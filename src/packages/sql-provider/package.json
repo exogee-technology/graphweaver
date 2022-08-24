@@ -25,6 +25,8 @@
 		"@exogee/base-resolver": "1.0.0",
 		"@mikro-orm/core": "5.1.0",
 		"@mikro-orm/postgresql": "5.1.0",
+		"apollo-server-lambda": "^3.10.1",
+		"aws-sdk": "^2.1201.0",
 		"bunyan": "1.8.14",
 		"class-validator": "0.13.2",
 		"dataloader": "2.0.0",

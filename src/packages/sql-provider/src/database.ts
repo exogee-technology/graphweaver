@@ -11,7 +11,7 @@ import {
 	ReflectMetadataProvider,
 } from '@mikro-orm/core';
 import { EntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
-import { logger } from '@nscc-easy/logger';
+import { logger } from './logger';
 import AWS from 'aws-sdk';
 
 import { allEntities } from './entities';

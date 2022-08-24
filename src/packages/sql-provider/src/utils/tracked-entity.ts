@@ -1,5 +1,4 @@
 import { BigIntType, PrimaryKey } from '@mikro-orm/core';
-
 import { BaseEntity } from '../entities/base-entity';
 
 export abstract class TrackedEntity<T extends TrackedEntity<T>> extends BaseEntity {

@@ -1,4 +1,4 @@
-import { logger } from '@nscc-easy/logger';
+import { logger } from '../logger';
 
 class AuthenticationContextImplementation {
 	private currentUserLogin?: string;

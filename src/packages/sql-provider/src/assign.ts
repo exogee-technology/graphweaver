@@ -6,9 +6,9 @@ import {
 	Reference,
 	ReferenceType,
 } from '@mikro-orm/core';
-import { logger } from '@nscc-easy/logger';
+import { logger } from './logger';
 
-import { Database } from '../database';
+import { Database } from './database';
 
 // This is how Mikro ORM does it within their own code, so in this file we're ok with non-null assertions.
 /* eslint-disable @typescript-eslint/no-non-null-assertion */

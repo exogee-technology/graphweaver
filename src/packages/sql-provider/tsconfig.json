@@ -1,4 +1,7 @@
 {
+	"extends": "../../tsconfig.json",
+	"references": [{ "path": "../base-resolver" }],
+	"include": ["./src"],
 	"compilerOptions": {
 		/* Basic Options */
 		"target": "es2019",
@@ -37,6 +40,5 @@
 		/* Advanced Options */
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true
-	},
-	"exclude": ["**/node_modules/**", "**/lib/**"]
+	}
 }
