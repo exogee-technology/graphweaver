@@ -38,7 +38,7 @@ bower_components
 build/Release
 
 # Dependency directories
-node_modules/
+#node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -111,14 +111,7 @@ dist
 .DS_Store
 
 # IntelliJ IDEA settings
-.idea/
-cash-to-web.iml
 
 # Deployment files
-package.deployment-backup.json
-backend/packages/expiry-runner/.deploy/index.js
-backend/packages/expiry-runner/.deploy/index.js.LICENSE.txt
 
 # Performance test results
-performance-tests/performance-test-local/output.csv
-performance-tests/performance-test-local/output.json
