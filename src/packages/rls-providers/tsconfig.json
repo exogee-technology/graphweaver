@@ -1,0 +1,14 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../base-resolver" },
+		{ "path": "../database-entities"},
+		{ "path": "../logger" }
+	]
+}

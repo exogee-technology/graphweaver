@@ -1,0 +1,16 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../base-resolver" },
+		{ "path": "../graphql-scalars" },
+		{ "path": "../database-entities" },
+		{ "path": "../rls-providers" },
+		{ "path": "../logger" }
+	]
+}

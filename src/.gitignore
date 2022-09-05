@@ -38,7 +38,7 @@ bower_components
 build/Release
 
 # Dependency directories
-#node_modules/
+node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
@@ -104,7 +104,7 @@ dist
 .tern-port
 
 # Typescript Output
-*/packages/*/lib
+**/packages/**/lib
 
 # VSCode settings
 .vscode/
@@ -115,3 +115,6 @@ dist
 # Deployment files
 
 # Performance test results
+
+# Output folders
+lib/

@@ -79,12 +79,12 @@ export interface BackendProvider<T> {
 		relatedIds: readonly string[],
 		filter?: any
 	): Promise<T[]>;
-	update(id: string, updateArgs: Partial<T>): Promise<T>;
+	updateOne(id: string, updateArgs: Partial<T>): Promise<T>;
 	updateMany(entities: (Partial<T> & { id: string })[]): Promise<T[]>;
-	create(entity: Partial<T>): Promise<T>;
+	createOne(entity: Partial<T>): Promise<T>;
 	createMany(entities: Partial<T>[]): Promise<T[]>;
 	createOrUpdateMany(entities: Partial<T>[]): Promise<T[]>;
-	delete(id: string): Promise<boolean>;
+	deleteOne(id: string): Promise<boolean>;
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
 }

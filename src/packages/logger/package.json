@@ -1,0 +1,26 @@
+{
+	"name": "@exogee/logger",
+	"version": "1.0.0",
+	"description": "Used to log across all services and APIs",
+	"homepage": "",
+	"license": "UNLICENSED",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"scripts": {
+		"build:legacy": "tsc --build",
+		"build:types": "tsc --emitDeclarationOnly"
+	},
+	"dependencies": {
+		"bunyan": "1.8.14"
+	},
+	"devDependencies": {
+		"@types/bunyan": "1.8.6",
+		"typescript": "4.5.5"
+	}
+}

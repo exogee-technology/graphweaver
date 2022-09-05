@@ -461,7 +461,7 @@ export function createBaseResolver<T, O>(
 			}
 
 			// Save!
-			const entity = await provider.create(createData);
+			const entity = await provider.createOne(createData);
 
 			if (gqlEntityType.fromBackendEntity) {
 				return gqlEntityType.fromBackendEntity.call(gqlEntityType, entity);
@@ -525,7 +525,7 @@ export function createBaseResolver<T, O>(
 			}
 
 			// Update and save!
-			const result = await provider.update(updateItemData.id, updateData);
+			const result = await provider.updateOne(updateItemData.id, updateData);
 
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
@@ -538,7 +538,7 @@ export function createBaseResolver<T, O>(
 		// Delete
 		@Mutation((returns) => Boolean, { name: `delete${gqlEntityTypeName}` })
 		deleteItem(@Arg('id', () => ID) id: string) {
-			return provider.delete(id);
+			return provider.deleteOne(id);
 		}
 	}
 

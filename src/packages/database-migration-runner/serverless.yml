@@ -1,0 +1,25 @@
+service:
+  name: just-for-offline-development
+
+functions:
+  index:
+    # .deploy allows us to test the deployment code.
+    handler: .deploy/index.handler
+    # handler: lib/index.handler
+    events:
+      - http:
+          path: /
+          method: '*'
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3001
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  timeout: 30
