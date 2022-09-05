@@ -3,10 +3,6 @@
 	"version": "1.0.0",
 	"description": "Graph Weaver: Base resolver",
 	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/exogee-technology/graphweaver.git"
-	},
 	"scripts": {
 		"build:legacy": "tsc --build",
 		"build:types": "tsc --emitDeclarationOnly",
@@ -26,7 +22,6 @@
 		"class-validator": "0.13.2",
 		"dataloader": "2.0.0",
 		"graphql": "15.8.0",
-		"knex": "1.0.4",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.1.13",
 		"type-graphql": "1.1.1"

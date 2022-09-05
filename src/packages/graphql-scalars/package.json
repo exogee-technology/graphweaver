@@ -1,0 +1,31 @@
+{
+	"name": "@exogee/graphql-scalars",
+	"version": "1.0.0",
+	"description": "A package to house all common scalar types used across GraphQL APIs",
+	"author": "Exogee Pty Ltd",
+	"license": "UNLICENSED",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build:types": "tsc --emitDeclarationOnly",
+		"test": "jest --passWithNoTests",
+		"test:watch": "jest --passWithNoTests --watch"
+	},
+	"dependencies": {
+		"@exogee/database-entities": "workspace:1.0.0"
+	},
+	"devDependencies": {
+		"@types/jest": "26.0.23",
+		"decimal.js": "10.3.1",
+		"graphql": "15.8.0",
+		"jest": "27.0.6",
+		"ts-jest": "27.0.3",
+		"typescript": "4.5.5"
+	}
+}

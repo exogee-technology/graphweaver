@@ -1,0 +1,30 @@
+{
+	"name": "@exogee/backend-app-launcher",
+	"version": "1.0.0",
+	"description": "",
+	"main": "serverless.js",
+	"scripts": {
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build:types": "pnpm -r build:types",
+		"build:js": "node transpile.js",
+		"build:legacy": "pnpm -r build:legacy",
+		"start": "concurrently \"pnpm build:js -- --watch\" \"pnpm -r build:types\" \"nodemon --ignore buckets/ --exec serverless offline start\"",
+		"start:legacy": "pnpm build:legacy && pnpm serverless offline"
+	},
+	"author": "Exogee Pty Ltd",
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"concurrently": "7.0.0",
+		"esbuild-css-modules-plugin": "2.3.1",
+		"esbuild-register": "3.1.2",
+		"nodemon": "2.0.15",
+		"serverless": "3.7.9",
+		"serverless-offline": "8.5.0"
+	},
+	"dependencies": {
+		"@aws-sdk/signature-v4-crt": "3.54.1",
+		"@exogee/graphql-api": "workspace:1.0.0",
+		"dotenv": "10.0.0",
+        "esbuild": "0.15.5"
+	}
+}

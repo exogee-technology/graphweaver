@@ -18,6 +18,6 @@ if (!validLevels[level])
 	);
 
 export const logger = bunyan.createLogger({
-	name: 'nscc-easy',
+	name: 'graphweaver',
 	level,
 });
