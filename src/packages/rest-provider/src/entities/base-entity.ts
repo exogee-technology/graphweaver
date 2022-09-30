@@ -21,6 +21,8 @@ export type Relationship<T> = {
 export type RelationshipMap<T> = Map<string, Relationship<T>>;
 
 export class BaseEntity implements BaseDataEntity {
+	public dataEntity: any;
+	
 	public isReference(_: string, dataField: any) {
 		return dataField.href ? true : false;
 	}
