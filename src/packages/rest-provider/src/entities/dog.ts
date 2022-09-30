@@ -1,5 +1,5 @@
-import { Field } from "../decorators";
 import { BaseEntity } from "./base-entity";
+import { Field } from "../decorators";
 
 export class Dog extends BaseEntity {
 	@Field()

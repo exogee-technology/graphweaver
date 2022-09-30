@@ -10,6 +10,7 @@
 		{ "path": "../base-resolver" },
 		{ "path": "../graphql-scalars" },
 		{ "path": "../database-entities" },
+		{ "path": "../rest-provider" },
 		{ "path": "../rls-providers" },
 		{ "path": "../logger" }
 	]

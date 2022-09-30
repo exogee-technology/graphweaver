@@ -19,4 +19,4 @@ echo "Removing Webpack build output (.deploy folders)"
 find ./packages/ -name .deploy -type d -exec rm -rf {} +
 
 echo "Installing dependencies"
-yarn install
+pnpm install
