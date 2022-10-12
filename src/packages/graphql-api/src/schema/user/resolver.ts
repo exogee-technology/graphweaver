@@ -1,6 +1,6 @@
 import { AuthorizedBaseFunctions, createBaseResolver } from '@exogee/base-resolver';
 import { User as OrmUser } from '@exogee/database-entities';
-import { RLSMikroBackendProvider } from '@exogee/rls-providers';
+import { RLSMikroBackendProvider } from '@exogee/database-provider';
 import { Resolver } from 'type-graphql';
 
 import { User } from './entity';

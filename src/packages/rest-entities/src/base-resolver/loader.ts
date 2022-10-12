@@ -1,7 +1,11 @@
-import { BaseEntity } from '../';
+import {
+	BaseEntity,
+	RelationshipMap,
+	RelationshipType,
+	Relationship,
+} from '../entities';
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
-import { Relationship, RelationshipType } from '../entities';
 import { EntityConstructor, EntityManager } from '../entity-manager';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};

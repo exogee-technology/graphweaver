@@ -18,7 +18,7 @@ export class ChangeTracker implements EventSubscriber {
 	async afterFlush({ uow, em }: FlushEventArgs): Promise<void> {
 		const changesets = uow
 			.getChangeSets()
-			.filter((cs) => cs.entity instanceof TrackedEntity) as ChangeSet<TrackedEntity<any>>[];
+			.filter( ( cs ) => cs.entity instanceof TrackedEntity ) as unknown as ChangeSet<TrackedEntity<any>>[];
 		const trx = em.getTransactionContext();
 
 		for (const cs of changesets) {

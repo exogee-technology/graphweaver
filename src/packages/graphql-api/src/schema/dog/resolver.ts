@@ -1,5 +1,5 @@
 import { AuthorizedBaseFunctions, createBaseResolver } from '@exogee/base-resolver';
-import { RestBackendProvider, Dog as RestDog } from '@exogee/rest-provider';
+import { RestBackendProvider, Dog as RestDog } from '@exogee/rest-entities';
 import { Resolver } from 'type-graphql';
 
 import { Dog } from './entity';
