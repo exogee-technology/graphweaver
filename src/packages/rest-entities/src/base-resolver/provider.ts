@@ -6,11 +6,9 @@ import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { DataSourceConfig } from 'apollo-datasource';
 import pluralize from 'pluralize';
 
-export class RestBackendProvider
-<
-	T,
-	G extends GraphQLEntity<T>
-> extends RESTDataSource implements BackendProvider<T>  {
+export class RestBackendProvider<T, G extends GraphQLEntity<T>>
+	extends RESTDataSource
+	implements BackendProvider<T> {
 	private readonly gqlTypeName: string;
 	public readonly backendId = 'rest-api';
 
@@ -18,12 +16,12 @@ export class RestBackendProvider
 
 	public readonly supportsInFilter = true;
 
-    public constructor(restType: new () => T, gqlType: new (dataEntity: T) => G) {
+	public constructor(restType: new () => T, gqlType: new (dataEntity: T) => G) {
 		super();
 		this.memoizeGetRequests = false;
 		this.baseURL = 'https://dogsandowners.free.beeceptor.com/';
 		this.initialize({} as DataSourceConfig<any>); // <===== this one resolve the issue
-        // super('https://dogsandowners.free.beeceptor.com'); 
+		// super('https://dogsandowners.free.beeceptor.com');
 		// cannot use a url like https://apimocha.com/gwrestdogs with HTTPDataSource
 		this.entityType = restType;
 		this.gqlTypeName = gqlType.name;
@@ -33,8 +31,8 @@ export class RestBackendProvider
 	// willSendRequest(request: RequestOptions) {
 	// 	request.headers.set('Authorization', this.context.token);
 	// }
-    
-    public async find(
+
+	public async find(
 		filter: any, // @todo: Create a type for this
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
@@ -43,25 +41,15 @@ export class RestBackendProvider
 			filter: JSON.stringify(filter),
 		});
 
-        const plural = pluralize(this.entityType.name);
-		// const result = await this.get(`/${plural}`);
+		const plural = pluralize(this.entityType.name);
 		return this.get(`/${plural}`);
-
-		// logger.trace(`find ${this.entityType.name} result: ${result.headers['content-length'] ?? '?'} rows`);
-
-		// return result.body as T[];
 	}
 
-    public async findOne(id: string): Promise<T | null> {
+	public async findOne(id: string): Promise<T | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
-        
-        const plural = pluralize(this.entityType.name);
-		// const result = await this.get(`/${plural}/${id}`);
+
+		const plural = pluralize(this.entityType.name);
 		return this.get(`/${plural}/${id}`);
-
-		// logger.trace(`findOne ${this.entityType.name} result`, { result });
-
-		// return result.body as T;
 	}
 
 	public async findByRelatedId(
@@ -70,34 +58,31 @@ export class RestBackendProvider
 		relatedFieldIds: string[],
 		filter?: any
 	): Promise<T[]> {
-
-        // TODO
+		// TODO
 		return [] as T[];
 	}
 
 	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
+		const body = JSON.stringify(updateArgs);
+	
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
-			updateArgs: JSON.stringify(updateArgs),
+			updateArgs: body,
 		});
 
-        const entity = undefined as unknown;
-
-		// logger.trace(`update ${this.entityType.name} entity`, entity);
-
-		return entity as T;
+		const plural = pluralize(this.entityType.name);
+		return this.put(`/${plural}/${id}`, body);
 	}
 
 	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
+		const body = JSON.stringify(updateItems);
+	
 		logger.trace(`Running update many ${this.entityType.name} with args`, {
-			updateItems: JSON.stringify(updateItems),
+			updateItems: body,
 		});
 
-        const entities = undefined as unknown;
-
-		// logger.trace(`updated ${this.entityType.name} items `, entities);
-
-		return entities as T[];
+		const plural = pluralize(this.entityType.name);
+		return this.post(`/${plural}`, body);
 	}
 
 	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
@@ -105,54 +90,57 @@ export class RestBackendProvider
 			items: JSON.stringify(items),
 		});
 
-        const entities = undefined as unknown;
-
-		// logger.trace(`created or updated ${this.entityType.name} items `, entities);
-
-		return entities as [];
+		return Promise.reject();
 	}
 
 	public async createOne(createArgs: Partial<T>): Promise<T> {
+		const body = JSON.stringify(createArgs);
+		
 		logger.trace(`Running create ${this.entityType.name} with args`, {
-			createArgs: JSON.stringify(createArgs),
+			createArgs: body
 		});
 
-        const entity = undefined as unknown;
-
-		// logger.trace(`create ${this.entityType.name} result`, entity);
-
-		return entity as T;
+		const plural = pluralize(this.entityType.name);
+		return this.post(`/${plural}`, body);
 	}
 
 	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
+		const body = JSON.stringify(createItems);
+	
 		logger.trace(`Running create ${this.entityType.name} with args`, {
-			createArgs: JSON.stringify(createItems),
+			createArgs: body,
 		});
 
-        const entities = undefined as unknown;
-
-		// logger.trace(`created ${this.entityType.name} items `, entities);
-
-		return entities as T[];
+		const plural = pluralize(this.entityType.name);
+		return this.post(`/${plural}`, body);
 	}
 
 	public async deleteOne(id: string): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with id ${id}`);
 
-		// logger.trace(`delete ${this.entityType.name} result: deleted ${deletedRows} row(s)`);
-
-		return true;
+		const plural = pluralize(this.entityType.name);
+		return this.delete(`/${plural}/${id}`);
 	}
 
 	public async deleteMany(ids: string[]): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with ids ${ids}`);
 
-		// logger.trace(`delete ${this.entityType.name} result: deleted ${deletedRows} row(s)`);
+		const plural = pluralize(this.entityType.name);
 
-		return true;
+		// if the REST API supports batch DELETE then we could do this 
+		// but this client does not support a body with DELETE
+		// const body = JSON.stringify(ids);
+		// return this.delete(`/${plural}`)
+
+		// if the REST API (or client) does not support batch DELETE 
+		// then resort to map-reduce
+		let result = true;
+		return Promise.all(ids.map((id) => this.delete(`/${plural}/${id}`))).then((responses) =>
+			responses.map(() => true).reduce(() => result, true)
+		);
 	}
 
-    public getRelatedEntityId(entity: any, relatedIdField: string) {
+	public getRelatedEntityId(entity: any, relatedIdField: string) {
 		if (typeof entity.unwrap !== 'function') {
 			throw new Error('Could not unwrap related entity');
 		}
