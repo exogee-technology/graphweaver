@@ -50,6 +50,10 @@ const server = new ApolloServer({
 	// context: handleContext,
 	// This removes implementation details from error messages that shouldn't be exposed to clients.
 	formatError: formatGraphQLError,
+	// this is hor datasource-rest is used, but we use a later http datasource
+	// dataSources: () => {
+	// 	return dogAPI: new DogAPI()
+	// }
 });
 
 exports.handler = server.createHandler({

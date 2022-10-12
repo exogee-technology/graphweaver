@@ -25,9 +25,9 @@
 		"aws-sdk": "2.1069.0",
 		"color-convert": "2.0.1",
 		"dotenv": "16.0.0",
-		"@mikro-orm/core": "5.1.0",
-		"@mikro-orm/entity-generator": "5.1.0",
-		"@mikro-orm/postgresql": "5.1.0",
+		"@mikro-orm/core": "5.4.0",
+		"@mikro-orm/entity-generator": "5.4.0",
+		"@mikro-orm/postgresql": "5.4.0",
 		"pg": "8.5.1"
 	},
 	"devDependencies": {

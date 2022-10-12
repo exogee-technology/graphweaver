@@ -23,7 +23,7 @@ export const Cors: PluginDefinition = {
 				const subdomain = deploymentEnv === 'production' ? 'easy' : `easy-${deploymentEnv}`;
 				const domainName = `${subdomain}.${rootDomain}`;
 
-				const defaultOrigin = 'http://localhost:8000';
+				const defaultOrigin = 'http://localhost:3000';
 				const origin = request.http?.headers.get('origin') || defaultOrigin;
 				response.http?.headers.set('Access-Control-Allow-Credentials', 'true');
 				if (origin?.endsWith(domainName)) {

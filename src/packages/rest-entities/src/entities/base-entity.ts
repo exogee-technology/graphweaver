@@ -28,6 +28,6 @@ export class BaseEntity implements BaseDataEntity {
 	}
 
 	public isCollection(fieldName: string, dataField: any) {
-		return isArray(dataField);
+		return isArray(dataField.fieldName);
 	}
 }

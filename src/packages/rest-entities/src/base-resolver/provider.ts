@@ -1,15 +1,16 @@
 import { BackendProvider, GraphQLEntity, PaginationOptions } from '@exogee/base-resolver';
 import { logger } from '@exogee/logger';
-// import { assign } from './assign';
 
-import { HTTPDataSource } from 'apollo-datasource-http';
+// import { HTTPDataSource } from 'apollo-datasource-http';
+import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
+import { DataSourceConfig } from 'apollo-datasource';
 import pluralize from 'pluralize';
 
 export class RestBackendProvider
 <
 	T,
 	G extends GraphQLEntity<T>
-> extends HTTPDataSource implements BackendProvider<T>  {
+> extends RESTDataSource implements BackendProvider<T>  {
 	private readonly gqlTypeName: string;
 	public readonly backendId = 'rest-api';
 
@@ -18,17 +19,20 @@ export class RestBackendProvider
 	public readonly supportsInFilter = true;
 
     public constructor(restType: new () => T, gqlType: new (dataEntity: T) => G) {
-        super('https://dogsandowners.free.beeceptor.com');
+		super();
+		this.memoizeGetRequests = false;
+		this.baseURL = 'https://dogsandowners.free.beeceptor.com/';
+		this.initialize({} as DataSourceConfig<any>); // <===== this one resolve the issue
+        // super('https://dogsandowners.free.beeceptor.com'); 
+		// cannot use a url like https://apimocha.com/gwrestdogs with HTTPDataSource
 		this.entityType = restType;
 		this.gqlTypeName = gqlType.name;
 	}
 
-    mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArgs: Partial<T>) => {
-        // Clean the input and remove any GraphQL classes from the object
-        const cleanInput = JSON.parse(JSON.stringify(inputArgs));
-        // return assign(result, cleanInput);
-		return undefined; // TODO remove this, uncomment the line above, and copy assign.ts into the project
-    };
+	// TODO: authentication
+	// willSendRequest(request: RequestOptions) {
+	// 	request.headers.set('Authorization', this.context.token);
+	// }
     
     public async find(
 		filter: any, // @todo: Create a type for this
@@ -40,22 +44,24 @@ export class RestBackendProvider
 		});
 
         const plural = pluralize(this.entityType.name);
-		const result = await this.get(`/${plural}`);
+		// const result = await this.get(`/${plural}`);
+		return this.get(`/${plural}`);
 
-		logger.trace(`find ${this.entityType.name} result: ${result.headers['content-length'] ?? '?'} rows`);
+		// logger.trace(`find ${this.entityType.name} result: ${result.headers['content-length'] ?? '?'} rows`);
 
-		return result.body as T[];
+		// return result.body as T[];
 	}
 
     public async findOne(id: string): Promise<T | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
         
         const plural = pluralize(this.entityType.name);
-		const result = await this.get(`/${plural}/${id}`);
+		// const result = await this.get(`/${plural}/${id}`);
+		return this.get(`/${plural}/${id}`);
 
-		logger.trace(`findOne ${this.entityType.name} result`, { result });
+		// logger.trace(`findOne ${this.entityType.name} result`, { result });
 
-		return result.body as T;
+		// return result.body as T;
 	}
 
 	public async findByRelatedId(
