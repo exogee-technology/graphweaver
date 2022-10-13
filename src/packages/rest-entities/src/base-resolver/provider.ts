@@ -1,7 +1,6 @@
 import { BackendProvider, GraphQLEntity, PaginationOptions } from '@exogee/base-resolver';
 import { logger } from '@exogee/logger';
 
-// import { HTTPDataSource } from 'apollo-datasource-http';
 import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { DataSourceConfig } from 'apollo-datasource';
 import pluralize from 'pluralize';
@@ -20,18 +19,20 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		super();
 		this.memoizeGetRequests = false;
 		this.baseURL = 'https://dogsandowners.free.beeceptor.com/';
-		this.initialize({} as DataSourceConfig<any>); // <===== this one resolve the issue
+		this.initialize({} as DataSourceConfig<any>);
 		// super('https://dogsandowners.free.beeceptor.com');
 		// cannot use a url like https://apimocha.com/gwrestdogs with HTTPDataSource
 		this.entityType = restType;
 		this.gqlTypeName = gqlType.name;
 	}
 
-	// TODO: authentication
-	// willSendRequest(request: RequestOptions) {
-	// 	request.headers.set('Authorization', this.context.token);
-	// }
+	// AUTHENTICATION
+	willSendRequest(request: RequestOptions) {
+		// request.headers.set('Authorization', this.context.token);
+		request.headers.set('meta', 'Exogee');
+	}
 
+	// GET METHODS
 	public async find(
 		filter: any, // @todo: Create a type for this
 		pagination?: PaginationOptions,
@@ -58,13 +59,14 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		relatedFieldIds: string[],
 		filter?: any
 	): Promise<T[]> {
-		// TODO
-		return [] as T[];
+		// not implemented but maybe possible 
+		return Promise.reject();
 	}
 
+	// PUT METHODS
 	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
 		const body = JSON.stringify(updateArgs);
-	
+
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
 			updateArgs: body,
@@ -76,37 +78,31 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 
 	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
 		const body = JSON.stringify(updateItems);
-	
+
 		logger.trace(`Running update many ${this.entityType.name} with args`, {
 			updateItems: body,
 		});
 
 		const plural = pluralize(this.entityType.name);
-		return this.post(`/${plural}`, body);
+
+		// if the REST API does not support batch
+		// then resort to map
+		logger.trace(`This will execute ${updateItems.length} requests`);
+
+		return Promise.all(
+			updateItems.map((item) => this.put(`/${plural}`, JSON.stringify(item)))
+		).then((responses) => responses.map((data) => data));
 	}
 
 	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
-		logger.trace(`Running create or update many for ${this.entityType.name} with args`, {
-			items: JSON.stringify(items),
-		});
-
+		// not something we can do with REST
 		return Promise.reject();
 	}
 
+	// POST METHODS
 	public async createOne(createArgs: Partial<T>): Promise<T> {
 		const body = JSON.stringify(createArgs);
-		
-		logger.trace(`Running create ${this.entityType.name} with args`, {
-			createArgs: body
-		});
 
-		const plural = pluralize(this.entityType.name);
-		return this.post(`/${plural}`, body);
-	}
-
-	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
-		const body = JSON.stringify(createItems);
-	
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: body,
 		});
@@ -115,6 +111,30 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		return this.post(`/${plural}`, body);
 	}
 
+	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
+		const body = JSON.stringify(createItems);
+
+		logger.trace(`Running create ${this.entityType.name} with args`, {
+			createArgs: body,
+		});
+
+		const plural = pluralize(this.entityType.name);
+
+		// if the REST API supports batch then we could do this
+		// const body = JSON.stringify(ids);
+		// return this.post(`/${plural}`)
+
+		// if the REST API does not support batch
+		// then resort to map
+
+		logger.trace(`This will execute ${createItems.length} requests`);
+
+		return Promise.all(
+			createItems.map((item) => this.post(`/${plural}`, JSON.stringify(item)))
+		).then((responses) => responses.map((data) => data));
+	}
+
+	// DELETE METHODS
 	public async deleteOne(id: string): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with id ${id}`);
 
@@ -127,16 +147,18 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 
 		const plural = pluralize(this.entityType.name);
 
-		// if the REST API supports batch DELETE then we could do this 
+		// if the REST API supports batch then we could do this
 		// but this client does not support a body with DELETE
 		// const body = JSON.stringify(ids);
 		// return this.delete(`/${plural}`)
 
-		// if the REST API (or client) does not support batch DELETE 
+		// if the REST API (or client) does not support batch
 		// then resort to map-reduce
-		let result = true;
+
+		logger.trace(`This will execute ${ids.length} requests`);
+
 		return Promise.all(ids.map((id) => this.delete(`/${plural}/${id}`))).then((responses) =>
-			responses.map(() => true).reduce(() => result, true)
+			responses.map(() => true).reduce(this.reduceBooleanArray, true)
 		);
 	}
 
@@ -150,5 +172,9 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 
 	public isCollection(entity: any) {
 		return false;
+	}
+
+	reduceBooleanArray(cumulative: boolean, current: boolean) {
+		return cumulative && current;
 	}
 }
