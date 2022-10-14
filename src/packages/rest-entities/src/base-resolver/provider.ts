@@ -1,6 +1,6 @@
 import { BackendProvider, GraphQLEntity, PaginationOptions } from '@exogee/base-resolver';
 import { logger } from '@exogee/logger';
-
+import { kebabCase } from 'lodash';
 import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { DataSourceConfig } from 'apollo-datasource';
 import pluralize from 'pluralize';
@@ -18,18 +18,25 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 	public constructor(restType: new () => T, gqlType: new (dataEntity: T) => G) {
 		super();
 		this.memoizeGetRequests = false;
-		this.baseURL = 'https://dogsandowners.free.beeceptor.com/';
+
+		// this.baseURL = 'https://dogsandowners.free.beeceptor.com/'; // beeceptor returns wrong data types
+		this.baseURL = 'https://6zd0g.mocklab.io/';
+		// this.baseURL = 'https://apimocha.com/gwrestdogs'; // apimocha weird issue saying json is invalid at "i"
 		this.initialize({} as DataSourceConfig<any>);
-		// super('https://dogsandowners.free.beeceptor.com');
-		// cannot use a url like https://apimocha.com/gwrestdogs with HTTPDataSource
 		this.entityType = restType;
 		this.gqlTypeName = gqlType.name;
+		this.context = {
+			acceptLanguage: 'en-au',
+			contentType: 'application/json',
+			sharedKey: 'd70a0cd87bf1ef70278df19e6ba677000ccf065bb41875d6c420d91e0c009e43',
+		};
 	}
 
 	// AUTHENTICATION
 	willSendRequest(request: RequestOptions) {
-		// request.headers.set('Authorization', this.context.token);
-		request.headers.set('meta', 'Exogee');
+		for (const [key, value] of Object.entries(this.context))
+			request.headers.set(kebabCase(key), value as string);
+		logger.trace(`Added all headers ${JSON.stringify(request.headers)}`);
 	}
 
 	// GET METHODS
@@ -59,7 +66,7 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		relatedFieldIds: string[],
 		filter?: any
 	): Promise<T[]> {
-		// not implemented but maybe possible 
+		// not implemented but maybe possible
 		return Promise.reject();
 	}
 
@@ -90,8 +97,8 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		logger.trace(`This will execute ${updateItems.length} requests`);
 
 		return Promise.all(
-			updateItems.map((item) => this.put(`/${plural}`, JSON.stringify(item)))
-		).then((responses) => responses.map((data) => data));
+			updateItems.map((item) => this.put(`/${plural}/${item.id}`, JSON.stringify(item)))
+		).then((responses) => responses.map((data) => JSON.parse(data)));
 	}
 
 	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
@@ -131,7 +138,7 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 
 		return Promise.all(
 			createItems.map((item) => this.post(`/${plural}`, JSON.stringify(item)))
-		).then((responses) => responses.map((data) => data));
+		).then((responses) => responses.map((data) => JSON.parse(data)));
 	}
 
 	// DELETE METHODS
