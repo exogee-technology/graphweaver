@@ -12,12 +12,12 @@ interface FieldOptions {
 	};
 }
 
-export function ManyToOne<T extends BaseEntity, U>(
+export function OneToMany<T extends BaseEntity, U>(
 	relationship: () => U,
 	options?: FieldOptions
 ): any {
 	return function (target: EntityConstructor<T>, propertyKey: keyof BaseEntity) {
-		console.log(`n-1 is this a relationship? ${relationship}`);
+		console.log(`1-n is this a relationship? ${relationship}`);
 		if (relationship) {
 			// REST uses the format *Id for underlying fields
 			const underlyingFieldName = options?.underlyingFieldName ?? `${propertyKey}Id`;
@@ -41,7 +41,7 @@ export function ManyToOne<T extends BaseEntity, U>(
 				target._relationshipMap = new Map();
 			}
 			target._relationshipMap.set(propertyKey, {
-				type: RelationshipType.MANY_TO_ONE,
+				type: RelationshipType.ONE_TO_MANY,
 				entity: relationship,
 				navigationPropertyName,
 				linkEntityAttributes,

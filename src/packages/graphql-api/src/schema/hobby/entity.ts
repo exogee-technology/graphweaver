@@ -1,7 +1,6 @@
 import { BaseLoaders, GraphQLEntity } from '@exogee/base-resolver';
 import { Hobby as OrmHobby } from '@exogee/database-entities';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
-
 import { User } from '../user';
 
 @ObjectType('Hobby')
