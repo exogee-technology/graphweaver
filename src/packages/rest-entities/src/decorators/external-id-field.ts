@@ -1,11 +1,11 @@
-// In some cases when linking across from GoCollect to CRM (or the other way around), it's very handy
+// In some cases when linking across from database to REST (or the other way around), it's very handy
 // to flatten entities from:
 //
-// siteHazard.createdFromJob = { id : 'whatever' }
+// entity.createdBy = { id : 'whatever' }
 //
 // to
 //
-// siteHazard.bin_hazardid = 'whatever'
+// entity.createdById = 'whatever'
 //
 // This allows us to treat them consistently from an API standpoint
 // but actually store the values where they need to go.

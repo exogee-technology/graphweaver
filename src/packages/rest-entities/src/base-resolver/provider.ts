@@ -5,7 +5,38 @@ import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { DataSourceConfig } from 'apollo-datasource';
 import pluralize from 'pluralize';
 
+export class RestLookupProvider<T> extends RESTDataSource {
+	public entityType: new () => T;
+
+	public constructor(restType: new () => T) {
+		super();
+		this.memoizeGetRequests = false;
+
+		this.baseURL = 'https://6zd0g.mocklab.io/';
+		this.initialize({} as DataSourceConfig<any>);
+		this.entityType = restType;
+		this.context = {
+			acceptLanguage: 'en-au',
+			contentType: 'application/json',
+			sharedKey: '***REMOVED***',
+		};
+	}
+
+	public async findAll(): Promise<T[]> {
+		const plural = pluralize(this.entityType.name);
+		return this.get(`/${plural}`);
+	}
+
+	public async findOne(id: string): Promise<T | null> {
+		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
+
+		const plural = pluralize(this.entityType.name);
+		return this.get(`/${plural}/${id}`);
+	}
+}
+
 export class RestBackendProvider<T, G extends GraphQLEntity<T>>
+	// export class RestBackendProvider<T>
 	extends RESTDataSource
 	implements BackendProvider<T> {
 	private readonly gqlTypeName: string;
@@ -16,6 +47,7 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 	public readonly supportsInFilter = true;
 
 	public constructor(restType: new () => T, gqlType: new (dataEntity: T) => G) {
+		// public constructor(restType: new () => T) {
 		super();
 		this.memoizeGetRequests = false;
 
@@ -66,8 +98,10 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		relatedFieldIds: string[],
 		filter?: any
 	): Promise<T[]> {
-		// not implemented but maybe possible
-		return Promise.reject();
+		const plural = pluralize(this.entityType.name);
+		const all = (await this.get(`/${plural}`)) as T[];
+		const field = relatedField as keyof T;
+		return all.filter((i) => relatedFieldIds.includes((i as any)[relatedField]));
 	}
 
 	// PUT METHODS
