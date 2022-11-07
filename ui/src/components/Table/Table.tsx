@@ -91,8 +91,6 @@ function Table() {
       return dateA - dateB;
     });
 
-  // console.log(sortedOnString);
-
   function checkType(toCheck: number | string | Date) {
     if (typeof toCheck === "number") {
       return "number";
