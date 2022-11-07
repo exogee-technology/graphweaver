@@ -1,42 +1,7 @@
 import { useState } from "react";
 import style from "./Table.module.css";
 
-const tableData: Array<object> = [
-  {
-    id: 1,
-    name: "Martin",
-    age: 32,
-    email: "martin@exogee.com",
-    role: "admin",
-    created_at: "2022-10-28 11:30:21",
-  },
-
-  {
-    id: 2,
-    name: "Maria",
-    age: 42,
-    email: "maria@exogee.com",
-    role: "admin",
-    created_at: "2022-10-28 11:20:21",
-  },
-
-  {
-    id: 3,
-    name: "Christofer",
-    age: 24,
-    email: "christofer@exogee.com",
-    role: "user",
-    created_at: "2022-10-28 11:45:21",
-  },
-  {
-    id: 4,
-    name: "Christofer",
-    age: 5,
-    email: "christofer@exogee.com",
-    role: "user",
-    created_at: "2022-10-28 12:50:21",
-  },
-];
+const tableData = require("../../utils/mock_data.json");
 
 function TableHeader({
   tableData,
@@ -102,12 +67,21 @@ function TableRows({ tableData }: { tableData: Array<object> }) {
 
 function Table() {
   const [data, setData] = useState(tableData);
+  const [columnDirection, setcolumnDirection] = useState(false);
 
-  const sortedOnNumber = (data: any, column: string) =>
-    data.sort((a: any, b: any) => b[column] - a[column]);
+  const sortedOnNumber = (data: any, column: string, direction: string) => {
+    setcolumnDirection((columnDirection) => !columnDirection);
+    return columnDirection
+      ? data.sort((a: any, b: any) => b[column] - a[column])
+      : data.sort((a: any, b: any) => a[column] - b[column]);
+  };
 
-  const sortedOnString = (data: any, column: string) =>
-    data.sort((a: any, b: any) => (a[column] > b[column] ? 1 : -1));
+  const sortedOnString = (data: any, column: string) => {
+    setcolumnDirection((columnDirection) => !columnDirection);
+    return columnDirection
+      ? data.sort((a: any, b: any) => (a[column] > b[column] ? 1 : -1))
+      : data.sort((a: any, b: any) => (a[column] < b[column] ? 1 : -1));
+  };
 
   const sortOnDate = (data: any) =>
     data.sort((a: any, b: any) => {
@@ -139,13 +113,8 @@ function Table() {
     data: object,
     direction = "desc"
   ) {
-    const options = {
-      direction: direction,
-      // type: type,
-    };
-
     if (type === "number") {
-      return sortedOnNumber(data, toSort);
+      return sortedOnNumber(data, toSort, direction);
     }
 
     if (type === "string") {
