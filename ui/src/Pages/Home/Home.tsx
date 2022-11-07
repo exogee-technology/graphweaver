@@ -5,6 +5,7 @@ import dataSourcesIcon from "../../assets/img/64-data-sources.svg";
 import openPlaygroundIcon from "../../assets/img/16-open-external.svg";
 import filterIcon from "../../assets/img/16-filter.svg";
 import Button from "../../components/Button";
+import { useState } from "react";
 
 function BlankSlate() {
   return (
@@ -22,6 +23,18 @@ function BlankSlate() {
 }
 
 function ToolBar() {
+  const [searchParam, setSearchParam] = useState("");
+
+  let timeOut: any;
+
+  const handleChange = (e: any) => {
+    clearTimeout(timeOut);
+
+    timeOut = setTimeout(() => {
+      console.log(e.target.value);
+    }, 500);
+  };
+
   return (
     <div className={style.toolBarWrapper}>
       <div className="titleWrapper">
@@ -35,6 +48,7 @@ function ToolBar() {
           type="search"
           name="search"
           placeholder="Search..."
+          onChange={handleChange}
         />
         <Button>
           <>
