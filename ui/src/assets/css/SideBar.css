@@ -1,0 +1,17 @@
+.blankSlate {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.subtext {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.subtext h4 {
+  font-weight: 600;
+}
