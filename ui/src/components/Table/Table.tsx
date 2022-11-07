@@ -69,11 +69,11 @@ function Table() {
   const [data, setData] = useState(tableData);
   const [columnDirection, setcolumnDirection] = useState(false);
 
-  const sortedOnNumber = (data: any, column: string, direction: string) => {
+  const sortedOnNumber = (data: any, column: string) => {
     setcolumnDirection((columnDirection) => !columnDirection);
     return columnDirection
-      ? data.sort((a: any, b: any) => b[column] - a[column])
-      : data.sort((a: any, b: any) => a[column] - b[column]);
+      ? data.sort((a: any, b: any) => a[column] - b[column])
+      : data.sort((a: any, b: any) => b[column] - a[column]);
   };
 
   const sortedOnString = (data: any, column: string) => {
@@ -114,7 +114,7 @@ function Table() {
     direction = "desc"
   ) {
     if (type === "number") {
-      return sortedOnNumber(data, toSort, direction);
+      return sortedOnNumber(data, toSort);
     }
 
     if (type === "string") {
