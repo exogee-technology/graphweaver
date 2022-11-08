@@ -1,8 +1,7 @@
 import { useState } from "react";
 import style from "./Table.module.css";
 import chevron from "../../assets/img/16-chevron-down.svg";
-
-const tableData = require("../../utils/mock_data.json");
+import { checkType } from "../../utils/sorting-helpers";
 
 function TableHeader({
   tableData,
@@ -56,7 +55,6 @@ function TableHeader({
 
 function TableRows({ tableData }: { tableData: Array<object> }) {
   const rows = tableData;
-
   const rowsArray: any = [];
 
   rows.forEach((row) => {
@@ -81,7 +79,7 @@ function TableRows({ tableData }: { tableData: Array<object> }) {
   );
 }
 
-function Table() {
+function Table({ tableData }: { tableData: Array<any> }) {
   const [data, setData] = useState(tableData);
   const [columnDirection, setcolumnDirection] = useState(false);
 
@@ -103,23 +101,8 @@ function Table() {
     data.sort((a: any, b: any) => {
       const dateA: any = new Date(a.created_at);
       const dateB: any = new Date(b.created_at);
-
       return dateA - dateB;
     });
-
-  function checkType(toCheck: number | string | Date) {
-    if (typeof toCheck === "number") {
-      return "number";
-    }
-
-    if (typeof toCheck === "string") {
-      return "string";
-    }
-
-    if (typeof toCheck.getMonth === "function") {
-      return "date";
-    }
-  }
 
   function sortData(toSort: any, type: string | number | Date, data: object) {
     if (type === "number") {
@@ -136,8 +119,7 @@ function Table() {
   }
 
   function sortDataFromColumn(header: any) {
-    const firstObject: any = data[0];
-    const type: any = checkType(firstObject[header]);
+    const type: any = checkType(data[0][header]);
     const sortedData = sortData(header, type, data);
     setData([...sortedData]);
   }
