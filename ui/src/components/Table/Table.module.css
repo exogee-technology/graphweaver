@@ -52,6 +52,8 @@
   padding: 0 24px;
   border-bottom: 1px solid rgba(237, 232, 242, 0.1);
   background: #271f36;
+  cursor: pointer;
+  position: relative;
 }
 
 #header th:first-child {
@@ -64,4 +66,46 @@
 
 .right {
   text-align: right !important;
+}
+
+#header th:not(#chevron) span {
+  display: inline-block;
+  position: absolute;
+
+  width: 16px;
+  height: 16px;
+
+  transform: translate(4px, 3.5px);
+  opacity: 0;
+}
+
+#header th:not(#chevron):hover span {
+  opacity: 1;
+}
+
+th#chevron span {
+  display: inline-block;
+  position: absolute;
+
+  width: 16px;
+  height: 16px;
+
+  transform: translate(4px, 3.5px);
+  opacity: 1;
+}
+
+.pointDown {
+  rotate: 0deg;
+}
+
+th:hover .pointDown {
+  rotate: 180deg;
+}
+
+.pointUp {
+  rotate: 180deg;
+}
+
+th:hover .pointUp {
+  rotate: 0deg;
 }
