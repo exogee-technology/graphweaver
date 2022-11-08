@@ -1,37 +1,53 @@
 import { useState } from "react";
 import style from "./Table.module.css";
+import chevron from "../../assets/img/16-chevron-down.svg";
 
 const tableData = require("../../utils/mock_data.json");
 
 function TableHeader({
   tableData,
   handleClick,
+  filterDirection,
 }: {
   tableData: Array<object>;
   handleClick: Function;
+  filterDirection: boolean;
 }) {
-  const headers = Object.keys(tableData[0]);
+  const [filteredColumn, setFilteredColumn] = useState(0);
 
-  const singleObject: any = tableData[0];
+  const headers = Object.keys(tableData[0]);
+  const firstObject: any = tableData[0];
 
   // When the value is a number right align text
   function valueIsNumber(header: string) {
-    return typeof singleObject[header] === "number" ? style.right : "";
+    return typeof firstObject[header] === "number" ? style.right : "";
   }
 
-  function passColumnKey(header: string) {
+  // Pass the column object key so we can filter on that column
+  function filterOnColumn(header: string, index: number) {
     handleClick(header);
+    setFilteredColumn(index);
   }
 
   return (
     <tr id={style.header}>
-      {headers.map((header: string) => (
+      {headers.map((header: string, index) => (
         <th
-          onClick={() => passColumnKey(header)}
+          onClick={() => {
+            filterOnColumn(header, index);
+          }}
           className={valueIsNumber(header)}
+          id={filteredColumn === index ? style.chevron : ""}
           key={header}
         >
           {header}
+          <span>
+            <img
+              src={chevron}
+              alt={`Filter ${header} ascending or descending`}
+              className={filterDirection ? style.pointUp : style.pointDown}
+            />
+          </span>
         </th>
       ))}
     </tr>
@@ -105,12 +121,7 @@ function Table() {
     }
   }
 
-  function sortData(
-    toSort: any,
-    type: string | number | Date,
-    data: object,
-    direction = "desc"
-  ) {
+  function sortData(toSort: any, type: string | number | Date, data: object) {
     if (type === "number") {
       return sortedOnNumber(data, toSort);
     }
@@ -135,7 +146,11 @@ function Table() {
     <div id={style.tableWrapper}>
       <table id={style.table}>
         <tbody>
-          <TableHeader handleClick={sortDataFromColumn} tableData={data} />
+          <TableHeader
+            handleClick={sortDataFromColumn}
+            filterDirection={columnDirection}
+            tableData={data}
+          />
           <TableRows tableData={data} />
         </tbody>
       </table>
