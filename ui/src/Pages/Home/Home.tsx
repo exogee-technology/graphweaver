@@ -6,6 +6,9 @@ import openPlaygroundIcon from "../../assets/img/16-open-external.svg";
 import filterIcon from "../../assets/img/16-filter.svg";
 import Button from "../../components/Button";
 import { useState } from "react";
+import { tab } from "@testing-library/user-event/dist/tab";
+
+const tableData = require("../../utils/mock_data.json");
 
 function BlankSlate() {
   return (
@@ -22,17 +25,30 @@ function BlankSlate() {
   );
 }
 
-function ToolBar() {
-  const [searchParam, setSearchParam] = useState("");
-
+function ToolBar({ tableData }: { tableData: Array<any> }) {
   let timeOut: any;
 
   const handleChange = (e: any) => {
     clearTimeout(timeOut);
 
     timeOut = setTimeout(() => {
-      console.log(e.target.value);
+      // console.log(e.target.value);
+      console.log(filterData(e.target.value));
     }, 500);
+  };
+
+  const filterData = (inputValue: any) => {
+    const convertToArray = Object.entries(tableData);
+
+    const filteredData = convertToArray.filter(([key, value]) => {
+      const vals = Object.keys(value).forEach((key) => {
+        const val: string = value[key];
+
+        console.log(val.match(inputValue));
+      });
+      return "";
+    });
+    // return filteredData;
   };
 
   return (
@@ -74,7 +90,8 @@ function ToolBar() {
 function MainScreen() {
   return (
     <>
-      <Table />
+      <ToolBar tableData={tableData} />
+      <Table tableData={tableData} />
     </>
   );
 }
@@ -82,7 +99,6 @@ function MainScreen() {
 function Home({ hasData }: { hasData: boolean }) {
   return (
     <div id={style.mainContentWrapper}>
-      {hasData ? <ToolBar /> : null}
       <SideBar hasData={hasData} />
       {hasData ? <MainScreen /> : <BlankSlate />}
     </div>
