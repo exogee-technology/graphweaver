@@ -79,8 +79,16 @@ function TableRows({ tableData }: { tableData: Array<object> }) {
   );
 }
 
-function Table({ tableData }: { tableData: Array<any> }) {
-  const [data, setData] = useState(tableData);
+function Table({
+  tableData,
+  updateTable,
+  initialData,
+}: {
+  tableData: Array<any>;
+  updateTable: Function;
+  initialData: Array<any>;
+}) {
+  const data = tableData;
   const [columnDirection, setcolumnDirection] = useState(false);
 
   const sortedOnNumber = (data: any, column: string) => {
@@ -119,9 +127,9 @@ function Table({ tableData }: { tableData: Array<any> }) {
   }
 
   function sortDataFromColumn(header: any) {
-    const type: any = checkType(data[0][header]);
+    const type: any = checkType(initialData[0][header]);
     const sortedData = sortData(header, type, data);
-    setData([...sortedData]);
+    updateTable([...sortedData]);
   }
 
   return (
@@ -131,7 +139,7 @@ function Table({ tableData }: { tableData: Array<any> }) {
           <TableHeader
             handleClick={sortDataFromColumn}
             filterDirection={columnDirection}
-            tableData={data}
+            tableData={initialData}
           />
           <TableRows tableData={data} />
         </tbody>

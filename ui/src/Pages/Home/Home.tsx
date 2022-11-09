@@ -5,8 +5,9 @@ import dataSourcesIcon from "../../assets/img/64-data-sources.svg";
 import openPlaygroundIcon from "../../assets/img/16-open-external.svg";
 import filterIcon from "../../assets/img/16-filter.svg";
 import Button from "../../components/Button";
+import { useState } from "react";
 
-const tableData = require("../../utils/mock_data.json");
+const mockData = require("../../utils/mock_data.json");
 
 function BlankSlate() {
   return (
@@ -23,14 +24,22 @@ function BlankSlate() {
   );
 }
 
-function ToolBar({ tableData }: { tableData: Array<any> }) {
+function ToolBar({
+  tableData,
+  updateTable,
+  initialData,
+}: {
+  tableData: Array<any>;
+  updateTable: Function;
+  initialData: Array<any>;
+}) {
   let timeOut: any;
 
   const handleChange = (e: any) => {
     clearTimeout(timeOut);
 
     timeOut = setTimeout(() => {
-      console.log(filterData(e.target.value, tableData));
+      updateTable(filterData(e.target.value, initialData));
     }, 500);
   };
 
@@ -97,10 +106,25 @@ function ToolBar({ tableData }: { tableData: Array<any> }) {
 }
 
 function MainScreen() {
+  const initialData = mockData;
+  const [tableData, setTableData] = useState(initialData);
+
+  function handleChange(update: Array<any>) {
+    setTableData([...update]);
+  }
+
   return (
     <>
-      <ToolBar tableData={tableData} />
-      <Table tableData={tableData} />
+      <ToolBar
+        updateTable={handleChange}
+        tableData={tableData}
+        initialData={initialData}
+      />
+      <Table
+        updateTable={handleChange}
+        tableData={tableData}
+        initialData={initialData}
+      />
     </>
   );
 }
