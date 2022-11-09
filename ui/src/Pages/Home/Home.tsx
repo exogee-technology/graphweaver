@@ -100,6 +100,7 @@ function ToolBar({
             </span>
           </>
         </Button>
+        <Button iconBefore={openPlaygroundIcon}>Test</Button>
       </div>
     </div>
   );
