@@ -5,8 +5,6 @@ import dataSourcesIcon from "../../assets/img/64-data-sources.svg";
 import openPlaygroundIcon from "../../assets/img/16-open-external.svg";
 import filterIcon from "../../assets/img/16-filter.svg";
 import Button from "../../components/Button";
-import { useState } from "react";
-import { tab } from "@testing-library/user-event/dist/tab";
 
 const tableData = require("../../utils/mock_data.json");
 
@@ -32,24 +30,35 @@ function ToolBar({ tableData }: { tableData: Array<any> }) {
     clearTimeout(timeOut);
 
     timeOut = setTimeout(() => {
-      // console.log(e.target.value);
-      console.log(filterData(e.target.value));
+      console.log(filterData(e.target.value, tableData));
     }, 500);
   };
 
-  const filterData = (inputValue: any) => {
-    const convertToArray = Object.entries(tableData);
-
-    const filteredData = convertToArray.filter(([key, value]) => {
-      const vals = Object.keys(value).forEach((key) => {
-        const val: string = value[key];
-
-        console.log(val.match(inputValue));
-      });
-      return "";
-    });
-    // return filteredData;
+  // Filter table data
+  const filterData = (inputValue: string, tableData: Array<any>) => {
+    let items: any = Object.values(tableData);
+    return items.filter((item: any) => compareValues(item, inputValue));
   };
+
+  // Compare values
+  function compareValues(item: any, inputValue: string) {
+    item = Object.values(item);
+
+    let match: boolean;
+    for (let i = 0; i < item.length; i++) {
+      const content: string = item[i];
+      const val: string = String(content);
+      const input: string = inputValue.toLowerCase();
+      const re: RegExp = new RegExp(input, "g");
+      match = val.toLowerCase().match(re) != null;
+
+      if (match) {
+        return match;
+      }
+      continue;
+    }
+    return false;
+  }
 
   return (
     <div className={style.toolBarWrapper}>
