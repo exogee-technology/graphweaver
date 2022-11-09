@@ -1,31 +1,69 @@
 import { BaseEntity } from './base-entity';
 import { Field, ManyToOne } from '../decorators';
 import { Breeder } from './breeder';
-import { RestLookupProvider } from '../base-resolver';
 
 class Reference<T> {
-	readonly provider: any;
 	private entity: any;
-	private isInitialized = false;
-	// static isReference<T extends object>(data: any): data is Reference<T>;
-	// static wrapReference<T extends object>(entity: T | Reference<T>, prop: EntityProperty<T>): Reference<T> | T;
-	// static unwrapReference<T extends object>(ref: T | Reference<T>): T;
-	// load<K extends keyof T = never, P extends string = never>(): Promise<T>;
-	// load<K extends keyof T>(prop: K): Promise<T[K]>;
-	// unwrap(): T;
-	// getProperty<K extends keyof T>(prop: K): T[K];
 
 	constructor(entity: T) {
-		this.provider = new RestLookupProvider(Breeder);
+		this.entity = entity;
+		this.set(entity);
 	}
 
-	public async load(): Promise<void> {
-		this.entity = await this.provider.findOne('1');
-		this.isInitialized = true;
+	static create(entity: any) {
+		if (Reference.isReference(entity)) {
+			return entity;
+		}
+		return new Reference(entity);
 	}
-
-	public getEntity(): T {
+	static isReference(data: any) {
+		return data && !!data.__reference;
+	}
+	static wrapReference(entity: any, prop: { wrappedReference: any }) {
+		if (entity && prop.wrappedReference && !Reference.isReference(entity)) {
+			return Reference.create(entity);
+		}
+		return entity;
+	}
+	static unwrapReference(ref: { unwrap: () => any }) {
+		return Reference.isReference(ref) ? ref.unwrap() : ref;
+	}
+	async load(options: any) {
+		const opts = typeof options === 'object' ? options : { prop: options };
+		if (!this.isInitialized()) {
+			await this.entity.init(undefined, opts?.populate, opts?.lockMode, opts?.connectionType);
+		}
+		if (opts.prop) {
+			return this.entity[opts.prop];
+		}
 		return this.entity;
+	}
+	set(entity: T) {
+		if (entity instanceof Reference) {
+			entity = entity.unwrap();
+		}
+		this.entity = entity;
+	}
+	unwrap() {
+		return this.entity;
+	}
+	getEntity() {
+		if (!this.isInitialized()) {
+			throw new Error(`Reference not initialized`);
+		}
+		return this.entity;
+	}
+	getProperty(prop: string | number) {
+		return this.getEntity()[prop];
+	}
+	isInitialized() {
+		return this.entity.__initialized;
+	}
+	populated(populated: any) {
+		this.entity.populated(populated);
+	}
+	toJSON(...args: any) {
+		return this.entity.toJSON(...args);
 	}
 }
 
@@ -37,5 +75,5 @@ export class Dog extends BaseEntity {
 	name!: string;
 
 	@ManyToOne(() => Breeder)
-	breeder!: Reference<Breeder>;
+	breeder!: () => Promise<Breeder | null>;
 }

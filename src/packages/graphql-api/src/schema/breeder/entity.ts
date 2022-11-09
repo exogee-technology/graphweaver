@@ -15,10 +15,11 @@ export class Breeder extends GraphQLEntity<RestBreeder> {
 
 	@Field(() => [Dog])
 	async dogs(@Root() breeder: Breeder) {
-		return BaseLoaders.loadByRelatedId({
+		const d = await BaseLoaders.loadByRelatedId({
 			gqlEntityType: Dog,
 			relatedField: 'breeder',
 			id: breeder.id,
 		});
+		return d.map((dog) => Dog.fromBackendEntity(dog));
 	}
 }

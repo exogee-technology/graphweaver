@@ -14,11 +14,10 @@ export class Hobby extends GraphQLEntity<OrmHobby> {
 	@Field(() => User, { nullable: true })
 	async user(@Root() hobby: Hobby) {
 		if (!hobby.dataEntity.user) return null;
-		return User.fromBackendEntity(
-			await BaseLoaders.loadOne({
-				gqlEntityType: User,
-				id: hobby.dataEntity.user.unwrap().id,
-			})
-		);
+		const h = await BaseLoaders.loadOne({
+			gqlEntityType: User,
+			id: hobby.dataEntity.user.unwrap().id,
+		});
+		return User.fromBackendEntity(h);
 	}
 }

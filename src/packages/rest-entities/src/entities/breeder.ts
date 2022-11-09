@@ -2,7 +2,6 @@ import { BaseEntity } from './base-entity';
 import { Field } from '../decorators';
 import { Dog } from './dog';
 import { OneToMany } from '../decorators/one-to-many';
-import { RestLookupProvider } from '../base-resolver';
 
 class Collection<T> {
 	readonly provider: any;
@@ -18,7 +17,6 @@ class Collection<T> {
 
 	constructor(owner: object) {
 		this.owner = owner;
-		this.provider = new RestLookupProvider(Dog);
 	}
 
 	public isInitialized = () => {
@@ -66,6 +64,6 @@ export class Breeder extends BaseEntity {
 	@Field()
 	name!: string;
 
-	@OneToMany(() => Dog, {})
-	dogs = new Collection<Dog>(this);
+	@OneToMany(() => Dog)
+	dogs!: () => Promise<Dog[]>;
 }

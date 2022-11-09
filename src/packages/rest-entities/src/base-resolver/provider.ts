@@ -5,38 +5,7 @@ import { RequestOptions, RESTDataSource } from 'apollo-datasource-rest';
 import { DataSourceConfig } from 'apollo-datasource';
 import pluralize from 'pluralize';
 
-export class RestLookupProvider<T> extends RESTDataSource {
-	public entityType: new () => T;
-
-	public constructor(restType: new () => T) {
-		super();
-		this.memoizeGetRequests = false;
-
-		this.baseURL = 'https://6zd0g.mocklab.io/';
-		this.initialize({} as DataSourceConfig<any>);
-		this.entityType = restType;
-		this.context = {
-			acceptLanguage: 'en-au',
-			contentType: 'application/json',
-			sharedKey: 'd70a0cd87bf1ef70278df19e6ba677000ccf065bb41875d6c420d91e0c009e43',
-		};
-	}
-
-	public async findAll(): Promise<T[]> {
-		const plural = pluralize(this.entityType.name);
-		return this.get(`/${plural}`);
-	}
-
-	public async findOne(id: string): Promise<T | null> {
-		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
-
-		const plural = pluralize(this.entityType.name);
-		return this.get(`/${plural}/${id}`);
-	}
-}
-
 export class RestBackendProvider<T, G extends GraphQLEntity<T>>
-	// export class RestBackendProvider<T>
 	extends RESTDataSource
 	implements BackendProvider<T> {
 	private readonly gqlTypeName: string;
@@ -47,7 +16,6 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 	public readonly supportsInFilter = true;
 
 	public constructor(restType: new () => T, gqlType: new (dataEntity: T) => G) {
-		// public constructor(restType: new () => T) {
 		super();
 		this.memoizeGetRequests = false;
 
