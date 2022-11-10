@@ -30,7 +30,7 @@ function Dropdown({
     <>
       {showDropdown ? (
         <ul className={style.dropdown}>
-          <DropdownItems items={dropdownItems} />
+          {/* <DropdownItems items={dropdownItems} /> */}
         </ul>
       ) : null}
     </>
@@ -72,7 +72,7 @@ function Button({
           <Dropdown
             showDropdown={showDropdown}
             dropdownItems={dropdownItems}
-            updateTable={handleClick}
+            // updateTable={handleClick}
           />
         ) : null}
       </>
