@@ -25,11 +25,10 @@ function BlankSlate() {
 }
 
 function ToolBar({
-  tableData,
   updateTable,
   initialData,
 }: {
-  tableData: Array<any>;
+  // tableData: Array<any>;
   updateTable: Function;
   initialData: Array<any>;
 }) {
@@ -100,7 +99,16 @@ function ToolBar({
             </span>
           </>
         </Button>
-        <Button iconBefore={openPlaygroundIcon}>Test</Button>
+        <Button
+          dropdown={true}
+          dropdownItems={[
+            { name: "Add links array", href: "some_url" },
+            { name: "Add links array", href: "some_url" },
+          ]}
+          iconBefore={openPlaygroundIcon}
+        >
+          Test
+        </Button>
       </div>
     </div>
   );
@@ -116,11 +124,7 @@ function MainScreen() {
 
   return (
     <>
-      <ToolBar
-        updateTable={handleChange}
-        tableData={tableData}
-        initialData={initialData}
-      />
+      <ToolBar updateTable={handleChange} initialData={initialData} />
       <Table
         updateTable={handleChange}
         tableData={tableData}
