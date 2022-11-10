@@ -1,7 +1,13 @@
 import { useState } from "react";
 import style from "./Button.module.css";
 
-function DropdownItems({ items }: { items: Array<object> }) {
+function DropdownItems({
+  items,
+  handleClick,
+}: {
+  items: Array<object>;
+  handleClick: Function;
+}) {
   return (
     <>
       {items.map((item: any) => (
@@ -63,7 +69,11 @@ function Button({
         {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
         {children}
         {dropdown ? (
-          <Dropdown showDropdown={showDropdown} dropdownItems={dropdownItems} />
+          <Dropdown
+            showDropdown={showDropdown}
+            dropdownItems={dropdownItems}
+            updateTable={handleClick}
+          />
         ) : null}
       </>
     </button>
