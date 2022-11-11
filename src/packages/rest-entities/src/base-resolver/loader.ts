@@ -7,7 +7,6 @@ import {
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { EntityConstructor, EntityManager } from '../entity-manager';
-
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
 
 const REST_MAX_REQUEST_BATCH_SIZE = 100;

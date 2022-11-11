@@ -1,5 +1,5 @@
 import { AuthorizeAccess, BaseLoaders, GraphQLEntity } from '@exogee/base-resolver';
-import { Breeder as RestBreeder } from './entity';
+import { Breeder as RestBreeder } from '@exogee/rest-entities';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
 
 import { Dog } from '../dog';
@@ -7,6 +7,7 @@ import { Dog } from '../dog';
 @ObjectType('Breeder')
 @AuthorizeAccess({})
 export class Breeder extends GraphQLEntity<RestBreeder> {
+
 	@Field(() => ID)
 	id!: string;
 
