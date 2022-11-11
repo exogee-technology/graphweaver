@@ -1,39 +1,23 @@
 import { useState } from "react";
 import style from "./Button.module.css";
 
-function DropdownItems({
-  items,
+function DropdownItem({
   handleClick,
+  children,
 }: {
-  items: Array<object>;
-  handleClick: Function;
+  handleClick: any;
+  children: JSX.Element | string;
 }) {
-  return (
-    <>
-      {items.map((item: any) => (
-        <li key={Math.random()}>
-          <a href={item.href}>{item.name}</a>
-        </li>
-      ))}
-    </>
-  );
+  return <li onClick={handleClick}>{children}</li>;
 }
 
-function Dropdown({
-  showDropdown,
-  dropdownItems,
-}: {
-  showDropdown: boolean;
-  dropdownItems: Array<object>;
-}) {
+function Dropdown({ showDropdown }: { showDropdown: boolean }) {
   return (
-    <>
-      {showDropdown ? (
-        <ul className={style.dropdown}>
-          {/* <DropdownItems items={dropdownItems} /> */}
-        </ul>
-      ) : null}
-    </>
+    <ul className={showDropdown ? style.dropdown : style.hide}>
+      <DropdownItem handleClick={() => console.log("bla")}>
+        Some link
+      </DropdownItem>
+    </ul>
   );
 }
 
@@ -42,39 +26,27 @@ function Button({
   children,
   iconBefore,
   dropdown = false,
-  dropdownItems = [{ name: "Add links array", href: "some_url" }],
 }: {
   handleClick?: Function;
   children: JSX.Element | string;
   iconBefore?: string;
   dropdown?: boolean;
-  dropdownItems?: Array<object>;
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   function hasIconBefore() {
-    if (iconBefore) {
-      return true;
-    }
+    return iconBefore ? true : false;
   }
 
-  function handleLocalClick() {
-    if (dropdown) {
-      setShowDropdown(!showDropdown);
-    }
+  function showHidDropdown() {
+    return dropdown ? setShowDropdown(!showDropdown) : false;
   }
   return (
-    <button onClick={handleLocalClick} className={style.button} type="button">
+    <button onClick={showHidDropdown} className={style.button} type="button">
       <>
         {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
         {children}
-        {dropdown ? (
-          <Dropdown
-            showDropdown={showDropdown}
-            dropdownItems={dropdownItems}
-            // updateTable={handleClick}
-          />
-        ) : null}
+        {dropdown ? <Dropdown showDropdown={showDropdown} /> : null}
       </>
     </button>
   );
