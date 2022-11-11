@@ -11,12 +11,20 @@ function DropdownItem({
   return <li onClick={handleClick}>{children}</li>;
 }
 
-function Dropdown({ showDropdown }: { showDropdown: boolean }) {
+function Dropdown({
+  showDropdown,
+  onUpdate,
+}: {
+  showDropdown: boolean;
+  onUpdate: any;
+}) {
+  const handleLocal = () => {
+    onUpdate("some param");
+  };
+
   return (
     <ul className={showDropdown ? style.dropdown : style.hide}>
-      <DropdownItem handleClick={() => console.log("bla")}>
-        Some link
-      </DropdownItem>
+      <DropdownItem handleClick={() => handleLocal()}>Some link</DropdownItem>
     </ul>
   );
 }
@@ -26,11 +34,13 @@ function Button({
   children,
   iconBefore,
   dropdown = false,
+  onUpdate,
 }: {
   handleClick?: Function;
   children: JSX.Element | string;
   iconBefore?: string;
   dropdown?: boolean;
+  onUpdate?: Function;
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -46,7 +56,9 @@ function Button({
       <>
         {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
         {children}
-        {dropdown ? <Dropdown showDropdown={showDropdown} /> : null}
+        {dropdown ? (
+          <Dropdown showDropdown={showDropdown} onUpdate={onUpdate} />
+        ) : null}
       </>
     </button>
   );
