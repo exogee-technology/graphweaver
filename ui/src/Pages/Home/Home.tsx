@@ -43,6 +43,11 @@ function ToolBar({
     }, 500);
   };
 
+  const updateFromFilter = (param: any) => {
+    console.log(param);
+    console.log("test fired");
+  };
+
   // Filter table data
   const filterData = (inputValue: string, tableData: Array<any>) => {
     let items: any = Object.values(tableData);
@@ -110,7 +115,9 @@ function ToolBar({
         >
           Test
         </Button>
-        <FilterButton dropdown={true}>Filter</FilterButton>
+        <FilterButton dropdown={true} onUpdate={updateFromFilter}>
+          Filter
+        </FilterButton>
       </div>
     </div>
   );
