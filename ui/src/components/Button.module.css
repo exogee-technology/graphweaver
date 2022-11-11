@@ -57,10 +57,20 @@
   flex-shrink: 0;
   white-space: nowrap;
 
+  font-family: "Inter";
+
   font-style: normal;
+  font-weight: 500;
+}
+
+.dropdown li p {
   font-weight: 500;
 }
 
 .dropdown li:hover {
   background: #7038c2;
+}
+
+.hide {
+  display: none;
 }
