@@ -31,12 +31,14 @@ function Button({
   handleClick = () => null,
   children,
   iconBefore,
+  iconAfter,
   dropdown = false,
   dropdownItems = [{ name: "Add links array", href: "some_url" }],
 }: {
   handleClick?: Function;
   children: JSX.Element | string;
   iconBefore?: string;
+  iconAfter?: string;
   dropdown?: boolean;
   dropdownItems?: Array<object>;
 }) {
@@ -46,17 +48,29 @@ function Button({
     return iconBefore ? true : false;
   }
 
+  function hasIconAfter() {
+    return iconAfter ? true : false;
+  }
+
   function handleLocalClick() {
     return dropdown ? setShowDropdown(!showDropdown) : false;
   }
+
+  function renderDropdown() {
+    if (dropdown) {
+      return (
+        <Dropdown showDropdown={showDropdown} dropdownItems={dropdownItems} />
+      );
+    }
+  }
+
   return (
     <button onClick={handleLocalClick} className={style.button} type="button">
       <>
         {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
         {children}
-        {dropdown ? (
-          <Dropdown showDropdown={showDropdown} dropdownItems={dropdownItems} />
-        ) : null}
+        {hasIconAfter() ? <img src={iconAfter} alt="Icon" /> : null}
+        {renderDropdown()}
       </>
     </button>
   );
