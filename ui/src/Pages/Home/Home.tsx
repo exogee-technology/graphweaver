@@ -5,6 +5,7 @@ import dataSourcesIcon from "../../assets/img/64-data-sources.svg";
 import openPlaygroundIcon from "../../assets/img/16-open-external.svg";
 import filterIcon from "../../assets/img/16-filter.svg";
 import Button from "../../components/Button";
+import FilterButton from "../../components/FilterButton";
 import { useState } from "react";
 
 const mockData = require("../../utils/mock_data.json");
@@ -109,6 +110,7 @@ function ToolBar({
         >
           Test
         </Button>
+        <FilterButton dropdown={true}>Filter</FilterButton>
       </div>
     </div>
   );

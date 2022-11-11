@@ -21,13 +21,9 @@ function Dropdown({
   dropdownItems: Array<object>;
 }) {
   return (
-    <>
-      {showDropdown ? (
-        <ul className={style.dropdown}>
-          <DropdownItems items={dropdownItems} />
-        </ul>
-      ) : null}
-    </>
+    <ul className={showDropdown ? style.dropdown : style.hide}>
+      <DropdownItems items={dropdownItems} />
+    </ul>
   );
 }
 
@@ -47,15 +43,11 @@ function Button({
   const [showDropdown, setShowDropdown] = useState(false);
 
   function hasIconBefore() {
-    if (iconBefore) {
-      return true;
-    }
+    return iconBefore ? true : false;
   }
 
   function handleLocalClick() {
-    if (dropdown) {
-      setShowDropdown(!showDropdown);
-    }
+    return dropdown ? setShowDropdown(!showDropdown) : false;
   }
   return (
     <button onClick={handleLocalClick} className={style.button} type="button">
