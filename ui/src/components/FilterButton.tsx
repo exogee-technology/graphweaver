@@ -51,14 +51,19 @@ function Button({
   function showHidDropdown() {
     return dropdown ? setShowDropdown(!showDropdown) : false;
   }
+
+  function renderDropdown() {
+    if (dropdown) {
+      return <Dropdown showDropdown={showDropdown} onUpdate={onUpdate} />;
+    }
+  }
+
   return (
     <button onClick={showHidDropdown} className={style.button} type="button">
       <>
         {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
         {children}
-        {dropdown ? (
-          <Dropdown showDropdown={showDropdown} onUpdate={onUpdate} />
-        ) : null}
+        {renderDropdown()}
       </>
     </button>
   );
