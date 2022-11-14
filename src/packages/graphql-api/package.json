@@ -26,7 +26,6 @@
 		"@exogee/logger": "workspace:1.0.0",
 		"@exogee/database-provider": "workspace:1.0.0",
 		"@exogee/rest-entities": "workspace:1.0.0",
-		"@exogee/shared": "workspace:1.0.0",
 		"apollo-server-core": "3.10.3",
 		"apollo-server-errors": "3.3.1",
 		"apollo-server-lambda": "3.10.0",
