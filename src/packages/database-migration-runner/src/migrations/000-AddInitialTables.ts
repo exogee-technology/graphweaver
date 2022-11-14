@@ -6,7 +6,6 @@ export class AddInitialTables implements Migration {
 	sortKey = 0;
 
 	public async up(database: Client): Promise<any> {
-
 		// Apollo Sessions
 		await database.query(
 			`create table "session" ("session_token" varchar(255) not null, "expires_at" timestamptz(0) not null, "value" jsonb null);`
@@ -30,8 +29,6 @@ export class AddInitialTables implements Migration {
 		);
 
 		// Entities
-		await database.query(
-			`create table "user" ("id" bigserial primary key, "name" text not null);`
-		)
+		await database.query(`create table "user" ("id" bigserial primary key, "name" text not null);`);
 	}
 }

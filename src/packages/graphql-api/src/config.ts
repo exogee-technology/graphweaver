@@ -10,4 +10,3 @@ export const requireEnvironmentVariable = (envStr: string): string => {
 	if (!envVar) throw new Error(`${envStr} required but not found`);
 	return envVar;
 };
-
