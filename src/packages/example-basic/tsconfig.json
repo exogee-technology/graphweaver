@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"target": "es2019",
+		"module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../base-resolver" },
+		{ "path": "../graphql-scalars" },
+		{ "path": "../database-entities" },
+		{ "path": "../rest-entities" },
+		{ "path": "../database-provider" },
+		{ "path": "../logger" }
+	]
+}
