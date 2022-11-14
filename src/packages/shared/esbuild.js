@@ -1,3 +1,4 @@
+/* eslint-disable */
 const esbuild = require('esbuild');
 
 esbuild
