@@ -27,7 +27,7 @@ export const handleContext = async ({
 		return {
 			session: {
 				token,
-				expiry: 100000
+				expiry: 100000,
 			},
 		};
 	} catch (err: any) {

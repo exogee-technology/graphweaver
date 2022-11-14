@@ -16,10 +16,10 @@ export class Skill extends GraphQLEntity<OrmSkill> {
 	async users(@Root() skill: Skill) {
 		if (!skill.dataEntity.users) return null;
 		const users = await BaseLoaders.loadByRelatedId({
-				gqlEntityType: User,
-				relatedField: 'skills',
-				id: skill.id,
-			});
-		return users.map(user => User.fromBackendEntity(user));
+			gqlEntityType: User,
+			relatedField: 'skills',
+			id: skill.id,
+		});
+		return users.map((user) => User.fromBackendEntity(user));
 	}
 }
