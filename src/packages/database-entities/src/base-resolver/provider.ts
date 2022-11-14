@@ -124,7 +124,7 @@ export const mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArg
 	return assign(result, cleanInput);
 };
 
-export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
+export class MikroBackendProvider<T extends Record<string, unknown>> implements BackendProvider<T> {
 	public readonly backendId = 'mikro-orm';
 
 	public entityType: new () => T;
