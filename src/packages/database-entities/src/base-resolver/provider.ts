@@ -124,6 +124,7 @@ export const mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArg
 	return assign(result, cleanInput);
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public readonly backendId = 'mikro-orm';
 
@@ -404,7 +405,9 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 	public async deleteOne(id: string): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with id ${id}`);
-		const deletedRows = await this.getRepository().nativeDelete({ id } as unknown as FilterQuery<T>);
+		const deletedRows = await this.getRepository().nativeDelete(({
+			id,
+		} as unknown) as FilterQuery<T>);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');

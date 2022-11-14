@@ -11,6 +11,6 @@ export class Skill extends BaseEntity {
 	@Property({ type: String })
 	name!: string;
 
-	@ManyToMany({ entity: () => User, mappedBy: 'skills'})
+	@ManyToMany({ entity: () => User, mappedBy: 'skills' })
 	users = new Collection<User>(this);
 }

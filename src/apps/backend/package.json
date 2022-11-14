@@ -5,7 +5,7 @@
 	"main": "serverless.js",
 	"scripts": {
 		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
-		"build:types": "pnpm -r build:types",
+		"build:types": "pnpm -r build:types --filter \"!packages/example*\"",
 		"build:js": "node transpile.js",
 		"build:legacy": "pnpm -r build:legacy",
 		"start": "concurrently \"pnpm build:js -- --watch\" \"pnpm -r build:types\" \"nodemon --ignore buckets/ --exec serverless offline start\"",
