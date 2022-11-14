@@ -1,4 +1,12 @@
-import { BigIntType, Collection, Entity, ManyToMany, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	BigIntType,
+	Collection,
+	Entity,
+	ManyToMany,
+	OneToMany,
+	PrimaryKey,
+	Property,
+} from '@mikro-orm/core';
 
 import { BaseEntity } from './base-entity';
 import { Hobby } from './hobby';

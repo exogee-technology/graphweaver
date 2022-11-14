@@ -1,9 +1,4 @@
-import {
-	BaseEntity,
-	RelationshipMap,
-	RelationshipType,
-	Relationship,
-} from './entities';
+import { BaseEntity, RelationshipMap, RelationshipType, Relationship } from './entities';
 
 export interface EntityConstructor<T extends BaseEntity> {
 	new (_entity: any): T;
@@ -201,7 +196,6 @@ export class EntityManager<T extends BaseEntity> {
 		query = query || {};
 		if (!query.select) query.select = this.defaultSelectForEntity();
 		query = this.mapFieldsAndRelationshipsForEntity({ value: query });
-
 	};
 
 	public readonly aggregate = async (type: Aggregate, query?: Partial<QueryOptions<T>>) => {
@@ -243,5 +237,4 @@ export class EntityManager<T extends BaseEntity> {
 
 		return new this._entity(undefined);
 	};
-
 }
