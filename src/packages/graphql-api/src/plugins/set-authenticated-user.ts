@@ -1,5 +1,5 @@
 import { AuthenticationContext } from '@exogee/database-entities';
-import { Role } from '@exogee/shared';
+import { Role } from '../auth';
 import { PluginDefinition } from 'apollo-server-core';
 
 import { AuthorizationContext } from '../auth/authorization-context';

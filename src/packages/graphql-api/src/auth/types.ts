@@ -1,7 +1,8 @@
-import { FilterQuery } from '@exogee/database-entities';
-import { Role } from '@exogee/shared';
-
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
+
+export enum Role {
+	SUPER_ADMIN = 'SUPER_ADMIN',
+}
 
 export enum Permission {
 	NONE = 'NONE',
