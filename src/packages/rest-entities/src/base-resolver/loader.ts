@@ -1,9 +1,4 @@
-import {
-	BaseEntity,
-	RelationshipMap,
-	RelationshipType,
-	Relationship,
-} from '../entities';
+import { BaseEntity, RelationshipMap, RelationshipType, Relationship } from '../entities';
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { EntityConstructor, EntityManager } from '../entity-manager';
@@ -114,9 +109,7 @@ const getRelatedRecordId = <T extends BaseEntity>(
 	relatedIdField: string,
 	relationship?: Relationship<T>
 ) => {
-	return isManyToManyRelationship(relationship)
-		? null
-		: record[relatedIdField as keyof T];
+	return isManyToManyRelationship(relationship) ? null : record[relatedIdField as keyof T];
 };
 
 const getRelatedIdLoader = <T extends BaseEntity, O extends BaseEntity>(

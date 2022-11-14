@@ -7,7 +7,6 @@ registerScalarType(DateScalar, Date);
 
 // Common Enums
 
-
 // Common GraphQL objects
 @ObjectType()
 export class FileStoreSignedUrl {
