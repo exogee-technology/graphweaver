@@ -6,7 +6,4 @@ import { Dog } from './entity';
 
 @Resolver((of) => Dog)
 @AuthorizedBaseFunctions()
-export class DogResolver extends createBaseResolver(
-	Dog,
-	new RestBackendProvider(RestDog, Dog)
-) {}
+export class DogResolver extends createBaseResolver(Dog, new RestBackendProvider(RestDog, Dog)) {}

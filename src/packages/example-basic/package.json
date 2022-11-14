@@ -1,0 +1,37 @@
+{
+	"name": "@exogee/graphweaver-example-basic",
+	"version": "0.1.0",
+	"description": "An example project for @exogee/graphweaver",
+	"license": "MIT",
+	"scripts": {
+		"start": "ts-node src/index.ts",
+		"prettier": "prettier --write .",
+		"test": "pnpm test:tsc && pnpm test:prettier",
+		"test:tsc": "tsc --noEmit",
+		"test:prettier": "prettier --check ."
+	},
+	"dependencies": {
+		"@exogee/apollo-plugins": "workspace:1.0.0",
+		"@exogee/base-resolver": "workspace:1.0.0",
+		"@exogee/database-entities": "workspace:1.0.0",
+		"@exogee/database-provider": "workspace:1.0.0",
+		"@exogee/graphql-scalars": "workspace:1.0.0",
+		"@exogee/logger": "workspace:1.0.0",
+		"@exogee/rest-entities": "workspace:1.0.0",
+		"@exogee/shared": "workspace:1.0.0",
+		"@mikro-orm/core": "5.4.2",
+		"@mikro-orm/postgresql": "5.4.2",
+		"apollo-server": "3.11.1",
+		"apollo-server-core": "3.10.3",
+		"dotenv": "16.0.0",
+		"graphql": "15.8.0",
+		"reflect-metadata": "0.1.13",
+		"type-graphql": "1.1.1"
+	},
+	"devDependencies": {
+		"@types/node": "14.14.10",
+		"open": "8.4.0",
+		"ts-node": "10.9.1",
+		"typescript": "4.5.4"
+	}
+}
