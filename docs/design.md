@@ -11,14 +11,16 @@ When reading the document, consider your first experience as a developer. You ma
   - [Design Principles](#design-principles)
   - [Lists](#lists)
     - [Filters](#filters)
-      - [Logical Operators](#logical-operators)
-      - [Conditional Operators](#conditional-operators)
-      - [IdFilter](#idfilter)
-      - [StringFilter](#stringfilter)
-      - [NumberFilter](#numberfilter)
-      - [DateFilter](#datefilter)
+      - [Operators](#operators)
+        - [Logical Operators](#logical-operators)
+        - [Conditional Operators](#conditional-operators)
+        - [Not Logical Operator](#not-logical-operator)
+      - [Scalar Filters](#scalar-filters)
+        - [IdFilter](#idfilter)
+        - [StringFilter](#stringfilter)
+        - [NumberFilter](#numberfilter)
+        - [DateFilter](#datefilter)
       - [Filter Test Cases](#filter-test-cases)
-      - [Not Logical Operator](#not-logical-operator)
     - [Pagination](#pagination)
 
 ## Design Principles
@@ -84,11 +86,13 @@ We can use the `count` property when implementing paging, which we will cover in
 
 Filters are a combination of logical and conditional operators. These operators are combinable and offer great flexibility and power. We must remember that they also introduce a learning curve for new developers.
 
+#### Operators
+
 It is the design intention to decouple these operators from SQL operators. Although the comparison is inevitable different data sources will support a subset or all operations.
 
 The operators supported by base resolver are:
 
-#### Logical Operators
+##### Logical Operators
 
 | Operator | Description                               |
 | -------- | ----------------------------------------- |
@@ -96,7 +100,7 @@ The operators supported by base resolver are:
 | or       | One or more conditions must return `true` |
 | not      | All conditions must return `false`        |
 
-#### Conditional Operators
+##### Conditional Operators
 
 | Operator           | Description                                |
 | ------------------ | ------------------------------------------ |
@@ -122,7 +126,72 @@ The last conditional operator is a bit different to the others. It modifies how 
 
 It specifies the case sensitivity for a string-based operator. Next, let's look at the filter types that Base Resolver uses.
 
-Base Resolver produces four Filter types:
+##### Not Logical Operator
+
+You may have noticed that there is not a specific `notIn` or `notEqual` operator. That is because there is a `not` logical operator that we can use instead. Let's look at some examples:
+
+- Where Author's first name is not "Luke"
+
+```
+{
+  firstName: {
+    "not": [
+      {
+        "equal": "Luke"
+      }
+    ]
+  }
+}
+```
+
+- Where Author's first name is not "Luke" and any case
+
+```
+{
+  firstName: {
+    "not": [
+      {
+        "equal": "Luke",
+        "case": "insensitive"
+      }
+    ]
+  }
+}
+```
+
+- Where Author's first name is not null
+
+```
+{
+  firstName: {
+    "not": [
+      {
+        "equal": null
+      }
+    ]
+  }
+}
+```
+
+- Where Author's id is not in
+
+```
+{
+  id: {
+    "not": [
+      {
+        "in": ["1"]
+      }
+    ]
+  }
+}
+```
+
+The `not` logical operator is for reversing the default behaviour from "All conditions must return `true`" to "All conditions must return `false`".
+
+#### Scalar Filters
+
+Base Resolver produces four Scalar Filter types:
 
 - IdFilter
 - StringFilter
@@ -131,7 +200,7 @@ Base Resolver produces four Filter types:
 
 Each filter above will only support a subset of the operators. For example, string filters will not implement `lessThan`. Here is the schema output for each filter:
 
-#### IdFilter
+##### IdFilter
 
 ```
   input IdFilter {
@@ -141,7 +210,7 @@ Each filter above will only support a subset of the operators. For example, stri
   }
 ```
 
-#### StringFilter
+##### StringFilter
 
 ```
   input StringFilter {
@@ -155,7 +224,7 @@ Each filter above will only support a subset of the operators. For example, stri
   }
 ```
 
-#### NumberFilter
+##### NumberFilter
 
 ```
   input NumberFilter {
@@ -169,7 +238,7 @@ Each filter above will only support a subset of the operators. For example, stri
   }
 ```
 
-#### DateFilter
+##### DateFilter
 
 ```
   input DateFilter {
@@ -249,69 +318,6 @@ Next, let's look at some sample filters.
 ```
 
 We have not covered the use of `not`. Let's look at that next.
-
-#### Not Logical Operator
-
-You may have noticed that there is not a specific `notIn` or `notEqual` operator. That is because there is a `not` logical operator that we can use instead. Let's look at some examples:
-
-- Where Author's first name is not "Luke"
-
-```
-{
-  firstName: {
-    "not": [
-      {
-        "equal": "Luke"
-      }
-    ]
-  }
-}
-```
-
-- Where Author's first name is not "Luke" and any case
-
-```
-{
-  firstName: {
-    "not": [
-      {
-        "equal": "Luke",
-        "case": "insensitive"
-      }
-    ]
-  }
-}
-```
-
-- Where Author's first name is not null
-
-```
-{
-  firstName: {
-    "not": [
-      {
-        "equal": null
-      }
-    ]
-  }
-}
-```
-
-- Where Author's id is not in
-
-```
-{
-  id: {
-    "not": [
-      {
-        "in": ["1"]
-      }
-    ]
-  }
-}
-```
-
-The `not` logical operator is for reversing the default behaviour from "All conditions must return `true`" to "All conditions must return `false`".
 
 ### Pagination
 
