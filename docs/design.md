@@ -113,7 +113,7 @@ The operators supported by GraphWeaver are:
 | Operator           | Description                                |
 | ------------------ | ------------------------------------------ |
 | equals             | Value equals `n`                           |
-| in                 | Value `n` exists in the list               |
+| in                 | Value `n` exists in the list or array      |
 | lessThan           | Value `n` is less than `x`                 |
 | lessThanOrEqual    | Value `n` is less than or equal to `x`     |
 | greaterThan        | Value `n` is greater than `x`              |
