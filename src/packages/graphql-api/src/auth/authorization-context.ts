@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { Role } from '@exogee/shared';
+import { Role } from './types';
 import { ForbiddenError } from 'apollo-server-lambda';
 
 class AuthorizationContextImplementation {
