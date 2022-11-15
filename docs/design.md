@@ -25,10 +25,18 @@ When reading the document, consider your first experience as a developer. You ma
 
 ## Design Principles
 
+The API design has some guiding principles:
+
 - We prefer verbosity to improve readability.
 - We adopt an extensible approach
 
-These principles introduce some negative consequences. For example, senior software engineers may find this frustrating as they have to type more boilerplate to interact with the API.
+As software engineers we spend more time reading code than writing it. Therefore, the API focuses on readability that means limiting the amount of acronyms or abbreviations.
+
+The second principle is about extensibility. We should design the API so that we can easily add new attributes as the API develops. As the API will be used by many companies and projects its difficult to know what is required from the start. However, we can allow the API to be easily extended, saving us refactor time in the future.
+
+These principles should be followed when proposing changes to the API.
+
+We also acknowledge that these principles introduce some negative consequences. For example, senior software engineers may find this frustrating as they have to type more boilerplate to interact with the API.
 
 This frustration is apparent when writing filters. Filters use a convention such as:
 
