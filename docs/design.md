@@ -132,7 +132,7 @@ The last conditional operator is a bit different to the others. It modifies how 
   }
 ```
 
-It specifies the case sensitivity for a string-based operator. Next, let's look at the filter types that Base Resolver uses.
+It specifies the case sensitivity for a string-based operator. Next, let's look at the filter types that GraphWeaver uses.
 
 ##### Not Logical Operator
 
