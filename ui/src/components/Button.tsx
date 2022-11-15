@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import style from "./Button.module.css";
 
 function DropdownItems({ items }: { items: Array<object> }) {
@@ -16,14 +16,48 @@ function DropdownItems({ items }: { items: Array<object> }) {
 function Dropdown({
   showDropdown,
   dropdownItems,
+  onOutsideClick,
+  getParent,
 }: {
   showDropdown: boolean;
   dropdownItems: Array<object>;
+  onOutsideClick: any;
+  getParent: Function;
 }) {
+  function useOutsideAlerter(ref: any) {
+    useEffect(() => {
+      function handleClickOutside(e: Event) {
+        if (e.target === getParent().current) {
+          return;
+        }
+
+        if (ref.current && !ref.current.contains(e.target)) {
+          onOutsideClick();
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+
   return (
-    <ul className={showDropdown ? style.dropdown : style.hide}>
-      <DropdownItems items={dropdownItems} />
-    </ul>
+    <>
+      {showDropdown ? (
+        <ul
+          ref={wrapperRef}
+          className={showDropdown ? style.dropdown : style.hide}
+        >
+          <DropdownItems items={dropdownItems} />
+        </ul>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 
@@ -45,32 +79,52 @@ function Button({
   const [showDropdown, setShowDropdown] = useState(false);
 
   function hasIconBefore() {
-    return iconBefore ? true : false;
+    if (iconBefore) {
+      return <img src={iconBefore} alt="Icon" />;
+    }
   }
 
   function hasIconAfter() {
-    return iconAfter ? true : false;
+    if (iconAfter) {
+      return <img src={iconAfter} alt="Icon" />;
+    }
   }
 
   function handleLocalClick() {
     return dropdown ? setShowDropdown(!showDropdown) : false;
   }
 
-  function renderDropdown() {
+  function hasDropdown() {
     if (dropdown) {
       return (
-        <Dropdown showDropdown={showDropdown} dropdownItems={dropdownItems} />
+        <Dropdown
+          onOutsideClick={() => setShowDropdown(false)}
+          getParent={getParent}
+          showDropdown={showDropdown}
+          dropdownItems={dropdownItems}
+        />
       );
     }
   }
 
+  // To refer to when clicking outside dropdown
+  const parentRef = useRef(null);
+  function getParent() {
+    return parentRef;
+  }
+
   return (
-    <button onClick={handleLocalClick} className={style.button} type="button">
+    <button
+      ref={parentRef}
+      onClick={handleLocalClick}
+      className={style.button}
+      type="button"
+    >
       <>
-        {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
+        {hasIconBefore()}
         {children}
-        {hasIconAfter() ? <img src={iconAfter} alt="Icon" /> : null}
-        {renderDropdown()}
+        {hasIconAfter()}
+        {hasDropdown()}
       </>
     </button>
   );

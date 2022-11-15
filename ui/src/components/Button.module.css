@@ -19,6 +19,10 @@
   font-weight: 500;
 }
 
+.button:hover {
+  background-color: #853af2;
+}
+
 .button span {
   width: 16px;
   height: 16px;
@@ -73,6 +77,15 @@
 
 .dropdown li:hover {
   background: #7038c2;
+}
+
+.clickMeAway {
+  background-color: red;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  bottom: 0;
 }
 
 .hide {
