@@ -96,7 +96,7 @@ Filters are a combination of logical and conditional operators. These operators 
 
 #### Operators
 
-It is the design intention to decouple these operators from SQL operators. Although the comparison is inevitable different data sources will support either a subset or all operations.
+While designing GraphWeaver, we've intentionally decoupled these operators from SQL operators. Although the comparison is inevitable different data sources will support either a subset or all operations. The query syntax is not meant to support all SQL operations.
 
 The operators supported by base resolver are:
 
