@@ -199,7 +199,7 @@ The `not` logical operator is for reversing the default behaviour from "All cond
 
 #### Scalar Filters
 
-Base Resolver produces four Scalar Filter types:
+GraphWeaver produces four Scalar Filter types:
 
 - IdFilter
 - StringFilter
