@@ -30,9 +30,9 @@ The API design has some guiding principles:
 - We prefer verbosity to improve readability.
 - We adopt an extensible approach
 
-As software engineers we spend more time reading code than writing it. Therefore, the API focuses on readability, which means limiting the amount of acronyms or abbreviations.
+As software engineers, we spend more time reading code than writing it. Therefore, the API focuses on readability, which means limiting the number of acronyms or abbreviations.
 
-The second principle is about extensibility. We should design the API so that we can easily add new attributes as the API develops. As the API will be used by many companies and projects its difficult to know what is required from the start. However, we can allow the API to be easily extended, saving us refactor time in the future.
+The second principle is about extensibility. We should design the API so that we can easily add new attributes as the API develops. As the API will be used by many companies and projects, it's difficult to know what is required from the start. However, we can allow the API to be easily extended, saving us refactoring time in the future.
 
 These principles should be followed when proposing changes to the API.
 
