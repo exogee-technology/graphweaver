@@ -89,14 +89,14 @@ function ToolBar({
           placeholder="Search..."
           onChange={handleChange}
         />
-        <Button>
-          <>
-            <span>
-              <img width={16} src={filterIcon} alt="Open playground" />
-            </span>
-            <p>Filter</p>
-          </>
-        </Button>
+        <FilterButton
+          dropdown={true}
+          iconBefore={filterIcon}
+          onUpdate={updateFromFilter}
+        >
+          Filter
+        </FilterButton>
+
         <Button>
           <>
             <p>Open playground</p>
@@ -115,9 +115,6 @@ function ToolBar({
         >
           Test
         </Button>
-        <FilterButton dropdown={true} onUpdate={updateFromFilter}>
-          Filter
-        </FilterButton>
       </div>
     </div>
   );
