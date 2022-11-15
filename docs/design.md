@@ -1,8 +1,25 @@
-# GraphWeaver Design
+# GraphWeaver API Design
 
 The GraphWeaver API is for a junior developer starting in software engineering. All design decisions have the junior developer in mind.
 
 When reading the document, consider your first experience as a developer. You may not have fully understood all the acronyms and terminology. Therefore the design of this API has a high level of readability and extensibility.
+
+## Contents
+
+- [GraphWeaver API Design](#graphweaver-api-design)
+  - [Contents](#contents)
+  - [Design Principles](#design-principles)
+  - [Lists](#lists)
+    - [Filters](#filters)
+      - [Logical Operators](#logical-operators)
+      - [Conditional Operators](#conditional-operators)
+      - [IdFilter](#idfilter)
+      - [StringFilter](#stringfilter)
+      - [NumberFilter](#numberfilter)
+      - [DateFilter](#datefilter)
+      - [Filter Test Cases](#filter-test-cases)
+      - [Not Logical Operator](#not-logical-operator)
+    - [Pagination](#pagination)
 
 ## Design Principles
 
