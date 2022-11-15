@@ -53,8 +53,8 @@ const runBuild = async () => {
 			return;
 		}
 
-		if(dir.match(/^example*/)) {
-			console.log("Ignoring example package");
+		if (dir.match(/^example*/)) {
+			console.log('Ignoring example package');
 			return;
 		}
 

@@ -1,4 +1,3 @@
-import jwtDecode from 'jwt-decode';
 import { AuthChecker } from 'type-graphql';
 
 import { AuthenticationError } from '../utils';

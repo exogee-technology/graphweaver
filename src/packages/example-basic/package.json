@@ -18,7 +18,6 @@
 		"@exogee/graphql-scalars": "workspace:1.0.0",
 		"@exogee/logger": "workspace:1.0.0",
 		"@exogee/rest-entities": "workspace:1.0.0",
-		"@exogee/shared": "workspace:1.0.0",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"apollo-server": "3.11.1",
