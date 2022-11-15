@@ -41,12 +41,12 @@ This frustration is apparent when writing filters. Filters use a convention such
 ```
 {
   firstName: {
-    "equals": "Luke"
+    "contains": "Luke"
   }
 }
 ```
 
-We could shorten it to `firstName_eq: "Luke"` yet, you have to know what `_eq` means. This approach is also less extensible if we needed to add in a case insensitive equals operator.
+We could shorten it to `firstName_contains: "Luke"` yet, this approach is also less extensible. If we needed to add in a case insensitive contains operator, it would be difficult to do without adding `_icontains` or similar.
 
 When working on GraphWeaver, remember when you were a junior developer and ask yourself. Would I know what this means?
 
