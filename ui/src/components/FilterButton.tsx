@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import style from "./Button.module.css";
 
 function DropdownItem({
@@ -14,18 +14,54 @@ function DropdownItem({
 function Dropdown({
   showDropdown,
   onUpdate,
+  onOutsideClick,
+  getParent,
 }: {
   showDropdown: boolean;
   onUpdate: any;
+  onOutsideClick: any;
+  getParent: any;
 }) {
   const handleLocal = () => {
     onUpdate("some param");
   };
 
+  function useOutsideAlerter(ref: any) {
+    useEffect(() => {
+      function handleClickOutside(e: Event) {
+        if (e.target === getParent().current) {
+          return;
+        }
+
+        if (ref.current && !ref.current.contains(e.target)) {
+          onOutsideClick();
+        }
+      }
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }, [ref]);
+  }
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
+
   return (
-    <ul className={showDropdown ? style.dropdown : style.hide}>
-      <DropdownItem handleClick={() => handleLocal()}>Some link</DropdownItem>
-    </ul>
+    <>
+      {showDropdown ? (
+        <ul
+          ref={wrapperRef}
+          className={showDropdown ? style.dropdown : style.hide}
+        >
+          <DropdownItem handleClick={() => handleLocal()}>
+            Some link
+          </DropdownItem>
+        </ul>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 
@@ -33,37 +69,67 @@ function Button({
   handleClick = () => null,
   children,
   iconBefore,
+  iconAfter,
   dropdown = false,
   onUpdate,
 }: {
   handleClick?: Function;
   children: JSX.Element | string;
   iconBefore?: string;
+  iconAfter?: string;
   dropdown?: boolean;
   onUpdate?: Function;
 }) {
   const [showDropdown, setShowDropdown] = useState(false);
 
   function hasIconBefore() {
-    return iconBefore ? true : false;
+    if (iconBefore) {
+      return <img src={iconBefore} alt="Icon" />;
+    }
   }
 
-  function showHidDropdown() {
+  function hasIconAfter() {
+    if (iconAfter) {
+      return <img src={iconAfter} alt="Icon" />;
+    }
+  }
+
+  function showHideDropdown() {
+    console.log("fired", showDropdown);
     return dropdown ? setShowDropdown(!showDropdown) : false;
   }
 
-  function renderDropdown() {
+  // To refer to when clicking outside dropdown
+  const parentRef = useRef(null);
+  function getParent() {
+    return parentRef;
+  }
+
+  function hasDropdown() {
     if (dropdown) {
-      return <Dropdown showDropdown={showDropdown} onUpdate={onUpdate} />;
+      return (
+        <Dropdown
+          getParent={getParent}
+          onOutsideClick={() => setShowDropdown(false)}
+          showDropdown={showDropdown}
+          onUpdate={onUpdate}
+        />
+      );
     }
   }
 
   return (
-    <button onClick={showHidDropdown} className={style.button} type="button">
+    <button
+      ref={parentRef}
+      onClick={showHideDropdown}
+      className={style.button}
+      type="button"
+    >
       <>
-        {hasIconBefore() ? <img src={iconBefore} alt="Icon" /> : null}
+        {hasIconBefore()}
         {children}
-        {renderDropdown()}
+        {hasIconAfter()}
+        {hasDropdown()}
       </>
     </button>
   );
