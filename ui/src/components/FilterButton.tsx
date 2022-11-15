@@ -95,7 +95,6 @@ function Button({
   }
 
   function showHideDropdown() {
-    console.log("fired", showDropdown);
     return dropdown ? setShowDropdown(!showDropdown) : false;
   }
 
