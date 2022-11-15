@@ -366,7 +366,7 @@ The `OrderBy` input type allows us to reorder the paginated results. For example
 }
 ```
 
-The Base Resolver generates the `OrderBy` input for each entity type. For example, our book `OrderBy` input would look like this:
+GraphWeaver generates the `OrderBy` input for each entity type. For example, our book `OrderBy` input would look like this:
 
 ```
   input BookOrderBy {
