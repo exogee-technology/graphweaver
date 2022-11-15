@@ -92,7 +92,7 @@ We can use the `count` property when implementing paging, which we will cover in
 
 ### Filters
 
-Filters are a combination of logical and conditional operators. These operators are combinable and offer great flexibility and power. We must remember that they also introduce a learning curve for new developers.
+Filters are a combination of logical and conditional operators. These operators are composable and offer great flexibility and power. We must remember that they also introduce a learning curve for new developers.
 
 #### Operators
 
