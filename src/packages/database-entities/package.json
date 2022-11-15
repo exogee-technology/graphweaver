@@ -21,7 +21,6 @@
 	"dependencies": {
 		"@exogee/base-resolver": "workspace:1.0.0",
 		"@exogee/logger": "workspace:1.0.0",
-		"@exogee/shared": "workspace:1.0.0",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"apollo-server-lambda": "3.1.2",
