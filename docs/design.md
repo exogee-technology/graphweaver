@@ -4,10 +4,7 @@ The GraphWeaver API is designed for a junior developer starting as a software en
 
 When reading the document, consider your first experience as a developer. You may not have fully understood all the acronyms and terminology. Therefore the design of this API has a high level of readability.
 
-## Contents
-
 - [GraphWeaver API Design](#graphweaver-api-design)
-  - [Contents](#contents)
   - [Design Principles](#design-principles)
   - [Lists](#lists)
     - [Filters](#filters)
