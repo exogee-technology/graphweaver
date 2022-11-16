@@ -1,0 +1,10 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./lib",
+		"lib": ["ES2019"]
+	},
+	"include": ["./src"],
+	"references": [{ "path": "../logger" }, { "path": "../mikroorm" }]
+}

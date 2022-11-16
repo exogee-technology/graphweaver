@@ -1,21 +1,11 @@
+import { createBaseResolver, GraphQLEntity } from '@exogee/graphweaver';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+
 import { Field, ID, ObjectType, Resolver } from 'type-graphql';
-import { BaseDataEntity, createBaseResolver, GraphQLEntity } from '@exogee/base-resolver';
-import { BigIntType, Entity, PrimaryKey, Property, Reference, Utils } from '@mikro-orm/core';
-import { MikroBackendProvider } from '@exogee/database-entities';
+import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
-// @todo should this be in the core mikro provider package?
-class BaseEntity implements BaseDataEntity {
-	public isReference(_: string, dataField: any) {
-		return Reference.isReference<any>(dataField);
-	}
-
-	public isCollection(fieldName: string, dataField: any) {
-		return Utils.isCollection<any>(dataField);
-	}
-}
-
-@Entity({ tableName: 'User' })
-class UserDBEntity extends BaseEntity {
+@Entity()
+export class User extends BaseEntity {
 	@PrimaryKey({ type: () => BigIntType })
 	id!: string;
 
@@ -24,7 +14,7 @@ class UserDBEntity extends BaseEntity {
 }
 
 @ObjectType('User')
-class UserGQLEntity extends GraphQLEntity<UserDBEntity> {
+class UserGQLEntity extends GraphQLEntity<User> {
 	@Field(() => ID)
 	id!: string;
 
@@ -35,5 +25,5 @@ class UserGQLEntity extends GraphQLEntity<UserDBEntity> {
 @Resolver(() => UserGQLEntity)
 export class UserGQLResolver extends createBaseResolver(
 	UserGQLEntity,
-	new MikroBackendProvider(UserDBEntity)
+	new MikroBackendProvider(User)
 ) {}

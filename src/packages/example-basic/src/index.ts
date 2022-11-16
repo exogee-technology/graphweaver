@@ -1,17 +1,20 @@
 import 'reflect-metadata';
 import { ApolloServer } from 'apollo-server';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { ConnectToDatabase } from '@exogee/apollo-plugins';
+import { connectToDatabase } from '@exogee/graphweaver-apollo';
 import { config } from 'dotenv';
 import open from 'open';
 
-import { schema } from './schema';
+import { schema, mikroOrmEntities } from './schema';
 
 config();
 
 const server = new ApolloServer({
 	schema,
-	plugins: [ConnectToDatabase, ApolloServerPluginLandingPageGraphQLPlayground],
+	plugins: [
+		connectToDatabase({ overrides: { entities: mikroOrmEntities } }),
+		ApolloServerPluginLandingPageGraphQLPlayground,
+	],
 	introspection: true,
 });
 
