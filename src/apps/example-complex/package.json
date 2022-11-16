@@ -1,15 +1,16 @@
 {
-	"name": "@exogee/backend-app-launcher",
+	"name": "@exogee/graphweaver-example-complex-app-launcher",
 	"version": "1.0.0",
 	"description": "",
 	"main": "serverless.js",
 	"scripts": {
 		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
-		"build:types": "pnpm -r build:types --filter \"!packages/example*\"",
+		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example*\"",
 		"build:js": "node transpile.js",
 		"build:legacy": "pnpm -r build:legacy",
 		"start": "concurrently \"pnpm build:js -- --watch\" \"pnpm -r build:types\" \"nodemon --ignore buckets/ --exec serverless offline start\"",
-		"start:legacy": "pnpm build:legacy && pnpm serverless offline"
+		"start:legacy": "pnpm build:legacy && pnpm serverless offline",
+		"migrate": "pnpm -r migration:run --filter \"@exogee/graphweaver-example-complex-migrations\""
 	},
 	"author": "Exogee Pty Ltd",
 	"license": "UNLICENSED",
