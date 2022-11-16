@@ -24,6 +24,6 @@ export const plugins: PluginDefinition[] = [
 	ClearDatabaseContext,
 	ApolloSession,
 	SetAuthenticatedUser,
-   Cors,
+	Cors,
 	DisableApolloServerPluginLandingPage,
 ];
