@@ -53,11 +53,6 @@ const runBuild = async () => {
 			return;
 		}
 
-		if (dir.match(/^example-basic*/)) {
-			console.log('Ignoring example-basic package');
-			return;
-		}
-
 		const packageJsonPath = join(fullPath, 'package.json');
 
 		if (!existsSync(packageJsonPath)) {

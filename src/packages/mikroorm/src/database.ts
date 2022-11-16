@@ -211,13 +211,15 @@ class DatabaseImplementation {
 
 		logger.trace('Initialising ORM');
 
+		logger.trace(`${params.entities?.length}x entities`);
+
 		const orm = await MikroORM.init({
 			driver: PostgreSqlDriver,
 			...params,
 
 			implicitTransactions: false,
 			metadataProvider: ReflectMetadataProvider,
-			discovery: { disableDynamicFileAccess: true, warnWhenNoEntities: false },
+			discovery: { disableDynamicFileAccess: true },
 			allowGlobalContext: true,
 
 			// Ensure we only ever create one connection to the database.

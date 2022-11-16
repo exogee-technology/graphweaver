@@ -1,20 +1,17 @@
 {
+	"extends": "../../tsconfig.json",
 	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
-		"noUnusedLocals": false,
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true,
-		"target": "es2019",
-		"module": "CommonJS",
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true
+		"noUnusedLocals": false
 	},
 	"include": ["./src"],
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/graphql-scalars" },
 		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/rls" },
 		{ "path": "../../packages/logger" }
 	]
 }

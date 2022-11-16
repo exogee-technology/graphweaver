@@ -4,10 +4,11 @@
 	"description": "",
 	"main": "serverless.js",
 	"scripts": {
-		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
-		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example*\"",
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" && pnpm build:example",
+		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example-*\"",
 		"build:js": "node transpile.js",
 		"build:legacy": "pnpm -r build:legacy",
+		"build:example": "pnpm -r build --filter \"@exogee/graphweaver-example-complex\"",
 		"start": "concurrently \"pnpm build:js -- --watch\" \"pnpm -r build:types\" \"nodemon --ignore buckets/ --exec serverless offline start\"",
 		"start:legacy": "pnpm build:legacy && pnpm serverless offline",
 		"migrate": "pnpm -r migration:run --filter \"@exogee/graphweaver-example-complex-migrations\""

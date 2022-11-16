@@ -12,10 +12,7 @@
 		"lib"
 	],
 	"scripts": {
-		"build:types": "tsc --emitDeclarationOnly",
 		"migration:run": "ts-node --transpile-only src/scripts/run-migrations.ts",
-		"migration:create": "pnpm -r build --filter \"@exogee/backend-app-launcher\" && ts-node --transpile-only src/scripts/generate-migration.ts",
-		"migration:generate": "pnpm -r build --filter \"@exogee/backend-app-launcher\" && ts-node --transpile-only src/scripts/generate-migration.ts",
 		"start": "pnpm migration:run",
 		"test": "jest"
 	},
