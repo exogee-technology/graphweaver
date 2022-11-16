@@ -74,6 +74,12 @@ You might have noticed in the above there is also an `AuthorList` type. The `Aut
 
 The `AuthorList` has two returned properties `items`, an array of authors and a `count` property. The `count` property is the total number of authors in the dataset and is useful when you need to display how many authors there are in the system.
 
+We could also add more metric information to the `List` type such as:
+
+- Which backends were queried
+- Number of individual requests
+- Request duration from the server's perspective
+
 An example list query would look like this:
 
 ```
