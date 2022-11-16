@@ -274,7 +274,17 @@ Next, let's look at some sample filters.
 }
 ```
 
-We have not covered the use of `not`. Let's look at that next.
+- Where Book Stores location is within 5 kilometers of point x
+
+```
+{
+    location: {
+        withinDistance: 5,
+        unit: 'km',
+        fromPoint: [-33.852222, 151.210556]
+    }
+}
+```
 
 ### Pagination
 
