@@ -361,7 +361,8 @@ The `OrderBy` input type allows us to reorder the paginated results. For example
   limit: 1,
   offset: 0,
   orderBy: {
-    createdAt: DESC
+    publishedOn: DESC,
+    rating: DESC
   }
 }
 ```
@@ -372,7 +373,8 @@ GraphWeaver generates the `OrderBy` input for each entity type. For example, our
   input BookOrderBy {
     id: SORT,
     title: SORT,
-    createdAt: SORT,
+    publishedOn: SORT,
+    rating: SORT,
   }
 ```
 
