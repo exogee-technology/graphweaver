@@ -10,31 +10,27 @@ Stripped down example of using GraphWeaver with the MikroORM adapter.
 pnpm install
 
 # Set up .env in apps/example-basic
-```dotenv
 DATABASE_HOST=
 DATABASE_USERNAME=
 DATABASE_PASSWORD=
 DATABASE_NAME=
-```
 
 # Run migration, build graphweaver packages, and run example app
 cd src/apps/example-basic && pnpm start
 ```
 
 ### examples/example-complex - `@exogee/graphweaver-example-complex`
-A more complex example of using GraphWeaver with multiple adapters and relationships.
+A more complex example of using GraphWeaver with multiple adapters and relationships in serverless.
 
 ```shell
 # Install dependencies
 pnpm install
 
 # Set up .env in apps/example-complex
-```dotenv
 DATABASE_HOST=
 DATABASE_USERNAME=
 DATABASE_PASSWORD=
 DATABASE_NAME=
-```
 
 # Run migration, build and run example app
 cd src/apps/example-complex && pnpm migrate && pnpm build && pnpm start
@@ -54,14 +50,14 @@ export class UserGQLResolver extends createBaseResolver(
 ) {}
 ```
 
-## packages/apollo - `@exogee/graphweaver-apollo`
+### packages/apollo - `@exogee/graphweaver-apollo`
 Apollo support for graphweaver, includes various plugins.
 
-## packages/mikroorm - `@exogee/graphweaver-mikroorm`
+### packages/mikroorm - `@exogee/graphweaver-mikroorm`
 MikroORM backend support for graphweaver
 
-## packages/rest - `@exogee/graphweaver-rest`
+### packages/rest - `@exogee/graphweaver-rest`
 RESTful backend support for graphweaver
 
-## packages/rls - `@exogee/graphweaver-rls`
+### packages/rls - `@exogee/graphweaver-rls`
 Row-level security support for graphweaver
