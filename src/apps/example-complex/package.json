@@ -1,16 +1,11 @@
 {
-	"name": "@exogee/graphweaver-example-complex-app-launcher",
+	"name": "@exogee/graphweaver-example-complex-app",
 	"version": "1.0.0",
-	"description": "",
+	"description": "App to build and launch the graphweaver example app",
 	"main": "serverless.js",
 	"scripts": {
-		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" && pnpm build:example",
-		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example-*\"",
-		"build:js": "node transpile.js",
-		"build:legacy": "pnpm -r build:legacy",
-		"build:example": "pnpm -r build --filter \"@exogee/graphweaver-example-complex\"",
-		"start": "concurrently \"pnpm build:js -- --watch\" \"pnpm -r build:types\" \"nodemon --ignore buckets/ --exec serverless offline start\"",
-		"start:legacy": "pnpm build:legacy && pnpm serverless offline",
+		"build": "pnpm -r build --filter \"@exogee/graphweaver-app\" && pnpm -r build --filter \"@exogee/graphweaver-example-complex\"",
+		"start": "concurrently \"pnpm -r build --filter @exogee/graphweaver-app --watch\" \"pnpm -r build --filter @exogee/graphweaver-example-complex --watch\" \"nodemon --exec serverless offline start\"",
 		"migrate": "pnpm -r migration:run --filter \"@exogee/graphweaver-example-complex-migrations\""
 	},
 	"author": "Exogee Pty Ltd",
