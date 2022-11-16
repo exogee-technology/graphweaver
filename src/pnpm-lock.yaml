@@ -26,6 +26,9 @@ importers:
       ts-jest: 26.4.4_jest@26.6.3+typescript@4.8.4
       typescript: 4.8.4
 
+  apps/example-basic:
+    specifiers: {}
+
   apps/example-complex:
     specifiers:
       '@aws-sdk/signature-v4-crt': 3.54.1
@@ -41,6 +44,29 @@ importers:
     dependencies:
       '@aws-sdk/signature-v4-crt': 3.54.1
       '@exogee/graphweaver-example-complex': link:../../examples/example-complex
+      dotenv: 10.0.0
+      esbuild: 0.15.5
+    devDependencies:
+      concurrently: 7.0.0
+      esbuild-css-modules-plugin: 2.3.1_esbuild@0.15.5
+      esbuild-register: 3.1.2_esbuild@0.15.5
+      nodemon: 2.0.15
+      serverless: 3.7.9
+      serverless-offline: 8.5.0_serverless@3.7.9
+
+  apps/graphweaver:
+    specifiers:
+      '@aws-sdk/signature-v4-crt': 3.54.1
+      concurrently: 7.0.0
+      dotenv: 10.0.0
+      esbuild: 0.15.5
+      esbuild-css-modules-plugin: 2.3.1
+      esbuild-register: 3.1.2
+      nodemon: 2.0.15
+      serverless: 3.7.9
+      serverless-offline: 8.5.0
+    dependencies:
+      '@aws-sdk/signature-v4-crt': 3.54.1
       dotenv: 10.0.0
       esbuild: 0.15.5
     devDependencies:
@@ -11426,7 +11452,7 @@ packages:
     engines: {node: '>= 0.6.0'}
 
   /long-timeout/0.1.1:
-    resolution: {integrity: sha512-BFRuQUqc7x2NWxfJBCyUrN8iYUYznzL9JROmRz1gZ6KlOIgmoD+njPVbb+VNn2nGMKggMsK79iUNErillsrx7w==}
+    resolution: {integrity: sha1-lyHXiLR+C8taJMLivuGg2lXatRQ=}
     dev: true
 
   /long/4.0.0:
@@ -14619,7 +14645,7 @@ packages:
       bs-logger: 0.2.6
       buffer-from: 1.1.2
       fast-json-stable-stringify: 2.1.0
-      jest: 26.6.3_ts-node@10.4.0
+      jest: 26.6.3_ts-node@9.0.0
       jest-util: 26.6.2
       json5: 2.2.1
       lodash.memoize: 4.1.2
