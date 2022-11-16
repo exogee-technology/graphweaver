@@ -11,7 +11,6 @@ When reading the document, consider your first experience as a developer. You ma
       - [Operators](#operators)
         - [Logical Operators](#logical-operators)
         - [Conditional Operators](#conditional-operators)
-        - [Not Logical Operator](#not-logical-operator)
       - [Scalar Filters](#scalar-filters)
         - [IdFilter](#idfilter)
         - [StringFilter](#stringfilter)
@@ -27,6 +26,7 @@ The API design has some guiding principles:
 
 - We prefer verbosity to improve readability.
 - We adopt an extensible approach to reduce refactoring.
+- We want to be explicit not implicit to avoid confusion.
 
 As software engineers, we spend more time reading code than writing it. Therefore, the API focuses on readability, limiting the number of acronyms and/or abbreviations.
 
@@ -110,18 +110,20 @@ The operators supported by GraphWeaver are:
 
 ##### Conditional Operators
 
-| Operator           | Description                                |
-| ------------------ | ------------------------------------------ |
-| equals             | Value equals `n`                           |
-| in                 | Value `n` exists in the list or array      |
-| lessThan           | Value `n` is less than `x`                 |
-| lessThanOrEqual    | Value `n` is less than or equal to `x`     |
-| greaterThan        | Value `n` is greater than `x`              |
-| greaterThanOrEqual | Value `n` is greater than or equal to `x`  |
-| startsWith         | Value `n` starts with `x`                  |
-| endsWith           | Value `n` ends with `x`                    |
-| contains           | Value `n` contains `x`                     |
-| case               | a modifier that specifies case sensitivity |
+| Operator           | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| equal              | Value equals `n`                               |
+| notEqual           | Value is not equal `n`                         |
+| in                 | Value `n` exists in the list or array          |
+| notIn              | Value `n` does not exists in the list or array |
+| lessThan           | Value `n` is less than `x`                     |
+| lessThanOrEqual    | Value `n` is less than or equal to `x`         |
+| greaterThan        | Value `n` is greater than `x`                  |
+| greaterThanOrEqual | Value `n` is greater than or equal to `x`      |
+| startsWith         | Value `n` starts with `x`                      |
+| endsWith           | Value `n` ends with `x`                        |
+| contains           | Value `n` contains `x`                         |
+| case               | a modifier that specifies case sensitivity     |
 
 The last conditional operator is a bit different to the others. It modifies how the conditional operator is applied. The `case` operator is defined like this:
 
@@ -133,69 +135,6 @@ The last conditional operator is a bit different to the others. It modifies how 
 ```
 
 It specifies the case sensitivity for a string-based operator. Next, let's look at the filter types that GraphWeaver uses.
-
-##### Not Logical Operator
-
-You may have noticed that there is not a specific `notIn` or `notEqual` conditional operator. That is because there is a `not` logical operator that we can use instead. Let's look at some examples:
-
-- Where Author's first name is not "Luke"
-
-```
-{
-  firstName: {
-    "not": [
-      {
-        "equal": "Luke"
-      }
-    ]
-  }
-}
-```
-
-- Where Author's first name is not "Luke" and any case
-
-```
-{
-  firstName: {
-    "not": [
-      {
-        "equal": "Luke",
-        "case": "insensitive"
-      }
-    ]
-  }
-}
-```
-
-- Where Author's first name is not null
-
-```
-{
-  firstName: {
-    "not": [
-      {
-        "equal": null
-      }
-    ]
-  }
-}
-```
-
-- Where Author's id is not in
-
-```
-{
-  id: {
-    "not": [
-      {
-        "in": ["1"]
-      }
-    ]
-  }
-}
-```
-
-The `not` logical operator is for reversing the default behaviour from "All conditions must return `true`" to "All conditions must return `false`".
 
 #### Scalar Filters
 
@@ -212,9 +151,10 @@ Each filter will only support a subset of the operators. For example, string fil
 
 ```
   input IdFilter {
-    not: [IdFilter!]
     equal: String
+    notEqual: String
     in: [String!]
+    notIn: [String!]
   }
 ```
 
@@ -222,9 +162,10 @@ Each filter will only support a subset of the operators. For example, string fil
 
 ```
   input StringFilter {
-    not: [StringFilter!]
     equal: String
+    notEqual: String
     in: [String!]
+    notIn: [String!]
     startsWith: String
     endsWith: String
     contains: String
@@ -236,9 +177,10 @@ Each filter will only support a subset of the operators. For example, string fil
 
 ```
   input NumberFilter {
-    not: [NumberFilter!]
-    equal: Float
-    in: [Float!]
+    equal: String
+    notEqual: String
+    in: [String!]
+    notIn: [String!]
     lessThan: Float
     lessThanOrEqual: Float
     greaterThan: Float
@@ -250,9 +192,10 @@ Each filter will only support a subset of the operators. For example, string fil
 
 ```
   input DateFilter {
-    not: [DateFilter!]
-    equal: DateTime
-    in: [DateTime!]
+    equal: String
+    notEqual: String
+    in: [String!]
+    notIn: [String!]
     lessThan: DateTime
     lessThanOrEqual: DateTime
     greaterThan: DateTime
