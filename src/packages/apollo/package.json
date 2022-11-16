@@ -1,0 +1,28 @@
+{
+	"name": "@exogee/graphweaver-apollo",
+	"version": "0.1.0",
+	"description": "Apollo Server support for @exogee/graphweaver",
+	"license": "UNLICENSED",
+	"scripts": {
+		"build:legacy": "tsc --build",
+		"build:types": "tsc --emitDeclarationOnly",
+		"prettier": "prettier --write src/**/*.ts"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"dependencies": {
+		"@exogee/graphweaver": "workspace:0.1.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0",
+		"@exogee/logger": "workspace:0.1.0",
+		"async-mutex": "0.3.2",
+		"apollo-server-core": "3.10.3",
+		"decimal.js": "10.3.1",
+		"graphql": "15.8.0"
+	} 
+}

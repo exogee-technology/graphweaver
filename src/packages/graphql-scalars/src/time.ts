@@ -1,4 +1,4 @@
-import { Time } from '@exogee/database-entities';
+import { Time } from '@exogee/graphweaver-mikroorm';
 import { GraphQLScalarType, Kind } from 'graphql';
 
 export const TimeScalar = new GraphQLScalarType({
