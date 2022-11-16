@@ -6,7 +6,7 @@ on:
     branches: ["main", "release"]
 
 jobs:
-  build-and-test-backend:
+  build-and-test-graphweaver:
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'pull_request' }}
     defaults:
@@ -59,9 +59,8 @@ jobs:
 
       - run: pnpm i
       - run: pnpm lint
-      - run: pnpm -r build --filter "@exogee/backend-app-launcher"
-      - run: pnpm migrate
-      - run: pnpm test
+      - run: pnpm -r build --filter "@exogee/graphweaver-app"
+      - run: pnpm -r test --filter "@exogee/graphweaver-app"
     env:
       DATABASE_HOST: localhost
       DATABASE_USERNAME: postgres
@@ -69,42 +68,3 @@ jobs:
       DATABASE_PORT: 5432
       DATABASE_NAME: graphweaver
 
-  # build-and-test-frontend-web-app:
-  #   runs-on: ubuntu-latest
-  #   if: ${{ github.event_name == 'pull_request' }}
-  #   defaults:
-  #     run:
-  #       working-directory: src/apps/web-app
-
-  #   steps:
-  #     - uses: actions/checkout@v2
-
-  #     - uses: actions/cache@v3
-  #       env:
-  #         cache-name: cache-pnpm-modules
-  #       with:
-  #         path: ~/.pnpm-store
-  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
-
-  #     - uses: pnpm/action-setup@v2.2.4
-  #       with:
-  #         version: 6.32.3
-  #         run_install: false
-
-  #     - uses: actions/setup-node@v2
-  #       with:
-  #         node-version: "14"
-  #         cache: "pnpm"
-  #         cache-dependency-path: src/pnpm-lock.yaml
-
-  #     - run: pnpm i
-  #     - run: pnpm -r build --filter "@exogee/backend-app-launcher"
-
-  #     - run: pnpm build:tsc
-  #       # - name: Run Tests # TODO: uncomment when tests are added to any frontend package
-  #       # run: pnpm test
-  #       env:
-  #         PORT: 8000
-  #         VITE_GRAPHWEAVER_URI: http://localhost:3000/graphql/v1
