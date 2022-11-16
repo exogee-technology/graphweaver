@@ -40,7 +40,7 @@ importers:
       serverless-offline: 8.5.0
     dependencies:
       '@aws-sdk/signature-v4-crt': 3.54.1
-      '@exogee/graphweaver-example-complex': link:../../packages/example-complex
+      '@exogee/graphweaver-example-complex': link:../../examples/example-complex
       dotenv: 10.0.0
       esbuild: 0.15.5
     devDependencies:
@@ -51,56 +51,7 @@ importers:
       serverless: 3.7.9
       serverless-offline: 8.5.0_serverless@3.7.9
 
-  packages/apollo:
-    specifiers:
-      '@exogee/graphweaver': workspace:0.1.0
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0
-      '@exogee/logger': workspace:0.1.0
-      apollo-server-core: 3.10.3
-      async-mutex: 0.3.2
-      decimal.js: 10.3.1
-      graphql: 15.8.0
-    dependencies:
-      '@exogee/graphweaver': link:../core
-      '@exogee/graphweaver-mikroorm': link:../mikroorm
-      '@exogee/logger': link:../logger
-      apollo-server-core: 3.10.3_graphql@15.8.0
-      async-mutex: 0.3.2
-      decimal.js: 10.3.1
-      graphql: 15.8.0
-
-  packages/core:
-    specifiers:
-      '@types/bunyan': 1.8.6
-      '@types/jest': 27.0.2
-      '@types/pluralize': 0.0.29
-      bunyan: 1.8.14
-      class-validator: 0.13.2
-      dataloader: 2.0.0
-      graphql: 15.8.0
-      jest: 27.2.2
-      pluralize: 8.0.0
-      reflect-metadata: 0.1.13
-      ts-jest: 27.0.5
-      type-graphql: 1.1.1
-      typescript: 4.5.4
-    dependencies:
-      bunyan: 1.8.14
-      class-validator: 0.13.2
-      dataloader: 2.0.0
-      graphql: 15.8.0
-      pluralize: 8.0.0
-      reflect-metadata: 0.1.13
-      type-graphql: 1.1.1_aea24acf06b899fbc466d3b3b949c72d
-    devDependencies:
-      '@types/bunyan': 1.8.6
-      '@types/jest': 27.0.2
-      '@types/pluralize': 0.0.29
-      jest: 27.2.2
-      ts-jest: 27.0.5_33017d82d85e6301670aa6588f89b534
-      typescript: 4.5.4
-
-  packages/example-basic:
+  examples/example-basic:
     specifiers:
       '@exogee/graphql-scalars': workspace:0.1.0
       '@exogee/graphweaver': workspace:0.1.0
@@ -120,11 +71,11 @@ importers:
       type-graphql: 1.1.1
       typescript: 4.5.4
     dependencies:
-      '@exogee/graphql-scalars': link:../graphql-scalars
-      '@exogee/graphweaver': link:../core
-      '@exogee/graphweaver-apollo': link:../apollo
-      '@exogee/graphweaver-mikroorm': link:../mikroorm
-      '@exogee/logger': link:../logger
+      '@exogee/graphql-scalars': link:../../packages/graphql-scalars
+      '@exogee/graphweaver': link:../../packages/core
+      '@exogee/graphweaver-apollo': link:../../packages/apollo
+      '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
+      '@exogee/logger': link:../../packages/logger
       '@mikro-orm/core': 5.4.2_@mikro-orm+postgresql@5.4.2
       '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
       apollo-server: 3.11.1_graphql@15.8.0
@@ -139,7 +90,7 @@ importers:
       ts-node: 10.9.1_ee68483f7031a842e3912f5ae2fbe807
       typescript: 4.5.4
 
-  packages/example-complex:
+  examples/example-complex:
     specifiers:
       '@exogee/graphql-scalars': workspace:0.1.0
       '@exogee/graphweaver': workspace:0.1.0
@@ -199,13 +150,13 @@ importers:
       webpack: 5.68.0
       webpack-cli: 4.9.2
     dependencies:
-      '@exogee/graphql-scalars': link:../graphql-scalars
-      '@exogee/graphweaver': link:../core
-      '@exogee/graphweaver-apollo': link:../apollo
-      '@exogee/graphweaver-mikroorm': link:../mikroorm
-      '@exogee/graphweaver-rest': link:../rest
-      '@exogee/graphweaver-rls': link:../rls
-      '@exogee/logger': link:../logger
+      '@exogee/graphql-scalars': link:../../packages/graphql-scalars
+      '@exogee/graphweaver': link:../../packages/core
+      '@exogee/graphweaver-apollo': link:../../packages/apollo
+      '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
+      '@exogee/graphweaver-rest': link:../../packages/rest
+      '@exogee/graphweaver-rls': link:../../packages/rls
+      '@exogee/logger': link:../../packages/logger
       '@mikro-orm/core': 5.4.2
       apollo-server-core: 3.10.3_graphql@15.8.0
       apollo-server-errors: 3.3.1_graphql@15.8.0
@@ -258,7 +209,7 @@ importers:
       webpack: 5.68.0_webpack-cli@4.9.2
       webpack-cli: 4.9.2_webpack@5.68.0
 
-  packages/example-complex-migrations:
+  examples/example-complex-migrations:
     specifiers:
       '@exogee/graphweaver-mikroorm': 0.1.0
       '@exogee/logger': 0.1.0
@@ -278,8 +229,8 @@ importers:
       ts-node: 10.4.0
       typescript: 4.5.5
     dependencies:
-      '@exogee/graphweaver-mikroorm': link:../mikroorm
-      '@exogee/logger': link:../logger
+      '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
+      '@exogee/logger': link:../../packages/logger
       '@mikro-orm/core': 5.4.2_a91cac94d79a33b5217c779a5b43d90c
       '@mikro-orm/entity-generator': 5.4.2_@mikro-orm+core@5.4.2+pg@8.5.1
       '@mikro-orm/postgresql': 5.4.0_4544c65bfb0bfbe9d157f6b90fd76ffb
@@ -296,6 +247,55 @@ importers:
       ts-morph: 9.1.0
       ts-node: 10.4.0_typescript@4.5.5
       typescript: 4.5.5
+
+  packages/apollo:
+    specifiers:
+      '@exogee/graphweaver': workspace:0.1.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0
+      '@exogee/logger': workspace:0.1.0
+      apollo-server-core: 3.10.3
+      async-mutex: 0.3.2
+      decimal.js: 10.3.1
+      graphql: 15.8.0
+    dependencies:
+      '@exogee/graphweaver': link:../core
+      '@exogee/graphweaver-mikroorm': link:../mikroorm
+      '@exogee/logger': link:../logger
+      apollo-server-core: 3.10.3_graphql@15.8.0
+      async-mutex: 0.3.2
+      decimal.js: 10.3.1
+      graphql: 15.8.0
+
+  packages/core:
+    specifiers:
+      '@types/bunyan': 1.8.6
+      '@types/jest': 27.0.2
+      '@types/pluralize': 0.0.29
+      bunyan: 1.8.14
+      class-validator: 0.13.2
+      dataloader: 2.0.0
+      graphql: 15.8.0
+      jest: 27.2.2
+      pluralize: 8.0.0
+      reflect-metadata: 0.1.13
+      ts-jest: 27.0.5
+      type-graphql: 1.1.1
+      typescript: 4.5.4
+    dependencies:
+      bunyan: 1.8.14
+      class-validator: 0.13.2
+      dataloader: 2.0.0
+      graphql: 15.8.0
+      pluralize: 8.0.0
+      reflect-metadata: 0.1.13
+      type-graphql: 1.1.1_aea24acf06b899fbc466d3b3b949c72d
+    devDependencies:
+      '@types/bunyan': 1.8.6
+      '@types/jest': 27.0.2
+      '@types/pluralize': 0.0.29
+      jest: 27.2.2
+      ts-jest: 27.0.5_33017d82d85e6301670aa6588f89b534
+      typescript: 4.5.4
 
   packages/graphql-scalars:
     specifiers:
@@ -4559,6 +4559,7 @@ packages:
   /apollo-cache-control/0.15.0_graphql@15.8.0:
     resolution: {integrity: sha512-U2uYvHZsWmR6s6CD5zlq3PepfbUAM8953CeVM2Y2QYMtJ8i4CYplEPbIWb3zTIXSPbIPeWGddM56pChI6Iz3zA==}
     engines: {node: '>=6.0'}
+    deprecated: The functionality provided by the `apollo-cache-control` package is built in to `apollo-server-core` starting with Apollo Server 3. See https://www.apollographql.com/docs/apollo-server/migration/#cachecontrol for details.
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
@@ -5016,6 +5017,7 @@ packages:
   /apollo-tracing/0.16.0_graphql@15.8.0:
     resolution: {integrity: sha512-Oy8kTggB+fJ/hHXwHyMpuTl5KW7u1XetKFDErZVOobUKc2zjc/NgWiC/s7SGYZCgfLodBjvwfa6rMcvLkz7c0w==}
     engines: {node: '>=4.0'}
+    deprecated: The `apollo-tracing` package is no longer part of Apollo Server 3. See https://www.apollographql.com/docs/apollo-server/migration/#tracing for details
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:
@@ -8471,6 +8473,7 @@ packages:
   /graphql-extensions/0.16.0_graphql@15.8.0:
     resolution: {integrity: sha512-rZQc/USoEIw437BGRUwoHoLPR1LA791Ltj6axONqgKIyyx2sqIO3YT9kTbB/eIUdJBrCozp4KuUeZ09xKeQDxg==}
     engines: {node: '>=6.0'}
+    deprecated: 'The `graphql-extensions` API has been removed from Apollo Server 3. Use the plugin API instead: https://www.apollographql.com/docs/apollo-server/integrations/plugins/'
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0
     dependencies:

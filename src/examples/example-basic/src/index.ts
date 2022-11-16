@@ -6,7 +6,6 @@ import { config } from 'dotenv';
 import open from 'open';
 
 import { schema, mikroOrmEntities } from './schema';
-
 config();
 
 const server = new ApolloServer({

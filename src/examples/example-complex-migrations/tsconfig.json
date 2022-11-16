@@ -6,5 +6,5 @@
 		"lib": ["ES2019"]
 	},
 	"include": ["./src"],
-	"references": [{ "path": "../logger" }, { "path": "../mikroorm" }]
+	"references": [{ "path": "../../packages/logger" }, { "path": "../../packages/mikroorm" }]
 }

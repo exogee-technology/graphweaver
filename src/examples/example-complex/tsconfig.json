@@ -1,0 +1,17 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/graphql-scalars" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/rls" },
+		{ "path": "../../packages/logger" }
+	]
+}

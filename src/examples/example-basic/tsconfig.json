@@ -12,9 +12,9 @@
 	},
 	"include": ["./src"],
 	"references": [
-		{ "path": "../core" },
-		{ "path": "../graphql-scalars" },
-		{ "path": "../mikroorm" },
-		{ "path": "../logger" }
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/graphql-scalars" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/logger" }
 	]
 }
