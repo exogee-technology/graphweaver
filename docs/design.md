@@ -13,6 +13,7 @@ When reading the document, consider your first experience as a developer. You ma
         - [Conditional Operators](#conditional-operators)
       - [Scalar Filters](#scalar-filters)
         - [IdFilter](#idfilter)
+        - [BooleanFilter](#booleanfilter)
         - [StringFilter](#stringfilter)
         - [NumberFilter](#numberfilter)
         - [DateFilter](#datefilter)
@@ -147,6 +148,7 @@ It specifies the case sensitivity for a string-based operator. Next, let's look 
 GraphWeaver produces four Scalar Filter types:
 
 - IdFilter
+- BooleanFilter
 - StringFilter
 - NumberFilter
 - DateFilter
@@ -161,6 +163,14 @@ Each filter will only support a subset of the operators. For example, string fil
     notEqual: String
     in: [String!]
     notIn: [String!]
+  }
+```
+
+##### BooleanFilter
+
+```
+  input BooleanFilter {
+    equal: String
   }
 ```
 
