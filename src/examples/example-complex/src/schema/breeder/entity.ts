@@ -7,6 +7,8 @@ import { Dog } from '../dog';
 @ObjectType('Breeder')
 //@AuthorizeAccess({})
 export class Breeder extends GraphQLEntity<RestBreeder> {
+	public dataEntity!: RestBreeder;
+
 	@Field(() => ID)
 	id!: string;
 
@@ -17,7 +19,7 @@ export class Breeder extends GraphQLEntity<RestBreeder> {
 	async dogs(@Root() breeder: Breeder) {
 		return BaseLoaders.loadByRelatedId({
 			gqlEntityType: Dog,
-			relatedField: 'breeder',
+			relatedField: 'breederId',
 			id: breeder.id,
 		});
 	}
