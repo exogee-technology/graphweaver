@@ -206,7 +206,7 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 	}
 
 	public getRelatedEntityId(entity: any, relatedIdField: string) {
-		if (typeof entity == 'string') {
+		if (typeof entity === 'string') {
 			return entity;
 		}
 		if (typeof entity.unwrap !== 'function') {
