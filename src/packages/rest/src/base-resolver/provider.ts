@@ -82,7 +82,7 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		});
 
 		const plural = pluralize(this.entityType.name);
-		const result = await this.get(`/${plural}`);
+		const result = await this.get(`/${plural}`); // @todo convert graphql filter to rest api
 		if (typeof result === 'string') {
 			return JSON.parse(result);
 		}
