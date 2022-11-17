@@ -1,0 +1,26 @@
+{
+	"name": "@exogee/graphweaver-app",
+	"version": "0.1.0",
+	"description": "App to build, package and distribute the full graphweaver app",
+	"scripts": {
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example-*\"",
+		"build:js": "node transpile.js",
+		"build:legacy": "pnpm -r build:legacy" 
+	},
+	"author": "Exogee Pty Ltd",
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"concurrently": "7.0.0",
+		"esbuild-css-modules-plugin": "2.3.1",
+		"esbuild-register": "3.1.2",
+		"nodemon": "2.0.15",
+		"serverless": "3.7.9",
+		"serverless-offline": "8.5.0"
+	},
+	"dependencies": {
+		"@aws-sdk/signature-v4-crt": "3.54.1",
+		"dotenv": "10.0.0",
+		"esbuild": "0.15.5"
+	}
+}
