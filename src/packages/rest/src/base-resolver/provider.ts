@@ -83,7 +83,10 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 
 		const plural = pluralize(this.entityType.name);
 		const result = await this.get(`/${plural}`);
-		return JSON.parse(result); //@todo try/catch this or use performRequest() instead?
+		if (typeof result === 'string') {
+			return JSON.parse(result);
+		}
+		return result;
 	}
 
 	public async findOne(id: string): Promise<T | null> {
@@ -91,7 +94,10 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 
 		const plural = pluralize(this.entityType.name);
 		const result = await this.get(`/${plural}/${id}`);
-		return JSON.parse(result); //@todo try/catch this or use performRequest() instead?
+		if (typeof result === 'string') {
+			return JSON.parse(result);
+		}
+		return result;
 	}
 
 	public async findByRelatedId(
