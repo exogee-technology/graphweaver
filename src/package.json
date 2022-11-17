@@ -10,6 +10,7 @@
 	"main": "packages/<ENTRY_PACKAGE>/lib/index.js",
 	"scripts": {
 		"clean": "./clean.sh",
+		"format": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\"",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\"",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
