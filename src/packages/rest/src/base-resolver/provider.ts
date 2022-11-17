@@ -82,14 +82,16 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		});
 
 		const plural = pluralize(this.entityType.name);
-		return this.get(`/${plural}`);
+		const result = await this.get(`/${plural}`);
+		return JSON.parse(result); //@todo try/catch this or use performRequest() instead?
 	}
 
 	public async findOne(id: string): Promise<T | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
 
 		const plural = pluralize(this.entityType.name);
-		return this.get(`/${plural}/${id}`);
+		const result = await this.get(`/${plural}/${id}`);
+		return JSON.parse(result); //@todo try/catch this or use performRequest() instead?
 	}
 
 	public async findByRelatedId(
@@ -204,6 +206,9 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 	}
 
 	public getRelatedEntityId(entity: any, relatedIdField: string) {
+		if (typeof entity == 'string') {
+			return entity;
+		}
 		if (typeof entity.unwrap !== 'function') {
 			throw new Error('Could not unwrap related entity');
 		}
