@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/logger",
-	"version": "1.0.0",
-	"description": "Used to log across all services and APIs",
+	"version": "0.1.0",
+	"description": "Common logging output for Exogee projects",
 	"homepage": "",
 	"license": "UNLICENSED",
 	"directories": {

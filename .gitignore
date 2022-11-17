@@ -103,3 +103,6 @@ dist
 # TernJS port file
 .tern-port
 .DS_Store
+
+# Built artefacts
+lib

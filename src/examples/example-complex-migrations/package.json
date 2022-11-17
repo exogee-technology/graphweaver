@@ -1,0 +1,40 @@
+{
+	"name": "@exogee/graphweaver-example-complex-migrations",
+	"version": "0.1.0",
+	"description": "Database migrations for example-complex",
+	"license": "UNLICENSED",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"migration:run": "ts-node --transpile-only src/scripts/run-migrations.ts",
+		"start": "pnpm migration:run",
+		"test": "jest"
+	},
+	"dependencies": {
+		"@exogee/graphweaver-mikroorm": "0.1.0",
+		"@exogee/logger": "0.1.0",
+		"aws-sdk": "2.1069.0",
+		"color-convert": "2.0.1",
+		"dotenv": "16.0.0",
+		"@mikro-orm/core": "5.4.2",
+		"@mikro-orm/entity-generator": "5.4.2",
+		"@mikro-orm/postgresql": "5.4.0",
+		"pg": "8.5.1"
+	},
+	"devDependencies": {
+		"@types/aws-lambda": "8.10.64",
+		"@types/color-convert": "2.0.0",
+		"@types/pg": "7.14.7",
+		"serverless": "3.1.1",
+		"serverless-offline": "8.4.0",
+		"ts-morph": "9.1.0",
+		"ts-node": "10.4.0",
+		"typescript": "4.5.5"
+	}
+}
