@@ -1,0 +1,5 @@
+@types
+**/node_modules/**
+**/lib/**
+**/build/**
+.eslintrc.js
