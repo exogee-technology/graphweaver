@@ -16,7 +16,7 @@
 		"test:prettier": "prettier --check ."
 	},
 	"dependencies": {
-		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.1",
 		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1",
 		"@mikro-orm/core": "5.4.2",
