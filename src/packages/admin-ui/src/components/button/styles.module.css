@@ -1,93 +1,92 @@
 .button {
-  position: relative;
-  box-sizing: border-box;
+	position: relative;
+	box-sizing: border-box;
 
-  /* Auto layout */
+	/* Auto layout */
 
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 8px 12px;
-  gap: 8px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 8px 12px;
+	gap: 8px;
 
-  flex-shrink: 0;
+	flex-shrink: 0;
 
-  background: #7038c2;
-  border: 1px solid rgba(237, 232, 242, 0.2);
-  box-shadow: 0px 1px 3px rgba(9, 5, 16, 0.1);
-  border-radius: 6px;
-  font-weight: 500;
+	background: #7038c2;
+	border: 1px solid rgba(237, 232, 242, 0.2);
+	box-shadow: 0px 1px 3px rgba(9, 5, 16, 0.1);
+	border-radius: 6px;
+	font-weight: 500;
 }
 
 .button:hover {
-  background-color: #853af2;
+	background-color: #853af2;
 }
 
 .button span {
-  width: 16px;
-  height: 16px;
-  /* background-image: url(../assets/img/16-filter.svg); */
+	width: 16px;
+	height: 16px;
 }
 
 .buttonWrapper {
-  position: relative;
+	position: relative;
 }
 
 .dropdown {
-  position: absolute;
-  display: flex;
-  flex-direction: column;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
 
-  top: 40px;
-  right: 0px;
+	top: 40px;
+	right: 0px;
 
-  background: #201b2b;
-  border: 1px solid rgba(237, 232, 242, 0.1);
-  box-shadow: 0px 2px 20px #100a1c, 0px 8px 2px rgba(16, 10, 28, 0.2);
-  border-radius: 6px;
-  z-index: 1;
-  padding: 8px 0;
+	background: #201b2b;
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	box-shadow: 0px 2px 20px #100a1c, 0px 8px 2px rgba(16, 10, 28, 0.2);
+	border-radius: 6px;
+	z-index: 1;
+	padding: 8px 0;
 
-  flex-wrap: nowrap;
+	flex-wrap: nowrap;
 
-  /* min-width: 140px; */
+	/* min-width: 140px; */
 }
 
 .dropdown li {
-  padding: 8px 16px 8px 16px;
-  height: 32px;
-  display: block;
-  text-align: left;
-  flex-shrink: 0;
-  white-space: nowrap;
+	padding: 8px 16px 8px 16px;
+	height: 32px;
+	display: block;
+	text-align: left;
+	flex-shrink: 0;
+	white-space: nowrap;
 
-  font-family: "Inter";
+	font-family: 'Inter';
 
-  font-style: normal;
-  font-weight: 500;
+	font-style: normal;
+	font-weight: 500;
 }
 
 .dropdown li a {
-  font-weight: 500;
+	font-weight: 500;
 }
 
 .dropdown li p {
-  font-weight: 500;
+	font-weight: 500;
 }
 
 .dropdown li:hover {
-  background: #7038c2;
+	background: #7038c2;
 }
 
 .clickMeAway {
-  background-color: red;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  left: 0;
-  bottom: 0;
+	background-color: red;
+	position: absolute;
+	width: 100vw;
+	height: 100vh;
+	left: 0;
+	bottom: 0;
 }
 
 .hide {
-  display: none;
+	display: none;
 }

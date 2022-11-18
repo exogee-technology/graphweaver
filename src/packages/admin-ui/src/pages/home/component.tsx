@@ -1,15 +1,17 @@
 import { useState } from 'react';
+
 import { SideBar, Table, Button, FilterButton } from '~/components';
-import dataSourcesIcon from '~/assets/img/64-data-sources.svg';
-import openPlaygroundIcon from '~/assets/img/16-open-external.svg';
-import filterIcon from '~/assets/img/16-filter.svg';
-import styles from './styles.module.css';
 import mockData from '~/utils/mock-data.json';
+
+import styles from './styles.module.css';
+import { ReactComponent as DataSourcesIcon } from '~/assets/64-data-sources.svg';
+import { ReactComponent as OpenPlaygroundIcon } from '~/assets/16-open-external.svg';
+import { ReactComponent as FilterIcon } from '~/assets/16-filter.svg';
 
 const BlankSlate = () => (
 	<div id={styles.centerBlankSlate}>
 		<div className={styles.blankSlateWrapper}>
-			<img width="64" src={dataSourcesIcon} alt="No data sources icon" />
+			<DataSourcesIcon />
 			<h1>No data sources yet</h1>
 
 			<p className="subtext">
@@ -83,14 +85,14 @@ function ToolBar({
 					placeholder="Search..."
 					onChange={handleChange}
 				/>
-				<FilterButton dropdown={true} iconBefore={filterIcon} onUpdate={updateFromFilter}>
+				<FilterButton dropdown={true} iconBefore={<FilterIcon />} onUpdate={updateFromFilter}>
 					Filter
 				</FilterButton>
 
 				<Button>
 					<p>Open playground</p>
 					<span>
-						<img width={16} src={openPlaygroundIcon} alt="Open playground" />
+						<OpenPlaygroundIcon />
 					</span>
 				</Button>
 				<Button
@@ -99,7 +101,7 @@ function ToolBar({
 						{ name: 'Add links array', href: 'some_url' },
 						{ name: 'Add links array', href: 'some_url' },
 					]}
-					iconBefore={openPlaygroundIcon}
+					iconBefore={<OpenPlaygroundIcon />}
 				>
 					Test
 				</Button>
