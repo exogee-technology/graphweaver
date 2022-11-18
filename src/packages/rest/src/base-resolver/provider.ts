@@ -12,13 +12,13 @@ export class RestLookupProvider<T> extends RESTDataSource {
 		super();
 		this.memoizeGetRequests = false;
 
-		this.baseURL = 'https://6zd0g.mocklab.io/';
+		this.baseURL = process.env.REST_BASE_URL;
 		this.initialize({} as DataSourceConfig<any>);
 		this.entityType = restType;
 		this.context = {
 			acceptLanguage: 'en-au',
 			contentType: 'application/json',
-			sharedKey: 'd70a0cd87bf1ef70278df19e6ba677000ccf065bb41875d6c420d91e0c009e43',
+			sharedKey: process.env.REST_SHARED_KEY ?? '',
 		};
 	}
 
@@ -51,16 +51,14 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		super();
 		this.memoizeGetRequests = false;
 
-		// this.baseURL = 'https://dogsandowners.free.beeceptor.com/'; // beeceptor returns wrong data types
-		this.baseURL = 'https://6zd0g.mocklab.io/';
-		// this.baseURL = 'https://apimocha.com/gwrestdogs'; // apimocha weird issue saying json is invalid at "i"
+		this.baseURL = process.env.REST_BASE_URL;
 		this.initialize({} as DataSourceConfig<any>);
 		this.entityType = restType;
 		this.gqlTypeName = gqlType.name;
 		this.context = {
 			acceptLanguage: 'en-au',
 			contentType: 'application/json',
-			sharedKey: 'd70a0cd87bf1ef70278df19e6ba677000ccf065bb41875d6c420d91e0c009e43',
+			sharedKey: process.env.REST_SHARED_KEY ?? '',
 		};
 	}
 

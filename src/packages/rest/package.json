@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "0.1.0",
-	"description": "RESTful adapter for @exogee/graphweaver-core",
-	"license": "UNLICENSED",
+	"version": "0.1.0-alpha.0",
+	"description": "RESTful backend for @exogee/graphweaver",
+	"license": "MIT",
 	"scripts": {
 		"build:legacy": "tsc --build",
 		"build:types": "tsc --emitDeclarationOnly",
@@ -19,7 +19,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.0",
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
 		"@exogee/logger": "workspace:0.1.0",
 		"apollo-datasource": "^3.3.2",
 		"apollo-datasource-rest": "3.7.0",
