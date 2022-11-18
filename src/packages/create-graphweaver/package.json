@@ -11,7 +11,7 @@
   },
   "bin": "bin/index.js",
   "files": [
-    "lib"
+    "bin"
   ],
   "dependencies": {
     "chalk": "5.1.2",
