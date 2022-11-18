@@ -41,7 +41,6 @@
 		"graphql-fields": "2.0.3",
 		"graphql-type-json": "0.3.2",
 		"jwt-decode": "3.1.2",
-		"lodash": "4.17.21",
 		"luxon": "2.1.1",
 		"pg-native": "3.0.0",
 		"pluralize": "8.0.0",
