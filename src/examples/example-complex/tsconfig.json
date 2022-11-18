@@ -13,7 +13,7 @@
 	"include": ["./src"],
 	"references": [
 		{ "path": "../../packages/core" },
-		{ "path": "../../packages/graphql-scalars" },
+		{ "path": "../../packages/scalars" },
 		{ "path": "../../packages/mikroorm" },
 		{ "path": "../../packages/logger" }
 	]
