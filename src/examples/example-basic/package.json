@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-basic",
-	"version": "0.1.0-alpha.0",
+	"version": "0.1.0-alpha.1",
 	"license": "MIT",
 	"description": "An example project for @exogee/graphweaver",
 	"bin": "bin/index.js",
