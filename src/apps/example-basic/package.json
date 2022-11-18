@@ -1,12 +1,13 @@
 {
 	"name": "@exogee/graphweaver-example-basic-app",
 	"version": "0.1.0-alpha.0",
+	"license": "MIT",
+	"private": true,
 	"description": "Build and launch the GraphWeaver example app",
 	"main": "serverless.js",
 	"scripts": {
 		"build": "pnpm -r build --filter @exogee/graphweaver-example-basic",
-		"start": "pnpm -r build --filter @exogee/graphweaver-app && pnpm -r start --filter @exogee/graphweaver-example-basic --watch" 
+		"start": "pnpm -r build --filter @exogee/graphweaver-app && pnpm -r start --filter @exogee/graphweaver-example-basic --watch"
 	},
-	"license": "UNLICENSED",
-	"private": true
+
 }

@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-complex-app",
 	"version": "0.1.0-alpha.0",
-	"license": "UNLICENSED",
+	"license": "MIT",
 	"private": true,
 	"description": "App to build and launch the graphweaver example app",
 	"main": "serverless.js",

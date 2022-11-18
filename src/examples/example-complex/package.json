@@ -1,9 +1,9 @@
 {
 	"name": "@exogee/graphweaver-example-complex",
-	"version": "0.1.0",
-	"description": "Complex example of using @exogee/graphweaver",
-	"license": "UNLICENSED",
+	"version": "0.1.0-alpha.0",
+	"license": "MIT",
 	"private": true,
+	"description": "Complex example of using @exogee/graphweaver",
 	"scripts": {
 		"build": "esbuild --outdir=lib --format=cjs src/*.ts   src/**/**/*.ts src/**/*.ts",
 		"prettier": "prettier --write src/**/*.ts",
