@@ -26,7 +26,7 @@ function ToolBar({
 	initialData,
 }: {
 	// tableData: Array<any>;
-	updateTable: Function;
+	updateTable: (update: Array<any>) => any;
 	initialData: Array<any>;
 }) {
 	let timeOut: any;
@@ -45,10 +45,8 @@ function ToolBar({
 	};
 
 	// Filter table data
-	const filterData = (inputValue: string, tableData: Array<any>) => {
-		let items: any = Object.values(tableData);
-		return items.filter((item: any) => compareValues(item, inputValue));
-	};
+	const filterData = (inputValue: string, tableData: Array<any>) =>
+		Object.values(tableData).filter((item: any) => compareValues(item, inputValue));
 
 	// Compare values
 	function compareValues(item: any, inputValue: string) {
@@ -56,10 +54,10 @@ function ToolBar({
 
 		let match: boolean;
 		for (let i = 0; i < item.length; i++) {
-			const content: string = item[i];
-			const val: string = String(content);
-			const input: string = inputValue.toLowerCase();
-			const re: RegExp = new RegExp(input, 'g');
+			const content = item[i];
+			const val = String(content);
+			const input = inputValue.toLowerCase();
+			const re = new RegExp(input, 'g');
 			match = val.toLowerCase().match(re) != null;
 
 			if (match) {
