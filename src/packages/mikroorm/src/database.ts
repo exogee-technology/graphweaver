@@ -15,11 +15,8 @@ import { EntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { logger } from '@exogee/logger';
 //import AWS from 'aws-sdk';
 
-@Entity()
-class FakeEntity {}
-
 export interface ConnectionOptions {
-	overrides?: Options;
+	mikroOrmConfig?: Options;
 	secretArn?: string;
 }
 
@@ -190,7 +187,7 @@ class DatabaseImplementation {
 			...defaults,
 			//...filterUndefined(secret),
 			...filterUndefined(environmentOverrides),
-			...filterUndefined(connectionOptions?.overrides),
+			...filterUndefined(connectionOptions?.mikroOrmConfig),
 		};
 	};
 
@@ -215,11 +212,14 @@ class DatabaseImplementation {
 
 		const orm = await MikroORM.init({
 			driver: PostgreSqlDriver,
-			...params,
 
 			implicitTransactions: false,
 			metadataProvider: ReflectMetadataProvider,
-			discovery: { disableDynamicFileAccess: true },
+			discovery: {
+				disableDynamicFileAccess: true,
+				requireEntitiesArray: false,
+				warnWhenNoEntities: false,
+			},
 			allowGlobalContext: true,
 
 			// Ensure we only ever create one connection to the database.
@@ -227,6 +227,7 @@ class DatabaseImplementation {
 				min: 1,
 				max: 1,
 			},
+			...params,
 		});
 
 		logger.trace('Creating connection to %s on %s', params.dbName, params.host);

@@ -1,4 +1,4 @@
-import { exit, cwd } from 'node:process';
+import { exit, cwd } from 'process';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 
@@ -12,6 +12,11 @@ import {
 
 import { Backend } from './backend';
 
+const abort = () => {
+	console.log('Cancelled!');
+	exit(1);
+};
+
 // const thisScriptDirectory = __dirname;
 
 (async () => {
@@ -23,23 +28,21 @@ import { Backend } from './backend';
 			name: 'projectName',
 			message: `What would your like to call your new project?`,
 		},
-
 		{
 			type: 'checkbox',
 			name: 'backends',
 			message: 'Which GraphWeaver backends will you need?',
 			choices: [
 				{
-					value: Backend.MikroORM,
-					name: 'MikroORM Backend (MySQL, PostgreSQL, SQLite)',
+					value: Backend.MikroORMPostgres,
+					name: 'MikroORM - PostgreSQL Backend',
 				},
 				{
 					value: Backend.REST,
-					name: 'RESTful Backend (REST APIs)',
+					name: 'REST Backend',
 				},
 			],
 		},
-
 		{
 			type: 'confirm',
 			name: 'createDirectory',
@@ -63,8 +66,3 @@ import { Backend } from './backend';
 
 	exit(0);
 })();
-
-const abort = () => {
-	console.log('Cancelled!');
-	exit(1);
-};
