@@ -1,4 +1,4 @@
-import { exit, cwd } from 'node:process';
+import { exit, cwd } from 'process';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 
@@ -11,6 +11,11 @@ import {
 } from './template';
 
 import { Backend } from './backend';
+
+const abort = () => {
+	console.log('Cancelled!');
+	exit(1);
+};
 
 // const thisScriptDirectory = __dirname;
 
@@ -30,11 +35,11 @@ import { Backend } from './backend';
 			choices: [
 				{
 					value: Backend.MikroORMPostgres,
-					name: 'MikroORM Backend (MySQL, PostgreSQL, SQLite)',
+					name: 'MikroORM - PostgreSQL Backend',
 				},
 				{
 					value: Backend.REST,
-					name: 'RESTful Backend (REST APIs)',
+					name: 'REST Backend',
 				},
 			],
 		},
@@ -61,8 +66,3 @@ import { Backend } from './backend';
 
 	exit(0);
 })();
-
-const abort = () => {
-	console.log('Cancelled!');
-	exit(1);
-};
