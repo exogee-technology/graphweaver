@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"description": "Complex example of using @exogee/graphweaver",
 	"license": "UNLICENSED",
-	"private": "yes",
+	"private": true,
 	"scripts": {
 		"build": "esbuild --outdir=lib --format=cjs src/*.ts   src/**/**/*.ts src/**/*.ts",
 		"prettier": "prettier --write src/**/*.ts",
