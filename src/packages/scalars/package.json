@@ -17,7 +17,7 @@
 		"test:watch": "jest --passWithNoTests --watch"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.0"
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",
