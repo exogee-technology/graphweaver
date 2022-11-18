@@ -12,6 +12,9 @@
     "pub:dry": "pnpm publish --access=public --dry-run" 
   },
   "bin": "bin/index.js",
+  "files": [
+    "lib"
+  ],
   "dependencies": {
     "chalk": "5.1.2",
     "inquirer": "9.1.4"
