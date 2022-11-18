@@ -188,7 +188,7 @@ class DatabaseImplementation {
 		// Apply each in order so the correct value wins.
 		return {
 			...defaults,
-			...filterUndefined(secret),
+			//...filterUndefined(secret),
 			...filterUndefined(environmentOverrides),
 			...filterUndefined(connectionOptions?.overrides),
 		};
