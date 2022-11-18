@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import graphweaverLogo from '~/assets/graphweaver-logo.svg';
-import databaseIcon16 from '~/assets/16-database.svg';
+import { ReactComponent as GraphweaverLogo } from '~/assets/graphweaver-logo.svg';
+import { ReactComponent as DatabaseIcon } from '~/assets/16-database.svg';
+import { ReactComponent as TableIcon } from '~/assets/16-table.svg';
 import styles from './styles.module.css';
 
 const sideBarData = [
@@ -61,7 +62,7 @@ const SubListItem = ({
 			className={`${styles.subListItem} ${active}`}
 			href="/#"
 		>
-			<span></span>
+			<TableIcon />
 			{child.name}
 		</a>
 	</li>
@@ -99,7 +100,7 @@ function SideBarEntity() {
 							}}
 						>
 							<span>
-								<img height={16} src={databaseIcon16} alt="Database icon" />
+								<DatabaseIcon />
 							</span>
 							{entity.name}
 						</a>
@@ -122,7 +123,7 @@ function SideBarEntity() {
 
 const DataSources = () => (
 	<div id={styles.sideBarMenu}>
-		<img className={styles.logo} width="52" src={graphweaverLogo} alt="Graphweaver logo." />
+		<GraphweaverLogo width="52" />
 		<p className={styles.subtext}>Data sources</p>
 		<SideBarEntity />
 	</div>
@@ -131,7 +132,7 @@ const DataSources = () => (
 const BlankSlate = () => (
 	<div id={styles.sideBar}>
 		<div className={styles.blankSlate}>
-			<img width="52" src={graphweaverLogo} alt="No database yet, add one." />
+			<GraphweaverLogo width="52" />
 		</div>
 	</div>
 );
