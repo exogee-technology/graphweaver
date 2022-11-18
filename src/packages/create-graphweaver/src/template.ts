@@ -1,6 +1,6 @@
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync } from 'fs';
 import { Backend, packagesForBackend } from './backend';
-import { GRAPHWEAVER_TARGET_VERSION } from './constants';
+import { GRAPHWEAVER_CORE_TARGET_VERSION } from './constants';
 
 export const makePackageJson = (projectName: string, backends: Backend[]) => {
 	const backendPackages = Object.assign(
@@ -16,18 +16,20 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 			start: 'ts-node src/index.ts',
 		},
 		dependencies: {
-			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver': GRAPHWEAVER_CORE_TARGET_VERSION,
 			...backendPackages,
 			'apollo-server': '3.11.1',
 			'apollo-server-core': '3.10.3',
 			graphql: '15.8.0',
 			'reflect-metadata': '0.1.13',
+			'type-graphql': '1.1.1',
 		},
 		devDependencies: {
 			'@types/node': '14.14.10',
 			open: '8.4.0',
 			'ts-node': '10.9.1',
 			typescript: '4.5.4',
+			dotenv: '16.0.0',
 		},
 	};
 
@@ -45,20 +47,28 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 
 import 'reflect-metadata';
 ${
-	backends.includes(Backend.MikroORM)
+	backends.includes(Backend.MikroORMPostgres)
 		? `import { connectToDatabase } from '@exogee/graphweaver-apollo';`
 		: ``
 }
 import { ApolloServer } from 'apollo-server';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import open from 'open';
+import { config } from 'dotenv';
 
-import { schema } from './schema';
+config();
+
+import { schema${
+		backends.includes(Backend.MikroORMPostgres) ? `, mikroOrmEntities` : ''
+	} } from './schema';
 
 const server = new ApolloServer({
         schema,
-        plugins: [
-                connectToDatabase({ overrides: { entities: mikroOrmEntities } }),
+        plugins: [${
+					backends.includes(Backend.MikroORMPostgres)
+						? `connectToDatabase({ mikroOrmConfig: { entities: mikroOrmEntities } }),\n`
+						: ''
+				}
                 ApolloServerPluginLandingPageGraphQLPlayground,
         ],
         introspection: true,
@@ -77,16 +87,27 @@ const server = new ApolloServer({
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} GraphWeaver Project - Schema */
-import { buildSchemaSync } from 'type-graphql';
+import { buildSchemaSync, Reesolver, Query } from 'type-graphql';
 
 ${
-	backends.includes(Backend.MikroORM)
+	backends.includes(Backend.MikroORMPostgres)
 		? `export const mikroOrmEntities = [ /* Insert MikroORM Entities Here */ ];`
 		: ``
 }
 
+@Resolver()
+class PingResolver {
+	@Query(() => Boolean)
+	async ping() {
+    		return true; 
+  	}
+}
+
 export const schema = buildSchemaSync({
-        resolvers: [ /* Insert Resolvers Here */ ],
+        resolvers: [ 
+		PingResolver, 
+		/* Insert Resolvers Here */
+	],
 });      
 
 `;
