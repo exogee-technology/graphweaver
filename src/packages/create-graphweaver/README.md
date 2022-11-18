@@ -3,5 +3,5 @@
 ## Getting Started
 
 ```shell
-$ npx init @exogee/graphweaver
+$ npm init @exogee/graphweaver
 ```
