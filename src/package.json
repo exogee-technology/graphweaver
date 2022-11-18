@@ -9,7 +9,7 @@
 	},
 	"scripts": {
 		"clean": "./clean.sh",
-		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\"",
+		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
 		"database:rebuild-local": "dropdb graphweaver --if-exists && createdb graphweaver && pnpm migrate",
