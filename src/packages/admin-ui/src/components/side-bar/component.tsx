@@ -123,7 +123,7 @@ function SideBarEntity() {
 
 const DataSources = () => (
 	<div id={styles.sideBarMenu}>
-		<GraphweaverLogo width="52" />
+		<GraphweaverLogo width="52" className={styles.logo} />
 		<p className={styles.subtext}>Data sources</p>
 		<SideBarEntity />
 	</div>
