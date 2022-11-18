@@ -23,14 +23,13 @@ import { Backend } from './backend';
 			name: 'projectName',
 			message: `What would your like to call your new project?`,
 		},
-
 		{
 			type: 'checkbox',
 			name: 'backends',
 			message: 'Which GraphWeaver backends will you need?',
 			choices: [
 				{
-					value: Backend.MikroORM,
+					value: Backend.MikroORMPostgres,
 					name: 'MikroORM Backend (MySQL, PostgreSQL, SQLite)',
 				},
 				{
@@ -39,7 +38,6 @@ import { Backend } from './backend';
 				},
 			],
 		},
-
 		{
 			type: 'confirm',
 			name: 'createDirectory',
