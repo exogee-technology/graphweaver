@@ -32,7 +32,7 @@ importers:
   apps/example-complex:
     specifiers:
       '@aws-sdk/signature-v4-crt': 3.54.1
-      '@exogee/graphweaver-example-complex': workspace:0.1.0
+      '@exogee/graphweaver-example-complex': workspace:0.1.0-alpha.0
       concurrently: 7.0.0
       dotenv: 10.0.0
       esbuild: 0.15.5
@@ -81,7 +81,7 @@ importers:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.0-alpha.0
       '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
       '@types/node': 14.14.10
@@ -116,7 +116,7 @@ importers:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.0-alpha.0
       '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@exogee/graphweaver-rest': workspace:0.1.0-alpha.0
       '@exogee/graphweaver-rls': workspace:0.1.0-alpha.0
       '@exogee/graphweaver-scalars': workspace:0.1.0-alpha.0
@@ -235,7 +235,7 @@ importers:
 
   examples/example-complex-migrations:
     specifiers:
-      '@exogee/graphweaver-mikroorm': 0.1.0-alpha.0
+      '@exogee/graphweaver-mikroorm': 0.1.0-alpha.1
       '@exogee/logger': 0.1.0
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/entity-generator': 5.4.2
@@ -296,7 +296,7 @@ importers:
   packages/apollo:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@exogee/logger': workspace:0.1.0
       apollo-server-core: 3.10.3
       async-mutex: 0.3.2
@@ -441,7 +441,7 @@ importers:
   packages/rls:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@exogee/logger': workspace:0.1.0
       '@types/node': 14.14.10
       apollo-server-errors: 3.3.1
@@ -471,7 +471,7 @@ importers:
 
   packages/scalars:
     specifiers:
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@types/jest': 26.0.23
       decimal.js: 10.3.1
       graphql: 15.8.0
