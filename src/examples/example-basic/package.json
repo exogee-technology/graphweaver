@@ -4,6 +4,9 @@
 	"description": "An example project for @exogee/graphweaver",
 	"license": "MIT",
 	"bin": "bin/index.js",
+	"files": [
+		"lib"
+	],
 	"scripts": {
 		"build": "tsc && printf '%s\n%s\n' \"#!/usr/bin/env node\" \"$(cat bin/index.js)\" > bin/index.js",
 		"start": "ts-node src/index.ts",

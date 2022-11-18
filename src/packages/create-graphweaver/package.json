@@ -7,9 +7,7 @@
     "start": "pnpm build && mkdir --parents test && rm -rf test/* && cd test && node ../bin/index.js",
     "build": "esbuild src/index.ts --bundle --platform=node --outdir=bin --banner:js=\"#!/usr/bin/env node\"",
     "prettier": "prettier --write .",
-    "test:prettier": "prettier --check .",
-    "pub": "pnpm publish --access=public",
-    "pub:dry": "pnpm publish --access=public --dry-run" 
+    "test:prettier": "prettier --check ." 
   },
   "bin": "bin/index.js",
   "files": [
