@@ -2,8 +2,7 @@
 	"name": "@exogee/logger",
 	"version": "0.1.0",
 	"description": "Common logging output for Exogee projects",
-	"homepage": "",
-	"license": "UNLICENSED",
+	"license": "MIT",
 	"directories": {
 		"lib": "lib"
 	},

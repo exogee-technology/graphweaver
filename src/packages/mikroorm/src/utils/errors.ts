@@ -1,4 +1,4 @@
-import { ApolloError } from 'apollo-server-lambda';
+import { ApolloError } from 'apollo-server-core';
 
 export class OptimisticLockError<T> extends ApolloError {
 	constructor(message: string, extensions: { entity: T }) {
