@@ -18,7 +18,7 @@
 	],
 	"dependencies": {
 		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1",
 		"@exogee/logger": "workspace:0.1.0",
 		"async-mutex": "0.3.2",
 		"apollo-server-core": "3.10.3",

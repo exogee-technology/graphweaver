@@ -18,7 +18,7 @@
 	"dependencies": {
 		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.0",
 		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"apollo-server": "3.11.1",

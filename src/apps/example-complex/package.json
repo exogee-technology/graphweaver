@@ -20,7 +20,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/signature-v4-crt": "3.54.1",
-		"@exogee/graphweaver-example-complex": "workspace:0.1.0",
+		"@exogee/graphweaver-example-complex": "workspace:0.1.0-alpha.0",
 		"dotenv": "10.0.0",
 		"esbuild": "0.15.5"
 	}
