@@ -35,6 +35,9 @@ export class Dog extends BaseEntity {
 	@Field()
 	name!: string;
 
-	@ManyToOne(() => Breeder)
-	breeder!: Reference<Breeder>;
+	@ManyToOne(() => Breeder, {})
+	breederId?: string;
+
+	@ManyToOne(() => Breeder, {})
+	breeder?: Breeder;
 }
