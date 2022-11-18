@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, ReactNode } from 'react';
 import styles from './styles.module.css';
 
 const DropdownItem = ({
@@ -64,25 +64,13 @@ export const FilterButton = ({
 	onUpdate,
 }: {
 	handleClick?: () => any;
-	children: JSX.Element | string;
-	iconBefore?: string;
-	iconAfter?: string;
+	children?: ReactNode;
+	iconBefore?: ReactNode;
+	iconAfter?: ReactNode;
 	dropdown?: boolean;
 	onUpdate?: () => any;
 }) => {
 	const [showDropdown, setShowDropdown] = useState(false);
-
-	function hasIconBefore() {
-		if (iconBefore) {
-			return <img src={iconBefore} alt="Icon" />;
-		}
-	}
-
-	function hasIconAfter() {
-		if (iconAfter) {
-			return <img src={iconAfter} alt="Icon" />;
-		}
-	}
 
 	function showHideDropdown() {
 		return dropdown ? setShowDropdown(!showDropdown) : false;
@@ -109,12 +97,10 @@ export const FilterButton = ({
 
 	return (
 		<button ref={parentRef} onClick={showHideDropdown} className={styles.button} type="button">
-			<>
-				{hasIconBefore()}
-				{children}
-				{hasIconAfter()}
-				{hasDropdown()}
-			</>
+			{iconBefore}
+			{children}
+			{iconAfter}
+			{hasDropdown()}
 		</button>
 	);
 };
