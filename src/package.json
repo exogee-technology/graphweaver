@@ -14,8 +14,8 @@
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
 		"database:rebuild-local": "dropdb graphweaver --if-exists && createdb graphweaver && pnpm migrate",
 		"start": "echo \"To start an application, cd apps/[the application you want] then run pnpm start\"",
-		"pub:dry": "pnpm -r build --filter '@exogee/graphweaver-app' && pnpm -r build --filter '@exogee/example-basic-app' && pnpm publish --recursive --dry-run --access=public",
-		"pub": "pnpm -r build --filter '@exogee/graphweaver-app' && pnpm -r build --filter '@exogee/example-basic-app' && pnpm publish --recursive --access=public"
+		"pub:dry": "pnpm -r build --filter '@exogee/graphweaver-app' && pnpm -r build --filter '@exogee/graphweaver-example-basic-app' && pnpm publish --recursive --dry-run --access=public",
+		"pub": "pnpm -r build --filter '@exogee/graphweaver-app' && pnpm -r build --filter '@exogee/graphweaver-example-basic-app' && pnpm publish --recursive --access=public"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.17.0",
