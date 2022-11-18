@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-apollo",
-	"version": "0.1.0",
+	"version": "0.1.0-alpha.0",
 	"description": "Apollo Server support for @exogee/graphweaver",
-	"license": "UNLICENSED",
+	"license": "MIT",
 	"scripts": {
 		"build:legacy": "tsc --build",
 		"build:types": "tsc --emitDeclarationOnly",
@@ -17,8 +17,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.0",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0",
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.0",
 		"@exogee/logger": "workspace:0.1.0",
 		"async-mutex": "0.3.2",
 		"apollo-server-core": "3.10.3",
