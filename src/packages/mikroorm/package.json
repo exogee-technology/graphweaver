@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "0.1.0",
-	"description": "MikroORM Adapter for @exogee/graphweaver",
+	"version": "0.1.0-alpha.0",
+	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
 		"build:legacy": "tsc --build --verbose",
@@ -19,10 +19,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.0",
-		"@exogee/logger": "workspace:0.1.0",
-		"apollo-server-lambda": "3.1.2",
-		"aws-sdk": "2.1069.0",
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
+		"@exogee/logger": "workspace:0.1.0-alpha.0",
 		"dataloader": "2.0.0",
 		"decimal.js": "10.3.1",
 		"dotenv": "16.0.0",
