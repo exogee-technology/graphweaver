@@ -13,13 +13,10 @@ import {
 } from '@mikro-orm/core';
 import { EntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { logger } from '@exogee/logger';
-import AWS from 'aws-sdk';
-
-@Entity()
-class FakeEntity {}
+//import AWS from 'aws-sdk';
 
 export interface ConnectionOptions {
-	overrides?: Options;
+	mikroOrmConfig?: Options;
 	secretArn?: string;
 }
 
@@ -134,7 +131,7 @@ class DatabaseImplementation {
 
 		// If we've been passed a secret then we need to get all this
 		// info from Secrets Manager.
-		let secret = {};
+		/* let secret = {};
 		const secretArn = connectionOptions?.secretArn || process.env.DATABASE_SECRET_ARN;
 
 		if (secretArn) {
@@ -163,7 +160,7 @@ class DatabaseImplementation {
 
 				secret = { host, port, user, password, dbName };
 			}
-		}
+		} */
 
 		// And finally we can override all of this with environment variables if needed.
 		const environmentOverrides: Options = {
@@ -188,9 +185,9 @@ class DatabaseImplementation {
 		// Apply each in order so the correct value wins.
 		return {
 			...defaults,
-			...filterUndefined(secret),
+			//...filterUndefined(secret),
 			...filterUndefined(environmentOverrides),
-			...filterUndefined(connectionOptions?.overrides),
+			...filterUndefined(connectionOptions?.mikroOrmConfig),
 		};
 	};
 
@@ -215,11 +212,14 @@ class DatabaseImplementation {
 
 		const orm = await MikroORM.init({
 			driver: PostgreSqlDriver,
-			...params,
 
 			implicitTransactions: false,
 			metadataProvider: ReflectMetadataProvider,
-			discovery: { disableDynamicFileAccess: true },
+			discovery: {
+				disableDynamicFileAccess: true,
+				requireEntitiesArray: false,
+				warnWhenNoEntities: false,
+			},
 			allowGlobalContext: true,
 
 			// Ensure we only ever create one connection to the database.
@@ -227,6 +227,7 @@ class DatabaseImplementation {
 				min: 1,
 				max: 1,
 			},
+			...params,
 		});
 
 		logger.trace('Creating connection to %s on %s', params.dbName, params.host);
