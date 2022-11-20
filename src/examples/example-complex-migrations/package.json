@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver-example-complex-migrations",
-	"version": "0.1.0",
+	"version": "0.1.0-alpha.0",
+	"license": "MIT",
+	"private": true,
 	"description": "Database migrations for example-complex",
-	"license": "UNLICENSED",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -17,7 +18,7 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "0.1.0",
+		"@exogee/graphweaver-mikroorm": "0.1.0-alpha.1",
 		"@exogee/logger": "0.1.0",
 		"aws-sdk": "2.1069.0",
 		"color-convert": "2.0.1",

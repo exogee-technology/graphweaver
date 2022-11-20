@@ -1,6 +1,8 @@
 {
 	"name": "@exogee/graphweaver-example-complex-app",
-	"version": "1.0.0",
+	"version": "0.1.0-alpha.0",
+	"license": "MIT",
+	"private": true,
 	"description": "App to build and launch the graphweaver example app",
 	"main": "serverless.js",
 	"scripts": {
@@ -8,8 +10,6 @@
 		"start": "concurrently \"pnpm -r build --filter @exogee/graphweaver-app --watch\" \"pnpm -r build --filter @exogee/graphweaver-example-complex --watch\" \"nodemon --exec serverless offline start\"",
 		"migrate": "pnpm -r migration:run --filter \"@exogee/graphweaver-example-complex-migrations\""
 	},
-	"author": "Exogee Pty Ltd",
-	"license": "UNLICENSED",
 	"devDependencies": {
 		"concurrently": "7.0.0",
 		"esbuild-css-modules-plugin": "2.3.1",
@@ -20,7 +20,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/signature-v4-crt": "3.54.1",
-		"@exogee/graphweaver-example-complex": "workspace:0.1.0",
+		"@exogee/graphweaver-example-complex": "workspace:0.1.0-alpha.0",
 		"dotenv": "10.0.0",
 		"esbuild": "0.15.5"
 	}
