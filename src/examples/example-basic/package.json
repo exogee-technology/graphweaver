@@ -1,9 +1,14 @@
 {
 	"name": "@exogee/graphweaver-example-basic",
-	"version": "0.1.0",
-	"description": "An example project for @exogee/graphweaver",
+	"version": "0.1.0-alpha.0",
 	"license": "MIT",
+	"description": "An example project for @exogee/graphweaver",
+	"bin": "bin/index.js",
+	"files": [
+		"bin"
+	],
 	"scripts": {
+		"build": "tsc && printf '%s\n%s\n' \"#!/usr/bin/env node\" \"$(cat bin/index.js)\" > bin/index.js",
 		"start": "ts-node src/index.ts",
 		"prettier": "prettier --write .",
 		"test": "pnpm test:tsc && pnpm test:prettier",
@@ -11,11 +16,9 @@
 		"test:prettier": "prettier --check ."
 	},
 	"dependencies": {
-		"@exogee/graphweaver-apollo": "workspace:0.1.0",
-		"@exogee/graphweaver": "workspace:0.1.0",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0",
-		"@exogee/graphql-scalars": "workspace:0.1.0",
-		"@exogee/logger": "workspace:0.1.0",
+		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"apollo-server": "3.11.1",

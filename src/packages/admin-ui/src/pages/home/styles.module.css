@@ -1,0 +1,48 @@
+#mainContentWrapper {
+  /* Same as sidebar */
+  margin-left: 300px;
+}
+
+#centerBlankSlate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.blankSlateWrapper {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: -32px;
+}
+
+.toolBarWrapper {
+  width: 100%;
+  padding: 48px 40px 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.toolsWrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.search {
+  background: rgba(237, 232, 242, 0.02);
+  border: 1px solid rgba(237, 232, 242, 0.1);
+  border-radius: 6px;
+  padding-left: 32px;
+  background-image: url(../../assets/img/16-search.svg);
+  background-size: 16px 16px;
+  background-repeat: no-repeat;
+  background-position-x: 8px;
+  background-position-y: center;
+  outline: 0;
+}

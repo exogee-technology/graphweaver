@@ -1,9 +1,8 @@
 {
-	"name": "@exogee/graphql-scalars",
-	"version": "0.1.0",
-	"description": "A package to house all common scalar types used across GraphQL APIs",
-	"author": "Exogee Pty Ltd",
-	"license": "UNLICENSED",
+	"name": "@exogee/graphweaver-scalars",
+	"version": "0.1.0-alpha.0",
+	"description": "Common scalar types for use with @exogee/graphweaver",
+	"license": "MIT",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -18,7 +17,7 @@
 		"test:watch": "jest --passWithNoTests --watch"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0"
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",

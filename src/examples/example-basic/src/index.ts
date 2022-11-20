@@ -11,7 +11,7 @@ config();
 const server = new ApolloServer({
 	schema,
 	plugins: [
-		connectToDatabase({ overrides: { entities: mikroOrmEntities } }),
+		connectToDatabase({ mikroOrmConfig: { entities: mikroOrmEntities } }),
 		ApolloServerPluginLandingPageGraphQLPlayground,
 	],
 	introspection: true,

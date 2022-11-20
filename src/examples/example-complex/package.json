@@ -1,8 +1,9 @@
 {
 	"name": "@exogee/graphweaver-example-complex",
-	"version": "0.1.0",
+	"version": "0.1.0-alpha.0",
+	"license": "MIT",
+	"private": true,
 	"description": "Complex example of using @exogee/graphweaver",
-	"license": "UNLICENSED",
 	"scripts": {
 		"build": "esbuild --outdir=lib --format=cjs src/*.ts   src/**/**/*.ts src/**/*.ts",
 		"prettier": "prettier --write src/**/*.ts",
@@ -17,12 +18,12 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphql-scalars": "workspace:0.1.0",
-		"@exogee/graphweaver": "workspace:0.1.0",
-		"@exogee/graphweaver-apollo": "workspace:0.1.0",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0",
-		"@exogee/graphweaver-rest": "workspace:0.1.0",
-		"@exogee/graphweaver-rls": "workspace:0.1.0",
+		"@exogee/graphweaver-scalars": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.1",
+		"@exogee/graphweaver-rest": "workspace:0.1.0-alpha.0",
+		"@exogee/graphweaver-rls": "workspace:0.1.0-alpha.0",
 		"@exogee/logger": "workspace:0.1.0",
 		"@mikro-orm/core": "5.4.2",
 		"apollo-server-core": "3.10.3",
