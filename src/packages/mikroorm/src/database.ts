@@ -212,6 +212,7 @@ class DatabaseImplementation {
 
 		const orm = await MikroORM.init({
 			driver: PostgreSqlDriver,
+			debug: true,
 
 			implicitTransactions: false,
 			metadataProvider: ReflectMetadataProvider,

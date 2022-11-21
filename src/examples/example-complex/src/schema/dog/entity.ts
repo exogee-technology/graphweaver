@@ -16,15 +16,12 @@ export class Dog extends GraphQLEntity<RestDog> {
 	@Field(() => String)
 	name!: string;
 
-	@Field(() => String, {})
-	breederId?: string;
-
 	@Field(() => Breeder, { nullable: false })
 	async breeder() {
-		if (!this.breederId) return null;
+		if (!this.dataEntity.breederId) return null;
 		const result = await BaseLoaders.loadOne({
 			gqlEntityType: Breeder,
-			id: this.breederId,
+			id: this.dataEntity.breederId,
 		});
 		return Breeder.fromBackendEntity(result);
 	}

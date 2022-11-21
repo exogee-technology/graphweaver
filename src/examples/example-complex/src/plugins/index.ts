@@ -19,7 +19,7 @@ export const plugins: PluginDefinition[] = [
 	MutexRequestsInDevelopment,
 	LogRequests,
 	LogErrors,
-	connectToDatabase({ overrides: { entities: mikroOrmEntities } }),
+	connectToDatabase({ mikroOrmConfig: { entities: mikroOrmEntities } }),
 	ClearDataLoaderCache,
 	ClearDatabaseContext,
 	ApolloSession,
