@@ -213,11 +213,10 @@ export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 		if (typeof entity === 'string') {
 			return entity;
 		}
-		if (typeof entity.unwrap !== 'function') {
-			throw new Error('Could not unwrap related entity');
+		if (entity.id) {
+			return entity.id;
 		}
-
-		return entity.unwrap().id;
+		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
 	public isCollection(entity: any) {

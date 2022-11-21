@@ -11,6 +11,6 @@ export class Hobby extends BaseEntity {
 	@Property({ type: String })
 	name!: string;
 
-	@ManyToOne(() => User)
+	@ManyToOne(() => User, { wrappedReference: true })
 	user!: Reference<User>;
 }
