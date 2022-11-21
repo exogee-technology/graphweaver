@@ -37,7 +37,4 @@ export class Dog extends BaseEntity {
 
 	@ManyToOne(() => Breeder, {})
 	breederId?: string;
-
-	@ManyToOne(() => Breeder, {})
-	breeder?: Breeder;
 }
