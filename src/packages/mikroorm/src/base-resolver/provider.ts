@@ -439,11 +439,14 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	}
 
 	public getRelatedEntityId(entity: any, relatedIdField: string) {
-		if (typeof entity.unwrap !== 'function') {
-			throw new Error('Could not unwrap related entity');
+		if (typeof entity === 'string') {
+			return entity;
 		}
-
-		return entity.unwrap().id;
+		if (entity.id) {
+			return entity.id;
+		}
+		// No need to unwrap in Mikroorm version 5
+		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
 	public isCollection(entity: any) {

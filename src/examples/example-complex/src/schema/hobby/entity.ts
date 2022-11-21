@@ -5,6 +5,8 @@ import { User } from '../user';
 
 @ObjectType('Hobby')
 export class Hobby extends GraphQLEntity<OrmHobby> {
+	public dataEntity!: OrmHobby;
+
 	@Field(() => ID)
 	id!: string;
 
