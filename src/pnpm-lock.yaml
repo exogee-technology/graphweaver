@@ -80,7 +80,7 @@ importers:
   examples/example-basic:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.1
       '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
@@ -115,11 +115,11 @@ importers:
   examples/example-complex:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.1
       '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.1
       '@exogee/graphweaver-rest': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-rls': workspace:0.1.0-alpha.0
-      '@exogee/graphweaver-scalars': workspace:0.1.0-alpha.0
+      '@exogee/graphweaver-rls': workspace:0.1.0-alpha.1
+      '@exogee/graphweaver-scalars': workspace:0.1.0-alpha.1
       '@exogee/logger': workspace:0.1.0
       '@graphql-codegen/cli': 1.19.4
       '@graphql-codegen/typescript': 1.19.0
