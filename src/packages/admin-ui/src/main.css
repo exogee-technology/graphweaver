@@ -14,7 +14,9 @@
 	color: var(--body-copy-color);
 }
 
-body {
+html,
+body,
+#root {
 	margin: 0;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
@@ -22,6 +24,8 @@ body {
 
 	font-size: 14px;
 	line-height: 150%;
+
+	height: 100%;
 }
 
 /* Font styling */

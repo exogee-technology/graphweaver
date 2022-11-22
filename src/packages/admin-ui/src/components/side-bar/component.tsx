@@ -121,21 +121,10 @@ function SideBarEntity() {
 	);
 }
 
-const DataSources = () => (
-	<div id={styles.sideBarMenu}>
+export const SideBar = () => (
+	<div className={styles.sideBar}>
 		<GraphweaverLogo width="52" className={styles.logo} />
 		<p className={styles.subtext}>Data sources</p>
 		<SideBarEntity />
 	</div>
 );
-
-const BlankSlate = () => (
-	<div id={styles.sideBar}>
-		<div className={styles.blankSlate}>
-			<GraphweaverLogo width="52" />
-		</div>
-	</div>
-);
-
-export const SideBar = ({ hasData }: { hasData: boolean }) =>
-	hasData ? <DataSources /> : <BlankSlate />;

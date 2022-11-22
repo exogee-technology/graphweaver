@@ -1,82 +1,55 @@
-import { ReactElement, useCallback, useState } from 'react';
+import DataGrid, { SortColumn } from 'react-data-grid';
+import { useMemo, useState } from 'react';
+
+import 'react-data-grid/lib/styles.css';
+import './table-styles.css';
+
 import styles from './styles.module.css';
-import chevron from '~/assets/16-chevron-down.svg';
 
-function TableHeader({
-	tableData,
-	handleClick,
-	filterDirection,
-}: {
-	tableData: Array<object>;
-	handleClick?: (header: string) => any;
-	filterDirection: boolean;
-}) {
-	const [filteredColumn, setFilteredColumn] = useState(0);
+const columns = [
+	{ key: 'id', name: 'ID' },
+	{ key: 'title', name: 'Title' },
+];
 
-	const headers = Object.keys(tableData[0]);
-	const firstObject: any = tableData[0];
+const rows = [
+	{ id: 0, title: 'Example' },
+	{ id: 1, title: 'Demo' },
+];
 
-	// When the value is a number right align text
-	const valueIsNumber = useCallback(
-		(header: string) => (typeof firstObject[header] === 'number' ? styles.right : ''),
-		[]
-	);
+export const Table = () => {
+	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+	const sortedRows = useMemo((): readonly any[] => {
+		if (sortColumns.length === 0) return rows;
 
-	// Pass the column object key so we can filter on that column
-	const filterOnColumn = useCallback(
-		(header: string, index: number) => {
-			handleClick?.(header);
-			setFilteredColumn(index);
-		},
-		[handleClick, setFilteredColumn]
-	);
+		return [...rows].sort((a, b) => {
+			for (const sort of sortColumns) {
+				const left = (a as any)[sort.columnKey];
+				const right = (b as any)[sort.columnKey];
+
+				let result = 0;
+				if (typeof left === 'number') result = left - right;
+				else result = String(left).localeCompare(String(right));
+
+				if (result !== 0) {
+					return sort.direction === 'ASC' ? result : -result;
+				}
+			}
+			return 0;
+		});
+	}, [rows, sortColumns]);
 
 	return (
-		<tr id={styles.header}>
-			{headers.map((header: string, index) => (
-				<th
-					onClick={() => {
-						filterOnColumn(header, index);
-					}}
-					className={valueIsNumber(header)}
-					id={filteredColumn === index ? styles.chevron : ''}
-					key={header}
-				>
-					{header}
-					<span>
-						<img
-							src={chevron}
-							alt={`Filter ${header} ascending or descending`}
-							className={filterDirection ? styles.pointUp : styles.pointDown}
-						/>
-					</span>
-				</th>
-			))}
-		</tr>
+		<div className={styles.tableWrapper}>
+			<DataGrid
+				columns={columns}
+				rows={sortedRows}
+				sortColumns={sortColumns}
+				onSortColumnsChange={setSortColumns}
+				defaultColumnOptions={{
+					sortable: true,
+					resizable: true,
+				}}
+			/>
+		</div>
 	);
-}
-
-const TableRows = ({ tableData }: { tableData: Array<object> }) => (
-	<>
-		{tableData?.map((row, index) => (
-			<tr key={index}>
-				{Object.values(row).map((field) => (
-					<td className={typeof field === 'number' ? styles.right : ''} key={Math.random()}>
-						{field}
-					</td>
-				))}
-			</tr>
-		))}
-	</>
-);
-
-export const Table = ({ data, headerData }: { data: Array<any>; headerData: Array<any> }) => (
-	<div id={styles.tableWrapper}>
-		<table id={styles.table}>
-			<tbody>
-				<TableHeader filterDirection tableData={headerData} />
-				<TableRows tableData={data} />
-			</tbody>
-		</table>
-	</div>
-);
+};
