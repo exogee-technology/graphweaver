@@ -87,7 +87,7 @@ const server = new ApolloServer({
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} GraphWeaver Project - Schema */
-import { buildSchemaSync, Reesolver, Query } from 'type-graphql';
+import { buildSchemaSync, Resolver, Query } from 'type-graphql';
 
 ${
 	backends.includes(Backend.MikroORMPostgres)
