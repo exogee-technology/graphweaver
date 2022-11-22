@@ -27,6 +27,10 @@
 	background: #1e1a25;
 }
 
+.rdg-row:hover {
+	background: #352d44;
+}
+
 .rdg-row-odd {
 	background: #241e2f;
 }
