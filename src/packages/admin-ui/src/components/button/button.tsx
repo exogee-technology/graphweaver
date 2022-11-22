@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, ReactNode } from 'react';
 import styles from './styles.module.css';
 
 const DropdownItems = ({ items }: { items: Array<object> }) => (
@@ -59,9 +59,9 @@ export const Button = ({
 	dropdownItems = [{ name: 'Add links array', href: 'some_url' }],
 }: {
 	handleClick?: () => any;
-	children: JSX.Element | string;
-	iconBefore?: JSX.Element;
-	iconAfter?: JSX.Element;
+	children: ReactNode;
+	iconBefore?: ReactNode;
+	iconAfter?: ReactNode;
 	dropdown?: boolean;
 	dropdownItems?: Array<object>;
 }) => {

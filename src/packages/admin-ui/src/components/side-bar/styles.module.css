@@ -1,24 +1,8 @@
-#sideBar {
-	position: fixed;
+.sideBar {
+	position: sticky;
 	top: 0;
-	left: 0;
 	width: 300px;
-	height: 100%;
-	background: #170f23;
-	border-right: 1px solid rgba(237, 232, 242, 0.1);
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-}
-
-#sideBarMenu {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 300px;
-	height: 100%;
-	background: #170f23;
+	background: hsl(264, 40%, 10%);
 	border-right: 1px solid rgba(237, 232, 242, 0.1);
 	display: flex;
 	flex-direction: column;

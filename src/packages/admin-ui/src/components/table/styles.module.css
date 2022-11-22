@@ -1,111 +1,48 @@
-#tableWrapper {
-  padding: 0 40px 32px 40px;
-  margin-top: 32px;
-}
-
-#table {
-  background: #1e1a25;
-  border: 1px solid rgba(237, 232, 242, 0.1);
-  border-radius: 12px;
-  width: 100%;
-  min-height: 100%;
-  display: block;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-#table td {
-  padding: 14px 24px;
-}
-
-#table tbody {
-  display: table;
-  width: 100%;
-}
-
-#table tr:nth-child(odd) {
-  background: #241e2f;
-}
-
-#table tr:first-child {
-  background: #271f36;
-}
-
-#table tr:first-child:hover {
-  background: #271f36;
-}
-
-#table tr:hover {
-  background: #352d44;
-  /* cursor: pointer; */
-}
-
-#header {
-  background: #271f36;
-  height: 40px;
-}
-
-#header th {
-  height: 100%;
-  vertical-align: middle;
-  text-align: left;
-  padding: 0 24px;
-  border-bottom: 1px solid rgba(237, 232, 242, 0.1);
-  background: #271f36;
-  cursor: pointer;
-  position: relative;
-}
-
-#header th:first-child {
-  border-top-left-radius: 12px;
-}
-
-#header th:last-child {
-  border-top-right-radius: 12px;
-}
-
-.right {
-  text-align: right !important;
+.tableWrapper {
+	padding: 0 40px 32px 40px;
+	margin-top: 32px;
+	display: flex;
+	flex: 1;
 }
 
 #header th:not(#chevron) span {
-  display: inline-block;
-  position: absolute;
+	display: inline-block;
+	position: absolute;
 
-  width: 16px;
-  height: 16px;
+	width: 16px;
+	height: 16px;
 
-  transform: translate(4px, 3.5px);
-  opacity: 0;
+	transform: translate(4px, 3.5px);
+	opacity: 0;
 }
 
 #header th:not(#chevron):hover span {
-  opacity: 1;
+	opacity: 1;
 }
 
 th#chevron span {
-  display: inline-block;
-  position: absolute;
+	display: inline-block;
+	position: absolute;
 
-  width: 16px;
-  height: 16px;
+	width: 16px;
+	height: 16px;
 
-  transform: translate(4px, 3.5px);
-  opacity: 1;
+	transform: translate(4px, 3.5px);
+	opacity: 1;
 }
 
 .pointDown {
-  rotate: 0deg;
+	rotate: 0deg;
 }
 
 th:hover .pointDown {
-  rotate: 180deg;
+	rotate: 180deg;
 }
 
 .pointUp {
-  rotate: 180deg;
+	rotate: 180deg;
 }
 
 th:hover .pointUp {
-  rotate: 0deg;
+	rotate: 0deg;
 }
