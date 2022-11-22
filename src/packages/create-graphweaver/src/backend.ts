@@ -18,7 +18,7 @@ export const packagesForBackend = (backend: Backend): Record<string, string> => 
 				'@exogee/graphweaver-mikroorm': GRAPHWEAVER_MIKROORM_TARGET_VERSION,
 				'@exogee/graphweaver-apollo': GRAPHWEAVER_APOLLO_TARGET_VERSION,
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
-				'@mikro-orm/postgres': MIKRO_ORM_TARGET_VERSION,
+				'@mikro-orm/postgresql': MIKRO_ORM_TARGET_VERSION,
 			};
 
 		case Backend.REST:
