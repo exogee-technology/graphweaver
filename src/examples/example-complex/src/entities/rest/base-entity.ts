@@ -1,5 +1,4 @@
 import { BaseDataEntity } from '@exogee/graphweaver';
-import { isArray } from 'lodash';
 
 export enum RelationshipType {
 	MANY_TO_ONE = 'MANY_TO_ONE',
@@ -29,6 +28,6 @@ export class BaseEntity implements BaseDataEntity {
 	}
 
 	public isCollection(fieldName: string, dataField: any) {
-		return isArray(dataField.fieldName);
+		return Array.isArray(dataField[fieldName]);
 	}
 }
