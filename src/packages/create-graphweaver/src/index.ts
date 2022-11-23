@@ -8,6 +8,7 @@ import {
 	makeIndex,
 	makeSchemaIndex,
 	makeTsConfig,
+	makeReadme,
 } from './template';
 
 import { Backend } from './backend';
@@ -53,6 +54,7 @@ const abort = () => {
 	if (!createDirectory) abort();
 
 	makeDirectories();
+	makeReadme(projectName);
 	makePackageJson(projectName, backends);
 	makeTsConfig();
 	makeIndex(projectName, backends);
