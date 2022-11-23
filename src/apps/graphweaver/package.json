@@ -1,12 +1,12 @@
 {
 	"name": "@exogee/graphweaver-app",
-	"version": "0.1.0-alpha.0",
+	"version": "0.1.0-alpha.5",
 	"license": "MIT",
 	"private": true,
 	"description": "App to build, package and distribute the full graphweaver app",
 	"scripts": {
 		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
-		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example-*\"",
+		"build:types": "pnpm -r build:types --filter \"!@exogee/graphweaver-example-*\" --filter \"!@exogee/graphweaver-ui\"",
 		"build:js": "node transpile.js",
 		"build:legacy": "pnpm -r build:legacy"
 	},
