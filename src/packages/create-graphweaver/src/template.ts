@@ -1,6 +1,6 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { Backend, packagesForBackend } from './backend';
-import { GRAPHWEAVER_CORE_TARGET_VERSION } from './constants';
+import { GRAPHWEAVER_TARGET_VERSION } from './constants';
 
 export const makePackageJson = (projectName: string, backends: Backend[]) => {
 	const backendPackages = Object.assign(
@@ -16,7 +16,7 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 			start: 'ts-node src/index.ts',
 		},
 		dependencies: {
-			'@exogee/graphweaver': GRAPHWEAVER_CORE_TARGET_VERSION,
+			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
 			'apollo-server': '3.11.1',
 			'apollo-server-core': '3.10.3',
