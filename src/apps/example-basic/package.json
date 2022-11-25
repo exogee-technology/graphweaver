@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-basic-app",
-	"version": "0.1.0-alpha.1",
+	"version": "0.1.0-alpha.5",
 	"license": "MIT",
 	"private": true,
 	"description": "Build and launch the GraphWeaver example app",
