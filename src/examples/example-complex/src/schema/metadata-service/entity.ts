@@ -1,21 +1,6 @@
-import { GraphQLEntity, BaseLoaders } from '@exogee/graphweaver';
-import { Collection, ReferenceType } from '@exogee/graphweaver-mikroorm';
-import { Directive, Field, ID, ObjectType, Root } from 'type-graphql';
-
-@ObjectType('AdminField')
-export class AdminField {
-	@Field(() => String)
-	name!: string;
-
-	@Field(() => String)
-	type!: string;
-
-	@Field(() => String, { nullable: true })
-	relationshipType?: string;
-
-	@Field(() => String, { nullable: true })
-	relatedEntity?: string;
-}
+import { Collection } from '@exogee/graphweaver-mikroorm';
+import { Field, ObjectType, Root } from 'type-graphql';
+import { AdminField } from './admin-field';
 
 @ObjectType('AdminUiMetadata')
 export class AdminUiMetadata {

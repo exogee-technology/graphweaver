@@ -1,24 +1,20 @@
 import { AuthorizedBaseFunctions, createBaseResolver } from '@exogee/graphweaver';
 import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { getMetadataStorage, Query, Resolver } from 'type-graphql';
-import { AdminField, AdminUiMetadata } from './entity';
+import { AdminField } from './admin-field';
+import { AdminUiMetadata } from './entity';
+import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 
 @Resolver((of) => AdminUiMetadata)
-// @AuthorizedBaseFunctions()
+@AuthorizedBaseFunctions()
 export class AdminUiMetadataResolver {
-	getObjectFromName(name: string, objectTypes: any[]) {
-		const objectType = objectTypes.find((objectType) => objectType.name === name);
-		return objectType;
-	}
-
-	getFieldType(name: string, fields: any[]) {
-		const field = fields.find((field) => field.name === name);
-		return field;
-	}
-
 	@Query(() => [AdminUiMetadata], { name: '_graphweaver' })
 	public async getAdminUiMetadata() {
 		const metadata = getMetadataStorage();
+		const objectTypeData: { [entityName: string]: ObjectClassMetadata } = {};
+		for (const objectType of metadata.objectTypes) {
+			objectTypeData[objectType.name] = objectType;
+		}
 		const objectTypes = metadata.objectTypes.map((objectType) => {
 			const fields = objectType.fields.map((field) => {
 				const typeValue = field.getType();
@@ -26,10 +22,11 @@ export class AdminUiMetadataResolver {
 				const fieldObject: AdminField = {
 					name: field.name,
 					type: entityName,
+					relationshipType: null,
+					relatedEntity: null,
 				};
-				const relatedObject = this.getObjectFromName(entityName, metadata.objectTypes);
+				const relatedObject = objectTypeData[entityName];
 				if (field.typeOptions.array) {
-					const relatedObject = this.getObjectFromName(entityName, metadata.objectTypes);
 					if (relatedObject) {
 						const relatedEntity = relatedObject.fields.find((field) => {
 							const fieldTypeName = field.getType().name;
@@ -55,7 +52,6 @@ export class AdminUiMetadataResolver {
 				fields: fields,
 			};
 		});
-		console.log('objectTypes ==== ', objectTypes);
 		return objectTypes;
 	}
 }
