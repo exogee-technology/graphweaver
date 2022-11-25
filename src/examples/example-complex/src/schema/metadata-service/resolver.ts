@@ -4,6 +4,7 @@ import { getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { AdminField } from './admin-field';
 import { AdminUiMetadata } from './entity';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
+import { GraphQLScalarType } from 'graphql';
 
 @Resolver((of) => AdminUiMetadata)
 @AuthorizedBaseFunctions()
@@ -17,7 +18,7 @@ export class AdminUiMetadataResolver {
 		}
 		const objectTypes = metadata.objectTypes.map((objectType) => {
 			const fields = objectType.fields.map((field) => {
-				const typeValue = field.getType();
+				const typeValue = field.getType() as any;
 				const entityName = typeValue.name;
 				const fieldObject: AdminField = {
 					name: field.name,
@@ -29,8 +30,8 @@ export class AdminUiMetadataResolver {
 				if (field.typeOptions.array) {
 					if (relatedObject) {
 						const relatedEntity = relatedObject.fields.find((field) => {
-							const fieldTypeName = field.getType().name;
-							return fieldTypeName === objectType.name;
+							const fieldType = field.getType() as any;
+							return fieldType.name === objectType.name;
 						});
 						if (relatedEntity?.typeOptions) {
 							fieldObject.relationshipType = relatedEntity.typeOptions.array
