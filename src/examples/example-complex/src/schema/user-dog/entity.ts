@@ -12,11 +12,11 @@ export class UserDog extends GraphQLEntity<OrmUserDog> {
 
 	@Field(() => [Dog])
 	async dogs(@Root() userDog: UserDog) {
-		if (!this.dataEntity.dogId) return null;
+		if (!this.dataEntity.restDogId) return null;
 		const dogs = await BaseLoaders.loadByRelatedId({
 			gqlEntityType: Dog,
 			relatedField: 'id',
-			id: userDog.dataEntity.dogId,
+			id: userDog.dataEntity.restDogId,
 		});
 		return dogs.map((dog) => Dog.fromBackendEntity(dog));
 	}
