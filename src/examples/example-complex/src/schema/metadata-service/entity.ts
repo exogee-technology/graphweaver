@@ -7,8 +7,8 @@ export class AdminUiMetadata {
 	@Field(() => String)
 	name!: string;
 
-	@Field(() => String)
-	backendId!: string;
+	@Field(() => String, { nullable: true })
+	backendId?: string;
 
 	@Field(() => [AdminField])
 	async fields(@Root() adminUiMetadata: AdminUiMetadata) {

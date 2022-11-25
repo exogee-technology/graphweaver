@@ -1,4 +1,8 @@
-import { AuthorizedBaseFunctions, createBaseResolver } from '@exogee/graphweaver';
+import {
+	AuthorizedBaseFunctions,
+	createBaseResolver,
+	EntityMetadataMap,
+} from '@exogee/graphweaver';
 import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { AdminField } from './admin-field';
@@ -13,10 +17,13 @@ export class AdminUiMetadataResolver {
 	public async getAdminUiMetadata() {
 		const metadata = getMetadataStorage();
 		const objectTypeData: { [entityName: string]: ObjectClassMetadata } = {};
+
 		for (const objectType of metadata.objectTypes) {
 			objectTypeData[objectType.name] = objectType;
 		}
 		const objectTypes = metadata.objectTypes.map((objectType) => {
+			const name = objectType.name;
+			const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
 			const fields = objectType.fields.map((field) => {
 				const typeValue = field.getType() as any;
 				const entityName = typeValue.name;
@@ -33,7 +40,7 @@ export class AdminUiMetadataResolver {
 					}
 					const relatedEntity = relatedObject.fields.find((field) => {
 						const fieldType = field.getType() as any;
-						return fieldType.name === objectType.name;
+						return fieldType.name === name;
 					});
 					if (relatedEntity?.typeOptions) {
 						fieldObject.relationshipType = relatedEntity.typeOptions.array
@@ -47,9 +54,9 @@ export class AdminUiMetadataResolver {
 				return fieldObject;
 			});
 			return {
-				name: objectType.name,
-				backendId: '', // @todo
-				fields: fields,
+				name,
+				backendId,
+				fields,
 			};
 		});
 		return objectTypes;
