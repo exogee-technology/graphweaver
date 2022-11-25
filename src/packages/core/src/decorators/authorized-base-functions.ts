@@ -13,7 +13,12 @@ export function AuthorizedBaseFunctions(
 
 		// The Authorized decorator must be applied at the level in the class hierachy
 		// where the relevant functions are defined
-		const firstLevelPrototype = Object.getPrototypeOf(constructor.prototype);
+		// Treat 'AdminUiMetadataResolver' as a firstLevelPrototype because it doesn't extend BaseResolver.
+		const firstLevelPrototype =
+			constructor.name === 'AdminUiMetadataResolver'
+				? constructor.prototype
+				: Object.getPrototypeOf(constructor.prototype);
+
 		let secondLevelPrototype: any = undefined;
 
 		if (firstLevelPrototype.constructor.name === 'WritableBaseResolver') {
@@ -26,7 +31,9 @@ export function AuthorizedBaseFunctions(
 
 		// Apply authorisation to read functions if requested
 		const prototypeForReadFuncs = secondLevelPrototype ?? firstLevelPrototype;
-		if (prototypeForReadFuncs.constructor.name !== 'BaseResolver') {
+		if (
+			!['BaseResolver', 'AdminUiMetadataResolver'].includes(prototypeForReadFuncs.constructor.name)
+		) {
 			throw new Error('Authentication middleware could not be initialised');
 		}
 		if (!enforceAuthorizationOn || enforceAuthorizationOn === 'all') {
