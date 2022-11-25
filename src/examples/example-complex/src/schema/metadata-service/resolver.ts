@@ -28,18 +28,17 @@ export class AdminUiMetadataResolver {
 				};
 				const relatedObject = objectTypeData[entityName];
 				if (field.typeOptions.array) {
-					if (relatedObject) {
-						const relatedEntity = relatedObject.fields.find((field) => {
-							const fieldType = field.getType() as any;
-							return fieldType.name === objectType.name;
-						});
-						if (relatedEntity?.typeOptions) {
-							fieldObject.relationshipType = relatedEntity.typeOptions.array
-								? ReferenceType.MANY_TO_MANY
-								: ReferenceType.ONE_TO_MANY;
-						}
-					} else {
+					if (!relatedObject) {
 						throw new Error(`unknown entityName ${entityName}`);
+					}
+					const relatedEntity = relatedObject.fields.find((field) => {
+						const fieldType = field.getType() as any;
+						return fieldType.name === objectType.name;
+					});
+					if (relatedEntity?.typeOptions) {
+						fieldObject.relationshipType = relatedEntity.typeOptions.array
+							? ReferenceType.MANY_TO_MANY
+							: ReferenceType.ONE_TO_MANY;
 					}
 					fieldObject.relatedEntity = entityName;
 				} else if (relatedObject) {
