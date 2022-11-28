@@ -18,6 +18,8 @@ export const BackendRow = ({
 	const { entitiesForBackend } = useSchema();
 	const [expanded, setExpanded] = useState(false);
 
+	const entities = entitiesForBackend(backend);
+
 	return (
 		<ul key={backend} className={styles.entity}>
 			<li className={expanded ? styles.open : styles.closed}>
@@ -33,14 +35,15 @@ export const BackendRow = ({
 					<ChevronIcon />
 				</a>
 				<ul>
-					{entitiesForBackend(backend).map((entity) => (
-						<EntityRow
-							entity={entity}
-							key={entity.name}
-							handleClick={() => onEntitySelected?.(entity)}
-							selected={selectedEntity?.name === entity.name}
-						/>
-					))}
+					{entities &&
+						entities.map((entity) => (
+							<EntityRow
+								entity={entity}
+								key={entity.name}
+								handleClick={() => onEntitySelected?.(entity)}
+								selected={selectedEntity?.name === entity.name}
+							/>
+						))}
 				</ul>
 			</li>
 		</ul>
