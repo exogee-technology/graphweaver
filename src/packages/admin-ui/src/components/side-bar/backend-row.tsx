@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { ReactComponent as DatabaseIcon } from '~/assets/16-database.svg';
+import { ReactComponent as ChevronIcon } from '~/assets/16-chevron-down.svg';
 import { Entity, useSchema } from '~/utils/use-schema';
 import { EntityRow } from './entity-row';
 import styles from './styles.module.css';
@@ -29,6 +30,7 @@ export const BackendRow = ({
 				>
 					<DatabaseIcon />
 					{backend}
+					<ChevronIcon />
 				</a>
 				<ul>
 					{entitiesForBackend(backend).map((entity) => (

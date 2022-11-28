@@ -10,8 +10,16 @@
 	flex-direction: column;
 }
 
+.sideBar li {
+	padding: 0 8px 8px 14px;
+}
+
 .sideBar > ul {
 	margin: 8px;
+}
+
+.sideBar > ul:last-child {
+	margin-top: 0;
 }
 
 .sideBar a > svg {
@@ -37,10 +45,6 @@
 
 /* Data Source List */
 
-.closed {
-	padding: 8px;
-}
-
 .closed > ul {
 	display: none;
 }
@@ -50,10 +54,15 @@
 	align-items: center;
 }
 
+.closed > a > svg:last-child {
+	position: absolute;
+	right: 10px;
+	transform: rotate(180deg);
+}
+
 .open {
 	background-color: #382f46;
 	border-radius: 6px;
-	padding: 8px;
 }
 
 .open a {
@@ -64,8 +73,9 @@
 	align-items: center;
 }
 
-.open a::after {
-	transform: rotate(180deg);
+.open > a > svg:last-child {
+	position: absolute;
+	right: 10px;
 }
 
 a.subListItem span {
