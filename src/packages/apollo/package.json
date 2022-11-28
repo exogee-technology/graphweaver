@@ -23,6 +23,10 @@
 		"async-mutex": "0.3.2",
 		"apollo-server-core": "3.10.3",
 		"decimal.js": "10.3.1",
-		"graphql": "15.8.0"
-	} 
+		"graphql": "15.8.0",
+		"@graphql-tools/schema": "^8.0.0",
+		"apollo-server-errors": "3.3.1",
+		"apollo-server-lambda": "3.10.0",
+		"type-graphql": "1.1.1"
+	}
 }
