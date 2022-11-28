@@ -7,6 +7,7 @@ import { ListLoader } from './loader';
 import styles from './styles.module.css';
 import React from 'react';
 import { ApolloQueryResult } from '@apollo/client';
+import { DetailPanel } from '~/components/detail-panel';
 
 // const BlankSlate = () => (
 // 	<div id={styles.centerBlankSlate}>
@@ -55,21 +56,24 @@ const ToolBar = () => (
 );
 
 export const List = () => {
-	const data = useLoaderData() as ReturnType<typeof ListLoader>['data'];
+	const { rows } = useLoaderData() as { rows: any };
 
 	return (
-		<React.Suspense fallback={<p>Loading...</p>}>
-			<Await resolve={Promise.all([data.rows, data.detail])} errorElement={<p>Error!</p>}>
-				{([rows, detail]: [
-					ApolloQueryResult<{ result: Array<{ id: string }> }>,
-					ApolloQueryResult<{ result: { id: string } }>
-				]) => (
-					<>
-						<ToolBar />
-						<Table rows={rows.data.result} detailEntity={detail?.data?.result} />
-					</>
-				)}
-			</Await>
-		</React.Suspense>
+		<>
+			<div className={styles.mainContent}>
+				<ToolBar />
+
+				<React.Suspense fallback={<p>Loading...</p>}>
+					<Await resolve={rows} errorElement={<p>Error!</p>}>
+						{(rows: ApolloQueryResult<{ result: Array<{ id: string }> }>) => (
+							<>
+								<Table rows={rows.data.result} />
+							</>
+						)}
+					</Await>
+				</React.Suspense>
+			</div>
+			<DetailPanel />
+		</>
 	);
 };

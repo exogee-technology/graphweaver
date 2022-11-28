@@ -53,15 +53,7 @@ const columnsForEntity = <T extends { id: string }>(
 			: undefined,
 	}));
 
-export const Table = <T extends { id: string }>({
-	rows,
-	detailEntity,
-}: {
-	rows: T[];
-	detailEntity?: T;
-}) => {
-	console.log(rows);
-
+export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
 	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
