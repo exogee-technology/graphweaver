@@ -1,6 +1,6 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
 import { useCallback, useState, MouseEvent } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import 'react-data-grid/lib/styles.css';
 // These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
@@ -32,34 +32,24 @@ const columnsForEntity = <T extends { id: string }>(
 						(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation(),
 						[]
 					);
-
 					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
 
+					const linkForValue = (value: any) => (
+						<Link
+							key={value.id}
+							to={routeFor({ type: field.type, id: value.id as string })}
+							onClick={gobbleEvent}
+						>
+							{value[relatedEntity?.summaryField || 'id']}
+						</Link>
+					);
+
 					if (Array.isArray(value)) {
 						// We're in a many relationship. Return an array of links.
-						return (
-							<>
-								{value.map((value) => (
-									<Link
-										key={value.id}
-										to={routeFor({ type: field.type, id: value.id as string })}
-										onClick={gobbleEvent}
-									>
-										{value[relatedEntity?.summaryField || 'id']}
-									</Link>
-								))}
-							</>
-						);
+						return value.map(linkForValue);
 					} else if (value) {
-						return (
-							<Link
-								to={routeFor({ type: field.type, id: (value as any).id as string })}
-								onClick={gobbleEvent}
-							>
-								{(value as any)[relatedEntity?.summaryField || 'id']}
-							</Link>
-						);
+						return linkForValue(value);
 					} else {
 						return null;
 					}
@@ -70,10 +60,12 @@ const columnsForEntity = <T extends { id: string }>(
 export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
 	const navigate = useNavigate();
+	const { id } = useParams();
 	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
-
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
+	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
+
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
@@ -94,6 +86,7 @@ export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 				onSortColumnsChange={setSortColumns}
 				defaultColumnOptions={{ resizable: true }}
 				onRowClick={navigateToDetailForEntity}
+				rowClass={rowClass}
 			/>
 		</div>
 	);

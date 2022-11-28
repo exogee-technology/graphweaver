@@ -27,7 +27,8 @@
 	background: #1e1a25;
 }
 
-.rdg-row:hover {
+.rdg-row:hover,
+.rdg-row-selected {
 	background: #352d44;
 }
 
