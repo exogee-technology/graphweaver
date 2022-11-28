@@ -5,16 +5,19 @@ dotenv.config({
 	path: envPath,
 });
 
+import Graphweaver from '@exogee/graphweaver-apollo';
 import 'reflect-metadata';
 
 import { setAdministratorRoleName, upsertAuthorizationContext } from '@exogee/graphweaver';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { ApolloServer } from 'apollo-server-lambda';
 
 import { plugins } from './plugins';
-import { schema } from './schema';
-import { formatGraphQLError } from './utils';
-// import { handleContext } from './utils/context';
+import { HobbyResolver } from './schema/hobby';
+import { UserResolver } from './schema/user';
+import { BreederResolver } from './schema/breeder';
+import { DogResolver } from './schema/dog';
+import { SkillResolver } from './schema/skill';
+import { UserDogResolver } from './schema/user-dog';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 
 // Setup auth context
 setAdministratorRoleName('Administrator');
@@ -33,20 +36,20 @@ const pluginsWithPlayground =
 		  ]
 		: plugins;
 
-const server = new ApolloServer({
-	schema,
+const graphweaver = new Graphweaver({
+	resolvers: [
+		HobbyResolver,
+		UserResolver,
+		SkillResolver,
+		DogResolver,
+		BreederResolver,
+		UserDogResolver,
+	],
 	plugins: pluginsWithPlayground,
+	adminMetadata: { enabled: true },
 	introspection: process.env.IS_OFFLINE === 'true',
-	// context: handleContext,
-	// This removes implementation details from error messages that shouldn't be exposed to clients.
-	formatError: formatGraphQLError,
-	// this is hor datasource-rest is used, but we use a later http datasource
-	// dataSources: () => {
-	// 	return dogAPI: new DogAPI()
-	// }
 });
 
-exports.handler = server.createHandler({
-	// This sets the max payload body size
+exports.handler = graphweaver.server.createHandler({
 	expressGetMiddlewareOptions: { bodyParserConfig: { limit: '5mb' } },
 });
