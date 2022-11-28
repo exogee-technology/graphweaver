@@ -59,14 +59,11 @@ const queryForEntityPage = (entity: Entity, entityByType: (type: string) => Enti
 	`;
 };
 
-export const getEntity = <T>(entity: Entity, id: string) => {
-	const query = queryForEntity(entity);
-
-	return client.query({
-		query,
+export const getEntity = <T>(entity: Entity, id: string) =>
+	client.query({
+		query: queryForEntity(entity),
 		variables: { id },
 	});
-};
 
 const queryForEntity = (entity: Entity) => {
 	// If the entity is called SomeThing then the query name is someThing.
