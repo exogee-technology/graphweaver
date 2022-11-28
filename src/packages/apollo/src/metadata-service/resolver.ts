@@ -19,21 +19,19 @@ export class AdminUiMetadataResolver {
 		const objectTypes = metadata.objectTypes.map((objectType) => {
 			const name = objectType.name;
 			const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
-			const fields = objectType.fields.map((field) => {
+			const fields = objectType.fields?.map((field) => {
 				const typeValue = field.getType() as any;
 				const entityName = typeValue.name;
 				const fieldObject: AdminField = {
 					name: field.name,
 					type: entityName,
-					relationshipType: null,
-					relatedEntity: null,
 				};
 				const relatedObject = objectTypeData[entityName];
 				if (field.typeOptions.array) {
 					if (!relatedObject) {
 						throw new Error(`Unknown entityName ${entityName}`);
 					}
-					const relatedEntity = relatedObject.fields.find((field) => {
+					const relatedEntity = relatedObject.fields?.find((field) => {
 						const fieldType = field.getType() as any;
 						return fieldType.name === name;
 					});
