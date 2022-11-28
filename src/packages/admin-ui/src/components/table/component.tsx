@@ -1,6 +1,6 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
-import { useCallback, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useCallback, useState, MouseEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import 'react-data-grid/lib/styles.css';
 // These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
@@ -26,6 +26,13 @@ const columnsForEntity = <T extends { id: string }>(
 		// We only need a formatter for relationships.
 		formatter: field.relationshipType
 			? ({ row }) => {
+					// Without stopping propagation on our links, the grid will be notified about the click,
+					// which is not what we want. We want to navigate and not let the grid handle it
+					const gobbleEvent = useCallback(
+						(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation(),
+						[]
+					);
+
 					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
 
@@ -34,7 +41,11 @@ const columnsForEntity = <T extends { id: string }>(
 						return (
 							<>
 								{value.map((value) => (
-									<Link key={value.id} to={routeFor({ type: field.type, id: value.id as string })}>
+									<Link
+										key={value.id}
+										to={routeFor({ type: field.type, id: value.id as string })}
+										onClick={gobbleEvent}
+									>
 										{value[relatedEntity?.summaryField || 'id']}
 									</Link>
 								))}
@@ -42,7 +53,10 @@ const columnsForEntity = <T extends { id: string }>(
 						);
 					} else if (value) {
 						return (
-							<Link to={routeFor({ type: field.type, id: (value as any).id as string })}>
+							<Link
+								to={routeFor({ type: field.type, id: (value as any).id as string })}
+								onClick={gobbleEvent}
+							>
 								{(value as any)[relatedEntity?.summaryField || 'id']}
 							</Link>
 						);
@@ -55,9 +69,18 @@ const columnsForEntity = <T extends { id: string }>(
 
 export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+	const navigate = useNavigate();
 	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
+
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
+	const navigateToDetailForEntity = useCallback(
+		(row: T) => {
+			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
+			navigate(routeFor({ entity: selectedEntity, id: row.id }));
+		},
+		[selectedEntity]
+	);
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
@@ -70,6 +93,7 @@ export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
 				defaultColumnOptions={{ resizable: true }}
+				onRowClick={navigateToDetailForEntity}
 			/>
 		</div>
 	);
