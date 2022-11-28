@@ -47,5 +47,8 @@ export const useSchema = () => {
 			return entityMap[entityName];
 		},
 		entitiesForBackend: (backendId: string) => dataSourceMap[backendId],
+		entityInBackend: (entityName: string, backendId: string) =>
+			// TODO: This could be an O(1) lookup if we build one first.
+			!!dataSourceMap[backendId].find((entity) => entity.name === entityName),
 	};
 };

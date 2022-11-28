@@ -18,12 +18,7 @@ export const SideBar = ({
 			<p className={styles.subtext}>Data Sources</p>
 
 			{schema.backends.map((backend) => (
-				<BackendRow
-					key={backend}
-					backend={backend}
-					selectedEntity={selectedEntity}
-					onEntitySelected={onEntitySelected}
-				/>
+				<BackendRow key={backend} backend={backend} />
 			))}
 		</div>
 	);
