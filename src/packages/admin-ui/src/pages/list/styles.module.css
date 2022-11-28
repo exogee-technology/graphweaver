@@ -1,18 +1,7 @@
-#centerBlankSlate {
+.mainContent {
 	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 100vh;
-}
-
-.blankSlateWrapper {
-	display: flex;
+	flex: 4;
 	flex-direction: column;
-	text-align: center;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-	margin-top: -32px;
 }
 
 .toolBarWrapper {
