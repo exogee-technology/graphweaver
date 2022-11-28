@@ -1,17 +1,15 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import 'react-data-grid/lib/styles.css';
+// These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
 import './table-styles.css';
 
 import styles from './styles.module.css';
 import { Entity, useSchema } from '~/utils/use-schema';
-import { getEntityPage } from '~/utils/get-entity-page';
-
-const urlForEntity = (type: string, id: string) => {
-	const cleanType = type.replaceAll(/[^a-zA-Z\d]/g, '');
-	return `/${cleanType}/${id}`;
-};
+import { useSelectedEntity } from '~/utils/use-selected-entity';
+import { routeFor } from '~/utils/route-for';
 
 const columnsForEntity = <T extends { id: string }>(
 	entity: Entity,
@@ -28,7 +26,7 @@ const columnsForEntity = <T extends { id: string }>(
 		// We only need a formatter for relationships.
 		formatter: field.relationshipType
 			? ({ row }) => {
-					const value = (row as any)[field.name];
+					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
 
 					if (Array.isArray(value)) {
@@ -36,17 +34,17 @@ const columnsForEntity = <T extends { id: string }>(
 						return (
 							<>
 								{value.map((value) => (
-									<a key={value.id} href={urlForEntity(field.type, value.id)}>
+									<Link key={value.id} to={routeFor({ type: field.type, id: value.id as string })}>
 										{value[relatedEntity?.summaryField || 'id']}
-									</a>
+									</Link>
 								))}
 							</>
 						);
 					} else if (value) {
 						return (
-							<a href={urlForEntity(field.type, value.id)}>
-								{value[relatedEntity?.summaryField || 'id']}
-							</a>
+							<Link to={routeFor({ type: field.type, id: (value as any).id as string })}>
+								{(value as any)[relatedEntity?.summaryField || 'id']}
+							</Link>
 						);
 					} else {
 						return null;
@@ -56,61 +54,28 @@ const columnsForEntity = <T extends { id: string }>(
 	}));
 
 export const Table = <T extends { id: string }>({
-	selectedEntity,
+	rows,
+	detailEntity,
 }: {
-	selectedEntity?: Entity;
+	rows: T[];
+	detailEntity?: T;
 }) => {
-	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
-	const [nextPage, setNextPage] = useState(0);
-	const [loading, setLoading] = useState(false);
-	const [rows, setRows] = useState<T[]>([]);
-	const { entityByType } = useSchema();
+	console.log(rows);
 
+	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+	const { entityByType } = useSchema();
+	const { selectedEntity } = useSelectedEntity();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 
-	const loadMore = async () => {
-		if (loading) return;
-		if (!selectedEntity) return;
-
-		setLoading(true);
-
-		const { result } = await getEntityPage<T>(selectedEntity, sortColumns, entityByType, nextPage);
-
-		setRows((rows) => [...rows, ...result]);
-		setNextPage((prev) => prev + 1);
-		setLoading(false);
-	};
-
-	const handleScroll = useCallback(({ currentTarget }: React.UIEvent<HTMLDivElement>) => {
-		// Are we at the bottom?
-		if (currentTarget.scrollTop + 10 >= currentTarget.scrollHeight - currentTarget.clientHeight) {
-			// Yes, load next page if we're not already loading it.
-			loadMore();
-		}
-	}, []);
-
-	// Load data whenever the selected entity or sort columns changes.
-	useEffect(() => {
-		setNextPage(0);
-		setRows([]);
-		setLoading(false);
-
-		// Delay to ensure set state calls take effect before trying to load more.
-		setTimeout(loadMore, 0);
-	}, [selectedEntity, sortColumns]);
-
-	if (!selectedEntity) return 'Select an Entity to Display';
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	return (
 		<div className={styles.tableWrapper}>
-			{loading && <div className={styles.loadingPanel}>Loading</div>}
-
 			<DataGrid
 				columns={columnsForEntity(selectedEntity, entityByType) as any}
 				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
-				onScroll={handleScroll}
 				onSortColumnsChange={setSortColumns}
 				defaultColumnOptions={{ resizable: true }}
 			/>
