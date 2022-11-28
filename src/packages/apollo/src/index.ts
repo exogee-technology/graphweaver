@@ -43,6 +43,7 @@ export default class Graphweaver {
 			throw new Error('Graphweaver config resolvers required');
 		}
 		this.config = config;
+		// Order of plugins is important here
 		const plugins: PluginDefinition[] = [
 			MutexRequestsInDevelopment,
 			LogRequests,
