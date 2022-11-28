@@ -1,9 +1,13 @@
-import { useState } from 'react';
-import { SideBar, Table, Button, FilterButton } from '~/components';
+import { Await, useLoaderData } from 'react-router-dom';
+import { Table, Button, FilterButton } from '~/components';
 import { ReactComponent as OpenPlaygroundIcon } from '~/assets/16-open-external.svg';
 import { ReactComponent as FilterIcon } from '~/assets/16-filter.svg';
-import { Entity } from '~/utils/use-schema';
+
+import { ListLoader } from './loader';
 import styles from './styles.module.css';
+import React from 'react';
+import { ApolloQueryResult } from '@apollo/client';
+import { DetailPanel } from '~/components/detail-panel';
 
 // const BlankSlate = () => (
 // 	<div id={styles.centerBlankSlate}>
@@ -51,16 +55,25 @@ const ToolBar = () => (
 	</div>
 );
 
-export const Home = () => {
-	const [selectedEntity, setSelectedEntity] = useState<Entity | undefined>();
+export const List = () => {
+	const { rows } = useLoaderData() as { rows: any };
 
 	return (
-		<div className={styles.wrapper}>
-			<SideBar selectedEntity={selectedEntity} onEntitySelected={setSelectedEntity} />
-			<div className={styles.content}>
+		<>
+			<div className={styles.mainContent}>
 				<ToolBar />
-				<Table selectedEntity={selectedEntity} />
+
+				<React.Suspense fallback={<p>Loading...</p>}>
+					<Await resolve={rows} errorElement={<p>Error!</p>}>
+						{(rows: ApolloQueryResult<{ result: Array<{ id: string }> }>) => (
+							<>
+								<Table rows={rows.data.result} />
+							</>
+						)}
+					</Await>
+				</React.Suspense>
 			</div>
-		</div>
+			<DetailPanel />
+		</>
 	);
 };

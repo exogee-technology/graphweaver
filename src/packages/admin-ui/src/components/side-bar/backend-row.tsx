@@ -3,20 +3,14 @@ import { useState } from 'react';
 import { ReactComponent as DatabaseIcon } from '~/assets/16-database.svg';
 import { ReactComponent as ChevronIcon } from '~/assets/16-chevron-down.svg';
 import { Entity, useSchema } from '~/utils/use-schema';
+import { useSelectedEntity } from '~/utils/use-selected-entity';
 import { EntityRow } from './entity-row';
 import styles from './styles.module.css';
 
-export const BackendRow = ({
-	backend,
-	selectedEntity,
-	onEntitySelected,
-}: {
-	backend: string;
-	selectedEntity?: Entity;
-	onEntitySelected?: (entity: Entity) => any;
-}) => {
+export const BackendRow = ({ backend }: { backend: string }) => {
 	const { entitiesForBackend } = useSchema();
-	const [expanded, setExpanded] = useState(false);
+	const { selectedEntity } = useSelectedEntity();
+	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
 
 	return (
 		<ul key={backend} className={styles.entity}>
@@ -34,12 +28,7 @@ export const BackendRow = ({
 				</a>
 				<ul>
 					{entitiesForBackend(backend).map((entity) => (
-						<EntityRow
-							entity={entity}
-							key={entity.name}
-							handleClick={() => onEntitySelected?.(entity)}
-							selected={selectedEntity?.name === entity.name}
-						/>
+						<EntityRow key={entity.name} entity={entity} />
 					))}
 				</ul>
 			</li>
