@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { request } from 'graphql-request';
-import { query } from './graphql';
+// import { request } from 'graphql-request';
+import { useQuery } from '@apollo/client';
+import { SCHEMA_QUERY } from './graphql';
 
 export interface Entity {
 	name: string;
@@ -18,15 +19,14 @@ export interface EntityField {
 
 export const useSchema = () => {
 	const [schema, setSchema] = useState<Entity[]>([]);
+	const { data } = useQuery(SCHEMA_QUERY);
 
 	// Fetch the schema
 	useEffect(() => {
-		request('http://localhost:3000/graphql/v1', query).then((result) => {
-			if (result._graphweaver && result._graphweaver.length) {
-				setSchema(result._graphweaver.filter((entity: any) => entity.backendId));
-			}
-		});
-	}, []);
+		if (data && data._graphweaver && data._graphweaver.length) {
+			setSchema(data._graphweaver.filter((entity: any) => entity.backendId));
+		}
+	}, [data]);
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
@@ -59,5 +59,8 @@ export const useSchema = () => {
 			return entityMap[entityName];
 		},
 		entitiesForBackend: (backendId: string) => dataSourceMap[backendId],
+		entityInBackend: (entityName: string, backendId: string) =>
+			// TODO: This could be an O(1) lookup if we build one first.
+			!!dataSourceMap[backendId].find((entity) => entity.name === entityName),
 	};
 };
