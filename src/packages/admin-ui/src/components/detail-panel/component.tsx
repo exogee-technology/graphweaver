@@ -8,7 +8,7 @@ const DetailPanelError = () => {
 
 	console.error(error);
 
-	return <p>Error!: {error.message}</p>;
+	return <pre className={styles.wrapper}>Error!: {error.message}</pre>;
 };
 
 export const DetailPanel = () => {
@@ -17,7 +17,7 @@ export const DetailPanel = () => {
 	if (!detail) return null;
 
 	return (
-		<React.Suspense fallback={<p>Loading...</p>}>
+		<React.Suspense fallback={<pre className={styles.wrapper}>Loading...</pre>}>
 			<Await resolve={detail} errorElement={<DetailPanelError />}>
 				{(detail: ApolloQueryResult<{ result: { id: string } }>) => (
 					<pre className={styles.wrapper}>{JSON.stringify(detail.data.result, null, 4)}</pre>
