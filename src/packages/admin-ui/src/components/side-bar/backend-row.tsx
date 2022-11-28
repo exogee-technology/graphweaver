@@ -27,9 +27,7 @@ export const BackendRow = ({
 						setExpanded(!expanded);
 					}}
 				>
-					<span>
-						<DatabaseIcon />
-					</span>
+					<DatabaseIcon />
 					{backend}
 				</a>
 				<ul>
