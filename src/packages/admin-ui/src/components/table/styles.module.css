@@ -2,47 +2,5 @@
 	padding: 0 40px 32px 40px;
 	margin-top: 32px;
 	display: flex;
-	flex: 1;
-}
-
-#header th:not(#chevron) span {
-	display: inline-block;
-	position: absolute;
-
-	width: 16px;
-	height: 16px;
-
-	transform: translate(4px, 3.5px);
-	opacity: 0;
-}
-
-#header th:not(#chevron):hover span {
-	opacity: 1;
-}
-
-th#chevron span {
-	display: inline-block;
-	position: absolute;
-
-	width: 16px;
-	height: 16px;
-
-	transform: translate(4px, 3.5px);
-	opacity: 1;
-}
-
-.pointDown {
-	rotate: 0deg;
-}
-
-th:hover .pointDown {
-	rotate: 180deg;
-}
-
-.pointUp {
-	rotate: 180deg;
-}
-
-th:hover .pointUp {
-	rotate: 0deg;
+	flex: 4;
 }

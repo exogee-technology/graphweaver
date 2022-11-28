@@ -1,6 +1,6 @@
-import { gql } from 'graphql-request';
+import { gql } from '@apollo/client';
 
-export const query = gql`
+export const SCHEMA_QUERY = gql`
 	query {
 		_graphweaver {
 			name

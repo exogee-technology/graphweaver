@@ -10,13 +10,14 @@
 		"start": "vite"
 	},
 	"dependencies": {
+		"@apollo/client": "3.7.1",
 		"classnames": "2.3.2",
 		"graphql": "16.6.0",
-		"graphql-request": "5.0.0",
 		"pluralize": "8.0.0",
 		"react": "18.2.0",
 		"react-data-grid": "7.0.0-beta.20",
 		"react-dom": "18.2.0",
+		"react-router-dom": "6.4.3",
 		"vite-plugin-svgr": "2.2.2"
 	},
 	"devDependencies": {
