@@ -35,7 +35,7 @@ export default class Graphweaver {
 		mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
 	};
 	constructor(config: GraphweaverConfig) {
-		logger.info(`Graphweaver constructor called`);
+		logger.trace(`Graphweaver constructor called`);
 		if (!config) {
 			throw new Error('Graphweaver config required');
 		}
