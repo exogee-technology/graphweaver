@@ -1,6 +1,6 @@
+import { ForbiddenError } from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
 import { Role } from './types';
-import { ForbiddenError } from 'apollo-server-lambda';
 
 class AuthorizationContextImplementation {
 	private currentUserRole?: Role;

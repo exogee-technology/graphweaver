@@ -1,5 +1,5 @@
+import { PluginDefinition } from '@exogee/graphweaver-apollo';
 import { AuthenticationContext } from '@exogee/graphweaver-mikroorm';
-import { PluginDefinition } from 'apollo-server-core';
 
 import { Role } from '../auth';
 import { AuthorizationContext } from '../auth/authorization-context';
