@@ -60,7 +60,7 @@ export default class Graphweaver {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(AdminUiMetadataResolver);
 		}
-		logger.info(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 		const schema = buildSchemaSync({
 			resolvers,
 			authChecker: () => true,
