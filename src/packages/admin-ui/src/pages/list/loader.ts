@@ -8,11 +8,6 @@ const entityByNameOrType = (entity: string | undefined) => {
 	const cleaned = entity?.replaceAll(cleaningPattern, '');
 	const selectedEntity = schema.find((e) => e.name === cleaned);
 
-	console.log('entity', entity);
-	console.log('cleaned', cleaned);
-	console.log('schema', schema);
-	console.log('selected', selectedEntity);
-
 	if (!selectedEntity) throw new Error(`Unknown entity ${entity}.`);
 
 	return selectedEntity;
