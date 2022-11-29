@@ -65,7 +65,7 @@ export default class Graphweaver {
 			resolvers,
 			authChecker: () => true,
 		});
-		logger.info(`Graphweaver starting ApolloServer`);
+		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer({
 			...this.config,
 			plugins,
