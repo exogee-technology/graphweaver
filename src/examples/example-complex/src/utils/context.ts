@@ -1,12 +1,9 @@
+import { AuthenticationError } from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
-import { AuthenticationError } from 'apollo-server-lambda';
-import { LambdaContextFunctionParams } from 'apollo-server-lambda/dist/ApolloServer';
 
 import { EasyAuthorizationContext } from '../auth';
 
-export const handleContext = async ({
-	express,
-}: LambdaContextFunctionParams): Promise<EasyAuthorizationContext> => {
+export const handleContext = async ({ express }): Promise<EasyAuthorizationContext> => {
 	const authorization = express.req?.headers?.authorization;
 
 	if (!authorization) {
