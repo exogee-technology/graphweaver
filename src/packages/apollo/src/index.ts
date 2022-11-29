@@ -57,7 +57,7 @@ export default class Graphweaver {
 		];
 		const resolvers = (this.config.resolvers || []) as any;
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
-			logger.info(`Graphweaver adminMetadata is enabled`);
+			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(AdminUiMetadataResolver);
 		}
 		logger.info(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
