@@ -1,5 +1,7 @@
-import { useMemo } from 'react';
-import { schema } from './stub-data';
+import { useEffect, useMemo, useState } from 'react';
+// import { request } from 'graphql-request';
+import { useQuery } from '@apollo/client';
+import { SCHEMA_QUERY } from './graphql';
 
 export interface Entity {
 	name: string;
@@ -16,6 +18,16 @@ export interface EntityField {
 }
 
 export const useSchema = () => {
+	const [schema, setSchema] = useState<Entity[]>([]);
+	const { data } = useQuery(SCHEMA_QUERY);
+
+	// Fetch the schema
+	useEffect(() => {
+		if (data && data._graphweaver && data._graphweaver.length) {
+			setSchema(data._graphweaver.filter((entity: any) => entity.backendId));
+		}
+	}, [data]);
+
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
 		const result: { [backendId: string]: Entity[] } = {};
