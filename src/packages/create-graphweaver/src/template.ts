@@ -18,8 +18,6 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		dependencies: {
 			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
-			'apollo-server': '3.11.1',
-			'apollo-server-core': '3.10.3',
 			graphql: '15.8.0',
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '1.1.1',
@@ -46,37 +44,24 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 /* ${projectName} GraphWeaver Project */
 
 import 'reflect-metadata';
-${
-	backends.includes(Backend.MikroORMPostgres)
-		? `import { connectToDatabase } from '@exogee/graphweaver-apollo';`
-		: ``
-}
-import { ApolloServer } from 'apollo-server';
-import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
+import Graphweaver,{ connectToDatabase } from '@exogee/graphweaver-apollo';
 import open from 'open';
 import { config } from 'dotenv';
+import { PingResolver } from './schema';
 
 config();
 
-import { schema${
-		backends.includes(Backend.MikroORMPostgres) ? `, mikroOrmEntities` : ''
-	} } from './schema';
-
-const server = new ApolloServer({
-        schema,
-        plugins: [${
-					backends.includes(Backend.MikroORMPostgres)
-						? `connectToDatabase({ mikroOrmConfig: { entities: mikroOrmEntities } }),\n`
-						: ''
-				}
-                ApolloServerPluginLandingPageGraphQLPlayground,
-        ],
-        introspection: true,
+const graphweaver = new Graphweaver({
+	resolvers: [ PingResolver as any ],
+	mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
+	plugins: [],
+	adminMetadata: { enabled: true },
+	introspection: process.env.IS_OFFLINE === 'true',
 });
 
 (async () => {
-        const info = await server.listen();
-        console.log(\`GraphWeaver is ready and awaiting at \${info.url}\`);
+        const info = await graphweaver.server.listen();
+        console.log(\`GraphWeaver with apollo is ready and awaiting at \${info.url}\`);
         open(info.url);
 })();
 `;
@@ -96,20 +81,12 @@ ${
 }
 
 @Resolver()
-class PingResolver {
+export class PingResolver {
 	@Query(() => Boolean)
 	async ping() {
     		return true; 
   	}
-}
-
-export const schema = buildSchemaSync({
-        resolvers: [ 
-		PingResolver, 
-		/* Insert Resolvers Here */
-	],
-});      
-
+}   
 `;
 
 	writeFileSync('src/schema/index.ts', index);
@@ -128,6 +105,7 @@ export const makeTsConfig = () => {
 			allowSyntheticDefaultImports: true,
 			esModuleInterop: true,
 		},
+		exclude: ['**/node_modules/**', '**/lib/**'],
 		include: ['./src'],
 	};
 
