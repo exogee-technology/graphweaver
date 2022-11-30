@@ -1,82 +1,93 @@
-import { ReactElement, useCallback, useState } from 'react';
+import DataGrid, { Column, SortColumn } from 'react-data-grid';
+import { useCallback, useState, MouseEvent } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+
+import 'react-data-grid/lib/styles.css';
+// These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
+import './table-styles.css';
+
 import styles from './styles.module.css';
-import chevron from '~/assets/16-chevron-down.svg';
+import { Entity, useSchema } from '~/utils/use-schema';
+import { useSelectedEntity } from '~/utils/use-selected-entity';
+import { routeFor } from '~/utils/route-for';
 
-function TableHeader({
-	tableData,
-	handleClick,
-	filterDirection,
-}: {
-	tableData: Array<object>;
-	handleClick?: (header: string) => any;
-	filterDirection: boolean;
-}) {
-	const [filteredColumn, setFilteredColumn] = useState(0);
+const columnsForEntity = <T extends { id: string }>(
+	entity: Entity,
+	entityByType: (type: string) => Entity
+): Column<T>[] =>
+	entity.fields.map((field) => ({
+		key: field.name,
+		name: field.name,
+		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
 
-	const headers = Object.keys(tableData[0]);
-	const firstObject: any = tableData[0];
+		// We don't support sorting by relationships yet.
+		sortable: !field.relationshipType,
 
-	// When the value is a number right align text
-	const valueIsNumber = useCallback(
-		(header: string) => (typeof firstObject[header] === 'number' ? styles.right : ''),
-		[]
-	);
+		// We only need a formatter for relationships.
+		formatter: field.relationshipType
+			? ({ row }) => {
+					// Without stopping propagation on our links, the grid will be notified about the click,
+					// which is not what we want. We want to navigate and not let the grid handle it
+					const gobbleEvent = useCallback(
+						(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation(),
+						[]
+					);
+					const value = row[field.name as keyof typeof row];
+					const relatedEntity = entityByType(field.type);
 
-	// Pass the column object key so we can filter on that column
-	const filterOnColumn = useCallback(
-		(header: string, index: number) => {
-			handleClick?.(header);
-			setFilteredColumn(index);
+					const linkForValue = (value: any) => (
+						<Link
+							key={value.id}
+							to={routeFor({ type: field.type, id: value.id as string })}
+							onClick={gobbleEvent}
+						>
+							{value[relatedEntity?.summaryField || 'id']}
+						</Link>
+					);
+
+					if (Array.isArray(value)) {
+						// We're in a many relationship. Return an array of links.
+						return value.map(linkForValue);
+					} else if (value) {
+						return linkForValue(value);
+					} else {
+						return null;
+					}
+			  }
+			: undefined,
+	}));
+
+export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
+	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+	const navigate = useNavigate();
+	const { id } = useParams();
+	const { entityByType } = useSchema();
+	const { selectedEntity } = useSelectedEntity();
+	const rowKeyGetter = useCallback((row: T) => row.id, []);
+	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
+
+	const navigateToDetailForEntity = useCallback(
+		(row: T) => {
+			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
+			navigate(routeFor({ entity: selectedEntity, id: row.id }));
 		},
-		[handleClick, setFilteredColumn]
+		[selectedEntity]
 	);
+
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	return (
-		<tr id={styles.header}>
-			{headers.map((header: string, index) => (
-				<th
-					onClick={() => {
-						filterOnColumn(header, index);
-					}}
-					className={valueIsNumber(header)}
-					id={filteredColumn === index ? styles.chevron : ''}
-					key={header}
-				>
-					{header}
-					<span>
-						<img
-							src={chevron}
-							alt={`Filter ${header} ascending or descending`}
-							className={filterDirection ? styles.pointUp : styles.pointDown}
-						/>
-					</span>
-				</th>
-			))}
-		</tr>
+		<div className={styles.tableWrapper}>
+			<DataGrid
+				columns={columnsForEntity(selectedEntity, entityByType) as any}
+				rows={rows}
+				rowKeyGetter={rowKeyGetter}
+				sortColumns={sortColumns}
+				onSortColumnsChange={setSortColumns}
+				defaultColumnOptions={{ resizable: true }}
+				onRowClick={navigateToDetailForEntity}
+				rowClass={rowClass}
+			/>
+		</div>
 	);
-}
-
-const TableRows = ({ tableData }: { tableData: Array<object> }) => (
-	<>
-		{tableData?.map((row, index) => (
-			<tr key={index}>
-				{Object.values(row).map((field) => (
-					<td className={typeof field === 'number' ? styles.right : ''} key={Math.random()}>
-						{field}
-					</td>
-				))}
-			</tr>
-		))}
-	</>
-);
-
-export const Table = ({ data, headerData }: { data: Array<any>; headerData: Array<any> }) => (
-	<div id={styles.tableWrapper}>
-		<table id={styles.table}>
-			<tbody>
-				<TableHeader filterDirection tableData={headerData} />
-				<TableRows tableData={data} />
-			</tbody>
-		</table>
-	</div>
-);
+};
