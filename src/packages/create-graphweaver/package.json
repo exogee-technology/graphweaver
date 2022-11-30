@@ -1,26 +1,26 @@
 {
-  "name": "@exogee/create-graphweaver",
-  "version": "0.1.0-alpha.5",
-  "description": "Create a new GraphWeaver project interactively",
-  "license": "MIT",
-  "scripts": {
-    "start": "pnpm build && mkdir --parents test && rm -rf test/* && cd test && node ../bin/index.js",
-    "build": "esbuild src/index.ts --bundle --platform=node --outdir=bin --banner:js=\"#!/usr/bin/env node\"",
-    "prettier": "prettier --write .",
-    "test:prettier": "prettier --check ." 
-  },
-  "bin": "bin/index.js",
-  "files": [
-    "bin"
-  ],
-  "dependencies": {
-    "chalk": "5.1.2",
-    "inquirer": "9.1.4"
-  },
-  "devDependencies": {
-    "@types/node": "18.11.9",
-    "@types/inquirer": "9.0.3",
-    "esbuild": "0.15.5",
-    "prettier": "2.7.1"
-  }
+	"name": "@exogee/create-graphweaver",
+	"version": "0.1.0-alpha.5",
+	"description": "Create a new GraphWeaver project interactively",
+	"license": "MIT",
+	"scripts": {
+		"start": "pnpm build && mkdir -p test && rm -rf test/* && cd test && node ../bin/index.js",
+		"build": "esbuild src/index.ts --bundle --platform=node --outdir=bin --banner:js=\"#!/usr/bin/env node\"",
+		"prettier": "prettier --write .",
+		"test:prettier": "prettier --check ."
+	},
+	"bin": "bin/index.js",
+	"files": [
+		"bin"
+	],
+	"dependencies": {
+		"chalk": "5.1.2",
+		"inquirer": "9.1.4"
+	},
+	"devDependencies": {
+		"@types/node": "18.11.9",
+		"@types/inquirer": "9.0.3",
+		"esbuild": "0.15.5",
+		"prettier": "2.7.1"
+	}
 }
