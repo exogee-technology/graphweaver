@@ -1,6 +1,9 @@
-import { ApolloError, UserInputError as ApolloUserInputError } from 'apollo-server-lambda';
+import { ApolloError, UserInputError as ApolloUserInputError } from '@exogee/graphweaver-apollo';
 
-export { AuthenticationError, ApolloError as InternalServerError } from 'apollo-server-lambda';
+export {
+	AuthenticationError,
+	ApolloError as InternalServerError,
+} from '@exogee/graphweaver-apollo';
 
 export class UserInputError extends ApolloUserInputError {
 	constructor(message: string, extensions: { friendlyMessage: string }) {
