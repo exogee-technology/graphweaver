@@ -8,7 +8,7 @@ export class UserDog extends BaseEntity {
 	id!: string;
 
 	@Property({ type: String })
-	dogId!: string;
+	restDogId!: string;
 
 	@ManyToOne(() => User)
 	user!: User;
