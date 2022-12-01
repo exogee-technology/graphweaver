@@ -1,9 +1,9 @@
+import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { PluginDefinition } from 'apollo-server-core';
 import { stripIgnoredCharacters } from 'graphql';
 
 // This plugin logs on each request.
-export const LogRequests: PluginDefinition = {
+export const LogRequests: ApolloServerPlugin = {
 	async requestDidStart({ request: { variables, query } }) {
 		const variablesCopy = { ...variables };
 
