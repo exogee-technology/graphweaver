@@ -12,7 +12,12 @@ import Graphweaver, {
 } from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
 
-import { ReportResolver, ReportRowResolver, ReportCellResolver } from './schema';
+import {
+	ReportResolver,
+	ReportRowResolver,
+	ReportCellResolver,
+	ReportSectionResolver,
+} from './schema';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { TokenSet } from 'xero-node';
 
@@ -35,7 +40,7 @@ const pluginsWithPlayground = isOffline
 
 logger.info(`example-xero start Graphweaver`);
 const graphweaver = new Graphweaver({
-	resolvers: [ReportResolver, ReportRowResolver, ReportCellResolver],
+	resolvers: [ReportResolver, ReportRowResolver, ReportCellResolver, ReportSectionResolver],
 	plugins: pluginsWithPlayground,
 	adminMetadata: { enabled: true },
 	introspection: process.env.IS_OFFLINE === 'true',

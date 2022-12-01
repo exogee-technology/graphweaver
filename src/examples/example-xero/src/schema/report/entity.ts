@@ -1,7 +1,7 @@
 import { GraphQLEntity } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 import { ReportWithRow } from 'xero-node';
-import { ReportRow } from '../report-row';
+import { ReportSection } from '../report-section';
 
 @ObjectType('Report')
 export class Report extends GraphQLEntity<ReportWithRow> {
@@ -13,10 +13,8 @@ export class Report extends GraphQLEntity<ReportWithRow> {
 	@Field(() => String)
 	reportName!: string;
 
-	@Field(() => ReportRow, { nullable: false })
-	async rows() {
-		return this.dataEntity.rows?.map(({ rows }) =>
-			rows.map((row) => ReportRow.fromBackendEntity(row))
-		);
+	@Field(() => [ReportSection], { nullable: false })
+	async sections() {
+		return this.dataEntity.rows?.map((section) => ReportSection.fromBackendEntity(section));
 	}
 }
