@@ -1,0 +1,41 @@
+.rdg {
+	background: #1e1a25;
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 12px;
+	flex: 1;
+	height: 100%;
+}
+
+.rdg-header-row {
+	background: #271f36;
+}
+
+.rdg-header-row div:first-child {
+	border-top-left-radius: 12px;
+}
+
+.rdg-header-row div:last-child {
+	border-top-right-radius: 12px;
+}
+
+.rdg-header-sort-name {
+	color: rgba(237, 232, 242, 0.6);
+	font-weight: 600;
+}
+
+.rdg-row {
+	background: #1e1a25;
+}
+
+.rdg-row:hover,
+.rdg-row-selected {
+	background: #352d44;
+}
+
+.rdg-row-odd {
+	background: #241e2f;
+}
+
+.rdg-cell {
+	padding: 0 12px;
+}
