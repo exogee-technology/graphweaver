@@ -5,7 +5,7 @@
 	"private": true,
 	"description": "Complex example of using @exogee/graphweaver",
 	"scripts": {
-		"build": "esbuild --outdir=lib --format=cjs src/*.ts   src/**/**/*.ts src/**/*.ts",
+		"build": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"prettier": "prettier --write src/**/*.ts",
 		"test": "jest"
 	},
