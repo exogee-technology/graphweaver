@@ -6,6 +6,6 @@ import { ReportCell as XeroReportCell } from 'xero-node';
 export class ReportCell extends GraphQLEntity<XeroReportCell> {
 	public dataEntity!: XeroReportCell;
 
-	@Field(() => String)
-	value!: string;
+	@Field(() => String, { nullable: true })
+	value?: string;
 }

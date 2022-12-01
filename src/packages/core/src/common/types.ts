@@ -66,7 +66,8 @@ export interface BackendProvider<T> {
 	// queries when you query across data sources.
 	readonly backendId: string;
 
-	entityType: new () => T;
+	entityType?: new () => T;
+
 	find(
 		filter: any,
 		pagination?: PaginationOptions,
