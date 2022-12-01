@@ -1,0 +1,37 @@
+{
+	"name": "@exogee/graphweaver-xero",
+	"version": "0.1.0-alpha.5",
+	"description": "Xero backend for @exogee/graphweaver",
+	"license": "MIT",
+	"scripts": {
+		"build:legacy": "tsc --build",
+		"build:types": "tsc --emitDeclarationOnly",
+		"prettier": "prettier --write src/**/*.ts",
+		"codegen": "graphql-codegen --config ./codegen.yml",
+		"test": "jest --passWithNoTests"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"dependencies": {
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.5",
+		"@exogee/logger": "workspace:0.1.0",
+		"class-validator": "0.13.2",
+		"dataloader": "2.1.0",
+		"graphql": "15.x.x",
+		"type-graphql": "1.1.1",
+		"xero-node": "4.30.0"
+	},
+	"devDependencies": {
+		"@types/node": "14.14.10",
+		"jest": "26.6.3",
+		"prettier": "2.2.1",
+		"ts-jest": "26.4.4",
+		"typescript": "4.5.4"
+	}
+}
