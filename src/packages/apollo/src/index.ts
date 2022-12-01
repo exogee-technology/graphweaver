@@ -38,7 +38,7 @@ export default class Graphweaver {
 		resolvers: [],
 	};
 	constructor(config: GraphweaverConfig) {
-		logger.info(`Graphweaver constructor called`);
+		logger.trace(`Graphweaver constructor called`);
 		if (!config) {
 			throw new Error('Graphweaver config required');
 		}
@@ -59,15 +59,15 @@ export default class Graphweaver {
 		];
 		const resolvers = (this.config.resolvers || []) as any;
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
-			logger.info(`Graphweaver adminMetadata is enabled`);
+			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(AdminUiMetadataResolver);
 		}
-		logger.info(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 		const schema = buildSchemaSync({
 			resolvers,
 			authChecker: () => true,
 		});
-		logger.info(`Graphweaver starting ApolloServer`);
+		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer({
 			...(this.config.apolloServerOptions as any),
 			plugins: plugins,
