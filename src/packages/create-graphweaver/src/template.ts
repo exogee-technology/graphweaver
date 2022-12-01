@@ -44,7 +44,7 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 /* ${projectName} GraphWeaver Project */
 
 import 'reflect-metadata';
-import Graphweaver,{ connectToDatabase } from '@exogee/graphweaver-apollo';
+import Graphweaver, { startStandaloneServer } from '@exogee/graphweaver-apollo';
 import open from 'open';
 import { config } from 'dotenv';
 import { PingResolver } from './schema';
@@ -52,17 +52,20 @@ import { PingResolver } from './schema';
 config();
 
 const graphweaver = new Graphweaver({
-	resolvers: [ PingResolver as any ],
+	resolvers: [PingResolver as any],
 	mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
-	plugins: [],
+	apolloServerOptions: {
+		introspection: process.env.IS_OFFLINE === 'true',
+		schema: {} as any, // @todo
+		plugins: [],
+	},
 	adminMetadata: { enabled: true },
-	introspection: process.env.IS_OFFLINE === 'true',
 });
 
 (async () => {
-        const info = await graphweaver.server.listen();
-        console.log(\`GraphWeaver with apollo is ready and awaiting at \${info.url}\`);
-        open(info.url);
+	const { url } = await startStandaloneServer(graphweaver.server);
+	console.log(\`GraphWeaver with apollo is ready and awaiting at \${url}\`);
+	open(url);
 })();
 `;
 
