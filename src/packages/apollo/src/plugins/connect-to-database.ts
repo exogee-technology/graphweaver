@@ -1,7 +1,7 @@
+import { ApolloServerPlugin } from '@apollo/server';
 import { Database, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
-import { PluginDefinition } from 'apollo-server-core';
 
-export const connectToDatabase = (options: ConnectionOptions): PluginDefinition => {
+export const connectToDatabase = (options: ConnectionOptions): ApolloServerPlugin => {
 	return {
 		serverWillStart: async () => {
 			await Database.connect(options);
@@ -9,7 +9,7 @@ export const connectToDatabase = (options: ConnectionOptions): PluginDefinition 
 	};
 };
 
-export const ConnectToDatabase: PluginDefinition = {
+export const ConnectToDatabase: ApolloServerPlugin = {
 	serverWillStart: async () => {
 		await Database.connect();
 	},

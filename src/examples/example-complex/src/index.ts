@@ -6,10 +6,9 @@ dotenv.config({
 	path: envPath,
 });
 
-import Graphweaver, {
-	ApolloServerPluginLandingPageGraphQLPlayground,
-} from '@exogee/graphweaver-apollo';
+import Graphweaver from '@exogee/graphweaver-apollo';
 import 'reflect-metadata';
+import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { setAdministratorRoleName, upsertAuthorizationContext } from '@exogee/graphweaver';
 import { HobbyResolver } from './schema/hobby';
@@ -27,19 +26,6 @@ import { logger } from '@exogee/logger';
 setAdministratorRoleName('Administrator');
 upsertAuthorizationContext({ roles: ['Administrator'] });
 
-const pluginsWithPlayground = isOffline
-	? [
-			ApolloSession,
-			SetAuthenticatedUser,
-			ApolloServerPluginLandingPageGraphQLPlayground({
-				endpoint: '/graphql/v1',
-				settings: {
-					'request.credentials': 'include',
-				},
-			}),
-	  ]
-	: [ApolloSession, SetAuthenticatedUser];
-
 logger.info(`example-complex start Graphweaver`);
 const graphweaver = new Graphweaver({
 	resolvers: [
@@ -50,13 +36,13 @@ const graphweaver = new Graphweaver({
 		BreederResolver,
 		UserDogResolver,
 	],
+	apolloServerOptions: {
+		introspection: process.env.IS_OFFLINE === 'true',
+		schema: {} as any, // @todo
+		plugins: [ApolloSession, SetAuthenticatedUser],
+	},
 	mikroOrmOptions: { mikroOrmConfig: { entities: mikroOrmEntities } },
-	plugins: pluginsWithPlayground,
 	adminMetadata: { enabled: true },
-	introspection: process.env.IS_OFFLINE === 'true',
 });
 logger.info(`example-complex graphweaver.server start`);
-
-exports.handler = graphweaver.server.createHandler({
-	expressGetMiddlewareOptions: { bodyParserConfig: { limit: '5mb' } },
-});
+exports.handler = startServerAndCreateLambdaHandler(graphweaver.server);

@@ -1,8 +1,8 @@
+import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { PluginDefinition } from 'apollo-server-core';
 
 // This plugin ensures we log errors
-export const LogErrors: PluginDefinition = {
+export const LogErrors: ApolloServerPlugin = {
 	async requestDidStart() {
 		return {
 			didEncounterErrors: async ({ errors }) => {
