@@ -21,7 +21,6 @@ export interface XeroDataAccessor<T> {
 
 export class XeroBackendProvider<T> implements BackendProvider<T> {
 	public readonly backendId = 'xero-api';
-	public entityType: new () => T;
 	public readonly supportsInFilter = true;
 
 	public static accessTokenProvider: {
@@ -29,12 +28,12 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		set: (newToken: TokenSet) => Promise<any>;
 	};
 
-	public constructor(xeroResultType: new () => T, protected accessor?: XeroDataAccessor<T>) {
-		this.entityType = xeroResultType;
-	}
+	public constructor(protected entityTypeName: string, protected accessor?: XeroDataAccessor<T>) {}
 
 	protected async ensureAccessToken() {
-		const tokenSet = xero.readTokenSet();
+		await xero.initialize();
+		let tokenSet = xero.readTokenSet();
+
 		if (tokenSet.token_type !== 'Bearer') {
 			logger.trace('Access token type is not Bearer, setting token');
 
@@ -44,16 +43,12 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 				);
 
 			xero.setTokenSet(await XeroBackendProvider.accessTokenProvider.get());
+			tokenSet = xero.readTokenSet();
 		}
-
-		console.log('Expired: ', tokenSet.expired());
-		console.log('Token Set: ', tokenSet.expires_at);
-		console.log('Expires in: ', tokenSet.expires_in);
 
 		if (tokenSet.expired()) {
 			logger.trace('Access token expired. Refreshing.');
-			const result = await xero.refreshToken();
-			await XeroBackendProvider.accessTokenProvider.set(result);
+			await XeroBackendProvider.accessTokenProvider.set(await xero.refreshToken());
 			logger.trace('Refresh complete.');
 		}
 	}
@@ -66,7 +61,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	): Promise<T[]> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running find ${this.entityType.name} with filter`, {
+		logger.trace(`Running find ${this.entityTypeName} with filter`, {
 			filter: JSON.stringify(filter),
 		});
 
@@ -75,13 +70,22 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
 			);
 
-		return this.accessor.find(xero);
+		try {
+			const result = await this.accessor.find(xero);
+
+			return result;
+		} catch (error: any) {
+			// Nicer error message if we can muster it.
+			if (error.response?.body) throw error.response.body;
+
+			throw error;
+		}
 	}
 
 	public async findOne(id: string): Promise<T | null> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
+		logger.trace(`Running findOne ${this.entityTypeName} with ID ${id}`);
 
 		return {} as T;
 	}
@@ -101,7 +105,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running update one ${this.entityType.name} with args`, {
+		logger.trace(`Running update one ${this.entityTypeName} with args`, {
 			id,
 			updateArgs,
 		});
@@ -112,7 +116,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running update many ${this.entityType.name} with args`, {
+		logger.trace(`Running update many ${this.entityTypeName} with args`, {
 			updateItems: updateItems,
 		});
 
@@ -129,7 +133,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
-		logger.trace(`Running create ${this.entityType.name} with args`, {
+		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});
 
@@ -138,13 +142,13 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 	// DELETE METHODS
 	public async deleteOne(id: string): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityType.name} with id ${id}`);
+		logger.trace(`Running delete ${this.entityTypeName} with id ${id}`);
 
 		throw new Error('Not implemented');
 	}
 
 	public async deleteMany(ids: string[]): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityType.name} with ids ${ids}`);
+		logger.trace(`Running delete ${this.entityTypeName} with ids ${ids}`);
 
 		throw new Error('Not implemented');
 	}
@@ -160,6 +164,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	public isCollection(entity: any) {
+		console.log('Entity: ', entity);
 		return false;
 	}
 }
