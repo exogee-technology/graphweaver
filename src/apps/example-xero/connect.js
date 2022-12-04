@@ -41,8 +41,10 @@ exports.handler = async (event) => {
 		statusCode: 200,
 		headers: { 'content-type': 'text/html' },
 		body: `
-			<html>
+			<!DOCTYPE html>
+			<html lang="en">
 				<head>
+					<meta charset="utf-8">
 					<title>Graphweaver - Connect to Xero</title>
 				</head>
 				<body>
