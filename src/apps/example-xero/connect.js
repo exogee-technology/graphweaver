@@ -27,7 +27,6 @@ exports.handler = async (event) => {
 			.map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
 			.join('&')}`;
 
-		console.log(url);
 		try {
 			token = await xero.apiCallback(url);
 			await xero.updateTenants();

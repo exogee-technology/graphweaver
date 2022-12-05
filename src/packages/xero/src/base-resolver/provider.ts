@@ -1,5 +1,6 @@
-import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
+import { BackendProvider, PaginationOptions, Sort } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
+import { isUUID } from 'class-validator';
 import { TokenSet, TokenSetParameters, XeroClient } from 'xero-node';
 
 const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
@@ -16,12 +17,79 @@ const xero = new XeroClient({
 });
 
 export interface XeroDataAccessor<T> {
-	find: (client: XeroClient) => Promise<T[]>;
+	find: (args: { xero: XeroClient; filter?: string; order?: string }) => Promise<T[]>;
 }
+
+// This takes:
+// {
+// 	_or: [
+// 		{ id: '123'},
+// 		{ id: '234'},
+// 	]
+// }
+// and turns it into a string like:
+// AccountID=="123" OR AccountID=="234"
+const xeroFilterFrom = (filter: any) => {
+	if (!filter) return undefined;
+
+	const chunks: string[] = [];
+
+	for (const [key, value] of Object.entries(filter)) {
+		if (key === '_or' || key === '_and') {
+			const subChunks: string[] = [];
+			for (const subChunk of value as any[]) {
+				const subFilter = xeroFilterFrom(subChunk);
+				if (subFilter) subChunks.push(subFilter);
+			}
+
+			if (key === '_or') chunks.push(`${subChunks.join(' OR ')}`);
+			else chunks.push(`${subChunks.join(' AND ')}`);
+		} else {
+			const replacedKey = key === 'id' ? 'AccountID' : key;
+			let subfilter =
+				typeof value === 'object' ? xeroFilterFrom(value) : (value as string | undefined);
+
+			// Some Xero types need to be quoted.
+			if (isUUID(subfilter, 4)) {
+				subfilter = `GUID("${subfilter}")`;
+			} else if (typeof subfilter === 'string') {
+				subfilter = `"${subfilter}"`;
+			}
+
+			if (key.endsWith('_gt')) {
+				chunks.push(`${replacedKey}>${subfilter}`);
+			} else if (key.endsWith('_gte')) {
+				chunks.push(`${replacedKey}<=${subfilter}`);
+			} else if (key.endsWith('_lt')) {
+				chunks.push(`${replacedKey}<${subfilter}`);
+			} else if (key.endsWith('_lte')) {
+				chunks.push(`${replacedKey}<=${subfilter}`);
+			} else {
+				chunks.push(`${replacedKey}==${subfilter}`);
+			}
+		}
+	}
+
+	return chunks.join(' AND ') || undefined;
+};
+
+const xeroOrderFrom = (pagination?: PaginationOptions) => {
+	if (!pagination || !pagination.orderBy) return undefined;
+
+	const chunks: string[] = [];
+	for (const [key, value] of Object.entries(pagination.orderBy)) {
+		chunks.push(`${key} ${value}`);
+	}
+
+	return chunks.join(', ') || undefined;
+};
 
 export class XeroBackendProvider<T> implements BackendProvider<T> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
+
+	// Xero's API starts balking when we send requests with more than 25 OR filters in them.
+	public readonly maxDataLoaderBatchSize = 25;
 
 	public static accessTokenProvider: {
 		get: () => Promise<TokenSet | TokenSetParameters> | TokenSet | TokenSetParameters;
@@ -65,13 +133,18 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			filter: JSON.stringify(filter),
 		});
 
-		if (!this.accessor)
+		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
 			);
+		}
 
 		try {
-			const result = await this.accessor.find(xero);
+			const result = await this.accessor.find({
+				xero,
+				filter: xeroFilterFrom(filter),
+				order: xeroOrderFrom(pagination),
+			});
 
 			return result;
 		} catch (error: any) {
@@ -87,7 +160,14 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 		logger.trace(`Running findOne ${this.entityTypeName} with ID ${id}`);
 
-		return {} as T;
+		if (!this.accessor) {
+			throw new Error(
+				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
+			);
+		}
+
+		const rows = await this.find({ id });
+		return rows[0] || null;
 	}
 
 	public async findByRelatedId(
@@ -98,7 +178,16 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	): Promise<T[]> {
 		await this.ensureAccessToken();
 
-		return [];
+		if (!this.accessor) {
+			throw new Error(
+				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
+			);
+		}
+
+		return this.find({
+			_or: [relatedFieldIds.map((id) => ({ [relatedField]: id }))],
+			...filter,
+		});
 	}
 
 	// PUT METHODS
@@ -164,7 +253,6 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	public isCollection(entity: any) {
-		console.log('Entity: ', entity);
 		return false;
 	}
 }
