@@ -66,12 +66,14 @@ importers:
       nodemon: 2.0.15
       serverless: 3.7.9
       serverless-offline: 8.5.0
+      uuid: 8.3.2
       xero-node: 4.30.0
     dependencies:
       '@aws-sdk/signature-v4-crt': 3.54.1
       '@exogee/graphweaver-example-xero': link:../../examples/example-xero
       dotenv: 10.0.0
       esbuild: 0.15.5
+      uuid: 8.3.2
       xero-node: 4.30.0
     devDependencies:
       concurrently: 7.0.0
@@ -398,7 +400,7 @@ importers:
       '@types/pluralize': 0.0.29
       bunyan: 1.8.14
       class-validator: 0.13.2
-      dataloader: 2.0.0
+      dataloader: workspace:2.1.1
       graphql: 15.8.0
       jest: 27.2.2
       pluralize: 8.0.0
@@ -409,7 +411,7 @@ importers:
     dependencies:
       bunyan: 1.8.14
       class-validator: 0.13.2
-      dataloader: 2.0.0
+      dataloader: link:../dataloader
       graphql: 15.8.0
       pluralize: 8.0.0
       reflect-metadata: 0.1.13
@@ -438,6 +440,9 @@ importers:
       '@types/node': 18.11.9
       esbuild: 0.15.5
       prettier: 2.7.1
+
+  packages/dataloader:
+    specifiers: {}
 
   packages/logger:
     specifiers:
@@ -15403,7 +15408,7 @@ packages:
       bs-logger: 0.2.6
       buffer-from: 1.1.2
       fast-json-stable-stringify: 2.1.0
-      jest: 26.6.3_ts-node@10.4.0
+      jest: 26.6.3_ts-node@9.0.0
       jest-util: 26.6.2
       json5: 2.2.1
       lodash.memoize: 4.1.2

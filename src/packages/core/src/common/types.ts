@@ -88,6 +88,9 @@ export interface BackendProvider<T> {
 	deleteOne(id: string): Promise<boolean>;
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
+
+	// Optional, tells dataloader to cap pages at this size.
+	readonly maxDataLoaderBatchSize?: number;
 }
 
 export interface GraphqlEntityType<T, O> {
