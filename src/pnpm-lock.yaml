@@ -305,6 +305,7 @@ importers:
       graphql: 15.8.0
       jest: 26.6.3
       prettier: 2.2.1
+      reflect-metadata: 0.1.13
       ts-jest: 26.4.4
       ts-node: 10.4.0
       tsc-watch: 4.2.9
@@ -319,6 +320,7 @@ importers:
       async-mutex: 0.3.1
       class-validator: 0.13.2
       graphql: 15.8.0
+      reflect-metadata: 0.1.13
       type-graphql: 1.1.1_aea24acf06b899fbc466d3b3b949c72d
       xero-node: 4.30.0
     devDependencies:
@@ -15408,7 +15410,7 @@ packages:
       bs-logger: 0.2.6
       buffer-from: 1.1.2
       fast-json-stable-stringify: 2.1.0
-      jest: 26.6.3_ts-node@9.0.0
+      jest: 26.6.3_ts-node@10.4.0
       jest-util: 26.6.2
       json5: 2.2.1
       lodash.memoize: 4.1.2
