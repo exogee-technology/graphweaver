@@ -66,9 +66,7 @@ export const List = () => {
 				<React.Suspense fallback={<p>Loading...</p>}>
 					<Await resolve={rows} errorElement={<p>Error!</p>}>
 						{(rows: ApolloQueryResult<{ result: Array<{ id: string }> }>) => (
-							<>
-								<Table rows={rows.data.result} />
-							</>
+							<Table rows={rows.data.result} />
 						)}
 					</Await>
 				</React.Suspense>
