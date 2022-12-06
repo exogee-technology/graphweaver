@@ -6,3 +6,4 @@ export * from './filter';
 export * from './pagination';
 export * from './read-only';
 export * from './read-only-property';
+export * from './summary-field';
