@@ -9,6 +9,9 @@ export class AdminUiEntityMetadata {
 	@Field(() => String, { nullable: true })
 	backendId?: string | null;
 
+	@Field(() => String, { nullable: true })
+	summaryField?: string | null;
+
 	@Field(() => [AdminUiFieldMetadata])
 	fields?: AdminUiFieldMetadata[] = [];
 }
