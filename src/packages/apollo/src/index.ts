@@ -1,38 +1,41 @@
-import { PluginDefinition, Config } from 'apollo-server-core';
-import { ApolloServer } from 'apollo-server-lambda';
 import { AdminUiMetadataResolver } from './metadata-service';
 import { buildSchemaSync } from 'type-graphql';
+import { AuthenticationContext, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 import { formatGraphQLError } from './plugins/format-error';
-import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
+
+import { logger } from '@exogee/logger';
+import { ApolloServer, ApolloServerOptions, ApolloServerPlugin } from '@apollo/server';
+import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
 	ClearDatabaseContext,
 	ClearDataLoaderCache,
 	connectToDatabase,
-	DisableApolloServerPluginLandingPage,
 	LogErrors,
 	LogRequests,
 	MutexRequestsInDevelopment,
 } from './plugins';
 import { Cors } from './plugins/cors';
-import { logger } from '@exogee/logger';
-export * from './plugins';
-export * from 'apollo-server-core';
+
+export * from '@apollo/server';
+export { startStandaloneServer } from '@apollo/server/standalone';
 
 export interface AdminMetadata {
 	enabled: boolean;
 	config?: any;
 }
 
-export interface GraphweaverConfig extends Config {
+export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	plugins?: PluginDefinition[];
 	mikroOrmOptions: ConnectionOptions;
+	resolvers: Array<any>;
+	apolloServerOptions?: ApolloServerOptionsWithStaticSchema<any>;
 }
 export default class Graphweaver {
 	server: ApolloServer;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
+		resolvers: [],
 	};
 	constructor(config: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
@@ -40,11 +43,11 @@ export default class Graphweaver {
 			throw new Error('Graphweaver config required');
 		}
 		if (!config.resolvers) {
-			throw new Error('Graphweaver config resolvers required');
+			throw new Error('Graphweaver resolvers required');
 		}
 		this.config = config;
-		// Order of plugins is important here
-		const plugins: PluginDefinition[] = [
+		// Order is important here
+		const plugins = [
 			MutexRequestsInDevelopment,
 			LogRequests,
 			LogErrors,
@@ -52,8 +55,7 @@ export default class Graphweaver {
 			ClearDataLoaderCache,
 			ClearDatabaseContext,
 			Cors,
-			DisableApolloServerPluginLandingPage,
-			...(this.config.plugins || []),
+			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
@@ -67,11 +69,9 @@ export default class Graphweaver {
 		});
 		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer({
-			...this.config,
-			plugins,
+			...(this.config.apolloServerOptions as any),
+			plugins: plugins,
 			schema,
-			introspection: process.env.IS_OFFLINE === 'true',
-			formatError: this.config.formatError ?? formatGraphQLError,
 		});
 	}
 

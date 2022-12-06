@@ -48,7 +48,8 @@
 		"type-graphql": "1.1.1",
 		"uid-safe": "2.1.5",
 		"uuid": "8.3.2",
-		"web-push": "3.4.5"
+		"web-push": "3.4.5",
+		"@as-integrations/aws-lambda": "^1.0.1"
 	},
 	"devDependencies": {
 		"@graphql-codegen/cli": "1.19.4",

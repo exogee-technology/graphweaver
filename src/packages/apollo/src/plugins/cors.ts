@@ -1,7 +1,7 @@
+import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { PluginDefinition } from 'apollo-server-core';
 
-export const Cors: PluginDefinition = {
+export const Cors: ApolloServerPlugin = {
 	async requestDidStart({ request }) {
 		return {
 			willSendResponse: async ({ response }) => {
