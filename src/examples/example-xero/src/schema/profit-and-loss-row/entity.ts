@@ -26,21 +26,18 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => Number)
 	amount!: number;
 
-	@Field(() => ID)
-	accountId!: string;
+	@Field(() => ID, { nullable: true })
+	accountId?: string;
 
 	@Field(() => Account, { nullable: true })
 	async account() {
 		if (!this.dataEntity.accountId) return null;
 
-		const loaded = await BaseLoaders.loadOne({
-			gqlEntityType: Account,
-			id: this.dataEntity.accountId,
-		});
-
-		console.log('loaded: ', loaded);
-		console.log('from ID: ', this.dataEntity.accountId);
-
-		return Account.fromBackendEntity(loaded);
+		return Account.fromBackendEntity(
+			await BaseLoaders.loadOne({
+				gqlEntityType: Account,
+				id: this.dataEntity.accountId,
+			})
+		);
 	}
 }

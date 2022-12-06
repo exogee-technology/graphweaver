@@ -1,7 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
 
-@ObjectType('AdminField')
-export class AdminField {
+@ObjectType('AdminUiFieldMetadata')
+export class AdminUiFieldMetadata {
 	@Field(() => String)
 	name!: string;
 

@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import dotenv from 'dotenv';
 import * as path from 'path';
 import * as fs from 'fs/promises';
