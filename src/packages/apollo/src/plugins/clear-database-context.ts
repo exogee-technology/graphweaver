@@ -1,7 +1,7 @@
+import { ApolloServerPlugin } from '@apollo/server';
 import { Database } from '@exogee/graphweaver-mikroorm';
-import { PluginDefinition } from 'apollo-server-core';
 
-export const ClearDatabaseContext: PluginDefinition = {
+export const ClearDatabaseContext: ApolloServerPlugin = {
 	// We need to ensure the Entity Manager is clear on each request
 	async requestDidStart() {
 		Database.em.clear();
