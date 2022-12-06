@@ -1,4 +1,4 @@
-import { AuthorizedBaseFunctions, EntityMetadataMap } from '@exogee/graphweaver';
+import { AuthorizedBaseFunctions, EntityMetadataMap, isSummaryField } from '@exogee/graphweaver';
 import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
@@ -29,6 +29,9 @@ export class AdminUiMetadataResolver {
 			.map((objectType) => {
 				const name = objectType.name;
 				const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
+				const summaryField = objectType.fields?.find((field) =>
+					isSummaryField(objectType.target, field.name)
+				)?.name;
 				const fields = objectType.fields?.map((field) => {
 					const typeValue = field.getType() as any;
 					const entityName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
@@ -59,6 +62,7 @@ export class AdminUiMetadataResolver {
 				return {
 					name,
 					backendId,
+					summaryField,
 					fields,
 				};
 			})

@@ -1,4 +1,4 @@
-import { GraphQLEntity } from '@exogee/graphweaver';
+import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
 
@@ -18,6 +18,7 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	@Field(() => String, { nullable: true })
 	code?: string;
 
+	@SummaryField()
 	@Field(() => String)
 	name!: string;
 

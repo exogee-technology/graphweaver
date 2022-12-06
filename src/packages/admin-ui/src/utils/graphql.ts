@@ -6,6 +6,7 @@ export const SCHEMA_QUERY = gql`
 			entities {
 				name
 				backendId
+				summaryField
 				fields {
 					name
 					type
