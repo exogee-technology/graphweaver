@@ -32,10 +32,9 @@ const parseReport = (report: ReportWithRows) => {
 						const date = dates[i];
 						const value = otherCells[i];
 
-						const accountAttribute = value.attributes?.find((attribute) => {
-							console.log(`'${attribute.value}': ${isUUID(attribute.value)}`);
-							return attribute.id === 'account' && isUUID(attribute.value);
-						});
+						const accountAttribute = value.attributes?.find(
+							(attribute) => attribute.id === 'account' && isUUID(attribute.value)
+						);
 
 						results.push(
 							ProfitAndLossRow.fromBackendEntity({

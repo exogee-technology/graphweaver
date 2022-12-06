@@ -15,8 +15,8 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String)
-	code!: string;
+	@Field(() => String, { nullable: true })
+	code?: string;
 
 	@Field(() => String)
 	name!: string;
