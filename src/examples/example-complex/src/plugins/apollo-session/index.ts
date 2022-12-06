@@ -1,8 +1,8 @@
-import { PluginDefinition } from 'apollo-server-core';
 import cookie from 'cookie';
 import signature from 'cookie-signature';
 import * as crypto from 'crypto';
 import uid from 'uid-safe';
+import { ApolloServerPlugin } from '@exogee/graphweaver-apollo';
 
 import { DatabaseStore } from './database-store';
 
@@ -35,7 +35,7 @@ const hash = (input: string) => {
 	return hasher.digest('base64');
 };
 
-export const ApolloSession: PluginDefinition = {
+export const ApolloSession: ApolloServerPlugin = {
 	async requestDidStart({ request }) {
 		const rawCookie = request.http?.headers.get('cookie');
 		const sessionTokenWithSignature = cookie.parse(rawCookie || '')[cookieName];
@@ -46,7 +46,7 @@ export const ApolloSession: PluginDefinition = {
 		let userRequestedLogout = false;
 
 		return {
-			responseForOperation: async ({ context }) => {
+			responseForOperation: async ({ contextValue: context }) => {
 				context.session = sessionToken ? await store.get(sessionToken) : undefined;
 				if (context.session) {
 					initialSessionHash = hash(JSON.stringify(context.session));
@@ -57,7 +57,7 @@ export const ApolloSession: PluginDefinition = {
 				return null;
 			},
 
-			willSendResponse: async ({ context, response }) => {
+			willSendResponse: async ({ contextValue: context, response }) => {
 				const logout = context?.session?.logout;
 				const serialisedSession = JSON.stringify(context?.session);
 				const newSessionId = sessionToken || (await uid(24));
