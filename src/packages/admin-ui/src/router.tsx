@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { XeroDashboard } from './dashboads/xero';
 import { DefaultLayout } from './layouts/default';
 import { List, ListLoader, Root } from './pages';
 
@@ -28,6 +29,14 @@ const router = createBrowserRouter([
 			</DefaultLayout>
 		),
 		loader: ListLoader,
+	},
+	{
+		path: '/dashboard/:id',
+		element: (
+			<DefaultLayout>
+				<XeroDashboard />
+			</DefaultLayout>
+		),
 	},
 ]);
 
