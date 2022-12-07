@@ -8,10 +8,9 @@ dotenv.config({
 	path: envPath,
 });
 
-import Graphweaver, {
-	ApolloServerPluginLandingPageGraphQLPlayground,
-} from '@exogee/graphweaver-apollo';
+import Graphweaver from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
+import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { AccountResolver, ProfitAndLossRowResolver } from './schema';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
@@ -23,29 +22,18 @@ XeroBackendProvider.accessTokenProvider = {
 		await fs.writeFile('./token.json', JSON.stringify(newToken, null, 4), 'utf-8'),
 };
 
-const pluginsWithPlayground = isOffline
-	? [
-			ApolloServerPluginLandingPageGraphQLPlayground({
-				endpoint: '/graphql/v1',
-				settings: {
-					'request.credentials': 'include',
-				},
-			}),
-	  ]
-	: [];
-
 logger.info(`example-xero start Graphweaver`);
 const graphweaver = new Graphweaver({
 	resolvers: [AccountResolver, ProfitAndLossRowResolver],
-	plugins: pluginsWithPlayground,
+	apolloServerOptions: {
+		introspection: process.env.IS_OFFLINE === 'true',
+		schema: {} as any, // @todo
+	},
 	adminMetadata: { enabled: true },
-	introspection: process.env.IS_OFFLINE === 'true',
 
 	// TODO: Remove
 	mikroOrmOptions: {},
 });
 logger.info(`example-xero graphweaver.server start`);
 
-exports.handler = graphweaver.server.createHandler({
-	expressGetMiddlewareOptions: { bodyParserConfig: { limit: '5mb' } },
-});
+exports.handler = startServerAndCreateLambdaHandler(graphweaver.server);
