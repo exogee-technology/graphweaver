@@ -2,11 +2,13 @@ import { v4 } from 'uuid';
 import { createBaseResolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
-import { ReportWithRows, RowType } from 'xero-node';
+import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
+import { XeroTenant } from '../tenant';
+import { forEachTenant } from '../../utils';
 
-const parseReport = (report: ReportWithRows) => {
+const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
 
 	const results: ProfitAndLossRow[] = [];
@@ -39,6 +41,7 @@ const parseReport = (report: ReportWithRows) => {
 						results.push(
 							ProfitAndLossRow.fromBackendEntity({
 								id: v4(),
+								tenantId,
 								accountId: accountAttribute ? accountAttribute.value : null,
 								amount: parseFloat(value.value),
 								date,
@@ -54,26 +57,28 @@ const parseReport = (report: ReportWithRows) => {
 	return results;
 };
 
+const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
+	// Xero limits us to 365 days.
+	const to = new Date();
+	const from = new Date(to.valueOf());
+	from.setDate(to.getDate() - 365);
+
+	const { body } = await xero.accountingApi.getReportProfitAndLoss(
+		tenantId,
+		from.toISOString(),
+		to.toISOString(),
+		11,
+		'MONTH'
+	);
+
+	return parseReport(tenantId, body);
+};
+
 @Resolver((of) => ProfitAndLossRow)
 export class ProfitAndLossRowResolver extends createBaseResolver(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
-		find: async ({ xero, filter }) => {
-			const to = new Date();
-
-			// Xero limits us to 365 days.
-			const from = new Date(to.valueOf());
-			from.setDate(to.getDate() - 365);
-
-			const { body } = await xero.accountingApi.getReportProfitAndLoss(
-				'22460aa9-d4f8-4f35-98c5-7e407698ef2b',
-				from.toISOString(),
-				to.toISOString(),
-				11,
-				'MONTH'
-			);
-
-			return parseReport(body);
-		},
+		find: ({ xero }) =>
+			forEachTenant<ProfitAndLossRow>(xero, (tenant) => loadReportForTenant(xero, tenant.tenantId)),
 	})
 ) {}

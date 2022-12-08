@@ -17,7 +17,12 @@ const xero = new XeroClient({
 });
 
 export interface XeroDataAccessor<T> {
-	find: (args: { xero: XeroClient; filter?: string; order?: string }) => Promise<T[]>;
+	find: (args: {
+		xero: XeroClient;
+		filter?: string;
+		rawFilter: Record<string, any>;
+		order?: string;
+	}) => Promise<T[]>;
 }
 
 // This takes:
@@ -143,6 +148,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			const result = await this.accessor.find({
 				xero,
 				filter: xeroFilterFrom(filter),
+				rawFilter: filter,
 				order: xeroOrderFrom(pagination),
 			});
 

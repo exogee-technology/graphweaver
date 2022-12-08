@@ -12,7 +12,7 @@ import Graphweaver from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
 import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
-import { AccountResolver, ProfitAndLossRowResolver } from './schema';
+import { AccountResolver, ProfitAndLossRowResolver, TenantResolver } from './schema';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { TokenSet } from 'xero-node';
 
@@ -24,7 +24,7 @@ XeroBackendProvider.accessTokenProvider = {
 
 logger.info(`example-xero start Graphweaver`);
 const graphweaver = new Graphweaver({
-	resolvers: [AccountResolver, ProfitAndLossRowResolver],
+	resolvers: [AccountResolver, ProfitAndLossRowResolver, TenantResolver],
 	apolloServerOptions: {
 		introspection: process.env.IS_OFFLINE === 'true',
 		schema: {} as any, // @todo

@@ -12,7 +12,9 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 	const { selectedEntity } = useSelectedEntity();
 	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
 
-	const entities = entitiesForBackend(backend);
+	const entities = entitiesForBackend(backend)?.sort((left, right) =>
+		left.name.localeCompare(right.name)
+	);
 
 	return (
 		<ul key={backend} className={styles.entity}>
