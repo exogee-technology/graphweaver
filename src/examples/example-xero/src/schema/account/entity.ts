@@ -1,16 +1,13 @@
-import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import { BaseLoaders, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
+import { Tenant } from '../tenant';
 
 registerEnumType(AccountType, { name: 'AccountType' });
 
 @ObjectType('Account')
-// TODO: How should we type fromBackendEntity so the generics agree?
-//       That or we should add an easy way to alias for Xero entities so we don't even need this.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 export class Account extends GraphQLEntity<XeroAccount> {
-	public dataEntity!: XeroAccount;
+	public dataEntity!: XeroAccount & { tenantId: string };
 
 	@Field(() => ID)
 	id!: string;
@@ -24,4 +21,19 @@ export class Account extends GraphQLEntity<XeroAccount> {
 
 	@Field(() => AccountType)
 	type!: AccountType;
+
+	@Field(() => String)
+	tenantId!: string;
+
+	@Field(() => Tenant, { nullable: true })
+	async tenant() {
+		if (!this.dataEntity.tenantId) return null;
+
+		return Tenant.fromBackendEntity(
+			await BaseLoaders.loadOne({
+				gqlEntityType: Tenant,
+				id: this.dataEntity.tenantId,
+			})
+		);
+	}
 }
