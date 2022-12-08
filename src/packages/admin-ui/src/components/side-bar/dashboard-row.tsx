@@ -6,11 +6,12 @@ import { routeFor } from '~/utils/route-for';
 
 import styles from './styles.module.css';
 
-export const DashboardRow = ({ name }: { name: string }) => (
+export const DashboardRow = ({ name, tenantId }: { name: string; tenantId?: string }) => (
 	<li>
 		<NavLink
-			to={routeFor({ dashboard: name })}
+			to={routeFor({ dashboard: name, tenantId })}
 			className={({ isActive }) => classnames(styles.subListItem, isActive && styles.active)}
+			end
 		>
 			<TableIcon />
 			{name}

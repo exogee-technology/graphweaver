@@ -6,7 +6,7 @@ import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
 import { XeroTenant } from '../tenant';
-import { forEachTenant } from '../../utils';
+import { forEachTenant, inMemoryFilterFor } from '../../utils';
 
 const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
@@ -78,7 +78,12 @@ const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
 export class ProfitAndLossRowResolver extends createBaseResolver(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
-		find: ({ xero }) =>
-			forEachTenant<ProfitAndLossRow>(xero, (tenant) => loadReportForTenant(xero, tenant.tenantId)),
+		find: async ({ xero, rawFilter }) => {
+			const result = await forEachTenant<ProfitAndLossRow>(xero, (tenant) =>
+				loadReportForTenant(xero, tenant.tenantId)
+			);
+
+			return result.filter(inMemoryFilterFor(rawFilter));
+		},
 	})
 ) {}
