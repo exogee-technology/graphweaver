@@ -1,13 +1,18 @@
+import { useQuery } from '@apollo/client';
 import classnames from 'classnames';
 import { ReactComponent as GraphweaverLogo } from '~/assets/graphweaver-logo.svg';
 import { useSchema } from '~/utils/use-schema';
 
 import { BackendRow } from './backend-row';
 import { DashboardRow } from './dashboard-row';
+import { TenantsResult, TENANTS_QUERY } from './graphql';
 import styles from './styles.module.css';
 
 export const SideBar = () => {
 	const schema = useSchema();
+	const { data, loading } = useQuery<TenantsResult>(TENANTS_QUERY);
+
+	if (loading) return <p>'Loading...'</p>;
 
 	return (
 		<div className={styles.sideBar}>
@@ -16,8 +21,9 @@ export const SideBar = () => {
 			<p className={styles.subtext}>Dashboards</p>
 			<ul className={classnames(styles.entity, styles.closed)}>
 				<DashboardRow name="All" />
-				<DashboardRow name="Coinage" />
-				<DashboardRow name="Exogee" />
+				{data?.result.map((tenant) => (
+					<DashboardRow key={tenant.id} name={tenant.tenantName} tenantId={tenant.id} />
+				))}
 			</ul>
 
 			<p className={styles.subtext}>Data Sources</p>

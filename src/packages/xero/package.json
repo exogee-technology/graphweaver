@@ -23,8 +23,6 @@
 		"@exogee/logger": "workspace:0.1.0",
 		"class-validator": "0.13.2",
 		"dataloader": "2.1.0",
-		"graphql": "15.x.x",
-		"type-graphql": "1.1.1",
 		"xero-node": "4.30.0"
 	},
 	"devDependencies": {

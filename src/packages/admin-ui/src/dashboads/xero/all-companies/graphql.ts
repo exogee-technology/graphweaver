@@ -6,23 +6,21 @@ export interface ProfitAndLossResult {
 
 export interface ProfitAndLossRow {
 	amount: number;
-	date: Date;
-	description?: string;
-	account: {
-		name: string;
-		type: string;
+	date: string;
+	tenant: {
+		id: string;
+		tenantName: string;
 	};
 }
 
 export const PROFIT_AND_LOSS = gql`
-	query XeroDashboard {
-		profitAndLossRows {
+	query XeroDashboard($description: String!) {
+		profitAndLossRows(filter: { description: $description }) {
 			amount
 			date
-			description
-			account {
-				name
-				type
+			tenant {
+				id
+				tenantName
 			}
 		}
 	}

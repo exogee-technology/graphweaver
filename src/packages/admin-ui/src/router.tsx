@@ -31,7 +31,15 @@ const router = createBrowserRouter([
 		loader: ListLoader,
 	},
 	{
-		path: '/dashboard/:id',
+		path: '/dashboard',
+		element: (
+			<DefaultLayout>
+				<XeroDashboard />
+			</DefaultLayout>
+		),
+	},
+	{
+		path: '/dashboard/:tenantId',
 		element: (
 			<DefaultLayout>
 				<XeroDashboard />
