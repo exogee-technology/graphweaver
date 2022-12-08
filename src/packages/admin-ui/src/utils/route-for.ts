@@ -5,6 +5,7 @@ interface RouteForEntity {
 	type?: undefined;
 	dashboard?: undefined;
 	id?: string;
+	tenantId?: undefined;
 }
 
 interface RouteForType {
@@ -12,6 +13,7 @@ interface RouteForType {
 	entity?: undefined;
 	dashboard?: undefined;
 	id?: string;
+	tenantId?: undefined;
 }
 
 interface RouteForDashboard {
@@ -19,14 +21,19 @@ interface RouteForDashboard {
 	entity?: undefined;
 	type?: undefined;
 	id?: string;
+	tenantId?: string;
 }
 
 export type RouteForProps = RouteForEntity | RouteForType | RouteForDashboard;
 
 const cleaningPattern = /[^a-zA-Z0-9]/g;
 
-export const routeFor = ({ entity, dashboard, type, id }: RouteForProps) => {
-	if (dashboard) return `/dashboard/${dashboard}`;
+export const routeFor = ({ entity, type, id, dashboard, tenantId }: RouteForProps) => {
+	if (dashboard) {
+		const chunks = ['dashboard'];
+		if (tenantId) chunks.push(tenantId);
+		return `/${chunks.join('/')}`;
+	}
 
 	let entityName = null;
 

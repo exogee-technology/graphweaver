@@ -11,6 +11,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
+		"@nivo/bump": "0.80.0",
 		"@nivo/core": "0.80.0",
 		"@nivo/line": "0.80.0",
 		"@nivo/tooltip": "0.80.0",
