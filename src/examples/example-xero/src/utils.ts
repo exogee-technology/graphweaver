@@ -1,9 +1,7 @@
 import { XeroClient } from 'xero-node';
 import { XeroTenant } from './schema';
 
-type WithTenantId<T> = T extends Array<unknown>
-	? Array<T & { tenantId: string }>
-	: T & { tenantId: string };
+type WithTenantId<T> = T & { tenantId: string };
 
 type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | Promise<T[]>;
 
@@ -21,9 +19,7 @@ export const forEachTenant = async <T = unknown>(
 			// as Xero never adds it, but we need it on everything we're doing
 			// a forEachTenant on.
 			if (Array.isArray(result)) {
-				for (const element of result) {
-					element.tenantId = tenant.tenantId;
-				}
+				result.forEach((element) => (element.tenantId = tenant.tenantId));
 			} else {
 				result.tenantId = tenant.tenantId;
 			}
@@ -36,16 +32,16 @@ export const forEachTenant = async <T = unknown>(
 	return results.flat() as WithTenantId<T>[];
 };
 
-export const inMemoryFilterFor = (rawFilter: Record<string, any>, level = 1) => (item) => {
+export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (item) => {
 	for (const [key, value] of Object.entries(rawFilter || {})) {
 		if (key === '_or') {
 			for (const condition of value) {
-				if (inMemoryFilterFor(condition, level + 1)(item)) return true;
+				if (inMemoryFilterFor(condition)(item)) return true;
 			}
 			return false;
 		} else if (key === '_and') {
 			for (const condition of value) {
-				if (!inMemoryFilterFor(condition, level + 1)(item)) return false;
+				if (!inMemoryFilterFor(condition)(item)) return false;
 			}
 			return true;
 		} else if (key.indexOf('_') >= 0) {
