@@ -41,8 +41,7 @@ export const XeroDashboard = () => {
 					animate
 					curve="monotoneX"
 					useMesh
-					xScale={{ type: 'time', format: '%Y-%m-%d' }}
-					xFormat="time:%Y-%m-%d"
+					xScale={{ type: 'time' }}
 					yScale={{ type: 'linear' }}
 					yFormat="$,.2f"
 					enableGridY={false}

@@ -5,7 +5,7 @@
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
 	"scripts": {
-		"build": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap `find src \\( -name '*.ts' \\)`",
 		"prettier": "prettier --write src/**/*.ts",
 		"test": "jest"
 	},
