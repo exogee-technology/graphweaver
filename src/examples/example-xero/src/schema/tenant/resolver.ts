@@ -11,15 +11,12 @@ export class TenantResolver extends createBaseResolver(
 		find: async ({ xero, rawFilter }) => {
 			if (!xero.tenants.length) await xero.updateTenants(false);
 
-			console.log('Before filter: ', xero.tenants);
-			const result = xero.tenants.filter(inMemoryFilterFor(rawFilter));
-			console.log('After filter: ', result);
+			// We want to clone the tenants so we don't mutate Xero's internal state
+			// When setting our id to tenantId.
+			const copy = JSON.parse(JSON.stringify(xero.tenants));
+			copy.forEach((tenant) => (tenant.id = tenant.tenantId));
 
-			for (const tenant of result) {
-				tenant.id = tenant.tenantId;
-			}
-
-			return result;
+			return copy.filter(inMemoryFilterFor(rawFilter));
 		},
 	})
 ) {}
