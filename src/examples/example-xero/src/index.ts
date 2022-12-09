@@ -1,12 +1,5 @@
 import 'reflect-metadata';
-import dotenv from 'dotenv';
-import * as path from 'path';
 import * as fs from 'fs/promises';
-const isOffline = process.env.IS_OFFLINE === 'true';
-const envPath = isOffline ? path.join(__dirname, '../.env') : undefined;
-dotenv.config({
-	path: envPath,
-});
 
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
