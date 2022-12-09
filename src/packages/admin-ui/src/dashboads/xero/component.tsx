@@ -5,5 +5,5 @@ import { SingleCompany } from './single-company';
 export const XeroDashboard = () => {
 	const { tenantId } = useParams();
 
-	return tenantId ? <SingleCompany tenantId={tenantId} /> : <AllCompanies />;
+	return tenantId ? <SingleCompany /> : <AllCompanies />;
 };
