@@ -1,7 +1,9 @@
 import { gql } from '@apollo/client';
 
-export interface ProfitAndLossResult {
-	profitAndLossRows: ProfitAndLossRow[];
+export interface LoaderData {
+	data: {
+		profitAndLossRows: ProfitAndLossRow[];
+	};
 }
 
 export interface ProfitAndLossRow {

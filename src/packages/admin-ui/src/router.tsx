@@ -1,5 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { XeroDashboard } from './dashboads/xero';
+import {
+	AllCompaniesDashboardLoader,
+	SingleCompanyDashboardLoader,
+	XeroDashboard,
+} from './dashboads/xero';
 import { DefaultLayout } from './layouts/default';
 import { List, ListLoader, Root } from './pages';
 
@@ -14,24 +18,25 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/:entity',
+		loader: ListLoader,
 		element: (
 			<DefaultLayout>
 				<List />
 			</DefaultLayout>
 		),
-		loader: ListLoader,
 	},
 	{
 		path: '/:entity/:id',
+		loader: ListLoader,
 		element: (
 			<DefaultLayout>
 				<List />
 			</DefaultLayout>
 		),
-		loader: ListLoader,
 	},
 	{
 		path: '/dashboard',
+		loader: AllCompaniesDashboardLoader,
 		element: (
 			<DefaultLayout>
 				<XeroDashboard />
@@ -40,6 +45,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/dashboard/:tenantId',
+		loader: SingleCompanyDashboardLoader,
 		element: (
 			<DefaultLayout>
 				<XeroDashboard />
