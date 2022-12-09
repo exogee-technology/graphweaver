@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { AllCompanies } from './all-companies';
-import { SingleTenant } from './single-tenant';
+import { SingleCompany } from './single-company';
 
 export const XeroDashboard = () => {
 	const { tenantId } = useParams();
 
-	return tenantId ? <SingleTenant tenantId={tenantId} /> : <AllCompanies />;
+	return tenantId ? <SingleCompany tenantId={tenantId} /> : <AllCompanies />;
 };
