@@ -7,7 +7,7 @@ import { tooltip } from './tooltip';
 
 const categories = ['Net Profit', 'Total Operating Expenses', 'Gross Profit'];
 
-export const SingleTenant = ({ tenantId }: { tenantId: string }) => {
+export const SingleCompany = ({ tenantId }: { tenantId: string }) => {
 	const { data, loading } = useQuery<ProfitAndLossResult>(PROFIT_AND_LOSS, {
 		variables: { tenantId },
 	});
@@ -44,7 +44,7 @@ export const SingleTenant = ({ tenantId }: { tenantId: string }) => {
 					curve="monotoneX"
 					useMesh
 					xScale={{ type: 'time' }}
-					yScale={{ type: 'linear' }}
+					yScale={{ type: 'linear', min: 'auto' }}
 					yFormat="$,.2f"
 					enableGridY={false}
 					enableSlices="x"

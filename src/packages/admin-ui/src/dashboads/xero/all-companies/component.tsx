@@ -125,7 +125,7 @@ export const AllCompanies = () => {
 					curve="monotoneX"
 					useMesh
 					xScale={{ type: 'time' }}
-					yScale={{ type: 'linear' }}
+					yScale={{ type: 'linear', min: 'auto' }}
 					yFormat="$,.2f"
 					enableGridY={false}
 					enableSlices="x"
@@ -152,7 +152,7 @@ export const AllCompanies = () => {
 					useMesh
 					enableArea
 					xScale={{ type: 'time' }}
-					yScale={{ type: 'linear' }}
+					yScale={{ type: 'linear', min: 'auto' }}
 					yFormat="$,.2f"
 					enableGridY={false}
 					enableSlices="x"
