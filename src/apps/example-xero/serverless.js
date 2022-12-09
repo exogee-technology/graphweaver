@@ -51,7 +51,7 @@ const config = {
 	package: {
 		individually: true,
 		excludeDevDependencies: true,
-		exclude: ['**'],
+		patterns: ['!**'],
 	},
 
 	functions: {
