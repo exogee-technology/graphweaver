@@ -45,9 +45,10 @@ export const AllCompanies = () => {
 	});
 
 	// Cumulative Net Profit
+	const totalsByCompany: { [companyName: string]: number } = {};
 	const cumulativeNetProfit = [...tenantNetProfitMap.values()].map((value) => {
 		let currentTotal = 0;
-		return {
+		const newRecord = {
 			id: value.id,
 			data: value.data.map(({ x, y }) => {
 				const newPoint = {
@@ -58,11 +59,40 @@ export const AllCompanies = () => {
 				return newPoint;
 			}),
 		};
+
+		totalsByCompany[value.id] = currentTotal;
+		return newRecord;
 	});
+
+	let overallTotal = 0;
 
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.reportSection}>
+				<h2 className={styles.reportHeading}>Net Profit for Last 12 Months</h2>
+				<div className={styles.totalNetProfitCardRow}>
+					{Object.entries(totalsByCompany)
+						.sort(([left], [right]) => left.localeCompare(right))
+						.map(([company, total]) => {
+							overallTotal += total;
+							return (
+								<div key={company} className={styles.totalNetProfitCard}>
+									<span className={styles.totalNetProfitCardCompanyName}>{company}</span>
+									<span className={styles.totalNetProfitCardAmount}>
+										{total.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+									</span>
+								</div>
+							);
+						})}
+
+					<div className={styles.totalNetProfitCard}>
+						<span className={styles.totalNetProfitCardCompanyName}>All Companies</span>
+						<span className={styles.totalNetProfitCardAmount}>
+							{overallTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+						</span>
+					</div>
+				</div>
+
 				<h2 className={styles.reportHeading}>Ranking</h2>
 				<ResponsiveAreaBump
 					data={rankingData}
