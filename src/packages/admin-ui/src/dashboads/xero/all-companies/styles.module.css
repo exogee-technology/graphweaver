@@ -11,8 +11,29 @@
 	font-size: 16px;
 }
 
-.latestNetProfit {
-	margin: 0 0 20px 30px;
+.totalNetProfitCardRow {
+	display: flex;
+	flex-direction: row;
+	margin: 0 18px;
+}
+
+.totalNetProfitCard {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid white;
+	border-radius: 10px;
+	margin: 10px;
+	padding: 10px 15px;
+}
+
+.totalNetProfitCardCompanyName {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.totalNetProfitCardCompanyName {
+	font-size: 15px;
+	font-weight: 600;
 }
 
 .reportSection {
