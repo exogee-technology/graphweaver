@@ -1,4 +1,5 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Loader } from './components/loader/component';
 import {
 	AllCompaniesDashboardLoader,
 	SingleCompanyDashboardLoader,
@@ -49,6 +50,14 @@ const router = createBrowserRouter([
 		element: (
 			<DefaultLayout>
 				<XeroDashboard />
+			</DefaultLayout>
+		),
+	},
+	{
+		path: '/loader',
+		element: (
+			<DefaultLayout>
+				<Loader />
 			</DefaultLayout>
 		),
 	},

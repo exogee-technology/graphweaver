@@ -7,6 +7,7 @@ import styles from './styles.module.css';
 import { netProfitTooltip } from './tooltips';
 import { Await, useLoaderData } from 'react-router-dom';
 import React from 'react';
+import { Loader } from '~/components/loader';
 
 type TenantNetProfitData = {
 	id: string;
@@ -20,7 +21,7 @@ export const AllCompanies = () => {
 	const data = useLoaderData() as { rows: ProfitAndLossRow[] };
 
 	return (
-		<React.Suspense fallback={<p>Loading...</p>}>
+		<React.Suspense fallback={<Loader />}>
 			<Await resolve={data.rows} errorElement={<p>Error loading report rows!</p>}>
 				{(result: LoaderData) => {
 					const { profitAndLossRows } = result.data;

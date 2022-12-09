@@ -1,0 +1,66 @@
+@keyframes blobbing {
+	0% {
+		border-radius: 24% 76% 17% 83% / 71% 73% 27% 29%;
+	}
+
+	50% {
+		border-radius: 61% 39% 48% 52% / 22% 38% 62% 78%;
+	}
+
+	100% {
+		border-radius: 24% 76% 17% 83% / 71% 73% 27% 29%;
+	}
+}
+
+@keyframes width-smoosh {
+	to {
+		width: 325px;
+	}
+}
+
+@keyframes height-smoosh {
+	to {
+		height: 350px;
+	}
+}
+
+.wrapper {
+	display: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.blob {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-10%, -70%);
+
+	width: 300px;
+	height: 250px;
+
+	mix-blend-mode: hard-light;
+	background: linear-gradient(90deg, var(--body-copy-color) 0%, var(--primary-color) 100%);
+	border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+
+	animation: blobbing 3s ease-in-out infinite alternate,
+		width-smoosh 1.5s ease-in-out infinite alternate,
+		height-smoosh 2s ease-in-out infinite alternate;
+}
+
+.blob:before {
+	content: '';
+	z-index: -1;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	border-radius: inherit;
+	transform: translate3d(0px, 20px, 0) scale(0.95);
+	filter: blur(20px);
+	opacity: var(0.7);
+	transition: opacity 0.3s;
+
+	background: linear-gradient(45deg, var(--primary-color) 0%, var(--body-copy-color) 100%);
+}
