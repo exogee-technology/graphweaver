@@ -44,6 +44,22 @@ export const AllCompanies = () => {
 		data: rankingData[0].data.map(({ x }) => ({ x, y: 0 })),
 	});
 
+	// Cumulative Net Profit
+	const cumulativeNetProfit = [...tenantNetProfitMap.values()].map((value) => {
+		let currentTotal = 0;
+		return {
+			id: value.id,
+			data: value.data.map(({ x, y }) => {
+				const newPoint = {
+					x,
+					y: y + currentTotal,
+				};
+				currentTotal += y;
+				return newPoint;
+			}),
+		};
+	});
+
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.reportSection}>
@@ -69,12 +85,40 @@ export const AllCompanies = () => {
 					margin={{ top: 40, right: 100, bottom: 40, left: 60 }}
 					theme={theme}
 				/>
+
 				<h2 className={styles.reportHeading}>Net Profit</h2>
 				<ResponsiveLine
 					data={[...tenantNetProfitMap.values()]}
 					animate
 					curve="monotoneX"
 					useMesh
+					xScale={{ type: 'time' }}
+					yScale={{ type: 'linear' }}
+					yFormat="$,.2f"
+					enableGridY={false}
+					enableSlices="x"
+					margin={{ top: 40, right: 80, bottom: 40, left: 80 }}
+					axisLeft={{
+						legend: '$AUD',
+						legendOffset: 12,
+						format: (value: number) => `$${Math.floor(value / 1_000_00) / 10}m`,
+					}}
+					axisBottom={{
+						format: (value: Date) => monthString(value),
+						legend: 'Month',
+						legendOffset: -12,
+					}}
+					tooltip={netProfitTooltip}
+					theme={theme}
+				/>
+
+				<h2 className={styles.reportHeading}>Cumulative Net Profit</h2>
+				<ResponsiveLine
+					data={cumulativeNetProfit}
+					animate
+					curve="monotoneX"
+					useMesh
+					enableArea
 					xScale={{ type: 'time' }}
 					yScale={{ type: 'linear' }}
 					yFormat="$,.2f"
