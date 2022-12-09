@@ -16,6 +16,7 @@
 		"@nivo/line": "0.80.0",
 		"@nivo/tooltip": "0.80.0",
 		"classnames": "2.3.2",
+		"decimal.js": "10.4.3",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
 		"prop-types": "15.8.1",

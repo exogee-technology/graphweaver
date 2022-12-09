@@ -1,3 +1,4 @@
+import { Decimal } from 'decimal.js';
 import { useQuery } from '@apollo/client';
 import { ResponsiveAreaBump } from '@nivo/bump';
 import { ResponsiveLine } from '@nivo/line';
@@ -47,20 +48,21 @@ export const AllCompanies = () => {
 	// Cumulative Net Profit
 	const totalsByCompany: { [companyName: string]: number } = {};
 	const cumulativeNetProfit = [...tenantNetProfitMap.values()].map((value) => {
-		let currentTotal = 0;
+		let currentTotal = new Decimal(0);
 		const newRecord = {
 			id: value.id,
 			data: value.data.map(({ x, y }) => {
 				const newPoint = {
 					x,
-					y: y + currentTotal,
+					y: new Decimal(y).add(currentTotal).toNumber(),
 				};
-				currentTotal += y;
+				currentTotal = currentTotal.plus(y);
 				return newPoint;
 			}),
 		};
 
-		totalsByCompany[value.id] = currentTotal;
+		totalsByCompany[value.id] = currentTotal.toNumber();
+
 		return newRecord;
 	});
 
