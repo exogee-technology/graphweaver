@@ -1,6 +1,7 @@
 import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
 import { Await, useLoaderData } from 'react-router-dom';
+import { Loader } from '~/components/loader';
 
 import { theme } from '../../theme';
 
@@ -14,7 +15,7 @@ export const SingleCompany = () => {
 	const data = useLoaderData() as { rows: ProfitAndLossRow[] };
 
 	return (
-		<React.Suspense fallback={<p>Loading...</p>}>
+		<React.Suspense fallback={<Loader />}>
 			<Await resolve={data.rows} errorElement={<p>Error loading report rows!</p>}>
 				{(result: LoaderData) => {
 					const rows = result.data.profitAndLossRows;

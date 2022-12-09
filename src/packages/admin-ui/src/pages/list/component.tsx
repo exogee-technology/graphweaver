@@ -7,7 +7,7 @@ import { ListLoader } from './loader';
 import styles from './styles.module.css';
 import React from 'react';
 import { ApolloQueryResult } from '@apollo/client';
-import { DetailPanel } from '~/components/detail-panel';
+import { DetailPanel, Loader } from '~/components';
 
 // const BlankSlate = () => (
 // 	<div id={styles.centerBlankSlate}>
@@ -63,7 +63,7 @@ export const List = () => {
 			<div className={styles.mainContent}>
 				<ToolBar />
 
-				<React.Suspense fallback={<p>Loading...</p>}>
+				<React.Suspense fallback={<Loader />}>
 					<Await resolve={rows} errorElement={<p>Error!</p>}>
 						{(rows: ApolloQueryResult<{ result: Array<{ id: string }> }>) => (
 							<Table rows={rows.data.result} />
