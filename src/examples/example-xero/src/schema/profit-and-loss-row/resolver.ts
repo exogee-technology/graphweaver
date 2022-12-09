@@ -5,7 +5,6 @@ import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
-import { XeroTenant } from '../tenant';
 import { forEachTenant, inMemoryFilterFor } from '../../utils';
 
 const parseReport = (tenantId: string, report: ReportWithRows) => {
@@ -58,10 +57,9 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 };
 
 const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
-	// Xero limits us to 365 days.
-	const to = new Date();
-	const from = new Date(to.valueOf());
-	from.setDate(to.getDate() - 365);
+	const today = new Date();
+	const from = new Date(today.getFullYear(), today.getMonth(), 1);
+	const to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
 
 	const { body } = await xero.accountingApi.getReportProfitAndLoss(
 		tenantId,
