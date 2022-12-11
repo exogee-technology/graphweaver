@@ -5,7 +5,7 @@ import { ReactComponent as ChevronIcon } from '~/assets/16-chevron-down.svg';
 import { useSchema } from '~/utils/use-schema';
 import { useSelectedEntity } from '~/utils/use-selected-entity';
 import { EntityRow } from './entity-row';
-import styles from './styles.module.css';
+import styles from '../styles.module.css';
 
 export const BackendRow = ({ backend }: { backend: string }) => {
 	const { entitiesForBackend } = useSchema();
