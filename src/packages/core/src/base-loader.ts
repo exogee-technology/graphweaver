@@ -40,16 +40,18 @@ const getFieldMetadata = (fieldName: string, gqlEntityType: any) => {
 const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
-		const fetchRecordsById = async (keys: readonly string[]) => {
-			logger.trace(`DataLoader: Loading ${gqlTypeName} (${keys.join(', ')})`);
+		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
+		if (!provider) {
+			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
+		}
 
-			const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
-			if (!provider) {
-				throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
-			}
+		const fetchRecordsById = async (keys: readonly string[]) => {
+			logger.trace(
+				`DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s): (${keys.join(', ')})`
+			);
 
 			const filter = {
-				$or: keys.map((k) => {
+				_or: keys.map((k) => {
 					return { id: k };
 				}),
 			};
@@ -67,7 +69,9 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 			return keys.map((key) => lookup[key]);
 		};
 
-		loadOneLoaderMap[gqlTypeName] = new DataLoader(fetchRecordsById);
+		loadOneLoaderMap[gqlTypeName] = new DataLoader(fetchRecordsById, {
+			maxBatchSize: provider.maxDataLoaderBatchSize,
+		});
 	}
 
 	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, T>;
@@ -83,13 +87,13 @@ const getBaseRelatedIdLoader = <T>({
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	const loaderKey = `${gqlTypeName}-${relatedField}`; /* gqlTypeName-fieldname */
 	if (!relatedIdLoaderMap[loaderKey]) {
+		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
+		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
+
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
 			logger.trace(`DataLoader: Loading ${gqlTypeName}.${relatedField} in (${keys.join(', ')})`);
 
 			// Check metadata storage
-
-			const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
-			if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 
 			// @todo Check if this is a many-to-many field - get mikroorm metadata
 			//const fieldMetadata = getFieldMetadata(relatedField, gqlEntityType);
@@ -119,7 +123,9 @@ const getBaseRelatedIdLoader = <T>({
 			return keys.map((key) => lookup[key] || []);
 		};
 
-		relatedIdLoaderMap[loaderKey] = new DataLoader(fetchRecordsByRelatedId);
+		relatedIdLoaderMap[loaderKey] = new DataLoader(fetchRecordsByRelatedId, {
+			maxBatchSize: provider.maxDataLoaderBatchSize,
+		});
 	}
 
 	return relatedIdLoaderMap[loaderKey] as DataLoader<string, T[]>;
@@ -147,7 +153,7 @@ export const BaseLoaders = {
 	},
 
 	clearCache: () => {
-		logger.trace('Clearing ORM DataLoader cache.');
+		logger.trace('Clearing Base Loader DataLoader cache.');
 
 		loadOneLoaderMap = {};
 		relatedIdLoaderMap = {};

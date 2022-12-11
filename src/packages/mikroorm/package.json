@@ -20,18 +20,20 @@
 	],
 	"dependencies": {
 		"@exogee/graphweaver": "workspace:0.1.0-alpha.5",
-		"apollo-server-core": "3.10.3",
 		"@exogee/logger": "workspace:0.1.0",
+		"apollo-server-core": "3.10.3",
 		"dataloader": "2.0.0",
 		"decimal.js": "10.3.1",
 		"dotenv": "16.0.0",
+		"graphql": "15.8.0",
 		"reflect-metadata": "0.1.13"
 	},
 	"devDependencies": {
-		"ts-node": "10.4.0",
-		"typescript": "4.5.5",
 		"@mikro-orm/core": "5.4.2",
-		"@mikro-orm/postgresql": "5.4.2"
+		"@mikro-orm/postgresql": "5.4.2",
+		"@types/node": "18.11.11",
+		"ts-node": "10.4.0",
+		"typescript": "4.5.5"
 	},
 	"peerDependencies": {
 		"@mikro-orm/core": "5.4.2",
