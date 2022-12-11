@@ -1,5 +1,6 @@
 import { useQuery } from '@apollo/client';
 import classnames from 'classnames';
+import { Link } from 'react-router-dom';
 import { ReactComponent as GraphweaverLogo } from '~/assets/graphweaver-logo.svg';
 import { useSchema } from '~/utils/use-schema';
 
@@ -16,7 +17,9 @@ export const SideBar = () => {
 
 	return (
 		<div className={styles.sideBar}>
-			<GraphweaverLogo width="52" className={styles.logo} />
+			<Link to="/">
+				<GraphweaverLogo width="52" className={styles.logo} />
+			</Link>
 
 			<p className={styles.subtext}>Dashboards</p>
 			<ul className={classnames(styles.entity, styles.closed)}>
