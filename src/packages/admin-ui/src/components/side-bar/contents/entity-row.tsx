@@ -5,7 +5,7 @@ import { ReactComponent as TableIcon } from '~/assets/16-table.svg';
 import { routeFor } from '~/utils/route-for';
 import { Entity } from '~/utils/use-schema';
 
-import styles from './styles.module.css';
+import styles from '../styles.module.css';
 
 export const EntityRow = ({ entity }: { entity: Entity }) => (
 	<li>
