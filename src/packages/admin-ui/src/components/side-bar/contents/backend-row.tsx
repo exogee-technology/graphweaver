@@ -2,17 +2,19 @@ import { useState } from 'react';
 
 import { ReactComponent as DatabaseIcon } from '~/assets/16-database.svg';
 import { ReactComponent as ChevronIcon } from '~/assets/16-chevron-down.svg';
-import { Entity, useSchema } from '~/utils/use-schema';
+import { useSchema } from '~/utils/use-schema';
 import { useSelectedEntity } from '~/utils/use-selected-entity';
 import { EntityRow } from './entity-row';
-import styles from './styles.module.css';
+import styles from '../styles.module.css';
 
 export const BackendRow = ({ backend }: { backend: string }) => {
 	const { entitiesForBackend } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
 	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
 
-	const entities = entitiesForBackend(backend);
+	const entities = entitiesForBackend(backend)?.sort((left, right) =>
+		left.name.localeCompare(right.name)
+	);
 
 	return (
 		<ul key={backend} className={styles.entity}>
