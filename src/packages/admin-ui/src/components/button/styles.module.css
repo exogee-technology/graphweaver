@@ -12,7 +12,7 @@
 
 	flex-shrink: 0;
 
-	background: #7038c2;
+	background: var(--primary-color);
 	border: 1px solid rgba(237, 232, 242, 0.2);
 	box-shadow: 0px 1px 3px rgba(9, 5, 16, 0.1);
 	border-radius: 6px;
@@ -75,16 +75,7 @@
 }
 
 .dropdown li:hover {
-	background: #7038c2;
-}
-
-.clickMeAway {
-	background-color: red;
-	position: absolute;
-	width: 100vw;
-	height: 100vh;
-	left: 0;
-	bottom: 0;
+	background: var(--primary-color);
 }
 
 .hide {
