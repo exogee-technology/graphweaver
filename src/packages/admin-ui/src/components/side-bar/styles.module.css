@@ -103,7 +103,7 @@
 }
 
 .subListItem.active {
-	background-color: #7038c2;
+	background-color: var(--primary-color);
 	opacity: 1;
 }
 
