@@ -1,15 +1,25 @@
 import { gql } from '@apollo/client';
 
 export const SCHEMA_QUERY = gql`
-	query {
-		_graphweaver {
-			name
-			backendId
-			fields {
+	{
+		result: _graphweaver {
+			entities {
 				name
-				type
-				relationshipType
-				relatedEntity
+				backendId
+				summaryField
+				fields {
+					name
+					type
+					relationshipType
+					relatedEntity
+				}
+			}
+			enums {
+				name
+				values {
+					name
+					value
+				}
 			}
 		}
 	}

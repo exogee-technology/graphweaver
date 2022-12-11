@@ -23,7 +23,9 @@
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.5",
 		"@exogee/logger": "workspace:0.1.0",
 		"apollo-server-errors": "3.3.1",
+		"class-validator": "0.13.2",
 		"dotenv": "10.0.0",
+		"graphql": "15.8.0",
 		"prettier": "2.2.1",
 		"type-graphql": "1.1.1"
 	},

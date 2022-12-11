@@ -20,7 +20,7 @@
 	"dependencies": {
 		"bunyan": "1.8.14",
 		"class-validator": "0.13.2",
-		"dataloader": "2.0.0",
+		"dataloader": "workspace:2.1.1",
 		"graphql": "15.8.0",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.1.13",

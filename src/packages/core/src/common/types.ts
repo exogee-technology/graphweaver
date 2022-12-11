@@ -66,7 +66,8 @@ export interface BackendProvider<T> {
 	// queries when you query across data sources.
 	readonly backendId: string;
 
-	entityType: new () => T;
+	entityType?: new () => T;
+
 	find(
 		filter: any,
 		pagination?: PaginationOptions,
@@ -87,6 +88,9 @@ export interface BackendProvider<T> {
 	deleteOne(id: string): Promise<boolean>;
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
+
+	// Optional, tells dataloader to cap pages at this size.
+	readonly maxDataLoaderBatchSize?: number;
 }
 
 export interface GraphqlEntityType<T, O> {
