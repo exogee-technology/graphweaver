@@ -41,7 +41,7 @@ export const SingleCompany = () => {
 													currency: 'USD',
 												})
 												.split('.')[0]
-										: '$0.00'}
+										: '$0'}
 								</p>
 								<ResponsiveLine
 									data={chartValues}
