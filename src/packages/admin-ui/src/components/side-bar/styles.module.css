@@ -67,8 +67,6 @@
 
 .open a {
 	opacity: 1;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
 	display: flex;
 	align-items: center;
 }
@@ -85,11 +83,11 @@
 }
 
 .subListItem {
+	display: flex;
+	align-items: center;
 	opacity: 0.6;
 	height: 32px;
 	border-radius: 6px;
-	display: flex;
-	align-items: center;
 	padding: 0 10px;
 	width: 100%;
 }
