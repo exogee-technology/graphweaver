@@ -34,14 +34,14 @@ export const SingleCompany = () => {
 								<h2 className={styles.reportHeading}>Financials</h2>
 								<p className={styles.latestNetProfit}>
 									Latest Net Profit{' '}
-									{
-										netProfitRows[0].amount
-											.toLocaleString('en-US', {
-												style: 'currency',
-												currency: 'USD',
-											})
-											.split('.')[0]
-									}
+									{netProfitRows[0]?.amount
+										? netProfitRows[0].amount
+												.toLocaleString('en-US', {
+													style: 'currency',
+													currency: 'USD',
+												})
+												.split('.')[0]
+										: '$0.00'}
 								</p>
 								<ResponsiveLine
 									data={chartValues}
