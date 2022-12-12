@@ -4,6 +4,7 @@
 	position: sticky;
 	top: 0;
 	width: 300px;
+	min-width: 250px;
 	background: hsl(264, 40%, 10%);
 	border-right: 1px solid rgba(237, 232, 242, 0.1);
 	display: flex;
