@@ -1,6 +1,7 @@
 import { ApolloQueryResult } from '@apollo/client';
 import React from 'react';
 import { Await, useAsyncError, useLoaderData } from 'react-router-dom';
+import { useSelectedEntity } from '~/utils/use-selected-entity';
 import styles from './styles.module.css';
 
 const DetailPanelError = () => {
@@ -13,6 +14,7 @@ const DetailPanelError = () => {
 
 export const DetailPanel = () => {
 	const { detail } = useLoaderData() as { detail: any };
+	const { selectedEntity } = useSelectedEntity();
 
 	if (!detail) return null;
 
@@ -20,7 +22,11 @@ export const DetailPanel = () => {
 		<React.Suspense fallback={<pre className={styles.wrapper}>Loading...</pre>}>
 			<Await resolve={detail} errorElement={<DetailPanelError />}>
 				{(detail: ApolloQueryResult<{ result: { id: string } }>) => (
-					<pre className={styles.wrapper}>{JSON.stringify(detail.data.result, null, 4)}</pre>
+					<pre className={styles.wrapper}>
+						{JSON.stringify(detail.data.result, null, 4)}
+						------
+						{JSON.stringify(selectedEntity?.fields)}
+					</pre>
 				)}
 			</Await>
 		</React.Suspense>
