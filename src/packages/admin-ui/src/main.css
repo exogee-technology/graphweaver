@@ -60,3 +60,11 @@ input[type='search']::-webkit-search-cancel-button {
 code {
 	font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+*,
+*::after,
+*::before {
+	/* Make it so that users can't drag the application elements by default */
+	-webkit-user-drag: none;
+	-webkit-app-region: no-drag;
+}
