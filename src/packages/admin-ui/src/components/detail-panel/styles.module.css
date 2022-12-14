@@ -1,6 +1,75 @@
+/* Taken from main.css */
+:root {
+	font-family: 'Inter', sans-serif;
+	--body-copy-color: #ede8f2;
+	--body-bg-color: #100a1c;
+	--primary-color: #7038c2;
+}
+
+
 .wrapper {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
 	min-width: 400px;
+}
+
+.modalBodyOpen {
+    position: absolute;
+    /* inset: 40px; */
+    border: 1px solid rgb(204, 204, 204);
+    background: rgb(255, 255, 255);
+    overflow: auto;
+    border-radius: 4px;
+    outline: none;
+    padding: 20px;	
+	inset: 150px 5px 100px;
+	left: 250px;
+	color: #7038c2; /* var(--primary-color); */
+}
+
+.modalOverlay {
+	position: fixed;
+	inset: 0px;
+	background-color: rgba(255, 255, 255, 0.40);
+}
+
+.formLabel {
+	/* display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-width: 400px; */
+	color: #7038c2; /* var(--primary-color); */
+	margin: 5px 5px 5px 0px;
+	font-weight: bold;
+}
+
+.formButton {
+	color: var(--body-copy-color);
+	background-color: #7038c2;
+	border-color: #7038c2;
+	font-weight: bold;
+    border-radius: 4px;
+    outline: none;
+	margin: 5px 5px 5px 0px;
+    padding: 5px;	
+	box-shadow: none;
+}
+
+.modalContent {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	min-width: 400px;
+	color: #7038c2; /* var(--primary-color); */
+}
+
+.idContent {
+	color: grey;
+}
+
+.modalButtons {
+	display: flex;
+	flex-flow: row-reverse nowrap;
+	align-items: flex-start;
 }
