@@ -1,13 +1,18 @@
-import { Await, useLoaderData } from 'react-router-dom';
-import { Table, Button, FilterButton } from '~/components';
-import { ReactComponent as OpenPlaygroundIcon } from '~/assets/16-open-external.svg';
-import { ReactComponent as FilterIcon } from '~/assets/16-filter.svg';
-
-import { ListLoader } from './loader';
-import styles from './styles.module.css';
 import React from 'react';
+import { Await, useLoaderData } from 'react-router-dom';
 import { ApolloQueryResult } from '@apollo/client';
-import { DetailPanel, Loader } from '~/components';
+import {
+	Button,
+	DetailPanel,
+	FilterButton,
+	FilterIcon,
+	Loader,
+	OpenExternalIcon,
+	Table,
+} from '@exogee/graphweaver-admin-ui-components';
+
+import '@exogee/graphweaver-admin-ui-components/lib/index.css';
+import styles from './styles.module.css';
 
 // const BlankSlate = () => (
 // 	<div id={styles.centerBlankSlate}>
@@ -38,7 +43,7 @@ const ToolBar = () => (
 			<Button>
 				<p>Open playground</p>
 				<span>
-					<OpenPlaygroundIcon />
+					<OpenExternalIcon />
 				</span>
 			</Button>
 			<Button
@@ -47,7 +52,7 @@ const ToolBar = () => (
 					{ name: 'Add links array', href: 'some_url' },
 					{ name: 'Add links array', href: 'some_url' },
 				]}
-				iconBefore={<OpenPlaygroundIcon />}
+				iconBefore={<OpenExternalIcon />}
 			>
 				Test
 			</Button>

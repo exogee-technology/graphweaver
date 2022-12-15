@@ -8,7 +8,9 @@
 		"target": "es2019",
 		"module": "CommonJS",
 		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true
+		"esModuleInterop": true,
+		"jsx": "react-jsx",
+		"types": ["vite/client"]
 	},
 	"include": ["./src"],
 	"references": [

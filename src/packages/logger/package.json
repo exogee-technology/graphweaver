@@ -12,7 +12,8 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"scripts": {
-		"build:legacy": "tsc --build",
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly"
 	},
 	"dependencies": {
@@ -20,6 +21,7 @@
 	},
 	"devDependencies": {
 		"@types/bunyan": "1.8.6",
+		"esbuild": "0.15.5",
 		"typescript": "4.5.5"
 	}
 }

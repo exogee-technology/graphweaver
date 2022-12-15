@@ -4,7 +4,8 @@
 	"description": "Xero backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
-		"build:legacy": "tsc --build",
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
@@ -27,6 +28,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "14.14.10",
+		"esbuild": "0.15.5",
 		"jest": "26.6.3",
 		"prettier": "2.2.1",
 		"ts-jest": "26.4.4",

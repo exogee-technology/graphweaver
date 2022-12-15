@@ -1,14 +1,13 @@
+import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Loader } from './components/loader/component';
-import {
-	AllCompaniesDashboardLoader,
-	SingleCompanyDashboardLoader,
-	XeroDashboard,
-} from './dashboads/xero';
-import { DefaultLayout } from './layouts/default';
+
+// This is injected by vite-plugin-graphweaver
+import { dashboards } from 'virtual:graphweaver-user-supplied-dashboards';
+
+import { Loader, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
 import { List, ListLoader, Root } from './pages';
 
-const router = createBrowserRouter([
+const defaultRoutes = [
 	{
 		path: '/',
 		element: (
@@ -36,24 +35,6 @@ const router = createBrowserRouter([
 		),
 	},
 	{
-		path: '/dashboard',
-		loader: AllCompaniesDashboardLoader,
-		element: (
-			<DefaultLayout>
-				<XeroDashboard />
-			</DefaultLayout>
-		),
-	},
-	{
-		path: '/dashboard/:tenantId',
-		loader: SingleCompanyDashboardLoader,
-		element: (
-			<DefaultLayout>
-				<XeroDashboard />
-			</DefaultLayout>
-		),
-	},
-	{
 		path: '/loader',
 		element: (
 			<DefaultLayout>
@@ -61,6 +42,21 @@ const router = createBrowserRouter([
 			</DefaultLayout>
 		),
 	},
-]);
+];
 
-export const Router = () => <RouterProvider router={router} />;
+export const Router = () => {
+	const [router, setRouter] = useState<any>(null);
+
+	useEffect(() => {
+		(async () => {
+			const routes = (await Promise.all(dashboards.map(({ routes }) => routes())))
+				.flat()
+				.filter((route) => route?.path);
+			setRouter(createBrowserRouter([...defaultRoutes, ...routes]));
+		})();
+	}, []);
+
+	if (!router) return <Loader />;
+
+	return <RouterProvider router={router} />;
+};

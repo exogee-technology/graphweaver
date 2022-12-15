@@ -22,6 +22,8 @@
 		"@exogee/graphweaver-example-xero": "workspace:0.1.0-alpha.5",
 		"dotenv": "10.0.0",
 		"esbuild": "0.15.5",
+		"graphql": "15.8.0",
+		"graphql-tag": "2.12.6",
 		"uuid": "8.3.2",
 		"xero-node": "4.30.0"
 	}

@@ -1,27 +1,23 @@
 {
-	"name": "admin-ui",
+	"name": "@exogee/graphweaver-admin-ui",
 	"private": true,
-	"version": "0.0.0",
+	"version": "0.1.0-alpha.5",
 	"type": "module",
+	"main": "lib/index.js",
+	"types": "lib/index.d.ts",
 	"scripts": {
-		"build": "tsc && vite build",
-		"dev": "vite",
-		"preview": "vite preview",
-		"start": "vite"
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build:types": "tsc --noEmit false --emitDeclarationOnly --declaration --outDir lib"
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
-		"@nivo/bump": "0.80.0",
-		"@nivo/core": "0.80.0",
-		"@nivo/line": "0.80.0",
-		"@nivo/tooltip": "0.80.0",
+		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.0-alpha.5",
 		"classnames": "2.3.2",
-		"decimal.js": "10.4.3",
-		"graphql": "16.6.0",
+		"graphql": "15.8.0",
 		"pluralize": "8.0.0",
 		"prop-types": "15.8.1",
 		"react": "18.2.0",
-		"react-data-grid": "7.0.0-beta.20",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
 		"vite-plugin-svgr": "2.2.2"
@@ -31,6 +27,7 @@
 		"@types/react": "18.0.25",
 		"@types/react-dom": "18.0.9",
 		"@vitejs/plugin-react": "2.2.0",
+		"esbuild": "0.15.5",
 		"typescript": "4.9.3",
 		"vite": "3.2.4"
 	}

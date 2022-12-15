@@ -1,0 +1,10 @@
+export { ReactComponent as ChevronDownIcon } from './16-chevron-down.svg';
+export { ReactComponent as DatabaseIcon } from './16-database.svg';
+export { ReactComponent as FilterIcon } from './16-filter.svg';
+export { ReactComponent as OpenExternalIcon } from './16-open-external.svg';
+export { ReactComponent as SearchIcon } from './16-search.svg';
+export { ReactComponent as TableLightIcon } from './16-table-light.svg';
+export { ReactComponent as TableIcon } from './16-table.svg';
+export { ReactComponent as DatabaseIcon24 } from './24-database.svg';
+export { ReactComponent as DataSourcesIcon } from './64-data-sources.svg';
+export { ReactComponent as GraphweaverLogo } from './graphweaver-logo.svg';
