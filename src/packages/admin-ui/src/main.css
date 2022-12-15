@@ -3,6 +3,7 @@
 	--body-copy-color: #ede8f2;
 	--body-bg-color: #100a1c;
 	--primary-color: #7038c2;
+	--secondary-color: #853af2;
 }
 @supports (font-variation-settings: normal) {
 	:root {

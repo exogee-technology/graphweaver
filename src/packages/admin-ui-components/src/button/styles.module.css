@@ -20,7 +20,7 @@
 }
 
 .button:hover {
-	background-color: #853af2;
+	background-color: var(--secondary-color);
 }
 
 .button span {
