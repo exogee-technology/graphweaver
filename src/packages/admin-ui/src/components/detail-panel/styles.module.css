@@ -14,62 +14,185 @@
 	min-width: 400px;
 }
 
-.modalBodyOpen {
-    position: absolute;
-    /* inset: 40px; */
-    border: 1px solid rgb(204, 204, 204);
-    background: rgb(255, 255, 255);
-    overflow: auto;
-    border-radius: 4px;
-    outline: none;
-    padding: 20px;	
-	inset: 150px 5px 100px;
-	left: 250px;
-	color: #7038c2; /* var(--primary-color); */
+/* Derived from Figma designs */
+.detailContainer {
+	box-sizing: border-box;
+
+	position: relative;
+	height: 100%;
+	
+	background: #171221;
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 12px;
+	left: 55%;
+	/* Transition in */
+	animation: 0.5s ease-out 0s 1 slideInFromRight;
+}
+
+.detailContainer.finished {
+	/* Transition out */
+	animation: 0.5s ease-out 0s 1 slideOutToRight;
+}
+
+.detailLabel {
+	position: absolute;
+	width: 72px;
+	height: 25px;
+	left: 32px;
+	top: 24px;
+	
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 140%;
+	/* or 25px */
+	color: #EDE8F2;
+}
+
+.detailFieldList {
+	position: relative;
+	left: 32px;
+	top: 110px;
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+	max-height: 75%;
+	overflow-y: scroll;
+}
+
+.detailField {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+}
+
+.fieldLabel {
+	flex: none;
+
+	font-family: 'Inter';
+	font-style: normal;
+	/* font-weight: 500; */
+	font-size: 14px;
+	line-height: 150%;
+	/* identical to box height, or 21px */
+
+	color: rgba(237, 232, 242, 0.6);
+    font-weight: 600;
+}
+
+.textInputField {
+	box-sizing: border-box;
+
+	height: 40px;
+	max-width: 40%;
+	
+	background: rgba(237, 232, 242, 0.02);
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 6px;	
+	padding: 10px;
 }
 
 .modalOverlay {
 	position: fixed;
 	inset: 0px;
-	background-color: rgba(255, 255, 255, 0.40);
+	background-color: rgba(255, 255, 255, 0);
 }
 
-.formLabel {
-	/* display: flex;
-	flex: 1;
-	flex-direction: column;
-	min-width: 400px; */
-	color: #7038c2; /* var(--primary-color); */
-	margin: 5px 5px 5px 0px;
-	font-weight: bold;
-}
-
-.formButton {
-	color: var(--body-copy-color);
-	background-color: #7038c2;
-	border-color: #7038c2;
-	font-weight: bold;
-    border-radius: 4px;
-    outline: none;
-	margin: 5px 5px 5px 0px;
-    padding: 5px;	
-	box-shadow: none;
-}
-
-.modalContent {
+.detailFormContainer {
 	display: flex;
-	flex: 1;
-	flex-direction: column;
-	min-width: 400px;
-	color: #7038c2; /* var(--primary-color); */
+	flex-flow: column nowrap;
+}
+
+.detailButtonContainer {
+	position: relative;
+	display: flex;
+	flex-flow: row nowrap;
+	gap: 10px;
+	max-width: 40%;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+.saveButton {
+	flex: none;
+	padding: 8px 12px;
+	
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 14px;
+
+	
+	background: #7038C2;
+	border: 1px solid rgba(237, 232, 242, 0.2);
+	box-shadow: 0px 4px 2px #090510;
+	border-radius: 6px;
+}
+
+.cancelButton {
+	flex: none;
+	padding: 8px 12px;
+	
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 14px;
+	/* identical to box height, or 100% */
+	
+	background: rgba(237, 232, 242, 0.02);
+	border: none;
+	color: #EDE8F2;
+
 }
 
 .idContent {
-	color: grey;
+	position: relative;
+	width: 414px;
+	height: 21px;
+	left: 32px;
+	top: 57px;
+	
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	/* identical to box height, or 21px */
+	
+	color: rgba(237, 232, 242, 0.6);
 }
 
-.modalButtons {
+.detailIconContainer {
 	display: flex;
 	flex-flow: row-reverse nowrap;
 	align-items: flex-start;
+	max-width: 40%;
+}
+
+@keyframes slideInFromRight {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+  
+@keyframes slideOutToRight {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+.closeIcon {
+	width: 20px;
+	color: #7038c2;
+	position: relative;
+	top: 24px;
+	right: -32px;
 }
