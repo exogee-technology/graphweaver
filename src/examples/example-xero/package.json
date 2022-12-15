@@ -7,6 +7,7 @@
 	"scripts": {
 		"build": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap `find src \\( -name '*.ts' \\)`",
 		"prettier": "prettier --write src/**/*.ts",
+		"start": "graphweaver start",
 		"test": "jest"
 	},
 	"main": "lib/index.js",
@@ -20,12 +21,25 @@
 	"dependencies": {
 		"@as-integrations/aws-lambda": "1.0.1",
 		"@exogee/graphweaver": "workspace:0.1.0-alpha.5",
+		"@exogee/graphweaver-admin-ui": "workspace:0.1.0-alpha.5",
+		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.0-alpha.5",
 		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.5",
+		"@exogee/graphweaver-cli": "workspace:0.1.0-alpha.5",
 		"@exogee/graphweaver-xero": "workspace:0.1.0-alpha.5",
 		"@exogee/logger": "workspace:0.1.0",
+		"@nivo/bump": "0.80.0",
+		"@nivo/core": "0.80.0",
+		"@nivo/line": "0.80.0",
+		"@nivo/tooltip": "0.80.0",
 		"async-mutex": "0.3.1",
 		"class-validator": "0.13.2",
+		"decimal.js": "10.4.3",
 		"graphql": "15.8.0",
+		"graphql-tag": "2.12.6",
+		"prop-types": "15.8.1",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-router-dom": "6.4.3",
 		"reflect-metadata": "0.1.13",
 		"type-graphql": "1.1.1",
 		"uuid": "8.3.2",
@@ -40,6 +54,7 @@
 		"ts-jest": "26.4.4",
 		"ts-node": "10.4.0",
 		"tsc-watch": "4.2.9",
-		"typescript": "4.5.4"
+		"typescript": "4.5.4",
+		"vite": "3.2.4"
 	}
 }

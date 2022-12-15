@@ -8,6 +8,7 @@
 		"url": "https://github.com/exogee-technology/graphweaver.git"
 	},
 	"scripts": {
+		"build": "pnpm -r build",
 		"clean": "./clean.sh",
 		"format": "pnpm prettier",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
