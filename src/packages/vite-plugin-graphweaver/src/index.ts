@@ -18,9 +18,16 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 	const virtualModuleId = 'virtual:graphweaver-user-supplied-dashboards';
 	const resolvedVirtualModuleId = resolved(virtualModuleId);
 
+	let adminUiPath: string | null = null;
+
 	return {
 		name: 'vite-plugin-graphweaver',
+		configResolved(config) {
+			adminUiPath = config.root;
+		},
 		resolveId(id) {
+			if (!adminUiPath) throw new Error('Config must be resolved to resolve specific files.');
+
 			// This function allows the node module to exist in either the user's
 			// node_modules directory, or in the admin-ui package's node_modules directory.
 			if (id === virtualModuleId) return resolvedVirtualModuleId;
@@ -28,7 +35,8 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 			// Ok, if it's not any of our virtual modules, it may be in the user's project
 			// directory.
 			try {
-				const userNodeModule = require.resolve(id, { paths: [process.cwd()] });
+				// Try to find it in the user's project folder or Admin UI, either is fine.
+				const userNodeModule = require.resolve(id, { paths: [adminUiPath, process.cwd()] });
 				if (userNodeModule) return userNodeModule;
 			} catch (error: any) {
 				// Module not found errors are expected, so we don't need to log them.
