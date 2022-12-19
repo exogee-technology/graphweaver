@@ -18,8 +18,14 @@
 	"dependencies": {
 		"@exogee/graphweaver-admin-ui": "workspace:0.1.0-alpha.5",
 		"@vitejs/plugin-react": "2.2.0",
+		"dotenv": "16.0.3",
 		"esbuild": "0.15.5",
+		"esbuild-css-modules-plugin": "2.3.1",
+		"rimraf": "3.0.2",
 		"rollup-plugin-visualizer": "5.8.3",
+		"serverless": "3.25.1",
+		"serverless-dotenv-plugin": "4.0.2",
+		"serverless-offline": "12.0.2",
 		"vite": "3.2.4",
 		"vite-plugin-graphweaver": "workspace:0.1.0-alpha.5",
 		"vite-plugin-svgr": "2.2.2",
@@ -27,6 +33,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "18.11.9",
+		"@types/rimraf": "3.0.2",
 		"prettier": "2.7.1"
 	}
 }
