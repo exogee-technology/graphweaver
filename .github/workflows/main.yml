@@ -53,7 +53,7 @@ jobs:
 
       - uses: actions/setup-node@v2
         with:
-          node-version: "14"
+          node-version: "16"
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
@@ -67,4 +67,3 @@ jobs:
       DATABASE_PASSWORD: postgres
       DATABASE_PORT: 5432
       DATABASE_NAME: graphweaver
-
