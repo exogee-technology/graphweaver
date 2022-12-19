@@ -38,6 +38,13 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend();
 			}
+
+			// Note, this will leave the ESBuild service process around:
+			// https://github.com/evanw/esbuild/issues/985
+			// console.log('Handles: ', (process as any)._getActiveHandles());
+			//
+			// It does not give us a way to kill it gracefully, so we'll do it here.
+			process.exit(0);
 		},
 	})
 	.command({

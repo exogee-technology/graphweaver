@@ -1,36 +1,18 @@
 import path from 'path';
 import rimrafCallback from 'rimraf';
-import { build, BuildOptions } from 'esbuild';
+import { build } from 'esbuild';
 import cssModulesPlugin from 'esbuild-css-modules-plugin';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
+import {
+	AdditionalFunctionConfig,
+	baseEsbuildConfig,
+	inputPathFor,
+	makeAllPackagesExternalPlugin,
+	devOutputPathFor,
+} from '../util';
 
 const rimraf = promisify(rimrafCallback);
-
-const makeAllPackagesExternalPlugin = () => ({
-	name: 'make-all-packages-external',
-	setup(build: any) {
-		const filter = /^[^./]|^\.[^./]|^\.\.[^/]/; // Must not start with "/" or "./" or "../"
-		build.onResolve({ filter }, ({ path }: any) => {
-			// On Windows, packages in the monorepo are resolved as full file paths starting with C:\ ...
-			// And Go (used by esbuild) does not support regex with negative lookaheads
-			return { path, external: !/^[C-Z]:\\/.test(path) };
-		});
-	},
-});
-
-const baseEsbuildConfig: BuildOptions = {
-	// Anything in node_modules should be marked as external for running.
-	plugins: [makeAllPackagesExternalPlugin(), cssModulesPlugin()],
-
-	minify: false,
-	bundle: true,
-	sourcemap: true,
-	platform: 'node',
-	target: ['node14'],
-	format: 'cjs',
-	watch: true,
-};
 
 const builtInBackendFunctions: Record<string, any> = {
 	'graphweaver-backend': {
@@ -48,19 +30,6 @@ const builtInBackendFunctions: Record<string, any> = {
 	},
 };
 
-interface AdditionalFunctionConfig {
-	handlerPath: string;
-	handlerName?: string;
-	urlPath: string;
-	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ANY';
-}
-
-const inputPathFor = (userSuppliedPath: string) =>
-	path.resolve(process.cwd(), 'src', 'backend', userSuppliedPath);
-
-const outputPathFor = (userSuppliedPath: string) =>
-	path.resolve(process.cwd(), '.graphweaver', 'backend', userSuppliedPath);
-
 export const startBackend = async () => {
 	// Get ready for our config.
 	const backendFunctions = { ...builtInBackendFunctions };
@@ -71,6 +40,9 @@ export const startBackend = async () => {
 	// Put the index.js file in there.
 	await build({
 		...baseEsbuildConfig,
+
+		// Anything in node_modules should be marked as external for running.
+		plugins: [makeAllPackagesExternalPlugin(), cssModulesPlugin()],
 
 		entryPoints: ['./src/backend/index.ts'],
 		outfile: '.graphweaver/backend/index.js',
@@ -93,13 +65,13 @@ export const startBackend = async () => {
 						...baseEsbuildConfig,
 
 						entryPoints: [inputPathFor(additionalFunction.handlerPath)],
-						outfile: `${outputPathFor(additionalFunction.handlerPath)}.js`,
+						outfile: `${devOutputPathFor(additionalFunction.handlerPath)}.js`,
 					});
 
 					backendFunctions[
 						`user-function:${additionalFunction.handlerPath}-${additionalFunction.method}-${additionalFunction.urlPath}`
 					] = {
-						handler: `${outputPathFor(additionalFunction.urlPath)}.${
+						handler: `${devOutputPathFor(additionalFunction.urlPath)}.${
 							additionalFunction.handlerName || 'handler'
 						}`,
 						environment: dotenv.config().parsed,
