@@ -7,11 +7,12 @@ export const loadDashboards = async (configPath: string) => {
 	try {
 		const { adminUI } = await import(configPath);
 
-		const dashboardPath = adminUI.dashboardPath || path.resolve(process.cwd(), 'src', 'dashboards');
+		const dashboardPath =
+			adminUI?.dashboardPath || path.resolve(process.cwd(), 'src', 'dashboards');
 
 		// TODO: Additional validation
 		if ((await fs.stat(dashboardPath)).isDirectory()) {
-			return `export { dashboards } from '${configPath}';`;
+			return `export { dashboards } from '${dashboardPath}';`;
 		}
 	} catch (error) {
 		console.warn('Received error:');
