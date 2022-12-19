@@ -3,17 +3,22 @@ import { Plugin } from 'vite';
 import { loadDashboards } from './loaders';
 
 export interface ViteGraphweaverOptions {
-	dashboardDirectoryPath?: string;
+	configPath?: string;
 }
 
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
 
 const defaultSettings: ViteGraphweaverOptions = {
-	dashboardDirectoryPath: path.join('.', 'src', 'dashboards'),
+	configPath: path.resolve('.', 'graphweaver-config.js'),
 };
 
 export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugin {
 	const settings = { ...defaultSettings, ...options };
+
+	// Ensure the config path is an absolute path.
+	settings.configPath = settings.configPath
+		? path.resolve(settings.configPath)
+		: defaultSettings.configPath;
 
 	const virtualModuleId = 'virtual:graphweaver-user-supplied-dashboards';
 	const resolvedVirtualModuleId = resolved(virtualModuleId);
@@ -50,7 +55,9 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 		},
 		async load(id) {
 			if (id === resolvedVirtualModuleId) {
-				return await loadDashboards(settings);
+				if (!settings.configPath) throw new Error('Config path should be resolved by now.');
+
+				return await loadDashboards(settings.configPath);
 			}
 		},
 	};

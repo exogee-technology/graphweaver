@@ -4,6 +4,8 @@ const { promisify } = require('util');
 
 const { build } = require('esbuild');
 const { dependencies, devDependencies } = require('./package.json');
+const { copyFile } = require('fs/promises');
+const path = require('path');
 
 const exec = promisify(nodeExec);
 

@@ -8,7 +8,7 @@ export const startFrontend = async () => {
 
 	const server = await createServer(viteConfig(root));
 
-	console.log('Graphweaver admin UI listening at:');
+	console.log('GraphWeaver Admin UI listening at:');
 	await server.listen();
 	server.printUrls();
 };
