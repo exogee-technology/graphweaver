@@ -54,3 +54,17 @@ export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (item) => {
 
 	return true;
 };
+
+/// Generate a deterministic ID for a string
+/// This is not sophisticated and is a shortened but still performant version of
+/// Java's hashCode function, modified to always return a positive number
+/// (see https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript)
+export const generateId = (source: string): string => {
+	let hash = 0;
+	let i = 0;
+	if (source.length === 0) return '0';
+	while (i < source.length) {
+		hash = (((hash << 5) - hash + source.charCodeAt(i++)) << 0) >>> 0;
+	}
+	return '' + hash;
+};

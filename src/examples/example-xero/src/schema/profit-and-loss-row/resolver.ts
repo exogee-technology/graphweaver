@@ -1,11 +1,10 @@
-import { v4 } from 'uuid';
 import { createBaseResolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
-import { forEachTenant, inMemoryFilterFor } from '../../utils';
+import { forEachTenant, generateId, inMemoryFilterFor } from '../../utils';
 
 const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
@@ -39,7 +38,13 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 
 						results.push(
 							ProfitAndLossRow.fromBackendEntity({
-								id: v4(),
+								id: generateId(
+									tenantId +
+										(accountAttribute ? accountAttribute.value || '' : '') +
+										(value.value || '') +
+										date.toString() +
+										(description.value || '')
+								),
 								tenantId,
 								accountId: accountAttribute ? accountAttribute.value : null,
 								amount: parseFloat(value.value),

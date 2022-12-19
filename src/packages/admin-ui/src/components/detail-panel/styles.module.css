@@ -6,7 +6,6 @@
 	--primary-color: #7038c2;
 }
 
-
 .wrapper {
 	display: flex;
 	flex: 1;
@@ -20,13 +19,15 @@
 
 	position: relative;
 	height: 100%;
-	
+
 	background: #171221;
 	border: 1px solid rgba(237, 232, 242, 0.1);
 	border-radius: 12px;
 	left: 55%;
 	/* Transition in */
 	animation: 0.5s ease-out 0s 1 slideInFromRight;
+
+	overflow-y: scroll;
 }
 
 .detailContainer.finished {
@@ -40,14 +41,14 @@
 	height: 25px;
 	left: 32px;
 	top: 24px;
-	
+
 	font-family: 'Inter';
 	font-style: normal;
 	font-weight: 600;
 	font-size: 18px;
 	line-height: 140%;
 	/* or 25px */
-	color: #EDE8F2;
+	color: #ede8f2;
 }
 
 .detailFieldList {
@@ -58,7 +59,7 @@
 	flex-flow: column nowrap;
 	gap: 10px;
 	max-height: 75%;
-	overflow-y: scroll;
+	padding-bottom: 20px;
 }
 
 .detailField {
@@ -78,7 +79,7 @@
 	/* identical to box height, or 21px */
 
 	color: rgba(237, 232, 242, 0.6);
-    font-weight: 600;
+	font-weight: 600;
 }
 
 .textInputField {
@@ -86,10 +87,10 @@
 
 	height: 40px;
 	max-width: 40%;
-	
+
 	background: rgba(237, 232, 242, 0.02);
 	border: 1px solid rgba(237, 232, 242, 0.1);
-	border-radius: 6px;	
+	border-radius: 6px;
 	padding: 10px;
 }
 
@@ -116,15 +117,14 @@
 .saveButton {
 	flex: none;
 	padding: 8px 12px;
-	
+
 	font-family: 'Inter';
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 14px;
 
-	
-	background: #7038C2;
+	background: #7038c2;
 	border: 1px solid rgba(237, 232, 242, 0.2);
 	box-shadow: 0px 4px 2px #090510;
 	border-radius: 6px;
@@ -133,18 +133,17 @@
 .cancelButton {
 	flex: none;
 	padding: 8px 12px;
-	
+
 	font-family: 'Inter';
 	font-style: normal;
 	font-weight: 500;
 	font-size: 14px;
 	line-height: 14px;
 	/* identical to box height, or 100% */
-	
+
 	background: rgba(237, 232, 242, 0.02);
 	border: none;
-	color: #EDE8F2;
-
+	color: #ede8f2;
 }
 
 .idContent {
@@ -153,14 +152,14 @@
 	height: 21px;
 	left: 32px;
 	top: 57px;
-	
+
 	font-family: 'Inter';
 	font-style: normal;
 	font-weight: 400;
 	font-size: 14px;
 	line-height: 150%;
 	/* identical to box height, or 21px */
-	
+
 	color: rgba(237, 232, 242, 0.6);
 }
 
@@ -179,7 +178,7 @@
 		transform: translateX(0);
 	}
 }
-  
+
 @keyframes slideOutToRight {
 	0% {
 		transform: translateX(0);

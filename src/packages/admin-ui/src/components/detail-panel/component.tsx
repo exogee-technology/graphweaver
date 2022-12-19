@@ -14,16 +14,15 @@ import { useSelectedEntity } from '~/utils/use-selected-entity';
 
 import styles from './styles.module.css';
 import buttonStyles from '../button/styles.module.css';
+/** @see https://react-select.com/home */
 import { Select, SelectOption } from '../select';
 
 interface ResultBaseType {
 	id: string;
 }
 
-type ResultType = keyof ResultBaseType;
-
 // TODO: Move to test utils
-// Do-nothing func as placeholder for event handlers
+// Do-nothing func as placeholder for event handlers. This doesn't play nice with Formik useField()
 export function _fakeCallback(msg: string, action?: () => void): any {
 	return async function (...args: any[]) {
 		// tslint:disable-next-line:no-console
@@ -136,7 +135,10 @@ const ModalContent = ({
 		if (field.relationshipType) {
 			const relatedEntity = entityByType(field.type);
 			// TODO: For select fields we want both the summaryField *and* the ID for the SelectOption
-			return result[field.name][relatedEntity?.summaryField || ('id' as keyof typeof result)];
+			const relatedField = result[field.name];
+			return relatedField
+				? relatedField[relatedEntity?.summaryField || ('id' as keyof typeof result)]
+				: '';
 		}
 		return result[field.name as keyof typeof result];
 	};
@@ -147,12 +149,11 @@ const ModalContent = ({
 	const initialValues = formFields.reduce((acc, field) => {
 		const { result } = detail.data;
 		const value = getValue(field, result);
-		acc[field.name] = value;
+		acc[field.name] = value || '';
 		return acc;
 	}, {} as Record<string, any>);
 
 	return (
-		// <div>
 		<Modal
 			isOpen={isOpen}
 			onRequestClose={cancel}
@@ -175,8 +176,6 @@ const ModalContent = ({
 				<DetailForm initialValues={initialValues} detailFields={formFields} onCancel={cancel} />
 			</div>
 		</Modal>
-
-		// </div>
 	);
 };
 
@@ -206,10 +205,6 @@ export const DetailPanel = () => {
 					}
 
 					return <ModalContent selectedEntity={selectedEntity} detail={detail} />;
-					// Debug output
-					// return <pre className={styles.wrapper}>
-					// 	{JSON.stringify(detail.data.result, null, 4)}
-					// </pre>
 				}}
 			</Await>
 		</React.Suspense>
