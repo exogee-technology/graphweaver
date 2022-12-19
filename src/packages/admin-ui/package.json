@@ -27,6 +27,7 @@
 		"react-dom": "18.2.0",
 		"react-modal": "3.16.1",
 		"react-router-dom": "6.4.3",
+		"react-select": "5.7.0",
 		"vite-plugin-svgr": "2.2.2"
 	},
 	"devDependencies": {

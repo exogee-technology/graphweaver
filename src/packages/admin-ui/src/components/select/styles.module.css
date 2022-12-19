@@ -1,0 +1,11 @@
+.select {
+	box-sizing: border-box;
+
+	height: 40px;
+	max-width: 40%;
+	
+	background: rgba(237, 232, 242, 0.02);
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 6px;	
+	padding: 10px;
+}

@@ -96,7 +96,7 @@
 .modalOverlay {
 	position: fixed;
 	inset: 0px;
-	background-color: rgba(255, 255, 255, 0);
+	background-color: rgba(255, 255, 255, 0.4);
 }
 
 .detailFormContainer {
@@ -195,4 +195,5 @@
 	position: relative;
 	top: 24px;
 	right: -32px;
+	cursor: pointer;
 }
