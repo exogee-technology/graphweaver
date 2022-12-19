@@ -25,9 +25,9 @@ type ResultType = keyof ResultBaseType;
 // TODO: Move to test utils
 // Do-nothing func as placeholder for event handlers
 export function _fakeCallback(msg: string, action?: () => void): any {
-	return async function () {
+	return async function (...args: any[]) {
 		// tslint:disable-next-line:no-console
-		console.info(msg, Array.from(arguments));
+		console.info(msg, Array.from(args));
 		return new Promise<void>((resolve) => {
 			setTimeout(resolve, 1000);
 		}).then((_resolve) => action && action());
