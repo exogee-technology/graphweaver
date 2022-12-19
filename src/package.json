@@ -10,7 +10,7 @@
 	"scripts": {
 		"clean": "./clean.sh",
 		"format": "pnpm prettier",
-		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
+		"prettier": "prettier --write \"*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\" \"examples/**/*.{js,jsx,ts,tsx}\"",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
 		"database:rebuild-local": "dropdb graphweaver --if-exists && createdb graphweaver && pnpm migrate",
