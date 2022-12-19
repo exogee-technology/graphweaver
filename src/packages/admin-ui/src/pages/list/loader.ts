@@ -22,5 +22,5 @@ const entityByNameOrType = (entity: string | undefined) => {
 export const ListLoader = <T>({ params: { entity, id } }: LoaderFunctionArgs) =>
 	defer({
 		rows: getEntityPage<T>(entityByNameOrType(entity), [], entityByNameOrType, 1),
-		detail: id ? getEntity<T>(entityByNameOrType(entity), id) : undefined,
+		detail: id ? getEntity<T>(entityByNameOrType(entity), entityByNameOrType, id) : undefined,
 	});
