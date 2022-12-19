@@ -7,9 +7,11 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 		outdir: 'lib',
 		format: 'esm',
 		bundle: true,
+		minify: true,
 		sourcemap: 'linked',
 		external: [
-			// This can't be bundled because it's virtual and supplied by Vite.
+			// This can't be bundled because it's virtual and supplied by
+			// our vite plugin directly.
 			'virtual:graphweaver-user-supplied-dashboards',
 
 			// And these can't because they're peer dependencies, and we need to use
