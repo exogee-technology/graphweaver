@@ -2,7 +2,7 @@ module.exports = {
 	backend: {
 		additionalFunctions: [
 			{
-				handlerPath: './connect',
+				handlerPath: './src/backend/connect',
 				handlerName: 'handler',
 				urlPath: 'connect',
 				method: 'GET',
