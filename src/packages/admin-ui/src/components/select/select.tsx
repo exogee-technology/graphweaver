@@ -14,7 +14,7 @@ export interface SelectOption {
 	label: string;
 }
 
-/// A Single-valued Select component
+// A Single-valued Select component
 export const Select = ({
 	options,
 	onChange,

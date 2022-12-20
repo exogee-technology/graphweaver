@@ -128,7 +128,7 @@ const ModalContent = ({
 		return result[field.name as keyof typeof result];
 	};
 
-	/// Weed out ID fields - for the moment.
+	// Weed out ID fields - for the moment.
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => field.name !== 'id');
 
 	const initialValues = formFields.reduce((acc, field) => {
