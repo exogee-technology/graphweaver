@@ -33,7 +33,7 @@
 	border: none;
 	border-radius: 6px;
 	box-shadow: 0px 1px 3px rgba(9, 5, 16, 0.1);
-	color: #ede8f2;
+	color: var(--body-copy-color);
 }
 
 .button[type='reset']:hover {

@@ -16,7 +16,7 @@
 	position: relative;
 	height: 100%;
 
-	background: #171221;
+	background: var(--detail-bg-color);
 	border: 1px solid rgba(237, 232, 242, 0.1);
 	border-radius: 12px;
 	left: 55%;

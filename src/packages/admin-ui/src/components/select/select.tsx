@@ -40,9 +40,8 @@ export const Select = ({
 	const defaultStyles = {
 		option: (provided: any, state: { isSelected: boolean; isFocused: boolean }) => ({
 			...provided,
-			// #ede8f2 is RGBA(237,232,242,0.02) but with 100% opacity
-			// #12170d is the inverse
-			color: state.isSelected ? 'var(--primary-color)' : '#ede8f2',
+			// #12170d is the inverse of var(--body-copy-color) which is RGBA(237,232,242,0.02) but with 100% opacity
+			color: state.isSelected ? 'var(--primary-color)' : 'var(--body-copy-color)',
 			backgroundColor: state.isSelected
 				? '#12170d'
 				: state.isFocused

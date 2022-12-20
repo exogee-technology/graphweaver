@@ -1,9 +1,9 @@
 import { ApolloQueryResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, useField } from 'formik';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import * as Modal from 'react-modal';
-import { Await, useAsyncError, useLoaderData, useNavigate } from 'react-router-dom';
+import { Await, useAsyncError, useLoaderData, useNavigate, useParams } from 'react-router-dom';
 
 import { ReactComponent as ExitIcon } from '~/assets/close-button-svgrepo-com.svg';
 import { routeFor } from '~/utils/route-for';
@@ -101,7 +101,7 @@ const ModalContent = ({
 	selectedEntity: Entity;
 	detail: ApolloQueryResult<{ result: ResultBaseType }>;
 }) => {
-	const [isOpen, setOpen] = useState<boolean>(true);
+	const { id } = useParams();
 	const navigate = useNavigate();
 	const { entityByType } = useSchema();
 
@@ -110,7 +110,6 @@ const ModalContent = ({
 	]);
 
 	const cancel = () => {
-		setOpen(false);
 		navigateBack();
 	};
 
@@ -140,13 +139,11 @@ const ModalContent = ({
 
 	return (
 		<Modal
-			isOpen={isOpen}
+			isOpen={id !== undefined}
 			onRequestClose={cancel}
 			shouldCloseOnEsc
 			shouldCloseOnOverlayClick
-			className={
-				isOpen ? styles.detailContainer : classnames(styles.detailContainer, styles.finished)
-			}
+			className={id ? styles.detailContainer : classnames(styles.detailContainer, styles.finished)}
 			overlayClassName={styles.modalOverlay}
 			// Temp till setAppElement used
 			ariaHideApp={false}
