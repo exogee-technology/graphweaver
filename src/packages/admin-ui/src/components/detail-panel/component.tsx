@@ -2,7 +2,6 @@ import { ApolloQueryResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, useField } from 'formik';
 import React, { useCallback, useState } from 'react';
-/** @see https://reactcommunity.org/react-modal/ */
 import * as Modal from 'react-modal';
 import { Await, useAsyncError, useLoaderData, useNavigate } from 'react-router-dom';
 
@@ -10,27 +9,14 @@ import { ReactComponent as ExitIcon } from '~/assets/close-button-svgrepo-com.sv
 import { routeFor } from '~/utils/route-for';
 import { Entity, EntityField, useSchema } from '~/utils/use-schema';
 import { useSelectedEntity } from '~/utils/use-selected-entity';
-// import { Button } from '../button';
+import { Button } from '../button';
+
+import { Select, SelectOption } from '../select';
 
 import styles from './styles.module.css';
-import buttonStyles from '../button/styles.module.css';
-/** @see https://react-select.com/home */
-import { Select, SelectOption } from '../select';
 
 interface ResultBaseType {
 	id: string;
-}
-
-// TODO: Move to test utils
-// Do-nothing func as placeholder for event handlers. This doesn't play nice with Formik useField()
-export function _fakeCallback(msg: string, action?: () => void): any {
-	return async function (...args: any[]) {
-		// tslint:disable-next-line:no-console
-		console.info(msg, Array.from(args));
-		return new Promise<void>((resolve) => {
-			setTimeout(resolve, 1000);
-		}).then((_resolve) => action && action());
-	};
 }
 
 const DetailPanelError = () => {
@@ -47,8 +33,6 @@ const SelectField = ({ name }: { name: string }) => {
 
 	const initialOption: SelectOption = { label: initialValue, value: initialValue };
 	const options = [initialOption];
-
-	// const { setValue } = helpers;
 
 	return <Select options={options} onChange={field.onChange} defaultValue={initialOption} />;
 };
@@ -86,7 +70,13 @@ const DetailForm = ({
 	return (
 		<Formik
 			initialValues={initialValues}
-			onSubmit={_fakeCallback('Formik onSubmit', onCancel)}
+			onSubmit={(values, actions) => {
+				setTimeout(() => {
+					alert(JSON.stringify(values, null, 2));
+					actions.setSubmitting(false);
+					onCancel();
+				}, 500);
+			}}
 			onReset={onCancel}
 		>
 			<Form className={styles.detailFormContainer}>
@@ -95,13 +85,8 @@ const DetailForm = ({
 						return <DetailField key={field.name} field={field} />;
 					})}
 					<div className={styles.detailButtonContainer}>
-						<button type="reset" className={styles.cancelButton}>
-							Cancel
-						</button>
-						{/* <Button handleClick={_fakeCallback("Button onSubmit", onCancel)}>Save</Button> */}
-						<button type="submit" className={buttonStyles.button}>
-							Save
-						</button>
+						<Button type={'reset'}>Cancel</Button>
+						<Button type={'submit'}>Save</Button>
 					</div>
 				</div>
 			</Form>
@@ -159,7 +144,6 @@ const ModalContent = ({
 			onRequestClose={cancel}
 			shouldCloseOnEsc
 			shouldCloseOnOverlayClick
-			// parentSelector={() => document.querySelector('#root')}>
 			className={
 				isOpen ? styles.detailContainer : classnames(styles.detailContainer, styles.finished)
 			}
@@ -186,7 +170,6 @@ export const DetailPanel = () => {
 	if (!detail) return null;
 
 	return (
-		// TODO: Loading into modal - maybe invert this so that the React.Suspense component is in the modal?
 		<React.Suspense fallback={<pre className={styles.wrapper}>Loading...</pre>}>
 			<Await resolve={detail} errorElement={<DetailPanelError />}>
 				{(detail: ApolloQueryResult<{ result: ResultBaseType }>) => {

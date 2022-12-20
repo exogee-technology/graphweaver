@@ -57,6 +57,7 @@ export const Button = ({
 	iconAfter,
 	dropdown = false,
 	dropdownItems = [{ name: 'Add links array', href: 'some_url' }],
+	type = 'button',
 }: {
 	handleClick?: () => any;
 	children: ReactNode;
@@ -64,6 +65,7 @@ export const Button = ({
 	iconAfter?: ReactNode;
 	dropdown?: boolean;
 	dropdownItems?: Array<object>;
+	type?: 'submit' | 'reset' | 'button';
 }) => {
 	const [showDropdown, setShowDropdown] = useState(false);
 
@@ -91,7 +93,7 @@ export const Button = ({
 	}
 
 	return (
-		<button ref={parentRef} onClick={handleLocalClick} className={styles.button} type="button">
+		<button ref={parentRef} onClick={handleLocalClick} className={styles.button} type={type}>
 			{iconBefore}
 			{children}
 			{iconAfter}
