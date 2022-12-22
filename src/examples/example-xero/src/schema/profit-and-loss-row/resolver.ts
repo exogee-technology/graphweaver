@@ -82,11 +82,13 @@ export class ProfitAndLossRowResolver extends createBaseResolver(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
 		find: async ({ xero, rawFilter }) => {
-			const result = await forEachTenant<ProfitAndLossRow>(xero, (tenant) =>
-				loadReportForTenant(xero, tenant.tenantId)
+			const result = await forEachTenant<ProfitAndLossRow>(
+				xero,
+				(tenant) => loadReportForTenant(xero, tenant.tenantId),
+				rawFilter
 			);
 
-			return result.filter(inMemoryFilterFor(rawFilter));
+			return result;
 		},
 	})
 ) {}
