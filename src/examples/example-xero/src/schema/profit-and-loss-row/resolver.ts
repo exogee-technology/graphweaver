@@ -1,5 +1,6 @@
 import { createBaseResolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
+import { logger } from '@exogee/logger';
 import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
@@ -88,7 +89,7 @@ export class ProfitAndLossRowResolver extends createBaseResolver(
 				rawFilter
 			);
 
-			return result;
+			return result.filter(inMemoryFilterFor(rawFilter));
 		},
 	})
 ) {}

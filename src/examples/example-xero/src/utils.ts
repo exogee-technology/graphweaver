@@ -12,9 +12,12 @@ export const forEachTenant = async <T = unknown>(
 ): Promise<WithTenantId<T>[]> => {
 	if (!xero.tenants.length) await xero.updateTenants(false);
 
-	const filteredTenants = rawFilter
-		? xero.tenants.filter(inMemoryFilterFor(rawFilter))
-		: xero.tenants;
+	// Parse the filter, and if it contains a "tenantId" clause, filter the available Tenants accordingly.
+	// For this version, just look for a simple 'tenantId'='...' and nothing else
+	const filteredTenants =
+		rawFilter && Object.keys(rawFilter).includes('tenantId')
+			? [...xero.tenants.filter((tenant) => tenant.tenantId === rawFilter['tenantId'])]
+			: xero.tenants;
 
 	const results = await Promise.all(
 		filteredTenants.map(async (tenant) => {
