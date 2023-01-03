@@ -12,12 +12,7 @@ export const forEachTenant = async <T = unknown>(
 ): Promise<WithTenantId<T>[]> => {
 	if (!xero.tenants.length) await xero.updateTenants(false);
 
-	// Parse the filter, and if it contains a "tenantId" clause, filter the available Tenants accordingly.
-	// For this version, just look for a simple 'tenantId'='...' and nothing else
-	const filteredTenants =
-		rawFilter && Object.keys(rawFilter).includes('tenantId')
-			? [...xero.tenants.filter((tenant) => tenant.tenantId === rawFilter['tenantId'])]
-			: xero.tenants;
+	const filteredTenants = xero.tenants.filter(inMemoryFilterFor(rawFilter));
 
 	const results = await Promise.all(
 		filteredTenants.map(async (tenant) => {
@@ -56,7 +51,8 @@ export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (
 			return true;
 		} else if (key.indexOf('_') >= 0) {
 			throw new Error(`Filter ${key} not yet implemented.`);
-		} else if (item[key] !== value) {
+			// To make '_or' and '_and' work properly, ignore this test and fall through/return TRUE if the field does not exist in the item.
+		} else if (item[key] !== null && item[key] !== undefined && item[key] !== value) {
 			// Simple equality comparison
 			return false;
 		}
