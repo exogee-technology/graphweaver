@@ -1,5 +1,7 @@
-import React, { useMemo } from 'react';
+import classNames from 'classnames';
 import ReactSelect, { ActionMeta, SingleValue } from 'react-select';
+
+import styles from './styles.module.css';
 
 const myOptions: SelectOption[] = [
 	{ value: 'chocolate', label: 'Chocolate' },
@@ -35,50 +37,24 @@ export const Select = ({
 	// We are/are not interested when the selection is cleared
 	clearSelection?: boolean;
 }) => {
-	/// TODO: move these styles into a CSS Modules file and reference from there.
-	/// TODO: This is not trivial; see https://react-select.com/styles
+	// See https://react-select.com/styles
+	// Also see https://github.com/JedWatson/react-select/blob/master/storybook/stories/ClassNamesWithTailwind.stories.tsx
+	// This isn't working because the default styles are written in last (by the loader?) and override these styles. Not worked out
+	// how to turn them off. Even with the 'unstyled' option.
 	const defaultStyles = {
-		option: (provided: any, state: { isSelected: boolean; isFocused: boolean }) => ({
-			...provided,
-			// #12170d is the inverse of var(--body-copy-color) which is RGBA(237,232,242,0.02) but with 100% opacity
-			color: state.isSelected ? 'var(--primary-color)' : 'var(--body-copy-color)',
-			backgroundColor: state.isSelected
-				? '#12170d'
-				: state.isFocused
-				? 'var(--primary-color)'
-				: '#12170d',
-		}),
-		control: (provided: any, state: { isFocused: boolean }) => ({
-			...provided,
-			boxSizing: 'border-box',
-			borderColor: state.isFocused || 'rgba(237, 232, 242, 0.1)',
-			background: 'rgba(237, 232, 242, 0.02)',
-			borderRadius: '6px',
-			maxWidth: '40%',
-			outline: state.isFocused && 'none',
-			padding: '0px',
-		}),
-		menu: (styles: any) => ({
-			...styles,
-			zIndex: 999,
-			fontSize: '12px',
-			lineHeight: '20px',
-			fontFamily: 'Inter',
-			fontWeight: '500',
-			fontStyle: 'normal',
-			background: 'rgba(237, 232, 242, 0.02)',
-			borderRadius: '6px',
-			borderColor: 'rgba(237, 232, 242, 0.1)',
-			display: 'inline-block',
-		}),
-		singleValue: (base: any) => ({
-			...base,
-			padding: 5,
-			borderRadius: 5,
-			background: 'rgba(237, 232, 242, 0.02)',
-			color: '#ede8f2',
-			display: 'flex',
-		}),
+		menu: () => classNames(styles.reactSelect__menu),
+		singleValue: () => classNames(styles.reactSelect__singleValue),
+		control: (state: { isFocused: boolean }) =>
+			classNames(
+				styles.reactSelect__control,
+				state.isFocused && styles.reactSelect__controlFocused
+			),
+		option: (state: { isSelected: boolean; isFocused: boolean }) =>
+			classNames(
+				state.isSelected && styles.reactSelect__optionSelected,
+				state.isFocused && styles.reactSelect__optionFocused,
+				!state.isSelected && !state.isFocused && styles.reactSelect__option
+			),
 	};
 
 	const change = (option: SingleValue<SelectOption>, action: ActionMeta<SelectOption>) => {
@@ -91,11 +67,12 @@ export const Select = ({
 		}
 	};
 
-	// const styles = defaultStyles;
-
 	return (
 		<ReactSelect
-			styles={defaultStyles}
+			// This is really not ideal but it's hard to override default styles otherwise, and there are other problems; see above
+			// See https://react-select.com/styles#the-classnames-prop
+			unstyled
+			classNames={defaultStyles}
 			options={options}
 			onChange={change}
 			autoFocus={autoFocus}
@@ -104,6 +81,7 @@ export const Select = ({
 			menuPosition={'fixed'}
 			isDisabled={isDisabled}
 			isClearable={isClearable}
+			classNamePrefix={'reactSelect'}
 		/>
 	);
 };

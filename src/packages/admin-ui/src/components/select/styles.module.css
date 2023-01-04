@@ -1,11 +1,63 @@
-.select {
+.reactSelect__select {
 	box-sizing: border-box;
 
 	height: 40px;
 	max-width: 40%;
-	
+
 	background: rgba(237, 232, 242, 0.02);
 	border: 1px solid rgba(237, 232, 242, 0.1);
-	border-radius: 6px;	
+	border-radius: 6px;
 	padding: 10px;
+}
+
+.reactSelect__menu {
+	z-index: 999;
+	font-size: 12px;
+	line-height: 20px;
+	font-family: 'Inter';
+	font-weight: 500;
+	font-style: normal;
+	background: rgba(237, 232, 242, 0.02);
+	border-radius: 6px;
+	border-color: rgba(237, 232, 242, 0.1);
+	display: inline-block;
+}
+
+.reactSelect__singleValue {
+	padding: 5px;
+	border-radius: 5px;
+	background: rgba(237, 232, 242, 0.02);
+	color: #ede8f2;
+	display: flex;
+}
+
+:global .reactSelect__control {
+	box-sizing: border-box;
+	border-color: rgba(237, 232, 242, 0.1);
+	background: rgba(237, 232, 242, 0.02);
+	border-radius: 6px;
+	max-width: 40%;
+	padding: 0px;
+}
+
+:global .reactSelect__controlFocused {
+	border-color: rgba(237, 232, 242, 0.02);
+	outline: none;
+}
+
+.reactSelect__option {
+	color: var(--body-copy-color);
+	/* #12170d is the inverse of var(--body-copy-color) which is RGBA(237,232,242,0.02) but with 100% opacity */
+	background-color: #12170d;
+}
+
+.reactSelect__optionSelected {
+	color: var(--primary-color);
+	/* #12170d is the inverse of var(--body-copy-color) which is RGBA(237,232,242,0.02) but with 100% opacity */
+	background-color: #12170d;
+}
+
+.reactSelect__optionFocused {
+	color: var(--body-copy-color);
+	background-color: var(--primary-color);
 }
