@@ -6,8 +6,9 @@ import { useSchema } from '~/utils/use-schema';
 import { useSelectedEntity } from '~/utils/use-selected-entity';
 import { EntityRow } from './entity-row';
 import styles from '../styles.module.css';
+import classNames from 'classnames';
 
-export const BackendRow = ({ backend }: { backend: string }) => {
+export const BackendRow = ({ backend, collapsed }: { backend: string; collapsed?: boolean }) => {
 	const { entitiesForBackend } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
 	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
@@ -27,11 +28,16 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 					}}
 				>
 					<DatabaseIcon />
-					{backend}
+					<span style={collapsed ? { display: 'none' } : { whiteSpace: 'nowrap', fontWeight: 600 }}>
+						{backend}
+					</span>
 					<ChevronIcon />
 				</a>
 				<ul>
-					{entities && entities.map((entity) => <EntityRow key={entity.name} entity={entity} />)}
+					{entities &&
+						entities.map((entity) => (
+							<EntityRow key={entity.name} entity={entity} collapsed={collapsed} />
+						))}
 				</ul>
 			</li>
 		</ul>

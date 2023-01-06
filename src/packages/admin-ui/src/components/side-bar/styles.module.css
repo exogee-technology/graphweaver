@@ -1,33 +1,78 @@
 /* Sidebar */
+:root {
+	/* Logo is 86px; 120px preserves all the icons including the Data-Source icons */
+	--sidebar-min-width: 120px;
+	--sidebar-max-width: 300px;
+}
 
-.sideBar {
+.sideBarContent {
 	position: sticky;
 	top: 0;
-	width: 300px;
-	min-width: 250px;
+	min-width: var(--sidebar-min-width);
+	max-width: var(--sidebar-max-width);
 	background: hsl(264, 40%, 10%);
 	border-right: 1px solid rgba(237, 232, 242, 0.1);
 	display: flex;
 	flex-direction: column;
 }
 
-.sideBar li {
+.sideBar {
+	flex-grow: 0;
+	flex-shrink: 0;
+	min-width: var(--sidebar-min-width);
+	max-width: var(--sidebar-max-width);
+	display: flex;
+	flex-direction: row;
+	z-index: 2;
+}
+
+.sideBar .sideBarContent {
+	flex: 1;
+}
+
+.sideBar .sideBarResizer {
+	flex-grow: 0;
+	flex-shrink: 0;
+	flex-basis: 6px;
+	justify-self: flex-end;
+	cursor: col-resize;
+	resize: horizontal;
+}
+
+.sideBar .sideBarResizer:hover {
+	width: 3px;
+	background: #c1c3c5b4;
+}
+
+.sideBar .sideBarResizer:hover::after {
+	content: url(../../assets/16-chevron-down.svg);
+	position: relative;
+	transform: rotate(270deg);
+	left: 0;
+	top: 80px;
+	width: 64px;
+	height: 64px;
+	background-color: white;
+	cursor: pointer;
+}
+
+.sideBarContent li {
 	padding: 0 8px 8px 14px;
 }
 
-.sideBar > ul {
+.sideBarContent > ul {
 	margin: 8px;
 }
 
-.sideBar > ul:last-child {
+.sideBarContent > ul:last-child {
 	margin-top: 0;
 }
 
-.sideBar a > svg {
+.sideBarContent a svg {
 	margin-right: 8px;
 }
 
-.sideBar a::before {
+.sideBarContent a::before {
 	content: '';
 	height: 32px;
 	display: inline-block;
@@ -77,10 +122,9 @@
 	right: 10px;
 }
 
-.subListItem span {
+.subListItem svg {
 	width: 16px;
 	height: 16px;
-	background-image: url(./assets/16-table.svg);
 }
 
 .subListItem {
@@ -91,7 +135,17 @@
 	border-radius: 6px;
 	padding: 0 10px;
 	width: 100%;
+	font-weight: 600;
+	white-space: nowrap;
 }
+
+/* .subListItem::before {
+	content: url(../../assets/16-table.svg);
+	width: 16px;
+	height: 16px;
+	margin-right: 8px;
+	opacity: 1;
+} */
 
 .subListItem::after {
 	display: none;
@@ -106,6 +160,47 @@
 	opacity: 1;
 }
 
-.subListItem.active span {
-	background-image: url(../../assets/img/16-table-light.svg);
+/* .subListItem.active::before {
+	content: url(../../assets/16-table-light.svg);
+} */
+
+span[data-tooltip-for].textHidden {
+	visibility: hidden;
+}
+
+/* Not required except for specificity?
+.subListItem.tooltip {
+	/* position: relative; * /
+	display: inline-block;
+	/* border-bottom: 1px dotted black; * /
+} */
+
+.subListItem .tooltiptext {
+	visibility: hidden;
+	width: 120px;
+	background-color: #2a2235;
+	color: #fff;
+	text-align: center;
+	border-radius: 6px;
+	padding: 5px 0;
+	position: absolute;
+	z-index: 1;
+	bottom: 150%;
+	left: 50%;
+	margin-left: -60px;
+}
+
+.subListItem .tooltiptext::after {
+	content: '';
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: black transparent transparent transparent;
+}
+
+.subListItem:hover .tooltiptext {
+	visibility: visible;
 }

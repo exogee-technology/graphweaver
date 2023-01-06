@@ -7,14 +7,16 @@ import { Entity } from '~/utils/use-schema';
 
 import styles from '../styles.module.css';
 
-export const EntityRow = ({ entity }: { entity: Entity }) => (
+export const EntityRow = ({ entity, collapsed }: { entity: Entity; collapsed?: boolean }) => (
 	<li>
 		<NavLink
 			to={routeFor({ entity })}
 			className={({ isActive }) => classnames(styles.subListItem, isActive && styles.active)}
 		>
 			<TableIcon />
-			{entity.name}
+			<span style={collapsed ? { display: 'none' } : { whiteSpace: 'nowrap', fontWeight: 600 }}>
+				{entity.name}
+			</span>
 		</NavLink>
 	</li>
 );
