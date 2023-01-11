@@ -8,7 +8,7 @@ import { Tenant } from './entity';
 export class TenantResolver extends createBaseResolver(
 	Tenant,
 	new XeroBackendProvider('Tenant', {
-		find: async ({ xero, rawFilter }) => {
+		find: async ({ xero, rawFilter, order, limit, offset }) => {
 			if (!xero.tenants.length) await xero.updateTenants(false);
 
 			// We want to clone the tenants so we don't mutate Xero's internal state
@@ -16,7 +16,18 @@ export class TenantResolver extends createBaseResolver(
 			const copy = JSON.parse(JSON.stringify(xero.tenants));
 			copy.forEach((tenant) => (tenant.id = tenant.tenantId));
 
-			return copy.filter(inMemoryFilterFor(rawFilter));
+			// TODO: Order...
+
+			const filteredResult = copy.filter(inMemoryFilterFor(rawFilter));
+
+			// TODO: cache for scrollback (and forward scroll)
+			if (Array.isArray(filteredResult)) {
+				const realLimit = limit ?? 100;
+				const realOffset = offset ?? 0;
+				return filteredResult.slice(realOffset, realOffset + realLimit);
+			}
+
+			return filteredResult;
 		},
 	})
 ) {}

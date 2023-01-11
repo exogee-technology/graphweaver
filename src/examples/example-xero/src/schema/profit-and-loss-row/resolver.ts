@@ -76,12 +76,23 @@ const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
 export class ProfitAndLossRowResolver extends createBaseResolver(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
-		find: async ({ xero, rawFilter }) => {
+		find: async ({ xero, rawFilter, limit, offset }) => {
 			const result = await forEachTenant<ProfitAndLossRow>(xero, (tenant) =>
 				loadReportForTenant(xero, tenant.tenantId)
 			);
 
-			return result.filter(inMemoryFilterFor(rawFilter));
+			// TODO: Order...
+
+			const filteredResult = result.filter(inMemoryFilterFor(rawFilter));
+
+			// TODO: cache for scrollback (and forward scroll)
+			if (Array.isArray(filteredResult)) {
+				const realLimit = limit ?? 100;
+				const realOffset = offset ?? 0;
+				return filteredResult.slice(realOffset, realOffset + realLimit);
+			}
+
+			return filteredResult;
 		},
 	})
 ) {}
