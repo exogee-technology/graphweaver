@@ -3,9 +3,10 @@ import { gql } from '@apollo/client';
 import pluralize from 'pluralize';
 import { SortColumn } from 'react-data-grid';
 
+// Can't use useApolloClient/useQuery/useParms here if not using Loader
 import { client } from '~/apollo';
 
-const PAGE_SIZE = 100;
+export const PAGE_SIZE = 50;
 
 export const getEntityPage = <T>(
 	entity: Entity,

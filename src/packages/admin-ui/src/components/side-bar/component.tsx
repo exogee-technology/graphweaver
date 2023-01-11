@@ -21,23 +21,25 @@ export const SideBar = () => {
 
 	return (
 		<div className={styles.sideBar}>
-			<Link to="/">
-				<GraphweaverLogo width="52" className={styles.logo} />
-			</Link>
+			<div className={styles.sideBarContent}>
+				<Link to="/">
+					<GraphweaverLogo width="52" className={styles.logo} />
+				</Link>
 
-			<p className={styles.subtext}>Dashboards</p>
-			<ul className={classnames(styles.entity, styles.closed)}>
-				<DashboardRow name="All" />
-				{data?.result.map((tenant) => (
-					<DashboardRow key={tenant.id} name={tenant.tenantName} tenantId={tenant.id} />
+				<p className={styles.subtext}>Dashboards</p>
+				<ul className={classnames(styles.entity, styles.closed)}>
+					<DashboardRow name="All" />
+					{data?.result.map((tenant) => (
+						<DashboardRow key={tenant.id} name={tenant.tenantName} tenantId={tenant.id} />
+					))}
+				</ul>
+
+				<p className={styles.subtext}>Data Sources</p>
+
+				{schema.backends.map((backend) => (
+					<BackendRow key={backend} backend={backend} />
 				))}
-			</ul>
-
-			<p className={styles.subtext}>Data Sources</p>
-
-			{schema.backends.map((backend) => (
-				<BackendRow key={backend} backend={backend} />
-			))}
+			</div>
 		</div>
 	);
 };
