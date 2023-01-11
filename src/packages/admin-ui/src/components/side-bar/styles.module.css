@@ -1,8 +1,9 @@
 /* Sidebar */
 
 .sideBar {
-	position: sticky;
+	position: relative;
 	top: 0;
+	height: 100%;
 	width: 300px;
 	min-width: 250px;
 	background: hsl(264, 40%, 10%);
@@ -11,23 +12,28 @@
 	flex-direction: column;
 }
 
-.sideBar li {
+.sideBarContent {
+	position: fixed;
+	display: inline-block;
+}
+
+.sideBarContent li {
 	padding: 0 8px 8px 14px;
 }
 
-.sideBar > ul {
+.sideBarContent > ul {
 	margin: 8px;
 }
 
-.sideBar > ul:last-child {
+.sideBarContent > ul:last-child {
 	margin-top: 0;
 }
 
-.sideBar a > svg {
+.sideBarContent a > svg {
 	margin-right: 8px;
 }
 
-.sideBar a::before {
+.sideBarContent a::before {
 	content: '';
 	height: 32px;
 	display: inline-block;
