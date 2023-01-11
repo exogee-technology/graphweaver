@@ -1,10 +1,22 @@
 import React from 'react';
-import { SideBar } from '~/components';
+import { Header, SideBar } from '~/components';
 import styles from './styles.module.css';
 
-export const DefaultLayout = ({ children }: { children: React.ReactNode }) => (
-	<div className={styles.wrapper}>
-		<SideBar />
-		{children}
+export const DefaultLayout = ({
+	header,
+	children,
+}: {
+	header?: React.ReactNode;
+	children: React.ReactNode;
+}) => (
+	<div className={styles.container}>
+		<header>
+			<Header>{header}</Header>
+		</header>
+		<nav>
+			<SideBar />
+		</nav>
+		<div className={styles.content}>{children}</div>
+		<footer className={styles.footer}>{/* TODO: */ ''}</footer>
 	</div>
 );

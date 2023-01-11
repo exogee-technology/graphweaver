@@ -1,6 +1,18 @@
 .tableWrapper {
 	padding: 0 40px 32px 40px;
 	margin-top: 32px;
-	display: flex;
-	flex: 4;
+}
+
+/* TODO: */
+.spinner {
+	/* inline-size: 180px; */
+	/* padding-block: 8px;
+	padding-inline: 16px; */
+	position: relative;
+	text-align: center;
+	/* inset-block-end: 8px;
+	inset-inline-end: 8px; */
+	color: var(--body-copy-color);
+	line-height: 35px;
+	background: var(--body-bg-color);
 }
