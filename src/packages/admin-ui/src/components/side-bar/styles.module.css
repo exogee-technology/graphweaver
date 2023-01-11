@@ -13,7 +13,7 @@
 }
 
 .sideBarContent {
-	position: fixed;
+	/* position: fixed; */
 	display: inline-block;
 }
 
@@ -86,7 +86,7 @@
 .subListItem span {
 	width: 16px;
 	height: 16px;
-	background-image: url(./assets/16-table.svg);
+	background-image: url(../../assets/16-table.svg);
 }
 
 .subListItem {
@@ -113,5 +113,5 @@
 }
 
 .subListItem.active span {
-	background-image: url(../../assets/img/16-table-light.svg);
+	background-image: url(../../assets/16-table-light.svg);
 }
