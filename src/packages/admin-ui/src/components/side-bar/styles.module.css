@@ -61,7 +61,7 @@
 }
 
 .sideBarContent {
-	position: fixed;
+	/* position: fixed; */
 	display: inline-block;
 }
 
@@ -136,6 +136,7 @@
 .subListItem svg {
 	width: 16px;
 	height: 16px;
+	background-image: url(../../assets/16-table.svg);
 }
 
 .subListItem {
@@ -169,6 +170,10 @@
 .subListItem.active {
 	background-color: var(--primary-color);
 	opacity: 1;
+}
+
+.subListItem.active span {
+	background-image: url(../../assets/16-table-light.svg);
 }
 
 /* .subListItem.active::before {

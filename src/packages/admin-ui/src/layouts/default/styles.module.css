@@ -8,7 +8,7 @@
 	/* TODO: */
 	/* grid-template-columns: 300px 1fr; */
 	grid-template-columns: 1fr 6px 5fr;
-	grid-row-gap: 10px;
+	grid-row-gap: 5px;
 	/* TODO: */
 	/* grid-column-gap: 10px; */
 	grid-column-gap: 2px;
