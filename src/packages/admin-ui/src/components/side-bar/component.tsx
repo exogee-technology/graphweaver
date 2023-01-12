@@ -46,7 +46,7 @@ export const SideBar = () => {
 			onMouseDown={(e) => e.preventDefault()}
 		>
 			<SideBarContent collapsed={isCollapsed} />
-			<div className={styles.sideBarResizer} onMouseDown={startResizing} />
+			<div className={styles.dragbar} onMouseDown={startResizing} />
 		</div>
 	);
 };

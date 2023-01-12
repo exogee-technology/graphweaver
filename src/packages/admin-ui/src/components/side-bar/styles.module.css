@@ -5,9 +5,11 @@
 	--sidebar-max-width: 300px;
 }
 
-.sideBarContent {
-	position: sticky;
+.sideBar {
+	position: relative;
 	top: 0;
+	height: 100%;
+	width: 300px;
 	min-width: var(--sidebar-min-width);
 	max-width: var(--sidebar-max-width);
 	background: hsl(264, 40%, 10%);
@@ -16,7 +18,7 @@
 	flex-direction: column;
 }
 
-.sideBar {
+/* .sideBar {
 	flex-grow: 0;
 	flex-shrink: 0;
 	min-width: var(--sidebar-min-width);
@@ -28,23 +30,25 @@
 
 .sideBar .sideBarContent {
 	flex: 1;
-}
+} */
 
-.sideBar .sideBarResizer {
+.dragbar {
+	/* TODO: */
 	flex-grow: 0;
 	flex-shrink: 0;
 	flex-basis: 6px;
 	justify-self: flex-end;
-	cursor: col-resize;
+	/* cursor: col-resize; */
 	resize: horizontal;
 }
 
-.sideBar .sideBarResizer:hover {
-	width: 3px;
+.dragbar:hover {
+	width: 6px;
 	background: #c1c3c5b4;
 }
 
-.sideBar .sideBarResizer:hover::after {
+.dragbar:hover::after {
+	/* TODO: */
 	content: url(../../assets/16-chevron-down.svg);
 	position: relative;
 	transform: rotate(270deg);
@@ -54,6 +58,11 @@
 	height: 64px;
 	background-color: white;
 	cursor: pointer;
+}
+
+.sideBarContent {
+	position: fixed;
+	display: inline-block;
 }
 
 .sideBarContent li {
@@ -68,7 +77,9 @@
 	margin-top: 0;
 }
 
-.sideBarContent a svg {
+/* TODO: */
+/* .sideBarContent a svg { */
+.sideBarContent a > svg {
 	margin-right: 8px;
 }
 

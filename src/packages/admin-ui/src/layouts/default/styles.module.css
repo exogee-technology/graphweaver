@@ -1,6 +1,47 @@
-.wrapper {
+.container {
+	display: grid;
+	grid-template-areas:
+		'nav dragbar header'
+		'nav dragbar content'
+		'footer footer footer';
+	grid-template-rows: 120px 1fr 80px;
+	/* TODO: */
+	/* grid-template-columns: 300px 1fr; */
+	grid-template-columns: 1fr 6px 5fr;
+	grid-row-gap: 10px;
+	/* TODO: */
+	/* grid-column-gap: 10px; */
+	grid-column-gap: 2px;
+	height: 100vh;
+	margin: 0;
+}
+
+.content {
+	grid-area: content;
 	display: flex;
-	flex-direction: row;
-	width: 100%;
-	height: 100%;
+	flex-direction: column;
+	overflow-y: scroll;
+}
+
+.dragbar {
+	grid-area: dragbar;
+	cursor: ew-resize;
+}
+
+header {
+	grid-area: header;
+	/* TODO: */
+	overflow: auto;
+}
+
+nav {
+	grid-area: nav;
+	/* TODO: */
+	overflow: auto;
+}
+
+footer {
+	grid-area: footer;
+	/* TODO: */
+	overflow: auto;
 }
