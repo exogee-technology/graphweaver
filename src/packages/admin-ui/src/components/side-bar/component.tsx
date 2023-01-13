@@ -1,52 +1,49 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useQuery } from '@apollo/client';
+import classnames from 'classnames';
+import { Link } from 'react-router-dom';
+import { ReactComponent as GraphweaverLogo } from '~/assets/graphweaver-logo.svg';
+import { useSchema } from '~/utils/use-schema';
 
-import { SideBarContent } from './side-bar-content';
+import { BackendRow, DashboardRow } from './contents';
+import { TenantsResult, TENANTS_QUERY } from './graphql';
 import styles from './styles.module.css';
 
-const SIDEBAR_CSS_MAX_WIDTH = 300;
-const SIDEBAR_CSS_OPT_WIDTH = 250;
+export const SideBar = ({ isCollapsed, width }: { isCollapsed: boolean; width: number }) => {
+	const schema = useSchema();
+	const { data, loading } = useQuery<TenantsResult>(TENANTS_QUERY);
 
-export const SideBar = () => {
-	const sidebarRef = useRef<HTMLDivElement>(null);
-	const [isResizing, setIsResizing] = useState(false);
-	const [isCollapsed, setIsCollapsed] = useState(false);
-	const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_CSS_MAX_WIDTH);
-
-	const startResizing = useCallback(() => setIsResizing(true), []);
-
-	const stopResizing = useCallback(() => {
-		setIsResizing(false);
-	}, []);
-
-	const resize = useCallback(
-		(mouseMoveEvent: MouseEvent) => {
-			if (isResizing && sidebarRef.current) {
-				setSidebarWidth(mouseMoveEvent.clientX - sidebarRef.current.getBoundingClientRect().left);
-			}
-			// TODO: Debounce this?
-			setIsCollapsed(sidebarWidth < SIDEBAR_CSS_OPT_WIDTH);
-		},
-		[isResizing, sidebarWidth]
-	);
-
-	useEffect(() => {
-		window.addEventListener('mousemove', resize);
-		window.addEventListener('mouseup', stopResizing);
-		return () => {
-			window.removeEventListener('mousemove', resize);
-			window.removeEventListener('mouseup', stopResizing);
-		};
-	}, [resize, stopResizing]);
+	if (loading)
+		//TODO: Spinner
+		return (
+			<div className={styles.sideBarContent}>
+				<p>'Loading...'</p>
+			</div>
+		);
 
 	return (
-		<div
-			className={styles.sideBar}
-			ref={sidebarRef}
-			style={{ width: sidebarWidth }}
-			onMouseDown={(e) => e.preventDefault()}
-		>
-			<SideBarContent collapsed={isCollapsed} />
-			<div className={styles.dragbar} onMouseDown={startResizing} />
+		<div className={styles.sideBar} style={{ width }}>
+			<Link to="/">
+				<GraphweaverLogo width="52" className={styles.logo} />
+			</Link>
+
+			<p className={classnames(styles.subtext, isCollapsed && styles.textHidden)}>Dashboards</p>
+			<ul className={classnames(styles.entity, styles.closed)}>
+				<DashboardRow name="All" isCollapsed={isCollapsed} />
+				{data?.result.map((tenant) => (
+					<DashboardRow
+						key={tenant.id}
+						name={tenant.tenantName}
+						tenantId={tenant.id}
+						isCollapsed={isCollapsed}
+					/>
+				))}
+			</ul>
+
+			<p className={classnames(styles.subtext, isCollapsed && styles.textHidden)}>Data Sources</p>
+
+			{schema.backends.map((backend) => (
+				<BackendRow key={backend} backend={backend} isCollapsed={isCollapsed} />
+			))}
 		</div>
 	);
 };

@@ -7,8 +7,15 @@ import { useSelectedEntity } from '~/utils/use-selected-entity';
 import { EntityRow } from './entity-row';
 import styles from '../styles.module.css';
 import classNames from 'classnames';
+import { WithTooltip } from '~/components';
 
-export const BackendRow = ({ backend, collapsed }: { backend: string; collapsed?: boolean }) => {
+export const BackendRow = ({
+	backend,
+	isCollapsed,
+}: {
+	backend: string;
+	isCollapsed?: boolean;
+}) => {
 	const { entitiesForBackend } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
 	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
@@ -16,6 +23,8 @@ export const BackendRow = ({ backend, collapsed }: { backend: string; collapsed?
 	const entities = entitiesForBackend(backend)?.sort((left, right) =>
 		left.name.localeCompare(right.name)
 	);
+
+	const spanClass = isCollapsed ? styles.textHidden : classNames(styles.subListItem);
 
 	return (
 		<ul key={backend} className={styles.entity}>
@@ -27,16 +36,22 @@ export const BackendRow = ({ backend, collapsed }: { backend: string; collapsed?
 						setExpanded(!expanded);
 					}}
 				>
-					<DatabaseIcon />
-					<span style={collapsed ? { display: 'none' } : { whiteSpace: 'nowrap', fontWeight: 600 }}>
-						{backend}
-					</span>
+					<WithTooltip
+						content={`Data Sources: ${backend}`}
+						className={classNames(styles.subListItem, styles.tooltip, styles.active)}
+						direction={'right'}
+						visible={isCollapsed ?? false}
+					>
+						<DatabaseIcon />
+					</WithTooltip>
+
+					<span className={spanClass}>{backend}</span>
 					<ChevronIcon />
 				</a>
 				<ul>
 					{entities &&
 						entities.map((entity) => (
-							<EntityRow key={entity.name} entity={entity} collapsed={collapsed} />
+							<EntityRow key={entity.name} entity={entity} isCollapsed={isCollapsed} />
 						))}
 				</ul>
 			</li>

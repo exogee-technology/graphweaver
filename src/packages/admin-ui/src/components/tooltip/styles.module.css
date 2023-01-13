@@ -1,0 +1,94 @@
+:root {
+	--tooltip-text-color: var(--body-copy-color);
+	--tooltip-background-color: black;
+	--tooltip-margin: 30px;
+	--tooltip-arrow-size: 6px;
+}
+
+.tooltipWrapper {
+	display: inline-block;
+	position: relative;
+	margin: 0;
+	padding: 0;
+}
+
+/* Absolute positioning */
+.tooltip {
+	position: absolute;
+	border-radius: 4px;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 6px;
+	color: var(--tooltip-text-color);
+	background: var(--tooltip-background-color);
+	font-size: 14px;
+	/* font-family: sans-serif; */
+	font-weight: 600;
+	opacity: 1;
+	line-height: 1;
+	z-index: 100;
+	white-space: nowrap;
+}
+
+/* CSS border triangles */
+.tooltip::before {
+	content: ' ';
+	left: 50%;
+	border: solid transparent;
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-width: var(--tooltip-arrow-size);
+	margin-left: calc(var(--tooltip-arrow-size) * -1);
+}
+
+/* Absolute positioning */
+.tooltip.top {
+	top: calc(var(--tooltip-margin) * -1);
+}
+/* CSS border triangles */
+.tooltip.top::before {
+	top: 100%;
+	border-top-color: var(--tooltip-background-color);
+}
+
+/* Absolute positioning */
+.tooltip.right {
+	left: calc(100% + var(--tooltip-margin));
+	top: 50%;
+	transform: translateX(0) translateY(-50%);
+}
+/* CSS border triangles */
+.tooltip.right::before {
+	left: calc(var(--tooltip-arrow-size) * -1);
+	top: 50%;
+	transform: translateX(0) translateY(-50%);
+	border-right-color: var(--tooltip-background-color);
+}
+
+/* Absolute positioning */
+.tooltip.bottom {
+	bottom: calc(var(--tooltip-margin) * -1);
+}
+/* CSS border triangles */
+.tooltip.bottom::before {
+	bottom: 100%;
+	border-bottom-color: var(--tooltip-background-color);
+}
+
+/* Absolute positioning */
+.tooltip.left {
+	left: auto;
+	right: calc(100% + var(--tooltip-margin));
+	top: 50%;
+	transform: translateX(0) translateY(-50%);
+}
+/* CSS border triangles */
+.tooltip.left::before {
+	left: auto;
+	right: calc(var(--tooltip-arrow-size) * -2);
+	top: 50%;
+	transform: translateX(0) translateY(-50%);
+	border-left-color: var(--tooltip-background-color);
+}

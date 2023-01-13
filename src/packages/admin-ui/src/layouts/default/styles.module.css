@@ -5,12 +5,8 @@
 		'nav dragbar content'
 		'footer footer footer';
 	grid-template-rows: 120px 1fr 80px;
-	/* TODO: */
-	/* grid-template-columns: 300px 1fr; */
-	grid-template-columns: 1fr 6px 5fr;
+	grid-template-columns: var(--sidebar-width) 6px 1fr;
 	grid-row-gap: 5px;
-	/* TODO: */
-	/* grid-column-gap: 10px; */
 	grid-column-gap: 2px;
 	height: 100vh;
 	margin: 0;
@@ -25,23 +21,36 @@
 
 .dragbar {
 	grid-area: dragbar;
-	cursor: ew-resize;
+	cursor: col-resize;
+	resize: horizontal;
 }
+
+.dragbar:hover {
+	width: 6px;
+	background: #c1c3c5b4;
+}
+
+/* TODO: Meant to be a clickable arrow which fully closes or opens the sidebar */
+/* .dragbar:hover::after {
+	content: url(../../assets/16-chevron-down.svg);
+	position: relative;
+	transform: rotate(270deg);
+	left: 0;
+	top: 80px;
+	width: 64px;
+	height: 64px;
+	background-color: white;
+	cursor: pointer;
+} */
 
 header {
 	grid-area: header;
-	/* TODO: */
-	overflow: auto;
 }
 
-nav {
+.nav {
 	grid-area: nav;
-	/* TODO: */
-	overflow: auto;
 }
 
 footer {
 	grid-area: footer;
-	/* TODO: */
-	overflow: auto;
 }
