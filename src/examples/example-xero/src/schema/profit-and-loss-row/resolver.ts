@@ -1,11 +1,13 @@
 import { v4 } from 'uuid';
-import { createBaseResolver } from '@exogee/graphweaver';
+import { createBaseResolver, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
-import { forEachTenant, inMemoryFilterFor, offsetAndLimit } from '../../utils';
+import { forEachTenant, inMemoryFilterFor, offsetAndLimit, orderedResult } from '../../utils';
+
+const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 
 const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
@@ -76,18 +78,19 @@ const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
 export class ProfitAndLossRowResolver extends createBaseResolver(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
-		find: async ({ xero, rawFilter, limit, offset }) => {
+		find: async ({ xero, rawFilter, order, limit, offset }) => {
 			const result = await forEachTenant<ProfitAndLossRow>(xero, (tenant) =>
 				loadReportForTenant(xero, tenant.tenantId)
 			);
 
-			// TODO: Order...
+			const sortFields = order ?? defaultSort;
 
-			const filteredResult = result.filter(inMemoryFilterFor(rawFilter));
-
-			return Array.isArray(filteredResult)
-				? offsetAndLimit(filteredResult, offset, limit)
-				: filteredResult;
+			// filter -> order -> limit/offset
+			return offsetAndLimit(
+				orderedResult(result.filter(inMemoryFilterFor(rawFilter)), sortFields),
+				offset,
+				limit
+			);
 		},
 	})
 ) {}
