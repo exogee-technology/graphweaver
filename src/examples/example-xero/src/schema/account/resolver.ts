@@ -1,7 +1,7 @@
 import { createBaseResolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
-import { forEachTenant } from '../../utils';
+import { forEachTenant, offsetAndLimit } from '../../utils';
 import { Account } from './entity';
 import { Account as XeroAccount } from 'xero-node';
 
@@ -22,11 +22,7 @@ export class AccountResolver extends createBaseResolver(
 				return accounts;
 			});
 
-			// TODO: cache for scrollback (and forward scroll)
-
-			const realLimit = limit ?? 100;
-			const realOffset = offset ?? 0;
-			return fullSet.slice(realOffset, realOffset + realLimit);
+			return offsetAndLimit(fullSet, offset, limit);
 		},
 	})
 ) {}

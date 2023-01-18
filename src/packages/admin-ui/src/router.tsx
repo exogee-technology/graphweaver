@@ -20,7 +20,6 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/:entity',
-		// loader: ListLoader,
 		element: (
 			<DefaultLayout header={<ToolBar />}>
 				<List />
@@ -29,7 +28,6 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/:entity/:id',
-		// loader: ListLoader,
 		element: (
 			<DefaultLayout header={<ToolBar />}>
 				<List />

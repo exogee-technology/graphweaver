@@ -2,7 +2,7 @@ import { ApolloQueryResult, NetworkStatus } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
 import * as Modal from 'react-modal';
 import { useAsyncError, useNavigate, useParams } from 'react-router-dom';
-import { useEntityFetch } from '~/pages';
+import { fetchEntity } from '~/pages';
 import { routeFor } from '~/utils/route-for';
 import { useSelectedEntity } from '~/utils/use-selected-entity';
 import styles from './styles.module.css';
@@ -23,7 +23,7 @@ export const DetailPanel = () => {
 	const [detail, setDetail] = useState<ApolloQueryResult<any> | undefined>();
 
 	const fetchData = useCallback(async () => {
-		const result = await useEntityFetch(selectedEntity.name, id);
+		const result = await fetchEntity(selectedEntity.name, id);
 		if (result) {
 			setDetail(result);
 		}
@@ -40,10 +40,6 @@ export const DetailPanel = () => {
 		selectedEntity,
 	]);
 
-	const cancel = () => {
-		navigateBack();
-	};
-
 	if (!detail) return null;
 
 	if (detail.loading) {
@@ -58,7 +54,7 @@ export const DetailPanel = () => {
 			isOpen={id !== undefined}
 			overlayClassName={styles.modalOverlay}
 			className={styles.detailContainer}
-			onRequestClose={cancel}
+			onRequestClose={navigateBack}
 			shouldCloseOnEsc
 			shouldCloseOnOverlayClick
 			// TODO: suppress following warning: 'Warning: react-modal: App element is not defined. Please use `Modal.setAppElement(el)` or set `appElement={el}`. This is needed so screen readers don't see main content when modal is opened'

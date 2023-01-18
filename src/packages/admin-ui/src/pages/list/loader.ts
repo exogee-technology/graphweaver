@@ -27,7 +27,7 @@ export const ListLoader = <T>({ params: { entity, id } }: LoaderFunctionArgs) =>
 		detail: id ? getEntity<T>(entityByNameOrType(entity), id) : undefined,
 	});
 
-export const useListFetch = <T>(entity: string, sortColumns?: SortColumn[], page?: number) => {
+export const fetchList = <T>(entity: string, sortColumns?: SortColumn[], page?: number) => {
 	const result = getEntityPage<T>(
 		entityByNameOrType(entity),
 		sortColumns || [],
@@ -38,7 +38,7 @@ export const useListFetch = <T>(entity: string, sortColumns?: SortColumn[], page
 	return result;
 };
 
-export const useEntityFetch = <T>(entity: string, id?: string) => {
+export const fetchEntity = <T>(entity: string, id?: string) => {
 	const detail = id ? getEntity<T>(entityByNameOrType(entity), id) : undefined;
 
 	return detail;

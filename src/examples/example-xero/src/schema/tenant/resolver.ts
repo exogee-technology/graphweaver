@@ -1,7 +1,7 @@
 import { createBaseResolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
-import { inMemoryFilterFor } from '../../utils';
+import { inMemoryFilterFor, offsetAndLimit } from '../../utils';
 import { Tenant } from './entity';
 
 @Resolver((of) => Tenant)
@@ -18,16 +18,7 @@ export class TenantResolver extends createBaseResolver(
 
 			// TODO: Order...
 
-			const filteredResult = copy.filter(inMemoryFilterFor(rawFilter));
-
-			// TODO: cache for scrollback (and forward scroll)
-			if (Array.isArray(filteredResult)) {
-				const realLimit = limit ?? 100;
-				const realOffset = offset ?? 0;
-				return filteredResult.slice(realOffset, realOffset + realLimit);
-			}
-
-			return filteredResult;
+			return offsetAndLimit(copy.filter(inMemoryFilterFor(rawFilter)), offset, limit);
 		},
 	})
 ) {}
