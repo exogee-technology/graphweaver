@@ -1,6 +1,8 @@
 import { XeroClient } from 'xero-node';
 import { XeroTenant } from './schema';
 
+const PAGE_SIZE = 100;
+
 type WithTenantId<T> = T & { tenantId: string };
 
 type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | Promise<T[]>;
@@ -53,4 +55,10 @@ export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (item) => {
 	}
 
 	return true;
+};
+
+export const offsetAndLimit = <T>(result: T[], offset?: number, limit?: number) => {
+	const realLimit = limit ?? 100;
+	const realOffset = offset ?? 0;
+	return result.slice(realOffset, realOffset + realLimit);
 };

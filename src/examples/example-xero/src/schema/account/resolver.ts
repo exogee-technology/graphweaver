@@ -1,7 +1,7 @@
 import { createBaseResolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
-import { forEachTenant } from '../../utils';
+import { forEachTenant, offsetAndLimit } from '../../utils';
 import { Account } from './entity';
 import { Account as XeroAccount } from 'xero-node';
 
@@ -9,8 +9,8 @@ import { Account as XeroAccount } from 'xero-node';
 export class AccountResolver extends createBaseResolver(
 	Account,
 	new XeroBackendProvider('Account', {
-		find: async ({ xero, filter, order }) => {
-			return forEachTenant<XeroAccount>(xero, async (tenant) => {
+		find: async ({ xero, filter, order, limit, offset }) => {
+			const fullSet = await forEachTenant<XeroAccount>(xero, async (tenant) => {
 				const {
 					body: { accounts },
 				} = await xero.accountingApi.getAccounts(tenant.tenantId, undefined, filter, order);
@@ -21,6 +21,8 @@ export class AccountResolver extends createBaseResolver(
 
 				return accounts;
 			});
+
+			return offsetAndLimit(fullSet, offset, limit);
 		},
 	})
 ) {}

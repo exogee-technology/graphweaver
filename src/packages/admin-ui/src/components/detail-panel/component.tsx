@@ -1,6 +1,10 @@
-import { ApolloQueryResult } from '@apollo/client';
-import React from 'react';
-import { Await, useAsyncError, useLoaderData } from 'react-router-dom';
+import { ApolloQueryResult, NetworkStatus } from '@apollo/client';
+import { useCallback, useEffect, useState } from 'react';
+import * as Modal from 'react-modal';
+import { useAsyncError, useNavigate, useParams } from 'react-router-dom';
+import { fetchEntity } from '~/pages';
+import { routeFor } from '~/utils/route-for';
+import { useSelectedEntity } from '~/utils/use-selected-entity';
 import styles from './styles.module.css';
 
 const DetailPanelError = () => {
@@ -12,17 +16,51 @@ const DetailPanelError = () => {
 };
 
 export const DetailPanel = () => {
-	const { detail } = useLoaderData() as { detail: any };
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const { selectedEntity } = useSelectedEntity();
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+	const [detail, setDetail] = useState<ApolloQueryResult<any> | undefined>();
+
+	const fetchData = useCallback(async () => {
+		const result = await fetchEntity(selectedEntity.name, id);
+		if (result) {
+			setDetail(result);
+		}
+	}, [id]);
+
+	// Don't put fetchData into dependency array here - causes inf loop
+	useEffect(() => {
+		fetchData()
+			// TODO: error handling
+			.catch(console.error);
+	}, [id]);
+
+	const navigateBack = useCallback(() => navigate(routeFor({ entity: selectedEntity })), [
+		selectedEntity,
+	]);
 
 	if (!detail) return null;
 
+	if (detail.loading) {
+		return <pre>Loading...</pre>;
+	}
+	if (detail.error) {
+		return <DetailPanelError />;
+	}
+
 	return (
-		<React.Suspense fallback={<pre className={styles.wrapper}>Loading...</pre>}>
-			<Await resolve={detail} errorElement={<DetailPanelError />}>
-				{(detail: ApolloQueryResult<{ result: { id: string } }>) => (
-					<pre className={styles.wrapper}>{JSON.stringify(detail.data.result, null, 4)}</pre>
-				)}
-			</Await>
-		</React.Suspense>
+		<Modal
+			isOpen={id !== undefined}
+			overlayClassName={styles.modalOverlay}
+			className={styles.detailContainer}
+			onRequestClose={navigateBack}
+			shouldCloseOnEsc
+			shouldCloseOnOverlayClick
+			// TODO: suppress following warning: 'Warning: react-modal: App element is not defined. Please use `Modal.setAppElement(el)` or set `appElement={el}`. This is needed so screen readers don't see main content when modal is opened'
+			ariaHideApp={false}
+		>
+			<pre className={styles.wrpper}>{JSON.stringify(detail.data.result, null, 4)}</pre>
+		</Modal>
 	);
 };
