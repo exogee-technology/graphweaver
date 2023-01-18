@@ -9,10 +9,6 @@
 	--detail-bg-color: #171221;
 }
 
-* {
-	box-sizing: 'border-box';
-}
-
 /* Derived from Figma designs */
 .detailContainer {
 	position: relative;
