@@ -5,7 +5,7 @@ import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
-import { forEachTenant, inMemoryFilterFor } from '../../utils';
+import { forEachTenant, inMemoryFilterFor, offsetAndLimit } from '../../utils';
 
 const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
@@ -85,14 +85,9 @@ export class ProfitAndLossRowResolver extends createBaseResolver(
 
 			const filteredResult = result.filter(inMemoryFilterFor(rawFilter));
 
-			// TODO: cache for scrollback (and forward scroll)
-			if (Array.isArray(filteredResult)) {
-				const realLimit = limit ?? 100;
-				const realOffset = offset ?? 0;
-				return filteredResult.slice(realOffset, realOffset + realLimit);
-			}
-
-			return filteredResult;
+			return Array.isArray(filteredResult)
+				? offsetAndLimit(filteredResult, offset, limit)
+				: filteredResult;
 		},
 	})
 ) {}
