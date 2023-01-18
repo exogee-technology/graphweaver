@@ -6,11 +6,12 @@
 	"scripts": {
 		"build": "node build.js",
 		"prettier": "prettier --write .",
-		"gw": "./bin/index.js"
+		"gw": "./bin/gw-bin.js",
+		"postinstall": "node build.js"
 	},
 	"bin": {
-		"graphweaver": "bin/index.js",
-		"gw": "bin/index.js"
+		"graphweaver": "bin/gw-bin.js",
+		"gw": "bin/gw-bin.js"
 	},
 	"files": [
 		"bin"
