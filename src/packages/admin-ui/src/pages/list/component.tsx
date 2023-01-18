@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Table } from '~/components';
 
-import { useListFetch } from './loader';
+import { fetchList } from './loader';
 import { useCallback, useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { DetailPanel } from '~/components';
@@ -57,7 +57,7 @@ export const List = () => {
 		let eof = false;
 
 		if (currentState && !currentState.eof) {
-			const result = await useListFetch(entity, currentState.sortColumns, currentState.page);
+			const result = await fetchList(entity, currentState.sortColumns, currentState.page);
 			data = result.data.result;
 
 			if (data.length < PAGE_SIZE) {
@@ -77,13 +77,13 @@ export const List = () => {
 			.catch(console.error);
 	}, [entity, entityState[entity]?.page]);
 
-	const incrementPage = (entity: string) => {
+	const incrementPage = () => {
 		setDataState(entity, { page: (entityState[entity]?.page ?? defaultEntityState.page) + 1 });
 	};
 
-	const triggerRefetch = useCallback(() => {
-		incrementPage(entity);
-	}, [entity, entityState[entity]?.page]);
+	// const triggerRefetch = useCallback(() => {
+	// 	incrementPage(entity);
+	// }, [entity, entityState[entity]?.page]);
 
 	const { loading, error, data, eof } = entityState[entity] ?? defaultEntityState;
 	if (loading) {
@@ -95,7 +95,7 @@ export const List = () => {
 
 	return (
 		<>
-			<Table rows={data} refetch={triggerRefetch} eof={eof} />
+			<Table rows={data} refetch={incrementPage} eof={eof} />
 			<DetailPanel />
 		</>
 	);
