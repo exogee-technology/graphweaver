@@ -21,7 +21,7 @@ export interface XeroDataAccessor<T> {
 		xero: XeroClient;
 		filter?: string;
 		rawFilter: Record<string, any>;
-		order?: string;
+		order?: Record<string, Sort>;
 		limit?: number;
 		offset?: number;
 	}) => Promise<T[]>;
@@ -83,12 +83,10 @@ const xeroFilterFrom = (filter: any) => {
 const xeroOrderFrom = (pagination?: PaginationOptions) => {
 	if (!pagination || !pagination.orderBy) return undefined;
 
-	const chunks: string[] = [];
-	for (const [key, value] of Object.entries(pagination.orderBy)) {
-		chunks.push(`${key} ${value}`);
+	if (Object.entries(pagination.orderBy).length > 0) {
+		return pagination.orderBy;
 	}
-
-	return chunks.join(', ') || undefined;
+	return undefined;
 };
 
 const xeroLimitFrom = (pagination?: PaginationOptions) => {
