@@ -1,4 +1,4 @@
 test
-bin
+bin/gw-bin.js
 node_modules
 *.log
