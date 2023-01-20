@@ -71,7 +71,7 @@ export const List = () => {
 	const fetchData = useCallback(async () => {
 		const currentState = entityState[entity] ?? defaultEntityState;
 		let data = [];
-		let eof = false;
+		let lastRecordReturned = false;
 
 		if (!currentState.eof) {
 			// fetchList will remove enum type sortColumns to avoid Apollo exceptions...
@@ -91,11 +91,11 @@ export const List = () => {
 				}
 			}
 			if (data.length < PAGE_SIZE) {
-				eof = true;
+				lastRecordReturned = true;
 			}
 			const loading = result.loading;
 			const error = result.error;
-			setDataState(entity, { data, eof, loading, error });
+			setDataState(entity, { data, eof: lastRecordReturned, loading, error });
 		}
 	}, [entity, entityState[entity]?.sortColumns, entityState[entity]?.page]);
 
@@ -140,7 +140,7 @@ export const List = () => {
 
 	return (
 		<>
-			<Table rows={data} orderBy={sortColumns} refetch={requestRefetch} eof={eof} />
+			<Table rows={data} orderBy={sortColumns} requestRefetch={requestRefetch} eof={eof} />
 			<DetailPanel />
 		</>
 	);
