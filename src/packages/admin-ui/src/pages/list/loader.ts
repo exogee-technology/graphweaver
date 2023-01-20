@@ -11,7 +11,7 @@ const {
 	data: { result: schema },
 } = await client.query<{ result: Schema }>({ query: SCHEMA_QUERY });
 
-const entityByNameOrType = (entity: string | undefined) => {
+export const entityByNameOrType = (entity: string | undefined) => {
 	const cleaned = entity?.replaceAll(cleaningPattern, '');
 	const selectedEntity = schema.entities.find((e: any) => e.name === cleaned);
 
@@ -28,9 +28,23 @@ export const ListLoader = <T>({ params: { entity, id } }: LoaderFunctionArgs) =>
 	});
 
 export const fetchList = <T>(entity: string, sortColumns?: SortColumn[], page?: number) => {
+	// Enum field sort - ApolloQuery throws an error if we try to sort by such fields so
+	// will have to do this on the front end
+	// TODO: multi-column sort
+	const schemaEntity = entityByNameOrType(entity);
+	const apolloSortColumns = sortColumns?.reduce((arr: SortColumn[], col) => {
+		const field = schemaEntity.fields.find((f) => f.name === col.columnKey);
+		const enumField = schema.enums.find((e) => e.name === field?.type);
+		if (enumField) {
+			// Remove from sortColumns to avoid Apollo exception
+			return arr;
+		}
+		arr.push(col);
+		return arr;
+	}, []);
 	const result = getEntityPage<T>(
 		entityByNameOrType(entity),
-		sortColumns || [],
+		apolloSortColumns || [],
 		entityByNameOrType,
 		page ?? 1
 	);

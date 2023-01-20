@@ -1,5 +1,5 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
-import React, { useCallback, useState, MouseEvent, UIEventHandler } from 'react';
+import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import 'react-data-grid/lib/styles.css';
@@ -60,14 +60,16 @@ const columnsForEntity = <T extends { id: string }>(
 
 export const Table = <T extends { id: string }>({
 	rows,
+	orderBy = [],
 	refetch,
 	eof,
 }: {
 	rows: T[];
-	refetch: () => void;
+	orderBy: SortColumn[];
+	refetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
 	eof: boolean;
 }) => {
-	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
@@ -92,10 +94,21 @@ export const Table = <T extends { id: string }>({
 			return;
 		}
 
+		// TODO: Does not prevent a race condition. All this call does is trigger a reload, but really we want
+		// TODO: the reload to complete before setting loading to false
 		setLoading(true);
-		refetch();
-		setLoading(false);
+		refetch({});
+		// TODO: So...
+		setTimeout(() => setLoading(false), 500);
 	};
+
+	const handleSort = () => {
+		refetch({ sortColumns });
+	};
+
+	useEffect(() => {
+		handleSort();
+	}, [sortColumns]);
 
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
