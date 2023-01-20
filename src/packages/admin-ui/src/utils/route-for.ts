@@ -50,7 +50,7 @@ export const routeFor = ({ entity, type, id, dashboard, tenantId, sort }: RouteF
 	const chunks = [entityName];
 	if (id) chunks.push(id);
 	// TODO: At the moment, sorting is a simple '?name=asc&name=desc&...' string
-	let search: string = '';
+	let search = '';
 	if (sort && sort.length > 0) {
 		search = '?' + sort.map((col) => `${col.columnKey}=${col.direction}`).join('&');
 	}
