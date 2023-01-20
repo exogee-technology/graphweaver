@@ -11,6 +11,8 @@ registerEnumType(Sort, {
 	name: 'Sort',
 });
 
+// TODO: When implementing multi-sort columns, Order By has to have its own order so a Record won't do
+// (Ordered Array-like is more important than Set-like )
 export type OrderByOptions = {
 	[x: string]: Sort;
 };
