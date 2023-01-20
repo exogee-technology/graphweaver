@@ -21,6 +21,7 @@ export const Filter = <T extends { name: string }>(GraphqlEntityType: () => T) =
 			index,
 			typeOptions: { nullable: true },
 			validate: undefined,
+			deprecationReason: undefined,
 		});
 	};
 };
