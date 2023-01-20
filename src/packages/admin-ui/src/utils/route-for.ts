@@ -1,3 +1,4 @@
+import { SortColumn } from 'react-data-grid';
 import { Entity } from './use-schema';
 
 interface RouteForEntity {
@@ -24,11 +25,16 @@ interface RouteForDashboard {
 	tenantId?: string;
 }
 
-export type RouteForProps = RouteForEntity | RouteForType | RouteForDashboard;
+interface SearchParams {
+	sort?: SortColumn[];
+	// TODO: filter
+}
+
+export type RouteForProps = (RouteForEntity | RouteForType | RouteForDashboard) & SearchParams;
 
 const cleaningPattern = /[^a-zA-Z0-9]/g;
 
-export const routeFor = ({ entity, type, id, dashboard, tenantId }: RouteForProps) => {
+export const routeFor = ({ entity, type, id, dashboard, tenantId, sort }: RouteForProps) => {
 	if (dashboard) {
 		const chunks = ['dashboard'];
 		if (tenantId) chunks.push(tenantId);
@@ -43,5 +49,10 @@ export const routeFor = ({ entity, type, id, dashboard, tenantId }: RouteForProp
 
 	const chunks = [entityName];
 	if (id) chunks.push(id);
-	return `/${chunks.join('/')}`;
+	// TODO: At the moment, sorting is a simple '?name=asc&name=desc&...' string
+	let search: string = '';
+	if (sort && sort.length > 0) {
+		search = '?' + sort.map((col) => `${col.columnKey}=${col.direction}`).join('&');
+	}
+	return `/${chunks.join('/')}${search}`;
 };
