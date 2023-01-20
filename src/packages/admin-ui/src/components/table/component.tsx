@@ -61,12 +61,12 @@ const columnsForEntity = <T extends { id: string }>(
 export const Table = <T extends { id: string }>({
 	rows,
 	orderBy = [],
-	refetch,
+	requestRefetch,
 	eof,
 }: {
 	rows: T[];
 	orderBy: SortColumn[];
-	refetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
+	requestRefetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
 	eof: boolean;
 }) => {
 	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
@@ -95,15 +95,15 @@ export const Table = <T extends { id: string }>({
 		}
 
 		// TODO: Does not prevent a race condition. All this call does is trigger a reload, but really we want
-		// TODO: the reload to complete before setting loading to false
+		// TODO: the reload itself to complete before setting loading to false
 		setLoading(true);
-		refetch({});
+		requestRefetch({});
 		// TODO: So...
 		setTimeout(() => setLoading(false), 500);
 	};
 
 	const handleSort = () => {
-		refetch({ sortColumns });
+		requestRefetch({ sortColumns });
 	};
 
 	useEffect(() => {
