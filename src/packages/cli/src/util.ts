@@ -1,5 +1,5 @@
 import path from 'path';
-import { BuildOptions } from 'esbuild';
+import { BuildOptions, Message } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -37,11 +37,11 @@ export const baseEsbuildConfig: BuildOptions = {
 export const makeAllPackagesExternalPlugin = () => ({
 	name: 'make-all-packages-external',
 	setup(build: any) {
-		const filter = /^[^./]|^\.[^./]|^\.\.[^/]/; // Must not start with "/" or "./" or "../"
+		// On Windows, packages in the monorepo are resolved as full file paths starting with C:\ ...
+		// And Go (used by esbuild) does not support regex with negative lookaheads
+		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // Must not start with "/" or "./" or "../" or a drive letter
 		build.onResolve({ filter }, ({ path }: any) => {
-			// On Windows, packages in the monorepo are resolved as full file paths starting with C:\ ...
-			// And Go (used by esbuild) does not support regex with negative lookaheads
-			return { path, external: !/^[C-Z]:\\/.test(path) };
+			return { path, external: true };
 		});
 	},
 });
@@ -54,10 +54,9 @@ export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
 			// If it's available locally then it should be bundled,
 			// otherwise let it be external in the resulting bundle.
 			try {
-				require.resolve(path);
+				const resolvedPath = require.resolve(path);
 
-				// If that succeeded, it's in.
-				return { path, external: false };
+				return { path: resolvedPath, external: false };
 			} catch (error) {
 				// Ok, it's out.
 				return { path, external: true };
