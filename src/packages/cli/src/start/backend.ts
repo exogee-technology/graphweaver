@@ -31,6 +31,8 @@ const builtInBackendFunctions: Record<string, any> = {
 };
 
 export const startBackend = async () => {
+	console.log('Starting backend...');
+
 	// Get ready for our config.
 	const backendFunctions = { ...builtInBackendFunctions };
 
@@ -107,6 +109,7 @@ export const startBackend = async () => {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	const { default: ServerlessOffline } = await import('serverless-offline');
+	const logLevel = 'debug';
 	const slsOffline = new ServerlessOffline(
 		// Shim in a kind of serverless config so the plugin kicks up and does its job.
 		{
@@ -120,7 +123,8 @@ export const startBackend = async () => {
 
 					environment: {
 						// In dev it's helpful to trace.
-						LOGGING_LEVEL: process.env.LOGGING_LEVEL || 'trace',
+						LOGGING_LEVEL: 'trace', //  process.env.LOGGING_LEVEL || 'trace',
+						SLS_DEBUG: '*',
 					},
 				},
 				custom: {
@@ -133,9 +137,12 @@ export const startBackend = async () => {
 				getFunction: (key: string) => backendFunctions[key],
 				getAllEventsInFunction: (key: string) => backendFunctions[key].events,
 			},
+		},
+		{
+			printOutput: true,
 		}
 	);
 
-	console.log('GraphWeaver Backend Listening at:');
+	console.log(`GraphWeaver Backend log level ${logLevel} Listening at:'`);
 	await slsOffline.start();
 };
