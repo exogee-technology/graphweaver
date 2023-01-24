@@ -26,8 +26,8 @@
 		"async-mutex": "0.3.2",
 		"class-validator": "0.13.2",
 		"decimal.js": "10.3.1",
-		"graphql": "15.8.0",
-		"type-graphql": "1.1.1"
+		"graphql": "16.6.0",
+		"type-graphql": "1.2.0-rc.1"
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5"

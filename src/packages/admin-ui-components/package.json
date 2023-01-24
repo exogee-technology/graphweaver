@@ -27,7 +27,7 @@
 		"react-data-grid": "7.0.0-beta.20"
 	},
 	"peerDependencies": {
-		"graphql": "15.8.0",
+		"graphql": "16.6.0",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3"

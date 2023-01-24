@@ -27,11 +27,11 @@
 		"class-validator": "0.13.2",
 		"dataloader": "2.1.0",
 		"dotenv": "10.0.0",
-		"graphql": "15.8.0",
+		"graphql": "16.6.0",
 		"lodash": "4.17.21",
 		"pluralize": "8.0.0",
 		"prettier": "2.2.1",
-		"type-graphql": "1.1.1"
+		"type-graphql": "1.2.0-rc.1"
 	},
 	"devDependencies": {
 		"@types/node": "14.14.10",
