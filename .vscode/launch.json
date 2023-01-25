@@ -5,23 +5,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Xero Example",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/examples/example-xero",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "type": "node",
+      "env": { "LOGGING_LEVEL": "trace" }
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Admin UI in Chrome",
       "url": "http://localhost:8000",
       "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Xero Example",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/src/apps/example-xero",
-      "program": "${workspaceFolder}/src/apps/example-xero/node_modules/serverless/bin/serverless.js",
-      "args": ["offline"],
-      "env": {
-        "LOGGING_LEVEL": "trace"
-      },
-      "preLaunchTask": "Build Xero Example"
     }
   ]
 }
