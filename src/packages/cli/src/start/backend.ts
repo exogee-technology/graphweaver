@@ -82,7 +82,7 @@ export const startBackend = async () => {
 								http: {
 									path: additionalFunction.urlPath,
 									method: additionalFunction.method || 'ANY',
-									cors: true,
+									cors: additionalFunction.cors ?? true,
 								},
 							},
 						],
