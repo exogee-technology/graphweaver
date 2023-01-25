@@ -113,7 +113,10 @@ export const startBackend = async () => {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	const { default: ServerlessOffline } = await import('serverless-offline');
-	const logLevel = 'debug';
+
+	const logLevel = process.env.LOGGING_LEVEL || 'trace';
+	const SLS_DEBUG = process.env.SLS_DEBUG || (logLevel === 'trace' ? '*' : undefined);
+
 	const slsOffline = new ServerlessOffline(
 		// Shim in a kind of serverless config so the plugin kicks up and does its job.
 		{
@@ -127,8 +130,8 @@ export const startBackend = async () => {
 
 					environment: {
 						// In dev it's helpful to trace.
-						LOGGING_LEVEL: 'trace', //  process.env.LOGGING_LEVEL || 'trace',
-						SLS_DEBUG: '*',
+						LOGGING_LEVEL: logLevel,
+						SLS_DEBUG,
 					},
 				},
 				custom: {
@@ -147,6 +150,6 @@ export const startBackend = async () => {
 		}
 	);
 
-	console.log(`GraphWeaver Backend log level ${logLevel} Listening at:'`);
+	console.log(`GraphWeaver Backend log level '${logLevel}' - starting Serverless Offline...`);
 	await slsOffline.start();
 };
