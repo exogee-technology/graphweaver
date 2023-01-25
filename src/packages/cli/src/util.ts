@@ -5,6 +5,7 @@ export interface AdditionalFunctionConfig {
 	handlerPath: string;
 	handlerName?: string;
 	urlPath: string;
+	cors?: boolean;
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ANY';
 }
 
