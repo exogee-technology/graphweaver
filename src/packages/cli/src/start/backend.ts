@@ -77,7 +77,7 @@ export const startBackend = async () => {
 					backendFunctions[
 						`user-function:${additionalFunction.handlerPath}-${additionalFunction.method}-${additionalFunction.urlPath}`
 					] = {
-						handler: `${devOutputPathFor(additionalFunction.urlPath)}.${
+						handler: `${devOutputPathFor(additionalFunction.handlerPath)}.${
 							additionalFunction.handlerName || 'handler'
 						}`,
 						environment: dotenv.config().parsed,
