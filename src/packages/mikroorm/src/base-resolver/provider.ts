@@ -424,7 +424,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		const deletedRows = await Database.transactional<number>(async () => {
 			const deletedCount = await this.getRepository().nativeDelete({
 				id: { $in: ids },
-			} as FilterQuery<T>);
+			} as FilterQuery<any>); // We can remove this cast when Typescript knows that T has an `id` property.
 
 			if (deletedCount !== ids.length) {
 				throw new Error('We did not delete all the rows, rolling back');
