@@ -12,6 +12,10 @@ import {
 	devOutputPathFor,
 } from '../util';
 
+// The Serverless Offline logger should report any errors and such to the console as well.
+// This is how we configure the Serverless log reporter to use console.log().
+import '@serverless/utils/log-reporters/node';
+
 const rimraf = promisify(rimrafCallback);
 
 const builtInBackendFunctions: Record<string, any> = {
