@@ -480,12 +480,12 @@ importers:
 
   packages/mikroorm:
     specifiers:
-      '@apollo/server': 4.2.2
       '@exogee/graphweaver': workspace:0.1.0-alpha.5
       '@exogee/logger': workspace:0.1.0
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
       '@types/node': 18.11.11
+      apollo-server-core: 3.10.3
       dataloader: 2.0.0
       decimal.js: 10.3.1
       dotenv: 16.0.0
@@ -495,9 +495,9 @@ importers:
       ts-node: 10.4.0
       typescript: 4.9.4
     dependencies:
-      '@apollo/server': 4.2.2_graphql@16.6.0
       '@exogee/graphweaver': link:../core
       '@exogee/logger': link:../logger
+      apollo-server-core: 3.10.3_graphql@16.6.0
       dataloader: 2.0.0
       decimal.js: 10.3.1
       dotenv: 16.0.0
@@ -737,6 +737,26 @@ packages:
       zen-observable-ts: 1.2.5
     dev: false
 
+  /@apollo/protobufjs/1.2.6:
+    resolution: {integrity: sha512-Wqo1oSHNUj/jxmsVp4iR3I480p6qdqHikn38lKrFhfzcDJ7lwd7Ck7cHRl4JE81tWNArl77xhnG/OkZhxKBYOw==}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@protobufjs/aspromise': 1.1.2
+      '@protobufjs/base64': 1.1.2
+      '@protobufjs/codegen': 2.0.4
+      '@protobufjs/eventemitter': 1.1.0
+      '@protobufjs/fetch': 1.1.0
+      '@protobufjs/float': 1.0.2
+      '@protobufjs/inquire': 1.1.0
+      '@protobufjs/path': 1.1.2
+      '@protobufjs/pool': 1.1.0
+      '@protobufjs/utf8': 1.1.0
+      '@types/long': 4.0.2
+      '@types/node': 10.17.60
+      long: 4.0.0
+    dev: false
+
   /@apollo/protobufjs/1.2.7:
     resolution: {integrity: sha512-Lahx5zntHPZia35myYDBRuF58tlwPskwHc5CWBZC/4bMKB6siTBWwtMrkqXcsNwQiFSzSx5hKdRPUmemrEp3Gg==}
     hasBin: true
@@ -820,6 +840,15 @@ packages:
       sha.js: 2.4.11
     dev: false
 
+  /@apollo/utils.dropunuseddefinitions/1.1.0_graphql@16.6.0:
+    resolution: {integrity: sha512-jU1XjMr6ec9pPoL+BFWzEPW7VHHulVdGKMkPAMiCigpVIT11VmCbnij0bWob8uS3ODJ65tZLYKAh/55vLw2rbg==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      graphql: 14.x || 15.x || 16.x
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
   /@apollo/utils.dropunuseddefinitions/2.0.0_graphql@16.6.0:
     resolution: {integrity: sha512-BoPW+Z3kA8kLh0FCWyzOt+R77W5mVZWer5s6UyvVwZ/qROGiEgcHXFcI5TMMndpXoDo0xBSvQV0lIKYHbJQ7+g==}
     engines: {node: '>=14'}
@@ -863,9 +892,27 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
+  /@apollo/utils.printwithreducedwhitespace/1.1.0_graphql@16.6.0:
+    resolution: {integrity: sha512-GfFSkAv3n1toDZ4V6u2d7L4xMwLA+lv+6hqXicMN9KELSJ9yy9RzuEXaX73c/Ry+GzRsBy/fdSUGayGqdHfT2Q==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      graphql: 14.x || 15.x || 16.x
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
   /@apollo/utils.printwithreducedwhitespace/2.0.0_graphql@16.6.0:
     resolution: {integrity: sha512-S+wyxFyuO0LJ8v+mg8c7rRwyKZ+9xlO5wXD/UgaysH3rcCe9NBHRWx/9cmdZ9nTqgKC5X01uHZ6Gsi6pOrUGgw==}
     engines: {node: '>=14'}
+    peerDependencies:
+      graphql: 14.x || 15.x || 16.x
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
+  /@apollo/utils.removealiases/1.0.0_graphql@16.6.0:
+    resolution: {integrity: sha512-6cM8sEOJW2LaGjL/0vHV0GtRaSekrPQR4DiywaApQlL9EdROASZU5PsQibe2MWeZCOhNrPRuHh4wDMwPsWTn8A==}
+    engines: {node: '>=12.13.0'}
     peerDependencies:
       graphql: 14.x || 15.x || 16.x
     dependencies:
@@ -881,6 +928,16 @@ packages:
       graphql: 16.6.0
     dev: false
 
+  /@apollo/utils.sortast/1.1.0_graphql@16.6.0:
+    resolution: {integrity: sha512-VPlTsmUnOwzPK5yGZENN069y6uUHgeiSlpEhRnLFYwYNoJHsuJq2vXVwIaSmts015WTPa2fpz1inkLYByeuRQA==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      graphql: 14.x || 15.x || 16.x
+    dependencies:
+      graphql: 16.6.0
+      lodash.sortby: 4.7.0
+    dev: false
+
   /@apollo/utils.sortast/2.0.0_graphql@16.6.0:
     resolution: {integrity: sha512-VKoVOh8xkvh5HabtyGTekIYbwXdyYFPodFuHpWp333Fo2KBmpczLY+RBMHEr3v2MLoXDn/WUMtR3JZmvFJ45zw==}
     engines: {node: '>=14'}
@@ -891,12 +948,36 @@ packages:
       lodash.sortby: 4.7.0
     dev: false
 
+  /@apollo/utils.stripsensitiveliterals/1.2.0_graphql@16.6.0:
+    resolution: {integrity: sha512-E41rDUzkz/cdikM5147d8nfCFVKovXxKBcjvLEQ7bjZm/cg9zEcXvS6vFY8ugTubI3fn6zoqo0CyU8zT+BGP9w==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      graphql: 14.x || 15.x || 16.x
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
   /@apollo/utils.stripsensitiveliterals/2.0.0_graphql@16.6.0:
     resolution: {integrity: sha512-pzj1XINetE54uxIjc4bN6gVzDWYP8OZ/yB0xMTgvzttu1VLgXf3BTV76d9hlqLoe8cV0JiD+xLpJktrHOzmBJQ==}
     engines: {node: '>=14'}
     peerDependencies:
       graphql: 14.x || 15.x || 16.x
     dependencies:
+      graphql: 16.6.0
+    dev: false
+
+  /@apollo/utils.usagereporting/1.0.1_graphql@16.6.0:
+    resolution: {integrity: sha512-6dk+0hZlnDbahDBB2mP/PZ5ybrtCJdLMbeNJD+TJpKyZmSY6bA3SjI8Cr2EM9QA+AdziywuWg+SgbWUF3/zQqQ==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      graphql: 14.x || 15.x || 16.x
+    dependencies:
+      '@apollo/usage-reporting-protobuf': 4.0.2
+      '@apollo/utils.dropunuseddefinitions': 1.1.0_graphql@16.6.0
+      '@apollo/utils.printwithreducedwhitespace': 1.1.0_graphql@16.6.0
+      '@apollo/utils.removealiases': 1.0.0_graphql@16.6.0
+      '@apollo/utils.sortast': 1.1.0_graphql@16.6.0
+      '@apollo/utils.stripsensitiveliterals': 1.2.0_graphql@16.6.0
       graphql: 16.6.0
     dev: false
 
@@ -918,6 +999,21 @@ packages:
   /@apollo/utils.withrequired/2.0.0:
     resolution: {integrity: sha512-+djpTu6AEE/A1etryZs9tmXRyDY6XXGe3G29MS/LB09uHq3pcl3n4Q5lvDTL5JWKuJixrulg5djePLDAooG8dQ==}
     engines: {node: '>=14'}
+    dev: false
+
+  /@apollographql/apollo-tools/0.5.4_graphql@16.6.0:
+    resolution: {integrity: sha512-shM3q7rUbNyXVVRkQJQseXv6bnYM3BUma/eZhwXR4xsuM+bqWnJKvW7SAfRjP7LuSCocrexa5AXhjjawNHrIlw==}
+    engines: {node: '>=8', npm: '>=6'}
+    peerDependencies:
+      graphql: ^14.2.1 || ^15.0.0 || ^16.0.0
+    dependencies:
+      graphql: 16.6.0
+    dev: false
+
+  /@apollographql/graphql-playground-html/1.6.29:
+    resolution: {integrity: sha512-xCcXpoz52rI4ksJSdOCxeOCn2DLocxwHf9dVT/Q90Pte1LX+LY+91SFtJF3KXVHH8kEin+g1KKCQPKBjZJfWNA==}
+    dependencies:
+      xss: 1.0.14
     dev: false
 
   /@ardatan/aggregate-error/0.0.6:
@@ -3160,6 +3256,16 @@ packages:
       tslib: 2.4.1
     dev: false
 
+  /@graphql-tools/merge/8.3.15_graphql@16.6.0:
+    resolution: {integrity: sha512-hYYOlsqkUlL6oOo7zzuk6hIv7xQzy+x21sgK84d5FWaiWYkLYh9As8myuDd9SD5xovWWQ9m/iRhIOVDEMSyEKA==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      '@graphql-tools/utils': 9.1.4_graphql@16.6.0
+      graphql: 16.6.0
+      tslib: 2.4.1
+    dev: false
+
   /@graphql-tools/merge/8.3.1_graphql@16.6.0:
     resolution: {integrity: sha512-BMm99mqdNZbEYeTPK3it9r9S6rsZsQKtlqJsSBknAclXq2pGEfOxjcIZi+kBSkHZKPKCRrYDd5vY0+rUmIHVLg==}
     peerDependencies:
@@ -3168,6 +3274,18 @@ packages:
       '@graphql-tools/utils': 8.9.0_graphql@16.6.0
       graphql: 16.6.0
       tslib: 2.4.1
+
+  /@graphql-tools/mock/8.7.15_graphql@16.6.0:
+    resolution: {integrity: sha512-0zImG5tuObhowqtijlB6TMAIVtCIBsnGGwNW8gnCOa+xZAqfGdUMsSma17tHC2XuI7xhv7A0O8pika9e3APLUg==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      '@graphql-tools/schema': 9.0.13_graphql@16.6.0
+      '@graphql-tools/utils': 9.1.4_graphql@16.6.0
+      fast-json-stable-stringify: 2.1.0
+      graphql: 16.6.0
+      tslib: 2.4.1
+    dev: false
 
   /@graphql-tools/optimize/1.3.1_graphql@16.6.0:
     resolution: {integrity: sha512-5j5CZSRGWVobt4bgRRg7zhjPiSimk+/zIuColih8E8DxuFOaJ+t0qu7eZS5KXWBkjcd4BPNuhUPpNlEmHPqVRQ==}
@@ -3261,6 +3379,18 @@ packages:
       value-or-promise: 1.0.11
     dev: false
 
+  /@graphql-tools/schema/9.0.13_graphql@16.6.0:
+    resolution: {integrity: sha512-guRA3fwAtv+M1Kh930P4ydH9aKJTWscIkhVFcWpj/cnjYYxj88jkEJ15ZNiJX/2breNY+sbVgmlgLKb6aXi/Jg==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      '@graphql-tools/merge': 8.3.15_graphql@16.6.0
+      '@graphql-tools/utils': 9.1.4_graphql@16.6.0
+      graphql: 16.6.0
+      tslib: 2.4.1
+      value-or-promise: 1.0.12
+    dev: false
+
   /@graphql-tools/url-loader/6.10.1_bb3d3aae83805cac41e1ce9f529a1d9e:
     resolution: {integrity: sha512-DSDrbhQIv7fheQ60pfDpGD256ixUQIR6Hhf9Z5bRjVkXOCvO5XrkwoWLiU7iHL81GB1r0Ba31bf+sl+D4nyyfw==}
     peerDependencies:
@@ -3348,6 +3478,15 @@ packages:
     dependencies:
       graphql: 16.6.0
       tslib: 2.4.1
+
+  /@graphql-tools/utils/9.1.4_graphql@16.6.0:
+    resolution: {integrity: sha512-hgIeLt95h9nQgQuzbbdhuZmh+8WV7RZ/6GbTj6t3IU4Zd2zs9yYJ2jgW/krO587GMOY8zCwrjNOMzD40u3l7Vg==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      graphql: 16.6.0
+      tslib: 2.4.1
+    dev: false
 
   /@graphql-tools/wrap/7.0.8_graphql@16.6.0:
     resolution: {integrity: sha512-1NDUymworsOlb53Qfh7fonDi2STvqCtbeE68ntKY9K/Ju/be2ZNxrFSbrBHwnxWcN9PjISNnLcAyJ1L5tCUyhg==}
@@ -5997,6 +6136,10 @@ packages:
       form-data: 3.0.1
     dev: false
 
+  /@types/node/10.17.60:
+    resolution: {integrity: sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw==}
+    dev: false
+
   /@types/node/14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
     dev: true
@@ -6325,7 +6468,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6_@babel+core@7.20.5
       magic-string: 0.26.7
       react-refresh: 0.14.0
-      vite: 3.2.4_@types+node@18.11.9
+      vite: 3.2.4
     transitivePeerDependencies:
       - supports-color
 
@@ -6764,6 +6907,47 @@ packages:
       - encoding
     dev: false
 
+  /apollo-reporting-protobuf/3.3.3:
+    resolution: {integrity: sha512-L3+DdClhLMaRZWVmMbBcwl4Ic77CnEBPXLW53F7hkYhkaZD88ivbCVB1w/x5gunO6ZHrdzhjq0FHmTsBvPo7aQ==}
+    deprecated: The `apollo-reporting-protobuf` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/usage-reporting-protobuf` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    dependencies:
+      '@apollo/protobufjs': 1.2.6
+    dev: false
+
+  /apollo-server-core/3.10.3_graphql@16.6.0:
+    resolution: {integrity: sha512-PiTirlcaszgnJGzSsGui9XWh0KAh0BUW+GvRKN6O0H0qOSXSLmoqqyL83J+u+HaUZGyyiE0+VOkyCcuF+kKbEw==}
+    engines: {node: '>=12.0'}
+    deprecated: The `apollo-server-core` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    peerDependencies:
+      graphql: ^15.3.0 || ^16.0.0
+    dependencies:
+      '@apollo/utils.keyvaluecache': 1.0.2
+      '@apollo/utils.logger': 1.0.1
+      '@apollo/utils.usagereporting': 1.0.1_graphql@16.6.0
+      '@apollographql/apollo-tools': 0.5.4_graphql@16.6.0
+      '@apollographql/graphql-playground-html': 1.6.29
+      '@graphql-tools/mock': 8.7.15_graphql@16.6.0
+      '@graphql-tools/schema': 8.5.1_graphql@16.6.0
+      '@josephg/resolvable': 1.0.1
+      apollo-datasource: 3.3.2
+      apollo-reporting-protobuf: 3.3.3
+      apollo-server-env: 4.2.1
+      apollo-server-errors: 3.3.1_graphql@16.6.0
+      apollo-server-plugin-base: 3.7.1_graphql@16.6.0
+      apollo-server-types: 3.7.1_graphql@16.6.0
+      async-retry: 1.3.3
+      fast-json-stable-stringify: 2.1.0
+      graphql: 16.6.0
+      graphql-tag: 2.12.6_graphql@16.6.0
+      loglevel: 1.8.1
+      lru-cache: 6.0.0
+      sha.js: 2.4.11
+      uuid: 9.0.0
+      whatwg-mimetype: 3.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /apollo-server-env/4.2.1:
     resolution: {integrity: sha512-vm/7c7ld+zFMxibzqZ7SSa5tBENc4B0uye9LTfjJwGoQFY5xsUPH5FpO5j0bMUDZ8YYNbrF9SNtzc5Cngcr90g==}
     engines: {node: '>=12.0'}
@@ -6782,6 +6966,35 @@ packages:
       graphql: ^15.3.0 || ^16.0.0
     dependencies:
       graphql: 16.6.0
+    dev: false
+
+  /apollo-server-plugin-base/3.7.1_graphql@16.6.0:
+    resolution: {integrity: sha512-g3vJStmQtQvjGI289UkLMfThmOEOddpVgHLHT2bNj0sCD/bbisj4xKbBHETqaURokteqSWyyd4RDTUe0wAUDNQ==}
+    engines: {node: '>=12.0'}
+    deprecated: The `apollo-server-plugin-base` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    peerDependencies:
+      graphql: ^15.3.0 || ^16.0.0
+    dependencies:
+      apollo-server-types: 3.7.1_graphql@16.6.0
+      graphql: 16.6.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /apollo-server-types/3.7.1_graphql@16.6.0:
+    resolution: {integrity: sha512-aE9RDVplmkaOj/OduNmGa+0a1B5RIWI0o3zC1zLvBTVWMKTpo0ifVf11TyMkLCY+T7cnZqVqwyShziOyC3FyUw==}
+    engines: {node: '>=12.0'}
+    deprecated: The `apollo-server-types` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    peerDependencies:
+      graphql: ^15.3.0 || ^16.0.0
+    dependencies:
+      '@apollo/utils.keyvaluecache': 1.0.2
+      '@apollo/utils.logger': 1.0.1
+      apollo-reporting-protobuf: 3.3.3
+      apollo-server-env: 4.2.1
+      graphql: 16.6.0
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /archive-type/4.0.0:
@@ -8323,6 +8536,10 @@ packages:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
     hasBin: true
+
+  /cssfilter/0.0.10:
+    resolution: {integrity: sha512-FAaLDaplstoRsDR8XGYH51znUN0UY7nMc6Z9/fvE8EXGwvJE9hu7W2vHwx1+bd6gCYnln9nLbzxFTrcO9YQDZw==}
+    dev: false
 
   /cssom/0.3.8:
     resolution: {integrity: sha512-b0tGHbfegbhPJpxpiBPU2sCkigAqtM9O121le6bbOlgyV+NyGyCmVfJ6QW9eRjz8CpNfWEOYBIMIGRYkLwsIYg==}
@@ -18257,6 +18474,11 @@ packages:
     resolution: {integrity: sha512-41BrgH+dIbCFXClcSapVs5M6GkENd3gQOJpEfPDNa71LsUGMXDL0jMWpI/Rh7WhX+Aalfz2TTS3Zt5pUsbnhLg==}
     engines: {node: '>=12'}
 
+  /value-or-promise/1.0.12:
+    resolution: {integrity: sha512-Z6Uz+TYwEqE7ZN50gwn+1LCVo9ZVrpxRPOhOLnncYkY1ZzOYtrX8Fwf/rFktZ8R5mJms6EZf5TqNOMeZmnPq9Q==}
+    engines: {node: '>=12'}
+    dev: false
+
   /value-or-promise/1.0.6:
     resolution: {integrity: sha512-9r0wQsWD8z/BxPOvnwbPf05ZvFngXyouE9EKB+5GbYix+BYnAwrIChCUyFIinfbf2FL/U71z+CPpbnmTdxrwBg==}
     engines: {node: '>=12'}
@@ -18291,7 +18513,7 @@ packages:
     dependencies:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 6.5.1
-      vite: 3.2.4_@types+node@18.11.9
+      vite: 3.2.4
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -18327,7 +18549,6 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vite/3.2.4_@types+node@14.14.10:
     resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
@@ -18395,6 +18616,7 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /w3c-hr-time/1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
@@ -18787,6 +19009,15 @@ packages:
   /xmlchars/2.2.0:
     resolution: {integrity: sha512-JZnDKK8B0RCDw84FNdDAIpZK+JuJw+s7Lz8nksI7SIuU3UXJJslUthsi+uWBUYOwPFwW7W7PRLRfUKpxjtjFCw==}
     dev: true
+
+  /xss/1.0.14:
+    resolution: {integrity: sha512-og7TEJhXvn1a7kzZGQ7ETjdQVS2UfZyTlsEdDOqvQF7GoxNfY+0YLCzBy1kPdsDDx4QuNAonQPddpsn6Xl/7sw==}
+    engines: {node: '>= 0.10.0'}
+    hasBin: true
+    dependencies:
+      commander: 2.20.3
+      cssfilter: 0.0.10
+    dev: false
 
   /xtend/4.0.2:
     resolution: {integrity: sha512-LKYU1iAXJXUgAXn9URjiu+MWhyUXHsvfp7mcuYm9dSUKK0/CjtrUwFAxD82/mCWbtLsGjFIad0wIsod4zrTAEQ==}
