@@ -140,7 +140,7 @@ export const BaseLoaders = {
 		id: string;
 	}) => {
 		const loader = getBaseLoadOneLoader(gqlEntityType);
-		return (loader.load(id) as unknown) as Promise<T>;
+		return loader.load(id) as unknown as Promise<T>;
 	},
 
 	loadByRelatedId: <T>(args: {
@@ -149,7 +149,7 @@ export const BaseLoaders = {
 		id: string;
 	}) => {
 		const loader = getBaseRelatedIdLoader(args);
-		return (loader.load(args.id) as unknown) as Promise<T[]>;
+		return loader.load(args.id) as unknown as Promise<T[]>;
 	},
 
 	clearCache: () => {
