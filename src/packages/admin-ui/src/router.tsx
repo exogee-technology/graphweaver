@@ -6,6 +6,7 @@ import { dashboards } from 'virtual:graphweaver-user-supplied-dashboards';
 
 import { Loader, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
 import { List, ListLoader, Root } from './pages';
+import { ToolBar } from './components';
 
 const defaultRoutes = [
 	{
@@ -18,18 +19,16 @@ const defaultRoutes = [
 	},
 	{
 		path: '/:entity',
-		loader: ListLoader,
 		element: (
-			<DefaultLayout>
+			<DefaultLayout header={<ToolBar />}>
 				<List />
 			</DefaultLayout>
 		),
 	},
 	{
 		path: '/:entity/:id',
-		loader: ListLoader,
 		element: (
-			<DefaultLayout>
+			<DefaultLayout header={<ToolBar />}>
 				<List />
 			</DefaultLayout>
 		),

@@ -45,14 +45,96 @@ exports.handler = async (event) => {
 				<head>
 					<meta charset="utf-8">
 					<title>Graphweaver - Connect to Xero</title>
+					<style>
+						:root {
+							font-family: 'Inter', sans-serif;
+							--body-copy-color: #ede8f2;
+							--body-bg-color: #100a1c;
+							--primary-color: #7038c2;
+							--secondary-color: #853af2;
+						}
+						@supports (font-variation-settings: normal) {
+							:root {
+								font-family: 'Inter var', sans-serif;
+							}
+						}
+					
+						* {
+							font-family: 'Inter', sans-serif;
+							color: var(--body-copy-color);
+						}
+					
+						html,
+						body,
+						#root {
+							margin: 0;
+							-webkit-font-smoothing: antialiased;
+							-moz-osx-font-smoothing: grayscale;
+							background-color: var(--body-bg-color);
+						
+							line-height: 200%;
+						
+							height: 100%;
+
+							display: flex;
+							justify-content: center;
+							align-items: center;
+						}
+
+						a {
+							position: relative;
+							box-sizing: border-box;
+						
+							padding: 8px 12px;
+						
+							background: var(--primary-color);
+							border: 1px solid rgba(237, 232, 242, 0.2);
+							box-shadow: 0px 1px 3px rgba(9, 5, 16, 0.1);
+							border-radius: 6px;
+							font-weight: 500;
+							text-decoration: none;
+						}
+						
+						a:hover {
+							background-color: var(--secondary-color);
+						}
+						
+						pre {
+							font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+							  monospace;
+					
+							opacity: 0.6;
+					
+							width: 600px;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							margin-left: 20px;
+						}
+
+						h1 {
+							margin-top: 20px;
+							font-style: normal;
+							font-weight: 600;
+							font-size: 16px;
+							line-height: 140%;
+						}
+
+						p > span,
+						li > span {
+							opacity: 0.6;
+						}
+
+					</style>
 				</head>
 				<body>
-					<a href="${await xero.buildConsentUrl()}">Connect to Xero</a>
+					<div>
+						<a href="${await xero.buildConsentUrl()}">Connect to Xero</a>
 					
 					${
 						error
 							? `
-								<p>Error from Xero (try connecting again)</p>
+								<h1>Error from Xero (try connecting again)</h1>
 								<pre>${JSON.stringify(error, null, 4)}</pre>
 							`
 							: ''
@@ -60,22 +142,28 @@ exports.handler = async (event) => {
 					${
 						token
 							? `
-								<p>Token from Xero</p>
+								<h1>Token from Xero</h1>
 								<pre>${JSON.stringify(token, null, 4)}</pre>
-								<p>This token has been saved to ./token.json, and you are ready to use the API.</p>
+								<p>This token has been saved to <span>./token.json</span>, and you are ready to use the API.</p>
 							`
 							: ''
 					}
 					${
 						xero.tenants.length
 							? `
-								<p>We have access to the following Xero Tenants:</p>
+								<h1>We have access to the following Xero Tenants:</h1>
 								<ul>
-									${xero.tenants.map((tenant) => `<li>${tenant.tenantName} (ID: ${tenant.tenantId})</li>`).join('')}
+									${xero.tenants
+										.map(
+											(tenant) =>
+												`<li>${tenant.tenantName} <span>(ID: ${tenant.tenantId})</span></li>`
+										)
+										.join('')}
 								</ul>
 							`
 							: ''
 					}
+					</div>
 				</body>
 			</html>
 		`,
