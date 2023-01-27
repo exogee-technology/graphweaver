@@ -58,13 +58,13 @@ const columnsForEntity = <T extends { id: string }>(
 
 export const Table = <T extends { id: string }>({
 	rows,
-	orderBy = [],
 	requestRefetch,
+	orderBy = [],
 	eof,
 }: {
 	rows: T[];
-	orderBy: SortColumn[];
 	requestRefetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
+	orderBy?: SortColumn[];
 	eof: boolean;
 }) => {
 	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
