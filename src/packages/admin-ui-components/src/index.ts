@@ -5,5 +5,8 @@ export * from './detail-panel';
 export * from './layouts';
 export * from './loader';
 export * from './side-bar';
+export * from './spinner';
 export * from './table';
 export * from './utils';
+export * from './header';
+export * from './toolbar';

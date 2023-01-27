@@ -1,81 +1,110 @@
-import React from 'react';
-import { Await, useLoaderData } from 'react-router-dom';
-import { ApolloQueryResult } from '@apollo/client';
 import {
 	Button,
 	DetailPanel,
 	FilterButton,
 	FilterIcon,
-	Loader,
 	OpenExternalIcon,
 	Table,
 } from '@exogee/graphweaver-admin-ui-components';
 
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import styles from './styles.module.css';
+import { useParams } from 'react-router-dom';
 
-// const BlankSlate = () => (
-// 	<div id={styles.centerBlankSlate}>
-// 		<div className={styles.blankSlateWrapper}>
-// 			<DataSourcesIcon />
-// 			<h1>No data sources yet</h1>
+import { fetchList } from './loader';
+import { useCallback, useEffect, useState } from 'react';
+import { ApolloError } from '@apollo/client';
+import { SortColumn } from 'react-data-grid';
+import { PAGE_SIZE } from '~/utils/data-loading';
 
-// 			<p className="subtext">
-// 				Connect data sources. See the <a href="/#">readme</a> for more details
-// 			</p>
-// 		</div>
-// 	</div>
-// );
+type DataType = { id: string };
+interface DataState {
+	data: DataType[];
+	sortColumns: SortColumn[];
+	page: number;
+	loading: boolean;
+	error?: ApolloError;
+	eof: boolean;
+}
 
-const ToolBar = () => (
-	<div className={styles.toolBarWrapper}>
-		<div className="titleWrapper">
-			<h1>localhost</h1>
-			<p className="subtext">localhost:3000/graphql/v1</p>
-		</div>
+type DataStateByEntity = Record<string, DataState>;
 
-		<div className={styles.toolsWrapper}>
-			<input className={styles.search} type="search" name="search" placeholder="Search..." />
-			<FilterButton dropdown iconBefore={<FilterIcon />}>
-				Filter
-			</FilterButton>
-
-			<Button>
-				<p>Open playground</p>
-				<span>
-					<OpenExternalIcon />
-				</span>
-			</Button>
-			<Button
-				dropdown
-				dropdownItems={[
-					{ name: 'Add links array', href: 'some_url' },
-					{ name: 'Add links array', href: 'some_url' },
-				]}
-				iconBefore={<OpenExternalIcon />}
-			>
-				Test
-			</Button>
-		</div>
-	</div>
-);
+const defaultEntityState = {
+	data: [],
+	sortColumns: [],
+	page: 1,
+	loading: false,
+	error: undefined,
+	eof: false,
+};
 
 export const List = () => {
-	const { rows } = useLoaderData() as { rows: any };
+	const { entity } = useParams();
+
+	if (!entity) {
+		throw new Error('There should always be an entity at this point.');
+	}
+
+	const [entityState, setEntityState] = useState<DataStateByEntity>({});
+
+	const setDataState = (entity: string, state: Partial<DataState>) => {
+		const currentState = entityState[entity] ?? defaultEntityState;
+		// All but data are overwritten, data is appended
+		const newData = [...currentState.data, ...(state.data ?? [])];
+		const newDataState = {
+			...currentState,
+			...state,
+			data: newData,
+		};
+		setEntityState((entityState) => ({ ...entityState, [entity]: newDataState }));
+	};
+
+	const fetchData = useCallback(async () => {
+		const currentState = entityState[entity] ?? defaultEntityState;
+
+		let data = [];
+		let eof = false;
+
+		if (currentState && !currentState.eof) {
+			const result = await fetchList(entity, currentState.sortColumns, currentState.page);
+			data = result.data.result;
+
+			if (data.length < PAGE_SIZE) {
+				eof = true;
+			}
+			const loading = result.loading;
+			const error = result.error;
+			setDataState(entity, { data, eof, loading, error });
+		}
+	}, [entity, entityState[entity]?.data]);
+
+	// Don't add 'fetchData' to the dependency array, or this will inf loop
+	// Only fire if either entity or page changes
+	useEffect(() => {
+		fetchData()
+			// TODO: error handling
+			.catch(console.error);
+	}, [entity, entityState[entity]?.page]);
+
+	const incrementPage = () => {
+		setDataState(entity, { page: (entityState[entity]?.page ?? defaultEntityState.page) + 1 });
+	};
+
+	// const triggerRefetch = useCallback(() => {
+	// 	incrementPage(entity);
+	// }, [entity, entityState[entity]?.page]);
+
+	const { loading, error, data, eof } = entityState[entity] ?? defaultEntityState;
+	if (loading) {
+		return <pre>Loading...</pre>;
+	}
+	if (error) {
+		return <pre>{`Error! ${error.message}`}</pre>;
+	}
 
 	return (
 		<>
-			<div className={styles.mainContent}>
-				<ToolBar />
-
-				<React.Suspense fallback={<Loader />}>
-					<Await resolve={rows} errorElement={<p>Error!</p>}>
-						{(rows: ApolloQueryResult<{ result: Array<{ id: string }> }>) => (
-							<Table rows={rows.data.result} />
-						)}
-					</Await>
-				</React.Suspense>
-			</div>
+			<Table rows={data} refetch={incrementPage} eof={eof} />
 			<DetailPanel />
 		</>
 	);
