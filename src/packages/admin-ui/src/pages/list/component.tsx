@@ -1,21 +1,11 @@
-import {
-	Button,
-	DetailPanel,
-	FilterButton,
-	FilterIcon,
-	OpenExternalIcon,
-	Table,
-} from '@exogee/graphweaver-admin-ui-components';
-
-import '@exogee/graphweaver-admin-ui-components/lib/index.css';
-import styles from './styles.module.css';
-import { useParams } from 'react-router-dom';
-
-import { fetchList } from './loader';
 import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { SortColumn } from 'react-data-grid';
-import { PAGE_SIZE } from '~/utils/data-loading';
+
+import { DetailPanel, Table, useSchema, PAGE_SIZE } from '@exogee/graphweaver-admin-ui-components';
+import '@exogee/graphweaver-admin-ui-components/lib/index.css';
+import { fetchList } from './graphql';
 
 type DataType = { id: string };
 interface DataState {
@@ -40,11 +30,9 @@ const defaultEntityState = {
 
 export const List = () => {
 	const { entity } = useParams();
+	if (!entity) throw new Error('There should always be an entity at this point.');
 
-	if (!entity) {
-		throw new Error('There should always be an entity at this point.');
-	}
-
+	const { entityByName } = useSchema();
 	const [entityState, setEntityState] = useState<DataStateByEntity>({});
 
 	const setDataState = (entity: string, state: Partial<DataState>) => {
@@ -66,14 +54,18 @@ export const List = () => {
 		let eof = false;
 
 		if (currentState && !currentState.eof) {
-			const result = await fetchList(entity, currentState.sortColumns, currentState.page);
+			const result = await fetchList<{ result: any[] }>(
+				entity,
+				entityByName,
+				currentState.sortColumns,
+				currentState.page
+			);
+			const { loading, error } = result;
 			data = result.data.result;
 
 			if (data.length < PAGE_SIZE) {
 				eof = true;
 			}
-			const loading = result.loading;
-			const error = result.error;
 			setDataState(entity, { data, eof, loading, error });
 		}
 	}, [entity, entityState[entity]?.data]);
@@ -104,7 +96,7 @@ export const List = () => {
 
 	return (
 		<>
-			<Table rows={data} refetch={incrementPage} eof={eof} />
+			<Table rows={data} requestRefetch={incrementPage} eof={eof} />
 			<DetailPanel />
 		</>
 	);

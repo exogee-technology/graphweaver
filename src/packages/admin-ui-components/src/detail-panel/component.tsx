@@ -1,10 +1,7 @@
-import { ApolloQueryResult, NetworkStatus } from '@apollo/client';
+import { ApolloQueryResult } from '@apollo/client';
 import { useCallback, useEffect, useState } from 'react';
-import * as Modal from 'react-modal';
 import { useAsyncError, useNavigate, useParams } from 'react-router-dom';
-import { fetchEntity } from '~/pages';
-import { routeFor } from '~/utils/route-for';
-import { useSelectedEntity } from '~/utils/use-selected-entity';
+import { useSelectedEntity, routeFor, getEntity } from '../utils';
 import styles from './styles.module.css';
 
 const DetailPanelError = () => {
@@ -23,9 +20,9 @@ export const DetailPanel = () => {
 	const [detail, setDetail] = useState<ApolloQueryResult<any> | undefined>();
 
 	const fetchData = useCallback(async () => {
-		const result = await fetchEntity(selectedEntity.name, id);
-		if (result) {
-			setDetail(result);
+		if (id) {
+			const result = await getEntity(selectedEntity, id);
+			if (result) setDetail(result);
 		}
 	}, [id]);
 
@@ -36,9 +33,10 @@ export const DetailPanel = () => {
 			.catch(console.error);
 	}, [id]);
 
-	const navigateBack = useCallback(() => navigate(routeFor({ entity: selectedEntity })), [
-		selectedEntity,
-	]);
+	const navigateBack = useCallback(
+		() => navigate(routeFor({ entity: selectedEntity })),
+		[selectedEntity]
+	);
 
 	if (!detail) return null;
 
@@ -49,18 +47,5 @@ export const DetailPanel = () => {
 		return <DetailPanelError />;
 	}
 
-	return (
-		<Modal
-			isOpen={id !== undefined}
-			overlayClassName={styles.modalOverlay}
-			className={styles.detailContainer}
-			onRequestClose={navigateBack}
-			shouldCloseOnEsc
-			shouldCloseOnOverlayClick
-			// TODO: suppress following warning: 'Warning: react-modal: App element is not defined. Please use `Modal.setAppElement(el)` or set `appElement={el}`. This is needed so screen readers don't see main content when modal is opened'
-			ariaHideApp={false}
-		>
-			<pre className={styles.wrpper}>{JSON.stringify(detail.data.result, null, 4)}</pre>
-		</Modal>
-	);
+	return <pre className={styles.wrpper}>{JSON.stringify(detail.data.result, null, 4)}</pre>;
 };

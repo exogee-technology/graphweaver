@@ -1,8 +1,7 @@
-import { Button, FilterButton } from '~/components';
-import { ReactComponent as OpenPlaygroundIcon } from '~/assets/16-open-external.svg';
-import { ReactComponent as FilterIcon } from '~/assets/16-filter.svg';
+import { Button, FilterButton } from '..';
+import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external.svg';
+import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
 import styles from './styles.module.css';
-import React from 'react';
 
 // const BlankSlate = () => (
 // 	<div id={styles.centerBlankSlate}>
