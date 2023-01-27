@@ -16,9 +16,9 @@ import { isUntrackedProperty } from './untracked-property';
 @Subscriber()
 export class ChangeTracker implements EventSubscriber {
 	async afterFlush({ uow, em }: FlushEventArgs): Promise<void> {
-		const changesets = (uow
+		const changesets = uow
 			.getChangeSets()
-			.filter((cs) => cs.entity instanceof TrackedEntity) as unknown) as ChangeSet<
+			.filter((cs) => cs.entity instanceof TrackedEntity) as unknown as ChangeSet<
 			TrackedEntity<any>
 		>[];
 		const trx = em.getTransactionContext();
