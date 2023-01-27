@@ -1,0 +1,66 @@
+@keyframes fadeoutin {
+	0% {
+		opacity: 1;
+	}
+	25% {
+		opacity: 0.5;
+	}
+	50% {
+		opacity: 0.05;
+	}
+	75% {
+		opacity: 0.5;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.gw-rank {
+	animation: fadeoutin 1.5s ease infinite;
+}
+
+/* 1    2   3
+  4   5  6
+   7    8
+    9  10 
+*/
+.gw-rank:nth-of-type(1) {
+	animation-delay: 0s;
+}
+
+.gw-rank:nth-of-type(2) {
+	animation-delay: 0.5s;
+}
+
+.gw-rank:nth-of-type(3) {
+	animation-delay: 0.8s;
+}
+
+.gw-rank:nth-of-type(4) {
+	animation-delay: 0.1s;
+}
+
+.gw-rank:nth-of-type(5) {
+	animation-delay: 0.4s;
+}
+
+.gw-rank:nth-of-type(6) {
+	animation-delay: 0.7s;
+}
+
+.gw-rank:nth-of-type(7) {
+	animation-delay: 0.2s;
+}
+
+.gw-rank:nth-of-type(8) {
+	animation-delay: 0.6s;
+}
+
+.gw-rank:nth-of-type(9) {
+	animation-delay: 0.3s;
+}
+
+.gw-rank:nth-of-type(10) {
+	animation-delay: 0.5s;
+}

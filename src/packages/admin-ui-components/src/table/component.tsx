@@ -1,8 +1,9 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
-import { useCallback, useState, MouseEvent } from 'react';
+import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
 import { Entity, useSchema, useSelectedEntity, routeFor } from '../utils';
+import { Spinner } from '../spinner';
 
 import 'react-data-grid/lib/styles.css';
 // These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
@@ -55,14 +56,59 @@ const columnsForEntity = <T extends { id: string }>(
 			: undefined,
 	}));
 
-export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
-	const [sortColumns, setSortColumns] = useState<readonly SortColumn[]>([]);
+export const Table = <T extends { id: string }>({
+	rows,
+	orderBy = [],
+	requestRefetch,
+	eof,
+}: {
+	rows: T[];
+	orderBy: SortColumn[];
+	requestRefetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
+	eof: boolean;
+}) => {
+	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
+	const [isLoading, setLoading] = useState(false);
+	const [endOfSet, setEndOfSet] = useState(false);
+
+	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
+		// Return true when the scrollTop reaches 10 over the bottom ...
+		const { currentTarget } = event;
+		const target = currentTarget as Element;
+		const approachingEndOfSet =
+			target.scrollTop + 10 >= currentTarget.scrollHeight - currentTarget.clientHeight;
+		setEndOfSet(approachingEndOfSet);
+		return approachingEndOfSet;
+	};
+
+	const handleScroll: UIEventHandler<HTMLDivElement> = async (event: React.UIEvent) => {
+		// Do nothing if we aren't at the last row, or if we're currently loading...
+		// Also do nothing if EOF detected (no more rows to load)
+		if (isLoading || !scrolledToEnd(event) || eof) {
+			return;
+		}
+
+		// TODO: Does not prevent a race condition. All this call does is trigger a reload, but really we want
+		// TODO: the reload itself to complete before setting loading to false
+		setLoading(true);
+		requestRefetch({});
+		// TODO: So...
+		setTimeout(() => setLoading(false), 500);
+	};
+
+	const handleSort = () => {
+		requestRefetch({ sortColumns });
+	};
+
+	useEffect(() => {
+		handleSort();
+	}, [sortColumns]);
 
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
@@ -75,7 +121,7 @@ export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	return (
-		<div className={styles.tableWrapper}>
+		<>
 			<DataGrid
 				columns={columnsForEntity(selectedEntity, entityByType) as any}
 				rows={rows}
@@ -85,7 +131,14 @@ export const Table = <T extends { id: string }>({ rows }: { rows: T[] }) => {
 				defaultColumnOptions={{ resizable: true }}
 				onRowClick={navigateToDetailForEntity}
 				rowClass={rowClass}
+				onScroll={handleScroll}
+				className={styles.tableWrapper}
 			/>
-		</div>
+			{!(isLoading || endOfSet || eof) && (
+				<div className={styles.spinner}>
+					<Spinner />
+				</div>
+			)}
+		</>
 	);
 };

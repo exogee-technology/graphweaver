@@ -14,6 +14,7 @@
 * {
 	font-family: 'Inter', sans-serif;
 	color: var(--body-copy-color);
+	box-sizing: border-box;
 }
 
 html,

@@ -22,6 +22,8 @@ export interface XeroDataAccessor<T> {
 		filter?: string;
 		rawFilter: Record<string, any>;
 		order?: string;
+		limit?: number;
+		offset?: number;
 	}) => Promise<T[]>;
 }
 
@@ -89,6 +91,19 @@ const xeroOrderFrom = (pagination?: PaginationOptions) => {
 	return chunks.join(', ') || undefined;
 };
 
+const xeroLimitFrom = (pagination?: PaginationOptions) => {
+	if (!pagination || pagination.limit === undefined || pagination.limit === null) return undefined;
+
+	return pagination.limit;
+};
+
+const xeroOffsetFrom = (pagination?: PaginationOptions) => {
+	if (!pagination || pagination.offset === undefined || pagination.offset === null)
+		return undefined;
+
+	return pagination.offset;
+};
+
 export class XeroBackendProvider<T> implements BackendProvider<T> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
@@ -134,9 +149,16 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	): Promise<T[]> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running find ${this.entityTypeName} with filter`, {
-			filter: JSON.stringify(filter),
-		});
+		logger.trace(
+			`Running find ${this.entityTypeName} with filter`,
+			{
+				filter: JSON.stringify(filter),
+			},
+			'and pagination',
+			{
+				pagination: JSON.stringify(pagination),
+			}
+		);
 
 		if (!this.accessor) {
 			throw new Error(
@@ -150,7 +172,15 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 				filter: xeroFilterFrom(filter),
 				rawFilter: filter,
 				order: xeroOrderFrom(pagination),
+				limit: xeroLimitFrom(pagination),
+				offset: xeroOffsetFrom(pagination),
 			});
+
+			logger.trace(
+				`Find ${this.entityTypeName} with filter ${JSON.stringify(
+					filter
+				)} and pagination ${JSON.stringify(pagination)} returned ${result.length} rows.`
+			);
 
 			return result;
 		} catch (error: any) {

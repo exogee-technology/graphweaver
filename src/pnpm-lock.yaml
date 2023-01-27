@@ -283,6 +283,7 @@ importers:
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.9
+      '@types/react-modal': 3.13.1
       '@vitejs/plugin-react': 2.2.0
       classnames: 2.3.2
       esbuild: 0.15.5
@@ -291,6 +292,7 @@ importers:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0
+      react-modal: 3.16.1
       react-router-dom: 6.4.3
       typescript: 4.9.4
       vite: 3.2.4
@@ -304,12 +306,14 @@ importers:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+      react-modal: 3.16.1_react-dom@18.2.0+react@18.2.0
       react-router-dom: 6.4.3_react-dom@18.2.0+react@18.2.0
       vite-plugin-svgr: 2.2.2_vite@3.2.4
     devDependencies:
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.9
+      '@types/react-modal': 3.13.1
       '@vitejs/plugin-react': 2.2.0_vite@3.2.4
       esbuild: 0.15.5
       typescript: 4.9.4
@@ -6208,6 +6212,12 @@ packages:
       '@types/react': 18.0.25
     dev: true
 
+  /@types/react-modal/3.13.1:
+    resolution: {integrity: sha512-iY/gPvTDIy6Z+37l+ibmrY+GTV4KQTHcCyR5FIytm182RQS69G5ps4PH2FxtC7bAQ2QRHXMevsBgck7IQruHNg==}
+    dependencies:
+      '@types/react': 18.0.25
+    dev: true
+
   /@types/react/18.0.25:
     resolution: {integrity: sha512-xD6c0KDT4m7n9uD4ZHi02lzskaiqcBxf4zi+tXZY98a04wvc0hi/TcCPC2FOESZi51Nd7tlUeOJY8RofL799/g==}
     dependencies:
@@ -9984,6 +9994,10 @@ packages:
       onetime: 6.0.0
       signal-exit: 3.0.7
       strip-final-newline: 3.0.0
+    dev: false
+
+  /exenv/1.2.2:
+    resolution: {integrity: sha512-Z+ktTxTwv9ILfgKCk32OX3n/doe+OcLTRtqK9pcL+JsP3J1/VW8Uvl4ZjLlKqeW4rzK4oesDOGMEMRIZqtP4Iw==}
     dev: false
 
   /exit/0.1.2:
@@ -15986,6 +16000,21 @@ packages:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
     dev: false
 
+  /react-modal/3.16.1_react-dom@18.2.0+react@18.2.0:
+    resolution: {integrity: sha512-VStHgI3BVcGo7OXczvnJN7yT2TWHJPDXZWyI/a0ssFNhGZWsPmB8cF0z33ewDXq4VfYMO1vXgiv/g8Nj9NDyWg==}
+    engines: {node: '>=8'}
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
+      react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
+    dependencies:
+      exenv: 1.2.2
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-lifecycles-compat: 3.0.4
+      warning: 4.0.3
+    dev: false
+
   /react-refresh/0.14.0:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
@@ -18637,6 +18666,12 @@ packages:
     dependencies:
       makeerror: 1.0.12
     dev: true
+
+  /warning/4.0.3:
+    resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
+    dependencies:
+      loose-envify: 1.4.0
+    dev: false
 
   /watchpack/2.4.0:
     resolution: {integrity: sha512-Lcvm7MGST/4fup+ifyKi2hjyIAwcdI4HRgtvTpIUxBRhB+RFtUh8XtDOxUfctVCnhVi+QQj49i91OyvzkJl6cg==}
