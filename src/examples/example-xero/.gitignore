@@ -1,0 +1,6 @@
+# We definitely don't need our Xero access token in Git
+token.json
+
+# Working build files
+.esbuild
+.graphweaver
