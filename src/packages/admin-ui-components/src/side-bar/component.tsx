@@ -41,22 +41,24 @@ export const SideBar = () => {
 				<GraphweaverLogo width="52" className={styles.logo} />
 			</Link>
 
-			{!!userDashboardLinks.length && (
-				<>
-					<p className={styles.subtext}>Dashboards</p>
-					<ul className={classnames(styles.entity, styles.closed)}>
-						{userDashboardLinks.map((link) => (
-							<DashboardRow key={link.route} name={link.name} route={link.route} />
-						))}
-					</ul>
-				</>
-			)}
+			<div className={styles.sideBarContent}>
+				{!!userDashboardLinks.length && (
+					<>
+						<p className={styles.subtext}>Dashboards</p>
+						<ul className={classnames(styles.entity, styles.closed)}>
+							{userDashboardLinks.map((link) => (
+								<DashboardRow key={link.route} name={link.name} route={link.route} />
+							))}
+						</ul>
+					</>
+				)}
 
-			<p className={styles.subtext}>Data Sources</p>
+				<p className={styles.subtext}>Data Sources</p>
 
-			{schema.backends.map((backend) => (
-				<BackendRow key={backend} backend={backend} />
-			))}
+				{schema.backends.map((backend) => (
+					<BackendRow key={backend} backend={backend} />
+				))}
+			</div>
 		</div>
 	);
 };
