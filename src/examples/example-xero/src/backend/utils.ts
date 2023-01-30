@@ -1,9 +1,10 @@
 import { XeroClient } from 'xero-node';
+import { Sort } from '@exogee/graphweaver';
 import { XeroTenant } from './schema';
 
 const PAGE_SIZE = 100;
 
-type WithTenantId<T> = T & { tenantId: string };
+export type WithTenantId<T> = T & { tenantId: string };
 
 type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | Promise<T[]>;
 
@@ -61,4 +62,60 @@ export const offsetAndLimit = <T>(result: T[], offset?: number, limit?: number) 
 	const realLimit = limit ?? 100;
 	const realOffset = offset ?? 0;
 	return result.slice(realOffset, realOffset + realLimit);
+};
+
+// TODO: Use type definitions for this instead of calling instanceof etc
+// TODO: Also see core/base-resolver which controls what shows up in the schema as a sortable field
+// TODO: (Currently enum fields are excluded)
+
+export const isSortable = <T>(field: T | undefined) => {
+	if (field === undefined) {
+		return false;
+	}
+
+	if (['bigint', 'boolean', 'number', 'string'].some((t) => typeof field === t)) {
+		return true;
+	}
+
+	// special case: Date
+	if (field instanceof Date) {
+		return true;
+	}
+
+	// Composite fields, special fields etc - ret false
+	return false;
+};
+
+// 1. Reverse the sort if DESC is passed in
+// 2. Receive a get() function to extract the comparable items - pass a lambda for this
+export const compareFn = <T, K>(get: (t: T) => K, ascOrDesc: Sort): ((a: T, b: T) => number) => {
+	const sign = ascOrDesc === Sort.ASC ? 1 : -1;
+	return (a: T, b: T) => {
+		const valA = get(a);
+		const valB = get(b);
+		return valA < valB ? -1 * sign : valA > valB ? sign : 0;
+	};
+};
+
+export const orderedResult = <T>(result: T[], sortFields: Record<string, Sort>) => {
+	// Use the first record returned
+	if (result.length > 0) {
+		const [firstRecord] = result;
+		// TODO: Implement multi-level sort (f1 ASC, f2 DESC, f3 DESC ...)
+		for (const [fieldName, sort] of Object.entries(sortFields)) {
+			if (isSortable(firstRecord[fieldName])) {
+				return result.sort(compareFn((row) => row[fieldName], sort));
+			}
+		}
+	}
+	return result;
+};
+
+export const orderByToString = (orderBy: Record<string, Sort>): string | undefined => {
+	const chunks: string[] = [];
+	for (const [key, value] of Object.entries(orderBy)) {
+		chunks.push(`${key} ${value.toUpperCase()}`);
+	}
+
+	return chunks.join(', ') || undefined;
 };
