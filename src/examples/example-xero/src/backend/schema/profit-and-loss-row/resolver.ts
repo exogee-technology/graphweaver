@@ -1,11 +1,16 @@
-import { v4 } from 'uuid';
 import { createBaseResolver, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
-import { forEachTenant, inMemoryFilterFor, offsetAndLimit, orderedResult } from '../../utils';
+import {
+	forEachTenant,
+	generateId,
+	inMemoryFilterFor,
+	offsetAndLimit,
+	orderedResult,
+} from '../../utils';
 
 const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 
@@ -41,9 +46,16 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 
 						results.push(
 							ProfitAndLossRow.fromBackendEntity({
-								id: v4(),
+								// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
+								id: generateId(
+									tenantId +
+										(accountAttribute?.value ?? '') +
+										(value.value || '') +
+										date.toString() +
+										(description.value || '')
+								),
 								tenantId,
-								accountId: accountAttribute ? accountAttribute.value : null,
+								accountId: accountAttribute?.value ?? null,
 								amount: parseFloat(value.value),
 								date,
 								description: description.value,
