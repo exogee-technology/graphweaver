@@ -1,9 +1,11 @@
-import { createBaseResolver } from '@exogee/graphweaver';
+import { createBaseResolver, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
-import { forEachTenant, offsetAndLimit } from '../../utils';
+import { forEachTenant, offsetAndLimit, orderByToString } from '../../utils';
 import { Account } from './entity';
 import { Account as XeroAccount } from 'xero-node';
+
+const defaultSort: Record<string, Sort> = { ['name']: Sort.ASC };
 
 @Resolver((of) => Account)
 export class AccountResolver extends createBaseResolver(
@@ -11,9 +13,15 @@ export class AccountResolver extends createBaseResolver(
 	new XeroBackendProvider('Account', {
 		find: async ({ xero, filter, order, limit, offset }) => {
 			const fullSet = await forEachTenant<XeroAccount>(xero, async (tenant) => {
+				const sortFields = order ?? defaultSort;
 				const {
 					body: { accounts },
-				} = await xero.accountingApi.getAccounts(tenant.tenantId, undefined, filter, order);
+				} = await xero.accountingApi.getAccounts(
+					tenant.tenantId,
+					undefined,
+					filter,
+					orderByToString(sortFields)
+				);
 
 				for (const account of accounts) {
 					(account as any).id = account.accountID;
@@ -22,6 +30,7 @@ export class AccountResolver extends createBaseResolver(
 				return accounts;
 			});
 
+			// filter -> order -> limit/offset
 			return offsetAndLimit(fullSet, offset, limit);
 		},
 	})

@@ -1,8 +1,10 @@
-import { createBaseResolver } from '@exogee/graphweaver';
+import { createBaseResolver, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
-import { inMemoryFilterFor, offsetAndLimit } from '../../utils';
+import { inMemoryFilterFor, offsetAndLimit, orderedResult } from '../../utils';
 import { Tenant } from './entity';
+
+const defaultSort: Record<string, Sort> = { ['tenantName']: Sort.ASC };
 
 @Resolver((of) => Tenant)
 export class TenantResolver extends createBaseResolver(
@@ -16,9 +18,14 @@ export class TenantResolver extends createBaseResolver(
 			const copy = JSON.parse(JSON.stringify(xero.tenants));
 			copy.forEach((tenant) => (tenant.id = tenant.tenantId));
 
-			// TODO: Order...
+			const sortFields = order ?? defaultSort;
 
-			return offsetAndLimit(copy.filter(inMemoryFilterFor(rawFilter)), offset, limit);
+			// filter -> order -> limit/offset
+			return offsetAndLimit(
+				orderedResult(copy.filter(inMemoryFilterFor(rawFilter)), sortFields),
+				offset,
+				limit
+			);
 		},
 	})
 ) {}
