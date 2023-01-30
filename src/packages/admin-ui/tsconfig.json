@@ -15,12 +15,8 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"jsx": "react-jsx",
-
-		"paths": {
-			"~/*": ["./src/*"]
-		}
+		"jsx": "react-jsx"
 	},
-	"include": ["src", "@types/svg.d.ts"],
-	"references": [{ "path": "./tsconfig.node.json" }]
+	"include": ["src", "@types"],
+	"references": [{ "path": "../admin-ui-components" }, { "path": "./tsconfig.node.json" }]
 }
