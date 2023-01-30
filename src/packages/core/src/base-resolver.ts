@@ -33,7 +33,7 @@ import {
 import { QueryManager } from './query-manager';
 
 const arrayOperations = new Set(['in', 'nin']);
-const supportedOrderByTypes = new Set(['String', 'Number', 'Date', 'ISOString']);
+const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
 const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
