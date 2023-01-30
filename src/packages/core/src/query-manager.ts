@@ -1,4 +1,4 @@
-import { logger } from './logger';
+import { logger } from '@exogee/logger';
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 
 import { EntityMetadataMap } from './base-resolver';
