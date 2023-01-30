@@ -58,6 +58,20 @@ export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (item) => {
 	return true;
 };
 
+// Generate a deterministic ID for a string
+// This is not sophisticated and is a shortened but still performant version of
+// Java's hashCode function, modified to always return a positive number
+// (see https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript)
+export const generateId = (source: string): string => {
+	let hash = 0;
+	let i = 0;
+	if (source.length === 0) return '0';
+	while (i < source.length) {
+		hash = (((hash << 5) - hash + source.charCodeAt(i++)) << 0) >>> 0;
+	}
+	return '' + hash;
+};
+
 export const offsetAndLimit = <T>(result: T[], offset?: number, limit?: number) => {
 	const realLimit = limit ?? 100;
 	const realOffset = offset ?? 0;
@@ -66,7 +80,6 @@ export const offsetAndLimit = <T>(result: T[], offset?: number, limit?: number) 
 
 // TODO: Use type definitions for this instead of calling instanceof etc
 // TODO: Also see core/base-resolver which controls what shows up in the schema as a sortable field
-// TODO: (Currently enum fields are excluded)
 
 export const isSortable = <T>(field: T | undefined) => {
 	if (field === undefined) {
