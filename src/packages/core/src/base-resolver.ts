@@ -275,7 +275,13 @@ export function createBaseResolver<T, O>(
 	TypeMap[`${plural}PaginationInput`] = PaginationInputArgs;
 	for (const field of entityFields) {
 		const fieldType = field.getType() as any;
-		if (field.name !== 'id' && fieldType && !supportedOrderByTypes.has(fieldType.name)) {
+
+		if (
+			field.name !== 'id' &&
+			fieldType &&
+			!supportedOrderByTypes.has(fieldType.name) &&
+			!enumSet.has(fieldType as any)
+		) {
 			continue;
 		}
 
