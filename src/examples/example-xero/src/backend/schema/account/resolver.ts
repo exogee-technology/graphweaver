@@ -12,6 +12,7 @@ export class AccountResolver extends createBaseResolver(
 	Account,
 	new XeroBackendProvider('Account', {
 		find: async ({ xero, filter, order, limit, offset }) => {
+			const sortFields = order ?? defaultSort;
 			const fullSet = await forEachTenant<XeroAccount>(xero, async (tenant) => {
 				const sortFields = order ?? defaultSort;
 				const {

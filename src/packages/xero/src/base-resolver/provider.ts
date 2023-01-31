@@ -86,7 +86,6 @@ const xeroOrderFrom = (pagination?: PaginationOptions) => {
 	if (Object.entries(pagination.orderBy).length > 0) {
 		return pagination.orderBy;
 	}
-
 	return undefined;
 };
 
