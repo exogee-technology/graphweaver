@@ -24,6 +24,7 @@ export const Pagination = <T extends { name: string }>(GraphqlEntityType: () => 
 			index,
 			typeOptions: { nullable: true },
 			validate: undefined,
+			deprecationReason: undefined,
 		});
 	};
 };

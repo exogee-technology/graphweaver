@@ -37,9 +37,13 @@ export const getConnectionInfo = async () => {
 			logger.trace('Parsing result');
 
 			// We only want certain properties from this secret.
-			const { host, port, username: user, password, dbname: dbName } = JSON.parse(
-				result.SecretString
-			) as {
+			const {
+				host,
+				port,
+				username: user,
+				password,
+				dbname: dbName,
+			} = JSON.parse(result.SecretString) as {
 				host: string;
 				port: number;
 				username: string;

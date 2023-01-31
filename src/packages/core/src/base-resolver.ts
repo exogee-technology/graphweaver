@@ -1,4 +1,4 @@
-import { logger } from './logger';
+import { logger } from '@exogee/logger';
 import { GraphQLScalarType } from 'graphql';
 import pluralize from 'pluralize';
 import {
@@ -33,7 +33,7 @@ import {
 import { QueryManager } from './query-manager';
 
 const arrayOperations = new Set(['in', 'nin']);
-const supportedOrderByTypes = new Set(['String', 'Number', 'Date', 'ISOString']);
+const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
 const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
@@ -275,7 +275,13 @@ export function createBaseResolver<T, O>(
 	TypeMap[`${plural}PaginationInput`] = PaginationInputArgs;
 	for (const field of entityFields) {
 		const fieldType = field.getType() as any;
-		if (field.name !== 'id' && fieldType && !supportedOrderByTypes.has(fieldType.name)) {
+
+		if (
+			field.name !== 'id' &&
+			fieldType &&
+			!supportedOrderByTypes.has(fieldType.name) &&
+			!enumSet.has(fieldType as any)
+		) {
 			continue;
 		}
 

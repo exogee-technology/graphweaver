@@ -38,7 +38,8 @@ export class RestLookupProvider<T> extends RESTDataSource {
 export class RestBackendProvider<T, G extends GraphQLEntity<T>>
 	// export class RestBackendProvider<T>
 	extends RESTDataSource
-	implements BackendProvider<T> {
+	implements BackendProvider<T>
+{
 	private readonly gqlTypeName: string;
 	public readonly backendId = 'rest-api';
 

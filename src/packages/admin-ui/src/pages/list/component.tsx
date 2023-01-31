@@ -1,14 +1,17 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Table } from '~/components';
-
-import { entityByNameOrType, fetchList } from './loader';
 import { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
-import { DetailPanel } from '~/components';
 import { SortColumn } from 'react-data-grid';
-import { PAGE_SIZE } from '~/utils/data-loading';
-import { routeFor } from '~/utils/route-for';
-import { useSchema } from '~/utils/use-schema';
+
+import {
+	DetailPanel,
+	Table,
+	useSchema,
+	PAGE_SIZE,
+	routeFor,
+} from '@exogee/graphweaver-admin-ui-components';
+import '@exogee/graphweaver-admin-ui-components/lib/index.css';
+import { fetchList } from './graphql';
 
 type DataType = { id: string };
 interface DataState {
@@ -17,7 +20,7 @@ interface DataState {
 	page: number;
 	loading: boolean;
 	error?: ApolloError;
-	eof: boolean;
+	allDataFetched: boolean;
 }
 
 type DataStateByEntity = Record<string, DataState>;
@@ -28,19 +31,18 @@ const defaultEntityState = {
 	page: 1,
 	loading: false,
 	error: undefined,
-	eof: false,
+	allDataFetched: false,
 };
 
 export const List = () => {
 	const { entity } = useParams();
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
-	const schema = useSchema();
-	const schemaEntity = entityByNameOrType(entity);
 
-	if (!entity) {
-		throw new Error('There should always be an entity at this point.');
-	}
+	if (!entity) throw new Error('There should always be an entity at this point.');
+
+	const { entityByName } = useSchema();
+	const schemaEntity = entityByName(entity);
 
 	const [entityState, setEntityState] = useState<DataStateByEntity>({});
 
@@ -50,7 +52,6 @@ export const List = () => {
 			[entity]: { ...defaultEntityState, ...state },
 		}));
 	};
-
 	const setDataState = (entity: string, state: Partial<DataState>) => {
 		const currentState = entityState[entity] ?? defaultEntityState;
 		// PAGINATION: All but data are overwritten, data is appended
@@ -59,7 +60,7 @@ export const List = () => {
 		// Ensure that currentState.data is empty beforehand so we aren't just appending even when
 		// we don't need to (ie. sort -> reset pagination and data before fetch -> fetch -> setDataState)
 		// See resetDataState
-		const newData = [...(currentState.data ?? []), ...(state.data ?? [])];
+		const newData = [...currentState.data, ...(state.data ?? [])];
 		const newDataState = {
 			...currentState,
 			...state,
@@ -70,33 +71,26 @@ export const List = () => {
 
 	const fetchData = useCallback(async () => {
 		const currentState = entityState[entity] ?? defaultEntityState;
+
+		if (currentState.allDataFetched) {
+			return;
+		}
+
 		let data = [];
 		let lastRecordReturned = false;
+		const result = await fetchList<{ result: any[] }>(
+			entity,
+			entityByName,
+			currentState.sortColumns,
+			currentState.page
+		);
+		data = result.data.result.slice();
 
-		if (!currentState.eof) {
-			// fetchList will remove enum type sortColumns to avoid Apollo exceptions...
-			const result = await fetchList(entity, currentState.sortColumns, currentState.page);
-			data = result.data.result.slice();
-			// ...So if one was used, do the search here now
-			for (const col of currentState.sortColumns) {
-				const field = schemaEntity.fields.find((f) => f.name === col.columnKey);
-				const num = field ? schema.enumByName(field.type) : undefined;
-				if (num && field) {
-					const sign = col.direction === 'ASC' ? 1 : -1;
-					data.sort((a: any, b: any) =>
-						a[field.name] > b[field.name] ? sign : a[field.name] < b[field.name] ? -1 * sign : 0
-					);
-					// TODO: multi-column sort
-					break;
-				}
-			}
-			if (data.length < PAGE_SIZE) {
-				lastRecordReturned = true;
-			}
-			const loading = result.loading;
-			const error = result.error;
-			setDataState(entity, { data, eof: lastRecordReturned, loading, error });
+		if (data.length < PAGE_SIZE) {
+			lastRecordReturned = true;
 		}
+		const { loading, error } = result;
+		setDataState(entity, { data, allDataFetched: lastRecordReturned, loading, error });
 	}, [entity, entityState[entity]?.sortColumns, entityState[entity]?.page]);
 
 	useEffect(() => {
@@ -125,12 +119,11 @@ export const List = () => {
 
 	// Increment page only; leave the rest
 	const incrementPage = () => {
-		setDataState(entity, {
-			page: (entityState[entity]?.page ?? defaultEntityState.page) + 1,
-		});
+		setDataState(entity, { page: (entityState[entity]?.page ?? defaultEntityState.page) + 1 });
 	};
 
-	const { loading, error, data, sortColumns, eof } = entityState[entity] ?? defaultEntityState;
+	const { loading, error, data, sortColumns, allDataFetched } =
+		entityState[entity] ?? defaultEntityState;
 	if (loading) {
 		return <pre>Loading...</pre>;
 	}
@@ -140,7 +133,12 @@ export const List = () => {
 
 	return (
 		<>
-			<Table rows={data} orderBy={sortColumns} requestRefetch={requestRefetch} eof={eof} />
+			<Table
+				rows={data}
+				orderBy={sortColumns}
+				requestRefetch={requestRefetch}
+				allDataFetched={allDataFetched}
+			/>
 			<DetailPanel />
 		</>
 	);

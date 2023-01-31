@@ -20,9 +20,10 @@ export function Field(options?: FieldOptions): any {
 		Object.defineProperty(target, propertyKey, {
 			get: function () {
 				const key = options?.underlyingFieldName || propertyKey;
-				const value = this._entity[
-					options?.useFormattedValue ? `${key}@OData.Community.Display.V1.FormattedValue` : key
-				];
+				const value =
+					this._entity[
+						options?.useFormattedValue ? `${key}@OData.Community.Display.V1.FormattedValue` : key
+					];
 				if (options?.serializer) {
 					return options.serializer.fromCrm(value);
 				}

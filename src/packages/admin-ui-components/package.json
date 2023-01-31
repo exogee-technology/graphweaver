@@ -1,0 +1,47 @@
+{
+	"name": "@exogee/graphweaver-admin-ui-components",
+	"version": "0.1.0-alpha.5",
+	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"prettier": "prettier --write src/**/*.ts",
+		"codegen": "graphql-codegen --config ./codegen.yml",
+		"test": "jest --passWithNoTests"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"dependencies": {
+		"@apollo/client": "3.7.1",
+		"classnames": "2.3.2",
+		"graphql": "16.6.0",
+		"pluralize": "8.0.0",
+		"react-data-grid": "7.0.0-beta.20"
+	},
+	"peerDependencies": {
+		"graphql": "16.6.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-router-dom": "6.4.3"
+	},
+	"devDependencies": {
+		"esbuild": "0.15.5",
+		"esbuild-css-modules-plugin": "2.7.1",
+		"esbuild-plugin-svgr": "1.0.1",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-router-dom": "6.4.3",
+		"typescript": "4.9.4",
+		"vite": "3.2.4",
+		"vite-plugin-svgr": "2.2.2"
+	}
+}
