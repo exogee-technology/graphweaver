@@ -20,7 +20,7 @@ interface DataState {
 	page: number;
 	loading: boolean;
 	error?: ApolloError;
-	eof: boolean;
+	allDataFetched: boolean;
 }
 
 type DataStateByEntity = Record<string, DataState>;
@@ -31,14 +31,13 @@ const defaultEntityState = {
 	page: 1,
 	loading: false,
 	error: undefined,
-	eof: false,
+	allDataFetched: false,
 };
 
 export const List = () => {
 	const { entity } = useParams();
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
-	const schema = useSchema();
 
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
@@ -73,39 +72,25 @@ export const List = () => {
 	const fetchData = useCallback(async () => {
 		const currentState = entityState[entity] ?? defaultEntityState;
 
+		if (currentState.allDataFetched) {
+			return;
+		}
+
 		let data = [];
 		let lastRecordReturned = false;
+		const result = await fetchList<{ result: any[] }>(
+			entity,
+			entityByName,
+			currentState.sortColumns,
+			currentState.page
+		);
+		data = result.data.result.slice();
 
-		if (!currentState.eof) {
-			// fetchList will remove enum type sortColumns to avoid Apollo exceptions...
-			// TODO: This is a far-from-ideal solution
-			const result = await fetchList<{ result: any[] }>(
-				entity,
-				entityByName,
-				currentState.sortColumns,
-				currentState.page
-			);
-			data = result.data.result.slice();
-			// ...So if one was used, do the search here now
-			for (const col of currentState.sortColumns) {
-				const field = schemaEntity.fields.find((f) => f.name === col.columnKey);
-				const num = field ? schema.enumByName(field.type) : undefined;
-				if (num && field) {
-					const sign = col.direction === 'ASC' ? 1 : -1;
-					data.sort((a: any, b: any) =>
-						a[field.name] > b[field.name] ? sign : a[field.name] < b[field.name] ? -1 * sign : 0
-					);
-					// TODO: multi-column sort
-					break;
-				}
-			}
-
-			if (data.length < PAGE_SIZE) {
-				lastRecordReturned = true;
-			}
-			const { loading, error } = result;
-			setDataState(entity, { data, eof: lastRecordReturned, loading, error });
+		if (data.length < PAGE_SIZE) {
+			lastRecordReturned = true;
 		}
+		const { loading, error } = result;
+		setDataState(entity, { data, allDataFetched: lastRecordReturned, loading, error });
 	}, [entity, entityState[entity]?.sortColumns, entityState[entity]?.page]);
 
 	useEffect(() => {
@@ -137,7 +122,8 @@ export const List = () => {
 		setDataState(entity, { page: (entityState[entity]?.page ?? defaultEntityState.page) + 1 });
 	};
 
-	const { loading, error, data, sortColumns, eof } = entityState[entity] ?? defaultEntityState;
+	const { loading, error, data, sortColumns, allDataFetched } =
+		entityState[entity] ?? defaultEntityState;
 	if (loading) {
 		return <pre>Loading...</pre>;
 	}
@@ -147,7 +133,12 @@ export const List = () => {
 
 	return (
 		<>
-			<Table rows={data} orderBy={sortColumns} requestRefetch={requestRefetch} eof={eof} />
+			<Table
+				rows={data}
+				orderBy={sortColumns}
+				requestRefetch={requestRefetch}
+				allDataFetched={allDataFetched}
+			/>
 			<DetailPanel />
 		</>
 	);
