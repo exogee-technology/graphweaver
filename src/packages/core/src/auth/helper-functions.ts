@@ -1,4 +1,4 @@
-import { logger } from '../logger';
+import { logger } from '@exogee/logger';
 
 import {
 	AccessControlList,

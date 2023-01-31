@@ -38,8 +38,8 @@ export class GraphQLEntity<T> {
 
 				if (
 					typeof dataField !== 'undefined' &&
-					!((dataEntity as unknown) as BaseDataEntity).isCollection?.(field.name, dataField) &&
-					!((dataEntity as unknown) as BaseDataEntity).isReference?.(field.name, dataField) &&
+					!(dataEntity as unknown as BaseDataEntity).isCollection?.(field.name, dataField) &&
+					!(dataEntity as unknown as BaseDataEntity).isReference?.(field.name, dataField) &&
 					typeof (entity as any)[field.name] !== 'function'
 				)
 					// @todo: Can't figure out how to infer this type correctly, but this is what we want to do.

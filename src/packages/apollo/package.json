@@ -4,7 +4,8 @@
 	"description": "Apollo Server support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
-		"build:legacy": "tsc --build",
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts"
 	},
@@ -25,7 +26,10 @@
 		"async-mutex": "0.3.2",
 		"class-validator": "0.13.2",
 		"decimal.js": "10.3.1",
-		"graphql": "15.8.0",
-		"type-graphql": "1.1.1"
+		"graphql": "16.6.0",
+		"type-graphql": "2.0.0-beta.1"
+	},
+	"devDependencies": {
+		"esbuild": "0.15.5"
 	}
 }
