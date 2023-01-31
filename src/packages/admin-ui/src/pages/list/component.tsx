@@ -38,7 +38,6 @@ export const List = () => {
 	const { entity } = useParams();
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
-	// const schema = useSchema();
 
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
