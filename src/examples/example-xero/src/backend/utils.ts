@@ -10,12 +10,18 @@ type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | P
 
 export const forEachTenant = async <T = unknown>(
 	xero: XeroClient,
-	callback: ForEachTenantCallback<T>
+	callback: ForEachTenantCallback<T>,
+	rawFilter?: Record<string, any>
 ): Promise<WithTenantId<T>[]> => {
 	if (!xero.tenants.length) await xero.updateTenants(false);
 
+	// Check if tenants are filtered on
+	const filteredTenants = rawFilter
+		? xero.tenants.filter(inMemoryFilterFor(rawFilter))
+		: xero.tenants;
+
 	const results = await Promise.all(
-		xero.tenants.map(async (tenant) => {
+		filteredTenants.map(async (tenant) => {
 			const result = (await callback(tenant)) as WithTenantId<T>;
 
 			// We should go ahead and doctor up the result(s) with a tenantId,
@@ -35,7 +41,9 @@ export const forEachTenant = async <T = unknown>(
 	return results.flat() as WithTenantId<T>[];
 };
 
-export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (item) => {
+export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (
+	item: Record<string, any>
+) => {
 	for (const [key, value] of Object.entries(rawFilter || {})) {
 		if (key === '_or') {
 			for (const condition of value) {
@@ -49,8 +57,8 @@ export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (item) => {
 			return true;
 		} else if (key.indexOf('_') >= 0) {
 			throw new Error(`Filter ${key} not yet implemented.`);
-		} else if (item[key] !== value) {
-			// Simple equality comparison
+			// To make '_or' and '_and' work properly, ignore this test and fall through/return TRUE if the field does not exist in the item.
+		} else if (item[key] !== null && item[key] !== undefined && item[key] !== value) {
 			return false;
 		}
 	}

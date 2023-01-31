@@ -11,26 +11,30 @@ const defaultSort: Record<string, Sort> = { ['name']: Sort.ASC };
 export class AccountResolver extends createBaseResolver(
 	Account,
 	new XeroBackendProvider('Account', {
-		find: async ({ xero, filter, order, limit, offset }) => {
-			const fullSet = await forEachTenant<XeroAccount>(xero, async (tenant) => {
-				const sortFields = order ?? defaultSort;
-				const {
-					body: { accounts },
-				} = await xero.accountingApi.getAccounts(
-					tenant.tenantId,
-					undefined,
-					filter,
-					orderByToString(sortFields)
-				);
+		find: async ({ xero, filter, rawFilter, order, limit, offset }) => {
+			const fullSet = await forEachTenant<XeroAccount>(
+				xero,
+				async (tenant) => {
+					const sortFields = order ?? defaultSort;
+					const {
+						body: { accounts },
+					} = await xero.accountingApi.getAccounts(
+						tenant.tenantId,
+						undefined,
+						filter,
+						orderByToString(sortFields)
+					);
 
-				for (const account of accounts) {
-					(account as any).id = account.accountID;
-				}
+					for (const account of accounts) {
+						(account as any).id = account.accountID;
+					}
 
-				return accounts;
-			});
+					return accounts;
+				},
+				rawFilter
+			);
 
-			// filter -> order -> limit/offset
+			// (filter) -> order -> limit/offset
 			return offsetAndLimit(fullSet, offset, limit);
 		},
 	})
