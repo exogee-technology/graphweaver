@@ -1,0 +1,16 @@
+:root {
+	--select-background: rgba(237, 232, 242, 0.02);
+	--select-border-color: rgba(237, 232, 242, 0.1);
+	--select-selected-option-color: #12170d;
+}
+.select {
+	box-sizing: border-box;
+
+	height: 40px;
+	max-width: 40%;
+
+	background: var(--select-background);
+	border: 1px solid var(--select-border-color);
+	border-radius: 6px;
+	padding: 10px;
+}
