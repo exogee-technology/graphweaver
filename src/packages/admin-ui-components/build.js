@@ -22,6 +22,9 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 			'react-router',
 			'react-router-dom',
 			'@remix-run/router',
+
+			// Introduced by react-select
+			'@emotion/*',
 		],
 		entryPoints: ['src/index.ts'],
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],

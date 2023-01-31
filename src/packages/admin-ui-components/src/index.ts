@@ -10,3 +10,4 @@ export * from './table';
 export * from './utils';
 export * from './header';
 export * from './toolbar';
+export * from './select';
