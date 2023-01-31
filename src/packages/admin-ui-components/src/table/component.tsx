@@ -60,12 +60,12 @@ export const Table = <T extends { id: string }>({
 	rows,
 	requestRefetch,
 	orderBy = [],
-	eof,
+	allDataFetched,
 }: {
 	rows: T[];
 	requestRefetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
 	orderBy?: SortColumn[];
-	eof: boolean;
+	allDataFetched: boolean;
 }) => {
 	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
 	const navigate = useNavigate();
@@ -90,7 +90,7 @@ export const Table = <T extends { id: string }>({
 	const handleScroll: UIEventHandler<HTMLDivElement> = async (event: React.UIEvent) => {
 		// Do nothing if we aren't at the last row, or if we're currently loading...
 		// Also do nothing if EOF detected (no more rows to load)
-		if (isLoading || !scrolledToEnd(event) || eof) {
+		if (isLoading || !scrolledToEnd(event) || allDataFetched) {
 			return;
 		}
 
@@ -134,7 +134,7 @@ export const Table = <T extends { id: string }>({
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
 			/>
-			{!(isLoading || endOfSet || eof) && (
+			{!(isLoading || endOfSet || allDataFetched) && (
 				<div className={styles.spinner}>
 					<Spinner />
 				</div>
