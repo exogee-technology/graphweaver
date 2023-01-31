@@ -129,8 +129,9 @@ export async function checkAuthorization(
 	requiredPermission: AccessType
 ) {
 	// Get ACL first
-	const access = EntityMetadataMap.get(Object.getPrototypeOf(entity).constructor.name)
-		?.accessControlList;
+	const access = EntityMetadataMap.get(
+		Object.getPrototypeOf(entity).constructor.name
+	)?.accessControlList;
 	if (!access) {
 		logger.trace(
 			`An attempt to access entity '${

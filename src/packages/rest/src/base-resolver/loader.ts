@@ -156,7 +156,7 @@ const getRelatedIdLoader = <T extends BaseEntity, O extends BaseEntity>(
 export const RestLoaders = {
 	loadOne: <T extends BaseEntity>(odataType: EntityConstructor<T>, id: string) => {
 		const loader = getLoadOneLoader(odataType);
-		return (loader.load(id) as unknown) as Promise<T>;
+		return loader.load(id) as unknown as Promise<T>;
 	},
 
 	loadByRelatedId: <T extends BaseEntity, O extends BaseEntity>({
@@ -166,7 +166,7 @@ export const RestLoaders = {
 		id,
 	}: LoadByRelatedIdProps<T, O>) => {
 		const loader = getRelatedIdLoader(restType as any, relatedRestType as any, relatedField);
-		return (loader.load(id) as unknown) as Promise<T[]>;
+		return loader.load(id) as unknown as Promise<T[]>;
 	},
 
 	clearCache: () => {

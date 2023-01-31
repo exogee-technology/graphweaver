@@ -1,7 +1,7 @@
-import { ApolloError } from 'apollo-server-core';
+import { GraphQLError } from 'graphql';
 
-export class OptimisticLockError<T> extends ApolloError {
+export class OptimisticLockError<T> extends GraphQLError {
 	constructor(message: string, extensions: { entity: T }) {
-		super(message, 'OPTIMISTIC_LOCK_ERROR', extensions);
+		super(message, { extensions: { code: 'OPTIMISTIC_LOCK_ERROR', extensions } });
 	}
 }

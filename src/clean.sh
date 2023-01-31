@@ -15,6 +15,9 @@ find ./packages/ -name tsconfig.tsbuildinfo -type f -exec rm -rf {} +
 echo "Removing TypeScript build output (lib folders)"
 find ./packages/ -name lib -type d -exec rm -rf {} +
 
+echo "Removing the binary generated file for cli"
+find ./packages/ -name bin/index.js -type d -exec rm -rf {} +
+
 echo "Removing Webpack build output (.deploy folders)"
 find ./packages/ -name .deploy -type d -exec rm -rf {} +
 
