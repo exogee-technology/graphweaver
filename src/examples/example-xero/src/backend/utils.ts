@@ -15,9 +15,22 @@ export const forEachTenant = async <T = unknown>(
 ): Promise<WithTenantId<T>[]> => {
 	if (!xero.tenants.length) await xero.updateTenants(false);
 
-	// Check if tenants are filtered on
-	const filteredTenants = rawFilter
-		? xero.tenants.filter(inMemoryFilterFor(rawFilter))
+	// Check if tenants are filtered on - this filter is looking for an ID and will always fail
+	// if one is passed in - resulting in no output here
+	// So pull out the 'tenantId' field
+	// @todo: fix inMemoryFilterFor
+	const tenantFilter = Object.entries(rawFilter || {}).reduce(
+		(acc: Record<string, any>, [key, value]) => {
+			if (key === 'tenantId') {
+				acc[key] = value;
+			}
+			return acc;
+		},
+		{}
+	);
+
+	const filteredTenants = tenantFilter
+		? xero.tenants.filter(inMemoryFilterFor(tenantFilter))
 		: xero.tenants;
 
 	const results = await Promise.all(
@@ -58,6 +71,7 @@ export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (
 		} else if (key.indexOf('_') >= 0) {
 			throw new Error(`Filter ${key} not yet implemented.`);
 			// To make '_or' and '_and' work properly, ignore this test and fall through/return TRUE if the field does not exist in the item.
+			// @todo: this is broken and needs more work
 		} else if (item[key] !== null && item[key] !== undefined && item[key] !== value) {
 			return false;
 		}

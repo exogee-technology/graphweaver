@@ -149,9 +149,13 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		await this.ensureAccessToken();
 
 		logger.trace(
-			`Running find ${this.entityTypeName} with filter`,
+			`Running find ${this.entityTypeName} with rawFilter`,
 			{
-				filter: JSON.stringify(filter),
+				rawFilter: JSON.stringify(filter),
+			},
+			`and filter`,
+			{
+				filter: JSON.stringify(xeroFilterFrom(filter)),
 			},
 			'and pagination',
 			{
