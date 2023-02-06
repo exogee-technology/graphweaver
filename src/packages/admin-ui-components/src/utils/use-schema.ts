@@ -28,6 +28,32 @@ export interface EntityField {
 	relationshipType?: '1:1' | '1:n' | 'm:1' | 'm:n';
 }
 
+export interface Filter {
+	filter?: FieldPredicate;
+}
+
+interface FieldEquals {
+	kind: 'equals';
+	field: string;
+	value: string;
+}
+
+interface FieldLike {
+	kind: 'like';
+	field: string;
+	pattern: string;
+	isCaseInsensitive: boolean;
+}
+
+type FieldPredicate = FieldEquals | FieldLike; // FieldAnd | FieldOr | FieldNot | in, isNull, isTrue, greaterThan, lessThan, between, etc
+
+type SortDirection = 'ASC' | 'DESC';
+
+export interface SortField {
+	field: string;
+	direction: SortDirection;
+}
+
 export const useSchema = () => {
 	const { data } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
 

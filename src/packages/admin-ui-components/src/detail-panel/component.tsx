@@ -47,5 +47,5 @@ export const DetailPanel = () => {
 		return <DetailPanelError />;
 	}
 
-	return <pre className={styles.wrpper}>{JSON.stringify(detail.data.result, null, 4)}</pre>;
+	return <pre className={styles.wrapper}>{JSON.stringify(detail.data.result, null, 4)}</pre>;
 };
