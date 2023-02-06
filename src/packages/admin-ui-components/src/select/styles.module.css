@@ -6,9 +6,6 @@
 .select {
 	box-sizing: border-box;
 
-	height: 40px;
-	max-width: 40%;
-
 	background: var(--select-background);
 	border: 1px solid var(--select-border-color);
 	border-radius: 6px;
