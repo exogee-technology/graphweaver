@@ -91,7 +91,6 @@ export const List = () => {
 			currentState.page
 		);
 		data = result.data.result.slice();
-		console.table(data);
 
 		if (data.length < PAGE_SIZE) {
 			lastRecordReturned = true;
