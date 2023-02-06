@@ -1,5 +1,5 @@
 import { SortColumn } from 'react-data-grid';
-import { Entity } from './use-schema';
+import { Entity, Filter, SortField } from './use-schema';
 
 interface RouteForEntity {
 	entity: string | Entity;
@@ -26,15 +26,23 @@ interface RouteForDashboard {
 }
 
 interface SearchParams {
-	sort?: SortColumn[];
-	// TODO: filter
+	sort?: SortField[];
+	filter?: Filter;
 }
 
 export type RouteForProps = (RouteForEntity | RouteForType | RouteForDashboard) & SearchParams;
 
 const cleaningPattern = /[^a-zA-Z0-9]/g;
 
-export const routeFor = ({ entity, type, id, dashboard, tenantId, sort }: RouteForProps) => {
+export const routeFor = ({
+	entity,
+	type,
+	id,
+	dashboard,
+	tenantId,
+	sort,
+	filter,
+}: RouteForProps) => {
 	if (dashboard) {
 		const chunks = ['dashboard'];
 		if (tenantId) chunks.push(tenantId);
@@ -49,11 +57,37 @@ export const routeFor = ({ entity, type, id, dashboard, tenantId, sort }: RouteF
 
 	const chunks = [entityName];
 	if (id) chunks.push(id);
-	// TODO: At the moment, sorting is a simple '?name=asc&name=desc&...' string
-	// TODO: Will need to change to '?sort=...&filter=...'
+
+	return `/${chunks.join('/')}${encodeSearchParams({ sort, filter })}`;
+};
+
+const encodeSearchParams = (searchParams: SearchParams) => {
+	const { sort, filter } = searchParams;
 	let search = '';
+	let sortEncoded;
+	let filterEncoded;
 	if (sort && sort.length > 0) {
-		search = '?' + sort.map((col) => `${col.columnKey}=${col.direction}`).join('&');
+		sortEncoded = 'sort=' + encodeURIComponent(btoa(JSON.stringify(sort)));
 	}
-	return `/${chunks.join('/')}${search}`;
+	if (filter) {
+		filterEncoded = 'filter=' + encodeURIComponent(btoa(JSON.stringify(filter)));
+	}
+	if (sortEncoded || filterEncoded) {
+		search = '?' + [sortEncoded, filterEncoded].join('&');
+	}
+	return search;
+};
+
+export const decodeSearchParams = (search: URLSearchParams) => {
+	const result: Record<string, any> = {};
+	const rawSort = search.get('sort');
+	const rawFilter = search.get('filter');
+	if (rawSort !== null) {
+		// TODO: validate JSON
+		result['sort'] = JSON.parse(atob(decodeURIComponent(rawSort)));
+	}
+	if (rawFilter !== null) {
+		result['filter'] = JSON.parse(atob(decodeURIComponent(rawFilter)));
+	}
+	return result;
 };

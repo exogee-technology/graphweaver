@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { SortColumn } from 'react-data-grid';
@@ -9,6 +9,9 @@ import {
 	useSchema,
 	PAGE_SIZE,
 	routeFor,
+	decodeSearchParams,
+	SortField,
+	Filter,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { fetchList } from './graphql';
@@ -16,7 +19,8 @@ import { fetchList } from './graphql';
 type DataType = { id: string };
 interface DataState {
 	data: DataType[];
-	sortColumns: SortColumn[];
+	filterField: Filter;
+	sortFields: SortField[];
 	page: number;
 	loading: boolean;
 	error?: ApolloError;
@@ -27,7 +31,8 @@ type DataStateByEntity = Record<string, DataState>;
 
 const defaultEntityState = {
 	data: [],
-	sortColumns: [],
+	sortFields: [],
+	filterField: { filter: undefined },
 	page: 1,
 	loading: false,
 	error: undefined,
@@ -35,22 +40,21 @@ const defaultEntityState = {
 };
 
 export const List = () => {
-	const { entity } = useParams();
+	const { entity, id } = useParams();
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
 
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
 	const { entityByName } = useSchema();
-	const schemaEntity = entityByName(entity);
 
 	const [entityState, setEntityState] = useState<DataStateByEntity>({});
 
 	const resetDataState = (entity: string, state: Partial<DataState>) => {
-		setEntityState((entityState) => ({
+		setEntityState({
 			...entityState,
 			[entity]: { ...defaultEntityState, ...state },
-		}));
+		});
 	};
 	const setDataState = (entity: string, state: Partial<DataState>) => {
 		const currentState = entityState[entity] ?? defaultEntityState;
@@ -66,7 +70,7 @@ export const List = () => {
 			...state,
 			data: newData,
 		};
-		setEntityState((entityState) => ({ ...entityState, [entity]: newDataState }));
+		setEntityState({ ...entityState, [entity]: newDataState });
 	};
 
 	const fetchData = useCallback(async () => {
@@ -78,43 +82,56 @@ export const List = () => {
 
 		let data = [];
 		let lastRecordReturned = false;
+		const filter = currentState.filterField;
 		const result = await fetchList<{ result: any[] }>(
 			entity,
 			entityByName,
-			currentState.sortColumns,
+			filter?.filter !== undefined ? filter : undefined,
+			currentState.sortFields,
 			currentState.page
 		);
 		data = result.data.result.slice();
+		console.table(data);
 
 		if (data.length < PAGE_SIZE) {
 			lastRecordReturned = true;
 		}
+
 		const { loading, error } = result;
 		setDataState(entity, { data, allDataFetched: lastRecordReturned, loading, error });
-	}, [entity, entityState[entity]?.sortColumns, entityState[entity]?.page]);
+	}, [
+		entity,
+		entityState[entity]?.filterField,
+		entityState[entity]?.sortFields,
+		entityState[entity]?.page,
+	]);
 
 	useEffect(() => {
-		const sortColumns: SortColumn[] = Array.from(search.entries()).map((field) => ({
-			columnKey: field[0],
-			direction: field[1].toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-		}));
+		const { filter, sort } = decodeSearchParams(search);
 		// TODO: This will always cause a refetch even if search unchanged as data is cleared
-		resetDataState(entity, { sortColumns });
+		resetDataState(entity, { filterField: filter, sortFields: sort });
 	}, [search]);
 
 	useEffect(() => {
 		fetchData()
 			// TODO: error handling
 			.catch(console.error);
-	}, [fetchData, entity, entityState[entity]?.sortColumns, entityState[entity]?.page]);
+	}, [
+		fetchData,
+		entity,
+		entityState[entity]?.filterField,
+		entityState[entity]?.sortFields,
+		entityState[entity]?.page,
+	]);
 
 	const requestRefetch = (state: Partial<DataState>) => {
-		state.sortColumns ? requestSort(state) : incrementPage();
+		state.sortFields ? requestSort(state) : incrementPage();
 	};
 
 	// TODO: Get warning in here that navigate should be in a useEffect
 	const requestSort = (state: Partial<DataState>) => {
-		navigate(routeFor({ entity, sort: state.sortColumns }));
+		const { filter } = decodeSearchParams(search);
+		navigate(routeFor({ entity, sort: state.sortFields, filter }));
 	};
 
 	// Increment page only; leave the rest
@@ -122,8 +139,14 @@ export const List = () => {
 		setDataState(entity, { page: (entityState[entity]?.page ?? defaultEntityState.page) + 1 });
 	};
 
-	const { loading, error, data, sortColumns, allDataFetched } =
-		entityState[entity] ?? defaultEntityState;
+	const {
+		loading,
+		error,
+		data,
+		sortFields: sortColumns,
+		allDataFetched,
+	} = entityState[entity] ?? defaultEntityState;
+	console.count('sortColumns before loading Table');
 	if (loading) {
 		return <pre>Loading...</pre>;
 	}
