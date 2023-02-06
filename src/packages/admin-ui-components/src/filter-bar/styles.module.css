@@ -1,0 +1,8 @@
+.filterBarWrapper {
+	display: flex;
+	flex-direction: row;
+	padding: 16px 0 16px 40px;
+	gap: 12px;
+	min-height: 38px;
+	align-items: center;
+}

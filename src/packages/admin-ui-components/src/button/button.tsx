@@ -68,7 +68,9 @@ export const Button = ({
 	const [showDropdown, setShowDropdown] = useState(false);
 
 	function handleLocalClick() {
-		return dropdown ? setShowDropdown(!showDropdown) : false;
+		// Make this component act like a standard button if there's no dropdown. So...
+		// If there's a dropdown, toggle that, otherwise forward to prop
+		return dropdown ? setShowDropdown(!showDropdown) : handleClick();
 	}
 
 	function hasDropdown() {
