@@ -115,14 +115,20 @@ export const Table = <T extends { id: string }>({
 		handleSort();
 	}, [sortColumns]);
 
-	// @todo: Keep useCallback and watch list, but hoist callback into List; set filter to { equals, id }
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
+			// Don't set the filter in the route
 			navigate(routeFor({ entity: selectedEntity, id: row.id }));
 		},
 		[selectedEntity]
 	);
+
+	const filteredRows = () => {
+		return rows.filter((row) => {
+			return selectedEntity && id ? row.id === id : true;
+		});
+	};
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
@@ -130,7 +136,7 @@ export const Table = <T extends { id: string }>({
 		<>
 			<DataGrid
 				columns={columnsForEntity(selectedEntity, entityByType) as any}
-				rows={rows}
+				rows={filteredRows()}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
