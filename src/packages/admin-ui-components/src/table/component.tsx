@@ -2,7 +2,7 @@ import DataGrid, { Column, SortColumn } from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { Entity, useSchema, useSelectedEntity, routeFor } from '../utils';
+import { Entity, useSchema, useSelectedEntity, routeFor, SortField } from '../utils';
 import { Spinner } from '../spinner';
 
 import 'react-data-grid/lib/styles.css';
@@ -63,11 +63,13 @@ export const Table = <T extends { id: string }>({
 	allDataFetched,
 }: {
 	rows: T[];
-	requestRefetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
-	orderBy?: SortColumn[];
+	requestRefetch: ({ sortFields }: { sortFields?: SortField[] }) => void;
+	orderBy?: SortField[];
 	allDataFetched: boolean;
 }) => {
-	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
+	const [sortColumns, setSortColumns] = useState<SortColumn[]>(
+		orderBy.map((f) => ({ columnKey: f.field, direction: f.direction }))
+	);
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
@@ -96,6 +98,7 @@ export const Table = <T extends { id: string }>({
 
 		// TODO: Does not prevent a race condition. All this call does is trigger a reload, but really we want
 		// TODO: the reload itself to complete before setting loading to false
+		// TODO: direct call
 		setLoading(true);
 		requestRefetch({});
 		// TODO: So...
@@ -103,13 +106,16 @@ export const Table = <T extends { id: string }>({
 	};
 
 	const handleSort = () => {
-		requestRefetch({ sortColumns });
+		requestRefetch({
+			sortFields: sortColumns.map((c) => ({ field: c.columnKey, direction: c.direction })),
+		});
 	};
 
 	useEffect(() => {
 		handleSort();
 	}, [sortColumns]);
 
+	// @todo: Keep useCallback and watch list, but hoist callback into List; set filter to { equals, id }
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
