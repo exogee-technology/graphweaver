@@ -29,6 +29,10 @@ const defaultStyles = {
 		...providedStyles,
 		flexGrow: '1',
 	}),
+	placeholder: (providedStyles: any) => ({
+		...providedStyles,
+		textTransform: 'uppercase',
+	}),
 	control: (providedStyles: any, state: { isFocused: boolean }) => ({
 		...providedStyles,
 		boxSizing: 'border-box',
@@ -78,7 +82,7 @@ const defaultStyles = {
 	//   },
 }; //), [])
 
-export const clearValue = (ref: any) => {
+export const clearSelect = (ref: any) => {
 	ref.current?.clearValue();
 };
 
