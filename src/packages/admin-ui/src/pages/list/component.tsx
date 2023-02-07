@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { SortColumn } from 'react-data-grid';
@@ -12,35 +12,15 @@ import {
 	decodeSearchParams,
 	SortField,
 	Filter,
+	DataContext,
+	DataState,
+	defaultEntityState,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { fetchList } from './graphql';
 
-type DataType = { id: string };
-interface DataState {
-	data: DataType[];
-	filterField: Filter;
-	sortFields: SortField[];
-	page: number;
-	loading: boolean;
-	error?: ApolloError;
-	allDataFetched: boolean;
-}
-
-type DataStateByEntity = Record<string, DataState>;
-
-const defaultEntityState = {
-	data: [],
-	sortFields: [],
-	filterField: { filter: undefined },
-	page: 1,
-	loading: false,
-	error: undefined,
-	allDataFetched: false,
-};
-
 export const List = () => {
-	const { entity, id } = useParams();
+	const { entity } = useParams();
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
 
@@ -48,7 +28,9 @@ export const List = () => {
 
 	const { entityByName } = useSchema();
 
-	const [entityState, setEntityState] = useState<DataStateByEntity>({});
+	// const [entityState, setEntityState] = useState<DataStateByEntity>({});
+
+	const { entityState, setEntityState } = useContext(DataContext);
 
 	const resetDataState = (entity: string, state: Partial<DataState>) => {
 		setEntityState({
