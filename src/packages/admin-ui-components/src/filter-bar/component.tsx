@@ -2,7 +2,7 @@ import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
 	Button,
-	clearValue,
+	clearSelect,
 	decodeSearchParams,
 	Filter,
 	routeFor,
@@ -11,14 +11,11 @@ import {
 	useSchema,
 	useSelectedEntity,
 } from '..';
+import { EnumFilter, RelationshipFilter, TextFilter } from '../filters';
 
 import styles from './styles.module.css';
 
-const dummyOptions = [
-	{ label: 'Option 1', value: 1 },
-	{ label: 'Option 2', value: 2 },
-	{ label: 'Option 3', value: 3 },
-];
+type IndexedRef = Record<string, any>; //React.MutableRefObject<any>>;
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
@@ -28,68 +25,69 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const navigate = useNavigate();
 	const [filter, setFilter] = useState<Filter>();
 
-	// Use to control Clear button
-	const ref = useRef(null);
-
 	if (!entity) {
 		throw Error('Entity should be in URL here');
 	}
 
 	const entityType = entityByName(entity);
 
-	let filters = [
-		<Select key={Math.random()} options={dummyOptions} />,
-		<Select key={Math.random()} options={dummyOptions} />,
-		<Select key={Math.random()} options={dummyOptions} />,
-		<Select key={Math.random()} options={dummyOptions} />,
-	];
+	// Use to control Clear button
+	const refs = useRef<IndexedRef>({});
+	// let refs: IndexedRef = {};
+	let filters: JSX.Element[] = [];
 
 	const tempSetAccountsFilters = () => {
-		// TODO: -------------------------------------------------------
-		// TODO: Cache all these in a useMemo provider, perhaps on load,
-		// TODO: then pass them down here
-		// TODO: -------------------------------------------------------
-		const typeField = entityType.fields.find((f) => f.name === 'type');
-		let typeEnumOptions: SelectOption[] = [];
-		if (typeField) {
-			const typeEnum = enumByName(typeField.type);
-			typeEnumOptions = Array.from(typeEnum.values).map((v) => ({
-				label: v.name,
-				value: v.value,
-			}));
-		}
-		const tenantField = entityType.fields.find((f) => f.name === 'tenant');
-		let tenantOptions: SelectOption[] = [];
-		if (tenantField && tenantField.relationshipType === 'm:1') {
-			// @todo: query back all tenant ID/name pairs
-			const tenantEntityType = entityByType(tenantField.type);
-		}
-		// (code) (name) type (tenant)
+		// refs = {
+		// 	['code']: useRef(null),
+		// 	['name']: useRef(null),
+		// 	['type']: useRef(null),
+		// 	['tenant']: useRef(null),
+		// };
 		return [
-			// <Select key={'CODE'} options={dummyOptions} placeholder={'CODE*'} isClearable />,
-			// <Select key={'NAME'} options={dummyOptions} placeholder={'NAME*'} isClearable />,
-			<Select
-				key={'TYPE'}
-				options={typeEnumOptions}
-				placeholder={'TYPE'}
-				isClearable
-				clearSelection
-				ref={ref}
-				onChange={onFilterType}
+			<TextFilter
+				key={'code'}
+				fieldName={'code'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['code'] = el)} // refs['code']}
 			/>,
-			// <Select key={'TENANT'} options={dummyOptions} placeholder={'TENANT*'} isClearable />,
+			<TextFilter
+				key={'name'}
+				fieldName={'name'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['name'] = el)}
+			/>,
+			<EnumFilter
+				key={'type'}
+				fieldName={'type'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['type'] = el)}
+			/>,
+			<RelationshipFilter
+				key={'tenant'}
+				fieldName={'tenant'}
+				refFieldName={'tenantId'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['tenant'] = el)}
+			/>,
 		];
 	};
 
-	const onFilterType = (option?: SelectOption) => {
-		// option will be empty if 'clear' selected
+	const onFilter = (fieldName: string, filter?: Filter) => {
 		// @todo: multiple filters
-		if (!option) {
-			setFilter(undefined);
-			return;
-		}
 		// @todo: read schema to see what filter pred to use
-		setFilter({ filter: { kind: 'equals', field: 'type', value: option.value } });
+		if (filter !== undefined) {
+			// Clear all other filters
+			Object.entries(refs).forEach(([name, ref]) => {
+				if (name !== fieldName) {
+					clearSelect(ref);
+				}
+			});
+		}
+		setFilter(filter);
 	};
 
 	useEffect(() => {
@@ -106,7 +104,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	const clearAllFilters = () => {
-		clearValue(ref);
+		Object.values(refs).forEach((ref) => clearSelect(ref));
 		setFilter(undefined);
 	};
 

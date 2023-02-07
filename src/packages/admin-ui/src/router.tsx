@@ -4,7 +4,13 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 // This is injected by vite-plugin-graphweaver
 import { dashboards } from 'virtual:graphweaver-user-supplied-dashboards';
 
-import { Loader, DefaultLayout, ToolBar } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Loader,
+	DefaultLayout,
+	ToolBar,
+	DataStateByEntity,
+	DataContext,
+} from '@exogee/graphweaver-admin-ui-components';
 import { List, Root } from './pages';
 
 const defaultRoutes = [
@@ -44,6 +50,7 @@ const defaultRoutes = [
 
 export const Router = () => {
 	const [router, setRouter] = useState<any>(null);
+	const [entityState, setEntityState] = useState<DataStateByEntity>({});
 
 	useEffect(() => {
 		(async () => {
@@ -56,5 +63,9 @@ export const Router = () => {
 
 	if (!router) return <Loader />;
 
-	return <RouterProvider router={router} />;
+	return (
+		<DataContext.Provider value={{ entityState, setEntityState }}>
+			<RouterProvider router={router} />;
+		</DataContext.Provider>
+	);
 };
