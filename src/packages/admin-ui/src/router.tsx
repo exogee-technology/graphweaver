@@ -50,7 +50,6 @@ const defaultRoutes = [
 
 export const Router = () => {
 	const [router, setRouter] = useState<any>(null);
-	const [entityState, setEntityState] = useState<DataStateByEntity>({});
 
 	useEffect(() => {
 		(async () => {
@@ -63,9 +62,5 @@ export const Router = () => {
 
 	if (!router) return <Loader />;
 
-	return (
-		<DataContext.Provider value={{ entityState, setEntityState }}>
-			<RouterProvider router={router} />;
-		</DataContext.Provider>
-	);
+	return <RouterProvider router={router} />;
 };
