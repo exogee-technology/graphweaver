@@ -72,7 +72,7 @@ export interface SortField {
 }
 
 export const useSchema = () => {
-	const { data } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
+	const { data, loading, error } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
@@ -111,6 +111,8 @@ export const useSchema = () => {
 	}, [data]);
 
 	return {
+		loading,
+		error,
 		entities: Object.keys(entityMap),
 		backends: Object.keys(dataSourceMap),
 		entityByName: (entityName: string) => entityMap[entityName],
