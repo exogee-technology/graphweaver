@@ -45,7 +45,24 @@ interface FieldLike {
 	isCaseInsensitive: boolean;
 }
 
-type FieldPredicate = FieldEquals | FieldLike; // FieldAnd | FieldOr | FieldNot | in, isNull, isTrue, greaterThan, lessThan, between, etc
+interface FieldGreaterThan {
+	kind: '_gt';
+	field: string;
+	value: string;
+}
+
+interface FieldLessThan {
+	kind: '_lt';
+	field: string;
+	value: string;
+}
+
+interface FieldAnd {
+	kind: '_and';
+	and: FieldPredicate[];
+}
+
+export type FieldPredicate = FieldEquals | FieldLike | FieldAnd | FieldGreaterThan | FieldLessThan; // | FieldOr | FieldNot | in, isNull, isTrue between, etc
 
 type SortDirection = 'ASC' | 'DESC';
 

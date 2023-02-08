@@ -65,6 +65,7 @@ export const List = () => {
 		let data = [];
 		let lastRecordReturned = false;
 		const filter = currentState.filterField;
+		console.log('DEBUG: filter passed to backend', filter);
 		const result = await fetchList<{ result: any[] }>(
 			entity,
 			entityByName,
@@ -127,7 +128,7 @@ export const List = () => {
 		sortFields: sortColumns,
 		allDataFetched,
 	} = entityState[entity] ?? defaultEntityState;
-	console.count('sortColumns before loading Table');
+	console.count('DEBUG: sortColumns before loading Table');
 	if (loading) {
 		return <pre>Loading...</pre>;
 	}
