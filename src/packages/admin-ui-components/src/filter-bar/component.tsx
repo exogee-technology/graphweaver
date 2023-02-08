@@ -4,6 +4,7 @@ import {
 	Button,
 	clearSelect,
 	decodeSearchParams,
+	FieldPredicate,
 	Filter,
 	routeFor,
 	Select,
@@ -11,7 +12,7 @@ import {
 	useSchema,
 	useSelectedEntity,
 } from '..';
-import { EnumFilter, RelationshipFilter, TextFilter } from '../filters';
+import { DateFilter, EnumFilter, RelationshipFilter, TextFilter } from '../filters';
 
 import styles from './styles.module.css';
 
@@ -20,7 +21,6 @@ type IndexedRef = Record<string, any>; //React.MutableRefObject<any>>;
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
 	const [search, setSearch] = useSearchParams();
-	console.log('DEBUG calling useSchema from FilterBar');
 	const { entityByName, entityByType, enumByName, entities } = useSchema();
 	const navigate = useNavigate();
 	const [filter, setFilter] = useState<Filter>();
@@ -33,23 +33,17 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	// Use to control Clear button
 	const refs = useRef<IndexedRef>({});
-	// let refs: IndexedRef = {};
-	let filters: JSX.Element[] = [];
 
-	const tempSetAccountsFilters = () => {
-		// refs = {
-		// 	['code']: useRef(null),
-		// 	['name']: useRef(null),
-		// 	['type']: useRef(null),
-		// 	['tenant']: useRef(null),
-		// };
+	let filters: Record<string, JSX.Element[]> = {};
+
+	const tempSetAccountFilters = () => {
 		return [
 			<TextFilter
 				key={'code'}
 				fieldName={'code'}
 				entity={entity}
 				onSelect={onFilter}
-				ref={(el) => (refs.current['code'] = el)} // refs['code']}
+				ref={(el) => (refs.current['code'] = el)}
 			/>,
 			<TextFilter
 				key={'name'}
@@ -76,8 +70,83 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		];
 	};
 
+	const tempSetPAndLFilters = () => {
+		return [
+			<DateFilter
+				key={'date'}
+				fieldName={'date'}
+				entity={entity}
+				onSelect={onDateFilter}
+				ref={(el) => (refs.current['date'] = el)}
+			/>,
+			<TextFilter
+				key={'description'}
+				fieldName={'description'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['description'] = el)}
+			/>,
+			// <NumberFilter
+			// 	key={'amount'}
+			// 	fieldName={'amount'}
+			// 	entity={entity}
+			// 	onSelect={onFilter}
+			// 	ref={(el) => (refs.current['amount'] = el)}
+			// />,
+			<RelationshipFilter
+				key={'account'}
+				fieldName={'account'}
+				refFieldName={'accountId'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['account'] = el)}
+			/>,
+			<RelationshipFilter
+				key={'tenant'}
+				fieldName={'tenant'}
+				refFieldName={'tenantId'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['tenant'] = el)}
+			/>,
+		];
+	};
+
+	const tempSetTenantFilters = () => {
+		return [
+			<TextFilter
+				key={'tenantName'}
+				fieldName={'tenantName'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['tenantName'] = el)}
+			/>,
+			<TextFilter
+				key={'tenantType'}
+				fieldName={'tenantType'}
+				entity={entity}
+				onSelect={onFilter}
+				ref={(el) => (refs.current['tenantType'] = el)}
+			/>,
+			<DateFilter
+				key={'createdDateUtc'}
+				fieldName={'createdDateUtc'}
+				entity={entity}
+				onSelect={onDateFilter}
+				ref={(el) => (refs.current['createdDateUtc'] = el)}
+			/>,
+			<DateFilter
+				key={'updatedDateUtc'}
+				fieldName={'updatedDateUtc'}
+				entity={entity}
+				onSelect={onDateFilter}
+				ref={(el) => (refs.current['updatedDateUtc'] = el)}
+			/>,
+		];
+	};
+
 	const onFilter = (fieldName: string, filter?: Filter) => {
-		// @todo: multiple filters
+		// @todo: multiple filters working together
 		// @todo: read schema to see what filter pred to use
 		if (filter !== undefined) {
 			// Clear all other filters
@@ -90,6 +159,60 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		setFilter(filter);
 	};
 
+	const onDateFilter = (fieldName: string, filter?: Filter) => {
+		// @todo: multiple filters working together
+		// @todo: read schema to see what filter pred to use
+		if (filter !== undefined) {
+			// Clear all other filters
+			Object.entries(refs).forEach(([name, ref]) => {
+				if (name !== fieldName) {
+					clearSelect(ref);
+				}
+			});
+		}
+		// @todo: The default date format returned is 'YYYY-MM-DD', but
+		// in future we want to handle this.
+		//
+		// We also want to handle a date range rather than a single date,
+		// but for the moment we will look at a single 24-hour period and
+		// filter on that.
+		//
+		// Assume filter is 'equals field = value', truncate the datetime, compute the next day,
+		// then set up an '_and [ _gt, _lt ]' filter
+		if (filter?.filter?.kind === 'equals') {
+			const startDateStr = filter.filter.value;
+			const startDate = new Date(startDateStr);
+			if (!!startDate.valueOf()) {
+				// Xero: These are UTC dates
+				startDate.setUTCHours(0, 0, 0, 0);
+				const startDateTimeIso = startDate.toISOString();
+				const endDateIso = new Date(startDate.setDate(startDate.getDate() + 1));
+				const endDateTimeIso = endDateIso.toISOString();
+				const newFilter: Filter = {
+					filter: {
+						kind: '_and',
+						and: [
+							{
+								kind: '_gt',
+								field: fieldName,
+								value: startDateTimeIso,
+							},
+							{
+								kind: '_lt',
+								field: fieldName,
+								value: endDateTimeIso,
+							},
+						],
+					},
+				};
+				setFilter(newFilter);
+				return;
+			}
+		}
+		// Dunno what's going on, just send the raw filter.
+		setFilter(filter);
+	};
+
 	useEffect(() => {
 		// Preserve search params - update filter segment only
 		const { sort } = decodeSearchParams(search);
@@ -99,7 +222,14 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	// @todo: read schema to see what filters there are configured
 	switch (entity) {
 		case 'Account':
-			filters = tempSetAccountsFilters();
+			filters[entity] = tempSetAccountFilters();
+			break;
+		case 'ProfitAndLossRow':
+			filters[entity] = tempSetPAndLFilters();
+			break;
+		case 'Tenant':
+			filters[entity] = tempSetTenantFilters();
+			break;
 		default:
 	}
 
@@ -112,7 +242,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		<div className={styles.filterBarWrapper}>
 			{/* // @todo: move to :before pseudoselector */}
 			{iconBefore}
-			{...filters}
+			{...filters[entity]}
 			<Button handleClick={clearAllFilters}>Clear Filters</Button>
 		</div>
 	);

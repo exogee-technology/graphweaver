@@ -35,7 +35,7 @@ export const RelationshipFilter = React.forwardRef(
 			relationshipOptions = data
 				// yuk
 				.map((item) => ({ label: (item as any)[field.name], value: item.id }))
-				.sort((a, b) => a?.label.toLocaleLowerCase().localeCompare(b?.label.toLocaleLowerCase()));
+				.sort((a, b) => a?.label?.toLocaleLowerCase().localeCompare(b?.label?.toLocaleLowerCase()));
 		}
 
 		const onChange = (option?: SelectOption) => {
