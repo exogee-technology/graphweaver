@@ -4,6 +4,7 @@ export * from './button';
 export * from './detail-panel';
 export * from './layouts';
 export * from './loader';
+export * from './require-schema';
 export * from './side-bar';
 export * from './spinner';
 export * from './table';
