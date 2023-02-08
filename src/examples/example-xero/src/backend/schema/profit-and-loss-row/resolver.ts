@@ -98,7 +98,11 @@ export class ProfitAndLossRowResolver extends createBaseResolver(
 			const sortFields = order ?? defaultSort;
 
 			// (filter) -> order -> limit/offset
-			return offsetAndLimit(orderedResult(result, sortFields), offset, limit);
+			return offsetAndLimit(
+				orderedResult(result.filter(inMemoryFilterFor(rawFilter)), sortFields),
+				offset,
+				limit
+			);
 		},
 	})
 ) {}
