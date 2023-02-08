@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // This is injected by vite-plugin-graphweaver
 import { dashboards } from 'virtual:graphweaver-user-supplied-dashboards';
-
 import { Loader, DefaultLayout, ToolBar } from '@exogee/graphweaver-admin-ui-components';
+
 import { List, Root } from './pages';
 
 const defaultRoutes = [
