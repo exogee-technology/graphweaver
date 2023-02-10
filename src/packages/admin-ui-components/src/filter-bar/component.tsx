@@ -44,7 +44,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		throw Error('Entity should be in URL here');
 	}
 
-	let filters: Record<string, JSX.Element[]> = {};
+	const filters: Record<string, JSX.Element[]> = {};
 
 	// @todo: Maybe filterState options also need to be tagged by entity in case the same fieldnames recur across entities?
 	// otoh can share eg. tenantId settings
@@ -182,7 +182,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// Assume filter is 'equals field = value', truncate the datetime, compute the next day,
 		// then set up an '_and [ _gte, _lt ]' filter
 		const startDate = new Date(option.value);
-		if (!!startDate.valueOf()) {
+		if (startDate.valueOf()) {
 			// Xero: These are UTC dates
 			startDate.setUTCHours(0, 0, 0, 0);
 			const startDateTimeIso = startDate.toISOString();
