@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, Select, SelectOption, useSchema } from '..';
+import { Select, SelectOption, useSchema } from '..';
 
 export const EnumFilter = React.forwardRef(
 	(
@@ -7,10 +7,12 @@ export const EnumFilter = React.forwardRef(
 			fieldName,
 			entity,
 			onSelect,
+			selected,
 		}: {
 			fieldName: string;
 			entity: string;
-			onSelect?: (fieldName: string, filter?: Filter) => void;
+			onSelect?: (fieldName: string, option?: SelectOption) => void;
+			selected?: SelectOption;
 		},
 		ref: any
 	) => {
@@ -29,19 +31,14 @@ export const EnumFilter = React.forwardRef(
 
 		const onChange = (option?: SelectOption) => {
 			// option will be empty if 'clear' selected
-			// @todo: multiple filters
 			if (!onSelect) return;
-			if (!option) {
-				return onSelect(fieldName, undefined);
-			}
-			return onSelect(fieldName, {
-				filter: { kind: 'equals', field: fieldName, value: option.value },
-			});
+			return onSelect(fieldName, option);
 		};
 
 		return (
 			<Select
 				key={fieldName}
+				value={selected}
 				options={enumOptions}
 				placeholder={fieldName}
 				isClearable

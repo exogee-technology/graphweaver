@@ -19,23 +19,14 @@ const xero = new XeroClient({
 export interface XeroDataAccessor<T> {
 	find: (args: {
 		xero: XeroClient;
-		filter?: string;
-		rawFilter: Record<string, any>;
+		filter: Record<string, any>;
 		order?: Record<string, Sort>;
 		limit?: number;
 		offset?: number;
 	}) => Promise<T[]>;
 }
 
-// This takes:
-// {
-// 	_or: [
-// 		{ id: '123'},
-// 		{ id: '234'},
-// 	]
-// }
-// and turns it into a string like:
-// AccountID=="123" OR AccountID=="234"
+/** @deprecated moved to Account resolver as only used there - left here for logging only */
 const xeroFilterFrom = (filter: any) => {
 	if (!filter) return undefined;
 
@@ -43,36 +34,39 @@ const xeroFilterFrom = (filter: any) => {
 
 	for (const [key, value] of Object.entries(filter)) {
 		if (key === '_or' || key === '_and') {
-			const subChunks: string[] = [];
-			for (const subChunk of value as any[]) {
-				const subFilter = xeroFilterFrom(subChunk);
-				if (subFilter) subChunks.push(subFilter);
+			const subPredicates: string[] = [];
+			for (const subPredicate of value as any[]) {
+				const subFilter = xeroFilterFrom(subPredicate);
+				if (subFilter) subPredicates.push(subFilter);
 			}
 
-			if (key === '_or') chunks.push(`${subChunks.join(' OR ')}`);
-			else chunks.push(`${subChunks.join(' AND ')}`);
+			if (key === '_or') chunks.push(`${subPredicates.join(' OR ')}`);
+			else chunks.push(`${subPredicates.join(' AND ')}`);
 		} else {
-			const replacedKey = key === 'id' ? 'AccountID' : key;
-			let subfilter =
+			// Key structure: fieldName + optional predicate, assume no underscore in fieldName
+			const keyParts = key.split('_', 2);
+			const replacedKey = keyParts[0] === 'id' ? 'AccountID' : keyParts[0];
+			let subFilter =
 				typeof value === 'object' ? xeroFilterFrom(value) : (value as string | undefined);
 
 			// Some Xero types need to be quoted.
-			if (isUUID(subfilter, 4)) {
-				subfilter = `GUID("${subfilter}")`;
-			} else if (typeof subfilter === 'string') {
-				subfilter = `"${subfilter}"`;
+			if (isUUID(subFilter, 4)) {
+				subFilter = `GUID("${subFilter}")`;
+			} else if (typeof subFilter === 'string') {
+				// Assume this works for ISO date strings
+				subFilter = `"${subFilter}"`;
 			}
 
 			if (key.endsWith('_gt')) {
-				chunks.push(`${replacedKey}>${subfilter}`);
+				chunks.push(`${replacedKey}>${subFilter}`);
 			} else if (key.endsWith('_gte')) {
-				chunks.push(`${replacedKey}<=${subfilter}`);
+				chunks.push(`${replacedKey}<=${subFilter}`);
 			} else if (key.endsWith('_lt')) {
-				chunks.push(`${replacedKey}<${subfilter}`);
+				chunks.push(`${replacedKey}<${subFilter}`);
 			} else if (key.endsWith('_lte')) {
-				chunks.push(`${replacedKey}<=${subfilter}`);
+				chunks.push(`${replacedKey}<=${subFilter}`);
 			} else {
-				chunks.push(`${replacedKey}==${subfilter}`);
+				chunks.push(`${replacedKey}==${subFilter}`);
 			}
 		}
 	}
@@ -152,11 +146,11 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			{
 				rawFilter: JSON.stringify(filter),
 			},
-			`and filter`,
+			`(converted by Account resolver to xero filter`,
 			{
-				filter: JSON.stringify(xeroFilterFrom(filter)),
+				filter: xeroFilterFrom(filter),
 			},
-			'and pagination',
+			') and pagination',
 			{
 				pagination: JSON.stringify(pagination),
 			}
@@ -171,8 +165,8 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		try {
 			const result = await this.accessor.find({
 				xero,
-				filter: xeroFilterFrom(filter),
-				rawFilter: filter,
+				// filter: xeroFilterFrom(filter),
+				filter,
 				order: xeroOrderFrom(pagination),
 				limit: xeroLimitFrom(pagination),
 				offset: xeroOffsetFrom(pagination),

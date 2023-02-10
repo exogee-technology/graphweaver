@@ -1,8 +1,7 @@
 import { gql } from '@apollo/client';
 import pluralize from 'pluralize';
-import { SortColumn } from 'react-data-grid';
 
-import { Entity, Filter, SortField } from './use-schema';
+import { Entity, FieldPredicate, Filter, SortField } from './use-schema';
 // Can't use useApolloClient/useQuery/useParms here if not using Loader
 import { apolloClient } from '../apollo';
 
@@ -17,15 +16,11 @@ export const getEntityPage = <T>(
 ) => {
 	const query = queryForEntityPage(entity, entityByType);
 
-	// Start with simple fieldName = value
-	const filter: { [field: string]: string } = {};
+	const filter: Record<string, any> = convertFilter(filterField.filter);
 	const orderBy: { [field: string]: 'ASC' | 'DESC' } = {};
 
 	for (const sortColumn of sortFields) {
 		orderBy[sortColumn.field] = sortColumn.direction;
-	}
-	if (filterField.filter && filterField.filter.kind === 'equals') {
-		filter[filterField.filter.field] = filterField.filter.value;
 	}
 
 	return apolloClient.query<T>({
@@ -97,4 +92,30 @@ const queryForEntity = (entity: Entity) => {
 			}
 		}
 	`;
+};
+
+const convertFilter = (inFilter?: FieldPredicate): Record<string, any> => {
+	// Convert to filiter format used by backend:
+	// '_and'|'_or' -> {[pred]: [...]}
+	// 'equals': -> {[fieldName]: value}
+	// '_lt'|'_lte'|'_gt'|'_gte': -> {[fieldName + pred]: value}
+	if (!inFilter) {
+		return {};
+	}
+	switch (inFilter.kind) {
+		case '_and':
+			return { ['_and']: inFilter.and.map(convertFilter) };
+		case '_or':
+			return { ['_or']: inFilter.or.map(convertFilter) };
+		case '_gt':
+		case '_gte':
+		case '_lt':
+		case '_lte':
+			return { [inFilter.field + inFilter.kind]: inFilter.value };
+		case 'equals':
+			return { [inFilter.field]: inFilter.value };
+		default:
+			return {};
+		// case '_like' not implemented
+	}
 };

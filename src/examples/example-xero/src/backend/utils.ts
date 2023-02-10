@@ -11,23 +11,11 @@ type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | P
 export const forEachTenant = async <T = unknown>(
 	xero: XeroClient,
 	callback: ForEachTenantCallback<T>,
-	rawFilter?: Record<string, any>
+	filter?: Record<string, any>
 ): Promise<WithTenantId<T>[]> => {
 	if (!xero.tenants.length) await xero.updateTenants(false);
 
-	// Check if tenants are filtered on - this filter is looking for an ID and will always fail
-	// if one is passed in - resulting in no output here
-	// So pull out the 'tenantId' field
-	// @todo: fix inMemoryFilterFor
-	const tenantFilter = Object.entries(rawFilter || {}).reduce(
-		(acc: Record<string, any>, [key, value]) => {
-			if (key === 'tenantId') {
-				acc[key] = value;
-			}
-			return acc;
-		},
-		{}
-	);
+	const [tenantFilter] = splitFilter(filter);
 
 	const filteredTenants = tenantFilter
 		? xero.tenants.filter(inMemoryFilterFor(tenantFilter))
@@ -54,25 +42,56 @@ export const forEachTenant = async <T = unknown>(
 	return results.flat() as WithTenantId<T>[];
 };
 
-export const inMemoryFilterFor = (rawFilter: Record<string, any>) => (
-	item: Record<string, any>
-) => {
-	for (const [key, value] of Object.entries(rawFilter || {})) {
-		if (key === '_or') {
-			for (const condition of value) {
+export const inMemoryFilterFor = (filter: Record<string, any>) => (item: Record<string, any>) => {
+	for (const [filterKey, filterValue] of Object.entries(filter || {})) {
+		if (filterKey === '_or') {
+			for (const condition of filterValue) {
 				if (inMemoryFilterFor(condition)(item)) return true;
 			}
 			return false;
-		} else if (key === '_and') {
-			for (const condition of value) {
+		} else if (filterKey === '_and') {
+			for (const condition of filterValue) {
 				if (!inMemoryFilterFor(condition)(item)) return false;
 			}
 			return true;
-		} else if (key.indexOf('_') >= 0) {
-			throw new Error(`Filter ${key} not yet implemented.`);
-			// To make '_or' and '_and' work properly, ignore this test and fall through/return TRUE if the field does not exist in the item.
-			// @todo: this is broken and needs more work
-		} else if (item[key] !== null && item[key] !== undefined && item[key] !== value) {
+		} else if (filterKey.indexOf('_') >= 0) {
+			const keyParts = filterKey.split('_', 2);
+			const [key, operator] = keyParts;
+			const value = item[key];
+			switch (operator) {
+				case 'gt':
+					return isNumeric(value) && isNumeric(filterValue)
+						? +value > +filterValue
+						: isDate(value) && isDate(filterValue)
+						? new Date(value).valueOf() > new Date(filterValue).valueOf()
+						: (value as string).localeCompare(filterValue as string) > 0;
+				case 'gte':
+					return isNumeric(value) && isNumeric(filterValue)
+						? +value >= +filterValue
+						: isDate(value) && isDate(filterValue)
+						? new Date(value).valueOf() >= new Date(filterValue).valueOf()
+						: (value as string).localeCompare(filterValue as string) >= 0;
+				case 'lt':
+					return isNumeric(value) && isNumeric(filterValue)
+						? +value < +filterValue
+						: isDate(value) && isDate(filterValue)
+						? new Date(value).valueOf() < new Date(filterValue).valueOf()
+						: (value as string).localeCompare(filterValue as string) < 0;
+				case 'lte':
+					return isNumeric(value) && isNumeric(filterValue)
+						? +value <= +filterValue
+						: isDate(value) && isDate(filterValue)
+						? new Date(value).valueOf() <= new Date(filterValue).valueOf()
+						: (value as string).localeCompare(filterValue as string) <= 0;
+				default:
+					throw new Error(`Filter ${filterKey} not yet implemented.`);
+			}
+			// assume 'equals': filterKey == fieldName
+		} else if (
+			item[filterKey] !== null &&
+			item[filterKey] !== undefined &&
+			item[filterKey] !== filterValue
+		) {
 			return false;
 		}
 	}
@@ -100,9 +119,7 @@ export const offsetAndLimit = <T>(result: T[], offset?: number, limit?: number) 
 	return result.slice(realOffset, realOffset + realLimit);
 };
 
-// TODO: Use type definitions for this instead of calling instanceof etc
-// TODO: Also see core/base-resolver which controls what shows up in the schema as a sortable field
-
+// @todo: Use schema defs to control what shows up in the schema as a sortable field
 export const isSortable = <T>(field: T | undefined) => {
 	if (field === undefined) {
 		return false;
@@ -153,4 +170,40 @@ export const orderByToString = (orderBy: Record<string, Sort>): string | undefin
 	}
 
 	return chunks.join(', ') || undefined;
+};
+
+const isNumeric = (item: unknown): boolean => {
+	if (item === undefined || item === null) return false;
+	if (typeof item === 'bigint' || typeof item === 'number') return true;
+	if (typeof item === 'string') {
+		return !isNaN(+item);
+	}
+	return false;
+};
+
+const isDate = (item: unknown): boolean => {
+	if (item instanceof Date) return true;
+	if (typeof item === 'string' || typeof item === 'number') {
+		const date = new Date(item);
+		return !isNaN(date.valueOf());
+	}
+	return false;
+};
+
+export const splitFilter = (filter: Record<string, any>): Record<string, any>[] => {
+	// Check if tenants are filtered on - this filter is looking for an ID and will always fail
+	// if one is passed in - resulting in no output here
+	// So pull out the 'tenantId' field
+	// @todo: fix inMemoryFilterFor
+	const tenantFilter: Record<string, any> = {};
+	const remainingFilter: Record<string, any> = Object.entries(filter || {}).reduce(
+		(acc: Record<string, any>, [key, value]) => {
+			if (key === 'tenantId') {
+				tenantFilter[key] = value;
+			} else acc[key] = value;
+			return acc;
+		},
+		{}
+	);
+	return [tenantFilter, remainingFilter];
 };
