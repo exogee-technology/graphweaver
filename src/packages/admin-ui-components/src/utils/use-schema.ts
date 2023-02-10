@@ -39,7 +39,7 @@ interface FieldEquals {
 }
 
 interface FieldLike {
-	kind: 'like';
+	kind: '_like';
 	field: string;
 	pattern: string;
 	isCaseInsensitive: boolean;
@@ -57,12 +57,38 @@ interface FieldLessThan {
 	value: string;
 }
 
+interface FieldGreaterThanOrEqualTo {
+	kind: '_gte';
+	field: string;
+	value: string;
+}
+
+interface FieldLessThanOrEqualTo {
+	kind: '_lte';
+	field: string;
+	value: string;
+}
+
 interface FieldAnd {
 	kind: '_and';
 	and: FieldPredicate[];
 }
 
-export type FieldPredicate = FieldEquals | FieldLike | FieldAnd | FieldGreaterThan | FieldLessThan; // | FieldOr | FieldNot | in, isNull, isTrue between, etc
+interface FieldOr {
+	kind: '_or';
+	or: FieldPredicate[];
+}
+
+// @todo: These are the ones currently supported by the Xero backend provider
+export type FieldPredicate =
+	| FieldEquals
+	| FieldLike
+	| FieldAnd
+	| FieldOr
+	| FieldGreaterThan
+	| FieldLessThan
+	| FieldGreaterThanOrEqualTo
+	| FieldLessThanOrEqualTo; // | FieldNot | in, isNull, isTrue between, etc
 
 type SortDirection = 'ASC' | 'DESC';
 

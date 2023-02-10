@@ -10,7 +10,7 @@ const defaultSort: Record<string, Sort> = { ['tenantName']: Sort.ASC };
 export class TenantResolver extends createBaseResolver(
 	Tenant,
 	new XeroBackendProvider('Tenant', {
-		find: async ({ xero, rawFilter, order, limit, offset }) => {
+		find: async ({ xero, filter, order, limit, offset }) => {
 			if (!xero.tenants.length) await xero.updateTenants(false);
 
 			// We want to clone the tenants so we don't mutate Xero's internal state
@@ -22,7 +22,7 @@ export class TenantResolver extends createBaseResolver(
 
 			// filter -> order -> limit/offset
 			return offsetAndLimit(
-				orderedResult(copy.filter(inMemoryFilterFor(rawFilter)), sortFields),
+				orderedResult(copy.filter(inMemoryFilterFor(filter)), sortFields),
 				offset,
 				limit
 			);

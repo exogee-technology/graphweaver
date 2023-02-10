@@ -27,7 +27,5 @@ export const defaultEntityState = {
 	allDataFetched: false,
 };
 
-// export const DataContext = createContext<DataStateByEntity>({});
-// @todo: Combine with useReducer. currently this is set up in Router to put entityState/setEntityState into the context
-// Typescript demands that these are properly typed
+// @todo: Combine with useReducer. currently this is set up in DefaultLayout to put entityState/setEntityState into the context
 export const DataContext = createContext({} as any);
