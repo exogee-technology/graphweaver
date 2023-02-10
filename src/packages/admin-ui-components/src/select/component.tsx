@@ -1,6 +1,5 @@
 import React from 'react';
-import { useCallback, useRef, useState } from 'react';
-import ReactSelect, { ActionMeta, GroupBase, SingleValue, SelectInstance } from 'react-select';
+import ReactSelect, { ActionMeta, SingleValue } from 'react-select';
 
 import './styles.module.css';
 
@@ -93,23 +92,23 @@ export const Select = React.forwardRef(
 			options,
 			onChange,
 			autoFocus,
-			defaultValue,
+			// defaultValue,
+			value,
 			isDisabled,
 			isClearable,
 			placeholder,
 			clearSelection,
-			labelPrefix,
 		}: {
 			options: SelectOption[];
 			onChange?: (value?: SelectOption) => void;
 			autoFocus?: boolean;
-			defaultValue?: SelectOption;
+			// defaultValue?: SelectOption;
+			value?: SelectOption;
 			isDisabled?: boolean;
 			isClearable?: boolean;
 			placeholder?: string;
 			// We are/are not interested when the selection is cleared
 			clearSelection?: boolean;
-			labelPrefix?: string;
 		},
 		ref?: any
 	) => {
@@ -125,7 +124,6 @@ export const Select = React.forwardRef(
 		};
 
 		const styles = defaultStyles;
-		const prefix = labelPrefix ? `${labelPrefix}: ` : '';
 
 		return (
 			<ReactSelect
@@ -134,14 +132,13 @@ export const Select = React.forwardRef(
 				options={options}
 				onChange={change}
 				autoFocus={autoFocus}
-				defaultValue={defaultValue}
+				// defaultValue={defaultValue}
+				value={value || null}
 				menuPlacement={'auto'}
 				menuPosition={'fixed'}
 				placeholder={placeholder}
 				isDisabled={isDisabled}
 				isClearable={isClearable}
-				// @todo: Unfortunately this sticks a prefix on every menu item not just the selected item
-				getOptionLabel={(option) => `${prefix}${option.label}`}
 			/>
 		);
 	}

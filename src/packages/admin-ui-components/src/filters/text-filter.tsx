@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { DataContext, DataStateByEntity, Filter, Select, SelectOption, useSchema } from '..';
+import { DataContext, DataStateByEntity, Select, SelectOption, useSchema } from '..';
 
 export const TextFilter = React.forwardRef(
 	<T extends { id: string }>(
@@ -7,10 +7,13 @@ export const TextFilter = React.forwardRef(
 			fieldName,
 			entity,
 			onSelect,
+			selected,
 		}: {
 			fieldName: string;
 			entity: string;
-			onSelect?: (fieldName: string, filter?: Filter) => void;
+			// onSelect?: (fieldName: string, filter?: Filter) => void;
+			onSelect?: (fieldName: string, option?: SelectOption) => void;
+			selected?: SelectOption;
 		},
 		ref: any
 	) => {
@@ -39,19 +42,14 @@ export const TextFilter = React.forwardRef(
 
 		const onChange = (option?: SelectOption) => {
 			// option will be empty if 'clear' selected
-			// @todo: multiple filters
 			if (!onSelect) return;
-			if (!option) {
-				return onSelect(fieldName, undefined);
-			}
-			return onSelect(fieldName, {
-				filter: { kind: 'equals', field: fieldName, value: option.value },
-			});
+			return onSelect(fieldName, option);
 		};
 
 		return (
 			<Select
 				key={fieldName}
+				value={selected}
 				options={textOptions}
 				placeholder={fieldName}
 				isClearable

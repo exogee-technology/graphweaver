@@ -5,14 +5,16 @@ export const RelationshipFilter = React.forwardRef(
 	<T extends { id: string }>(
 		{
 			fieldName,
-			refFieldName,
+			relationshipRefFieldName,
 			entity,
 			onSelect,
+			selected,
 		}: {
 			fieldName: string;
-			refFieldName?: string;
+			relationshipRefFieldName?: string;
 			entity: string;
-			onSelect?: (fieldName: string, filter?: Filter) => void;
+			onSelect?: (fieldName: string, option?: SelectOption) => void;
+			selected?: SelectOption;
 		},
 		ref: any
 	) => {
@@ -26,33 +28,34 @@ export const RelationshipFilter = React.forwardRef(
 			field && field.relationshipType === 'm:1'
 				? entities.find((e) => e === field.type)
 				: undefined;
+
 		if (!relationshipEntity) return null;
 
-		const data = (entityState as DataStateByEntity)[relationshipEntity]?.data as T[];
+		const relationshipEntityType = entityByName(relationshipEntity);
+		const relationshipData = (entityState as DataStateByEntity)[relationshipEntity]?.data as T[];
+
 		let relationshipOptions: SelectOption[] = [];
-		if (data && field && data.length > 0) {
+		if (relationshipData && field && relationshipData.length > 0) {
 			// Get a sorted list
-			relationshipOptions = data
+			relationshipOptions = relationshipData
 				// yuk
-				.map((item) => ({ label: (item as any)[field.name], value: item.id }))
+				.map((item) => {
+					const label = relationshipEntityType.summaryField;
+					return { label: label ? (item as any)[label] : 'notfound', value: item.id };
+				})
 				.sort((a, b) => a?.label?.toLocaleLowerCase().localeCompare(b?.label?.toLocaleLowerCase()));
 		}
 
 		const onChange = (option?: SelectOption) => {
 			// option will be empty if 'clear' selected
-			// @todo: multiple filters
 			if (!onSelect) return;
-			if (!option) {
-				return onSelect(fieldName, undefined);
-			}
-			return onSelect(fieldName, {
-				filter: { kind: 'equals', field: refFieldName || fieldName, value: option.value },
-			});
+			return onSelect(relationshipRefFieldName ?? fieldName, option);
 		};
 
 		return (
 			<Select
 				key={fieldName}
+				value={selected}
 				options={relationshipOptions}
 				placeholder={fieldName}
 				isClearable
