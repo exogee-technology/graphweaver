@@ -10,8 +10,6 @@ The goal of any proposed authentication solution should be to make available a s
 
 These can even be open-sourced along with the other FOSS Graphweaver code.
 
-==... TODO config or dashboards approach - details==
-
 
 
 ## The SDK
@@ -41,67 +39,94 @@ Graphweaver must include a server-side check, so that even if an apparently vali
 
 #### Token lifecycle
 
-We may want to use tokens issued by authentication providers merely to handle logins and authentication checks, and once authenticated, replace these with our own, for managing ACLs etc. This makes storage, retrieval, checking authorized users and handling ACLs or application roles much simpler than trying to piggy-back on third-party tokens.
+In the **OAuth2** case, we will need to handle **ID** tokens (If OICD is being used) and/or **Refresh** tokens as issued by authentication providers to handle logins and authentication checks. We are interested in AP-supplied **access** tokens (possibly separate tokens if OIDC is being used), which the Graphweaver backend will use to authorize requests. 
 
-#### Silent authentication
+This complexity can be hidden in the PM. The token, once obtained via login using the PM, can be sent to the backend without review.
 
-Third party providers (eg. Auth0) also provide an OIDC-compliant 'silent' authentication mechanism, with refresh tokens, which allow for applications to initiate an authentication request directly without any user intervention. This can be used to avoid disruption on long-lasting active sessions.
+In the backend, where it is expected that ACLs, roles etc are set within the schema, we decode the token. In the simplest case we don't manage any sessions. If using JWKS to obtain public keys, for example, we can cache the key obtained and use it to decode incoming JWTs.
+
+Once done we can examine the claims and match role information in the claims against ACLs in the schema. This means that the backend needs to know how to match token roles (or user 'groups') with schema-defined ACLs. We may also want to include a list of users which might require special treatment. 
+
+#### Silent authentication and token renewal
+
+Third party providers (eg. Auth0) also provide an OIDC-compliant 'silent' authentication mechanism, with refresh tokens, which allow for applications to initiate or re-initiate an authentication request directly without any user intervention. This can be used to avoid disruption on long-lasting active sessions.
+
+It should be possible to cover this within the PM itself, as Graphweaver does not need to manage this process.
 
 ### Request authorization
 
-Graphweaver will hand the authentication process over to whichever relevant PM has been included or configured by the client. Once the system is satisfied that the user is authenticated, requests will most likely need to be decorated with valid keys/tokens to enable those requests.
+Graphweaver will hand the authentication process over to whichever relevant PM has been included or configured by the client. Once the system is satisfied that the user is authenticated, requests will most likely need to be decorated with valid keys/tokens to enable those requests. 
 
-### Third-party requests (possibly)
+In the case of OAuth2/OIDC, there may be a separate Access Token used to manage requests to the Graphweaver backend. 
 
-During the authorization process a third party may wish to make an out of band request to Graphweaver as part of the process. This should also be configurable within the SDK, if it cannot be handled by the PM exlusively.
+In the **SAML** case, where the Graphweaver backend is the SP, enough information should be present in the SAML assertion received from the IdP on authentication to ensure that the SP can validate the existing session. The user agent (frontend) should maintain the SAML session details and pass them to the backend. This means that, in this case, some session management may be required in the backend and therefore need backend configuration.
+
+In some cases we will have configured users in a backend entity, so this can be used as well as the token and schema definitions.
+
+### Third-party requests
+
+During the authorization process, or later, a third party may wish to make an out of band request to Graphweaver as part of the process. This should also be configurable within the SDK.
+
+One possible example is with a SAML session, where a user has initiated a Single Log-Out (SLO) from another SAML session. In this case, the IdP will attempt to contact all logged-in SPs (including Graphweaver) and initiate a logout.
+
+For this reason PM configuration may require that a Graphweaver endpoint is publicly accessible by remote hosts.
 
 
 
 ## Authentication mechanisms to be supported
 
-==TODO will go through these==
+* **Transport**: JWT (JWT-only, JWT with JWKS), cookies, other
 
-Transport: JWTs, cookies, other
+* **Methods**: WebAuthn, OAuth2, SAML/WS-Fed, AD/LDAP, Username/Password, Basic, OTP, Magic Links
 
-Methods: WebAuthn, OAuth2, SAML, Username/Password, Basic, OTP, Magic Links
+* **External general-purpose providers**: Auth0, Okta, OneLogin, KeyCloak, Amazon Cognito, IdentityServer
 
-External providers: Auth0, Okta, Xero, other SAML providers eg. Google Workspace, Salesforce, OAuth2 providers eg. Github, JIRA
+* **SAML providers** eg. Google Workspace, Salesforce
 
+* **OAuth providers** eg. Github, JIRA, Xero, Hubspot
 
-
-The goal is for external pluggable modules to deal with the complexities of each login endpoint
+The goal is for external pluggable modules to deal with the complexities of each login endpoint.
 
 
 
 ## Anatomy of the proposed solution
 
-### 1. User sends request to GW (either a given endpoint or the home page)
+### 1. User sends request to Graphweaver (either a given endpoint or the home page)
 
-&rArr; we need the home page/endpoint stub in config, plus the transport mechanism for the token/API key:
+Configuration to include the home page or endpoint stub, plus the transport mechanism for the token/API key:
 
 * JWT, Authorization header
-* Cookie (can't do anything with this - will rely on its presence/absence when the user lands; see 401/403 below)
+* Cookie (can't do anything with this in the browser - will rely on its presence/absence when the user lands; see 401/403 below)
 
-For each endpoint stub/backend, there should be a corresponding PM.
+For each endpoint stub/backend, there should be a corresponding PM and configured mechanism.
 
 ### 2. We need to check if authenticated before anything else
 
-&rArr; we need info on where to find the authentication. Local storage/JWT? API key or just token? Certificate? Filesystem file (cf. Xero)?
+Look for any associated authentication payload (**Authorization** header or cookie), or locate any stored information to use for the challenge (Local storage + CSP, API key or token; Certificate; Filesystem file (cf. Example Xero)
 
 ### 3. We need to know how to check if a local authentication item is valid
 
-&rArr; some public endpoint that we can use to validate the token, from our backend. This may need our own (2M) tokens to do so - eg. Auth0 this can be a JWKS endpoint, client ID, client secret, method (POST/GET) and API req/response format (eg. REST/JSON and required fields etc). This should be handled by the PM, which would then need to supply a request function we can call with the information we have, but may want to include things like JWKS and client ID in the configuration parameters for Graphweaver integration. It would be useful if we could check the basics - eg. whether it has expired - on the client, rather than sending to a server.
+Some public endpoint that we can use to validate the token, from our frontend or backend. In the examples below, the processing at both frontend and backend should be done by the PM.
 
-**OR**
+#### Eg. Auth0 (JWT/OAuth)
 
-&rArr; we just try the token anyway and handle the 401 or 403 response. This should be configurable.
+1. Look into session storage to see if a token is already present, and check the expiry. If it is absent or expired, assume not logged in and send an **authorize** request to Auth0. This may redirect to an external login page
+2. If the token is present, send request to backend with the token.
+3. An **authorize** response will be redirected to our configured callback endpoint; if OK, save the token and send request to backend with the token.
+4. At the backend, parse the JWT. If necessary, use the configured JWKS + client ID endpoint to do so.
+5. Ensure request is authorized. 
+
+#### Failed authentication at backend
+
+Backend responds with a 401 or 403 response. This should be configurable.
 
 ### 4. We have a failed authentication response
 
 We need to decide whether the next step is
 
-* Just capture and send username/password/OTP etc to an endpoint, or
-* Redirect to an external endpoint
+* Just capture username/password/OTP etc, and forward to an endpoint, or
+* Redirect to an external endpoint, or (for example: JWT/OIDC)
+* Perform a 'silent' authorization request (using cached token)
 
 For the former we will need the PM config to tell us what data and format it is required in. We can present a generic, configurable Login page in GW, and we can use that to capture the credentials and forward to the PM. The PM config can include details such as the endpoint and possibly M2M tokens to access it.
 
@@ -109,7 +134,7 @@ This endpoint could be the client's own service, which may then in turn redirect
 
 ### 5. The PM returns with a successful login
 
-&rArr; we need the transport mechanism as in (1) above - ie. how (or whether) the authentication token or certificate and/or API token is stored, and how it accompanies each request. 
+Continue with the request - we need the transport mechanism as in (1) above - ie. how (or whether) the authentication token or certificate and/or API token is stored, and how it accompanies each request. 
 
 
 
@@ -123,19 +148,19 @@ The Pluggable Module is designed to handle the authentication process in this si
 
 At a bare minimum the following items would need to be included in the solution:
 
-| Parameter or dependency                        | Used by      | Specification                                                |
-| ---------------------------------------------- | ------------ | ------------------------------------------------------------ |
-| callback URL*                                  | GW           | default or configuration param                               |
-| logout URL*                                    | PM           | default or configuration param (optional)                    |
-| allowed origin (CORS)* &dagger;                | PM           | default (*client*.graphweaver.com)                           |
-| client subdomain*                              | PM           | configuration param                                          |
-| auth0 domain or custom domain* &dagger;        | PM           | configuration param                                          |
-| auth0 client Id*                               | PM           | configuration param                                          |
-| dependency: `@auth0/auth0-react` or `auth0.js` | PM and/or GW | config: require installation. Also any other deps required by the PM |
-| JWT token storage                              | GW           | eg. LocalStorage with CSP - default or config                |
-| Linked backend                                 | GW           | configuration param                                          |
-| login URL (embedded) or login redirect**       | PM           | configuration param                                          |
-| user type                                      | PM and/or GW | optional configuration param - interface declaration (see below) |
+| Parameter or dependency                        | Used by                           | Specification                                                |
+| ---------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
+| callback URL*                                  | GW frontend                       | default or configuration param                               |
+| logout URL*                                    | PM                                | default or configuration param (optional)                    |
+| allowed origin (CORS)* &dagger;                | PM                                | default (*client*.graphweaver.com)                           |
+| client subdomain*                              | PM                                | configuration param                                          |
+| auth0 domain or custom domain* &dagger;        | PM                                | configuration param                                          |
+| auth0 client Id*                               | PM                                | configuration param                                          |
+| dependency: `@auth0/auth0-react` or `auth0.js` | PM and/or GW frontend and backend | config: require installation. Also any other deps required by the PM |
+| JWT token storage                              | GW frontend                       | eg. LocalStorage with CSP - default or config                |
+| Linked backend                                 | GW frontend                       | configuration param                                          |
+| login URL (embedded) or login redirect**       | PM                                | configuration param                                          |
+| user type                                      | PM and/or GW backend              | optional configuration param - interface declaration (see below) |
 
 \* These items are also set at Auth0. Graphweaver must be an allowed origin under CORS, especially if using an embedded login.
 
@@ -145,19 +170,19 @@ At a bare minimum the following items would need to be included in the solution:
 
 #### Some issues
 
-* It's not immediately clear how users are identified. Auth0's React solution hides a lot of the details. However at a bare minimum users should be identified by email address, as this is used to verify the user by default. On the other hand the client may have configured different methods, so perhaps we should just make it part of the spec that GW agnostically requests an ID string, and the PM provides *something* (eg UUID, simple email address, or something else).
+* If users are available to Graphweaver through a specified entity available in the schema, then this should provide enough info to manage access controls. If there is no User entity, however, it's not immediately clear how users are identified. Auth0's React solution hides a lot of the details. However at a bare minimum users should be identified by email address, as this is used to verify the user by default. On the other hand the client may have configured different methods, so perhaps we should just make it part of the spec that GW agnostically requests an ID string, and the PM provides *something* (eg UUID, simple email address, or something else).
 
-  Use this to configure the local login screen (if using embedded login). If using remote login, the user ID should be available in the JWT `subject` claim.
+  Use this to configure the local login screen (if using embedded login). If using remote login, the user ID should be available in the JWT `sub` claim.
 
 * In the case of the login with redirection method, the client will handle the landing page completely as it will be hosted by them (or at Auth0 on their behalf). However, for embedded login, we may need further config to pass styling to the PM to handle the login component.
 
 #### Pluggable Module activities
 
-The Pluggable Module will receive the Auth0 context and manage the authorize call. GW can handle the callback, as it is GW which needs to extract the JWT for storage. The PM should be stateless (other than what is managed by Auth0 React), and so should not need to intercept the callback. 
+The Pluggable Module will receive the Auth0 context and manage the authorize call. GW frontend can handle the callback, passing the returned JWT to the backend (which may store it in the session). The PM should be stateless (other than what is managed by Auth0 React), and so should not need to intercept the callback.
 
 The PM should also handle the complexity of whether the login is embedded or via redirection to Auth0 or the client's custom domain. 
 
-With respect to checking if the user is authorized, we could check the JWT in the back-end, or have the back-end pass the JWT to the PM to find out. However, if the PM is written using Auth0 React, it will not need our token for this. In this strategy, whenever back-end GW needs to check that the user is authenticated, it can just ping the PM which can call one of the Auth0 'silent auth' methods. This should return a valid token.
+The PM should handle renewals and 'silent' auth calls as required, perhaps using its own storage for ID and request tokens.
 
 
 
@@ -169,7 +194,7 @@ With respect to checking if the user is authorized, we could check the JWT in th
 
 This method may require an allowable CORS or custom domain configuration. It works using direct `POST` calls to a specific endpoint. 
 
-Also, this only works if we have prior access to a database of users and associated connection types (email addresses or phone numbers). 
+Also, this only works if we have prior access to a Users entity holding associated connection types (email addresses or phone numbers). 
 
 There are two ways to implement this. The simplest is for the PM to redirect to an external page where the unauthenticated user performs login and handles the SMS or email code or magic link, then the external page arranges for the token to be transmitted back to the PM for forwarding to GW.
 
@@ -179,20 +204,21 @@ Minimum configuration:
 
 | Parameter or dependency                        | Used by | Specification                         |
 | ---------------------------------------------- | ------- | ------------------------------------- |
+| callback URL* | GW frontend | default or configuration param |
 | remote login page location/method (eg `POST`)* | PM      | configuration param                   |
 | Auth0 domain or custom domain** &dagger;       | PM      | configuration param                   |
 | Auth0 client ID** &dagger;                     | PM      | configuration param                   |
-| connection method (email or SMS)**             | PM/GW   | configuration param                   |
-| send (code or URL)**                           | PM/GW   | configuration param                   |
-| JWT token storage                              | GW      | eg. LocalStorage with CSP             |
+| connection method (email or SMS)**             | PM/GW frontend | configuration param                   |
+| send (code or URL)**                           | PM/GW frontend | configuration param                   |
+| JWT token storage                              | GW (backend) | eg. LocalStorage with CSP             |
 | Linked backend                                 | GW      | configuration param                   |
-| local or remote login indicator                | GW      | configuration param                   |
+| local or remote login indicator                | GW frontend | configuration param                   |
 | login URL                                      | PM      | configuration param (for local login) |
-| user type**                                    | GW      | configuration param; as used by Auth0 |
+| user role/type**                            | GW frontend/backend | configuration param; as used by Auth0 |
 
 \* Either a remote login page (which will have to be configured to return the token/HTTP status code), or 
 
-\** all the Auth0 identifiers required for a local request. Use this to configure the local login screen (if using embedded login). If using remote login, the user ID should be available in the JWT `subject` claim. 
+\** all the Auth0 identifiers required for a local request. Use this to configure the local login screen (if using embedded login). If using remote login, the user ID should be available in the JWT `sub` claim. 
 
 &dagger; If the client is using Auth0 to manage authentication on another application, and wants to use the same Auth0 application to manage GW authentication with embedded login, then by default the PM will be executing from a different origin from that for which the application has been constructed. This requires extra configuration as GW will be a CORS resource. Unless a custom domain is specified, this may cause problems in browsers which disable third-party cookies by default.
 
@@ -214,17 +240,18 @@ Although SAML SSO can be managed via a third party mediator such as Auth0, it's 
 
 Minimum configuration with GW as SP (Service Provider):
 
-| Parameter or dependency                        | Used by | Specification             |
-| ---------------------------------------------- | ------- | ------------------------- |
-| IdP entry point*                               | PM      | config param              |
-| Issuer ID*                                     | PM      | config param              |
-| Callback (Consumer) URL*                       | PM      | config param              |
-| Certificate*                                   | PM      | config param              |
-| dependencies; eg `passport-saml` and `saml2js` | PM/GW   | require installation      |
-| Token storage                                  | GW      | eg. LocalStorage with CSP |
-| Linked backend                                 | GW      | configuration param       |
-| Login URL                                      | PM      | config param              |
-| User type                                      | GW      | config interface param    |
+| Parameter or dependency                        | Used by       | Specification                  |
+| ---------------------------------------------- | ------------- | ------------------------------ |
+| IdP entry point*                               | PM            | config param                   |
+| Issuer ID*                                     | PM            | config param                   |
+| Callback (Consumer) URL*                       | PM            | config param                   |
+| Certificate*                                   | PM            | config param                   |
+| dependencies; eg `passport-saml` and `saml2js` | PM/GW backend | require installation           |
+| Token storage                                  | GW backend    | eg. LocalStorage with CSP      |
+| Linked backend                                 | GW            | configuration param            |
+| Login URL                                      | PM            | config param                   |
+| User role/type                                 | GW backend    | config interface param         |
+| Callback URL                                   | PM            | Used for IdP-initiated log out |
 
 \* Either also stored at or issued by IdP
 
@@ -233,6 +260,14 @@ Minimum configuration with GW as SP (Service Provider):
 Pluggable module will use the login URL to contact the IdP server entrypoint. If the user is not authenticated the IdP will redirect to its login form, and then load the callback URL with the results. The SAML token is XML but can be translated into JSON format using `saml2js` and stored as a normal token.
 
 
+
+## Deployment
+
+### Graphweaver built-in PMs
+
+We will be providing a small set of example authentication PMs. What follows is the deployment method for the built-in **Xero Authentication Provider**.
+
+### Client-provided or public PM packages
 
 
 
@@ -257,6 +292,24 @@ SP = GW (via Auth0) - note this will require a tenant in Auth0
 IdP = external
 
 If Auth0 is SP, it will forward a standard JWT to GW.
+
+
+
+Options for GW and for 'hiding' from GW
+
+Storage  - httpOnly cookies - have to be set by auth server in such a way that they will be available at the GW backend. The GW backend must have a way to read them (PM) and must know what the auth format is - eg. token etc
+
+Storage - JWT -  stored in GW frontend (or in localstorage using CSP - passed to GW backend using Bearer token header or other method
+
+Refresh/renewal should be performed by PM so we are agnostic about this (and associated tokens)
+
+ID token not used except by PM so again agnostic
+
+expiry/not-before stored on both frontend and backend
+
+access token: options: (1) accessible by GW backend (either via storage or via request header) - use one issued by AS, then backend checks still valid (via PM request to AS) on every call - (upside: secure including where access remotely revoked after token issued; downside: slow) - or (2) throw away AS token, issue our own from backend (signed by our own secret) - then check on every call to backend without ref to AS. upside: fast, downside - will still allow access even if AS token subsequently revoked until token expires.
+
+
 
 
 
