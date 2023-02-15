@@ -2,12 +2,22 @@ import path from 'path';
 import { createServer } from 'vite';
 import { viteConfig } from '../vite-config';
 
-export const startFrontend = async () => {
+export interface StartOptions {
+	host?: string /** Host to listen on e.g. 0.0.0.0 */;
+}
+
+export const startFrontend = async (options: StartOptions) => {
+	// Generate a Vite Config
+	const rootDirectory = path.resolve(require.resolve('@exogee/graphweaver-admin-ui'), '..', '..');
+
+	const config = viteConfig({
+		rootDirectory,
+		host: options.host,
+	});
+
+	const server = await createServer(config);
+
 	// Start vite.
-	const root = path.resolve(require.resolve('@exogee/graphweaver-admin-ui'), '..', '..');
-
-	const server = await createServer(viteConfig(root));
-
 	console.log('GraphWeaver Admin UI listening at:');
 	await server.listen();
 	server.printUrls();
