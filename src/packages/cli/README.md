@@ -1,7 +1,15 @@
-# `@exogee/create-graphweaver`
+# Graphweaver CLI `@exogee/graphweaver-cli`
 
-## Getting Started
+## Start
 
 ```shell
-$ npm init @exogee/graphweaver
+graphweaver start
+```
+
+- `--host`: Specify a host to listen on e.g. `graphweaver start --host 0.0.0.0`
+
+## Build
+
+```shell
+graphweaver build
 ```
