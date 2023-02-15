@@ -4,16 +4,20 @@ import graphweaver from 'vite-plugin-graphweaver';
 import { InlineConfig } from 'vite';
 import path from 'path';
 
-export const viteConfig: (viteRootDirectory: string) => InlineConfig = (
-	viteRootDirectory: string
-) => ({
+export interface ViteConfigOptions {
+	rootDirectory: string;
+	host?: string;
+}
+
+export const viteConfig = (options: ViteConfigOptions): InlineConfig => ({
 	configFile: false,
-	root: viteRootDirectory,
+	root: options.rootDirectory,
 	build: {
 		outDir: path.resolve(process.cwd(), 'dist', 'admin-ui'),
 	},
 	server: {
 		port: 8000,
+		host: options.host,
 	},
 	plugins: [svgr(), react(), graphweaver()],
 });

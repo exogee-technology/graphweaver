@@ -34,7 +34,11 @@ const builtInBackendFunctions: Record<string, any> = {
 	},
 };
 
-export const startBackend = async () => {
+export interface StartOptions {
+	host?: string /** Host to listen on e.g. 0.0.0.0 */;
+}
+
+export const startBackend = async (options: StartOptions) => {
 	console.log('Starting backend...');
 
 	// Get ready for our config.
@@ -138,6 +142,7 @@ export const startBackend = async () => {
 					'serverless-offline': {
 						noPrependStageInUrl: true,
 						useWorkerThreads: true,
+						...(options.host ? { host: options.host } : {}),
 					},
 				},
 				getAllFunctions: () => Object.keys(backendFunctions),
