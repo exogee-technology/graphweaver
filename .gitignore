@@ -1,3 +1,6 @@
+# PNPM store
+.pnpm-store
+
 # Logs
 logs
 *.log
