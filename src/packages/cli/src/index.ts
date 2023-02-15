@@ -51,18 +51,23 @@ yargs
 		command: ['start [environment]', 's [environment]'],
 		describe: 'Runs a development version of the project locally.',
 		builder: (yargs) =>
-			yargs.positional('environment', {
-				type: 'string',
-				choices: ['backend', 'frontend', 'all'],
-				default: 'all',
-				describe: 'Choose whether you want to run the backend, frontend, or both.',
-			}),
-		handler: async ({ environment }) => {
+			yargs
+				.positional('environment', {
+					type: 'string',
+					choices: ['backend', 'frontend', 'all'],
+					default: 'all',
+					describe: 'Choose whether you want to run the backend, frontend, or both.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify a host to listen on e.g. --host 0.0.0.0',
+				}),
+		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend();
+				await startBackend(args);
 			}
 			if (environment === 'frontend' || environment === 'all') {
-				await startFrontend();
+				await startFrontend(args);
 			}
 		},
 	})
