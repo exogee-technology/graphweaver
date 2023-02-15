@@ -115,20 +115,12 @@ In the examples below, the processing at the frontend should be done by the plug
 1. Graphweaver: look up in configuration to see which plugin modules are configured for authentication and select the relevant module.
 
 1. Plugin: Look into request or session storage to see if a token is already present, and check the expiry. If it is absent or expired, assume not logged in and send an **authorize** request to Auth0. This may redirect to an external login page
-
 2. Plugin: If the token is present, forward it back to Graphweaver, which will send the request to backend with the token.
-
 3. Plugin: An **authorize** response will be redirected to our configured callback endpoint; if OK, save the token and forward the token to Graphweaver. Graphweaver: send request to backend with the token.
-
 4. Backend: parse the JWT. If necessary, use the configured JWKS + client ID endpoint to do so.
+5. Backend: Ensure request is authorized. This may mean that data and callback function(s) implemented in the plugin should be made available in the context used by the backend. If the backend fails authentication, return 401/403 to the frontend.
 
-5. ==TODO== Backend: Ensure request is authorized. 
 
-   ==(5) and (6) This may require access to the plugin code being made available to the backend.== 
-
-#### Failed authentication at backend
-
-Backend responds with a 401 or 403 response to the frontend, which must then work out what to do (eg. ask plugin to authenticate). This should be configurable.
 
 ### 4. We have a failed authentication response from backend
 
@@ -304,35 +296,29 @@ The plugin will need to handle Cognito sign-in and management of ID and access t
 
 ### Graphweaver built-in plugins
 
-#### Proposed flows
-
-
-
 We will be providing a small set of example authentication plugins. What follows is the deployment method and proposed flows for the built-in **Xero Authentication Provider**.
+
+* Include the plugin module in a subfolder in *`[implementation]`*`/src/admin-ui/auth`[^1]
+
+* In the `vite-plugin-graphweaver` package: Add a loader function to inject an `authHandlers` export for the authentication plugins.
+
+* Create a function to define a virtual module `virtual:graphweaver-auth-plugins` and to call the loader function, and add a call to this function to the `plugins` list in `vite-config.ts`
+
+* Include configurations for the plugins in  `/graphweaver-config.ts` (these are also visible in `cli/src/build/backend.ts`)
+
+* Ensure the virtual module `virtual:graphweaver-auth-plugins` is included in the `external` list for **esbuild**
+
+* Export the `authHandlers` object in *`[implementation]`*`/src/admin-ui/auth/index.ts(x)`. This should be the array of plugin object definitions and configuration parameters, so that Graphweaver knows which plugins to use with which incoming requests.
+
+* Import the plugins from `virtual:graphweaver-auth-plugins` in use.
+
+  [^1]: Currently, in the example app `example-xero`, the dashboards are in the folder `example-xero/src/dashboards`. This should be moved to `example-xero/src/admin-ui/dashboards` alongside the `auth` folder.
+
+  
 
 ### Client-provided or public plugin packages
 
-
-
-Options for Graphweaver and for 'hiding' from Graphweaver
-
-Storage  - httpOnly cookies - have to be set by auth server in such a way that they will be available at the Graphweaver backend. The Graphweaver backend must have a way to read them (plugin) and must know what the auth format is - eg. token etc
-
-Storage - JWT -  stored in Graphweaver frontend (or in localstorage using CSP - passed to Graphweaver backend using Bearer token header or other method
-
-Refresh/renewal should be performed by plugin so we are agnostic about this (and associated tokens)
-
-ID token not used except by plugin so again agnostic
-
-expiry/not-before stored on both frontend and backend
-
-
-
-
-
-
-
-
+The above solution should work the same for external plugins, if they are included in/exported from the same `auth` subfolder.
 
 
 
