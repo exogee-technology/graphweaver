@@ -56,17 +56,27 @@ const columnsForEntity = <T extends { id: string }>(
 			: undefined,
 	}));
 
-export const Table = <T extends { id: string }>({
+export interface TableRowItem {
+	id: string;
+}
+
+export interface RequestRefetchOptions {
+	sortColumns?: SortColumn[];
+}
+
+export interface TableProps<T extends TableRowItem> {
+	rows: T[];
+	requestRefetch: (options: RequestRefetchOptions) => void;
+	orderBy: SortColumn[];
+	allDataFetched: boolean;
+}
+
+export const Table = <T extends TableRowItem>({
 	rows,
 	requestRefetch,
 	orderBy = [],
 	allDataFetched,
-}: {
-	rows: T[];
-	requestRefetch: ({ sortColumns }: { sortColumns?: SortColumn[] }) => void;
-	orderBy?: SortColumn[];
-	allDataFetched: boolean;
-}) => {
+}: TableProps<T>) => {
 	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
 	const navigate = useNavigate();
 	const { id } = useParams();

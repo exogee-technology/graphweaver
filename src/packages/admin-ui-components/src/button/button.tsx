@@ -1,101 +1,56 @@
-import { useState, useEffect, useRef, ReactNode } from 'react';
+import { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
 import styles from './styles.module.css';
 
-const DropdownItems = ({ items }: { items: Array<object> }) => (
-	<>
-		{items.map((item: any) => (
-			<li key={Math.random()}>
-				<a href={item.href}>{item.name}</a>
-			</li>
-		))}
-	</>
-);
-
-export const Dropdown = ({
-	showDropdown,
-	dropdownItems,
-	onOutsideClick,
-	getParent,
-}: {
-	showDropdown: boolean;
-	dropdownItems: Array<object>;
-	onOutsideClick: any;
-	getParent: () => any;
-}) => {
-	function useOutsideAlerter(ref: any) {
-		useEffect(() => {
-			function handleClickOutside(e: Event) {
-				if (e.target === getParent().current) {
-					return;
-				}
-
-				if (ref.current && !ref.current.contains(e.target)) {
-					onOutsideClick();
-				}
-			}
-			document.addEventListener('mousedown', handleClickOutside);
-			return () => {
-				document.removeEventListener('mousedown', handleClickOutside);
-			};
-		}, [ref]);
-	}
-
-	const wrapperRef = useRef(null);
-	useOutsideAlerter(wrapperRef);
-
-	return showDropdown ? (
-		<ul ref={wrapperRef} className={showDropdown ? styles.dropdown : styles.hide}>
-			<DropdownItems items={dropdownItems} />
-		</ul>
-	) : null;
-};
+export interface ButtonProps {
+	onClick?(): any /** Event emitted when clicked */;
+	onClickOutside?(): any /** Event emitted when outside */;
+	renderBefore?(): ReactNode /** Render function before the button */;
+	renderAfter?(): ReactNode /** Render function after the button */;
+	children?: ReactNode;
+}
 
 export const Button = ({
-	handleClick = () => null,
+	onClick,
 	children,
-	iconBefore,
-	iconAfter,
-	dropdown = false,
-	dropdownItems = [{ name: 'Add links array', href: 'some_url' }],
-}: {
-	handleClick?: () => any;
-	children: ReactNode;
-	iconBefore?: ReactNode;
-	iconAfter?: ReactNode;
-	dropdown?: boolean;
-	dropdownItems?: Array<object>;
-}) => {
-	const [showDropdown, setShowDropdown] = useState(false);
+	renderBefore,
+	renderAfter,
+	onClickOutside,
+}: ButtonProps): JSX.Element => {
+	const buttonRef = useRef<HTMLButtonElement>(null);
 
-	function handleLocalClick() {
-		return dropdown ? setShowDropdown(!showDropdown) : false;
+	function handleOnClickButton() {
+		onClick?.();
 	}
 
-	function hasDropdown() {
-		if (dropdown) {
-			return (
-				<Dropdown
-					onOutsideClick={() => setShowDropdown(false)}
-					getParent={getParent}
-					showDropdown={showDropdown}
-					dropdownItems={dropdownItems}
-				/>
-			);
+	function handleMouseDownEvent(event: DocumentEventMap['mousedown']) {
+		// No ref or target to compare? Return with no action
+		if (!buttonRef?.current || !event.target) {
+			return;
 		}
+
+		// Target of the click is the button,return with no action.
+		// @todo check children as well?
+		if (buttonRef.current.contains(event.target as Node)) {
+			return;
+		}
+
+		// Otherwise, click was outside the element, emit an event.
+		onClickOutside?.();
 	}
 
-	// To refer to when clicking outside dropdown
-	const parentRef = useRef(null);
-	function getParent() {
-		return parentRef;
-	}
+	useEffect(() => {
+		// Register mousedown listeners to capture outside click
+		document.addEventListener('mousedown', handleMouseDownEvent);
+		return () => {
+			document.removeEventListener('mousedown', handleMouseDownEvent);
+		};
+	}, []);
 
 	return (
-		<button ref={parentRef} onClick={handleLocalClick} className={styles.button} type="button">
-			{iconBefore}
+		<button ref={buttonRef} onClick={handleOnClickButton} className={styles.button} type="button">
+			{renderBefore?.()}
 			{children}
-			{iconAfter}
-			{hasDropdown()}
+			{renderAfter?.()}
 		</button>
 	);
 };

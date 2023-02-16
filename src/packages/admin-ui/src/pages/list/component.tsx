@@ -9,6 +9,7 @@ import {
 	useSchema,
 	PAGE_SIZE,
 	routeFor,
+	ToolBar,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { fetchList } from './graphql';
@@ -32,6 +33,13 @@ const defaultEntityState = {
 	loading: false,
 	error: undefined,
 	allDataFetched: false,
+};
+
+export const ListToolBar = () => {
+	const { entity } = useParams();
+	const { entityByName } = useSchema();
+	const schemaEntity = entityByName(entity);
+	return <ToolBar title={entity} subtitle={`From ${schemaEntity.backendId}`} />;
 };
 
 export const List = () => {

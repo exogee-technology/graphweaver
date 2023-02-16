@@ -5,7 +5,9 @@ import styles from './styles.module.css';
 
 export const Spinner = () => {
 	return (
-		<div className={styles.spinner}>
+		<div
+		//className={styles.spinner} @todo
+		>
 			{/* <GraphweaverSpinner /> */}
 			More data...
 		</div>
