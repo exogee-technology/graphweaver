@@ -23,20 +23,22 @@ export interface DropdownProps extends Partial<ButtonProps> {
 export const Dropdown = ({ items, children, ...props }: DropdownProps): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const handleOnClickItem = (item: DropdownItem) => () => {
-		const result = item.onClick?.();
-		if (result !== false) setIsOpen(false);
-	};
+    function handleOnClickItem(item: DropdownItem) {
+        return () => {
+            const result = item.onClick?.();
+            if (result !== false) setIsOpen(false);
+        };
+	}
 
-	const handleOnClickOutside = () => {
+    function handleOnClickOutside() {
 		setIsOpen(false);
 		props.onClickOutside?.();
-	};
+	}
 
-	const handleOnClickButton = () => {
+	function handleOnClickButton() {
 		setIsOpen(!isOpen);
 		props.onClick?.();
-	};
+	}
 
 	const DropDownList = useMemo(
 		() => (
