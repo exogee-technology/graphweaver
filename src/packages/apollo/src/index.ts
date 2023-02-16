@@ -1,10 +1,9 @@
 import { AdminUiMetadataResolver } from './metadata-service';
-import { buildSchemaSync } from 'type-graphql';
-import { AuthenticationContext, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
-import { formatGraphQLError } from './plugins/format-error';
+import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 
 import { logger } from '@exogee/logger';
-import { ApolloServer, ApolloServerOptions, ApolloServerPlugin } from '@apollo/server';
+import { ApolloServer } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
 	ClearDatabaseContext,
@@ -28,7 +27,9 @@ export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
 	mikroOrmOptions: ConnectionOptions;
 	resolvers: Array<any>;
-	apolloServerOptions?: ApolloServerOptionsWithStaticSchema<any>;
+	// We omit schema here because we will build it from your resolvers.
+	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
+	authChecker?: AuthChecker<any, any>;
 }
 export default class Graphweaver {
 	server: ApolloServer;
@@ -37,6 +38,7 @@ export default class Graphweaver {
 		mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
 		resolvers: [],
 	};
+
 	constructor(config: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
 		if (!config) {
@@ -45,6 +47,12 @@ export default class Graphweaver {
 		if (!config.resolvers) {
 			throw new Error('Graphweaver resolvers required');
 		}
+		if (!config.authChecker) {
+			logger.warn(
+				'Graphweaver authChecker not set, allowing all access from anywhere. Are you sure you want to do this? This should only happen in a non-real environment.'
+			);
+		}
+
 		this.config = config;
 		// Order is important here
 		const plugins = [
@@ -65,12 +73,13 @@ export default class Graphweaver {
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 		const schema = buildSchemaSync({
 			resolvers,
-			authChecker: () => true,
+			authChecker: config.authChecker ?? (() => true),
 		});
+
 		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer({
 			...(this.config.apolloServerOptions as any),
-			plugins: plugins,
+			plugins,
 			schema,
 		});
 	}

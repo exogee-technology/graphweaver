@@ -3,19 +3,6 @@ import { logger } from '@exogee/logger';
 import { isUUID } from 'class-validator';
 import { TokenSet, TokenSetParameters, XeroClient } from 'xero-node';
 
-const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
-if (!XERO_CLIENT_ID) throw new Error('XERO_CLIENT_ID is required in environment');
-if (!XERO_CLIENT_SECRET) throw new Error('XERO_CLIENT_SECRET is required in environment');
-if (!XERO_CLIENT_REDIRECT_URIS)
-	throw new Error('XERO_CLIENT_REDIRECT_URIS is required in environment');
-
-const xero = new XeroClient({
-	clientId: XERO_CLIENT_ID,
-	clientSecret: XERO_CLIENT_SECRET,
-	redirectUris: XERO_CLIENT_REDIRECT_URIS.split(' '),
-	scopes: (process.env.XERO_SCOPES || 'accounting.reports.read').split(' '),
-});
-
 export interface XeroDataAccessor<T> {
 	find: (args: {
 		xero: XeroClient;
@@ -109,16 +96,39 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	// Xero's API starts balking when we send requests with more than 25 OR filters in them.
 	public readonly maxDataLoaderBatchSize = 25;
 
-	public static accessTokenProvider: {
+	protected static xero: XeroClient;
+
+	public static accessTokenProvider?: {
 		get: () => Promise<TokenSet | TokenSetParameters> | TokenSet | TokenSetParameters;
 		set: (newToken: TokenSet) => Promise<any>;
 	};
 
+	protected static resetXeroClient = () => {
+		const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
+		if (!XERO_CLIENT_ID) throw new Error('XERO_CLIENT_ID is required in environment');
+		if (!XERO_CLIENT_SECRET) throw new Error('XERO_CLIENT_SECRET is required in environment');
+		if (!XERO_CLIENT_REDIRECT_URIS)
+			throw new Error('XERO_CLIENT_REDIRECT_URIS is required in environment');
+
+		XeroBackendProvider.xero = new XeroClient({
+			clientId: XERO_CLIENT_ID,
+			clientSecret: XERO_CLIENT_SECRET,
+			redirectUris: XERO_CLIENT_REDIRECT_URIS.split(' '),
+			scopes: (process.env.XERO_SCOPES || 'accounting.reports.read').split(' '),
+		});
+	};
+
 	public constructor(protected entityTypeName: string, protected accessor?: XeroDataAccessor<T>) {}
 
+	public static clearTokensAndProvider() {
+		delete this.accessTokenProvider;
+		XeroBackendProvider.resetXeroClient();
+	}
+
 	protected async ensureAccessToken() {
-		await xero.initialize();
-		let tokenSet = xero.readTokenSet();
+		if (!XeroBackendProvider.xero) XeroBackendProvider.resetXeroClient();
+		await XeroBackendProvider.xero.initialize();
+		let tokenSet = XeroBackendProvider.xero.readTokenSet();
 
 		if (tokenSet.token_type !== 'Bearer') {
 			logger.trace('Access token type is not Bearer, setting token');
@@ -128,13 +138,22 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 					'You must set an access token provider on the XeroBackendProvider before accessing Xero.'
 				);
 
-			xero.setTokenSet(await XeroBackendProvider.accessTokenProvider.get());
-			tokenSet = xero.readTokenSet();
+			XeroBackendProvider.xero.setTokenSet(await XeroBackendProvider.accessTokenProvider.get());
+			tokenSet = XeroBackendProvider.xero.readTokenSet();
 		}
 
 		if (tokenSet.expired()) {
 			logger.trace('Access token expired. Refreshing.');
-			await XeroBackendProvider.accessTokenProvider.set(await xero.refreshToken());
+
+			if (!XeroBackendProvider.accessTokenProvider) {
+				throw new Error(
+					'You must have set an access token provider in order to refresh access tokens.'
+				);
+			}
+
+			await XeroBackendProvider.accessTokenProvider.set(
+				await XeroBackendProvider.xero.refreshToken()
+			);
 			logger.trace('Refresh complete.');
 		}
 	}
@@ -166,7 +185,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 		try {
 			const result = await this.accessor.find({
-				xero,
+				xero: XeroBackendProvider.xero,
 				filter: xeroFilterFrom(filter),
 				rawFilter: filter,
 				order: xeroOrderFrom(pagination),
