@@ -38,8 +38,14 @@ const defaultEntityState = {
 export const ListToolBar = () => {
 	const { entity } = useParams();
 	const { entityByName } = useSchema();
-	const schemaEntity = entityByName(entity);
-	return <ToolBar title={entity} subtitle={`From ${schemaEntity.backendId}`} />;
+	return (
+		<ToolBar
+			title={entity}
+			subtitle={
+				entity && entityByName(entity) ? `From ${entityByName(entity).backendId}` : undefined
+			}
+		/>
+	);
 };
 
 export const List = () => {
