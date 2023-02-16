@@ -1,5 +1,10 @@
+import type { ReactNode } from 'react';
 import styles from './styles.module.css';
 
-export const Header = ({ children }: { children?: React.ReactNode }) => {
+export interface HeaderProps {
+	children?: ReactNode;
+}
+
+export const Header = ({ children }: HeaderProps): JSX.Element => {
 	return <div className={styles.header}>{children}</div>;
 };
