@@ -1,39 +1,66 @@
-// @todo: get a different icon for filterIcon
-import { Button, ControlsIcon, FilterBar, FilterButton, FilterIcon, OpenExternalIcon } from '..';
+import { Button } from '../button';
+import { Dropdown } from '../dropdown';
+import type { DropdownItem } from '../dropdown';
+
+import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external.svg';
+import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
 import styles from './styles.module.css';
 
-export const ToolBar = () => (
-	<div className={styles.toolBarContainer}>
+// const BlankSlate = () => (
+// 	<div id={styles.centerBlankSlate}>
+// 		<div className={styles.blankSlateWrapper}>
+// 			<DataSourcesIcon />
+// 			<h1>No data sources yet</h1>
+// 			<p className="subtext">
+// 				Connect data sources. See the <a href="/#">readme</a> for more details
+// 			</p>
+// 		</div>
+// 	</div>
+// );
+
+export interface ToolBarProps {
+	title?: string;
+	subtitle?: string;
+}
+
+export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
+	const filterItems: DropdownItem[] = [
+		{
+			id: 'test',
+			name: 'Test',
+			onClick: () => {
+				alert('Clicked Test');
+			},
+		},
+	];
+
+	const externalLinkItems: DropdownItem[] = [
+		{
+			id: 'google',
+			name: 'Google',
+			href: 'https://google.com/',
+			renderAfter: () => <OpenPlaygroundIcon />,
+		},
+	];
+
+	return (
 		<div className={styles.toolBarWrapper}>
 			<div className="titleWrapper">
-				<h1>localhost</h1>
-				<p className="subtext">localhost:3000/graphql/v1</p>
+				<h1>{title}</h1>
+				<p className="subtext">{subtitle}</p>
 			</div>
 
 			<div className={styles.toolsWrapper}>
 				<input className={styles.search} type="search" name="search" placeholder="Search..." />
-				{/* <FilterButton dropdown iconBefore={<ControlsIcon />}>
-					Filter
-				</FilterButton> */}
 
-				<Button>
-					<p>Open playground</p>
-					<span>
-						<OpenExternalIcon />
-					</span>
-				</Button>
-				<Button
-					dropdown
-					dropdownItems={[
-						{ name: 'Add links array', href: 'some_url' },
-						{ name: 'Add links array', href: 'some_url' },
-					]}
-					iconBefore={<OpenExternalIcon />}
-				>
-					Test
-				</Button>
+				<Dropdown items={filterItems} renderBefore={() => <FilterIcon />}>
+					Filter
+				</Dropdown>
+
+				<Button renderAfter={() => <OpenPlaygroundIcon />}>Open playground</Button>
+
+				<Dropdown items={externalLinkItems}>Links</Dropdown>
 			</div>
 		</div>
-		<FilterBar iconBefore={<FilterIcon />} />
-	</div>
-);
+	);
+};

@@ -8,9 +8,12 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
-		"prettier": "prettier --write src/**/*.ts",
+		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
-		"test": "jest --passWithNoTests"
+		"test": "pnpm test:unit",
+		"test:unit": "jest --passWithNoTests",
+		"test:tsc": "tsc --noEmit",
+		"test:prettier": "prettier --check ."
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
