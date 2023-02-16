@@ -1,2 +1,2 @@
-export * from './button';
-export * from './filter-button';
+export type { ButtonProps } from './button';
+export { Button } from './button';

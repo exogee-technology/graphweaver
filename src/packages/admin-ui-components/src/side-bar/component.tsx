@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { dashboards, NavLinkExport } from 'virtual:graphweaver-user-supplied-dashboards';
 
 import { GraphweaverLogo } from '../assets';
-import { useSchema } from '../utils/use-schema';
+import { useSchema } from '../utils';
 
 import { BackendRow, DashboardRow } from './contents';
 
@@ -45,7 +45,10 @@ export const SideBar = () => {
 				{!!userDashboardLinks.length && (
 					<>
 						<p className={styles.subtext}>Dashboards</p>
-						<ul className={classnames(styles.entity, styles.closed)}>
+						<ul
+							//className={classnames(styles.entity, styles.closed)}
+							className={classnames(styles.closed)}
+						>
 							{userDashboardLinks.map((link) => (
 								<DashboardRow key={link.route} name={link.name} route={link.route} />
 							))}

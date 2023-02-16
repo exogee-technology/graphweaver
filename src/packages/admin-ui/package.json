@@ -8,7 +8,10 @@
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
-		"build:types": "tsc --noEmit false --emitDeclarationOnly --declaration --outDir lib"
+		"build:types": "tsc --noEmit false --emitDeclarationOnly --declaration --outDir lib",
+		"prettier": "prettier --write .",
+		"test:prettier": "prettier --check .",
+		"test:tsc": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
