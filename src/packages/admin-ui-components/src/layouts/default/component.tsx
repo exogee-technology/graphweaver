@@ -11,22 +11,17 @@ export const DefaultLayout = ({
 }: {
 	header?: React.ReactNode;
 	children: React.ReactNode;
-}) => {
-	const [entityState, setEntityState] = useState<DataStateByEntity>({});
-	return (
-		<RequireSchema>
-			<DataContext.Provider value={{ entityState, setEntityState }}>
-				<div className={styles.container}>
-					<header>
-						<Header>{header}</Header>
-					</header>
-					<nav>
-						<SideBar />
-					</nav>
-					<div className={styles.content}>{children}</div>
-					<footer className={styles.footer}>{/* TODO: */ ''}</footer>
-				</div>
-			</DataContext.Provider>
-		</RequireSchema>
-	);
-};
+}) => (
+	<RequireSchema>
+		<div className={styles.container}>
+			<header>
+				<Header>{header}</Header>
+			</header>
+			<nav>
+				<SideBar />
+			</nav>
+			<div className={styles.content}>{children}</div>
+			{/** @todo <footer className={styles.footer}></footer> */}
+		</div>
+	</RequireSchema>
+);

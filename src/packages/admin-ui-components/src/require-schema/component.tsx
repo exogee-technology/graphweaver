@@ -1,7 +1,12 @@
+import type { ReactNode } from 'react';
 import { useSchema } from '../utils';
 import { Spinner } from '../spinner';
 
-export const RequireSchema = ({ children }: { children?: React.ReactNode }) => {
+export interface RequireSchemaProps {
+	children?: ReactNode;
+}
+
+export const RequireSchema = ({ children }: RequireSchemaProps): JSX.Element => {
 	const { loading, error } = useSchema();
 
 	if (error) return <div>{error.message}</div>;
