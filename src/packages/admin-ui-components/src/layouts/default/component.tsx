@@ -20,7 +20,7 @@ export const DefaultLayout = ({
 				<SideBar />
 			</nav>
 			<div className={styles.content}>{children}</div>
-			<footer className={styles.footer}>{/* TODO: */ ''}</footer>
+			{/** @todo <footer className={styles.footer}></footer> */}
 		</div>
 	</RequireSchema>
 );

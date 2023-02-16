@@ -1,56 +1,56 @@
-import { useState, useEffect, useRef, ReactNode } from 'react';
+import { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
 import styles from './styles.module.css';
 
 export interface ButtonProps {
-    onClick?(): any; /** Event emitted when clicked */
-    renderBefore?(): ReactNode; /** Render function before the button */
-    renderAfter?(): ReactNode; /** Render function after the button */
-    dropdown?: boolean; /** Is the button a dropdown menu? */
-    dropdownItems?: Array<object>; /** If the button is a dropdown, the items in the dropdown @todo type me */
-    children?: ReactNode;
+	onClick?(): any /** Event emitted when clicked */;
+	onClickOutside?(): any /** Event emitted when outside */;
+	renderBefore?(): ReactNode /** Render function before the button */;
+	renderAfter?(): ReactNode /** Render function after the button */;
+	children?: ReactNode;
 }
 
 export const Button = ({
-    onClick,
-    children,
-    renderBefore,
-    renderAfter,
-    dropdown = false,
-    dropdownItems = [{ name: 'Add links array', href: 'some_url' }],
+	onClick,
+	children,
+	renderBefore,
+	renderAfter,
+	onClickOutside,
 }: ButtonProps): JSX.Element => {
-	const [showDropdown, setShowDropdown] = useState(false);
+	const buttonRef = useRef<HTMLButtonElement>(null);
 
-    function handleOnClickButton() {
-	   if(!dropdown) return;
-       setShowDropdown(!showDropdown);
+	function handleOnClickButton() {
+		onClick?.();
 	}
 
-    function handleOnOutsideClickDropdown() {
-        setShowDropdown(false);
-    }
+	function handleMouseDownEvent(event: DocumentEventMap['mousedown']) {
+		// No ref or target to compare? Return with no action
+		if (!buttonRef?.current || !event.target) {
+			return;
+		}
 
-    const renderDropdown: ReactNode = useMemo(() => {
-        if(!dropdown) return null;
-        return <Dropdown
-            onOutsideClick={handleOnOutsideClickDropdown}
-            getParent={getParent}
-            showDropdown={showDropdown}
-            dropdownItems={dropdownItems}
-        />
-    }, [dropdown, dropdownItems])
+		// Target of the click is the button,return with no action.
+		// @todo check children as well?
+		if (buttonRef.current.contains(event.target as Node)) {
+			return;
+		}
 
-	// To refer to when clicking outside dropdown @todo better way to do this?
-	const parentRef = useRef(null);
-	function getParent() {
-		return parentRef;
+		// Otherwise, click was outside the element, emit an event.
+		onClickOutside?.();
 	}
+
+	useEffect(() => {
+		// Register mousedown listeners to capture outside click
+		document.addEventListener('mousedown', handleMouseDownEvent);
+		return () => {
+			document.removeEventListener('mousedown', handleMouseDownEvent);
+		};
+	}, []);
 
 	return (
-		<button ref={parentRef} onClick={handleOnClickButton} className={styles.button} type="button">
-            {renderBefore()}
+		<button ref={buttonRef} onClick={handleOnClickButton} className={styles.button} type="button">
+			{renderBefore?.()}
 			{children}
-            {renderAfter()}
-			{dropdown && renderDropdown()}
+			{renderAfter?.()}
 		</button>
 	);
 };
