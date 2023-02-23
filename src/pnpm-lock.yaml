@@ -430,7 +430,7 @@ importers:
       '@types/jest': 27.0.2
       '@types/pluralize': 0.0.29
       class-validator: 0.13.2
-      dataloader: workspace:2.1.1
+      dataloader: 2.2.2
       esbuild: 0.15.5
       graphql: 16.6.0
       jest: 27.2.2
@@ -442,7 +442,7 @@ importers:
     dependencies:
       '@exogee/logger': link:../logger
       class-validator: 0.13.2
-      dataloader: link:../dataloader
+      dataloader: 2.2.2
       graphql: 16.6.0
       pluralize: 8.0.0
       reflect-metadata: 0.1.13
@@ -472,9 +472,6 @@ importers:
       esbuild: 0.15.5
       prettier: 2.7.1
 
-  packages/dataloader:
-    specifiers: {}
-
   packages/logger:
     specifiers:
       '@types/bunyan': 1.8.6
@@ -496,7 +493,7 @@ importers:
       '@mikro-orm/postgresql': 5.4.2
       '@types/node': 18.11.11
       apollo-server-core: 3.10.3
-      dataloader: 2.0.0
+      dataloader: 2.2.2
       decimal.js: 10.3.1
       dotenv: 16.0.0
       esbuild: 0.15.5
@@ -508,7 +505,7 @@ importers:
       '@exogee/graphweaver': link:../core
       '@exogee/logger': link:../logger
       apollo-server-core: 3.10.3_graphql@16.6.0
-      dataloader: 2.0.0
+      dataloader: 2.2.2
       decimal.js: 10.3.1
       dotenv: 16.0.0
       graphql: 16.6.0
@@ -530,7 +527,7 @@ importers:
       apollo-datasource-rest: 3.7.0
       apollo-server-errors: 3.3.1
       class-validator: 0.13.2
-      dataloader: 2.1.0
+      dataloader: 2.2.2
       dotenv: 10.0.0
       graphql: 16.6.0
       jest: 26.6.3
@@ -549,7 +546,7 @@ importers:
       apollo-datasource-rest: 3.7.0_graphql@16.6.0
       apollo-server-errors: 3.3.1_graphql@16.6.0
       class-validator: 0.13.2
-      dataloader: 2.1.0
+      dataloader: 2.2.2
       dotenv: 10.0.0
       graphql: 16.6.0
       lodash: 4.17.21
@@ -632,7 +629,7 @@ importers:
       '@exogee/logger': workspace:0.1.0
       '@types/node': 14.14.10
       class-validator: 0.13.2
-      dataloader: 2.1.0
+      dataloader: 2.2.2
       esbuild: 0.15.5
       jest: 26.6.3
       prettier: 2.2.1
@@ -643,7 +640,7 @@ importers:
       '@exogee/graphweaver': link:../core
       '@exogee/logger': link:../logger
       class-validator: 0.13.2
-      dataloader: 2.1.0
+      dataloader: 2.2.2
       xero-node: 4.30.0
     devDependencies:
       '@types/node': 14.14.10
@@ -8206,9 +8203,10 @@ packages:
 
   /dataloader/2.0.0:
     resolution: {integrity: sha512-YzhyDAwA4TaQIhM5go+vCLmU0UikghC/t9DTQYZR2M/UvZ1MdOhPezSDZcjj9uqQJOMqjLcpWtyW2iNINdlatQ==}
+    dev: true
 
-  /dataloader/2.1.0:
-    resolution: {integrity: sha512-qTcEYLen3r7ojZNgVUaRggOI+KM7jrKxXeSHhogh/TWxYMeONEMqY+hmkobiYQozsGIyg9OYVzO4ZIfoB4I0pQ==}
+  /dataloader/2.2.2:
+    resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
     dev: false
 
   /date-fns/1.30.1:
