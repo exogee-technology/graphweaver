@@ -1,7 +1,11 @@
 import yargs from 'yargs';
-import { buildBackend, buildFrontend } from './build';
-import { analyseBundle } from './bundle';
-import { startBackend, startFrontend } from './start';
+import {
+	analyseBundle,
+	buildBackend,
+	buildFrontend,
+	startBackend,
+	startFrontend,
+} from '@exogee/graphweaver-builder';
 
 yargs
 	.env('GRAPHWEAVER')
