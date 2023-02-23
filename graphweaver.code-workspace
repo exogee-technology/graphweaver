@@ -5,26 +5,6 @@
       "path": "."
     },
     {
-      "name": "➡️ Example: Complex",
-      "path": "src/examples/example-complex"
-    },
-    {
-      "name": "➡️ Example: Complex with Migrations",
-      "path": "src/examples/example-complex-migrations"
-    },
-    {
-      "name": "➡️ Example: Xero",
-      "path": "src/examples/example-xero"
-    },
-    {
-      "name": "📦 @exogee/create-graphweaver",
-      "path": "src/packages/create-graphweaver"
-    },
-    {
-      "name": "📦 @exogee/graphweaver",
-      "path": "src/packages/core"
-    },
-    {
       "name": "📦 @exogee/graphweaver-admin-ui",
       "path": "src/packages/admin-ui"
     },
@@ -37,8 +17,24 @@
       "path": "src/packages/apollo"
     },
     {
+      "name": "📦 @exogee/graphweaver-builder",
+      "path": "src/packages/builder"
+    },
+    {
       "name": "📦 @exogee/graphweaver-cli",
       "path": "src/packages/cli"
+    },
+    {
+      "name": "📦 @exogee/graphweaver",
+      "path": "src/packages/core"
+    },
+    {
+      "name": "📦 @exogee/create-graphweaver",
+      "path": "src/packages/create-graphweaver"
+    },
+    {
+      "name": "📦 @exogee/logger",
+      "path": "src/packages/logger"
     },
     {
       "name": "📦 @exogee/graphweaver-mikroorm",
@@ -57,16 +53,24 @@
       "path": "src/packages/scalars"
     },
     {
+      "name": "📦 vite-plugin-graphweaver",
+      "path": "src/packages/vite-plugin-graphweaver"
+    },
+    {
       "name": "📦 @exogee/graphweaver-xero",
       "path": "src/packages/xero"
     },
     {
-      "name": "📦 @exogee/logger",
-      "path": "src/packages/logger"
+      "name": "➡️ Example: Complex",
+      "path": "src/examples/example-complex"
     },
     {
-      "name": "📦 vite-plugin-graphweaver",
-      "path": "src/packages/vite-plugin-graphweaver"
+      "name": "➡️ Example: Complex with Migrations",
+      "path": "src/examples/example-complex-migrations"
+    },
+    {
+      "name": "➡️ Example: Xero",
+      "path": "src/examples/example-xero"
     }
   ],
   "settings": {}
