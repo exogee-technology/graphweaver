@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/create-graphweaver",
-	"version": "0.1.0-alpha.5",
+	"version": "0.1.0-alpha.6",
 	"description": "Create a new GraphWeaver project interactively",
 	"license": "MIT",
 	"scripts": {
