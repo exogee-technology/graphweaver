@@ -2,9 +2,9 @@ import path from 'path';
 import { build } from 'vite';
 import { viteConfig } from '../vite-config';
 
-export interface BuildOptions {}
+export interface FrontendBuildOptions {}
 
-export const buildFrontend = async (_: BuildOptions) => {
+export const buildFrontend = async (_: FrontendBuildOptions) => {
 	const rootDirectory = path.resolve(require.resolve('@exogee/graphweaver-admin-ui'), '..', '..');
 	const config = viteConfig({ rootDirectory });
 	await build(config);

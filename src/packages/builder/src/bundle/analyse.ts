@@ -4,9 +4,9 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { viteConfig } from '../vite-config';
 
 export const analyseBundle = async () => {
-	const root = path.resolve(require.resolve('@exogee/graphweaver-admin-ui'), '..', '..');
+	const rootDirectory = path.resolve(require.resolve('@exogee/graphweaver-admin-ui'), '..', '..');
 
-	const config = viteConfig(root);
+	const config = viteConfig({ rootDirectory });
 
 	await build({
 		...config,

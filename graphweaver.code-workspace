@@ -1,0 +1,77 @@
+{
+  "folders": [
+    {
+      "name": "✨ root",
+      "path": "."
+    },
+    {
+      "name": "➡️ Example: Complex",
+      "path": "src/examples/complex"
+    },
+    {
+      "name": "➡️ Example: Complex with Migrations",
+      "path": "src/examples/complex-migrations"
+    },
+    {
+      "name": "➡️ Example: Xero",
+      "path": "src/examples/xero"
+    },
+    {
+      "name": "📦 @exogee/create-graphweaver",
+      "path": "src/packages/create-graphweaver"
+    },
+    {
+      "name": "📦 @exogee/graphweaver",
+      "path": "src/packages/core"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-admin-ui",
+      "path": "src/packages/admin-ui"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-admin-ui-components",
+      "path": "src/packages/admin-ui-components"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-apollo",
+      "path": "src/packages/apollo"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-builder",
+      "path": "src/packages/builder"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-cli",
+      "path": "src/packages/cli"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-mikroorm",
+      "path": "src/packages/mikroorm"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-rest",
+      "path": "src/packages/rest"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-rls",
+      "path": "src/packages/rls"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-scalars",
+      "path": "src/packages/scalars"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-xero",
+      "path": "src/packages/xero"
+    },
+    {
+      "name": "📦 @exogee/logger",
+      "path": "src/packages/logger"
+    },
+    {
+      "name": "📦 vite-plugin-graphweaver",
+      "path": "src/packages/vite-plugin-graphweaver"
+    }
+  ],
+  "settings": {}
+}

@@ -9,10 +9,9 @@ const path = require('path');
 const exec = promisify(nodeExec);
 
 (async () => {
-	// Build the CLI
 	await build({
 		entryPoints: ['./src/index.ts'],
-		outdir: 'bin',
+		outdir: 'lib',
 		bundle: true,
 		platform: 'node',
 		banner: { js: '#!/usr/bin/env node' },
@@ -23,7 +22,4 @@ const exec = promisify(nodeExec);
 			...Object.keys(devDependencies),
 		],
 	});
-
-	// TODO: This won't work on Windows, guard accordingly.
-	await exec('chmod 755 bin/index.js');
 })();

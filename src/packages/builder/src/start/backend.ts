@@ -34,11 +34,11 @@ const builtInBackendFunctions: Record<string, any> = {
 	},
 };
 
-export interface StartOptions {
+export interface BackendStartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
 }
 
-export const startBackend = async (options: StartOptions) => {
+export const startBackend = async (options: BackendStartOptions) => {
 	console.log('Starting backend...');
 
 	// Get ready for our config.
