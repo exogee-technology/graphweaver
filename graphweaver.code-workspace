@@ -6,15 +6,15 @@
     },
     {
       "name": "➡️ Example: Complex",
-      "path": "src/examples/example-complex"
+      "path": "src/examples/complex"
     },
     {
       "name": "➡️ Example: Complex with Migrations",
-      "path": "src/examples/example-complex-migrations"
+      "path": "src/examples/complex-migrations"
     },
     {
       "name": "➡️ Example: Xero",
-      "path": "src/examples/example-xero"
+      "path": "src/examples/xero"
     },
     {
       "name": "📦 @exogee/create-graphweaver",
