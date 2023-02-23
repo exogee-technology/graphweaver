@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
 	"private": true,
-	"version": "0.1.0-alpha.5",
+	"version": "0.1.0-alpha.6",
 	"type": "module",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
