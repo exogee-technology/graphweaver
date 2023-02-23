@@ -12,9 +12,9 @@ import {
 
 const rimraf = promisify(rimrafCallback);
 
-export interface BuildOptions {}
+export interface BackendBuildOptions {}
 
-export const buildBackend = async (_: BuildOptions) => {
+export const buildBackend = async (_: BackendBuildOptions) => {
 	console.log('Building backend...');
 
 	// Clear the folder
