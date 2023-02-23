@@ -21,7 +21,7 @@
 	"dependencies": {
 		"@exogee/logger": "workspace:0.1.0",
 		"class-validator": "0.13.2",
-		"dataloader": "workspace:2.1.1",
+		"dataloader": "2.2.2",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.1.13",
