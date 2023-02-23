@@ -1,0 +1,5 @@
+test
+!bin
+bin/index.js
+node_modules
+*.log
