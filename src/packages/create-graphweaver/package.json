@@ -1,13 +1,14 @@
 {
 	"name": "@exogee/create-graphweaver",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.0",
 	"description": "Create a new GraphWeaver project interactively",
 	"license": "MIT",
 	"scripts": {
 		"start": "pnpm build && mkdir -p test && rm -rf test/* && cd test && node ../bin/index.js",
 		"build": "esbuild src/index.ts --bundle --platform=node --outdir=bin --banner:js=\"#!/usr/bin/env node\"",
 		"prettier": "prettier --write .",
-		"test:prettier": "prettier --check ."
+		"test:prettier": "prettier --check .",
+		"version": "npm version --no-git-tag-version"
 	},
 	"bin": "bin/index.js",
 	"files": [

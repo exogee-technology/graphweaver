@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
 	"private": true,
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.0",
 	"type": "module",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -11,7 +11,8 @@
 		"build:types": "tsc --noEmit false --emitDeclarationOnly --declaration --outDir lib",
 		"prettier": "prettier --write .",
 		"test:prettier": "prettier --check .",
-		"test:tsc": "tsc --noEmit"
+		"test:tsc": "tsc --noEmit",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
