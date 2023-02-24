@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.0-alpha.5",
+		"@exogee/graphweaver": "workspace:0.1.0",
 		"@exogee/logger": "workspace:0.1.0",
 		"apollo-server-core": "3.10.3",
 		"dataloader": "2.2.2",

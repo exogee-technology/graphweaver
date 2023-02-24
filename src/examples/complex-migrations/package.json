@@ -20,13 +20,13 @@
 	},
 	"dependencies": {
 		"@exogee/graphweaver-mikroorm": "0.1.0-alpha.5",
-		"@exogee/logger": "0.1.0",
-		"aws-sdk": "2.1069.0",
-		"color-convert": "2.0.1",
-		"dotenv": "16.0.0",
+		"@exogee/logger": "workspace:0.1.0",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/entity-generator": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.0",
+		"aws-sdk": "2.1069.0",
+		"color-convert": "2.0.1",
+		"dotenv": "16.0.0",
 		"pg": "8.5.1"
 	},
 	"devDependencies": {
