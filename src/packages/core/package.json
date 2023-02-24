@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.0",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
@@ -8,7 +8,8 @@
 		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
-		"test": "jest --passWithNoTests"
+		"test": "jest --passWithNoTests",
+		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
