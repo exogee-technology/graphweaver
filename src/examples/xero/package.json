@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.0",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -10,7 +10,8 @@
 		"prettier": "prettier --write src/**/*.ts",
 		"start": "graphweaver start",
 		"start:backend": "graphweaver start backend",
-		"test": "jest"
+		"test": "jest",
+		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",

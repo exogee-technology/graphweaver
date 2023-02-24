@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.0",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {
@@ -14,7 +14,8 @@
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
-		"build:types": "tsc --emitDeclarationOnly"
+		"build:types": "tsc --emitDeclarationOnly",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"bunyan": "1.8.14"
