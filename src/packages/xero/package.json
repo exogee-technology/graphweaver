@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.0-alpha.5",
+		"@exogee/graphweaver": "workspace:0.1.0",
 		"@exogee/logger": "workspace:0.1.0",
 		"class-validator": "0.13.2",
 		"dataloader": "2.2.2",
