@@ -112,3 +112,6 @@ lib
 bin
 node_modules
 *.log
+
+# Session-specific authentication
+token.json

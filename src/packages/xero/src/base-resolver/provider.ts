@@ -125,6 +125,11 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		XeroBackendProvider.resetXeroClient();
 	}
 
+	public static async refreshToken() {
+		const newToken = await XeroBackendProvider.xero.refreshToken();
+		return newToken;
+	}
+
 	protected async ensureAccessToken() {
 		if (!XeroBackendProvider.xero) XeroBackendProvider.resetXeroClient();
 		await XeroBackendProvider.xero.initialize();
@@ -142,6 +147,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			tokenSet = XeroBackendProvider.xero.readTokenSet();
 		}
 
+		// @todo: (a) This doesn't throw an error here (cf context.ts) (b) seems to fire every time
 		if (tokenSet.expired()) {
 			logger.trace('Access token expired. Refreshing.');
 
