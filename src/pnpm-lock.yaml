@@ -29,13 +29,13 @@ importers:
   examples/complex:
     specifiers:
       '@as-integrations/aws-lambda': ^1.0.1
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-rest': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-rls': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-scalars': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-rest': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-rls': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-scalars': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@graphql-codegen/cli': 1.19.4
       '@graphql-codegen/typescript': 2.8.7
       '@graphql-codegen/typescript-resolvers': 1.18.0
@@ -141,8 +141,8 @@ importers:
 
   examples/complex-migrations:
     specifiers:
-      '@exogee/graphweaver-mikroorm': 0.1.0-alpha.5
-      '@exogee/logger': 0.1.0
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/entity-generator': 5.4.2
       '@mikro-orm/postgresql': 5.4.0
@@ -181,13 +181,13 @@ importers:
   examples/xero:
     specifiers:
       '@as-integrations/aws-lambda': 1.0.1
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-admin-ui': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-admin-ui-components': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-cli': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-xero': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-admin-ui': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-admin-ui-components': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-apollo': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-cli': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-xero': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@nivo/bump': 0.80.0
       '@nivo/core': 0.80.0
       '@nivo/line': 0.80.0
@@ -254,7 +254,7 @@ importers:
   packages/admin-ui:
     specifiers:
       '@apollo/client': 3.7.1
-      '@exogee/graphweaver-admin-ui-components': workspace:0.1.0-alpha.5
+      '@exogee/graphweaver-admin-ui-components': workspace:0.1.0-alpha.6
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.9
@@ -344,9 +344,9 @@ importers:
   packages/apollo:
     specifiers:
       '@apollo/server': 4.2.2
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@graphql-tools/schema': ^8.0.0
       async-mutex: 0.3.2
       class-validator: 0.13.2
@@ -370,7 +370,7 @@ importers:
 
   packages/builder:
     specifiers:
-      '@exogee/graphweaver-admin-ui': workspace:0.1.0-alpha.5
+      '@exogee/graphweaver-admin-ui': workspace:0.1.0-alpha.6
       '@serverless/utils': 6.8.2
       '@types/node': 18.11.9
       '@types/rimraf': 3.0.2
@@ -385,7 +385,7 @@ importers:
       serverless-dotenv-plugin: 4.0.2
       serverless-offline: 12.0.2
       vite: 3.2.4
-      vite-plugin-graphweaver: workspace:0.1.0-alpha.5
+      vite-plugin-graphweaver: workspace:0.1.0-alpha.6
       vite-plugin-svgr: 2.2.2
     dependencies:
       '@exogee/graphweaver-admin-ui': link:../admin-ui
@@ -409,8 +409,8 @@ importers:
 
   packages/cli:
     specifiers:
-      '@exogee/graphweaver-admin-ui': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-builder': workspace:0.1.0-alpha.5
+      '@exogee/graphweaver-admin-ui': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-builder': workspace:0.1.0-alpha.6
       '@types/node': 18.11.9
       esbuild: 0.15.5
       prettier: 2.7.1
@@ -426,7 +426,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@types/jest': 27.0.2
       '@types/pluralize': 0.0.29
       class-validator: 0.13.2
@@ -487,8 +487,8 @@ importers:
 
   packages/mikroorm:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
       '@types/node': 18.11.11
@@ -520,8 +520,8 @@ importers:
 
   packages/rest:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@types/node': 14.14.10
       apollo-datasource: 3.3.2
       apollo-datasource-rest: 3.7.0
@@ -563,9 +563,9 @@ importers:
 
   packages/rls:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@types/node': 14.14.10
       class-validator: 0.13.2
       dotenv: 10.0.0
@@ -596,7 +596,7 @@ importers:
 
   packages/scalars:
     specifiers:
-      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.5
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.6
       '@types/jest': 26.0.23
       decimal.js: 10.3.1
       graphql: 16.6.0
@@ -625,8 +625,8 @@ importers:
 
   packages/xero:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.0-alpha.5
-      '@exogee/logger': workspace:0.1.0
+      '@exogee/graphweaver': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@types/node': 14.14.10
       class-validator: 0.13.2
       dataloader: 2.2.2
