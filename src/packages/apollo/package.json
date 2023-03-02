@@ -19,9 +19,9 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.2.2",
-		"@exogee/graphweaver": "workspace:0.1.0-alpha.5",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.5",
-		"@exogee/logger": "workspace:0.1.0",
+		"@exogee/graphweaver": "workspace:0.1.0-alpha.6",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.6",
+		"@exogee/logger": "workspace:0.1.0-alpha.6",
 		"@graphql-tools/schema": "^8.0.0",
 		"async-mutex": "0.3.2",
 		"class-validator": "0.13.2",
