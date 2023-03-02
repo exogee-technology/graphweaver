@@ -19,7 +19,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/logger": "workspace:0.1.0",
+		"@exogee/logger": "workspace:0.1.0-alpha.6",
 		"class-validator": "0.13.2",
 		"dataloader": "2.2.2",
 		"graphql": "16.6.0",
