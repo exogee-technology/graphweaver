@@ -149,20 +149,20 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 		// @todo: (a) This doesn't throw an error here (cf context.ts) (b) seems to fire every time
 		// @todo: Leave it to context to sort out
-		// if (tokenSet.expired()) {
-		// 	logger.trace('Access token expired. Refreshing.');
+		if (tokenSet.expired()) {
+			logger.trace('Access token expired. Refreshing.');
 
-		// 	if (!XeroBackendProvider.accessTokenProvider) {
-		// 		throw new Error(
-		// 			'You must have set an access token provider in order to refresh access tokens.'
-		// 		);
-		// 	}
+			if (!XeroBackendProvider.accessTokenProvider) {
+				throw new Error(
+					'You must have set an access token provider in order to refresh access tokens.'
+				);
+			}
 
-		// 	await XeroBackendProvider.accessTokenProvider.set(
-		// 		await XeroBackendProvider.xero.refreshToken()
-		// 	);
-		// 	logger.trace('Refresh complete.');
-		// }
+			await XeroBackendProvider.accessTokenProvider.set(
+				await XeroBackendProvider.xero.refreshToken()
+			);
+			logger.trace('Refresh complete.');
+		}
 	}
 
 	// GET METHODS
