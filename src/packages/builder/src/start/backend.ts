@@ -101,7 +101,6 @@ export const startBackend = async (options: BackendStartOptions) => {
 	} catch (error) {
 		// We don't actually care if this fails, we just won't load
 		// your custom functions.
-		console.warn('Error while building additional functions: ', error);
 	}
 
 	// Sadly there's no easy way to trigger Serverless programatically:
