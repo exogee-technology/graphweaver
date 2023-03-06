@@ -15,9 +15,7 @@ export const loadDashboards = async (configPath: string) => {
 			return `export { dashboards } from '${dashboardPath}';`;
 		}
 	} catch (error) {
-		console.warn('Received error:');
-		console.error(error);
-		console.warn(`Ignoring dashboards from config in ${configPath}.`);
+		// If we get an error here it's fine, we just won't load your dashboards if you have any.
 	}
 
 	return `export const dashboards = [];`;

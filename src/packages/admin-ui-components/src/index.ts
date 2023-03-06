@@ -5,6 +5,7 @@ export * from './detail-panel';
 export * from './layouts';
 export * from './loader';
 export * from './require-schema';
+export * from './save-auth-code-from-query-string';
 export * from './side-bar';
 export * from './spinner';
 export * from './table';
