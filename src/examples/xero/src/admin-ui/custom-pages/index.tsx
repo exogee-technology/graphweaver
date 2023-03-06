@@ -1,12 +1,21 @@
 import { apolloClient, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
-import { TENANTS_QUERY } from './graphql';
-import { XeroDashboard } from './component';
-import { AllCompaniesDashboardLoader } from './all-companies';
-import { SingleCompanyDashboardLoader } from './single-company';
+import { TENANTS_QUERY } from './dashboards/graphql';
+import { XeroDashboard } from './dashboards/component';
+import { AllCompaniesDashboardLoader } from './dashboards/all-companies';
+import { SingleCompanyDashboardLoader } from './dashboards/single-company';
+import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
 
 export const customPages = {
 	routes: () => [
 		{
+			// This is where Xero sends us back to after the OAuth flow.
+			// Its job is to read the code and store it in local storage, then
+			// redirect back to /.
+			path: '/xero-auth-code',
+			element: <XeroAuthCodeReceiver />,
+		},
+		{
+			// These are dashboards
 			path: '/xero-dashboard',
 			loader: AllCompaniesDashboardLoader,
 			element: (
