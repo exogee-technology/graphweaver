@@ -102,6 +102,7 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			}
 			if (token.expired()) {
 				logger.trace('Token is expired, renewing for the user.');
+				if (!xero.openIdClient) await xero.initialize();
 				xero.setTokenSet(token);
 				token = await xero.refreshToken();
 			}
