@@ -617,28 +617,38 @@ importers:
 
   packages/xero:
     specifiers:
+      '@apollo/server': 4.2.2
       '@exogee/graphweaver': workspace:0.1.0-alpha.6
       '@exogee/logger': workspace:0.1.0-alpha.6
       '@types/node': 14.14.10
       class-validator: 0.13.2
       dataloader: 2.2.2
       esbuild: 0.15.5
+      graphql: 16.6.0
       jest: 26.6.3
       prettier: 2.2.1
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-router-dom: 6.4.3
       ts-jest: 26.4.4
       typescript: 4.9.4
       xero-node: 4.30.0
     dependencies:
+      '@apollo/server': 4.2.2_graphql@16.6.0
       '@exogee/graphweaver': link:../core
       '@exogee/logger': link:../logger
       class-validator: 0.13.2
       dataloader: 2.2.2
+      graphql: 16.6.0
       xero-node: 4.30.0
     devDependencies:
       '@types/node': 14.14.10
       esbuild: 0.15.5
       jest: 26.6.3
       prettier: 2.2.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+      react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
       ts-jest: 26.4.4_vxa7amr3o4p5wmsiameezakoli
       typescript: 4.9.4
 
@@ -768,7 +778,7 @@ packages:
       '@apollo/utils.logger': 2.0.0
       '@apollo/utils.usagereporting': 2.0.0_graphql@16.6.0
       '@apollo/utils.withrequired': 2.0.0
-      '@graphql-tools/schema': 9.0.12_graphql@16.6.0
+      '@graphql-tools/schema': 9.0.13_graphql@16.6.0
       '@josephg/resolvable': 1.0.1
       '@types/express': 4.17.14
       '@types/express-serve-static-core': 4.17.31
@@ -2927,16 +2937,6 @@ packages:
       tslib: 2.3.1
     dev: true
 
-  /@graphql-tools/merge/8.3.14_graphql@16.6.0:
-    resolution: {integrity: sha512-zV0MU1DnxJLIB0wpL4N3u21agEiYFsjm6DI130jqHpwF0pR9HkF+Ni65BNfts4zQelP0GjkHltG+opaozAJ1NA==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      '@graphql-tools/utils': 9.1.3_graphql@16.6.0
-      graphql: 16.6.0
-      tslib: 2.4.1
-    dev: false
-
   /@graphql-tools/merge/8.3.15_graphql@16.6.0:
     resolution: {integrity: sha512-hYYOlsqkUlL6oOo7zzuk6hIv7xQzy+x21sgK84d5FWaiWYkLYh9As8myuDd9SD5xovWWQ9m/iRhIOVDEMSyEKA==}
     peerDependencies:
@@ -3048,18 +3048,6 @@ packages:
       tslib: 2.4.1
       value-or-promise: 1.0.11
 
-  /@graphql-tools/schema/9.0.12_graphql@16.6.0:
-    resolution: {integrity: sha512-DmezcEltQai0V1y96nwm0Kg11FDS/INEFekD4nnVgzBqawvznWqK6D6bujn+cw6kivoIr3Uq//QmU/hBlBzUlQ==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      '@graphql-tools/merge': 8.3.14_graphql@16.6.0
-      '@graphql-tools/utils': 9.1.3_graphql@16.6.0
-      graphql: 16.6.0
-      tslib: 2.4.1
-      value-or-promise: 1.0.11
-    dev: false
-
   /@graphql-tools/schema/9.0.13_graphql@16.6.0:
     resolution: {integrity: sha512-guRA3fwAtv+M1Kh930P4ydH9aKJTWscIkhVFcWpj/cnjYYxj88jkEJ15ZNiJX/2breNY+sbVgmlgLKb6aXi/Jg==}
     peerDependencies:
@@ -3151,15 +3139,6 @@ packages:
       graphql: 16.6.0
       tslib: 2.4.1
     dev: true
-
-  /@graphql-tools/utils/9.1.3_graphql@16.6.0:
-    resolution: {integrity: sha512-bbJyKhs6awp1/OmP+WKA1GOyu9UbgZGkhIj5srmiMGLHohEOKMjW784Sk0BZil1w2x95UPu0WHw6/d/HVCACCg==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      graphql: 16.6.0
-      tslib: 2.4.1
-    dev: false
 
   /@graphql-tools/utils/9.1.4_graphql@16.6.0:
     resolution: {integrity: sha512-hgIeLt95h9nQgQuzbbdhuZmh+8WV7RZ/6GbTj6t3IU4Zd2zs9yYJ2jgW/krO587GMOY8zCwrjNOMzD40u3l7Vg==}
@@ -5579,7 +5558,7 @@ packages:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 18.11.11
+      '@types/node': 14.14.10
     dev: false
 
   /@types/bunyan/1.8.6:
@@ -5609,7 +5588,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 18.11.11
+      '@types/node': 14.14.10
     dev: false
 
   /@types/cookie-signature/1.0.3:
@@ -5644,7 +5623,7 @@ packages:
   /@types/express-serve-static-core/4.17.31:
     resolution: {integrity: sha512-DxMhY+NAsTwMMFHBTtJFNp5qiHKJ7TeqOo23zVEM9alT1Ml27Q3xcTH0xwxn7Q0BbMcVEJOs/7aQtUWupUQN3Q==}
     dependencies:
-      '@types/node': 18.11.11
+      '@types/node': 14.14.10
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
     dev: false
@@ -5784,7 +5763,7 @@ packages:
   /@types/node-fetch/2.6.2:
     resolution: {integrity: sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==}
     dependencies:
-      '@types/node': 18.11.11
+      '@types/node': 14.14.10
       form-data: 3.0.1
     dev: false
 
@@ -5794,7 +5773,6 @@ packages:
 
   /@types/node/14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
-    dev: true
 
   /@types/node/18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -5898,7 +5876,7 @@ packages:
     resolution: {integrity: sha512-z5xyF6uh8CbjAu9760KDKsH2FcDxZ2tFCsA4HIMWE6IkiYMXfVoa+4f9KX+FN0ZLsaMw1WNG2ETLA6N+/YA+cg==}
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 18.11.11
+      '@types/node': 14.14.10
     dev: false
 
   /@types/serverless/1.78.11:
