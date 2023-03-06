@@ -1,5 +1,4 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
 
 const httpLink = new HttpLink({
 	uri: import.meta.env.VITE_GRAPHWEAVER_API_URL || 'http://localhost:3000/graphql/v1',
@@ -38,12 +37,7 @@ const authLink = new ApolloLink((operation, forward) => {
 	});
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-	console.log('graphQLErrors', graphQLErrors);
-	console.log('networkError', networkError);
-});
-
 export const apolloClient = new ApolloClient({
-	link: errorLink.concat(authLink.concat(httpLink)),
+	link: authLink.concat(httpLink),
 	cache: new InMemoryCache(),
 });
