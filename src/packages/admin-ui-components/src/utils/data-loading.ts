@@ -60,13 +60,13 @@ const queryForEntityPage = (entity: Entity, entityByType: (type: string) => Enti
 	`;
 };
 
-export const getEntity = <T>(entity: Entity, id: string) =>
+export const getEntity = <T>(entity: Entity, id: string, entityByType?: (type: string) => Entity) =>
 	apolloClient.query<T>({
-		query: queryForEntity(entity),
+		query: queryForEntity(entity, entityByType),
 		variables: { id },
 	});
 
-const queryForEntity = (entity: Entity) => {
+const queryForEntity = (entity: Entity, entityByType?: (type: string) => Entity) => {
 	// If the entity is called SomeThing then the query name is someThing.
 	const queryName = entity.name[0].toLowerCase() + entity.name.slice(1);
 
@@ -80,7 +80,11 @@ const queryForEntity = (entity: Entity) => {
 				${entity.fields
 					.map((field) => {
 						if (field.relationshipType) {
-							return `${field.name} { id }`;
+							if (!entityByType) {
+								return `${field.name} { id }`;
+							}
+							const relatedEntity = entityByType(field.type);
+							return `${field.name} { id ${relatedEntity.summaryField || ''} }`;
 						} else {
 							return field.name;
 						}
