@@ -1,0 +1,108 @@
+.overlay {
+	background-color: rgba(120, 120, 120, 0.8);
+	width: 100%;
+	min-height: 100%;
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	overflow: auto;
+}
+
+.closeArea {
+	position: absolute;
+	width: 100%;
+	height: 100vh;
+}
+
+.closeBtn {
+	background-color: transparent;
+	border: 0px;
+	outline: none;
+	width: 36px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+.closeBtn:hover * > path {
+	color: var(--color-black);
+}
+
+.wrapper {
+	background-color: var(--color-white);
+	border-radius: 8px;
+	border: 1px solid #ececec;
+	box-shadow: 0px 24px 44px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: row;
+	z-index: 1;
+	margin: auto;
+}
+
+.content {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	min-width: 500px;
+}
+
+.header {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	align-items: center;
+	width: 67%;
+}
+
+.headerWrapper {
+	border-bottom: 1px solid var(--color-border-default);
+}
+
+.footerWrapper {
+	border-top: 1px solid var(--color-border-default);
+}
+
+.fullScreen {
+	width: 100vw;
+	height: 100%;
+	margin: 0;
+}
+
+.contentWrapper {
+	height: 100%;
+}
+
+.title {
+	position: relative;
+	height: 25px;
+	left: 32px;
+	top: 24px;
+
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 18px;
+	line-height: 140%;
+	/* or 25px */
+	color: #ede8f2;
+	background-color: var(--detail-bg-color);
+	z-index: 1;
+}
+
+.iconContainer {
+	min-width: 32px;
+	margin: 6px;
+	cursor: pointer;
+	max-height: 32px;
+}
+.iconContainer:hover {
+	background-color: rgba(237, 242, 232, 0.4);
+	color: var(--secondary-color);
+}
