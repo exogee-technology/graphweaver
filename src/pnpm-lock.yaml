@@ -141,8 +141,8 @@ importers:
 
   examples/complex-migrations:
     specifiers:
-      '@exogee/graphweaver-mikroorm': 0.1.0-alpha.6
-      '@exogee/logger': 0.1.0-alpha.6
+      '@exogee/graphweaver-mikroorm': workspace:0.1.0-alpha.6
+      '@exogee/logger': workspace:0.1.0-alpha.6
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/entity-generator': 5.4.2
       '@mikro-orm/postgresql': 5.4.0
@@ -16962,7 +16962,7 @@ packages:
       bs-logger: 0.2.6
       buffer-from: 1.1.2
       fast-json-stable-stringify: 2.1.0
-      jest: 26.6.3_ts-node@9.0.0
+      jest: 26.6.3
       jest-util: 26.6.2
       json5: 2.2.3
       lodash.memoize: 4.1.2
