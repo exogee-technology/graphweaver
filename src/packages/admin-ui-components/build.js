@@ -7,7 +7,7 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 		outdir: 'lib',
 		format: 'esm',
 		bundle: true,
-		minify: true,
+		minify: false,
 		sourcemap: 'linked',
 		external: [
 			// This can't be bundled because it's virtual and supplied by
