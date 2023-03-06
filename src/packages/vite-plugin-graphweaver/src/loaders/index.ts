@@ -1,1 +1,1 @@
-export * from './dashboards';
+export * from './custom-pages';
