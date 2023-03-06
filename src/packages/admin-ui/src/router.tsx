@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // This is injected by vite-plugin-graphweaver
-import { dashboards } from 'virtual:graphweaver-user-supplied-dashboards';
+import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
 import { Loader, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
 
 import { List, ListToolBar, Root } from './pages';
@@ -47,9 +47,7 @@ export const Router = () => {
 
 	useEffect(() => {
 		(async () => {
-			const routes = (await Promise.all(dashboards.map(({ routes }) => routes())))
-				.flat()
-				.filter((route) => route?.path);
+			const routes = (await customPages.routes()).flat().filter((route) => route?.path);
 			setRouter(createBrowserRouter([...defaultRoutes, ...routes]));
 		})();
 	}, []);
