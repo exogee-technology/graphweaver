@@ -6,18 +6,6 @@ import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external
 import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
 import styles from './styles.module.css';
 
-// const BlankSlate = () => (
-// 	<div id={styles.centerBlankSlate}>
-// 		<div className={styles.blankSlateWrapper}>
-// 			<DataSourcesIcon />
-// 			<h1>No data sources yet</h1>
-// 			<p className="subtext">
-// 				Connect data sources. See the <a href="/#">readme</a> for more details
-// 			</p>
-// 		</div>
-// 	</div>
-// );
-
 export interface ToolBarProps {
 	title?: string;
 	subtitle?: string;
