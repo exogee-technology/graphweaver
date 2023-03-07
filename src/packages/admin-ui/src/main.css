@@ -4,6 +4,7 @@
 	--body-bg-color: #100a1c;
 	--primary-color: #7038c2;
 	--secondary-color: #853af2;
+	--detail-bg-color: #171221;
 }
 @supports (font-variation-settings: normal) {
 	:root {

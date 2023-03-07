@@ -125,6 +125,11 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		XeroBackendProvider.resetXeroClient();
 	}
 
+	public static async refreshToken() {
+		const newToken = await XeroBackendProvider.xero.refreshToken();
+		return newToken;
+	}
+
 	protected async ensureAccessToken() {
 		if (!XeroBackendProvider.xero) XeroBackendProvider.resetXeroClient();
 		await XeroBackendProvider.xero.initialize();

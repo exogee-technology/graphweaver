@@ -26,6 +26,7 @@
 	"dependencies": {
 		"@apollo/client": "3.7.1",
 		"classnames": "2.3.2",
+		"formik": "2.2.9",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
 		"react-data-grid": "7.0.0-beta.20"
@@ -37,11 +38,11 @@
 		"react-router-dom": "6.4.3"
 	},
 	"devDependencies": {
+		"@types/pluralize": "0.0.29",
 		"@types/react": "18.0.25",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-svgr": "1.0.1",
-		"@types/pluralize": "0.0.29",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
