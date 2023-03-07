@@ -82,7 +82,7 @@ const DetailForm = ({
 						return <DetailField key={field.name} field={field} />;
 					})}
 					<div className={styles.detailButtonContainer}>
-						<Button type={'reset'}>Cancel</Button>
+						<Button type="reset">Cancel</Button>
 						<Button type={'submit'}>Save</Button>
 					</div>
 				</div>
