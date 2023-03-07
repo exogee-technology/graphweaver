@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
 import styles from './styles.module.css';
 
@@ -6,7 +7,9 @@ export interface ButtonProps {
 	onClickOutside?(): any /** Event emitted when outside */;
 	renderBefore?(): ReactNode /** Render function before the button */;
 	renderAfter?(): ReactNode /** Render function after the button */;
+	className?: string /** alternative styling */;
 	children?: ReactNode;
+	type?: 'submit' | 'reset' | 'button';
 }
 
 export const Button = ({
@@ -15,6 +18,8 @@ export const Button = ({
 	renderBefore,
 	renderAfter,
 	onClickOutside,
+	className,
+	type = 'button',
 }: ButtonProps): JSX.Element => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -47,7 +52,12 @@ export const Button = ({
 	}, []);
 
 	return (
-		<button ref={buttonRef} onClick={handleOnClickButton} className={styles.button} type="button">
+		<button
+			ref={buttonRef}
+			onClick={handleOnClickButton}
+			className={classNames([className, styles.button])}
+			type={type}
+		>
 			{renderBefore?.()}
 			{children}
 			{renderAfter?.()}
