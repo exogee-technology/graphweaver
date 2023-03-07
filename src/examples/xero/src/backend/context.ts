@@ -12,7 +12,7 @@ export const context = async ({ event }) => {
 	const writeTokenToFs = async (newToken: TokenSet) =>
 		await fs.writeFile('./token.json', JSON.stringify(newToken, null, 4), 'utf-8');
 	const expired = (token: TokenSet): boolean => {
-		return Math.max((+token.expires_at ?? Date.now()) - Date.now(), 0) === 0;
+		return token.expires_at ? +token.expires_at - Date.now() < 0 : false;
 	};
 
 	try {
