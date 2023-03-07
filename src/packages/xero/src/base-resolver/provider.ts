@@ -147,8 +147,6 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			tokenSet = XeroBackendProvider.xero.readTokenSet();
 		}
 
-		// @todo: (a) This doesn't throw an error here (cf context.ts) (b) seems to fire every time
-		// @todo: Leave it to context to sort out
 		if (tokenSet.expired()) {
 			logger.trace('Access token expired. Refreshing.');
 
