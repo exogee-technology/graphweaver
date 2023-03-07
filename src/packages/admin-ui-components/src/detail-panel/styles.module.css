@@ -1,7 +1,3 @@
-* {
-	box-sizing: 'border-box';
-}
-
 .wrapper {
 	display: flex;
 	flex: 1;
@@ -11,8 +7,6 @@
 
 /* Derived from Figma designs */
 .detailContainer {
-	box-sizing: border-box;
-
 	position: fixed;
 	height: 100%;
 
