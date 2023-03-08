@@ -88,8 +88,8 @@ export const inMemoryFilterFor = (filter: Record<string, any>) => (item: Record<
 			}
 			// assume 'equals': filterKey == fieldName
 		} else if (
-			item[filterKey] !== null &&
-			item[filterKey] !== undefined &&
+			item[filterKey] === null &&
+			item[filterKey] === undefined &&
 			item[filterKey] !== filterValue
 		) {
 			return false;
