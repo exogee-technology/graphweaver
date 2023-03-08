@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // This is injected by vite-plugin-graphweaver
-import { dashboards, NavLinkExport } from 'virtual:graphweaver-user-supplied-dashboards';
+import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-custom-pages';
 
 import { GraphweaverLogo } from '../assets';
 import { useSchema } from '../utils';
@@ -19,9 +19,7 @@ export const SideBar = () => {
 
 	useEffect(() => {
 		(async () => {
-			const links = (await Promise.all(dashboards.map(({ navLinks }) => navLinks())))
-				.flat()
-				.filter((navLink) => navLink?.name);
+			const links = (await customPages.navLinks()).flat().filter((navLink) => navLink?.name);
 			links.sort((left, right) => left.name.localeCompare(right.name));
 			setUserDashboardLinks(links);
 			setLoading(false);
