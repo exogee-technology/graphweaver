@@ -5,26 +5,139 @@
 	min-width: 400px;
 }
 
-:root {
-	--detail-bg-color: #171221;
-}
-
 /* Derived from Figma designs */
 .detailContainer {
-	position: relative;
+	position: fixed;
 	height: 100%;
 
 	background: var(--detail-bg-color);
 	border: 1px solid rgba(237, 232, 242, 0.1);
-	border-radius: 12px;
-	left: 55%;
+	border-radius: 6px;
+	left: 70%;
+	width: 45%;
+	/* Transition in */
+	animation: 0.5s ease-out 0s 1 slideInFromRight;
 
-	overflow-y: scroll;
+	overflow-y: auto;
 	overflow-x: hidden;
+}
+
+.detailContainer.finished {
+	/* Transition out */
+	animation: 0.5s ease-out 0s 1 slideOutToRight;
+}
+
+.detailFieldList {
+	position: relative;
+	left: 32px;
+	top: 60px;
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+	max-height: 75%;
+	padding-bottom: 20px;
+}
+
+.detailField {
+	display: flex;
+	flex-flow: column nowrap;
+	gap: 10px;
+}
+
+.fieldLabel {
+	flex: none;
+
+	font-family: 'Inter';
+	font-style: normal;
+	font-size: 14px;
+	line-height: 150%;
+	/* identical to box height, or 21px */
+
+	color: rgba(237, 232, 242, 0.6);
+	font-weight: 600;
+	max-width: 60%;
+}
+
+.textInputField,
+.selectField {
+	box-sizing: border-box;
+
+	height: 40px;
+	max-width: 57%;
+
+	background: rgba(237, 232, 242, 0.02);
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 6px;
+	padding: 10px;
 }
 
 .modalOverlay {
 	position: fixed;
 	inset: 0px;
 	background-color: rgba(255, 255, 255, 0.4);
+}
+
+.detailFormContainer {
+	display: flex;
+	flex-flow: column nowrap;
+}
+
+.detailButtonContainer {
+	position: relative;
+	display: flex;
+	flex-flow: row nowrap;
+	gap: 10px;
+	max-width: 57%;
+	justify-content: flex-end;
+	margin-top: 20px;
+}
+
+.idContent {
+	position: relative;
+	width: 414px;
+	height: 21px;
+	left: 32px;
+	top: 57px;
+
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 150%;
+	/* identical to box height, or 21px */
+
+	color: rgba(237, 232, 242, 0.6);
+}
+
+@keyframes slideInFromRight {
+	0% {
+		transform: translateX(100%);
+	}
+	100% {
+		transform: translateX(0);
+	}
+}
+
+@keyframes slideOutToRight {
+	0% {
+		transform: translateX(0);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
+.closeIcon {
+	width: 32px;
+	color: var(--primary-color);
+	position: relative;
+	top: 24px;
+	right: -32px;
+	cursor: pointer;
+	padding: 6px;
+	border-radius: 6px;
+}
+
+.closeIcon:hover {
+	background-color: rgba(237, 232, 242, 0.2);
 }

@@ -9,7 +9,7 @@ export const Spinner = () => {
 		//className={styles.spinner} @todo
 		>
 			{/* <GraphweaverSpinner /> */}
-			More data...
+			Loading...
 		</div>
 	);
 };
