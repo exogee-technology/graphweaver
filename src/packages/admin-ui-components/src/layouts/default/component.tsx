@@ -11,6 +11,7 @@ export const DefaultLayout = ({
 	header?: React.ReactNode;
 	children: React.ReactNode;
 }) => (
+	// This makes sure the schema loads before any of the stuff trying to access data loads.
 	<RequireSchema>
 		<div className={styles.container}>
 			<header>
