@@ -61,19 +61,28 @@ export const routeFor = ({
 	return `/${chunks.join('/')}${encodeSearchParams({ sort, filter })}`;
 };
 
+// Stop '&' being always prepended to filter
+interface EncodedParams {
+	sort?: string;
+	filter?: string;
+}
+
 const encodeSearchParams = (searchParams: SearchParams) => {
 	const { sort, filter } = searchParams;
 	let search = '';
-	let sortEncoded;
-	let filterEncoded;
+	let encoded: EncodedParams = {};
 	if (sort && sort.length > 0) {
-		sortEncoded = 'sort=' + encodeURIComponent(btoa(JSON.stringify(sort)));
+		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
 	}
-	if (filter) {
-		filterEncoded = 'filter=' + encodeURIComponent(btoa(JSON.stringify(filter)));
+	if (filter && Object.keys(filter).length > 0) {
+		encoded = { ...encoded, filter: encodeURIComponent(btoa(JSON.stringify(filter))) };
 	}
-	if (sortEncoded || filterEncoded) {
-		search = '?' + [sortEncoded, filterEncoded].join('&');
+	if (Object.keys(encoded).length > 0) {
+		search =
+			'?' +
+			Object.entries(encoded)
+				.map(([k, v]) => `${k}=${v}`)
+				.join('&');
 	}
 	return search;
 };
