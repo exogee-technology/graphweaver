@@ -2,9 +2,8 @@
 	display: grid;
 	grid-template-areas:
 		'nav header'
-		'nav content'
-		'footer footer';
-	grid-template-rows: 148px 1fr 80px;
+		'nav content';
+	grid-template-rows: 120px 1fr;
 	grid-template-columns: 300px 1fr;
 	grid-row-gap: 5px;
 	grid-column-gap: 10px;
@@ -16,7 +15,9 @@
 	grid-area: content;
 	display: flex;
 	flex-direction: column;
-	overflow-y: scroll;
+	/* overflow-y: scroll; */
+	overflow-y: auto;
+	/* margin-bottom: 5px; */
 }
 
 header {
