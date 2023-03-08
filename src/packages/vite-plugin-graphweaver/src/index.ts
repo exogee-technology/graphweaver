@@ -1,6 +1,6 @@
 import path from 'path';
 import { Plugin } from 'vite';
-import { loadDashboards } from './loaders';
+import { loadCustomPages } from './loaders';
 
 export interface ViteGraphweaverOptions {
 	configPath?: string;
@@ -20,7 +20,7 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 		? path.resolve(settings.configPath)
 		: defaultSettings.configPath;
 
-	const virtualModuleId = 'virtual:graphweaver-user-supplied-dashboards';
+	const virtualModuleId = 'virtual:graphweaver-user-supplied-custom-pages';
 	const resolvedVirtualModuleId = resolved(virtualModuleId);
 
 	let adminUiPath: string | null = null;
@@ -57,7 +57,7 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 			if (id === resolvedVirtualModuleId) {
 				if (!settings.configPath) throw new Error('Config path should be resolved by now.');
 
-				return await loadDashboards(settings.configPath);
+				return await loadCustomPages(settings.configPath);
 			}
 		},
 	};
