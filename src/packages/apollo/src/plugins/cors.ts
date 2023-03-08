@@ -15,6 +15,21 @@ export const Cors: ApolloServerPlugin = {
 						'X-Amz-Security-Token',
 						'X-Amz-User-Agent',
 						'Xsrf-Token',
+						'X-Auth-Redirect',
+					].join(',')
+				);
+
+				response.http?.headers.set(
+					'Access-Control-Expose-Headers',
+					[
+						// We need our auth headers to be accessible by the JS so we can store them.
+						// You also MUST use CSP headers to ensure that if XSS is accidentally possible, scripts
+						// injected on the page aren't allowed to run.
+						'Authorization',
+
+						// This is how the server tells the client that it needs to redirect to an OAuth provider to get
+						// a token or code.
+						'X-Auth-Redirect',
 					].join(',')
 				);
 
