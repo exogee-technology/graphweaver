@@ -4,13 +4,14 @@ import { logger } from '@exogee/logger';
 import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { AccountResolver, ProfitAndLossRowResolver, TenantResolver } from './schema';
-import { context } from './context';
+import { XeroAuthApolloPlugin } from '@exogee/graphweaver-xero';
 
 logger.info(`example-xero start Graphweaver`);
 const graphweaver = new Graphweaver({
 	resolvers: [AccountResolver, ProfitAndLossRowResolver, TenantResolver],
 	apolloServerOptions: {
 		introspection: process.env.IS_OFFLINE === 'true',
+		plugins: [XeroAuthApolloPlugin],
 	},
 	adminMetadata: { enabled: true },
 
@@ -19,4 +20,4 @@ const graphweaver = new Graphweaver({
 });
 logger.info(`example-xero graphweaver.server start`);
 
-exports.handler = startServerAndCreateLambdaHandler(graphweaver.server, { context });
+exports.handler = startServerAndCreateLambdaHandler(graphweaver.server);
