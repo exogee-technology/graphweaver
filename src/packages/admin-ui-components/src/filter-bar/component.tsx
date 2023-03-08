@@ -240,7 +240,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			{/* // @todo: move to :before pseudoselector */}
 			{iconBefore}
 			{...filters[entity]}
-			<Button handleClick={clearAllFilters}>Clear Filters</Button>
+			<Button onClick={clearAllFilters}>Clear Filters</Button>
 		</div>
 	);
 };

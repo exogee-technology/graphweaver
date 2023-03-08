@@ -20,27 +20,6 @@ import {
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { fetchList } from './graphql';
 
-type DataType = { id: string };
-interface DataState {
-	data: DataType[];
-	sortColumns: SortColumn[];
-	page: number;
-	loading: boolean;
-	error?: ApolloError;
-	allDataFetched: boolean;
-}
-
-type DataStateByEntity = Record<string, DataState>;
-
-const defaultEntityState = {
-	data: [],
-	sortColumns: [],
-	page: 1,
-	loading: false,
-	error: undefined,
-	allDataFetched: false,
-};
-
 export const ListToolBar = () => {
 	const { entity } = useParams();
 	const { entityByName } = useSchema();
