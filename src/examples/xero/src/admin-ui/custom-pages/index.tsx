@@ -1,9 +1,11 @@
 import { apolloClient, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
-import { TENANTS_QUERY } from './dashboards/graphql';
-import { XeroDashboard } from './dashboards/component';
-import { AllCompaniesDashboardLoader } from './dashboards/all-companies';
-import { SingleCompanyDashboardLoader } from './dashboards/single-company';
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
+import {
+	XeroDashboard,
+	TENANTS_QUERY,
+	AllCompaniesDashboardLoader,
+	SingleCompanyDashboardLoader,
+} from './dashboards';
 
 export const customPages = {
 	routes: () => [
