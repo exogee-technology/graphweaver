@@ -27,3 +27,15 @@
 	width: 16px;
 	height: 16px;
 }
+
+.button[type='reset'] {
+	background: rgba(237, 232, 242, 0.02);
+	border: none;
+	border-radius: 6px;
+	box-shadow: 0px 1px 3px rgba(9, 5, 16, 0.1);
+	color: var(--body-copy-color);
+}
+
+.button[type='reset']:hover {
+	background-color: rgba(237, 232, 242, 0.2);
+}

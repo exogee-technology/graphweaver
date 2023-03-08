@@ -9,3 +9,4 @@ export { ReactComponent as TableIcon } from './16-table.svg';
 export { ReactComponent as DatabaseIcon24 } from './24-database.svg';
 export { ReactComponent as DataSourcesIcon } from './64-data-sources.svg';
 export { ReactComponent as GraphweaverLogo } from './graphweaver-logo.svg';
+export { ReactComponent as ExitIcon } from './close-button-svgrepo-com.svg';

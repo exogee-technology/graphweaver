@@ -119,6 +119,11 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		XeroBackendProvider.resetXeroClient();
 	}
 
+	public static async refreshToken() {
+		const newToken = await XeroBackendProvider.xero.refreshToken();
+		return newToken;
+	}
+
 	protected async ensureAccessToken() {
 		if (!XeroBackendProvider.xero) XeroBackendProvider.resetXeroClient();
 		await XeroBackendProvider.xero.initialize();
@@ -183,9 +188,9 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 		try {
 			const result = await this.accessor.find({
-				xero,
-				// filter: xeroFilterFrom(filter),
+				xero: XeroBackendProvider.xero,
 				filter,
+				// rawFilter: filter,
 				order: xeroOrderFrom(pagination),
 				limit: xeroLimitFrom(pagination),
 				offset: xeroOffsetFrom(pagination),
