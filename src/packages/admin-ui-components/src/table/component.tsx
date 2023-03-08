@@ -61,13 +61,13 @@ export interface TableRowItem {
 }
 
 export interface RequestRefetchOptions {
-	sortColumns?: SortColumn[];
+	sortFields?: SortField[];
 }
 
 export interface TableProps<T extends TableRowItem> {
 	rows: T[];
 	requestRefetch: (options: RequestRefetchOptions) => void;
-	orderBy: SortColumn[];
+	orderBy: SortField[];
 	allDataFetched: boolean;
 }
 
@@ -77,7 +77,9 @@ export const Table = <T extends TableRowItem>({
 	orderBy = [],
 	allDataFetched,
 }: TableProps<T>) => {
-	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
+	const [sortColumns, setSortColumns] = useState<SortColumn[]>(
+		orderBy.map((f) => ({ columnKey: f.field, direction: f.direction }))
+	);
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
