@@ -92,11 +92,6 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 	protected static xero: XeroClient;
 
-	public static accessTokenProvider?: {
-		get: () => Promise<TokenSet | TokenSetParameters> | TokenSet | TokenSetParameters;
-		set: (newToken: TokenSet) => Promise<any>;
-	};
-
 	protected static resetXeroClient = () => {
 		const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
 		if (!XERO_CLIENT_ID) throw new Error('XERO_CLIENT_ID is required in environment');
@@ -114,46 +109,28 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 	public constructor(protected entityTypeName: string, protected accessor?: XeroDataAccessor<T>) {}
 
-	public static clearTokensAndProvider() {
-		delete this.accessTokenProvider;
+	public static clearTokens() {
 		XeroBackendProvider.resetXeroClient();
 	}
 
-	public static async refreshToken() {
-		const newToken = await XeroBackendProvider.xero.refreshToken();
-		return newToken;
+	public static setTokenSet(token: TokenSet) {
+		XeroBackendProvider.resetXeroClient();
+		XeroBackendProvider.xero.setTokenSet(token);
 	}
 
 	protected async ensureAccessToken() {
 		if (!XeroBackendProvider.xero) XeroBackendProvider.resetXeroClient();
 		await XeroBackendProvider.xero.initialize();
-		let tokenSet = XeroBackendProvider.xero.readTokenSet();
+		const tokenSet = XeroBackendProvider.xero.readTokenSet();
 
 		if (tokenSet.token_type !== 'Bearer') {
-			logger.trace('Access token type is not Bearer, setting token');
-
-			if (!XeroBackendProvider.accessTokenProvider)
-				throw new Error(
-					'You must set an access token provider on the XeroBackendProvider before accessing Xero.'
-				);
-
-			XeroBackendProvider.xero.setTokenSet(await XeroBackendProvider.accessTokenProvider.get());
-			tokenSet = XeroBackendProvider.xero.readTokenSet();
+			logger.trace('Access token type is not Bearer, rejecting request');
+			throw new Error('Error 1: Invalid token set');
 		}
 
 		if (tokenSet.expired()) {
-			logger.trace('Access token expired. Refreshing.');
-
-			if (!XeroBackendProvider.accessTokenProvider) {
-				throw new Error(
-					'You must have set an access token provider in order to refresh access tokens.'
-				);
-			}
-
-			await XeroBackendProvider.accessTokenProvider.set(
-				await XeroBackendProvider.xero.refreshToken()
-			);
-			logger.trace('Refresh complete.');
+			logger.trace('Access token is expired, rejecting request');
+			throw new Error('Error 2: Invalid token set');
 		}
 	}
 
