@@ -18,9 +18,16 @@ export interface DropdownItem {
 
 export interface DropdownProps extends Partial<ButtonProps> {
 	items: Array<DropdownItem> /** List of items in the dropdown */;
+	className?: string /** Make button look like textfield not button */;
+	defaultValue?: DropdownItem;
 }
 
-export const Dropdown = ({ items, children, ...props }: DropdownProps): JSX.Element => {
+export const Dropdown = ({
+	items,
+	children,
+	defaultValue,
+	...props
+}: DropdownProps): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	function handleOnClickItem(item: DropdownItem) {
@@ -63,7 +70,7 @@ export const Dropdown = ({ items, children, ...props }: DropdownProps): JSX.Elem
 			onClickOutside={handleOnClickOutside}
 			onClick={handleOnClickButton}
 		>
-			{children}
+			{defaultValue?.name ?? children}
 			<ul className={isOpen ? styles.dropdown : styles.hide}>{DropDownList}</ul>
 		</Button>
 	);

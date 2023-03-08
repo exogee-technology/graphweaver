@@ -26,4 +26,4 @@ export const fetchEntity = <T>(
 	entity: string,
 	entityByNameOrType: (entity: string) => Entity,
 	id?: string
-) => (id ? getEntity<T>(entityByNameOrType(entity), id) : undefined);
+) => (id ? getEntity<T>(entityByNameOrType(entity), id, entityByNameOrType) : undefined);
