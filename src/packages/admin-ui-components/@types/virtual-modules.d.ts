@@ -1,4 +1,4 @@
-declare module 'virtual:graphweaver-user-supplied-dashboards' {
+declare module 'virtual:graphweaver-user-supplied-custom-pages' {
 	import { RouteObject } from 'react-router-dom';
 
 	export interface NavLinkExport {
@@ -6,10 +6,10 @@ declare module 'virtual:graphweaver-user-supplied-dashboards' {
 		route: string;
 	}
 
-	export interface DashboardExport {
+	export interface CustomPagesExport {
 		routes: () => RouteObject[] | Promise<RouteObject[]>;
 		navLinks: () => NavLinkExport[] | Promise<NavLinkExport[]>;
 	}
 
-	export const dashboards: DashboardExport[];
+	export const customPages: CustomPagesExport;
 }
