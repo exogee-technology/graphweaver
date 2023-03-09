@@ -1,12 +1,46 @@
-.datePickerWrapper {
+.inputField {
+	text-transform: uppercase;
 	color: var(--body-copy-color);
 	background-color: var(--select-background);
 	border-color: var(--select-border-color);
 	border-radius: 6px;
-	box-sizing: border-box;
 	min-height: 38px;
+	padding-left: 5px;
 }
 
+.datePickerWrapper {
+	/* color: var(--body-copy-color);
+	background-color: var(--select-background);
+	border-color: var(--select-border-color);
+	border-radius: 6px;
+	min-height: 38px; */
+}
+
+:global .rdtPicker {
+	background-color: #100a1c;
+	border-color: var(--select-border-color);
+	border-radius: 6px;
+}
+
+:global .rdtPicker th {
+	border-bottom-color: var(--select-border-color);
+	border-bottom-width: 1px;
+}
+
+:global .rdtPicker td.rdtDay:hover,
+:global .rdtPicker thead tr:first-of-type th:hover,
+:global td.rdtMonth:hover,
+:global td.rdtYear:hover {
+	background-color: var(--select-hover-background);
+}
+
+:global .rdtPicker td.rdtActive {
+	background-color: var(--secondary-color);
+}
+
+:global .rdtPicker td.rdtToday:before {
+	border-bottom-color: var(--secondary-color);
+}
 /** 
  * These are all I could find to style the input field.
  * @see https://stackoverflow.com/questions/22909969/styling-inputtype-date-in-chrome

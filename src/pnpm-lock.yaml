@@ -313,6 +313,7 @@ importers:
       pluralize: 8.0.0
       react: 18.2.0
       react-data-grid: 7.0.0-beta.20
+      react-datetime: 3.2.0
       react-dom: 18.2.0
       react-router-dom: 6.4.3
       react-select: 5.7.0
@@ -329,6 +330,7 @@ importers:
       graphql: 16.6.0
       pluralize: 8.0.0
       react-data-grid: 7.0.0-beta.20_react-dom@18.2.0+react@18.2.0
+      react-datetime: 3.2.0_react@18.2.0
       react-select: 5.7.0_d66faa32af5d287aae1ce541d0cc1a18
     devDependencies:
       '@types/pluralize': 0.0.29
@@ -15477,6 +15479,16 @@ packages:
       clsx: 1.2.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
+    dev: false
+
+  /react-datetime/3.2.0_react@18.2.0:
+    resolution: {integrity: sha512-w5XdeNIGzBht9CadaZIJhKUhEcDTgH0XokKxGPCxeeJRYL7B3HIKA8CM6Q0xej2JFJt0n5d+zi3maMwaY3262A==}
+    peerDependencies:
+      moment: ^2.16.0
+      react: ^16.5.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:

@@ -1,6 +1,7 @@
 import { XeroClient } from 'xero-node';
 import { Sort } from '@exogee/graphweaver';
 import { XeroTenant } from './schema';
+import { logger } from '@exogee/logger';
 
 const PAGE_SIZE = 100;
 
@@ -87,15 +88,16 @@ export const inMemoryFilterFor = (filter: Record<string, any>) => (item: Record<
 					throw new Error(`Filter ${filterKey} not yet implemented.`);
 			}
 			// assume 'equals': filterKey == fieldName
-		} else if (
-			item[filterKey] === null &&
-			item[filterKey] === undefined &&
-			item[filterKey] !== filterValue
-		) {
-			return false;
+		} else {
+			if (
+				item[filterKey] === null ||
+				item[filterKey] === undefined ||
+				item[filterKey] !== filterValue
+			) {
+				return false;
+			}
 		}
 	}
-
 	return true;
 };
 
