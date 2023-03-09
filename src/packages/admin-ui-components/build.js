@@ -25,6 +25,8 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 
 			// Introduced by react-select
 			'@emotion/*',
+			// react-datetime
+			'react-datetime',
 		],
 		entryPoints: ['src/index.ts'],
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],

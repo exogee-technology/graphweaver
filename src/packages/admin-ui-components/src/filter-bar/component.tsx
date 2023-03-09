@@ -13,17 +13,19 @@ interface FilterState {
 	options: IndexedOptions;
 }
 
+const emptyFilterState: FilterState = { filter: {}, options: {} };
+
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
-	const [filterState, setFilterState] = useReducer(
-		(prev: FilterState, next: FilterState) => {
-			const newState = { ...prev, ...next };
-			return newState;
-		},
-		{ filter: {}, options: {} }
-	);
+
+	const datePickerRef = useRef<any>(null);
+
+	const [filterState, setFilterState] = useReducer((prev: FilterState, next: FilterState) => {
+		const newState = { ...prev, ...next };
+		return newState;
+	}, emptyFilterState);
 
 	const setFilterFromOptions = (options?: IndexedOptions) => {
 		const newState = { filter: {}, options: options ?? {} };
@@ -49,7 +51,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	// @todo: Maybe filterState options also need to be tagged by entity in case the same fieldnames recur across entities?
 	// otoh can share eg. tenantId settings
 	const tempSetAccountFilters = () => {
-		const { options } = filterState;
+		let { options } = filterState;
 		return [
 			<TextFilter
 				key={'code'}
@@ -92,6 +94,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onDateFilter}
 				selected={options['date']}
+				ref={datePickerRef}
 			/>,
 			<TextFilter
 				key={'description'}
@@ -232,7 +235,8 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	const clearAllFilters = () => {
-		setFilterFromOptions({});
+		setFilterState({ filter: {}, options: { date: { label: 'selectedDate', value: '' } } });
+		datePickerRef.current?.onClear();
 	};
 
 	return (
