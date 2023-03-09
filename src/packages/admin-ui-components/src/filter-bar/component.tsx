@@ -51,7 +51,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	// @todo: Maybe filterState options also need to be tagged by entity in case the same fieldnames recur across entities?
 	// otoh can share eg. tenantId settings
 	const tempSetAccountFilters = () => {
-		let { options } = filterState;
+		const { options } = filterState;
 		return [
 			<TextFilter
 				key={'code'}
