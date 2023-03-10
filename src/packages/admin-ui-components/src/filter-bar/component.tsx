@@ -20,8 +20,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
 
-	const datePickerRef = useRef<any>(null);
-
 	const [filterState, setFilterState] = useReducer((prev: FilterState, next: FilterState) => {
 		const newState = { ...prev, ...next };
 		return newState;
@@ -94,7 +92,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onDateFilter}
 				selected={options['date']}
-				ref={datePickerRef}
+				// ref={datePickerRef}
 			/>,
 			<TextFilter
 				key={'description'}
@@ -235,8 +233,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	const clearAllFilters = () => {
-		setFilterState({ filter: {}, options: { date: { label: 'selectedDate', value: '' } } });
-		datePickerRef.current?.onClear();
+		setFilterState(emptyFilterState);
 	};
 
 	return (
