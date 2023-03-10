@@ -2,7 +2,7 @@
 
 ## Getting Started with GraphWeaver
 
-You can create a new project with the __GraphWeaver CLI__, by running `npm init @exogee/graphweaver`.
+You can create a new project with the **GraphWeaver CLI**, by running `npm init @exogee/graphweaver`.
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 
@@ -10,25 +10,26 @@ The prompts will ask you which backends to install, and create a scaffold projec
 ❯ npm init @exogee/graphweaver
 GraphWeaver
 
-? What would your like to call your new project? 
+? What would your like to call your new project?
 test-project
 
-? Which GraphWeaver backends will you need? 
+? Which GraphWeaver backends will you need?
 MikroORM - PostgreSQL Backend
 REST Backend
 
-? OK, we're ready- I'm going to create a new app in /Users/helloworld/project- is that OK? 
+? OK, we're ready- I'm going to create a new app in /Users/helloworld/project- is that OK?
 Yes
 
 All Done!
 
 Make sure you npm install / yarn install / pnpm install, then run the start script to get started
-❯ 
+❯
 ```
 
 ## Examples
 
 ### examples/example-basic - `@exogee/graphweaver-example-basic`
+
 Stripped down example of using GraphWeaver with the MikroORM adapter.
 
 ```
@@ -46,6 +47,7 @@ cd src/apps/example-basic && pnpm start
 ```
 
 ### examples/example-complex - `@exogee/graphweaver-example-complex`
+
 A more complex example of using GraphWeaver with multiple adapters and relationships in serverless.
 
 ```
@@ -62,28 +64,66 @@ DATABASE_NAME=
 cd src/apps/example-complex && pnpm migrate && pnpm build && pnpm start
 ```
 
-
 ## Packages
 
 ### packages/core - `@exogee/graphweaver`
+
 GraphWeaver core package, includes `createBaseResolver` method that creates a resolver in combination with one of the backend packages:
 
 ```typescript
 @Resolver(() => UserGQLEntity)
 export class UserGQLResolver extends createBaseResolver(
-	UserGQLEntity,
-	new MikroBackendProvider(User)
+  UserGQLEntity,
+  new MikroBackendProvider(User)
 ) {}
 ```
 
 ### packages/apollo - `@exogee/graphweaver-apollo`
+
 Apollo support for graphweaver, includes various plugins.
 
 ### packages/mikroorm - `@exogee/graphweaver-mikroorm`
+
 MikroORM backend support for graphweaver
 
 ### packages/rest - `@exogee/graphweaver-rest`
+
 RESTful backend support for graphweaver
 
 ### packages/rls - `@exogee/graphweaver-rls`
+
 Row-level security support for graphweaver
+
+## Contributing
+
+### Publishing
+
+To publish the packages in the monorepo, first you need to assess the types of changes that occurred. Follow semver and run
+the appropriate command for `major`, `minor` or `patch` changes.
+
+```console
+$ pnpm version:bump patch
+```
+
+Now the versions are bumped, but packages that depend on each other are still referencing the old version. Run this command
+to update all the references across the monorepo.
+
+```console
+$ pnpm relink:deps
+```
+
+Now we're ready to publish. Run:
+
+```console
+$ pnpm publish:dry
+```
+
+This will show you what would be published if you went ahead and did one.
+
+If you're happy with these and want to publish these changes, run
+
+```console
+$ pnpm publish --otp [code from 2FA device]
+```
+
+You're done!
