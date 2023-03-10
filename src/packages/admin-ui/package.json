@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"type": "module",
 	"main": "src/main.tsx",
 	"types": "src/main.tsx",
@@ -12,7 +12,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
-		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.0",
+		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.1",
 		"classnames": "2.3.2",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
