@@ -2,15 +2,12 @@
 	"name": "@exogee/graphweaver-admin-ui",
 	"version": "0.1.0",
 	"type": "module",
-	"main": "lib/index.js",
-	"types": "lib/index.d.ts",
+	"main": "src/main.tsx",
+	"types": "src/main.tsx",
 	"scripts": {
-		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
-		"build:types": "tsc --noEmit false --emitDeclarationOnly --declaration --outDir lib",
+		"build:types": "tsc --noEmit",
 		"prettier": "prettier --write .",
 		"test:prettier": "prettier --check .",
-		"test:tsc": "tsc --noEmit",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
