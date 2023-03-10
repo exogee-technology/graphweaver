@@ -128,7 +128,8 @@ export const Table = <T extends TableRowItem>({
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	if (loading) {
+	// loading is not always around for long; check the row count as well, if zero, load the blob
+	if (loading || rows.length === 0) {
 		return <Loader />;
 	}
 	if (error) {
