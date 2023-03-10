@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,8 +21,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.0",
-		"@exogee/logger": "workspace:0.1.0",
+		"@exogee/graphweaver": "workspace:0.1.1",
+		"@exogee/logger": "workspace:0.1.1",
 		"apollo-server-core": "3.10.3",
 		"dataloader": "2.2.2",
 		"decimal.js": "10.3.1",
