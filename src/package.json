@@ -19,7 +19,7 @@
 		"database:rebuild-local": "dropdb graphweaver --if-exists && createdb graphweaver && pnpm migrate",
 		"start": "echo \"To start an example, cd examples/[the application you want] then run pnpm start\"",
 		"relink:deps": "pnpm update -r \"@exogee/*\" \"vite-plugin-graphweaver\"",
-		"version": "pnpm -r version"
+		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.49.0",
