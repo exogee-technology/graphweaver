@@ -144,7 +144,7 @@ export const Table = <T extends TableRowItem>({
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
 			/>
-			{!(isLoading || endOfSet || allDataFetched) && (
+			{isLoading && (
 				<div className={styles.spinner}>
 					<Spinner />
 				</div>
