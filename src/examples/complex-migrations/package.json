@@ -19,7 +19,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "0.1.0-alpha.5",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.0",
 		"@exogee/logger": "workspace:0.1.0",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/entity-generator": "5.4.2",
