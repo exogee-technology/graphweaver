@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.1",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -13,7 +13,8 @@
 		"test": "pnpm test:unit",
 		"test:unit": "jest --passWithNoTests",
 		"test:tsc": "tsc --noEmit",
-		"test:prettier": "prettier --check ."
+		"test:prettier": "prettier --check .",
+		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",

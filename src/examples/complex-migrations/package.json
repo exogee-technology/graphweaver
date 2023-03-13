@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-complex-migrations",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Database migrations for example-complex",
@@ -15,17 +15,18 @@
 	"scripts": {
 		"migration:run": "ts-node --transpile-only src/scripts/run-migrations.ts",
 		"start": "pnpm migration:run",
-		"test": "jest"
+		"test": "jest",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.6",
-		"@exogee/logger": "workspace:0.1.0-alpha.6",
-		"aws-sdk": "2.1069.0",
-		"color-convert": "2.0.1",
-		"dotenv": "16.0.0",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.1",
+		"@exogee/logger": "workspace:0.1.1",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/entity-generator": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.0",
+		"aws-sdk": "2.1069.0",
+		"color-convert": "2.0.1",
+		"dotenv": "16.0.0",
 		"pg": "8.5.1"
 	},
 	"devDependencies": {

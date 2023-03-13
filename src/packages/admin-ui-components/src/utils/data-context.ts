@@ -11,6 +11,7 @@ export interface DataState {
 	sortFields: SortField[];
 	page: number;
 	loading: boolean;
+	loadingNext: boolean;
 	error?: ApolloError;
 	allDataFetched: boolean;
 }
@@ -23,6 +24,7 @@ export const defaultEntityState = {
 	filterField: { filter: undefined },
 	page: 1,
 	loading: false,
+	loadingNext: false,
 	error: undefined,
 	allDataFetched: false,
 };
