@@ -1,21 +1,18 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"private": true,
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.1",
 	"type": "module",
-	"main": "lib/index.js",
-	"types": "lib/index.d.ts",
+	"main": "src/main.tsx",
+	"types": "src/main.tsx",
 	"scripts": {
-		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
-		"build:types": "tsc --noEmit false --emitDeclarationOnly --declaration --outDir lib",
+		"build:types": "tsc --noEmit",
 		"prettier": "prettier --write .",
 		"test:prettier": "prettier --check .",
-		"test:tsc": "tsc --noEmit"
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
-		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.0-alpha.6",
+		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.1",
 		"classnames": "2.3.2",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
