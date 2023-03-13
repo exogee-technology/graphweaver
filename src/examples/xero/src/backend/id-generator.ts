@@ -11,21 +11,15 @@ import * as crypto from 'crypto';
  */
 export class IdGenerator {
 	private static instance: IdGenerator;
-	private seed: string = 'Graphweaver fixed seed';
+	private readonly seed = 'Graphweaver fixed seed';
 	private strlen = 15;
-	private readonly rand: RandomSeed;
-
-	private constructor() {
-		this.rand = create(this.seed);
-	}
+	private readonly rand = create(this.seed);
 
 	public static init = (reinitialize?: boolean): IdGenerator => {
-		if (this.instance) {
-			if (reinitialize) {
-				this.instance = new this();
-			}
+		if (!this.instance || reinitialize) {
+			this.instance = new this();
 		}
-		return this.instance || (this.instance = new this());
+		return this.instance;
 	};
 
 	public static getId = () => aguid(this.instance.rand.string(this.instance.strlen));
@@ -39,15 +33,14 @@ const aguid = (str?: string): string => {
 		return uuid.v4(); // return node-uuid v4() uuid
 	} else {
 		// create a consistent (non-random!) UUID
-		var hash = crypto.createHash('sha256').update(str.toString()).digest('hex').substring(0, 36);
-		var chars = hash.split('');
+		const hash = crypto.createHash('sha256').update(str.toString()).digest('hex').substring(0, 36);
+		const chars = hash.split('');
 		chars[8] = '-';
 		chars[13] = '-';
 		chars[14] = '4';
 		chars[18] = '-';
 		chars[19] = '8';
 		chars[23] = '-';
-		hash = chars.join('');
-		return hash;
+		return chars.join('');
 	}
 };
