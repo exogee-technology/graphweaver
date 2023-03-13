@@ -17,6 +17,7 @@
 	flex-direction: column;
 	/* overflow-y: scroll; */
 	overflow-y: auto;
+	margin-left: 40px;
 	/* margin-bottom: 5px; */
 }
 

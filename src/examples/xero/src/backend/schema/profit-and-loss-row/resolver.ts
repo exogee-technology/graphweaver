@@ -4,13 +4,8 @@ import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
-import {
-	forEachTenant,
-	generateId,
-	inMemoryFilterFor,
-	offsetAndLimit,
-	orderedResult,
-} from '../../utils';
+import { forEachTenant, inMemoryFilterFor, offsetAndLimit, orderedResult } from '../../utils';
+import { IdGenerator } from '../../id-generator';
 
 const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 
@@ -18,6 +13,8 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
 
 	const results: ProfitAndLossRow[] = [];
+
+	IdGenerator.init(true);
 
 	for (const data of report.reports) {
 		// Find the date buckets from the header. These are used later when adding rows.
@@ -46,14 +43,7 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 
 						results.push(
 							ProfitAndLossRow.fromBackendEntity({
-								// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
-								id: generateId(
-									tenantId +
-										(accountAttribute?.value ?? '') +
-										(value.value || '') +
-										date.toString() +
-										(description.value || '')
-								),
+								id: IdGenerator.getId(),
 								tenantId,
 								accountId: accountAttribute?.value ?? null,
 								amount: parseFloat(value.value),
@@ -91,16 +81,18 @@ export class ProfitAndLossRowResolver extends createBaseResolver(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
 		find: async ({ xero, rawFilter, order, limit, offset }) => {
-			const result = await forEachTenant<ProfitAndLossRow>(
-				xero,
-				(tenant) => loadReportForTenant(xero, tenant.tenantId),
-				rawFilter
+			const result = await forEachTenant<ProfitAndLossRow>(xero, (tenant) =>
+				loadReportForTenant(xero, tenant.tenantId)
 			);
 
 			const sortFields = order ?? defaultSort;
 
 			// filter -> order -> limit/offset
-			return offsetAndLimit(orderedResult(result, sortFields), offset, limit);
+			return offsetAndLimit(
+				orderedResult(result.filter(inMemoryFilterFor(rawFilter)), sortFields),
+				offset,
+				limit
+			);
 		},
 	})
 ) {}
