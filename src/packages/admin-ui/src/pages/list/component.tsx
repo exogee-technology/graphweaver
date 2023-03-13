@@ -20,6 +20,7 @@ interface DataState {
 	sortColumns: SortColumn[];
 	page: number;
 	loading: boolean;
+	loadingNext: boolean;
 	error?: ApolloError;
 	allDataFetched: boolean;
 }
@@ -31,6 +32,7 @@ const defaultEntityState = {
 	sortColumns: [],
 	page: 1,
 	loading: false,
+	loadingNext: false,
 	error: undefined,
 	allDataFetched: false,
 };
@@ -104,7 +106,13 @@ export const List = () => {
 			lastRecordReturned = true;
 		}
 		const { loading, error } = result;
-		setDataState(entity, { data, allDataFetched: lastRecordReturned, loading, error });
+		setDataState(entity, {
+			data,
+			allDataFetched: lastRecordReturned,
+			loading,
+			loadingNext: false,
+			error,
+		});
 	}, [entity, entityState[entity]?.sortColumns, entityState[entity]?.page]);
 
 	useEffect(() => {
@@ -112,7 +120,7 @@ export const List = () => {
 			columnKey: field[0],
 			direction: field[1].toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
 		}));
-		// TODO: This will always cause a refetch even if search unchanged as data is cleared
+		// This will always cause a refetch even if search unchanged as data is cleared
 		resetDataState(entity, { sortColumns });
 	}, [search]);
 
@@ -127,23 +135,22 @@ export const List = () => {
 	};
 
 	// TODO: Get warning in here that navigate should be in a useEffect
+	// Makes no sense, this is triggered by a user event
 	const requestSort = (state: Partial<DataState>) => {
 		navigate(routeFor({ entity, sort: state.sortColumns }));
 	};
 
-	// Increment page only; leave the rest
+	// Increment page only; leave the rest, set signal to table to show 'Loading' indicator.
+	// Do not trigger navigation
 	const incrementPage = () => {
-		setDataState(entity, { page: (entityState[entity]?.page ?? defaultEntityState.page) + 1 });
+		setDataState(entity, {
+			loadingNext: true,
+			page: (entityState[entity]?.page ?? defaultEntityState.page) + 1,
+		});
 	};
 
-	const { loading, error, data, sortColumns, allDataFetched } =
+	const { loading, loadingNext, error, data, sortColumns, allDataFetched } =
 		entityState[entity] ?? defaultEntityState;
-	if (loading) {
-		return <pre>Loading...</pre>;
-	}
-	if (error) {
-		return <pre>{`Error! ${error.message}`}</pre>;
-	}
 
 	return (
 		<>
@@ -152,6 +159,9 @@ export const List = () => {
 				orderBy={sortColumns}
 				requestRefetch={requestRefetch}
 				allDataFetched={allDataFetched}
+				loading={loading}
+				loadingNext={loadingNext}
+				error={error}
 			/>
 			<DetailPanel />
 		</>

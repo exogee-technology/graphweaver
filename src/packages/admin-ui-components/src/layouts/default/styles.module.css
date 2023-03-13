@@ -15,9 +15,8 @@
 	grid-area: content;
 	display: flex;
 	flex-direction: column;
-	/* overflow-y: scroll; */
 	overflow-y: auto;
-	/* margin-bottom: 5px; */
+	margin-left: 40px;
 }
 
 header {
@@ -26,8 +25,4 @@ header {
 
 nav {
 	grid-area: nav;
-}
-
-footer {
-	grid-area: footer;
 }
