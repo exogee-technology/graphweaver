@@ -23,37 +23,44 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 	try {
 		// Are there any custom additional functions we need to build?
 		// If so, merge them in.
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const { backend } = require(path.join(process.cwd(), 'graphweaver-config'));
 
 		const functions: AdditionalFunctionConfig[] = [
 			{
 				handlerPath: './src/backend/index',
+				urlPath: '/graphql/v1',
+				method: 'POST',
 			},
-			...backend.additionalFunctions,
 		];
 
-		if (Array.isArray(backend.additionalFunctions)) {
-			for (const backendFunction of functions) {
-				// TODO: Better validation
-				if (backendFunction.handlerPath) {
-					console.log(
-						` - Building ${backendFunction.handlerPath} => ${path.relative(
-							process.cwd(),
-							buildOutputPathFor(backendFunction.handlerPath)
-						)}.js`
-					);
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const { backend } = require(path.join(process.cwd(), 'graphweaver-config'));
+			functions.push(...backend.additionalFunctions);
 
-					await build({
-						...baseEsbuildConfig,
+			if (Array.isArray(backend.additionalFunctions)) {
+				for (const backendFunction of functions) {
+					// TODO: Better validation
+					if (backendFunction.handlerPath) {
+						console.log(
+							` - Building ${backendFunction.handlerPath} => ${path.relative(
+								process.cwd(),
+								buildOutputPathFor(backendFunction.handlerPath)
+							)}.js`
+						);
 
-						plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
+						await build({
+							...baseEsbuildConfig,
 
-						entryPoints: [inputPathFor(backendFunction.handlerPath)],
-						outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
-					});
+							plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
+
+							entryPoints: [inputPathFor(backendFunction.handlerPath)],
+							outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
+						});
+					}
 				}
 			}
+		} catch (error) {
+			// It's perfectly fine if they don't have a graphweaver-config file, we just don't have anything to add.
 		}
 	} catch (error) {
 		console.error(error);
