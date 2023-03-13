@@ -1,13 +1,14 @@
 {
 	"name": "@exogee/graphweaver-example-complex",
-	"version": "0.1.0-alpha.6",
+	"version": "0.1.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Complex example of using @exogee/graphweaver",
 	"scripts": {
 		"build": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"prettier": "prettier --write src/**/*.ts",
-		"test": "jest"
+		"test": "jest",
+		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
@@ -18,13 +19,14 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver-scalars": "workspace:0.1.0-alpha.6",
-		"@exogee/graphweaver": "workspace:0.1.0-alpha.6",
-		"@exogee/graphweaver-apollo": "workspace:0.1.0-alpha.6",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.0-alpha.6",
-		"@exogee/graphweaver-rest": "workspace:0.1.0-alpha.6",
-		"@exogee/graphweaver-rls": "workspace:0.1.0-alpha.6",
-		"@exogee/logger": "workspace:0.1.0-alpha.6",
+		"@as-integrations/aws-lambda": "1.0.1",
+		"@exogee/graphweaver": "workspace:0.1.1",
+		"@exogee/graphweaver-apollo": "workspace:0.1.1",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.1",
+		"@exogee/graphweaver-rest": "workspace:0.1.1",
+		"@exogee/graphweaver-rls": "workspace:0.1.1",
+		"@exogee/graphweaver-scalars": "workspace:0.1.1",
+		"@exogee/logger": "workspace:0.1.1",
 		"@mikro-orm/core": "5.4.2",
 		"async-mutex": "0.3.1",
 		"aws-jwt-verify": "3.1.0",
@@ -48,8 +50,7 @@
 		"type-graphql": "2.0.0-beta.1",
 		"uid-safe": "2.1.5",
 		"uuid": "8.3.2",
-		"web-push": "3.4.5",
-		"@as-integrations/aws-lambda": "^1.0.1"
+		"web-push": "3.4.5"
 	},
 	"devDependencies": {
 		"@graphql-codegen/cli": "1.19.4",
