@@ -9,6 +9,8 @@ import 'react-data-grid/lib/styles.css';
 // These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
 import './table-styles.css';
 import styles from './styles.module.css';
+import { Loader } from '../loader';
+import { ApolloError } from '@apollo/client';
 
 const columnsForEntity = <T extends { id: string }>(
 	entity: Entity,
@@ -69,6 +71,9 @@ export interface TableProps<T extends TableRowItem> {
 	requestRefetch: (options: RequestRefetchOptions) => void;
 	orderBy: SortColumn[];
 	allDataFetched: boolean;
+	loading: boolean;
+	loadingNext: boolean;
+	error?: ApolloError;
 }
 
 export const Table = <T extends TableRowItem>({
@@ -76,6 +81,9 @@ export const Table = <T extends TableRowItem>({
 	requestRefetch,
 	orderBy = [],
 	allDataFetched,
+	loading,
+	loadingNext = false,
+	error,
 }: TableProps<T>) => {
 	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
 	const navigate = useNavigate();
@@ -84,32 +92,22 @@ export const Table = <T extends TableRowItem>({
 	const { selectedEntity } = useSelectedEntity();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
-	const [isLoading, setLoading] = useState(false);
-	const [endOfSet, setEndOfSet] = useState(false);
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
-		// Return true when the scrollTop reaches 10 over the bottom ...
+		// Return true when the scrollTop reaches the bottom ...
 		const { currentTarget } = event;
 		const target = currentTarget as Element;
-		const approachingEndOfSet =
-			target.scrollTop + 10 >= currentTarget.scrollHeight - currentTarget.clientHeight;
-		setEndOfSet(approachingEndOfSet);
-		return approachingEndOfSet;
+		const atEndOfSet = target.scrollTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
+		return atEndOfSet;
 	};
 
 	const handleScroll: UIEventHandler<HTMLDivElement> = async (event: React.UIEvent) => {
 		// Do nothing if we aren't at the last row, or if we're currently loading...
 		// Also do nothing if EOF detected (no more rows to load)
-		if (isLoading || !scrolledToEnd(event) || allDataFetched) {
+		if (loadingNext || !scrolledToEnd(event) || allDataFetched) {
 			return;
 		}
-
-		// TODO: Does not prevent a race condition. All this call does is trigger a reload, but really we want
-		// TODO: the reload itself to complete before setting loading to false
-		setLoading(true);
 		requestRefetch({});
-		// TODO: So...
-		setTimeout(() => setLoading(false), 500);
 	};
 
 	const handleSort = () => {
@@ -130,6 +128,15 @@ export const Table = <T extends TableRowItem>({
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
+	// loading is not always around for long; check the row count as well, if zero, load the blob
+	// - Check allDataFetched in case there are zero rows or all returned already
+	if (loading || (!allDataFetched && rows.length === 0)) {
+		return <Loader />;
+	}
+	if (error) {
+		return <pre>{`Error! ${error.message}`}</pre>;
+	}
+
 	return (
 		<>
 			<DataGrid
@@ -144,7 +151,7 @@ export const Table = <T extends TableRowItem>({
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
 			/>
-			{isLoading && (
+			{loadingNext && (
 				<div className={styles.spinner}>
 					<Spinner />
 				</div>
