@@ -304,7 +304,9 @@ importers:
       '@emotion/styled': 11.10.5
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
+      '@types/react-date-range': 1.4.4
       classnames: 2.3.2
+      date-fns: 2.29.3
       esbuild: 0.15.5
       esbuild-css-modules-plugin: 2.7.1
       esbuild-plugin-svgr: 1.0.1
@@ -314,6 +316,7 @@ importers:
       pluralize: 8.0.0
       react: 18.2.0
       react-data-grid: 7.0.0-beta.20
+      react-date-range: 1.4.0
       react-datetime: 3.2.0
       react-dom: 18.2.0
       react-router-dom: 6.4.3
@@ -327,16 +330,19 @@ importers:
       '@emotion/react': 11.10.5_281bd807203c2775b3a3c90b05c2fd40
       '@emotion/styled': 11.10.5_74c491954720260b1e86f16cafac796a
       classnames: 2.3.2
+      date-fns: 2.29.3
       formik: 2.2.9_react@18.2.0
       graphql: 16.6.0
       moment: 2.29.4
       pluralize: 8.0.0
       react-data-grid: 7.0.0-beta.20_react-dom@18.2.0+react@18.2.0
+      react-date-range: 1.4.0_date-fns@2.29.3+react@18.2.0
       react-datetime: 3.2.0_moment@2.29.4+react@18.2.0
       react-select: 5.7.0_d66faa32af5d287aae1ce541d0cc1a18
     devDependencies:
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
+      '@types/react-date-range': 1.4.4
       esbuild: 0.15.5
       esbuild-css-modules-plugin: 2.7.1_esbuild@0.15.5
       esbuild-plugin-svgr: 1.0.1
@@ -5953,6 +5959,13 @@ packages:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
     dev: false
 
+  /@types/react-date-range/1.4.4:
+    resolution: {integrity: sha512-9Y9NyNgaCsEVN/+O4HKuxzPbVjRVBGdOKRxMDcsTRWVG62lpYgnxefNckTXDWup8FvczoqPW0+ESZR6R1yymDg==}
+    dependencies:
+      '@types/react': 18.0.25
+      date-fns: 2.29.3
+    dev: true
+
   /@types/react-dom/18.0.9:
     resolution: {integrity: sha512-qnVvHxASt/H7i+XG1U1xMiY5t+IHcPGUK7TDMDzom08xa7e86eCeKOiLZezwCKVxJn6NEiiy2ekgX8aQssjIKg==}
     dependencies:
@@ -8241,6 +8254,10 @@ packages:
   /date-fns/1.30.1:
     resolution: {integrity: sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==}
     dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
 
   /dayjs/1.11.7:
     resolution: {integrity: sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==}
@@ -15497,6 +15514,20 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
+  /react-date-range/1.4.0_date-fns@2.29.3+react@18.2.0:
+    resolution: {integrity: sha512-+9t0HyClbCqw1IhYbpWecjsiaftCeRN5cdhsi9v06YdimwyMR2yYHWcgVn3URwtN/txhqKpEZB6UX1fHpvK76w==}
+    peerDependencies:
+      date-fns: 2.0.0-alpha.7 || >=2.0.0
+      react: ^0.14 || ^15.0.0-rc || >=15.0
+    dependencies:
+      classnames: 2.3.2
+      date-fns: 2.29.3
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-list: 0.8.17_react@18.2.0
+      shallow-equal: 1.2.1
+    dev: false
+
   /react-datetime/3.2.0_moment@2.29.4+react@18.2.0:
     resolution: {integrity: sha512-w5XdeNIGzBht9CadaZIJhKUhEcDTgH0XokKxGPCxeeJRYL7B3HIKA8CM6Q0xej2JFJt0n5d+zi3maMwaY3262A==}
     peerDependencies:
@@ -15535,6 +15566,15 @@ packages:
 
   /react-lifecycles-compat/3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
+    dev: false
+
+  /react-list/0.8.17_react@18.2.0:
+    resolution: {integrity: sha512-pgmzGi0G5uGrdHzMhgO7KR1wx5ZXVvI3SsJUmkblSAKtewIhMwbQiMuQiTE83ozo04BQJbe0r3WIWzSO0dR1xg==}
+    peerDependencies:
+      react: 0.14 || 15 - 18
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
     dev: false
 
   /react-modal/3.16.1_react-dom@18.2.0+react@18.2.0:
@@ -16396,6 +16436,10 @@ packages:
     dependencies:
       kind-of: 6.0.3
     dev: true
+
+  /shallow-equal/1.2.1:
+    resolution: {integrity: sha512-S4vJDjHHMBaiZuT9NPb616CSmLf618jawtv3sufLl6ivK8WocjAo58cXwbRV1cgqxH0Qbv+iUt6m05eqEa2IRA==}
+    dev: false
 
   /shebang-command/1.2.0:
     resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}

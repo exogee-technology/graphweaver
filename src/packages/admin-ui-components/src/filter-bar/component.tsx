@@ -1,7 +1,7 @@
-import { ReactNode, useEffect, useReducer, useRef } from 'react';
+import { ReactNode, useEffect, useReducer } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button, decodeSearchParams, Filter, routeFor, SelectOption } from '..';
-import { DateFilter, EnumFilter, RelationshipFilter, TextFilter } from '../filters';
+import { DateRangeFilter, EnumFilter, RelationshipFilter, TextFilter } from '../filters';
 
 import styles from './styles.module.css';
 
@@ -85,13 +85,15 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const tempSetPAndLFilters = () => {
 		const { options } = filterState;
+		const fieldName = 'date';
 		return [
-			<DateFilter
-				key={'date'}
-				fieldName={'date'}
+			<DateRangeFilter
+				key={fieldName}
+				fieldName={fieldName}
 				entity={entity}
-				onSelect={onDateFilter}
-				selected={options['date']}
+				onSelect={onDateRangeFilter}
+				selectedStart={options[fieldName]}
+				selectedEnd={options[`${fieldName}To`]}
 				// ref={datePickerRef}
 			/>,
 			<TextFilter
@@ -152,7 +154,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			// Clear all other filters
 			Object.keys(newOptions).forEach((name) => {
 				if (name !== fieldName) {
-					newOptions[name] = undefined;
+					delete newOptions[name];
 				}
 			});
 		}
@@ -170,7 +172,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// Setting date filter; first clear all other filters
 		Object.keys(newOptions).forEach((name) => {
 			if (name !== fieldName) {
-				newOptions[name] = undefined;
+				delete newOptions[name];
 			}
 		});
 		// Then set date filter
@@ -188,6 +190,75 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			startDate.setUTCHours(0, 0, 0, 0);
 			const startDateTimeIso = startDate.toISOString();
 			const endDateIso = new Date(startDate.setDate(startDate.getDate() + 1));
+			const endDateTimeIso = endDateIso.toISOString();
+			const newFilter: Filter = {
+				filter: {
+					kind: '_and',
+					and: [
+						{
+							kind: '_gte',
+							field: fieldName,
+							value: startDateTimeIso,
+						},
+						{
+							kind: '_lt',
+							field: fieldName,
+							value: endDateTimeIso,
+						},
+					],
+				},
+			};
+			return setFilterState({ filter: newFilter, options: newOptions });
+		}
+		// Dunno what's going on, just update options.
+		return setFilterState({ ...filterState, options: newOptions });
+	};
+
+	const onDateRangeFilter = (
+		fieldName: string,
+		startDate?: SelectOption,
+		endDate?: SelectOption
+	) => {
+		// @todo: multiple filters working together
+		const newOptions: IndexedOptions = {
+			...filterState.options,
+			[fieldName]: startDate,
+		};
+		if (startDate === undefined) {
+			delete newOptions[`${fieldName}To`];
+			return setFilterFromOptions(newOptions);
+		}
+		if (endDate) {
+			newOptions[`${fieldName}To`] = endDate;
+		}
+
+		// Setting date filter; first clear all other filters
+		Object.keys(newOptions).forEach((name) => {
+			if (name !== fieldName && name !== `${fieldName}To`) {
+				delete newOptions[name];
+			}
+			if (!endDate) {
+				delete newOptions[`${fieldName}To`];
+			}
+		});
+		// Then set date filter
+		// @todo: The default date format returned is 'YYYY-MM-DD', but in future we want to handle this.
+		//
+		// If we are passed only a single date, use 24-hour period and filter on that.
+		// Assume filter is 'equals field = value', truncate the datetime, compute the next day,
+		// then set up an '_and [ _gte, _lt ]' filter
+		//
+		// Otherwise, use both dates.
+		const start = new Date(startDate.value);
+		const end = endDate ? new Date(endDate.value) : undefined;
+		if (start.valueOf()) {
+			// Xero: These are UTC dates
+			start.setUTCHours(0, 0, 0, 0);
+			const startDateTimeIso = start.toISOString();
+			if (end && end.valueOf()) {
+				end.setUTCHours(0, 0, 0, 0);
+			}
+			const endDateIso = end && end.valueOf() ? end : new Date(start.setDate(start.getDate() + 1));
 			const endDateTimeIso = endDateIso.toISOString();
 			const newFilter: Filter = {
 				filter: {
