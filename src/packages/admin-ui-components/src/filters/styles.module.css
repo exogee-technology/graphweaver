@@ -1,92 +1,33 @@
+/** ===== [ react-date-time ] ===== */
+
+.dateRangeSelector {
+	display: flex;
+	flex-direction: row;
+	color: var(--body-copy-color);
+	border: 1px solid var(--select-border-color);
+	border-radius: 6px;
+}
+
+.dateRangeSelector:hover {
+	border-color: hsl(0, 0%, 70%);
+}
+
 .inputField {
 	text-transform: uppercase;
-	/* color: var(--body-copy-color); */
 	color: hsl(0, 0%, 50%);
 	font-size: 100%;
 	background-color: var(--select-background);
-	/* border: 1px solid var(--select-border-color);
-	border-radius: 6px 0px 0px 6px; */
 	border: none;
 	min-height: 36px;
+	padding-top: 8px;
 	padding-left: 10px;
 }
 
 .inputFieldActive {
 	background-color: var(--primary-color);
 	color: var(--body-copy-color);
-}
-
-.datePickerWrapper {
-	display: flex;
-	flex-direction: row-reverse;
-	color: var(--body-copy-color);
-	/* background-color: var(--select-background); */
-	border: 1px solid var(--select-border-color);
-	border-radius: 6px;
-}
-
-.datePickerWrapper:hover {
-	border-color: hsl(0, 0%, 70%);
-}
-
-:global .rdtPicker {
-	background-color: #100a1c;
-	border-color: var(--select-border-color);
-	border-radius: 6px;
-}
-
-:global .rdtPicker th {
-	border-bottom-color: var(--select-border-color);
-	border-bottom-width: 1px;
-}
-
-:global .rdtPicker td.rdtDay:hover,
-:global .rdtPicker thead tr:first-of-type th:hover,
-:global td.rdtMonth:hover,
-:global td.rdtYear:hover {
-	background-color: var(--select-hover-background);
-}
-
-:global .rdtPicker td.rdtActive {
-	background-color: var(--secondary-color);
-}
-
-:global .rdtPicker td.rdtToday:before {
-	border-bottom-color: var(--secondary-color);
-}
-
-.closeIconContainer {
-	width: 32px;
-	background-color: var(--select-background);
-	color: var(--primary-color);
-	position: relative;
-	cursor: pointer;
-	padding: 6px;
-	/* border: 1px solid var(--select-border-color);
-	border-radius: 0px 6px 6px 0px; */
-}
-
-.closeIconSeparator {
-	align-self: stretch;
-	width: 1px;
-	background-color: var(--select-border-color);
-	margin-bottom: 8px;
-	margin-top: 8px;
-	box-sizing: border-box;
-}
-
-.closeIcon {
-	display: inline-block;
-	fill: currentColor;
-	line-height: 1;
-	stroke: currentColor;
-	stroke-width: 5px;
-	width: 20px;
-	padding: 5px;
-}
-
-.closeIcon:hover {
-	background-color: rgba(237, 232, 242, 0.2);
+	border-radius: 6px 0px 0px 6px;
+	padding-right: 10px;
 }
 
 .indicatorSeparator {
@@ -112,43 +53,120 @@
 	flex-shrink: 0;
 }
 
-/** 
- * These are all I could find to style the input field.
- * @see https://stackoverflow.com/questions/22909969/styling-inputtype-date-in-chrome
- * and  https://stackoverflow.com/questions/14946091/are-there-any-style-options-for-the-html5-date-picker
- * Not using var() colours because suspect they are not available, but
- * having said that these aren't working too well either
- */
-::-webkit-datetime-edit {
-	vertical-align: middle;
+.closeIconContainer {
+	width: 32px;
+	background-color: var(--select-background);
+	color: var(--primary-color);
+	position: relative;
+	cursor: pointer;
+	padding: 6px;
+}
+
+.closeIconSeparator {
+	align-self: stretch;
+	width: 1px;
+	background-color: var(--select-border-color);
+	margin-bottom: 8px;
+	margin-top: 8px;
+	box-sizing: border-box;
+}
+
+.closeIcon {
+	display: inline-block;
+	fill: currentColor;
+	line-height: 1;
+	stroke: currentColor;
+	stroke-width: 5px;
+	width: 20px;
 	padding: 5px;
 }
-::-webkit-datetime-edit-fields-wrapper {
-	color: #ede8f2;
-	background-color: #100a1c;
+
+.closeIcon:hover {
+	background-color: rgba(237, 232, 242, 0.2);
 }
-::-webkit-datetime-edit-text {
-	color: #ede8f2;
-	background: #100a1c;
-	padding: 0 0.3em;
+
+.dateRangeWrapper {
+	z-index: 2;
 }
-::-webkit-datetime-edit-month-field {
-	color: #ede8f2;
-	background: #100a1c;
+
+.calendarButtons {
+	display: flex;
+	flex-direction: row;
+	background-color: var(--body-bg-color);
+	gap: 8px;
+	padding: 8px;
 }
-::-webkit-datetime-edit-day-field {
-	color: #ede8f2;
-	background: #100a1c;
+
+.clearButton[type='reset'] {
+	border-color: var(--select-border-color);
+	border-radius: 6px;
+	border-style: solid;
+	border-width: 1px;
+	background-color: rgba(237, 232, 242, 0.2);
 }
-::-webkit-datetime-edit-year-field {
-	color: #ede8f2;
-	background: #100a1c;
+
+.clearButton[type='reset']:hover {
+	border-color: hsl(0, 0%, 70%);
 }
-::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-	/* display: none; */
+
+/* For the following, Use classNames prop of same name. See definition of ClassNames in react-date-range */
+
+.dateDisplayItem input {
+	text-transform: uppercase;
+	text-align: left;
 }
-::-webkit-calendar-picker-indicator {
-	background: #ede8f2;
+
+.dateDisplayItem {
+	text-transform: uppercase;
+	color: hsl(0, 0%, 50%);
+	font-size: 100%;
+	background-color: var(--select-background);
+	min-height: 36px;
+	padding-left: 10px;
+}
+
+.dateDisplayWrapper {
+	color: hsl(0, 0%, 50%);
+	font-size: 100%;
+	background-color: var(--select-background);
+	max-height: 38px;
+}
+
+.dateDisplay {
+	margin: 0px 8px;
+}
+
+.calendarWrapper {
+	color: hsl(0, 0%, 50%);
+	font-size: 100%;
+	background-color: var(--body-bg-color);
+}
+
+.monthAndYearPickers select {
+	border-color: var(--select-border-color);
+	border-radius: 6px;
+	border-style: solid;
+	border-width: 1px;
+	/* background-color: rgba(237, 232, 242, 0.2); */
+	color: var(--body-copy-color);
+}
+
+.monthAndYearPickers select:hover {
+	border-color: hsl(0, 0%, 70%);
+}
+
+.dayNumber span {
+	color: var(--body-copy-color);
+}
+
+.dayPassive > .dayNumber span {
+	color: #1d2429;
+}
+
+.dayToday > .dayNumber span::after {
+	background: var(--primary-color);
+}
+
+.dayHovered {
+	border-color: var(--primary-color);
 }
