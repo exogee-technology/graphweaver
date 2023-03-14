@@ -27,6 +27,8 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 			'@emotion/*',
 			// react-datetime
 			'react-datetime',
+			// react-date-range
+			'react-date-range',
 		],
 		entryPoints: ['src/index.ts'],
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],

@@ -3,7 +3,7 @@ import Datetime from 'react-datetime';
 import moment, { Moment } from 'moment';
 import { Button, ExitIcon, SelectOption } from '..';
 
-import styles from './styles.module.css';
+import styles from './date-time-filter.module.css';
 import './styles.module.css';
 
 import 'react-datetime/css/react-datetime.css';
@@ -56,8 +56,7 @@ export const DateFilter = React.forwardRef(
 					// @todo: true=locale, false=disabled (datepicker only)
 					timeFormat={false}
 					input={true}
-					// This has to be set TRUE if the dates being displayed are UTC, otherwise the
-					// filter makes no sense
+					// Turn this off after testing complete; see ID-2934 AC (3)
 					utc={true}
 					// Receives moment object (valid) or string (invalid)
 					onChange={handleChange}

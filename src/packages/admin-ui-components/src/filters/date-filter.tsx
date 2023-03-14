@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { SelectOption } from '..';
 
-import styles from './styles.module.css';
+import styles from './date-filter.module.css';
 import './styles.module.css';
 
 // TODO: There's no way to insert a placeholder, without coding an overlay or something
