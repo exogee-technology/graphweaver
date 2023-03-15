@@ -48,25 +48,25 @@ interface FieldLike {
 interface FieldGreaterThan {
 	kind: '_gt';
 	field: string;
-	value: string;
+	value: string | number;
 }
 
 interface FieldLessThan {
 	kind: '_lt';
 	field: string;
-	value: string;
+	value: string | number;
 }
 
 interface FieldGreaterThanOrEqualTo {
 	kind: '_gte';
 	field: string;
-	value: string;
+	value: string | number;
 }
 
 interface FieldLessThanOrEqualTo {
 	kind: '_lte';
 	field: string;
-	value: string;
+	value: string | number;
 }
 
 interface FieldAnd {

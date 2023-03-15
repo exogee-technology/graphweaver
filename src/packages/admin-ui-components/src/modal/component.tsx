@@ -7,7 +7,7 @@ import styles from './styles.module.css';
 export interface ModalProps {
 	isOpen: boolean;
 	onRequestClose?: () => void;
-	className: string;
+	className?: string;
 	title: string | React.ReactElement;
 	modalContent?: React.ReactElement;
 	footerContent?: React.ReactElement;
@@ -15,6 +15,7 @@ export interface ModalProps {
 	fullScreen?: boolean;
 	shouldCloseOnOverlayClick?: boolean;
 	shouldCloseOnEsc?: boolean;
+	overlay?: boolean;
 }
 
 export const Modal = ({
@@ -28,6 +29,7 @@ export const Modal = ({
 	fullScreen,
 	shouldCloseOnOverlayClick = false,
 	shouldCloseOnEsc = false,
+	overlay = true,
 }: ModalProps) => {
 	const modalRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +67,7 @@ export const Modal = ({
 	return (
 		<>
 			{isOpen && (
-				<div className={styles.overlay}>
+				<div className={classNames(overlay ? styles.overlay : styles.noOverlay)}>
 					<div
 						ref={modalRef}
 						className={classNames(className || [styles.wrapper, fullScreen && styles.fullScreen])}
