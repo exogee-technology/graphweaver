@@ -47,9 +47,9 @@ const xeroFilterFrom = (filter: any) => {
 			if (key.endsWith('_gt')) {
 				chunks.push(`${replacedKey}>${subFilter}`);
 			} else if (key.endsWith('_gte')) {
-				chunks.push(`${replacedKey}<=${subFilter}`);
+				chunks.push(`${replacedKey}>=${subFilter}`);
 			} else if (key.endsWith('_lt')) {
-				chunks.push(`${replacedKey}<${subFilter}`);
+				chunks.push(`${replacedKey} < ${subFilter}`);
 			} else if (key.endsWith('_lte')) {
 				chunks.push(`${replacedKey}<=${subFilter}`);
 			} else {

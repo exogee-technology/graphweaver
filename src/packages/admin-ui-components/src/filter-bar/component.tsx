@@ -1,11 +1,18 @@
 import { ReactNode, useEffect, useReducer } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Button, decodeSearchParams, Filter, routeFor, SelectOption } from '..';
-import { DateRangeFilter, EnumFilter, RelationshipFilter, TextFilter } from '../filters';
+import { Button } from '../button';
+import { decodeSearchParams, FieldPredicate, Filter, isNumeric, routeFor } from '../utils';
+import { SelectOption } from '../select';
+import {
+	DateRangeFilter,
+	EnumFilter,
+	NumericFilter,
+	RelationshipFilter,
+	TextFilter,
+} from '../filters';
 
 import styles from './styles.module.css';
 
-type IndexedRefs = Record<string, any>;
 type IndexedOptions = Record<string, any>;
 
 interface FilterState {
@@ -85,15 +92,15 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const tempSetPAndLFilters = () => {
 		const { options } = filterState;
-		const fieldName = 'date';
+		const dateFieldName = 'date';
+		const amountFieldName = 'amount';
 		return [
 			<DateRangeFilter
-				key={fieldName}
-				fieldName={fieldName}
-				entity={entity}
+				key={dateFieldName}
+				fieldName={dateFieldName}
 				onSelect={onDateRangeFilter}
-				selectedStart={options[fieldName]}
-				selectedEnd={options[`${fieldName}To`]}
+				selectedStart={options[dateFieldName]}
+				selectedEnd={options[`${dateFieldName}To`]}
 				// ref={datePickerRef}
 			/>,
 			<TextFilter
@@ -103,10 +110,12 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				onSelect={onFilter}
 				selected={options['description']}
 			/>,
-			// @todo: 'amount' filter on numbers range
-
-			// @todo: Handle null accountId; currently this filter will not exclude null account IDs
-			// @todo: (backend problem)
+			<NumericFilter
+				key={'amount'}
+				fieldName={'amount'}
+				onSelect={onNumericFilter}
+				selected={options['amount']}
+			/>,
 			<RelationshipFilter
 				key={'account'}
 				fieldName={'account'}
@@ -160,6 +169,91 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		}
 		// Set filter from options only
 		setFilterFromOptions(newOptions);
+	};
+
+	const onNumericFilter = (fieldName: string, option?: SelectOption) => {
+		// @todo: multiple filters working together
+		const newOptions: IndexedOptions = { ...filterState.options, [fieldName]: option };
+		if (option !== undefined) {
+			// Clear all other filters
+			Object.keys(newOptions).forEach((name) => {
+				if (name !== fieldName) {
+					delete newOptions[name];
+				}
+			});
+		}
+		// MinAmount only for now...
+		if (option?.label === 'minAmount' && isNumeric(option.value)) {
+			const newFilter: Filter = {
+				filter: {
+					kind: '_gte',
+					field: fieldName,
+					value: +option.value,
+				},
+			};
+			return setFilterState({ filter: newFilter, options: newOptions });
+		}
+		// Dunno what's going on, just update options.
+		return setFilterState({ ...filterState, options: newOptions });
+	};
+
+	const onNumberRangeFilter = (
+		fieldName: string,
+		minAmount?: SelectOption,
+		maxAmount?: SelectOption
+	) => {
+		// @todo: multiple filters working together
+		const newOptions: IndexedOptions = {
+			...filterState.options,
+			[fieldName]: minAmount,
+			[`${fieldName}Max`]: maxAmount,
+		};
+		if (maxAmount === undefined && minAmount === undefined) {
+			delete newOptions[`${fieldName}Max`];
+			delete newOptions[fieldName];
+			return setFilterFromOptions(newOptions);
+		}
+
+		// Setting date filter; first clear all other filters
+		Object.keys(newOptions).forEach((name) => {
+			if (name !== fieldName && name !== `${fieldName}Max`) {
+				delete newOptions[name];
+			}
+			if (!maxAmount) {
+				delete newOptions[`${fieldName}Max`];
+			}
+			if (!minAmount) {
+				delete newOptions[fieldName];
+			}
+		});
+		// Either one or both can be used in filter
+		const filters: FieldPredicate[] = [];
+		if (minAmount && isNumeric(minAmount.value)) {
+			filters.push({
+				kind: '_gte',
+				field: fieldName,
+				value: +minAmount.value,
+			});
+		}
+		if (maxAmount && isNumeric(maxAmount.value)) {
+			filters.push({
+				kind: '_lt',
+				field: fieldName,
+				value: +maxAmount.value,
+			});
+		}
+		const newFilter: Filter =
+			filters.length > 1
+				? {
+						filter: {
+							kind: '_and',
+							and: [...filters],
+						},
+				  }
+				: filters.length === 1
+				? { filter: filters[0] }
+				: { ...filterState.filter };
+		return setFilterState({ filter: newFilter, options: newOptions });
 	};
 
 	const onDateFilter = (fieldName: string, option?: SelectOption) => {

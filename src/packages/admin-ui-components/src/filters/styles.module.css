@@ -1,6 +1,39 @@
+/** ===== [ numeric filter ] ===== */
+.numericInputWrapper {
+	display: flex;
+	flex-direction: column;
+}
+
+.numericInput {
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
+	z-index: 2;
+}
+
+.numericInput input {
+	text-transform: uppercase;
+	color: hsl(0, 0%, 50%);
+	font-size: 100%;
+	background-color: var(--select-background);
+	border-color: var(--select-border-color);
+	border-radius: 6px;
+	border-style: solid;
+	border-width: 1px;
+	min-height: 36px;
+	padding-left: 10px;
+}
+
+.numericInput input:hover {
+	background-color: var(--primary-color);
+	color: var(--body-copy-color);
+	border-radius: 6px;
+	padding-right: 10px;
+}
+
 /** ===== [ react-date-time ] ===== */
 
-.dateRangeSelector {
+.filterSelector {
 	display: flex;
 	flex-direction: row;
 	color: var(--body-copy-color);
@@ -8,7 +41,7 @@
 	border-radius: 6px;
 }
 
-.dateRangeSelector:hover {
+.filterSelector:hover {
 	border-color: hsl(0, 0%, 70%);
 }
 
@@ -89,7 +122,7 @@
 	z-index: 2;
 }
 
-.calendarButtons {
+.filterButtons {
 	display: flex;
 	flex-direction: row;
 	background-color: var(--body-bg-color);
