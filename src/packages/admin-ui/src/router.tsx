@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
 import { Loader, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
 
-import { List, ListToolBar, Root } from './pages';
+import { List, ListToolBar, Root, Playground } from './pages';
 
 const defaultRoutes = [
 	{
@@ -29,6 +29,14 @@ const defaultRoutes = [
 		element: (
 			<DefaultLayout header={<ListToolBar />}>
 				<List />
+			</DefaultLayout>
+		),
+	},
+	{
+		path: '/playground',
+		element: (
+			<DefaultLayout>
+				<Playground />
 			</DefaultLayout>
 		),
 	},
