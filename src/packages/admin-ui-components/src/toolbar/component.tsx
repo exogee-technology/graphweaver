@@ -5,6 +5,7 @@ import type { DropdownItem } from '../dropdown';
 import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external.svg';
 import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
 import styles from './styles.module.css';
+import { Link } from 'react-router-dom';
 
 export interface ToolBarProps {
 	title?: string;
@@ -45,7 +46,9 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 					Filter
 				</Dropdown>
 
-				<Button renderAfter={() => <OpenPlaygroundIcon />}>Open playground</Button>
+				<Link to={{ pathname: '/playground' }} target="_blank">
+					<Button renderAfter={() => <OpenPlaygroundIcon />}>Open playground</Button>
+				</Link>
 
 				<Dropdown items={externalLinkItems}>Links</Dropdown>
 			</div>
