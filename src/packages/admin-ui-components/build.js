@@ -2,6 +2,8 @@ import esbuild from 'esbuild';
 import svgrPlugin from 'esbuild-plugin-svgr';
 import cssModulesPlugin from 'esbuild-css-modules-plugin';
 
+const watch = process.argv.slice(0)?.[2];
+
 (async () => {
 	await esbuild.build({
 		outdir: 'lib',
@@ -25,5 +27,6 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 		],
 		entryPoints: ['src/index.ts'],
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],
+		watch: watch === '--watch',
 	});
 })();
