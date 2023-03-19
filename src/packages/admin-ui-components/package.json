@@ -8,6 +8,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
 		"test": "pnpm test:unit",
@@ -28,6 +29,7 @@
 		"@apollo/client": "3.7.1",
 		"classnames": "2.3.2",
 		"formik": "2.2.9",
+		"graphiql": "2.4.0",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
 		"react-data-grid": "7.0.0-beta.20"
