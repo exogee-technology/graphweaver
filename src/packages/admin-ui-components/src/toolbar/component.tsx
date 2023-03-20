@@ -46,7 +46,7 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 					Filter
 				</Dropdown>
 
-				<Link to={{ pathname: '/playground' }} target="_blank">
+				<Link to={{ pathname: '/playground' }} target="_blank" rel="noopener noreferrer">
 					<Button renderAfter={() => <OpenPlaygroundIcon />}>Open playground</Button>
 				</Link>
 
