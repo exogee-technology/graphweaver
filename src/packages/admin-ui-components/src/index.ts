@@ -13,3 +13,5 @@ export * from './toolbar';
 export * from './select';
 export * from './filter-bar';
 export * from './utils';
+export * from './playground';
+export * from './config';

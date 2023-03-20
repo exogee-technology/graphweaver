@@ -19,7 +19,7 @@
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",
-		"typescript": "4.9.4",
+		"typescript": "5.0.2",
 		"vite": "3.2.4"
 	},
 	"peerDependencies": {
