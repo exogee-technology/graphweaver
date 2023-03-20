@@ -34,11 +34,7 @@ const defaultRoutes = [
 	},
 	{
 		path: '/playground',
-		element: (
-			<DefaultLayout>
-				<Playground />
-			</DefaultLayout>
-		),
+		element: <Playground />,
 	},
 	{
 		path: '/loader',
