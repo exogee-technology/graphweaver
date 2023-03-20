@@ -16,16 +16,6 @@ export interface ToolBarProps {
 }
 
 export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
-	const filterItems: DropdownItem[] = [
-		{
-			id: 'test',
-			name: 'Test',
-			onClick: () => {
-				alert('Clicked Test');
-			},
-		},
-	];
-
 	const externalLinkItems: DropdownItem[] = [
 		{
 			id: 'google',
@@ -45,11 +35,6 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 
 				<div className={styles.toolsWrapper}>
 					<input className={styles.search} type="search" name="search" placeholder="Search..." />
-
-					<Dropdown items={filterItems}>
-						<FilterIcon />
-						Filter
-					</Dropdown>
 					<Link to={{ pathname: '/playground' }} target="_blank" rel="noopener noreferrer">
 						<Button>
 							Open playground
@@ -59,8 +44,8 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 
 					<Dropdown items={externalLinkItems}>Links</Dropdown>
 				</div>
-				<FilterBar iconBefore={<FilterIcon />} />
 			</div>
+			<FilterBar iconBefore={<FilterIcon />} />
 		</div>
 	);
 };
