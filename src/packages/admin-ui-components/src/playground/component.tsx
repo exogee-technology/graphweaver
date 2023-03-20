@@ -14,5 +14,5 @@ export const Playground = () => {
 		url: uri,
 		headers: { ...(auth ? { Authorization: auth } : {}) },
 	});
-	<GraphiQL fetcher={fetcher} />;
+	return <GraphiQL fetcher={fetcher} />;
 };
