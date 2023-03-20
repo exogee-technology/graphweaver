@@ -8,6 +8,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
 		"test": "pnpm test:unit",
@@ -26,8 +27,10 @@
 	],
 	"dependencies": {
 		"@apollo/client": "3.7.1",
+		"@graphiql/toolkit": "0.8.2",
 		"classnames": "2.3.2",
 		"formik": "2.2.9",
+		"graphiql": "2.4.0",
 		"graphql": "16.6.0",
 		"pluralize": "8.0.0",
 		"react-data-grid": "7.0.0-beta.20"
@@ -47,7 +50,7 @@
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
-		"typescript": "4.9.4",
+		"typescript": "5.0.2",
 		"vite": "3.2.4",
 		"vite-plugin-svgr": "2.2.2"
 	}
