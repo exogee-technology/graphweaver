@@ -11,3 +11,5 @@ export * from './spinner';
 export * from './table';
 export * from './toolbar';
 export * from './utils';
+export * from './playground';
+export * from './config';
