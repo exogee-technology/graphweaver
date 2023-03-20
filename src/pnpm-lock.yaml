@@ -299,6 +299,7 @@ importers:
   packages/admin-ui-components:
     specifiers:
       '@apollo/client': 3.7.1
+      '@graphiql/toolkit': 0.8.2
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
       classnames: 2.3.2
@@ -318,6 +319,7 @@ importers:
       vite-plugin-svgr: 2.2.2
     dependencies:
       '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
+      '@graphiql/toolkit': 0.8.2_graphql@16.6.0
       classnames: 2.3.2
       formik: 2.2.9_react@18.2.0
       graphiql: 2.4.0_fekdsjdxvr6rryguukhsma4zsq
