@@ -1,7 +1,8 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
+import { uri } from './config';
 
 const httpLink = new HttpLink({
-	uri: import.meta.env.VITE_GRAPHWEAVER_API_URL || 'http://localhost:3000/graphql/v1',
+	uri,
 	credentials: 'include',
 });
 
