@@ -64,14 +64,10 @@ export const Dropdown = ({
 	);
 
 	return (
-		<Button
-			renderAfter={() => <DownChevronIcon />}
-			{...props}
-			onClickOutside={handleOnClickOutside}
-			onClick={handleOnClickButton}
-		>
+		<Button {...props} onClickOutside={handleOnClickOutside} onClick={handleOnClickButton}>
 			{defaultValue?.name ?? children}
 			<ul className={isOpen ? styles.dropdown : styles.hide}>{DropDownList}</ul>
+			<DownChevronIcon />
 		</Button>
 	);
 };
