@@ -5,6 +5,7 @@ import type { DropdownItem } from '../dropdown';
 import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external.svg';
 import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
 import styles from './styles.module.css';
+import { Link } from 'react-router-dom';
 
 export interface ToolBarProps {
 	title?: string;
@@ -41,11 +42,17 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 			<div className={styles.toolsWrapper}>
 				<input className={styles.search} type="search" name="search" placeholder="Search..." />
 
-				<Dropdown items={filterItems} renderBefore={() => <FilterIcon />}>
+				<Dropdown items={filterItems}>
+					<FilterIcon />
 					Filter
 				</Dropdown>
 
-				<Button renderAfter={() => <OpenPlaygroundIcon />}>Open playground</Button>
+				<Link to={{ pathname: '/playground' }} target="_blank" rel="noopener noreferrer">
+					<Button>
+						Open playground
+						<OpenPlaygroundIcon />
+					</Button>
+				</Link>
 
 				<Dropdown items={externalLinkItems}>Links</Dropdown>
 			</div>
