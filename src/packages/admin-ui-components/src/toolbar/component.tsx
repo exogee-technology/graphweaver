@@ -42,12 +42,16 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 			<div className={styles.toolsWrapper}>
 				<input className={styles.search} type="search" name="search" placeholder="Search..." />
 
-				<Dropdown items={filterItems} renderBefore={() => <FilterIcon />}>
+				<Dropdown items={filterItems}>
+					<FilterIcon />
 					Filter
 				</Dropdown>
 
 				<Link to={{ pathname: '/playground' }} target="_blank" rel="noopener noreferrer">
-					<Button renderAfter={() => <OpenPlaygroundIcon />}>Open playground</Button>
+					<Button>
+						Open playground
+						<OpenPlaygroundIcon />
+					</Button>
 				</Link>
 
 				<Dropdown items={externalLinkItems}>Links</Dropdown>
