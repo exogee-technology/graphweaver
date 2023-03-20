@@ -3,7 +3,7 @@ import { createGraphiQLFetcher } from '@graphiql/toolkit';
 
 import 'graphiql/graphiql.min.css';
 
-import { uri } from '../config';
+import { uri, localStorageAuthKey } from '../config';
 
 // This Fetch Middleware does a few things:
 //   1. If there's something called `graphweaver-auth` in local storage, we need to send that to the server.
@@ -11,7 +11,7 @@ import { uri } from '../config';
 //   3. If the server sends back a header called `Authorization` on any response, we need to update our `graphweaver-auth` local storage value with
 //      what we got from the server.
 const fetchMiddleware = async (url: RequestInfo | URL, init?: RequestInit) => {
-	const auth = localStorage.getItem('graphweaver-auth');
+	const auth = localStorage.getItem(localStorageAuthKey);
 	const response = await fetch(url, {
 		...init,
 		headers: {
@@ -28,7 +28,7 @@ const fetchMiddleware = async (url: RequestInfo | URL, init?: RequestInit) => {
 	// Feature 3 above ☝️
 	// Do we have an auth header we need to store?
 	const authHeader = response.headers.get('Authorization');
-	if (authHeader) localStorage.setItem('graphweaver-auth', authHeader);
+	if (authHeader) localStorage.setItem(localStorageAuthKey, authHeader);
 
 	return response;
 };
