@@ -56,7 +56,7 @@
 		"ts-jest": "26.4.4",
 		"ts-node": "10.4.0",
 		"tsc-watch": "4.2.9",
-		"typescript": "4.9.4",
+		"typescript": "5.0.2",
 		"vite": "3.2.4"
 	}
 }
