@@ -5,8 +5,6 @@ import styles from './styles.module.css';
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
 	onClickOutside?(): any /** Event emitted when outside */;
-	renderBefore?(): ReactNode /** Render function before the button */;
-	renderAfter?(): ReactNode /** Render function after the button */;
 	className?: string /** alternative styling */;
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
@@ -15,8 +13,6 @@ export interface ButtonProps {
 export const Button = ({
 	onClick,
 	children,
-	renderBefore,
-	renderAfter,
 	onClickOutside,
 	className,
 	type = 'button',
@@ -58,9 +54,7 @@ export const Button = ({
 			className={classNames([className, styles.button])}
 			type={type}
 		>
-			{renderBefore?.()}
 			{children}
-			{renderAfter?.()}
 		</button>
 	);
 };
