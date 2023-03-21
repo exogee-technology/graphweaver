@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { DateTime } from 'luxon';
 
 import { SelectOption } from '../';
-import { DateRangePicker } from '../date-range-picker';
+import { DatePicker } from '../date-picker';
 
 import styles from './styles.module.css';
 
@@ -37,5 +37,5 @@ export const DateRangeFilter = ({
 	};
 
 	//@todo: NB dates are UTC but the filter is local
-	return <DateRangePicker onChange={onChange} placeholder={fieldName} />;
+	return <DatePicker onChange={onChange} placeholder={fieldName} isRangePicker />;
 };
