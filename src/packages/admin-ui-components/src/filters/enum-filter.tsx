@@ -30,7 +30,6 @@ export const EnumFilter = ({
 	}
 
 	const onChange = (option?: SelectOption[]) => {
-		// option will be empty if 'clear' selected
 		if (!onSelect) return;
 		return onSelect(fieldName, option?.[0]);
 	};

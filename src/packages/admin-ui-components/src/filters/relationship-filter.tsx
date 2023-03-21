@@ -46,7 +46,6 @@ export const RelationshipFilter = <T extends { id: string }>({
 	}
 
 	const onChange = (option?: SelectOption[]) => {
-		// option will be empty if 'clear' selected
 		if (!onSelect) return;
 		return onSelect(relationshipRefFieldName ?? fieldName, option?.[0]);
 	};
