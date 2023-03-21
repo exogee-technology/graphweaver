@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import { Button } from '../button';
-import { SelectOption } from '../select';
+import { SelectOption } from '../';
 import { FilterSelector } from './filter-selector';
 
 import styles from './styles.module.css';

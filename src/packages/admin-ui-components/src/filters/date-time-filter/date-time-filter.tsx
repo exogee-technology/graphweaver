@@ -2,7 +2,7 @@ import React from 'react';
 import Datetime from 'react-datetime';
 import moment, { Moment } from 'moment';
 import { ExitIcon } from '../../assets';
-import { SelectOption } from '../../select';
+import { SelectOption } from '../../';
 
 import styles from './styles.module.css';
 import './styles.module.css';

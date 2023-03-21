@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SelectOption } from '../../select';
+import { SelectOption } from '../../';
 
 import styles from './styles.module.css';
 import './styles.module.css';

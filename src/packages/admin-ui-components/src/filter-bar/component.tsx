@@ -90,6 +90,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['tenantId']}
+				resetCount={resetCount}
 			/>,
 		];
 	};
@@ -128,6 +129,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['accountId']}
+				resetCount={resetCount}
 			/>,
 			<RelationshipFilter
 				key={'tenant'}
@@ -136,6 +138,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['tenantId']}
+				resetCount={resetCount}
 			/>,
 		];
 	};
