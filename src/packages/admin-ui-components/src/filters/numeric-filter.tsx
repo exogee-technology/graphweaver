@@ -1,44 +1,30 @@
-import { ChangeEvent, useEffect, useState } from 'react';
 import { SelectOption } from '../';
-import { isNumeric } from '../utils';
-
-import styles from './styles.module.css';
+import { Input } from '../input';
 
 interface NumericFilterProps {
 	fieldName: string;
 	onSelect?: (fieldName: string, option?: SelectOption) => void;
 	selected?: SelectOption;
+	resetCount: number; // We use this to reset the filter using the key
 }
 
-export const NumericFilter = ({ fieldName, onSelect, selected }: NumericFilterProps) => {
-	const [value, setValue] = useState<number | undefined>();
-
-	// synchronization
-	useEffect(() => {
-		if (!selected || !isNumeric(selected.value)) {
-			setValue(undefined);
-		}
-		setValue(selected?.value);
-	}, [selected]);
-
-	const onChange = (event: ChangeEvent<HTMLInputElement>) => {
-		// option will be empty if 'clear' selected
-		if (!onSelect) return;
-		return onSelect(fieldName, { label: 'minAmount', value: event.target.value });
+export const NumericFilter = ({
+	fieldName,
+	onSelect,
+	selected,
+	resetCount,
+}: NumericFilterProps) => {
+	const onChange = (fieldName: string, value?: string) => {
+		onSelect?.(fieldName, { label: selected?.label ?? fieldName, value: value });
 	};
 
 	return (
-		<div className={styles.numericInputWrapper}>
-			<div className={styles.numericInput}>
-				<input
-					type={'number'}
-					key={fieldName}
-					placeholder={fieldName}
-					value={value}
-					// @todo: debounce
-					onChange={onChange}
-				/>
-			</div>
-		</div>
+		<Input
+			key={`${fieldName}:${resetCount}`}
+			inputMode="numeric"
+			fieldName={fieldName}
+			value={selected?.value}
+			onChange={onChange}
+		/>
 	);
 };

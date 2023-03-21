@@ -106,7 +106,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				onSelect={onDateRangeFilter}
 				selectedStart={options[dateFieldName]}
 				selectedEnd={options[`${dateFieldName}To`]}
-				// ref={datePickerRef}
+				resetCount={resetCount}
 			/>,
 			<TextFilter
 				key={'description'}
@@ -121,6 +121,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				fieldName={'amount'}
 				onSelect={onNumericFilter}
 				selected={options['amount']}
+				resetCount={resetCount}
 			/>,
 			<RelationshipFilter
 				key={'account'}

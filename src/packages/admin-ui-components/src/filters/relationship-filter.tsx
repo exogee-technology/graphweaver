@@ -45,13 +45,6 @@ export const RelationshipFilter = <T extends { id: string }>({
 			.sort((a, b) => a?.label?.toLocaleLowerCase().localeCompare(b?.label?.toLocaleLowerCase()));
 	}
 
-	console.log(relationshipEntity);
-	console.log(entityState);
-	console.log(entity);
-	console.log(relationshipData);
-	console.log(fieldName);
-	console.log(relationshipOptions);
-
 	const onChange = (option?: SelectOption[]) => {
 		// option will be empty if 'clear' selected
 		if (!onSelect) return;

@@ -11,6 +11,7 @@ interface DateRangeFilterProps {
 	onSelect?: (fieldName: string, start?: SelectOption, end?: SelectOption) => void;
 	selectedStart?: SelectOption;
 	selectedEnd?: SelectOption;
+	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const DateRangeFilter = ({
@@ -18,6 +19,7 @@ export const DateRangeFilter = ({
 	onSelect,
 	selectedStart,
 	selectedEnd,
+	resetCount,
 }: DateRangeFilterProps) => {
 	const [show, setShow] = useState(false);
 	const [buttonText, setButtonText] = useState(fieldName);
@@ -37,5 +39,12 @@ export const DateRangeFilter = ({
 	};
 
 	//@todo: NB dates are UTC but the filter is local
-	return <DatePicker onChange={onChange} placeholder={fieldName} isRangePicker />;
+	return (
+		<DatePicker
+			key={`${fieldName}:${resetCount}`}
+			onChange={onChange}
+			placeholder={fieldName}
+			isRangePicker
+		/>
+	);
 };
