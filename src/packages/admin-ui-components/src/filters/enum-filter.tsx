@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '../select';
+import { MultiSelect, SelectOption } from '../multi-select';
 import { useSchema } from '../utils';
 
 interface EnumFilterProps {
@@ -6,9 +6,16 @@ interface EnumFilterProps {
 	entity: string;
 	onSelect?: (fieldName: string, option?: SelectOption) => void;
 	selected?: SelectOption;
+	resetCount: number; // We use this to reset the filter using the key
 }
 
-export const EnumFilter = ({ fieldName, entity, onSelect, selected }: EnumFilterProps) => {
+export const EnumFilter = ({
+	fieldName,
+	entity,
+	onSelect,
+	selected,
+	resetCount,
+}: EnumFilterProps) => {
 	const { entityByName, enumByName } = useSchema();
 	const entityType = entityByName(entity);
 
@@ -22,20 +29,18 @@ export const EnumFilter = ({ fieldName, entity, onSelect, selected }: EnumFilter
 		}));
 	}
 
-	const onChange = (option?: SelectOption) => {
+	const onChange = (option?: SelectOption[]) => {
 		// option will be empty if 'clear' selected
 		if (!onSelect) return;
-		return onSelect(fieldName, option);
+		return onSelect(fieldName, option?.[0]);
 	};
 
 	return (
-		<Select
-			key={fieldName}
-			value={selected}
+		<MultiSelect
+			key={fieldName + resetCount}
 			options={enumOptions}
+			value={selected ? [selected] : []}
 			placeholder={fieldName}
-			isClearable
-			clearSelection
 			onChange={onChange}
 		/>
 	);
