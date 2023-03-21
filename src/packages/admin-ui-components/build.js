@@ -25,11 +25,6 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 			'react-router',
 			'react-router-dom',
 			'@remix-run/router',
-
-			// react-datetime
-			'react-datetime',
-			// react-date-range
-			'react-date-range',
 		],
 		entryPoints: ['src/index.ts'],
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],
