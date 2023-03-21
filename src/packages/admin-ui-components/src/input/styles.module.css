@@ -12,6 +12,7 @@
 }
 
 .numericInput input {
+	all: unset;
 	text-transform: uppercase;
 	color: hsl(0, 0%, 50%);
 	font-size: 100%;
@@ -24,9 +25,7 @@
 	padding-left: 10px;
 }
 
-.numericInput input:hover {
+.numericInputHighlighted input {
 	background-color: var(--primary-color);
 	color: var(--body-copy-color);
-	border-radius: 6px;
-	padding-right: 10px;
 }
