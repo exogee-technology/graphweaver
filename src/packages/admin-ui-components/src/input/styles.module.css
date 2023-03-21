@@ -1,17 +1,16 @@
-/** ===== [ numeric filter ] ===== */
-.numericInputWrapper {
+.inputWrapper {
 	display: flex;
 	flex-direction: column;
 }
 
-.numericInput {
+.input {
 	display: flex;
 	flex-direction: row;
 	gap: 8px;
 	z-index: 2;
 }
 
-.numericInput input {
+.input input {
 	all: unset;
 	text-transform: uppercase;
 	color: hsl(0, 0%, 50%);
@@ -25,7 +24,7 @@
 	padding-left: 10px;
 }
 
-.numericInputHighlighted input {
+.inputHighlighted input {
 	background-color: var(--primary-color);
 	color: var(--body-copy-color);
 }
