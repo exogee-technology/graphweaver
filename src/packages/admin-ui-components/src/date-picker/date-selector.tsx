@@ -6,17 +6,10 @@ interface Props {
 	startDate?: DateTime;
 	endDate?: DateTime;
 	onSelect: (startDate?: DateTime, endDate?: DateTime) => void;
-	onClose: () => void;
 	isRangePicker?: boolean;
 }
 
-export const DateSelector = ({
-	startDate,
-	endDate,
-	onSelect,
-	onClose,
-	isRangePicker = false,
-}: Props) => {
+export const DateSelector = ({ startDate, endDate, onSelect, isRangePicker = false }: Props) => {
 	const [currentMonth, setCurrentMonth] = useState<DateTime>(DateTime.local());
 	const [selectedStartDate, setSelectedStartDate] = useState<DateTime | undefined>(startDate);
 	const [selectedEndDate, setSelectedEndDate] = useState<DateTime | undefined>(endDate);
