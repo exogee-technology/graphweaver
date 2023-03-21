@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { SelectOption } from '../select';
+import { SelectOption } from '../';
 import { isNumeric } from '../utils';
 
 import styles from './styles.module.css';
