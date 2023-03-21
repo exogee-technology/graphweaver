@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import classnames from 'classnames';
 
 import { Button } from '../button';
-import { DateRangeSelector } from './date-range-selector';
+import { DateSelector } from './date-selector';
 
 import styles from './styles.module.css';
 import { ExitIcon } from '../assets';
@@ -11,9 +11,10 @@ import { ExitIcon } from '../assets';
 interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
 	placeholder?: string;
+	isRangePicker?: boolean;
 }
 
-export const DateRangePicker = ({ onChange, placeholder }: Props) => {
+export const DatePicker = ({ onChange, placeholder, isRangePicker = false }: Props) => {
 	const [startDate, setStartDate] = useState<DateTime | undefined>(undefined);
 	const [endDate, setEndDate] = useState<DateTime | undefined>(undefined);
 	const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +25,11 @@ export const DateRangePicker = ({ onChange, placeholder }: Props) => {
 		setEndDate(end);
 		setIsOpen(false);
 		onChange(start, end);
+	};
+
+	const close = () => {
+		setIsOpen(false);
+		onChange(startDate, endDate);
 	};
 
 	const clear = () => {
@@ -59,8 +65,11 @@ export const DateRangePicker = ({ onChange, placeholder }: Props) => {
 
 	return (
 		<div className={styles.container}>
-			<div className={styles.inputSelector} onClick={() => setIsOpen((isOpen) => !isOpen)}>
-				<div className={classnames(startDate && styles.inputFieldActive, styles.inputField)}>
+			<div className={styles.inputSelector}>
+				<div
+					className={classnames(startDate && styles.inputFieldActive, styles.inputField)}
+					onClick={() => setIsOpen((isOpen) => !isOpen)}
+				>
 					{displayText()}
 				</div>
 				{startDate && (
@@ -74,11 +83,12 @@ export const DateRangePicker = ({ onChange, placeholder }: Props) => {
 			</div>
 			{isOpen && (
 				<div className={styles.popup} ref={datePickerRef}>
-					<DateRangeSelector
+					<DateSelector
 						startDate={startDate}
 						endDate={endDate}
 						onSelect={handleDateRangeSelect}
-						onClose={() => setIsOpen(false)}
+						onClose={close}
+						isRangePicker={isRangePicker}
 					/>
 					<div className={styles.filterButtons}>
 						<Button

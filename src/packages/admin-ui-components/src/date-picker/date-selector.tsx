@@ -1,15 +1,22 @@
 import { DateTime } from 'luxon';
 import { useState } from 'react';
-import styles from './date-range-selector.module.css';
+import styles from './date-selector.module.css';
 
 interface Props {
 	startDate?: DateTime;
 	endDate?: DateTime;
 	onSelect: (startDate?: DateTime, endDate?: DateTime) => void;
 	onClose: () => void;
+	isRangePicker?: boolean;
 }
 
-export const DateRangeSelector = ({ startDate, endDate, onSelect, onClose }: Props) => {
+export const DateSelector = ({
+	startDate,
+	endDate,
+	onSelect,
+	onClose,
+	isRangePicker = false,
+}: Props) => {
 	const [currentMonth, setCurrentMonth] = useState<DateTime>(DateTime.local());
 	const [selectedStartDate, setSelectedStartDate] = useState<DateTime | undefined>(startDate);
 	const [selectedEndDate, setSelectedEndDate] = useState<DateTime | undefined>(endDate);
@@ -19,14 +26,18 @@ export const DateRangeSelector = ({ startDate, endDate, onSelect, onClose }: Pro
 	};
 
 	const handleDayClick = (day: DateTime) => {
-		if (!selectedStartDate && !selectedEndDate) {
-			setSelectedStartDate(day);
-		} else if (selectedStartDate && !selectedEndDate && day > selectedStartDate) {
-			setSelectedEndDate(day);
-			onSelect(selectedStartDate, day);
+		if (isRangePicker) {
+			if (!selectedStartDate && !selectedEndDate) {
+				setSelectedStartDate(day);
+			} else if (selectedStartDate && !selectedEndDate && day > selectedStartDate) {
+				setSelectedEndDate(day);
+				onSelect(selectedStartDate, day);
+			} else {
+				setSelectedStartDate(day);
+				setSelectedEndDate(undefined);
+			}
 		} else {
-			setSelectedStartDate(day);
-			setSelectedEndDate(undefined);
+			onSelect(day, day);
 		}
 	};
 
