@@ -76,7 +76,7 @@
 }
 
 .option.selected {
-	background-color: #007bff;
+	background-color: var(--select-selected-option-color);
 	color: #fff;
 }
 

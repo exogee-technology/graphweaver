@@ -29,14 +29,13 @@
 		"@apollo/client": "3.7.1",
 		"@graphiql/toolkit": "0.8.2",
 		"classnames": "2.3.2",
-		"date-fns": "2.29.3",
 		"formik": "2.2.9",
 		"graphiql": "2.4.0",
 		"graphql": "16.6.0",
+		"luxon": "2.1.1",
 		"moment": "2.29.4",
 		"pluralize": "8.0.0",
 		"react-data-grid": "7.0.0-beta.20",
-		"react-date-range": "1.4.0",
 		"react-datetime": "3.2.0"
 	},
 	"peerDependencies": {
@@ -46,9 +45,9 @@
 		"react-router-dom": "6.4.3"
 	},
 	"devDependencies": {
+		"@types/luxon": "2.0.7",
 		"@types/pluralize": "0.0.29",
 		"@types/react": "18.0.25",
-		"@types/react-date-range": "1.4.4",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-svgr": "1.0.1",
