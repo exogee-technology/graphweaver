@@ -1,8 +1,8 @@
-import { ReactNode, useEffect, useReducer } from 'react';
+import { ReactNode, useEffect, useReducer, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
 import { decodeSearchParams, FieldPredicate, Filter, isNumeric, routeFor } from '../utils';
-import { SelectOption } from '../select';
+import { SelectOption } from '../';
 import {
 	DateRangeFilter,
 	EnumFilter,
@@ -24,6 +24,7 @@ const emptyFilterState: FilterState = { filter: {}, options: {} };
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
+	const [resetCount, setResetCount] = useState(0);
 	const [search, setSearch] = useSearchParams();
 	const navigate = useNavigate();
 
@@ -64,6 +65,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['code']}
+				resetCount={resetCount}
 			/>,
 			<TextFilter
 				key={'name'}
@@ -71,6 +73,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['name']}
+				resetCount={resetCount}
 			/>,
 			<EnumFilter
 				key={'type'}
@@ -78,6 +81,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['type']}
+				resetCount={resetCount}
 			/>,
 			<RelationshipFilter
 				key={'tenant'}
@@ -109,6 +113,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['description']}
+				resetCount={resetCount}
 			/>,
 			<NumericFilter
 				key={'amount'}
@@ -144,6 +149,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['tenantName']}
+				resetCount={resetCount}
 			/>,
 			<TextFilter
 				key={'tenantType'}
@@ -151,6 +157,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				entity={entity}
 				onSelect={onFilter}
 				selected={options['tenantType']}
+				resetCount={resetCount}
 			/>,
 			// createdDateUtc and updatedDateUtc fields have no '..._gte' or '..._lt' fields defined in TenantsListFilter
 		];
@@ -399,6 +406,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const clearAllFilters = () => {
 		setFilterState(emptyFilterState);
+		setResetCount((resetCount) => resetCount + 1);
 	};
 
 	return (
