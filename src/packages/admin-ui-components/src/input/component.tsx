@@ -41,8 +41,8 @@ export const Input = ({
 	}, [debouncedValue]);
 
 	return (
-		<div className={styles.numericInputWrapper}>
-			<div className={classNames(value && styles.numericInputHighlighted, styles.numericInput)}>
+		<div className={styles.inputWrapper}>
+			<div className={classNames(value && styles.inputHighlighted, styles.input)}>
 				<input
 					type="text"
 					inputMode={inputMode}
