@@ -44,7 +44,7 @@ export const DatePicker = ({ onChange, placeholder, isRangePicker = false }: Pro
 				startDate.toFormat('dd/MM/yyyy'),
 				endDate ? endDate.toFormat('dd/MM/yyyy') : undefined,
 			];
-			return `${selectedDatesText.join('-')}`;
+			return isRangePicker ? `${selectedDatesText.join('-')}` : startDate.toFormat('dd/MM/yyyy');
 		} else {
 			return placeholder ?? '';
 		}
@@ -87,15 +87,10 @@ export const DatePicker = ({ onChange, placeholder, isRangePicker = false }: Pro
 						startDate={startDate}
 						endDate={endDate}
 						onSelect={handleDateRangeSelect}
-						onClose={close}
 						isRangePicker={isRangePicker}
 					/>
 					<div className={styles.filterButtons}>
-						<Button
-							type={'button'}
-							className={styles.finishButton}
-							onClick={() => onChange(startDate, endDate)}
-						>
+						<Button type={'button'} className={styles.finishButton} onClick={close}>
 							Done
 						</Button>
 						<Button type={'reset'} className={styles.clearButton} onClick={clear}>
