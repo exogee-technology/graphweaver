@@ -311,11 +311,9 @@ importers:
       graphiql: 2.4.0
       graphql: 16.6.0
       luxon: 2.1.1
-      moment: 2.29.4
       pluralize: 8.0.0
       react: 18.2.0
       react-data-grid: 7.0.0-beta.20
-      react-datetime: 3.2.0
       react-dom: 18.2.0
       react-router-dom: 6.4.3
       typescript: 5.0.2
@@ -329,10 +327,8 @@ importers:
       graphiql: 2.4.0_fekdsjdxvr6rryguukhsma4zsq
       graphql: 16.6.0
       luxon: 2.1.1
-      moment: 2.29.4
       pluralize: 8.0.0
       react-data-grid: 7.0.0-beta.20_biqbaboplfbrettd7655fr4n2y
-      react-datetime: 3.2.0_moment@2.29.4+react@18.2.0
     devDependencies:
       '@types/luxon': 2.0.7
       '@types/pluralize': 0.0.29
@@ -11840,7 +11836,7 @@ packages:
       jest-validate: 26.6.2
       micromatch: 4.0.5
       pretty-format: 26.6.2
-      ts-node: 10.4.0_jroyiddt6ygusve22hzkdp6efe
+      ts-node: 10.4.0_avmhn26gld6oiqh27furhvl56y
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -15722,17 +15718,6 @@ packages:
       clsx: 1.2.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-    dev: false
-
-  /react-datetime/3.2.0_moment@2.29.4+react@18.2.0:
-    resolution: {integrity: sha512-w5XdeNIGzBht9CadaZIJhKUhEcDTgH0XokKxGPCxeeJRYL7B3HIKA8CM6Q0xej2JFJt0n5d+zi3maMwaY3262A==}
-    peerDependencies:
-      moment: ^2.16.0
-      react: ^16.5.0 || ^17.0.0 || ^18.0.0
-    dependencies:
-      moment: 2.29.4
-      prop-types: 15.8.1
-      react: 18.2.0
     dev: false
 
   /react-dom/18.2.0_react@18.2.0:

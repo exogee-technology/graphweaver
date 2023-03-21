@@ -15,3 +15,4 @@ export * from './utils';
 export * from './playground';
 export * from './config';
 export * from './multi-select';
+export * from './date-picker';
