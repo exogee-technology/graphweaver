@@ -26,8 +26,6 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 			'react-router-dom',
 			'@remix-run/router',
 
-			// Introduced by react-select
-			'@emotion/*',
 			// react-datetime
 			'react-datetime',
 			// react-date-range
