@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { DateRange as ReactDateRange, Range, RangeKeyDict } from 'react-date-range';
 
-import { SelectOption } from '../select';
+import { SelectOption } from '../';
 import { Button } from '../button';
 import { FilterSelector } from './filter-selector';
 
