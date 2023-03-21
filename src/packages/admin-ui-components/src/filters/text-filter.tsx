@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { DataContext, DataStateByEntity, Select, SelectOption, useSchema } from '..';
+import { useContext } from 'react';
+import { DataContext, DataStateByEntity, MultiSelect, SelectOption, useSchema } from '..';
 
 interface TextFilterProps {
 	fieldName: string;
@@ -7,6 +7,7 @@ interface TextFilterProps {
 	// onSelect?: (fieldName: string, filter?: Filter) => void;
 	onSelect?: (fieldName: string, option?: SelectOption) => void;
 	selected?: SelectOption;
+	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const TextFilter = <T extends { id: string }>({
@@ -14,6 +15,7 @@ export const TextFilter = <T extends { id: string }>({
 	entity,
 	onSelect,
 	selected,
+	resetCount,
 }: TextFilterProps) => {
 	const { entityByName } = useSchema();
 	const { entityState, setEntityState } = useContext(DataContext);
@@ -38,20 +40,17 @@ export const TextFilter = <T extends { id: string }>({
 			.map((item) => ({ label: item, value: item }));
 	}
 
-	const onChange = (option?: SelectOption) => {
-		// option will be empty if 'clear' selected
+	const onChange = (options?: SelectOption[]) => {
 		if (!onSelect) return;
-		return onSelect(fieldName, option);
+		return onSelect(fieldName, options?.[0]);
 	};
 
 	return (
-		<Select
-			key={fieldName}
-			value={selected}
+		<MultiSelect
+			key={fieldName + resetCount}
 			options={textOptions}
+			value={selected ? [selected] : []}
 			placeholder={fieldName}
-			isClearable
-			clearSelection
 			onChange={onChange}
 		/>
 	);

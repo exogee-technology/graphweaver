@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Select, SelectOption } from '../select';
+import { MultiSelect, SelectOption } from '../multi-select';
 import { DataContext, DataStateByEntity, useSchema } from '../utils';
 
 interface RelationshipFilterProps {
@@ -8,6 +8,7 @@ interface RelationshipFilterProps {
 	entity: string;
 	onSelect?: (fieldName: string, option?: SelectOption) => void;
 	selected?: SelectOption;
+	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const RelationshipFilter = <T extends { id: string }>({
@@ -16,6 +17,7 @@ export const RelationshipFilter = <T extends { id: string }>({
 	entity,
 	onSelect,
 	selected,
+	resetCount,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
 	const { entityState, setEntityState } = useContext(DataContext);
@@ -43,20 +45,18 @@ export const RelationshipFilter = <T extends { id: string }>({
 			.sort((a, b) => a?.label?.toLocaleLowerCase().localeCompare(b?.label?.toLocaleLowerCase()));
 	}
 
-	const onChange = (option?: SelectOption) => {
+	const onChange = (option?: SelectOption[]) => {
 		// option will be empty if 'clear' selected
 		if (!onSelect) return;
-		return onSelect(relationshipRefFieldName ?? fieldName, option);
+		return onSelect(relationshipRefFieldName ?? fieldName, option?.[0]);
 	};
 
 	return (
-		<Select
-			key={fieldName}
-			value={selected}
+		<MultiSelect
+			key={fieldName + resetCount}
 			options={relationshipOptions}
+			value={selected ? [selected] : []}
 			placeholder={fieldName}
-			isClearable
-			clearSelection
 			onChange={onChange}
 		/>
 	);
