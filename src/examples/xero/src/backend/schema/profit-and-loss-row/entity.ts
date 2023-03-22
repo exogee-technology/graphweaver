@@ -24,6 +24,11 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => ID)
 	id!: string;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.DATE_RANGE,
+		},
+	})
 	@Field(() => Date)
 	date!: Date;
 
@@ -35,12 +40,22 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => String)
 	description!: string;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.NUMERIC,
+		},
+	})
 	@Field(() => Number)
 	amount!: number;
 
 	@Field(() => ID, { nullable: true })
 	accountId?: string;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.RELATIONSHIP,
+		},
+	})
 	@Field(() => Account, { nullable: true })
 	async account() {
 		if (!this.dataEntity.accountId) return null;
@@ -56,6 +71,11 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => ID, { nullable: true })
 	tenantId?: string;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.RELATIONSHIP,
+		},
+	})
 	@Field(() => Tenant, { nullable: true })
 	async tenant() {
 		if (!this.dataEntity.tenantId) return null;
