@@ -22,10 +22,20 @@ export interface Entity {
 	fields: EntityField[];
 }
 
+export enum AdminUIFilterType {
+	DATE_RANGE = 'DATE_RANGE',
+	ENUM = 'ENUM',
+	NUMERIC = 'NUMERIC',
+	RELATIONSHIP = 'RELATIONSHIP',
+	TEXT = 'TEXT',
+}
 export interface EntityField {
 	name: string;
 	type: string;
 	relationshipType?: '1:1' | '1:n' | 'm:1' | 'm:n';
+	filter?: {
+		type: AdminUIFilterType;
+	};
 }
 
 export interface Filter {
