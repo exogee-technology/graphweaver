@@ -1,4 +1,9 @@
-import { AuthorizedBaseFunctions, EntityMetadataMap, isSummaryField } from '@exogee/graphweaver';
+import {
+	AuthorizedBaseFunctions,
+	EntityMetadataMap,
+	isSummaryField,
+	AdminUISettingsMap,
+} from '@exogee/graphweaver';
 import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
@@ -28,6 +33,7 @@ export class AdminUiMetadataResolver {
 		const entities: AdminUiEntityMetadata[] = metadata.objectTypes
 			.map((objectType) => {
 				const name = objectType.name;
+				const adminUISettings = AdminUISettingsMap.get(name);
 				const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
 				const summaryField = objectType.fields?.find((field) =>
 					isSummaryField(objectType.target, field.name)
@@ -57,6 +63,7 @@ export class AdminUiMetadataResolver {
 					} else if (relatedObject) {
 						fieldObject.relationshipType = ReferenceType.MANY_TO_ONE;
 					}
+					fieldObject.filter = adminUISettings?.fields?.[field.name]?.filter;
 					return fieldObject;
 				});
 				return {
