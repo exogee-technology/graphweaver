@@ -1,7 +1,15 @@
-import { ReactNode, useEffect, useReducer, useState } from 'react';
+import { ReactNode, useEffect, useReducer, useState, createElement } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
-import { decodeSearchParams, FieldPredicate, Filter, isNumeric, routeFor } from '../utils';
+import {
+	AdminUIFilterType,
+	decodeSearchParams,
+	FieldPredicate,
+	Filter,
+	isNumeric,
+	routeFor,
+	useSchema,
+} from '../utils';
 import { SelectOption } from '../';
 import {
 	DateRangeFilter,
@@ -26,6 +34,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
 	const [resetCount, setResetCount] = useState(0);
 	const [search, setSearch] = useSearchParams();
+	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 
 	const [filterState, setFilterState] = useReducer((prev: FilterState, next: FilterState) => {
@@ -52,119 +61,68 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		throw Error('Entity should be in URL here');
 	}
 
-	const filters: Record<string, JSX.Element[]> = {};
-
-	// @todo: Maybe filterState options also need to be tagged by entity in case the same fieldnames recur across entities?
-	// otoh can share eg. tenantId settings
-	const tempSetAccountFilters = () => {
+	const getFilters = (entityName: string) => {
 		const { options } = filterState;
-		return [
-			<TextFilter
-				key={'code'}
-				fieldName={'code'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['code']}
-				resetCount={resetCount}
-			/>,
-			<TextFilter
-				key={'name'}
-				fieldName={'name'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['name']}
-				resetCount={resetCount}
-			/>,
-			<EnumFilter
-				key={'type'}
-				fieldName={'type'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['type']}
-				resetCount={resetCount}
-			/>,
-			<RelationshipFilter
-				key={'tenant'}
-				fieldName={'tenant'}
-				relationshipRefFieldName={'tenantId'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['tenantId']}
-				resetCount={resetCount}
-			/>,
-		];
-	};
+		const profitAndLossRowEntity = entityByName(entityName);
 
-	const tempSetPAndLFilters = () => {
-		const { options } = filterState;
-		const dateFieldName = 'date';
-		const amountFieldName = 'amount';
-		return [
-			<DateRangeFilter
-				key={dateFieldName}
-				fieldName={dateFieldName}
-				onSelect={onDateRangeFilter}
-				selectedStart={options[dateFieldName]}
-				selectedEnd={options[`${dateFieldName}To`]}
-				resetCount={resetCount}
-			/>,
-			<TextFilter
-				key={'description'}
-				fieldName={'description'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['description']}
-				resetCount={resetCount}
-			/>,
-			<NumericFilter
-				key={'amount'}
-				fieldName={'amount'}
-				onSelect={onNumericFilter}
-				selected={options['amount']}
-				resetCount={resetCount}
-			/>,
-			<RelationshipFilter
-				key={'account'}
-				fieldName={'account'}
-				relationshipRefFieldName={'accountId'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['accountId']}
-				resetCount={resetCount}
-			/>,
-			<RelationshipFilter
-				key={'tenant'}
-				fieldName={'tenant'}
-				relationshipRefFieldName={'tenantId'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['tenantId']}
-				resetCount={resetCount}
-			/>,
-		];
-	};
+		return profitAndLossRowEntity.fields
+			.map((field) => {
+				if (field.filter?.type === AdminUIFilterType.TEXT) {
+					return createElement(TextFilter, {
+						key: field.name,
+						fieldName: field.name,
+						entity: entity,
+						selected: options[field.name],
+						onSelect: onFilter,
+						resetCount: resetCount,
+					});
+				}
 
-	const tempSetTenantFilters = () => {
-		const { options } = filterState;
-		return [
-			<TextFilter
-				key={'tenantName'}
-				fieldName={'tenantName'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['tenantName']}
-				resetCount={resetCount}
-			/>,
-			<TextFilter
-				key={'tenantType'}
-				fieldName={'tenantType'}
-				entity={entity}
-				onSelect={onFilter}
-				selected={options['tenantType']}
-				resetCount={resetCount}
-			/>,
-			// createdDateUtc and updatedDateUtc fields have no '..._gte' or '..._lt' fields defined in TenantsListFilter
-		];
+				if (field.filter?.type === AdminUIFilterType.DATE_RANGE) {
+					return createElement(DateRangeFilter, {
+						key: field.name,
+						fieldName: field.name,
+						onSelect: onDateRangeFilter,
+						selectedStart: options[field.name],
+						selectedEnd: options[`${field.name}To`],
+						resetCount: resetCount,
+					});
+				}
+
+				if (field.filter?.type === AdminUIFilterType.NUMERIC) {
+					return createElement(NumericFilter, {
+						key: field.name,
+						fieldName: field.name,
+						selected: options[field.name],
+						onSelect: onNumericFilter,
+						resetCount: resetCount,
+					});
+				}
+
+				if (field.filter?.type === AdminUIFilterType.RELATIONSHIP) {
+					return createElement(RelationshipFilter, {
+						key: field.name,
+						fieldName: field.name,
+						relationshipRefFieldName: 'accountId',
+						entity: entity,
+						selected: options[field.name],
+						onSelect: onFilter,
+						resetCount: resetCount,
+					});
+				}
+
+				if (field.filter?.type === AdminUIFilterType.ENUM) {
+					return createElement(EnumFilter, {
+						key: field.name,
+						fieldName: field.name,
+						entity: entity,
+						selected: options[field.name],
+						onSelect: onFilter,
+						resetCount: resetCount,
+					});
+				}
+			})
+			.filter((field): field is React.FunctionComponentElement<any> => !!field);
 	};
 
 	const onFilter = (fieldName: string, option?: SelectOption) => {
@@ -200,117 +158,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					kind: '_gte',
 					field: fieldName,
 					value: +option.value,
-				},
-			};
-			return setFilterState({ filter: newFilter, options: newOptions });
-		}
-		// Dunno what's going on, just update options.
-		return setFilterState({ ...filterState, options: newOptions });
-	};
-
-	const onNumberRangeFilter = (
-		fieldName: string,
-		minAmount?: SelectOption,
-		maxAmount?: SelectOption
-	) => {
-		// @todo: multiple filters working together
-		const newOptions: IndexedOptions = {
-			...filterState.options,
-			[fieldName]: minAmount,
-			[`${fieldName}Max`]: maxAmount,
-		};
-		if (maxAmount === undefined && minAmount === undefined) {
-			delete newOptions[`${fieldName}Max`];
-			delete newOptions[fieldName];
-			return setFilterFromOptions(newOptions);
-		}
-
-		// Setting date filter; first clear all other filters
-		Object.keys(newOptions).forEach((name) => {
-			if (name !== fieldName && name !== `${fieldName}Max`) {
-				delete newOptions[name];
-			}
-			if (!maxAmount) {
-				delete newOptions[`${fieldName}Max`];
-			}
-			if (!minAmount) {
-				delete newOptions[fieldName];
-			}
-		});
-		// Either one or both can be used in filter
-		const filters: FieldPredicate[] = [];
-		if (minAmount && isNumeric(minAmount.value)) {
-			filters.push({
-				kind: '_gte',
-				field: fieldName,
-				value: +minAmount.value,
-			});
-		}
-		if (maxAmount && isNumeric(maxAmount.value)) {
-			filters.push({
-				kind: '_lt',
-				field: fieldName,
-				value: +maxAmount.value,
-			});
-		}
-		const newFilter: Filter =
-			filters.length > 1
-				? {
-						filter: {
-							kind: '_and',
-							and: [...filters],
-						},
-				  }
-				: filters.length === 1
-				? { filter: filters[0] }
-				: { ...filterState.filter };
-		return setFilterState({ filter: newFilter, options: newOptions });
-	};
-
-	const onDateFilter = (fieldName: string, option?: SelectOption) => {
-		// @todo: multiple filters working together
-		const newOptions: IndexedOptions = { ...filterState.options, [fieldName]: option };
-		if (option === undefined) {
-			return setFilterFromOptions(newOptions);
-		}
-
-		// Setting date filter; first clear all other filters
-		Object.keys(newOptions).forEach((name) => {
-			if (name !== fieldName) {
-				delete newOptions[name];
-			}
-		});
-		// Then set date filter
-		// @todo: The default date format returned is 'YYYY-MM-DD', but in future we want to handle this.
-		//
-		// We also want to handle a date range rather than a single date,
-		// but for the moment we will look at a single 24-hour period and
-		// filter on that.
-		//
-		// Assume filter is 'equals field = value', truncate the datetime, compute the next day,
-		// then set up an '_and [ _gte, _lt ]' filter
-		const startDate = new Date(option.value);
-		if (startDate.valueOf()) {
-			// Xero: These are UTC dates
-			startDate.setUTCHours(0, 0, 0, 0);
-			const startDateTimeIso = startDate.toISOString();
-			const endDateIso = new Date(startDate.setDate(startDate.getDate() + 1));
-			const endDateTimeIso = endDateIso.toISOString();
-			const newFilter: Filter = {
-				filter: {
-					kind: '_and',
-					and: [
-						{
-							kind: '_gte',
-							field: fieldName,
-							value: startDateTimeIso,
-						},
-						{
-							kind: '_lt',
-							field: fieldName,
-							value: endDateTimeIso,
-						},
-					],
 				},
 			};
 			return setFilterState({ filter: newFilter, options: newOptions });
@@ -394,19 +241,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		navigate(routeFor({ entity, filter: filterState.filter, sort }));
 	}, [filterState.filter]);
 
-	// @todo: read schema to see what filters there are configured
-	switch (entity) {
-		case 'Account':
-			filters[entity] = tempSetAccountFilters();
-			break;
-		case 'ProfitAndLossRow':
-			filters[entity] = tempSetPAndLFilters();
-			break;
-		case 'Tenant':
-			filters[entity] = tempSetTenantFilters();
-			break;
-		default:
-	}
+	const filters = getFilters(entity);
 
 	const clearAllFilters = () => {
 		setFilterState(emptyFilterState);
@@ -414,11 +249,14 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	return (
-		<div className={styles.filterBarWrapper}>
-			{/* // @todo: move to :before pseudoselector */}
-			{iconBefore}
-			{...filters[entity]}
-			<Button onClick={clearAllFilters}>Clear Filters</Button>
-		</div>
+		<>
+			{filters.length > 0 && (
+				<div className={styles.filterBarWrapper}>
+					{iconBefore}
+					{...filters}
+					<Button onClick={clearAllFilters}>Clear Filters</Button>
+				</div>
+			)}
+		</>
 	);
 };
