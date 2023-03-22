@@ -1,4 +1,9 @@
-import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
+import {
+	BaseLoaders,
+	GraphQLEntity,
+	AdminUISettings,
+	AdminUIFilterType,
+} from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 import { Account } from '../account';
 import { Tenant } from '../tenant';
@@ -22,6 +27,11 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => Date)
 	date!: Date;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.TEXT,
+		},
+	})
 	@Field(() => String)
 	description!: string;
 

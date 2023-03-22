@@ -1,7 +1,7 @@
 import { getMetadataStorage, ObjectType } from 'type-graphql';
 import { FieldMetadata as TypeGraphQLFieldMetadata } from 'type-graphql/dist/metadata/definitions';
 
-import { AccessControlList } from '.';
+import { AccessControlList, AdminUISettingsType } from '.';
 
 const metadata = getMetadataStorage();
 
@@ -21,6 +21,8 @@ export interface BaseDataEntity {
 }
 
 export const AclMap = new Map<string, AccessControlList<any>>();
+// This map is used to store the Admin UI Settings Metadata
+export const AdminUISettingsMap = new Map<string, AdminUISettingsType>();
 
 @ObjectType()
 export class GraphQLEntity<T> {
