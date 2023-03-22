@@ -12,6 +12,9 @@ export const SCHEMA_QUERY = gql`
 					type
 					relationshipType
 					relatedEntity
+					filter {
+						type
+					}
 				}
 			}
 			enums {
