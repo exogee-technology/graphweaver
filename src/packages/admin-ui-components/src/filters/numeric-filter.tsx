@@ -1,21 +1,22 @@
-import { SelectOption } from '../';
+import { Filter, SelectOption } from '../';
 import { Input } from '../input';
 
 interface NumericFilterProps {
 	fieldName: string;
-	onSelect?: (fieldName: string, option?: SelectOption) => void;
+	entity?: string; // Unused but defined for a consistent API
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	selected?: SelectOption;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const NumericFilter = ({
 	fieldName,
-	onSelect,
+	onChange,
 	selected,
 	resetCount,
 }: NumericFilterProps) => {
-	const onChange = (fieldName: string, value?: string) => {
-		onSelect?.(fieldName, { label: selected?.label ?? fieldName, value: value });
+	const handleOnChange = (fieldName: string, value?: string) => {
+		onChange?.(fieldName, value === '' ? undefined : { [fieldName]: value });
 	};
 
 	return (
@@ -24,7 +25,7 @@ export const NumericFilter = ({
 			inputMode="numeric"
 			fieldName={fieldName}
 			value={selected?.value}
-			onChange={onChange}
+			onChange={handleOnChange}
 		/>
 	);
 };

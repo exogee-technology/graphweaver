@@ -10,8 +10,6 @@ import {
 	PAGE_SIZE,
 	routeFor,
 	decodeSearchParams,
-	SortField,
-	Filter,
 	DataContext,
 	DataState,
 	defaultEntityState,
@@ -76,11 +74,10 @@ export const List = () => {
 
 		let data = [];
 		let lastRecordReturned = false;
-		const filter = currentState.filterField;
 		const result = await fetchList<{ result: any[] }>(
 			entity,
 			entityByName,
-			filter?.filter !== undefined ? filter : undefined,
+			currentState.filterFields,
 			currentState.sortFields,
 			currentState.page
 		);
@@ -100,15 +97,15 @@ export const List = () => {
 		});
 	}, [
 		entity,
-		entityState[entity]?.filterField,
+		entityState[entity]?.filterFields,
 		entityState[entity]?.sortFields,
 		entityState[entity]?.page,
 	]);
 
 	useEffect(() => {
-		const { filter, sort } = decodeSearchParams(search);
+		const { filters, sort } = decodeSearchParams(search);
 		// TODO: This will always cause a refetch even if search unchanged as data is cleared
-		resetDataState(entity, { filterField: filter, sortFields: sort });
+		resetDataState(entity, { ...(filters ? { filterFields: filters } : {}), sortFields: sort });
 		// const sortColumns: SortColumn[] = Array.from(search.entries()).map((field) => ({
 		// 	columnKey: field[0],
 		// 	direction: field[1].toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
@@ -124,7 +121,7 @@ export const List = () => {
 	}, [
 		fetchData,
 		entity,
-		entityState[entity]?.filterField,
+		entityState[entity]?.filterFields,
 		entityState[entity]?.sortFields,
 		entityState[entity]?.page,
 	]);
@@ -136,8 +133,8 @@ export const List = () => {
 	// TODO: Get warning in here that navigate should be in a useEffect
 	// Makes no sense, this is triggered by a user event
 	const requestSort = (state: Partial<DataState>) => {
-		const { filter } = decodeSearchParams(search);
-		navigate(routeFor({ entity, sort: state.sortFields, filter }));
+		const { filters } = decodeSearchParams(search);
+		navigate(routeFor({ entity, sort: state.sortFields, filters }));
 	};
 
 	// Increment page only; leave the rest, set signal to table to show 'Loading' indicator.
@@ -149,14 +146,14 @@ export const List = () => {
 		});
 	};
 
-	const { loading, loadingNext, error, data, sortColumns, allDataFetched } =
+	const { loading, loadingNext, error, data, sortFields, allDataFetched } =
 		entityState[entity] ?? defaultEntityState;
 
 	return (
 		<>
 			<Table
 				rows={data}
-				orderBy={sortColumns}
+				orderBy={sortFields}
 				requestRefetch={requestRefetch}
 				allDataFetched={allDataFetched}
 				loading={loading}

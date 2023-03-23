@@ -1,10 +1,10 @@
 import { MultiSelect, SelectOption } from '../multi-select';
-import { useSchema } from '../utils';
+import { Filter, useSchema } from '../utils';
 
 interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
-	onSelect?: (fieldName: string, option?: SelectOption) => void;
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	selected?: SelectOption;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -12,7 +12,7 @@ interface EnumFilterProps {
 export const EnumFilter = ({
 	fieldName,
 	entity,
-	onSelect,
+	onChange,
 	selected,
 	resetCount,
 }: EnumFilterProps) => {
@@ -29,9 +29,13 @@ export const EnumFilter = ({
 		}));
 	}
 
-	const onChange = (option?: SelectOption[]) => {
-		if (!onSelect) return;
-		return onSelect(fieldName, option?.[0]);
+	const handleOnChange = (options?: SelectOption[]) => {
+		onChange?.(
+			fieldName,
+			(options ?? [])?.length > 0
+				? { [`${fieldName}_in`]: options?.map((option) => option.value) }
+				: undefined
+		);
 	};
 
 	return (
@@ -40,7 +44,7 @@ export const EnumFilter = ({
 			options={enumOptions}
 			value={selected ? [selected] : []}
 			placeholder={fieldName}
-			onChange={onChange}
+			onChange={handleOnChange}
 		/>
 	);
 };

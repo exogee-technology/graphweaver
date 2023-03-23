@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { Spinner } from '../spinner';
 import styles from './styles.module.css';
 
 export interface SelectOption {
@@ -11,6 +12,7 @@ interface MultiSelectProps {
 	onChange: (selected: SelectOption[]) => void;
 	value?: SelectOption[];
 	placeholder?: string;
+	loading?: boolean;
 }
 
 export const MultiSelect: React.FC<MultiSelectProps> = ({
@@ -18,6 +20,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 	onChange,
 	value = [],
 	placeholder = 'Select',
+	loading = false,
 }) => {
 	const [open, setOpen] = useState(false);
 	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
@@ -78,7 +81,11 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 				{selectedOptions.length > 0 ? (
 					<div className={styles.selectedOptions}>
 						<div className={styles.optionPill}>
-							<span>{`${selectedOptions.length} Selected`}</span>
+							<span className={styles.optionPillLabel}>
+								{selectedOptions.length > 1
+									? `${selectedOptions.length} Selected`
+									: selectedOptions?.[0].label}
+							</span>
 							<span className={styles.deleteOption} onClick={() => handleDeleteAll()}>
 								&times;
 							</span>
@@ -87,30 +94,38 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 				) : (
 					<div className={styles.placeholder}>{placeholder}</div>
 				)}
+				<div className={styles.optionsDropdownBackground}></div>
 				<div className={styles.optionsDropdown}>
-					<div className={styles.selectedOptions}>
-						{selectedOptions.map((option) => (
-							<div className={styles.optionPill} key={option.value}>
-								<span>{option.label}</span>
-								<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
-									&times;
-								</span>
-							</div>
-						))}
-					</div>
-					{options.map((option) => (
-						<div
-							className={`${styles.option} ${
-								selectedOptions.find((selected) => selected.value === option.value)
-									? styles.selected
-									: ''
-							}`}
-							key={option.value}
-							onClick={() => handleClick(option)}
-						>
-							{option.label}
-						</div>
-					))}
+					<>
+						{loading && <Spinner />}
+						{!loading && (
+							<>
+								<div className={styles.selectedOptions}>
+									{selectedOptions.map((option) => (
+										<div className={styles.optionPill} key={option.value}>
+											<span className={styles.optionPillLabel}>{option.label}</span>
+											<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
+												&times;
+											</span>
+										</div>
+									))}
+								</div>
+								{options.map((option) => (
+									<div
+										className={`${styles.option} ${
+											selectedOptions.find((selected) => selected.value === option.value)
+												? styles.selected
+												: ''
+										}`}
+										key={option.value}
+										onClick={() => handleClick(option)}
+									>
+										{option.label}
+									</div>
+								))}
+							</>
+						)}
+					</>
 				</div>
 				<span className={`${styles.arrow} ${open ? styles.arrowUp : styles.arrowDown}`}></span>
 			</div>
