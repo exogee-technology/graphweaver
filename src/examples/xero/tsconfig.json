@@ -16,6 +16,7 @@
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/logger" },
-		{ "path": "../../packages/xero" }
+		{ "path": "../../packages/xero" },
+		{ "path": "../../packages/scalars" }
 	]
 }

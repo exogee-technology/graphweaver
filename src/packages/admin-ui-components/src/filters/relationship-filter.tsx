@@ -42,7 +42,8 @@ export const RelationshipFilter = <T extends { id: string }>({
 			(options ?? [])?.length > 0
 				? {
 						[fieldName]: {
-							id_in: options?.map((option) => option.value),
+							// id_in: options?.map((option) => option.value),
+							id: options?.[0]?.value,
 						},
 				  }
 				: undefined

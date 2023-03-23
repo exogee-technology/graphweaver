@@ -25,12 +25,10 @@ export const DateRangeFilter = ({
 			fieldName,
 			startDate && endDate
 				? {
-						[fieldName]: {
-							_and: [
-								{ [`${fieldName}_gte`]: startDate.toISODate() },
-								{ [`${fieldName}_lte`]: endDate.toISODate() },
-							],
-						},
+						_and: [
+							{ [`${fieldName}_gte`]: startDate.startOf('day').toISO() },
+							{ [`${fieldName}_lte`]: endDate.endOf('day').toISO() },
+						],
 				  }
 				: undefined
 		);
