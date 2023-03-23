@@ -1,4 +1,9 @@
-import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import {
+	AdminUIFilterType,
+	AdminUISettings,
+	GraphQLEntity,
+	SummaryField,
+} from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 // Xero doesn't provide a type for these for whatever reason. Both
@@ -25,10 +30,20 @@ export class Tenant extends GraphQLEntity<XeroTenant> {
 	@Field(() => String)
 	authEventId!: string;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.TEXT,
+		},
+	})
 	@SummaryField()
 	@Field(() => String)
 	tenantName!: string;
 
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.TEXT,
+		},
+	})
 	@Field(() => String)
 	tenantType!: string;
 
