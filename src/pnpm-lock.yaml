@@ -186,6 +186,7 @@ importers:
       '@exogee/graphweaver-admin-ui-components': workspace:0.1.1
       '@exogee/graphweaver-apollo': workspace:0.1.1
       '@exogee/graphweaver-cli': workspace:0.1.1
+      '@exogee/graphweaver-scalars': workspace:0.1.1
       '@exogee/graphweaver-xero': workspace:0.1.1
       '@exogee/logger': workspace:0.1.1
       '@nivo/bump': 0.80.0
@@ -221,6 +222,7 @@ importers:
       '@exogee/graphweaver-admin-ui-components': link:../../packages/admin-ui-components
       '@exogee/graphweaver-apollo': link:../../packages/apollo
       '@exogee/graphweaver-cli': link:../../packages/cli
+      '@exogee/graphweaver-scalars': link:../../packages/scalars
       '@exogee/graphweaver-xero': link:../../packages/xero
       '@exogee/logger': link:../../packages/logger
       '@nivo/bump': 0.80.0_6zomopewppbkd5eeu2nbbcio3i
@@ -600,16 +602,22 @@ importers:
     specifiers:
       '@exogee/graphweaver-mikroorm': workspace:0.1.1
       '@types/jest': 26.0.23
+      '@types/luxon': 2.0.7
       decimal.js: 10.3.1
+      esbuild: 0.15.5
       graphql: 16.6.0
       jest: 27.0.6
+      luxon: 2.1.1
       ts-jest: 27.0.3
       typescript: 5.0.2
     dependencies:
       '@exogee/graphweaver-mikroorm': link:../mikroorm
+      luxon: 2.1.1
     devDependencies:
       '@types/jest': 26.0.23
+      '@types/luxon': 2.0.7
       decimal.js: 10.3.1
+      esbuild: 0.15.5
       graphql: 16.6.0
       jest: 27.0.6
       ts-jest: 27.0.3_tw56bzwiuqtcomwmn2jblfhv3y
@@ -11836,7 +11844,7 @@ packages:
       jest-validate: 26.6.2
       micromatch: 4.0.5
       pretty-format: 26.6.2
-      ts-node: 10.4.0_avmhn26gld6oiqh27furhvl56y
+      ts-node: 10.4.0_jroyiddt6ygusve22hzkdp6efe
     transitivePeerDependencies:
       - bufferutil
       - canvas
