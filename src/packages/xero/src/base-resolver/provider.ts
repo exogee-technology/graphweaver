@@ -33,6 +33,7 @@ const xeroFilterFrom = (filter: any) => {
 			// Key structure: fieldName + optional predicate, assume no underscore in fieldName
 			const keyParts = key.split('_', 2);
 			const replacedKey = keyParts[0] === 'id' ? 'AccountID' : keyParts[0];
+
 			let subFilter =
 				typeof value === 'object' ? xeroFilterFrom(value) : (value as string | undefined);
 

@@ -40,11 +40,13 @@ export const TextFilter = <T extends { id: string }>({
 	}
 
 	const handleOnChange = (options?: SelectOption[]) => {
-		const filter: Filter | undefined =
+		onChange?.(
+			fieldName,
 			(options ?? [])?.length > 0
-				? { filter: { [`${fieldName}_in`]: options?.map((option) => option.value) } }
-				: undefined;
-		onChange?.(fieldName, filter);
+				? // ? { [`${fieldName}_in`]: options?.map((option) => option.value) }
+				  { [fieldName]: options?.[0]?.value }
+				: undefined
+		);
 	};
 
 	return (

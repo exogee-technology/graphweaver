@@ -33,7 +33,8 @@ export const EnumFilter = ({
 		onChange?.(
 			fieldName,
 			(options ?? [])?.length > 0
-				? { [`${fieldName}_in`]: options?.map((option) => option.value) }
+				? //{ [`${fieldName}_in`]: options?.map((option) => option.value) }
+				  { [fieldName]: options?.[0]?.value }
 				: undefined
 		);
 	};

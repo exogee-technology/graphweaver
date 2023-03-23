@@ -36,6 +36,7 @@ export const DatePicker = ({ onChange, placeholder, isRangePicker = false }: Pro
 		setStartDate(undefined);
 		setEndDate(undefined);
 		setIsOpen(false);
+		onChange(undefined, undefined);
 	};
 
 	const displayText = () => {
