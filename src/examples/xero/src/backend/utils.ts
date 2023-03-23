@@ -9,6 +9,19 @@ export type WithTenantId<T> = T & { tenantId: string };
 
 type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | Promise<T[]>;
 
+type ObjectWithId = {
+	id: string;
+};
+
+const hasId = (obj: unknown): obj is ObjectWithId => {
+	return (obj as ObjectWithId).id !== undefined && typeof (obj as ObjectWithId).id === 'string';
+};
+
+const isObject = (value: unknown) => {
+	const type = typeof value;
+	return value != null && (type === 'object' || type === 'function');
+};
+
 export const forEachTenant = async <T = unknown>(
 	xero: XeroClient,
 	callback: ForEachTenantCallback<T>,
@@ -87,7 +100,10 @@ export const inMemoryFilterFor = (filter: Record<string, any>) => (item: Record<
 				default:
 					throw new Error(`Filter ${filterKey} not yet implemented.`);
 			}
-			// assume 'equals': filterKey == fieldName
+		} else if (isObject(filterValue) && hasId(filterValue)) {
+			// If we have an filter with an object and an ID then flatten the object and map it
+			// For example: { account: { id: '123' } } to { accountId: '123' }
+			return filterValue?.id === item?.[`${filterKey}Id`];
 		} else {
 			if (
 				item[filterKey] === null ||
