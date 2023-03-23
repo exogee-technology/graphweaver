@@ -38,6 +38,13 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		throw Error('Entity should be in URL here');
 	}
 
+	const onFilter = (fieldName: string, filter?: Filter) => {
+		setFilter((_filter) => ({
+			..._filter,
+			...{ [fieldName]: filter },
+		}));
+	};
+
 	const getFilterComponents = (entityName: string) => {
 		const { options } = filterState;
 		const profitAndLossRowEntity = entityByName(entityName);
@@ -71,13 +78,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				);
 			})
 			.filter((field): field is React.FunctionComponentElement<any> => !!field);
-	};
-
-	const onFilter = (fieldName: string, filter?: Filter) => {
-		setFilter((_filter) => ({
-			..._filter,
-			...{ [fieldName]: filter },
-		}));
 	};
 
 	useEffect(() => {
