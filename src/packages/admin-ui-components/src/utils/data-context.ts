@@ -6,8 +6,8 @@ import { Filter, SortField } from '.';
 type DataType = { id: string };
 
 export interface DataState {
+	filterFields: Filter[];
 	data: DataType[];
-	filterField: Filter;
 	sortFields: SortField[];
 	page: number;
 	loading: boolean;
@@ -16,12 +16,10 @@ export interface DataState {
 	allDataFetched: boolean;
 }
 
-export type DataStateByEntity = Record<string, DataState>;
-
 export const defaultEntityState = {
 	data: [],
 	sortFields: [],
-	filterField: { filter: undefined },
+	filterFields: [],
 	page: 1,
 	loading: false,
 	loadingNext: false,
@@ -29,5 +27,11 @@ export const defaultEntityState = {
 	allDataFetched: false,
 };
 
+type DataContextType = {
+	entityState: {
+		[x: string]: DataState;
+	};
+	setEntityState: any;
+};
 // @todo: Combine with useReducer. currently this is set up in DefaultLayout to put entityState/setEntityState into the context
-export const DataContext = createContext({} as any);
+export const DataContext = createContext({} as DataContextType);

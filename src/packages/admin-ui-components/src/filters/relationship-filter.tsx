@@ -1,54 +1,69 @@
-import React, { useContext } from 'react';
+import { useQuery } from '@apollo/client';
+
 import { MultiSelect, SelectOption } from '../multi-select';
-import { DataContext, DataStateByEntity, useSchema } from '../utils';
+import { Filter, useSchema } from '../utils';
+import { getRelationshipQuery } from './graphql';
 
 interface RelationshipFilterProps {
 	fieldName: string;
-	relationshipRefFieldName?: string;
 	entity: string;
-	onSelect?: (fieldName: string, option?: SelectOption) => void;
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	selected?: SelectOption;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const RelationshipFilter = <T extends { id: string }>({
 	fieldName,
-	relationshipRefFieldName,
 	entity,
-	onSelect,
+	onChange,
 	selected,
 	resetCount,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
-	const { entityState, setEntityState } = useContext(DataContext);
 
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);
+	if (!field?.type) return null;
 
 	const relationshipEntity =
 		field && field.relationshipType === 'm:1' ? entities.find((e) => e === field.type) : undefined;
-
 	if (!relationshipEntity) return null;
 
 	const relationshipEntityType = entityByName(relationshipEntity);
-	const relationshipData = (entityState as DataStateByEntity)[relationshipEntity]?.data as T[];
+	if (!relationshipEntityType.summaryField) return null;
 
-	let relationshipOptions: SelectOption[] = [];
-	if (relationshipData && field && relationshipData.length > 0) {
-		// Get a sorted list
-		relationshipOptions = relationshipData
-			// yuk
-			.map((item) => {
-				const label = relationshipEntityType.summaryField;
-				return { label: label ? (item as any)[label] : 'notfound', value: item.id };
-			})
-			.sort((a, b) => a?.label?.toLocaleLowerCase().localeCompare(b?.label?.toLocaleLowerCase()));
-	}
-
-	const onChange = (option?: SelectOption[]) => {
-		if (!onSelect) return;
-		return onSelect(relationshipRefFieldName ?? fieldName, option?.[0]);
+	const orderBy = {
+		[relationshipEntityType.summaryField]: 'ASC',
 	};
+
+	const handleOnChange = (options?: SelectOption[]) => {
+		onChange?.(
+			fieldName,
+			(options ?? [])?.length > 0
+				? {
+						[fieldName]: {
+							id_in: options?.map((option) => option.value),
+						},
+				  }
+				: undefined
+		);
+	};
+
+	const { data, loading } = useQuery<{ result: any[] }>(
+		getRelationshipQuery(field.type, relationshipEntityType.summaryField),
+		{
+			variables: {
+				pagination: {
+					orderBy,
+				},
+			},
+		}
+	);
+
+	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
+		const label = relationshipEntityType.summaryField;
+		return { label: label ? (item as any)[label] : 'notfound', value: item.id };
+	});
 
 	return (
 		<MultiSelect
@@ -56,7 +71,8 @@ export const RelationshipFilter = <T extends { id: string }>({
 			options={relationshipOptions}
 			value={selected ? [selected] : []}
 			placeholder={fieldName}
-			onChange={onChange}
+			onChange={handleOnChange}
+			loading={loading}
 		/>
 	);
 };

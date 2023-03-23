@@ -1,48 +1,46 @@
 import { useState } from 'react';
 import { DateTime } from 'luxon';
 
-import { SelectOption } from '../';
+import { Filter, SelectOption } from '../';
 import { DatePicker } from '../date-picker';
 
 import styles from './styles.module.css';
 
 interface DateRangeFilterProps {
 	fieldName: string;
-	onSelect?: (fieldName: string, start?: SelectOption, end?: SelectOption) => void;
-	selectedStart?: SelectOption;
-	selectedEnd?: SelectOption;
+	entity?: string; // Not used but added to conform to API
+	onChange?: (fieldName: string, filter?: Filter) => void;
+	selected?: SelectOption;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const DateRangeFilter = ({
 	fieldName,
-	onSelect,
-	selectedStart,
-	selectedEnd,
+	onChange,
+	selected,
 	resetCount,
 }: DateRangeFilterProps) => {
-	const [show, setShow] = useState(false);
-	const [buttonText, setButtonText] = useState(fieldName);
-	const [selectedDateRange, setSelectedDateRange] = useState<{
-		startDate?: DateTime;
-		endDate?: DateTime;
-	}>({
-		startDate: undefined,
-		endDate: DateTime.now(),
-	});
-
-	const onChange = (startDate?: DateTime, endDate?: DateTime) => {
-		setSelectedDateRange({
-			startDate,
-			endDate,
-		});
+	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
+		onChange?.(
+			fieldName,
+			startDate && endDate
+				? {
+						[fieldName]: {
+							_and: [
+								{ [`${fieldName}_gte`]: startDate.toISODate() },
+								{ [`${fieldName}_lte`]: endDate.toISODate() },
+							],
+						},
+				  }
+				: undefined
+		);
 	};
 
 	//@todo: NB dates are UTC but the filter is local
 	return (
 		<DatePicker
 			key={`${fieldName}:${resetCount}`}
-			onChange={onChange}
+			onChange={handleOnChange}
 			placeholder={fieldName}
 			isRangePicker
 		/>

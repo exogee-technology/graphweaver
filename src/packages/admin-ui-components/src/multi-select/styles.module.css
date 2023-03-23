@@ -9,6 +9,7 @@
 	position: relative;
 	width: 100%;
 	flex: 1;
+	min-width: 0;
 }
 
 .selectBox {
@@ -19,14 +20,15 @@
 	border-radius: 6px;
 	cursor: pointer;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	position: relative;
 }
 
 .selectedOptions {
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	padding: 4px;
+	min-width: 0;
 }
 
 .optionPill {
@@ -35,8 +37,15 @@
 	color: #fff;
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	justify-content: space-between;
 	padding: 4px 8px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.optionPillLabel {
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .deleteOption {
@@ -50,6 +59,10 @@
 	color: #6c757d;
 	padding: 8px;
 	text-transform: uppercase;
+}
+
+.optionsDropdownBackground {
+	width: 30px;
 }
 
 .optionsDropdown {
@@ -66,6 +79,11 @@
 	z-index: 1;
 }
 
+.optionsDropdown .selectedOptions {
+	flex-direction: column;
+	gap: 10px;
+}
+
 .selectBox.open .optionsDropdown {
 	display: block;
 }
@@ -73,6 +91,9 @@
 .option {
 	cursor: pointer;
 	padding: 8px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .option.selected {
