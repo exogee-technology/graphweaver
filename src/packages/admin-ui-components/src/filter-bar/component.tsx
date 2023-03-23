@@ -29,11 +29,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const navigate = useNavigate();
 	const [filter, setFilter] = useState<{ [x: string]: Filter | undefined }>({});
 
-	const [filterState, setFilterState] = useReducer((prev: FilterState, next: FilterState) => {
-		const newState = { ...prev, ...next };
-		return newState;
-	}, emptyFilterState);
-
 	if (!entity) {
 		throw Error('Entity should be in URL here');
 	}
@@ -46,7 +41,8 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	const getFilterComponents = (entityName: string) => {
-		const { options } = filterState;
+		// @todo this needs populating with filters from the address bar
+		const options: any = {};
 		const profitAndLossRowEntity = entityByName(entityName);
 
 		return profitAndLossRowEntity.fields
@@ -85,16 +81,16 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			.map(([_, _filter]) => _filter)
 			.filter((_filter): _filter is Filter => _filter !== undefined);
 
-		if (filters) {
-			const { sort } = decodeSearchParams(search);
-			navigate(routeFor({ entity, filters, sort }));
-		}
+		const { sort } = decodeSearchParams(search);
+		navigate(
+			routeFor({ entity, filters: filters && filters.length > 0 ? filters : undefined, sort })
+		);
 	}, [filter]);
 
 	const filterComponents = getFilterComponents(entity);
 
 	const clearAllFilters = () => {
-		setFilterState(emptyFilterState);
+		setFilter({});
 		setResetCount((resetCount) => resetCount + 1);
 	};
 
