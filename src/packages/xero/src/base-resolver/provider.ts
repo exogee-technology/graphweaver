@@ -13,55 +13,6 @@ export interface XeroDataAccessor<T> {
 	}) => Promise<T[]>;
 }
 
-/** @deprecated moved to Account resolver as only used there - left here for logging only */
-const xeroFilterFrom = (filter: any) => {
-	if (!filter) return undefined;
-
-	const chunks: string[] = [];
-
-	for (const [key, value] of Object.entries(filter)) {
-		if (key === '_or' || key === '_and') {
-			const subPredicates: string[] = [];
-			for (const subPredicate of value as any[]) {
-				const subFilter = xeroFilterFrom(subPredicate);
-				if (subFilter) subPredicates.push(subFilter);
-			}
-
-			if (key === '_or') chunks.push(`${subPredicates.join(' OR ')}`);
-			else chunks.push(`${subPredicates.join(' AND ')}`);
-		} else {
-			// Key structure: fieldName + optional predicate, assume no underscore in fieldName
-			const keyParts = key.split('_', 2);
-			const replacedKey = keyParts[0] === 'id' ? 'AccountID' : keyParts[0];
-
-			let subFilter =
-				typeof value === 'object' ? xeroFilterFrom(value) : (value as string | undefined);
-
-			// Some Xero types need to be quoted.
-			if (isUUID(subFilter, 4)) {
-				subFilter = `GUID("${subFilter}")`;
-			} else if (typeof subFilter === 'string') {
-				// Assume this works for ISO date strings
-				subFilter = `"${subFilter}"`;
-			}
-
-			if (key.endsWith('_gt')) {
-				chunks.push(`${replacedKey}>${subFilter}`);
-			} else if (key.endsWith('_gte')) {
-				chunks.push(`${replacedKey}>=${subFilter}`);
-			} else if (key.endsWith('_lt')) {
-				chunks.push(`${replacedKey} < ${subFilter}`);
-			} else if (key.endsWith('_lte')) {
-				chunks.push(`${replacedKey}<=${subFilter}`);
-			} else {
-				chunks.push(`${replacedKey}==${subFilter}`);
-			}
-		}
-	}
-
-	return chunks.join(' AND ') || undefined;
-};
-
 const xeroOrderFrom = (pagination?: PaginationOptions) => {
 	if (!pagination || !pagination.orderBy) return undefined;
 
@@ -143,21 +94,6 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	): Promise<T[]> {
 		await this.ensureAccessToken();
 
-		logger.trace(
-			`Running find ${this.entityTypeName} with rawFilter`,
-			{
-				rawFilter: JSON.stringify(filter),
-			},
-			`(converted by Account resolver to xero filter`,
-			{
-				filter: xeroFilterFrom(filter),
-			},
-			') and pagination',
-			{
-				pagination: JSON.stringify(pagination),
-			}
-		);
-
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
@@ -168,7 +104,6 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			const result = await this.accessor.find({
 				xero: XeroBackendProvider.xero,
 				filter,
-				// rawFilter: filter,
 				order: xeroOrderFrom(pagination),
 				limit: xeroLimitFrom(pagination),
 				offset: xeroOffsetFrom(pagination),
