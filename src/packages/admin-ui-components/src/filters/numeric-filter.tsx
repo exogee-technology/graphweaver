@@ -16,7 +16,8 @@ export const NumericFilter = ({
 	resetCount,
 }: NumericFilterProps) => {
 	const handleOnChange = (fieldName: string, value?: string) => {
-		onChange?.(fieldName, value === '' ? undefined : { [fieldName]: value });
+		const inputValue = value && !isNaN(+value) ? parseInt(value) : undefined;
+		onChange?.(fieldName, value === '' ? undefined : { [fieldName]: inputValue });
 	};
 
 	return (
