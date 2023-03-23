@@ -3,7 +3,7 @@ import { SideBar } from '../../side-bar';
 import { Header } from '../../header';
 import { RequireSchema } from '../../require-schema';
 import styles from './styles.module.css';
-import { DataContext, DataStateByEntity } from '../../utils';
+import { DataContext } from '../../utils';
 
 export const DefaultLayout = ({
 	header,
@@ -12,7 +12,7 @@ export const DefaultLayout = ({
 	header?: React.ReactNode;
 	children: React.ReactNode;
 }) => {
-	const [entityState, setEntityState] = useState<DataStateByEntity>({});
+	const [entityState, setEntityState] = useState({});
 	return (
 		<RequireSchema>
 			<DataContext.Provider value={{ entityState, setEntityState }}>

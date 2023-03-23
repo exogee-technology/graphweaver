@@ -27,7 +27,7 @@ interface RouteForDashboard {
 
 interface SearchParams {
 	sort?: SortField[];
-	filter?: Filter;
+	filters?: Filter[];
 }
 
 export type RouteForProps = (RouteForEntity | RouteForType | RouteForDashboard) & SearchParams;
@@ -41,7 +41,7 @@ export const routeFor = ({
 	dashboard,
 	tenantId,
 	sort,
-	filter,
+	filters,
 }: RouteForProps) => {
 	if (dashboard) {
 		const chunks = ['dashboard'];
@@ -58,24 +58,24 @@ export const routeFor = ({
 	const chunks = [entityName];
 	if (id) chunks.push(id);
 
-	return `/${chunks.join('/')}${encodeSearchParams({ sort, filter })}`;
+	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters })}`;
 };
 
 // Stop '&' being always prepended to filter
 interface EncodedParams {
 	sort?: string;
-	filter?: string;
+	filters?: string;
 }
 
 const encodeSearchParams = (searchParams: SearchParams) => {
-	const { sort, filter } = searchParams;
+	const { sort, filters } = searchParams;
 	let search = '';
 	let encoded: EncodedParams = {};
 	if (sort && sort.length > 0) {
 		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
 	}
-	if (filter && Object.keys(filter).length > 0) {
-		encoded = { ...encoded, filter: encodeURIComponent(btoa(JSON.stringify(filter))) };
+	if (filters && filters.length > 0) {
+		encoded = { ...encoded, filters: encodeURIComponent(btoa(JSON.stringify(filters))) };
 	}
 	if (Object.keys(encoded).length > 0) {
 		search =
@@ -87,16 +87,16 @@ const encodeSearchParams = (searchParams: SearchParams) => {
 	return search;
 };
 
-export const decodeSearchParams = (search: URLSearchParams) => {
-	const result: Record<string, any> = {};
+export const decodeSearchParams = (
+	search: URLSearchParams
+): {
+	sort?: any;
+	filters?: Filter[];
+} => {
 	const rawSort = search.get('sort');
-	const rawFilter = search.get('filter');
-	if (rawSort !== null) {
-		// TODO: validate JSON
-		result['sort'] = JSON.parse(atob(decodeURIComponent(rawSort)));
-	}
-	if (rawFilter !== null) {
-		result['filter'] = JSON.parse(atob(decodeURIComponent(rawFilter)));
-	}
-	return result;
+	const rawFilter = search.get('filters');
+	return {
+		sort: rawSort ? JSON.parse(atob(decodeURIComponent(rawSort))) : undefined,
+		filters: rawFilter ? JSON.parse(atob(decodeURIComponent(rawFilter))) : undefined,
+	};
 };

@@ -38,67 +38,57 @@ export interface EntityField {
 	};
 }
 
+// @todo this needs typing correctly
 export interface Filter {
-	filter?: FieldPredicate;
+	[x: string]: unknown;
 }
 
-interface FieldEquals {
-	kind: 'equals';
-	field: string;
-	value: string;
-}
+// interface FieldEquals {
+// 	kind: 'equals';
+// 	field: string;
+// 	value: string;
+// }
 
-interface FieldLike {
-	kind: '_like';
-	field: string;
-	pattern: string;
-	isCaseInsensitive: boolean;
-}
+// interface FieldLike {
+// 	kind: '_like';
+// 	field: string;
+// 	pattern: string;
+// 	isCaseInsensitive: boolean;
+// }
 
-interface FieldGreaterThan {
-	kind: '_gt';
-	field: string;
-	value: string | number;
-}
+// interface FieldGreaterThan {
+// 	kind: '_gt';
+// 	field: string;
+// 	value: string | number;
+// }
 
-interface FieldLessThan {
-	kind: '_lt';
-	field: string;
-	value: string | number;
-}
+// interface FieldLessThan {
+// 	kind: '_lt';
+// 	field: string;
+// 	value: string | number;
+// }
 
-interface FieldGreaterThanOrEqualTo {
-	kind: '_gte';
-	field: string;
-	value: string | number;
-}
+// interface FieldGreaterThanOrEqualTo {
+// 	kind: '_gte';
+// 	field: string;
+// 	value: string | number;
+// }
 
-interface FieldLessThanOrEqualTo {
-	kind: '_lte';
-	field: string;
-	value: string | number;
-}
+// interface FieldLessThanOrEqualTo {
+// 	kind: '_lte';
+// 	field: string;
+// 	value: string | number;
+// }
 
-interface FieldAnd {
-	kind: '_and';
-	and: FieldPredicate[];
-}
+// interface FieldAnd {
+// 	kind: '_and';
+// 	and: FieldPredicate[];
+// }
 
-interface FieldOr {
-	kind: '_or';
-	or: FieldPredicate[];
-}
-
-// @todo: These are the ones currently supported by the Xero backend provider
-export type FieldPredicate =
-	| FieldEquals
-	| FieldLike
-	| FieldAnd
-	| FieldOr
-	| FieldGreaterThan
-	| FieldLessThan
-	| FieldGreaterThanOrEqualTo
-	| FieldLessThanOrEqualTo; // | FieldNot | in, isNull, isTrue between, etc
+// interface FieldOr {
+// 	kind: '_or';
+// 	or: FieldPredicate[];
+// }
 
 type SortDirection = 'ASC' | 'DESC';
 

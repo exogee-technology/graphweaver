@@ -1,11 +1,10 @@
 import { useContext } from 'react';
-import { DataContext, DataStateByEntity, MultiSelect, SelectOption, useSchema } from '..';
+import { DataContext, Filter, MultiSelect, SelectOption, useSchema } from '..';
 
 interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	// onSelect?: (fieldName: string, filter?: Filter) => void;
-	onSelect?: (fieldName: string, option?: SelectOption) => void;
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	selected?: SelectOption;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -13,15 +12,15 @@ interface TextFilterProps {
 export const TextFilter = <T extends { id: string }>({
 	fieldName,
 	entity,
-	onSelect,
+	onChange,
 	selected,
 	resetCount,
 }: TextFilterProps) => {
 	const { entityByName } = useSchema();
-	const { entityState, setEntityState } = useContext(DataContext);
+	const { entityState } = useContext(DataContext);
 
 	const entityType = entityByName(entity);
-	const data = (entityState as DataStateByEntity)[entity]?.data as T[];
+	const data = entityState[entity]?.data;
 	const field = entityType?.fields.find((f) => f.name === fieldName);
 	let textOptions: SelectOption[] = [];
 	if (data && field && data.length > 0) {
@@ -40,9 +39,12 @@ export const TextFilter = <T extends { id: string }>({
 			.map((item) => ({ label: item, value: item }));
 	}
 
-	const onChange = (options?: SelectOption[]) => {
-		if (!onSelect) return;
-		return onSelect(fieldName, options?.[0]);
+	const handleOnChange = (options?: SelectOption[]) => {
+		const filter: Filter | undefined =
+			(options ?? [])?.length > 0
+				? { filter: { [`${fieldName}_in`]: options?.map((option) => option.value) } }
+				: undefined;
+		onChange?.(fieldName, filter);
 	};
 
 	return (
@@ -51,7 +53,7 @@ export const TextFilter = <T extends { id: string }>({
 			options={textOptions}
 			value={selected ? [selected] : []}
 			placeholder={fieldName}
-			onChange={onChange}
+			onChange={handleOnChange}
 		/>
 	);
 };
