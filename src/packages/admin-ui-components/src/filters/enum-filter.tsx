@@ -1,11 +1,11 @@
 import { MultiSelect, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 
-interface EnumFilterProps {
+export interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter;
+	onChange?: (fieldName: string, filter?: Filter<string>) => void;
+	initialFilter?: Filter<string>;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -43,7 +43,9 @@ export const EnumFilter = ({
 		<MultiSelect
 			key={fieldName + resetCount}
 			options={enumOptions}
-			value={initialFilter ? [{ value: initialFilter?.[fieldName] as any, label: '' }] : []}
+			value={
+				initialFilter?.[fieldName] ? [{ value: initialFilter?.[fieldName], label: undefined }] : []
+			}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>

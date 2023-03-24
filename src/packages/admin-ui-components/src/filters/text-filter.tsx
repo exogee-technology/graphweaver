@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { DataContext, Filter, MultiSelect, SelectOption, useSchema } from '..';
 
-interface TextFilterProps {
+export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter;
+	onChange?: (fieldName: string, filter?: Filter<string>) => void;
+	initialFilter?: Filter<string>;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -54,7 +54,7 @@ export const TextFilter = <T extends { id: string }>({
 		<MultiSelect
 			key={fieldName + resetCount}
 			options={textOptions}
-			value={initialFilter && resetCount === 0 ? [{ value, label: value as string }] : []}
+			value={initialFilter ? [{ value, label: value }] : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>
