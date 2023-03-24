@@ -4,15 +4,17 @@ import { MultiSelect, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
-interface RelationshipFilterProps {
+type RelationshipFilterType = { [x: string]: { id: string } } | undefined;
+
+export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter;
+	onChange?: (fieldName: string, filter?: Filter<RelationshipFilterType>) => void;
+	initialFilter?: Filter<RelationshipFilterType>;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
-export const RelationshipFilter = <T extends { id: string }>({
+export const RelationshipFilter = ({
 	fieldName,
 	entity,
 	onChange,
@@ -71,7 +73,9 @@ export const RelationshipFilter = <T extends { id: string }>({
 			key={fieldName + resetCount}
 			options={relationshipOptions}
 			value={
-				initialFilter ? [{ value: (initialFilter?.[fieldName] as any).id, label: undefined }] : []
+				initialFilter?.[fieldName]?.id
+					? [{ value: initialFilter?.[fieldName]?.id, label: undefined }]
+					: []
 			}
 			placeholder={fieldName}
 			onChange={handleOnChange}

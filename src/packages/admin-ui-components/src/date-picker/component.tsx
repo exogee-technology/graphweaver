@@ -12,11 +12,19 @@ interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
 	placeholder?: string;
 	isRangePicker?: boolean;
+	initialStartDate?: DateTime;
+	initialEndDate?: DateTime;
 }
 
-export const DatePicker = ({ onChange, placeholder, isRangePicker = false }: Props) => {
-	const [startDate, setStartDate] = useState<DateTime | undefined>(undefined);
-	const [endDate, setEndDate] = useState<DateTime | undefined>(undefined);
+export const DatePicker = ({
+	onChange,
+	placeholder,
+	isRangePicker = false,
+	initialStartDate,
+	initialEndDate,
+}: Props) => {
+	const [startDate, setStartDate] = useState<DateTime | undefined>(initialStartDate);
+	const [endDate, setEndDate] = useState<DateTime | undefined>(initialEndDate);
 	const [isOpen, setIsOpen] = useState(false);
 	const datePickerRef = useRef<HTMLDivElement>(null);
 
