@@ -4,7 +4,7 @@ import styles from './styles.module.css';
 
 export interface SelectOption {
 	value: any;
-	label: string;
+	label?: string;
 }
 
 interface MultiSelectProps {
@@ -82,7 +82,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 					<div className={styles.selectedOptions}>
 						<div className={styles.optionPill}>
 							<span className={styles.optionPillLabel}>
-								{selectedOptions.length > 1
+								{selectedOptions.length > 1 || !selectedOptions?.[0]?.label
 									? `${selectedOptions.length} Selected`
 									: selectedOptions?.[0].label}
 							</span>

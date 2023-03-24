@@ -1,5 +1,5 @@
 import { SortColumn } from 'react-data-grid';
-import { Entity, Filter, SortField } from './use-schema';
+import { Entity, FieldFilter, Filter, SortField } from './use-schema';
 
 interface RouteForEntity {
 	entity: string | Entity;
@@ -27,7 +27,7 @@ interface RouteForDashboard {
 
 interface SearchParams {
 	sort?: SortField[];
-	filters?: Filter[];
+	filters?: FieldFilter;
 }
 
 export type RouteForProps = (RouteForEntity | RouteForType | RouteForDashboard) & SearchParams;
@@ -74,7 +74,7 @@ const encodeSearchParams = (searchParams: SearchParams) => {
 	if (sort && sort.length > 0) {
 		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
 	}
-	if (filters && filters.length > 0) {
+	if (filters && Object.keys(filters).length > 0) {
 		encoded = { ...encoded, filters: encodeURIComponent(btoa(JSON.stringify(filters))) };
 	}
 	if (Object.keys(encoded).length > 0) {
@@ -91,7 +91,7 @@ export const decodeSearchParams = (
 	search: URLSearchParams
 ): {
 	sort?: any;
-	filters?: Filter[];
+	filters?: FieldFilter;
 } => {
 	const rawSort = search.get('sort');
 	const rawFilter = search.get('filters');
