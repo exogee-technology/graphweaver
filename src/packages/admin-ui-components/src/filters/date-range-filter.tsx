@@ -3,15 +3,20 @@ import { DateTime } from 'luxon';
 import { Filter } from '../';
 import { DatePicker } from '../date-picker';
 
-import styles from './styles.module.css';
+type DateRangeFilterType = { [x: string]: string }[] | undefined;
 
-interface DateRangeFilterProps {
+export interface DateRangeFilterProps {
 	fieldName: string;
 	entity?: string; // Not used but added to conform to API
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter;
+	onChange?: (fieldName: string, filter?: Filter<DateRangeFilterType>) => void;
+	initialFilter?: Filter<DateRangeFilterType>;
 	resetCount: number; // We use this to reset the filter using the key
 }
+
+const getInitialDateWithKeyFromFilter = (key: string, filter?: Filter<DateRangeFilterType>) => {
+	const iSOString = filter?._and?.find((_filter) => _filter[key])?.[key];
+	return iSOString ? DateTime.fromISO(iSOString) : undefined;
+};
 
 export const DateRangeFilter = ({
 	fieldName,
@@ -19,27 +24,33 @@ export const DateRangeFilter = ({
 	initialFilter,
 	resetCount,
 }: DateRangeFilterProps) => {
+	const startKey = `${fieldName}_gte`;
+	const endKey = `${fieldName}_lte`;
+	const initialStartDate = getInitialDateWithKeyFromFilter(startKey, initialFilter);
+	const initialEndDate = getInitialDateWithKeyFromFilter(endKey, initialFilter);
+
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
 		onChange?.(
 			fieldName,
 			startDate && endDate
 				? {
 						_and: [
-							{ [`${fieldName}_gte`]: startDate.startOf('day').toISO() },
-							{ [`${fieldName}_lte`]: endDate.endOf('day').toISO() },
+							{ [startKey]: startDate.startOf('day').toISO() },
+							{ [endKey]: endDate.endOf('day').toISO() },
 						],
 				  }
 				: undefined
 		);
 	};
 
-	//@todo: NB dates are UTC but the filter is local
 	return (
 		<DatePicker
 			key={`${fieldName}:${resetCount}`}
 			onChange={handleOnChange}
 			placeholder={fieldName}
 			isRangePicker
+			initialStartDate={initialStartDate}
+			initialEndDate={initialEndDate}
 		/>
 	);
 };

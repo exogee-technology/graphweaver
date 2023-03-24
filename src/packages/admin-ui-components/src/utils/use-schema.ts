@@ -44,8 +44,8 @@ export interface FieldFilter {
 	[x: string]: Filter | undefined;
 }
 
-export interface Filter {
-	[x: string]: unknown;
+export interface Filter<T = unknown> {
+	[x: string]: T;
 }
 
 // interface FieldEquals {

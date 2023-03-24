@@ -1,4 +1,11 @@
-import { ReactNode, useEffect, useReducer, useState, createElement } from 'react';
+import {
+	ReactNode,
+	useEffect,
+	useReducer,
+	useState,
+	createElement,
+	FunctionComponent,
+} from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
 import {
@@ -11,10 +18,15 @@ import {
 } from '../utils';
 import {
 	DateRangeFilter,
+	DateRangeFilterProps,
 	EnumFilter,
+	EnumFilterProps,
 	NumericFilter,
+	NumericFilterProps,
 	RelationshipFilter,
+	RelationshipFilterProps,
 	TextFilter,
+	TextFilterProps,
 } from '../filters';
 
 import styles from './styles.module.css';
@@ -44,35 +56,35 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const getFilterComponents = (entityName: string) => {
 		const rowEntity = entityByName(entityName);
 
-		return rowEntity.fields
-			.map((field) => {
-				const filterComponent: {
-					[x in AdminUIFilterType]:
-						| typeof TextFilter
-						| typeof RelationshipFilter
-						| typeof EnumFilter
-						| typeof NumericFilter
-						| typeof DateRangeFilter;
-				} = {
-					[AdminUIFilterType.TEXT]: TextFilter,
-					[AdminUIFilterType.RELATIONSHIP]: RelationshipFilter,
-					[AdminUIFilterType.ENUM]: EnumFilter,
-					[AdminUIFilterType.NUMERIC]: NumericFilter,
-					[AdminUIFilterType.DATE_RANGE]: DateRangeFilter,
-				};
-				return (
-					field.filter?.type &&
-					createElement(filterComponent[field.filter.type], {
+		return rowEntity.fields.map((field) => {
+			const filterComponent = {
+				[AdminUIFilterType.TEXT]: TextFilter,
+				[AdminUIFilterType.RELATIONSHIP]: RelationshipFilter,
+				[AdminUIFilterType.ENUM]: EnumFilter,
+				[AdminUIFilterType.NUMERIC]: NumericFilter,
+				[AdminUIFilterType.DATE_RANGE]: DateRangeFilter,
+			};
+			return (
+				field.filter?.type &&
+				createElement(
+					filterComponent[field.filter.type] as FunctionComponent<
+						| NumericFilterProps
+						| TextFilterProps
+						| DateRangeFilterProps
+						| EnumFilterProps
+						| RelationshipFilterProps
+					>,
+					{
 						key: field.name,
 						fieldName: field.name,
 						entity: entity,
 						initialFilter: filter[field.name],
 						onChange: onFilter,
 						resetCount: resetCount,
-					})
-				);
-			})
-			.filter((field): field is React.FunctionComponentElement<any> => !!field);
+					}
+				)
+			);
+		});
 	};
 
 	useEffect(() => {
