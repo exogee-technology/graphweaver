@@ -33,7 +33,7 @@ export const ListToolBar = () => {
 
 export const List = () => {
 	const { entity } = useParams();
-	const [search, setSearch] = useSearchParams();
+	const [search] = useSearchParams();
 	const navigate = useNavigate();
 
 	if (!entity) throw new Error('There should always be an entity at this point.');
@@ -42,14 +42,22 @@ export const List = () => {
 
 	const { entityState, setEntityState } = useContext(DataContext);
 
+	const getDefaultEntityState = () => {
+		const { filters } = decodeSearchParams(search);
+		return {
+			...defaultEntityState,
+			filterFields: filters,
+		};
+	};
+
 	const resetDataState = (entity: string, state: Partial<DataState>) => {
 		setEntityState({
 			...entityState,
-			[entity]: { ...defaultEntityState, ...state },
+			[entity]: { ...getDefaultEntityState(), ...state },
 		});
 	};
 	const setDataState = (entity: string, state: Partial<DataState>) => {
-		const currentState = entityState[entity] ?? defaultEntityState;
+		const currentState = entityState[entity] ?? getDefaultEntityState();
 		// PAGINATION: All but data are overwritten, data is appended
 		// SORT/FILTER: Data is overwritten, starting from the beginning
 		// As we don't know here which change has triggered the setter func,
@@ -66,7 +74,7 @@ export const List = () => {
 	};
 
 	const fetchData = useCallback(async () => {
-		const currentState = entityState[entity] ?? defaultEntityState;
+		const currentState = entityState[entity] ?? getDefaultEntityState();
 
 		if (currentState.allDataFetched) {
 			return;
@@ -119,7 +127,6 @@ export const List = () => {
 			// TODO: error handling
 			.catch(console.error);
 	}, [
-		fetchData,
 		entity,
 		entityState[entity]?.filterFields,
 		entityState[entity]?.sortFields,
@@ -142,12 +149,12 @@ export const List = () => {
 	const incrementPage = () => {
 		setDataState(entity, {
 			loadingNext: true,
-			page: (entityState[entity]?.page ?? defaultEntityState.page) + 1,
+			page: (entityState[entity]?.page ?? getDefaultEntityState().page) + 1,
 		});
 	};
 
 	const { loading, loadingNext, error, data, sortFields, allDataFetched } =
-		entityState[entity] ?? defaultEntityState;
+		entityState[entity] ?? getDefaultEntityState();
 
 	return (
 		<>

@@ -8,7 +8,7 @@ interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	selected?: SelectOption;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -16,7 +16,7 @@ export const RelationshipFilter = <T extends { id: string }>({
 	fieldName,
 	entity,
 	onChange,
-	selected,
+	initialFilter,
 	resetCount,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
@@ -42,7 +42,7 @@ export const RelationshipFilter = <T extends { id: string }>({
 			(options ?? [])?.length > 0
 				? {
 						[fieldName]: {
-							// id_in: options?.map((option) => option.value),
+							// @todo this can be expanded to support the in operator id_in: options?.map((option) => option.value),
 							id: options?.[0]?.value,
 						},
 				  }
@@ -70,7 +70,9 @@ export const RelationshipFilter = <T extends { id: string }>({
 		<MultiSelect
 			key={fieldName + resetCount}
 			options={relationshipOptions}
-			value={selected ? [selected] : []}
+			value={
+				initialFilter ? [{ value: (initialFilter?.[fieldName] as any).id, label: undefined }] : []
+			}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			loading={loading}

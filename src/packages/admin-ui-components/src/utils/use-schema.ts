@@ -39,6 +39,11 @@ export interface EntityField {
 }
 
 // @todo this needs typing correctly
+
+export interface FieldFilter {
+	[x: string]: Filter | undefined;
+}
+
 export interface Filter {
 	[x: string]: unknown;
 }

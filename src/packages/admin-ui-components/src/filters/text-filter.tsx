@@ -5,7 +5,7 @@ interface TextFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	selected?: SelectOption;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -13,7 +13,7 @@ export const TextFilter = <T extends { id: string }>({
 	fieldName,
 	entity,
 	onChange,
-	selected,
+	initialFilter,
 	resetCount,
 }: TextFilterProps) => {
 	const { entityByName } = useSchema();
@@ -22,6 +22,7 @@ export const TextFilter = <T extends { id: string }>({
 	const entityType = entityByName(entity);
 	const data = entityState[entity]?.data;
 	const field = entityType?.fields.find((f) => f.name === fieldName);
+	const value = initialFilter?.[fieldName];
 	let textOptions: SelectOption[] = [];
 	if (data && field && data.length > 0) {
 		// Get a unique, sorted list
@@ -43,7 +44,7 @@ export const TextFilter = <T extends { id: string }>({
 		onChange?.(
 			fieldName,
 			(options ?? [])?.length > 0
-				? // ? { [`${fieldName}_in`]: options?.map((option) => option.value) }
+				? // @todo this can be expanded to support the in operator { [`${fieldName}_in`]: options?.map((option) => option.value) }
 				  { [fieldName]: options?.[0]?.value }
 				: undefined
 		);
@@ -53,7 +54,7 @@ export const TextFilter = <T extends { id: string }>({
 		<MultiSelect
 			key={fieldName + resetCount}
 			options={textOptions}
-			value={selected ? [selected] : []}
+			value={initialFilter && resetCount === 0 ? [{ value, label: value as string }] : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>

@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import { DateTime } from 'luxon';
 
-import { Filter, SelectOption } from '../';
+import { Filter } from '../';
 import { DatePicker } from '../date-picker';
 
 import styles from './styles.module.css';
@@ -10,14 +9,14 @@ interface DateRangeFilterProps {
 	fieldName: string;
 	entity?: string; // Not used but added to conform to API
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	selected?: SelectOption;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const DateRangeFilter = ({
 	fieldName,
 	onChange,
-	selected,
+	initialFilter,
 	resetCount,
 }: DateRangeFilterProps) => {
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
