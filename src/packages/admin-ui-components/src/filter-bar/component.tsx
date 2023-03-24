@@ -19,19 +19,19 @@ import {
 import {
 	DateRangeFilter,
 	DateRangeFilterProps,
+	DateRangeFilterType,
 	EnumFilter,
 	EnumFilterProps,
 	NumericFilter,
 	NumericFilterProps,
 	RelationshipFilter,
 	RelationshipFilterProps,
+	RelationshipFilterType,
 	TextFilter,
 	TextFilterProps,
 } from '../filters';
 
 import styles from './styles.module.css';
-
-type IndexedOptions = Record<string, any>;
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
@@ -68,17 +68,22 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				field.filter?.type &&
 				createElement(
 					filterComponent[field.filter.type] as FunctionComponent<
-						| NumericFilterProps
-						| TextFilterProps
-						| DateRangeFilterProps
-						| EnumFilterProps
-						| RelationshipFilterProps
+						NumericFilterProps &
+							TextFilterProps &
+							DateRangeFilterProps &
+							EnumFilterProps &
+							RelationshipFilterProps
 					>,
 					{
 						key: field.name,
 						fieldName: field.name,
 						entity: entity,
-						initialFilter: filter[field.name],
+						initialFilter: filter[field.name] as
+							| (Filter<number | undefined> &
+									Filter<string> &
+									Filter<DateRangeFilterType> &
+									Filter<RelationshipFilterType>)
+							| undefined,
 						onChange: onFilter,
 						resetCount: resetCount,
 					}
