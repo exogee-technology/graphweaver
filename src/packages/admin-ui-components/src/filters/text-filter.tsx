@@ -28,7 +28,7 @@ export const TextFilter = <T extends { id: string }>({
 		// Get a unique, sorted list
 		textOptions = data
 			// yuk
-			.map((item) => (item as any)[field.name])
+			.map((item) => item[field.name as keyof typeof item])
 			.reduce((arr: string[], item) => {
 				if (!arr.includes(item)) {
 					arr.push(item);

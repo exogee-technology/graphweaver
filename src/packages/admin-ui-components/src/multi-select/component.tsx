@@ -3,7 +3,7 @@ import { Spinner } from '../spinner';
 import styles from './styles.module.css';
 
 export interface SelectOption {
-	value: any;
+	value: unknown;
 	label?: string;
 }
 
