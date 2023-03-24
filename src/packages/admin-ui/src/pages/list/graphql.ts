@@ -1,6 +1,6 @@
 import {
 	Entity,
-	Filter,
+	FieldFilter,
 	getEntity,
 	getEntityPage,
 	SortField,
@@ -10,13 +10,13 @@ import { SortColumn } from 'react-data-grid';
 export const fetchList = <T>(
 	entity: string,
 	entityByNameOrType: (entity: string) => Entity,
-	filterField?: Filter[],
+	filterField?: FieldFilter,
 	sortFields?: SortField[],
 	page?: number
 ) =>
 	getEntityPage<T>(
 		entityByNameOrType(entity),
-		filterField || [],
+		filterField || {},
 		sortFields || [],
 		entityByNameOrType,
 		page ?? 1

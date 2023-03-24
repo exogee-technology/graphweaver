@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import pluralize from 'pluralize';
 
-import { Entity, Filter, SortField } from './use-schema';
+import { Entity, FieldFilter, Filter, SortField } from './use-schema';
 // Can't use useApolloClient/useQuery/useParms here if not using Loader
 import { apolloClient } from '../apollo';
 
@@ -9,7 +9,7 @@ export const PAGE_SIZE = 50;
 
 export const getEntityPage = <T>(
 	entity: Entity,
-	filters: Filter[],
+	filters: FieldFilter,
 	sortFields: readonly SortField[],
 	entityByType: (type: string) => Entity,
 	page: number
@@ -98,15 +98,19 @@ const queryForEntity = (entity: Entity, entityByType?: (type: string) => Entity)
 	`;
 };
 
-const andFilters = (filters: Filter[]) => {
-	return filters.length > 0
-		? filters.reduce<{ _and: unknown[] }>(
-				(prev, curr) => {
-					return {
-						_and: [...prev._and, curr],
-					};
-				},
-				{ _and: [] }
-		  )
-		: undefined;
+const andFilters = (filters: FieldFilter) => {
+	const filter = Object.entries(filters)
+		.map(([_, _filter]) => _filter)
+		.filter((_filter): _filter is Filter => _filter !== undefined);
+
+	if (filter.length === 0) return undefined;
+
+	return filter.reduce<{ _and: unknown[] }>(
+		(prev, curr) => {
+			return {
+				_and: [...prev._and, curr],
+			};
+		},
+		{ _and: [] }
+	);
 };

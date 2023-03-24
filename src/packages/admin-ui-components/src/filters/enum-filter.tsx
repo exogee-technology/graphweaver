@@ -5,7 +5,7 @@ interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	selected?: SelectOption;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -13,7 +13,7 @@ export const EnumFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	selected,
+	initialFilter,
 	resetCount,
 }: EnumFilterProps) => {
 	const { entityByName, enumByName } = useSchema();
@@ -33,7 +33,7 @@ export const EnumFilter = ({
 		onChange?.(
 			fieldName,
 			(options ?? [])?.length > 0
-				? //{ [`${fieldName}_in`]: options?.map((option) => option.value) }
+				? //@todo this can be expanded to support the in operator { [`${fieldName}_in`]: options?.map((option) => option.value) }
 				  { [fieldName]: options?.[0]?.value }
 				: undefined
 		);
@@ -43,7 +43,7 @@ export const EnumFilter = ({
 		<MultiSelect
 			key={fieldName + resetCount}
 			options={enumOptions}
-			value={selected ? [selected] : []}
+			value={initialFilter ? [{ value: initialFilter?.[fieldName] as any, label: '' }] : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>

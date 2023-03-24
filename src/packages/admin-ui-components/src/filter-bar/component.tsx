@@ -1,7 +1,14 @@
 import { ReactNode, useEffect, useReducer, useState, createElement } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
-import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
+import {
+	AdminUIFilterType,
+	decodeSearchParams,
+	FieldFilter,
+	Filter,
+	routeFor,
+	useSchema,
+} from '../utils';
 import {
 	DateRangeFilter,
 	EnumFilter,
@@ -14,20 +21,14 @@ import styles from './styles.module.css';
 
 type IndexedOptions = Record<string, any>;
 
-interface FilterState {
-	filter: Filter;
-	options: IndexedOptions;
-}
-
-const emptyFilterState: FilterState = { filter: {}, options: {} };
-
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
-	const [filter, setFilter] = useState<{ [x: string]: Filter | undefined }>({});
+	const searchParams = decodeSearchParams(search);
+	const [filter, setFilter] = useState<FieldFilter>(searchParams.filters ?? {});
 
 	if (!entity) {
 		throw Error('Entity should be in URL here');
@@ -41,11 +42,9 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	const getFilterComponents = (entityName: string) => {
-		// @todo this needs populating with filters from the address bar
-		const options: any = {};
-		const profitAndLossRowEntity = entityByName(entityName);
+		const rowEntity = entityByName(entityName);
 
-		return profitAndLossRowEntity.fields
+		return rowEntity.fields
 			.map((field) => {
 				const filterComponent: {
 					[x in AdminUIFilterType]:
@@ -67,7 +66,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						key: field.name,
 						fieldName: field.name,
 						entity: entity,
-						selected: options[field.name],
+						initialFilter: filter[field.name],
 						onChange: onFilter,
 						resetCount: resetCount,
 					})
@@ -77,13 +76,9 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	useEffect(() => {
-		const filters = Object.entries(filter)
-			.map(([_, _filter]) => _filter)
-			.filter((_filter): _filter is Filter => _filter !== undefined);
-
 		const { sort } = decodeSearchParams(search);
 		navigate(
-			routeFor({ entity, filters: filters && filters.length > 0 ? filters : undefined, sort })
+			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort })
 		);
 	}, [filter]);
 

@@ -1,12 +1,12 @@
 import { ApolloError } from '@apollo/client';
 import { createContext } from 'react';
 
-import { Filter, SortField } from '.';
+import { FieldFilter, SortField } from '.';
 
 type DataType = { id: string };
 
 export interface DataState {
-	filterFields: Filter[];
+	filterFields: FieldFilter;
 	data: DataType[];
 	sortFields: SortField[];
 	page: number;
