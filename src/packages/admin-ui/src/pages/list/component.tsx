@@ -1,7 +1,5 @@
-import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ApolloError } from '@apollo/client';
-import { SortColumn } from 'react-data-grid';
 
 import {
 	DetailPanel,
