@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import { Filter } from '../';
 import { DatePicker } from '../date-picker';
 
-type DateRangeFilterType = { [x: string]: string }[] | undefined;
+export type DateRangeFilterType = { [x: string]: string }[] | undefined;
 
 export interface DateRangeFilterProps {
 	fieldName: string;

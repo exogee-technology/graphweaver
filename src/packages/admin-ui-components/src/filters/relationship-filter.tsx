@@ -4,7 +4,7 @@ import { MultiSelect, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
-type RelationshipFilterType = { [x: string]: { id: string } } | undefined;
+export type RelationshipFilterType = { [x: string]: { id: string } } | undefined;
 
 export interface RelationshipFilterProps {
 	fieldName: string;
