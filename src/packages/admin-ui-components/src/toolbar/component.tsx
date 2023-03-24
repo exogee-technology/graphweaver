@@ -45,7 +45,7 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 					<Dropdown items={externalLinkItems}>Links</Dropdown>
 				</div>
 			</div>
-			<FilterBar iconBefore={<FilterIcon />} />
+			<FilterBar key={`filterBar:${title}:${subtitle}`} iconBefore={<FilterIcon />} />
 		</div>
 	);
 };

@@ -127,6 +127,7 @@ export const List = () => {
 			// TODO: error handling
 			.catch(console.error);
 	}, [
+		fetchData,
 		entity,
 		entityState[entity]?.filterFields,
 		entityState[entity]?.sortFields,
