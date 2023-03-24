@@ -17,7 +17,7 @@ export class AccountResolver extends createBaseResolver(
 				xero,
 				async (tenant) => {
 					const sortFields = order ?? defaultSort;
-					const [remainingFilter] = splitFilter(filter);
+					const [_, remainingFilter] = splitFilter(filter);
 					const {
 						body: { accounts },
 					} = await xero.accountingApi.getAccounts(
