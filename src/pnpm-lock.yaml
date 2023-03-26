@@ -178,6 +178,27 @@ importers:
       ts-node: 10.4.0_typescript@5.0.2
       typescript: 5.0.2
 
+  examples/databases:
+    specifiers:
+      '@as-integrations/aws-lambda': 1.0.1
+      '@exogee/graphweaver': workspace:0.1.1
+      '@exogee/graphweaver-apollo': workspace:0.1.1
+      '@exogee/graphweaver-cli': workspace:0.1.1
+      '@exogee/graphweaver-mikroorm': workspace:0.1.1
+      '@types/node': 14.14.10
+      reflect-metadata: 0.1.13
+      typescript: 5.0.2
+    dependencies:
+      '@as-integrations/aws-lambda': 1.0.1
+      '@exogee/graphweaver': link:../../packages/core
+      '@exogee/graphweaver-apollo': link:../../packages/apollo
+      '@exogee/graphweaver-cli': link:../../packages/cli
+      '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
+      reflect-metadata: 0.1.13
+    devDependencies:
+      '@types/node': 14.14.10
+      typescript: 5.0.2
+
   examples/xero:
     specifiers:
       '@as-integrations/aws-lambda': 1.0.1
@@ -5821,7 +5842,7 @@ packages:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 18.11.11
+      '@types/node': 18.14.2
     dev: false
 
   /@types/bunyan/1.8.6:
@@ -5851,7 +5872,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 18.11.11
+      '@types/node': 18.14.2
     dev: false
 
   /@types/cookie-signature/1.0.3:
@@ -5886,7 +5907,7 @@ packages:
   /@types/express-serve-static-core/4.17.33:
     resolution: {integrity: sha512-TPBqmR/HRYI3eC2E5hmiivIzv+bidAfXofM+sbonAGvyDhySGw9/PQZFt2BLOrjUUR++4eJVpx6KnLQK1Fk9tA==}
     dependencies:
-      '@types/node': 18.11.11
+      '@types/node': 18.14.2
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
     dev: false
@@ -6027,7 +6048,7 @@ packages:
   /@types/node-fetch/2.6.2:
     resolution: {integrity: sha512-DHqhlq5jeESLy19TYhLakJ07kNumXWjcDdxXsLUMJZ6ue8VZJj4kLPQVE/2mdHh3xZziNF1xppu5lwmS53HR+A==}
     dependencies:
-      '@types/node': 18.11.11
+      '@types/node': 18.14.2
       form-data: 3.0.1
     dev: false
 
@@ -6041,6 +6062,7 @@ packages:
 
   /@types/node/18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
+    dev: true
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
@@ -6137,7 +6159,7 @@ packages:
     resolution: {integrity: sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==}
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 18.11.11
+      '@types/node': 18.14.2
     dev: false
 
   /@types/serverless/1.78.11:
@@ -11844,7 +11866,7 @@ packages:
       jest-validate: 26.6.2
       micromatch: 4.0.5
       pretty-format: 26.6.2
-      ts-node: 10.4.0_jroyiddt6ygusve22hzkdp6efe
+      ts-node: 10.4.0_avmhn26gld6oiqh27furhvl56y
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -13168,7 +13190,7 @@ packages:
     resolution: {integrity: sha512-7vuh85V5cdDofPyxn58nrPjBktZo0u9x1g8WtjQol+jZDaE+fhN+cIvTj11GndBnMnyfrUOG1sZQxCdjKh+DKg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 18.14.2
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
