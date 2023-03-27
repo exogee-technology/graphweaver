@@ -128,12 +128,14 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public readonly backendId = 'mikro-orm';
 
 	public entityType: new () => T;
-	public connectionManagerId: string;
+	public connectionManagerId?: string;
 
 	public readonly supportsInFilter = true;
 
 	private get database() {
-		return cm.database(this.connectionManagerId) ?? Database;
+		// If we have a connection manager ID then use that else fallback to the Database
+		if (!this.connectionManagerId) return Database;
+		return cm.database(this.connectionManagerId) || Database;
 	}
 
 	private getRepository: () => SqlEntityRepository<T> = () => {
@@ -143,7 +145,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return repository as SqlEntityRepository<T>;
 	};
 
-	public constructor(mikroType: new () => T, connectionManagerId: string) {
+	public constructor(mikroType: new () => T, connectionManagerId?: string) {
 		this.entityType = mikroType;
 		this.connectionManagerId = connectionManagerId;
 	}
