@@ -42,12 +42,12 @@ export const RelationshipFilter = ({
 		onChange?.(
 			fieldName,
 			(options ?? [])?.length > 0
-				? {
+				? ({
 						[fieldName]: {
 							// @todo this can be expanded to support the in operator id_in: options?.map((option) => option.value),
 							id: options?.[0]?.value,
 						},
-				  }
+				  } as Filter<RelationshipFilterType>)
 				: undefined
 		);
 	};

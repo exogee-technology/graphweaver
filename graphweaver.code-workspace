@@ -13,7 +13,7 @@
       "path": "src/examples/complex-migrations"
     },
     {
-      "name": "➡️ Example: Databases",
+      "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
     },
     {

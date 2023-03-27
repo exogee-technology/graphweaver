@@ -3,15 +3,15 @@ The user table in PostgreSQL looks like this:
 ```
 CREATE DATABASE todo_app;
 
-CREATE TABLE users (
+CREATE TABLE user (
   id SERIAL PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Seed data for users table
-INSERT INTO users (username, email)
+-- Seed data for user table
+INSERT INTO user (username, email)
 VALUES
   ('john_doe', 'john.doe@example.com'),
   ('jane_smith', 'jane.smith@example.com'),
@@ -30,7 +30,7 @@ The todo table is in MySQL and looks like this:
 ```
 CREATE DATABASE todo_app;
 
-CREATE TABLE tasks (
+CREATE TABLE task (
   id INT AUTO_INCREMENT PRIMARY KEY,
   description VARCHAR(255) NOT NULL,
   completed BOOLEAN NOT NULL DEFAULT false,
@@ -39,8 +39,8 @@ CREATE TABLE tasks (
   user_id INT NOT NULL
 );
 
--- Seed data for tasks table
-INSERT INTO tasks (description, completed, user_id)
+-- Seed data for task table
+INSERT INTO task (description, completed, user_id)
 VALUES
   ('Buy groceries', false, 1),
   ('Clean the house', true, 1),
