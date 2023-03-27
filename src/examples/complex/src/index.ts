@@ -41,7 +41,7 @@ const graphweaver = new Graphweaver({
 		schema: {} as any, // @todo
 		plugins: [ApolloSession, SetAuthenticatedUser],
 	},
-	mikroOrmOptions: { mikroOrmConfig: { entities: mikroOrmEntities } },
+	mikroOrmOptions: [{ mikroOrmConfig: { entities: mikroOrmEntities } }],
 	adminMetadata: { enabled: true },
 });
 logger.info(`example-complex graphweaver.server start`);
