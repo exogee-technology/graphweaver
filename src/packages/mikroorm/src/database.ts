@@ -17,6 +17,7 @@ import { logger } from '@exogee/logger';
 export interface ConnectionOptions {
 	mikroOrmConfig?: Options;
 	secretArn?: string;
+	connectionManagerId?: string;
 }
 
 export enum IsolationLevel {

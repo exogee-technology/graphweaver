@@ -17,12 +17,14 @@ const graphweaver = new Graphweaver({
 
 	mikroOrmOptions: [
 		{
+			connectionManagerId: 'pg',
 			mikroOrmConfig: {
 				entities: [User],
 				dbName: 'todo_app',
 			},
 		},
 		{
+			connectionManagerId: 'my',
 			mikroOrmConfig: {
 				entities: [Task],
 				driver: MySqlDriver,
