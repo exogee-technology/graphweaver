@@ -1,14 +1,13 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
-import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { mikroOrmEntities } from './entities';
 import { UserResolver } from './schema/user';
 import { TaskResolver } from './schema/task';
 
 const graphweaver = new Graphweaver({
-	resolvers: [TaskResolver],
+	resolvers: [TaskResolver, UserResolver],
 	apolloServerOptions: {
 		introspection: process.env.IS_OFFLINE === 'true',
 	},
