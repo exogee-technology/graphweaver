@@ -2,7 +2,6 @@ import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 import {
-	AnyEntity,
 	Database,
 	FilterQuery,
 	LockMode,
@@ -10,7 +9,7 @@ import {
 	ReferenceType,
 	SqlEntityRepository,
 	Utils,
-	wrap,
+	cm,
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
@@ -129,18 +128,24 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public readonly backendId = 'mikro-orm';
 
 	public entityType: new () => T;
+	public connectionManagerId: string;
 
 	public readonly supportsInFilter = true;
 
+	private get database() {
+		return cm.database(this.connectionManagerId) ?? Database;
+	}
+
 	private getRepository: () => SqlEntityRepository<T> = () => {
-		const repository = Database.em.getRepository<T>(this.entityType);
+		const repository = this.database.em.getRepository<T>(this.entityType);
 		if (!repository) throw new Error('Could not find repository for ' + this.entityType.name);
 
 		return repository as SqlEntityRepository<T>;
 	};
 
-	public constructor(mikroType: new () => T) {
+	public constructor(mikroType: new () => T, connectionManagerId: string) {
 		this.entityType = mikroType;
+		this.connectionManagerId = connectionManagerId;
 	}
 
 	private applyWhereClause(where: any) {
@@ -233,8 +238,8 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 		// 1:1 relations that aren't on the owning side need to get populated so the references get set.
 		// This method is protected, but we need to use it from here, hence the `as any`.
-		const driver = Database.em.getDriver();
-		const meta = Database.em.getMetadata().get(this.entityType.name);
+		const driver = this.database.em.getDriver();
+		const meta = this.database.em.getMetadata().get(this.entityType.name);
 		query.populate((driver as any).autoJoinOneToOneOwner(meta, []));
 
 		if (additionalOptionsForBackend?.populate) {
@@ -250,7 +255,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public async findOne(id: string): Promise<T | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
 
-		const result = await Database.em.findOne(this.entityType, id);
+		const result = await this.database.em.findOne(this.entityType, id);
 
 		logger.trace(`findOne ${this.entityType.name} result`, { result });
 
