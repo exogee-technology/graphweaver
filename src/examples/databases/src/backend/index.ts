@@ -3,7 +3,8 @@ import Graphweaver from '@exogee/graphweaver-apollo';
 import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
-import { mikroOrmEntities } from './entities';
+import { Task, User } from './entities';
+
 import { UserResolver } from './schema/user';
 import { TaskResolver } from './schema/task';
 
@@ -14,16 +15,24 @@ const graphweaver = new Graphweaver({
 	},
 	adminMetadata: { enabled: true },
 
-	mikroOrmOptions: {
-		mikroOrmConfig: {
-			entities: mikroOrmEntities,
-			driver: MySqlDriver,
-			dbName: 'todo_app',
-			user: 'root',
-			password: '',
-			port: 3306,
+	mikroOrmOptions: [
+		{
+			mikroOrmConfig: {
+				entities: [User],
+				dbName: 'todo_app',
+			},
 		},
-	},
+		{
+			mikroOrmConfig: {
+				entities: [Task],
+				driver: MySqlDriver,
+				dbName: 'todo_app',
+				user: 'root',
+				password: '',
+				port: 3306,
+			},
+		},
+	],
 });
 
 exports.handler = startServerAndCreateLambdaHandler(graphweaver.server, {});
