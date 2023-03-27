@@ -32,6 +32,7 @@
 	},
 	"devDependencies": {
 		"@mikro-orm/core": "5.4.2",
+		"@mikro-orm/mysql": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"@types/node": "18.11.11",
 		"esbuild": "0.15.5",
@@ -40,6 +41,7 @@
 	},
 	"peerDependencies": {
 		"@mikro-orm/core": "5.4.2",
-		"@mikro-orm/postgresql": "5.4.2"
+		"@mikro-orm/postgresql": "5.4.2",
+		"@mikro-orm/mysql": "5.4.2"
 	}
 }

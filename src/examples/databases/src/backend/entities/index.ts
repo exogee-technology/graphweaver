@@ -1,5 +1,7 @@
-export * from './user';
+// export * from './user';
+export * from './task';
 
-import { User } from './user';
+// import { User } from './user';
+import { Task } from './task';
 
-export const mikroOrmEntities = [User];
+export const mikroOrmEntities = [Task];
