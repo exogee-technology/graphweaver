@@ -275,7 +275,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		};
 
 		const populate = [relatedField as `${string}.`];
-		const result = (await Database.em.find(entity, queryFilter, { populate })) as unknown[];
+		const result = (await this.database.em.find(entity, queryFilter, { populate })) as unknown[];
 
 		return result as T[];
 	}
@@ -286,7 +286,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			updateArgs: JSON.stringify(updateArgs),
 		});
 
-		const entity = await Database.em.findOne(this.entityType, id, {
+		const entity = await this.database.em.findOne(this.entityType, id, {
 			// This is an optimisation so that assign() doesn't have to go fetch everything one at a time.
 			populate: [...visitPathForPopulate(this.entityType.name, updateArgs)] as `${string}.`[],
 		});
@@ -298,7 +298,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		// If a version has been sent, let's check it
 		if (updateArgs?.version) {
 			try {
-				await Database.em.lock(entity, LockMode.OPTIMISTIC, updateArgs.version);
+				await this.database.em.lock(entity, LockMode.OPTIMISTIC, updateArgs.version);
 				delete updateArgs.version;
 			} catch (err) {
 				throw new OptimisticLockError((err as Error)?.message, { entity });
@@ -318,17 +318,17 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			updateItems: JSON.stringify(updateItems),
 		});
 
-		const entities = await Database.transactional<T[]>(async () => {
+		const entities = await this.database.transactional<T[]>(async () => {
 			return Promise.all<T>(
 				updateItems.map(async (item) => {
 					if (!item?.id) throw new Error('You must pass an ID for this entity to update it.');
 
 					// Find the entity in the database
-					const entity = await Database.em.findOneOrFail(this.entityType, item.id, {
+					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
 						populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
 					await mapAndAssignKeys(entity, this.entityType, item);
-					Database.em.persist(entity);
+					this.database.em.persist(entity);
 					return entity;
 				})
 			);
@@ -344,13 +344,13 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			items: JSON.stringify(items),
 		});
 
-		const entities = await Database.transactional<T[]>(async () => {
+		const entities = await this.database.transactional<T[]>(async () => {
 			return Promise.all<T>(
 				items.map(async (item) => {
 					let entity;
 					const { id } = item as any;
 					if (id) {
-						entity = await Database.em.findOneOrFail(this.entityType, id, {
+						entity = await this.database.em.findOneOrFail(this.entityType, id, {
 							populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 						});
 						logger.trace(`Running update on ${this.entityType.name} with item`, {
@@ -364,7 +364,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 							item: JSON.stringify(item),
 						});
 					}
-					Database.em.persist(entity);
+					this.database.em.persist(entity);
 					return entity;
 				})
 			);
@@ -394,12 +394,12 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			createArgs: JSON.stringify(createItems),
 		});
 
-		const entities = await Database.transactional<T[]>(async () => {
+		const entities = await this.database.transactional<T[]>(async () => {
 			return Promise.all<T>(
 				createItems.map(async (item) => {
 					const entity = new this.entityType();
 					await mapAndAssignKeys(entity, this.entityType, item);
-					Database.em.persist(entity);
+					this.database.em.persist(entity);
 					return entity;
 				})
 			);
@@ -428,7 +428,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public async deleteMany(ids: string[]): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with ids ${ids}`);
 
-		const deletedRows = await Database.transactional<number>(async () => {
+		const deletedRows = await this.database.transactional<number>(async () => {
 			const deletedCount = await this.getRepository().nativeDelete({
 				id: { $in: ids },
 			} as FilterQuery<any>); // We can remove this cast when Typescript knows that T has an `id` property.
