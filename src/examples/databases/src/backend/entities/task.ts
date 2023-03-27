@@ -8,4 +8,7 @@ export class Task extends BaseEntity {
 
 	@Property({ type: String })
 	description!: string;
+
+	@Property({ type: BigIntType })
+	userId!: string;
 }
