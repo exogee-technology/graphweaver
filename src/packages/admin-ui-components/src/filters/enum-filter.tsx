@@ -34,7 +34,7 @@ export const EnumFilter = ({
 			fieldName,
 			(options ?? [])?.length > 0
 				? //@todo this can be expanded to support the in operator { [`${fieldName}_in`]: options?.map((option) => option.value) }
-				  { [fieldName]: options?.[0]?.value }
+				  ({ [fieldName]: options?.[0]?.value } as Filter<string>)
 				: undefined
 		);
 	};
