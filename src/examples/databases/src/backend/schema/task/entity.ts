@@ -1,7 +1,13 @@
-import { GraphQLEntity } from '@exogee/graphweaver';
+import {
+	AdminUIFilterType,
+	AdminUISettings,
+	BaseLoaders,
+	GraphQLEntity,
+} from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';
+import { User } from '../user';
 
 @ObjectType('Task')
 export class Task extends GraphQLEntity<OrmTask> {
@@ -10,6 +16,23 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => ID)
+	@Field(() => String)
 	description!: string;
+
+	@AdminUISettings({
+		filter: {
+			type: AdminUIFilterType.RELATIONSHIP,
+		},
+	})
+	@Field(() => User, { nullable: true })
+	async user() {
+		if (!this.dataEntity.userId) return null;
+
+		return User.fromBackendEntity(
+			await BaseLoaders.loadOne({
+				gqlEntityType: User,
+				id: this.dataEntity.userId,
+			})
+		);
+	}
 }
