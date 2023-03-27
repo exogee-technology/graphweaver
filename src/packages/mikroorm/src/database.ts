@@ -4,14 +4,14 @@ import './utils/change-tracker';
 import {
 	AnyEntity,
 	Connection,
-	Entity,
 	EntityName,
 	IDatabaseDriver,
 	MikroORM,
 	Options,
 	ReflectMetadataProvider,
 } from '@mikro-orm/core';
-import { EntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
+// import { EntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { EntityManager, MySqlDriver } from '@mikro-orm/mysql';
 import { logger } from '@exogee/logger';
 //import AWS from 'aws-sdk';
 
@@ -50,7 +50,7 @@ class DatabaseImplementation {
 	}
 
 	public get em() {
-		return (this.transactionalEm || this.orm.em) as EntityManager<PostgreSqlDriver>;
+		return (this.transactionalEm || this.orm.em) as EntityManager<MySqlDriver>;
 	}
 
 	public async transactional<T>(
@@ -211,7 +211,7 @@ class DatabaseImplementation {
 		logger.trace(`${params.entities?.length}x entities`);
 
 		const orm = await MikroORM.init({
-			driver: PostgreSqlDriver,
+			driver: MySqlDriver,
 			validateRequired: false, // Since v5, new entities are validated on runtime (just before executing insert queries), based on the entity metadata
 
 			implicitTransactions: false,

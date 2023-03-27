@@ -43,4 +43,5 @@ export {
 	Utils,
 	wrap,
 } from '@mikro-orm/core';
-export { SqlEntityManager, SqlEntityRepository } from '@mikro-orm/postgresql';
+// export { SqlEntityManager, SqlEntityRepository } from '@mikro-orm/postgresql';
+export { SqlEntityManager, SqlEntityRepository } from '@mikro-orm/mysql';
