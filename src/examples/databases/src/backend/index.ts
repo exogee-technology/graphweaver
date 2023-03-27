@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { mikroOrmEntities } from './entities';
 import { UserResolver } from './schema/user';
@@ -16,6 +17,7 @@ const graphweaver = new Graphweaver({
 	mikroOrmOptions: {
 		mikroOrmConfig: {
 			entities: mikroOrmEntities,
+			driver: MySqlDriver,
 			dbName: 'todo_app',
 			user: 'root',
 			password: '',
