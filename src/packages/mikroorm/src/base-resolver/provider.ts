@@ -125,12 +125,16 @@ export const mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArg
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
-	public readonly backendId = 'mikro-orm';
+	private _backendId: string;
 
 	public entityType: new () => T;
 	public connectionManagerId?: string;
 
 	public readonly supportsInFilter = true;
+
+	get backendId() {
+		return this._backendId;
+	}
 
 	private get database() {
 		// If we have a connection manager ID then use that else fallback to the Database
@@ -148,6 +152,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public constructor(mikroType: new () => T, connectionManagerId?: string) {
 		this.entityType = mikroType;
 		this.connectionManagerId = connectionManagerId;
+		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
 	}
 
 	private applyWhereClause(where: any) {
