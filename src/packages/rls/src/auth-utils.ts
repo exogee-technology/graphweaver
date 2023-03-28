@@ -124,7 +124,7 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 }
 
 export async function checkAuthorization(
-	entity: AnyEntity<unknown>,
+	entity: any,
 	requestInput: any,
 	requiredPermission: AccessType
 ) {

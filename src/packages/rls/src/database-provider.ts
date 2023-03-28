@@ -25,7 +25,7 @@ import { checkAuthorization, requiredPermissionsForAction } from './auth-utils';
 export class RLSMikroBackendProvider<
 	T,
 	G extends GraphQLEntity<T>
-> extends MikroBackendProvider<T> {
+> extends MikroBackendProvider<any> {
 	private readonly gqlTypeName: string;
 
 	constructor(mikroType: new () => T, gqlType: new (dataEntity: T) => G) {
@@ -105,7 +105,7 @@ export class RLSMikroBackendProvider<
 			await checkAuthorization(entityBeforeUpdate, updateArgs, AccessType.Update);
 			// Now attempt to perform the update, and check whether the result passes
 			// the authorisation checks as well
-			const updateResult = await super.updateOne(id, updateArgs);
+			const updateResult = await super.updateOne(id, updateArgs as any);
 			await checkAuthorization(updateResult, updateArgs, AccessType.Update);
 			// Operation is allowed
 			return updateResult;

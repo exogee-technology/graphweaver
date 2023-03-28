@@ -23,6 +23,7 @@
 		"@exogee/graphweaver": "workspace:0.1.1",
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.1",
 		"@exogee/logger": "workspace:0.1.1",
+		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.13.2",
 		"dotenv": "10.0.0",
 		"graphql": "16.6.0",
