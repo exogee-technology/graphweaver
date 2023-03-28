@@ -6,6 +6,7 @@ importers:
     specifiers:
       '@typescript-eslint/eslint-plugin': 5.49.0
       '@typescript-eslint/parser': 5.49.0
+      concurrently: 7.6.0
       eslint: 8.32.0
       eslint-config-prettier: 8.6.0
       eslint-plugin-prettier: 4.2.1
@@ -17,6 +18,7 @@ importers:
     devDependencies:
       '@typescript-eslint/eslint-plugin': 5.49.0_u2kzaz7l5btnzbikxu5qhiuaai
       '@typescript-eslint/parser': 5.49.0_pydb3hde2stcjsf742jarbqbry
+      concurrently: 7.6.0
       eslint: 8.32.0
       eslint-config-prettier: 8.6.0_eslint@8.32.0
       eslint-plugin-prettier: 4.2.1_cn4lalcyadplruoxa5mhp7j3dq
@@ -557,7 +559,10 @@ importers:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.1
       '@exogee/logger': workspace:0.1.1
+      '@types/lodash': 4.14.192
+      '@types/luxon': 2.0.7
       '@types/node': 14.14.10
+      '@types/pluralize': 0.0.29
       apollo-datasource: 3.3.2
       apollo-datasource-rest: 3.7.0
       apollo-server-errors: 3.3.1
@@ -567,6 +572,7 @@ importers:
       graphql: 16.6.0
       jest: 26.6.3
       lodash: 4.17.21
+      luxon: 2.1.1
       pluralize: 8.0.0
       prettier: 2.2.1
       ts-jest: 26.4.4
@@ -585,11 +591,15 @@ importers:
       dotenv: 10.0.0
       graphql: 16.6.0
       lodash: 4.17.21
+      luxon: 2.1.1
       pluralize: 8.0.0
       prettier: 2.2.1
       type-graphql: 2.0.0-beta.1_rq55dqxpbhywxwjvxttjguy4yy
     devDependencies:
+      '@types/lodash': 4.14.192
+      '@types/luxon': 2.0.7
       '@types/node': 14.14.10
+      '@types/pluralize': 0.0.29
       jest: 26.6.3_ts-node@9.0.0
       ts-jest: 26.4.4_che7i2lgee6hjn22adhmsl6fdi
       ts-node: 9.0.0_typescript@5.0.2
@@ -602,6 +612,7 @@ importers:
       '@exogee/graphweaver-mikroorm': workspace:0.1.1
       '@exogee/logger': workspace:0.1.1
       '@types/node': 14.14.10
+      apollo-server-errors: 3.3.1
       class-validator: 0.13.2
       dotenv: 10.0.0
       graphql: 16.6.0
@@ -616,6 +627,7 @@ importers:
       '@exogee/graphweaver': link:../core
       '@exogee/graphweaver-mikroorm': link:../mikroorm
       '@exogee/logger': link:../logger
+      apollo-server-errors: 3.3.1_graphql@16.6.0
       class-validator: 0.13.2
       dotenv: 10.0.0
       graphql: 16.6.0
@@ -6104,6 +6116,10 @@ packages:
   /@types/lodash/4.14.191:
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==}
 
+  /@types/lodash/4.14.192:
+    resolution: {integrity: sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A==}
+    dev: true
+
   /@types/long/4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
@@ -8163,6 +8179,22 @@ packages:
   /concat-map/0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
+  /concurrently/7.6.0:
+    resolution: {integrity: sha512-BKtRgvcJGeZ4XttiDiNcFiRlxoAeZOseqUvyYRUp/Vtd+9p1ULmeoSqGsDA+2ivdeDFpqrJvGvmI+StKfKl5hw==}
+    engines: {node: ^12.20.0 || ^14.13.0 || >=16.0.0}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      date-fns: 2.29.3
+      lodash: 4.17.21
+      rxjs: 7.8.0
+      shell-quote: 1.8.0
+      spawn-command: 0.0.2-1
+      supports-color: 8.1.1
+      tree-kill: 1.2.2
+      yargs: 17.7.1
+    dev: true
+
   /configstore/5.0.1:
     resolution: {integrity: sha512-aMKprgk5YhBNyH25hj8wGt2+D52Sw1DRRIzqBwLp2Ya9mFmY8KPvvtvmna8SxVR9JMZ4kzMD68N22vlaRpkeFA==}
     engines: {node: '>=8'}
@@ -8486,6 +8518,11 @@ packages:
 
   /date-fns/1.30.1:
     resolution: {integrity: sha512-hBSVCvSmWC+QypYObzwGOd9wqdDpOt+0wl0KbU+R+uuZBS1jN8VsD1ss3irQDknRj5NvxiTF6oj/nDRnN/UQNw==}
+    dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
     dev: true
 
   /dayjs/1.11.7:
@@ -16879,6 +16916,10 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
+  /shell-quote/1.8.0:
+    resolution: {integrity: sha512-QHsz8GgQIGKlRi24yFc6a6lN69Idnx634w49ay6+jA5yFh7a1UY+4Rp6HPx/L/1zcEDPEij8cIsiqR6bQsE5VQ==}
+    dev: true
+
   /shellwords/0.1.1:
     resolution: {integrity: sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==}
     dev: true
@@ -17023,6 +17064,10 @@ packages:
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
+
+  /spawn-command/0.0.2-1:
+    resolution: {integrity: sha512-n98l9E2RMSJ9ON1AKisHzz7V42VDiBQGY6PB1BwRglz99wpVsSuGzQ+jOi6lFXBGVTCrRpltvjm+/XA+tpeJrg==}
+    dev: true
 
   /spdx-correct/3.1.1:
     resolution: {integrity: sha512-cOYcUWwhCuHCXi49RhFRCyJEK3iPj1Ziz9DpViV3tbZOwXD49QzIN3MpOLJNxh2qwq2lJJZaKMVw9qNi4jTC0w==}
@@ -17642,6 +17687,11 @@ packages:
 
   /traverse/0.6.7:
     resolution: {integrity: sha512-/y956gpUo9ZNCb99YjxG7OaslxZWHfCHAUUfshwqOXmxUIvqLjVO581BT+gM59+QV9tFe6/CGG53tsA1Y7RSdg==}
+
+  /tree-kill/1.2.2:
+    resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
+    hasBin: true
+    dev: true
 
   /trim-repeated/1.0.0:
     resolution: {integrity: sha512-pkonvlKk8/ZuR0D5tLW8ljt5I8kmxp2XKymhepUeOdCEfKpZaktSArkLHZt76OB1ZvO9bssUsDty4SWhLvZpLg==}
