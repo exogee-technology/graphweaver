@@ -1,5 +1,5 @@
 import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
+import { BaseEntity, ExternalIdField } from '@exogee/graphweaver-mikroorm';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -9,6 +9,7 @@ export class Task extends BaseEntity {
 	@Property({ type: String })
 	description!: string;
 
+	@ExternalIdField({ from: 'user' })
 	@Property({ type: BigIntType })
 	userId!: string;
 }
