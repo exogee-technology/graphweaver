@@ -1,66 +1,83 @@
-@keyframes fadeoutin {
+.spinner,
+.spinner div,
+.spinner div:after {
+	box-sizing: border-box;
+}
+.spinner {
+	display: flex;
+	width: 100%;
+	height: 100%;
+	justify-content: center;
+	align-items: center;
+}
+.spinner div {
+	transform-origin: 20px 20px;
+	animation: spinner 1.2s linear infinite;
+}
+.spinner div:after {
+	content: ' ';
+	display: block;
+	position: absolute;
+	top: 1.6px;
+	left: 18.4px;
+	width: 3.2px;
+	height: 8.8px;
+	border-radius: 20%;
+	background: currentColor;
+}
+.spinner div:nth-child(1) {
+	transform: rotate(0deg);
+	animation-delay: -1.1s;
+}
+.spinner div:nth-child(2) {
+	transform: rotate(30deg);
+	animation-delay: -1s;
+}
+.spinner div:nth-child(3) {
+	transform: rotate(60deg);
+	animation-delay: -0.9s;
+}
+.spinner div:nth-child(4) {
+	transform: rotate(90deg);
+	animation-delay: -0.8s;
+}
+.spinner div:nth-child(5) {
+	transform: rotate(120deg);
+	animation-delay: -0.7s;
+}
+.spinner div:nth-child(6) {
+	transform: rotate(150deg);
+	animation-delay: -0.6s;
+}
+.spinner div:nth-child(7) {
+	transform: rotate(180deg);
+	animation-delay: -0.5s;
+}
+.spinner div:nth-child(8) {
+	transform: rotate(210deg);
+	animation-delay: -0.4s;
+}
+.spinner div:nth-child(9) {
+	transform: rotate(240deg);
+	animation-delay: -0.3s;
+}
+.spinner div:nth-child(10) {
+	transform: rotate(270deg);
+	animation-delay: -0.2s;
+}
+.spinner div:nth-child(11) {
+	transform: rotate(300deg);
+	animation-delay: -0.1s;
+}
+.spinner div:nth-child(12) {
+	transform: rotate(330deg);
+	animation-delay: 0s;
+}
+@keyframes spinner {
 	0% {
 		opacity: 1;
 	}
-	25% {
-		opacity: 0.5;
-	}
-	50% {
-		opacity: 0.05;
-	}
-	75% {
-		opacity: 0.5;
-	}
 	100% {
-		opacity: 1;
+		opacity: 0;
 	}
-}
-
-.gw-rank {
-	animation: fadeoutin 1.5s ease infinite;
-}
-
-/* 1    2   3
-  4   5  6
-   7    8
-    9  10 
-*/
-.gw-rank:nth-of-type(1) {
-	animation-delay: 0s;
-}
-
-.gw-rank:nth-of-type(2) {
-	animation-delay: 0.5s;
-}
-
-.gw-rank:nth-of-type(3) {
-	animation-delay: 0.8s;
-}
-
-.gw-rank:nth-of-type(4) {
-	animation-delay: 0.1s;
-}
-
-.gw-rank:nth-of-type(5) {
-	animation-delay: 0.4s;
-}
-
-.gw-rank:nth-of-type(6) {
-	animation-delay: 0.7s;
-}
-
-.gw-rank:nth-of-type(7) {
-	animation-delay: 0.2s;
-}
-
-.gw-rank:nth-of-type(8) {
-	animation-delay: 0.6s;
-}
-
-.gw-rank:nth-of-type(9) {
-	animation-delay: 0.3s;
-}
-
-.gw-rank:nth-of-type(10) {
-	animation-delay: 0.5s;
 }
