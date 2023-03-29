@@ -39,51 +39,6 @@ const nonJoinKeys = new Set([
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
 
-// Check if we have any keys that are a collection of entities
-export const visitPathForPopulate = (
-	entityName: string,
-	updateArgBranch: any,
-	populateBranch = ''
-) => {
-	const { properties } = Database.em.getMetadata().get(entityName);
-	const collectedPaths = populateBranch ? new Set<string>([populateBranch]) : new Set<string>([]);
-
-	for (const [key, value] of Object.entries(updateArgBranch ?? {})) {
-		if (
-			// If it's a relationship, go ahead and and '.' it in, recurse.
-			properties[key]?.reference === ReferenceType.ONE_TO_ONE ||
-			properties[key]?.reference === ReferenceType.ONE_TO_MANY ||
-			properties[key]?.reference === ReferenceType.MANY_TO_ONE ||
-			properties[key]?.reference === ReferenceType.MANY_TO_MANY
-		) {
-			if (Array.isArray(value)) {
-				// In the case where the array is empty we also need to make sure we load the collection.
-				collectedPaths.add(appendPath(populateBranch, key));
-
-				for (const entry of value) {
-					// Recurse
-					const newPaths = visitPathForPopulate(
-						properties[key].type,
-						entry,
-						appendPath(populateBranch, key)
-					);
-					newPaths.forEach((path) => collectedPaths.add(path));
-				}
-			} else if (typeof value === 'object') {
-				// Recurse
-				const newPaths = visitPathForPopulate(
-					properties[key].type,
-					value,
-					appendPath(populateBranch, key)
-				);
-				newPaths.forEach((path) => collectedPaths.add(path));
-			}
-		}
-	}
-
-	return collectedPaths;
-};
-
 export const gqlToMikro: (filter: any) => any = (filter: any) => {
 	if (Array.isArray(filter)) {
 		return filter.map((element) => gqlToMikro(element));
@@ -138,6 +93,16 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return cm.database(this.connectionManagerId) || Database;
 	}
 
+	// This is exposed for use in the RLS package
+	public get transactional() {
+		return this.database.transactional;
+	}
+
+	// This is exposed for use in the RLS package
+	public get em() {
+		return this.database.em;
+	}
+
 	private getRepository: () => SqlEntityRepository<T> = () => {
 		const repository = this.database.em.getRepository<T>(this.entityType);
 		if (!repository) throw new Error('Could not find repository for ' + this.entityType.name);
@@ -155,7 +120,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		// Clean the input and remove any GraphQL classes from the object
 		// const cleanInput = JSON.parse(JSON.stringify(inputArgs));
 		const assignmentObj = this.applyExternalIdFields(entityType, inputArgs);
-		return assign(result, assignmentObj);
+		return assign(result, assignmentObj, undefined, undefined, this.database.em);
 	};
 
 	private applyExternalIdFields = (target: AnyEntity | string, values: any) => {
@@ -207,6 +172,47 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			});
 
 		return values;
+	};
+
+	// Check if we have any keys that are a collection of entities
+	public visitPathForPopulate = (entityName: string, updateArgBranch: any, populateBranch = '') => {
+		const { properties } = this.database.em.getMetadata().get(entityName);
+		const collectedPaths = populateBranch ? new Set<string>([populateBranch]) : new Set<string>([]);
+
+		for (const [key, value] of Object.entries(updateArgBranch ?? {})) {
+			if (
+				// If it's a relationship, go ahead and and '.' it in, recurse.
+				properties[key]?.reference === ReferenceType.ONE_TO_ONE ||
+				properties[key]?.reference === ReferenceType.ONE_TO_MANY ||
+				properties[key]?.reference === ReferenceType.MANY_TO_ONE ||
+				properties[key]?.reference === ReferenceType.MANY_TO_MANY
+			) {
+				if (Array.isArray(value)) {
+					// In the case where the array is empty we also need to make sure we load the collection.
+					collectedPaths.add(appendPath(populateBranch, key));
+
+					for (const entry of value) {
+						// Recurse
+						const newPaths = this.visitPathForPopulate(
+							properties[key].type,
+							entry,
+							appendPath(populateBranch, key)
+						);
+						newPaths.forEach((path) => collectedPaths.add(path));
+					}
+				} else if (typeof value === 'object') {
+					// Recurse
+					const newPaths = this.visitPathForPopulate(
+						properties[key].type,
+						value,
+						appendPath(populateBranch, key)
+					);
+					newPaths.forEach((path) => collectedPaths.add(path));
+				}
+			}
+		}
+
+		return collectedPaths;
 	};
 
 	private applyWhereClause(where: any) {
@@ -353,7 +359,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 		const entity = await this.database.em.findOne(this.entityType, id, {
 			// This is an optimisation so that assign() doesn't have to go fetch everything one at a time.
-			populate: [...visitPathForPopulate(this.entityType.name, updateArgs)] as `${string}.`[],
+			populate: [...this.visitPathForPopulate(this.entityType.name, updateArgs)] as `${string}.`[],
 		});
 
 		if (entity === null) {
@@ -390,7 +396,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 					// Find the entity in the database
 					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
-						populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
+						populate: [...this.visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
 					await this.mapAndAssignKeys(entity, this.entityType, item);
 					this.database.em.persist(entity);
@@ -416,7 +422,9 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 					const { id } = item as any;
 					if (id) {
 						entity = await this.database.em.findOneOrFail(this.entityType, id, {
-							populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
+							populate: [
+								...this.visitPathForPopulate(this.entityType.name, item),
+							] as `${string}.`[],
 						});
 						logger.trace(`Running update on ${this.entityType.name} with item`, {
 							item: JSON.stringify(item),
