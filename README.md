@@ -64,11 +64,17 @@ DATABASE_NAME=
 cd src/apps/example-complex && pnpm migrate && pnpm build && pnpm start
 ```
 
+### examples/databases - `@exogee/graphweaver-example-databases`
+
+An example of using GraphWeaver with two connected databases (MySQL, PostgreSQL) and the MikroORM adapter.
+
+Follow the instructions in the `./src/examples/databases/README.md` to get started.
+
 ## Packages
 
 ### packages/core - `@exogee/graphweaver`
 
-GraphWeaver core package, includes `createBaseResolver` method that creates a resolver in combination with one of the backend packages:
+GraphWeaver core package includes `createBaseResolver` method that creates a resolver in combination with one of the backend packages:
 
 ```typescript
 @Resolver(() => UserGQLEntity)
@@ -80,7 +86,7 @@ export class UserGQLResolver extends createBaseResolver(
 
 ### packages/apollo - `@exogee/graphweaver-apollo`
 
-Apollo support for graphweaver, includes various plugins.
+Apollo support for graphweaver includes various plugins.
 
 ### packages/mikroorm - `@exogee/graphweaver-mikroorm`
 
@@ -98,7 +104,7 @@ Row-level security support for graphweaver
 
 ### Publishing
 
-To publish the packages in the monorepo, first you need to assess the types of changes that occurred. Follow semver and run
+To publish the packages in the monorepo first you need to assess the types of changes that occurred. Follow semver and run
 the appropriate command for `major`, `minor` or `patch` changes.
 
 ```console
