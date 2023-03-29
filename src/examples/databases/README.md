@@ -1,3 +1,11 @@
+# Multiple Databases
+
+It is possible to connect more than one database to GraphWeaver and expose the data via the API.
+
+This example demonstrates how to do that with a MySQL and PostgreSQL database.
+
+To run the example make sure that you have a local MySQL and PostgreSQL database and that you seed each database as below.
+
 The user table in PostgreSQL looks like this:
 
 ```
@@ -143,3 +151,7 @@ VALUES
   ('Do some Pilates', false, 9),
   ('Watch a comedy', true, 10);
 ```
+
+Once the database is up and running you can start the example with:
+
+`pnpm start`
