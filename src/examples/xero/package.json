@@ -10,7 +10,6 @@
 		"prettier": "prettier --write src/**/*.ts",
 		"start": "graphweaver start",
 		"start:backend": "graphweaver start backend",
-		"test": "jest",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",

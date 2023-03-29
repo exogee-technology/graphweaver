@@ -9,7 +9,6 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
-		"test": "jest --passWithNoTests",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",

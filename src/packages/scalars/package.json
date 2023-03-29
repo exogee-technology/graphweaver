@@ -15,8 +15,6 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
-		"test": "jest --passWithNoTests",
-		"test:watch": "jest --passWithNoTests --watch",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {

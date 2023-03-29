@@ -7,7 +7,6 @@
 	"scripts": {
 		"build": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
 		"prettier": "prettier --write src/**/*.ts",
-		"test": "jest",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
