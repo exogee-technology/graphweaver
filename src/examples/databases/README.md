@@ -154,4 +154,7 @@ VALUES
 
 Once the database is up and running you can start the example with:
 
-`pnpm start`
+```
+pnpm i
+pnpm start
+```
