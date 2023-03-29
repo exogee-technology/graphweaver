@@ -9,7 +9,6 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
 		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
-		"test": "jest --forceExit",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
