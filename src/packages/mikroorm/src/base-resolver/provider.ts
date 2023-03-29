@@ -10,6 +10,8 @@ import {
 	SqlEntityRepository,
 	Utils,
 	cm,
+	externalIdFieldMap,
+	AnyEntity,
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
@@ -117,12 +119,6 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 	return filter;
 };
 
-export const mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArgs: Partial<T>) => {
-	// Clean the input and remove any GraphQL classes from the object
-	const cleanInput = JSON.parse(JSON.stringify(inputArgs));
-	return assign(result, cleanInput);
-};
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	private _backendId: string;
@@ -154,6 +150,64 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		this.connectionManagerId = connectionManagerId;
 		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
 	}
+
+	private mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArgs: Partial<T>) => {
+		// Clean the input and remove any GraphQL classes from the object
+		// const cleanInput = JSON.parse(JSON.stringify(inputArgs));
+		const assignmentObj = this.applyExternalIdFields(entityType, inputArgs);
+		return assign(result, assignmentObj);
+	};
+
+	private applyExternalIdFields = (target: AnyEntity | string, values: any) => {
+		const targetName = typeof target === 'string' ? target : target.name;
+		const map = externalIdFieldMap.get(targetName);
+
+		const mapFieldNames = (partialFilterObj: any) => {
+			for (const [from, to] of Object.entries(map || {})) {
+				if (partialFilterObj[from] && typeof partialFilterObj[from].id !== 'undefined') {
+					if (Object.keys(partialFilterObj[from]).length > 1) {
+						throw new Error(
+							`Expected precisely 1 key called 'id' in queryObj.${from} on ${target}, got ${JSON.stringify(
+								partialFilterObj[from],
+								null,
+								4
+							)}`
+						);
+					}
+
+					partialFilterObj[to] = partialFilterObj[from].id;
+					delete partialFilterObj[from];
+				}
+			}
+		};
+
+		// Check for and/or/etc at the root level and handle correctly
+		for (const rootLevelKey of Object.keys(values)) {
+			if (mikroObjectOperations.has(rootLevelKey)) {
+				for (const field of values[rootLevelKey]) {
+					mapFieldNames(field);
+				}
+			}
+		}
+		// Map the rest of the field names as well
+		mapFieldNames(values);
+
+		// Traverse the nested entities
+		const { properties } = this.database.em.getMetadata().get(targetName);
+		Object.values(properties)
+			.filter((property) => typeof property.entity !== 'undefined' && values[property.name])
+			.forEach((property) => {
+				if (Array.isArray(values[property.name])) {
+					values[property.name].forEach((value: any) =>
+						this.applyExternalIdFields(property.type, value)
+					);
+				} else {
+					values[property.name] = this.applyExternalIdFields(property.type, values[property.name]);
+				}
+			});
+
+		return values;
+	};
 
 	private applyWhereClause(where: any) {
 		const query = this.getRepository().createQueryBuilder();
@@ -229,9 +283,15 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		// }
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 
+		// Convert from: { account: {id: '6' }}
+		// to { accountId: '6' }
+		// This conversion only works on root level objects
+		const whereWithAppliedExternalIdFields =
+			where && this.applyExternalIdFields(this.entityType, where);
+
 		// Regions need some fancy handling with Query Builder. Process the where further
 		// and return a Query Builder instance.
-		const query = this.applyWhereClause(where);
+		const query = this.applyWhereClause(whereWithAppliedExternalIdFields);
 
 		// If we have specified a limit, offset or order then update the query
 		pagination?.limit && query.limit(pagination.limit);
@@ -310,7 +370,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			}
 		}
 
-		await mapAndAssignKeys(entity, this.entityType, updateArgs);
+		await this.mapAndAssignKeys(entity, this.entityType, updateArgs);
 		await this.getRepository().persistAndFlush(entity);
 
 		logger.trace(`update ${this.entityType.name} entity`, entity);
@@ -332,7 +392,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
 						populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
-					await mapAndAssignKeys(entity, this.entityType, item);
+					await this.mapAndAssignKeys(entity, this.entityType, item);
 					this.database.em.persist(entity);
 					return entity;
 				})
@@ -361,10 +421,10 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 						logger.trace(`Running update on ${this.entityType.name} with item`, {
 							item: JSON.stringify(item),
 						});
-						await mapAndAssignKeys(entity, this.entityType, item);
+						await this.mapAndAssignKeys(entity, this.entityType, item);
 					} else {
 						entity = new this.entityType();
-						await mapAndAssignKeys(entity, this.entityType, item);
+						await this.mapAndAssignKeys(entity, this.entityType, item);
 						logger.trace(`Running create on ${this.entityType.name} with item`, {
 							item: JSON.stringify(item),
 						});
@@ -386,7 +446,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		});
 
 		const entity = new this.entityType();
-		await mapAndAssignKeys(entity, this.entityType, createArgs);
+		await this.mapAndAssignKeys(entity, this.entityType, createArgs);
 		await this.getRepository().persistAndFlush(entity);
 
 		logger.trace(`create ${this.entityType.name} result`, entity);
@@ -403,7 +463,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			return Promise.all<T>(
 				createItems.map(async (item) => {
 					const entity = new this.entityType();
-					await mapAndAssignKeys(entity, this.entityType, item);
+					await this.mapAndAssignKeys(entity, this.entityType, item);
 					this.database.em.persist(entity);
 					return entity;
 				})

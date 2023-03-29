@@ -7,6 +7,7 @@ dotenv.config({
 
 export * from './base-resolver';
 export * from './entities';
+export * from './decorators';
 export * from './database';
 export * from './types';
 export * from './utils/authentication-context';
