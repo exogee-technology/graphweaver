@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import pluralize from 'pluralize';
 
 import { Entity, FieldFilter, Filter, SortField } from './use-schema';
-// Can't use useApolloClient/useQuery/useParms here if not using Loader
+// Can't use useApolloClient/useQuery/useParams here if not using Loader
 import { apolloClient } from '../apollo';
 
 export const PAGE_SIZE = 50;
@@ -22,6 +22,9 @@ export const getEntityPage = <T>(
 	for (const sortColumn of sortFields) {
 		orderBy[sortColumn.field] = sortColumn.direction;
 	}
+
+	// set the default sort order
+	if (sortFields.length === 0) orderBy.id = 'ASC';
 
 	return apolloClient.query<T>({
 		query,
