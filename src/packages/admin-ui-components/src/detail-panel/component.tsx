@@ -104,6 +104,8 @@ const DetailForm = ({
 	);
 };
 
+const SLIDE_ANIMATION_TIME = 300;
+
 const ModalContent = ({
 	selectedEntity,
 	detail,
@@ -113,14 +115,8 @@ const ModalContent = ({
 	detail: ApolloQueryResult<{ result: ResultBaseType }>;
 	onClose: () => void;
 }) => {
-	// @todo: Modal won't reopen on same record once closed
-	const [id, setId] = useState<string | null>(null);
-	const [closing, setClosing] = useState(false);
+	const [open, setOpen] = useState(false);
 	const { entityByType } = useSchema();
-
-	useEffect(() => {
-		setId(detail.data.result.id);
-	}, [detail.data.result]);
 
 	const getValue = (field: EntityField, result: any) => {
 		if (field.relationshipType) {
@@ -150,19 +146,19 @@ const ModalContent = ({
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 
-	// Orchestrate close so that slideout gets time to execute (0.5s)
+	useEffect(() => {
+		// The timeouts here are 300ms to match the animation time of the css
+		setTimeout(() => setOpen(true), SLIDE_ANIMATION_TIME);
+	}, []);
+
 	const closeModal = () => {
-		setClosing(true);
-		setId(null);
-		setTimeout(() => {
-			setClosing(false);
-			onClose();
-		}, 500);
+		setOpen(false);
+		setTimeout(onClose, SLIDE_ANIMATION_TIME);
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		const id = detail.data.result.id;
-		console.log(values, detail.data.result);
+
 		await updateEntity({
 			variables: {
 				data: {
@@ -177,11 +173,11 @@ const ModalContent = ({
 
 	return (
 		<Modal
-			isOpen={closing || id !== null}
+			isOpen
 			onRequestClose={closeModal}
 			shouldCloseOnEsc
 			shouldCloseOnOverlayClick
-			className={id ? styles.detailContainer : classnames(styles.detailContainer, styles.finished)}
+			className={open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer}
 			title={selectedEntity.name}
 			modalContent={
 				<DetailForm

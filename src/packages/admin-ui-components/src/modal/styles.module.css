@@ -1,16 +1,17 @@
 .overlay {
-	background-color: rgb(0 0 0 / 70%);
+	background-color: rgb(0 0 0 / 30%);
 	width: 100%;
 	min-height: 100%;
 	position: fixed;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	top: 0px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	overflow: auto;
+	overflow: hidden;
 }
 
 .noOverlay {
