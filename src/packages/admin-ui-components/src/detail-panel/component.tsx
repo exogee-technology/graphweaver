@@ -22,6 +22,7 @@ import { generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
 import { flattenRelationshipIds } from './utils';
+import { MultiSelect, SelectOption } from '../multi-select';
 
 interface ResultBaseType {
 	id: string;
@@ -41,10 +42,10 @@ const SelectField = ({ name }: { name: string }) => {
 
 	console.log(initialValue);
 
-	const initialOption: DropdownItem = initialValue;
-	const options = [initialOption];
+	const initialOption: SelectOption[] = [initialValue];
+	const options = initialOption;
 
-	return <Dropdown items={options} className={styles.selectField} defaultValue={initialOption} />;
+	return <MultiSelect options={options} value={initialOption} onChange={() => {}} />;
 };
 
 const DetailField = ({ field }: { field: EntityField }) => {
@@ -128,7 +129,7 @@ const ModalContent = ({
 
 			return {
 				id: relatedField.id,
-				name: relatedField
+				value: relatedField
 					? relatedField[relatedEntity?.summaryField || ('id' as keyof typeof result)]
 					: '',
 			};
