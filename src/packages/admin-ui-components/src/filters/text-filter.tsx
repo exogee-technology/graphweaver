@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { DataContext, Filter, MultiSelect, SelectOption, useSchema } from '..';
+import { DataContext, Filter, Select, SelectOption, useSchema } from '..';
 
 export interface TextFilterProps {
 	fieldName: string;
@@ -51,7 +51,7 @@ export const TextFilter = <T extends { id: string }>({
 	};
 
 	return (
-		<MultiSelect
+		<Select
 			key={fieldName + resetCount}
 			options={textOptions}
 			value={initialFilter ? [{ value, label: value }] : []}

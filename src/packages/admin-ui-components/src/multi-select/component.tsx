@@ -7,20 +7,27 @@ export interface SelectOption {
 	label?: string;
 }
 
-interface MultiSelectProps {
+export enum SelectMode {
+	SINGLE = 'SINGLE',
+	MULTI = 'MULTI',
+}
+
+interface SelectProps {
 	options: SelectOption[];
 	onChange: (selected: SelectOption[]) => void;
 	value?: SelectOption[];
 	placeholder?: string;
 	loading?: boolean;
+	mode?: SelectMode;
 }
 
-export const MultiSelect: React.FC<MultiSelectProps> = ({
+export const Select: React.FC<SelectProps> = ({
 	options,
 	onChange,
 	value = [],
 	placeholder = 'Select',
 	loading = false,
+	mode = SelectMode.MULTI,
 }) => {
 	const [open, setOpen] = useState(false);
 	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
@@ -86,9 +93,11 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 									? `${selectedOptions.length} Selected`
 									: selectedOptions?.[0].label}
 							</span>
-							<span className={styles.deleteOption} onClick={() => handleDeleteAll()}>
-								&times;
-							</span>
+							{mode === SelectMode.MULTI && (
+								<span className={styles.deleteOption} onClick={() => handleDeleteAll()}>
+									&times;
+								</span>
+							)}
 						</div>
 					</div>
 				) : (
@@ -101,14 +110,15 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 						{!loading && (
 							<>
 								<div className={styles.selectedOptions}>
-									{selectedOptions.map((option) => (
-										<div className={styles.optionPill} key={`${option?.value}:OptionPill`}>
-											<span className={styles.optionPillLabel}>{option.label}</span>
-											<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
-												&times;
-											</span>
-										</div>
-									))}
+									{mode === SelectMode.MULTI &&
+										selectedOptions.map((option) => (
+											<div className={styles.optionPill} key={`${option?.value}:OptionPill`}>
+												<span className={styles.optionPillLabel}>{option.label}</span>
+												<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
+													&times;
+												</span>
+											</div>
+										))}
 								</div>
 								{options.map((option) => (
 									<div
