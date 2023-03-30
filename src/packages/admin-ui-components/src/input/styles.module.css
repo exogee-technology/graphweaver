@@ -12,7 +12,6 @@
 
 .input input {
 	all: unset;
-	text-transform: uppercase;
 	color: hsl(0, 0%, 50%);
 	font-size: 100%;
 	background-color: var(--select-background);
