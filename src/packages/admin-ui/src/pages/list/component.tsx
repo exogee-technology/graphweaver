@@ -166,7 +166,7 @@ export const List = () => {
 				loadingNext={loadingNext}
 				error={error}
 			/>
-			<DetailPanel />
+			<DetailPanel refetchData={fetchData} />
 		</>
 	);
 };
