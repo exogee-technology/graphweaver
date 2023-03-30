@@ -1,4 +1,4 @@
-import { ApolloQueryResult } from '@apollo/client';
+import { ApolloQueryResult, useMutation } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
@@ -9,6 +9,8 @@ import { Dropdown, DropdownItem } from '../dropdown';
 import { Entity, EntityField, getEntity, routeFor, useSchema, useSelectedEntity } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
+
+import { generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
 
@@ -130,6 +132,10 @@ const ModalContent = ({
 		return acc;
 	}, {} as Record<string, any>);
 
+	const [updateEntity] = useMutation(
+		generateUpdateEntityMutation(selectedEntity.name, Object.keys(initialValues))
+	);
+
 	// Orchestrate close so that slideout gets time to execute (0.5s)
 	const closeModal = () => {
 		setClosing(true);
@@ -140,9 +146,18 @@ const ModalContent = ({
 		}, 500);
 	};
 
-	const handleOnSubmit = (values: any, actions: FormikHelpers<any>) => {
-		console.log(values, selectedEntity.name);
+	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
+		const id = detail.data.result.id;
+		await updateEntity({
+			variables: {
+				data: {
+					id,
+					...values,
+				},
+			},
+		});
 		actions.setSubmitting(false);
+		onClose();
 	};
 
 	return (
@@ -165,7 +180,7 @@ const ModalContent = ({
 	);
 };
 
-export const DetailPanel = () => {
+export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
@@ -189,6 +204,7 @@ export const DetailPanel = () => {
 	const navigateBack = useCallback(() => {
 		setDetail(null);
 		navigate(routeFor({ entity: selectedEntity }));
+		refetchData();
 	}, [selectedEntity]);
 
 	if (!detail) return null;
