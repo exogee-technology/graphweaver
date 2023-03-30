@@ -60,24 +60,15 @@ const DetailForm = ({
 	initialValues,
 	detailFields,
 	onCancel,
+	onSubmit,
 }: {
 	initialValues: Record<string, any>;
 	detailFields: EntityField[];
+	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
 }) => {
-	const handleOnSubmit = (values: any, actions: FormikHelpers<any>) => {
-		alert(JSON.stringify(values, null, 2));
-		actions.setSubmitting(false);
-	};
-
 	return (
-		<Formik
-			initialValues={initialValues}
-			onSubmit={(values, actions) => {
-				setTimeout(() => handleOnSubmit(values, actions), 2500);
-			}}
-			onReset={onCancel}
-		>
+		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
 			{({ isSubmitting }) => (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
@@ -149,6 +140,11 @@ const ModalContent = ({
 		}, 500);
 	};
 
+	const handleOnSubmit = (values: any, actions: FormikHelpers<any>) => {
+		console.log(values, selectedEntity.name);
+		actions.setSubmitting(false);
+	};
+
 	return (
 		<Modal
 			isOpen={closing || id !== null}
@@ -158,7 +154,12 @@ const ModalContent = ({
 			className={id ? styles.detailContainer : classnames(styles.detailContainer, styles.finished)}
 			title={selectedEntity.name}
 			modalContent={
-				<DetailForm initialValues={initialValues} detailFields={formFields} onCancel={closeModal} />
+				<DetailForm
+					initialValues={initialValues}
+					detailFields={formFields}
+					onCancel={closeModal}
+					onSubmit={handleOnSubmit}
+				/>
 			}
 		/>
 	);
