@@ -1,13 +1,23 @@
 import { gql } from '@apollo/client';
+import { Entity } from '../utils';
 
-export const generateUpdateEntityMutation = (entityName: string, fields: string[]) => gql`
-    mutation updateEntity ($data: ${entityName}CreateOrUpdateInput!){
-      update${entityName} (data: $data) {
+export const generateUpdateEntityMutation = (
+	entity: Entity,
+	entityByType: (entityType: string) => Entity
+) => gql`
+    mutation updateEntity ($data: ${entity.name}CreateOrUpdateInput!){
+      update${entity.name} (data: $data) {
         id
-        ${fields.map(
-					(field) => `${field}
-        `
-				)}
+        ${entity.fields
+					.map((field) => {
+						if (field.relationshipType) {
+							const relatedEntity = entityByType(field.type);
+							return `${field.name} { id ${relatedEntity.summaryField || ''} }`;
+						} else {
+							return field.name;
+						}
+					})
+					.join(' ')}
       }
     }
   `;
