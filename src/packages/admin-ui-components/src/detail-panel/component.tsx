@@ -13,6 +13,7 @@ import { Spinner } from '../spinner';
 import { generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
+import { flattenRelationshipIds } from './utils';
 
 interface ResultBaseType {
 	id: string;
@@ -30,7 +31,9 @@ const SelectField = ({ name }: { name: string }) => {
 	const [field, meta] = useField({ name, multiple: false });
 	const { initialValue } = meta;
 
-	const initialOption: DropdownItem = { id: initialValue, name: initialValue };
+	console.log(initialValue);
+
+	const initialOption: DropdownItem = initialValue;
 	const options = [initialOption];
 
 	return <Dropdown items={options} className={styles.selectField} defaultValue={initialOption} />;
@@ -114,9 +117,13 @@ const ModalContent = ({
 		if (field.relationshipType) {
 			const relatedEntity = entityByType(field.type);
 			const relatedField = result[field.name];
-			return relatedField
-				? relatedField[relatedEntity?.summaryField || ('id' as keyof typeof result)]
-				: '';
+
+			return {
+				id: relatedField.id,
+				name: relatedField
+					? relatedField[relatedEntity?.summaryField || ('id' as keyof typeof result)]
+					: '',
+			};
 		}
 		return result[field.name as keyof typeof result];
 	};
@@ -132,9 +139,7 @@ const ModalContent = ({
 		return acc;
 	}, {} as Record<string, any>);
 
-	const [updateEntity] = useMutation(
-		generateUpdateEntityMutation(selectedEntity.name, Object.keys(initialValues))
-	);
+	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 
 	// Orchestrate close so that slideout gets time to execute (0.5s)
 	const closeModal = () => {
@@ -148,11 +153,12 @@ const ModalContent = ({
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		const id = detail.data.result.id;
+		console.log(values, detail.data.result);
 		await updateEntity({
 			variables: {
 				data: {
 					id,
-					...values,
+					...flattenRelationshipIds(values),
 				},
 			},
 		});
