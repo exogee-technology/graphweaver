@@ -1,10 +1,9 @@
-import { ApolloQueryResult, useMutation } from '@apollo/client';
+import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { Modal } from '../modal';
 import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { Dropdown, DropdownItem } from '../dropdown';
 
 import {
 	decodeSearchParams,
@@ -18,10 +17,10 @@ import {
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 
-import { generateUpdateEntityMutation } from './graphql';
+import { generateUpdateEntityMutation, getRelationshipQuery } from './graphql';
 
 import styles from './styles.module.css';
-import { flattenRelationshipIds } from './utils';
+import { formatInputForRelationships } from './utils';
 import { Select, SelectMode, SelectOption } from '../multi-select';
 
 interface ResultBaseType {
@@ -36,17 +35,42 @@ const DetailPanelError = () => {
 	return <pre className={styles.wrapper}>Error!: {error.message}</pre>;
 };
 
-const SelectField = ({ name }: { name: string }) => {
-	const [field, meta] = useField({ name, multiple: false });
+const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
+	const [_, meta, helpers] = useField({ name, multiple: false });
+	const { entityByType } = useSchema();
 	const { initialValue } = meta;
-
-	console.log(initialValue);
-
 	const initialOption: SelectOption[] = [initialValue];
-	const options = initialOption;
+	const relationshipEntityType = entityByType(entity.type);
+
+	const { data } = useQuery<{ result: unknown[] }>(
+		getRelationshipQuery(entity.type, relationshipEntityType.summaryField),
+		{
+			variables: {
+				pagination: {
+					orderBy: {
+						[relationshipEntityType.summaryField as string]: 'ASC',
+					},
+				},
+			},
+		}
+	);
+
+	const options = (data?.result ?? []).map<SelectOption>((item) => {
+		const label = relationshipEntityType.summaryField;
+		return { label: label ? (item as any)[label] : 'notfound', value: (item as any).id };
+	});
+
+	const handleOnChange = (selected: SelectOption[]) => {
+		helpers.setValue(selected?.[0] || undefined);
+	};
 
 	return (
-		<Select options={options} value={initialOption} onChange={() => {}} mode={SelectMode.SINGLE} />
+		<Select
+			options={options}
+			value={initialOption}
+			onChange={handleOnChange}
+			mode={SelectMode.SINGLE}
+		/>
 	);
 };
 
@@ -58,7 +82,7 @@ const DetailField = ({ field }: { field: EntityField }) => {
 				<label htmlFor={field.name} className={styles.fieldLabel}>
 					{field.name}
 				</label>
-				<SelectField name={field.name} />
+				<SelectField name={field.name} entity={field} />
 			</div>
 		);
 	}
@@ -165,7 +189,7 @@ const ModalContent = ({
 			variables: {
 				data: {
 					id,
-					...flattenRelationshipIds(values),
+					...formatInputForRelationships(values),
 				},
 			},
 		});
