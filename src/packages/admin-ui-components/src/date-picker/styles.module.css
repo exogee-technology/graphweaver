@@ -99,6 +99,7 @@
 	overflow: hidden;
 	color: #6c757d;
 	padding: 8px;
+	text-transform: capitalize;
 }
 
 .inputFieldActive {
