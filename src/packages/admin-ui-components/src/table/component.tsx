@@ -1,8 +1,15 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { Entity, useSchema, useSelectedEntity, routeFor, SortField } from '../utils';
+import {
+	Entity,
+	useSchema,
+	useSelectedEntity,
+	routeFor,
+	SortField,
+	decodeSearchParams,
+} from '../utils';
 import { Spinner } from '../spinner';
 
 import 'react-data-grid/lib/styles.css';
@@ -92,6 +99,7 @@ export const Table = <T extends TableRowItem>({
 	const { id } = useParams();
 	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
+	const [search] = useSearchParams();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
 
@@ -126,16 +134,11 @@ export const Table = <T extends TableRowItem>({
 		(row: T) => {
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
 			// Don't set the filter in the route
-			navigate(routeFor({ entity: selectedEntity, id: row.id }));
+			const { filters, sort } = decodeSearchParams(search);
+			navigate(routeFor({ entity: selectedEntity, id: row.id, sort, filters }));
 		},
-		[selectedEntity]
+		[search, selectedEntity]
 	);
-
-	const filteredRows = () => {
-		return rows.filter((row) => {
-			return selectedEntity && id ? row.id === id : true;
-		});
-	};
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
@@ -152,7 +155,7 @@ export const Table = <T extends TableRowItem>({
 		<>
 			<DataGrid
 				columns={columnsForEntity(selectedEntity, entityByType) as any}
-				rows={filteredRows()}
+				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}

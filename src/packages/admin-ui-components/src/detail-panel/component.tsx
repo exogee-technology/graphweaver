@@ -3,10 +3,18 @@ import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { Modal } from '../modal';
-import { useAsyncError, useNavigate, useParams } from 'react-router-dom';
+import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Dropdown, DropdownItem } from '../dropdown';
 
-import { Entity, EntityField, getEntity, routeFor, useSchema, useSelectedEntity } from '../utils';
+import {
+	decodeSearchParams,
+	Entity,
+	EntityField,
+	getEntity,
+	routeFor,
+	useSchema,
+	useSelectedEntity,
+} from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 
@@ -191,6 +199,7 @@ export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName } = useSchema();
+	const [search] = useSearchParams();
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 	const [detail, setDetail] = useState<ApolloQueryResult<any> | null>(null);
 	const fetchData = useCallback(async () => {
@@ -209,9 +218,10 @@ export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
 
 	const navigateBack = useCallback(() => {
 		setDetail(null);
-		navigate(routeFor({ entity: selectedEntity }));
+		const { filters, sort } = decodeSearchParams(search);
+		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 		refetchData();
-	}, [selectedEntity]);
+	}, [search, selectedEntity]);
 
 	if (!detail) return null;
 
