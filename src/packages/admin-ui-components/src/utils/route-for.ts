@@ -58,6 +58,8 @@ export const routeFor = ({
 	const chunks = [entityName];
 	if (id) chunks.push(id);
 
+	console.log(`/${chunks.join('/')}${encodeSearchParams({ sort, filters })}`);
+
 	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters })}`;
 };
 
