@@ -129,7 +129,7 @@
 
 .closeIcon {
 	width: 32px;
-	color: var(--primary-color);
+	color: var(--body-copy-color);
 	position: relative;
 	top: 24px;
 	right: -32px;
