@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
+import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
 
 export interface ButtonProps {
@@ -9,6 +10,7 @@ export interface ButtonProps {
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
 	disabled?: boolean;
+	loading?: boolean;
 }
 
 export const Button = ({
@@ -18,6 +20,7 @@ export const Button = ({
 	className,
 	type = 'button',
 	disabled = false,
+	loading = false,
 }: ButtonProps): JSX.Element => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -57,7 +60,7 @@ export const Button = ({
 			type={type}
 			disabled={disabled}
 		>
-			{children}
+			{loading ? <Spinner size={SpinnerSize.SMALL} /> : children}
 		</button>
 	);
 };

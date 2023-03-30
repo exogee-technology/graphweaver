@@ -43,3 +43,7 @@
 .disabled {
 	opacity: 0.5;
 }
+
+.hideChildren {
+	opacity: 0;
+}

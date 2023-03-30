@@ -126,18 +126,3 @@
 		transform: translateX(100%);
 	}
 }
-
-.closeIcon {
-	width: 32px;
-	color: var(--body-copy-color);
-	position: relative;
-	top: 24px;
-	right: -32px;
-	cursor: pointer;
-	padding: 6px;
-	border-radius: 6px;
-}
-
-.closeIcon:hover {
-	background-color: rgba(237, 232, 242, 0.2);
-}
