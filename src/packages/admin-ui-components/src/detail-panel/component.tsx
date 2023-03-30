@@ -8,9 +8,9 @@ import { Dropdown, DropdownItem } from '../dropdown';
 
 import { Entity, EntityField, getEntity, routeFor, useSchema, useSelectedEntity } from '../utils';
 import { Button } from '../button';
+import { Spinner } from '../spinner';
 
 import styles from './styles.module.css';
-import { Spinner } from '../spinner';
 
 interface ResultBaseType {
 	id: string;
@@ -88,7 +88,7 @@ const DetailForm = ({
 							<Button type="reset" disabled={isSubmitting}>
 								Cancel
 							</Button>
-							<Button type="submit" disabled={isSubmitting}>
+							<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
 								Save
 							</Button>
 						</div>
