@@ -60,14 +60,13 @@
 	flex-direction: column;
 	width: 100%;
 	min-width: 500px;
+	padding: 30px;
 }
 
 .header {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
-	width: 67%;
-	height: 44px;
+	height: 90px;
 }
 
 .headerWrapper {
@@ -89,11 +88,8 @@
 }
 
 .title {
-	position: relative;
 	height: 25px;
-	left: 32px;
-	top: 24px;
-
+	align-self: center;
 	font-family: 'Inter';
 	font-style: normal;
 	font-weight: 600;
