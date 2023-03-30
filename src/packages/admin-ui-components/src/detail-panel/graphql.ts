@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import pluralize from 'pluralize';
 import { Entity } from '../utils';
 
 export const generateUpdateEntityMutation = (
@@ -21,3 +22,17 @@ export const generateUpdateEntityMutation = (
       }
     }
   `;
+
+export const getRelationshipQuery = (entityName: string, summaryField?: string) => {
+	const pluralName = pluralize(entityName);
+	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
+
+	return gql`
+    query getRelationship ($pagination: ${pluralName}PaginationInput) {
+      result: ${queryName} (pagination: $pagination) {
+        id
+        ${summaryField ? summaryField : ''}
+      }
+    }
+  `;
+};

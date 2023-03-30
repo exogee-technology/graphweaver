@@ -21,38 +21,51 @@ interface SelectProps {
 	mode?: SelectMode;
 }
 
-export const Select: React.FC<SelectProps> = ({
+export const Select = ({
 	options,
 	onChange,
 	value = [],
 	placeholder = 'Select',
 	loading = false,
 	mode = SelectMode.MULTI,
-}) => {
+}: SelectProps) => {
 	const [open, setOpen] = useState(false);
 	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	const handleClick = (option: SelectOption) => {
-		const selectedIndex = selectedOptions.findIndex((selected) => selected.value === option.value);
-		if (selectedIndex === -1) {
-			setSelectedOptions([...selectedOptions, option]);
+		if (mode === SelectMode.SINGLE) {
+			setSelectedOptions([option]);
 		} else {
-			setSelectedOptions([
-				...selectedOptions.slice(0, selectedIndex),
-				...selectedOptions.slice(selectedIndex + 1),
-			]);
+			setSelectedOptions((_selectedOptions) => {
+				const selectedIndex = _selectedOptions.findIndex(
+					(selected) => selected.value === option.value
+				);
+				if (selectedIndex === -1) {
+					return [..._selectedOptions, option];
+				}
+				return [
+					..._selectedOptions.slice(0, selectedIndex),
+					..._selectedOptions.slice(selectedIndex + 1),
+				];
+			});
 		}
 	};
 
+	// This is only used when multi select is enabled
 	const handleDelete = (option: SelectOption) => {
-		const selectedIndex = selectedOptions.findIndex((selected) => selected.value === option.value);
-		setSelectedOptions([
-			...selectedOptions.slice(0, selectedIndex),
-			...selectedOptions.slice(selectedIndex + 1),
-		]);
+		setSelectedOptions((_selectedOptions) => {
+			const selectedIndex = _selectedOptions.findIndex(
+				(selected) => selected.value === option.value
+			);
+			return [
+				..._selectedOptions.slice(0, selectedIndex),
+				..._selectedOptions.slice(selectedIndex + 1),
+			];
+		});
 	};
 
+	// This is only used when multi select is enabled
 	const handleDeleteAll = () => {
 		setSelectedOptions([]);
 	};
