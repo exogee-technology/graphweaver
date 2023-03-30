@@ -39,3 +39,7 @@
 .button[type='reset']:hover {
 	background-color: rgba(237, 232, 242, 0.2);
 }
+
+.disabled {
+	opacity: 0.5;
+}

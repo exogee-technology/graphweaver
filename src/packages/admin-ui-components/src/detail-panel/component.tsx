@@ -1,6 +1,6 @@
 import { ApolloQueryResult } from '@apollo/client';
 import classnames from 'classnames';
-import { Field, Form, Formik, useField } from 'formik';
+import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
 import { useCallback, useEffect, useState } from 'react';
 import { Modal } from '../modal';
 import { useAsyncError, useNavigate, useParams } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { Entity, EntityField, getEntity, routeFor, useSchema, useSelectedEntity 
 import { Button } from '../button';
 
 import styles from './styles.module.css';
+import { Spinner } from '../spinner';
 
 interface ResultBaseType {
 	id: string;
@@ -64,29 +65,36 @@ const DetailForm = ({
 	detailFields: EntityField[];
 	onCancel: () => void;
 }) => {
+	const handleOnSubmit = (values: any, actions: FormikHelpers<any>) => {
+		alert(JSON.stringify(values, null, 2));
+		actions.setSubmitting(false);
+	};
+
 	return (
 		<Formik
 			initialValues={initialValues}
 			onSubmit={(values, actions) => {
-				setTimeout(() => {
-					alert(JSON.stringify(values, null, 2));
-					actions.setSubmitting(false);
-					onCancel();
-				}, 500);
+				setTimeout(() => handleOnSubmit(values, actions), 2500);
 			}}
 			onReset={onCancel}
 		>
-			<Form className={styles.detailFormContainer}>
-				<div className={styles.detailFieldList}>
-					{detailFields.map((field) => {
-						return <DetailField key={field.name} field={field} />;
-					})}
-					<div className={styles.detailButtonContainer}>
-						<Button type="reset">Cancel</Button>
-						<Button type="submit">Save</Button>
+			{({ isSubmitting }) => (
+				<Form className={styles.detailFormContainer}>
+					<div className={styles.detailFieldList}>
+						{detailFields.map((field) => {
+							return <DetailField key={field.name} field={field} />;
+						})}
+						<div className={styles.detailButtonContainer}>
+							<Button type="reset" disabled={isSubmitting}>
+								Cancel
+							</Button>
+							<Button type="submit" disabled={isSubmitting}>
+								Save
+							</Button>
+						</div>
 					</div>
-				</div>
-			</Form>
+				</Form>
+			)}
 		</Formik>
 	);
 };
@@ -185,7 +193,11 @@ export const DetailPanel = () => {
 	if (!detail) return null;
 
 	if (detail.loading) {
-		return <pre>Loading...</pre>;
+		return (
+			<pre>
+				<Spinner />
+			</pre>
+		);
 	}
 	if (detail.error || detail.errors) {
 		return <DetailPanelError />;

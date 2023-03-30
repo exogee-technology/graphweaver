@@ -1,6 +1,5 @@
 import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
-import { ExitIcon } from '../assets';
 
 import styles from './styles.module.css';
 
@@ -75,12 +74,12 @@ export const Modal = ({
 						<div className={styles.content}>
 							<div className={styles.headerWrapper}>
 								<div className={styles.header}>
+									<div className={styles.title}>{title}</div>
 									{hideCloseX ? null : (
-										<div className={styles.iconContainer}>
-											<ExitIcon className={styles.closeIcon} onClick={onRequestClose} />
+										<div className={styles.iconContainer} onClick={onRequestClose}>
+											<div className={styles.close} />
 										</div>
 									)}
-									<div className={styles.title}>{title}</div>
 								</div>
 							</div>
 							{modalContent && <div className={styles.contentWrapper}>{modalContent}</div>}
