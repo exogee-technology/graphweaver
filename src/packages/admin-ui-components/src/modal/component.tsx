@@ -77,7 +77,7 @@ export const Modal = ({
 									<div className={styles.title}>{title}</div>
 									{hideCloseX ? null : (
 										<div className={styles.iconContainer} onClick={onRequestClose}>
-											<div className={styles.close} />
+											<div className={styles.closeIcon} />
 										</div>
 									)}
 								</div>
