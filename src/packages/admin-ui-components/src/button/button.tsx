@@ -8,6 +8,7 @@ export interface ButtonProps {
 	className?: string /** alternative styling */;
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
+	disabled?: boolean;
 }
 
 export const Button = ({
@@ -16,6 +17,7 @@ export const Button = ({
 	onClickOutside,
 	className,
 	type = 'button',
+	disabled = false,
 }: ButtonProps): JSX.Element => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -51,8 +53,9 @@ export const Button = ({
 		<button
 			ref={buttonRef}
 			onClick={handleOnClickButton}
-			className={classNames([className, styles.button])}
+			className={classNames([className, styles.button, disabled && styles.disabled])}
 			type={type}
+			disabled={disabled}
 		>
 			{children}
 		</button>

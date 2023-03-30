@@ -64,7 +64,6 @@
 
 .header {
 	display: flex;
-	flex-direction: row-reverse;
 	justify-content: space-between;
 	align-items: center;
 	width: 67%;
@@ -109,9 +108,28 @@
 	min-width: 32px;
 	margin: 6px;
 	cursor: pointer;
-	max-height: 32px;
+	min-height: 20px;
+	max-height: 20px;
 }
 .iconContainer:hover {
-	background-color: rgba(237, 242, 232, 0.4);
-	color: var(--secondary-color);
+	opacity: 0.7;
+}
+
+.closeIcon {
+	position: relative;
+}
+.closeIcon:before,
+.closeIcon:after {
+	position: absolute;
+	left: 15px;
+	content: ' ';
+	height: 20px;
+	width: 2px;
+	background-color: #fff;
+}
+.closeIcon:before {
+	transform: rotate(45deg);
+}
+.closeIcon:after {
+	transform: rotate(-45deg);
 }
