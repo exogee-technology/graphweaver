@@ -23,6 +23,27 @@ export const generateUpdateEntityMutation = (
     }
   `;
 
+export const generateCreateEntityMutation = (
+	entity: Entity,
+	entityByType: (entityType: string) => Entity
+) => gql`
+    mutation createEntity ($data: ${entity.name}InsertInput!){
+      create${entity.name} (data: $data) {
+        id
+        ${entity.fields
+					.map((field) => {
+						if (field.relationshipType) {
+							const relatedEntity = entityByType(field.type);
+							return `${field.name} { id ${relatedEntity.summaryField || ''} }`;
+						} else {
+							return field.name;
+						}
+					})
+					.join(' ')}
+      }
+    }
+  `;
+
 export const getRelationshipQuery = (entityName: string, summaryField?: string) => {
 	const pluralName = pluralize(entityName);
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);

@@ -69,7 +69,7 @@ interface EncodedParams {
 	filters?: string;
 }
 
-const encodeSearchParams = (searchParams: SearchParams) => {
+export const encodeSearchParams = (searchParams: SearchParams) => {
 	const { sort, filters } = searchParams;
 	let search = '';
 	let encoded: EncodedParams = {};

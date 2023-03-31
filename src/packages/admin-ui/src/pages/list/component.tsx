@@ -1,17 +1,17 @@
 import { useCallback, useContext, useEffect } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import {
 	DetailPanel,
 	Table,
 	useSchema,
 	PAGE_SIZE,
-	routeFor,
 	decodeSearchParams,
 	DataContext,
 	DataState,
 	defaultEntityState,
 	ToolBar,
+	encodeSearchParams,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { fetchList } from './graphql';
@@ -31,8 +31,7 @@ export const ListToolBar = () => {
 
 export const List = () => {
 	const { entity } = useParams();
-	const [search] = useSearchParams();
-	const navigate = useNavigate();
+	const [search, setSearchParams] = useSearchParams();
 
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
@@ -136,11 +135,13 @@ export const List = () => {
 		state.sortFields ? requestSort(state) : incrementPage();
 	};
 
-	// TODO: Get warning in here that navigate should be in a useEffect
-	// Makes no sense, this is triggered by a user event
 	const requestSort = (state: Partial<DataState>) => {
-		const { filters } = decodeSearchParams(search);
-		navigate(routeFor({ entity, sort: state.sortFields, filters }));
+		setSearchParams((_search) =>
+			encodeSearchParams({
+				..._search,
+				sort: state.sortFields,
+			})
+		);
 	};
 
 	// Increment page only; leave the rest, set signal to table to show 'Loading' indicator.
