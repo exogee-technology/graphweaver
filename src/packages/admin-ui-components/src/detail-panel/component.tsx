@@ -16,15 +16,19 @@ import {
 } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
-
-import { generateUpdateEntityMutation, getRelationshipQuery } from './graphql';
+import { Select, SelectMode, SelectOption } from '../multi-select';
+import { formatInputForRelationships } from './utils';
+import {
+	generateCreateEntityMutation,
+	generateUpdateEntityMutation,
+	getRelationshipQuery,
+} from './graphql';
 
 import styles from './styles.module.css';
-import { formatInputForRelationships } from './utils';
-import { Select, SelectMode, SelectOption } from '../multi-select';
 
 interface ResultBaseType {
 	id: string;
+	[x: string]: unknown;
 }
 
 const DetailPanelError = () => {
@@ -39,7 +43,6 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const { initialValue } = meta;
-	const initialOption: SelectOption[] = [initialValue];
 	const relationshipEntityType = entityByType(entity.type);
 
 	const { data } = useQuery<{ result: unknown[] }>(
@@ -67,7 +70,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	return (
 		<Select
 			options={options}
-			value={initialOption}
+			value={initialValue ? [initialValue] : []}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
 		/>
@@ -138,16 +141,20 @@ const ModalContent = ({
 	onClose,
 }: {
 	selectedEntity: Entity;
-	detail: ApolloQueryResult<{ result: ResultBaseType }>;
+	detail?: ApolloQueryResult<{ result: ResultBaseType }>;
 	onClose: () => void;
 }) => {
 	const [open, setOpen] = useState(false);
 	const { entityByType } = useSchema();
 
-	const getValue = (field: EntityField, result: any) => {
+	const getValue = (field: EntityField, result?: ResultBaseType) => {
 		if (field.relationshipType) {
 			const relatedEntity = entityByType(field.type);
-			const relatedField = result[field.name];
+			const relatedField = result?.[field.name] as Record<string, unknown> | undefined;
+
+			if (!relatedField) {
+				return undefined;
+			}
 
 			return {
 				value: relatedField.id,
@@ -156,14 +163,14 @@ const ModalContent = ({
 					: '',
 			};
 		}
-		return result[field.name as keyof typeof result];
+		return result?.[field.name as keyof typeof result];
 	};
 
 	// Weed out ID fields - for the moment.
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => field.name !== 'id');
 
 	const initialValues = formFields.reduce((acc, field) => {
-		const { result } = detail.data;
+		const result = detail?.data?.result;
 		const value = getValue(field, result);
 		//@todo: For relationshipType fields, we want both the ID and the value
 		acc[field.name] = value || '';
@@ -171,6 +178,7 @@ const ModalContent = ({
 	}, {} as Record<string, any>);
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
+	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
 
 	useEffect(() => {
 		// The timeouts here are 300ms to match the animation time of the css
@@ -183,16 +191,25 @@ const ModalContent = ({
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
-		const id = detail.data.result.id;
+		const id = detail?.data?.result?.id;
 
-		await updateEntity({
-			variables: {
-				data: {
-					id,
-					...formatInputForRelationships(values),
+		if (id) {
+			await updateEntity({
+				variables: {
+					data: {
+						id,
+						...formatInputForRelationships(values),
+					},
 				},
-			},
-		});
+			});
+		} else {
+			await createEntity({
+				variables: {
+					data: formatInputForRelationships(values),
+				},
+			});
+		}
+
 		actions.setSubmitting(false);
 		onClose();
 	};
@@ -226,7 +243,7 @@ export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 	const [detail, setDetail] = useState<ApolloQueryResult<any> | null>(null);
 	const fetchData = useCallback(async () => {
-		if (id) {
+		if (id && id !== 'new') {
 			const result = await getEntity(selectedEntity, id, entityByName);
 			if (result) setDetail(result);
 		}
@@ -245,6 +262,10 @@ export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 		refetchData();
 	}, [search, selectedEntity]);
+
+	if (id === 'new') {
+		return <ModalContent selectedEntity={selectedEntity} onClose={navigateBack} />;
+	}
 
 	if (!detail) return null;
 
