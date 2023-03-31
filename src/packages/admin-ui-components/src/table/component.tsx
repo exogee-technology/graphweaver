@@ -77,7 +77,6 @@ export interface TableProps<T extends TableRowItem> {
 	rows: T[];
 	requestRefetch: (options: RequestRefetchOptions) => void;
 	orderBy: SortField[];
-	allDataFetched: boolean;
 	loading: boolean;
 	loadingNext: boolean;
 	error?: ApolloError;
@@ -87,7 +86,6 @@ export const Table = <T extends TableRowItem>({
 	rows,
 	requestRefetch,
 	orderBy = [],
-	allDataFetched,
 	loading,
 	loadingNext = false,
 	error,
@@ -114,7 +112,7 @@ export const Table = <T extends TableRowItem>({
 	const handleScroll: UIEventHandler<HTMLDivElement> = async (event: React.UIEvent) => {
 		// Do nothing if we aren't at the last row, or if we're currently loading...
 		// Also do nothing if EOF detected (no more rows to load)
-		if (loadingNext || !scrolledToEnd(event) || allDataFetched) {
+		if (loadingNext || !scrolledToEnd(event)) {
 			return;
 		}
 		requestRefetch({});
@@ -142,9 +140,7 @@ export const Table = <T extends TableRowItem>({
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	// loading is not always around for long; check the row count as well, if zero, load the blob
-	// - Check allDataFetched in case there are zero rows or all returned already
-	if (loading || (!allDataFetched && rows.length === 0)) {
+	if (loading) {
 		return <Loader />;
 	}
 	if (error) {
