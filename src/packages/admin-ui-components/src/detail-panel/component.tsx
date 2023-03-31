@@ -234,7 +234,7 @@ const ModalContent = ({
 	);
 };
 
-export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
+export const DetailPanel = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
@@ -260,7 +260,6 @@ export const DetailPanel = ({ refetchData }: { refetchData: () => void }) => {
 		setDetail(null);
 		const { filters, sort } = decodeSearchParams(search);
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
-		refetchData();
 	}, [search, selectedEntity]);
 
 	if (id === 'new') {

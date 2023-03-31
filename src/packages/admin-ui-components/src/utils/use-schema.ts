@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { ApolloCache, TypePolicy, useQuery } from '@apollo/client';
 import { SCHEMA_QUERY } from './graphql';
+import pluralize from 'pluralize';
 
 export interface Schema {
 	entities: Entity[];
@@ -48,53 +49,6 @@ export interface Filter<T = unknown> {
 	[x: string]: T;
 }
 
-// interface FieldEquals {
-// 	kind: 'equals';
-// 	field: string;
-// 	value: string;
-// }
-
-// interface FieldLike {
-// 	kind: '_like';
-// 	field: string;
-// 	pattern: string;
-// 	isCaseInsensitive: boolean;
-// }
-
-// interface FieldGreaterThan {
-// 	kind: '_gt';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldLessThan {
-// 	kind: '_lt';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldGreaterThanOrEqualTo {
-// 	kind: '_gte';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldLessThanOrEqualTo {
-// 	kind: '_lte';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldAnd {
-// 	kind: '_and';
-// 	and: FieldPredicate[];
-// }
-
-// interface FieldOr {
-// 	kind: '_or';
-// 	or: FieldPredicate[];
-// }
-
 type SortDirection = 'ASC' | 'DESC';
 
 export interface SortField {
@@ -102,8 +56,38 @@ export interface SortField {
 	direction: SortDirection;
 }
 
+type Cache = ApolloCache<unknown> & {
+	policies: { addTypePolicies: (policy: { Query: TypePolicy }) => void };
+};
+
+type EntityMap = {
+	[entityName: string]: Entity;
+};
+
+const generateTypePolicyFields = (entityMap: EntityMap) => {
+	const policy = {
+		keyArgs: false as const,
+		merge(existing = [], incoming: { __ref: string }[]) {
+			const merged = [...existing, ...incoming];
+			const uniqueItems = new Set(merged.map((item) => item.__ref));
+			return [...uniqueItems].map((__ref) => merged.find((item) => item.__ref === __ref));
+		},
+	};
+
+	const mapEntityToPolicy = (entity: Entity) => ({
+		[pluralize(entity.name).toLowerCase()]: policy,
+	});
+
+	return {
+		...Object.values(entityMap)
+			.map(mapEntityToPolicy)
+			.reduce((acc, policy) => ({ ...acc, ...policy }), {}),
+	};
+};
+
 export const useSchema = () => {
-	const { data, loading, error } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
+	const { data, loading, error, client } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
+	const cache = client.cache as Cache;
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
@@ -128,6 +112,16 @@ export const useSchema = () => {
 		for (const entity of data.result.entities) {
 			if (entity.name) result[entity.name] = entity;
 		}
+
+		// Now we have our entities we can create the type policy
+		const typePolicy: { Query: TypePolicy } = {
+			Query: {
+				keyFields: ['id'],
+				fields: generateTypePolicyFields(result),
+			},
+		};
+		cache.policies.addTypePolicies(typePolicy);
+
 		return result;
 	}, [data]);
 
