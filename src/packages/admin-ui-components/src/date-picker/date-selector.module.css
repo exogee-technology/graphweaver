@@ -30,7 +30,7 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	width: calc(100% / 7);
+	flex: 0 1 14.2%;
 	height: 30px;
 	cursor: pointer;
 }
