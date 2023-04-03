@@ -57,8 +57,7 @@ const hasId = (obj: unknown): obj is ObjectWithId => {
 };
 
 const isObject = (value: unknown) => {
-	const type = typeof value;
-	return value != null && (type === 'object' || type === 'function');
+	return value != null && typeof value === 'object';
 };
 
 export class EntityManager<T extends BaseEntity> {
