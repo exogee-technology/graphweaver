@@ -41,7 +41,7 @@ export const EnumFilter = ({
 
 	return (
 		<MultiSelect
-			key={fieldName + resetCount}
+			key={`${fieldName}:${resetCount}`}
 			options={enumOptions}
 			value={
 				initialFilter?.[fieldName] ? [{ value: initialFilter?.[fieldName], label: undefined }] : []
