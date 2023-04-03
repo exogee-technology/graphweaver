@@ -114,8 +114,8 @@ export enum AdminUIFilterType {
 export type AdminUISettingsType = {
 	fields?: {
 		[x: string]: {
-			filter: {
-				type: AdminUIFilterType;
+			filter?: {
+				hide: true;
 			};
 		};
 	};

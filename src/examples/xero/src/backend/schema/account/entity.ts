@@ -1,10 +1,4 @@
-import {
-	AdminUIFilterType,
-	AdminUISettings,
-	BaseLoaders,
-	GraphQLEntity,
-	SummaryField,
-} from '@exogee/graphweaver';
+import { AdminUISettings, BaseLoaders, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
 import { Tenant } from '../tenant';
@@ -18,31 +12,21 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	@Field(() => ID)
 	id!: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.TEXT,
-		},
-	})
 	@Field(() => String, { nullable: true })
 	code?: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.TEXT,
-		},
-	})
 	@SummaryField()
 	@Field(() => String)
 	name!: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.ENUM,
-		},
-	})
 	@Field(() => AccountType)
 	type!: AccountType;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => String)
 	tenantId!: string;
 
