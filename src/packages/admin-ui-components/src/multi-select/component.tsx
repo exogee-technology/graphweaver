@@ -102,7 +102,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 							<>
 								<div className={styles.selectedOptions}>
 									{selectedOptions.map((option) => (
-										<div className={styles.optionPill} key={option.value}>
+										<div className={styles.optionPill} key={`${option.value}`}>
 											<span className={styles.optionPillLabel}>{option.label}</span>
 											<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
 												&times;
@@ -117,7 +117,7 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 												? styles.selected
 												: ''
 										}`}
-										key={option.value}
+										key={`${option.value}`}
 										onClick={() => handleClick(option)}
 									>
 										{option.label}
