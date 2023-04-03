@@ -4,7 +4,7 @@ import {
 	AdminUISettings,
 	AdminUIFilterType,
 } from '@exogee/graphweaver';
-import { ISOStringScalar } from '@exogee/graphweaver-scalars';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Account } from '../account';
@@ -31,7 +31,7 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 			type: AdminUIFilterType.DATE_RANGE,
 		},
 	})
-	@Field(() => ISOStringScalar)
+	@Field(() => ISODateStringScalar)
 	date!: Date;
 
 	@AdminUISettings({
