@@ -1,10 +1,5 @@
-import {
-	BaseLoaders,
-	GraphQLEntity,
-	AdminUISettings,
-	AdminUIFilterType,
-} from '@exogee/graphweaver';
-import { ISOStringScalar } from '@exogee/graphweaver-scalars';
+import { BaseLoaders, GraphQLEntity, AdminUISettings } from '@exogee/graphweaver';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Account } from '../account';
@@ -26,38 +21,23 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => ID)
 	id!: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.DATE_RANGE,
-		},
-	})
-	@Field(() => ISOStringScalar)
+	@Field(() => ISODateStringScalar)
 	date!: Date;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.TEXT,
-		},
-	})
 	@Field(() => String)
 	description!: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.NUMERIC,
-		},
-	})
 	@Field(() => Number)
 	amount!: number;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => ID, { nullable: true })
 	accountId?: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.RELATIONSHIP,
-		},
-	})
 	@Field(() => Account, { nullable: true })
 	async account() {
 		if (!this.dataEntity.accountId) return null;
@@ -70,14 +50,14 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 		);
 	}
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => ID, { nullable: true })
 	tenantId?: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.RELATIONSHIP,
-		},
-	})
 	@Field(() => Tenant, { nullable: true })
 	async tenant() {
 		if (!this.dataEntity.tenantId) return null;
