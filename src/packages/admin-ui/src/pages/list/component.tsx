@@ -8,12 +8,12 @@ import {
 	useSchema,
 	PAGE_SIZE,
 	decodeSearchParams,
-	DataState,
 	ToolBar,
 	FieldFilter,
 	Filter,
 	TableRowItem,
 	routeFor,
+	RequestRefetchOptions,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { queryForEntityPage } from './graphql';
@@ -89,11 +89,11 @@ export const List = () => {
 		});
 	}, [page, JSON.stringify(filters), JSON.stringify(sort)]);
 
-	const requestRefetch = (state: Partial<DataState>) => {
+	const requestRefetch = (state: Partial<RequestRefetchOptions>) => {
 		state.sortFields ? requestSort(state) : incrementPage();
 	};
 
-	const requestSort = (state: Partial<DataState>) => {
+	const requestSort = (state: Partial<RequestRefetchOptions>) => {
 		navigate(routeFor({ entity, sort: state.sortFields, filters }));
 	};
 
