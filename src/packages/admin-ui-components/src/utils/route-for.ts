@@ -43,6 +43,7 @@ export const routeFor = ({
 	tenantId,
 	sort,
 	filters,
+	page,
 }: RouteForProps) => {
 	if (dashboard) {
 		const chunks = ['dashboard'];
@@ -59,7 +60,7 @@ export const routeFor = ({
 	const chunks = [entityName];
 	if (id) chunks.push(id);
 
-	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters })}`;
+	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters, page })}`;
 };
 
 // Stop '&' being always prepended to filter
@@ -95,7 +96,7 @@ export const encodeSearchParams = (searchParams: SearchParams) => {
 export const decodeSearchParams = (
 	search: URLSearchParams
 ): {
-	sort?: any;
+	sort?: SortField[];
 	filters?: FieldFilter;
 	page: number;
 } => {
@@ -105,6 +106,6 @@ export const decodeSearchParams = (
 	return {
 		sort: rawSort ? JSON.parse(atob(decodeURIComponent(rawSort))) : undefined,
 		filters: rawFilter ? JSON.parse(atob(decodeURIComponent(rawFilter))) : undefined,
-		page: page ? +page : 0,
+		page: page ? +page : 1,
 	};
 };
