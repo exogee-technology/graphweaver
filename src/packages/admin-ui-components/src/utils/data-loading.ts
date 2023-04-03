@@ -17,7 +17,6 @@ export const getEntityPage = <T>(
 	const query = queryForEntityPage(entity, entityByType);
 
 	const filter = andFilters(filters);
-	console.log(filter);
 	const orderBy: { [field: string]: 'ASC' | 'DESC' } = {};
 
 	for (const sortColumn of sortFields) {

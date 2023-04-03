@@ -106,15 +106,13 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		setResetCount((resetCount) => resetCount + 1);
 	};
 
+	if (filterComponents.length === 0) return null;
+
 	return (
-		<>
-			{filterComponents.length > 0 && (
-				<div className={styles.filterBarWrapper}>
-					{iconBefore}
-					{...filterComponents}
-					<Button onClick={clearAllFilters}>Clear Filters</Button>
-				</div>
-			)}
-		</>
+		<div className={styles.filterBarWrapper}>
+			{iconBefore}
+			{...filterComponents}
+			<Button onClick={clearAllFilters}>Clear Filters</Button>
+		</div>
 	);
 };
