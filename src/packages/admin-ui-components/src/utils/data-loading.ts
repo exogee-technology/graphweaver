@@ -17,6 +17,7 @@ export const getEntityPage = <T>(
 	const query = queryForEntityPage(entity, entityByType);
 
 	const filter = andFilters(filters);
+	console.log(filter);
 	const orderBy: { [field: string]: 'ASC' | 'DESC' } = {};
 
 	for (const sortColumn of sortFields) {
@@ -104,13 +105,5 @@ const andFilters = (filters: FieldFilter) => {
 		.filter((_filter): _filter is Filter => _filter !== undefined);
 
 	if (filter.length === 0) return undefined;
-
-	return filter.reduce<{ _and: unknown[] }>(
-		(prev, curr) => {
-			return {
-				_and: [...prev._and, curr],
-			};
-		},
-		{ _and: [] }
-	);
+	return { _and: filter };
 };
