@@ -1,9 +1,8 @@
 import { AdminUISettingsMap } from '..';
-import { AdminUIFilterType } from '../common/types';
 
 type Props = {
 	filter?: {
-		type: AdminUIFilterType;
+		hide: true;
 	};
 };
 

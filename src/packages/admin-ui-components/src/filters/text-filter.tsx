@@ -6,7 +6,7 @@ import { queryForFilterText } from './graphql';
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter<string>) => void;
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	initialFilter?: Filter<string>;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -39,7 +39,7 @@ export const TextFilter = ({
 
 	return (
 		<Select
-			key={fieldName + resetCount}
+			key={`${fieldName}:${resetCount}`}
 			options={[...textOptions].map((value) => ({ value, label: value }))}
 			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
 			placeholder={fieldName}

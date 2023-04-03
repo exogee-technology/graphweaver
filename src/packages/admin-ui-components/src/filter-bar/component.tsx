@@ -18,17 +18,12 @@ import {
 } from '../utils';
 import {
 	DateRangeFilter,
-	DateRangeFilterProps,
 	DateRangeFilterType,
 	EnumFilter,
-	EnumFilterProps,
 	NumericFilter,
-	NumericFilterProps,
 	RelationshipFilter,
-	RelationshipFilterProps,
 	RelationshipFilterType,
 	TextFilter,
-	TextFilterProps,
 } from '../filters';
 
 import styles from './styles.module.css';
@@ -56,52 +51,44 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const getFilterComponents = (entityName: string) => {
 		const rowEntity = entityByName(entityName);
 
-		return rowEntity.fields
-			.map((field) => {
-				const filterComponent = {
-					[AdminUIFilterType.TEXT]: TextFilter,
-					[AdminUIFilterType.RELATIONSHIP]: RelationshipFilter,
-					[AdminUIFilterType.ENUM]: EnumFilter,
-					[AdminUIFilterType.NUMERIC]: NumericFilter,
-					[AdminUIFilterType.DATE_RANGE]: DateRangeFilter,
-				};
-				return (
-					field.filter?.type &&
-					createElement(
-						filterComponent[field.filter.type] as FunctionComponent<
-							NumericFilterProps &
-								TextFilterProps &
-								DateRangeFilterProps &
-								EnumFilterProps &
-								RelationshipFilterProps
-						>,
-						{
-							key: field.name,
-							fieldName: field.name,
-							entity: entity,
-							initialFilter: filter[field.name] as
-								| (Filter<number | undefined> &
-										Filter<string> &
-										Filter<DateRangeFilterType> &
-										Filter<RelationshipFilterType>)
-								| undefined,
-							onChange: onFilter,
-							resetCount: resetCount,
-						}
-					)
-				);
-			})
-			.filter(
-				(
-					component
-				): component is React.FunctionComponentElement<
-					NumericFilterProps &
-						TextFilterProps &
-						DateRangeFilterProps &
-						EnumFilterProps &
-						RelationshipFilterProps
-				> => component !== undefined
-			);
+		return rowEntity.fields.map((field) => {
+			if (!field.filter?.type) return null;
+			const options = {
+				key: field.name,
+				fieldName: field.name,
+				entity: entity,
+				onChange: onFilter,
+				resetCount: resetCount,
+			};
+
+			switch (field.filter.type) {
+				case AdminUIFilterType.TEXT:
+					return createElement(TextFilter, {
+						...options,
+						initialFilter: filter[field.name] as Filter<string> | undefined,
+					});
+				case AdminUIFilterType.RELATIONSHIP:
+					return createElement(RelationshipFilter, {
+						...options,
+						initialFilter: filter[field.name] as Filter<RelationshipFilterType> | undefined,
+					});
+				case AdminUIFilterType.ENUM:
+					return createElement(EnumFilter, {
+						...options,
+						initialFilter: filter[field.name] as Filter<string> | undefined,
+					});
+				case AdminUIFilterType.NUMERIC:
+					return createElement(NumericFilter, {
+						...options,
+						initialFilter: filter[field.name] as Filter<number> | undefined,
+					});
+				case AdminUIFilterType.DATE_RANGE:
+					return createElement(DateRangeFilter, {
+						...options,
+						initialFilter: filter[field.name] as Filter<DateRangeFilterType> | undefined,
+					});
+			}
+		});
 	};
 
 	useEffect(() => {
@@ -118,15 +105,13 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		setResetCount((resetCount) => resetCount + 1);
 	};
 
+	if (filterComponents.length === 0) return null;
+
 	return (
-		<>
-			{filterComponents.length > 0 && (
-				<div className={styles.filterBarWrapper}>
-					{iconBefore}
-					{...filterComponents}
-					<Button onClick={clearAllFilters}>Clear Filters</Button>
-				</div>
-			)}
-		</>
+		<div className={styles.filterBarWrapper}>
+			{iconBefore}
+			{...filterComponents}
+			<Button onClick={clearAllFilters}>Clear Filters</Button>
+		</div>
 	);
 };
