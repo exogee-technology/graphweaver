@@ -131,12 +131,6 @@ export const Table = <T extends TableRowItem>({
 		[selectedEntity]
 	);
 
-	const filteredRows = () => {
-		return rows.filter((row) => {
-			return selectedEntity && id ? row.id === id : true;
-		});
-	};
-
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	// loading is not always around for long; check the row count as well, if zero, load the blob
@@ -152,7 +146,7 @@ export const Table = <T extends TableRowItem>({
 		<>
 			<DataGrid
 				columns={columnsForEntity(selectedEntity, entityByType) as any}
-				rows={filteredRows()}
+				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
