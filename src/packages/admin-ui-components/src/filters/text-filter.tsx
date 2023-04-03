@@ -4,12 +4,12 @@ import { DataContext, Filter, MultiSelect, SelectOption, useSchema } from '..';
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter<string>) => void;
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	initialFilter?: Filter<string>;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
-export const TextFilter = <T extends { id: string }>({
+export const TextFilter = ({
 	fieldName,
 	entity,
 	onChange,
