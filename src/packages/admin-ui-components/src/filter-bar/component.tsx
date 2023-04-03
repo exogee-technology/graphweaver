@@ -68,11 +68,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				field.filter?.type &&
 				createElement(
 					filterComponent[field.filter.type] as FunctionComponent<
-						NumericFilterProps &
-							TextFilterProps &
-							DateRangeFilterProps &
-							EnumFilterProps &
-							RelationshipFilterProps
+						| NumericFilterProps
+						| TextFilterProps
+						| DateRangeFilterProps
+						| EnumFilterProps
+						| RelationshipFilterProps
 					>,
 					{
 						key: field.name,
