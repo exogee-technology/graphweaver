@@ -3,8 +3,8 @@ import { Input } from '../input';
 
 export interface NumericFilterProps {
 	fieldName: string;
-	entity?: string; // Unused but defined for a consistent API
-	onChange?: (fieldName: string, filter?: Filter<number | undefined>) => void;
+	entity: string; // Unused but defined for a consistent API
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	initialFilter?: Filter<number | undefined>;
 	resetCount: number; // We use this to reset the filter using the key
 }

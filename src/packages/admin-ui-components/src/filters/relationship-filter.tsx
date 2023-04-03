@@ -9,7 +9,7 @@ export type RelationshipFilterType = { [x: string]: { id: string } } | undefined
 export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter<RelationshipFilterType>) => void;
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	initialFilter?: Filter<RelationshipFilterType>;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -70,7 +70,7 @@ export const RelationshipFilter = ({
 
 	return (
 		<MultiSelect
-			key={fieldName + resetCount}
+			key={`${fieldName}:${resetCount}`}
 			options={relationshipOptions}
 			value={
 				initialFilter?.[fieldName]?.id
