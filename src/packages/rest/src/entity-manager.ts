@@ -53,7 +53,7 @@ type ObjectWithId = {
 };
 
 const hasId = (obj: unknown): obj is ObjectWithId => {
-	return (obj as ObjectWithId).id !== undefined && typeof (obj as ObjectWithId).id === 'string';
+	return typeof (obj as ObjectWithId).id === 'string';
 };
 
 const isObject = (value: unknown) => {
