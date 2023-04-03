@@ -1,5 +1,4 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
-import { isArray } from '@apollo/client/cache/inmemory/helpers';
 import { uri } from './config';
 
 const httpLink = new HttpLink({

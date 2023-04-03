@@ -1,28 +1,6 @@
 import { gql } from '@apollo/client';
-import { Entity, FieldFilter, getEntity, SortField } from '@exogee/graphweaver-admin-ui-components';
+import { Entity } from '@exogee/graphweaver-admin-ui-components';
 import pluralize from 'pluralize';
-
-// @todo remove the below
-// export const fetchList = <T>(
-// 	entity: string,
-// 	entityByNameOrType: (entity: string) => Entity,
-// 	filterField?: FieldFilter,
-// 	sortFields?: SortField[],
-// 	page?: number
-// ) =>
-// 	getEntityPage<T>(
-// 		entityByNameOrType(entity),
-// 		filterField || {},
-// 		sortFields || [],
-// 		entityByNameOrType,
-// 		page ?? 1
-// 	);
-
-// export const fetchEntity = <T>(
-// 	entity: string,
-// 	entityByNameOrType: (entity: string) => Entity,
-// 	id?: string
-// ) => (id ? getEntity<T>(entityByNameOrType(entity), id, entityByNameOrType) : undefined);
 
 export const queryForEntityPage = (entityName: string, entityByType: (type: string) => Entity) => {
 	const entity = entityByType(entityName);
