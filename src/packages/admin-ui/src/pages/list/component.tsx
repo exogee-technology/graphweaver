@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
 	DetailPanel,
@@ -10,25 +10,13 @@ import {
 	decodeSearchParams,
 	DataState,
 	ToolBar,
-	encodeSearchParams,
 	FieldFilter,
 	Filter,
+	TableRowItem,
+	routeFor,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { queryForEntityPage } from './graphql';
-
-export const ListToolBar = () => {
-	const { entity } = useParams();
-	const { entityByName } = useSchema();
-	return (
-		<ToolBar
-			title={entity}
-			subtitle={
-				entity && entityByName(entity) ? `From ${entityByName(entity).backendId}` : undefined
-			}
-		/>
-	);
-};
 
 const andFilters = (filters: FieldFilter) => {
 	const filter = Object.entries(filters)
@@ -47,123 +35,47 @@ const andFilters = (filters: FieldFilter) => {
 	);
 };
 
+export const ListToolBar = () => {
+	const { entity } = useParams();
+	const { entityByName } = useSchema();
+	return (
+		<ToolBar
+			title={entity}
+			subtitle={
+				entity && entityByName(entity) ? `From ${entityByName(entity).backendId}` : undefined
+			}
+		/>
+	);
+};
+
 export const List = () => {
 	const { entity } = useParams();
-	const [search, setSearchParams] = useSearchParams();
-
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
+	const navigate = useNavigate();
+	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 
-	// const { entityState, setEntityState } = useContext(DataContext);
-
-	// const getDefaultEntityState = () => {
-	// 	const { filters } = decodeSearchParams(search);
-	// 	return {
-	// 		...defaultEntityState,
-	// 		filterFields: filters,
-	// 	};
-	// };
-
-	// const resetDataState = (entity: string, state: Partial<DataState>) => {
-	// 	setEntityState({
-	// 		...entityState,
-	// 		[entity]: { ...getDefaultEntityState(), ...state },
-	// 	});
-	// };
-	// const setDataState = (entity: string, state: Partial<DataState>) => {
-	// 	const currentState = entityState[entity] ?? getDefaultEntityState();
-	// 	const newData = [...currentState.data, ...(state.data ?? [])];
-	// 	const newDataState = {
-	// 		...currentState,
-	// 		...state,
-	// 		data: newData,
-	// 	};
-	// 	setEntityState({ ...entityState, [entity]: newDataState });
-	// };
-
-	// const fetchData = useCallback(async () => {
-	// 	const currentState = entityState[entity] ?? getDefaultEntityState();
-
-	// 	if (currentState.allDataFetched) {
-	// 		return;
-	// 	}
-
-	// 	let data = [];
-	// 	let lastRecordReturned = false;
-	// 	const result = await fetchList<{ result: any[] }>(
-	// 		entity,
-	// 		entityByName,
-	// 		currentState.filterFields,
-	// 		currentState.sortFields,
-	// 		currentState.page
-	// 	);
-	// 	data = result.data.result.slice();
-
-	// 	if (data.length < PAGE_SIZE) {
-	// 		lastRecordReturned = true;
-	// 	}
-
-	// 	const { loading, error } = result;
-	// 	setDataState(entity, {
-	// 		data,
-	// 		allDataFetched: lastRecordReturned,
-	// 		loading,
-	// 		loadingNext: false,
-	// 		error,
-	// 	});
-	// }, [
-	// 	entity,
-	// 	entityState[entity]?.filterFields,
-	// 	entityState[entity]?.sortFields,
-	// 	entityState[entity]?.page,
-	// ]);
-
-	// useEffect(() => {
-	// 	const { filters, sort } = decodeSearchParams(search);
-	// 	resetDataState(entity, { ...(filters ? { filterFields: filters } : {}), sortFields: sort });
-	// }, [search]);
-
-	// useEffect(() => {
-	// 	fetchData().catch(console.error);
-	// }, [
-	// 	fetchData,
-	// 	entity,
-	// 	entityState[entity]?.filterFields,
-	// 	entityState[entity]?.sortFields,
-	// 	entityState[entity]?.page,
-	// ]);
-
-	const requestRefetch = (state: Partial<DataState>) => {
-		//state.sortFields ? requestSort(state) : incrementPage();
-	};
-
-	// const requestSort = (state: Partial<DataState>) => {
-	// 	setSearchParams((_search) =>
-	// 		encodeSearchParams({
-	// 			..._search,
-	// 			sort: state.sortFields,
-	// 		})
-	// 	);
-	// };
-
 	const { sort, page, filters } = decodeSearchParams(search);
-	const filter = filters ? andFilters(filters) : undefined;
 	const orderBy = {
-		id: 'ASC',
+		...(sort
+			? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
+			: { id: 'ASC' }),
 	};
 
-	const { data, loading, error, fetchMore, refetch } = useQuery<{ result: any[] }>(
+	const queryVariables = {
+		pagination: {
+			offset: Math.max(page - 1, 0) * PAGE_SIZE,
+			limit: PAGE_SIZE,
+			orderBy,
+		},
+		...(filters ? { filter: andFilters(filters) } : {}),
+	};
+
+	const { data, loading, error, fetchMore } = useQuery<{ result: TableRowItem[] }>(
 		queryForEntityPage(entity, entityByName),
 		{
-			variables: {
-				pagination: {
-					offset: Math.max(page - 1, 0) * PAGE_SIZE,
-					limit: PAGE_SIZE,
-					orderBy,
-				},
-				...(filter ? { filter } : {}),
-			},
+			variables: queryVariables,
 			notifyOnNetworkStatusChange: true,
 		}
 	);
@@ -171,41 +83,33 @@ export const List = () => {
 	const initialLoading = !!(!data?.result && loading);
 	const loadingNext = !!(data?.result && loading);
 
+	useEffect(() => {
+		fetchMore({
+			variables: queryVariables,
+		});
+	}, [page, JSON.stringify(filters), JSON.stringify(sort)]);
+
+	const requestRefetch = (state: Partial<DataState>) => {
+		state.sortFields ? requestSort(state) : incrementPage();
+	};
+
+	const requestSort = (state: Partial<DataState>) => {
+		navigate(routeFor({ entity, sort: state.sortFields, filters }));
+	};
+
 	const incrementPage = async () => {
 		const isNextPage = !((data?.result.length ?? 0) % PAGE_SIZE);
 		if (isNextPage) {
-			setSearchParams(
-				encodeSearchParams({
-					sort,
-					filters,
-					page: page + 1,
-				})
-			);
+			const nextPage = (data?.result.length ?? 0) / PAGE_SIZE + 1;
+			navigate(routeFor({ entity, sort, filters, page: nextPage }));
 		}
 	};
-
-	useEffect(() => {
-		fetchMore({
-			variables: {
-				pagination: {
-					offset: page * PAGE_SIZE,
-					limit: PAGE_SIZE,
-					orderBy,
-				},
-				...(filter ? { filter } : {}),
-			},
-		});
-	}, [page]);
-
-	useEffect(() => {
-		console.log(filter);
-	}, [filter]);
 
 	return (
 		<>
 			<Table
 				rows={data?.result || []}
-				orderBy={sort}
+				orderBy={sort ?? []}
 				requestRefetch={requestRefetch}
 				loading={initialLoading}
 				loadingNext={loadingNext}
