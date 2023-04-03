@@ -3,6 +3,7 @@ import {
 	EntityMetadataMap,
 	isSummaryField,
 	AdminUISettingsMap,
+	AdminUIFilterType,
 } from '@exogee/graphweaver';
 import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { getMetadataStorage, Query, Resolver } from 'type-graphql';
@@ -11,6 +12,31 @@ import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
 import { AdminUiMetadata } from './metadata';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
+
+const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): AdminUIFilterType => {
+	// Check if we have a relationship
+	if (field.relationshipType) {
+		return AdminUIFilterType.RELATIONSHIP;
+	}
+
+	// Check if we have an enum
+	const isEnum = enums.find((value) => value.name === field.type);
+	if (isEnum) return AdminUIFilterType.ENUM;
+
+	// Otherwise check the type
+	switch (field.type) {
+		case 'ID':
+			return AdminUIFilterType.TEXT;
+		case 'Number':
+			return AdminUIFilterType.NUMERIC;
+		case 'String':
+			return AdminUIFilterType.TEXT;
+		case 'ISOString':
+			return AdminUIFilterType.DATE_RANGE;
+		default:
+			return AdminUIFilterType.TEXT;
+	}
+};
 
 @Resolver((of) => AdminUiMetadata)
 @AuthorizedBaseFunctions()
@@ -63,7 +89,11 @@ export class AdminUiMetadataResolver {
 					} else if (relatedObject) {
 						fieldObject.relationshipType = ReferenceType.MANY_TO_ONE;
 					}
-					fieldObject.filter = adminUISettings?.fields?.[field.name]?.filter;
+					fieldObject.filter = adminUISettings?.fields?.[field.name]?.filter?.hide
+						? undefined
+						: {
+								type: mapFilterType(fieldObject, metadata.enums),
+						  };
 					return fieldObject;
 				});
 				return {
