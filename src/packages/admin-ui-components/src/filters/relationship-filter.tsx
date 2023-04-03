@@ -70,7 +70,7 @@ export const RelationshipFilter = ({
 
 	return (
 		<MultiSelect
-			key={fieldName + resetCount}
+			key={`${fieldName}:${resetCount}`}
 			options={relationshipOptions}
 			value={
 				initialFilter?.[fieldName]?.id
