@@ -48,53 +48,6 @@ export interface Filter<T = unknown> {
 	[x: string]: T;
 }
 
-// interface FieldEquals {
-// 	kind: 'equals';
-// 	field: string;
-// 	value: string;
-// }
-
-// interface FieldLike {
-// 	kind: '_like';
-// 	field: string;
-// 	pattern: string;
-// 	isCaseInsensitive: boolean;
-// }
-
-// interface FieldGreaterThan {
-// 	kind: '_gt';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldLessThan {
-// 	kind: '_lt';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldGreaterThanOrEqualTo {
-// 	kind: '_gte';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldLessThanOrEqualTo {
-// 	kind: '_lte';
-// 	field: string;
-// 	value: string | number;
-// }
-
-// interface FieldAnd {
-// 	kind: '_and';
-// 	and: FieldPredicate[];
-// }
-
-// interface FieldOr {
-// 	kind: '_or';
-// 	or: FieldPredicate[];
-// }
-
 type SortDirection = 'ASC' | 'DESC';
 
 export interface SortField {

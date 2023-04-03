@@ -69,9 +69,15 @@ export const DateSelector = ({ startDate, endDate, onSelect, isRangePicker = fal
 				>{`>`}</button>
 			</div>
 			<div className={styles.daysContainer}>
-				{[...Array(currentMonth.daysInMonth).keys()]
-					.map((day) => currentMonth.set({ day: day + 1 }))
-					.map((day) => renderDay(day))}
+				{[...Array(currentMonth.daysInMonth).keys()].map((day) =>
+					renderDay(
+						DateTime.fromObject({
+							day: day + 1,
+							month: currentMonth.month,
+							year: currentMonth.year,
+						})
+					)
+				)}
 			</div>
 		</div>
 	);

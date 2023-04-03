@@ -104,13 +104,5 @@ const andFilters = (filters: FieldFilter) => {
 		.filter((_filter): _filter is Filter => _filter !== undefined);
 
 	if (filter.length === 0) return undefined;
-
-	return filter.reduce<{ _and: unknown[] }>(
-		(prev, curr) => {
-			return {
-				_and: [...prev._and, curr],
-			};
-		},
-		{ _and: [] }
-	);
+	return { _and: filter };
 };
