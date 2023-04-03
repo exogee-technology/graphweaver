@@ -7,8 +7,8 @@ export type DateRangeFilterType = { [x: string]: string }[] | undefined;
 
 export interface DateRangeFilterProps {
 	fieldName: string;
-	entity?: string; // Not used but added to conform to API
-	onChange?: (fieldName: string, filter?: Filter<DateRangeFilterType>) => void;
+	entity: string; // Not used but added to conform to API
+	onChange?: (fieldName: string, filter?: Filter) => void;
 	initialFilter?: Filter<DateRangeFilterType>;
 	resetCount: number; // We use this to reset the filter using the key
 }
