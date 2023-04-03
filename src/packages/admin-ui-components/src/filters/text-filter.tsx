@@ -52,7 +52,7 @@ export const TextFilter = <T extends { id: string }>({
 
 	return (
 		<MultiSelect
-			key={fieldName + resetCount}
+			key={`${fieldName}:${resetCount}`}
 			options={textOptions}
 			value={initialFilter ? [{ value, label: value }] : []}
 			placeholder={fieldName}
