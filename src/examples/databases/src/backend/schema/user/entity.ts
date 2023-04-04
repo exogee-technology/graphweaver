@@ -1,14 +1,7 @@
-import {
-	GraphQLEntity,
-	AdminUISettings,
-	BaseLoaders,
-	SummaryField,
-	AdminUIFilterType,
-} from '@exogee/graphweaver';
+import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { User as OrmUser } from '../../entities';
-import { Task } from '../task';
 
 @ObjectType('User')
 export class User extends GraphQLEntity<OrmUser> {
@@ -17,20 +10,10 @@ export class User extends GraphQLEntity<OrmUser> {
 	@Field(() => ID)
 	id!: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.TEXT,
-		},
-	})
 	@SummaryField()
 	@Field(() => String)
 	username!: string;
 
-	@AdminUISettings({
-		filter: {
-			type: AdminUIFilterType.TEXT,
-		},
-	})
 	@Field(() => String)
 	email!: string;
 }
