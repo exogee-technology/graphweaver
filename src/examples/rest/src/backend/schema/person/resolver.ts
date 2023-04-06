@@ -1,5 +1,5 @@
 import { AuthorizedBaseFunctions, createBaseResolver } from '@exogee/graphweaver';
-import { RestBackendProvider } from '@exogee/graphweaver-rest';
+import { AccessorParams, RestBackendProvider } from '@exogee/graphweaver-rest';
 import url from 'url';
 
 import { Resolver } from 'type-graphql';
@@ -14,7 +14,7 @@ import { inMemoryFilterFor } from '../../utils';
 export class PersonResolver extends createBaseResolver(
 	Person,
 	new RestBackendProvider('People', {
-		find: async ({ filter }: any) => {
+		find: async ({ filter }: AccessorParams) => {
 			const { results } = await fetch(`/people`);
 
 			for (const person of results) {
