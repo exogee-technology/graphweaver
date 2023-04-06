@@ -1,4 +1,5 @@
 import { Field, ObjectType } from 'type-graphql';
+import { AdminUiFilterMetadata } from './filter';
 
 @ObjectType('AdminUiFieldMetadata')
 export class AdminUiFieldMetadata {
@@ -13,4 +14,7 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => String, { nullable: true })
 	relatedEntity?: string;
+
+	@Field(() => AdminUiFilterMetadata, { nullable: true })
+	filter?: AdminUiFilterMetadata;
 }

@@ -1,5 +1,6 @@
 export { ReactComponent as ChevronDownIcon } from './16-chevron-down.svg';
 export { ReactComponent as DatabaseIcon } from './16-database.svg';
+export { ReactComponent as ControlsIcon } from './16-filter.svg';
 export { ReactComponent as FilterIcon } from './16-filter.svg';
 export { ReactComponent as OpenExternalIcon } from './16-open-external.svg';
 export { ReactComponent as SearchIcon } from './16-search.svg';

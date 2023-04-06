@@ -6,66 +6,12 @@ import { TokenSet, TokenSetParameters, XeroClient } from 'xero-node';
 export interface XeroDataAccessor<T> {
 	find: (args: {
 		xero: XeroClient;
-		filter?: string;
-		rawFilter: Record<string, any>;
+		filter: Record<string, any>;
 		order?: Record<string, Sort>;
 		limit?: number;
 		offset?: number;
 	}) => Promise<T[]>;
 }
-
-// This takes:
-// {
-// 	_or: [
-// 		{ id: '123'},
-// 		{ id: '234'},
-// 	]
-// }
-// and turns it into a string like:
-// AccountID=="123" OR AccountID=="234"
-const xeroFilterFrom = (filter: any) => {
-	if (!filter) return undefined;
-
-	const chunks: string[] = [];
-
-	for (const [key, value] of Object.entries(filter)) {
-		if (key === '_or' || key === '_and') {
-			const subChunks: string[] = [];
-			for (const subChunk of value as any[]) {
-				const subFilter = xeroFilterFrom(subChunk);
-				if (subFilter) subChunks.push(subFilter);
-			}
-
-			if (key === '_or') chunks.push(`${subChunks.join(' OR ')}`);
-			else chunks.push(`${subChunks.join(' AND ')}`);
-		} else {
-			const replacedKey = key === 'id' ? 'AccountID' : key;
-			let subfilter =
-				typeof value === 'object' ? xeroFilterFrom(value) : (value as string | undefined);
-
-			// Some Xero types need to be quoted.
-			if (isUUID(subfilter, 4)) {
-				subfilter = `GUID("${subfilter}")`;
-			} else if (typeof subfilter === 'string') {
-				subfilter = `"${subfilter}"`;
-			}
-
-			if (key.endsWith('_gt')) {
-				chunks.push(`${replacedKey}>${subfilter}`);
-			} else if (key.endsWith('_gte')) {
-				chunks.push(`${replacedKey}<=${subfilter}`);
-			} else if (key.endsWith('_lt')) {
-				chunks.push(`${replacedKey}<${subfilter}`);
-			} else if (key.endsWith('_lte')) {
-				chunks.push(`${replacedKey}<=${subfilter}`);
-			} else {
-				chunks.push(`${replacedKey}==${subfilter}`);
-			}
-		}
-	}
-
-	return chunks.join(' AND ') || undefined;
-};
 
 const xeroOrderFrom = (pagination?: PaginationOptions) => {
 	if (!pagination || !pagination.orderBy) return undefined;
@@ -148,17 +94,6 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	): Promise<T[]> {
 		await this.ensureAccessToken();
 
-		logger.trace(
-			`Running find ${this.entityTypeName} with filter`,
-			{
-				filter: JSON.stringify(filter),
-			},
-			'and pagination',
-			{
-				pagination: JSON.stringify(pagination),
-			}
-		);
-
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
@@ -168,8 +103,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		try {
 			const result = await this.accessor.find({
 				xero: XeroBackendProvider.xero,
-				filter: xeroFilterFrom(filter),
-				rawFilter: filter,
+				filter,
 				order: xeroOrderFrom(pagination),
 				limit: xeroLimitFrom(pagination),
 				offset: xeroOffsetFrom(pagination),

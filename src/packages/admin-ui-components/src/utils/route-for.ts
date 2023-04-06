@@ -1,5 +1,5 @@
 import { SortColumn } from 'react-data-grid';
-import { Entity } from './use-schema';
+import { Entity, FieldFilter, Filter, SortField } from './use-schema';
 
 interface RouteForEntity {
 	entity: string | Entity;
@@ -26,15 +26,23 @@ interface RouteForDashboard {
 }
 
 interface SearchParams {
-	sort?: SortColumn[];
-	// TODO: filter
+	sort?: SortField[];
+	filters?: FieldFilter;
 }
 
 export type RouteForProps = (RouteForEntity | RouteForType | RouteForDashboard) & SearchParams;
 
 const cleaningPattern = /[^a-zA-Z0-9]/g;
 
-export const routeFor = ({ entity, type, id, dashboard, tenantId, sort }: RouteForProps) => {
+export const routeFor = ({
+	entity,
+	type,
+	id,
+	dashboard,
+	tenantId,
+	sort,
+	filters,
+}: RouteForProps) => {
 	if (dashboard) {
 		const chunks = ['dashboard'];
 		if (tenantId) chunks.push(tenantId);
@@ -49,11 +57,46 @@ export const routeFor = ({ entity, type, id, dashboard, tenantId, sort }: RouteF
 
 	const chunks = [entityName];
 	if (id) chunks.push(id);
-	// TODO: At the moment, sorting is a simple '?name=asc&name=desc&...' string
-	// TODO: Will need to change to '?sort=...&filter=...'
+
+	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters })}`;
+};
+
+// Stop '&' being always prepended to filter
+interface EncodedParams {
+	sort?: string;
+	filters?: string;
+}
+
+const encodeSearchParams = (searchParams: SearchParams) => {
+	const { sort, filters } = searchParams;
 	let search = '';
+	let encoded: EncodedParams = {};
 	if (sort && sort.length > 0) {
-		search = '?' + sort.map((col) => `${col.columnKey}=${col.direction}`).join('&');
+		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
 	}
-	return `/${chunks.join('/')}${search}`;
+	if (filters && Object.keys(filters).length > 0) {
+		encoded = { ...encoded, filters: encodeURIComponent(btoa(JSON.stringify(filters))) };
+	}
+	if (Object.keys(encoded).length > 0) {
+		search =
+			'?' +
+			Object.entries(encoded)
+				.map(([k, v]) => `${k}=${v}`)
+				.join('&');
+	}
+	return search;
+};
+
+export const decodeSearchParams = (
+	search: URLSearchParams
+): {
+	sort?: any;
+	filters?: FieldFilter;
+} => {
+	const rawSort = search.get('sort');
+	const rawFilter = search.get('filters');
+	return {
+		sort: rawSort ? JSON.parse(atob(decodeURIComponent(rawSort))) : undefined,
+		filters: rawFilter ? JSON.parse(atob(decodeURIComponent(rawFilter))) : undefined,
+	};
 };

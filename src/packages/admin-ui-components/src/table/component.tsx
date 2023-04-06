@@ -2,7 +2,7 @@ import DataGrid, { Column, SortColumn } from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 
-import { Entity, useSchema, useSelectedEntity, routeFor } from '../utils';
+import { Entity, useSchema, useSelectedEntity, routeFor, SortField } from '../utils';
 import { Spinner } from '../spinner';
 
 import 'react-data-grid/lib/styles.css';
@@ -63,13 +63,13 @@ export interface TableRowItem {
 }
 
 export interface RequestRefetchOptions {
-	sortColumns?: SortColumn[];
+	sortFields?: SortField[];
 }
 
 export interface TableProps<T extends TableRowItem> {
 	rows: T[];
 	requestRefetch: (options: RequestRefetchOptions) => void;
-	orderBy: SortColumn[];
+	orderBy: SortField[];
 	allDataFetched: boolean;
 	loading: boolean;
 	loadingNext: boolean;
@@ -85,7 +85,9 @@ export const Table = <T extends TableRowItem>({
 	loadingNext = false,
 	error,
 }: TableProps<T>) => {
-	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
+	const [sortColumns, setSortColumns] = useState<SortColumn[]>(
+		orderBy.map((f) => ({ columnKey: f.field, direction: f.direction }))
+	);
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
@@ -111,7 +113,9 @@ export const Table = <T extends TableRowItem>({
 	};
 
 	const handleSort = () => {
-		requestRefetch({ sortColumns });
+		requestRefetch({
+			sortFields: sortColumns.map((c) => ({ field: c.columnKey, direction: c.direction })),
+		});
 	};
 
 	useEffect(() => {
@@ -121,6 +125,7 @@ export const Table = <T extends TableRowItem>({
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
+			// Don't set the filter in the route
 			navigate(routeFor({ entity: selectedEntity, id: row.id }));
 		},
 		[selectedEntity]

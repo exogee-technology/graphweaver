@@ -1,5 +1,7 @@
-import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
+import { BaseLoaders, GraphQLEntity, AdminUISettings } from '@exogee/graphweaver';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { Field, ID, ObjectType } from 'type-graphql';
+
 import { Account } from '../account';
 import { Tenant } from '../tenant';
 
@@ -19,7 +21,7 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => Date)
+	@Field(() => ISODateStringScalar)
 	date!: Date;
 
 	@Field(() => String)
@@ -28,6 +30,11 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => Number)
 	amount!: number;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => ID, { nullable: true })
 	accountId?: string;
 
@@ -43,6 +50,11 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 		);
 	}
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => ID, { nullable: true })
 	tenantId?: string;
 
