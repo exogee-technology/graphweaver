@@ -9,7 +9,7 @@ export class Task extends BaseEntity {
 	@Property({ type: String })
 	description!: string;
 
-	@ExternalIdField({ from: 'user' })
+	@ExternalIdField({ from: 'people' })
 	@Property({ type: BigIntType })
-	userId!: string;
+	personId!: string;
 }
