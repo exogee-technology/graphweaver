@@ -217,6 +217,7 @@ importers:
       '@mikro-orm/mysql': 5.4.2
       '@types/node': 14.14.10
       dotenv: 16.0.0
+      esbuild: 0.15.5
       got: 11.8.2
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.1
@@ -236,6 +237,7 @@ importers:
       type-graphql: 2.0.0-beta.1
     devDependencies:
       '@types/node': 14.14.10
+      esbuild: 0.15.5
       typescript: 5.0.2
 
   examples/xero:
