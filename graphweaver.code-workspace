@@ -17,6 +17,10 @@
       "path": "src/examples/databases"
     },
     {
+      "name": "➡️ Example: Rest",
+      "path": "src/examples/rest"
+    },
+    {
       "name": "➡️ Example: Xero",
       "path": "src/examples/xero"
     },
