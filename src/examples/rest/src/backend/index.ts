@@ -24,7 +24,6 @@ const graphweaver = new Graphweaver({
 
 	mikroOrmOptions: [
 		{
-			connectionManagerId: 'my',
 			mikroOrmConfig: {
 				entities: [Task],
 				driver: MySqlDriver,
