@@ -13,6 +13,15 @@
 	overflow: auto;
 }
 
+.noOverlay {
+	width: 100%;
+	min-height: 100%;
+	position: relative;
+	display: flex;
+	/* justify-content: ; */
+	align-items: left;
+}
+
 .closeArea {
 	position: absolute;
 	width: 100%;

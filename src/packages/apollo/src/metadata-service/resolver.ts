@@ -1,4 +1,10 @@
-import { AuthorizedBaseFunctions, EntityMetadataMap, isSummaryField } from '@exogee/graphweaver';
+import {
+	AuthorizedBaseFunctions,
+	EntityMetadataMap,
+	isSummaryField,
+	AdminUISettingsMap,
+	AdminUIFilterType,
+} from '@exogee/graphweaver';
 import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
@@ -6,6 +12,31 @@ import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
 import { AdminUiMetadata } from './metadata';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
+
+const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): AdminUIFilterType => {
+	// Check if we have a relationship
+	if (field.relationshipType) {
+		return AdminUIFilterType.RELATIONSHIP;
+	}
+
+	// Check if we have an enum
+	const isEnum = enums.find((value) => value.name === field.type);
+	if (isEnum) return AdminUIFilterType.ENUM;
+
+	// Otherwise check the type
+	switch (field.type) {
+		case 'ID':
+			return AdminUIFilterType.TEXT;
+		case 'Number':
+			return AdminUIFilterType.NUMERIC;
+		case 'String':
+			return AdminUIFilterType.TEXT;
+		case 'ISOString':
+			return AdminUIFilterType.DATE_RANGE;
+		default:
+			return AdminUIFilterType.TEXT;
+	}
+};
 
 @Resolver((of) => AdminUiMetadata)
 @AuthorizedBaseFunctions()
@@ -28,6 +59,7 @@ export class AdminUiMetadataResolver {
 		const entities: AdminUiEntityMetadata[] = metadata.objectTypes
 			.map((objectType) => {
 				const name = objectType.name;
+				const adminUISettings = AdminUISettingsMap.get(name);
 				const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
 				const summaryField = objectType.fields?.find((field) =>
 					isSummaryField(objectType.target, field.name)
@@ -57,6 +89,11 @@ export class AdminUiMetadataResolver {
 					} else if (relatedObject) {
 						fieldObject.relationshipType = ReferenceType.MANY_TO_ONE;
 					}
+					fieldObject.filter = adminUISettings?.fields?.[field.name]?.filter?.hide
+						? undefined
+						: {
+								type: mapFilterType(fieldObject, metadata.enums),
+						  };
 					return fieldObject;
 				});
 				return {

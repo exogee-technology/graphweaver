@@ -1,4 +1,4 @@
-import { BaseLoaders, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import { AdminUISettings, BaseLoaders, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
 import { Tenant } from '../tenant';
@@ -22,6 +22,11 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	@Field(() => AccountType)
 	type!: AccountType;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => String)
 	tenantId!: string;
 

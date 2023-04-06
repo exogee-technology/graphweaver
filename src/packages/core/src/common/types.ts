@@ -102,3 +102,21 @@ export interface GraphqlEntityType<T, O> {
 }
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
+
+export enum AdminUIFilterType {
+	DATE_RANGE = 'DATE_RANGE',
+	ENUM = 'ENUM',
+	NUMERIC = 'NUMERIC',
+	RELATIONSHIP = 'RELATIONSHIP',
+	TEXT = 'TEXT',
+}
+
+export type AdminUISettingsType = {
+	fields?: {
+		[x: string]: {
+			filter?: {
+				hide: true;
+			};
+		};
+	};
+};

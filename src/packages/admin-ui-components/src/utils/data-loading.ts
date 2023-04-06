@@ -1,8 +1,7 @@
 import { gql } from '@apollo/client';
 import pluralize from 'pluralize';
-import { SortColumn } from 'react-data-grid';
 
-import { Entity } from './use-schema';
+import { Entity, FieldFilter, Filter, SortField } from './use-schema';
 // Can't use useApolloClient/useQuery/useParms here if not using Loader
 import { apolloClient } from '../apollo';
 
@@ -10,20 +9,24 @@ export const PAGE_SIZE = 50;
 
 export const getEntityPage = <T>(
 	entity: Entity,
-	sortColumns: readonly SortColumn[],
+	filters: FieldFilter,
+	sortFields: readonly SortField[],
 	entityByType: (type: string) => Entity,
 	page: number
 ) => {
 	const query = queryForEntityPage(entity, entityByType);
 
+	const filter = andFilters(filters);
 	const orderBy: { [field: string]: 'ASC' | 'DESC' } = {};
-	for (const sortColumn of sortColumns) {
-		orderBy[sortColumn.columnKey] = sortColumn.direction;
+
+	for (const sortColumn of sortFields) {
+		orderBy[sortColumn.field] = sortColumn.direction;
 	}
 
 	return apolloClient.query<T>({
 		query,
 		variables: {
+			filter,
 			pagination: {
 				offset: Math.max(page - 1, 0) * PAGE_SIZE,
 				limit: PAGE_SIZE,
@@ -43,8 +46,8 @@ const queryForEntityPage = (entity: Entity, entityByType: (type: string) => Enti
 	// We looked into generating an AST here but it's really verbose and
 	// doesn't seem that much cleaner than just generating a string.
 	return gql`
-		query AdminUIListPage($pagination: ${pluralName}PaginationInput) {
-			result: ${queryName}(pagination: $pagination) {
+		query AdminUIListPage($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
+			result: ${queryName}(filter: $filter, pagination: $pagination) {
 				${entity.fields
 					.map((field) => {
 						if (field.relationshipType) {
@@ -93,4 +96,13 @@ const queryForEntity = (entity: Entity, entityByType?: (type: string) => Entity)
 			}
 		}
 	`;
+};
+
+const andFilters = (filters: FieldFilter) => {
+	const filter = Object.entries(filters)
+		.map(([_, _filter]) => _filter)
+		.filter((_filter): _filter is Filter => _filter !== undefined);
+
+	if (filter.length === 0) return undefined;
+	return { _and: filter };
 };
