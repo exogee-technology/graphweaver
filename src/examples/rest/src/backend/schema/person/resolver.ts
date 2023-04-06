@@ -18,12 +18,10 @@ export class PersonResolver extends createBaseResolver(
 			const { results } = await fetch(`/people`);
 
 			for (const person of results) {
-				const paths = url
-					.parse(person.url)
-					.pathname?.split('/')
-					.filter((part) => part);
-				const id = paths?.[paths.length - 1];
-				(person as RestPeople & { id: string }).id = id || 'null';
+				const [_, __, id] = (url.parse(person.url).pathname?.split('/') || []).filter(
+					(part) => part
+				);
+				(person as RestPeople & { id: string }).id = id || person.url;
 			}
 
 			if (filter) {
