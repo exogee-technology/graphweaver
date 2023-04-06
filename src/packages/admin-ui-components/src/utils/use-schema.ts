@@ -22,10 +22,37 @@ export interface Entity {
 	fields: EntityField[];
 }
 
+export enum AdminUIFilterType {
+	DATE_RANGE = 'DATE_RANGE',
+	ENUM = 'ENUM',
+	NUMERIC = 'NUMERIC',
+	RELATIONSHIP = 'RELATIONSHIP',
+	TEXT = 'TEXT',
+}
 export interface EntityField {
 	name: string;
 	type: string;
 	relationshipType?: '1:1' | '1:n' | 'm:1' | 'm:n';
+	filter?: {
+		type: AdminUIFilterType;
+	};
+}
+
+// @todo this needs typing correctly
+
+export interface FieldFilter {
+	[x: string]: Filter | undefined;
+}
+
+export interface Filter<T = unknown> {
+	[x: string]: T;
+}
+
+type SortDirection = 'ASC' | 'DESC';
+
+export interface SortField {
+	field: string;
+	direction: SortDirection;
 }
 
 export const useSchema = () => {

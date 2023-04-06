@@ -9,6 +9,7 @@ import styles from '../styles.module.css';
 export const EntityRow = ({ entity }: { entity: Entity }) => (
 	<li>
 		<NavLink
+			reloadDocument
 			to={routeFor({ entity })}
 			className={({ isActive }) => classnames(styles.subListItem, isActive && styles.active)}
 		>

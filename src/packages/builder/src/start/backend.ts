@@ -151,6 +151,7 @@ export const startBackend = async (options: BackendStartOptions) => {
 		},
 		{
 			printOutput: true,
+			reloadHandler: true,
 		}
 	);
 

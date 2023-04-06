@@ -1,12 +1,26 @@
-import { Entity, getEntity, getEntityPage } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Entity,
+	FieldFilter,
+	getEntity,
+	getEntityPage,
+	SortField,
+} from '@exogee/graphweaver-admin-ui-components';
 import { SortColumn } from 'react-data-grid';
 
 export const fetchList = <T>(
 	entity: string,
 	entityByNameOrType: (entity: string) => Entity,
-	sortColumns?: SortColumn[],
+	filterField?: FieldFilter,
+	sortFields?: SortField[],
 	page?: number
-) => getEntityPage<T>(entityByNameOrType(entity), sortColumns || [], entityByNameOrType, page ?? 1);
+) =>
+	getEntityPage<T>(
+		entityByNameOrType(entity),
+		filterField || {},
+		sortFields || [],
+		entityByNameOrType,
+		page ?? 1
+	);
 
 export const fetchEntity = <T>(
 	entity: string,
