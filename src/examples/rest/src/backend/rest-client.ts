@@ -2,7 +2,9 @@ import got from 'got';
 
 const baseUrl = process.env.REST_BASE_URL;
 
-export const fetch = async (path: string) => {
-	const res = await got.get<any>(`${baseUrl}${path}`).json();
-	return res as any;
+export const fetch = async <T>(path: string) => {
+	return got.get(`${baseUrl}${path}`).json<{
+		count: number;
+		results: T[];
+	}>();
 };
