@@ -16,12 +16,12 @@ export class Task extends GraphQLEntity<OrmTask> {
 
 	@Field(() => Person, { nullable: true })
 	async people() {
-		if (!this.dataEntity.userId) return null;
+		if (!this.dataEntity.personId) return null;
 
 		return Person.fromBackendEntity(
 			await BaseLoaders.loadOne({
 				gqlEntityType: Person,
-				id: this.dataEntity.userId,
+				id: this.dataEntity.personId,
 			})
 		);
 	}
