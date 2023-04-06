@@ -1,8 +1,12 @@
 import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
+export type AccessorParams = {
+	filter?: Record<string, any>;
+	pagination?: PaginationOptions;
+};
 export interface RestDataAccessor<T> {
-	find: (args: { filter?: Record<string, any>; pagination?: PaginationOptions }) => Promise<T[]>;
+	find: (args: AccessorParams) => Promise<T[]>;
 }
 
 export class RestBackendProvider<T> implements BackendProvider<T> {
@@ -10,10 +14,7 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 	public constructor(protected entityTypeName: string, protected accessor?: RestDataAccessor<T>) {}
 
 	// GET METHODS
-	public async find(
-		filter: any, // @todo: Create a type for this
-		pagination?: PaginationOptions
-	): Promise<T[]> {
+	public async find(filter: Record<string, any>, pagination?: PaginationOptions): Promise<T[]> {
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
@@ -55,10 +56,10 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	public async findByRelatedId(
-		entity: any,
+		entity: unknown,
 		relatedField: string,
 		relatedFieldIds: string[],
-		filter?: any
+		filter?: Record<string, any>
 	): Promise<T[]> {
 		if (!this.accessor) {
 			throw new Error(
@@ -131,7 +132,7 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
-	public isCollection(entity: any) {
+	public isCollection(entity: unknown) {
 		return false;
 	}
 }
