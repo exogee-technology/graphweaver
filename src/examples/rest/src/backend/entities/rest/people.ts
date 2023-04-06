@@ -2,8 +2,8 @@ import { BaseEntity, Field } from '@exogee/graphweaver-rest';
 
 export class People extends BaseEntity {
 	@Field()
-	id!: string;
+	name!: string;
 
 	@Field()
-	name!: string;
+	url!: string;
 }
