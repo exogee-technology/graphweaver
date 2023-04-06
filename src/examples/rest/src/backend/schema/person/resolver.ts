@@ -15,7 +15,7 @@ export class PersonResolver extends createBaseResolver(
 	Person,
 	new RestBackendProvider('People', {
 		find: async ({ filter }: AccessorParams) => {
-			const { results } = await fetch(`/people`);
+			const { results } = await fetch<RestPeople>(`/people`);
 
 			for (const person of results) {
 				const [_, __, id] = (url.parse(person.url).pathname?.split('/') || []).filter(
