@@ -17,11 +17,11 @@ CREATE TABLE task (
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  user_id INT NOT NULL
+  person_id INT NOT NULL
 );
 
 -- Seed data for task table
-INSERT INTO task (description, completed, user_id)
+INSERT INTO task (description, completed, person_id)
 VALUES
   ('Buy groceries', false, 1),
   ('Clean the house', true, 1),
