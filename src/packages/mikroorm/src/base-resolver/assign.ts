@@ -10,7 +10,7 @@ import {
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
 
-import { Database } from '../database';
+import { ConnectionManager } from '../database';
 
 // This is how Mikro ORM does it within their own code, so in this file we're ok with non-null assertions.
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -32,7 +32,7 @@ export const assign = async <T extends AnyEntity<T>>(
 	data: EntityData<T>,
 	options?: AssignOptions,
 	visited = new Set<AnyEntity<any>>(),
-	em = Database.em
+	em = ConnectionManager.default.em
 ) => {
 	if (visited.has(entity)) return entity;
 	visited.add(entity);
@@ -142,10 +142,7 @@ export const assign = async <T extends AnyEntity<T>>(
 				const valueKeys = Object.keys(value as any);
 				if (valueKeys.length === 1 && valueKeys[0] === 'id') {
 					// Ok, this is just the ID, set the reference and move on.
-					(entity as any)[property] = Database.em.getReference(
-						propertyMetadata.type,
-						(value as any).id
-					);
+					(entity as any)[property] = em.getReference(propertyMetadata.type, (value as any).id);
 				} else {
 					if (entityPropertyValue && !Reference.isReference(entityPropertyValue)) {
 						throw new Error(
