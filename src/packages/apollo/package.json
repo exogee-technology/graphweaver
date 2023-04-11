@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap=linked `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write src/**/*.ts",
