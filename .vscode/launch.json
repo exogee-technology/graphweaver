@@ -14,7 +14,7 @@
       "env": { "LOGGING_LEVEL": "trace" }
     },
     {
-      "name": "Database Example",
+      "name": "MySQL and PostgreSQL Database Example",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "pnpm",
