@@ -1,4 +1,4 @@
-import { Database } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { Session } from '../../entities';
 import { DateTime } from 'luxon';
 
@@ -7,7 +7,7 @@ const secondsAgo = (seconds: number) => DateTime.utc().minus({ seconds }).toJSDa
 
 export class DatabaseStore {
 	private readonly findWithToken = (sessionToken: string) =>
-		Database.em.findOne(Session, { sessionToken, expiresAt: { $gt: new Date() } });
+		ConnectionManager.default.em.findOne(Session, { sessionToken, expiresAt: { $gt: new Date() } });
 
 	public readonly get = async (key: string) => {
 		const session = await this.findWithToken(key);
@@ -22,21 +22,21 @@ export class DatabaseStore {
 		session.expiresAt = secondsFromNow(sessionDuration);
 		session.value = value;
 
-		await Database.em.persistAndFlush(session);
+		await ConnectionManager.default.em.persistAndFlush(session);
 	};
 
 	public readonly delete = async (key: string) => {
-		await Database.em.nativeDelete(Session, { sessionToken: key });
+		await ConnectionManager.default.em.nativeDelete(Session, { sessionToken: key });
 	};
 
 	public readonly clearExpired = async (sessionDuration: number) => {
-		await Database.em.nativeDelete(Session, {
+		await ConnectionManager.default.em.nativeDelete(Session, {
 			expiresAt: { $lte: new Date() },
 		});
 	};
 
 	public readonly touch = async (key: string, sessionDuration: number) => {
-		await Database.em.nativeUpdate(
+		await ConnectionManager.default.em.nativeUpdate(
 			Session,
 			{ sessionToken: key },
 			{ expiresAt: secondsFromNow(sessionDuration) }

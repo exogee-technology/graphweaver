@@ -5,7 +5,7 @@ dotenv.config({
 	path: path.join(__dirname, '..', '..', '..', 'graphql-api', '.env'),
 });
 
-import { Database } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { CodeBlockWriter, Project } from 'ts-morph';
 
@@ -72,8 +72,8 @@ const run = async () => {
 
 	// Ok, generate the SQL and save it.
 	logger.info('Generating diff');
-	await Database.connect();
-	const generator = Database.orm.getSchemaGenerator();
+	await ConnectionManager.default.connect();
+	const generator = ConnectionManager.default.orm.getSchemaGenerator();
 	const dump = await generator.getUpdateSchemaSQL({ wrap: false });
 	const lines = dump.split('\n').filter((line) => line.length > 0);
 
