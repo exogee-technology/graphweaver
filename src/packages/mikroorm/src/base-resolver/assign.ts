@@ -10,7 +10,7 @@ import {
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
 
-import { ConnectionManager, Database } from '../database';
+import { ConnectionManager } from '../database';
 
 // This is how Mikro ORM does it within their own code, so in this file we're ok with non-null assertions.
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
