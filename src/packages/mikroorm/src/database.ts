@@ -247,13 +247,21 @@ class DatabaseImplementation {
 	};
 }
 
-export const Database = new DatabaseImplementation();
-
 class ConnectionsManager {
 	private connections: Map<string, DatabaseImplementation>;
 
 	constructor() {
 		this.connections = new Map<string, DatabaseImplementation>();
+	}
+
+	get default(): DatabaseImplementation {
+		const [defaultConnection] = [...this.connections];
+		if (!defaultConnection)
+			throw new Error(
+				'Error: No database connections. There should be at least one database connection.'
+			);
+		const [_, databaseConnection] = defaultConnection;
+		return databaseConnection;
 	}
 
 	public connect = async (id: string, connectionOptions?: ConnectionOptions) => {
@@ -269,4 +277,4 @@ class ConnectionsManager {
 		return this.connections.get(id);
 	}
 }
-export const cm = new ConnectionsManager();
+export const ConnectionManager = new ConnectionsManager();
