@@ -2,14 +2,13 @@ import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 import {
-	Database,
 	FilterQuery,
 	LockMode,
 	QueryFlag,
 	ReferenceType,
 	SqlEntityRepository,
 	Utils,
-	cm,
+	ConnectionManager,
 	externalIdFieldMap,
 	AnyEntity,
 } from '..';
@@ -89,8 +88,8 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 	private get database() {
 		// If we have a connection manager ID then use that else fallback to the Database
-		if (!this.connectionManagerId) return Database;
-		return cm.database(this.connectionManagerId) || Database;
+		if (!this.connectionManagerId) return ConnectionManager.default;
+		return ConnectionManager.database(this.connectionManagerId) || ConnectionManager.default;
 	}
 
 	// This is exposed for use in the RLS package
