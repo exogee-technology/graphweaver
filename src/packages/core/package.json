@@ -5,10 +5,9 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap=linked `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
-		"test": "jest --passWithNoTests",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -29,11 +28,8 @@
 		"type-graphql": "2.0.0-beta.1"
 	},
 	"devDependencies": {
-		"@types/jest": "27.0.2",
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
-		"jest": "27.2.2",
-		"ts-jest": "27.0.5",
 		"typescript": "5.0.2"
 	}
 }

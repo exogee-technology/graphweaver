@@ -9,7 +9,6 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
-		"test": "jest --passWithNoTests",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -37,12 +36,10 @@
 	"devDependencies": {
 		"@types/node": "14.14.10",
 		"esbuild": "0.15.5",
-		"jest": "26.6.3",
 		"prettier": "2.2.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
-		"ts-jest": "26.4.4",
 		"typescript": "5.0.2"
 	}
 }

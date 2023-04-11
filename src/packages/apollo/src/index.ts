@@ -25,7 +25,7 @@ export interface AdminMetadata {
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	mikroOrmOptions: ConnectionOptions;
+	mikroOrmOptions?: ConnectionOptions[];
 	resolvers: Array<any>;
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
@@ -35,7 +35,7 @@ export default class Graphweaver {
 	server: ApolloServer;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
-		mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
+		mikroOrmOptions: [{ mikroOrmConfig: { entities: [] } }],
 		resolvers: [],
 	};
 
@@ -59,7 +59,7 @@ export default class Graphweaver {
 			MutexRequestsInDevelopment,
 			LogRequests,
 			LogErrors,
-			connectToDatabase(this.config.mikroOrmOptions),
+			connectToDatabase(this.config.mikroOrmOptions ?? []),
 			ClearDataLoaderCache,
 			ClearDatabaseContext,
 			Cors,

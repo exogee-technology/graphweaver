@@ -8,7 +8,6 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
-		"test": "jest --passWithNoTests",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -23,6 +22,7 @@
 		"@exogee/graphweaver": "workspace:0.1.1",
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.1",
 		"@exogee/logger": "workspace:0.1.1",
+		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.13.2",
 		"dotenv": "10.0.0",
 		"graphql": "16.6.0",
@@ -31,8 +31,6 @@
 	},
 	"devDependencies": {
 		"@types/node": "14.14.10",
-		"jest": "26.6.3",
-		"ts-jest": "26.4.4",
 		"ts-node": "9.0.0",
 		"tsc-watch": "4.2.9",
 		"typescript": "5.0.2"

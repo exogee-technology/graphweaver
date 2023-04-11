@@ -2,15 +2,15 @@ import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 import {
-	AnyEntity,
-	Database,
 	FilterQuery,
 	LockMode,
 	QueryFlag,
 	ReferenceType,
 	SqlEntityRepository,
 	Utils,
-	wrap,
+	ConnectionManager,
+	externalIdFieldMap,
+	AnyEntity,
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
@@ -37,51 +37,6 @@ const nonJoinKeys = new Set([
 
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
-
-// Check if we have any keys that are a collection of entities
-export const visitPathForPopulate = (
-	entityName: string,
-	updateArgBranch: any,
-	populateBranch = ''
-) => {
-	const { properties } = Database.em.getMetadata().get(entityName);
-	const collectedPaths = populateBranch ? new Set<string>([populateBranch]) : new Set<string>([]);
-
-	for (const [key, value] of Object.entries(updateArgBranch ?? {})) {
-		if (
-			// If it's a relationship, go ahead and and '.' it in, recurse.
-			properties[key]?.reference === ReferenceType.ONE_TO_ONE ||
-			properties[key]?.reference === ReferenceType.ONE_TO_MANY ||
-			properties[key]?.reference === ReferenceType.MANY_TO_ONE ||
-			properties[key]?.reference === ReferenceType.MANY_TO_MANY
-		) {
-			if (Array.isArray(value)) {
-				// In the case where the array is empty we also need to make sure we load the collection.
-				collectedPaths.add(appendPath(populateBranch, key));
-
-				for (const entry of value) {
-					// Recurse
-					const newPaths = visitPathForPopulate(
-						properties[key].type,
-						entry,
-						appendPath(populateBranch, key)
-					);
-					newPaths.forEach((path) => collectedPaths.add(path));
-				}
-			} else if (typeof value === 'object') {
-				// Recurse
-				const newPaths = visitPathForPopulate(
-					properties[key].type,
-					value,
-					appendPath(populateBranch, key)
-				);
-				newPaths.forEach((path) => collectedPaths.add(path));
-			}
-		}
-	}
-
-	return collectedPaths;
-};
 
 export const gqlToMikro: (filter: any) => any = (filter: any) => {
 	if (Array.isArray(filter)) {
@@ -118,30 +73,146 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 	return filter;
 };
 
-export const mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArgs: Partial<T>) => {
-	// Clean the input and remove any GraphQL classes from the object
-	const cleanInput = JSON.parse(JSON.stringify(inputArgs));
-	return assign(result, cleanInput);
-};
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
-	public readonly backendId = 'mikro-orm';
+	private _backendId: string;
 
 	public entityType: new () => T;
+	public connectionManagerId?: string;
 
 	public readonly supportsInFilter = true;
 
+	get backendId() {
+		return this._backendId;
+	}
+
+	private get database() {
+		// If we have a connection manager ID then use that else fallback to the Database
+		if (!this.connectionManagerId) return ConnectionManager.default;
+		return ConnectionManager.database(this.connectionManagerId) || ConnectionManager.default;
+	}
+
+	// This is exposed for use in the RLS package
+	public get transactional() {
+		return this.database.transactional;
+	}
+
+	// This is exposed for use in the RLS package
+	public get em() {
+		return this.database.em;
+	}
+
 	private getRepository: () => SqlEntityRepository<T> = () => {
-		const repository = Database.em.getRepository<T>(this.entityType);
+		const repository = this.database.em.getRepository<T>(this.entityType);
 		if (!repository) throw new Error('Could not find repository for ' + this.entityType.name);
 
 		return repository as SqlEntityRepository<T>;
 	};
 
-	public constructor(mikroType: new () => T) {
+	public constructor(mikroType: new () => T, connectionManagerId?: string) {
 		this.entityType = mikroType;
+		this.connectionManagerId = connectionManagerId;
+		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
 	}
+
+	private mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArgs: Partial<T>) => {
+		// Clean the input and remove any GraphQL classes from the object
+		// const cleanInput = JSON.parse(JSON.stringify(inputArgs));
+		const assignmentObj = this.applyExternalIdFields(entityType, inputArgs);
+		return assign(result, assignmentObj, undefined, undefined, this.database.em);
+	};
+
+	private applyExternalIdFields = (target: AnyEntity | string, values: any) => {
+		const targetName = typeof target === 'string' ? target : target.name;
+		const map = externalIdFieldMap.get(targetName);
+
+		const mapFieldNames = (partialFilterObj: any) => {
+			for (const [from, to] of Object.entries(map || {})) {
+				if (partialFilterObj[from] && typeof partialFilterObj[from].id !== 'undefined') {
+					if (Object.keys(partialFilterObj[from]).length > 1) {
+						throw new Error(
+							`Expected precisely 1 key called 'id' in queryObj.${from} on ${target}, got ${JSON.stringify(
+								partialFilterObj[from],
+								null,
+								4
+							)}`
+						);
+					}
+
+					partialFilterObj[to] = partialFilterObj[from].id;
+					delete partialFilterObj[from];
+				}
+			}
+		};
+
+		// Check for and/or/etc at the root level and handle correctly
+		for (const rootLevelKey of Object.keys(values)) {
+			if (mikroObjectOperations.has(rootLevelKey)) {
+				for (const field of values[rootLevelKey]) {
+					mapFieldNames(field);
+				}
+			}
+		}
+		// Map the rest of the field names as well
+		mapFieldNames(values);
+
+		// Traverse the nested entities
+		const { properties } = this.database.em.getMetadata().get(targetName);
+		Object.values(properties)
+			.filter((property) => typeof property.entity !== 'undefined' && values[property.name])
+			.forEach((property) => {
+				if (Array.isArray(values[property.name])) {
+					values[property.name].forEach((value: any) =>
+						this.applyExternalIdFields(property.type, value)
+					);
+				} else {
+					values[property.name] = this.applyExternalIdFields(property.type, values[property.name]);
+				}
+			});
+
+		return values;
+	};
+
+	// Check if we have any keys that are a collection of entities
+	public visitPathForPopulate = (entityName: string, updateArgBranch: any, populateBranch = '') => {
+		const { properties } = this.database.em.getMetadata().get(entityName);
+		const collectedPaths = populateBranch ? new Set<string>([populateBranch]) : new Set<string>([]);
+
+		for (const [key, value] of Object.entries(updateArgBranch ?? {})) {
+			if (
+				// If it's a relationship, go ahead and and '.' it in, recurse.
+				properties[key]?.reference === ReferenceType.ONE_TO_ONE ||
+				properties[key]?.reference === ReferenceType.ONE_TO_MANY ||
+				properties[key]?.reference === ReferenceType.MANY_TO_ONE ||
+				properties[key]?.reference === ReferenceType.MANY_TO_MANY
+			) {
+				if (Array.isArray(value)) {
+					// In the case where the array is empty we also need to make sure we load the collection.
+					collectedPaths.add(appendPath(populateBranch, key));
+
+					for (const entry of value) {
+						// Recurse
+						const newPaths = this.visitPathForPopulate(
+							properties[key].type,
+							entry,
+							appendPath(populateBranch, key)
+						);
+						newPaths.forEach((path) => collectedPaths.add(path));
+					}
+				} else if (typeof value === 'object') {
+					// Recurse
+					const newPaths = this.visitPathForPopulate(
+						properties[key].type,
+						value,
+						appendPath(populateBranch, key)
+					);
+					newPaths.forEach((path) => collectedPaths.add(path));
+				}
+			}
+		}
+
+		return collectedPaths;
+	};
 
 	private applyWhereClause(where: any) {
 		const query = this.getRepository().createQueryBuilder();
@@ -217,9 +288,15 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		// }
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 
+		// Convert from: { account: {id: '6' }}
+		// to { accountId: '6' }
+		// This conversion only works on root level objects
+		const whereWithAppliedExternalIdFields =
+			where && this.applyExternalIdFields(this.entityType, where);
+
 		// Regions need some fancy handling with Query Builder. Process the where further
 		// and return a Query Builder instance.
-		const query = this.applyWhereClause(where);
+		const query = this.applyWhereClause(whereWithAppliedExternalIdFields);
 
 		// If we have specified a limit, offset or order then update the query
 		pagination?.limit && query.limit(pagination.limit);
@@ -233,8 +310,8 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 		// 1:1 relations that aren't on the owning side need to get populated so the references get set.
 		// This method is protected, but we need to use it from here, hence the `as any`.
-		const driver = Database.em.getDriver();
-		const meta = Database.em.getMetadata().get(this.entityType.name);
+		const driver = this.database.em.getDriver();
+		const meta = this.database.em.getMetadata().get(this.entityType.name);
 		query.populate((driver as any).autoJoinOneToOneOwner(meta, []));
 
 		if (additionalOptionsForBackend?.populate) {
@@ -250,7 +327,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public async findOne(id: string): Promise<T | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
 
-		const result = await Database.em.findOne(this.entityType, id);
+		const result = await this.database.em.findOne(this.entityType, id);
 
 		logger.trace(`findOne ${this.entityType.name} result`, { result });
 
@@ -268,7 +345,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		};
 
 		const populate = [relatedField as `${string}.`];
-		const result = (await Database.em.find(entity, queryFilter, { populate })) as unknown[];
+		const result = (await this.database.em.find(entity, queryFilter, { populate })) as unknown[];
 
 		return result as T[];
 	}
@@ -279,9 +356,9 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			updateArgs: JSON.stringify(updateArgs),
 		});
 
-		const entity = await Database.em.findOne(this.entityType, id, {
+		const entity = await this.database.em.findOne(this.entityType, id, {
 			// This is an optimisation so that assign() doesn't have to go fetch everything one at a time.
-			populate: [...visitPathForPopulate(this.entityType.name, updateArgs)] as `${string}.`[],
+			populate: [...this.visitPathForPopulate(this.entityType.name, updateArgs)] as `${string}.`[],
 		});
 
 		if (entity === null) {
@@ -291,14 +368,14 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		// If a version has been sent, let's check it
 		if (updateArgs?.version) {
 			try {
-				await Database.em.lock(entity, LockMode.OPTIMISTIC, updateArgs.version);
+				await this.database.em.lock(entity, LockMode.OPTIMISTIC, updateArgs.version);
 				delete updateArgs.version;
 			} catch (err) {
 				throw new OptimisticLockError((err as Error)?.message, { entity });
 			}
 		}
 
-		await mapAndAssignKeys(entity, this.entityType, updateArgs);
+		await this.mapAndAssignKeys(entity, this.entityType, updateArgs);
 		await this.getRepository().persistAndFlush(entity);
 
 		logger.trace(`update ${this.entityType.name} entity`, entity);
@@ -311,17 +388,17 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			updateItems: JSON.stringify(updateItems),
 		});
 
-		const entities = await Database.transactional<T[]>(async () => {
+		const entities = await this.database.transactional<T[]>(async () => {
 			return Promise.all<T>(
 				updateItems.map(async (item) => {
 					if (!item?.id) throw new Error('You must pass an ID for this entity to update it.');
 
 					// Find the entity in the database
-					const entity = await Database.em.findOneOrFail(this.entityType, item.id, {
-						populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
+					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
+						populate: [...this.visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
-					await mapAndAssignKeys(entity, this.entityType, item);
-					Database.em.persist(entity);
+					await this.mapAndAssignKeys(entity, this.entityType, item);
+					this.database.em.persist(entity);
 					return entity;
 				})
 			);
@@ -337,27 +414,29 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			items: JSON.stringify(items),
 		});
 
-		const entities = await Database.transactional<T[]>(async () => {
+		const entities = await this.database.transactional<T[]>(async () => {
 			return Promise.all<T>(
 				items.map(async (item) => {
 					let entity;
 					const { id } = item as any;
 					if (id) {
-						entity = await Database.em.findOneOrFail(this.entityType, id, {
-							populate: [...visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
+						entity = await this.database.em.findOneOrFail(this.entityType, id, {
+							populate: [
+								...this.visitPathForPopulate(this.entityType.name, item),
+							] as `${string}.`[],
 						});
 						logger.trace(`Running update on ${this.entityType.name} with item`, {
 							item: JSON.stringify(item),
 						});
-						await mapAndAssignKeys(entity, this.entityType, item);
+						await this.mapAndAssignKeys(entity, this.entityType, item);
 					} else {
 						entity = new this.entityType();
-						await mapAndAssignKeys(entity, this.entityType, item);
+						await this.mapAndAssignKeys(entity, this.entityType, item);
 						logger.trace(`Running create on ${this.entityType.name} with item`, {
 							item: JSON.stringify(item),
 						});
 					}
-					Database.em.persist(entity);
+					this.database.em.persist(entity);
 					return entity;
 				})
 			);
@@ -374,7 +453,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		});
 
 		const entity = new this.entityType();
-		await mapAndAssignKeys(entity, this.entityType, createArgs);
+		await this.mapAndAssignKeys(entity, this.entityType, createArgs);
 		await this.getRepository().persistAndFlush(entity);
 
 		logger.trace(`create ${this.entityType.name} result`, entity);
@@ -387,12 +466,12 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 			createArgs: JSON.stringify(createItems),
 		});
 
-		const entities = await Database.transactional<T[]>(async () => {
+		const entities = await this.database.transactional<T[]>(async () => {
 			return Promise.all<T>(
 				createItems.map(async (item) => {
 					const entity = new this.entityType();
-					await mapAndAssignKeys(entity, this.entityType, item);
-					Database.em.persist(entity);
+					await this.mapAndAssignKeys(entity, this.entityType, item);
+					this.database.em.persist(entity);
 					return entity;
 				})
 			);
@@ -421,7 +500,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	public async deleteMany(ids: string[]): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with ids ${ids}`);
 
-		const deletedRows = await Database.transactional<number>(async () => {
+		const deletedRows = await this.database.transactional<number>(async () => {
 			const deletedCount = await this.getRepository().nativeDelete({
 				id: { $in: ids },
 			} as FilterQuery<any>); // We can remove this cast when Typescript knows that T has an `id` property.
