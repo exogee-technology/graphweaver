@@ -269,4 +269,4 @@ class ConnectionsManager {
 		return this.connections.get(id);
 	}
 }
-export const cm = new ConnectionsManager();
+export const ConnectionManager = new ConnectionsManager();
