@@ -11,7 +11,7 @@ import {
 	QueryFilter,
 	Sort,
 } from '@exogee/graphweaver';
-import { Database, IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
