@@ -11,12 +11,7 @@ import {
 	QueryFilter,
 	Sort,
 } from '@exogee/graphweaver';
-import {
-	Database,
-	IsolationLevel,
-	MikroBackendProvider,
-	visitPathForPopulate,
-} from '@exogee/graphweaver-mikroorm';
+import { IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
@@ -25,7 +20,7 @@ import { checkAuthorization, requiredPermissionsForAction } from './auth-utils';
 export class RLSMikroBackendProvider<
 	T,
 	G extends GraphQLEntity<T>
-> extends MikroBackendProvider<T> {
+> extends MikroBackendProvider<any> {
 	private readonly gqlTypeName: string;
 
 	constructor(mikroType: new () => T, gqlType: new (dataEntity: T) => G) {
@@ -93,11 +88,13 @@ export class RLSMikroBackendProvider<
 	}
 
 	public async updateOne(id: string, updateArgs: Partial<T>): Promise<T> {
-		const entity = await Database.transactional<T>(async () => {
+		const entity = await this.transactional<T>(async () => {
 			// First check whether the user is allowed to update this record as-is
-			const entityBeforeUpdate = await Database.em.findOne(this.entityType, id, {
+			const entityBeforeUpdate = await this.em.findOne(this.entityType, id, {
 				// This is an optimization so that checkAuthorization() doesn't have to go fetch everything one at a time.
-				populate: [...visitPathForPopulate(this.entityType.name, updateArgs)] as `${string}.`[],
+				populate: [
+					...this.visitPathForPopulate(this.entityType.name, updateArgs),
+				] as `${string}.`[],
 			});
 			if (!entityBeforeUpdate) {
 				throw new Error(`Could not find a ${this.gqlTypeName} record with ID ${id}`);
@@ -105,7 +102,7 @@ export class RLSMikroBackendProvider<
 			await checkAuthorization(entityBeforeUpdate, updateArgs, AccessType.Update);
 			// Now attempt to perform the update, and check whether the result passes
 			// the authorisation checks as well
-			const updateResult = await super.updateOne(id, updateArgs);
+			const updateResult = await super.updateOne(id, updateArgs as any);
 			await checkAuthorization(updateResult, updateArgs, AccessType.Update);
 			// Operation is allowed
 			return updateResult;
@@ -116,7 +113,7 @@ export class RLSMikroBackendProvider<
 
 	public async updateMany(entities: (Partial<T> & { id: string })[]): Promise<T[]> {
 		// TODO: Check authorisation both before and after updates
-		const result = await Database.transactional<T[]>(async () => {
+		const result = await this.transactional<T[]>(async () => {
 			const updateManyResult = await super.updateMany(entities);
 
 			const authChecks: Promise<any>[] = [];
@@ -132,7 +129,7 @@ export class RLSMikroBackendProvider<
 	}
 
 	public async createOne(entity: Partial<T>): Promise<T> {
-		const result = await Database.transactional<T>(async () => {
+		const result = await this.transactional<T>(async () => {
 			const createResult = await super.createOne(entity);
 			await checkAuthorization(createResult, entity, AccessType.Create);
 			return createResult;
@@ -142,9 +139,9 @@ export class RLSMikroBackendProvider<
 	}
 
 	public async createMany(entities: Partial<T>[]): Promise<T[]> {
-		const result = await Database.transactional<T[]>(async () => {
+		const result = await this.transactional<T[]>(async () => {
 			const createManyResult = await super.createMany(entities);
-			await Database.em.flush(); // This is required to assign IDs to the candidate records
+			await this.em.flush(); // This is required to assign IDs to the candidate records
 
 			const authChecks: Promise<any>[] = [];
 			for (const [index, entity] of createManyResult.entries()) {
@@ -160,9 +157,9 @@ export class RLSMikroBackendProvider<
 
 	public async createOrUpdateMany(entities: Partial<T>[]): Promise<T[]> {
 		// TODO: Check authorisation both before and after updates
-		const result = await Database.transactional<T[]>(async () => {
+		const result = await this.transactional<T[]>(async () => {
 			const createOrUpdateManyResult = await super.createOrUpdateMany(entities);
-			await Database.em.flush(); // This is required to assign IDs any newly created records
+			await this.em.flush(); // This is required to assign IDs any newly created records
 
 			const authChecks: Promise<any>[] = [];
 			for (const [index, entity] of createOrUpdateManyResult.entries()) {
@@ -179,7 +176,7 @@ export class RLSMikroBackendProvider<
 	}
 
 	public async deleteOne(id: string): Promise<boolean> {
-		const entity = await Database.em.findOneOrFail(this.entityType, id);
+		const entity = await this.em.findOneOrFail(this.entityType, id);
 		await checkAuthorization(entity, { id }, AccessType.Delete);
 		return super.deleteOne(id);
 	}

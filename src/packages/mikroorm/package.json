@@ -5,11 +5,10 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap=linked `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
 		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
-		"test": "jest --forceExit",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -32,6 +31,7 @@
 	},
 	"devDependencies": {
 		"@mikro-orm/core": "5.4.2",
+		"@mikro-orm/mysql": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"@types/node": "18.11.11",
 		"esbuild": "0.15.5",
@@ -40,6 +40,7 @@
 	},
 	"peerDependencies": {
 		"@mikro-orm/core": "5.4.2",
-		"@mikro-orm/postgresql": "5.4.2"
+		"@mikro-orm/postgresql": "5.4.2",
+		"@mikro-orm/mysql": "5.4.2"
 	}
 }

@@ -15,7 +15,6 @@
 	"scripts": {
 		"migration:run": "ts-node --transpile-only src/scripts/run-migrations.ts",
 		"start": "pnpm migration:run",
-		"test": "jest",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {

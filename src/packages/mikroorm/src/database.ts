@@ -4,7 +4,6 @@ import './utils/change-tracker';
 import {
 	AnyEntity,
 	Connection,
-	Entity,
 	EntityName,
 	IDatabaseDriver,
 	MikroORM,
@@ -18,6 +17,7 @@ import { logger } from '@exogee/logger';
 export interface ConnectionOptions {
 	mikroOrmConfig?: Options;
 	secretArn?: string;
+	connectionManagerId?: string;
 }
 
 export enum IsolationLevel {
@@ -247,31 +247,34 @@ class DatabaseImplementation {
 	};
 }
 
-export const Database = new DatabaseImplementation();
+class ConnectionsManager {
+	private connections: Map<string, DatabaseImplementation>;
 
-export const checkDatabase = async () => {
-	await Database.connect();
-	const rows = await Database.rawConnection.execute('select 1 = 1 as "ok";');
-	return rows[0].ok;
-};
+	constructor() {
+		this.connections = new Map<string, DatabaseImplementation>();
+	}
 
-export const getDbSchema = async () => {
-	await Database.connect();
-	const result = (await Database.orm.getSchemaGenerator().generate())
-		.replace("set names 'utf8';\n", '')
-		.replace("set session_replication_role = 'replica';\n", '')
-		.replace("set session_replication_role = 'origin';\n", '');
-	await Database.close();
-	return result;
-};
+	get default(): DatabaseImplementation {
+		const [defaultConnection] = [...this.connections];
+		if (!defaultConnection)
+			throw new Error(
+				'Error: No database connections. There should be at least one database connection.'
+			);
+		const [_, databaseConnection] = defaultConnection;
+		return databaseConnection;
+	}
 
-export const clearDatabaseContext = async (
-	req?: any,
-	res?: any,
-	next?: any,
-	connectionOptions?: ConnectionOptions
-) => {
-	await Database.connect(connectionOptions);
-	Database.em.clear();
-	return next ? next() : undefined;
-};
+	public connect = async (id: string, connectionOptions?: ConnectionOptions) => {
+		if (this.connections.has(id)) return this.connections.get(id);
+		const database = new DatabaseImplementation();
+		if (connectionOptions) await database.connect(connectionOptions);
+		logger.trace(`Saving database connection with id "${id}".`);
+		this.connections.set(id, database);
+	};
+
+	public database(id: string) {
+		logger.trace(`Finding database connection for id "${id}"`);
+		return this.connections.get(id);
+	}
+}
+export const ConnectionManager = new ConnectionsManager();

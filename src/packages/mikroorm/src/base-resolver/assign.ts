@@ -2,6 +2,7 @@ import {
 	AnyEntity,
 	Collection,
 	EntityData,
+	EntityManager,
 	EntityProperty,
 	Reference,
 	ReferenceType,
@@ -9,7 +10,7 @@ import {
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
 
-import { Database } from '../database';
+import { ConnectionManager } from '../database';
 
 // This is how Mikro ORM does it within their own code, so in this file we're ok with non-null assertions.
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
@@ -30,7 +31,8 @@ export const assign = async <T extends AnyEntity<T>>(
 	entity: T,
 	data: EntityData<T>,
 	options?: AssignOptions,
-	visited = new Set<AnyEntity<any>>()
+	visited = new Set<AnyEntity<any>>(),
+	em = ConnectionManager.default.em
 ) => {
 	if (visited.has(entity)) return entity;
 	visited.add(entity);
@@ -70,7 +72,7 @@ export const assign = async <T extends AnyEntity<T>>(
 
 				if (subvalue.id) {
 					// Get the current entity from the ORM if there's an ID.
-					entity = Database.em.getUnitOfWork().getById(propertyMetadata.type, subvalue.id);
+					entity = em.getUnitOfWork().getById(propertyMetadata.type, subvalue.id);
 
 					if (!entity) {
 						// There are two cases here: either the user is trying to assign properties to the entity as well as changing members of a collection,
@@ -78,7 +80,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						// For the former we actually need the entity from the DB, while for the latter we can let it slide and just pass an ID entity on down.
 						if (Object.keys(subvalue).length === 1) {
 							// It's just the ID.
-							entity = Database.em.getReference(propertyMetadata.type, subvalue.id) as T;
+							entity = em.getReference(propertyMetadata.type, subvalue.id) as T;
 						} else {
 							logger.warn(
 								`Doing a full database fetch for ${propertyMetadata.type} with id ${subvalue.id}, this should ideally be prefetched into the Unit of Work before calling assign() for performance`
@@ -89,7 +91,7 @@ export const assign = async <T extends AnyEntity<T>>(
 							// Business unit 1 -> Business unit 2. In this scenario we prefetch the one that's currently on the entity, but the one we're changing
 							// to is not in the unit of work.
 							entity =
-								((await Database.em.findOne(propertyMetadata.type, {
+								((await em.findOne(propertyMetadata.type, {
 									id: subvalue.id,
 								})) as T | null) ?? undefined;
 						}
@@ -108,6 +110,7 @@ export const assign = async <T extends AnyEntity<T>>(
 					data: subvalue,
 					options,
 					visited,
+					em,
 				});
 
 				// Ok, now we've got the created or updated entity, ensure it's in the collection
@@ -139,10 +142,7 @@ export const assign = async <T extends AnyEntity<T>>(
 				const valueKeys = Object.keys(value as any);
 				if (valueKeys.length === 1 && valueKeys[0] === 'id') {
 					// Ok, this is just the ID, set the reference and move on.
-					(entity as any)[property] = Database.em.getReference(
-						propertyMetadata.type,
-						(value as any).id
-					);
+					(entity as any)[property] = em.getReference(propertyMetadata.type, (value as any).id);
 				} else {
 					if (entityPropertyValue && !Reference.isReference(entityPropertyValue)) {
 						throw new Error(
@@ -162,6 +162,7 @@ export const assign = async <T extends AnyEntity<T>>(
 						data: value as EntityData<T>,
 						options,
 						visited,
+						em,
 					});
 
 					(entity as any)[property] = Reference.create(newEntity);
@@ -182,12 +183,14 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 	data,
 	options,
 	visited,
+	em,
 }: {
 	entity?: T;
 	entityType: string;
 	data: EntityData<T>;
 	options?: AssignOptions;
 	visited: Set<AnyEntity<any>>;
+	em: EntityManager;
 }) => {
 	const create = options?.create ?? true;
 	const update = options?.update ?? true;
@@ -221,7 +224,7 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 		}
 
 		// We don't want Mikro to manage the data merging here, we'll do it in the next line.
-		const entity = Database.em.create<T>(entityType, {} as any);
+		const entity = em.create<T>(entityType, {} as any);
 		return assign(entity, data, options, visited);
 	}
 };

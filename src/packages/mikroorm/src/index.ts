@@ -7,6 +7,7 @@ dotenv.config({
 
 export * from './base-resolver';
 export * from './entities';
+export * from './decorators';
 export * from './database';
 export * from './types';
 export * from './utils/authentication-context';
@@ -43,4 +44,4 @@ export {
 	Utils,
 	wrap,
 } from '@mikro-orm/core';
-export { SqlEntityManager, SqlEntityRepository } from '@mikro-orm/postgresql';
+export { SqlEntityRepository } from '@mikro-orm/postgresql';

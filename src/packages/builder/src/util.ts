@@ -33,6 +33,7 @@ export const baseEsbuildConfig: BuildOptions = {
 	target: ['node16'],
 	format: 'cjs',
 	watch: true,
+	keepNames: true,
 };
 
 export const makeAllPackagesExternalPlugin = () => ({

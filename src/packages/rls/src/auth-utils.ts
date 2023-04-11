@@ -9,8 +9,7 @@ import {
 	getRolesFromAuthorizationContext,
 } from '@exogee/graphweaver';
 import {
-	AnyEntity,
-	Database,
+	ConnectionManager,
 	DatabaseObjectNotFoundException,
 	Reference,
 	wrap,
@@ -110,7 +109,7 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 	};
 
 	try {
-		await Database.em.findOneOrFail(name, where);
+		await ConnectionManager.default.em.findOneOrFail(name, where);
 	} catch (error) {
 		if (
 			error instanceof DatabaseObjectNotFoundException ||
@@ -124,14 +123,13 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 }
 
 export async function checkAuthorization(
-	entity: AnyEntity<unknown>,
+	entity: any,
 	requestInput: any,
 	requiredPermission: AccessType
 ) {
 	// Get ACL first
-	const access = EntityMetadataMap.get(
-		Object.getPrototypeOf(entity).constructor.name
-	)?.accessControlList;
+	const proto = Object.getPrototypeOf(entity);
+	const access = EntityMetadataMap.get(proto.constructor.name)?.accessControlList;
 	if (!access) {
 		logger.trace(
 			`An attempt to access entity '${
