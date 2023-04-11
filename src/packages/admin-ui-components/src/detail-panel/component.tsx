@@ -17,7 +17,6 @@ import {
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 import { Select, SelectMode, SelectOption } from '../multi-select';
-import { formatInputForRelationships } from './utils';
 import {
 	generateCreateEntityMutation,
 	generateUpdateEntityMutation,
@@ -45,7 +44,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	const { initialValue } = meta;
 	const relationshipEntityType = entityByType(entity.type);
 
-	const { data } = useQuery<{ result: unknown[] }>(
+	const { data } = useQuery<{ result: Record<string, string>[] }>(
 		getRelationshipQuery(entity.type, relationshipEntityType.summaryField),
 		{
 			variables: {
@@ -58,13 +57,13 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 		}
 	);
 
-	const options = (data?.result ?? []).map<SelectOption>((item) => {
+	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
 		const label = relationshipEntityType.summaryField;
-		return { label: label ? (item as any)[label] : 'notfound', value: (item as any).id };
+		return { label: label ? item[label] : 'notfound', value: item.id };
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue(selected?.[0] || undefined);
+		helpers.setValue({ id: selected?.[0]?.value || undefined });
 	};
 
 	return (
@@ -198,14 +197,14 @@ const ModalContent = ({
 				variables: {
 					data: {
 						id,
-						...formatInputForRelationships(values),
+						...values,
 					},
 				},
 			});
 		} else {
 			await createEntity({
 				variables: {
-					data: formatInputForRelationships(values),
+					data: values,
 				},
 			});
 		}

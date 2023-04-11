@@ -25,6 +25,7 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 			'react-router',
 			'react-router-dom',
 			'@remix-run/router',
+			'@exogee/graphweaver-admin-ui-components',
 		],
 		entryPoints: ['src/main.tsx'],
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],
