@@ -13,6 +13,10 @@
       "path": "src/examples/complex-migrations"
     },
     {
+      "name": "➡️ Example: MySQL and PostgreSQL Databases",
+      "path": "src/examples/databases"
+    },
+    {
       "name": "➡️ Example: Xero",
       "path": "src/examples/xero"
     },

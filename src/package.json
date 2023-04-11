@@ -8,7 +8,10 @@
 		"url": "https://github.com/exogee-technology/graphweaver.git"
 	},
 	"scripts": {
-		"build": "pnpm -r build",
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build:types": "pnpm -r build:types",
+		"build:js": "pnpm -r --parallel build:js",
+		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
 		"clean": "./clean.sh",
 		"format": "pnpm prettier",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
@@ -24,6 +27,7 @@
 	"devDependencies": {
 		"@typescript-eslint/eslint-plugin": "5.49.0",
 		"@typescript-eslint/parser": "5.49.0",
+		"concurrently": "7.6.0",
 		"eslint": "8.32.0",
 		"eslint-config-prettier": "8.6.0",
 		"eslint-plugin-prettier": "4.2.1",
