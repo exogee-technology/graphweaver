@@ -9,7 +9,7 @@
       "path": "src/examples/databases"
     },
     {
-      "name": "➡️ Example: Rest",
+      "name": "➡️ Example: Rest and MySQL Database",
       "path": "src/examples/rest"
     },
     {
