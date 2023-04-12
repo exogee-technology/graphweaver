@@ -1,4 +1,4 @@
-import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
+import { BaseLoaders, EventArgs, GraphQLEntity } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';
@@ -26,11 +26,12 @@ export class Task extends GraphQLEntity<OrmTask> {
 		);
 	}
 
-	static async onBeforeRead(args: any) {
-		console.log('onBeforeRead', args);
+	static async onBeforeRead({ args, fields }: EventArgs<Task>) {
+		// Here you can check the fields that were requested in the original query
+		// The GraphQL arguments are also available
 	}
 
-	static async onAfterRead(args: any) {
-		console.log('onAfterRead', args);
+	static async onAfterRead({ results }: EventArgs<Task>) {
+		return results;
 	}
 }

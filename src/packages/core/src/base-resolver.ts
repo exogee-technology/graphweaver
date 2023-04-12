@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { GraphQLScalarType } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLType } from 'graphql';
 import pluralize from 'pluralize';
 import {
 	Arg,
@@ -7,6 +7,7 @@ import {
 	Field,
 	getMetadataStorage,
 	ID,
+	Info,
 	InputType,
 	Int,
 	Mutation,
@@ -16,6 +17,7 @@ import {
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
+import { parseResolveInfo, ResolveTree } from 'graphql-parse-resolve-info';
 
 import { AclMap } from '.';
 import type {
@@ -304,18 +306,29 @@ export function createBaseResolver<T, O>(
 			filter: Partial<O>,
 			@Arg('pagination', () => PaginationInputArgs, { nullable: true })
 			pagination: PaginationOptions,
-			@Ctx() context: any
+			@Info() info: GraphQLResolveInfo
 		): Promise<Array<T>> {
-			await gqlEntityType?.onBeforeRead?.({ args: { filter, pagination }, context });
+			const parsedInfo = parseResolveInfo(info);
+			const fields = parsedInfo?.fieldsByTypeName[gqlEntityType.name] as ResolveTree;
+			await gqlEntityType?.onBeforeRead?.({ args: { filter, pagination }, fields });
+
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
 				filter,
 				pagination,
 			});
-			await gqlEntityType?.onAfterRead?.({ args: { filter, pagination }, context, data: result });
+
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
-				return result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
+				const results = result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
+
+				const data = (await gqlEntityType?.onAfterRead?.({
+					args: { filter, pagination },
+					fields,
+					results,
+				})) as T[];
+
+				return data ?? results;
 			}
 			return result as any; // if there's no conversion function, we assume the gql and backend types match
 		}
