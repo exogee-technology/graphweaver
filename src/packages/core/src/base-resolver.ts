@@ -3,6 +3,7 @@ import { GraphQLScalarType } from 'graphql';
 import pluralize from 'pluralize';
 import {
 	Arg,
+	Ctx,
 	Field,
 	getMetadataStorage,
 	ID,
@@ -302,14 +303,16 @@ export function createBaseResolver<T, O>(
 			@Arg('filter', () => ListInputFilterArgs, { nullable: true })
 			filter: Partial<O>,
 			@Arg('pagination', () => PaginationInputArgs, { nullable: true })
-			pagination: PaginationOptions
+			pagination: PaginationOptions,
+			@Ctx() context: any
 		): Promise<Array<T>> {
+			await gqlEntityType?.onBeforeRead?.({ args: { filter, pagination }, context });
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
 				filter,
 				pagination,
 			});
-
+			await gqlEntityType?.onAfterRead?.({ args: { filter, pagination }, context, data: result });
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
 				return result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
