@@ -1,4 +1,5 @@
 import { registerEnumType } from 'type-graphql';
+import { ResolveTree } from 'graphql-parse-resolve-info';
 
 export enum Sort {
 	ASC = 'asc',
@@ -93,14 +94,16 @@ export interface BackendProvider<T> {
 	readonly maxDataLoaderBatchSize?: number;
 }
 
+export type EventArgs<T> = { args: unknown; fields: ResolveTree; results?: T | T[] };
+
 export interface GraphqlEntityType<T, O> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
 	accessControlList?: AccessControlList<T>;
 	fromBackendEntity?(entity: O): T;
 	mapInputForInsertOrUpdate?(input: any): any;
-	onBeforeRead?: (args: any) => Promise<void>;
-	onAfterRead?: (args: any) => Promise<void>;
+	onBeforeRead?: (args: EventArgs<T>) => Promise<void>;
+	onAfterRead?: (args: EventArgs<T>) => Promise<T>;
 }
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
