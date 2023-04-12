@@ -25,4 +25,12 @@ export class Task extends GraphQLEntity<OrmTask> {
 			})
 		);
 	}
+
+	static async onBeforeRead(args: any) {
+		console.log('onBeforeRead', args);
+	}
+
+	static async onAfterRead(args: any) {
+		console.log('onAfterRead', args);
+	}
 }

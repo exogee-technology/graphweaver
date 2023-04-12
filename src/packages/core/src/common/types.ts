@@ -99,6 +99,8 @@ export interface GraphqlEntityType<T, O> {
 	accessControlList?: AccessControlList<T>;
 	fromBackendEntity?(entity: O): T;
 	mapInputForInsertOrUpdate?(input: any): any;
+	onBeforeRead?: (args: any) => Promise<void>;
+	onAfterRead?: (args: any) => Promise<void>;
 }
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
