@@ -1,8 +1,17 @@
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import { HookParams, AfterReadHook, BeforeReadHook } from './common/types';
 
-const augmentParamsWithFields = <T>(params: Pick<HookParams<T>, 'info'>) => {
-	const parsedInfo = parseResolveInfo(params?.info);
+export enum HookRegister {
+	BEFORE_READ = 'BEFORE_READ',
+	AFTER_READ = 'AFTER_READ',
+	BEFORE_UPDATE = 'BEFORE_UPDATE',
+	AFTER_UPDATE = 'AFTER_UPDATE',
+	BEFORE_DELETE = 'BEFORE_DELETE',
+	AFTER_DELETE = 'AFTER_DELETE',
+}
+
+const augmentParamsWithFields = <T>(params: Partial<HookParams<T>>) => {
+	const parsedInfo = params?.info ? parseResolveInfo(params?.info) : {};
 	return {
 		...params,
 		fields: parsedInfo?.fieldsByTypeName,
@@ -10,41 +19,40 @@ const augmentParamsWithFields = <T>(params: Pick<HookParams<T>, 'info'>) => {
 };
 
 export class HookManager<T> {
-	private beforeReadHooks: BeforeReadHook<T>[];
-	private afterReadHooks: AfterReadHook<T>[];
+	private hooks: Record<
+		HookRegister,
+		((params: Partial<HookParams<T>>) => Promise<HookParams<T>>)[]
+	> = {
+		[HookRegister.BEFORE_READ]: [],
+		[HookRegister.AFTER_READ]: [],
+		[HookRegister.BEFORE_UPDATE]: [],
+		[HookRegister.AFTER_UPDATE]: [],
+		[HookRegister.BEFORE_DELETE]: [],
+		[HookRegister.AFTER_DELETE]: [],
+	};
 
-	constructor() {
-		this.beforeReadHooks = [];
-		this.afterReadHooks = [];
+	registerHook(
+		hookType: HookRegister,
+		hook: (params: Partial<HookParams<T>>) => Promise<HookParams<T>>
+	): void {
+		const existingHooks = this.hooks[hookType];
+		this.hooks[hookType] = [...existingHooks, hook];
 	}
 
-	registerBeforeRead(beforeRead: BeforeReadHook<T>) {
-		this.beforeReadHooks.push(beforeRead);
-	}
-
-	registerAfterRead(afterRead: AfterReadHook<T>) {
-		this.afterReadHooks.push(afterRead);
-	}
-
-	async runBeforeReadHooks(
-		params: Omit<HookParams<T>, 'fields' | 'entities'>
-	): Promise<{ filter: Record<string, unknown> }> {
-		let filter = {};
-		for (const hook of this.beforeReadHooks) {
-			const res = await hook(augmentParamsWithFields(params));
-			filter = {
-				...filter,
-				...(res?.filter ? res?.filter : {}),
-			};
+	async runHooks(
+		hookType: HookRegister,
+		params: Partial<HookParams<T>>
+	): Promise<Partial<HookParams<T>>> {
+		const hooks = this.hooks[hookType];
+		if (!hooks || hooks.length === 0) {
+			return params;
 		}
-		return { filter };
-	}
 
-	async runAfterReadHooks(params: Omit<HookParams<T>, 'fields'>): Promise<(T | null)[]> {
-		let { entities } = params;
-		for (const hook of this.afterReadHooks) {
-			entities = (await hook(augmentParamsWithFields(params))) || [];
+		let currentParams = params;
+		for (const hook of hooks) {
+			currentParams = await hook(augmentParamsWithFields(currentParams));
 		}
-		return entities;
+
+		return currentParams;
 	}
 }

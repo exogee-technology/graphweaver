@@ -35,7 +35,7 @@ import {
 	isReadOnlyProperty,
 } from './decorators';
 import { QueryManager } from './query-manager';
-import { HookManager } from './hook-manager';
+import { HookManager, HookRegister } from './hook-manager';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -57,7 +57,7 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 }
 
 export interface BaseResolverInterface<T> {
-	hookManager: HookManager<T>;
+	hookManager?: HookManager<T>;
 }
 
 export function createBaseResolver<T, O>(
@@ -303,7 +303,7 @@ export function createBaseResolver<T, O>(
 
 	@Resolver({ isAbstract: true })
 	abstract class BaseResolver implements BaseResolverInterface<T> {
-		public hookManager = new HookManager<T>();
+		public hookManager?: HookManager<T>;
 
 		// List
 		@Query(() => [gqlEntityType], {
@@ -317,12 +317,17 @@ export function createBaseResolver<T, O>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<Array<T | null>> {
-			const hookParams = { args: { filter, pagination }, info, context };
-			const { filter: updatedFilter } = await this.hookManager.runBeforeReadHooks(hookParams);
+			const hookParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, {
+						args: { filter, pagination },
+						info,
+						context,
+				  })
+				: {};
 
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
-				filter: updatedFilter ?? filter,
+				filter: hookParams?.args?.filter ?? filter,
 				pagination,
 			});
 
@@ -330,10 +335,12 @@ export function createBaseResolver<T, O>(
 				const { fromBackendEntity } = gqlEntityType;
 				const results = result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
 
-				const entities = await this.hookManager.runAfterReadHooks({
-					...hookParams,
-					entities: results,
-				});
+				const { entities } = this.hookManager
+					? await this.hookManager.runHooks(HookRegister.AFTER_READ, {
+							...hookParams,
+							entities: results,
+					  })
+					: { entities: results };
 
 				return entities ?? results;
 			}
