@@ -1,5 +1,5 @@
 import { registerEnumType } from 'type-graphql';
-import { ResolveTree } from 'graphql-parse-resolve-info';
+import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo } from 'graphql';
 
 export enum Sort {
@@ -95,25 +95,19 @@ export interface BackendProvider<T> {
 	readonly maxDataLoaderBatchSize?: number;
 }
 
-export interface EventArgs<T> {
+export interface HookParams<T> {
 	args: Record<string, unknown>;
 	context: AuthorizationContext;
 	info: GraphQLResolveInfo;
-}
-
-export interface BeforeEventArgs<T> extends EventArgs<T> {
-	fields: ResolveTree;
-}
-
-export interface AfterEventArgs<T> extends BeforeEventArgs<T> {
-	entities?: T[];
+	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
+	entities: (T | null)[];
 }
 
 export type BeforeReadHook<T> = (
-	args: BeforeEventArgs<T>
+	params: Omit<HookParams<T>, 'entities'>
 ) => Promise<{ filter: Record<string, unknown> } | undefined>;
 
-export type AfterReadHook<T> = (args: AfterEventArgs<T>) => Promise<{ entities: T[] } | undefined>;
+export type AfterReadHook<T> = (params: HookParams<T>) => Promise<(T | null)[]>;
 
 export interface GraphqlEntityType<T, O> {
 	name: string; // note this is the built-in ES6 class.name attribute
