@@ -1,4 +1,9 @@
-import { HookParams, AuthorizedBaseFunctions, createBaseResolver } from '@exogee/graphweaver';
+import {
+	AfterHookParams,
+	AuthorizedBaseFunctions,
+	createBaseResolver,
+	BeforeHookParams,
+} from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Resolver } from 'type-graphql';
 
@@ -17,7 +22,7 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 		this.hookManager.registerAfterRead(this.afterRead);
 	}
 
-	async beforeRead({ args }: Partial<HookParams<Task>>) {
+	async beforeRead({ args }: BeforeHookParams<Task>) {
 		return {
 			filter: {
 				...(args?.filter ? args.filter : {}),
@@ -28,7 +33,7 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 		};
 	}
 
-	async afterRead({ entities }: HookParams<Task>) {
+	async afterRead({ entities }: AfterHookParams<Task>) {
 		return (entities || []).map((task) => {
 			if (task) {
 				task.description = task.description + ' and crush the resistance!';
