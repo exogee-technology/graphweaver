@@ -14,9 +14,6 @@ const graphweaver = new Graphweaver({
 		plugins: [XeroAuthApolloPlugin],
 	},
 	adminMetadata: { enabled: true },
-
-	// TODO: Remove
-	mikroOrmOptions: {},
 });
 logger.info(`example-xero graphweaver.server start`);
 

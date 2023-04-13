@@ -35,7 +35,6 @@ export default class Graphweaver {
 	server: ApolloServer;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
-		mikroOrmOptions: [{ mikroOrmConfig: { entities: [] } }],
 		resolvers: [],
 	};
 
@@ -59,10 +58,12 @@ export default class Graphweaver {
 			MutexRequestsInDevelopment,
 			LogRequests,
 			LogErrors,
-			connectToDatabase(this.config.mikroOrmOptions ?? []),
 			ClearDataLoaderCache,
-			ClearDatabaseContext,
 			Cors,
+			// Only load the database plugins if we have a database connected
+			...(this.config.mikroOrmOptions
+				? [connectToDatabase(this.config.mikroOrmOptions), ClearDatabaseContext]
+				: []),
 			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
