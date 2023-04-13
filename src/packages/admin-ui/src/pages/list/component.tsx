@@ -41,7 +41,7 @@ export const ListToolBar = () => {
 };
 
 export const List = () => {
-	const { entity } = useParams();
+	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
 	const navigate = useNavigate();
@@ -86,14 +86,14 @@ export const List = () => {
 	};
 
 	const requestSort = (state: Partial<RequestRefetchOptions>) => {
-		navigate(routeFor({ entity, sort: state.sortFields, filters }));
+		navigate(routeFor({ entity, id, sort: state.sortFields, filters }));
 	};
 
 	const incrementPage = async () => {
 		const isNextPage = !((data?.result.length ?? 0) % PAGE_SIZE);
 		if (isNextPage) {
 			const nextPage = (data?.result.length ?? 0) / PAGE_SIZE + 1;
-			navigate(routeFor({ entity, sort, filters, page: nextPage }));
+			navigate(routeFor({ entity, id, sort, filters, page: nextPage }));
 		}
 	};
 
@@ -107,7 +107,7 @@ export const List = () => {
 				loadingNext={loadingNext}
 				error={error}
 			/>
-			<DetailPanel />
+			{id && <DetailPanel />}
 		</>
 	);
 };
