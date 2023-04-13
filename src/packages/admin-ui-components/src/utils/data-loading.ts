@@ -6,13 +6,7 @@ import { apolloClient } from '../apollo';
 
 export const PAGE_SIZE = 50;
 
-export const getEntity = <T>(entity: Entity, id: string, entityByType?: (type: string) => Entity) =>
-	apolloClient.query<T>({
-		query: queryForEntity(entity, entityByType),
-		variables: { id },
-	});
-
-const queryForEntity = (entity: Entity, entityByType?: (type: string) => Entity) => {
+export const queryForEntity = (entity: Entity, entityByType?: (type: string) => Entity) => {
 	// If the entity is called SomeThing then the query name is someThing.
 	const queryName = entity.name[0].toLowerCase() + entity.name.slice(1);
 
