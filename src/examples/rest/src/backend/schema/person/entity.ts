@@ -13,12 +13,4 @@ export class Person extends GraphQLEntity<RestPeople> {
 	@SummaryField()
 	@Field(() => String)
 	name!: string;
-
-	static async onBeforeRead(args: any) {
-		console.log('onBeforeRead', args);
-	}
-
-	static async onAfterRead(args: any) {
-		console.log('onAfterRead', args);
-	}
 }
