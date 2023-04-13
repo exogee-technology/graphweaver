@@ -25,13 +25,4 @@ export class Task extends GraphQLEntity<OrmTask> {
 			})
 		);
 	}
-
-	static async onBeforeRead({ args, fields, context, info }: BeforeEventArgs<Task>) {
-		// Here you can check the fields that were requested in the original query
-		// The GraphQL arguments are also available
-	}
-
-	static async onAfterRead({ entities }: AfterEventArgs<Task>) {
-		entities;
-	}
 }
