@@ -1,4 +1,4 @@
-import { AfterEventArgs, BaseLoaders, BeforeEventArgs, GraphQLEntity } from '@exogee/graphweaver';
+import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';

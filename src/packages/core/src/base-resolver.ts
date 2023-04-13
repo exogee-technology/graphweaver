@@ -317,11 +317,12 @@ export function createBaseResolver<T, O>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<Array<T | null>> {
-			//const { filter: updatedFilter } = (await gqlEntityType?.onBeforeRead?.(params)) || {};
+			const hookParams = { args: { filter, pagination }, info, context };
+			const { filter: updatedFilter } = await this.hookManager.runBeforeReadHooks(hookParams);
 
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
-				filter,
+				filter: updatedFilter ?? filter,
 				pagination,
 			});
 
@@ -329,13 +330,17 @@ export function createBaseResolver<T, O>(
 				const { fromBackendEntity } = gqlEntityType;
 				const results = result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
 
+				const entities = await this.hookManager.runAfterReadHooks({
+					...hookParams,
+					entities: results,
+				});
 				// const { entities } =
 				// 	(await gqlEntityType?.onAfterRead?.({
 				// 		...params,
 				// 		entities: results,
 				// 	})) || {};
 
-				return results;
+				return entities ?? results;
 			}
 			return result as any; // if there's no conversion function, we assume the gql and backend types match
 		}
