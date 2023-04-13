@@ -67,7 +67,6 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		console.log({ id: selected?.[0]?.value || undefined });
 		helpers.setValue({ id: selected?.[0]?.value || undefined });
 	};
 
