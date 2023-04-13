@@ -44,6 +44,10 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	const { initialValue } = meta;
 	const relationshipEntityType = entityByType(entity.type);
 
+	useEffect(() => {
+		helpers.setValue({ id: initialValue.value || undefined });
+	}, []);
+
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
 		getRelationshipQuery(entity.type, relationshipEntityType.summaryField),
 		{
@@ -63,6 +67,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
+		console.log({ id: selected?.[0]?.value || undefined });
 		helpers.setValue({ id: selected?.[0]?.value || undefined });
 	};
 
