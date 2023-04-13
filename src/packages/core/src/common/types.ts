@@ -103,6 +103,9 @@ export interface HookParams<T> {
 	entities: (T | null)[];
 }
 
+export type BeforeHookParams<T> = Omit<HookParams<T>, 'entities'>;
+export type AfterHookParams<T> = HookParams<T>;
+
 export type BeforeReadHook<T> = (
 	params: Omit<HookParams<T>, 'entities'>
 ) => Promise<{ filter: Record<string, unknown> } | undefined>;

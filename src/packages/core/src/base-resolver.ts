@@ -334,11 +334,6 @@ export function createBaseResolver<T, O>(
 					...hookParams,
 					entities: results,
 				});
-				// const { entities } =
-				// 	(await gqlEntityType?.onAfterRead?.({
-				// 		...params,
-				// 		entities: results,
-				// 	})) || {};
 
 				return entities ?? results;
 			}
