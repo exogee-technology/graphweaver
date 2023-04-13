@@ -21,6 +21,7 @@ import { parseResolveInfo, ResolveTree } from 'graphql-parse-resolve-info';
 
 import { AclMap } from '.';
 import type {
+	AuthorizationContext,
 	BackendProvider,
 	GraphqlEntityType,
 	OrderByOptions,
@@ -306,11 +307,12 @@ export function createBaseResolver<T, O>(
 			filter: Partial<O>,
 			@Arg('pagination', () => PaginationInputArgs, { nullable: true })
 			pagination: PaginationOptions,
-			@Info() info: GraphQLResolveInfo
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
 		): Promise<Array<T>> {
 			const parsedInfo = parseResolveInfo(info);
 			const fields = parsedInfo?.fieldsByTypeName[gqlEntityType.name] as ResolveTree;
-			await gqlEntityType?.onBeforeRead?.({ args: { filter, pagination }, fields });
+			await gqlEntityType?.onBeforeRead?.({ args: { filter, pagination }, fields, context, info });
 
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
@@ -322,13 +324,15 @@ export function createBaseResolver<T, O>(
 				const { fromBackendEntity } = gqlEntityType;
 				const results = result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
 
-				const data = (await gqlEntityType?.onAfterRead?.({
+				await gqlEntityType?.onAfterRead?.({
 					args: { filter, pagination },
 					fields,
-					results,
-				})) as T[];
+					context,
+					info,
+					entities: results,
+				});
 
-				return data ?? results;
+				return results;
 			}
 			return result as any; // if there's no conversion function, we assume the gql and backend types match
 		}
