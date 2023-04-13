@@ -17,7 +17,7 @@ import {
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
-import { parseResolveInfo, ResolveTree } from 'graphql-parse-resolve-info';
+import { FieldsByTypeName, parseResolveInfo, ResolveTree } from 'graphql-parse-resolve-info';
 
 import { AclMap } from '.';
 import type {
@@ -35,6 +35,7 @@ import {
 	isReadOnlyProperty,
 } from './decorators';
 import { QueryManager } from './query-manager';
+import { HookManager } from './hook-manager';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -55,10 +56,14 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
+export interface BaseResolverInterface<T> {
+	hookManager: HookManager<T>;
+}
+
 export function createBaseResolver<T, O>(
 	gqlEntityType: GraphqlEntityType<T, O>,
 	provider: BackendProvider<O>
-): any {
+): abstract new () => BaseResolverInterface<T> {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -297,7 +302,9 @@ export function createBaseResolver<T, O>(
 	}
 
 	@Resolver({ isAbstract: true })
-	abstract class BaseResolver {
+	abstract class BaseResolver implements BaseResolverInterface<T> {
+		public hookManager = new HookManager<T>();
+
 		// List
 		@Query(() => [gqlEntityType], {
 			name: plural.charAt(0).toLowerCase() + plural.substring(1),
@@ -309,10 +316,8 @@ export function createBaseResolver<T, O>(
 			pagination: PaginationOptions,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
-		): Promise<Array<T>> {
-			const parsedInfo = parseResolveInfo(info);
-			const fields = parsedInfo?.fieldsByTypeName[gqlEntityType.name] as ResolveTree;
-			await gqlEntityType?.onBeforeRead?.({ args: { filter, pagination }, fields, context, info });
+		): Promise<Array<T | null>> {
+			//const { filter: updatedFilter } = (await gqlEntityType?.onBeforeRead?.(params)) || {};
 
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
@@ -324,13 +329,11 @@ export function createBaseResolver<T, O>(
 				const { fromBackendEntity } = gqlEntityType;
 				const results = result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
 
-				await gqlEntityType?.onAfterRead?.({
-					args: { filter, pagination },
-					fields,
-					context,
-					info,
-					entities: results,
-				});
+				// const { entities } =
+				// 	(await gqlEntityType?.onAfterRead?.({
+				// 		...params,
+				// 		entities: results,
+				// 	})) || {};
 
 				return results;
 			}
@@ -342,7 +345,7 @@ export function createBaseResolver<T, O>(
 			name: gqlEntityTypeName.charAt(0).toLowerCase() + gqlEntityTypeName.substring(1),
 			nullable: true,
 		})
-		public async getOne(@Arg('id', () => ID) id: string): Promise<T> {
+		public async getOne(@Arg('id', () => ID) id: string): Promise<T | null> {
 			const result = await provider.findOne(id);
 			if (result && gqlEntityType.fromBackendEntity) {
 				return gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
@@ -456,7 +459,9 @@ export function createBaseResolver<T, O>(
 	abstract class WritableBaseResolver extends BaseResolver {
 		// Create many items in a transaction
 		@Mutation((returns) => [gqlEntityType], { name: `create${plural}` })
-		async createMany(@Arg('input', () => InsertManyInputArgs) createItems: any): Promise<Array<T>> {
+		async createMany(
+			@Arg('input', () => InsertManyInputArgs) createItems: any
+		): Promise<Array<T | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let createData = createItems.data;
 
@@ -477,7 +482,7 @@ export function createBaseResolver<T, O>(
 
 		// Create
 		@Mutation((returns) => gqlEntityType, { name: `create${gqlEntityTypeName}` })
-		async createItem(@Arg('data', () => InsertInputArgs) createItemData: any): Promise<T> {
+		async createItem(@Arg('data', () => InsertInputArgs) createItemData: any): Promise<T | null> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let createData = createItemData;
 
@@ -498,7 +503,9 @@ export function createBaseResolver<T, O>(
 
 		// Update many items in a transaction
 		@Mutation((returns) => [gqlEntityType], { name: `update${plural}` })
-		async updateMany(@Arg('input', () => UpdateManyInputArgs) updateItems: any): Promise<Array<T>> {
+		async updateMany(
+			@Arg('input', () => UpdateManyInputArgs) updateItems: any
+		): Promise<Array<T | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let updateData = updateItems.data;
 
@@ -521,7 +528,7 @@ export function createBaseResolver<T, O>(
 		@Mutation((returns) => [gqlEntityType], { name: `createOrUpdateMany${plural}` })
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: any
-		): Promise<Array<T>> {
+		): Promise<Array<T | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let data = items.data;
 
@@ -542,7 +549,7 @@ export function createBaseResolver<T, O>(
 
 		// Update
 		@Mutation((returns) => gqlEntityType, { name: `update${gqlEntityTypeName}` })
-		async update(@Arg('data', () => UpdateInputArgs) updateItemData: any): Promise<T> {
+		async update(@Arg('data', () => UpdateInputArgs) updateItemData: any): Promise<T | null> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let updateData = updateItemData;
 			// The type may want to further manipulate the input before passing it to the provider.

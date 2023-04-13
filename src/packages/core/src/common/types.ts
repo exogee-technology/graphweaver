@@ -95,25 +95,32 @@ export interface BackendProvider<T> {
 	readonly maxDataLoaderBatchSize?: number;
 }
 
-export interface BeforeEventArgs<T> {
+export interface EventArgs<T> {
 	args: Record<string, unknown>;
-	fields: ResolveTree;
 	context: AuthorizationContext;
 	info: GraphQLResolveInfo;
 }
 
-export interface AfterEventArgs<T> extends BeforeEventArgs<T> {
-	entities?: T | T[];
+export interface BeforeEventArgs<T> extends EventArgs<T> {
+	fields: ResolveTree;
 }
+
+export interface AfterEventArgs<T> extends BeforeEventArgs<T> {
+	entities?: T[];
+}
+
+export type BeforeReadHook<T> = (
+	args: BeforeEventArgs<T>
+) => Promise<{ filter: Record<string, unknown> } | undefined>;
+
+export type AfterReadHook<T> = (args: AfterEventArgs<T>) => Promise<{ entities: T[] } | undefined>;
 
 export interface GraphqlEntityType<T, O> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
 	accessControlList?: AccessControlList<T>;
-	fromBackendEntity?(entity: O): T;
+	fromBackendEntity?(entity: O): T | null;
 	mapInputForInsertOrUpdate?(input: any): any;
-	onBeforeRead?: (args: BeforeEventArgs<T>) => Promise<void>;
-	onAfterRead?: (args: AfterEventArgs<T>) => Promise<void>;
 }
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
