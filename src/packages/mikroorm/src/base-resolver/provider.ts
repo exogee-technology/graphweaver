@@ -482,11 +482,9 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return entities;
 	}
 
-	public async deleteOne(id: string): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityType.name} with id ${id}`);
-		const deletedRows = await this.getRepository().nativeDelete({
-			id,
-		} as unknown as FilterQuery<T>);
+	public async deleteOne(filter: unknown): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
+		const deletedRows = await this.getRepository().nativeDelete(filter as FilterQuery<T>);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');

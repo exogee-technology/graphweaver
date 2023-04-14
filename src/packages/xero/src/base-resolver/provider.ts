@@ -199,8 +199,8 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	// DELETE METHODS
-	public async deleteOne(id: string): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName} with id ${id}`);
+	public async deleteOne(filter: unknown): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');
 	}
