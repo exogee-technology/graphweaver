@@ -112,7 +112,7 @@ export class RestBackendProvider<D, G extends GraphQLEntity<D>> implements Backe
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: unknown): Promise<boolean> {
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');
