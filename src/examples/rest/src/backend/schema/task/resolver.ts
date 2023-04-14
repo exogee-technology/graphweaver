@@ -19,16 +19,18 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 ) {
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: Partial<HookParams<Task>>): Promise<Partial<HookParams<Task>>> {
+		const filter = params.args?.filter ?? {};
+		const newFilter = {
+			...filter,
+			people: {
+				id: 4,
+			},
+		};
 		return {
 			...params,
 			args: {
-				...(params?.args ? params.args : {}),
-				filter: {
-					...(params?.args?.filter ? params.args.filter : {}),
-					people: {
-						id: 4,
-					},
-				},
+				...params.args,
+				filter: newFilter,
 			},
 		};
 	}
