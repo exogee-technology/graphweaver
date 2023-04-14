@@ -1,4 +1,4 @@
-import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
+import { BackendProvider, PaginationOptions, Sort } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 import {
@@ -324,10 +324,10 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return result;
 	}
 
-	public async findOne(id: string): Promise<T | null> {
-		logger.trace(`Running findOne ${this.entityType.name} with ID ${id}`);
+	public async findOne(filter: any): Promise<T | null> {
+		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
 
-		const result = await this.database.em.findOne(this.entityType, id);
+		const [result] = await this.find(filter, { orderBy: { id: Sort.DESC }, offset: 0, limit: 1 });
 
 		logger.trace(`findOne ${this.entityType.name} result`, { result });
 

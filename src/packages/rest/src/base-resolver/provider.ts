@@ -42,8 +42,8 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 		}
 	}
 
-	public async findOne(id: string): Promise<T | null> {
-		logger.trace(`Running findOne ${this.entityTypeName} with ID ${id}`);
+	public async findOne(filter: any): Promise<T | null> {
+		logger.trace(`Running findOne ${this.entityTypeName} with Filter ${filter}`);
 
 		if (!this.accessor) {
 			throw new Error(
@@ -51,7 +51,7 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 			);
 		}
 
-		const rows = await this.find({ id });
+		const rows = await this.find(filter);
 		return rows[0] || null;
 	}
 
