@@ -4,11 +4,11 @@ import {
 	buildAccessControlEntryForUser,
 	EntityMetadataMap,
 	evaluateConsolidatedAccessControlValue,
+	Filter,
 	GENERIC_AUTH_ERROR_MESSAGE,
 	getRolesFromAuthorizationContext,
 	GraphQLEntity,
 	PaginationOptions,
-	QueryFilter,
 	Sort,
 } from '@exogee/graphweaver';
 import { FilterQuery, IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
@@ -18,9 +18,9 @@ import { ForbiddenError } from 'apollo-server-errors';
 import { checkAuthorization, requiredPermissionsForAction } from './auth-utils';
 
 export class RLSMikroBackendProvider<
-	T,
+	T extends Record<string, unknown>,
 	G extends GraphQLEntity<T>
-> extends MikroBackendProvider<any> {
+> extends MikroBackendProvider<T, G> {
 	private readonly gqlTypeName: string;
 
 	constructor(mikroType: new () => T, gqlType: new (dataEntity: T) => G) {
@@ -35,7 +35,7 @@ export class RLSMikroBackendProvider<
 	};
 
 	public async find(
-		filter: any,
+		filter: Filter<G>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any
 	): Promise<T[]> {
@@ -58,7 +58,7 @@ export class RLSMikroBackendProvider<
 		return super.find(andFilters(filter, accessFilter), pagination, additionalOptionsForBackend);
 	}
 
-	public async findOne(id: string): Promise<T | null> {
+	public async findOne(filter: Filter<G>): Promise<T | null> {
 		const consolidatedAclEntry = buildAccessControlEntryForUser(
 			this.getAcl(),
 			getRolesFromAuthorizationContext()
@@ -70,7 +70,7 @@ export class RLSMikroBackendProvider<
 		}
 
 		// Filter for a single record by ID
-		const where: QueryFilter<any> = { id };
+		const where: Filter<G> = filter;
 
 		// If there are conditional permission filters, augment the supplied filter with them
 		const readEntry = consolidatedAclEntry[AccessType.Read];
@@ -175,7 +175,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async deleteOne(filter: any): Promise<boolean> {
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
 		const entity = await this.em.findOneOrFail(this.entityType, filter as FilterQuery<T>);
 		const { id } = filter;
 		if (!id) throw new Error('Check Authorization Error: No ID specified');

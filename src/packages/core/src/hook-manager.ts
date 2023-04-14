@@ -1,5 +1,5 @@
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
-import { HookParams, AfterReadHook, BeforeReadHook } from './common/types';
+import { HookParams } from './common/types';
 
 export enum HookRegister {
 	BEFORE_READ = 'BEFORE_READ',
@@ -10,18 +10,18 @@ export enum HookRegister {
 	AFTER_DELETE = 'AFTER_DELETE',
 }
 
-const augmentParamsWithFields = <T>(params: Partial<HookParams<T>>) => {
+const augmentParamsWithFields = <G, A>(params: Partial<HookParams<G, A>>) => {
 	const parsedInfo = params?.info ? parseResolveInfo(params?.info) : {};
 	return {
 		...params,
 		fields: parsedInfo?.fieldsByTypeName,
-	} as HookParams<T>;
+	} as HookParams<G, A>;
 };
 
-export class HookManager<T> {
+export class HookManager<G> {
 	private hooks: Record<
 		HookRegister,
-		((params: Partial<HookParams<T>>) => Promise<HookParams<T>>)[]
+		(<A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>)[]
 	> = {
 		[HookRegister.BEFORE_READ]: [],
 		[HookRegister.AFTER_READ]: [],
@@ -33,16 +33,16 @@ export class HookManager<T> {
 
 	registerHook(
 		hookType: HookRegister,
-		hook: (params: Partial<HookParams<T>>) => Promise<HookParams<T>>
+		hook: <A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>
 	): void {
 		const existingHooks = this.hooks[hookType];
 		this.hooks[hookType] = [...existingHooks, hook];
 	}
 
-	async runHooks(
+	async runHooks<A>(
 		hookType: HookRegister,
-		params: Partial<HookParams<T>>
-	): Promise<Partial<HookParams<T>>> {
+		params: Partial<HookParams<G, A>>
+	): Promise<Partial<HookParams<G, A>>> {
 		const hooks = this.hooks[hookType];
 		if (!hooks || hooks.length === 0) {
 			return params;
@@ -50,7 +50,7 @@ export class HookManager<T> {
 
 		let currentParams = params;
 		for (const hook of hooks) {
-			currentParams = await hook(augmentParamsWithFields(currentParams));
+			currentParams = await hook<A>(augmentParamsWithFields(currentParams));
 		}
 
 		return currentParams;
