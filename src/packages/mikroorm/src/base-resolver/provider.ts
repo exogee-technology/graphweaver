@@ -1,4 +1,10 @@
-import { BackendProvider, PaginationOptions, Sort } from '@exogee/graphweaver';
+import {
+	BackendProvider,
+	PaginationOptions,
+	Sort,
+	Filter,
+	GraphQLEntity,
+} from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 import {
@@ -74,10 +80,12 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
+export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
+	implements BackendProvider<D, G>
+{
 	private _backendId: string;
 
-	public entityType: new () => T;
+	public entityType: new () => D;
 	public connectionManagerId?: string;
 
 	public readonly supportsInFilter = true;
@@ -102,14 +110,14 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return this.database.em;
 	}
 
-	private getRepository: () => SqlEntityRepository<T> = () => {
-		const repository = this.database.em.getRepository<T>(this.entityType);
+	private getRepository: () => SqlEntityRepository<D> = () => {
+		const repository = this.database.em.getRepository<D>(this.entityType);
 		if (!repository) throw new Error('Could not find repository for ' + this.entityType.name);
 
-		return repository as SqlEntityRepository<T>;
+		return repository as SqlEntityRepository<D>;
 	};
 
-	public constructor(mikroType: new () => T, connectionManagerId?: string) {
+	public constructor(mikroType: new () => D, connectionManagerId?: string) {
 		this.entityType = mikroType;
 		this.connectionManagerId = connectionManagerId;
 		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
@@ -270,10 +278,10 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 	}
 
 	public async find(
-		filter: any, // @todo: Create a type for this
+		filter: Filter<G>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
-	): Promise<T[]> {
+	): Promise<D[]> {
 		logger.trace(`Running find ${this.entityType.name} with filter`, {
 			filter: JSON.stringify(filter),
 		});
@@ -324,7 +332,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return result;
 	}
 
-	public async findOne(filter: any): Promise<T | null> {
+	public async findOne(filter: Filter<G>): Promise<D | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
 
 		const [result] = await this.find(filter, { orderBy: { id: Sort.DESC }, offset: 0, limit: 1 });
@@ -339,18 +347,20 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		relatedField: string,
 		relatedFieldIds: string[],
 		filter?: any
-	): Promise<T[]> {
+	): Promise<D[]> {
 		const queryFilter = {
 			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[filter ?? []]],
 		};
 
 		const populate = [relatedField as `${string}.`];
-		const result = (await this.database.em.find(entity, queryFilter, { populate })) as unknown[];
+		const result = await this.database.em.find(entity, queryFilter, {
+			populate,
+		});
 
-		return result as T[];
+		return result as D[];
 	}
 
-	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
+	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
 			updateArgs: JSON.stringify(updateArgs),
@@ -383,13 +393,13 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return entity;
 	}
 
-	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
+	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
 		logger.trace(`Running update many ${this.entityType.name} with args`, {
 			updateItems: JSON.stringify(updateItems),
 		});
 
-		const entities = await this.database.transactional<T[]>(async () => {
-			return Promise.all<T>(
+		const entities = await this.database.transactional<D[]>(async () => {
+			return Promise.all<D>(
 				updateItems.map(async (item) => {
 					if (!item?.id) throw new Error('You must pass an ID for this entity to update it.');
 
@@ -409,13 +419,13 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return entities;
 	}
 
-	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
+	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
 		logger.trace(`Running create or update many for ${this.entityType.name} with args`, {
 			items: JSON.stringify(items),
 		});
 
-		const entities = await this.database.transactional<T[]>(async () => {
-			return Promise.all<T>(
+		const entities = await this.database.transactional<D[]>(async () => {
+			return Promise.all<D>(
 				items.map(async (item) => {
 					let entity;
 					const { id } = item as any;
@@ -447,7 +457,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return entities;
 	}
 
-	public async createOne(createArgs: Partial<T>): Promise<T> {
+	public async createOne(createArgs: Partial<D>): Promise<D> {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createArgs),
 		});
@@ -461,13 +471,13 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 		return entity;
 	}
 
-	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
+	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createItems),
 		});
 
-		const entities = await this.database.transactional<T[]>(async () => {
-			return Promise.all<T>(
+		const entities = await this.database.transactional<D[]>(async () => {
+			return Promise.all<D>(
 				createItems.map(async (item) => {
 					const entity = new this.entityType();
 					await this.mapAndAssignKeys(entity, this.entityType, item);
@@ -484,7 +494,7 @@ export class MikroBackendProvider<T extends {}> implements BackendProvider<T> {
 
 	public async deleteOne(filter: unknown): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
-		const deletedRows = await this.getRepository().nativeDelete(filter as FilterQuery<T>);
+		const deletedRows = await this.getRepository().nativeDelete(filter as FilterQuery<D>);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');

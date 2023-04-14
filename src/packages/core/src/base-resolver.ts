@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { GraphQLResolveInfo, GraphQLScalarType, GraphQLType } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
 import pluralize from 'pluralize';
 import {
 	Arg,
@@ -17,13 +17,14 @@ import {
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
-import { FieldsByTypeName, parseResolveInfo, ResolveTree } from 'graphql-parse-resolve-info';
 
-import { AclMap } from '.';
+import { AclMap, GraphQLEntity } from '.';
 import type {
 	AuthorizationContext,
 	BackendProvider,
+	Filter,
 	GraphqlEntityType,
+	HookParams,
 	OrderByOptions,
 	PaginationOptions,
 } from './common/types';
@@ -45,7 +46,7 @@ const scalarTypes = new Map<TypeValue, TypeValue>();
 export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry>();
 
 export interface BaseResolverMetadataEntry {
-	provider: BackendProvider<any>;
+	provider: BackendProvider<any, GraphQLEntity<unknown>>;
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
@@ -60,10 +61,12 @@ export interface BaseResolverInterface<T> {
 	hookManager?: HookManager<T>;
 }
 
-export function createBaseResolver<T, O>(
-	gqlEntityType: GraphqlEntityType<T, O>,
-	provider: BackendProvider<O>
-): abstract new () => BaseResolverInterface<T> {
+// G = GraphQL entity
+// D = Data Entity
+export function createBaseResolver<G extends { id: string }, D>(
+	gqlEntityType: GraphqlEntityType<G, D>,
+	provider: BackendProvider<D, G>
+): abstract new () => BaseResolverInterface<G> {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -302,8 +305,8 @@ export function createBaseResolver<T, O>(
 	}
 
 	@Resolver({ isAbstract: true })
-	abstract class BaseResolver implements BaseResolverInterface<T> {
-		public hookManager?: HookManager<T>;
+	abstract class BaseResolver implements BaseResolverInterface<G> {
+		public hookManager?: HookManager<G>;
 
 		// List
 		@Query(() => [gqlEntityType], {
@@ -311,13 +314,17 @@ export function createBaseResolver<T, O>(
 		})
 		public async list(
 			@Arg('filter', () => ListInputFilterArgs, { nullable: true })
-			filter: Partial<O>,
+			filter: Filter<G>,
 			@Arg('pagination', () => PaginationInputArgs, { nullable: true })
 			pagination: PaginationOptions,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
-		): Promise<Array<T | null>> {
-			const params = {
+		): Promise<Array<G | null>> {
+			type Args = {
+				filter: Filter<G>;
+				pagination: PaginationOptions;
+			};
+			const params: Partial<HookParams<G, Args>> = {
 				args: { filter, pagination },
 				info,
 				context,
@@ -326,15 +333,15 @@ export function createBaseResolver<T, O>(
 				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
-			const result = await QueryManager.find({
+			const result = await QueryManager.find<D, G>({
 				entityName: gqlEntityTypeName,
-				filter: hookParams.args?.filter as Partial<O>,
-				pagination: hookParams.args?.pagination as PaginationOptions,
+				filter: hookParams.args?.filter,
+				pagination: hookParams.args?.pagination,
 			});
 
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
-				const results = result.map((entity: O) => fromBackendEntity.call(gqlEntityType, entity));
+				const results = result.map((entity) => fromBackendEntity.call(gqlEntityType, entity));
 
 				const { entities } = this.hookManager
 					? await this.hookManager.runHooks(HookRegister.AFTER_READ, {
@@ -357,9 +364,11 @@ export function createBaseResolver<T, O>(
 			@Arg('id', () => ID) id: string,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
-		): Promise<T | null> {
-			const params = {
-				args: { filter: { id } },
+		): Promise<G | null> {
+			type Args = { filter: Filter<G> };
+			const filter: Args['filter'] = { id };
+			const params: Partial<HookParams<G, Args>> = {
+				args: { filter },
 				info,
 				context,
 			};
@@ -368,7 +377,9 @@ export function createBaseResolver<T, O>(
 				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
-			const result = await provider.findOne(hookParams.args?.filter);
+			if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
+
+			const result = await provider.findOne(hookParams.args.filter);
 
 			if (result && gqlEntityType.fromBackendEntity) {
 				const entity = gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
@@ -493,7 +504,7 @@ export function createBaseResolver<T, O>(
 		@Mutation((returns) => [gqlEntityType], { name: `create${plural}` })
 		async createMany(
 			@Arg('input', () => InsertManyInputArgs) createItems: any
-		): Promise<Array<T | null>> {
+		): Promise<Array<G | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let createData = createItems.data;
 
@@ -514,7 +525,7 @@ export function createBaseResolver<T, O>(
 
 		// Create
 		@Mutation((returns) => gqlEntityType, { name: `create${gqlEntityTypeName}` })
-		async createItem(@Arg('data', () => InsertInputArgs) createItemData: any): Promise<T | null> {
+		async createItem(@Arg('data', () => InsertInputArgs) createItemData: any): Promise<G | null> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let createData = createItemData;
 
@@ -537,7 +548,7 @@ export function createBaseResolver<T, O>(
 		@Mutation((returns) => [gqlEntityType], { name: `update${plural}` })
 		async updateMany(
 			@Arg('input', () => UpdateManyInputArgs) updateItems: any
-		): Promise<Array<T | null>> {
+		): Promise<Array<G | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let updateData = updateItems.data;
 
@@ -560,7 +571,7 @@ export function createBaseResolver<T, O>(
 		@Mutation((returns) => [gqlEntityType], { name: `createOrUpdateMany${plural}` })
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: any
-		): Promise<Array<T | null>> {
+		): Promise<Array<G | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let data = items.data;
 
@@ -581,7 +592,7 @@ export function createBaseResolver<T, O>(
 
 		// Update
 		@Mutation((returns) => gqlEntityType, { name: `update${gqlEntityTypeName}` })
-		async update(@Arg('data', () => UpdateInputArgs) updateItemData: any): Promise<T | null> {
+		async update(@Arg('data', () => UpdateInputArgs) updateItemData: any): Promise<G | null> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let updateData = updateItemData;
 			// The type may want to further manipulate the input before passing it to the provider.
@@ -607,7 +618,8 @@ export function createBaseResolver<T, O>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		) {
-			const params = {
+			type Args = { filter: Filter<G> };
+			const params: Partial<HookParams<G, Args>> = {
 				args: { filter: { id } },
 				info,
 				context,
@@ -616,6 +628,9 @@ export function createBaseResolver<T, O>(
 			const beforeParams = this.hookManager
 				? await this.hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 				: params;
+
+			if (!beforeParams.args?.filter)
+				throw new Error('No delete filter specified cannot continue.');
 
 			const success = await provider.deleteOne(beforeParams.args?.filter);
 

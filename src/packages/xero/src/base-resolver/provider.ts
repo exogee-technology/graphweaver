@@ -1,12 +1,17 @@
-import { BackendProvider, PaginationOptions, Sort } from '@exogee/graphweaver';
+import {
+	BackendProvider,
+	Filter,
+	GraphQLEntity,
+	PaginationOptions,
+	Sort,
+} from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { isUUID } from 'class-validator';
-import { TokenSet, TokenSetParameters, XeroClient } from 'xero-node';
+import { TokenSet, XeroClient } from 'xero-node';
 
-export interface XeroDataAccessor<T> {
+export interface XeroDataAccessor<T, G> {
 	find: (args: {
 		xero: XeroClient;
-		filter: Record<string, any>;
+		filter: Filter<G>;
 		order?: Record<string, Sort>;
 		limit?: number;
 		offset?: number;
@@ -35,7 +40,7 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<T> implements BackendProvider<T> {
+export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements BackendProvider<T, G> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 
@@ -59,7 +64,10 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		});
 	};
 
-	public constructor(protected entityTypeName: string, protected accessor?: XeroDataAccessor<T>) {}
+	public constructor(
+		protected entityTypeName: string,
+		protected accessor?: XeroDataAccessor<T, G>
+	) {}
 
 	public static clearTokens() {
 		XeroBackendProvider.resetXeroClient();
@@ -88,7 +96,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 	// GET METHODS
 	public async find(
-		filter: any, // @todo: Create a type for this
+		filter: Filter<G>, // @todo: Create a type for this
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
 	): Promise<T[]> {
@@ -124,10 +132,10 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		}
 	}
 
-	public async findOne(id: string): Promise<T | null> {
+	public async findOne(filter: Filter<G>): Promise<T | null> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running findOne ${this.entityTypeName} with ID ${id}`);
+		logger.trace(`Running findOne ${this.entityTypeName} with filter ${filter}`);
 
 		if (!this.accessor) {
 			throw new Error(
@@ -135,7 +143,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			);
 		}
 
-		const rows = await this.find({ id });
+		const rows = await this.find(filter);
 		return rows[0] || null;
 	}
 
@@ -199,7 +207,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: unknown): Promise<boolean> {
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');

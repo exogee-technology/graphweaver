@@ -3,7 +3,7 @@ import {
 	createBaseResolver,
 	Hook,
 	HookRegister,
-	HookParams,
+	ReadHookParams,
 } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Resolver } from 'type-graphql';
@@ -18,7 +18,7 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	new MikroBackendProvider(OrmTask, 'my-sql')
 ) {
 	@Hook(HookRegister.BEFORE_READ)
-	async beforeRead(params: Partial<HookParams<Task>>): Promise<Partial<HookParams<Task>>> {
+	async beforeRead(params: ReadHookParams<Task>): Promise<ReadHookParams<Task>> {
 		const filter = params.args?.filter ?? {};
 		const newFilter = {
 			...filter,
@@ -36,7 +36,7 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	}
 
 	@Hook(HookRegister.AFTER_READ)
-	async afterRead(params: Partial<HookParams<Task>>): Promise<Partial<HookParams<Task>>> {
+	async afterRead(params: ReadHookParams<Task>): Promise<ReadHookParams<Task>> {
 		const entities = (params.entities || []).map((task) => {
 			if (task) {
 				task.description = task.description + ' and crush the resistance!';
