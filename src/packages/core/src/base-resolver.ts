@@ -317,18 +317,19 @@ export function createBaseResolver<T, O>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<Array<T | null>> {
+			const params = {
+				args: { filter, pagination },
+				info,
+				context,
+			};
 			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, {
-						args: { filter, pagination },
-						info,
-						context,
-				  })
-				: {};
+				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
+				: params;
 
 			const result = await QueryManager.find({
 				entityName: gqlEntityTypeName,
-				filter: hookParams?.args?.filter ?? filter,
-				pagination,
+				filter: hookParams.args?.filter as Partial<O>,
+				pagination: hookParams.args?.pagination as PaginationOptions,
 			});
 
 			if (gqlEntityType.fromBackendEntity) {
@@ -352,10 +353,34 @@ export function createBaseResolver<T, O>(
 			name: gqlEntityTypeName.charAt(0).toLowerCase() + gqlEntityTypeName.substring(1),
 			nullable: true,
 		})
-		public async getOne(@Arg('id', () => ID) id: string): Promise<T | null> {
-			const result = await provider.findOne(id);
+		public async getOne(
+			@Arg('id', () => ID) id: string,
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
+		): Promise<T | null> {
+			const params = {
+				args: { filter: { id } },
+				info,
+				context,
+			};
+
+			const hookParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
+				: params;
+
+			const result = await provider.findOne(hookParams.args?.filter);
+
 			if (result && gqlEntityType.fromBackendEntity) {
-				return gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
+				const entity = gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
+
+				const { entities = [] } = this.hookManager
+					? await this.hookManager.runHooks(HookRegister.AFTER_READ, {
+							...hookParams,
+							entities: [entity],
+					  })
+					: { entities: [entity] };
+
+				return entities[0] ?? null;
 			}
 			return result as any; // if there's no conversion function, we assume the gql and backend types match
 		}
