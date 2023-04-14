@@ -18,7 +18,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.1",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.2",
 		"luxon": "2.1.1"
 	},
 	"devDependencies": {

@@ -18,8 +18,8 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.1",
-		"@exogee/logger": "workspace:0.1.1",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.2",
+		"@exogee/logger": "workspace:0.1.2",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/entity-generator": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.0",
