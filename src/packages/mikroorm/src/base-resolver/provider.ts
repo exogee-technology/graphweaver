@@ -492,7 +492,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return entities;
 	}
 
-	public async deleteOne(filter: unknown): Promise<boolean> {
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
 		const deletedRows = await this.getRepository().nativeDelete(filter as FilterQuery<D>);
 
