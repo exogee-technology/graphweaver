@@ -87,7 +87,7 @@ export interface BackendProvider<T> {
 	createOne(entity: Partial<T>): Promise<T>;
 	createMany(entities: Partial<T>[]): Promise<T[]>;
 	createOrUpdateMany(entities: Partial<T>[]): Promise<T[]>;
-	deleteOne(id: string): Promise<boolean>;
+	deleteOne(filter: any): Promise<boolean>;
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
 

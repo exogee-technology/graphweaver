@@ -11,7 +11,7 @@ import {
 	QueryFilter,
 	Sort,
 } from '@exogee/graphweaver';
-import { IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { FilterQuery, IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
@@ -175,9 +175,11 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async deleteOne(id: string): Promise<boolean> {
-		const entity = await this.em.findOneOrFail(this.entityType, id);
-		await checkAuthorization(entity, { id }, AccessType.Delete);
-		return super.deleteOne(id);
+	public async deleteOne(filter: any): Promise<boolean> {
+		const entity = await this.em.findOneOrFail(this.entityType, filter as FilterQuery<T>);
+		const { id } = filter;
+		if (!id) throw new Error('Check Authorization Error: No ID specified');
+		await checkAuthorization(entity, { id: filter.id }, AccessType.Delete);
+		return super.deleteOne(filter);
 	}
 }

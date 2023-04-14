@@ -602,8 +602,30 @@ export function createBaseResolver<T, O>(
 
 		// Delete
 		@Mutation((returns) => Boolean, { name: `delete${gqlEntityTypeName}` })
-		deleteItem(@Arg('id', () => ID) id: string) {
-			return provider.deleteOne(id);
+		async deleteItem(
+			@Arg('id', () => ID) id: string,
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
+		) {
+			const params = {
+				args: { filter: { id } },
+				info,
+				context,
+			};
+
+			const beforeParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+				: params;
+
+			const success = await provider.deleteOne(beforeParams.args?.filter);
+
+			this.hookManager
+				? await this.hookManager.runHooks(HookRegister.AFTER_DELETE, {
+						...params,
+				  })
+				: params;
+
+			return success;
 		}
 	}
 
