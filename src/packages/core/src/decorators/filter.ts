@@ -3,7 +3,7 @@ import { getMetadataStorage } from 'type-graphql';
 
 import { TypeMap } from '../common/types';
 
-export const Filter = <T extends { name: string }>(GraphqlEntityType: () => T) => {
+export const ArgFilter = <T extends { name: string }>(GraphqlEntityType: () => T) => {
 	return ({ constructor: target }: any, methodName: string, index: number) => {
 		const gqlEntityType = GraphqlEntityType();
 		const plural = pluralize(gqlEntityType.name);
