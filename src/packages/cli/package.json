@@ -4,7 +4,7 @@
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
-		"build": "node build.js",
+		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
 		"version": "npm version --no-git-tag-version"
