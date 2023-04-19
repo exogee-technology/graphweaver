@@ -21,7 +21,7 @@ export const DefaultLayout = ({
 
 	const resize = (e: { x: number }) => {
 		const size = e.x;
-		if (size > SIDEBAR_MIN_WIDTH && size < SIDEBAR_MAX_WIDTH) setFlexBasis(e.x);
+		if (size >= SIDEBAR_MIN_WIDTH && size <= SIDEBAR_MAX_WIDTH) setFlexBasis(e.x);
 	};
 
 	useEffect(() => {
