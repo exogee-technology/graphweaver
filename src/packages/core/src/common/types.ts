@@ -86,11 +86,11 @@ export interface BackendProvider<D, G> {
 		relatedIds: readonly string[],
 		filter?: Filter<G>
 	): Promise<D[]>;
-	updateOne(id: string, updateArgs: Partial<D>): Promise<D>;
-	updateMany(entities: (Partial<D> & { id: string })[]): Promise<D[]>;
-	createOne(entity: Partial<D>): Promise<D>;
-	createMany(entities: Partial<D>[]): Promise<D[]>;
-	createOrUpdateMany(entities: Partial<D>[]): Promise<D[]>;
+	updateOne(id: string, updateArgs: Partial<G>): Promise<D>;
+	updateMany(entities: (Partial<G> & { id: string })[]): Promise<D[]>;
+	createOne(entity: Partial<G>): Promise<D>;
+	createMany(entities: Partial<G>[]): Promise<D[]>;
+	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
 	deleteOne(filter: Filter<G>): Promise<boolean>;
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
@@ -110,6 +110,8 @@ export interface HookParams<G, A> {
 	deleted: boolean; // Used by a delete operation to indicate if successful
 }
 
+export type CreateHookParams<G> = Partial<HookParams<G, { createItems?: Partial<G>[] }>>;
+
 export type ReadHookParams<G> = Partial<
 	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }>
 >;
@@ -121,7 +123,7 @@ export interface GraphqlEntityType<G, D> {
 	typeName?: string;
 	accessControlList?: AccessControlList<G>;
 	fromBackendEntity?(entity: D): G | null;
-	mapInputForInsertOrUpdate?(input: any): any;
+	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;
 }
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
