@@ -96,7 +96,7 @@ export class XeroBackendProvider<D, G extends GraphQLEntity<D>> implements Backe
 
 	// GET METHODS
 	public async find(
-		filter: Filter<G>, // @todo: Create a type for this
+		filter: Filter<G>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
 	): Promise<D[]> {
