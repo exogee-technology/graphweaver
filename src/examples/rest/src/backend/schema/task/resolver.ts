@@ -1,6 +1,7 @@
 import {
 	AuthorizedBaseFunctions,
 	createBaseResolver,
+	DeleteHookParams,
 	Hook,
 	HookRegister,
 	ReadHookParams,
@@ -48,5 +49,15 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 			...params,
 			entities,
 		};
+	}
+
+	@Hook(HookRegister.BEFORE_DELETE)
+	async beforeDelete(params: DeleteHookParams<Task>): Promise<DeleteHookParams<Task>> {
+		return params;
+	}
+
+	@Hook(HookRegister.AFTER_DELETE)
+	async afterDelete(params: DeleteHookParams<Task>): Promise<DeleteHookParams<Task>> {
+		return params;
 	}
 }

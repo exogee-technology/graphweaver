@@ -107,11 +107,14 @@ export interface HookParams<G, A> {
 	info: GraphQLResolveInfo;
 	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
 	entities: (G | null)[];
+	deleted: boolean; // Used by a delete operation to indicate if successful
 }
 
 export type ReadHookParams<G> = Partial<
 	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }>
 >;
+
+export type DeleteHookParams<G> = Partial<HookParams<G, { filter: { id: string } & Filter<G> }>>;
 
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
