@@ -2,6 +2,8 @@ import { parseResolveInfo } from 'graphql-parse-resolve-info';
 import { HookParams } from './common/types';
 
 export enum HookRegister {
+	BEFORE_CREATE = 'BEFORE_CREATE',
+	AFTER_CREATE = 'AFTER_CREATE',
 	BEFORE_READ = 'BEFORE_READ',
 	AFTER_READ = 'AFTER_READ',
 	BEFORE_UPDATE = 'BEFORE_UPDATE',
@@ -23,6 +25,8 @@ export class HookManager<G> {
 		HookRegister,
 		(<A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>)[]
 	> = {
+		[HookRegister.BEFORE_CREATE]: [],
+		[HookRegister.AFTER_CREATE]: [],
 		[HookRegister.BEFORE_READ]: [],
 		[HookRegister.AFTER_READ]: [],
 		[HookRegister.BEFORE_UPDATE]: [],

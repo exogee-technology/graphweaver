@@ -22,11 +22,14 @@ import { AclMap, GraphQLEntity } from '.';
 import type {
 	AuthorizationContext,
 	BackendProvider,
+	CreateHookParams,
+	DeleteHookParams,
 	Filter,
 	GraphqlEntityType,
 	HookParams,
 	OrderByOptions,
 	PaginationOptions,
+	ReadHookParams,
 } from './common/types';
 import { AccessControlList, Sort, TypeMap } from './common/types';
 import {
@@ -43,10 +46,10 @@ const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOStr
 const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
-export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry>();
+export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<unknown>>();
 
-export interface BaseResolverMetadataEntry {
-	provider: BackendProvider<any, GraphQLEntity<unknown>>;
+export interface BaseResolverMetadataEntry<G> {
+	provider: BackendProvider<any, GraphQLEntity<G>>;
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
@@ -97,7 +100,7 @@ export function createBaseResolver<G extends { id: string }, D>(
 		fields: entityFields,
 		enums: metadata.enums,
 		accessControlList: acl,
-	});
+	} as BaseResolverMetadataEntry<G>);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -320,11 +323,7 @@ export function createBaseResolver<G extends { id: string }, D>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<Array<G | null>> {
-			type Args = {
-				filter: Filter<G>;
-				pagination: PaginationOptions;
-			};
-			const params: Partial<HookParams<G, Args>> = {
+			const params: ReadHookParams<G> = {
 				args: { filter, pagination },
 				info,
 				context,
@@ -365,10 +364,8 @@ export function createBaseResolver<G extends { id: string }, D>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<G | null> {
-			type Args = { filter: Filter<G> };
-			const filter: Args['filter'] = { id };
-			const params: Partial<HookParams<G, Args>> = {
-				args: { filter },
+			const params: ReadHookParams<G> = {
+				args: { filter: { id } },
 				info,
 				context,
 			};
@@ -503,7 +500,7 @@ export function createBaseResolver<G extends { id: string }, D>(
 		// Create many items in a transaction
 		@Mutation((returns) => [gqlEntityType], { name: `create${plural}` })
 		async createMany(
-			@Arg('input', () => InsertManyInputArgs) createItems: any
+			@Arg('input', () => InsertManyInputArgs) createItems: { data: Partial<G>[] }
 		): Promise<Array<G | null>> {
 			// Transform attributes which are one-to-many / many-to-many relationships
 			let createData = createItems.data;
@@ -525,9 +522,24 @@ export function createBaseResolver<G extends { id: string }, D>(
 
 		// Create
 		@Mutation((returns) => gqlEntityType, { name: `create${gqlEntityTypeName}` })
-		async createItem(@Arg('data', () => InsertInputArgs) createItemData: any): Promise<G | null> {
-			// Transform attributes which are one-to-many / many-to-many relationships
-			let createData = createItemData;
+		async createItem(
+			@Arg('data', () => InsertInputArgs) createItemData: Partial<G>,
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
+		): Promise<G | null> {
+			const params: CreateHookParams<G> = {
+				args: { createItems: [createItemData] },
+				info,
+				context,
+			};
+
+			const hookParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, params)
+				: params;
+
+			let createData = hookParams.args?.createItems?.[0];
+
+			if (!createData) throw new Error('No create data specified cannot continue.');
 
 			// The type may want to further manipulate the input before passing it to the provider.
 			if (gqlEntityType.mapInputForInsertOrUpdate) {
@@ -535,13 +547,21 @@ export function createBaseResolver<G extends { id: string }, D>(
 			}
 
 			// Save!
-			const entity = await provider.createOne(createData);
+			const result = await provider.createOne(createData);
 
 			if (gqlEntityType.fromBackendEntity) {
-				return gqlEntityType.fromBackendEntity.call(gqlEntityType, entity);
+				const entity = gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
+				const { entities = [] } = this.hookManager
+					? await this.hookManager.runHooks(HookRegister.AFTER_CREATE, {
+							...hookParams,
+							entities: [entity],
+					  })
+					: { entities: [entity] };
+
+				return entities[0] ?? null;
 			}
 
-			return entity as any; // they're saying there's no need to map, so types don't align, but we trust the dev.
+			return result as any; // they're saying there's no need to map, so types don't align, but we trust the dev.
 		}
 
 		// Update many items in a transaction
@@ -618,28 +638,25 @@ export function createBaseResolver<G extends { id: string }, D>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		) {
-			type Args = { filter: Filter<G> };
-			const params: Partial<HookParams<G, Args>> = {
+			const params: DeleteHookParams<G> = {
 				args: { filter: { id } },
 				info,
 				context,
 			};
 
-			const beforeParams = this.hookManager
+			const hookParams = this.hookManager
 				? await this.hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 				: params;
 
-			if (!beforeParams.args?.filter)
-				throw new Error('No delete filter specified cannot continue.');
+			if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
 
-			const success = await provider.deleteOne(beforeParams.args?.filter);
+			const success = await provider.deleteOne(hookParams.args?.filter);
 
-			this.hookManager
-				? await this.hookManager.runHooks(HookRegister.AFTER_DELETE, {
-						...params,
-						deleted: success,
-				  })
-				: params;
+			this.hookManager &&
+				(await this.hookManager.runHooks(HookRegister.AFTER_DELETE, {
+					...hookParams,
+					deleted: success,
+				}));
 
 			return success;
 		}
