@@ -1,7 +1,7 @@
 import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -59,7 +59,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue({ id: selected?.[0]?.value || undefined });
+		helpers.setValue({ id: selected?.[0]?.value ?? undefined });
 	};
 
 	return (
@@ -128,7 +128,7 @@ const DetailForm = ({
 	);
 };
 
-const SLIDE_ANIMATION_TIME = 300;
+const SLIDE_ANIMATION_TIME_CSS_VAR_NAME = '--detail-panel-slide-animation-time';
 
 export const DetailPanel = () => {
 	const [open, setOpen] = useState(false);
@@ -186,14 +186,22 @@ export const DetailPanel = () => {
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
 
+	const slideAnimationTime = useMemo(() => {
+		const slideAnimationTimeCssVar = getComputedStyle(document.documentElement)
+			.getPropertyValue(SLIDE_ANIMATION_TIME_CSS_VAR_NAME)
+			.trim();
+
+		const slideAnimationTime = parseInt(slideAnimationTimeCssVar);
+		return isNaN(slideAnimationTime) ? 0 : slideAnimationTime;
+	}, []);
+
 	useEffect(() => {
-		// The timeouts here are 300ms to match the animation time of the css
-		setTimeout(() => setOpen(true), SLIDE_ANIMATION_TIME);
+		setTimeout(() => setOpen(true), slideAnimationTime);
 	}, []);
 
 	const closeModal = () => {
 		setOpen(false);
-		setTimeout(onClose, SLIDE_ANIMATION_TIME);
+		setTimeout(onClose, slideAnimationTime);
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {

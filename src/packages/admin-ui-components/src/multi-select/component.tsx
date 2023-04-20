@@ -38,31 +38,26 @@ export const Select = ({
 			setSelectedOptions([option]);
 		} else {
 			setSelectedOptions((_selectedOptions) => {
-				const selectedIndex = _selectedOptions.findIndex(
+				const isOptionAlreadySelected = _selectedOptions.some(
 					(selected) => selected.value === option.value
 				);
-				if (selectedIndex === -1) {
+
+				if (!isOptionAlreadySelected) {
+					// If option is not found in _selectedOptions
 					return [..._selectedOptions, option];
 				}
-				return [
-					..._selectedOptions.slice(0, selectedIndex),
-					..._selectedOptions.slice(selectedIndex + 1),
-				];
+
+				// return the original array as nothing has changed
+				return _selectedOptions;
 			});
 		}
 	};
 
 	// This is only used when multi select is enabled
 	const handleDelete = (option: SelectOption) => {
-		setSelectedOptions((_selectedOptions) => {
-			const selectedIndex = _selectedOptions.findIndex(
-				(selected) => selected.value === option.value
-			);
-			return [
-				..._selectedOptions.slice(0, selectedIndex),
-				..._selectedOptions.slice(selectedIndex + 1),
-			];
-		});
+		setSelectedOptions((_selectedOptions) =>
+			_selectedOptions.filter((selected) => selected.value !== option.value)
+		);
 	};
 
 	// This is only used when multi select is enabled
@@ -107,7 +102,7 @@ export const Select = ({
 									: selectedOptions?.[0].label}
 							</span>
 							{mode === SelectMode.MULTI && (
-								<span className={styles.deleteOption} onClick={() => handleDeleteAll()}>
+								<span className={styles.deleteOption} onClick={handleDeleteAll}>
 									&times;
 								</span>
 							)}
