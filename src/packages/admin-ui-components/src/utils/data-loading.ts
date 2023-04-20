@@ -4,6 +4,8 @@ import { Entity } from './use-schema';
 // Can't use useApolloClient/useQuery/useParams here if not using Loader
 import { apolloClient } from '../apollo';
 
+import { generateGqlSelectForEntityFields } from './graphql';
+
 export const PAGE_SIZE = 50;
 
 export const getEntity = <T>(entity: Entity, id: string, entityByType?: (type: string) => Entity) =>
@@ -23,19 +25,7 @@ const queryForEntity = (entity: Entity, entityByType?: (type: string) => Entity)
 	return gql`
 		query AdminUIDetail($id: ID!) {
 			result: ${queryName}(id: $id) {
-				${entity.fields
-					.map((field) => {
-						if (field.relationshipType) {
-							if (!entityByType) {
-								return `${field.name} { id }`;
-							}
-							const relatedEntity = entityByType(field.type);
-							return `${field.name} { id ${relatedEntity.summaryField || ''} }`;
-						} else {
-							return field.name;
-						}
-					})
-					.join(' ')}
+				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}
 		}
 	`;
