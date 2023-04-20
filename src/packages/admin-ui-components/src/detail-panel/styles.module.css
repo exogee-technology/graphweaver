@@ -1,3 +1,7 @@
+:root {
+	--detail-panel-slide-animation-time: 300ms;
+}
+
 .wrapper {
 	display: flex;
 	flex: 1;
@@ -15,7 +19,7 @@
 
 	/* Make sure the div starts off the screen */
 	transform: translateX(100%);
-	transition: transform 0.3s;
+	transition: transform var(--detail-panel-slide-animation-time);
 
 	overflow-y: auto;
 	overflow-x: hidden;
