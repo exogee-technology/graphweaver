@@ -637,6 +637,7 @@ export function createBaseResolver<G extends { id: string }, D>(
 			this.hookManager
 				? await this.hookManager.runHooks(HookRegister.AFTER_DELETE, {
 						...params,
+						deleted: success,
 				  })
 				: params;
 
