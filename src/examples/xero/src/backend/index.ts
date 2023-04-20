@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { logger } from '@exogee/logger';
-import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda';
 
 import { AccountResolver, ProfitAndLossRowResolver, TenantResolver } from './schema';
 import { XeroAuthApolloPlugin } from '@exogee/graphweaver-xero';
@@ -14,10 +14,10 @@ const graphweaver = new Graphweaver({
 		plugins: [XeroAuthApolloPlugin],
 	},
 	adminMetadata: { enabled: true },
-
-	// TODO: Remove
-	mikroOrmOptions: {},
 });
 logger.info(`example-xero graphweaver.server start`);
 
-exports.handler = startServerAndCreateLambdaHandler(graphweaver.server);
+exports.handler = startServerAndCreateLambdaHandler(
+	graphweaver.server,
+	handlers.createAPIGatewayProxyEventRequestHandler()
+);
