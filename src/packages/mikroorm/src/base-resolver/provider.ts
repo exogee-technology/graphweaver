@@ -123,7 +123,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
 	}
 
-	private mapAndAssignKeys = <T>(result: T, entityType: new () => T, inputArgs: Partial<T>) => {
+	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<G>) => {
 		// Clean the input and remove any GraphQL classes from the object
 		// const cleanInput = JSON.parse(JSON.stringify(inputArgs));
 		const assignmentObj = this.applyExternalIdFields(entityType, inputArgs);
@@ -360,7 +360,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return result as D[];
 	}
 
-	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
+	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
 			updateArgs: JSON.stringify(updateArgs),
@@ -393,7 +393,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return entity;
 	}
 
-	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
+	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
 		logger.trace(`Running update many ${this.entityType.name} with args`, {
 			updateItems: JSON.stringify(updateItems),
 		});
@@ -419,7 +419,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return entities;
 	}
 
-	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
 		logger.trace(`Running create or update many for ${this.entityType.name} with args`, {
 			items: JSON.stringify(items),
 		});
@@ -457,7 +457,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return entities;
 	}
 
-	public async createOne(createArgs: Partial<D>): Promise<D> {
+	public async createOne(createArgs: Partial<G>): Promise<D> {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createArgs),
 		});
@@ -471,7 +471,7 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return entity;
 	}
 
-	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
+	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createItems),
 		});

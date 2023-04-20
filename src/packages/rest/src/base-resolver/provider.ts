@@ -76,7 +76,7 @@ export class RestBackendProvider<D, G extends GraphQLEntity<D>> implements Backe
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
+	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
 		logger.trace(`Running update one ${this.entityTypeName} with args`, {
 			id,
 			updateArgs,
@@ -85,7 +85,7 @@ export class RestBackendProvider<D, G extends GraphQLEntity<D>> implements Backe
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
+	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
 		logger.trace(`Running update many ${this.entityTypeName} with args`, {
 			updateItems: updateItems,
 		});
@@ -93,17 +93,17 @@ export class RestBackendProvider<D, G extends GraphQLEntity<D>> implements Backe
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
 		// not something we can do with REST
 		return Promise.reject();
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<D>): Promise<D> {
+	public async createOne(createArgs: Partial<G>): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
+	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});

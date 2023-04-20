@@ -40,7 +40,7 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements BackendProvider<T, G> {
+export class XeroBackendProvider<D, G extends GraphQLEntity<D>> implements BackendProvider<D, G> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 
@@ -66,7 +66,7 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 
 	public constructor(
 		protected entityTypeName: string,
-		protected accessor?: XeroDataAccessor<T, G>
+		protected accessor?: XeroDataAccessor<D, G>
 	) {}
 
 	public static clearTokens() {
@@ -99,7 +99,7 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 		filter: Filter<G>, // @todo: Create a type for this
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
-	): Promise<T[]> {
+	): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		if (!this.accessor) {
@@ -132,7 +132,7 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 		}
 	}
 
-	public async findOne(filter: Filter<G>): Promise<T | null> {
+	public async findOne(filter: Filter<G>): Promise<D | null> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running findOne ${this.entityTypeName} with filter ${filter}`);
@@ -152,7 +152,7 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 		relatedField: string,
 		relatedFieldIds: string[],
 		filter?: any
-	): Promise<T[]> {
+	): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		if (!this.accessor) {
@@ -168,7 +168,7 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
+	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running update one ${this.entityTypeName} with args`, {
@@ -179,7 +179,7 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
+	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running update many ${this.entityTypeName} with args`, {
@@ -189,16 +189,16 @@ export class XeroBackendProvider<T, G extends GraphQLEntity<T>> implements Backe
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
+	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
 		throw new Error('Not implemented');
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<T>): Promise<T> {
+	public async createOne(createArgs: Partial<G>): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
+	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});
