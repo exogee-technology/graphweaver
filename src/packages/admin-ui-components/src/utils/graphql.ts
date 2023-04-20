@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { Entity } from './use-schema';
 
 export const SCHEMA_QUERY = gql`
 	{
@@ -27,3 +28,21 @@ export const SCHEMA_QUERY = gql`
 		}
 	}
 `;
+
+export const generateGqlSelectForEntityFields = (
+	entity: Entity,
+	entityByType?: (entityType: string) => Entity
+) =>
+	entity.fields
+		.map((field) => {
+			if (field.relationshipType) {
+				if (!entityByType) {
+					return `${field.name} { id }`;
+				}
+				const relatedEntity = entityByType(field.type);
+				return `${field.name} { id ${relatedEntity.summaryField || ''} }`;
+			} else {
+				return field.name;
+			}
+		})
+		.join(' ');
