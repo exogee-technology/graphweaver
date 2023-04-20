@@ -126,7 +126,7 @@ export const useSchema = () => {
 		// Now we have our entities we can create the type policy
 		const typePolicy: { Query: TypePolicy } = {
 			Query: {
-				keyFields: ['id'],
+				keyFields: ['id'], // This is the default and is here for clarity
 				fields: generateTypePolicyFields(result),
 			},
 		};
