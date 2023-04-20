@@ -145,7 +145,7 @@ export const DetailPanel = () => {
 		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
-			skip: id === 'new',
+			skip: id === 'graphweaver-admin-new-entity',
 		}
 	);
 
