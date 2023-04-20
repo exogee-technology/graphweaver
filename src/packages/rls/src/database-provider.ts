@@ -87,7 +87,7 @@ export class RLSMikroBackendProvider<
 		return result[0];
 	}
 
-	public async updateOne(id: string, updateArgs: Partial<T>): Promise<T> {
+	public async updateOne(id: string, updateArgs: Partial<G>): Promise<T> {
 		const entity = await this.transactional<T>(async () => {
 			// First check whether the user is allowed to update this record as-is
 			const entityBeforeUpdate = await this.em.findOne(this.entityType, id, {
@@ -111,7 +111,7 @@ export class RLSMikroBackendProvider<
 		return entity;
 	}
 
-	public async updateMany(entities: (Partial<T> & { id: string })[]): Promise<T[]> {
+	public async updateMany(entities: (Partial<G> & { id: string })[]): Promise<T[]> {
 		// TODO: Check authorisation both before and after updates
 		const result = await this.transactional<T[]>(async () => {
 			const updateManyResult = await super.updateMany(entities);
@@ -128,7 +128,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async createOne(entity: Partial<T>): Promise<T> {
+	public async createOne(entity: Partial<G>): Promise<T> {
 		const result = await this.transactional<T>(async () => {
 			const createResult = await super.createOne(entity);
 			await checkAuthorization(createResult, entity, AccessType.Create);
@@ -138,7 +138,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async createMany(entities: Partial<T>[]): Promise<T[]> {
+	public async createMany(entities: Partial<G>[]): Promise<T[]> {
 		const result = await this.transactional<T[]>(async () => {
 			const createManyResult = await super.createMany(entities);
 			await this.em.flush(); // This is required to assign IDs to the candidate records
@@ -155,7 +155,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async createOrUpdateMany(entities: Partial<T>[]): Promise<T[]> {
+	public async createOrUpdateMany(entities: Partial<G>[]): Promise<T[]> {
 		// TODO: Check authorisation both before and after updates
 		const result = await this.transactional<T[]>(async () => {
 			const createOrUpdateManyResult = await super.createOrUpdateMany(entities);
