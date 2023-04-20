@@ -22,11 +22,10 @@ import { AclMap, GraphQLEntity } from '.';
 import type {
 	AuthorizationContext,
 	BackendProvider,
-	CreateHookParams,
+	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	Filter,
 	GraphqlEntityType,
-	HookParams,
 	OrderByOptions,
 	PaginationOptions,
 	ReadHookParams,
@@ -527,8 +526,8 @@ export function createBaseResolver<G extends { id: string }, D>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<G | null> {
-			const params: CreateHookParams<G> = {
-				args: { createItems: [createItemData] },
+			const params: CreateOrUpdateHookParams<G> = {
+				args: { items: [createItemData] },
 				info,
 				context,
 			};
@@ -537,7 +536,7 @@ export function createBaseResolver<G extends { id: string }, D>(
 				? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, params)
 				: params;
 
-			let createData = hookParams.args?.createItems?.[0];
+			let createData = hookParams.args?.items?.[0];
 
 			if (!createData) throw new Error('No create data specified cannot continue.');
 
@@ -612,20 +611,45 @@ export function createBaseResolver<G extends { id: string }, D>(
 
 		// Update
 		@Mutation((returns) => gqlEntityType, { name: `update${gqlEntityTypeName}` })
-		async update(@Arg('data', () => UpdateInputArgs) updateItemData: any): Promise<G | null> {
-			// Transform attributes which are one-to-many / many-to-many relationships
-			let updateData = updateItemData;
+		async update(
+			@Arg('data', () => UpdateInputArgs) updateItemData: Partial<G>,
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
+		): Promise<G | null> {
+			const params: CreateOrUpdateHookParams<G> = {
+				args: { items: [updateItemData] },
+				info,
+				context,
+			};
+
+			const hookParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_UPDATE, params)
+				: params;
+
+			let updateData = hookParams.args?.items?.[0];
+
+			if (!updateData) throw new Error('No update data specified cannot continue.');
+
 			// The type may want to further manipulate the input before passing it to the provider.
 			if (gqlEntityType.mapInputForInsertOrUpdate) {
 				updateData = gqlEntityType.mapInputForInsertOrUpdate(updateData);
 			}
 
+			if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');
+
 			// Update and save!
 			const result = await provider.updateOne(updateItemData.id, updateData);
 
 			if (gqlEntityType.fromBackendEntity) {
-				const { fromBackendEntity } = gqlEntityType;
-				return fromBackendEntity.call(gqlEntityType, result);
+				const entity = gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
+				const { entities = [] } = this.hookManager
+					? await this.hookManager.runHooks(HookRegister.AFTER_UPDATE, {
+							...hookParams,
+							entities: [entity],
+					  })
+					: { entities: [entity] };
+
+				return entities[0] ?? null;
 			}
 
 			return result as any; // they're saying there's no need to map, so types don't align, but we trust the dev.

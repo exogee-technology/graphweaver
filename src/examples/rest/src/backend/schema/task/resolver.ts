@@ -1,7 +1,7 @@
 import {
 	AuthorizedBaseFunctions,
 	createBaseResolver,
-	CreateHookParams,
+	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	Hook,
 	HookRegister,
@@ -20,12 +20,16 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	new MikroBackendProvider(OrmTask, 'my-sql')
 ) {
 	@Hook(HookRegister.BEFORE_CREATE)
-	async beforeCreate(params: CreateHookParams<Task>): Promise<CreateHookParams<Task>> {
+	async beforeCreate(
+		params: CreateOrUpdateHookParams<Task>
+	): Promise<CreateOrUpdateHookParams<Task>> {
 		return params;
 	}
 
 	@Hook(HookRegister.AFTER_CREATE)
-	async afterCreate(params: CreateHookParams<Task>): Promise<CreateHookParams<Task>> {
+	async afterCreate(
+		params: CreateOrUpdateHookParams<Task>
+	): Promise<CreateOrUpdateHookParams<Task>> {
 		return params;
 	}
 
@@ -52,6 +56,20 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 		// 	}
 		// 	return null;
 		// });
+		return params;
+	}
+
+	@Hook(HookRegister.BEFORE_UPDATE)
+	async beforeUpdate(
+		params: CreateOrUpdateHookParams<Task>
+	): Promise<CreateOrUpdateHookParams<Task>> {
+		return params;
+	}
+
+	@Hook(HookRegister.AFTER_UPDATE)
+	async afterUpdate(
+		params: CreateOrUpdateHookParams<Task>
+	): Promise<CreateOrUpdateHookParams<Task>> {
 		return params;
 	}
 
