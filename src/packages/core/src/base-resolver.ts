@@ -26,6 +26,7 @@ import type {
 	DeleteHookParams,
 	Filter,
 	GraphqlEntityType,
+	WithId,
 	OrderByOptions,
 	PaginationOptions,
 	ReadHookParams,
@@ -63,9 +64,13 @@ export interface BaseResolverInterface<T> {
 	hookManager?: HookManager<T>;
 }
 
+const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
+	return 'id' in obj && typeof obj.id === 'string';
+};
+
 // G = GraphQL entity
 // D = Data Entity
-export function createBaseResolver<G extends { id: string }, D>(
+export function createBaseResolver<G extends WithId, D>(
 	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G>
 ): abstract new () => BaseResolverInterface<G> {
@@ -566,24 +571,52 @@ export function createBaseResolver<G extends { id: string }, D>(
 		// Update many items in a transaction
 		@Mutation((returns) => [gqlEntityType], { name: `update${plural}` })
 		async updateMany(
-			@Arg('input', () => UpdateManyInputArgs) updateItems: any
+			@Arg('input', () => UpdateManyInputArgs) updateItems: { data: Partial<G>[] },
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
 		): Promise<Array<G | null>> {
-			// Transform attributes which are one-to-many / many-to-many relationships
-			let updateData = updateItems.data;
+			const params: CreateOrUpdateHookParams<G> = {
+				args: { items: updateItems.data },
+				info,
+				context,
+			};
+
+			const hookParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_UPDATE, params)
+				: params;
+
+			let updateData = hookParams.args?.items;
+
+			if (!updateData) throw new Error('No update data specified cannot continue.');
 
 			// The type may want to further manipulate the input before passing it to the provider.
 			if (gqlEntityType.mapInputForInsertOrUpdate) {
 				const { mapInputForInsertOrUpdate } = gqlEntityType;
-				updateData = updateData.map((updateItem: any) => mapInputForInsertOrUpdate(updateItem));
+				updateData = updateData.map((updateItem) => mapInputForInsertOrUpdate(updateItem));
 			}
 
-			const entities = await provider.updateMany(updateData);
+			// Check that all objects have IDs
+			const dataWithIds = updateData.filter(hasId);
+			if (!dataWithIds.length) throw new Error('No ID found in input so cannot update entity.');
+
+			const results = await provider.updateMany(dataWithIds);
+
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
-				return entities.map((entity) => fromBackendEntity.call(gqlEntityType, entity));
+				const graphQLEntities = results.map((result) =>
+					fromBackendEntity.call(gqlEntityType, result)
+				);
+				const { entities = [] } = this.hookManager
+					? await this.hookManager.runHooks(HookRegister.AFTER_UPDATE, {
+							...hookParams,
+							entities: graphQLEntities,
+					  })
+					: { entities: graphQLEntities };
+
+				return entities;
 			}
 
-			return entities as any[];
+			return results as any[];
 		}
 
 		// CreateOrUpdate many items in a transaction
