@@ -2,6 +2,10 @@ import { registerEnumType } from 'type-graphql';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo } from 'graphql';
 
+export type WithId = {
+	id: string;
+};
+
 export enum Sort {
 	ASC = 'asc',
 	DESC = 'desc',
@@ -87,7 +91,7 @@ export interface BackendProvider<D, G> {
 		filter?: Filter<G>
 	): Promise<D[]>;
 	updateOne(id: string, updateArgs: Partial<G>): Promise<D>;
-	updateMany(entities: (Partial<G> & { id: string })[]): Promise<D[]>;
+	updateMany(entities: (Partial<G> & WithId)[]): Promise<D[]>;
 	createOne(entity: Partial<G>): Promise<D>;
 	createMany(entities: Partial<G>[]): Promise<D[]>;
 	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
