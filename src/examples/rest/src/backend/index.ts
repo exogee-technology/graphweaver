@@ -7,21 +7,25 @@ dotenv.config({
 });
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import {
+	LambdaContextFunctionArgument,
+	handlers,
+	startServerAndCreateLambdaHandler,
+} from '@as-integrations/aws-lambda';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task } from './entities';
 
 import { PersonResolver } from './schema/person';
 import { TaskResolver } from './schema/task';
+import { Context } from './types';
 
-const graphweaver = new Graphweaver({
+const graphweaver = new Graphweaver<Context>({
 	resolvers: [TaskResolver, PersonResolver],
 	apolloServerOptions: {
 		introspection: isOffline,
 	},
 	adminMetadata: { enabled: true },
-
 	mikroOrmOptions: [
 		{
 			connectionManagerId: 'my-sql',
@@ -37,7 +41,16 @@ const graphweaver = new Graphweaver({
 	],
 });
 
-exports.handler = startServerAndCreateLambdaHandler(
+exports.handler = startServerAndCreateLambdaHandler<any, Context>(
 	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
+	handlers.createAPIGatewayProxyEventRequestHandler(),
+	{
+		context: async ({ event, context }: LambdaContextFunctionArgument<any>) => {
+			return {
+				user: {
+					id: '1',
+				},
+			};
+		},
+	}
 );

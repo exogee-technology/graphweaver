@@ -105,25 +105,27 @@ export interface BackendProvider<D, G> {
 
 // G = GraphQL entity
 // A = Args type
-export interface HookParams<G, A> {
+// TContext = GraphQL Context
+export interface HookParams<G, A, TContext = AuthorizationContext> {
 	args: A;
-	context: AuthorizationContext;
+	context: TContext;
 	info: GraphQLResolveInfo;
 	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
 	entities: (G | null)[];
 	deleted: boolean; // Used by a delete operation to indicate if successful
 }
 
-// export type CreateOrUpdateHookParams<G> = Partial<HookParams<G, { items: Partial<G>[] }>>;
-export type CreateOrUpdateHookParams<G> = {
+export type CreateOrUpdateHookParams<G, TContext = AuthorizationContext> = {
 	args: { items: Partial<G>[] };
-} & Partial<HookParams<G, { items: Partial<G>[] }>>;
+} & Partial<HookParams<G, { items: Partial<G>[] }, TContext>>;
 
-export type ReadHookParams<G> = Partial<
-	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }>
+export type ReadHookParams<G, TContext = AuthorizationContext> = Partial<
+	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }, TContext>
 >;
 
-export type DeleteHookParams<G> = Partial<HookParams<G, { filter: { id: string } & Filter<G> }>>;
+export type DeleteHookParams<G, TContext = AuthorizationContext> = Partial<
+	HookParams<G, { filter: { id: string } & Filter<G> }, TContext>
+>;
 
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute

@@ -3,7 +3,7 @@ import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 
 import { logger } from '@exogee/logger';
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer, BaseContext, ContextFunction } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
 	ClearDatabaseContext,
@@ -31,8 +31,8 @@ export interface GraphweaverConfig {
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	authChecker?: AuthChecker<any, any>;
 }
-export default class Graphweaver {
-	server: ApolloServer;
+export default class Graphweaver<TContext extends BaseContext> {
+	server: ApolloServer<TContext>;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
@@ -78,7 +78,7 @@ export default class Graphweaver {
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
-		this.server = new ApolloServer({
+		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
 			plugins,
 			schema,
