@@ -20,11 +20,12 @@ const augmentParamsWithFields = <G, A>(params: Partial<HookParams<G, A>>) => {
 	} as HookParams<G, A>;
 };
 
+export type HookFunction = <G, A>(
+	params: Partial<HookParams<G, A>>
+) => Promise<Partial<HookParams<G, A>>>;
+
 export class HookManager<G> {
-	private hooks: Record<
-		HookRegister,
-		(<A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>)[]
-	> = {
+	private hooks: Record<HookRegister, HookFunction[]> = {
 		[HookRegister.BEFORE_CREATE]: [],
 		[HookRegister.AFTER_CREATE]: [],
 		[HookRegister.BEFORE_READ]: [],
@@ -35,10 +36,7 @@ export class HookManager<G> {
 		[HookRegister.AFTER_DELETE]: [],
 	};
 
-	registerHook(
-		hookType: HookRegister,
-		hook: <A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>
-	): void {
+	registerHook(hookType: HookRegister, hook: HookFunction): void {
 		const existingHooks = this.hooks[hookType];
 		this.hooks[hookType] = [...existingHooks, hook];
 	}
@@ -54,7 +52,7 @@ export class HookManager<G> {
 
 		let currentParams = params;
 		for (const hook of hooks) {
-			currentParams = await hook<A>(augmentParamsWithFields(currentParams));
+			currentParams = await hook(augmentParamsWithFields(currentParams));
 		}
 
 		return currentParams;
