@@ -7,7 +7,7 @@ import { Tenant } from './entity';
 const defaultSort: Record<string, Sort> = { ['tenantName']: Sort.ASC };
 
 @Resolver((of) => Tenant)
-export class TenantResolver extends createBaseResolver(
+export class TenantResolver extends createBaseResolver<Tenant, unknown>(
 	Tenant,
 	new XeroBackendProvider('Tenant', {
 		find: async ({ xero, filter, order, limit, offset }) => {

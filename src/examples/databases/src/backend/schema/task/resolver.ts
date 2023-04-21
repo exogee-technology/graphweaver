@@ -7,7 +7,7 @@ import { Task } from './entity';
 
 @Resolver((of) => Task)
 @AuthorizedBaseFunctions()
-export class TaskResolver extends createBaseResolver(
+export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	Task,
 	new MikroBackendProvider(OrmTask, 'my')
 ) {}
