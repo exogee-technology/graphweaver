@@ -9,7 +9,7 @@ import { isUUID } from 'class-validator';
 const defaultSort: Record<string, Sort> = { ['name']: Sort.ASC };
 
 @Resolver((of) => Account)
-export class AccountResolver extends createBaseResolver(
+export class AccountResolver extends createBaseResolver<Account, XeroAccount>(
 	Account,
 	new XeroBackendProvider('Account', {
 		find: async ({ xero, filter, order, limit, offset }) => {
