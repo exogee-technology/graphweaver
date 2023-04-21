@@ -30,6 +30,7 @@ import type {
 	OrderByOptions,
 	PaginationOptions,
 	ReadHookParams,
+	HookParams,
 } from './common/types';
 import { AccessControlList, Sort, TypeMap } from './common/types';
 import {
@@ -618,62 +619,83 @@ export function createBaseResolver<G extends WithId, D>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: AuthorizationContext
 		): Promise<Array<G | null>> {
+			// Extracted common properties
+			const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
+				info,
+				context,
+			};
+
+			// Separate Create and Update items
+			const updateItems = items.data.filter(hasId);
+			const createItems = items.data.filter((value) => !hasId(value));
+
+			// Extract ids of items being updated
+			const updateItemIds = updateItems.map((item) => item.id) ?? [];
+
+			// Prepare updateParams and run hook if needed
 			const updateParams: CreateOrUpdateHookParams<G> = {
-				args: { items: items.data.filter(hasId) },
-				info,
-				context,
+				args: { items: updateItems },
+				...commonParams,
 			};
-			const updateHookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
-				: updateParams;
+			const updateHookParams =
+				updateItems.length && this.hookManager
+					? await this.hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
+					: updateParams;
 
+			// Prepare createParams and run hook if needed
 			const createParams: CreateOrUpdateHookParams<G> = {
-				args: { items: items.data.filter((value) => !hasId(value)) },
-				info,
-				context,
+				args: { items: createItems },
+				...commonParams,
 			};
-			const createHookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
-				: createParams;
+			const createHookParams =
+				createItems.length && this.hookManager
+					? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
+					: createParams;
 
+			// Combine update and create items into a single array
 			let data = [...(updateHookParams.args?.items ?? []), ...(createHookParams.args?.items ?? [])];
-			const createItemIds =
-				createHookParams.args?.items?.filter(hasId).map((item) => item.id) ?? [];
 
-			// The type may want to further manipulate the input before passing it to the provider.
+			// Apply mapInputForInsertOrUpdate if available
 			if (gqlEntityType.mapInputForInsertOrUpdate) {
 				const { mapInputForInsertOrUpdate } = gqlEntityType;
 				data = data.map((updateItem: any) => mapInputForInsertOrUpdate(updateItem));
 			}
 
+			// Call provider.createOrUpdateMany with prepared data to perform data operation
 			const results = await provider.createOrUpdateMany(data);
+
+			// Apply fromBackendEntity if available and run after hooks
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
 				const backendEntities = results.map((result) =>
 					fromBackendEntity.call(gqlEntityType, result)
 				);
 
-				const updateEntities = backendEntities.filter(
-					(entity) => entity && !createItemIds.includes(entity.id)
+				// Filter update and create entities
+				const updatedEntities = backendEntities.filter(
+					(entity) => entity && updateItemIds.includes(entity.id)
 				);
+				const createdEntities = backendEntities.filter(
+					(entity) => entity && !updateItemIds.includes(entity.id)
+				);
+
+				// Run after hooks for update and create entities
 				const updateHookEntities = await this.runAfterHooks(
 					HookRegister.AFTER_UPDATE,
 					updateHookParams,
-					updateEntities
-				);
-
-				const createEntities = backendEntities.filter(
-					(entity) => entity && createItemIds.includes(entity.id)
+					updatedEntities
 				);
 				const createHookEntities = await this.runAfterHooks(
 					HookRegister.AFTER_CREATE,
 					createHookParams,
-					createEntities
+					createdEntities
 				);
 
+				// Return combined results from after hooks
 				return [...createHookEntities, ...updateHookEntities];
 			}
 
+			// Fallback if we do not have a fromBackendEntity function to call
 			return results as any[];
 		}
 
