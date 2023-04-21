@@ -504,10 +504,23 @@ export function createBaseResolver<G extends WithId, D>(
 		// Create many items in a transaction
 		@Mutation((returns) => [gqlEntityType], { name: `create${plural}` })
 		async createMany(
-			@Arg('input', () => InsertManyInputArgs) createItems: { data: Partial<G>[] }
+			@Arg('input', () => InsertManyInputArgs) createItems: { data: Partial<G>[] },
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: AuthorizationContext
 		): Promise<Array<G | null>> {
-			// Transform attributes which are one-to-many / many-to-many relationships
-			let createData = createItems.data;
+			const params: CreateOrUpdateHookParams<G> = {
+				args: { items: createItems.data },
+				info,
+				context,
+			};
+
+			const hookParams = this.hookManager
+				? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, params)
+				: params;
+
+			let createData = hookParams.args?.items;
+
+			if (!createData) throw new Error('No update data specified cannot continue.');
 
 			// The type may want to further manipulate the input before passing it to the provider.
 			if (gqlEntityType.mapInputForInsertOrUpdate) {
@@ -515,13 +528,23 @@ export function createBaseResolver<G extends WithId, D>(
 				createData = createData.map((createItem: any) => mapInputForInsertOrUpdate(createItem));
 			}
 
-			const entities = await provider.createMany(createData);
+			const results = await provider.createMany(createData);
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;
-				return entities.map((entity) => fromBackendEntity.call(gqlEntityType, entity));
+				const graphQLEntities = results.map((result) =>
+					fromBackendEntity.call(gqlEntityType, result)
+				);
+				const { entities = [] } = this.hookManager
+					? await this.hookManager.runHooks(HookRegister.AFTER_CREATE, {
+							...hookParams,
+							entities: graphQLEntities,
+					  })
+					: { entities: graphQLEntities };
+
+				return entities;
 			}
 
-			return entities as any[];
+			return results as any[];
 		}
 
 		// Create
