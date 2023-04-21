@@ -114,7 +114,10 @@ export interface HookParams<G, A> {
 	deleted: boolean; // Used by a delete operation to indicate if successful
 }
 
-export type CreateOrUpdateHookParams<G> = Partial<HookParams<G, { items?: Partial<G>[] }>>;
+// export type CreateOrUpdateHookParams<G> = Partial<HookParams<G, { items: Partial<G>[] }>>;
+export type CreateOrUpdateHookParams<G> = {
+	args: { items: Partial<G>[] };
+} & Partial<HookParams<G, { items: Partial<G>[] }>>;
 
 export type ReadHookParams<G> = Partial<
 	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }>
