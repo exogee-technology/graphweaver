@@ -613,7 +613,7 @@ export function createBaseResolver<G extends WithId, D>(
 		}
 
 		// CreateOrUpdate many items in a transaction
-		@Mutation((returns) => [gqlEntityType], { name: `createOrUpdateMany${plural}` })
+		@Mutation((returns) => [gqlEntityType], { name: `createOrUpdate${plural}` })
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
