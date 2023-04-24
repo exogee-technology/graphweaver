@@ -1,7 +1,7 @@
-import { AuthorizedBaseFunctions, createBaseResolver } from '@exogee/graphweaver';
+import { createBaseResolver } from '@exogee/graphweaver';
 import { AccessorParams, RestBackendProvider } from '@exogee/graphweaver-rest';
 import url from 'url';
-
+import { AuthorizedBaseFunctions } from '@exogee/graphweaver-rls';
 import { Resolver } from 'type-graphql';
 
 import { People as RestPeople } from '../../entities';
