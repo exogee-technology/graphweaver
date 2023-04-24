@@ -105,7 +105,7 @@ const consolidateAccessControlValue = <G, TContext extends AuthorizationContext>
  * across all the roles the user belongs to
  */
 export const buildAccessControlEntryForUser = <G, TContext extends AuthorizationContext>(
-	acl: AccessControlList<G, TContext>,
+	acl: Partial<AccessControlList<G, TContext>>,
 	roles: string[]
 ): ConsolidatedAccessControlEntry<G, TContext> => {
 	// If this is a super user, return an object representing full access
@@ -155,9 +155,10 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
  * @param filters The list of individual filters to be combined into a single 'anded' filter
  * @returns A single filter object imposing all of the input filter conditions together
  */
-export const andFilters = <G>(...filters: Filter<G>[]): Filter<G> => {
+export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): Filter<G> => {
 	const nonEmptyFilters = filters.filter(
-		(filter) => !isEmptyObject(filter) && filter !== undefined && filter !== null
+		(filter): filter is Filter<G> =>
+			!isEmptyObject(filter) && filter !== undefined && filter !== null
 	);
 	console.log(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
 

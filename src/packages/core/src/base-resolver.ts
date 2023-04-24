@@ -90,15 +90,6 @@ export function createBaseResolver<G extends WithId, D>(
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
-	// @todo reimplement check
-	// let acl = AclMap.get(gqlEntityType.name);
-	// if (!acl) {
-	// 	logger.warn(
-	// 		`Could not find ACL for ${gqlEntityType.name} - only administrative users will be able to access this entity`
-	// 	);
-	// 	acl = {};
-	// }
-
 	EntityMetadataMap.set(objectNames[0].name, {
 		provider,
 		entity: objectNames[0],
