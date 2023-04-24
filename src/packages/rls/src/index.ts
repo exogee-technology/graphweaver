@@ -1,5 +1,4 @@
 export * from './database-provider';
-export * from './decorators/authorize-access';
-export * from './decorators/authorized-base-functions';
+export * from './decorators';
 export * from './types';
 export * from './helper-functions';

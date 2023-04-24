@@ -7,7 +7,7 @@ import {
 	ReadHookParams,
 } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { AuthorizedBaseFunctions } from '@exogee/graphweaver-rls';
+import { AuthorizedBaseResolver } from '@exogee/graphweaver-rls';
 import { Resolver } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';
@@ -19,7 +19,7 @@ type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, Context>;
 type DeleteHook = DeleteHookParams<Task, Context>;
 
 @Resolver((of) => Task)
-@AuthorizedBaseFunctions()
+@AuthorizedBaseResolver()
 export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	Task,
 	new MikroBackendProvider(OrmTask, 'my-sql')
