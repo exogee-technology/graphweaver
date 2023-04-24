@@ -12,13 +12,19 @@ import {
 	handlers,
 	startServerAndCreateLambdaHandler,
 } from '@as-integrations/aws-lambda';
+import { AuthorizationContext } from '@exogee/graphweaver-rls';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task } from './entities';
 
 import { PersonResolver } from './schema/person';
 import { TaskResolver } from './schema/task';
-import { Context } from './types';
+
+export interface Context extends AuthorizationContext {
+	user: {
+		id: string;
+	};
+}
 
 const graphweaver = new Graphweaver<Context>({
 	resolvers: [TaskResolver, PersonResolver],
