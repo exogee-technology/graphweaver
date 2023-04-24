@@ -1,4 +1,3 @@
-import { EntityMetadataMap } from '@exogee/graphweaver';
 import {
 	ConnectionManager,
 	DatabaseObjectNotFoundException,
@@ -15,6 +14,7 @@ import {
 	ConsolidatedAccessControlValue,
 } from './types';
 import {
+	AclMap,
 	buildAccessControlEntryForUser,
 	evaluateConsolidatedAccessControlValue,
 	getRolesFromAuthorizationContext,
@@ -73,7 +73,7 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 
-	const acl = EntityMetadataMap.get(entityName)?.accessControlList;
+	const acl = AclMap.get(entityName);
 	if (!acl) {
 		logger.error(`Could not get entity ACL for nested entity ${entityName}`);
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
@@ -136,8 +136,8 @@ export async function checkAuthorization(
 ) {
 	// Get ACL first
 	const proto = Object.getPrototypeOf(entity);
-	const access = EntityMetadataMap.get(proto.constructor.name)?.accessControlList;
-	if (!access) {
+	const acl = AclMap.get(proto.constructor.name);
+	if (!acl) {
 		logger.trace(
 			`An attempt to access entity '${
 				Object.getPrototypeOf(entity).constructor.name
@@ -149,7 +149,7 @@ export async function checkAuthorization(
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
 	assertObjectLevelPermissions(
-		buildAccessControlEntryForUser(access, getRolesFromAuthorizationContext()),
+		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext()),
 		requiredPermission
 	);
 	// Now check whether the root entity passes permissions filters (if set)

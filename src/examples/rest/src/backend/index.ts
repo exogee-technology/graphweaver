@@ -47,7 +47,7 @@ const graphweaver = new Graphweaver<Context>({
 	],
 });
 
-exports.handler = startServerAndCreateLambdaHandler<any, Context>(
+export const handler = startServerAndCreateLambdaHandler<any, Context>(
 	graphweaver.server,
 	handlers.createAPIGatewayProxyEventRequestHandler(),
 	{
