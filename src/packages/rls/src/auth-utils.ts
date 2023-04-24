@@ -1,13 +1,4 @@
-import {
-	AccessType,
-	buildAccessControlEntryForUser,
-	ConsolidatedAccessControlEntry,
-	ConsolidatedAccessControlValue,
-	EntityMetadataMap,
-	evaluateConsolidatedAccessControlValue,
-	GENERIC_AUTH_ERROR_MESSAGE,
-	getRolesFromAuthorizationContext,
-} from '@exogee/graphweaver';
+import { EntityMetadataMap } from '@exogee/graphweaver';
 import {
 	ConnectionManager,
 	DatabaseObjectNotFoundException,
@@ -16,6 +7,19 @@ import {
 } from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
+
+import {
+	AccessType,
+	ConsolidatedAccessControlEntry,
+	ConsolidatedAccessControlValue,
+} from './types';
+import {
+	buildAccessControlEntryForUser,
+	evaluateConsolidatedAccessControlValue,
+	getRolesFromAuthorizationContext,
+} from './helper-functions';
+
+export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
 export const requiredPermissionsForAction = (intent: any): AccessType => {
 	const keys = Object.keys(intent);

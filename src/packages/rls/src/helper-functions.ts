@@ -1,4 +1,5 @@
 import { logger } from '@exogee/logger';
+import { Filter } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -8,12 +9,13 @@ import {
 	BASE_ROLE_EVERYONE,
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
-	Filter,
-	GENERIC_AUTH_ERROR_MESSAGE,
-} from '../common/types';
+} from './types';
+import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 
 let authContext: AuthorizationContext | undefined;
 let administratorRoleName = '';
+
+export const AclMap = new Map<string, AccessControlList<any>>();
 
 const isEmptyObject = (candidate: any) => {
 	return (

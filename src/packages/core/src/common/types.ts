@@ -5,6 +5,8 @@ import { GraphQLResolveInfo } from 'graphql';
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
 
+export interface BaseContext {}
+
 export type WithId = {
 	id: string;
 };
@@ -29,41 +31,6 @@ export type PaginationOptions = {
 	offset: number;
 	limit: number;
 };
-
-// Consumers will extend the base context type
-export type AuthorizationContext = {
-	roles?: string[];
-};
-
-export enum AccessType {
-	Read = 'Read',
-	Create = 'Create',
-	Update = 'Update',
-	Delete = 'Delete',
-}
-
-export const BASE_ROLE_EVERYONE = 'Everyone';
-
-export type AccessControlList<T> = {
-	[K in string]?: AccessControlEntry<T>;
-};
-
-export interface AccessControlEntry<T> {
-	read?: AccessControlValue<T>;
-	create?: AccessControlValue<T>;
-	update?: AccessControlValue<T>;
-	delete?: AccessControlValue<T>;
-	write?: AccessControlValue<T>;
-	all?: AccessControlValue<T>;
-}
-
-export type ConsolidatedAccessControlEntry<T> = {
-	[K in AccessType]?: ConsolidatedAccessControlValue<T>;
-};
-
-export type AccessControlValue<G> = true | FilterFunction<G>;
-export type ConsolidatedAccessControlValue<G> = true | FilterFunction<G>[];
-export type FilterFunction<G> = (context: AuthorizationContext) => Filter<G> | Promise<Filter<G>>;
 
 export type Filter<G> = {
 	id?: string;
@@ -109,7 +76,7 @@ export interface BackendProvider<D, G> {
 // G = GraphQL entity
 // A = Args type
 // TContext = GraphQL Context
-export interface HookParams<G, TContext = AuthorizationContext> {
+export interface HookParams<G, TContext = BaseContext> {
 	context: TContext;
 	info: GraphQLResolveInfo;
 	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
@@ -117,30 +84,26 @@ export interface HookParams<G, TContext = AuthorizationContext> {
 	deleted?: boolean; // Used by a delete operation to indicate if successful
 }
 
-export interface CreateOrUpdateHookParams<G, TContext = AuthorizationContext>
+export interface CreateOrUpdateHookParams<G, TContext = BaseContext>
 	extends HookParams<G, TContext> {
 	args: { items: Partial<G>[] };
 }
 
-export interface ReadHookParams<G, TContext = AuthorizationContext>
-	extends HookParams<G, TContext> {
+export interface ReadHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
 	args: { filter?: Filter<G>; pagination?: PaginationOptions };
 }
 
-export interface DeleteHookParams<G, TContext = AuthorizationContext>
-	extends HookParams<G, TContext> {
+export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
 	args: { filter: { id: string } & Filter<G> };
 }
 
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
-	accessControlList?: AccessControlList<G>;
+	// accessControlList?: AccessControlList<G>;
 	fromBackendEntity?(entity: D): G | null;
 	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;
 }
-
-export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
 export enum AdminUIFilterType {
 	DATE_RANGE = 'DATE_RANGE',
