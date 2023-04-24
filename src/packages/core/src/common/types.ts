@@ -32,12 +32,29 @@ export type PaginationOptions = {
 	limit: number;
 };
 
-export type Filter<G> = {
-	id?: string;
+export type FilterEntity<G> = {
+	[K in keyof G]?: G[K] extends (...args: any[]) => Promise<infer C>
+		? Filter<C>
+		: G[K] extends Promise<infer C>
+		? Filter<C>
+		: Filter<G[K]>;
+};
+
+export type FilterTopLevelProperties<G> = {
 	_and?: Filter<G>[];
 	_or?: Filter<G>[];
 	_not?: Filter<G>[];
 };
+
+// G is the root GraphQL entity
+// C is a child GraphQL entity
+export type Filter<G> = {
+	id?: string; // Optional id property
+} & (
+	| FilterEntity<G>
+	| FilterTopLevelProperties<G>
+	| (FilterEntity<G> & FilterTopLevelProperties<G>)
+);
 
 // D = Data entity returned from the datastore
 // G = GraphQL entity

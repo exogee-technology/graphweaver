@@ -12,7 +12,7 @@ import { Resolver } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';
 import { Task } from './entity';
-import { Context } from '../../types';
+import { Context } from '../../';
 
 type ReadHook = ReadHookParams<Task, Context>;
 type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, Context>;
@@ -37,20 +37,21 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
 		// You can hook into any read here and make changes such as applying a filter
-		const filter = params.args?.filter ?? {};
-		const userFilter = {
-			...filter,
-			people: {
-				id: params.context?.user.id,
-			},
-		};
-		return {
-			...params,
-			args: {
-				...params.args,
-				filter: userFilter,
-			},
-		};
+		// const filter = params.args?.filter ?? {};
+		// const userFilter = {
+		// 	...filter,
+		// 	people: {
+		// 		id: params.context?.user.id,
+		// 	},
+		// };
+		// return {
+		// 	...params,
+		// 	args: {
+		// 		...params.args,
+		// 		filter: userFilter,
+		// 	},
+		// };
+		return params;
 	}
 
 	@Hook(HookRegister.AFTER_READ)

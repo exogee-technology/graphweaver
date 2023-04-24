@@ -10,6 +10,7 @@ import { ForbiddenError } from 'apollo-server-errors';
 
 import {
 	AccessType,
+	AuthorizationContext,
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
 } from './types';
@@ -48,14 +49,16 @@ const permissionsErrorHandler = (error: any) => {
 	throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 };
 
-const assertAccessControlValueNotEmpty = (acv: ConsolidatedAccessControlValue<any> | undefined) => {
+const assertAccessControlValueNotEmpty = <G, TContext extends AuthorizationContext>(
+	acv: ConsolidatedAccessControlValue<G, TContext> | undefined
+) => {
 	if (!(acv === true || acv !== undefined)) {
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 };
 
-export const assertObjectLevelPermissions = (
-	userPermission: ConsolidatedAccessControlEntry<any>,
+export const assertObjectLevelPermissions = <G, TContext extends AuthorizationContext>(
+	userPermission: ConsolidatedAccessControlEntry<G, TContext>,
 	requiredPermission: AccessType
 ) => {
 	assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
