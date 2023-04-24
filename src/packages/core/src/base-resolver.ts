@@ -18,9 +18,8 @@ import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 
-import { AclMap, GraphQLEntity } from '.';
+import { GraphQLEntity } from '.';
 import type {
-	AuthorizationContext,
 	BackendProvider,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
@@ -31,8 +30,9 @@ import type {
 	PaginationOptions,
 	ReadHookParams,
 	HookParams,
+	BaseContext,
 } from './common/types';
-import { AccessControlList, Sort, TypeMap } from './common/types';
+import { Sort, TypeMap } from './common/types';
 import {
 	isExcludedFromFilterType,
 	isExcludedFromInputTypes,
@@ -54,7 +54,7 @@ export interface BaseResolverMetadataEntry<G> {
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
-	accessControlList?: AccessControlList<any>;
+	accessControlList?: any;
 }
 
 export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue) {
@@ -91,20 +91,20 @@ export function createBaseResolver<G extends WithId, D>(
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
-	let acl = AclMap.get(gqlEntityType.name);
-	if (!acl) {
-		logger.warn(
-			`Could not find ACL for ${gqlEntityType.name} - only administrative users will be able to access this entity`
-		);
-		acl = {};
-	}
+	// @todo reimplement check
+	// let acl = AclMap.get(gqlEntityType.name);
+	// if (!acl) {
+	// 	logger.warn(
+	// 		`Could not find ACL for ${gqlEntityType.name} - only administrative users will be able to access this entity`
+	// 	);
+	// 	acl = {};
+	// }
 
 	EntityMetadataMap.set(objectNames[0].name, {
 		provider,
 		entity: objectNames[0],
 		fields: entityFields,
 		enums: metadata.enums,
-		accessControlList: acl,
 	} as BaseResolverMetadataEntry<G>);
 
 	const determineTypeName = (inputType: any) => {
@@ -341,7 +341,7 @@ export function createBaseResolver<G extends WithId, D>(
 			@Arg('pagination', () => PaginationInputArgs, { nullable: true })
 			pagination: PaginationOptions,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
 			const params: ReadHookParams<G> = {
 				args: { filter, pagination },
@@ -374,7 +374,7 @@ export function createBaseResolver<G extends WithId, D>(
 		public async getOne(
 			@Arg('id', () => ID) id: string,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			const params: ReadHookParams<G> = {
 				args: { filter: { id } },
@@ -520,7 +520,7 @@ export function createBaseResolver<G extends WithId, D>(
 		async createMany(
 			@Arg('input', () => InsertManyInputArgs) createItems: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
 			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
 				args: { items: createItems.data },
@@ -551,7 +551,7 @@ export function createBaseResolver<G extends WithId, D>(
 		async createItem(
 			@Arg('data', () => InsertInputArgs) createItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
 				args: { items: [createItemData] },
@@ -582,7 +582,7 @@ export function createBaseResolver<G extends WithId, D>(
 		async updateMany(
 			@Arg('input', () => UpdateManyInputArgs) updateItems: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
 			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
 				args: { items: updateItems.data },
@@ -617,7 +617,7 @@ export function createBaseResolver<G extends WithId, D>(
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
 			// Extracted common properties
 			const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
@@ -704,7 +704,7 @@ export function createBaseResolver<G extends WithId, D>(
 		async update(
 			@Arg('data', () => UpdateInputArgs) updateItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
 				args: { items: [updateItemData] },
@@ -737,7 +737,7 @@ export function createBaseResolver<G extends WithId, D>(
 		async deleteItem(
 			@Arg('id', () => ID) id: string,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		) {
 			const params: DeleteHookParams<G> = {
 				args: { filter: { id } },

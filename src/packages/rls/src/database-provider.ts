@@ -1,12 +1,6 @@
 import {
-	AccessType,
-	andFilters,
-	buildAccessControlEntryForUser,
 	EntityMetadataMap,
-	evaluateConsolidatedAccessControlValue,
 	Filter,
-	GENERIC_AUTH_ERROR_MESSAGE,
-	getRolesFromAuthorizationContext,
 	GraphQLEntity,
 	PaginationOptions,
 	Sort,
@@ -15,7 +9,18 @@ import { FilterQuery, IsolationLevel, MikroBackendProvider } from '@exogee/graph
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
-import { checkAuthorization, requiredPermissionsForAction } from './auth-utils';
+import {
+	checkAuthorization,
+	GENERIC_AUTH_ERROR_MESSAGE,
+	requiredPermissionsForAction,
+} from './auth-utils';
+import { AccessType } from './types';
+import {
+	andFilters,
+	buildAccessControlEntryForUser,
+	evaluateConsolidatedAccessControlValue,
+	getRolesFromAuthorizationContext,
+} from './helper-functions';
 
 export class RLSMikroBackendProvider<
 	T extends Record<string, unknown>,

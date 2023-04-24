@@ -65,6 +65,7 @@ importers:
       '@exogee/graphweaver-cli': workspace:0.1.2
       '@exogee/graphweaver-mikroorm': workspace:0.1.2
       '@exogee/graphweaver-rest': workspace:0.1.2
+      '@exogee/graphweaver-rls': workspace:0.1.2
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
       '@types/node': 14.14.10
@@ -80,6 +81,7 @@ importers:
       '@exogee/graphweaver-cli': link:../../packages/cli
       '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
       '@exogee/graphweaver-rest': link:../../packages/rest
+      '@exogee/graphweaver-rls': link:../../packages/rls
       '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
       dotenv: 16.0.0
