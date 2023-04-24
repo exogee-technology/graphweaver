@@ -19,7 +19,7 @@ type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, Context>;
 type DeleteHook = DeleteHookParams<Task, Context>;
 
 @Resolver((of) => Task)
-@AuthorizedBaseResolver()
+@AuthorizedBaseResolver('Task')
 export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	Task,
 	new MikroBackendProvider(OrmTask, 'my-sql')
@@ -36,34 +36,11 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
-		// You can hook into any read here and make changes such as applying a filter
-		// const filter = params.args?.filter ?? {};
-		// const userFilter = {
-		// 	...filter,
-		// 	people: {
-		// 		id: params.context?.user.id,
-		// 	},
-		// };
-		// return {
-		// 	...params,
-		// 	args: {
-		// 		...params.args,
-		// 		filter: userFilter,
-		// 	},
-		// };
 		return params;
 	}
 
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHook) {
-		// You can hook into any read after the data has been fetched here and make changes to the entities
-		// const entities = (params.entities || []).map((task) => {
-		// 	if (task) {
-		// 		task.description = task.description + ' and crush the resistance!';
-		// 		return task;
-		// 	}
-		// 	return null;
-		// });
 		return params;
 	}
 

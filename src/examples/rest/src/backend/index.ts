@@ -12,7 +12,11 @@ import {
 	handlers,
 	startServerAndCreateLambdaHandler,
 } from '@as-integrations/aws-lambda';
-import { AuthorizationContext } from '@exogee/graphweaver-rls';
+import {
+	AuthorizationContext,
+	setAdministratorRoleName,
+	upsertAuthorizationContext,
+} from '@exogee/graphweaver-rls';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task } from './entities';
@@ -47,16 +51,22 @@ const graphweaver = new Graphweaver<Context>({
 	],
 });
 
+setAdministratorRoleName('ADMINISTRATOR');
+
 export const handler = startServerAndCreateLambdaHandler<any, Context>(
 	graphweaver.server,
 	handlers.createAPIGatewayProxyEventRequestHandler(),
 	{
-		context: async ({ event, context }: LambdaContextFunctionArgument<any>) => {
-			return {
+		context: async ({ event }: LambdaContextFunctionArgument<any>) => {
+			const context: Context = {
 				user: {
-					id: '1',
+					id: '4',
 				},
+				roles: ['USER'],
 			};
+
+			upsertAuthorizationContext(context);
+			return context;
 		},
 	}
 );
