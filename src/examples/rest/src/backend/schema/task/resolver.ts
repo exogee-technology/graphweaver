@@ -1,5 +1,4 @@
 import {
-	AuthorizedBaseFunctions,
 	createBaseResolver,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
@@ -8,6 +7,7 @@ import {
 	ReadHookParams,
 } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { AuthorizedBaseFunctions } from '@exogee/graphweaver-rls';
 import { Resolver } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';

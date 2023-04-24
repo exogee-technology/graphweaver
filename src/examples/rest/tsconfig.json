@@ -9,6 +9,7 @@
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/rest" }
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/rls" }
 	]
 }
