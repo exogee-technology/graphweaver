@@ -12,10 +12,11 @@ import {
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 
-let authContext: AuthorizationContext | undefined;
+type AuthContext<T extends AuthorizationContext | undefined> = T;
+let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
 let administratorRoleName = '';
 
-export const AclMap = new Map<string, AccessControlList<any>>();
+export const AclMap = new Map<string, Partial<AccessControlList<any, any>>>();
 
 const isEmptyObject = (candidate: any) => {
 	return (
@@ -74,10 +75,10 @@ export function getRolesFromAuthorizationContext() {
  * to the existing value provided and returns a single, new
  * access control value
  */
-const consolidateAccessControlValue = (
-	base: AccessControlValue<any>,
-	candidate: AccessControlValue<any>
-): ConsolidatedAccessControlValue<any> | undefined => {
+const consolidateAccessControlValue = <G, TContext extends AuthorizationContext>(
+	base: AccessControlValue<G, TContext>,
+	candidate: AccessControlValue<G, TContext>
+): ConsolidatedAccessControlValue<G, TContext> | undefined => {
 	// True is the broadest possible permission already, leave as is
 	// Likewise, if the new value is true, set and return
 	if (base === true || candidate === true) return true;
@@ -103,10 +104,10 @@ const consolidateAccessControlValue = (
  * @returns A single access control entry representing the combined access permissions
  * across all the roles the user belongs to
  */
-export const buildAccessControlEntryForUser = (
-	acl: AccessControlList<any>,
+export const buildAccessControlEntryForUser = <G, TContext extends AuthorizationContext>(
+	acl: AccessControlList<G, TContext>,
 	roles: string[]
-): ConsolidatedAccessControlEntry<any> => {
+): ConsolidatedAccessControlEntry<G, TContext> => {
 	// If this is a super user, return an object representing full access
 	if (roles.includes(getAdministratorRoleName())) {
 		return {
@@ -169,8 +170,11 @@ export const andFilters = <G>(...filters: Filter<G>[]): Filter<G> => {
  * @param consolidatedAccessControlValue The access control value to be used as the input
  * @returns The resultant query filter should be applied in the request to the data provider
  */
-export const evaluateConsolidatedAccessControlValue = async <G>(
-	consolidatedAccessControlValue: ConsolidatedAccessControlValue<G>
+export const evaluateConsolidatedAccessControlValue = async <
+	G,
+	TContext extends AuthorizationContext
+>(
+	consolidatedAccessControlValue: ConsolidatedAccessControlValue<G, TContext>
 ): Promise<Filter<G>> => {
 	if (consolidatedAccessControlValue === true) {
 		// Return an unconditional filter
@@ -187,7 +191,7 @@ export const evaluateConsolidatedAccessControlValue = async <G>(
 				if (!authContext) {
 					throw new Error('Authorisation context provider not initialised');
 				}
-				return filter(authContext);
+				return filter(authContext as TContext);
 			})
 		);
 

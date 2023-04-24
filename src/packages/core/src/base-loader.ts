@@ -2,7 +2,7 @@ import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { getMetadataStorage } from 'type-graphql';
 
-import { EntityMetadataMap } from '.';
+import { EntityMetadataMap, Filter } from '.';
 import { GraphQLEntityConstructor } from './base-entity';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
@@ -37,7 +37,7 @@ const getFieldMetadata = (fieldName: string, gqlEntityType: any) => {
 	return entityFields[0];
 };
 
-const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => {
+const getBaseLoadOneLoader = <G>(gqlEntityType: GraphQLEntityConstructor<G>) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
 		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
@@ -50,9 +50,9 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 				`DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s): (${keys.join(', ')})`
 			);
 
-			const filter = {
+			const filter: Filter<G> = {
 				_or: keys.map((k) => {
-					return { id: k };
+					return { id: k } as Filter<G>; // Use a type assertion to ensure it matches Filter<G>
 				}),
 			};
 
@@ -62,7 +62,7 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 
 			// Need to return in the same order as was requested. Iterate once and create
 			// a map by ID so we don't n^2 this stuff.
-			const lookup: { [key: string]: T } = {};
+			const lookup: { [key: string]: G } = {};
 			for (const record of records) {
 				lookup[record.id] = record;
 			}
@@ -74,7 +74,7 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 		});
 	}
 
-	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, T>;
+	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, G>;
 };
 
 const getBaseRelatedIdLoader = <T>({

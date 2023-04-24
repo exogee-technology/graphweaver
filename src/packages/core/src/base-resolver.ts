@@ -1,4 +1,3 @@
-import { logger } from '@exogee/logger';
 import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
 import pluralize from 'pluralize';
 import {
