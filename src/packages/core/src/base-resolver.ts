@@ -316,7 +316,7 @@ export function createBaseResolver<G extends WithId, D>(
 	abstract class BaseResolver implements BaseResolverInterface<G> {
 		public hookManager?: HookManager<G>;
 
-		public async runAfterHooks<H>(
+		public async runAfterHooks<H extends HookParams<G>>(
 			hookRegister: HookRegister,
 			hookParams: H,
 			entities: (G | null)[]

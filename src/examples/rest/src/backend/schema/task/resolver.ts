@@ -25,18 +25,17 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	new MikroBackendProvider(OrmTask, 'my-sql')
 ) {
 	@Hook(HookRegister.BEFORE_CREATE)
-	async beforeCreate(params: CreateOrUpdateHook): Promise<CreateOrUpdateHook> {
+	async beforeCreate(params: CreateOrUpdateHook) {
 		return params;
 	}
 
 	@Hook(HookRegister.AFTER_CREATE)
-	async afterCreate(params: CreateOrUpdateHook): Promise<CreateOrUpdateHook> {
+	async afterCreate(params: CreateOrUpdateHook) {
 		return params;
 	}
 
 	@Hook(HookRegister.BEFORE_READ)
-	async beforeRead(params: ReadHookParams<Task, Context>): Promise<ReadHookParams<Task, Context>> {
-		console.log(params.context?.user.id);
+	async beforeRead(params: ReadHook) {
 		// You can hook into any read here and make changes such as applying a filter
 		const filter = params.args?.filter ?? {};
 		const userFilter = {
@@ -55,7 +54,7 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	}
 
 	@Hook(HookRegister.AFTER_READ)
-	async afterRead(params: ReadHook): Promise<ReadHook> {
+	async afterRead(params: ReadHook) {
 		// You can hook into any read after the data has been fetched here and make changes to the entities
 		// const entities = (params.entities || []).map((task) => {
 		// 	if (task) {
@@ -68,22 +67,22 @@ export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	}
 
 	@Hook(HookRegister.BEFORE_UPDATE)
-	async beforeUpdate(params: CreateOrUpdateHook): Promise<CreateOrUpdateHook> {
+	async beforeUpdate(params: CreateOrUpdateHook) {
 		return params;
 	}
 
 	@Hook(HookRegister.AFTER_UPDATE)
-	async afterUpdate(params: CreateOrUpdateHook): Promise<CreateOrUpdateHook> {
+	async afterUpdate(params: CreateOrUpdateHook) {
 		return params;
 	}
 
 	@Hook(HookRegister.BEFORE_DELETE)
-	async beforeDelete(params: DeleteHook): Promise<DeleteHook> {
+	async beforeDelete(params: DeleteHook) {
 		return params;
 	}
 
 	@Hook(HookRegister.AFTER_DELETE)
-	async afterDelete(params: DeleteHook): Promise<DeleteHook> {
+	async afterDelete(params: DeleteHook) {
 		return params;
 	}
 }

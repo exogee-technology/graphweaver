@@ -2,6 +2,9 @@ import { registerEnumType } from 'type-graphql';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo } from 'graphql';
 
+export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
+export type { GraphQLResolveInfo } from 'graphql';
+
 export type WithId = {
 	id: string;
 };
@@ -106,26 +109,28 @@ export interface BackendProvider<D, G> {
 // G = GraphQL entity
 // A = Args type
 // TContext = GraphQL Context
-export interface HookParams<G, A, TContext = AuthorizationContext> {
-	args: A;
+export interface HookParams<G, TContext = AuthorizationContext> {
 	context: TContext;
 	info: GraphQLResolveInfo;
-	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
-	entities: (G | null)[];
-	deleted: boolean; // Used by a delete operation to indicate if successful
+	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
+	entities?: (G | null)[];
+	deleted?: boolean; // Used by a delete operation to indicate if successful
 }
 
-export type CreateOrUpdateHookParams<G, TContext = AuthorizationContext> = {
+export interface CreateOrUpdateHookParams<G, TContext = AuthorizationContext>
+	extends HookParams<G, TContext> {
 	args: { items: Partial<G>[] };
-} & Partial<HookParams<G, { items: Partial<G>[] }, TContext>>;
+}
 
-export type ReadHookParams<G, TContext = AuthorizationContext> = Partial<
-	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }, TContext>
->;
+export interface ReadHookParams<G, TContext = AuthorizationContext>
+	extends HookParams<G, TContext> {
+	args: { filter?: Filter<G>; pagination?: PaginationOptions };
+}
 
-export type DeleteHookParams<G, TContext = AuthorizationContext> = Partial<
-	HookParams<G, { filter: { id: string } & Filter<G> }, TContext>
->;
+export interface DeleteHookParams<G, TContext = AuthorizationContext>
+	extends HookParams<G, TContext> {
+	args: { filter: { id: string } & Filter<G> };
+}
 
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
