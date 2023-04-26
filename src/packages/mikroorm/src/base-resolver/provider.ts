@@ -4,6 +4,7 @@ import {
 	Sort,
 	Filter,
 	GraphQLEntity,
+	BaseDataEntity,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -17,6 +18,7 @@ import {
 	ConnectionManager,
 	externalIdFieldMap,
 	AnyEntity,
+	IsolationLevel,
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
@@ -80,7 +82,7 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
+export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEntity<D>>
 	implements BackendProvider<D, G>
 {
 	private _backendId: string;
@@ -103,6 +105,10 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 	// This is exposed for use in the RLS package
 	public get transactional() {
 		return this.database.transactional;
+	}
+
+	public async startTransaction<T>(callback: () => Promise<T>) {
+		return this.database.transactional<T>(callback, IsolationLevel.REPEATABLE_READ);
 	}
 
 	// This is exposed for use in the RLS package

@@ -1,5 +1,6 @@
 import {
 	BackendProvider,
+	BaseDataEntity,
 	Filter,
 	GraphQLEntity,
 	PaginationOptions,
@@ -40,7 +41,8 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<D, G extends GraphQLEntity<D>> implements BackendProvider<D, G> {
+export class XeroBackendProvider<D extends BaseDataEntity, G extends GraphQLEntity<D>>
+	implements BackendProvider<D, G> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 
