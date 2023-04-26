@@ -1,7 +1,6 @@
 import { createBaseResolver } from '@exogee/graphweaver';
 import { AccessorParams, RestBackendProvider } from '@exogee/graphweaver-rest';
 import url from 'url';
-import { AuthorizedBaseFunctions } from '@exogee/graphweaver-rls';
 import { Resolver } from 'type-graphql';
 
 import { People as RestPeople } from '../../entities';
@@ -10,7 +9,6 @@ import { fetch } from '../../rest-client';
 import { inMemoryFilterFor } from '../../utils';
 
 @Resolver((of) => Person)
-@AuthorizedBaseFunctions()
 export class PersonResolver extends createBaseResolver<Person, RestPeople>(
 	Person,
 	new RestBackendProvider('People', {

@@ -1,4 +1,5 @@
 import {
+	BaseDataEntity,
 	EntityMetadataMap,
 	Filter,
 	GraphQLEntity,
@@ -23,7 +24,7 @@ import {
 } from './helper-functions';
 
 export class RLSMikroBackendProvider<
-	T extends Record<string, unknown>,
+	T extends BaseDataEntity,
 	G extends GraphQLEntity<T>
 > extends MikroBackendProvider<T, G> {
 	private readonly gqlTypeName: string;
@@ -108,7 +109,7 @@ export class RLSMikroBackendProvider<
 			// Now attempt to perform the update, and check whether the result passes
 			// the authorisation checks as well
 			const updateResult = await super.updateOne(id, updateArgs as any);
-			await checkAuthorization(updateResult, updateArgs, AccessType.Update);
+			await checkAuthorization(updateResult as any, updateArgs, AccessType.Update);
 			// Operation is allowed
 			return updateResult;
 		}, IsolationLevel.REPEATABLE_READ);
@@ -123,7 +124,7 @@ export class RLSMikroBackendProvider<
 
 			const authChecks: Promise<any>[] = [];
 			for (const [index, entity] of updateManyResult.entries()) {
-				authChecks.push(checkAuthorization(entity, entities[index], AccessType.Update));
+				authChecks.push(checkAuthorization(entity as any, entities[index], AccessType.Update));
 			}
 			await Promise.all(authChecks);
 
@@ -136,7 +137,7 @@ export class RLSMikroBackendProvider<
 	public async createOne(entity: Partial<G>): Promise<T> {
 		const result = await this.transactional<T>(async () => {
 			const createResult = await super.createOne(entity);
-			await checkAuthorization(createResult, entity, AccessType.Create);
+			await checkAuthorization(createResult as any, entity, AccessType.Create);
 			return createResult;
 		}, IsolationLevel.REPEATABLE_READ);
 
@@ -150,7 +151,7 @@ export class RLSMikroBackendProvider<
 
 			const authChecks: Promise<any>[] = [];
 			for (const [index, entity] of createManyResult.entries()) {
-				authChecks.push(checkAuthorization(entity, entities[index], AccessType.Create));
+				authChecks.push(checkAuthorization(entity as any, entities[index], AccessType.Create));
 			}
 			await Promise.all(authChecks);
 
@@ -169,7 +170,11 @@ export class RLSMikroBackendProvider<
 			const authChecks: Promise<any>[] = [];
 			for (const [index, entity] of createOrUpdateManyResult.entries()) {
 				authChecks.push(
-					checkAuthorization(entity, entities[index], requiredPermissionsForAction(entities[index]))
+					checkAuthorization(
+						entity as any,
+						entities[index],
+						requiredPermissionsForAction(entities[index])
+					)
 				);
 			}
 			await Promise.all(authChecks);

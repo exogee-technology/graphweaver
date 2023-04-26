@@ -86,6 +86,9 @@ export interface BackendProvider<D, G> {
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
 
+	// Optional, allows the resolver to start a transaction
+	startTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
+
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
 }
@@ -96,6 +99,7 @@ export interface BackendProvider<D, G> {
 export interface HookParams<G, TContext = BaseContext> {
 	context: TContext;
 	info: GraphQLResolveInfo;
+	transactional: boolean;
 	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
 	entities?: (G | null)[];
 	deleted?: boolean; // Used by a delete operation to indicate if successful
@@ -117,6 +121,7 @@ export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
+	backendProvider?: BackendProvider<D, G>;
 	// accessControlList?: AccessControlList<G>;
 	fromBackendEntity?(entity: D): G | null;
 	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;

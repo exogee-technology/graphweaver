@@ -1,6 +1,6 @@
 import { AccessControlList, AclMap, AuthorizationContext } from '..';
 
-export function AuthorizeAccess<G, TContext extends AuthorizationContext>(
+export function ApplyAccessControlList<G, TContext extends AuthorizationContext>(
 	acl: Partial<AccessControlList<G, TContext>>
 ) {
 	return function (constructor: any): void {
