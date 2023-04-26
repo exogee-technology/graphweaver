@@ -494,7 +494,11 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 
 	public async deleteOne(filter: Filter<G>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
-		const deletedRows = await this.getRepository().nativeDelete(filter as FilterQuery<D>);
+		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		const whereWithAppliedExternalIdFields =
+			where && this.applyExternalIdFields(this.entityType, where);
+
+		const deletedRows = await this.getRepository().nativeDelete(whereWithAppliedExternalIdFields);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');
