@@ -6,7 +6,7 @@ export class BaseEntity implements BaseDataEntity {
 		return Reference.isReference<any>(dataField);
 	}
 
-	public isCollection(fieldName: string, dataField: any) {
+	public isCollection(_: string, dataField: any) {
 		return Utils.isCollection<any>(dataField);
 	}
 }

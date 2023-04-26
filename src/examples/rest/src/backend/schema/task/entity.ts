@@ -1,6 +1,6 @@
 import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { AccessControlList, AuthorizeAccess } from '@exogee/graphweaver-rls';
+import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-rls';
 
 import { Task as OrmTask } from '../../entities';
 import { Person } from '../person';
@@ -18,7 +18,7 @@ const acl: AccessControlList<Task, Context> = {
 	},
 };
 
-@AuthorizeAccess(acl)
+@ApplyAccessControlList(acl)
 @ObjectType('Task')
 export class Task extends GraphQLEntity<OrmTask> {
 	public dataEntity!: OrmTask;

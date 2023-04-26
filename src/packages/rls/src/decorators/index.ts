@@ -1,3 +1,2 @@
-export * from './authorize-access';
-export * from './authorized-base-functions';
+export * from './apply-access-control-list';
 export * from './authorized-base-resolver';

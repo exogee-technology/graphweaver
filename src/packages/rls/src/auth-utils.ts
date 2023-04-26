@@ -1,9 +1,3 @@
-import {
-	ConnectionManager,
-	DatabaseObjectNotFoundException,
-	Reference,
-	wrap,
-} from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
@@ -20,6 +14,7 @@ import {
 	evaluateConsolidatedAccessControlValue,
 	getRolesFromAuthorizationContext,
 } from './helper-functions';
+import { BaseDataEntity, GraphQLEntity } from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -84,7 +79,7 @@ export const requiredPermissionsForAction = (intent: any): AccessType => {
 };
 
 const permissionsErrorHandler = (error: any) => {
-	if (error instanceof DatabaseObjectNotFoundException || (error as any).name === 'NotFoundError') {
+	if ((error as any).name === 'NotFoundError') {
 		logger.trace(
 			'Raising ForbiddenError: Could not find object in database (likely because a query did not pass a permission filter)'
 		);
@@ -107,16 +102,20 @@ export const assertObjectLevelPermissions = <G, TContext extends AuthorizationCo
 	assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
 };
 
-export async function checkFilterPermsForReference(value: Reference<any>, accessType: AccessType) {
-	// Initialise entity first
-	const entity = await value.load();
-	const entityName: string = entity.__meta?.name;
-	if (!entityName) {
+export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseDataEntity>>(
+	entity: G,
+	accessType: AccessType
+) {
+	const {
+		id,
+		constructor: { name },
+	} = entity as any;
+	if (!name) {
 		logger.error('Raising ForbiddenError: Could not determine entity name');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 
-	const acl = getACL(entityName);
+	const acl = getACL(name);
 	const accessControlEntry = buildAccessControlEntryForUser(
 		acl,
 		getRolesFromAuthorizationContext()
@@ -135,11 +134,6 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 
-	const {
-		id,
-		constructor: { name },
-	}: any = value.unwrap();
-
 	const accessFilter = await evaluateConsolidatedAccessControlValue(consolidatedAccessControlValue);
 
 	// Some filters will work by filtering by ID so we need to check that they match
@@ -150,16 +144,16 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 
 	// All the easy checks have been performed, go ahead and run the filter against the db
 	const where = {
-		$and: [{ id }, accessFilter],
+		_and: [{ id }, accessFilter],
 	};
 
 	try {
-		await ConnectionManager.default.em.findOneOrFail(name, where);
+		const result = await entity.backendProvider?.findOne(where);
+		console.log(result);
+		// await provider.findOne(where);
+		// await ConnectionManager.default.em.findOneOrFail(name, where);
 	} catch (error) {
-		if (
-			error instanceof DatabaseObjectNotFoundException ||
-			(error as any).name === 'NotFoundError'
-		) {
+		if ((error as any).name === 'NotFoundError') {
 			logger.trace('Raising ForbiddenError: User is not allowed to access this record');
 			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 		}
@@ -167,9 +161,9 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 	}
 }
 
-export async function checkAuthorization(
-	entity: any,
-	requestInput: any,
+export async function checkAuthorization<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+	entity: G,
+	requestInput: Partial<G>,
 	requiredPermission: AccessType
 ) {
 	// Get ACL first
@@ -181,7 +175,7 @@ export async function checkAuthorization(
 	assertUserCanPerformRequestedAction(acl, requiredPermission);
 
 	// Now check whether the root entity passes permissions filters (if set)
-	await checkFilterPermsForReference(wrap(entity).toReference(), requiredPermission);
+	await checkFilterPermsForReference(entity, requiredPermission);
 
 	// Recurse through the list
 	const relatedEntityAuthChecks: Promise<any>[] = [];
@@ -193,49 +187,48 @@ export async function checkAuthorization(
 			continue;
 		}
 
-		const accessType = requiredPermissionsForAction(value);
-		if (Reference.isReference(value)) {
-			// This property is a related entity
-			relatedEntityAuthChecks.push(
-				(async () => {
-					const entity = await value.load();
-					await Promise.all([
-						checkAuthorization(entity, requestInput[key], accessType),
-						checkFilterPermsForReference(value, accessType),
-					]);
-				})()
-			);
-		} else if (typeof (value as any)?.getItems === 'function') {
-			// This is a Collection (one to many or many to many related entity), iterate through each item in the collection
-			for (const item of (value as any).getItems()) {
-				relatedEntityAuthChecks.push(
-					Promise.all([
-						checkAuthorization(
-							item,
-							requestInput[key],
-							requiredPermissionsForAction(requestInput[key])
-						),
-						checkFilterPermsForReference(wrap(item).toReference(), accessType),
-					])
-				);
-			}
-		} else if (
-			value &&
-			typeof value === 'object' &&
-			Object.keys(value as any)?.includes('__meta')
-		) {
-			// Items within a Collection are not wrapped in a Reference
-			relatedEntityAuthChecks.push(
-				Promise.all([
-					checkAuthorization(
-						value as any,
-						requestInput[key],
-						requiredPermissionsForAction(requestInput[key])
-					),
-					checkFilterPermsForReference(wrap(value).toReference(), accessType),
-				])
-			);
-		}
+		// const accessType = requiredPermissionsForAction(value);
+		// if (entity.isReference?.(key, value)) {
+		// 	// This property is a related entity
+		// 	relatedEntityAuthChecks.push(
+		// 		(async () => {
+		// 			const entity = await value.load();
+		// 			const input = requestInput[key as keyof D];
+		// 			await Promise.all([
+		// 				...(input ? [checkAuthorization(entity, input, accessType)] : []),
+		// 				// checkFilterPermsForReference(value, accessType),
+		// 			]);
+		// 		})()
+		// 	);
+		// } else if (typeof (value as any)?.getItems === 'function') {
+		// 	// This is a Collection (one to many or many to many related entity), iterate through each item in the collection
+		// 	for (const item of (value as any).getItems()) {
+		// 		const input = requestInput[key as keyof D];
+		// 		relatedEntityAuthChecks.push(
+		// 			Promise.all([
+		// 				...(input
+		// 					? [checkAuthorization(item, input, requiredPermissionsForAction(input))]
+		// 					: []),
+		// 				// checkFilterPermsForReference(wrap(item).toReference(), accessType),
+		// 			])
+		// 		);
+		// 	}
+		// } else if (
+		// 	value &&
+		// 	typeof value === 'object' &&
+		// 	Object.keys(value as any)?.includes('__meta')
+		// ) {
+		// 	const input = requestInput[key as keyof D];
+		// 	// Items within a Collection are not wrapped in a Reference
+		// 	relatedEntityAuthChecks.push(
+		// 		Promise.all([
+		// 			...(input
+		// 				? [checkAuthorization(value as any, input, requiredPermissionsForAction(input))]
+		// 				: []),
+		// 			// checkFilterPermsForReference(wrap(value).toReference(), accessType),
+		// 		])
+		// 	);
+		// }
 	}
 
 	try {
