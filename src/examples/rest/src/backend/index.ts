@@ -63,11 +63,15 @@ export const handler = startServerAndCreateLambdaHandler<any, Context>(
 	handlers.createAPIGatewayProxyEventRequestHandler(),
 	{
 		context: async ({ event }: LambdaContextFunctionArgument<any>) => {
+			// Let's use the x-user-id to specify a different user for testing
+			// In a real world application this would be inside an access token
+			const userId = (event as any)?.headers?.['x-user-id'] ?? '1';
 			const context: Context = {
 				user: {
-					id: '1',
+					id: userId,
 				},
-				roles: [Roles.LIGHT_SIDE],
+				// If the user id is Darth Vader then return the dark side role
+				roles: userId === '4' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
 			};
 
 			upsertAuthorizationContext(context);
