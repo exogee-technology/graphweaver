@@ -8,6 +8,7 @@ import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
 import {
+	AccessControlList,
 	AccessType,
 	AuthorizationContext,
 	ConsolidatedAccessControlEntry,
@@ -21,6 +22,48 @@ import {
 } from './helper-functions';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
+
+export const getACL = (gqlEntityTypeName: string) => {
+	const acl = AclMap.get(gqlEntityTypeName);
+	if (!acl) {
+		logger.trace(`An attempt to access entity '${gqlEntityTypeName}' was blocked. No ACL found.`);
+		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
+	}
+	return acl;
+};
+
+export const assertUserCanPerformRequestedAction = (
+	acl: Partial<AccessControlList<any, any>>,
+	requiredPermission: AccessType
+) => {
+	// Check whether the user can perform the request type of action at all,
+	// before evaluating any (more expensive) permissions filters
+	assertObjectLevelPermissions(
+		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext()),
+		requiredPermission
+	);
+};
+
+export const getAccessFilter = async (
+	acl: Partial<AccessControlList<any, any>>,
+	requiredPermission: AccessType
+) => {
+	const consolidatedAclEntry = buildAccessControlEntryForUser(
+		acl,
+		getRolesFromAuthorizationContext()
+	);
+
+	const readEntry = consolidatedAclEntry[requiredPermission];
+	if (!readEntry) {
+		logger.trace(
+			`Raising ForbiddenError: User does not have ${requiredPermission} access on this entity`
+		);
+		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
+	}
+
+	// If there are conditional permission filters, augment the supplied filter with them
+	return evaluateConsolidatedAccessControlValue(readEntry);
+};
 
 export const requiredPermissionsForAction = (intent: any): AccessType => {
 	const keys = Object.keys(intent);
@@ -73,12 +116,7 @@ export async function checkFilterPermsForReference(value: Reference<any>, access
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 
-	const acl = AclMap.get(entityName);
-	if (!acl) {
-		logger.error(`Could not get entity ACL for nested entity ${entityName}`);
-		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
-	}
-
+	const acl = getACL(entityName);
 	const accessControlEntry = buildAccessControlEntryForUser(
 		acl,
 		getRolesFromAuthorizationContext()
@@ -136,22 +174,12 @@ export async function checkAuthorization(
 ) {
 	// Get ACL first
 	const proto = Object.getPrototypeOf(entity);
-	const acl = AclMap.get(proto.constructor.name);
-	if (!acl) {
-		logger.trace(
-			`An attempt to access entity '${
-				Object.getPrototypeOf(entity).constructor.name
-			}' was blocked. No ACL found.`
-		);
-		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
-	}
+	const acl = getACL(proto.constructor.name);
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
-	assertObjectLevelPermissions(
-		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext()),
-		requiredPermission
-	);
+	assertUserCanPerformRequestedAction(acl, requiredPermission);
+
 	// Now check whether the root entity passes permissions filters (if set)
 	await checkFilterPermsForReference(wrap(entity).toReference(), requiredPermission);
 
