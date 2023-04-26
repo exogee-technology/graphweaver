@@ -30,6 +30,11 @@ export interface Context extends AuthorizationContext {
 	};
 }
 
+export enum Roles {
+	LIGHT_SIDE = 'LIGHT_SIDE',
+	DARK_SIDE = 'DARK_SIDE',
+}
+
 const graphweaver = new Graphweaver<Context>({
 	resolvers: [TaskResolver, PersonResolver],
 	apolloServerOptions: {
@@ -60,9 +65,9 @@ export const handler = startServerAndCreateLambdaHandler<any, Context>(
 		context: async ({ event }: LambdaContextFunctionArgument<any>) => {
 			const context: Context = {
 				user: {
-					id: '4',
+					id: '1',
 				},
-				roles: ['USER'],
+				roles: [Roles.LIGHT_SIDE],
 			};
 
 			upsertAuthorizationContext(context);
