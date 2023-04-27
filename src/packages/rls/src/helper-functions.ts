@@ -168,13 +168,10 @@ export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): Filter<G> 
 /**
  * Evaluates any filters in an access control value and returns the resulting query filter
  *
- * @param consolidatedAccessControlValue The access control value to be used as the input
+ * @param accessControlValue The access control value to be used as the input
  * @returns The resultant query filter should be applied in the request to the data provider
  */
-export const evaluateConsolidatedAccessControlValue = async <
-	G,
-	TContext extends AuthorizationContext
->(
+export const evaluateAccessControlValue = async <G, TContext extends AuthorizationContext>(
 	consolidatedAccessControlValue: ConsolidatedAccessControlValue<G, TContext>
 ): Promise<Filter<G>> => {
 	if (consolidatedAccessControlValue === true) {
