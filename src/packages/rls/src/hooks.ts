@@ -33,7 +33,14 @@ export const afterCreate = async <G extends GraphQLEntity<D>, D extends BaseData
 	// 2. Check user has permission for each
 	// @todo what if the order returned is not the same as the input?
 	const authChecks = entities.map((entity, index) =>
-		entity?.dataEntity ? checkAuthorization(entity, items[index], AccessType.Create) : undefined
+		entity?.id
+			? checkAuthorization(
+					Object.getPrototypeOf(entity).constructor,
+					entity.id,
+					items[index],
+					AccessType.Create
+			  )
+			: undefined
 	);
 	await Promise.all(authChecks);
 	return params;

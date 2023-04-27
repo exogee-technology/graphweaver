@@ -11,10 +11,15 @@ import {
 import {
 	AclMap,
 	buildAccessControlEntryForUser,
-	evaluateConsolidatedAccessControlValue,
+	evaluateAccessControlValue,
 	getRolesFromAuthorizationContext,
 } from './helper-functions';
-import { BaseDataEntity, EntityMetadataMap, GraphQLEntity } from '@exogee/graphweaver';
+import {
+	BaseDataEntity,
+	EntityMetadataMap,
+	GraphQLEntity,
+	GraphQLEntityConstructor,
+} from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -57,7 +62,7 @@ export const getAccessFilter = async (
 	}
 
 	// If there are conditional permission filters, augment the supplied filter with them
-	return evaluateConsolidatedAccessControlValue(readEntry);
+	return evaluateAccessControlValue(readEntry);
 };
 
 export const requiredPermissionsForAction = (intent: any): AccessType => {
@@ -102,13 +107,11 @@ export const assertObjectLevelPermissions = <G, TContext extends AuthorizationCo
 	assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
 };
 
-export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseDataEntity>>(
-	entity: G,
-	accessType: AccessType
-) {
-	const {
-		constructor: { name },
-	} = entity;
+export async function checkEntityPermission<
+	G extends GraphQLEntityConstructor<D>,
+	D extends BaseDataEntity
+>(entity: G, id: string, accessType: AccessType) {
+	const { name } = entity;
 	if (!name) {
 		logger.error('Raising ForbiddenError: Could not determine entity name');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
@@ -120,12 +123,12 @@ export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseD
 		getRolesFromAuthorizationContext()
 	);
 
-	const consolidatedAccessControlValue = accessControlEntry[accessType];
-	if (consolidatedAccessControlValue === true) {
+	const accessControlValue = accessControlEntry[accessType];
+	if (accessControlValue === true) {
 		// User has been explicitly granted full access for this entity and access type
 		return;
 	}
-	if (consolidatedAccessControlValue === undefined) {
+	if (accessControlValue === undefined) {
 		// No access has been granted for this operation
 		logger.trace(
 			'Raising ForbiddenError: User does not have any permissions on this entity for this access type'
@@ -133,10 +136,9 @@ export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseD
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 
-	const accessFilter = await evaluateConsolidatedAccessControlValue(consolidatedAccessControlValue);
+	const accessFilter = await evaluateAccessControlValue(accessControlValue);
 
 	// Some filters will work by filtering by ID so we need to check that they match
-	const { id } = entity;
 	if (Object(accessFilter).hasOwnProperty('id') && Object(accessFilter).id !== id) {
 		logger.trace('Raising ForbiddenError: Request rejected because ID based filter did not match');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
@@ -162,74 +164,54 @@ export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseD
 	}
 }
 
-export async function checkAuthorization<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
-	entity: G,
-	requestInput: Partial<G>,
-	requiredPermission: AccessType
-) {
+export async function checkAuthorization<
+	G extends GraphQLEntityConstructor<D>,
+	D extends BaseDataEntity
+>(entity: G, id: string, requestInput: Partial<G>, requiredPermission: AccessType) {
 	// Get ACL first
-	const proto = Object.getPrototypeOf(entity);
-	const acl = getACL(proto.constructor.name);
+	const acl = getACL(entity.name);
+	const meta = EntityMetadataMap.get(entity.name);
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
 	assertUserCanPerformRequestedAction(acl, requiredPermission);
 
 	// Now check whether the root entity passes permissions filters (if set)
-	await checkFilterPermsForReference(entity, requiredPermission);
+	await checkEntityPermission(entity as any, id, requiredPermission);
 
 	// Recurse through the list
 	const relatedEntityAuthChecks: Promise<any>[] = [];
-	for (const [key, value] of Object.entries(entity)) {
+	const entries = Object.entries(requestInput);
+
+	for (const [key, value] of entries) {
 		// Check whether this property was in the request payload.
 		// Also filter out Scalar values as these have already been
-		// checked above in the call to checkFilterPermsForReference
+		// checked above in the call to checkFilterPerms
 		if (checkPayloadAndFilterScalarsAndDates(requestInput, key, value)) {
 			continue;
 		}
 
-		// const accessType = requiredPermissionsForAction(value);
-		// if (entity.isReference?.(key, value)) {
-		// 	// This property is a related entity
-		// 	relatedEntityAuthChecks.push(
-		// 		(async () => {
-		// 			const entity = await value.load();
-		// 			const input = requestInput[key as keyof D];
-		// 			await Promise.all([
-		// 				...(input ? [checkAuthorization(entity, input, accessType)] : []),
-		// 				// checkFilterPermsForReference(value, accessType),
-		// 			]);
-		// 		})()
-		// 	);
-		// } else if (typeof (value as any)?.getItems === 'function') {
-		// 	// This is a Collection (one to many or many to many related entity), iterate through each item in the collection
-		// 	for (const item of (value as any).getItems()) {
-		// 		const input = requestInput[key as keyof D];
-		// 		relatedEntityAuthChecks.push(
-		// 			Promise.all([
-		// 				...(input
-		// 					? [checkAuthorization(item, input, requiredPermissionsForAction(input))]
-		// 					: []),
-		// 				// checkFilterPermsForReference(wrap(item).toReference(), accessType),
-		// 			])
-		// 		);
-		// 	}
-		// } else if (
-		// 	value &&
-		// 	typeof value === 'object' &&
-		// 	Object.keys(value as any)?.includes('__meta')
-		// ) {
-		// 	const input = requestInput[key as keyof D];
-		// 	// Items within a Collection are not wrapped in a Reference
-		// 	relatedEntityAuthChecks.push(
-		// 		Promise.all([
-		// 			...(input
-		// 				? [checkAuthorization(value as any, input, requiredPermissionsForAction(input))]
-		// 				: []),
-		// 			// checkFilterPermsForReference(wrap(value).toReference(), accessType),
-		// 		])
-		// 	);
-		// }
+		// If we are here then we have an array or an object lets see if its a related entity
+		const relationship = meta?.fields.find((field) => field.name === key);
+		const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<BaseDataEntity>;
+		const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
+		if (isRelatedEntity) {
+			// Now we have a related entity lets check we have permission
+			const accessType = requiredPermissionsForAction(value);
+			const values = Array.isArray(value) ? value : [value];
+			for (const item of values) {
+				const relatedId = item?.id;
+
+				// We only check the nested inputs with ID's, this is because if there was no ID
+				// supplied in the input args then the entity has been created in the data source.
+				// The creation hook will triggered for that entity and the permissions checked
+				if (relatedId) {
+					relatedEntityAuthChecks.push(
+						checkAuthorization(relatedEntity, relatedId, item, accessType)
+					);
+				}
+			}
+		}
 	}
 
 	try {
