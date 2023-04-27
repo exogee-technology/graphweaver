@@ -1,7 +1,7 @@
 import { getMetadataStorage, ObjectType } from 'type-graphql';
 import { FieldMetadata as TypeGraphQLFieldMetadata } from 'type-graphql/dist/metadata/definitions';
 
-import { AdminUISettingsType, BackendProvider } from '.';
+import { AdminUISettingsType, BackendProvider, GraphqlEntityType } from '.';
 
 const metadata = getMetadataStorage();
 
@@ -9,9 +9,9 @@ export type DataEntity<T> = {
 	[x in keyof T]: T[x];
 };
 
-export type GraphQLEntityConstructor<D extends BaseDataEntity> = {
+export interface GraphQLEntityConstructor<D extends BaseDataEntity> {
 	new (dataEntity: D): GraphQLEntity<D>;
-};
+}
 
 export type FieldMetadata = TypeGraphQLFieldMetadata;
 
@@ -25,8 +25,7 @@ export const AdminUISettingsMap = new Map<string, AdminUISettingsType>();
 
 @ObjectType()
 export class GraphQLEntity<D extends BaseDataEntity> {
-	public backendProvider?: BackendProvider<D, this>;
-
+	public id?: string;
 	constructor(public dataEntity: D) {}
 
 	static fromBackendEntity<D extends BaseDataEntity, G extends GraphQLEntity<D>>(

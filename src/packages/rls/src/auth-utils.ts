@@ -14,7 +14,7 @@ import {
 	evaluateConsolidatedAccessControlValue,
 	getRolesFromAuthorizationContext,
 } from './helper-functions';
-import { BaseDataEntity, GraphQLEntity } from '@exogee/graphweaver';
+import { BaseDataEntity, EntityMetadataMap, GraphQLEntity } from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -107,9 +107,8 @@ export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseD
 	accessType: AccessType
 ) {
 	const {
-		id,
 		constructor: { name },
-	} = entity as any;
+	} = entity;
 	if (!name) {
 		logger.error('Raising ForbiddenError: Could not determine entity name');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
@@ -137,6 +136,7 @@ export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseD
 	const accessFilter = await evaluateConsolidatedAccessControlValue(consolidatedAccessControlValue);
 
 	// Some filters will work by filtering by ID so we need to check that they match
+	const { id } = entity;
 	if (Object(accessFilter).hasOwnProperty('id') && Object(accessFilter).id !== id) {
 		logger.trace('Raising ForbiddenError: Request rejected because ID based filter did not match');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
@@ -148,14 +148,15 @@ export async function checkFilterPermsForReference<G extends GraphQLEntity<BaseD
 	};
 
 	try {
-		const result = await entity.backendProvider?.findOne(where);
-		console.log(result);
-		// await provider.findOne(where);
-		// await ConnectionManager.default.em.findOneOrFail(name, where);
-	} catch (error) {
-		if ((error as any).name === 'NotFoundError') {
+		const { provider } = EntityMetadataMap.get(name) ?? {};
+		const result = await provider?.findOne(where);
+		if (!result) {
 			logger.trace('Raising ForbiddenError: User is not allowed to access this record');
 			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
+		}
+	} catch (error) {
+		if ((error as any).message === GENERIC_AUTH_ERROR_MESSAGE) {
+			throw error;
 		}
 		throw new Error('An unexpected error has occurred');
 	}
