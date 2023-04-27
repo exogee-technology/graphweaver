@@ -6,14 +6,9 @@ import { Task as OrmTask } from '../../entities';
 import { Person } from '../person';
 import { Context } from '../../';
 
-// ACL example allowing users to read only their own tasks
 const acl: AccessControlList<Task, Context> = {
-	LIGHT_SIDE: {
-		// Users can only perform operations on their own tasks
-		all: (context) => ({ people: { id: context.user.id } }),
-	},
-	DARK_SIDE: {
-		// Dark side user role can perform operations on any tasks
+	Everyone: {
+		// All user role can perform operations on tasks
 		all: true,
 	},
 };

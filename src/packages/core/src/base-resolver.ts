@@ -83,8 +83,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			'ObjectType name parameter was not set for GQL entity deriving from BaseEntity'
 		);
 	}
-	// link the provider to the entity
-	gqlEntityType.backendProvider = provider;
 
 	const gqlEntityTypeName = objectNames[0].name;
 	const plural = pluralize(gqlEntityTypeName);

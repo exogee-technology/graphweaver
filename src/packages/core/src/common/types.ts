@@ -121,7 +121,6 @@ export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
-	backendProvider?: BackendProvider<D, G>;
 	fromBackendEntity?(entity: D): G | null;
 	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;
 }
