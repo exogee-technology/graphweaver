@@ -122,7 +122,6 @@ export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
 	backendProvider?: BackendProvider<D, G>;
-	// accessControlList?: AccessControlList<G>;
 	fromBackendEntity?(entity: D): G | null;
 	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;
 }
