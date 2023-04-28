@@ -25,7 +25,7 @@ const assertTransactional = (transactional: boolean) => {
 		);
 };
 
-export const afterCreate = async <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+export const afterCreateOrUpdate = async <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
 	params: CreateOrUpdateHookParams<G, AuthorizationContext>
 ) => {
 	const items = params.args.items;
@@ -91,12 +91,6 @@ export const beforeUpdate = (gqlEntityTypeName: string) => {
 		await Promise.all(authChecks);
 		return params;
 	};
-};
-
-export const afterUpdate = async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
-	// 1. Check to ensure we are within a transaction
-	assertTransactional(params.transactional);
-	return params;
 };
 
 export const beforeDelete = (gqlEntityTypeName: string) => {
