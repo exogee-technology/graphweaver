@@ -40,6 +40,7 @@ import {
 } from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
+import { createOrUpdateEntities } from './utils/create-or-update-entities';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -97,6 +98,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		fields: entityFields,
 		enums: metadata.enums,
 	} as BaseResolverMetadataEntry<D>);
+
+	// This is used to traverse entity and create/update any related nested entities
+	const createOrUpdate = createOrUpdateEntities(gqlEntityType);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -526,14 +530,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					context,
 					transactional,
 				});
-				let { items } = params.args;
-
-				// The type may want to further manipulate the input before passing it to the provider.
-				if (gqlEntityType.mapInputForInsertOrUpdate) {
-					const { mapInputForInsertOrUpdate } = gqlEntityType;
-					items = items.map((createItem: any) => mapInputForInsertOrUpdate(createItem));
-				}
-
+				const { items } = params.args;
 				const results = await provider.createMany(items);
 
 				if (gqlEntityType.fromBackendEntity) {
@@ -560,23 +557,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					context,
 					transactional,
 				});
-				let [item] = params.args.items;
-
-				// The type may want to further manipulate the input before passing it to the provider.
-				if (gqlEntityType.mapInputForInsertOrUpdate) {
-					item = gqlEntityType.mapInputForInsertOrUpdate(item);
-				}
+				const [item] = params.args.items;
 
 				// Save!
-				const results = await provider.createOne({ ...item });
-
-				if (gqlEntityType.fromBackendEntity) {
-					const result = gqlEntityType.fromBackendEntity.call(gqlEntityType, results);
-					const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
-					return entity;
+				const meta = EntityMetadataMap.get(gqlEntityType.name);
+				if (!meta) {
+					throw new Error(`Unexpected Error: entity not found in metadata map`);
 				}
-
-				return results as any; // they're saying there's no need to map, so types don't align, but we trust the dev.
+				const result = (await createOrUpdate(item, meta)) as G;
+				const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
+				return entity;
 			});
 		}
 
@@ -594,13 +584,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					context,
 					transactional,
 				});
-				let { items } = params.args;
-
-				// The type may want to further manipulate the input before passing it to the provider.
-				if (gqlEntityType.mapInputForInsertOrUpdate) {
-					const { mapInputForInsertOrUpdate } = gqlEntityType;
-					items = items.map((item) => mapInputForInsertOrUpdate(item));
-				}
+				const { items } = params.args;
 
 				// Check that all objects have IDs
 				const updateData = items.filter(hasId);
@@ -661,16 +645,10 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						: createParams;
 
 				// Combine update and create items into a single array
-				let data = [
+				const data = [
 					...(updateHookParams.args?.items ?? []),
 					...(createHookParams.args?.items ?? []),
 				];
-
-				// Apply mapInputForInsertOrUpdate if available
-				if (gqlEntityType.mapInputForInsertOrUpdate) {
-					const { mapInputForInsertOrUpdate } = gqlEntityType;
-					data = data.map((updateItem: any) => mapInputForInsertOrUpdate(updateItem));
-				}
 
 				// Call provider.createOrUpdateMany with prepared data to perform data operation
 				const results = await provider.createOrUpdateMany(data);
@@ -725,12 +703,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					context,
 					transactional,
 				});
-				let [item] = params.args.items;
-
-				// The type may want to further manipulate the input before passing it to the provider.
-				if (gqlEntityType.mapInputForInsertOrUpdate) {
-					item = gqlEntityType.mapInputForInsertOrUpdate(item);
-				}
+				const [item] = params.args.items;
 
 				if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');
 
