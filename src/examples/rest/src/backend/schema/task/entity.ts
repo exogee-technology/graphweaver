@@ -7,8 +7,12 @@ import { Person } from '../person';
 import { Context } from '../../';
 
 const acl: AccessControlList<Task, Context> = {
-	Everyone: {
-		// All user role can perform operations on tasks
+	LIGHT_SIDE: {
+		// Users can only perform operations on their own tasks
+		all: (context) => ({ people: { id: context.user.id } }),
+	},
+	DARK_SIDE: {
+		// Dark side user role can perform operations on any tasks
 		all: true,
 	},
 };
