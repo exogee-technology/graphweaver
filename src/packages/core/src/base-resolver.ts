@@ -64,7 +64,7 @@ export interface BaseResolverInterface<T> {
 	hookManager?: HookManager<T>;
 }
 
-const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
+export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
 };
 

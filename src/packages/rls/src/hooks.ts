@@ -2,8 +2,11 @@ import {
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
+	EntityMetadataMap,
 	GraphQLEntity,
+	GraphQLEntityConstructor,
 	ReadHookParams,
+	hasId,
 } from '@exogee/graphweaver';
 
 import { AccessType, AuthorizationContext } from './types';
@@ -68,8 +71,24 @@ export const beforeRead = (gqlEntityTypeName: string) => {
 
 export const beforeUpdate = (gqlEntityTypeName: string) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		const items = params.args.items.filter(hasId);
+		const { entity } = EntityMetadataMap.get(gqlEntityTypeName) ?? {};
+
+		if (!entity) {
+			throw new Error(
+				'Raising ForbiddenError: Request rejected as no entity constructor was found'
+			);
+		}
+
+		const target = entity.target as GraphQLEntityConstructor<BaseDataEntity>;
+
 		// 1. Check to ensure we are within a transaction
 		assertTransactional(params.transactional);
+		// 2. Check user has permission for each item
+		const authChecks = items.map((item) =>
+			checkAuthorization(target, item.id, item, AccessType.Update)
+		);
+		await Promise.all(authChecks);
 		return params;
 	};
 };
