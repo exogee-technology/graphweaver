@@ -1,10 +1,11 @@
 import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { Field, ID, ObjectType, Root } from 'type-graphql';
 import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-rls';
 
 import { Task as OrmTask } from '../../entities';
 import { Person } from '../person';
 import { Context } from '../../';
+import { Tag } from '../tag';
 
 const acl: AccessControlList<Task, Context> = {
 	LIGHT_SIDE: {
@@ -38,5 +39,16 @@ export class Task extends GraphQLEntity<OrmTask> {
 				id: this.dataEntity.personId,
 			})
 		);
+	}
+
+	@Field(() => [Tag], { nullable: true })
+	async tags(@Root() task: Task) {
+		const tags = await BaseLoaders.loadByRelatedId({
+			gqlEntityType: Tag,
+			relatedField: 'tasks',
+			id: task.id,
+		});
+
+		return tags.map((tag) => Tag.fromBackendEntity(tag));
 	}
 }
