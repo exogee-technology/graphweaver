@@ -20,9 +20,11 @@ import {
 import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task } from './entities';
+import { Tag } from './entities';
 
 import { PersonResolver } from './schema/person';
 import { TaskResolver } from './schema/task';
+import { TagResolver } from './schema/tag';
 
 export interface Context extends AuthorizationContext {
 	user: {
@@ -36,7 +38,7 @@ export enum Roles {
 }
 
 const graphweaver = new Graphweaver<Context>({
-	resolvers: [TaskResolver, PersonResolver],
+	resolvers: [TaskResolver, TagResolver, PersonResolver],
 	apolloServerOptions: {
 		introspection: isOffline,
 	},
@@ -45,7 +47,7 @@ const graphweaver = new Graphweaver<Context>({
 		{
 			connectionManagerId: 'my-sql',
 			mikroOrmConfig: {
-				entities: [Task],
+				entities: [Task, Tag],
 				driver: MySqlDriver,
 				dbName: 'todo_app',
 				user: 'root',
