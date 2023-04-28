@@ -20,6 +20,19 @@ CREATE TABLE task (
   person_id INT NOT NULL
 );
 
+CREATE TABLE tag (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE task_tags (
+  task_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY (task_id, tag_id),
+  FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE,
+  FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE
+);
+
 -- Seed data for task table
 INSERT INTO task (description, completed, person_id)
 VALUES
