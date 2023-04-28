@@ -1,6 +1,6 @@
 import { BaseResolverInterface, HookManager, HookRegister } from '@exogee/graphweaver';
 
-import { afterCreate, afterUpdate, beforeDelete, beforeRead, beforeUpdate } from '../hooks';
+import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeUpdate } from '../hooks';
 
 export const AuthorizedBaseResolver = <G>(gqlEntityTypeName: string) => {
 	return <T extends { new (): any } & BaseResolverInterface<G>>(constructor: T): T => {
@@ -10,8 +10,8 @@ export const AuthorizedBaseResolver = <G>(gqlEntityTypeName: string) => {
 		hookManager.registerHook(HookRegister.BEFORE_UPDATE, beforeUpdate(gqlEntityTypeName));
 		hookManager.registerHook(HookRegister.BEFORE_DELETE, beforeDelete(gqlEntityTypeName));
 
-		hookManager.registerHook(HookRegister.AFTER_CREATE, afterCreate);
-		hookManager.registerHook(HookRegister.AFTER_UPDATE, afterUpdate);
+		hookManager.registerHook(HookRegister.AFTER_CREATE, afterCreateOrUpdate);
+		hookManager.registerHook(HookRegister.AFTER_UPDATE, afterCreateOrUpdate);
 
 		constructor.prototype.hookManager = hookManager;
 
