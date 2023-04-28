@@ -6,6 +6,7 @@ import {
 	EntityProperty,
 	Reference,
 	ReferenceType,
+	Utils,
 	wrap,
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
@@ -59,7 +60,7 @@ export const assign = async <T extends AnyEntity<T>>(
 				);
 
 			// Ensure the entity has a loaded collection at the same place.
-			if (!(entityPropertyValue instanceof Collection)) {
+			if (!Utils.isCollection(entityPropertyValue)) {
 				throw new Error(
 					`Tried to merge array into non-collection property ${property} on entity ${metadata.name}`
 				);
