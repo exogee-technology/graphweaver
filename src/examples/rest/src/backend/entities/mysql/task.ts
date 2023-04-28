@@ -16,5 +16,5 @@ export class Task extends BaseEntity {
 	personId!: string;
 
 	@ManyToMany(() => Tag, (tag) => tag.tasks, { owner: true })
-	tags = new Collection<Tag>(this);
+	tags: Collection<Tag> = new Collection<Tag>(this);
 }
