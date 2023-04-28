@@ -60,7 +60,7 @@ export const assign = async <T extends AnyEntity<T>>(
 				);
 
 			// Ensure the entity has a loaded collection at the same place.
-			if (!Utils.isCollection(entityPropertyValue)) {
+			if (!Utils.isCollection<T, any>(entityPropertyValue)) {
 				throw new Error(
 					`Tried to merge array into non-collection property ${property} on entity ${metadata.name}`
 				);
