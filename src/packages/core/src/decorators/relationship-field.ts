@@ -13,8 +13,11 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 	{ relatedField }: RelationshipFieldOptions<any>
 ) {
 	return (target: any, key: string) => {
+		// We now need to update the MetadataStorage for type graphql
+		// this is so the new function that we return below is setup in the schema
 		const metadata = getMetadataStorage();
 
+		// first lets fetch the getType function
 		const { getType, typeOptions } = findType({
 			metadataKey: 'design:returntype',
 			prototype: target,
@@ -22,6 +25,8 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 			returnTypeFunc,
 			typeOptions: { nullable: true },
 		});
+
+		// next we need to add the below function as a field resolver
 		metadata.collectClassFieldMetadata({
 			name: key,
 			schemaName: key,
@@ -33,6 +38,8 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 			deprecationReason: undefined,
 			simple: false,
 		});
+
+		// then we need to link the method name to the schema name
 		metadata.collectFieldResolverMetadata({
 			kind: 'internal',
 			methodName: key,
@@ -40,6 +47,8 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 			target: target.constructor,
 			complexity: 0,
 		});
+
+		// we also need to attach some graphQL args to the function
 		metadata.collectHandlerParamMetadata({
 			kind: 'root',
 			target: target.constructor,
@@ -49,20 +58,23 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 			getType,
 		});
 
-		// define new property descriptor
+		// we then declare the field resolver for this field:
+		const fieldResolver = async (root: any) => {
+			const gqlEntityType = getType() as G;
+			const tags = await BaseLoaders.loadByRelatedId({
+				gqlEntityType,
+				relatedField: relatedField as any,
+				id: root.id,
+			});
+
+			return tags.map((tag) => (gqlEntityType as any).fromBackendEntity(tag));
+		};
+
+		// define new property descriptor to overwrite the current property on the class
 		const descriptor = {
 			enumerable: true,
 			configurable: true,
-			value: async (root: any) => {
-				const gqlEntityType = getType() as G;
-				const tags = await BaseLoaders.loadByRelatedId({
-					gqlEntityType,
-					relatedField: relatedField as any,
-					id: root.id,
-				});
-
-				return tags.map((tag) => (gqlEntityType as any).fromBackendEntity(tag));
-			},
+			value: fieldResolver,
 		};
 
 		// define new property on class prototype
