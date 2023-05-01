@@ -6,7 +6,6 @@
 
 .toolBarWrapper {
 	width: 100%;
-	padding: 48px 40px 0 40px;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;

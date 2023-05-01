@@ -28,6 +28,7 @@ interface RouteForDashboard {
 interface SearchParams {
 	sort?: SortField[];
 	filters?: FieldFilter;
+	page?: number;
 }
 
 export type RouteForProps = (RouteForEntity | RouteForType | RouteForDashboard) & SearchParams;
@@ -42,6 +43,7 @@ export const routeFor = ({
 	tenantId,
 	sort,
 	filters,
+	page,
 }: RouteForProps) => {
 	if (dashboard) {
 		const chunks = ['dashboard'];
@@ -58,17 +60,18 @@ export const routeFor = ({
 	const chunks = [entityName];
 	if (id) chunks.push(id);
 
-	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters })}`;
+	return `/${chunks.join('/')}${encodeSearchParams({ sort, filters, page })}`;
 };
 
 // Stop '&' being always prepended to filter
 interface EncodedParams {
+	page?: number;
 	sort?: string;
 	filters?: string;
 }
 
-const encodeSearchParams = (searchParams: SearchParams) => {
-	const { sort, filters } = searchParams;
+export const encodeSearchParams = (searchParams: SearchParams) => {
+	const { sort, filters, page } = searchParams;
 	let search = '';
 	let encoded: EncodedParams = {};
 	if (sort && sort.length > 0) {
@@ -76,6 +79,9 @@ const encodeSearchParams = (searchParams: SearchParams) => {
 	}
 	if (filters && Object.keys(filters).length > 0) {
 		encoded = { ...encoded, filters: encodeURIComponent(btoa(JSON.stringify(filters))) };
+	}
+	if (page) {
+		encoded = { ...encoded, page };
 	}
 	if (Object.keys(encoded).length > 0) {
 		search =
@@ -90,13 +96,16 @@ const encodeSearchParams = (searchParams: SearchParams) => {
 export const decodeSearchParams = (
 	search: URLSearchParams
 ): {
-	sort?: any;
+	sort?: SortField[];
 	filters?: FieldFilter;
+	page: number;
 } => {
 	const rawSort = search.get('sort');
 	const rawFilter = search.get('filters');
+	const page = search.get('page') || undefined;
 	return {
 		sort: rawSort ? JSON.parse(atob(decodeURIComponent(rawSort))) : undefined,
 		filters: rawFilter ? JSON.parse(atob(decodeURIComponent(rawFilter))) : undefined,
+		page: page ? +page : 1,
 	};
 };

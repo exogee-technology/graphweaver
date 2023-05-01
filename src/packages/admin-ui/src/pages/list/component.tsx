@@ -1,4 +1,5 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useQuery } from '@apollo/client';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
@@ -6,15 +7,25 @@ import {
 	Table,
 	useSchema,
 	PAGE_SIZE,
-	routeFor,
 	decodeSearchParams,
-	DataContext,
-	DataState,
-	defaultEntityState,
 	ToolBar,
+	FieldFilter,
+	Filter,
+	TableRowItem,
+	routeFor,
+	RequestRefetchOptions,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
-import { fetchList } from './graphql';
+import { queryForEntityPage } from './graphql';
+
+const andFilters = (filters: FieldFilter) => {
+	const filter = Object.entries(filters)
+		.map(([_, _filter]) => _filter)
+		.filter((_filter): _filter is Filter => _filter !== undefined);
+
+	if (filter.length === 0) return undefined;
+	return { _and: filter };
+};
 
 export const ListToolBar = () => {
 	const { entity } = useParams();
@@ -31,138 +42,68 @@ export const ListToolBar = () => {
 
 export const List = () => {
 	const { entity } = useParams();
-	const [search] = useSearchParams();
-	const navigate = useNavigate();
-
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
+	const navigate = useNavigate();
+	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 
-	const { entityState, setEntityState } = useContext(DataContext);
-
-	const getDefaultEntityState = () => {
-		const { filters } = decodeSearchParams(search);
-		return {
-			...defaultEntityState,
-			filterFields: filters,
-		};
+	const { sort, page, filters } = decodeSearchParams(search);
+	const orderBy = {
+		...(sort
+			? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
+			: { id: 'ASC' }),
 	};
 
-	const resetDataState = (entity: string, state: Partial<DataState>) => {
-		setEntityState({
-			...entityState,
-			[entity]: { ...getDefaultEntityState(), ...state },
-		});
-	};
-	const setDataState = (entity: string, state: Partial<DataState>) => {
-		const currentState = entityState[entity] ?? getDefaultEntityState();
-		// PAGINATION: All but data are overwritten, data is appended
-		// SORT/FILTER: Data is overwritten, starting from the beginning
-		// As we don't know here which change has triggered the setter func,
-		// Ensure that currentState.data is empty beforehand so we aren't just appending even when
-		// we don't need to (ie. sort -> reset pagination and data before fetch -> fetch -> setDataState)
-		// See resetDataState
-		const newData = [...currentState.data, ...(state.data ?? [])];
-		const newDataState = {
-			...currentState,
-			...state,
-			data: newData,
-		};
-		setEntityState({ ...entityState, [entity]: newDataState });
+	const queryVariables = {
+		pagination: {
+			offset: Math.max(page - 1, 0) * PAGE_SIZE,
+			limit: PAGE_SIZE,
+			orderBy,
+		},
+		...(filters ? { filter: andFilters(filters) } : {}),
 	};
 
-	const fetchData = useCallback(async () => {
-		const currentState = entityState[entity] ?? getDefaultEntityState();
-
-		if (currentState.allDataFetched) {
-			return;
+	const { data, loading, error, fetchMore } = useQuery<{ result: TableRowItem[] }>(
+		queryForEntityPage(entity, entityByName),
+		{
+			variables: queryVariables,
+			notifyOnNetworkStatusChange: true,
 		}
+	);
 
-		let data = [];
-		let lastRecordReturned = false;
-		const result = await fetchList<{ result: any[] }>(
-			entity,
-			entityByName,
-			currentState.filterFields,
-			currentState.sortFields,
-			currentState.page
-		);
-		data = result.data.result.slice();
-
-		if (data.length < PAGE_SIZE) {
-			lastRecordReturned = true;
-		}
-
-		const { loading, error } = result;
-		setDataState(entity, {
-			data,
-			allDataFetched: lastRecordReturned,
-			loading,
-			loadingNext: false,
-			error,
-		});
-	}, [
-		entity,
-		entityState[entity]?.filterFields,
-		entityState[entity]?.sortFields,
-		entityState[entity]?.page,
-	]);
+	const initialLoading = !!(!data?.result && loading);
+	const loadingNext = !!(data?.result && loading);
 
 	useEffect(() => {
-		const { filters, sort } = decodeSearchParams(search);
-		// TODO: This will always cause a refetch even if search unchanged as data is cleared
-		resetDataState(entity, { ...(filters ? { filterFields: filters } : {}), sortFields: sort });
-		// const sortColumns: SortColumn[] = Array.from(search.entries()).map((field) => ({
-		// 	columnKey: field[0],
-		// 	direction: field[1].toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
-		// }));
-		// // This will always cause a refetch even if search unchanged as data is cleared
-		// resetDataState(entity, { sortColumns });
-	}, [search]);
+		fetchMore({
+			variables: queryVariables,
+		});
+	}, [page, JSON.stringify(filters), JSON.stringify(sort)]);
 
-	useEffect(() => {
-		fetchData()
-			// TODO: error handling
-			.catch(console.error);
-	}, [
-		fetchData,
-		entity,
-		entityState[entity]?.filterFields,
-		entityState[entity]?.sortFields,
-		entityState[entity]?.page,
-	]);
-
-	const requestRefetch = (state: Partial<DataState>) => {
+	const requestRefetch = (state: Partial<RequestRefetchOptions>) => {
 		state.sortFields ? requestSort(state) : incrementPage();
 	};
 
-	// TODO: Get warning in here that navigate should be in a useEffect
-	// Makes no sense, this is triggered by a user event
-	const requestSort = (state: Partial<DataState>) => {
-		const { filters } = decodeSearchParams(search);
+	const requestSort = (state: Partial<RequestRefetchOptions>) => {
 		navigate(routeFor({ entity, sort: state.sortFields, filters }));
 	};
 
-	// Increment page only; leave the rest, set signal to table to show 'Loading' indicator.
-	// Do not trigger navigation
-	const incrementPage = () => {
-		setDataState(entity, {
-			loadingNext: true,
-			page: (entityState[entity]?.page ?? getDefaultEntityState().page) + 1,
-		});
+	const incrementPage = async () => {
+		const isNextPage = !((data?.result.length ?? 0) % PAGE_SIZE);
+		if (isNextPage) {
+			const nextPage = (data?.result.length ?? 0) / PAGE_SIZE + 1;
+			navigate(routeFor({ entity, sort, filters, page: nextPage }));
+		}
 	};
-
-	const { loading, loadingNext, error, data, sortFields, allDataFetched } =
-		entityState[entity] ?? getDefaultEntityState();
 
 	return (
 		<>
 			<Table
-				rows={data}
-				orderBy={sortFields}
+				rows={data?.result || []}
+				orderBy={sort ?? []}
 				requestRefetch={requestRefetch}
-				allDataFetched={allDataFetched}
-				loading={loading}
+				loading={initialLoading}
 				loadingNext={loadingNext}
 				error={error}
 			/>

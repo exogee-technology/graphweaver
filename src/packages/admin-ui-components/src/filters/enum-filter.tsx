@@ -1,4 +1,4 @@
-import { MultiSelect, SelectOption } from '../multi-select';
+import { Select, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 
 export interface EnumFilterProps {
@@ -40,7 +40,7 @@ export const EnumFilter = ({
 	};
 
 	return (
-		<MultiSelect
+		<Select
 			key={`${fieldName}:${resetCount}`}
 			options={enumOptions}
 			value={

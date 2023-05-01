@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task, User } from './entities';
@@ -37,4 +37,7 @@ const graphweaver = new Graphweaver({
 	],
 });
 
-exports.handler = startServerAndCreateLambdaHandler(graphweaver.server, {});
+exports.handler = startServerAndCreateLambdaHandler(
+	graphweaver.server,
+	handlers.createAPIGatewayProxyEventRequestHandler()
+);

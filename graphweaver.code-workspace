@@ -5,16 +5,12 @@
       "path": "."
     },
     {
-      "name": "➡️ Example: Complex",
-      "path": "src/examples/complex"
-    },
-    {
-      "name": "➡️ Example: Complex with Migrations",
-      "path": "src/examples/complex-migrations"
-    },
-    {
       "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
+    },
+    {
+      "name": "➡️ Example: Rest and MySQL Database",
+      "path": "src/examples/rest"
     },
     {
       "name": "➡️ Example: Xero",

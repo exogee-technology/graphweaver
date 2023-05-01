@@ -1,5 +1,7 @@
-import { useContext } from 'react';
-import { DataContext, Filter, MultiSelect, SelectOption, useSchema } from '..';
+import { useQuery } from '@apollo/client';
+
+import { Filter, Select, SelectOption, useSchema } from '..';
+import { queryForFilterText } from './graphql';
 
 export interface TextFilterProps {
 	fieldName: string;
@@ -17,28 +19,13 @@ export const TextFilter = ({
 	resetCount,
 }: TextFilterProps) => {
 	const { entityByName } = useSchema();
-	const { entityState } = useContext(DataContext);
+	const initialValue = initialFilter?.[fieldName];
 
-	const entityType = entityByName(entity);
-	const data = entityState[entity]?.data;
-	const field = entityType?.fields.find((f) => f.name === fieldName);
-	const value = initialFilter?.[fieldName];
-	let textOptions: SelectOption[] = [];
-	if (data && field && data.length > 0) {
-		// Get a unique, sorted list
-		textOptions = data
-			// yuk
-			.map((item) => item[field.name as keyof typeof item])
-			.reduce((arr: string[], item) => {
-				if (!arr.includes(item)) {
-					arr.push(item);
-				}
-				return arr;
-			}, [])
-			.sort((a, b) => a?.toLocaleLowerCase().localeCompare(b?.toLocaleLowerCase()))
-			// value = label, we don't care
-			.map((item) => ({ label: item, value: item }));
-	}
+	const { data } = useQuery<{ result: Record<string, string>[] }>(
+		queryForFilterText(entity, fieldName, entityByName)
+	);
+
+	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		onChange?.(
@@ -51,10 +38,10 @@ export const TextFilter = ({
 	};
 
 	return (
-		<MultiSelect
+		<Select
 			key={`${fieldName}:${resetCount}`}
-			options={textOptions}
-			value={initialFilter ? [{ value, label: value }] : []}
+			options={[...textOptions].map((value) => ({ value, label: value }))}
+			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>
