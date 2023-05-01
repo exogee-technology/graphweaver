@@ -87,7 +87,7 @@ const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
 };
 
 @Resolver((of) => ProfitAndLossRow)
-export class ProfitAndLossRowResolver extends createBaseResolver(
+export class ProfitAndLossRowResolver extends createBaseResolver<ProfitAndLossRow, unknown>(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
 		find: async ({ xero, filter, order, limit, offset }) => {

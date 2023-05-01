@@ -9,7 +9,7 @@ import {
 	decodeSearchParams,
 	Entity,
 	EntityField,
-	getEntity,
+	queryForEntity,
 	routeFor,
 	useSchema,
 	useSelectedEntity,
@@ -30,19 +30,15 @@ interface ResultBaseType {
 	[x: string]: unknown;
 }
 
-const DetailPanelError = () => {
-	const error = useAsyncError() as Error;
-
-	console.error(error);
-
-	return <pre className={styles.wrapper}>Error!: {error.message}</pre>;
-};
-
 const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const { initialValue } = meta;
 	const relationshipEntityType = entityByType(entity.type);
+
+	useEffect(() => {
+		helpers.setValue({ id: initialValue.value || undefined });
+	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
 		getRelationshipQuery(entity.type, relationshipEntityType.summaryField),
@@ -134,17 +130,29 @@ const DetailForm = ({
 
 const SLIDE_ANIMATION_TIME_CSS_VAR_NAME = '--detail-panel-slide-animation-time';
 
-const ModalContent = ({
-	selectedEntity,
-	detail,
-	onClose,
-}: {
-	selectedEntity: Entity;
-	detail?: ApolloQueryResult<{ result: ResultBaseType }>;
-	onClose: () => void;
-}) => {
+export const DetailPanel = () => {
 	const [open, setOpen] = useState(false);
-	const { entityByType } = useSchema();
+
+	const { id } = useParams();
+	const navigate = useNavigate();
+	const { selectedEntity } = useSelectedEntity();
+	const { entityByName, entityByType } = useSchema();
+	const [search] = useSearchParams();
+
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
+	const { data, loading } = useQuery<{ result: ResultBaseType }>(
+		queryForEntity(selectedEntity, entityByName),
+		{
+			variables: { id },
+			skip: id === 'graphweaver-admin-new-entity',
+		}
+	);
+
+	const onClose = useCallback(() => {
+		const { filters, sort } = decodeSearchParams(search);
+		navigate(routeFor({ entity: selectedEntity, filters, sort }));
+	}, [search, selectedEntity]);
 
 	const getValue = (field: EntityField, result?: ResultBaseType) => {
 		if (field.relationshipType) {
@@ -169,9 +177,8 @@ const ModalContent = ({
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => field.name !== 'id');
 
 	const initialValues = formFields.reduce((acc, field) => {
-		const result = detail?.data?.result;
+		const result = data?.result;
 		const value = getValue(field, result);
-		//@todo: For relationshipType fields, we want both the ID and the value
 		acc[field.name] = value || '';
 		return acc;
 	}, {} as Record<string, any>);
@@ -198,7 +205,7 @@ const ModalContent = ({
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
-		const id = detail?.data?.result?.id;
+		const id = data?.result?.id;
 
 		if (id) {
 			await updateEntity({
@@ -230,65 +237,19 @@ const ModalContent = ({
 			className={open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer}
 			title={selectedEntity.name}
 			modalContent={
-				<DetailForm
-					initialValues={initialValues}
-					detailFields={formFields}
-					onCancel={closeModal}
-					onSubmit={handleOnSubmit}
-				/>
+				<>
+					{loading ? (
+						<Spinner />
+					) : (
+						<DetailForm
+							initialValues={initialValues}
+							detailFields={formFields}
+							onCancel={closeModal}
+							onSubmit={handleOnSubmit}
+						/>
+					)}
+				</>
 			}
 		/>
 	);
-};
-
-export const DetailPanel = () => {
-	const { id } = useParams();
-	const navigate = useNavigate();
-	const { selectedEntity } = useSelectedEntity();
-	const { entityByName } = useSchema();
-	const [search] = useSearchParams();
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-	const [detail, setDetail] = useState<ApolloQueryResult<any> | null>(null);
-	const fetchData = useCallback(async () => {
-		if (id && id !== 'new') {
-			const result = await getEntity(selectedEntity, id, entityByName);
-			if (result) setDetail(result);
-		}
-	}, [id]);
-
-	// Don't put fetchData into dependency array here - causes inf loop
-	useEffect(() => {
-		fetchData()
-			// TODO: error handling
-			.catch(console.error);
-	}, [id]);
-
-	const navigateBack = useCallback(() => {
-		setDetail(null);
-		const { filters, sort } = decodeSearchParams(search);
-		navigate(routeFor({ entity: selectedEntity, filters, sort }));
-	}, [search, selectedEntity]);
-
-	if (id === 'new') {
-		return <ModalContent selectedEntity={selectedEntity} onClose={navigateBack} />;
-	}
-
-	if (!detail) return null;
-
-	if (detail.loading) {
-		return (
-			<pre>
-				<Spinner />
-			</pre>
-		);
-	}
-	if (detail.error || detail.errors) {
-		return <DetailPanelError />;
-	}
-
-	if (detail.data.result === null) {
-		return <pre className={styles.wrapper}>Data result is null</pre>;
-	}
-
-	return <ModalContent selectedEntity={selectedEntity} detail={detail} onClose={navigateBack} />;
 };
