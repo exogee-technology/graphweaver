@@ -1,16 +1,17 @@
 .overlay {
-	background-color: rgba(120, 120, 120, 0.8);
+	background-color: rgb(0 0 0 / 30%);
 	width: 100%;
 	min-height: 100%;
 	position: fixed;
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	top: 0px;
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	overflow: auto;
+	overflow: hidden;
 }
 
 .noOverlay {
@@ -60,14 +61,13 @@
 	flex-direction: column;
 	width: 100%;
 	min-width: 500px;
+	padding: 30px;
 }
 
 .header {
 	display: flex;
-	flex-direction: row-reverse;
 	justify-content: space-between;
-	align-items: center;
-	width: 67%;
+	height: 90px;
 }
 
 .headerWrapper {
@@ -89,11 +89,8 @@
 }
 
 .title {
-	position: relative;
 	height: 25px;
-	left: 32px;
-	top: 24px;
-
+	align-self: center;
 	font-family: 'Inter';
 	font-style: normal;
 	font-weight: 600;
@@ -106,12 +103,31 @@
 }
 
 .iconContainer {
+	display: flex;
 	min-width: 32px;
-	margin: 6px;
 	cursor: pointer;
-	max-height: 32px;
+	min-height: 20px;
+	max-height: 20px;
 }
 .iconContainer:hover {
-	background-color: rgba(237, 242, 232, 0.4);
-	color: var(--secondary-color);
+	opacity: 0.7;
+}
+
+.closeIconWrapper {
+	width: 100%;
+}
+
+.closeIconLeft {
+	height: 100%;
+	width: 2px;
+	margin-left: 12px;
+	background-color: #fff;
+	transform: rotate(45deg);
+}
+
+.closeIconRight {
+	height: 100%;
+	width: 2px;
+	background-color: #fff;
+	transform: rotate(90deg);
 }

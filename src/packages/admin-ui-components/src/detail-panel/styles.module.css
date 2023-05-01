@@ -1,36 +1,36 @@
+:root {
+	--detail-panel-slide-animation-time: 300ms;
+}
+
 .wrapper {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
-	min-width: 400px;
+	min-width: 500px;
 }
 
 /* Derived from Figma designs */
 .detailContainer {
-	position: fixed;
 	height: 100%;
-
+	align-self: end;
 	background: var(--detail-bg-color);
 	border: 1px solid rgba(237, 232, 242, 0.1);
 	border-radius: 6px;
-	left: 70%;
-	width: 45%;
-	/* Transition in */
-	animation: 0.5s ease-out 0s 1 slideInFromRight;
+
+	/* Make sure the div starts off the screen */
+	transform: translateX(100%);
+	transition: transform var(--detail-panel-slide-animation-time);
 
 	overflow-y: auto;
 	overflow-x: hidden;
 }
 
-.detailContainer.finished {
+.detailContainer.slideIn {
 	/* Transition out */
-	animation: 0.5s ease-out 0s 1 slideOutToRight;
+	transform: translateX(0%);
 }
 
 .detailFieldList {
-	position: relative;
-	left: 32px;
-	top: 60px;
 	display: flex;
 	flex-flow: column nowrap;
 	gap: 10px;
@@ -55,16 +55,12 @@
 
 	color: rgba(237, 232, 242, 0.6);
 	font-weight: 600;
-	max-width: 60%;
 }
 
 .textInputField,
 .selectField {
 	box-sizing: border-box;
-
 	height: 40px;
-	max-width: 57%;
-
 	background: rgba(237, 232, 242, 0.02);
 	border: 1px solid rgba(237, 232, 242, 0.1);
 	border-radius: 6px;
@@ -87,7 +83,6 @@
 	display: flex;
 	flex-flow: row nowrap;
 	gap: 10px;
-	max-width: 57%;
 	justify-content: flex-end;
 	margin-top: 20px;
 }
@@ -107,37 +102,4 @@
 	/* identical to box height, or 21px */
 
 	color: rgba(237, 232, 242, 0.6);
-}
-
-@keyframes slideInFromRight {
-	0% {
-		transform: translateX(100%);
-	}
-	100% {
-		transform: translateX(0);
-	}
-}
-
-@keyframes slideOutToRight {
-	0% {
-		transform: translateX(0);
-	}
-	100% {
-		transform: translateX(100%);
-	}
-}
-
-.closeIcon {
-	width: 32px;
-	color: var(--primary-color);
-	position: relative;
-	top: 24px;
-	right: -32px;
-	cursor: pointer;
-	padding: 6px;
-	border-radius: 6px;
-}
-
-.closeIcon:hover {
-	background-color: rgba(237, 232, 242, 0.2);
 }

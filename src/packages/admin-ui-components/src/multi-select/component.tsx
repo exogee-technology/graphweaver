@@ -7,45 +7,60 @@ export interface SelectOption {
 	label?: string;
 }
 
-interface MultiSelectProps {
+export enum SelectMode {
+	SINGLE = 'SINGLE',
+	MULTI = 'MULTI',
+}
+
+interface SelectProps {
 	options: SelectOption[];
 	onChange: (selected: SelectOption[]) => void;
 	value?: SelectOption[];
 	placeholder?: string;
 	loading?: boolean;
+	mode?: SelectMode;
 }
 
-export const MultiSelect: React.FC<MultiSelectProps> = ({
+export const Select = ({
 	options,
 	onChange,
 	value = [],
 	placeholder = 'Select',
 	loading = false,
-}) => {
+	mode = SelectMode.MULTI,
+}: SelectProps) => {
 	const [open, setOpen] = useState(false);
 	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	const handleClick = (option: SelectOption) => {
-		const selectedIndex = selectedOptions.findIndex((selected) => selected.value === option.value);
-		if (selectedIndex === -1) {
-			setSelectedOptions([...selectedOptions, option]);
+		if (mode === SelectMode.SINGLE) {
+			setSelectedOptions([option]);
 		} else {
-			setSelectedOptions([
-				...selectedOptions.slice(0, selectedIndex),
-				...selectedOptions.slice(selectedIndex + 1),
-			]);
+			setSelectedOptions((_selectedOptions) => {
+				const isOptionAlreadySelected = _selectedOptions.some(
+					(selected) => selected.value === option.value
+				);
+
+				if (!isOptionAlreadySelected) {
+					// If option is not found in _selectedOptions
+					return [..._selectedOptions, option];
+				}
+
+				// return the original array as nothing has changed
+				return _selectedOptions;
+			});
 		}
 	};
 
+	// This is only used when multi select is enabled
 	const handleDelete = (option: SelectOption) => {
-		const selectedIndex = selectedOptions.findIndex((selected) => selected.value === option.value);
-		setSelectedOptions([
-			...selectedOptions.slice(0, selectedIndex),
-			...selectedOptions.slice(selectedIndex + 1),
-		]);
+		setSelectedOptions((_selectedOptions) =>
+			_selectedOptions.filter((selected) => selected.value !== option.value)
+		);
 	};
 
+	// This is only used when multi select is enabled
 	const handleDeleteAll = () => {
 		setSelectedOptions([]);
 	};
@@ -86,9 +101,11 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 									? `${selectedOptions.length} Selected`
 									: selectedOptions?.[0].label}
 							</span>
-							<span className={styles.deleteOption} onClick={() => handleDeleteAll()}>
-								&times;
-							</span>
+							{mode === SelectMode.MULTI && (
+								<span className={styles.deleteOption} onClick={handleDeleteAll}>
+									&times;
+								</span>
+							)}
 						</div>
 					</div>
 				) : (
@@ -101,14 +118,15 @@ export const MultiSelect: React.FC<MultiSelectProps> = ({
 						{!loading && (
 							<>
 								<div className={styles.selectedOptions}>
-									{selectedOptions.map((option) => (
-										<div className={styles.optionPill} key={`${option?.value}:OptionPill`}>
-											<span className={styles.optionPillLabel}>{option.label}</span>
-											<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
-												&times;
-											</span>
-										</div>
-									))}
+									{mode === SelectMode.MULTI &&
+										selectedOptions.map((option) => (
+											<div className={styles.optionPill} key={`${option?.value}:OptionPill`}>
+												<span className={styles.optionPillLabel}>{option.label}</span>
+												<span className={styles.deleteOption} onClick={() => handleDelete(option)}>
+													&times;
+												</span>
+											</div>
+										))}
 								</div>
 								{options.map((option) => (
 									<div
