@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 
-import { MultiSelect, SelectOption } from '../multi-select';
+import { Select, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
@@ -69,7 +69,7 @@ export const RelationshipFilter = ({
 	});
 
 	return (
-		<MultiSelect
+		<Select
 			key={`${fieldName}:${resetCount}`}
 			options={relationshipOptions}
 			value={
