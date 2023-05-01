@@ -1,4 +1,4 @@
-import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
+import { BaseLoaders, GraphQLEntity, RelationshipField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
 import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-rls';
 
@@ -41,14 +41,6 @@ export class Task extends GraphQLEntity<OrmTask> {
 		);
 	}
 
-	@Field(() => [Tag], { nullable: true })
-	async tags(@Root() task: Task) {
-		const tags = await BaseLoaders.loadByRelatedId({
-			gqlEntityType: Tag,
-			relatedField: 'tasks',
-			id: task.id,
-		});
-
-		return tags.map((tag) => Tag.fromBackendEntity(tag));
-	}
+	@RelationshipField(() => [Tag], { relatedField: 'tasks' })
+	tags!: Tag;
 }
