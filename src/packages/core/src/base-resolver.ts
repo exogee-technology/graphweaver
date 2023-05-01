@@ -99,9 +99,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		enums: metadata.enums,
 	} as BaseResolverMetadataEntry<D>);
 
-	// This is used to traverse entity and create/update any related nested entities
-	const createOrUpdate = createOrUpdateEntities(gqlEntityType);
-
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
 		const typeNamesFromMetadata = metadata.objectTypes.filter(
@@ -531,15 +528,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					transactional,
 				});
 				const { items } = params.args;
-				const results = await provider.createMany(items);
-
-				if (gqlEntityType.fromBackendEntity) {
-					const { fromBackendEntity } = gqlEntityType;
-					const entities = results.map((result) => fromBackendEntity.call(gqlEntityType, result));
-					return this.runAfterHooks(HookRegister.AFTER_CREATE, params, entities);
-				}
-
-				return results as any[];
+				const entities = (await createOrUpdateEntities(
+					items,
+					gqlEntityType.name,
+					info,
+					context
+				)) as G[];
+				return this.runAfterHooks(HookRegister.AFTER_CREATE, params, entities);
 			});
 		}
 
@@ -559,7 +554,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				});
 				const [item] = params.args.items;
 
-				const result = (await createOrUpdate(item, gqlEntityType.name)) as G;
+				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
 				const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
 				return entity;
 			});
@@ -585,15 +580,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				const updateData = items.filter(hasId);
 				if (!updateData.length) throw new Error('No ID found in input so cannot update entity.');
 
-				const results = await provider.updateMany(updateData);
-
-				if (gqlEntityType.fromBackendEntity) {
-					const { fromBackendEntity } = gqlEntityType;
-					const entities = results.map((result) => fromBackendEntity.call(gqlEntityType, result));
-					return this.runAfterHooks(HookRegister.AFTER_UPDATE, params, entities);
-				}
-
-				return results as any[];
+				const entities = (await createOrUpdateEntities(
+					items,
+					gqlEntityType.name,
+					info,
+					context
+				)) as G[];
+				return this.runAfterHooks(HookRegister.AFTER_UPDATE, params, entities);
 			});
 		}
 
@@ -645,42 +638,35 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					...(createHookParams.args?.items ?? []),
 				];
 
-				// Call provider.createOrUpdateMany with prepared data to perform data operation
-				const results = await provider.createOrUpdateMany(data);
+				const entities = (await createOrUpdateEntities(
+					data,
+					gqlEntityType.name,
+					info,
+					context
+				)) as G[];
 
-				// Apply fromBackendEntity if available and run after hooks
-				if (gqlEntityType.fromBackendEntity) {
-					const { fromBackendEntity } = gqlEntityType;
-					const backendEntities = results.map((result) =>
-						fromBackendEntity.call(gqlEntityType, result)
-					);
+				// Filter update and create entities
+				const updatedEntities = entities.filter(
+					(entity) => entity && updateItemIds.includes(entity.id)
+				);
+				const createdEntities = entities.filter(
+					(entity) => entity && !updateItemIds.includes(entity.id)
+				);
 
-					// Filter update and create entities
-					const updatedEntities = backendEntities.filter(
-						(entity) => entity && updateItemIds.includes(entity.id)
-					);
-					const createdEntities = backendEntities.filter(
-						(entity) => entity && !updateItemIds.includes(entity.id)
-					);
+				// Run after hooks for update and create entities
+				const updateHookEntities = await this.runAfterHooks(
+					HookRegister.AFTER_UPDATE,
+					updateHookParams,
+					updatedEntities
+				);
+				const createHookEntities = await this.runAfterHooks(
+					HookRegister.AFTER_CREATE,
+					createHookParams,
+					createdEntities
+				);
 
-					// Run after hooks for update and create entities
-					const updateHookEntities = await this.runAfterHooks(
-						HookRegister.AFTER_UPDATE,
-						updateHookParams,
-						updatedEntities
-					);
-					const createHookEntities = await this.runAfterHooks(
-						HookRegister.AFTER_CREATE,
-						createHookParams,
-						createdEntities
-					);
-
-					// Return combined results from after hooks
-					return [...createHookEntities, ...updateHookEntities];
-				}
-
-				// Fallback if we do not have a fromBackendEntity function to call
-				return results as any[];
+				// Return combined results from after hooks
+				return [...createHookEntities, ...updateHookEntities];
 			});
 		}
 
@@ -702,16 +688,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 				if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');
 
-				// Update and save!
-				const results = await provider.updateOne(updateItemData.id, item);
-
-				if (gqlEntityType.fromBackendEntity) {
-					const result = gqlEntityType.fromBackendEntity.call(gqlEntityType, results);
-					const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [result]);
-					return entity;
-				}
-
-				return results as any; // they're saying there's no need to map, so types don't align, but we trust the dev.
+				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
+				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [result]);
+				return entity;
 			});
 		}
 
