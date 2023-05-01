@@ -11,7 +11,7 @@ import { inMemoryFilterFor } from '../../utils';
 
 @Resolver((of) => Person)
 @AuthorizedBaseFunctions()
-export class PersonResolver extends createBaseResolver(
+export class PersonResolver extends createBaseResolver<Person, RestPeople>(
 	Person,
 	new RestBackendProvider('People', {
 		find: async ({ filter }: AccessorParams) => {

@@ -1,4 +1,10 @@
 import { registerEnumType } from 'type-graphql';
+import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
+import { GraphQLResolveInfo } from 'graphql';
+
+export type WithId = {
+	id: string;
+};
 
 export enum Sort {
 	ASC = 'asc',
@@ -52,40 +58,44 @@ export type ConsolidatedAccessControlEntry<T> = {
 	[K in AccessType]?: ConsolidatedAccessControlValue<T>;
 };
 
-export type AccessControlValue<T> = true | QueryFilterFunction<T>;
-export type ConsolidatedAccessControlValue<T> = true | QueryFilterFunction<T>[];
-export type QueryFilterFunction<T> = (
-	context: AuthorizationContext
-) => QueryFilter<T> | Promise<QueryFilter<T>>;
+export type AccessControlValue<G> = true | FilterFunction<G>;
+export type ConsolidatedAccessControlValue<G> = true | FilterFunction<G>[];
+export type FilterFunction<G> = (context: AuthorizationContext) => Filter<G> | Promise<Filter<G>>;
 
-// TODO: (non-trivial) Consider creating a generic filter type for graphql entities
-export type QueryFilter<T> = any;
+export type Filter<G> = {
+	id?: string;
+	_and?: Filter<G>[];
+	_or?: Filter<G>[];
+	_not?: Filter<G>[];
+};
 
-export interface BackendProvider<T> {
+// D = Data entity returned from the datastore
+// G = GraphQL entity
+export interface BackendProvider<D, G> {
 	// This is used for query splitting, so we know where to break your
 	// queries when you query across data sources.
 	readonly backendId: string;
 
-	entityType?: new () => T;
+	entityType?: new () => D;
 
 	find(
-		filter: any,
+		filter: Filter<G>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any
-	): Promise<T[]>;
-	findOne(filter: any): Promise<T | null>;
+	): Promise<D[]>;
+	findOne(filter: Filter<G>): Promise<D | null>;
 	findByRelatedId(
 		entity: any,
 		relatedField: string,
 		relatedIds: readonly string[],
-		filter?: any
-	): Promise<T[]>;
-	updateOne(id: string, updateArgs: Partial<T>): Promise<T>;
-	updateMany(entities: (Partial<T> & { id: string })[]): Promise<T[]>;
-	createOne(entity: Partial<T>): Promise<T>;
-	createMany(entities: Partial<T>[]): Promise<T[]>;
-	createOrUpdateMany(entities: Partial<T>[]): Promise<T[]>;
-	deleteOne(id: string): Promise<boolean>;
+		filter?: Filter<G>
+	): Promise<D[]>;
+	updateOne(id: string, updateArgs: Partial<G>): Promise<D>;
+	updateMany(entities: (Partial<G> & WithId)[]): Promise<D[]>;
+	createOne(entity: Partial<G>): Promise<D>;
+	createMany(entities: Partial<G>[]): Promise<D[]>;
+	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
+	deleteOne(filter: Filter<G>): Promise<boolean>;
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
 
@@ -93,12 +103,34 @@ export interface BackendProvider<T> {
 	readonly maxDataLoaderBatchSize?: number;
 }
 
-export interface GraphqlEntityType<T, O> {
+// G = GraphQL entity
+// A = Args type
+export interface HookParams<G, A> {
+	args: A;
+	context: AuthorizationContext;
+	info: GraphQLResolveInfo;
+	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
+	entities: (G | null)[];
+	deleted: boolean; // Used by a delete operation to indicate if successful
+}
+
+// export type CreateOrUpdateHookParams<G> = Partial<HookParams<G, { items: Partial<G>[] }>>;
+export type CreateOrUpdateHookParams<G> = {
+	args: { items: Partial<G>[] };
+} & Partial<HookParams<G, { items: Partial<G>[] }>>;
+
+export type ReadHookParams<G> = Partial<
+	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }>
+>;
+
+export type DeleteHookParams<G> = Partial<HookParams<G, { filter: { id: string } & Filter<G> }>>;
+
+export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
-	accessControlList?: AccessControlList<T>;
-	fromBackendEntity?(entity: O): T;
-	mapInputForInsertOrUpdate?(input: any): any;
+	accessControlList?: AccessControlList<G>;
+	fromBackendEntity?(entity: D): G | null;
+	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;
 }
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';

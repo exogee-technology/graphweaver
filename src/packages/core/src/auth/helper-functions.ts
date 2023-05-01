@@ -8,8 +8,8 @@ import {
 	BASE_ROLE_EVERYONE,
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
+	Filter,
 	GENERIC_AUTH_ERROR_MESSAGE,
-	QueryFilter,
 } from '../common/types';
 
 let authContext: AuthorizationContext | undefined;
@@ -152,13 +152,13 @@ export const buildAccessControlEntryForUser = (
  * @param filters The list of individual filters to be combined into a single 'anded' filter
  * @returns A single filter object imposing all of the input filter conditions together
  */
-export const andFilters = <T>(...filters: QueryFilter<T>[]): Promise<QueryFilter<T>> => {
+export const andFilters = <G>(...filters: Filter<G>[]): Filter<G> => {
 	const nonEmptyFilters = filters.filter(
 		(filter) => !isEmptyObject(filter) && filter !== undefined && filter !== null
 	);
 	console.log(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
 
-	return nonEmptyFilters.length > 1 ? { ['_and' as any]: [nonEmptyFilters] } : nonEmptyFilters[0];
+	return nonEmptyFilters.length > 1 ? { _and: nonEmptyFilters } : nonEmptyFilters[0];
 };
 
 /**
@@ -167,9 +167,9 @@ export const andFilters = <T>(...filters: QueryFilter<T>[]): Promise<QueryFilter
  * @param consolidatedAccessControlValue The access control value to be used as the input
  * @returns The resultant query filter should be applied in the request to the data provider
  */
-export const evaluateConsolidatedAccessControlValue = async <T>(
-	consolidatedAccessControlValue: ConsolidatedAccessControlValue<T>
-): Promise<QueryFilter<T>> => {
+export const evaluateConsolidatedAccessControlValue = async <G>(
+	consolidatedAccessControlValue: ConsolidatedAccessControlValue<G>
+): Promise<Filter<G>> => {
 	if (consolidatedAccessControlValue === true) {
 		// Return an unconditional filter
 		return {};
@@ -180,12 +180,14 @@ export const evaluateConsolidatedAccessControlValue = async <T>(
 		logger.trace(`Got permission filters: `, consolidatedAccessControlValue);
 
 		// Evaluate each filter function
-		const evaluatedFilters = consolidatedAccessControlValue.map((filter) => {
-			if (!authContext) {
-				throw new Error('Authorisation context provider not initialised');
-			}
-			return filter(authContext);
-		});
+		const evaluatedFilters = await Promise.all(
+			consolidatedAccessControlValue.map((filter) => {
+				if (!authContext) {
+					throw new Error('Authorisation context provider not initialised');
+				}
+				return filter(authContext);
+			})
+		);
 
 		// Apply to original search criteria
 		return evaluatedFilters.length > 1 ? { _or: evaluatedFilters } : evaluatedFilters[0];

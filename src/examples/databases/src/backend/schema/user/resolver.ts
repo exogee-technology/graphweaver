@@ -7,7 +7,7 @@ import { User } from './entity';
 
 @Resolver((of) => User)
 @AuthorizedBaseFunctions()
-export class UserResolver extends createBaseResolver(
+export class UserResolver extends createBaseResolver<User, OrmUser>(
 	User,
 	new MikroBackendProvider(OrmUser, 'pg')
 ) {}

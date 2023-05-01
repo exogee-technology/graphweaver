@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import { Button } from '../button';
 import { Dropdown } from '../dropdown';
@@ -9,6 +9,7 @@ import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
 import styles from './styles.module.css';
 
 import { FilterBar } from '../filter-bar';
+import { decodeSearchParams, routeFor, useSelectedEntity } from '../utils';
 
 export interface ToolBarProps {
 	title?: string;
@@ -16,12 +17,17 @@ export interface ToolBarProps {
 }
 
 export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
+	const { selectedEntity } = useSelectedEntity();
+	const [search] = useSearchParams();
+	const { filters, sort } = decodeSearchParams(search);
+
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
 	const externalLinkItems: DropdownItem[] = [
 		{
-			id: 'google',
-			name: 'Google',
-			href: 'https://google.com/',
-			renderAfter: () => <OpenPlaygroundIcon />,
+			id: 'new',
+			name: `New ${selectedEntity.name}`,
+			href: routeFor({ entity: selectedEntity, id: 'graphweaver-admin-new-entity', sort, filters }),
 		},
 	];
 

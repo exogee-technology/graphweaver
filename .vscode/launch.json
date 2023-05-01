@@ -7,7 +7,7 @@
     {
       "name": "Xero Example",
       "request": "launch",
-      "cwd": "${workspaceFolder}/src/examples/example-xero",
+      "cwd": "${workspaceFolder}/src/examples/xero",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start"],
       "type": "node",

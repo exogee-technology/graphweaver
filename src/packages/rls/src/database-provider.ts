@@ -4,23 +4,23 @@ import {
 	buildAccessControlEntryForUser,
 	EntityMetadataMap,
 	evaluateConsolidatedAccessControlValue,
+	Filter,
 	GENERIC_AUTH_ERROR_MESSAGE,
 	getRolesFromAuthorizationContext,
 	GraphQLEntity,
 	PaginationOptions,
-	QueryFilter,
 	Sort,
 } from '@exogee/graphweaver';
-import { IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { FilterQuery, IsolationLevel, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
 
 import { checkAuthorization, requiredPermissionsForAction } from './auth-utils';
 
 export class RLSMikroBackendProvider<
-	T,
+	T extends Record<string, unknown>,
 	G extends GraphQLEntity<T>
-> extends MikroBackendProvider<any> {
+> extends MikroBackendProvider<T, G> {
 	private readonly gqlTypeName: string;
 
 	constructor(mikroType: new () => T, gqlType: new (dataEntity: T) => G) {
@@ -35,7 +35,7 @@ export class RLSMikroBackendProvider<
 	};
 
 	public async find(
-		filter: any,
+		filter: Filter<G>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any
 	): Promise<T[]> {
@@ -58,7 +58,7 @@ export class RLSMikroBackendProvider<
 		return super.find(andFilters(filter, accessFilter), pagination, additionalOptionsForBackend);
 	}
 
-	public async findOne(id: string): Promise<T | null> {
+	public async findOne(filter: Filter<G>): Promise<T | null> {
 		const consolidatedAclEntry = buildAccessControlEntryForUser(
 			this.getAcl(),
 			getRolesFromAuthorizationContext()
@@ -70,7 +70,7 @@ export class RLSMikroBackendProvider<
 		}
 
 		// Filter for a single record by ID
-		const where: QueryFilter<any> = { id };
+		const where: Filter<G> = filter;
 
 		// If there are conditional permission filters, augment the supplied filter with them
 		const readEntry = consolidatedAclEntry[AccessType.Read];
@@ -87,7 +87,7 @@ export class RLSMikroBackendProvider<
 		return result[0];
 	}
 
-	public async updateOne(id: string, updateArgs: Partial<T>): Promise<T> {
+	public async updateOne(id: string, updateArgs: Partial<G>): Promise<T> {
 		const entity = await this.transactional<T>(async () => {
 			// First check whether the user is allowed to update this record as-is
 			const entityBeforeUpdate = await this.em.findOne(this.entityType, id, {
@@ -111,7 +111,7 @@ export class RLSMikroBackendProvider<
 		return entity;
 	}
 
-	public async updateMany(entities: (Partial<T> & { id: string })[]): Promise<T[]> {
+	public async updateMany(entities: (Partial<G> & { id: string })[]): Promise<T[]> {
 		// TODO: Check authorisation both before and after updates
 		const result = await this.transactional<T[]>(async () => {
 			const updateManyResult = await super.updateMany(entities);
@@ -128,7 +128,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async createOne(entity: Partial<T>): Promise<T> {
+	public async createOne(entity: Partial<G>): Promise<T> {
 		const result = await this.transactional<T>(async () => {
 			const createResult = await super.createOne(entity);
 			await checkAuthorization(createResult, entity, AccessType.Create);
@@ -138,7 +138,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async createMany(entities: Partial<T>[]): Promise<T[]> {
+	public async createMany(entities: Partial<G>[]): Promise<T[]> {
 		const result = await this.transactional<T[]>(async () => {
 			const createManyResult = await super.createMany(entities);
 			await this.em.flush(); // This is required to assign IDs to the candidate records
@@ -155,7 +155,7 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async createOrUpdateMany(entities: Partial<T>[]): Promise<T[]> {
+	public async createOrUpdateMany(entities: Partial<G>[]): Promise<T[]> {
 		// TODO: Check authorisation both before and after updates
 		const result = await this.transactional<T[]>(async () => {
 			const createOrUpdateManyResult = await super.createOrUpdateMany(entities);
@@ -175,9 +175,11 @@ export class RLSMikroBackendProvider<
 		return result;
 	}
 
-	public async deleteOne(id: string): Promise<boolean> {
-		const entity = await this.em.findOneOrFail(this.entityType, id);
-		await checkAuthorization(entity, { id }, AccessType.Delete);
-		return super.deleteOne(id);
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+		const entity = await this.em.findOneOrFail(this.entityType, filter as FilterQuery<T>);
+		const { id } = filter;
+		if (!id) throw new Error('Check Authorization Error: No ID specified');
+		await checkAuthorization(entity, { id: filter.id }, AccessType.Delete);
+		return super.deleteOne(filter);
 	}
 }
