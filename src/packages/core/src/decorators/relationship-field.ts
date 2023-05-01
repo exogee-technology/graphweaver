@@ -2,7 +2,7 @@ import { getMetadataStorage } from 'type-graphql';
 import { ReturnTypeFunc } from 'type-graphql/dist/decorators/types';
 import { findType } from 'type-graphql/dist/helpers/findType';
 import { BaseLoaders } from '../base-loader';
-import { BaseDataEntity, GraphQLEntityConstructor } from '..';
+import { BaseContext, BaseDataEntity, GraphQLEntityConstructor, GraphQLResolveInfo } from '..';
 
 type RelationshipFieldOptions<D> = {
 	relatedField: keyof D & string;
@@ -57,9 +57,22 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 			propertyName: undefined,
 			getType,
 		});
+		metadata.collectHandlerParamMetadata({
+			kind: 'info',
+			target: target.constructor,
+			methodName: key,
+			index: 1,
+		});
+		metadata.collectHandlerParamMetadata({
+			kind: 'context',
+			target: target.constructor,
+			methodName: key,
+			index: 2,
+			propertyName: undefined,
+		});
 
 		// we then declare the field resolver for this field:
-		const fieldResolver = async (root: any) => {
+		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
 			const gqlEntityType = getType() as G;
 			const tags = await BaseLoaders.loadByRelatedId({
 				gqlEntityType,
