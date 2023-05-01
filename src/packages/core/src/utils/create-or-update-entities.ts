@@ -55,15 +55,13 @@ export const createOrUpdateEntities = <G extends WithId, D extends BaseDataEntit
 		return { id: entity.id } as Partial<G>;
 	};
 
-	const traverseInput = async <T>(
-		input: Partial<G> | Partial<G>[],
-		meta: BaseResolverMetadataEntry<any>
-	) => {
+	const traverseInput = async <T>(input: Partial<G> | Partial<G>[], entityTypeName: string) => {
+		const meta = getMeta(entityTypeName);
 		if (Array.isArray(input)) {
 			// Here we have an array nothing to do but loop through them
 			const nodes: Partial<G>[] = [];
 			for (const node of input) {
-				const updatedNode = await traverseInput(node, meta);
+				const updatedNode = await traverseInput(node, entityTypeName);
 				if (Array.isArray(updatedNode)) {
 					throw new Error('We should not have an array inside an array');
 				}
@@ -86,7 +84,7 @@ export const createOrUpdateEntities = <G extends WithId, D extends BaseDataEntit
 					// We have a related entity so lets traverse and check if we need to do an update or create
 					node = {
 						...node,
-						[key]: await traverseInput(childNode, getMeta(relatedEntity.name)),
+						[key]: await traverseInput(childNode, relatedEntity.name),
 					};
 				}
 			}

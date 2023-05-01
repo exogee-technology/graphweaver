@@ -559,12 +559,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				});
 				const [item] = params.args.items;
 
-				// Save!
-				const meta = EntityMetadataMap.get(gqlEntityType.name);
-				if (!meta) {
-					throw new Error(`Unexpected Error: entity not found in metadata map`);
-				}
-				const result = (await createOrUpdate(item, meta)) as G;
+				const result = (await createOrUpdate(item, gqlEntityType.name)) as G;
 				const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
 				return entity;
 			});
