@@ -1,4 +1,4 @@
-import { BackendProvider, PaginationOptions } from '@exogee/graphweaver';
+import { BackendProvider, Filter, GraphQLEntity, PaginationOptions } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 export type AccessorParams = {
@@ -9,12 +9,12 @@ export interface RestDataAccessor<T> {
 	find: (args: AccessorParams) => Promise<T[]>;
 }
 
-export class RestBackendProvider<T> implements BackendProvider<T> {
+export class RestBackendProvider<D, G extends GraphQLEntity<D>> implements BackendProvider<D, G> {
 	public readonly backendId = 'rest-api';
-	public constructor(protected entityTypeName: string, protected accessor?: RestDataAccessor<T>) {}
+	public constructor(protected entityTypeName: string, protected accessor?: RestDataAccessor<D>) {}
 
 	// GET METHODS
-	public async find(filter: Record<string, any>, pagination?: PaginationOptions): Promise<T[]> {
+	public async find(filter: Filter<G>, pagination?: PaginationOptions): Promise<D[]> {
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
@@ -42,8 +42,8 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 		}
 	}
 
-	public async findOne(id: string): Promise<T | null> {
-		logger.trace(`Running findOne ${this.entityTypeName} with ID ${id}`);
+	public async findOne(filter: Filter<G>): Promise<D | null> {
+		logger.trace(`Running findOne ${this.entityTypeName} with Filter ${filter}`);
 
 		if (!this.accessor) {
 			throw new Error(
@@ -51,7 +51,7 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 			);
 		}
 
-		const rows = await this.find({ id });
+		const rows = await this.find(filter);
 		return rows[0] || null;
 	}
 
@@ -59,22 +59,24 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 		entity: unknown,
 		relatedField: string,
 		relatedFieldIds: string[],
-		filter?: Record<string, any>
-	): Promise<T[]> {
+		filter?: Filter<G>
+	): Promise<D[]> {
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
 			);
 		}
 
+		const orFilters: Filter<G>[] = relatedFieldIds.map((id) => ({ [relatedField]: id }));
+
 		return this.find({
-			_or: [relatedFieldIds.map((id) => ({ [relatedField]: id }))],
+			_or: orFilters,
 			...filter,
 		});
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
+	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
 		logger.trace(`Running update one ${this.entityTypeName} with args`, {
 			id,
 			updateArgs,
@@ -83,7 +85,7 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
+	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
 		logger.trace(`Running update many ${this.entityTypeName} with args`, {
 			updateItems: updateItems,
 		});
@@ -91,17 +93,17 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
+	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
 		// not something we can do with REST
 		return Promise.reject();
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<T>): Promise<T> {
+	public async createOne(createArgs: Partial<G>): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
+	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});
@@ -110,8 +112,8 @@ export class RestBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	// DELETE METHODS
-	public async deleteOne(id: string): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName} with id ${id}`);
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');
 	}

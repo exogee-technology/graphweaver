@@ -85,7 +85,7 @@ class DatabaseImplementation {
 			return this.em.transactional(async (em) => {
 				this.transactionalEm = em;
 				this.transactionInProgressIsolationLevel = isolationLevel;
-				await em.execute(`SET TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+				await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
 				let result: T;
 				try {
 					result = await callback();

@@ -1,12 +1,17 @@
-import { BackendProvider, PaginationOptions, Sort } from '@exogee/graphweaver';
+import {
+	BackendProvider,
+	Filter,
+	GraphQLEntity,
+	PaginationOptions,
+	Sort,
+} from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { isUUID } from 'class-validator';
-import { TokenSet, TokenSetParameters, XeroClient } from 'xero-node';
+import { TokenSet, XeroClient } from 'xero-node';
 
-export interface XeroDataAccessor<T> {
+export interface XeroDataAccessor<T, G> {
 	find: (args: {
 		xero: XeroClient;
-		filter: Record<string, any>;
+		filter: Filter<G>;
 		order?: Record<string, Sort>;
 		limit?: number;
 		offset?: number;
@@ -35,7 +40,7 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<T> implements BackendProvider<T> {
+export class XeroBackendProvider<D, G extends GraphQLEntity<D>> implements BackendProvider<D, G> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 
@@ -59,7 +64,10 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		});
 	};
 
-	public constructor(protected entityTypeName: string, protected accessor?: XeroDataAccessor<T>) {}
+	public constructor(
+		protected entityTypeName: string,
+		protected accessor?: XeroDataAccessor<D, G>
+	) {}
 
 	public static clearTokens() {
 		XeroBackendProvider.resetXeroClient();
@@ -88,10 +96,10 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 
 	// GET METHODS
 	public async find(
-		filter: any, // @todo: Create a type for this
+		filter: Filter<G>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
-	): Promise<T[]> {
+	): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		if (!this.accessor) {
@@ -124,10 +132,10 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		}
 	}
 
-	public async findOne(id: string): Promise<T | null> {
+	public async findOne(filter: Filter<G>): Promise<D | null> {
 		await this.ensureAccessToken();
 
-		logger.trace(`Running findOne ${this.entityTypeName} with ID ${id}`);
+		logger.trace(`Running findOne ${this.entityTypeName} with filter ${filter}`);
 
 		if (!this.accessor) {
 			throw new Error(
@@ -135,7 +143,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 			);
 		}
 
-		const rows = await this.find({ id });
+		const rows = await this.find(filter);
 		return rows[0] || null;
 	}
 
@@ -144,7 +152,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		relatedField: string,
 		relatedFieldIds: string[],
 		filter?: any
-	): Promise<T[]> {
+	): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		if (!this.accessor) {
@@ -160,7 +168,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<T & { version?: number }>): Promise<T> {
+	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running update one ${this.entityTypeName} with args`, {
@@ -171,7 +179,7 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<T> & { id: string })[]): Promise<T[]> {
+	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running update many ${this.entityTypeName} with args`, {
@@ -181,16 +189,16 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<T>[]): Promise<T[]> {
+	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
 		throw new Error('Not implemented');
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<T>): Promise<T> {
+	public async createOne(createArgs: Partial<G>): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<T>[]): Promise<T[]> {
+	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});
@@ -199,8 +207,8 @@ export class XeroBackendProvider<T> implements BackendProvider<T> {
 	}
 
 	// DELETE METHODS
-	public async deleteOne(id: string): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName} with id ${id}`);
+	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');
 	}

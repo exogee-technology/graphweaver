@@ -1,4 +1,4 @@
-import { createBaseResolver, Sort } from '@exogee/graphweaver';
+import { createBaseResolver, Filter, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
 import { forEachTenant, offsetAndLimit, orderByToString, splitFilter } from '../../utils';
@@ -9,7 +9,7 @@ import { isUUID } from 'class-validator';
 const defaultSort: Record<string, Sort> = { ['name']: Sort.ASC };
 
 @Resolver((of) => Account)
-export class AccountResolver extends createBaseResolver(
+export class AccountResolver extends createBaseResolver<Account, XeroAccount>(
 	Account,
 	new XeroBackendProvider('Account', {
 		find: async ({ xero, filter, order, limit, offset }) => {
@@ -53,7 +53,7 @@ export class AccountResolver extends createBaseResolver(
 // and turns it into a string like:
 // AccountID=="123" OR AccountID=="234"
 // NB: This is currently used only for Accounts
-const xeroFilterFrom = (filter: any) => {
+const xeroFilterFrom = (filter: Filter<Account> | Filter<Account>[]) => {
 	if (!filter) return undefined;
 
 	const chunks: string[] = [];

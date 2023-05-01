@@ -4,6 +4,7 @@
 	border-radius: 12px;
 	flex: 1;
 	height: 100%;
+	--rdg-selection-color: transparent;
 }
 
 .rdg-header-row {
