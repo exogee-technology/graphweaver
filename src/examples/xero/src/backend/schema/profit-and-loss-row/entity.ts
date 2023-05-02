@@ -1,4 +1,4 @@
-import { BaseLoaders, GraphQLEntity, AdminUISettings } from '@exogee/graphweaver';
+import { GraphQLEntity, AdminUISettings, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { Field, ID, ObjectType } from 'type-graphql';
 
@@ -38,17 +38,8 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => ID, { nullable: true })
 	accountId?: string;
 
-	@Field(() => Account, { nullable: true })
-	async account() {
-		if (!this.dataEntity.accountId) return null;
-
-		return Account.fromBackendEntity(
-			await BaseLoaders.loadOne({
-				gqlEntityType: Account,
-				id: this.dataEntity.accountId,
-			})
-		);
-	}
+	@RelationshipField<ProfitAndLossRow>(() => Account, { id: 'accountId' })
+	account!: Account;
 
 	@AdminUISettings({
 		filter: {
@@ -58,15 +49,6 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	@Field(() => ID, { nullable: true })
 	tenantId?: string;
 
-	@Field(() => Tenant, { nullable: true })
-	async tenant() {
-		if (!this.dataEntity.tenantId) return null;
-
-		return Tenant.fromBackendEntity(
-			await BaseLoaders.loadOne({
-				gqlEntityType: Tenant,
-				id: this.dataEntity.tenantId,
-			})
-		);
-	}
+	@RelationshipField<ProfitAndLossRow>(() => Tenant, { id: 'tenantId' })
+	tenant!: Tenant;
 }
