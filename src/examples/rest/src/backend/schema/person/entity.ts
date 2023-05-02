@@ -1,6 +1,6 @@
 import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-rls';
+import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { People as RestPeople } from '../../entities';
 import { Context } from '../..';

@@ -9,7 +9,7 @@ import {
 	RelationshipField,
 } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-rls';
+import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Task as OrmTask } from '../../entities';
 import { Person } from '../person';
