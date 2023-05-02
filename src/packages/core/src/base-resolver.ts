@@ -55,7 +55,6 @@ export interface BaseResolverMetadataEntry<D extends BaseDataEntity> {
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
-	accessControlList?: any;
 }
 
 export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue) {
