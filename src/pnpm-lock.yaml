@@ -289,7 +289,6 @@ importers:
   packages/auth:
     specifiers:
       '@exogee/graphweaver': workspace:0.1.2
-      '@exogee/graphweaver-mikroorm': workspace:0.1.2
       '@exogee/logger': workspace:0.1.2
       '@types/node': 14.14.10
       apollo-server-errors: 3.3.1
@@ -304,7 +303,6 @@ importers:
       typescript: 5.0.2
     dependencies:
       '@exogee/graphweaver': link:../core
-      '@exogee/graphweaver-mikroorm': link:../mikroorm
       '@exogee/logger': link:../logger
       apollo-server-errors: 3.3.1_graphql@16.6.0
       class-validator: 0.13.2
