@@ -89,6 +89,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 	public entityType: new () => D;
 	public connectionManagerId?: string;
+	private transactionIsolationLevel!: IsolationLevel;
 
 	public readonly supportsInFilter = true;
 
@@ -108,7 +109,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	}
 
 	public async withTransaction<T>(callback: () => Promise<T>) {
-		return this.database.transactional<T>(callback, IsolationLevel.REPEATABLE_READ);
+		return this.database.transactional<T>(callback, this.transactionIsolationLevel);
 	}
 
 	// This is exposed for use in the RLS package
@@ -123,10 +124,15 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return repository as SqlEntityRepository<D>;
 	};
 
-	public constructor(mikroType: new () => D, connectionManagerId?: string) {
+	public constructor(
+		mikroType: new () => D,
+		connectionManagerId?: string,
+		transactionIsolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ
+	) {
 		this.entityType = mikroType;
 		this.connectionManagerId = connectionManagerId;
 		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
+		this.transactionIsolationLevel = transactionIsolationLevel;
 	}
 
 	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<G>) => {
