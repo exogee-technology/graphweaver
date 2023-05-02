@@ -23,6 +23,10 @@ export function RelationshipField<
 	D extends BaseDataEntity = G['dataEntity']
 >(returnTypeFunc: ReturnTypeFunc, { relatedField, id }: RelationshipFieldOptions<D>) {
 	return (target: any, key: string) => {
+		if (!id && !relatedField)
+			throw new Error(
+				`Implementation Error: You must specify either an ID or a related field and neither was specified.`
+			);
 		// We now need to update the MetadataStorage for type graphql
 		// this is so the new function that we return below is setup in the schema
 		const metadata = getMetadataStorage();
@@ -84,9 +88,10 @@ export function RelationshipField<
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
+			const filter = id ? { id } : { [relatedField as string]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
-				args: { filter: { id } },
+				args: { filter },
 				info,
 				context,
 				transactional: false,
