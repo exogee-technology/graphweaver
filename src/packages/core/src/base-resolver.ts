@@ -48,6 +48,7 @@ const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
 export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<any>>();
+export const hookManagerMap = new Map<string, HookManager<any>>([]);
 
 export interface BaseResolverMetadataEntry<D extends BaseDataEntity> {
 	provider: BackendProvider<D, GraphQLEntity<D>>;
@@ -61,9 +62,7 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
-export interface BaseResolverInterface<T> {
-	hookManager?: HookManager<T>;
-}
+export interface BaseResolverInterface {}
 
 export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
@@ -74,7 +73,7 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G>
-): abstract new () => BaseResolverInterface<G> {
+): abstract new () => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -305,9 +304,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	@Resolver({ isAbstract: true })
-	abstract class BaseResolver implements BaseResolverInterface<G> {
-		public hookManager?: HookManager<G>;
-
+	abstract class BaseResolver implements BaseResolverInterface {
 		public async startTransaction<T>(callback: () => Promise<T>) {
 			return provider.startTransaction ? provider.startTransaction<T>(callback) : callback();
 		}
@@ -317,8 +314,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			hookParams: H,
 			entities: (G | null)[]
 		): Promise<(G | null)[]> {
-			const { entities: hookEntities = [] } = this.hookManager
-				? await this.hookManager.runHooks(hookRegister, {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const { entities: hookEntities = [] } = hookManager
+				? await hookManager.runHooks(hookRegister, {
 						...hookParams,
 						entities,
 				  })
@@ -339,14 +337,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: ReadHookParams<G> = {
 				args: { filter, pagination },
 				info,
 				context,
 				transactional: false,
 			};
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
 			const result = await QueryManager.find<D, G>({
@@ -373,6 +372,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: ReadHookParams<G> = {
 				args: { filter: { id } },
 				info,
@@ -380,8 +380,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				transactional: false,
 			};
 
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
 			if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
@@ -504,9 +504,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			hookRegister: HookRegister,
 			params: CreateOrUpdateHookParams<G>
 		): Promise<CreateOrUpdateHookParams<G>> {
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(hookRegister, params)
-				: params;
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
 
 			const items = hookParams.args?.items;
 			if (!items) throw new Error('No data specified cannot continue.');
@@ -599,6 +598,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		): Promise<Array<G | null>> {
 			return this.startTransaction<Array<G | null>>(async () => {
 				// Extracted common properties
+				const hookManager = hookManagerMap.get(gqlEntityTypeName);
 				const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
 					info,
 					context,
@@ -618,8 +618,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					...commonParams,
 				};
 				const updateHookParams =
-					updateItems.length && this.hookManager
-						? await this.hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
+					updateItems.length && hookManager
+						? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
 						: updateParams;
 
 				// Prepare createParams and run hook if needed
@@ -628,8 +628,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					...commonParams,
 				};
 				const createHookParams =
-					createItems.length && this.hookManager
-						? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
+					createItems.length && hookManager
+						? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
 						: createParams;
 
 				// Combine update and create items into a single array
@@ -701,6 +701,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		) {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: DeleteHookParams<G> = {
 				args: { filter: { id } },
 				info,
@@ -708,16 +709,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				transactional: false,
 			};
 
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 				: params;
 
 			if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
 
 			const success = await provider.deleteOne(hookParams.args?.filter);
 
-			this.hookManager &&
-				(await this.hookManager.runHooks(HookRegister.AFTER_DELETE, {
+			hookManager &&
+				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 					...hookParams,
 					deleted: success,
 				}));

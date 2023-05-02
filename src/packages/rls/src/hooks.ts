@@ -3,6 +3,7 @@ import {
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	EntityMetadataMap,
+	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	ReadHookParams,
@@ -25,11 +26,11 @@ const assertTransactional = (transactional: boolean) => {
 		);
 };
 
-export const afterCreateOrUpdate = async <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+export const afterCreateOrUpdate = async <G>(
 	params: CreateOrUpdateHookParams<G, AuthorizationContext>
 ) => {
 	const items = params.args.items;
-	const entities = params.entities ?? [];
+	const entities = (params.entities ?? []) as GraphQLEntity<BaseDataEntity>[];
 
 	// 1. Check to ensure we are within a transaction
 	assertTransactional(params.transactional);
@@ -80,7 +81,10 @@ export const beforeUpdate = (gqlEntityTypeName: string) => {
 			);
 		}
 
-		const target = entity.target as GraphQLEntityConstructor<BaseDataEntity>;
+		const target = entity.target as GraphQLEntityConstructor<
+			GraphQLEntity<BaseDataEntity>,
+			BaseDataEntity
+		>;
 
 		// 1. Check to ensure we are within a transaction
 		assertTransactional(params.transactional);

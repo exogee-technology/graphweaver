@@ -115,7 +115,7 @@ export interface ReadHookParams<G, TContext = BaseContext> extends HookParams<G,
 }
 
 export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
-	args: { filter: { id: string } & Filter<G> };
+	args: { filter: Filter<G> };
 }
 
 export interface GraphqlEntityType<G, D> {
