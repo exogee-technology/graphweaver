@@ -11,9 +11,9 @@ export class Task extends BaseEntity {
 	@Property({ type: String })
 	description!: string;
 
-	@ExternalIdField({ from: 'people' })
+	@ExternalIdField({ from: 'user' })
 	@Property({ type: BigIntType })
-	personId!: string;
+	userId!: string;
 
 	@ManyToMany(() => Tag, (tag) => tag.tasks, { owner: true })
 	tags: Collection<Tag> = new Collection<Tag>(this);

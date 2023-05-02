@@ -17,7 +17,7 @@ CREATE TABLE task (
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  person_id INT NOT NULL
+  user_id INT NOT NULL
 );
 
 CREATE TABLE tag (
@@ -34,7 +34,7 @@ CREATE TABLE task_tags (
 );
 
 -- Seed data for task table
-INSERT INTO task (description, completed, person_id)
+INSERT INTO task (description, completed, user_id)
 VALUES
   ('Buy groceries', false, 1),
   ('Clean the house', true, 1),
