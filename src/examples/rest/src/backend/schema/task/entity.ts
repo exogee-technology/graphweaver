@@ -29,18 +29,9 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => String)
 	description!: string;
 
-	@Field(() => Person, { nullable: true })
-	async people() {
-		if (!this.dataEntity.personId) return null;
+	@RelationshipField<Task>(() => Person, { id: 'personId' })
+	people!: Person;
 
-		return Person.fromBackendEntity(
-			await BaseLoaders.loadOne({
-				gqlEntityType: Person,
-				id: this.dataEntity.personId,
-			})
-		);
-	}
-
-	@RelationshipField(() => [Tag], { relatedField: 'tasks' })
-	tags!: Tag;
+	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
+	tags!: Tag[];
 }

@@ -9,8 +9,8 @@ export type DataEntity<T> = {
 	[x in keyof T]: T[x];
 };
 
-export interface GraphQLEntityConstructor<D extends BaseDataEntity> {
-	new (dataEntity: D): GraphQLEntity<D>;
+export interface GraphQLEntityConstructor<G extends GraphQLEntity<D>, D extends BaseDataEntity> {
+	new (dataEntity: D): G;
 }
 
 export type FieldMetadata = TypeGraphQLFieldMetadata;

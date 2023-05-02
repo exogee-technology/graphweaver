@@ -118,7 +118,10 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 			const [key, childNode] = entry as any;
 
 			const relationship = meta.fields.find((field) => field.name === key);
-			const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<BaseDataEntity>;
+			const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
+				GraphQLEntity<BaseDataEntity>,
+				BaseDataEntity
+			>;
 			const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
 
 			if (isRelatedEntity) {

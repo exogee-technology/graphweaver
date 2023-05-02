@@ -2,16 +2,23 @@ import { getMetadataStorage } from 'type-graphql';
 import { ReturnTypeFunc } from 'type-graphql/dist/decorators/types';
 import { findType } from 'type-graphql/dist/helpers/findType';
 import { BaseLoaders } from '../base-loader';
-import { BaseContext, BaseDataEntity, GraphQLEntityConstructor, GraphQLResolveInfo } from '..';
+import {
+	BaseContext,
+	BaseDataEntity,
+	GraphQLEntity,
+	GraphQLEntityConstructor,
+	GraphQLResolveInfo,
+} from '..';
 
 type RelationshipFieldOptions<D> = {
-	relatedField: keyof D & string;
+	relatedField?: keyof D & string;
+	id?: keyof D & string;
 };
 
-export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEntity>>(
-	returnTypeFunc: ReturnTypeFunc,
-	{ relatedField }: RelationshipFieldOptions<any>
-) {
+export function RelationshipField<
+	G extends GraphQLEntity<D> = any,
+	D extends BaseDataEntity = G['dataEntity']
+>(returnTypeFunc: ReturnTypeFunc, { relatedField, id }: RelationshipFieldOptions<D>) {
 	return (target: any, key: string) => {
 		// We now need to update the MetadataStorage for type graphql
 		// this is so the new function that we return below is setup in the schema
@@ -73,14 +80,30 @@ export function RelationshipField<G extends GraphQLEntityConstructor<BaseDataEnt
 
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
-			const gqlEntityType = getType() as G;
-			const tags = await BaseLoaders.loadByRelatedId({
-				gqlEntityType,
-				relatedField: relatedField as any,
-				id: root.id,
-			});
+			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
-			return tags.map((tag) => (gqlEntityType as any).fromBackendEntity(tag));
+			let dataEntities: D[] | undefined = undefined;
+			if (relatedField) {
+				dataEntities = await BaseLoaders.loadByRelatedId({
+					gqlEntityType,
+					relatedField: relatedField,
+					id: root.id,
+				});
+			}
+
+			if (id) {
+				const dataEntity = await BaseLoaders.loadOne({
+					gqlEntityType,
+					id: root.dataEntity[id],
+				});
+				dataEntities = [dataEntity];
+			}
+
+			const result = dataEntities?.map((dataEntity) =>
+				(gqlEntityType as any).fromBackendEntity(dataEntity)
+			);
+
+			return id ? result?.[0] : result;
 		};
 
 		// define new property descriptor to overwrite the current property on the class
