@@ -85,7 +85,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	const gqlEntityTypeName = objectNames[0].name;
 	const plural = pluralize(gqlEntityTypeName);
-	const transactional = !!provider.startTransaction;
+	const transactional = !!provider.withTransaction;
 
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
@@ -304,8 +304,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	@Resolver({ isAbstract: true })
 	abstract class BaseResolver implements BaseResolverInterface {
-		public async startTransaction<T>(callback: () => Promise<T>) {
-			return provider.startTransaction ? provider.startTransaction<T>(callback) : callback();
+		public async withTransaction<T>(callback: () => Promise<T>) {
+			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}
 
 		public async runAfterHooks<H extends HookParams<G>>(
@@ -518,7 +518,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			return this.startTransaction<Array<G | null>>(async () => {
+			return this.withTransaction<Array<G | null>>(async () => {
 				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
 					args: { items: createItems.data },
 					info,
@@ -543,7 +543,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
-			return this.startTransaction<G | null>(async () => {
+			return this.withTransaction<G | null>(async () => {
 				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
 					args: { items: [createItemData] },
 					info,
@@ -565,7 +565,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			return this.startTransaction<Array<G | null>>(async () => {
+			return this.withTransaction<Array<G | null>>(async () => {
 				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
 					args: { items: updateItems.data },
 					info,
@@ -595,7 +595,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			return this.startTransaction<Array<G | null>>(async () => {
+			return this.withTransaction<Array<G | null>>(async () => {
 				// Extracted common properties
 				const hookManager = hookManagerMap.get(gqlEntityTypeName);
 				const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
@@ -676,7 +676,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
-			return this.startTransaction<G | null>(async () => {
+			return this.withTransaction<G | null>(async () => {
 				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
 					args: { items: [updateItemData] },
 					info,
