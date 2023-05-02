@@ -22,7 +22,7 @@ import { MySqlDriver } from '@mikro-orm/mysql';
 import { Task } from './entities';
 import { Tag } from './entities';
 
-import { PersonResolver } from './schema/person';
+import { UserResolver } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
 
@@ -38,7 +38,7 @@ export enum Roles {
 }
 
 const graphweaver = new Graphweaver<Context>({
-	resolvers: [TaskResolver, TagResolver, PersonResolver],
+	resolvers: [TaskResolver, TagResolver, UserResolver],
 	apolloServerOptions: {
 		introspection: isOffline,
 	},

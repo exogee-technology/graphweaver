@@ -12,7 +12,7 @@ import { Field, ID, ObjectType, Root } from 'type-graphql';
 import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Task as OrmTask } from '../../entities';
-import { Person } from '../person';
+import { User } from '../user';
 import { Context } from '../../';
 import { Tag } from '../tag';
 
@@ -23,7 +23,7 @@ type DeleteHook = DeleteHookParams<Task, Context>;
 const acl: AccessControlList<Task, Context> = {
 	LIGHT_SIDE: {
 		// Users can only perform operations on their own tasks
-		all: (context) => ({ people: { id: context.user.id } }),
+		all: (context) => ({ user: { id: context.user.id } }),
 	},
 	DARK_SIDE: {
 		// Dark side user role can perform operations on any tasks
@@ -42,8 +42,8 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Task>(() => Person, { id: 'personId' })
-	people!: Person;
+	@RelationshipField<Task>(() => User, { id: 'userId' })
+	user!: User;
 
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
