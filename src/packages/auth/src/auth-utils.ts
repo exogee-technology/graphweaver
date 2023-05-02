@@ -199,7 +199,7 @@ export async function checkAuthorization<
 		>;
 		const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
 		if (isRelatedEntity) {
-			// Now we have a related entity lets check we have permission
+			// Now we have a related entity, lets check we have permission
 			const accessType = requiredPermissionsForAction(value);
 			const values = Array.isArray(value) ? value : [value];
 			for (const item of values) {
