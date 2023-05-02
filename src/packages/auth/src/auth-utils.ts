@@ -157,6 +157,7 @@ export async function checkEntityPermission<
 			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 		}
 	} catch (error) {
+		logger.error('Error while checking entity permissions', error);
 		if ((error as any).message === GENERIC_AUTH_ERROR_MESSAGE) {
 			throw error;
 		}
