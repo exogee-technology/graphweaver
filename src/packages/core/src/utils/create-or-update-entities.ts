@@ -115,7 +115,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 		let node = { ...input };
 		// Lets loop through the properties and check for nested entities
 		for (const entry of Object.entries(input)) {
-			const [key, childNode] = entry as any;
+			const [key, childNode] = entry;
 
 			const relationship = meta.fields.find((field) => field.name === key);
 			const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
