@@ -87,7 +87,7 @@ export interface BackendProvider<D, G> {
 	isCollection(entity: any): boolean;
 
 	// Optional, allows the resolver to start a transaction
-	startTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
+	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
 
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
