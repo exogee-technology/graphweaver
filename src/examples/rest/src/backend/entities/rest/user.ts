@@ -1,6 +1,6 @@
 import { BaseEntity, Field } from '@exogee/graphweaver-rest';
 
-export class People extends BaseEntity {
+export class User extends BaseEntity {
 	@Field()
 	name!: string;
 
