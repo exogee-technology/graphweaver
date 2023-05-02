@@ -1,6 +1,6 @@
 import { BaseLoaders, GraphQLEntity, RelationshipField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-rls';
+import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Tag as OrmTag } from '../../entities';
 import { Context } from '../../';

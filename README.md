@@ -96,7 +96,7 @@ MikroORM backend support for graphweaver
 
 RESTful backend support for graphweaver
 
-### packages/rls - `@exogee/graphweaver-rls`
+### packages/auth - `@exogee/graphweaver-auth`
 
 Row-level security support for graphweaver
 

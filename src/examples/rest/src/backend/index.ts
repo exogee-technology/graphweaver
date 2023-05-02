@@ -16,7 +16,7 @@ import {
 	AuthorizationContext,
 	setAdministratorRoleName,
 	upsertAuthorizationContext,
-} from '@exogee/graphweaver-rls';
+} from '@exogee/graphweaver-auth';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task } from './entities';
