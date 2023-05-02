@@ -108,7 +108,7 @@ export const assertObjectLevelPermissions = <G, TContext extends AuthorizationCo
 };
 
 export async function checkEntityPermission<
-	G extends GraphQLEntityConstructor<D>,
+	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
 	D extends BaseDataEntity
 >(entity: G, id: string, accessType: AccessType) {
 	const { name } = entity;
@@ -165,7 +165,7 @@ export async function checkEntityPermission<
 }
 
 export async function checkAuthorization<
-	G extends GraphQLEntityConstructor<D>,
+	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
 	D extends BaseDataEntity
 >(entity: G, id: string, requestInput: Partial<G>, requiredPermission: AccessType) {
 	// Get ACL first
@@ -193,7 +193,10 @@ export async function checkAuthorization<
 
 		// If we are here then we have an array or an object lets see if its a related entity
 		const relationship = meta?.fields.find((field) => field.name === key);
-		const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<BaseDataEntity>;
+		const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
+			GraphQLEntity<BaseDataEntity>,
+			BaseDataEntity
+		>;
 		const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
 		if (isRelatedEntity) {
 			// Now we have a related entity lets check we have permission

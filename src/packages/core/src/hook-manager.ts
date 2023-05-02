@@ -20,7 +20,7 @@ const augmentParamsWithFields = <G, P extends HookParams<G>>(params: P) => {
 	} as P;
 };
 
-export type HookFunction<G, P extends HookParams<G>> = (params: P) => Promise<P>;
+export type HookFunction<G, P extends HookParams<G> = HookParams<G>> = (params: P) => Promise<P>;
 
 export class HookManager<G> {
 	private hooks: Record<HookRegister, HookFunction<G, any>[]> = {

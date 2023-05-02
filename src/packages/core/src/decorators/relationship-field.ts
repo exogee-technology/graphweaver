@@ -8,6 +8,9 @@ import {
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphQLResolveInfo,
+	HookRegister,
+	ReadHookParams,
+	hookManagerMap,
 } from '..';
 
 type RelationshipFieldOptions<D> = {
@@ -82,6 +85,18 @@ export function RelationshipField<
 		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
+			const params: ReadHookParams<G> = {
+				args: { filter: { id } },
+				info,
+				context,
+				transactional: false,
+			};
+
+			const hookManager = hookManagerMap.get(gqlEntityType.name);
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+				: params;
+
 			let dataEntities: D[] | undefined = undefined;
 			if (relatedField) {
 				dataEntities = await BaseLoaders.loadByRelatedId({
@@ -99,11 +114,18 @@ export function RelationshipField<
 				dataEntities = [dataEntity];
 			}
 
-			const result = dataEntities?.map((dataEntity) =>
+			const entities = dataEntities?.map((dataEntity) =>
 				(gqlEntityType as any).fromBackendEntity(dataEntity)
 			);
 
-			return id ? result?.[0] : result;
+			const { entities: hookEntities = [] } = hookManager
+				? await hookManager.runHooks(HookRegister.AFTER_READ, {
+						...hookParams,
+						entities,
+				  })
+				: { entities };
+
+			return id ? hookEntities?.[0] : hookEntities;
 		};
 
 		// define new property descriptor to overwrite the current property on the class
