@@ -48,41 +48,36 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
 
+	// The hooks below are not in use (and are not required when creating an entity)
+	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHook) {
 		return params;
 	}
-
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHook) {
 		return params;
