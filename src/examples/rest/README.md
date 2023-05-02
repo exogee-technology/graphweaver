@@ -29,8 +29,8 @@ CREATE TABLE task_tags (
   task_id INT NOT NULL,
   tag_id INT NOT NULL,
   PRIMARY KEY (task_id, tag_id),
-  FOREIGN KEY (task_id) REFERENCES task(id) ON DELETE CASCADE,
-  FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE
+  FOREIGN KEY (task_id) REFERENCES task(id),
+  FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
 
 -- Seed data for task table
