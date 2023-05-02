@@ -54,7 +54,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 
 			const filter: Filter<D> = {
 				_or: keys.map((k) => {
-					return { id: k } as Filter<D>; // Use a type assertion to ensure it matches Filter<G>
+					return { id: k };
 				}),
 			};
 
