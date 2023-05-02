@@ -107,7 +107,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return this.database.transactional;
 	}
 
-	public async startTransaction<T>(callback: () => Promise<T>) {
+	public async withTransaction<T>(callback: () => Promise<T>) {
 		return this.database.transactional<T>(callback, IsolationLevel.REPEATABLE_READ);
 	}
 
