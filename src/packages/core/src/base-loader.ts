@@ -2,7 +2,7 @@ import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { getMetadataStorage } from 'type-graphql';
 
-import { BaseDataEntity, EntityMetadataMap, Filter } from '.';
+import { BaseDataEntity, EntityMetadataMap, Filter, GraphQLEntity } from '.';
 import { GraphQLEntityConstructor } from './base-entity';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
@@ -37,8 +37,8 @@ const getFieldMetadata = (fieldName: string, gqlEntityType: any) => {
 	return entityFields[0];
 };
 
-const getBaseLoadOneLoader = <D extends BaseDataEntity>(
-	gqlEntityType: GraphQLEntityConstructor<D>
+const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+	gqlEntityType: GraphQLEntityConstructor<G, D>
 ) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
@@ -79,11 +79,11 @@ const getBaseLoadOneLoader = <D extends BaseDataEntity>(
 	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, D>;
 };
 
-const getBaseRelatedIdLoader = <D extends BaseDataEntity>({
+const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
 	gqlEntityType,
 	relatedField,
 }: {
-	gqlEntityType: GraphQLEntityConstructor<D>;
+	gqlEntityType: GraphQLEntityConstructor<G, D>;
 	relatedField: string;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
@@ -134,20 +134,20 @@ const getBaseRelatedIdLoader = <D extends BaseDataEntity>({
 };
 
 export const BaseLoaders = {
-	loadOne: <D extends BaseDataEntity>({
+	loadOne: <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
 		gqlEntityType,
 		id,
 	}: {
-		gqlEntityType: GraphQLEntityConstructor<D>;
+		gqlEntityType: GraphQLEntityConstructor<G, D>;
 		id: string;
 	}) => {
 		const loader = getBaseLoadOneLoader(gqlEntityType);
 		return loader.load(id) as unknown as Promise<D>;
 	},
 
-	loadByRelatedId: <D extends BaseDataEntity>(args: {
-		gqlEntityType: GraphQLEntityConstructor<D>;
-		relatedField: keyof D & string;
+	loadByRelatedId: <G extends GraphQLEntity<D>, D extends BaseDataEntity>(args: {
+		gqlEntityType: GraphQLEntityConstructor<G, D>;
+		relatedField: Omit<keyof D, 'isCollection' | 'isReference'> & string;
 		id: string;
 	}) => {
 		const loader = getBaseRelatedIdLoader(args);
