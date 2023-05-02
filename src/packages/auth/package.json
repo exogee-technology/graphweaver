@@ -22,7 +22,6 @@
 	],
 	"dependencies": {
 		"@exogee/graphweaver": "workspace:0.1.2",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.2",
 		"@exogee/logger": "workspace:0.1.2",
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.13.2",
