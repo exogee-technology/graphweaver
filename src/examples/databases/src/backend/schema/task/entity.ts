@@ -1,4 +1,4 @@
-import { BaseLoaders, GraphQLEntity } from '@exogee/graphweaver';
+import { GraphQLEntity, RelationshipField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';
@@ -14,15 +14,6 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => String)
 	description!: string;
 
-	@Field(() => User, { nullable: true })
-	async user() {
-		if (!this.dataEntity.userId) return null;
-
-		return User.fromBackendEntity(
-			await BaseLoaders.loadOne({
-				gqlEntityType: User,
-				id: this.dataEntity.userId,
-			})
-		);
-	}
+	@RelationshipField<Task>(() => User, { id: 'userId' })
+	user!: User;
 }

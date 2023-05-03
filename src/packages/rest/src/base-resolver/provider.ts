@@ -1,4 +1,10 @@
-import { BackendProvider, Filter, GraphQLEntity, PaginationOptions } from '@exogee/graphweaver';
+import {
+	BackendProvider as Provider,
+	BaseDataEntity as DE,
+	Filter,
+	GraphQLEntity as GE,
+	PaginationOptions,
+} from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
 export type AccessorParams = {
@@ -9,7 +15,7 @@ export interface RestDataAccessor<T> {
 	find: (args: AccessorParams) => Promise<T[]>;
 }
 
-export class RestBackendProvider<D, G extends GraphQLEntity<D>> implements BackendProvider<D, G> {
+export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provider<D, G> {
 	public readonly backendId = 'rest-api';
 	public constructor(protected entityTypeName: string, protected accessor?: RestDataAccessor<D>) {}
 

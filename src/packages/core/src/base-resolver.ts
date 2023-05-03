@@ -1,4 +1,3 @@
-import { logger } from '@exogee/logger';
 import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
 import pluralize from 'pluralize';
 import {
@@ -18,9 +17,8 @@ import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 
-import { AclMap, GraphQLEntity } from '.';
+import { BaseDataEntity, GraphQLEntity } from '.';
 import type {
-	AuthorizationContext,
 	BackendProvider,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
@@ -31,8 +29,9 @@ import type {
 	PaginationOptions,
 	ReadHookParams,
 	HookParams,
+	BaseContext,
 } from './common/types';
-import { AccessControlList, Sort, TypeMap } from './common/types';
+import { Sort, TypeMap } from './common/types';
 import {
 	isExcludedFromFilterType,
 	isExcludedFromInputTypes,
@@ -41,40 +40,39 @@ import {
 } from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
+import { createOrUpdateEntities } from './utils/create-or-update-entities';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
 const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
-export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<unknown>>();
+export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<any>>();
+export const hookManagerMap = new Map<string, HookManager<any>>([]);
 
-export interface BaseResolverMetadataEntry<G> {
-	provider: BackendProvider<any, GraphQLEntity<G>>;
+export interface BaseResolverMetadataEntry<D extends BaseDataEntity> {
+	provider: BackendProvider<D, GraphQLEntity<D>>;
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
-	accessControlList?: AccessControlList<any>;
 }
 
 export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue) {
 	scalarTypes.set(scalarType, treatAsType);
 }
 
-export interface BaseResolverInterface<T> {
-	hookManager?: HookManager<T>;
-}
+export interface BaseResolverInterface {}
 
-const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
+export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
 };
 
 // G = GraphQL entity
 // D = Data Entity
-export function createBaseResolver<G extends WithId, D>(
+export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G>
-): abstract new () => BaseResolverInterface<G> {
+): abstract new () => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -87,25 +85,17 @@ export function createBaseResolver<G extends WithId, D>(
 
 	const gqlEntityTypeName = objectNames[0].name;
 	const plural = pluralize(gqlEntityTypeName);
+	const transactional = !!provider.withTransaction;
 
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
-
-	let acl = AclMap.get(gqlEntityType.name);
-	if (!acl) {
-		logger.warn(
-			`Could not find ACL for ${gqlEntityType.name} - only administrative users will be able to access this entity`
-		);
-		acl = {};
-	}
 
 	EntityMetadataMap.set(objectNames[0].name, {
 		provider,
 		entity: objectNames[0],
 		fields: entityFields,
 		enums: metadata.enums,
-		accessControlList: acl,
-	} as BaseResolverMetadataEntry<G>);
+	} as BaseResolverMetadataEntry<D>);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -313,16 +303,19 @@ export function createBaseResolver<G extends WithId, D>(
 	}
 
 	@Resolver({ isAbstract: true })
-	abstract class BaseResolver implements BaseResolverInterface<G> {
-		public hookManager?: HookManager<G>;
+	abstract class BaseResolver implements BaseResolverInterface {
+		public async withTransaction<T>(callback: () => Promise<T>) {
+			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
+		}
 
-		public async runAfterHooks<H>(
+		public async runAfterHooks<H extends HookParams<G>>(
 			hookRegister: HookRegister,
 			hookParams: H,
 			entities: (G | null)[]
 		): Promise<(G | null)[]> {
-			const { entities: hookEntities = [] } = this.hookManager
-				? await this.hookManager.runHooks(hookRegister, {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const { entities: hookEntities = [] } = hookManager
+				? await hookManager.runHooks(hookRegister, {
 						...hookParams,
 						entities,
 				  })
@@ -341,15 +334,17 @@ export function createBaseResolver<G extends WithId, D>(
 			@Arg('pagination', () => PaginationInputArgs, { nullable: true })
 			pagination: PaginationOptions,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: ReadHookParams<G> = {
 				args: { filter, pagination },
 				info,
 				context,
+				transactional: false,
 			};
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
 			const result = await QueryManager.find<D, G>({
@@ -374,16 +369,18 @@ export function createBaseResolver<G extends WithId, D>(
 		public async getOne(
 			@Arg('id', () => ID) id: string,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<G | null> {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: ReadHookParams<G> = {
 				args: { filter: { id } },
 				info,
 				context,
+				transactional: false,
 			};
 
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
 			if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
@@ -506,9 +503,8 @@ export function createBaseResolver<G extends WithId, D>(
 			hookRegister: HookRegister,
 			params: CreateOrUpdateHookParams<G>
 		): Promise<CreateOrUpdateHookParams<G>> {
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(hookRegister, params)
-				: params;
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
 
 			const items = hookParams.args?.items;
 			if (!items) throw new Error('No data specified cannot continue.');
@@ -520,30 +516,24 @@ export function createBaseResolver<G extends WithId, D>(
 		async createMany(
 			@Arg('input', () => InsertManyInputArgs) createItems: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
-				args: { items: createItems.data },
-				info,
-				context,
-			});
-			let { items } = params.args;
-
-			// The type may want to further manipulate the input before passing it to the provider.
-			if (gqlEntityType.mapInputForInsertOrUpdate) {
-				const { mapInputForInsertOrUpdate } = gqlEntityType;
-				items = items.map((createItem: any) => mapInputForInsertOrUpdate(createItem));
-			}
-
-			const results = await provider.createMany(items);
-
-			if (gqlEntityType.fromBackendEntity) {
-				const { fromBackendEntity } = gqlEntityType;
-				const entities = results.map((result) => fromBackendEntity.call(gqlEntityType, result));
+			return this.withTransaction<Array<G | null>>(async () => {
+				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
+					args: { items: createItems.data },
+					info,
+					context,
+					transactional,
+				});
+				const { items } = params.args;
+				const entities = (await createOrUpdateEntities(
+					items,
+					gqlEntityType.name,
+					info,
+					context
+				)) as G[];
 				return this.runAfterHooks(HookRegister.AFTER_CREATE, params, entities);
-			}
-
-			return results as any[];
+			});
 		}
 
 		// Create
@@ -551,30 +541,21 @@ export function createBaseResolver<G extends WithId, D>(
 		async createItem(
 			@Arg('data', () => InsertInputArgs) createItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<G | null> {
-			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
-				args: { items: [createItemData] },
-				info,
-				context,
-			});
-			let [item] = params.args.items;
+			return this.withTransaction<G | null>(async () => {
+				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
+					args: { items: [createItemData] },
+					info,
+					context,
+					transactional,
+				});
+				const [item] = params.args.items;
 
-			// The type may want to further manipulate the input before passing it to the provider.
-			if (gqlEntityType.mapInputForInsertOrUpdate) {
-				item = gqlEntityType.mapInputForInsertOrUpdate(item);
-			}
-
-			// Save!
-			const results = await provider.createOne(item);
-
-			if (gqlEntityType.fromBackendEntity) {
-				const result = gqlEntityType.fromBackendEntity.call(gqlEntityType, results);
+				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
 				const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
 				return entity;
-			}
-
-			return results as any; // they're saying there's no need to map, so types don't align, but we trust the dev.
+			});
 		}
 
 		// Update many items in a transaction
@@ -582,34 +563,29 @@ export function createBaseResolver<G extends WithId, D>(
 		async updateMany(
 			@Arg('input', () => UpdateManyInputArgs) updateItems: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
-				args: { items: updateItems.data },
-				info,
-				context,
-			});
-			let { items } = params.args;
+			return this.withTransaction<Array<G | null>>(async () => {
+				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
+					args: { items: updateItems.data },
+					info,
+					context,
+					transactional,
+				});
+				const { items } = params.args;
 
-			// The type may want to further manipulate the input before passing it to the provider.
-			if (gqlEntityType.mapInputForInsertOrUpdate) {
-				const { mapInputForInsertOrUpdate } = gqlEntityType;
-				items = items.map((item) => mapInputForInsertOrUpdate(item));
-			}
+				// Check that all objects have IDs
+				const updateData = items.filter(hasId);
+				if (!updateData.length) throw new Error('No ID found in input so cannot update entity.');
 
-			// Check that all objects have IDs
-			const updateData = items.filter(hasId);
-			if (!updateData.length) throw new Error('No ID found in input so cannot update entity.');
-
-			const results = await provider.updateMany(updateData);
-
-			if (gqlEntityType.fromBackendEntity) {
-				const { fromBackendEntity } = gqlEntityType;
-				const entities = results.map((result) => fromBackendEntity.call(gqlEntityType, result));
+				const entities = (await createOrUpdateEntities(
+					items,
+					gqlEntityType.name,
+					info,
+					context
+				)) as G[];
 				return this.runAfterHooks(HookRegister.AFTER_UPDATE, params, entities);
-			}
-
-			return results as any[];
+			});
 		}
 
 		// CreateOrUpdate many items in a transaction
@@ -617,65 +593,62 @@ export function createBaseResolver<G extends WithId, D>(
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			// Extracted common properties
-			const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
-				info,
-				context,
-			};
+			return this.withTransaction<Array<G | null>>(async () => {
+				// Extracted common properties
+				const hookManager = hookManagerMap.get(gqlEntityTypeName);
+				const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
+					info,
+					context,
+					transactional,
+				};
 
-			// Separate Create and Update items
-			const updateItems = items.data.filter(hasId);
-			const createItems = items.data.filter((value) => !hasId(value));
+				// Separate Create and Update items
+				const updateItems = items.data.filter(hasId);
+				const createItems = items.data.filter((value) => !hasId(value));
 
-			// Extract ids of items being updated
-			const updateItemIds = updateItems.map((item) => item.id) ?? [];
+				// Extract ids of items being updated
+				const updateItemIds = updateItems.map((item) => item.id) ?? [];
 
-			// Prepare updateParams and run hook if needed
-			const updateParams: CreateOrUpdateHookParams<G> = {
-				args: { items: updateItems },
-				...commonParams,
-			};
-			const updateHookParams =
-				updateItems.length && this.hookManager
-					? await this.hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
-					: updateParams;
+				// Prepare updateParams and run hook if needed
+				const updateParams: CreateOrUpdateHookParams<G> = {
+					args: { items: updateItems },
+					...commonParams,
+				};
+				const updateHookParams =
+					updateItems.length && hookManager
+						? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
+						: updateParams;
 
-			// Prepare createParams and run hook if needed
-			const createParams: CreateOrUpdateHookParams<G> = {
-				args: { items: createItems },
-				...commonParams,
-			};
-			const createHookParams =
-				createItems.length && this.hookManager
-					? await this.hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
-					: createParams;
+				// Prepare createParams and run hook if needed
+				const createParams: CreateOrUpdateHookParams<G> = {
+					args: { items: createItems },
+					...commonParams,
+				};
+				const createHookParams =
+					createItems.length && hookManager
+						? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
+						: createParams;
 
-			// Combine update and create items into a single array
-			let data = [...(updateHookParams.args?.items ?? []), ...(createHookParams.args?.items ?? [])];
+				// Combine update and create items into a single array
+				const data = [
+					...(updateHookParams.args?.items ?? []),
+					...(createHookParams.args?.items ?? []),
+				];
 
-			// Apply mapInputForInsertOrUpdate if available
-			if (gqlEntityType.mapInputForInsertOrUpdate) {
-				const { mapInputForInsertOrUpdate } = gqlEntityType;
-				data = data.map((updateItem: any) => mapInputForInsertOrUpdate(updateItem));
-			}
-
-			// Call provider.createOrUpdateMany with prepared data to perform data operation
-			const results = await provider.createOrUpdateMany(data);
-
-			// Apply fromBackendEntity if available and run after hooks
-			if (gqlEntityType.fromBackendEntity) {
-				const { fromBackendEntity } = gqlEntityType;
-				const backendEntities = results.map((result) =>
-					fromBackendEntity.call(gqlEntityType, result)
-				);
+				const entities = (await createOrUpdateEntities(
+					data,
+					gqlEntityType.name,
+					info,
+					context
+				)) as G[];
 
 				// Filter update and create entities
-				const updatedEntities = backendEntities.filter(
+				const updatedEntities = entities.filter(
 					(entity) => entity && updateItemIds.includes(entity.id)
 				);
-				const createdEntities = backendEntities.filter(
+				const createdEntities = entities.filter(
 					(entity) => entity && !updateItemIds.includes(entity.id)
 				);
 
@@ -693,10 +666,7 @@ export function createBaseResolver<G extends WithId, D>(
 
 				// Return combined results from after hooks
 				return [...createHookEntities, ...updateHookEntities];
-			}
-
-			// Fallback if we do not have a fromBackendEntity function to call
-			return results as any[];
+			});
 		}
 
 		// Update
@@ -704,32 +674,23 @@ export function createBaseResolver<G extends WithId, D>(
 		async update(
 			@Arg('data', () => UpdateInputArgs) updateItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		): Promise<G | null> {
-			const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
-				args: { items: [updateItemData] },
-				info,
-				context,
-			});
-			let [item] = params.args.items;
+			return this.withTransaction<G | null>(async () => {
+				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
+					args: { items: [updateItemData] },
+					info,
+					context,
+					transactional,
+				});
+				const [item] = params.args.items;
 
-			// The type may want to further manipulate the input before passing it to the provider.
-			if (gqlEntityType.mapInputForInsertOrUpdate) {
-				item = gqlEntityType.mapInputForInsertOrUpdate(item);
-			}
+				if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');
 
-			if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');
-
-			// Update and save!
-			const results = await provider.updateOne(updateItemData.id, item);
-
-			if (gqlEntityType.fromBackendEntity) {
-				const result = gqlEntityType.fromBackendEntity.call(gqlEntityType, results);
+				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
 				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [result]);
 				return entity;
-			}
-
-			return results as any; // they're saying there's no need to map, so types don't align, but we trust the dev.
+			});
 		}
 
 		// Delete
@@ -737,24 +698,26 @@ export function createBaseResolver<G extends WithId, D>(
 		async deleteItem(
 			@Arg('id', () => ID) id: string,
 			@Info() info: GraphQLResolveInfo,
-			@Ctx() context: AuthorizationContext
+			@Ctx() context: BaseContext
 		) {
+			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: DeleteHookParams<G> = {
 				args: { filter: { id } },
 				info,
 				context,
+				transactional: false,
 			};
 
-			const hookParams = this.hookManager
-				? await this.hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 				: params;
 
 			if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
 
 			const success = await provider.deleteOne(hookParams.args?.filter);
 
-			this.hookManager &&
-				(await this.hookManager.runHooks(HookRegister.AFTER_DELETE, {
+			hookManager &&
+				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 					...hookParams,
 					deleted: success,
 				}));

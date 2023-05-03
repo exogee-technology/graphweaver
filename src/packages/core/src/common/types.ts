@@ -2,6 +2,11 @@ import { registerEnumType } from 'type-graphql';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo } from 'graphql';
 
+export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
+export type { GraphQLResolveInfo } from 'graphql';
+
+export interface BaseContext {}
+
 export type WithId = {
 	id: string;
 };
@@ -27,47 +32,29 @@ export type PaginationOptions = {
 	limit: number;
 };
 
-// Consumers will extend the base context type
-export type AuthorizationContext = {
-	roles?: string[];
+export type FilterEntity<G> = {
+	[K in keyof G]?: G[K] extends (...args: any[]) => Promise<infer C>
+		? Filter<C>
+		: G[K] extends Promise<infer C>
+		? Filter<C>
+		: Filter<G[K]>;
 };
 
-export enum AccessType {
-	Read = 'Read',
-	Create = 'Create',
-	Update = 'Update',
-	Delete = 'Delete',
-}
-
-export const BASE_ROLE_EVERYONE = 'Everyone';
-
-export type AccessControlList<T> = {
-	[K in string]?: AccessControlEntry<T>;
-};
-
-export interface AccessControlEntry<T> {
-	read?: AccessControlValue<T>;
-	create?: AccessControlValue<T>;
-	update?: AccessControlValue<T>;
-	delete?: AccessControlValue<T>;
-	write?: AccessControlValue<T>;
-	all?: AccessControlValue<T>;
-}
-
-export type ConsolidatedAccessControlEntry<T> = {
-	[K in AccessType]?: ConsolidatedAccessControlValue<T>;
-};
-
-export type AccessControlValue<G> = true | FilterFunction<G>;
-export type ConsolidatedAccessControlValue<G> = true | FilterFunction<G>[];
-export type FilterFunction<G> = (context: AuthorizationContext) => Filter<G> | Promise<Filter<G>>;
-
-export type Filter<G> = {
-	id?: string;
+export type FilterTopLevelProperties<G> = {
 	_and?: Filter<G>[];
 	_or?: Filter<G>[];
 	_not?: Filter<G>[];
 };
+
+// G is the root GraphQL entity
+// C is a child GraphQL entity
+export type Filter<G> = {
+	id?: string; // Optional id property
+} & (
+	| FilterEntity<G>
+	| FilterTopLevelProperties<G>
+	| (FilterEntity<G> & FilterTopLevelProperties<G>)
+);
 
 // D = Data entity returned from the datastore
 // G = GraphQL entity
@@ -99,41 +86,43 @@ export interface BackendProvider<D, G> {
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
 
+	// Optional, allows the resolver to start a transaction
+	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
+
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
 }
 
 // G = GraphQL entity
 // A = Args type
-export interface HookParams<G, A> {
-	args: A;
-	context: AuthorizationContext;
+// TContext = GraphQL Context
+export interface HookParams<G, TContext = BaseContext> {
+	context: TContext;
 	info: GraphQLResolveInfo;
-	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
-	entities: (G | null)[];
-	deleted: boolean; // Used by a delete operation to indicate if successful
+	transactional: boolean;
+	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
+	entities?: (G | null)[];
+	deleted?: boolean; // Used by a delete operation to indicate if successful
 }
 
-// export type CreateOrUpdateHookParams<G> = Partial<HookParams<G, { items: Partial<G>[] }>>;
-export type CreateOrUpdateHookParams<G> = {
+export interface CreateOrUpdateHookParams<G, TContext = BaseContext>
+	extends HookParams<G, TContext> {
 	args: { items: Partial<G>[] };
-} & Partial<HookParams<G, { items: Partial<G>[] }>>;
+}
 
-export type ReadHookParams<G> = Partial<
-	HookParams<G, { filter?: Filter<G>; pagination?: PaginationOptions }>
->;
+export interface ReadHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
+	args: { filter?: Filter<G>; pagination?: PaginationOptions };
+}
 
-export type DeleteHookParams<G> = Partial<HookParams<G, { filter: { id: string } & Filter<G> }>>;
+export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
+	args: { filter: Filter<G> };
+}
 
 export interface GraphqlEntityType<G, D> {
 	name: string; // note this is the built-in ES6 class.name attribute
 	typeName?: string;
-	accessControlList?: AccessControlList<G>;
 	fromBackendEntity?(entity: D): G | null;
-	mapInputForInsertOrUpdate?(entity: Partial<G>): Partial<G>;
 }
-
-export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
 export enum AdminUIFilterType {
 	DATE_RANGE = 'DATE_RANGE',

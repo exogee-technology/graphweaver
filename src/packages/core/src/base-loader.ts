@@ -2,7 +2,7 @@ import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { getMetadataStorage } from 'type-graphql';
 
-import { EntityMetadataMap } from '.';
+import { BaseDataEntity, EntityMetadataMap, Filter, GraphQLEntity } from '.';
 import { GraphQLEntityConstructor } from './base-entity';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
@@ -37,7 +37,9 @@ const getFieldMetadata = (fieldName: string, gqlEntityType: any) => {
 	return entityFields[0];
 };
 
-const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => {
+const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+	gqlEntityType: GraphQLEntityConstructor<G, D>
+) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
 		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
@@ -50,7 +52,7 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 				`DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s): (${keys.join(', ')})`
 			);
 
-			const filter = {
+			const filter: Filter<D> = {
 				_or: keys.map((k) => {
 					return { id: k };
 				}),
@@ -62,7 +64,7 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 
 			// Need to return in the same order as was requested. Iterate once and create
 			// a map by ID so we don't n^2 this stuff.
-			const lookup: { [key: string]: T } = {};
+			const lookup: { [key: string]: D } = {};
 			for (const record of records) {
 				lookup[record.id] = record;
 			}
@@ -74,14 +76,14 @@ const getBaseLoadOneLoader = <T>(gqlEntityType: GraphQLEntityConstructor<T>) => 
 		});
 	}
 
-	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, T>;
+	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, D>;
 };
 
-const getBaseRelatedIdLoader = <T>({
+const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
 	gqlEntityType,
 	relatedField,
 }: {
-	gqlEntityType: GraphQLEntityConstructor<T>;
+	gqlEntityType: GraphQLEntityConstructor<G, D>;
 	relatedField: string;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
@@ -103,20 +105,20 @@ const getBaseRelatedIdLoader = <T>({
 
 			// Need to return in the same order as was requested. Iterate once and create
 			// a map by ID so we don't n^2 this stuff.
-			const lookup: { [key: string]: T[] } = {};
+			const lookup: { [key: string]: D[] } = {};
 			for (const record of records) {
 				const relatedRecord = record[relatedField];
 				if (provider.isCollection(relatedRecord)) {
 					// ManyToManys come back this way.
 					for (const subRecord of relatedRecord) {
 						if (!lookup[subRecord.id]) lookup[subRecord.id] = [];
-						lookup[subRecord.id].push(record as T);
+						lookup[subRecord.id].push(record as D);
 					}
 				} else {
 					// ManyToOnes come back this way
 					const relatedRecordId = provider.getRelatedEntityId(relatedRecord, relatedField);
 					if (!lookup[relatedRecordId]) lookup[relatedRecordId] = [];
-					lookup[relatedRecordId].push(record as T);
+					lookup[relatedRecordId].push(record as D);
 				}
 			}
 
@@ -128,28 +130,28 @@ const getBaseRelatedIdLoader = <T>({
 		});
 	}
 
-	return relatedIdLoaderMap[loaderKey] as DataLoader<string, T[]>;
+	return relatedIdLoaderMap[loaderKey] as DataLoader<string, D[]>;
 };
 
 export const BaseLoaders = {
-	loadOne: <T>({
+	loadOne: <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
 		gqlEntityType,
 		id,
 	}: {
-		gqlEntityType: GraphQLEntityConstructor<T>;
+		gqlEntityType: GraphQLEntityConstructor<G, D>;
 		id: string;
 	}) => {
 		const loader = getBaseLoadOneLoader(gqlEntityType);
-		return loader.load(id) as unknown as Promise<T>;
+		return loader.load(id) as unknown as Promise<D>;
 	},
 
-	loadByRelatedId: <T>(args: {
-		gqlEntityType: GraphQLEntityConstructor<T>;
-		relatedField: keyof T & string;
+	loadByRelatedId: <G extends GraphQLEntity<D>, D extends BaseDataEntity>(args: {
+		gqlEntityType: GraphQLEntityConstructor<G, D>;
+		relatedField: Omit<keyof D, 'isCollection' | 'isReference'> & string;
 		id: string;
 	}) => {
 		const loader = getBaseRelatedIdLoader(args);
-		return loader.load(args.id) as unknown as Promise<T[]>;
+		return loader.load(args.id) as unknown as Promise<D[]>;
 	},
 
 	clearCache: () => {

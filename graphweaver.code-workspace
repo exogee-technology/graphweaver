@@ -53,8 +53,8 @@
       "path": "src/packages/rest"
     },
     {
-      "name": "📦 @exogee/graphweaver-rls",
-      "path": "src/packages/rls"
+      "name": "📦 @exogee/graphweaver-auth",
+      "path": "src/packages/auth"
     },
     {
       "name": "📦 @exogee/graphweaver-scalars",

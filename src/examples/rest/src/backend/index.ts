@@ -7,26 +7,45 @@ dotenv.config({
 });
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import {
+	LambdaContextFunctionArgument,
+	handlers,
+	startServerAndCreateLambdaHandler,
+} from '@as-integrations/aws-lambda';
+import {
+	AuthorizationContext,
+	setAdministratorRoleName,
+	upsertAuthorizationContext,
+} from '@exogee/graphweaver-auth';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
-import { Task } from './entities';
+import { Task, Tag } from './entities';
 
-import { PersonResolver } from './schema/person';
+import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
+import { TagResolver } from './schema/tag';
+import { BaseLoaders } from '@exogee/graphweaver';
 
-const graphweaver = new Graphweaver({
-	resolvers: [TaskResolver, PersonResolver],
+export interface Context extends AuthorizationContext {
+	user: User;
+}
+
+export enum Roles {
+	LIGHT_SIDE = 'LIGHT_SIDE',
+	DARK_SIDE = 'DARK_SIDE',
+}
+
+const graphweaver = new Graphweaver<Context>({
+	resolvers: [TaskResolver, TagResolver, UserResolver],
 	apolloServerOptions: {
 		introspection: isOffline,
 	},
 	adminMetadata: { enabled: true },
-
 	mikroOrmOptions: [
 		{
 			connectionManagerId: 'my-sql',
 			mikroOrmConfig: {
-				entities: [Task],
+				entities: [Task, Tag],
 				driver: MySqlDriver,
 				dbName: 'todo_app',
 				user: 'root',
@@ -37,7 +56,31 @@ const graphweaver = new Graphweaver({
 	],
 });
 
-exports.handler = startServerAndCreateLambdaHandler(
+setAdministratorRoleName('ADMINISTRATOR');
+
+export const handler = startServerAndCreateLambdaHandler<any, Context>(
 	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
+	handlers.createAPIGatewayProxyEventRequestHandler(),
+	{
+		context: async ({ event }: LambdaContextFunctionArgument<any>) => {
+			// Let's use the x-user-id to specify a different user for testing
+			// In a real world application this would be inside an access token
+			const userId = (event as any)?.headers?.['x-user-id'] ?? '1';
+
+			const user = User.fromBackendEntity(
+				await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
+			);
+
+			if (!user) throw new Error('Bad Request: Unknown user id provided.');
+
+			const context: Context = {
+				user,
+				// If the user id is 4 this is Darth Vader and we return the dark side role
+				roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
+			};
+
+			upsertAuthorizationContext(context);
+			return context;
+		},
+	}
 );

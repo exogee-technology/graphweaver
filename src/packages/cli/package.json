@@ -24,6 +24,6 @@
 	},
 	"devDependencies": {
 		"@types/node": "18.11.9",
-		"prettier": "2.7.1"
+		"prettier": "2.8.8"
 	}
 }

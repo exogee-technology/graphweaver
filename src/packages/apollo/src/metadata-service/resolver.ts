@@ -1,5 +1,4 @@
 import {
-	AuthorizedBaseFunctions,
 	EntityMetadataMap,
 	isSummaryField,
 	AdminUISettingsMap,
@@ -39,7 +38,6 @@ const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): Admi
 };
 
 @Resolver((of) => AdminUiMetadata)
-@AuthorizedBaseFunctions()
 export class AdminUiMetadataResolver {
 	@Query(() => AdminUiMetadata, { name: '_graphweaver' })
 	public async getAdminUiMetadata() {
