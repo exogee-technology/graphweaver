@@ -144,3 +144,11 @@ Once the database is up and running you can start the example with:
 pnpm i
 pnpm start
 ```
+
+## Authorization
+
+This example also demonstrates the use of the auth library. By default all requests are made by "Luke Skywalker" and Luke is only able to view and create tasks for himself.
+
+However, if you send a header of `x-user-id: 4` to the server then this will change the logged-in user to "Darth Vadar".
+
+Darth has access to edit and create all entities, he has the power of the dark side.
