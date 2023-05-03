@@ -19,17 +19,15 @@ import {
 } from '@exogee/graphweaver-auth';
 import { MySqlDriver } from '@mikro-orm/mysql';
 
-import { Task } from './entities';
-import { Tag } from './entities';
+import { Task, Tag } from './entities';
 
-import { UserResolver } from './schema/user';
+import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
+import { BaseLoaders } from '@exogee/graphweaver';
 
 export interface Context extends AuthorizationContext {
-	user: {
-		id: string;
-	};
+	user: User;
 }
 
 export enum Roles {
@@ -68,12 +66,17 @@ export const handler = startServerAndCreateLambdaHandler<any, Context>(
 			// Let's use the x-user-id to specify a different user for testing
 			// In a real world application this would be inside an access token
 			const userId = (event as any)?.headers?.['x-user-id'] ?? '1';
+
+			const user = User.fromBackendEntity(
+				await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
+			);
+
+			if (!user) throw new Error('Bad Request: Unknown user id provided.');
+
 			const context: Context = {
-				user: {
-					id: userId,
-				},
-				// If the user id is Darth Vader then return the dark side role
-				roles: userId === '4' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
+				user,
+				// If the user id is 4 this is Darth Vader and we return the dark side role
+				roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
 			};
 
 			upsertAuthorizationContext(context);
