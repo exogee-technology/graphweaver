@@ -4,6 +4,7 @@ import {
 	Sort,
 	Filter,
 	GraphQLEntity,
+	BaseDataEntity,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -17,6 +18,7 @@ import {
 	ConnectionManager,
 	externalIdFieldMap,
 	AnyEntity,
+	IsolationLevel,
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
@@ -80,13 +82,14 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
+export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEntity<D>>
 	implements BackendProvider<D, G>
 {
 	private _backendId: string;
 
 	public entityType: new () => D;
 	public connectionManagerId?: string;
+	private transactionIsolationLevel!: IsolationLevel;
 
 	public readonly supportsInFilter = true;
 
@@ -105,6 +108,10 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return this.database.transactional;
 	}
 
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return this.database.transactional<T>(callback, this.transactionIsolationLevel);
+	}
+
 	// This is exposed for use in the RLS package
 	public get em() {
 		return this.database.em;
@@ -117,10 +124,15 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 		return repository as SqlEntityRepository<D>;
 	};
 
-	public constructor(mikroType: new () => D, connectionManagerId?: string) {
+	public constructor(
+		mikroType: new () => D,
+		connectionManagerId?: string,
+		transactionIsolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ
+	) {
 		this.entityType = mikroType;
 		this.connectionManagerId = connectionManagerId;
 		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
+		this.transactionIsolationLevel = transactionIsolationLevel;
 	}
 
 	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<G>) => {
@@ -494,7 +506,11 @@ export class MikroBackendProvider<D extends {}, G extends GraphQLEntity<D>>
 
 	public async deleteOne(filter: Filter<G>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
-		const deletedRows = await this.getRepository().nativeDelete(filter as FilterQuery<D>);
+		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		const whereWithAppliedExternalIdFields =
+			where && this.applyExternalIdFields(this.entityType, where);
+
+		const deletedRows = await this.getRepository().nativeDelete(whereWithAppliedExternalIdFields);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');

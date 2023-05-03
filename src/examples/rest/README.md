@@ -17,11 +17,24 @@ CREATE TABLE task (
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  person_id INT NOT NULL
+  user_id INT NOT NULL
+);
+
+CREATE TABLE tag (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE task_tags (
+  task_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  PRIMARY KEY (task_id, tag_id),
+  FOREIGN KEY (task_id) REFERENCES task(id),
+  FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
 
 -- Seed data for task table
-INSERT INTO task (description, completed, person_id)
+INSERT INTO task (description, completed, user_id)
 VALUES
   ('Buy groceries', false, 1),
   ('Clean the house', true, 1),
@@ -131,3 +144,11 @@ Once the database is up and running you can start the example with:
 pnpm i
 pnpm start
 ```
+
+## Authorization
+
+This example also demonstrates the use of the auth library. By default all requests are made by "Luke Skywalker" and Luke is only able to view and create tasks for himself.
+
+However, if you send a header of `x-user-id: 4` to the server then this will change the logged-in user to "Darth Vadar".
+
+Darth has access to edit and create all entities, he has the power of the dark side.

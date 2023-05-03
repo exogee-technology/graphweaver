@@ -1,7 +1,7 @@
 import { getMetadataStorage, ObjectType } from 'type-graphql';
 import { FieldMetadata as TypeGraphQLFieldMetadata } from 'type-graphql/dist/metadata/definitions';
 
-import { AccessControlList, AdminUISettingsType } from '.';
+import { AdminUISettingsType, BackendProvider, GraphqlEntityType } from '.';
 
 const metadata = getMetadataStorage();
 
@@ -9,9 +9,9 @@ export type DataEntity<T> = {
 	[x in keyof T]: T[x];
 };
 
-export type GraphQLEntityConstructor<T> = {
-	new (dataEntity: T): GraphQLEntity<T>;
-};
+export interface GraphQLEntityConstructor<G extends GraphQLEntity<D>, D extends BaseDataEntity> {
+	new (dataEntity: D): G;
+}
 
 export type FieldMetadata = TypeGraphQLFieldMetadata;
 
@@ -20,15 +20,18 @@ export interface BaseDataEntity {
 	isReference: (fieldName: string, dataField: any) => boolean;
 }
 
-export const AclMap = new Map<string, AccessControlList<any>>();
 // This map is used to store the Admin UI Settings Metadata
 export const AdminUISettingsMap = new Map<string, AdminUISettingsType>();
 
 @ObjectType()
-export class GraphQLEntity<T> {
-	constructor(public dataEntity: T) {}
+export class GraphQLEntity<D extends BaseDataEntity> {
+	public id?: string;
+	constructor(public dataEntity: D) {}
 
-	static fromBackendEntity<T, G>(this: new (dataEntity: T) => G, dataEntity: T) {
+	static fromBackendEntity<D extends BaseDataEntity, G extends GraphQLEntity<D>>(
+		this: new (dataEntity: D) => G,
+		dataEntity: D
+	) {
 		if (dataEntity === undefined || dataEntity === null) return null;
 
 		const entity = new this(dataEntity);
@@ -36,15 +39,14 @@ export class GraphQLEntity<T> {
 		metadata.fields
 			.filter((field) => field.target === this)
 			.forEach((field) => {
-				const dataField = dataEntity?.[field.name as keyof T];
+				const dataField = dataEntity?.[field.name as keyof D];
 
 				if (
 					typeof dataField !== 'undefined' &&
-					!(dataEntity as unknown as BaseDataEntity).isCollection?.(field.name, dataField) &&
-					!(dataEntity as unknown as BaseDataEntity).isReference?.(field.name, dataField) &&
+					!dataEntity.isCollection?.(field.name, dataField) &&
+					!dataEntity.isReference?.(field.name, dataField) &&
 					typeof (entity as any)[field.name] !== 'function'
 				)
-					// @todo: Can't figure out how to infer this type correctly, but this is what we want to do.
 					(entity as any)[field.name] = dataField;
 			});
 

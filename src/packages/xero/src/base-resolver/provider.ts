@@ -1,7 +1,8 @@
 import {
-	BackendProvider,
+	BackendProvider as Provider,
+	BaseDataEntity as DE,
 	Filter,
-	GraphQLEntity,
+	GraphQLEntity as GE,
 	PaginationOptions,
 	Sort,
 } from '@exogee/graphweaver';
@@ -40,7 +41,7 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<D, G extends GraphQLEntity<D>> implements BackendProvider<D, G> {
+export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Provider<D, G> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 

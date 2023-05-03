@@ -12,19 +12,18 @@ export enum HookRegister {
 	AFTER_DELETE = 'AFTER_DELETE',
 }
 
-const augmentParamsWithFields = <G, A>(params: Partial<HookParams<G, A>>) => {
+const augmentParamsWithFields = <G, P extends HookParams<G>>(params: P) => {
 	const parsedInfo = params?.info ? parseResolveInfo(params?.info) : {};
 	return {
 		...params,
 		fields: parsedInfo?.fieldsByTypeName,
-	} as HookParams<G, A>;
+	} as P;
 };
 
+export type HookFunction<G, P extends HookParams<G> = HookParams<G>> = (params: P) => Promise<P>;
+
 export class HookManager<G> {
-	private hooks: Record<
-		HookRegister,
-		(<A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>)[]
-	> = {
+	private hooks: Record<HookRegister, HookFunction<G, any>[]> = {
 		[HookRegister.BEFORE_CREATE]: [],
 		[HookRegister.AFTER_CREATE]: [],
 		[HookRegister.BEFORE_READ]: [],
@@ -35,18 +34,12 @@ export class HookManager<G> {
 		[HookRegister.AFTER_DELETE]: [],
 	};
 
-	registerHook(
-		hookType: HookRegister,
-		hook: <A>(params: Partial<HookParams<G, A>>) => Promise<HookParams<G, A>>
-	): void {
+	registerHook<P extends HookParams<G>>(hookType: HookRegister, hook: HookFunction<G, P>): void {
 		const existingHooks = this.hooks[hookType];
 		this.hooks[hookType] = [...existingHooks, hook];
 	}
 
-	async runHooks<A>(
-		hookType: HookRegister,
-		params: Partial<HookParams<G, A>>
-	): Promise<Partial<HookParams<G, A>>> {
+	async runHooks<P extends HookParams<G>>(hookType: HookRegister, params: P): Promise<P> {
 		const hooks = this.hooks[hookType];
 		if (!hooks || hooks.length === 0) {
 			return params;
@@ -54,7 +47,7 @@ export class HookManager<G> {
 
 		let currentParams = params;
 		for (const hook of hooks) {
-			currentParams = await hook<A>(augmentParamsWithFields(currentParams));
+			currentParams = await hook(augmentParamsWithFields(currentParams));
 		}
 
 		return currentParams;
