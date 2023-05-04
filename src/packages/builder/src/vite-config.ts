@@ -19,5 +19,8 @@ export const viteConfig = (options: ViteConfigOptions): InlineConfig => ({
 		port: 8000,
 		host: options.host,
 	},
+	optimizeDeps: {
+		include: ['react-dom/client', 'react-dom'],
+	},
 	plugins: [svgr(), react(), graphweaver()],
 });
