@@ -1,6 +1,6 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { Backend, packagesForBackend } from './backend';
-import { GRAPHWEAVER_TARGET_VERSION } from './constants';
+import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
 
 export const makePackageJson = (projectName: string, backends: Backend[]) => {
 	const backendPackages = Object.assign(
@@ -16,6 +16,7 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 			start: 'ts-node src/index.ts',
 		},
 		dependencies: {
+			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
 			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
 			'@exogee/graphweaver-cli': GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
@@ -42,14 +43,20 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 /* ${projectName} GraphWeaver Project */
 
 import 'reflect-metadata';
-import Graphweaver, { startStandaloneServer } from '@exogee/graphweaver-apollo';
-import { PingResolver } from './schema';
-
-config();
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import Graphweaver from '@exogee/graphweaver-apollo';
 
 const graphweaver = new Graphweaver({
-	resolvers: [PingResolver as any],
-	mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
+	resolvers: [],
+	mikroOrmOptions: [
+		{
+			connectionManagerId: 'db',
+			mikroOrmConfig: {
+				entities: [],
+				dbName: '%%REPLACE_WITH_DB_NAME%%'
+			},
+		},
+	],
 	apolloServerOptions: {
 		introspection: process.env.IS_OFFLINE === 'true',
 		schema: {} as any, // @todo
@@ -58,11 +65,12 @@ const graphweaver = new Graphweaver({
 	adminMetadata: { enabled: true },
 });
 
-(async () => {
-	const { url } = await startStandaloneServer(graphweaver.server);
-	console.log(\`GraphWeaver with apollo is ready and awaiting at \${url}\`);
-	open(url);
-})();
+export const handler = startServerAndCreateLambdaHandler<any>(
+	graphweaver.server,
+	handlers.createAPIGatewayProxyEventRequestHandler()
+);
+
+
 `;
 
 	writeFileSync(`${projectName}/src/index.ts`, index);
