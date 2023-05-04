@@ -8,7 +8,12 @@ export interface StartOptions {
 
 export const startFrontend = async (options: StartOptions) => {
 	// Generate a Vite Config
-	const rootDirectory = path.resolve(require.resolve('@exogee/graphweaver-admin-ui'), '..', '..');
+	const rootDirectory = path.resolve(
+		require.resolve('@exogee/graphweaver-admin-ui'),
+		'..',
+		'..',
+		'dist'
+	);
 
 	const config = viteConfig({
 		rootDirectory,
