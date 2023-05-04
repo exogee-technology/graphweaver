@@ -1,13 +1,14 @@
 import esbuild from 'esbuild';
 import svgrPlugin from 'esbuild-plugin-svgr';
 import cssModulesPlugin from 'esbuild-css-modules-plugin';
+import { copy } from 'esbuild-plugin-copy';
 
 const flags = process.argv.slice(0);
 const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName}`);
 
 (async () => {
 	await esbuild.build({
-		outdir: 'lib',
+		outdir: 'dist',
 		format: 'esm',
 		bundle: true,
 		minify: false,
@@ -28,7 +29,22 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 			'@exogee/graphweaver-admin-ui-components',
 		],
 		entryPoints: ['src/main.tsx'],
-		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],
+		plugins: [
+			cssModulesPlugin({ inject: true }),
+			svgrPlugin({ exportType: 'named' }),
+			copy({
+				assets: [
+					{
+						from: ['./src/assets/**/*'],
+						to: ['./assets'],
+					},
+					{
+						from: ['./src/index.html'],
+						to: ['./index.html'],
+					},
+				],
+			}),
+		],
 		watch: flagIncludes('watch'),
 	});
 })();
