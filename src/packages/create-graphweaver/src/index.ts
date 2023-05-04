@@ -18,8 +18,6 @@ const abort = () => {
 	exit(1);
 };
 
-// const thisScriptDirectory = __dirname;
-
 (async () => {
 	console.log(chalk.green('GraphWeaver\n'));
 
@@ -35,8 +33,12 @@ const abort = () => {
 			message: 'Which GraphWeaver backends will you need?',
 			choices: [
 				{
-					value: Backend.MikroORMPostgres,
+					value: Backend.MikroOrmPostgres,
 					name: 'MikroORM - PostgreSQL Backend',
+				},
+				{
+					value: Backend.MikroOrmMysql,
+					name: 'MikroORM - MySQL Backend',
 				},
 				{
 					value: Backend.REST,
@@ -47,24 +49,20 @@ const abort = () => {
 		{
 			type: 'confirm',
 			name: 'createDirectory',
-			message: `OK, we're ready- I'm going to create a new app in ${cwd()}- is that OK?`,
+			message: `OK, we're ready- I'm going to create a new app in "${cwd()}" - is that OK?`,
 		},
 	]);
 
 	if (!createDirectory) abort();
 
-	makeDirectories();
+	makeDirectories(projectName);
 	makeReadme(projectName);
 	makePackageJson(projectName, backends);
-	makeTsConfig();
+	makeTsConfig(projectName);
 	makeIndex(projectName, backends);
 	makeSchemaIndex(projectName, backends);
 
-	console.log(
-		chalk.green(
-			'All Done!\nMake sure you npm install / yarn install / pnpm install, then pnpm start to get started'
-		)
-	);
+	console.log(chalk.green('All Done!\nMake sure you to pnpm install, then pnpm start.'));
 
 	exit(0);
 })();
