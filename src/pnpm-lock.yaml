@@ -31,10 +31,10 @@ importers:
   examples/databases:
     specifiers:
       '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/graphweaver-apollo': workspace:0.1.5
-      '@exogee/graphweaver-cli': workspace:0.1.5
-      '@exogee/graphweaver-mikroorm': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/graphweaver-apollo': workspace:0.1.7
+      '@exogee/graphweaver-cli': workspace:0.1.7
+      '@exogee/graphweaver-mikroorm': workspace:0.1.7
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
@@ -60,12 +60,12 @@ importers:
   examples/rest:
     specifiers:
       '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/graphweaver-apollo': workspace:0.1.5
-      '@exogee/graphweaver-auth': workspace:0.1.5
-      '@exogee/graphweaver-cli': workspace:0.1.5
-      '@exogee/graphweaver-mikroorm': workspace:0.1.5
-      '@exogee/graphweaver-rest': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/graphweaver-apollo': workspace:0.1.7
+      '@exogee/graphweaver-auth': workspace:0.1.7
+      '@exogee/graphweaver-cli': workspace:0.1.7
+      '@exogee/graphweaver-mikroorm': workspace:0.1.7
+      '@exogee/graphweaver-rest': workspace:0.1.7
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
       '@types/node': 14.14.10
@@ -95,14 +95,14 @@ importers:
   examples/xero:
     specifiers:
       '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/graphweaver-admin-ui': workspace:0.1.5
-      '@exogee/graphweaver-admin-ui-components': workspace:0.1.5
-      '@exogee/graphweaver-apollo': workspace:0.1.5
-      '@exogee/graphweaver-cli': workspace:0.1.5
-      '@exogee/graphweaver-scalars': workspace:0.1.5
-      '@exogee/graphweaver-xero': workspace:0.1.5
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/graphweaver-admin-ui': workspace:0.1.7
+      '@exogee/graphweaver-admin-ui-components': workspace:0.1.7
+      '@exogee/graphweaver-apollo': workspace:0.1.7
+      '@exogee/graphweaver-cli': workspace:0.1.7
+      '@exogee/graphweaver-scalars': workspace:0.1.7
+      '@exogee/graphweaver-xero': workspace:0.1.7
+      '@exogee/logger': workspace:0.1.7
       '@nivo/bump': 0.80.0
       '@nivo/core': 0.80.0
       '@nivo/line': 0.80.0
@@ -167,7 +167,7 @@ importers:
     specifiers:
       '@apollo/client': 3.7.1
       '@chialab/esbuild-plugin-html': 0.17.2
-      '@exogee/graphweaver-admin-ui-components': workspace:0.1.5
+      '@exogee/graphweaver-admin-ui-components': workspace:0.1.7
       '@types/pluralize': 0.0.29
       '@types/react': 18.0.25
       '@types/react-dom': 18.0.9
@@ -266,9 +266,9 @@ importers:
   packages/apollo:
     specifiers:
       '@apollo/server': 4.2.2
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/graphweaver-mikroorm': workspace:0.1.5
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/graphweaver-mikroorm': workspace:0.1.7
+      '@exogee/logger': workspace:0.1.7
       '@graphql-tools/schema': 8.0.0
       async-mutex: 0.3.2
       class-validator: 0.13.2
@@ -292,8 +292,8 @@ importers:
 
   packages/auth:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/logger': workspace:0.1.7
       '@types/node': 14.14.10
       apollo-server-errors: 3.3.1
       class-validator: 0.13.2
@@ -323,7 +323,7 @@ importers:
 
   packages/builder:
     specifiers:
-      '@exogee/graphweaver-admin-ui': workspace:0.1.5
+      '@exogee/graphweaver-admin-ui': workspace:0.1.7
       '@serverless/utils': 6.8.2
       '@types/node': 18.11.9
       '@types/rimraf': 3.0.2
@@ -338,7 +338,7 @@ importers:
       serverless-dotenv-plugin: 4.0.2
       serverless-offline: 12.0.2
       vite: 3.2.4
-      vite-plugin-graphweaver: workspace:0.1.5
+      vite-plugin-graphweaver: workspace:0.1.7
       vite-plugin-svgr: 2.2.2
     dependencies:
       '@exogee/graphweaver-admin-ui': link:../admin-ui
@@ -362,8 +362,8 @@ importers:
 
   packages/cli:
     specifiers:
-      '@exogee/graphweaver-admin-ui': workspace:0.1.5
-      '@exogee/graphweaver-builder': workspace:0.1.5
+      '@exogee/graphweaver-admin-ui': workspace:0.1.7
+      '@exogee/graphweaver-builder': workspace:0.1.7
       '@types/node': 18.11.9
       esbuild: 0.15.5
       prettier: 2.8.8
@@ -379,7 +379,7 @@ importers:
 
   packages/core:
     specifiers:
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/logger': workspace:0.1.7
       '@graphql-tools/delegate': 9.0.35
       '@types/pluralize': 0.0.29
       class-validator: 0.13.2
@@ -438,8 +438,8 @@ importers:
 
   packages/mikroorm:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/logger': workspace:0.1.7
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
@@ -473,8 +473,8 @@ importers:
 
   packages/rest:
     specifiers:
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/logger': workspace:0.1.7
       '@types/lodash': 4.14.192
       '@types/luxon': 2.0.7
       '@types/node': 14.14.10
@@ -518,7 +518,7 @@ importers:
 
   packages/scalars:
     specifiers:
-      '@exogee/graphweaver-mikroorm': workspace:0.1.5
+      '@exogee/graphweaver-mikroorm': workspace:0.1.7
       '@types/jest': 26.0.23
       '@types/luxon': 2.0.7
       decimal.js: 10.3.1
@@ -550,8 +550,8 @@ importers:
   packages/xero:
     specifiers:
       '@apollo/server': 4.2.2
-      '@exogee/graphweaver': workspace:0.1.5
-      '@exogee/logger': workspace:0.1.5
+      '@exogee/graphweaver': workspace:0.1.7
+      '@exogee/logger': workspace:0.1.7
       '@types/node': 14.14.10
       class-validator: 0.13.2
       dataloader: 2.2.2
