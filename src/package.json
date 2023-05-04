@@ -15,7 +15,7 @@
 		"clean": "./clean.sh",
 		"format": "pnpm prettier",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
-		"publish": "pnpm -r build && pnpm -r publish --no-git-checks --access public",
+		"publish:packages": "pnpm -r build && pnpm -r publish --no-git-checks --access public",
 		"publish:dry": "pnpm -r build && pnpm -r publish --no-git-checks --access public --dry-run",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
 		"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",

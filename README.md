@@ -129,7 +129,7 @@ This will show you what would be published if you went ahead and did one.
 If you're happy with these and want to publish these changes, run
 
 ```console
-$ pnpm publish --otp [code from 2FA device]
+$ pnpm publish:packages --otp [code from 2FA device]
 ```
 
 You're done!
