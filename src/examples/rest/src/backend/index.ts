@@ -18,13 +18,13 @@ import {
 	upsertAuthorizationContext,
 } from '@exogee/graphweaver-auth';
 import { MySqlDriver } from '@mikro-orm/mysql';
+import { BaseLoaders } from '@exogee/graphweaver';
 
 import { Task, Tag } from './entities';
 
 import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
-import { BaseLoaders } from '@exogee/graphweaver';
 
 export interface Context extends AuthorizationContext {
 	user: User;
