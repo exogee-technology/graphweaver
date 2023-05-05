@@ -44,4 +44,3 @@ export {
 	Utils,
 	wrap,
 } from '@mikro-orm/core';
-export { SqlEntityRepository } from '@mikro-orm/postgresql';

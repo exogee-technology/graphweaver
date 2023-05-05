@@ -13,7 +13,6 @@ import {
 	LockMode,
 	QueryFlag,
 	ReferenceType,
-	SqlEntityRepository,
 	Utils,
 	ConnectionManager,
 	externalIdFieldMap,
@@ -22,6 +21,8 @@ import {
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
+
+import type { SqlEntityRepository } from '@mikro-orm/postgresql';
 
 const objectOperations = new Set(['_and', '_or', '_not']);
 const mikroObjectOperations = new Set(['$and', '$or', '$not']);
