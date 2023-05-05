@@ -4,6 +4,8 @@
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
+		"start": "pnpm build && mkdir -p test && rm -rf test/* && cd test && node ../bin/index.js",
+		"build": "esbuild src/index.ts --bundle --platform=node --outdir=bin --banner:js=\"#!/usr/bin/env node\"",
 		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
@@ -20,10 +22,13 @@
 		"@exogee/graphweaver-admin-ui": "workspace:0.1.7",
 		"@exogee/graphweaver-builder": "workspace:0.1.7",
 		"esbuild": "0.15.5",
+		"inquirer": "9.2.1",
 		"yargs": "17.6.2"
 	},
 	"devDependencies": {
+		"@types/inquirer": "9.0.3",
 		"@types/node": "18.11.9",
+		"@types/yargs": "17.0.24",
 		"prettier": "2.8.8"
 	}
 }

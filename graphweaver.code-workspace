@@ -17,10 +17,6 @@
       "path": "src/examples/xero"
     },
     {
-      "name": "📦 @exogee/create-graphweaver",
-      "path": "src/packages/create-graphweaver"
-    },
-    {
       "name": "📦 @exogee/graphweaver",
       "path": "src/packages/core"
     },
