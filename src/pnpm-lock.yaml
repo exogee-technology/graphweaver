@@ -451,10 +451,11 @@ importers:
       dotenv: 16.0.0
       graphql: 16.6.0
       reflect-metadata: 0.1.13
-    devDependencies:
-      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
+    optionalDependencies:
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
       '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
+    devDependencies:
+      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@types/node': 18.11.11
       esbuild: 0.15.5
       ts-node: 10.4.0_seji7frfqlst5vdfurl2ln7b6i
