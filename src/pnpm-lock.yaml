@@ -37,7 +37,6 @@ importers:
       '@exogee/graphweaver-mikroorm': workspace:0.1.7
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
-      '@mikro-orm/postgresql': 5.4.2
       '@types/node': 14.14.10
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.1
@@ -48,9 +47,8 @@ importers:
       '@exogee/graphweaver-apollo': link:../../packages/apollo
       '@exogee/graphweaver-cli': link:../../packages/cli
       '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
-      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
+      '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
-      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.1
     devDependencies:
@@ -3111,6 +3109,7 @@ packages:
   /@mikro-orm/postgresql/5.4.2_@mikro-orm+core@5.4.2:
     resolution: {integrity: sha512-HSScFbelq/X27JAAkG9CqDRQjp7eQ3MCrD45ey2NpUJli3qG4VnsCCO0rD9K/TThC4rXO/8ZPramhPXSlwnYTA==}
     engines: {node: '>= 14.0.0'}
+    requiresBuild: true
     peerDependencies:
       '@mikro-orm/core': ^5.0.0
       '@mikro-orm/entity-generator': ^5.0.0
