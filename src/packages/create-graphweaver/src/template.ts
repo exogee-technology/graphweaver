@@ -13,11 +13,13 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		version: '0.1.0',
 		description: `${projectName} GraphWeaver Project`,
 		scripts: {
-			start: 'ts-node src/index.ts',
+			build: 'graphweaver build',
+			start: 'graphweaver start',
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
 			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver-apollo': GRAPHWEAVER_TARGET_VERSION,
 			'@exogee/graphweaver-cli': GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
@@ -35,7 +37,9 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 export const makeDirectories = (projectName: string) => {
 	mkdirSync(projectName);
 	mkdirSync(`${projectName}/src`);
-	mkdirSync(`${projectName}/src/schema`);
+	mkdirSync(`${projectName}/src/backend`);
+	mkdirSync(`${projectName}/src/backend/schema`);
+	mkdirSync(`${projectName}/src/backend/schema/ping`);
 };
 
 export const makeIndex = (projectName: string, backends: Backend[]) => {
@@ -45,9 +49,16 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 import 'reflect-metadata';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
+import { PingResolver } from './schema/ping';
+
+const isOffline = process.env.IS_OFFLINE === 'true';
 
 const graphweaver = new Graphweaver({
-	resolvers: [],
+	resolvers: [PingResolver],
+	apolloServerOptions: {
+		introspection: isOffline,
+	},
+	adminMetadata: { enabled: true },
 	mikroOrmOptions: [
 		{
 			connectionManagerId: 'db',
@@ -57,12 +68,6 @@ const graphweaver = new Graphweaver({
 			},
 		},
 	],
-	apolloServerOptions: {
-		introspection: process.env.IS_OFFLINE === 'true',
-		schema: {} as any, // @todo
-		plugins: [],
-	},
-	adminMetadata: { enabled: true },
 });
 
 export const handler = startServerAndCreateLambdaHandler<any>(
@@ -73,19 +78,13 @@ export const handler = startServerAndCreateLambdaHandler<any>(
 
 `;
 
-	writeFileSync(`${projectName}/src/index.ts`, index);
+	writeFileSync(`${projectName}/src/backend/index.ts`, index);
 };
 
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} GraphWeaver Project - Schema */
 import { buildSchemaSync, Resolver, Query } from 'type-graphql';
-
-${
-	backends.includes(Backend.MikroOrmPostgres) || backends.includes(Backend.MikroOrmMysql)
-		? `export const mikroOrmEntities = [ /* Insert MikroORM Entities Here */ ];`
-		: ``
-}
 
 @Resolver()
 export class PingResolver {
@@ -96,7 +95,7 @@ export class PingResolver {
 }   
 `;
 
-	writeFileSync(`${projectName}/src/schema/index.ts`, index);
+	writeFileSync(`${projectName}/src/backend/schema/ping/index.ts`, index);
 };
 
 export const makeTsConfig = (projectName: string) => {
