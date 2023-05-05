@@ -4,8 +4,6 @@
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
-		"start": "pnpm build && mkdir -p test && rm -rf test/* && cd test && node ../bin/index.js",
-		"build": "esbuild src/index.ts --bundle --platform=node --outdir=bin --banner:js=\"#!/usr/bin/env node\"",
 		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
