@@ -1,9 +1,0 @@
-{
-	"extends": "../../tsconfig.json",
-	"include": ["./src", "./package.json"],
-	"compilerOptions": {
-		"rootDir": ".",
-		"outDir": "./lib",
-		"resolveJsonModule": true
-	}
-}

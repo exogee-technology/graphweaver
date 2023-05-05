@@ -1,14 +1,22 @@
 import yargs from 'yargs';
 import {
+	BackendStartOptions,
+	StartOptions,
 	analyseBundle,
 	buildBackend,
 	buildFrontend,
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
+import { create } from './create';
 
 yargs
 	.env('GRAPHWEAVER')
+	.command({
+		command: ['create'],
+		describe: 'Create a graphweaver project in various ways.',
+		handler: create,
+	})
 	.command({
 		command: ['analyse [target]', 'analyze [target]', 'a [target]'],
 		describe: 'Instruments your graphweaver project in various ways.',
@@ -37,10 +45,10 @@ yargs
 			}),
 		handler: async ({ environment }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await buildBackend();
+				await buildBackend({});
 			}
 			if (environment === 'frontend' || environment === 'all') {
-				await buildFrontend();
+				await buildFrontend({});
 			}
 
 			// Note, this will leave the ESBuild service process around:
@@ -68,10 +76,10 @@ yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args);
+				await startBackend(args as BackendStartOptions);
 			}
 			if (environment === 'frontend' || environment === 'all') {
-				await startFrontend(args);
+				await startFrontend(args as StartOptions);
 			}
 		},
 	})
