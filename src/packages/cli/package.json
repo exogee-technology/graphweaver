@@ -20,10 +20,13 @@
 		"@exogee/graphweaver-admin-ui": "workspace:0.1.7",
 		"@exogee/graphweaver-builder": "workspace:0.1.7",
 		"esbuild": "0.15.5",
+		"inquirer": "9.2.1",
 		"yargs": "17.6.2"
 	},
 	"devDependencies": {
+		"@types/inquirer": "9.0.3",
 		"@types/node": "18.11.9",
+		"@types/yargs": "17.0.24",
 		"prettier": "2.8.8"
 	}
 }
