@@ -2,7 +2,7 @@
 
 ## Getting Started with GraphWeaver
 
-You can create a new project with the **GraphWeaver CLI**, by running `npm init @exogee/graphweaver`.
+You can create a new project with the **GraphWeaver CLI**, by running `npx @exogee/graphweaver-cli create`.
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 
@@ -14,10 +14,11 @@ GraphWeaver
 test-project
 
 ? Which GraphWeaver backends will you need?
-MikroORM - PostgreSQL Backend
-REST Backend
+ ◯ MikroORM - PostgreSQL Backend
+ ◯ MikroORM - MySQL Backend
+ ◯ REST Backend
 
-? OK, we're ready- I'm going to create a new app in /Users/helloworld/project- is that OK?
+? OK, we're ready- I'm going to create a new app in "/Users/test-project" - is that OK?
 Yes
 
 All Done!
