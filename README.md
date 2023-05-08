@@ -29,47 +29,25 @@ Make sure you npm install / yarn install / pnpm install, then run the start scri
 
 ## Examples
 
-### examples/example-basic - `@exogee/graphweaver-example-basic`
-
-Stripped down example of using GraphWeaver with the MikroORM adapter.
-
-```
-# Install dependencies
-pnpm install
-
-# Set up .env in apps/example-basic
-DATABASE_HOST=
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
-DATABASE_NAME=
-
-# Run migration, build graphweaver packages, and run example app
-cd src/apps/example-basic && pnpm start
-```
-
-### examples/example-complex - `@exogee/graphweaver-example-complex`
-
-A more complex example of using GraphWeaver with multiple adapters and relationships in serverless.
-
-```
-# Install dependencies
-pnpm install
-
-# Set up .env in apps/example-complex
-DATABASE_HOST=
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
-DATABASE_NAME=
-
-# Run migration, build and run example app
-cd src/apps/example-complex && pnpm migrate && pnpm build && pnpm start
-```
-
 ### examples/databases - `@exogee/graphweaver-example-databases`
 
 An example of using GraphWeaver with two connected databases (MySQL, PostgreSQL) and the MikroORM adapter.
 
 Follow the instructions in the `./src/examples/databases/README.md` to get started.
+
+### examples/rest - `@exogee/graphweaver-example-rest`
+
+It is possible to connect a database and an external REST API to GraphWeaver and expose the data via the GraphQL API.
+
+This example demonstrates how to do that with MySQL and the Star Wars API.
+
+Follow the instructions in the `./src/examples/rest/README.md` to get started.
+
+### examples/xero - `@exogee/graphweaver-example-xero`
+
+An example of using GraphWeaver with Xero
+
+Follow the instructions in the `./src/examples/xero/README.md` to get started.
 
 ## Packages
 
