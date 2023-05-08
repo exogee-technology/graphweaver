@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-apollo",
-	"version": "0.1.7",
+	"version": "0.1.9",
 	"description": "Apollo Server support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,9 +21,9 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.2.2",
-		"@exogee/graphweaver": "workspace:0.1.7",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.7",
-		"@exogee/logger": "workspace:0.1.7",
+		"@exogee/graphweaver": "workspace:0.1.9",
+		"@exogee/graphweaver-mikroorm": "workspace:0.1.9",
+		"@exogee/logger": "workspace:0.1.9",
 		"@graphql-tools/schema": "8.0.0",
 		"async-mutex": "0.3.2",
 		"class-validator": "0.13.2",
