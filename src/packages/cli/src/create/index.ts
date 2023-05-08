@@ -48,7 +48,10 @@ export const create = async () => {
 			{
 				type: 'confirm',
 				name: 'createDirectory',
-				message: `OK, we're ready- I'm going to create a new app in "${cwd()}" - is that OK?`,
+				message: (answers) =>
+					`OK, we're ready- I'm going to create a new app in "${cwd()}/${
+						answers.projectName
+					}" - is that OK?`,
 			},
 		]);
 
