@@ -38,9 +38,11 @@
 		"ts-node": "10.4.0",
 		"typescript": "5.0.2"
 	},
-	"peerDependencies": {
-		"@mikro-orm/core": "5.4.2",
+	"optionalDependencies": {
 		"@mikro-orm/mysql": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2"
+	},
+	"peerDependencies": {
+		"@mikro-orm/core": "5.4.2"
 	}
 }

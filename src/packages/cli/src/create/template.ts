@@ -1,6 +1,6 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { Backend, packagesForBackend } from './backend';
-import { GRAPHWEAVER_TARGET_VERSION } from './constants';
+import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
 
 export const makePackageJson = (projectName: string, backends: Backend[]) => {
 	const backendPackages = Object.assign(
@@ -13,30 +13,33 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		version: '0.1.0',
 		description: `${projectName} GraphWeaver Project`,
 		scripts: {
-			start: 'ts-node src/index.ts',
+			build: 'graphweaver build',
+			start: 'graphweaver start',
 		},
 		dependencies: {
+			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
 			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver-apollo': GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver-cli': GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
-			graphql: '15.8.0',
 			'reflect-metadata': '0.1.13',
-			'type-graphql': '1.1.1',
+			'type-graphql': '2.0.0-beta.1',
 		},
 		devDependencies: {
 			'@types/node': '14.14.10',
-			open: '8.4.0',
-			'ts-node': '10.9.1',
-			typescript: '4.5.4',
-			dotenv: '16.0.0',
+			typescript: '5.0.2',
 		},
 	};
 
-	writeFileSync('package.json', JSON.stringify(packageJson, null, 4));
+	writeFileSync(`${projectName}/package.json`, JSON.stringify(packageJson, null, 4));
 };
 
-export const makeDirectories = () => {
-	mkdirSync('src');
-	mkdirSync('src/schema');
+export const makeDirectories = (projectName: string) => {
+	mkdirSync(projectName);
+	mkdirSync(`${projectName}/src`);
+	mkdirSync(`${projectName}/src/backend`);
+	mkdirSync(`${projectName}/src/backend/schema`);
+	mkdirSync(`${projectName}/src/backend/schema/ping`);
 };
 
 export const makeIndex = (projectName: string, backends: Backend[]) => {
@@ -44,44 +47,44 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 /* ${projectName} GraphWeaver Project */
 
 import 'reflect-metadata';
-import Graphweaver, { startStandaloneServer } from '@exogee/graphweaver-apollo';
-import open from 'open';
-import { config } from 'dotenv';
-import { PingResolver } from './schema';
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import Graphweaver from '@exogee/graphweaver-apollo';
+import { PingResolver } from './schema/ping';
 
-config();
+const isOffline = process.env.IS_OFFLINE === 'true';
 
 const graphweaver = new Graphweaver({
-	resolvers: [PingResolver as any],
-	mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
+	resolvers: [PingResolver],
 	apolloServerOptions: {
-		introspection: process.env.IS_OFFLINE === 'true',
-		schema: {} as any, // @todo
-		plugins: [],
+		introspection: isOffline,
 	},
 	adminMetadata: { enabled: true },
+	mikroOrmOptions: [
+		{
+			connectionManagerId: 'db',
+			mikroOrmConfig: {
+				entities: [],
+				dbName: '%%REPLACE_WITH_DB_NAME%%'
+			},
+		},
+	],
 });
 
-(async () => {
-	const { url } = await startStandaloneServer(graphweaver.server);
-	console.log(\`GraphWeaver with apollo is ready and awaiting at \${url}\`);
-	open(url);
-})();
+export const handler = startServerAndCreateLambdaHandler<any>(
+	graphweaver.server,
+	handlers.createAPIGatewayProxyEventRequestHandler()
+);
+
+
 `;
 
-	writeFileSync('src/index.ts', index);
+	writeFileSync(`${projectName}/src/backend/index.ts`, index);
 };
 
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} GraphWeaver Project - Schema */
 import { buildSchemaSync, Resolver, Query } from 'type-graphql';
-
-${
-	backends.includes(Backend.MikroORMPostgres)
-		? `export const mikroOrmEntities = [ /* Insert MikroORM Entities Here */ ];`
-		: ``
-}
 
 @Resolver()
 export class PingResolver {
@@ -92,10 +95,10 @@ export class PingResolver {
 }   
 `;
 
-	writeFileSync('src/schema/index.ts', index);
+	writeFileSync(`${projectName}/src/backend/schema/ping/index.ts`, index);
 };
 
-export const makeTsConfig = () => {
+export const makeTsConfig = (projectName: string) => {
 	const tsConfig = {
 		compilerOptions: {
 			outDir: './lib',
@@ -112,10 +115,10 @@ export const makeTsConfig = () => {
 		include: ['./src'],
 	};
 
-	writeFileSync('tsconfig.json', JSON.stringify(tsConfig, null, 4));
+	writeFileSync(`${projectName}/tsconfig.json`, JSON.stringify(tsConfig, null, 4));
 };
 
 export const makeReadme = (projectName: string) => {
 	const readme = `# ${projectName} GraphWeaver Project`;
-	writeFileSync('README.md', readme);
+	writeFileSync(`${projectName}/README.md`, readme);
 };

@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { MySqlDriver } from '@mikro-orm/mysql';
+import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
 import { Task, User } from './entities';
 
@@ -20,7 +21,11 @@ const graphweaver = new Graphweaver({
 			connectionManagerId: 'pg',
 			mikroOrmConfig: {
 				entities: [User],
+				driver: PostgreSqlDriver,
 				dbName: 'todo_app',
+				user: 'root',
+				password: '',
+				port: 5432,
 			},
 		},
 		{
