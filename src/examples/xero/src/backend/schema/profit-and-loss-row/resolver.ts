@@ -12,7 +12,7 @@ const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
 
-	const results: ProfitAndLossRow[] = [];
+	const results: XeroProfitAndLossRow[] = [];
 
 	IdGenerator.init(true);
 
@@ -50,7 +50,7 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 							description: description.value,
 						} as XeroProfitAndLossRow;
 
-						results.push(ProfitAndLossRow.fromBackendEntity(profitAndLossRow));
+						results.push(profitAndLossRow);
 					}
 				}
 			}
@@ -84,7 +84,7 @@ export class ProfitAndLossRowResolver extends createBaseResolver<
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
 		find: async ({ xero, filter, order, limit, offset }) => {
-			const result = await forEachTenant<ProfitAndLossRow>(
+			const result = await forEachTenant<XeroProfitAndLossRow>(
 				xero,
 				(tenant) => loadReportForTenant(xero, tenant.tenantId),
 				filter
