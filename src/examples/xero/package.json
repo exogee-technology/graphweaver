@@ -21,6 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
+		"@apollo/client": "3.7.1",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:0.1.7",
 		"@exogee/graphweaver-admin-ui": "workspace:0.1.7",

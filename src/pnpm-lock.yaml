@@ -92,6 +92,7 @@ importers:
 
   examples/xero:
     specifiers:
+      '@apollo/client': 3.7.1
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:0.1.7
       '@exogee/graphweaver-admin-ui': workspace:0.1.7
@@ -129,6 +130,7 @@ importers:
       vite: 3.2.4
       xero-node: 4.30.0
     dependencies:
+      '@apollo/client': 3.7.1_gdcq4dv6opitr3wbfwyjmanyra
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': link:../../packages/core
       '@exogee/graphweaver-admin-ui': link:../../packages/admin-ui
