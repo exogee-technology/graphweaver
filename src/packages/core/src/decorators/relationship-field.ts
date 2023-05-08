@@ -116,7 +116,7 @@ export function RelationshipField<
 					gqlEntityType,
 					id: root.dataEntity[id],
 				});
-				dataEntities = [dataEntity];
+				dataEntities = dataEntity ? [dataEntity] : [];
 			}
 
 			const entities = dataEntities?.map((dataEntity) =>
