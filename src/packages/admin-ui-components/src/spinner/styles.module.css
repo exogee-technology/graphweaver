@@ -1,66 +1,55 @@
-@keyframes fadeoutin {
-	0% {
-		opacity: 1;
+:root {
+	--spinner-size: 32px;
+}
+
+.small {
+	--spinner-size: 18px;
+}
+
+.container {
+	min-width: 100%;
+	min-height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.wrapper {
+	margin: 0;
+}
+
+.loader {
+	width: var(--spinner-size);
+	--c: 255 255 255; /* the color using the RGB format */
+
+	aspect-ratio: 1;
+	display: grid;
+	border-radius: 50%;
+	background: linear-gradient(0deg, rgb(var(--c) / 50%) 30%, #0000 0 70%, rgb(var(--c) / 100%) 0)
+			50%/5% 100%,
+		linear-gradient(90deg, rgb(var(--c) / 25%) 30%, #0000 0 70%, rgb(var(--c) / 75%) 0) 50%/100% 5%;
+	background-repeat: no-repeat;
+	animation: load 1s infinite steps(12);
+}
+.loader::before,
+.loader::after {
+	content: '';
+	grid-area: 1/1;
+	border-radius: 50%;
+	background: inherit;
+	opacity: 0.915;
+	transform: rotate(30deg);
+}
+.loader::after {
+	opacity: 0.83;
+	transform: rotate(60deg);
+}
+
+@keyframes load {
+	from {
+		transform: rotate(0turn);
 	}
-	25% {
-		opacity: 0.5;
+	to {
+		transform: rotate(1turn);
 	}
-	50% {
-		opacity: 0.05;
-	}
-	75% {
-		opacity: 0.5;
-	}
-	100% {
-		opacity: 1;
-	}
-}
-
-.gw-rank {
-	animation: fadeoutin 1.5s ease infinite;
-}
-
-/* 1    2   3
-  4   5  6
-   7    8
-    9  10 
-*/
-.gw-rank:nth-of-type(1) {
-	animation-delay: 0s;
-}
-
-.gw-rank:nth-of-type(2) {
-	animation-delay: 0.5s;
-}
-
-.gw-rank:nth-of-type(3) {
-	animation-delay: 0.8s;
-}
-
-.gw-rank:nth-of-type(4) {
-	animation-delay: 0.1s;
-}
-
-.gw-rank:nth-of-type(5) {
-	animation-delay: 0.4s;
-}
-
-.gw-rank:nth-of-type(6) {
-	animation-delay: 0.7s;
-}
-
-.gw-rank:nth-of-type(7) {
-	animation-delay: 0.2s;
-}
-
-.gw-rank:nth-of-type(8) {
-	animation-delay: 0.6s;
-}
-
-.gw-rank:nth-of-type(9) {
-	animation-delay: 0.3s;
-}
-
-.gw-rank:nth-of-type(10) {
-	animation-delay: 0.5s;
 }

@@ -1,7 +1,13 @@
+.toolBarContainer {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
 .toolBarWrapper {
 	width: 100%;
-	padding: 48px 40px 0 40px;
 	display: flex;
+	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-end;
 }
@@ -17,7 +23,7 @@
 	border: 1px solid rgba(237, 232, 242, 0.1);
 	border-radius: 6px;
 	padding-left: 32px;
-	background-image: url(../../assets/16-search.svg);
+	background-image: url(assets/16-search.svg);
 	background-size: 16px 16px;
 	background-repeat: no-repeat;
 	background-position-x: 8px;

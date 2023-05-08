@@ -1,9 +1,10 @@
 {
 	"extends": "../../tsconfig.json",
-	"include": ["./src"],
+	"include": ["./src", "./package.json"],
 	"compilerOptions": {
-		"rootDir": "./src",
-		"outDir": "./lib"
+		"rootDir": ".",
+		"outDir": "./lib",
+		"resolveJsonModule": true
 	},
 	"references": [{ "path": "../vite-plugin-graphweaver" }, { "path": "../builder" }]
 }

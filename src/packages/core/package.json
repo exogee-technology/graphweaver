@@ -1,14 +1,13 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "0.1.1",
+	"version": "0.1.7",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap=linked `find src \\( -name '*.ts' \\)`",
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write src/**/*.ts",
-		"test": "jest --passWithNoTests",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -20,20 +19,19 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/logger": "workspace:0.1.1",
+		"@exogee/logger": "workspace:0.1.7",
+		"@graphql-tools/delegate": "9.0.35",
 		"class-validator": "0.13.2",
 		"dataloader": "2.2.2",
 		"graphql": "16.6.0",
+		"graphql-parse-resolve-info": "4.13.0",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.1.13",
 		"type-graphql": "2.0.0-beta.1"
 	},
 	"devDependencies": {
-		"@types/jest": "27.0.2",
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
-		"jest": "27.2.2",
-		"ts-jest": "27.0.5",
-		"typescript": "4.9.4"
+		"typescript": "5.0.2"
 	}
 }

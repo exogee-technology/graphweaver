@@ -1,4 +1,9 @@
-import { BaseLoaders, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import {
+	AdminUISettings,
+	GraphQLEntity,
+	RelationshipField,
+	SummaryField,
+} from '@exogee/graphweaver';
 import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
 import { Tenant } from '../tenant';
@@ -22,18 +27,14 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	@Field(() => AccountType)
 	type!: AccountType;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => String)
 	tenantId!: string;
 
-	@Field(() => Tenant, { nullable: true })
-	async tenant() {
-		if (!this.dataEntity.tenantId) return null;
-
-		return Tenant.fromBackendEntity(
-			await BaseLoaders.loadOne({
-				gqlEntityType: Tenant,
-				id: this.dataEntity.tenantId,
-			})
-		);
-	}
+	@RelationshipField<Account>(() => Tenant, { id: 'tenantId' })
+	tenant!: Tenant;
 }

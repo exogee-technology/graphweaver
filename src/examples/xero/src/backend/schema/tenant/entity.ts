@@ -1,9 +1,9 @@
-import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import { AdminUISettings, BaseDataEntity, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
 
 // Xero doesn't provide a type for these for whatever reason. Both
 // xero.tenants and xero.updateTenants() are typed as any[].
-export interface XeroTenant {
+export interface XeroTenant extends BaseDataEntity {
 	id: string;
 	authEventId: string;
 	tenantId: string;
@@ -22,6 +22,11 @@ export class Tenant extends GraphQLEntity<XeroTenant> {
 	@Field(() => ID)
 	id!: string;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => String)
 	authEventId!: string;
 
@@ -32,9 +37,19 @@ export class Tenant extends GraphQLEntity<XeroTenant> {
 	@Field(() => String)
 	tenantType!: string;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => String)
 	createdDateUtc!: string;
 
+	@AdminUISettings({
+		filter: {
+			hide: true,
+		},
+	})
 	@Field(() => String)
 	updatedDateUtc!: string;
 }

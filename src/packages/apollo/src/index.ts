@@ -3,7 +3,7 @@ import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 
 import { logger } from '@exogee/logger';
-import { ApolloServer } from '@apollo/server';
+import { ApolloServer, BaseContext, ContextFunction } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
 	ClearDatabaseContext,
@@ -25,17 +25,16 @@ export interface AdminMetadata {
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	mikroOrmOptions: ConnectionOptions;
+	mikroOrmOptions?: ConnectionOptions[];
 	resolvers: Array<any>;
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	authChecker?: AuthChecker<any, any>;
 }
-export default class Graphweaver {
-	server: ApolloServer;
+export default class Graphweaver<TContext extends BaseContext> {
+	server: ApolloServer<TContext>;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
-		mikroOrmOptions: { mikroOrmConfig: { entities: [] } },
 		resolvers: [],
 	};
 
@@ -59,10 +58,12 @@ export default class Graphweaver {
 			MutexRequestsInDevelopment,
 			LogRequests,
 			LogErrors,
-			connectToDatabase(this.config.mikroOrmOptions),
 			ClearDataLoaderCache,
-			ClearDatabaseContext,
 			Cors,
+			// Only load the database plugins if we have a database connected
+			...(this.config.mikroOrmOptions
+				? [connectToDatabase(this.config.mikroOrmOptions), ClearDatabaseContext]
+				: []),
 			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
@@ -77,7 +78,7 @@ export default class Graphweaver {
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
-		this.server = new ApolloServer({
+		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
 			plugins,
 			schema,

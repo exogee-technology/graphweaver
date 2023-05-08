@@ -2,7 +2,7 @@ import { createBaseResolver, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
-import { ProfitAndLossRow } from './entity';
+import { ProfitAndLossRow, XeroProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
 import { forEachTenant, inMemoryFilterFor, offsetAndLimit, orderedResult } from '../../utils';
 import { IdGenerator } from '../../id-generator';
@@ -41,16 +41,16 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 							(attribute) => attribute.id === 'account' && isUUID(attribute.value)
 						);
 
-						results.push(
-							ProfitAndLossRow.fromBackendEntity({
-								id: IdGenerator.getId(),
-								tenantId,
-								accountId: accountAttribute?.value ?? null,
-								amount: parseFloat(value.value),
-								date,
-								description: description.value,
-							})
-						);
+						const profitAndLossRow = {
+							id: IdGenerator.getId(),
+							tenantId,
+							accountId: accountAttribute?.value ?? null,
+							amount: parseFloat(value.value),
+							date,
+							description: description.value,
+						} as XeroProfitAndLossRow;
+
+						results.push(ProfitAndLossRow.fromBackendEntity(profitAndLossRow));
 					}
 				}
 			}
@@ -77,19 +77,24 @@ const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
 };
 
 @Resolver((of) => ProfitAndLossRow)
-export class ProfitAndLossRowResolver extends createBaseResolver(
+export class ProfitAndLossRowResolver extends createBaseResolver<
+	ProfitAndLossRow,
+	XeroProfitAndLossRow
+>(
 	ProfitAndLossRow,
 	new XeroBackendProvider('ProfitAndLossRow', {
-		find: async ({ xero, rawFilter, order, limit, offset }) => {
-			const result = await forEachTenant<ProfitAndLossRow>(xero, (tenant) =>
-				loadReportForTenant(xero, tenant.tenantId)
+		find: async ({ xero, filter, order, limit, offset }) => {
+			const result = await forEachTenant<ProfitAndLossRow>(
+				xero,
+				(tenant) => loadReportForTenant(xero, tenant.tenantId),
+				filter
 			);
 
 			const sortFields = order ?? defaultSort;
 
-			// filter -> order -> limit/offset
+			// (filter) -> order -> limit/offset
 			return offsetAndLimit(
-				orderedResult(result.filter(inMemoryFilterFor(rawFilter)), sortFields),
+				orderedResult(result.filter(inMemoryFilterFor(filter)), sortFields),
 				offset,
 				limit
 			);

@@ -1,0 +1,40 @@
+{
+	"name": "@exogee/graphweaver-auth",
+	"version": "0.1.7",
+	"description": "Row-Level Security support for @exogee/graphweaver",
+	"license": "MIT",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "esbuild --outdir=lib --platform=node --format=cjs --sourcemap=linked `find src \\( -name '*.ts' \\)`",
+		"build:types": "tsc --emitDeclarationOnly",
+		"build:watch": "pnpm build:js --watch",
+		"prettier": "prettier --write src/**/*.ts",
+		"codegen": "graphql-codegen --config ./codegen.yml",
+		"version": "npm version --no-git-tag-version"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"dependencies": {
+		"@exogee/graphweaver": "workspace:0.1.7",
+		"@exogee/logger": "workspace:0.1.7",
+		"apollo-server-errors": "3.3.1",
+		"class-validator": "0.13.2",
+		"dotenv": "10.0.0",
+		"graphql": "16.6.0",
+		"type-graphql": "2.0.0-beta.1"
+	},
+	"devDependencies": {
+		"@types/node": "14.14.10",
+		"esbuild": "0.15.5",
+		"prettier": "2.8.8",
+		"ts-node": "9.0.0",
+		"tsc-watch": "4.2.9",
+		"typescript": "5.0.2"
+	}
+}

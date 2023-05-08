@@ -29,7 +29,9 @@
 		"emitDecoratorMetadata": true,
 
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
+		"forceConsistentCasingInFileNames": true,
+		"ignoreDeprecations": "5.0",
+		"sourceMap": true
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"]
 }

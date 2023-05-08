@@ -1,25 +1,26 @@
 import classNames from 'classnames';
 import { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
+import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
 
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
 	onClickOutside?(): any /** Event emitted when outside */;
-	renderBefore?(): ReactNode /** Render function before the button */;
-	renderAfter?(): ReactNode /** Render function after the button */;
 	className?: string /** alternative styling */;
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
+	disabled?: boolean;
+	loading?: boolean;
 }
 
 export const Button = ({
 	onClick,
 	children,
-	renderBefore,
-	renderAfter,
 	onClickOutside,
 	className,
 	type = 'button',
+	disabled = false,
+	loading = false,
 }: ButtonProps): JSX.Element => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -55,12 +56,11 @@ export const Button = ({
 		<button
 			ref={buttonRef}
 			onClick={handleOnClickButton}
-			className={classNames([className, styles.button])}
+			className={classNames([className, styles.button, disabled && styles.disabled])}
 			type={type}
+			disabled={disabled}
 		>
-			{renderBefore?.()}
-			{children}
-			{renderAfter?.()}
+			{loading ? <Spinner size={SpinnerSize.SMALL} /> : children}
 		</button>
 	);
 };

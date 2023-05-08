@@ -1,8 +1,15 @@
 import DataGrid, { Column, SortColumn } from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
-import { Entity, useSchema, useSelectedEntity, routeFor } from '../utils';
+import {
+	Entity,
+	useSchema,
+	useSelectedEntity,
+	routeFor,
+	SortField,
+	decodeSearchParams,
+} from '../utils';
 import { Spinner } from '../spinner';
 
 import 'react-data-grid/lib/styles.css';
@@ -63,14 +70,13 @@ export interface TableRowItem {
 }
 
 export interface RequestRefetchOptions {
-	sortColumns?: SortColumn[];
+	sortFields?: SortField[];
 }
 
 export interface TableProps<T extends TableRowItem> {
 	rows: T[];
 	requestRefetch: (options: RequestRefetchOptions) => void;
-	orderBy: SortColumn[];
-	allDataFetched: boolean;
+	orderBy: SortField[];
 	loading: boolean;
 	loadingNext: boolean;
 	error?: ApolloError;
@@ -80,16 +86,18 @@ export const Table = <T extends TableRowItem>({
 	rows,
 	requestRefetch,
 	orderBy = [],
-	allDataFetched,
 	loading,
 	loadingNext = false,
 	error,
 }: TableProps<T>) => {
-	const [sortColumns, setSortColumns] = useState<SortColumn[]>(orderBy);
+	const [sortColumns, setSortColumns] = useState<SortColumn[]>(
+		orderBy.map((f) => ({ columnKey: f.field, direction: f.direction }))
+	);
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
+	const [search] = useSearchParams();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
 
@@ -104,14 +112,16 @@ export const Table = <T extends TableRowItem>({
 	const handleScroll: UIEventHandler<HTMLDivElement> = async (event: React.UIEvent) => {
 		// Do nothing if we aren't at the last row, or if we're currently loading...
 		// Also do nothing if EOF detected (no more rows to load)
-		if (loadingNext || !scrolledToEnd(event) || allDataFetched) {
+		if (loadingNext || !scrolledToEnd(event)) {
 			return;
 		}
 		requestRefetch({});
 	};
 
 	const handleSort = () => {
-		requestRefetch({ sortColumns });
+		requestRefetch({
+			sortFields: sortColumns.map((c) => ({ field: c.columnKey, direction: c.direction })),
+		});
 	};
 
 	useEffect(() => {
@@ -121,16 +131,16 @@ export const Table = <T extends TableRowItem>({
 	const navigateToDetailForEntity = useCallback(
 		(row: T) => {
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
-			navigate(routeFor({ entity: selectedEntity, id: row.id }));
+			// Don't set the filter in the route
+			const { filters, sort } = decodeSearchParams(search);
+			navigate(routeFor({ entity: selectedEntity, id: row.id, sort, filters }));
 		},
-		[selectedEntity]
+		[search, selectedEntity]
 	);
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	// loading is not always around for long; check the row count as well, if zero, load the blob
-	// - Check allDataFetched in case there are zero rows or all returned already
-	if (loading || (!allDataFetched && rows.length === 0)) {
+	if (loading) {
 		return <Loader />;
 	}
 	if (error) {

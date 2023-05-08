@@ -1,13 +1,12 @@
 import classNames from 'classnames';
 import React, { useEffect, useRef } from 'react';
-import { ExitIcon } from '../assets';
 
 import styles from './styles.module.css';
 
 export interface ModalProps {
 	isOpen: boolean;
 	onRequestClose?: () => void;
-	className: string;
+	className?: string;
 	title: string | React.ReactElement;
 	modalContent?: React.ReactElement;
 	footerContent?: React.ReactElement;
@@ -15,6 +14,7 @@ export interface ModalProps {
 	fullScreen?: boolean;
 	shouldCloseOnOverlayClick?: boolean;
 	shouldCloseOnEsc?: boolean;
+	overlay?: boolean;
 }
 
 export const Modal = ({
@@ -28,6 +28,7 @@ export const Modal = ({
 	fullScreen,
 	shouldCloseOnOverlayClick = false,
 	shouldCloseOnEsc = false,
+	overlay = true,
 }: ModalProps) => {
 	const modalRef = useRef<HTMLDivElement>(null);
 
@@ -65,7 +66,7 @@ export const Modal = ({
 	return (
 		<>
 			{isOpen && (
-				<div className={styles.overlay}>
+				<div className={classNames(overlay ? styles.overlay : styles.noOverlay)}>
 					<div
 						ref={modalRef}
 						className={classNames(className || [styles.wrapper, fullScreen && styles.fullScreen])}
@@ -73,12 +74,16 @@ export const Modal = ({
 						<div className={styles.content}>
 							<div className={styles.headerWrapper}>
 								<div className={styles.header}>
+									<div className={styles.title}>{title}</div>
 									{hideCloseX ? null : (
-										<div className={styles.iconContainer}>
-											<ExitIcon className={styles.closeIcon} onClick={onRequestClose} />
+										<div className={styles.iconContainer} onClick={onRequestClose}>
+											<div className={styles.closeIconWrapper}>
+												<div className={styles.closeIconLeft}>
+													<div className={styles.closeIconRight}></div>
+												</div>
+											</div>
 										</div>
 									)}
-									<div className={styles.title}>{title}</div>
 								</div>
 							</div>
 							{modalContent && <div className={styles.contentWrapper}>{modalContent}</div>}

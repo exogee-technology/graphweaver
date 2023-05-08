@@ -1,15 +1,21 @@
-// TODO: (1) sizing and placement (2) animation; see CSS
-import { ReactComponent as GraphweaverSpinner } from '~/assets/graphweaver-logo-spinner.svg';
-import './styles.module.css';
+import classNames from 'classnames';
 import styles from './styles.module.css';
 
-export const Spinner = () => {
+export enum SpinnerSize {
+	LARGE = 'LARGE',
+	SMALL = 'SMALL',
+}
+
+type Props = {
+	size?: SpinnerSize;
+};
+
+export const Spinner = ({ size = SpinnerSize.LARGE }: Props) => {
 	return (
-		<div
-		//className={styles.spinner} @todo
-		>
-			{/* <GraphweaverSpinner /> */}
-			Loading...
+		<div className={classNames(styles.container, size === SpinnerSize.SMALL && styles.small)}>
+			<div className={classNames(styles.wrapper, size === SpinnerSize.SMALL && styles.small)}>
+				<div className={styles.loader}></div>
+			</div>
 		</div>
 	);
 };

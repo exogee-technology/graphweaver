@@ -5,20 +5,16 @@
       "path": "."
     },
     {
-      "name": "➡️ Example: Complex",
-      "path": "src/examples/complex"
+      "name": "➡️ Example: MySQL and PostgreSQL Databases",
+      "path": "src/examples/databases"
     },
     {
-      "name": "➡️ Example: Complex with Migrations",
-      "path": "src/examples/complex-migrations"
+      "name": "➡️ Example: Rest and MySQL Database",
+      "path": "src/examples/rest"
     },
     {
       "name": "➡️ Example: Xero",
       "path": "src/examples/xero"
-    },
-    {
-      "name": "📦 @exogee/create-graphweaver",
-      "path": "src/packages/create-graphweaver"
     },
     {
       "name": "📦 @exogee/graphweaver",
@@ -53,8 +49,8 @@
       "path": "src/packages/rest"
     },
     {
-      "name": "📦 @exogee/graphweaver-rls",
-      "path": "src/packages/rls"
+      "name": "📦 @exogee/graphweaver-auth",
+      "path": "src/packages/auth"
     },
     {
       "name": "📦 @exogee/graphweaver-scalars",

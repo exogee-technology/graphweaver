@@ -1,0 +1,75 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	width: 300px;
+	border: 1px solid black;
+	font-family: Arial, sans-serif;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
+	background-color: var(--select-background);
+	font-weight: bold;
+}
+
+.daysContainer {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: flex-start;
+	padding: 10px;
+	background-color: var(--select-background);
+}
+
+.day {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 0 1 14.2%;
+	height: 30px;
+	cursor: pointer;
+}
+
+.day:hover {
+	border-radius: 4px;
+	background-color: var(--body-bg-color);
+}
+
+.muted {
+	color: #d3d3d3;
+	cursor: default;
+}
+
+.selected {
+	background-color: var(--primary-color);
+	color: var(--body-copy-color);
+}
+
+.range {
+	background-color: #e0e0e0;
+}
+
+.selected.range {
+	background-color: var(--primary-color);
+}
+
+.monthButton {
+	border: none;
+	outline: none;
+	padding: 0;
+	margin: 0;
+	background: none;
+	cursor: pointer;
+	height: 36px;
+	width: 36px;
+	border-radius: 4px;
+}
+
+.monthButton:hover {
+	background-color: var(--primary-color);
+}

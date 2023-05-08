@@ -1,0 +1,15 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./lib",
+		"lib": ["ES2019"]
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/auth" }
+	]
+}

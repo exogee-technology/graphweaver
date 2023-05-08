@@ -7,11 +7,31 @@
     {
       "name": "Xero Example",
       "request": "launch",
-      "cwd": "${workspaceFolder}/src/examples/example-xero",
+      "cwd": "${workspaceFolder}/src/examples/xero",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start"],
       "type": "node",
       "env": { "LOGGING_LEVEL": "trace" }
+    },
+    {
+      "name": "MySQL and PostgreSQL Database Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/databases"
+    },
+    {
+      "name": "Rest Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/rest"
     },
     {
       "type": "chrome",

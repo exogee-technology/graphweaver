@@ -20,34 +20,16 @@ export function Field(options?: FieldOptions): any {
 		Object.defineProperty(target, propertyKey, {
 			get: function () {
 				const key = options?.underlyingFieldName || propertyKey;
-				const value =
-					this._entity[
-						options?.useFormattedValue ? `${key}@OData.Community.Display.V1.FormattedValue` : key
-					];
-				if (options?.serializer) {
-					return options.serializer.fromCrm(value);
-				}
+				const value = this._entity[key];
 
 				return value;
 			},
 			set: function (value: any) {
-				let valueToSet = value;
-
-				if (options?.serializer) {
-					valueToSet = options.serializer.toCrm(value);
-				}
-
-				this._entity[options?.underlyingFieldName || propertyKey] = valueToSet;
+				const key = options?.underlyingFieldName || propertyKey;
+				this._entity[key] = value;
 			},
 			enumerable: true,
 		});
-
-		// Store the set of fields that use formatted values, so that we only add the
-		// FormattedValues metadata header to our CRM request if we need to
-		if (options?.useFormattedValue) {
-			if (!target._withFormattedValuesFor) target._withFormattedValuesFor = new Set<string>();
-			target._withFormattedValuesFor?.add(propertyKey);
-		}
 
 		// Remember this for later so we can correctly translate from our names
 		// to the underlying names for selects and filters.
