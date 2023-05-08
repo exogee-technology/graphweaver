@@ -44,7 +44,7 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	accountId?: string;
 
 	@RelationshipField<ProfitAndLossRow>(() => Account, { id: 'accountId' })
-	account!: Account;
+	account?: Account;
 
 	@AdminUISettings({
 		filter: {

@@ -139,9 +139,10 @@ export const BaseLoaders = {
 		id,
 	}: {
 		gqlEntityType: GraphQLEntityConstructor<G, D>;
-		id: string;
+		id?: string;
 	}) => {
 		const loader = getBaseLoadOneLoader(gqlEntityType);
+		if (!id) return null;
 		return loader.load(id) as unknown as Promise<D>;
 	},
 
