@@ -11,7 +11,7 @@ export const customFields = new Map<string, CustomField[]>();
 customFields.set('Task', [
 	{
 		name: 'search',
-		type: 'string',
+		type: 'custom',
 		index: 3,
 		component: Link,
 	},
