@@ -39,6 +39,11 @@ export interface EntityField {
 	};
 }
 
+export interface CustomField extends EntityField {
+	index?: number;
+	component: <T>(entity: T) => JSX.Element;
+}
+
 // @todo this needs typing correctly
 
 export interface FieldFilter {

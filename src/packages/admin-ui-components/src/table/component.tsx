@@ -1,4 +1,10 @@
-import DataGrid, { Column, SortColumn } from 'react-data-grid';
+import DataGrid, {
+	Column,
+	FormatterProps,
+	Row,
+	RowRendererProps,
+	SortColumn,
+} from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -19,11 +25,23 @@ import styles from './styles.module.css';
 import { Loader } from '../loader';
 import { ApolloError } from '@apollo/client';
 
+import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+
 const columnsForEntity = <T extends { id: string }>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
-): Column<T>[] =>
-	entity.fields.map((field) => ({
+): Column<T>[] => {
+	console.log(customFields, entity.name);
+	const column = customFields?.[entity.name as keyof typeof customFields];
+
+	const customCols = column?.fields.map((field) => ({
+		key: field.name,
+		name: field.name,
+		width: 200,
+		formatter: ({ row }: FormatterProps<T, unknown>) => field?.component?.(row),
+	}));
+
+	const entityCols = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
 		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
@@ -33,7 +51,7 @@ const columnsForEntity = <T extends { id: string }>(
 
 		// We only need a formatter for relationships.
 		formatter: field.relationshipType
-			? ({ row }) => {
+			? ({ row }: FormatterProps<T, unknown>) => {
 					// Without stopping propagation on our links, the grid will be notified about the click,
 					// which is not what we want. We want to navigate and not let the grid handle it
 					const gobbleEvent = useCallback(
@@ -64,6 +82,9 @@ const columnsForEntity = <T extends { id: string }>(
 			  }
 			: undefined,
 	}));
+
+	return [...entityCols, ...(customCols ? customCols : [])];
+};
 
 export interface TableRowItem {
 	id: string;
@@ -147,6 +168,8 @@ export const Table = <T extends TableRowItem>({
 		return <pre>{`Error! ${error.message}`}</pre>;
 	}
 
+	const rowRenderer = (key: React.Key, props: RowRendererProps<T>) => <Row {...props} />;
+
 	return (
 		<>
 			<DataGrid
@@ -160,6 +183,7 @@ export const Table = <T extends TableRowItem>({
 				rowClass={rowClass}
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
+				renderers={{ rowRenderer }}
 			/>
 			{loadingNext && (
 				<div className={styles.spinner}>
