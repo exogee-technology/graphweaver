@@ -178,8 +178,6 @@ export const Table = <T extends TableRowItem>({
 		return <pre>{`Error! ${error.message}`}</pre>;
 	}
 
-	const rowRenderer = (key: React.Key, props: RowRendererProps<T>) => <Row {...props} />;
-
 	return (
 		<>
 			<DataGrid
@@ -193,7 +191,6 @@ export const Table = <T extends TableRowItem>({
 				rowClass={rowClass}
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
-				renderers={{ rowRenderer }}
 			/>
 			{loadingNext && (
 				<div className={styles.spinner}>
