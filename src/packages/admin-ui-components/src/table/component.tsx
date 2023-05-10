@@ -74,11 +74,11 @@ const columnsForEntity = <T extends { id: string }>(
 	}));
 
 	// Let's check if there are custom fields to add
-	const customFieldsForEntity = customFields?.[entity.name as keyof typeof customFields];
-	if (customFieldsForEntity?.fields) {
+	const customFieldsForEntity = customFields?.get(entity.name);
+	if (customFieldsForEntity) {
 		// Covert the custom fields to columns
 		const customColumns =
-			customFieldsForEntity?.fields.map((field) => ({
+			customFieldsForEntity.map((field) => ({
 				key: field.name,
 				name: field.name,
 				width: 200,
@@ -87,7 +87,7 @@ const columnsForEntity = <T extends { id: string }>(
 			})) || [];
 
 		// Add the custom columns to the existing table taking into account any supplied index
-		for (const field of customFieldsForEntity.fields) {
+		for (const field of customFieldsForEntity) {
 			const customCol = customColumns.shift();
 			if (customCol) entityColumns.splice(field.index ?? entityColumns.length, 0, customCol);
 		}

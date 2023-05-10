@@ -1,13 +1,18 @@
+import { CustomField } from '@exogee/graphweaver-admin-ui-components';
 import { Link } from './link';
 
-export const customFields = {
-	Task: {
-		fields: [
-			{
-				name: 'search',
-				index: 3,
-				component: Link,
-			},
-		],
-	},
+export type Task = {
+	user: {
+		name: string;
+	};
 };
+
+export const customFields = new Map<string, CustomField[]>();
+customFields.set('Task', [
+	{
+		name: 'search',
+		type: 'string',
+		index: 3,
+		component: Link,
+	},
+]);
