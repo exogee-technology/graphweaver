@@ -4,7 +4,7 @@ export const customFields = {
 	Task: {
 		fields: [
 			{
-				name: 'Google',
+				name: 'search',
 				index: 3,
 				component: Link,
 			},
