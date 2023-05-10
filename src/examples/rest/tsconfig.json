@@ -15,8 +15,8 @@
 	"include": ["./src"],
 	"references": [
 		{ "path": "../../packages/core" },
-		{ "path": "../../packages/logger" },
-		{ "path": "../../packages/xero" },
-		{ "path": "../../packages/scalars" }
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/auth" }
 	]
 }
