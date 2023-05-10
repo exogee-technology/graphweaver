@@ -31,17 +31,7 @@ const columnsForEntity = <T extends { id: string }>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T>[] => {
-	console.log(customFields, entity.name);
-	const column = customFields?.[entity.name as keyof typeof customFields];
-
-	const customCols = column?.fields.map((field) => ({
-		key: field.name,
-		name: field.name,
-		width: 200,
-		formatter: ({ row }: FormatterProps<T, unknown>) => field?.component?.(row),
-	}));
-
-	const entityCols = entity.fields.map((field) => ({
+	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
 		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
@@ -83,7 +73,27 @@ const columnsForEntity = <T extends { id: string }>(
 			: undefined,
 	}));
 
-	return [...entityCols, ...(customCols ? customCols : [])];
+	// Let's check if there are custom fields to add
+	const customFieldsForEntity = customFields?.[entity.name as keyof typeof customFields];
+	if (customFieldsForEntity?.fields) {
+		// Covert the custom fields to columns
+		const customColumns =
+			customFieldsForEntity?.fields.map((field) => ({
+				key: field.name,
+				name: field.name,
+				width: 200,
+				sortable: false,
+				formatter: ({ row }: FormatterProps<T, unknown>) => field?.component?.(row),
+			})) || [];
+
+		// Add the custom columns to the existing table taking into account any supplied index
+		for (const field of customFieldsForEntity.fields) {
+			const customCol = customColumns.shift();
+			if (customCol) entityColumns.splice(field.index ?? entityColumns.length, 0, customCol);
+		}
+	}
+
+	return entityColumns;
 };
 
 export interface TableRowItem {
