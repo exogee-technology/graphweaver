@@ -24,6 +24,7 @@
 		"@exogee/graphweaver-cli": "workspace:0.1.9",
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.9",
 		"@exogee/graphweaver-rest": "workspace:0.1.9",
+		"@exogee/graphweaver-admin-ui-components": "workspace:0.1.9",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",
 		"react": "18.2.0",
