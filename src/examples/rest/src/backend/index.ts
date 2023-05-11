@@ -66,10 +66,11 @@ export const handler = startServerAndCreateLambdaHandler<any, Context>(
 			// Let's use the x-user-id to specify a different user for testing
 			// In a real world application this would be inside an access token
 			const userId = (event as any)?.headers?.['x-user-id'] ?? '1';
+			const userData = await BaseLoaders.loadOne({ gqlEntityType: User, id: userId });
 
-			const user = User.fromBackendEntity(
-				await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
-			);
+			if (!userData) throw new Error('Bad Request: Unknown user id provided.');
+
+			const user = User.fromBackendEntity(userData);
 
 			if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
