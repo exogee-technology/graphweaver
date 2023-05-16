@@ -24,6 +24,8 @@
 		"@exogee/graphweaver": "workspace:0.1.9",
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.9",
 		"@exogee/logger": "workspace:0.1.9",
+		"@graphql-tools/graphql-file-loader": "7.5.17",
+		"@graphql-tools/load": "7.8.14",
 		"@graphql-tools/schema": "8.0.0",
 		"async-mutex": "0.3.2",
 		"class-validator": "0.13.2",
