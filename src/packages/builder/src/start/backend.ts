@@ -15,6 +15,7 @@ import {
 // The Serverless Offline logger should report any errors and such to the console as well.
 // This is how we configure the Serverless log reporter to use console.log().
 import '@serverless/utils/log-reporters/node';
+import { buildSchemaSync } from 'type-graphql';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -57,6 +58,15 @@ export const startBackend = async (options: BackendStartOptions) => {
 		entryPoints: ['./src/backend/index.ts'],
 		outfile: '.graphweaver/backend/index.js',
 	});
+
+	// Read the exported resolvers and if we find them build the schema
+	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
+	if (resolvers) {
+		buildSchemaSync({
+			resolvers,
+			emitSchemaFile: '.graphweaver/backend/schema.gql',
+		});
+	}
 
 	// Are there any custom additional functions we need to build?
 	try {
