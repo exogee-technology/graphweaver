@@ -7,18 +7,31 @@ import {
 	baseEsbuildConfig,
 	buildOutputPathFor,
 	inputPathFor,
+	makeAllPackagesExternalPlugin,
 	makeOptionalMikroOrmPackagesExternalPlugin,
 } from '../util';
+import CssModulesPlugin from 'esbuild-css-modules-plugin';
 
 const rimraf = promisify(rimrafCallback);
 
 export interface BackendBuildOptions {}
 
 export const buildBackend = async (_: BackendBuildOptions) => {
-	console.log('Building backend...');
+	console.log('Building backend....');
 
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
+
+	// Put the index.js file in there.
+	await build({
+		...baseEsbuildConfig,
+
+		// Anything in node_modules should be marked as external for running.
+		plugins: [makeAllPackagesExternalPlugin(), CssModulesPlugin()],
+
+		entryPoints: ['./src/backend/index.ts'],
+		outfile: '.graphweaver/backend/index.js',
+	});
 
 	try {
 		// Are there any custom additional functions we need to build?
@@ -34,10 +47,11 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const { backend } = require(path.join(process.cwd(), 'graphweaver-config'));
-			functions.push(...backend.additionalFunctions);
+			const config = require(path.join(process.cwd(), 'graphweaver-config'));
+			console.log(config);
+			functions.push(...config.backend.additionalFunctions);
 
-			if (Array.isArray(backend.additionalFunctions)) {
+			if (Array.isArray(config.backend.additionalFunctions)) {
 				for (const backendFunction of functions) {
 					// TODO: Better validation
 					if (backendFunction.handlerPath) {

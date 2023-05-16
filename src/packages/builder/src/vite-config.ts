@@ -13,7 +13,7 @@ export const viteConfig = (options: ViteConfigOptions): InlineConfig => ({
 	configFile: false,
 	root: options.rootDirectory,
 	build: {
-		outDir: path.resolve(process.cwd(), 'dist', 'admin-ui'),
+		outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
 	},
 	server: {
 		port: 8000,
