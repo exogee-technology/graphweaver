@@ -24,6 +24,7 @@
 		"@exogee/graphweaver-mikroorm": "workspace:0.1.9",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",
+		"@mikro-orm/postgresql": "5.4.2",
 		"reflect-metadata": "0.1.13",
 		"type-graphql": "2.0.0-beta.1"
 	},
