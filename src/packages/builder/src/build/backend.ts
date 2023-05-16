@@ -11,6 +11,7 @@ import {
 	makeOptionalMikroOrmPackagesExternalPlugin,
 } from '../util';
 import CssModulesPlugin from 'esbuild-css-modules-plugin';
+import { buildSchemaSync } from 'type-graphql';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -32,6 +33,15 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 		entryPoints: ['./src/backend/index.ts'],
 		outfile: '.graphweaver/backend/index.js',
 	});
+
+	// Read the exported resolvers and if we find them build the schema
+	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
+	if (resolvers) {
+		buildSchemaSync({
+			resolvers,
+			emitSchemaFile: '.graphweaver/backend/schema.gql',
+		});
+	}
 
 	try {
 		// Are there any custom additional functions we need to build?

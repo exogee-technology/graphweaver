@@ -335,6 +335,7 @@ importers:
       serverless: 3.25.1
       serverless-dotenv-plugin: 4.0.2
       serverless-offline: 12.0.2
+      type-graphql: 2.0.0-beta.1
       vite: 3.2.4
       vite-plugin-graphweaver: workspace:0.1.9
       vite-plugin-svgr: 2.2.2
@@ -350,6 +351,7 @@ importers:
       serverless: 3.25.1
       serverless-dotenv-plugin: 4.0.2_serverless@3.25.1
       serverless-offline: 12.0.2_serverless@3.25.1
+      type-graphql: 2.0.0-beta.1
       vite: 3.2.4_@types+node@18.11.9
       vite-plugin-graphweaver: link:../vite-plugin-graphweaver
       vite-plugin-svgr: 2.2.2_vite@3.2.4
