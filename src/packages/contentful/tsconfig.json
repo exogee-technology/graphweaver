@@ -1,13 +1,11 @@
 {
-        "extends": "../../tsconfig.json",
-        "compilerOptions": {
-                "outDir": "./lib",
-                "rootDir": "./src",
-                "noUnusedLocals": false,
-        "types": ["@types/node"] 
-        },
-        "include": ["./src"],
-        "references": [
-                { "path": "../helpers" } 
-        ]
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"types": ["@types/node"]
+	},
+	"include": ["./src"],
+	"references": [{ "path": "../helpers" }]
 }

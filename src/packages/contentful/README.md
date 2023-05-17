@@ -10,10 +10,9 @@ Takes a contenful client config as the first argument (see createClient options 
 
 Takes a contentful client config as the first argument (see createClient options at https://github.com/contentful/contentful.js), and a Contentful Content Type ID as the second argument. You must have run buildContentfulSchema first with the same configuration to pre-fetch the contentful schema.
 
-
 ## Example
 
-### Build Script 
+### Build Script
 
 ```
 import { buildContentfulSchema } from "@exogee/graphweaver-contentful/build";
@@ -30,9 +29,9 @@ import { clientConfig } from "./my-contentful-config";
 ```
 import { createContentfulResolver } from "@exogee/graphweaver-contentful";
 
-const { 
-  resolver: ArticleResolver, 
-  entity: ArticleEntity, 
+const {
+  resolver: ArticleResolver,
+  entity: ArticleEntity,
   provider: ArticleProvider
 } = createContentfulResolver(clientConfig, 'Article');
 

@@ -15,7 +15,7 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"prettier": "prettier --write .",
 		"test": "npm run test:format && npm run test:typescript",
-		"test:typescript": "tsc --noEmit src/*.ts",
+		"test:typescript": "tsc --noEmit",
 		"test:format": "prettier --check .",
 		"version": "pnpm version --no-git-tag-version"
 	},
