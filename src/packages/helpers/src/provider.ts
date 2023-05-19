@@ -1,26 +1,28 @@
 import { Filter, PaginationOptions, BackendProvider } from '@exogee/graphweaver';
 
-export interface ProviderOptions<Entity, Context> {
+export interface ProviderOptions<Entity, Context, DataEntity> {
 	init?(): Promise<Context>;
-	create?(context: Context, entity: Partial<Entity>): Promise<Entity>;
+	create?(context: Context, entity: Partial<Entity>): Promise<DataEntity>;
 	read(
 		context: Context,
 		filter: Filter<Entity>,
-		pagination?: PaginationOptions
-	): Promise<Entity | Array<Entity> | null>;
-	update?(context: Context, id: string, entity: Partial<Entity>): Promise<Entity>;
+		pagination?: Partial<PaginationOptions>
+	): Promise<DataEntity | Array<DataEntity> | null>;
+	update?(context: Context, id: string, entity: Partial<Entity>): Promise<DataEntity>;
 	remove?(context: Context, filter: Filter<Entity>): Promise<boolean>;
 	backendId: string;
 }
 
-export const createProvider = <Entity, Context>(options: ProviderOptions<Entity, Context>) => {
-	class Provider<Entity, Context> implements BackendProvider<Entity, Entity> {
+export const createProvider = <Entity, Context, DataEntity = Entity>(
+	options: ProviderOptions<Entity, Context, DataEntity>
+) => {
+	class Provider<Entity, Context> implements BackendProvider<DataEntity, Entity> {
 		readonly backendId: string;
 
-		create: ProviderOptions<Entity, Context>['create'];
-		read: ProviderOptions<Entity, Context>['read'];
-		update: ProviderOptions<Entity, Context>['update'];
-		remove: ProviderOptions<Entity, Context>['remove'];
+		create: ProviderOptions<Entity, Context, DataEntity>['create'];
+		read: ProviderOptions<Entity, Context, DataEntity>['read'];
+		update: ProviderOptions<Entity, Context, DataEntity>['update'];
+		remove: ProviderOptions<Entity, Context, DataEntity>['remove'];
 		initFn: Promise<void>;
 
 		context: Context | undefined;
@@ -32,7 +34,7 @@ export const createProvider = <Entity, Context>(options: ProviderOptions<Entity,
 			remove,
 			init,
 			backendId,
-		}: ProviderOptions<Entity, Context>) {
+		}: ProviderOptions<Entity, Context, DataEntity>) {
 			this.backendId = backendId;
 			this.create = create;
 			this.read = read;
@@ -54,15 +56,17 @@ export const createProvider = <Entity, Context>(options: ProviderOptions<Entity,
 			return this.initFn;
 		}
 
-		async find(filter: Filter<Entity>, pagination?: PaginationOptions): Promise<Array<Entity>> {
-			await this.init;
+		async find(
+			filter: Filter<Entity>,
+			pagination?: Partial<PaginationOptions>
+		): Promise<Array<DataEntity>> {
+			await this.initFn;
 			const result = await this.read(this.context as Context, filter, pagination);
 			return result === null ? [] : Array.isArray(result) ? result : [result];
 		}
 
-		async findOne(filter: Filter<Entity>): Promise<Entity | null> {
-			await this.initFn;
-			const result = await this.read(this.context as Context, filter);
+		async findOne(filter: Filter<Entity>): Promise<DataEntity | null> {
+			const result = await this.find(filter, { limit: 1 });
 			const oneResult = Array.isArray(result) ? result?.[0] : result;
 			return oneResult || null;
 		}
@@ -72,36 +76,36 @@ export const createProvider = <Entity, Context>(options: ProviderOptions<Entity,
 			relatedField: string,
 			relatedIds: readonly string[],
 			filter?: Filter<Entity>
-		): Promise<Array<Entity>> {
+		): Promise<Array<DataEntity>> {
 			await this.initFn;
 			throw new Error('Not implemented: findByRelatedId');
 		}
 
-		async updateOne(id: string, entity: Partial<Entity>): Promise<Entity> {
+		async updateOne(id: string, entity: Partial<Entity>): Promise<DataEntity> {
 			await this.initFn;
 			if (!this.update) throw new Error('update not available');
 			return this.update(this.context as Context, id, entity);
 		}
 
-		async updateMany(entities: Array<Partial<Entity>>): Promise<Array<Entity>> {
+		async updateMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
 			await this.initFn;
 			if (!this.update) throw new Error('update not available');
 			throw new Error('Not implemented: updateMany');
 		}
 
-		async createOne(entity: Partial<Entity>): Promise<Entity> {
+		async createOne(entity: Partial<Entity>): Promise<DataEntity> {
 			await this.initFn;
 			if (!this.create) throw new Error('create not available');
 			return this.create(this.context as Context, entity);
 		}
 
-		async createMany(entities: Array<Partial<Entity>>): Promise<Array<Entity>> {
+		async createMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
 			await this.initFn;
 			if (!this.create) throw new Error('create not available');
 			throw new Error('Not implemented: createMany');
 		}
 
-		async createOrUpdateMany(entities: Array<Partial<Entity>>): Promise<Array<Entity>> {
+		async createOrUpdateMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
 			await this.initFn;
 			if (!this.update || !this.create) throw new Error('create/update not available');
 			throw new Error('Not implemented: createOrUpdateMany');
