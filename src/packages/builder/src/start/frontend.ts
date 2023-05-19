@@ -8,8 +8,7 @@ export interface StartOptions {
 }
 
 export const startFrontend = async ({ host, port }: StartOptions) => {
-
-	console.log("Starting Admin UI...");
+	console.log('Starting Admin UI...');
 
 	// Generate a Vite Config
 	const rootDirectory = path.resolve(

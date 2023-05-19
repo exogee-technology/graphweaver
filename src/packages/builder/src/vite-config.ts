@@ -17,12 +17,13 @@ export const viteConfig = ({
 	rootDirectory,
 	backendUrl,
 }: ViteConfigOptions): InlineConfig => {
-
 	return {
 		configFile: false,
 		root: rootDirectory,
 		base: '',
-		define: { ...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `"${backendUrl}"` } : {}) },
+		define: {
+			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `"${backendUrl}"` } : {}),
+		},
 		build: {
 			outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
 		},

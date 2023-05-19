@@ -16,7 +16,6 @@ import {
 // This is how we configure the Serverless log reporter to use console.log().
 import '@serverless/utils/log-reporters/node';
 import { buildSchemaSync } from 'type-graphql';
-import Module from 'module';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -131,7 +130,6 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	const logLevel = process.env.LOGGING_LEVEL || 'trace';
 	const SLS_DEBUG = process.env.SLS_DEBUG || (logLevel === 'trace' ? '*' : undefined);
-
 
 	const slsOffline = new ServerlessOffline(
 		// Shim in a kind of serverless config so the plugin kicks up and does its job.
