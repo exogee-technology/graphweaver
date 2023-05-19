@@ -74,6 +74,11 @@ yargs
 					type: 'string',
 					describe: 'Specify a host to listen on e.g. --host 0.0.0.0',
 				}),
+				.option('basePort', {
+					type: 'string',
+					default: 9000,
+					describe: 'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as BackendStartOptions);

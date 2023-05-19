@@ -26,7 +26,7 @@ const builtInBackendFunctions: Record<string, any> = {
 		events: [
 			{
 				http: {
-					path: 'graphql/v1/{proxy+}',
+					path: '/{proxy+}',
 					method: 'ANY',
 					cors: true,
 				},
@@ -37,6 +37,7 @@ const builtInBackendFunctions: Record<string, any> = {
 
 export interface BackendStartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
+	port: number /** Port to listen on, default is 9001 */;
 }
 
 export const startBackend = async (options: BackendStartOptions) => {
@@ -152,6 +153,7 @@ export const startBackend = async (options: BackendStartOptions) => {
 						noPrependStageInUrl: true,
 						useWorkerThreads: true,
 						...(options.host ? { host: options.host } : {}),
+						port: options.port + 1 || 9001,
 					},
 				},
 				getAllFunctions: () => Object.keys(backendFunctions),
