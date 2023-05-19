@@ -33,5 +33,9 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 	// Start vite.
 	await server.listen();
 
-	console.log(`🚀 Admin UI: ${server.resolvedUrls.local?.[0] || server.resolvedUrls.network?.[0]}`);
+	console.log(
+		`🚀 Admin UI: ${
+			server.resolvedUrls?.local?.[0] || server.resolvedUrls?.network?.[0]
+		} : 'Could not get URL'`
+	);
 };
