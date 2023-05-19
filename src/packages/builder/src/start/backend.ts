@@ -16,6 +16,7 @@ import {
 // This is how we configure the Serverless log reporter to use console.log().
 import '@serverless/utils/log-reporters/node';
 import { buildSchemaSync } from 'type-graphql';
+import Module from 'module';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -40,8 +41,8 @@ export interface BackendStartOptions {
 	port: number /** Port to listen on, default is 9001 */;
 }
 
-export const startBackend = async (options: BackendStartOptions) => {
-	console.log('Starting backend...');
+export const startBackend = async ({ host, port }: BackendStartOptions) => {
+	console.log('Starting Backend...');
 
 	// Get ready for our config.
 	const backendFunctions = { ...builtInBackendFunctions };
@@ -131,6 +132,7 @@ export const startBackend = async (options: BackendStartOptions) => {
 	const logLevel = process.env.LOGGING_LEVEL || 'trace';
 	const SLS_DEBUG = process.env.SLS_DEBUG || (logLevel === 'trace' ? '*' : undefined);
 
+
 	const slsOffline = new ServerlessOffline(
 		// Shim in a kind of serverless config so the plugin kicks up and does its job.
 		{
@@ -152,8 +154,8 @@ export const startBackend = async (options: BackendStartOptions) => {
 					'serverless-offline': {
 						noPrependStageInUrl: true,
 						useWorkerThreads: true,
-						...(options.host ? { host: options.host } : {}),
-						port: options.port + 1 || 9001,
+						...(host ? { host } : {}),
+						...(port ? { httpPort: port + 1 } : {}),
 					},
 				},
 				getAllFunctions: () => Object.keys(backendFunctions),
@@ -167,6 +169,8 @@ export const startBackend = async (options: BackendStartOptions) => {
 		}
 	);
 
-	console.log(`GraphWeaver Backend log level '${logLevel}' - starting Serverless Offline...`);
+	console.log(`Backend Log Level: ${logLevel}`);
 	await slsOffline.start();
+
+	console.log(`🚀 Backend: ${slsOffline.internals().getApiGatewayServer().info.uri}`);
 };
