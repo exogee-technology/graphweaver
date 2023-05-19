@@ -1,3 +1,4 @@
+import { SocketAddress } from 'node:net';
 import path from 'path';
 import { createServer } from 'vite';
 import { viteConfig } from '../vite-config';
@@ -6,6 +7,14 @@ export interface StartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
 	port?: number /** Port to listen on, default is 9000  */;
 }
+
+const urlFromHttpServerAddress = (address?: string | SocketAddress): string => {
+	if (!address) throw new Error('No address from vite dev server');
+	if (typeof address === 'string') return address;
+        if (address.address === "::1") return `localhost:${address.port}`;
+	if (address.address.startsWith('::')) return `[${address.address}]:${address.port}`;
+	return `${address.address}:${address.port}`;
+};
 
 export const startFrontend = async ({ host, port }: StartOptions) => {
 	console.log('Starting Admin UI...');
@@ -31,19 +40,8 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 	const server = await createServer(config);
 
 	server.httpServer?.on('listening', () => {
-		const address = server.httpServer?.address();
-		if (!address || typeof address === 'string')
-			throw new Error('Could not retrieve address from the vite dev server');
-
-		const { address: listeningAddress, port: listeningPort, family } = address;
-
-		console.log(address);
-
-		if (family === 'IPv6') {
-			console.log(`🚀 Admin UI: http://[${listeningAddress}]:${listeningPort}`);
-		} else {
-			console.log(`🚀 Admin UI: http://${listeningAddress}:${listeningPort}`);
-		}
+		const url = urlFromHttpServerAddress(server.httpServer?.address());
+		console.log(`🚀 Admin UI: http://${url}`);
 	});
 
 	// Start vite.
