@@ -23,12 +23,12 @@ export const mapContentfulItem = (item: Entry<any, any, any>, fields: Array<Fiel
 	return mappedItem;
 };
 
-export const fieldFromContentfulTypeField = ({
+export const fieldFromContentfulTypeField = <DataEntity = any>({
 	id,
 	type,
 	required,
 	disabled,
-}: ContentTypeField): FieldOptions<any> | undefined => {
+}: ContentTypeField): FieldOptions<DataEntity> | undefined => {
 	if (disabled) return;
 	switch (type) {
 		case 'Symbol':
