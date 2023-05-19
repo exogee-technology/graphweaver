@@ -1,49 +1,49 @@
 import { GraphQLEntity, createBaseResolver, BackendProvider } from '@exogee/graphweaver';
-import { Resolver as ResolverDecorator, Field, ObjectType, ID } from 'type-graphql';
+import { Resolver, Field, ObjectType, ID } from 'type-graphql';
 
 import { caps, createFieldOnClass, setNameOnClass, setClassReadOnly } from './util';
 
-interface Item {
+interface ItemWithId {
 	id: string;
 	[key: string]: string | number | boolean;
 }
 
-export interface FieldOptions<TEntity> {
+export interface FieldOptions<DataEntity> {
 	name: string;
 	type: 'string' | 'float' | 'boolean';
-	resolve?(data: TEntity, fieldName: string): any;
+	resolve?(data: DataEntity, fieldName: string): any;
 	optional?: boolean;
 	metadata?: Record<string, any>;
 }
 
-export interface ResolverOptions<TEntity extends Item> {
+export interface ResolverOptions<Entity, DataEntity> {
 	name: string;
-	fields: Array<FieldOptions<TEntity>>;
-	provider: BackendProvider<TEntity, TEntity>;
+	fields: Array<FieldOptions<DataEntity>>;
+	provider: BackendProvider<DataEntity, Entity>;
 	readOnly?: boolean;
 }
 
-export const createResolver = <TEntity extends Item>({
+export const createResolver = <Entity extends ItemWithId, DataEntity extends ItemWithId = Entity>({
 	name,
 	fields,
 	provider,
 	readOnly,
-}: ResolverOptions<TEntity>) => {
+}: ResolverOptions<Entity, DataEntity>) => {
 	const entityName = caps(name);
 
 	// Create GraphQL Entity
 	@ObjectType(entityName)
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-expect-error @todo need to fix the type issue heree
-	class Entity extends GraphQLEntity<TEntity> {
-		public dataEntity!: TEntity;
+	// @ts-expect-error @todo need to fix the type issue here
+	class NewEntity extends GraphQLEntity<DataEntity> {
+		public dataEntity!: DataEntity;
 
 		@Field(() => ID)
 		id!: string;
 	}
 
-	setNameOnClass(Entity, entityName);
-	if (readOnly) setClassReadOnly(Entity);
+	setNameOnClass(NewEntity, entityName);
+	if (readOnly) setClassReadOnly(NewEntity);
 
 	// Create fields on the class
 	for (const {
@@ -53,7 +53,7 @@ export const createResolver = <TEntity extends Item>({
 		optional: fieldOptional = true,
 	} of fields) {
 		createFieldOnClass(
-			Entity,
+			NewEntity,
 			fieldName,
 			fieldType,
 			(dataEntity) => {
@@ -65,12 +65,12 @@ export const createResolver = <TEntity extends Item>({
 	}
 
 	// Create Base Resolver
-	@ResolverDecorator(() => Entity)
+	@Resolver(() => NewEntity)
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-expect-error @todo need to fix the type issue here
-	class Resolver extends createBaseResolver<Entity, TEntity>(Entity, provider) {}
+	class NewResolver extends createBaseResolver<DataEntity, Entity>(NewEntity, provider) {}
 
-	setNameOnClass(Resolver, `${entityName}Resolver`);
+	setNameOnClass(NewResolver, `${entityName}Resolver`);
 
-	return { provider, entity: Entity, resolver: Resolver };
+	return { provider, entity: NewEntity, resolver: NewResolver };
 };
