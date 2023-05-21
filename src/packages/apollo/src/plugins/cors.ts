@@ -38,7 +38,7 @@ export const Cors: ApolloServerPlugin = {
 				const subdomain = deploymentEnv === 'production' ? 'easy' : `easy-${deploymentEnv}`;
 				const domainName = `${subdomain}.${rootDomain}`;
 
-				const defaultOrigin = 'http://localhost:3000';
+				const defaultOrigin = 'http://localhost:9000';
 				const origin = request.http?.headers.get('origin') || defaultOrigin;
 				response.http?.headers.set('Access-Control-Allow-Credentials', 'true');
 				if (origin?.endsWith(domainName)) {
