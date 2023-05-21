@@ -3,9 +3,9 @@ import { Resolver, Field, ObjectType, ID } from 'type-graphql';
 
 import { caps, createFieldOnClass, setNameOnClass, setClassReadOnly } from './util';
 
-interface ItemWithId {
+export interface ItemWithId {
 	id: string;
-	[key: string]: string | number | boolean;
+	[key: string]: any;
 }
 
 export interface FieldOptions<DataEntity> {
