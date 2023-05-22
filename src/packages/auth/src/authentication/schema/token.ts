@@ -3,12 +3,10 @@ import { Field, ID, ObjectType } from 'type-graphql';
 
 export class AuthToken implements BaseDataEntity {
 	authToken: string;
-	idToken?: string;
-	refreshToken?: string;
+	refreshToken!: string;
 
-	constructor(authToken: string, idToken?: string, refreshToken?: string) {
+	constructor(authToken: string, refreshToken: string) {
 		this.authToken = authToken;
-		this.idToken = idToken;
 		this.refreshToken = refreshToken;
 	}
 
@@ -27,9 +25,6 @@ export class Token extends GraphQLEntity<AuthToken> {
 	@Field(() => String)
 	authToken!: string;
 
-	@Field(() => String, { nullable: true })
-	idToken?: string;
-
-	@Field(() => String, { nullable: true })
-	refreshToken?: string;
+	@Field(() => String)
+	refreshToken!: string;
 }
