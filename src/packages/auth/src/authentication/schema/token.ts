@@ -1,6 +1,24 @@
-import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import { GraphQLEntity, SummaryField, BaseDataEntity } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { AuthToken } from '../base-auth-provider';
+
+export class AuthToken implements BaseDataEntity {
+	authToken: string;
+	idToken?: string;
+	refreshToken?: string;
+
+	constructor(authToken: string, idToken?: string, refreshToken?: string) {
+		this.authToken = authToken;
+		this.idToken = idToken;
+		this.refreshToken = refreshToken;
+	}
+
+	isReference() {
+		return false;
+	}
+	isCollection() {
+		return false;
+	}
+}
 
 @ObjectType('User')
 export class Token extends GraphQLEntity<AuthToken> {
