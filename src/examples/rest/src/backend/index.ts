@@ -14,6 +14,7 @@ import {
 } from '@as-integrations/aws-lambda';
 import {
 	AuthorizationContext,
+	LocalAuthApolloPlugin,
 	setAdministratorRoleName,
 	upsertAuthorizationContext,
 } from '@exogee/graphweaver-auth';
@@ -42,6 +43,7 @@ const graphweaver = new Graphweaver<Context>({
 	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
+		plugins: [LocalAuthApolloPlugin],
 	},
 	adminMetadata: { enabled: true },
 	mikroOrmOptions: [
