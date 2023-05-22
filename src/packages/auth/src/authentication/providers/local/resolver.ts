@@ -3,22 +3,17 @@ import { AuthorizationContext } from '../../../types';
 import { LocalAuthProvider } from './provider';
 import { Token } from '../../schema/token';
 
-@Resolver()
+@Resolver((of) => Token)
 export class LocalAuthResolver {
-	private authProvider: LocalAuthProvider;
-
-	constructor(authProvider: LocalAuthProvider) {
-		this.authProvider = authProvider;
-	}
-
 	@Mutation(() => Token)
 	async login(
-		@Arg('email') email: string,
-		@Arg('password') password: string,
+		@Arg('email', () => String) email: string,
+		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		const userProfile = await this.authProvider.login(email, password);
-		const authToken = await this.authProvider.generateAuthToken(userProfile);
+		const authProvider = new LocalAuthProvider();
+		const userProfile = await authProvider.login(email, password);
+		const authToken = await authProvider.generateAuthToken(userProfile);
 
 		const token = Token.fromBackendEntity(authToken);
 		if (!token) throw new Error('Login unsuccessful.');
@@ -33,10 +28,11 @@ export class LocalAuthResolver {
 
 	@Mutation(() => Token)
 	async refreshSession(
-		@Arg('refreshToken') refreshToken: string,
+		@Arg('refreshToken', () => String) refreshToken: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		const authToken = await this.authProvider.refreshAuthToken(refreshToken);
+		const authProvider = new LocalAuthProvider();
+		const authToken = await authProvider.refreshAuthToken(refreshToken);
 		const token = Token.fromBackendEntity(authToken);
 
 		if (!token) throw new Error('Auth Token not refreshed.');
