@@ -1,23 +1,8 @@
-import { AuthProvider, BaseAuthProvider, UserProfile } from '../../base-auth-provider';
+import { BaseAuthProvider } from '../../base-auth-provider';
 import { AuthToken } from '../../schema/token';
+import { UserProfile } from '../../user-profile';
 
 export class LocalAuthProvider implements BaseAuthProvider {
-	async login(email: string, password: string) {
-		const user: UserProfile = {
-			id: '4',
-			provider: AuthProvider.LOCAL,
-			displayName: 'Darth Vader',
-			email: 'darth@deathstar.com',
-			roles: [],
-			isReference: () => {
-				return false;
-			},
-			isCollection: () => {
-				return false;
-			},
-		};
-		return user;
-	}
 	async generateAuthToken(user: UserProfile) {
 		const token = new AuthToken('');
 		return token;
