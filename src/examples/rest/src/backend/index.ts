@@ -14,6 +14,7 @@ import {
 } from '@as-integrations/aws-lambda';
 import {
 	AuthorizationContext,
+	LocalAuthResolver,
 	setAdministratorRoleName,
 	upsertAuthorizationContext,
 } from '@exogee/graphweaver-auth';
@@ -35,7 +36,7 @@ export enum Roles {
 	DARK_SIDE = 'DARK_SIDE',
 }
 
-export const resolvers = [TaskResolver, TagResolver, UserResolver];
+const resolvers = [TaskResolver, TagResolver, UserResolver, LocalAuthResolver];
 
 const graphweaver = new Graphweaver<Context>({
 	resolvers,
