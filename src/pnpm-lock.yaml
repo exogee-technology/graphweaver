@@ -296,6 +296,7 @@ importers:
 
   packages/auth:
     specifiers:
+      '@apollo/server': 4.2.2
       '@exogee/graphweaver': workspace:0.1.10
       '@exogee/logger': workspace:0.1.10
       '@types/node': 14.14.10
@@ -310,6 +311,7 @@ importers:
       type-graphql: 2.0.0-beta.1
       typescript: 5.0.2
     dependencies:
+      '@apollo/server': 4.2.2_graphql@16.6.0
       '@exogee/graphweaver': link:../core
       '@exogee/logger': link:../logger
       apollo-server-errors: 3.3.1_graphql@16.6.0
@@ -703,7 +705,7 @@ packages:
       '@apollo/utils.logger': 2.0.1
       '@apollo/utils.usagereporting': 2.0.1_graphql@16.6.0
       '@apollo/utils.withrequired': 2.0.1
-      '@graphql-tools/schema': 9.0.18_graphql@16.6.0
+      '@graphql-tools/schema': 9.0.19_graphql@16.6.0
       '@josephg/resolvable': 1.0.1
       '@types/express': 4.17.17
       '@types/express-serve-static-core': 4.17.33
