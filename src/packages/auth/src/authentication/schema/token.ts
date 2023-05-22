@@ -20,14 +20,16 @@ export class AuthToken implements BaseDataEntity {
 	}
 }
 
-@ObjectType('User')
+@ObjectType('Token')
 export class Token extends GraphQLEntity<AuthToken> {
 	public dataEntity!: AuthToken;
 
-	@Field(() => ID)
-	id!: string;
-
-	@SummaryField()
 	@Field(() => String)
-	name!: string;
+	authToken!: string;
+
+	@Field(() => String, { nullable: true })
+	idToken?: string;
+
+	@Field(() => String, { nullable: true })
+	refreshToken?: string;
 }
