@@ -11,7 +11,7 @@ import { LocalAuthTokenProvider } from './provider';
 // if (!XERO_CLIENT_REDIRECT_URIS)
 // 	throw new Error('XERO_CLIENT_REDIRECT_URIS is required in environment');
 
-const redirectUrl = 'http://localhost:3000/login'; // @todo make configurable
+const redirectUrl = 'http://localhost:8000/login'; // @todo make configurable
 
 export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 	async requestDidStart({ request, contextValue }) {

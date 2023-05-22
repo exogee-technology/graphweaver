@@ -1,0 +1,27 @@
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 16px;
+}
+
+.logo {
+	box-sizing: border-box;
+	padding: 40px;
+	width: 150px;
+}
+
+.titleContainer {
+	display: flex;
+	width: 100%;
+	justify-content: start;
+	font-size: 20px;
+	font-weight: 400;
+}
+
+.buttonContainer {
+	display: flex;
+	width: 100%;
+	justify-content: end;
+	padding: 40px 0;
+}
