@@ -3,12 +3,15 @@ import { logger } from '@exogee/logger';
 
 import { AuthorizationContext } from '../../../types';
 import { Token } from '../../schema';
+import { LocalAuthTokenProvider } from './provider';
 
 // const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
 // if (!XERO_CLIENT_ID) throw new Error('XERO_CLIENT_ID is required in environment');
 // if (!XERO_CLIENT_SECRET) throw new Error('XERO_CLIENT_SECRET is required in environment');
 // if (!XERO_CLIENT_REDIRECT_URIS)
 // 	throw new Error('XERO_CLIENT_REDIRECT_URIS is required in environment');
+
+const redirectUrl = 'http://localhost:3000/login'; // @todo make configurable
 
 export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 	async requestDidStart({ request, contextValue }) {
@@ -30,13 +33,20 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 		// Case 1: No header, initial request.
 		if (!authHeader) {
 			logger.trace('No Auth header, setting redirect');
-			redirect = 'http://localhost:3000/login'; // @todo make configurable
+			redirect = redirectUrl;
 		} else {
 			logger.trace('Got a token, checking for basic failures.');
 
-			// Ok, now we need to validate the token.
-			token = new Token(JSON.parse(authHeader));
-			logger.trace('Token parsed successfully.');
+			const tokenProvider = new LocalAuthTokenProvider();
+			const valid = await tokenProvider.verifyToken(authHeader);
+
+			if (!valid) {
+				redirect = redirectUrl;
+			} else {
+				// Ok, now we need to validate the token.
+				token = new Token(JSON.parse(authHeader));
+				logger.trace('Token parsed successfully.');
+			}
 		}
 
 		return {

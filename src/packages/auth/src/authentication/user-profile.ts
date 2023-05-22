@@ -1,5 +1,5 @@
 import { BaseDataEntity } from '@exogee/graphweaver';
-import { AuthProvider } from './base-auth-provider';
+import { AuthProvider } from './base-auth-token-provider';
 
 export type UserProfileData = {
 	provider: AuthProvider;

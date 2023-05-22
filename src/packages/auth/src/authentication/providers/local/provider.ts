@@ -1,17 +1,17 @@
-import { BaseAuthProvider } from '../../base-auth-provider';
+import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
 import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../user-profile';
 
-export class LocalAuthProvider implements BaseAuthProvider {
-	async generateAuthToken(user: UserProfile) {
+export class LocalAuthTokenProvider implements BaseAuthTokenProvider {
+	async generateToken(user: UserProfile) {
 		const token = new AuthToken('', '');
 		return token;
 	}
-	async refreshAuthToken(refreshToken: string) {
+	async refreshToken(refreshToken: string) {
 		const token = new AuthToken('', '');
 		return token;
 	}
-	async verifyAuthToken(authToken: string) {
-		return true;
+	async verifyToken(authToken: string) {
+		return false;
 	}
 }
