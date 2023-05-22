@@ -62,13 +62,14 @@ export const createProvider = <Entity, Context, DataEntity = Entity>(
 		): Promise<Array<DataEntity>> {
 			await this.initFn;
 			const result = await this.read(this.context as Context, filter, pagination);
-			return result === null ? [] : Array.isArray(result) ? result : [result];
+			if(result === null) return [];
+			if(Array.isArray(result)) return result;
+			return [ result ];
 		}
 
 		async findOne(filter: Filter<Entity>): Promise<DataEntity | null> {
-			const result = await this.find(filter, { limit: 1 });
-			const oneResult = Array.isArray(result) ? result?.[0] : result;
-			return oneResult || null;
+			const result = await this.find(filter, { limit: 1 })?.[0];
+			return result || null;
 		}
 
 		async findByRelatedId(

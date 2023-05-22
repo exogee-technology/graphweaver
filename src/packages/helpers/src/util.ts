@@ -15,7 +15,7 @@ export const createFieldOnClass = (
 ) => {
 	Object.defineProperty(target.prototype, name, {
 		value() {
-			value(this.dataEntity);
+			return value(this.dataEntity);
 		},
 	});
 	Field(typeFunctionForType(type), fieldOptions)(
