@@ -29,4 +29,20 @@ export class AuthResolver extends LocalAuthResolver {
 
 		return userProfile;
 	}
+
+	async getUserProfile(userId: string) {
+		const user = User.fromBackendEntity(
+			await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
+		);
+
+		if (!user) throw new Error('Bad Request: Unknown user id provided.');
+
+		const userProfile = new UserProfile({
+			id: user.id,
+			provider: AuthProvider.LOCAL,
+			roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
+		});
+
+		return userProfile;
+	}
 }
