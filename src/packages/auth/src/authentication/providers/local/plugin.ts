@@ -23,17 +23,13 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 		// 2. No auth header, initial request.
 		//    - In this situation we need to redirect them to the login page.
 		// 3. There is an auth header
-		//    - In this situation we need to verify the token, error if it's not valid then send the token back to them.
+		//    - In this situation we need to verify the token, error if it's not valid and redirect.
 		//
-		// In all situations we need to set the token in the context so the rest of the application can decide whether
-		// to send data back to the client or not.
 
 		// We may need to return a redirect to the client. If so, we'll set this variable.
 		const authHeader = request.http?.headers.get('authorization');
-		let redirect: string;
-		let token: Token | undefined = undefined;
-
 		const operation = request.operationName;
+		let redirect: string;
 
 		// Case 1. No auth header, initial request for a guest operation.
 		if (guestOperations.some((guestOperation) => guestOperation === operation)) {
@@ -44,17 +40,14 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 			redirect = redirectUrl;
 		} else {
 			// Case 3. There is an auth header
-			logger.trace('Got a token, checking for basic failures.');
+			logger.trace('Got a token, checking it is valid.');
 
 			const tokenProvider = new LocalAuthTokenProvider();
-			const valid = await tokenProvider.verifyToken(authHeader);
 
-			if (!valid) {
+			try {
+				await tokenProvider.verifyToken(authHeader);
+			} catch {
 				redirect = redirectUrl;
-			} else {
-				// Ok, now we need to validate the token.
-				token = new Token(JSON.parse(authHeader));
-				logger.trace('Token parsed successfully.');
 			}
 		}
 
@@ -64,12 +57,6 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 				if (redirect) {
 					logger.trace('Redirect set, setting X-Auth-Redirect header.');
 					response.http?.headers.set('X-Auth-Redirect', redirect);
-				}
-
-				// And if we have a new token for the browser to save, we should pass that down too.
-				if (token) {
-					logger.trace('Token set, setting Authorization header.');
-					response.http?.headers.set('Authorization', JSON.stringify(token));
 				}
 			},
 		};

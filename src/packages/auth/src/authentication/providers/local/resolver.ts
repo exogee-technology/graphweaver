@@ -23,23 +23,4 @@ export abstract class LocalAuthResolver {
 
 		return token;
 	}
-
-	@Mutation(() => Boolean)
-	logout(@Ctx() ctx: AuthorizationContext): boolean {
-		return true;
-	}
-
-	@Mutation(() => Token)
-	async refreshSession(
-		@Arg('refreshToken', () => String) refreshToken: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<Token> {
-		const tokenProvider = new LocalAuthTokenProvider();
-		const authToken = await tokenProvider.refreshToken(refreshToken);
-		const token = Token.fromBackendEntity(authToken);
-
-		if (!token) throw new Error('Auth Token not refreshed.');
-
-		return token;
-	}
 }
