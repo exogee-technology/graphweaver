@@ -3,11 +3,9 @@ import { Field, ID, ObjectType } from 'type-graphql';
 
 export class AuthToken implements BaseDataEntity {
 	authToken: string;
-	refreshToken!: string;
 
-	constructor(authToken: string, refreshToken: string) {
+	constructor(authToken: string) {
 		this.authToken = authToken;
-		this.refreshToken = refreshToken;
 	}
 
 	isReference() {
@@ -24,7 +22,4 @@ export class Token extends GraphQLEntity<AuthToken> {
 
 	@Field(() => String)
 	authToken!: string;
-
-	@Field(() => String)
-	refreshToken!: string;
 }
