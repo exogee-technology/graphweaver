@@ -7,6 +7,7 @@ import { UserProfile } from '../../user-profile';
 @Resolver((of) => Token, { isAbstract: true })
 export abstract class LocalAuthResolver {
 	abstract authenticate(username: string, password: string): Promise<UserProfile>;
+	abstract authenticate(username: string, password: string): Promise<UserProfile>;
 
 	@Mutation(() => Token)
 	async login(

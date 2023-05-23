@@ -4,6 +4,8 @@ import { logger } from '@exogee/logger';
 import { AuthorizationContext } from '../../../types';
 import { LocalAuthTokenProvider } from './provider';
 import { upsertAuthorizationContext } from '../../../helper-functions';
+import { LocalAuthResolver } from './resolver';
+import { UserProfile } from '../../user-profile';
 
 if (!process.env.LOCAL_AUTH_REDIRECT_URI)
 	throw new Error('LOCAL_AUTH_REDIRECT_URI is required in environment');
@@ -11,7 +13,9 @@ if (!process.env.LOCAL_AUTH_REDIRECT_URI)
 const redirectUrl = process.env.LOCAL_AUTH_REDIRECT_URI;
 const guestOperations = ['login'];
 
-export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
+export const localAuthApolloPlugin = (
+	getUserProfile: (userId: string) => Promise<UserProfile>
+): ApolloServerPlugin<AuthorizationContext> => ({
 	async requestDidStart({ request, contextValue }) {
 		logger.trace('LocalAuthApolloPlugin requestDidStart');
 		// We have two use cases this needs to handle:
@@ -43,7 +47,12 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 
 			try {
 				const decoded = await tokenProvider.decodeToken(authHeader);
+
+				const userId = typeof decoded === 'object' ? decoded?.id : undefined;
+				const userProfile = await getUserProfile(userId);
+
 				contextValue.token = decoded;
+				contextValue.roles = userProfile.roles;
 
 				upsertAuthorizationContext(contextValue);
 			} catch {
@@ -61,4 +70,4 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 			},
 		};
 	},
-};
+});
