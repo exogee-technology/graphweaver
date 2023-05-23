@@ -7,13 +7,14 @@ import styles from './styles.module.css';
 import { useMutation } from '@apollo/client';
 
 import { LOGIN_MUTATION } from './graphql';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
-	const [login] = useMutation(LOGIN_MUTATION);
+	const navigate = useNavigate();
+	const [login] = useMutation<{ login: { authToken: string } }>(LOGIN_MUTATION);
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
-		console.log(values);
-		await login({
+		const res = await login({
 			variables: {
 				username: values.username,
 				password: values.password,
@@ -21,6 +22,11 @@ export const Login = () => {
 		});
 
 		actions.setSubmitting(false);
+
+		if (res?.data?.login.authToken) {
+			localStorage.setItem('graphweaver-auth', res.data.login.authToken);
+			navigate('/');
+		}
 	};
 
 	return (
@@ -30,14 +36,14 @@ export const Login = () => {
 					<GraphweaverLogo width="52" className={styles.logo} />
 					<div className={styles.titleContainer}>Login</div>
 					<Field
-						placeholder={'username'}
+						placeholder={'Username'}
 						id={'username'}
 						name={'username'}
 						className={styles.textInputField}
 					/>
 					<Field
 						type={'password'}
-						placeholder={'password'}
+						placeholder={'Password'}
 						id={'password'}
 						name={'password'}
 						className={styles.textInputField}
