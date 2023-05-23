@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"description": "RESTful backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -20,8 +20,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:0.1.10",
-		"@exogee/logger": "workspace:0.1.10",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/logger": "workspace:*",
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.13.2",
 		"dataloader": "2.2.2",
