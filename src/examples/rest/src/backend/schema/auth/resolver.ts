@@ -3,13 +3,12 @@ import { Resolver } from 'type-graphql';
 import { User } from '../user';
 import { BaseLoaders } from '@exogee/graphweaver';
 import { Roles } from '../..';
-
-const logins = [{ id: '4', username: 'darth', password: 'deathstar123' }];
+import { credentials } from '../../entities/memory/credentials';
 
 @Resolver()
 export class AuthResolver extends LocalAuthResolver {
 	async authenticate(username: string, password: string) {
-		const login = logins.find(
+		const login = credentials.find(
 			(login) => login.username === username && login.password === password
 		);
 
