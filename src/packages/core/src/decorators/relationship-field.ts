@@ -15,14 +15,17 @@ import {
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
-	id?: keyof D & string | ((dataEntity: D) => string);
-        plainEntity?: boolean; /* Entity is not a Graphweaver Entity and does not use a dataEntity property */
+	id?: (keyof D & string) | ((dataEntity: D) => string);
+	plainEntity?: boolean /* Entity is not a Graphweaver Entity and does not use a dataEntity property */;
 };
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
 	D extends BaseDataEntity = G['dataEntity']
->(returnTypeFunc: ReturnTypeFunc, { relatedField, id, plainEntity = false }: RelationshipFieldOptions<D>) {
+>(
+	returnTypeFunc: ReturnTypeFunc,
+	{ relatedField, id, plainEntity = false }: RelationshipFieldOptions<D>
+) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
@@ -88,11 +91,14 @@ export function RelationshipField<
 
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
-
-			const idValue = !id ? undefined : typeof id === 'function' ? id(plainEntity ? root : root.dataEntity) : id;
+			const idValue = !id
+				? undefined
+				: typeof id === 'function'
+				? id(plainEntity ? root : root.dataEntity)
+				: id;
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
-			
+
 			const filter = idValue ? { id: idValue } : { [relatedField as string]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
