@@ -12,14 +12,17 @@ import { LocalAuthTokenProvider } from './provider';
 // 	throw new Error('XERO_CLIENT_REDIRECT_URIS is required in environment');
 
 const redirectUrl = 'http://localhost:8000/login'; // @todo make configurable
+const guestOperations = ['login'];
 
 export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 	async requestDidStart({ request, contextValue }) {
 		logger.trace('LocalAuthApolloPlugin requestDidStart');
 		// We have two use cases this needs to handle:
-		// 1. No auth header, initial request.
+		// 1. No auth header, initial request for a guest operation.
+		//    - Some requests are allowed when accessed by a guest defined above.
+		// 2. No auth header, initial request.
 		//    - In this situation we need to redirect them to the login page.
-		// 2. There is an auth header
+		// 3. There is an auth header
 		//    - In this situation we need to verify the token, error if it's not valid then send the token back to them.
 		//
 		// In all situations we need to set the token in the context so the rest of the application can decide whether
@@ -30,11 +33,17 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 		let redirect: string;
 		let token: Token | undefined = undefined;
 
-		// Case 1: No header, initial request.
-		if (!authHeader) {
+		const operation = request.operationName;
+
+		// Case 1. No auth header, initial request for a guest operation.
+		if (guestOperations.some((guestOperation) => guestOperation === operation)) {
+			// If we are here then we do nothing as the operation requested was a guest operation
+		} else if (!authHeader) {
+			// Case 2. No auth header, initial request.
 			logger.trace('No Auth header, setting redirect');
 			redirect = redirectUrl;
 		} else {
+			// Case 3. There is an auth header
 			logger.trace('Got a token, checking for basic failures.');
 
 			const tokenProvider = new LocalAuthTokenProvider();
