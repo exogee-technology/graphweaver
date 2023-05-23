@@ -16,26 +16,12 @@ import {
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
 	id?: (keyof D & string) | ((dataEntity: D) => string);
-	plainEntity: undefined | false;
-};
-
-type RelationshipFieldOptionsAsPlainEntity<G> = {
-	relatedField?: keyof G & string;
-	id?: (keyof G & string) | ((entity: G) => string);
-	plainEntity: true /* Entity is not a Graphweaver Entity and does not use a dataEntity property */;
 };
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
 	D extends BaseDataEntity = G['dataEntity']
->(
-	returnTypeFunc: ReturnTypeFunc,
-	{
-		relatedField,
-		id,
-		plainEntity = false,
-	}: RelationshipFieldOptions<D> | RelationshipFieldOptionsAsPlainEntity<G>
-) {
+>(returnTypeFunc: ReturnTypeFunc, { relatedField, id }: RelationshipFieldOptions<D>) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
@@ -104,8 +90,8 @@ export function RelationshipField<
 			const idValue = !id
 				? undefined
 				: typeof id === 'function'
-				? id(plainEntity ? root : root.dataEntity)
-				: id;
+				? id(root.dataEntity)
+				: root.dataEntity[id];
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
