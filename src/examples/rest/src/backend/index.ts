@@ -10,7 +10,7 @@ import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import {
 	AuthorizationContext,
-	LocalAuthApolloPlugin,
+	localAuthApolloPlugin,
 	setAdministratorRoleName,
 } from '@exogee/graphweaver-auth';
 import { MySqlDriver } from '@mikro-orm/mysql';
@@ -20,7 +20,7 @@ import { Task, Tag } from './entities';
 import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
-import { AuthResolver } from './schema/auth';
+import { AuthResolver, getUserProfile } from './schema/auth';
 
 export interface Context extends AuthorizationContext {
 	user: User;
@@ -37,7 +37,7 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
-		plugins: [LocalAuthApolloPlugin],
+		plugins: [localAuthApolloPlugin(getUserProfile)],
 	},
 	adminMetadata: { enabled: true },
 	mikroOrmOptions: [
