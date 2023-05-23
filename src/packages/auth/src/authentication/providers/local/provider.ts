@@ -17,8 +17,7 @@ export class LocalAuthTokenProvider implements BaseAuthTokenProvider {
 		const token = new AuthToken(authToken);
 		return token;
 	}
-	async verifyToken(authToken: string) {
-		const decoded = jwt.verify(authToken, secret);
-		return !!decoded;
+	async decodeToken(authToken: string) {
+		return jwt.verify(authToken, secret);
 	}
 }

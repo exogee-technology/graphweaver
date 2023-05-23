@@ -3,6 +3,7 @@ import { logger } from '@exogee/logger';
 
 import { AuthorizationContext } from '../../../types';
 import { LocalAuthTokenProvider } from './provider';
+import { upsertAuthorizationContext } from '../../../helper-functions';
 
 if (!process.env.LOCAL_AUTH_REDIRECT_URI)
 	throw new Error('LOCAL_AUTH_REDIRECT_URI is required in environment');
@@ -41,7 +42,10 @@ export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
 			const tokenProvider = new LocalAuthTokenProvider();
 
 			try {
-				await tokenProvider.verifyToken(authHeader);
+				const decoded = await tokenProvider.decodeToken(authHeader);
+				contextValue.token = decoded;
+
+				upsertAuthorizationContext(contextValue);
 			} catch {
 				redirect = redirectUrl;
 			}
