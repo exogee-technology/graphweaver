@@ -2,16 +2,12 @@ import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
 import { AuthorizationContext } from '../../../types';
-import { Token } from '../../schema';
 import { LocalAuthTokenProvider } from './provider';
 
-// const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
-// if (!XERO_CLIENT_ID) throw new Error('XERO_CLIENT_ID is required in environment');
-// if (!XERO_CLIENT_SECRET) throw new Error('XERO_CLIENT_SECRET is required in environment');
-// if (!XERO_CLIENT_REDIRECT_URIS)
-// 	throw new Error('XERO_CLIENT_REDIRECT_URIS is required in environment');
+if (!process.env.LOCAL_AUTH_REDIRECT_URI)
+	throw new Error('LOCAL_AUTH_REDIRECT_URI is required in environment');
 
-const redirectUrl = 'http://localhost:8000/login'; // @todo make configurable
+const redirectUrl = process.env.LOCAL_AUTH_REDIRECT_URI;
 const guestOperations = ['login'];
 
 export const LocalAuthApolloPlugin: ApolloServerPlugin<AuthorizationContext> = {
