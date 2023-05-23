@@ -16,15 +16,22 @@ import {
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
 	id?: (keyof D & string) | ((dataEntity: D) => string);
-	plainEntity?: boolean /* Entity is not a Graphweaver Entity and does not use a dataEntity property */;
+	plainEntity: undefined | false ;
 };
+
+type RelationshipFieldOptionsAsPlainEntity<G> = {
+	relatedField?: keyof G & string;
+	id?: (keyof G & string) | ((entity: G) => string);
+	plainEntity: true /* Entity is not a Graphweaver Entity and does not use a dataEntity property */;
+}
+
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
 	D extends BaseDataEntity = G['dataEntity']
 >(
 	returnTypeFunc: ReturnTypeFunc,
-	{ relatedField, id, plainEntity = false }: RelationshipFieldOptions<D>
+	{ relatedField, id, plainEntity = false }: RelationshipFieldOptions<D> | RelationshipFieldOptionsAsPlainEntity<G>
 ) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
