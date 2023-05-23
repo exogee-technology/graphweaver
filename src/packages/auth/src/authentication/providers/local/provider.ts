@@ -8,7 +8,7 @@ if (!process.env.LOCAL_AUTH_JWT_SECRET)
 	throw new Error('LOCAL_AUTH_JWT_SECRET is required in environment');
 
 const secret = process.env.LOCAL_AUTH_JWT_SECRET;
-const expiresIn = '8h'; // @todo - this is too long but setting to 8 hours until we define refresh tokens
+const expiresIn = process.env.LOCAL_AUTH_JWT_EXPIRES_IN ?? '8h';
 
 export class LocalAuthTokenProvider implements BaseAuthTokenProvider {
 	async generateToken(user: UserProfile) {
