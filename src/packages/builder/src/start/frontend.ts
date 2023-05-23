@@ -35,7 +35,7 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 
 	console.log(
 		`🚀 Admin UI: ${
-			server.resolvedUrls?.local?.[0] || server.resolvedUrls?.network?.[0]
-		} : 'Could not get URL'`
+			server.resolvedUrls?.local?.[0] || server.resolvedUrls?.network?.[0] || 'Could not get URL'
+		}`
 	);
 };
