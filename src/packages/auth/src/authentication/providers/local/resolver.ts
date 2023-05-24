@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import { AuthorizationContext } from '../../../types';
 import { LocalAuthTokenProvider } from './provider';
 import { Token } from '../../schema/token';
-import { UserProfile } from '../../user-profile';
+import { UserProfile } from '../../../user-profile';
 
 @Resolver((of) => Token, { isAbstract: true })
 export abstract class LocalAuthResolver {
