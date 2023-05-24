@@ -35,7 +35,7 @@ export enum Roles {
 	DARK_SIDE = 'DARK_SIDE',
 }
 
-export const resolvers = [TaskResolver, TagResolver, UserResolver];
+const resolvers = [TaskResolver, TagResolver, UserResolver];
 
 const graphweaver = new Graphweaver<Context>({
 	resolvers,
