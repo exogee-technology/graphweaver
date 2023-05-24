@@ -56,7 +56,11 @@ export const Router = () => {
 	useEffect(() => {
 		(async () => {
 			const routes = (await customPages.routes()).flat().filter((route) => route?.path);
-			setRouter(createBrowserRouter([...defaultRoutes, ...routes]));
+			setRouter(
+				createBrowserRouter([...defaultRoutes, ...routes], {
+					basename: import.meta.env.VITE_ADMIN_UI_BASE || '/',
+				})
+			);
 		})();
 	}, []);
 

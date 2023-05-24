@@ -1,4 +1,10 @@
-import DataGrid, { Column, SortColumn } from 'react-data-grid';
+import DataGrid, {
+	Column,
+	FormatterProps,
+	Row,
+	RowRendererProps,
+	SortColumn,
+} from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -19,11 +25,13 @@ import styles from './styles.module.css';
 import { Loader } from '../loader';
 import { ApolloError } from '@apollo/client';
 
+import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+
 const columnsForEntity = <T extends { id: string }>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
-): Column<T>[] =>
-	entity.fields.map((field) => ({
+): Column<T>[] => {
+	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
 		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
@@ -33,7 +41,7 @@ const columnsForEntity = <T extends { id: string }>(
 
 		// We only need a formatter for relationships.
 		formatter: field.relationshipType
-			? ({ row }) => {
+			? ({ row }: FormatterProps<T, unknown>) => {
 					// Without stopping propagation on our links, the grid will be notified about the click,
 					// which is not what we want. We want to navigate and not let the grid handle it
 					const gobbleEvent = useCallback(
@@ -64,6 +72,29 @@ const columnsForEntity = <T extends { id: string }>(
 			  }
 			: undefined,
 	}));
+
+	// Let's check if there are custom fields to add
+	const customFieldsForEntity = customFields?.get(entity.name);
+	if (customFieldsForEntity) {
+		// Covert the custom fields to columns
+		const customColumns =
+			customFieldsForEntity.map((field) => ({
+				key: field.name,
+				name: field.name,
+				width: 200,
+				sortable: false,
+				formatter: ({ row }: FormatterProps<T, unknown>) => field?.component?.(row),
+			})) || [];
+
+		// Add the custom columns to the existing table taking into account any supplied index
+		for (const field of customFieldsForEntity) {
+			const customCol = customColumns.shift();
+			if (customCol) entityColumns.splice(field.index ?? entityColumns.length, 0, customCol);
+		}
+	}
+
+	return entityColumns;
+};
 
 export interface TableRowItem {
 	id: string;
