@@ -10,7 +10,6 @@ interface NumericFilterProps {
 	fieldName: string;
 	onChange?: (fieldName: string, value?: string) => void;
 	value?: string;
-	type?: 'text' | 'password';
 	inputMode:
 		| 'search'
 		| 'text'
@@ -28,7 +27,6 @@ export const Input = ({
 	onChange,
 	value: initialValue,
 	inputMode,
-	type = 'text',
 }: NumericFilterProps) => {
 	const [value, setValue] = useState<string | undefined>(initialValue ?? '');
 	const debouncedValue = useDebounce<string | undefined>(value, 800); // debounce request for 800ms
@@ -46,7 +44,7 @@ export const Input = ({
 		<div className={styles.inputWrapper}>
 			<div className={classNames(value && styles.inputHighlighted, styles.input)}>
 				<input
-					type={type}
+					type="text"
 					inputMode={inputMode}
 					key={fieldName}
 					placeholder={fieldName}
