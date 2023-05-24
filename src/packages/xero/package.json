@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-xero",
-	"version": "0.1.9",
+	"version": "0.1.11",
 	"description": "Xero backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,8 +21,8 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.2.2",
-		"@exogee/graphweaver": "workspace:0.1.9",
-		"@exogee/logger": "workspace:0.1.9",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/logger": "workspace:*",
 		"class-validator": "0.13.2",
 		"dataloader": "2.2.2",
 		"graphql": "16.6.0",

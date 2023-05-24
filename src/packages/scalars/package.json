@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-scalars",
-	"version": "0.1.9",
+	"version": "0.1.11",
 	"description": "Common scalar types for use with @exogee/graphweaver",
 	"license": "MIT",
 	"main": "lib/index.js",
@@ -18,7 +18,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.9",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"luxon": "2.1.1"
 	},
 	"devDependencies": {

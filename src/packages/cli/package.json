@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-cli",
-	"version": "0.1.9",
+	"version": "0.1.11",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -17,8 +17,8 @@
 		"bin"
 	],
 	"dependencies": {
-		"@exogee/graphweaver-admin-ui": "workspace:0.1.9",
-		"@exogee/graphweaver-builder": "workspace:0.1.9",
+		"@exogee/graphweaver-admin-ui": "workspace:*",
+		"@exogee/graphweaver-builder": "workspace:*",
 		"esbuild": "0.15.5",
 		"inquirer": "9.2.1",
 		"yargs": "17.6.2"
