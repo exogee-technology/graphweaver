@@ -29,6 +29,7 @@ export class AuthResolver extends LocalAuthResolver {
 		return userProfile;
 	}
 }
+
 export const getUserProfile = async (userId: string) => {
 	const user = User.fromBackendEntity(
 		await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
@@ -40,6 +41,7 @@ export const getUserProfile = async (userId: string) => {
 		id: user.id,
 		provider: AuthProvider.LOCAL,
 		roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
+		displayName: user.name,
 	});
 
 	return userProfile;
