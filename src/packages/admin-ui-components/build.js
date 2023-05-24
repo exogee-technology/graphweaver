@@ -16,6 +16,7 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 			// This can't be bundled because it's virtual and supplied by
 			// our vite plugin directly.
 			'virtual:graphweaver-user-supplied-custom-pages',
+			'virtual:graphweaver-user-supplied-custom-fields',
 
 			// And these can't because they're peer dependencies, and we need to use
 			// the version supplied by the ultimate consumer of the library.
