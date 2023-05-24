@@ -21,7 +21,8 @@ import { Task, Tag } from './entities';
 import { UserResolver } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
-import { AuthResolver, getUserProfile } from './schema/auth';
+import { AuthResolver } from './schema/auth';
+import { addUserToContext } from './auth/context';
 
 export enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
@@ -34,7 +35,7 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
-		plugins: [localAuthApolloPlugin(getUserProfile)],
+		plugins: [localAuthApolloPlugin(addUserToContext)],
 	},
 	adminMetadata: {
 		enabled: true,

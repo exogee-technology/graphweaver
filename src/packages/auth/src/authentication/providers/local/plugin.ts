@@ -19,7 +19,7 @@ const didEncounterForbiddenError = (error: any) => {
 };
 
 export const localAuthApolloPlugin = (
-	getUserProfile: (userId: string) => Promise<UserProfile>
+	addUserToContext: (userId: string) => Promise<UserProfile>
 ): ApolloServerPlugin<AuthorizationContext> => ({
 	async requestDidStart({ request, contextValue }) {
 		logger.trace('LocalAuthApolloPlugin requestDidStart');
@@ -37,7 +37,6 @@ export const localAuthApolloPlugin = (
 
 		// Case 1. No auth header, initial request for a guest operation.
 		if (!authHeader) {
-			// Case 2. No auth header, initial request.
 			logger.trace('No Auth header, setting redirect');
 
 			// We are a guest and have not logged in yet.
@@ -48,7 +47,7 @@ export const localAuthApolloPlugin = (
 			});
 			upsertAuthorizationContext(contextValue);
 		} else {
-			// Case 3. There is an auth header
+			// Case 2. There is an auth header
 			logger.trace('Got a token, checking it is valid.');
 
 			const tokenProvider = new LocalAuthTokenProvider();
@@ -57,7 +56,7 @@ export const localAuthApolloPlugin = (
 				const decoded = await tokenProvider.decodeToken(authHeader);
 
 				const userId = typeof decoded === 'object' ? decoded?.id : undefined;
-				const userProfile = await getUserProfile(userId);
+				const userProfile = await addUserToContext(userId);
 
 				contextValue.token = decoded;
 				contextValue.user = userProfile;

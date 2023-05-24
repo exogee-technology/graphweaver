@@ -17,7 +17,10 @@ export abstract class LocalAuthResolver {
 	): Promise<Token> {
 		const tokenProvider = new LocalAuthTokenProvider();
 		const userProfile = await this.authenticate(email, password);
+		if (!userProfile) throw new Error('Login unsuccessful.');
+
 		const authToken = await tokenProvider.generateToken(userProfile);
+		if (!authToken) throw new Error('Login unsuccessful.');
 
 		const token = Token.fromBackendEntity(authToken);
 		if (!token) throw new Error('Login unsuccessful.');
