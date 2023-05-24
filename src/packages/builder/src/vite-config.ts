@@ -25,7 +25,7 @@ export const viteConfig = ({
 		base,
 		define: {
 			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `'${backendUrl}'` } : {}),
-			'import.meta.env.VITE_ADMIN_UI_BASE': `'${base}'`
+			'import.meta.env.VITE_ADMIN_UI_BASE': `'${base}'`,
 		},
 		build: {
 			outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
