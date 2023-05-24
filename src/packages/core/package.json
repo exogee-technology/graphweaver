@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "0.1.10",
+	"version": "0.1.11",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
@@ -19,7 +19,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/logger": "workspace:0.1.10",
+		"@exogee/logger": "workspace:*",
 		"@graphql-tools/delegate": "9.0.35",
 		"class-validator": "0.13.2",
 		"dataloader": "2.2.2",
