@@ -1,21 +1,12 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-// @todo does anyone need this legacy code?
-const defaultValidateOrigin = (origin: string) => {
-	const rootDomain = process.env.ROOT_DOMAIN;
-	const deploymentEnv = process.env.DEPLOYMENT_ENVIRONMENT || 'development';
-	const subdomain = deploymentEnv === 'production' ? 'easy' : `easy-${deploymentEnv}`;
-	const domainName = `${subdomain}.${rootDomain}`;
-	return origin?.endsWith(domainName);
-};
-
 export interface CorsPluginOptions {
 	validateOrigin?(origin: string): boolean;
 }
 
 export const corsPlugin = ({
-	validateOrigin = defaultValidateOrigin,
+	validateOrigin = () => false,
 }: CorsPluginOptions = {}): ApolloServerPlugin => ({
 	async requestDidStart({ request }) {
 		return {
