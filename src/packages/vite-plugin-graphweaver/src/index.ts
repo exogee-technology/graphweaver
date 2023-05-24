@@ -1,6 +1,6 @@
 import path from 'path';
 import { Plugin } from 'vite';
-import { loadCustomPages } from './loaders';
+import { loadCustomPages, loadCustomFields } from './loaders';
 
 export interface ViteGraphweaverOptions {
 	configPath?: string;
@@ -23,6 +23,9 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 	const virtualModuleId = 'virtual:graphweaver-user-supplied-custom-pages';
 	const resolvedVirtualModuleId = resolved(virtualModuleId);
 
+	const virtualCustomFieldsModuleId = 'virtual:graphweaver-user-supplied-custom-fields';
+	const resolvedVirtualCustomFieldModuleId = resolved(virtualCustomFieldsModuleId);
+
 	let adminUiPath: string | null = null;
 
 	return {
@@ -36,6 +39,7 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 			// This function allows the node module to exist in either the user's
 			// node_modules directory, or in the admin-ui package's node_modules directory.
 			if (id === virtualModuleId) return resolvedVirtualModuleId;
+			if (id === virtualCustomFieldsModuleId) return resolvedVirtualCustomFieldModuleId;
 
 			// Ok, if it's not any of our virtual modules, it may be in the user's project
 			// directory.
@@ -58,6 +62,12 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 				if (!settings.configPath) throw new Error('Config path should be resolved by now.');
 
 				return await loadCustomPages(settings.configPath);
+			}
+
+			if (id === resolvedVirtualCustomFieldModuleId) {
+				if (!settings.configPath) throw new Error('Config path should be resolved by now.');
+
+				return await loadCustomFields(settings.configPath);
 			}
 		},
 	};
