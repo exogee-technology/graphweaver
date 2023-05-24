@@ -1,7 +1,13 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-export const Cors: ApolloServerPlugin = {
+export interface CorsPluginOptions {
+	validateOrigin?(origin: string): boolean;
+}
+
+export const corsPlugin = ({
+	validateOrigin = () => false,
+}: CorsPluginOptions = {}): ApolloServerPlugin => ({
 	async requestDidStart({ request }) {
 		return {
 			willSendResponse: async ({ response }) => {
@@ -33,15 +39,11 @@ export const Cors: ApolloServerPlugin = {
 					].join(',')
 				);
 
-				const rootDomain = process.env.ROOT_DOMAIN;
-				const deploymentEnv = process.env.DEPLOYMENT_ENVIRONMENT || 'development';
-				const subdomain = deploymentEnv === 'production' ? 'easy' : `easy-${deploymentEnv}`;
-				const domainName = `${subdomain}.${rootDomain}`;
-
 				const defaultOrigin = 'http://localhost:9000';
 				const origin = request.http?.headers.get('origin') || defaultOrigin;
 				response.http?.headers.set('Access-Control-Allow-Credentials', 'true');
-				if (origin?.endsWith(domainName)) {
+
+				if (validateOrigin(origin)) {
 					// Ok, this is a graphweaver request
 					logger.trace(`Adding CORS allow origin header: ${origin}`);
 					response.http?.headers.set('Access-Control-Allow-Origin', origin);
@@ -57,4 +59,4 @@ export const Cors: ApolloServerPlugin = {
 			},
 		};
 	},
-};
+});
