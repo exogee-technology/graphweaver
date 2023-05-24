@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
 import { AuthToken } from '../../schema/token';
-import { UserProfile } from '../../user-profile';
+import { UserProfile } from '../../../user-profile';
 
 if (!process.env.LOCAL_AUTH_JWT_SECRET)
 	throw new Error('LOCAL_AUTH_JWT_SECRET is required in environment');

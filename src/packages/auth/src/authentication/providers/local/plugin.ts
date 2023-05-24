@@ -4,8 +4,10 @@ import { logger } from '@exogee/logger';
 import { AuthorizationContext } from '../../../types';
 import { LocalAuthTokenProvider } from './provider';
 import { upsertAuthorizationContext } from '../../../helper-functions';
-import { UserProfile } from '../../user-profile';
+import { UserProfile } from '../../../user-profile';
 import { ForbiddenError } from 'apollo-server-errors';
+import { AuthProvider } from '../../base-auth-token-provider';
+import { GraphQLError } from 'graphql';
 
 if (!process.env.LOCAL_AUTH_REDIRECT_URI)
 	throw new Error('LOCAL_AUTH_REDIRECT_URI is required in environment');
@@ -30,6 +32,8 @@ export const localAuthApolloPlugin = (
 
 		// We may need to return a redirect to the client. If so, we'll set this variable.
 		const authHeader = request.http?.headers.get('authorization');
+		// If verification fails then set this flag
+		let verificationFailed = false;
 
 		// Case 1. No auth header, initial request for a guest operation.
 		if (!authHeader) {
@@ -37,7 +41,11 @@ export const localAuthApolloPlugin = (
 			logger.trace('No Auth header, setting redirect');
 
 			// We are a guest and have not logged in yet.
-			contextValue.roles = ['GUEST'];
+			contextValue.user = new UserProfile({
+				id: undefined,
+				roles: ['GUEST'],
+				provider: AuthProvider.LOCAL,
+			});
 			upsertAuthorizationContext(contextValue);
 		} else {
 			// Case 3. There is an auth header
@@ -52,11 +60,12 @@ export const localAuthApolloPlugin = (
 				const userProfile = await getUserProfile(userId);
 
 				contextValue.token = decoded;
-				contextValue.roles = userProfile.roles;
+				contextValue.user = userProfile;
 
 				upsertAuthorizationContext(contextValue);
-			} catch {
-				throw new ForbiddenError('Forbidden: Authentication Failed');
+			} catch (err: unknown) {
+				logger.trace(`JWT verification failed. ${err}`);
+				verificationFailed = true;
 			}
 		}
 
@@ -64,7 +73,7 @@ export const localAuthApolloPlugin = (
 			willSendResponse: async ({ response, contextValue }) => {
 				// Let's check if we are a guest and have received a forbidden error
 				if (
-					contextValue.roles?.includes('GUEST') &&
+					contextValue.user?.roles?.includes('GUEST') &&
 					response &&
 					(response.body as any)?.singleResult?.errors
 				) {
@@ -76,6 +85,12 @@ export const localAuthApolloPlugin = (
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 						response.http?.headers.set('X-Auth-Redirect', redirectUrl);
 					}
+				}
+
+				// Let's check if verification has failed and redirect to login if it has
+				if (verificationFailed) {
+					logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
+					response.http?.headers.set('X-Auth-Redirect', redirectUrl);
 				}
 			},
 		};

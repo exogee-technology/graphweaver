@@ -22,10 +22,6 @@ import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
 import { AuthResolver, getUserProfile } from './schema/auth';
 
-export interface Context extends AuthorizationContext {
-	user: User;
-}
-
 export enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
 	DARK_SIDE = 'DARK_SIDE',

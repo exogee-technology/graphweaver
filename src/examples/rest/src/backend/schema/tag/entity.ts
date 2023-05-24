@@ -1,12 +1,15 @@
 import { GraphQLEntity, RelationshipField } from '@exogee/graphweaver';
 import { Field, ID, ObjectType } from 'type-graphql';
-import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import {
+	AccessControlList,
+	ApplyAccessControlList,
+	AuthorizationContext,
+} from '@exogee/graphweaver-auth';
 
 import { Tag as OrmTag } from '../../entities';
-import { Context } from '../../';
 import { Task } from '../task';
 
-const acl: AccessControlList<Tag, Context> = {
+const acl: AccessControlList<Tag, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		// Users can only read tags
 		read: true,
