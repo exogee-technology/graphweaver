@@ -33,7 +33,7 @@ export const localAuthApolloPlugin = (
 		// We may need to return a redirect to the client. If so, we'll set this variable.
 		const authHeader = request.http?.headers.get('authorization');
 		// If verification fails then set this flag
-		let verificationFailed = false;
+		let tokenVerificationFailed = false;
 
 		// Case 1. No auth header, initial request for a guest operation.
 		if (!authHeader) {
@@ -64,7 +64,7 @@ export const localAuthApolloPlugin = (
 				upsertAuthorizationContext(contextValue);
 			} catch (err: unknown) {
 				logger.trace(`JWT verification failed. ${err}`);
-				verificationFailed = true;
+				tokenVerificationFailed = true;
 			}
 		}
 
@@ -87,7 +87,7 @@ export const localAuthApolloPlugin = (
 				}
 
 				// Let's check if verification has failed and redirect to login if it has
-				if (verificationFailed) {
+				if (tokenVerificationFailed) {
 					logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
 					response.http?.headers.set('X-Auth-Redirect', redirectUrl);
 				}
