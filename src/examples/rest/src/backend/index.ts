@@ -9,6 +9,7 @@ import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import {
+	ForbiddenError,
 	AuthorizationContext,
 	localAuthApolloPlugin,
 	setAdministratorRoleName,
@@ -17,7 +18,7 @@ import { MySqlDriver } from '@mikro-orm/mysql';
 
 import { Task, Tag } from './entities';
 
-import { UserResolver, User } from './schema/user';
+import { UserResolver } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
 import { AuthResolver, getUserProfile } from './schema/auth';
@@ -35,7 +36,15 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 		introspection: isOffline,
 		plugins: [localAuthApolloPlugin(getUserProfile)],
 	},
-	adminMetadata: { enabled: true },
+	adminMetadata: {
+		enabled: true,
+		hooks: {
+			beforeRead: (context: AuthorizationContext) => {
+				// Ensure only logged in users can access the admin ui metadata
+				if (!context.token) throw new ForbiddenError('Forbidden');
+			},
+		},
+	},
 	mikroOrmOptions: [
 		{
 			connectionManagerId: 'my-sql',
