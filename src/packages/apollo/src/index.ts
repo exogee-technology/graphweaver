@@ -15,8 +15,10 @@ import {
 	LogErrors,
 	LogRequests,
 	MutexRequestsInDevelopment,
+	corsPlugin,
 } from './plugins';
-import { Cors } from './plugins/cors';
+
+import type { CorsPluginOptions } from './plugins';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -36,6 +38,7 @@ export interface GraphweaverConfig {
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	authChecker?: AuthChecker<any, any>;
+	corsOptions?: CorsPluginOptions;
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -66,7 +69,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogRequests,
 			LogErrors,
 			ClearDataLoaderCache,
-			Cors,
+			corsPlugin(this.config.corsOptions),
 			// Only load the database plugins if we have a database connected
 			...(this.config.mikroOrmOptions
 				? [connectToDatabase(this.config.mikroOrmOptions), ClearDatabaseContext]
