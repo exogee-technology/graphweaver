@@ -37,18 +37,24 @@ yargs
 		command: ['build [environment]', 'b [environment]'],
 		describe: 'Builds your graphweaver project for deployment.',
 		builder: (yargs) =>
-			yargs.positional('environment', {
-				type: 'string',
-				choices: ['backend', 'frontend', 'all'],
-				default: 'all',
-				describe: 'Choose whether you want to build the backend, frontend, or both.',
-			}),
-		handler: async ({ environment }) => {
+			yargs
+				.positional('environment', {
+					type: 'string',
+					choices: ['backend', 'frontend', 'all'],
+					default: 'all',
+					describe: 'Choose whether you want to build the backend, frontend, or both.',
+				})
+				.option('adminUiBase', {
+					type: 'string',
+					default: '/',
+					describe: 'Specify the base path for the Admin UI',
+				}),
+		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
 			}
 			if (environment === 'frontend' || environment === 'all') {
-				await buildFrontend({});
+				await buildFrontend({ adminUiBase });
 			}
 
 			// Note, this will leave the ESBuild service process around:

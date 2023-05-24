@@ -4,9 +4,11 @@ import rimrafCallback from 'rimraf';
 
 import { viteConfig } from '../vite-config';
 
-export interface FrontendBuildOptions {}
+export interface FrontendBuildOptions {
+	adminUiBase?: string;
+} 
 
-export const buildFrontend = async (_: FrontendBuildOptions) => {
+export const buildFrontend = async ({ adminUiBase } : FrontendBuildOptions) => {
 	// Clear the folder
 	rimrafCallback.sync(path.join('.graphweaver', 'admin-ui'));
 
@@ -16,7 +18,7 @@ export const buildFrontend = async (_: FrontendBuildOptions) => {
 		'..',
 		'dist'
 	);
-	const config = viteConfig({ rootDirectory });
+	const config = viteConfig({ rootDirectory, base: adminUiBase });
 	await build(config);
 
 	console.log('Build complete!');
