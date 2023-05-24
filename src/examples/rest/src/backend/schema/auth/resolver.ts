@@ -1,9 +1,10 @@
-import { AuthProvider, LocalAuthResolver, UserProfile } from '@exogee/graphweaver-auth';
+import { LocalAuthResolver } from '@exogee/graphweaver-auth';
 import { Resolver } from 'type-graphql';
-import { User } from '../user';
 import { BaseLoaders } from '@exogee/graphweaver';
-import { Roles } from '../..';
+
+import { User } from '../user';
 import { credentials } from '../../entities/memory/credentials';
+import { mapUserToProfile } from '../../auth/context';
 
 @Resolver()
 export class AuthResolver extends LocalAuthResolver {
@@ -20,29 +21,6 @@ export class AuthResolver extends LocalAuthResolver {
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
-		const userProfile = new UserProfile({
-			id: user.id,
-			provider: AuthProvider.LOCAL,
-			roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
-		});
-
-		return userProfile;
+		return mapUserToProfile(user);
 	}
 }
-
-export const getUserProfile = async (userId: string) => {
-	const user = User.fromBackendEntity(
-		await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
-	);
-
-	if (!user) throw new Error('Bad Request: Unknown user id provided.');
-
-	const userProfile = new UserProfile({
-		id: user.id,
-		provider: AuthProvider.LOCAL,
-		roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
-		displayName: user.name,
-	});
-
-	return userProfile;
-};
