@@ -9,6 +9,7 @@ export interface ViteConfigOptions {
 	backendUrl?: string;
 	host?: string;
 	port?: number;
+	base?: string;
 }
 
 export const viteConfig = ({
@@ -16,13 +17,15 @@ export const viteConfig = ({
 	port,
 	rootDirectory,
 	backendUrl,
+	base = '/',
 }: ViteConfigOptions): InlineConfig => {
 	return {
 		configFile: false,
 		root: rootDirectory,
-		base: '',
+		base,
 		define: {
-			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `"${backendUrl}"` } : {}),
+			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `'${backendUrl}'` } : {}),
+			'import.meta.env.VITE_ADMIN_UI_BASE': `'${base.replace(/\/$/, '')}'`,
 		},
 		build: {
 			outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
