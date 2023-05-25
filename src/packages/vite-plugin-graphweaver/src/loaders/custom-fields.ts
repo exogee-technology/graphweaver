@@ -21,5 +21,5 @@ export const loadCustomFields = async (configPath: string) => {
 		// If we get an error here it's fine, we just won't load your dashboards if you have any.
 	}
 
-	return `export const customFields = {};`;
+	return `export const customFields = new Map();`;
 };
