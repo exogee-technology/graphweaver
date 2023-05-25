@@ -23,7 +23,9 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 			'@exogee/graphweaver-cli': GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
-			'type-graphql': '2.0.0-beta.1',
+			'type-graphql': '2.0.0-beta.2',
+			'class-validator': '0.14.0',
+			graphql: '16.6.0',
 		},
 		devDependencies: {
 			'@types/node': '14.14.10',
