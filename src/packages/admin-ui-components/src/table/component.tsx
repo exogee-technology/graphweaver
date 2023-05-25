@@ -74,7 +74,7 @@ const columnsForEntity = <T extends { id: string }>(
 	}));
 
 	// Let's check if there are custom fields to add
-	const customFieldsForEntity = customFields?.get?.(entity.name);
+	const customFieldsForEntity = customFields?.get(entity.name);
 	if (customFieldsForEntity) {
 		// Covert the custom fields to columns
 		const customColumns =
