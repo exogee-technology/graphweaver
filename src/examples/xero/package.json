@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "0.1.12",
+	"version": "0.1.13",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -21,6 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
+		"@apollo/server": "4.2.2",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
@@ -35,7 +36,7 @@
 		"@nivo/line": "0.80.0",
 		"@nivo/tooltip": "0.80.0",
 		"async-mutex": "0.3.1",
-		"class-validator": "0.13.2",
+		"class-validator": "0.14.0",
 		"decimal.js": "10.4.3",
 		"graphql": "16.6.0",
 		"graphql-tag": "2.12.6",
@@ -44,7 +45,7 @@
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
 		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.1",
+		"type-graphql": "2.0.0-beta.2",
 		"uuid": "8.3.2",
 		"xero-node": "4.30.0"
 	},
