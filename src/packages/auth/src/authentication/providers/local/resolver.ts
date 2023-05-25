@@ -4,7 +4,7 @@ import { LocalAuthTokenProvider } from './provider';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 
-@Resolver((of) => Token, { isAbstract: true })
+@Resolver((of) => Token)
 export abstract class LocalAuthResolver {
 	abstract authenticate(username: string, password: string): Promise<UserProfile>;
 	abstract authenticate(username: string, password: string): Promise<UserProfile>;
