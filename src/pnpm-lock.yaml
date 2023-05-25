@@ -30,6 +30,7 @@ importers:
 
   examples/databases:
     specifiers:
+      '@apollo/server': 4.2.2
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:*
       '@exogee/graphweaver-apollo': workspace:*
@@ -39,11 +40,14 @@ importers:
       '@mikro-orm/mysql': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
       '@types/node': 14.14.10
+      class-validator: 0.14.0
+      graphql: 16.6.0
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.1
       typescript: 5.0.2
     dependencies:
-      '@as-integrations/aws-lambda': 2.0.1
+      '@apollo/server': 4.2.2_graphql@16.6.0
+      '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
       '@exogee/graphweaver': link:../../packages/core
       '@exogee/graphweaver-apollo': link:../../packages/apollo
       '@exogee/graphweaver-cli': link:../../packages/cli
@@ -51,14 +55,17 @@ importers:
       '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
       '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
+      class-validator: 0.14.0
+      graphql: 16.6.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/node': 14.14.10
       typescript: 5.0.2
 
   examples/rest:
     specifiers:
+      '@apollo/server': 4.2.2
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:*
       '@exogee/graphweaver-admin-ui-components': workspace:*
@@ -70,8 +77,10 @@ importers:
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
       '@types/node': 14.14.10
+      class-validator: 0.14.0
       dotenv: 16.0.0
       got: 11.8.2
+      graphql: 16.6.0
       react: 18.2.0
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.1
@@ -79,7 +88,8 @@ importers:
       vite: 3.2.4
       vite-plugin-svgr: 2.2.2
     dependencies:
-      '@as-integrations/aws-lambda': 2.0.1
+      '@apollo/server': 4.2.2_graphql@16.6.0
+      '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
       '@exogee/graphweaver': link:../../packages/core
       '@exogee/graphweaver-admin-ui-components': link:../../packages/admin-ui-components
       '@exogee/graphweaver-apollo': link:../../packages/apollo
@@ -89,11 +99,13 @@ importers:
       '@exogee/graphweaver-rest': link:../../packages/rest
       '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
+      class-validator: 0.14.0
       dotenv: 16.0.0
       got: 11.8.2
+      graphql: 16.6.0
       react: 18.2.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/node': 14.14.10
       typescript: 5.0.2
@@ -102,6 +114,7 @@ importers:
 
   examples/xero:
     specifiers:
+      '@apollo/server': 4.2.2
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:*
       '@exogee/graphweaver-admin-ui': workspace:*
@@ -136,7 +149,8 @@ importers:
       vite: 3.2.4
       xero-node: 4.30.0
     dependencies:
-      '@as-integrations/aws-lambda': 2.0.1
+      '@apollo/server': 4.2.2_graphql@16.6.0
+      '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
       '@exogee/graphweaver': link:../../packages/core
       '@exogee/graphweaver-admin-ui': link:../../packages/admin-ui
       '@exogee/graphweaver-admin-ui-components': link:../../packages/admin-ui-components
@@ -238,7 +252,7 @@ importers:
       formik: 2.2.9
       graphiql: 2.4.0
       graphql: 16.6.0
-      luxon: 2.1.1
+      luxon: 2.5.2
       pluralize: 8.0.0
       react: 18.2.0
       react-data-grid: 7.0.0-beta.20
@@ -254,7 +268,7 @@ importers:
       formik: 2.2.9_react@18.2.0
       graphiql: 2.4.0_fekdsjdxvr6rryguukhsma4zsq
       graphql: 16.6.0
-      luxon: 2.1.1
+      luxon: 2.5.2
       pluralize: 8.0.0
       react-data-grid: 7.0.0-beta.20_biqbaboplfbrettd7655fr4n2y
     devDependencies:
@@ -340,9 +354,11 @@ importers:
       '@types/node': 18.11.9
       '@types/rimraf': 3.0.2
       '@vitejs/plugin-react': 2.2.0
+      class-validator: 0.14.0
       dotenv: 16.0.3
       esbuild: 0.15.5
       esbuild-css-modules-plugin: 2.3.1
+      graphql: 16.6.0
       prettier: 2.8.8
       rimraf: 3.0.2
       rollup-plugin-visualizer: 5.8.3
@@ -357,15 +373,17 @@ importers:
       '@exogee/graphweaver-admin-ui': link:../admin-ui
       '@serverless/utils': 6.8.2
       '@vitejs/plugin-react': 2.2.0_vite@3.2.4
+      class-validator: 0.14.0
       dotenv: 16.0.3
       esbuild: 0.15.5
       esbuild-css-modules-plugin: 2.3.1_esbuild@0.15.5
+      graphql: 16.6.0
       rimraf: 3.0.2
       rollup-plugin-visualizer: 5.8.3
       serverless: 3.25.1
       serverless-dotenv-plugin: 4.0.2_serverless@3.25.1
       serverless-offline: 12.0.2_serverless@3.25.1
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
       vite: 3.2.4_@types+node@18.11.9
       vite-plugin-graphweaver: link:../vite-plugin-graphweaver
       vite-plugin-svgr: 2.2.2_vite@3.2.4
@@ -490,7 +508,7 @@ importers:
       esbuild: 0.15.5
       graphql: 16.6.0
       lodash: 4.17.21
-      luxon: 2.1.1
+      luxon: 2.5.2
       pluralize: 8.0.0
       prettier: 2.8.8
       ts-node: 9.0.0
@@ -506,7 +524,7 @@ importers:
       dotenv: 10.0.0
       graphql: 16.6.0
       lodash: 4.17.21
-      luxon: 2.1.1
+      luxon: 2.5.2
       pluralize: 8.0.0
       type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
     devDependencies:
@@ -528,11 +546,11 @@ importers:
       decimal.js: 10.3.1
       esbuild: 0.15.5
       graphql: 16.6.0
-      luxon: 2.1.1
+      luxon: 2.5.2
       typescript: 5.0.2
     dependencies:
       '@exogee/graphweaver-mikroorm': link:../mikroorm
-      luxon: 2.1.1
+      luxon: 2.5.2
     devDependencies:
       '@types/jest': 26.0.23
       '@types/luxon': 2.0.7
@@ -923,12 +941,13 @@ packages:
       xss: 1.0.14
     dev: false
 
-  /@as-integrations/aws-lambda/2.0.1:
+  /@as-integrations/aws-lambda/2.0.1_@apollo+server@4.2.2:
     resolution: {integrity: sha512-zp4X2bMnjP9jQx8hbmKBimdGPU9YjnWk0Gi+9nHKPK95y1F1IFw2oR2IJvGN9rpcD4q1ycNcP7eMlPx8EcPIXw==}
     engines: {node: '>=14.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
     dependencies:
+      '@apollo/server': 4.2.2_graphql@16.6.0
       '@types/aws-lambda': 8.10.115
     dev: false
 
@@ -4118,7 +4137,7 @@ packages:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
     dev: false
 
   /@types/bunyan/1.8.6:
@@ -4139,7 +4158,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
     dev: false
 
   /@types/estree/1.0.1:
@@ -4148,7 +4167,7 @@ packages:
   /@types/express-serve-static-core/4.17.35:
     resolution: {integrity: sha512-wALWQwrgiB2AWTT91CB62b6Yt0sNHpznUXeZEcnPU3DRdlDIz74x8Qg1UUYKSVFi+va5vKOLYRBI1bRKiLLKIg==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
       '@types/send': 0.17.1
@@ -4249,7 +4268,7 @@ packages:
   /@types/node-fetch/2.6.4:
     resolution: {integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
       form-data: 3.0.1
     dev: false
 
@@ -4269,7 +4288,6 @@ packages:
 
   /@types/node/20.2.3:
     resolution: {integrity: sha512-pg9d0yC4rVNWQzX8U7xb4olIOFuuVL9za3bzMT2pu2SU0SNEi66i2qrvhE2qt0HvkhuCaWJu7pLNOt/Pj8BIrw==}
-    dev: true
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -4339,14 +4357,14 @@ packages:
     resolution: {integrity: sha512-Cwo8LE/0rnvX7kIIa3QHCkcuF21c05Ayb0ZfxPiv0W8VRiZiNW/WuRupHKpqqGVGf7SUA44QSOUKaEd9lIrd/Q==}
     dependencies:
       '@types/mime': 1.3.2
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
     dev: false
 
   /@types/serve-static/1.15.1:
     resolution: {integrity: sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==}
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
     dev: false
 
   /@types/stack-utils/2.0.1:
@@ -4521,7 +4539,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6_@babel+core@7.21.8
       magic-string: 0.26.7
       react-refresh: 0.14.0
-      vite: 3.2.4_@types+node@18.11.9
+      vite: 3.2.4
     transitivePeerDependencies:
       - supports-color
 
@@ -7638,14 +7656,6 @@ packages:
       - supports-color
     dev: false
 
-  /graphql-query-complexity/0.12.0:
-    resolution: {integrity: sha512-fWEyuSL6g/+nSiIRgIipfI6UXTI7bAxrpPlCY1c0+V3pAEUo1ybaKmSBgNr1ed2r+agm1plJww8Loig9y6s2dw==}
-    peerDependencies:
-      graphql: ^14.6.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      lodash.get: 4.4.2
-    dev: false
-
   /graphql-query-complexity/0.12.0_graphql@16.6.0:
     resolution: {integrity: sha512-fWEyuSL6g/+nSiIRgIipfI6UXTI7bAxrpPlCY1c0+V3pAEUo1ybaKmSBgNr1ed2r+agm1plJww8Loig9y6s2dw==}
     peerDependencies:
@@ -7653,14 +7663,6 @@ packages:
     dependencies:
       graphql: 16.6.0
       lodash.get: 4.4.2
-    dev: false
-
-  /graphql-subscriptions/2.0.0:
-    resolution: {integrity: sha512-s6k2b8mmt9gF9pEfkxsaO1lTxaySfKoEJzEfmwguBbQ//Oq23hIXCfR1hm4kdh5hnR20RdwB+s3BCb+0duHSZA==}
-    peerDependencies:
-      graphql: ^15.7.2 || ^16.0.0
-    dependencies:
-      iterall: 1.3.0
     dev: false
 
   /graphql-subscriptions/2.0.0_graphql@16.6.0:
@@ -9256,8 +9258,8 @@ packages:
       es5-ext: 0.10.62
     dev: false
 
-  /luxon/2.1.1:
-    resolution: {integrity: sha512-6VQVNw7+kQu3hL1ZH5GyOhnk8uZm21xS7XJ/6vDZaFNcb62dpFDKcH8TI5NkoZOdMRxr7af7aYGrJlE/Wv0i1w==}
+  /luxon/2.5.2:
+    resolution: {integrity: sha512-Yg7/RDp4nedqmLgyH0LwgGRvMEKVzKbUdkBYyCosbHgJ+kaOUx0qzSiSatVc3DFygnirTPYnMM2P5dg2uH1WvA==}
     engines: {node: '>=12'}
     dev: false
 
@@ -11728,24 +11730,6 @@ packages:
     engines: {node: '>=14.16'}
     dev: false
 
-  /type-graphql/2.0.0-beta.1:
-    resolution: {integrity: sha512-eafe1WJAdiCTEma43Imi1NRRgioIL1nk2FIprpQ0uvodcpIz0uoR+SZgRGu0AXof7DdcrlL3ZdRVoOiuolOQMA==}
-    engines: {node: '>= 14.5.0'}
-    requiresBuild: true
-    peerDependencies:
-      class-validator: '>=0.13.0'
-      graphql: ^16.6.0
-    dependencies:
-      '@types/glob': 8.1.0
-      '@types/node': 14.14.10
-      '@types/semver': 7.5.0
-      glob: 8.1.0
-      graphql-query-complexity: 0.12.0
-      graphql-subscriptions: 2.0.0
-      semver: 7.5.1
-      tslib: 2.5.2
-    dev: false
-
   /type-graphql/2.0.0-beta.1_y4roju44775djskduzf2jupeyy:
     resolution: {integrity: sha512-eafe1WJAdiCTEma43Imi1NRRgioIL1nk2FIprpQ0uvodcpIz0uoR+SZgRGu0AXof7DdcrlL3ZdRVoOiuolOQMA==}
     engines: {node: '>= 14.5.0'}
@@ -12001,7 +11985,7 @@ packages:
     dependencies:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 6.5.1
-      vite: 3.2.4_@types+node@18.11.9
+      vite: 3.2.4
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -12037,7 +12021,6 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vite/3.2.4_@types+node@14.14.10:
     resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
@@ -12105,6 +12088,7 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /vscode-languageserver-types/3.17.3:
     resolution: {integrity: sha512-SYU4z1dL0PyIMd4Vj8YOqFvHu7Hz/enbWtpfnVbJHU4Nd1YNYx8u0ennumc6h48GQNeOLxmwySmnADouT/AuZA==}

@@ -28,7 +28,7 @@
 		"dotenv": "10.0.0",
 		"graphql": "16.6.0",
 		"lodash": "4.17.21",
-		"luxon": "2.1.1",
+		"luxon": "2.5.2",
 		"pluralize": "8.0.0",
 		"type-graphql": "2.0.0-beta.1"
 	},

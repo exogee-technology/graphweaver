@@ -28,7 +28,9 @@
 		"type-graphql": "2.0.0-beta.1",
 		"vite": "3.2.4",
 		"vite-plugin-graphweaver": "workspace:*",
-		"vite-plugin-svgr": "2.2.2"
+		"vite-plugin-svgr": "2.2.2",
+		"class-validator": "0.14.0",
+		"graphql": "16.6.0"
 	},
 	"devDependencies": {
 		"@types/node": "18.11.9",

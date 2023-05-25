@@ -30,7 +30,7 @@
 		"formik": "2.2.9",
 		"graphiql": "2.4.0",
 		"graphql": "16.6.0",
-		"luxon": "2.1.1",
+		"luxon": "2.5.2",
 		"pluralize": "8.0.0",
 		"react-data-grid": "7.0.0-beta.20"
 	},
