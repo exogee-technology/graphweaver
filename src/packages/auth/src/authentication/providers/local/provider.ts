@@ -21,11 +21,13 @@ const removeAuthPrefixIfPresent = (authorizationHeader: string): string => {
 	return authorizationHeader.replace(prefixPattern, '');
 };
 
+const TOKEN_PREFIX = 'Bearer';
+
 export class LocalAuthTokenProvider implements BaseAuthTokenProvider {
 	async generateToken(user: UserProfile) {
 		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
 		const authToken = jwt.sign({ id: user.id }, secret, { expiresIn });
-		const token = new AuthToken(`Bearer ${authToken}`);
+		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 		return token;
 	}
 	async decodeToken(authToken: string) {
