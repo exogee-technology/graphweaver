@@ -19,7 +19,7 @@
 	},
 	"dependencies": {
 		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"luxon": "2.1.1"
+		"luxon": "2.5.2"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",

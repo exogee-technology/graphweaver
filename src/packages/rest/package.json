@@ -23,14 +23,14 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"apollo-server-errors": "3.3.1",
-		"class-validator": "0.13.2",
+		"class-validator": "0.14.0",
 		"dataloader": "2.2.2",
 		"dotenv": "10.0.0",
 		"graphql": "16.6.0",
 		"lodash": "4.17.21",
-		"luxon": "2.1.1",
+		"luxon": "2.5.2",
 		"pluralize": "8.0.0",
-		"type-graphql": "2.0.0-beta.1"
+		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@types/lodash": "4.14.192",

@@ -302,7 +302,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		metadata.collectClassFieldMetadata(fieldCopy);
 	}
 
-	@Resolver({ isAbstract: true })
+	@Resolver()
 	abstract class BaseResolver implements BaseResolverInterface {
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
@@ -497,7 +497,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 	TypeMap[`${plural}CreateOrUpdateManyInput`] = CreateOrUpdateManyInputArgs;
 
-	@Resolver({ isAbstract: true })
+	@Resolver()
 	abstract class WritableBaseResolver extends BaseResolver {
 		private async runWritableBeforeHooks(
 			hookRegister: HookRegister,
