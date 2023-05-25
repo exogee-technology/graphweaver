@@ -58,7 +58,7 @@ jobs:
 
       - run: pnpm i
       - run: pnpm lint
-      - run: pnpm -r build
+      - run: pnpm build
       - run: pnpm -r test
     env:
       DATABASE_HOST: localhost
