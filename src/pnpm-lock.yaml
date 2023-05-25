@@ -43,7 +43,7 @@ importers:
       class-validator: 0.14.0
       graphql: 16.6.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
     dependencies:
       '@apollo/server': 4.2.2_graphql@16.6.0
@@ -58,7 +58,7 @@ importers:
       class-validator: 0.14.0
       graphql: 16.6.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/node': 14.14.10
       typescript: 5.0.2
@@ -83,7 +83,7 @@ importers:
       graphql: 16.6.0
       react: 18.2.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
       vite: 3.2.4
       vite-plugin-svgr: 2.2.2
@@ -105,7 +105,7 @@ importers:
       graphql: 16.6.0
       react: 18.2.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/node': 14.14.10
       typescript: 5.0.2
@@ -143,7 +143,7 @@ importers:
       reflect-metadata: 0.1.13
       ts-node: 10.4.0
       tsc-watch: 4.2.9
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
       uuid: 8.3.2
       vite: 3.2.4
@@ -173,7 +173,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       react-router-dom: 6.4.3_biqbaboplfbrettd7655fr4n2y
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
       uuid: 8.3.2
       xero-node: 4.30.0
     devDependencies:
@@ -299,7 +299,7 @@ importers:
       decimal.js: 10.3.1
       esbuild: 0.15.5
       graphql: 16.6.0
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
     dependencies:
       '@apollo/server': 4.2.2_graphql@16.6.0
       '@exogee/graphweaver': link:../core
@@ -312,7 +312,7 @@ importers:
       class-validator: 0.14.0
       decimal.js: 10.3.1
       graphql: 16.6.0
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
       esbuild: 0.15.5
 
@@ -329,7 +329,7 @@ importers:
       prettier: 2.8.8
       ts-node: 9.0.0
       tsc-watch: 4.2.9
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
     dependencies:
       '@exogee/graphweaver': link:../core
@@ -338,7 +338,7 @@ importers:
       class-validator: 0.14.0
       dotenv: 10.0.0
       graphql: 16.6.0
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/node': 14.14.10
       esbuild: 0.15.5
@@ -365,7 +365,7 @@ importers:
       serverless: 3.25.1
       serverless-dotenv-plugin: 4.0.2
       serverless-offline: 12.0.2
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       vite: 3.2.4
       vite-plugin-graphweaver: workspace:*
       vite-plugin-svgr: 2.2.2
@@ -383,7 +383,7 @@ importers:
       serverless: 3.25.1
       serverless-dotenv-plugin: 4.0.2_serverless@3.25.1
       serverless-offline: 12.0.2_serverless@3.25.1
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
       vite: 3.2.4_@types+node@18.11.9
       vite-plugin-graphweaver: link:../vite-plugin-graphweaver
       vite-plugin-svgr: 2.2.2_vite@3.2.4
@@ -427,7 +427,7 @@ importers:
       graphql-parse-resolve-info: 4.13.0
       pluralize: 8.0.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
     dependencies:
       '@exogee/logger': link:../logger
@@ -438,7 +438,7 @@ importers:
       graphql-parse-resolve-info: 4.13.0_graphql@16.6.0
       pluralize: 8.0.0
       reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/pluralize': 0.0.29
       esbuild: 0.15.5
@@ -511,7 +511,7 @@ importers:
       prettier: 2.8.8
       ts-node: 9.0.0
       tsc-watch: 4.2.9
-      type-graphql: 2.0.0-beta.1
+      type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
     dependencies:
       '@exogee/graphweaver': link:../core
@@ -524,7 +524,7 @@ importers:
       lodash: 4.17.21
       luxon: 2.5.2
       pluralize: 8.0.0
-      type-graphql: 2.0.0-beta.1_y4roju44775djskduzf2jupeyy
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
       '@types/lodash': 4.14.192
       '@types/luxon': 2.0.7
@@ -3946,6 +3946,7 @@ packages:
     dependencies:
       '@types/minimatch': 5.1.2
       '@types/node': 14.14.10
+    dev: true
 
   /@types/graceful-fs/4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
@@ -4023,6 +4024,7 @@ packages:
 
   /@types/minimatch/5.1.2:
     resolution: {integrity: sha512-K0VQKziLUWkVKiRVrx4a40iPaxTUefQmjtkQofBkYRcoaaL/8rhwDWww9qWbrgicNOgnpIsMxyNIUM4+n6dUIA==}
+    dev: true
 
   /@types/node-fetch/2.6.4:
     resolution: {integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==}
@@ -4033,6 +4035,7 @@ packages:
 
   /@types/node/14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
+    dev: true
 
   /@types/node/18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -7148,17 +7151,6 @@ packages:
       minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
-
-  /glob/8.1.0:
-    resolution: {integrity: sha512-r8hpEjiQEYlF2QU0df3dS+nxxSIreXQS1qRhMJM0Q5NDdR386C7jb7Hwwod8Fgiuex+k0GFjgft18yvxm5XoCQ==}
-    engines: {node: '>=12'}
-    dependencies:
-      fs.realpath: 1.0.0
-      inflight: 1.0.6
-      inherits: 2.0.4
-      minimatch: 5.1.6
-      once: 1.4.0
-    dev: false
 
   /globals/11.12.0:
     resolution: {integrity: sha512-WOBp/EEGUiIsJSp7wcv/y6MO+lV9UoncWqxuFfm8eBwzWNgyfBd6Gz+IeKQ9jCmyhoH99g15M3T+QaVHFjizVA==}
@@ -11335,19 +11327,19 @@ packages:
     engines: {node: '>=14.16'}
     dev: false
 
-  /type-graphql/2.0.0-beta.1_y4roju44775djskduzf2jupeyy:
-    resolution: {integrity: sha512-eafe1WJAdiCTEma43Imi1NRRgioIL1nk2FIprpQ0uvodcpIz0uoR+SZgRGu0AXof7DdcrlL3ZdRVoOiuolOQMA==}
+  /type-graphql/2.0.0-beta.2_y4roju44775djskduzf2jupeyy:
+    resolution: {integrity: sha512-MCGxRvNADu5Wp9QEudI/WQgiqHJfjanGcKRk/ErCow6IaG04NNI7o3bjjxQVWC+qDundSOhmaquNdjDiiTbcqQ==}
     engines: {node: '>= 14.5.0'}
-    requiresBuild: true
     peerDependencies:
-      class-validator: '>=0.13.0'
+      class-validator: '>=0.14.0'
       graphql: ^16.6.0
+    peerDependenciesMeta:
+      class-validator:
+        optional: true
     dependencies:
-      '@types/glob': 8.1.0
-      '@types/node': 14.14.10
+      '@types/node': 20.2.3
       '@types/semver': 7.5.0
       class-validator: 0.14.0
-      glob: 8.1.0
       graphql: 16.6.0
       graphql-query-complexity: 0.12.0_graphql@16.6.0
       graphql-subscriptions: 2.0.0_graphql@16.6.0
