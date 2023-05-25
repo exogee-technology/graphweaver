@@ -10,14 +10,20 @@ if (!process.env.LOCAL_AUTH_JWT_SECRET)
 const secret = process.env.LOCAL_AUTH_JWT_SECRET;
 const expiresIn = process.env.LOCAL_AUTH_JWT_EXPIRES_IN ?? '8h';
 
+const removeAuthPrefixIfPresent = (authorizationHeader: string): string => {
+	const prefixPattern = /^\s*[\w-]+\s+/i;
+	return authorizationHeader.replace(prefixPattern, '');
+};
+
 export class LocalAuthTokenProvider implements BaseAuthTokenProvider {
 	async generateToken(user: UserProfile) {
 		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
 		const authToken = jwt.sign({ id: user.id }, secret, { expiresIn });
-		const token = new AuthToken(authToken);
+		const token = new AuthToken(`Bearer ${authToken}`);
 		return token;
 	}
 	async decodeToken(authToken: string) {
-		return jwt.verify(authToken, secret);
+		const token = removeAuthPrefixIfPresent(authToken);
+		return jwt.verify(token, secret);
 	}
 }
