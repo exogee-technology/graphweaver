@@ -250,7 +250,7 @@ importers:
       esbuild-css-modules-plugin: 2.7.1
       esbuild-plugin-svgr: 1.0.1
       formik: 2.2.9
-      graphiql: 2.4.0
+      graphiql: 2.4.5
       graphql: 16.6.0
       luxon: 2.5.2
       pluralize: 8.0.0
@@ -266,7 +266,7 @@ importers:
       '@graphiql/toolkit': 0.8.2_graphql@16.6.0
       classnames: 2.3.2
       formik: 2.2.9_react@18.2.0
-      graphiql: 2.4.0_fekdsjdxvr6rryguukhsma4zsq
+      graphiql: 2.4.5_fekdsjdxvr6rryguukhsma4zsq
       graphql: 16.6.0
       luxon: 2.5.2
       pluralize: 8.0.0
@@ -5774,10 +5774,6 @@ packages:
     resolution: {integrity: sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==}
     dev: false
 
-  /entities/2.2.0:
-    resolution: {integrity: sha512-p92if5Nz619I0w+akJrLZH0MX0Pb5DX39XOwQTtXSdQQOaYH03S1uIQp4mhOZtAXrxq4ViO67YTiLBo2638o9A==}
-    dev: false
-
   /entities/4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
@@ -7239,16 +7235,15 @@ packages:
     resolution: {integrity: sha512-bzh50DW9kTPM00T8y4o8vQg89Di9oLJVLW/KaOGIXJWP/iqCN6WKYkbNOF04vFLJhwcpYUh9ydh/+5vpOqV4YQ==}
     dev: true
 
-  /graphiql/2.4.0_fekdsjdxvr6rryguukhsma4zsq:
-    resolution: {integrity: sha512-lJ6OYDQkhAMZePrz8g6r9vMVmxa4SY9eEzzyJxsgE+jA+6PFKds2e8/tDAaCYfX0HNv84nc7W/th1vsHIdgYiA==}
+  /graphiql/2.4.5_fekdsjdxvr6rryguukhsma4zsq:
+    resolution: {integrity: sha512-i+vedgQ9tMJ1uoBgUNS1F2naJODaAGPe7xInIHCscU+xPb4WwjRj9dI9rbAnHCNkcZgCdJNJNz0D6z6tLm1Ucw==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       '@graphiql/react': 0.17.5_fekdsjdxvr6rryguukhsma4zsq
-      '@graphiql/toolkit': 0.8.2_graphql@16.6.0
-      entities: 2.2.0
+      '@graphiql/toolkit': 0.8.4_graphql@16.6.0
       graphql: 16.6.0
       graphql-language-service: 5.1.6_graphql@16.6.0
       markdown-it: 12.3.2
