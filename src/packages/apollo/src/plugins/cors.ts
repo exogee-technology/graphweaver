@@ -22,6 +22,7 @@ export const corsPlugin = ({
 						'X-Amz-User-Agent',
 						'Xsrf-Token',
 						'X-Auth-Redirect',
+						'Apollo-Require-Preflight',
 					].join(',')
 				);
 
@@ -29,12 +30,12 @@ export const corsPlugin = ({
 					'Access-Control-Expose-Headers',
 					[
 						// We need our auth headers to be accessible by the JS so we can store them.
-						// You also MUST use CSP headers to ensure that if XSS is accidentally possible, scripts
-						// injected on the page aren't allowed to run.
+						// You also MUST use CSP headers to ensure that if XSS is accidentally
+						// possible, scripts injected on the page aren't allowed to run.
 						'Authorization',
 
-						// This is how the server tells the client that it needs to redirect to an OAuth provider to get
-						// a token or code.
+						// This is how the server tells the client that it needs to redirect to
+						// an OAuth provider to get a token or code.
 						'X-Auth-Redirect',
 					].join(',')
 				);
