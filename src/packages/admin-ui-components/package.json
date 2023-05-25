@@ -28,7 +28,7 @@
 		"@graphiql/toolkit": "0.8.2",
 		"classnames": "2.3.2",
 		"formik": "2.2.9",
-		"graphiql": "2.4.0",
+		"graphiql": "2.4.5",
 		"graphql": "16.6.0",
 		"luxon": "2.5.2",
 		"pluralize": "8.0.0",
