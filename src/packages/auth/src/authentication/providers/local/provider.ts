@@ -10,6 +10,12 @@ if (!process.env.LOCAL_AUTH_JWT_SECRET)
 const secret = process.env.LOCAL_AUTH_JWT_SECRET;
 const expiresIn = process.env.LOCAL_AUTH_JWT_EXPIRES_IN ?? '8h';
 
+/**
+ * Removes any prefix from the given authorization header.
+ * The prefix is assumed to be separated from the actual token by whitespace.
+ * @param authorizationHeader The authorization header string.
+ * @returns The modified authorization header with the prefix removed.
+ */
 const removeAuthPrefixIfPresent = (authorizationHeader: string): string => {
 	const prefixPattern = /^\s*[\w-]+\s+/i;
 	return authorizationHeader.replace(prefixPattern, '');
