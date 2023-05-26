@@ -25,7 +25,7 @@
     <img src="https://img.shields.io/github/issues-pr/exogee-technology/graphweaver" alt="Pull Requests">
   </a>
   <a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
   </a>
 </p>
 
