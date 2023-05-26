@@ -15,10 +15,18 @@
 
 <!-- PROJECT STATUS -->
 <p align="center">
-  [![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)](https://github.com/exogee-technology/graphweaver)
-  [![GitHub Issues](https://github.com/exogee-technology/graphweaver/issues)](https://img.shields.io/github/issues/exogee-technology/graphweaver)
-  [![Pull Requests](https://github.com/exogee-technology/graphweaver/pulls)](https://img.shields.io/github/issues-pr/exogee-technology/graphweaver)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  <a href="https://github.com/exogee-technology/graphweaver">
+    <img src="https://img.shields.io/badge/status-active-brightgreen.svg" alt="Project Status">
+  </a>
+  <a href="https://github.com/exogee-technology/graphweaver/issues">
+    <img src="https://img.shields.io/github/issues/exogee-technology/graphweaver" alt="GitHub Issues">
+  </a>
+  <a href="https://github.com/exogee-technology/graphweaver/pulls">
+    <img src="https://img.shields.io/github/issues-pr/exogee-technology/graphweaver" alt="Pull Requests">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT">
+  </a>
 </p>
 
 <!-- TABLE OF CONTENTS -->
