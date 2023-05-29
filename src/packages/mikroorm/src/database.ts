@@ -269,7 +269,9 @@ class ConnectionsManager {
 		return databaseConnection;
 	}
 
-	public connect = async (id: string, connectionOptions?: ConnectionOptions) => {
+	public connect = async (id?: string, connectionOptions?: ConnectionOptions) => {
+		if (!id) throw new Error('Error: No id attached to connection.');
+
 		if (this.connections.has(id)) return this.connections.get(id);
 		const database = new DatabaseImplementation();
 		if (connectionOptions) await database.connect(connectionOptions);
