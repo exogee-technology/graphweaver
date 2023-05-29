@@ -24,6 +24,9 @@
   <a href="https://github.com/exogee-technology/graphweaver/pulls">
     <img src="https://img.shields.io/github/issues-pr/exogee-technology/graphweaver" alt="Pull Requests">
   </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+  </a>
 </p>
 
 <!-- TABLE OF CONTENTS -->
@@ -56,14 +59,18 @@ Comprehensive documentation and usage examples can be found on our [Docs Site](h
 
 ## Quick Start
 
-You can create a new project with the **GraphWeaver CLI**, by running `npx @exogee/graphweaver-cli create`.
+Before we start the installer make sure you are running:
+
+- Node `>16.*`
+- PNPM `>7.*`
+
+With those two installed you can create a new project with the **GraphWeaver CLI**, by running:
+
+`npx @exogee/graphweaver-cli@latest create`
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 
 ```
-❯ npm init @exogee/graphweaver
-GraphWeaver
-
 ? What would your like to call your new project?
 test-project
 
