@@ -255,6 +255,10 @@ class ConnectionsManager {
 		this.connections = new Map<string, DatabaseImplementation>();
 	}
 
+	getConnections() {
+		return Array.from(this.connections.values());
+	}
+
 	get default(): DatabaseImplementation {
 		const [defaultConnection] = [...this.connections];
 		if (!defaultConnection)

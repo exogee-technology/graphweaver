@@ -1,5 +1,5 @@
 import { ApolloServerPlugin } from '@apollo/server';
-import { ConnectionManager, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, ConnectionOptions } from '../database';
 
 export const connectToDatabase = (options: ConnectionOptions[]): ApolloServerPlugin => {
 	return {
