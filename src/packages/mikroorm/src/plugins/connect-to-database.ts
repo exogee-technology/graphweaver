@@ -1,12 +1,18 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { ConnectionManager, ConnectionOptions } from '../database';
 
-export const connectToDatabase = (options: ConnectionOptions[]): ApolloServerPlugin => {
+export const connectToDatabase = (
+	options: ConnectionOptions[] | ConnectionOptions
+): ApolloServerPlugin => {
 	return {
 		serverWillStart: async () => {
-			for (const option of options) {
-				if (option.connectionManagerId)
-					await ConnectionManager.connect(option.connectionManagerId, option);
+			if (Array.isArray(options)) {
+				for (const option of options) {
+					if (option.connectionManagerId)
+						await ConnectionManager.connect(option.connectionManagerId, option);
+				}
+			} else {
+				await ConnectionManager.connect(options.connectionManagerId, options);
 			}
 		},
 	};
