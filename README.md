@@ -59,14 +59,18 @@ Comprehensive documentation and usage examples can be found on our [Docs Site](h
 
 ## Quick Start
 
-You can create a new project with the **GraphWeaver CLI**, by running `npx @exogee/graphweaver-cli create`.
+Before we start the installer make sure you are running:
+
+- Node `>16.*`
+- PNPM `>7.*`
+
+With those two installed you can create a new project with the **GraphWeaver CLI**, by running:
+
+`npx @exogee/graphweaver-cli create`
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 
 ```
-❯ npm init @exogee/graphweaver
-GraphWeaver
-
 ? What would your like to call your new project?
 test-project
 
