@@ -16,7 +16,6 @@ import {
 	corsPlugin,
 } from './plugins';
 
-import type { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 import type { CorsPluginOptions } from './plugins';
 
 export * from '@apollo/server';
@@ -29,7 +28,6 @@ export interface AdminMetadata {
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	mikroOrmOptions?: ConnectionOptions[];
 	resolvers: Array<any>;
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;

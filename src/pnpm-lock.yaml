@@ -414,9 +414,6 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
-      '@exogee/graphweaver-mikroorm':
-        specifier: workspace:*
-        version: link:../mikroorm
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
