@@ -1,12 +1,12 @@
 import { AdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
-import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
+
 import path from 'path';
 import { loadSchemaSync } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 
 import { logger } from '@exogee/logger';
-import { ApolloServer, BaseContext, ContextFunction } from '@apollo/server';
+import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
 	ClearDatabaseContext,
@@ -18,6 +18,7 @@ import {
 	corsPlugin,
 } from './plugins';
 
+import type { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 import type { CorsPluginOptions } from './plugins';
 
 export * from '@apollo/server';

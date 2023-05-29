@@ -1,4 +1,5 @@
-import { BaseEntity, RelationshipMap, RelationshipType, Relationship } from '../entities';
+import { RelationshipType } from '@exogee/graphweaver';
+import { BaseEntity, Relationship } from '../entities';
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { EntityConstructor, EntityManager } from '../entity-manager';
