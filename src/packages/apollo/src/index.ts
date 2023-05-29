@@ -9,9 +9,7 @@ import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
-	ClearDatabaseContext,
 	ClearDataLoaderCache,
-	connectToDatabase,
 	LogErrors,
 	LogRequests,
 	MutexRequestsInDevelopment,
@@ -68,10 +66,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogErrors,
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
-			// Only load the database plugins if we have a database connected
-			...(this.config.mikroOrmOptions
-				? [connectToDatabase(this.config.mikroOrmOptions), ClearDatabaseContext]
-				: []),
 			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
