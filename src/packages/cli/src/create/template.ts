@@ -45,12 +45,47 @@ export const makeDirectories = (projectName: string) => {
 };
 
 export const makeIndex = (projectName: string, backends: Backend[]) => {
+	const myDriverImport = `import { MySqlDriver } from '@mikro-orm/mysql';`;
+	const myConfig = `
+		{
+			connectionManagerId: 'my',
+			mikroOrmConfig: {
+				driver: MySqlDriver,
+				entities: [],
+				dbName: '%%REPLACE_WITH_DB_NAME%%',
+				user: '%%REPLACE_WITH_USERNAME%%',
+				password: '%%REPLACE_WITH_PASSWORD%%',
+				port: 3306,
+			},
+		},
+	`;
+
+	const pgDriverImport = `import { PostgreSqlDriver } from '@mikro-orm/postgresql';`;
+	const pgConfig = `
+		{
+			connectionManagerId: 'pg',
+			mikroOrmConfig: {
+				driver: MySqlDriver,
+				entities: [],
+				dbName: '%%REPLACE_WITH_DB_NAME%%',
+				user: '%%REPLACE_WITH_USERNAME%%',
+				password: '%%REPLACE_WITH_PASSWORD%%',
+				port: 5432,
+			},
+		},
+	`;
+
+	const hasPostgres = backends.some((backend) => backend === Backend.MikroOrmPostgres);
+	const hasMySql = backends.some((backend) => backend === Backend.MikroOrmMysql);
+
 	const index = `\
 /* ${projectName} GraphWeaver Project */
 
 import 'reflect-metadata';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
+${hasPostgres ? pgDriverImport : ``}
+${hasMySql ? myDriverImport : ``}
 import { PingResolver } from './schema/ping';
 
 const isOffline = process.env.IS_OFFLINE === 'true';
@@ -61,15 +96,14 @@ const graphweaver = new Graphweaver({
 		introspection: isOffline,
 	},
 	adminMetadata: { enabled: true },
-	mikroOrmOptions: [
-		{
-			connectionManagerId: 'db',
-			mikroOrmConfig: {
-				entities: [],
-				dbName: '%%REPLACE_WITH_DB_NAME%%'
-			},
-		},
-	],
+	${
+		hasPostgres || hasMySql
+			? `mikroOrmOptions: [
+					${hasPostgres ? pgConfig : ``}
+					${hasMySql ? myConfig : ``}
+				],`
+			: ``
+	}
 });
 
 export const handler = startServerAndCreateLambdaHandler<any>(
