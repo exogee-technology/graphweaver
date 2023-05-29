@@ -1,4 +1,5 @@
 import { ReactNode, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Button } from '../button';
 import type { ButtonProps } from '../button';
@@ -52,9 +53,20 @@ export const Dropdown = ({
 			<>
 				{items.map((item) => (
 					<li key={item.id}>
-						<a href={item.href} onClick={handleOnClickItem(item)}>
-							{item.name}
-						</a>
+						{item.href.startsWith('/') ? (
+							<Link
+								to={{ pathname: item.href }}
+								target="_blank"
+								rel="noopener noreferrer"
+								onClick={handleOnClickItem(item)}
+							>
+								{item.name}
+							</Link>
+						) : (
+							<a href={item.href} onClick={handleOnClickItem(item)}>
+								{item.name}
+							</a>
+						)}
 						{item.renderAfter?.()}
 					</li>
 				))}
