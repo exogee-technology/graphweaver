@@ -46,8 +46,7 @@ export const makeDirectories = (projectName: string) => {
 
 export const makeIndex = (projectName: string, backends: Backend[]) => {
 	const myDriverImport = `import { MySqlDriver } from '@mikro-orm/mysql';`;
-	const myConfig = `
-		{
+	const myConfig = `{
 			connectionManagerId: 'my',
 			mikroOrmConfig: {
 				driver: MySqlDriver,
@@ -57,23 +56,20 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 				password: '%%REPLACE_WITH_PASSWORD%%',
 				port: 3306,
 			},
-		},
-	`;
+		},`;
 
 	const pgDriverImport = `import { PostgreSqlDriver } from '@mikro-orm/postgresql';`;
-	const pgConfig = `
-		{
+	const pgConfig = `{
 			connectionManagerId: 'pg',
 			mikroOrmConfig: {
-				driver: MySqlDriver,
+				driver: PostgreSqlDriver,
 				entities: [],
 				dbName: '%%REPLACE_WITH_DB_NAME%%',
 				user: '%%REPLACE_WITH_USERNAME%%',
 				password: '%%REPLACE_WITH_PASSWORD%%',
 				port: 5432,
 			},
-		},
-	`;
+		},`;
 
 	const hasPostgres = backends.some((backend) => backend === Backend.MikroOrmPostgres);
 	const hasMySql = backends.some((backend) => backend === Backend.MikroOrmMysql);
@@ -99,9 +95,9 @@ const graphweaver = new Graphweaver({
 	${
 		hasPostgres || hasMySql
 			? `mikroOrmOptions: [
-					${hasPostgres ? pgConfig : ``}
-					${hasMySql ? myConfig : ``}
-				],`
+		${hasPostgres ? pgConfig : ``}
+		${hasMySql ? myConfig : ``}
+	],`
 			: ``
 	}
 });
