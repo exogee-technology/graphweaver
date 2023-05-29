@@ -4,10 +4,10 @@ import { Resolver } from 'type-graphql';
 
 import { Task as OrmTask } from '../../entities';
 import { Task } from './entity';
-import { Context } from '../../';
+import { myConnection } from '../../database';
 
 @Resolver((of) => Task)
 export class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	Task,
-	new MikroBackendProvider(OrmTask, 'my-sql')
+	new MikroBackendProvider(OrmTask, myConnection)
 ) {}
