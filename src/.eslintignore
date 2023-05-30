@@ -6,4 +6,4 @@
 **/.graphweaver/**
 .eslintrc.js
 packages/cli/bin/index.js
-packages/create-graphweaver/bin/index.js
+packages/cli/test-create.js
