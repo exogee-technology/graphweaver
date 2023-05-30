@@ -46,12 +46,20 @@ jobs:
           pwd
           pnpm test:create
 
-      - name: Change to GW instance and start
+      - name: Change to GW instance and install
         working-directory: src/packages/cli/test
         run: |
           pwd
-          pnpm i
-          pnpm start & npx wait-for http://localhost:9001 -t 30
+          npm i
+      
+      - name: Start GW instance
+        working-directory: src/packages/cli/test
+        timeout-minutes: 2
+        run: |
+          npm start &
+          sleep 10 &&
+          curl http://localhost:9000 &&
+          killall node
 
         env:
           CI: true
