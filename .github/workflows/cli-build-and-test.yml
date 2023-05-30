@@ -1,0 +1,48 @@
+name: CLI Build and Test
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Change to CLI directory
+        run: cd packages/cli
+
+      - name: Run CLI tests
+        run: pnpm test:create
+
+      - name: Change to GW instance directory
+        run: cd test
+
+      - name: Install GW instance dependencies
+        run: pnpm i
+
+      - name: Change to GW instance directory
+        run: pnpm start &
+
+      - name: Wait for server to start
+        run: npx wait-for http://localhost:9000 -t 30
+
+        env:
+          CI: true

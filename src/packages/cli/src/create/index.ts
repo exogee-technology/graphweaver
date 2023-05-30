@@ -20,6 +20,16 @@ const abort = () => {
 export const needsDatabaseConnection = (backends: Backend[]) =>
 	backends.some((backend) => [Backend.MikroOrmPostgres, Backend.MikroOrmMysql].includes(backend));
 
+export const createGraphWeaver = (projectName: string, backends: Backend[]) => {
+	makeDirectories(projectName);
+	makeReadme(projectName);
+	makePackageJson(projectName, backends);
+	makeTsConfig(projectName);
+	makeIndex(projectName, backends);
+	if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
+	makeSchemaIndex(projectName, backends);
+};
+
 export const create = async () => {
 	console.log('GraphWeaver\n');
 
@@ -61,13 +71,7 @@ export const create = async () => {
 
 		if (!createDirectory) abort();
 
-		makeDirectories(projectName);
-		makeReadme(projectName);
-		makePackageJson(projectName, backends);
-		makeTsConfig(projectName);
-		makeIndex(projectName, backends);
-		if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
-		makeSchemaIndex(projectName, backends);
+		createGraphWeaver(projectName, backends);
 
 		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
 
