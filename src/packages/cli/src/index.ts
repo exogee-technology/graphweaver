@@ -10,6 +10,8 @@ import {
 } from '@exogee/graphweaver-builder';
 import { create } from './create';
 
+export { createGraphWeaver } from './create';
+
 yargs
 	.env('GRAPHWEAVER')
 	.command({

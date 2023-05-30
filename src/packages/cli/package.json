@@ -8,6 +8,7 @@
 		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
+		"test:create": "node test-create.js",
 		"version": "npm version --no-git-tag-version"
 	},
 	"bin": {
