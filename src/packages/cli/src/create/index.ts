@@ -7,6 +7,7 @@ import {
 	makeSchemaIndex,
 	makeTsConfig,
 	makeReadme,
+	makeDatabase,
 } from './template';
 
 import { Backend } from './backend';
@@ -14,6 +15,19 @@ import { Backend } from './backend';
 const abort = () => {
 	console.log('Cancelled!');
 	exit(1);
+};
+
+export const needsDatabaseConnection = (backends: Backend[]) =>
+	backends.some((backend) => [Backend.MikroOrmPostgres, Backend.MikroOrmMysql].includes(backend));
+
+export const createGraphWeaver = (projectName: string, backends: Backend[]) => {
+	makeDirectories(projectName);
+	makeReadme(projectName);
+	makePackageJson(projectName, backends);
+	makeTsConfig(projectName);
+	makeIndex(projectName, backends);
+	if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
+	makeSchemaIndex(projectName, backends);
 };
 
 export const create = async () => {
@@ -57,12 +71,7 @@ export const create = async () => {
 
 		if (!createDirectory) abort();
 
-		makeDirectories(projectName);
-		makeReadme(projectName);
-		makePackageJson(projectName, backends);
-		makeTsConfig(projectName);
-		makeIndex(projectName, backends);
-		makeSchemaIndex(projectName, backends);
+		createGraphWeaver(projectName, backends);
 
 		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
 

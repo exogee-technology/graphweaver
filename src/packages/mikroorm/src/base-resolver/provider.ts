@@ -18,6 +18,7 @@ import {
 	externalIdFieldMap,
 	AnyEntity,
 	IsolationLevel,
+	ConnectionOptions,
 } from '..';
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
@@ -127,12 +128,12 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 	public constructor(
 		mikroType: new () => D,
-		connectionManagerId?: string,
+		connection: ConnectionOptions,
 		transactionIsolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ
 	) {
 		this.entityType = mikroType;
-		this.connectionManagerId = connectionManagerId;
-		this._backendId = `mikro-orm-${connectionManagerId || ''}`;
+		this.connectionManagerId = connection.connectionManagerId;
+		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
 		this.transactionIsolationLevel = transactionIsolationLevel;
 	}
 

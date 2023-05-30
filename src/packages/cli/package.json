@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-cli",
-	"version": "0.1.16",
+	"version": "0.1.17",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -8,6 +8,7 @@
 		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
+		"test:create": "node test-create.js",
 		"version": "npm version --no-git-tag-version"
 	},
 	"bin": {
