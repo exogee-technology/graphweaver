@@ -7,6 +7,7 @@ import {
 	makeSchemaIndex,
 	makeTsConfig,
 	makeReadme,
+	makeDatabase,
 } from './template';
 
 import { Backend } from './backend';
@@ -15,6 +16,9 @@ const abort = () => {
 	console.log('Cancelled!');
 	exit(1);
 };
+
+export const needsDatabaseConnection = (backends: Backend[]) =>
+	backends.some((backend) => [Backend.MikroOrmPostgres, Backend.MikroOrmMysql].includes(backend));
 
 export const create = async () => {
 	console.log('GraphWeaver\n');
@@ -62,6 +66,7 @@ export const create = async () => {
 		makePackageJson(projectName, backends);
 		makeTsConfig(projectName);
 		makeIndex(projectName, backends);
+		if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
 		makeSchemaIndex(projectName, backends);
 
 		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
