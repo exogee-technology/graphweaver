@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-xero",
-	"version": "0.1.16",
+	"version": "0.1.17",
 	"description": "Xero backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
