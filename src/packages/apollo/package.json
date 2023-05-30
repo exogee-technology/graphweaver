@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-apollo",
-	"version": "0.1.16",
+	"version": "0.1.17",
 	"description": "Apollo Server support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -22,7 +22,6 @@
 	"dependencies": {
 		"@apollo/server": "4.2.2",
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/graphql-file-loader": "7.5.17",
 		"@graphql-tools/load": "7.8.14",

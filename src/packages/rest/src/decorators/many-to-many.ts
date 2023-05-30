@@ -1,4 +1,6 @@
-import { BaseEntity, RelationshipType } from '../entities/base-entity';
+import { RelationshipType } from '@exogee/graphweaver';
+
+import { BaseEntity } from '../entities/base-entity';
 import { EntityConstructor } from '../entity-manager';
 
 interface FieldOptions {

@@ -255,6 +255,10 @@ class ConnectionsManager {
 		this.connections = new Map<string, DatabaseImplementation>();
 	}
 
+	getConnections() {
+		return Array.from(this.connections.values());
+	}
+
 	get default(): DatabaseImplementation {
 		const [defaultConnection] = [...this.connections];
 		if (!defaultConnection)
@@ -265,7 +269,9 @@ class ConnectionsManager {
 		return databaseConnection;
 	}
 
-	public connect = async (id: string, connectionOptions?: ConnectionOptions) => {
+	public connect = async (id?: string, connectionOptions?: ConnectionOptions) => {
+		if (!id) throw new Error('Error: No id attached to connection.');
+
 		if (this.connections.has(id)) return this.connections.get(id);
 		const database = new DatabaseImplementation();
 		if (connectionOptions) await database.connect(connectionOptions);
