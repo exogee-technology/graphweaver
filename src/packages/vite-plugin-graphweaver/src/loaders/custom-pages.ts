@@ -1,30 +1,20 @@
-import path from 'path';
-import fs from 'fs/promises';
+import { config } from '@exogee/graphweaver-config';
+import { tryToResolvePath } from './util';
 
-export const loadCustomPages = async (configPath: string) => {
-	// The user must ensure they export a config object called 'dashboards' on the graphweaver
-	// adminUI config to get them included.
+export const loadCustomPages = async (projectRoot: string) => {
 	try {
-		let customPagesPath = path.resolve(process.cwd(), 'src', 'admin-ui', 'custom-pages');
+		const { customPagesPath } = config(projectRoot).adminUI;
+		const resolvedCustomPagesPath = await tryToResolvePath(customPagesPath);
+		if (!resolvedCustomPagesPath) throw new Error("Couldn't find a file that matched the path");
 
-		try {
-			const { adminUI } = await import(configPath);
-			if (adminUI?.customPagesPath) customPagesPath = adminUI.customPagesPath;
-		} catch (error) {
-			// They are allowed not to have a config if they want, we just set a default.
-		}
+		// @todo Validate import- we can't import typescript here but we could validate another way
 
-		// TODO: Additional validation like importing the object and making sure we get
-		// the properties we expect.
-		if ((await fs.stat(customPagesPath)).isDirectory()) {
-			return `export { customPages } from '${customPagesPath}';`;
-		}
+		return `export { customPages } from '${resolvedCustomPagesPath}';`;
 	} catch (error) {
-		// If we get an error here it's fine, we just won't load your dashboards if you have any.
-	}
-
-	return `export const customPages = {
+		console.warn('No custom pages component found');
+		return `export const customPages = {
 		routes: () => [],
 		navLinks: () => [],
 	};`;
+	}
 };

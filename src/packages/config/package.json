@@ -1,0 +1,24 @@
+{
+	"name": "@exogee/graphweaver-config",
+	"version": "0.1.17",
+	"description": "Retrieve and parse Graphweaver configurations",
+	"license": "MIT",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"prettier": "prettier --write .",
+		"version": "npm version --no-git-tag-version"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"dependencies": {
+		"lodash": "4.17.21"
+	},
+	"devDependencies": {
+		"@types/lodash": "4.14.192",
+		"@types/node": "18.11.9",
+		"esbuild": "0.15.5",
+		"prettier": "2.8.8"
+	}
+}

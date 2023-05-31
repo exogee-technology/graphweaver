@@ -1,25 +1,17 @@
-import path from 'path';
-import fs from 'fs/promises';
+import { config } from '@exogee/graphweaver-config';
+import { tryToResolvePath } from './util';
 
-export const loadCustomFields = async (configPath: string) => {
+export const loadCustomFields = async (projectRoot: string) => {
 	try {
-		let customFieldsPath = path.resolve(process.cwd(), 'src', 'admin-ui', 'custom-fields');
+		const { customFieldsPath } = config(projectRoot).adminUI;
 
-		try {
-			const { adminUI } = await import(configPath);
-			if (adminUI?.customFieldsPath) customFieldsPath = adminUI.customFieldsPath;
-		} catch (error) {
-			// They are allowed not to have a config if they want, we just set a default.
-		}
+		const resolvedCustomFieldsPath = await tryToResolvePath(customFieldsPath);
+		if (!resolvedCustomFieldsPath) throw new Error("Couldn't find a file that matched the path");
 
-		// TODO: Additional validation like importing the object and making sure we get
-		// the properties we expect.
-		if ((await fs.stat(customFieldsPath)).isDirectory()) {
-			return `export { customFields } from '${customFieldsPath}';`;
-		}
+		// @todo Validate import- we can't import typescript here but we could validate another way
+		return `export { customFields } from '${resolvedCustomFieldsPath}';`;
 	} catch (error) {
-		// If we get an error here it's fine, we just won't load your dashboards if you have any.
+		console.warn('No custom fields component found');
+		return `export const customFields = new Map();`;
 	}
-
-	return `export const customFields = new Map();`;
 };

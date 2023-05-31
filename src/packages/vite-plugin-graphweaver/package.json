@@ -24,5 +24,8 @@
 	},
 	"peerDependencies": {
 		"vite": "3 || 4"
+	},
+	"dependencies": {
+		"@exogee/graphweaver-config": "workspace:*"
 	}
 }
