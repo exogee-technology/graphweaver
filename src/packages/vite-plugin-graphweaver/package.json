@@ -15,7 +15,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "esbuild --outdir=lib --platform=node --bundle src/index.ts",
 		"build:types": "tsc --emitDeclarationOnly",
-		"version": "npm version --no-git-tag-version"
+		"version": "npm version --no-git-tag-version" 
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",

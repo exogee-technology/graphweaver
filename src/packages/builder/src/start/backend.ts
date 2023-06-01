@@ -133,40 +133,38 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	// Shim in a kind of serverless config so the plugin kicks up and does its job.
 	const slsOffline = new ServerlessOffline(
-		onResolveServerlessOfflineConfiguration(
-			{
-				config: {
-					servicePath: '/',
-				},
-				service: {
-					provider: {
-						name: 'aws',
-						timeout: 30,
+		onResolveServerlessOfflineConfiguration({
+			config: {
+				servicePath: '/',
+			},
+			service: {
+				provider: {
+					name: 'aws',
+					timeout: 30,
 
-						environment: {
-							// In dev it's helpful to trace.
-							LOGGING_LEVEL: logLevel,
-							SLS_DEBUG,
-						},
+					environment: {
+						// In dev it's helpful to trace.
+						LOGGING_LEVEL: logLevel,
+						SLS_DEBUG,
 					},
-					custom: {
-						'serverless-offline': {
-							noPrependStageInUrl: true,
-							useWorkerThreads: true,
-							...(host ? { host } : {}),
-							...(port ? { httpPort: port + 1 } : {}),
-						},
-					},
-					getAllFunctions: () => Object.keys(backendFunctions),
-					getFunction: (key: string) => backendFunctions[key],
-					getAllEventsInFunction: (key: string) => backendFunctions[key].events,
 				},
-			}),
-			{
-				printOutput: true,
-				reloadHandler: true,
-			}
-		 
+				custom: {
+					'serverless-offline': {
+						noPrependStageInUrl: true,
+						useWorkerThreads: true,
+						...(host ? { host } : {}),
+						...(port ? { httpPort: port + 1 } : {}),
+					},
+				},
+				getAllFunctions: () => Object.keys(backendFunctions),
+				getFunction: (key: string) => backendFunctions[key],
+				getAllEventsInFunction: (key: string) => backendFunctions[key].events,
+			},
+		}),
+		{
+			printOutput: true,
+			reloadHandler: true,
+		}
 	);
 
 	console.log(`Backend Log Level: ${logLevel}`);
