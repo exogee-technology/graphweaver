@@ -62,7 +62,7 @@ export const config = (
 	configFileName = 'graphweaver-config'
 ): ConfigOptions => {
 	try {
-		cAonst customConfigPath = join(configRoot, configFileName);
+		const customConfigPath = join(configRoot, configFileName);
 
 		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const customConfig = require(customConfigPath);
