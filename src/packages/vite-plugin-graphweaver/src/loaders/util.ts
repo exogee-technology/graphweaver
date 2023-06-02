@@ -11,7 +11,9 @@ export const tryToResolvePath = async (path: string): Promise<string | undefined
 			try {
 				await stat(resolvePath(`${path}.${extension}`));
 				return resolvePath(`${path}.${extension}`);
+				// eslint-disable-next-line @typescript-eslint/no-empty
 			} catch {}
 		}
+		// eslint-disable-next-line @typescript-eslint/no-empty
 	} catch {}
 };

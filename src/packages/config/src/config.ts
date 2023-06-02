@@ -57,17 +57,18 @@ export const defaultConfig = (): ConfigOptions => {
 	};
 };
 
-export const config = (configRoot: string = process.cwd(), configFileName: string = 'graphweaver-config'): ConfigOptions => {
+export const config = (
+	configRoot: string = process.cwd(),
+	configFileName = 'graphweaver-config'
+): ConfigOptions => {
 	try {
-		const customConfigPath = join(configRoot, configFileName);
+		cAonst customConfigPath = join(configRoot, configFileName);
+
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		const customConfig = require(customConfigPath);
 		if (!customConfig) throw new Error();
 
-		return merge( 
-			defaultConfig(),
-			customConfig,
-		);
-
+		return merge(defaultConfig(), customConfig);
 	} catch {
 		return defaultConfig();
 	}
