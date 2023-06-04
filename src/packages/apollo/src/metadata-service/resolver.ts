@@ -3,9 +3,9 @@ import {
 	isSummaryField,
 	AdminUISettingsMap,
 	AdminUIFilterType,
+	RelationshipType,
 	BaseContext,
 } from '@exogee/graphweaver';
-import { ReferenceType } from '@exogee/graphweaver-mikroorm';
 import { Ctx, getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
@@ -84,12 +84,12 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							});
 							if (relatedEntity?.typeOptions) {
 								fieldObject.relationshipType = relatedEntity.typeOptions.array
-									? ReferenceType.MANY_TO_MANY
-									: ReferenceType.ONE_TO_MANY;
+									? RelationshipType.MANY_TO_MANY
+									: RelationshipType.ONE_TO_MANY;
 							}
 							fieldObject.relatedEntity = entityName;
 						} else if (relatedObject) {
-							fieldObject.relationshipType = ReferenceType.MANY_TO_ONE;
+							fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 						}
 						fieldObject.filter = adminUISettings?.fields?.[field.name]?.filter?.hide
 							? undefined

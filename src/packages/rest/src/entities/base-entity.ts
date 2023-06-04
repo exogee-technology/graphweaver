@@ -1,10 +1,4 @@
-import { BaseDataEntity } from '@exogee/graphweaver';
-
-export enum RelationshipType {
-	MANY_TO_ONE = 'MANY_TO_ONE',
-	MANY_TO_MANY = 'MANY_TO_MANY',
-	ONE_TO_MANY = 'ONE_TO_MANY',
-}
+import { BaseDataEntity, RelationshipType } from '@exogee/graphweaver';
 
 export type Relationship<T> = {
 	entity: () => T;
