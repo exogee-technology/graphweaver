@@ -1,19 +1,22 @@
 import { AdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
-import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
+
+import path from 'path';
+import { loadSchemaSync } from '@graphql-tools/load';
+import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 
 import { logger } from '@exogee/logger';
-import { ApolloServer, BaseContext, ContextFunction } from '@apollo/server';
+import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
-	ClearDatabaseContext,
 	ClearDataLoaderCache,
-	connectToDatabase,
 	LogErrors,
 	LogRequests,
 	MutexRequestsInDevelopment,
+	corsPlugin,
 } from './plugins';
-import { Cors } from './plugins/cors';
+
+import type { CorsPluginOptions } from './plugins';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -25,12 +28,13 @@ export interface AdminMetadata {
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	mikroOrmOptions?: ConnectionOptions[];
 	resolvers: Array<any>;
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	authChecker?: AuthChecker<any, any>;
+	corsOptions?: CorsPluginOptions;
 }
+
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
 	private config: GraphweaverConfig = {
@@ -59,11 +63,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogRequests,
 			LogErrors,
 			ClearDataLoaderCache,
-			Cors,
-			// Only load the database plugins if we have a database connected
-			...(this.config.mikroOrmOptions
-				? [connectToDatabase(this.config.mikroOrmOptions), ClearDatabaseContext]
-				: []),
+			corsPlugin(this.config.corsOptions),
 			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
@@ -72,10 +72,26 @@ export default class Graphweaver<TContext extends BaseContext> {
 			resolvers.push(AdminUiMetadataResolver);
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
-		const schema = buildSchemaSync({
-			resolvers,
-			authChecker: config.authChecker ?? (() => true),
-		});
+
+		let schema: any;
+		try {
+			logger.trace(`Graphweaver loading schema from file`);
+			schema = loadSchemaSync(path.join(process.cwd(), './.graphweaver/backend/schema.gql'), {
+				loaders: [new GraphQLFileLoader()],
+			});
+		} catch {
+			// continue we can build the schema if the load failed
+		}
+
+		if (!schema) {
+			logger.trace(
+				`Graphweaver building schema from scratch this will slow down the server startup time`
+			);
+			schema = buildSchemaSync({
+				resolvers,
+				authChecker: config.authChecker ?? (() => true),
+			});
+		}
 
 		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer<TContext>({

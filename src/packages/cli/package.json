@@ -1,12 +1,14 @@
 {
 	"name": "@exogee/graphweaver-cli",
-	"version": "0.1.7",
+	"version": "0.1.17",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
+		"build": "npm run build:js",
 		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
+		"test:create": "node test-create.js",
 		"version": "npm version --no-git-tag-version"
 	},
 	"bin": {
@@ -17,8 +19,8 @@
 		"bin"
 	],
 	"dependencies": {
-		"@exogee/graphweaver-admin-ui": "workspace:0.1.7",
-		"@exogee/graphweaver-builder": "workspace:0.1.7",
+		"@exogee/graphweaver-admin-ui": "workspace:*",
+		"@exogee/graphweaver-builder": "workspace:*",
 		"esbuild": "0.15.5",
 		"inquirer": "9.2.1",
 		"yargs": "17.6.2"

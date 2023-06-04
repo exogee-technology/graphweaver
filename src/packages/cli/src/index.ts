@@ -10,6 +10,8 @@ import {
 } from '@exogee/graphweaver-builder';
 import { create } from './create';
 
+export { createGraphWeaver } from './create';
+
 yargs
 	.env('GRAPHWEAVER')
 	.command({
@@ -37,18 +39,24 @@ yargs
 		command: ['build [environment]', 'b [environment]'],
 		describe: 'Builds your graphweaver project for deployment.',
 		builder: (yargs) =>
-			yargs.positional('environment', {
-				type: 'string',
-				choices: ['backend', 'frontend', 'all'],
-				default: 'all',
-				describe: 'Choose whether you want to build the backend, frontend, or both.',
-			}),
-		handler: async ({ environment }) => {
+			yargs
+				.positional('environment', {
+					type: 'string',
+					choices: ['backend', 'frontend', 'all'],
+					default: 'all',
+					describe: 'Choose whether you want to build the backend, frontend, or both.',
+				})
+				.option('adminUiBase', {
+					type: 'string',
+					default: '/',
+					describe: 'Specify the base path for the Admin UI',
+				}),
+		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
 			}
 			if (environment === 'frontend' || environment === 'all') {
-				await buildFrontend({});
+				await buildFrontend({ adminUiBase });
 			}
 
 			// Note, this will leave the ESBuild service process around:
@@ -73,6 +81,12 @@ yargs
 				.option('host', {
 					type: 'string',
 					describe: 'Specify a host to listen on e.g. --host 0.0.0.0',
+				})
+				.option('port', {
+					type: 'number',
+					default: 9000,
+					describe:
+						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {

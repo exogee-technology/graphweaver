@@ -1,23 +1,85 @@
-# GraphWeaver
+<!-- PROJECT LOGO -->
+<p align="center">
+  <a href="https://github.com/exogee-technology/graphweaver">
+    <img src="https://docs.graphweaver.com/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2F2da1f00d-6bca-4881-8a8c-a3b589f8a191%2FScreenshot_2023-05-11_at_4.12.28_pm.png&w=1920&q=80" alt="Project Logo">
+  </a>
+</p>
 
-## Getting Started with GraphWeaver
+<!-- PROJECT TITLE -->
+<h1 align="center">GraphWeaver</h1>
 
-You can create a new project with the **GraphWeaver CLI**, by running `npm init @exogee/graphweaver`.
+<!-- PROJECT DESCRIPTION -->
+<p align="center">
+  Welcome to GraphWeaver! This open source project allows you to seamlessly weave together complex graph structures, unlocking powerful data visualization and analysis capabilities.
+</p>
+
+<!-- PROJECT STATUS -->
+<p align="center">
+  <a href="https://github.com/exogee-technology/graphweaver">
+    <img src="https://img.shields.io/badge/status-active-brightgreen.svg" alt="Project Status">
+  </a>
+  <a href="https://github.com/exogee-technology/graphweaver/issues">
+    <img src="https://img.shields.io/github/issues/exogee-technology/graphweaver" alt="GitHub Issues">
+  </a>
+  <a href="https://github.com/exogee-technology/graphweaver/pulls">
+    <img src="https://img.shields.io/github/issues-pr/exogee-technology/graphweaver" alt="Pull Requests">
+  </a>
+  <a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT">
+  </a>
+</p>
+
+<!-- TABLE OF CONTENTS -->
+
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [About](#about)
+- [Documentation](#documentation)
+- [Quick Start](#quick-start)
+- [Contributing](#contributing)
+  - [Publishing](#publishing)
+- [License](#license)
+
+<!-- ABOUT -->
+
+## About
+
+GraphWeaver allows you to build modern applications which accept that they are not the source of truth for all data in the application. Seamlessly join multiple backend services including REST APIs, databases, and SaaS platforms into a single GraphQL API, then administer the data in all of those places.
+
+Never replicate your data again.
+
+<!-- DOCUMENTATION -->
+
+## Documentation
+
+Comprehensive documentation and usage examples can be found on our [Docs Site](https://docs.graphweaver.com). It covers installation instructions, detailed API documentation, and guides to help you get started with GraphWeaver.
+
+<!-- QUICK START -->
+
+## Quick Start
+
+Before we start the installer make sure you are running:
+
+- Node `>16.*`
+- PNPM `>7.*`
+
+With those two installed you can create a new project with the **GraphWeaver CLI**, by running:
+
+`npx @exogee/graphweaver-cli@latest create`
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 
 ```
-❯ npm init @exogee/graphweaver
-GraphWeaver
-
 ? What would your like to call your new project?
 test-project
 
 ? Which GraphWeaver backends will you need?
-MikroORM - PostgreSQL Backend
-REST Backend
+ ◯ MikroORM - PostgreSQL Backend
+ ◯ MikroORM - MySQL Backend
+ ◯ REST Backend
 
-? OK, we're ready- I'm going to create a new app in /Users/helloworld/project- is that OK?
+? OK, we're ready- I'm going to create a new app in "/Users/test-project" - is that OK?
 Yes
 
 All Done!
@@ -26,81 +88,23 @@ Make sure you npm install / yarn install / pnpm install, then run the start scri
 ❯
 ```
 
-## Examples
-
-### examples/example-basic - `@exogee/graphweaver-example-basic`
-
-Stripped down example of using GraphWeaver with the MikroORM adapter.
+Finally,
 
 ```
-# Install dependencies
-pnpm install
-
-# Set up .env in apps/example-basic
-DATABASE_HOST=
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
-DATABASE_NAME=
-
-# Run migration, build graphweaver packages, and run example app
-cd src/apps/example-basic && pnpm start
+cd ./test-project
+pnpm i
+pnpm start
 ```
 
-### examples/example-complex - `@exogee/graphweaver-example-complex`
+Open your web browser and navigate to http://localhost:9000.
 
-A more complex example of using GraphWeaver with multiple adapters and relationships in serverless.
+Explore the Admin UI and start weaving your own graphs!
 
-```
-# Install dependencies
-pnpm install
-
-# Set up .env in apps/example-complex
-DATABASE_HOST=
-DATABASE_USERNAME=
-DATABASE_PASSWORD=
-DATABASE_NAME=
-
-# Run migration, build and run example app
-cd src/apps/example-complex && pnpm migrate && pnpm build && pnpm start
-```
-
-### examples/databases - `@exogee/graphweaver-example-databases`
-
-An example of using GraphWeaver with two connected databases (MySQL, PostgreSQL) and the MikroORM adapter.
-
-Follow the instructions in the `./src/examples/databases/README.md` to get started.
-
-## Packages
-
-### packages/core - `@exogee/graphweaver`
-
-GraphWeaver core package includes `createBaseResolver` method that creates a resolver in combination with one of the backend packages:
-
-```typescript
-@Resolver(() => UserGQLEntity)
-export class UserGQLResolver extends createBaseResolver(
-  UserGQLEntity,
-  new MikroBackendProvider(User)
-) {}
-```
-
-### packages/apollo - `@exogee/graphweaver-apollo`
-
-Apollo support for graphweaver includes various plugins.
-
-### packages/mikroorm - `@exogee/graphweaver-mikroorm`
-
-MikroORM backend support for graphweaver
-
-### packages/rest - `@exogee/graphweaver-rest`
-
-RESTful backend support for graphweaver
-
-### packages/auth - `@exogee/graphweaver-auth`
-
-Row-level security support for graphweaver
+<!-- CONTRIBUTING -->
 
 ## Contributing
+
+We welcome contributions from the community! If you're interested in improving GraphWeaver, please refer to our Contribution Guidelines for detailed instructions.
 
 ### Publishing
 
@@ -133,3 +137,14 @@ $ pnpm publish:packages --otp [code from 2FA device]
 ```
 
 You're done!
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License. See LICENSE for more information.
+
+<!-- FOOTER -->
+<p align="center">
+  Made with ❤️ by Exogee Technology
+</p>

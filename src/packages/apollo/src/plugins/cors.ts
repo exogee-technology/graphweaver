@@ -1,7 +1,13 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-export const Cors: ApolloServerPlugin = {
+export interface CorsPluginOptions {
+	validateOrigin?(origin: string): boolean;
+}
+
+export const corsPlugin = ({
+	validateOrigin = () => false,
+}: CorsPluginOptions = {}): ApolloServerPlugin => ({
 	async requestDidStart({ request }) {
 		return {
 			willSendResponse: async ({ response }) => {
@@ -16,6 +22,7 @@ export const Cors: ApolloServerPlugin = {
 						'X-Amz-User-Agent',
 						'Xsrf-Token',
 						'X-Auth-Redirect',
+						'Apollo-Require-Preflight',
 					].join(',')
 				);
 
@@ -23,25 +30,21 @@ export const Cors: ApolloServerPlugin = {
 					'Access-Control-Expose-Headers',
 					[
 						// We need our auth headers to be accessible by the JS so we can store them.
-						// You also MUST use CSP headers to ensure that if XSS is accidentally possible, scripts
-						// injected on the page aren't allowed to run.
+						// You also MUST use CSP headers to ensure that if XSS is accidentally
+						// possible, scripts injected on the page aren't allowed to run.
 						'Authorization',
 
-						// This is how the server tells the client that it needs to redirect to an OAuth provider to get
-						// a token or code.
+						// This is how the server tells the client that it needs to redirect to
+						// an OAuth provider to get a token or code.
 						'X-Auth-Redirect',
 					].join(',')
 				);
 
-				const rootDomain = process.env.ROOT_DOMAIN;
-				const deploymentEnv = process.env.DEPLOYMENT_ENVIRONMENT || 'development';
-				const subdomain = deploymentEnv === 'production' ? 'easy' : `easy-${deploymentEnv}`;
-				const domainName = `${subdomain}.${rootDomain}`;
-
-				const defaultOrigin = 'http://localhost:3000';
+				const defaultOrigin = 'http://localhost:9000';
 				const origin = request.http?.headers.get('origin') || defaultOrigin;
 				response.http?.headers.set('Access-Control-Allow-Credentials', 'true');
-				if (origin?.endsWith(domainName)) {
+
+				if (validateOrigin(origin)) {
 					// Ok, this is a graphweaver request
 					logger.trace(`Adding CORS allow origin header: ${origin}`);
 					response.http?.headers.set('Access-Control-Allow-Origin', origin);
@@ -57,4 +60,4 @@ export const Cors: ApolloServerPlugin = {
 			},
 		};
 	},
-};
+});

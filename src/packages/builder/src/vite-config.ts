@@ -6,21 +6,37 @@ import path from 'path';
 
 export interface ViteConfigOptions {
 	rootDirectory: string;
+	backendUrl?: string;
 	host?: string;
+	port?: number;
+	base?: string;
 }
 
-export const viteConfig = (options: ViteConfigOptions): InlineConfig => ({
-	configFile: false,
-	root: options.rootDirectory,
-	build: {
-		outDir: path.resolve(process.cwd(), 'dist', 'admin-ui'),
-	},
-	server: {
-		port: 8000,
-		host: options.host,
-	},
-	optimizeDeps: {
-		include: ['react-dom/client', 'react-dom'],
-	},
-	plugins: [svgr(), react(), graphweaver()],
-});
+export const viteConfig = ({
+	host,
+	port,
+	rootDirectory,
+	backendUrl,
+	base = '/',
+}: ViteConfigOptions): InlineConfig => {
+	return {
+		configFile: false,
+		root: rootDirectory,
+		base,
+		define: {
+			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `'${backendUrl}'` } : {}),
+			'import.meta.env.VITE_ADMIN_UI_BASE': `'${base.replace(/\/$/, '')}'`,
+		},
+		build: {
+			outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
+		},
+		server: {
+			...(host ? { host } : {}),
+			...(port ? { port } : {}),
+		},
+		optimizeDeps: {
+			include: ['react-dom/client', 'react-dom'],
+		},
+		plugins: [svgr(), react(), graphweaver()],
+	};
+};

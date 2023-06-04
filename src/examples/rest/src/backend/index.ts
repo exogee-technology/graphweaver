@@ -17,14 +17,13 @@ import {
 	setAdministratorRoleName,
 	upsertAuthorizationContext,
 } from '@exogee/graphweaver-auth';
-import { MySqlDriver } from '@mikro-orm/mysql';
 import { BaseLoaders } from '@exogee/graphweaver';
-
-import { Task, Tag } from './entities';
+import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
 import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
+import { myConnection } from './database';
 
 export interface Context extends AuthorizationContext {
 	user: User;
@@ -35,25 +34,15 @@ export enum Roles {
 	DARK_SIDE = 'DARK_SIDE',
 }
 
+const resolvers = [TaskResolver, TagResolver, UserResolver];
+
 const graphweaver = new Graphweaver<Context>({
-	resolvers: [TaskResolver, TagResolver, UserResolver],
+	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
+		plugins: [connectToDatabase(myConnection), ClearDatabaseContext],
 	},
 	adminMetadata: { enabled: true },
-	mikroOrmOptions: [
-		{
-			connectionManagerId: 'my-sql',
-			mikroOrmConfig: {
-				entities: [Task, Tag],
-				driver: MySqlDriver,
-				dbName: 'todo_app',
-				user: 'root',
-				password: '',
-				port: 3306,
-			},
-		},
-	],
 });
 
 setAdministratorRoleName('ADMINISTRATOR');

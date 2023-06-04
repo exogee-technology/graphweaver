@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-apollo",
-	"version": "0.1.7",
+	"version": "0.1.17",
 	"description": "Apollo Server support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,15 +21,16 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.2.2",
-		"@exogee/graphweaver": "workspace:0.1.7",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.7",
-		"@exogee/logger": "workspace:0.1.7",
-		"@graphql-tools/schema": "8.0.0",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/logger": "workspace:*",
+		"@graphql-tools/graphql-file-loader": "7.5.17",
+		"@graphql-tools/load": "7.8.14",
+		"@graphql-tools/schema": "8.5.1",
 		"async-mutex": "0.3.2",
-		"class-validator": "0.13.2",
+		"class-validator": "0.14.0",
 		"decimal.js": "10.3.1",
 		"graphql": "16.6.0",
-		"type-graphql": "2.0.0-beta.1"
+		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5"

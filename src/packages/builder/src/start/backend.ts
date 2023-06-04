@@ -15,6 +15,7 @@ import {
 // The Serverless Offline logger should report any errors and such to the console as well.
 // This is how we configure the Serverless log reporter to use console.log().
 import '@serverless/utils/log-reporters/node';
+import { buildSchemaSync } from 'type-graphql';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -25,7 +26,7 @@ const builtInBackendFunctions: Record<string, any> = {
 		events: [
 			{
 				http: {
-					path: 'graphql/v1/{proxy+}',
+					path: '/{proxy+}',
 					method: 'ANY',
 					cors: true,
 				},
@@ -36,10 +37,11 @@ const builtInBackendFunctions: Record<string, any> = {
 
 export interface BackendStartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
+	port: number /** Port to listen on, default is 9001 */;
 }
 
-export const startBackend = async (options: BackendStartOptions) => {
-	console.log('Starting backend...');
+export const startBackend = async ({ host, port }: BackendStartOptions) => {
+	console.log('Starting Backend...');
 
 	// Get ready for our config.
 	const backendFunctions = { ...builtInBackendFunctions };
@@ -57,6 +59,15 @@ export const startBackend = async (options: BackendStartOptions) => {
 		entryPoints: ['./src/backend/index.ts'],
 		outfile: '.graphweaver/backend/index.js',
 	});
+
+	// Read the exported resolvers and if we find them build the schema
+	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
+	if (resolvers) {
+		buildSchemaSync({
+			resolvers,
+			emitSchemaFile: '.graphweaver/backend/schema.gql',
+		});
+	}
 
 	// Are there any custom additional functions we need to build?
 	try {
@@ -141,7 +152,8 @@ export const startBackend = async (options: BackendStartOptions) => {
 					'serverless-offline': {
 						noPrependStageInUrl: true,
 						useWorkerThreads: true,
-						...(options.host ? { host: options.host } : {}),
+						...(host ? { host } : {}),
+						...(port ? { httpPort: port + 1 } : {}),
 					},
 				},
 				getAllFunctions: () => Object.keys(backendFunctions),
@@ -155,6 +167,8 @@ export const startBackend = async (options: BackendStartOptions) => {
 		}
 	);
 
-	console.log(`GraphWeaver Backend log level '${logLevel}' - starting Serverless Offline...`);
+	console.log(`Backend Log Level: ${logLevel}`);
 	await slsOffline.start();
+
+	console.log(`🚀 Backend: ${slsOffline.internals().getApiGatewayServer().info.uri}`);
 };

@@ -17,22 +17,29 @@
 		"start": "graphweaver start"
 	},
 	"dependencies": {
+		"@apollo/server": "4.2.2",
 		"@as-integrations/aws-lambda": "2.0.1",
-		"@exogee/graphweaver": "workspace:0.1.7",
-		"@exogee/graphweaver-apollo": "workspace:0.1.7",
-		"@exogee/graphweaver-auth": "workspace:0.1.7",
-		"@exogee/graphweaver-cli": "workspace:0.1.7",
-		"@exogee/graphweaver-mikroorm": "workspace:0.1.7",
-		"@exogee/graphweaver-rest": "workspace:0.1.7",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-apollo": "workspace:*",
+		"@exogee/graphweaver-auth": "workspace:*",
+		"@exogee/graphweaver-cli": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"@exogee/graphweaver-rest": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",
+		"react": "18.2.0",
 		"dotenv": "16.0.0",
-		"got": "11.8.2",
+		"got": "11.8.5",
 		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.1"
+		"type-graphql": "2.0.0-beta.2",
+		"class-validator": "0.14.0",
+		"graphql": "16.6.0"
 	},
 	"devDependencies": {
 		"@types/node": "14.14.10",
-		"typescript": "5.0.2"
+		"typescript": "5.0.2",
+		"vite": "3.2.4",
+		"vite-plugin-svgr": "2.2.2"
 	}
 }
