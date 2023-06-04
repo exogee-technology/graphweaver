@@ -1,4 +1,5 @@
-import { BaseEntity, RelationshipMap, RelationshipType, Relationship } from './entities';
+import { RelationshipType } from '@exogee/graphweaver';
+import { BaseEntity, RelationshipMap, Relationship } from './entities';
 
 export interface EntityConstructor<T extends BaseEntity> {
 	new (_entity: any): T;

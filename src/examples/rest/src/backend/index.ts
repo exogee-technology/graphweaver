@@ -13,15 +13,16 @@ import {
 	localAuthApolloPlugin,
 	setAdministratorRoleName,
 } from '@exogee/graphweaver-auth';
-import { MySqlDriver } from '@mikro-orm/mysql';
 
-// Data Entities
-import { Task, Tag } from './entities';
-// GraphQL Resolvers
-import { UserResolver } from './schema/user';
+import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
+
+import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
 import { AuthResolver } from './schema/auth';
+
+import { myConnection } from './database';
+
 // Auth Functions
 import { addUserToContext } from './auth/context';
 import { beforeRead } from './auth/admin-ui';
@@ -37,7 +38,11 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
-		plugins: [localAuthApolloPlugin(addUserToContext)],
+		plugins: [
+			localAuthApolloPlugin(addUserToContext),
+			connectToDatabase(myConnection),
+			ClearDatabaseContext,
+		],
 	},
 	adminMetadata: {
 		enabled: true,
@@ -45,19 +50,6 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 			beforeRead,
 		},
 	},
-	mikroOrmOptions: [
-		{
-			connectionManagerId: 'my-sql',
-			mikroOrmConfig: {
-				entities: [Task, Tag],
-				driver: MySqlDriver,
-				dbName: 'todo_app',
-				user: process.env.MYSQL_USERNAME,
-				password: process.env.MYSQL_PASSWORD,
-				port: 3306,
-			},
-		},
-	],
 });
 
 setAdministratorRoleName('ADMINISTRATOR');

@@ -1,17 +1,15 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
-import { ConnectionOptions } from '@exogee/graphweaver-mikroorm';
+
 import path from 'path';
 import { loadSchemaSync } from '@graphql-tools/load';
 import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
 
 import { logger } from '@exogee/logger';
-import { ApolloServer, BaseContext, ContextFunction } from '@apollo/server';
+import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
 import {
-	ClearDatabaseContext,
 	ClearDataLoaderCache,
-	connectToDatabase,
 	LogErrors,
 	LogRequests,
 	MutexRequestsInDevelopment,
@@ -33,7 +31,6 @@ export interface AdminMetadata {
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	mikroOrmOptions?: ConnectionOptions[];
 	resolvers: Array<any>;
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
@@ -70,10 +67,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogErrors,
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
-			// Only load the database plugins if we have a database connected
-			...(this.config.mikroOrmOptions
-				? [connectToDatabase(this.config.mikroOrmOptions), ClearDatabaseContext]
-				: []),
 			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
