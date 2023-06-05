@@ -7,69 +7,54 @@ dotenv.config({
 });
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
-import {
-	LambdaContextFunctionArgument,
-	handlers,
-	startServerAndCreateLambdaHandler,
-} from '@as-integrations/aws-lambda';
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import {
 	AuthorizationContext,
+	localAuthApolloPlugin,
 	setAdministratorRoleName,
-	upsertAuthorizationContext,
 } from '@exogee/graphweaver-auth';
-import { BaseLoaders } from '@exogee/graphweaver';
+
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
 import { UserResolver, User } from './schema/user';
 import { TaskResolver } from './schema/task';
 import { TagResolver } from './schema/tag';
+import { AuthResolver } from './schema/auth';
+
 import { myConnection } from './database';
 
-export interface Context extends AuthorizationContext {
-	user: User;
-}
+// Auth Functions
+import { addUserToContext } from './auth/context';
+import { beforeRead } from './auth/admin-ui';
 
 export enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
 	DARK_SIDE = 'DARK_SIDE',
 }
 
-const resolvers = [TaskResolver, TagResolver, UserResolver];
+const resolvers = [TaskResolver, TagResolver, UserResolver, AuthResolver];
 
-const graphweaver = new Graphweaver<Context>({
+const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
-		plugins: [connectToDatabase(myConnection), ClearDatabaseContext],
+		plugins: [
+			localAuthApolloPlugin(addUserToContext),
+			connectToDatabase(myConnection),
+			ClearDatabaseContext,
+		],
 	},
-	adminMetadata: { enabled: true },
+	adminMetadata: {
+		enabled: true,
+		hooks: {
+			beforeRead,
+		},
+	},
 });
 
 setAdministratorRoleName('ADMINISTRATOR');
 
-export const handler = startServerAndCreateLambdaHandler<any, Context>(
+export const handler = startServerAndCreateLambdaHandler<any>(
 	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler(),
-	{
-		context: async ({ event }: LambdaContextFunctionArgument<any>) => {
-			// Let's use the x-user-id to specify a different user for testing
-			// In a real world application this would be inside an access token
-			const userId = (event as any)?.headers?.['x-user-id'] ?? '1';
-
-			const user = User.fromBackendEntity(
-				await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
-			);
-
-			if (!user) throw new Error('Bad Request: Unknown user id provided.');
-
-			const context: Context = {
-				user,
-				// If the user id is 4 this is Darth Vader and we return the dark side role
-				roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
-			};
-
-			upsertAuthorizationContext(context);
-			return context;
-		},
-	}
+	handlers.createAPIGatewayProxyEventRequestHandler()
 );

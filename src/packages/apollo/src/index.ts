@@ -1,4 +1,4 @@
-import { AdminUiMetadataResolver } from './metadata-service';
+import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
 
 import path from 'path';
@@ -24,6 +24,9 @@ export { startStandaloneServer } from '@apollo/server/standalone';
 export interface AdminMetadata {
 	enabled: boolean;
 	config?: any;
+	hooks?: {
+		beforeRead?: <C extends BaseContext>(context: C) => void;
+	};
 }
 
 export interface GraphweaverConfig {
@@ -69,7 +72,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		const resolvers = (this.config.resolvers || []) as any;
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
-			resolvers.push(AdminUiMetadataResolver);
+			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 

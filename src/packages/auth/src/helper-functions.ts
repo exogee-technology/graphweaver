@@ -12,6 +12,8 @@ import {
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 
+export { ForbiddenError } from 'apollo-server-errors';
+
 type AuthContext<T extends AuthorizationContext | undefined> = T;
 let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
 let administratorRoleName = '';
@@ -62,10 +64,14 @@ export function getRolesFromAuthorizationContext() {
 	if (!authContext) {
 		throw new Error('Authorization context not set');
 	}
-	if (!Array.isArray(authContext.roles) || authContext.roles.length === 0) {
+	if (
+		!authContext.user?.roles ||
+		!Array.isArray(authContext.user?.roles) ||
+		authContext.user?.roles.length === 0
+	) {
 		throw new Error('Currently logged in user has no roles');
 	}
-	return authContext.roles;
+	return authContext.user.roles;
 }
 
 /**
