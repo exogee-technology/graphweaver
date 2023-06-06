@@ -11,6 +11,7 @@ import {
 } from './template';
 
 import { Backend } from './backend';
+import { Downloader } from './templates/download';
 
 const abort = () => {
 	console.log('Cancelled!');
@@ -30,8 +31,12 @@ export const initGraphWeaver = (projectName: string, backends: Backend[]) => {
 	makeSchemaIndex(projectName, backends);
 };
 
-export const init = async () => {
-	console.log('GraphWeaver\n');
+type InitOptions = {
+	template?: string /** Optional template to use for the starter */;
+};
+
+export const init = async ({ template }: InitOptions) => {
+	console.log(`GraphWeaver ${template ? 'using template ' + template : ''}\n`);
 
 	import('inquirer').then(async ({ default: inquirer }) => {
 		const { projectName, createDirectory, backends } = await inquirer.prompt([
@@ -40,25 +45,29 @@ export const init = async () => {
 				name: 'projectName',
 				message: `What would your like to call your new project?`,
 			},
-			{
-				type: 'checkbox',
-				name: 'backends',
-				message: 'Which GraphWeaver backends will you need?',
-				choices: [
-					{
-						value: Backend.MikroOrmPostgres,
-						name: 'MikroORM - PostgreSQL Backend',
-					},
-					{
-						value: Backend.MikroOrmMysql,
-						name: 'MikroORM - MySQL Backend',
-					},
-					{
-						value: Backend.REST,
-						name: 'REST Backend',
-					},
-				],
-			},
+			...(template
+				? []
+				: [
+						{
+							type: 'checkbox',
+							name: 'backends',
+							message: 'Which GraphWeaver backends will you need?',
+							choices: [
+								{
+									value: Backend.MikroOrmPostgres,
+									name: 'MikroORM - PostgreSQL Backend',
+								},
+								{
+									value: Backend.MikroOrmMysql,
+									name: 'MikroORM - MySQL Backend',
+								},
+								{
+									value: Backend.REST,
+									name: 'REST Backend',
+								},
+							],
+						},
+				  ]),
 			{
 				type: 'confirm',
 				name: 'createDirectory',
@@ -71,7 +80,12 @@ export const init = async () => {
 
 		if (!createDirectory) abort();
 
-		initGraphWeaver(projectName, backends);
+		if (template) {
+			const downloadManager = new Downloader();
+			await downloadManager.download(projectName, template);
+		} else {
+			initGraphWeaver(projectName, backends);
+		}
 
 		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
 

@@ -1,4 +1,4 @@
-# Graphweaver CLI `@exogee/graphweaver-cli`
+# Graphweaver CLI `graphweaver`
 
 ## Start
 
