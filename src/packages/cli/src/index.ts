@@ -8,16 +8,16 @@ import {
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
-import { create } from './create';
+import { init } from './init';
 
-export { createGraphWeaver } from './create';
+export { createGraphWeaver } from './init';
 
 yargs
 	.env('GRAPHWEAVER')
 	.command({
-		command: ['create'],
+		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
-		handler: create,
+		handler: init,
 	})
 	.command({
 		command: ['analyse [target]', 'analyze [target]', 'a [target]'],
