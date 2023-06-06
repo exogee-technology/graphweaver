@@ -22,7 +22,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
-		"@exogee/graphweaver-cli": "workspace:*",
+		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",

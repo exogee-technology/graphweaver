@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "0.1.17",
+	"version": "0.1.20",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -27,7 +27,7 @@
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
-		"@exogee/graphweaver-cli": "workspace:*",
+		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",

@@ -34,7 +34,6 @@ importers:
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:*
       '@exogee/graphweaver-apollo': workspace:*
-      '@exogee/graphweaver-cli': workspace:*
       '@exogee/graphweaver-mikroorm': workspace:*
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
@@ -42,6 +41,7 @@ importers:
       '@types/node': 14.14.10
       class-validator: 0.14.0
       graphql: 16.6.0
+      graphweaver: workspace:*
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
@@ -50,13 +50,13 @@ importers:
       '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
       '@exogee/graphweaver': link:../../packages/core
       '@exogee/graphweaver-apollo': link:../../packages/apollo
-      '@exogee/graphweaver-cli': link:../../packages/cli
       '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
       '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
       '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
       class-validator: 0.14.0
       graphql: 16.6.0
+      graphweaver: link:../../packages/cli
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
     devDependencies:
@@ -71,7 +71,6 @@ importers:
       '@exogee/graphweaver-admin-ui-components': workspace:*
       '@exogee/graphweaver-apollo': workspace:*
       '@exogee/graphweaver-auth': workspace:*
-      '@exogee/graphweaver-cli': workspace:*
       '@exogee/graphweaver-mikroorm': workspace:*
       '@exogee/graphweaver-rest': workspace:*
       '@mikro-orm/core': 5.4.2
@@ -81,6 +80,7 @@ importers:
       dotenv: 16.0.0
       got: 11.8.5
       graphql: 16.6.0
+      graphweaver: workspace:*
       react: 18.2.0
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2
@@ -94,7 +94,6 @@ importers:
       '@exogee/graphweaver-admin-ui-components': link:../../packages/admin-ui-components
       '@exogee/graphweaver-apollo': link:../../packages/apollo
       '@exogee/graphweaver-auth': link:../../packages/auth
-      '@exogee/graphweaver-cli': link:../../packages/cli
       '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
       '@exogee/graphweaver-rest': link:../../packages/rest
       '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
@@ -103,6 +102,7 @@ importers:
       dotenv: 16.0.0
       got: 11.8.5
       graphql: 16.6.0
+      graphweaver: link:../../packages/cli
       react: 18.2.0
       reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
@@ -120,7 +120,6 @@ importers:
       '@exogee/graphweaver-admin-ui': workspace:*
       '@exogee/graphweaver-admin-ui-components': workspace:*
       '@exogee/graphweaver-apollo': workspace:*
-      '@exogee/graphweaver-cli': workspace:*
       '@exogee/graphweaver-scalars': workspace:*
       '@exogee/graphweaver-xero': workspace:*
       '@exogee/logger': workspace:*
@@ -135,6 +134,7 @@ importers:
       esbuild: 0.15.5
       graphql: 16.6.0
       graphql-tag: 2.12.6
+      graphweaver: workspace:*
       prettier: 2.8.8
       prop-types: 15.8.1
       react: 18.2.0
@@ -155,7 +155,6 @@ importers:
       '@exogee/graphweaver-admin-ui': link:../../packages/admin-ui
       '@exogee/graphweaver-admin-ui-components': link:../../packages/admin-ui-components
       '@exogee/graphweaver-apollo': link:../../packages/apollo
-      '@exogee/graphweaver-cli': link:../../packages/cli
       '@exogee/graphweaver-scalars': link:../../packages/scalars
       '@exogee/graphweaver-xero': link:../../packages/xero
       '@exogee/logger': link:../../packages/logger
@@ -168,6 +167,7 @@ importers:
       decimal.js: 10.4.3
       graphql: 16.6.0
       graphql-tag: 2.12.6_graphql@16.6.0
+      graphweaver: link:../../packages/cli
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -400,6 +400,9 @@ importers:
     specifiers:
       '@exogee/graphweaver-admin-ui': workspace:*
       '@exogee/graphweaver-builder': workspace:*
+      '@octokit/core': 4.2.1
+      '@octokit/plugin-throttling': 6.0.0
+      '@octokit/rest': 19.0.11
       '@types/inquirer': 9.0.3
       '@types/node': 18.11.9
       '@types/yargs': 17.0.24
@@ -410,6 +413,9 @@ importers:
     dependencies:
       '@exogee/graphweaver-admin-ui': link:../admin-ui
       '@exogee/graphweaver-builder': link:../builder
+      '@octokit/core': 4.2.1
+      '@octokit/plugin-throttling': 6.0.0_@octokit+core@4.2.1
+      '@octokit/rest': 19.0.11
       esbuild: 0.15.5
       inquirer: 9.2.1
       yargs: 17.6.2
@@ -418,37 +424,6 @@ importers:
       '@types/node': 18.11.9
       '@types/yargs': 17.0.24
       prettier: 2.8.8
-
-  packages/cli/test:
-    specifiers:
-      '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': 0.1.17
-      '@exogee/graphweaver-apollo': 0.1.17
-      '@exogee/graphweaver-cli': 0.1.17
-      '@exogee/graphweaver-mikroorm': 0.1.17
-      '@mikro-orm/core': 5.4.2
-      '@mikro-orm/postgresql': 5.4.2
-      '@types/node': 14.14.10
-      class-validator: 0.14.0
-      graphql: 16.6.0
-      reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.2
-      typescript: 5.0.2
-    dependencies:
-      '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': link:../../core
-      '@exogee/graphweaver-apollo': link:../../apollo
-      '@exogee/graphweaver-cli': link:..
-      '@exogee/graphweaver-mikroorm': link:../../mikroorm
-      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
-      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
-      class-validator: 0.14.0
-      graphql: 16.6.0
-      reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
-    devDependencies:
-      '@types/node': 14.14.10
-      typescript: 5.0.2
 
   packages/core:
     specifiers:
@@ -867,15 +842,6 @@ packages:
   /@apollo/utils.withrequired/2.0.1:
     resolution: {integrity: sha512-YBDiuAX9i1lLc6GeTy1m7DGLFn/gMnvXqlalOIMjM7DeOgIacEjjfwPqb0M1CQ2v11HhR15d1NmxJoRCfrNqcA==}
     engines: {node: '>=14'}
-    dev: false
-
-  /@as-integrations/aws-lambda/2.0.1:
-    resolution: {integrity: sha512-zp4X2bMnjP9jQx8hbmKBimdGPU9YjnWk0Gi+9nHKPK95y1F1IFw2oR2IJvGN9rpcD4q1ycNcP7eMlPx8EcPIXw==}
-    engines: {node: '>=14.0'}
-    peerDependencies:
-      '@apollo/server': ^4.0.0
-    dependencies:
-      '@types/aws-lambda': 8.10.115
     dev: false
 
   /@as-integrations/aws-lambda/2.0.1_@apollo+server@4.2.2:
@@ -2905,51 +2871,6 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
-  /@mikro-orm/core/5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu:
-    resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
-    engines: {node: '>= 14.0.0'}
-    peerDependencies:
-      '@mikro-orm/better-sqlite': ^5.0.0
-      '@mikro-orm/entity-generator': ^5.0.0
-      '@mikro-orm/mariadb': ^5.0.0
-      '@mikro-orm/migrations': ^5.0.0
-      '@mikro-orm/migrations-mongodb': ^5.0.0
-      '@mikro-orm/mongodb': ^5.0.0
-      '@mikro-orm/mysql': ^5.0.0
-      '@mikro-orm/postgresql': ^5.0.0
-      '@mikro-orm/seeder': ^5.0.0
-      '@mikro-orm/sqlite': ^5.0.0
-    peerDependenciesMeta:
-      '@mikro-orm/better-sqlite':
-        optional: true
-      '@mikro-orm/entity-generator':
-        optional: true
-      '@mikro-orm/mariadb':
-        optional: true
-      '@mikro-orm/migrations':
-        optional: true
-      '@mikro-orm/migrations-mongodb':
-        optional: true
-      '@mikro-orm/mongodb':
-        optional: true
-      '@mikro-orm/mysql':
-        optional: true
-      '@mikro-orm/postgresql':
-        optional: true
-      '@mikro-orm/seeder':
-        optional: true
-      '@mikro-orm/sqlite':
-        optional: true
-    dependencies:
-      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
-      acorn-loose: 8.3.0
-      acorn-walk: 8.2.0
-      dotenv: 16.0.2
-      fs-extra: 10.1.0
-      globby: 11.0.4
-      mikro-orm: 5.4.2
-      reflect-metadata: 0.1.13
-
   /@mikro-orm/core/5.4.2_fyvjslnt4umxnwbsvn4uylbnpq:
     resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
     engines: {node: '>= 14.0.0'}
@@ -3027,7 +2948,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
+      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       fs-extra: 10.1.0
       knex: 2.3.0_pg@8.8.0
       pg: 8.8.0
@@ -3123,7 +3044,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
+      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@mikro-orm/knex': 5.4.2_gx4qpbej4qnj53to75in55gjcu
       pg: 8.8.0
     transitivePeerDependencies:
@@ -3329,6 +3250,138 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
+
+  /@octokit/auth-token/3.0.3:
+    resolution: {integrity: sha512-/aFM2M4HVDBT/jjDBa84sJniv1t9Gm/rLkalaz9htOm+L+8JMj1k9w0CkUdcxNyNxZPlTxKPVko+m1VlM58ZVA==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/types': 9.2.3
+    dev: false
+
+  /@octokit/core/4.2.1:
+    resolution: {integrity: sha512-tEDxFx8E38zF3gT7sSMDrT1tGumDgsw5yPG6BBh/X+5ClIQfMH/Yqocxz1PnHx6CHyF6pxmovUTOfZAUvQ0Lvw==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/auth-token': 3.0.3
+      '@octokit/graphql': 5.0.6
+      '@octokit/request': 6.2.5
+      '@octokit/request-error': 3.0.3
+      '@octokit/types': 9.2.3
+      before-after-hook: 2.2.3
+      universal-user-agent: 6.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@octokit/endpoint/7.0.5:
+    resolution: {integrity: sha512-LG4o4HMY1Xoaec87IqQ41TQ+glvIeTKqfjkCEmt5AIwDZJwQeVZFIEYXrYY6yLwK+pAScb9Gj4q+Nz2qSw1roA==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/types': 9.2.3
+      is-plain-object: 5.0.0
+      universal-user-agent: 6.0.0
+    dev: false
+
+  /@octokit/graphql/5.0.6:
+    resolution: {integrity: sha512-Fxyxdy/JH0MnIB5h+UQ3yCoh1FG4kWXfFKkpWqjZHw/p+Kc8Y44Hu/kCgNBT6nU1shNumEchmW/sUO1JuQnPcw==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/request': 6.2.5
+      '@octokit/types': 9.2.3
+      universal-user-agent: 6.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@octokit/openapi-types/17.2.0:
+    resolution: {integrity: sha512-MazrFNx4plbLsGl+LFesMo96eIXkFgEtaKbnNpdh4aQ0VM10aoylFsTYP1AEjkeoRNZiiPe3T6Gl2Hr8dJWdlQ==}
+    dev: false
+
+  /@octokit/plugin-paginate-rest/6.1.2_@octokit+core@4.2.1:
+    resolution: {integrity: sha512-qhrmtQeHU/IivxucOV1bbI/xZyC/iOBhclokv7Sut5vnejAIAEXVcGQeRpQlU39E0WwK9lNvJHphHri/DB6lbQ==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      '@octokit/core': '>=4'
+    dependencies:
+      '@octokit/core': 4.2.1
+      '@octokit/tsconfig': 1.0.2
+      '@octokit/types': 9.2.3
+    dev: false
+
+  /@octokit/plugin-request-log/1.0.4_@octokit+core@4.2.1:
+    resolution: {integrity: sha512-mLUsMkgP7K/cnFEw07kWqXGF5LKrOkD+lhCrKvPHXWDywAwuDUeDwWBpc69XK3pNX0uKiVt8g5z96PJ6z9xCFA==}
+    peerDependencies:
+      '@octokit/core': '>=3'
+    dependencies:
+      '@octokit/core': 4.2.1
+    dev: false
+
+  /@octokit/plugin-rest-endpoint-methods/7.1.2_@octokit+core@4.2.1:
+    resolution: {integrity: sha512-R0oJ7j6f/AdqPLtB9qRXLO+wjI9pctUn8Ka8UGfGaFCcCv3Otx14CshQ89K4E88pmyYZS8p0rNTiprML/81jig==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      '@octokit/core': '>=3'
+    dependencies:
+      '@octokit/core': 4.2.1
+      '@octokit/types': 9.2.3
+      deprecation: 2.3.1
+    dev: false
+
+  /@octokit/plugin-throttling/6.0.0_@octokit+core@4.2.1:
+    resolution: {integrity: sha512-RdKkzD8X/T17KJmEHTsZ5Ztj7WGNpxsJAIyR1bgvkoyar+cDrIRZMsP15r8JRB1QI/LN2F/stUs5/kMVaYXS9g==}
+    engines: {node: '>= 18'}
+    peerDependencies:
+      '@octokit/core': ^4.0.0
+    dependencies:
+      '@octokit/core': 4.2.1
+      '@octokit/types': 9.2.3
+      bottleneck: 2.19.5
+    dev: false
+
+  /@octokit/request-error/3.0.3:
+    resolution: {integrity: sha512-crqw3V5Iy2uOU5Np+8M/YexTlT8zxCfI+qu+LxUB7SZpje4Qmx3mub5DfEKSO8Ylyk0aogi6TYdf6kxzh2BguQ==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/types': 9.2.3
+      deprecation: 2.3.1
+      once: 1.4.0
+    dev: false
+
+  /@octokit/request/6.2.5:
+    resolution: {integrity: sha512-z83E8UIlPNaJUsXpjD8E0V5o/5f+vJJNbNcBwVZsX3/vC650U41cOkTLjq4PKk9BYonQGOnx7N17gvLyNjgGcQ==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/endpoint': 7.0.5
+      '@octokit/request-error': 3.0.3
+      '@octokit/types': 9.2.3
+      is-plain-object: 5.0.0
+      node-fetch: 2.6.11
+      universal-user-agent: 6.0.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@octokit/rest/19.0.11:
+    resolution: {integrity: sha512-m2a9VhaP5/tUw8FwfnW2ICXlXpLPIqxtg3XcAiGMLj/Xhw3RSBfZ8le/466ktO1Gcjr8oXudGnHhxV1TXJgFxw==}
+    engines: {node: '>= 14'}
+    dependencies:
+      '@octokit/core': 4.2.1
+      '@octokit/plugin-paginate-rest': 6.1.2_@octokit+core@4.2.1
+      '@octokit/plugin-request-log': 1.0.4_@octokit+core@4.2.1
+      '@octokit/plugin-rest-endpoint-methods': 7.1.2_@octokit+core@4.2.1
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /@octokit/tsconfig/1.0.2:
+    resolution: {integrity: sha512-I0vDR0rdtP8p2lGMzvsJzbhdOWy405HcGovrspJ8RRibHnyRgggUSNO5AIox5LmqiwmatHKYsvj6VGFHkqS7lA==}
+    dev: false
+
+  /@octokit/types/9.2.3:
+    resolution: {integrity: sha512-MMeLdHyFIALioycq+LFcA71v0S2xpQUX2cw6pPbHQjaibcHYwLnmK/kMZaWuGfGfjBJZ3wRUq+dOaWsvrPJVvA==}
+    dependencies:
+      '@octokit/openapi-types': 17.2.0
+    dev: false
 
   /@panva/asn1.js/1.0.0:
     resolution: {integrity: sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==}
@@ -4801,6 +4854,10 @@ packages:
       tweetnacl: 0.14.5
     dev: false
 
+  /before-after-hook/2.2.3:
+    resolution: {integrity: sha512-NzUnlZexiaH/46WDhANlyR2bXRopNg4F/zuSA3OpZnllCUgRaOF2znDioDWrmbNVsuZk6l9pMquQB38cfBZwkQ==}
+    dev: false
+
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
@@ -4870,6 +4927,10 @@ packages:
       unpipe: 1.0.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /bottleneck/2.19.5:
+    resolution: {integrity: sha512-VHiNCbI1lKdl44tGrhNfU3lup0Tj/ZBMJB5/2ZbNXRCPuRCO7ed2mgcK4r17y+KB2EfuYuRaVlwNbAeaWGSpbw==}
     dev: false
 
   /bowser/2.11.0:
@@ -5726,6 +5787,10 @@ packages:
   /depd/2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
     engines: {node: '>= 0.8'}
+    dev: false
+
+  /deprecation/2.3.1:
+    resolution: {integrity: sha512-xmHIy4F3scKVwMsQ4WnVaS8bHOx0DmVwRywosKhaILI0ywMDWPtBSku2HNxRvF7jtwDRsoEwYQSfbxj8b7RlJQ==}
     dev: false
 
   /destroy/1.2.0:
@@ -7823,6 +7888,11 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       isobject: 3.0.1
+    dev: false
+
+  /is-plain-object/5.0.0:
+    resolution: {integrity: sha512-VRSzKkbMm5jMDoKLbltAkFQ5Qr7VDiTFGXxYFXXowVj387GeGNOCsOH6Msy00SGZ3Fp84b1Naa1psqgcCIEP5Q==}
+    engines: {node: '>=0.10.0'}
     dev: false
 
   /is-primitive/3.0.1:
@@ -11529,6 +11599,10 @@ packages:
     resolution: {integrity: sha512-WWM3HP+siTxzIWPNUg7hZ4XO8clKi6NoCAJJWnuRL+BAqyFXF8gC03WNyTefGoUXYc47uYgXxpKLIEvo65PEHw==}
     dependencies:
       type: 2.7.2
+    dev: false
+
+  /universal-user-agent/6.0.0:
+    resolution: {integrity: sha512-isyNax3wXoKaulPDZWHQqbmIx1k2tb9fb3GGDBRxCscfYV2Ch7WxPArBsFEG8s/safwXTT7H4QGhaIkTp9447w==}
     dev: false
 
   /universalify/2.0.0:
