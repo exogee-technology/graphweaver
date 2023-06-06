@@ -28,7 +28,10 @@ export const RelationshipFilter = ({
 	if (!field?.type) return null;
 
 	const relationshipEntity =
-		field && field.relationshipType === 'm:1' ? entities.find((e) => e === field.type) : undefined;
+		field && field.relationshipType === 'MANY_TO_ONE'
+			? entities.find((e) => e === field.type)
+			: undefined;
+
 	if (!relationshipEntity) return null;
 
 	const relationshipEntityType = entityByName(relationshipEntity);
