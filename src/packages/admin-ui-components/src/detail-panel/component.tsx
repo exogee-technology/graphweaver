@@ -73,6 +73,10 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 };
 
 const DetailField = ({ field }: { field: EntityField }) => {
+	//@todo we need to handle many to many edits
+	if (field.relationshipType === 'MANY_TO_MANY') {
+		return <></>;
+	}
 	if (field.relationshipType) {
 		// @todo: For these fields we want both the ID and the name (value)
 		return (
@@ -155,7 +159,7 @@ export const DetailPanel = () => {
 	}, [search, selectedEntity]);
 
 	const getValue = (field: EntityField, result?: ResultBaseType) => {
-		if (field.relationshipType) {
+		if (field.relationshipType === 'MANY_TO_ONE') {
 			const relatedEntity = entityByType(field.type);
 			const relatedField = result?.[field.name] as Record<string, unknown> | undefined;
 
