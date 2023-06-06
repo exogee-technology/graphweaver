@@ -41,7 +41,6 @@ export class Downloader {
 	constructor() {
 		const ThrottledOctokit = Octokit.plugin(throttling);
 		this.octokit = new ThrottledOctokit({
-			auth: 'token ',
 			throttle: {
 				onSecondaryRateLimit: (retryAfter, options) => {
 					/* ... */
