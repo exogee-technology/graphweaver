@@ -21,7 +21,7 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
 			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
 			'@exogee/graphweaver-apollo': GRAPHWEAVER_TARGET_VERSION,
-			'@exogee/graphweaver-cli': GRAPHWEAVER_TARGET_VERSION,
+			graphweaver: GRAPHWEAVER_TARGET_VERSION,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',

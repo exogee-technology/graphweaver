@@ -8,16 +8,24 @@ import {
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
-import { create } from './create';
+import { init } from './init';
 
-export { createGraphWeaver } from './create';
+export { initGraphWeaver } from './init';
 
 yargs
 	.env('GRAPHWEAVER')
 	.command({
-		command: ['create'],
+		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
-		handler: create,
+		builder: (yargs) =>
+			yargs.option('template', {
+				type: 'string',
+				describe: 'Specify a template to base your server on e.g. --template rest',
+			}),
+		handler: async (argv) => {
+			const template = argv.template;
+			init({ template });
+		},
 	})
 	.command({
 		command: ['analyse [target]', 'analyze [target]', 'a [target]'],
@@ -90,7 +98,7 @@ yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await startBackend(args as BackendStartOptions);
+				await startBackend(args as any);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);

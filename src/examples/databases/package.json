@@ -21,7 +21,7 @@
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
-		"@exogee/graphweaver-cli": "workspace:*",
+		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",
