@@ -1,5 +1,5 @@
 {
-	"name": "@exogee/graphweaver-cli",
+	"name": "graphweaver",
 	"version": "0.1.17",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
