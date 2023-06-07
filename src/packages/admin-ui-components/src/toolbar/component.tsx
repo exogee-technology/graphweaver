@@ -23,13 +23,8 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	const externalLinkItems: DropdownItem[] = [
-		{
-			id: 'new',
-			name: `New ${selectedEntity.name}`,
-			href: routeFor({ entity: selectedEntity, id: 'graphweaver-admin-new-entity', sort, filters }),
-		},
-	];
+	// @todo allow to be extended
+	const externalLinkItems: DropdownItem[] = [];
 
 	return (
 		<div className={styles.toolBarContainer}>
@@ -41,14 +36,34 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 
 				<div className={styles.toolsWrapper}>
 					<input className={styles.search} type="search" name="search" placeholder="Search..." />
-					<Link to={{ pathname: '/playground' }} target="_blank" rel="noopener noreferrer">
+					<Link
+						className={styles.toolBarTrailingButton}
+						to={{ pathname: '/playground' }}
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label={`Open Playground`}
+					>
 						<Button>
-							Open playground
+							Open Playground
 							<OpenPlaygroundIcon />
 						</Button>
 					</Link>
+					<Link
+						className={styles.toolBarTrailingButton}
+						to={{
+							pathname: routeFor({
+								entity: selectedEntity,
+								id: 'graphweaver-admin-new-entity',
+								sort,
+								filters,
+							}),
+						}}
+						aria-label={`Create New ${selectedEntity.name}`}
+					>
+						<Button>Create New {selectedEntity.name}</Button>
+					</Link>
 
-					<Dropdown items={externalLinkItems}>Links</Dropdown>
+					{externalLinkItems.length > 0 && <Dropdown items={externalLinkItems}>Links</Dropdown>}
 				</div>
 			</div>
 			<FilterBar key={`filterBar:${title}:${subtitle}`} iconBefore={<FilterIcon />} />

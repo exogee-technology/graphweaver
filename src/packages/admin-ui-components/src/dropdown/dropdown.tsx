@@ -53,15 +53,8 @@ export const Dropdown = ({
 			<>
 				{items.map((item) => (
 					<li key={item.id}>
-						{item.href.startsWith('/') ? (
-							<Link
-								to={{ pathname: item.href }}
-								target="_blank"
-								rel="noopener noreferrer"
-								onClick={handleOnClickItem(item)}
-							>
-								{item.name}
-							</Link>
+						{!item.href ? (
+							<span onClick={handleOnClickItem(item)}>{item.name}</span>
 						) : (
 							<a href={item.href} onClick={handleOnClickItem(item)}>
 								{item.name}
