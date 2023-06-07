@@ -3,13 +3,15 @@ import { build, buildSync } from 'esbuild';
 import rimrafCallback from 'rimraf';
 import { promisify } from 'util';
 import {
-	AdditionalFunctionConfig,
 	baseEsbuildConfig,
 	buildOutputPathFor,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
 	makeOptionalMikroOrmPackagesExternalPlugin,
 } from '../util';
+
+import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
+
 import CssModulesPlugin from 'esbuild-css-modules-plugin';
 import { buildSchemaSync } from 'type-graphql';
 
@@ -43,51 +45,42 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 		});
 	}
 
-	try {
-		// Are there any custom additional functions we need to build?
-		// If so, merge them in.
+	// Are there any custom additional functions we need to build?
+	// If so, merge them in.
 
-		const functions: AdditionalFunctionConfig[] = [
-			{
-				handlerPath: './src/backend/index',
-				urlPath: '/graphql/v1',
-				method: 'POST',
-			},
-		];
+	const functions: AdditionalFunctionOptions[] = [
+		{
+			handlerPath: './src/backend/index',
+			urlPath: '/graphql/v1',
+			method: 'POST',
+		},
+	];
 
-		try {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const config = require(path.join(process.cwd(), 'graphweaver-config'));
-			console.log(config);
-			functions.push(...config.backend.additionalFunctions);
+	const { additionalFunctions } = config().backend;
+	const { onResolveEsbuildConfiguration } = config().build;
+	functions.push(...additionalFunctions);
 
-			if (Array.isArray(config.backend.additionalFunctions)) {
-				for (const backendFunction of functions) {
-					// TODO: Better validation
-					if (backendFunction.handlerPath) {
-						console.log(
-							` - Building ${backendFunction.handlerPath} => ${path.relative(
-								process.cwd(),
-								buildOutputPathFor(backendFunction.handlerPath)
-							)}.js`
-						);
+	for (const backendFunction of functions) {
+		// TODO: Better validation
+		if (backendFunction.handlerPath) {
+			console.log(
+				` - Building ${backendFunction.handlerPath} => ${path.relative(
+					process.cwd(),
+					buildOutputPathFor(backendFunction.handlerPath)
+				)}.js`
+			);
 
-						await build({
-							...baseEsbuildConfig,
+			await build(
+				onResolveEsbuildConfiguration({
+					...baseEsbuildConfig,
 
-							plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
+					plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
 
-							entryPoints: [inputPathFor(backendFunction.handlerPath)],
-							outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
-						});
-					}
-				}
-			}
-		} catch (error) {
-			// It's perfectly fine if they don't have a graphweaver-config file, we just don't have anything to add.
+					entryPoints: [inputPathFor(backendFunction.handlerPath)],
+					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
+				})
+			);
 		}
-	} catch (error) {
-		console.error(error);
 	}
 
 	console.log();
@@ -109,7 +102,7 @@ export const buildBackendSync = (_: BackendBuildOptions) => {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const { backend } = require(path.join(process.cwd(), 'graphweaver-config'));
 
-	const functions: AdditionalFunctionConfig[] = [
+	const functions: AdditionalFunctionOptions[] = [
 		{
 			handlerPath: './src/backend/index',
 		},

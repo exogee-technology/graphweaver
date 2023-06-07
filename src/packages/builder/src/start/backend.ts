@@ -17,6 +17,8 @@ import {
 import '@serverless/utils/log-reporters/node';
 import { buildSchemaSync } from 'type-graphql';
 
+import { config } from '@exogee/graphweaver-config';
+
 const rimraf = promisify(rimrafCallback);
 
 const builtInBackendFunctions: Record<string, any> = {
@@ -43,6 +45,8 @@ export interface BackendStartOptions {
 export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	console.log('Starting Backend...');
 
+	const { additionalFunctions } = config().backend;
+	const { onResolveServerlessOfflineConfiguration, onResolveEsbuildConfiguration } = config().start;
 	// Get ready for our config.
 	const backendFunctions = { ...builtInBackendFunctions };
 
@@ -50,18 +54,21 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	await rimraf(path.join('.graphweaver', 'backend'));
 
 	// Put the index.js file in there.
-	await build({
-		...baseEsbuildConfig,
+	await build(
+		onResolveEsbuildConfiguration({
+			...baseEsbuildConfig,
 
-		// Anything in node_modules should be marked as external for running.
-		plugins: [makeAllPackagesExternalPlugin(), cssModulesPlugin()],
+			// Anything in node_modules should be marked as external for running.
+			plugins: [makeAllPackagesExternalPlugin(), cssModulesPlugin()],
 
-		entryPoints: ['./src/backend/index.ts'],
-		outfile: '.graphweaver/backend/index.js',
-	});
+			entryPoints: ['./src/backend/index.ts'],
+			outfile: '.graphweaver/backend/index.js',
+		})
+	);
 
 	// Read the exported resolvers and if we find them build the schema
 	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
+
 	if (resolvers) {
 		buildSchemaSync({
 			resolvers,
@@ -70,48 +77,41 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	}
 
 	// Are there any custom additional functions we need to build?
-	try {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const { backend } = require(path.join(process.cwd(), 'graphweaver-config'));
 
-		if (Array.isArray(backend.additionalFunctions)) {
-			for (const additionalFunction of backend.additionalFunctions as AdditionalFunctionConfig[]) {
-				if (
-					// TODO: Better validation
-					additionalFunction.handlerPath &&
-					additionalFunction.method &&
-					additionalFunction.urlPath
-				) {
-					await build({
-						...baseEsbuildConfig,
+	for (const additionalFunction of additionalFunctions) {
+		if (
+			// TODO: Better validation
+			additionalFunction.handlerPath &&
+			additionalFunction.method &&
+			additionalFunction.urlPath
+		) {
+			await build(
+				onResolveEsbuildConfiguration({
+					...baseEsbuildConfig,
 
-						entryPoints: [inputPathFor(additionalFunction.handlerPath)],
-						outfile: `${devOutputPathFor(additionalFunction.handlerPath)}.js`,
-					});
+					entryPoints: [inputPathFor(additionalFunction.handlerPath)],
+					outfile: `${devOutputPathFor(additionalFunction.handlerPath)}.js`,
+				})
+			);
 
-					backendFunctions[
-						`user-function:${additionalFunction.handlerPath}-${additionalFunction.method}-${additionalFunction.urlPath}`
-					] = {
-						handler: `${devOutputPathFor(additionalFunction.handlerPath)}.${
-							additionalFunction.handlerName || 'handler'
-						}`,
-						environment: dotenv.config().parsed,
-						events: [
-							{
-								http: {
-									path: additionalFunction.urlPath,
-									method: additionalFunction.method || 'ANY',
-									cors: additionalFunction.cors ?? true,
-								},
-							},
-						],
-					};
-				}
-			}
+			backendFunctions[
+				`user-function:${additionalFunction.handlerPath}-${additionalFunction.method}-${additionalFunction.urlPath}`
+			] = {
+				handler: `${devOutputPathFor(additionalFunction.handlerPath)}.${
+					additionalFunction.handlerName || 'handler'
+				}`,
+				environment: dotenv.config().parsed,
+				events: [
+					{
+						http: {
+							path: additionalFunction.urlPath,
+							method: additionalFunction.method || 'ANY',
+							cors: additionalFunction.cors ?? true,
+						},
+					},
+				],
+			};
 		}
-	} catch (error) {
-		// We don't actually care if this fails, we just won't load
-		// your custom functions.
 	}
 
 	// Sadly there's no easy way to trigger Serverless programatically:
@@ -131,9 +131,9 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	const logLevel = process.env.LOGGING_LEVEL || 'trace';
 	const SLS_DEBUG = process.env.SLS_DEBUG || (logLevel === 'trace' ? '*' : undefined);
 
+	// Shim in a kind of serverless config so the plugin kicks up and does its job.
 	const slsOffline = new ServerlessOffline(
-		// Shim in a kind of serverless config so the plugin kicks up and does its job.
-		{
+		onResolveServerlessOfflineConfiguration({
 			config: {
 				servicePath: '/',
 			},
@@ -160,7 +160,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 				getFunction: (key: string) => backendFunctions[key],
 				getAllEventsInFunction: (key: string) => backendFunctions[key].events,
 			},
-		},
+		}),
 		{
 			printOutput: true,
 			reloadHandler: true,
