@@ -1,14 +1,15 @@
 import path from 'path';
 import { build } from 'vite';
 import rimrafCallback from 'rimraf';
+import { config } from '@exogee/graphweaver-config';
 
 import { viteConfig } from '../vite-config';
 
 export interface FrontendBuildOptions {
 	adminUiBase?: string;
-} 
+}
 
-export const buildFrontend = async ({ adminUiBase } : FrontendBuildOptions) => {
+export const buildFrontend = async ({ adminUiBase }: FrontendBuildOptions) => {
 	// Clear the folder
 	rimrafCallback.sync(path.join('.graphweaver', 'admin-ui'));
 
@@ -18,8 +19,9 @@ export const buildFrontend = async ({ adminUiBase } : FrontendBuildOptions) => {
 		'..',
 		'dist'
 	);
-	const config = viteConfig({ rootDirectory, base: adminUiBase });
-	await build(config);
+
+	const { onResolveViteConfiguration } = config().build;
+	await build(onResolveViteConfiguration(viteConfig({ rootDirectory, base: adminUiBase })));
 
 	console.log('Build complete!');
 };

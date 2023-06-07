@@ -15,11 +15,14 @@
 	"source": "src/index.ts",
 	"dependencies": {
 		"@exogee/graphweaver-admin-ui": "workspace:*",
+		"@exogee/graphweaver-config": "workspace:*",
 		"@serverless/utils": "6.8.2",
 		"@vitejs/plugin-react": "2.2.0",
+		"class-validator": "0.14.0",
 		"dotenv": "16.0.3",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
+		"graphql": "16.6.0",
 		"rimraf": "3.0.2",
 		"rollup-plugin-visualizer": "5.8.3",
 		"serverless": "3.25.1",
@@ -28,9 +31,7 @@
 		"type-graphql": "2.0.0-beta.2",
 		"vite": "3.2.4",
 		"vite-plugin-graphweaver": "workspace:*",
-		"vite-plugin-svgr": "2.2.2",
-		"class-validator": "0.14.0",
-		"graphql": "16.6.0"
+		"vite-plugin-svgr": "2.2.2"
 	},
 	"devDependencies": {
 		"@types/node": "18.11.9",

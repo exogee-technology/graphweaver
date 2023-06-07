@@ -18,11 +18,15 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"devDependencies": {
+		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
 		"typescript": "5.0.2",
 		"vite": "3.2.4"
 	},
 	"peerDependencies": {
 		"vite": "3 || 4"
+	},
+	"dependencies": {
+		"@exogee/graphweaver-config": "workspace:*"
 	}
 }

@@ -1,6 +1,7 @@
 import path from 'path';
 import { createServer } from 'vite';
 import { viteConfig } from '../vite-config';
+import { config } from '@exogee/graphweaver-config';
 
 export interface StartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
@@ -9,6 +10,8 @@ export interface StartOptions {
 
 export const startFrontend = async ({ host, port }: StartOptions) => {
 	console.log('Starting Admin UI...');
+
+	const { onResolveViteConfiguration } = config().start;
 
 	// Generate a Vite Config
 	const rootDirectory = path.resolve(
@@ -21,14 +24,16 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 	const backendUrl = new URL('/', 'http://localhost');
 	backendUrl.port = String((port || 9000) + 1);
 
-	const config = viteConfig({
-		rootDirectory,
-		backendUrl: backendUrl.toString(),
-		host,
-		port,
-	});
-
-	const server = await createServer(config);
+	const server = await createServer(
+		onResolveViteConfiguration(
+			viteConfig({
+				rootDirectory,
+				backendUrl: backendUrl.toString(),
+				host,
+				port,
+			})
+		)
+	);
 
 	// Start vite.
 	await server.listen();
