@@ -33,7 +33,7 @@ export enum AdminUIFilterType {
 export interface EntityField {
 	name: string;
 	type: string;
-	relationshipType?: '1:1' | '1:n' | 'm:1' | 'm:n';
+	relationshipType?: 'MANY_TO_MANY' | 'MANY_TO_ONE' | 'ONE_TO_MANY' | 'ONE_TO_ONE';
 	filter?: {
 		type: AdminUIFilterType;
 	};

@@ -44,7 +44,7 @@ jobs:
         working-directory: src/packages/cli
         run: |
           pwd
-          pnpm test:create
+          pnpm test:init
 
       - name: Change to GW instance and install
         working-directory: src/packages/cli/test

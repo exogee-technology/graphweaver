@@ -9,21 +9,24 @@ import {
 	RelationshipField,
 } from '@exogee/graphweaver';
 import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import {
+	AccessControlList,
+	ApplyAccessControlList,
+	AuthorizationContext,
+} from '@exogee/graphweaver-auth';
 
 import { Task as OrmTask } from '../../entities';
 import { User } from '../user';
-import { Context } from '../../';
 import { Tag } from '../tag';
 
-type ReadHook = ReadHookParams<Task, Context>;
-type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, Context>;
-type DeleteHook = DeleteHookParams<Task, Context>;
+type ReadHook = ReadHookParams<Task, AuthorizationContext>;
+type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, AuthorizationContext>;
+type DeleteHook = DeleteHookParams<Task, AuthorizationContext>;
 
-const acl: AccessControlList<Task, Context> = {
+const acl: AccessControlList<Task, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		// Users can only perform operations on their own tasks
-		all: (context) => ({ user: { id: context.user.id } }),
+		all: (context) => ({ user: { id: context.user?.id } }),
 	},
 	DARK_SIDE: {
 		// Dark side user role can perform operations on any tasks
