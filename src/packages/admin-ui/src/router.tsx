@@ -18,7 +18,7 @@ const defaultRoutes = [
 	},
 	{
 		path: '/login',
-		element: <Login />,
+		element: <Login {...(customPages?.loginProps ?? {})} />,
 	},
 	{
 		path: '/:entity',
