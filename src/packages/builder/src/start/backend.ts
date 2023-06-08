@@ -157,7 +157,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 					},
 				},
 				getAllFunctions: () => Object.keys(backendFunctions),
-				getFunction: (key: string) => backendFunctions[key],
+				getFunction: (key: string) => ({ ...backendFunctions[key], name: key }),
 				getAllEventsInFunction: (key: string) => backendFunctions[key].events,
 			},
 		}),

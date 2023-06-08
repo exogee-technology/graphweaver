@@ -17,7 +17,7 @@ import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/m
 type EntityManager = PgEntityManager<PostgreSqlDriver> | MyEntityManager<MySqlDriver>;
 
 export interface ConnectionOptions {
-	mikroOrmConfig?: Options;
+	mikroOrmConfig?: Options | (() => Options | Promise<Options>);
 	secretArn?: string;
 	connectionManagerId?: string;
 }
@@ -131,38 +131,10 @@ class DatabaseImplementation {
 			dbName: 'graphweaver',
 		};
 
-		// If we've been passed a secret then we need to get all this
-		// info from Secrets Manager.
-		/* let secret = {};
-		const secretArn = connectionOptions?.secretArn || process.env.DATABASE_SECRET_ARN;
-
-		if (secretArn) {
-			const SecretsManager = new AWS.SecretsManager();
-			logger.trace('Fetching database connection info from Secrets Manager');
-
-			const result = await SecretsManager.getSecretValue({
-				SecretId: secretArn,
-			}).promise();
-
-			logger.trace('Got result from Secrets Manager');
-
-			if (result.SecretString) {
-				logger.trace('Parsing result');
-
-				// We only want certain properties from this secret.
-				const { host, port, username: user, password, dbname: dbName } = JSON.parse(
-					result.SecretString
-				) as {
-					host: string;
-					port: number;
-					username: string;
-					password: string;
-					dbname: string;
-				};
-
-				secret = { host, port, user, password, dbName };
-			}
-		} */
+		const resolvedMikroOrmConfig =
+			typeof connectionOptions?.mikroOrmConfig === 'function'
+				? await connectionOptions.mikroOrmConfig()
+				: connectionOptions?.mikroOrmConfig;
 
 		// And finally we can override all of this with environment variables if needed.
 		const environmentOverrides: Options = {
@@ -187,9 +159,8 @@ class DatabaseImplementation {
 		// Apply each in order so the correct value wins.
 		return {
 			...defaults,
-			//...filterUndefined(secret),
 			...filterUndefined(environmentOverrides),
-			...filterUndefined(connectionOptions?.mikroOrmConfig),
+			...filterUndefined(resolvedMikroOrmConfig),
 		};
 	};
 
@@ -206,6 +177,7 @@ class DatabaseImplementation {
 
 		logger.trace('Creating new ORM');
 		logger.trace('Getting connection info');
+
 		const params = await this.getConnectionInfo(connectionOptions);
 
 		logger.trace('Initialising ORM');
