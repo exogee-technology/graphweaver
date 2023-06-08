@@ -15,7 +15,7 @@ interface Form {
 }
 
 export interface LoginProps {
-	onLogin?(username: string, password: string): string; // Returns a token to place in Authorization header
+	onLogin?(username: string, password: string): string | Promise<string>; // Returns a token to place in Authorization header
 }
 
 export const Login = ({ onLogin }: LoginProps) => {
@@ -28,7 +28,7 @@ export const Login = ({ onLogin }: LoginProps) => {
 
 		try {
 			if (onLogin) {
-				token = onLogin(values.username, values.password);
+				token = await onLogin(values.username, values.password);
 			} else {
 				const { data } = await login({
 					variables: {
