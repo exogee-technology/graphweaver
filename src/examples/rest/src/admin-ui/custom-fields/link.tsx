@@ -1,6 +1,5 @@
 import { MouseEventHandler } from 'react';
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
-import { Button } from '@exogee/graphweaver-admin-ui-components';
 
 type Task = {
 	user: {
@@ -16,7 +15,6 @@ export const Link = (task: Task) => {
 	};
 	return (
 		<div style={{ cursor: 'pointer' }} onClick={handleClick}>
-			<Button />
 			<OpenIcon />
 		</div>
 	);
