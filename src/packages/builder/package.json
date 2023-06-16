@@ -17,7 +17,7 @@
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
 		"@serverless/utils": "6.8.2",
-		"@vitejs/plugin-react": "2.2.0",
+		"@vitejs/plugin-react": "3.1.0",
 		"class-validator": "0.14.0",
 		"dotenv": "16.0.3",
 		"esbuild": "0.15.5",
@@ -29,9 +29,9 @@
 		"serverless-dotenv-plugin": "4.0.2",
 		"serverless-offline": "12.0.2",
 		"type-graphql": "2.0.0-beta.2",
-		"vite": "3.2.4",
+		"vite": "4.3.9",
 		"vite-plugin-graphweaver": "workspace:*",
-		"vite-plugin-svgr": "2.2.2"
+		"vite-plugin-svgr": "3.2.0"
 	},
 	"devDependencies": {
 		"@types/node": "18.11.9",
