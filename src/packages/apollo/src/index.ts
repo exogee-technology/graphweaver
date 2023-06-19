@@ -17,6 +17,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
+import { exportTypes } from './codegen';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -95,6 +96,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 				authChecker: config.authChecker ?? (() => true),
 			});
 		}
+
+		// Export the schema types to typescript
+		exportTypes(schema);
 
 		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer<TContext>({
