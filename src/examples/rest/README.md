@@ -36,7 +36,7 @@ CREATE TABLE task_tags (
 
 -- Seed data for task table
 -- Seed data for task table
-INSERT INTO task (description, completed, user_id, Priority)
+INSERT INTO task (description, completed, user_id, priority)
 VALUES
   ('Go for a run', false, 1, 'HIGH'),
   ('Write a blog post', false, 2, 'MEDIUM'),
