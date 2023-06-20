@@ -2,22 +2,25 @@ import {
 	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
+	FieldsByTypeName,
 	GraphQLEntity,
 	Hook,
 	HookRegister,
 	ReadHookParams,
 	RelationshipField,
+	ResolveTree,
 } from '@exogee/graphweaver';
-import { Field, ID, ObjectType, Root } from 'type-graphql';
+import { Field, ID, ObjectType, Root, registerEnumType } from 'type-graphql';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
 
-import { Task as OrmTask } from '../../entities';
+import { Task as OrmTask, Priority } from '../../entities';
 import { User } from '../user';
 import { Tag } from '../tag';
+import { Roles } from '../..';
 
 type ReadHook = ReadHookParams<Task, AuthorizationContext>;
 type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, AuthorizationContext>;
@@ -32,6 +35,36 @@ const acl: AccessControlList<Task, AuthorizationContext> = {
 		// Dark side user role can perform operations on any tasks
 		all: true,
 	},
+};
+
+registerEnumType(Priority, {
+	name: 'Priority',
+	valuesConfig: {
+		HIGH: {
+			description: 'HIGH',
+		},
+		MEDIUM: {
+			description: 'MEDIUM',
+		},
+		LOW: {
+			description: 'LOW',
+		},
+	},
+});
+
+const preventLightSideAccess = (
+	authContext: AuthorizationContext,
+	requestedFields: ResolveTree | { [str: string]: ResolveTree },
+	preventedColumn: string
+) => {
+	if (
+		authContext.user?.roles.includes(Roles.LIGHT_SIDE) &&
+		Object.keys(requestedFields).includes(preventedColumn)
+	) {
+		throw new Error(
+			`Column Level Security: You don't have access to this field '${preventedColumn}'`
+		);
+	}
 };
 
 @ApplyAccessControlList(acl)
@@ -51,6 +84,9 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
 
+	@Field(() => Priority, { nullable: true })
+	priority?: Priority;
+
 	// The hooks below are not in use (and are not required when creating an entity)
 	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
@@ -63,6 +99,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	}
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.AFTER_READ)
