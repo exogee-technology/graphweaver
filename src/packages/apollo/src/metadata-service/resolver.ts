@@ -115,9 +115,11 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 				})),
 			}));
 
-			const params = (await hooks?.afterRead?.({ context, metadata: { entities, enums } })) ?? {
-				metadata: { entities, enums },
-			};
+			const params = hooks?.afterRead
+				? await hooks.afterRead({ context, metadata: { entities, enums } })
+				: {
+						metadata: { entities, enums },
+				  };
 
 			return params?.metadata;
 		}

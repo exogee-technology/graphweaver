@@ -22,7 +22,7 @@ export const afterRead = async (params: MetadataHookParams<AuthorizationContext>
 		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
 		requestedFieldNames.includes(preventedColumn)
 	) {
-		// Filter out the prevented column from within the entityName entity
+		// Filter out the prevented column from within the specificed entity
 		const filteredEntities = params.metadata?.entities?.map((entity) => {
 			if (entity.name === entityName) {
 				const filteredFields = entity.fields.filter((field) => field.name !== preventedColumn);
