@@ -44,7 +44,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 	class AdminUiMetadataResolver {
 		@Query(() => AdminUiMetadata, { name: '_graphweaver' })
 		public async getAdminUiMetadata<C extends BaseContext>(@Ctx() context: C) {
-			hooks?.beforeRead?.(context);
+			await hooks?.beforeRead?.({ context });
 			const metadata = getMetadataStorage();
 
 			// Build some lookups for more efficient data locating later.
@@ -115,10 +115,11 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 				})),
 			}));
 
-			return {
-				entities,
-				enums,
+			const params = (await hooks?.afterRead?.({ context, metadata: { entities, enums } })) ?? {
+				metadata: { entities, enums },
 			};
+
+			return params?.metadata;
 		}
 	}
 

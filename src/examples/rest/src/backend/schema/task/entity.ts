@@ -52,7 +52,7 @@ registerEnumType(Priority, {
 
 type TaskField = 'id' | 'description' | 'user' | 'tags' | 'priority';
 
-const preventLightSideAccess = (
+export const preventLightSideAccess = (
 	params: CreateOrUpdateHook | ReadHook,
 	requestedFields: ResolveTree | { [str: string]: ResolveTree },
 	preventedColumn: TaskField
