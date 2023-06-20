@@ -51,18 +51,23 @@ registerEnumType(Priority, {
 });
 
 const preventLightSideAccess = (
-	authContext: AuthorizationContext,
+	params: CreateOrUpdateHook | ReadHook,
 	requestedFields: ResolveTree | { [str: string]: ResolveTree },
 	preventedColumn: string
 ) => {
 	if (
-		authContext.user?.roles.includes(Roles.LIGHT_SIDE) &&
+		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
 		Object.keys(requestedFields).includes(preventedColumn)
 	) {
-		throw new Error(
-			`Column Level Security: You don't have access to this field '${preventedColumn}'`
-		);
+		// filter out the prevented column from the returned entities
+		const filteredEntities = params.entities?.map((entity) => {
+			const { [preventedColumn]: _, ...rest } = entity;
+			return rest;
+		});
+
+		return filteredEntities;
 	}
+	return params.entities;
 };
 
 @ApplyAccessControlList(acl)
@@ -89,42 +94,43 @@ export class Task extends GraphQLEntity<OrmTask> {
 	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		// filter the retured data object (entities) out priorty
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHook) {
-		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 }
