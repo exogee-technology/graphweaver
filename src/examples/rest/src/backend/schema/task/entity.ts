@@ -50,10 +50,12 @@ registerEnumType(Priority, {
 	},
 });
 
+type TaskField = 'id' | 'description' | 'user' | 'tags' | 'priority';
+
 const preventLightSideAccess = (
 	params: CreateOrUpdateHook | ReadHook,
 	requestedFields: ResolveTree | { [str: string]: ResolveTree },
-	preventedColumn: string
+	preventedColumn: TaskField
 ) => {
 	if (
 		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
