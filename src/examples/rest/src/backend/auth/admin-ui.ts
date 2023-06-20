@@ -10,29 +10,19 @@ export const beforeRead = async (params: MetadataHookParams<AuthorizationContext
 export const afterRead = async (params: MetadataHookParams<AuthorizationContext>) => {
 	// Ensure only logged in users can access the admin ui metadata
 	if (!params.context.token) throw new ForbiddenError('Forbidden');
-	// console.log('afterRead');
 
-	// console.log(params.metadata);
+	// Filter out the priority column from the Task entity if the user is on the light side
 	const requestedFieldNames = params.metadata?.entities
 		.find((entity) => entity.name === 'Task')
 		?.fields.map((field) => field.name);
-
-	console.log('requestedFields', requestedFieldNames);
 	const entityName = 'Task';
 	const preventedColumn = 'priority';
 
-	// Determine user role from context
 	if (
 		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
 		requestedFieldNames.includes(preventedColumn)
 	) {
-		console.log(params.metadata?.entities);
-		console.log('*******************\n');
-
-		console.log(params.metadata?.entities?.find((entity) => entity.name === entityName));
-		console.log('*******************\n');
-
-		// filter out the prevented column from within the entityName entity
+		// Filter out the prevented column from within the entityName entity
 		const filteredEntities = params.metadata?.entities?.map((entity) => {
 			if (entity.name === entityName) {
 				const filteredFields = entity.fields.filter((field) => field.name !== preventedColumn);
@@ -42,15 +32,6 @@ export const afterRead = async (params: MetadataHookParams<AuthorizationContext>
 				};
 			}
 			return entity;
-		});
-
-		console.log('filteredEntities', filteredEntities);
-		console.log({
-			...params,
-			metadata: {
-				...params.metadata,
-				entities: filteredEntities,
-			},
 		});
 
 		return {
