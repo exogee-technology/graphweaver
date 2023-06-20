@@ -1,8 +1,6 @@
 import {
-	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
-	FieldsByTypeName,
 	GraphQLEntity,
 	Hook,
 	HookRegister,
@@ -91,10 +89,12 @@ export class Task extends GraphQLEntity<OrmTask> {
 	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.BEFORE_READ)
@@ -104,22 +104,27 @@ export class Task extends GraphQLEntity<OrmTask> {
 	}
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHook) {
+		preventLightSideAccess(params.context, params.fields['Task'], 'priority');
 		return params;
 	}
 }
