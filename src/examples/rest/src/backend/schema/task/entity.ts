@@ -52,6 +52,8 @@ registerEnumType(Priority, {
 
 type TaskField = keyof InstanceType<typeof Task>;
 
+// As an example of column level security
+// This prevents users on the light side from accessing the priority column
 export const preventLightSideAccess = (
 	params: CreateOrUpdateHook | ReadHook,
 	requestedFields: ResolveTree | { [str: string]: ResolveTree },
@@ -61,7 +63,7 @@ export const preventLightSideAccess = (
 		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
 		Object.keys(requestedFields).includes(preventedColumn)
 	) {
-		// filter out the prevented column from the returned entities
+		// Filter out the prevented column from the returned entities
 		const filteredEntities = params.entities?.map((entity) => {
 			const { [preventedColumn]: _, ...rest } = entity;
 			return rest;
