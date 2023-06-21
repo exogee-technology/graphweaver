@@ -50,7 +50,7 @@ registerEnumType(Priority, {
 	},
 });
 
-type TaskField = 'id' | 'description' | 'user' | 'tags' | 'priority';
+type TaskField = keyof InstanceType<typeof Task>;
 
 export const preventLightSideAccess = (
 	params: CreateOrUpdateHook | ReadHook,
