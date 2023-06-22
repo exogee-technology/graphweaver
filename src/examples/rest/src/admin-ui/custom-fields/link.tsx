@@ -1,5 +1,5 @@
 import { MouseEventHandler } from 'react';
-import { Task, TasksDocument } from '../../types';
+import { Task, TasksDocument } from '../../__generated__/gql';
 import { useQuery } from '@apollo/client';
 
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
@@ -22,7 +22,7 @@ export const Link = (task: Task) => {
 	});
 
 	data.tasks.map((task) => {
-		task.tag;
+		task.user.id;
 	});
 
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {

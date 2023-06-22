@@ -16,7 +16,6 @@
 	"dependencies": {
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
-		"@graphql-codegen/add": "5.0.0",
 		"@graphql-codegen/client-preset": "4.0.1",
 		"@graphql-codegen/core": "4.0.0",
 		"@graphql-codegen/gql-tag-operations": "4.0.1",

@@ -423,12 +423,6 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
-      '@graphql-codegen/core':
-        specifier: 4.0.0
-        version: 4.0.0(graphql@16.6.0)
-      '@graphql-codegen/typescript':
-        specifier: 4.0.0
-        version: 4.0.0(graphql@16.6.0)
       '@graphql-tools/graphql-file-loader':
         specifier: 7.5.17
         version: 7.5.17(graphql@16.6.0)
@@ -518,9 +512,6 @@ importers:
       '@exogee/graphweaver-config':
         specifier: workspace:*
         version: link:../config
-      '@graphql-codegen/add':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.6.0)
       '@graphql-codegen/client-preset':
         specifier: 4.0.1
         version: 4.0.1(graphql@16.6.0)
@@ -4018,6 +4009,7 @@ packages:
       globby: 11.0.4
       mikro-orm: 5.4.2
       reflect-metadata: 0.1.13
+    dev: false
 
   /@mikro-orm/core@5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2):
     resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
@@ -4096,7 +4088,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)
+      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2)
       fs-extra: 10.1.0
       knex: 2.3.0(mysql2@2.3.3)
       mysql2: 2.3.3
@@ -4163,7 +4155,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)
+      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2)
       '@mikro-orm/knex': 5.4.2(@mikro-orm/core@5.4.2)(mysql2@2.3.3)
       mysql2: 2.3.3
     transitivePeerDependencies:
@@ -5327,6 +5319,7 @@ packages:
 
   /@types/node@14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
+    dev: true
 
   /@types/node@18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -5588,7 +5581,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.19.6(@babel/core@7.21.8)
       magic-string: 0.26.7
       react-refresh: 0.14.0
-      vite: 3.2.4(@types/node@18.11.9)
+      vite: 3.2.4
     transitivePeerDependencies:
       - supports-color
 
@@ -13331,7 +13324,7 @@ packages:
     dependencies:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 6.5.1
-      vite: 3.2.4(@types/node@14.14.10)
+      vite: 3.2.4
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -13367,7 +13360,6 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vite@3.2.4(@types/node@14.14.10):
     resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
@@ -13401,6 +13393,7 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /vite@3.2.4(@types/node@18.11.9):
     resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
@@ -13434,6 +13427,7 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /vite@3.2.4(@types/node@20.2.5):
     resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
