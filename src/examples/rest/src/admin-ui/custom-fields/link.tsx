@@ -1,7 +1,16 @@
 import { MouseEventHandler } from 'react';
-import { Task } from '@graphweaver';
+import { Task, TasksDocument } from '@graphweaver';
 
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
+
+const tasksQueryDocument = /* GraphQL */ `
+	query Tasks {
+		tasks {
+			id
+			description
+		}
+	}
+`;
 
 export const Link = (task: Task) => {
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
