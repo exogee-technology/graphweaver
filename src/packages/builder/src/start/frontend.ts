@@ -2,6 +2,7 @@ import path from 'path';
 import { createServer } from 'vite';
 import { viteConfig } from '../vite-config';
 import { config } from '@exogee/graphweaver-config';
+import { exportTypes } from '../codegen';
 
 export interface StartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
@@ -20,6 +21,8 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 		'..',
 		'dist'
 	);
+
+	await exportTypes();
 
 	const backendUrl = new URL('/', 'http://localhost');
 	backendUrl.port = String((port || 9000) + 1);

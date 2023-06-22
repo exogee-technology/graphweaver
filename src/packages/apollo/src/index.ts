@@ -1,13 +1,11 @@
+import fs from 'fs';
+import path from 'path';
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
-
-import path from 'path';
-import { loadSchemaSync } from '@graphql-tools/load';
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
-
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
+
 import {
 	ClearDataLoaderCache,
 	LogErrors,
@@ -77,25 +75,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
-		let schema: any;
-		try {
-			logger.trace(`Graphweaver loading schema from file`);
-			schema = loadSchemaSync(path.join(process.cwd(), './.graphweaver/backend/schema.gql'), {
-				loaders: [new GraphQLFileLoader()],
-			});
-		} catch {
-			// continue we can build the schema if the load failed
-		}
-
-		if (!schema) {
-			logger.trace(
-				`Graphweaver building schema from scratch this will slow down the server startup time`
-			);
-			schema = buildSchemaSync({
-				resolvers,
-				authChecker: config.authChecker ?? (() => true),
-			});
-		}
+		const emitSchemaFile = path.join(process.cwd(), './.graphweaver/backend/schema.gql');
+		const schema = buildSchemaSync({
+			resolvers,
+			authChecker: config.authChecker ?? (() => true),
+			emitSchemaFile,
+		});
 
 		// Export the schema types to typescript
 		exportTypes(schema);
