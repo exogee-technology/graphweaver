@@ -17,24 +17,25 @@
 		"start": "graphweaver start"
 	},
 	"dependencies": {
+		"@apollo/client": "3.7.1",
 		"@apollo/server": "4.2.2",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
-		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
-		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",
-		"react": "18.2.0",
+		"class-validator": "0.14.0",
 		"dotenv": "16.0.0",
 		"got": "11.8.5",
+		"graphql": "16.6.0",
+		"graphweaver": "workspace:*",
+		"react": "18.2.0",
 		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.2",
-		"class-validator": "0.14.0",
-		"graphql": "16.6.0"
+		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@types/node": "14.14.10",

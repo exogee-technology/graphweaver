@@ -32,7 +32,7 @@ export const exportTypes = async () => {
 		[`typed-document-node`]: typedDocumentNodePlugin,
 		typescript: typescriptPlugin,
 		[`typescript-operations`]: typescriptOperationPlugin,
-		// [`gen-dts`]: gqlTagPlugin,
+		[`gen-dts`]: gqlTagPlugin,
 	};
 
 	const files = Object.entries(plugins).map(async ([key, plugin]) => {
@@ -40,9 +40,13 @@ export const exportTypes = async () => {
 			schema: printedSchema,
 			documents: loadedDocuments,
 			plugins: [
-				{
-					[key]: {},
-				},
+				...(key === 'gen-dts'
+					? []
+					: [
+							{
+								[key]: {},
+							},
+					  ]),
 			],
 			pluginMap: {
 				[key]: plugin,

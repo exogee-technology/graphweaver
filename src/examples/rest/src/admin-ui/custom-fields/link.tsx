@@ -1,5 +1,6 @@
 import { MouseEventHandler } from 'react';
-import { Task, TasksDocument } from '@graphweaver';
+import { Task, TasksDocument } from '../../types';
+import { useQuery } from '@apollo/client';
 
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 
@@ -8,11 +9,22 @@ const tasksQueryDocument = /* GraphQL */ `
 		tasks {
 			id
 			description
+			user {
+				id
+			}
 		}
 	}
 `;
 
 export const Link = (task: Task) => {
+	const { data, error, loading } = useQuery(TasksDocument, {
+		fetchPolicy: 'network-only',
+	});
+
+	data.tasks.map((task) => {
+		task.tag;
+	});
+
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
