@@ -92,6 +92,9 @@ importers:
 
   examples/rest:
     dependencies:
+      '@apollo/client':
+        specifier: 3.7.1
+        version: 3.7.1(graphql@16.6.0)(react@18.2.0)
       '@apollo/server':
         specifier: 4.2.2
         version: 4.2.2(graphql@16.6.0)
@@ -979,6 +982,41 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      response-iterator: 0.2.6
+      symbol-observable: 4.0.0
+      ts-invariant: 0.10.3
+      tslib: 2.5.2
+      zen-observable-ts: 1.2.5
+    dev: false
+
+  /@apollo/client@3.7.1(graphql@16.6.0)(react@18.2.0):
+    resolution: {integrity: sha512-xu5M/l7p9gT9Fx7nF3AQivp0XukjB7TM7tOd5wifIpI8RskYveL4I+rpTijzWrnqCPZabkbzJKH7WEAKdctt9w==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+      graphql-ws: ^5.5.5
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+    peerDependenciesMeta:
+      graphql-ws:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      subscriptions-transport-ws:
+        optional: true
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
+      '@wry/context': 0.7.3
+      '@wry/equality': 0.5.6
+      '@wry/trie': 0.3.2
+      graphql: 16.6.0
+      graphql-tag: 2.12.6(graphql@16.6.0)
+      hoist-non-react-statics: 3.3.2
+      optimism: 0.16.2
+      prop-types: 15.8.1
+      react: 18.2.0
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -3980,7 +4018,6 @@ packages:
       globby: 11.0.4
       mikro-orm: 5.4.2
       reflect-metadata: 0.1.13
-    dev: false
 
   /@mikro-orm/core@5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2):
     resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
@@ -4059,7 +4096,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2)
+      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)
       fs-extra: 10.1.0
       knex: 2.3.0(mysql2@2.3.3)
       mysql2: 2.3.3
@@ -4126,7 +4163,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2)
+      '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)
       '@mikro-orm/knex': 5.4.2(@mikro-orm/core@5.4.2)(mysql2@2.3.3)
       mysql2: 2.3.3
     transitivePeerDependencies:
@@ -5290,7 +5327,6 @@ packages:
 
   /@types/node@14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
-    dev: true
 
   /@types/node@18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -13295,7 +13331,7 @@ packages:
     dependencies:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 6.5.1
-      vite: 3.2.4(@types/node@18.11.9)
+      vite: 3.2.4(@types/node@14.14.10)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -13365,7 +13401,6 @@ packages:
       rollup: 2.79.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vite@3.2.4(@types/node@18.11.9):
     resolution: {integrity: sha512-Z2X6SRAffOUYTa+sLy3NQ7nlHFU100xwanq1WDwqaiFiCe+25zdxP1TfCS5ojPV2oDDcXudHIoPnI1Z/66B7Yw==}
