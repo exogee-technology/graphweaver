@@ -4,6 +4,7 @@ import { executeCodegen } from '@graphql-codegen/cli';
 import { createDirectoryIfNotExists } from '../util';
 import { patchFile } from './patch';
 
+const backendEndpoint = 'http://localhost:9001';
 const outputDirectory = './src/__generated__/';
 const outputPath = path.join(process.cwd(), outputDirectory);
 
@@ -11,7 +12,7 @@ export const exportTypes = async () => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
-			schema: 'http://localhost:9001',
+			schema: backendEndpoint,
 			documents: ['./src/**/*.tsx', './src/**/*.ts'],
 			generates: {
 				[outputDirectory]: {
