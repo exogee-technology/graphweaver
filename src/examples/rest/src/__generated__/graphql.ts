@@ -1,20 +1,4 @@
 /* eslint-disable */
-import type { DocumentNode as GqlDocumentNode } from 'graphql';
-
-interface DocumentTypeDecoration<TResult, TVariables> {
-	/**
-	 * This type is used to ensure that the variables you pass in to the query are assignable to Variables
-	 * and that the Result is assignable to whatever you pass your result to. The method is never actually
-	 * implemented, but the type is valid because we list it as optional
-	 */
-	__apiType?: (variables: TVariables) => TResult;
-}
-
-interface DocumentNode<TResult = { [key: string]: any }, TVariables = { [key: string]: any }>
-	extends GqlDocumentNode,
-		DocumentTypeDecoration<TResult, TVariables> {}
-		
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -457,11 +441,3 @@ export type UsersPaginationInput = {
 export type UsersUpdateManyInput = {
   data: Array<UserCreateOrUpdateInput>;
 };
-
-export type TaskQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', id: string, description: string, user?: { __typename?: 'User', id: string, name: string } | null } | null };
-
-
-export const TaskDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Task"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"task"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"StringValue","value":"2","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<TaskQuery, TaskQueryVariables>;

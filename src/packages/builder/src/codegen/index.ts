@@ -13,6 +13,7 @@ export const codeGenerator = async () => {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
 			schema: backendEndpoint,
+			ignoreNoDocuments: true,
 			documents: ['./src/**/*.tsx', './src/**/*.ts'],
 			generates: {
 				[outputDirectory]: {
