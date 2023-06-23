@@ -198,6 +198,15 @@ export type MutationUpdateUsersArgs = {
   input: UsersUpdateManyInput;
 };
 
+export enum Priority {
+  /** HIGH */
+  High = 'HIGH',
+  /** LOW */
+  Low = 'LOW',
+  /** MEDIUM */
+  Medium = 'MEDIUM'
+}
+
 export type Query = {
   __typename?: 'Query';
   _graphweaver: AdminUiMetadata;
@@ -314,6 +323,7 @@ export type Task = {
   __typename?: 'Task';
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  priority?: Maybe<Priority>;
   tags?: Maybe<Array<Tag>>;
   user?: Maybe<User>;
 };
@@ -321,12 +331,14 @@ export type Task = {
 export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  priority?: InputMaybe<Priority>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
+  priority?: InputMaybe<Priority>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
@@ -357,6 +369,12 @@ export type TasksListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['ID']['input']>;
   id_null?: InputMaybe<Scalars['ID']['input']>;
+  priority?: InputMaybe<Priority>;
+  priority_in?: InputMaybe<Array<Priority>>;
+  priority_ne?: InputMaybe<Priority>;
+  priority_nin?: InputMaybe<Array<Priority>>;
+  priority_notnull?: InputMaybe<Priority>;
+  priority_null?: InputMaybe<Priority>;
   tags?: InputMaybe<TagsListFilter>;
   user?: InputMaybe<UsersListFilter>;
 };
@@ -364,6 +382,7 @@ export type TasksListFilter = {
 export type TasksOrderByInput = {
   description?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
+  priority?: InputMaybe<Sort>;
 };
 
 export type TasksPaginationInput = {

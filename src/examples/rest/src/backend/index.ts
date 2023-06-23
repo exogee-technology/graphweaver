@@ -25,7 +25,7 @@ import { myConnection } from './database';
 
 // Auth Functions
 import { addUserToContext } from './auth/context';
-import { beforeRead } from './auth/admin-ui';
+import { beforeRead, afterRead } from './auth/admin-ui';
 
 export enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
@@ -48,6 +48,7 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 		enabled: true,
 		hooks: {
 			beforeRead,
+			afterRead,
 		},
 	},
 });
