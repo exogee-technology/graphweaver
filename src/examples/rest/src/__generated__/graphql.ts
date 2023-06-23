@@ -102,6 +102,102 @@ export type Mutation = {
   updateUsers: Array<User>;
 };
 
+
+export type MutationCreateOrUpdateTagsArgs = {
+  input: TagsCreateOrUpdateManyInput;
+};
+
+
+export type MutationCreateOrUpdateTasksArgs = {
+  input: TasksCreateOrUpdateManyInput;
+};
+
+
+export type MutationCreateOrUpdateUsersArgs = {
+  input: UsersCreateOrUpdateManyInput;
+};
+
+
+export type MutationCreateTagArgs = {
+  data: TagInsertInput;
+};
+
+
+export type MutationCreateTagsArgs = {
+  input: TagsInsertManyInput;
+};
+
+
+export type MutationCreateTaskArgs = {
+  data: TaskInsertInput;
+};
+
+
+export type MutationCreateTasksArgs = {
+  input: TasksInsertManyInput;
+};
+
+
+export type MutationCreateUserArgs = {
+  data: UserInsertInput;
+};
+
+
+export type MutationCreateUsersArgs = {
+  input: UsersInsertManyInput;
+};
+
+
+export type MutationDeleteTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteTaskArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateTagArgs = {
+  data: TagCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateTagsArgs = {
+  input: TagsUpdateManyInput;
+};
+
+
+export type MutationUpdateTaskArgs = {
+  data: TaskCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateTasksArgs = {
+  input: TasksUpdateManyInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UserCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateUsersArgs = {
+  input: UsersUpdateManyInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   _graphweaver: AdminUiMetadata;
@@ -113,11 +209,105 @@ export type Query = {
   users: Array<User>;
 };
 
+
+export type QueryTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTagsArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+  pagination?: InputMaybe<TagsPaginationInput>;
+};
+
+
+export type QueryTaskArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+  pagination?: InputMaybe<TasksPaginationInput>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryUsersArgs = {
+  filter?: InputMaybe<UsersListFilter>;
+  pagination?: InputMaybe<UsersPaginationInput>;
+};
+
+export enum Sort {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
 export type Tag = {
   __typename?: 'Tag';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   tasks?: Maybe<Array<Task>>;
+};
+
+export type TagCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
+};
+
+export type TagInsertInput = {
+  name: Scalars['String']['input'];
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
+};
+
+export type TagsCreateOrUpdateManyInput = {
+  data: Array<TagCreateOrUpdateInput>;
+};
+
+export type TagsInsertManyInput = {
+  data: Array<TagInsertInput>;
+};
+
+export type TagsListFilter = {
+  _and?: InputMaybe<Array<TagsListFilter>>;
+  _not?: InputMaybe<TagsListFilter>;
+  _or?: InputMaybe<Array<TagsListFilter>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TasksListFilter>;
+};
+
+export type TagsOrderByInput = {
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  tasks?: InputMaybe<Sort>;
+};
+
+export type TagsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TagsOrderByInput>;
+};
+
+export type TagsUpdateManyInput = {
+  data: Array<TagCreateOrUpdateInput>;
 };
 
 export type Task = {
@@ -126,6 +316,64 @@ export type Task = {
   id: Scalars['ID']['output'];
   tags?: Maybe<Array<Tag>>;
   user?: Maybe<User>;
+};
+
+export type TaskCreateOrUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
+};
+
+export type TaskInsertInput = {
+  description: Scalars['String']['input'];
+  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
+};
+
+export type TasksCreateOrUpdateManyInput = {
+  data: Array<TaskCreateOrUpdateInput>;
+};
+
+export type TasksInsertManyInput = {
+  data: Array<TaskInsertInput>;
+};
+
+export type TasksListFilter = {
+  _and?: InputMaybe<Array<TasksListFilter>>;
+  _not?: InputMaybe<TasksListFilter>;
+  _or?: InputMaybe<Array<TasksListFilter>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['String']['input']>;
+  description_null?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  tags?: InputMaybe<TagsListFilter>;
+  user?: InputMaybe<UsersListFilter>;
+};
+
+export type TasksOrderByInput = {
+  description?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+};
+
+export type TasksPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TasksOrderByInput>;
+};
+
+export type TasksUpdateManyInput = {
+  data: Array<TaskCreateOrUpdateInput>;
 };
 
 export type Token = {
@@ -139,10 +387,62 @@ export type User = {
   name: Scalars['String']['output'];
 };
 
-export type TasksQueryVariables = Exact<{ [key: string]: never; }>;
+export type UserCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserInsertInput = {
+  name: Scalars['String']['input'];
+};
+
+export type UsersCreateOrUpdateManyInput = {
+  data: Array<UserCreateOrUpdateInput>;
+};
+
+export type UsersInsertManyInput = {
+  data: Array<UserInsertInput>;
+};
+
+export type UsersListFilter = {
+  _and?: InputMaybe<Array<UsersListFilter>>;
+  _not?: InputMaybe<UsersListFilter>;
+  _or?: InputMaybe<Array<UsersListFilter>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UsersOrderByInput = {
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+};
+
+export type UsersPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<UsersOrderByInput>;
+};
+
+export type UsersUpdateManyInput = {
+  data: Array<UserCreateOrUpdateInput>;
+};
+
+export type TaskQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, description: string, user?: { __typename?: 'User', id: string, name: string } | null }> };
+export type TaskQuery = { __typename?: 'Query', task?: { __typename?: 'Task', id: string, description: string, user?: { __typename?: 'User', id: string, name: string } | null } | null };
 
 
-export const TasksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<TasksQuery, TasksQueryVariables>;
+export const TaskDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Task"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"task"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"StringValue","value":"2","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<TaskQuery, TaskQueryVariables>;

@@ -1,12 +1,12 @@
 import { MouseEventHandler } from 'react';
 import { useQuery } from '@apollo/client';
 
-import { Task, TasksDocument, graphql } from '../../__generated__';
+import { Task, TaskDocument, graphql } from '../../__generated__';
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 
 graphql(`
-	query Tasks {
-		tasks {
+	query Task {
+		task(id: "2") {
 			id
 			description
 			user {
@@ -18,13 +18,11 @@ graphql(`
 `);
 
 export const Link = (task: Task) => {
-	const { data } = useQuery(TasksDocument, {
+	const { data } = useQuery(TaskDocument, {
 		fetchPolicy: 'network-only',
 	});
 
-	data.tasks.map((task) => {
-		task.user.name;
-	});
+	data.task.user.name;
 
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
 		e.preventDefault();

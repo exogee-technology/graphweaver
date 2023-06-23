@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { printSchema } from 'graphql';
 import { executeCodegen } from '@graphql-codegen/cli';
-import { buildSchemaSync } from 'type-graphql';
 import { createDirectoryIfNotExists } from '../util';
 import { patchFile } from './patch';
 
@@ -10,19 +8,10 @@ const outputDirectory = './src/__generated__/';
 const outputPath = path.join(process.cwd(), outputDirectory);
 
 export const exportTypes = async () => {
-	// Read the exported resolvers and if we find them build the schema
-	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
-
-	// We can only build the types if we have access to the resolvers
-	if (!resolvers) return;
-
 	try {
-		const schema = buildSchemaSync({ resolvers });
-		const printedSchema = printSchema(schema);
-
 		const files = await executeCodegen({
 			cwd: process.cwd(),
-			schema: printedSchema,
+			schema: 'http://localhost:9001',
 			documents: ['./src/**/*.tsx', './src/**/*.ts'],
 			generates: {
 				[outputDirectory]: {
