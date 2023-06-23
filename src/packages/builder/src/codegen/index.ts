@@ -8,7 +8,7 @@ const backendEndpoint = 'http://localhost:9001';
 const outputDirectory = './src/__generated__/';
 const outputPath = path.join(process.cwd(), outputDirectory);
 
-export const exportTypes = async () => {
+export const codeGenerator = async () => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),

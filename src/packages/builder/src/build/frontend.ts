@@ -4,7 +4,7 @@ import rimrafCallback from 'rimraf';
 import { config } from '@exogee/graphweaver-config';
 
 import { viteConfig } from '../vite-config';
-import { exportTypes } from '../codegen';
+import { codeGenerator } from '../codegen';
 
 export interface FrontendBuildOptions {
 	adminUiBase?: string;
@@ -21,7 +21,8 @@ export const buildFrontend = async ({ adminUiBase }: FrontendBuildOptions) => {
 		'dist'
 	);
 
-	await exportTypes();
+	// We can now generate the front end functions and types
+	await codeGenerator();
 
 	const { onResolveViteConfiguration } = config().build;
 	await build(onResolveViteConfiguration(viteConfig({ rootDirectory, base: adminUiBase })));
