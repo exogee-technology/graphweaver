@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import type { DocumentNode as GqlDocumentNode } from 'graphql';
 
 interface DocumentTypeDecoration<TResult, TVariables> {
@@ -11,23 +10,19 @@ interface DocumentTypeDecoration<TResult, TVariables> {
 	__apiType?: (variables: TVariables) => TResult;
 }
 
-interface DocumentNode<TResult = { [key: string]: any }, TVariables = { [key: string]: any }>
+interface TypedDocumentNode<TResult = { [key: string]: any }, TVariables = { [key: string]: any }>
 	extends GqlDocumentNode,
 		DocumentTypeDecoration<TResult, TVariables> {}
-		
+
 /**
  * Helper for extracting a TypeScript type for operation result from a TypedDocumentNode and TypedDocumentString.
  * @example
  * const myQuery = { ... }; // TypedDocumentNode<R, V>
  * type ResultType = ResultOf<typeof myQuery>; // Now it's R
  */
-type ResultOf<T> = T extends DocumentTypeDecoration<
-  infer ResultType,
-  infer VariablesType
->
-  ? ResultType
-  : never;
-
+type ResultOf<T> = T extends DocumentTypeDecoration<infer ResultType, infer VariablesType>
+	? ResultType
+	: never;
 import { FragmentDefinitionNode } from 'graphql';
 import { Incremental } from './graphql';
 
