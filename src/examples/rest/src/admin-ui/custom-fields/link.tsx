@@ -1,7 +1,7 @@
 import { MouseEventHandler } from 'react';
-import { Task, TasksDocument, graphql } from '../../__generated__';
 import { useQuery } from '@apollo/client';
 
+import { Task, TasksDocument, graphql } from '../../__generated__';
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 
 graphql(`
