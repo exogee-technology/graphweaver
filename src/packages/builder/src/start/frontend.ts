@@ -10,8 +10,6 @@ export interface StartOptions {
 }
 
 export const startFrontend = async ({ host, port }: StartOptions) => {
-	console.log('Starting Admin UI...');
-
 	const { onResolveViteConfiguration } = config().start;
 
 	// Generate a Vite Config
@@ -42,8 +40,11 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 	await server.listen();
 
 	console.log(
-		`🚀 Admin UI: ${
+		`
+Admin UI: ${
 			server.resolvedUrls?.local?.[0] || server.resolvedUrls?.network?.[0] || 'Could not get URL'
-		}`
+		} 🚀
+
+`
 	);
 };

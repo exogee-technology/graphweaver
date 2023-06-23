@@ -169,6 +169,4 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	console.log(`Backend Log Level: ${logLevel}`);
 	await slsOffline.start();
-
-	console.log(`🚀 Backend: ${slsOffline.internals().getApiGatewayServer().info.uri}`);
 };
