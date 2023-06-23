@@ -36,6 +36,12 @@ export const viteConfig = ({
 		},
 		optimizeDeps: {
 			include: ['react-dom/client', 'react-dom'],
+			exclude: [
+				// This can't be bundled because it's virtual and supplied by
+				// our vite plugin directly.
+				'virtual:graphweaver-user-supplied-custom-pages',
+				'virtual:graphweaver-user-supplied-custom-fields',
+			],
 		},
 		plugins: [svgr(), react(), graphweaver()],
 	};

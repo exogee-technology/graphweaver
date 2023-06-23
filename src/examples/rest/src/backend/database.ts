@@ -8,8 +8,8 @@ export const myConnection = {
 		entities: [Task, Tag],
 		driver: MySqlDriver,
 		dbName: 'todo_app',
-		user: 'root',
-		password: 'password',
+		user: process.env.MYSQL_USERNAME,
+		password: process.env.MYSQL_PASSWORD,
 		port: 3306,
 	},
 };
