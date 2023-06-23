@@ -16,6 +16,7 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		scripts: {
 			build: 'graphweaver build',
 			start: 'graphweaver start',
+			watch: 'graphweaver watch',
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,

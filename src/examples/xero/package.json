@@ -9,6 +9,7 @@
 		"gw": "graphweaver",
 		"prettier": "prettier --write src/**/*.ts",
 		"start": "graphweaver start",
+		"watch": "graphweaver watch",
 		"start:backend": "graphweaver start backend",
 		"version": "npm version --no-git-tag-version"
 	},

@@ -14,7 +14,8 @@
 	],
 	"scripts": {
 		"build": "graphweaver build",
-		"start": "graphweaver start"
+		"start": "graphweaver start",
+		"watch": "graphweaver watch"
 	},
 	"dependencies": {
 		"@apollo/client": "3.7.1",
