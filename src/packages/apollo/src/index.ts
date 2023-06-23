@@ -74,11 +74,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
-		const emitSchemaFile = path.join(process.cwd(), './.graphweaver/backend/schema.gql');
 		const schema = buildSchemaSync({
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),
-			emitSchemaFile,
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
