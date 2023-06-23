@@ -105,4 +105,34 @@ yargs
 			}
 		},
 	})
+	.command({
+		command: ['watch [environment]', 'w [environment]'],
+		describe: 'Runs a development version of the project locally and watches files for changes.',
+		builder: (yargs) =>
+			yargs
+				.positional('environment', {
+					type: 'string',
+					choices: ['backend', 'frontend', 'all'],
+					default: 'all',
+					describe: 'Choose whether you want to run the backend, frontend, or both.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify a host to listen on e.g. --host 0.0.0.0',
+				})
+				.option('port', {
+					type: 'number',
+					default: 9000,
+					describe:
+						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				}),
+		handler: async ({ environment, ...args }) => {
+			if (environment === 'backend' || environment === 'all') {
+				await startBackend(args as any);
+			}
+			if (environment === 'frontend' || environment === 'all') {
+				await startFrontend(args as StartOptions);
+			}
+		},
+	})
 	.parse();
