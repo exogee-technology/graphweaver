@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { codegen } from '@graphql-codegen/core';
 import { printSchema, parse, GraphQLError } from 'graphql';
-import { loadSchemaSync, loadDocuments } from '@graphql-tools/load';
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import { loadDocuments } from '@graphql-tools/load';
 import { CodeFileLoader } from '@graphql-tools/code-file-loader';
 import * as gqlTagPlugin from '@graphql-codegen/gql-tag-operations';
 import * as typescriptPlugin from '@graphql-codegen/typescript';
@@ -12,6 +11,7 @@ import * as typedDocumentNodePlugin from '@graphql-codegen/typed-document-node';
 
 import { patch } from './patch';
 import { createDirectoryIfNotExists } from '../util';
+import { buildSchemaSync } from 'type-graphql';
 
 // Location of the apps schema file
 const schemaFile = path.join(process.cwd(), './.graphweaver/backend/schema.gql');
@@ -25,16 +25,19 @@ const outputDirectory = path.join(process.cwd(), './src/__generated__');
 const filename = `${outputDirectory}/gql.ts`;
 
 export const exportTypes = async () => {
+	// Read the exported resolvers and if we find them build the schema
+	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
+
+	// We can only build the types if we have access to the resolvers
+	if (!resolvers) return;
+
 	try {
+		const schema = buildSchemaSync({ resolvers });
+		const printedSchema = parse(printSchema(schema));
+
 		const loadedDocuments = await loadDocuments([tsxDocumentLocation, tsDocumentLocation], {
 			loaders: [new CodeFileLoader()],
 		});
-
-		const schema = loadSchemaSync(schemaFile, {
-			loaders: [new GraphQLFileLoader()],
-		});
-
-		const printedSchema = parse(printSchema(schema));
 
 		const plugins = {
 			[`typed-document-node`]: typedDocumentNodePlugin,
@@ -74,10 +77,8 @@ export const exportTypes = async () => {
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {
 			// do nothing for now and silently fail
-		} else if (err instanceof GraphQLError) {
-			console.log(err.message + `\n in ${err.source?.name}`);
 		} else {
-			throw err;
+			console.log(err.message + `\n in ${err.source?.name}`);
 		}
 	}
 };

@@ -615,6 +615,9 @@ importers:
       '@octokit/rest':
         specifier: 19.0.11
         version: 19.0.11
+      chokidar:
+        specifier: 3.5.3
+        version: 3.5.3
       esbuild:
         specifier: 0.15.5
         version: 0.15.5

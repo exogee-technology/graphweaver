@@ -9,7 +9,7 @@ const tasksQueryDocument = /* GraphQL */ `
 		tasks {
 			id
 			description
-			user {
+			tags {
 				id
 			}
 		}
@@ -17,12 +17,12 @@ const tasksQueryDocument = /* GraphQL */ `
 `;
 
 export const Link = (task: Task) => {
-	const { data, error, loading } = useQuery(TasksDocument, {
+	const { data } = useQuery(TasksDocument, {
 		fetchPolicy: 'network-only',
 	});
 
 	data.tasks.map((task) => {
-		task.user.id;
+		task.tags.length;
 	});
 
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {

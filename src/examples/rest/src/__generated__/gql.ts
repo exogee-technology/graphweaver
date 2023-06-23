@@ -15,7 +15,7 @@ export interface DocumentNode<TResult = { [key: string]: any }, TVariables = { [
 	extends GqlDocumentNode,
 		DocumentTypeDecoration<TResult, TVariables> {}
 
-export const TasksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<TasksQuery, TasksQueryVariables>;
+export const TasksDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]} as unknown as DocumentNode<TasksQuery, TasksQueryVariables>;
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -32,33 +32,59 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Query = {
+  __typename?: 'Query';
+  users: Array<User>;
+  user?: Maybe<User>;
+  tags: Array<Tag>;
+  tag?: Maybe<Tag>;
+  tasks: Array<Task>;
+  task?: Maybe<Task>;
+  _graphweaver: AdminUiMetadata;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type Tag = {
+  __typename?: 'Tag';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  tasks?: Maybe<Array<Task>>;
+};
+
+export type Task = {
+  __typename?: 'Task';
+  id: Scalars['ID']['output'];
+  description: Scalars['String']['output'];
+  user?: Maybe<User>;
+  tags?: Maybe<Array<Tag>>;
+};
+
+export type AdminUiMetadata = {
+  __typename?: 'AdminUiMetadata';
+  entities: Array<AdminUiEntityMetadata>;
+  enums: Array<AdminUiEnumMetadata>;
+};
+
 export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
+  name: Scalars['String']['output'];
   backendId?: Maybe<Scalars['String']['output']>;
-  fields: Array<AdminUiFieldMetadata>;
-  name: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
-};
-
-export type AdminUiEnumMetadata = {
-  __typename?: 'AdminUiEnumMetadata';
-  name: Scalars['String']['output'];
-  values: Array<AdminUiEnumValueMetadata>;
-};
-
-export type AdminUiEnumValueMetadata = {
-  __typename?: 'AdminUiEnumValueMetadata';
-  name: Scalars['String']['output'];
-  value: Scalars['String']['output'];
+  fields: Array<AdminUiFieldMetadata>;
 };
 
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
-  filter?: Maybe<AdminUiFilterMetadata>;
   name: Scalars['String']['output'];
-  relatedEntity?: Maybe<Scalars['String']['output']>;
-  relationshipType?: Maybe<Scalars['String']['output']>;
   type: Scalars['String']['output'];
+  relationshipType?: Maybe<Scalars['String']['output']>;
+  relatedEntity?: Maybe<Scalars['String']['output']>;
+  filter?: Maybe<AdminUiFilterMetadata>;
 };
 
 export type AdminUiFilterMetadata = {
@@ -74,59 +100,39 @@ export enum AdminUiFilterType {
   Text = 'TEXT'
 }
 
-export type AdminUiMetadata = {
-  __typename?: 'AdminUiMetadata';
-  entities: Array<AdminUiEntityMetadata>;
-  enums: Array<AdminUiEnumMetadata>;
+export type AdminUiEnumMetadata = {
+  __typename?: 'AdminUiEnumMetadata';
+  name: Scalars['String']['output'];
+  values: Array<AdminUiEnumValueMetadata>;
+};
+
+export type AdminUiEnumValueMetadata = {
+  __typename?: 'AdminUiEnumValueMetadata';
+  name: Scalars['String']['output'];
+  value: Scalars['String']['output'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createOrUpdateTags: Array<Tag>;
-  createOrUpdateTasks: Array<Task>;
-  createOrUpdateUsers: Array<User>;
-  createTag: Tag;
-  createTags: Array<Tag>;
-  createTask: Task;
-  createTasks: Array<Task>;
-  createUser: User;
-  createUsers: Array<User>;
-  deleteTag: Scalars['Boolean']['output'];
-  deleteTask: Scalars['Boolean']['output'];
-  deleteUser: Scalars['Boolean']['output'];
   login: Token;
-  updateTag: Tag;
-  updateTags: Array<Tag>;
-  updateTask: Task;
-  updateTasks: Array<Task>;
-  updateUser: User;
+  createUsers: Array<User>;
+  createUser: User;
   updateUsers: Array<User>;
-};
-
-export type Query = {
-  __typename?: 'Query';
-  _graphweaver: AdminUiMetadata;
-  tag?: Maybe<Tag>;
-  tags: Array<Tag>;
-  task?: Maybe<Task>;
-  tasks: Array<Task>;
-  user?: Maybe<User>;
-  users: Array<User>;
-};
-
-export type Tag = {
-  __typename?: 'Tag';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  tasks?: Maybe<Array<Task>>;
-};
-
-export type Task = {
-  __typename?: 'Task';
-  description: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  tags?: Maybe<Array<Tag>>;
-  user?: Maybe<User>;
+  createOrUpdateUsers: Array<User>;
+  updateUser: User;
+  deleteUser: Scalars['Boolean']['output'];
+  createTags: Array<Tag>;
+  createTag: Tag;
+  updateTags: Array<Tag>;
+  createOrUpdateTags: Array<Tag>;
+  updateTag: Tag;
+  deleteTag: Scalars['Boolean']['output'];
+  createTasks: Array<Task>;
+  createTask: Task;
+  updateTasks: Array<Task>;
+  createOrUpdateTasks: Array<Task>;
+  updateTask: Task;
+  deleteTask: Scalars['Boolean']['output'];
 };
 
 export type Token = {
@@ -134,14 +140,8 @@ export type Token = {
   authToken: Scalars['String']['output'];
 };
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-};
-
 export type TasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, description: string, user?: { __typename?: 'User', id: string } | null }> };
+export type TasksQuery = { __typename?: 'Query', tasks: Array<{ __typename?: 'Task', id: string, description: string, tags?: Array<{ __typename?: 'Tag', id: string }> | null }> };
 

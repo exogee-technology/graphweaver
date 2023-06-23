@@ -5,7 +5,6 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
 import {
-	AdditionalFunctionConfig,
 	baseEsbuildConfig,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
@@ -15,7 +14,6 @@ import {
 // The Serverless Offline logger should report any errors and such to the console as well.
 // This is how we configure the Serverless log reporter to use console.log().
 import '@serverless/utils/log-reporters/node';
-import { buildSchemaSync } from 'type-graphql';
 
 import { config } from '@exogee/graphweaver-config';
 
@@ -66,18 +64,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 		})
 	);
 
-	// Read the exported resolvers and if we find them build the schema
-	const { resolvers } = await import(path.join(process.cwd(), './.graphweaver/backend/index.js'));
-
-	if (resolvers) {
-		buildSchemaSync({
-			resolvers,
-			emitSchemaFile: '.graphweaver/backend/schema.gql',
-		});
-	}
-
 	// Are there any custom additional functions we need to build?
-
 	for (const additionalFunction of additionalFunctions) {
 		if (
 			// TODO: Better validation

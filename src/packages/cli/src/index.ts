@@ -1,6 +1,6 @@
 import yargs from 'yargs';
+import chokidar from 'chokidar';
 import {
-	BackendStartOptions,
 	StartOptions,
 	analyseBundle,
 	buildBackend,
@@ -131,7 +131,18 @@ yargs
 				await startBackend(args as any);
 			}
 			if (environment === 'frontend' || environment === 'all') {
+				// Logic to start the process
+				console.log('Watch process started...');
 				await startFrontend(args as StartOptions);
+
+				// Watch the directory for file changes
+				const watcher = chokidar.watch('./src/**', { ignored: [/node_modules/, /__generated__/] });
+
+				// Restart the process on file change
+				watcher.on('change', async () => {
+					console.log('File changed. Restarting the process...');
+					await startFrontend(args as StartOptions);
+				});
 			}
 		},
 	})

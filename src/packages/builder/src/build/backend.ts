@@ -2,6 +2,9 @@ import path from 'path';
 import { build, buildSync } from 'esbuild';
 import rimrafCallback from 'rimraf';
 import { promisify } from 'util';
+import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
+import CssModulesPlugin from 'esbuild-css-modules-plugin';
+
 import {
 	baseEsbuildConfig,
 	buildOutputPathFor,
@@ -9,10 +12,6 @@ import {
 	makeAllPackagesExternalPlugin,
 	makeOptionalMikroOrmPackagesExternalPlugin,
 } from '../util';
-
-import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
-
-import CssModulesPlugin from 'esbuild-css-modules-plugin';
 
 const rimraf = promisify(rimrafCallback);
 
