@@ -67,7 +67,6 @@ importers:
 
   examples/rest:
     specifiers:
-      '@apollo/client': 3.7.1
       '@apollo/server': 4.2.2
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:*
@@ -91,7 +90,6 @@ importers:
       vite: 4.3.9
       vite-plugin-svgr: 3.2.0
     dependencies:
-      '@apollo/client': 3.7.1_onqnqwb3ubg5opvemcqf7c2qhy
       '@apollo/server': 4.2.2_graphql@16.6.0
       '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
       '@exogee/graphweaver': link:../../packages/core
@@ -137,7 +135,6 @@ importers:
       decimal.js: 10.4.3
       esbuild: 0.15.5
       graphql: 16.6.0
-      graphql-tag: 2.12.6
       graphweaver: workspace:*
       prettier: 2.8.8
       prop-types: 15.8.1
@@ -170,7 +167,6 @@ importers:
       class-validator: 0.14.0
       decimal.js: 10.4.3
       graphql: 16.6.0
-      graphql-tag: 2.12.6_graphql@16.6.0
       graphweaver: link:../../packages/cli
       prop-types: 15.8.1
       react: 18.2.0
@@ -697,41 +693,6 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      response-iterator: 0.2.6
-      symbol-observable: 4.0.0
-      ts-invariant: 0.10.3
-      tslib: 2.5.3
-      zen-observable-ts: 1.2.5
-    dev: false
-
-  /@apollo/client/3.7.1_onqnqwb3ubg5opvemcqf7c2qhy:
-    resolution: {integrity: sha512-xu5M/l7p9gT9Fx7nF3AQivp0XukjB7TM7tOd5wifIpI8RskYveL4I+rpTijzWrnqCPZabkbzJKH7WEAKdctt9w==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-      graphql-ws: ^5.5.5
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
-    peerDependenciesMeta:
-      graphql-ws:
-        optional: true
-      react:
-        optional: true
-      react-dom:
-        optional: true
-      subscriptions-transport-ws:
-        optional: true
-    dependencies:
-      '@graphql-typed-document-node/core': 3.2.0_graphql@16.6.0
-      '@wry/context': 0.7.3
-      '@wry/equality': 0.5.6
-      '@wry/trie': 0.3.2
-      graphql: 16.6.0
-      graphql-tag: 2.12.6_graphql@16.6.0
-      hoist-non-react-statics: 3.3.2
-      optimism: 0.16.2
-      prop-types: 15.8.1
-      react: 18.2.0
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3

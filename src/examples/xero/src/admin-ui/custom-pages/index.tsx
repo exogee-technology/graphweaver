@@ -1,11 +1,12 @@
 import { apolloClient, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
+
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
 import {
 	XeroDashboard,
-	TENANTS_QUERY,
 	AllCompaniesDashboardLoader,
 	SingleCompanyDashboardLoader,
 } from './dashboards';
+import { TenantsDocument } from '../../__generated__';
 
 export const customPages = {
 	routes: () => [
@@ -39,12 +40,13 @@ export const customPages = {
 
 	navLinks: async () => {
 		// To know nav links we need to know the tenants.
-		const { data } = await apolloClient.query({ query: TENANTS_QUERY });
-		if (!Array.isArray(data.result)) return;
+		const { data } = await apolloClient.query({ query: TenantsDocument });
+
+		if (!Array.isArray(data.tenants)) return;
 
 		return [
 			{ name: 'All Companies', route: '/xero-dashboard' },
-			...data.result.map((tenant) => ({
+			...data.tenants.map((tenant) => ({
 				name: tenant.tenantName,
 				route: `/xero-dashboard/${tenant.id}`,
 			})),

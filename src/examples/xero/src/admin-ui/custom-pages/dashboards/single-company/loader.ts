@@ -1,11 +1,12 @@
 import { LoaderFunctionArgs, defer } from 'react-router-dom';
 import { apolloClient } from '@exogee/graphweaver-admin-ui-components';
-import { PROFIT_AND_LOSS } from './graphql';
+
+import { ProfitAndLossRowsSingleCompanyDocument } from '../../../../__generated__';
 
 export const SingleCompanyDashboardLoader = ({ params: { tenantId } }: LoaderFunctionArgs) =>
 	defer({
 		rows: apolloClient.query({
-			query: PROFIT_AND_LOSS,
+			query: ProfitAndLossRowsSingleCompanyDocument,
 			variables: {
 				tenantId,
 			},
