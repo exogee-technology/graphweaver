@@ -1,5 +1,5 @@
 import { MouseEventHandler } from 'react';
-import { Task, TasksDocument } from '../../__generated__/gql';
+import { Task, TasksDocument } from '../../__generated__';
 import { useQuery } from '@apollo/client';
 
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
@@ -9,7 +9,7 @@ const tasksQueryDocument = /* GraphQL */ `
 		tasks {
 			id
 			description
-			tags {
+			user {
 				id
 			}
 		}
@@ -22,7 +22,7 @@ export const Link = (task: Task) => {
 	});
 
 	data.tasks.map((task) => {
-		task.tags.length;
+		task.user.id;
 	});
 
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
