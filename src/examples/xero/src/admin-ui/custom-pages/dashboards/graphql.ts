@@ -1,10 +1,10 @@
-import { gql } from 'graphql-tag';
+import { graphql } from '../../../__generated__';
 
-export const TENANTS_QUERY = gql`
-	{
-		result: tenants {
+graphql(`
+	query Tenants {
+		tenants {
 			id
 			tenantName
 		}
 	}
-`;
+`);

@@ -1,11 +1,12 @@
 import { defer } from 'react-router-dom';
 import { apolloClient } from '@exogee/graphweaver-admin-ui-components';
-import { PROFIT_AND_LOSS } from './graphql';
+
+import { ProfitAndLossRowsAllCompaniesDocument } from '../../../../__generated__';
 
 export const AllCompaniesDashboardLoader = () =>
 	defer({
 		rows: apolloClient.query({
-			query: PROFIT_AND_LOSS,
+			query: ProfitAndLossRowsAllCompaniesDocument,
 			variables: {
 				description: 'Net Profit',
 			},

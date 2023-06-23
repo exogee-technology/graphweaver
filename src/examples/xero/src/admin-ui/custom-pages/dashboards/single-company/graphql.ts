@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { graphql } from '../../../../__generated__';
 
 export interface LoaderData {
 	data: {
@@ -16,8 +16,8 @@ export interface ProfitAndLossRow {
 	};
 }
 
-export const PROFIT_AND_LOSS = gql`
-	query XeroDashboard($tenantId: ID!) {
+graphql(`
+	query profitAndLossRowsSingleCompany($tenantId: ID!) {
 		profitAndLossRows(filter: { tenantId: $tenantId }) {
 			amount
 			date
@@ -28,23 +28,4 @@ export const PROFIT_AND_LOSS = gql`
 			}
 		}
 	}
-`;
-
-// import { useQuery } from '@apollo/client';
-// graphql(`
-// 	query Task {
-// 		task(id: "2") {
-// 			id
-// 			description
-// 			user {
-// 				id
-// 				name
-// 			}
-// 		}
-// 	}
-// `);
-// const { data } = useQuery(TaskDocument, {
-// 	fetchPolicy: 'network-only',
-// });
-
-// data.task.user.name;
+`);

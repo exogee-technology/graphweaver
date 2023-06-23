@@ -1,4 +1,4 @@
-import { gql } from 'graphql-tag';
+import { graphql } from '../../../../__generated__';
 
 export interface LoaderData {
 	data: {
@@ -15,8 +15,8 @@ export interface ProfitAndLossRow {
 	};
 }
 
-export const PROFIT_AND_LOSS = gql`
-	query XeroDashboard($description: String!) {
+graphql(`
+	query profitAndLossRowsAllCompanies($description: String!) {
 		profitAndLossRows(filter: { description: $description }) {
 			amount
 			date
@@ -26,4 +26,4 @@ export const PROFIT_AND_LOSS = gql`
 			}
 		}
 	}
-`;
+`);
