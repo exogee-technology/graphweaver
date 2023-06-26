@@ -47,7 +47,7 @@ export const SingleCompany = () => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.reportSection}>
-				<h2 className={styles.reportHeading}>Financials</h2>
+				<h2 className={styles.reportHeading}>Financial</h2>
 				<p className={styles.latestNetProfit}>
 					Latest Net Profit{' '}
 					{netProfitRows[0]?.amount

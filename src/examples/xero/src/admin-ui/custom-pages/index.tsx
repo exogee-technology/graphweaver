@@ -3,9 +3,9 @@ import { gql } from '@apollo/client';
 
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
 import { XeroDashboard } from './dashboards';
-import { TenantsDocument } from './index.generated';
+import { TenantsQuery } from './index.generated';
 
-gql`
+const tenantsQuery = gql`
 	query Tenants {
 		tenants {
 			id
@@ -44,7 +44,7 @@ export const customPages = {
 
 	navLinks: async () => {
 		// To know nav links we need to know the tenants.
-		const { data } = await apolloClient.query({ query: TenantsDocument });
+		const { data } = await apolloClient.query<TenantsQuery>({ query: tenantsQuery });
 
 		if (!Array.isArray(data.tenants)) return;
 

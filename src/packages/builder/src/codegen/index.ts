@@ -35,7 +35,7 @@ export const codeGenerator = async () => {
 				'src/': {
 					preset: 'near-operation-file',
 					presetConfig: {
-						extension: '.generated.tsx',
+						extension: '.generated.ts',
 						baseTypesPath: 'types.generated.ts',
 					},
 					plugins: [

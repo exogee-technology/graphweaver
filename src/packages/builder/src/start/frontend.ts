@@ -17,7 +17,7 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 
 	// Let's check if we need to start the server
 	if (server) {
-		server.restart();
+		//server.restart();
 	} else {
 		const { onResolveViteConfiguration } = config().start;
 
