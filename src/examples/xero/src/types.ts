@@ -1,20 +1,3 @@
-/* eslint-disable */
-import type { DocumentNode as GqlDocumentNode } from 'graphql';
-
-interface DocumentTypeDecoration<TResult, TVariables> {
-	/**
-	 * This type is used to ensure that the variables you pass in to the query are assignable to Variables
-	 * and that the Result is assignable to whatever you pass your result to. The method is never actually
-	 * implemented, but the type is valid because we list it as optional
-	 */
-	__apiType?: (variables: TVariables) => TResult;
-}
-
-interface DocumentNode<TResult = { [key: string]: any }, TVariables = { [key: string]: any }>
-	extends GqlDocumentNode,
-		DocumentTypeDecoration<TResult, TVariables> {}
-		
-
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -29,7 +12,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
   ISOString: { input: any; output: any; }
 };
 
@@ -582,27 +564,3 @@ export type TenantsPaginationInput = {
 export type TenantsUpdateManyInput = {
   data: Array<TenantCreateOrUpdateInput>;
 };
-
-export type ProfitAndLossRowsAllCompaniesQueryVariables = Exact<{
-  description: Scalars['String']['input'];
-}>;
-
-
-export type ProfitAndLossRowsAllCompaniesQuery = { __typename?: 'Query', profitAndLossRows: Array<{ __typename?: 'ProfitAndLossRow', amount: number, date: any, tenant?: { __typename?: 'Tenant', id: string, tenantName: string } | null }> };
-
-export type TenantsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type TenantsQuery = { __typename?: 'Query', tenants: Array<{ __typename?: 'Tenant', id: string, tenantName: string }> };
-
-export type ProfitAndLossRowsSingleCompanyQueryVariables = Exact<{
-  tenantId: Scalars['ID']['input'];
-}>;
-
-
-export type ProfitAndLossRowsSingleCompanyQuery = { __typename?: 'Query', profitAndLossRows: Array<{ __typename?: 'ProfitAndLossRow', amount: number, date: any, description: string, account?: { __typename?: 'Account', name?: string | null, type?: AccountType | null } | null }> };
-
-
-export const ProfitAndLossRowsAllCompaniesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"profitAndLossRowsAllCompanies"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"description"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profitAndLossRows"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"description"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"tenant"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tenantName"}}]}}]}}]}}]} as unknown as DocumentNode<ProfitAndLossRowsAllCompaniesQuery, ProfitAndLossRowsAllCompaniesQueryVariables>;
-export const TenantsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Tenants"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tenants"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tenantName"}}]}}]}}]} as unknown as DocumentNode<TenantsQuery, TenantsQueryVariables>;
-export const ProfitAndLossRowsSingleCompanyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"profitAndLossRowsSingleCompany"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"tenantId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"profitAndLossRows"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"tenantId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"tenantId"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"amount"}},{"kind":"Field","name":{"kind":"Name","value":"date"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"account"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"}}]}}]}}]}}]} as unknown as DocumentNode<ProfitAndLossRowsSingleCompanyQuery, ProfitAndLossRowsSingleCompanyQueryVariables>;

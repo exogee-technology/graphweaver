@@ -5,8 +5,6 @@ import { createDirectoryIfNotExists } from '../util';
 import { patchFile } from './patch';
 
 const backendEndpoint = 'http://localhost:9001';
-const outputDirectory = './src/__generated__/';
-const outputPath = path.join(process.cwd(), outputDirectory);
 
 export const codeGenerator = async () => {
 	try {
@@ -16,16 +14,20 @@ export const codeGenerator = async () => {
 			ignoreNoDocuments: true,
 			documents: ['./src/**/*.tsx', './src/**/*.ts'],
 			generates: {
-				[outputDirectory]: {
-					preset: 'client',
+				'src/types.ts': { plugins: ['typescript'] },
+				'src/': {
+					preset: 'near-operation-file',
+					presetConfig: {
+						extension: '.generated.tsx',
+						baseTypesPath: 'types.ts',
+					},
+					plugins: ['typescript-operations', 'typescript-react-apollo'],
 				},
 			},
 		});
-		createDirectoryIfNotExists(outputPath);
 
 		for (const file of files) {
-			const filePath = path.join(process.cwd(), file.filename);
-			fs.writeFileSync(filePath, patchFile(file.filename, file.content), 'utf8');
+			fs.writeFileSync(file.filename, file.content, 'utf8');
 		}
 	} catch (err: any) {
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
