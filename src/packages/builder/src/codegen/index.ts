@@ -19,7 +19,9 @@ export const codeGenerator = async () => {
 			generates: {
 				'src/types.generated.ts': {
 					config: {
-						skipDocumentsValidation: true,
+						skipDocumentsValidation: {
+							skipDuplicateValidation: true, // A flag to disable the validation for duplicate query and mutation names we don't need this as we are using near-operation-file
+						},
 					},
 					plugins: [
 						{
