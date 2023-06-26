@@ -12,25 +12,23 @@ export interface StartOptions {
 let server: ViteDevServer | undefined = undefined;
 
 export const startFrontend = async ({ host, port }: StartOptions) => {
-	const { onResolveViteConfiguration } = config().start;
-
-	// Generate a Vite Config
-	const rootDirectory = path.resolve(
-		require.resolve('@exogee/graphweaver-admin-ui'),
-		'..',
-		'..',
-		'dist'
-	);
-
 	// We can now generate the front end functions and types
 	await codeGenerator();
 
-	const backendUrl = new URL('/', 'http://localhost');
-	backendUrl.port = String((port || 9000) + 1);
+	// Let's check if we need to start the server
+	if (!server) {
+		const { onResolveViteConfiguration } = config().start;
 
-	if (server) {
-		server.restart();
-	} else {
+		// Generate a Vite Config
+		const rootDirectory = path.resolve(
+			require.resolve('@exogee/graphweaver-admin-ui'),
+			'..',
+			'..',
+			'dist'
+		);
+
+		const backendUrl = new URL('/', 'http://localhost');
+		backendUrl.port = String((port || 9000) + 1);
 		server = await createServer(
 			onResolveViteConfiguration(
 				viteConfig({
