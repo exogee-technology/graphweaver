@@ -137,7 +137,7 @@ yargs
 
 				// Watch the directory for file changes
 				const watcher = chokidar.watch('./src/**', {
-					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/],
+					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
 				});
 
 				// Restart the process on file change

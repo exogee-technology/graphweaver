@@ -12,14 +12,14 @@ export const codeGenerator = async () => {
 			cwd: process.cwd(),
 			schema: backendEndpoint,
 			ignoreNoDocuments: true,
-			documents: ['./src/**/*.tsx', './src/**/*.ts'],
+			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {
-				'src/types.ts': { plugins: ['typescript'] },
+				'src/types.generated.ts': { plugins: ['typescript'] },
 				'src/': {
 					preset: 'near-operation-file',
 					presetConfig: {
 						extension: '.generated.tsx',
-						baseTypesPath: 'types.ts',
+						baseTypesPath: 'types.generated.ts',
 					},
 					plugins: ['typescript-operations', 'typescript-react-apollo'],
 				},

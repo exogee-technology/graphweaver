@@ -46,6 +46,8 @@ export const customPages = {
 		// To know nav links we need to know the tenants.
 		const { data } = await useTenantsQuery();
 
+		data.tenants[0].id;
+
 		if (!Array.isArray(data.tenants)) return;
 
 		return [
