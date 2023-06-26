@@ -67,9 +67,3 @@ export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
 		});
 	},
 });
-
-export const createDirectoryIfNotExists = (directoryPath: string): void => {
-	if (!fs.existsSync(directoryPath)) {
-		fs.mkdirSync(directoryPath, { recursive: true });
-	}
-};

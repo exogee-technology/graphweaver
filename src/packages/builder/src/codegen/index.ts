@@ -1,8 +1,5 @@
 import fs from 'fs';
-import path from 'path';
 import { executeCodegen } from '@graphql-codegen/cli';
-import { createDirectoryIfNotExists } from '../util';
-import { patchFile } from './patch';
 
 const backendEndpoint = 'http://localhost:9001';
 
@@ -14,14 +11,31 @@ export const codeGenerator = async () => {
 			ignoreNoDocuments: true,
 			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {
-				'src/types.generated.ts': { plugins: ['typescript'] },
+				'src/types.generated.ts': {
+					plugins: [
+						{
+							add: {
+								content: '/* eslint-disable */',
+							},
+						},
+						'typescript',
+					],
+				},
 				'src/': {
 					preset: 'near-operation-file',
 					presetConfig: {
 						extension: '.generated.tsx',
 						baseTypesPath: 'types.generated.ts',
 					},
-					plugins: ['typescript-operations', 'typescript-react-apollo'],
+					plugins: [
+						{
+							add: {
+								content: '/* eslint-disable */',
+							},
+						},
+						'typescript-operations',
+						'typescript-react-apollo',
+					],
 				},
 			},
 		});
