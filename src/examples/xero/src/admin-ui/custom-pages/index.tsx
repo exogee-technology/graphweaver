@@ -1,9 +1,9 @@
-import { DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
+import { DefaultLayout, apolloClient } from '@exogee/graphweaver-admin-ui-components';
 import { gql } from '@apollo/client';
 
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
 import { XeroDashboard } from './dashboards';
-import { useTenantsQuery } from './index.generated';
+import { TenantsDocument } from './index.generated';
 
 gql`
 	query Tenants {
@@ -44,7 +44,7 @@ export const customPages = {
 
 	navLinks: async () => {
 		// To know nav links we need to know the tenants.
-		const { data } = await useTenantsQuery();
+		const { data } = await apolloClient.query({ query: TenantsDocument });
 
 		if (!Array.isArray(data.tenants)) return;
 
