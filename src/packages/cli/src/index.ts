@@ -136,7 +136,9 @@ yargs
 				await startFrontend(args as StartOptions);
 
 				// Watch the directory for file changes
-				const watcher = chokidar.watch('./src/**', { ignored: [/node_modules/, /__generated__/] });
+				const watcher = chokidar.watch('./src/**', {
+					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/],
+				});
 
 				// Restart the process on file change
 				watcher.on('change', async () => {

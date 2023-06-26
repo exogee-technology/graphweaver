@@ -1,20 +1,34 @@
 import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Loader, useQuery } from '@exogee/graphweaver-admin-ui-components';
+import { gql } from '@apollo/client';
+import { Loader } from '@exogee/graphweaver-admin-ui-components';
 
 import { theme } from '../theme';
 import styles from './styles.module.css';
 import { tooltip } from './tooltip';
-
-import { ProfitAndLossRowsSingleCompanyDocument } from '../../../../__generated__';
+import { useProfitAndLossRowsSingleCompanyQuery } from './component.generated';
 
 const categories = ['Net Profit', 'Total Operating Expenses', 'Gross Profit'];
+
+gql`
+	query profitAndLossRowsSingleCompany($tenantId: ID!) {
+		profitAndLossRows(filter: { tenantId: $tenantId }) {
+			amount
+			date
+			description
+			account {
+				name
+				type
+			}
+		}
+	}
+`;
 
 export const SingleCompany = () => {
 	const { tenantId } = useParams();
 
-	const { data, loading, error } = useQuery(ProfitAndLossRowsSingleCompanyDocument, {
+	const { data, loading, error } = useProfitAndLossRowsSingleCompanyQuery({
 		variables: { tenantId },
 	});
 

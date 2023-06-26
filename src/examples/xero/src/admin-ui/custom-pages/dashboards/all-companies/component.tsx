@@ -1,25 +1,38 @@
 import React from 'react';
-import { Await, useLoaderData } from 'react-router-dom';
+import { gql } from '@apollo/client';
 import { Decimal } from 'decimal.js';
 import { ResponsiveAreaBump } from '@nivo/bump';
 import { ResponsiveLine } from '@nivo/line';
-import { Loader, useQuery } from '@exogee/graphweaver-admin-ui-components';
+import { Loader } from '@exogee/graphweaver-admin-ui-components';
+
 import { theme } from '../theme';
 import styles from './styles.module.css';
 import { netProfitTooltip } from './tooltips';
-
-import { ProfitAndLossRowsAllCompaniesDocument } from '../../../../__generated__';
+import { useProfitAndLossRowsAllCompaniesQuery } from './component.generated';
 
 type TenantNetProfitData = {
 	id: string;
 	data: { x: Date; y: number }[];
 };
 
+gql`
+	query profitAndLossRowsAllCompanies($description: String!) {
+		profitAndLossRows(filter: { description: $description }) {
+			amount
+			date
+			tenant {
+				id
+				tenantName
+			}
+		}
+	}
+`;
+
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const monthString = (date: Date) => `${months[date.getMonth()]} ${date.getFullYear()}`;
 
 export const AllCompanies = () => {
-	const { data, loading, error } = useQuery(ProfitAndLossRowsAllCompaniesDocument, {
+	const { data, loading, error } = useProfitAndLossRowsAllCompaniesQuery({
 		variables: { description: 'Net Profit' },
 	});
 
