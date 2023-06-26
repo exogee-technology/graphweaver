@@ -8,16 +8,16 @@ import * as Types from '../../../../types.generated';
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 const defaultOptions = {} as const;
-export type ProfitAndLossRowsSingleCompanyQueryVariables = Types.Exact<{
+export type ProfitAndLossRowsQueryVariables = Types.Exact<{
   tenantId: Types.Scalars['ID']['input'];
 }>;
 
 
-export type ProfitAndLossRowsSingleCompanyQuery = { __typename?: 'Query', profitAndLossRows: Array<{ __typename?: 'ProfitAndLossRow', amount: number, date: any, description: string, account?: { __typename?: 'Account', name?: string | null, type?: Types.AccountType | null } | null }> };
+export type ProfitAndLossRowsQuery = { __typename?: 'Query', profitAndLossRows: Array<{ __typename?: 'ProfitAndLossRow', amount: number, date: any, description: string, account?: { __typename?: 'Account', name?: string | null, type?: Types.AccountType | null } | null }> };
 
 
-export const ProfitAndLossRowsSingleCompanyDocument = gql`
-    query profitAndLossRowsSingleCompany($tenantId: ID!) {
+export const ProfitAndLossRowsDocument = gql`
+    query profitAndLossRows($tenantId: ID!) {
   profitAndLossRows(filter: {tenantId: $tenantId}) {
     amount
     date
@@ -31,29 +31,29 @@ export const ProfitAndLossRowsSingleCompanyDocument = gql`
     `;
 
 /**
- * __useProfitAndLossRowsSingleCompanyQuery__
+ * __useProfitAndLossRowsQuery__
  *
- * To run a query within a React component, call `useProfitAndLossRowsSingleCompanyQuery` and pass it any options that fit your needs.
- * When your component renders, `useProfitAndLossRowsSingleCompanyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useProfitAndLossRowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useProfitAndLossRowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useProfitAndLossRowsSingleCompanyQuery({
+ * const { data, loading, error } = useProfitAndLossRowsQuery({
  *   variables: {
  *      tenantId: // value for 'tenantId'
  *   },
  * });
  */
-export function useProfitAndLossRowsSingleCompanyQuery(baseOptions: Apollo.QueryHookOptions<ProfitAndLossRowsSingleCompanyQuery, ProfitAndLossRowsSingleCompanyQueryVariables>) {
+export function useProfitAndLossRowsQuery(baseOptions: Apollo.QueryHookOptions<ProfitAndLossRowsQuery, ProfitAndLossRowsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ProfitAndLossRowsSingleCompanyQuery, ProfitAndLossRowsSingleCompanyQueryVariables>(ProfitAndLossRowsSingleCompanyDocument, options);
+        return Apollo.useQuery<ProfitAndLossRowsQuery, ProfitAndLossRowsQueryVariables>(ProfitAndLossRowsDocument, options);
       }
-export function useProfitAndLossRowsSingleCompanyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfitAndLossRowsSingleCompanyQuery, ProfitAndLossRowsSingleCompanyQueryVariables>) {
+export function useProfitAndLossRowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ProfitAndLossRowsQuery, ProfitAndLossRowsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ProfitAndLossRowsSingleCompanyQuery, ProfitAndLossRowsSingleCompanyQueryVariables>(ProfitAndLossRowsSingleCompanyDocument, options);
+          return Apollo.useLazyQuery<ProfitAndLossRowsQuery, ProfitAndLossRowsQueryVariables>(ProfitAndLossRowsDocument, options);
         }
-export type ProfitAndLossRowsSingleCompanyQueryHookResult = ReturnType<typeof useProfitAndLossRowsSingleCompanyQuery>;
-export type ProfitAndLossRowsSingleCompanyLazyQueryHookResult = ReturnType<typeof useProfitAndLossRowsSingleCompanyLazyQuery>;
-export type ProfitAndLossRowsSingleCompanyQueryResult = Apollo.QueryResult<ProfitAndLossRowsSingleCompanyQuery, ProfitAndLossRowsSingleCompanyQueryVariables>;
+export type ProfitAndLossRowsQueryHookResult = ReturnType<typeof useProfitAndLossRowsQuery>;
+export type ProfitAndLossRowsLazyQueryHookResult = ReturnType<typeof useProfitAndLossRowsLazyQuery>;
+export type ProfitAndLossRowsQueryResult = Apollo.QueryResult<ProfitAndLossRowsQuery, ProfitAndLossRowsQueryVariables>;
