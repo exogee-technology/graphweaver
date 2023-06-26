@@ -1,7 +1,7 @@
 import { apolloClient, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
 
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
-import { XeroDashboard, AllCompaniesDashboardLoader } from './dashboards';
+import { XeroDashboard } from './dashboards';
 import { TenantsDocument } from '../../__generated__';
 
 export const customPages = {
@@ -16,7 +16,6 @@ export const customPages = {
 		{
 			// These are dashboards
 			path: '/xero-dashboard',
-			loader: AllCompaniesDashboardLoader,
 			element: (
 				<DefaultLayout>
 					<XeroDashboard />
