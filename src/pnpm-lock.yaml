@@ -357,6 +357,7 @@ importers:
     specifiers:
       '@exogee/graphweaver-admin-ui': workspace:*
       '@exogee/graphweaver-config': workspace:*
+      '@graphql-codegen/add': 5.0.0
       '@graphql-codegen/cli': 4.0.1
       '@graphql-codegen/client-preset': 4.0.1
       '@graphql-codegen/near-operation-file-preset': 2.5.0
@@ -383,6 +384,7 @@ importers:
     dependencies:
       '@exogee/graphweaver-admin-ui': link:../admin-ui
       '@exogee/graphweaver-config': link:../config
+      '@graphql-codegen/add': 5.0.0_graphql@16.6.0
       '@graphql-codegen/cli': 4.0.1_xfoe4adolgvm4tvnio5xigcr6e
       '@graphql-codegen/client-preset': 4.0.1_graphql@16.6.0
       '@graphql-codegen/near-operation-file-preset': 2.5.0_graphql@16.6.0
