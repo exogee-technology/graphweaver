@@ -51,9 +51,9 @@ export const codeGenerator = async () => {
 			},
 		});
 
-		for (const file of files) {
-			fs.writeFileSync(file.filename, file.content, 'utf8');
-		}
+		await Promise.all(
+			files.map(async (file) => fs.promises.writeFile(file.filename, file.content, 'utf8'))
+		);
 	} catch (err: any) {
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {
