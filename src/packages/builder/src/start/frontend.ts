@@ -16,9 +16,7 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 	await codeGenerator();
 
 	// Let's check if we need to start the server
-	if (server) {
-		//server.restart();
-	} else {
+	if (!server) {
 		const { onResolveViteConfiguration } = config().start;
 
 		// Generate a Vite Config
