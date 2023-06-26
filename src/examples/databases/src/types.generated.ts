@@ -69,30 +69,18 @@ export type AdminUiMetadata = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createOrUpdateTags: Array<Tag>;
   createOrUpdateTasks: Array<Task>;
   createOrUpdateUsers: Array<User>;
-  createTag: Tag;
-  createTags: Array<Tag>;
   createTask: Task;
   createTasks: Array<Task>;
   createUser: User;
   createUsers: Array<User>;
-  deleteTag: Scalars['Boolean']['output'];
   deleteTask: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
-  login: Token;
-  updateTag: Tag;
-  updateTags: Array<Tag>;
   updateTask: Task;
   updateTasks: Array<Task>;
   updateUser: User;
   updateUsers: Array<User>;
-};
-
-
-export type MutationCreateOrUpdateTagsArgs = {
-  input: TagsCreateOrUpdateManyInput;
 };
 
 
@@ -103,16 +91,6 @@ export type MutationCreateOrUpdateTasksArgs = {
 
 export type MutationCreateOrUpdateUsersArgs = {
   input: UsersCreateOrUpdateManyInput;
-};
-
-
-export type MutationCreateTagArgs = {
-  data: TagInsertInput;
-};
-
-
-export type MutationCreateTagsArgs = {
-  input: TagsInsertManyInput;
 };
 
 
@@ -136,11 +114,6 @@ export type MutationCreateUsersArgs = {
 };
 
 
-export type MutationDeleteTagArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type MutationDeleteTaskArgs = {
   id: Scalars['ID']['input'];
 };
@@ -148,22 +121,6 @@ export type MutationDeleteTaskArgs = {
 
 export type MutationDeleteUserArgs = {
   id: Scalars['ID']['input'];
-};
-
-
-export type MutationLoginArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateTagArgs = {
-  data: TagCreateOrUpdateInput;
-};
-
-
-export type MutationUpdateTagsArgs = {
-  input: TagsUpdateManyInput;
 };
 
 
@@ -186,35 +143,13 @@ export type MutationUpdateUsersArgs = {
   input: UsersUpdateManyInput;
 };
 
-export enum Priority {
-  /** HIGH */
-  High = 'HIGH',
-  /** LOW */
-  Low = 'LOW',
-  /** MEDIUM */
-  Medium = 'MEDIUM'
-}
-
 export type Query = {
   __typename?: 'Query';
   _graphweaver: AdminUiMetadata;
-  tag?: Maybe<Tag>;
-  tags: Array<Tag>;
   task?: Maybe<Task>;
   tasks: Array<Task>;
   user?: Maybe<User>;
   users: Array<User>;
-};
-
-
-export type QueryTagArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryTagsArgs = {
-  filter?: InputMaybe<TagsListFilter>;
-  pagination?: InputMaybe<TagsPaginationInput>;
 };
 
 
@@ -244,90 +179,21 @@ export enum Sort {
   Desc = 'DESC'
 }
 
-export type Tag = {
-  __typename?: 'Tag';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  tasks?: Maybe<Array<Task>>;
-};
-
-export type TagCreateOrUpdateInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
-};
-
-export type TagInsertInput = {
-  name: Scalars['String']['input'];
-  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
-};
-
-export type TagsCreateOrUpdateManyInput = {
-  data: Array<TagCreateOrUpdateInput>;
-};
-
-export type TagsInsertManyInput = {
-  data: Array<TagInsertInput>;
-};
-
-export type TagsListFilter = {
-  _and?: InputMaybe<Array<TagsListFilter>>;
-  _not?: InputMaybe<TagsListFilter>;
-  _or?: InputMaybe<Array<TagsListFilter>>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  name_ilike?: InputMaybe<Scalars['String']['input']>;
-  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_like?: InputMaybe<Scalars['String']['input']>;
-  name_ne?: InputMaybe<Scalars['String']['input']>;
-  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_notnull?: InputMaybe<Scalars['String']['input']>;
-  name_null?: InputMaybe<Scalars['String']['input']>;
-  tasks?: InputMaybe<TasksListFilter>;
-};
-
-export type TagsOrderByInput = {
-  id?: InputMaybe<Sort>;
-  name?: InputMaybe<Sort>;
-  tasks?: InputMaybe<Sort>;
-};
-
-export type TagsPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TagsOrderByInput>;
-};
-
-export type TagsUpdateManyInput = {
-  data: Array<TagCreateOrUpdateInput>;
-};
-
 export type Task = {
   __typename?: 'Task';
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  priority?: Maybe<Priority>;
-  tags?: Maybe<Array<Tag>>;
   user?: Maybe<User>;
 };
 
 export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
-  priority?: InputMaybe<Priority>;
-  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
-  priority?: InputMaybe<Priority>;
-  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
@@ -357,20 +223,12 @@ export type TasksListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['ID']['input']>;
   id_null?: InputMaybe<Scalars['ID']['input']>;
-  priority?: InputMaybe<Priority>;
-  priority_in?: InputMaybe<Array<Priority>>;
-  priority_ne?: InputMaybe<Priority>;
-  priority_nin?: InputMaybe<Array<Priority>>;
-  priority_notnull?: InputMaybe<Priority>;
-  priority_null?: InputMaybe<Priority>;
-  tags?: InputMaybe<TagsListFilter>;
   user?: InputMaybe<UsersListFilter>;
 };
 
 export type TasksOrderByInput = {
   description?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
-  priority?: InputMaybe<Sort>;
 };
 
 export type TasksPaginationInput = {
@@ -383,24 +241,22 @@ export type TasksUpdateManyInput = {
   data: Array<TaskCreateOrUpdateInput>;
 };
 
-export type Token = {
-  __typename?: 'Token';
-  authToken: Scalars['String']['output'];
-};
-
 export type User = {
   __typename?: 'User';
+  email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
+  username: Scalars['String']['output'];
 };
 
 export type UserCreateOrUpdateInput = {
+  email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserInsertInput = {
-  name: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type UsersCreateOrUpdateManyInput = {
@@ -415,25 +271,34 @@ export type UsersListFilter = {
   _and?: InputMaybe<Array<UsersListFilter>>;
   _not?: InputMaybe<UsersListFilter>;
   _or?: InputMaybe<Array<UsersListFilter>>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  email_ilike?: InputMaybe<Scalars['String']['input']>;
+  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_like?: InputMaybe<Scalars['String']['input']>;
+  email_ne?: InputMaybe<Scalars['String']['input']>;
+  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_notnull?: InputMaybe<Scalars['String']['input']>;
+  email_null?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['ID']['input']>;
   id_null?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  name_ilike?: InputMaybe<Scalars['String']['input']>;
-  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_like?: InputMaybe<Scalars['String']['input']>;
-  name_ne?: InputMaybe<Scalars['String']['input']>;
-  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_notnull?: InputMaybe<Scalars['String']['input']>;
-  name_null?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['String']['input']>;
+  username_null?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersOrderByInput = {
+  email?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
-  name?: InputMaybe<Sort>;
+  username?: InputMaybe<Sort>;
 };
 
 export type UsersPaginationInput = {
