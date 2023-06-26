@@ -1,6 +1,6 @@
 import { MouseEventHandler } from 'react';
 
-import { Task } from '../../__generated__';
+import { Task } from '../../types.generated';
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 
 export const Link = (task: Task) => {
