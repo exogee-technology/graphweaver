@@ -1,6 +1,8 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
 import { uri } from './config';
 
+export { useQuery, useMutation } from '@apollo/client';
+
 const httpLink = new HttpLink({
 	uri,
 });
