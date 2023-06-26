@@ -18,6 +18,9 @@ export const codeGenerator = async () => {
 			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {
 				'src/types.generated.ts': {
+					config: {
+						skipDocumentsValidation: true,
+					},
 					plugins: [
 						{
 							add: {
