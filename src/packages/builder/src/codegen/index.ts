@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { executeCodegen } from '@graphql-codegen/cli';
-
-const backendEndpoint = 'http://localhost:9001';
+import loader from './loader';
 
 const content = `/* eslint-disable */
 /* 
@@ -13,7 +12,11 @@ export const codeGenerator = async () => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
-			schema: backendEndpoint,
+			schema: {
+				graphweaver: {
+					loader: loader as any,
+				},
+			},
 			ignoreNoDocuments: true,
 			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {
