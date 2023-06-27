@@ -94,9 +94,6 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => Priority, { nullable: true })
 	priority?: Priority;
 
-	@Field(() => [String])
-	test = ['test'];
-
 	// The hooks below are not in use (and are not required when creating an entity)
 	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
