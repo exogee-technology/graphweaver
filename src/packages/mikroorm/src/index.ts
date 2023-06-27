@@ -12,6 +12,7 @@ export * from './database';
 export * from './types';
 export * from './utils/authentication-context';
 export * from './plugins';
+export * from './introspection';
 
 // Re-export from Mikro so things that depend on database entities can access helpers such as
 // Reference.isReference().
