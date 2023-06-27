@@ -21,6 +21,7 @@
 	"dependencies": {
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@octokit/core": "4.2.1",
 		"@octokit/plugin-throttling": "6.0.0",
 		"@octokit/rest": "19.0.11",

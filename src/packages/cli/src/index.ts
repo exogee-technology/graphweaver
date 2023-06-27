@@ -9,6 +9,7 @@ import {
 	startFrontend,
 } from '@exogee/graphweaver-builder';
 import { init } from './init';
+import { importDataSource } from './import';
 
 export { initGraphWeaver } from './init';
 
@@ -26,6 +27,11 @@ yargs
 			const template = argv.template;
 			init({ template });
 		},
+	})
+	.command({
+		command: ['import'],
+		describe: 'Inspect a datasource and then import its entities.',
+		handler: importDataSource,
 	})
 	.command({
 		command: ['analyse [target]', 'analyze [target]', 'a [target]'],
