@@ -1,26 +1,23 @@
-import { MikroORM } from '@mikro-orm/core';
-
-export const generateMikroDataEntity = async () => {
+import { knex } from '@mikro-orm/knex';
+import schemaInspector from 'knex-schema-inspector';
 
 export const introspection = async () => {
 	console.log('introspecting...');
-	const orm = await MikroORM.init({
-		discovery: {
-			// we need to disable validation for no entities
-			warnWhenNoEntities: false,
+
+	const database = knex({
+		client: 'postgresql',
+		connection: {
+			host: '127.0.0.1',
+			user: 'postgres',
+			password: '',
+			database: 'todo_app',
+			charset: 'utf8',
 		},
-		type: 'postgresql',
-		dbName: 'todo_app',
-		user: 'postgres',
-		password: '',
-		port: 5432,
 	});
-	const generator = orm.getEntityGenerator();
-	const dump = await generator.generate({
-		baseDir: process.cwd() + '/backend/entities',
-	});
-	console.log(dump);
-	await orm.close(true);
+	const inspector = schemaInspector(database);
+
+	console.log(await inspector.tables());
+	await database.destroy();
 };
 
 //1. Generate Mikro Data Entities
