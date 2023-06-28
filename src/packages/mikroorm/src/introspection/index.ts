@@ -1,50 +1,14 @@
-import { knex, Column } from '@mikro-orm/knex';
-import schemaInspector from 'knex-schema-inspector';
+import { ConnectionOptions } from '../database';
+import { getMetadata } from './metadata';
 
-type DBConnection = {
-	host: string;
-	user: string;
-	password: string;
-	database: string;
-};
-
-type TableMetadata = {
-	[k in string]: Column[];
-};
-
-const fetchDatabaseMetadata = async (client: 'postgresql' | 'mysql', connection: DBConnection) => {
-	const database = knex({
-		client,
-		connection: {
-			...connection,
-			charset: 'utf8',
-		},
-	});
-	const inspector = schemaInspector(database);
-	const columns = await inspector.columnInfo();
-
-	const entities: TableMetadata = columns.reduce((metadata: TableMetadata, column) => {
-		return {
-			...metadata,
-			[column.table]: [...(metadata[column.table] ? metadata[column.table] : []), column],
-		} as TableMetadata;
-	}, {});
-
-	await database.destroy();
-
-	return entities;
-};
-
-export const introspection = async () => {
+export const introspection = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
 	console.log('introspecting...');
-	const metadata = await fetchDatabaseMetadata('postgresql', {
-		host: '127.0.0.1',
-		user: 'postgres',
-		password: '',
-		database: 'go-collect',
-	});
-
+	const metadata = await getMetadata(client, options);
 	console.log(metadata);
+
+	for (const meta of metadata) {
+		console.log(meta.class);
+	}
 };
 
 //1. Generate Mikro Data Entities
