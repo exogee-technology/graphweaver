@@ -7,8 +7,9 @@ import type {
 	Platform,
 } from '@mikro-orm/core';
 import { ReferenceType, UnknownType, Utils } from '@mikro-orm/core';
+import { BaseFile } from './base-file';
 
-export class DataEntityFile {
+export class DataEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
 	protected readonly entityImports = new Set<string>();
 
@@ -16,7 +17,17 @@ export class DataEntityFile {
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
 		protected readonly platform: Platform
-	) {}
+	) {
+		super(meta, namingStrategy, platform);
+	}
+
+	getBasePath() {
+		return `./backend/entities/postgresql/`;
+	}
+
+	getBaseName() {
+		return this.meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase() + '.ts';
+	}
 
 	generate(): string {
 		this.coreImports.add('Entity');
@@ -84,15 +95,6 @@ export class DataEntityFile {
 		}
 
 		return ret;
-	}
-
-	getBaseName() {
-		return this.meta.className + '.ts';
-	}
-
-	protected quote(val: string) {
-		/* istanbul ignore next */
-		return val.startsWith(`'`) ? `\`${val}\`` : `'${val}'`;
 	}
 
 	protected getPropertyDefinition(prop: EntityProperty, padLeft: number): string {

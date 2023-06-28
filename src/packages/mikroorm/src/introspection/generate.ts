@@ -1,20 +1,10 @@
-import { DatabaseSchema } from '@mikro-orm/knex';
+import { DatabaseSchema, AbstractSqlPlatform } from '@mikro-orm/knex';
+import { EntityMetadata, EntityProperty, NamingStrategy, ReferenceType } from '@mikro-orm/core';
 
 import { ConnectionManager, ConnectionOptions } from '../database';
-import { DataEntityFile } from './data-entity-file';
-import { EntityMetadata, EntityProperty, NamingStrategy, ReferenceType } from '@mikro-orm/core';
-import { GraphQlEntityFile } from './graphql-entity-file';
+import { DataEntityFile, GraphQlEntityFile } from './files';
 
-const getSchema = async () => {
-	const database = ConnectionManager.database('gen');
-	if (!database) throw new Error('cannot connect to database');
-	const config = database.em.config;
-	const driver = database.em.getDriver();
-	const platform = driver.getPlatform();
-	const connection = driver.getConnection();
-
-	return await DatabaseSchema.create(connection, platform, config);
-};
+const CONNECTION_MANAGER_ID = 'generate';
 
 const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: NamingStrategy) => {
 	for (const meta of metadata) {
@@ -43,14 +33,12 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 	}
 };
 
-const convertSchemaToMetadata = async (schema: DatabaseSchema) => {
-	const database = ConnectionManager.database('gen');
-	if (!database) throw new Error('cannot connect to database');
-	const config = database.em.config;
-	const driver = database.em.getDriver();
-	const platform = driver.getPlatform();
+const convertSchemaToMetadata = async (
+	schema: DatabaseSchema,
+	platform: AbstractSqlPlatform,
+	namingStrategy: NamingStrategy
+) => {
 	const helper = platform.getSchemaHelper();
-	const namingStrategy = config.getNamingStrategy();
 
 	if (!helper) throw new Error('cannot connect to database');
 
@@ -67,7 +55,7 @@ const convertSchemaToMetadata = async (schema: DatabaseSchema) => {
 const openConnection = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
 	const { PostgreSqlDriver } = await import('@mikro-orm/postgresql');
 
-	await ConnectionManager.connect('gen', {
+	await ConnectionManager.connect(CONNECTION_MANAGER_ID, {
 		mikroOrmConfig: {
 			driver: PostgreSqlDriver,
 			...options.mikroOrmConfig,
@@ -75,35 +63,42 @@ const openConnection = async (client: 'postgresql' | 'mysql', options: Connectio
 	});
 };
 
-export const closeConnection = async () => {
+const closeConnection = async () => {
 	console.log('Closing database connection...');
-	await ConnectionManager.close('gen');
+	await ConnectionManager.close(CONNECTION_MANAGER_ID);
 	console.log('Database connection closed.');
 };
 
-export const generateDataEntityFiles = (metadata: EntityMetadata<any>[]) => {
-	const database = ConnectionManager.database('gen');
+export const generate = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
+	await openConnection(client, options);
+
+	const database = ConnectionManager.database(CONNECTION_MANAGER_ID);
 	if (!database) throw new Error('cannot connect to database');
+
 	const config = database.em.config;
 	const driver = database.em.getDriver();
 	const platform = driver.getPlatform();
 	const namingStrategy = config.getNamingStrategy();
+	const connection = driver.getConnection();
 
-	const files: (DataEntityFile | GraphQlEntityFile)[] = [];
+	const schema = await DatabaseSchema.create(connection, platform, config);
+	const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
+
+	const source: (DataEntityFile | GraphQlEntityFile)[] = [];
 
 	for (const meta of metadata) {
 		if (!meta.pivotTable) {
-			files.push(new DataEntityFile(meta, namingStrategy, platform));
-			files.push(new GraphQlEntityFile(meta, namingStrategy, platform));
+			source.push(new DataEntityFile(meta, namingStrategy, platform));
+			source.push(new GraphQlEntityFile(meta, namingStrategy, platform));
 		}
 	}
 
-	return files.map((file) => file.generate());
-};
+	const files = source.map((file) => ({
+		filepath: `${file.getBasePath()}${file.getBaseName()}`,
+		contents: file.generate(),
+	}));
 
-export const getMetadata = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
-	await openConnection(client, options);
-	const schema = await getSchema();
-	const metadata = await convertSchemaToMetadata(schema);
-	return metadata;
+	await closeConnection();
+
+	return files;
 };
