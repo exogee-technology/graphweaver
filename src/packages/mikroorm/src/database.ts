@@ -215,7 +215,7 @@ class DatabaseImplementation {
 	public close = async () => {
 		logger.trace('Closing database connection');
 
-		await this.orm.close();
+		await this.orm.close(true);
 		delete this.cachedOrm;
 	};
 }
@@ -254,6 +254,12 @@ class ConnectionsManager {
 	public database(id: string) {
 		logger.trace(`Finding database connection for id "${id}"`);
 		return this.connections.get(id);
+	}
+
+	public async close(id: string) {
+		const database = this.database(id);
+		await database?.close();
+		return true;
 	}
 }
 export const ConnectionManager = new ConnectionsManager();
