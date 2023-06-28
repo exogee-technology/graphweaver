@@ -1,13 +1,16 @@
 import { ConnectionOptions } from '../database';
-import { closeConnection, generateDataEntityFiles, getMetadata } from './metadata';
+import { generate } from './generate';
 
 export const introspection = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
 	console.log('introspecting...');
-	const metadata = await getMetadata(client, options);
-	console.log(metadata);
 
-	const dataEntities = generateDataEntityFiles(metadata);
-	console.log(dataEntities);
+	const files = await generate(client, options);
 
-	await closeConnection();
+	for (const file of files) {
+		if (file.filepath === `./backend/schema/job/entity.ts`) {
+			console.log(file.contents);
+		}
+	}
+
+	return files;
 };

@@ -1,14 +1,15 @@
 import type {
 	Dictionary,
 	EntityMetadata,
-	EntityOptions,
 	EntityProperty,
 	NamingStrategy,
 	Platform,
 } from '@mikro-orm/core';
 import { ReferenceType, UnknownType, Utils } from '@mikro-orm/core';
 
-export class GraphQlEntityFile {
+import { BaseFile } from './base-file';
+
+export class GraphQlEntityFile extends BaseFile {
 	protected readonly typeGraphQlImports = new Set<string>();
 	protected readonly entityImports = new Set<string>();
 
@@ -16,7 +17,18 @@ export class GraphQlEntityFile {
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
 		protected readonly platform: Platform
-	) {}
+	) {
+		super(meta, namingStrategy, platform);
+	}
+
+	getBasePath() {
+		const dirName = this.meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase();
+		return `./backend/schema/${dirName}/`;
+	}
+
+	getBaseName() {
+		return 'entity.ts';
+	}
 
 	generate(): string {
 		this.typeGraphQlImports.add('ObjectType');
@@ -26,12 +38,6 @@ export class GraphQlEntityFile {
 			this.typeGraphQlImports.add('Index');
 			const properties = Utils.asArray(index.properties).map((prop) => `'${prop}'`);
 			ret += `@Index({ name: '${index.name}', properties: [${properties.join(', ')}] })\n`;
-		});
-
-		this.meta.uniques.forEach((index) => {
-			this.typeGraphQlImports.add('Unique');
-			const properties = Utils.asArray(index.properties).map((prop) => `'${prop}'`);
-			ret += `@Unique({ name: '${index.name}', properties: [${properties.join(', ')}] })\n`;
 		});
 
 		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {`;
@@ -84,15 +90,6 @@ export class GraphQlEntityFile {
 		}
 
 		return ret;
-	}
-
-	getBaseName() {
-		return this.meta.className + '.ts';
-	}
-
-	protected quote(val: string) {
-		/* istanbul ignore next */
-		return val.startsWith(`'`) ? `\`${val}\`` : `'${val}'`;
 	}
 
 	protected getPropertyDefinition(prop: EntityProperty, padLeft: number): string {
