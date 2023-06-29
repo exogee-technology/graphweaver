@@ -14,6 +14,7 @@ import {
 	LogRequests,
 	MutexRequestsInDevelopment,
 	corsPlugin,
+	dedupeGraphQL,
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
@@ -52,6 +53,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
+		// graphqlDeduplicatorOptions: {
+		// 	enabled: true,
+		// },
 	};
 
 	constructor(config: GraphweaverConfig) {
@@ -77,6 +81,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
 			...(this.config.apolloServerOptions?.plugins || []),
+			dedupeGraphQL,
 		];
 		const resolvers = (this.config.resolvers || []) as any;
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {

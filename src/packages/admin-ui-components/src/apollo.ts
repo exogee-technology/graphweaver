@@ -1,4 +1,6 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
+// import { inflate } from 'graphql-deduplicator';
+
 import { uri } from './config';
 
 const httpLink = new HttpLink({
@@ -42,7 +44,7 @@ const authLink = new ApolloLink((operation, forward) => {
 				);
 			localStorage.setItem('graphweaver-auth', newAuthToken);
 		}
-
+		// TODO: check if graphql dedupe is enabled
 		return response;
 	});
 });
