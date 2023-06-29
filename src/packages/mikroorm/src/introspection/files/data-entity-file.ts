@@ -1,3 +1,28 @@
+// This file is a modified version of source from MikroORM, located here:
+// https://github.com/mikro-orm/mikro-orm/blob/6ba3d4004deef00b754a4ca2011cf64e44a4a3a3/packages/entity-generator/src/SourceFile.ts
+//
+// MIT License
+//
+// Copyright (c) 2018 Martin Adámek
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 import type {
 	Dictionary,
 	EntityMetadata,
@@ -22,32 +47,15 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	getBasePath() {
-		return `./backend/entities/postgresql/`;
+		return `backend/entities/postgresql/`;
 	}
 
 	getBaseName() {
-		return this.meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase() + '.ts';
+		return this.pascalToKebabCaseString(this.meta.className) + '.ts';
 	}
 
 	generate(): string {
-		this.coreImports.add('Entity');
-		let ret = `@Entity(${this.getCollectionDecl()})\n`;
-
-		this.meta.indexes.forEach((index) => {
-			this.coreImports.add('Index');
-			const properties = Utils.asArray(index.properties).map((prop) => `'${prop}'`);
-			ret += `@Index({ name: '${index.name}', properties: [${properties.join(', ')}] })\n`;
-		});
-
-		this.meta.uniques.forEach((index) => {
-			this.coreImports.add('Unique');
-			const properties = Utils.asArray(index.properties).map((prop) => `'${prop}'`);
-			ret += `@Unique({ name: '${index.name}', properties: [${properties.join(', ')}] })\n`;
-		});
-
-		ret += `export class ${this.meta.className} extends BaseEntity {`;
 		const enumDefinitions: string[] = [];
-		const optionalProperties: EntityProperty<any>[] = [];
 		let classBody = '\n';
 		Object.values(this.meta.properties).forEach((prop) => {
 			const decorator = this.getPropertyDecorator(prop, 2);
@@ -68,31 +76,31 @@ export class DataEntityFile extends BaseFile {
 				);
 				enumDefinitions.push(this.getEnumClassDefinition(enumClassName, prop.items as string[], 2));
 			}
-
-			if (!prop.nullable && typeof prop.default !== 'undefined') {
-				optionalProperties.push(prop);
-			}
 		});
 
-		if (optionalProperties.length > 0) {
-			this.coreImports.add('OptionalProps');
-			const optionalPropertyNames = optionalProperties.map((prop) => `'${prop.name}'`).sort();
-			ret += `\n\n${' '.repeat(2)}[OptionalProps]?: ${optionalPropertyNames.join(' | ')};`;
-		}
-		ret += `${classBody}}\n`;
+		let ret = ``;
+
+		this.coreImports.add('Entity');
 		const imports = [
 			`import { ${[...this.coreImports].sort().join(', ')} } from '@mikro-orm/core';`,
 			`import { BaseEntity } from '@exogee/graphweaver-mikroorm';`,
 		];
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
-			imports.push(`import { ${entity} } from './${entity}';`);
+			imports.push(`import { ${entity} } from './${this.pascalToKebabCaseString(entity)}';`);
 		});
 
-		ret = `${imports.join('\n')}\n\n${ret}`;
 		if (enumDefinitions.length) {
-			ret += '\n' + enumDefinitions.join('\n');
+			ret += enumDefinitions.join('\n');
+			ret += '\n';
 		}
+
+		ret += `@Entity(${this.getCollectionDecl()})\n`;
+		ret += `export class ${this.meta.className} extends BaseEntity {`;
+
+		ret += `${classBody}}\n`;
+
+		ret = `${imports.join('\n')}\n\n${ret}`;
 
 		return ret;
 	}

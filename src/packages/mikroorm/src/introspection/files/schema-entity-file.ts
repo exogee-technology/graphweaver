@@ -5,12 +5,13 @@ import type {
 	NamingStrategy,
 	Platform,
 } from '@mikro-orm/core';
-import { ReferenceType, UnknownType, Utils } from '@mikro-orm/core';
+import { ReferenceType, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
 
-export class GraphQlEntityFile extends BaseFile {
-	protected readonly typeGraphQlImports = new Set<string>();
+export class SchemaEntityFile extends BaseFile {
+	protected readonly coreImports = new Set<string>();
+	protected readonly scalarImports = new Set<string>();
 	protected readonly entityImports = new Set<string>();
 
 	constructor(
@@ -22,8 +23,8 @@ export class GraphQlEntityFile extends BaseFile {
 	}
 
 	getBasePath() {
-		const dirName = this.meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase();
-		return `./backend/schema/${dirName}/`;
+		const dirName = this.pascalToKebabCaseString(this.meta.className);
+		return `backend/schema/${dirName}/`;
 	}
 
 	getBaseName() {
@@ -31,16 +32,13 @@ export class GraphQlEntityFile extends BaseFile {
 	}
 
 	generate(): string {
-		this.typeGraphQlImports.add('ObjectType');
+		this.coreImports.add('ObjectType');
 		let ret = `@ObjectType(${this.quote(this.meta.className)})\n`;
 
-		this.meta.indexes.forEach((index) => {
-			this.typeGraphQlImports.add('Index');
-			const properties = Utils.asArray(index.properties).map((prop) => `'${prop}'`);
-			ret += `@Index({ name: '${index.name}', properties: [${properties.join(', ')}] })\n`;
-		});
+		this.coreImports.add('GraphQLEntity');
+		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
+		ret += `  public dataEntity!: Orm${this.meta.className};`;
 
-		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {`;
 		const enumDefinitions: string[] = [];
 		const optionalProperties: EntityProperty<any>[] = [];
 		let classBody = '\n';
@@ -69,20 +67,27 @@ export class GraphQlEntityFile extends BaseFile {
 			}
 		});
 
-		if (optionalProperties.length > 0) {
-			this.typeGraphQlImports.add('OptionalProps');
-			const optionalPropertyNames = optionalProperties.map((prop) => `'${prop.name}'`).sort();
-			ret += `\n\n${' '.repeat(2)}[OptionalProps]?: ${optionalPropertyNames.join(' | ')};`;
-		}
 		ret += `${classBody}}\n`;
 		const imports = [
-			`import { GraphQLEntity } from '@exogee/graphweaver';`,
-			`import { ${[...this.typeGraphQlImports].sort().join(', ')} } from 'type-graphql';`,
+			`import { ${[...this.coreImports].sort().join(', ')} } from '@exogee/graphweaver';`,
 		];
+
+		if (this.scalarImports.size > 0) {
+			imports.push(
+				`import { ${[...this.scalarImports]
+					.sort()
+					.join(', ')} } from '@exogee/graphweaver-scalars';`
+			);
+		}
+
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
-			imports.push(`import { ${entity} } from './${entity}';`);
+			imports.push(`import { ${entity} } from '../${this.pascalToKebabCaseString(entity)}';`);
 		});
+
+		imports.push(
+			`import { ${this.meta.className} as Orm${this.meta.className} } from '../../entities';`
+		);
 
 		ret = `${imports.join('\n')}\n\n${ret}`;
 		if (enumDefinitions.length) {
@@ -96,7 +101,7 @@ export class GraphQlEntityFile extends BaseFile {
 		const padding = ' '.repeat(padLeft);
 
 		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
-			this.typeGraphQlImports.add('Collection');
+			this.coreImports.add('Collection');
 			this.entityImports.add(prop.type);
 			return `${padding}${prop.name} = new Collection<${prop.type}>(this);\n`;
 		}
@@ -105,12 +110,6 @@ export class GraphQlEntityFile extends BaseFile {
 		const isEnumOrNonStringDefault = prop.enum || typeof prop.default !== 'string';
 		const useDefault = prop.default != null && isEnumOrNonStringDefault;
 		const optional = prop.nullable ? '?' : useDefault ? '' : '!';
-
-		if (prop.wrappedReference) {
-			this.typeGraphQlImports.add('IdentifiedReference');
-			this.entityImports.add(prop.type);
-			return `${padding}${prop.name}${optional}: IdentifiedReference<${prop.type}>;\n`;
-		}
 
 		const ret = `${prop.name}${optional}: ${prop.type}`;
 
@@ -142,133 +141,53 @@ export class GraphQlEntityFile extends BaseFile {
 		return ret;
 	}
 
+	private getPropertyType(prop: EntityProperty): string {
+		if (prop.primary) {
+			this.coreImports.add('ID');
+			return 'ID';
+		}
+
+		if (prop.type === 'Date') {
+			this.scalarImports.add('ISOStringScalar');
+			return 'ISOStringScalar';
+		}
+
+		if (prop.columnTypes?.[0] === 'date') {
+			this.scalarImports.add('DateScalar');
+			return 'DateScalar';
+		}
+
+		return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+	}
+
 	private getPropertyDecorator(prop: EntityProperty, padLeft: number): string {
 		const padding = ' '.repeat(padLeft);
 		const options = {} as Dictionary;
 		let decorator = this.getDecoratorType(prop);
-		this.typeGraphQlImports.add(decorator.substring(1));
 
-		if (prop.reference === ReferenceType.MANY_TO_MANY) {
+		if ([ReferenceType.MANY_TO_MANY, ReferenceType.ONE_TO_MANY].includes(prop.reference)) {
 			this.getManyToManyDecoratorOptions(options, prop);
 		} else if (prop.reference === ReferenceType.ONE_TO_MANY) {
 			this.getOneToManyDecoratorOptions(options, prop);
 		} else if (prop.reference !== ReferenceType.SCALAR) {
 			this.getForeignKeyDecoratorOptions(options, prop);
-		} else {
-			this.getScalarPropertyDecoratorOptions(options, prop);
-		}
-
-		if (prop.enum) {
-			options.items = `() => ${prop.type}`;
 		}
 
 		this.getCommonDecoratorOptions(options, prop);
-		const indexes = this.getPropertyIndexes(prop, options);
-		decorator = [...indexes.sort(), decorator].map((d) => padding + d).join('\n');
+		decorator = [decorator].map((d) => padding + d).join('\n');
 
 		if (!Utils.hasObjectKeys(options)) {
-			return `${decorator}()\n`;
+			return `${decorator}(() => ${this.getPropertyType(prop)})\n`;
 		}
 
-		return `${decorator}({ ${Object.entries(options)
+		return `${decorator}(() => ${this.getPropertyType(prop)}, { ${Object.entries(options)
 			.map(([opt, val]) => `${opt}: ${val}`)
 			.join(', ')} })\n`;
-	}
-
-	protected getPropertyIndexes(prop: EntityProperty, options: Dictionary): string[] {
-		if (prop.reference === ReferenceType.SCALAR) {
-			const ret: string[] = [];
-
-			if (prop.index) {
-				this.typeGraphQlImports.add('Index');
-				ret.push(`@Index({ name: '${prop.index}' })`);
-			}
-
-			if (prop.unique) {
-				this.typeGraphQlImports.add('Unique');
-				ret.push(`@Unique({ name: '${prop.unique}' })`);
-			}
-
-			return ret;
-		}
-
-		const processIndex = (type: 'index' | 'unique') => {
-			if (!prop[type]) {
-				return;
-			}
-
-			const defaultName = this.platform.getIndexName(this.meta.collection, prop.fieldNames, type);
-			options[type] = defaultName === prop[type] ? 'true' : `'${prop[type]}'`;
-			const expected = {
-				index: this.platform.indexForeignKeys(),
-				unique: prop.reference === ReferenceType.ONE_TO_ONE,
-			};
-
-			if (expected[type] && options[type] === 'true') {
-				delete options[type];
-			}
-		};
-
-		processIndex('index');
-		processIndex('unique');
-
-		return [];
 	}
 
 	protected getCommonDecoratorOptions(options: Dictionary, prop: EntityProperty): void {
 		if (prop.nullable && !prop.mappedBy) {
 			options.nullable = true;
-		}
-
-		if (prop.default == null) {
-			return;
-		}
-
-		if (typeof prop.default !== 'string') {
-			options.default = prop.default;
-			return;
-		}
-
-		if ([`''`, ''].includes(prop.default)) {
-			options.default = `''`;
-		} else if (prop.defaultRaw === this.quote(prop.default)) {
-			options.default = this.quote(prop.default);
-		} else {
-			options.defaultRaw = `\`${prop.default}\``;
-		}
-	}
-
-	protected getScalarPropertyDecoratorOptions(options: Dictionary, prop: EntityProperty): void {
-		let t = prop.type.toLowerCase();
-
-		if (t === 'date') {
-			t = 'datetime';
-		}
-
-		if (prop.fieldNames[0] !== this.namingStrategy.propertyToColumnName(prop.name)) {
-			options.fieldName = `'${prop.fieldNames[0]}'`;
-		}
-
-		// for enum properties, we don't need a column type or the property length
-		// in the decorator so return early.
-		if (prop.enum) {
-			return;
-		}
-
-		const mappedType1 = this.platform.getMappedType(t);
-		const mappedType2 = this.platform.getMappedType(prop.columnTypes[0]);
-		const columnType1 = mappedType1.getColumnType({ ...prop, autoincrement: false }, this.platform);
-		const columnType2 = mappedType2.getColumnType({ ...prop, autoincrement: false }, this.platform);
-
-		if (
-			columnType1 !== columnType2 ||
-			[mappedType1, mappedType2].some((t) => t instanceof UnknownType)
-		) {
-			options.columnType = this.quote(prop.columnTypes[0]);
-		}
-
-		if (prop.length) {
-			options.length = prop.length;
 		}
 	}
 
@@ -311,54 +230,21 @@ export class GraphQlEntityFile extends BaseFile {
 		const parts = prop.referencedTableName.split('.', 2);
 		const className = this.namingStrategy.getClassName(parts.length > 1 ? parts[1] : parts[0], '_');
 		this.entityImports.add(className);
-		options.entity = `() => ${className}`;
-
-		if (prop.wrappedReference) {
-			options.wrappedReference = true;
-		}
-
-		if (prop.mappedBy) {
-			options.mappedBy = this.quote(prop.mappedBy);
-			return;
-		}
-
-		if (
-			prop.fieldNames[0] !==
-			this.namingStrategy.joinKeyColumnName(prop.name, prop.referencedColumnNames[0])
-		) {
-			options.fieldName = this.quote(prop.fieldNames[0]);
-		}
-
-		if (prop.primary) {
-			options.primary = true;
-		}
+		options.id = this.quote(this.snakeToCamelCaseString(prop.fieldNames[0]));
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {
-		if (prop.reference === ReferenceType.ONE_TO_ONE) {
-			return '@OneToOne';
+		if ([ReferenceType.ONE_TO_ONE, ReferenceType.MANY_TO_ONE].includes(prop.reference)) {
+			this.coreImports.add('RelationshipField');
+			return `@RelationshipField<${this.meta.className}>`;
 		}
 
-		if (prop.reference === ReferenceType.MANY_TO_ONE) {
-			return '@ManyToOne';
+		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
+			this.coreImports.add('RelationshipField');
+			return `@RelationshipField<${prop.type}>`;
 		}
 
-		if (prop.reference === ReferenceType.ONE_TO_MANY) {
-			return '@OneToMany';
-		}
-
-		if (prop.reference === ReferenceType.MANY_TO_MANY) {
-			return '@ManyToMany';
-		}
-
-		if (prop.primary) {
-			return '@PrimaryKey';
-		}
-
-		if (prop.enum) {
-			return '@Enum';
-		}
-
+		this.coreImports.add('Field');
 		return '@Field';
 	}
 }

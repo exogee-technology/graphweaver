@@ -1,8 +1,14 @@
 import { DatabaseSchema, AbstractSqlPlatform } from '@mikro-orm/knex';
-import { EntityMetadata, EntityProperty, NamingStrategy, ReferenceType } from '@mikro-orm/core';
+import {
+	EntityMetadata,
+	EntityProperty,
+	NamingStrategy,
+	ReferenceType,
+	Utils,
+} from '@mikro-orm/core';
 
 import { ConnectionManager, ConnectionOptions } from '../database';
-import { DataEntityFile, GraphQlEntityFile } from './files';
+import { DataEntityFile, SchemaEntityFile } from './files';
 
 const CONNECTION_MANAGER_ID = 'generate';
 
@@ -33,6 +39,16 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 	}
 };
 
+const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
+	for (const meta of metadata.filter((m) => !m.pivotTable)) {
+		for (const prop of meta.relations) {
+			if ([ReferenceType.MANY_TO_ONE, ReferenceType.ONE_TO_ONE].includes(prop.reference)) {
+				prop.wrappedReference = true;
+			}
+		}
+	}
+};
+
 const convertSchemaToMetadata = async (
 	schema: DatabaseSchema,
 	platform: AbstractSqlPlatform,
@@ -48,6 +64,7 @@ const convertSchemaToMetadata = async (
 		.map((table) => table.getEntityDeclaration(namingStrategy, helper));
 
 	detectManyToManyRelations(metadata, namingStrategy);
+	generateIdentifiedReferences(metadata);
 
 	return metadata;
 };
@@ -84,17 +101,18 @@ export const generate = async (client: 'postgresql' | 'mysql', options: Connecti
 	const schema = await DatabaseSchema.create(connection, platform, config);
 	const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
 
-	const source: (DataEntityFile | GraphQlEntityFile)[] = [];
+	const source: (DataEntityFile | SchemaEntityFile)[] = [];
 
 	for (const meta of metadata) {
 		if (!meta.pivotTable) {
 			source.push(new DataEntityFile(meta, namingStrategy, platform));
-			source.push(new GraphQlEntityFile(meta, namingStrategy, platform));
+			source.push(new SchemaEntityFile(meta, namingStrategy, platform));
 		}
 	}
 
 	const files = source.map((file) => ({
-		filepath: `${file.getBasePath()}${file.getBaseName()}`,
+		path: file.getBasePath(),
+		name: file.getBaseName(),
 		contents: file.generate(),
 	}));
 

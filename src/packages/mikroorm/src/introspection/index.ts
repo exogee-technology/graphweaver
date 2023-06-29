@@ -7,7 +7,10 @@ export const introspection = async (client: 'postgresql' | 'mysql', options: Con
 	const files = await generate(client, options);
 
 	for (const file of files) {
-		if (file.filepath === `./backend/schema/job/entity.ts`) {
+		if (file.path === `backend/schema/job/`) {
+			console.log(file.contents);
+		}
+		if (file.name === `job.ts`) {
 			console.log(file.contents);
 		}
 	}

@@ -1,5 +1,4 @@
-import { GraphQLEntity, SummaryField } from '@exogee/graphweaver';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { GraphQLEntity, SummaryField, Field, ID, ObjectType } from '@exogee/graphweaver';
 
 import { User as OrmUser } from '../../entities';
 
