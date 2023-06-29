@@ -32,7 +32,6 @@
 		"dotenv": "16.0.0",
 		"got": "11.8.5",
 		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.2",
 		"class-validator": "0.14.0",
 		"graphql": "16.6.0"
 	},

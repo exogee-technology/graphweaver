@@ -1,2 +1,2 @@
 export * from './data-entity-file';
-export * from './graphql-entity-file';
+export * from './schema-entity-file';

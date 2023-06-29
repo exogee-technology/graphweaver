@@ -1,5 +1,4 @@
-import { GraphQLEntity, RelationshipField } from '@exogee/graphweaver';
-import { Field, ID, ObjectType } from 'type-graphql';
+import { GraphQLEntity, RelationshipField, Field, ID, ObjectType } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,

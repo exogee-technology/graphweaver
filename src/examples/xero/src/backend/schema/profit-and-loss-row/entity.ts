@@ -1,6 +1,12 @@
-import { GraphQLEntity, AdminUISettings, RelationshipField } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	AdminUISettings,
+	RelationshipField,
+	Field,
+	ID,
+	ObjectType,
+} from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
-import { Field, ID, ObjectType } from 'type-graphql';
 
 import { Account } from '../account';
 import { Tenant } from '../tenant';
