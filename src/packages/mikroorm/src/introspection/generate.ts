@@ -8,7 +8,7 @@ import {
 } from '@mikro-orm/core';
 
 import { ConnectionManager, ConnectionOptions } from '../database';
-import { DataEntityFile, SchemaEntityFile } from './files';
+import { DataEntityFile, SchemaEntityFile, SchemaIndexFile } from './files';
 
 const CONNECTION_MANAGER_ID = 'generate';
 
@@ -86,6 +86,8 @@ const closeConnection = async () => {
 	console.log('Database connection closed.');
 };
 
+type File = DataEntityFile | SchemaEntityFile | SchemaIndexFile;
+
 export const generate = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
 	await openConnection(client, options);
 
@@ -101,12 +103,13 @@ export const generate = async (client: 'postgresql' | 'mysql', options: Connecti
 	const schema = await DatabaseSchema.create(connection, platform, config);
 	const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
 
-	const source: (DataEntityFile | SchemaEntityFile)[] = [];
+	const source: File[] = [];
 
 	for (const meta of metadata) {
 		if (!meta.pivotTable) {
 			source.push(new DataEntityFile(meta, namingStrategy, platform));
 			source.push(new SchemaEntityFile(meta, namingStrategy, platform));
+			source.push(new SchemaIndexFile(meta, namingStrategy, platform));
 		}
 	}
 
