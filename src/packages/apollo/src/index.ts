@@ -52,6 +52,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
+		apolloServerOptions: {
+			introspection: true,
+		},
 	};
 
 	constructor(config: GraphweaverConfig) {
