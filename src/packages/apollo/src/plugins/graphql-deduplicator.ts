@@ -5,12 +5,13 @@ export const dedupeGraphQL: ApolloServerPlugin = {
 	async requestDidStart() {
 		return {
 			async willSendResponse(requestContext) {
-				if (requestContext.response.body.kind == 'single') {
-					if (requestContext.response.body.singleResult.data) {
-						// TODO: check if enabled
+				if (
+					requestContext.response.body.kind == 'single' &&
+					requestContext.response.body.singleResult.data
+				) {
+					if (typeof requestContext.response.body.singleResult.data.result === 'object') {
 						requestContext.response.body.singleResult.data.result = deflate(
-							// @ts-ignore
-							requestContext.response.body.singleResult.data.result
+							requestContext.response.body.singleResult.data.result as object
 						);
 					}
 				}
