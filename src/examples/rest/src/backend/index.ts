@@ -1,11 +1,7 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
-import {
-	AuthorizationContext,
-	localAuthApolloPlugin,
-	setAdministratorRoleName,
-} from '@exogee/graphweaver-auth';
+import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver-auth';
 
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
@@ -18,7 +14,6 @@ import { myConnection } from './database';
 
 // Auth Functions
 import { addUserToContext } from './auth/context';
-import { beforeRead, afterRead } from './auth/admin-ui';
 
 export enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
@@ -37,8 +32,6 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 		],
 	},
 });
-
-setAdministratorRoleName('ADMINISTRATOR');
 
 export const handler = startServerAndCreateLambdaHandler<any>(
 	graphweaver.server,
