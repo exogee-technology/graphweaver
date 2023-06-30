@@ -14,7 +14,6 @@ const graphweaver = new Graphweaver({
 		introspection: process.env.IS_OFFLINE === 'true',
 		plugins: [connectToDatabase(connections), ClearDatabaseContext],
 	},
-	adminMetadata: { enabled: true },
 });
 
 exports.handler = startServerAndCreateLambdaHandler(

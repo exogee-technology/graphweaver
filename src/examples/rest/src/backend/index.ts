@@ -44,13 +44,6 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 			ClearDatabaseContext,
 		],
 	},
-	adminMetadata: {
-		enabled: true,
-		hooks: {
-			beforeRead,
-			afterRead,
-		},
-	},
 });
 
 setAdministratorRoleName('ADMINISTRATOR');
