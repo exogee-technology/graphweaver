@@ -13,7 +13,6 @@ const graphweaver = new Graphweaver({
 		introspection: process.env.IS_OFFLINE === 'true',
 		plugins: [XeroAuthApolloPlugin],
 	},
-	adminMetadata: { enabled: true },
 });
 logger.info(`example-xero graphweaver.server start`);
 
