@@ -7,8 +7,17 @@ import {
 	Utils,
 } from '@mikro-orm/core';
 
-import { ConnectionManager, ConnectionOptions } from '../database';
-import { DataEntityFile, SchemaEntityFile, SchemaIndexFile, SchemaResolverFile } from './files';
+import { ConnectionManager, ConnectionOptions, DatabaseType } from '../database';
+import {
+	DataEntityFile,
+	DataEntityIndexFile,
+	DataSourceIndexFile,
+	SchemaEntityFile,
+	SchemaIndexFile,
+	SchemaResolverFile,
+	SchemaEntityIndexFile,
+	DatabaseFile,
+} from './files';
 
 const CONNECTION_MANAGER_ID = 'generate';
 
@@ -69,7 +78,7 @@ const convertSchemaToMetadata = async (
 	return metadata;
 };
 
-const openConnection = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
+const openConnection = async (options: ConnectionOptions) => {
 	const { PostgreSqlDriver } = await import('@mikro-orm/postgresql');
 
 	await ConnectionManager.connect(CONNECTION_MANAGER_ID, {
@@ -86,10 +95,18 @@ const closeConnection = async () => {
 	console.log('Database connection closed.');
 };
 
-type File = DataEntityFile | SchemaEntityFile | SchemaIndexFile | SchemaResolverFile;
+type File =
+	| DataEntityFile
+	| SchemaEntityFile
+	| SchemaEntityIndexFile
+	| SchemaIndexFile
+	| SchemaResolverFile
+	| DataEntityIndexFile
+	| DataSourceIndexFile
+	| DatabaseFile;
 
-export const generate = async (client: 'postgresql' | 'mysql', options: ConnectionOptions) => {
-	await openConnection(client, options);
+export const generate = async (type: DatabaseType, options: ConnectionOptions) => {
+	await openConnection(options);
 
 	const database = ConnectionManager.database(CONNECTION_MANAGER_ID);
 	if (!database) throw new Error('cannot connect to database');
@@ -109,10 +126,19 @@ export const generate = async (client: 'postgresql' | 'mysql', options: Connecti
 		if (!meta.pivotTable) {
 			source.push(new DataEntityFile(meta, namingStrategy, platform));
 			source.push(new SchemaEntityFile(meta, namingStrategy, platform));
-			source.push(new SchemaIndexFile(meta, namingStrategy, platform));
+			source.push(new SchemaEntityIndexFile(meta, namingStrategy, platform));
 			source.push(new SchemaResolverFile(meta, namingStrategy, platform));
 		}
 	}
+
+	// Export all the entities from the data source directory
+	source.push(new DataEntityIndexFile(metadata));
+	// Export the data source from the entities directory
+	source.push(new DataSourceIndexFile());
+	// Export the data source from the entities directory
+	source.push(new SchemaIndexFile(metadata));
+	// Export the database connection to its own file
+	source.push(new DatabaseFile(type, options));
 
 	const files = source.map((file) => ({
 		path: file.getBasePath(),

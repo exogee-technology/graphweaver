@@ -1,10 +1,10 @@
 import { EntityMetadata } from '@mikro-orm/core';
 
-export class SchemaIndexFile {
+export class DataEntityIndexFile {
 	constructor(protected readonly metadata: EntityMetadata<any>[]) {}
 
 	getBasePath() {
-		return `backend/schema`;
+		return `backend/entities/postgresql/`;
 	}
 
 	getBaseName() {
@@ -12,7 +12,7 @@ export class SchemaIndexFile {
 	}
 
 	generate(): string {
-		let ret = 'export const resolvers = [\n';
+		let ret = 'export const entities = [\n';
 		const padding = '\t';
 		const imports: string[] = [];
 		const exports: string[] = [];
@@ -21,8 +21,8 @@ export class SchemaIndexFile {
 			if (!meta.pivotTable) {
 				const filename = meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase();
 				exports.push(`export * from './${filename}';`);
-				imports.push(`import { ${meta.className}Resolver } from './${filename}';`);
-				ret += `${padding}${meta.className}Resolver,\n`;
+				imports.push(`import { ${meta.className} } from './${filename}';`);
+				ret += `${padding}${meta.className},\n`;
 			}
 		}
 
