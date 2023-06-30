@@ -56,10 +56,11 @@ export class DataEntityFile extends BaseFile {
 
 	generate(): string {
 		const enumDefinitions: string[] = [];
-		let classBody = '\n';
-		Object.values(this.meta.properties).forEach((prop) => {
-			const decorator = this.getPropertyDecorator(prop, 2);
-			const definition = this.getPropertyDefinition(prop, 2);
+		let classBody = '';
+		const props = Object.values(this.meta.properties);
+		props.forEach((prop) => {
+			const decorator = this.getPropertyDecorator(prop);
+			const definition = this.getPropertyDefinition(prop);
 
 			if (!classBody.endsWith('\n\n')) {
 				classBody += '\n';
@@ -67,14 +68,15 @@ export class DataEntityFile extends BaseFile {
 
 			classBody += decorator;
 			classBody += definition;
-			classBody += '\n';
+
+			if (props[props.length - 1] !== prop) classBody += '\n';
 
 			if (prop.enum) {
 				const enumClassName = this.namingStrategy.getClassName(
 					this.meta.collection + '_' + prop.fieldNames[0],
 					'_'
 				);
-				enumDefinitions.push(this.getEnumClassDefinition(enumClassName, prop.items as string[], 2));
+				enumDefinitions.push(this.getEnumClassDefinition(enumClassName, prop.items as string[]));
 			}
 		});
 
@@ -105,8 +107,8 @@ export class DataEntityFile extends BaseFile {
 		return ret;
 	}
 
-	protected getPropertyDefinition(prop: EntityProperty, padLeft: number): string {
-		const padding = ' '.repeat(padLeft);
+	protected getPropertyDefinition(prop: EntityProperty): string {
+		const padding = '\t';
 
 		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
 			this.coreImports.add('Collection');
@@ -135,15 +137,11 @@ export class DataEntityFile extends BaseFile {
 			return `${padding}${ret} = ${prop.type}.${prop.default.toUpperCase()};\n`;
 		}
 
-		return `${padding}${ret} = ${prop.default};\n`;
+		return `${padding}${prop.name} = ${prop.default};\n`;
 	}
 
-	protected getEnumClassDefinition(
-		enumClassName: string,
-		enumValues: string[],
-		padLeft: number
-	): string {
-		const padding = ' '.repeat(padLeft);
+	protected getEnumClassDefinition(enumClassName: string, enumValues: string[]): string {
+		const padding = '\t';
 		let ret = `export enum ${enumClassName} {\n`;
 
 		for (const enumValue of enumValues) {
@@ -175,8 +173,8 @@ export class DataEntityFile extends BaseFile {
 			.join(', ')} }`;
 	}
 
-	private getPropertyDecorator(prop: EntityProperty, padLeft: number): string {
-		const padding = ' '.repeat(padLeft);
+	private getPropertyDecorator(prop: EntityProperty): string {
+		const padding = '\t';
 		const options = {} as Dictionary;
 		let decorator = this.getDecoratorType(prop);
 		this.coreImports.add(decorator.substring(1));
