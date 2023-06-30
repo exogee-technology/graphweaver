@@ -8,12 +8,10 @@ export const dedupeGraphQL: ApolloServerPlugin = {
 				if (requestContext.response.body.kind == 'single') {
 					if (requestContext.response.body.singleResult.data) {
 						// TODO: check if enabled
-						requestContext.response.body.singleResult.data = deflate(
-							requestContext.response.body.singleResult.data
+						requestContext.response.body.singleResult.data.result = deflate(
+							// @ts-ignore
+							requestContext.response.body.singleResult.data.result
 						);
-						console.log(requestContext.response.body.singleResult.data);
-
-						console.log('deflate', deflate(requestContext.response.body.singleResult.data));
 					}
 				}
 			},
