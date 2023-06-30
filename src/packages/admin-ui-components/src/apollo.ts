@@ -44,7 +44,8 @@ const authLink = new ApolloLink((operation, forward) => {
 				);
 			localStorage.setItem('graphweaver-auth', newAuthToken);
 		}
-		// TODO: check if graphql dedupe is enabled
+
+		// Inflate the response data, this is deduplicated by default
 		if (response.data) {
 			response.data = inflate(response.data);
 		}

@@ -46,6 +46,9 @@ export interface GraphweaverConfig {
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	authChecker?: AuthChecker<any, any>;
 	corsOptions?: CorsPluginOptions;
+	graphqlDeduplicator?: {
+		enabled: boolean;
+	};
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -53,9 +56,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
-		// graphqlDeduplicatorOptions: {
-		// 	enabled: true,
-		// },
+		graphqlDeduplicator: {
+			enabled: true,
+		},
 	};
 
 	constructor(config: GraphweaverConfig) {
@@ -81,8 +84,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
 			...(this.config.apolloServerOptions?.plugins || []),
-			dedupeGraphQL,
+			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
+
 		const resolvers = (this.config.resolvers || []) as any;
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
