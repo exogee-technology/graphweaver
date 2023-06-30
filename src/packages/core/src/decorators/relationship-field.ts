@@ -16,12 +16,16 @@ import {
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
 	id?: (keyof D & string) | ((dataEntity: D) => string);
+	nullable?: boolean;
 };
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
 	D extends BaseDataEntity = G['dataEntity']
->(returnTypeFunc: ReturnTypeFunc, { relatedField, id }: RelationshipFieldOptions<D>) {
+>(
+	returnTypeFunc: ReturnTypeFunc,
+	{ relatedField, id, nullable = true }: RelationshipFieldOptions<D>
+) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
@@ -37,7 +41,7 @@ export function RelationshipField<
 			prototype: target,
 			propertyKey: key,
 			returnTypeFunc,
-			typeOptions: { nullable: true },
+			typeOptions: { nullable },
 		});
 
 		// next we need to add the below function as a field resolver
