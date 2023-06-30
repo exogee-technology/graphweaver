@@ -13,6 +13,6 @@ export class SchemaIndexFile extends BaseFile {
 	generate(): string {
 		const imports = [`export * from './entity';`, `export * from './resolver';`];
 
-		return `${imports.join('\n')}`;
+		return `${imports.join('\n')}\n`;
 	}
 }

@@ -35,9 +35,10 @@ export class SchemaEntityFile extends BaseFile {
 	generate(): string {
 		const enumDefinitions: string[] = [];
 		let classBody = '\n';
-		Object.values(this.meta.properties).forEach((prop) => {
-			const decorator = this.getPropertyDecorator(prop, 2);
-			const definition = this.getPropertyDefinition(prop, 2);
+		const props = Object.values(this.meta.properties);
+		props.forEach((prop) => {
+			const decorator = this.getPropertyDecorator(prop);
+			const definition = this.getPropertyDefinition(prop);
 
 			if (!classBody.endsWith('\n\n')) {
 				classBody += '\n';
@@ -45,7 +46,8 @@ export class SchemaEntityFile extends BaseFile {
 
 			classBody += decorator;
 			classBody += definition;
-			classBody += '\n';
+
+			if (props[props.length - 1] !== prop) classBody += '\n';
 
 			if (prop.enum) {
 				const enumClassName = this.namingStrategy.getClassName(
@@ -69,7 +71,7 @@ export class SchemaEntityFile extends BaseFile {
 
 		this.coreImports.add('GraphQLEntity');
 		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
-		ret += `  public dataEntity!: Orm${this.meta.className};`;
+		ret += `\tpublic dataEntity!: Orm${this.meta.className};`;
 
 		ret += `${classBody}}\n`;
 		const imports = [
@@ -100,8 +102,8 @@ export class SchemaEntityFile extends BaseFile {
 		return ret;
 	}
 
-	protected getPropertyDefinition(prop: EntityProperty, padLeft: number): string {
-		const padding = ' '.repeat(padLeft);
+	protected getPropertyDefinition(prop: EntityProperty): string {
+		const padding = '\t';
 
 		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
 			this.coreImports.add('Collection');
@@ -124,7 +126,7 @@ export class SchemaEntityFile extends BaseFile {
 			return `${padding}${ret} = ${prop.type}.${prop.default.toUpperCase()};\n`;
 		}
 
-		return `${padding}${ret} = ${prop.default};\n`;
+		return `${padding}${prop.name} = ${prop.default};\n`;
 	}
 
 	protected getEnumClassDefinition(enumClassName: string): string {
@@ -152,8 +154,8 @@ export class SchemaEntityFile extends BaseFile {
 		return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
 	}
 
-	private getPropertyDecorator(prop: EntityProperty, padLeft: number): string {
-		const padding = ' '.repeat(padLeft);
+	private getPropertyDecorator(prop: EntityProperty): string {
+		const padding = '\t';
 		const options = {} as Dictionary;
 		let decorator = this.getDecoratorType(prop);
 
