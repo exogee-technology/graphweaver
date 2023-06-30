@@ -11,7 +11,6 @@ import { connections } from './database';
 const graphweaver = new Graphweaver({
 	resolvers: [TaskResolver, UserResolver],
 	apolloServerOptions: {
-		introspection: process.env.IS_OFFLINE === 'true',
 		plugins: [connectToDatabase(connections), ClearDatabaseContext],
 	},
 });

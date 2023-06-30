@@ -1,10 +1,3 @@
-import dotenv from 'dotenv';
-import * as path from 'path';
-const isOffline = process.env.IS_OFFLINE === 'true';
-const envPath = isOffline ? path.join(__dirname, '../.env') : undefined;
-dotenv.config({
-	path: envPath,
-});
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
@@ -37,7 +30,6 @@ const resolvers = [TaskResolver, TagResolver, UserResolver, AuthResolver];
 const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
-		introspection: isOffline,
 		plugins: [
 			localAuthApolloPlugin(addUserToContext),
 			connectToDatabase(myConnection),

@@ -10,7 +10,6 @@ logger.info(`example-xero start Graphweaver`);
 const graphweaver = new Graphweaver({
 	resolvers: [AccountResolver, ProfitAndLossRowResolver, TenantResolver],
 	apolloServerOptions: {
-		introspection: process.env.IS_OFFLINE === 'true',
 		plugins: [XeroAuthApolloPlugin],
 	},
 });
