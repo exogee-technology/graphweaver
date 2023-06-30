@@ -40,7 +40,6 @@ export class SchemaEntityFile extends BaseFile {
 		ret += `  public dataEntity!: Orm${this.meta.className};`;
 
 		const enumDefinitions: string[] = [];
-		const optionalProperties: EntityProperty<any>[] = [];
 		let classBody = '\n';
 		Object.values(this.meta.properties).forEach((prop) => {
 			const decorator = this.getPropertyDecorator(prop, 2);
@@ -60,10 +59,6 @@ export class SchemaEntityFile extends BaseFile {
 					'_'
 				);
 				enumDefinitions.push(this.getEnumClassDefinition(enumClassName, prop.items as string[], 2));
-			}
-
-			if (!prop.nullable && typeof prop.default !== 'undefined') {
-				optionalProperties.push(prop);
 			}
 		});
 
@@ -173,6 +168,7 @@ export class SchemaEntityFile extends BaseFile {
 			this.getForeignKeyDecoratorOptions(options, prop);
 		}
 
+		this.getCommonDecoratorOptions(options, prop);
 		decorator = [decorator].map((d) => padding + d).join('\n');
 
 		if (!Utils.hasObjectKeys(options)) {
@@ -182,6 +178,12 @@ export class SchemaEntityFile extends BaseFile {
 		return `${decorator}(() => ${this.getPropertyType(prop)}, { ${Object.entries(options)
 			.map(([opt, val]) => `${opt}: ${val}`)
 			.join(', ')} })\n`;
+	}
+
+	protected getCommonDecoratorOptions(options: Dictionary, prop: EntityProperty): void {
+		if (prop.nullable && !prop.mappedBy) {
+			options.nullable = true;
+		}
 	}
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
@@ -224,10 +226,6 @@ export class SchemaEntityFile extends BaseFile {
 		const className = this.namingStrategy.getClassName(parts.length > 1 ? parts[1] : parts[0], '_');
 		this.entityImports.add(className);
 		options.id = this.quote(this.snakeToCamelCaseString(prop.fieldNames[0]));
-
-		if (prop.nullable && !prop.mappedBy) {
-			options.nullable = true;
-		}
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {
