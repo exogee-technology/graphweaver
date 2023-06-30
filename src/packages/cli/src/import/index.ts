@@ -22,6 +22,7 @@ export const importDataSource = async () => {
 			user: 'postgres',
 			password: '',
 			dbName: 'go-collect',
+			port: 5432,
 		},
 	});
 	console.log('Import complete.');

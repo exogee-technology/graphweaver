@@ -51,7 +51,7 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	getBaseName() {
-		return this.pascalToKebabCaseString(this.meta.className) + '.ts';
+		return 'index.ts';
 	}
 
 	generate(): string {
