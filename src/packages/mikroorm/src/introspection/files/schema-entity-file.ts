@@ -13,6 +13,7 @@ export class SchemaEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
 	protected readonly scalarImports = new Set<string>();
 	protected readonly entityImports = new Set<string>();
+	protected readonly enumImports = new Set<string>();
 
 	constructor(
 		protected readonly meta: EntityMetadata,
@@ -32,13 +33,6 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	generate(): string {
-		this.coreImports.add('ObjectType');
-		let ret = `@ObjectType(${this.quote(this.meta.className)})\n`;
-
-		this.coreImports.add('GraphQLEntity');
-		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
-		ret += `  public dataEntity!: Orm${this.meta.className};`;
-
 		const enumDefinitions: string[] = [];
 		let classBody = '\n';
 		Object.values(this.meta.properties).forEach((prop) => {
@@ -58,9 +52,24 @@ export class SchemaEntityFile extends BaseFile {
 					this.meta.collection + '_' + prop.fieldNames[0],
 					'_'
 				);
-				enumDefinitions.push(this.getEnumClassDefinition(enumClassName, prop.items as string[], 2));
+				console.log('prop.enum:::', prop);
+				enumDefinitions.push(this.getEnumClassDefinition(enumClassName));
 			}
 		});
+
+		let ret = '';
+
+		if (enumDefinitions.length) {
+			ret += enumDefinitions.join('\n');
+			ret += '\n\n';
+		}
+
+		this.coreImports.add('ObjectType');
+		ret += `@ObjectType(${this.quote(this.meta.className)})\n`;
+
+		this.coreImports.add('GraphQLEntity');
+		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
+		ret += `  public dataEntity!: Orm${this.meta.className};`;
 
 		ret += `${classBody}}\n`;
 		const imports = [
@@ -81,13 +90,12 @@ export class SchemaEntityFile extends BaseFile {
 		});
 
 		imports.push(
-			`import { ${this.meta.className} as Orm${this.meta.className} } from '../../entities';`
+			`import { ${this.enumImports.size > 0 ? [...this.enumImports].sort().join(', ') + ', ' : ''}${
+				this.meta.className
+			} as Orm${this.meta.className} } from '../../entities';`
 		);
 
 		ret = `${imports.join('\n')}\n\n${ret}`;
-		if (enumDefinitions.length) {
-			ret += '\n' + enumDefinitions.join('\n');
-		}
 
 		return ret;
 	}
@@ -119,21 +127,10 @@ export class SchemaEntityFile extends BaseFile {
 		return `${padding}${ret} = ${prop.default};\n`;
 	}
 
-	protected getEnumClassDefinition(
-		enumClassName: string,
-		enumValues: string[],
-		padLeft: number
-	): string {
-		const padding = ' '.repeat(padLeft);
-		let ret = `export enum ${enumClassName} {\n`;
-
-		for (const enumValue of enumValues) {
-			ret += `${padding}${enumValue.toUpperCase()} = '${enumValue}',\n`;
-		}
-
-		ret += '}\n';
-
-		return ret;
+	protected getEnumClassDefinition(enumClassName: string): string {
+		this.coreImports.add('registerEnumType');
+		this.enumImports.add(enumClassName);
+		return `registerEnumType(${enumClassName}, { name: ${this.quote(enumClassName)} });`;
 	}
 
 	private getPropertyType(prop: EntityProperty): string {
