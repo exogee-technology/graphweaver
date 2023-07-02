@@ -228,7 +228,7 @@ export class SchemaEntityFile extends BaseFile {
 		const parts = prop.referencedTableName.split('.', 2);
 		const className = this.namingStrategy.getClassName(parts.length > 1 ? parts[1] : parts[0], '_');
 		this.entityImports.add(className);
-		options.id = this.quote(this.snakeToCamelCaseString(prop.fieldNames[0]));
+		options.id = `(entity) => entity.${prop.name}?.id`;
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {
