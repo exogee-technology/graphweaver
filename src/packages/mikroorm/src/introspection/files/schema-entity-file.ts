@@ -151,6 +151,10 @@ export class SchemaEntityFile extends BaseFile {
 			return 'DateScalar';
 		}
 
+		if (prop.type.includes('[]')) {
+			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
+		}
+
 		return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
 	}
 
