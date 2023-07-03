@@ -46,7 +46,6 @@ export const makeDirectories = (projectName: string) => {
 	mkdirSync(`${projectName}/src`);
 	mkdirSync(`${projectName}/src/backend`);
 	mkdirSync(`${projectName}/src/backend/schema`);
-	mkdirSync(`${projectName}/src/backend/schema/ping`);
 };
 
 export const makeDatabase = (projectName: string, backends: Backend[]) => {
@@ -142,7 +141,7 @@ export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 export const resolvers = []; // add your resolvers here 
 `;
 
-	writeFileSync(`${projectName}/src/backend/schema/ping/index.ts`, index);
+	writeFileSync(`${projectName}/src/backend/schema/index.ts`, index);
 };
 
 export const makeTsConfig = (projectName: string) => {
