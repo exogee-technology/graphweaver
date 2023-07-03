@@ -3,14 +3,12 @@ import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
-// Export these from index.ts
-import { UserResolver } from './schema/user';
-import { TaskResolver } from './schema/task';
+import { resolvers } from './schema';
 
 import { connections } from './database';
 
 const graphweaver = new Graphweaver({
-	resolvers: [TaskResolver, UserResolver], // import as resovlers array.
+	resolvers: resolvers,
 	apolloServerOptions: {
 		plugins: [connectToDatabase(connections), ClearDatabaseContext],
 	},
