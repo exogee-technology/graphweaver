@@ -111,15 +111,11 @@ ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
 
 import { PingResolver } from './schema/ping';
 
-const isOffline = process.env.IS_OFFLINE === 'true';
-
 const graphweaver = new Graphweaver({
 	resolvers: [PingResolver],
 	apolloServerOptions: {
-		introspection: isOffline,
 		${hasDatabaseConnections ? `plugins,` : ''}
 	},
-	adminMetadata: { enabled: true },
 });
 
 export const handler = startServerAndCreateLambdaHandler<any>(
