@@ -51,7 +51,8 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	getBaseName() {
-		return 'index.ts';
+		const fileName = this.pascalToKebabCaseString(this.meta.className);
+		return `${fileName}.ts`;
 	}
 
 	generate(): string {
@@ -107,6 +108,14 @@ export class DataEntityFile extends BaseFile {
 		return ret;
 	}
 
+	protected getPropertyType(prop: EntityProperty): string {
+		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
+			return `Record<string, unknown>`;
+		}
+
+		return prop.type;
+	}
+
 	protected getPropertyDefinition(prop: EntityProperty): string {
 		const padding = '\t';
 
@@ -127,7 +136,7 @@ export class DataEntityFile extends BaseFile {
 			return `${padding}${prop.name}${optional}: IdentifiedReference<${prop.type}>;\n`;
 		}
 
-		const ret = `${prop.name}${optional}: ${prop.type}`;
+		const ret = `${prop.name}${optional}: ${this.getPropertyType(prop)}`;
 
 		if (!useDefault) {
 			return `${padding + ret};\n`;
