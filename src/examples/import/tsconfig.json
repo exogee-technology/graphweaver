@@ -3,6 +3,8 @@
 	"compilerOptions": {
 		"rootDir": "./src",
 		"outDir": "./lib",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
 		"lib": ["ES2019"]
 	},
 	"include": ["./src"],
