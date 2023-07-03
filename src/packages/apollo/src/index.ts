@@ -79,22 +79,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		}
 
 		// Assign defaults
-		this.config = {
-			...config,
-			adminMetadata: {
-				...config.adminMetadata,
-				enabled: config.adminMetadata?.enabled ?? true,
-			},
-			apolloServerOptions: {
-				...config.apolloServerOptions,
-				introspection: config.apolloServerOptions?.introspection ?? true,
-			},
-			graphqlDeduplicator: {
-				...config.graphqlDeduplicator,
-				enabled: config.graphqlDeduplicator?.enabled ?? true,
-			},
-		};
-
+		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -147,3 +132,35 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.info(`Graphweaver async called`);
 	}
 }
+
+const mergeConfig = <T>(defaultConfig: T, userConfig: Partial<T>): T => {
+	if (typeof defaultConfig !== 'object' || typeof userConfig !== 'object' || !defaultConfig) {
+		throw new Error('Invalid config');
+	}
+
+	const merged = { ...defaultConfig } as T;
+
+	for (const key in userConfig) {
+		const userConfigValue = userConfig[key];
+		const defaultConfigValue = defaultConfig?.[key];
+
+		if (Array.isArray(defaultConfigValue) && Array.isArray(userConfigValue)) {
+			if (userConfigValue.length > 0) {
+				merged[key] = userConfigValue as unknown as T[Extract<keyof T, string>];
+			}
+		} else if (
+			userConfigValue &&
+			defaultConfigValue &&
+			typeof defaultConfigValue === 'object' &&
+			typeof userConfigValue === 'object'
+		) {
+			if (Object.prototype.hasOwnProperty.call(userConfig, key)) {
+				merged[key] = mergeConfig(defaultConfigValue, userConfigValue);
+			}
+		} else {
+			merged[key] = userConfigValue as unknown as T[Extract<keyof T, string>];
+		}
+	}
+
+	return merged;
+};
