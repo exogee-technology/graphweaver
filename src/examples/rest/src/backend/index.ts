@@ -5,11 +5,7 @@ import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver
 
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
-import { UserResolver, User } from './schema/user';
-import { TaskResolver } from './schema/task';
-import { TagResolver } from './schema/tag';
-import { AuthResolver } from './schema/auth';
-
+import { resolvers } from './schema';
 import { myConnection } from './database';
 
 // Auth Functions
@@ -19,8 +15,6 @@ export enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
 	DARK_SIDE = 'DARK_SIDE',
 }
-
-const resolvers = [TaskResolver, TagResolver, UserResolver, AuthResolver];
 
 const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,

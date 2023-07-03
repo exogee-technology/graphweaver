@@ -2,11 +2,11 @@ import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda';
 
-import { AccountResolver, ProfitAndLossRowResolver, TenantResolver } from './schema';
+import { resolvers } from './schema';
 import { XeroAuthApolloPlugin } from '@exogee/graphweaver-xero';
 
 const graphweaver = new Graphweaver({
-	resolvers: [AccountResolver, ProfitAndLossRowResolver, TenantResolver],
+	resolvers: resolvers,
 	apolloServerOptions: {
 		plugins: [XeroAuthApolloPlugin],
 	},
