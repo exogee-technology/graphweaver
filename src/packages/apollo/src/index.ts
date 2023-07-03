@@ -71,7 +71,19 @@ export default class Graphweaver<TContext extends BaseContext> {
 			);
 		}
 
-		this.config = config;
+		// Assign defaults
+		this.config = {
+			...config,
+			adminMetadata: {
+				...config.adminMetadata,
+				enabled: config.adminMetadata?.enabled ?? true,
+			},
+			apolloServerOptions: {
+				...config.apolloServerOptions,
+				introspection: config.apolloServerOptions?.introspection ?? true,
+			},
+		};
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -82,6 +94,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.apolloServerOptions?.plugins || []),
 		];
 		const resolvers = (this.config.resolvers || []) as any;
+
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
