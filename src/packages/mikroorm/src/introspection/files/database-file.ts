@@ -21,9 +21,13 @@ export class DatabaseFile {
 			...(isPostgresql
 				? [`import { PostgreSqlDriver } from '@mikro-orm/postgresql';`]
 				: [`import { MySqlDriver } from '@mikro-orm/mysql';`]),
+			`import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';`,
 			`import { entities } from './entities';`,
 		];
-		const exports = [`export const connections = [connection];`];
+		const exports = [
+			`export const connections = [connection];`,
+			`export const plugins = [connectToDatabase(connection), ClearDatabaseContext];`,
+		];
 
 		const pad = '\t';
 

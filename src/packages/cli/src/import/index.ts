@@ -1,5 +1,6 @@
 import { introspection } from '@exogee/graphweaver-mikroorm';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import ora from 'ora';
 import path from 'path';
 
 const createDirectories = (dirPath: string) => {
@@ -15,7 +16,8 @@ const createDirectories = (dirPath: string) => {
 };
 
 export const importDataSource = async () => {
-	console.log('importDataSource...');
+	const spinner = ora('Introspecting...').start();
+
 	const files = await introspection('postgresql', {
 		mikroOrmConfig: {
 			host: '127.0.0.1',
@@ -25,6 +27,8 @@ export const importDataSource = async () => {
 			port: 5432,
 		},
 	});
+
+	spinner.stop();
 	console.log('Import complete.');
 
 	for (const file of files) {

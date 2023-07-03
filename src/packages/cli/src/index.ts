@@ -13,19 +13,21 @@ import { importDataSource } from './import';
 
 export { initGraphWeaver } from './init';
 
+yargs.version(false);
+
 yargs
 	.env('GRAPHWEAVER')
 	.command({
 		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
 		builder: (yargs) =>
-			yargs.option('template', {
+			yargs.option('version', {
 				type: 'string',
-				describe: 'Specify a template to base your server on e.g. --template rest',
+				describe: 'Specify a version of GraphWeaver to use.',
 			}),
 		handler: async (argv) => {
-			const template = argv.template;
-			init({ template });
+			const version = argv.version;
+			init({ version });
 		},
 	})
 	.command({
@@ -109,6 +111,14 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
 			}
+		},
+	})
+	.showHelpOnFail(true)
+	.help('help')
+	.command({
+		command: '*',
+		handler() {
+			yargs.showHelp();
 		},
 	})
 	.parse();
