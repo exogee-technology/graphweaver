@@ -102,6 +102,14 @@ export class SchemaEntityFile extends BaseFile {
 		return ret;
 	}
 
+	protected getTypescriptPropertyType(prop: EntityProperty): string {
+		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
+			return `Record<string, unknown>`;
+		}
+
+		return prop.type;
+	}
+
 	protected getPropertyDefinition(prop: EntityProperty): string {
 		const padding = '\t';
 
@@ -116,7 +124,7 @@ export class SchemaEntityFile extends BaseFile {
 		const useDefault = prop.default != null && isEnumOrNonStringDefault;
 		const optional = prop.nullable ? '?' : useDefault ? '' : '!';
 
-		const ret = `${prop.name}${optional}: ${prop.type}`;
+		const ret = `${prop.name}${optional}: ${this.getTypescriptPropertyType(prop)}`;
 
 		if (!useDefault) {
 			return `${padding + ret};\n`;
@@ -135,7 +143,7 @@ export class SchemaEntityFile extends BaseFile {
 		return `registerEnumType(${enumClassName}, { name: ${this.quote(enumClassName)} });`;
 	}
 
-	private getPropertyType(prop: EntityProperty): string {
+	private getGraphQLPropertyType(prop: EntityProperty): string {
 		if (prop.primary) {
 			this.coreImports.add('ID');
 			return 'ID';
@@ -149,6 +157,11 @@ export class SchemaEntityFile extends BaseFile {
 		if (prop.columnTypes?.[0] === 'date') {
 			this.scalarImports.add('DateScalar');
 			return 'DateScalar';
+		}
+
+		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
+			this.scalarImports.add('GraphQLJSON');
+			return `GraphQLJSON`;
 		}
 
 		if (prop.type.includes('[]')) {
@@ -175,10 +188,10 @@ export class SchemaEntityFile extends BaseFile {
 		decorator = [decorator].map((d) => padding + d).join('\n');
 
 		if (!Utils.hasObjectKeys(options)) {
-			return `${decorator}(() => ${this.getPropertyType(prop)})\n`;
+			return `${decorator}(() => ${this.getGraphQLPropertyType(prop)})\n`;
 		}
 
-		return `${decorator}(() => ${this.getPropertyType(prop)}, { ${Object.entries(options)
+		return `${decorator}(() => ${this.getGraphQLPropertyType(prop)}, { ${Object.entries(options)
 			.map(([opt, val]) => `${opt}: ${val}`)
 			.join(', ')} })\n`;
 	}
