@@ -150,8 +150,8 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.type === 'Date') {
-			this.scalarImports.add('ISOStringScalar');
-			return 'ISOStringScalar';
+			this.scalarImports.add('ISODateStringScalar');
+			return 'ISODateStringScalar';
 		}
 
 		if (prop.columnTypes?.[0] === 'date') {

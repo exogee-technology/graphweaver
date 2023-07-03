@@ -37,6 +37,7 @@ importers:
       '@exogee/graphweaver': workspace:*
       '@exogee/graphweaver-apollo': workspace:*
       '@exogee/graphweaver-mikroorm': workspace:*
+      '@exogee/graphweaver-scalars': workspace:*
       '@mikro-orm/core': 5.4.2
       '@mikro-orm/mysql': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
@@ -52,6 +53,7 @@ importers:
       '@exogee/graphweaver': link:../../packages/core
       '@exogee/graphweaver-apollo': link:../../packages/apollo
       '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars': link:../../packages/scalars
       '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
       '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
@@ -573,10 +575,12 @@ importers:
       decimal.js: 10.3.1
       esbuild: 0.15.5
       graphql: 16.6.0
+      graphql-type-json: 0.3.2
       luxon: 2.5.2
       typescript: 5.0.2
     dependencies:
       '@exogee/graphweaver-mikroorm': link:../mikroorm
+      graphql-type-json: 0.3.2_graphql@16.6.0
       luxon: 2.5.2
     devDependencies:
       '@types/jest': 26.0.23
@@ -4771,7 +4775,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5_@babel+core@7.22.5
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.3.9_@types+node@18.11.9
+      vite: 4.3.9
     transitivePeerDependencies:
       - supports-color
 
@@ -7659,6 +7663,14 @@ packages:
     dependencies:
       graphql: 16.6.0
       tslib: 2.5.3
+    dev: false
+
+  /graphql-type-json/0.3.2_graphql@16.6.0:
+    resolution: {integrity: sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==}
+    peerDependencies:
+      graphql: '>=0.8.0'
+    dependencies:
+      graphql: 16.6.0
     dev: false
 
   /graphql/16.6.0:
@@ -12057,7 +12069,7 @@ packages:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 7.0.0
       '@svgr/plugin-jsx': 7.0.0
-      vite: 4.3.9_@types+node@18.11.9
+      vite: 4.3.9
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -12092,7 +12104,6 @@ packages:
       rollup: 3.25.1
     optionalDependencies:
       fsevents: 2.3.2
-    dev: true
 
   /vite/4.3.9_@types+node@14.14.10:
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
@@ -12158,6 +12169,7 @@ packages:
       rollup: 3.25.1
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /vite/4.3.9_@types+node@20.2.5:
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
