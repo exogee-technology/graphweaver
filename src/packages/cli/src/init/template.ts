@@ -3,11 +3,13 @@ import { Backend, packagesForBackend } from './backend';
 import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
 import { needsDatabaseConnection } from '.';
 
-export const makePackageJson = (projectName: string, backends: Backend[]) => {
+export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
 	const backendPackages = Object.assign(
 		{},
 		...backends.map((backend) => packagesForBackend(backend))
 	);
+
+	const graphWeaverVersion = version ?? GRAPHWEAVER_TARGET_VERSION;
 
 	const packageJson = {
 		name: projectName,
@@ -16,12 +18,14 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		scripts: {
 			build: 'graphweaver build',
 			start: 'graphweaver start',
+			import: 'graphweaver import',
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
-			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
-			'@exogee/graphweaver-apollo': GRAPHWEAVER_TARGET_VERSION,
-			graphweaver: GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver': graphWeaverVersion,
+			'@exogee/graphweaver-scalars': graphWeaverVersion,
+			'@exogee/graphweaver-apollo': graphWeaverVersion,
+			graphweaver: graphWeaverVersion,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
@@ -108,13 +112,12 @@ import 'reflect-metadata';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
-
-import { PingResolver } from './schema/ping';
+import { resolvers } from './schema';
 
 const isOffline = process.env.IS_OFFLINE === 'true';
 
 const graphweaver = new Graphweaver({
-	resolvers: [PingResolver],
+	resolvers,
 	apolloServerOptions: {
 		introspection: isOffline,
 		${hasDatabaseConnections ? `plugins,` : ''}
@@ -136,15 +139,7 @@ export const handler = startServerAndCreateLambdaHandler<any>(
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} GraphWeaver Project - Schema */
-import { buildSchemaSync, Resolver, Query } from 'type-graphql';
-
-@Resolver()
-export class PingResolver {
-	@Query(() => Boolean)
-	async ping() {
-    		return true; 
-  	}
-}   
+export const resolvers = []; // add your resolvers here 
 `;
 
 	writeFileSync(`${projectName}/src/backend/schema/ping/index.ts`, index);
