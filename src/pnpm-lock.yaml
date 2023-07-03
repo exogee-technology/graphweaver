@@ -30,6 +30,39 @@ importers:
       turbo: 1.10.1
       typescript: 5.0.2
 
+  examples/base:
+    specifiers:
+      '@apollo/server': 4.2.2
+      '@as-integrations/aws-lambda': 2.0.1
+      '@exogee/graphweaver': workspace:*
+      '@exogee/graphweaver-apollo': workspace:*
+      '@exogee/graphweaver-mikroorm': workspace:*
+      '@exogee/graphweaver-scalars': workspace:*
+      '@mikro-orm/core': 5.4.2
+      '@mikro-orm/postgresql': 5.4.2
+      '@types/node': 14.14.10
+      class-validator: 0.14.0
+      graphql: 16.6.0
+      graphweaver: workspace:*
+      reflect-metadata: 0.1.13
+      typescript: 5.0.2
+    dependencies:
+      '@apollo/server': 4.2.2_graphql@16.6.0
+      '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
+      '@exogee/graphweaver': link:../../packages/core
+      '@exogee/graphweaver-apollo': link:../../packages/apollo
+      '@exogee/graphweaver-mikroorm': link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars': link:../../packages/scalars
+      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
+      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
+      class-validator: 0.14.0
+      graphql: 16.6.0
+      graphweaver: link:../../packages/cli
+      reflect-metadata: 0.1.13
+    devDependencies:
+      '@types/node': 14.14.10
+      typescript: 5.0.2
+
   examples/databases:
     specifiers:
       '@apollo/server': 4.2.2
@@ -579,9 +612,10 @@ importers:
       luxon: 2.5.2
       typescript: 5.0.2
     dependencies:
-      '@exogee/graphweaver-mikroorm': link:../mikroorm
       graphql-type-json: 0.3.2_graphql@16.6.0
       luxon: 2.5.2
+    optionalDependencies:
+      '@exogee/graphweaver-mikroorm': link:../mikroorm
     devDependencies:
       '@types/jest': 26.0.23
       '@types/luxon': 2.0.7
@@ -3030,6 +3064,52 @@ packages:
       reflect-metadata: 0.1.13
     dev: false
 
+  /@mikro-orm/core/5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu:
+    resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/better-sqlite': ^5.0.0
+      '@mikro-orm/entity-generator': ^5.0.0
+      '@mikro-orm/mariadb': ^5.0.0
+      '@mikro-orm/migrations': ^5.0.0
+      '@mikro-orm/migrations-mongodb': ^5.0.0
+      '@mikro-orm/mongodb': ^5.0.0
+      '@mikro-orm/mysql': ^5.0.0
+      '@mikro-orm/postgresql': ^5.0.0
+      '@mikro-orm/seeder': ^5.0.0
+      '@mikro-orm/sqlite': ^5.0.0
+    peerDependenciesMeta:
+      '@mikro-orm/better-sqlite':
+        optional: true
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/mariadb':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@mikro-orm/migrations-mongodb':
+        optional: true
+      '@mikro-orm/mongodb':
+        optional: true
+      '@mikro-orm/mysql':
+        optional: true
+      '@mikro-orm/postgresql':
+        optional: true
+      '@mikro-orm/seeder':
+        optional: true
+      '@mikro-orm/sqlite':
+        optional: true
+    dependencies:
+      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
+      acorn-loose: 8.3.0
+      acorn-walk: 8.2.0
+      dotenv: 16.0.2
+      fs-extra: 10.1.0
+      globby: 11.0.4
+      mikro-orm: 5.4.2
+      reflect-metadata: 0.1.13
+    dev: false
+
   /@mikro-orm/core/5.4.2_fyvjslnt4umxnwbsvn4uylbnpq:
     resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
     engines: {node: '>= 14.0.0'}
@@ -4366,7 +4446,7 @@ packages:
     resolution: {integrity: sha512-ALYone6pm6QmwZoAgeyNksccT9Q4AWZQ6PvfwR37GT6r6FWUPguq6sUmNGSMV2Wr761oQoBxwGGa6DR5o1DC9g==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
     dev: false
 
   /@types/bunyan/1.8.6:
@@ -4380,14 +4460,14 @@ packages:
     dependencies:
       '@types/http-cache-semantics': 4.0.1
       '@types/keyv': 3.1.4
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
       '@types/responselike': 1.0.0
     dev: false
 
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
     dev: false
 
   /@types/estree/1.0.1:
@@ -4396,7 +4476,7 @@ packages:
   /@types/express-serve-static-core/4.17.35:
     resolution: {integrity: sha512-wALWQwrgiB2AWTT91CB62b6Yt0sNHpznUXeZEcnPU3DRdlDIz74x8Qg1UUYKSVFi+va5vKOLYRBI1bRKiLLKIg==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
       '@types/send': 0.17.1
@@ -4471,7 +4551,7 @@ packages:
   /@types/keyv/3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
     dev: false
 
   /@types/lodash/4.14.192:
@@ -4505,12 +4585,13 @@ packages:
   /@types/node-fetch/2.6.4:
     resolution: {integrity: sha512-1ZX9fcN4Rvkvgv4E6PAY5WXUFWFcRWxZa3EW83UjycOB9ljJCedb2CupIP4RZMEwF/M3eTcCihbBRgwtGbg5Rg==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
       form-data: 3.0.1
     dev: false
 
   /@types/node/14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
+    dev: true
 
   /@types/node/18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -4571,7 +4652,7 @@ packages:
   /@types/responselike/1.0.0:
     resolution: {integrity: sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==}
     dependencies:
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
     dev: false
 
   /@types/retry/0.12.1:
@@ -4595,14 +4676,14 @@ packages:
     resolution: {integrity: sha512-Cwo8LE/0rnvX7kIIa3QHCkcuF21c05Ayb0ZfxPiv0W8VRiZiNW/WuRupHKpqqGVGf7SUA44QSOUKaEd9lIrd/Q==}
     dependencies:
       '@types/mime': 1.3.2
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
     dev: false
 
   /@types/serve-static/1.15.1:
     resolution: {integrity: sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==}
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 14.14.10
+      '@types/node': 20.3.1
     dev: false
 
   /@types/stack-utils/2.0.1:
@@ -6251,7 +6332,7 @@ packages:
     dev: false
 
   /ee-first/1.1.1:
-    resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
+    resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: false
 
   /electron-to-chromium/1.4.433:
@@ -9364,7 +9445,7 @@ packages:
     dev: false
 
   /media-typer/0.3.0:
-    resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
+    resolution: {integrity: sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=}
     engines: {node: '>= 0.6'}
     dev: false
 
@@ -9382,7 +9463,7 @@ packages:
     dev: false
 
   /merge-descriptors/1.0.1:
-    resolution: {integrity: sha512-cCi6g3/Zr1iqQi6ySbseM1Xvooa98N0w31jzUYrXPX2xqObmFGHJ0tQ5u74H3mVh7wLouTseZyYIq39g8cNp1w==}
+    resolution: {integrity: sha1-sAqqVW3YtEVoFQ7J0blT8/kMu2E=}
     dev: false
 
   /merge-stream/2.0.0:
@@ -11982,7 +12063,7 @@ packages:
     dev: false
 
   /utils-merge/1.0.1:
-    resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
+    resolution: {integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=}
     engines: {node: '>= 0.4.0'}
     dev: false
 
