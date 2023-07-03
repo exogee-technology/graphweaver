@@ -15,7 +15,7 @@ import {
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
-	id?: (keyof D & string) | ((dataEntity: D) => string);
+	id?: (keyof D & string) | ((dataEntity: D) => string | undefined);
 	nullable?: boolean;
 };
 
@@ -96,6 +96,11 @@ export function RelationshipField<
 				: typeof id === 'function'
 				? id(root.dataEntity)
 				: root.dataEntity[id];
+
+			if (!idValue && !relatedField) {
+				//id is null and we are loading a single instance so lets return null
+				return null;
+			}
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
