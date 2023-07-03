@@ -292,6 +292,7 @@ export class DataEntityFile extends BaseFile {
 		// for enum properties, we don't need a column type or the property length
 		// in the decorator so return early.
 		if (prop.enum) {
+			options.type = this.quote('string');
 			return;
 		}
 
@@ -304,7 +305,9 @@ export class DataEntityFile extends BaseFile {
 			columnType1 !== columnType2 ||
 			[mappedType1, mappedType2].some((t) => t instanceof UnknownType)
 		) {
-			options.columnType = this.quote(prop.columnTypes[0]);
+			options.type = this.quote(prop.columnTypes[0]);
+		} else {
+			options.type = this.quote(prop.type);
 		}
 
 		if (prop.length) {

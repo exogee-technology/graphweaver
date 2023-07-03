@@ -54,7 +54,6 @@ export class SchemaEntityFile extends BaseFile {
 					this.meta.collection + '_' + prop.fieldNames[0],
 					'_'
 				);
-				console.log('prop.enum:::', prop);
 				enumDefinitions.push(this.getEnumClassDefinition(enumClassName));
 			}
 		});
@@ -114,9 +113,8 @@ export class SchemaEntityFile extends BaseFile {
 		const padding = '\t';
 
 		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
-			this.coreImports.add('Collection');
 			this.entityImports.add(prop.type);
-			return `${padding}${prop.name} = new Collection<${prop.type}>(this);\n`;
+			return `${padding}${prop.name}!: ${prop.type}[];\n`;
 		}
 
 		// string defaults are usually things like SQL functions, but can be also enums, for that `useDefault` should be true
@@ -159,13 +157,21 @@ export class SchemaEntityFile extends BaseFile {
 			return 'DateScalar';
 		}
 
+		if (prop.type === 'unknown') {
+			return 'String';
+		}
+
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
-			this.scalarImports.add('GraphQLJSON');
-			return `GraphQLJSON`;
+			this.scalarImports.add('GraphQLJSONObject');
+			return `GraphQLJSONObject`;
 		}
 
 		if (prop.type.includes('[]')) {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
+		}
+
+		if (prop.pivotTable) {
+			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1)}]`;
 		}
 
 		return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
@@ -204,31 +210,7 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		options.entity = `() => ${prop.type}`;
-
-		if (prop.mappedBy) {
-			options.mappedBy = this.quote(prop.mappedBy);
-			return;
-		}
-
-		if (
-			prop.pivotTable !==
-			this.namingStrategy.joinTableName(this.meta.collection, prop.type, prop.name)
-		) {
-			options.pivotTable = this.quote(prop.pivotTable);
-		}
-
-		if (prop.joinColumns.length === 1) {
-			options.joinColumn = this.quote(prop.joinColumns[0]);
-		} else {
-			options.joinColumns = `[${prop.joinColumns.map(this.quote).join(', ')}]`;
-		}
-
-		if (prop.inverseJoinColumns.length === 1) {
-			options.inverseJoinColumn = this.quote(prop.inverseJoinColumns[0]);
-		} else {
-			options.inverseJoinColumns = `[${prop.inverseJoinColumns.map(this.quote).join(', ')}]`;
-		}
+		options.relatedField = this.quote(`${this.snakeToCamelCaseString(this.meta.collection)}s`);
 	}
 
 	protected getOneToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
