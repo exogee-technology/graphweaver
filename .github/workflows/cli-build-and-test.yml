@@ -50,7 +50,7 @@ jobs:
         working-directory: src/packages/cli/test
         run: |
           pwd
-          pnpm i
+          pnpm i --no-frozen-lockfile
       
       - name: Start GW instance
         working-directory: src/packages/cli/test
