@@ -39,7 +39,6 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 			const inverseMeta = metadata.find((m) => m.className === meta.className);
 			const inverseProp = inverseMeta?.props.find((p) => p.name === newProp.mappedBy);
 			if (inverseProp) inverseProp.inversedBy = newProp.name;
-			console.log(inverseProp);
 
 			if (prop.reference === ReferenceType.MANY_TO_ONE) {
 				newProp.reference = ReferenceType.ONE_TO_MANY;

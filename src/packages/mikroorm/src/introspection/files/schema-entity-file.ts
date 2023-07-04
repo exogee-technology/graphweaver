@@ -162,8 +162,8 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
-			this.scalarImports.add('GraphQLJSONObject');
-			return `GraphQLJSONObject`;
+			this.scalarImports.add('GraphQLJSON');
+			return `GraphQLJSON`;
 		}
 
 		if (prop.type.includes('[]')) {
@@ -214,7 +214,6 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		console.log(this.meta.name, prop);
 		const relatedField = prop.inversedBy
 			? prop.inversedBy
 			: `${this.snakeToCamelCaseString(this.meta.collection)}s`;
