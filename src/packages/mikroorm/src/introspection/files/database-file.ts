@@ -3,7 +3,7 @@ import { ConnectionOptions, DatabaseType } from '../../database';
 
 export class DatabaseFile {
 	constructor(
-		protected readonly type: DatabaseType,
+		protected readonly databaseType: DatabaseType,
 		protected readonly connection: ConnectionOptions
 	) {}
 
@@ -16,7 +16,7 @@ export class DatabaseFile {
 	}
 
 	generate(): string {
-		const isPostgresql = this.type === 'postgresql';
+		const isPostgresql = this.databaseType === 'postgresql';
 		const imports = [
 			...(isPostgresql
 				? [`import { PostgreSqlDriver } from '@mikro-orm/postgresql';`]
@@ -34,7 +34,7 @@ export class DatabaseFile {
 		const config = this.connection.mikroOrmConfig as Options;
 
 		const connection = [`export const connection = {`];
-		connection.push(`${pad}connectionManagerId: '${this.type}',`);
+		connection.push(`${pad}connectionManagerId: '${this.databaseType}',`);
 		connection.push(`${pad}mikroOrmConfig: {`);
 		connection.push(`${pad}${pad}entities: entities,`);
 		connection.push(`${pad}${pad}driver: ${isPostgresql ? 'PostgreSqlDriver' : 'MySqlDriver'},`);

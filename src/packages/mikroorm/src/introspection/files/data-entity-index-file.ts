@@ -1,10 +1,14 @@
 import { EntityMetadata } from '@mikro-orm/core';
+import { DatabaseType } from '../../database';
 
 export class DataEntityIndexFile {
-	constructor(protected readonly metadata: EntityMetadata<any>[]) {}
+	constructor(
+		protected readonly metadata: EntityMetadata<any>[],
+		protected readonly databaseType: DatabaseType
+	) {}
 
 	getBasePath() {
-		return `backend/entities/postgresql/`;
+		return `backend/entities/${this.databaseType}/`;
 	}
 
 	getBaseName() {

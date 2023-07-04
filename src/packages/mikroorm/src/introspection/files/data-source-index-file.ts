@@ -1,4 +1,8 @@
+import { DatabaseType } from '../../database';
+
 export class DataSourceIndexFile {
+	constructor(protected readonly databaseType: DatabaseType) {}
+
 	getBasePath() {
 		return `backend/entities/`;
 	}
@@ -8,7 +12,7 @@ export class DataSourceIndexFile {
 	}
 
 	generate(): string {
-		const imports = [`export * from './postgresql';`];
+		const imports = [`export * from './${this.databaseType}';`];
 
 		return `${imports.join('\n')}\n`;
 	}

@@ -117,12 +117,10 @@ const convertSchemaToMetadata = async (
 	return metadata;
 };
 
-const openConnection = async (options: ConnectionOptions) => {
-	const { PostgreSqlDriver } = await import('@mikro-orm/postgresql');
-
+const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
 	await ConnectionManager.connect(CONNECTION_MANAGER_ID, {
 		mikroOrmConfig: {
-			driver: PostgreSqlDriver,
+			type,
 			...options.mikroOrmConfig,
 		},
 	});
@@ -144,8 +142,8 @@ type File =
 	| DataSourceIndexFile
 	| DatabaseFile;
 
-export const generate = async (type: DatabaseType, options: ConnectionOptions) => {
-	await openConnection(options);
+export const generate = async (databaseType: DatabaseType, options: ConnectionOptions) => {
+	await openConnection(databaseType, options);
 
 	const database = ConnectionManager.database(CONNECTION_MANAGER_ID);
 	if (!database) throw new Error('cannot connect to database');
@@ -165,7 +163,7 @@ export const generate = async (type: DatabaseType, options: ConnectionOptions) =
 
 	for (const meta of metadata) {
 		if (!meta.pivotTable) {
-			source.push(new DataEntityFile(meta, namingStrategy, platform));
+			source.push(new DataEntityFile(meta, namingStrategy, platform, databaseType));
 			source.push(new SchemaEntityFile(meta, namingStrategy, platform));
 			source.push(new SchemaEntityIndexFile(meta, namingStrategy, platform));
 			source.push(new SchemaResolverFile(meta, namingStrategy, platform));
@@ -173,13 +171,13 @@ export const generate = async (type: DatabaseType, options: ConnectionOptions) =
 	}
 
 	// Export all the entities from the data source directory
-	source.push(new DataEntityIndexFile(metadata));
+	source.push(new DataEntityIndexFile(metadata, databaseType));
 	// Export the data source from the entities directory
-	source.push(new DataSourceIndexFile());
+	source.push(new DataSourceIndexFile(databaseType));
 	// Export the data source from the entities directory
 	source.push(new SchemaIndexFile(metadata));
 	// Export the database connection to its own file
-	source.push(new DatabaseFile(type, options));
+	source.push(new DatabaseFile(databaseType, options));
 
 	const files = source.map((file) => ({
 		path: file.getBasePath(),
