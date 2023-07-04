@@ -1,5 +1,4 @@
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda';
 
 import { resolvers } from './schema';
 import { XeroAuthApolloPlugin } from '@exogee/graphweaver-xero';
@@ -11,7 +10,4 @@ const graphweaver = new Graphweaver({
 	},
 });
 
-exports.handler = startServerAndCreateLambdaHandler(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
+exports.handler = graphweaver.handler();
