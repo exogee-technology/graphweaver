@@ -135,11 +135,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.info(`Graphweaver async called`);
 	}
 
-	public handler() {
+	public handler(): AWSLambda.APIGatewayProxyHandler {
 		logger.info(`Graphweaver handler called`);
 
 		return startServerAndCreateLambdaHandler(
-			// @todo: fix this type, BaseContext
+			// @todo: fix this type, TContext extends BaseContext, this should work
 			this.server as unknown as ApolloServer<BaseContext>,
 			handlers.createAPIGatewayProxyEventRequestHandler()
 		);
