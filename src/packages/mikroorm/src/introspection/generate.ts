@@ -153,7 +153,9 @@ export const generate = async (type: DatabaseType, options: ConnectionOptions) =
 	const namingStrategy = config.getNamingStrategy();
 	const connection = driver.getConnection();
 
+	console.log('Fetching database schema...');
 	const schema = await DatabaseSchema.create(connection, platform, config);
+	console.log('Building metadata...');
 	const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
 
 	const source: File[] = [];
