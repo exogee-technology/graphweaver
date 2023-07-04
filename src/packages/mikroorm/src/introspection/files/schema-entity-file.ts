@@ -106,6 +106,10 @@ export class SchemaEntityFile extends BaseFile {
 			return `Record<string, unknown>`;
 		}
 
+		if (prop.columnTypes?.[0] === 'date') {
+			return 'Date';
+		}
+
 		return prop.type;
 	}
 
@@ -153,8 +157,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.columnTypes?.[0] === 'date') {
-			this.scalarImports.add('DateScalar');
-			return 'DateScalar';
+			return 'Date';
 		}
 
 		if (prop.type === 'unknown') {
