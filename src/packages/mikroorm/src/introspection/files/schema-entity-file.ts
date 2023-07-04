@@ -170,6 +170,10 @@ export class SchemaEntityFile extends BaseFile {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
 		}
 
+		if ([ReferenceType.MANY_TO_MANY, ReferenceType.ONE_TO_MANY].includes(prop.reference)) {
+			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
+		}
+
 		if (prop.pivotTable) {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1)}]`;
 		}
@@ -182,7 +186,7 @@ export class SchemaEntityFile extends BaseFile {
 		const options = {} as Dictionary;
 		let decorator = this.getDecoratorType(prop);
 
-		if ([ReferenceType.MANY_TO_MANY, ReferenceType.ONE_TO_MANY].includes(prop.reference)) {
+		if (prop.reference === ReferenceType.MANY_TO_MANY) {
 			this.getManyToManyDecoratorOptions(options, prop);
 		} else if (prop.reference === ReferenceType.ONE_TO_MANY) {
 			this.getOneToManyDecoratorOptions(options, prop);
@@ -210,13 +214,16 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		options.relatedField = this.quote(`${this.snakeToCamelCaseString(this.meta.collection)}s`);
+		console.log(this.meta.name, prop);
+		const relatedField = prop.inversedBy
+			? prop.inversedBy
+			: `${this.snakeToCamelCaseString(this.meta.collection)}s`;
+		options.relatedField = this.quote(relatedField);
 	}
 
 	protected getOneToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		options.entity = `() => ${prop.type}`;
-		options.mappedBy = this.quote(prop.mappedBy);
+		options.relatedField = this.quote(prop.mappedBy);
 	}
 
 	protected getForeignKeyDecoratorOptions(options: Dictionary, prop: EntityProperty) {

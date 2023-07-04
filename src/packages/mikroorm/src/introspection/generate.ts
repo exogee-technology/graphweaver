@@ -21,6 +21,42 @@ import {
 
 const CONNECTION_MANAGER_ID = 'generate';
 
+const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
+	for (const meta of metadata.filter((m) => !m.pivotTable)) {
+		for (const prop of meta.relations) {
+			const targetMeta = metadata.find((m) => m.className === prop.type);
+			const newProp = {
+				name: prop.name + 'Inverse',
+				type: meta.className,
+				joinColumns: prop.fieldNames,
+				referencedTableName: meta.tableName,
+				referencedColumnNames: Utils.flatten(
+					(targetMeta?.getPrimaryProps() ?? []).map((pk) => pk.fieldNames)
+				),
+				mappedBy: prop.name,
+			} as EntityProperty;
+
+			const inverseMeta = metadata.find((m) => m.className === meta.className);
+			const inverseProp = inverseMeta?.props.find((p) => p.name === newProp.mappedBy);
+			if (inverseProp) inverseProp.inversedBy = newProp.name;
+			console.log(inverseProp);
+
+			if (prop.reference === ReferenceType.MANY_TO_ONE) {
+				newProp.reference = ReferenceType.ONE_TO_MANY;
+			} else if (prop.reference === ReferenceType.ONE_TO_ONE && !prop.mappedBy) {
+				newProp.reference = ReferenceType.ONE_TO_ONE;
+				newProp.nullable = true;
+			} else if (prop.reference === ReferenceType.MANY_TO_MANY && !prop.mappedBy) {
+				newProp.reference = ReferenceType.MANY_TO_MANY;
+			} else {
+				continue;
+			}
+
+			targetMeta?.addProperty(newProp);
+		}
+	}
+};
+
 const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: NamingStrategy) => {
 	for (const meta of metadata) {
 		if (
@@ -74,6 +110,7 @@ const convertSchemaToMetadata = async (
 
 	detectManyToManyRelations(metadata, namingStrategy);
 	generateIdentifiedReferences(metadata);
+	generateBidirectionalRelations(metadata);
 
 	return metadata;
 };
