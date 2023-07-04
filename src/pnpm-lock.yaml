@@ -44,7 +44,6 @@ importers:
       class-validator: 0.14.0
       graphql: 16.6.0
       graphweaver: workspace:*
-      reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
     dependencies:
@@ -59,7 +58,6 @@ importers:
       class-validator: 0.14.0
       graphql: 16.6.0
       graphweaver: link:../../packages/cli
-      reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2_c722e4d39cfffa34c943a64ba4d1e4c6
     devDependencies:
       '@types/node': 14.14.10
@@ -84,7 +82,6 @@ importers:
       graphql: 16.6.0
       graphweaver: workspace:*
       react: 18.2.0
-      reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
       vite: 4.3.9
@@ -106,7 +103,6 @@ importers:
       graphql: 16.6.0
       graphweaver: link:../../packages/cli
       react: 18.2.0
-      reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2_c722e4d39cfffa34c943a64ba4d1e4c6
     devDependencies:
       '@types/node': 14.14.10
@@ -142,7 +138,6 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0
       react-router-dom: 6.4.3
-      reflect-metadata: 0.1.13
       ts-node: 10.4.0
       tsc-watch: 4.2.9
       type-graphql: 2.0.0-beta.2
@@ -174,7 +169,6 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-router-dom: 6.4.3_react-dom@18.2.0+react@18.2.0
-      reflect-metadata: 0.1.13
       type-graphql: 2.0.0-beta.2_c722e4d39cfffa34c943a64ba4d1e4c6
       uuid: 8.3.2
       xero-node: 4.30.0
@@ -294,6 +288,7 @@ importers:
   packages/apollo:
     specifiers:
       '@apollo/server': 4.2.2
+      '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': workspace:*
       '@exogee/logger': workspace:*
       '@graphql-tools/graphql-file-loader': 7.5.17
@@ -310,6 +305,7 @@ importers:
       type-graphql: 2.0.0-beta.2
     dependencies:
       '@apollo/server': 4.2.2_graphql@16.6.0
+      '@as-integrations/aws-lambda': 2.0.1_@apollo+server@4.2.2
       '@exogee/graphweaver': link:../core
       '@exogee/logger': link:../logger
       '@graphql-tools/graphql-file-loader': 7.5.17_graphql@16.6.0

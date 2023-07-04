@@ -1,5 +1,4 @@
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver-auth';
 
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
@@ -26,7 +25,4 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 	},
 });
 
-export const handler = startServerAndCreateLambdaHandler<any>(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
+export const handler = graphweaver.handler();
