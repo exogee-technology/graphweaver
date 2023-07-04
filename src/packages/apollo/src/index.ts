@@ -137,8 +137,10 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	public handler() {
 		logger.info(`Graphweaver handler called`);
-		startServerAndCreateLambdaHandler(
-			this.server,
+
+		return startServerAndCreateLambdaHandler(
+			// @todo: fix this type, BaseContext
+			this.server as unknown as ApolloServer<BaseContext>,
 			handlers.createAPIGatewayProxyEventRequestHandler()
 		);
 	}

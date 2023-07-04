@@ -1,5 +1,4 @@
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
 import { resolvers } from './schema';
@@ -13,7 +12,4 @@ const graphweaver = new Graphweaver({
 	},
 });
 
-exports.handler = startServerAndCreateLambdaHandler(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
+exports.handler = graphweaver.handler();
