@@ -102,7 +102,7 @@ export const List = () => {
 		// Hold any overrides we need to apply
 		const overrides: { [k in keyof typeof row]?: unknown } = {};
 		for (const key in row) {
-			if (Array.isArray(row[key as keyof typeof row])) {
+			if (typeof row[key as keyof typeof row] === 'object') {
 				// We have an array let's stringify it so it can be displayed in the table
 				overrides[key as keyof typeof row] = JSON.stringify(row[key as keyof typeof row]);
 			}
