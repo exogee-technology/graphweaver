@@ -33,6 +33,7 @@ import type {
 } from '@mikro-orm/core';
 import { ReferenceType, UnknownType, Utils } from '@mikro-orm/core';
 import { BaseFile } from './base-file';
+import { DatabaseType } from '../../database';
 
 export class DataEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -41,13 +42,14 @@ export class DataEntityFile extends BaseFile {
 	constructor(
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
-		protected readonly platform: Platform
+		protected readonly platform: Platform,
+		protected readonly databaseType: DatabaseType
 	) {
 		super(meta, namingStrategy, platform);
 	}
 
 	getBasePath() {
-		return `backend/entities/postgresql/`;
+		return `backend/entities/${this.databaseType}/`;
 	}
 
 	getBaseName() {
