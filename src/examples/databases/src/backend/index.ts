@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';

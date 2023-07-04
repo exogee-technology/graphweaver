@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { startServerAndCreateLambdaHandler, handlers } from '@as-integrations/aws-lambda';
 
