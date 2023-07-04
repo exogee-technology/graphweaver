@@ -217,9 +217,7 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		const relatedField = prop.inversedBy
-			? prop.inversedBy
-			: `${this.snakeToCamelCaseString(this.meta.collection)}s`;
+		const relatedField = prop.inversedBy ? prop.inversedBy : prop.mappedBy;
 		options.relatedField = this.quote(relatedField);
 	}
 
