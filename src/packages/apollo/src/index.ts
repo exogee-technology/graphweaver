@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import path from 'path';
 import { loadSchemaSync } from '@graphql-tools/load';
@@ -79,8 +80,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			);
 		}
 
-		// Assign defaults
+		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -131,6 +133,14 @@ export default class Graphweaver<TContext extends BaseContext> {
 	public async init() {
 		// Do some async here if necessary
 		logger.info(`Graphweaver async called`);
+	}
+
+	public handler() {
+		logger.info(`Graphweaver handler called`);
+		startServerAndCreateLambdaHandler(
+			this.server,
+			handlers.createAPIGatewayProxyEventRequestHandler()
+		);
 	}
 }
 
