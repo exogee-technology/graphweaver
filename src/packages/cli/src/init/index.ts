@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { exit, cwd } from 'process';
 
 import {
