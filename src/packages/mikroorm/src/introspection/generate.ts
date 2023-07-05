@@ -22,6 +22,18 @@ import {
 
 const CONNECTION_MANAGER_ID = 'generate';
 
+export class IntrospectionError extends Error {
+	protected type: string;
+	constructor(protected title = '', message = '') {
+		super(message);
+		this.type = 'IntrospectionError';
+		this.title = title;
+		this.message = message;
+	}
+}
+
+const hasErrorMessage = (error: any): error is { message: string } => error.message;
+
 const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		for (const prop of meta.relations) {
@@ -120,6 +132,13 @@ const convertSchemaToMetadata = async (
 		.sort((a, b) => a.name.localeCompare(b.name))
 		.map((table) => table.getEntityDeclaration(namingStrategy, helper));
 
+	if (metadata.length === 0) {
+		throw new IntrospectionError(
+			`Warning: No tables found, this database is empty.`,
+			`Make sure you have tables in this database and then try again.`
+		);
+	}
+
 	detectManyToManyRelations(metadata, namingStrategy);
 	generateIdentifiedReferences(metadata);
 	generateBidirectionalRelations(metadata);
@@ -154,49 +173,62 @@ type File =
 	| DatabaseFile;
 
 export const generate = async (databaseType: DatabaseType, options: ConnectionOptions) => {
-	await openConnection(databaseType, options);
+	try {
+		await openConnection(databaseType, options);
 
-	const database = ConnectionManager.database(CONNECTION_MANAGER_ID);
-	if (!database) throw new Error('cannot connect to database');
+		const database = ConnectionManager.database(CONNECTION_MANAGER_ID);
+		if (!database)
+			throw new IntrospectionError(
+				`Warning: Unable to connect to database.`,
+				'Please check the connection settings and try again'
+			);
 
-	const config = database.em.config;
-	const driver = database.em.getDriver();
-	const platform = driver.getPlatform();
-	const namingStrategy = config.getNamingStrategy();
-	const connection = driver.getConnection();
+		const config = database.em.config;
+		const driver = database.em.getDriver();
+		const platform = driver.getPlatform();
+		const namingStrategy = config.getNamingStrategy();
+		const connection = driver.getConnection();
 
-	console.log('Fetching database schema...');
-	const schema = await DatabaseSchema.create(connection, platform, config);
-	console.log('Building metadata...');
-	const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
+		console.log('Fetching database schema...');
+		const schema = await DatabaseSchema.create(connection, platform, config);
+		console.log('Building metadata...');
+		const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
 
-	const source: File[] = [];
+		const source: File[] = [];
 
-	for (const meta of metadata) {
-		if (!meta.pivotTable) {
-			source.push(new DataEntityFile(meta, namingStrategy, platform, databaseType));
-			source.push(new SchemaEntityFile(meta, namingStrategy, platform));
-			source.push(new SchemaEntityIndexFile(meta, namingStrategy, platform));
-			source.push(new SchemaResolverFile(meta, namingStrategy, platform));
+		for (const meta of metadata) {
+			if (!meta.pivotTable) {
+				source.push(new DataEntityFile(meta, namingStrategy, platform, databaseType));
+				source.push(new SchemaEntityFile(meta, namingStrategy, platform));
+				source.push(new SchemaEntityIndexFile(meta, namingStrategy, platform));
+				source.push(new SchemaResolverFile(meta, namingStrategy, platform));
+			}
 		}
+
+		// Export all the entities from the data source directory
+		source.push(new DataEntityIndexFile(metadata, databaseType));
+		// Export the data source from the entities directory
+		source.push(new DataSourceIndexFile(databaseType));
+		// Export the data source from the entities directory
+		source.push(new SchemaIndexFile(metadata));
+		// Export the database connection to its own file
+		source.push(new DatabaseFile(databaseType, options));
+
+		const files = source.map((file) => ({
+			path: file.getBasePath(),
+			name: file.getBaseName(),
+			contents: file.generate(),
+		}));
+
+		await closeConnection();
+
+		return files;
+	} catch (err) {
+		if (err instanceof IntrospectionError) throw err;
+
+		throw new IntrospectionError(
+			`Warning: Unable to connect to database.`,
+			hasErrorMessage(err) ? err.message : 'Please check the connection settings and try again'
+		);
 	}
-
-	// Export all the entities from the data source directory
-	source.push(new DataEntityIndexFile(metadata, databaseType));
-	// Export the data source from the entities directory
-	source.push(new DataSourceIndexFile(databaseType));
-	// Export the data source from the entities directory
-	source.push(new SchemaIndexFile(metadata));
-	// Export the database connection to its own file
-	source.push(new DatabaseFile(databaseType, options));
-
-	const files = source.map((file) => ({
-		path: file.getBasePath(),
-		name: file.getBaseName(),
-		contents: file.generate(),
-	}));
-
-	await closeConnection();
-
-	return files;
 };
