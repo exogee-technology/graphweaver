@@ -15,6 +15,17 @@ const createDirectories = (dirPath: string) => {
 	}
 };
 
+export const isIntrospectionError = (
+	error: any
+): error is { type: string; title: string; message: string } => {
+	return (
+		typeof error.type === 'string' &&
+		typeof error.title === 'string' &&
+		error.type === 'IntrospectionError' &&
+		typeof error.message === 'string'
+	);
+};
+
 export const importDataSource = async (source: 'mysql' | 'postgresql') => {
 	const { default: inquirer } = await import('inquirer');
 	const { host, dbName, user, password, port } = await inquirer.prompt([
@@ -50,22 +61,30 @@ export const importDataSource = async (source: 'mysql' | 'postgresql') => {
 
 	const spinner = ora('Introspecting...').start();
 
-	const files = await introspection(source, {
-		mikroOrmConfig: {
-			host,
-			dbName,
-			user,
-			password,
-			port,
-		},
-	});
+	try {
+		const files = await introspection(source, {
+			mikroOrmConfig: {
+				host,
+				dbName,
+				user,
+				password,
+				port,
+			},
+		});
 
-	spinner.stop();
-	console.log('Import complete.');
+		spinner.stop();
+		console.log('Import complete.');
 
-	for (const file of files) {
-		createDirectories(path.join('./src/', file.path));
-		writeFileSync(path.join(process.cwd(), './src/', file.path, file.name), file.contents);
+		for (const file of files) {
+			createDirectories(path.join('./src/', file.path));
+			writeFileSync(path.join(process.cwd(), './src/', file.path, file.name), file.contents);
+		}
+	} catch (err: unknown) {
+		if (isIntrospectionError(err)) {
+			console.warn(`\n\n${err.title}\n${err.message}\n\n`);
+		} else {
+			throw err;
+		}
 	}
 
 	// Force exit because Mikro is keeping the socket open to the db
