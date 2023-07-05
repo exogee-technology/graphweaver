@@ -31,9 +31,18 @@ yargs
 		},
 	})
 	.command({
-		command: ['import'],
-		describe: 'Inspect a datasource and then import its entities.',
-		handler: importDataSource,
+		command: ['import [source]'],
+		describe: 'Inspect a data source and then import its entities.',
+		builder: (yargs) =>
+			yargs.positional('source', {
+				type: 'string',
+				choices: ['mysql', 'postgresql'],
+				default: 'postgresql',
+				describe: 'The data source to import.',
+			}),
+		handler: async ({ source }) => {
+			await importDataSource(source);
+		},
 	})
 	.command({
 		command: ['analyse [target]', 'analyze [target]', 'a [target]'],
