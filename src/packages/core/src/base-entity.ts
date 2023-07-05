@@ -25,7 +25,7 @@ export const AdminUISettingsMap = new Map<string, AdminUISettingsType>();
 
 @ObjectType()
 export class GraphQLEntity<D extends BaseDataEntity> {
-	public id?: string;
+	public id?: string | number;
 	constructor(public dataEntity: D) {}
 
 	static fromBackendEntity<D extends BaseDataEntity, G extends GraphQLEntity<D>>(

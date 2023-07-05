@@ -15,7 +15,7 @@ import {
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
-	id?: (keyof D & string) | ((dataEntity: D) => string | undefined);
+	id?: (keyof D & string) | ((dataEntity: D) => string | number | undefined);
 	nullable?: boolean;
 };
 
