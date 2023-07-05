@@ -44,6 +44,11 @@ export class SchemaEntityFile extends BaseFile {
 				classBody += '\n';
 			}
 
+			// Add a summary field if we have a name or title attribute
+			if (['name', 'title'].includes(prop.name.toLowerCase())) {
+				this.coreImports.add('SummaryField');
+				classBody += `\t@SummaryField()\n`;
+			}
 			classBody += decorator;
 			classBody += definition;
 
