@@ -33,6 +33,10 @@ body,
 	color-scheme: dark;
 }
 
+*::-webkit-scrollbar {
+	display: none;
+}
+
 /* Font styling */
 h1 {
 	font-style: normal;
