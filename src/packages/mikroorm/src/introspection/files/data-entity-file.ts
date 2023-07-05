@@ -167,9 +167,7 @@ export class DataEntityFile extends BaseFile {
 	private getCollectionDecl() {
 		const options: EntityOptions<unknown> = {};
 
-		if (this.meta.collection !== this.namingStrategy.classToTableName(this.meta.className)) {
-			options.tableName = this.quote(this.meta.collection);
-		}
+		options.tableName = this.quote(this.meta.collection);
 
 		if (this.meta.schema && this.meta.schema !== this.platform.getDefaultSchemaName()) {
 			options.schema = this.quote(this.meta.schema);
@@ -353,10 +351,8 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getForeignKeyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
-		const parts = prop.referencedTableName.split('.', 2);
-		const className = this.namingStrategy.getClassName(parts.length > 1 ? parts[1] : parts[0], '_');
-		this.entityImports.add(className);
-		options.entity = `() => ${className}`;
+		this.entityImports.add(prop.type);
+		options.entity = `() => ${prop.type}`;
 
 		if (prop.wrappedReference) {
 			options.wrappedReference = true;

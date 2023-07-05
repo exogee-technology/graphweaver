@@ -539,11 +539,13 @@ importers:
       '@mikro-orm/mysql': 5.4.2
       '@mikro-orm/postgresql': 5.4.2
       '@types/node': 18.11.11
+      '@types/pluralize': 0.0.29
       dataloader: 2.2.2
       decimal.js: 10.3.1
       dotenv: 16.0.0
       esbuild: 0.15.5
       graphql: 16.6.0
+      pluralize: 8.0.0
       reflect-metadata: 0.1.13
       ts-node: 10.4.0
       typescript: 5.0.2
@@ -555,6 +557,7 @@ importers:
       decimal.js: 10.3.1
       dotenv: 16.0.0
       graphql: 16.6.0
+      pluralize: 8.0.0
       reflect-metadata: 0.1.13
     optionalDependencies:
       '@mikro-orm/knex': 5.4.2_@mikro-orm+core@5.4.2
@@ -563,6 +566,7 @@ importers:
     devDependencies:
       '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@types/node': 18.11.11
+      '@types/pluralize': 0.0.29
       esbuild: 0.15.5
       ts-node: 10.4.0_seji7frfqlst5vdfurl2ln7b6i
       typescript: 5.0.2

@@ -227,9 +227,7 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	protected getForeignKeyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
-		const parts = prop.referencedTableName.split('.', 2);
-		const className = this.namingStrategy.getClassName(parts.length > 1 ? parts[1] : parts[0], '_');
-		this.entityImports.add(className);
+		this.entityImports.add(prop.type);
 		options.id = `(entity) => entity.${prop.name}?.id`;
 	}
 
