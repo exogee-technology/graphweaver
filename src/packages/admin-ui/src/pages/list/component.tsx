@@ -101,8 +101,10 @@ export const List = () => {
 	const rows = (data?.result ?? []).map((row) => {
 		// Hold any overrides we need to apply
 		const overrides: { [k in keyof typeof row]?: unknown } = {};
+		const { fields } = entityByName(entity);
 		for (const key in row) {
-			if (typeof row[key as keyof typeof row] === 'object') {
+			const field = fields.find((field) => field.name === key);
+			if (field?.type === 'JSON') {
 				// We have an array let's stringify it so it can be displayed in the table
 				overrides[key as keyof typeof row] = JSON.stringify(row[key as keyof typeof row]);
 			}
