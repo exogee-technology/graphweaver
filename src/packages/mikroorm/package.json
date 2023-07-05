@@ -27,7 +27,8 @@
 		"decimal.js": "10.3.1",
 		"dotenv": "16.0.0",
 		"graphql": "16.6.0",
-		"reflect-metadata": "0.1.13"
+		"reflect-metadata": "0.1.13",
+		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
 		"@mikro-orm/core": "5.4.2",
@@ -35,6 +36,7 @@
 		"@mikro-orm/postgresql": "5.4.2",
 		"@mikro-orm/knex": "5.4.2",
 		"@types/node": "18.11.11",
+		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
 		"ts-node": "10.4.0",
 		"typescript": "5.0.2"

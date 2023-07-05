@@ -6,6 +6,7 @@ import {
 	ReferenceType,
 	Utils,
 } from '@mikro-orm/core';
+import pluralize from 'pluralize';
 
 import { ConnectionManager, ConnectionOptions, DatabaseType } from '../database';
 import {
@@ -96,6 +97,16 @@ const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
 	}
 };
 
+const generateSingularTypeReferences = (metadata: EntityMetadata[]): void => {
+	for (const meta of metadata.filter((m) => !m.pivotTable)) {
+		meta.className = pluralize.singular(meta.className);
+		const props = Object.values(meta.properties);
+		props.forEach((prop) => {
+			prop.type = pluralize.singular(prop.type);
+		});
+	}
+};
+
 const convertSchemaToMetadata = async (
 	schema: DatabaseSchema,
 	platform: AbstractSqlPlatform,
@@ -113,6 +124,7 @@ const convertSchemaToMetadata = async (
 	detectManyToManyRelations(metadata, namingStrategy);
 	generateIdentifiedReferences(metadata);
 	generateBidirectionalRelations(metadata);
+	generateSingularTypeReferences(metadata);
 
 	return metadata;
 };
