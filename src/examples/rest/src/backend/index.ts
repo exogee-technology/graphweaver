@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver-auth';
 

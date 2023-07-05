@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import yargs from 'yargs';
 import {
 	BackendStartOptions,
