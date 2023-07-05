@@ -10,6 +10,10 @@
 	overflow-x: hidden;
 }
 
+.sideBar::-webkit-scrollbar {
+	display: none;
+}
+
 .sideBarContent {
 	/* position: fixed; */
 	display: inline-block;
