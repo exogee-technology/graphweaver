@@ -18,13 +18,27 @@ const createDirectories = (dirPath: string) => {
 export const importDataSource = async () => {
 	const spinner = ora('Introspecting...').start();
 
-	const files = await introspection('mysql', {
+	// mikroOrmConfig: {
+	// 		host: '127.0.0.1',
+	// 		dbName: 'out_and_seek',
+	// 		user: 'root',
+	// 		password: 'password',
+	// 		port: 3306,
+	// 	},
+
+	// host: '127.0.0.1',
+	// 		dbName: 'go-collect',
+	// 		user: 'postgres',
+	// 		password: '',
+	// 		port: 5432,
+
+	const files = await introspection('postgresql', {
 		mikroOrmConfig: {
 			host: '127.0.0.1',
-			dbName: 'out_and_seek',
-			user: 'root',
-			password: 'password',
-			port: 3306,
+			dbName: 'go-collect',
+			user: 'postgres',
+			password: '',
+			port: 5432,
 		},
 	});
 
