@@ -103,7 +103,7 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 
 	const index = `\
 /* ${projectName} GraphWeaver Project */
-
+import 'reflect-metadata';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
@@ -117,10 +117,7 @@ const graphweaver = new Graphweaver({
 	},
 });
 
-export const handler = startServerAndCreateLambdaHandler<any>(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
+export const handler = graphweaver.handler();
 
 
 `;
