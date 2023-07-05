@@ -35,7 +35,8 @@ export const importDataSource = async (source: 'mysql' | 'postgresql') => {
 			message: `What is the username to access the database server?`,
 		},
 		{
-			type: 'input',
+			type: 'password',
+			mask: '*',
 			name: 'password',
 			message: `What is the password for this user?`,
 		},
