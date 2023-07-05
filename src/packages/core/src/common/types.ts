@@ -49,7 +49,7 @@ export type FilterTopLevelProperties<G> = {
 // G is the root GraphQL entity
 // C is a child GraphQL entity
 export type Filter<G> = {
-	id?: string; // Optional id property
+	id?: string | number; // Optional id property
 } & (
 	| FilterEntity<G>
 	| FilterTopLevelProperties<G>
