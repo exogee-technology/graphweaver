@@ -100,10 +100,9 @@ const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
 const generateSingularTypeReferences = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		meta.className = pluralize.singular(meta.className);
-		const props = Object.values(meta.properties);
-		props.forEach((prop) => {
+		for (const prop of meta.relations) {
 			prop.type = pluralize.singular(prop.type);
-		});
+		}
 	}
 };
 
