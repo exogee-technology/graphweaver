@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 
 import { resolvers } from './schema';
