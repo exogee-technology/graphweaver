@@ -126,6 +126,10 @@ export class SchemaEntityFile extends BaseFile {
 		const useDefault = prop.default != null && isEnumOrNonStringDefault;
 		const optional = prop.nullable ? '?' : useDefault ? '' : '!';
 
+		if (prop.primary) {
+			return `${padding}id!: ${this.getTypescriptPropertyType(prop)};`;
+		}
+
 		const ret = `${prop.name}${optional}: ${this.getTypescriptPropertyType(prop)}`;
 
 		if (!useDefault) {
