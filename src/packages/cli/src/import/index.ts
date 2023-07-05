@@ -16,29 +16,46 @@ const createDirectories = (dirPath: string) => {
 };
 
 export const importDataSource = async (source: 'mysql' | 'postgresql') => {
+	const { default: inquirer } = await import('inquirer');
+	const { host, dbName, user, password, port } = await inquirer.prompt([
+		{
+			type: 'input',
+			name: 'host',
+			default: '127.0.0.1',
+			message: `What is the database server's hostname?`,
+		},
+		{
+			type: 'input',
+			name: 'dbName',
+			message: `What is the database name?`,
+		},
+		{
+			type: 'input',
+			name: 'user',
+			message: `What is the username to access the database server?`,
+		},
+		{
+			type: 'input',
+			name: 'password',
+			message: `What is the password for this user?`,
+		},
+		{
+			type: 'input',
+			name: 'port',
+			default: source === 'postgresql' ? 5432 : 3306,
+			message: `What is the port?`,
+		},
+	]);
+
 	const spinner = ora('Introspecting...').start();
-
-	// mikroOrmConfig: {
-	// 		host: '127.0.0.1',
-	// 		dbName: 'out_and_seek',
-	// 		user: 'root',
-	// 		password: 'password',
-	// 		port: 3306,
-	// 	},
-
-	// host: '127.0.0.1',
-	// 		dbName: 'go-collect',
-	// 		user: 'postgres',
-	// 		password: '',
-	// 		port: 5432,
 
 	const files = await introspection(source, {
 		mikroOrmConfig: {
-			host: '127.0.0.1',
-			dbName: 'go-collect',
-			user: 'postgres',
-			password: '',
-			port: 5432,
+			host,
+			dbName,
+			user,
+			password,
+			port,
 		},
 	});
 
