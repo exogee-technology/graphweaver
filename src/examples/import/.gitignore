@@ -1,6 +1,0 @@
-# Working build files
-.esbuild
-.graphweaver
-src/backend/entities
-src/backend/schema
-database.ts
