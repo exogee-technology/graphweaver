@@ -6,7 +6,7 @@ import { needsDatabaseConnection } from '.';
 export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
 	const backendPackages = Object.assign(
 		{},
-		...backends.map((backend) => packagesForBackend(backend))
+		...backends.map((backend) => packagesForBackend(backend, version))
 	);
 
 	const graphWeaverVersion = version ?? GRAPHWEAVER_TARGET_VERSION;
