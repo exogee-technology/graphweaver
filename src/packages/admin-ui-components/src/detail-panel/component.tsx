@@ -37,7 +37,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	const relationshipEntityType = entityByType(entity.type);
 
 	useEffect(() => {
-		helpers.setValue({ id: initialValue.value || undefined });
+		helpers.setValue(initialValue.value ? { id: initialValue.value } : undefined);
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
@@ -59,7 +59,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue({ id: selected?.[0]?.value ?? undefined });
+		helpers.setValue(selected?.[0]?.value ? { id: selected?.[0]?.value } : undefined);
 	};
 
 	return (
