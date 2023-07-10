@@ -88,9 +88,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 		const eMap = EntityMetadataMap;
 		for (const metadata of eMap.values()) {
 			console.log(metadata.provider);
-			// if (metadata.provider.addToPlugins && metadata.provider.plugins) {
-			// 	apolloPlugins.push(...metadata.provider.plugins); // @todo - new Set([])?
-			// }
+			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
+				// only push unique plugins
+				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
+					(plugin) => !apolloPlugins.includes(plugin)
+				);
+				apolloPlugins.push(...eMetadataProviderPlugins);
+			}
 		}
 
 		// Order is important here
@@ -103,6 +107,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
+		console.log('********************\n');
+		console.log('APOLLO PLUGINS', apolloPlugins);
+
+		console.log('ALL Plugins', plugins);
+		console.log('********************\n');
 
 		const resolvers = (this.config.resolvers || []) as any;
 		// loop through resolvers to get data providers
