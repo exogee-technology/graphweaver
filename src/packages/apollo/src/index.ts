@@ -83,6 +83,16 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
 
+		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
+
+		const eMap = EntityMetadataMap;
+		for (const metadata of eMap.values()) {
+			console.log(metadata.provider);
+			// if (metadata.provider.addToPlugins && metadata.provider.plugins) {
+			// 	apolloPlugins.push(...metadata.provider.plugins); // @todo - new Set([])?
+			// }
+		}
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -90,16 +100,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogErrors,
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
-			...(this.config.apolloServerOptions?.plugins || []),
+			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
-
-		const eMap = EntityMetadataMap;
-
-		for (const metadata of eMap.values()) {
-			console.log(metadata.provider);
-			// metadata.provider.addToPlugins(plugins)
-		}
 
 		const resolvers = (this.config.resolvers || []) as any;
 		// loop through resolvers to get data providers
@@ -107,14 +110,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// -  Keep track of what data providers require data providers
 		// Create a new Set([]) of plugins required by data providers
 		// Add the plugins to the plugins array
-
-		for (const resolver of resolvers) {
-			console.log('*******************\n');
-
-			console.log(resolver);
-
-			console.log('*******************\n');
-		}
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);

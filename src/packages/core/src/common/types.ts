@@ -1,6 +1,7 @@
 import { registerEnumType } from 'type-graphql';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo } from 'graphql';
+import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -91,6 +92,9 @@ export interface BackendProvider<D, G> {
 
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
+
+	addToPlugins?: (plugins: ApolloServerPlugin<BaseContext>[]) => any; //ApolloServerPlugin<BaseContext>[];
+	plugins?: ApolloServerPlugin<BaseContext>[];
 }
 
 // G = GraphQL entity
