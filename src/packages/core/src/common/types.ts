@@ -6,7 +6,7 @@ import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
 
-export interface BaseContext {}
+export interface CustomBaseContext extends BaseContext {}
 
 export type WithId = {
 	id: string;
@@ -99,7 +99,7 @@ export interface BackendProvider<D, G> {
 // G = GraphQL entity
 // A = Args type
 // TContext = GraphQL Context
-export interface HookParams<G, TContext = BaseContext> {
+export interface HookParams<G, TContext = CustomBaseContext> {
 	context: TContext;
 	info: GraphQLResolveInfo;
 	transactional: boolean;
@@ -108,16 +108,16 @@ export interface HookParams<G, TContext = BaseContext> {
 	deleted?: boolean; // Used by a delete operation to indicate if successful
 }
 
-export interface CreateOrUpdateHookParams<G, TContext = BaseContext>
+export interface CreateOrUpdateHookParams<G, TContext = CustomBaseContext>
 	extends HookParams<G, TContext> {
 	args: { items: Partial<G>[] };
 }
 
-export interface ReadHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
+export interface ReadHookParams<G, TContext = CustomBaseContext> extends HookParams<G, TContext> {
 	args: { filter?: Filter<G>; pagination?: PaginationOptions };
 }
 
-export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
+export interface DeleteHookParams<G, TContext = CustomBaseContext> extends HookParams<G, TContext> {
 	args: { filter: Filter<G> };
 }
 
