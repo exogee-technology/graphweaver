@@ -557,4 +557,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	public isCollection(entity: any) {
 		return Utils.isCollection(entity);
 	}
+	// addTo apolloplugins
+	// loop through
+	//	 Look at plugins in the array with the same conection all good, if none thne add it
 }
