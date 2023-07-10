@@ -93,7 +93,6 @@ export interface BackendProvider<D, G> {
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
 
-	addToPlugins?: (plugins: ApolloServerPlugin<BaseContext>[]) => any; //ApolloServerPlugin<BaseContext>[];
 	plugins?: ApolloServerPlugin<BaseContext>[];
 }
 
