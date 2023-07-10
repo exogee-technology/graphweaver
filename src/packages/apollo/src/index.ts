@@ -107,18 +107,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
-		console.log('********************\n');
-		console.log('APOLLO PLUGINS', apolloPlugins);
-
-		console.log('ALL Plugins', plugins);
-		console.log('********************\n');
 
 		const resolvers = (this.config.resolvers || []) as any;
-		// loop through resolvers to get data providers
-		// look at data providers to find plugins required
-		// -  Keep track of what data providers require data providers
-		// Create a new Set([]) of plugins required by data providers
-		// Add the plugins to the plugins array
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
