@@ -19,6 +19,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
+import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -93,7 +94,27 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
 
+		const eMap = EntityMetadataMap;
+
+		for (const metadata of eMap.values()) {
+			console.log(metadata.provider);
+			// metadata.provider.addToPlugins(plugins)
+		}
+
 		const resolvers = (this.config.resolvers || []) as any;
+		// loop through resolvers to get data providers
+		// look at data providers to find plugins required
+		// -  Keep track of what data providers require data providers
+		// Create a new Set([]) of plugins required by data providers
+		// Add the plugins to the plugins array
+
+		for (const resolver of resolvers) {
+			console.log('*******************\n');
+
+			console.log(resolver);
+
+			console.log('*******************\n');
+		}
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
