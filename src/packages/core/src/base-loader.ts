@@ -86,6 +86,8 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	gqlEntityType: GraphQLEntityConstructor<G, D>;
 	relatedField: string;
 }) => {
+	console.log('getBaseRelatedIdLoader', gqlEntityType, relatedField);
+
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	const loaderKey = `${gqlTypeName}-${relatedField}`; /* gqlTypeName-fieldname */
 	if (!relatedIdLoaderMap[loaderKey]) {
