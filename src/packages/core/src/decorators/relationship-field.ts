@@ -85,6 +85,25 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
+		// add arg, to filter to related filter
+		// metadata.collectHandlerParamMetadata({
+		// 	kind: 'arg',
+		// 	target: target.constructor,
+		// 	methodName: key,
+		// 	index: 3,
+		// 	name: 'filter',
+		// 	// @todo - check if below is correct
+		// 	description: undefined,
+		// 	deprecationReason: undefined,
+		// 	getType: () => Boolean, // @todo - this will need to become a filter type
+		// 	typeOptions: { nullable: true },
+		// 	validate: undefined,
+		// });
+
+		console.log('id', id);
+		console.log('relatedField', relatedField);
+		// console.log('metadata', metadata);
+
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
 			const idValue = !id

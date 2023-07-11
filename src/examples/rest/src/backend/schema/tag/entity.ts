@@ -31,6 +31,7 @@ export class Tag extends GraphQLEntity<OrmTag> {
 	@Field(() => String)
 	name!: string;
 
+	// Decorator, Generic Type, return type function, relationship field options (keyof D b/c this is the id of the related entity)
 	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
 	tasks!: Task[];
 }
