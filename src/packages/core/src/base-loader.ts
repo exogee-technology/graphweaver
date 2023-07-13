@@ -82,27 +82,48 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
 	gqlEntityType,
 	relatedField,
+	filter,
 }: {
 	gqlEntityType: GraphQLEntityConstructor<G, D>;
 	relatedField: string;
+	filter?: Filter<D>;
 }) => {
 	console.log('getBaseRelatedIdLoader', gqlEntityType, relatedField);
+	console.log('filter', filter);
 
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
-	const loaderKey = `${gqlTypeName}-${relatedField}`; /* gqlTypeName-fieldname */
+	// @todo - is there a better way to cache the filter?
+	const loaderKey = `${gqlTypeName}-${relatedField}-${JSON.stringify(
+		filter
+	)}`; /* gqlTypeName-fieldname-filterObject */
+
+	console.log('loaderKey', loaderKey);
+	console.log('!relatedIdLoaderMap[loaderKey] exists?', !relatedIdLoaderMap[loaderKey]);
 	if (!relatedIdLoaderMap[loaderKey]) {
+		console.log("relatedIdLoaderMap[loaderKey] doesn't exist, creating it");
+
 		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
 		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
-			logger.trace(`DataLoader: Loading ${gqlTypeName}.${relatedField} in (${keys.join(', ')})`);
+			logger.trace(
+				`DataLoader: Loading ${gqlTypeName}.${relatedField}${
+					filter && `.${JSON.stringify(filter)}`
+				} in (${keys.join(', ')})`
+			);
 
 			// Check metadata storage
 
 			// @todo Check if this is a many-to-many field - get mikroorm metadata
 			//const fieldMetadata = getFieldMetadata(relatedField, gqlEntityType);
 
-			const records = await provider.findByRelatedId(provider.entityType, relatedField, keys);
+			// @todo - check if provider supports filter
+			const records = await provider.findByRelatedId(
+				provider.entityType,
+				relatedField,
+				keys,
+				filter as unknown as Filter<GraphQLEntity<any>>
+			);
 			logger.trace(`DataLoader: Loading ${gqlTypeName} got ${records.length} result(s).`);
 
 			// Need to return in the same order as was requested. Iterate once and create
@@ -131,7 +152,6 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			maxBatchSize: provider.maxDataLoaderBatchSize,
 		});
 	}
-
 	return relatedIdLoaderMap[loaderKey] as DataLoader<string, D[]>;
 };
 
@@ -151,6 +171,7 @@ export const BaseLoaders = {
 		gqlEntityType: GraphQLEntityConstructor<G, D>;
 		relatedField: Omit<keyof D, 'isCollection' | 'isReference'> & string;
 		id: string;
+		filter?: Filter<D>;
 	}) => {
 		const loader = getBaseRelatedIdLoader(args);
 		return loader.load(args.id) as unknown as Promise<D[]>;

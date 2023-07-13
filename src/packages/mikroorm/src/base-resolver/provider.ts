@@ -362,6 +362,8 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		relatedFieldIds: string[],
 		filter?: any
 	): Promise<D[]> {
+		console.log('findByRelatedId', filter);
+
 		const queryFilter = {
 			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[filter ?? []]],
 		};
