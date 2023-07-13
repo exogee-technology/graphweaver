@@ -88,11 +88,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	relatedField: string;
 	filter?: Filter<D>;
 }) => {
-	console.log('getBaseRelatedIdLoader', gqlEntityType, relatedField);
-	console.log('filter', filter);
-
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
-	// @todo - is there a better way to cache the filter?
 	const loaderKey = `${gqlTypeName}-${relatedField}-${JSON.stringify(
 		filter
 	)}`; /* gqlTypeName-fieldname-filterObject */
