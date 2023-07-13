@@ -1,5 +1,5 @@
 import { getMetadataStorage } from 'type-graphql';
-import { ReturnTypeFunc, TypeValueThunk } from 'type-graphql/dist/decorators/types';
+import { ReturnTypeFunc } from 'type-graphql/dist/decorators/types';
 import { findType } from 'type-graphql/dist/helpers/findType';
 import { BaseLoaders } from '../base-loader';
 import {
@@ -33,9 +33,6 @@ export function RelationshipField<
 		// We now need to update the MetadataStorage for type graphql
 		// this is so the new function that we return below is setup in the schema
 		const metadata = getMetadataStorage();
-		console.log('target', target);
-		console.log('key', key);
-		console.log('typeMap', TypeMap);
 
 		// first lets fetch the getType function
 		const { getType, typeOptions } = findType({
@@ -47,12 +44,9 @@ export function RelationshipField<
 		});
 
 		const getRelatedType = () => {
-			// capitalize first letter of key
 			const typeName = key.charAt(0).toUpperCase() + key.slice(1);
 			return TypeMap[`${pluralize(typeName)}ListFilter`];
 		};
-
-		console.log('getRelatedType', getRelatedType());
 
 		// next we need to add the below function as a field resolver
 		metadata.collectClassFieldMetadata({
@@ -99,10 +93,6 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
-		// const gqlEntityType = returnTypeFunc();
-		// const plural = pluralize(gqlEntityType.name);
-		// const typeMap = TypeMap[`${plural}FilterInput`];
-
 		// add arg, to filter to related filter
 		metadata.collectHandlerParamMetadata({
 			kind: 'arg',
@@ -110,10 +100,8 @@ export function RelationshipField<
 			methodName: key,
 			index: 3,
 			name: 'filter',
-			// @todo - check if below is correct
 			description: 'Filter the related entities',
 			deprecationReason: undefined,
-			// what goes here?
 			getType: getRelatedType,
 			typeOptions: { nullable: true },
 			validate: undefined,
