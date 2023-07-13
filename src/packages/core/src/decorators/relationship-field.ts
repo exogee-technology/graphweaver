@@ -1,10 +1,11 @@
 import { getMetadataStorage } from 'type-graphql';
-import { ReturnTypeFunc } from 'type-graphql/dist/decorators/types';
+import { ReturnTypeFunc, TypeValueThunk } from 'type-graphql/dist/decorators/types';
 import { findType } from 'type-graphql/dist/helpers/findType';
 import { BaseLoaders } from '../base-loader';
 import {
 	BaseContext,
 	BaseDataEntity,
+	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphQLResolveInfo,
@@ -12,6 +13,8 @@ import {
 	ReadHookParams,
 	hookManagerMap,
 } from '..';
+import { TypeMap } from '../common/types';
+import pluralize from 'pluralize';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
@@ -30,6 +33,9 @@ export function RelationshipField<
 		// We now need to update the MetadataStorage for type graphql
 		// this is so the new function that we return below is setup in the schema
 		const metadata = getMetadataStorage();
+		console.log('target', target);
+		console.log('key', key);
+		console.log('typeMap', TypeMap);
 
 		// first lets fetch the getType function
 		const { getType, typeOptions } = findType({
@@ -39,6 +45,35 @@ export function RelationshipField<
 			returnTypeFunc,
 			typeOptions: { nullable: true },
 		});
+
+		// getType for related field
+		// const { getType: getRelatedType, typeOptions: relatedTypeOptions } = findType({
+		// 	metadataKey: 'design:paramtypes',
+		// 	prototype: target,
+		// 	propertyKey: key,
+		// 	returnTypeFunc,
+		// 	typeOptions: { nullable: true },
+		// });
+		const cachedTypeNames: Record<any, string> = {};
+
+		//get the field metadata of this
+		const field = metadata.fields.find(
+			(field) => field.target === target.constructor && field.name === key
+		);
+		// THIS IS UNDEFINED ^^
+
+		const getRelatedType = () => {
+			// capitalize first letter of key
+			const typeName = key.charAt(0).toUpperCase() + key.slice(1);
+
+			// If it doesn't have a name it might be an enum or similar.
+			return key
+				? TypeMap[`${pluralize(typeName)}ListFilter`] || field?.getType()
+				: field?.getType();
+		};
+
+		console.log('getType', getType());
+		//console.log('getRelatedType', getRelatedType());
 
 		// next we need to add the below function as a field resolver
 		metadata.collectClassFieldMetadata({
@@ -85,27 +120,36 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
+		// const gqlEntityType = returnTypeFunc();
+		// const plural = pluralize(gqlEntityType.name);
+		// const typeMap = TypeMap[`${plural}FilterInput`];
+
 		// add arg, to filter to related filter
-		// metadata.collectHandlerParamMetadata({
-		// 	kind: 'arg',
-		// 	target: target.constructor,
-		// 	methodName: key,
-		// 	index: 3,
-		// 	name: 'filter',
-		// 	// @todo - check if below is correct
-		// 	description: undefined,
-		// 	deprecationReason: undefined,
-		// 	getType: () => Boolean, // @todo - this will need to become a filter type
-		// 	typeOptions: { nullable: true },
-		// 	validate: undefined,
-		// });
+		metadata.collectHandlerParamMetadata({
+			kind: 'arg',
+			target: target.constructor,
+			methodName: key,
+			index: 3,
+			name: 'schmilter',
+			// @todo - check if below is correct
+			description: 'Filter the related entities',
+			deprecationReason: undefined,
+			// what goes here?
+			getType: getRelatedType,
+			typeOptions: { nullable: true },
+			validate: undefined,
+		});
 
-		console.log('id', id);
-		console.log('relatedField', relatedField);
-		// console.log('metadata', metadata);
-
+		if (relatedField) {
+			console.log('relatedField', relatedField);
+		}
 		// we then declare the field resolver for this field:
-		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
+		const fieldResolver = async (
+			root: any,
+			info: GraphQLResolveInfo,
+			context: BaseContext,
+			schmilter: Filter<D>
+		) => {
 			const idValue = !id
 				? undefined
 				: typeof id === 'function'
@@ -134,6 +178,7 @@ export function RelationshipField<
 					gqlEntityType,
 					relatedField: relatedField,
 					id: root.id,
+					filter: schmilter,
 				});
 			}
 
