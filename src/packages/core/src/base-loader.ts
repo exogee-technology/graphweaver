@@ -97,11 +97,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 		filter
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
-	console.log('loaderKey', loaderKey);
-	console.log('!relatedIdLoaderMap[loaderKey] exists?', !relatedIdLoaderMap[loaderKey]);
 	if (!relatedIdLoaderMap[loaderKey]) {
-		console.log("relatedIdLoaderMap[loaderKey] doesn't exist, creating it");
-
 		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
 		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 

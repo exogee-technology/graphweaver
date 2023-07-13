@@ -46,34 +46,13 @@ export function RelationshipField<
 			typeOptions: { nullable: true },
 		});
 
-		// getType for related field
-		// const { getType: getRelatedType, typeOptions: relatedTypeOptions } = findType({
-		// 	metadataKey: 'design:paramtypes',
-		// 	prototype: target,
-		// 	propertyKey: key,
-		// 	returnTypeFunc,
-		// 	typeOptions: { nullable: true },
-		// });
-		const cachedTypeNames: Record<any, string> = {};
-
-		//get the field metadata of this
-		const field = metadata.fields.find(
-			(field) => field.target === target.constructor && field.name === key
-		);
-		// THIS IS UNDEFINED ^^
-
 		const getRelatedType = () => {
 			// capitalize first letter of key
 			const typeName = key.charAt(0).toUpperCase() + key.slice(1);
-
-			// If it doesn't have a name it might be an enum or similar.
-			return key
-				? TypeMap[`${pluralize(typeName)}ListFilter`] || field?.getType()
-				: field?.getType();
+			return TypeMap[`${pluralize(typeName)}ListFilter`];
 		};
 
-		console.log('getType', getType());
-		//console.log('getRelatedType', getRelatedType());
+		console.log('getRelatedType', getRelatedType());
 
 		// next we need to add the below function as a field resolver
 		metadata.collectClassFieldMetadata({
@@ -130,7 +109,7 @@ export function RelationshipField<
 			target: target.constructor,
 			methodName: key,
 			index: 3,
-			name: 'schmilter',
+			name: 'filter',
 			// @todo - check if below is correct
 			description: 'Filter the related entities',
 			deprecationReason: undefined,
@@ -140,15 +119,12 @@ export function RelationshipField<
 			validate: undefined,
 		});
 
-		if (relatedField) {
-			console.log('relatedField', relatedField);
-		}
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (
 			root: any,
 			info: GraphQLResolveInfo,
 			context: BaseContext,
-			schmilter: Filter<D>
+			filter?: Filter<D>
 		) => {
 			const idValue = !id
 				? undefined
@@ -158,7 +134,11 @@ export function RelationshipField<
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
-			const filter = idValue ? { id: idValue } : { [relatedField as string]: { id: root.id } };
+			const relatedEntityFilter = filter
+				? filter
+				: idValue
+				? { id: idValue }
+				: { [relatedField as string]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
 				args: { filter },
@@ -178,7 +158,7 @@ export function RelationshipField<
 					gqlEntityType,
 					relatedField: relatedField,
 					id: root.id,
-					filter: schmilter,
+					filter: relatedEntityFilter,
 				});
 			}
 
