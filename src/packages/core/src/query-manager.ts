@@ -99,6 +99,13 @@ class QueryManagerImplementation {
 		filter?: Filter<G>;
 		pagination?: PaginationOptions;
 	}) => {
+		console.log('************************\n');
+		console.log('QueryManagerImplementation.find');
+		console.log('entityName', entityName);
+		//console.log('EntityMetadataMap.get(entityName)', EntityMetadataMap.get(entityName));
+
+		console.log('************************\n');
+
 		const metadata = EntityMetadataMap.get(entityName);
 		if (!metadata) throw new Error(`Could not get provider for '${entityName}' entity.`);
 
@@ -109,6 +116,8 @@ class QueryManagerImplementation {
 
 		// Ok, at this point we're good to go, we can just pass the find on down to the provider.
 		const provider: BackendProvider<D, G> = metadata.provider;
+		console.log('provider', provider);
+
 		return provider.find(result.filter, pagination);
 	};
 }

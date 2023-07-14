@@ -347,11 +347,20 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 				: params;
 
+			console.log('**********************\n');
+			console.log('gqlEntityTypeName', gqlEntityTypeName);
+			console.log('filter', filter);
+			console.log('hookParams.args?.filter', hookParams.args?.filter);
+			console.log('hookParams', hookParams);
+			console.log('**********************\n');
+
 			const result = await QueryManager.find<D, G>({
 				entityName: gqlEntityTypeName,
 				filter: hookParams.args?.filter,
 				pagination: hookParams.args?.pagination,
 			});
+			console.log('result', result);
+			console.log('**********************\n');
 
 			if (gqlEntityType.fromBackendEntity) {
 				const { fromBackendEntity } = gqlEntityType;

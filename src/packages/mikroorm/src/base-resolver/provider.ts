@@ -145,11 +145,22 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	};
 
 	private applyExternalIdFields = (target: AnyEntity | string, values: any) => {
+		console.log('*******************\n');
+		console.log('applyExternalIdFields\n');
+		console.log('target: ', target);
+		console.log('values: ', values);
+		console.log('*******************\n');
+
 		const targetName = typeof target === 'string' ? target : target.name;
 		const map = externalIdFieldMap.get(targetName);
 
 		const mapFieldNames = (partialFilterObj: any) => {
 			for (const [from, to] of Object.entries(map || {})) {
+				console.log('*******************\n');
+				console.log('from: ', from);
+				console.log('to: ', to);
+				console.log('*******************\n');
+
 				if (partialFilterObj[from] && typeof partialFilterObj[from].id !== 'undefined') {
 					if (Object.keys(partialFilterObj[from]).length > 1) {
 						throw new Error(
@@ -163,6 +174,13 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 					partialFilterObj[to] = partialFilterObj[from].id;
 					delete partialFilterObj[from];
+				} else {
+					// START HERE -
+					// Why  do we call this.applyExternalIdFields on things that aren't ids
+					console.log('*******************\n');
+					console.log('partialFilterObj[from]: ', partialFilterObj[from]);
+					console.log('partialFilterObj[to]: ', partialFilterObj[to]);
+					console.log('*******************\n');
 				}
 			}
 		};
@@ -237,6 +255,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	};
 
 	private applyWhereClause(where: any) {
+		console.log('*******************\n');
+		console.log('where: ', where);
+		console.log('*******************\n');
+
 		const query = this.getRepository().createQueryBuilder();
 		const joinKeysUsed = new Map<string, number>();
 
@@ -248,6 +270,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 					}
 				} else if (typeof current === 'object') {
 					for (const key of Object.keys(current)) {
+						console.log('*******************\n');
+						console.log('key: ', key);
+						console.log('*******************\n');
+
 						const shouldJoin =
 							current[key] !== null &&
 							typeof current[key] === 'object' &&
@@ -258,6 +284,9 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 						if (mikroObjectOperations.has(key)) {
 							visit(current[key], table);
 						} else if (shouldJoin) {
+							console.log('*******************\n');
+							console.log('Should join, we have a nested object: ', current[key]);
+							console.log('*******************\n');
 							// Otherwise ensure we've actually got a full on nested object,
 							// not just a filter property.
 							const keyUseCount = joinKeysUsed.has(key) ? (joinKeysUsed.get(key) ?? 0) + 1 : 1;
@@ -281,6 +310,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 				}
 			};
 
+			console.log('*******************\n');
+			console.log('Before next visit, where: ', where);
+			console.log('*******************\n');
+
 			visit(where);
 
 			if (Object.keys(where).length > 0) {
@@ -300,6 +333,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 			filter: JSON.stringify(filter),
 		});
 
+		console.log('*******************\n');
+		console.log('filter: ', filter);
+		console.log('*******************\n');
+
 		// Strip custom types out of the equation.
 		// This query only works if we JSON.parse(JSON.stringify(filter)):
 		//
@@ -316,9 +353,16 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);
 
+		console.log('*******************\n');
+		console.log('whereWithAppliedExternalIdFields: ', whereWithAppliedExternalIdFields);
+		console.log('*******************\n');
+
 		// Regions need some fancy handling with Query Builder. Process the where further
 		// and return a Query Builder instance.
 		const query = this.applyWhereClause(whereWithAppliedExternalIdFields);
+		console.log('*******************\n');
+		console.log('query: ', query);
+		console.log('*******************\n');
 
 		// If we have specified a limit, offset or order then update the query
 		pagination?.limit && query.limit(pagination.limit);
@@ -334,13 +378,25 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		// This method is protected, but we need to use it from here, hence the `as any`.
 		const driver = this.database.em.getDriver();
 		const meta = this.database.em.getMetadata().get(this.entityType.name);
+		console.log('*******************\n');
+		console.log('meta: ', meta);
+		console.log('*******************\n');
+
 		query.populate((driver as any).autoJoinOneToOneOwner(meta, []));
 
 		if (additionalOptionsForBackend?.populate) {
+			console.log('*******************\n');
+			console.log('additionalOptionsForBackend.populate: ', additionalOptionsForBackend.populate);
+			console.log('*******************\n');
+
 			query.populate(additionalOptionsForBackend.populate);
 		}
 
 		const result = await query.getResult();
+		console.log('*******************\n');
+		console.log('result: ', result);
+		console.log('*******************\n');
+
 		logger.trace(`find ${this.entityType.name} result: ${result.length} rows`);
 
 		return result;
