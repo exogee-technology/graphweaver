@@ -1,6 +1,5 @@
 import yargs from 'yargs';
 import {
-	BackendStartOptions,
 	StartOptions,
 	analyseBundle,
 	buildBackend,
@@ -8,10 +7,8 @@ import {
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
-import { init } from './init';
+import { Backend, init } from './init';
 import { importDataSource } from './import';
-
-export { initGraphWeaver } from './init';
 
 yargs.version(false);
 
@@ -29,6 +26,7 @@ yargs
 				.option('backend', {
 					type: 'string',
 					describe: 'Specify a data source.',
+					choices: ['postgres', 'mysql', 'rest', 'sqlite'],
 				})
 				.option('version', {
 					type: 'string',
@@ -38,21 +36,30 @@ yargs
 			const version = argv.version;
 			const name = argv.name;
 			const backend = argv.backend;
-			init({ name, backend, version });
+			if (backend === 'postgres') init({ name, backend: Backend.MikroOrmPostgres, version });
+			if (backend === 'mysql') init({ name, backend: Backend.MikroOrmMysql, version });
+			if (backend === 'rest') init({ name, backend: Backend.REST, version });
+			if (backend === 'sqlite') init({ name, backend: Backend.MikroOrmSqlite, version });
+			init({ name, version });
 		},
 	})
 	.command({
 		command: ['import [source]'],
 		describe: 'Inspect a data source and then import its entities.',
 		builder: (yargs) =>
-			yargs.positional('source', {
-				type: 'string',
-				choices: ['mysql', 'postgresql'],
-				default: 'postgresql',
-				describe: 'The data source to import.',
-			}),
-		handler: async ({ source }) => {
-			await importDataSource(source);
+			yargs
+				.positional('source', {
+					type: 'string',
+					choices: ['mysql', 'postgresql', 'sqlite'],
+					default: 'postgresql',
+					describe: 'The data source to import.',
+				})
+				.option('database', {
+					type: 'string',
+					describe: 'Specify the database name.',
+				}),
+		handler: async ({ source, database }) => {
+			await importDataSource(source, database);
 		},
 	})
 	.command({
