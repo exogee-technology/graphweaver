@@ -519,7 +519,10 @@ importers:
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': 0.1.25
       '@exogee/graphweaver-apollo': 0.1.25
+      '@exogee/graphweaver-mikroorm': 0.1.25
       '@exogee/graphweaver-scalars': 0.1.25
+      '@mikro-orm/core': 5.4.2
+      '@mikro-orm/sqlite': 5.4.2
       '@types/node': 14.14.10
       class-validator: 0.14.0
       graphql: 16.6.0
@@ -531,7 +534,10 @@ importers:
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': link:../../core
       '@exogee/graphweaver-apollo': link:../../apollo
+      '@exogee/graphweaver-mikroorm': link:../../mikroorm
       '@exogee/graphweaver-scalars': link:../../scalars
+      '@mikro-orm/core': 5.4.2_@mikro-orm+sqlite@5.4.2
+      '@mikro-orm/sqlite': 5.4.2_@mikro-orm+core@5.4.2
       class-validator: 0.14.0
       graphql: 16.6.0
       graphweaver: link:../../cli

@@ -10,7 +10,12 @@ import {
 	makeDatabase,
 } from './template';
 
-import { Backend } from './backend';
+export enum Backend {
+	MikroOrmPostgres,
+	MikroOrmMysql,
+	REST,
+	MikroOrmSqlite,
+}
 
 const abort = () => {
 	console.log('Cancelled!');
@@ -18,7 +23,9 @@ const abort = () => {
 };
 
 export const needsDatabaseConnection = (backends: Backend[]) =>
-	backends.some((backend) => [Backend.MikroOrmPostgres, Backend.MikroOrmMysql].includes(backend));
+	backends.some((backend) =>
+		[Backend.MikroOrmPostgres, Backend.MikroOrmMysql, Backend.MikroOrmSqlite].includes(backend)
+	);
 
 export const initGraphWeaver = (projectName: string, backends: Backend[], version?: string) => {
 	makeDirectories(projectName);
@@ -32,8 +39,8 @@ export const initGraphWeaver = (projectName: string, backends: Backend[], versio
 
 type InitOptions = {
 	version?: string /** Optional version to use for the starter */;
-	name?: string /** Optional version to use for the starter */;
-	backend?: number /** Optional version to use for the starter */;
+	name?: string /** Optional name to use for the project */;
+	backend?: Backend /** Optional backend to use for the starter */;
 };
 
 export const init = async ({ version, name, backend }: InitOptions) => {
@@ -68,6 +75,10 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 						name: 'MikroORM - MySQL Backend',
 					},
 					{
+						value: Backend.MikroOrmSqlite,
+						name: 'MikroORM - SQLite Backend',
+					},
+					{
 						value: Backend.REST,
 						name: 'REST Backend',
 					},
@@ -84,7 +95,7 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 		]);
 
 		if (!createDirectory) abort();
-		initGraphWeaver(name ?? projectName, backend ? [backend] : backends, version);
+		initGraphWeaver(projectName, backends, version);
 	}
 
 	console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');

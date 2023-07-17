@@ -4,8 +4,8 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
-		"test:init": "rm -rf ./test && node ../cli/bin init --name=test --backend=0 version=workspace:*",
-		"test:import": "node ./scripts/import.js",
+		"test:init": "rm -rf ./test && node ../cli/bin init --name=test --backend=sqlite version=workspace:*",
+		"test:import": "cd test && node ../../cli/bin import sqlite --database=../database.sqlite",
 		"test": "node --version"
 	},
 	"dependencies": {

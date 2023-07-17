@@ -26,38 +26,44 @@ export const isIntrospectionError = (
 	);
 };
 
-export const importDataSource = async (source: 'mysql' | 'postgresql') => {
+export const importDataSource = async (
+	source: 'mysql' | 'postgresql' | 'sqlite',
+	database?: string
+) => {
 	const { default: inquirer } = await import('inquirer');
-	const { host, dbName, user, password, port } = await inquirer.prompt([
-		{
-			type: 'input',
-			name: 'host',
-			default: '127.0.0.1',
-			message: `What is the database server's hostname?`,
-		},
-		{
-			type: 'input',
-			name: 'dbName',
-			message: `What is the database name?`,
-		},
-		{
-			type: 'input',
-			name: 'user',
-			message: `What is the username to access the database server?`,
-		},
-		{
-			type: 'password',
-			mask: '*',
-			name: 'password',
-			message: `What is the password for this user?`,
-		},
-		{
-			type: 'input',
-			name: 'port',
-			default: source === 'postgresql' ? 5432 : 3306,
-			message: `What is the port?`,
-		},
-	]);
+	const { host, dbName, user, password, port } =
+		source === 'sqlite'
+			? { host: undefined, dbName: database, user: undefined, password: undefined, port: undefined }
+			: await inquirer.prompt([
+					{
+						type: 'input',
+						name: 'host',
+						default: '127.0.0.1',
+						message: `What is the database server's hostname?`,
+					},
+					{
+						type: 'input',
+						name: 'dbName',
+						message: `What is the database name?`,
+					},
+					{
+						type: 'input',
+						name: 'user',
+						message: `What is the username to access the database server?`,
+					},
+					{
+						type: 'password',
+						mask: '*',
+						name: 'password',
+						message: `What is the password for this user?`,
+					},
+					{
+						type: 'input',
+						name: 'port',
+						default: source === 'postgresql' ? 5432 : 3306,
+						message: `What is the port?`,
+					},
+			  ]);
 
 	const spinner = ora('Introspecting...').start();
 
