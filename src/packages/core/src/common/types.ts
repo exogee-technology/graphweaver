@@ -8,7 +8,7 @@ export type { GraphQLResolveInfo } from 'graphql';
 export interface BaseContext {}
 
 export type WithId = {
-	id: string;
+	id: string | number;
 };
 
 export enum Sort {
@@ -77,7 +77,7 @@ export interface BackendProvider<D, G> {
 		relatedIds: readonly string[],
 		filter?: Filter<G>
 	): Promise<D[]>;
-	updateOne(id: string, updateArgs: Partial<G>): Promise<D>;
+	updateOne(id: string | number, updateArgs: Partial<G>): Promise<D>;
 	updateMany(entities: (Partial<G> & WithId)[]): Promise<D[]>;
 	createOne(entity: Partial<G>): Promise<D>;
 	createMany(entities: Partial<G>[]): Promise<D[]>;
