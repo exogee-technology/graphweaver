@@ -293,7 +293,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 							// not just a filter property.
 							const keyUseCount = joinKeysUsed.has(key) ? (joinKeysUsed.get(key) ?? 0) + 1 : 1;
 							const joinKey = joinKeysUsed.has(key) ? `${key}${keyUseCount}` : key;
-							query.leftJoin(`${table}.${key}`, joinKey);
+							// query.leftJoin(`${table}.${key}`, joinKey);
 							// Certain filters can result in the same table being joined
 							// on different criteria - keep track and avoid using the same alias
 							joinKeysUsed.set(joinKey, keyUseCount);
