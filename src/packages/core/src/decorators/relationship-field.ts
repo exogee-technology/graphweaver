@@ -5,6 +5,7 @@ import { BaseLoaders } from '../base-loader';
 import {
 	BaseContext,
 	BaseDataEntity,
+	EntityMetadataMap,
 	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
@@ -42,9 +43,8 @@ export function RelationshipField<
 			returnTypeFunc,
 			typeOptions: { nullable: true },
 		});
-
+		const typeName = key.charAt(0).toUpperCase() + key.slice(1);
 		const getRelatedType = () => {
-			const typeName = key.charAt(0).toUpperCase() + key.slice(1);
 			return TypeMap[`${pluralize(typeName)}ListFilter`]; //if this doesnt exist, dont add metadata.collectHandlerParamMetadata, check EntityMetadataMap
 		};
 
@@ -93,20 +93,22 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
-		// add arg, to filter to related filter
-		metadata.collectHandlerParamMetadata({
-			kind: 'arg',
-			target: target.constructor,
-			methodName: key,
-			index: 3,
-			name: 'filter',
-			description: 'Filter the related entities',
-			deprecationReason: undefined,
-			getType: getRelatedType,
-			typeOptions: { nullable: true },
-			validate: undefined,
-		});
-
+		// if the provider of this entity supports filtering, add a filter arg
+		if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
+			// add arg, to filter to related filter
+			metadata.collectHandlerParamMetadata({
+				kind: 'arg',
+				target: target.constructor,
+				methodName: key,
+				index: 3,
+				name: 'filter',
+				description: 'Filter the related entities',
+				deprecationReason: undefined,
+				getType: getRelatedType,
+				typeOptions: { nullable: true },
+				validate: undefined,
+			});
+		}
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (
 			root: any,

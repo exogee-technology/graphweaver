@@ -25,7 +25,8 @@ export class RestBackendProvider<D extends DE, G extends GE<D>>
 		protected accessor?: RestDataAccessor<D>,
 		backendProviderConfig?: Partial<BackendProviderConfig>
 	) {}
-	// default backend provider config
+
+	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
 		filter: {
 			root: false,

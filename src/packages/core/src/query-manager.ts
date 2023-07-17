@@ -2,7 +2,7 @@ import { logger } from '@exogee/logger';
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 
 import { EntityMetadataMap } from './base-resolver';
-import { BackendProvider, Filter, PaginationOptions } from './common/types';
+import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './common/types';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -30,7 +30,7 @@ const entityNameFromType = (type: TypeValue) => (type as any).name || type.toStr
 
 const visit = async <D, G>(
 	currentEntityName: string,
-	currentProvider: BackendProvider<D, G>,
+	currentProvider: BackendProvider<D, G, BackendProviderConfig>,
 	currentFilter: any
 ) => {
 	// If there's no filter at this level, it's fine, just bail.
@@ -108,7 +108,7 @@ class QueryManagerImplementation {
 		logger.trace('Filter after ID flattening: ', filter);
 
 		// Ok, at this point we're good to go, we can just pass the find on down to the provider.
-		const provider: BackendProvider<D, G> = metadata.provider;
+		const provider: BackendProvider<D, G, BackendProviderConfig> = metadata.provider;
 		return provider.find(result.filter, pagination);
 	};
 }

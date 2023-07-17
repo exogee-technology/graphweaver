@@ -1,10 +1,11 @@
 import {
-	BackendProvider as Provider,
+	BackendProvider,
 	BaseDataEntity as DE,
 	Filter,
 	GraphQLEntity as GE,
 	PaginationOptions,
 	Sort,
+	BackendProviderConfig,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { TokenSet, XeroClient } from 'xero-node';
@@ -41,7 +42,9 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Provider<D, G> {
+export class XeroBackendProvider<D extends DE, G extends GE<D>>
+	implements BackendProvider<D, G, BackendProviderConfig>
+{
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 
@@ -67,8 +70,29 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Provi
 
 	public constructor(
 		protected entityTypeName: string,
-		protected accessor?: XeroDataAccessor<D, G>
+		protected accessor?: XeroDataAccessor<D, G>,
+		backendProviderConfig?: Partial<BackendProviderConfig>
 	) {}
+
+	// Default backend provider config
+	public readonly backendProviderConfig: BackendProviderConfig = {
+		filter: {
+			root: false,
+			parentByChild: false,
+			childByChild: false,
+		},
+		pagination: {
+			root: false,
+			offset: false,
+			limit: false,
+		},
+		orderBy: {
+			root: false,
+		},
+		sort: {
+			root: false,
+		},
+	};
 
 	public static clearTokens() {
 		XeroBackendProvider.resetXeroClient();
