@@ -45,7 +45,7 @@ export function RelationshipField<
 		});
 		const typeName = key.charAt(0).toUpperCase() + key.slice(1);
 		const getRelatedType = () => {
-			return TypeMap[`${pluralize(typeName)}ListFilter`]; //if this doesnt exist, dont add metadata.collectHandlerParamMetadata, check EntityMetadataMap
+			return TypeMap[`${pluralize(typeName)}ListFilter`];
 		};
 
 		// next we need to add the below function as a field resolver
@@ -93,9 +93,8 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
-		// if the provider of this entity supports filtering, add a filter arg
+		// If the provider of this entity supports filtering, add a filter arg
 		if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
-			// add arg, to filter to related filter
 			metadata.collectHandlerParamMetadata({
 				kind: 'arg',
 				target: target.constructor,
