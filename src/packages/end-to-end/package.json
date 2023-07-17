@@ -7,7 +7,7 @@
 		"test:init": "rm -rf ./test && node ../cli/bin init --name=test --backend=sqlite version=workspace:*",
 		"test:import": "cd test && node ../../cli/bin import sqlite --database=../database.sqlite",
 		"test:start": "cd test && pnpm start",
-		"test": "jest"
+		"test:e2e": "jest"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",
