@@ -65,7 +65,7 @@ jobs:
         run: |
           pnpm test:start &
           sleep 3 &&
-          pnpm test &&
+          pnpm test:e2e &&
           killall node
 
         env:
