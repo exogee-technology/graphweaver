@@ -115,6 +115,11 @@ export class SchemaEntityFile extends BaseFile {
 			return 'Date';
 		}
 
+		if (prop.type === 'unknown') {
+			//fallback to string if unknown
+			return 'string';
+		}
+
 		return prop.type;
 	}
 

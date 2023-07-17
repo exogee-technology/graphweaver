@@ -13,10 +13,6 @@
       "path": "src/examples/rest"
     },
     {
-      "name": "➡️ Example: SQLite Database",
-      "path": "src/examples/sqlite"
-    },
-    {
       "name": "➡️ Example: Xero",
       "path": "src/examples/xero"
     },
