@@ -1,0 +1,15 @@
+{
+	"name": "@exogee/graphweaver-end-to-end",
+	"version": "0.0.1",
+	"description": "Graphweaver Test Suite",
+	"license": "MIT",
+	"scripts": {
+		"test:init": "rm -rf ./test && node ../cli/bin init --name=test --backend=0 version=workspace:*",
+		"test:import": "node ./scripts/import.js",
+		"test": "node --version"
+	},
+	"dependencies": {
+		"@exogee/graphweaver": "workspace:*"
+	},
+	"devDependencies": {}
+}

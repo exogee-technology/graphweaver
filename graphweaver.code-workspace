@@ -61,6 +61,10 @@
       "path": "src/packages/xero"
     },
     {
+      "name": "📦 @exogee/graphweaver-end-to-end",
+      "path": "src/packages/end-to-end"
+    },
+    {
       "name": "📦 @exogee/logger",
       "path": "src/packages/logger"
     },

@@ -32,13 +32,23 @@ export const initGraphWeaver = (projectName: string, backends: Backend[], versio
 
 type InitOptions = {
 	version?: string /** Optional version to use for the starter */;
+	name?: string /** Optional version to use for the starter */;
+	backend?: number /** Optional version to use for the starter */;
 };
 
-export const init = async ({ version }: InitOptions) => {
+export const init = async ({ version, name, backend }: InitOptions) => {
 	console.log(`GraphWeaver ${version ? 'using version ' + version : ''}\n`);
 
-	import('inquirer').then(async ({ default: inquirer }) => {
-		const { projectName, createDirectory, backends } = await inquirer.prompt([
+	if (backend && name) {
+		initGraphWeaver(name, [backend], version);
+	} else {
+		const { default: inquirer } = await import('inquirer');
+
+		const {
+			projectName,
+			createDirectory = true,
+			backends,
+		} = await inquirer.prompt([
 			{
 				type: 'input',
 				name: 'projectName',
@@ -74,11 +84,10 @@ export const init = async ({ version }: InitOptions) => {
 		]);
 
 		if (!createDirectory) abort();
+		initGraphWeaver(name ?? projectName, backend ? [backend] : backends, version);
+	}
 
-		initGraphWeaver(projectName, backends, version);
+	console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
 
-		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
-
-		exit(0);
-	});
+	exit(0);
 };

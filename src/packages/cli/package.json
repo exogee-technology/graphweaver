@@ -8,9 +8,10 @@
 		"build:js": "node build.js",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
-		"test:init": "node test-init.js",
 		"version": "npm version --no-git-tag-version"
 	},
+	"main": "bin/index.js",
+	"source": "src/index.ts",
 	"bin": {
 		"graphweaver": "bin/gw-bin.js",
 		"gw": "bin/gw-bin.js"
