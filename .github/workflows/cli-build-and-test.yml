@@ -43,8 +43,14 @@ jobs:
       - name: Create GW instance
         working-directory: src/packages/end-to-end
         run: |
-          pwd
           pnpm test:init
+          ls test/src/backend/schema
+
+      - name: Import Chinook Database
+        working-directory: src/packages/end-to-end
+        run: |
+          pnpm test:import
+          ls test/src/backend/schema
 
       - name: Change to GW instance and install
         working-directory: src/packages/end-to-end/test
