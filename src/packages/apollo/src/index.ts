@@ -153,12 +153,12 @@ const mergeConfig = <T>(defaultConfig: T, userConfig: Partial<T>): T => {
 	const merged = { ...defaultConfig } as T;
 
 	for (const key in userConfig) {
-		const userConfigValue = userConfig[key];
+		const userConfigValue = userConfig[key] as T[Extract<keyof T, string>];
 		const defaultConfigValue = defaultConfig?.[key];
 
 		if (Array.isArray(defaultConfigValue) && Array.isArray(userConfigValue)) {
 			if (userConfigValue.length > 0) {
-				merged[key] = userConfigValue as unknown as T[Extract<keyof T, string>];
+				merged[key] = userConfigValue;
 			}
 		} else if (
 			userConfigValue &&
@@ -170,7 +170,7 @@ const mergeConfig = <T>(defaultConfig: T, userConfig: Partial<T>): T => {
 				merged[key] = mergeConfig(defaultConfigValue, userConfigValue);
 			}
 		} else {
-			merged[key] = userConfigValue as unknown as T[Extract<keyof T, string>];
+			merged[key] = userConfigValue;
 		}
 	}
 
