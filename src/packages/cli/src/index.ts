@@ -21,13 +21,24 @@ yargs
 		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
 		builder: (yargs) =>
-			yargs.option('version', {
-				type: 'string',
-				describe: 'Specify a version of GraphWeaver to use.',
-			}),
+			yargs
+				.option('name', {
+					type: 'string',
+					describe: 'The name of this project.',
+				})
+				.option('backend', {
+					type: 'string',
+					describe: 'Specify a data source.',
+				})
+				.option('version', {
+					type: 'string',
+					describe: 'Specify a version of GraphWeaver to use.',
+				}),
 		handler: async (argv) => {
 			const version = argv.version;
-			init({ version });
+			const name = argv.name;
+			const backend = argv.backend;
+			init({ name, backend, version });
 		},
 	})
 	.command({

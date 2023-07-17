@@ -41,24 +41,27 @@ jobs:
         run: pnpm build
 
       - name: Create GW instance
-        working-directory: src/packages/cli
+        working-directory: src/packages/end-to-end
         run: |
           pwd
           pnpm test:init
 
       - name: Change to GW instance and install
-        working-directory: src/packages/cli/test
+        working-directory: src/packages/end-to-end/test
         run: |
           pwd
           pnpm i --no-frozen-lockfile
-      
+
       - name: Start GW instance
-        working-directory: src/packages/cli/test
+        working-directory: src/packages/end-to-end/test
         timeout-minutes: 2
         run: |
-          pnpm start &
-          sleep 10 &&
-          curl http://localhost:9000 &&
+          pnpm start
+
+      - name: Stop GW instance
+        working-directory: src/packages/end-to-end/test
+        timeout-minutes: 2
+        run: |
           killall node
 
         env:

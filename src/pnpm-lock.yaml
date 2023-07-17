@@ -431,39 +431,6 @@ importers:
       '@types/yargs': 17.0.24
       prettier: 2.8.8
 
-  packages/cli/test:
-    specifiers:
-      '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': workspace:*
-      '@exogee/graphweaver-apollo': workspace:*
-      '@exogee/graphweaver-mikroorm': workspace:*
-      '@exogee/graphweaver-scalars': workspace:*
-      '@mikro-orm/core': 5.4.2
-      '@mikro-orm/mysql': 5.4.2
-      '@types/node': 14.14.10
-      class-validator: 0.14.0
-      graphql: 16.6.0
-      graphweaver: workspace:*
-      reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.2
-      typescript: 5.0.2
-    dependencies:
-      '@as-integrations/aws-lambda': 2.0.1
-      '@exogee/graphweaver': link:../../core
-      '@exogee/graphweaver-apollo': link:../../apollo
-      '@exogee/graphweaver-mikroorm': link:../../mikroorm
-      '@exogee/graphweaver-scalars': link:../../scalars
-      '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
-      '@mikro-orm/mysql': 5.4.2_@mikro-orm+core@5.4.2
-      class-validator: 0.14.0
-      graphql: 16.6.0
-      graphweaver: link:..
-      reflect-metadata: 0.1.13
-      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
-    devDependencies:
-      '@types/node': 14.14.10
-      typescript: 5.0.2
-
   packages/config:
     specifiers:
       '@types/lodash': 4.14.192
@@ -506,6 +473,45 @@ importers:
     devDependencies:
       '@types/pluralize': 0.0.29
       esbuild: 0.15.5
+      typescript: 5.0.2
+
+  packages/end-to-end:
+    specifiers:
+      '@exogee/graphweaver': workspace:*
+    dependencies:
+      '@exogee/graphweaver': link:../core
+
+  packages/end-to-end/test:
+    specifiers:
+      '@as-integrations/aws-lambda': 2.0.1
+      '@exogee/graphweaver': workspace:*
+      '@exogee/graphweaver-apollo': workspace:*
+      '@exogee/graphweaver-mikroorm': workspace:*
+      '@exogee/graphweaver-scalars': workspace:*
+      '@mikro-orm/core': 5.4.2
+      '@mikro-orm/postgresql': 5.4.2
+      '@types/node': 14.14.10
+      class-validator: 0.14.0
+      graphql: 16.6.0
+      graphweaver: workspace:*
+      reflect-metadata: 0.1.13
+      type-graphql: 2.0.0-beta.2
+      typescript: 5.0.2
+    dependencies:
+      '@as-integrations/aws-lambda': 2.0.1
+      '@exogee/graphweaver': link:../../core
+      '@exogee/graphweaver-apollo': link:../../apollo
+      '@exogee/graphweaver-mikroorm': link:../../mikroorm
+      '@exogee/graphweaver-scalars': link:../../scalars
+      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
+      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
+      class-validator: 0.14.0
+      graphql: 16.6.0
+      graphweaver: link:../../cli
+      reflect-metadata: 0.1.13
+      type-graphql: 2.0.0-beta.2_y4roju44775djskduzf2jupeyy
+    devDependencies:
+      '@types/node': 14.14.10
       typescript: 5.0.2
 
   packages/logger:
@@ -2743,6 +2749,52 @@ packages:
       globby: 11.0.4
       mikro-orm: 5.4.2
       reflect-metadata: 0.1.13
+    dev: false
+
+  /@mikro-orm/core/5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu:
+    resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      '@mikro-orm/better-sqlite': ^5.0.0
+      '@mikro-orm/entity-generator': ^5.0.0
+      '@mikro-orm/mariadb': ^5.0.0
+      '@mikro-orm/migrations': ^5.0.0
+      '@mikro-orm/migrations-mongodb': ^5.0.0
+      '@mikro-orm/mongodb': ^5.0.0
+      '@mikro-orm/mysql': ^5.0.0
+      '@mikro-orm/postgresql': ^5.0.0
+      '@mikro-orm/seeder': ^5.0.0
+      '@mikro-orm/sqlite': ^5.0.0
+    peerDependenciesMeta:
+      '@mikro-orm/better-sqlite':
+        optional: true
+      '@mikro-orm/entity-generator':
+        optional: true
+      '@mikro-orm/mariadb':
+        optional: true
+      '@mikro-orm/migrations':
+        optional: true
+      '@mikro-orm/migrations-mongodb':
+        optional: true
+      '@mikro-orm/mongodb':
+        optional: true
+      '@mikro-orm/mysql':
+        optional: true
+      '@mikro-orm/postgresql':
+        optional: true
+      '@mikro-orm/seeder':
+        optional: true
+      '@mikro-orm/sqlite':
+        optional: true
+    dependencies:
+      '@mikro-orm/postgresql': 5.4.2_@mikro-orm+core@5.4.2
+      acorn-loose: 8.3.0
+      acorn-walk: 8.2.0
+      dotenv: 16.0.2
+      fs-extra: 10.1.0
+      globby: 11.0.4
+      mikro-orm: 5.4.2
+      reflect-metadata: 0.1.13
 
   /@mikro-orm/core/5.4.2_fyvjslnt4umxnwbsvn4uylbnpq:
     resolution: {integrity: sha512-4JZfkUQNSvLh2RKNPl+2qy3RXmWdWOy8e++Owsb2qzmsL0T6CjIOz2kd+yPqZVvFH+unF5R1eQit/xnP3biM+A==}
@@ -2863,7 +2915,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
+      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
       fs-extra: 10.1.0
       knex: 2.3.0_pg@8.8.0
       pg: 8.8.0
@@ -2904,7 +2956,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
+      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       fs-extra: 10.1.0
       knex: 2.3.0_mysql2@2.3.3
       mysql2: 2.3.3
@@ -2930,7 +2982,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2_@mikro-orm+mysql@5.4.2
+      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
       '@mikro-orm/knex': 5.4.2_jio2iqpulxk2kw7xjo4lrtmsny
       mysql2: 2.3.3
     transitivePeerDependencies:
@@ -2959,7 +3011,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.4.2_fyvjslnt4umxnwbsvn4uylbnpq
+      '@mikro-orm/core': 5.4.2_fk4ppjvwwrrwsuvcbipnp2oieu
       '@mikro-orm/knex': 5.4.2_gx4qpbej4qnj53to75in55gjcu
       pg: 8.8.0
     transitivePeerDependencies:
@@ -4358,7 +4410,7 @@ packages:
     resolution: {integrity: sha512-IO+MJPVhoqz+28h1qLAcBEH2+xHMK6MTyHJc7MTnnYb6wsoLR29POVGJ7LycmVXIqyy/4/2ShP5sUwTXuOwb/w==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 18.11.9
+      '@types/node': 20.3.3
     dev: true
 
   /@types/graceful-fs/4.1.6:
@@ -4565,7 +4617,7 @@ packages:
   /@types/through/0.0.30:
     resolution: {integrity: sha512-FvnCJljyxhPM3gkRgWmxmDZyAQSiBQQWLI0A0VFL0K7W1oRUrPJSqNO0NvTnLkBcotdlp3lKvaT0JrnyRDkzOg==}
     dependencies:
-      '@types/node': 18.11.9
+      '@types/node': 20.3.3
     dev: true
 
   /@types/validator/13.7.17:
