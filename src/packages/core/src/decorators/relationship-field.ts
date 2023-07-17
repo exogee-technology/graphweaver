@@ -45,7 +45,7 @@ export function RelationshipField<
 
 		const getRelatedType = () => {
 			const typeName = key.charAt(0).toUpperCase() + key.slice(1);
-			return TypeMap[`${pluralize(typeName)}ListFilter`];
+			return TypeMap[`${pluralize(typeName)}ListFilter`]; //if this doesnt exist, dont add metadata.collectHandlerParamMetadata, check EntityMetadataMap
 		};
 
 		// next we need to add the below function as a field resolver

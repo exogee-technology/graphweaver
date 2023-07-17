@@ -107,6 +107,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		return result;
 	};
 
+	// Create if  data provider supports filter
 	// Create List Filter Args:
 	@InputType(`${plural}ListFilter`)
 	class ListInputFilterArgs {
