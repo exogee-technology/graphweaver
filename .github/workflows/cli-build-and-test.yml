@@ -45,6 +45,7 @@ jobs:
         run: |
           pnpm test:init
           ls test/src/backend/schema
+          cat test/package.json
 
       - name: Import Chinook Database
         working-directory: src/packages/end-to-end
