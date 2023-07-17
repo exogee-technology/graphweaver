@@ -47,17 +47,17 @@ jobs:
           ls test/src/backend/schema
           cat test/package.json
 
-      - name: Import Chinook Database
-        working-directory: src/packages/end-to-end
-        run: |
-          pnpm test:import
-          ls test/src/backend/schema
-
       - name: Change to GW instance and install
         working-directory: src/packages/end-to-end/test
         run: |
           pwd
           pnpm i --no-frozen-lockfile
+
+      - name: Import Chinook Database
+        working-directory: src/packages/end-to-end
+        run: |
+          pnpm test:import
+          ls test/src/backend/schema
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
