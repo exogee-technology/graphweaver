@@ -52,17 +52,17 @@ jobs:
           pwd
           pnpm i --no-frozen-lockfile
 
-      - name: Start GW instance
-        working-directory: src/packages/end-to-end/test
-        timeout-minutes: 2
-        run: |
-          pnpm start
+      # - name: Start GW instance
+      #   working-directory: src/packages/end-to-end/test
+      #   timeout-minutes: 2
+      #   run: |
+      #     pnpm start
 
-      - name: Stop GW instance
-        working-directory: src/packages/end-to-end/test
-        timeout-minutes: 2
-        run: |
-          killall node
+      # - name: Stop GW instance
+      #   working-directory: src/packages/end-to-end/test
+      #   timeout-minutes: 2
+      #   run: |
+      #     killall node
 
         env:
           CI: true
