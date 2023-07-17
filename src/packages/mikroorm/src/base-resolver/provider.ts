@@ -174,14 +174,16 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 					partialFilterObj[to] = partialFilterObj[from].id;
 					delete partialFilterObj[from];
-				} else {
-					// START HERE -
-					// Why  do we call this.applyExternalIdFields on things that aren't ids
-					console.log('*******************\n');
-					console.log('partialFilterObj[from]: ', partialFilterObj[from]);
-					console.log('partialFilterObj[to]: ', partialFilterObj[to]);
-					console.log('*******************\n');
 				}
+				//  else {
+				// 	// START HERE -
+				// 	// Why  do we call this.applyExternalIdFields on things that aren't ids
+				// 	console.log('*******************\n');
+				// 	console.log("mapFieldNames: ", );
+				// 	console.log('partialFilterObj[from]: ', partialFilterObj[from]);
+				// 	console.log('partialFilterObj[to]: ', partialFilterObj[to]);
+				// 	console.log('*******************\n');
+				// }
 			}
 		};
 
@@ -256,7 +258,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 	private applyWhereClause(where: any) {
 		console.log('*******************\n');
-		console.log('where: ', where);
+		console.log('applyWhereClause where: ', where);
 		console.log('*******************\n');
 
 		const query = this.getRepository().createQueryBuilder();
@@ -346,6 +348,9 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		//   }
 		// }
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		console.log('*******************\n');
+		console.log('where: ', where);
+		console.log('*******************\n');
 
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
