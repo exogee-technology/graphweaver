@@ -91,6 +91,8 @@ export interface BackendProvider<D, G, BackendProviderConfig> {
 
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
+
+	backendProviderConfig?: BackendProviderConfig;
 }
 
 // G = GraphQL entity
