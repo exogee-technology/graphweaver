@@ -74,10 +74,8 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							type: entityName,
 						};
 						const relatedObject = objectTypeData[entityName];
-						if (field.typeOptions.array) {
-							if (!relatedObject) {
-								throw new Error(`Unknown entityName ${entityName}`);
-							}
+						// Check if we have an array of related entities
+						if (field.typeOptions.array && relatedObject) {
 							const relatedEntity = relatedObject.fields?.find((field) => {
 								const fieldType = field.getType() as any;
 								return fieldType.name === name;
