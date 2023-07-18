@@ -1,11 +1,11 @@
-name: CLI Build and Test
+name: End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build-and-test-cli:
+  end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -41,24 +41,22 @@ jobs:
         run: pnpm build
 
       - name: Create GW instance
-        working-directory: src/packages/cli
+        working-directory: src/packages/end-to-end
         run: |
-          pwd
-          pnpm test:init
+          pnpm create-app
 
-      - name: Change to GW instance and install
-        working-directory: src/packages/cli/test
+      - name: Import Chinook Database
+        working-directory: src/packages/end-to-end
         run: |
-          pwd
-          npm i
-      
-      - name: Start GW instance
-        working-directory: src/packages/cli/test
+          pnpm import-database
+
+      - name: Start and Test GW instance
+        working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          npm start &
-          sleep 10 &&
-          curl http://localhost:9000 &&
+          pnpm start-server &
+          sleep 3 &&
+          pnpm test &&
           killall node
 
         env:

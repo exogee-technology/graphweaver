@@ -15,6 +15,7 @@ export enum SelectMode {
 interface SelectProps {
 	options: SelectOption[];
 	onChange: (selected: SelectOption[]) => void;
+	onOpen?: () => void;
 	value?: SelectOption[];
 	placeholder?: string;
 	loading?: boolean;
@@ -24,6 +25,7 @@ interface SelectProps {
 export const Select = ({
 	options,
 	onChange,
+	onOpen,
 	value = [],
 	placeholder = 'Select',
 	loading = false,
@@ -32,6 +34,10 @@ export const Select = ({
 	const [open, setOpen] = useState(false);
 	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		if (open) onOpen?.();
+	}, [open]);
 
 	const handleClick = (option: SelectOption) => {
 		if (mode === SelectMode.SINGLE) {

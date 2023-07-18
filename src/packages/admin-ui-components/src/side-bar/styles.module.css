@@ -6,6 +6,12 @@
 	border-right: 1px solid rgba(237, 232, 242, 0.1);
 	display: flex;
 	flex-direction: column;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.sideBar::-webkit-scrollbar {
+	display: none;
 }
 
 .sideBarContent {
@@ -25,12 +31,16 @@
 	margin-top: 0;
 }
 
-.sideBarContent a > svg {
-	margin-right: 8px;
+.dataSourceTitle {
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
-.sideBarContent a::before {
+.sideBarContent a {
 	content: '';
+	gap: 8px;
 	height: 32px;
 	display: inline-block;
 	vertical-align: middle;
@@ -58,8 +68,6 @@
 }
 
 .closed > a > svg:last-child {
-	position: absolute;
-	right: 10px;
 	transform: rotate(180deg);
 }
 
@@ -74,17 +82,6 @@
 	align-items: center;
 }
 
-.open > a > svg:last-child {
-	position: absolute;
-	right: 10px;
-}
-
-.subListItem span {
-	width: 16px;
-	height: 16px;
-	background-image: url(../../assets/16-table.svg);
-}
-
 .subListItem {
 	display: flex;
 	align-items: center;
@@ -93,6 +90,11 @@
 	border-radius: 6px;
 	padding: 0 10px;
 	width: 100%;
+}
+
+.subListItemText {
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .subListItem::after {
