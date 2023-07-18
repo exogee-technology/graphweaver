@@ -56,11 +56,13 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 				if (inverseProp) inverseProp.inversedBy = newProp.name;
 
 				if (prop.reference === ReferenceType.MANY_TO_ONE) {
+					newProp.name = pluralize(meta.tableName);
 					newProp.reference = ReferenceType.ONE_TO_MANY;
 				} else if (prop.reference === ReferenceType.ONE_TO_ONE && !prop.mappedBy) {
 					newProp.reference = ReferenceType.ONE_TO_ONE;
 					newProp.nullable = true;
 				} else if (prop.reference === ReferenceType.MANY_TO_MANY && !prop.mappedBy) {
+					newProp.name = pluralize(meta.tableName);
 					newProp.reference = ReferenceType.MANY_TO_MANY;
 				} else {
 					continue;
