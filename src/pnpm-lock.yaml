@@ -493,7 +493,7 @@ importers:
       ts-jest: 29.0.5_e3ra3wpkicw7bkmcdunkohzwlm
       typescript: 5.0.2
 
-  packages/end-to-end/test:
+  packages/end-to-end/app:
     specifiers:
       '@as-integrations/aws-lambda': 2.0.1
       '@exogee/graphweaver': 0.1.25
