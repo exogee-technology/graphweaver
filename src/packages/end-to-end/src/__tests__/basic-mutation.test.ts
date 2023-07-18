@@ -9,18 +9,19 @@ describe('basic mutation', () => {
 	beforeEach(resetDatabase);
 
 	test('should create an album', async () => {
-		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
-			.query(
+		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
+			.mutate(
 				gql`
-					query {
-						albums {
+					mutation CreateAlbum($data: AlbumInsertInput!) {
+						createAlbum(data: $data) {
 							id
 						}
 					}
 				`
 			)
+			.variables({ data: { ArtistId: { id: 1 }, Title: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.albums).toHaveLength(347);
+		expect(data?.createAlbum?.id).toBe('348');
 	});
 });

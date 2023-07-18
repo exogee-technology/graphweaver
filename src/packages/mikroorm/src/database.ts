@@ -43,6 +43,7 @@ class DatabaseImplementation {
 	private cachedOrm?: MikroORM<IDatabaseDriver<Connection>>;
 	private transactionalEm?: EntityManager;
 	private transactionInProgressIsolationLevel?: IsolationLevel;
+	private connectionOptions?: ConnectionOptions;
 
 	public get orm() {
 		if (!this.cachedOrm) {
@@ -90,7 +91,14 @@ class DatabaseImplementation {
 			return this.em.transactional(async (em) => {
 				this.transactionalEm = em;
 				this.transactionInProgressIsolationLevel = isolationLevel;
-				await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+
+				const driver = this.em.getDriver();
+				if (driver.constructor.name === 'SqliteDriver') {
+					logger.trace('All transactions in SQLite are SERIALIZABLE');
+				} else {
+					await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+				}
+
 				let result: T;
 				try {
 					result = await callback();
@@ -172,6 +180,7 @@ class DatabaseImplementation {
 
 	public connect = async (connectionOptions?: ConnectionOptions) => {
 		logger.trace('Database::connect() - Enter');
+		this.connectionOptions = connectionOptions;
 
 		if (this.cachedOrm) {
 			logger.trace('Returning cached ORM');
