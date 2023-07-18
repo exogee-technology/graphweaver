@@ -7,8 +7,11 @@ import {
 	ReadHookParams,
 	RelationshipField,
 	ResolveTree,
+	Field,
+	ID,
+	ObjectType,
+	registerEnumType,
 } from '@exogee/graphweaver';
-import { Field, ID, ObjectType, Root, registerEnumType } from 'type-graphql';
 import {
 	AccessControlList,
 	ApplyAccessControlList,

@@ -50,14 +50,12 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 					</Link>
 					<Link
 						className={styles.toolBarTrailingButton}
-						to={{
-							pathname: routeFor({
-								entity: selectedEntity,
-								id: 'graphweaver-admin-new-entity',
-								sort,
-								filters,
-							}),
-						}}
+						to={routeFor({
+							entity: selectedEntity,
+							id: 'graphweaver-admin-new-entity',
+							sort,
+							filters,
+						})}
 						aria-label={`Create New ${selectedEntity.name}`}
 					>
 						<Button>Create New {selectedEntity.name}</Button>

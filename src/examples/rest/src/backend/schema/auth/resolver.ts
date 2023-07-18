@@ -1,6 +1,5 @@
 import { LocalAuthResolver } from '@exogee/graphweaver-auth';
-import { Resolver } from 'type-graphql';
-import { BaseLoaders } from '@exogee/graphweaver';
+import { BaseLoaders, Resolver } from '@exogee/graphweaver';
 
 import { User } from '../user';
 import { credentials } from '../../entities/memory/credentials';
