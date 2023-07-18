@@ -16,7 +16,7 @@ export class DataEntityIndexFile {
 	}
 
 	generate(): string {
-		let ret = 'export const entities = [\n';
+		let file = 'export const entities = [\n';
 		const padding = '\t';
 		const imports: string[] = [];
 		const exports: string[] = [];
@@ -26,12 +26,12 @@ export class DataEntityIndexFile {
 				const filename = meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase();
 				exports.push(`export * from './${filename}';`);
 				imports.push(`import { ${meta.className} } from './${filename}';`);
-				ret += `${padding}${meta.className},\n`;
+				file += `${padding}${meta.className},\n`;
 			}
 		}
 
-		ret += '];\n';
+		file += '];\n';
 
-		return `${imports.join('\n')}\n\n${exports.join('\n')}\n\n${ret}`;
+		return `${imports.join('\n')}\n\n${exports.join('\n')}\n\n${file}`;
 	}
 }

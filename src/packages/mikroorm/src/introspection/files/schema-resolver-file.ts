@@ -13,11 +13,11 @@ export class SchemaResolverFile extends BaseFile {
 	generate(): string {
 		const padding = '\t';
 
-		let ret = `@Resolver((of) => ${this.meta.className})\n`;
-		ret += `export class ${this.meta.className}Resolver extends createBaseResolver<${this.meta.className}, Orm${this.meta.className}>(\n`;
-		ret += `${padding}${this.meta.className},\n`;
-		ret += `${padding}new MikroBackendProvider(Orm${this.meta.className}, connection)\n`;
-		ret += `) {}\n`;
+		let file = `@Resolver((of) => ${this.meta.className})\n`;
+		file += `export class ${this.meta.className}Resolver extends createBaseResolver<${this.meta.className}, Orm${this.meta.className}>(\n`;
+		file += `${padding}${this.meta.className},\n`;
+		file += `${padding}new MikroBackendProvider(Orm${this.meta.className}, connection)\n`;
+		file += `) {}\n`;
 
 		const imports = [
 			`import { createBaseResolver, Resolver } from '@exogee/graphweaver';`,
@@ -27,6 +27,6 @@ export class SchemaResolverFile extends BaseFile {
 			`import { connection } from '../../database';`,
 		];
 
-		return `${imports.join('\n')}\n\n${ret}`;
+		return `${imports.join('\n')}\n\n${file}`;
 	}
 }

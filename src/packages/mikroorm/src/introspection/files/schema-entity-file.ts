@@ -63,21 +63,21 @@ export class SchemaEntityFile extends BaseFile {
 			}
 		});
 
-		let ret = '';
+		let file = '';
 
 		if (enumDefinitions.length) {
-			ret += enumDefinitions.join('\n');
-			ret += '\n\n';
+			file += enumDefinitions.join('\n');
+			file += '\n\n';
 		}
 
 		this.coreImports.add('ObjectType');
-		ret += `@ObjectType(${this.quote(this.meta.className)})\n`;
+		file += `@ObjectType(${this.quote(this.meta.className)})\n`;
 
 		this.coreImports.add('GraphQLEntity');
-		ret += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
-		ret += `\tpublic dataEntity!: Orm${this.meta.className};`;
+		file += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
+		file += `\tpublic dataEntity!: Orm${this.meta.className};`;
 
-		ret += `${classBody}}\n`;
+		file += `${classBody}}\n`;
 		const imports = [
 			`import { ${[...this.coreImports].sort().join(', ')} } from '@exogee/graphweaver';`,
 		];
@@ -101,9 +101,9 @@ export class SchemaEntityFile extends BaseFile {
 			} as Orm${this.meta.className} } from '../../entities';`
 		);
 
-		ret = `${imports.join('\n')}\n\n${ret}`;
+		file = `${imports.join('\n')}\n\n${file}`;
 
-		return ret;
+		return file;
 	}
 
 	protected getTypescriptPropertyType(prop: EntityProperty): string {
@@ -140,14 +140,14 @@ export class SchemaEntityFile extends BaseFile {
 			return `${padding}id!: ${this.getTypescriptPropertyType(prop)};`;
 		}
 
-		const ret = `${prop.name}${optional}: ${this.getTypescriptPropertyType(prop)}`;
+		const file = `${prop.name}${optional}: ${this.getTypescriptPropertyType(prop)}`;
 
 		if (!useDefault) {
-			return `${padding + ret};\n`;
+			return `${padding + file};\n`;
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${ret} = ${prop.type}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.type}.${prop.default.toUpperCase()};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
