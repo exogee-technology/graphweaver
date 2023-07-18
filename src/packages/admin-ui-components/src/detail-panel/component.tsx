@@ -174,7 +174,12 @@ export const DetailPanel = () => {
 	};
 
 	// Weed out ID fields - for the moment.
-	const formFields: EntityField[] = selectedEntity.fields.filter((field) => field.name !== 'id');
+	// @todo we can remove the many to many filter once we support adding many to many in the UI
+	const formFields: EntityField[] = selectedEntity.fields.filter(
+		(field) =>
+			(field.relationshipType && field.relationshipType !== 'MANY_TO_MANY') ||
+			(!field.relationshipType && field.name !== 'id')
+	);
 
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = data?.result;

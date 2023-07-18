@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "0.1.17",
+	"version": "0.1.25",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -9,6 +9,7 @@
 		"gw": "graphweaver",
 		"prettier": "prettier --write src/**/*.ts",
 		"start": "graphweaver start",
+		"watch": "graphweaver watch",
 		"start:backend": "graphweaver start backend",
 		"version": "npm version --no-git-tag-version"
 	},
@@ -28,7 +29,6 @@
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
-		"@exogee/graphweaver-cli": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
@@ -41,7 +41,7 @@
 		"crypto": "1.0.1",
 		"decimal.js": "10.4.3",
 		"graphql": "16.6.0",
-		"graphql-tag": "2.12.6",
+		"graphweaver": "workspace:*",
 		"prop-types": "15.8.1",
 		"random-seed": "0.3.0",
 		"react": "18.2.0",
@@ -60,6 +60,6 @@
 		"ts-node": "10.4.0",
 		"tsc-watch": "4.2.9",
 		"typescript": "5.0.2",
-		"vite": "3.2.4"
+		"vite": "4.3.9"
 	}
 }

@@ -1,23 +1,16 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
-import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
+import { connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
-import { UserResolver } from './schema/user';
-import { TaskResolver } from './schema/task';
+import { resolvers } from './schema';
 
 import { connections } from './database';
 
 const graphweaver = new Graphweaver({
-	resolvers: [TaskResolver, UserResolver],
+	resolvers: resolvers,
 	apolloServerOptions: {
-		introspection: process.env.IS_OFFLINE === 'true',
-		plugins: [connectToDatabase(connections), ClearDatabaseContext],
+		plugins: [connectToDatabase(connections)],
 	},
-	adminMetadata: { enabled: true },
 });
 
-exports.handler = startServerAndCreateLambdaHandler(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
+exports.handler = graphweaver.handler();

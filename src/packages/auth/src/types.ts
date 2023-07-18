@@ -1,8 +1,11 @@
 import { BaseContext, Filter } from '@exogee/graphweaver';
+import { JwtPayload } from 'jsonwebtoken';
+import { UserProfile } from './user-profile';
 
 // Consumers will extend the base context type
 export interface AuthorizationContext extends BaseContext {
-	roles?: string[];
+	token?: string | JwtPayload;
+	user?: UserProfile;
 }
 
 export enum AccessType {

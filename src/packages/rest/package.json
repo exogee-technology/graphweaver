@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "0.1.17",
+	"version": "0.1.25",
 	"description": "RESTful backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {

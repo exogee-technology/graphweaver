@@ -17,6 +17,10 @@
       "path": "src/examples/xero"
     },
     {
+      "name": "🤖 graphweaver",
+      "path": "src/packages/cli"
+    },
+    {
       "name": "📦 @exogee/graphweaver",
       "path": "src/packages/core"
     },
@@ -35,10 +39,6 @@
     {
       "name": "📦 @exogee/graphweaver-builder",
       "path": "src/packages/builder"
-    },
-    {
-      "name": "📦 @exogee/graphweaver-cli",
-      "path": "src/packages/cli"
     },
     {
       "name": "📦 @exogee/graphweaver-mikroorm",

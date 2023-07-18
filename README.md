@@ -66,7 +66,7 @@ Before we start the installer make sure you are running:
 
 With those two installed you can create a new project with the **GraphWeaver CLI**, by running:
 
-`npx @exogee/graphweaver-cli@latest create`
+`npx graphweaver@latest init`
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 

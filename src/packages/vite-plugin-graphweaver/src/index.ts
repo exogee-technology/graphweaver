@@ -1,32 +1,22 @@
-import path from 'path';
 import { Plugin } from 'vite';
 import { loadCustomPages, loadCustomFields } from './loaders';
 
-export interface ViteGraphweaverOptions {
-	configPath?: string;
-}
-
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
 
-const defaultSettings: ViteGraphweaverOptions = {
-	configPath: path.resolve('.', 'graphweaver-config.js'),
-};
+export interface ViteGraphweaverOptions {
+	projectRoot?: string;
+}
 
-export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugin {
-	const settings = { ...defaultSettings, ...options };
-
-	// Ensure the config path is an absolute path.
-	settings.configPath = settings.configPath
-		? path.resolve(settings.configPath)
-		: defaultSettings.configPath;
-
+const graphweaverPlugin = ({
+	projectRoot = process.cwd(),
+}: ViteGraphweaverOptions = {}): Plugin => {
 	const virtualModuleId = 'virtual:graphweaver-user-supplied-custom-pages';
 	const resolvedVirtualModuleId = resolved(virtualModuleId);
 
 	const virtualCustomFieldsModuleId = 'virtual:graphweaver-user-supplied-custom-fields';
 	const resolvedVirtualCustomFieldModuleId = resolved(virtualCustomFieldsModuleId);
 
-	let adminUiPath: string | null = null;
+	let adminUiPath: string | undefined;
 
 	return {
 		name: 'vite-plugin-graphweaver',
@@ -45,7 +35,7 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 			// directory.
 			try {
 				// Try to find it in the user's project folder or Admin UI, either is fine.
-				const userNodeModule = require.resolve(id, { paths: [adminUiPath, process.cwd()] });
+				const userNodeModule = require.resolve(id, { paths: [adminUiPath, projectRoot] });
 				if (userNodeModule) return userNodeModule;
 			} catch (error: any) {
 				// Module not found errors are expected, so we don't need to log them.
@@ -58,17 +48,13 @@ export default function graphweaver(options: ViteGraphweaverOptions = {}): Plugi
 			// default Vite behaviour happen for it.
 		},
 		async load(id) {
-			if (id === resolvedVirtualModuleId) {
-				if (!settings.configPath) throw new Error('Config path should be resolved by now.');
+			if (!projectRoot) throw new Error('Config must be resolved to resolve specific files.');
 
-				return await loadCustomPages(settings.configPath);
-			}
+			if (id === resolvedVirtualModuleId) return await loadCustomPages(projectRoot);
 
-			if (id === resolvedVirtualCustomFieldModuleId) {
-				if (!settings.configPath) throw new Error('Config path should be resolved by now.');
-
-				return await loadCustomFields(settings.configPath);
-			}
+			if (id === resolvedVirtualCustomFieldModuleId) return await loadCustomFields(projectRoot);
 		},
 	};
-}
+};
+
+export default graphweaverPlugin;

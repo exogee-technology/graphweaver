@@ -5,5 +5,5 @@
 		"rootDir": "./src",
 		"outDir": "./lib"
 	},
-	"references": [{ "path": "../vite-plugin-graphweaver" }]
+	"references": [{ "path": "../vite-plugin-graphweaver" }, { "path": "../config" }]
 }

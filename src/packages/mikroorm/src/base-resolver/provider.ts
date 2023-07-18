@@ -19,11 +19,14 @@ import {
 	AnyEntity,
 	IsolationLevel,
 	ConnectionOptions,
+	ClearDatabaseContext,
 } from '..';
+
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
 
 import type { SqlEntityRepository } from '@mikro-orm/postgresql';
+import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 const objectOperations = new Set(['_and', '_or', '_not']);
 const mikroObjectOperations = new Set(['$and', '$or', '$not']);
@@ -557,4 +560,6 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	public isCollection(entity: any) {
 		return Utils.isCollection(entity);
 	}
+
+	public plugins: ApolloServerPlugin<BaseContext>[] = [ClearDatabaseContext];
 }

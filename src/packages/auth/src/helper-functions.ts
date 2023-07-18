@@ -12,9 +12,13 @@ import {
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 
+export { ForbiddenError } from 'apollo-server-errors';
+
 type AuthContext<T extends AuthorizationContext | undefined> = T;
 let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
-let administratorRoleName = '';
+
+const DEFAULT_ADMIN_ROLE_NAME = 'ADMINISTRATOR';
+let administratorRoleName = DEFAULT_ADMIN_ROLE_NAME;
 
 export const AclMap = new Map<string, Partial<AccessControlList<any, any>>>();
 
@@ -42,9 +46,10 @@ export function setAdministratorRoleName(roleName: string) {
 }
 
 export function getAdministratorRoleName() {
-	if (!administratorRoleName) {
-		logger.error('Administrator role name was not set');
-		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+	if (administratorRoleName === DEFAULT_ADMIN_ROLE_NAME) {
+		logger.warn(
+			`The default administrator role name is being used. Please set a custom administrator role name using the setAdministratorRoleName function.`
+		);
 	}
 	return administratorRoleName;
 }
@@ -62,10 +67,14 @@ export function getRolesFromAuthorizationContext() {
 	if (!authContext) {
 		throw new Error('Authorization context not set');
 	}
-	if (!Array.isArray(authContext.roles) || authContext.roles.length === 0) {
+	if (
+		!authContext.user?.roles ||
+		!Array.isArray(authContext.user?.roles) ||
+		authContext.user?.roles.length === 0
+	) {
 		throw new Error('Currently logged in user has no roles');
 	}
-	return authContext.roles;
+	return authContext.user.roles;
 }
 
 /**

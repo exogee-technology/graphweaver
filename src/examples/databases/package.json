@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-databases",
-	"version": "0.1.1",
+	"version": "0.1.22",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a MySQL and PostgreSQL database together.",
@@ -14,14 +14,15 @@
 	],
 	"scripts": {
 		"build": "graphweaver build",
-		"start": "graphweaver start"
+		"start": "graphweaver start",
+		"watch": "graphweaver watch"
 	},
 	"dependencies": {
 		"@apollo/server": "4.2.2",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
-		"@exogee/graphweaver-cli": "workspace:*",
+		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",

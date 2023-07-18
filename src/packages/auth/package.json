@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth",
-	"version": "0.1.17",
+	"version": "0.1.25",
 	"description": "Row-Level Security support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,15 +21,18 @@
 		"lib"
 	],
 	"dependencies": {
+		"@apollo/server": "4.2.2",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.14.0",
 		"dotenv": "10.0.0",
 		"graphql": "16.6.0",
+		"jsonwebtoken": "9.0.0",
 		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
+		"@types/jsonwebtoken": "9.0.2",
 		"@types/node": "14.14.10",
 		"esbuild": "0.15.5",
 		"prettier": "2.8.8",

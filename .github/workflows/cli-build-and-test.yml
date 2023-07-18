@@ -44,19 +44,19 @@ jobs:
         working-directory: src/packages/cli
         run: |
           pwd
-          pnpm test:create
+          pnpm test:init
 
       - name: Change to GW instance and install
         working-directory: src/packages/cli/test
         run: |
           pwd
-          npm i
+          pnpm i --no-frozen-lockfile
       
       - name: Start GW instance
         working-directory: src/packages/cli/test
         timeout-minutes: 2
         run: |
-          npm start &
+          pnpm start &
           sleep 10 &&
           curl http://localhost:9000 &&
           killall node

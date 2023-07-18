@@ -1,5 +1,4 @@
 import {
-	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	GraphQLEntity,
@@ -7,28 +6,72 @@ import {
 	HookRegister,
 	ReadHookParams,
 	RelationshipField,
+	ResolveTree,
 } from '@exogee/graphweaver';
-import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { AccessControlList, ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { Field, ID, ObjectType, Root, registerEnumType } from 'type-graphql';
+import {
+	AccessControlList,
+	ApplyAccessControlList,
+	AuthorizationContext,
+} from '@exogee/graphweaver-auth';
 
-import { Task as OrmTask } from '../../entities';
+import { Task as OrmTask, Priority } from '../../entities';
 import { User } from '../user';
-import { Context } from '../../';
 import { Tag } from '../tag';
+import { Roles } from '../..';
 
-type ReadHook = ReadHookParams<Task, Context>;
-type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, Context>;
-type DeleteHook = DeleteHookParams<Task, Context>;
+type ReadHook = ReadHookParams<Task, AuthorizationContext>;
+type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, AuthorizationContext>;
+type DeleteHook = DeleteHookParams<Task, AuthorizationContext>;
 
-const acl: AccessControlList<Task, Context> = {
+const acl: AccessControlList<Task, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		// Users can only perform operations on their own tasks
-		all: (context) => ({ user: { id: context.user.id } }),
+		all: (context) => ({ user: { id: context.user?.id } }),
 	},
 	DARK_SIDE: {
 		// Dark side user role can perform operations on any tasks
 		all: true,
 	},
+};
+
+registerEnumType(Priority, {
+	name: 'Priority',
+	valuesConfig: {
+		HIGH: {
+			description: 'HIGH',
+		},
+		MEDIUM: {
+			description: 'MEDIUM',
+		},
+		LOW: {
+			description: 'LOW',
+		},
+	},
+});
+
+type TaskField = keyof InstanceType<typeof Task>;
+
+// As an example of column level security
+// This prevents users on the light side from accessing the priority column
+export const preventLightSideAccess = (
+	params: CreateOrUpdateHook | ReadHook,
+	requestedFields: ResolveTree | { [str: string]: ResolveTree },
+	preventedColumn: TaskField
+) => {
+	if (
+		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
+		Object.keys(requestedFields).includes(preventedColumn)
+	) {
+		// Filter out the prevented column from the returned entities
+		const filteredEntities = params.entities?.map((entity) => {
+			const { [preventedColumn]: _, ...rest } = entity;
+			return rest;
+		});
+
+		return filteredEntities;
+	}
+	return params.entities;
 };
 
 @ApplyAccessControlList(acl)
@@ -48,38 +91,50 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
 
+	@Field(() => Priority, { nullable: true })
+	priority?: Priority;
+
 	// The hooks below are not in use (and are not required when creating an entity)
 	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHook) {
-		return params;
+		// filter the retured data object (entities) out priorty
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHook) {
-		return params;
+		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		return { ...params, entities: filteredEntities };
 	}
 }
