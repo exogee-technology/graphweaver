@@ -38,7 +38,7 @@ describe('nested create', () => {
 					mutation CreateArtist($data: ArtistInsertInput!) {
 						createArtist(data: $data) {
 							id
-							ArtistInverse {
+							Albums {
 								id
 								Title
 							}
@@ -50,7 +50,7 @@ describe('nested create', () => {
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.id).toBe('348');
-		expect(data?.createAlbum?.ArtistInverse?.[0]?.id).toBe('276');
-		expect(data?.createAlbum?.ArtistInverse?.[0]?.Title).toBe('string');
+		expect(data?.createAlbum?.Albums?.[0]?.id).toBe('276');
+		expect(data?.createAlbum?.Albums?.[0]?.Title).toBe('string');
 	});
 });
