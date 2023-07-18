@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver-auth';
 
-import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
+import { connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
 import { resolvers } from './schema';
 import { myConnection } from './database';
@@ -19,11 +19,7 @@ export enum Roles {
 const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
-		plugins: [
-			localAuthApolloPlugin(addUserToContext),
-			connectToDatabase(myConnection),
-			ClearDatabaseContext,
-		],
+		plugins: [localAuthApolloPlugin(addUserToContext), connectToDatabase(myConnection)],
 	},
 });
 
