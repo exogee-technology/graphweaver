@@ -109,12 +109,11 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			// @todo Check if this is a many-to-many field - get mikroorm metadata
 			//const fieldMetadata = getFieldMetadata(relatedField, gqlEntityType);
 
-			// @todo - check if provider supports filter
 			const records = await provider.findByRelatedId(
 				provider.entityType,
 				relatedField,
 				keys,
-				filter as unknown as Filter<GraphQLEntity<any>>
+				filter
 			);
 			logger.trace(`DataLoader: Loading ${gqlTypeName} got ${records.length} result(s).`);
 

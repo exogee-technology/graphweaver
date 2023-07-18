@@ -131,7 +131,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		) {
 			continue;
 		}
-		// Add filter support for nested r-ship
+
 		const fieldCopy = Object.assign({}, field);
 		fieldCopy.target = ListInputFilterArgs;
 		fieldCopy.typeOptions = { nullable: true };
