@@ -1,13 +1,11 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
-
-import path from 'path';
-import { loadSchemaSync } from '@graphql-tools/load';
-import { GraphQLFileLoader } from '@graphql-tools/graphql-file-loader';
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
+
 import {
 	ClearDataLoaderCache,
 	LogErrors,
@@ -18,6 +16,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
+import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -56,6 +55,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
+		apolloServerOptions: {
+			introspection: true,
+		},
 		graphqlDeduplicator: {
 			enabled: true,
 		},
@@ -75,7 +77,22 @@ export default class Graphweaver<TContext extends BaseContext> {
 			);
 		}
 
-		this.config = config;
+		// Assign default config
+		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
+
+		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
+
+		const eMap = EntityMetadataMap;
+		for (const metadata of eMap.values()) {
+			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
+				// only push unique plugins
+				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
+					(plugin) => !apolloPlugins.includes(plugin)
+				);
+				apolloPlugins.push(...eMetadataProviderPlugins);
+			}
+		}
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -83,36 +100,22 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogErrors,
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
-			...(this.config.apolloServerOptions?.plugins || []),
+			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
 
 		const resolvers = (this.config.resolvers || []) as any;
+
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
-		let schema: any;
-		try {
-			logger.trace(`Graphweaver loading schema from file`);
-			schema = loadSchemaSync(path.join(process.cwd(), './.graphweaver/backend/schema.gql'), {
-				loaders: [new GraphQLFileLoader()],
-			});
-		} catch {
-			// continue we can build the schema if the load failed
-		}
-
-		if (!schema) {
-			logger.trace(
-				`Graphweaver building schema from scratch this will slow down the server startup time`
-			);
-			schema = buildSchemaSync({
-				resolvers,
-				authChecker: config.authChecker ?? (() => true),
-			});
-		}
+		const schema = buildSchemaSync({
+			resolvers,
+			authChecker: config.authChecker ?? (() => true),
+		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer<TContext>({
@@ -126,4 +129,46 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Do some async here if necessary
 		logger.info(`Graphweaver async called`);
 	}
+
+	public handler(): AWSLambda.APIGatewayProxyHandler {
+		logger.info(`Graphweaver handler called`);
+
+		return startServerAndCreateLambdaHandler(
+			// @todo: fix this type, TContext extends BaseContext, this should work
+			this.server as unknown as ApolloServer<BaseContext>,
+			handlers.createAPIGatewayProxyEventRequestHandler()
+		);
+	}
 }
+
+const mergeConfig = <T>(defaultConfig: T, userConfig: Partial<T>): T => {
+	if (typeof defaultConfig !== 'object' || typeof userConfig !== 'object' || !defaultConfig) {
+		throw new Error('Invalid config');
+	}
+
+	const merged = { ...defaultConfig } as T;
+
+	for (const key in userConfig) {
+		const userConfigValue = userConfig[key] as T[Extract<keyof T, string>];
+		const defaultConfigValue = defaultConfig?.[key];
+
+		if (Array.isArray(defaultConfigValue) && Array.isArray(userConfigValue)) {
+			if (userConfigValue.length > 0) {
+				merged[key] = userConfigValue;
+			}
+		} else if (
+			userConfigValue &&
+			defaultConfigValue &&
+			typeof defaultConfigValue === 'object' &&
+			typeof userConfigValue === 'object'
+		) {
+			if (Object.prototype.hasOwnProperty.call(userConfig, key)) {
+				merged[key] = mergeConfig(defaultConfigValue, userConfigValue);
+			}
+		} else {
+			merged[key] = userConfigValue;
+		}
+	}
+
+	return merged;
+};

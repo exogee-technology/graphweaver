@@ -1,6 +1,5 @@
-import { createBaseResolver, Filter, Sort } from '@exogee/graphweaver';
+import { createBaseResolver, Filter, Sort, Resolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
-import { Resolver } from 'type-graphql';
 import { forEachTenant, offsetAndLimit, orderByToString, splitFilter } from '../../utils';
 import { Account } from './entity';
 import { Account as XeroAccount } from 'xero-node';

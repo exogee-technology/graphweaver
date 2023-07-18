@@ -16,7 +16,9 @@ export { ForbiddenError } from 'apollo-server-errors';
 
 type AuthContext<T extends AuthorizationContext | undefined> = T;
 let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
-let administratorRoleName = '';
+
+const DEFAULT_ADMIN_ROLE_NAME = 'ADMINISTRATOR';
+let administratorRoleName = DEFAULT_ADMIN_ROLE_NAME;
 
 export const AclMap = new Map<string, Partial<AccessControlList<any, any>>>();
 
@@ -44,9 +46,10 @@ export function setAdministratorRoleName(roleName: string) {
 }
 
 export function getAdministratorRoleName() {
-	if (!administratorRoleName) {
-		logger.error('Administrator role name was not set');
-		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+	if (administratorRoleName === DEFAULT_ADMIN_ROLE_NAME) {
+		logger.warn(
+			`The default administrator role name is being used. Please set a custom administrator role name using the setAdministratorRoleName function.`
+		);
 	}
 	return administratorRoleName;
 }

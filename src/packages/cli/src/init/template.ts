@@ -1,12 +1,13 @@
 import { writeFileSync, mkdirSync } from 'fs';
-import { Backend, packagesForBackend } from './backend';
+import { packagesForBackend } from './backend';
 import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
-import { needsDatabaseConnection } from '.';
+import { Backend, needsDatabaseConnection } from '.';
 
-export const makePackageJson = (projectName: string, backends: Backend[]) => {
+export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
+	const graphweaverVersion = version ? version : GRAPHWEAVER_TARGET_VERSION;
 	const backendPackages = Object.assign(
 		{},
-		...backends.map((backend) => packagesForBackend(backend))
+		...backends.map((backend) => packagesForBackend(backend, version))
 	);
 
 	const packageJson = {
@@ -16,12 +17,14 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		scripts: {
 			build: 'graphweaver build',
 			start: 'graphweaver start',
+			watch: 'graphweaver watch',
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
-			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
-			'@exogee/graphweaver-apollo': GRAPHWEAVER_TARGET_VERSION,
-			graphweaver: GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver': graphweaverVersion,
+			'@exogee/graphweaver-scalars': graphweaverVersion,
+			'@exogee/graphweaver-apollo': graphweaverVersion,
+			graphweaver: graphweaverVersion,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
@@ -42,7 +45,6 @@ export const makeDirectories = (projectName: string) => {
 	mkdirSync(`${projectName}/src`);
 	mkdirSync(`${projectName}/src/backend`);
 	mkdirSync(`${projectName}/src/backend/schema`);
-	mkdirSync(`${projectName}/src/backend/schema/ping`);
 };
 
 export const makeDatabase = (projectName: string, backends: Backend[]) => {
@@ -72,8 +74,19 @@ export const makeDatabase = (projectName: string, backends: Backend[]) => {
 	},
 };`;
 
+	const liteDriverImport = `import { SqliteDriver } from '@mikro-orm/sqlite';`;
+	const liteConnection = `export const liteConnection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		driver: SqliteDriver,
+		entities: [],
+		dbName: '%%REPLACE_WITH_DB_NAME%%',
+	},
+};`;
+
 	const hasPostgres = backends.some((backend) => backend === Backend.MikroOrmPostgres);
 	const hasMySql = backends.some((backend) => backend === Backend.MikroOrmMysql);
+	const hasSqlite = backends.some((backend) => backend === Backend.MikroOrmSqlite);
 
 	// Install the Apollo plugins on the server
 	let plugins = undefined;
@@ -83,14 +96,18 @@ export const makeDatabase = (projectName: string, backends: Backend[]) => {
 		plugins = `[connectToDatabase(pgConnection), ClearDatabaseContext]`;
 	} else if (hasMySql) {
 		plugins = `[connectToDatabase(myConnection), ClearDatabaseContext]`;
+	} else if (hasSqlite) {
+		plugins = `[connectToDatabase(liteConnection), ClearDatabaseContext]`;
 	}
 
 	const database = `import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
 ${hasPostgres ? pgDriverImport : ``}
 ${hasMySql ? myDriverImport : ``}
+${hasSqlite ? liteDriverImport : ``}
 
 ${hasPostgres ? pgConnection : ``}
 ${hasMySql ? myConnection : ``}
+${hasSqlite ? liteConnection : ``}
 
 export const plugins = ${plugins};
 	`;
@@ -103,30 +120,19 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 
 	const index = `\
 /* ${projectName} GraphWeaver Project */
-
 import 'reflect-metadata';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
-
-import { PingResolver } from './schema/ping';
-
-const isOffline = process.env.IS_OFFLINE === 'true';
+import { resolvers } from './schema';
 
 const graphweaver = new Graphweaver({
-	resolvers: [PingResolver],
+	resolvers,
 	apolloServerOptions: {
-		introspection: isOffline,
 		${hasDatabaseConnections ? `plugins,` : ''}
 	},
-	adminMetadata: { enabled: true },
 });
 
-export const handler = startServerAndCreateLambdaHandler<any>(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
-
+export const handler = graphweaver.handler();
 
 `;
 
@@ -136,18 +142,10 @@ export const handler = startServerAndCreateLambdaHandler<any>(
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} GraphWeaver Project - Schema */
-import { buildSchemaSync, Resolver, Query } from 'type-graphql';
-
-@Resolver()
-export class PingResolver {
-	@Query(() => Boolean)
-	async ping() {
-    		return true; 
-  	}
-}   
+export const resolvers = []; // add your resolvers here 
 `;
 
-	writeFileSync(`${projectName}/src/backend/schema/ping/index.ts`, index);
+	writeFileSync(`${projectName}/src/backend/schema/index.ts`, index);
 };
 
 export const makeTsConfig = (projectName: string) => {

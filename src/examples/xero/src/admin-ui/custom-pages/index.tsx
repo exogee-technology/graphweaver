@@ -1,11 +1,18 @@
-import { apolloClient, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
+import { DefaultLayout, apolloClient } from '@exogee/graphweaver-admin-ui-components';
+import { gql } from '@apollo/client';
+
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
-import {
-	XeroDashboard,
-	TENANTS_QUERY,
-	AllCompaniesDashboardLoader,
-	SingleCompanyDashboardLoader,
-} from './dashboards';
+import { XeroDashboard } from './dashboards';
+import { TenantsQuery } from './index.generated';
+
+const tenantsQuery = gql`
+	query Tenants {
+		tenants {
+			id
+			tenantName
+		}
+	}
+`;
 
 export const customPages = {
 	routes: () => [
@@ -19,7 +26,6 @@ export const customPages = {
 		{
 			// These are dashboards
 			path: '/xero-dashboard',
-			loader: AllCompaniesDashboardLoader,
 			element: (
 				<DefaultLayout>
 					<XeroDashboard />
@@ -28,7 +34,6 @@ export const customPages = {
 		},
 		{
 			path: '/xero-dashboard/:tenantId',
-			loader: SingleCompanyDashboardLoader,
 			element: (
 				<DefaultLayout>
 					<XeroDashboard />
@@ -39,12 +44,13 @@ export const customPages = {
 
 	navLinks: async () => {
 		// To know nav links we need to know the tenants.
-		const { data } = await apolloClient.query({ query: TENANTS_QUERY });
-		if (!Array.isArray(data.result)) return;
+		const { data } = await apolloClient.query<TenantsQuery>({ query: tenantsQuery });
+
+		if (!Array.isArray(data.tenants)) return;
 
 		return [
 			{ name: 'All Companies', route: '/xero-dashboard' },
-			...data.result.map((tenant) => ({
+			...data.tenants.map((tenant) => ({
 				name: tenant.tenantName,
 				route: `/xero-dashboard/${tenant.id}`,
 			})),

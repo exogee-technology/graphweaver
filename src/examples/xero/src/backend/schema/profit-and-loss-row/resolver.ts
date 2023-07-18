@@ -1,6 +1,5 @@
-import { createBaseResolver, Sort } from '@exogee/graphweaver';
+import { createBaseResolver, Sort, Resolver } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
-import { Resolver } from 'type-graphql';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
 import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
