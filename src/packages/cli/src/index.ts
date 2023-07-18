@@ -11,20 +11,20 @@ import {
 import { init } from './init';
 
 export { initGraphWeaver } from './init';
-
+yargs.version(false);
 yargs
 	.env('GRAPHWEAVER')
 	.command({
 		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
 		builder: (yargs) =>
-			yargs.option('template', {
+			yargs.option('version', {
 				type: 'string',
-				describe: 'Specify a template to base your server on e.g. --template rest',
+				describe: 'Specify a version to base your server on e.g. --version 1.0.0',
 			}),
 		handler: async (argv) => {
-			const template = argv.template;
-			init({ template });
+			const version = argv.version;
+			init({ version });
 		},
 	})
 	.command({
