@@ -4,12 +4,11 @@ import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
 import { Backend, needsDatabaseConnection } from '.';
 
 export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
+	const graphweaverVersion = version ? version : GRAPHWEAVER_TARGET_VERSION;
 	const backendPackages = Object.assign(
 		{},
 		...backends.map((backend) => packagesForBackend(backend, version))
 	);
-
-	const graphWeaverVersion = version ?? GRAPHWEAVER_TARGET_VERSION;
 
 	const packageJson = {
 		name: projectName,
@@ -22,10 +21,10 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
-			'@exogee/graphweaver': graphWeaverVersion,
-			'@exogee/graphweaver-scalars': graphWeaverVersion,
-			'@exogee/graphweaver-apollo': graphWeaverVersion,
-			graphweaver: graphWeaverVersion,
+			'@exogee/graphweaver': graphweaverVersion,
+			'@exogee/graphweaver-scalars': graphweaverVersion,
+			'@exogee/graphweaver-apollo': graphweaverVersion,
+			graphweaver: graphweaverVersion,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
@@ -121,29 +120,19 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 
 	const index = `\
 /* ${projectName} GraphWeaver Project */
-
 import 'reflect-metadata';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
 import { resolvers } from './schema';
 
-const isOffline = process.env.IS_OFFLINE === 'true';
-
 const graphweaver = new Graphweaver({
 	resolvers,
 	apolloServerOptions: {
-		introspection: isOffline,
 		${hasDatabaseConnections ? `plugins,` : ''}
 	},
-	adminMetadata: { enabled: true },
 });
 
-export const handler = startServerAndCreateLambdaHandler<any>(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
-
+export const handler = graphweaver.handler();
 
 `;
 
