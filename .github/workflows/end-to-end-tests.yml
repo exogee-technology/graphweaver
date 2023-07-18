@@ -1,11 +1,11 @@
-name: CLI Build and Test
+name: End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build-and-test-cli:
+  end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
