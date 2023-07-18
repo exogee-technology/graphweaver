@@ -1,6 +1,6 @@
 import yargs from 'yargs';
+import chokidar from 'chokidar';
 import {
-	BackendStartOptions,
 	StartOptions,
 	analyseBundle,
 	buildBackend,
@@ -102,6 +102,49 @@ yargs
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
+			}
+		},
+	})
+	.command({
+		command: ['watch [environment]', 'w [environment]'],
+		describe: 'Runs a development version of the project locally and watches files for changes.',
+		builder: (yargs) =>
+			yargs
+				.positional('environment', {
+					type: 'string',
+					choices: ['backend', 'frontend', 'all'],
+					default: 'all',
+					describe: 'Choose whether you want to run the backend, frontend, or both.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify a host to listen on e.g. --host 0.0.0.0',
+				})
+				.option('port', {
+					type: 'number',
+					default: 9000,
+					describe:
+						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				}),
+		handler: async ({ environment, ...args }) => {
+			if (environment === 'backend' || environment === 'all') {
+				await startBackend(args as any);
+			}
+			if (environment === 'frontend' || environment === 'all') {
+				// Logic to start the process
+				console.log('Watch process started...');
+				await startFrontend(args as StartOptions);
+
+				// Watch the directory for file changes
+				const watcher = chokidar.watch('./src/**', {
+					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
+				});
+
+				// Restart the process on file change
+				watcher.on('change', async () => {
+					console.log('File changed. Restarting the process...');
+					await startFrontend(args as StartOptions);
+				});
 			}
 		},
 	})

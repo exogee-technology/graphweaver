@@ -15,6 +15,7 @@ const exec = promisify(nodeExec);
 		bundle: true,
 		platform: 'node',
 		banner: { js: '#!/usr/bin/env node' },
+		sourcemap: 'linked',
 		external: [
 			// Our dependencies will be installed in node_modules. The bundling is
 			// just to ensure our own files are pulled in
