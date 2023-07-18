@@ -5,10 +5,10 @@ import { Album } from '../types';
 import { config } from '../config';
 import { resetDatabase } from '../utils';
 
-describe('basic query', () => {
+describe('basic mutation', () => {
 	beforeEach(resetDatabase);
 
-	test('should get albums', async () => {
+	test('should create an album', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
 			.query(
 				gql`

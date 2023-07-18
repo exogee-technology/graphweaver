@@ -43,29 +43,20 @@ jobs:
       - name: Create GW instance
         working-directory: src/packages/end-to-end
         run: |
-          pnpm test:init
-          ls test/src/backend/schema
-          cat test/package.json
-
-      - name: Change to GW instance and install
-        working-directory: src/packages/end-to-end/test
-        run: |
-          pwd
-          pnpm i --no-frozen-lockfile
+          pnpm create-app
 
       - name: Import Chinook Database
         working-directory: src/packages/end-to-end
         run: |
-          pnpm test:import
-          ls test/src/backend/schema
+          pnpm import-database
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm test:start &
+          pnpm start-server &
           sleep 3 &&
-          pnpm test:e2e &&
+          pnpm test &&
           killall node
 
         env:
