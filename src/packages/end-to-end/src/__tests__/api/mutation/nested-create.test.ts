@@ -15,7 +15,7 @@ describe('nested create', () => {
 					mutation CreateAlbum($data: AlbumInsertInput!) {
 						createAlbum(data: $data) {
 							id
-							ArtistId {
+							Artist {
 								id
 								Name
 							}
@@ -27,8 +27,8 @@ describe('nested create', () => {
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.id).toBe('348');
-		expect(data?.createAlbum?.ArtistId?.id).toBe('276');
-		expect(data?.createAlbum?.ArtistId?.Name).toBe('string');
+		expect(data?.createAlbum?.Artist?.id).toBe('276');
+		expect(data?.createAlbum?.Artist?.Name).toBe('string');
 	});
 
 	test('should create an artist and an album', async () => {
@@ -38,7 +38,7 @@ describe('nested create', () => {
 					mutation CreateArtist($data: ArtistInsertInput!) {
 						createArtist(data: $data) {
 							id
-							ArtistIdInverse {
+							ArtistInverse {
 								id
 								Title
 							}
@@ -50,7 +50,7 @@ describe('nested create', () => {
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.id).toBe('348');
-		expect(data?.createAlbum?.ArtistIdInverse?.[0]?.id).toBe('276');
-		expect(data?.createAlbum?.ArtistIdInverse?.[0]?.Title).toBe('string');
+		expect(data?.createAlbum?.ArtistInverse?.[0]?.id).toBe('276');
+		expect(data?.createAlbum?.ArtistInverse?.[0]?.Title).toBe('string');
 	});
 });

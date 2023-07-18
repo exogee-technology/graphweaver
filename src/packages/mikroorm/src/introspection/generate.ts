@@ -103,6 +103,7 @@ const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		for (const prop of meta.relations) {
 			if ([ReferenceType.MANY_TO_ONE, ReferenceType.ONE_TO_ONE].includes(prop.reference)) {
+				prop.name = pluralize.singular(prop.referencedTableName);
 				prop.wrappedReference = true;
 			}
 		}
