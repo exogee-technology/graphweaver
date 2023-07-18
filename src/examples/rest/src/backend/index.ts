@@ -1,13 +1,10 @@
 import 'reflect-metadata';
-
 import Graphweaver from '@exogee/graphweaver-apollo';
 import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver-auth';
-
 import { connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
 import { resolvers } from './schema';
 import { myConnection } from './database';
-
 // Auth Functions
 import { addUserToContext } from './auth/context';
 
