@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 
 import { Select, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
@@ -55,7 +55,7 @@ export const RelationshipFilter = ({
 		);
 	};
 
-	const { data, loading } = useQuery<{ result: any[] }>(
+	const [getRelationship, { data, loading, error }] = useLazyQuery<{ result: any[] }>(
 		getRelationshipQuery(field.type, relationshipEntityType.summaryField),
 		{
 			variables: {
@@ -65,6 +65,12 @@ export const RelationshipFilter = ({
 			},
 		}
 	);
+
+	const handleOnOpen = () => {
+		if (!data && !loading && !error) {
+			getRelationship();
+		}
+	};
 
 	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
 		const label = relationshipEntityType.summaryField;
@@ -82,6 +88,7 @@ export const RelationshipFilter = ({
 			}
 			placeholder={fieldName}
 			onChange={handleOnChange}
+			onOpen={handleOnOpen}
 			loading={loading}
 		/>
 	);

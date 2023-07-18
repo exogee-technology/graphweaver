@@ -21,6 +21,7 @@
 		"@apollo/server": "4.2.2",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
 		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
@@ -28,7 +29,6 @@
 		"@mikro-orm/mysql": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
 		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.2",
 		"class-validator": "0.14.0",
 		"graphql": "16.6.0"
 	},

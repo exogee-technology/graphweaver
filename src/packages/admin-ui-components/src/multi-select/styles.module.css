@@ -9,7 +9,6 @@
 	position: relative;
 	width: 100%;
 	flex: 1;
-	min-width: 0;
 }
 
 .selectBox {
@@ -28,7 +27,6 @@
 	display: flex;
 	flex-wrap: nowrap;
 	padding: 4px;
-	min-width: 0;
 }
 
 .optionPill {

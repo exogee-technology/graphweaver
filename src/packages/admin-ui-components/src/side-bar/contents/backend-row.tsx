@@ -26,7 +26,7 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 					}}
 				>
 					<DatabaseIcon />
-					{backend}
+					<div className={styles.dataSourceTitle}>{backend}</div>
 					<ChevronDownIcon />
 				</a>
 				<ul>

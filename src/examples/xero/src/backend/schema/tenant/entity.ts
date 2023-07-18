@@ -1,5 +1,11 @@
-import { AdminUISettings, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
-import { Field, ID, ObjectType } from 'type-graphql';
+import {
+	AdminUISettings,
+	GraphQLEntity,
+	SummaryField,
+	Field,
+	ID,
+	ObjectType,
+} from '@exogee/graphweaver';
 
 // Xero doesn't provide a type for these for whatever reason. Both
 // xero.tenants and xero.updateTenants() are typed as any[].

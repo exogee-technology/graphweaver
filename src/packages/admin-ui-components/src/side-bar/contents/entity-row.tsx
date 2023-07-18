@@ -13,7 +13,7 @@ export const EntityRow = ({ entity }: { entity: Entity }) => (
 			className={({ isActive }) => classnames(styles.subListItem, isActive && styles.active)}
 		>
 			<TableIcon />
-			{entity.name}
+			<span className={styles.subListItemText}>{entity.name}</span>
 		</NavLink>
 	</li>
 );
