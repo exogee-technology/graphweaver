@@ -24,11 +24,11 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	code?: string;
 
 	@SummaryField()
-	@Field(() => String)
-	name!: string;
+	@Field(() => String, { nullable: true })
+	name?: string;
 
-	@Field(() => AccountType)
-	type!: AccountType;
+	@Field(() => AccountType, { nullable: true })
+	type?: AccountType;
 
 	@AdminUISettings({
 		filter: {

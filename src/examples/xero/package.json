@@ -9,6 +9,7 @@
 		"gw": "graphweaver",
 		"prettier": "prettier --write src/**/*.ts",
 		"start": "graphweaver start",
+		"watch": "graphweaver watch",
 		"start:backend": "graphweaver start backend",
 		"version": "npm version --no-git-tag-version"
 	},
@@ -21,13 +22,13 @@
 		"lib"
 	],
 	"dependencies": {
+		"@apollo/client": "3.7.1",
 		"@apollo/server": "4.2.2",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-apollo": "workspace:*",
-		"graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
@@ -39,7 +40,7 @@
 		"class-validator": "0.14.0",
 		"decimal.js": "10.4.3",
 		"graphql": "16.6.0",
-		"graphql-tag": "2.12.6",
+		"graphweaver": "workspace:*",
 		"prop-types": "15.8.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
