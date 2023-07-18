@@ -16,6 +16,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
+import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -79,6 +80,19 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
 
+		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
+
+		const eMap = EntityMetadataMap;
+		for (const metadata of eMap.values()) {
+			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
+				// only push unique plugins
+				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
+					(plugin) => !apolloPlugins.includes(plugin)
+				);
+				apolloPlugins.push(...eMetadataProviderPlugins);
+			}
+		}
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -86,7 +100,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			LogErrors,
 			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
-			...(this.config.apolloServerOptions?.plugins || []),
+			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
 

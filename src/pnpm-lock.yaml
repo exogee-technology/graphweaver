@@ -466,6 +466,7 @@ importers:
 
   packages/core:
     specifiers:
+      '@apollo/server': 4.2.2
       '@exogee/logger': workspace:*
       '@graphql-tools/delegate': 9.0.35
       '@types/pluralize': 0.0.29
@@ -479,6 +480,7 @@ importers:
       type-graphql: 2.0.0-beta.2
       typescript: 5.0.2
     dependencies:
+      '@apollo/server': 4.2.2_graphql@16.6.0
       '@exogee/logger': link:../logger
       '@graphql-tools/delegate': 9.0.35_graphql@16.6.0
       class-validator: 0.14.0
