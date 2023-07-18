@@ -23,6 +23,7 @@
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"chokidar": "3.5.3",
 		"esbuild": "0.15.5",
 		"inquirer": "9.2.1",
 		"ora": "5.4.1",
