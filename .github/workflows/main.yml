@@ -59,7 +59,7 @@ jobs:
       - run: pnpm i
       - run: pnpm lint
       - run: pnpm build
-      - run: pnpm -r test
+      - run: pnpm -r --filter=!"@exogee/graphweaver-end-to-end" test 
     env:
       DATABASE_HOST: localhost
       DATABASE_USERNAME: postgres

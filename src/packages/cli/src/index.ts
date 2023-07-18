@@ -1,6 +1,6 @@
 import yargs from 'yargs';
+import chokidar from 'chokidar';
 import {
-	BackendStartOptions,
 	StartOptions,
 	analyseBundle,
 	buildBackend,
@@ -8,9 +8,10 @@ import {
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
-import { init } from './init';
+import { Backend, init } from './init';
+import { importDataSource } from './import';
 
-export { initGraphWeaver } from './init';
+yargs.version(false);
 
 yargs
 	.env('GRAPHWEAVER')
@@ -18,13 +19,48 @@ yargs
 		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
 		builder: (yargs) =>
-			yargs.option('template', {
-				type: 'string',
-				describe: 'Specify a template to base your server on e.g. --template rest',
-			}),
+			yargs
+				.option('name', {
+					type: 'string',
+					describe: 'The name of this project.',
+				})
+				.option('backend', {
+					type: 'string',
+					describe: 'Specify a data source.',
+					choices: ['postgres', 'mysql', 'rest', 'sqlite'],
+				})
+				.option('version', {
+					type: 'string',
+					describe: 'Specify a version of GraphWeaver to use.',
+				}),
 		handler: async (argv) => {
-			const template = argv.template;
-			init({ template });
+			const version = argv.version;
+			const name = argv.name;
+			const backend = argv.backend;
+			if (backend === 'postgres') init({ name, backend: Backend.MikroOrmPostgres, version });
+			if (backend === 'mysql') init({ name, backend: Backend.MikroOrmMysql, version });
+			if (backend === 'rest') init({ name, backend: Backend.REST, version });
+			if (backend === 'sqlite') init({ name, backend: Backend.MikroOrmSqlite, version });
+			init({ name, version });
+		},
+	})
+	.command({
+		command: ['import [source]'],
+		describe: 'Inspect a data source and then import its entities.',
+		builder: (yargs) =>
+			yargs
+				.positional('source', {
+					type: 'string',
+					choices: ['mysql', 'postgresql', 'sqlite'],
+					default: 'postgresql',
+					describe: 'The data source to import.',
+				})
+				.option('database', {
+					type: 'string',
+					describe: 'Specify the database name.',
+				}),
+		handler: async ({ source, database }) => {
+			await importDataSource(source, database);
 		},
 	})
 	.command({
@@ -103,6 +139,57 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
 			}
+		},
+	})
+	.command({
+		command: ['watch [environment]', 'w [environment]'],
+		describe: 'Runs a development version of the project locally and watches files for changes.',
+		builder: (yargs) =>
+			yargs
+				.positional('environment', {
+					type: 'string',
+					choices: ['backend', 'frontend', 'all'],
+					default: 'all',
+					describe: 'Choose whether you want to run the backend, frontend, or both.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify a host to listen on e.g. --host 0.0.0.0',
+				})
+				.option('port', {
+					type: 'number',
+					default: 9000,
+					describe:
+						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				}),
+		handler: async ({ environment, ...args }) => {
+			if (environment === 'backend' || environment === 'all') {
+				await startBackend(args as any);
+			}
+			if (environment === 'frontend' || environment === 'all') {
+				// Logic to start the process
+				console.log('Watch process started...');
+				await startFrontend(args as StartOptions);
+
+				// Watch the directory for file changes
+				const watcher = chokidar.watch('./src/**', {
+					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
+				});
+
+				// Restart the process on file change
+				watcher.on('change', async () => {
+					console.log('File changed. Restarting the process...');
+					await startFrontend(args as StartOptions);
+				});
+			}
+		},
+	})
+	.showHelpOnFail(true)
+	.help('help')
+	.command({
+		command: '*',
+		handler() {
+			yargs.showHelp();
 		},
 	})
 	.parse();

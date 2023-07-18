@@ -18,13 +18,17 @@ import pluralize from 'pluralize';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
-	id?: (keyof D & string) | ((dataEntity: D) => string);
+	id?: (keyof D & string) | ((dataEntity: D) => string | number | undefined);
+	nullable?: boolean;
 };
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
 	D extends BaseDataEntity = G['dataEntity']
->(returnTypeFunc: ReturnTypeFunc, { relatedField, id }: RelationshipFieldOptions<D>) {
+>(
+	returnTypeFunc: ReturnTypeFunc,
+	{ relatedField, id, nullable = true }: RelationshipFieldOptions<D>
+) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
@@ -40,7 +44,7 @@ export function RelationshipField<
 			prototype: target,
 			propertyKey: key,
 			returnTypeFunc,
-			typeOptions: { nullable: true },
+			typeOptions: { nullable },
 		});
 
 		const getRelatedType = () => {
@@ -119,6 +123,11 @@ export function RelationshipField<
 				: typeof id === 'function'
 				? id(root.dataEntity)
 				: root.dataEntity[id];
+
+			if (!idValue && !relatedField) {
+				//id is null and we are loading a single instance so lets return null
+				return null;
+			}
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 

@@ -3,8 +3,11 @@ import {
 	GraphQLEntity,
 	RelationshipField,
 	SummaryField,
+	Field,
+	ID,
+	ObjectType,
+	registerEnumType,
 } from '@exogee/graphweaver';
-import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
 import { Tenant } from '../tenant';
 
@@ -21,11 +24,11 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	code?: string;
 
 	@SummaryField()
-	@Field(() => String)
-	name!: string;
+	@Field(() => String, { nullable: true })
+	name?: string;
 
-	@Field(() => AccountType)
-	type!: AccountType;
+	@Field(() => AccountType, { nullable: true })
+	type?: AccountType;
 
 	@AdminUISettings({
 		filter: {
