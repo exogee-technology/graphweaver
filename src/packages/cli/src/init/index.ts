@@ -11,7 +11,6 @@ import {
 } from './template';
 
 import { Backend } from './backend';
-import { Downloader } from './templates/download';
 
 const abort = () => {
 	console.log('Cancelled!');
@@ -21,10 +20,10 @@ const abort = () => {
 export const needsDatabaseConnection = (backends: Backend[]) =>
 	backends.some((backend) => [Backend.MikroOrmPostgres, Backend.MikroOrmMysql].includes(backend));
 
-export const initGraphWeaver = (projectName: string, backends: Backend[]) => {
+export const initGraphWeaver = (projectName: string, backends: Backend[], version?: string) => {
 	makeDirectories(projectName);
 	makeReadme(projectName);
-	makePackageJson(projectName, backends);
+	makePackageJson(projectName, backends, version);
 	makeTsConfig(projectName);
 	makeIndex(projectName, backends);
 	if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
@@ -32,11 +31,11 @@ export const initGraphWeaver = (projectName: string, backends: Backend[]) => {
 };
 
 type InitOptions = {
-	template?: string /** Optional template to use for the starter */;
+	version?: string /** Optional version to use for the starter */;
 };
 
-export const init = async ({ template }: InitOptions) => {
-	console.log(`GraphWeaver ${template ? 'using template ' + template : ''}\n`);
+export const init = async ({ version }: InitOptions) => {
+	console.log(`GraphWeaver ${version ? 'using version ' + version : ''}\n`);
 
 	import('inquirer').then(async ({ default: inquirer }) => {
 		const { projectName, createDirectory, backends } = await inquirer.prompt([
@@ -45,29 +44,25 @@ export const init = async ({ template }: InitOptions) => {
 				name: 'projectName',
 				message: `What would your like to call your new project?`,
 			},
-			...(template
-				? []
-				: [
-						{
-							type: 'checkbox',
-							name: 'backends',
-							message: 'Which GraphWeaver backends will you need?',
-							choices: [
-								{
-									value: Backend.MikroOrmPostgres,
-									name: 'MikroORM - PostgreSQL Backend',
-								},
-								{
-									value: Backend.MikroOrmMysql,
-									name: 'MikroORM - MySQL Backend',
-								},
-								{
-									value: Backend.REST,
-									name: 'REST Backend',
-								},
-							],
-						},
-				  ]),
+			{
+				type: 'checkbox',
+				name: 'backends',
+				message: 'Which GraphWeaver backends will you need?',
+				choices: [
+					{
+						value: Backend.MikroOrmPostgres,
+						name: 'MikroORM - PostgreSQL Backend',
+					},
+					{
+						value: Backend.MikroOrmMysql,
+						name: 'MikroORM - MySQL Backend',
+					},
+					{
+						value: Backend.REST,
+						name: 'REST Backend',
+					},
+				],
+			},
 			{
 				type: 'confirm',
 				name: 'createDirectory',
@@ -80,12 +75,7 @@ export const init = async ({ template }: InitOptions) => {
 
 		if (!createDirectory) abort();
 
-		if (template) {
-			const downloadManager = new Downloader();
-			await downloadManager.download(projectName, template);
-		} else {
-			initGraphWeaver(projectName, backends);
-		}
+		initGraphWeaver(projectName, backends, version);
 
 		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
 

@@ -3,7 +3,8 @@ import { Backend, packagesForBackend } from './backend';
 import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
 import { needsDatabaseConnection } from '.';
 
-export const makePackageJson = (projectName: string, backends: Backend[]) => {
+export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
+	const graphweaverVersion = version ? version : GRAPHWEAVER_TARGET_VERSION;
 	const backendPackages = Object.assign(
 		{},
 		...backends.map((backend) => packagesForBackend(backend))
@@ -20,9 +21,9 @@ export const makePackageJson = (projectName: string, backends: Backend[]) => {
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
-			'@exogee/graphweaver': GRAPHWEAVER_TARGET_VERSION,
-			'@exogee/graphweaver-apollo': GRAPHWEAVER_TARGET_VERSION,
-			graphweaver: GRAPHWEAVER_TARGET_VERSION,
+			'@exogee/graphweaver': graphweaverVersion,
+			'@exogee/graphweaver-apollo': graphweaverVersion,
+			graphweaver: graphweaverVersion,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
@@ -104,30 +105,20 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 
 	const index = `\
 /* ${projectName} GraphWeaver Project */
-
 import 'reflect-metadata';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import Graphweaver from '@exogee/graphweaver-apollo';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
 
 import { PingResolver } from './schema/ping';
 
-const isOffline = process.env.IS_OFFLINE === 'true';
-
 const graphweaver = new Graphweaver({
 	resolvers: [PingResolver],
 	apolloServerOptions: {
-		introspection: isOffline,
 		${hasDatabaseConnections ? `plugins,` : ''}
 	},
-	adminMetadata: { enabled: true },
 });
 
-export const handler = startServerAndCreateLambdaHandler<any>(
-	graphweaver.server,
-	handlers.createAPIGatewayProxyEventRequestHandler()
-);
-
+export const handler = graphweaver.handler();
 
 `;
 

@@ -1,7 +1,7 @@
-import fs from 'fs';
-import path from 'path';
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
@@ -54,6 +54,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
+		apolloServerOptions: {
+			introspection: true,
+		},
 		graphqlDeduplicator: {
 			enabled: true,
 		},
@@ -73,7 +76,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			);
 		}
 
-		this.config = config;
+		// Assign default config
+		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -86,6 +91,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		];
 
 		const resolvers = (this.config.resolvers || []) as any;
+
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
@@ -109,4 +115,46 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Do some async here if necessary
 		logger.info(`Graphweaver async called`);
 	}
+
+	public handler(): AWSLambda.APIGatewayProxyHandler {
+		logger.info(`Graphweaver handler called`);
+
+		return startServerAndCreateLambdaHandler(
+			// @todo: fix this type, TContext extends BaseContext, this should work
+			this.server as unknown as ApolloServer<BaseContext>,
+			handlers.createAPIGatewayProxyEventRequestHandler()
+		);
+	}
 }
+
+const mergeConfig = <T>(defaultConfig: T, userConfig: Partial<T>): T => {
+	if (typeof defaultConfig !== 'object' || typeof userConfig !== 'object' || !defaultConfig) {
+		throw new Error('Invalid config');
+	}
+
+	const merged = { ...defaultConfig } as T;
+
+	for (const key in userConfig) {
+		const userConfigValue = userConfig[key] as T[Extract<keyof T, string>];
+		const defaultConfigValue = defaultConfig?.[key];
+
+		if (Array.isArray(defaultConfigValue) && Array.isArray(userConfigValue)) {
+			if (userConfigValue.length > 0) {
+				merged[key] = userConfigValue;
+			}
+		} else if (
+			userConfigValue &&
+			defaultConfigValue &&
+			typeof defaultConfigValue === 'object' &&
+			typeof userConfigValue === 'object'
+		) {
+			if (Object.prototype.hasOwnProperty.call(userConfig, key)) {
+				merged[key] = mergeConfig(defaultConfigValue, userConfigValue);
+			}
+		} else {
+			merged[key] = userConfigValue;
+		}
+	}
+
+	return merged;
+};
