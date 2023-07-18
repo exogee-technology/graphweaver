@@ -1,11 +1,7 @@
 import { MouseEventHandler } from 'react';
-import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 
-type Task = {
-	user: {
-		name: string;
-	};
-};
+import { Task } from '../../types.generated';
+import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 
 export const Link = (task: Task) => {
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
