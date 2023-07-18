@@ -3,8 +3,11 @@ import {
 	GraphQLEntity,
 	RelationshipField,
 	SummaryField,
+	Field,
+	ID,
+	ObjectType,
+	registerEnumType,
 } from '@exogee/graphweaver';
-import { Field, ID, ObjectType, registerEnumType } from 'type-graphql';
 import { Account as XeroAccount, AccountType } from 'xero-node';
 import { Tenant } from '../tenant';
 

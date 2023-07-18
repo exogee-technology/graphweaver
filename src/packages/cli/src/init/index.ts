@@ -10,7 +10,12 @@ import {
 	makeDatabase,
 } from './template';
 
-import { Backend } from './backend';
+export enum Backend {
+	MikroOrmPostgres,
+	MikroOrmMysql,
+	REST,
+	MikroOrmSqlite,
+}
 
 const abort = () => {
 	console.log('Cancelled!');
@@ -18,7 +23,9 @@ const abort = () => {
 };
 
 export const needsDatabaseConnection = (backends: Backend[]) =>
-	backends.some((backend) => [Backend.MikroOrmPostgres, Backend.MikroOrmMysql].includes(backend));
+	backends.some((backend) =>
+		[Backend.MikroOrmPostgres, Backend.MikroOrmMysql, Backend.MikroOrmSqlite].includes(backend)
+	);
 
 export const initGraphWeaver = (projectName: string, backends: Backend[], version?: string) => {
 	makeDirectories(projectName);
@@ -32,13 +39,23 @@ export const initGraphWeaver = (projectName: string, backends: Backend[], versio
 
 type InitOptions = {
 	version?: string /** Optional version to use for the starter */;
+	name?: string /** Optional name to use for the project */;
+	backend?: Backend /** Optional backend to use for the starter */;
 };
 
-export const init = async ({ version }: InitOptions) => {
+export const init = async ({ version, name, backend }: InitOptions) => {
 	console.log(`GraphWeaver ${version ? 'using version ' + version : ''}\n`);
 
-	import('inquirer').then(async ({ default: inquirer }) => {
-		const { projectName, createDirectory, backends } = await inquirer.prompt([
+	if (backend && name) {
+		initGraphWeaver(name, [backend], version);
+	} else {
+		const { default: inquirer } = await import('inquirer');
+
+		const {
+			projectName,
+			createDirectory = true,
+			backends,
+		} = await inquirer.prompt([
 			{
 				type: 'input',
 				name: 'projectName',
@@ -58,6 +75,10 @@ export const init = async ({ version }: InitOptions) => {
 						name: 'MikroORM - MySQL Backend',
 					},
 					{
+						value: Backend.MikroOrmSqlite,
+						name: 'MikroORM - SQLite Backend',
+					},
+					{
 						value: Backend.REST,
 						name: 'REST Backend',
 					},
@@ -74,11 +95,10 @@ export const init = async ({ version }: InitOptions) => {
 		]);
 
 		if (!createDirectory) abort();
-
 		initGraphWeaver(projectName, backends, version);
+	}
 
-		console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
+	console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
 
-		exit(0);
-	});
+	exit(0);
 };
