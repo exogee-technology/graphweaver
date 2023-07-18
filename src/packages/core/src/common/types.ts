@@ -1,6 +1,7 @@
 import { registerEnumType } from 'type-graphql';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo } from 'graphql';
+import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -8,7 +9,7 @@ export type { GraphQLResolveInfo } from 'graphql';
 export interface BaseContext {}
 
 export type WithId = {
-	id: string;
+	id: string | number;
 };
 
 export enum Sort {
@@ -49,7 +50,7 @@ export type FilterTopLevelProperties<G> = {
 // G is the root GraphQL entity
 // C is a child GraphQL entity
 export type Filter<G> = {
-	id?: string; // Optional id property
+	id?: string | number; // Optional id property
 } & (
 	| FilterEntity<G>
 	| FilterTopLevelProperties<G>
@@ -77,7 +78,7 @@ export interface BackendProvider<D, G, BackendProviderConfig> {
 		relatedIds: readonly string[],
 		filter?: Filter<G>
 	): Promise<D[]>;
-	updateOne(id: string, updateArgs: Partial<G>): Promise<D>;
+	updateOne(id: string | number, updateArgs: Partial<G>): Promise<D>;
 	updateMany(entities: (Partial<G> & WithId)[]): Promise<D[]>;
 	createOne(entity: Partial<G>): Promise<D>;
 	createMany(entities: Partial<G>[]): Promise<D[]>;
@@ -93,6 +94,7 @@ export interface BackendProvider<D, G, BackendProviderConfig> {
 	readonly maxDataLoaderBatchSize?: number;
 
 	backendProviderConfig?: BackendProviderConfig;
+	plugins?: ApolloServerPlugin<ApolloBaseContext>[];
 }
 
 // G = GraphQL entity

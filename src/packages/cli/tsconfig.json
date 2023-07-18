@@ -6,5 +6,9 @@
 		"outDir": "./lib",
 		"resolveJsonModule": true
 	},
-	"references": [{ "path": "../vite-plugin-graphweaver" }, { "path": "../builder" }]
+	"references": [
+		{ "path": "../vite-plugin-graphweaver" },
+		{ "path": "../builder" },
+		{ "path": "../mikroorm" }
+	]
 }

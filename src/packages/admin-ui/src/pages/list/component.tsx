@@ -97,10 +97,28 @@ export const List = () => {
 		}
 	};
 
+	// If we have an array as a value then we need to convert this to a string to display in the table
+	const rows = (data?.result ?? []).map((row) => {
+		// Hold any overrides we need to apply
+		type OverrideKey = keyof typeof row;
+		const overrides: { [k in OverrideKey]?: unknown } = {};
+
+		const { fields } = entityByName(entity);
+		for (const key in row) {
+			const field = fields.find((field) => field.name === key);
+			if (field?.type === 'JSON') {
+				// We have an array let's stringify it so it can be displayed in the table
+				overrides[key as OverrideKey] = JSON.stringify(row[key as OverrideKey]);
+			}
+		}
+		// override any arrays we have found
+		return { ...row, ...overrides } as typeof row;
+	});
+
 	return (
 		<>
 			<Table
-				rows={data?.result || []}
+				rows={rows}
 				orderBy={sort ?? []}
 				requestRefetch={requestRefetch}
 				loading={initialLoading}

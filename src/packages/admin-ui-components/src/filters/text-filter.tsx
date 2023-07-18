@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 
 import { Filter, Select, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
@@ -21,7 +21,7 @@ export const TextFilter = ({
 	const { entityByName } = useSchema();
 	const initialValue = initialFilter?.[fieldName];
 
-	const { data } = useQuery<{ result: Record<string, string>[] }>(
+	const [getData, { loading, error, data }] = useLazyQuery<{ result: Record<string, string>[] }>(
 		queryForFilterText(entity, fieldName, entityByName)
 	);
 
@@ -37,6 +37,12 @@ export const TextFilter = ({
 		);
 	};
 
+	const handleOnOpen = () => {
+		if (!data && !loading && !error) {
+			getData();
+		}
+	};
+
 	return (
 		<Select
 			key={`${fieldName}:${resetCount}`}
@@ -44,6 +50,8 @@ export const TextFilter = ({
 			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
+			onOpen={handleOnOpen}
+			loading={loading}
 		/>
 	);
 };

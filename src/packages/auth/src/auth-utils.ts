@@ -110,7 +110,7 @@ export const assertObjectLevelPermissions = <G, TContext extends AuthorizationCo
 export async function checkEntityPermission<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
 	D extends BaseDataEntity
->(entity: G, id: string, accessType: AccessType) {
+>(entity: G, id: string | number, accessType: AccessType) {
 	const { name } = entity;
 	if (!name) {
 		logger.error('Raising ForbiddenError: Could not determine entity name');
@@ -168,7 +168,7 @@ export async function checkEntityPermission<
 export async function checkAuthorization<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
 	D extends BaseDataEntity
->(entity: G, id: string, requestInput: Partial<G>, requiredPermission: AccessType) {
+>(entity: G, id: string | number, requestInput: Partial<G>, requiredPermission: AccessType) {
 	// Get ACL first
 	const acl = getACL(entity.name);
 	const meta = EntityMetadataMap.get(entity.name);

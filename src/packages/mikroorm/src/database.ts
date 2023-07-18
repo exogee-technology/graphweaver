@@ -3,6 +3,7 @@ import './utils/change-tracker';
 
 import {
 	AnyEntity,
+	Configuration,
 	Connection,
 	EntityName,
 	IDatabaseDriver,
@@ -15,6 +16,8 @@ import { logger } from '@exogee/logger';
 import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
 type EntityManager = PgEntityManager<PostgreSqlDriver> | MyEntityManager<MySqlDriver>;
+
+export type DatabaseType = keyof typeof Configuration.PLATFORMS;
 
 export interface ConnectionOptions {
 	mikroOrmConfig?: Options | (() => Options | Promise<Options>);
@@ -40,6 +43,7 @@ class DatabaseImplementation {
 	private cachedOrm?: MikroORM<IDatabaseDriver<Connection>>;
 	private transactionalEm?: EntityManager;
 	private transactionInProgressIsolationLevel?: IsolationLevel;
+	private connectionOptions?: ConnectionOptions;
 
 	public get orm() {
 		if (!this.cachedOrm) {
@@ -87,7 +91,14 @@ class DatabaseImplementation {
 			return this.em.transactional(async (em) => {
 				this.transactionalEm = em;
 				this.transactionInProgressIsolationLevel = isolationLevel;
-				await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+
+				const driver = this.em.getDriver();
+				if (driver.constructor.name === 'SqliteDriver') {
+					logger.trace('All transactions in SQLite are SERIALIZABLE');
+				} else {
+					await em.execute(`SET SESSION TRANSACTION ISOLATION LEVEL ${isolationLevel}`);
+				}
+
 				let result: T;
 				try {
 					result = await callback();
@@ -169,6 +180,7 @@ class DatabaseImplementation {
 
 	public connect = async (connectionOptions?: ConnectionOptions) => {
 		logger.trace('Database::connect() - Enter');
+		this.connectionOptions = connectionOptions;
 
 		if (this.cachedOrm) {
 			logger.trace('Returning cached ORM');
@@ -215,7 +227,7 @@ class DatabaseImplementation {
 	public close = async () => {
 		logger.trace('Closing database connection');
 
-		await this.orm.close();
+		await this.orm.close(true);
 		delete this.cachedOrm;
 	};
 }
@@ -254,6 +266,12 @@ class ConnectionsManager {
 	public database(id: string) {
 		logger.trace(`Finding database connection for id "${id}"`);
 		return this.connections.get(id);
+	}
+
+	public async close(id: string) {
+		const database = this.database(id);
+		await database?.close();
+		return true;
 	}
 }
 export const ConnectionManager = new ConnectionsManager();

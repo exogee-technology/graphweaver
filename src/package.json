@@ -2,7 +2,7 @@
 	"name": "graphweaver-monorepo",
 	"description": "GraphWeaver: Quickly build a GraphQL server using type-graphql and dataloader",
 	"private": true,
-	"license": "UNLICENSED",
+	"license": "MIT",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/exogee-technology/graphweaver.git"
