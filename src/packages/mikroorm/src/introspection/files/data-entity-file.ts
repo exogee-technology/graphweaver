@@ -83,7 +83,7 @@ export class DataEntityFile extends BaseFile {
 			}
 		});
 
-		let ret = ``;
+		let file = ``;
 
 		this.coreImports.add('Entity');
 		const imports = [
@@ -96,18 +96,18 @@ export class DataEntityFile extends BaseFile {
 		});
 
 		if (enumDefinitions.length) {
-			ret += enumDefinitions.join('\n');
-			ret += '\n';
+			file += enumDefinitions.join('\n');
+			file += '\n';
 		}
 
-		ret += `@Entity(${this.getCollectionDecl()})\n`;
-		ret += `export class ${this.meta.className} extends BaseEntity {`;
+		file += `@Entity(${this.getCollectionDecl()})\n`;
+		file += `export class ${this.meta.className} extends BaseEntity {`;
 
-		ret += `${classBody}}\n`;
+		file += `${classBody}}\n`;
 
-		ret = `${imports.join('\n')}\n\n${ret}`;
+		file = `${imports.join('\n')}\n\n${file}`;
 
-		return ret;
+		return file;
 	}
 
 	protected getPropertyType(prop: EntityProperty): string {
@@ -142,14 +142,14 @@ export class DataEntityFile extends BaseFile {
 			return `${padding}id!: ${this.getPropertyType(prop)};`;
 		}
 
-		const ret = `${prop.name}${optional}: ${this.getPropertyType(prop)}`;
+		const file = `${prop.name}${optional}: ${this.getPropertyType(prop)}`;
 
 		if (!useDefault) {
-			return `${padding + ret};\n`;
+			return `${padding + file};\n`;
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${ret} = ${prop.type}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.type}.${prop.default.toUpperCase()};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
@@ -157,15 +157,15 @@ export class DataEntityFile extends BaseFile {
 
 	protected getEnumClassDefinition(enumClassName: string, enumValues: string[]): string {
 		const padding = '\t';
-		let ret = `export enum ${enumClassName} {\n`;
+		let file = `export enum ${enumClassName} {\n`;
 
 		for (const enumValue of enumValues) {
-			ret += `${padding}${enumValue.toUpperCase()} = '${enumValue}',\n`;
+			file += `${padding}${enumValue.toUpperCase()} = '${enumValue}',\n`;
 		}
 
-		ret += '}\n';
+		file += '}\n';
 
-		return ret;
+		return file;
 	}
 
 	private getCollectionDecl() {
