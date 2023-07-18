@@ -5,7 +5,7 @@ import { Album } from '../../../types';
 import { config } from '../../../config';
 import { resetDatabase } from '../../../utils';
 
-describe('basic mutation', () => {
+describe('basic create', () => {
 	beforeEach(resetDatabase);
 
 	test('should create an album', async () => {
