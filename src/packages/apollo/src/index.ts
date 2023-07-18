@@ -84,7 +84,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		const eMap = EntityMetadataMap;
 		for (const metadata of eMap.values()) {
-			console.log(metadata.provider);
 			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
 				// only push unique plugins
 				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
