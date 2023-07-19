@@ -8,7 +8,7 @@
 		"import-database": "cp ./database.sqlite ./app/database.sqlite && cd app && node ../../cli/bin import sqlite --database=database.sqlite",
 		"start-server": "cd app && pnpm start",
 		"dev": "pnpm create-app && pnpm import-database && pnpm start-server",
-		"test": "jest"
+		"test": "jest --runInBand"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",

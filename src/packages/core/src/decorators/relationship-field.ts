@@ -97,21 +97,26 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
+		console.log('**********************************\n');
+		console.log('typeName', typeName);
+		console.log('EntityMetadataMap.get(typeName)', EntityMetadataMap.get(typeName));
+		console.log('**********************************\n');
 		// If the provider of this entity supports filtering, add a filter arg
-		if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
-			metadata.collectHandlerParamMetadata({
-				kind: 'arg',
-				target: target.constructor,
-				methodName: key,
-				index: 3,
-				name: 'filter',
-				description: 'Filter the related entities',
-				deprecationReason: undefined,
-				getType: getRelatedType,
-				typeOptions: { nullable: true },
-				validate: undefined,
-			});
-		}
+		//if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
+		metadata.collectHandlerParamMetadata({
+			kind: 'arg',
+			target: target.constructor,
+			methodName: key,
+			index: 3,
+			name: 'filter',
+			description: 'Filter the related entities',
+			deprecationReason: undefined,
+			getType: getRelatedType,
+			typeOptions: { nullable: true },
+			validate: undefined,
+		});
+		//}
+
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (
 			root: any,
