@@ -1261,20 +1261,20 @@ export type MutationUpdateTracksArgs = {
 
 export type Playlist = {
 	__typename?: 'Playlist';
-	PlaylistTrack?: Maybe<Array<Track>>;
 	id: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
+	playlistTrack?: Maybe<Array<Track>>;
 };
 
 export type PlaylistCreateOrUpdateInput = {
-	PlaylistTrack?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 	id?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
+	playlistTrack?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
 export type PlaylistInsertInput = {
-	PlaylistTrack?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 	name?: InputMaybe<Scalars['String']['input']>;
+	playlistTrack?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
 export type PlaylistsCreateOrUpdateManyInput = {
@@ -1286,7 +1286,6 @@ export type PlaylistsInsertManyInput = {
 };
 
 export type PlaylistsListFilter = {
-	PlaylistTrack?: InputMaybe<TracksListFilter>;
 	_and?: InputMaybe<Array<PlaylistsListFilter>>;
 	_not?: InputMaybe<PlaylistsListFilter>;
 	_or?: InputMaybe<Array<PlaylistsListFilter>>;
@@ -1304,12 +1303,13 @@ export type PlaylistsListFilter = {
 	name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
 	name_notnull?: InputMaybe<Scalars['String']['input']>;
 	name_null?: InputMaybe<Scalars['String']['input']>;
+	playlistTrack?: InputMaybe<TracksListFilter>;
 };
 
 export type PlaylistsOrderByInput = {
-	PlaylistTrack?: InputMaybe<Sort>;
 	id?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
+	playlistTrack?: InputMaybe<Sort>;
 };
 
 export type PlaylistsPaginationInput = {

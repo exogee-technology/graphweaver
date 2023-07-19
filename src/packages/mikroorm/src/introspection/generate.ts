@@ -93,7 +93,7 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 				meta.tableName.replace(new RegExp('^' + owner.tableName + '_'), '')
 			);
 			owner.addProperty({
-				name,
+				name: pascalToCamelCaseString(name),
 				reference: ReferenceType.MANY_TO_MANY,
 				pivotTable: meta.tableName,
 				type: meta.relations[1].type,
