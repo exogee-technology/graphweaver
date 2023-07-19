@@ -25,7 +25,7 @@ import {
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
 
-import type { SqlEntityRepository } from '@mikro-orm/postgresql';
+import { QueryBuilder, SqlEntityRepository } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 const objectOperations = new Set(['_and', '_or', '_not']);
@@ -239,61 +239,6 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return collectedPaths;
 	};
 
-	private applyWhereClause(where: any) {
-		const query = this.getRepository().createQueryBuilder();
-		const joinKeysUsed = new Map<string, number>();
-
-		if (where) {
-			const visit = (current: any, table = 'e0') => {
-				if (Array.isArray(current)) {
-					for (const element of current) {
-						visit(element, table);
-					}
-				} else if (typeof current === 'object') {
-					for (const key of Object.keys(current)) {
-						const shouldJoin =
-							current[key] !== null &&
-							typeof current[key] === 'object' &&
-							Object.keys(current[key]).filter((key) => !nonJoinKeys.has(key)).length > 0;
-
-						// Only join if it's not $and, $or, $not, and if it's one of those object operations
-						// pass the parent and current table on down without any change.
-						if (mikroObjectOperations.has(key)) {
-							visit(current[key], table);
-						} else if (shouldJoin) {
-							// Otherwise ensure we've actually got a full on nested object,
-							// not just a filter property.
-							const keyUseCount = joinKeysUsed.has(key) ? (joinKeysUsed.get(key) ?? 0) + 1 : 1;
-							const joinKey = joinKeysUsed.has(key) ? `${key}${keyUseCount}` : key;
-							query.leftJoin(`${table}.${key}`, joinKey);
-							// Certain filters can result in the same table being joined
-							// on different criteria - keep track and avoid using the same alias
-							joinKeysUsed.set(joinKey, keyUseCount);
-							visit(current[key], key);
-						}
-
-						// Filter out empty objects
-						if (
-							current[key] !== null &&
-							typeof current[key] === 'object' &&
-							Object.keys(current[key]).length === 0
-						) {
-							delete current[key];
-						}
-					}
-				}
-			};
-
-			visit(where);
-
-			if (Object.keys(where).length > 0) {
-				query.andWhere(where);
-			}
-		}
-
-		return query;
-	}
-
 	public async find(
 		filter: Filter<G>,
 		pagination?: PaginationOptions,
@@ -316,12 +261,16 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
 		// This conversion only works on root level objects
-		const whereWithAppliedExternalIdFields =
-			where && this.applyExternalIdFields(this.entityType, where);
+		const whereWithAppliedExternalIdFields = where
+			? this.applyExternalIdFields(this.entityType, where)
+			: {};
 
 		// Regions need some fancy handling with Query Builder. Process the where further
 		// and return a Query Builder instance.
-		const query = this.applyWhereClause(whereWithAppliedExternalIdFields);
+		const query = this.getRepository().createQueryBuilder();
+		if (Object.keys(whereWithAppliedExternalIdFields).length > 0) {
+			query.andWhere(whereWithAppliedExternalIdFields);
+		}
 
 		// If we have specified a limit, offset or order then update the query
 		pagination?.limit && query.limit(pagination.limit);
