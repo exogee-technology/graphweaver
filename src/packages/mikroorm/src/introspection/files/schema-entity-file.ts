@@ -8,6 +8,7 @@ import type {
 import { ReferenceType, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
+import { pascalToKebabCaseString } from '../utils';
 
 export class SchemaEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -24,7 +25,7 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	getBasePath() {
-		const dirName = this.pascalToKebabCaseString(this.meta.className);
+		const dirName = pascalToKebabCaseString(this.meta.className);
 		return `backend/schema/${dirName}/`;
 	}
 
@@ -92,7 +93,7 @@ export class SchemaEntityFile extends BaseFile {
 
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
-			imports.push(`import { ${entity} } from '../${this.pascalToKebabCaseString(entity)}';`);
+			imports.push(`import { ${entity} } from '../${pascalToKebabCaseString(entity)}';`);
 		});
 
 		imports.push(
