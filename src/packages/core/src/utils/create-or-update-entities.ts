@@ -60,7 +60,7 @@ const callChildMutation = async <G>(
 		schema: info.schema,
 		operation: OperationTypeNode.MUTATION,
 		fieldName: mutationName,
-		args: { data },
+		args: Array.isArray(data) ? { input: { data } } : { data },
 		context,
 		info,
 	});

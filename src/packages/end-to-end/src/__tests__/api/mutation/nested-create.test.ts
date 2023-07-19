@@ -8,7 +8,7 @@ import { resetDatabase } from '../../../utils';
 describe('nested create', () => {
 	beforeEach(resetDatabase);
 
-	test.only('should create an album and an artist', async () => {
+	test('should create an album and an artist', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
 			.mutate(
 				gql`
