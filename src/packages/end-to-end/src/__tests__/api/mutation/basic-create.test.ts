@@ -19,7 +19,7 @@ describe('basic create', () => {
 					}
 				`
 			)
-			.variables({ data: { Artist: { id: 1 }, Title: 'string' } })
+			.variables({ data: { artist: { id: 1 }, title: 'string' } })
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.id).toBe('348');
