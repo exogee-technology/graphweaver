@@ -89,11 +89,9 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 			meta.pivotTable = true;
 			const owner = metadata.find((m) => m.className === meta.relations[0].type);
 			if (!owner) throw new Error('No Owner');
-			const name = namingStrategy.columnNameToProperty(
-				meta.tableName.replace(new RegExp('^' + owner.tableName + '_'), '')
-			);
+			const name = pascalToCamelCaseString(meta.relations?.[1]?.type);
 			owner.addProperty({
-				name: pascalToCamelCaseString(name),
+				name: pluralize(name),
 				reference: ReferenceType.MANY_TO_MANY,
 				pivotTable: meta.tableName,
 				type: meta.relations[1].type,

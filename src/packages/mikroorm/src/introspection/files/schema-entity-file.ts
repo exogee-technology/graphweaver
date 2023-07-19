@@ -8,7 +8,8 @@ import type {
 import { ReferenceType, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
-import { pascalToKebabCaseString } from '../utils';
+import { pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
+import pluralize from 'pluralize';
 
 export class SchemaEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -232,8 +233,7 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		const relatedField = prop.inversedBy ? prop.inversedBy : prop.mappedBy;
-		options.relatedField = this.quote(relatedField);
+		options.relatedField = this.quote(pluralize(pascalToCamelCaseString(this.meta.className)));
 	}
 
 	protected getOneToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
