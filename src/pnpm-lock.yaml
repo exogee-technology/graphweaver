@@ -734,16 +734,16 @@ importers:
         specifier: 2.0.1
         version: 2.0.1(@apollo/server@4.2.2)
       '@exogee/graphweaver':
-        specifier: 0.1.25
+        specifier: workspace:*
         version: link:../../core
       '@exogee/graphweaver-apollo':
-        specifier: 0.1.25
+        specifier: workspace:*
         version: link:../../apollo
       '@exogee/graphweaver-mikroorm':
-        specifier: 0.1.25
+        specifier: workspace:*
         version: link:../../mikroorm
       '@exogee/graphweaver-scalars':
-        specifier: 0.1.25
+        specifier: workspace:*
         version: link:../../scalars
       '@mikro-orm/core':
         specifier: 5.4.2
@@ -758,7 +758,7 @@ importers:
         specifier: 16.6.0
         version: 16.6.0
       graphweaver:
-        specifier: 0.1.25
+        specifier: workspace:*
         version: link:../../cli
       reflect-metadata:
         specifier: 0.1.13
