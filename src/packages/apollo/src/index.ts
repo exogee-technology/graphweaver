@@ -17,6 +17,7 @@ import {
 
 import type { CorsPluginOptions } from './plugins';
 import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
+import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
