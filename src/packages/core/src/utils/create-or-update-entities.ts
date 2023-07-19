@@ -125,19 +125,30 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 			const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
 
 			if (isRelatedEntity) {
-				// We have a related entity so lets check if we need to do an update or create
-				const result = isLinking(childNode) // if all entities are in the format {id: ""} then we are just linking the entity
-					? childNode
-					: await callChildMutation(
-							getMutationName(relatedEntity.name, childNode),
-							childNode,
-							info,
-							context
-					  );
-				node = {
-					...node,
-					[key]: result,
-				};
+				if (isLinking(childNode)) {
+					// First check if we only have a linking entity or a array, that is every entity is in the format {id: ""}
+					// if we are linked we don't need to do anything just continue
+				} else if (Array.isArray(childNode)) {
+					// if we still have an array then we are updating or creating entities
+					// we need to create the parent first as the children need reference to their parent
+					// Let's start by checking if we already have the parent ID
+					// If we don't then we need to create the parent first
+				} else {
+					// lastly if we are only creating or updating a single object then we can call this first and then give the parent reference
+					const result = await callChildMutation(
+						getMutationName(relatedEntity.name, childNode),
+						childNode,
+						info,
+						context
+					);
+
+					// check that we have ids now for all the results and reduce to just ids
+					const linkingEntities = result;
+					node = {
+						...node,
+						[key]: linkingEntities,
+					};
+				}
 			}
 		}
 
