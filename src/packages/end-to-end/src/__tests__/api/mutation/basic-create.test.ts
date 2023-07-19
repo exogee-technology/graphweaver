@@ -1,11 +1,11 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../types';
-import { config } from '../config';
-import { resetDatabase } from '../utils';
+import { Album } from '../../../types';
+import { config } from '../../../config';
+import { resetDatabase } from '../../../utils';
 
-describe('basic mutation', () => {
+describe('basic create', () => {
 	beforeEach(resetDatabase);
 
 	test('should create an album', async () => {
@@ -19,7 +19,7 @@ describe('basic mutation', () => {
 					}
 				`
 			)
-			.variables({ data: { ArtistId: { id: 1 }, Title: 'string' } })
+			.variables({ data: { artist: { id: 1 }, title: 'string' } })
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.id).toBe('348');
