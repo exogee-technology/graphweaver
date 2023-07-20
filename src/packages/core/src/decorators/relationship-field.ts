@@ -100,12 +100,14 @@ export function RelationshipField<
 		console.log('**********************************\n');
 		console.log('typeName', typeName);
 		console.log('EntityMetadataMap.get(typeName)', EntityMetadataMap.get(typeName));
+		console.log('EntityMetadataMap', EntityMetadataMap);
 		console.log('**********************************\n');
 		// If the provider of this entity supports filtering, add a filter arg
 		//if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
 		metadata.collectHandlerParamMetadata({
 			kind: 'arg',
-			target: target.constructor,
+			target: target.constructor, // class that called this decorator 	@RelationshipField<Task>(() => User, { id: 'userId' })
+			// task is the target
 			methodName: key,
 			index: 3,
 			name: 'filter',
@@ -116,7 +118,12 @@ export function RelationshipField<
 			validate: undefined,
 		});
 		//}
-
+		console.log('target.constructor', target.constructor);
+		console.log('key', key);
+		console.log(
+			'TypeMap[`${pluralize(typeName)}ListFilter`]',
+			TypeMap[`${pluralize(typeName)}ListFilter`]
+		);
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (
 			root: any,

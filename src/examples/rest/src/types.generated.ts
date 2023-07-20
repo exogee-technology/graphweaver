@@ -251,6 +251,11 @@ export type Tag = {
   tasks?: Maybe<Array<Task>>;
 };
 
+
+export type TagTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+};
+
 export type TagCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -314,6 +319,16 @@ export type Task = {
   priority?: Maybe<Priority>;
   tags?: Maybe<Array<Tag>>;
   user?: Maybe<User>;
+};
+
+
+export type TaskTagsArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+};
+
+
+export type TaskUserArgs = {
+  filter?: InputMaybe<UsersListFilter>;
 };
 
 export type TaskCreateOrUpdateInput = {
