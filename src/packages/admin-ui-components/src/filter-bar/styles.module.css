@@ -5,4 +5,5 @@
 	gap: 12px;
 	min-height: 38px;
 	align-items: center;
+	overflow-x: scroll;
 }
