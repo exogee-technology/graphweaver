@@ -113,6 +113,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 		// Here we have an object so now we need to find any related entities and see if we need to update or create them
 
 		let node = { ...input };
+		let parent;
 		// Lets loop through the properties and check for nested entities
 		for (const entry of Object.entries(input)) {
 			const [key, childNode] = entry;
@@ -139,16 +140,19 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 					let parentId = node.id;
 					if (!parentId) {
 						// We don't have an ID this means the parent needs to be created first
-						parentId = undefined;
+						// We have an object like {name: "test"} so we need to perform a create
+						parent = parent ?? (await meta.provider.createOne(node));
+						parentId = parent.id;
 					}
 
 					// Add parent ID to children
 					const childMeta = getMeta(relatedEntity.name);
 					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
-					if (!parentField)
+					if (!parentField) {
 						throw new Error(
 							`Implementation Error: No parent field found for ${relatedEntity.name}`
 						);
+					}
 					const childEntities = childNode.map((child) => ({
 						...child,
 						[parentField.name]: { id: parentId },
@@ -177,7 +181,10 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 		}
 
 		// Down here we have an entity and let's check if we need to create or update
-		if (isIdOnly(node)) {
+		if (parent) {
+			// We needed to create the parent earlier so no need to create it again
+			return fromBackendEntity(parent, gqlEntityType);
+		} else if (isIdOnly(node)) {
 			// Nothing to do here we are just attaching the id
 			return node;
 		} else if ('id' in node && node.id && Object.keys(node).length > 1) {
