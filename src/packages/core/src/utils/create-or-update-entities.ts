@@ -127,12 +127,29 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 			if (isRelatedEntity) {
 				if (isLinking(childNode)) {
 					// First check if we only have a linking entity or a array, that is every entity is in the format {id: ""}
-					// if we are linked we don't need to do anything just continue
+					// If we are linked we don't need to do anything just continue
 				} else if (Array.isArray(childNode)) {
-					// if we still have an array then we are updating or creating entities
-					// we need to create the parent first as the children need reference to their parent
+					// I we still have an array then we are updating or creating entities
+					// We need to create the parent first as the children need reference to their parent
 					// Let's start by checking if we already have the parent ID
-					// If we don't then we need to create the parent first
+					let parentId = node.id;
+					if (!parentId) {
+						// We don't have an ID this means the parent needs to be created first
+						parentId = undefined;
+					}
+					const childEntities = childNode.map((child) => {
+						console.log(child);
+						return { ...child, artist: { id: parentId } };
+					});
+					await callChildMutation(
+						getMutationName(relatedEntity.name, childEntities),
+						childEntities,
+						info,
+						context
+					);
+
+					// As we have updated the parent from the child we can remove this key
+					delete node[key as keyof Partial<G>];
 				} else {
 					// lastly if we are only creating or updating a single object then we can call this first and then give the parent reference
 					const result = await callChildMutation(
@@ -142,11 +159,9 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 						context
 					);
 
-					// check that we have ids now for all the results and reduce to just ids
-					const linkingEntities = result;
 					node = {
 						...node,
-						[key]: linkingEntities,
+						[key]: result,
 					};
 				}
 			}
