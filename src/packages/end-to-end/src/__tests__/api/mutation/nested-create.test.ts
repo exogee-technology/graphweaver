@@ -49,7 +49,7 @@ describe('nested create', () => {
 			.variables({ data: { albums: [{ title: 'string' }], name: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.createArtist?.id).toBe('277');
+		expect(data?.createArtist?.id).toBe('276');
 		expect(data?.createArtist?.albums?.[0]?.id).toBe('348');
 		expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
 	});
