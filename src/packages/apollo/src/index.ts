@@ -1,6 +1,7 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
-import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { AuthChecker, buildSchemaSync, getMetadataStorage } from 'type-graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import pluralize from 'pluralize';
 
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -16,7 +17,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
+import { EntityMetadataMap, TypeMap } from '@exogee/graphweaver';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -111,7 +112,38 @@ export default class Graphweaver<TContext extends BaseContext> {
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+		/******************************************************* */
+		const metadata = getMetadataStorage();
+		console.log(metadata);
 
+		// For each of the EntityMetadataMap entries, look at the provider and if filtering is supported, add the filter type to the schema
+		for (const entityMetadata of EntityMetadataMap.values()) {
+			if (entityMetadata.provider.backendProviderConfig?.filter?.childByChild) {
+				console.log('Adding filter type for', entityMetadata);
+				// key is lowercase entity name
+				const key = entityMetadata.entity.name.toLowerCase();
+
+				const getRelatedType = () => {
+					return TypeMap[`${pluralize(entityMetadata.entity.name)}ListFilter`];
+				};
+				const target = entityMetadata.entity.target;
+				metadata.collectHandlerParamMetadata({
+					kind: 'arg',
+					target, // class that called this decorator
+					//@RelationshipField<Task>(() => User, { id: 'userId' })
+					// task is the target
+					methodName: pluralize(key),
+					index: 3,
+					name: 'filter',
+					description: 'Filter the related entities',
+					deprecationReason: undefined,
+					getType: getRelatedType,
+					typeOptions: { nullable: true },
+					validate: undefined,
+				});
+			}
+		}
+		// ******************************************************* */
 		const schema = buildSchemaSync({
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),

@@ -451,6 +451,9 @@ importers:
       graphql-deduplicator:
         specifier: 2.0.6
         version: 2.0.6
+      pluralize:
+        specifier: 8.0.0
+        version: 8.0.0
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.6.0)
@@ -458,6 +461,9 @@ importers:
       '@types/graphql-deduplicator':
         specifier: 2.0.0
         version: 2.0.0
+      '@types/pluralize':
+        specifier: 0.0.29
+        version: 0.0.29
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
