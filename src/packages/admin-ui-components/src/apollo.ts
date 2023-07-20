@@ -14,6 +14,7 @@ const isExpired = (token: string) => {
 		const decodedJwt = JSON.parse(atob(token.split('.')[1]));
 		return decodedJwt.exp * 1000 < Date.now();
 	} catch (e) {
+		console.warn('Not able to decode the current Graphweaver Auth Token.');
 		return true;
 	}
 };
