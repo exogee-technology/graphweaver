@@ -104,6 +104,7 @@ export function RelationshipField<
 		console.log('**********************************\n');
 		// If the provider of this entity supports filtering, add a filter arg
 		//if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
+		// Removing this for providers that don't support filtering in apollo package
 		metadata.collectHandlerParamMetadata({
 			kind: 'arg',
 			target: target.constructor, // class that called this decorator 	@RelationshipField<Task>(() => User, { id: 'userId' })

@@ -18,6 +18,7 @@ import {
 
 import type { CorsPluginOptions } from './plugins';
 import { EntityMetadataMap, TypeMap } from '@exogee/graphweaver';
+import { ArgParamMetadata } from 'type-graphql/dist/metadata/definitions';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -115,34 +116,87 @@ export default class Graphweaver<TContext extends BaseContext> {
 		/******************************************************* */
 		const metadata = getMetadataStorage();
 		console.log(metadata);
+		console.log(EntityMetadataMap);
 
-		// For each of the EntityMetadataMap entries, look at the provider and if filtering is supported, add the filter type to the schema
-		for (const entityMetadata of EntityMetadataMap.values()) {
-			if (entityMetadata.provider.backendProviderConfig?.filter?.childByChild) {
-				console.log('Adding filter type for', entityMetadata);
-				// key is lowercase entity name
-				const key = entityMetadata.entity.name.toLowerCase();
+		// Type guard for params that are arg kind
+		const isArg = (param: any): param is ArgParamMetadata => {
+			return param.kind === 'arg';
+		};
 
-				const getRelatedType = () => {
-					return TypeMap[`${pluralize(entityMetadata.entity.name)}ListFilter`];
-				};
-				const target = entityMetadata.entity.target;
-				metadata.collectHandlerParamMetadata({
-					kind: 'arg',
-					target, // class that called this decorator
-					//@RelationshipField<Task>(() => User, { id: 'userId' })
-					// task is the target
-					methodName: pluralize(key),
-					index: 3,
-					name: 'filter',
-					description: 'Filter the related entities',
-					deprecationReason: undefined,
-					getType: getRelatedType,
-					typeOptions: { nullable: true },
-					validate: undefined,
-				});
+		// Remove the filter arg from typegraphql metadata
+		// All RelationshipField's default to having a filter arg
+		// Check to ensure the provider supports filtering
+		metadata.params = metadata.params.filter((param) => {
+			// Don't touch non-filter params
+			if (!isArg(param) || (isArg(param) && param.name !== 'filter')) {
+				return true;
 			}
-		}
+
+			const eMapKey =
+				pluralize.singular(param.methodName).charAt(0).toUpperCase() +
+				pluralize.singular(param.methodName).slice(1);
+
+			// If this param's methodName is not in the EntityMetadataMap, don't touch it
+			if (!EntityMetadataMap.has(pluralize.singular(eMapKey))) {
+				return true;
+			}
+			const entityMetadata = EntityMetadataMap.get(pluralize.singular(eMapKey));
+			// If this provider supports filtering, keep the param, otherwise remove it
+			if (entityMetadata?.provider?.backendProviderConfig?.filter?.childByChild) {
+				return true;
+			}
+
+			console.log(param);
+			return false;
+		});
+
+		// For each of the EntityMetadataMap entries,
+		// If the provider supports filtering, add the filter type to the schema
+		// for (const entityMetadata of EntityMetadataMap.values()) {
+		// 	if (entityMetadata.provider.backendProviderConfig?.filter?.childByChild) {
+		// 		console.log('Adding filter type for', entityMetadata);
+
+		// 		// For each of the entityMetadata's fields,
+		// 		// look at the field's type and see if it is a relationship field
+		// 		for (const fieldMetadata of entityMetadata.fields) {
+		// 			const x = EntityMetadataMap.get(fieldMetadata.name);
+		// 			const type = fieldMetadata.getType();
+		// 			console.log(EntityMetadataMap.get(fieldMetadata.name));
+		// 			// if this field supports filtering, add the filter type to the schema
+		// 			if (
+		// 				EntityMetadataMap.get(fieldMetadata.name)?.provider?.backendProviderConfig?.filter
+		// 					?.childByChild
+		// 			) {
+		// 				console.log('oiiii');
+		// 			}
+		// 		}
+
+		// 		// key is lowercase entity name
+		// 		const key = entityMetadata.entity.name.toLowerCase();
+
+		// 		const getRelatedType = () => {
+		// 			return TypeMap[`${pluralize(entityMetadata.entity.name)}ListFilter`];
+		// 		};
+		// 		const target = entityMetadata.entity.target; // entityMetadata.entity.target.constructor
+		// 		// CHECK FEILDS AND LOOK FOR RELATIONSHIPS
+		// 		metadata.collectHandlerParamMetadata({
+		// 			kind: 'arg',
+		// 			target, // class that called this decorator
+		// 			// Task entity
+		// 			// @RelationshipField<Task>(() => User, { id: 'userId' })
+		// 			// task is the target
+		// 			// key is this entity
+		// 			methodName: pluralize(key),
+		// 			index: 3,
+		// 			name: 'filter',
+		// 			description: 'Filter the related entities',
+		// 			deprecationReason: undefined,
+		// 			getType: getRelatedType,
+		// 			typeOptions: { nullable: true },
+		// 			validate: undefined,
+		// 		});
+		// 	}
+		// }
 		// ******************************************************* */
 		const schema = buildSchemaSync({
 			resolvers,

@@ -326,11 +326,6 @@ export type TaskTagsArgs = {
   filter?: InputMaybe<TagsListFilter>;
 };
 
-
-export type TaskUserArgs = {
-  filter?: InputMaybe<UsersListFilter>;
-};
-
 export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
