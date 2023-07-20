@@ -132,7 +132,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 				} else if (Array.isArray(childNode)) {
 					// If we have an array, we may need to create the parent first as children need reference to the parent
 
-					// As we have updated the parent from the child, we can remove this key
+					// As are updating the parent from the child, we can remove this key
 					delete node[key as keyof Partial<G>];
 
 					// Check if we already have the parent ID
