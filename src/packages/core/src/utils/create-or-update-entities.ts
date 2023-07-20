@@ -131,26 +131,35 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 				} else if (Array.isArray(childNode)) {
 					// I we still have an array then we are updating or creating entities
 					// We need to create the parent first as the children need reference to their parent
+
+					// As we have updated the parent from the child we can remove this key
+					delete node[key as keyof Partial<G>];
+
 					// Let's start by checking if we already have the parent ID
 					let parentId = node.id;
 					if (!parentId) {
 						// We don't have an ID this means the parent needs to be created first
 						parentId = undefined;
 					}
-					const childEntities = childNode.map((child) => {
-						console.log(child);
-						return { ...child, artist: { id: parentId } };
-					});
+
+					// Add parent ID to children
+					const childMeta = getMeta(relatedEntity.name);
+					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
+					if (!parentField)
+						throw new Error(
+							`Implementation Error: No parent field found for ${relatedEntity.name}`
+						);
+					const childEntities = childNode.map((child) => ({
+						...child,
+						[parentField.name]: { id: parentId },
+					}));
 					await callChildMutation(
 						getMutationName(relatedEntity.name, childEntities),
 						childEntities,
 						info,
 						context
 					);
-
-					// As we have updated the parent from the child we can remove this key
-					delete node[key as keyof Partial<G>];
-				} else {
+				} else if (Object.keys(childNode).length === 1) {
 					// lastly if we are only creating or updating a single object then we can call this first and then give the parent reference
 					const result = await callChildMutation(
 						getMutationName(relatedEntity.name, childNode),

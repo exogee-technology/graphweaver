@@ -31,7 +31,7 @@ describe('nested create', () => {
 		expect(data?.createAlbum?.artist?.name).toBe('string');
 	});
 
-	test.only('should create an artist and an album', async () => {
+	test('should create an artist and an album', async () => {
 		const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
 			.mutate(
 				gql`
