@@ -17,7 +17,7 @@ export interface RestDataAccessor<T> {
 }
 
 export class RestBackendProvider<D extends DE, G extends GE<D>>
-	implements Provider<D, G, BackendProviderConfig>
+	implements Provider<D, G, Partial<BackendProviderConfig>>
 {
 	public readonly backendId = 'rest-api';
 	public constructor(
