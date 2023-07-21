@@ -5,6 +5,8 @@ import { BaseLoaders } from '../base-loader';
 import {
 	BaseContext,
 	BaseDataEntity,
+	EntityMetadataMap,
+	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphQLResolveInfo,
@@ -12,6 +14,8 @@ import {
 	ReadHookParams,
 	hookManagerMap,
 } from '..';
+import { TypeMap } from '../common/types';
+import pluralize from 'pluralize';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
@@ -43,6 +47,10 @@ export function RelationshipField<
 			returnTypeFunc,
 			typeOptions: { nullable },
 		});
+		const typeName = key.charAt(0).toUpperCase() + key.slice(1);
+		const getRelatedType = () => {
+			return TypeMap[`${pluralize(typeName)}ListFilter`];
+		};
 
 		// next we need to add the below function as a field resolver
 		metadata.collectClassFieldMetadata({
@@ -89,8 +97,27 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
+		// Create filter arg for all relationship fields - we filter these by data provider support in the apollo package
+		metadata.collectHandlerParamMetadata({
+			kind: 'arg',
+			target: target.constructor,
+			methodName: key,
+			index: 3,
+			name: 'filter',
+			description: 'Filter the related entities',
+			deprecationReason: undefined,
+			getType: getRelatedType,
+			typeOptions: { nullable: true },
+			validate: undefined,
+		});
+
 		// we then declare the field resolver for this field:
-		const fieldResolver = async (root: any, info: GraphQLResolveInfo, context: BaseContext) => {
+		const fieldResolver = async (
+			root: any,
+			info: GraphQLResolveInfo,
+			context: BaseContext,
+			filter?: Filter<D>
+		) => {
 			const idValue = !id
 				? undefined
 				: typeof id === 'function'
@@ -104,7 +131,11 @@ export function RelationshipField<
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
-			const filter = idValue ? { id: idValue } : { [relatedField as string]: { id: root.id } };
+			const relatedEntityFilter = filter
+				? filter
+				: idValue
+				? { id: idValue }
+				: { [relatedField as string]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
 				args: { filter },
@@ -124,6 +155,7 @@ export function RelationshipField<
 					gqlEntityType,
 					relatedField: relatedField,
 					id: root.id,
+					filter: relatedEntityFilter,
 				});
 			}
 

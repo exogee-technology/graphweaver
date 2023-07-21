@@ -10,23 +10,32 @@ import { inMemoryFilterFor } from '../../utils';
 @Resolver((of) => User)
 export class UserResolver extends createBaseResolver<User, RestUser>(
 	User,
-	new RestBackendProvider('User', {
-		find: async ({ filter }: AccessorParams) => {
-			const { results } = await fetch<RestUser>(`/people`);
+	new RestBackendProvider(
+		'User',
+		{
+			find: async ({ filter }: AccessorParams) => {
+				const { results } = await fetch<RestUser>(`/people`);
 
-			for (const person of results) {
-				const [_, __, id] = (url.parse(person.url).pathname?.split('/') || []).filter(
-					(part) => part
-				);
-				(person as RestUser & { id: string }).id = id || person.url;
-			}
+				for (const person of results) {
+					const [_, __, id] = (url.parse(person.url).pathname?.split('/') || []).filter(
+						(part) => part
+					);
+					(person as RestUser & { id: string }).id = id || person.url;
+				}
 
-			if (filter) {
-				const memoryFilter = inMemoryFilterFor(filter);
-				return results.filter(memoryFilter);
-			}
+				if (filter) {
+					const memoryFilter = inMemoryFilterFor(filter);
+					return results.filter(memoryFilter);
+				}
 
-			return results;
+				return results;
+			},
 		},
-	})
+		// This overwrites default options
+		{
+			filter: {
+				root: true, // this is sorted in memory above
+			},
+		}
+	)
 ) {}

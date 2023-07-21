@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver-monorepo",
-	"description": "GraphWeaver: Quickly build a GraphQL server using type-graphql and dataloader",
+	"description": "Graphweaver: Quickly build a GraphQL server using type-graphql and dataloader",
 	"private": true,
 	"license": "MIT",
 	"repository": {
@@ -12,7 +12,7 @@
 		"build:types": "turbo --filter \"!./examples/**\" build:types",
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
 		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
-		"clean": "./clean.sh",
+		"clean": "./clean.sh && pnpm build",
 		"format": "pnpm prettier",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
 		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",

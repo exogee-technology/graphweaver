@@ -59,7 +59,7 @@ export type Filter<G> = {
 
 // D = Data entity returned from the datastore
 // G = GraphQL entity
-export interface BackendProvider<D, G> {
+export interface BackendProvider<D, G, BackendProviderConfig> {
 	// This is used for query splitting, so we know where to break your
 	// queries when you query across data sources.
 	readonly backendId: string;
@@ -93,6 +93,7 @@ export interface BackendProvider<D, G> {
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
 
+	backendProviderConfig?: BackendProviderConfig;
 	plugins?: ApolloServerPlugin<ApolloBaseContext>[];
 }
 
@@ -149,4 +150,23 @@ export enum RelationshipType {
 	MANY_TO_ONE = 'MANY_TO_ONE',
 	MANY_TO_MANY = 'MANY_TO_MANY',
 	ONE_TO_MANY = 'ONE_TO_MANY',
+}
+
+export interface BackendProviderConfig {
+	filter: {
+		root: boolean;
+		parentByChild: boolean;
+		childByChild: boolean;
+	};
+	pagination: {
+		root: boolean;
+		offset: boolean;
+		limit: boolean;
+	};
+	orderBy: {
+		root: boolean;
+	};
+	sort: {
+		root: boolean;
+	};
 }

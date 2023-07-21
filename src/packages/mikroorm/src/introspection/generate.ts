@@ -19,6 +19,7 @@ import {
 	SchemaEntityIndexFile,
 	DatabaseFile,
 } from './files';
+import { pascalToCamelCaseString } from './utils';
 
 const CONNECTION_MANAGER_ID = 'generate';
 
@@ -56,11 +57,15 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 				if (inverseProp) inverseProp.inversedBy = newProp.name;
 
 				if (prop.reference === ReferenceType.MANY_TO_ONE) {
+					const name = pascalToCamelCaseString(meta.tableName);
+					newProp.name = pluralize(name);
 					newProp.reference = ReferenceType.ONE_TO_MANY;
 				} else if (prop.reference === ReferenceType.ONE_TO_ONE && !prop.mappedBy) {
 					newProp.reference = ReferenceType.ONE_TO_ONE;
 					newProp.nullable = true;
 				} else if (prop.reference === ReferenceType.MANY_TO_MANY && !prop.mappedBy) {
+					const name = pascalToCamelCaseString(meta.tableName);
+					newProp.name = pluralize(name);
 					newProp.reference = ReferenceType.MANY_TO_MANY;
 				} else {
 					continue;
@@ -84,11 +89,9 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 			meta.pivotTable = true;
 			const owner = metadata.find((m) => m.className === meta.relations[0].type);
 			if (!owner) throw new Error('No Owner');
-			const name = namingStrategy.columnNameToProperty(
-				meta.tableName.replace(new RegExp('^' + owner.tableName + '_'), '')
-			);
+			const name = pascalToCamelCaseString(meta.relations?.[1]?.type);
 			owner.addProperty({
-				name,
+				name: pluralize(name),
 				reference: ReferenceType.MANY_TO_MANY,
 				pivotTable: meta.tableName,
 				type: meta.relations[1].type,
@@ -103,6 +106,8 @@ const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		for (const prop of meta.relations) {
 			if ([ReferenceType.MANY_TO_ONE, ReferenceType.ONE_TO_ONE].includes(prop.reference)) {
+				const name = pascalToCamelCaseString(prop.referencedTableName);
+				prop.name = pluralize.singular(name);
 				prop.wrappedReference = true;
 			}
 		}
@@ -115,6 +120,16 @@ const generateSingularTypeReferences = (metadata: EntityMetadata[]): void => {
 		for (const prop of meta.relations) {
 			prop.type = pluralize.singular(prop.type);
 		}
+	}
+};
+
+// Convert properties like FirstName to firstName
+const convertToCamelCasePropertyNames = (metadata: EntityMetadata[]): void => {
+	for (const meta of metadata.filter((m) => !m.pivotTable)) {
+		const props = Object.values(meta.properties);
+		props.forEach((prop) => {
+			prop.name = pascalToCamelCaseString(prop.name);
+		});
 	}
 };
 
@@ -139,6 +154,7 @@ const convertSchemaToMetadata = async (
 		);
 	}
 
+	convertToCamelCasePropertyNames(metadata);
 	detectManyToManyRelations(metadata, namingStrategy);
 	generateIdentifiedReferences(metadata);
 	generateBidirectionalRelations(metadata);
