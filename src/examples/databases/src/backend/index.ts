@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import Graphweaver from '@exogee/graphweaver-apollo';
+import Graphweaver from '@exogee/graphweaver-server';
 import { connectToDatabase } from '@exogee/graphweaver-mikroorm';
 
 import { resolvers } from './schema';

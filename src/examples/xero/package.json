@@ -28,7 +28,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@exogee/graphweaver-apollo": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",

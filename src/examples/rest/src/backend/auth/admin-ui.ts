@@ -1,4 +1,4 @@
-import { MetadataHookParams } from '@exogee/graphweaver-apollo';
+import { MetadataHookParams } from '@exogee/graphweaver-server';
 import { AuthorizationContext, ForbiddenError } from '@exogee/graphweaver-auth';
 import { Roles } from '..';
 
