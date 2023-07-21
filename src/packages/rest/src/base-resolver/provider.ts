@@ -4,6 +4,7 @@ import {
 	Filter,
 	GraphQLEntity as GE,
 	PaginationOptions,
+	BackendProviderConfig,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -15,9 +16,35 @@ export interface RestDataAccessor<T> {
 	find: (args: AccessorParams) => Promise<T[]>;
 }
 
-export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provider<D, G> {
+export class RestBackendProvider<D extends DE, G extends GE<D>>
+	implements Provider<D, G, BackendProviderConfig>
+{
 	public readonly backendId = 'rest-api';
-	public constructor(protected entityTypeName: string, protected accessor?: RestDataAccessor<D>) {}
+	public constructor(
+		protected entityTypeName: string,
+		protected accessor?: RestDataAccessor<D>,
+		backendProviderConfig?: BackendProviderConfig
+	) {}
+
+	// Default backend provider config
+	public readonly backendProviderConfig: BackendProviderConfig = {
+		filter: {
+			root: false,
+			parentByChild: false,
+			childByChild: false,
+		},
+		pagination: {
+			root: false,
+			offset: false,
+			limit: false,
+		},
+		orderBy: {
+			root: false,
+		},
+		sort: {
+			root: false,
+		},
+	};
 
 	// GET METHODS
 	public async find(filter: Filter<G>, pagination?: PaginationOptions): Promise<D[]> {

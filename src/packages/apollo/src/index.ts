@@ -1,5 +1,5 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
-import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { AuthChecker, buildSchemaSync, getMetadataStorage } from 'type-graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { logger } from '@exogee/logger';
@@ -16,7 +16,8 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
+import { EntityMetadataMap } from '@exogee/graphweaver';
+import { removeInvalidFilterArg } from './typegraphql-params';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -111,6 +112,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+
+		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
+		removeInvalidFilterArg();
 
 		const schema = buildSchemaSync({
 			resolvers,

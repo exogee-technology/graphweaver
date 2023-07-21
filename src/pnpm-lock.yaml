@@ -451,6 +451,9 @@ importers:
       graphql-deduplicator:
         specifier: 2.0.6
         version: 2.0.6
+      pluralize:
+        specifier: 8.0.0
+        version: 8.0.0
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.6.0)
@@ -458,6 +461,9 @@ importers:
       '@types/graphql-deduplicator':
         specifier: 2.0.0
         version: 2.0.0
+      '@types/pluralize':
+        specifier: 0.0.29
+        version: 0.0.29
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -6513,7 +6519,11 @@ packages:
     resolution: {integrity: sha512-OTVoDm039CNyAWSRc2WBimMl/N9J4Fk2le21Xzcf+3OiWPNNSIbMnpWKBUyraPh2d9SAEgoBdQxTfVNihXgiUw==}
     engines: {node: '>=16.0.0'}
     dependencies:
+<<<<<<< HEAD
+      '@whatwg-node/node-fetch': 0.4.9
+=======
       '@whatwg-node/node-fetch': 0.4.11
+>>>>>>> main
       urlpattern-polyfill: 9.0.0
     dev: false
 
@@ -6527,8 +6537,13 @@ packages:
       tslib: 2.6.0
     dev: false
 
+<<<<<<< HEAD
+  /@whatwg-node/node-fetch@0.4.9:
+    resolution: {integrity: sha512-0W9tV/RGOm/VlwvxjgBXTA7J3a0nwufjNi6VJEAQQR/pgQkBV6rQsC+GMy6LMlaAjPi6Fg0/Zp9wuRXb/trC9g==}
+=======
   /@whatwg-node/node-fetch@0.4.11:
     resolution: {integrity: sha512-JRMx/yrBW/PXUH+0EIurUIQtAsEMrHtZBBKv6b+YCK1yG7pMNqtkl5Z39Rynq8ysVc/I6yTtNwkCy9bz5To1vw==}
+>>>>>>> main
     engines: {node: '>=16.0.0'}
     dependencies:
       '@whatwg-node/events': 0.1.1
@@ -7172,8 +7187,13 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
+<<<<<<< HEAD
+      caniuse-lite: 1.0.30001516
+      electron-to-chromium: 1.4.464
+=======
       caniuse-lite: 1.0.30001517
       electron-to-chromium: 1.4.467
+>>>>>>> main
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.9)
 
@@ -7354,8 +7374,13 @@ packages:
     engines: {node: '>=14.16'}
     dev: false
 
+<<<<<<< HEAD
+  /caniuse-lite@1.0.30001516:
+    resolution: {integrity: sha512-Wmec9pCBY8CWbmI4HsjBeQLqDTqV91nFVR83DnZpYyRnPI1wePDsTg0bGLPC5VU/3OIZV1fmxEea1b+tFKe86g==}
+=======
   /caniuse-lite@1.0.30001517:
     resolution: {integrity: sha512-Vdhm5S11DaFVLlyiKu4hiUTkpZu+y1KA/rZZqVQfOD5YdDT/eQKlkt7NaE0WGOFgX32diqt9MiP9CAiFeRklaA==}
+>>>>>>> main
 
   /capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -8293,8 +8318,13 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: false
 
+<<<<<<< HEAD
+  /electron-to-chromium@1.4.464:
+    resolution: {integrity: sha512-guZ84yoou4+ILNdj0XEbmGs6DEWj6zpVOWYpY09GU66yEb0DSYvP/biBPzHn0GuW/3RC/pnaYNUWlQE1fJYtgA==}
+=======
   /electron-to-chromium@1.4.467:
     resolution: {integrity: sha512-2qI70O+rR4poYeF2grcuS/bCps5KJh6y1jtZMDDEteyKJQrzLOEhFyXCLcHW6DTBjKjWkk26JhWoAi+Ux9A0fg==}
+>>>>>>> main
 
   /emittery@0.13.1:
     resolution: {integrity: sha512-DeWwawk6r5yR9jFgnDKYt4sLS0LmHJJi3ZOnb5/JdbYwj3nW+FxQnHIjhBKz8YLC7oRNPVM9NQ47I3CVx34eqQ==}
@@ -8948,7 +8978,7 @@ packages:
     dev: true
 
   /events@1.1.1:
-    resolution: {integrity: sha512-kEcvvCBByWXGnZy6JUlgAp2gBIUjfCAV6P6TgT1/aaQKcmuAEC4OZTV1I4EWQLz2gxZw76atuVyvHhTxvi0Flw==}
+    resolution: {integrity: sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=}
     engines: {node: '>=0.4.x'}
     dev: false
 
@@ -11514,7 +11544,7 @@ packages:
     dev: false
 
   /long-timeout@0.1.1:
-    resolution: {integrity: sha1-lyHXiLR+C8taJMLivuGg2lXatRQ=}
+    resolution: {integrity: sha512-BFRuQUqc7x2NWxfJBCyUrN8iYUYznzL9JROmRz1gZ6KlOIgmoD+njPVbb+VNn2nGMKggMsK79iUNErillsrx7w==}
     dev: false
 
   /long@4.0.0:
@@ -14862,7 +14892,7 @@ packages:
     dev: false
 
   /verror@1.10.0:
-    resolution: {integrity: sha512-ZZKSmDAEFOijERBLkmYfJ+vmk3w+7hOLYDNkRCuRuMJGEmqYNCNLyBBFwWKVMhfwaEF3WOd0Zlw86U/WC/+nYw==}
+    resolution: {integrity: sha1-OhBcoXBTr1XW4nDB+CiGguGNpAA=}
     engines: {'0': node >=0.6.0}
     dependencies:
       assert-plus: 1.0.0

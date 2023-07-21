@@ -80,6 +80,14 @@ export type Album = {
 	tracks?: Maybe<Array<Track>>;
 };
 
+export type AlbumArtistArgs = {
+	filter?: InputMaybe<ArtistsListFilter>;
+};
+
+export type AlbumTracksArgs = {
+	filter?: InputMaybe<TracksListFilter>;
+};
+
 export type AlbumCreateOrUpdateInput = {
 	artist?: InputMaybe<ArtistCreateOrUpdateInput>;
 	id?: InputMaybe<Scalars['ID']['input']>;
@@ -143,6 +151,10 @@ export type Artist = {
 	albums?: Maybe<Array<Album>>;
 	id: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
+};
+
+export type ArtistAlbumsArgs = {
+	filter?: InputMaybe<AlbumsListFilter>;
 };
 
 export type ArtistCreateOrUpdateInput = {
@@ -217,6 +229,14 @@ export type Customer = {
 	phone?: Maybe<Scalars['String']['output']>;
 	postalCode?: Maybe<Scalars['String']['output']>;
 	state?: Maybe<Scalars['String']['output']>;
+};
+
+export type CustomerEmployeeArgs = {
+	filter?: InputMaybe<EmployeesListFilter>;
+};
+
+export type CustomerInvoicesArgs = {
+	filter?: InputMaybe<InvoicesListFilter>;
 };
 
 export type CustomerCreateOrUpdateInput = {
@@ -407,6 +427,18 @@ export type Employee = {
 	postalCode?: Maybe<Scalars['String']['output']>;
 	state?: Maybe<Scalars['String']['output']>;
 	title?: Maybe<Scalars['String']['output']>;
+};
+
+export type EmployeeCustomersArgs = {
+	filter?: InputMaybe<CustomersListFilter>;
+};
+
+export type EmployeeEmployeeArgs = {
+	filter?: InputMaybe<EmployeesListFilter>;
+};
+
+export type EmployeeEmployeesArgs = {
+	filter?: InputMaybe<EmployeesListFilter>;
 };
 
 export type EmployeeCreateOrUpdateInput = {
@@ -614,6 +646,10 @@ export type Genre = {
 	tracks?: Maybe<Array<Track>>;
 };
 
+export type GenreTracksArgs = {
+	filter?: InputMaybe<TracksListFilter>;
+};
+
 export type GenreCreateOrUpdateInput = {
 	id?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
@@ -684,6 +720,14 @@ export type Invoice = {
 	total: Scalars['String']['output'];
 };
 
+export type InvoiceCustomerArgs = {
+	filter?: InputMaybe<CustomersListFilter>;
+};
+
+export type InvoiceInvoiceLinesArgs = {
+	filter?: InputMaybe<InvoiceLinesListFilter>;
+};
+
 export type InvoiceCreateOrUpdateInput = {
 	billingAddress?: InputMaybe<Scalars['String']['input']>;
 	billingCity?: InputMaybe<Scalars['String']['input']>;
@@ -716,6 +760,14 @@ export type InvoiceLine = {
 	quantity: Scalars['Float']['output'];
 	track?: Maybe<Track>;
 	unitPrice: Scalars['String']['output'];
+};
+
+export type InvoiceLineInvoiceArgs = {
+	filter?: InputMaybe<InvoicesListFilter>;
+};
+
+export type InvoiceLineTrackArgs = {
+	filter?: InputMaybe<TracksListFilter>;
 };
 
 export type InvoiceLineCreateOrUpdateInput = {
@@ -897,6 +949,10 @@ export type MediaType = {
 	id: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
 	tracks?: Maybe<Array<Track>>;
+};
+
+export type MediaTypeTracksArgs = {
+	filter?: InputMaybe<TracksListFilter>;
 };
 
 export type MediaTypeCreateOrUpdateInput = {
@@ -1263,18 +1319,22 @@ export type Playlist = {
 	__typename?: 'Playlist';
 	id: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
-	playlistTrack?: Maybe<Array<Track>>;
+	tracks?: Maybe<Array<Track>>;
+};
+
+export type PlaylistTracksArgs = {
+	filter?: InputMaybe<TracksListFilter>;
 };
 
 export type PlaylistCreateOrUpdateInput = {
 	id?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
-	playlistTrack?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
+	tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
 export type PlaylistInsertInput = {
 	name?: InputMaybe<Scalars['String']['input']>;
-	playlistTrack?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
+	tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
 export type PlaylistsCreateOrUpdateManyInput = {
@@ -1303,13 +1363,13 @@ export type PlaylistsListFilter = {
 	name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
 	name_notnull?: InputMaybe<Scalars['String']['input']>;
 	name_null?: InputMaybe<Scalars['String']['input']>;
-	playlistTrack?: InputMaybe<TracksListFilter>;
+	tracks?: InputMaybe<TracksListFilter>;
 };
 
 export type PlaylistsOrderByInput = {
 	id?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
-	playlistTrack?: InputMaybe<Sort>;
+	tracks?: InputMaybe<Sort>;
 };
 
 export type PlaylistsPaginationInput = {
@@ -1455,6 +1515,26 @@ export type Track = {
 	name: Scalars['String']['output'];
 	playlists?: Maybe<Array<Playlist>>;
 	unitPrice: Scalars['String']['output'];
+};
+
+export type TrackAlbumArgs = {
+	filter?: InputMaybe<AlbumsListFilter>;
+};
+
+export type TrackGenreArgs = {
+	filter?: InputMaybe<GenresListFilter>;
+};
+
+export type TrackInvoiceLinesArgs = {
+	filter?: InputMaybe<InvoiceLinesListFilter>;
+};
+
+export type TrackMediaTypeArgs = {
+	filter?: InputMaybe<MediaTypesListFilter>;
+};
+
+export type TrackPlaylistsArgs = {
+	filter?: InputMaybe<PlaylistsListFilter>;
 };
 
 export type TrackCreateOrUpdateInput = {
