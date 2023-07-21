@@ -45,7 +45,7 @@ jobs:
         run: |
           pnpm backup-pnpm-workspace
           pnpm create-app
-          restore-pnpm-workspace
+          pnpm restore-pnpm-workspace
 
       - name: Import Chinook Database
         working-directory: src/packages/end-to-end
