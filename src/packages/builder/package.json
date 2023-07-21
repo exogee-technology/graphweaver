@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-builder",
 	"version": "0.1.25",
-	"description": "A tool for building and running GraphWeaver projects",
+	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
