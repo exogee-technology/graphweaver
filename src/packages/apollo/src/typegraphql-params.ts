@@ -9,6 +9,8 @@ export const isArg = (param: any): param is ArgParamMetadata => {
 	return param.kind === 'arg';
 };
 
+// This function checks to see if the data provider supports nested child filters
+// If it does not support filtering then the filter is removed
 export const removeInvalidFilterArg = () => {
 	const typeGraphQLMetadata = getMetadataStorage();
 

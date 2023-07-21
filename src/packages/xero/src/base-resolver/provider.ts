@@ -71,7 +71,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>>
 	public constructor(
 		protected entityTypeName: string,
 		protected accessor?: XeroDataAccessor<D, G>,
-		backendProviderConfig?: Partial<BackendProviderConfig>
+		backendProviderConfig?: BackendProviderConfig
 	) {}
 
 	// Default backend provider config
