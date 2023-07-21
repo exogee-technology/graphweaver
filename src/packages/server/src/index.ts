@@ -1,5 +1,5 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
-import { AuthChecker, buildSchemaSync, getMetadataStorage } from 'type-graphql';
+import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { logger } from '@exogee/logger';

@@ -23,7 +23,7 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
 			'@exogee/graphweaver': graphweaverVersion,
 			'@exogee/graphweaver-scalars': graphweaverVersion,
-			'@exogee/graphweaver-apollo': graphweaverVersion,
+			'@exogee/graphweaver-server': graphweaverVersion,
 			graphweaver: graphweaverVersion,
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
@@ -121,7 +121,7 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} Graphweaver Project */
 import 'reflect-metadata';
-import Graphweaver from '@exogee/graphweaver-apollo';
+import Graphweaver from '@exogee/graphweaver-server';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
 import { resolvers } from './schema';
 
