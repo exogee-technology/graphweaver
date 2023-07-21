@@ -35,7 +35,6 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 				</div>
 
 				<div className={styles.toolsWrapper}>
-					<input className={styles.search} type="search" name="search" placeholder="Search..." />
 					<Link
 						className={styles.toolBarTrailingButton}
 						to={{ pathname: '/playground' }}

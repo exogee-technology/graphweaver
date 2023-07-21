@@ -1,6 +1,6 @@
 # Graphweaver Xero example
 
-An example of using GraphWeaver with Xero
+An example of using Graphweaver with Xero
 
 ## Get Started
 

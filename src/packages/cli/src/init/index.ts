@@ -27,7 +27,7 @@ export const needsDatabaseConnection = (backends: Backend[]) =>
 		[Backend.MikroOrmPostgres, Backend.MikroOrmMysql, Backend.MikroOrmSqlite].includes(backend)
 	);
 
-export const initGraphWeaver = (projectName: string, backends: Backend[], version?: string) => {
+export const initGraphweaver = (projectName: string, backends: Backend[], version?: string) => {
 	makeDirectories(projectName);
 	makeReadme(projectName);
 	makePackageJson(projectName, backends, version);
@@ -44,10 +44,10 @@ type InitOptions = {
 };
 
 export const init = async ({ version, name, backend }: InitOptions) => {
-	console.log(`GraphWeaver ${version ? 'using version ' + version : ''}\n`);
+	console.log(`Graphweaver ${version ? 'using version ' + version : ''}\n`);
 
 	if (backend && name) {
-		initGraphWeaver(name, [backend], version);
+		initGraphweaver(name, [backend], version);
 	} else {
 		const { default: inquirer } = await import('inquirer');
 
@@ -64,7 +64,7 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 			{
 				type: 'checkbox',
 				name: 'backends',
-				message: 'Which GraphWeaver backends will you need?',
+				message: 'Which Graphweaver backends will you need?',
 				choices: [
 					{
 						value: Backend.MikroOrmPostgres,
@@ -95,7 +95,7 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 		]);
 
 		if (!createDirectory) abort();
-		initGraphWeaver(projectName, backends, version);
+		initGraphweaver(projectName, backends, version);
 	}
 
 	console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
