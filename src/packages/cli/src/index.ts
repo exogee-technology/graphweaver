@@ -14,7 +14,7 @@ import { importDataSource } from './import';
 
 yargs.version(false);
 
-const MINIMUM_NODE_SUPPORTED = '16.0.0';
+const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
 yargs
 	.env('GRAPHWEAVER')
