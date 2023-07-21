@@ -4,11 +4,10 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
-		"create-app": "rm -rf ./app && node ../cli/bin init --name=app --backend=sqlite --version=\"workspace:*\"",
-		"install-app": "cd app && pnpm i --frozen-lockfile",
+		"create-app": "rm -rf ./app && node ../cli/bin init --name=app --backend=sqlite --version=\"workspace:*\" && cd app && pnpm i --no-frozen-lockfile",
 		"import-database": "cp ./database.sqlite ./app/database.sqlite && cd app && node ../../cli/bin import sqlite --database=database.sqlite",
 		"start-server": "cd app && pnpm start",
-		"dev": "pnpm create-app && pnpm install-app && pnpm import-database && pnpm start-server",
+		"dev": "pnpm create-app && pnpm import-database && pnpm start-server",
 		"test": "jest --runInBand"
 	},
 	"devDependencies": {
