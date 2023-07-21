@@ -5,6 +5,7 @@ import {
 	Filter,
 	GraphQLEntity,
 	BaseDataEntity,
+	BackendProviderConfig,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -88,7 +89,7 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEntity<D>>
-	implements BackendProvider<D, G>
+	implements BackendProvider<D, G, BackendProviderConfig>
 {
 	private _backendId: string;
 
@@ -97,6 +98,26 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	private transactionIsolationLevel!: IsolationLevel;
 
 	public readonly supportsInFilter = true;
+
+	// Default backend provider config
+	public readonly backendProviderConfig: BackendProviderConfig = {
+		filter: {
+			root: true,
+			parentByChild: true,
+			childByChild: true,
+		},
+		pagination: {
+			root: false,
+			offset: false,
+			limit: false,
+		},
+		orderBy: {
+			root: false,
+		},
+		sort: {
+			root: false,
+		},
+	};
 
 	get backendId() {
 		return this._backendId;
