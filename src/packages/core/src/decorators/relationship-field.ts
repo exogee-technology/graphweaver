@@ -97,18 +97,10 @@ export function RelationshipField<
 			propertyName: undefined,
 		});
 
-		console.log('**********************************\n');
-		console.log('typeName', typeName);
-		console.log('EntityMetadataMap.get(typeName)', EntityMetadataMap.get(typeName));
-		console.log('EntityMetadataMap', EntityMetadataMap);
-		console.log('**********************************\n');
-		// If the provider of this entity supports filtering, add a filter arg
-		//if (EntityMetadataMap.get(typeName)?.provider?.backendProviderConfig?.filter?.childByChild) {
-		// Removing this for providers that don't support filtering in apollo package
+		// Create filter arg for all relationship fields - we filter these by data provider support in the apollo package
 		metadata.collectHandlerParamMetadata({
 			kind: 'arg',
-			target: target.constructor, // class that called this decorator 	@RelationshipField<Task>(() => User, { id: 'userId' })
-			// task is the target
+			target: target.constructor,
 			methodName: key,
 			index: 3,
 			name: 'filter',
@@ -118,13 +110,7 @@ export function RelationshipField<
 			typeOptions: { nullable: true },
 			validate: undefined,
 		});
-		//}
-		console.log('target.constructor', target.constructor);
-		console.log('key', key);
-		console.log(
-			'TypeMap[`${pluralize(typeName)}ListFilter`]',
-			TypeMap[`${pluralize(typeName)}ListFilter`]
-		);
+
 		// we then declare the field resolver for this field:
 		const fieldResolver = async (
 			root: any,
