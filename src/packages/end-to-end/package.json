@@ -4,10 +4,12 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
+		"backup-lock": "cp ../../pnpm-lock.yaml ../../pnpm-lock.yaml.bak",
 		"create-app": "rm -rf ./app && node ../cli/bin init --name=app --backend=sqlite --version=\"workspace:*\" && cd app && pnpm i --no-frozen-lockfile",
+		"restore-lock": "cp ../../pnpm-lock.yaml.bak ../../pnpm-lock.yaml && rm ../../pnpm-lock.yaml.bak",
 		"import-database": "cp ./database.sqlite ./app/database.sqlite && cd app && node ../../cli/bin import sqlite --database=database.sqlite",
 		"start-server": "cd app && pnpm start",
-		"dev": "pnpm create-app && pnpm import-database && pnpm start-server",
+		"dev": "pnpm backup-lock && pnpm create-app && pnpm restore-lock && pnpm import-database && pnpm start-server",
 		"test": "jest --runInBand"
 	},
 	"devDependencies": {
