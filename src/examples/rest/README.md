@@ -1,6 +1,6 @@
 # REST with MySql Databases
 
-It is possible to connect a database and an external REST API to GraphWeaver and expose the data via the GraphQL API.
+It is possible to connect a database and an external REST API to Graphweaver and expose the data via the GraphQL API.
 
 This example demonstrates how to do that with MySQL and the Star Wars API.
 
