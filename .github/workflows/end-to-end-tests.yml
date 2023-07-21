@@ -44,6 +44,7 @@ jobs:
         working-directory: src/packages/end-to-end
         run: |
           pnpm create-app
+          cd app && pnpm i --no-frozen-lockfile
 
       - name: Import Chinook Database
         working-directory: src/packages/end-to-end
