@@ -60,7 +60,7 @@ const callChildMutation = async <G>(
 		schema: info.schema,
 		operation: OperationTypeNode.MUTATION,
 		fieldName: mutationName,
-		args: { input: { data } },
+		args: Array.isArray(data) ? { input: { data } } : { data },
 		context,
 		info,
 	});
@@ -99,7 +99,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 	const gqlEntityType: GraphqlEntityType<G, D> = meta.entity.target;
 
 	if (Array.isArray(input)) {
-		// Here we have an array nothing to do but loop through them
+		// If input is an array, loop through the elements
 		const nodes: Partial<G>[] = [];
 		for (const node of input) {
 			const updatedNode = await createOrUpdateEntities(node, entityTypeName, info, context);
@@ -110,13 +110,15 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 		}
 		return nodes;
 	} else if (isObject(input)) {
-		// Here we have an object so now we need to find any related entities and see if we need to update or create them
-
+		// If input is an object, check for nested entities and update/create them
 		let node = { ...input };
-		// Lets loop through the properties and check for nested entities
-		for (const entry of Object.entries(input)) {
-			const [key, childNode] = entry;
+		let parent: G | undefined = undefined;
 
+		// Loop through the properties and check for nested entities
+		for (const entry of Object.entries(input)) {
+			const [key, childNode]: [string, Partial<G> | Partial<G>[]] = entry;
+
+			// Check if the property represents a related entity
 			const relationship = meta.fields.find((field) => field.name === key);
 			const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
 				GraphQLEntity<BaseDataEntity>,
@@ -125,32 +127,69 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 			const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
 
 			if (isRelatedEntity) {
-				// We have a related entity so lets check if we need to do an update or create
-				const result = isLinking(childNode) // if all entities are in the format {id: ""} then we are just linking the entity
-					? childNode
-					: await callChildMutation(
-							getMutationName(relatedEntity.name, childNode),
-							childNode,
-							info,
-							context
-					  );
-				node = {
-					...node,
-					[key]: result,
-				};
+				if (isLinking(childNode)) {
+					// If it's a linking entity or an array of linking entities, nothing to do here
+				} else if (Array.isArray(childNode)) {
+					// If we have an array, we may need to create the parent first as children need reference to the parent
+
+					// As are updating the parent from the child, we can remove this key
+					delete node[key as keyof Partial<G>];
+
+					// Check if we already have the parent ID
+					let parentId = node.id ?? parent?.id;
+					if (!parentId && !parent) {
+						// If there's no ID, create the parent first
+						const parentDataEntity = await meta.provider.createOne(node);
+						parent = fromBackendEntity(parentDataEntity, gqlEntityType);
+						parentId = parent?.id;
+					}
+					if (!parentId) {
+						throw new Error(`Implementation Error: No parent id found for ${relatedEntity.name}`);
+					}
+
+					// Add parent ID to children and perform the mutation
+					const childMeta = getMeta(relatedEntity.name);
+					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
+					if (!parentField) {
+						throw new Error(
+							`Implementation Error: No parent field found for ${relatedEntity.name}`
+						);
+					}
+					const childEntities = childNode.map((child) => ({
+						...child,
+						[parentField.name]: { id: parentId },
+					}));
+
+					// Now create/update the children
+					const mutationName = getMutationName(relatedEntity.name, childEntities);
+					await callChildMutation(mutationName, childEntities, info, context);
+					// on the next line lets make sure we have an object with at least 1 key
+				} else if (Object.keys(childNode).length > 0) {
+					// If only one object, create or update it first, then update the parent reference
+					const mutationName = getMutationName(relatedEntity.name, childNode);
+					const result = await callChildMutation(mutationName, childNode, info, context);
+
+					node = {
+						...node,
+						[key]: result,
+					};
+				}
 			}
 		}
 
 		// Down here we have an entity and let's check if we need to create or update
-		if (isIdOnly(node)) {
-			// Nothing to do here we are just attaching the id
+		if (parent) {
+			// We needed to create the parent earlier, no need to create it again
+			return parent;
+		} else if (isIdOnly(node)) {
+			// If it's just an ID, return it as is
 			return node;
 		} else if ('id' in node && node.id && Object.keys(node).length > 1) {
-			// We have an object like this {id: 1, name: "test"} so we need to update the name property
+			// If it's an object with an ID and other properties, update the entity
 			const result = await meta.provider.updateOne(node.id, node);
 			return fromBackendEntity(result, gqlEntityType);
 		} else {
-			// We have an object like {name: "test"} so we need to perform a create
+			// If it's an object without an ID, create a new entity
 			const result = await meta.provider.createOne(node);
 			return fromBackendEntity(result, gqlEntityType);
 		}

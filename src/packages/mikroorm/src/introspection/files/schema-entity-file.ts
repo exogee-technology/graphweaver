@@ -8,6 +8,8 @@ import type {
 import { ReferenceType, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
+import { pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
+import pluralize from 'pluralize';
 
 export class SchemaEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -24,7 +26,7 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	getBasePath() {
-		const dirName = this.pascalToKebabCaseString(this.meta.className);
+		const dirName = pascalToKebabCaseString(this.meta.className);
 		return `backend/schema/${dirName}/`;
 	}
 
@@ -92,7 +94,7 @@ export class SchemaEntityFile extends BaseFile {
 
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
-			imports.push(`import { ${entity} } from '../${this.pascalToKebabCaseString(entity)}';`);
+			imports.push(`import { ${entity} } from '../${pascalToKebabCaseString(entity)}';`);
 		});
 
 		imports.push(
@@ -231,8 +233,7 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		const relatedField = prop.inversedBy ? prop.inversedBy : prop.mappedBy;
-		options.relatedField = this.quote(relatedField);
+		options.relatedField = this.quote(pluralize(pascalToCamelCaseString(this.meta.className)));
 	}
 
 	protected getOneToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
