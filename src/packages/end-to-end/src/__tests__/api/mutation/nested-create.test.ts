@@ -31,8 +31,8 @@ describe('nested create', () => {
 		expect(data?.createAlbum?.artist?.name).toBe('string');
 	});
 
-	test.skip('should create an artist and an album', async () => {
-		const { data } = await request<{ createAlbum: Artist }>(config.baseUrl)
+	test('should create an artist and an album', async () => {
+		const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
 			.mutate(
 				gql`
 					mutation CreateArtist($data: ArtistInsertInput!) {
@@ -49,8 +49,31 @@ describe('nested create', () => {
 			.variables({ data: { albums: [{ title: 'string' }], name: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.createAlbum?.id).toBe('348');
-		expect(data?.createAlbum?.albums?.[0]?.id).toBe('276');
-		expect(data?.createAlbum?.albums?.[0]?.title).toBe('string');
+		expect(data?.createArtist?.id).toBe('276');
+		expect(data?.createArtist?.albums?.[0]?.id).toBe('348');
+		expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
+	});
+
+	test('should update an artist and create an album', async () => {
+		const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
+			.mutate(
+				gql`
+					mutation UpdateArtist($data: ArtistCreateOrUpdateInput!) {
+						updateArtist(data: $data) {
+							id
+							albums {
+								id
+								title
+							}
+						}
+					}
+				`
+			)
+			.variables({ data: { albums: [{ title: 'string' }], id: '1' } })
+			.expectNoErrors();
+
+		expect(data?.updateArtist?.id).toBe('1');
+		expect(data?.updateArtist?.albums?.map((album) => album.id)).toContain('348');
+		expect(data?.updateArtist?.albums?.map((album) => album.title)).toContain('string');
 	});
 });

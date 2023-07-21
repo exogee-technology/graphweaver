@@ -1,10 +1,9 @@
 ---
 name: Bug report
-about: Create a bug report to help improve GraphWeaver
-title: ''
-labels: ''
-assignees: ''
-
+about: Create a bug report to help improve Graphweaver
+title: ""
+labels: ""
+assignees: ""
 ---
 
 **Describe the bug**
@@ -12,6 +11,7 @@ A brief but clear and concise description of what the issue is.
 
 **To Reproduce**
 Steps to reproduce the behavior:
+
 1. Go to '...'
 2. Click on '....'
 3. Scroll down to '....'
@@ -27,7 +27,8 @@ What actually happened.
 If applicable, add screenshots or screencasts to help explain the issue.
 
 **Desktop (please complete the following information):**
- - OS and version: [e.g. MacOS 13.3.1, Windows 11 v22H2]
+
+- OS and version: [e.g. MacOS 13.3.1, Windows 11 v22H2]
 
 **Additional context**
 Add any other context about the problem here.

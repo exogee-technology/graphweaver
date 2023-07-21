@@ -6,11 +6,11 @@
 </p>
 
 <!-- PROJECT TITLE -->
-<h1 align="center">GraphWeaver</h1>
+<h1 align="center">Graphweaver</h1>
 
 <!-- PROJECT DESCRIPTION -->
 <p align="center">
-  Welcome to GraphWeaver! This open source project allows you to seamlessly weave together complex graph structures, unlocking powerful data visualization and analysis capabilities.
+  Welcome to Graphweaver! This open source project allows you to seamlessly weave together complex graph structures, unlocking powerful data visualization and analysis capabilities.
 </p>
 
 <!-- PROJECT STATUS -->
@@ -45,7 +45,7 @@
 
 ## About
 
-GraphWeaver allows you to build modern applications which accept that they are not the source of truth for all data in the application. Seamlessly join multiple backend services including REST APIs, databases, and SaaS platforms into a single GraphQL API, then administer the data in all of those places.
+Graphweaver allows you to build modern applications which accept that they are not the source of truth for all data in the application. Seamlessly join multiple backend services including REST APIs, databases, and SaaS platforms into a single GraphQL API, then administer the data in all of those places.
 
 Never replicate your data again.
 
@@ -53,7 +53,7 @@ Never replicate your data again.
 
 ## Documentation
 
-Comprehensive documentation and usage examples can be found on our [Docs Site](https://docs.graphweaver.com). It covers installation instructions, detailed API documentation, and guides to help you get started with GraphWeaver.
+Comprehensive documentation and usage examples can be found on our [Docs Site](https://docs.graphweaver.com). It covers installation instructions, detailed API documentation, and guides to help you get started with Graphweaver.
 
 <!-- QUICK START -->
 
@@ -64,7 +64,7 @@ Before we start the installer make sure you are running:
 - Node `>16.*`
 - PNPM `>7.*`
 
-With those two installed you can create a new project with the **GraphWeaver CLI**, by running:
+With those two installed you can create a new project with the **Graphweaver CLI**, by running:
 
 `npx graphweaver@latest init`
 
@@ -74,7 +74,7 @@ The prompts will ask you which backends to install, and create a scaffold projec
 ? What would your like to call your new project?
 test-project
 
-? Which GraphWeaver backends will you need?
+? Which Graphweaver backends will you need?
  ◯ MikroORM - PostgreSQL Backend
  ◯ MikroORM - MySQL Backend
  ◯ REST Backend
@@ -104,7 +104,7 @@ Explore the Admin UI and start weaving your own graphs!
 
 ## Contributing
 
-We welcome contributions from the community! If you're interested in improving GraphWeaver, please refer to our Contribution Guidelines for detailed instructions.
+We welcome contributions from the community! If you're interested in improving Graphweaver, please refer to our Contribution Guidelines for detailed instructions.
 
 ### Publishing
 

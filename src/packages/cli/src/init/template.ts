@@ -13,7 +13,7 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 	const packageJson = {
 		name: projectName,
 		version: '0.1.0',
-		description: `${projectName} GraphWeaver Project`,
+		description: `${projectName} Graphweaver Project`,
 		scripts: {
 			build: 'graphweaver build',
 			start: 'graphweaver start',
@@ -119,7 +119,7 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 	const hasDatabaseConnections = needsDatabaseConnection(backends);
 
 	const index = `\
-/* ${projectName} GraphWeaver Project */
+/* ${projectName} Graphweaver Project */
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-apollo';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
@@ -141,7 +141,7 @@ export const handler = graphweaver.handler();
 
 export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
-/* ${projectName} GraphWeaver Project - Schema */
+/* ${projectName} Graphweaver Project - Schema */
 export const resolvers = []; // add your resolvers here 
 `;
 
@@ -169,6 +169,6 @@ export const makeTsConfig = (projectName: string) => {
 };
 
 export const makeReadme = (projectName: string) => {
-	const readme = `# ${projectName} GraphWeaver Project`;
+	const readme = `# ${projectName} Graphweaver Project`;
 	writeFileSync(`${projectName}/README.md`, readme);
 };

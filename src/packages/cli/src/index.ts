@@ -31,7 +31,7 @@ yargs
 				})
 				.option('version', {
 					type: 'string',
-					describe: 'Specify a version of GraphWeaver to use.',
+					describe: 'Specify a version of Graphweaver to use.',
 				}),
 		handler: async (argv) => {
 			const version = argv.version;
