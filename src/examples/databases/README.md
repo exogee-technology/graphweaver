@@ -1,6 +1,6 @@
 # Multiple Databases
 
-It is possible to connect more than one database to GraphWeaver and expose the data via the API.
+It is possible to connect more than one database to Graphweaver and expose the data via the API.
 
 This example demonstrates how to do that with a MySQL and PostgreSQL database.
 

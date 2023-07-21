@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 
-const summaryFieldKey = Symbol('GraphWeaverSummaryFieldKey');
+const summaryFieldKey = Symbol('GraphweaverSummaryFieldKey');
 
 export function SummaryField() {
 	return (target: any, propertyKey: string | symbol) => {
