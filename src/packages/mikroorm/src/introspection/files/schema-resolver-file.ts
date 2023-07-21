@@ -1,8 +1,9 @@
+import { pascalToKebabCaseString } from '../utils';
 import { BaseFile } from './base-file';
 
 export class SchemaResolverFile extends BaseFile {
 	getBasePath() {
-		const dirName = this.pascalToKebabCaseString(this.meta.className);
+		const dirName = pascalToKebabCaseString(this.meta.className);
 		return `backend/schema/${dirName}/`;
 	}
 
