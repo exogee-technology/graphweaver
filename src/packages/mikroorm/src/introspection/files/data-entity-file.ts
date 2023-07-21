@@ -34,6 +34,7 @@ import type {
 import { ReferenceType, UnknownType, Utils } from '@mikro-orm/core';
 import { BaseFile } from './base-file';
 import { DatabaseType } from '../../database';
+import { pascalToKebabCaseString } from '../utils';
 
 export class DataEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -53,7 +54,7 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	getBaseName() {
-		const fileName = this.pascalToKebabCaseString(this.meta.className);
+		const fileName = pascalToKebabCaseString(this.meta.className);
 		return `${fileName}.ts`;
 	}
 
@@ -92,7 +93,7 @@ export class DataEntityFile extends BaseFile {
 		];
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
-			imports.push(`import { ${entity} } from './${this.pascalToKebabCaseString(entity)}';`);
+			imports.push(`import { ${entity} } from './${pascalToKebabCaseString(entity)}';`);
 		});
 
 		if (enumDefinitions.length) {

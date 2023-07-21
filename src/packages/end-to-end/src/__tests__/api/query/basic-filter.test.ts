@@ -1,36 +1,36 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../types';
-import { config } from '../config';
-import { resetDatabase } from '../utils';
+import { Album } from '../../../types';
+import { config } from '../../../config';
+import { resetDatabase } from '../../../utils';
 
-describe('child content filter', () => {
+describe('basic filter', () => {
 	beforeEach(resetDatabase);
 
 	test('should filter Albums by Artist ID = "Black Sabbath"', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
 			.query(
 				gql`
-					query ExampleQuery($filter: AlbumsListFilter) {
+					query Albums($filter: AlbumsListFilter) {
 						albums(filter: $filter) {
 							id
-							Title
-							ArtistId {
+							title
+							artist {
 								id
-								Name
+								name
 							}
 						}
 					}
-				`,
-				{
-					filter: {
-						ArtistId: {
-							Name: 'Black Sabbath',
-						},
-					},
-				}
+				`
 			)
+			.variables({
+				filter: {
+					artist: {
+						name: 'Black Sabbath',
+					},
+				},
+			})
 			.expectNoErrors();
 
 		expect(data?.albums).toHaveLength(2);
