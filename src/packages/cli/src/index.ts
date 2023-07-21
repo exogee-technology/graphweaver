@@ -1,5 +1,6 @@
 import yargs from 'yargs';
 import chokidar from 'chokidar';
+import semver from 'semver';
 import {
 	StartOptions,
 	analyseBundle,
@@ -13,8 +14,18 @@ import { importDataSource } from './import';
 
 yargs.version(false);
 
+const MINIMUM_NODE_SUPPORTED = '16.0.0';
+
 yargs
 	.env('GRAPHWEAVER')
+	.check(() => {
+		if (semver.lt(process.version, MINIMUM_NODE_SUPPORTED)) {
+			throw new Error(
+				`\n\nERROR:\nPlease upgrade Node.js to at least version v${MINIMUM_NODE_SUPPORTED} or above.\n\n`
+			);
+		}
+		return true;
+	})
 	.command({
 		command: ['init'],
 		describe: 'Create a graphweaver project in various ways.',
