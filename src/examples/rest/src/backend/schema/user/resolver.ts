@@ -35,8 +35,6 @@ export class UserResolver extends createBaseResolver<User, RestUser>(
 		{
 			filter: {
 				root: true, // this is sorted in memory above
-				parentByChild: false,
-				childByChild: false,
 			},
 		}
 	)
