@@ -22,7 +22,7 @@
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@exogee/graphweaver-apollo": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
