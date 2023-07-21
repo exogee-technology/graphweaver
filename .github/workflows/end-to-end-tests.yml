@@ -43,7 +43,9 @@ jobs:
       - name: Create GW instance
         working-directory: src/packages/end-to-end
         run: |
+          pnpm backup-pnpm-workspace
           pnpm create-app
+          pnpm restore-pnpm-workspace
 
       - name: Import Chinook Database
         working-directory: src/packages/end-to-end
