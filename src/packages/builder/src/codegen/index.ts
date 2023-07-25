@@ -1,5 +1,6 @@
 import fs from 'fs';
 import { executeCodegen } from '@graphql-codegen/cli';
+import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset';
 import loader from './loader';
 
 const content = `/* eslint-disable */
@@ -12,6 +13,7 @@ export const codeGenerator = async () => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
+			pluginLoader: async (plugin: string) => import(plugin),
 			schema: {
 				graphweaver: {
 					loader: loader as any,
@@ -36,7 +38,7 @@ export const codeGenerator = async () => {
 					],
 				},
 				'src/': {
-					preset: 'near-operation-file',
+					preset: nearOperationFilePreset,
 					presetConfig: {
 						extension: '.generated.ts',
 						baseTypesPath: 'types.generated.ts',
