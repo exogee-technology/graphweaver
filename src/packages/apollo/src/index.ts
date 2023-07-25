@@ -108,12 +108,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		// Look at resolvers to check their provider plugins
 		for (const resolver of resolvers) {
-			console.log('********************************************\n');
 			const resolverMetadata = resolver.metadata as BaseResolverMetadataEntry<any>;
-			console.log(resolverMetadata);
-			console.log('********************************************\n');
 
-			// If this resolver has a provider, and that provider has plugins, add them to the list
+			// If this resolver has a provider, and that provider has plugins, add them to the plugins array
 			if (
 				resolverMetadata &&
 				resolverMetadata.provider?.plugins &&
