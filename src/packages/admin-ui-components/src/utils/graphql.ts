@@ -40,7 +40,7 @@ export const generateGqlSelectForEntityFields = (
 					return `${field.name} { id }`;
 				}
 				const relatedEntity = entityByType(field.type);
-				return `${field.name} { id ${relatedEntity.summaryField || ''} }`;
+				return `${field.name} { id ${relatedEntity?.summaryField || ''} }`;
 			} else {
 				return field.name;
 			}
