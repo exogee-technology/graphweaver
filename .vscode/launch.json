@@ -38,7 +38,7 @@
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": ["dev", "--preserve-symlinks"],
       "restart": true,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/src/packages/end-to-end"

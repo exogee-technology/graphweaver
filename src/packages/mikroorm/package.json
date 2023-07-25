@@ -34,6 +34,7 @@
 		"@mikro-orm/core": "5.4.2",
 		"@mikro-orm/mysql": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
+		"@mikro-orm/sqlite": "5.4.2",
 		"@mikro-orm/knex": "5.4.2",
 		"@types/node": "18.11.11",
 		"@types/pluralize": "0.0.29",
@@ -44,6 +45,7 @@
 	"optionalDependencies": {
 		"@mikro-orm/mysql": "5.4.2",
 		"@mikro-orm/postgresql": "5.4.2",
+		"@mikro-orm/sqlite": "5.4.2",
 		"@mikro-orm/knex": "5.4.2"
 	},
 	"peerDependencies": {

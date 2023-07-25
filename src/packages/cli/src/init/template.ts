@@ -1,10 +1,9 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { packagesForBackend } from './backend';
-import { AWS_LAMBDA_VERSION, GRAPHWEAVER_TARGET_VERSION } from './constants';
+import { AWS_LAMBDA_VERSION, graphweaverVersion } from './constants';
 import { Backend, needsDatabaseConnection } from '.';
 
 export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
-	const graphweaverVersion = version ? version : GRAPHWEAVER_TARGET_VERSION;
 	const backendPackages = Object.assign(
 		{},
 		...backends.map((backend) => packagesForBackend(backend, version))
@@ -21,10 +20,10 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
-			'@exogee/graphweaver': graphweaverVersion,
-			'@exogee/graphweaver-scalars': graphweaverVersion,
-			'@exogee/graphweaver-apollo': graphweaverVersion,
-			graphweaver: graphweaverVersion,
+			'@exogee/graphweaver': graphweaverVersion(version, 'core'),
+			'@exogee/graphweaver-scalars': graphweaverVersion(version, 'scalars'),
+			'@exogee/graphweaver-server': graphweaverVersion(version, 'server'),
+			graphweaver: graphweaverVersion(version, 'cli'),
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
@@ -121,7 +120,7 @@ export const makeIndex = (projectName: string, backends: Backend[]) => {
 	const index = `\
 /* ${projectName} Graphweaver Project */
 import 'reflect-metadata';
-import Graphweaver from '@exogee/graphweaver-apollo';
+import Graphweaver from '@exogee/graphweaver-server';
 ${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
 import { resolvers } from './schema';
 
