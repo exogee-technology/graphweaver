@@ -62,15 +62,7 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
-export interface BaseResolverInterface<D, G> {
-	// metadata: {
-	// 	// @todo: Use BaseResolverMetadataEntry
-	// 	provider: BackendProvider<D, G, BackendProviderConfig>;
-	// 	entity: ObjectClassMetadata;
-	// 	fields: FieldMetadata[];
-	// 	enums: EnumMetadata[];
-	// };
-}
+export interface BaseResolverInterface<D, G> {}
 
 export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
@@ -752,10 +744,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				}));
 
 			return success;
-		}
-
-		getStuff() {
-			return 'stuff';
 		}
 	}
 
