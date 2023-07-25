@@ -37,6 +37,7 @@
 - [About](#about)
 - [Documentation](#documentation)
 - [Quick Start](#quick-start)
+  - [Next Steps](#next-steps)
 - [Contributing](#contributing)
   - [Publishing](#publishing)
 - [License](#license)
@@ -68,7 +69,7 @@ With those two installed you can create a new project with the **Graphweaver CLI
 
 `npx graphweaver@latest init`
 
-The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
+The prompts will ask you which backends to install for this app.
 
 First you will be asked to name the project:
 
@@ -100,9 +101,9 @@ Make sure you npm install / yarn install / pnpm install, then run the start scri
 
 Once the new app has been created `cd test-project`. Then run `pnpm install` to install all the required dependencies.
 
-Once the dependencies have been installed, you can start the development server by running `pnpm start`.
+Once installed, you can start the development server by running `pnpm start`.
 
-This will launch the Graphweaver development server at http://localhost:9000, which will look something like this:
+This will launch the Graphweaver server and Admin UI at http://localhost:9000:
 
 <!-- PROJECT LOGO -->
 <p align="center">
@@ -113,10 +114,12 @@ This will launch the Graphweaver development server at http://localhost:9000, wh
 
 Very empty! We need to fill the API with data! To do that, we need to connect to a data source and create some entities.
 
-There are two options to do that:
+### Next Steps
 
-- If you have an existing database (Postgres, MySql or Sqlite) with a schema and/or data then go to the [Importing a Database](https://docs.graphweaver.com/importing-a-database) page which will automatically import your database.
-- If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://docs.graphweaver.com/connect-to-a-data-source) page.
+There are two options to connect a data source:
+
+1. If you have an existing database (Postgres, MySql or Sqlite) then go to the [Importing a Database](https://docs.graphweaver.com/importing-a-database) page. This will guide you through importing your database.
+1. If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://docs.graphweaver.com/connect-to-a-data-source) page.
 
 <!-- CONTRIBUTING -->
 
