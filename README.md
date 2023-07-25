@@ -61,24 +61,34 @@ Comprehensive documentation and usage examples can be found on our [Docs Site](h
 
 Before we start the installer make sure you are running:
 
-- Node `>16.*`
-- PNPM `>7.*`
+- Node `>18.*`
+- PNPM `>8.*`
 
-With those two installed you can create a new project with the **Graphweaver CLI**, by running:
+With those two installed you can create a new project with the Graphweaver CLI, by running:
 
 `npx graphweaver@latest init`
 
 The prompts will ask you which backends to install, and create a scaffold project with schema folders ready to create a schema.
 
+First you will be asked to name the project:
+
 ```
 ? What would your like to call your new project?
 test-project
+```
 
+Next, you will be asked to choose your data source. Select your data source and press enter.
+
+```
 ? Which Graphweaver backends will you need?
- ◯ MikroORM - PostgreSQL Backend
- ◯ MikroORM - MySQL Backend
- ◯ REST Backend
+◯ MikroORM - PostgreSQL Backend
+◯ MikroORM - MySQL Backend
+◯ REST Backend
+```
 
+Finally, you are asked to confirm that the project is going to be created.
+
+```
 ? OK, we're ready- I'm going to create a new app in "/Users/test-project" - is that OK?
 Yes
 
@@ -88,17 +98,25 @@ Make sure you npm install / yarn install / pnpm install, then run the start scri
 ❯
 ```
 
-Finally,
+Once the new app has been created `cd test-project`. Then run `pnpm install` to install all the required dependencies.
 
-```
-cd ./test-project
-pnpm i
-pnpm start
-```
+Once the dependencies have been installed, you can start the development server by running pnpm start.
 
-Open your web browser and navigate to http://localhost:9000.
+This will launch the Graphweaver development server found at http://localhost:9000 and it will look something like this:
 
-Explore the Admin UI and start weaving your own graphs!
+<!-- PROJECT LOGO -->
+<p align="center">
+  <a href="https://github.com/exogee-technology/graphweaver">
+    <img src="https://docs.graphweaver.com/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2Fc5b8b2bc-a8c5-4851-8e99-bca52c5f3fec%2FScreenshot_2023-07-25_at_10.57.37_am.png&w=1920&q=80" alt="Project Logo">
+  </a>
+</p>
+
+Very empty! We need to fill the API with data! To do that, we need to connect the data source and create some entities.
+
+There are a few options to get started:
+
+- If you have an existing database (Postgres, MySql or Sqlite) with a schema and/or data then go to the [Importing a Database]() page which will automatically import your database.
+- If you have a data source but it is currently empty then go to [How to Connect a Data Source]() page.
 
 <!-- CONTRIBUTING -->
 
