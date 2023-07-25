@@ -1,5 +1,5 @@
 import path from 'path';
-import { BuildOptions, Message } from 'esbuild';
+import { BuildOptions } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
