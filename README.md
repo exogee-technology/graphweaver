@@ -100,9 +100,9 @@ Make sure you npm install / yarn install / pnpm install, then run the start scri
 
 Once the new app has been created `cd test-project`. Then run `pnpm install` to install all the required dependencies.
 
-Once the dependencies have been installed, you can start the development server by running pnpm start.
+Once the dependencies have been installed, you can start the development server by running `pnpm start`.
 
-This will launch the Graphweaver development server found at http://localhost:9000 and it will look something like this:
+This will launch the Graphweaver development server at http://localhost:9000, which will look something like this:
 
 <!-- PROJECT LOGO -->
 <p align="center">
@@ -111,9 +111,9 @@ This will launch the Graphweaver development server found at http://localhost:90
   </a>
 </p>
 
-Very empty! We need to fill the API with data! To do that, we need to connect the data source and create some entities.
+Very empty! We need to fill the API with data! To do that, we need to connect to a data source and create some entities.
 
-There are a few options to get started:
+There are two options to do that:
 
 - If you have an existing database (Postgres, MySql or Sqlite) with a schema and/or data then go to the [Importing a Database](https://docs.graphweaver.com/importing-a-database) page which will automatically import your database.
 - If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://docs.graphweaver.com/connect-to-a-data-source) page.
