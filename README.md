@@ -64,7 +64,7 @@ Before we start the installer make sure you are running:
 - Node `>18.*`
 - PNPM `>8.*`
 
-With those two installed you can create a new project with the Graphweaver CLI, by running:
+With those two installed you can create a new project with the **Graphweaver CLI**, by running:
 
 `npx graphweaver@latest init`
 
@@ -115,8 +115,8 @@ Very empty! We need to fill the API with data! To do that, we need to connect th
 
 There are a few options to get started:
 
-- If you have an existing database (Postgres, MySql or Sqlite) with a schema and/or data then go to the [Importing a Database]() page which will automatically import your database.
-- If you have a data source but it is currently empty then go to [How to Connect a Data Source]() page.
+- If you have an existing database (Postgres, MySql or Sqlite) with a schema and/or data then go to the [Importing a Database](https://docs.graphweaver.com/importing-a-database) page which will automatically import your database.
+- If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://docs.graphweaver.com/connect-to-a-data-source) page.
 
 <!-- CONTRIBUTING -->
 
