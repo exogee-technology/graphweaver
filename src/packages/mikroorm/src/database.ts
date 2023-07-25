@@ -243,6 +243,10 @@ class ConnectionsManager {
 		return Array.from(this.connections.values());
 	}
 
+	getConnectionIds() {
+		return Array.from(this.connections.keys());
+	}
+
 	get default(): DatabaseImplementation {
 		const [defaultConnection] = [...this.connections];
 		if (!defaultConnection)
