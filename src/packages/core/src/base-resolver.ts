@@ -62,7 +62,15 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
-export interface BaseResolverInterface {}
+export interface BaseResolverInterface<D, G> {
+	// metadata: {
+	// 	// @todo: Use BaseResolverMetadataEntry
+	// 	provider: BackendProvider<D, G, BackendProviderConfig>;
+	// 	entity: ObjectClassMetadata;
+	// 	fields: FieldMetadata[];
+	// 	enums: EnumMetadata[];
+	// };
+}
 
 export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
@@ -73,7 +81,7 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G, BackendProviderConfig>
-): abstract new () => BaseResolverInterface {
+): abstract new () => BaseResolverInterface<D, G> {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -90,6 +98,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
+
+	const entityMetadata = {
+		provider,
+		entity: objectNames[0],
+		fields: entityFields,
+		enums: metadata.enums,
+	};
 
 	EntityMetadataMap.set(objectNames[0].name, {
 		provider,
@@ -305,7 +320,19 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	@Resolver()
-	abstract class BaseResolver implements BaseResolverInterface {
+	abstract class BaseResolver implements BaseResolverInterface<D, G> {
+		static metadata: {
+			provider: BackendProvider<D, G, BackendProviderConfig>;
+			entity: ObjectClassMetadata;
+			fields: FieldMetadata[];
+			enums: EnumMetadata[];
+		} = {
+			provider,
+			entity: objectNames[0],
+			fields: entityFields,
+			enums: metadata.enums,
+		};
+
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}
@@ -725,6 +752,10 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				}));
 
 			return success;
+		}
+
+		getStuff() {
+			return 'stuff';
 		}
 	}
 

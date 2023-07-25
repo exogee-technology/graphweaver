@@ -16,8 +16,11 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import { BaseResolverInterface, EntityMetadataMap } from '@exogee/graphweaver';
-import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
+import {
+	BaseResolverInterface,
+	BaseResolverMetadataEntry,
+	EntityMetadataMap,
+} from '@exogee/graphweaver';
 import { removeInvalidFilterArg } from './typegraphql-params';
 
 export * from '@apollo/server';
@@ -106,13 +109,26 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
 
-		const resolvers = (this.config.resolvers || []) as any;
+		const resolvers = (this.config.resolvers || []) as any; // BaseResolverInterface[]
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+
+		// Look at resolvers to check their provider plugins
+		for (const resolver of resolvers) {
+			console.log('********************************************\n');
+			const stuff = resolver.metadata as BaseResolverMetadataEntry<any>;
+			console.log(stuff);
+			console.log('********************************************\n');
+
+			// If the provider is MikroBackendProvider, register connectToDatabase(myConnection) as a plugin
+			if (stuff.provider?.backendId === 'mikroorm') {
+				//	plugins.push(stuff.provider.plugins[0]);
+			}
+		}
 
 		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
 		removeInvalidFilterArg();
