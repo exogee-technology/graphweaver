@@ -21,6 +21,7 @@ import {
 	IsolationLevel,
 	ConnectionOptions,
 	ClearDatabaseContext,
+	connectToDatabase,
 } from '..';
 
 import { OptimisticLockError } from '../utils/errors';
@@ -93,6 +94,8 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 {
 	private _backendId: string;
 
+	private connection: ConnectionOptions;
+
 	public entityType: new () => D;
 	public connectionManagerId?: string;
 	private transactionIsolationLevel!: IsolationLevel;
@@ -159,6 +162,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		this.connectionManagerId = connection.connectionManagerId;
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
 		this.transactionIsolationLevel = transactionIsolationLevel;
+		this.connection = connection;
 	}
 
 	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<G>) => {
@@ -531,5 +535,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return Utils.isCollection(entity);
 	}
 
-	public plugins: ApolloServerPlugin<BaseContext>[] = [ClearDatabaseContext];
+	public get plugins(): ApolloServerPlugin<BaseContext>[] {
+		return [ClearDatabaseContext, connectToDatabase(this.connection)];
+	}
 }
