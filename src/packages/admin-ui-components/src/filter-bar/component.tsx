@@ -51,7 +51,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const getFilterComponents = (entityName: string) => {
 		const rowEntity = entityByName(entityName);
 
-		return rowEntity.fields.map((field) => {
+		// @todo - currently the filters are not fitting on the screen
+		// we plan to redo this filter bar so that it is a drop down
+		// for now the workaround is to reduce the number of filters to 5
+		const showOnlyFiveFilters = rowEntity.fields.length > 5 ? 5 : rowEntity.fields.length;
+		return rowEntity.fields.slice(0, showOnlyFiveFilters).map((field) => {
 			if (!field.filter?.type) return null;
 			const options = {
 				key: field.name,
