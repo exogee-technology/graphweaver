@@ -94,6 +94,14 @@ export default class Graphweaver<TContext extends BaseContext> {
 			}
 		}
 
+		const resolvers = (this.config.resolvers || []) as any;
+
+		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
+			logger.trace(`Graphweaver adminMetadata is enabled`);
+			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
+		}
+		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+
 		// Order is important here
 		const plugins = [
 			MutexRequestsInDevelopment,
@@ -104,14 +112,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
-
-		const resolvers = (this.config.resolvers || []) as any;
-
-		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
-			logger.trace(`Graphweaver adminMetadata is enabled`);
-			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
-		}
-		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
 		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
 		removeInvalidFilterArg();

@@ -12,7 +12,9 @@ export const connectToDatabase = (
 						await ConnectionManager.connect(option.connectionManagerId, option);
 				}
 			} else {
-				await ConnectionManager.connect(options.connectionManagerId, options);
+				if (options.connectionManagerId) {
+					await ConnectionManager.connect(options.connectionManagerId, options);
+				}
 			}
 		},
 	};

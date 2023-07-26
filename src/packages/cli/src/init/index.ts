@@ -32,9 +32,9 @@ export const initGraphweaver = (projectName: string, backends: Backend[], versio
 	makeReadme(projectName);
 	makePackageJson(projectName, backends, version);
 	makeTsConfig(projectName);
-	makeIndex(projectName, backends);
+	makeIndex(projectName);
 	if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
-	makeSchemaIndex(projectName, backends);
+	makeSchemaIndex(projectName);
 };
 
 type InitOptions = {
