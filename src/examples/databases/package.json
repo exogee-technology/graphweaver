@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-databases",
-	"version": "0.1.22",
+	"version": "0.2.0",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a MySQL and PostgreSQL database together.",
@@ -15,7 +15,8 @@
 	"scripts": {
 		"build": "graphweaver build",
 		"start": "graphweaver start",
-		"watch": "graphweaver watch"
+		"watch": "graphweaver watch",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"@apollo/server": "4.2.2",
