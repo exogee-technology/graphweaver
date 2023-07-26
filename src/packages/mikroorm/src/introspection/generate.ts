@@ -106,7 +106,7 @@ const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		for (const prop of meta.relations) {
 			if ([ReferenceType.MANY_TO_ONE, ReferenceType.ONE_TO_ONE].includes(prop.reference)) {
-				const name = pascalToCamelCaseString(prop.referencedTableName);
+				const name = pascalToCamelCaseString(prop.type);
 				prop.name = pluralize.singular(name);
 				prop.wrappedReference = true;
 			}
