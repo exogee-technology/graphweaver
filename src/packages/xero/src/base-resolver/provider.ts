@@ -42,9 +42,7 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<D extends DE, G extends GE<D>>
-	implements BackendProvider<D, G, BackendProviderConfig>
-{
+export class XeroBackendProvider<D extends DE, G extends GE<D>> implements BackendProvider<D, G> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 

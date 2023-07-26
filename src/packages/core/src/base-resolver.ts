@@ -30,7 +30,6 @@ import type {
 	ReadHookParams,
 	HookParams,
 	BaseContext,
-	BackendProviderConfig,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
 import {
@@ -52,7 +51,7 @@ export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<any>>
 export const hookManagerMap = new Map<string, HookManager<any>>([]);
 
 export interface BaseResolverMetadataEntry<D extends BaseDataEntity> {
-	provider: BackendProvider<D, GraphQLEntity<D>, BackendProviderConfig>;
+	provider: BackendProvider<D, GraphQLEntity<D>>;
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
@@ -72,7 +71,7 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G, BackendProviderConfig>
+	provider: BackendProvider<D, G>
 ): abstract new () => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
@@ -91,12 +90,14 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
-	EntityMetadataMap.set(objectNames[0].name, {
+	const entityMetadata: BaseResolverMetadataEntry<D> = {
 		provider,
 		entity: objectNames[0],
 		fields: entityFields,
 		enums: metadata.enums,
-	} as BaseResolverMetadataEntry<D>);
+	};
+
+	EntityMetadataMap.set(objectNames[0].name, entityMetadata);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
