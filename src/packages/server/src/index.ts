@@ -98,7 +98,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			}
 		}
 
-		const resolvers = (this.config.resolvers || []) as any; // BaseResolverInterface[]
+		const resolvers = (this.config.resolvers || []) as any; //any BaseResolverInterface<D, G>[];
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
@@ -107,18 +107,18 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
 		// Look at resolvers to check their provider plugins
-		for (const resolver of resolvers) {
-			const resolverMetadata = resolver.metadata as BaseResolverMetadataEntry<any>;
+		// for (const resolver of resolvers) {
+		// 	const resolverMetadata = resolver.metadata as BaseResolverMetadataEntry<any>;
 
-			// If this resolver has a provider, and that provider has plugins, add them to the plugins array
-			if (
-				resolverMetadata &&
-				resolverMetadata.provider?.plugins &&
-				resolverMetadata.provider?.plugins.length > 0
-			) {
-				apolloPlugins.push(...resolverMetadata.provider.plugins);
-			}
-		}
+		// 	// If this resolver has a provider, and that provider has plugins, add them to the plugins array
+		// 	if (
+		// 		resolverMetadata &&
+		// 		resolverMetadata.provider?.plugins &&
+		// 		resolverMetadata.provider?.plugins.length > 0
+		// 	) {
+		// 		apolloPlugins.push(...resolverMetadata.provider.plugins);
+		// 	}
+		// }
 
 		// Order is important here
 		const plugins = [

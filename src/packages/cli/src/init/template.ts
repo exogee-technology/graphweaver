@@ -87,19 +87,7 @@ export const makeDatabase = (projectName: string, backends: Backend[]) => {
 	const hasMySql = backends.some((backend) => backend === Backend.MikroOrmMysql);
 	const hasSqlite = backends.some((backend) => backend === Backend.MikroOrmSqlite);
 
-	// Install the Apollo plugins on the server
-	let plugins = undefined;
-	if (hasPostgres && hasMySql) {
-		plugins = `[connectToDatabase([pgConnection, myConnection]), ClearDatabaseContext]`;
-	} else if (hasPostgres) {
-		plugins = `[connectToDatabase(pgConnection), ClearDatabaseContext]`;
-	} else if (hasMySql) {
-		plugins = `[connectToDatabase(myConnection), ClearDatabaseContext]`;
-	} else if (hasSqlite) {
-		plugins = `[connectToDatabase(liteConnection), ClearDatabaseContext]`;
-	}
-
-	const database = `import { ClearDatabaseContext, connectToDatabase } from '@exogee/graphweaver-mikroorm';
+	const database = `
 ${hasPostgres ? pgDriverImport : ``}
 ${hasMySql ? myDriverImport : ``}
 ${hasSqlite ? liteDriverImport : ``}
@@ -108,7 +96,6 @@ ${hasPostgres ? pgConnection : ``}
 ${hasMySql ? myConnection : ``}
 ${hasSqlite ? liteConnection : ``}
 
-export const plugins = ${plugins};
 	`;
 
 	writeFileSync(`${projectName}/src/backend/database.ts`, database);
