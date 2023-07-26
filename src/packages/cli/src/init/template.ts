@@ -101,21 +101,15 @@ ${hasSqlite ? liteConnection : ``}
 	writeFileSync(`${projectName}/src/backend/database.ts`, database);
 };
 
-export const makeIndex = (projectName: string, backends: Backend[]) => {
-	const hasDatabaseConnections = needsDatabaseConnection(backends);
-
+export const makeIndex = (projectName: string) => {
 	const index = `\
 /* ${projectName} Graphweaver Project */
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
-${hasDatabaseConnections ? `import { plugins } from './database';` : ''}
 import { resolvers } from './schema';
 
 const graphweaver = new Graphweaver({
 	resolvers,
-	apolloServerOptions: {
-		${hasDatabaseConnections ? `plugins,` : ''}
-	},
 });
 
 export const handler = graphweaver.handler();
@@ -125,7 +119,7 @@ export const handler = graphweaver.handler();
 	writeFileSync(`${projectName}/src/backend/index.ts`, index);
 };
 
-export const makeSchemaIndex = (projectName: string, backends: Backend[]) => {
+export const makeSchemaIndex = (projectName: string) => {
 	const index = `\
 /* ${projectName} Graphweaver Project - Schema */
 export const resolvers = []; // add your resolvers here 

@@ -59,7 +59,7 @@ export type Filter<G> = {
 
 // D = Data entity returned from the datastore
 // G = GraphQL entity
-export interface BackendProvider<D, G, BackendProviderConfig> {
+export interface BackendProvider<D, G> {
 	// This is used for query splitting, so we know where to break your
 	// queries when you query across data sources.
 	readonly backendId: string;
