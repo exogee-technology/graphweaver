@@ -44,6 +44,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "End to End - App",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/end-to-end/app"
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Admin UI in Chrome",
