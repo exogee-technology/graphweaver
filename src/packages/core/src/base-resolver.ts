@@ -98,12 +98,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		enums: metadata.enums,
 	};
 
-	EntityMetadataMap.set(objectNames[0].name, {
-		provider,
-		entity: objectNames[0],
-		fields: entityFields,
-		enums: metadata.enums,
-	} as BaseResolverMetadataEntry<D>);
+	EntityMetadataMap.set(objectNames[0].name, entityMetadata as BaseResolverMetadataEntry<D>);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -318,12 +313,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			entity: ObjectClassMetadata;
 			fields: FieldMetadata[];
 			enums: EnumMetadata[];
-		} = {
-			provider,
-			entity: objectNames[0],
-			fields: entityFields,
-			enums: metadata.enums,
-		};
+		} = entityMetadata;
 
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
