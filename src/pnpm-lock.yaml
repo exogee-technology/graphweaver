@@ -736,7 +736,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.4.2
-        version: 5.4.2(@mikro-orm/core@5.4.2)(pg@8.8.0)(sqlite3@5.0.11)
+        version: 5.4.2(@mikro-orm/core@5.4.2)(mysql2@2.3.3)(pg@8.8.0)
       '@mikro-orm/mysql':
         specifier: 5.4.2
         version: 5.4.2(@mikro-orm/core@5.4.2)(pg@8.8.0)
@@ -4355,7 +4355,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.4.2(@mikro-orm/mysql@5.4.2)(@mikro-orm/postgresql@5.4.2)(@mikro-orm/sqlite@5.4.2)
-      '@mikro-orm/knex': 5.4.2(@mikro-orm/core@5.4.2)(pg@8.8.0)(sqlite3@5.0.11)
+      '@mikro-orm/knex': 5.4.2(@mikro-orm/core@5.4.2)(mysql2@2.3.3)(pg@8.8.0)
       pg: 8.8.0
     transitivePeerDependencies:
       - better-sqlite3
