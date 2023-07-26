@@ -90,14 +90,14 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
-	const entityMetadata = {
+	const entityMetadata: BaseResolverMetadataEntry<D> = {
 		provider,
 		entity: objectNames[0],
 		fields: entityFields,
 		enums: metadata.enums,
 	};
 
-	EntityMetadataMap.set(objectNames[0].name, entityMetadata as BaseResolverMetadataEntry<D>);
+	EntityMetadataMap.set(objectNames[0].name, entityMetadata);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -307,13 +307,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	@Resolver()
 	abstract class BaseResolver implements BaseResolverInterface {
-		static metadata: {
-			provider: BackendProvider<D, G>;
-			entity: ObjectClassMetadata;
-			fields: FieldMetadata[];
-			enums: EnumMetadata[];
-		} = entityMetadata;
-
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}
