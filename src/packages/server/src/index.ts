@@ -16,11 +16,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import {
-	BaseResolverInterface,
-	BaseResolverMetadataEntry,
-	EntityMetadataMap,
-} from '@exogee/graphweaver';
+import { EntityMetadataMap } from '@exogee/graphweaver';
 import { removeInvalidFilterArg } from './typegraphql-params';
 
 export * from '@apollo/server';
@@ -98,27 +94,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 			}
 		}
 
-		const resolvers = (this.config.resolvers || []) as any; //any BaseResolverInterface<D, G>[];
+		const resolvers = (this.config.resolvers || []) as any;
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
 			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
-
-		// Look at resolvers to check their provider plugins
-		// for (const resolver of resolvers) {
-		// 	const resolverMetadata = resolver.metadata as BaseResolverMetadataEntry<any>;
-
-		// 	// If this resolver has a provider, and that provider has plugins, add them to the plugins array
-		// 	if (
-		// 		resolverMetadata &&
-		// 		resolverMetadata.provider?.plugins &&
-		// 		resolverMetadata.provider?.plugins.length > 0
-		// 	) {
-		// 		apolloPlugins.push(...resolverMetadata.provider.plugins);
-		// 	}
-		// }
 
 		// Order is important here
 		const plugins = [

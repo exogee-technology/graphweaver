@@ -30,7 +30,6 @@ import type {
 	ReadHookParams,
 	HookParams,
 	BaseContext,
-	BackendProviderConfig,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
 import {
@@ -52,7 +51,7 @@ export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<any>>
 export const hookManagerMap = new Map<string, HookManager<any>>([]);
 
 export interface BaseResolverMetadataEntry<D extends BaseDataEntity> {
-	provider: BackendProvider<D, GraphQLEntity<D>, BackendProviderConfig>;
+	provider: BackendProvider<D, GraphQLEntity<D>>;
 	entity: ObjectClassMetadata;
 	fields: FieldMetadata[];
 	enums: EnumMetadata[];
@@ -62,7 +61,7 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
-export interface BaseResolverInterface<D, G> {}
+export interface BaseResolverInterface {}
 
 export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
@@ -72,8 +71,8 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G, BackendProviderConfig>
-): abstract new () => BaseResolverInterface<D, G> {
+	provider: BackendProvider<D, G>
+): abstract new () => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -307,9 +306,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	@Resolver()
-	abstract class BaseResolver implements BaseResolverInterface<D, G> {
+	abstract class BaseResolver implements BaseResolverInterface {
 		static metadata: {
-			provider: BackendProvider<D, G, BackendProviderConfig>;
+			provider: BackendProvider<D, G>;
 			entity: ObjectClassMetadata;
 			fields: FieldMetadata[];
 			enums: EnumMetadata[];
