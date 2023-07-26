@@ -90,7 +90,7 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEntity<D>>
-	implements BackendProvider<D, G, BackendProviderConfig>
+	implements BackendProvider<D, G>
 {
 	private _backendId: string;
 
