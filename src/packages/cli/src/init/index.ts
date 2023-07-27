@@ -83,6 +83,13 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 						name: 'REST Backend',
 					},
 				],
+				validate(answer) {
+					if (answer.length < 1) {
+						return 'You must select at least one backend (Press <space> to select).';
+					}
+
+					return true;
+				},
 			},
 			{
 				type: 'confirm',
