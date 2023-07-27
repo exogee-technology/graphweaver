@@ -11,6 +11,26 @@ jobs:
       run:
         working-directory: src
 
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image 
+        image: postgres
+        # Provide env for postgres to set-up database
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: gw
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -45,10 +65,15 @@ jobs:
         run: |
           pnpm create-app
 
-      - name: Import Chinook Database
+      - name: Import Chinook SQLite Database
         working-directory: src/packages/end-to-end
         run: |
-          pnpm import-database
+          pnpm import-database-sqlite
+
+      - name: Import Chinook Postgres SQL Database
+        working-directory: src/packages/end-to-end
+        run: |
+          pnpm import-database-sql
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end

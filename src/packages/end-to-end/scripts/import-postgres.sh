@@ -1,0 +1,1 @@
+cp ./databases/database.sqlite ./app/databases/database.sqlite && cd app && node ../../cli/bin import sql --database=database.sql
