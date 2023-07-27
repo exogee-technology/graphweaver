@@ -27,7 +27,7 @@ export const isIntrospectionError = (
 	);
 };
 
-const checkForMissingDependencies = async (source: 'mysql' | 'postgresql' | 'sqlite') => {
+const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') => {
 	// We want to read the package.json of gw app so we can ignore this error
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const packageJson = require(path.join(process.cwd(), 'package.json'));
@@ -40,15 +40,16 @@ const checkForMissingDependencies = async (source: 'mysql' | 'postgresql' | 'sql
 		`@mikro-orm/${source}`,
 	];
 
+	// hold on to any missing deps
 	const missingDependencies: string[] = [];
 
 	requiredDependencies.forEach((dependency) => {
 		if (!dependencies.includes(dependency)) {
-			missingDependencies.push(
-				`${dependency}@${
-					dependency.includes('@mikro-orm/') ? MIKRO_ORM_TARGET_VERSION : GRAPHWEAVER_TARGET_VERSION
-				}`
-			);
+			// we found a missing dep lets save it
+			const version = dependency.includes('@mikro-orm/')
+				? MIKRO_ORM_TARGET_VERSION
+				: GRAPHWEAVER_TARGET_VERSION;
+			missingDependencies.push(`${dependency}@${version}`);
 		}
 	});
 
@@ -63,7 +64,8 @@ export const importDataSource = async (
 	source: 'mysql' | 'postgresql' | 'sqlite',
 	database?: string
 ) => {
-	await checkForMissingDependencies(source);
+	// check we have all the dependencies needed to run the import
+	checkForMissingDependencies(source);
 
 	const { default: inquirer } = await import('inquirer');
 	const { host, dbName, user, password, port } =
