@@ -6,11 +6,11 @@
 	"scripts": {
 		"create-app": "rm -rf ./app && node ../cli/bin init --name=app --backend=sqlite --version=\"local\" && cd app && pnpm i --ignore-workspace --no-lockfile",
 		"import-database-sqlite": ". ./scripts/import-sqlite.sh",
+		"import-database-sql": ". ./scripts/import-sql.sh",
 		"start-server": "cd app && pnpm start",
 		"dev": "pnpm create-app && pnpm import-database && pnpm start-server",
 		"test": "jest --runInBand",
-		"version": "npm version --no-git-tag-version",
-		"test2": ". ./scripts/test.sh"
+		"version": "npm version --no-git-tag-version"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",
