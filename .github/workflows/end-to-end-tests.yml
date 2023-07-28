@@ -21,6 +21,8 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: gw
+          POSTGRES_HOST: localhost
+
         # Set health checks to wait until postgres has started
         options: >-
           --health-cmd pg_isready
@@ -60,8 +62,8 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
       
-      - name: Install psql
-        run: apt-get install --yes --no-install-recommends postgresql-client
+      # - name: Install psql
+      #   run: apt-get install --yes --no-install-recommends postgresql-client
 
       - name: Set up PostgreSQL
         working-directory: src/packages/end-to-end
