@@ -1,4 +1,5 @@
-import { Client } from 'pg';
+import pkg from 'pg';
+const { Client } = pkg;
 
 const pgclient = new Client({
 	host: process.env.POSTGRES_HOST,
