@@ -60,6 +60,9 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Set up PostgreSQL
+        run: pnpm setup-postgres
+
       - name: Create GW instance
         working-directory: src/packages/end-to-end
         run: |
