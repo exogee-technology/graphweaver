@@ -64,6 +64,7 @@ jobs:
       - name: Connect to PostgreSQL
         # Runs a script that creates a PostgreSQL table, populates
         # the table with data, and then retrieves the data.
+        working-directory: src/packages/end-to-end
         run: node client.js
         # Environment variable used by the `client.js` script to create
         # a new PostgreSQL client.
@@ -72,7 +73,7 @@ jobs:
           POSTGRES_HOST: postgres
           # The default PostgreSQL port
           POSTGRES_PORT: 5432
-          
+
           # The default PostgreSQL user  
       # - name: Install psql
       #   run: apt-get install --yes --no-install-recommends postgresql-client
