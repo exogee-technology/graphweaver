@@ -62,7 +62,7 @@ jobs:
         run: pnpm build
 
       - name: Install pg dependency
-        run: pnpm i pg
+        run: pnpm i pg -w
 
       - name: Connect to PostgreSQL
         # Runs a script that creates a PostgreSQL table, populates
