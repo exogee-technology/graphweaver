@@ -61,7 +61,7 @@ jobs:
         run: pnpm build
       
       - name: Install psql
-        run: apt-get update && apt-get install --yes --no-install-recommends postgresql-client
+        run: apt-get install --yes --no-install-recommends postgresql-client
 
       - name: Set up PostgreSQL
         working-directory: src/packages/end-to-end
