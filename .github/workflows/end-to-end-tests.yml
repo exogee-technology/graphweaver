@@ -21,7 +21,6 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: gw
-          POSTGRES_HOST: localhost
 
         # Set health checks to wait until postgres has started
         options: >-
@@ -68,6 +67,11 @@ jobs:
       - name: Set up PostgreSQL
         working-directory: src/packages/end-to-end
         run: PGPASSWORD=postgres pnpm setup-postgres
+        env:
+          # The hostname used to communicate with the PostgreSQL service container
+          POSTGRES_HOST: postgres
+          # The default PostgreSQL port
+          POSTGRES_PORT: 5432
 
       - name: Create GW instance
         working-directory: src/packages/end-to-end
