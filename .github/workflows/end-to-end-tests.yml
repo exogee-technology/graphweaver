@@ -15,7 +15,7 @@ jobs:
       # Label used to access the service container
       postgres:
         # Docker Hub image 
-        image: postgres
+        image: postgis/postgis
         # Provide env for postgres to set-up database
         env:
           POSTGRES_USER: postgres
