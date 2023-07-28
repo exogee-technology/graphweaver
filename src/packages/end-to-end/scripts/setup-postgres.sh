@@ -1,6 +1,6 @@
 # Wait for PostgreSQL to start
 until psql -h localhost -U postgres -d gw -c "SELECT 1" &> /dev/null; do
-    sleep 1
+    sleep 5
 done
 
 psql -U postgres -d gw -c "CREATE TABLE \"user\" (id BIGSERIAL PRIMARY KEY, username VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255), last_name VARCHAR(255));"
