@@ -62,7 +62,7 @@ jobs:
 
       - name: Set up PostgreSQL
         working-directory: src/packages/end-to-end
-        run: pnpm setup-postgres
+        run: PGPASSWORD=postgres pnpm setup-postgres
 
       - name: Create GW instance
         working-directory: src/packages/end-to-end
