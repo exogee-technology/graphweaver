@@ -1,5 +1,5 @@
 # Wait for PostgreSQL to start
-until psql -h localhost -U postgres -d gw -c "SELECT 1" &> /dev/null; do
+until psql -h postgres -U postgres -d gw -c "SELECT 1" &> /dev/null; do
     sleep 5
 done
 
