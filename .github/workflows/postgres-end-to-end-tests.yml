@@ -1,4 +1,4 @@
-name: End to End Tests
+name: Postgre End to End Tests
 
 on:
   pull_request:
@@ -95,7 +95,7 @@ jobs:
         run: |
           pnpm create-app
 
-      - name: Import Chinook Postgres SQL Database
+      - name: Import Postgres Chinook Database
         working-directory: src/packages/end-to-end
         run: |
           pnpm import-database-sql
