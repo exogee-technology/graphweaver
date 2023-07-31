@@ -1,11 +1,11 @@
-import pkg from 'pg';
-const { Client } = pkg;
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { Client } = require('pg');
 
 const pgclient = new Client({
 	host: process.env.POSTGRES_HOST,
 	port: process.env.POSTGRES_PORT,
 	user: 'postgres',
-	password: 'postgres', // CHANGE THIS
+	password: 'postgres',
 	database: 'postgres',
 });
 
