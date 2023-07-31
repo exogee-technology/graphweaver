@@ -11,8 +11,10 @@ const noDBClient = new Client({
 async function createdb() {
 	try {
 		await noDBClient.connect();
-		const database = `create database gw;`;
+		const dropDB = `drop database if exists gw;`;
+		await noDBClient.query(dropDB);
 
+		const database = `create database gw;`;
 		await noDBClient.query(database);
 	} catch (error) {
 		console.error('Error:', error);
