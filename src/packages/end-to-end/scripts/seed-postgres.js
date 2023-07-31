@@ -2,7 +2,7 @@
 const { Client } = require('pg');
 const fs = require('fs');
 
-var sql = fs.readFileSync('./databases/postgres.sql').toString();
+const sql = fs.readFileSync('./databases/postgres.sql').toString();
 
 const DATABASE_HOST = process.env.DATABASE_HOST ?? 'localhost';
 const DATABASE_USERNAME = process.env.DATABASE_USERNAME ?? 'postgres';
@@ -26,7 +26,7 @@ async function seedData() {
 		process.exit(1); // Exit with a non-zero code to indicate an error occurred
 	}
 
-	console.log('Connection closed');
+	console.log('Database Seeded Successfully!');
 	process.exit(0);
 }
 
