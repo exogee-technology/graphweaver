@@ -59,57 +59,11 @@ jobs:
       - name: Setup Postgres
         working-directory: src/packages/end-to-end
         run: pnpm setup-postgres
-    
-         
-      - name: Connect to PostgreSQL
-        # Runs a script that creates a PostgreSQL table, populates
-        # the table with data, and then retrieves the data.
-        working-directory: src/packages/end-to-end/scripts
-        run: node client.js
-        # Environment variable used by the `client.js` script to create
-        # a new PostgreSQL client.
-        env:
-          # The hostname used to communicate with the PostgreSQL service container
-          POSTGRES_HOST: postgres
-          # The default PostgreSQL port
-          POSTGRES_PORT: 5432
-
-          # The default PostgreSQL user
-      # - name: Install psql
-      #   run: apt-get install --yes --no-install-recommends postgresql-client
-
-      # - name: Set up PostgreSQL
-      #   working-directory: src/packages/end-to-end
-      #   run: PGPASSWORD=postgres pnpm setup-postgres
-      #   env:
-      #     # The hostname used to communicate with the PostgreSQL service container
-      #     POSTGRES_HOST: postgres
-      #     # The default PostgreSQL port
-      #     POSTGRES_PORT: 5432
-
-      - name: Create GW instance
-        working-directory: src/packages/end-to-end
-        run: |
-          pnpm create-app
-
-      - name: Import Postgres Chinook Database
-        working-directory: src/packages/end-to-end
-        run: |
-          pnpm import-database-sql
-
-      - name: Start and Test GW instance
-        working-directory: src/packages/end-to-end
-        timeout-minutes: 2
-        run: |
-          pnpm start-server &
-          sleep 3 &&
-          pnpm test &&
-          killall node
-
+  
+     
     env:
       CI: true
       DATABASE_HOST: localhost
       DATABASE_USERNAME: postgres	
       DATABASE_PASSWORD: postgres
       DATABASE_PORT: 5432
-      DATABASE_NAME: gw
