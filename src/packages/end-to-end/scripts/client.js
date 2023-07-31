@@ -41,4 +41,4 @@ async function connectAndQuery() {
 	}
 }
 
-await connectAndQuery();
+connectAndQuery();
