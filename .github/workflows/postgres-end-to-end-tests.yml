@@ -55,15 +55,14 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-
-      - name: Setup Postgres
+      - name: Seed Postgres
         working-directory: src/packages/end-to-end
-        run: pnpm setup-postgres
-  
-     
+        run: pnpm seed-postgres
+
     env:
       CI: true
       DATABASE_HOST: localhost
-      DATABASE_USERNAME: postgres	
+      DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       DATABASE_PORT: 5432
+      DATABASE_NAME: gw
