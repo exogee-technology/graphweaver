@@ -1,4 +1,4 @@
-name: Postgre End to End Tests
+name: Postgres End to End Tests
 
 on:
   pull_request:
@@ -55,13 +55,16 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Install pg dependency
-        run: pnpm i pg -w
 
       - name: Setup Postgres
         working-directory: src/packages/end-to-end
-        run: PGPASSWORD=postgres pnpm setup-postgres
+        run: pnpm setup-postgres
         env:
+            DATABASE_HOST: localhost
+            DATABASE_USERNAME: postgres
+            DATABASE_PASSWORD: postgres
+            DATABASE_PORT: 5432
+            DATABASE_NAME: gw
             # The hostname used to communicate with the PostgreSQL service container
             POSTGRES_HOST: postgres
             # The default PostgreSQL port

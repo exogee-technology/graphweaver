@@ -7,7 +7,7 @@
 		"create-app": "rm -rf ./app && node ../cli/bin init --name=app --backend=sqlite --version=\"local\" && cd app && pnpm i --ignore-workspace --no-lockfile",
 		"import-database-sqlite": ". ./scripts/import-sqlite.sh",
 		"import-database-sql": ". ./scripts/import-sql.sh",
-		"setup-postgres": ". ./scripts/setup-postgres.sh",
+		"setup-postgres": "node ./scripts/client.js",
 		"start-server": "cd app && pnpm start",
 		"dev": "pnpm create-app && pnpm import-database && pnpm start-server",
 		"test": "jest --runInBand",
@@ -20,6 +20,7 @@
 		"jest": "29.4.0",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.0.5",
-		"typescript": "5.0.2"
+		"typescript": "5.0.2",
+		"pg": "8.11.1"
 	}
 }
