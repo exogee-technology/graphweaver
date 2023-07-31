@@ -59,6 +59,7 @@ jobs:
         run: pnpm i pg -w
 
       - name: Setup Postgres
+        working-directory: src/packages/end-to-end
         run: PGPASSWORD=postgres pnpm setup-postgres
         env:
             # The hostname used to communicate with the PostgreSQL service container
