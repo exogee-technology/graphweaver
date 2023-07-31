@@ -59,6 +59,19 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm seed-postgres
 
+      - name: Create GW instance
+        working-directory: src/packages/end-to-end
+        run: |
+          pnpm create-app
+
+      - name: Import Postgres Chinook Database
+        working-directory: src/packages/end-to-end
+        run: |
+          mkdir app/databases
+          cp ./databases/postgres.sql ./app/databases/postgres.sql
+          cd app 
+          node ../../cli/bin import postgresql --database=databases/postgres.sql
+
     env:
       CI: true
       DATABASE_HOST: localhost
