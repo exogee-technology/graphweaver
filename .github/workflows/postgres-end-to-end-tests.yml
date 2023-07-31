@@ -13,7 +13,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgis/postgis
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
@@ -59,17 +59,8 @@ jobs:
       - name: Setup Postgres
         working-directory: src/packages/end-to-end
         run: pnpm setup-postgres
-        env:
-            DATABASE_HOST: localhost
-            DATABASE_USERNAME: postgres
-            DATABASE_PASSWORD: postgres
-            DATABASE_PORT: 5432
-            DATABASE_NAME: gw
-            # The hostname used to communicate with the PostgreSQL service container
-            POSTGRES_HOST: postgres
-            # The default PostgreSQL port
-            POSTGRES_PORT: 5432
-
+    
+         
       - name: Connect to PostgreSQL
         # Runs a script that creates a PostgreSQL table, populates
         # the table with data, and then retrieves the data.
@@ -115,5 +106,10 @@ jobs:
           pnpm test &&
           killall node
 
-        env:
-          CI: true
+    env:
+      CI: true
+      DATABASE_HOST: localhost
+      DATABASE_USERNAME: postgres	
+      DATABASE_PASSWORD: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: gw
