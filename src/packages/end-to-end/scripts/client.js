@@ -2,10 +2,10 @@
 const { Client } = require('pg');
 
 const noDBClient = new Client({
-	host: process.env.POSTGRES_HOST, // Use the environment variable for the hostname
-	port: process.env.POSTGRES_PORT,
-	user: 'postgres',
-	password: 'postgres',
+	host: process.env.DATABASE_HOST,
+	port: process.env.DATABASE_PORT,
+	user: process.env.DATABASE_USERNAME,
+	password: process.env.DATABASE_PASSWORD,
 });
 
 async function createdb() {
