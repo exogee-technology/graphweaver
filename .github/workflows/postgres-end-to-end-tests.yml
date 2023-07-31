@@ -58,13 +58,13 @@ jobs:
       - name: Install pg dependency
         run: pnpm i pg -w
 
-      #   - name: Setup Postgres
-      #     run: PGPASSWORD=postgres pnpm setup-postgres
-      #     env:
-      #       # The hostname used to communicate with the PostgreSQL service container
-      #       POSTGRES_HOST: postgres
-      #       # The default PostgreSQL port
-      #       POSTGRES_PORT: 5432
+      - name: Setup Postgres
+        run: PGPASSWORD=postgres pnpm setup-postgres
+        env:
+            # The hostname used to communicate with the PostgreSQL service container
+            POSTGRES_HOST: postgres
+            # The default PostgreSQL port
+            POSTGRES_PORT: 5432
 
       - name: Connect to PostgreSQL
         # Runs a script that creates a PostgreSQL table, populates
