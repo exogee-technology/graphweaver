@@ -1,9 +1,9 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../../../types';
-import { config } from '../../../config';
-import { resetDatabase } from '../../../utils';
+import { Album } from '../../../../types';
+import { config } from '../../../../config';
+import { resetDatabase } from '../../../../utils';
 
 describe('basic filter', () => {
 	beforeEach(resetDatabase);
