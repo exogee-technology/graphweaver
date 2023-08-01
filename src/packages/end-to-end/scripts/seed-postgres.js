@@ -19,6 +19,7 @@ async function seedData() {
 			password: DATABASE_PASSWORD,
 			database: DATABASE_NAME,
 		});
+
 		await client.connect();
 		await client.query(sql);
 	} catch (error) {

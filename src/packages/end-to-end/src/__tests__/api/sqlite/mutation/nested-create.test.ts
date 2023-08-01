@@ -1,9 +1,9 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album, Artist } from '../../../types';
-import { config } from '../../../config';
-import { resetDatabase } from '../../../utils';
+import { Album, Artist } from '../../../../types';
+import { config } from '../../../../config';
+import { resetDatabase } from '../../../../utils';
 
 describe('nested create', () => {
 	beforeEach(resetDatabase);
