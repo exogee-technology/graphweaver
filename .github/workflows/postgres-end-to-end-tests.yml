@@ -71,6 +71,15 @@ jobs:
           cp ./databases/postgres.sql ./app/databases/postgres.sql
           cd app 
           node ../../cli/bin import postgresql --database=databases/postgres.sql
+      
+      - name: Start and Test GW instance
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 2
+        run: |
+            pnpm start-server &
+            sleep 3 &&
+            pnpm test &&
+            killall node
 
     env:
       CI: true
