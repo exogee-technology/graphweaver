@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 6px 16px;
+}
+
+svg {
+    width: 24px;
+    height: 24px;
+}
+
+.error {
+    background-color: var(--color-light-red);
+}
+
+.error svg {
+    fill: var(--color-red);
+}
+
+.success {
+    background-color: var(--color-light-green);
+}
+
+.success svg {
+    fill: var(--color-green);
+}
+
+.info {
+    background-color: var(--color-light-blue);
+}
+
+.info svg {
+    fill: var(--color-blue);
+}
+
+.warning {
+    background-color: var(--color-light-orange);
+}
+
+.warning svg {
+    fill: var(--color-orange);
+}
+
+.message {
+    color: var(--color-black);
+}
