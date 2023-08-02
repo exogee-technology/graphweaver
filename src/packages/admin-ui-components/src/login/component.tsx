@@ -1,5 +1,6 @@
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { GraphweaverLogo } from '../assets';
+import { Alert } from '../alert';
 import { Button } from '../button';
 
 import styles from './styles.module.css';
@@ -23,8 +24,12 @@ export const Login = ({ onLogin }: LoginProps) => {
 	const [login] = useMutation<{ login: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 
-	const handleOnSubmit = async (values: Form, { setSubmitting }: FormikHelpers<Form>) => {
+	const handleOnSubmit = async (
+		values: Form,
+		{ setSubmitting, resetForm }: FormikHelpers<Form>
+	) => {
 		let token;
+		setError(undefined);
 
 		try {
 			if (onLogin) {
@@ -44,6 +49,7 @@ export const Login = ({ onLogin }: LoginProps) => {
 				navigate('/');
 			}
 		} catch (error) {
+			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
 		} finally {
 			setSubmitting(false);
@@ -74,11 +80,7 @@ export const Login = ({ onLogin }: LoginProps) => {
 							Login
 						</Button>
 					</div>
-					{!!error && (
-						<div>
-							<b>Error: ${error.message}</b>
-						</div>
-					)}
+					{!!error && <Alert>Invalid username or password.</Alert>}
 				</Form>
 			)}
 		</Formik>
