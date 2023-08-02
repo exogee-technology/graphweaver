@@ -64,7 +64,7 @@ export async function dropDataAndRecreateGWDatabase() {
 
 		console.log('Database Dropped and Re-Created Successfully!');
 	} catch (error) {
-		console.error('Error while droppingData:', error);
+		console.error('Error while dropping and recreating database:', error);
 	}
 }
 

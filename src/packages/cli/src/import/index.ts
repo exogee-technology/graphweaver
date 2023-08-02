@@ -64,6 +64,15 @@ export const importDataSource = async (
 	source: 'mysql' | 'postgresql' | 'sqlite',
 	database?: string
 ) => {
+	// postgres & mysql
+	// Pass in host, db name, port, password
+	// determine what kind of source
+	// create a list of prompts
+	// if no prompts happy days
+	// other wise show prompts
+
+	//sqlite just needs database
+
 	// check we have all the dependencies needed to run the import
 	checkForMissingDependencies(source);
 
