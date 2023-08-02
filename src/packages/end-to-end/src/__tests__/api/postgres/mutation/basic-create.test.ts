@@ -6,23 +6,24 @@ import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
 import { deleteDatabase } from '../../../../postgres-utils';
 
-describe('basic query', () => {
+describe('basic create', () => {
 	beforeEach(resetDatabase);
 
-	test('should get albums', async () => {
-		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
-			.query(
+	test('should create an album', async () => {
+		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
+			.mutate(
 				gql`
-					query {
-						albums {
+					mutation CreateAlbum($data: AlbumInsertInput!) {
+						createAlbum(data: $data) {
 							id
 						}
 					}
 				`
 			)
+			.variables({ data: { artist: { id: 1 }, title: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.albums).toHaveLength(347);
+		expect(data?.createAlbum?.id).toBe('348');
 	});
 	afterAll(deleteDatabase);
 });
