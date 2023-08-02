@@ -5,6 +5,17 @@
 	--primary-color: #7038c2;
 	--secondary-color: #853af2;
 	--detail-bg-color: #171221;
+
+	--color-light-blue: #abbce9;
+	--color-light-green: #abe9b8;
+	--color-light-orange: #e9c8ab;
+	--color-light-red: #ff9999;
+	--color-blue: #0288d1;
+	--color-red: #d32f2f;
+	--color-orange: #ed6c02;
+	--color-green: #2e7d32;
+	--color-white: #fff;
+	--color-black: #5b5151;
 }
 @supports (font-variation-settings: normal) {
 	:root {
