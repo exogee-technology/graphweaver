@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: 6px 16px;
+}
+
+svg {
+    width: 24px;
+    height: 24px;
+}
+
+.error {
+    background-color: #ce5e5e;
+}
+
+.error svg {
+    fill: red;
+}
+
+.success {
+    background-color: #abe9b8;
+    color: green;
+}
+
+.success svg {
+    fill: green;
+}
+
+.info {
+    background-color: #abbce9;
+    color: #0288d1;;
+}
+
+.info svg {
+    fill: #0288d1;
+}
+
+.warning {
+    background-color: #e9c8ab;
+    color: orange;
+}
+
+.warning svg {
+    fill: orange;
+}
