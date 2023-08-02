@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-type Props = {
+type SpacerProps = {
 	height?: number;
 	width?: number;
 	grow?: number;
@@ -9,7 +9,7 @@ type Props = {
 	className?: string;
 };
 
-export const Spacer = ({ height, width, flex = 1, grow, shrink, className }: Props) => {
+export const Spacer = ({ height, width, flex = 1, grow, shrink, className }: SpacerProps) => {
 	const style = {
 		flex: flex,
 		flexGrow: grow,
