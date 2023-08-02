@@ -10,36 +10,37 @@ svg {
 }
 
 .error {
-    background-color: #ce5e5e;
+    background-color: var(--color-light-red);
 }
 
 .error svg {
-    fill: red;
+    fill: var(--color-red);
 }
 
 .success {
-    background-color: #abe9b8;
-    color: green;
+    background-color: var(--color-light-green);
 }
 
 .success svg {
-    fill: green;
+    fill: var(--color-green);
 }
 
 .info {
-    background-color: #abbce9;
-    color: #0288d1;;
+    background-color: var(--color-light-blue);
 }
 
 .info svg {
-    fill: #0288d1;
+    fill: var(--color-blue);
 }
 
 .warning {
-    background-color: #e9c8ab;
-    color: orange;
+    background-color: var(--color-light-orange);
 }
 
 .warning svg {
-    fill: orange;
+    fill: var(--color-orange);
+}
+
+.message {
+    color: var(--color-black);
 }
