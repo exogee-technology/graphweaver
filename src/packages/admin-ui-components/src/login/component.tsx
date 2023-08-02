@@ -80,7 +80,7 @@ export const Login = ({ onLogin }: LoginProps) => {
 							Login
 						</Button>
 					</div>
-					{!!error && <Alert>Invalid username or password.</Alert>}
+					{!!error && <Alert>{error.message}</Alert>}
 				</Form>
 			)}
 		</Formik>
