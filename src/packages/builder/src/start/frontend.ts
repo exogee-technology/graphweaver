@@ -44,10 +44,15 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 
 		console.log(
 			`
-Admin UI: ${
+The Graphweaver server has started. 😀😀
+
+The GraphQL API is available at ${backendUrl.toString()}
+
+Admin UI is available at ${
 				server.resolvedUrls?.local?.[0] || server.resolvedUrls?.network?.[0] || 'Could not get URL'
 			} 🚀
 
+If you are new here, start with Admin UI.
 `
 		);
 	}
