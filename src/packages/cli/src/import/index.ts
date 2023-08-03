@@ -68,16 +68,10 @@ export const importDataSource = async (
 	password?: string,
 	user?: string
 ) => {
-	// postgres & mysql
-	// Pass in host, db name, port, password
-	// determine what kind of source
-	// create a list of prompts
-	// if no prompts happy days
-	// other wise show prompts
-
+	console.log(
+		`\n\nImporting data source ${source}, ${database}, ${host}, ${port}, ${password}, ${user}...`
+	);
 	const prompts = [];
-
-	//sqlite just needs database
 
 	if (source === 'sqlite') {
 		if (!database) {
@@ -89,7 +83,6 @@ export const importDataSource = async (
 		}
 	}
 
-	// postgres & mysql
 	if (source === 'postgresql' || source === 'mysql') {
 		if (!database) {
 			prompts.push({

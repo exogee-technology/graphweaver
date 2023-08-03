@@ -11,10 +11,10 @@ import {
 } from './template';
 
 export enum Backend {
-	MikroOrmPostgres,
-	MikroOrmMysql,
-	REST,
-	MikroOrmSqlite,
+	Postgres = 'Postgres',
+	Mysql = 'Mysql',
+	Rest = 'Rest',
+	Sqlite = 'Sqlite',
 }
 
 const abort = () => {
@@ -23,9 +23,7 @@ const abort = () => {
 };
 
 export const needsDatabaseConnection = (backends: Backend[]) =>
-	backends.some((backend) =>
-		[Backend.MikroOrmPostgres, Backend.MikroOrmMysql, Backend.MikroOrmSqlite].includes(backend)
-	);
+	backends.some((backend) => [Backend.Postgres, Backend.Mysql, Backend.Sqlite].includes(backend));
 
 export const initGraphweaver = (projectName: string, backends: Backend[], version?: string) => {
 	makeDirectories(projectName);
@@ -41,10 +39,17 @@ type InitOptions = {
 	version?: string /** Optional version to use for the starter */;
 	name?: string /** Optional name to use for the project */;
 	backend?: Backend /** Optional backend to use for the starter */;
+	host?: string /** Optional host to use for the starter */;
+	port?: number /** Optional port to use for the starter */;
+	password?: string /** Optional password to use for the starter */;
+	user?: string /** Optional user to use for the starter */;
 };
 
-export const init = async ({ version, name, backend }: InitOptions) => {
+export const init = async ({ version, name, backend, host, port, password, user }: InitOptions) => {
 	console.log(`Graphweaver ${version ? 'using version ' + version : ''}\n`);
+	console.log(
+		`version: ${version}, name: ${name}, backend: ${backend}, host: ${host}, port: ${port}, password: ${password}, user: ${user} `
+	);
 
 	if (backend && name) {
 		initGraphweaver(name, [backend], version);
@@ -67,19 +72,19 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 				message: 'Which Graphweaver backends will you need?',
 				choices: [
 					{
-						value: Backend.MikroOrmPostgres,
+						value: Backend.Postgres,
 						name: 'MikroORM - PostgreSQL Backend',
 					},
 					{
-						value: Backend.MikroOrmMysql,
+						value: Backend.Mysql,
 						name: 'MikroORM - MySQL Backend',
 					},
 					{
-						value: Backend.MikroOrmSqlite,
+						value: Backend.Sqlite,
 						name: 'MikroORM - SQLite Backend',
 					},
 					{
-						value: Backend.REST,
+						value: Backend.Rest,
 						name: 'REST Backend',
 					},
 				],
