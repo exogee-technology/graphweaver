@@ -4,7 +4,7 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
-		"create-app-postgres": "rm -rf ./app && node ../cli/bin init --name=app --backend=postgres --version=\"local\" && cd app && pnpm i --ignore-workspace --no-lockfile",
+		"create-app-postgres": "rm -rf ./app && node ../cli/bin init --name=app --backend=\"postgres\" --version=\"local\" --host=localhost --user=postgres --password=postgres --port=5432 && cd app && pnpm i --ignore-workspace --no-lockfile",
 		"import-database-sqlite": ". ./scripts/import-sqlite.sh",
 		"import-database-postgres": ". ./scripts/import-postgres.sh",
 		"seed-postgres": "node ./scripts/seed-postgres.js",
