@@ -68,9 +68,6 @@ export const importDataSource = async (
 	password?: string,
 	user?: string
 ) => {
-	console.log(
-		`\n\nImporting data source ${source}, ${database}, ${host}, ${port}, ${password}, ${user}...`
-	);
 	const prompts = [];
 
 	if (source === 'sqlite') {

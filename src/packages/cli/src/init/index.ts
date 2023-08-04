@@ -39,10 +39,6 @@ type InitOptions = {
 	version?: string /** Optional version to use for the starter */;
 	name?: string /** Optional name to use for the project */;
 	backend?: Backend /** Optional backend to use for the starter */;
-	host?: string /** Optional host to use for the starter */;
-	port?: number /** Optional port to use for the starter */;
-	password?: string /** Optional password to use for the starter */;
-	user?: string /** Optional user to use for the starter */;
 };
 
 export const init = async ({ version, name, backend }: InitOptions) => {
