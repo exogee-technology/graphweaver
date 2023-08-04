@@ -51,7 +51,7 @@ jobs:
         run: |
           pnpm start-server &
           sleep 3 &&
-          pnpm test-postgres &&
+          pnpm test-sqlite &&
           killall node
 
         env:
