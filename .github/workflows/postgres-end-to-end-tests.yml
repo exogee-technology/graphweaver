@@ -55,31 +55,25 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Create GW database
+        run: createdb gw
+
       - name: Seed Postgres
         working-directory: src/packages/end-to-end
         run: pnpm seed-postgres
 
-      - name: Create GW instance
-        working-directory: src/packages/end-to-end
-        run: |
-          pnpm create-app
-
       - name: Import Postgres Chinook Database
         working-directory: src/packages/end-to-end
-        run: |
-          mkdir app/databases
-          cp ./databases/postgres.sql ./app/databases/postgres.sql
-          cd app 
-          node ../../cli/bin import postgresql --database=databases/postgres.sql
-      
+        run: pnpm import-database-postgres
+
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-            pnpm start-server &
-            sleep 3 &&
-            pnpm test &&
-            killall node
+          pnpm start-server &
+          sleep 3 &&
+          pnpm test &&
+          killall node
 
     env:
       CI: true
