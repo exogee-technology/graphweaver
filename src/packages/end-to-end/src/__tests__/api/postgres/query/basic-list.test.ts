@@ -3,12 +3,8 @@ import gql from 'graphql-tag';
 
 import { Album } from '../../../../types';
 import { config } from '../../../../config';
-import { resetDatabase } from '../../../../utils';
-import { deleteDatabase } from '../../../../postgres-utils';
 
 describe('basic query', () => {
-	beforeEach(resetDatabase);
-
 	test('should get albums', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
 			.query(
@@ -24,5 +20,4 @@ describe('basic query', () => {
 
 		expect(data?.albums).toHaveLength(347);
 	});
-	afterAll(deleteDatabase);
 });

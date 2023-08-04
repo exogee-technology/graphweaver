@@ -1,6 +1,5 @@
 import fs from 'fs';
 import { config } from './config';
-import { seedData, dropDataAndRecreateGWDatabase, deleteDatabase } from './postgres-utils';
 
 const database = process.env.DATABASE;
 
@@ -20,11 +19,5 @@ export const resetDatabase = async () => {
 			`${config.appDirectory}/databases/database.sqlite`
 		);
 		return;
-	}
-	if (database === Database.POSTGRES) {
-		await dropDataAndRecreateGWDatabase();
-		await seedData();
-	} else {
-		throw new Error(`Database ${database} not supported.`);
 	}
 };
