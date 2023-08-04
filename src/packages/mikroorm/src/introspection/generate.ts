@@ -212,12 +212,25 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 
 		const source: File[] = [];
 
+		const summaryOfEntities: { name: string; entityFilePath: string; schemaFilePath: string }[] =
+			[];
+
 		for (const meta of metadata) {
 			if (!meta.pivotTable) {
-				source.push(new DataEntityFile(meta, namingStrategy, platform, databaseType));
-				source.push(new SchemaEntityFile(meta, namingStrategy, platform));
-				source.push(new SchemaEntityIndexFile(meta, namingStrategy, platform));
-				source.push(new SchemaResolverFile(meta, namingStrategy, platform));
+				const dataEntityFile = new DataEntityFile(meta, namingStrategy, platform, databaseType);
+				const schemaEntityFile = new SchemaEntityFile(meta, namingStrategy, platform);
+				const schemaIndexFile = new SchemaEntityIndexFile(meta, namingStrategy, platform);
+				const schemaResolverFile = new SchemaResolverFile(meta, namingStrategy, platform);
+				source.push(dataEntityFile, schemaEntityFile, schemaIndexFile, schemaResolverFile);
+				summaryOfEntities.push({
+					name: meta.className,
+					entityFilePath: `${dataEntityFile.getBasePath()}${dataEntityFile.getBaseName()}`,
+					schemaFilePath: `${schemaIndexFile.getBasePath()}: ${[
+						schemaIndexFile.getBaseName(),
+						schemaEntityFile.getBaseName(),
+						schemaResolverFile.getBaseName(),
+					].join(', ')}`,
+				});
 			}
 		}
 
@@ -237,6 +250,12 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		}));
 
 		await closeConnection();
+
+		console.log('\nImport Summary:');
+		console.table(summaryOfEntities);
+		console.log(
+			`\nImported ${summaryOfEntities.length} entities, creating the above files in your Graphweaver project. \n`
+		);
 
 		return files;
 	} catch (err) {
