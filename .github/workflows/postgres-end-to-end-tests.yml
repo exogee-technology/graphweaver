@@ -72,7 +72,7 @@ jobs:
         run: |
           pnpm start-server &
           sleep 3 &&
-          pnpm test &&
+          pnpm test-sqlite &&
           killall node
 
     env:
