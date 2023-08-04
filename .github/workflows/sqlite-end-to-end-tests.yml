@@ -40,12 +40,7 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Create GW instance
-        working-directory: src/packages/end-to-end
-        run: |
-          pnpm create-app
-
-      - name: Import SQLite Chinook Database
+      - name: Init and Import SQLite Chinook Database
         working-directory: src/packages/end-to-end
         run: |
           pnpm import-database-sqlite
