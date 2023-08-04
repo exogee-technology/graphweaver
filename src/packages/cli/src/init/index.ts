@@ -45,12 +45,7 @@ type InitOptions = {
 	user?: string /** Optional user to use for the starter */;
 };
 
-export const init = async ({ version, name, backend, host, port, password, user }: InitOptions) => {
-	console.log(`Graphweaver ${version ? 'using version ' + version : ''}\n`);
-	console.log(
-		`version: ${version}, name: ${name}, backend: ${backend}, host: ${host}, port: ${port}, password: ${password}, user: ${user} `
-	);
-
+export const init = async ({ version, name, backend }: InitOptions) => {
 	if (backend && name) {
 		initGraphweaver(name, [backend], version);
 	} else {

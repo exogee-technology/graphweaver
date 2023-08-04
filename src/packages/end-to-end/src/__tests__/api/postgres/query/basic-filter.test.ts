@@ -3,12 +3,8 @@ import gql from 'graphql-tag';
 
 import { Album } from '../../../../types';
 import { config } from '../../../../config';
-import { resetDatabase } from '../../../../utils';
-import { deleteDatabase } from '../../../../postgres-utils';
 
 describe('basic filter', () => {
-	beforeEach(resetDatabase);
-
 	test('should filter Albums by Artist ID = "Black Sabbath"', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
 			.query(
@@ -36,5 +32,4 @@ describe('basic filter', () => {
 
 		expect(data?.albums).toHaveLength(2);
 	});
-	afterAll(deleteDatabase);
 });
