@@ -55,8 +55,9 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Create GW database
-        run: createdb gw
+        # If this is here the error is "createdb: error: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory"
+      # - name: Create GW database
+      #   run: createdb gw
 
       - name: Seed Postgres
         working-directory: src/packages/end-to-end
