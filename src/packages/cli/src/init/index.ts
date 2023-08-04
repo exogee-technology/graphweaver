@@ -11,10 +11,10 @@ import {
 } from './template';
 
 export enum Backend {
-	MikroOrmPostgres,
-	MikroOrmMysql,
-	REST,
-	MikroOrmSqlite,
+	Postgres = 'Postgres',
+	Mysql = 'Mysql',
+	Rest = 'Rest',
+	Sqlite = 'Sqlite',
 }
 
 const abort = () => {
@@ -23,9 +23,7 @@ const abort = () => {
 };
 
 export const needsDatabaseConnection = (backends: Backend[]) =>
-	backends.some((backend) =>
-		[Backend.MikroOrmPostgres, Backend.MikroOrmMysql, Backend.MikroOrmSqlite].includes(backend)
-	);
+	backends.some((backend) => [Backend.Postgres, Backend.Mysql, Backend.Sqlite].includes(backend));
 
 export const initGraphweaver = (projectName: string, backends: Backend[], version?: string) => {
 	makeDirectories(projectName);
@@ -44,8 +42,6 @@ type InitOptions = {
 };
 
 export const init = async ({ version, name, backend }: InitOptions) => {
-	console.log(`Graphweaver ${version ? 'using version ' + version : ''}\n`);
-
 	if (backend && name) {
 		initGraphweaver(name, [backend], version);
 	} else {
@@ -67,19 +63,19 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 				message: 'Which Graphweaver backends will you need?',
 				choices: [
 					{
-						value: Backend.MikroOrmPostgres,
+						value: Backend.Postgres,
 						name: 'MikroORM - PostgreSQL Backend',
 					},
 					{
-						value: Backend.MikroOrmMysql,
+						value: Backend.Mysql,
 						name: 'MikroORM - MySQL Backend',
 					},
 					{
-						value: Backend.MikroOrmSqlite,
+						value: Backend.Sqlite,
 						name: 'MikroORM - SQLite Backend',
 					},
 					{
-						value: Backend.REST,
+						value: Backend.Rest,
 						name: 'REST Backend',
 					},
 				],

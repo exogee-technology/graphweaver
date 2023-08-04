@@ -4,11 +4,14 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
-		"create-app": "rm -rf ./app && node ../cli/bin init --name=app --backend=sqlite --version=\"local\" && cd app && pnpm i --ignore-workspace --no-lockfile",
-		"import-database": "cp ./database.sqlite ./app/database.sqlite && cd app && node ../../cli/bin import sqlite --database=database.sqlite",
+		"import-database-sqlite": ". ./scripts/import-sqlite.sh",
+		"import-database-postgres": ". ./scripts/import-postgres.sh",
+		"seed-postgres": "node ./scripts/seed-postgres.js",
 		"start-server": "cd app && pnpm start",
-		"dev": "pnpm create-app && pnpm import-database && pnpm start-server",
-		"test": "jest --runInBand",
+		"dev-sqlite": "pnpm import-database-sqlite && pnpm start-server",
+		"dev-postgres": "createdb gw && pnpm seed-postgres && pnpm import-database-postgres  && pnpm start-server",
+		"test-sqlite": "export DATABASE=sqlite && jest --runInBand -- api/sqlite",
+		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"version": "npm version --no-git-tag-version"
 	},
 	"devDependencies": {
@@ -16,6 +19,7 @@
 		"graphql": "16.6.0",
 		"graphql-tag": "2.12.6",
 		"jest": "29.4.0",
+		"pg": "8.11.1",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.0.5",
 		"typescript": "5.0.2"

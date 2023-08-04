@@ -60,6 +60,11 @@ Comprehensive documentation and usage examples can be found on our [Docs Site](h
 
 ## Quick Start
 
+
+https://github.com/exogee-technology/graphweaver/assets/81122022/3c4eb47e-84ff-476c-998f-936994e8064b
+
+
+
 Before we start the installer make sure you are running:
 
 - Node `>18.*`

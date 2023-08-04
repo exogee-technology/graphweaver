@@ -83,9 +83,9 @@ export const makeDatabase = (projectName: string, backends: Backend[]) => {
 	},
 };`;
 
-	const hasPostgres = backends.some((backend) => backend === Backend.MikroOrmPostgres);
-	const hasMySql = backends.some((backend) => backend === Backend.MikroOrmMysql);
-	const hasSqlite = backends.some((backend) => backend === Backend.MikroOrmSqlite);
+	const hasPostgres = backends.some((backend) => backend === Backend.Postgres);
+	const hasMySql = backends.some((backend) => backend === Backend.Mysql);
+	const hasSqlite = backends.some((backend) => backend === Backend.Sqlite);
 
 	const database = `
 ${hasPostgres ? pgDriverImport : ``}
