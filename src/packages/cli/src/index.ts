@@ -43,15 +43,39 @@ yargs
 				.option('version', {
 					type: 'string',
 					describe: 'Specify a version of Graphweaver to use.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify the database server hostname.',
+				})
+				.option('port', {
+					type: 'number',
+					describe: 'Specify the database server port.',
+				})
+				.option('password', {
+					type: 'string',
+					describe: 'Specify the database server password.',
+				})
+				.option('user', {
+					type: 'string',
+					describe: 'Specify the database server user.',
 				}),
 		handler: async (argv) => {
 			const version = argv.version;
 			const name = argv.name;
 			const backend = argv.backend;
-			if (backend === 'postgres') init({ name, backend: Backend.MikroOrmPostgres, version });
-			if (backend === 'mysql') init({ name, backend: Backend.MikroOrmMysql, version });
-			if (backend === 'rest') init({ name, backend: Backend.REST, version });
-			if (backend === 'sqlite') init({ name, backend: Backend.MikroOrmSqlite, version });
+			const host = argv.host;
+			const port = argv.port;
+			const password = argv.password;
+			const user = argv.user;
+
+			console.log(
+				`Initing project ${name}, ${version}, ${backend}, ${host}, ${port}, ${password}, ${user}...`
+			);
+			if (backend === 'postgres') init({ name, backend: Backend.Postgres, version });
+			if (backend === 'mysql') init({ name, backend: Backend.Mysql, version });
+			if (backend === 'rest') init({ name, backend: Backend.Rest, version });
+			if (backend === 'sqlite') init({ name, backend: Backend.Sqlite, version });
 			init({ name, version });
 		},
 	})
@@ -69,9 +93,30 @@ yargs
 				.option('database', {
 					type: 'string',
 					describe: 'Specify the database name.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify the database server hostname.',
+				})
+				.option('port', {
+					type: 'number',
+					describe: 'Specify the database server port.',
+				})
+				.option('password', {
+					type: 'string',
+					describe: 'Specify the database server password.',
+				})
+				.option('user', {
+					type: 'string',
+					describe: 'Specify the database server user.',
 				}),
-		handler: async ({ source, database }) => {
-			await importDataSource(source, database);
+		handler: async ({ source, database, host, port, password, user }) => {
+			console.log('Importing data source...');
+			console.log(
+				`Source: ${source}, Database: ${database}, Host: ${host}, Port: ${port}, Password: ${password}, User: ${user}`
+			);
+
+			await importDataSource(source, database, host, port, password, user);
 		},
 	})
 	.command({

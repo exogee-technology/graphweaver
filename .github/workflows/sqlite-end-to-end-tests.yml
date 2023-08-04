@@ -1,11 +1,11 @@
-name: End to End Tests
+name: SQLite End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  end-to-end-tests:
+  sqlite-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -40,15 +40,10 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Create GW instance
+      - name: Init and Import SQLite Chinook Database
         working-directory: src/packages/end-to-end
         run: |
-          pnpm create-app
-
-      - name: Import Chinook Database
-        working-directory: src/packages/end-to-end
-        run: |
-          pnpm import-database
+          pnpm import-database-sqlite
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
@@ -56,7 +51,7 @@ jobs:
         run: |
           pnpm start-server &
           sleep 3 &&
-          pnpm test &&
+          pnpm test-sqlite &&
           killall node
 
         env:

@@ -1,13 +1,10 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../../../types';
-import { config } from '../../../config';
-import { resetDatabase } from '../../../utils';
+import { Album } from '../../../../types';
+import { config } from '../../../../config';
 
 describe('basic filter', () => {
-	beforeEach(resetDatabase);
-
 	test('should filter Albums by Artist ID = "Black Sabbath"', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
 			.query(

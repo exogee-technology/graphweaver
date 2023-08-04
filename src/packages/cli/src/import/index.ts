@@ -62,45 +62,77 @@ const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') 
 
 export const importDataSource = async (
 	source: 'mysql' | 'postgresql' | 'sqlite',
-	database?: string
+	database?: string,
+	host?: string,
+	port?: number,
+	password?: string,
+	user?: string
 ) => {
+	const prompts = [];
+
+	if (source === 'sqlite') {
+		if (!database) {
+			prompts.push({
+				type: 'input',
+				name: 'dbName',
+				message: `What is the database name?`,
+			});
+		}
+	}
+
+	if (source === 'postgresql' || source === 'mysql') {
+		if (!database) {
+			prompts.push({
+				type: 'input',
+				name: 'dbName',
+				message: `What is the database name?`,
+			});
+		}
+		if (!host) {
+			prompts.push({
+				type: 'input',
+				name: 'host',
+				default: '127.0.0.1',
+				message: `What is the database server's hostname?`,
+			});
+		}
+		if (!port) {
+			prompts.push({
+				type: 'input',
+				name: 'port',
+				default: source === 'postgresql' ? 5432 : 3306,
+				message: `What is the port?`,
+			});
+		}
+		if (!password) {
+			prompts.push({
+				type: 'password',
+				mask: '*',
+				name: 'password',
+				message: `What is the password for this user?`,
+			});
+		}
+		if (!user) {
+			prompts.push({
+				type: 'input',
+				name: 'user',
+				message: `What is the username to access the database server?`,
+			});
+		}
+	}
+	const { default: inquirer } = await import('inquirer');
+
+	if (prompts.length > 0) {
+		const answers = await inquirer.prompt(prompts);
+		database = answers.dbName ?? database;
+		host = answers.host ?? host;
+		port = answers.port ?? port;
+		password = answers.password ?? password;
+		user = answers.user ?? user;
+	}
+
 	// check we have all the dependencies needed to run the import
 	checkForMissingDependencies(source);
-
-	const { default: inquirer } = await import('inquirer');
-	const { host, dbName, user, password, port } =
-		source === 'sqlite'
-			? { host: undefined, dbName: database, user: undefined, password: undefined, port: undefined }
-			: await inquirer.prompt([
-					{
-						type: 'input',
-						name: 'host',
-						default: '127.0.0.1',
-						message: `What is the database server's hostname?`,
-					},
-					{
-						type: 'input',
-						name: 'dbName',
-						message: `What is the database name?`,
-					},
-					{
-						type: 'input',
-						name: 'user',
-						message: `What is the username to access the database server?`,
-					},
-					{
-						type: 'password',
-						mask: '*',
-						name: 'password',
-						message: `What is the password for this user?`,
-					},
-					{
-						type: 'input',
-						name: 'port',
-						default: source === 'postgresql' ? 5432 : 3306,
-						message: `What is the port?`,
-					},
-			  ]);
 
 	const spinner = ora('Introspecting...').start();
 
@@ -108,7 +140,7 @@ export const importDataSource = async (
 		const files = await introspection(source, {
 			mikroOrmConfig: {
 				host,
-				dbName,
+				dbName: database,
 				user,
 				password,
 				port,
