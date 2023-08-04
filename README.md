@@ -60,6 +60,8 @@ Comprehensive documentation and usage examples can be found on our [Docs Site](h
 
 ## Quick Start
 
+https://file.notion.so/f/s/298e1097-f03f-4e63-8bd8-03cf01c77ff0/GWQuickStart.mp4
+
 Before we start the installer make sure you are running:
 
 - Node `>18.*`
