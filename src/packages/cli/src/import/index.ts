@@ -148,12 +148,12 @@ export const importDataSource = async (
 		});
 
 		spinner.stop();
-		console.log('Import complete.');
 
 		for (const file of files) {
 			createDirectories(path.join('./src/', file.path));
 			writeFileSync(path.join(process.cwd(), './src/', file.path, file.name), file.contents);
 		}
+		console.log(`${files.length} files have been successfully created in the project.`);
 	} catch (err: unknown) {
 		if (isIntrospectionError(err)) {
 			console.warn(`\n\n${err.title}\n${err.message}\n\n`);
