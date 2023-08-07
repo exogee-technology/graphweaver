@@ -57,11 +57,11 @@ That's why we built Graphweaver. We've been using it on our projects for about a
 
 ## Features
 
-📝 Code-first GraphQL API: Save time and code efficiently with our code-first approach.
-🚀 Built for Node in Typescript: The power of Typescript combined with the flexibility of Node.js.
-🔗 Connect to Multiple Datasources: Seamlessly integrate Postgres, MySql, Sqlite, REST, and more.
-🎯 Instant GraphQL API: Get your API up and running quickly with automatic queries and mutations.
-🔄 One Command Import: Easily import an existing database with a simple command-line tool.
+  📝 Code-first GraphQL API: Save time and code efficiently with our code-first approach.</br>
+  🚀 Built for Node in Typescript: The power of Typescript combined with the flexibility of Node.js.</br>
+  🔗 Connect to Multiple Datasources: Seamlessly integrate Postgres, MySql, Sqlite, REST, and more.</br>
+  🎯 Instant GraphQL API: Get your API up and running quickly with automatic queries and mutations.</br>
+  🔄 One Command Import: Easily import an existing database with a simple command-line tool.</br>
 
 <!-- DOCUMENTATION -->
 
