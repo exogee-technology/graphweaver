@@ -25,9 +25,6 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Show mysql databases for root user
-        run: mysql --protocol=tcp -h localhost -P 3306 -u root -ppassword -e "SHOW DATABASES"
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
