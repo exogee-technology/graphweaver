@@ -10,4 +10,4 @@ mysql -hlocalhost -u $MYSQL_USER --password=$MYSQL_PASSWORD Chinook < databases/
 mysql -hlocalhost -u $MYSQL_USER --password=$MYSQL_PASSWORD -e "CREATE USER IF NOT EXISTS 'tester'@'localhost' IDENTIFIED BY 'password';"
 mysql -hlocalhost -u $MYSQL_USER --password=$MYSQL_PASSWORD -e "GRANT ALL ON Chinook.* TO 'tester'@'localhost';"
 mysql -hlocalhost -u $MYSQL_USER --password=$MYSQL_PASSWORD -e "FLUSH PRIVILEGES;"
-node ../../cli/bin import mysql --database=Chinook --user=tester --password=password --host=localhost --port=3306 
+node ../../cli/bin import mysql --database=Chinook --user=tester --password=password --host="127.0.0.1" --port=3306 
