@@ -55,7 +55,9 @@ jobs:
 
       - name: Import Mysql Chinook Database
         working-directory: src/packages/end-to-end
-        run: pnpm import-database-mysql
+        run: |
+          sudo /etc/init.d/mysql start 
+          pnpm import-database-mysql
 
       - name: Start and Test Chinook instance
         working-directory: src/packages/end-to-end
