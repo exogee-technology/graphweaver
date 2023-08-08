@@ -11,19 +11,6 @@ jobs:
       run:
         working-directory: src
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: password
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd "mysqladmin ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -53,11 +40,12 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Start Mysql server
+        run: sudo /etc/init.d/mysql start
+
       - name: Import Mysql Chinook Database
         working-directory: src/packages/end-to-end
-        run: |
-          sudo /etc/init.d/mysql start 
-          pnpm import-database-mysql
+        run: pnpm import-database-mysql
 
       - name: Start and Test Chinook instance
         working-directory: src/packages/end-to-end
@@ -70,4 +58,4 @@ jobs:
 
     env:
       CI: true
-      MYSQL_PASSWORD: password
+      MYSQL_PASSWORD: root
