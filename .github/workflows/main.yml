@@ -61,7 +61,7 @@ jobs:
       - run: pnpm build
       - run: pnpm -r --filter=!"@exogee/graphweaver-end-to-end" test 
     env:
-      DATABASE_HOST: 127.0.0.1
+      DATABASE_HOST: localhost
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
       DATABASE_PORT: 5432
