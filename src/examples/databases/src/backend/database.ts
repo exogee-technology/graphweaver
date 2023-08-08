@@ -26,5 +26,3 @@ export const myConnection = {
 		port: 3306,
 	},
 };
-
-export const connections = [pgConnection, myConnection];
