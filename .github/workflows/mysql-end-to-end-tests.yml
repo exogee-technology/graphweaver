@@ -6,8 +6,11 @@ on:
 
 env:
   CI: true
-  MYSQL_USER: root
-  MYSQL_PASSWORD: root
+  DATABASE_HOST: 127.0.0.1
+  DATABASE_USERNAME: root
+  DATABASE_PASSWORD: root
+  DATABASE_PORT: 3306
+  DATABASE_NAME: Chinook
 
 jobs:
   mysql-end-to-end-tests:
@@ -47,13 +50,7 @@ jobs:
 
       - name: 🔥 Initialize MySQL
         run: sudo systemctl start mysql.service
-      
-      - name: 🚀 Boost user
-        run: |
-          mysql -e "ALTER USER '${{ env.MYSQL_USER }}'@'localhost' \
-          IDENTIFIED WITH mysql_native_password BY 'root';" \
-          -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-          
+              
       - name: Import Mysql Chinook Database
         working-directory: src/packages/end-to-end
         run: pnpm import-database-mysql
