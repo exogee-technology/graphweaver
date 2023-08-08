@@ -42,6 +42,7 @@ export class DatabaseFile {
 		);
 		connection.push(`${pad}${pad}dbName: '${config.dbName}',`);
 		if (!isSQLite) {
+			connection.push(`${pad}${pad}host: '${config.host}',`);
 			connection.push(`${pad}${pad}user: '${config.user}',`);
 			connection.push(`${pad}${pad}password: '${config.password}',`);
 			connection.push(`${pad}${pad}port: ${config.port},`);

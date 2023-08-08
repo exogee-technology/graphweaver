@@ -1,0 +1,66 @@
+name: MySQL End to End Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  CI: true
+  DATABASE_HOST: 127.0.0.1
+  DATABASE_USERNAME: root
+  DATABASE_PASSWORD: root
+  DATABASE_PORT: 3306
+  DATABASE_NAME: Chinook
+
+jobs:
+  mysql-end-to-end-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:         
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8.6.9
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: 🔥 Initialize MySQL
+        run: sudo systemctl start mysql.service
+              
+      - name: Import Mysql Chinook Database
+        working-directory: src/packages/end-to-end
+        run: pnpm import-database-mysql
+
+      - name: Start and Test Chinook instance
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 2
+        run: |
+          pnpm start-server &
+          sleep 3 &&
+          pnpm test-mysql &&
+          killall node
+
