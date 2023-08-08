@@ -1,4 +1,4 @@
-name: Mysql End to End Tests
+name: MySQL End to End Tests
 
 on:
   pull_request:
