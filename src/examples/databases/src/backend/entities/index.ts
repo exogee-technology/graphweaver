@@ -1,2 +1,2 @@
-export * from './postgresql/user';
-export * from './mysql/task';
+export * from './postgresql';
+export * from './mysql';
