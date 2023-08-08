@@ -10,7 +10,7 @@
 
 <!-- PROJECT DESCRIPTION -->
 <p align="center">
-  Welcome to Graphweaver! This open source project allows you to seamlessly weave together complex graph structures, unlocking powerful data visualization and analysis capabilities.
+  Welcome to Graphweaver! Turn multiple data sources into a single GraphQL API.
 </p>
 
 <!-- PROJECT STATUS -->
@@ -34,7 +34,8 @@
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [About](#about)
+- [Why](#why)
+- [Features](#features)
 - [Documentation](#documentation)
 - [Quick Start](#quick-start)
   - [Next Steps](#next-steps)
@@ -42,13 +43,25 @@
   - [Publishing](#publishing)
 - [License](#license)
 
-<!-- ABOUT -->
+<!-- WHY -->
 
-## About
+## Why
 
-Graphweaver allows you to build modern applications which accept that they are not the source of truth for all data in the application. Seamlessly join multiple backend services including REST APIs, databases, and SaaS platforms into a single GraphQL API, then administer the data in all of those places.
+We consistently find that everyone has lots of sources of truth. You know, CRM holding customer data, accounting systems handling invoices, and more scattered across different SaaS platforms and databases? It's a real pain to sync it all up!
 
-Never replicate your data again.
+In the past we used to copy data from everywhere to the DB, but that always breaks at some point.
+
+Well, after years of grappling with this issue, we wanted a way to easily build a single GraphQL API in front of all those sources. An API that allows you to execute queries that even span across datasources (give me DB records where customer in CRM name is "Bob"), and also allows you to administer your data all from one place. 
+
+That's why we built Graphweaver. We've been using it on our projects for about a year now and think you'll love it too!
+
+## Features
+
+  📝 Code-first GraphQL API: Save time and code efficiently with our code-first approach.</br>
+  🚀 Built for Node in Typescript: The power of Typescript combined with the flexibility of Node.js.</br>
+  🔗 Connect to Multiple Datasources: Seamlessly integrate Postgres, MySql, Sqlite, REST, and more.</br>
+  🎯 Instant GraphQL API: Get your API up and running quickly with automatic queries and mutations.</br>
+  🔄 One Command Import: Easily import an existing database with a simple command-line tool.</br>
 
 <!-- DOCUMENTATION -->
 
