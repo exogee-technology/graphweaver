@@ -11,7 +11,7 @@
 		"start-server": "cd app && pnpm start",
 		"dev-sqlite": "pnpm import-database-sqlite && pnpm start-server",
 		"dev-postgres": "createdb gw && pnpm seed-postgres && pnpm import-database-postgres  && pnpm start-server",
-		"dev-mysql": "export MYSQL_USER=root && export MYSQL_PASSWORD=root && pnpm import-database-mysql && pnpm start-server",
+		"dev-mysql": "export DATABASE_USERNAME=root && export DATABASE_PASSWORD=root && export DATABASE_HOST=localhost && pnpm import-database-mysql && pnpm start-server",
 		"test-sqlite": "export DATABASE=sqlite && jest --runInBand -- api/sqlite",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
