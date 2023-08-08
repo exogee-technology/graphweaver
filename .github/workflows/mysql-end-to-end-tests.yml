@@ -16,16 +16,7 @@ jobs:
       run:
         working-directory: src
 
-    steps:
-      - name: 🔥 Initialize MySQL
-        run: sudo systemctl start mysql.service
-      
-      - name: 🚀 Boost user
-        run: |
-          mysql -e "ALTER USER '${{ env.MYSQL_USER }}'@'localhost' \
-          IDENTIFIED WITH mysql_native_password BY 'root';" \
-          -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
-          
+    steps:         
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -54,6 +45,15 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: 🔥 Initialize MySQL
+        run: sudo systemctl start mysql.service
+      
+      - name: 🚀 Boost user
+        run: |
+          mysql -e "ALTER USER '${{ env.MYSQL_USER }}'@'localhost' \
+          IDENTIFIED WITH mysql_native_password BY 'root';" \
+          -u${{ env.MYSQL_USER }} -p${{ env.MYSQL_PASSWORD }}
+          
       - name: Import Mysql Chinook Database
         working-directory: src/packages/end-to-end
         run: pnpm import-database-mysql
