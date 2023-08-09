@@ -225,7 +225,7 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
 				console.log('Watch process started...');
-				await startFrontend(args as StartOptions);
+				await startFrontend(args as StartOptions, true);
 
 				// Watch the directory for file changes
 				const watcher = chokidar.watch('./src/**', {
@@ -235,7 +235,7 @@ yargs
 				// Restart the process on file change
 				watcher.on('change', async () => {
 					console.log('File changed. Restarting the process...');
-					await startFrontend(args as StartOptions);
+					await startFrontend(args as StartOptions, true);
 				});
 			}
 		},
