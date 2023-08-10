@@ -11,6 +11,7 @@ import {
 	ID,
 	ObjectType,
 	registerEnumType,
+	Root,
 } from '@exogee/graphweaver';
 import {
 	AccessControlList,
@@ -96,6 +97,11 @@ export class Task extends GraphQLEntity<OrmTask> {
 
 	@Field(() => Priority, { nullable: true })
 	priority?: Priority;
+
+	@Field((type) => String, { nullable: true })
+	slug(@Root() task: Task) {
+		return `${task.id}:${task.description}`;
+	}
 
 	// The hooks below are not in use (and are not required when creating an entity)
 	// They are included here as an example of how to use them
