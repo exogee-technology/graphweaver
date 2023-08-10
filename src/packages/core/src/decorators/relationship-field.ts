@@ -47,8 +47,9 @@ export function RelationshipField<
 			returnTypeFunc,
 			typeOptions: { nullable },
 		});
-		const typeName = key.charAt(0).toUpperCase() + key.slice(1);
 		const getRelatedType = () => {
+			const relatedEntityType = getType() as GraphQLEntityConstructor<G, D>;
+			const typeName = relatedEntityType.name;
 			return TypeMap[`${pluralize(typeName)}ListFilter`];
 		};
 
