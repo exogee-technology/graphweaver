@@ -317,6 +317,7 @@ export type Task = {
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   priority?: Maybe<Priority>;
+  slug?: Maybe<Scalars['String']['output']>;
   tags?: Maybe<Array<Tag>>;
   user?: Maybe<User>;
 };
@@ -330,6 +331,7 @@ export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   priority?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
@@ -337,6 +339,7 @@ export type TaskCreateOrUpdateInput = {
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
   priority?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
@@ -373,6 +376,14 @@ export type TasksListFilter = {
   priority_nin?: InputMaybe<Array<Priority>>;
   priority_notnull?: InputMaybe<Priority>;
   priority_null?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slug_ilike?: InputMaybe<Scalars['String']['input']>;
+  slug_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug_like?: InputMaybe<Scalars['String']['input']>;
+  slug_ne?: InputMaybe<Scalars['String']['input']>;
+  slug_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug_notnull?: InputMaybe<Scalars['String']['input']>;
+  slug_null?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<TagsListFilter>;
   user?: InputMaybe<UsersListFilter>;
 };
@@ -381,6 +392,7 @@ export type TasksOrderByInput = {
   description?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   priority?: InputMaybe<Sort>;
+  slug?: InputMaybe<Sort>;
 };
 
 export type TasksPaginationInput = {
