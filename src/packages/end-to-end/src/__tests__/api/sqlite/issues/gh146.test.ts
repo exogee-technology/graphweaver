@@ -19,7 +19,7 @@ import {
 	RelationshipField,
 	Resolver,
 } from '@exogee/graphweaver';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { BaseEntity, MikroBackendProvider, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 
 import { resetDatabase } from '../../../../utils';
 
