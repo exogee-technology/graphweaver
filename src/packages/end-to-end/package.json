@@ -17,6 +17,19 @@
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
 		"version": "npm version --no-git-tag-version"
 	},
+	"dependencies": {
+		"@exogee/graphweaver": "*",
+		"@exogee/graphweaver-scalars": "*",
+		"@exogee/graphweaver-server": "*",
+		"graphweaver": "*",
+		"@exogee/graphweaver-mikroorm": "*",
+		"@mikro-orm/core": "5.4.2",
+		"@mikro-orm/sqlite": "5.4.2",
+		"reflect-metadata": "0.1.13",
+		"type-graphql": "2.0.0-beta.2",
+		"class-validator": "0.14.0",
+		"graphql": "16.6.0"
+	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",
 		"graphql": "16.6.0",
