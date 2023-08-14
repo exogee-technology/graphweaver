@@ -12,7 +12,7 @@
 		"dev-sqlite": "pnpm import-database-sqlite && pnpm start-server",
 		"dev-postgres": "createdb gw && pnpm seed-postgres && pnpm import-database-postgres  && pnpm start-server",
 		"dev-mysql": "pnpm import-database-mysql && pnpm start-server",
-		"test-sqlite": "export DATABASE=sqlite && jest --runInBand -- api/sqlite",
+		"test-sqlite": "export DATABASE=sqlite && jest --runInBand --forceExit ---- api/sqlite",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
 		"version": "npm version --no-git-tag-version"
