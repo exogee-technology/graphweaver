@@ -69,9 +69,7 @@ yargs
 			const password = argv.password;
 			const user = argv.user;
 
-			console.log(
-				`Initing project ${name}, ${version}, ${backend}, ${host}, ${port}, ${password}, ${user}...`
-			);
+			console.log(`Initing project ${name}, ${version}, ${backend}, ${host}, ${port}, ${user}...`);
 			if (backend === 'postgres') init({ name, backend: Backend.Postgres, version });
 			if (backend === 'mysql') init({ name, backend: Backend.Mysql, version });
 			if (backend === 'rest') init({ name, backend: Backend.Rest, version });
@@ -113,7 +111,7 @@ yargs
 		handler: async ({ source, database, host, port, password, user }) => {
 			console.log('Importing data source...');
 			console.log(
-				`Source: ${source}, Database: ${database}, Host: ${host}, Port: ${port}, Password: ${password}, User: ${user}`
+				`Source: ${source}, Database: ${database}, Host: ${host}, Port: ${port}, User: ${user}`
 			);
 
 			await importDataSource(source, database, host, port, password, user);

@@ -31,11 +31,11 @@
 		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "5.4.2",
-		"@mikro-orm/mysql": "5.4.2",
-		"@mikro-orm/postgresql": "5.4.2",
-		"@mikro-orm/sqlite": "5.4.2",
-		"@mikro-orm/knex": "5.4.2",
+		"@mikro-orm/core": "5.7.14",
+		"@mikro-orm/mysql": "5.7.14",
+		"@mikro-orm/postgresql": "5.7.14",
+		"@mikro-orm/sqlite": "5.7.14",
+		"@mikro-orm/knex": "5.7.14",
 		"@types/node": "18.11.11",
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
@@ -43,13 +43,13 @@
 		"typescript": "5.0.2"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/mysql": "5.4.2",
-		"@mikro-orm/postgresql": "5.4.2",
-		"@mikro-orm/sqlite": "5.4.2",
-		"@mikro-orm/knex": "5.4.2"
+		"@mikro-orm/mysql": "5.7.14",
+		"@mikro-orm/postgresql": "5.7.14",
+		"@mikro-orm/sqlite": "5.7.14",
+		"@mikro-orm/knex": "5.7.14"
 	},
 	"peerDependencies": {
-		"@mikro-orm/core": "5.4.2",
-		"@mikro-orm/knex": "5.4.2"
+		"@mikro-orm/core": "5.7.14",
+		"@mikro-orm/knex": "5.7.14"
 	}
 }
