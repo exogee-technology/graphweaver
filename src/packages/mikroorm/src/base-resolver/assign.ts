@@ -4,6 +4,7 @@ import {
 	EntityData,
 	EntityManager,
 	EntityProperty,
+	FilterQuery,
 	Reference,
 	ReferenceType,
 	Utils,
@@ -94,7 +95,7 @@ export const assign = async <T extends AnyEntity<T>>(
 							entity =
 								((await em.findOne(propertyMetadata.type, {
 									id: subvalue.id,
-								})) as T | null) ?? undefined;
+								} as FilterQuery<T>)) as T | null) ?? undefined;
 						}
 					}
 
@@ -130,7 +131,7 @@ export const assign = async <T extends AnyEntity<T>>(
 			//          Many to many properties. Consider the case of tags on an entity, when we pass ['a', 'b', 'c'] as the list of tags, that
 			//          means we need to remove anything that isn't 'a', 'b', or 'c' because it's not in the array.
 			entityPropertyValue.remove(
-				...entityPropertyValue.getItems().filter((entity) => !visitedEntities.has(entity))
+				entityPropertyValue.getItems().filter((entity) => !visitedEntities.has(entity))
 			);
 		} else if (
 			propertyMetadata?.reference == ReferenceType.MANY_TO_ONE ||
