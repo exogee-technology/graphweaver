@@ -95,14 +95,6 @@ class ArtistResolver extends createBaseResolver<Artist, OrmArtist>(
 describe('RelationshipField', () => {
 	beforeEach(resetDatabase);
 
-	afterAll((done) => {
-		for (const connection of ConnectionManager.getConnections()) {
-			connection.em.clear();
-			connection.close();
-		}
-		done();
-	});
-
 	test('should not get error on buildSchema when relationship field name is not same as entity', async () => {
 		const graphweaver = new Graphweaver({
 			resolvers: [AlbumResolver, ArtistResolver],
