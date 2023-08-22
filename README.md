@@ -40,7 +40,14 @@
 - [Quick Start](#quick-start)
   - [Next Steps](#next-steps)
 - [Contributing](#contributing)
-  - [Publishing](#publishing)
+  - [Releasing New Packages](#releasing-new-packages)
+    - [1. Create a new Branch:](#1-create-a-new-branch)
+    - [2. Update Package Versions:](#2-update-package-versions)
+      - [3. Update Package References:](#3-update-package-references)
+      - [4. Commit and Pull Request:](#4-commit-and-pull-request)
+      - [5. Review and Merge:](#5-review-and-merge)
+      - [6. Publish to NPM:](#6-publish-to-npm)
+      - [7. Verify and Monitor:](#7-verify-and-monitor)
 - [License](#license)
 
 <!-- WHY -->
@@ -145,35 +152,32 @@ There are two options to connect a data source:
 
 We welcome contributions from the community! If you're interested in improving Graphweaver, please refer to our Contribution Guidelines for detailed instructions.
 
-### Publishing
+### Releasing New Packages
 
-To publish the packages in the monorepo first you need to assess the types of changes that occurred. Follow semver and run
-the appropriate command for `major`, `minor` or `patch` changes.
+Follow these steps to release new packages:
 
+#### 1. Create a new Branch:
+Begin by creating a new branch. Base it on the latest main branch. 
+#### 2. Update Package Versions:
+Evaluate changes and adhere to Semantic Versioning (semver). Run the relevant command for `major`, `minor` or `patch` changes.
 ```console
 $ pnpm version:bump patch
 ```
-
+##### 3. Update Package References:
 Now the versions are bumped, but packages that depend on each other are still referencing the old version. Run this command
 to update all the references across the monorepo.
 
 ```console
 $ pnpm relink:deps
 ```
-
-Now we're ready to publish. Run:
-
-```console
-$ pnpm publish:dry
-```
-
-This will show you what would be published if you went ahead and did one.
-
-If you're happy with these and want to publish these changes, run
-
-```console
-$ pnpm publish:packages --otp [code from 2FA device]
-```
+##### 4. Commit and Pull Request:
+Commit the changes. Create a pull request targeting the main branch.
+##### 5. Review and Merge:
+Await PR approval, then merge it into main to integrate new versions.
+##### 6. Publish to NPM:
+After merging, trigger the "Publish to NPM" workflow in the Actions tab.
+##### 7. Verify and Monitor:
+Monitor the workflow progress in GitHub Actions. Confirm successful publication in the npm registry. 
 
 You're done!
 
