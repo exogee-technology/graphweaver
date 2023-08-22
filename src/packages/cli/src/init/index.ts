@@ -118,7 +118,9 @@ export const init = async ({
 		initGraphweaver(name, backends, version);
 	}
 
-	console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
+	console.log(
+		'All Done!\nMake sure you cd to the new project directory, then run pnpm install and pnpm start.'
+	);
 
 	exit(0);
 };
