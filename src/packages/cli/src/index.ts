@@ -47,21 +47,20 @@ yargs
 		handler: async (argv) => {
 			const version = argv.version;
 			const name = argv.name;
-			const backends =
-				argv.backend?.flatMap((backend: string) => {
-					switch (backend) {
-						case 'postgres':
-							return Backend.Postgres;
-						case 'mysql':
-							return Backend.Mysql;
-						case 'rest':
-							return Backend.Rest;
-						case 'sqlite':
-							return Backend.Sqlite;
-						default:
-							return [];
-					}
-				}) ?? [];
+			const backends = argv.backend?.flatMap((backend: string) => {
+				switch (backend) {
+					case 'postgres':
+						return Backend.Postgres;
+					case 'mysql':
+						return Backend.Mysql;
+					case 'rest':
+						return Backend.Rest;
+					case 'sqlite':
+						return Backend.Sqlite;
+					default:
+						return [];
+				}
+			});
 
 			console.log('Initiasing a new Graphweaver project...');
 			if (name) console.log(`Project Name: ${name}`);
