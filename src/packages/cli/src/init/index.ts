@@ -67,9 +67,8 @@ export const init = async ({
 				message: `What would your like to call your new project?`,
 				default: initialName,
 				validate: (answer) => {
-					const { validForNewPackages, warnings } = validate(answer);
-					if (!validForNewPackages)
-						return `Project name is not valid: ${warnings?.join(',') ?? ''}`;
+					const { validForNewPackages, errors } = validate(answer);
+					if (!validForNewPackages) return `Project name is not valid: ${errors?.join(',') ?? ''}`;
 					return true;
 				},
 			},
