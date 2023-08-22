@@ -1,4 +1,6 @@
 import { exit, cwd } from 'process';
+import validate from 'validate-npm-package-name';
+import { valid as validSemver } from 'semver';
 
 import {
 	makePackageJson,
@@ -38,29 +40,44 @@ export const initGraphweaver = (projectName: string, backends: Backend[], versio
 type InitOptions = {
 	version?: string /** Optional version to use for the starter */;
 	name?: string /** Optional name to use for the project */;
-	backend?: Backend /** Optional backend to use for the starter */;
+	backends?: Array<Backend> /** Optional backend to use for the starter */;
 };
 
-export const init = async ({ version, name, backend }: InitOptions) => {
-	if (backend && name) {
-		initGraphweaver(name, [backend], version);
+export const init = async ({
+	version,
+	name: initialName,
+	backends: initialBackends,
+}: InitOptions) => {
+	if (version !== undefined && !validSemver(version))
+		throw new Error(`'${version}' is not a valid semver`);
+
+	if (initialName && Array.isArray(initialBackends) && initialBackends.length > 0) {
+		initGraphweaver(initialName, initialBackends, version);
 	} else {
 		const { default: inquirer } = await import('inquirer');
 
 		const {
-			projectName,
+			name,
 			createDirectory = true,
 			backends,
 		} = await inquirer.prompt([
 			{
 				type: 'input',
-				name: 'projectName',
+				name: 'name',
 				message: `What would your like to call your new project?`,
+				default: initialName,
+				validate: (answer) => {
+					const { validForNewPackages, warnings } = validate(answer);
+					if (!validForNewPackages)
+						return `Project name is not valid: ${warnings?.join(',') ?? ''}`;
+					return true;
+				},
 			},
 			{
 				type: 'checkbox',
 				name: 'backends',
 				message: 'Which Graphweaver backends will you need?',
+				default: initialBackends,
 				choices: [
 					{
 						value: Backend.Postgres,
@@ -79,7 +96,7 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 						name: 'REST Backend',
 					},
 				],
-				validate(answer) {
+				validate: (answer) => {
 					if (answer.length < 1) {
 						return 'You must select at least one backend (Press <space> to select).';
 					}
@@ -98,7 +115,7 @@ export const init = async ({ version, name, backend }: InitOptions) => {
 		]);
 
 		if (!createDirectory) abort();
-		initGraphweaver(projectName, backends, version);
+		initGraphweaver(name, backends, version);
 	}
 
 	console.log('All Done!\nMake sure you to pnpm install, then pnpm start.');
