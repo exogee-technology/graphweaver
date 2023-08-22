@@ -48,7 +48,7 @@ export const init = async ({
 	name: initialName,
 	backends: initialBackends,
 }: InitOptions) => {
-	if (version !== undefined && !validSemver(version))
+	if (version !== undefined && !validSemver(version) && version !== 'local')
 		throw new Error(`'${version}' is not a valid semver`);
 
 	if (initialName && Array.isArray(initialBackends) && initialBackends.length > 0) {
