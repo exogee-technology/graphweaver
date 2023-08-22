@@ -62,7 +62,7 @@ yargs
 				}
 			});
 
-			console.log('Initiasing a new Graphweaver project...');
+			console.log('Initialising a new Graphweaver project...');
 			if (name) console.log(`Project Name: ${name}`);
 			if (backends) console.log(`Backends: ${backends.join(',')}`);
 			if (version) console.log(`Graphweaver Version: ${version}`);
