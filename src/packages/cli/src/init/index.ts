@@ -1,6 +1,6 @@
 import { exit, cwd } from 'process';
-import validate from 'validate-npm-package-name';
-import { valid as validSemver } from 'semver';
+import validatePackageName from 'validate-npm-package-name';
+import { valid as validateSemver } from 'semver';
 
 import {
 	makePackageJson,
@@ -48,7 +48,8 @@ export const init = async ({
 	name: initialName,
 	backends: initialBackends,
 }: InitOptions) => {
-	if (version !== undefined && !validSemver(version) && version !== 'local')
+	// version must be a valid semver or the special string 'local' for local development
+	if (version !== undefined && !validateSemver(version) && version !== 'local')
 		throw new Error(`'${version}' is not a valid semver`);
 
 	if (initialName && Array.isArray(initialBackends) && initialBackends.length > 0) {
@@ -67,7 +68,7 @@ export const init = async ({
 				message: `What would your like to call your new project?`,
 				default: initialName,
 				validate: (answer) => {
-					const { validForNewPackages, warnings, errors } = validate(answer);
+					const { validForNewPackages, warnings, errors } = validatePackageName(answer);
 					const messages = [...(errors ?? []), ...(warnings ?? [])];
 					if (!validForNewPackages) return `Project name is not valid: ${messages.join(',')}`;
 					return true;
