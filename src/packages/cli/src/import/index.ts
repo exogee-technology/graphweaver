@@ -56,7 +56,7 @@ const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') 
 	if (missingDependencies.length > 0) {
 		console.warn(`\n\nPlease install these missing dependencies and try again:\n`);
 		console.warn(`\t\t pnpm i ${missingDependencies.join(' ')}\n\n`);
-		process.exit();
+		process.exit(1);
 	}
 };
 
