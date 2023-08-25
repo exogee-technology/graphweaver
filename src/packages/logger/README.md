@@ -1,13 +1,15 @@
-# `@exogee/graphql-scalars`
-
-A package to house common scalar types used across GraphQL APIs.
-
-A scalar is a custom value type used in GraphQL. For example, the Point scalar allows us to request latitude and longitude as a single
-endpoint in the GraphQL query, which comes back as an object.
+# Logger `logger`
+Common logging output in JSON format.
 
 ## Usage
-
-Import the scalars you want to use, then specify them as the field type. For more information, see examples in `graphql-api`.
+```
+    import { logger } from '@exogee/logger';
+    
+    logger.trace(`This is a trace line.`);
+    logger.error(`This is an error line.`);
+    logger.info(`This is an info line.`);
+    logger.warn(`This is a warning line`);
+```
 
 ## Documentation
 
