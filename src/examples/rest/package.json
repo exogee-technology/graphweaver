@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database.",
@@ -42,5 +42,15 @@
 		"typescript": "5.0.2",
 		"vite": "4.3.9",
 		"vite-plugin-svgr": "3.2.0"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }
