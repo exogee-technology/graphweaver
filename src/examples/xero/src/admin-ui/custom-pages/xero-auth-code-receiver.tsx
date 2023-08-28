@@ -2,7 +2,6 @@ import { useSearchParams, Navigate } from 'react-router-dom';
 
 export const XeroAuthCodeReceiver = () => {
 	const [searchParams] = useSearchParams();
-
 	// We need to set here on initial render so that we definitely capture the code if we're receiving an auth redirect.
 	// Otherwise we get an extra loop through the OAuth flow because local storage gets set too late.
 	if (
