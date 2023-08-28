@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "RESTful backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -42,5 +42,15 @@
 		"ts-node": "9.0.0",
 		"tsc-watch": "4.2.9",
 		"typescript": "5.0.2"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
@@ -34,5 +34,15 @@
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
 		"typescript": "5.0.2"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }

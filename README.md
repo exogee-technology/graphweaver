@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/exogee-technology/graphweaver">
-    <img src="https://docs.graphweaver.com/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2F2da1f00d-6bca-4881-8a8c-a3b589f8a191%2FScreenshot_2023-05-11_at_4.12.28_pm.png&w=1920&q=80" alt="Project Logo">
+    <img src="https://graphweaver.com/docs/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2F2da1f00d-6bca-4881-8a8c-a3b589f8a191%2FScreenshot_2023-05-11_at_4.12.28_pm.png&w=1920&q=80" alt="Project Logo">
   </a>
 </p>
 
@@ -40,14 +40,6 @@
 - [Quick Start](#quick-start)
   - [Next Steps](#next-steps)
 - [Contributing](#contributing)
-  - [Releasing New Packages](#releasing-new-packages)
-    - [1. Create a new Branch:](#1-create-a-new-branch)
-    - [2. Update Package Versions:](#2-update-package-versions)
-      - [3. Update Package References:](#3-update-package-references)
-      - [4. Commit and Pull Request:](#4-commit-and-pull-request)
-      - [5. Review and Merge:](#5-review-and-merge)
-      - [6. Publish to NPM:](#6-publish-to-npm)
-      - [7. Verify and Monitor:](#7-verify-and-monitor)
 - [License](#license)
 
 <!-- WHY -->
@@ -74,7 +66,7 @@ That's why we built Graphweaver. We've been using it on our projects for about a
 
 ## Documentation
 
-Comprehensive documentation and usage examples can be found on our [Docs Site](https://docs.graphweaver.com). It covers installation instructions, detailed API documentation, and guides to help you get started with Graphweaver.
+Comprehensive documentation and usage examples can be found on our [Docs Site](https://graphweaver.com/docs). It covers installation instructions, detailed API documentation, and guides to help you get started with Graphweaver.
 
 <!-- QUICK START -->
 
@@ -133,7 +125,7 @@ This will launch the Graphweaver server and Admin UI at http://localhost:9000:
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/exogee-technology/graphweaver">
-    <img src="https://docs.graphweaver.com/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2Fc5b8b2bc-a8c5-4851-8e99-bca52c5f3fec%2FScreenshot_2023-07-25_at_10.57.37_am.png&w=1920&q=80" alt="Project Logo">
+    <img src="https://graphweaver.com/docs/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2Fc5b8b2bc-a8c5-4851-8e99-bca52c5f3fec%2FScreenshot_2023-07-25_at_10.57.37_am.png&w=1920&q=80" alt="Project Logo">
   </a>
 </p>
 
@@ -143,43 +135,14 @@ Very empty! We need to fill the API with data! To do that, we need to connect to
 
 There are two options to connect a data source:
 
-1. If you have an existing database (Postgres, MySql or Sqlite) then go to the [Importing a Database](https://docs.graphweaver.com/importing-a-database) page. This will guide you through importing your database.
-1. If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://docs.graphweaver.com/connect-to-a-data-source) page.
+1. If you have an existing database (Postgres, MySql or Sqlite) then go to the [Importing a Database](https://graphweaver.com/docs/importing-a-database) page. This will guide you through importing your database.
+1. If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://graphweaver.com/docs/connect-to-a-data-source) page.
 
 <!-- CONTRIBUTING -->
 
 ## Contributing
 
 We welcome contributions from the community! If you're interested in improving Graphweaver, please refer to our Contribution Guidelines for detailed instructions.
-
-### Releasing New Packages
-
-Follow these steps to release new packages:
-
-#### 1. Create a new Branch:
-Begin by creating a new branch. Base it on the latest main branch. 
-#### 2. Update Package Versions:
-Evaluate changes and adhere to Semantic Versioning (semver). Run the relevant command for `major`, `minor` or `patch` changes.
-```console
-$ pnpm version:bump patch
-```
-##### 3. Update Package References:
-Now the versions are bumped, but packages that depend on each other are still referencing the old version. Run this command
-to update all the references across the monorepo.
-
-```console
-$ pnpm relink:deps
-```
-##### 4. Commit and Pull Request:
-Commit the changes. Create a pull request targeting the main branch.
-##### 5. Review and Merge:
-Await PR approval, then merge it into main to integrate new versions.
-##### 6. Publish to NPM:
-After merging, trigger the "Publish to NPM" workflow in the Actions tab.
-##### 7. Verify and Monitor:
-Monitor the workflow progress in GitHub Actions. Confirm successful publication in the npm registry. 
-
-You're done!
 
 <!-- LICENSE -->
 

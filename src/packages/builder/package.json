@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "0.2.4",
+	"version": "0.2.5",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -45,5 +45,15 @@
 		"@types/node": "18.11.9",
 		"@types/rimraf": "3.0.2",
 		"prettier": "2.8.8"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }
