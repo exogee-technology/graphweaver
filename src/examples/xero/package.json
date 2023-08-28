@@ -32,10 +32,10 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@nivo/bump": "0.80.0",
-		"@nivo/core": "0.80.0",
-		"@nivo/line": "0.80.0",
-		"@nivo/tooltip": "0.80.0",
+		"@nivo/bump": "0.83.0",
+		"@nivo/core": "0.83.0",
+		"@nivo/line": "0.83.0",
+		"@nivo/tooltip": "0.83.0",
 		"async-mutex": "0.3.1",
 		"class-validator": "0.14.0",
 		"decimal.js": "10.4.3",
@@ -57,15 +57,5 @@
 		"tsc-watch": "4.2.9",
 		"typescript": "5.0.2",
 		"vite": "4.3.9"
-	},
-	"keywords": [
-		"graphql",
-		"gql",
-		"headless",
-		"cms",
-		"postgres",
-		"postgresql",
-		"mysql",
-		"sqlite"
-	]
+	}
 }
