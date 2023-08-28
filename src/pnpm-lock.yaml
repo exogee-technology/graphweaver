@@ -525,14 +525,14 @@ importers:
         specifier: 5.8.3
         version: 5.8.3
       serverless:
-        specifier: 3.25.1
-        version: 3.25.1
+        specifier: 3.34.0
+        version: 3.34.0
       serverless-dotenv-plugin:
         specifier: 4.0.2
-        version: 4.0.2(serverless@3.25.1)
+        version: 4.0.2(serverless@3.34.0)
       serverless-offline:
         specifier: 12.0.2
-        version: 12.0.2(serverless@3.25.1)
+        version: 12.0.2(serverless@3.34.0)
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.6.0)
@@ -779,7 +779,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -4399,7 +4399,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -5197,6 +5197,47 @@ packages:
       - debug
       - supports-color
       - utf-8-validate
+    dev: false
+
+  /@serverless/utils@6.13.1:
+    resolution: {integrity: sha512-yokWzlsIaAd3TWzNgIDz6l8HZmtYZs9caaLuheZ0IiZ/bDWSCLBWn84HKkdWZOmFnYxejyPNJEOwE59mtSR3Ow==}
+    engines: {node: '>=12.0'}
+    dependencies:
+      archive-type: 4.0.0
+      chalk: 4.1.2
+      ci-info: 3.8.0
+      cli-progress-footer: 2.3.2
+      content-disposition: 0.5.4
+      d: 1.0.1
+      decompress: 4.2.1
+      event-emitter: 0.3.5
+      ext: 1.7.0
+      ext-name: 5.0.0
+      file-type: 16.5.4
+      filenamify: 4.3.0
+      get-stream: 6.0.1
+      got: 11.8.6
+      inquirer: 8.2.5
+      js-yaml: 4.1.0
+      jwt-decode: 3.1.2
+      lodash: 4.17.21
+      log: 6.3.1
+      log-node: 8.0.3(log@6.3.1)
+      make-dir: 4.0.0
+      memoizee: 0.4.15
+      ms: 2.1.3
+      ncjsm: 4.3.2
+      node-fetch: 2.6.12
+      open: 8.4.2
+      p-event: 4.2.0
+      supports-color: 8.1.1
+      timers-ext: 0.1.7
+      type: 2.7.2
+      uni-global: 1.0.0
+      uuid: 8.3.2
+      write-file-atomic: 4.0.2
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /@serverless/utils@6.8.2:
@@ -6103,6 +6144,7 @@ packages:
 
   /@types/node@14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
+    dev: true
 
   /@types/node@18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -6472,6 +6514,13 @@ packages:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
     requiresBuild: true
 
+  /abort-controller@3.0.0:
+    resolution: {integrity: sha512-h8lQ8tacZYnR3vNQTgibj+tODHI5/+l06Au2Pcriv/Gmet0eaj4TwWH41sO9wnHDiQsEj19q0drzdWdeAHtweg==}
+    engines: {node: '>=6.5'}
+    dependencies:
+      event-target-shim: 5.0.1
+    dev: false
+
   /accepts@1.3.8:
     resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
@@ -6801,8 +6850,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
-  /aws-sdk@2.1259.0:
-    resolution: {integrity: sha512-ku0sXQ0HOpvhMfu9yszqek4T+xvR9pXemxn3ruG3raIv9Hag0bpZoSqxm6rFtlZV9C26bB47ef5A5+HbkPk8PQ==}
+  /aws-sdk@2.1445.0:
+    resolution: {integrity: sha512-/IYUYE79khfguHsb28fQtXKR/avgkhCa6NNOh6W84xEyc89hLTvF30VlvaYaHFlIQeDmylO9kJfjSqGrEVDPIg==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -6814,7 +6863,7 @@ packages:
       url: 0.10.3
       util: 0.12.5
       uuid: 8.0.0
-      xml2js: 0.4.19
+      xml2js: 0.5.0
     dev: false
 
   /aws-sign2@0.7.0:
@@ -7125,7 +7174,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
     dev: false
 
@@ -8118,13 +8167,13 @@ packages:
       tslib: 2.6.0
     dev: false
 
-  /dotenv-expand@8.0.3:
-    resolution: {integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==}
+  /dotenv-expand@10.0.0:
+    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
     dev: false
 
-  /dotenv-expand@9.0.0:
-    resolution: {integrity: sha512-uW8Hrhp5ammm9x7kBLR6jDfujgaDarNA02tprvZdyrJ7MpdzD1KyrIHG4l+YoC2fJ2UcdFdNWNWIjt+sexBHJw==}
+  /dotenv-expand@8.0.3:
+    resolution: {integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==}
     engines: {node: '>=12'}
     dev: false
 
@@ -8841,6 +8890,11 @@ packages:
       stream-combiner: 0.0.4
       through: 2.3.8
     dev: true
+
+  /event-target-shim@5.0.1:
+    resolution: {integrity: sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==}
+    engines: {node: '>=6'}
+    dev: false
 
   /eventemitter3@3.1.2:
     resolution: {integrity: sha512-tvtQIeLVHjDkJYnzf2dgVMxfuSGJeM/7UCG17TT4EumTfNtF+0nebF/4zWOIkCreAbtNqhGEboB6BWrwqNaw4Q==}
@@ -9563,6 +9617,23 @@ packages:
 
   /got@11.8.5:
     resolution: {integrity: sha512-o0Je4NvQObAuZPHLFoRSkdG2lTgtcynqymzg2Vupdx6PorhaT5MCbIyXG6d4D94kk8ZG57QeosgdiqfJWhEhlQ==}
+    engines: {node: '>=10.19.0'}
+    dependencies:
+      '@sindresorhus/is': 4.6.0
+      '@szmarczak/http-timer': 4.0.6
+      '@types/cacheable-request': 6.0.3
+      '@types/responselike': 1.0.0
+      cacheable-lookup: 5.0.4
+      cacheable-request: 7.0.4
+      decompress-response: 6.0.0
+      http2-wrapper: 1.0.3
+      lowercase-keys: 2.0.0
+      p-cancelable: 2.1.1
+      responselike: 2.0.1
+    dev: false
+
+  /got@11.8.6:
+    resolution: {integrity: sha512-6tfZ91bOr7bOXnK7PRDCGBLa1H4U080YHNaAQ2KsMGlLEzRbk44nsZF2E1IeRc3vtJHPVbKCYgdFbaGO2ljd8g==}
     engines: {node: '>=10.19.0'}
     dependencies:
       '@sindresorhus/is': 4.6.0
@@ -10895,6 +10966,13 @@ packages:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
     dev: false
 
+  /json-colorizer@2.2.2:
+    resolution: {integrity: sha512-56oZtwV1piXrQnRNTtJeqRv+B9Y/dXAYLqBBaYl/COcUdoZxgLBLAO88+CnkbT6MxNs0c5E9mPBIb2sFcNz3vw==}
+    dependencies:
+      chalk: 2.4.2
+      lodash.get: 4.4.2
+    dev: false
+
   /json-cycle@1.5.0:
     resolution: {integrity: sha512-GOehvd5PO2FeZ5T4c+RxobeT5a1PiGpF4u9/3+UvrMU4bhnVqzJY7hm39wg8PDCqkU91fWGH8qjWR4bn+wgq9w==}
     engines: {node: '>= 4'}
@@ -11482,6 +11560,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       semver: 6.3.1
+
+  /make-dir@4.0.0:
+    resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
+    engines: {node: '>=10'}
+    dependencies:
+      semver: 7.5.4
+    dev: false
 
   /make-error@1.3.6:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
@@ -13330,7 +13415,7 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-dotenv-plugin@4.0.2(serverless@3.25.1):
+  /serverless-dotenv-plugin@4.0.2(serverless@3.34.0):
     resolution: {integrity: sha512-MOXsSSuJPMAiNp7bVvvCC+ahmEMMohlaPpaVU2w4wFgMVSvs+BU7xIwQGv/7TTMNdjYVS/W2JoS5ZSkCdjHzCg==}
     peerDependencies:
       serverless: 1 || 2 || pre-3 || 3
@@ -13338,10 +13423,10 @@ packages:
       chalk: 4.1.2
       dotenv: 16.0.3
       dotenv-expand: 8.0.3
-      serverless: 3.25.1
+      serverless: 3.34.0
     dev: false
 
-  /serverless-offline@12.0.2(serverless@3.25.1):
+  /serverless-offline@12.0.2(serverless@3.34.0):
     resolution: {integrity: sha512-Lp8ums5NwSCqn91gyVHIxEPTTntjNQYD/nq/7/e+4ogyoKOQ3X0TI0lKwum2lXT2j9KT7v6KdSz9xzmbftZRFA==}
     engines: {node: '>=14.18.0'}
     peerDependencies:
@@ -13369,7 +13454,7 @@ packages:
       object.hasown: 1.1.2
       p-memoize: 7.1.1
       p-retry: 5.1.2
-      serverless: 3.25.1
+      serverless: 3.34.0
       velocityjs: 2.0.6
       ws: 8.13.0
     transitivePeerDependencies:
@@ -13380,19 +13465,20 @@ packages:
       - utf-8-validate
     dev: false
 
-  /serverless@3.25.1:
-    resolution: {integrity: sha512-FFyC3+1iYPfbVKRHMcPqkGRNzXRgIg8/wsG+dI49oAGqT8Y7LXDRNCd7wuGyXRlRf2IXSMXzGTEmEFCFJPti3w==}
+  /serverless@3.34.0:
+    resolution: {integrity: sha512-xtWAg78NGgboolP/GArdorx+UHyESJgriGSE6Qpgg9trTYsKMyd8YKaMIM3sidy89e45XZopRSpvnPYoQCJOBA==}
     engines: {node: '>=12.0'}
     hasBin: true
     requiresBuild: true
     dependencies:
       '@serverless/dashboard-plugin': 6.2.3(supports-color@8.1.1)
       '@serverless/platform-client': 4.3.2(supports-color@8.1.1)
-      '@serverless/utils': 6.8.2
+      '@serverless/utils': 6.13.1
+      abort-controller: 3.0.0
       ajv: 8.12.0
       ajv-formats: 2.1.1(ajv@8.12.0)
       archiver: 5.3.1
-      aws-sdk: 2.1259.0
+      aws-sdk: 2.1445.0
       bluebird: 3.7.2
       cachedir: 2.3.0
       chalk: 4.1.2
@@ -13402,8 +13488,8 @@ packages:
       d: 1.0.1
       dayjs: 1.11.9
       decompress: 4.2.1
-      dotenv: 16.0.3
-      dotenv-expand: 9.0.0
+      dotenv: 16.3.1
+      dotenv-expand: 10.0.0
       essentials: 1.2.0
       ext: 1.7.0
       fastest-levenshtein: 1.0.16
@@ -13411,11 +13497,11 @@ packages:
       fs-extra: 10.1.0
       get-stdin: 8.0.0
       globby: 11.1.0
-      got: 11.8.5
       graceful-fs: 4.2.11
       https-proxy-agent: 5.0.1(supports-color@8.1.1)
       is-docker: 2.2.1
       js-yaml: 4.1.0
+      json-colorizer: 2.2.2
       json-cycle: 1.5.0
       json-refs: 3.0.15(supports-color@8.1.1)
       lodash: 4.17.21
@@ -13431,6 +13517,7 @@ packages:
       require-from-string: 2.0.2
       semver: 7.5.4
       signal-exit: 3.0.7
+      stream-buffers: 3.0.2
       strip-ansi: 6.0.1
       supports-color: 8.1.1
       tar: 6.1.15
@@ -13438,6 +13525,7 @@ packages:
       type: 2.7.2
       untildify: 4.0.0
       uuid: 9.0.0
+      ws: 7.5.9
       yaml-ast-parser: 0.0.43
     transitivePeerDependencies:
       - bufferutil
@@ -13729,6 +13817,11 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       bl: 5.1.0
+    dev: false
+
+  /stream-buffers@3.0.2:
+    resolution: {integrity: sha512-DQi1h8VEBA/lURbSwFtEHnSTb9s2/pwLEaFuNhXwy1Dx3Sa0lOuYT2yNUr4/j2fs8oCAMANtrZ5OrPZtyVs3MQ==}
+    engines: {node: '>= 0.10.0'}
     dev: false
 
   /stream-combiner@0.0.4:
@@ -14768,7 +14861,7 @@ packages:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 7.0.0
       '@svgr/plugin-jsx': 7.0.0
-      vite: 4.3.9(@types/node@14.14.10)
+      vite: 4.3.9(@types/node@20.2.5)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -14804,6 +14897,7 @@ packages:
       rollup: 3.26.3
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /vite@4.3.9(@types/node@18.11.9):
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
@@ -15043,15 +15137,16 @@ packages:
       request: 2.88.2
     dev: false
 
-  /xml2js@0.4.19:
-    resolution: {integrity: sha512-esZnJZJOiJR9wWKMyuvSE1y6Dq5LCuJanqhxslH2bxM6duahNZ+HMpCLhBQGZkbX6xRf8x1Y2eJlgt2q3qo49Q==}
+  /xml2js@0.5.0:
+    resolution: {integrity: sha512-drPFnkQJik/O+uPKpqSgr22mpuFHqKdbS835iAQrUC73L2F5WkboIRd63ai/2Yg6I1jzifPFKH2NTK+cfglkIA==}
+    engines: {node: '>=4.0.0'}
     dependencies:
       sax: 1.2.1
-      xmlbuilder: 9.0.7
+      xmlbuilder: 11.0.1
     dev: false
 
-  /xmlbuilder@9.0.7:
-    resolution: {integrity: sha512-7YXTQc3P2l9+0rjaUbLwMKRhtmwg1M1eDf6nag7urC7pIPYLD9W/jmzQ4ptRSUbodw5S0jfoGTflLemQibSpeQ==}
+  /xmlbuilder@11.0.1:
+    resolution: {integrity: sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==}
     engines: {node: '>=4.0'}
     dev: false
 
