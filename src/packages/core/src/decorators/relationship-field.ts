@@ -1,6 +1,7 @@
 import { getMetadataStorage } from 'type-graphql';
 import { ReturnTypeFunc } from 'type-graphql/dist/decorators/types';
 import { findType } from 'type-graphql/dist/helpers/findType';
+import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 import { BaseLoaders } from '../base-loader';
 import {
 	BaseContext,
@@ -50,7 +51,10 @@ export function RelationshipField<
 		const getRelatedType = () => {
 			const relatedEntityType = getType() as GraphQLEntityConstructor<G, D>;
 			const typeName = relatedEntityType.name;
-			return TypeMap[`${pluralize(typeName)}ListFilter`];
+			const objectTypeName = (metadata.objectTypes as ObjectClassMetadata[]).find(
+				(objectType: ObjectClassMetadata) => objectType.target?.name === typeName
+			)?.name;
+			return TypeMap[`${pluralize(objectTypeName || typeName)}ListFilter`];
 		};
 
 		// next we need to add the below function as a field resolver
