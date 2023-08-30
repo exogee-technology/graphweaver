@@ -169,5 +169,5 @@ Distributed under the MIT License. See LICENSE for more information.
 
 <!-- FOOTER -->
 <p align="center">
-  Made with ❤️ by Exogee
+  Made with ❤️ by [Exogee](https://exogee.com)
 </p>
