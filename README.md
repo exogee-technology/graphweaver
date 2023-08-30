@@ -75,10 +75,10 @@ That's why we built Graphweaver. We've been using it on our projects for about a
 Graphweaver comes pre-built with the following security features:
 
 - **Role Based Access Control -** Define permissions and access rights at a role level and assign those roles to users.
-- **Access Control Lists-** Define and apply permissions based on user roles and assign them to Create, Read, Update, Delete operations.
-- **Row Level Security -** Implement row level security and define who has access to which rows in the data source.
-- **Column Level Security -** Fine-grained control over the fields and columns that users can access or modify.
-- **Identity Providers -** Pre-built identity providers for Local Database and Cognito implementations.
+- **Access Control Lists-** Define and apply permissions based on user roles and assign them to Create, Read, Update, and Delete operations.
+- **Row Level Security -** Implement row-level security and define who has access to which rows in the data source.
+- **Column Level Security -** Fine-grained control over which fields and columns a user can access and modify.
+- **Identity Providers -** Pre-built identity providers for Local Database and Amazon Cognito.
 
 For more on security see the [security documentation](https://graphweaver.com/docs/security).
 
