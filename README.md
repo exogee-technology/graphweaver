@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/exogee-technology/graphweaver">
-    <img src="https://docs.graphweaver.com/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2F2da1f00d-6bca-4881-8a8c-a3b589f8a191%2FScreenshot_2023-05-11_at_4.12.28_pm.png&w=1920&q=80" alt="Project Logo">
+    <img src="https://graphweaver.com/docs/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2F2da1f00d-6bca-4881-8a8c-a3b589f8a191%2FScreenshot_2023-05-11_at_4.12.28_pm.png&w=1920&q=80" alt="Project Logo">
   </a>
 </p>
 
@@ -45,7 +45,6 @@
 - [Quick Start](#quick-start)
   - [Next Steps](#next-steps)
 - [Contributing](#contributing)
-  - [Publishing](#publishing)
 - [License](#license)
 
 <!-- WHY -->
@@ -87,7 +86,7 @@ For more on security see the [security documentation](https://graphweaver.com/do
 
 ## Documentation
 
-Comprehensive documentation and usage examples can be found on our [Docs Site](https://docs.graphweaver.com). It covers installation instructions, detailed API documentation, security implementation and guides to help you get started with Graphweaver.
+Comprehensive documentation and usage examples can be found on our [Docs Site](https://graphweaver.com/docs). It covers installation instructions, detailed API documentation, security implementation and guides to help you get started with Graphweaver.
 
 <!-- QUICK START -->
 
@@ -143,7 +142,7 @@ This will launch the Graphweaver server and Admin UI at http://localhost:9000:
 <!-- PROJECT LOGO -->
 <p align="center">
   <a href="https://github.com/exogee-technology/graphweaver">
-    <img src="https://docs.graphweaver.com/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2Fc5b8b2bc-a8c5-4851-8e99-bca52c5f3fec%2FScreenshot_2023-07-25_at_10.57.37_am.png&w=1920&q=80" alt="Project Logo">
+    <img src="https://graphweaver.com/docs/_next/image?url=https%3A%2F%2Fassets.super.so%2F34623db9-2df1-4511-9266-443aac2d1de3%2Fimages%2Fc5b8b2bc-a8c5-4851-8e99-bca52c5f3fec%2FScreenshot_2023-07-25_at_10.57.37_am.png&w=1920&q=80" alt="Project Logo">
   </a>
 </p>
 
@@ -153,46 +152,14 @@ Very empty! We need to fill the API with data! To do that, we need to connect to
 
 There are two options to connect a data source:
 
-1. If you have an existing database (Postgres, MySql or Sqlite) then go to the [Importing a Database](https://docs.graphweaver.com/importing-a-database) page. This will guide you through importing your database.
-1. If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://docs.graphweaver.com/connect-to-a-data-source) page.
+1. If you have an existing database (Postgres, MySql or Sqlite) then go to the [Importing a Database](https://graphweaver.com/docs/importing-a-database) page. This will guide you through importing your database.
+1. If you have a data source but it is currently empty then go to [How to Connect a Data Source](https://graphweaver.com/docs/connect-to-a-data-source) page.
 
 <!-- CONTRIBUTING -->
 
 ## Contributing
 
 We welcome contributions from the community! If you're interested in improving Graphweaver, please refer to our Contribution Guidelines for detailed instructions.
-
-### Publishing
-
-To publish the packages in the monorepo first you need to assess the types of changes that occurred. Follow semver and run
-the appropriate command for `major`, `minor` or `patch` changes.
-
-```console
-$ pnpm version:bump patch
-```
-
-Now the versions are bumped, but packages that depend on each other are still referencing the old version. Run this command
-to update all the references across the monorepo.
-
-```console
-$ pnpm relink:deps
-```
-
-Now we're ready to publish. Run:
-
-```console
-$ pnpm publish:dry
-```
-
-This will show you what would be published if you went ahead and did one.
-
-If you're happy with these and want to publish these changes, run
-
-```console
-$ pnpm publish:packages --otp [code from 2FA device]
-```
-
-You're done!
 
 <!-- LICENSE -->
 

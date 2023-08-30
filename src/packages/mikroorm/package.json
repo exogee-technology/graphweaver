@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "0.2.2",
+	"version": "0.2.5",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -51,5 +51,15 @@
 	"peerDependencies": {
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/knex": "5.7.14"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }

@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "0.2.2",
+	"version": "0.2.5",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -26,15 +26,28 @@
 		"chokidar": "3.5.3",
 		"esbuild": "0.15.5",
 		"inquirer": "9.2.1",
+		"node-semver": "1.0.0",
 		"ora": "5.4.1",
 		"semver": "7.5.4",
+		"validate-npm-package-name": "5.0.0",
 		"yargs": "17.6.2"
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.3",
 		"@types/node": "18.11.9",
 		"@types/semver": "7.5.0",
+		"@types/validate-npm-package-name": "4.0.0",
 		"@types/yargs": "17.0.24",
 		"prettier": "2.8.8"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }

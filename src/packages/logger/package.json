@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "0.2.2",
+	"version": "0.2.5",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {
@@ -24,5 +24,15 @@
 		"@types/bunyan": "1.8.6",
 		"esbuild": "0.15.5",
 		"typescript": "5.0.2"
-	}
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }

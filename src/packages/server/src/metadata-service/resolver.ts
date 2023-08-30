@@ -50,7 +50,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 			// Build some lookups for more efficient data locating later.
 			const objectTypeData: { [entityName: string]: ObjectClassMetadata } = {};
 			for (const objectType of metadata.objectTypes) {
-				objectTypeData[objectType.name] = objectType;
+				objectTypeData[objectType.target.name] = objectType;
 			}
 
 			const enumMetadata = new Map<object, EnumMetadata>();
@@ -69,23 +69,23 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const fields = objectType.fields?.map((field) => {
 						const typeValue = field.getType() as any;
 						const entityName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
+						const relatedObject = objectTypeData[entityName];
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
-							type: entityName,
+							type: relatedObject?.name || entityName,
 						};
-						const relatedObject = objectTypeData[entityName];
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
 							const relatedEntity = relatedObject.fields?.find((field) => {
 								const fieldType = field.getType() as any;
-								return fieldType.name === name;
+								return fieldType.name === objectType.target.name;
 							});
 							if (relatedEntity?.typeOptions) {
 								fieldObject.relationshipType = relatedEntity.typeOptions.array
 									? RelationshipType.MANY_TO_MANY
 									: RelationshipType.ONE_TO_MANY;
 							}
-							fieldObject.relatedEntity = entityName;
+							fieldObject.relatedEntity = relatedObject.name;
 						} else if (relatedObject) {
 							fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 						}

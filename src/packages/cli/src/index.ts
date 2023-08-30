@@ -36,45 +36,39 @@ yargs
 					describe: 'The name of this project.',
 				})
 				.option('backend', {
-					type: 'string',
-					describe: 'Specify a data source.',
+					type: 'array',
+					describe: 'Specify one or more data sources.',
 					choices: ['postgres', 'mysql', 'rest', 'sqlite'],
 				})
 				.option('version', {
 					type: 'string',
 					describe: 'Specify a version of Graphweaver to use.',
-				})
-				.option('host', {
-					type: 'string',
-					describe: 'Specify the database server hostname.',
-				})
-				.option('port', {
-					type: 'number',
-					describe: 'Specify the database server port.',
-				})
-				.option('password', {
-					type: 'string',
-					describe: 'Specify the database server password.',
-				})
-				.option('user', {
-					type: 'string',
-					describe: 'Specify the database server user.',
 				}),
 		handler: async (argv) => {
 			const version = argv.version;
 			const name = argv.name;
-			const backend = argv.backend;
-			const host = argv.host;
-			const port = argv.port;
-			const password = argv.password;
-			const user = argv.user;
+			const backends = argv.backend?.flatMap((backend: string) => {
+				switch (backend) {
+					case 'postgres':
+						return Backend.Postgres;
+					case 'mysql':
+						return Backend.Mysql;
+					case 'rest':
+						return Backend.Rest;
+					case 'sqlite':
+						return Backend.Sqlite;
+					default:
+						return [];
+				}
+			});
 
-			console.log(`Initing project ${name}, ${version}, ${backend}, ${host}, ${port}, ${user}...`);
-			if (backend === 'postgres') init({ name, backend: Backend.Postgres, version });
-			if (backend === 'mysql') init({ name, backend: Backend.Mysql, version });
-			if (backend === 'rest') init({ name, backend: Backend.Rest, version });
-			if (backend === 'sqlite') init({ name, backend: Backend.Sqlite, version });
-			init({ name, version });
+			console.log('Initialising a new Graphweaver project...');
+			if (name) console.log(`Project Name: ${name}`);
+			if (backends) console.log(`Backends: ${backends.join(',')}`);
+			if (version) console.log(`Graphweaver Version: ${version}`);
+			console.log();
+
+			init({ name, version, backends });
 		},
 	})
 	.command({
@@ -110,9 +104,12 @@ yargs
 				}),
 		handler: async ({ source, database, host, port, password, user }) => {
 			console.log('Importing data source...');
-			console.log(
-				`Source: ${source}, Database: ${database}, Host: ${host}, Port: ${port}, User: ${user}`
-			);
+			if (source) console.log(`Source: ${source}`);
+			if (database) console.log(`Database Name: ${database}`);
+			if (host) console.log(`Database Host: ${host}`);
+			if (port) console.log(`Database Port: ${port}`);
+			if (user) console.log(`Database User: ${user}`);
+			console.log();
 
 			await importDataSource(source, database, host, port, password, user);
 		},
