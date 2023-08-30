@@ -1,7 +1,6 @@
 import { XeroClient } from 'xero-node';
 import { Sort } from '@exogee/graphweaver';
 import { XeroTenant } from './schema';
-import { logger } from '@exogee/logger';
 
 const PAGE_SIZE = 100;
 
