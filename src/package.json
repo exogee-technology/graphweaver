@@ -37,5 +37,10 @@
 		"ts-jest": "29.0.5",
 		"turbo": "1.10.1",
 		"typescript": "5.0.2"
+	},
+	"pnpm": {
+		"overrides": {
+			"d3-color": "3.1.0"
+		}
 	}
 }
