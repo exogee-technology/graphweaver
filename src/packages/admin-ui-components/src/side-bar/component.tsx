@@ -9,6 +9,7 @@ import { GraphweaverLogo } from '../assets';
 import { useSchema } from '../utils';
 
 import { BackendRow, DashboardRow } from './contents';
+import { Spacer } from '../spacer';
 
 import styles from './styles.module.css';
 
@@ -60,6 +61,19 @@ export const SideBar = () => {
 					<BackendRow key={backend} backend={backend} />
 				))}
 			</div>
+
+			<Spacer grow={1} />
+
+			<div className={styles.sideBarFooter}>
+				<div className={styles.footerText}>
+					Powered by{' '}
+					<a href="https://graphweaver.com/" target="_blank">
+						Graphweaver
+					</a>
+				</div>
+			</div>
+
+			<Spacer height={10} />
 		</div>
 	);
 };
