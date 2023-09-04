@@ -10,7 +10,7 @@
 
 <!-- PROJECT DESCRIPTION -->
 <p align="center">
-  Instant GraphQL over all your data.
+  Data Everywhere - Instant GraphQL
 </p>
 
 <p align="center">
