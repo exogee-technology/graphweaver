@@ -8,6 +8,7 @@ export * from './loader';
 export * from './require-schema';
 export * from './side-bar';
 export * from './spinner';
+export * from './spacer';
 export * from './table';
 export * from './toolbar';
 export * from './filter-bar';
