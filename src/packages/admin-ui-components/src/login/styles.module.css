@@ -3,6 +3,7 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 16px;
+	width: 250px;
 }
 
 .logo {
@@ -33,4 +34,5 @@
 	border: 1px solid rgba(237, 232, 242, 0.1);
 	border-radius: 6px;
 	padding: 10px;
+	width: 100%;
 }
