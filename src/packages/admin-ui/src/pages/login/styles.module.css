@@ -1,5 +1,6 @@
 .wrapper {
 	display: flex;
+	flex-direction: column;
 	flex: 1 1 auto;
 	align-items: center;
 	justify-content: center;
@@ -21,4 +22,13 @@
 	min-height: 400px;
 	justify-content: center;
 	align-items: center;
+}
+
+.footer {
+	display: flex;
+	justify-content: center;
+}
+
+.footerText {
+	opacity: 0.6;
 }

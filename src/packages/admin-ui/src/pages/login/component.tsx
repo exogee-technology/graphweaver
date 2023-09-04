@@ -1,4 +1,4 @@
-import { Login as LoginForm, LoginProps } from '@exogee/graphweaver-admin-ui-components';
+import { Login as LoginForm, LoginProps, Spacer } from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
 
@@ -7,6 +7,16 @@ export const Login = (props: LoginProps) => {
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
 				<LoginForm {...props} />
+			</div>
+			<Spacer height={30} />
+
+			<div className={styles.footer}>
+				<div className={styles.footerText}>
+					Powered by{' '}
+					<a href="https://graphweaver.com/" target="_blank">
+						Graphweaver
+					</a>
+				</div>
 			</div>
 		</div>
 	);
