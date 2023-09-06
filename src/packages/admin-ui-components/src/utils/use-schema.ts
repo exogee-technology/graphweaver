@@ -30,9 +30,18 @@ export enum AdminUIFilterType {
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 }
+
+export enum EntityFieldType {
+	BOOLEAN = 'Boolean',
+	ID = 'ID!',
+	OPTIONAL_ID = 'ID',
+	JSON = 'JSON',
+	// TODO: This needs to be extended for the other types
+}
+
 export interface EntityField {
 	name: string;
-	type: string;
+	type: EntityFieldType;
 	relationshipType?: 'MANY_TO_MANY' | 'MANY_TO_ONE' | 'ONE_TO_MANY' | 'ONE_TO_ONE';
 	filter?: {
 		type: AdminUIFilterType;
