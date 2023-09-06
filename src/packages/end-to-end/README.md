@@ -67,3 +67,5 @@ Then
 
 1. Run `pnpm dev-sqlite` This will start the test server, leave this running to start the tests
 2. Run `pnpm test-ui` in another terminal, this will execute the end to end test suite against the server started above
+
+To run the recorder use `npx playwright codegen`
