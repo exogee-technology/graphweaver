@@ -7,8 +7,8 @@ import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-ro
 
 import {
 	decodeSearchParams,
-	Entity,
 	EntityField,
+	EntityFieldType,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -102,36 +102,27 @@ const BooleanField = ({ name }: { name: string }) => {
 	);
 };
 
+const JSONField = ({ name }: { name: string }) => {
+	const [_, meta] = useField({ name, multiple: false });
+	const { initialValue } = meta;
+	return <code>{JSON.stringify(initialValue, null, 4)}</code>;
+};
+
 const DetailField = ({ field }: { field: EntityField }) => {
-	if (field.relationshipType) {
-		// @todo: For these fields we want both the ID and the name (value)
-		return (
-			<div className={styles.detailField}>
-				<label htmlFor={field.name} className={styles.fieldLabel}>
-					{field.name}
-				</label>
-				<SelectField name={field.name} entity={field} />
-			</div>
-		);
-	}
-
-	if (field.type === 'Boolean') {
-		return (
-			<div className={styles.detailField}>
-				<label htmlFor={field.name} className={styles.fieldLabel}>
-					{field.name}
-				</label>
-				<BooleanField name={field.name} />
-			</div>
-		);
-	}
-
 	return (
 		<div className={styles.detailField}>
 			<label htmlFor={field.name} className={styles.fieldLabel}>
 				{field.name}
 			</label>
-			<Field id={field.name} name={field.name} className={styles.textInputField} />
+			{field.relationshipType ? (
+				<SelectField name={field.name} entity={field} />
+			) : field.type === EntityFieldType.JSON ? (
+				<JSONField name={field.name} />
+			) : field.type === EntityFieldType.BOOLEAN ? (
+				<BooleanField name={field.name} />
+			) : (
+				<Field id={field.name} name={field.name} className={styles.textInputField} />
+			)}
 		</div>
 	);
 };

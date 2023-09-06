@@ -15,6 +15,7 @@ import {
 	routeFor,
 	SortField,
 	decodeSearchParams,
+	EntityFieldType,
 } from '../utils';
 import { Spinner } from '../spinner';
 
@@ -34,7 +35,8 @@ const columnsForEntity = <T,>(
 	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
-		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
+		width:
+			field.type === EntityFieldType.ID || field.type === EntityFieldType.OPTIONAL_ID ? 20 : 200,
 
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
@@ -94,17 +96,6 @@ const columnsForEntity = <T,>(
 	}
 
 	return entityColumns;
-};
-
-const formatRows = <T extends TableRowItem>(rows: T[]) => {
-	return rows.map((row) => {
-		for (const key of Object.keys(row)) {
-			const value = row[key as keyof typeof row];
-			if (typeof value === 'boolean') row[key as keyof typeof row] = `${value}` as T[keyof T];
-		}
-
-		return row;
-	});
 };
 
 export interface TableRowItem {
@@ -193,7 +184,7 @@ export const Table = <T extends TableRowItem>({
 		<>
 			<DataGrid
 				columns={columnsForEntity<T>(selectedEntity, entityByType)}
-				rows={formatRows(rows)}
+				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
