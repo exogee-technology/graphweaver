@@ -15,6 +15,7 @@
 		"test-sqlite": "export DATABASE=sqlite && jest --runInBand --forceExit ---- api/sqlite",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
+		"test-ui": "npx playwright test",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
@@ -31,6 +32,7 @@
 		"graphql": "16.6.0"
 	},
 	"devDependencies": {
+		"@playwright/test": "1.37.1",
 		"@types/jest": "26.0.23",
 		"graphql": "16.6.0",
 		"graphql-tag": "2.12.6",
