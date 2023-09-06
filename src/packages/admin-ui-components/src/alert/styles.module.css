@@ -1,12 +1,12 @@
-.container {
+.severity {
 	display: flex;
 	flex-direction: row;
 	padding: 6px 16px;
 }
 
-svg {
-	width: 16px;
-	height: 16px;
+.severity svg {
+	width: 24px;
+	height: 24px;
 }
 
 .error {

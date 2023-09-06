@@ -25,7 +25,7 @@ export const Alert = ({ severity = 'error', children }: AlertProps): JSX.Element
 	};
 
 	return (
-		<div className={classNames(styles.container, severityClass[severity])}>
+		<div className={classNames(styles.severity, severityClass[severity])}>
 			{severityIcon[severity]}
 			<Spacer width={10} />
 			<div className={styles.message}>{children}</div>
