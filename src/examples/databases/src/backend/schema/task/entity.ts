@@ -1,4 +1,5 @@
-import { GraphQLEntity, RelationshipField, Field, ID, ObjectType } from '@exogee/graphweaver';
+import { GraphQLEntity, RelationshipField, Field, ID, ObjectType, Root } from '@exogee/graphweaver';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 import { Task as OrmTask } from '../../entities';
 import { User } from '../user';
@@ -15,6 +16,15 @@ export class Task extends GraphQLEntity<OrmTask> {
 
 	@Field(() => Boolean)
 	completed!: boolean;
+
+	// Example of a field resolver using a json type
+	@Field(() => GraphQLJSON)
+	meta(@Root() task: Task) {
+		return {
+			id: task.id,
+			description: task.description,
+		};
+	}
 
 	@RelationshipField<Task>(() => User, { id: 'userId' })
 	user!: User;
