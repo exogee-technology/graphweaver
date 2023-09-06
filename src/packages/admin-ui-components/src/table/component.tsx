@@ -27,10 +27,10 @@ import { ApolloError } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
-const columnsForEntity = <T extends { id: string }>(
+const columnsForEntity = <T,>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
-): Column<T>[] => {
+): Column<T, unknown>[] => {
 	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
@@ -94,6 +94,17 @@ const columnsForEntity = <T extends { id: string }>(
 	}
 
 	return entityColumns;
+};
+
+const formatRows = <T extends TableRowItem>(rows: T[]) => {
+	return rows.map((row) => {
+		for (const key of Object.keys(row)) {
+			const value = row[key as keyof typeof row];
+			if (typeof value === 'boolean') row[key as keyof typeof row] = `${value}` as T[keyof T];
+		}
+
+		return row;
+	});
 };
 
 export interface TableRowItem {
@@ -181,8 +192,8 @@ export const Table = <T extends TableRowItem>({
 	return (
 		<>
 			<DataGrid
-				columns={columnsForEntity(selectedEntity, entityByType) as any}
-				rows={rows}
+				columns={columnsForEntity<T>(selectedEntity, entityByType)}
+				rows={formatRows(rows)}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
