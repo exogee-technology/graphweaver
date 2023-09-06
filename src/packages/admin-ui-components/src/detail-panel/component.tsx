@@ -72,6 +72,36 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	);
 };
 
+const BooleanField = ({ name }: { name: string }) => {
+	const [_, meta, helpers] = useField({ name, multiple: false });
+	const { initialValue } = meta;
+
+	useEffect(() => {
+		helpers.setValue(initialValue.value ? initialValue.value : undefined);
+	}, []);
+
+	const handleOnChange = (selected: SelectOption[]) => {
+		const value = selected?.[0]?.value;
+		if (value === undefined) {
+			helpers.setValue(undefined);
+		} else {
+			helpers.setValue(value);
+		}
+	};
+
+	return (
+		<Select
+			options={[
+				{ value: true, label: 'true' },
+				{ value: false, label: 'false' },
+			]}
+			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
+			onChange={handleOnChange}
+			mode={SelectMode.SINGLE}
+		/>
+	);
+};
+
 const DetailField = ({ field }: { field: EntityField }) => {
 	if (field.relationshipType) {
 		// @todo: For these fields we want both the ID and the name (value)
@@ -84,6 +114,18 @@ const DetailField = ({ field }: { field: EntityField }) => {
 			</div>
 		);
 	}
+
+	if (field.type === 'Boolean') {
+		return (
+			<div className={styles.detailField}>
+				<label htmlFor={field.name} className={styles.fieldLabel}>
+					{field.name}
+				</label>
+				<BooleanField name={field.name} />
+			</div>
+		);
+	}
+
 	return (
 		<div className={styles.detailField}>
 			<label htmlFor={field.name} className={styles.fieldLabel}>
@@ -184,7 +226,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = data?.result;
 		const value = getValue(field, result);
-		acc[field.name] = value || '';
+		acc[field.name] = value ?? '';
 		return acc;
 	}, {} as Record<string, any>);
 
