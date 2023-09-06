@@ -61,7 +61,7 @@ jobs:
         if: always()
         with:
           name: playwright-report
-          path: playwright-report/
+          path: src/packages/end-to-end/playwright-report/
           retention-days: 30
         
         env:
