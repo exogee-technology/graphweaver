@@ -25,6 +25,9 @@ export class Task extends BaseEntity {
 	@Property({ type: String })
 	description!: string;
 
+	@Property({ type: Boolean, fieldName: 'completed' })
+	isCompleted!: boolean;
+
 	@ExternalIdField({ from: 'user' })
 	@Property({ type: BigIntType })
 	userId!: string;

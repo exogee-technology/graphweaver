@@ -11,6 +11,7 @@
 
 /* Derived from Figma designs */
 .detailContainer {
+	max-width: 500px;
 	height: 100%;
 	align-self: end;
 	background: var(--detail-bg-color);

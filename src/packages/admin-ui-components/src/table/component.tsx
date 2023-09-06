@@ -15,6 +15,7 @@ import {
 	routeFor,
 	SortField,
 	decodeSearchParams,
+	EntityFieldType,
 } from '../utils';
 import { Spinner } from '../spinner';
 
@@ -27,14 +28,15 @@ import { ApolloError } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
-const columnsForEntity = <T extends { id: string }>(
+const columnsForEntity = <T,>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
-): Column<T>[] => {
+): Column<T, unknown>[] => {
 	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
-		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
+		width:
+			field.type === EntityFieldType.ID || field.type === EntityFieldType.OPTIONAL_ID ? 20 : 200,
 
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
@@ -181,7 +183,7 @@ export const Table = <T extends TableRowItem>({
 	return (
 		<>
 			<DataGrid
-				columns={columnsForEntity(selectedEntity, entityByType) as any}
+				columns={columnsForEntity<T>(selectedEntity, entityByType)}
 				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}

@@ -7,8 +7,8 @@ import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-ro
 
 import {
 	decodeSearchParams,
-	Entity,
 	EntityField,
+	EntityFieldType,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -72,24 +72,57 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	);
 };
 
+const BooleanField = ({ name }: { name: string }) => {
+	const [_, meta, helpers] = useField({ name, multiple: false });
+	const { initialValue } = meta;
+
+	useEffect(() => {
+		helpers.setValue(initialValue.value ? initialValue.value : undefined);
+	}, []);
+
+	const handleOnChange = (selected: SelectOption[]) => {
+		const value = selected?.[0]?.value;
+		if (value === undefined) {
+			helpers.setValue(undefined);
+		} else {
+			helpers.setValue(value);
+		}
+	};
+
+	return (
+		<Select
+			options={[
+				{ value: true, label: 'true' },
+				{ value: false, label: 'false' },
+			]}
+			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
+			onChange={handleOnChange}
+			mode={SelectMode.SINGLE}
+		/>
+	);
+};
+
+const JSONField = ({ name }: { name: string }) => {
+	const [_, meta] = useField({ name, multiple: false });
+	const { initialValue } = meta;
+	return <code>{JSON.stringify(initialValue, null, 4)}</code>;
+};
+
 const DetailField = ({ field }: { field: EntityField }) => {
-	if (field.relationshipType) {
-		// @todo: For these fields we want both the ID and the name (value)
-		return (
-			<div className={styles.detailField}>
-				<label htmlFor={field.name} className={styles.fieldLabel}>
-					{field.name}
-				</label>
-				<SelectField name={field.name} entity={field} />
-			</div>
-		);
-	}
 	return (
 		<div className={styles.detailField}>
 			<label htmlFor={field.name} className={styles.fieldLabel}>
 				{field.name}
 			</label>
-			<Field id={field.name} name={field.name} className={styles.textInputField} />
+			{field.relationshipType ? (
+				<SelectField name={field.name} entity={field} />
+			) : field.type === EntityFieldType.JSON ? (
+				<JSONField name={field.name} />
+			) : field.type === EntityFieldType.BOOLEAN ? (
+				<BooleanField name={field.name} />
+			) : (
+				<Field id={field.name} name={field.name} className={styles.textInputField} />
+			)}
 		</div>
 	);
 };
@@ -184,7 +217,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = data?.result;
 		const value = getValue(field, result);
-		acc[field.name] = value || '';
+		acc[field.name] = value ?? '';
 		return acc;
 	}, {} as Record<string, any>);
 
