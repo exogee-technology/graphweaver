@@ -15,7 +15,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	description!: string;
 
 	@Field(() => Boolean)
-	completed!: boolean;
+	isCompleted!: boolean;
 
 	// Example of a field resolver using a json type
 	@Field(() => GraphQLJSON)
