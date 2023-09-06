@@ -90,7 +90,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	description!: string;
 
 	@Field(() => Boolean)
-	completed!: boolean;
+	isCompleted!: boolean;
 
 	@RelationshipField<Task>(() => User, { id: 'userId' })
 	user!: User;
