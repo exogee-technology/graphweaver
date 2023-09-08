@@ -35,7 +35,7 @@ const graphweaver = new Graphweaver({
 	},
 });
 
-describe('Local Authentication', () => {
+describe('Local Authentication - Login', () => {
 	test('should return a valid user and successfully login.', async () => {
 		const response = await graphweaver.server.executeOperation<{ login: { authToken: string } }>({
 			query: gql`
