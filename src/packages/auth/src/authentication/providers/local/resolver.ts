@@ -7,16 +7,15 @@ import { UserProfile } from '../../../user-profile';
 @Resolver((of) => Token)
 export abstract class LocalAuthResolver {
 	abstract authenticate(username: string, password: string): Promise<UserProfile>;
-	abstract authenticate(username: string, password: string): Promise<UserProfile>;
 
 	@Mutation(() => Token)
 	async login(
-		@Arg('email', () => String) email: string,
+		@Arg('username', () => String) username: string,
 		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
 		const tokenProvider = new LocalAuthTokenProvider();
-		const userProfile = await this.authenticate(email, password);
+		const userProfile = await this.authenticate(username, password);
 		if (!userProfile) throw new Error('Login unsuccessful.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
