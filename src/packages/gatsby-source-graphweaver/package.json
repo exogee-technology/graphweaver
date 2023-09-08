@@ -1,0 +1,37 @@
+{
+	"name": "@exogee/gatsby-source-graphweaver",
+	"version": "1.0.0",
+	"scripts": {
+		"build": "pnpm build:js && pnpm build:ts",
+		"build:ts": "tsc",
+		"build:js": "esbuild src/gatsby-node.ts --bundle --platform=node --outdir=dist --format=cjs",
+		"format": "prettier --write .",
+		"lint": "eslint --fix .",
+		"test": "pnpm test:format && pnpm test:typescript && pnpm test:lint",
+		"test:format": "prettier --check .",
+		"test:typescript": "tsc --noEmit",
+		"test:lint": "eslint ."
+	},
+	"license": "MIT",
+	"dependencies": {
+		"esbuild": "0.17.18",
+		"node-fetch": "3.3.1"
+	},
+	"devDependencies": {
+		"@types/gm": "1.25.1",
+		"@types/node": "18.13.0",
+		"@typescript-eslint/eslint-plugin": "5.59.0",
+		"eslint": "8.33.0",
+		"eslint-plugin-simple-import-sort": "10.0.0",
+		"gatsby": "5.6.0",
+		"gatsby-plugin-utils": "4.11.0",
+		"gm": "1.25.0",
+		"graphql": "16.6.0",
+		"prettier": "2.8.8",
+		"typescript": "4.9.5"
+	},
+	"keywords": [
+		"gatsby",
+		"gatsby-plugin"
+	]
+}

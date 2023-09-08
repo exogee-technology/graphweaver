@@ -71,6 +71,10 @@
     {
       "name": "📦 vite-plugin-graphweaver",
       "path": "src/packages/vite-plugin-graphweaver"
+    },
+    {
+      "name": "📦 @exogee/gatsby-source-graphweaver",
+      "path": "src/packages/gatsby-source-graphweaver"
     }
   ],
   "settings": {}
