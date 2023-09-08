@@ -5,9 +5,7 @@ import { AuthorizationContext } from '../../../types';
 import { LocalAuthTokenProvider } from './provider';
 import { upsertAuthorizationContext } from '../../../helper-functions';
 import { UserProfile } from '../../../user-profile';
-import { ForbiddenError } from 'apollo-server-errors';
 import { AuthProvider } from '../../base-auth-token-provider';
-import { GraphQLError } from 'graphql';
 
 const redirectUrl = process.env.LOCAL_AUTH_REDIRECT_URI;
 

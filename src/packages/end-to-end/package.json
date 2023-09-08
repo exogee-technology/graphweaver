@@ -16,12 +16,14 @@
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
 		"test-ui": "npx playwright test",
+		"test": "jest --runInBand",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"@exogee/graphweaver": "*",
 		"@exogee/graphweaver-scalars": "*",
 		"@exogee/graphweaver-server": "*",
+		"@exogee/graphweaver-auth": "*",
 		"graphweaver": "*",
 		"@exogee/graphweaver-mikroorm": "*",
 		"@mikro-orm/core": "5.7.14",
