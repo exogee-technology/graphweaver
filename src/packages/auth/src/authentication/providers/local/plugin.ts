@@ -9,14 +9,9 @@ import { AuthProvider } from '../../base-auth-token-provider';
 import { ErrorCodes } from '../../../errors';
 
 const redirectUrl = process.env.LOCAL_AUTH_REDIRECT_URI;
-const challengeUrl = process.env.LOCAL_AUTH_CHALLENGE_URI;
 
 const didEncounterForbiddenError = (error: any) => {
 	return error.extensions.code === ErrorCodes.FORBIDDEN;
-};
-
-const didEncounterChallengeError = (error: any) => {
-	return error.extensions.code === ErrorCodes.CHALLENGE;
 };
 
 export const localAuthApolloPlugin = (
@@ -88,17 +83,6 @@ export const localAuthApolloPlugin = (
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 							response.http?.headers.set('X-Auth-Redirect', redirectUrl);
 						}
-					}
-
-					const didEncounterChallengeErrors = (response.body as any)?.singleResult?.errors?.some(
-						didEncounterChallengeError
-					);
-					//If we received a step up error we need to redirect, set the header to tell the client to do so.
-					if (didEncounterChallengeErrors) {
-						if (!challengeUrl)
-							throw new Error('LOCAL_AUTH_CHALLENGE_URI is required in environment');
-						logger.trace('Step Up Required Error Found: setting X-Auth-Redirect header.');
-						response.http?.headers.set('X-Auth-Redirect', challengeUrl);
 					}
 
 					// Let's check if verification has failed and redirect to login if it has
