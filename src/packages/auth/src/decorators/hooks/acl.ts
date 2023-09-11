@@ -3,21 +3,20 @@ import {
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	EntityMetadataMap,
-	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	ReadHookParams,
 	hasId,
 } from '@exogee/graphweaver';
 
-import { AccessType, AuthorizationContext } from './types';
-import { andFilters } from './helper-functions';
+import { AccessType, AuthorizationContext } from '../../types';
+import { andFilters } from '../../helper-functions';
 import {
 	assertUserCanPerformRequestedAction,
 	checkAuthorization,
 	getACL,
 	getAccessFilter,
-} from './auth-utils';
+} from '../../auth-utils';
 
 const assertTransactional = (transactional: boolean) => {
 	if (!transactional)
