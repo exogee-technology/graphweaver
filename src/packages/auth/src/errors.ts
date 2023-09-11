@@ -7,7 +7,7 @@ export enum ErrorCodes {
 }
 
 export class ChallengeError extends ApolloError {
-	constructor(message: string, extensions?: Record<string, any>) {
+	constructor(message: string, extensions: { entity: string; provider: string }) {
 		super(message, 'CHALLENGE', extensions);
 
 		Object.defineProperty(this, 'name', { value: 'ChallengeError' });

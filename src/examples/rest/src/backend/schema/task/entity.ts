@@ -132,7 +132,10 @@ export class Task extends GraphQLEntity<OrmTask> {
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
-		throw new ChallengeError('Do a challenge!');
+		throw new ChallengeError('Do a challenge!', {
+			entity: 'Task',
+			provider: 'MikroBackendProvider',
+		});
 		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
 		return { ...params, entities: filteredEntities };
 	}
