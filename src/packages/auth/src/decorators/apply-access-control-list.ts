@@ -10,7 +10,7 @@ import {
 } from '@exogee/graphweaver';
 import { AccessControlList, AclMap, AuthorizationContext } from '..';
 
-import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeUpdate } from '../hooks';
+import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeUpdate } from './hooks/acl';
 
 export function ApplyAccessControlList<G, TContext extends AuthorizationContext>(
 	acl: Partial<AccessControlList<G, TContext>>
