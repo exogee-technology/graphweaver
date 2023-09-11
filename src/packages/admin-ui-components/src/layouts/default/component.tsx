@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
 import { SideBar } from '../../side-bar';
-import { Header } from '../../header';
 import { RequireSchema } from '../../require-schema';
 import styles from './styles.module.css';
 
@@ -9,13 +9,7 @@ const SIDEBAR_MIN_WIDTH = 220;
 const SIDEBAR_MAX_WIDTH = 820;
 const SIDEBAR_START_WIDTH = 320;
 
-export const DefaultLayout = ({
-	header,
-	children,
-}: {
-	header?: React.ReactNode;
-	children: React.ReactNode;
-}) => {
+export const DefaultLayout = () => {
 	const resizer = useRef<HTMLDivElement>(null);
 	const [flexBasis, setFlexBasis] = useState(SIDEBAR_START_WIDTH);
 
@@ -52,12 +46,8 @@ export const DefaultLayout = ({
 					</div>
 					<div className={styles.resizer} ref={resizer}></div>
 					<div className={styles.content}>
-						<header>
-							<Header>{header}</Header>
-						</header>
-						{children}
+						<Outlet />
 					</div>
-					{/** @todo <footer className={styles.footer}></footer> */}
 				</div>
 			</div>
 		</RequireSchema>
