@@ -1,9 +1,9 @@
-import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
+import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
 	decodeSearchParams,
@@ -22,6 +22,7 @@ import {
 	generateUpdateEntityMutation,
 	getRelationshipQuery,
 } from './graphql';
+import { didEncounterChallenge } from '../utils/auth';
 
 import styles from './styles.module.css';
 
@@ -245,25 +246,33 @@ export const DetailPanel = () => {
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		const id = data?.result?.id;
 
-		if (id) {
-			await updateEntity({
-				variables: {
-					data: {
-						id,
-						...values,
+		try {
+			if (id) {
+				await updateEntity({
+					variables: {
+						data: {
+							id,
+							...values,
+						},
 					},
-				},
-			});
-		} else {
-			await createEntity({
-				variables: {
-					data: values,
-				},
-			});
-		}
+				});
+			} else {
+				await createEntity({
+					variables: {
+						data: values,
+					},
+				});
+			}
 
-		actions.setSubmitting(false);
-		onClose();
+			actions.setSubmitting(false);
+			onClose();
+		} catch (err: unknown) {
+			actions.setSubmitting(false);
+
+			if (err instanceof ApolloError && didEncounterChallenge(err)) {
+				console.log('display challenge');
+			}
+		}
 	};
 
 	return (
