@@ -60,4 +60,4 @@ export interface MultiFactorAuthenticationOperation<G> {
 	all?: MultiFactorAuthenticationRule<G>;
 }
 
-export type MultiFactorAuthenticationRule<G> = AuthProvider[];
+export type MultiFactorAuthenticationRule<G> = { required: number; providers: AuthProvider[] }[];
