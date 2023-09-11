@@ -1,11 +1,11 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import { AuthorizationContext } from '../../../types';
-import { LocalAuthTokenProvider } from './provider';
+import { PasswordAuthTokenProvider } from './provider';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 
 @Resolver((of) => Token)
-export abstract class LocalAuthResolver {
+export abstract class PasswordAuthResolver {
 	abstract authenticate(username: string, password: string): Promise<UserProfile>;
 
 	@Mutation(() => Token)
@@ -14,7 +14,7 @@ export abstract class LocalAuthResolver {
 		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		const tokenProvider = new LocalAuthTokenProvider();
+		const tokenProvider = new PasswordAuthTokenProvider();
 		const userProfile = await this.authenticate(username, password);
 		if (!userProfile) throw new Error('Login unsuccessful.');
 

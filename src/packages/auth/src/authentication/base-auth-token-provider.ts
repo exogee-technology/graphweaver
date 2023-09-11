@@ -3,7 +3,7 @@ import { AuthToken } from './schema';
 import { UserProfile } from '../user-profile';
 
 export enum AuthProvider {
-	LOCAL = 'LOCAL',
+	PASSWORD = 'PASSWORD',
 }
 
 export interface BaseAuthTokenProvider {

@@ -17,6 +17,7 @@ import {
 	AccessControlList,
 	ApplyAccessControlList,
 	ApplyMultiFactorAuthentication,
+	AuthProvider,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
 
@@ -79,7 +80,12 @@ export const preventLightSideAccess = (
 	return params.entities;
 };
 
-@ApplyMultiFactorAuthentication()
+@ApplyMultiFactorAuthentication<Task>({
+	EVERYONE: {
+		// all users must provide a password mfa when writing data
+		write: [AuthProvider.PASSWORD],
+	},
+})
 @ApplyAccessControlList(acl)
 @ObjectType('Task')
 export class Task extends GraphQLEntity<OrmTask> {

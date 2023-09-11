@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
-import { AuthorizationContext, localAuthApolloPlugin } from '@exogee/graphweaver-auth';
+import { AuthorizationContext, passwordAuthApolloPlugin } from '@exogee/graphweaver-auth';
 
 import { resolvers } from './schema';
 // Auth Functions
@@ -15,7 +15,7 @@ export enum Roles {
 const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
-		plugins: [localAuthApolloPlugin(addUserToContext)],
+		plugins: [passwordAuthApolloPlugin(addUserToContext)],
 	},
 	adminMetadata: {
 		enabled: true,
