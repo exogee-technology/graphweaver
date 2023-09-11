@@ -1,8 +1,6 @@
 import {
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
-	GraphQLEntity,
 	HookManager,
 	HookRegister,
 	ReadHookParams,
