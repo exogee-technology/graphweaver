@@ -3,50 +3,42 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { Loader, DefaultLayout } from '@exogee/graphweaver-admin-ui-components';
+import { Loader, DefaultLayout, DetailPanel } from '@exogee/graphweaver-admin-ui-components';
 
-import { List, ListToolBar, Root, Playground, Login } from './pages';
+import { List, Root, Playground, Login } from './pages';
 
 const defaultRoutes = [
 	{
 		path: '/',
-		element: (
-			<DefaultLayout>
-				<Root />
-			</DefaultLayout>
-		),
+		element: <DefaultLayout />,
+		children: [
+			{
+				path: '/',
+				element: <Root />,
+			},
+			{
+				path: ':entity',
+				element: <List />,
+				children: [
+					{
+						path: ':id',
+						element: <DetailPanel />,
+					},
+				],
+			},
+			{
+				path: 'loader',
+				element: <Loader />,
+			},
+		],
 	},
 	{
 		path: '/login',
 		element: <Login {...(customPages?.loginProps ?? {})} />,
 	},
 	{
-		path: '/:entity',
-		element: (
-			<DefaultLayout header={<ListToolBar />}>
-				<List />
-			</DefaultLayout>
-		),
-	},
-	{
-		path: '/:entity/:id',
-		element: (
-			<DefaultLayout header={<ListToolBar />}>
-				<List />
-			</DefaultLayout>
-		),
-	},
-	{
 		path: '/playground',
 		element: <Playground />,
-	},
-	{
-		path: '/loader',
-		element: (
-			<DefaultLayout>
-				<Loader />
-			</DefaultLayout>
-		),
 	},
 ];
 
