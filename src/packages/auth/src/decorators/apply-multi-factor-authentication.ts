@@ -4,7 +4,7 @@ import {
 	HookRegister,
 	hookManagerMap,
 } from '@exogee/graphweaver';
-import { AuthorizationContext, ChallengeError } from '..';
+import { AuthorizationContext, ChallengeError, MultiFactorAuthentication } from '..';
 
 export const beforeUpdate = (gqlEntityTypeName: string) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
@@ -16,7 +16,7 @@ export const beforeUpdate = (gqlEntityTypeName: string) => {
 	};
 };
 
-export function ApplyMultiFactorAuthentication<G>() {
+export function ApplyMultiFactorAuthentication<G>(mfa: MultiFactorAuthentication<G>) {
 	return function (constructor: any): void {
 		const hookManager =
 			(hookManagerMap.get(constructor.name) as HookManager<G>) || new HookManager<G>();
