@@ -1,4 +1,4 @@
-import { LocalAuthResolver } from '@exogee/graphweaver-auth';
+import { PasswordAuthResolver } from '@exogee/graphweaver-auth';
 import { BaseLoaders, Resolver } from '@exogee/graphweaver';
 
 import { User } from '../user';
@@ -6,7 +6,7 @@ import { credentials } from '../../entities/memory/credentials';
 import { mapUserToProfile } from '../../auth/context';
 
 @Resolver()
-export class AuthResolver extends LocalAuthResolver {
+export class AuthResolver extends PasswordAuthResolver {
 	async authenticate(username: string, password: string) {
 		const login = credentials.find(
 			(login) => login.username === username && login.password === password
