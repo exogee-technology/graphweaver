@@ -110,9 +110,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
 	reporter.verbose(`[plugin] Last fetched date: ${lastFetchedDate}`);
 
 	interface IApiResponse {
-		data: {
-			events: Array<any>;
-		};
+		data: any;
 		errors?: Array<{
 			message: string;
 			locations: Array<unknown>;
@@ -128,36 +126,10 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
 		apiKey,
 		//  @todo - make this a generic query passed in from the client
 		`#graphql
-      query EventsCollection {
-		events {
+      query Albums {
+		albums {
 			id
-			status
-			title
-			url
-			summary
-			eventStart
-			eventEnd
-			imageUrl
-			contactName
-			contactUrl
-			place
-			address
-			latitude
-			longitude
-			created
-			changed
-			published
-			isFree
-			modules {
-				id
-				type
-				data
-			}
-			widgets {
-				id
-				type
-				data
-			}
+			title	
 		}
       }
     `
@@ -185,6 +157,7 @@ export const sourceNodes: GatsbyNode[`sourceNodes`] = async (
 	 */
 	await cache.set(CACHE_KEYS.Timestamp, lastFetchedDateCurrent);
 
+	console.log('data', data);
 	const events = data?.events ?? [];
 
 	sourcingTimer.setStatus(`Processing ${events.length} events`);
