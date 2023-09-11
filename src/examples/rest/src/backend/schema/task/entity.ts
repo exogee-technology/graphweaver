@@ -17,6 +17,7 @@ import {
 	AccessControlList,
 	ApplyAccessControlList,
 	AuthorizationContext,
+	ChallengeError,
 } from '@exogee/graphweaver-auth';
 
 import { Task as OrmTask, Priority } from '../../entities';
@@ -131,6 +132,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
+		throw new ChallengeError('Do a challenge!');
 		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
 		return { ...params, entities: filteredEntities };
 	}
