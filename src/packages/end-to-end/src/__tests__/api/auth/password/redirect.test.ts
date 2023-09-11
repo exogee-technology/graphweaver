@@ -1,13 +1,13 @@
-process.env.LOCAL_AUTH_REDIRECT_URI = '*';
-process.env.LOCAL_AUTH_JWT_SECRET = '*';
+process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
+process.env.PASSWORD_AUTH_JWT_SECRET = '*';
 
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
 import {
-	LocalAuthResolver,
-	localAuthApolloPlugin,
+	PasswordAuthResolver,
+	passwordAuthApolloPlugin,
 	UserProfile,
 	AuthProvider,
 	AuthorizationContext,
@@ -16,13 +16,13 @@ import {
 
 const user = new UserProfile({
 	id: '1',
-	provider: AuthProvider.LOCAL,
+	provider: AuthProvider.PASSWORD,
 	roles: ['admin'],
 	displayName: 'Test User',
 });
 
 @Resolver()
-export class AuthResolver extends LocalAuthResolver {
+export class AuthResolver extends PasswordAuthResolver {
 	async authenticate(username: string, password: string) {
 		return user;
 	}
@@ -37,7 +37,7 @@ export const beforeRead = async <C extends AuthorizationContext>(params: Metadat
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [localAuthApolloPlugin(async () => user)],
+		plugins: [passwordAuthApolloPlugin(async () => user)],
 	},
 	adminMetadata: {
 		enabled: true,
@@ -47,7 +47,7 @@ const graphweaver = new Graphweaver({
 	},
 });
 
-describe('Local Authentication - Redirect', () => {
+describe('Password Authentication - Redirect', () => {
 	test('should redirect an unauthenticated user to the login screen.', async () => {
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
@@ -61,6 +61,8 @@ describe('Local Authentication - Redirect', () => {
 			`,
 		});
 
-		expect(response.http.headers.get('X-Auth-Redirect')).toBe(process.env.LOCAL_AUTH_REDIRECT_URI);
+		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
+			process.env.PASSWORD_AUTH_REDIRECT_URI
+		);
 	});
 });
