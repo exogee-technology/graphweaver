@@ -9,4 +9,5 @@ export enum AuthProvider {
 export interface BaseAuthTokenProvider {
 	generateToken: (user: UserProfile) => Promise<AuthToken>;
 	decodeToken: (authToken: string) => Promise<string | JwtPayload>;
+	stepUpToken: (user: UserProfile) => Promise<AuthToken>;
 }

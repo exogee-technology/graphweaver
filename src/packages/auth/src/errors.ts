@@ -10,7 +10,7 @@ export enum ErrorCodes {
 export class ChallengeError extends ApolloError {
 	constructor(
 		message: string,
-		extensions: { entity: string; provider: MultiFactorAuthentication<any> }
+		extensions: { entity: string; provider: MultiFactorAuthentication }
 	) {
 		super(message, 'CHALLENGE', extensions);
 

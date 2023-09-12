@@ -1,11 +1,33 @@
 import { BaseContext, Filter } from '@exogee/graphweaver';
-import { JwtPayload } from 'jsonwebtoken';
 import { UserProfile } from './user-profile';
 import { AuthProvider } from './authentication';
 
+export enum AuthenticationMethodReference {
+	PASSWORD = 'pwd',
+}
+
+export type AuthenticationClassReference =
+	`urn:gw:loa:${number}fa:${AuthenticationMethodReference}`;
+
+export interface JwtPayload {
+	iss?: string | undefined;
+	sub?: string | undefined;
+	aud?: string | string[] | undefined;
+	exp?: number | undefined;
+	nbf?: number | undefined;
+	iat?: number | undefined;
+	jti?: string | undefined;
+	amr?: AuthenticationMethodReference[];
+	acr?: {
+		values: AuthenticationClassReference[];
+	};
+}
+
+export type Token = string | JwtPayload;
+
 // Consumers will extend the base context type
 export interface AuthorizationContext extends BaseContext {
-	token?: string | JwtPayload;
+	token?: Token;
 	user?: UserProfile;
 }
 
@@ -47,17 +69,17 @@ export type ConsolidatedAccessControlValue<G, TContext extends AuthorizationCont
 	| true
 	| AccessControlFilterFunction<G, TContext>[];
 
-export type MultiFactorAuthentication<G> = {
-	[K in string]?: MultiFactorAuthenticationOperation<G>;
+export type MultiFactorAuthentication = {
+	[K in string]?: MultiFactorAuthenticationOperation;
 };
 
-export interface MultiFactorAuthenticationOperation<G> {
-	read?: MultiFactorAuthenticationRule<G>;
-	create?: MultiFactorAuthenticationRule<G>;
-	update?: MultiFactorAuthenticationRule<G>;
-	delete?: MultiFactorAuthenticationRule<G>;
-	write?: MultiFactorAuthenticationRule<G>;
-	all?: MultiFactorAuthenticationRule<G>;
+export interface MultiFactorAuthenticationOperation {
+	read?: MultiFactorAuthenticationRule;
+	create?: MultiFactorAuthenticationRule;
+	update?: MultiFactorAuthenticationRule;
+	delete?: MultiFactorAuthenticationRule;
+	write?: MultiFactorAuthenticationRule;
+	all?: MultiFactorAuthenticationRule;
 }
 
-export type MultiFactorAuthenticationRule<G> = { required: number; providers: AuthProvider[] }[];
+export type MultiFactorAuthenticationRule = { factors: number; providers: AuthProvider[] }[];
