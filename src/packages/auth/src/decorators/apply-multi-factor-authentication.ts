@@ -91,7 +91,7 @@ export const checkAuthentication = async <
 		(value) => value === `urn:gw:loa:2fa:${AuthenticationMethodReference.PASSWORD}`
 	);
 
-	//7. check is the claim has been met
+	//7. check if the claim has been met
 	if (!claim) {
 		throw new ChallengeError(
 			'MFA Challenge Required: Operation requires a step up in your authentication.',
