@@ -84,13 +84,14 @@ export const checkAuthentication = async <
 	//2. check the roles in the mfa rule
 	//3. check the number of factors needed for this request
 	//4. check any required auth providers for this request
+	//5. check for any nested entities and if they require mfa
 
-	//5. check the current acr values to see if we have already authenticated
+	//6. check the current acr values to see if we have already authenticated
 	const claim = token?.acr?.values?.some(
 		(value) => value === `urn:gw:loa:2fa:${AuthenticationMethodReference.PASSWORD}`
 	);
 
-	//6. check is the claim has been met
+	//7. check is the claim has been met
 	if (!claim) {
 		throw new ChallengeError(
 			'MFA Challenge Required: Operation requires a step up in your authentication.',
