@@ -9,7 +9,7 @@ export abstract class PasswordAuthResolver {
 	abstract authenticate(username: string, password: string): Promise<UserProfile>;
 
 	@Mutation(() => Token)
-	async login(
+	async loginPassword(
 		@Arg('username', () => String) username: string,
 		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
@@ -23,6 +23,29 @@ export abstract class PasswordAuthResolver {
 
 		const token = Token.fromBackendEntity(authToken);
 		if (!token) throw new Error('Login unsuccessful.');
+
+		return token;
+	}
+
+	@Mutation(() => Token)
+	async challengePassword(
+		@Arg('password', () => String) password: string,
+		@Ctx() ctx: AuthorizationContext
+	): Promise<Token> {
+		const tokenProvider = new PasswordAuthTokenProvider();
+		if (!ctx.token) throw new Error('Challenge unsuccessful.');
+
+		const username = ctx.user?.username;
+		if (!username) throw new Error('Challenge unsuccessful.');
+
+		const userProfile = await this.authenticate(username, password);
+		if (!userProfile) throw new Error('Challenge unsuccessful.');
+
+		const authToken = await tokenProvider.stepUpToken(userProfile);
+		if (!authToken) throw new Error('Challenge unsuccessful.');
+
+		const token = Token.fromBackendEntity(authToken);
+		if (!token) throw new Error('Challenge unsuccessful.');
 
 		return token;
 	}

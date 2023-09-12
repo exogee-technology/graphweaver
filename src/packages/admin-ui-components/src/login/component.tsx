@@ -21,7 +21,7 @@ export interface LoginProps {
 
 export const Login = ({ onLogin }: LoginProps) => {
 	const navigate = useNavigate();
-	const [login] = useMutation<{ login: { authToken: string } }>(LOGIN_MUTATION);
+	const [loginPassword] = useMutation<{ loginPassword: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 
 	const handleOnSubmit = async (
@@ -35,14 +35,14 @@ export const Login = ({ onLogin }: LoginProps) => {
 			if (onLogin) {
 				token = await onLogin(values.username, values.password);
 			} else {
-				const { data } = await login({
+				const { data } = await loginPassword({
 					variables: {
 						username: values.username,
 						password: values.password,
 					},
 				});
 
-				token = data?.login.authToken;
+				token = data?.loginPassword.authToken;
 				if (!token) throw new Error('Missing token');
 
 				localStorage.setItem('graphweaver-auth', token);

@@ -38,7 +38,9 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	async decodeToken(authToken: string) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
-		return jwt.verify(token, secret);
+		const payload = jwt.verify(token, secret);
+		if (typeof payload === 'string') throw new Error('Verification of token failed');
+		return payload;
 	}
 	async stepUpToken(user: UserProfile) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
