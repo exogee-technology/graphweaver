@@ -13,8 +13,8 @@ import {
 	AuthenticationMethodReference,
 	AuthorizationContext,
 	ChallengeError,
+	JwtPayload,
 	MultiFactorAuthentication,
-	Token,
 } from '..';
 import { logger } from '@exogee/logger';
 
@@ -68,7 +68,7 @@ export const checkAuthentication = async <
 >(
 	entity: G,
 	requestInput: Partial<G>,
-	token?: Token
+	token?: string | JwtPayload
 ) => {
 	// Get ACL first
 	const mfa = getMFA(entity.name);

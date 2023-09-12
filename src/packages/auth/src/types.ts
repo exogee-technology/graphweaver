@@ -23,11 +23,9 @@ export interface JwtPayload {
 	};
 }
 
-export type Token = string | JwtPayload;
-
 // Consumers will extend the base context type
 export interface AuthorizationContext extends BaseContext {
-	token?: Token;
+	token?: string | JwtPayload;
 	user?: UserProfile;
 }
 
