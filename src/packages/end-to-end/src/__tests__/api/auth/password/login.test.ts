@@ -37,10 +37,12 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Login', () => {
 	test('should return a valid user and successfully login.', async () => {
-		const response = await graphweaver.server.executeOperation<{ login: { authToken: string } }>({
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
 			query: gql`
-				mutation login($username: String!, $password: String!) {
-					login(username: $username, password: $password) {
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
 						authToken
 					}
 				}
@@ -53,14 +55,16 @@ describe('Password Authentication - Login', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
-		expect(response.body.singleResult.data?.login?.authToken).toContain('Bearer ');
+		expect(response.body.singleResult.data?.loginPassword?.authToken).toContain('Bearer ');
 	});
 
 	test('should return an error when the password is incorrect.', async () => {
-		const response = await graphweaver.server.executeOperation<{ login: { authToken: string } }>({
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
 			query: gql`
-				mutation login($username: String!, $password: String!) {
-					login(username: $username, password: $password) {
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
 						authToken
 					}
 				}
