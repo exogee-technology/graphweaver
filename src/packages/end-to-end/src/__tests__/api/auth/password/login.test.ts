@@ -54,7 +54,13 @@ describe('Password Authentication - Login', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
-		expect(response.body.singleResult.data?.loginPassword?.authToken).toContain('Bearer ');
+
+		const token = response.body.singleResult.data?.loginPassword?.authToken;
+		expect(token).toContain('Bearer ');
+
+		const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
+		// Check that the token expires in the future
+		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 	});
 
 	test('should return an error when the password is incorrect.', async () => {
