@@ -39,18 +39,10 @@ export class Task extends GraphQLEntity<any> {
 
 	@Field(() => String)
 	description!: string;
-}
 
-@Resolver((of) => Task)
-class TaskResolver extends createBaseResolver<Task, any>(
-	Task,
-	new MikroBackendProvider(class OrmTask extends BaseEntity {}, {
-		connectionManagerId: 'sqlite',
-		mikroOrmConfig: {
-			driver: SqliteDriver,
-		},
-	})
-) {}
+	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
+	tags!: Tag[];
+}
 
 @ObjectType('Tag')
 export class Tag extends GraphQLEntity<any> {
@@ -65,6 +57,17 @@ export class Tag extends GraphQLEntity<any> {
 	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
 	tasks!: Task[];
 }
+
+@Resolver((of) => Task)
+class TaskResolver extends createBaseResolver<Task, any>(
+	Task,
+	new MikroBackendProvider(class OrmTask extends BaseEntity {}, {
+		connectionManagerId: 'sqlite',
+		mikroOrmConfig: {
+			driver: SqliteDriver,
+		},
+	})
+) {}
 
 @Resolver((of) => Tag)
 class TagResolver extends createBaseResolver<Tag, any>(
@@ -121,12 +124,12 @@ describe('Password Authentication - Challenge', () => {
 		expect(responseTwo.body.singleResult.errors?.[0]?.extensions?.acr).toBe('urn:gw:loa:2fa:pwd');
 	});
 
-	test.only('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
+	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
 		const responseTwo = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
-				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
+				mutation updateEntity($data: TagCreateOrUpdateInput!) {
 					updateTag(data: $data) {
 						id
 					}
@@ -138,6 +141,7 @@ describe('Password Authentication - Challenge', () => {
 					tasks: [
 						{
 							id: '1',
+							description: 'test',
 						},
 					],
 				},
