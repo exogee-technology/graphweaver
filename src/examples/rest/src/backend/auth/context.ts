@@ -9,7 +9,6 @@ export const mapUserToProfile = (user: User): UserProfile => {
 	const login = credentials.find((login) => login.id === user.id);
 	return new UserProfile({
 		id: user.id,
-		provider: AuthProvider.PASSWORD,
 		roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
 		displayName: user.name,
 		username: login.username,
