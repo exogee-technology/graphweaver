@@ -81,7 +81,7 @@ export const preventLightSideAccess = (
 };
 
 @ApplyMultiFactorAuthentication<Task>({
-	EVERYONE: {
+	Everyone: {
 		// all users must provide a password mfa when writing data
 		write: [{ factors: 2, providers: [AuthProvider.PASSWORD] }],
 	},

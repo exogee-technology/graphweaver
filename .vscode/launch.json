@@ -34,24 +34,14 @@
       "cwd": "${workspaceFolder}/src/examples/rest"
     },
     {
-      "name": "End to End",
+      "name": "End to End - Auth",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev", "--preserve-symlinks"],
+      "runtimeArgs": ["test-auth"],
       "restart": true,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
-    },
-    {
-      "name": "End to End - App",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["start"],
-      "restart": true,
-      "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/packages/end-to-end/app"
     },
     {
       "type": "chrome",

@@ -15,7 +15,6 @@ import {
 
 const user = new UserProfile({
 	id: '1',
-	provider: AuthProvider.PASSWORD,
 	roles: ['admin'],
 	displayName: 'Test User',
 });

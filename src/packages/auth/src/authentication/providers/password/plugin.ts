@@ -5,7 +5,6 @@ import { AuthorizationContext } from '../../../types';
 import { PasswordAuthTokenProvider } from './provider';
 import { upsertAuthorizationContext } from '../../../helper-functions';
 import { UserProfile } from '../../../user-profile';
-import { AuthProvider } from '../../base-auth-token-provider';
 import { ErrorCodes } from '../../../errors';
 
 const redirectUrl = process.env.PASSWORD_AUTH_REDIRECT_URI;
@@ -42,7 +41,6 @@ export const passwordAuthApolloPlugin = (
 				contextValue.user = new UserProfile({
 					id: undefined,
 					roles: ['GUEST'],
-					provider: AuthProvider.PASSWORD,
 				});
 				upsertAuthorizationContext(contextValue);
 			} else {

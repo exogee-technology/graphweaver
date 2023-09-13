@@ -1,13 +1,18 @@
 import { BaseContext, Filter } from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
-import { AuthProvider } from './authentication';
+
+export enum AuthProvider {
+	PASSWORD = 'PASSWORD',
+}
 
 export enum AuthenticationMethodReference {
 	PASSWORD = 'pwd',
+	ANY = 'any',
 }
 
-export type AuthenticationClassReference =
-	`urn:gw:loa:${number}fa:${AuthenticationMethodReference}`;
+export type AuthenticationClassReference = `urn:gw:loa:${number}fa:${
+	| AuthenticationMethodReference
+	| string}`;
 
 export interface JwtPayload {
 	iss?: string | undefined;
@@ -71,13 +76,17 @@ export type MultiFactorAuthentication = {
 	[K in string]?: MultiFactorAuthenticationOperation;
 };
 
-export interface MultiFactorAuthenticationOperation {
-	read?: MultiFactorAuthenticationRule;
-	create?: MultiFactorAuthenticationRule;
-	update?: MultiFactorAuthenticationRule;
-	delete?: MultiFactorAuthenticationRule;
-	write?: MultiFactorAuthenticationRule;
-	all?: MultiFactorAuthenticationRule;
+export enum MultiFactorAuthenticationOperationType {
+	READ = 'read',
+	CREATE = 'create',
+	UPDATE = 'update',
+	DELETE = 'delete',
+	WRITE = 'write',
+	ALL = 'all',
 }
 
-export type MultiFactorAuthenticationRule = { factors: number; providers: AuthProvider[] }[];
+export type MultiFactorAuthenticationOperation = {
+	[k in MultiFactorAuthenticationOperationType]?: MultiFactorAuthenticationRule[];
+};
+
+export type MultiFactorAuthenticationRule = { factors: number; providers: AuthProvider[] };
