@@ -10,6 +10,7 @@ import {
 	GraphQLEntity,
 	ID,
 	ObjectType,
+	RelationshipField,
 	Resolver,
 	createBaseResolver,
 } from '@exogee/graphweaver';
@@ -51,6 +52,31 @@ class TaskResolver extends createBaseResolver<Task, any>(
 	})
 ) {}
 
+@ObjectType('Tag')
+export class Tag extends GraphQLEntity<any> {
+	public dataEntity!: any;
+
+	@Field(() => ID)
+	id!: string;
+
+	@Field(() => String)
+	name!: string;
+
+	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
+	tasks!: Task[];
+}
+
+@Resolver((of) => Tag)
+class TagResolver extends createBaseResolver<Tag, any>(
+	Tag,
+	new MikroBackendProvider(class OrmTag extends BaseEntity {}, {
+		connectionManagerId: 'sqlite',
+		mikroOrmConfig: {
+			driver: SqliteDriver,
+		},
+	})
+) {}
+
 const user = new UserProfile({
 	id: '1',
 	roles: ['admin'],
@@ -66,7 +92,7 @@ export class AuthResolver extends PasswordAuthResolver {
 }
 
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, TaskResolver],
+	resolvers: [AuthResolver, TaskResolver, TagResolver],
 	apolloServerOptions: {
 		plugins: [passwordAuthApolloPlugin(async () => user)],
 	},
@@ -87,6 +113,33 @@ describe('Password Authentication - Challenge', () => {
 			variables: {
 				data: {
 					id: '1',
+				},
+			},
+		});
+
+		assert(responseTwo.body.kind === 'single');
+		expect(responseTwo.body.singleResult.errors?.[0]?.extensions?.acr).toBe('urn:gw:loa:2fa:pwd');
+	});
+
+	test.only('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
+		const responseTwo = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
+					updateTag(data: $data) {
+						id
+					}
+				}
+			`,
+			variables: {
+				data: {
+					id: '1',
+					tasks: [
+						{
+							id: '1',
+						},
+					],
 				},
 			},
 		});
