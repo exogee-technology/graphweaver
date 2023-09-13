@@ -54,7 +54,7 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 				id: user.id,
 				amr: [AuthenticationMethodReference.PASSWORD],
 				acr: {
-					values: [`urn:gw:loa:2fa:${AuthenticationMethodReference.PASSWORD}`],
+					values: [`urn:gw:loa:2fa:${AuthenticationMethodReference.PASSWORD}`], //@todo the number of factors needs to be removed
 				},
 			},
 			secret,
