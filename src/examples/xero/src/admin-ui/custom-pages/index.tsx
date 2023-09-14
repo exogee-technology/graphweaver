@@ -26,19 +26,17 @@ export const customPages = {
 		{
 			// These are dashboards
 			path: '/xero-dashboard',
-			element: (
-				<DefaultLayout>
-					<XeroDashboard />
-				</DefaultLayout>
-			),
-		},
-		{
-			path: '/xero-dashboard/:tenantId',
-			element: (
-				<DefaultLayout>
-					<XeroDashboard />
-				</DefaultLayout>
-			),
+			element: <DefaultLayout />,
+			children: [
+				{
+					path: '/',
+					element: <XeroDashboard />,
+				},
+				{
+					path: ':tenantId',
+					element: <XeroDashboard />,
+				},
+			],
 		},
 	],
 
