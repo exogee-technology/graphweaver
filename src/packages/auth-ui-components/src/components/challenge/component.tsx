@@ -37,7 +37,7 @@ export const Challenge = () => {
 			if (!token) throw new Error('Missing token');
 
 			localStorage.setItem('graphweaver-auth', token);
-			navigate('/');
+			navigate(-1);
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
