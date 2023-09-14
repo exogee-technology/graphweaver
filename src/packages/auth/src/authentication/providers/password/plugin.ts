@@ -8,9 +8,14 @@ import { UserProfile } from '../../../user-profile';
 import { ErrorCodes } from '../../../errors';
 
 const redirectUrl = process.env.PASSWORD_AUTH_REDIRECT_URI;
+const challengeUrl = process.env.PASSWORD_CHALLENGE_REDIRECT_URI;
 
 const didEncounterForbiddenError = (error: any) => {
 	return error.extensions.code === ErrorCodes.FORBIDDEN;
+};
+
+const didEncounterChallengeError = (error: any) => {
+	return error.extensions.code === ErrorCodes.CHALLENGE;
 };
 
 export const passwordAuthApolloPlugin = (
@@ -81,6 +86,15 @@ export const passwordAuthApolloPlugin = (
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 							response.http?.headers.set('X-Auth-Redirect', redirectUrl);
 						}
+					}
+
+					const didEncounterChallengeErrors = (response.body as any)?.singleResult?.errors?.some(
+						didEncounterChallengeError
+					);
+
+					if (didEncounterChallengeErrors) {
+						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
+						if (challengeUrl) response.http?.headers.set('X-Auth-Redirect', challengeUrl);
 					}
 
 					// Let's check if verification has failed and redirect to login if it has
