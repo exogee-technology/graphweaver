@@ -1,4 +1,5 @@
-import { Login as LoginForm, LoginProps, Spacer } from '@exogee/graphweaver-admin-ui-components';
+import { Spacer } from '@exogee/graphweaver-admin-ui-components';
+import { LoginForm, LoginProps } from '../../';
 
 import styles from './styles.module.css';
 

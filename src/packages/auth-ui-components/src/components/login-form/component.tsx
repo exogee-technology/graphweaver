@@ -1,14 +1,12 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { GraphweaverLogo } from '../assets';
-import { Alert } from '../alert';
-import { Button } from '../button';
+import { useMutation } from '@apollo/client';
+import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
-import { useMutation } from '@apollo/client';
 
 import { LOGIN_MUTATION } from './graphql';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 interface Form {
 	username: string;
@@ -19,7 +17,7 @@ export interface LoginProps {
 	onLogin?(username: string, password: string): string | Promise<string>; // Returns a token to place in Authorization header
 }
 
-export const Login = ({ onLogin }: LoginProps) => {
+export const LoginForm = ({ onLogin }: LoginProps) => {
 	const navigate = useNavigate();
 	const [loginPassword] = useMutation<{ loginPassword: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();

@@ -25,6 +25,7 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
+		"@exogee/graphweaver-auth-ui-components": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@mikro-orm/core": "5.7.14",

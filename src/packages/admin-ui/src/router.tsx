@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
 import { Loader, DefaultLayout, DetailPanel } from '@exogee/graphweaver-admin-ui-components';
 
-import { List, Root, Playground, Login } from './pages';
+import { List, Root, Playground } from './pages';
 
 const defaultRoutes = [
 	{
@@ -31,10 +31,6 @@ const defaultRoutes = [
 				element: <Loader />,
 			},
 		],
-	},
-	{
-		path: '/login',
-		element: <Login {...(customPages?.loginProps ?? {})} />,
 	},
 	{
 		path: '/playground',
