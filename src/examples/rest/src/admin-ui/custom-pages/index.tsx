@@ -1,10 +1,20 @@
-import { Login } from '@exogee/graphweaver-auth-ui-components';
+import { Auth, Login, Challenge } from '@exogee/graphweaver-auth-ui-components';
 
 export const customPages = {
 	routes: () => [
 		{
-			path: '/login',
-			element: <Login />,
+			path: '/auth',
+			element: <Auth />,
+			children: [
+				{
+					path: 'login',
+					element: <Login />,
+				},
+				{
+					path: 'challenge',
+					element: <Challenge />,
+				},
+			],
 		},
 	],
 };

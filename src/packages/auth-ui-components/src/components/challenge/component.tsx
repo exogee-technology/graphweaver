@@ -6,20 +6,17 @@ import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-com
 
 import styles from './styles.module.css';
 
-import { LOGIN_MUTATION } from './graphql';
+import { CHALLENGE_MUTATION } from './graphql';
 
 interface Form {
-	username: string;
 	password: string;
 }
 
-export interface LoginProps {
-	onLogin?(username: string, password: string): string | Promise<string>; // Returns a token to place in Authorization header
-}
-
-export const LoginForm = ({ onLogin }: LoginProps) => {
+export const Challenge = () => {
 	const navigate = useNavigate();
-	const [loginPassword] = useMutation<{ loginPassword: { authToken: string } }>(LOGIN_MUTATION);
+	const [challengePassword] = useMutation<{ challengePassword: { authToken: string } }>(
+		CHALLENGE_MUTATION
+	);
 	const [error, setError] = useState<Error | undefined>();
 
 	const handleOnSubmit = async (
@@ -30,22 +27,17 @@ export const LoginForm = ({ onLogin }: LoginProps) => {
 		setError(undefined);
 
 		try {
-			if (onLogin) {
-				token = await onLogin(values.username, values.password);
-			} else {
-				const { data } = await loginPassword({
-					variables: {
-						username: values.username,
-						password: values.password,
-					},
-				});
+			const { data } = await challengePassword({
+				variables: {
+					password: values.password,
+				},
+			});
 
-				token = data?.loginPassword.authToken;
-				if (!token) throw new Error('Missing token');
+			token = data?.challengePassword.authToken;
+			if (!token) throw new Error('Missing token');
 
-				localStorage.setItem('graphweaver-auth', token);
-				navigate('/');
-			}
+			localStorage.setItem('graphweaver-auth', token);
+			navigate('/');
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
@@ -55,17 +47,11 @@ export const LoginForm = ({ onLogin }: LoginProps) => {
 	};
 
 	return (
-		<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
+		<Formik<Form> initialValues={{ password: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
-					<div className={styles.titleContainer}>Login</div>
-					<Field
-						placeholder="Username"
-						id="username"
-						name="username"
-						className={styles.textInputField}
-					/>
+					<div className={styles.titleContainer}>Confirm your Password</div>
 					<Field
 						type="password"
 						placeholder="Password"
@@ -75,7 +61,7 @@ export const LoginForm = ({ onLogin }: LoginProps) => {
 					/>
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-							Login
+							Confirm
 						</Button>
 					</div>
 					{!!error && <Alert>{error.message}</Alert>}
