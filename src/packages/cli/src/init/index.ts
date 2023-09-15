@@ -110,7 +110,7 @@ export const init = async ({
 				name: 'createDirectory',
 				message: (answers) =>
 					`OK, we're ready- I'm going to create a new app in "${cwd()}/${
-						answers.projectName
+						answers.name
 					}" - is that OK?`,
 			},
 		]);
