@@ -15,7 +15,7 @@ interface Form {
 
 export const Login = () => {
 	const navigate = useNavigate();
-	const [loginPassword] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
+	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 
 	const handleOnSubmit = async (
@@ -26,7 +26,7 @@ export const Login = () => {
 		setError(undefined);
 
 		try {
-			const { data } = await loginPassword({
+			const { data } = await login({
 				variables: {
 					username: values.username,
 					password: values.password,

@@ -14,7 +14,7 @@ interface Form {
 
 export const Challenge = () => {
 	const navigate = useNavigate();
-	const [challengePassword] = useMutation<{ result: { authToken: string } }>(CHALLENGE_MUTATION);
+	const [challenge] = useMutation<{ result: { authToken: string } }>(CHALLENGE_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 
 	const handleOnSubmit = async (
@@ -25,7 +25,7 @@ export const Challenge = () => {
 		setError(undefined);
 
 		try {
-			const { data } = await challengePassword({
+			const { data } = await challenge({
 				variables: {
 					password: values.password,
 				},
