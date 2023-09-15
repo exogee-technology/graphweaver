@@ -16,7 +16,7 @@
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-sqlite": "export DATABASE=sqlite && jest --runInBand --forceExit ---- api/sqlite",
-		"test-ui": "npx playwright test",
+		"test-ui": "pnpm exec playwright test",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {

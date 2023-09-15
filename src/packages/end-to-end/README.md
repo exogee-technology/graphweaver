@@ -61,7 +61,7 @@ The Graphweaver Command Line Interface (CLI) tool enables you to set up and mana
 
 Install the chrome browser using:
 
-`npx playwright install --with-deps chromium`
+`npx playwright@1.37.1 install --with-deps chromium`
 
 Then
 
