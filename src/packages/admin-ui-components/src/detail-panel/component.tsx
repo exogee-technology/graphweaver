@@ -1,6 +1,6 @@
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import classnames from 'classnames';
-import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
+import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -78,7 +78,7 @@ const BooleanField = ({ name }: { name: string }) => {
 	const { initialValue } = meta;
 
 	useEffect(() => {
-		helpers.setValue(initialValue.value ? initialValue.value : undefined);
+		helpers.setValue(initialValue ?? undefined);
 	}, []);
 
 	const handleOnChange = (selected: SelectOption[]) => {
@@ -128,16 +128,28 @@ const DetailField = ({ field }: { field: EntityField }) => {
 	);
 };
 
+const PersistForm = ({ name }: { name: string }) => {
+	const { values } = useFormikContext();
+
+	useEffect(() => {
+		if (values) window.sessionStorage.setItem(name, JSON.stringify(values));
+	}, [values]);
+
+	return null;
+};
+
 const DetailForm = ({
 	initialValues,
 	detailFields,
 	onCancel,
 	onSubmit,
+	persistName,
 }: {
 	initialValues: Record<string, any>;
 	detailFields: EntityField[];
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
+	persistName: string;
 }) => {
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
@@ -156,6 +168,7 @@ const DetailForm = ({
 							</Button>
 						</div>
 					</div>
+					<PersistForm name={persistName} />
 				</Form>
 			)}
 		</Formik>
@@ -167,7 +180,7 @@ const SLIDE_ANIMATION_TIME_CSS_VAR_NAME = '--detail-panel-slide-animation-time';
 export const DetailPanel = () => {
 	const [open, setOpen] = useState(false);
 
-	const { id } = useParams();
+	const { id, entity } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName, entityByType } = useSchema();
@@ -215,9 +228,18 @@ export const DetailPanel = () => {
 			(!field.relationshipType && field.name !== 'id')
 	);
 
+	const persistName = `gw-${entity}-${id}`.toLowerCase();
+	const savedSessionState = useMemo((): ResultBaseType | undefined => {
+		const maybeState = window.sessionStorage.getItem(persistName);
+		if (maybeState && maybeState !== null) {
+			return JSON.parse(maybeState);
+		}
+		return undefined;
+	}, []);
+
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = data?.result;
-		const value = getValue(field, result);
+		const value = getValue(field, savedSessionState ?? result);
 		acc[field.name] = value ?? '';
 		return acc;
 	}, {} as Record<string, any>);
@@ -239,6 +261,7 @@ export const DetailPanel = () => {
 	}, []);
 
 	const closeModal = () => {
+		clearSessionState();
 		setOpen(false);
 		setTimeout(onClose, slideAnimationTime);
 	};
@@ -265,6 +288,7 @@ export const DetailPanel = () => {
 			}
 
 			actions.setSubmitting(false);
+			clearSessionState();
 			onClose();
 		} catch (err: unknown) {
 			actions.setSubmitting(false);
@@ -273,6 +297,10 @@ export const DetailPanel = () => {
 				console.log('display challenge');
 			}
 		}
+	};
+
+	const clearSessionState = () => {
+		window.sessionStorage.removeItem(persistName);
 	};
 
 	return (
@@ -293,6 +321,7 @@ export const DetailPanel = () => {
 							detailFields={formFields}
 							onCancel={closeModal}
 							onSubmit={handleOnSubmit}
+							persistName={persistName}
 						/>
 					)}
 				</>
