@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { ApolloProvider } from '@apollo/client';
-import {
-	Loader,
-	DefaultLayout,
-	DetailPanel,
-	apolloClient,
-} from '@exogee/graphweaver-admin-ui-components';
+import { Loader, DefaultLayout, DetailPanel } from '@exogee/graphweaver-admin-ui-components';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
@@ -59,9 +53,5 @@ export const Router = () => {
 
 	if (!router) return <Loader />;
 
-	return (
-		<ApolloProvider client={apolloClient(router)}>
-			<RouterProvider router={router} />
-		</ApolloProvider>
-	);
+	return <RouterProvider router={router} />;
 };
