@@ -45,7 +45,7 @@ const authLink = new ApolloLink((operation, forward) => {
 	return forward(operation).map((response) => {
 		const context = operation.getContext();
 		//  If the server sends back a header called `X-Auth-Redirect` on any response, we need to redirect the user to that URL.
-		const redirectHeader = context.response.headers.get('X-Auth-Redirect') as string;
+		const redirectHeader = context.response.headers.get('X-Auth-Redirect');
 		if (redirectHeader)
 			window.location.replace(`${redirectHeader}?redirect_uri=${window.location.href}`);
 

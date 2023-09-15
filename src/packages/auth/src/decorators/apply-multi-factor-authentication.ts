@@ -1,11 +1,13 @@
 import {
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
+	DeleteHookParams,
 	EntityMetadataMap,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	HookManager,
 	HookRegister,
+	ReadHookParams,
 	hasId,
 	hookManagerMap,
 } from '@exogee/graphweaver';
@@ -19,21 +21,20 @@ import {
 	MultiFactorAuthenticationRule,
 	MultiFactorAuthenticationOperationType,
 	getRolesFromAuthorizationContext,
-	AuthProvider,
 	AuthenticationClassReference,
 } from '..';
 import { logger } from '@exogee/logger';
 
-export const MfaMap = new Map<string, Partial<MultiFactorAuthentication>>();
+const MfaMap = new Map<string, Partial<MultiFactorAuthentication>>();
 
-export const setMFA = (name: string, mfa: MultiFactorAuthentication) => {
+const setMFA = (name: string, mfa: MultiFactorAuthentication) => {
 	if (MfaMap.get(name)) {
 		throw new Error(`The MFA rules already exist for ${name}.`);
 	}
 	MfaMap.set(name, mfa);
 };
 
-export const getMFA = (gqlEntityTypeName: string) => {
+const getMFA = (gqlEntityTypeName: string) => {
 	const mfa = MfaMap.get(gqlEntityTypeName);
 	if (!mfa) {
 		logger.warn(
@@ -43,29 +44,34 @@ export const getMFA = (gqlEntityTypeName: string) => {
 	return mfa;
 };
 
-export const beforeUpdate = (gqlEntityTypeName: string) => {
-	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
-		const items = params.args.items.filter(hasId);
+const beforeRead = (entityName: string) => {
+	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
+		await checkAuthentication(entityName, MultiFactorAuthenticationOperationType.READ, token);
+		return params;
+	};
+};
 
-		const { entity } = EntityMetadataMap.get(gqlEntityTypeName) ?? {};
+const beforeCreate = (entityName: string) => {
+	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		const token = params.context.token;
+		await checkAuthentication(entityName, MultiFactorAuthenticationOperationType.CREATE, token);
+		return params;
+	};
+};
 
-		if (!entity) {
-			throw new Error(
-				'Raising ForbiddenError: Request rejected as no entity constructor was found'
-			);
-		}
+const beforeUpdate = (entityName: string) => {
+	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		const token = params.context.token;
+		await checkAuthentication(entityName, MultiFactorAuthenticationOperationType.UPDATE, token);
+		return params;
+	};
+};
 
-		const target = entity.target as GraphQLEntityConstructor<
-			GraphQLEntity<BaseDataEntity>,
-			BaseDataEntity
-		>;
-
-		// 1. Check user has the correct level of authentication
-		const authChecks = items.map((item) =>
-			checkAuthentication(target, item, MultiFactorAuthenticationOperationType.UPDATE, token)
-		);
-		await Promise.all(authChecks);
+const beforeDelete = (entityName: string) => {
+	return async <G>(params: DeleteHookParams<G, AuthorizationContext>) => {
+		const token = params.context.token;
+		await checkAuthentication(entityName, MultiFactorAuthenticationOperationType.DELETE, token);
 		return params;
 	};
 };
@@ -133,29 +139,26 @@ const authProvidersRequired = (
 		: [...requiredProviders];
 };
 
-export const checkAuthentication = async <
-	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
-	D extends BaseDataEntity
->(
-	entity: G,
-	requestInput: Partial<G>,
+const checkAuthentication = async (
+	entityName: string,
 	operation: MultiFactorAuthenticationOperationType,
 	token?: string | JwtPayload
 ) => {
-	// Get ACL first
-	const mfa = getMFA(entity.name);
+	// Get MFA first
+	const mfa = getMFA(entityName);
 
 	// If we have no MFA for this entity then continue
 	if (!mfa) return;
-
-	const meta = EntityMetadataMap.get(entity.name);
-
 	if (typeof token === 'string') throw new Error('Authentication Error: Expected JWT Payload.');
 
 	//1. check the roles of the logged in user
 	const roles = getRolesFromAuthorizationContext();
 	//2. check the roles in the mfa rule
 	const rules = getRulesForRoles(mfa, roles, operation);
+
+	// No rules found for the current users role it is safe to continue
+	if (rules.length === 0) return;
+
 	//3. check the number of factors needed for this request
 	const factors = maxFactorsRequired(rules);
 	//4. check any required auth providers for this request
@@ -170,7 +173,7 @@ export const checkAuthentication = async <
 		throw new ChallengeError(
 			'MFA Challenge Required: Operation requires a step up in your authentication.',
 			{
-				entity: entity.name,
+				entity: entityName,
 				provider: mfa,
 				acr,
 			}
@@ -185,9 +188,21 @@ export function ApplyMultiFactorAuthentication<G>(mfa: MultiFactorAuthentication
 		const hookManager =
 			(hookManagerMap.get(constructor.name) as HookManager<G>) || new HookManager<G>();
 
+		hookManager.registerHook<ReadHookParams<G, AuthorizationContext>>(
+			HookRegister.BEFORE_READ,
+			beforeRead(constructor.name)
+		);
 		hookManager.registerHook<CreateOrUpdateHookParams<G, AuthorizationContext>>(
 			HookRegister.BEFORE_UPDATE,
 			beforeUpdate(constructor.name)
+		);
+		hookManager.registerHook<CreateOrUpdateHookParams<G, AuthorizationContext>>(
+			HookRegister.BEFORE_CREATE,
+			beforeCreate(constructor.name)
+		);
+		hookManager.registerHook<DeleteHookParams<G, AuthorizationContext>>(
+			HookRegister.BEFORE_DELETE,
+			beforeDelete(constructor.name)
 		);
 
 		hookManagerMap.set(constructor.name, hookManager);
