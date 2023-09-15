@@ -64,6 +64,6 @@ jobs:
           name: playwright-report
           path: src/packages/end-to-end/playwright-report/
           retention-days: 30
-        
+
         env:
           CI: true
