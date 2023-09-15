@@ -14,9 +14,7 @@ interface Form {
 
 export const Challenge = () => {
 	const navigate = useNavigate();
-	const [challengePassword] = useMutation<{ challengePassword: { authToken: string } }>(
-		CHALLENGE_MUTATION
-	);
+	const [challengePassword] = useMutation<{ result: { authToken: string } }>(CHALLENGE_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 
 	const handleOnSubmit = async (
@@ -33,7 +31,7 @@ export const Challenge = () => {
 				},
 			});
 
-			token = data?.challengePassword.authToken;
+			token = data?.result.authToken;
 			if (!token) throw new Error('Missing token');
 
 			localStorage.setItem('graphweaver-auth', token);
