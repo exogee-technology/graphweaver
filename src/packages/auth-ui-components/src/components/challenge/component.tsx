@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
@@ -13,9 +13,12 @@ interface Form {
 }
 
 export const Challenge = () => {
-	const navigate = useNavigate();
 	const [challenge] = useMutation<{ result: { authToken: string } }>(CHALLENGE_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
+	const [searchParams] = useSearchParams();
+
+	const redirectUri = searchParams.get('redirect_uri');
+	if (!redirectUri) throw new Error('Missing redirect URL');
 
 	const handleOnSubmit = async (
 		values: Form,
@@ -35,11 +38,10 @@ export const Challenge = () => {
 			if (!token) throw new Error('Missing token');
 
 			localStorage.setItem('graphweaver-auth', token);
-			navigate(-1);
+			window.location.replace(redirectUri);
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
-		} finally {
 			setSubmitting(false);
 		}
 	};
