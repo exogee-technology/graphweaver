@@ -61,11 +61,11 @@ The Graphweaver Command Line Interface (CLI) tool enables you to set up and mana
 
 Install the chrome browser using:
 
-`npx playwright@1.37.1 install --with-deps chromium`
+`pnpm playwright install --with-deps chromium`
 
 Then
 
 1. Run `pnpm dev-sqlite` This will start the test server, leave this running to start the tests
 2. Run `pnpm test-ui` in another terminal, this will execute the end to end test suite against the server started above
 
-To run the recorder use `npx playwright codegen`
+To run the recorder use `pnpm playwright codegen`

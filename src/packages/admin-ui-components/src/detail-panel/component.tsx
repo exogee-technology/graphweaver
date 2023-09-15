@@ -22,7 +22,6 @@ import {
 	generateUpdateEntityMutation,
 	getRelationshipQuery,
 } from './graphql';
-import { didEncounterChallenge } from '../utils/auth';
 
 import styles from './styles.module.css';
 
@@ -78,7 +77,7 @@ const BooleanField = ({ name }: { name: string }) => {
 	const { initialValue } = meta;
 
 	useEffect(() => {
-		helpers.setValue(initialValue ?? undefined);
+		helpers.setValue(initialValue);
 	}, []);
 
 	const handleOnChange = (selected: SelectOption[]) => {
@@ -269,34 +268,26 @@ export const DetailPanel = () => {
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		const id = data?.result?.id;
 
-		try {
-			if (id) {
-				await updateEntity({
-					variables: {
-						data: {
-							id,
-							...values,
-						},
+		if (id) {
+			await updateEntity({
+				variables: {
+					data: {
+						id,
+						...values,
 					},
-				});
-			} else {
-				await createEntity({
-					variables: {
-						data: values,
-					},
-				});
-			}
-
-			actions.setSubmitting(false);
-			clearSessionState();
-			onClose();
-		} catch (err: unknown) {
-			actions.setSubmitting(false);
-
-			if (err instanceof ApolloError && didEncounterChallenge(err)) {
-				console.log('display challenge');
-			}
+				},
+			});
+		} else {
+			await createEntity({
+				variables: {
+					data: values,
+				},
+			});
 		}
+
+		actions.setSubmitting(false);
+		clearSessionState();
+		onClose();
 	};
 
 	const clearSessionState = () => {
