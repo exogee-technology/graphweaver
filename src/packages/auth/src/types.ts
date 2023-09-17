@@ -89,4 +89,4 @@ export type MultiFactorAuthenticationOperation = {
 	[k in MultiFactorAuthenticationOperationType]?: MultiFactorAuthenticationRule[];
 };
 
-export type MultiFactorAuthenticationRule = { factors: number; providers: AuthProvider[] };
+export type MultiFactorAuthenticationRule = { factorsRequired: number; providers: AuthProvider[] };
