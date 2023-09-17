@@ -120,7 +120,7 @@ const getRulesForRoles = (
 // Find the highest number of factors needed for this request
 const maxFactorsRequired = (rules: MultiFactorAuthenticationRule[]) => {
 	return rules.reduce(
-		(maxFactors, rule) => (maxFactors > rule.factors ? maxFactors : rule.factors),
+		(maxFactors, rule) => (maxFactors > rule.factorsRequired ? maxFactors : rule.factorsRequired),
 		0
 	);
 };

@@ -27,7 +27,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 @ApplyMultiFactorAuthentication<Task>({
 	Everyone: {
 		// all users must provide a password mfa when writing data
-		write: [{ factors: 2, providers: [AuthProvider.PASSWORD] }],
+		write: [{ factorsRequired: 1, providers: [AuthProvider.PASSWORD] }],
 	},
 })
 @ObjectType('Task')
