@@ -1,16 +1,12 @@
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
-import ms from 'ms';
-import jwt from 'jsonwebtoken';
 
 import {
 	AccessControlList,
 	AccessType,
-	AuthenticationMethod,
 	AuthorizationContext,
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
-	JwtPayload,
 } from './types';
 import {
 	AclMap,
@@ -243,30 +239,5 @@ const checkPayloadAndFilterScalarsAndDates = (requestInput: any, key: string, va
 		value === null ||
 		value === undefined ||
 		value instanceof Date
-	);
-};
-
-export const stepUpAuthToken = (
-	userId: string,
-	authMethod: AuthenticationMethod,
-	expiresIn: string,
-	existingTokenPayload: JwtPayload
-) => {
-	if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
-	const expires = Math.floor((Date.now() + ms(expiresIn)) / 1000);
-
-	return jwt.sign(
-		{
-			id: userId,
-			amr: [authMethod], // AMR = Authentication Method Reference https://datatracker.ietf.org/doc/html/rfc8176
-			acr: {
-				values: {
-					...(existingTokenPayload.acr?.values ?? {}),
-					[`${authMethod}`]: expires, // ACR = Authentication Context Class Reference
-				},
-			},
-			exp: existingTokenPayload.exp,
-		},
-		secret
 	);
 };

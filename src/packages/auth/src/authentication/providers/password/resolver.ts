@@ -43,7 +43,7 @@ export abstract class PasswordAuthResolver {
 		const userProfile = await this.authenticate(username, password);
 		if (!userProfile) throw new Error('Challenge unsuccessful: Userprofile missing.');
 
-		const authToken = await tokenProvider.stepUpToken(userProfile, existingToken);
+		const authToken = await tokenProvider.stepUpToken(existingToken);
 		if (!authToken) throw new Error('Challenge unsuccessful: Step up failed.');
 
 		const token = Token.fromBackendEntity(authToken);
