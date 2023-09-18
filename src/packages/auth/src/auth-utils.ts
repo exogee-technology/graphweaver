@@ -22,7 +22,6 @@ import {
 } from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
-const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 
 export const getACL = (gqlEntityTypeName: string) => {
 	const acl = AclMap.get(gqlEntityTypeName);
