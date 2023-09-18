@@ -42,7 +42,7 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	}
 	async stepUpToken(existingTokenPayload: JwtPayload) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
-		const expires = Math.floor((Date.now() + ms(expiresIn)) / 1000);
+		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
 		const token = jwt.sign(
 			{
