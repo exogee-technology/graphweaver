@@ -4,10 +4,11 @@ import ms from 'ms';
 import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
 import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
-import { AuthenticationMethod } from '../../../types';
+import { AuthenticationMethod, JwtPayload } from '../../../types';
 
 const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
+const mfaExpiresIn = process.env.PASSWORD_MFA_JWT_EXPIRES_IN ?? '30m';
 
 /**
  * Removes any prefix from the given authorization header.
@@ -32,15 +33,16 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 		return token;
 	}
-	async decodeToken(authToken: string) {
+	async decodeToken(authToken: string): Promise<JwtPayload> {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
 		const payload = jwt.verify(token, secret);
 		if (typeof payload === 'string') throw new Error('Verification of token failed');
 		return payload;
 	}
-	async stepUpToken(user: UserProfile) {
+	async stepUpToken(user: UserProfile, existingTokenPayload: JwtPayload) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		const expiresIn = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
 		const authToken = jwt.sign(
 			{
@@ -48,15 +50,13 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 				amr: [AuthenticationMethod.PASSWORD], // AMR = Authentication Method Reference https://datatracker.ietf.org/doc/html/rfc8176
 				acr: {
 					values: {
-						// @todo spread in any existing valid acr values from the current token
-						[`${AuthenticationMethod.PASSWORD}`]: ms(expiresIn), // ACR = Authentication Context Class Reference
+						...(existingTokenPayload.acr?.values ?? {}),
+						[`${AuthenticationMethod.PASSWORD}`]: expiresIn, // ACR = Authentication Context Class Reference
 					},
 				},
+				exp: existingTokenPayload.exp,
 			},
-			secret,
-			{
-				expiresIn,
-			}
+			secret
 		);
 		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 

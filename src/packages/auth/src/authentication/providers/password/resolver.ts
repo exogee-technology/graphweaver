@@ -32,17 +32,19 @@ export abstract class PasswordAuthResolver {
 		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
+		if (!ctx.token) throw new Error('Challenge unsuccessful: Token missing.');
 		const tokenProvider = new PasswordAuthTokenProvider();
-		if (!ctx.token) throw new Error('Challenge unsuccessful.');
+		const existingToken =
+			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 
 		const username = ctx.user?.username;
-		if (!username) throw new Error('Challenge unsuccessful.');
+		if (!username) throw new Error('Challenge unsuccessful: Username missing.');
 
 		const userProfile = await this.authenticate(username, password);
-		if (!userProfile) throw new Error('Challenge unsuccessful.');
+		if (!userProfile) throw new Error('Challenge unsuccessful: Userprofile missing.');
 
-		const authToken = await tokenProvider.stepUpToken(userProfile);
-		if (!authToken) throw new Error('Challenge unsuccessful.');
+		const authToken = await tokenProvider.stepUpToken(userProfile, existingToken);
+		if (!authToken) throw new Error('Challenge unsuccessful: Step up failed.');
 
 		const token = Token.fromBackendEntity(authToken);
 		if (!token) throw new Error('Challenge unsuccessful.');

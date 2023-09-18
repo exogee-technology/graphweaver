@@ -6,13 +6,8 @@ export enum AuthenticationMethod {
 }
 
 export interface JwtPayload {
-	iss?: string | undefined;
-	sub?: string | undefined;
-	aud?: string | string[] | undefined;
-	exp?: number | undefined;
-	nbf?: number | undefined;
-	iat?: number | undefined;
-	jti?: string | undefined;
+	id?: string;
+	exp?: number;
 	amr?: AuthenticationMethod[];
 	acr?: {
 		values: { [K in AuthenticationMethod]: number };

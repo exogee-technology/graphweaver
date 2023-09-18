@@ -119,9 +119,9 @@ const filterRule = (
 	timestamp: number
 ) => {
 	if (rule.providers) {
-		return timestamp > expiresIn && rule.providers.includes(key as any);
+		return timestamp < expiresIn && rule.providers.includes(key as any);
 	}
-	return timestamp > expiresIn;
+	return timestamp < expiresIn;
 };
 
 const checkAuthentication = async (
