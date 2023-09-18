@@ -10,13 +10,8 @@ import { ErrorCodes } from '../../../errors';
 const redirectUrl = process.env.PASSWORD_AUTH_REDIRECT_URI;
 const challengeUrl = process.env.PASSWORD_CHALLENGE_REDIRECT_URI;
 
-const didEncounterForbiddenError = (error: any) => {
-	return error.extensions.code === ErrorCodes.FORBIDDEN;
-};
-
-const didEncounterChallengeError = (error: any) => {
-	return error.extensions.code === ErrorCodes.CHALLENGE;
-};
+const didEncounterForbiddenError = (error: any) => error.extensions.code === ErrorCodes.FORBIDDEN;
+const didEncounterChallengeError = (error: any) => error.extensions.code === ErrorCodes.CHALLENGE;
 
 export const passwordAuthApolloPlugin = (
 	addUserToContext: (userId: string) => Promise<UserProfile>
@@ -73,15 +68,11 @@ export const passwordAuthApolloPlugin = (
 
 			return {
 				willSendResponse: async ({ response, contextValue }) => {
-					// Let's check if we are a guest and have received a forbidden error
-					if (
-						contextValue.user?.roles?.includes('GUEST') &&
-						response &&
-						(response.body as any)?.singleResult?.errors
-					) {
-						const didEncounterForbiddenErrors = (response.body as any)?.singleResult?.errors.some(
-							didEncounterForbiddenError
-						);
+					// Let's check if we are a guest and have received any errors
+					const errors = (response.body as any)?.singleResult?.errors;
+
+					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
+						const didEncounterForbiddenErrors = errors.some(didEncounterForbiddenError);
 						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
 						if (didEncounterForbiddenErrors) {
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
@@ -89,10 +80,8 @@ export const passwordAuthApolloPlugin = (
 						}
 					}
 
-					const didEncounterChallengeErrors = (response.body as any)?.singleResult?.errors?.some(
-						didEncounterChallengeError
-					);
-
+					const didEncounterChallengeErrors = errors?.some(didEncounterChallengeError);
+					//If we received a challenge error we need to redirect, set the header to tell the client to do so.
 					if (didEncounterChallengeErrors) {
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 						if (challengeUrl) response.http?.headers.set('X-Auth-Redirect', challengeUrl);
