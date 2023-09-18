@@ -5,7 +5,6 @@ import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
 import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../../types';
-import { stepUpAuthToken } from '../../../auth-utils';
 
 const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
@@ -41,13 +40,21 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 		if (typeof payload === 'string') throw new Error('Verification of token failed');
 		return payload;
 	}
-	async stepUpToken(user: UserProfile, existingTokenPayload: JwtPayload) {
-		if (!user.id) throw new Error('Authentication failed: No user ID was found.');
-		const token = stepUpAuthToken(
-			user.id,
-			AuthenticationMethod.PASSWORD,
-			mfaExpiresIn,
-			existingTokenPayload
+	async stepUpToken(existingTokenPayload: JwtPayload) {
+		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		const expires = Math.floor((Date.now() + ms(expiresIn)) / 1000);
+
+		const token = jwt.sign(
+			{
+				...existingTokenPayload,
+				acr: {
+					values: {
+						...(existingTokenPayload.acr?.values ?? {}),
+						[AuthenticationMethod.PASSWORD]: expires, // ACR = Authentication Context Class Reference
+					},
+				},
+			},
+			secret
 		);
 		return new AuthToken(`${TOKEN_PREFIX} ${token}`);
 	}
