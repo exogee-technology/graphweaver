@@ -9,7 +9,6 @@ import {
 	PasswordAuthResolver,
 	passwordAuthApolloPlugin,
 	UserProfile,
-	AuthProvider,
 	AuthorizationContext,
 	ForbiddenError,
 } from '@exogee/graphweaver-auth';

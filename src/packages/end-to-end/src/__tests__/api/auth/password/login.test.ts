@@ -10,7 +10,6 @@ import {
 	PasswordAuthResolver,
 	passwordAuthApolloPlugin,
 	UserProfile,
-	AuthProvider,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({

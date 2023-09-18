@@ -1,18 +1,9 @@
 import { BaseContext, Filter } from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
 
-export enum AuthProvider {
-	PASSWORD = 'PASSWORD',
-}
-
-export enum AuthenticationMethodReference {
+export enum AuthenticationMethod {
 	PASSWORD = 'pwd',
-	ANY = 'any',
 }
-
-export type AuthenticationClassReference = `urn:gw:loa:${number}fa:${
-	| AuthenticationMethodReference
-	| string}`;
 
 export interface JwtPayload {
 	iss?: string | undefined;
@@ -22,9 +13,9 @@ export interface JwtPayload {
 	nbf?: number | undefined;
 	iat?: number | undefined;
 	jti?: string | undefined;
-	amr?: AuthenticationMethodReference[];
+	amr?: AuthenticationMethod[];
 	acr?: {
-		values: AuthenticationClassReference[];
+		values: { [K in AuthenticationMethod]: number };
 	};
 }
 
@@ -89,4 +80,7 @@ export type MultiFactorAuthenticationOperation = {
 	[k in MultiFactorAuthenticationOperationType]?: MultiFactorAuthenticationRule[];
 };
 
-export type MultiFactorAuthenticationRule = { factorsRequired: number; providers: AuthProvider[] };
+export type MultiFactorAuthenticationRule = {
+	factorsRequired: number;
+	providers: AuthenticationMethod[];
+};

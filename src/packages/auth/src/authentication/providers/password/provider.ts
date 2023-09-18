@@ -1,9 +1,10 @@
 import jwt from 'jsonwebtoken';
+import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
 import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
-import { AuthenticationMethodReference } from '../../../types';
+import { AuthenticationMethod } from '../../../types';
 
 const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
@@ -25,13 +26,9 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	async generateToken(user: UserProfile) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
-		const authToken = jwt.sign(
-			{ id: user.id, amr: [AuthenticationMethodReference.PASSWORD] },
-			secret,
-			{
-				expiresIn,
-			}
-		);
+		const authToken = jwt.sign({ id: user.id, amr: [AuthenticationMethod.PASSWORD] }, secret, {
+			expiresIn,
+		});
 		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 		return token;
 	}
@@ -45,16 +42,15 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	async stepUpToken(user: UserProfile) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 
-		// LOA = Level of Authentication
-		// ACR = Authentication Context Class Reference
-		// AMR = Authentication Method Reference https://datatracker.ietf.org/doc/html/rfc8176
-
 		const authToken = jwt.sign(
 			{
 				id: user.id,
-				amr: [AuthenticationMethodReference.PASSWORD],
+				amr: [AuthenticationMethod.PASSWORD], // AMR = Authentication Method Reference https://datatracker.ietf.org/doc/html/rfc8176
 				acr: {
-					values: [`urn:gw:loa:2fa:${AuthenticationMethodReference.PASSWORD}`], //@todo the number of factors needs to be removed
+					values: {
+						// @todo spread in any existing valid acr values from the current token
+						[`${AuthenticationMethod.PASSWORD}`]: ms(expiresIn), // ACR = Authentication Context Class Reference
+					},
 				},
 			},
 			secret,
