@@ -187,7 +187,7 @@ export const DetailPanel = () => {
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	const { data, loading } = useQuery<{ result: ResultBaseType }>(
+	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
 		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
@@ -304,6 +304,8 @@ export const DetailPanel = () => {
 				<>
 					{loading ? (
 						<Spinner />
+					) : error ? (
+						<p>Failed to load entity.</p>
 					) : (
 						<DetailForm
 							initialValues={initialValues}
