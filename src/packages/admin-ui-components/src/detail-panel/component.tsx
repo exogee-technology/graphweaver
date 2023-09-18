@@ -266,8 +266,6 @@ export const DetailPanel = () => {
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
-		const id = data?.result?.id;
-
 		if (id) {
 			await updateEntity({
 				variables: {
