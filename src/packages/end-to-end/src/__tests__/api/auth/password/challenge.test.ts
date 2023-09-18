@@ -19,7 +19,7 @@ import {
 	passwordAuthApolloPlugin,
 	UserProfile,
 	ApplyMultiFactorAuthentication,
-	AuthProvider,
+	AuthenticationMethod,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -27,7 +27,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 @ApplyMultiFactorAuthentication<Task>({
 	Everyone: {
 		// all users must provide a password mfa when writing data
-		write: [{ factorsRequired: 1, providers: [AuthProvider.PASSWORD] }],
+		write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
 	},
 })
 @ObjectType('Task')
@@ -121,7 +121,7 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(responseTwo.body.kind === 'single');
-		expect(responseTwo.body.singleResult.errors?.[0]?.extensions?.acr).toBe('urn:gw:loa:2fa:pwd');
+		expect(responseTwo.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');
 	});
 
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
@@ -149,6 +149,6 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(responseTwo.body.kind === 'single');
-		expect(responseTwo.body.singleResult.errors?.[0]?.extensions?.acr).toBe('urn:gw:loa:2fa:pwd');
+		expect(responseTwo.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');
 	});
 });

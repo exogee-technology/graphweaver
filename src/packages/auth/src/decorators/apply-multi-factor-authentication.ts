@@ -1,18 +1,14 @@
 import {
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
-	EntityMetadataMap,
-	GraphQLEntity,
-	GraphQLEntityConstructor,
 	HookManager,
 	HookRegister,
 	ReadHookParams,
-	hasId,
 	hookManagerMap,
 } from '@exogee/graphweaver';
+import { logger } from '@exogee/logger';
+
 import {
-	AuthenticationMethodReference,
 	AuthorizationContext,
 	BASE_ROLE_EVERYONE,
 	ChallengeError,
@@ -21,9 +17,8 @@ import {
 	MultiFactorAuthenticationRule,
 	MultiFactorAuthenticationOperationType,
 	getRolesFromAuthorizationContext,
-	AuthenticationClassReference,
+	AuthenticationMethod,
 } from '..';
-import { logger } from '@exogee/logger';
 
 const MfaMap = new Map<string, Partial<MultiFactorAuthentication>>();
 
@@ -117,26 +112,16 @@ const getRulesForRoles = (
 	return rules;
 };
 
-// Find the highest number of factors needed for this request
-const maxFactorsRequired = (rules: MultiFactorAuthenticationRule[]) => {
-	return rules.reduce(
-		(maxFactors, rule) => (maxFactors > rule.factorsRequired ? maxFactors : rule.factorsRequired),
-		0
-	);
-};
-
-const authProvidersRequired = (
-	rules: MultiFactorAuthenticationRule[]
-): AuthenticationMethodReference[] => {
-	const requiredProviders = new Set<AuthenticationMethodReference>();
-	for (const rule of rules) {
-		for (const provider of rule.providers) {
-			requiredProviders.add(AuthenticationMethodReference[provider]);
-		}
+const filterRule = (
+	rule: MultiFactorAuthenticationRule,
+	key: AuthenticationMethod,
+	expiresIn: number,
+	timestamp: number
+) => {
+	if (rule.providers) {
+		return timestamp > expiresIn && rule.providers.includes(key as any);
 	}
-	return requiredProviders.size === 0
-		? [AuthenticationMethodReference.ANY]
-		: [...requiredProviders];
+	return timestamp > expiresIn;
 };
 
 const checkAuthentication = async (
@@ -156,28 +141,33 @@ const checkAuthentication = async (
 	//2. check the roles in the mfa rule
 	const rules = getRulesForRoles(mfa, roles, operation);
 
-	// No rules found for the current users role it is safe to continue
+	// No rules found for the current user role, it is safe to continue
 	if (rules.length === 0) return;
 
-	//3. check the number of factors needed for this request
-	const factors = maxFactorsRequired(rules);
-	//4. check any required auth providers for this request
-	const providers = authProvidersRequired(rules);
-	//5. create the acr value that should be in the token
-	const acr: AuthenticationClassReference = `urn:gw:loa:${factors}fa:${providers.join(',')}`;
-	//6. check the current acr values to see if we have already authenticated
-	const claimFound = token?.acr?.values?.some((value) => value === acr);
+	// Get existing mfa authentications in the token
+	const tokenMfaValues = Object.entries(token?.acr?.values ?? {}) as [
+		AuthenticationMethod,
+		number
+	][];
+	// Let's get the current timestamp to check if any mfa has expired
+	const timestamp = Math.floor(Date.now() / 1000);
 
-	//7. check if the claim has been met
-	if (!claimFound) {
-		throw new ChallengeError(
-			'MFA Challenge Required: Operation requires a step up in your authentication.',
-			{
-				entity: entityName,
-				provider: mfa,
-				acr,
-			}
+	// Loop through each rule and make sure it passes, throw when we find one that fails.
+	for (const rule of rules) {
+		// Let's check if this rule has specified providers
+		const validMFAFound = tokenMfaValues.filter(([key, expiresIn]) =>
+			filterRule(rule, key, expiresIn, timestamp)
 		);
+
+		// If we find less then the number of required then we need to throw a challenge error
+		if (validMFAFound.length < rule.factorsRequired) {
+			throw new ChallengeError(
+				'MFA Challenge Required: Operation requires a step up in your authentication.',
+				{
+					entity: entityName,
+				}
+			);
+		}
 	}
 };
 

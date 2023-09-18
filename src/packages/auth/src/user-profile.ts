@@ -1,5 +1,4 @@
 import { BaseDataEntity } from '@exogee/graphweaver';
-import { AuthProvider } from './types';
 
 export type UserProfileData = {
 	id?: string;
