@@ -788,6 +788,9 @@ importers:
       jest:
         specifier: 29.4.0
         version: 29.4.0
+      mockdate:
+        specifier: 3.0.5
+        version: 3.0.5
       pg:
         specifier: 8.11.1
         version: 8.11.1
@@ -849,7 +852,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -4469,7 +4472,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -11979,6 +11982,10 @@ packages:
     resolution: {integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==}
     engines: {node: '>=10'}
     hasBin: true
+
+  /mockdate@3.0.5:
+    resolution: {integrity: sha512-iniQP4rj1FhBdBYS/+eQv7j1tadJ9lJtdzgOpvsOHng/GbcDh2Fhdeq+ZRldrPYdXvCyfFUmFeEwEGXZB5I/AQ==}
+    dev: true
 
   /moment@2.29.4:
     resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}

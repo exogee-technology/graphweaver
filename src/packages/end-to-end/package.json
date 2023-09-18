@@ -21,17 +21,17 @@
 	},
 	"dependencies": {
 		"@exogee/graphweaver": "*",
+		"@exogee/graphweaver-auth": "*",
+		"@exogee/graphweaver-mikroorm": "*",
 		"@exogee/graphweaver-scalars": "*",
 		"@exogee/graphweaver-server": "*",
-		"@exogee/graphweaver-auth": "*",
-		"graphweaver": "*",
-		"@exogee/graphweaver-mikroorm": "*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
-		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.2",
 		"class-validator": "0.14.0",
-		"graphql": "16.6.0"
+		"graphql": "16.6.0",
+		"graphweaver": "*",
+		"reflect-metadata": "0.1.13",
+		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@playwright/test": "1.37.1",
@@ -39,6 +39,7 @@
 		"graphql": "16.6.0",
 		"graphql-tag": "2.12.6",
 		"jest": "29.4.0",
+		"mockdate": "3.0.5",
 		"pg": "8.11.1",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.0.5",

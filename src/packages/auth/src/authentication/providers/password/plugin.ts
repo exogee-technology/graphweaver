@@ -58,6 +58,7 @@ export const passwordAuthApolloPlugin = (
 					const decoded = await tokenProvider.decodeToken(authHeader);
 
 					const userId = typeof decoded === 'object' ? decoded?.id : undefined;
+					if (!userId) throw new Error('Token verification failed: No user ID found.');
 					const userProfile = await addUserToContext(userId);
 
 					contextValue.token = decoded;
