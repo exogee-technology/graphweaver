@@ -5,6 +5,7 @@ import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
 import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../../types';
+import { stepUpAuthToken } from '../../../auth-utils';
 
 const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
@@ -41,25 +42,13 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 		return payload;
 	}
 	async stepUpToken(user: UserProfile, existingTokenPayload: JwtPayload) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
-		const expiresIn = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
-
-		const authToken = jwt.sign(
-			{
-				id: user.id,
-				amr: [AuthenticationMethod.PASSWORD], // AMR = Authentication Method Reference https://datatracker.ietf.org/doc/html/rfc8176
-				acr: {
-					values: {
-						...(existingTokenPayload.acr?.values ?? {}),
-						[`${AuthenticationMethod.PASSWORD}`]: expiresIn, // ACR = Authentication Context Class Reference
-					},
-				},
-				exp: existingTokenPayload.exp,
-			},
-			secret
+		if (!user.id) throw new Error('Authentication failed: No user ID was found.');
+		const token = stepUpAuthToken(
+			user.id,
+			AuthenticationMethod.PASSWORD,
+			mfaExpiresIn,
+			existingTokenPayload
 		);
-		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
-
-		return token;
+		return new AuthToken(`${TOKEN_PREFIX} ${token}`);
 	}
 }
