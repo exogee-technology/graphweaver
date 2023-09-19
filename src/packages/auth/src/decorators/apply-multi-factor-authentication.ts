@@ -154,7 +154,7 @@ const checkAuthentication = async (
 
 	// Loop through each rule and make sure it passes, throw when we find one that fails.
 	for (const rule of rules) {
-		// Let's check if this rule has specified providers
+		// Let's check for recent mfa step ups in the token that match the rule
 		const validMFAFound = tokenMfaValues.filter(([key, expiresIn]) =>
 			filterRule(rule, key, expiresIn, timestamp)
 		);
