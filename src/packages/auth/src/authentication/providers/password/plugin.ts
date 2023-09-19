@@ -9,7 +9,7 @@ import { ErrorCodes } from '../../../errors';
 
 const redirectUrl = process.env.PASSWORD_AUTH_REDIRECT_URI;
 const challengeUrl = process.env.PASSWORD_CHALLENGE_REDIRECT_URI;
-const requestRedirectUrl = process.env.PASSWORD_AUTH_REQUEST_REDIRECT_URI;
+const requestRedirectUrl = process.env.PASSWORD_AUTH_DEFAULT_REQUEST_REDIRECT_URI;
 const whitelist = process.env.PASSWORD_AUTH_WHITELIST_DOMAINS?.split?.(' ');
 
 const didEncounterForbiddenError = (error: any) => error.extensions.code === ErrorCodes.FORBIDDEN;
