@@ -10,6 +10,7 @@ import { ErrorCodes } from '../../../errors';
 const redirectUrl = process.env.PASSWORD_AUTH_REDIRECT_URI;
 const challengeUrl = process.env.PASSWORD_CHALLENGE_REDIRECT_URI;
 const requestRedirectUrl = process.env.PASSWORD_AUTH_REQUEST_REDIRECT_URI;
+const whitelist = process.env.PASSWORD_AUTH_WHITELIST_DOMAINS?.split?.(' ');
 
 const didEncounterForbiddenError = (error: any) => error.extensions.code === ErrorCodes.FORBIDDEN;
 const didEncounterChallengeError = (error: any) => error.extensions.code === ErrorCodes.CHALLENGE;
@@ -24,10 +25,21 @@ const buildUrl = (root: string, redirect?: string) => {
 	return url.toString();
 };
 
+const isURLWhitelisted = (authRedirect: string) => {
+	if (!whitelist) throw new Error('PASSWORD_AUTH_WHITELIST_DOMAINS is required in environment');
+
+	const url = new URL(authRedirect);
+	const redirectDomain = url.hostname.toLowerCase();
+
+	// Check if the current domain matches any domain in the whitelist
+	return whitelist.some((whitelistedDomain) =>
+		redirectDomain.includes(whitelistedDomain.toLowerCase())
+	);
+};
+
 export const passwordAuthApolloPlugin = (
 	addUserToContext: (userId: string) => Promise<UserProfile>
 ): ApolloServerPlugin<AuthorizationContext> => {
-	if (!redirectUrl) throw new Error('PASSWORD_AUTH_REDIRECT_URI is required in environment');
 	if (!redirectUrl) throw new Error('PASSWORD_AUTH_REDIRECT_URI is required in environment');
 
 	return {
@@ -42,9 +54,13 @@ export const passwordAuthApolloPlugin = (
 
 			// We may need to return a redirect to the client. If so, we'll set this variable.
 			const authHeader = request.http?.headers.get('authorization');
-			// @todo we need to validate X-Auth-Request-Redirect
 			const authRedirect =
 				request.http?.headers.get('X-Auth-Request-Redirect') ?? requestRedirectUrl;
+
+			// Check that we are allowed to redirect to this domain
+			if (authRedirect && !isURLWhitelisted(authRedirect)) {
+				throw new Error('Authentication Failed: Unknown redirect URI.');
+			}
 
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
