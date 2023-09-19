@@ -1,4 +1,4 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
+process.env.PASSWORD_AUTH_REDIRECT_URI = 'http://localhost:9000/';
 process.env.PASSWORD_AUTH_JWT_SECRET = '*';
 
 import 'reflect-metadata';

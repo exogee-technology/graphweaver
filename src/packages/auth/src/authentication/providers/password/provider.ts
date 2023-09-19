@@ -38,6 +38,7 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 		return token;
 	}
+
 	async decodeToken(authToken: string): Promise<JwtPayload> {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
@@ -45,6 +46,7 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 		if (typeof payload === 'string') throw new Error('Verification of token failed');
 		return payload;
 	}
+
 	async stepUpToken(existingTokenPayload: JwtPayload) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
