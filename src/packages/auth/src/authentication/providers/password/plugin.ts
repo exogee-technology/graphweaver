@@ -2,7 +2,7 @@ import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
 import { AuthorizationContext } from '../../../types';
-import { PasswordAuthTokenProvider } from './provider';
+import { PasswordAuthTokenProvider, isExpired } from './provider';
 import { upsertAuthorizationContext } from '../../../helper-functions';
 import { UserProfile } from '../../../user-profile';
 import { ErrorCodes } from '../../../errors';
@@ -33,8 +33,8 @@ export const passwordAuthApolloPlugin = (
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
 
-			// Case 1. No auth header, initial request for a guest operation.
-			if (!authHeader) {
+			// Case 1. No auth header or it has expired.
+			if (!authHeader || isExpired(authHeader)) {
 				logger.trace('No Auth header, setting redirect');
 
 				// We are a guest and have not logged in yet.
@@ -44,7 +44,7 @@ export const passwordAuthApolloPlugin = (
 				});
 				upsertAuthorizationContext(contextValue);
 			} else {
-				// Case 2. There is an auth header
+				// Case 2. There is a valid auth header
 				logger.trace('Got a token, checking it is valid.');
 
 				const tokenProvider = new PasswordAuthTokenProvider();

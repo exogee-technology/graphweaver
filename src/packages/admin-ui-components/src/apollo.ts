@@ -8,31 +8,15 @@ const httpLink = new HttpLink({
 	uri,
 });
 
-const isExpired = (token: string) => {
-	try {
-		const decodedJwt = JSON.parse(atob(token.split('.')[1]));
-		return decodedJwt.exp * 1000 < Date.now();
-	} catch (e) {
-		console.warn('Not able to decode the current Graphweaver Auth Token.');
-		return true;
-	}
-};
-
 const authLink = new ApolloLink((operation, forward) => {
 	//  If there's something called `graphweaver-auth` in local storage, we need to send that to the server.
-	let currentAuthToken = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
+	const currentAuthToken = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
 
 	// The token should include the type and the credential, if not let's emit a warning.
 	if (currentAuthToken && currentAuthToken.split(' ').length < 2)
 		console.warn(
 			'Current Graphweaver Auth Token is invalid, it should be in the form "[type] [credential]"'
 		);
-
-	if (currentAuthToken && isExpired(currentAuthToken)) {
-		console.warn('Current Graphweaver Auth Token is expired, removing expired token.');
-		localStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
-		currentAuthToken = null;
-	}
 
 	operation.setContext({
 		headers: {
