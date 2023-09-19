@@ -8,7 +8,7 @@ import { AuthenticationMethod, JwtPayload } from '../../../types';
 
 const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
-const mfaExpiresIn = process.env.PASSWORD_MFA_JWT_EXPIRES_IN ?? '30m';
+const mfaExpiresIn = process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN ?? '30m';
 
 /**
  * Removes any prefix from the given authorization header.
