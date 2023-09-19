@@ -16,10 +16,10 @@ export abstract class PasswordAuthResolver {
 	): Promise<Token> {
 		const tokenProvider = new PasswordAuthTokenProvider();
 		const userProfile = await this.authenticate(username, password);
-		if (!userProfile) throw new Error('Login unsuccessful.');
+		if (!userProfile) throw new Error('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
-		if (!authToken) throw new Error('Login unsuccessful.');
+		if (!authToken) throw new Error('Login unsuccessful: Token generation failed.');
 
 		const token = Token.fromBackendEntity(authToken);
 		if (!token) throw new Error('Login unsuccessful.');
