@@ -20,6 +20,7 @@ const graphweaver = new Graphweaver<AuthorizationContext>({
 	adminMetadata: {
 		enabled: true,
 		hooks: {
+			// These hooks filter the admin ui entities based on the logged in user
 			beforeRead,
 			afterRead,
 		},
