@@ -1,5 +1,5 @@
 import { BaseLoaders } from '@exogee/graphweaver';
-import { AuthProvider, UserProfile } from '@exogee/graphweaver-auth';
+import { UserProfile } from '@exogee/graphweaver-auth';
 
 import { User } from '../schema/user';
 import { Roles } from '..';
@@ -15,6 +15,8 @@ export const mapUserToProfile = (user: User): UserProfile => {
 	});
 };
 
+// This function is called from the authentication provider
+// You must fetch the user by ID and return a UserProfile, which is added to the context
 export const addUserToContext = async (userId: string) => {
 	const user = User.fromBackendEntity(
 		await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
