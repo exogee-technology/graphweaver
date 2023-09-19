@@ -2,7 +2,7 @@ import { DefaultLayout, apolloClient } from '@exogee/graphweaver-admin-ui-compon
 import { gql } from '@apollo/client';
 
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
-import { XeroDashboard } from './dashboards';
+import { AllCompanies, SingleCompany } from './dashboards';
 import { TenantsQuery } from './index.generated';
 
 const tenantsQuery = gql`
@@ -24,17 +24,16 @@ export const customPages = {
 			element: <XeroAuthCodeReceiver />,
 		},
 		{
-			// These are dashboards
-			path: '/xero-dashboard',
+			path: 'xero-dashboard',
 			element: <DefaultLayout />,
 			children: [
 				{
-					path: '/',
-					element: <XeroDashboard />,
+					index: true,
+					element: <AllCompanies />,
 				},
 				{
 					path: ':tenantId',
-					element: <XeroDashboard />,
+					element: <SingleCompany />,
 				},
 			],
 		},

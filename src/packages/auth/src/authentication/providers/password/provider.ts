@@ -21,6 +21,11 @@ const removeAuthPrefixIfPresent = (authorizationHeader: string): string => {
 	return authorizationHeader.replace(prefixPattern, '');
 };
 
+export const isExpired = (token: string) => {
+	const decodedJwt = JSON.parse(atob(token.split('.')[1]));
+	return decodedJwt.exp * 1000 < Date.now();
+};
+
 const TOKEN_PREFIX = 'Bearer';
 
 export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
