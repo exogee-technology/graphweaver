@@ -1,8 +1,8 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-import { AuthorizationContext } from '../../../types';
-import { PasswordAuthTokenProvider, isExpired } from './provider';
+import { AuthenticationMethod, AuthorizationContext } from '../../../types';
+import { AuthTokenProvider, isExpired } from '../../token';
 import { upsertAuthorizationContext } from '../../../helper-functions';
 import { UserProfile } from '../../../user-profile';
 import { ErrorCodes } from '../../../errors';
@@ -79,7 +79,7 @@ export const passwordAuthApolloPlugin = (
 				// Case 2. There is a valid auth header
 				logger.trace('Got a token, checking it is valid.');
 
-				const tokenProvider = new PasswordAuthTokenProvider();
+				const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
 
 				try {
 					const decoded = await tokenProvider.decodeToken(authHeader);
