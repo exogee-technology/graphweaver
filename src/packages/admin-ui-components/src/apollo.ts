@@ -1,8 +1,6 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
 import { inflate } from 'graphql-deduplicator';
-import { uri } from './config';
-
-const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'graphweaver-auth';
+import { localStorageAuthKey, uri } from './config';
 
 const httpLink = new HttpLink({
 	uri,
@@ -10,7 +8,7 @@ const httpLink = new HttpLink({
 
 const authLink = new ApolloLink((operation, forward) => {
 	//  If there's something called `graphweaver-auth` in local storage, we need to send that to the server.
-	const currentAuthToken = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
+	const currentAuthToken = localStorage.getItem(localStorageAuthKey);
 
 	// The token should include the type and the credential, if not let's emit a warning.
 	if (currentAuthToken && currentAuthToken.split(' ').length < 2)
