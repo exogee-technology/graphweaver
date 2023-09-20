@@ -1,12 +1,13 @@
-import { Login as LoginForm, LoginProps, Spacer } from '@exogee/graphweaver-admin-ui-components';
+import { Spacer } from '@exogee/graphweaver-admin-ui-components';
+import { Outlet } from 'react-router-dom';
 
 import styles from './styles.module.css';
 
-export const Login = (props: LoginProps) => {
+export const Auth = () => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.container}>
-				<LoginForm {...props} />
+				<Outlet />
 			</div>
 			<Spacer height={30} />
 

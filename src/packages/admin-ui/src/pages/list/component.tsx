@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
 	DetailPanel,
@@ -15,6 +15,7 @@ import {
 	routeFor,
 	RequestRefetchOptions,
 	EntityFieldType,
+	Header,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { queryForEntityPage } from './graphql';
@@ -121,6 +122,10 @@ export const List = () => {
 
 	return (
 		<>
+			<Header>
+				<ListToolBar />
+			</Header>
+
 			<Table
 				rows={rows}
 				orderBy={sort ?? []}
@@ -129,7 +134,7 @@ export const List = () => {
 				loadingNext={loadingNext}
 				error={error}
 			/>
-			{id && <DetailPanel />}
+			<Outlet />
 		</>
 	);
 };

@@ -53,6 +53,10 @@
       "path": "src/packages/auth"
     },
     {
+      "name": "📦 @exogee/graphweaver-auth-ui-components",
+      "path": "src/packages/auth-ui-components"
+    },
+    {
       "name": "📦 @exogee/graphweaver-scalars",
       "path": "src/packages/scalars"
     },

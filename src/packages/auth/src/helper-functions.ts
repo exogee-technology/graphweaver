@@ -12,8 +12,6 @@ import {
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 
-export { ForbiddenError } from 'apollo-server-errors';
-
 type AuthContext<T extends AuthorizationContext | undefined> = T;
 let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
 

@@ -1,6 +1,18 @@
 import { BaseContext, Filter } from '@exogee/graphweaver';
-import { JwtPayload } from 'jsonwebtoken';
 import { UserProfile } from './user-profile';
+
+export enum AuthenticationMethod {
+	PASSWORD = 'pwd',
+}
+
+export interface JwtPayload {
+	id?: string;
+	exp?: number;
+	amr?: AuthenticationMethod[];
+	acr?: {
+		values: { [K in AuthenticationMethod]: number };
+	};
+}
 
 // Consumers will extend the base context type
 export interface AuthorizationContext extends BaseContext {
@@ -45,3 +57,25 @@ export type AccessControlFilterFunction<G, TContext extends AuthorizationContext
 export type ConsolidatedAccessControlValue<G, TContext extends AuthorizationContext> =
 	| true
 	| AccessControlFilterFunction<G, TContext>[];
+
+export type MultiFactorAuthentication = {
+	[K in string]?: MultiFactorAuthenticationOperation;
+};
+
+export enum MultiFactorAuthenticationOperationType {
+	READ = 'read',
+	CREATE = 'create',
+	UPDATE = 'update',
+	DELETE = 'delete',
+	WRITE = 'write',
+	ALL = 'all',
+}
+
+export type MultiFactorAuthenticationOperation = {
+	[k in MultiFactorAuthenticationOperationType]?: MultiFactorAuthenticationRule[];
+};
+
+export type MultiFactorAuthenticationRule = {
+	factorsRequired: number;
+	providers: AuthenticationMethod[];
+};

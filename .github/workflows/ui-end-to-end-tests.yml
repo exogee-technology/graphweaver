@@ -37,12 +37,12 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
+      - name: Build CLI tool
+        run: pnpm build
+
       - name: Install Playwright Browsers
         working-directory: src/packages/end-to-end
         run: pnpm playwright install --with-deps chromium
-
-      - name: Build CLI tool
-        run: pnpm build
 
       - name: Init and Import SQLite Chinook Database
         working-directory: src/packages/end-to-end
@@ -64,6 +64,6 @@ jobs:
           name: playwright-report
           path: src/packages/end-to-end/playwright-report/
           retention-days: 30
-        
+
         env:
           CI: true

@@ -6,5 +6,9 @@ export interface HeaderProps {
 }
 
 export const Header = ({ children }: HeaderProps): JSX.Element => {
-	return <div className={styles.header}>{children}</div>;
+	return (
+		<header>
+			<div className={styles.header}>{children}</div>
+		</header>
+	);
 };
