@@ -10,6 +10,7 @@ The todo table is in MySQL and looks like this:
 
 ```
 CREATE DATABASE todo_app;
+USE todo_app;
 
 CREATE TABLE task (
   id INT AUTO_INCREMENT PRIMARY KEY,
