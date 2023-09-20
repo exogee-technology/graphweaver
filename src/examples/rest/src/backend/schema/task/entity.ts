@@ -67,7 +67,7 @@ export const preventLightSideAccess = (
 ) => {
 	if (
 		params.context.user?.roles.includes(Roles.LIGHT_SIDE) &&
-		Object.keys(requestedFields).includes(preventedColumn)
+		Object.keys(requestedFields ?? {}).includes(preventedColumn)
 	) {
 		// Filter out the prevented column from the returned entities
 		const filteredEntities = params.entities?.map((entity) => {
