@@ -39,7 +39,7 @@ export const Login = () => {
 			token = data?.result.authToken;
 			if (!token) throw new Error('Missing token');
 
-			localStorage.setItem('graphweaver-auth', token);
+			localStorage.setItem(localStorageAuthKey, token);
 			window.location.replace(redirectUri);
 		} catch (error) {
 			resetForm();
