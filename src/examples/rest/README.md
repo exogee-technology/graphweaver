@@ -10,6 +10,7 @@ The todo table is in MySQL and looks like this:
 
 ```
 CREATE DATABASE todo_app;
+USE todo_app;
 
 CREATE TABLE task (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,7 +35,18 @@ CREATE TABLE task_tags (
   FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
 
--- Seed data for task table
+CREATE TABLE credential (
+  id INT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+INSERT INTO credential (id, username, password)
+VALUES
+  (1, 'luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
+  (4, 'darth', '$argon2id$v=19$m=65536,t=3,p=4$vM5N5I6+Ed46GWe7YCH0pQ$Lc7+o27PIhE4eK4cDvKz2TT9e/UW2LCcf7ExAX7y7gQ')
+  ;
+
 -- Seed data for task table
 INSERT INTO task (description, completed, user_id, priority)
 VALUES
@@ -131,8 +143,9 @@ pnpm start
 
 ## Authorization
 
-This example also demonstrates the use of the auth library. By default all requests are made by "Luke Skywalker" and Luke is only able to view and create tasks for himself.
+This example also demonstrates the use of the auth library. You can login using one of the following credentials:
 
-However, if you send a header of `x-user-id: 4` to the server then this will change the logged-in user to "Darth Vadar".
-
-Darth has access to edit and create all entities, he has the power of the dark side.
+```
+	{ username: 'luke', password: 'lightsaber123' },
+	{ username: 'darth', password: 'deathstar123' },
+```

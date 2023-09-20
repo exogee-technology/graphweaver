@@ -1,9 +1,9 @@
-import { ApolloQueryResult, useMutation, useQuery } from '@apollo/client';
+import { ApolloError, useMutation, useQuery } from '@apollo/client';
 import classnames from 'classnames';
-import { Field, Form, Formik, FormikHelpers, useField } from 'formik';
+import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { useAsyncError, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
 	decodeSearchParams,
@@ -77,7 +77,7 @@ const BooleanField = ({ name }: { name: string }) => {
 	const { initialValue } = meta;
 
 	useEffect(() => {
-		helpers.setValue(initialValue.value ? initialValue.value : undefined);
+		helpers.setValue(initialValue);
 	}, []);
 
 	const handleOnChange = (selected: SelectOption[]) => {
@@ -127,16 +127,35 @@ const DetailField = ({ field }: { field: EntityField }) => {
 	);
 };
 
+const PersistForm = ({ name }: { name: string }) => {
+	const { values, isSubmitting, submitForm } = useFormikContext();
+
+	useEffect(() => {
+		// Check if we have saved session form state and auto-submit after auth step-up
+		const savedSessionState = window.sessionStorage.getItem(name);
+		if (savedSessionState && !isSubmitting) submitForm();
+	}, []);
+
+	useEffect(() => {
+		// As we are about to submit save the session data in case we need it after auth step-up
+		if (values && isSubmitting) window.sessionStorage.setItem(name, JSON.stringify(values));
+	}, [values, isSubmitting]);
+
+	return null;
+};
+
 const DetailForm = ({
 	initialValues,
 	detailFields,
 	onCancel,
 	onSubmit,
+	persistName,
 }: {
 	initialValues: Record<string, any>;
 	detailFields: EntityField[];
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
+	persistName: string;
 }) => {
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
@@ -155,6 +174,7 @@ const DetailForm = ({
 							</Button>
 						</div>
 					</div>
+					<PersistForm name={persistName} />
 				</Form>
 			)}
 		</Formik>
@@ -166,7 +186,7 @@ const SLIDE_ANIMATION_TIME_CSS_VAR_NAME = '--detail-panel-slide-animation-time';
 export const DetailPanel = () => {
 	const [open, setOpen] = useState(false);
 
-	const { id } = useParams();
+	const { id, entity } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName, entityByType } = useSchema();
@@ -174,7 +194,7 @@ export const DetailPanel = () => {
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	const { data, loading } = useQuery<{ result: ResultBaseType }>(
+	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
 		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
@@ -214,9 +234,18 @@ export const DetailPanel = () => {
 			(!field.relationshipType && field.name !== 'id')
 	);
 
+	const persistName = `gw-${entity}-${id}`.toLowerCase();
+	const savedSessionState = useMemo((): ResultBaseType | undefined => {
+		const maybeState = window.sessionStorage.getItem(persistName);
+		if (maybeState && maybeState !== null) {
+			return JSON.parse(maybeState);
+		}
+		return undefined;
+	}, []);
+
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = data?.result;
-		const value = getValue(field, result);
+		const value = getValue(field, savedSessionState ?? result);
 		acc[field.name] = value ?? '';
 		return acc;
 	}, {} as Record<string, any>);
@@ -238,13 +267,12 @@ export const DetailPanel = () => {
 	}, []);
 
 	const closeModal = () => {
+		clearSessionState();
 		setOpen(false);
 		setTimeout(onClose, slideAnimationTime);
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
-		const id = data?.result?.id;
-
 		if (id) {
 			await updateEntity({
 				variables: {
@@ -263,7 +291,12 @@ export const DetailPanel = () => {
 		}
 
 		actions.setSubmitting(false);
+		clearSessionState();
 		onClose();
+	};
+
+	const clearSessionState = () => {
+		window.sessionStorage.removeItem(persistName);
 	};
 
 	return (
@@ -278,12 +311,15 @@ export const DetailPanel = () => {
 				<>
 					{loading ? (
 						<Spinner />
+					) : error ? (
+						<p>Failed to load entity.</p>
 					) : (
 						<DetailForm
 							initialValues={initialValues}
 							detailFields={formFields}
 							onCancel={closeModal}
 							onSubmit={handleOnSubmit}
+							persistName={persistName}
 						/>
 					)}
 				</>

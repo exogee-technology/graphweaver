@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, OperationTypeNode } from 'graphql';
+import { GraphQLError, GraphQLResolveInfo, OperationTypeNode } from 'graphql';
 import { delegateToSchema } from '@graphql-tools/delegate';
 import pluralize from 'pluralize';
 
@@ -65,7 +65,7 @@ const callChildMutation = async <G>(
 		info,
 	});
 	if (result.name === 'GraphQLError') {
-		throw new Error(result.message);
+		throw new GraphQLError(result.message, { ...result });
 	}
 	return result;
 };

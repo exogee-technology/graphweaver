@@ -1,27 +1,14 @@
 import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/client';
 import { inflate } from 'graphql-deduplicator';
-
-import { uri } from './config';
-
-const AUTH_TOKEN_LOCAL_STORAGE_KEY = 'graphweaver-auth';
+import { localStorageAuthKey, uri } from './config';
 
 const httpLink = new HttpLink({
 	uri,
 });
 
-const isExpired = (token: string) => {
-	try {
-		const decodedJwt = JSON.parse(atob(token.split('.')[1]));
-		return decodedJwt.exp * 1000 < Date.now();
-	} catch (e) {
-		console.warn('Not able to decode the current Graphweaver Auth Token.');
-		return true;
-	}
-};
-
 const authLink = new ApolloLink((operation, forward) => {
 	//  If there's something called `graphweaver-auth` in local storage, we need to send that to the server.
-	let currentAuthToken = localStorage.getItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
+	const currentAuthToken = localStorage.getItem(localStorageAuthKey);
 
 	// The token should include the type and the credential, if not let's emit a warning.
 	if (currentAuthToken && currentAuthToken.split(' ').length < 2)
@@ -29,17 +16,12 @@ const authLink = new ApolloLink((operation, forward) => {
 			'Current Graphweaver Auth Token is invalid, it should be in the form "[type] [credential]"'
 		);
 
-	if (currentAuthToken && isExpired(currentAuthToken)) {
-		console.warn('Current Graphweaver Auth Token is expired, removing expired token.');
-		localStorage.removeItem(AUTH_TOKEN_LOCAL_STORAGE_KEY);
-		currentAuthToken = null;
-	}
-
 	operation.setContext({
 		headers: {
 			'Apollo-Require-Preflight': 'true',
 			'Content-Type': 'application/json',
 			...(currentAuthToken ? { Authorization: currentAuthToken } : {}),
+			'X-Auth-Request-Redirect': window.location.href,
 		},
 	});
 
@@ -59,7 +41,7 @@ const authLink = new ApolloLink((operation, forward) => {
 				console.warn(
 					'New Graphweaver Auth Token is invalid, it should be in the form "[type] [credential]"'
 				);
-			localStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE_KEY, newAuthToken);
+			localStorage.setItem(localStorageAuthKey, newAuthToken);
 		}
 
 		// Inflate the response data, this is deduplicated by default

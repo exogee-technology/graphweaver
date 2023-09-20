@@ -20,8 +20,11 @@ export const SideBar = () => {
 
 	useEffect(() => {
 		(async () => {
-			const links = (await customPages.navLinks()).flat().filter((navLink) => navLink?.name);
-			links.sort((left, right) => left.name.localeCompare(right.name));
+			const navLinks = customPages.navLinks ? await customPages.navLinks() : [];
+			const links = navLinks
+				.flat()
+				.filter((navLink) => navLink?.name)
+				.sort((left, right) => left.name.localeCompare(right.name));
 			setUserDashboardLinks(links);
 			setLoading(false);
 		})();

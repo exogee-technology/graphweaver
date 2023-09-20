@@ -1,28 +1,30 @@
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { GraphweaverLogo } from '../assets';
-import { Alert } from '../alert';
-import { Button } from '../button';
+import { useMutation } from '@apollo/client';
+import {
+	GraphweaverLogo,
+	Alert,
+	Button,
+	localStorageAuthKey,
+} from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
-import { useMutation } from '@apollo/client';
 
 import { LOGIN_MUTATION } from './graphql';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 
 interface Form {
 	username: string;
 	password: string;
 }
 
-export interface LoginProps {
-	onLogin?(username: string, password: string): string | Promise<string>; // Returns a token to place in Authorization header
-}
-
-export const Login = ({ onLogin }: LoginProps) => {
-	const navigate = useNavigate();
-	const [login] = useMutation<{ login: { authToken: string } }>(LOGIN_MUTATION);
+export const Login = () => {
+	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
+	const [searchParams] = useSearchParams();
+
+	const redirectUri = searchParams.get('redirect_uri');
+	if (!redirectUri) throw new Error('Missing redirect URL');
 
 	const handleOnSubmit = async (
 		values: Form,
@@ -32,22 +34,18 @@ export const Login = ({ onLogin }: LoginProps) => {
 		setError(undefined);
 
 		try {
-			if (onLogin) {
-				token = await onLogin(values.username, values.password);
-			} else {
-				const { data } = await login({
-					variables: {
-						username: values.username,
-						password: values.password,
-					},
-				});
+			const { data } = await login({
+				variables: {
+					username: values.username,
+					password: values.password,
+				},
+			});
 
-				token = data?.login.authToken;
-				if (!token) throw new Error('Missing token');
+			token = data?.result.authToken;
+			if (!token) throw new Error('Missing token');
 
-				localStorage.setItem('graphweaver-auth', token);
-				navigate('/');
-			}
+			localStorage.setItem(localStorageAuthKey, token);
+			window.location.replace(redirectUri);
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));

@@ -1,9 +1,9 @@
 import { JwtPayload } from 'jsonwebtoken';
-
-export enum AuthProvider {
-	LOCAL = 'LOCAL',
-}
+import { AuthToken } from './schema';
+import { UserProfile } from '../user-profile';
 
 export interface BaseAuthTokenProvider {
-	decodeToken: (authToken: string) => Promise<string | JwtPayload>;
+	generateToken: (user: UserProfile) => Promise<AuthToken>;
+	decodeToken: (authToken: string) => Promise<JwtPayload>;
+	stepUpToken: (existingTokenPayload: JwtPayload) => Promise<AuthToken>;
 }
