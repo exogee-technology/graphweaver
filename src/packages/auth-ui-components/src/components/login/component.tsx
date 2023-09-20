@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
-import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
+import {
+	GraphweaverLogo,
+	Alert,
+	Button,
+	localStorageAuthKey,
+} from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
 
