@@ -41,7 +41,7 @@ const authLink = new ApolloLink((operation, forward) => {
 				console.warn(
 					'New Graphweaver Auth Token is invalid, it should be in the form "[type] [credential]"'
 				);
-			localStorage.setItem(AUTH_TOKEN_LOCAL_STORAGE_KEY, newAuthToken);
+			localStorage.setItem(localStorageAuthKey, newAuthToken);
 		}
 
 		// Inflate the response data, this is deduplicated by default
