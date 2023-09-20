@@ -53,9 +53,12 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
+		const amr = new Set([...(existingTokenPayload.amr ?? []), AuthenticationMethod.PASSWORD]);
+
 		const token = jwt.sign(
 			{
 				...existingTokenPayload,
+				amr: [...amr],
 				acr: {
 					values: {
 						...(existingTokenPayload.acr?.values ?? {}),
