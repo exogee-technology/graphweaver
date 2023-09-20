@@ -143,7 +143,7 @@ pnpm start
 
 ## Authorization
 
-This example also demonstrates the use of the auth library you can login using one of the following credentials:
+This example also demonstrates the use of the auth library. You can login using one of the following credentials:
 
 ```
 	{ username: 'luke', password: 'lightsaber123' },

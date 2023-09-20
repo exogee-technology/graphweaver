@@ -104,17 +104,15 @@ export const passwordAuthApolloPlugin = (
 					const errors = (response.body as any)?.singleResult?.errors;
 
 					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
-						const didEncounterForbiddenErrors = errors.some(didEncounterForbiddenError);
 						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
-						if (didEncounterForbiddenErrors) {
+						if (errors.some(didEncounterForbiddenError)) {
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 							response.http?.headers.set('X-Auth-Redirect', buildUrl(redirectUrl, authRedirect));
 						}
 					}
 
-					const didEncounterChallengeErrors = errors?.some(didEncounterChallengeError);
 					//If we received a challenge error we need to redirect, set the header to tell the client to do so.
-					if (didEncounterChallengeErrors) {
+					if (errors?.some(didEncounterChallengeError)) {
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 						if (challengeUrl)
 							response.http?.headers.set('X-Auth-Redirect', buildUrl(challengeUrl, authRedirect));

@@ -122,11 +122,9 @@ export const List = () => {
 
 	return (
 		<>
-			<header>
-				<Header>
-					<ListToolBar />
-				</Header>
-			</header>
+			<Header>
+				<ListToolBar />
+			</Header>
 
 			<Table
 				rows={rows}
