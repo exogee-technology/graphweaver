@@ -1,6 +1,8 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import { AuthorizationContext } from '../../../types';
-import { PasswordAuthTokenProvider } from './provider';
+import { AuthenticationError } from 'apollo-server-errors';
+
+import { AuthenticationMethod, AuthorizationContext } from '../../../types';
+import { AuthTokenProvider } from '../../token';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 
@@ -14,15 +16,15 @@ export abstract class PasswordAuthResolver {
 		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		const tokenProvider = new PasswordAuthTokenProvider();
+		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
 		const userProfile = await this.authenticate(username, password);
-		if (!userProfile) throw new Error('Login unsuccessful: Authentication failed.');
+		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
-		if (!authToken) throw new Error('Login unsuccessful: Token generation failed.');
+		if (!authToken) throw new AuthenticationError('Login unsuccessful: Token generation failed.');
 
 		const token = Token.fromBackendEntity(authToken);
-		if (!token) throw new Error('Login unsuccessful.');
+		if (!token) throw new AuthenticationError('Login unsuccessful.');
 
 		return token;
 	}
@@ -32,22 +34,22 @@ export abstract class PasswordAuthResolver {
 		@Arg('password', () => String) password: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		if (!ctx.token) throw new Error('Challenge unsuccessful: Token missing.');
-		const tokenProvider = new PasswordAuthTokenProvider();
+		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
 		const existingToken =
 			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 
 		const username = ctx.user?.username;
-		if (!username) throw new Error('Challenge unsuccessful: Username missing.');
+		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
 		const userProfile = await this.authenticate(username, password);
-		if (!userProfile) throw new Error('Challenge unsuccessful: Userprofile missing.');
+		if (!userProfile) throw new AuthenticationError('Challenge unsuccessful: Userprofile missing.');
 
 		const authToken = await tokenProvider.stepUpToken(existingToken);
-		if (!authToken) throw new Error('Challenge unsuccessful: Step up failed.');
+		if (!authToken) throw new AuthenticationError('Challenge unsuccessful: Step up failed.');
 
 		const token = Token.fromBackendEntity(authToken);
-		if (!token) throw new Error('Challenge unsuccessful.');
+		if (!token) throw new AuthenticationError('Challenge unsuccessful.');
 
 		return token;
 	}

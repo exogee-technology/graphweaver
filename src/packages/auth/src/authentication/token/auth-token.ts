@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import ms from 'ms';
 
-import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
-import { AuthToken } from '../../schema/token';
-import { UserProfile } from '../../../user-profile';
-import { AuthenticationMethod, JwtPayload } from '../../../types';
+import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
+import { AuthToken } from '../schema/token';
+import { UserProfile } from '../../user-profile';
+import { AuthenticationMethod, JwtPayload } from '../../types';
 
 const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
@@ -28,11 +28,13 @@ export const isExpired = (token: string) => {
 
 const TOKEN_PREFIX = 'Bearer';
 
-export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
+export class AuthTokenProvider implements BaseAuthTokenProvider {
+	constructor(private authMethod: AuthenticationMethod) {}
+
 	async generateToken(user: UserProfile) {
 		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
 		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
-		const authToken = jwt.sign({ id: user.id, amr: [AuthenticationMethod.PASSWORD] }, secret, {
+		const authToken = jwt.sign({ id: user.id, amr: [this.authMethod] }, secret, {
 			expiresIn,
 		});
 		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
@@ -57,7 +59,7 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 				acr: {
 					values: {
 						...(existingTokenPayload.acr?.values ?? {}),
-						[AuthenticationMethod.PASSWORD]: expires, // ACR = Authentication Context Class Reference
+						[this.authMethod]: expires, // ACR = Authentication Context Class Reference
 					},
 				},
 			},

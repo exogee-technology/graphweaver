@@ -1,6 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { AuthToken } from './schema';
-import { UserProfile } from '../user-profile';
+import { AuthToken } from '../schema';
+import { UserProfile } from '../../user-profile';
 
 export interface BaseAuthTokenProvider {
 	generateToken: (user: UserProfile) => Promise<AuthToken>;
