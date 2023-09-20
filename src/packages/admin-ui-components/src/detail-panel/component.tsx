@@ -128,11 +128,18 @@ const DetailField = ({ field }: { field: EntityField }) => {
 };
 
 const PersistForm = ({ name }: { name: string }) => {
-	const { values } = useFormikContext();
+	const { values, isSubmitting, submitForm } = useFormikContext();
 
 	useEffect(() => {
-		if (values) window.sessionStorage.setItem(name, JSON.stringify(values));
-	}, [values]);
+		// Check if we have saved session form state and auto-submit after auth step-up
+		const savedSessionState = window.sessionStorage.getItem(name);
+		if (savedSessionState && !isSubmitting) submitForm();
+	}, []);
+
+	useEffect(() => {
+		// As we are about to submit save the session data in case we need it after auth step-up
+		if (values && isSubmitting) window.sessionStorage.setItem(name, JSON.stringify(values));
+	}, [values, isSubmitting]);
 
 	return null;
 };
