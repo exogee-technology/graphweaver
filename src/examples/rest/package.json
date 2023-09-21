@@ -34,7 +34,7 @@
 		"class-validator": "0.14.0",
 		"dotenv": "16.0.0",
 		"got": "11.8.5",
-		"graphql": "16.6.0",
+		"graphql": "16.8.1",
 		"graphweaver": "workspace:*",
 		"react": "18.2.0",
 		"reflect-metadata": "0.1.13"
