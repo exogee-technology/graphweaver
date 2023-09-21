@@ -66,7 +66,7 @@ export class MagicLinkAuthResolver extends AuthResolver {
 
 	async emailMagicLink(magicLink: MagicLink): Promise<boolean> {
 		// In a production system this would email the magic link
-		console.log(magicLink.token);
+		console.log(`\n\n ######## MagicLink: ${magicLink.token} ######## \n\n`);
 		return true;
 	}
 }
