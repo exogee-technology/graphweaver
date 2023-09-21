@@ -24,25 +24,21 @@ const config = {
 	ttl: process.env.MAGIC_LINK_TTL || '15m',
 };
 
-class MagicLink {
-	public token: string;
-	private createdAt: Date;
-	private redeemedAt?: Date;
-
-	constructor(private userId: string) {
-		this.userId = userId;
-		this.token = randomUUID();
-		this.createdAt = new Date();
-	}
+export interface MagicLink {
+	userId: string;
+	token: string;
+	createdAt: Date;
+	redeemedAt?: Date;
 }
 
 @Resolver((of) => Token)
 export abstract class MagicLinkAuthResolver {
 	abstract getUser(username: string): Promise<UserProfile>;
-	abstract getUserMagicLink(userId: string, token: string): Promise<MagicLink>;
-	abstract getUserMagicLinks(userId: string, period: Date): Promise<MagicLink[]>;
-	abstract createMagicLink(magicLink: MagicLink): Promise<boolean>;
-	abstract updateMagicLink(magicLink: MagicLink): Promise<boolean>;
+	abstract getMagicLink(userId: string, token: string): Promise<MagicLink>;
+	abstract getMagicLinks(userId: string, period: Date): Promise<MagicLink[]>;
+	abstract createMagicLink(userId: string, token: string): Promise<MagicLink>;
+	abstract redeemMagicLink(magicLink: MagicLink): Promise<boolean>;
+	abstract emailMagicLink(magicLink: MagicLink): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
 	async sendMagicLink(@Arg('username', () => String) username: string): Promise<boolean> {
@@ -59,7 +55,7 @@ export abstract class MagicLinkAuthResolver {
 		const { rate } = config;
 		// Current date minus the rate limit period
 		const period = new Date(new Date().getTime() - ms(rate.period));
-		const links = await this.getUserMagicLinks(user.id, period);
+		const links = await this.getMagicLinks(user.id, period);
 
 		// Check rate limiting conditions for magic link creation
 		if (links.length >= rate.limit) {
@@ -68,12 +64,9 @@ export abstract class MagicLinkAuthResolver {
 		}
 
 		// Create a magic link and save it to the database
-		const link = new MagicLink(user.id);
+		const link = await this.createMagicLink(user.id, randomUUID());
 
-		// @todo Email the link to the user
-		console.log(link.token);
-
-		return await this.createMagicLink(link);
+		return await this.emailMagicLink(link);
 	}
 
 	@Mutation((returns) => Token)
@@ -93,7 +86,7 @@ export abstract class MagicLinkAuthResolver {
 			if (!userProfile?.id)
 				throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
-			const link = await this.getUserMagicLink(userProfile.id, magicLinkToken);
+			const link = await this.getMagicLink(userProfile.id, magicLinkToken);
 			// {
 			// 	user: { email: email.toLowerCase(), isActive: true },
 			// 	token,
