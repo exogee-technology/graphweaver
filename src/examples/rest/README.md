@@ -41,6 +41,14 @@ CREATE TABLE credential (
   password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE magic_link (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  userId INT NOT NULL,
+  token VARCHAR(36) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  redeemed_at TIMESTAMP
+);
+
 INSERT INTO credential (id, username, password)
 VALUES
   (1, 'luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
