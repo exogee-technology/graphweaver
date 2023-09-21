@@ -14,6 +14,7 @@ import {
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
+const MOCK_CREATED_AT = new Date();
 
 const user = new UserProfile({
 	id: '1',
@@ -28,16 +29,17 @@ export class AuthResolver extends MagicLinkAuthResolver {
 		return user;
 	}
 
-	async getMagicLink(userId: string, _: string): Promise<MagicLink> {
-		return { userId, token: MOCK_TOKEN, createdAt: new Date() };
+	async getMagicLink(userId: string, token: string): Promise<MagicLink> {
+		if (token === MOCK_TOKEN) return { userId, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT };
+		throw new Error('No magic link found');
 	}
 
 	async getMagicLinks(userId: string, _: Date): Promise<MagicLink[]> {
-		return [{ userId, token: MOCK_TOKEN, createdAt: new Date() }];
+		return [{ userId, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT }];
 	}
 
-	async createMagicLink(userId: string, token: string): Promise<MagicLink> {
-		return { userId, token, createdAt: new Date() };
+	async createMagicLink(userId: string, _: string): Promise<MagicLink> {
+		return { userId, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT };
 	}
 
 	async redeemMagicLink(_: MagicLink): Promise<boolean> {
@@ -58,6 +60,14 @@ const graphweaver = new Graphweaver({
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
+		const emailMagicLinkSpy = jest
+			.spyOn(AuthResolver.prototype, 'emailMagicLink')
+			.mockImplementation(async () => true);
+
+		const redeemMagicLinkSpy = jest
+			.spyOn(AuthResolver.prototype, 'redeemMagicLink')
+			.mockImplementation(async () => true);
+
 		const sendResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
@@ -68,7 +78,6 @@ describe('Magic Link Authentication - Login', () => {
 			`,
 			variables: {
 				username: 'test',
-				password: 'test123',
 			},
 		});
 
@@ -99,5 +108,19 @@ describe('Magic Link Authentication - Login', () => {
 		const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
 		// Check that the token expires in the future
 		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
+
+		// Check that the email and redeem methods have been called
+		expect(emailMagicLinkSpy).toHaveBeenCalledTimes(1);
+		expect(emailMagicLinkSpy).toHaveBeenCalledWith({
+			userId: user.id,
+			token: MOCK_TOKEN,
+			createdAt: MOCK_CREATED_AT,
+		});
+		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
+		expect(redeemMagicLinkSpy).toHaveBeenCalledWith({
+			userId: user.id,
+			token: MOCK_TOKEN,
+			createdAt: MOCK_CREATED_AT,
+		});
 	});
 });
