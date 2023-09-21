@@ -105,6 +105,9 @@ export abstract class MagicLinkAuthResolver {
 			const token = Token.fromBackendEntity(authToken);
 			if (!token) throw new AuthenticationError('Login unsuccessful.');
 
+			// Callback to the client to mark the magic link as used
+			await this.redeemMagicLink(link);
+
 			return token;
 		} catch (e) {
 			logger.info('Authentication failed with error', e);
