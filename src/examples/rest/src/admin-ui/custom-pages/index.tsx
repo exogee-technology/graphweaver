@@ -1,5 +1,20 @@
-import { routes } from '@exogee/graphweaver-auth-ui-components';
+import { Auth, Challenge, PasswordLogin } from '@exogee/graphweaver-auth-ui-components';
 
 export const customPages = {
-	routes: () => [...routes.password, ...routes.magicLink],
+	routes: () => [
+		{
+			path: '/auth',
+			element: <Auth />,
+			children: [
+				{
+					path: 'login',
+					element: <PasswordLogin />,
+				},
+				{
+					path: 'challenge',
+					element: <Challenge />,
+				},
+			],
+		},
+	],
 };
