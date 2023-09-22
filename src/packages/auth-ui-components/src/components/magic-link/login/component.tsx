@@ -6,21 +6,21 @@ import {
 	GraphweaverLogo,
 	Alert,
 	Button,
-	localStorageAuthKey,
+	REDIRECT_HEADER,
 } from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
 
-import { LOGIN_MUTATION } from './graphql';
+import { SEND_MAGIC_LINK_MUTATION } from './graphql';
 
 interface Form {
 	username: string;
-	password: string;
 }
 
-export const Login = () => {
-	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
+export const MagicLinkLogin = () => {
+	const [sendMagicLink] = useMutation<{ result: boolean }>(SEND_MAGIC_LINK_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
+	const [sent, setSent] = useState(false);
 	const [searchParams] = useSearchParams();
 
 	const redirectUri = searchParams.get('redirect_uri');
@@ -30,54 +30,56 @@ export const Login = () => {
 		values: Form,
 		{ setSubmitting, resetForm }: FormikHelpers<Form>
 	) => {
-		let token;
 		setError(undefined);
 
 		try {
-			const { data } = await login({
+			await sendMagicLink({
 				variables: {
 					username: values.username,
-					password: values.password,
+				},
+				context: {
+					headers: {
+						[REDIRECT_HEADER]: redirectUri,
+					},
 				},
 			});
 
-			token = data?.result.authToken;
-			if (!token) throw new Error('Missing token');
-
-			localStorage.setItem(localStorageAuthKey, token);
-			window.location.replace(redirectUri);
+			setSent(true);
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
-		} finally {
 			setSubmitting(false);
 		}
 	};
 
 	return (
-		<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
+		<Formik<Form> initialValues={{ username: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
-					<div className={styles.titleContainer}>Login</div>
-					<Field
-						placeholder="Username"
-						id="username"
-						name="username"
-						className={styles.textInputField}
-					/>
-					<Field
-						type="password"
-						placeholder="Password"
-						id="password"
-						name="password"
-						className={styles.textInputField}
-					/>
-					<div className={styles.buttonContainer}>
-						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-							Login
-						</Button>
-					</div>
+					{sent ? (
+						<p className={styles.sent}>
+							We&#39;ve sent an email to you that contains a link, click to sign in.
+						</p>
+					) : (
+						<>
+							<div className={styles.titleContainer}>Enter your Username</div>
+							<p>Enter your username below and we&#39;ll send you a magic link to login.</p>
+							<Field
+								type="text"
+								placeholder="Username"
+								id="username"
+								name="username"
+								className={styles.textInputField}
+							/>
+							<div className={styles.buttonContainer}>
+								<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+									Send
+								</Button>
+							</div>
+						</>
+					)}
+
 					{!!error && <Alert>{error.message}</Alert>}
 				</Form>
 			)}

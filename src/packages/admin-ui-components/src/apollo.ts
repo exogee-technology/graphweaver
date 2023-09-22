@@ -6,6 +6,8 @@ const httpLink = new HttpLink({
 	uri,
 });
 
+export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
+
 const authLink = new ApolloLink((operation, forward) => {
 	//  If there's something called `graphweaver-auth` in local storage, we need to send that to the server.
 	const currentAuthToken = localStorage.getItem(localStorageAuthKey);
@@ -21,7 +23,7 @@ const authLink = new ApolloLink((operation, forward) => {
 			'Apollo-Require-Preflight': 'true',
 			'Content-Type': 'application/json',
 			...(currentAuthToken ? { Authorization: currentAuthToken } : {}),
-			'X-Auth-Request-Redirect': window.location.href,
+			[REDIRECT_HEADER]: operation.getContext()?.headers?.[REDIRECT_HEADER] ?? window.location.href,
 		},
 	});
 

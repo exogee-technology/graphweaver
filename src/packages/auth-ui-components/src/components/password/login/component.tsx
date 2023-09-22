@@ -11,14 +11,15 @@ import {
 
 import styles from './styles.module.css';
 
-import { CHALLENGE_MUTATION } from './graphql';
+import { LOGIN_MUTATION } from './graphql';
 
 interface Form {
+	username: string;
 	password: string;
 }
 
-export const Challenge = () => {
-	const [challenge] = useMutation<{ result: { authToken: string } }>(CHALLENGE_MUTATION);
+export const PasswordLogin = () => {
+	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
 
@@ -33,8 +34,9 @@ export const Challenge = () => {
 		setError(undefined);
 
 		try {
-			const { data } = await challenge({
+			const { data } = await login({
 				variables: {
+					username: values.username,
 					password: values.password,
 				},
 			});
@@ -47,16 +49,23 @@ export const Challenge = () => {
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
+		} finally {
 			setSubmitting(false);
 		}
 	};
 
 	return (
-		<Formik<Form> initialValues={{ password: '' }} onSubmit={handleOnSubmit}>
+		<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
-					<div className={styles.titleContainer}>Confirm your Password</div>
+					<div className={styles.titleContainer}>Login</div>
+					<Field
+						placeholder="Username"
+						id="username"
+						name="username"
+						className={styles.textInputField}
+					/>
 					<Field
 						type="password"
 						placeholder="Password"
@@ -66,7 +75,7 @@ export const Challenge = () => {
 					/>
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-							Confirm
+							Login
 						</Button>
 					</div>
 					{!!error && <Alert>{error.message}</Alert>}

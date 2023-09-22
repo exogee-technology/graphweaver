@@ -19,6 +19,7 @@ export interface JwtPayload {
 export interface AuthorizationContext extends BaseContext {
 	token?: string | JwtPayload;
 	user?: UserProfile;
+	redirectUri?: URL;
 }
 
 export enum AccessType {

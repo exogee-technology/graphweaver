@@ -207,3 +207,11 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 };
+
+export const requireEnvironmentVariable = (envStr: string): string => {
+	const envVar = process.env[envStr];
+	if (!envVar) {
+		throw new Error(`${envStr} required but not found.`);
+	}
+	return envVar;
+};
