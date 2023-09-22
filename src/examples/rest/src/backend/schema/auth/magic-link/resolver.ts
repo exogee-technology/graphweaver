@@ -29,7 +29,7 @@ export class MagicLinkAuthResolver extends AuthResolver {
 
 	async getMagicLink(userId: string, token: string): Promise<MagicLinkInterface> {
 		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		return await database.em.findOneOrFail(MagicLink, { userId, token });
+		return await database.em.findOneOrFail(MagicLink, { userId, token, redeemedAt: null });
 	}
 
 	async getMagicLinks(userId: string, period: Date): Promise<MagicLinkInterface[]> {
