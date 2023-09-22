@@ -1,4 +1,4 @@
-import { Auth, PasswordLogin, PasswordChallenge, MagicLinkLogin, MagicLinkVerify } from '.';
+import { Auth, PasswordLogin, PasswordChallenge, MagicLinkSend, MagicLinkVerify } from '.';
 
 const password = [
 	{
@@ -24,7 +24,7 @@ const magicLink = [
 		children: [
 			{
 				path: 'login',
-				element: <MagicLinkLogin />,
+				element: <MagicLinkSend />,
 			},
 			{
 				path: 'verify',
