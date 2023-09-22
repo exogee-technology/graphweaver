@@ -30,10 +30,11 @@ export const isExpired = (token: string) => {
 const TOKEN_PREFIX = 'Bearer';
 
 export class AuthTokenProvider implements BaseAuthTokenProvider {
-	constructor(private authMethod: AuthenticationMethod) {}
+	constructor(private authMethod?: AuthenticationMethod) {}
 
 	async generateToken(user: UserProfile) {
 		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
+		if (!this.authMethod) throw new Error('Please provide an authMethod in the constructor.');
 		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
 		const authToken = jwt.sign({ id: user.id, amr: [this.authMethod] }, secret, {
 			expiresIn,
@@ -52,9 +53,10 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
 		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
+		if (!this.authMethod) throw new Error('Please provide an authMethod in the constructor.');
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
-		const amr = new Set([...(existingTokenPayload.amr ?? []), AuthenticationMethod.PASSWORD]);
+		const amr = new Set([...(existingTokenPayload.amr ?? []), this.authMethod]);
 
 		const token = jwt.sign(
 			{

@@ -1,7 +1,7 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../types';
+import { AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
 import { UserProfile } from '../../user-profile';
@@ -17,7 +17,7 @@ enum RedirectType {
 	LOGIN = 'login',
 }
 
-const buildUrl = (redirect: URL, type: RedirectType) => {
+const buildRedirectUri = (redirect: URL, type: RedirectType) => {
 	const url = new URL(redirect.origin);
 	url.pathname = `auth/magic-link/${type}`;
 	const params = new URLSearchParams();
@@ -78,7 +78,7 @@ export const AuthApolloPlugin = (
 				// Case 2. There is a valid auth header
 				logger.trace('Got a token, checking it is valid.');
 
-				const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
+				const tokenProvider = new AuthTokenProvider();
 
 				try {
 					const decoded = await tokenProvider.decodeToken(authHeader);
@@ -108,7 +108,7 @@ export const AuthApolloPlugin = (
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 							response.http?.headers.set(
 								'X-Auth-Redirect',
-								buildUrl(authRedirect, RedirectType.LOGIN)
+								buildRedirectUri(authRedirect, RedirectType.LOGIN)
 							);
 						}
 					}
@@ -118,7 +118,7 @@ export const AuthApolloPlugin = (
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 						response.http?.headers.set(
 							'X-Auth-Redirect',
-							buildUrl(authRedirect, RedirectType.CHALLENGE)
+							buildRedirectUri(authRedirect, RedirectType.CHALLENGE)
 						);
 					}
 
@@ -127,7 +127,7 @@ export const AuthApolloPlugin = (
 						logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
 						response.http?.headers.set(
 							'X-Auth-Redirect',
-							buildUrl(authRedirect, RedirectType.LOGIN)
+							buildRedirectUri(authRedirect, RedirectType.LOGIN)
 						);
 					}
 				},

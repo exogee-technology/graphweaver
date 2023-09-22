@@ -25,6 +25,9 @@ export interface MagicLink {
 	redeemedAt?: Date;
 }
 
+// For now this is just a uuid
+const createToken = randomUUID;
+
 @Resolver((of) => Token)
 export abstract class MagicLinkAuthResolver {
 	abstract getUser(username: string): Promise<UserProfile>;
@@ -61,7 +64,7 @@ export abstract class MagicLinkAuthResolver {
 		}
 
 		// Create a magic link and save it to the database
-		const link = await this.createMagicLink(user.id, randomUUID());
+		const link = await this.createMagicLink(user.id, createToken());
 
 		// Get Redirect URL
 		const redirect = new URL(
@@ -82,13 +85,10 @@ export abstract class MagicLinkAuthResolver {
 	@Mutation((returns) => Token)
 	async loginMagicLink(
 		@Arg('username', () => String) username: string,
-		@Arg('token', () => String) magicLinkToken: string,
-		@Ctx() ctx: AuthorizationContext
+		@Arg('token', () => String) magicLinkToken: string
 	): Promise<Token> {
 		if (!magicLinkToken)
 			throw new AuthenticationError('Login unsuccessful: Authentication failed.');
-		// Current date minus ttl
-		const ttl = new Date(new Date().getTime() - ms(config.ttl));
 
 		// find the magic link in the database
 		try {
@@ -97,14 +97,10 @@ export abstract class MagicLinkAuthResolver {
 				throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 			const link = await this.getMagicLink(userProfile.id, magicLinkToken);
-			// {
-			// 	token,
-			// 	createdAt: {
-			// 		$gt: ttl,
-			// 	},
-			// },
-			// @todo check the above criteria
-			if (!link) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
+			// Check that the magic link is still valid
+			const ttl = new Date(new Date().getTime() - ms(config.ttl));
+			if (!link || link.createdAt < ttl)
+				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
 			const authToken = await tokenProvider.generateToken(userProfile);
@@ -150,7 +146,7 @@ export abstract class MagicLinkAuthResolver {
 		}
 
 		// Create a magic link and save it to the database
-		const link = await this.createMagicLink(user.id, randomUUID());
+		const link = await this.createMagicLink(user.id, createToken());
 
 		// Get Redirect URL
 		const redirect = new URL(
@@ -174,8 +170,6 @@ export abstract class MagicLinkAuthResolver {
 	): Promise<Token> {
 		if (!magicLinkToken)
 			throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-		// Current date minus ttl
-		const ttl = new Date(new Date().getTime() - ms(config.ttl));
 
 		// find the magic link in the database
 		try {
@@ -192,13 +186,10 @@ export abstract class MagicLinkAuthResolver {
 			}
 
 			const link = await this.getMagicLink(user.id, magicLinkToken);
-			// {
-			// 	createdAt: {
-			// 		$gt: ttl,
-			// 	},
-			// },
-			// @todo check the above criteria
-			if (!link) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+			// Check that the magic link is still valid
+			const ttl = new Date(new Date().getTime() - ms(config.ttl));
+			if (!link || link.createdAt < ttl)
+				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
 			const authToken = await tokenProvider.stepUpToken(user);
