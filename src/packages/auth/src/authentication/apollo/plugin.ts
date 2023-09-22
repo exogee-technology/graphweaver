@@ -1,27 +1,34 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-import { AuthorizationContext } from '../../types';
+import { AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
 import { UserProfile } from '../../user-profile';
-import { ErrorCodes } from '../../errors';
+import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
-const didEncounterForbiddenError = (error: any) => error.extensions.code === ErrorCodes.FORBIDDEN;
-const didEncounterChallengeError = (error: any) => error.extensions.code === ErrorCodes.CHALLENGE;
+const didEncounterForbiddenError = (error: any): error is ForbiddenError =>
+	error.extensions.code === ErrorCodes.FORBIDDEN;
+const didEncounterChallengeError = (error: any): error is ChallengeError =>
+	error.extensions.code === ErrorCodes.CHALLENGE;
 
 enum RedirectType {
 	CHALLENGE = 'challenge',
 	LOGIN = 'login',
 }
 
-const buildRedirectUri = (redirect: URL, type: RedirectType) => {
+const buildRedirectUri = (
+	redirect: URL,
+	type: RedirectType,
+	providers?: AuthenticationMethod[]
+) => {
 	const url = new URL(redirect.origin);
-	url.pathname = `auth/magic-link/${type}`;
+	url.pathname = `auth/${type}`;
 	const params = new URLSearchParams();
 	params.set('redirect_uri', redirect.toString());
+	if (providers) params.set('providers', providers.join(','));
 	url.search = params.toString();
 	return url.toString();
 };
@@ -116,9 +123,20 @@ export const AuthApolloPlugin = (
 					//If we received a challenge error we need to redirect, set the header to tell the client to do so.
 					if (errors?.some(didEncounterChallengeError)) {
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
+
+						// Find all the providers listed in the challenge errors
+						const providers: Set<AuthenticationMethod> = errors.reduce(
+							(acc: Set<AuthenticationMethod>, error: ChallengeError | unknown) => {
+								if (didEncounterChallengeError(error))
+									return new Set([...acc, ...error.extensions.providers]);
+								return acc;
+							},
+							new Set<AuthenticationMethod>()
+						);
+
 						response.http?.headers.set(
 							'X-Auth-Redirect',
-							buildRedirectUri(authRedirect, RedirectType.CHALLENGE)
+							buildRedirectUri(authRedirect, RedirectType.CHALLENGE, [...providers])
 						);
 					}
 

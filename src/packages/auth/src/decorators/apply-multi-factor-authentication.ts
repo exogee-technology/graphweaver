@@ -165,6 +165,7 @@ const checkAuthentication = async (
 				'MFA Challenge Required: Operation requires a step up in your authentication.',
 				{
 					entity: entityName,
+					providers: rule.providers,
 				}
 			);
 		}
