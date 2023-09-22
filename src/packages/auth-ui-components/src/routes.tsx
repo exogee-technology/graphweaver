@@ -1,4 +1,11 @@
-import { Auth, PasswordLogin, PasswordChallenge, MagicLinkSend, MagicLinkVerify } from '.';
+import {
+	Auth,
+	PasswordLogin,
+	PasswordChallenge,
+	MagicLinkSend,
+	MagicLinkVerify,
+	MagicLinkChallenge,
+} from '.';
 
 const password = [
 	{
@@ -29,6 +36,10 @@ const magicLink = [
 			{
 				path: 'verify',
 				element: <MagicLinkVerify />,
+			},
+			{
+				path: 'challenge',
+				element: <MagicLinkChallenge />,
 			},
 		],
 	},
