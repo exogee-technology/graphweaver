@@ -8,14 +8,11 @@ import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
+import { requireEnvironmentVariable } from '../../../helper-functions';
 
 const config = {
-	base: {
-		url: process.env.ORIGIN,
-	},
-	email: {
-		enabled: process.env.SEND_MAGIC_LINK_EMAIL || 'true',
-		from: () => process.env.MAGIC_LINK_FROM_ADDRESS,
+	url: {
+		verify: requireEnvironmentVariable('MAGIC_LINK_AUTH_REDIRECT_URI'),
 	},
 	rate: {
 		limit: parseInt(process.env.MAGIC_LINK_RATE_LIMIT ?? '5'),
@@ -38,10 +35,13 @@ export abstract class MagicLinkAuthResolver {
 	abstract getMagicLinks(userId: string, period: Date): Promise<MagicLink[]>;
 	abstract createMagicLink(userId: string, token: string): Promise<MagicLink>;
 	abstract redeemMagicLink(magicLink: MagicLink): Promise<boolean>;
-	abstract emailMagicLink(magicLink: MagicLink): Promise<boolean>;
+	abstract emailMagicLink(magicLink: URL): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
-	async sendMagicLink(@Arg('username', () => String) username: string): Promise<boolean> {
+	async sendMagicLink(
+		@Arg('username', () => String) username: string,
+		@Ctx() ctx: AuthorizationContext
+	): Promise<boolean> {
 		// check that the user exists
 		const user = await this.getUser(username);
 
@@ -66,7 +66,16 @@ export abstract class MagicLinkAuthResolver {
 		// Create a magic link and save it to the database
 		const link = await this.createMagicLink(user.id, randomUUID());
 
-		return await this.emailMagicLink(link);
+		// Create magic link url
+		const url = new URL(config.url.verify);
+
+		// Set search params
+		if (ctx?.redirectUri) url.searchParams.set('redirect_uri', ctx?.redirectUri?.toString());
+		url.searchParams.set('token', link.token);
+		url.searchParams.set('username', username);
+
+		// Send to user
+		return await this.emailMagicLink(url);
 	}
 
 	@Mutation((returns) => Token)

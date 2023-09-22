@@ -1,20 +1,37 @@
-import { Auth, Login, Challenge } from '.';
+import { Auth, PasswordLogin, PasswordChallenge, MagicLinkLogin, MagicLinkVerify } from '.';
 
 const password = [
 	{
-		path: '/auth',
+		path: '/auth/password',
 		element: <Auth />,
 		children: [
 			{
 				path: 'login',
-				element: <Login />,
+				element: <PasswordLogin />,
 			},
 			{
 				path: 'challenge',
-				element: <Challenge />,
+				element: <PasswordChallenge />,
 			},
 		],
 	},
 ];
 
-export const routes = { password };
+const magicLink = [
+	{
+		path: '/auth/magic-link',
+		element: <Auth />,
+		children: [
+			{
+				path: 'login',
+				element: <MagicLinkLogin />,
+			},
+			{
+				path: 'verify',
+				element: <MagicLinkVerify />,
+			},
+		],
+	},
+];
+
+export const routes = { password, magicLink };

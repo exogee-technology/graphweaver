@@ -1,2 +1,2 @@
-export * from './challenge';
-export * from './login';
+export * from './password';
+export * from './magic-link';

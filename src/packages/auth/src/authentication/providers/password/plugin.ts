@@ -12,6 +12,8 @@ const challengeUrl = process.env.PASSWORD_CHALLENGE_REDIRECT_URI;
 const requestRedirectUrl = process.env.PASSWORD_AUTH_DEFAULT_REQUEST_REDIRECT_URI;
 const whitelist = process.env.PASSWORD_AUTH_WHITELIST_DOMAINS?.split?.(' ');
 
+export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
+
 const didEncounterForbiddenError = (error: any) => error.extensions.code === ErrorCodes.FORBIDDEN;
 const didEncounterChallengeError = (error: any) => error.extensions.code === ErrorCodes.CHALLENGE;
 
@@ -54,13 +56,13 @@ export const passwordAuthApolloPlugin = (
 
 			// We may need to return a redirect to the client. If so, we'll set this variable.
 			const authHeader = request.http?.headers.get('authorization');
-			const authRedirect =
-				request.http?.headers.get('X-Auth-Request-Redirect') ?? requestRedirectUrl;
+			const authRedirect = request.http?.headers.get(REDIRECT_HEADER) ?? requestRedirectUrl;
 
 			// Check that we are allowed to redirect to this domain
 			if (authRedirect && !isURLWhitelisted(authRedirect)) {
 				throw new Error('Authentication Failed: Unknown redirect URI.');
 			}
+			if (authRedirect) contextValue.redirectUri = new URL(authRedirect);
 
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
