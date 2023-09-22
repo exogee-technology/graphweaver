@@ -11,9 +11,6 @@ import { AuthTokenProvider } from '../../token';
 import { requireEnvironmentVariable } from '../../../helper-functions';
 
 const config = {
-	url: {
-		verify: requireEnvironmentVariable('MAGIC_LINK_AUTH_REDIRECT_URI'),
-	},
 	rate: {
 		limit: parseInt(process.env.MAGIC_LINK_RATE_LIMIT ?? '5'),
 		period: process.env.MAGIC_LINK_RATE_PERIOD || '1d',
@@ -66,11 +63,15 @@ export abstract class MagicLinkAuthResolver {
 		// Create a magic link and save it to the database
 		const link = await this.createMagicLink(user.id, randomUUID());
 
-		// Create magic link url
-		const url = new URL(config.url.verify);
+		// Get Redirect URL
+		const redirect = new URL(
+			ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
+		);
+		const url = new URL(redirect.origin);
+		url.pathname = 'auth/magic-link/verify';
 
 		// Set search params
-		if (ctx?.redirectUri) url.searchParams.set('redirect_uri', ctx?.redirectUri?.toString());
+		url.searchParams.set('redirect_uri', redirect.toString());
 		url.searchParams.set('token', link.token);
 		url.searchParams.set('username', username);
 

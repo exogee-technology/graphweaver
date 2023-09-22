@@ -1,52 +1,47 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../../types';
-import { AuthTokenProvider, isExpired } from '../../token';
-import { upsertAuthorizationContext } from '../../../helper-functions';
-import { UserProfile } from '../../../user-profile';
-import { ErrorCodes } from '../../../errors';
-
-const redirectUrl = process.env.PASSWORD_AUTH_REDIRECT_URI;
-const challengeUrl = process.env.PASSWORD_CHALLENGE_REDIRECT_URI;
-const requestRedirectUrl = process.env.PASSWORD_AUTH_DEFAULT_REQUEST_REDIRECT_URI;
-const whitelist = process.env.PASSWORD_AUTH_WHITELIST_DOMAINS?.split?.(' ');
+import { AuthenticationMethod, AuthorizationContext } from '../../types';
+import { AuthTokenProvider, isExpired } from '../token';
+import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
+import { UserProfile } from '../../user-profile';
+import { ErrorCodes } from '../../errors';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
 const didEncounterForbiddenError = (error: any) => error.extensions.code === ErrorCodes.FORBIDDEN;
 const didEncounterChallengeError = (error: any) => error.extensions.code === ErrorCodes.CHALLENGE;
 
-const buildUrl = (root: string, redirect?: string) => {
-	const url = new URL(root);
-	const params = new URLSearchParams(url.search);
+enum RedirectType {
+	CHALLENGE = 'challenge',
+	LOGIN = 'login',
+}
 
-	if (redirect) params.set('redirect_uri', redirect);
-
+const buildUrl = (redirect: URL, type: RedirectType) => {
+	const url = new URL(redirect.origin);
+	url.pathname = `auth/magic-link/${type}`;
+	const params = new URLSearchParams();
+	params.set('redirect_uri', redirect.toString());
 	url.search = params.toString();
 	return url.toString();
 };
 
-const isURLWhitelisted = (authRedirect: string) => {
-	if (!whitelist) throw new Error('PASSWORD_AUTH_WHITELIST_DOMAINS is required in environment');
+const isURLWhitelisted = (authRedirect: URL) => {
+	const whitelist = requireEnvironmentVariable('AUTH_WHITELIST_DOMAINS')?.split?.(' ');
 
-	const url = new URL(authRedirect);
-	const redirectDomain = url.hostname.toLowerCase();
-
+	const redirectDomain = authRedirect.hostname.toLowerCase();
 	// Check if the current domain matches any domain in the whitelist
 	return whitelist.some((whitelistedDomain) =>
 		redirectDomain.includes(whitelistedDomain.toLowerCase())
 	);
 };
 
-export const passwordAuthApolloPlugin = (
+export const AuthApolloPlugin = (
 	addUserToContext: (userId: string) => Promise<UserProfile>
 ): ApolloServerPlugin<AuthorizationContext> => {
-	if (!redirectUrl) throw new Error('PASSWORD_AUTH_REDIRECT_URI is required in environment');
-
 	return {
 		async requestDidStart({ request, contextValue }) {
-			logger.trace('PasswordAuthApolloPlugin requestDidStart');
+			logger.trace('AuthApolloPlugin requestDidStart');
 			// We have two use cases this needs to handle:
 			// 1. No auth header, initial request for a guest operation.
 			//    - Some requests are allowed when accessed by a guest defined above.
@@ -56,13 +51,15 @@ export const passwordAuthApolloPlugin = (
 
 			// We may need to return a redirect to the client. If so, we'll set this variable.
 			const authHeader = request.http?.headers.get('authorization');
-			const authRedirect = request.http?.headers.get(REDIRECT_HEADER) ?? requestRedirectUrl;
+			const authRedirect = new URL(
+				request.http?.headers.get(REDIRECT_HEADER) ?? requireEnvironmentVariable('AUTH_BASE_URI')
+			);
 
 			// Check that we are allowed to redirect to this domain
 			if (authRedirect && !isURLWhitelisted(authRedirect)) {
 				throw new Error('Authentication Failed: Unknown redirect URI.');
 			}
-			if (authRedirect) contextValue.redirectUri = new URL(authRedirect);
+			if (authRedirect) contextValue.redirectUri = authRedirect;
 
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
@@ -109,21 +106,29 @@ export const passwordAuthApolloPlugin = (
 						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
 						if (errors.some(didEncounterForbiddenError)) {
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
-							response.http?.headers.set('X-Auth-Redirect', buildUrl(redirectUrl, authRedirect));
+							response.http?.headers.set(
+								'X-Auth-Redirect',
+								buildUrl(authRedirect, RedirectType.LOGIN)
+							);
 						}
 					}
 
 					//If we received a challenge error we need to redirect, set the header to tell the client to do so.
 					if (errors?.some(didEncounterChallengeError)) {
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
-						if (challengeUrl)
-							response.http?.headers.set('X-Auth-Redirect', buildUrl(challengeUrl, authRedirect));
+						response.http?.headers.set(
+							'X-Auth-Redirect',
+							buildUrl(authRedirect, RedirectType.CHALLENGE)
+						);
 					}
 
 					// Let's check if verification has failed and redirect to login if it has
 					if (tokenVerificationFailed) {
 						logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
-						response.http?.headers.set('X-Auth-Redirect', buildUrl(redirectUrl, authRedirect));
+						response.http?.headers.set(
+							'X-Auth-Redirect',
+							buildUrl(authRedirect, RedirectType.LOGIN)
+						);
 					}
 				},
 			};

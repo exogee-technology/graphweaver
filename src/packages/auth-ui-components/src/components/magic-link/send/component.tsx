@@ -17,7 +17,7 @@ interface Form {
 	username: string;
 }
 
-export const MagicLinkLogin = () => {
+export const MagicLinkSend = () => {
 	const [sendMagicLink] = useMutation<{ result: boolean }>(SEND_MAGIC_LINK_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [sent, setSent] = useState(false);

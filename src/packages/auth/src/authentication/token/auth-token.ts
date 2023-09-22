@@ -5,10 +5,11 @@ import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
 import { AuthToken } from '../schema/token';
 import { UserProfile } from '../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../types';
+import { requireEnvironmentVariable } from '../../helper-functions';
 
-const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
-const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
-const mfaExpiresIn = process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN ?? '30m';
+const secret = requireEnvironmentVariable('AUTH_JWT_SECRET');
+const expiresIn = process.env.AUTH_JWT_EXPIRES_IN ?? '8h';
+const mfaExpiresIn = process.env.AUTH_JWT_CHALLENGE_EXPIRES_IN ?? '30m';
 
 /**
  * Removes any prefix from the given authorization header.
@@ -32,7 +33,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	constructor(private authMethod: AuthenticationMethod) {}
 
 	async generateToken(user: UserProfile) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
 		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
 		const authToken = jwt.sign({ id: user.id, amr: [this.authMethod] }, secret, {
 			expiresIn,
@@ -42,7 +43,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
 		const payload = jwt.verify(token, secret);
 		if (typeof payload === 'string') throw new Error('Verification of token failed');
@@ -50,7 +51,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), AuthenticationMethod.PASSWORD]);
