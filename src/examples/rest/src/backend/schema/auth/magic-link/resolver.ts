@@ -64,8 +64,8 @@ export class MagicLinkAuthResolver extends AuthResolver {
 		return true;
 	}
 
-	async emailMagicLink(magicLink: URL): Promise<boolean> {
-		// In a production system this would email the magic link and you would not log to the console!
+	async sendMagicLink(magicLink: URL): Promise<boolean> {
+		// In a production system this would email / sms the magic link and you would not log to the console!
 		console.log(`\n\n ######## MagicLink: ${magicLink.toString()} ######## \n\n`);
 		return true;
 	}

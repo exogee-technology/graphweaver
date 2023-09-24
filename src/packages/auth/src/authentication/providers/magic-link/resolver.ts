@@ -35,7 +35,7 @@ export abstract class MagicLinkAuthResolver {
 	abstract getMagicLinks(userId: string, period: Date): Promise<MagicLink[]>;
 	abstract createMagicLink(userId: string, token: string): Promise<MagicLink>;
 	abstract redeemMagicLink(magicLink: MagicLink): Promise<boolean>;
-	abstract emailMagicLink(magicLink: URL): Promise<boolean>;
+	abstract sendMagicLink(magicLink: URL): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
 	async sendLoginMagicLink(
@@ -80,7 +80,7 @@ export abstract class MagicLinkAuthResolver {
 		url.searchParams.set('username', username);
 
 		// Send to user
-		return await this.emailMagicLink(url);
+		return await this.sendMagicLink(url);
 	}
 
 	@Mutation((returns) => Token)
@@ -162,7 +162,7 @@ export abstract class MagicLinkAuthResolver {
 		url.searchParams.set('token', link.token);
 
 		// Send to user
-		return await this.emailMagicLink(url);
+		return await this.sendMagicLink(url);
 	}
 
 	@Mutation((returns) => Token)

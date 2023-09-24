@@ -33,15 +33,21 @@ export const MagicLinkLogin = () => {
 	if (!redirectUri) throw new Error('Missing redirect URL');
 
 	const token = searchParams.get('token');
+	const username = searchParams.get('username');
 
 	useEffect(() => {
 		const verifyLink = async () => {
 			try {
 				initialized.current = true;
 
+				if (!token || !username) {
+					setError(new Error('Login failed please try again'));
+				}
+
 				const { data } = await verifyMagicLink({
 					variables: {
 						token,
+						username,
 					},
 				});
 
