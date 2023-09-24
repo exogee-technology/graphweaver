@@ -1,7 +1,3 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
-process.env.PASSWORD_AUTH_JWT_SECRET = '*';
-process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
-
 import 'reflect-metadata';
 import MockDate from 'mockdate';
 import gql from 'graphql-tag';
@@ -18,7 +14,7 @@ import {
 } from '@exogee/graphweaver';
 import {
 	PasswordAuthResolver,
-	passwordAuthApolloPlugin,
+	authApolloPlugin,
 	UserProfile,
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
@@ -100,7 +96,7 @@ export class AuthResolver extends PasswordAuthResolver {
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver, TaskResolver, TagResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 });
 

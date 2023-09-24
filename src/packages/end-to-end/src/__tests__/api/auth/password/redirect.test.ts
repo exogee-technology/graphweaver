@@ -1,13 +1,10 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = 'http://localhost:9000/';
-process.env.PASSWORD_AUTH_JWT_SECRET = '*';
-
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
 import {
 	PasswordAuthResolver,
-	passwordAuthApolloPlugin,
+	authApolloPlugin,
 	UserProfile,
 	AuthorizationContext,
 	ForbiddenError,
@@ -35,7 +32,7 @@ export const beforeRead = async <C extends AuthorizationContext>(params: Metadat
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 	adminMetadata: {
 		enabled: true,
@@ -60,7 +57,9 @@ describe('Password Authentication - Redirect', () => {
 		});
 
 		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
-			process.env.PASSWORD_AUTH_REDIRECT_URI
+			`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=${encodeURIComponent(
+				process.env.AUTH_BASE_URI + '/' ?? ''
+			)}`
 		);
 	});
 });

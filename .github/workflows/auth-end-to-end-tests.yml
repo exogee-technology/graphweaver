@@ -48,3 +48,7 @@ jobs:
 
         env:
           CI: true
+          AUTH_JWT_SECRET: "*"
+          AUTH_BASE_URI: "http://localhost:9000"
+          AUTH_WHITELIST_DOMAINS: "localhost"
+          AUTH_MAGIC_LINK_RATE_LIMIT: "500"

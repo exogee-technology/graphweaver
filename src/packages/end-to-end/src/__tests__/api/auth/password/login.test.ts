@@ -1,16 +1,9 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
-process.env.PASSWORD_AUTH_JWT_SECRET = '*';
-
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
-import {
-	PasswordAuthResolver,
-	passwordAuthApolloPlugin,
-	UserProfile,
-} from '@exogee/graphweaver-auth';
+import { PasswordAuthResolver, authApolloPlugin, UserProfile } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
 	id: '1',
@@ -29,7 +22,7 @@ export class AuthResolver extends PasswordAuthResolver {
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 });
 

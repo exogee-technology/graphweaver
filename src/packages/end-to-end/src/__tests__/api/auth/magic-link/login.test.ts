@@ -1,16 +1,14 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
-process.env.PASSWORD_AUTH_JWT_SECRET = '*';
-
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
 import {
-	passwordAuthApolloPlugin,
+	authApolloPlugin,
 	UserProfile,
 	MagicLinkAuthResolver,
 	MagicLink,
+	AuthenticationMethod,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
@@ -46,7 +44,7 @@ export class AuthResolver extends MagicLinkAuthResolver {
 		return true;
 	}
 
-	async emailMagicLink(_: MagicLink): Promise<boolean> {
+	async sendMagicLink(_: URL): Promise<boolean> {
 		return true;
 	}
 }
@@ -54,14 +52,14 @@ export class AuthResolver extends MagicLinkAuthResolver {
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 });
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
-		const emailMagicLinkSpy = jest
-			.spyOn(AuthResolver.prototype, 'emailMagicLink')
+		const sendMagicLinkSpy = jest
+			.spyOn(AuthResolver.prototype, 'sendMagicLink')
 			.mockImplementation(async () => true);
 
 		const redeemMagicLinkSpy = jest
@@ -72,8 +70,8 @@ describe('Magic Link Authentication - Login', () => {
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
-				mutation sendMagicLink($username: String!) {
-					sendMagicLink(username: $username)
+				mutation sendLoginMagicLink($username: String!) {
+					sendLoginMagicLink(username: $username)
 				}
 			`,
 			variables: {
@@ -85,11 +83,11 @@ describe('Magic Link Authentication - Login', () => {
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
 		const loginResponse = await graphweaver.server.executeOperation<{
-			loginMagicLink: { authToken: string };
+			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
-				mutation loginMagicLink($username: String!, $token: String!) {
-					loginMagicLink(username: $username, token: $token) {
+				mutation verifyLoginMagicLink($username: String!, $token: String!) {
+					verifyLoginMagicLink(username: $username, token: $token) {
 						authToken
 					}
 				}
@@ -102,7 +100,7 @@ describe('Magic Link Authentication - Login', () => {
 
 		assert(loginResponse.body.kind === 'single');
 
-		const token = loginResponse.body.singleResult.data?.loginMagicLink?.authToken;
+		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		expect(token).toContain('Bearer ');
 
 		const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
@@ -110,12 +108,12 @@ describe('Magic Link Authentication - Login', () => {
 		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
 		// Check that the email and redeem methods have been called
-		expect(emailMagicLinkSpy).toHaveBeenCalledTimes(1);
-		expect(emailMagicLinkSpy).toHaveBeenCalledWith({
-			userId: user.id,
-			token: MOCK_TOKEN,
-			createdAt: MOCK_CREATED_AT,
-		});
+		expect(sendMagicLinkSpy).toHaveBeenCalledTimes(1);
+		expect(sendMagicLinkSpy).toHaveBeenCalledWith(
+			new URL(
+				`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=http%3A%2F%2Flocalhost%3A9000%2F&providers=${AuthenticationMethod.MAGIC_LINK}&token=${MOCK_TOKEN}&username=${user.username}`
+			)
+		);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledWith({
 			userId: user.id,
