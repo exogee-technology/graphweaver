@@ -75,13 +75,13 @@ export const MagicLinkChallenge = () => {
 			</div>
 			{token ? (
 				<Spinner />
+			) : error ? (
+				<Alert>{error.message}</Alert>
 			) : (
 				<p className={styles.sent}>
 					We&#39;ve sent an email to you that contains a link, click it to perform this operation.
 				</p>
 			)}
-
-			{!!error && <Alert>{error.message}</Alert>}
 		</div>
 	);
 };

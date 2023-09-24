@@ -38,7 +38,7 @@ export abstract class MagicLinkAuthResolver {
 	abstract emailMagicLink(magicLink: URL): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
-	async sendMagicLink(
+	async sendLoginMagicLink(
 		@Arg('username', () => String) username: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
@@ -71,10 +71,11 @@ export abstract class MagicLinkAuthResolver {
 			ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
 		);
 		const url = new URL(redirect.origin);
-		url.pathname = 'auth/magic-link/verify';
+		url.pathname = 'auth/login';
 
 		// Set search params
 		url.searchParams.set('redirect_uri', redirect.toString());
+		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
 		url.searchParams.set('token', link.token);
 		url.searchParams.set('username', username);
 
@@ -83,7 +84,7 @@ export abstract class MagicLinkAuthResolver {
 	}
 
 	@Mutation((returns) => Token)
-	async loginMagicLink(
+	async verifyLoginMagicLink(
 		@Arg('username', () => String) username: string,
 		@Arg('token', () => String) magicLinkToken: string
 	): Promise<Token> {
@@ -153,9 +154,10 @@ export abstract class MagicLinkAuthResolver {
 			ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
 		);
 		const url = new URL(redirect.origin);
-		url.pathname = 'auth/magic-link/challenge';
+		url.pathname = 'auth/challenge';
 
 		// Set search params
+		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
 		url.searchParams.set('redirect_uri', redirect.toString());
 		url.searchParams.set('token', link.token);
 
