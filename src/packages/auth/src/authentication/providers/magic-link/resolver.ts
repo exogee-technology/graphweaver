@@ -12,10 +12,10 @@ import { requireEnvironmentVariable } from '../../../helper-functions';
 
 const config = {
 	rate: {
-		limit: parseInt(process.env.MAGIC_LINK_RATE_LIMIT ?? '5'),
-		period: process.env.MAGIC_LINK_RATE_PERIOD || '1d',
+		limit: parseInt(process.env.AUTH_MAGIC_LINK_RATE_LIMIT ?? '5'),
+		period: process.env.AUTH_MAGIC_LINK_RATE_PERIOD || '1d',
 	},
-	ttl: process.env.MAGIC_LINK_TTL || '15m',
+	ttl: process.env.AUTH_MAGIC_LINK_TTL || '15m',
 };
 
 export interface MagicLink {

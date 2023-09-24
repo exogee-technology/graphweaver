@@ -43,12 +43,12 @@ const isURLWhitelisted = (authRedirect: URL) => {
 	);
 };
 
-export const AuthApolloPlugin = (
+export const authApolloPlugin = (
 	addUserToContext: (userId: string) => Promise<UserProfile>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
-			logger.trace('AuthApolloPlugin requestDidStart');
+			logger.trace('authApolloPlugin requestDidStart');
 			// We have two use cases this needs to handle:
 			// 1. No auth header, initial request for a guest operation.
 			//    - Some requests are allowed when accessed by a guest defined above.
