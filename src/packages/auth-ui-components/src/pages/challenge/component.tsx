@@ -1,10 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { MagicLinkChallenge, PasswordChallenge } from '../../components';
-
-export enum AuthenticationMethod {
-	PASSWORD = 'pwd',
-	MAGIC_LINK = 'mgl',
-}
+import { AuthenticationMethod } from '../../types';
 
 export const Challenge = () => {
 	const [searchParams] = useSearchParams();
