@@ -8,6 +8,7 @@ export enum AuthenticationMethod {
 
 export interface JwtPayload {
 	id?: string;
+	iat?: number;
 	exp?: number;
 	amr?: AuthenticationMethod[];
 	acr?: {
