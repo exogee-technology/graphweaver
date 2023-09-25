@@ -151,7 +151,6 @@ export abstract class MagicLinkAuthResolver {
 		if (!url) return true;
 
 		url.pathname = 'auth/challenge';
-		url.searchParams.set('username', username);
 
 		// Send to user
 		return await this.sendMagicLink(url);
