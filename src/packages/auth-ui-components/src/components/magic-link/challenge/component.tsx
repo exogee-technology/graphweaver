@@ -73,10 +73,10 @@ export const MagicLinkChallenge = () => {
 			<div>
 				<GraphweaverLogo width="52" className={styles.logo} />
 			</div>
-			{token ? (
-				<Spinner />
-			) : error ? (
+			{error ? (
 				<Alert>{error.message}</Alert>
+			) : token ? (
+				<Spinner />
 			) : (
 				<p className={styles.sent}>
 					We&#39;ve sent an email to you that contains a link, click it to perform this operation.

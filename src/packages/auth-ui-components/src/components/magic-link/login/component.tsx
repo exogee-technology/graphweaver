@@ -92,7 +92,7 @@ export const MagicLinkLogin = () => {
 
 	return (
 		<>
-			{token ? (
+			{token && !error ? (
 				<Spinner />
 			) : (
 				<Formik<Form> initialValues={{ username: '' }} onSubmit={handleOnSubmit}>
