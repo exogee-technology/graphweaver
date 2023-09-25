@@ -88,8 +88,8 @@ export abstract class MagicLinkAuthResolver {
 			const link = await this.getMagicLink(userProfile.id, magicLinkToken);
 			// Check that the magic link is still valid
 			const ttl = new Date(new Date().getTime() - ms(config.ttl));
-			if (!link || link.createdAt < ttl)
-				throw new AuthenticationError('Auth unsuccessful: Authentication failed.');
+			if (link.createdAt < ttl)
+				throw new AuthenticationError('Auth unsuccessful: Authentication Magic Link expired.');
 
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
 			const authToken = challenge
@@ -105,8 +105,10 @@ export abstract class MagicLinkAuthResolver {
 
 			return token;
 		} catch (e) {
+			if (e instanceof AuthenticationError) throw e;
+
 			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('Authentication failed.');
+			throw new AuthenticationError('Magic Link authentication failed.');
 		}
 	}
 
@@ -156,6 +158,8 @@ export abstract class MagicLinkAuthResolver {
 		@Arg('token', () => String) magicLinkToken: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
+		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+
 		const username = ctx.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
