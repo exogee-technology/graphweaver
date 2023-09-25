@@ -4,7 +4,7 @@ import {
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
-import { ConnectionManager, wrap } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, DatabaseImplementation, wrap } from '@exogee/graphweaver-mikroorm';
 
 import { addUserToContext } from '../../../auth/context';
 import { myConnection } from '../../../database';
@@ -13,14 +13,18 @@ import { MagicLink } from '../../../entities/mysql/magic-link';
 
 @Resolver()
 export class MagicLinkAuthResolver extends AuthResolver {
+	private database: DatabaseImplementation;
+	constructor() {
+		super();
+		this.database = ConnectionManager.database(myConnection.connectionManagerId);
+	}
 	/**
 	 *
 	 * @param username fetch user details using a username
 	 * @returns return a UserProfile compatible entity
 	 */
 	async getUser(username: string): Promise<UserProfile> {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		const credential = await database.em.findOneOrFail(Credential, { username });
+		const credential = await this.database.em.findOneOrFail(Credential, { username });
 		return addUserToContext(credential.id);
 	}
 
@@ -31,8 +35,7 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @returns Array of MagicLink compatible entities
 	 */
 	async getMagicLink(userId: string, token: string): Promise<MagicLinkInterface> {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		return await database.em.findOneOrFail(MagicLink, { userId, token, redeemedAt: null });
+		return this.database.em.findOneOrFail(MagicLink, { userId, token, redeemedAt: null });
 	}
 
 	/**
@@ -42,8 +45,7 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @returns MagicLink compatible entity
 	 */
 	async getMagicLinks(userId: string, period: Date): Promise<MagicLinkInterface[]> {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		return await database.em.find(MagicLink, {
+		return this.database.em.find(MagicLink, {
 			userId,
 			createdAt: {
 				$gt: period,
@@ -58,16 +60,15 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @returns MagicLink compatible entity
 	 */
 	async createMagicLink(userId: string, token: string): Promise<MagicLinkInterface> {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
 		const link = new MagicLink();
 		wrap(link).assign(
 			{
 				userId,
 				token,
 			},
-			{ em: database.em }
+			{ em: this.database.em }
 		);
-		await database.em.persistAndFlush(link);
+		await this.database.em.persistAndFlush(link);
 		return link;
 	}
 
@@ -77,10 +78,9 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @returns boolean to indicate the successful saving of the redeem operation
 	 */
 	async redeemMagicLink({ id }: MagicLink): Promise<boolean> {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		const link = await database.em.findOneOrFail(MagicLink, { id });
+		const link = await this.database.em.findOneOrFail(MagicLink, { id });
 		link.redeemedAt = new Date();
-		await database.em.persistAndFlush(link);
+		await this.database.em.persistAndFlush(link);
 		return true;
 	}
 
