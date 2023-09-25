@@ -4,6 +4,7 @@ import { UserProfile } from './user-profile';
 export enum AuthenticationMethod {
 	PASSWORD = 'pwd',
 	MAGIC_LINK = 'mgl',
+	ONE_TIME_PASSWORD = 'otp',
 }
 
 export interface JwtPayload {
