@@ -94,8 +94,6 @@ export const MagicLinkLogin = () => {
 		<>
 			{token ? (
 				<Spinner />
-			) : error ? (
-				<Alert>{error.message}</Alert>
 			) : (
 				<Formik<Form> initialValues={{ username: '' }} onSubmit={handleOnSubmit}>
 					{({ isSubmitting }) => (
@@ -123,6 +121,7 @@ export const MagicLinkLogin = () => {
 									</div>
 								</>
 							)}
+							{!!error && <Alert>{error.message}</Alert>}
 						</Form>
 					)}
 				</Formik>
