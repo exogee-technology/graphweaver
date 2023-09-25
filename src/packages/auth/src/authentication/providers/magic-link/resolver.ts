@@ -4,7 +4,7 @@ import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'crypto';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../../types';
+import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../../types';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
@@ -76,7 +76,11 @@ export abstract class MagicLinkAuthResolver {
 		return url;
 	}
 
-	private async verifyMagicLink(username: string, magicLinkToken?: string, challenge = false) {
+	private async verifyMagicLink(
+		username: string,
+		magicLinkToken?: string,
+		existingAuthToken?: JwtPayload
+	) {
 		try {
 			if (!magicLinkToken)
 				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
@@ -92,8 +96,8 @@ export abstract class MagicLinkAuthResolver {
 				throw new AuthenticationError('Auth unsuccessful: Authentication Magic Link expired.');
 
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
-			const authToken = challenge
-				? await tokenProvider.stepUpToken(userProfile)
+			const authToken = existingAuthToken
+				? await tokenProvider.stepUpToken(existingAuthToken)
 				: await tokenProvider.generateToken(userProfile);
 			if (!authToken) throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
 
@@ -159,10 +163,13 @@ export abstract class MagicLinkAuthResolver {
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
 		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
+		const existingToken =
+			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 
 		const username = ctx.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
-		return this.verifyMagicLink(username, magicLinkToken, true);
+		return this.verifyMagicLink(username, magicLinkToken, existingToken);
 	}
 }

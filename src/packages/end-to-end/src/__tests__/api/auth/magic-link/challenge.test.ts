@@ -56,6 +56,10 @@ const graphweaver = new Graphweaver({
 });
 
 describe('Magic Link Authentication - Challenge', () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	test('should fail challenge if not logged in.', async () => {
 		const response = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
@@ -205,5 +209,77 @@ describe('Magic Link Authentication - Challenge', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
 			'Auth unsuccessful: Authentication Magic Link expired.'
 		);
+	});
+
+	test('should pass challenge if using correct token.', async () => {
+		const sendResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation sendLoginMagicLink($username: String!) {
+					sendLoginMagicLink(username: $username)
+				}
+			`,
+			variables: {
+				username: 'test',
+			},
+		});
+
+		assert(sendResponse.body.kind === 'single');
+		expect(sendResponse.body.singleResult.errors).toBeUndefined();
+
+		const loginResponse = await graphweaver.server.executeOperation<{
+			verifyLoginMagicLink: { authToken: string };
+		}>({
+			query: gql`
+				mutation verifyLoginMagicLink($username: String!, $token: String!) {
+					verifyLoginMagicLink(username: $username, token: $token) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				token: MOCK_TOKEN,
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+
+		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
+		assert(token);
+
+		const response = await graphweaver.server.executeOperation<{
+			result: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation verifyChallengeMagicLink($token: String!) {
+					result: verifyChallengeMagicLink(token: $token) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				token: MOCK_TOKEN,
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+
+		// Check we have a returned token
+		const steppedUpToken = response.body.singleResult.data?.result?.authToken;
+		assert(steppedUpToken);
+		expect(steppedUpToken).toContain('Bearer ');
+
+		// Let's check that we have the MFA value in the token and that it has an expiry
+		const payload = JSON.parse(atob(steppedUpToken?.split('.')[1] ?? '{}'));
+		expect(payload.acr?.values?.mgl).toBeGreaterThan(Math.floor(Date.now() / 1000));
+		expect(payload.amr).toContain('mgl');
+
+		// Let's check that the original expiry has not extended
+		const originalPayload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
+		expect(payload.exp).toBe(originalPayload.exp);
 	});
 });
