@@ -37,18 +37,14 @@ export abstract class MagicLinkAuthResolver {
 	abstract redeemMagicLink(magicLink: MagicLink): Promise<boolean>;
 	abstract sendMagicLink(magicLink: URL): Promise<boolean>;
 
-	@Mutation((returns) => Boolean)
-	async sendLoginMagicLink(
-		@Arg('username', () => String) username: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<boolean> {
+	private async generateMagicLink(username: string, ctx: AuthorizationContext) {
 		// check that the user exists
 		const user = await this.getUser(username);
 
 		// if the user does not exist, silently fail
 		if (!user?.id) {
 			logger.warn(`User with username ${username} does not exist or is not active.`);
-			return true;
+			return;
 		}
 
 		// Check if the user created X links in the last X period
@@ -60,7 +56,7 @@ export abstract class MagicLinkAuthResolver {
 		// Check rate limiting conditions for magic link creation
 		if (links.length >= rate.limit) {
 			logger.warn(`Too many magic links created for ${username}.`);
-			return true;
+			return;
 		}
 
 		// Create a magic link and save it to the database
@@ -70,45 +66,39 @@ export abstract class MagicLinkAuthResolver {
 		const redirect = new URL(
 			ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
 		);
-		const url = new URL(redirect.origin);
-		url.pathname = 'auth/login';
 
-		// Set search params
+		const url = new URL(redirect.origin);
+
 		url.searchParams.set('redirect_uri', redirect.toString());
 		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
 		url.searchParams.set('token', link.token);
-		url.searchParams.set('username', username);
 
-		// Send to user
-		return await this.sendMagicLink(url);
+		return url;
 	}
 
-	@Mutation((returns) => Token)
-	async verifyLoginMagicLink(
-		@Arg('username', () => String) username: string,
-		@Arg('token', () => String) magicLinkToken: string
-	): Promise<Token> {
-		if (!magicLinkToken)
-			throw new AuthenticationError('Login unsuccessful: Authentication failed.');
-
-		// find the magic link in the database
+	private async verifyMagicLink(username: string, magicLinkToken?: string, challenge = false) {
 		try {
+			if (!magicLinkToken)
+				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+
 			const userProfile = await this.getUser(username);
 			if (!userProfile?.id)
-				throw new AuthenticationError('Login unsuccessful: Authentication failed.');
+				throw new AuthenticationError('Auth unsuccessful: Authentication failed.');
 
 			const link = await this.getMagicLink(userProfile.id, magicLinkToken);
 			// Check that the magic link is still valid
 			const ttl = new Date(new Date().getTime() - ms(config.ttl));
 			if (!link || link.createdAt < ttl)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+				throw new AuthenticationError('Auth unsuccessful: Authentication failed.');
 
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
-			const authToken = await tokenProvider.generateToken(userProfile);
-			if (!authToken) throw new AuthenticationError('Login unsuccessful: Token generation failed.');
+			const authToken = challenge
+				? await tokenProvider.stepUpToken(userProfile)
+				: await tokenProvider.generateToken(userProfile);
+			if (!authToken) throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
 
 			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Login unsuccessful.');
+			if (!token) throw new AuthenticationError('Auth unsuccessful.');
 
 			// Callback to the client to mark the magic link as used
 			await this.redeemMagicLink(link);
@@ -121,45 +111,41 @@ export abstract class MagicLinkAuthResolver {
 	}
 
 	@Mutation((returns) => Boolean)
+	async sendLoginMagicLink(
+		@Arg('username', () => String) username: string,
+		@Ctx() ctx: AuthorizationContext
+	): Promise<boolean> {
+		const url = await this.generateMagicLink(username, ctx);
+
+		// fail silently
+		if (!url) return true;
+
+		url.pathname = 'auth/login';
+		url.searchParams.set('username', username);
+
+		return await this.sendMagicLink(url);
+	}
+
+	@Mutation((returns) => Token)
+	async verifyLoginMagicLink(
+		@Arg('username', () => String) username: string,
+		@Arg('token', () => String) magicLinkToken: string
+	): Promise<Token> {
+		return this.verifyMagicLink(username, magicLinkToken);
+	}
+
+	@Mutation((returns) => Boolean)
 	async sendChallengeMagicLink(@Ctx() ctx: AuthorizationContext): Promise<boolean> {
 		const username = ctx.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
-		// check that the user exists
-		const user = await this.getUser(username);
+		const url = await this.generateMagicLink(username, ctx);
 
-		// if the user does not exist, silently fail
-		if (!user?.id) {
-			logger.warn(`User with username ${username} does not exist or is not active.`);
-			return true;
-		}
+		// fail silently
+		if (!url) return true;
 
-		// Check if the user created X links in the last X period
-		const { rate } = config;
-		// Current date minus the rate limit period
-		const period = new Date(new Date().getTime() - ms(rate.period));
-		const links = await this.getMagicLinks(user.id, period);
-
-		// Check rate limiting conditions for magic link creation
-		if (links.length >= rate.limit) {
-			logger.warn(`Too many magic links created for ${username}.`);
-			return true;
-		}
-
-		// Create a magic link and save it to the database
-		const link = await this.createMagicLink(user.id, createToken());
-
-		// Get Redirect URL
-		const redirect = new URL(
-			ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
-		);
-		const url = new URL(redirect.origin);
 		url.pathname = 'auth/challenge';
-
-		// Set search params
-		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
-		url.searchParams.set('redirect_uri', redirect.toString());
-		url.searchParams.set('token', link.token);
+		url.searchParams.set('username', username);
 
 		// Send to user
 		return await this.sendMagicLink(url);
@@ -170,44 +156,9 @@ export abstract class MagicLinkAuthResolver {
 		@Arg('token', () => String) magicLinkToken: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		if (!magicLinkToken)
-			throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+		const username = ctx.user?.username;
+		if (!username) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
-		// find the magic link in the database
-		try {
-			const username = ctx.user?.username;
-			if (!username)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-
-			// check that the user exists
-			const user = await this.getUser(username);
-
-			// if the user does not exist, silently fail
-			if (!user?.id) {
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-			}
-
-			const link = await this.getMagicLink(user.id, magicLinkToken);
-			// Check that the magic link is still valid
-			const ttl = new Date(new Date().getTime() - ms(config.ttl));
-			if (!link || link.createdAt < ttl)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
-			const authToken = await tokenProvider.stepUpToken(user);
-			if (!authToken)
-				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
-
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-			// Callback to the client to mark the magic link as used
-			await this.redeemMagicLink(link);
-
-			return token;
-		} catch (e) {
-			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('Authentication failed.');
-		}
+		return this.verifyMagicLink(username, magicLinkToken, true);
 	}
 }
