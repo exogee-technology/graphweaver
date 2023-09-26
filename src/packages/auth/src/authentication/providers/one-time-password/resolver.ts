@@ -96,20 +96,21 @@ export abstract class OneTimePasswordAuthResolver {
 
 			const userProfile = await this.getUser(username);
 			if (!userProfile?.id)
-				throw new AuthenticationError('Auth unsuccessful: Authentication failed.');
+				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
 			const otp = await this.getOTP(userProfile.id, code);
 			// Check that the otp is still valid
 			const ttl = new Date(new Date().getTime() - ms(config.ttl));
 			if (otp.createdAt < ttl)
-				throw new AuthenticationError('Auth unsuccessful: Authentication OTP expired.');
+				throw new AuthenticationError('Challenge unsuccessful: Authentication OTP expired.');
 
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-			if (!authToken) throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
+			if (!authToken)
+				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
 
 			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Auth unsuccessful.');
+			if (!token) throw new AuthenticationError('Challenge unsuccessful.');
 
 			// Callback to the client to mark the otp as used
 			await this.redeemOTP(otp);
