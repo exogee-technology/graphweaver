@@ -29,9 +29,9 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	}
 
 	/**
-	 * Return a specific token for this user
+	 * Return a specific OTP for this user
 	 * @param userId users ID
-	 * @param token token string
+	 * @param code code string
 	 * @returns Array of OTP compatible entities
 	 */
 	async getOTP(userId: string, code: string): Promise<OTPInterface> {
@@ -56,7 +56,7 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	/**
 	 * A callback to persist the OTP in the data source of choice
 	 * @param userId user ID to search for
-	 * @param token the token generated for this OTP
+	 * @param code the code generated for this OTP
 	 * @returns OTP compatible entity
 	 */
 	async createOTP(userId: string, code: string): Promise<OTPInterface> {

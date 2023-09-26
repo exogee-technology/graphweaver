@@ -5,7 +5,7 @@ import { Credential, Task, Tag, MagicLink, OneTimePassword } from './entities';
 export const myConnection = {
 	connectionManagerId: 'my-sql',
 	mikroOrmConfig: {
-		entities: [Credential, MagicLink, Task, Tag, OneTimePassword],
+		entities: [Credential, MagicLink, OneTimePassword, Task, Tag],
 		driver: MySqlDriver,
 		dbName: 'todo_app',
 		user: process.env.MYSQL_USERNAME,
