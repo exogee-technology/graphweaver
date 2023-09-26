@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import { MagicLinkChallenge, PasswordChallenge } from '../../components';
+import { MagicLinkChallenge, OTPChallenge, PasswordChallenge } from '../../components';
 import { AuthenticationMethod } from '../../types';
 
 export const Challenge = () => {
@@ -11,5 +11,6 @@ export const Challenge = () => {
 
 	if (firstProvider === AuthenticationMethod.PASSWORD) return <PasswordChallenge />;
 	if (firstProvider === AuthenticationMethod.MAGIC_LINK) return <MagicLinkChallenge />;
+	if (firstProvider === AuthenticationMethod.ONE_TIME_PASSWORD) return <OTPChallenge />;
 	return null;
 };

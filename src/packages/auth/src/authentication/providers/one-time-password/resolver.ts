@@ -11,13 +11,14 @@ import { AuthTokenProvider } from '../../token';
 
 const config = {
 	rate: {
-		limit: parseInt(process.env.AUTH_OTP_RATE_LIMIT ?? '5'),
+		limit: parseInt(process.env.AUTH_OTP_RATE_LIMIT ?? '10'),
 		period: process.env.AUTH_OTP_RATE_PERIOD || '1d',
 	},
 	ttl: process.env.AUTH_OTP_TTL || '1m',
 };
 
 export interface OTP {
+	id?: string;
 	userId: string;
 	code: string;
 	createdAt: Date;

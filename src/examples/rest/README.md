@@ -49,6 +49,14 @@ CREATE TABLE magic_link (
   redeemed_at TIMESTAMP
 );
 
+CREATE TABLE one_time_password (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  code VARCHAR(6) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  redeemed_at TIMESTAMP
+);
+
 INSERT INTO credential (id, username, password)
 VALUES
   (1, 'luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
