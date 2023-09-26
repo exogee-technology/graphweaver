@@ -141,7 +141,7 @@ describe('One Time Password Authentication - Challenge', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Auth unsuccessful: Authentication OTP expired.'
+			'Challenge unsuccessful: Authentication OTP expired.'
 		);
 	});
 
