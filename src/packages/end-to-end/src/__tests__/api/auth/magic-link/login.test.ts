@@ -112,7 +112,8 @@ describe('Magic Link Authentication - Login', () => {
 		expect(sendMagicLinkSpy).toHaveBeenCalledWith(
 			new URL(
 				`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=http%3A%2F%2Flocalhost%3A9000%2F&providers=${AuthenticationMethod.MAGIC_LINK}&token=${MOCK_TOKEN}&username=${user.username}`
-			)
+			),
+			{ userId: user.id, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT }
 		);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledWith({
