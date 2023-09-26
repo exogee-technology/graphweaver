@@ -89,9 +89,9 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @param magicLink the URL that was generated and should be sent to the user
 	 * @returns a boolean to indicate that the URL has been sent
 	 */
-	async sendMagicLink(magicLink: URL): Promise<boolean> {
+	async sendMagicLink(url: URL, magicLink: MagicLinkInterface): Promise<boolean> {
 		// In a production system this would email / sms the magic link and you would not log to the console!
-		console.log(`\n\n ######## MagicLink: ${magicLink.toString()} ######## \n\n`);
+		console.log(`\n\n ######## MagicLink: ${url.toString()} ######## \n\n`);
 		return true;
 	}
 }

@@ -35,7 +35,7 @@ export abstract class MagicLinkAuthResolver {
 	abstract getMagicLinks(userId: string, period: Date): Promise<MagicLink[]>;
 	abstract createMagicLink(userId: string, token: string): Promise<MagicLink>;
 	abstract redeemMagicLink(magicLink: MagicLink): Promise<boolean>;
-	abstract sendMagicLink(magicLink: URL): Promise<boolean>;
+	abstract sendMagicLink(url: URL, magicLink: MagicLink): Promise<boolean>;
 
 	private async generateMagicLink(username: string, ctx: AuthorizationContext) {
 		// check that the user exists
@@ -73,7 +73,7 @@ export abstract class MagicLinkAuthResolver {
 		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
 		url.searchParams.set('token', link.token);
 
-		return url;
+		return { link, url };
 	}
 
 	private async verifyMagicLink(
@@ -121,15 +121,15 @@ export abstract class MagicLinkAuthResolver {
 		@Arg('username', () => String) username: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
-		const url = await this.generateMagicLink(username, ctx);
+		const { url, link } = (await this.generateMagicLink(username, ctx)) ?? {};
 
 		// fail silently
-		if (!url) return true;
+		if (!link || !url) return true;
 
 		url.pathname = 'auth/login';
 		url.searchParams.set('username', username);
 
-		return await this.sendMagicLink(url);
+		return await this.sendMagicLink(url, link);
 	}
 
 	@Mutation((returns) => Token)
@@ -145,15 +145,15 @@ export abstract class MagicLinkAuthResolver {
 		const username = ctx.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
-		const url = await this.generateMagicLink(username, ctx);
+		const { url, link } = (await this.generateMagicLink(username, ctx)) ?? {};
 
 		// fail silently
-		if (!url) return true;
+		if (!link || !url) return true;
 
 		url.pathname = 'auth/challenge';
 
 		// Send to user
-		return await this.sendMagicLink(url);
+		return await this.sendMagicLink(url, link);
 	}
 
 	@Mutation((returns) => Token)
