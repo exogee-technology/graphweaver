@@ -7,6 +7,7 @@ import {
 	authApolloPlugin,
 	UserProfile,
 	OneTimePasswordAuthResolver,
+	PasswordAuthResolver,
 	OTP,
 } from '@exogee/graphweaver-auth';
 
@@ -48,8 +49,16 @@ export class AuthResolver extends OneTimePasswordAuthResolver {
 	}
 }
 
+@Resolver()
+export class CredentialAuthResolver extends PasswordAuthResolver {
+	async authenticate(username: string, password: string) {
+		if (password === 'test123') return user;
+		throw new Error('Unknown username or password, please try again');
+	}
+}
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver],
+	resolvers: [AuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},
@@ -80,5 +89,116 @@ describe('One Time Password Authentication - Challenge', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
 			'Challenge unsuccessful: Token missing.'
 		);
+	});
+
+	test('should fail challenge if ttl expired.', async () => {
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'test123',
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
+
+		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		assert(token);
+
+		jest.spyOn(AuthResolver.prototype, 'getOTP').mockImplementation(
+			async () =>
+				({
+					userId: user.id,
+					code: MOCK_CODE,
+					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
+				} as OTP)
+		);
+
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation verifyOTPChallenge($code: String!) {
+					result: verifyOTPChallenge(code: $code) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				code: MOCK_CODE,
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Auth unsuccessful: Authentication OTP expired.'
+		);
+	});
+
+	test('should pass challenge if using correct token.', async () => {
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'test123',
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
+
+		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		assert(token);
+
+		const response = await graphweaver.server.executeOperation<{
+			result: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation verifyOTPChallenge($code: String!) {
+					result: verifyOTPChallenge(code: $code) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				code: MOCK_CODE,
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+
+		// Check we have a returned token
+		const steppedUpToken = response.body.singleResult.data?.result?.authToken;
+		assert(steppedUpToken);
+		expect(steppedUpToken).toContain('Bearer ');
+
+		// Let's check that we have the MFA value in the token and that it has an expiry
+		const payload = JSON.parse(atob(steppedUpToken?.split('.')[1] ?? '{}'));
+		expect(payload.acr?.values?.otp).toBeGreaterThan(Math.floor(Date.now() / 1000));
+		expect(payload.amr).toContain('otp');
+
+		// Let's check that the original expiry has not extended
+		const originalPayload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
+		expect(payload.exp).toBe(originalPayload.exp);
 	});
 });
