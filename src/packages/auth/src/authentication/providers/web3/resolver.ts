@@ -11,6 +11,27 @@ import { ethers } from 'ethers';
 @Resolver((of) => Token)
 export abstract class Web3AuthResolver {
 	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
+	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
+
+	@Mutation((returns) => Token)
+	async registerDevice(
+		@Arg('address', () => String) address: string,
+		@Ctx() ctx: AuthorizationContext
+	): Promise<boolean> {
+		try {
+			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
+			if (!address) throw new AuthenticationError('Challenge unsuccessful: No address.');
+
+			// Save device ID
+			return this.saveWalletAddress(ctx.user.id, address);
+		} catch (e) {
+			if (e instanceof AuthenticationError) throw e;
+
+			logger.info('Authentication failed with error', e);
+			throw new AuthenticationError('Web3 authentication failed.');
+		}
+	}
 
 	@Mutation((returns) => Token)
 	async verifyWeb3Challenge(

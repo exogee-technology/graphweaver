@@ -38,8 +38,7 @@ CREATE TABLE task_tags (
 CREATE TABLE credential (
   id INT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  wallet_address VARCHAR(255),
+  password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE magic_link (
@@ -56,6 +55,13 @@ CREATE TABLE one_time_password (
   code VARCHAR(6) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   redeemed_at TIMESTAMP
+);
+
+CREATE TABLE device (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  address VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO credential (id, username, password)
