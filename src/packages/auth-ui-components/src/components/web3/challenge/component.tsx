@@ -27,10 +27,15 @@ const config: Config = {
 };
 
 const ConnectButton = () => {
-	const { account, deactivate, activateBrowserWallet } = useEthers();
-	// 'account' being undefined means that we are not connected.
-	if (account) return <button onClick={() => deactivate()}>Disconnect</button>;
-	else return <button onClick={() => activateBrowserWallet()}>Connect</button>;
+	const { account, activateBrowserWallet } = useEthers();
+	// 'account' means that we are connected.
+	if (account) return null;
+	else
+		return (
+			<Button type="submit" onClick={() => activateBrowserWallet()}>
+				Connect Wallet
+			</Button>
+		);
 };
 
 const VerifyButton = () => {
@@ -44,16 +49,17 @@ const VerifyButton = () => {
 
 	const handleSignMessage = async () => {
 		try {
-			console.log(library, account);
+			setError(undefined);
+
 			if (library !== undefined && 'getSigner' in library && account !== undefined) {
 				const signer = library.getSigner();
-				const signedMessage = await signer.signMessage(`gw-${new Date().toISOString()}`);
-
-				console.log(signedMessage);
+				const message = `gw-${new Date().toISOString()}`;
+				const signature = await signer.signMessage(message);
 
 				const { data } = await verifySignature({
 					variables: {
-						signedMessage,
+						message,
+						signature,
 					},
 				});
 
@@ -67,6 +73,9 @@ const VerifyButton = () => {
 			setError(error instanceof Error ? error : new Error(String(error)));
 		}
 	};
+
+	// 'account' undefined means that we are not connected.
+	if (!account) return null;
 
 	return (
 		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleSignMessage}>

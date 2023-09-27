@@ -38,7 +38,8 @@ CREATE TABLE task_tags (
 CREATE TABLE credential (
   id INT PRIMARY KEY,
   username VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL
+  password VARCHAR(255) NOT NULL,
+  wallet_address VARCHAR(255),
 );
 
 CREATE TABLE magic_link (

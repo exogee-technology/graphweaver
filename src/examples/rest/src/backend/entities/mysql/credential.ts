@@ -11,4 +11,7 @@ export class Credential extends BaseEntity {
 
 	@Property({ type: String })
 	password!: string;
+
+	@Property({ type: String })
+	walletAddress!: string;
 }
