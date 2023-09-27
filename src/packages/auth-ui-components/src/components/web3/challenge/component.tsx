@@ -8,15 +8,23 @@ import {
 	Button,
 } from '@exogee/graphweaver-admin-ui-components';
 import { Form, Formik } from 'formik';
-import { useEthers } from '@usedapp/core';
-
-import styles from './styles.module.css';
+import { Config, DAppProvider, Mainnet, useEthers } from '@usedapp/core';
+import { getDefaultProvider } from 'ethers';
 
 import { VERIFY_WEB3_MUTATION } from './graphql';
+
+import styles from './styles.module.css';
 
 interface Form {
 	code: string;
 }
+
+const config: Config = {
+	readOnlyChainId: Mainnet.chainId,
+	readOnlyUrls: {
+		[Mainnet.chainId]: getDefaultProvider('mainnet'),
+	},
+};
 
 const ConnectButton = () => {
 	const { account, deactivate, activateBrowserWallet } = useEthers();
@@ -25,7 +33,7 @@ const ConnectButton = () => {
 	else return <button onClick={() => activateBrowserWallet()}>Connect</button>;
 };
 
-export const Web3Challenge = () => {
+const VerifyButton = () => {
 	const { account, library } = useEthers();
 	const [verifySignature] = useMutation<{ result: { authToken: string } }>(VERIFY_WEB3_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
@@ -36,9 +44,12 @@ export const Web3Challenge = () => {
 
 	const handleSignMessage = async () => {
 		try {
+			console.log(library, account);
 			if (library !== undefined && 'getSigner' in library && account !== undefined) {
 				const signer = library.getSigner();
-				const signedMessage = await signer.signMessage('Message');
+				const signedMessage = await signer.signMessage(`gw-${new Date().toISOString()}`);
+
+				console.log(signedMessage);
 
 				const { data } = await verifySignature({
 					variables: {
@@ -58,24 +69,32 @@ export const Web3Challenge = () => {
 	};
 
 	return (
-		<div className={styles.wrapper}>
-			<div>
-				<GraphweaverLogo width="52" className={styles.logo} />
+		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleSignMessage}>
+			{({ isSubmitting }) => (
+				<Form className={styles.wrapper}>
+					<div className={styles.titleContainerCenter}>Verify Wallet</div>
+					<div className={styles.buttonContainerCenter}>
+						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+							Verify
+						</Button>
+					</div>
+					{!!error && <Alert>{error.message}</Alert>}
+				</Form>
+			)}
+		</Formik>
+	);
+};
+
+export const Web3Challenge = () => {
+	return (
+		<DAppProvider config={config}>
+			<div className={styles.wrapper}>
+				<div>
+					<GraphweaverLogo width="52" className={styles.logo} />
+				</div>
+				<ConnectButton />
+				<VerifyButton />
 			</div>
-			<ConnectButton />
-			<Formik<Form> initialValues={{ code: '' }} onSubmit={handleSignMessage}>
-				{({ isSubmitting }) => (
-					<Form className={styles.wrapper}>
-						<div className={styles.titleContainerCenter}>Verify Wallet</div>
-						<div className={styles.buttonContainerCenter}>
-							<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-								Verify
-							</Button>
-						</div>
-						{!!error && <Alert>{error.message}</Alert>}
-					</Form>
-				)}
-			</Formik>
-		</div>
+		</DAppProvider>
 	);
 };
