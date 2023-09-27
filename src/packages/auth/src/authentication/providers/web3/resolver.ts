@@ -23,7 +23,6 @@ export abstract class Web3AuthResolver {
 			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
 			if (!address) throw new AuthenticationError('Challenge unsuccessful: No address.');
 
-			// Save device ID
 			return this.saveWalletAddress(ctx.user.id, address);
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
