@@ -1,11 +1,11 @@
 import { MySqlDriver } from '@mikro-orm/mysql';
-import { Credential, Task, Tag, MagicLink, OneTimePassword } from './entities';
+import { Credential, Task, Tag, MagicLink, OneTimePassword, Device } from './entities';
 
 // Define the database connection
 export const myConnection = {
 	connectionManagerId: 'my-sql',
 	mikroOrmConfig: {
-		entities: [Credential, MagicLink, OneTimePassword, Task, Tag],
+		entities: [Credential, MagicLink, OneTimePassword, Device, Task, Tag],
 		driver: MySqlDriver,
 		dbName: 'todo_app',
 		user: process.env.MYSQL_USERNAME,

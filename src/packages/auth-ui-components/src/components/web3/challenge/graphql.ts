@@ -7,3 +7,9 @@ export const VERIFY_WEB3_MUTATION: DocumentNode = gql`
 		}
 	}
 `;
+
+export const REGISTER_WALLET_ADDRESS_MUTATION: DocumentNode = gql`
+	mutation registerWalletAddress($address: String!) {
+		result: registerWalletAddress(address: $address)
+	}
+`;

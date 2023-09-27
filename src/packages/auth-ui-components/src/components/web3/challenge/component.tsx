@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import {
@@ -11,7 +11,7 @@ import { Form, Formik } from 'formik';
 import { Config, DAppProvider, Mainnet, useEthers } from '@usedapp/core';
 import { getDefaultProvider } from 'ethers';
 
-import { VERIFY_WEB3_MUTATION } from './graphql';
+import { REGISTER_WALLET_ADDRESS_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
 
 import styles from './styles.module.css';
 
@@ -27,12 +27,39 @@ const config: Config = {
 };
 
 const ConnectButton = () => {
-	const { account, activateBrowserWallet } = useEthers();
+	const { library, activateBrowserWallet, account } = useEthers();
+	const [activated, setActivated] = useState(false);
+	const [registerDevice] = useMutation<{ result: { authToken: string } }>(
+		REGISTER_WALLET_ADDRESS_MUTATION
+	);
+
+	const handleOnActivate = () => {
+		activateBrowserWallet();
+		setActivated(true);
+	};
+
+	const handleRegisterDevice = async () => {
+		if (activated && library !== undefined && 'getSigner' in library) {
+			setActivated(false);
+			const signer = library.getSigner();
+			const address = await signer.getAddress();
+			await registerDevice({
+				variables: {
+					address,
+				},
+			});
+		}
+	};
+
+	useEffect(() => {
+		handleRegisterDevice();
+	}, [activated, library]);
+
 	// 'account' means that we are connected.
 	if (account) return null;
 	else
 		return (
-			<Button type="submit" onClick={() => activateBrowserWallet()}>
+			<Button type="submit" onClick={handleOnActivate}>
 				Connect Wallet
 			</Button>
 		);

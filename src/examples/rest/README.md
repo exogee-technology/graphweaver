@@ -61,7 +61,8 @@ CREATE TABLE device (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
   address VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT uc_device UNIQUE (user_id, address)
 );
 
 INSERT INTO credential (id, username, password)
