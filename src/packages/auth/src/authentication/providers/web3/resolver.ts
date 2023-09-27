@@ -13,8 +13,8 @@ export abstract class Web3AuthResolver {
 	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
 	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
 
-	@Mutation((returns) => Token)
-	async registerDevice(
+	@Mutation((returns) => Boolean)
+	async registerWalletAddress(
 		@Arg('address', () => String) address: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
