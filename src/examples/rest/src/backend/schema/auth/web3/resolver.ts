@@ -2,7 +2,7 @@ import { Web3AuthResolver as AuthResolver, UserProfile } from '@exogee/graphweav
 import { BaseLoaders, Resolver } from '@exogee/graphweaver';
 import { ConnectionManager, DatabaseImplementation } from '@exogee/graphweaver-mikroorm';
 
-import { addUserToContext, mapUserToProfile } from '../../../auth/context';
+import { mapUserToProfile } from '../../../auth/context';
 import { myConnection } from '../../../database';
 import { Credential } from '../../../entities/mysql';
 import { User } from '../../user';
