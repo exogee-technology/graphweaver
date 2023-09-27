@@ -21,7 +21,6 @@ export class Web3AuthResolver extends AuthResolver {
 	 * @returns return a UserProfile compatible entity
 	 */
 	async getUserByWalletAddress(id: string, address: string): Promise<UserProfile> {
-		console.log(address);
 		const credential = await this.database.em.findOneOrFail(Credential, {
 			id,
 			walletAddress: address,
