@@ -91,7 +91,7 @@ export const OTPChallenge = () => {
 				<Formik<Form> initialValues={{ code: '' }} onSubmit={handleSendCode}>
 					{({ isSubmitting }) => (
 						<Form className={styles.wrapper}>
-							<div className={styles.titleContainerCenter}>Send Code</div>
+							<div className={styles.titleContainerCenter}>Send OTP Code</div>
 							<div className={styles.buttonContainerCenter}>
 								<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
 									Send

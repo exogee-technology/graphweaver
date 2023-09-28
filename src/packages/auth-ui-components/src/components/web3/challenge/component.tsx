@@ -9,9 +9,10 @@ import {
 } from '@exogee/graphweaver-admin-ui-components';
 import { Form, Formik } from 'formik';
 import { Config, DAppProvider, Mainnet, useEthers } from '@usedapp/core';
-import { getDefaultProvider } from 'ethers';
+import { ethers, getDefaultProvider } from 'ethers';
+import Web3Token from 'web3-token';
 
-import { REGISTER_WALLET_ADDRESS_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
+import { ENROL_WALLET_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
 
 import styles from './styles.module.css';
 
@@ -26,40 +27,40 @@ const config: Config = {
 	},
 };
 
+const expiresIn = import.meta.env.VITE_ADMIN_UI_AUTH_WEB3_TOKEN_EXPIRES_IN ?? '5m';
+const domain = import.meta.env.VITE_ADMIN_UI_AUTH_WEB3_TOKEN_DOMAIN ?? 'graphweaver.com';
+
 const ConnectButton = () => {
-	const { library, activateBrowserWallet, account } = useEthers();
-	const [activated, setActivated] = useState(false);
-	const [registerDevice] = useMutation<{ result: { authToken: string } }>(
-		REGISTER_WALLET_ADDRESS_MUTATION
+	const { activateBrowserWallet, account } = useEthers();
+	const [registerDevice, { loading }] = useMutation<{ result: { authToken: string } }>(
+		ENROL_WALLET_MUTATION
 	);
 
-	const handleOnActivate = () => {
+	const handleOnActivate = async () => {
+		const provider = new ethers.providers.Web3Provider((window as any).ethereum, 'any');
+		// Prompt user for account connections
+		await provider.send('eth_requestAccounts', []);
+		const signer = provider.getSigner();
+		const token = await Web3Token.sign(async (msg: string) => await signer.signMessage(msg), {
+			statement: `I want to connect my wallet to ${domain}`,
+			domain,
+			expires_in: expiresIn,
+		});
+
+		await registerDevice({
+			variables: {
+				token,
+			},
+		});
+
 		activateBrowserWallet();
-		setActivated(true);
 	};
-
-	const handleRegisterDevice = async () => {
-		if (activated && library !== undefined && 'getSigner' in library) {
-			setActivated(false);
-			const signer = library.getSigner();
-			const address = await signer.getAddress();
-			await registerDevice({
-				variables: {
-					address,
-				},
-			});
-		}
-	};
-
-	useEffect(() => {
-		handleRegisterDevice();
-	}, [activated, library]);
 
 	// 'account' means that we are connected.
 	if (account) return null;
 	else
 		return (
-			<Button type="submit" onClick={handleOnActivate}>
+			<Button type="submit" onClick={handleOnActivate} disabled={loading} loading={loading}>
 				Connect Wallet
 			</Button>
 		);
@@ -80,13 +81,15 @@ const VerifyButton = () => {
 
 			if (library !== undefined && 'getSigner' in library && account !== undefined) {
 				const signer = library.getSigner();
-				const message = `gw-${new Date().toISOString()}`;
-				const signature = await signer.signMessage(message);
+				const token = await Web3Token.sign(async (msg: string) => await signer.signMessage(msg), {
+					statement: `Use my wallet to verify my identity.`,
+					domain,
+					expires_in: expiresIn,
+				});
 
 				const { data } = await verifySignature({
 					variables: {
-						message,
-						signature,
+						token,
 					},
 				});
 

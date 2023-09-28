@@ -1,32 +1,37 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
+import Web3Token from 'web3-token';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
-import { ethers } from 'ethers';
 
 @Resolver((of) => Token)
 export abstract class Web3AuthResolver {
 	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
-	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
+	abstract saveWalletAddress(
+		id: string,
+		address: string,
+		ctx: AuthorizationContext
+	): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
-	async registerWalletAddress(
-		@Arg('address', () => String) address: string,
+	async enrolWallet(
+		@Arg('token', () => String) token: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
 		try {
 			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
-			if (!address) throw new AuthenticationError('Challenge unsuccessful: No address.');
+			if (!token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
 
-			return this.saveWalletAddress(ctx.user.id, address);
+			const { address } = await Web3Token.verify(token);
+
+			return this.saveWalletAddress(ctx.user.id, address, ctx);
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
-
 			logger.info('Authentication failed with error', e);
 			throw new AuthenticationError('Web3 authentication failed.');
 		}
@@ -34,8 +39,7 @@ export abstract class Web3AuthResolver {
 
 	@Mutation((returns) => Token)
 	async verifyWeb3Challenge(
-		@Arg('signature', () => String) signature: string,
-		@Arg('message', () => String) message: string,
+		@Arg('token', () => String) web3Token: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
 		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
@@ -47,12 +51,10 @@ export abstract class Web3AuthResolver {
 		if (!userId) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 
 		try {
-			if (!signature || !message)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+			if (!web3Token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
 
-			// Verify signed message
-			const signerAddress = await ethers.utils.verifyMessage(message, signature);
-			const userByAddress = await this.getUserByWalletAddress(userId, signerAddress);
+			const { address } = await Web3Token.verify(web3Token);
+			const userByAddress = await this.getUserByWalletAddress(userId, address);
 
 			// Double check the wallet address is for the current user
 			if (userId !== userByAddress.id) {
