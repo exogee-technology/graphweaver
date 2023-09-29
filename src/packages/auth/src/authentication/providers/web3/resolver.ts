@@ -53,7 +53,7 @@ export abstract class Web3AuthResolver {
 			if (!token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
 
 			const mfa = await this.getMultiFactorAuthentication();
-			await checkAuthentication(mfa, AccessType.Create, ctx.token);
+			if (mfa) await checkAuthentication(mfa, AccessType.Create, ctx.token);
 
 			const { address } = await Web3Token.verify(token);
 

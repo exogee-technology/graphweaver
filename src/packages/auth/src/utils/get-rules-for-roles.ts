@@ -7,7 +7,7 @@ import {
 } from '../types';
 
 export const getRulesForRoles = (
-	mfa: Partial<MultiFactorAuthentication>, // The MFA rules for this entity
+	mfa: MultiFactorAuthentication, // The MFA rules for this entity
 	roles: string[], // The roles assigned by the current user
 	operation: AccessType // The operation performed by the user
 ): MultiFactorAuthenticationRule[] => {

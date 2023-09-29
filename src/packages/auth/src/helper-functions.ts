@@ -235,7 +235,7 @@ const filterRule = (
 };
 
 export const checkAuthentication = async (
-	mfa: Partial<MultiFactorAuthentication>,
+	mfa: MultiFactorAuthentication,
 	operation: AccessType,
 	token?: string | JwtPayload
 ) => {
