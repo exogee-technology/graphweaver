@@ -55,6 +55,10 @@ const graphweaver = new Graphweaver({
 });
 
 describe('web3 challenge', () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	it('should return an OTP challenge when checking if we can enrol an web3 wallet address', async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
@@ -78,20 +82,13 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
 					canEnrolWallet
 				}
 			`,
-			variables: {
-				data: {
-					id: '1',
-				},
-			},
 		});
 
 		assert(response.body.kind === 'single');
@@ -100,4 +97,9 @@ describe('web3 challenge', () => {
 		);
 		expect(response.body.singleResult.errors?.[0]?.extensions?.providers).toStrictEqual(['otp']);
 	});
+
+	// tests
+	// should return otp challenge when enrolling a wallet and token contains no otp
+	// should return true for enrol wallet when token is stepped up using otp
+	// should return true for verify wallet and step up the token with wb3
 });
