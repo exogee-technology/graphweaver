@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
+import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import Web3Token from 'web3-token';
@@ -20,6 +20,27 @@ export abstract class Web3AuthResolver {
 	abstract getMultiFactorAuthentication(): Promise<MultiFactorAuthentication>;
 	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
 	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
+
+	// Use this query to check if you can enrol a wallet
+	@Query((returns) => Boolean)
+	async canEnrolWallet(@Ctx() ctx: AuthorizationContext): Promise<boolean> {
+		try {
+			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
+
+			const mfa = await this.getMultiFactorAuthentication();
+			await checkAuthentication(mfa, AccessType.Create, ctx.token);
+
+			return true;
+		} catch (e) {
+			if (e instanceof AuthenticationError) throw e;
+			if (e instanceof ChallengeError) throw e;
+			if (e instanceof ForbiddenError) throw e;
+
+			logger.info('Authentication failed with error', e);
+			throw new AuthenticationError('Web3 authentication failed.');
+		}
+	}
 
 	@Mutation((returns) => Boolean)
 	async enrolWallet(
