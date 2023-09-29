@@ -68,12 +68,12 @@ export type MultiFactorAuthentication = {
 };
 
 export enum MultiFactorAuthenticationOperationType {
-	READ = 'read',
-	CREATE = 'create',
-	UPDATE = 'update',
-	DELETE = 'delete',
-	WRITE = 'write',
-	ALL = 'all',
+	READ = 'Read',
+	CREATE = 'Create',
+	UPDATE = 'Update',
+	DELETE = 'Delete',
+	WRITE = 'Write',
+	ALL = 'All',
 }
 
 export type MultiFactorAuthenticationOperation = {

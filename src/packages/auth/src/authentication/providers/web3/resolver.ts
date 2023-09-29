@@ -1,21 +1,25 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import { AuthenticationError } from 'apollo-server-errors';
+import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import Web3Token from 'web3-token';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../../types';
+import {
+	AccessType,
+	AuthenticationMethod,
+	AuthorizationContext,
+	MultiFactorAuthentication,
+} from '../../../types';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
+import { checkAuthentication } from '../../../helper-functions';
+import { ChallengeError } from '../../../errors';
 
 @Resolver((of) => Token)
 export abstract class Web3AuthResolver {
+	abstract getMultiFactorAuthentication(): Promise<MultiFactorAuthentication>;
 	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
-	abstract saveWalletAddress(
-		id: string,
-		address: string,
-		ctx: AuthorizationContext
-	): Promise<boolean>;
+	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
 	async enrolWallet(
@@ -27,11 +31,17 @@ export abstract class Web3AuthResolver {
 			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
 			if (!token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
 
+			const mfa = await this.getMultiFactorAuthentication();
+			await checkAuthentication(mfa, AccessType.Create, ctx.token);
+
 			const { address } = await Web3Token.verify(token);
 
-			return this.saveWalletAddress(ctx.user.id, address, ctx);
+			return this.saveWalletAddress(ctx.user.id, address);
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
+			if (e instanceof ChallengeError) throw e;
+			if (e instanceof ForbiddenError) throw e;
+
 			logger.info('Authentication failed with error', e);
 			throw new AuthenticationError('Web3 authentication failed.');
 		}
