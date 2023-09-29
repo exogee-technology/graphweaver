@@ -17,7 +17,7 @@ import { ChallengeError } from '../../../errors';
 
 @Resolver((of) => Token)
 export abstract class Web3AuthResolver {
-	abstract getMultiFactorAuthentication(): Promise<MultiFactorAuthentication>;
+	abstract getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined>;
 	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
 	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
 
@@ -29,7 +29,7 @@ export abstract class Web3AuthResolver {
 			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
 
 			const mfa = await this.getMultiFactorAuthentication();
-			await checkAuthentication(mfa, AccessType.Create, ctx.token);
+			if (mfa) await checkAuthentication(mfa, AccessType.Create, ctx.token);
 
 			return true;
 		} catch (e) {
