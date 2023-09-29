@@ -40,6 +40,12 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Start and Test Auth Backend
+        working-directory: src/packages/auth
+        timeout-minutes: 2
+        run: |
+          pnpm test
+
       - name: Start and Test Auth
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
