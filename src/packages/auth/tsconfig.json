@@ -3,8 +3,10 @@
 	"compilerOptions": {
 		"outDir": "./lib",
 		"rootDir": "./src",
-		"noUnusedLocals": false
+		"noUnusedLocals": false,
+		"typeRoots": ["@types", "node_modules/@types", "../node_modules/@types"]
 	},
 	"include": ["./src"],
+	"exclude": ["src/**/*.test.ts"],
 	"references": [{ "path": "../core" }, { "path": "../logger" }]
 }

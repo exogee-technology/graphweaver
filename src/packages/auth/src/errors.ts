@@ -13,7 +13,6 @@ export class ChallengeError extends ApolloError {
 		message: string,
 		public extensions: {
 			code?: ErrorCodes.CHALLENGE;
-			entity: string;
 			providers: AuthenticationMethod[];
 		}
 	) {

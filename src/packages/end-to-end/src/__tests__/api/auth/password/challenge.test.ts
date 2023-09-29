@@ -25,7 +25,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 @ApplyMultiFactorAuthentication<Task>({
 	Everyone: {
 		// all users must provide a password mfa when writing data
-		write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
+		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
 	},
 })
 @ObjectType('Task')
@@ -120,7 +120,9 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Authentication Error: Expected Token.'
+		);
 	});
 
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
@@ -148,7 +150,9 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Authentication Error: Expected Token.'
+		);
 	});
 
 	test('should fail challenge if not logged in.', async () => {
