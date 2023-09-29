@@ -28,10 +28,12 @@
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"class-validator": "0.14.0",
+		"ethers": "6.3.0",
 		"graphql": "16.8.1",
 		"graphweaver": "*",
 		"reflect-metadata": "0.1.13",
-		"type-graphql": "2.0.0-beta.2"
+		"type-graphql": "2.0.0-beta.2",
+		"web3-token": "1.0.6"
 	},
 	"devDependencies": {
 		"@playwright/test": "1.37.1",

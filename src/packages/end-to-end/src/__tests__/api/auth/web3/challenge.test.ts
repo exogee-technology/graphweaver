@@ -11,6 +11,15 @@ import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
 import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
+import Web3Token from 'web3-token';
+import * as Ethers from 'ethers';
+
+const mnemonic = (Ethers as any).Mnemonic.fromPhrase(
+	'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
+);
+const mnemonic_instance = (Ethers as any).HDNodeWallet.fromMnemonic(mnemonic);
+const ethers_provider = new (Ethers as any).JsonRpcProvider(process.env['CHAIN_PROVIDER_URL']);
+const ethers_signer = new Ethers.Wallet(mnemonic_instance.privateKey, ethers_provider);
 
 const user = new UserProfile({
 	id: '1',
@@ -98,8 +107,99 @@ describe('web3 challenge', () => {
 		expect(response.body.singleResult.errors?.[0]?.extensions?.providers).toStrictEqual(['otp']);
 	});
 
-	// tests
-	// should return otp challenge when enrolling a wallet and token contains no otp
+	it('should return OTP challenge when enrolling a wallet and auth token contains no otp step up', async () => {
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'test123',
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
+
+		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		assert(token);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation enrolWallet($token: String!) {
+					result: enrolWallet(token: $token)
+				}
+			`,
+			variables: {
+				token: 'MOCK TOKEN',
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'MFA Challenge Required: Operation requires a step up in your authentication.'
+		);
+		expect(response.body.singleResult.errors?.[0]?.extensions?.providers).toStrictEqual(['otp']);
+	});
+
 	// should return true for enrol wallet when token is stepped up using otp
-	// should return true for verify wallet and step up the token with wb3
+
+	it('should return true for verify wallet and step up the token with wb3', async () => {
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'test123',
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
+
+		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		assert(token);
+
+		const web3Token = await Web3Token.sign((body: any) => ethers_signer.signMessage(body), {
+			expires_in: '1d',
+		});
+
+		const response = await graphweaver.server.executeOperation<{
+			result: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation verifyWeb3Challenge($token: String!) {
+					result: verifyWeb3Challenge(token: $token) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				token: web3Token,
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+
+		const steppedUpToken = response.body.singleResult.data?.result?.authToken;
+		const payload = JSON.parse(atob(steppedUpToken?.split('.')[1] ?? '{}'));
+		expect(payload.acr?.values?.wb3).toBeGreaterThan(Math.floor(Date.now() / 1000));
+		expect(payload.amr).toContain('wb3');
+	});
 });
