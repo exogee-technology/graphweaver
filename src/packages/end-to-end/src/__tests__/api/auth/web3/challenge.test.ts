@@ -14,11 +14,12 @@ import { Resolver } from 'type-graphql';
 import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
 
-const mnemonic = (Ethers as any).Mnemonic.fromPhrase(
-	'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about'
-);
+// Setup ethers for signing
+const phrase =
+	'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
+const mnemonic = (Ethers as any).Mnemonic.fromPhrase(phrase);
 const mnemonic_instance = (Ethers as any).HDNodeWallet.fromMnemonic(mnemonic);
-const ethers_provider = new (Ethers as any).JsonRpcProvider(process.env['CHAIN_PROVIDER_URL']);
+const ethers_provider = new (Ethers as any).JsonRpcProvider();
 const ethers_signer = new Ethers.Wallet(mnemonic_instance.privateKey, ethers_provider);
 
 const user = new UserProfile({
