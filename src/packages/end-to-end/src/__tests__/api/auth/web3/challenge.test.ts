@@ -31,7 +31,7 @@ const user = new UserProfile({
 
 @Resolver()
 export class AuthResolver extends Web3AuthResolver {
-	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication> {
+	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined> {
 		return {
 			Everyone: {
 				// all users must provide a magic link mfa when writing data
@@ -150,7 +150,56 @@ describe('web3 challenge', () => {
 		expect(response.body.singleResult.errors?.[0]?.extensions?.providers).toStrictEqual(['otp']);
 	});
 
-	// should return true for enrol wallet when token is stepped up using otp
+	it('should return true for enrol wallet', async () => {
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'test123',
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
+
+		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		assert(token);
+
+		const web3Token = await Web3Token.sign((body: any) => ethers_signer.signMessage(body), {
+			expires_in: '1d',
+		});
+
+		jest
+			.spyOn(AuthResolver.prototype, 'getMultiFactorAuthentication')
+			.mockImplementation(async () => undefined);
+
+		const spy = jest.spyOn(AuthResolver.prototype, 'saveWalletAddress');
+		const web3Address = await ethers_signer.getAddress();
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation enrolWallet($token: String!) {
+					result: enrolWallet(token: $token)
+				}
+			`,
+			variables: {
+				token: web3Token,
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(spy).toHaveBeenCalledWith(user.id, web3Address.toLowerCase());
+	});
 
 	it('should return true for verify wallet and step up the token with wb3', async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
