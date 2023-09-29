@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import {
 	GraphweaverLogo,
 	Alert,
 	localStorageAuthKey,
 	Button,
+	Spinner,
 } from '@exogee/graphweaver-admin-ui-components';
 import { Form, Formik } from 'formik';
 import { Config, DAppProvider, Mainnet, useEthers } from '@usedapp/core';
 import { ethers, getDefaultProvider } from 'ethers';
 import Web3Token from 'web3-token';
 
-import { ENROL_WALLET_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
+import { CAN_ENROL_WALLET_QUERY, ENROL_WALLET_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
 
 import styles from './styles.module.css';
 
@@ -124,6 +125,25 @@ const VerifyButton = () => {
 	);
 };
 
+const ConnectAndVerifyButtons = () => {
+	const { account } = useEthers();
+
+	// This checks if we can register a wallet and redirects if we cant
+	const walletConnected = !!account;
+	const { data, loading } = useQuery<{ canEnrolWallet: boolean }>(CAN_ENROL_WALLET_QUERY, {
+		skip: walletConnected,
+	});
+
+	if (!walletConnected && (!data?.canEnrolWallet || loading)) return <Spinner />;
+
+	return (
+		<>
+			<ConnectButton />
+			<VerifyButton />
+		</>
+	);
+};
+
 export const Web3Challenge = () => {
 	return (
 		<DAppProvider config={config}>
@@ -131,8 +151,7 @@ export const Web3Challenge = () => {
 				<div>
 					<GraphweaverLogo width="52" className={styles.logo} />
 				</div>
-				<ConnectButton />
-				<VerifyButton />
+				<ConnectAndVerifyButtons />
 			</div>
 		</DAppProvider>
 	);

@@ -13,3 +13,9 @@ export const ENROL_WALLET_MUTATION: DocumentNode = gql`
 		result: enrolWallet(token: $token)
 	}
 `;
+
+export const CAN_ENROL_WALLET_QUERY: DocumentNode = gql`
+	query {
+		canEnrolWallet
+	}
+`;
