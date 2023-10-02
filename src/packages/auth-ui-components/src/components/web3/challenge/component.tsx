@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -32,12 +32,12 @@ const expiresIn = import.meta.env.VITE_ADMIN_UI_AUTH_WEB3_TOKEN_EXPIRES_IN ?? '5
 const domain = import.meta.env.VITE_ADMIN_UI_AUTH_WEB3_TOKEN_DOMAIN ?? 'graphweaver.com';
 
 const ConnectButton = () => {
-	const { activateBrowserWallet, account } = useEthers();
+	const { activateBrowserWallet, account: walletConnected } = useEthers();
 	const [registerDevice, { loading }] = useMutation<{ result: { authToken: string } }>(
 		ENROL_WALLET_MUTATION
 	);
 
-	const handleOnActivate = async () => {
+	const handleOnActivate = useCallback(async () => {
 		const provider = new ethers.providers.Web3Provider((window as any).ethereum, 'any');
 		// Prompt user for account connections
 		await provider.send('eth_requestAccounts', []);
@@ -55,10 +55,9 @@ const ConnectButton = () => {
 		});
 
 		activateBrowserWallet();
-	};
+	}, [registerDevice, activateBrowserWallet]);
 
-	// 'account' means that we are connected.
-	if (account) return null;
+	if (walletConnected) return null;
 	else
 		return (
 			<Button type="submit" onClick={handleOnActivate} disabled={loading} loading={loading}>
@@ -76,7 +75,7 @@ const VerifyButton = () => {
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
 
-	const handleSignMessage = async () => {
+	const handleSignMessage = useCallback(async () => {
 		try {
 			setError(undefined);
 
@@ -103,7 +102,7 @@ const VerifyButton = () => {
 		} catch (error) {
 			setError(error instanceof Error ? error : new Error(String(error)));
 		}
-	};
+	}, [library, verifySignature]);
 
 	// 'account' undefined means that we are not connected.
 	if (!account) return null;
