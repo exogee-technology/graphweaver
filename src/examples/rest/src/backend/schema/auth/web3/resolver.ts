@@ -1,9 +1,6 @@
 import {
 	Web3AuthResolver as AuthResolver,
 	AuthenticationMethod,
-	AuthorizationContext,
-	ChallengeError,
-	ForbiddenError,
 	MultiFactorAuthentication,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
@@ -29,14 +26,14 @@ export class Web3AuthResolver extends AuthResolver {
 	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication> {
 		return {
 			Everyone: {
-				// all users must provide a magic link mfa when writing data
+				// all users must provide a OTP mfa when saving a wallet address
 				Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.ONE_TIME_PASSWORD] }],
 			},
 		};
 	}
 
 	/**
-	 * Check that the wallet address is associated with this user
+	 * Retrieve the user profile that matches the logged in user and wallet address
 	 * @param userId of the current logged in user
 	 * @param address web3 address used to sign the mfa message
 	 * @returns return a UserProfile compatible entity
@@ -62,7 +59,7 @@ export class Web3AuthResolver extends AuthResolver {
 	 * Save the wallet address and associate with this user
 	 * @param userId of the current logged in user
 	 * @param address web3 address used to sign the mfa message
-	 * @returns return a UserProfile compatible entity
+	 * @returns return a boolean if successful
 	 */
 	async saveWalletAddress(userId: string, address: string): Promise<boolean> {
 		// Let's check if we already have this combination in the database
@@ -71,10 +68,10 @@ export class Web3AuthResolver extends AuthResolver {
 			address,
 		});
 
-		// If we do there is nothing else to do
+		// It is found so no need to add it again
 		if (existingDevice) return true;
 
-		// As we are here we need to insert it into the database
+		// Insert the new wallet address into the database
 		const device = new Device();
 		wrap(device).assign(
 			{
