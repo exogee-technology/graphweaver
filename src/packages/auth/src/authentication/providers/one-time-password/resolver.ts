@@ -104,7 +104,6 @@ export abstract class OneTimePasswordAuthResolver {
 			if (otp.createdAt < ttl)
 				throw new AuthenticationError('Challenge unsuccessful: Authentication OTP expired.');
 
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 			if (!authToken)
 				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');

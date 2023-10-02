@@ -222,15 +222,13 @@ export const requireEnvironmentVariable = (envStr: string): string => {
 	return envVar;
 };
 
-const filterRule = (
+const filterValidMFA = (
 	rule: MultiFactorAuthenticationRule,
 	key: AuthenticationMethod,
 	expiresIn: number,
 	timestamp: number
 ) => {
-	if (rule.providers) {
-		return timestamp < expiresIn && rule.providers.includes(key as any);
-	}
+	if (rule.providers) return timestamp < expiresIn && rule.providers.includes(key);
 	return timestamp < expiresIn;
 };
 
@@ -242,9 +240,9 @@ export const checkAuthentication = async (
 	if (!token) throw new Error('Authentication Error: Expected Token.');
 	if (typeof token === 'string') throw new Error('Authentication Error: Expected JWT Payload.');
 
-	//1. check the roles of the logged in user
+	// Check the roles of the logged in user
 	const roles = getRolesFromAuthorizationContext();
-	//2. check the roles in the mfa rule
+	// Get the rules associated with the users roles
 	const rules = getRulesForRoles(mfa, roles, operation);
 
 	// No rules found for the current user role, it is safe to continue
@@ -262,7 +260,7 @@ export const checkAuthentication = async (
 	for (const rule of rules) {
 		// Let's check for recent mfa step ups in the token that match the rule
 		const validMFAFound = tokenMfaValues.filter(([key, expiresIn]) =>
-			filterRule(rule, key, expiresIn, timestamp)
+			filterValidMFA(rule, key, expiresIn, timestamp)
 		);
 
 		// If we find less then the number of required then we need to throw a challenge error

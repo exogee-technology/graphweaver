@@ -74,7 +74,7 @@ export abstract class Web3AuthResolver {
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
 		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
+		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.WEB3);
 		const existingAuthToken =
 			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 
@@ -92,7 +92,6 @@ export abstract class Web3AuthResolver {
 				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 			}
 
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.WEB3);
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 			if (!authToken)
 				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
