@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import {
@@ -28,7 +28,7 @@ export const OTPChallenge = () => {
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
 
-	const handleSendCode = async () => {
+	const handleSendCode = useCallback(async () => {
 		try {
 			await sendOTP({
 				context: {
@@ -42,25 +42,28 @@ export const OTPChallenge = () => {
 		} catch (error) {
 			setError(error instanceof Error ? error : new Error(String(error)));
 		}
-	};
+	}, [sendOTP, setError, setSent]);
 
-	const handleVerifyCode = async ({ code }: Form) => {
-		try {
-			const { data } = await verifyOTP({
-				variables: {
-					code,
-				},
-			});
+	const handleVerifyCode = useCallback(
+		async ({ code }: Form) => {
+			try {
+				const { data } = await verifyOTP({
+					variables: {
+						code,
+					},
+				});
 
-			const authToken = data?.result.authToken;
-			if (!authToken) throw new Error('Missing auth token');
+				const authToken = data?.result.authToken;
+				if (!authToken) throw new Error('Missing auth token');
 
-			localStorage.setItem(localStorageAuthKey, authToken);
-			window.location.replace(redirectUri);
-		} catch (error) {
-			setError(error instanceof Error ? error : new Error(String(error)));
-		}
-	};
+				localStorage.setItem(localStorageAuthKey, authToken);
+				window.location.replace(redirectUri);
+			} catch (error) {
+				setError(error instanceof Error ? error : new Error(String(error)));
+			}
+		},
+		[verifyOTP]
+	);
 
 	return (
 		<div className={styles.wrapper}>
