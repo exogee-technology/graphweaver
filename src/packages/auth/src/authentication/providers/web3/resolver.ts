@@ -73,17 +73,13 @@ export abstract class Web3AuthResolver {
 		@Arg('token', () => String) web3Token: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.WEB3);
-		const existingAuthToken =
-			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
-
-		const userId = ctx.user?.id;
-		if (!userId) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-
 		try {
+			const userId = ctx.user?.id;
+			if (!userId) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 			if (!web3Token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
+			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 
+			// Verify wallet address belongs to the logged in user
 			const { address } = await Web3Token.verify(web3Token);
 			const userByAddress = await this.getUserByWalletAddress(userId, address);
 
@@ -92,6 +88,10 @@ export abstract class Web3AuthResolver {
 				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 			}
 
+			// Upgrade Token
+			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.WEB3);
+			const existingAuthToken =
+				typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 			if (!authToken)
 				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
