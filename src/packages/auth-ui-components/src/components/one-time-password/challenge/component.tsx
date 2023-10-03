@@ -67,7 +67,7 @@ export const OTPChallenge = () => {
 				setError(error instanceof Error ? error : new Error(String(error)));
 			}
 		},
-		[verifyOTP]
+		[verifyOTP, navigate]
 	);
 
 	return (
