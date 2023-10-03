@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import ms from 'ms';
-import { AuthenticationError } from 'apollo-server-errors';
+import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import otpGenerator from 'otp-generator';
 
@@ -8,6 +8,7 @@ import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
+import { ChallengeError } from '../../../errors';
 
 const config = {
 	rate: {
@@ -83,16 +84,11 @@ export abstract class OneTimePasswordAuthResolver {
 		@Arg('code', () => String) code: string,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
-		const existingAuthToken =
-			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
-
-		const username = ctx.user?.username;
-		if (!username) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-
 		try {
+			const username = ctx.user?.username;
+			if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 			if (!code) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 
 			const userProfile = await this.getUser(username);
 			if (!userProfile?.id)
@@ -104,6 +100,10 @@ export abstract class OneTimePasswordAuthResolver {
 			if (otp.createdAt < ttl)
 				throw new AuthenticationError('Challenge unsuccessful: Authentication OTP expired.');
 
+			// Step up existing token
+			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
+			const existingAuthToken =
+				typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 			if (!authToken)
 				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
@@ -117,6 +117,8 @@ export abstract class OneTimePasswordAuthResolver {
 			return token;
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
+			if (e instanceof ChallengeError) throw e;
+			if (e instanceof ForbiddenError) throw e;
 
 			logger.info('Authentication failed with error', e);
 			throw new AuthenticationError('OTP authentication failed.');
