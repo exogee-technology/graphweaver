@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Field, Form, Formik, FormikHelpers, replace } from 'formik';
 import { useMutation } from '@apollo/client';
 import {
 	GraphweaverLogo,
@@ -12,6 +12,7 @@ import {
 import styles from './styles.module.css';
 
 import { LOGIN_MUTATION } from './graphql';
+import { formatRedirectUrl } from '../../../utils/urls';
 
 interface Form {
 	username: string;
@@ -22,14 +23,12 @@ export const PasswordLogin = () => {
 	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
 
-	const handleOnSubmit = async (
-		values: Form,
-		{ setSubmitting, resetForm }: FormikHelpers<Form>
-	) => {
+	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
 		let token;
 		setError(undefined);
 
@@ -45,12 +44,10 @@ export const PasswordLogin = () => {
 			if (!token) throw new Error('Missing token');
 
 			localStorage.setItem(localStorageAuthKey, token);
-			window.location.replace(redirectUri);
+			navigate(formatRedirectUrl(redirectUri), { replace: true });
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
-		} finally {
-			setSubmitting(false);
 		}
 	};
 

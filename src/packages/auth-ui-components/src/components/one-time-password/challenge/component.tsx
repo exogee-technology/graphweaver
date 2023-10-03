@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import {
 	GraphweaverLogo,
@@ -8,11 +8,12 @@ import {
 	localStorageAuthKey,
 	Button,
 } from '@exogee/graphweaver-admin-ui-components';
-import { Field, Form, Formik } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 
 import styles from './styles.module.css';
 
 import { SEND_OTP_MUTATION, VERIFY_OTP_MUTATION } from './graphql';
+import { formatRedirectUrl } from '../../../utils/urls';
 
 interface Form {
 	code: string;
@@ -24,6 +25,7 @@ export const OTPChallenge = () => {
 	const [error, setError] = useState<Error | undefined>();
 	const [sent, setSent] = useState<boolean>(false);
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
@@ -45,7 +47,7 @@ export const OTPChallenge = () => {
 	}, [sendOTP, setError, setSent]);
 
 	const handleVerifyCode = useCallback(
-		async ({ code }: Form) => {
+		async ({ code }: Form, { resetForm }: FormikHelpers<Form>) => {
 			try {
 				const { data } = await verifyOTP({
 					variables: {
@@ -57,8 +59,11 @@ export const OTPChallenge = () => {
 				if (!authToken) throw new Error('Missing auth token');
 
 				localStorage.setItem(localStorageAuthKey, authToken);
-				window.location.replace(redirectUri);
+				navigate(formatRedirectUrl(redirectUri), {
+					replace: true,
+				});
 			} catch (error) {
+				resetForm();
 				setError(error instanceof Error ? error : new Error(String(error)));
 			}
 		},
