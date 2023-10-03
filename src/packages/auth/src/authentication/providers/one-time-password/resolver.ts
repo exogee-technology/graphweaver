@@ -8,7 +8,7 @@ import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
-import { ChallengeError } from 'packages/auth/src/errors';
+import { ChallengeError } from '../../../errors';
 
 const config = {
 	rate: {
