@@ -25,6 +25,7 @@
 		"@apollo/server": "4.9.3",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
+		"@simplewebauthn/server": "8.2.0",
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.14.0",
 		"dotenv": "10.0.0",
