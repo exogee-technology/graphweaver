@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
 import {
 	GraphweaverLogo,
@@ -14,6 +14,7 @@ import { ethers, getDefaultProvider } from 'ethers';
 import Web3Token from 'web3-token';
 
 import { CAN_ENROL_WALLET_QUERY, ENROL_WALLET_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
+import { formatRedirectUrl } from '../../../utils/urls';
 
 import styles from './styles.module.css';
 
@@ -71,6 +72,7 @@ const VerifyButton = () => {
 	const [verifySignature] = useMutation<{ result: { authToken: string } }>(VERIFY_WEB3_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
@@ -97,12 +99,13 @@ const VerifyButton = () => {
 				if (!authToken) throw new Error('Missing auth token');
 
 				localStorage.setItem(localStorageAuthKey, authToken);
-				window.location.replace(redirectUri);
+
+				navigate(formatRedirectUrl(redirectUri), { replace: true });
 			}
 		} catch (error) {
 			setError(error instanceof Error ? error : new Error(String(error)));
 		}
-	}, [library, verifySignature]);
+	}, [library, verifySignature, navigate, account]);
 
 	// 'account' undefined means that we are not connected.
 	if (!account) return null;
