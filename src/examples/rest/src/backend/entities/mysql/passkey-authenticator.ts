@@ -1,4 +1,4 @@
-import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Uint8ArrayType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import type {
 	PasskeyAuthenticatorDevice,
@@ -7,10 +7,13 @@ import type {
 
 @Entity()
 export class PasskeyAuthenticator extends BaseEntity implements PasskeyAuthenticatorDevice {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: Uint8ArrayType })
 	credentialID!: Uint8Array;
 
-	@Property({ type: BigIntType })
+	@Property({ type: String })
+	userId!: string;
+
+	@Property({ type: Uint8ArrayType })
 	credentialPublicKey!: Uint8Array;
 
 	@Property({ type: Number })
