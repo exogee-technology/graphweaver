@@ -35,7 +35,18 @@ export class PasskeyAuthResolver extends AuthResolver {
 		return passkeyChallenge.challenge;
 	}
 
-	public async setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean> {}
+	public async setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean> {
+		const passkeyChallenge = new PasskeyChallenge();
+		wrap(passkeyChallenge).assign(
+			{
+				userId,
+				challenge,
+			},
+			{ em: this.database.em }
+		);
+		this.database.em.persistAndFlush(passkeyChallenge);
+		return true;
+	}
 
 	public async getUserAuthenticators(userId: string): Promise<PasskeyAuthenticatorDevice[]> {
 		const authenticators = await this.database.em.find(PasskeyAuthenticator, {
@@ -64,10 +75,30 @@ export class PasskeyAuthResolver extends AuthResolver {
 	public async saveNewUserAuthenticator(
 		userId: string,
 		authenticator: PasskeyAuthenticatorDevice
-	): Promise<boolean> {}
+	): Promise<boolean> {
+		const passkeyAuthenticator = new PasskeyAuthenticator();
+		wrap(passkeyAuthenticator).assign(
+			{
+				userId,
+				...authenticator,
+			},
+			{ em: this.database.em }
+		);
+		await this.database.em.persistAndFlush(passkeyAuthenticator);
+		return true;
+	}
 
 	public async saveUpdatedAuthenticatorCounter(
 		authenticator: PasskeyAuthenticatorDevice,
 		counter: number
-	): Promise<boolean> {}
+	): Promise<boolean> {
+		const passkeyAuthenticator = await this.database.em.findOneOrFail(PasskeyAuthenticator, {
+			credentialID: authenticator.credentialID,
+		});
+
+		passkeyAuthenticator.counter = counter;
+		await this.database.em.persistAndFlush(passkeyAuthenticator);
+
+		return true;
+	}
 }
