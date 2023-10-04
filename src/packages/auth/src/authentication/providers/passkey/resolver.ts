@@ -1,11 +1,14 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import { generateRegistrationOptions, verifyRegistrationResponse } from '@simplewebauthn/server';
 import { AuthenticationError } from 'apollo-server-errors';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import type { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/typescript-types';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { AuthTokenProvider } from '../../token';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
+import { Registration } from './entities/registration';
 
 // Human-readable title for your website
 const rpName = 'SimpleWebAuthn Example';
@@ -28,15 +31,12 @@ export abstract class PasskeyAuthResolver {
 	abstract getUserCurrentChallenge(userId: string): Promise<string>;
 	abstract setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean>;
 	abstract getUserAuthenticators(userId: string): Promise<Authenticator[]>;
-	abstract saveNewUserAuthenticator(
-		userId: string,
-		authenticator: Authenticator
-	): Promise<Authenticator[]>;
+	abstract saveNewUserAuthenticator(userId: string, authenticator: Authenticator): Promise<boolean>;
 
-	@Mutation(() => Token)
+	@Mutation(() => GraphQLJSON)
 	async passkeyRegistration(
 		@Ctx() ctx: AuthorizationContext
-	): Promise<PublicKeyCredentialCreationOptions> {
+	): Promise<PublicKeyCredentialCreationOptionsJSON> {
 		const userId = ctx.user?.id;
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
@@ -60,13 +60,13 @@ export abstract class PasskeyAuthResolver {
 
 		await this.setUserCurrentChallenge(userId, options.challenge);
 
-		return options as any;
+		return options;
 	}
 
 	@Mutation(() => Boolean)
 	async passkeyVerifyRegistration(
-		@Arg('registrationResponse', () => RegistrationResponse)
-		registrationResponse: RegistrationResponse,
+		@Arg('registrationResponse', () => Registration)
+		registrationResponse: Registration,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
 		const userId = ctx.user?.id;
