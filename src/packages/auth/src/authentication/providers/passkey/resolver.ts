@@ -17,10 +17,11 @@ import { AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
 import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './entities';
 
-export type {
-	AuthenticatorDevice as PasskeyAuthenticatorDevice,
-	AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture,
-} from '@simplewebauthn/typescript-types';
+export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/typescript-types';
+
+export interface PasskeyAuthenticatorDevice extends AuthenticatorDevice {
+	id: string;
+}
 
 // Human-readable title for your website
 const rpName = 'SimpleWebAuthn Example';
@@ -33,17 +34,17 @@ const origin = `https://${rpID}`;
 export abstract class PasskeyAuthResolver {
 	abstract getUserCurrentChallenge(userId: string): Promise<string>;
 	abstract setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean>;
-	abstract getUserAuthenticators(userId: string): Promise<AuthenticatorDevice[]>;
+	abstract getUserAuthenticators(userId: string): Promise<PasskeyAuthenticatorDevice[]>;
 	abstract getUserAuthenticator(
 		userId: string,
-		authenticatorId: Uint8Array
-	): Promise<AuthenticatorDevice>;
+		credentialID: Uint8Array
+	): Promise<PasskeyAuthenticatorDevice>;
 	abstract saveNewUserAuthenticator(
 		userId: string,
 		authenticator: AuthenticatorDevice
 	): Promise<boolean>;
 	abstract saveUpdatedAuthenticatorCounter(
-		authenticator: AuthenticatorDevice,
+		authenticatorId: string,
 		counter: number
 	): Promise<boolean>;
 
@@ -153,8 +154,8 @@ export abstract class PasskeyAuthResolver {
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
 		const expectedChallenge = await this.getUserCurrentChallenge(userId);
-		const authenticatorId = new TextEncoder().encode(authenticationResponse.id);
-		const authenticator = await this.getUserAuthenticator(userId, authenticatorId);
+		const credentialID = new TextEncoder().encode(authenticationResponse.id);
+		const authenticator = await this.getUserAuthenticator(userId, credentialID);
 
 		if (!authenticator) {
 			throw new AuthenticationError(
@@ -169,7 +170,12 @@ export abstract class PasskeyAuthResolver {
 				expectedChallenge,
 				expectedOrigin: origin,
 				expectedRPID: rpID,
-				authenticator,
+				authenticator: {
+					credentialPublicKey: authenticator.credentialPublicKey,
+					credentialID: authenticator.credentialID,
+					counter: authenticator.counter,
+					transports: authenticator.transports,
+				},
 			});
 		} catch (error: any) {
 			throw new AuthenticationError(`Authentication failed: ${error?.message ?? ''}`);
@@ -181,7 +187,7 @@ export abstract class PasskeyAuthResolver {
 			const { authenticationInfo } = verification;
 			const { newCounter } = authenticationInfo;
 
-			await this.saveUpdatedAuthenticatorCounter(authenticator, newCounter);
+			await this.saveUpdatedAuthenticatorCounter(authenticator.id, newCounter);
 		}
 
 		return verified;

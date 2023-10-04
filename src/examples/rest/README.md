@@ -44,12 +44,13 @@ CREATE TABLE credential (
 CREATE TABLE passkey_challenge (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
-  challenge VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  challenge VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE passkey_authenticator (
-  credential_id TEXT NOT NULL PRIMARY KEY,
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  credential_id TEXT NOT NULL,
+  user_id INT NOT NULL,
   credential_public_key BLOB NOT NULL,
   counter BIGINT NOT NULL,
   transports VARCHAR(255)

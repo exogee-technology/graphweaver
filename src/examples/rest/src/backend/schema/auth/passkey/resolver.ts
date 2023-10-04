@@ -60,11 +60,11 @@ export class PasskeyAuthResolver extends AuthResolver {
 
 	public async getUserAuthenticator(
 		userId: string,
-		authenticatorId: Uint8Array
+		credentialID: Uint8Array
 	): Promise<PasskeyAuthenticatorDevice> {
 		const authenticator = await this.database.em.findOneOrFail(PasskeyAuthenticator, {
 			userId,
-			credentialID: authenticatorId,
+			credentialID,
 		});
 
 		if (!authenticator) throw new Error('Bad Request: User has no authenticator.');
@@ -89,11 +89,11 @@ export class PasskeyAuthResolver extends AuthResolver {
 	}
 
 	public async saveUpdatedAuthenticatorCounter(
-		authenticator: PasskeyAuthenticatorDevice,
+		authenticatorId: string,
 		counter: number
 	): Promise<boolean> {
 		const passkeyAuthenticator = await this.database.em.findOneOrFail(PasskeyAuthenticator, {
-			credentialID: authenticator.credentialID,
+			id: authenticatorId,
 		});
 
 		passkeyAuthenticator.counter = counter;
