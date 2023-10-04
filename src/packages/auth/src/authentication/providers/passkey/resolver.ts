@@ -1,9 +1,15 @@
 import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import { generateRegistrationOptions, verifyRegistrationResponse } from '@simplewebauthn/server';
+import {
+	generateRegistrationOptions,
+	verifyRegistrationResponse,
+	generateAuthenticationOptions,
+	verifyAuthenticationResponse,
+} from '@simplewebauthn/server';
 import { AuthenticationError } from 'apollo-server-errors';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import type {
 	PublicKeyCredentialCreationOptionsJSON,
+	PublicKeyCredentialRequestOptionsJSON,
 	AuthenticatorDevice,
 } from '@simplewebauthn/typescript-types';
 
@@ -11,7 +17,7 @@ import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { AuthTokenProvider } from '../../token';
 import { Token } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
-import { Registration } from './entities/registration';
+import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './entities';
 
 // Human-readable title for your website
 const rpName = 'SimpleWebAuthn Example';
@@ -25,13 +31,21 @@ export abstract class PasskeyAuthResolver {
 	abstract getUserCurrentChallenge(userId: string): Promise<string>;
 	abstract setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean>;
 	abstract getUserAuthenticators(userId: string): Promise<AuthenticatorDevice[]>;
+	abstract getUserAuthenticator(
+		userId: string,
+		authenticatorId: string
+	): Promise<AuthenticatorDevice>;
 	abstract saveNewUserAuthenticator(
 		userId: string,
 		authenticator: AuthenticatorDevice
 	): Promise<boolean>;
+	abstract saveUpdatedAuthenticatorCounter(
+		authenticator: AuthenticatorDevice,
+		counter: number
+	): Promise<boolean>;
 
 	@Mutation(() => GraphQLJSON)
-	async passkeyRegistration(
+	async passkeyGenerateRegistrationOptions(
 		@Ctx() ctx: AuthorizationContext
 	): Promise<PublicKeyCredentialCreationOptionsJSON> {
 		const userId = ctx.user?.id;
@@ -61,16 +75,13 @@ export abstract class PasskeyAuthResolver {
 	}
 
 	@Mutation(() => Boolean)
-	async passkeyVerifyRegistration(
-		@Arg('registrationResponse', () => Registration)
-		registrationResponse: Registration,
+	async passkeyVerifyRegistrationResponse(
+		@Arg('registrationResponse', () => PasskeyRegistrationResponse)
+		registrationResponse: PasskeyRegistrationResponse,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
 		const userId = ctx.user?.id;
 		if (!userId) throw new AuthenticationError('Authentication failed.');
-
-		const username = ctx.user?.username;
-		if (!username) throw new AuthenticationError('Authentication failed.');
 
 		const expectedChallenge = await this.getUserCurrentChallenge(userId);
 
@@ -99,6 +110,74 @@ export abstract class PasskeyAuthResolver {
 			};
 
 			await this.saveNewUserAuthenticator(userId, newAuthenticator);
+		}
+
+		return verified;
+	}
+
+	@Mutation(() => GraphQLJSON)
+	async passkeyGenerateAuthenticationOptions(
+		@Ctx() ctx: AuthorizationContext
+	): Promise<PublicKeyCredentialRequestOptionsJSON> {
+		const userId = ctx.user?.id;
+		if (!userId) throw new AuthenticationError('Authentication failed.');
+
+		const userAuthenticators = await this.getUserAuthenticators(userId);
+
+		const options = await generateAuthenticationOptions({
+			// Require users to use a previously-registered authenticator
+			allowCredentials: userAuthenticators.map((authenticator) => ({
+				id: authenticator.credentialID,
+				type: 'public-key',
+				transports: authenticator.transports,
+			})),
+			userVerification: 'preferred',
+		});
+
+		// (Pseudocode) Remember this challenge for this user
+		await this.setUserCurrentChallenge(userId, options.challenge);
+
+		return options;
+	}
+
+	@Mutation(() => Boolean)
+	async passkeyVerifyAuthenticationResponse(
+		@Arg('authenticationResponse', () => PasskeyAuthenticationResponse)
+		authenticationResponse: PasskeyAuthenticationResponse,
+		@Ctx() ctx: AuthorizationContext
+	): Promise<boolean> {
+		const userId = ctx.user?.id;
+		if (!userId) throw new AuthenticationError('Authentication failed.');
+
+		const expectedChallenge = await this.getUserCurrentChallenge(userId);
+		const authenticator = await this.getUserAuthenticator(userId, authenticationResponse.id);
+
+		if (!authenticator) {
+			throw new AuthenticationError(
+				`Could not find authenticator ${authenticationResponse.id} for user ${userId}`
+			);
+		}
+
+		let verification;
+		try {
+			verification = await verifyAuthenticationResponse({
+				response: authenticationResponse,
+				expectedChallenge,
+				expectedOrigin: origin,
+				expectedRPID: rpID,
+				authenticator,
+			});
+		} catch (error: any) {
+			throw new AuthenticationError(`Authentication failed: ${error?.message ?? ''}`);
+		}
+
+		const { verified } = verification;
+
+		if (verified) {
+			const { authenticationInfo } = verification;
+			const { newCounter } = authenticationInfo;
+
+			await this.saveUpdatedAuthenticatorCounter(authenticator, newCounter);
 		}
 
 		return verified;

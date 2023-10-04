@@ -1,11 +1,11 @@
 import { Field, InputType } from '@exogee/graphweaver';
 import type {
-	AuthenticatorAttestationResponseJSON,
-	RegistrationResponseJSON,
+	AuthenticatorAssertionResponseJSON,
+	AuthenticationResponseJSON,
 } from '@simplewebauthn/typescript-types';
 
 @InputType()
-export class Registration implements RegistrationResponseJSON {
+export class PasskeyAuthenticationResponse implements AuthenticationResponseJSON {
 	@Field()
 	id!: string;
 
@@ -13,7 +13,7 @@ export class Registration implements RegistrationResponseJSON {
 	rawId!: string;
 
 	@Field()
-	response!: AuthenticatorAttestationResponseJSON;
+	response!: AuthenticatorAssertionResponseJSON;
 
 	@Field({ nullable: true })
 	authenticatorAttachment?: AuthenticatorAttachment;
