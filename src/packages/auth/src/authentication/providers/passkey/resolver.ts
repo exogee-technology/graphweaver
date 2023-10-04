@@ -36,7 +36,7 @@ export abstract class PasskeyAuthResolver {
 	abstract getUserAuthenticators(userId: string): Promise<AuthenticatorDevice[]>;
 	abstract getUserAuthenticator(
 		userId: string,
-		authenticatorId: string
+		authenticatorId: Uint8Array
 	): Promise<AuthenticatorDevice>;
 	abstract saveNewUserAuthenticator(
 		userId: string,
@@ -153,7 +153,8 @@ export abstract class PasskeyAuthResolver {
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
 		const expectedChallenge = await this.getUserCurrentChallenge(userId);
-		const authenticator = await this.getUserAuthenticator(userId, authenticationResponse.id);
+		const authenticatorId = new TextEncoder().encode(authenticationResponse.id);
+		const authenticator = await this.getUserAuthenticator(userId, authenticatorId);
 
 		if (!authenticator) {
 			throw new AuthenticationError(
