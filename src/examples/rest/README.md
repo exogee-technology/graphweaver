@@ -41,21 +41,17 @@ CREATE TABLE credential (
   password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE challenge (
+CREATE TABLE passkey_challenge (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
-  value VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  redeemed_at TIMESTAMP
+  challenge VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE authenticator (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  credential_id TEXT NOT NULL,
+CREATE TABLE passkey_authenticator (
+  credential_id TEXT NOT NULL PRIMARY KEY,
   credential_public_key BLOB NOT NULL,
   counter BIGINT NOT NULL,
-  credential_device_type VARCHAR(32) NOT NULL,
-  credential_backed_up BOOL NOT NULL,
   transports VARCHAR(255)
 );
 

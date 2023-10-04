@@ -17,6 +17,11 @@ import { AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
 import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './entities';
 
+export type {
+	AuthenticatorDevice as PasskeyAuthenticatorDevice,
+	AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture,
+} from '@simplewebauthn/typescript-types';
+
 // Human-readable title for your website
 const rpName = 'SimpleWebAuthn Example';
 // A unique identifier for your website
