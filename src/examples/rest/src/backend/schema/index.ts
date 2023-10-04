@@ -3,6 +3,7 @@ import {
 	MagicLinkAuthResolver,
 	OneTimePasswordAuthResolver,
 	Web3AuthResolver,
+	PasskeyAuthResolver,
 } from './auth';
 import { UserResolver } from './user';
 import { TaskResolver } from './task';
@@ -13,6 +14,7 @@ export const resolvers = [
 	MagicLinkAuthResolver,
 	OneTimePasswordAuthResolver,
 	Web3AuthResolver,
+	PasskeyAuthResolver,
 	UserResolver,
 	TaskResolver,
 	TagResolver,
