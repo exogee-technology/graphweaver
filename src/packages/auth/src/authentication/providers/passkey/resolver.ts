@@ -13,10 +13,8 @@ import type {
 	AuthenticatorDevice,
 } from '@simplewebauthn/typescript-types';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../../types';
-import { AuthTokenProvider } from '../../token';
+import { AuthorizationContext } from '../../../types';
 import { Token } from '../../schema/token';
-import { UserProfile } from '../../../user-profile';
 import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './entities';
 
 // Human-readable title for your website
