@@ -37,6 +37,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "1.37.1",
+		"@simplewebauthn/typescript-types": "8.0.0",
 		"@types/jest": "26.0.23",
 		"dotenv": "16.3.1",
 		"graphql": "16.8.1",

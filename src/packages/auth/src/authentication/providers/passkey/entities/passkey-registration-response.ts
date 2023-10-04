@@ -1,26 +1,27 @@
-import { Field, InputType } from '@exogee/graphweaver';
+import { Field, ID, InputType } from '@exogee/graphweaver';
 import type {
 	AuthenticatorAttestationResponseJSON,
 	RegistrationResponseJSON,
 } from '@simplewebauthn/typescript-types';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 @InputType()
 export class PasskeyRegistrationResponse implements RegistrationResponseJSON {
-	@Field()
+	@Field(() => ID)
 	id!: string;
 
-	@Field()
+	@Field(() => String)
 	rawId!: string;
 
-	@Field()
+	@Field(() => GraphQLJSON)
 	response!: AuthenticatorAttestationResponseJSON;
 
-	@Field({ nullable: true })
+	@Field(() => String, { nullable: true })
 	authenticatorAttachment?: AuthenticatorAttachment;
 
-	@Field()
+	@Field(() => GraphQLJSON)
 	clientExtensionResults!: AuthenticationExtensionsClientOutputs;
 
-	@Field()
+	@Field(() => String)
 	type!: PublicKeyCredentialType;
 }
