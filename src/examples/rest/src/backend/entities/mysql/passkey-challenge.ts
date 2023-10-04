@@ -12,7 +12,4 @@ export class PasskeyChallenge extends BaseEntity {
 
 	@Property({ type: String })
 	challenge!: string;
-
-	@Property({ type: Date })
-	createdAt!: Date;
 }
