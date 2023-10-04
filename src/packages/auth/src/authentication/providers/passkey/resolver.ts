@@ -2,7 +2,10 @@ import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
 import { generateRegistrationOptions, verifyRegistrationResponse } from '@simplewebauthn/server';
 import { AuthenticationError } from 'apollo-server-errors';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
-import type { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/typescript-types';
+import type {
+	PublicKeyCredentialCreationOptionsJSON,
+	AuthenticatorDevice,
+} from '@simplewebauthn/typescript-types';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { AuthTokenProvider } from '../../token';
@@ -17,21 +20,15 @@ const rpID = 'localhost';
 // The URL at which registrations and authentications should occur
 const origin = `https://${rpID}`;
 
-type Authenticator = {
-	id: Uint8Array;
-	credentialPublicKey: Uint8Array;
-	counter: number;
-	credentialDeviceType?: string;
-	credentialBackedUp?: boolean;
-	transports?: AuthenticatorTransport[];
-};
-
 @Resolver((of) => Token)
 export abstract class PasskeyAuthResolver {
 	abstract getUserCurrentChallenge(userId: string): Promise<string>;
 	abstract setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean>;
-	abstract getUserAuthenticators(userId: string): Promise<Authenticator[]>;
-	abstract saveNewUserAuthenticator(userId: string, authenticator: Authenticator): Promise<boolean>;
+	abstract getUserAuthenticators(userId: string): Promise<AuthenticatorDevice[]>;
+	abstract saveNewUserAuthenticator(
+		userId: string,
+		authenticator: AuthenticatorDevice
+	): Promise<boolean>;
 
 	@Mutation(() => GraphQLJSON)
 	async passkeyRegistration(
@@ -52,7 +49,7 @@ export abstract class PasskeyAuthResolver {
 			userName: username,
 			attestationType: 'none',
 			excludeCredentials: userAuthenticators.map((authenticator) => ({
-				id: authenticator.id,
+				id: authenticator.credentialID,
 				type: 'public-key',
 				transports: authenticator.transports,
 			})),
@@ -95,8 +92,8 @@ export abstract class PasskeyAuthResolver {
 			if (!registrationInfo?.credentialPublicKey) throw new AuthenticationError('');
 			if (!registrationInfo?.counter) throw new AuthenticationError('');
 
-			const newAuthenticator: Authenticator = {
-				id: registrationInfo.credentialID,
+			const newAuthenticator: AuthenticatorDevice = {
+				credentialID: registrationInfo.credentialID,
 				credentialPublicKey: registrationInfo.credentialPublicKey,
 				counter: registrationInfo.counter,
 			};
