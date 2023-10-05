@@ -7,11 +7,22 @@ import {
 	localStorageAuthKey,
 	Spinner,
 } from '@exogee/graphweaver-admin-ui-components';
-import { startRegistration } from '@simplewebauthn/browser';
-import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/typescript-types';
+import { startRegistration, startAuthentication } from '@simplewebauthn/browser';
+import {
+	PublicKeyCredentialCreationOptionsJSON,
+	PublicKeyCredentialRequestOptionsJSON,
+} from '@simplewebauthn/typescript-types';
 import { Form, Formik } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
-import { GENERATE_REGISTRATION_OPTIONS, VERIFY_REGISTRATION_OPTIONS } from './graphql';
+import {
+	GENERATE_AUTHENTICATION_OPTIONS,
+	GENERATE_REGISTRATION_OPTIONS,
+	VERIFY_AUTHENTICATION_RESPONSE,
+	VERIFY_REGISTRATION_RESPONSE,
+} from './graphql';
+import { formatRedirectUrl } from '../../../utils/urls';
+
 import styles from './styles.module.css';
 
 const passkeyAutoConnectFlag = 'passkey:autoConnectTag';
@@ -32,9 +43,9 @@ const RegisterButton = ({
 		passkeyGenerateRegistrationOptions: PublicKeyCredentialCreationOptionsJSON;
 	}>(GENERATE_REGISTRATION_OPTIONS);
 
-	const [verifyRegistrationOptions, { loading: verifyLoading }] = useMutation<{
+	const [verifyRegistrationResponse, { loading: verifyLoading }] = useMutation<{
 		passkeyVerifyRegistrationResponse: boolean;
-	}>(VERIFY_REGISTRATION_OPTIONS);
+	}>(VERIFY_REGISTRATION_RESPONSE);
 
 	const loading = generateLoading || verifyLoading;
 
@@ -43,7 +54,7 @@ const RegisterButton = ({
 			const { data } = await generateRegistrationOptions();
 			if (!data) throw new Error('Could not generate registration options.');
 			const registrationResponse = await startRegistration(data.passkeyGenerateRegistrationOptions);
-			const { data: verifyData } = await verifyRegistrationOptions({
+			const { data: verifyData } = await verifyRegistrationResponse({
 				variables: {
 					registrationResponse,
 				},
@@ -60,7 +71,7 @@ const RegisterButton = ({
 				setError(error);
 			}
 		}
-	}, [generateRegistrationOptions, verifyRegistrationOptions, setError]);
+	}, [generateRegistrationOptions, verifyRegistrationResponse, setError]);
 
 	if (autoConnect) return null;
 	if (!autoConnect && loading) return <Spinner />;
@@ -80,6 +91,70 @@ const RegisterButton = ({
 	);
 };
 
+const AuthenticateButton = ({
+	setError,
+}: {
+	setError: Dispatch<React.SetStateAction<Error | undefined>>;
+}) => {
+	const autoConnect = localStorage.getItem(passkeyAutoConnectFlag);
+	const [searchParams] = useSearchParams();
+	const navigate = useNavigate();
+
+	const redirectUri = searchParams.get('redirect_uri');
+	if (!redirectUri) throw new Error('Missing redirect URL');
+
+	// This checks if we can register a wallet and redirects if we cant
+	const [generateAuthenticationOptions, { loading: generateLoading }] = useMutation<{
+		passkeyGenerateAuthenticationOptions: PublicKeyCredentialRequestOptionsJSON;
+	}>(GENERATE_AUTHENTICATION_OPTIONS);
+
+	const [verifyAuthenticationResponse, { loading: verifyLoading }] = useMutation<{
+		passkeyVerifyAuthenticationResponse: { authToken: string };
+	}>(VERIFY_AUTHENTICATION_RESPONSE);
+
+	const loading = generateLoading || verifyLoading;
+
+	const handleOnAuthenticate = useCallback(async () => {
+		try {
+			const { data } = await generateAuthenticationOptions();
+			if (!data) throw new Error('Could not generate registration options.');
+			const authenticationResponse = await startAuthentication(
+				data.passkeyGenerateAuthenticationOptions
+			);
+			const { data: verifyData } = await verifyAuthenticationResponse({
+				variables: {
+					authenticationResponse,
+				},
+			});
+			const authToken = verifyData?.passkeyVerifyAuthenticationResponse.authToken;
+			if (!authToken) throw new Error('Missing auth token');
+
+			localStorage.setItem(localStorageAuthKey, authToken);
+
+			navigate(formatRedirectUrl(redirectUri), { replace: true });
+		} catch (error: any) {
+			setError(error);
+		}
+	}, [generateAuthenticationOptions, verifyAuthenticationResponse, setError]);
+
+	if (!autoConnect) return null;
+	if (autoConnect && loading) return <Spinner />;
+	return (
+		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleOnAuthenticate}>
+			{({ isSubmitting }) => (
+				<Form className={styles.wrapper}>
+					<div className={styles.titleContainerCenter}>Verify Passkey</div>
+					<div className={styles.buttonContainerCenter}>
+						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+							verify
+						</Button>
+					</div>
+				</Form>
+			)}
+		</Formik>
+	);
+};
+
 export const PasskeyChallenge = () => {
 	const [error, setError] = useState<Error | undefined>();
 
@@ -89,6 +164,7 @@ export const PasskeyChallenge = () => {
 				<GraphweaverLogo width="52" className={styles.logo} />
 			</div>
 			<RegisterButton setError={setError} />
+			<AuthenticateButton setError={setError} />
 			{!!error && <Alert>{error.message}</Alert>}
 		</div>
 	);

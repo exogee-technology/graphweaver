@@ -60,7 +60,7 @@ export class PasskeyAuthResolver extends AuthResolver {
 
 	public async getUserAuthenticator(
 		userId: string,
-		credentialID: Uint8Array
+		credentialID: string
 	): Promise<PasskeyAuthenticatorDevice> {
 		const authenticator = await this.database.em.findOneOrFail(PasskeyAuthenticator, {
 			userId,
