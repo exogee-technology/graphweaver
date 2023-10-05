@@ -30,8 +30,6 @@ export class PasskeyAuthResolver extends AuthResolver {
 			{ orderBy: { id: QueryOrder.DESC } }
 		);
 
-		if (!passkeyChallenge) throw new Error('Bad Request: User has no recent challenge.');
-
 		return passkeyChallenge.challenge;
 	}
 
@@ -44,7 +42,7 @@ export class PasskeyAuthResolver extends AuthResolver {
 			},
 			{ em: this.database.em }
 		);
-		this.database.em.persistAndFlush(passkeyChallenge);
+		await this.database.em.persistAndFlush(passkeyChallenge);
 		return true;
 	}
 
@@ -52,8 +50,6 @@ export class PasskeyAuthResolver extends AuthResolver {
 		const authenticators = await this.database.em.find(PasskeyAuthenticator, {
 			userId,
 		});
-
-		if (!authenticators) throw new Error('Bad Request: User has no authenticators.');
 
 		return authenticators;
 	}
@@ -66,8 +62,6 @@ export class PasskeyAuthResolver extends AuthResolver {
 			userId,
 			credentialID,
 		});
-
-		if (!authenticator) throw new Error('Bad Request: User has no authenticator.');
 
 		return authenticator;
 	}
@@ -98,7 +92,6 @@ export class PasskeyAuthResolver extends AuthResolver {
 
 		passkeyAuthenticator.counter = counter;
 		await this.database.em.persistAndFlush(passkeyAuthenticator);
-
 		return true;
 	}
 }
