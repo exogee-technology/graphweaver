@@ -19,8 +19,11 @@ import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './en
 
 export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/typescript-types';
 
-export interface PasskeyAuthenticatorDevice extends AuthenticatorDevice {
+export interface PasskeyAuthenticatorDevice {
 	id: string;
+	credentialPublicKey: Uint8Array;
+	credentialID: Uint8Array;
+	counter: number;
 }
 
 // Human-readable title for your website
@@ -28,7 +31,7 @@ const rpName = 'SimpleWebAuthn Example';
 // A unique identifier for your website
 const rpID = 'localhost';
 // The URL at which registrations and authentications should occur
-const origin = `https://${rpID}`;
+const origin = `http://${rpID}:9000`;
 
 @Resolver((of) => Token)
 export abstract class PasskeyAuthResolver {
@@ -69,7 +72,6 @@ export abstract class PasskeyAuthResolver {
 			excludeCredentials: userAuthenticators.map((authenticator) => ({
 				id: authenticator.credentialID,
 				type: 'public-key',
-				transports: authenticator.transports,
 			})),
 		});
 
@@ -104,13 +106,13 @@ export abstract class PasskeyAuthResolver {
 		const { verified, registrationInfo } = verification;
 
 		if (verified) {
-			if (!registrationInfo?.credentialPublicKey) throw new AuthenticationError('');
-			if (!registrationInfo?.counter) throw new AuthenticationError('');
+			if (!registrationInfo?.credentialPublicKey)
+				throw new AuthenticationError('Authentication failed: No Public Key Found');
 
 			const newAuthenticator: AuthenticatorDevice = {
 				credentialID: registrationInfo.credentialID,
 				credentialPublicKey: registrationInfo.credentialPublicKey,
-				counter: registrationInfo.counter,
+				counter: registrationInfo.counter ?? 0,
 			};
 
 			await this.saveNewUserAuthenticator(userId, newAuthenticator);
@@ -133,7 +135,6 @@ export abstract class PasskeyAuthResolver {
 			allowCredentials: userAuthenticators.map((authenticator) => ({
 				id: authenticator.credentialID,
 				type: 'public-key',
-				transports: authenticator.transports,
 			})),
 			userVerification: 'preferred',
 		});
@@ -174,7 +175,6 @@ export abstract class PasskeyAuthResolver {
 					credentialPublicKey: authenticator.credentialPublicKey,
 					credentialID: authenticator.credentialID,
 					counter: authenticator.counter,
-					transports: authenticator.transports,
 				},
 			});
 		} catch (error: any) {

@@ -1,9 +1,6 @@
 import { Uint8ArrayType, Entity, PrimaryKey, Property, BigIntType } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
-import type {
-	PasskeyAuthenticatorDevice,
-	PasskeyAuthenticatorTransportFuture,
-} from '@exogee/graphweaver-auth';
+import type { PasskeyAuthenticatorDevice } from '@exogee/graphweaver-auth';
 
 @Entity()
 export class PasskeyAuthenticator extends BaseEntity implements PasskeyAuthenticatorDevice {
@@ -21,7 +18,4 @@ export class PasskeyAuthenticator extends BaseEntity implements PasskeyAuthentic
 
 	@Property({ type: Number })
 	counter!: number;
-
-	@Property({ type: String })
-	transports?: PasskeyAuthenticatorTransportFuture[];
 }

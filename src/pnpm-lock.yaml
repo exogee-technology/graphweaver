@@ -347,7 +347,7 @@ importers:
         version: 5.0.2
       vite:
         specifier: 4.3.9
-        version: 4.3.9(@types/node@14.14.10)
+        version: 4.3.9(@types/node@18.11.9)
 
   packages/admin-ui-components:
     dependencies:
@@ -417,7 +417,7 @@ importers:
         version: 5.0.2
       vite:
         specifier: 4.3.9
-        version: 4.3.9(@types/node@14.14.10)
+        version: 4.3.9(@types/node@18.11.9)
       vite-plugin-svgr:
         specifier: 3.2.0
         version: 3.2.0(vite@4.3.9)
@@ -509,6 +509,9 @@ importers:
       '@simplewebauthn/browser':
         specifier: 8.3.1
         version: 8.3.1
+      '@simplewebauthn/typescript-types':
+        specifier: 8.0.0
+        version: 8.0.0
       '@usedapp/core':
         specifier: 1.2.13
         version: 1.2.13(ethers@5.7.2)(react@18.2.0)
@@ -560,7 +563,7 @@ importers:
         version: 5.0.2
       vite:
         specifier: 4.3.9
-        version: 4.3.9(@types/node@14.14.10)
+        version: 4.3.9(@types/node@18.11.9)
       vite-plugin-svgr:
         specifier: 3.2.0
         version: 3.2.0(vite@4.3.9)
@@ -900,7 +903,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -4950,7 +4953,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -6928,6 +6931,7 @@ packages:
 
   /@types/node@14.14.10:
     resolution: {integrity: sha512-J32dgx2hw8vXrSbu4ZlVhn1Nm3GbeCFNw2FWL8S5QKucHGY0cyNwjdQdO+KMBZ4wpmC7KhLCiNsdk1RFRIYUQQ==}
+    dev: true
 
   /@types/node@18.11.11:
     resolution: {integrity: sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==}
@@ -7267,7 +7271,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.9)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.3.9(@types/node@14.14.10)
+      vite: 4.3.9(@types/node@18.11.9)
     transitivePeerDependencies:
       - supports-color
 
@@ -16481,7 +16485,7 @@ packages:
       '@rollup/pluginutils': 5.0.2
       '@svgr/core': 7.0.0
       '@svgr/plugin-jsx': 7.0.0
-      vite: 4.3.9(@types/node@14.14.10)
+      vite: 4.3.9(@types/node@18.11.9)
     transitivePeerDependencies:
       - rollup
       - supports-color
@@ -16517,6 +16521,7 @@ packages:
       rollup: 3.26.3
     optionalDependencies:
       fsevents: 2.3.2
+    dev: true
 
   /vite@4.3.9(@types/node@18.11.9):
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
@@ -16549,7 +16554,6 @@ packages:
       rollup: 3.26.3
     optionalDependencies:
       fsevents: 2.3.2
-    dev: false
 
   /vite@4.3.9(@types/node@20.2.5):
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
