@@ -53,7 +53,9 @@ const RegisterButton = ({
 			}
 		} catch (error: any) {
 			if (error.name === 'InvalidStateError') {
-				setError(new Error('Error: Authenticator was probably already registered by user'));
+				// This error happens when someone tries to register an already registered passkey
+				console.error('Error: Authenticator was probably already registered by user');
+				localStorage.setItem(passkeyAutoConnectFlag, 'true');
 			} else {
 				setError(error);
 			}
