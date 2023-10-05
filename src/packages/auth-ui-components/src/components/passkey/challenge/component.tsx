@@ -33,11 +33,13 @@ interface Form {
 
 const RegisterButton = ({
 	setError,
+	autoConnect,
+	setAutoConnect,
 }: {
 	setError: Dispatch<React.SetStateAction<Error | undefined>>;
+	autoConnect: string | null;
+	setAutoConnect: Dispatch<React.SetStateAction<string | null>>;
 }) => {
-	const autoConnect = localStorage.getItem(passkeyAutoConnectFlag);
-
 	// This checks if we can register a wallet and redirects if we cant
 	const [generateRegistrationOptions, { loading: generateLoading }] = useMutation<{
 		passkeyGenerateRegistrationOptions: PublicKeyCredentialCreationOptionsJSON;
@@ -49,6 +51,11 @@ const RegisterButton = ({
 
 	const loading = generateLoading || verifyLoading;
 
+	const setPasskeyAutoConnect = useCallback(() => {
+		localStorage.setItem(passkeyAutoConnectFlag, 'true');
+		setAutoConnect('true');
+	}, [setAutoConnect]);
+
 	const handleOnRegister = useCallback(async () => {
 		try {
 			const { data } = await generateRegistrationOptions();
@@ -59,14 +66,12 @@ const RegisterButton = ({
 					registrationResponse,
 				},
 			});
-			if (verifyData?.passkeyVerifyRegistrationResponse) {
-				localStorage.setItem(passkeyAutoConnectFlag, 'true');
-			}
+			if (verifyData?.passkeyVerifyRegistrationResponse) setPasskeyAutoConnect();
 		} catch (error: any) {
 			if (error.name === 'InvalidStateError') {
 				// This error happens when someone tries to register an already registered passkey
 				console.error('Error: Authenticator was probably already registered by user');
-				localStorage.setItem(passkeyAutoConnectFlag, 'true');
+				setPasskeyAutoConnect();
 			} else {
 				setError(error);
 			}
@@ -93,29 +98,29 @@ const RegisterButton = ({
 
 const AuthenticateButton = ({
 	setError,
+	autoConnect,
 }: {
 	setError: Dispatch<React.SetStateAction<Error | undefined>>;
+	autoConnect: string | null;
 }) => {
-	const autoConnect = localStorage.getItem(passkeyAutoConnectFlag);
+	const [loading, setLoading] = useState(false);
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
 
-	// This checks if we can register a wallet and redirects if we cant
-	const [generateAuthenticationOptions, { loading: generateLoading }] = useMutation<{
+	const [generateAuthenticationOptions] = useMutation<{
 		passkeyGenerateAuthenticationOptions: PublicKeyCredentialRequestOptionsJSON;
 	}>(GENERATE_AUTHENTICATION_OPTIONS);
 
-	const [verifyAuthenticationResponse, { loading: verifyLoading }] = useMutation<{
+	const [verifyAuthenticationResponse] = useMutation<{
 		passkeyVerifyAuthenticationResponse: { authToken: string };
 	}>(VERIFY_AUTHENTICATION_RESPONSE);
 
-	const loading = generateLoading || verifyLoading;
-
 	const handleOnAuthenticate = useCallback(async () => {
 		try {
+			setLoading(true);
 			const { data } = await generateAuthenticationOptions();
 			if (!data) throw new Error('Could not generate registration options.');
 			const authenticationResponse = await startAuthentication(
@@ -134,6 +139,7 @@ const AuthenticateButton = ({
 			navigate(formatRedirectUrl(redirectUri), { replace: true });
 		} catch (error: any) {
 			setError(error);
+			setLoading(false);
 		}
 	}, [generateAuthenticationOptions, verifyAuthenticationResponse, setError]);
 
@@ -157,14 +163,21 @@ const AuthenticateButton = ({
 
 export const PasskeyChallenge = () => {
 	const [error, setError] = useState<Error | undefined>();
+	const [autoConnect, setAutoConnect] = useState<string | null>(
+		localStorage.getItem(passkeyAutoConnectFlag)
+	);
 
 	return (
 		<div className={styles.wrapper}>
 			<div>
 				<GraphweaverLogo width="52" className={styles.logo} />
 			</div>
-			<RegisterButton setError={setError} />
-			<AuthenticateButton setError={setError} />
+			<RegisterButton
+				setError={setError}
+				autoConnect={autoConnect}
+				setAutoConnect={setAutoConnect}
+			/>
+			<AuthenticateButton setError={setError} autoConnect={autoConnect} />
 			{!!error && <Alert>{error.message}</Alert>}
 		</div>
 	);
