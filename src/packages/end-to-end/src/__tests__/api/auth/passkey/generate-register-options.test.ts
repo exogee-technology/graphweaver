@@ -37,7 +37,7 @@ export class AuthResolver extends PasskeyAuthResolver {
 
 	public async getUserAuthenticator(
 		_: string,
-		credentialID: Uint8Array
+		credentialID: string
 	): Promise<PasskeyAuthenticatorDevice> {
 		return {
 			id: '1',
