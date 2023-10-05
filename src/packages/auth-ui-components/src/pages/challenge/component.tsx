@@ -2,6 +2,7 @@ import { useSearchParams } from 'react-router-dom';
 import {
 	MagicLinkChallenge,
 	OTPChallenge,
+	PasskeyChallenge,
 	PasswordChallenge,
 	Web3Challenge,
 } from '../../components';
@@ -18,5 +19,6 @@ export const Challenge = () => {
 	if (firstProvider === AuthenticationMethod.MAGIC_LINK) return <MagicLinkChallenge />;
 	if (firstProvider === AuthenticationMethod.ONE_TIME_PASSWORD) return <OTPChallenge />;
 	if (firstProvider === AuthenticationMethod.WEB3) return <Web3Challenge />;
+	if (firstProvider === AuthenticationMethod.PASSKEY) return <PasskeyChallenge />;
 	return null;
 };

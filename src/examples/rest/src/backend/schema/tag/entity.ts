@@ -24,7 +24,7 @@ const acl: AccessControlList<Tag, AuthorizationContext> = {
 @ApplyMultiFactorAuthentication<Tag>({
 	Everyone: {
 		// all users must provide a magic link mfa when writing data
-		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.ONE_TIME_PASSWORD] }],
+		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSKEY] }],
 	},
 })
 @ApplyAccessControlList(acl)

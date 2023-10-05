@@ -49,7 +49,7 @@ CREATE TABLE passkey_challenge (
 
 CREATE TABLE passkey_authenticator (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  credential_id TEXT NOT NULL,
+  credential_id BLOB NOT NULL,
   user_id INT NOT NULL,
   credential_public_key BLOB NOT NULL,
   counter BIGINT NOT NULL,
