@@ -40,7 +40,6 @@ const RegisterButton = ({
 	autoConnect: string | null;
 	setAutoConnect: Dispatch<React.SetStateAction<string | null>>;
 }) => {
-	// This checks if we can register a wallet and redirects if we cant
 	const [generateRegistrationOptions, { loading: generateLoading }] = useMutation<{
 		passkeyGenerateRegistrationOptions: PublicKeyCredentialCreationOptionsJSON;
 	}>(GENERATE_REGISTRATION_OPTIONS);
