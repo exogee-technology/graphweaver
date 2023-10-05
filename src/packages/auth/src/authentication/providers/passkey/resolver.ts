@@ -92,41 +92,45 @@ export abstract class PasskeyAuthResolver {
 		registrationResponse: PasskeyRegistrationResponse,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
-		if (!ctx.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
-
-		const userId = ctx.user?.id;
-		if (!userId) throw new AuthenticationError('Authentication failed.');
-
-		const expectedChallenge = await this.getUserCurrentChallenge(userId);
-
-		let verification;
 		try {
-			verification = await verifyRegistrationResponse({
+			if (!ctx.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
+
+			const userId = ctx.user?.id;
+			if (!userId) throw new AuthenticationError('Authentication failed.');
+
+			const expectedChallenge = await this.getUserCurrentChallenge(userId);
+
+			const verification = await verifyRegistrationResponse({
 				response: registrationResponse,
 				expectedChallenge,
 				expectedOrigin: origin,
 				expectedRPID: config.rp.id,
 			});
-		} catch (error: any) {
-			throw new AuthenticationError(`Authentication failed: ${error?.message ?? ''}`);
+
+			const { verified, registrationInfo } = verification;
+
+			if (verified) {
+				if (!registrationInfo?.credentialPublicKey)
+					throw new AuthenticationError('Authentication failed: No Public Key Found');
+
+				const newAuthenticator: Omit<PasskeyAuthenticatorDevice, 'id'> = {
+					credentialID: isoBase64URL.fromBuffer(registrationInfo.credentialID),
+					credentialPublicKey: registrationInfo.credentialPublicKey,
+					counter: registrationInfo.counter ?? 0,
+				};
+
+				await this.saveNewUserAuthenticator(userId, newAuthenticator);
+			}
+
+			return verified;
+		} catch (e: any) {
+			if (e instanceof AuthenticationError) throw e;
+			if (e instanceof ChallengeError) throw e;
+			if (e instanceof ForbiddenError) throw e;
+
+			logger.info('Authentication failed with error', e);
+			throw new AuthenticationError('Passkey authentication failed.');
 		}
-
-		const { verified, registrationInfo } = verification;
-
-		if (verified) {
-			if (!registrationInfo?.credentialPublicKey)
-				throw new AuthenticationError('Authentication failed: No Public Key Found');
-
-			const newAuthenticator: Omit<PasskeyAuthenticatorDevice, 'id'> = {
-				credentialID: isoBase64URL.fromBuffer(registrationInfo.credentialID),
-				credentialPublicKey: registrationInfo.credentialPublicKey,
-				counter: registrationInfo.counter ?? 0,
-			};
-
-			await this.saveNewUserAuthenticator(userId, newAuthenticator);
-		}
-
-		return verified;
 	}
 
 	@Mutation(() => GraphQLJSON)
