@@ -7,8 +7,8 @@ export class PasskeyAuthenticator extends BaseEntity implements PasskeyAuthentic
 	@PrimaryKey({ type: BigIntType })
 	id!: string;
 
-	@Property({ type: Uint8ArrayType })
-	credentialID!: Uint8Array;
+	@Property({ type: String })
+	credentialID!: string;
 
 	@Property({ type: String })
 	userId!: string;
