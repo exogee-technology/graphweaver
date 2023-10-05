@@ -59,6 +59,8 @@ export abstract class PasskeyAuthResolver {
 	async passkeyGenerateRegistrationOptions(
 		@Ctx() ctx: AuthorizationContext
 	): Promise<PublicKeyCredentialCreationOptionsJSON> {
+		if (!ctx.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
+
 		const userId = ctx.user?.id;
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
@@ -90,6 +92,8 @@ export abstract class PasskeyAuthResolver {
 		registrationResponse: PasskeyRegistrationResponse,
 		@Ctx() ctx: AuthorizationContext
 	): Promise<boolean> {
+		if (!ctx.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
+
 		const userId = ctx.user?.id;
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
@@ -129,6 +133,8 @@ export abstract class PasskeyAuthResolver {
 	async passkeyGenerateAuthenticationOptions(
 		@Ctx() ctx: AuthorizationContext
 	): Promise<PublicKeyCredentialRequestOptionsJSON> {
+		if (!ctx.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
+
 		const userId = ctx.user?.id;
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
@@ -156,9 +162,10 @@ export abstract class PasskeyAuthResolver {
 		@Ctx() ctx: AuthorizationContext
 	): Promise<Token> {
 		try {
+			if (!ctx.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
+
 			const userId = ctx.user?.id;
 			if (!userId) throw new AuthenticationError('Authentication failed.');
-			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 
 			const expectedChallenge = await this.getUserCurrentChallenge(userId);
 			const authenticator = await this.getUserAuthenticator(userId, authenticationResponse.id);
