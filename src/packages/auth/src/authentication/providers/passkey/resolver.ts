@@ -29,12 +29,13 @@ export interface PasskeyAuthenticatorDevice {
 	counter: number;
 }
 
-// Human-readable title for your website
-const rpName = 'SimpleWebAuthn Example';
-// A unique identifier for your website
-const rpID = 'localhost';
-// The URL at which registrations and authentications should occur
-const origin = `http://${rpID}:9000`;
+const config = {
+	rp: {
+		name: process.env.AUTH_PASSKEY_RELYING_PARTY_NAME ?? 'Graphweaver',
+		id: process.env.AUTH_PASSKEY_RELYING_PARTY_ID || 'localhost',
+	},
+	origin: process.env.AUTH_PASSKEY_ORIGIN || 'http://localhost:9000',
+};
 
 @Resolver((of) => Token)
 export abstract class PasskeyAuthResolver {
@@ -67,8 +68,8 @@ export abstract class PasskeyAuthResolver {
 		const userAuthenticators = await this.getUserAuthenticators(userId);
 
 		const options = await generateRegistrationOptions({
-			rpName,
-			rpID,
+			rpName: config.rp.name,
+			rpID: config.rp.id,
 			userID: userId,
 			userName: username,
 			attestationType: 'none',
@@ -100,7 +101,7 @@ export abstract class PasskeyAuthResolver {
 				response: registrationResponse,
 				expectedChallenge,
 				expectedOrigin: origin,
-				expectedRPID: rpID,
+				expectedRPID: config.rp.id,
 			});
 		} catch (error: any) {
 			throw new AuthenticationError(`Authentication failed: ${error?.message ?? ''}`);
@@ -172,7 +173,7 @@ export abstract class PasskeyAuthResolver {
 				response: authenticationResponse,
 				expectedChallenge,
 				expectedOrigin: origin,
-				expectedRPID: rpID,
+				expectedRPID: config.rp.id,
 				authenticator: {
 					credentialPublicKey: authenticator.credentialPublicKey,
 					credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
