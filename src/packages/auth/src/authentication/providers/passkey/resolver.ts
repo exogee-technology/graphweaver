@@ -153,7 +153,7 @@ export abstract class PasskeyAuthResolver {
 			userVerification: 'preferred',
 		});
 
-		// (Pseudocode) Remember this challenge for this user
+		// Remember this challenge for this user
 		await this.setUserCurrentChallenge(userId, options.challenge);
 
 		return options;
