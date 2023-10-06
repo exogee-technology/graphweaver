@@ -23,6 +23,13 @@ type PasskeyChallenge = {
 	challenge: string;
 };
 
+type PasskeyAuthenticator = {
+	userId: string;
+	credentialID: string;
+	credentialPublicKey: Uint8Array;
+	counter: number;
+};
+
 @Resolver()
 export class PasskeyAuthResolver extends AuthResolver {
 	private database: DatabaseImplementation;
@@ -63,11 +70,24 @@ export class PasskeyAuthResolver extends AuthResolver {
 	}
 
 	public async getUserAuthenticators(userId: string): Promise<PasskeyAuthenticatorDevice[]> {
-		const authenticators = await this.database.em.find(PasskeyAuthenticator, {
-			userId,
-		});
+		const authenticators = await this.database.em.find<Authentication<PasskeyAuthenticator>>(
+			Authentication,
+			{
+				type: AuthenticationType.PasskeyAuthenticator,
+				data: {
+					userId,
+				},
+			}
+		);
 
-		return authenticators;
+		return authenticators.map<PasskeyAuthenticatorDevice>(
+			({ id, data: { credentialID, credentialPublicKey, counter } }) => ({
+				id: id,
+				credentialID,
+				credentialPublicKey,
+				counter,
+			})
+		);
 	}
 
 	public async getUserAuthenticator(
