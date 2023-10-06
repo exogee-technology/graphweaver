@@ -2,11 +2,11 @@ import {
 	Credential,
 	Task,
 	Tag,
+	Authentication,
 	MagicLink,
 	OneTimePassword,
 	Device,
 	PasskeyAuthenticator,
-	PasskeyChallenge,
 } from './mysql';
 
 export * from './rest';
@@ -20,5 +20,5 @@ export const databaseEntities = [
 	OneTimePassword,
 	Device,
 	PasskeyAuthenticator,
-	PasskeyChallenge,
+	Authentication,
 ];
