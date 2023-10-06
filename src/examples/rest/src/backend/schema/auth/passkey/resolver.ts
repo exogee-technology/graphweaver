@@ -11,7 +11,17 @@ import {
 } from '@exogee/graphweaver-mikroorm';
 
 import { myConnection } from '../../../database';
-import { PasskeyAuthenticator, PasskeyChallenge } from '../../../entities';
+import { Authentication, PasskeyAuthenticator } from '../../../entities';
+
+enum AuthenticationType {
+	PasskeyChallenge = 'PasskeyChallenge',
+	PasskeyAuthenticator = 'PasskeyAuthenticator',
+}
+
+type PasskeyChallenge = {
+	userId: string;
+	challenge: string;
+};
 
 @Resolver()
 export class PasskeyAuthResolver extends AuthResolver {
@@ -22,23 +32,29 @@ export class PasskeyAuthResolver extends AuthResolver {
 	}
 
 	public async getUserCurrentChallenge(userId: string): Promise<string> {
-		const passkeyChallenge = await this.database.em.findOneOrFail(
-			PasskeyChallenge,
+		const passkeyChallenge = await this.database.em.findOneOrFail<Authentication<PasskeyChallenge>>(
+			Authentication,
 			{
-				userId,
+				type: AuthenticationType.PasskeyChallenge,
+				data: {
+					userId,
+				},
 			},
 			{ orderBy: { id: QueryOrder.DESC } }
 		);
 
-		return passkeyChallenge.challenge;
+		return passkeyChallenge.data.challenge;
 	}
 
 	public async setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean> {
-		const passkeyChallenge = new PasskeyChallenge();
+		const passkeyChallenge = new Authentication();
 		wrap(passkeyChallenge).assign(
 			{
-				userId,
-				challenge,
+				type: AuthenticationType.PasskeyChallenge,
+				data: {
+					userId,
+					challenge,
+				},
 			},
 			{ em: this.database.em }
 		);
