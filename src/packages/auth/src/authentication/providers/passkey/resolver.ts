@@ -103,7 +103,7 @@ export abstract class PasskeyAuthResolver {
 			const verification = await verifyRegistrationResponse({
 				response: registrationResponse,
 				expectedChallenge,
-				expectedOrigin: origin,
+				expectedOrigin: config.origin,
 				expectedRPID: config.rp.id,
 			});
 
@@ -183,7 +183,7 @@ export abstract class PasskeyAuthResolver {
 			const verification = await verifyAuthenticationResponse({
 				response: authenticationResponse,
 				expectedChallenge,
-				expectedOrigin: origin,
+				expectedOrigin: config.origin,
 				expectedRPID: config.rp.id,
 				authenticator: {
 					credentialPublicKey: authenticator.credentialPublicKey,
