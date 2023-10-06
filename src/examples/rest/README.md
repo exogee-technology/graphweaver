@@ -80,6 +80,13 @@ CREATE TABLE device (
   CONSTRAINT uc_device UNIQUE (user_id, address)
 );
 
+CREATE TABLE authentication (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  type VARCHAR(255) NOT NULL,
+  data JSON NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 INSERT INTO credential (id, username, password)
 VALUES
   (1, 'luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
