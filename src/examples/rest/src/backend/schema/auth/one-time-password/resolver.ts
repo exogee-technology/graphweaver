@@ -1,6 +1,7 @@
 import {
 	OneTimePasswordAuthResolver as AuthResolver,
-	OTP as OTPInterface,
+	OneTimePassword,
+	OneTimePasswordData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
@@ -9,7 +10,8 @@ import { ConnectionManager, DatabaseImplementation, wrap } from '@exogee/graphwe
 import { addUserToContext } from '../../../auth/context';
 import { myConnection } from '../../../database';
 import { Credential } from '../../../entities/mysql';
-import { OneTimePassword } from '../../../entities/mysql';
+import { Authentication } from '../../../entities/mysql';
+import { AuthenticationType } from '..';
 
 @Resolver()
 export class OneTimePasswordAuthResolver extends AuthResolver {
@@ -34,8 +36,15 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	 * @param code code string
 	 * @returns Array of OTP compatible entities
 	 */
-	async getOTP(userId: string, code: string): Promise<OTPInterface> {
-		return this.database.em.findOneOrFail(OneTimePassword, { userId, code, redeemedAt: null });
+	async getOTP(userId: string, code: string): Promise<OneTimePassword> {
+		return await this.database.em.findOneOrFail<Authentication<OneTimePasswordData>>(
+			Authentication,
+			{
+				type: AuthenticationType.OTPChallenge,
+				userId,
+				data: { code, redeemedAt: 'null' },
+			}
+		);
 	}
 
 	/**
@@ -44,8 +53,9 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	 * @param period the earliest date that is valid for this period
 	 * @returns OTP compatible entity
 	 */
-	async getOTPs(userId: string, period: Date): Promise<OTPInterface[]> {
-		return this.database.em.find(OneTimePassword, {
+	async getOTPs(userId: string, period: Date): Promise<OneTimePassword[]> {
+		return this.database.em.find<Authentication<OneTimePasswordData>>(Authentication, {
+			type: AuthenticationType.OTPChallenge,
 			userId,
 			createdAt: {
 				$gt: period,
@@ -59,12 +69,16 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	 * @param code the code generated for this OTP
 	 * @returns OTP compatible entity
 	 */
-	async createOTP(userId: string, code: string): Promise<OTPInterface> {
-		const link = new OneTimePassword();
+	async createOTP(userId: string, code: string): Promise<OneTimePassword> {
+		const link = new Authentication<OneTimePasswordData>();
 		wrap(link).assign(
 			{
+				type: AuthenticationType.OTPChallenge,
 				userId,
-				code,
+				data: {
+					code,
+					redeemedAt: 'null',
+				},
 			},
 			{ em: this.database.em }
 		);
@@ -77,9 +91,12 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	 * @param otp the otp that was updated
 	 * @returns boolean to indicate the successful saving of the redeem operation
 	 */
-	async redeemOTP({ id }: OTPInterface): Promise<boolean> {
-		const otp = await this.database.em.findOneOrFail(OneTimePassword, { id });
-		otp.redeemedAt = new Date();
+	async redeemOTP({ id }: OneTimePassword): Promise<boolean> {
+		const otp = await this.database.em.findOneOrFail<Authentication<OneTimePasswordData>>(
+			Authentication,
+			{ id }
+		);
+		otp.data.redeemedAt = new Date();
 		await this.database.em.persistAndFlush(otp);
 		return true;
 	}
@@ -89,9 +106,9 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	 * @param otp the OTP that was generated and should be sent to the user
 	 * @returns a boolean to indicate that the code has been sent
 	 */
-	async sendOTP(otp: OTPInterface): Promise<boolean> {
+	async sendOTP(otp: OneTimePassword): Promise<boolean> {
 		// In a production system this would email / sms the OTP and you would not log to the console!
-		console.log(`\n\n ######## OTP: ${otp.code} ######## \n\n`);
+		console.log(`\n\n ######## OTP: ${otp.data.code} ######## \n\n`);
 		return true;
 	}
 }

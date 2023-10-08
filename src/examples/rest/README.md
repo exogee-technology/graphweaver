@@ -41,15 +41,6 @@ CREATE TABLE credential (
   password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE passkey_authenticator (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  credential_id TEXT NOT NULL,
-  user_id INT NOT NULL,
-  credential_public_key BLOB NOT NULL,
-  counter BIGINT NOT NULL,
-  transports VARCHAR(255)
-);
-
 CREATE TABLE magic_link (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT NOT NULL,
@@ -58,27 +49,13 @@ CREATE TABLE magic_link (
   redeemed_at TIMESTAMP
 );
 
-CREATE TABLE one_time_password (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  code VARCHAR(6) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  redeemed_at TIMESTAMP
-);
-
-CREATE TABLE device (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  user_id INT NOT NULL,
-  address VARCHAR(255) NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  CONSTRAINT uc_device UNIQUE (user_id, address)
-);
-
 CREATE TABLE authentication (
   id INT AUTO_INCREMENT PRIMARY KEY,
   type VARCHAR(255) NOT NULL,
+  user_id INT NOT NULL,
   data JSON NOT NULL,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES credential(id)
 );
 
 INSERT INTO credential (id, username, password)
