@@ -18,12 +18,16 @@ const config = {
 	ttl: process.env.AUTH_OTP_TTL || '1m',
 };
 
-export interface OTP {
+export interface OneTimePasswordData {
+	code: string;
+	redeemedAt?: Date;
+}
+
+export interface OneTimePassword {
 	id?: string;
 	userId: string;
-	code: string;
+	data: OneTimePasswordData;
 	createdAt: Date;
-	redeemedAt?: Date;
 }
 
 const createCode = () =>
@@ -37,11 +41,11 @@ const createCode = () =>
 @Resolver((of) => Token)
 export abstract class OneTimePasswordAuthResolver {
 	abstract getUser(username: string): Promise<UserProfile>;
-	abstract getOTP(userId: string, code: string): Promise<OTP>;
-	abstract getOTPs(userId: string, period: Date): Promise<OTP[]>;
-	abstract createOTP(userId: string, code: string): Promise<OTP>;
-	abstract redeemOTP(otp: OTP): Promise<boolean>;
-	abstract sendOTP(otp: OTP): Promise<boolean>;
+	abstract getOTP(userId: string, code: string): Promise<OneTimePassword>;
+	abstract getOTPs(userId: string, period: Date): Promise<OneTimePassword[]>;
+	abstract createOTP(userId: string, code: string): Promise<OneTimePassword>;
+	abstract redeemOTP(otp: OneTimePassword): Promise<boolean>;
+	abstract sendOTP(otp: OneTimePassword): Promise<boolean>;
 
 	@Mutation((returns) => Boolean)
 	async sendOTPChallenge(@Ctx() ctx: AuthorizationContext): Promise<boolean> {

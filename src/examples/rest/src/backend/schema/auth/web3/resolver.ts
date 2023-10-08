@@ -9,8 +9,13 @@ import { ConnectionManager, DatabaseImplementation, wrap } from '@exogee/graphwe
 
 import { mapUserToProfile } from '../../../auth/context';
 import { myConnection } from '../../../database';
-import { Device } from '../../../entities/mysql';
+import { Authentication } from '../../../entities/mysql';
 import { User } from '../../user';
+import { AuthenticationType } from '..';
+
+type WalletAddress = {
+	address: string;
+};
 
 @Resolver()
 export class Web3AuthResolver extends AuthResolver {
@@ -39,10 +44,16 @@ export class Web3AuthResolver extends AuthResolver {
 	 * @returns return a UserProfile compatible entity
 	 */
 	async getUserByWalletAddress(userId: string, address: string): Promise<UserProfile> {
-		const device = await this.database.em.findOneOrFail(Device, {
-			userId,
-			address,
-		});
+		const device = await this.database.em.findOneOrFail<Authentication<WalletAddress>>(
+			Authentication,
+			{
+				type: AuthenticationType.Web3WalletAddress,
+				userId,
+				data: {
+					address,
+				},
+			}
+		);
 
 		if (!device) throw new Error('Bad Request: Unknown user wallet address provided.');
 
@@ -63,20 +74,29 @@ export class Web3AuthResolver extends AuthResolver {
 	 */
 	async saveWalletAddress(userId: string, address: string): Promise<boolean> {
 		// Let's check if we already have this combination in the database
-		const existingDevice = await this.database.em.findOne(Device, {
-			userId,
-			address,
-		});
+		const existingDevice = await this.database.em.findOne<Authentication<WalletAddress>>(
+			Authentication,
+			{
+				type: AuthenticationType.Web3WalletAddress,
+				userId,
+				data: {
+					address,
+				},
+			}
+		);
 
 		// It is found so no need to add it again
 		if (existingDevice) return true;
 
 		// Insert the new wallet address into the database
-		const device = new Device();
+		const device = new Authentication<WalletAddress>();
 		wrap(device).assign(
 			{
+				type: AuthenticationType.Web3WalletAddress,
 				userId,
-				address,
+				data: {
+					address,
+				},
 			},
 			{ em: this.database.em }
 		);

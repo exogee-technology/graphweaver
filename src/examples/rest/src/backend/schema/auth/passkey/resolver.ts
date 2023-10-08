@@ -12,19 +12,13 @@ import {
 
 import { myConnection } from '../../../database';
 import { Authentication } from '../../../entities';
-
-enum AuthenticationType {
-	PasskeyChallenge = 'PasskeyChallenge',
-	PasskeyAuthenticator = 'PasskeyAuthenticator',
-}
+import { AuthenticationType } from '..';
 
 type PasskeyChallenge = {
-	userId: string;
 	challenge: string;
 };
 
 type PasskeyAuthenticator = {
-	userId: string;
 	credentialID: string;
 	credentialPublicKey: string;
 	counter: number;
@@ -43,9 +37,7 @@ export class PasskeyAuthResolver extends AuthResolver {
 			Authentication,
 			{
 				type: AuthenticationType.PasskeyChallenge,
-				data: {
-					userId,
-				},
+				userId,
 			},
 			{ orderBy: { id: QueryOrder.DESC } }
 		);
@@ -58,8 +50,8 @@ export class PasskeyAuthResolver extends AuthResolver {
 		wrap(passkeyChallenge).assign(
 			{
 				type: AuthenticationType.PasskeyChallenge,
+				userId,
 				data: {
-					userId,
 					challenge,
 				},
 			},
@@ -74,9 +66,7 @@ export class PasskeyAuthResolver extends AuthResolver {
 			Authentication,
 			{
 				type: AuthenticationType.PasskeyAuthenticator,
-				data: {
-					userId,
-				},
+				userId,
 			}
 		);
 
@@ -99,8 +89,8 @@ export class PasskeyAuthResolver extends AuthResolver {
 			data: { credentialPublicKey, counter },
 		} = await this.database.em.findOneOrFail<Authentication<PasskeyAuthenticator>>(Authentication, {
 			type: AuthenticationType.PasskeyAuthenticator,
+			userId,
 			data: {
-				userId,
 				credentialID,
 			},
 		});
@@ -121,8 +111,8 @@ export class PasskeyAuthResolver extends AuthResolver {
 		wrap(passkeyAuthenticator).assign(
 			{
 				type: AuthenticationType.PasskeyAuthenticator,
+				userId,
 				data: {
-					userId,
 					credentialID: authenticator.credentialID,
 					credentialPublicKey: authenticator.credentialPublicKey,
 					counter: authenticator.counter,

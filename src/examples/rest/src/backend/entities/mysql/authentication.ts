@@ -10,6 +10,9 @@ export class Authentication<T> extends BaseEntity implements AuthenticationBaseE
 	@Property({ type: String })
 	type!: string;
 
+	@Property({ type: String })
+	userId!: string;
+
 	@Property({ type: JsonType })
 	data!: T;
 
