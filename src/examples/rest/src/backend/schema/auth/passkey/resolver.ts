@@ -11,7 +11,7 @@ import {
 } from '@exogee/graphweaver-mikroorm';
 
 import { myConnection } from '../../../database';
-import { Authentication, PasskeyAuthenticator } from '../../../entities';
+import { Authentication } from '../../../entities';
 
 enum AuthenticationType {
 	PasskeyChallenge = 'PasskeyChallenge',
@@ -26,7 +26,7 @@ type PasskeyChallenge = {
 type PasskeyAuthenticator = {
 	userId: string;
 	credentialID: string;
-	credentialPublicKey: Uint8Array;
+	credentialPublicKey: string;
 	counter: number;
 };
 
@@ -94,23 +94,39 @@ export class PasskeyAuthResolver extends AuthResolver {
 		userId: string,
 		credentialID: string
 	): Promise<PasskeyAuthenticatorDevice> {
-		const authenticator = await this.database.em.findOneOrFail(PasskeyAuthenticator, {
-			userId,
-			credentialID,
+		const {
+			id,
+			data: { credentialPublicKey, counter },
+		} = await this.database.em.findOneOrFail<Authentication<PasskeyAuthenticator>>(Authentication, {
+			type: AuthenticationType.PasskeyAuthenticator,
+			data: {
+				userId,
+				credentialID,
+			},
 		});
 
-		return authenticator;
+		return {
+			id,
+			credentialID,
+			credentialPublicKey,
+			counter,
+		};
 	}
 
 	public async saveNewUserAuthenticator(
 		userId: string,
 		authenticator: PasskeyAuthenticatorDevice
 	): Promise<boolean> {
-		const passkeyAuthenticator = new PasskeyAuthenticator();
+		const passkeyAuthenticator = new Authentication<PasskeyAuthenticator>();
 		wrap(passkeyAuthenticator).assign(
 			{
-				userId,
-				...authenticator,
+				type: AuthenticationType.PasskeyAuthenticator,
+				data: {
+					userId,
+					credentialID: authenticator.credentialID,
+					credentialPublicKey: authenticator.credentialPublicKey,
+					counter: authenticator.counter,
+				},
 			},
 			{ em: this.database.em }
 		);
@@ -122,11 +138,14 @@ export class PasskeyAuthResolver extends AuthResolver {
 		authenticatorId: string,
 		counter: number
 	): Promise<boolean> {
-		const passkeyAuthenticator = await this.database.em.findOneOrFail(PasskeyAuthenticator, {
+		const passkeyAuthenticator = await this.database.em.findOneOrFail<
+			Authentication<PasskeyAuthenticator>
+		>(Authentication, {
+			type: AuthenticationType.PasskeyAuthenticator,
 			id: authenticatorId,
 		});
 
-		passkeyAuthenticator.counter = counter;
+		passkeyAuthenticator.data.counter = counter;
 		await this.database.em.persistAndFlush(passkeyAuthenticator);
 		return true;
 	}
