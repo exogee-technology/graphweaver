@@ -24,7 +24,7 @@ export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFutur
 
 export interface PasskeyAuthenticatorDevice {
 	id: string;
-	credentialPublicKey: Uint8Array;
+	credentialPublicKey: string;
 	credentialID: string;
 	counter: number;
 }
@@ -115,7 +115,7 @@ export abstract class PasskeyAuthResolver {
 
 				const newAuthenticator: Omit<PasskeyAuthenticatorDevice, 'id'> = {
 					credentialID: isoBase64URL.fromBuffer(registrationInfo.credentialID),
-					credentialPublicKey: registrationInfo.credentialPublicKey,
+					credentialPublicKey: isoBase64URL.fromBuffer(registrationInfo.credentialPublicKey),
 					counter: registrationInfo.counter ?? 0,
 				};
 
@@ -186,7 +186,7 @@ export abstract class PasskeyAuthResolver {
 				expectedOrigin: config.origin,
 				expectedRPID: config.rp.id,
 				authenticator: {
-					credentialPublicKey: authenticator.credentialPublicKey,
+					credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
 					credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
 					counter: authenticator.counter,
 				},
