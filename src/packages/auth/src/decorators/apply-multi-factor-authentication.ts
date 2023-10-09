@@ -17,7 +17,7 @@ import {
 const beforeRead = (mfa?: Partial<MultiFactorAuthentication>) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
-		if (mfa) checkAuthentication(mfa, AccessType.Read, token);
+		if (mfa) await checkAuthentication(mfa, AccessType.Read, token);
 		return params;
 	};
 };
@@ -25,7 +25,7 @@ const beforeRead = (mfa?: Partial<MultiFactorAuthentication>) => {
 const beforeCreate = (mfa?: Partial<MultiFactorAuthentication>) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
-		if (mfa) checkAuthentication(mfa, AccessType.Create, token);
+		if (mfa) await checkAuthentication(mfa, AccessType.Create, token);
 		return params;
 	};
 };

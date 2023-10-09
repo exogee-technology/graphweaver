@@ -40,7 +40,7 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 		return await this.database.em.findOneOrFail<Authentication<OneTimePasswordData>>(
 			Authentication,
 			{
-				type: AuthenticationType.OTPChallenge,
+				type: AuthenticationType.OneTimePasswordChallenge,
 				userId,
 				data: { code, redeemedAt: 'null' },
 			}
@@ -55,7 +55,7 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 	 */
 	async getOTPs(userId: string, period: Date): Promise<OneTimePassword[]> {
 		return this.database.em.find<Authentication<OneTimePasswordData>>(Authentication, {
-			type: AuthenticationType.OTPChallenge,
+			type: AuthenticationType.OneTimePasswordChallenge,
 			userId,
 			createdAt: {
 				$gt: period,
@@ -73,7 +73,7 @@ export class OneTimePasswordAuthResolver extends AuthResolver {
 		const link = new Authentication<OneTimePasswordData>();
 		wrap(link).assign(
 			{
-				type: AuthenticationType.OTPChallenge,
+				type: AuthenticationType.OneTimePasswordChallenge,
 				userId,
 				data: {
 					code,

@@ -18,11 +18,16 @@ const config = {
 	ttl: process.env.AUTH_MAGIC_LINK_TTL || '15m',
 };
 
-export interface MagicLink {
-	userId: string;
+export interface MagicLinkData {
 	token: string;
-	createdAt: Date;
 	redeemedAt?: Date;
+}
+
+export interface MagicLink {
+	id: string;
+	userId: string;
+	createdAt: Date;
+	data: MagicLinkData;
 }
 
 // For now this is just a uuid
@@ -71,7 +76,7 @@ export abstract class MagicLinkAuthResolver {
 
 		url.searchParams.set('redirect_uri', redirect.toString());
 		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
-		url.searchParams.set('token', link.token);
+		url.searchParams.set('token', link.data.token);
 
 		return { link, url };
 	}
