@@ -8,5 +8,6 @@ export enum AuthenticationType {
 	PasskeyChallenge = 'PasskeyChallenge',
 	PasskeyAuthenticator = 'PasskeyAuthenticator',
 	Web3WalletAddress = 'Web3WalletAddress',
-	OTPChallenge = 'OTPChallenge',
+	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
+	MagicLinkChallenge = 'MagicLinkChallenge',
 }

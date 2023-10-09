@@ -1,6 +1,7 @@
 import {
 	MagicLinkAuthResolver as AuthResolver,
-	MagicLink as MagicLinkInterface,
+	MagicLink,
+	MagicLinkData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
@@ -8,8 +9,8 @@ import { ConnectionManager, DatabaseImplementation, wrap } from '@exogee/graphwe
 
 import { addUserToContext } from '../../../auth/context';
 import { myConnection } from '../../../database';
-import { Credential } from '../../../entities/mysql';
-import { MagicLink } from '../../../entities/mysql/magic-link';
+import { Authentication, Credential } from '../../../entities/mysql';
+import { AuthenticationType } from '..';
 
 @Resolver()
 export class MagicLinkAuthResolver extends AuthResolver {
@@ -34,8 +35,15 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @param token token string
 	 * @returns Array of MagicLink compatible entities
 	 */
-	async getMagicLink(userId: string, token: string): Promise<MagicLinkInterface> {
-		return this.database.em.findOneOrFail(MagicLink, { userId, token, redeemedAt: null });
+	async getMagicLink(userId: string, token: string): Promise<MagicLink> {
+		return this.database.em.findOneOrFail(Authentication<MagicLinkData>, {
+			type: AuthenticationType.MagicLinkChallenge,
+			userId,
+			data: {
+				token,
+				redeemedAt: 'null',
+			},
+		});
 	}
 
 	/**
@@ -44,8 +52,9 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @param period the earliest date that is valid for this period
 	 * @returns MagicLink compatible entity
 	 */
-	async getMagicLinks(userId: string, period: Date): Promise<MagicLinkInterface[]> {
-		return this.database.em.find(MagicLink, {
+	async getMagicLinks(userId: string, period: Date): Promise<MagicLink[]> {
+		return this.database.em.find(Authentication<MagicLinkData>, {
+			type: AuthenticationType.MagicLinkChallenge,
 			userId,
 			createdAt: {
 				$gt: period,
@@ -59,12 +68,16 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @param token the token generated for this magic link
 	 * @returns MagicLink compatible entity
 	 */
-	async createMagicLink(userId: string, token: string): Promise<MagicLinkInterface> {
-		const link = new MagicLink();
+	async createMagicLink(userId: string, token: string): Promise<MagicLink> {
+		const link = new Authentication<MagicLinkData>();
 		wrap(link).assign(
 			{
+				type: AuthenticationType.MagicLinkChallenge,
 				userId,
-				token,
+				data: {
+					token,
+					redeemedAt: 'null',
+				},
 			},
 			{ em: this.database.em }
 		);
@@ -78,8 +91,8 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @returns boolean to indicate the successful saving of the redeem operation
 	 */
 	async redeemMagicLink({ id }: MagicLink): Promise<boolean> {
-		const link = await this.database.em.findOneOrFail(MagicLink, { id });
-		link.redeemedAt = new Date();
+		const link = await this.database.em.findOneOrFail(Authentication<MagicLinkData>, { id });
+		link.data.redeemedAt = new Date();
 		await this.database.em.persistAndFlush(link);
 		return true;
 	}
@@ -89,7 +102,7 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 * @param magicLink the URL that was generated and should be sent to the user
 	 * @returns a boolean to indicate that the URL has been sent
 	 */
-	async sendMagicLink(url: URL, magicLink: MagicLinkInterface): Promise<boolean> {
+	async sendMagicLink(url: URL, magicLink: MagicLink): Promise<boolean> {
 		// In a production system this would email / sms the magic link and you would not log to the console!
 		console.log(`\n\n ######## MagicLink: ${url.toString()} ######## \n\n`);
 		return true;
