@@ -9,7 +9,7 @@ import {
 	AuthorizationContext,
 	MultiFactorAuthentication,
 } from '../../../types';
-import { Token } from '../../schema/token';
+import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
 import { checkAuthentication } from '../../../helper-functions';

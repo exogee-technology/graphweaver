@@ -3,7 +3,7 @@ import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { AuthTokenProvider } from '../../token';
-import { Token } from '../../schema/token';
+import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 
 @Resolver((of) => Token)

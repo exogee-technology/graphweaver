@@ -5,7 +5,7 @@ import { logger } from '@exogee/logger';
 import otpGenerator from 'otp-generator';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
-import { Token } from '../../schema/token';
+import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
 import { ChallengeError } from '../../../errors';

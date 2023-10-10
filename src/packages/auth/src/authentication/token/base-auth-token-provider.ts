@@ -1,5 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken';
-import { AuthToken } from '../schema';
+import { AuthToken } from '../entities';
 import { UserProfile } from '../../user-profile';
 
 export interface BaseAuthTokenProvider {
