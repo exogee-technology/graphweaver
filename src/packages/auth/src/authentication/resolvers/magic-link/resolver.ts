@@ -5,7 +5,7 @@ import { logger } from '@exogee/logger';
 import { randomUUID } from 'crypto';
 
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../../types';
-import { Token } from '../../schema/token';
+import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthTokenProvider } from '../../token';
 import { requireEnvironmentVariable } from '../../../helper-functions';

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
-import { AuthToken } from '../schema/token';
+import { AuthToken } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../types';
 import { requireEnvironmentVariable } from '../../helper-functions';
