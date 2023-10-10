@@ -6,9 +6,9 @@ import { Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	OneTimePasswordAuthResolver,
+	BaseOneTimePasswordAuthResolver,
 	PasswordAuthResolver,
-	OTP,
+	OneTimePassword,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_CODE = '123456';
@@ -22,29 +22,30 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends OneTimePasswordAuthResolver {
+export class AuthResolver extends BaseOneTimePasswordAuthResolver {
 	async getUser(_: string): Promise<UserProfile> {
 		return user;
 	}
 
-	async getOTP(userId: string, code: string): Promise<OTP> {
-		if (code === MOCK_CODE) return { userId, code: MOCK_CODE, createdAt: MOCK_CREATED_AT };
+	async getOTP(userId: string, code: string): Promise<OneTimePassword> {
+		if (code === MOCK_CODE)
+			return { userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT };
 		throw new Error('No otp found');
 	}
 
-	async getOTPs(userId: string, _: Date): Promise<OTP[]> {
-		return [{ userId, code: MOCK_CODE, createdAt: MOCK_CREATED_AT }];
+	async getOTPs(userId: string, _: Date): Promise<OneTimePassword[]> {
+		return [{ userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT }];
 	}
 
-	async createOTP(userId: string, _: string): Promise<OTP> {
-		return { userId, code: MOCK_CODE, createdAt: MOCK_CREATED_AT };
+	async createOTP(userId: string, _: string): Promise<OneTimePassword> {
+		return { userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT };
 	}
 
-	async redeemOTP(_: OTP): Promise<boolean> {
+	async redeemOTP(_: OneTimePassword): Promise<boolean> {
 		return true;
 	}
 
-	async sendOTP(_: OTP): Promise<boolean> {
+	async sendOTP(_: OneTimePassword): Promise<boolean> {
 		return true;
 	}
 }
@@ -118,9 +119,9 @@ describe('One Time Password Authentication - Challenge', () => {
 			async () =>
 				({
 					userId: user.id,
-					code: MOCK_CODE,
+					data: { code: MOCK_CODE },
 					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				} as OTP)
+				} as OneTimePassword)
 		);
 
 		const response = await graphweaver.server.executeOperation<{

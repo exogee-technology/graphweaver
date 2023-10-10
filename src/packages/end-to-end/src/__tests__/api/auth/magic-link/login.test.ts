@@ -28,16 +28,17 @@ export class AuthResolver extends MagicLinkAuthResolver {
 	}
 
 	async getMagicLink(userId: string, token: string): Promise<MagicLink> {
-		if (token === MOCK_TOKEN) return { userId, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT };
+		if (token === MOCK_TOKEN)
+			return { id: '1', userId, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT };
 		throw new Error('No magic link found');
 	}
 
 	async getMagicLinks(userId: string, _: Date): Promise<MagicLink[]> {
-		return [{ userId, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT }];
+		return [{ id: '1', userId, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT }];
 	}
 
 	async createMagicLink(userId: string, _: string): Promise<MagicLink> {
-		return { userId, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT };
+		return { id: '1', userId, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT };
 	}
 
 	async redeemMagicLink(_: MagicLink): Promise<boolean> {
@@ -113,12 +114,13 @@ describe('Magic Link Authentication - Login', () => {
 			new URL(
 				`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=http%3A%2F%2Flocalhost%3A9000%2F&providers=${AuthenticationMethod.MAGIC_LINK}&token=${MOCK_TOKEN}&username=${user.username}`
 			),
-			{ userId: user.id, token: MOCK_TOKEN, createdAt: MOCK_CREATED_AT }
+			{ id: '1', userId: user.id, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT }
 		);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledWith({
+			id: '1',
 			userId: user.id,
-			token: MOCK_TOKEN,
+			data: { token: MOCK_TOKEN },
 			createdAt: MOCK_CREATED_AT,
 		});
 	});

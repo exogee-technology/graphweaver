@@ -1,10 +1,11 @@
 import 'reflect-metadata';
 import {
 	UserProfile,
-	PasskeyAuthResolver,
+	BasePasskeyAuthResolver,
 	authApolloPlugin,
 	PasskeyAuthenticatorDevice,
 	PasswordAuthResolver,
+	Token,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -22,7 +23,7 @@ const user = new UserProfile({
 const MOCK_CHALLENGE = 'MOCK CHALLENGE';
 
 @Resolver()
-export class AuthResolver extends PasskeyAuthResolver {
+export class AuthResolver extends BasePasskeyAuthResolver {
 	public async getUserCurrentChallenge(userId: string): Promise<string> {
 		return MOCK_CHALLENGE;
 	}
@@ -43,7 +44,7 @@ export class AuthResolver extends PasskeyAuthResolver {
 			id: '1',
 			credentialID,
 			counter: 1,
-			credentialPublicKey: Buffer.from('test'),
+			credentialPublicKey: 'test',
 		};
 	}
 
