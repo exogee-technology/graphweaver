@@ -2,8 +2,6 @@ import { GraphQLEntity, SummaryField, Field, ID, ObjectType } from '@exogee/grap
 import {
 	AccessControlList,
 	ApplyAccessControlList,
-	ApplyMultiFactorAuthentication,
-	AuthenticationMethod,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
 
@@ -20,12 +18,6 @@ const acl: AccessControlList<User, AuthorizationContext> = {
 	},
 };
 
-@ApplyMultiFactorAuthentication<User>({
-	Everyone: {
-		// all users must provide a magic link mfa when writing data
-		Read: [{ factorsRequired: 1, providers: [AuthenticationMethod.MAGIC_LINK] }],
-	},
-})
 @ApplyAccessControlList(acl)
 @ObjectType('User')
 export class User extends GraphQLEntity<RestUser> {

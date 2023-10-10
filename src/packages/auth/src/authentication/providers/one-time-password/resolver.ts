@@ -1,131 +1,118 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import ms from 'ms';
-import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
-import { logger } from '@exogee/logger';
-import otpGenerator from 'otp-generator';
+import { BackendProvider, Resolver, Sort } from '@exogee/graphweaver';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../../types';
-import { Token } from '../../schema/token';
-import { UserProfile } from '../../../user-profile';
-import { AuthTokenProvider } from '../../token';
-import { ChallengeError } from '../../../errors';
+import {
+	BaseOneTimePasswordAuthResolver,
+	OneTimePassword,
+	OneTimePasswordData,
+} from './base-resolver';
+import { AuthenticationType } from '../../../types';
+import { AuthenticationBaseEntity } from '../../entities';
+import { AuthenticationError } from 'apollo-server-errors';
 
-const config = {
-	rate: {
-		limit: parseInt(process.env.AUTH_OTP_RATE_LIMIT ?? '10'),
-		period: process.env.AUTH_OTP_RATE_PERIOD || '1d',
-	},
-	ttl: process.env.AUTH_OTP_TTL || '1m',
-};
+type OneTimePasswordProvider = BackendProvider<
+	AuthenticationBaseEntity<OneTimePasswordData>,
+	AuthenticationBaseEntity<OneTimePasswordData>
+>;
 
-export interface OneTimePasswordData {
-	code: string;
-	redeemedAt?: Date;
-}
+@Resolver()
+export class OneTimePasswordAuthResolver extends BaseOneTimePasswordAuthResolver {
+	private provider: OneTimePasswordProvider;
 
-export interface OneTimePassword {
-	id?: string;
-	userId: string;
-	data: OneTimePasswordData;
-	createdAt: Date;
-}
+	constructor({ provider }: { provider: OneTimePasswordProvider }) {
+		super();
+		this.provider = provider;
+	}
+	/**
+	 * Return a specific OTP for this user
+	 * @param userId users ID
+	 * @param code code string
+	 * @returns Array of OTP compatible entities
+	 */
+	async getOTP(userId: string, code: string): Promise<OneTimePassword> {
+		const result = await this.provider.find(
+			{
+				type: AuthenticationType.OneTimePasswordChallenge,
+				userId,
+				data: { code, redeemedAt: 'null' },
+			},
+			{ limit: 1, orderBy: { id: Sort.DESC }, offset: 0 }
+		);
 
-const createCode = () =>
-	otpGenerator.generate(6, {
-		digits: true,
-		lowerCaseAlphabets: false,
-		upperCaseAlphabets: false,
-		specialChars: false,
-	});
-
-@Resolver((of) => Token)
-export abstract class OneTimePasswordAuthResolver {
-	abstract getUser(username: string): Promise<UserProfile>;
-	abstract getOTP(userId: string, code: string): Promise<OneTimePassword>;
-	abstract getOTPs(userId: string, period: Date): Promise<OneTimePassword[]>;
-	abstract createOTP(userId: string, code: string): Promise<OneTimePassword>;
-	abstract redeemOTP(otp: OneTimePassword): Promise<boolean>;
-	abstract sendOTP(otp: OneTimePassword): Promise<boolean>;
-
-	@Mutation((returns) => Boolean)
-	async sendOTPChallenge(@Ctx() ctx: AuthorizationContext): Promise<boolean> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const username = ctx.user?.username;
-		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
-
-		// check that the user exists
-		const user = await this.getUser(username);
-
-		// if the user does not exist, silently fail
-		if (!user?.id) {
-			logger.warn(`User with username ${username} does not exist or is not active.`);
-			return true;
-		}
-
-		// Check if the user created X links in the last X period
-		const { rate } = config;
-		// Current date minus the rate limit period
-		const period = new Date(new Date().getTime() - ms(rate.period));
-		const otps = await this.getOTPs(user.id, period);
-
-		// Check rate limiting conditions for otp creation
-		if (otps.length >= rate.limit) {
-			logger.warn(`Too many OTP created for ${username}.`);
-			return true;
-		}
-
-		// Create a OTP and save it to the database
-		const otp = await this.createOTP(user.id, createCode());
-		// fail silently
-		if (!otp) return true;
-
-		// Send to user
-		return this.sendOTP(otp);
+		const [otp] = result;
+		if (!otp) throw new AuthenticationError('Authentication Failed: OTP not found');
+		return otp;
 	}
 
-	@Mutation((returns) => Token)
-	async verifyOTPChallenge(
-		@Arg('code', () => String) code: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<Token> {
-		try {
-			const username = ctx.user?.username;
-			if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
-			if (!code) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+	/**
+	 * Return all otp that are valid in the current period for this user
+	 * @param userId user ID to search for
+	 * @param period the earliest date that is valid for this period
+	 * @returns OTP compatible entity
+	 */
+	async getOTPs(userId: string, period: Date): Promise<OneTimePassword[]> {
+		return await this.provider.find({
+			type: AuthenticationType.OneTimePasswordChallenge,
+			userId,
+			createdAt_gt: period,
+		} as {
+			type: AuthenticationType.OneTimePasswordChallenge;
+			userId: string;
+			createdAt_gt: Date;
+		});
+	}
 
-			const userProfile = await this.getUser(username);
-			if (!userProfile?.id)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+	/**
+	 * A callback to persist the OTP in the data source of choice
+	 * @param userId user ID to search for
+	 * @param code the code generated for this OTP
+	 * @returns OTP compatible entity
+	 */
+	async createOTP(userId: string, code: string): Promise<OneTimePassword> {
+		const link = await this.provider.createOne({
+			type: AuthenticationType.OneTimePasswordChallenge,
+			userId,
+			data: {
+				code,
+				redeemedAt: 'null',
+			},
+		});
+		return link;
+	}
 
-			const otp = await this.getOTP(userProfile.id, code);
-			// Check that the otp is still valid
-			const ttl = new Date(new Date().getTime() - ms(config.ttl));
-			if (otp.createdAt < ttl)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication OTP expired.');
+	/**
+	 * A callback to persist the redeeming of an OTP
+	 * @param otp the otp that was updated
+	 * @returns boolean to indicate the successful saving of the redeem operation
+	 */
+	async redeemOTP({ id }: OneTimePassword): Promise<boolean> {
+		if (!id) throw new AuthenticationError('Authentication Failed: OTP not found');
 
-			// Step up existing token
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
-			const existingAuthToken =
-				typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
-			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-			if (!authToken)
-				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
+		const otp = await this.provider.findOne({
+			id,
+		});
 
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-			// Callback to the client to mark the otp as used
-			await this.redeemOTP(otp);
-
-			return token;
-		} catch (e) {
-			if (e instanceof AuthenticationError) throw e;
-			if (e instanceof ChallengeError) throw e;
-			if (e instanceof ForbiddenError) throw e;
-
-			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('OTP authentication failed.');
+		if (!otp) {
+			throw new AuthenticationError('Authentication Failed: OTP not found');
 		}
+
+		await this.provider.updateOne(id, {
+			data: {
+				...otp.data,
+				redeemedAt: new Date(),
+			},
+		});
+
+		return true;
+	}
+
+	/**
+	 * A callback that can be used to send the OTP via channels such as email or SMS
+	 * @param otp the OTP that was generated and should be sent to the user
+	 * @returns a boolean to indicate that the code has been sent
+	 */
+	async sendOTP(otp: OneTimePassword): Promise<boolean> {
+		// In a production system this would email / sms the OTP and you would not log to the console!
+		console.log(`\n\n ######## OTP: ${otp.data.code} ######## \n\n`);
+		return true;
 	}
 }
