@@ -111,8 +111,7 @@ export class OneTimePasswordAuthResolver extends BaseOneTimePasswordAuthResolver
 	 * @returns a boolean to indicate that the code has been sent
 	 */
 	async sendOTP(otp: OneTimePassword): Promise<boolean> {
-		// In a production system this would email / sms the OTP and you would not log to the console!
-		console.log(`\n\n ######## OTP: ${otp.data.code} ######## \n\n`);
+		//Override this method in your implementation to send the OTP to the user
 		return true;
 	}
 }
