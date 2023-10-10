@@ -1,9 +1,9 @@
 import { BackendProvider, Resolver, Sort } from '@exogee/graphweaver';
 
 import {
-	BaseOneTimePasswordAuthResolver,
 	OneTimePassword,
 	OneTimePasswordData,
+	createBaseOneTimePasswordAuthResolver,
 } from './base-resolver';
 import { AuthenticationType } from '../../../types';
 import { AuthenticationBaseEntity } from '../../entities';
@@ -15,7 +15,7 @@ type OneTimePasswordProvider = BackendProvider<
 >;
 
 @Resolver()
-export class OneTimePasswordAuthResolver extends BaseOneTimePasswordAuthResolver {
+export class OneTimePasswordAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 	private provider: OneTimePasswordProvider;
 
 	constructor({ provider }: { provider: OneTimePasswordProvider }) {

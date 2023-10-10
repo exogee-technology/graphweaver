@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import {
 	UserProfile,
-	BasePasskeyAuthResolver,
+	createBasePasskeyAuthResolver,
 	authApolloPlugin,
 	PasskeyAuthenticatorDevice,
 	PasswordAuthResolver,
@@ -23,7 +23,7 @@ const user = new UserProfile({
 const MOCK_CHALLENGE = 'MOCK CHALLENGE';
 
 @Resolver()
-export class AuthResolver extends BasePasskeyAuthResolver {
+export class AuthResolver extends createBasePasskeyAuthResolver() {
 	public async getUserCurrentChallenge(userId: string): Promise<string> {
 		return MOCK_CHALLENGE;
 	}

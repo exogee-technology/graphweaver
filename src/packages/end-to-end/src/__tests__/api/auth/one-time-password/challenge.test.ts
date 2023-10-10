@@ -6,7 +6,7 @@ import { Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	BaseOneTimePasswordAuthResolver,
+	createBaseOneTimePasswordAuthResolver,
 	PasswordAuthResolver,
 	OneTimePassword,
 } from '@exogee/graphweaver-auth';
@@ -22,7 +22,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends BaseOneTimePasswordAuthResolver {
+class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 	async getUser(_: string): Promise<UserProfile> {
 		return user;
 	}
@@ -59,7 +59,7 @@ export class CredentialAuthResolver extends PasswordAuthResolver {
 }
 
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, CredentialAuthResolver],
+	resolvers: [OTPAuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},
@@ -115,7 +115,7 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(AuthResolver.prototype, 'getOTP').mockImplementation(
+		jest.spyOn(OTPAuthResolver.prototype, 'getOTP').mockImplementation(
 			async () =>
 				({
 					userId: user.id,
