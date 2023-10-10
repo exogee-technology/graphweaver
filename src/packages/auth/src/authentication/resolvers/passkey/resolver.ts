@@ -1,6 +1,6 @@
-import { BackendProvider, Resolver, Sort } from '@exogee/graphweaver';
+import { BackendProvider, Sort } from '@exogee/graphweaver';
 
-import { BasePasskeyAuthResolver, PasskeyAuthenticatorDevice } from './base-resolver';
+import { createBasePasskeyAuthResolver, PasskeyAuthenticatorDevice } from './base-resolver';
 import { AuthenticationType } from '../../../types';
 import { AuthenticationBaseEntity } from '../../entities';
 import { AuthenticationError } from 'apollo-server-errors';
@@ -25,8 +25,7 @@ type PasskeyAuthenticatorProvider = BackendProvider<
 	AuthenticationBaseEntity<PasskeyAuthenticator>
 >;
 
-@Resolver()
-export class PasskeyAuthResolver extends BasePasskeyAuthResolver {
+export class PasskeyAuthResolver extends createBasePasskeyAuthResolver() {
 	private passkeyChallengeProvider: PasskeyChallengeProvider;
 	private passkeyAuthenticatorProvider: PasskeyAuthenticatorProvider;
 	constructor({
