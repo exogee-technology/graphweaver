@@ -85,3 +85,11 @@ export type MultiFactorAuthenticationRule = {
 	factorsRequired: number;
 	providers: AuthenticationMethod[];
 };
+
+export enum AuthenticationType {
+	PasskeyChallenge = 'PasskeyChallenge',
+	PasskeyAuthenticator = 'PasskeyAuthenticator',
+	Web3WalletAddress = 'Web3WalletAddress',
+	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
+	MagicLinkChallenge = 'MagicLinkChallenge',
+}
