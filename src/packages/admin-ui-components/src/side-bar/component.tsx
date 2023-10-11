@@ -45,8 +45,6 @@ export const SideBar = () => {
 
 			<div className={styles.sideBarContent}>
 				<ul className={classnames(styles.closed)}>
-					<SettingsRow key={'/settings'} name={'Settings'} route={'/settings'} />
-
 					{!!userDashboardLinks.length && (
 						<>
 							{userDashboardLinks.map((link) => (
@@ -54,6 +52,8 @@ export const SideBar = () => {
 							))}
 						</>
 					)}
+
+					<SettingsRow key={'/settings'} name={'Settings'} route={'/settings'} />
 				</ul>
 
 				<p className={styles.subtext}>Data Sources</p>
