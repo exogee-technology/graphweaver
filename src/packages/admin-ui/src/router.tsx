@@ -4,7 +4,7 @@ import { Loader, DefaultLayout, DetailPanel } from '@exogee/graphweaver-admin-ui
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { List, Root, Playground } from './pages';
+import { List, Root, Playground, Settings } from './pages';
 
 const defaultRoutes = [
 	{
@@ -28,6 +28,10 @@ const defaultRoutes = [
 			{
 				path: 'loader',
 				element: <Loader />,
+			},
+			{
+				path: 'settings',
+				element: <Settings />,
 			},
 		],
 	},
