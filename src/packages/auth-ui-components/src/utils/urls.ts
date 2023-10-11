@@ -3,8 +3,7 @@ export const formatRedirectUrl = (url: string): string => {
 	const currentLocation = window.location;
 
 	if (parsedUrl.hostname === currentLocation.hostname) {
-		const pathAndSearchParams = parsedUrl.pathname + parsedUrl.search;
-		return pathAndSearchParams;
+		return parsedUrl.pathname + parsedUrl.search;
 	}
 	return url;
 };
