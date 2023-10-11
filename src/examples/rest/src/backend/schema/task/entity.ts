@@ -80,12 +80,12 @@ export const preventLightSideAccess = (
 	return params.entities;
 };
 
-@ApplyMultiFactorAuthentication<Task>({
+@ApplyMultiFactorAuthentication<Task>(() => ({
 	Everyone: {
 		// all users must provide a password mfa when writing data
 		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.WEB3] }],
 	},
-})
+}))
 @ApplyAccessControlList(acl)
 @ObjectType('Task')
 export class Task extends GraphQLEntity<OrmTask> {

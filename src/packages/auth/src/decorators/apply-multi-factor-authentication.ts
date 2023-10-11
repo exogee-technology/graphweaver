@@ -2,6 +2,7 @@ import {
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	HookManager,
+	HookParams,
 	HookRegister,
 	ReadHookParams,
 	hookManagerMap,
@@ -14,58 +15,68 @@ import {
 	checkAuthentication,
 } from '..';
 
-const beforeRead = (mfa?: Partial<MultiFactorAuthentication>) => {
-	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
+const beforeRead = <G>(
+	mfa?: (params?: ReadHookParams<G, AuthorizationContext>) => MultiFactorAuthentication
+) => {
+	return async (params: ReadHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
-		if (mfa) await checkAuthentication(mfa, AccessType.Read, token);
+		if (mfa) await checkAuthentication(mfa(params), AccessType.Read, token);
 		return params;
 	};
 };
 
-const beforeCreate = (mfa?: Partial<MultiFactorAuthentication>) => {
-	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+const beforeCreate = <G>(
+	mfa?: (params?: CreateOrUpdateHookParams<G, AuthorizationContext>) => MultiFactorAuthentication
+) => {
+	return async (params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
-		if (mfa) await checkAuthentication(mfa, AccessType.Create, token);
+		if (mfa) await checkAuthentication(mfa(params), AccessType.Create, token);
 		return params;
 	};
 };
 
-const beforeUpdate = (mfa?: Partial<MultiFactorAuthentication>) => {
-	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+const beforeUpdate = <G>(
+	mfa?: (params?: CreateOrUpdateHookParams<G, AuthorizationContext>) => MultiFactorAuthentication
+) => {
+	return async (params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
-		if (mfa) await checkAuthentication(mfa, AccessType.Update, token);
+		if (mfa) await checkAuthentication(mfa(params), AccessType.Update, token);
 		return params;
 	};
 };
 
-const beforeDelete = (mfa?: Partial<MultiFactorAuthentication>) => {
-	return async <G>(params: DeleteHookParams<G, AuthorizationContext>) => {
+const beforeDelete = <G>(
+	mfa?: (params?: DeleteHookParams<G, AuthorizationContext>) => MultiFactorAuthentication
+) => {
+	return async (params: DeleteHookParams<G, AuthorizationContext>) => {
 		const token = params.context.token;
-		if (mfa) await checkAuthentication(mfa, AccessType.Delete, token);
+		if (mfa) await checkAuthentication(mfa(params), AccessType.Delete, token);
 		return params;
 	};
 };
 
-export function ApplyMultiFactorAuthentication<G>(mfa: MultiFactorAuthentication) {
+export function ApplyMultiFactorAuthentication<G>(
+	mfa: (params?: HookParams<G, AuthorizationContext>) => MultiFactorAuthentication
+) {
 	return function (constructor: any): void {
 		const hookManager =
 			(hookManagerMap.get(constructor.name) as HookManager<G>) || new HookManager<G>();
 
 		hookManager.registerHook<ReadHookParams<G, AuthorizationContext>>(
 			HookRegister.BEFORE_READ,
-			beforeRead(mfa)
+			beforeRead<G>(mfa)
 		);
 		hookManager.registerHook<CreateOrUpdateHookParams<G, AuthorizationContext>>(
 			HookRegister.BEFORE_UPDATE,
-			beforeUpdate(mfa)
+			beforeUpdate<G>(mfa)
 		);
 		hookManager.registerHook<CreateOrUpdateHookParams<G, AuthorizationContext>>(
 			HookRegister.BEFORE_CREATE,
-			beforeCreate(mfa)
+			beforeCreate<G>(mfa)
 		);
 		hookManager.registerHook<DeleteHookParams<G, AuthorizationContext>>(
 			HookRegister.BEFORE_DELETE,
-			beforeDelete(mfa)
+			beforeDelete<G>(mfa)
 		);
 
 		hookManagerMap.set(constructor.name, hookManager);
