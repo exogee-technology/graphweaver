@@ -23,11 +23,11 @@
 	padding: 0 8px 8px 14px;
 }
 
-.sideBarContent > ul {
+.entity {
 	margin: 8px;
 }
 
-.sideBarContent > ul:last-child {
+.entity:last-child {
 	margin-top: 0;
 }
 
@@ -82,7 +82,7 @@
 	align-items: center;
 }
 
-.subListItem {
+.listItem {
 	display: flex;
 	align-items: center;
 	opacity: 0.6;
@@ -92,31 +92,32 @@
 	width: 100%;
 }
 
-.subListItemText {
+.listItemText {
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 
-.subListItem::after {
+.listItem::after {
 	display: none;
 }
 
-.subListItem:hover {
+.listItem:hover {
 	background-color: #2a2235;
 }
 
-.subListItem.active {
+.listItem.active {
 	background-color: var(--primary-color);
 	opacity: 1;
 }
 
-.subListItem.active span {
+.listItem.active span {
 	background-image: url(../../assets/16-table-light.svg);
 }
 
 .sideBarFooter {
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 }
 
 .footerText {

@@ -10,10 +10,10 @@ export const EntityRow = ({ entity }: { entity: Entity }) => (
 	<li>
 		<NavLink
 			to={routeFor({ entity })}
-			className={({ isActive }) => classnames(styles.subListItem, isActive && styles.active)}
+			className={({ isActive }) => classnames(styles.listItem, isActive && styles.active)}
 		>
 			<TableIcon />
-			<span className={styles.subListItemText}>{entity.name}</span>
+			<span className={styles.listItemText}>{entity.name}</span>
 		</NavLink>
 	</li>
 );

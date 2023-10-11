@@ -1,18 +1,18 @@
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 
-import { TableIcon } from '../../assets';
+import { SettingsIcon } from '../../assets';
 
 import styles from '../styles.module.css';
 
-export const DashboardRow = ({ name, route }: { name: string; route: string }) => (
+export const SettingsRow = ({ name, route }: { name: string; route: string }) => (
 	<li>
 		<NavLink
 			to={route}
 			className={({ isActive }) => classnames(styles.listItem, isActive && styles.active)}
 			end
 		>
-			<TableIcon />
+			<SettingsIcon />
 			{name}
 		</NavLink>
 	</li>

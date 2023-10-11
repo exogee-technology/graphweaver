@@ -8,7 +8,7 @@ import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-cu
 import { GraphweaverLogo } from '../assets';
 import { useSchema } from '../utils';
 
-import { BackendRow, DashboardRow } from './contents';
+import { BackendRow, DashboardRow, SettingsRow } from './contents';
 import { Spacer } from '../spacer';
 
 import styles from './styles.module.css';
@@ -44,19 +44,17 @@ export const SideBar = () => {
 			</Link>
 
 			<div className={styles.sideBarContent}>
-				{!!userDashboardLinks.length && (
-					<>
-						<p className={styles.subtext}>Dashboards</p>
-						<ul
-							//className={classnames(styles.entity, styles.closed)}
-							className={classnames(styles.closed)}
-						>
+				<ul className={classnames(styles.closed)}>
+					<SettingsRow key={'/settings'} name={'Settings'} route={'/'} />
+
+					{!!userDashboardLinks.length && (
+						<>
 							{userDashboardLinks.map((link) => (
 								<DashboardRow key={link.route} name={link.name} route={link.route} />
 							))}
-						</ul>
-					</>
-				)}
+						</>
+					)}
+				</ul>
 
 				<p className={styles.subtext}>Data Sources</p>
 
