@@ -5,18 +5,23 @@ import {
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
-import { ConnectionManager, DatabaseImplementation, wrap } from '@exogee/graphweaver-mikroorm';
+import {
+	ConnectionManager,
+	DatabaseImplementation,
+	MikroBackendProvider,
+} from '@exogee/graphweaver-mikroorm';
 
 import { addUserToContext } from '../../../auth/context';
 import { myConnection } from '../../../database';
 import { Authentication, Credential } from '../../../entities/mysql';
-import { AuthenticationType } from '..';
 
 @Resolver()
 export class MagicLinkAuthResolver extends AuthResolver {
 	private database: DatabaseImplementation;
 	constructor() {
-		super();
+		super({
+			provider: new MikroBackendProvider(Authentication<MagicLinkData>, myConnection),
+		});
 		this.database = ConnectionManager.database(myConnection.connectionManagerId);
 	}
 	/**
@@ -27,74 +32,6 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	async getUser(username: string): Promise<UserProfile> {
 		const credential = await this.database.em.findOneOrFail(Credential, { username });
 		return addUserToContext(credential.id);
-	}
-
-	/**
-	 * Return a specific token for this user
-	 * @param userId users ID
-	 * @param token token string
-	 * @returns Array of MagicLink compatible entities
-	 */
-	async getMagicLink(userId: string, token: string): Promise<MagicLink> {
-		return this.database.em.findOneOrFail(Authentication<MagicLinkData>, {
-			type: AuthenticationType.MagicLinkChallenge,
-			userId,
-			data: {
-				token,
-				redeemedAt: 'null',
-			},
-		});
-	}
-
-	/**
-	 * Return all magic links that are valid in the current period for this user
-	 * @param userId user ID to search for
-	 * @param period the earliest date that is valid for this period
-	 * @returns MagicLink compatible entity
-	 */
-	async getMagicLinks(userId: string, period: Date): Promise<MagicLink[]> {
-		return this.database.em.find(Authentication<MagicLinkData>, {
-			type: AuthenticationType.MagicLinkChallenge,
-			userId,
-			createdAt: {
-				$gt: period,
-			},
-		});
-	}
-
-	/**
-	 * A callback to persist the Magic Link in the data source of choice
-	 * @param userId user ID to search for
-	 * @param token the token generated for this magic link
-	 * @returns MagicLink compatible entity
-	 */
-	async createMagicLink(userId: string, token: string): Promise<MagicLink> {
-		const link = new Authentication<MagicLinkData>();
-		wrap(link).assign(
-			{
-				type: AuthenticationType.MagicLinkChallenge,
-				userId,
-				data: {
-					token,
-					redeemedAt: 'null',
-				},
-			},
-			{ em: this.database.em }
-		);
-		await this.database.em.persistAndFlush(link);
-		return link;
-	}
-
-	/**
-	 * A callback to persist the redeeming of a Magic Link
-	 * @param magicLink the magicLink that was updated
-	 * @returns boolean to indicate the successful saving of the redeem operation
-	 */
-	async redeemMagicLink({ id }: MagicLink): Promise<boolean> {
-		const link = await this.database.em.findOneOrFail(Authentication<MagicLinkData>, { id });
-		link.data.redeemedAt = new Date();
-		await this.database.em.persistAndFlush(link);
-		return true;
 	}
 
 	/**

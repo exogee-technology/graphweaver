@@ -1,179 +1,125 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import ms from 'ms';
-import { AuthenticationError } from 'apollo-server-errors';
-import { logger } from '@exogee/logger';
-import { randomUUID } from 'crypto';
+import { BackendProvider, Resolver } from '@exogee/graphweaver';
 
-import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../../types';
-import { Token } from '../../entities/token';
+import { AuthenticationBaseEntity } from '../../entities';
+import { MagicLink, MagicLinkData, createBaseMagicLinkAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
-import { AuthTokenProvider } from '../../token';
-import { requireEnvironmentVariable } from '../../../helper-functions';
+import { AuthenticationType } from '../../../types';
+import { AuthenticationError } from 'apollo-server-errors';
 
-const config = {
-	rate: {
-		limit: parseInt(process.env.AUTH_MAGIC_LINK_RATE_LIMIT ?? '5'),
-		period: process.env.AUTH_MAGIC_LINK_RATE_PERIOD || '1d',
-	},
-	ttl: process.env.AUTH_MAGIC_LINK_TTL || '15m',
-};
+type MagicLinkProvider = BackendProvider<
+	AuthenticationBaseEntity<MagicLinkData>,
+	AuthenticationBaseEntity<MagicLinkData>
+>;
+@Resolver()
+export class MagicLinkAuthResolver extends createBaseMagicLinkAuthResolver() {
+	private provider: MagicLinkProvider;
 
-export interface MagicLinkData {
-	token: string;
-	redeemedAt?: Date;
-}
-
-export interface MagicLink {
-	id: string;
-	userId: string;
-	createdAt: Date;
-	data: MagicLinkData;
-}
-
-// For now this is just a uuid
-const createToken = randomUUID;
-
-@Resolver((of) => Token)
-export abstract class MagicLinkAuthResolver {
-	abstract getUser(username: string): Promise<UserProfile>;
-	abstract getMagicLink(userId: string, token: string): Promise<MagicLink>;
-	abstract getMagicLinks(userId: string, period: Date): Promise<MagicLink[]>;
-	abstract createMagicLink(userId: string, token: string): Promise<MagicLink>;
-	abstract redeemMagicLink(magicLink: MagicLink): Promise<boolean>;
-	abstract sendMagicLink(url: URL, magicLink: MagicLink): Promise<boolean>;
-
-	private async generateMagicLink(username: string, ctx: AuthorizationContext) {
-		// check that the user exists
-		const user = await this.getUser(username);
-
-		// if the user does not exist, silently fail
-		if (!user?.id) {
-			logger.warn(`User with username ${username} does not exist or is not active.`);
-			return;
-		}
-
-		// Check if the user created X links in the last X period
-		const { rate } = config;
-		// Current date minus the rate limit period
-		const period = new Date(new Date().getTime() - ms(rate.period));
-		const links = await this.getMagicLinks(user.id, period);
-
-		// Check rate limiting conditions for magic link creation
-		if (links.length >= rate.limit) {
-			logger.warn(`Too many magic links created for ${username}.`);
-			return;
-		}
-
-		// Create a magic link and save it to the database
-		const link = await this.createMagicLink(user.id, createToken());
-
-		// Get Redirect URL
-		const redirect = new URL(
-			ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
+	constructor({ provider }: { provider: MagicLinkProvider }) {
+		super();
+		this.provider = provider;
+	}
+	/**
+	 *
+	 * @param username fetch user details using a username
+	 * @returns return a UserProfile compatible entity
+	 */
+	async getUser(username: string): Promise<UserProfile> {
+		throw new Error(
+			'Method getUser not implemented: Override this function to return a user profile'
 		);
-
-		const url = new URL(redirect.origin);
-
-		url.searchParams.set('redirect_uri', redirect.toString());
-		url.searchParams.set('providers', AuthenticationMethod.MAGIC_LINK);
-		url.searchParams.set('token', link.data.token);
-
-		return { link, url };
 	}
 
-	private async verifyMagicLink(
-		username: string,
-		magicLinkToken?: string,
-		existingAuthToken?: JwtPayload
-	) {
-		try {
-			if (!magicLinkToken)
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
+	/**
+	 * Return a specific token for this user
+	 * @param userId users ID
+	 * @param token token string
+	 * @returns Array of MagicLink compatible entities
+	 */
+	async getMagicLink(userId: string, token: string): Promise<MagicLink> {
+		const link = await this.provider.findOne({
+			type: AuthenticationType.MagicLinkChallenge,
+			userId,
+			data: {
+				token,
+				redeemedAt: 'null',
+			},
+		});
 
-			const userProfile = await this.getUser(username);
-			if (!userProfile?.id)
-				throw new AuthenticationError('Auth unsuccessful: Authentication failed.');
+		if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
+		return link;
+	}
 
-			const link = await this.getMagicLink(userProfile.id, magicLinkToken);
-			// Check that the magic link is still valid
-			const ttl = new Date(new Date().getTime() - ms(config.ttl));
-			if (link.createdAt < ttl)
-				throw new AuthenticationError('Auth unsuccessful: Authentication Magic Link expired.');
+	/**
+	 * Return all magic links that are valid in the current period for this user
+	 * @param userId user ID to search for
+	 * @param period the earliest date that is valid for this period
+	 * @returns MagicLink compatible entity
+	 */
+	async getMagicLinks(userId: string, period: Date): Promise<MagicLink[]> {
+		return this.provider.find({
+			type: AuthenticationType.MagicLinkChallenge,
+			userId,
+			createdAt_gt: period,
+		} as {
+			type: AuthenticationType.MagicLinkChallenge;
+			userId: string;
+			createdAt_gt: Date;
+		});
+	}
 
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
-			const authToken = existingAuthToken
-				? await tokenProvider.stepUpToken(existingAuthToken)
-				: await tokenProvider.generateToken(userProfile);
-			if (!authToken) throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
+	/**
+	 * A callback to persist the Magic Link in the data source of choice
+	 * @param userId user ID to search for
+	 * @param token the token generated for this magic link
+	 * @returns MagicLink compatible entity
+	 */
+	async createMagicLink(userId: string, token: string): Promise<MagicLink> {
+		const link = await this.provider.createOne({
+			type: AuthenticationType.MagicLinkChallenge,
+			userId,
+			data: {
+				token,
+				redeemedAt: 'null',
+			},
+		});
+		return link;
+	}
 
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Auth unsuccessful.');
+	/**
+	 * A callback to persist the redeeming of a Magic Link
+	 * @param magicLink the magicLink that was updated
+	 * @returns boolean to indicate the successful saving of the redeem operation
+	 */
+	async redeemMagicLink({ id }: MagicLink): Promise<boolean> {
+		if (!id) throw new AuthenticationError('Authentication Failed: Magic Link not found');
 
-			// Callback to the client to mark the magic link as used
-			await this.redeemMagicLink(link);
+		const link = await this.provider.findOne({
+			id,
+		});
 
-			return token;
-		} catch (e) {
-			if (e instanceof AuthenticationError) throw e;
-
-			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('Magic Link authentication failed.');
+		if (!link) {
+			throw new AuthenticationError('Authentication Failed: Magic Link not found');
 		}
+
+		await this.provider.updateOne(id, {
+			data: {
+				...link.data,
+				redeemedAt: new Date(),
+			},
+		});
+
+		return true;
 	}
 
-	@Mutation((returns) => Boolean)
-	async sendLoginMagicLink(
-		@Arg('username', () => String) username: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<boolean> {
-		const { url, link } = (await this.generateMagicLink(username, ctx)) ?? {};
-
-		// fail silently
-		if (!link || !url) return true;
-
-		url.pathname = 'auth/login';
-		url.searchParams.set('username', username);
-
-		return await this.sendMagicLink(url, link);
-	}
-
-	@Mutation((returns) => Token)
-	async verifyLoginMagicLink(
-		@Arg('username', () => String) username: string,
-		@Arg('token', () => String) magicLinkToken: string
-	): Promise<Token> {
-		return this.verifyMagicLink(username, magicLinkToken);
-	}
-
-	@Mutation((returns) => Boolean)
-	async sendChallengeMagicLink(@Ctx() ctx: AuthorizationContext): Promise<boolean> {
-		const username = ctx.user?.username;
-		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
-
-		const { url, link } = (await this.generateMagicLink(username, ctx)) ?? {};
-
-		// fail silently
-		if (!link || !url) return true;
-
-		url.pathname = 'auth/challenge';
-
-		// Send to user
-		return await this.sendMagicLink(url, link);
-	}
-
-	@Mutation((returns) => Token)
-	async verifyChallengeMagicLink(
-		@Arg('token', () => String) magicLinkToken: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<Token> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
-		const existingToken =
-			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
-
-		const username = ctx.user?.username;
-		if (!username) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-
-		return this.verifyMagicLink(username, magicLinkToken, existingToken);
+	/**
+	 * A callback that can be used to send the magic link via channels such as email or SMS
+	 * @param magicLink the URL that was generated and should be sent to the user
+	 * @returns a boolean to indicate that the URL has been sent
+	 */
+	async sendMagicLink(url: URL, magicLink: MagicLink): Promise<boolean> {
+		//Override this method in your implementation to send the OTP to the user
+		throw new Error(
+			'Method sendMagicLink not implemented: Override this function to send a Magic Link.'
+		);
 	}
 }
