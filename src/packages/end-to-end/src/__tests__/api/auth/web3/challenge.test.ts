@@ -2,10 +2,13 @@ import 'reflect-metadata';
 import {
 	AuthenticationMethod,
 	UserProfile,
-	Web3AuthResolver,
+	createBaseWeb3AuthResolver,
 	authApolloPlugin,
 	MultiFactorAuthentication,
 	PasswordAuthResolver,
+	AuthenticationBaseEntity,
+	WalletAddress,
+	AuthenticationType,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -30,7 +33,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends Web3AuthResolver {
+export class AuthResolver extends createBaseWeb3AuthResolver() {
 	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined> {
 		return {
 			Everyone: {
@@ -40,8 +43,19 @@ export class AuthResolver extends Web3AuthResolver {
 		};
 	}
 
-	async getUserByWalletAddress(userId: string, address: string): Promise<UserProfile> {
-		return user;
+	async getWalletAddress(
+		userId: string,
+		address: string
+	): Promise<AuthenticationBaseEntity<WalletAddress>> {
+		return {
+			id: '1',
+			userId,
+			type: AuthenticationType.Web3WalletAddress,
+			data: {
+				address: address.toLowerCase(),
+			},
+			createdAt: new Date(),
+		};
 	}
 
 	async saveWalletAddress(userId: string, address: string): Promise<boolean> {

@@ -1,110 +1,94 @@
-import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
-import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
-import { logger } from '@exogee/logger';
-import Web3Token from 'web3-token';
+import { BackendProvider, Resolver } from '@exogee/graphweaver';
 
+import { createBaseWeb3AuthResolver } from './base-resolver';
+import { AuthenticationBaseEntity } from '../../entities';
 import {
-	AccessType,
 	AuthenticationMethod,
-	AuthorizationContext,
+	AuthenticationType,
 	MultiFactorAuthentication,
 } from '../../../types';
-import { Token } from '../../entities/token';
-import { UserProfile } from '../../../user-profile';
-import { AuthTokenProvider } from '../../token';
-import { checkAuthentication } from '../../../helper-functions';
-import { ChallengeError } from '../../../errors';
 
-@Resolver((of) => Token)
-export abstract class Web3AuthResolver {
-	abstract getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined>;
-	abstract getUserByWalletAddress(id: string, address: string): Promise<UserProfile>;
-	abstract saveWalletAddress(id: string, address: string): Promise<boolean>;
+export type WalletAddress = {
+	address: string;
+};
 
-	// Use this query to check if you can enrol a wallet
-	@Query((returns) => Boolean)
-	async canEnrolWallet(@Ctx() ctx: AuthorizationContext): Promise<boolean> {
-		try {
-			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
+type Web3AuthProvider = BackendProvider<
+	AuthenticationBaseEntity<WalletAddress>,
+	AuthenticationBaseEntity<WalletAddress>
+>;
 
-			const mfa = await this.getMultiFactorAuthentication();
-			if (mfa) await checkAuthentication(mfa, AccessType.Create, ctx.token);
-
-			return true;
-		} catch (e) {
-			if (e instanceof AuthenticationError) throw e;
-			if (e instanceof ChallengeError) throw e;
-			if (e instanceof ForbiddenError) throw e;
-
-			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('Web3 authentication failed.');
-		}
+@Resolver()
+export class Web3AuthResolver extends createBaseWeb3AuthResolver() {
+	private provider: Web3AuthProvider;
+	constructor({ web3AuthProvider }: { web3AuthProvider: Web3AuthProvider }) {
+		super();
+		this.provider = web3AuthProvider;
+	}
+	/**
+	 * Secure the save wallet address mutation using a multi factor rule
+	 * @returns return a MultiFactorAuthentication compatible rule
+	 */
+	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication> {
+		// Override this function to change the MFA rules
+		return {
+			Everyone: {
+				// all users must provide a OTP mfa when saving a wallet address
+				Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
+			},
+		};
 	}
 
-	@Mutation((returns) => Boolean)
-	async enrolWallet(
-		@Arg('token', () => String) token: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<boolean> {
-		try {
-			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-			if (!ctx.user?.id) throw new AuthenticationError('Challenge unsuccessful: User not found.');
-			if (!token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
+	/**
+	 * Retrieve the user profile that matches the logged in user and wallet address
+	 * @param userId of the current logged in user
+	 * @param address web3 address used to sign the mfa message
+	 * @returns return a UserProfile compatible entity
+	 */
+	async getWalletAddress(
+		userId: string,
+		address: string
+	): Promise<AuthenticationBaseEntity<WalletAddress>> {
+		const device = await this.provider.findOne({
+			type: AuthenticationType.Web3WalletAddress,
+			userId,
+			data: {
+				address,
+			},
+		});
 
-			const mfa = await this.getMultiFactorAuthentication();
-			if (mfa) await checkAuthentication(mfa, AccessType.Create, ctx.token);
+		if (!device) throw new Error('Bad Request: Unknown user wallet address provided.');
 
-			const { address } = await Web3Token.verify(token);
-
-			return this.saveWalletAddress(ctx.user.id, address);
-		} catch (e) {
-			if (e instanceof AuthenticationError) throw e;
-			if (e instanceof ChallengeError) throw e;
-			if (e instanceof ForbiddenError) throw e;
-
-			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('Web3 authentication failed.');
-		}
+		return device;
 	}
 
-	@Mutation((returns) => Token)
-	async verifyWeb3Challenge(
-		@Arg('token', () => String) web3Token: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<Token> {
-		try {
-			const userId = ctx.user?.id;
-			if (!userId) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-			if (!web3Token) throw new AuthenticationError('Challenge unsuccessful: No web3 token.');
-			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+	/**
+	 * Save the wallet address and associate with this user
+	 * @param userId of the current logged in user
+	 * @param address web3 address used to sign the mfa message
+	 * @returns return a boolean if successful
+	 */
+	async saveWalletAddress(userId: string, address: string): Promise<boolean> {
+		// Let's check if we already have this combination in the database
+		const existingDevice = await this.provider.findOne({
+			type: AuthenticationType.Web3WalletAddress,
+			userId,
+			data: {
+				address,
+			},
+		});
 
-			// Verify wallet address belongs to the logged in user
-			const { address } = await Web3Token.verify(web3Token);
-			const userByAddress = await this.getUserByWalletAddress(userId, address);
+		// It is found so no need to add it again
+		if (existingDevice) return true;
 
-			// Double check the wallet address is for the current user
-			if (userId !== userByAddress.id) {
-				throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-			}
+		// Insert the new wallet address into the database
+		await this.provider.createOne({
+			type: AuthenticationType.Web3WalletAddress,
+			userId,
+			data: {
+				address,
+			},
+		});
 
-			// Upgrade Token
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.WEB3);
-			const existingAuthToken =
-				typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
-			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-			if (!authToken)
-				throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
-
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-			return token;
-		} catch (e) {
-			if (e instanceof AuthenticationError) throw e;
-
-			logger.info('Authentication failed with error', e);
-			throw new AuthenticationError('Web3 authentication failed.');
-		}
+		return true;
 	}
 }
