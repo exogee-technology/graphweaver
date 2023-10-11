@@ -6,7 +6,7 @@ import { Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	MagicLinkAuthResolver,
+	createBaseMagicLinkAuthResolver,
 	MagicLink,
 	AuthenticationMethod,
 } from '@exogee/graphweaver-auth';
@@ -22,7 +22,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends MagicLinkAuthResolver {
+export class AuthResolver extends createBaseMagicLinkAuthResolver() {
 	async getUser(_: string): Promise<UserProfile> {
 		return user;
 	}

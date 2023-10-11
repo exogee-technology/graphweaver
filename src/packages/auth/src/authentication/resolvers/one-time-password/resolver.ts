@@ -29,16 +29,12 @@ export class OneTimePasswordAuthResolver extends createBaseOneTimePasswordAuthRe
 	 * @returns Array of OTP compatible entities
 	 */
 	async getOTP(userId: string, code: string): Promise<OneTimePassword> {
-		const result = await this.provider.find(
-			{
-				type: AuthenticationType.OneTimePasswordChallenge,
-				userId,
-				data: { code, redeemedAt: 'null' },
-			},
-			{ limit: 1, orderBy: { id: Sort.DESC }, offset: 0 }
-		);
+		const otp = await this.provider.findOne({
+			type: AuthenticationType.OneTimePasswordChallenge,
+			userId,
+			data: { code, redeemedAt: 'null' },
+		});
 
-		const [otp] = result;
 		if (!otp) throw new AuthenticationError('Authentication Failed: OTP not found');
 		return otp;
 	}
@@ -50,7 +46,7 @@ export class OneTimePasswordAuthResolver extends createBaseOneTimePasswordAuthRe
 	 * @returns OTP compatible entity
 	 */
 	async getOTPs(userId: string, period: Date): Promise<OneTimePassword[]> {
-		return await this.provider.find({
+		return this.provider.find({
 			type: AuthenticationType.OneTimePasswordChallenge,
 			userId,
 			createdAt_gt: period,

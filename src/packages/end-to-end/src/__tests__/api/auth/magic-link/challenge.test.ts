@@ -6,8 +6,8 @@ import { Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	MagicLinkAuthResolver,
 	MagicLink,
+	createBaseMagicLinkAuthResolver,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
@@ -21,7 +21,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends MagicLinkAuthResolver {
+export class AuthResolver extends createBaseMagicLinkAuthResolver() {
 	async getUser(_: string): Promise<UserProfile> {
 		return user;
 	}
