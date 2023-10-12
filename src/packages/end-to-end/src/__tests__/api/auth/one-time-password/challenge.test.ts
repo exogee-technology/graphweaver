@@ -88,7 +88,7 @@ describe('One Time Password Authentication - Challenge', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Challenge unsuccessful: Username missing.'
+			'Challenge unsuccessful: Token missing.'
 		);
 	});
 
