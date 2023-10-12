@@ -13,11 +13,11 @@ import {
 	createBaseResolver,
 } from '@exogee/graphweaver';
 import {
-	PasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
+	createBasePasswordAuthResolver,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -29,7 +29,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 	},
 }))
 @ObjectType('Task')
-export class Task extends GraphQLEntity<any> {
+class Task extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
 	@Field(() => ID)
@@ -43,7 +43,7 @@ export class Task extends GraphQLEntity<any> {
 }
 
 @ObjectType('Tag')
-export class Tag extends GraphQLEntity<any> {
+class Tag extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
 	@Field(() => ID)
@@ -86,7 +86,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends PasswordAuthResolver {
+class AuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');

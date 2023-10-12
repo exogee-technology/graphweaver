@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
 import {
-	PasswordAuthResolver,
+	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	AuthorizationContext,
@@ -17,13 +17,13 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends PasswordAuthResolver {
+class AuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		return user;
 	}
 }
 
-export const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
+const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
 	// Ensure only logged in users can access the admin ui metadata
 	if (!params.context.token) throw new ForbiddenError('Forbidden');
 	return params;

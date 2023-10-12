@@ -7,7 +7,7 @@ import {
 	authApolloPlugin,
 	UserProfile,
 	createBaseOneTimePasswordAuthResolver,
-	PasswordAuthResolver,
+	createBasePasswordAuthResolver,
 	OneTimePassword,
 } from '@exogee/graphweaver-auth';
 
@@ -51,7 +51,7 @@ class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 }
 
 @Resolver()
-export class CredentialAuthResolver extends PasswordAuthResolver {
+class CredentialAuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');

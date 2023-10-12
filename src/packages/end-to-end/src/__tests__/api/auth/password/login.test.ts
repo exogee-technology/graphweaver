@@ -3,7 +3,11 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
-import { PasswordAuthResolver, authApolloPlugin, UserProfile } from '@exogee/graphweaver-auth';
+import {
+	createBasePasswordAuthResolver,
+	authApolloPlugin,
+	UserProfile,
+} from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
 	id: '1',
@@ -12,7 +16,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends PasswordAuthResolver {
+class AuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
