@@ -4,8 +4,7 @@ import {
 	createBasePasskeyAuthResolver,
 	authApolloPlugin,
 	PasskeyAuthenticatorDevice,
-	PasswordAuthResolver,
-	Token,
+	createBasePasswordAuthResolver,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -23,7 +22,7 @@ const user = new UserProfile({
 const MOCK_CHALLENGE = 'MOCK CHALLENGE';
 
 @Resolver()
-export class AuthResolver extends createBasePasskeyAuthResolver() {
+class AuthResolver extends createBasePasskeyAuthResolver() {
 	public async getUserCurrentChallenge(userId: string): Promise<string> {
 		return MOCK_CHALLENGE;
 	}
@@ -61,7 +60,7 @@ export class AuthResolver extends createBasePasskeyAuthResolver() {
 }
 
 @Resolver()
-export class CredentialAuthResolver extends PasswordAuthResolver {
+class CredentialAuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');

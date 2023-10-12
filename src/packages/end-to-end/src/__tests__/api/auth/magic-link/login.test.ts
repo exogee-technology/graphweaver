@@ -22,7 +22,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends createBaseMagicLinkAuthResolver() {
+class AuthResolver extends createBaseMagicLinkAuthResolver() {
 	async getUser(_: string): Promise<UserProfile> {
 		return user;
 	}

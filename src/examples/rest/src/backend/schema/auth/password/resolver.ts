@@ -1,7 +1,6 @@
-import { PasswordAuthResolver as AuthResolver } from '@exogee/graphweaver-auth';
+import { PasswordAuthResolver as AuthResolver, UserProfile } from '@exogee/graphweaver-auth';
 import { BaseLoaders, Resolver } from '@exogee/graphweaver';
-import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
-import * as argon2 from 'argon2';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { User } from '../../user';
 import { mapUserToProfile } from '../../../auth/context';
@@ -10,20 +9,17 @@ import { Credential } from '../../../entities/mysql';
 
 @Resolver()
 export class PasswordAuthResolver extends AuthResolver {
-	async authenticate(username: string, password: string) {
-		const database = ConnectionManager.database(myConnection.connectionManagerId);
-		const credential = await database.em.findOneOrFail(Credential, { username });
+	constructor() {
+		super({
+			provider: new MikroBackendProvider(Credential, myConnection),
+		});
+	}
 
-		if (await argon2.verify(credential.password, password)) {
-			const user = User.fromBackendEntity(
-				await BaseLoaders.loadOne({ gqlEntityType: User, id: credential.id })
-			);
+	async getUser(id: string): Promise<UserProfile> {
+		const user = User.fromBackendEntity(await BaseLoaders.loadOne({ gqlEntityType: User, id }));
 
-			if (!user) throw new Error('Bad Request: Unknown user id provided.');
+		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
-			return mapUserToProfile(user);
-		}
-
-		throw new Error('Authentication Failed: Unknown username or password.');
+		return mapUserToProfile(user);
 	}
 }

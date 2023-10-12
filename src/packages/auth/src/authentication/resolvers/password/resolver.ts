@@ -1,56 +1,36 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
-import { AuthenticationError } from 'apollo-server-errors';
+import { BackendProvider, Resolver } from '@exogee/graphweaver';
+import * as argon2 from 'argon2';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../../types';
-import { AuthTokenProvider } from '../../token';
-import { Token } from '../../entities/token';
+import { PasswordStorage } from '../../entities';
+import { createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
 
-@Resolver((of) => Token)
-export abstract class PasswordAuthResolver {
-	abstract authenticate(username: string, password: string): Promise<UserProfile>;
+type PasswordProvider = BackendProvider<PasswordStorage, PasswordStorage>;
 
-	@Mutation(() => Token)
-	async loginPassword(
-		@Arg('username', () => String) username: string,
-		@Arg('password', () => String) password: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<Token> {
-		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
-		const userProfile = await this.authenticate(username, password);
-		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
+@Resolver()
+export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
+	private provider: PasswordProvider;
 
-		const authToken = await tokenProvider.generateToken(userProfile);
-		if (!authToken) throw new AuthenticationError('Login unsuccessful: Token generation failed.');
-
-		const token = Token.fromBackendEntity(authToken);
-		if (!token) throw new AuthenticationError('Login unsuccessful.');
-
-		return token;
+	constructor({ provider }: { provider: PasswordProvider }) {
+		super();
+		this.provider = provider;
 	}
 
-	@Mutation(() => Token)
-	async challengePassword(
-		@Arg('password', () => String) password: string,
-		@Ctx() ctx: AuthorizationContext
-	): Promise<Token> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
-		const existingToken =
-			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
+	async getUser(id: string): Promise<UserProfile> {
+		throw new Error(
+			'Method getUser not implemented for PasswordAuthResolver: Override this function to return a user profile'
+		);
+	}
 
-		const username = ctx.user?.username;
-		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
+	async authenticate(username: string, password: string): Promise<UserProfile> {
+		const credential = await this.provider.findOne({ username });
 
-		const userProfile = await this.authenticate(username, password);
-		if (!userProfile) throw new AuthenticationError('Challenge unsuccessful: Userprofile missing.');
+		if (!credential) throw new Error('Bad Request: Unknown username provided.');
 
-		const authToken = await tokenProvider.stepUpToken(existingToken);
-		if (!authToken) throw new AuthenticationError('Challenge unsuccessful: Step up failed.');
+		if (await argon2.verify(credential.password, password)) {
+			return this.getUser(credential.id);
+		}
 
-		const token = Token.fromBackendEntity(authToken);
-		if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-		return token;
+		throw new Error('Authentication Failed: Unknown username or password.');
 	}
 }

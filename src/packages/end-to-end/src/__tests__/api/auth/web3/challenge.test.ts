@@ -5,7 +5,7 @@ import {
 	createBaseWeb3AuthResolver,
 	authApolloPlugin,
 	MultiFactorAuthentication,
-	PasswordAuthResolver,
+	createBasePasswordAuthResolver,
 	AuthenticationBaseEntity,
 	WalletAddress,
 	AuthenticationType,
@@ -33,7 +33,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends createBaseWeb3AuthResolver() {
+class AuthResolver extends createBaseWeb3AuthResolver() {
 	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined> {
 		return {
 			Everyone: {
@@ -64,7 +64,7 @@ export class AuthResolver extends createBaseWeb3AuthResolver() {
 }
 
 @Resolver()
-export class CredentialAuthResolver extends PasswordAuthResolver {
+class CredentialAuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
