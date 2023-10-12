@@ -1,4 +1,8 @@
-import { PasswordAuthResolver as AuthResolver, UserProfile } from '@exogee/graphweaver-auth';
+import {
+	PasswordAuthResolver as AuthResolver,
+	PasswordOperation,
+	UserProfile,
+} from '@exogee/graphweaver-auth';
 import { BaseLoaders, Resolver } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -15,10 +19,14 @@ export class PasswordAuthResolver extends AuthResolver {
 		});
 	}
 
-	async getUser(id: string): Promise<UserProfile> {
+	async getUser(id: string, operation: PasswordOperation): Promise<UserProfile> {
 		const user = User.fromBackendEntity(await BaseLoaders.loadOne({ gqlEntityType: User, id }));
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
+
+		if (operation === PasswordOperation.REGISTER) {
+			// Send email verification
+		}
 
 		return mapUserToProfile(user);
 	}

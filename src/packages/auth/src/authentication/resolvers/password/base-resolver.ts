@@ -10,6 +10,30 @@ export const createBasePasswordAuthResolver = () => {
 	@Resolver((of) => Token)
 	abstract class BasePasswordAuthResolver {
 		abstract authenticate(username: string, password: string): Promise<UserProfile>;
+		abstract save(username: string, password: string): Promise<UserProfile>;
+
+		@Mutation(() => Token)
+		async createLoginPassword(
+			@Arg('username', () => String) username: string,
+			@Arg('password', () => String) password: string,
+			@Arg('confirm', () => String) confirm: string,
+			@Ctx() ctx: AuthorizationContext
+		): Promise<Token> {
+			if (password !== confirm)
+				throw new AuthenticationError('Login unsuccessful: Passwords do not match.');
+
+			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
+			const userProfile = await this.save(username, password);
+			if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
+
+			const authToken = await tokenProvider.generateToken(userProfile);
+			if (!authToken) throw new AuthenticationError('Login unsuccessful: Token generation failed.');
+
+			const token = Token.fromBackendEntity(authToken);
+			if (!token) throw new AuthenticationError('Login unsuccessful.');
+
+			return token;
+		}
 
 		@Mutation(() => Token)
 		async loginPassword(

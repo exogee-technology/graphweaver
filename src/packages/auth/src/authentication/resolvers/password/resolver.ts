@@ -7,6 +7,10 @@ import { UserProfile } from '../../../user-profile';
 import { AuthenticationError } from 'apollo-server-errors';
 
 type PasswordProvider = BackendProvider<PasswordStorage, PasswordStorage>;
+export enum PasswordOperation {
+	LOGIN = 'login',
+	REGISTER = 'register',
+}
 
 @Resolver()
 export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
@@ -17,7 +21,9 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 		this.provider = provider;
 	}
 
-	async getUser(id: string): Promise<UserProfile> {
+	async getUser(id: string, operation: PasswordOperation): Promise<UserProfile> {
+		// Use the operation type to decide what actions to perform
+		// A register action could send an email verification for example
 		throw new Error(
 			'Method getUser not implemented for PasswordAuthResolver: Override this function to return a user profile'
 		);
@@ -31,9 +37,17 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
 
 		if (await argon2.verify(credential.password, password)) {
-			return this.getUser(credential.id);
+			return this.getUser(credential.id, PasswordOperation.LOGIN);
 		}
 
 		throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
+	}
+
+	async save(username: string, password: string): Promise<UserProfile> {
+		const passwordHash = await argon2.hash(password);
+		const credential = await this.provider.createOne({ username, password: passwordHash });
+
+		if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+		return this.getUser(credential.id, PasswordOperation.REGISTER);
 	}
 }
