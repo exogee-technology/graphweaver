@@ -22,12 +22,12 @@ import {
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
-@ApplyMultiFactorAuthentication<Task>({
+@ApplyMultiFactorAuthentication<Task>(() => ({
 	Everyone: {
 		// all users must provide a password mfa when writing data
 		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
 	},
-})
+}))
 @ObjectType('Task')
 export class Task extends GraphQLEntity<any> {
 	public dataEntity!: any;
