@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { logger } from '@exogee/logger';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
@@ -41,20 +42,37 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 		if (!privateKey)
 			throw new Error('PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
-		const authToken = jwt.sign(payload, privateKey, {
-			algorithm: 'ES256',
-			expiresIn,
-		});
-		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
-		return token;
+
+		try {
+			const authToken = jwt.sign(payload, privateKey, {
+				algorithm: 'ES256',
+				expiresIn,
+			});
+			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
+			return token;
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Could not generate token');
+		}
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
 		if (!publicKey)
 			throw new Error('PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64 is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
-		const payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
-		if (typeof payload === 'string') throw new Error('Verification of token failed');
+		let payload;
+		try {
+			payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Verification of token failed');
+		}
+
+		if (typeof payload === 'string' || payload == undefined) {
+			logger.error('JWT token payload is not an object');
+			throw new Error('Verification of token failed');
+		}
+
 		return payload;
 	}
 
@@ -65,22 +83,27 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), AuthenticationMethod.PASSWORD]);
 
-		const token = jwt.sign(
-			{
-				...existingTokenPayload,
-				amr: [...amr],
-				acr: {
-					values: {
-						...(existingTokenPayload.acr?.values ?? {}),
-						[AuthenticationMethod.PASSWORD]: expires, // ACR = Authentication Context Class Reference
+		try {
+			const token = jwt.sign(
+				{
+					...existingTokenPayload,
+					amr: [...amr],
+					acr: {
+						values: {
+							...(existingTokenPayload.acr?.values ?? {}),
+							[AuthenticationMethod.PASSWORD]: expires, // ACR = Authentication Context Class Reference
+						},
 					},
 				},
-			},
-			privateKey,
-			{
-				algorithm: 'ES256',
-			}
-		);
-		return new AuthToken(`${TOKEN_PREFIX} ${token}`);
+				privateKey,
+				{
+					algorithm: 'ES256',
+				}
+			);
+			return new AuthToken(`${TOKEN_PREFIX} ${token}`);
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Token step-up failed');
+		}
 	}
 }
