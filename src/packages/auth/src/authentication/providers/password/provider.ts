@@ -6,7 +6,15 @@ import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../../types';
 
-const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
+// Decode the two environment variables above from base64 and save as vars
+const publicKey = process.env.PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64
+	? Buffer.from(process.env.PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64, 'base64').toString('ascii')
+	: undefined;
+
+const privateKey = process.env.PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64
+	? Buffer.from(process.env.PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
+	: undefined;
+
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
 const mfaExpiresIn = process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN ?? '30m';
 
@@ -30,9 +38,11 @@ const TOKEN_PREFIX = 'Bearer';
 
 export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	async generateToken(user: UserProfile) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
-		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
-		const authToken = jwt.sign({ id: user.id, amr: [AuthenticationMethod.PASSWORD] }, secret, {
+		if (!privateKey)
+			throw new Error('PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
+		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
+		const authToken = jwt.sign(payload, privateKey, {
+			algorithm: 'ES256',
 			expiresIn,
 		});
 		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
@@ -40,15 +50,17 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!publicKey)
+			throw new Error('PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64 is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
-		const payload = jwt.verify(token, secret);
+		const payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
 		if (typeof payload === 'string') throw new Error('Verification of token failed');
 		return payload;
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!privateKey)
+			throw new Error('PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), AuthenticationMethod.PASSWORD]);
@@ -64,7 +76,10 @@ export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 					},
 				},
 			},
-			secret
+			privateKey,
+			{
+				algorithm: 'ES256',
+			}
 		);
 		return new AuthToken(`${TOKEN_PREFIX} ${token}`);
 	}
