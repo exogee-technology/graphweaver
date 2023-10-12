@@ -4,6 +4,7 @@ import * as argon2 from 'argon2';
 import { PasswordStorage } from '../../entities';
 import { createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
+import { AuthenticationError } from 'apollo-server-errors';
 
 type PasswordProvider = BackendProvider<PasswordStorage, PasswordStorage>;
 
@@ -25,12 +26,14 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string): Promise<UserProfile> {
 		const credential = await this.provider.findOne({ username });
 
-		if (!credential) throw new Error('Bad Request: Unknown username provided.');
+		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
+		if (!credential.password)
+			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
 
 		if (await argon2.verify(credential.password, password)) {
 			return this.getUser(credential.id);
 		}
 
-		throw new Error('Authentication Failed: Unknown username or password.');
+		throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 	}
 }
