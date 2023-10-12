@@ -50,7 +50,7 @@ const getMutationName = <G extends WithId>(
 };
 
 // This function is used to call the child's base resolver create/update mutation
-const callChildMutation = async <G>(
+export const callChildMutation = async <G>(
 	mutationName: string,
 	data: Partial<G>,
 	info: GraphQLResolveInfo,

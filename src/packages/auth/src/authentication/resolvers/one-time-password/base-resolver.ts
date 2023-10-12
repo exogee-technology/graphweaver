@@ -51,8 +51,6 @@ export const createBaseOneTimePasswordAuthResolver = () => {
 			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 			const userId = ctx.user?.id;
 			if (!userId) throw new AuthenticationError('Challenge unsuccessful: User ID missing.');
-			const username = ctx.user?.username;
-			if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
 			// Check if the user created X links in the last X period
 			const { rate } = config;
@@ -62,7 +60,7 @@ export const createBaseOneTimePasswordAuthResolver = () => {
 
 			// Check rate limiting conditions for otp creation
 			if (otps.length >= rate.limit) {
-				logger.warn(`Too many OTP created for ${username}.`);
+				logger.warn(`Too many OTP created for user with ID: ${userId}.`);
 				return true;
 			}
 
@@ -81,8 +79,6 @@ export const createBaseOneTimePasswordAuthResolver = () => {
 			@Ctx() ctx: AuthorizationContext
 		): Promise<Token> {
 			try {
-				const username = ctx.user?.username;
-				if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 				if (!code) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 				if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 				const userId = ctx.user?.id;

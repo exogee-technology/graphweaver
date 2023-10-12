@@ -1,4 +1,4 @@
-import { BaseContext, Filter } from '@exogee/graphweaver';
+import { BaseContext, Filter, GraphQLResolveInfo } from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
 
 export enum AuthenticationMethod {
@@ -93,3 +93,8 @@ export enum AuthenticationType {
 	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
 	MagicLinkChallenge = 'MagicLinkChallenge',
 }
+
+export type RequestParams = {
+	ctx: AuthorizationContext;
+	info: GraphQLResolveInfo;
+};
