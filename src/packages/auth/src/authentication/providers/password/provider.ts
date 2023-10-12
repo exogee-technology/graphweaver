@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { logger } from '@exogee/logger';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../../base-auth-token-provider';
@@ -6,7 +7,15 @@ import { AuthToken } from '../../schema/token';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../../types';
 
-const secret = process.env.PASSWORD_AUTH_JWT_SECRET;
+// Decode the two environment variables above from base64 and save as vars
+const publicKey = process.env.PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64
+	? Buffer.from(process.env.PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64, 'base64').toString('ascii')
+	: undefined;
+
+const privateKey = process.env.PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64
+	? Buffer.from(process.env.PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
+	: undefined;
+
 const expiresIn = process.env.PASSWORD_AUTH_JWT_EXPIRES_IN ?? '8h';
 const mfaExpiresIn = process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN ?? '30m';
 
@@ -30,42 +39,71 @@ const TOKEN_PREFIX = 'Bearer';
 
 export class PasswordAuthTokenProvider implements BaseAuthTokenProvider {
 	async generateToken(user: UserProfile) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
-		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
-		const authToken = jwt.sign({ id: user.id, amr: [AuthenticationMethod.PASSWORD] }, secret, {
-			expiresIn,
-		});
-		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
-		return token;
+		if (!privateKey)
+			throw new Error('PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
+		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
+
+		try {
+			const authToken = jwt.sign(payload, privateKey, {
+				algorithm: 'ES256',
+				expiresIn,
+			});
+			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
+			return token;
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Could not generate token');
+		}
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!publicKey)
+			throw new Error('PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64 is required in environment');
 		const token = removeAuthPrefixIfPresent(authToken);
-		const payload = jwt.verify(token, secret);
-		if (typeof payload === 'string') throw new Error('Verification of token failed');
+		let payload;
+		try {
+			payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Verification of token failed');
+		}
+
+		if (typeof payload === 'string' || payload == undefined) {
+			logger.error('JWT token payload is not an object');
+			throw new Error('Verification of token failed');
+		}
+
 		return payload;
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
-		if (!secret) throw new Error('PASSWORD_AUTH_JWT_SECRET is required in environment');
+		if (!privateKey)
+			throw new Error('PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), AuthenticationMethod.PASSWORD]);
 
-		const token = jwt.sign(
-			{
-				...existingTokenPayload,
-				amr: [...amr],
-				acr: {
-					values: {
-						...(existingTokenPayload.acr?.values ?? {}),
-						[AuthenticationMethod.PASSWORD]: expires, // ACR = Authentication Context Class Reference
+		try {
+			const token = jwt.sign(
+				{
+					...existingTokenPayload,
+					amr: [...amr],
+					acr: {
+						values: {
+							...(existingTokenPayload.acr?.values ?? {}),
+							[AuthenticationMethod.PASSWORD]: expires, // ACR = Authentication Context Class Reference
+						},
 					},
 				},
-			},
-			secret
-		);
-		return new AuthToken(`${TOKEN_PREFIX} ${token}`);
+				privateKey,
+				{
+					algorithm: 'ES256',
+				}
+			);
+			return new AuthToken(`${TOKEN_PREFIX} ${token}`);
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Token step-up failed');
+		}
 	}
 }
