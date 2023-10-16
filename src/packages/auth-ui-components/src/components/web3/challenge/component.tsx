@@ -44,7 +44,7 @@ const ConnectButton = () => {
 		await provider.send('eth_requestAccounts', []);
 		const signer = provider.getSigner();
 		const token = await Web3Token.sign(async (msg: string) => await signer.signMessage(msg), {
-			statement: `I want to connect my wallet to ${domain}`,
+			statement: `Use my wallet to verify my identity on ${domain}.`,
 			domain,
 			expires_in: expiresIn,
 		});

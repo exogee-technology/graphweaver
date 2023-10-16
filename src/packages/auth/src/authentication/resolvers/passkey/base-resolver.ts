@@ -129,7 +129,7 @@ export const createBasePasskeyAuthResolver = () => {
 				if (e instanceof ChallengeError) throw e;
 				if (e instanceof ForbiddenError) throw e;
 
-				logger.info('Authentication failed with error', e);
+				logger.error('Authentication failed with error', e);
 				throw new AuthenticationError('Passkey authentication failed.');
 			}
 		}
@@ -219,7 +219,7 @@ export const createBasePasskeyAuthResolver = () => {
 				if (e instanceof ChallengeError) throw e;
 				if (e instanceof ForbiddenError) throw e;
 
-				logger.info('Authentication failed with error', e);
+				logger.error('Authentication failed with error', e);
 				throw new AuthenticationError('Passkey authentication failed.');
 			}
 		}

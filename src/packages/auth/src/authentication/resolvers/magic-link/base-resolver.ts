@@ -118,7 +118,7 @@ export const createBaseMagicLinkAuthResolver = () => {
 			} catch (e) {
 				if (e instanceof AuthenticationError) throw e;
 
-				logger.info('Authentication failed with error', e);
+				logger.error('Authentication failed with error', e);
 				throw new AuthenticationError('Magic Link authentication failed.');
 			}
 		}

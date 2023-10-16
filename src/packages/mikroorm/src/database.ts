@@ -39,7 +39,9 @@ const NumericIsolationLevels = {
 	[IsolationLevel.READ_UNCOMMITTED]: 1,
 };
 
-export class DatabaseImplementation {
+export type Database = typeof DatabaseImplementation.prototype;
+
+class DatabaseImplementation {
 	private cachedOrm?: MikroORM<IDatabaseDriver<Connection>>;
 	private transactionalEm?: EntityManager;
 	private transactionInProgressIsolationLevel?: IsolationLevel;
