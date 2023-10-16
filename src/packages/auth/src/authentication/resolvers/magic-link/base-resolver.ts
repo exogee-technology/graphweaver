@@ -128,7 +128,10 @@ export const createBaseMagicLinkAuthResolver = () => {
 			const { url, link } = (await this.generateMagicLink(username, ctx)) ?? {};
 
 			// fail silently
-			if (!link || !url) return true;
+			if (!link || !url) {
+				logger.warn(`Failed to create Magic Link for user with username ${username}.`);
+				return true;
+			}
 
 			url.pathname = 'auth/login';
 			url.searchParams.set('username', username);
@@ -152,7 +155,10 @@ export const createBaseMagicLinkAuthResolver = () => {
 			const { url, link } = (await this.generateMagicLink(username, ctx)) ?? {};
 
 			// fail silently
-			if (!link || !url) return true;
+			if (!link || !url) {
+				logger.warn(`Failed to create Magic Link for user with username ${username}.`);
+				return true;
+			}
 
 			url.pathname = 'auth/challenge';
 
