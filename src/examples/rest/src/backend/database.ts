@@ -1,5 +1,6 @@
 import { MySqlDriver } from '@mikro-orm/mysql';
-import { Authentication, Credential, Tag, Task } from './entities';
+import { Credential, Tag, Task } from './entities';
+import { Authentication } from '@exogee/graphweaver-mikroorm';
 
 // Define the database connection
 export const myConnection = {
