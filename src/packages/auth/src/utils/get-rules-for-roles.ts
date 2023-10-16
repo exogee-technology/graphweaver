@@ -6,6 +6,12 @@ import {
 	MultiFactorAuthenticationRule,
 } from '../types';
 
+const writeOperations = new Set([
+	MultiFactorAuthenticationOperationType.CREATE,
+	MultiFactorAuthenticationOperationType.UPDATE,
+	MultiFactorAuthenticationOperationType.DELETE,
+]);
+
 export const getRulesForRoles = (
 	mfa: MultiFactorAuthentication, // The MFA rules for this entity
 	roles: string[], // The roles assigned by the current user
@@ -24,13 +30,8 @@ export const getRulesForRoles = (
 		}
 
 		// Check if we have a rule that matches a write operation
-		const writeOperations = [
-			MultiFactorAuthenticationOperationType.CREATE,
-			MultiFactorAuthenticationOperationType.UPDATE,
-			MultiFactorAuthenticationOperationType.DELETE,
-		];
 		if (
-			writeOperations.includes(operation as any) &&
+			writeOperations.has(operation as any) &&
 			operations?.[MultiFactorAuthenticationOperationType.WRITE]
 		) {
 			const rule = operations[MultiFactorAuthenticationOperationType.WRITE];

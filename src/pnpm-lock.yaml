@@ -509,9 +509,6 @@ importers:
       '@simplewebauthn/browser':
         specifier: 8.3.1
         version: 8.3.1
-      '@simplewebauthn/typescript-types':
-        specifier: 8.0.0
-        version: 8.0.0
       '@usedapp/core':
         specifier: 1.2.13
         version: 1.2.13(ethers@5.7.2)(react@18.2.0)
@@ -534,6 +531,9 @@ importers:
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
+      '@simplewebauthn/typescript-types':
+        specifier: 8.0.0
+        version: 8.0.0
       '@types/react':
         specifier: 18.0.25
         version: 18.0.25
@@ -903,7 +903,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -4953,7 +4953,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3

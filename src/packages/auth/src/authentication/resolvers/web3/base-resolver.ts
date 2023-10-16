@@ -42,7 +42,7 @@ export const createBaseWeb3AuthResolver = () => {
 				if (e instanceof ChallengeError) throw e;
 				if (e instanceof ForbiddenError) throw e;
 
-				logger.info('Authentication failed with error', e);
+				logger.error('Authentication failed with error', e);
 				throw new AuthenticationError('Web3 authentication failed.');
 			}
 		}
@@ -68,7 +68,7 @@ export const createBaseWeb3AuthResolver = () => {
 				if (e instanceof ChallengeError) throw e;
 				if (e instanceof ForbiddenError) throw e;
 
-				logger.info('Authentication failed with error', e);
+				logger.error('Authentication failed with error', e);
 				throw new AuthenticationError('Web3 authentication failed.');
 			}
 		}
@@ -109,7 +109,7 @@ export const createBaseWeb3AuthResolver = () => {
 			} catch (e) {
 				if (e instanceof AuthenticationError) throw e;
 
-				logger.info('Authentication failed with error', e);
+				logger.error('Authentication failed with error', e);
 				throw new AuthenticationError('Web3 authentication failed.');
 			}
 		}

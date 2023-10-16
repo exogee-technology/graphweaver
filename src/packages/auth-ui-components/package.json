@@ -26,7 +26,6 @@
 	"dependencies": {
 		"@apollo/client": "3.7.1",
 		"@simplewebauthn/browser": "8.3.1",
-		"@simplewebauthn/typescript-types": "8.0.0",
 		"@usedapp/core": "1.2.13",
 		"classnames": "2.3.2",
 		"ethers": "5.7.2",
@@ -52,7 +51,8 @@
 		"react-router-dom": "6.4.3",
 		"typescript": "5.0.2",
 		"vite": "4.3.9",
-		"vite-plugin-svgr": "3.2.0"
+		"vite-plugin-svgr": "3.2.0",
+		"@simplewebauthn/typescript-types": "8.0.0"
 	},
 	"keywords": [
 		"graphql",

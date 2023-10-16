@@ -5,11 +5,7 @@ import {
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
-import {
-	ConnectionManager,
-	DatabaseImplementation,
-	MikroBackendProvider,
-} from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, Database, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { addUserToContext } from '../../../auth/context';
 import { myConnection } from '../../../database';
@@ -17,7 +13,7 @@ import { Authentication, Credential } from '../../../entities/mysql';
 
 @Resolver()
 export class MagicLinkAuthResolver extends AuthResolver {
-	private database: DatabaseImplementation;
+	private database: Database;
 	constructor() {
 		super({
 			provider: new MikroBackendProvider(Authentication<MagicLinkData>, myConnection),
