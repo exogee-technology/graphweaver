@@ -1008,10 +1008,6 @@ importers:
       luxon:
         specifier: 2.5.2
         version: 2.5.2
-    optionalDependencies:
-      '@exogee/graphweaver-mikroorm':
-        specifier: workspace:*
-        version: link:../mikroorm
     devDependencies:
       '@types/jest':
         specifier: 26.0.23

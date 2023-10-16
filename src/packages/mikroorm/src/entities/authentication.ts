@@ -1,5 +1,5 @@
 import { BigIntType, Entity, PrimaryKey, Property, JsonType } from '@mikro-orm/core';
-import { BaseEntity } from '../';
+import { BaseEntity } from './base-entity';
 
 import type { AuthenticationBaseEntity } from '@exogee/graphweaver-auth';
 
