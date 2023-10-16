@@ -10,7 +10,7 @@ import {
 	MultiFactorAuthentication,
 } from '../../../types';
 import { Token } from '../../entities/token';
-import { AuthTokenProvider } from '../../token';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { checkAuthentication } from '../../../helper-functions';
 import { ChallengeError } from '../../../errors';
 import { AuthenticationBaseEntity } from '../../entities';
@@ -99,13 +99,8 @@ export const createBaseWeb3AuthResolver = () => {
 				const existingAuthToken =
 					typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 				const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-				if (!authToken)
-					throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
 
-				const token = Token.fromBackendEntity(authToken);
-				if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-				return token;
+				return verifyAndCreateTokenFromAuthToken(authToken);
 			} catch (e) {
 				if (e instanceof AuthenticationError) throw e;
 

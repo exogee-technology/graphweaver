@@ -6,7 +6,7 @@ import otpGenerator from 'otp-generator';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { Token } from '../../entities/token';
-import { AuthTokenProvider } from '../../token';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { ChallengeError } from '../../../errors';
 
 const config = {
@@ -95,11 +95,7 @@ export const createBaseOneTimePasswordAuthResolver = () => {
 				const existingAuthToken =
 					typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 				const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-				if (!authToken)
-					throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
-
-				const token = Token.fromBackendEntity(authToken);
-				if (!token) throw new AuthenticationError('Challenge unsuccessful.');
+				const token = verifyAndCreateTokenFromAuthToken(authToken);
 
 				// Callback to the client to mark the otp as used
 				await this.redeemOTP(otp);

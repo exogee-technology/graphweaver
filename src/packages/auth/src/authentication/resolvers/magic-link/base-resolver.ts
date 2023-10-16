@@ -7,7 +7,7 @@ import { randomUUID } from 'crypto';
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../../types';
 import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
-import { AuthTokenProvider } from '../../token';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { requireEnvironmentVariable } from '../../../helper-functions';
 
 const config = {
@@ -105,11 +105,8 @@ export const createBaseMagicLinkAuthResolver = () => {
 				const authToken = existingAuthToken
 					? await tokenProvider.stepUpToken(existingAuthToken)
 					: await tokenProvider.generateToken(userProfile);
-				if (!authToken)
-					throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
 
-				const token = Token.fromBackendEntity(authToken);
-				if (!token) throw new AuthenticationError('Auth unsuccessful.');
+				const token = verifyAndCreateTokenFromAuthToken(authToken);
 
 				// Callback to the client to mark the magic link as used
 				await this.redeemMagicLink(link);

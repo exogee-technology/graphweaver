@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg, Ctx, Info } from 'type-graphql';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext, RequestParams } from '../../../types';
-import { AuthTokenProvider } from '../../token';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { GraphQLResolveInfo } from 'graphql';
@@ -33,12 +33,7 @@ export const createBasePasswordAuthResolver = () => {
 			if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 			const authToken = await tokenProvider.generateToken(userProfile);
-			if (!authToken) throw new AuthenticationError('Login unsuccessful: Token generation failed.');
-
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Login unsuccessful.');
-
-			return token;
+			return verifyAndCreateTokenFromAuthToken(authToken);
 		}
 
 		@Mutation(() => Token)
@@ -53,12 +48,7 @@ export const createBasePasswordAuthResolver = () => {
 			if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 			const authToken = await tokenProvider.generateToken(userProfile);
-			if (!authToken) throw new AuthenticationError('Login unsuccessful: Token generation failed.');
-
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Login unsuccessful.');
-
-			return token;
+			return verifyAndCreateTokenFromAuthToken(authToken);
 		}
 
 		@Mutation(() => Token)
@@ -80,12 +70,7 @@ export const createBasePasswordAuthResolver = () => {
 				throw new AuthenticationError('Challenge unsuccessful: Userprofile missing.');
 
 			const authToken = await tokenProvider.stepUpToken(existingToken);
-			if (!authToken) throw new AuthenticationError('Challenge unsuccessful: Step up failed.');
-
-			const token = Token.fromBackendEntity(authToken);
-			if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-			return token;
+			return verifyAndCreateTokenFromAuthToken(authToken);
 		}
 	}
 
