@@ -17,7 +17,7 @@ import { logger } from '@exogee/logger';
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
 import { Token } from '../../entities/token';
 import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './entities';
-import { AuthTokenProvider } from '../../token';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { ChallengeError } from '../../../errors';
 
 export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/typescript-types';
@@ -207,13 +207,8 @@ export const createBasePasskeyAuthResolver = () => {
 				const existingAuthToken =
 					typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
 				const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-				if (!authToken)
-					throw new AuthenticationError('Challenge unsuccessful: Token generation failed.');
 
-				const token = Token.fromBackendEntity(authToken);
-				if (!token) throw new AuthenticationError('Challenge unsuccessful.');
-
-				return token;
+				return verifyAndCreateTokenFromAuthToken(authToken);
 			} catch (e: any) {
 				if (e instanceof AuthenticationError) throw e;
 				if (e instanceof ChallengeError) throw e;
