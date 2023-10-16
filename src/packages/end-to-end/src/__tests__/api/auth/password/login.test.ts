@@ -1,3 +1,5 @@
+process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
+
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';

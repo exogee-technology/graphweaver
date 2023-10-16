@@ -1,15 +1,22 @@
 import jwt from 'jsonwebtoken';
+import { logger } from '@exogee/logger';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
 import { AuthToken } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../types';
-import { requireEnvironmentVariable } from '../../helper-functions';
 
-const secret = requireEnvironmentVariable('AUTH_JWT_SECRET');
 const expiresIn = process.env.AUTH_JWT_EXPIRES_IN ?? '8h';
 const mfaExpiresIn = process.env.AUTH_JWT_CHALLENGE_EXPIRES_IN ?? '30m';
+// Decode the two environment variables above from base64 and save as vars
+const publicKey = process.env.AUTH_PUBLIC_KEY_PEM_BASE64
+	? Buffer.from(process.env.AUTH_PUBLIC_KEY_PEM_BASE64, 'base64').toString('ascii')
+	: undefined;
+
+const privateKey = process.env.AUTH_PRIVATE_KEY_PEM_BASE64
+	? Buffer.from(process.env.AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
+	: undefined;
 
 /**
  * Removes any prefix from the given authorization header.
@@ -33,44 +40,71 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	constructor(private authMethod?: AuthenticationMethod) {}
 
 	async generateToken(user: UserProfile) {
-		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
-		if (!this.authMethod) throw new Error('Please provide an authMethod in the constructor.');
-		// @todo Currently, using HMAC SHA256 look to support RSA SHA256
-		const authToken = jwt.sign({ id: user.id, amr: [this.authMethod] }, secret, {
-			expiresIn,
-		});
-		const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
-		return token;
+		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
+		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
+
+		try {
+			const authToken = jwt.sign(payload, privateKey, {
+				algorithm: 'ES256',
+				expiresIn,
+			});
+			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
+			return token;
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Could not generate token');
+		}
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
-		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
+		if (!publicKey) throw new Error('AUTH_PUBLIC_KEY_PEM_BASE64 is required in environment');
+
 		const token = removeAuthPrefixIfPresent(authToken);
-		const payload = jwt.verify(token, secret);
-		if (typeof payload === 'string') throw new Error('Verification of token failed');
+		let payload;
+		try {
+			payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Verification of token failed');
+		}
+
+		if (typeof payload === 'string' || payload == undefined) {
+			logger.error('JWT token payload is not an object');
+			throw new Error('Verification of token failed');
+		}
+
 		return payload;
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
-		if (!secret) throw new Error('AUTH_JWT_SECRET is required in environment');
+		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		if (!this.authMethod) throw new Error('Please provide an authMethod in the constructor.');
+
 		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), this.authMethod]);
 
-		const token = jwt.sign(
-			{
-				...existingTokenPayload,
-				amr: [...amr],
-				acr: {
-					values: {
-						...(existingTokenPayload.acr?.values ?? {}),
-						[this.authMethod]: expires, // ACR = Authentication Context Class Reference
+		try {
+			const token = jwt.sign(
+				{
+					...existingTokenPayload,
+					amr: [...amr],
+					acr: {
+						values: {
+							...(existingTokenPayload.acr?.values ?? {}),
+							[this.authMethod]: expires, // ACR = Authentication Context Class Reference
+						},
 					},
 				},
-			},
-			secret
-		);
-		return new AuthToken(`${TOKEN_PREFIX} ${token}`);
+				privateKey,
+				{
+					algorithm: 'ES256',
+				}
+			);
+			return new AuthToken(`${TOKEN_PREFIX} ${token}`);
+		} catch (err) {
+			logger.error(err);
+			throw new Error('Token step-up failed');
+		}
 	}
 }
