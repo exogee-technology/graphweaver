@@ -143,18 +143,47 @@ VALUES
 
 ```
 
+## Authorization
+
+This example also demonstrates the use of the auth library.
+
+Firstly, create a public/private ES256 key pair that will be used to sign JWT tokens:
+
+```
+# Generate a private key
+openssl ecparam -name prime256v1 -genkey -noout -out ecdsa-private-key.pem
+# Derive the public key for the private key
+openssl ec -in ecdsa-private-key.pem -pubout -out ecdsa-public-key.pem
+```
+
+Then, encode the PEM formatted keys as base64 strings:
+
+```
+# Output the private key in base64 format
+cat ecsda-private-key.pem | base64
+# Output the public key in base64 format
+cat ecdsa-public-key.pem | base64
+```
+
+Copy the base64-formatted values into your .env file:
+
+```
+AUTH_PUBLIC_KEY_PEM_BASE64="base64_encoded_pem_public_key"
+AUTH_PRIVATE_KEY_PEM_BASE64="base64_encoded_pem_private_key"
+```
+
+You will be able to login using one of the following credentials:
+
+```
+    { username: 'luke', password: 'lightsaber123' },
+    { username: 'darth', password: 'deathstar123' },
+```
+
+## Start a local development server
+
 Once the database is up and running you can start the example with:
 
 ```
 pnpm i
 pnpm start
-```
-
-## Authorization
-
-This example also demonstrates the use of the auth library. You can login using one of the following credentials:
-
-```
-	{ username: 'luke', password: 'lightsaber123' },
-	{ username: 'darth', password: 'deathstar123' },
 ```

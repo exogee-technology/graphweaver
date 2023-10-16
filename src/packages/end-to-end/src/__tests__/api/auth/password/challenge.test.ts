@@ -1,3 +1,6 @@
+process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
+process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
+
 import 'reflect-metadata';
 import MockDate from 'mockdate';
 import gql from 'graphql-tag';
