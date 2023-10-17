@@ -41,6 +41,15 @@ CREATE TABLE credential (
   password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE authentication (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  type VARCHAR(255) NOT NULL,
+  user_id INT NOT NULL,
+  data JSON NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES credential(id)
+);
+
 INSERT INTO credential (id, username, password)
 VALUES
   (1, 'luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
@@ -159,8 +168,8 @@ cat ecdsa-public-key.pem | base64
 Copy the base64-formatted values into your .env file:
 
 ```
-PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64="base64_encoded_pem_public_key"
-PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64="base64_encoded_pem_private_key"
+AUTH_PUBLIC_KEY_PEM_BASE64="base64_encoded_pem_public_key"
+AUTH_PRIVATE_KEY_PEM_BASE64="base64_encoded_pem_private_key"
 ```
 
 You will be able to login using one of the following credentials:

@@ -9,8 +9,14 @@ import {
 	BASE_ROLE_EVERYONE,
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
+	JwtPayload,
+	MultiFactorAuthentication,
+	MultiFactorAuthenticationRule,
+	AuthenticationMethod,
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
+import { ChallengeError } from './errors';
+import { getRulesForRoles } from './utils/get-rules-for-roles';
 
 type AuthContext<T extends AuthorizationContext | undefined> = T;
 let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
@@ -205,5 +211,66 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 	} else {
 		logger.error('Raising ForbiddenError: Unexpected error processing filter based access');
 		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+	}
+};
+
+export const requireEnvironmentVariable = (envStr: string): string => {
+	const envVar = process.env[envStr];
+	if (!envVar) {
+		throw new Error(`${envStr} required but not found.`);
+	}
+	return envVar;
+};
+
+const filterValidMFA = (
+	rule: MultiFactorAuthenticationRule,
+	key: AuthenticationMethod,
+	expiresIn: number,
+	timestamp: number
+) => {
+	if (rule.providers) return timestamp < expiresIn && rule.providers.includes(key);
+	return timestamp < expiresIn;
+};
+
+export const checkAuthentication = async (
+	mfa: MultiFactorAuthentication,
+	operation: AccessType,
+	token?: string | JwtPayload
+) => {
+	if (!token) throw new Error('Authentication Error: Expected Token.');
+	if (typeof token === 'string') throw new Error('Authentication Error: Expected JWT Payload.');
+
+	// Check the roles of the logged in user
+	const roles = getRolesFromAuthorizationContext();
+	// Get the rules associated with the users roles
+	const rules = getRulesForRoles(mfa, roles, operation);
+
+	// No rules found for the current user role, it is safe to continue
+	if (rules.length === 0) return;
+
+	// Get existing mfa authentications in the token
+	const tokenMfaValues = Object.entries(token?.acr?.values ?? {}) as [
+		AuthenticationMethod,
+		number
+	][];
+	// Let's get the current timestamp to check if any mfa has expired
+	const timestamp = Math.floor(Date.now() / 1000);
+
+	// Loop through each rule and make sure it passes, throw when we find one that fails.
+	for (const rule of rules) {
+		// Let's check for recent mfa step ups in the token that match the rule
+		const validMFAFound = tokenMfaValues.filter(([key, expiresIn]) =>
+			filterValidMFA(rule, key, expiresIn, timestamp)
+		);
+
+		// If we find less then the number of required then we need to throw a challenge error
+		if (validMFAFound.length < rule.factorsRequired) {
+			throw new ChallengeError(
+				'MFA Challenge Required: Operation requires a step up in your authentication.',
+				{
+					providers: rule.providers,
+				}
+			);
+		}
 	}
 };
