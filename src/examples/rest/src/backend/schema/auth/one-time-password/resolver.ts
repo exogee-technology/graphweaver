@@ -4,8 +4,9 @@ import {
 	OneTimePasswordData,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
-import { Authentication, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
+import { Authentication } from '../../../entities/mysql';
 import { myConnection } from '../../../database';
 
 @Resolver()

@@ -31,7 +31,6 @@
 		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
-		"@exogee/graphweaver-auth": "workspace:*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/mysql": "5.7.14",
 		"@mikro-orm/postgresql": "5.7.14",
