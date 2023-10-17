@@ -5,16 +5,11 @@ import {
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 import { BaseLoaders, Resolver } from '@exogee/graphweaver';
-import {
-	Authentication,
-	ConnectionManager,
-	Database,
-	MikroBackendProvider,
-} from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, Database, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { mapUserToProfile } from '../../../auth/context';
 import { myConnection } from '../../../database';
-import { Credential } from '../../../entities/mysql';
+import { Credential, Authentication } from '../../../entities/mysql';
 import { User } from '../../user';
 
 @Resolver()
