@@ -16,6 +16,8 @@ export enum PasswordOperation {
 @Resolver()
 export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 	private provider: PasswordProvider;
+	protected onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
+	protected onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
 
 	constructor({ provider }: { provider: PasswordProvider }) {
 		super();
@@ -49,6 +51,8 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 			return this.getUser(credential.id, PasswordOperation.LOGIN, params);
 		}
 
+		this.onUserAuthenticated?.(credential.id, params);
+
 		throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 	}
 
@@ -57,6 +61,9 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 		const credential = await this.provider.createOne({ username, password: passwordHash });
 
 		if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+
+		this.onUserRegistered?.(credential.id, params);
+
 		return this.getUser(credential.id, PasswordOperation.REGISTER, params);
 	}
 }
