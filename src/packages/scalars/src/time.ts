@@ -1,5 +1,18 @@
-import { Time } from '@exogee/graphweaver-mikroorm';
 import { GraphQLScalarType, Kind } from 'graphql';
+
+export class Time {
+	constructor(public readonly hour = 0, public readonly minute = 0, public readonly second = 0) {
+		if (hour > 23 || hour < 0) throw new Error(`Invalid time '${hour}:${minute}:${second}`);
+		if (minute > 59 || minute < 0) throw new Error(`Invalid time '${hour}:${minute}:${second}`);
+		if (second > 59 || second < 0) throw new Error(`Invalid time '${hour}:${minute}:${second}`);
+	}
+
+	public toString() {
+		return `${this.hour.toString().padStart(2, '0')}:${this.minute
+			.toString()
+			.padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`;
+	}
+}
 
 export const TimeScalar = new GraphQLScalarType({
 	name: 'Time',

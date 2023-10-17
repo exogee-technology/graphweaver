@@ -1,8 +1,4 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
-process.env.PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64 =
-	'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==';
-process.env.PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 =
-	'LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUtCckcwcko5YVA0YnN0SlAyeWVNcTZsRUpUN28wcHJIdTdleHJJTjdrUXdvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aXJYVFZVSyswMEdoUUNrY2F1OE5xZmxYbwpnOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=';
 
 import 'reflect-metadata';
 import gql from 'graphql-tag';
@@ -10,8 +6,8 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
 import {
-	PasswordAuthResolver,
-	passwordAuthApolloPlugin,
+	createBasePasswordAuthResolver,
+	authApolloPlugin,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
 
@@ -22,7 +18,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends PasswordAuthResolver {
+class AuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
@@ -32,7 +28,7 @@ export class AuthResolver extends PasswordAuthResolver {
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 });
 

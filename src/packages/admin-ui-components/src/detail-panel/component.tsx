@@ -37,7 +37,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	const relationshipEntityType = entityByType(entity.type);
 
 	useEffect(() => {
-		helpers.setValue(initialValue.value ? { id: initialValue.value } : undefined);
+		helpers.setValue(initialValue);
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
@@ -59,7 +59,7 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue(selected?.[0]?.value ? { id: selected?.[0]?.value } : undefined);
+		helpers.setValue(selected?.[0]);
 	};
 
 	return (
@@ -207,25 +207,6 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	}, [search, selectedEntity]);
 
-	const getValue = (field: EntityField, result?: ResultBaseType) => {
-		if (field.relationshipType) {
-			const relatedEntity = entityByType(field.type);
-			const relatedField = result?.[field.name] as Record<string, unknown> | undefined;
-
-			if (!relatedField) {
-				return undefined;
-			}
-
-			return {
-				value: relatedField.id,
-				label: relatedField
-					? relatedField[relatedEntity?.summaryField || ('id' as keyof typeof result)]
-					: '',
-			};
-		}
-		return result?.[field.name as keyof typeof result];
-	};
-
 	// Weed out ID fields - for the moment.
 	// @todo we can remove the many to many filter once we support adding many to many in the UI
 	const formFields: EntityField[] = selectedEntity.fields.filter(
@@ -244,8 +225,8 @@ export const DetailPanel = () => {
 	}, []);
 
 	const initialValues = formFields.reduce((acc, field) => {
-		const result = data?.result;
-		const value = getValue(field, savedSessionState ?? result);
+		const result = savedSessionState ?? data?.result;
+		const value = result?.[field.name as keyof typeof result];
 		acc[field.name] = value ?? '';
 		return acc;
 	}, {} as Record<string, any>);
@@ -272,7 +253,18 @@ export const DetailPanel = () => {
 		setTimeout(onClose, slideAnimationTime);
 	};
 
-	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
+	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
+		// Format form values as GraphQL input parameters
+		const values = (Object.entries(formValues) ?? []).reduce((acc, [key, value]: [string, any]) => {
+			// Check if we have a relationship value if so let's only send the id to the server
+			acc[key] =
+				value && typeof value === 'object' && value.hasOwnProperty('value')
+					? { id: value.value }
+					: value;
+
+			return acc;
+		}, {} as Record<string, any>);
+
 		if (id) {
 			await updateEntity({
 				variables: {

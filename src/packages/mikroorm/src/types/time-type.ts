@@ -15,7 +15,6 @@ export class Time {
 			.padStart(2, '0')}:${this.second.toString().padStart(2, '0')}`;
 	}
 }
-
 export class TimeType extends Type {
 	convertToDatabaseValue(value: any, platform: Platform) {
 		if (!value) return value;

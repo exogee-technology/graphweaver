@@ -1,8 +1,4 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
-process.env.PASSWORD_AUTH_PUBLIC_KEY_PEM_BASE64 =
-	'LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg==';
-process.env.PASSWORD_AUTH_PRIVATE_KEY_PEM_BASE64 =
-	'LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUtCckcwcko5YVA0YnN0SlAyeWVNcTZsRUpUN28wcHJIdTdleHJJTjdrUXdvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aXJYVFZVSyswMEdoUUNrY2F1OE5xZmxYbwpnOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo=';
 process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
 
 import 'reflect-metadata';
@@ -20,23 +16,23 @@ import {
 	createBaseResolver,
 } from '@exogee/graphweaver';
 import {
-	PasswordAuthResolver,
-	passwordAuthApolloPlugin,
+	authApolloPlugin,
 	UserProfile,
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
+	createBasePasswordAuthResolver,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
-@ApplyMultiFactorAuthentication<Task>({
+@ApplyMultiFactorAuthentication<Task>(() => ({
 	Everyone: {
 		// all users must provide a password mfa when writing data
-		write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
+		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
 	},
-})
+}))
 @ObjectType('Task')
-export class Task extends GraphQLEntity<any> {
+class Task extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
 	@Field(() => ID)
@@ -50,7 +46,7 @@ export class Task extends GraphQLEntity<any> {
 }
 
 @ObjectType('Tag')
-export class Tag extends GraphQLEntity<any> {
+class Tag extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
 	@Field(() => ID)
@@ -93,7 +89,7 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends PasswordAuthResolver {
+class AuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
@@ -103,7 +99,7 @@ export class AuthResolver extends PasswordAuthResolver {
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver, TaskResolver, TagResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 });
 
@@ -127,7 +123,9 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Authentication Error: Expected Token.'
+		);
 	});
 
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
@@ -155,7 +153,9 @@ describe('Password Authentication - Challenge', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Authentication Error: Expected Token.'
+		);
 	});
 
 	test('should fail challenge if not logged in.', async () => {

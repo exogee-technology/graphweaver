@@ -1,13 +1,10 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = 'http://localhost:9000/';
-process.env.PASSWORD_AUTH_JWT_SECRET = '*';
-
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
 import { Resolver } from '@exogee/graphweaver';
 import {
-	PasswordAuthResolver,
-	passwordAuthApolloPlugin,
+	createBasePasswordAuthResolver,
+	authApolloPlugin,
 	UserProfile,
 	AuthorizationContext,
 	ForbiddenError,
@@ -20,13 +17,13 @@ const user = new UserProfile({
 });
 
 @Resolver()
-export class AuthResolver extends PasswordAuthResolver {
+class AuthResolver extends createBasePasswordAuthResolver() {
 	async authenticate(username: string, password: string) {
 		return user;
 	}
 }
 
-export const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
+const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
 	// Ensure only logged in users can access the admin ui metadata
 	if (!params.context.token) throw new ForbiddenError('Forbidden');
 	return params;
@@ -35,7 +32,7 @@ export const beforeRead = async <C extends AuthorizationContext>(params: Metadat
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [passwordAuthApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user)],
 	},
 	adminMetadata: {
 		enabled: true,
@@ -60,7 +57,9 @@ describe('Password Authentication - Redirect', () => {
 		});
 
 		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
-			process.env.PASSWORD_AUTH_REDIRECT_URI
+			`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=${encodeURIComponent(
+				process.env.AUTH_BASE_URI + '/' ?? ''
+			)}`
 		);
 	});
 });

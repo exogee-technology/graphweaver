@@ -1,4 +1,6 @@
 import { ApolloError } from 'apollo-server-errors';
+import { AuthenticationMethod } from './types';
+
 export { ForbiddenError } from 'apollo-server-errors';
 
 export enum ErrorCodes {
@@ -9,11 +11,14 @@ export enum ErrorCodes {
 export class ChallengeError extends ApolloError {
 	constructor(
 		message: string,
-		extensions: {
-			entity: string;
+		public extensions: {
+			code?: ErrorCodes.CHALLENGE;
+			providers: AuthenticationMethod[];
 		}
 	) {
-		super(message, 'CHALLENGE', extensions);
+		super(message, ErrorCodes.CHALLENGE, extensions);
+		this.code = ErrorCodes.CHALLENGE;
+		this.extensions = { ...this.extensions, code: this.code };
 
 		Object.defineProperty(this, 'name', { value: 'ChallengeError' });
 	}

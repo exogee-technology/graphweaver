@@ -1,12 +1,17 @@
-import { BaseContext, Filter } from '@exogee/graphweaver';
+import { BaseContext, Filter, GraphQLResolveInfo } from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
 
 export enum AuthenticationMethod {
 	PASSWORD = 'pwd',
+	MAGIC_LINK = 'mgl',
+	ONE_TIME_PASSWORD = 'otp',
+	WEB3 = 'wb3',
+	PASSKEY = 'pky',
 }
 
 export interface JwtPayload {
 	id?: string;
+	iat?: number;
 	exp?: number;
 	amr?: AuthenticationMethod[];
 	acr?: {
@@ -18,6 +23,7 @@ export interface JwtPayload {
 export interface AuthorizationContext extends BaseContext {
 	token?: string | JwtPayload;
 	user?: UserProfile;
+	redirectUri?: URL;
 }
 
 export enum AccessType {
@@ -63,12 +69,12 @@ export type MultiFactorAuthentication = {
 };
 
 export enum MultiFactorAuthenticationOperationType {
-	READ = 'read',
-	CREATE = 'create',
-	UPDATE = 'update',
-	DELETE = 'delete',
-	WRITE = 'write',
-	ALL = 'all',
+	READ = 'Read',
+	CREATE = 'Create',
+	UPDATE = 'Update',
+	DELETE = 'Delete',
+	WRITE = 'Write',
+	ALL = 'All',
 }
 
 export type MultiFactorAuthenticationOperation = {
@@ -78,4 +84,17 @@ export type MultiFactorAuthenticationOperation = {
 export type MultiFactorAuthenticationRule = {
 	factorsRequired: number;
 	providers: AuthenticationMethod[];
+};
+
+export enum AuthenticationType {
+	PasskeyChallenge = 'PasskeyChallenge',
+	PasskeyAuthenticator = 'PasskeyAuthenticator',
+	Web3WalletAddress = 'Web3WalletAddress',
+	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
+	MagicLinkChallenge = 'MagicLinkChallenge',
+}
+
+export type RequestParams = {
+	ctx: AuthorizationContext;
+	info: GraphQLResolveInfo;
 };

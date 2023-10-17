@@ -30,7 +30,6 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/mysql": "5.7.14",
-		"argon2": "0.31.1",
 		"class-validator": "0.14.0",
 		"dotenv": "16.0.0",
 		"got": "11.8.5",

@@ -4,5 +4,6 @@ export * from './base-resolver';
 export * from './hook-manager';
 export * from './common/types';
 export * from './decorators';
+export * from './utils/create-or-update-entities';
 
 export * from 'type-graphql';
