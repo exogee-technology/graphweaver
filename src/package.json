@@ -9,10 +9,13 @@
 	},
 	"scripts": {
 		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build:win": "concurrently \"pnpm build:types\" \"pnpm build:js:win\"",
 		"build:types": "turbo --filter \"!./examples/**\" build:types",
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
+		"build:js:win": "turbo --filter \"!./examples/**\" build:js:win",
 		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
 		"clean": "./clean.sh && pnpm build",
+		"clean:win": "clean.bat",
 		"format": "pnpm prettier",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
 		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",

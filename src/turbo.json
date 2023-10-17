@@ -8,6 +8,10 @@
   "build:js": {
       "dependsOn": ["^build:js"],
       "cache": false
+    } ,
+  "build:js:win": {
+      "dependsOn": ["^build:js:win"],
+      "cache": false
     } 
 }
 } 
