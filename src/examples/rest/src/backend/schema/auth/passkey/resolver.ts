@@ -4,10 +4,9 @@ import {
 	PasskeyChallenge,
 } from '@exogee/graphweaver-auth';
 import { Resolver } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Authentication, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { myConnection } from '../../../database';
-import { Authentication } from '../../../entities';
 
 @Resolver()
 export class PasskeyAuthResolver extends AuthResolver {
