@@ -21,6 +21,17 @@ export class PasswordAuthResolver extends AuthResolver {
 		});
 	}
 
+	protected async onUserAuthenticated(userId: string, params: RequestParams): Promise<null> {
+		// This is called after a user has authenticated
+		return;
+	}
+
+	protected async onUserRegistered(userId: string, params: RequestParams): Promise<null> {
+		// As an example we are sending an OTP challenge to the user during registration
+		await callChildMutation('sendOTPChallenge', {}, params.info, params.ctx);
+		return;
+	}
+
 	async getUser(
 		id: string,
 		operation: PasswordOperation,

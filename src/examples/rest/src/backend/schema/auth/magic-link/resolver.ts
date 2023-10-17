@@ -4,7 +4,7 @@ import {
 	MagicLinkData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
-import { Resolver } from '@exogee/graphweaver';
+import { BaseLoaders, Resolver } from '@exogee/graphweaver';
 import {
 	Authentication,
 	ConnectionManager,
@@ -12,9 +12,10 @@ import {
 	MikroBackendProvider,
 } from '@exogee/graphweaver-mikroorm';
 
-import { addUserToContext } from '../../../auth/context';
+import { mapUserToProfile } from '../../../auth/context';
 import { myConnection } from '../../../database';
 import { Credential } from '../../../entities/mysql';
+import { User } from '../../user';
 
 @Resolver()
 export class MagicLinkAuthResolver extends AuthResolver {
@@ -32,7 +33,14 @@ export class MagicLinkAuthResolver extends AuthResolver {
 	 */
 	async getUser(username: string): Promise<UserProfile> {
 		const credential = await this.database.em.findOneOrFail(Credential, { username });
-		return addUserToContext(credential.id);
+
+		const user = User.fromBackendEntity(
+			await BaseLoaders.loadOne({ gqlEntityType: User, id: credential.id })
+		);
+
+		if (!user) throw new Error('Bad Request: Unknown user id provided.');
+
+		return mapUserToProfile(user);
 	}
 
 	/**
