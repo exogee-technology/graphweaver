@@ -1,5 +1,5 @@
 rm -rf ./app 
-node ../cli/bin init --name=app --backend=sqlite --version=\"local\" 
+node ../cli/bin init --name=app --backend=sqlite --useVersion=\"local\" 
 cd app 
 pnpm i --ignore-workspace --no-lockfile
 mkdir databases

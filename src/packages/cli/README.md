@@ -141,7 +141,7 @@ Step by step helper to create a graphweaver project in various ways.
 
 ```
 USAGE
-    $ graphweaver init [--name <value>] [--backend <value>] [--version <value>] [--host <value>] [--port <value>][--password <value>] [--user <value>]
+    $ graphweaver init [--name <value>] [--backend <value>] [--useVersion <value>] [--host <value>] [--port <value>][--password <value>] [--user <value>]
 
 FLAGS
     --database <value>
@@ -150,7 +150,7 @@ FLAGS
     --backend <value>
     Data source type. Select a choice from these options: `postgres`, `mysql`, `rest`, `sqlite`.
 
-    --version <value>
+    --useVersion <value>
     Specify a version of Graphweaver to use
 
     --database <value>
