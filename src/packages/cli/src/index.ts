@@ -11,6 +11,7 @@ import {
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
 import { importDataSource } from './import';
+import pkg from '../package.json';
 
 yargs.version(false);
 
@@ -235,6 +236,7 @@ yargs
 			}
 		},
 	})
+	.version(pkg.version)
 	.showHelpOnFail(true)
 	.help('help')
 	.command({
