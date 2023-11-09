@@ -149,11 +149,29 @@ export const importDataSource = async (
 
 		spinner.stop();
 
+		let fileCount = 0;
 		for (const file of files) {
 			createDirectories(path.join('./src/', file.path));
-			writeFileSync(path.join(process.cwd(), './src/', file.path, file.name), file.contents);
+
+			const fileFullPath = path.join(process.cwd(), './src/', file.path, file.name);
+			let allowOverwrite = true;
+			if (existsSync(fileFullPath)) {
+				const prompt = await inquirer.prompt<{ allowOverwrite: boolean }>([
+					{
+						type: 'confirm',
+						name: 'allowOverwrite',
+						message: `Overwrite this file ${file.name}?`,
+						default: true,
+					},
+				]);
+				allowOverwrite = prompt.allowOverwrite;
+			}
+			if (allowOverwrite) {
+				writeFileSync(fileFullPath, file.contents);
+				fileCount += 1;
+			}
 		}
-		console.log(`${files.length} files have been successfully created in the project.`);
+		console.log(`${fileCount} files have been successfully created in the project.`);
 	} catch (err: unknown) {
 		if (isIntrospectionError(err)) {
 			console.warn(`\n\n${err.title}\n${err.message}\n\n`);
