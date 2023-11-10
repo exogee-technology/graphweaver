@@ -66,7 +66,8 @@ export const importDataSource = async (
 	host?: string,
 	port?: number,
 	password?: string,
-	user?: string
+	user?: string,
+	overwriteAllFiles?: boolean
 ) => {
 	const prompts = [];
 
@@ -154,19 +155,19 @@ export const importDataSource = async (
 			createDirectories(path.join('./src/', file.path));
 
 			const fileFullPath = path.join(process.cwd(), './src/', file.path, file.name);
-			let allowOverwrite = true;
-			if (existsSync(fileFullPath)) {
-				const prompt = await inquirer.prompt<{ allowOverwrite: boolean }>([
+			let overwrite = true;
+			if (!overwriteAllFiles && file.needOverwriteWarning && existsSync(fileFullPath)) {
+				const prompt = await inquirer.prompt<{ overwrite: boolean }>([
 					{
 						type: 'confirm',
-						name: 'allowOverwrite',
-						message: `Overwrite this file ${file.name}?`,
+						name: 'overwrite',
+						message: `Overwrite this file ${path.join(file.path, file.name)}?`,
 						default: true,
 					},
 				]);
-				allowOverwrite = prompt.allowOverwrite;
+				overwrite = prompt.overwrite;
 			}
-			if (allowOverwrite) {
+			if (overwrite) {
 				writeFileSync(fileFullPath, file.contents);
 				fileCount += 1;
 			}
