@@ -243,11 +243,14 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		// Export the database connection to its own file
 		source.push(new DatabaseFile(databaseType, options));
 
-		const files = source.map((file) => ({
-			path: file.getBasePath(),
-			name: file.getBaseName(),
-			contents: file.generate(),
-		}));
+		const files = source.map((file) => {
+			return {
+				path: file.getBasePath(),
+				name: file.getBaseName(),
+				contents: file.generate(),
+				needOverwriteWarning: !![DatabaseFile, SchemaIndexFile].some((cls) => file instanceof cls),
+			};
+		});
 
 		await closeConnection();
 
