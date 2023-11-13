@@ -101,8 +101,13 @@ yargs
 				.option('user', {
 					type: 'string',
 					describe: 'Specify the database server user.',
+				})
+				.option('overwrite', {
+					alias: 'o',
+					type: 'boolean',
+					describe: 'Overwrite all existing files.',
 				}),
-		handler: async ({ source, database, host, port, password, user }) => {
+		handler: async ({ source, database, host, port, password, user, overwrite }) => {
 			console.log('Importing data source...');
 			if (source) console.log(`Source: ${source}`);
 			if (database) console.log(`Database Name: ${database}`);
@@ -111,7 +116,7 @@ yargs
 			if (user) console.log(`Database User: ${user}`);
 			console.log();
 
-			await importDataSource(source, database, host, port, password, user);
+			await importDataSource(source, database, host, port, password, user, overwrite);
 		},
 	})
 	.command({
