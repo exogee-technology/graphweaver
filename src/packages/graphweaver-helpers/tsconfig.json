@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"skipLibCheck": true,
+		"outDir": "dist",
+		"composite": true,
+		"rootDir": "src"
+	},
+	"types": [],
+	"include": ["src"]
+}

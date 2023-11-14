@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"skipLibCheck": true,
+		"lib": ["es2022"],
+		"outDir": "dist",
+		"moduleResolution": "nodenext",
+		"composite": true,
+		"rootDir": "src",
+		"target": "es2022"
+	},
+	"types": [],
+	"include": ["src"]
+}

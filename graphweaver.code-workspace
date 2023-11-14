@@ -75,6 +75,14 @@
     {
       "name": "📦 vite-plugin-graphweaver",
       "path": "src/packages/vite-plugin-graphweaver"
+    },
+    {
+      "name": "📦 @exogee/aws",
+      "path": "src/packages/graphweaver-aws"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-helpers",
+      "path": "src/packages/graphweaver-helpers"
     }
   ],
   "settings": {}
