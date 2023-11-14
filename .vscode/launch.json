@@ -49,6 +49,16 @@
       "name": "Admin UI in Chrome",
       "url": "http://localhost:9000",
       "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "AWS Cognito Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/aws-cognito"
     }
   ]
 }

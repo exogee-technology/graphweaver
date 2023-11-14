@@ -17,6 +17,10 @@
       "path": "src/examples/xero"
     },
     {
+      "name": "➡️ Example: AWS Cognito",
+      "path": "src/examples/aws-cognito"
+    },
+    {
       "name": "🤖 graphweaver",
       "path": "src/packages/cli"
     },
@@ -77,7 +81,7 @@
       "path": "src/packages/vite-plugin-graphweaver"
     },
     {
-      "name": "📦 @exogee/aws",
+      "name": "📦 @exogee/graphweaver-aws",
       "path": "src/packages/graphweaver-aws"
     },
     {
