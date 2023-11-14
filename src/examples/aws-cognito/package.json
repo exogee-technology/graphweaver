@@ -1,0 +1,57 @@
+{
+	"name": "@exogee/graphweaver-example-aws-cognito",
+	"version": "0.2.6",
+	"license": "MIT",
+	"private": true,
+	"description": "Example of connecting to AWS Cognito",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build": "graphweaver build",
+		"start": "graphweaver start",
+		"watch": "graphweaver watch",
+		"version": "npm version --no-git-tag-version"
+	},
+	"dependencies": {
+		"@apollo/server": "4.9.3",
+		"@as-integrations/aws-lambda": "2.0.1",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
+		"@exogee/graphweaver-auth": "workspace:*",
+		"@exogee/graphweaver-auth-ui-components": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver-aws": "workspace:*",
+		"@mikro-orm/core": "5.7.14",
+		"@mikro-orm/mysql": "5.7.14",
+		"class-validator": "0.14.0",
+		"dotenv": "16.0.0",
+		"got": "11.8.5",
+		"graphql": "16.8.1",
+		"graphweaver": "workspace:*",
+		"react": "18.2.0",
+		"reflect-metadata": "0.1.13"
+	},
+	"devDependencies": {
+		"@types/node": "14.14.10",
+		"typescript": "5.0.2",
+		"vite": "4.3.9",
+		"vite-plugin-svgr": "3.2.0"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
+}
