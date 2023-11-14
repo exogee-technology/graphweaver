@@ -2,7 +2,6 @@
 	"name": "@exogee/graphweaver-example-aws-cognito",
 	"version": "0.2.6",
 	"license": "MIT",
-	"private": true,
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",
 	"source": "src/index.ts",

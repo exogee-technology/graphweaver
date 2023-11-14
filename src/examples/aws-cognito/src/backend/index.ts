@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
-import { AuthorizationContext, authApolloPlugin } from '@exogee/graphweaver-auth';
+import { AuthorizationContext } from '@exogee/graphweaver-auth';
 
 import { resolvers } from './schema';
 
