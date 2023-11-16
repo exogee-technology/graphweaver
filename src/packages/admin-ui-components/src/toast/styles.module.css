@@ -1,0 +1,43 @@
+.toastContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.divider {
+	border-left: 1px solid white;
+	height: 80%;
+    padding-right: 16px;
+}
+
+.iconContainer {
+	display: flex;
+	min-width: 32px;
+	cursor: pointer;
+	min-height: 20px;
+	max-height: 20px;
+}
+
+.iconContainer:hover {
+	opacity: 0.7;
+}
+
+.closeIconWrapper {
+	width: 100%;
+}
+
+.closeIconLeft {
+	height: 100%;
+	width: 2px;
+	margin-left: 12px;
+	background-color: #fff;
+	transform: rotate(45deg);
+}
+
+.closeIconRight {
+	height: 100%;
+	width: 2px;
+	background-color: #fff;
+	transform: rotate(90deg);
+}

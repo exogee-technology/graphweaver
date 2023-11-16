@@ -4,6 +4,7 @@ import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from '
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import {
 	decodeSearchParams,
@@ -267,28 +268,35 @@ export const DetailPanel = () => {
 			return acc;
 		}, {} as Record<string, any>);
 
-		if (id && !isNew) {
-			await updateEntity({
-				variables: {
-					data: {
-						id,
-						...values,
+		try {
+			if (id && !isNew) {
+				await updateEntity({
+					variables: {
+						data: {
+							id,
+							...values,
+						},
 					},
-				},
-				refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
-			});
-		} else {
-			await createEntity({
-				variables: {
-					data: values,
-				},
-				refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
-			});
-		}
+					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
+				});
+			} else {
+				await createEntity({
+					variables: {
+						data: values,
+					},
+					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
+				});
+			}
 
-		actions.setSubmitting(false);
-		clearSessionState();
-		onClose();
+			clearSessionState();
+			onClose();
+		} catch (error: unknown) {
+			toast.error(String(error), {
+				duration: 5000,
+			});
+		} finally {
+			actions.setSubmitting(false);
+		}
 	};
 
 	const clearSessionState = () => {

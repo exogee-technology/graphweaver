@@ -33,7 +33,8 @@
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "2.5.2",
 		"pluralize": "8.0.0",
-		"react-data-grid": "7.0.0-beta.20"
+		"react-data-grid": "7.0.0-beta.20",
+		"react-hot-toast": "2.4.1"
 	},
 	"peerDependencies": {
 		"graphql": "16.8.1",
