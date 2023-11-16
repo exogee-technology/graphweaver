@@ -194,11 +194,13 @@ export const DetailPanel = () => {
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
+	const isNew = id === 'graphweaver-admin-new-entity';
+
 	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
 		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
-			skip: id === 'graphweaver-admin-new-entity',
+			skip: isNew,
 		}
 	);
 
@@ -265,7 +267,7 @@ export const DetailPanel = () => {
 			return acc;
 		}, {} as Record<string, any>);
 
-		if (id) {
+		if (id && !isNew) {
 			await updateEntity({
 				variables: {
 					data: {
@@ -273,12 +275,14 @@ export const DetailPanel = () => {
 						...values,
 					},
 				},
+				refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
 			});
 		} else {
 			await createEntity({
 				variables: {
 					data: values,
 				},
+				refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
 			});
 		}
 
