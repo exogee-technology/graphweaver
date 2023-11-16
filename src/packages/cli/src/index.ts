@@ -11,8 +11,7 @@ import {
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
 import { importDataSource } from './import';
-
-yargs.version(false);
+import pkg from '../package.json';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
@@ -40,12 +39,12 @@ yargs
 					describe: 'Specify one or more data sources.',
 					choices: ['postgres', 'mysql', 'rest', 'sqlite'],
 				})
-				.option('version', {
+				.option('useVersion', {
 					type: 'string',
 					describe: 'Specify a version of Graphweaver to use.',
 				}),
 		handler: async (argv) => {
-			const version = argv.version;
+			const version = argv.useVersion;
 			const name = argv.name;
 			const backends = argv.backend?.flatMap((backend: string) => {
 				switch (backend) {
@@ -240,6 +239,7 @@ yargs
 			}
 		},
 	})
+	.version(pkg.version)
 	.showHelpOnFail(true)
 	.help('help')
 	.command({

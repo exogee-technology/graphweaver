@@ -1,5 +1,5 @@
 rm -rf ./app 
-node ../cli/bin init --name=app --backend=mysql --version=\"local\" 
+node ../cli/bin init --name=app --backend=mysql --useVersion=\"local\" 
 cd app 
 pnpm i --ignore-workspace --no-lockfile
 mkdir databases
