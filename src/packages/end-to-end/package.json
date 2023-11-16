@@ -25,6 +25,7 @@
 		"@exogee/graphweaver-mikroorm": "*",
 		"@exogee/graphweaver-scalars": "*",
 		"@exogee/graphweaver-server": "*",
+		"@exogee/graphweaver-aws": "*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"class-validator": "0.14.0",

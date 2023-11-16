@@ -854,6 +854,9 @@ importers:
       '@exogee/graphweaver-auth':
         specifier: '*'
         version: link:../auth
+      '@exogee/graphweaver-aws':
+        specifier: '*'
+        version: link:../graphweaver-aws
       '@exogee/graphweaver-mikroorm':
         specifier: '*'
         version: link:../mikroorm

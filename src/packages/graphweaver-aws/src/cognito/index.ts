@@ -4,124 +4,18 @@ import { createProvider, createEntity, createResolver } from '@exogee/graphweave
 import type { ItemWithId } from '@exogee/graphweaver-helpers';
 import { createBaseResolver } from '@exogee/graphweaver';
 import { v4 } from 'uuid';
+import { getOneUser, getManyUsers, mapId, createUser } from '../util';
 
 import {
 	CognitoIdentityProviderClient,
-	ListUsersInGroupCommand,
-	ListGroupsCommand,
-	AdminGetUserCommand,
-	AdminCreateUserCommand,
-	AdminAddUserToGroupCommand,
 	AdminSetUserPasswordCommand,
+	ListUsersCommandInput,
+	ListUsersCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 type Entity = ItemWithId;
 type Context = any;
 type DataEntity = any;
-
-const createUser = async (
-	client: CognitoIdentityProviderClient,
-	UserPoolId: string,
-	{ email, groups }: Partial<DataEntity>
-) => {
-	// Create user
-	const user = await client.send(
-		new AdminCreateUserCommand({
-			UserPoolId,
-			Username: email,
-			UserAttributes: [
-				{ Name: 'email', Value: email },
-				{ Name: 'email_verified', Value: 'True' },
-			],
-		})
-	);
-
-	// Add user to specified groups
-	if (groups) {
-		for (const group of groups.split(',')) {
-			await client.send(
-				new AdminAddUserToGroupCommand({
-					GroupName: group,
-					Username: email,
-					UserPoolId,
-				})
-			);
-		}
-	}
-
-	if (!user) return null;
-	return {
-		...user,
-		Groups: groups.split(','),
-	};
-};
-
-// @todo add group
-const getOneUser = async (
-	client: CognitoIdentityProviderClient,
-	UserPoolId: string,
-	Username: string
-): Promise<any> => {
-	const user = await client.send(
-		new AdminGetUserCommand({
-			UserPoolId,
-			Username,
-		})
-	);
-
-	if (!user) return null;
-
-	return {
-		...user,
-		Attributes: user.UserAttributes,
-	};
-};
-
-const getManyUsers = async (
-	client: CognitoIdentityProviderClient,
-	UserPoolId: string,
-	_filter: any
-): Promise<any> => {
-	const mappedUsers = new Map();
-
-	// get groups
-	const groups = (
-		await client.send(
-			new ListGroupsCommand({
-				UserPoolId,
-			})
-		)
-	).Groups;
-
-	// for each group, get users
-	// @todo max is 50, we need to paginate
-	// @todo we should also get users not in a group?
-	for (const group of groups) {
-		const users = (
-			await client.send(
-				new ListUsersInGroupCommand({
-					UserPoolId,
-					GroupName: group.GroupName,
-				})
-			)
-		).Users;
-
-		for (const user of users) {
-			const existingUser = mappedUsers.get(user.Username);
-			mappedUsers.set(user.Username, {
-				...user,
-				Groups: [group.GroupName, ...(existingUser?.Groups ? [existingUser.Groups] : [])],
-			});
-		}
-	}
-
-	return [...mappedUsers.values()];
-};
-
-const mapId = (user: any): any => ({
-	id: user.Username,
-	...user,
-});
 
 export interface CreateAwsCognitoUserResolverOptions {
 	region: string;
@@ -132,15 +26,46 @@ export const createAwsCognitoUserResolver = ({
 	region,
 	userPoolId,
 }: CreateAwsCognitoUserResolverOptions) => {
+	console.log('**********************************\n');
+	console.log('createAwsCognitoUserResolver', region, userPoolId);
+	console.log('**********************************\n');
+	console.log(process.env.AWS_ACCESS_KEY_ID);
+	console.log(process.env.AWS_SECRET_ACCESS_KEY);
+	console.log(process.env.AWS_DEFAULT_REGION);
+
 	const provider = createProvider<Entity, Context, DataEntity>({
 		backendId: 'AWS',
 		init: async () => {
+			const client = new CognitoIdentityProviderClient({ region });
+			// const params: ListUsersCommandInput = {
+			// 	UserPoolId: userPoolId,
+			// };
+
+			// try {
+			// 	const command = new ListUsersCommand(params);
+			// 	const result = await client.send(command);
+
+			// 	// Process the result, e.g., log or return user information
+			// 	console.log('Users in the user pool:', result.Users);
+			// } catch (error) {
+			// 	console.error('Error listing users:', error);
+			// }
+
+			// try {
+			// 	const data = await client;
+			// 	// process data.
+			// } catch (error) {
+			// 	// error handling.
+			// }
+
 			return {
-				client: new CognitoIdentityProviderClient({ region }),
+				client,
 				UserPoolId: userPoolId,
 			};
 		},
 		read: async ({ client, UserPoolId }, filter, pagination) => {
+			console.log('read', filter, pagination);
+
 			if (filter?.id) return mapId(await getOneUser(client, UserPoolId, String(filter.id)));
 
 			if (Array.isArray(filter?._or))
@@ -153,7 +78,7 @@ export const createAwsCognitoUserResolver = ({
 		},
 	});
 
-	@ObjectType()
+	@ObjectType('CognitoUser')
 	class CognitoUser {
 		@Field(() => ID)
 		id!: string;
@@ -187,7 +112,7 @@ export const createAwsCognitoUserResolver = ({
 			@Arg('password', () => String) password: string
 		) {
 			const client = new CognitoIdentityProviderClient({
-				region: 'ap-southeast-2',
+				region: region,
 			});
 			const UserPoolId = process.env.COGNITO_USER_POOL_ID;
 

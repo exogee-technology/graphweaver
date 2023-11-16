@@ -5,6 +5,8 @@ import {
 	AdminGetUserCommand,
 	AdminCreateUserCommand,
 	AdminAddUserToGroupCommand,
+	ListUsersCommandInput,
+	ListUsersCommand,
 	AdminSetUserPasswordCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
@@ -83,6 +85,7 @@ export const getManyUsers = async (
 			})
 		)
 	).Groups;
+	console.log('getManyYUsers');
 
 	// for each group, get users
 	// @todo max is 50, we need to paginate
@@ -96,7 +99,6 @@ export const getManyUsers = async (
 				})
 			)
 		).Users;
-
 		for (const user of users) {
 			const existingUser = mappedUsers.get(user.Username);
 			mappedUsers.set(user.Username, {
@@ -104,6 +106,23 @@ export const getManyUsers = async (
 				Groups: [group.GroupName, ...(existingUser?.Groups ? [existingUser.Groups] : [])],
 			});
 		}
+	}
+
+	// Get users without groups
+	try {
+		const command = new ListUsersCommand({
+			UserPoolId,
+		});
+		const result = await client.send(command);
+		for (const user of result.Users) {
+			const existingUser = mappedUsers.get(user.Username);
+			mappedUsers.set(user.Username, {
+				...user,
+				Groups: [...(existingUser?.Groups ? [existingUser.Groups] : [])],
+			});
+		}
+	} catch (error) {
+		console.error('Error getting users without group:', error);
 	}
 
 	return [...mappedUsers.values()];
