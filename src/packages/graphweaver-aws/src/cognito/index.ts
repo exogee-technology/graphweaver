@@ -9,8 +9,8 @@ import { getOneUser, getManyUsers, mapId, createUser } from '../util';
 import {
 	CognitoIdentityProviderClient,
 	AdminSetUserPasswordCommand,
-	ListUsersCommandInput,
-	ListUsersCommand,
+	AdminDisableUserCommandInput,
+	AdminDisableUserCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 type Entity = ItemWithId;
@@ -26,37 +26,10 @@ export const createAwsCognitoUserResolver = ({
 	region,
 	userPoolId,
 }: CreateAwsCognitoUserResolverOptions) => {
-	console.log('**********************************\n');
-	console.log('createAwsCognitoUserResolver', region, userPoolId);
-	console.log('**********************************\n');
-	console.log(process.env.AWS_ACCESS_KEY_ID);
-	console.log(process.env.AWS_SECRET_ACCESS_KEY);
-	console.log(process.env.AWS_DEFAULT_REGION);
-
 	const provider = createProvider<Entity, Context, DataEntity>({
 		backendId: 'AWS',
 		init: async () => {
 			const client = new CognitoIdentityProviderClient({ region });
-			// const params: ListUsersCommandInput = {
-			// 	UserPoolId: userPoolId,
-			// };
-
-			// try {
-			// 	const command = new ListUsersCommand(params);
-			// 	const result = await client.send(command);
-
-			// 	// Process the result, e.g., log or return user information
-			// 	console.log('Users in the user pool:', result.Users);
-			// } catch (error) {
-			// 	console.error('Error listing users:', error);
-			// }
-
-			// try {
-			// 	const data = await client;
-			// 	// process data.
-			// } catch (error) {
-			// 	// error handling.
-			// }
 
 			return {
 				client,
@@ -64,8 +37,6 @@ export const createAwsCognitoUserResolver = ({
 			};
 		},
 		read: async ({ client, UserPoolId }, filter, pagination) => {
-			console.log('read', filter, pagination);
-
 			if (filter?.id) return mapId(await getOneUser(client, UserPoolId, String(filter.id)));
 
 			if (Array.isArray(filter?._or))
@@ -76,12 +47,32 @@ export const createAwsCognitoUserResolver = ({
 		create: async ({ client, UserPoolId }, entity) => {
 			return mapId(await createUser(client, UserPoolId, entity));
 		},
+		update: async ({ client, UserPoolId }, entityId: string) => {
+			console.log('Update entityId: ', entityId);
+			// START HERE
+			return mapId(await getOneUser(client, UserPoolId, entityId));
+		},
+		updateOne: async ({ client, UserPoolId }, entityId: string) => {
+			console.log('UpdateONE entityId: ', entityId);
+			// START HERE
+			return mapId(await getOneUser(client, UserPoolId, entityId));
+		},
 	});
 
 	@ObjectType('CognitoUser')
 	class CognitoUser {
 		@Field(() => ID)
 		id!: string;
+
+		@Field(() => String)
+		async username(@Root() dataEntity: DataEntity) {
+			return dataEntity.Username;
+		}
+
+		@Field(() => Boolean)
+		async enabled(@Root() dataEntity: DataEntity) {
+			return dataEntity.Enabled;
+		}
 
 		@Field(() => String, { nullable: true })
 		async email(@Root() dataEntity: DataEntity) {
@@ -126,6 +117,28 @@ export const createAwsCognitoUserResolver = ({
 			);
 
 			return true;
+		}
+
+		// @todo remove if we can do this via update
+		// Function to disable a user
+		@Mutation(() => Boolean)
+		async disableUser(username: string) {
+			const client = new CognitoIdentityProviderClient({
+				region: region,
+			});
+			const UserPoolId = process.env.COGNITO_USER_POOL_ID;
+			const params: AdminDisableUserCommandInput = {
+				UserPoolId,
+				Username: username,
+			};
+
+			try {
+				const command = new AdminDisableUserCommand(params);
+				await client.send(command);
+				console.log(`User ${username} disabled successfully.`);
+			} catch (error) {
+				console.error(`Error disabling user ${username}:`, error);
+			}
 		}
 	}
 

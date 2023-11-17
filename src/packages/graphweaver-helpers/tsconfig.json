@@ -4,8 +4,10 @@
 		"skipLibCheck": true,
 		"outDir": "dist",
 		"composite": true,
-		"rootDir": "src"
+		"rootDir": "src",
+		"sourceMap": true
 	},
 	"types": [],
-	"include": ["src"]
+	"include": ["src"],
+	"sourceMap": true
 }

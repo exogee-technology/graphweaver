@@ -265,7 +265,7 @@ export const DetailPanel = () => {
 			return acc;
 		}, {} as Record<string, any>);
 
-		if (id) {
+		if (id && id !== 'graphweaver-admin-new-entity') {
 			await updateEntity({
 				variables: {
 					data: {

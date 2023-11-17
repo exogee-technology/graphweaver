@@ -15,13 +15,13 @@ type DataEntity = any;
 export const createUser = async (
 	client: CognitoIdentityProviderClient,
 	UserPoolId: string,
-	{ email, groups }: Partial<DataEntity>
+	{ email, groups, username }: Partial<DataEntity>
 ): Promise<any> => {
 	// Create user
 	const user = await client.send(
 		new AdminCreateUserCommand({
 			UserPoolId,
-			Username: email,
+			Username: username,
 			UserAttributes: [
 				{ Name: 'email', Value: email },
 				{ Name: 'email_verified', Value: 'True' },
@@ -85,7 +85,6 @@ export const getManyUsers = async (
 			})
 		)
 	).Groups;
-	console.log('getManyYUsers');
 
 	// for each group, get users
 	// @todo max is 50, we need to paginate
