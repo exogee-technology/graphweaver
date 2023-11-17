@@ -129,7 +129,12 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 
 		async updateOne(id: Entity['id'], entity: Partial<Entity>): Promise<DataEntity> {
 			await this.initFn;
-			if (!this.update) throw new Error('update not available');
+			// we get to here
+			if (!this.update) {
+				console.log(this);
+				console.log(this.update);
+				throw new Error('update not available');
+			}
 			return this.update(this.context as Context, id, entity);
 		}
 

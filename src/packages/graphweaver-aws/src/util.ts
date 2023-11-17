@@ -88,31 +88,33 @@ export const getManyUsers = async (
 
 	// for each group, get users
 	// @todo max is 50, we need to paginate
-	// @todo we should also get users not in a group?
-	for (const group of groups) {
-		const users = (
-			await client.send(
-				new ListUsersInGroupCommand({
-					UserPoolId,
-					GroupName: group.GroupName,
-				})
-			)
-		).Users;
-		for (const user of users) {
-			const existingUser = mappedUsers.get(user.Username);
-			mappedUsers.set(user.Username, {
-				...user,
-				Groups: [group.GroupName, ...(existingUser?.Groups ? [existingUser.Groups] : [])],
-			});
+	if (groups) {
+		for (const group of groups) {
+			const users = (
+				await client.send(
+					new ListUsersInGroupCommand({
+						UserPoolId,
+						GroupName: group.GroupName,
+					})
+				)
+			).Users;
+			if (!users) return;
+			for (const user of users) {
+				const existingUser = mappedUsers.get(user.Username);
+				mappedUsers.set(user.Username, {
+					...user,
+					Groups: [group.GroupName, ...(existingUser?.Groups ? [existingUser.Groups] : [])],
+				});
+			}
 		}
 	}
-
 	// Get users without groups
 	try {
 		const command = new ListUsersCommand({
 			UserPoolId,
 		});
 		const result = await client.send(command);
+		if (!result.Users) return;
 		for (const user of result.Users) {
 			const existingUser = mappedUsers.get(user.Username);
 			mappedUsers.set(user.Username, {

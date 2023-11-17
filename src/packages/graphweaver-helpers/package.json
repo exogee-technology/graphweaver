@@ -4,7 +4,7 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"build": "pnpm build:js && pnpm build:types",
-		"build:js": "esbuild src/index.ts --bundle '--external:@exogee/graphweaver' '--external:type-graphql' '--external:graphql-type-json' --platform=node --outdir=dist --format=cjs",
+		"build:js": "esbuild src/index.ts --bundle '--external:@exogee/graphweaver' '--external:type-graphql' '--external:graphql-type-json' --platform=node --outdir=dist --format=cjs  --sourcemap=linked",
 		"build:types": "tsc --build --force --emitDeclarationOnly",
 		"format": "prettier --write .",
 		"test": "npm run test:format && npm run test:typescript",

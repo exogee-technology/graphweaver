@@ -3,7 +3,6 @@ import { createProvider, createEntity, createResolver } from '@exogee/graphweave
 
 import type { ItemWithId } from '@exogee/graphweaver-helpers';
 import { createBaseResolver } from '@exogee/graphweaver';
-import { v4 } from 'uuid';
 import { getOneUser, getManyUsers, mapId, createUser } from '../util';
 
 import {
@@ -76,7 +75,10 @@ export const createAwsCognitoUserResolver = ({
 
 		@Field(() => String, { nullable: true })
 		async email(@Root() dataEntity: DataEntity) {
-			return dataEntity.Attributes.find((attribute) => attribute.Name === 'email')?.Value ?? null;
+			return (
+				dataEntity.Attributes.find((attribute: { Name: string }) => attribute.Name === 'email')
+					?.Value ?? null
+			);
 		}
 
 		@Field(() => String)
