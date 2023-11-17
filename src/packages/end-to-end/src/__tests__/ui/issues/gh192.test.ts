@@ -10,8 +10,10 @@ test('ensure table refreshed after create', async ({ page }) => {
 	await expect(page.getByText('A Cor Do Som')).toBeVisible();
 	await page.getByText('A Cor Do Som').click();
 
+	// pre-condition: Infinity row does not exist in the table
 	await expect(page.getByText('Infinity')).not.toBeVisible();
 
+	// create new album called Infinity
 	await page.getByRole('button', { name: 'Create New Album' }).click();
 	await page.getByRole('textbox', { name: 'title' }).fill('Infinity');
 
@@ -22,5 +24,6 @@ test('ensure table refreshed after create', async ({ page }) => {
 	await page.locator('form').getByText('#9 Dream').click();
 	await page.getByRole('button', { name: 'Save' }).click();
 
+	// post-condition: Infinity row does exist in the table
 	await expect(page.getByText('Infinity')).toBeVisible();
 });
