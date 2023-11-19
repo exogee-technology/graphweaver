@@ -13,7 +13,7 @@ export interface ProviderOptions<Entity, Context, DataEntity> {
 	search?(context: Context, term: string): Promise<Array<DataEntity> | null>;
 	backendId: string;
 	dataEntity?: () => any;
-	updateOne?(context: Context, id: WithId['id'], entity: Partial<Entity>): Promise<DataEntity>;
+	//updateOne?(context: Context, id: WithId['id'], entity: Partial<Entity>): Promise<DataEntity>;
 }
 
 export const createProvider = <Entity extends WithId, Context, DataEntity extends WithId = any>(
@@ -129,10 +129,7 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 
 		async updateOne(id: Entity['id'], entity: Partial<Entity>): Promise<DataEntity> {
 			await this.initFn;
-			// we get to here
 			if (!this.update) {
-				console.log(this);
-				console.log(this.update);
 				throw new Error('update not available');
 			}
 			return this.update(this.context as Context, id, entity);

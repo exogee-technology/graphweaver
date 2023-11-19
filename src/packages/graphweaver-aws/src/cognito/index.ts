@@ -2,14 +2,23 @@ import { Arg, Field, ID, ObjectType, Root, Resolver, Mutation } from 'type-graph
 import { createProvider, createEntity, createResolver } from '@exogee/graphweaver-helpers';
 
 import type { ItemWithId } from '@exogee/graphweaver-helpers';
-import { createBaseResolver } from '@exogee/graphweaver';
-import { getOneUser, getManyUsers, mapId, createUser } from '../util';
+import { ReadOnly, createBaseResolver } from '@exogee/graphweaver';
+import {
+	getOneUser,
+	getManyUsers,
+	mapId,
+	createUser,
+	toggleUserStatus,
+	updateUserAttributes,
+} from '../util';
 
 import {
 	CognitoIdentityProviderClient,
 	AdminSetUserPasswordCommand,
 	AdminDisableUserCommandInput,
 	AdminDisableUserCommand,
+	AdminUpdateUserAttributesCommand,
+	AdminUpdateUserAttributesCommandInput,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 type Entity = ItemWithId;
@@ -46,23 +55,32 @@ export const createAwsCognitoUserResolver = ({
 		create: async ({ client, UserPoolId }, entity) => {
 			return mapId(await createUser(client, UserPoolId, entity));
 		},
-		update: async ({ client, UserPoolId }, entityId: string) => {
+		update: async ({ client, UserPoolId }, entityId: string, entityWithChanges) => {
+			console.log('Update entity: ', entityWithChanges);
 			console.log('Update entityId: ', entityId);
+
+			const existingUser = await getOneUser(client, UserPoolId, entityId);
+			console.log('existingUser: ', existingUser);
+
+			//If the enabled status has changed, disable the user
+			if (existingUser.Enabled !== entityWithChanges.enabled) {
+				await toggleUserStatus(client, UserPoolId, entityId, entityWithChanges.enabled);
+			}
+
 			// START HERE
-			return mapId(await getOneUser(client, UserPoolId, entityId));
-		},
-		updateOne: async ({ client, UserPoolId }, entityId: string) => {
-			console.log('UpdateONE entityId: ', entityId);
-			// START HERE
+			// disableUser(client, UserPoolId, entityId);
+			//updateUserAttributes(client, UserPoolId, entityId, entityWithChanges);
 			return mapId(await getOneUser(client, UserPoolId, entityId));
 		},
 	});
 
 	@ObjectType('CognitoUser')
 	class CognitoUser {
+		// @ReadOnly()
 		@Field(() => ID)
 		id!: string;
 
+		@ReadOnly()
 		@Field(() => String)
 		async username(@Root() dataEntity: DataEntity) {
 			return dataEntity.Username;
@@ -73,6 +91,7 @@ export const createAwsCognitoUserResolver = ({
 			return dataEntity.Enabled;
 		}
 
+		@ReadOnly()
 		@Field(() => String, { nullable: true })
 		async email(@Root() dataEntity: DataEntity) {
 			return (
@@ -140,6 +159,32 @@ export const createAwsCognitoUserResolver = ({
 				console.log(`User ${username} disabled successfully.`);
 			} catch (error) {
 				console.error(`Error disabling user ${username}:`, error);
+			}
+		}
+
+		@Mutation(() => Boolean)
+		async updateUserAttributes(
+			username: string,
+			userAttributes: { Name: string; Value: string }[]
+		) {
+			const client = new CognitoIdentityProviderClient({
+				region: process.env.AWS_REGION,
+			});
+			const UserPoolId = process.env.COGNITO_USER_POOL_ID;
+			const params: AdminUpdateUserAttributesCommandInput = {
+				UserPoolId,
+				Username: username,
+				UserAttributes: userAttributes,
+			};
+
+			try {
+				const command = new AdminUpdateUserAttributesCommand(params);
+				await client.send(command);
+				console.log(`User ${username} updated successfully.`);
+				return true;
+			} catch (error) {
+				console.error(`Error updating user ${username}:`, error);
+				return false;
 			}
 		}
 	}

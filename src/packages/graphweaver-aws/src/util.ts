@@ -8,6 +8,9 @@ import {
 	ListUsersCommandInput,
 	ListUsersCommand,
 	AdminSetUserPasswordCommand,
+	AdminDisableUserCommand,
+	AdminEnableUserCommand,
+	AdminUpdateUserAttributesCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
 
 type DataEntity = any;
@@ -148,4 +151,59 @@ export const setUserPassword = async (
 			Permanent: true,
 		})
 	);
+};
+
+export const toggleUserStatus = async (
+	client: CognitoIdentityProviderClient,
+	UserPoolId: string,
+	username: string,
+	isEnableUser: boolean
+): Promise<any> => {
+	const params = {
+		UserPoolId,
+		Username: username,
+	};
+
+	try {
+		const command = isEnableUser
+			? new AdminEnableUserCommand(params)
+			: new AdminDisableUserCommand(params);
+
+		await client.send(command);
+		console.log(
+			`User ${username} status set to ${isEnableUser ? 'enabled' : 'disabled'} successfully`
+		);
+	} catch (error) {
+		console.error(`Error setting user ${username} status:`, error);
+	}
+};
+
+export const updateUserAttributes = async (
+	client: CognitoIdentityProviderClient,
+	UserPoolId: string,
+	username: string,
+	entityWithChanges: {
+		id?: string;
+		[key: string]: any;
+	}
+	// userAttributes: { Name: string; Value: string }[]
+): Promise<any> => {
+	const params = {
+		UserPoolId,
+		Username: username,
+		//entityWithChanges except remove the id field
+		UserAttributes: Object.keys(entityWithChanges)
+			.filter((key) => key !== 'id')
+			.map((key) => ({ Name: key, Value: entityWithChanges[key] })),
+	};
+
+	try {
+		const command = new AdminUpdateUserAttributesCommand(params);
+		await client.send(command);
+		console.log(`User ${username} updated successfully.`);
+		return true;
+	} catch (error) {
+		console.error(`Error updating user ${username}:`, error);
+		return false;
+	}
 };
