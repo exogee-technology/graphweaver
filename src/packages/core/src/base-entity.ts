@@ -35,7 +35,7 @@ export class GraphQLEntity<D extends BaseDataEntity> {
 		if (dataEntity === undefined || dataEntity === null) return null;
 
 		const entity = new this(dataEntity);
-
+		console.log('GraphQLEntity.fromBackendEntity', entity);
 		metadata.fields
 			.filter((field) => field.target === this)
 			.forEach((field) => {

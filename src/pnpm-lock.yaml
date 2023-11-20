@@ -939,6 +939,9 @@ importers:
       '@exogee/graphweaver-helpers':
         specifier: workspace:*
         version: link:../graphweaver-helpers
+      '@exogee/graphweaver-rest':
+        specifier: workspace:*
+        version: link:../rest
       graphql:
         specifier: 16.8.1
         version: 16.8.1
