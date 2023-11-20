@@ -186,12 +186,10 @@ export const updateUserAttributes = async (
 		id?: string;
 		[key: string]: any;
 	}
-	// userAttributes: { Name: string; Value: string }[]
 ): Promise<any> => {
 	const params = {
 		UserPoolId,
 		Username: username,
-		//entityWithChanges except remove the id field
 		UserAttributes: Object.keys(entityWithChanges)
 			.filter((key) => key !== 'id')
 			.map((key) => ({ Name: key, Value: entityWithChanges[key] })),
