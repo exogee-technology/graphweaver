@@ -1,8 +1,9 @@
+import 'reflect-metadata';
+
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
-import { createAwsCognitoUserResolver } from '@exogee/graphweaver-aws';
+import { CognitoUser, createAwsCognitoUserResolver } from '@exogee/graphweaver-aws';
 
-import { Album } from '../../../../types';
 import { config } from '../../../../config';
 import Graphweaver from '@exogee/graphweaver-server';
 
@@ -18,20 +19,20 @@ const graphweaver = new Graphweaver({
 	resolvers: [cognitoUser.resolver],
 });
 
-// describe('basic query', () => {
-// 	test('should get cognito users', async () => {
-// 		const { data } = await request<{ cognitoUsers: CognitoUser[] }>(config.baseUrl)
-// 			.query(
-// 				gql`
-// 					query {
-// 						cognitoUsers {
-// 							id
-// 						}
-// 					}
-// 				`
-// 			)
-// 			.expectNoErrors();
+describe('basic query', () => {
+	test('should get cognito users', async () => {
+		const { data } = await request<{ cognitoUsers: CognitoUser[] }>(config.baseUrl)
+			.query(
+				gql`
+					query {
+						cognitoUsers {
+							id
+						}
+					}
+				`
+			)
+			.expectNoErrors();
 
-// 		expect(data?.cognitoUsers).toHaveLength(1);
-// 	});
-// });
+		expect(data?.cognitoUsers).toHaveLength(1);
+	});
+});
