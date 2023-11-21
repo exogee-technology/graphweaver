@@ -33,6 +33,6 @@ describe('basic query', () => {
 			)
 			.expectNoErrors();
 
-		expect(data?.cognitoUsers).toHaveLength(1);
+		expect(data?.cognitoUsers).toHaveLength(3);
 	});
 });
