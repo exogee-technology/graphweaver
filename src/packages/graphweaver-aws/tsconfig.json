@@ -1,15 +1,21 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
 		"experimentalDecorators": true,
-		"skipLibCheck": true,
-		"lib": ["es2022"],
-		"outDir": "dist",
-		"moduleResolution": "nodenext",
-		"composite": true,
-		"rootDir": "src",
-		"target": "es2022"
+		"target": "es2019",
+		"module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "react-jsx",
 	},
-	"types": [],
-	"include": ["src"]
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/auth" }
+	]
 }

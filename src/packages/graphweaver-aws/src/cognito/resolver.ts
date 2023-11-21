@@ -7,6 +7,7 @@ import { getOneUser, getManyUsers, mapId, createUser, toggleUserStatus } from '.
 
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import { CognitoUser } from './graphQLEntity';
+import { CognitoUserBackendEntity } from './backendEntity';
 
 type Entity = ItemWithId;
 type Context = any;
@@ -56,8 +57,11 @@ export const createAwsCognitoUserResolver = ({
 		},
 	});
 
-	@Resolver(() => CognitoUser)
-	class CognitoUserResolver extends createBaseResolver(CognitoUser as any, provider) {}
+	@Resolver((of) => CognitoUser)
+	class CognitoUserResolver extends createBaseResolver<CognitoUser, CognitoUserBackendEntity>(
+		CognitoUser,
+		provider
+	) {}
 
 	return {
 		resolver: CognitoUserResolver,

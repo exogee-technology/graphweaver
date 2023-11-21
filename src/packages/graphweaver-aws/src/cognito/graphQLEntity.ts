@@ -6,7 +6,7 @@ import { CognitoUserBackendEntity } from './backendEntity';
 @ObjectType('CognitoUser')
 export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	@Field(() => ID)
-	declare id: string;
+	id!: string;
 
 	@ReadOnly()
 	@Field(() => String)
