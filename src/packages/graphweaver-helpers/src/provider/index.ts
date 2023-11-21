@@ -13,7 +13,6 @@ export interface ProviderOptions<Entity, Context, DataEntity> {
 	search?(context: Context, term: string): Promise<Array<DataEntity> | null>;
 	backendId: string;
 	dataEntity?: () => any;
-	//updateOne?(context: Context, id: WithId['id'], entity: Partial<Entity>): Promise<DataEntity>;
 }
 
 export const createProvider = <Entity extends WithId, Context, DataEntity extends WithId = any>(
