@@ -49,6 +49,12 @@ export DATABASE_HOST=localhost
 1. Run `pnpm dev-mysql` This will start the test server, leave this running to start the tests
 2. Run `pnpm test-mysql` in another terminal, this will execute the end to end test suite against the server started above
 
+## To Run Tests: AWS-Cognito
+
+1. Ensure that the number of users in your user pool is the expected number in the test.
+2. Run `pnpm start` in the Example: AWS Cognito package.
+3. Run `pnpm test-aws-cognito` in another terminal, this will execute the end to end test suite against the server started above
+
 ## Documentation
 
 Comprehensive documentation and usage examples can be found on our [Docs Site](https://graphweaver.com/docs). It covers installation instructions, detailed API documentation, and guides to help you get started with Graphweaver.

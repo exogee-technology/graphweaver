@@ -1,0 +1,61 @@
+name: Auth End to End Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  auth-end-to-end-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8.6.9
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Start and Test Auth Backend
+        working-directory: src/packages/auth
+        timeout-minutes: 2
+        run: |
+          pnpm test
+
+      - name: Start and Test Auth
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 2
+        run: |
+          pnpm test-auth
+
+        env:
+          CI: true
+          AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+          AUTH_PRIVATE_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUtCckcwcko5YVA0YnN0SlAyeWVNcTZsRUpUN28wcHJIdTdleHJJTjdrUXdvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aXJYVFZVSyswMEdoUUNrY2F1OE5xZmxYbwpnOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo="
+          AUTH_BASE_URI: "http://localhost:9000"
+          AUTH_WHITELIST_DOMAINS: "localhost"
+          AUTH_MAGIC_LINK_RATE_LIMIT: "500"
