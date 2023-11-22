@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { ApolloProvider } from '@apollo/client';
-import { apolloClient } from '@exogee/graphweaver-admin-ui-components';
+import { apolloClient, DismissibleToast } from '@exogee/graphweaver-admin-ui-components';
 
 import { Router } from './router';
 
@@ -12,6 +12,7 @@ createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<ApolloProvider client={apolloClient}>
 			<Router />
+			<DismissibleToast />
 		</ApolloProvider>
 	</React.StrictMode>
 );
