@@ -1,11 +1,11 @@
-name: Auth End to End Tests
+name: AWS Cognito End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  auth-end-to-end-tests:
+  AWS-Cognito-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,25 +37,31 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
+      - name: Link local package
+        run: |
+          cd src/packages/graphweaver-aws
+          pnpm link
+          cd ../end-to-end
+          pnpm link graphweaver-aws
+
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Start and Test Auth Backend
-        working-directory: src/packages/auth
+      - name: Start and Test AWS-Cognito Backend
+        working-directory: src/packages/graphweaver-aws
         timeout-minutes: 2
         run: |
+          pnpm format 
           pnpm test
 
-      - name: Start and Test Auth
+      - name: Start and Test AWS Cognito
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm test-auth
+          pnpm test-aws-cognito
 
         env:
-          CI: true
-          AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
-          AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
-          AUTH_BASE_URI: "http://localhost:9000"
-          AUTH_WHITELIST_DOMAINS: "localhost"
-          AUTH_MAGIC_LINK_RATE_LIMIT: "500"
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
