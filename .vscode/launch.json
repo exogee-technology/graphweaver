@@ -44,6 +44,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "AWS Cognito Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/graphweaver-aws"
+    },
+    {
       "type": "chrome",
       "request": "launch",
       "name": "Admin UI in Chrome",
