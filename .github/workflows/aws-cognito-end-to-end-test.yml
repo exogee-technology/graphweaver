@@ -39,9 +39,11 @@ jobs:
 
       - name: Link local package
         run: |
-          pnpm link ${{ github.workspace }}/packages/graphweaver-aws
-         
-
+            cd ./packages/graphweaver-aws
+            pnpm link
+            cd ../../
+            pnpm link @exogee/graphweaver-aws
+        
       - name: Build CLI tool
         run: pnpm build
 
