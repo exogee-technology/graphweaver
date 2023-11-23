@@ -39,10 +39,9 @@ jobs:
 
       - name: Link local package
         run: |
-          cd src/packages/graphweaver-aws
-          pnpm link
-          cd ../end-to-end
-          pnpm link graphweaver-aws
+          pnpm link ${{ github.workspace }}/src/packages/graphweaver-aws
+          pnpm link ${{ github.workspace }}/src/packages/end-to-end graphweaver-aws
+
 
       - name: Build CLI tool
         run: pnpm build
