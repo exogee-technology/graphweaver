@@ -37,11 +37,15 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      # - name: Link local package
-      #   run: |
-      #     pnpm link ${{ github.workspace }}/src/packages/graphweaver-aws
-      #     pnpm link ${{ github.workspace }}/src/packages/end-to-end graphweaver-aws
+      - name: Print directory structure
+        run: |
+          echo "Printing directory structure:"
+          ls -R
 
+      - name: Link local package
+        run: |
+          pnpm link ${{ github.workspace }}/graphweaver-aws
+         
 
       - name: Build CLI tool
         run: pnpm build
