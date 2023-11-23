@@ -39,11 +39,9 @@ jobs:
 
       - name: Link local package
         run: |
-            cd ./packages/graphweaver-aws
-            pnpm link
-            cd ../../
-            pnpm link @exogee/graphweaver-aws
-        
+          cd ./packages/end-to-end
+          pnpm link ../../packages/graphweaver-aws
+      
       - name: Build CLI tool
         run: pnpm build
 
