@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 
-import request from 'supertest-graphql';
+import assert from 'assert';
+
 import gql from 'graphql-tag';
 import { CognitoUser, createAwsCognitoUserResolver } from '@exogee/graphweaver-aws';
 
-import { config } from '../../../../config';
 import Graphweaver from '@exogee/graphweaver-server';
 
 if (!process.env.COGNITO_USER_POOL_ID) {
@@ -21,22 +21,24 @@ const graphweaver = new Graphweaver({
 
 beforeAll(async () => {
 	await graphweaver.handler();
+	console.log(graphweaver);
+	console.log(cognitoUser);
 });
 
 describe('basic query', () => {
 	test('should get cognito users', async () => {
-		const { data } = await request<{ cognitoUsers: CognitoUser[] }>(config.baseUrl)
-			.query(
-				gql`
-					query {
-						cognitoUsers {
-							id
-						}
+		const response = await graphweaver.server.executeOperation<{ cognitoUsers: CognitoUser[] }>({
+			query: gql`
+				query {
+					cognitoUsers {
+						id
 					}
-				`
-			)
-			.expectNoErrors();
+				}
+			`,
+		});
 
-		expect(data?.cognitoUsers).toHaveLength(1);
+		assert(response.body.kind === 'single');
+
+		expect(response.body.singleResult.data?.cognitoUsers).toHaveLength(1);
 	});
 });
