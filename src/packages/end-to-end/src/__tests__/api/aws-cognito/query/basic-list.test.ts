@@ -19,6 +19,10 @@ const graphweaver = new Graphweaver({
 	resolvers: [cognitoUser.resolver],
 });
 
+beforeAll(async () => {
+	await graphweaver.handler();
+});
+
 describe('basic query', () => {
 	test('should get cognito users', async () => {
 		const { data } = await request<{ cognitoUsers: CognitoUser[] }>(config.baseUrl)

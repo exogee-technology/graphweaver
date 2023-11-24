@@ -56,8 +56,6 @@ jobs:
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm start-server &
-          sleep 3 &&
           pnpm test-aws-cognito
 
         env:
