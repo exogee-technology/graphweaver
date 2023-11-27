@@ -73,6 +73,10 @@
       "path": "src/packages/xero"
     },
     {
+      "name": "📦 @exogee/graphweaver-salesforce",
+      "path": "src/packages/graphweaver-salesforce"
+    },
+    {
       "name": "📦 @exogee/graphweaver-end-to-end",
       "path": "src/packages/end-to-end"
     },
