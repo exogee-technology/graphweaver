@@ -21,6 +21,10 @@
       "path": "src/examples/aws-cognito"
     },
     {
+      "name": "➡️ Example: Salesforce",
+      "path": "src/examples/salesforce"
+    },
+    {
       "name": "🤖 graphweaver",
       "path": "src/packages/cli"
     },

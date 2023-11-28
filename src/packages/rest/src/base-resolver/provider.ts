@@ -44,7 +44,7 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 	public async find(filter: Filter<G>, pagination?: PaginationOptions): Promise<D[]> {
 		if (!this.accessor) {
 			throw new Error(
-				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
+				'Attempting to run a find on a REST Backend Provider that does not have an accessor.'
 			);
 		}
 
