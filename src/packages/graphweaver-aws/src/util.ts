@@ -5,7 +5,6 @@ import {
 	AdminGetUserCommand,
 	AdminCreateUserCommand,
 	AdminAddUserToGroupCommand,
-	ListUsersCommandInput,
 	ListUsersCommand,
 	AdminSetUserPasswordCommand,
 	AdminDisableUserCommand,
@@ -198,7 +197,6 @@ export const updateUserAttributes = async (
 	try {
 		const command = new AdminUpdateUserAttributesCommand(params);
 		await client.send(command);
-		console.log(`User ${username} updated successfully.`);
 		return true;
 	} catch (error) {
 		console.error(`Error updating user ${username}:`, error);

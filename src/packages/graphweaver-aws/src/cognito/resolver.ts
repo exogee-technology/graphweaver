@@ -51,8 +51,6 @@ export const createAwsCognitoUserResolver = ({
 				await toggleUserStatus(client, UserPoolId, entityId, entityWithChanges.enabled);
 			}
 
-			// START HERE
-			//updateUserAttributes(client, UserPoolId, entityId, entityWithChanges);
 			return mapId(await getOneUser(client, UserPoolId, entityId));
 		},
 	});
