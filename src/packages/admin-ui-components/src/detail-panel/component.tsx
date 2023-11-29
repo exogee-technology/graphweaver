@@ -4,6 +4,7 @@ import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from '
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 import {
 	decodeSearchParams,
@@ -194,11 +195,13 @@ export const DetailPanel = () => {
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
+	const isNew = id === 'graphweaver-admin-new-entity';
+
 	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
 		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
-			skip: id === 'graphweaver-admin-new-entity',
+			skip: isNew,
 		}
 	);
 
@@ -265,26 +268,35 @@ export const DetailPanel = () => {
 			return acc;
 		}, {} as Record<string, any>);
 
-		if (id) {
-			await updateEntity({
-				variables: {
-					data: {
-						id,
-						...values,
+		try {
+			if (id && !isNew) {
+				await updateEntity({
+					variables: {
+						data: {
+							id,
+							...values,
+						},
 					},
-				},
-			});
-		} else {
-			await createEntity({
-				variables: {
-					data: values,
-				},
-			});
-		}
+					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
+				});
+			} else {
+				await createEntity({
+					variables: {
+						data: values,
+					},
+					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
+				});
+			}
 
-		actions.setSubmitting(false);
-		clearSessionState();
-		onClose();
+			clearSessionState();
+			onClose();
+		} catch (error: unknown) {
+			toast.error(String(error), {
+				duration: 5000,
+			});
+		} finally {
+			actions.setSubmitting(false);
+		}
 	};
 
 	const clearSessionState = () => {
