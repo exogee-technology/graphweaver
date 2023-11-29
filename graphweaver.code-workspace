@@ -77,8 +77,8 @@
       "path": "src/packages/xero"
     },
     {
-      "name": "📦 @exogee/graphweaver-salesforce",
-      "path": "src/packages/graphweaver-salesforce"
+      "name": "📦 @exogee/graphweaver-salesforce-graphql",
+      "path": "src/packages/graphweaver-salesforce-graphql"
     },
     {
       "name": "📦 @exogee/graphweaver-end-to-end",
@@ -87,6 +87,10 @@
     {
       "name": "📦 @exogee/logger",
       "path": "src/packages/logger"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-helpers",
+      "path": "src/packages/graphweaver-helpers"
     },
     {
       "name": "📦 vite-plugin-graphweaver",

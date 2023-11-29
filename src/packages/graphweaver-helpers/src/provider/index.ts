@@ -82,7 +82,8 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 		}
 
 		_mapDataEntity(dataEntity: DataEntity): DataEntity {
-			console.log('_mapDataEntity ', this?.dataEntity);
+			console.log('_mapDataEntity this.dataEntity:', this?.dataEntity);
+			console.log('_mapDataEntity dataEntity:', dataEntity);
 			if (!this?.dataEntity || typeof this.dataEntity !== 'function') return dataEntity;
 			const entity = Object.assign(new (this.dataEntity())(), dataEntity, {
 				id: dataEntity.id,
@@ -97,7 +98,9 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			await this.initFn;
 
 			const result = await this.read(this.context as Context, filter, pagination);
-
+			console.log('****************************************');
+			console.log('find result:', result);
+			console.log('****************************************');
 			if (result === null) return [];
 			if (Array.isArray(result)) return result.map((resultItem) => this._mapDataEntity(resultItem));
 			return [this._mapDataEntity(result)];

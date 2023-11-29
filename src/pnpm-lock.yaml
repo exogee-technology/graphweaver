@@ -266,6 +266,9 @@ importers:
       '@exogee/graphweaver-rest':
         specifier: workspace:*
         version: link:../../packages/rest
+      '@exogee/graphweaver-salesforce-graphql':
+        specifier: workspace:*
+        version: link:../../packages/graphweaver-salesforce-graphql
       '@exogee/graphweaver-server':
         specifier: workspace:*
         version: link:../../packages/server
@@ -1055,6 +1058,46 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
+      graphql-type-json:
+        specifier: 0.3.2
+        version: 0.3.2(graphql@16.8.1)
+      prettier:
+        specifier: 2.8.8
+        version: 2.8.8
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+      type-graphql:
+        specifier: 2.0.0-beta.2
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+      typescript:
+        specifier: 5.0.4
+        version: 5.0.4
+
+  packages/graphweaver-salesforce-graphql:
+    dependencies:
+      '@exogee/graphweaver-helpers':
+        specifier: workspace:*
+        version: link:../graphweaver-helpers
+      '@exogee/graphweaver-rest':
+        specifier: workspace:*
+        version: link:../rest
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      node-fetch:
+        specifier: 3.3.2
+        version: 3.3.2
+      uuid:
+        specifier: 9.0.0
+        version: 9.0.0
+    devDependencies:
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
+      esbuild:
+        specifier: 0.17.18
+        version: 0.17.18
       graphql-type-json:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.8.1)
@@ -14927,6 +14970,15 @@ packages:
 
   /node-fetch@3.3.1:
     resolution: {integrity: sha512-cRVc/kyto/7E5shrWca1Wsea4y6tL9iYJE5FBCius3JQfb/4P4I295PfhgbJQBLTx6lATE4z+wK0rPM4VS2uow==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      data-uri-to-buffer: 4.0.1
+      fetch-blob: 3.2.0
+      formdata-polyfill: 4.0.10
+    dev: false
+
+  /node-fetch@3.3.2:
+    resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dependencies:
       data-uri-to-buffer: 4.0.1

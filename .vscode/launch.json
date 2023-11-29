@@ -51,7 +51,17 @@
       "runtimeArgs": ["start"],
       "restart": true,
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/packages/graphweaver-aws"
+      "cwd": "${workspaceFolder}/src/examples/graphweaver-aws"
+    },
+    {
+      "name": "Salesforce Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/salesforce"
     },
     {
       "type": "chrome",

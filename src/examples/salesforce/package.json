@@ -27,6 +27,7 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
+		"@exogee/graphweaver-salesforce-graphql": "workspace:*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/mysql": "5.7.14",
 		"class-validator": "0.14.0",
