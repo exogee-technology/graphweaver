@@ -17,6 +17,10 @@
       "path": "src/examples/xero"
     },
     {
+      "name": "➡️ Example: AWS Cognito",
+      "path": "src/examples/aws-cognito"
+    },
+    {
       "name": "🤖 graphweaver",
       "path": "src/packages/cli"
     },
@@ -27,6 +31,10 @@
     {
       "name": "📦 @exogee/graphweaver-admin-ui",
       "path": "src/packages/admin-ui"
+    },
+    {
+      "name": "📦  @exogee/graphweaver-aws",
+      "path": "src/packages/graphweaver-aws"
     },
     {
       "name": "📦 @exogee/graphweaver-admin-ui-components",

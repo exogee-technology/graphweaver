@@ -1,0 +1,47 @@
+{
+	"name": "@exogee/graphweaver-aws",
+	"version": "0.2.6",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build": "pnpm build:js && pnpm build:types",
+		"build:js": "esbuild src/index.ts --bundle '--external:@exogee/graphweaver' '--external:type-graphql' '--external:graphql-type-json' --platform=node --outdir=lib --format=cjs  --sourcemap=linked",
+		"build:types": "tsc --emitDeclarationOnly",
+		"format": "prettier --write .",
+		"test": "npm run test:format && npm run test:typescript",
+		"test:typescript": "tsc --noEmit",
+		"test:format": "prettier --check ."
+	},
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"esbuild": "0.17.18",
+		"prettier": "2.8.8",
+		"reflect-metadata": "0.1.13",
+		"type-graphql": "2.0.0-beta.2",
+		"typescript": "5.0.4",
+		"graphql-type-json": "0.3.2",
+		"graphql": "16.8.1"
+	},
+	"peerDependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-rest": "workspace:*",
+		"type-graphql": "2.0.0-beta.2",
+		"graphql-type-json": "0.3.2",
+		"graphql": "16.8.1"
+	},
+	"dependencies": {
+		"@aws-sdk/client-cognito-identity-provider": "3.341.0",
+		"@aws-sdk/client-lambda": "3.342.0",
+		"@exogee/graphweaver-helpers": "workspace:*",
+		"@exogee/graphweaver-rest": "workspace:*",
+		"graphql": "16.8.1",
+		"uuid": "9.0.0"
+	}
+}
