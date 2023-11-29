@@ -17,6 +17,10 @@
       "path": "src/examples/xero"
     },
     {
+      "name": "➡️ Example: Mailchimp",
+      "path": "src/examples/mailchimp"
+    },
+    {
       "name": "➡️ Example: AWS Cognito",
       "path": "src/examples/aws-cognito"
     },
@@ -83,6 +87,10 @@
     {
       "name": "📦 vite-plugin-graphweaver",
       "path": "src/packages/vite-plugin-graphweaver"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-helpers",
+      "path": "src/packages/graphweaver-helpers"
     }
   ],
   "settings": {}

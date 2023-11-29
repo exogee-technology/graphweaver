@@ -12,5 +12,7 @@ export {
 	applyDecoratorToField,
 } from './entity';
 
+export * from './utils';
+
 export type { ResolverOptions, ItemWithId } from './resolver';
 export type { FieldOptions } from './entity';

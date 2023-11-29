@@ -59,7 +59,7 @@ const columnsForEntity = <T,>(
 							to={routeFor({ type: field.type, id: value.id as string })}
 							onClick={gobbleEvent}
 						>
-							{value[relatedEntity?.summaryField || 'id']}
+							{value[relatedEntity?.summaryField || 'id'] || value.label}
 						</Link>
 					);
 

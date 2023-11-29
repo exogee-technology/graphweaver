@@ -82,7 +82,6 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 		}
 
 		_mapDataEntity(dataEntity: DataEntity): DataEntity {
-			console.log('_mapDataEntity ', this?.dataEntity);
 			if (!this?.dataEntity || typeof this.dataEntity !== 'function') return dataEntity;
 			const entity = Object.assign(new (this.dataEntity())(), dataEntity, {
 				id: dataEntity.id,

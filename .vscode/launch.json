@@ -34,6 +34,16 @@
       "cwd": "${workspaceFolder}/src/examples/rest"
     },
     {
+      "name": "Mailchimp Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/mailchimp"
+    },
+    {
       "name": "End to End - Auth",
       "type": "node",
       "request": "launch",
