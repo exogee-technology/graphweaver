@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"outDir": "./lib",
+		"noUnusedLocals": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"target": "es2019",
+		"module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "react-jsx",
+		"types": ["vite/client", "vite-plugin-svgr/client"]
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/auth" },
+		{ "path": "../../packages/graphweaver-helpers"}
+	]
+}
