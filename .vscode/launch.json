@@ -51,7 +51,7 @@
       "runtimeArgs": ["start"],
       "restart": true,
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/examples/graphweaver-aws"
+      "cwd": "${workspaceFolder}/src/examples/aws-cognito"
     },
     {
       "name": "Salesforce Example",

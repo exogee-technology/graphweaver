@@ -21,8 +21,6 @@ const graphweaver = new Graphweaver({
 
 beforeAll(async () => {
 	await graphweaver.handler();
-	console.log(graphweaver);
-	console.log(cognitoUser);
 });
 
 describe('basic query', () => {

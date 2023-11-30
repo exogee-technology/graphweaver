@@ -22,21 +22,17 @@ export const createSalesforceAccountResolver = ({
 	salesforceToken,
 }: SalesforceAccountResolverOptions) => {
 	const provider = createProvider<Entity, Context, DataEntity>({
-		backendId: 'AWS',
+		backendId: 'Salesforce',
 		init: async () => {
 			// @todo: authenticate with salesforce
-			console.log('init: \n', salesforceInstanceUrl, salesforceToken);
 		},
 		read: async (context, filter, pagination) => {
-			console.log('read: \n', salesforceInstanceUrl, salesforceToken);
-
 			// if (filter?.id) return mapId(await getOneAccount(String(filter.id)));
 
 			// if (Array.isArray(filter?._or))
 			// 	return (await getManyAccounts(salesforceInstanceUrl, salesforceToken, filter)).map(mapId);
 
-			const x = await getManyAccounts(salesforceInstanceUrl, salesforceToken, filter);
-			return x;
+			return await getManyAccounts(salesforceInstanceUrl, salesforceToken, filter);
 		},
 	});
 

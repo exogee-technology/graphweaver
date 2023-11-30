@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { GraphQLEntity, ReadOnly } from '@exogee/graphweaver';
+import { GraphQLEntity } from '@exogee/graphweaver';
 
 import { SalesforceAccountBackendEntity } from './backendEntity';
 
@@ -8,9 +8,6 @@ export class SalesforceAccount extends GraphQLEntity<SalesforceAccountBackendEnt
 	@Field(() => ID)
 	id!: string;
 
-	@ReadOnly()
 	@Field(() => String)
-	async name(@Root() dataEntity: SalesforceAccountBackendEntity) {
-		return dataEntity.name;
-	}
+	name!: string;
 }
