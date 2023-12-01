@@ -16,15 +16,10 @@ export const createEventbriteEventProvider = (token: string, organizationId: str
 			client: eventbriteClient(token, organizationId),
 		}),
 		read: async ({ client }, filter, pagination) => {
-			console.log('#######read');
 			if (pagination) console.warn('Pagination is not supported yet by graphweaver-eventbrite');
 			const events = await client.listEvents();
-			try {
-				if (filter?.id) return events.find((event) => event.id === filter.id);
-				return events;
-			} catch (err) {
-				console.log('####Errr', err);
-			}
+			if (filter?.id) return events.find((event) => event.id === filter.id);
+			return events;
 		},
 		search: async ({ client }, query) => {
 			const insensitiveQuery = query.toLowerCase();

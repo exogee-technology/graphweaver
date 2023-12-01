@@ -1,19 +1,5 @@
-import {
-	DataEntity,
-	ExcludeFromFilterType,
-	ExcludeFromInputTypes,
-	GraphQLEntity,
-	ReadOnlyProperty,
-	Field,
-	ID,
-	ObjectType,
-	Root,
-	registerEnumType,
-} from '@exogee/graphweaver';
+import { GraphQLEntity, Field, ID, ObjectType, Root, registerEnumType } from '@exogee/graphweaver';
 
-import { EventbriteModule } from '../module';
-import { EventbriteWidget } from '../widget';
-import { eventbriteClient } from '../../client';
 import { EventbriteEventDataEntity } from './data-entity';
 
 export enum EventStatus {
@@ -64,7 +50,7 @@ export class Event extends GraphQLEntity<EventbriteEventDataEntity> {
 		return event.dataEntity.logo.url;
 	}
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	contactName(@Root() event: Event) {
 		return event.dataEntity.organizer.name;
 	}
@@ -106,45 +92,5 @@ export class Event extends GraphQLEntity<EventbriteEventDataEntity> {
 	@Field(() => Boolean)
 	isFree(@Root() event: Event) {
 		return event.dataEntity.is_free;
-	}
-
-	@ReadOnlyProperty()
-	@ExcludeFromFilterType()
-	@ExcludeFromInputTypes()
-	@Field(() => [EventbriteModule])
-	async modules(@Root() event: Event) {
-		// @todo move these from here
-		const token = process.env.EVENTBRITE_ACCESS_TOKEN;
-		const organizationId = process.env.EVENTBRITE_ORGANIZATION_ID;
-		const modules = (await eventbriteClient(token, organizationId).getEventStructuredContentModules(
-			event.id
-		)) as DataEntity<any>;
-
-		const modulesWithId = modules.map((module) => {
-			const prefix = `${event.id}-${module.type}`;
-			module.id = module.id ? `${prefix}-${module.id}` : prefix;
-			return module;
-		});
-		return modulesWithId;
-	}
-
-	@ReadOnlyProperty()
-	@ExcludeFromFilterType()
-	@ExcludeFromInputTypes()
-	@Field(() => [EventbriteWidget])
-	async widgets(@Root() event: Event) {
-		// @todo move these from here
-		const token = process.env.EVENTBRITE_ACCESS_TOKEN;
-		const organizationId = process.env.EVENTBRITE_ORGANIZATION_ID;
-		const widgets = (await eventbriteClient(token, organizationId).getEventStructuredContentWidgets(
-			event.id
-		)) as DataEntity<any>;
-
-		const widgetsWithId = widgets.map((widget) => {
-			const prefix = `${event.id}-${widget.type}`;
-			widget.id = widget.id ? `${prefix}-${widget.id}` : prefix;
-			return widget;
-		});
-		return widgetsWithId;
 	}
 }

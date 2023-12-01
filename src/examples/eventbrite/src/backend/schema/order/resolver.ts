@@ -4,6 +4,8 @@ import { EventbriteOrder } from './entity';
 import { EventbriteOrderDataEntity } from './data-entity';
 import { createEventbriteOrderProvider } from './provider';
 
+export type EventbriteOrderResolver = ReturnType<typeof createEventbriteOrderResolver>;
+
 export const createEventbriteOrderResolver = (token: string, organizationId: string) => {
 	const provider = createEventbriteOrderProvider(token, organizationId);
 
@@ -13,9 +15,5 @@ export const createEventbriteOrderResolver = (token: string, organizationId: str
 		EventbriteOrderDataEntity
 	>(EventbriteOrder, provider) {}
 
-	return {
-		provider,
-		entity: EventbriteOrder,
-		resolver: EventbriteOrderResolver,
-	};
+	return EventbriteOrderResolver;
 };
