@@ -8,11 +8,6 @@ export interface Context {
 	client: ReturnType<typeof eventbriteClient>;
 }
 
-/*const mapDataEntity = (
-  order: EventbriteOrderDataEntity
-): EventbriteOrderDataEntity =>
-  Object.assign(new EventbriteOrderDataEntity(), order); */
-
 export const createEventbriteOrderProvider = (token: string, organizationId: string) =>
 	createProvider<EventbriteOrder, Context, EventbriteOrderDataEntity>({
 		backendId: 'Eventbrite',

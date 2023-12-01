@@ -1,4 +1,11 @@
-import { GraphQLEntity, RelationshipField, Field, ID, ObjectType } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	RelationshipField,
+	Field,
+	ID,
+	ObjectType,
+	SummaryField,
+} from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -35,6 +42,7 @@ export class Tag extends GraphQLEntity<OrmTag> {
 	@Field(() => ID)
 	id!: string;
 
+	@SummaryField()
 	@Field(() => String)
 	name!: string;
 

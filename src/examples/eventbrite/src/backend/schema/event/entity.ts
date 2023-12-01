@@ -1,4 +1,12 @@
-import { GraphQLEntity, Field, ID, ObjectType, Root, registerEnumType } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	Field,
+	ID,
+	ObjectType,
+	Root,
+	registerEnumType,
+	SummaryField,
+} from '@exogee/graphweaver';
 
 import { EventbriteEventDataEntity } from './data-entity';
 
@@ -24,6 +32,7 @@ export class Event extends GraphQLEntity<EventbriteEventDataEntity> {
 	@Field(() => EventStatus)
 	status!: EventStatus;
 
+	@SummaryField()
 	@Field(() => String)
 	title(@Root() event: Event) {
 		return event.dataEntity.name.text;
