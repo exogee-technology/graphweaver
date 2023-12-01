@@ -27,10 +27,21 @@ export const createSalesforceAccountResolver = ({
 			// @todo: authenticate with salesforce
 		},
 		read: async (context, filter, pagination) => {
-			// if (filter?.id) return mapId(await getOneAccount(String(filter.id)));
+			console.log('*******************\n');
+			console.log('filter', filter);
+			console.log('*******************\n');
 
-			// if (Array.isArray(filter?._or))
-			// 	return (await getManyAccounts(salesforceInstanceUrl, salesforceToken, filter)).map(mapId);
+			if (filter?.id) {
+				return await getOneAccount(
+					String(filter.id),
+					salesforceInstanceUrl,
+					salesforceToken,
+					filter
+				);
+			}
+
+			if (Array.isArray(filter?._or))
+				return await getManyAccounts(salesforceInstanceUrl, salesforceToken, filter);
 
 			return await getManyAccounts(salesforceInstanceUrl, salesforceToken, filter);
 		},

@@ -20,8 +20,49 @@ type SalesforceAccountGraphQLResponse = {
 	errors: Array<any>;
 };
 
-export const getOneAccount = async (id: string): Promise<any> => {
-	throw new Error('Not implemented');
+export const getOneAccount = async (
+	id: string,
+	salesforceInstanceUrl: string,
+	salesforceToken: string,
+	_filter: any
+): Promise<any> => {
+	// Make a graphql query to salesforce
+	const query = `query Account{
+		uiapi {
+			query {
+			  Account(where: { Id: { eq: "${id}" } }) {
+				edges {
+				  node {
+					Id
+					Name {
+					  value
+					}
+				  }
+				}
+			  }
+			}
+		  }
+		}`;
+
+	const response = await fetch(salesforceInstanceUrl, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/json',
+			Authorization: `Bearer ${salesforceToken}`,
+		},
+		body: JSON.stringify({
+			query: query,
+		}),
+	});
+
+	const data = await response.json();
+	console.log('**********************\n');
+	console.log('getOneAccount data:', data);
+	const flattened = flattenResponse(data as SalesforceAccountGraphQLResponse);
+	console.log('**********************\n');
+
+	return flattened;
 };
 
 export const getManyAccounts = async (
