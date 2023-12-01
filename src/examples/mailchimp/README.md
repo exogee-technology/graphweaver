@@ -1,4 +1,4 @@
-# Graphweaver EventBrite example
+# Graphweaver Mailchimp example
 
 An example of using Graphweaver that integrates with mailchimp.
 
