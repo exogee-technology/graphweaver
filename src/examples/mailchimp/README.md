@@ -10,10 +10,10 @@ pnpm i
 cd .. && pnpm build
 
 # Set up .env
-MAILCHIMP_API_KEY=
-MAILCHIMP_SERVER_PREFIX=
-MAILCHIMP_LIST_ID=
-MAILCHIMP_PROJECTS_CATEGORY_ID=
+MAILCHIMP_API_KEY= # To generate an API key, navigate to the API Keys section of the mailchimp account and click Create New Key. Click Generate Key and Copy Key to Clipboard.
+MAILCHIMP_SERVER_PREFIX=us16 # The root url for the API is API is https://<dc>.api.mailchimp.com/3.0/. The <dc> part of the URL is the prefix here.
+MAILCHIMP_LIST_ID= # The unique id for the list object in Mailchimp
+MAILCHIMP_PROJECTS_CATEGORY_ID= # The unique id for the category object in Mailchimp
 
 # Run Graphweaver CLI
 pnpm graphweaver start
