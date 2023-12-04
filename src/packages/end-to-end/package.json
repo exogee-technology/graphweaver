@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
@@ -21,13 +21,12 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@exogee/graphweaver-auth": "workspace:*",
-		"@exogee/graphweaver-aws": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"@exogee/graphweaver-scalars": "workspace:*",
-		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver": "*",
+		"@exogee/graphweaver-auth": "*",
+		"@exogee/graphweaver-aws": "*",
+		"@exogee/graphweaver-mikroorm": "*",
+		"@exogee/graphweaver-scalars": "*",
+		"@exogee/graphweaver-server": "*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"class-validator": "0.14.0",
