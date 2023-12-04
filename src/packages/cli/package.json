@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "0.3.0",
+	"version": "0.2.7",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
