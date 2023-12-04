@@ -852,22 +852,22 @@ importers:
   packages/end-to-end:
     dependencies:
       '@exogee/graphweaver':
-        specifier: workspace:*
+        specifier: '*'
         version: link:../core
       '@exogee/graphweaver-auth':
-        specifier: workspace:*
+        specifier: '*'
         version: link:../auth
       '@exogee/graphweaver-aws':
-        specifier: workspace:*
+        specifier: '*'
         version: link:../graphweaver-aws
       '@exogee/graphweaver-mikroorm':
-        specifier: workspace:*
+        specifier: '*'
         version: link:../mikroorm
       '@exogee/graphweaver-scalars':
-        specifier: workspace:*
+        specifier: '*'
         version: link:../scalars
       '@exogee/graphweaver-server':
-        specifier: workspace:*
+        specifier: '*'
         version: link:../server
       '@mikro-orm/core':
         specifier: 5.7.14
@@ -1049,7 +1049,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -6566,7 +6566,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3
