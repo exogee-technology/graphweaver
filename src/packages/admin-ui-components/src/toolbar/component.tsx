@@ -57,7 +57,9 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 						})}
 						aria-label={`Create New ${selectedEntity.name}`}
 					>
-						<Button>Create New {selectedEntity.name}</Button>
+						<Button disabled={selectedEntity.attributes.isReadOnly}>
+							Create New {selectedEntity.name}
+						</Button>
 					</Link>
 
 					{externalLinkItems.length > 0 && <Dropdown items={externalLinkItems}>Links</Dropdown>}

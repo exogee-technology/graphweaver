@@ -21,6 +21,7 @@ export interface Entity {
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
 	fields: EntityField[];
+	attributes: EntityAttributes;
 }
 
 export enum AdminUIFilterType {
@@ -46,6 +47,10 @@ export interface EntityField {
 	filter?: {
 		type: AdminUIFilterType;
 	};
+}
+
+export interface EntityAttributes {
+	isReadOnly?: boolean;
 }
 
 export interface CustomField extends EntityField {

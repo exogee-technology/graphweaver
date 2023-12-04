@@ -17,6 +17,9 @@ export const SCHEMA_QUERY = gql`
 						type
 					}
 				}
+				attributes {
+					isReadOnly
+				}
 			}
 			enums {
 				name
