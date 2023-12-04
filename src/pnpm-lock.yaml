@@ -852,22 +852,22 @@ importers:
   packages/end-to-end:
     dependencies:
       '@exogee/graphweaver':
-        specifier: ^0.3.0
+        specifier: workspace:*
         version: link:../core
       '@exogee/graphweaver-auth':
-        specifier: ^0.3.0
+        specifier: workspace:*
         version: link:../auth
       '@exogee/graphweaver-aws':
-        specifier: ^0.2.6
+        specifier: workspace:*
         version: link:../graphweaver-aws
       '@exogee/graphweaver-mikroorm':
-        specifier: ^0.3.0
+        specifier: workspace:*
         version: link:../mikroorm
       '@exogee/graphweaver-scalars':
-        specifier: ^0.3.0
+        specifier: workspace:*
         version: link:../scalars
       '@exogee/graphweaver-server':
-        specifier: ^0.3.0
+        specifier: workspace:*
         version: link:../server
       '@mikro-orm/core':
         specifier: 5.7.14
