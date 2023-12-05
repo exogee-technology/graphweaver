@@ -47,6 +47,11 @@ export interface EntityField {
 	filter?: {
 		type: AdminUIFilterType;
 	};
+	attributes?: EntityFieldAttributes;
+}
+
+export interface EntityFieldAttributes {
+	isReadOnly?: boolean;
 }
 
 export interface EntityAttributes {

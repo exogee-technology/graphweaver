@@ -1,6 +1,6 @@
 import { Field, ObjectType } from 'type-graphql';
 import { AdminUiFieldMetadata } from './field';
-import { AdminUiEntityAttributeMetadata } from './attribute';
+import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 
 @ObjectType('AdminUiEntityMetadata')
 export class AdminUiEntityMetadata {

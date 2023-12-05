@@ -2,6 +2,7 @@ import {
 	EntityMetadataMap,
 	isSummaryField,
 	isReadOnly,
+	isReadOnlyProperty,
 	AdminUISettingsMap,
 	AdminUIFilterType,
 	RelationshipType,
@@ -13,7 +14,7 @@ import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
 import { AdminUiMetadata } from './metadata';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
-import { AdminUiEntityAttributeMetadata } from './attribute';
+import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { AdminMetadata } from '..';
 
 const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): AdminUIFilterType => {
@@ -100,6 +101,9 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							: {
 									type: mapFilterType(fieldObject, metadata.enums),
 							  };
+						if (isReadOnlyProperty(objectType.target, field.name)) {
+							fieldObject.attributes = { isReadOnly: true };
+						}
 						return fieldObject;
 					});
 					return {
