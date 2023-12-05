@@ -214,10 +214,11 @@ export const DetailPanel = () => {
 
 	// Weed out ID fields - for the moment.
 	// @todo we can remove the many to many filter once we support adding many to many in the UI
+	// remove field if it is readonly
 	const formFields: EntityField[] = selectedEntity.fields.filter(
 		(field) =>
 			(field.relationshipType && field.relationshipType !== 'MANY_TO_MANY') ||
-			(!field.relationshipType && field.name !== 'id')
+			(!field.relationshipType && field.name !== 'id' && !field.attributes?.isReadOnly)
 	);
 
 	const persistName = `gw-${entity}-${id}`.toLowerCase();
