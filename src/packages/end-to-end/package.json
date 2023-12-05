@@ -22,6 +22,7 @@
 	},
 	"dependencies": {
 		"@exogee/graphweaver": "*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "*",
 		"@exogee/graphweaver-aws": "*",
 		"@exogee/graphweaver-mikroorm": "*",
