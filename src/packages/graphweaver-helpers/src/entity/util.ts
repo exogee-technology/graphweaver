@@ -4,7 +4,6 @@ import {
 	RelationshipField,
 	BaseDataEntity,
 	SummaryField,
-	ExcludeFromInputTypes,
 	ExcludeFromFilterType,
 	GraphQLEntity,
 } from '@exogee/graphweaver';
@@ -23,7 +22,6 @@ export const createFieldOnEntity = <DataEntity = any>(
 		resolve,
 		optional = true,
 		summary = false,
-		excludeFromInputTypes = false,
 		excludeFromFilterType = true,
 	}: FieldOptions<DataEntity>,
 	fieldDecoratorOptions?: any
@@ -48,7 +46,6 @@ export const createFieldOnEntity = <DataEntity = any>(
 	);
 
 	if (summary) applyDecoratorToField(entity, name, SummaryField());
-	if (excludeFromInputTypes) applyDecoratorToField(entity, name, ExcludeFromInputTypes());
 	if (excludeFromFilterType) applyDecoratorToField(entity, name, ExcludeFromFilterType());
 };
 
@@ -69,9 +66,6 @@ export const createRelationshipFieldOnEntity = <D extends BaseDataEntity>(
 
 export const setFieldAsSummaryField = (target: any, name: string) =>
 	applyDecoratorToField(target, name, SummaryField());
-
-export const setFieldAsExcludeFromInputTypes = (target: any, name: string) =>
-	applyDecoratorToField(target, name, ExcludeFromInputTypes());
 
 export const setFieldAsExcludeFromFilterType = (target: any, name: string) =>
 	applyDecoratorToField(target, name, ExcludeFromFilterType());

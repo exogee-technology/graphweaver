@@ -7,7 +7,6 @@ export {
 	setEntityAsReadOnly,
 	applyDecoratorToEntity,
 	setFieldAsSummaryField,
-	setFieldAsExcludeFromInputTypes,
 	setFieldAsExcludeFromFilterType,
 	applyDecoratorToField,
 } from './entity';

@@ -1,6 +1,5 @@
 export * from './admin-ui-settings';
 export * from './exclude-from-filter-type';
-export * from './exclude-from-input-types';
 export * from './read-only';
 export * from './read-only-property';
 export * from './summary-field';

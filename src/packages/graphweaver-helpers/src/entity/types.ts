@@ -10,6 +10,5 @@ export interface FieldOptions<DataEntity> {
 	optional?: boolean;
 	summary?: boolean;
 	metadata?: Record<string, any>;
-	excludeFromInputTypes?: boolean;
 	excludeFromFilterType?: boolean;
 }
