@@ -61,10 +61,15 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 				enumMetadata.set(registeredEnum.enumObj, registeredEnum);
 			}
 
-			const entities: AdminUiEntityMetadata[] = metadata.objectTypes
+			const entities: (AdminUiEntityMetadata | undefined)[] = metadata.objectTypes
 				.map((objectType) => {
 					const name = objectType.name;
 					const adminUISettings = AdminUISettingsMap.get(name);
+
+					if (adminUISettings?.entity?.hide) {
+						return;
+					}
+
 					const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
 					const summaryField = objectType.fields?.find((field) =>
 						isSummaryField(objectType.target, field.name)
@@ -114,7 +119,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						attributes,
 					};
 				})
-				.filter((entity) => !!entity.backendId);
+				.filter((entity) => entity && !!entity.backendId);
 
 			const enums = metadata.enums.map((registeredEnum) => ({
 				name: registeredEnum.name,

@@ -144,6 +144,9 @@ export type AdminUISettingsType = {
 			};
 		};
 	};
+	entity?: {
+		hide: true;
+	};
 };
 
 export enum RelationshipType {
