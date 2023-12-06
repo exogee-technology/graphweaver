@@ -14,7 +14,6 @@ export function AdminUISettings(settings?: Props) {
 	const filter = settings?.filter;
 
 	return (target: any, propertyKey?: string | symbol) => {
-		console.log('###', target.name, target.constructor.name);
 		const entityName = target.name || target.constructor.name;
 		const settings = AdminUISettingsMap.get(entityName)
 			? AdminUISettingsMap.get(entityName) ?? {}
