@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "0.2.6",
+	"version": "0.2.7",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {

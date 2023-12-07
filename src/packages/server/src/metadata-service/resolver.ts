@@ -1,6 +1,8 @@
 import {
 	EntityMetadataMap,
 	isSummaryField,
+	isReadOnly,
+	isReadOnlyProperty,
 	AdminUISettingsMap,
 	AdminUIFilterType,
 	RelationshipType,
@@ -12,6 +14,7 @@ import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
 import { AdminUiMetadata } from './metadata';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
+import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { AdminMetadata } from '..';
 
 const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): AdminUIFilterType => {
@@ -66,6 +69,10 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const summaryField = objectType.fields?.find((field) =>
 						isSummaryField(objectType.target, field.name)
 					)?.name;
+					const attributes = new AdminUiEntityAttributeMetadata();
+					if (isReadOnly(objectType.target)) {
+						attributes.isReadOnly = true;
+					}
 					const fields = objectType.fields?.map((field) => {
 						const typeValue = field.getType() as any;
 						const entityName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
@@ -94,6 +101,9 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							: {
 									type: mapFilterType(fieldObject, metadata.enums),
 							  };
+						if (isReadOnlyProperty(objectType.target, field.name)) {
+							fieldObject.attributes = { isReadOnly: true };
+						}
 						return fieldObject;
 					});
 					return {
@@ -101,6 +111,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						backendId,
 						summaryField,
 						fields,
+						attributes,
 					};
 				})
 				.filter((entity) => !!entity.backendId);

@@ -933,6 +933,9 @@ importers:
       '@exogee/graphweaver':
         specifier: '*'
         version: link:../core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../admin-ui-components
       '@exogee/graphweaver-auth':
         specifier: '*'
         version: link:../auth
