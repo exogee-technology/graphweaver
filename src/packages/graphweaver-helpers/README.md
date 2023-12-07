@@ -53,8 +53,6 @@ If provided with a templateEntity, will populate an existing entity with the pro
 
 `metadata` - Not used by graphweaver but can be referenced by other plugins.
 
-`excludeFromInputTypes` - Boolean, set true if the field should not be an input
-
 `excludeFromFilterType` - Boolean, set true if the field cannot be filtered on.
 
 ### createFieldOnEntity
@@ -110,7 +108,6 @@ applyDecoratorToField(MyEntity, SummaryField());
 There are some convenience functions for common decorators:
 
 - `setFieldAsSummaryField(MyEntity)`
-- `setFieldAsExcludeFromInputTypes(MyEntity)`
 - `setFieldAsExcludeFromFilterType(MyEntity)`
 
 ### Example

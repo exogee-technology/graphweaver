@@ -151,12 +151,14 @@ const DetailForm = ({
 	onCancel,
 	onSubmit,
 	persistName,
+	isReadOnly,
 }: {
 	initialValues: Record<string, any>;
 	detailFields: EntityField[];
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
 	persistName: string;
+	isReadOnly?: boolean;
 }) => {
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
@@ -170,7 +172,7 @@ const DetailForm = ({
 							<Button type="reset" disabled={isSubmitting}>
 								Cancel
 							</Button>
-							<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+							<Button type="submit" disabled={isSubmitting || !!isReadOnly} loading={isSubmitting}>
 								Save
 							</Button>
 						</div>
@@ -212,10 +214,11 @@ export const DetailPanel = () => {
 
 	// Weed out ID fields - for the moment.
 	// @todo we can remove the many to many filter once we support adding many to many in the UI
+	// remove field if it is readonly
 	const formFields: EntityField[] = selectedEntity.fields.filter(
 		(field) =>
 			(field.relationshipType && field.relationshipType !== 'MANY_TO_MANY') ||
-			(!field.relationshipType && field.name !== 'id')
+			(!field.relationshipType && field.name !== 'id' && !field.attributes?.isReadOnly)
 	);
 
 	const persistName = `gw-${entity}-${id}`.toLowerCase();
@@ -324,6 +327,7 @@ export const DetailPanel = () => {
 							onCancel={closeModal}
 							onSubmit={handleOnSubmit}
 							persistName={persistName}
+							isReadOnly={selectedEntity.attributes.isReadOnly}
 						/>
 					)}
 				</>

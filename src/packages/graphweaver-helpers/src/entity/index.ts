@@ -8,7 +8,6 @@ export {
 	setEntityAsReadOnly,
 	applyDecoratorToEntity,
 	setFieldAsSummaryField,
-	setFieldAsExcludeFromInputTypes,
 	setFieldAsExcludeFromFilterType,
 	applyDecoratorToField,
 } from './util';
@@ -48,7 +47,6 @@ export const createEntity = <DataEntity>(
 		createFieldOnEntity(NewEntity, {
 			name: 'raw',
 			type: () => GraphQLJSON,
-			excludeFromInputTypes: true,
 			excludeFromFilterType: true,
 			optional: true,
 			resolve: (dataEntity) => dataEntity,

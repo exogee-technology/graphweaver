@@ -16,6 +16,12 @@ export const SCHEMA_QUERY = gql`
 					filter {
 						type
 					}
+					attributes {
+						isReadOnly
+					}
+				}
+				attributes {
+					isReadOnly
 				}
 			}
 			enums {
