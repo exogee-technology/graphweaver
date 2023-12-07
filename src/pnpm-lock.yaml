@@ -34,7 +34,7 @@ importers:
         version: 9.0.0(eslint@8.32.0)
       jest:
         specifier: 29.4.0
-        version: 29.4.0
+        version: 29.4.0(@types/node@14.14.10)
       prettier:
         specifier: 2.8.8
         version: 2.8.8
@@ -167,6 +167,161 @@ importers:
         specifier: 5.0.2
         version: 5.0.2
 
+  examples/eventbrite:
+    dependencies:
+      '@apollo/server':
+        specifier: 4.9.3
+        version: 4.9.3(graphql@16.8.1)
+      '@as-integrations/aws-lambda':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.9.3)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
+      '@exogee/graphweaver-auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@exogee/graphweaver-auth-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/auth-ui-components
+      '@exogee/graphweaver-helpers':
+        specifier: workspace:*
+        version: link:../../packages/graphweaver-helpers
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@exogee/logger':
+        specifier: workspace:*
+        version: link:../../packages/logger
+      class-validator:
+        specifier: 0.14.0
+        version: 0.14.0
+      dotenv:
+        specifier: 16.0.0
+        version: 16.0.0
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      graphql-type-json:
+        specifier: 0.3.2
+        version: 0.3.2(graphql@16.8.1)
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      isomorphic-fetch:
+        specifier: 3.0.0
+        version: 3.0.0
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+    devDependencies:
+      '@types/jest':
+        specifier: 26.0.23
+        version: 26.0.23
+      '@types/node':
+        specifier: 14.14.10
+        version: 14.14.10
+      graphql-tag:
+        specifier: 2.12.6
+        version: 2.12.6(graphql@16.8.1)
+      jest:
+        specifier: 29.4.0
+        version: 29.4.0(@types/node@14.14.10)
+      ts-jest:
+        specifier: 29.0.5
+        version: 29.0.5(@babel/core@7.22.9)(jest@29.4.0)(typescript@5.0.2)
+      typescript:
+        specifier: 5.0.2
+        version: 5.0.2
+      vite:
+        specifier: 4.3.9
+        version: 4.3.9(@types/node@14.14.10)
+      vite-plugin-svgr:
+        specifier: 3.2.0
+        version: 3.2.0(vite@4.3.9)
+
+  examples/mailchimp:
+    dependencies:
+      '@apollo/server':
+        specifier: 4.9.3
+        version: 4.9.3(graphql@16.8.1)
+      '@as-integrations/aws-lambda':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.9.3)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
+      '@exogee/graphweaver-auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@exogee/graphweaver-auth-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/auth-ui-components
+      '@exogee/graphweaver-helpers':
+        specifier: workspace:*
+        version: link:../../packages/graphweaver-helpers
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@mailchimp/mailchimp_marketing':
+        specifier: 3.0.80
+        version: 3.0.80
+      dotenv:
+        specifier: 16.0.0
+        version: 16.0.0
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      md5:
+        specifier: 2.3.0
+        version: 2.3.0
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+    devDependencies:
+      '@types/jest':
+        specifier: 26.0.23
+        version: 26.0.23
+      '@types/md5':
+        specifier: 2.3.5
+        version: 2.3.5
+      '@types/node':
+        specifier: 14.14.10
+        version: 14.14.10
+      graphql-tag:
+        specifier: 2.12.6
+        version: 2.12.6(graphql@16.8.1)
+      jest:
+        specifier: 29.4.0
+        version: 29.4.0(@types/node@14.14.10)
+      ts-jest:
+        specifier: 29.0.5
+        version: 29.0.5(@babel/core@7.22.9)(jest@29.4.0)(typescript@5.0.2)
+      typescript:
+        specifier: 5.0.2
+        version: 5.0.2
+      vite:
+        specifier: 4.3.9
+        version: 4.3.9(@types/node@14.14.10)
+      vite-plugin-svgr:
+        specifier: 3.2.0
+        version: 3.2.0(vite@4.3.9)
+
   examples/rest:
     dependencies:
       '@apollo/server':
@@ -187,6 +342,9 @@ importers:
       '@exogee/graphweaver-auth-ui-components':
         specifier: workspace:*
         version: link:../../packages/auth-ui-components
+      '@exogee/graphweaver-helpers':
+        specifier: workspace:*
+        version: link:../../packages/graphweaver-helpers
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../../packages/mikroorm
@@ -414,7 +572,7 @@ importers:
         version: 5.0.2
       vite:
         specifier: 4.3.9
-        version: 4.3.9(@types/node@18.11.9)
+        version: 4.3.9(@types/node@14.14.10)
 
   packages/admin-ui-components:
     dependencies:
@@ -487,7 +645,7 @@ importers:
         version: 5.0.2
       vite:
         specifier: 4.3.9
-        version: 4.3.9(@types/node@18.11.9)
+        version: 4.3.9(@types/node@14.14.10)
       vite-plugin-svgr:
         specifier: 3.2.0
         version: 3.2.0(vite@4.3.9)
@@ -636,7 +794,7 @@ importers:
         version: 5.0.2
       vite:
         specifier: 4.3.9
-        version: 4.3.9(@types/node@18.11.9)
+        version: 4.3.9(@types/node@14.14.10)
       vite-plugin-svgr:
         specifier: 3.2.0
         version: 3.2.0(vite@4.3.9)
@@ -917,7 +1075,7 @@ importers:
         version: 2.12.6(graphql@16.8.1)
       jest:
         specifier: 29.4.0
-        version: 29.4.0
+        version: 29.4.0(@types/node@14.14.10)
       mockdate:
         specifier: 3.0.5
         version: 3.0.5
@@ -6090,6 +6248,16 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.1.1
     dev: false
 
+  /@mailchimp/mailchimp_marketing@3.0.80:
+    resolution: {integrity: sha512-Cgz0xPb+1DUjmrl5whAsmqfAChBko+Wf4/PLQE4RvwfPlcq2agfHr1QFiXEhZ8e+GQwQ3hZQn9iLGXwIXwxUCg==}
+    engines: {node: '>=10.0.0'}
+    dependencies:
+      dotenv: 8.6.0
+      superagent: 3.8.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /@mapbox/node-pre-gyp@1.0.11:
     resolution: {integrity: sha512-Yhlar6v9WQgUp/He7BdgzOz8lqMQ8sU+jkCq7Wx8Myc5YFJLbEe7lgui/V7G1qB1DJykHSGwreceSaD60Y0PUQ==}
     hasBin: true
@@ -8360,6 +8528,10 @@ packages:
     resolution: {integrity: sha512-AxiYycfO+/M4VIH0ribSr2iPFC+APewpJIaQSydwVnzorK3mjSFXkA3HmhQidGx44MpwaatFyEkbW/WD4zdDaQ==}
     dev: true
 
+  /@types/md5@2.3.5:
+    resolution: {integrity: sha512-/i42wjYNgE6wf0j2bcTX6kuowmdL/6PE4IVitMpm2eYKBUuYCprdcWVK+xEF0gcV6ufMCRhtxmReGfc6hIK7Jw==}
+    dev: true
+
   /@types/mime@1.3.2:
     resolution: {integrity: sha512-YATxVxgRqNH6nHEIsvg6k2Boc1JHI9ZbH5iWFFv/MTkchz3b1ieGDa5T0a9RznNdI0KhVbdbWSN+KWWrQZRxTw==}
     dev: false
@@ -8723,7 +8895,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.22.5(@babel/core@7.22.9)
       magic-string: 0.27.0
       react-refresh: 0.14.0
-      vite: 4.3.9(@types/node@18.11.9)
+      vite: 4.3.9(@types/node@14.14.10)
     transitivePeerDependencies:
       - supports-color
 
@@ -9887,6 +10059,10 @@ packages:
     resolution: {integrity: sha512-mT8iDcrh03qDGRRmoA2hmBJnxpllMR+0/0qlzjqZES6NdiWDcZkCNAk4rPFZ9Q85r27unkiNNg8ZOiwZXBHwcA==}
     dev: false
 
+  /charenc@0.0.2:
+    resolution: {integrity: sha512-yrLQ/yVUFXkzg7EDQsPieE/53+0RlaWTs+wBrvW36cyilJ2SaDWfl4Yj7MtLTXleV9uEKefbAGUPv2/iWSooRA==}
+    dev: false
+
   /check-error@1.0.3:
     resolution: {integrity: sha512-iKEoDYaRmd1mxM90a2OEfWhjsjPpYPuQ+lMYsoxB126+t8fw7ySEO48nmDg5COTjxDI65/Y2OWpeEHk3ZOe8zg==}
     dependencies:
@@ -10339,6 +10515,10 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
 
+  /crypt@0.0.2:
+    resolution: {integrity: sha512-mCxBlsHFYh9C+HVpiEacem8FEBnMXgU9gy4zmNC+SXAZNB/1idgp/aulFJ4FgCi7GPEVbfyng092GqL2k2rmow==}
+    dev: false
+
   /cssesc@3.0.0:
     resolution: {integrity: sha512-/Tb/JcjK111nNScGob5MNtsntNM1aCNUDipB/TkwZFhyDrrE47SOx/18wF2bbjgc3ZzCSKW1T5nt5EbFoAz/Vg==}
     engines: {node: '>=4'}
@@ -10464,6 +10644,17 @@ packages:
         optional: true
     dependencies:
       ms: 2.0.0
+    dev: false
+
+  /debug@3.2.7:
+    resolution: {integrity: sha512-CFjzYYAi4ThfiQvizrFQevTTXHtnCqWfe7x1AhgEscTz6ZbLbfoLRLPugTQyBth6f8ZERVUSyWHFD/7Wu4t1XQ==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
+    dependencies:
+      ms: 2.1.3
     dev: false
 
   /debug@4.3.4(supports-color@8.1.1):
@@ -10739,6 +10930,11 @@ packages:
   /dotenv@16.3.1:
     resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
     engines: {node: '>=12'}
+
+  /dotenv@8.6.0:
+    resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
+    engines: {node: '>=10'}
+    dev: false
 
   /dset@3.1.2:
     resolution: {integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==}
@@ -12008,6 +12204,11 @@ packages:
       fetch-blob: 3.2.0
     dev: false
 
+  /formidable@1.2.6:
+    resolution: {integrity: sha512-KcpbcpuLNOwrEjnbpMC0gS+X8ciDoZE1kkqzat4a8vrprf+s9pKNQ/QIwWfbfs4ltgmFl3MD177SNTkve3BwGQ==}
+    deprecated: 'Please upgrade to latest, formidable@v2 or formidable@v3! Check these notes: https://bit.ly/2ZEqIau'
+    dev: false
+
   /formidable@2.1.2:
     resolution: {integrity: sha512-CM3GuJ57US06mlpQ47YcunuUZ9jpm8Vx+P2CGt2j7HpgkKZO/DJYQ0Bobim8G6PFQmK5lOqOOdUXboU+h73A4g==}
     dependencies:
@@ -12916,6 +13117,10 @@ packages:
       has-tostringtag: 1.0.0
     dev: false
 
+  /is-buffer@1.1.6:
+    resolution: {integrity: sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==}
+    dev: false
+
   /is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
     engines: {node: '>= 0.4'}
@@ -13163,6 +13368,15 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /isomorphic-fetch@3.0.0:
+    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
+    dependencies:
+      node-fetch: 2.6.12
+      whatwg-fetch: 3.6.19
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /isomorphic-ws@4.0.1(ws@7.5.9):
     resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
     peerDependencies:
@@ -13273,7 +13487,7 @@ packages:
       - supports-color
     dev: true
 
-  /jest-cli@29.6.1:
+  /jest-cli@29.6.1(@types/node@14.14.10):
     resolution: {integrity: sha512-607dSgTA4ODIN6go9w6xY3EYkyPFGicx51a69H7yfvt7lN53xNswEVLovq+E77VsTRi5fWprLH0yl4DJgE8Ing==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -13290,7 +13504,7 @@ packages:
       exit: 0.1.2
       graceful-fs: 4.2.11
       import-local: 3.1.0
-      jest-config: 29.6.1(@types/node@20.2.5)
+      jest-config: 29.6.1(@types/node@14.14.10)
       jest-util: 29.6.1
       jest-validate: 29.6.1
       prompts: 2.4.2
@@ -13299,6 +13513,45 @@ packages:
       - '@types/node'
       - supports-color
       - ts-node
+    dev: true
+
+  /jest-config@29.6.1(@types/node@14.14.10):
+    resolution: {integrity: sha512-XdjYV2fy2xYixUiV2Wc54t3Z4oxYPAELUzWnV6+mcbq0rh742X2p52pii5A3oeRzYjLnQxCsZmp0qpI6klE2cQ==}
+    engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
+    peerDependencies:
+      '@types/node': '*'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      '@babel/core': 7.22.9
+      '@jest/test-sequencer': 29.6.1
+      '@jest/types': 29.6.1
+      '@types/node': 14.14.10
+      babel-jest: 29.6.1(@babel/core@7.22.9)
+      chalk: 4.1.2
+      ci-info: 3.8.0
+      deepmerge: 4.3.1
+      glob: 7.2.3
+      graceful-fs: 4.2.11
+      jest-circus: 29.6.1
+      jest-environment-node: 29.6.1
+      jest-get-type: 29.4.3
+      jest-regex-util: 29.4.3
+      jest-resolve: 29.6.1
+      jest-runner: 29.6.1
+      jest-util: 29.6.1
+      jest-validate: 29.6.1
+      micromatch: 4.0.5
+      parse-json: 5.2.0
+      pretty-format: 29.6.1
+      slash: 3.0.0
+      strip-json-comments: 3.1.1
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /jest-config@29.6.1(@types/node@20.2.5):
@@ -13639,7 +13892,7 @@ packages:
       supports-color: 8.1.1
     dev: true
 
-  /jest@29.4.0:
+  /jest@29.4.0(@types/node@14.14.10):
     resolution: {integrity: sha512-Zfd4UzNxPkSoHRBkg225rBjQNa6pVqbh20MGniAzwaOzYLd+pQUcAwH+WPxSXxKFs+QWYfPYIq9hIVSmdVQmPA==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
     hasBin: true
@@ -13652,7 +13905,7 @@ packages:
       '@jest/core': 29.6.1
       '@jest/types': 29.6.1
       import-local: 3.1.0
-      jest-cli: 29.6.1
+      jest-cli: 29.6.1(@types/node@14.14.10)
     transitivePeerDependencies:
       - '@types/node'
       - supports-color
@@ -14444,6 +14697,14 @@ packages:
       hash-base: 3.1.0
       inherits: 2.0.4
       safe-buffer: 5.2.1
+    dev: false
+
+  /md5@2.3.0:
+    resolution: {integrity: sha512-T1GITYmFaKuO91vxyoQMFETst+O71VUPEU3ze5GNzDm0OWdP8v1ziTaAEPUr/3kLsY3Sftgz242A1SetQiDL7g==}
+    dependencies:
+      charenc: 0.0.2
+      crypt: 0.0.2
+      is-buffer: 1.1.6
     dev: false
 
   /mdurl@1.0.1:
@@ -16425,7 +16686,7 @@ packages:
       serverless: 1 || 2 || pre-3 || 3
     dependencies:
       chalk: 4.1.2
-      dotenv: 16.0.3
+      dotenv: 16.3.1
       dotenv-expand: 8.0.3
       serverless: 3.34.0
     dev: false
@@ -17017,6 +17278,25 @@ packages:
       - utf-8-validate
     dev: true
 
+  /superagent@3.8.1:
+    resolution: {integrity: sha512-VMBFLYgFuRdfeNQSMLbxGSLfmXL/xc+OO+BZp41Za/NRDBet/BNbkRJrYzCUu0u4GU0i/ml2dtT8b9qgkw9z6Q==}
+    engines: {node: '>= 4.0'}
+    deprecated: Please upgrade to v7.0.2+ of superagent.  We have fixed numerous issues with streams, form-data, attach(), filesystem errors not bubbling up (ENOENT on attach()), and all tests are now passing.  See the releases tab for more information at <https://github.com/visionmedia/superagent/releases>.
+    dependencies:
+      component-emitter: 1.3.0
+      cookiejar: 2.1.4
+      debug: 3.2.7
+      extend: 3.0.2
+      form-data: 2.3.3
+      formidable: 1.2.6
+      methods: 1.1.2
+      mime: 1.6.0
+      qs: 6.11.2
+      readable-stream: 2.3.8
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /superagent@7.1.6(supports-color@8.1.1):
     resolution: {integrity: sha512-gZkVCQR1gy/oUXr+kxJMLDjla434KmSOKbx5iGD30Ql+AkJQ/YlPKECJy2nhqOsHLjGHzoDTXNSjhnvWhzKk7g==}
     engines: {node: '>=6.4.0 <13 || >=14'}
@@ -17349,7 +17629,7 @@ packages:
       '@babel/core': 7.22.9
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 29.4.0
+      jest: 29.4.0(@types/node@14.14.10)
       jest-util: 29.6.1
       json5: 2.2.3
       lodash.memoize: 4.1.2
@@ -18033,6 +18313,7 @@ packages:
       rollup: 3.26.3
     optionalDependencies:
       fsevents: 2.3.2
+    dev: false
 
   /vite@4.3.9(@types/node@20.2.5):
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
@@ -18191,6 +18472,10 @@ packages:
 
   /webidl-conversions@4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}
+    dev: false
+
+  /whatwg-fetch@3.6.19:
+    resolution: {integrity: sha512-d67JP4dHSbm2TrpFj8AbO8DnL1JXL5J9u0Kq2xW6d0TFDbCA3Muhdt8orXC22utleTVj7Prqt82baN6RBvnEgw==}
     dev: false
 
   /whatwg-mimetype@3.0.0:
