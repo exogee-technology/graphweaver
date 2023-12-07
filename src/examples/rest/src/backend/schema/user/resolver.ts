@@ -5,7 +5,7 @@ import url from 'url';
 import { User as RestUser } from '../../entities';
 import { User } from './entity';
 import { fetch } from '../../rest-client';
-import { inMemoryFilterFor } from '../../utils';
+import { inMemoryFilterFor } from '@exogee/graphweaver-helpers';
 
 @Resolver((of) => User)
 export class UserResolver extends createBaseResolver<User, RestUser>(
