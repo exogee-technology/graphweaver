@@ -1,7 +1,7 @@
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
 import { Category } from './entity';
 import { ClientOptions } from '../index';
-import { CategoryDataEntity } from './data-entity';
+import { CategoryDataEntity } from '../../entities/category';
 import { createCategoryProvider } from './provider';
 
 export type CategoryResolver = ReturnType<typeof createCategoryResolver>;

@@ -1,7 +1,7 @@
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
 import { Member } from './entity';
 import { ClientOptions } from '../index';
-import { MemberDataEntity } from './data-entity';
+import { MemberDataEntity } from '../../entities/member';
 import { createMemberProvider } from './provider';
 
 export type MemberResolver = ReturnType<typeof createMemberResolver>;

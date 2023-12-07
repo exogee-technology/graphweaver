@@ -6,7 +6,7 @@ import {
 	inMemoryFilterFor,
 } from '@exogee/graphweaver-helpers';
 import { ClientOptions } from '../index';
-import { MemberDataEntity, MemberStatus } from './data-entity';
+import { MemberDataEntity, MemberStatus } from '../../entities/member';
 import md5 from 'md5';
 
 type Entity = ItemWithId;

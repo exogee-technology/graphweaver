@@ -6,7 +6,7 @@ import {
 	SummaryField,
 	registerEnumType,
 } from '@exogee/graphweaver';
-import { MemberDataEntity, MemberStatus } from './data-entity';
+import { MemberDataEntity, MemberStatus } from '../../entities';
 
 registerEnumType(MemberStatus, {
 	name: 'MemberStatus',

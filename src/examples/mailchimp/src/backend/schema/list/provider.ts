@@ -6,7 +6,7 @@ import {
 	inMemoryFilterFor,
 } from '@exogee/graphweaver-helpers';
 import { ClientOptions } from '../index';
-import { MailingListDataEntity } from './data-entity';
+import { MailingListDataEntity } from '../../entities/list';
 
 type Entity = ItemWithId;
 type Context = { client: any };

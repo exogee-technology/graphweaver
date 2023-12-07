@@ -1,7 +1,7 @@
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
 import { Interest } from './entity';
 import { ClientOptions } from '../index';
-import { InterestDataEntity } from './data-entity';
+import { InterestDataEntity } from '../../entities/interest';
 import { createInterestProvider } from './provider';
 
 export interface CreateInterestResolverOptions {

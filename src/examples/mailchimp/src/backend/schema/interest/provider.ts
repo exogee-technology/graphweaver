@@ -6,7 +6,7 @@ import {
 	inMemoryFilterFor,
 } from '@exogee/graphweaver-helpers';
 import { ClientOptions } from '../index';
-import { InterestDataEntity } from './data-entity';
+import { InterestDataEntity } from '../../entities/interest';
 import { CreateInterestResolverOptions } from './resolver';
 
 type Entity = ItemWithId;

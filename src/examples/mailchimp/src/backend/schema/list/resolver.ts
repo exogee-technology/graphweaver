@@ -1,7 +1,7 @@
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
 import { MailingList } from './entity';
 import { ClientOptions } from '../index';
-import { MailingListDataEntity } from './data-entity';
+import { MailingListDataEntity } from '../../entities/list';
 import { createMailingListProvider } from './provider';
 
 export type MailingListResolver = ReturnType<typeof createMailingListResolver>;
