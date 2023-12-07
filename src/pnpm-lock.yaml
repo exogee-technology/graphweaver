@@ -814,8 +814,8 @@ importers:
         specifier: 4.0.1
         version: 4.0.1(@babel/core@7.22.9)(@types/node@18.11.9)(graphql@16.8.1)
       '@graphql-codegen/near-operation-file-preset':
-        specifier: 2.5.0
-        version: 2.5.0(graphql@16.8.1)
+        specifier: 3.0.0
+        version: 3.0.0(graphql@16.8.1)
       '@graphql-codegen/typescript':
         specifier: 4.0.1
         version: 4.0.1(graphql@16.8.1)
@@ -4958,18 +4958,19 @@ packages:
       tslib: 2.5.3
     dev: false
 
-  /@graphql-codegen/near-operation-file-preset@2.5.0(graphql@16.8.1):
-    resolution: {integrity: sha512-S9PNJP5tTkUWBQ6inbviOsTREzsMxYVqJGrtPcIdMWkKLZAAItAfAb60klB1T64vt6Oru+nUf8IYUNrchJ8MYg==}
+  /@graphql-codegen/near-operation-file-preset@3.0.0(graphql@16.8.1):
+    resolution: {integrity: sha512-HRPaa7OsIAHQBFeGiTUVdjFcxzgvAs7uxSqcLEJgDpCr9cffpwnlgWP3gK79KnTiHsRkyb55U1K4YyrL00g1Cw==}
+    engines: {node: '>= 16.0.0'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@graphql-codegen/add': 3.2.3(graphql@16.8.1)
-      '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.8.1)
+      '@graphql-codegen/plugin-helpers': 3.1.2(graphql@16.8.1)
       '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.8.1)
-      '@graphql-tools/utils': 8.13.1(graphql@16.8.1)
+      '@graphql-tools/utils': 10.0.3(graphql@16.8.1)
       graphql: 16.8.1
       parse-filepath: 1.0.2
-      tslib: 2.4.1
+      tslib: 2.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
