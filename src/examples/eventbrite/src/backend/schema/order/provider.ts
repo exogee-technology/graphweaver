@@ -1,7 +1,7 @@
 import { createProvider } from '@exogee/graphweaver-helpers';
 
 import { EventbriteOrder } from './entity';
-import { EventbriteOrderDataEntity } from './data-entity';
+import { EventbriteOrderDataEntity } from '../../entities/order';
 import { eventbriteClient } from '../../client';
 
 export interface Context {

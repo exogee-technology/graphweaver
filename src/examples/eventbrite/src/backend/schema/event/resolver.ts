@@ -1,5 +1,5 @@
 import { Event as EventbriteEvent } from './entity';
-import { EventbriteEventDataEntity } from './data-entity';
+import { EventbriteEventDataEntity } from '../../entities/event';
 
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
 

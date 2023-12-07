@@ -2,7 +2,7 @@ import { createProvider } from '@exogee/graphweaver-helpers';
 
 import { eventbriteClient } from '../../client';
 import { Event as EventbriteEvent } from './entity';
-import { EventbriteEventDataEntity } from './data-entity';
+import { EventbriteEventDataEntity } from '../../entities/event';
 
 export interface Context {
 	client: ReturnType<typeof eventbriteClient>;

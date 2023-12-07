@@ -1,7 +1,7 @@
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
 
 import { EventbriteOrder } from './entity';
-import { EventbriteOrderDataEntity } from './data-entity';
+import { EventbriteOrderDataEntity } from '../../entities/order';
 import { createEventbriteOrderProvider } from './provider';
 
 export type EventbriteOrderResolver = ReturnType<typeof createEventbriteOrderResolver>;

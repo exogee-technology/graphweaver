@@ -1,6 +1,6 @@
 import { Field, ID, ObjectType, GraphQLEntity, RelationshipField } from '@exogee/graphweaver';
 
-import { EventbriteOrderDataEntity } from './data-entity';
+import { EventbriteOrderDataEntity } from '../../entities';
 
 import { Event as EventbriteEvent } from '../event';
 

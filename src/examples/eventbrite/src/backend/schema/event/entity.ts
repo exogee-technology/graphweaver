@@ -8,7 +8,7 @@ import {
 	SummaryField,
 } from '@exogee/graphweaver';
 
-import { EventbriteEventDataEntity } from './data-entity';
+import { EventbriteEventDataEntity } from '../../entities';
 
 export enum EventStatus {
 	Draft = 'draft',
