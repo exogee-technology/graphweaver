@@ -167,7 +167,11 @@ importers:
         specifier: 5.0.2
         version: 5.0.2
 
+<<<<<<< HEAD
   examples/mailchimp:
+=======
+  examples/eventbrite:
+>>>>>>> 885e973631fed62a60d52935be3b2e86b498833f
     dependencies:
       '@apollo/server':
         specifier: 4.9.3
@@ -193,21 +197,42 @@ importers:
       '@exogee/graphweaver-server':
         specifier: workspace:*
         version: link:../../packages/server
+<<<<<<< HEAD
       '@mailchimp/mailchimp_marketing':
         specifier: 3.0.80
         version: 3.0.80
+=======
+      '@exogee/logger':
+        specifier: workspace:*
+        version: link:../../packages/logger
+      class-validator:
+        specifier: 0.14.0
+        version: 0.14.0
+>>>>>>> 885e973631fed62a60d52935be3b2e86b498833f
       dotenv:
         specifier: 16.0.0
         version: 16.0.0
       graphql:
         specifier: 16.8.1
         version: 16.8.1
+<<<<<<< HEAD
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
       md5:
         specifier: 2.3.0
         version: 2.3.0
+=======
+      graphql-type-json:
+        specifier: 0.3.2
+        version: 0.3.2(graphql@16.8.1)
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      isomorphic-fetch:
+        specifier: 3.0.0
+        version: 3.0.0
+>>>>>>> 885e973631fed62a60d52935be3b2e86b498833f
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -218,9 +243,12 @@ importers:
       '@types/jest':
         specifier: 26.0.23
         version: 26.0.23
+<<<<<<< HEAD
       '@types/md5':
         specifier: 2.3.5
         version: 2.3.5
+=======
+>>>>>>> 885e973631fed62a60d52935be3b2e86b498833f
       '@types/node':
         specifier: 14.14.10
         version: 14.14.10
@@ -13289,6 +13317,15 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: false
 
+  /isomorphic-fetch@3.0.0:
+    resolution: {integrity: sha512-qvUtwJ3j6qwsF3jLxkZ72qCgjMysPzDfeV240JHiGZsANBYd+EEuu35v7dfrJ9Up0Ak07D7GGSkGhCHTqg/5wA==}
+    dependencies:
+      node-fetch: 2.6.12
+      whatwg-fetch: 3.6.19
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /isomorphic-ws@4.0.1(ws@7.5.9):
     resolution: {integrity: sha512-BhBvN2MBpWTaSHdWRb/bwdZJ1WaehQ2L1KngkCkfLUGF0mAWAT1sQUQacEmQ0jXkFw/czDXPNQSL5u2/Krsz1w==}
     peerDependencies:
@@ -18383,6 +18420,10 @@ packages:
 
   /webidl-conversions@4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}
+    dev: false
+
+  /whatwg-fetch@3.6.19:
+    resolution: {integrity: sha512-d67JP4dHSbm2TrpFj8AbO8DnL1JXL5J9u0Kq2xW6d0TFDbCA3Muhdt8orXC22utleTVj7Prqt82baN6RBvnEgw==}
     dev: false
 
   /whatwg-mimetype@3.0.0:

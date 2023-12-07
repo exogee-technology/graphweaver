@@ -12,6 +12,7 @@ import {
 	ObjectType,
 	registerEnumType,
 	Root,
+	SummaryField,
 } from '@exogee/graphweaver';
 import {
 	AccessControlList,
@@ -94,6 +95,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => ID)
 	id!: string;
 
+	@SummaryField()
 	@Field(() => String)
 	description!: string;
 

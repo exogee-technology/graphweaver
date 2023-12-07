@@ -1,0 +1,61 @@
+{
+	"name": "@exogee/graphweaver-eventbrite",
+	"version": "0.2.7",
+	"license": "MIT",
+	"private": true,
+	"description": "Example of using @exogee/graphweaver to connect EventBrite.",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build": "graphweaver build",
+		"start": "graphweaver start",
+		"watch": "graphweaver watch",
+		"version": "npm version --no-git-tag-version",
+		"test": "jest --runInBand --forceExit"
+	},
+	"dependencies": {
+		"@apollo/server": "4.9.3",
+		"@as-integrations/aws-lambda": "2.0.1",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
+		"@exogee/graphweaver-auth": "workspace:*",
+		"@exogee/graphweaver-auth-ui-components": "workspace:*",
+		"@exogee/graphweaver-helpers": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/logger": "workspace:*",
+		"class-validator": "0.14.0",
+		"dotenv": "16.0.0",
+		"graphql": "16.8.1",
+		"graphql-type-json": "0.3.2",
+		"graphweaver": "workspace:*",
+		"isomorphic-fetch": "3.0.0",
+		"react": "18.2.0",
+		"reflect-metadata": "0.1.13"
+	},
+	"devDependencies": {
+		"@types/jest": "26.0.23",
+		"@types/node": "14.14.10",
+		"graphql-tag": "2.12.6",
+		"jest": "29.4.0",
+		"ts-jest": "29.0.5",
+		"typescript": "5.0.2",
+		"vite": "4.3.9",
+		"vite-plugin-svgr": "3.2.0"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
+}
