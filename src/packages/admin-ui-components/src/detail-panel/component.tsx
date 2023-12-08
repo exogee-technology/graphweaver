@@ -10,6 +10,7 @@ import {
 	decodeSearchParams,
 	EntityField,
 	EntityFieldType,
+	Enum,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -42,21 +43,23 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(entity.type, relationshipEntityType.summaryField),
+		getRelationshipQuery(entity.type, relationshipEntityType?.summaryField),
 		{
 			variables: {
 				pagination: {
-					orderBy: {
-						[relationshipEntityType.summaryField as string]: 'ASC',
-					},
+					orderBy: relationshipEntityType
+						? {
+								[relationshipEntityType.summaryField as string]: 'ASC',
+						  }
+						: { id: 'ASC' },
 				},
 			},
 		}
 	);
 
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relationshipEntityType.summaryField;
-		return { label: label ? item[label] : 'notfound', value: item.id };
+		const label = relationshipEntityType?.summaryField || 'id';
+		return { label: item[label], value: item.id };
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
@@ -68,7 +71,11 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 			options={options}
 			value={initialValue ? [initialValue] : []}
 			onChange={handleOnChange}
-			mode={SelectMode.SINGLE}
+			mode={
+				entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE'
+					? SelectMode.SINGLE
+					: SelectMode.MULTI
+			}
 		/>
 	);
 };
@@ -96,7 +103,39 @@ const BooleanField = ({ name }: { name: string }) => {
 				{ value: true, label: 'true' },
 				{ value: false, label: 'false' },
 			]}
-			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
+			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
+			onChange={handleOnChange}
+			mode={SelectMode.SINGLE}
+		/>
+	);
+};
+
+const EnumField = ({ name, typeEnum }: { name: string; typeEnum: Enum }) => {
+	const [_, meta, helpers] = useField({ name, multiple: false });
+	const { initialValue } = meta;
+
+	useEffect(() => {
+		helpers.setValue(initialValue);
+	}, []);
+
+	const handleOnChange = (selected: SelectOption[]) => {
+		const value = selected?.[0]?.value;
+		if (value === undefined) {
+			helpers.setValue(undefined);
+		} else {
+			helpers.setValue(value);
+		}
+	};
+
+	const enumOptions = Array.from(typeEnum.values).map((v) => ({
+		label: v.name,
+		value: v.value,
+	}));
+
+	return (
+		<Select
+			options={enumOptions}
+			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
 		/>
@@ -109,21 +148,35 @@ const JSONField = ({ name }: { name: string }) => {
 	return <code>{JSON.stringify(initialValue, null, 4)}</code>;
 };
 
+const getField = ({ field }: { field: EntityField }) => {
+	if (field.relationshipType) {
+		return <SelectField name={field.name} entity={field} />;
+	}
+
+	if (field.type === EntityFieldType.JSON) {
+		return <JSONField name={field.name} />;
+	}
+
+	if (field.type === EntityFieldType.BOOLEAN) {
+		return <BooleanField name={field.name} />;
+	}
+
+	const { enumByName } = useSchema();
+	const enumField = enumByName(field.type);
+	if (enumField) {
+		return <EnumField name={field.name} typeEnum={enumField} />;
+	}
+
+	return <Field id={field.name} name={field.name} className={styles.textInputField} />;
+};
+
 const DetailField = ({ field }: { field: EntityField }) => {
 	return (
 		<div className={styles.detailField}>
 			<label htmlFor={field.name} className={styles.fieldLabel}>
 				{field.name}
 			</label>
-			{field.relationshipType ? (
-				<SelectField name={field.name} entity={field} />
-			) : field.type === EntityFieldType.JSON ? (
-				<JSONField name={field.name} />
-			) : field.type === EntityFieldType.BOOLEAN ? (
-				<BooleanField name={field.name} />
-			) : (
-				<Field id={field.name} name={field.name} className={styles.textInputField} />
-			)}
+			{getField({ field })}
 		</div>
 	);
 };

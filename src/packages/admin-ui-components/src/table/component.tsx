@@ -1,10 +1,4 @@
-import DataGrid, {
-	Column,
-	FormatterProps,
-	Row,
-	RowRendererProps,
-	SortColumn,
-} from 'react-data-grid';
+import DataGrid, { Column, FormatterProps, SortColumn } from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -53,15 +47,18 @@ const columnsForEntity = <T,>(
 					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
 
-					const linkForValue = (value: any) => (
-						<Link
-							key={value.id}
-							to={routeFor({ type: field.type, id: value.id as string })}
-							onClick={gobbleEvent}
-						>
-							{value[relatedEntity?.summaryField || 'id']}
-						</Link>
-					);
+					const linkForValue = (value: any) =>
+						relatedEntity ? (
+							<Link
+								key={value.id}
+								to={routeFor({ type: field.type, id: value.id as string })}
+								onClick={gobbleEvent}
+							>
+								{value.label}
+							</Link>
+						) : (
+							value.label
+						);
 
 					if (Array.isArray(value)) {
 						// We're in a many relationship. Return an array of links.
