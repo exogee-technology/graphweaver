@@ -43,21 +43,23 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(entity.type, relationshipEntityType.summaryField),
+		getRelationshipQuery(entity.type, relationshipEntityType?.summaryField),
 		{
 			variables: {
 				pagination: {
-					orderBy: {
-						[relationshipEntityType.summaryField as string]: 'ASC',
-					},
+					orderBy: relationshipEntityType
+						? {
+								[relationshipEntityType.summaryField as string]: 'ASC',
+						  }
+						: { id: 'ASC' },
 				},
 			},
 		}
 	);
 
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relationshipEntityType.summaryField;
-		return { label: label ? item[label] : 'notfound', value: item.id };
+		const label = relationshipEntityType?.summaryField || 'id';
+		return { label: item[label], value: item.id };
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
@@ -69,7 +71,11 @@ const SelectField = ({ name, entity }: { name: string; entity: EntityField }) =>
 			options={options}
 			value={initialValue ? [initialValue] : []}
 			onChange={handleOnChange}
-			mode={SelectMode.SINGLE}
+			mode={
+				entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE'
+					? SelectMode.SINGLE
+					: SelectMode.MULTI
+			}
 		/>
 	);
 };
