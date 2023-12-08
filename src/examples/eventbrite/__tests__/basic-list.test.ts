@@ -13,7 +13,7 @@ describe('Mailchimp Integration', () => {
 
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
-				query AdminUIEventListPage($filter: EventsListFilter, $pagination: EventsPaginationInput) {
+				query AdminUIListPage($filter: EventsListFilter, $pagination: EventsPaginationInput) {
 					result: events(filter: $filter, pagination: $pagination) {
 						id
 						status

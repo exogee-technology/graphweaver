@@ -280,14 +280,12 @@ export const DetailPanel = () => {
 							...values,
 						},
 					},
-					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
 				});
 			} else {
 				await createEntity({
 					variables: {
 						data: values,
 					},
-					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
 				});
 			}
 

@@ -8,7 +8,7 @@ export const queryForEntityPage = (entityName: string, entityByType: (type: stri
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`
-		query AdminUI${entityName}ListPage($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
+		query AdminUIListPage($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
 			result: ${queryName}(filter: $filter, pagination: $pagination) {
 				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}

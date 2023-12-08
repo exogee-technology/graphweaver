@@ -102,6 +102,7 @@ const generateTypePolicyFields = (entityMap: EntityMap) => {
 			return btoa(`${filter}:${orderBy}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
+			console.log(incoming);
 			const merged = [...existing, ...incoming];
 			const uniqueItems = new Set(merged.map((item) => item.__ref));
 			return [...uniqueItems].map((__ref) => merged.find((item) => item.__ref === __ref));
