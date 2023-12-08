@@ -97,7 +97,7 @@ const BooleanField = ({ name }: { name: string }) => {
 				{ value: true, label: 'true' },
 				{ value: false, label: 'false' },
 			]}
-			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
+			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
 		/>
@@ -129,7 +129,7 @@ const EnumField = ({ name, typeEnum }: { name: string; typeEnum: Enum }) => {
 	return (
 		<Select
 			options={enumOptions}
-			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
+			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
 		/>
