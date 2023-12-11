@@ -16,7 +16,7 @@ export const DismissibleToast = () => {
 					},
 					success: {
 						duration: 60_000,
-						icon: <SuccessIcon />,
+						icon: <SuccessIcon className={styles.successIcon} />,
 						style: {
 							background: '#1B9266',
 							color: 'white',
