@@ -34,7 +34,7 @@
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.3",
-		"@types/node": "18.11.9",
+		"@types/node": "20.2.5",
 		"@types/semver": "7.5.0",
 		"@types/validate-npm-package-name": "4.0.0",
 		"@types/yargs": "17.0.24",

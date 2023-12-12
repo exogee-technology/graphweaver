@@ -36,7 +36,7 @@
 		"@mikro-orm/postgresql": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"@mikro-orm/knex": "5.7.14",
-		"@types/node": "18.11.11",
+		"@types/node": "20.2.5",
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
 		"ts-node": "10.4.0",
