@@ -1,35 +1,22 @@
 import { AdminUISettingsMap } from '..';
 
 type Props = {
-	filter?: {
-		hide: true;
-	};
-	entity?: {
-		hide: true;
-	};
+	hideFromDisplay?: boolean;
+	hideFromFilterBar?: boolean;
 };
 
-export function AdminUISettings(settings?: Props) {
-	const entity = settings?.entity;
-	const filter = settings?.filter;
-
+export function AdminUISettings(props?: Props) {
 	return (target: any, propertyKey?: string | symbol) => {
 		const entityName = target.name || target.constructor.name;
 		const settings = AdminUISettingsMap.get(entityName)
 			? AdminUISettingsMap.get(entityName) ?? {}
 			: {};
 
-		if (filter) {
+		if (propertyKey) {
 			if (!settings.fields) settings.fields = {};
-			settings.fields[propertyKey as keyof typeof settings.fields] = {
-				filter,
-			};
-		}
-
-		if (entity) {
-			settings.entity = {
-				hide: entity.hide,
-			};
+			settings.fields[propertyKey as keyof typeof settings.fields] = { ...props };
+		} else {
+			settings.entity = { ...props };
 		}
 
 		AdminUISettingsMap.set(entityName, settings);

@@ -50,9 +50,7 @@ class OrmArtist extends BaseEntity {
 }
 
 @AdminUISettings({
-	entity: {
-		hide: true,
-	},
+	hideFromDisplay: true,
 })
 @ObjectType('Album')
 export class Album extends GraphQLEntity<OrmAlbum> {
@@ -76,14 +74,14 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	@Field(() => ID)
 	id!: number;
 
-	@SummaryField()
+	@AdminUISettings({
+		hideFromDisplay: true,
+	})
 	@Field(() => String, { nullable: true })
 	name?: string;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
@@ -132,6 +130,10 @@ test('Test the decorator adminUISettings', async () => {
 								type
 								__typename
 							}
+							attributes {
+								isReadOnly
+								__typename
+							}
 							__typename
 						}
 						attributes {
@@ -164,9 +166,12 @@ test('Test the decorator adminUISettings', async () => {
 	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
 
+	const idField = artistEntity?.fields.find((field) => field.name === 'id');
+	expect(idField).not.toBeNull();
+	expect(idField?.filter).not.toBeNull();
+
 	const nameField = artistEntity?.fields.find((field) => field.name === 'name');
-	expect(nameField).not.toBeNull();
-	expect(nameField?.filter).not.toBeNull();
+	expect(nameField).toBeUndefined();
 
 	const albumsField = artistEntity?.fields.find((field) => field.name === 'albums');
 	expect(albumsField).not.toBeNull();

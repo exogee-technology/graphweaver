@@ -139,13 +139,13 @@ export enum AdminUIFilterType {
 export type AdminUISettingsType = {
 	fields?: {
 		[x: string]: {
-			filter?: {
-				hide: true;
-			};
+			hideFromDisplay?: boolean;
+			hideFromFilterBar?: boolean;
 		};
 	};
 	entity?: {
-		hide: true;
+		hideFromDisplay?: boolean;
+		hideFromFilterBar?: boolean;
 	};
 };
 

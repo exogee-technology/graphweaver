@@ -29,9 +29,7 @@ export class Tenant extends GraphQLEntity<XeroTenant> {
 	id!: string;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@Field(() => String)
 	authEventId!: string;
@@ -44,17 +42,13 @@ export class Tenant extends GraphQLEntity<XeroTenant> {
 	tenantType!: string;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@Field(() => String)
 	createdDateUtc!: string;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@Field(() => String)
 	updatedDateUtc!: string;
