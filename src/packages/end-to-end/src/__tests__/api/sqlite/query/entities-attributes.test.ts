@@ -105,6 +105,10 @@ test('Should return isReadOnly attribute for each entity in getAdminUiMetadata',
 								type
 								__typename
 							}
+							attributes {
+								isReadOnly
+								__typename
+							}
 							__typename
 						}
 						attributes {

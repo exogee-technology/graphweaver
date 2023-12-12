@@ -37,9 +37,7 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	amount!: number;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@Field(() => ID, { nullable: true })
 	accountId?: string;
@@ -48,9 +46,7 @@ export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
 	account!: Account;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@Field(() => ID, { nullable: true })
 	tenantId?: string;

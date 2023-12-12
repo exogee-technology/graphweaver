@@ -31,9 +31,7 @@ export class Account extends GraphQLEntity<XeroAccount> {
 	type?: AccountType;
 
 	@AdminUISettings({
-		filter: {
-			hide: true,
-		},
+		hideFromFilterBar: true,
 	})
 	@Field(() => String)
 	tenantId!: string;

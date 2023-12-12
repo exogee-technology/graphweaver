@@ -66,7 +66,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const name = objectType.name;
 					const adminUISettings = AdminUISettingsMap.get(name);
 
-					if (adminUISettings?.entity?.hide) {
+					if (adminUISettings?.entity?.hideFromDisplay) {
 						return;
 					}
 
@@ -78,7 +78,10 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					if (isReadOnly(objectType.target)) {
 						attributes.isReadOnly = true;
 					}
-					const fields = objectType.fields?.map((field) => {
+					const visibleFields = objectType.fields?.filter(
+						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay
+					);
+					const fields = visibleFields?.map((field) => {
 						const typeValue = field.getType() as any;
 						const entityName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
 						const relatedObject = objectTypeData[entityName];
@@ -101,7 +104,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						} else if (relatedObject) {
 							fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 						}
-						fieldObject.filter = adminUISettings?.fields?.[field.name]?.filter?.hide
+						fieldObject.filter = adminUISettings?.fields?.[field.name]?.hideFromFilterBar
 							? undefined
 							: {
 									type: mapFilterType(fieldObject, metadata.enums),
