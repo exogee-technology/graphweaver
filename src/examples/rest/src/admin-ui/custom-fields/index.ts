@@ -8,5 +8,7 @@ customFields.set('Task', [
 		type: 'custom',
 		index: 3,
 		component: Link,
+
+		showOn: { table: true },
 	},
 ]);

@@ -5,12 +5,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
 import {
+	CustomField,
 	decodeSearchParams,
 	EntityField,
 	EntityFieldType,
-	Enum,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -18,146 +19,26 @@ import {
 } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
-import { Select, SelectMode, SelectOption } from '../multi-select';
-import {
-	generateCreateEntityMutation,
-	generateUpdateEntityMutation,
-	getRelationshipQuery,
-} from './graphql';
+import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
+import { BooleanField, EnumField, JSONField, SelectField } from './fields';
 
 interface ResultBaseType {
 	id: string;
 	[x: string]: unknown;
 }
 
-const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
-	const [_, meta, helpers] = useField({ name, multiple: false });
-	const { entityByType } = useSchema();
-	const { initialValue } = meta;
-	const relationshipEntityType = entityByType(entity.type);
-
-	useEffect(() => {
-		helpers.setValue(initialValue);
-	}, []);
-
-	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(entity.type, relationshipEntityType?.summaryField),
-		{
-			variables: {
-				pagination: {
-					orderBy: relationshipEntityType
-						? {
-								[relationshipEntityType.summaryField as string]: 'ASC',
-						  }
-						: { id: 'ASC' },
-				},
-			},
-		}
-	);
-
-	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relationshipEntityType?.summaryField || 'id';
-		return { label: item[label], value: item.id };
-	});
-
-	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue(selected?.[0]);
-	};
-
-	return (
-		<Select
-			options={options}
-			value={initialValue ? [initialValue] : []}
-			onChange={handleOnChange}
-			mode={
-				entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE'
-					? SelectMode.SINGLE
-					: SelectMode.MULTI
-			}
-		/>
-	);
-};
-
-const BooleanField = ({ name }: { name: string }) => {
-	const [_, meta, helpers] = useField({ name, multiple: false });
-	const { initialValue } = meta;
-
-	useEffect(() => {
-		helpers.setValue(initialValue);
-	}, []);
-
-	const handleOnChange = (selected: SelectOption[]) => {
-		const value = selected?.[0]?.value;
-		if (value === undefined) {
-			helpers.setValue(undefined);
-		} else {
-			helpers.setValue(value);
-		}
-	};
-
-	return (
-		<Select
-			options={[
-				{ value: true, label: 'true' },
-				{ value: false, label: 'false' },
-			]}
-			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
-			onChange={handleOnChange}
-			mode={SelectMode.SINGLE}
-		/>
-	);
-};
-
-const EnumField = ({ name, typeEnum }: { name: string; typeEnum: Enum }) => {
-	const [_, meta, helpers] = useField({ name, multiple: false });
-	const { initialValue } = meta;
-
-	useEffect(() => {
-		helpers.setValue(initialValue);
-	}, []);
-
-	const handleOnChange = (selected: SelectOption[]) => {
-		const value = selected?.[0]?.value;
-		if (value === undefined) {
-			helpers.setValue(undefined);
-		} else {
-			helpers.setValue(value);
-		}
-	};
-
-	const enumOptions = Array.from(typeEnum.values).map((v) => ({
-		label: v.name,
-		value: v.value,
-	}));
-
-	return (
-		<Select
-			options={enumOptions}
-			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
-			onChange={handleOnChange}
-			mode={SelectMode.SINGLE}
-		/>
-	);
-};
-
-const JSONField = ({ name }: { name: string }) => {
-	const [_, meta] = useField({ name, multiple: false });
-	const { initialValue } = meta;
-	return <code>{JSON.stringify(initialValue, null, 4)}</code>;
-};
-
 const getField = ({ field }: { field: EntityField }) => {
 	if (field.relationshipType) {
 		return <SelectField name={field.name} entity={field} />;
 	}
 
-	if (field.type === EntityFieldType.JSON) {
+	if (field.type === 'JSON') {
 		return <JSONField name={field.name} />;
 	}
 
-	if (field.type === EntityFieldType.BOOLEAN) {
+	if (field.type === 'Boolean') {
 		return <BooleanField name={field.name} />;
 	}
 
@@ -177,6 +58,17 @@ const DetailField = ({ field }: { field: EntityField }) => {
 				{field.name}
 			</label>
 			{getField({ field })}
+		</div>
+	);
+};
+
+const CustomField = ({ field }: { field: CustomField }) => {
+	const { selectedEntity } = useSelectedEntity();
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
+	return (
+		<div className={styles.detailField}>
+			{field.component({ entity: selectedEntity, context: 'detail-form' })}
 		</div>
 	);
 };
@@ -207,7 +99,7 @@ const DetailForm = ({
 	isReadOnly,
 }: {
 	initialValues: Record<string, any>;
-	detailFields: EntityField[];
+	detailFields: (EntityField | CustomField)[];
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
 	persistName: string;
@@ -219,7 +111,13 @@ const DetailForm = ({
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
-							return <DetailField key={field.name} field={field} />;
+							if (field.type === 'custom') {
+								const { detailForm: show } = (field as CustomField).showOn ?? { detailForm: true };
+
+								return show ? <CustomField key={field.name} field={field as CustomField} /> : null;
+							} else {
+								return <DetailField key={field.name} field={field} />;
+							}
 						})}
 						<div className={styles.detailButtonContainer}>
 							<Button type="reset" disabled={isSubmitting}>
@@ -273,6 +171,16 @@ export const DetailPanel = () => {
 			(field.relationshipType && field.relationshipType !== 'MANY_TO_MANY') ||
 			(!field.relationshipType && field.name !== 'id' && !field.attributes?.isReadOnly)
 	);
+
+	// Merge any custom fields in at their appropriate indices.
+	// Let's check if there are custom fields to add
+	const customFieldsForEntity = customFields?.get(selectedEntity.name);
+	if (customFieldsForEntity) {
+		// Add the custom fields to the existing fields taking into account any supplied index
+		for (const field of customFieldsForEntity) {
+			formFields.splice(field.index ?? formFields.length, 0, field);
+		}
+	}
 
 	const persistName = `gw-${entity}-${id}`.toLowerCase();
 	const savedSessionState = useMemo((): ResultBaseType | undefined => {

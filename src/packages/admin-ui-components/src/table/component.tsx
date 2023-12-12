@@ -9,7 +9,6 @@ import {
 	routeFor,
 	SortField,
 	decodeSearchParams,
-	EntityFieldType,
 } from '../utils';
 import { Spinner } from '../spinner';
 
@@ -22,15 +21,14 @@ import { ApolloError } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
-const columnsForEntity = <T,>(
+const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
 	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
-		width:
-			field.type === EntityFieldType.ID || field.type === EntityFieldType.OPTIONAL_ID ? 20 : 200,
+		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
 
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
@@ -73,22 +71,17 @@ const columnsForEntity = <T,>(
 	}));
 
 	// Let's check if there are custom fields to add
-	const customFieldsForEntity = customFields?.get(entity.name);
-	if (customFieldsForEntity) {
-		// Covert the custom fields to columns
-		const customColumns =
-			customFieldsForEntity.map((field) => ({
-				key: field.name,
-				name: field.name,
+	for (const customField of customFields?.get(entity.name) || []) {
+		const { table: show } = customField.showOn ?? { table: true };
+		if (show) {
+			entityColumns.splice(customField.index ?? entityColumns.length, 0, {
+				key: customField.name,
+				name: customField.name,
 				width: 200,
 				sortable: false,
-				formatter: ({ row }: FormatterProps<T, unknown>) => field?.component?.(row),
-			})) || [];
-
-		// Add the custom columns to the existing table taking into account any supplied index
-		for (const field of customFieldsForEntity) {
-			const customCol = customColumns.shift();
-			if (customCol) entityColumns.splice(field.index ?? entityColumns.length, 0, customCol);
+				formatter: ({ row }: FormatterProps<T, unknown>) =>
+					customField.component?.({ context: 'table', entity: row }),
+			});
 		}
 	}
 
