@@ -49,7 +49,7 @@ export interface GraphweaverConfig {
 	graphqlDeduplicator?: {
 		enabled: boolean;
 	};
-	enableValidationRules: boolean;
+	enableValidationRules?: boolean;
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
