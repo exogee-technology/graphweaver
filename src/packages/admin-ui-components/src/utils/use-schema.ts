@@ -32,13 +32,7 @@ export enum AdminUIFilterType {
 	TEXT = 'TEXT',
 }
 
-export enum EntityFieldType {
-	BOOLEAN = 'Boolean',
-	ID = 'ID!',
-	OPTIONAL_ID = 'ID',
-	JSON = 'JSON',
-	// TODO: This needs to be extended for the other types
-}
+export type EntityFieldType = 'Boolean' | 'custom' | 'ID!' | 'ID' | 'JSON';
 
 export interface EntityField {
 	name: string;
@@ -58,9 +52,23 @@ export interface EntityAttributes {
 	isReadOnly?: boolean;
 }
 
-export interface CustomField extends EntityField {
+export interface CustomFieldArgs<T = unknown> {
+	entity: T;
+	context: 'table' | 'detail-form';
+}
+
+export interface CustomField<T = unknown> extends EntityField {
 	index?: number;
-	component: (entity: unknown) => JSX.Element;
+	type: 'custom';
+
+	component: (args: CustomFieldArgs<T>) => JSX.Element;
+
+	// Defines where the custom field should be shown. If you don't define anything
+	// the default is to show it in both the table and the detail form.
+	showOn?: {
+		table?: boolean;
+		detailForm?: boolean;
+	};
 }
 
 // @todo this needs typing correctly
