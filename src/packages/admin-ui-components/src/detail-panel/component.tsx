@@ -163,23 +163,31 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	}, [search, selectedEntity]);
 
-	// Weed out ID fields - for the moment.
-	// @todo we can remove the many to many filter once we support adding many to many in the UI
-	// remove field if it is readonly
-	const formFields: EntityField[] = selectedEntity.fields.filter(
-		(field) =>
-			(field.relationshipType && field.relationshipType !== 'MANY_TO_MANY') ||
-			(!field.relationshipType && field.name !== 'id' && !field.attributes?.isReadOnly)
+	const customFieldsToShow = (customFields?.get(selectedEntity.name) || []).filter(
+		(customField) => {
+			const { detailForm: show } = customField.showOn ?? { detailForm: true };
+			return show;
+		}
 	);
 
-	// Merge any custom fields in at their appropriate indices.
-	// Let's check if there are custom fields to add
-	const customFieldsForEntity = customFields?.get(selectedEntity.name);
-	if (customFieldsForEntity) {
-		// Add the custom fields to the existing fields taking into account any supplied index
-		for (const field of customFieldsForEntity) {
-			formFields.splice(field.index ?? formFields.length, 0, field);
-		}
+	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
+		// We don't show Many to Many relationships in the form yet because we don't have
+		// a good editing interface for them.
+		if (field.relationshipType === 'MANY_TO_MANY') return false;
+
+		// We also don't show the related ID field for the same reason
+		if (field.relationshipType && field.name === 'id') return false;
+
+		// And we want to filter out any fields that will be overridden with custom fields.
+		if (customFieldsToShow.find((customField) => customField.name === field.name)) return false;
+
+		// Otherwise we're all good.
+		return true;
+	});
+
+	// Merge in the custom fields to the existing fields taking into account any supplied index
+	for (const field of customFieldsToShow) {
+		formFields.splice(field.index ?? formFields.length, 0, field);
 	}
 
 	const persistName = `gw-${entity}-${id}`.toLowerCase();
