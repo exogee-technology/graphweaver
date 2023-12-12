@@ -41,3 +41,9 @@
 	background-color: #fff;
 	transform: rotate(90deg);
 }
+
+.successIcon {
+	fill: white;
+	width: 26px;
+  	height: 26px;
+}

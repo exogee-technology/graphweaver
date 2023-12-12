@@ -104,3 +104,14 @@
 
 	color: rgba(237, 232, 242, 0.6);
 }
+
+.link {
+	background: none!important;
+	border: none;
+	padding: 0!important;
+	font-family: 'Inter';
+	font-style: normal;
+	color: white;
+	text-decoration: underline;
+	cursor: pointer;
+}

@@ -1,4 +1,4 @@
-import { ApolloError, useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -103,7 +103,7 @@ const BooleanField = ({ name }: { name: string }) => {
 				{ value: true, label: 'true' },
 				{ value: false, label: 'false' },
 			]}
-			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
+			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
 		/>
@@ -286,7 +286,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = savedSessionState ?? data?.result;
 		const value = result?.[field.name as keyof typeof result];
-		acc[field.name] = value ?? '';
+		acc[field.name] = value ?? undefined;
 		return acc;
 	}, {} as Record<string, any>);
 
@@ -312,6 +312,11 @@ export const DetailPanel = () => {
 		setTimeout(onClose, slideAnimationTime);
 	};
 
+	const navigateToDetailForEntity = (id?: string) => {
+		if (!id) return;
+		navigate(routeFor({ entity: selectedEntity, id }));
+	};
+
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
 		const values = (Object.entries(formValues) ?? []).reduce((acc, [key, value]: [string, any]) => {
@@ -325,27 +330,51 @@ export const DetailPanel = () => {
 		}, {} as Record<string, any>);
 
 		try {
+			let result: FetchResult;
 			if (id && !isNew) {
-				await updateEntity({
+				result = await updateEntity({
 					variables: {
 						data: {
 							id,
 							...values,
 						},
 					},
-					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
 				});
 			} else {
-				await createEntity({
+				result = await createEntity({
 					variables: {
 						data: values,
 					},
-					refetchQueries: [`AdminUI${selectedEntity.name}ListPage`],
+				});
+			}
+
+			if (!result.data) {
+				return toast.error('No data received in response', {
+					duration: 5000,
 				});
 			}
 
 			clearSessionState();
 			onClose();
+
+			const entityname = `${id && !isNew ? 'update' : 'create'}${selectedEntity.name}`;
+
+			toast.success(
+				<div>
+					Item{' '}
+					<button
+						className={styles.link}
+						onClick={() => navigateToDetailForEntity(result.data?.[entityname].id)}
+					>
+						{selectedEntity.summaryField
+							? `${result.data?.[entityname].id} ${
+									result.data?.[entityname]?.[selectedEntity.summaryField]
+							  }`
+							: result.data?.[entityname].id}
+					</button>{' '}
+					has been successfully {id && !isNew ? 'updated' : 'created'}.
+				</div>
+			);
 		} catch (error: unknown) {
 			toast.error(String(error), {
 				duration: 5000,

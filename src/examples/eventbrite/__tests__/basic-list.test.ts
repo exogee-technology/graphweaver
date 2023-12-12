@@ -5,15 +5,15 @@ import Graphweaver from '@exogee/graphweaver-server';
 
 import { eventbriteEvent } from '../src/backend/schema';
 
-describe('Mailchimp Integration', () => {
-	test('should get one mailing list', async () => {
+describe('EventBrite Integration', () => {
+	test('should get one event', async () => {
 		const graphweaver = new Graphweaver({
 			resolvers: [eventbriteEvent],
 		});
 
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
-				query AdminUIEventListPage($filter: EventsListFilter, $pagination: EventsPaginationInput) {
+				query AdminUIListPage($filter: EventsListFilter, $pagination: EventsPaginationInput) {
 					result: events(filter: $filter, pagination: $pagination) {
 						id
 						status
