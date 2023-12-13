@@ -9,6 +9,6 @@ customFields.set('Task', [
 		index: 3,
 		component: Link,
 
-		showOn: { table: true },
+		hideOnDetailForm: true,
 	},
 ]);

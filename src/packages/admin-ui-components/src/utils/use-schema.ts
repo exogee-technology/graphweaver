@@ -63,12 +63,8 @@ export interface CustomField<T = unknown> extends EntityField {
 
 	component: (args: CustomFieldArgs<T>) => JSX.Element;
 
-	// Defines where the custom field should be shown. If you don't define anything
-	// the default is to show it in both the table and the detail form.
-	showOn?: {
-		table?: boolean;
-		detailForm?: boolean;
-	};
+	hideOnTable?: boolean;
+	hideOnDetailForm?: boolean;
 }
 
 // @todo this needs typing correctly
