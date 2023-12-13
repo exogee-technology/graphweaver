@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database.",
@@ -40,7 +40,7 @@
 		"reflect-metadata": "0.1.13"
 	},
 	"devDependencies": {
-		"@types/node": "14.14.10",
+		"@types/node": "20.2.5",
 		"typescript": "5.0.2",
 		"vite": "4.3.9",
 		"vite-plugin-svgr": "3.2.0"

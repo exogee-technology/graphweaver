@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {
@@ -18,10 +18,10 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"bunyan": "1.8.14"
+		"pino": "8.16.2"
 	},
 	"devDependencies": {
-		"@types/bunyan": "1.8.6",
+		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
 		"typescript": "5.0.2"
 	},
