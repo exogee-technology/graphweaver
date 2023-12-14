@@ -22,7 +22,7 @@ import { ApolloError } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
-const columnsForEntity = <T,>(
+export const columnsForEntity = <T,>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
@@ -110,6 +110,7 @@ export interface TableProps<T extends TableRowItem> {
 	loading: boolean;
 	loadingNext: boolean;
 	error?: ApolloError;
+	columns: Column<T>[];
 }
 
 export const Table = <T extends TableRowItem>({
@@ -119,13 +120,13 @@ export const Table = <T extends TableRowItem>({
 	loading,
 	loadingNext = false,
 	error,
+	columns,
 }: TableProps<T>) => {
 	const [sortColumns, setSortColumns] = useState<SortColumn[]>(
 		orderBy.map((f) => ({ columnKey: f.field, direction: f.direction }))
 	);
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { entityByType } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
 	const [search] = useSearchParams();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
@@ -180,7 +181,7 @@ export const Table = <T extends TableRowItem>({
 	return (
 		<>
 			<DataGrid
-				columns={columnsForEntity<T>(selectedEntity, entityByType)}
+				columns={columns}
 				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}

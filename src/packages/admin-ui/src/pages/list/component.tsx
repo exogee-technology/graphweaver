@@ -3,7 +3,8 @@ import { useQuery } from '@apollo/client';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
-	DetailPanel,
+	exportToCSV,
+	columnsForEntity,
 	Table,
 	useSchema,
 	PAGE_SIZE,
@@ -29,7 +30,11 @@ const andFilters = (filters: FieldFilter) => {
 	return { _and: filter };
 };
 
-export const ListToolBar = () => {
+interface ListToolBarProps {
+	onExportToCSV: () => void;
+}
+
+export const ListToolBar = ({ onExportToCSV }: ListToolBarProps) => {
 	const { entity } = useParams();
 	const { entityByName } = useSchema();
 	return (
@@ -38,6 +43,7 @@ export const ListToolBar = () => {
 			subtitle={
 				entity && entityByName(entity) ? `From ${entityByName(entity).backendId}` : undefined
 			}
+			onExportToCSV={onExportToCSV}
 		/>
 	);
 };
@@ -48,7 +54,7 @@ export const List = () => {
 
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
-	const { entityByName } = useSchema();
+	const { entityByName, entityByType } = useSchema();
 
 	const { sort, page, filters } = decodeSearchParams(search);
 	const orderBy = {
@@ -120,13 +126,20 @@ export const List = () => {
 		return { ...row, ...overrides } as typeof row;
 	});
 
+	const columns = columnsForEntity<TableRowItem>(entityByName(entity), entityByType);
+
+	const handleExportToCSV = () => {
+		exportToCSV(entityByName(entity).name, columns, rows);
+	};
+
 	return (
 		<>
 			<Header>
-				<ListToolBar />
+				<ListToolBar onExportToCSV={handleExportToCSV} />
 			</Header>
 
 			<Table
+				columns={columns}
 				rows={rows}
 				orderBy={sort ?? []}
 				requestRefetch={requestRefetch}

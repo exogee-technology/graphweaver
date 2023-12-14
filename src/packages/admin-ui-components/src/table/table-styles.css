@@ -5,6 +5,10 @@
 	flex: 1;
 	height: 100%;
 	--rdg-selection-color: transparent;
+	-webkit-user-select: text;  /* Chrome all / Safari all */
+	-moz-user-select: text;     /* Firefox all */
+	-ms-user-select: text;      /* IE 10+ */
+	user-select: text;          /* Likely future */  
 }
 
 .rdg-header-row {
