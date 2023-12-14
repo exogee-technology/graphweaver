@@ -15,7 +15,6 @@ import {
 	TableRowItem,
 	routeFor,
 	RequestRefetchOptions,
-	EntityFieldType,
 	Header,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
@@ -114,11 +113,10 @@ export const List = () => {
 		const { fields } = entityByName(entity);
 		for (const key in row) {
 			const field = fields.find((field) => field.name === key);
-			if (field?.type === EntityFieldType.JSON) {
+			if (field?.type === 'JSON') {
 				// We have an array let's stringify it so it can be displayed in the table
 				overrides[key as OverrideKey] = JSON.stringify(row[key as OverrideKey]);
-			}
-			if (field?.type === EntityFieldType.BOOLEAN) {
+			} else if (field?.type === 'Boolean') {
 				overrides[key as OverrideKey] = `${row[key as OverrideKey]}`;
 			}
 		}

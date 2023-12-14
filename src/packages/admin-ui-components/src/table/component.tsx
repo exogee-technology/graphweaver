@@ -9,7 +9,6 @@ import {
 	routeFor,
 	SortField,
 	decodeSearchParams,
-	EntityFieldType,
 } from '../utils';
 import { Spinner } from '../spinner';
 
@@ -22,15 +21,14 @@ import { ApolloError } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
-export const columnsForEntity = <T,>(
+export const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
 	const entityColumns = entity.fields.map((field) => ({
 		key: field.name,
 		name: field.name,
-		width:
-			field.type === EntityFieldType.ID || field.type === EntityFieldType.OPTIONAL_ID ? 20 : 200,
+		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
 
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
@@ -72,23 +70,32 @@ export const columnsForEntity = <T,>(
 			: undefined,
 	}));
 
-	// Let's check if there are custom fields to add
-	const customFieldsForEntity = customFields?.get(entity.name);
-	if (customFieldsForEntity) {
-		// Covert the custom fields to columns
-		const customColumns =
-			customFieldsForEntity.map((field) => ({
-				key: field.name,
-				name: field.name,
+	// Which custom fields do we need to show here?
+	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
+		const { table: show } = customField.showOn ?? { table: true };
+		return show;
+	});
+
+	// Remove any fields that the user intends to replace with a custom field so
+	// their custom field indices are correct regardless of insertion order
+	for (const customField of customFieldsToShow) {
+		const index = entityColumns.findIndex((column) => column.name === customField.name);
+		if (index !== -1) {
+			entityColumns.splice(index, 1);
+		}
+	}
+
+	// Ok, now we can merge our custom fields in
+	for (const customField of customFieldsToShow) {
+		if (!customField.hideOnTable) {
+			entityColumns.splice(customField.index ?? entityColumns.length, 0, {
+				key: customField.name,
+				name: customField.name,
 				width: 200,
 				sortable: false,
-				formatter: ({ row }: FormatterProps<T, unknown>) => field?.component?.(row),
-			})) || [];
-
-		// Add the custom columns to the existing table taking into account any supplied index
-		for (const field of customFieldsForEntity) {
-			const customCol = customColumns.shift();
-			if (customCol) entityColumns.splice(field.index ?? entityColumns.length, 0, customCol);
+				formatter: ({ row }: FormatterProps<T, unknown>) =>
+					customField.component?.({ context: 'table', entity: row }),
+			});
 		}
 	}
 

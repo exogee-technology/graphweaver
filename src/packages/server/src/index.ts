@@ -49,6 +49,7 @@ export interface GraphweaverConfig {
 	graphqlDeduplicator?: {
 		enabled: boolean;
 	};
+	enableValidationRules?: boolean;
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -62,6 +63,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		graphqlDeduplicator: {
 			enabled: true,
 		},
+		enableValidationRules: false,
 	};
 
 	constructor(config: GraphweaverConfig) {
@@ -119,6 +121,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		const schema = buildSchemaSync({
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),
+			validate: this.config.enableValidationRules,
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);

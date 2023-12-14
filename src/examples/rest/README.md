@@ -160,7 +160,7 @@ Then, encode the PEM formatted keys as base64 strings:
 
 ```
 # Output the private key in base64 format
-cat ecsda-private-key.pem | base64
+cat ecdsa-private-key.pem | base64
 # Output the public key in base64 format
 cat ecdsa-public-key.pem | base64
 ```

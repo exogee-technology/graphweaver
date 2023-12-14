@@ -32,7 +32,7 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			graphql: '16.6.0',
 		},
 		devDependencies: {
-			'@types/node': '14.14.10',
+			'@types/node': '20.2.5',
 			typescript: '5.0.2',
 		},
 	};
