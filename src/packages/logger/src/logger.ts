@@ -1,4 +1,4 @@
-import bunyan from 'bunyan';
+import pino from 'pino';
 
 const validLevels = {
 	warn: true,
@@ -17,7 +17,7 @@ if (!validLevels[level])
 		`Invalid logging level ${level}, valid levels are ${Object.keys(validLevels).join(', ')}`
 	);
 
-export const logger = bunyan.createLogger({
+export const logger = pino({
 	name: 'graphweaver',
 	level,
 });

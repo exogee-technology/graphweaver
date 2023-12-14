@@ -112,9 +112,9 @@ const DetailForm = ({
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
 							if (field.type === 'custom') {
-								const { detailForm: show } = (field as CustomField).showOn ?? { detailForm: true };
+								if ((field as CustomField).hideOnDetailForm) return null;
 
-								return show ? <CustomField key={field.name} field={field as CustomField} /> : null;
+								return <CustomField key={field.name} field={field as CustomField} />;
 							} else {
 								return <DetailField key={field.name} field={field} />;
 							}

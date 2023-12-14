@@ -87,8 +87,7 @@ const columnsForEntity = <T extends TableRowItem>(
 
 	// Ok, now we can merge our custom fields in
 	for (const customField of customFieldsToShow) {
-		const { table: show } = customField.showOn ?? { table: true };
-		if (show) {
+		if (!customField.hideOnTable) {
 			entityColumns.splice(customField.index ?? entityColumns.length, 0, {
 				key: customField.name,
 				name: customField.name,

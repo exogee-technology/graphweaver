@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-mailchimp",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting Mailchimp.",
@@ -39,7 +39,7 @@
 	"devDependencies": {
 		"@types/jest": "26.0.23",
 		"@types/md5": "2.3.5",
-		"@types/node": "14.14.10",
+		"@types/node": "20.2.5",
 		"graphql-tag": "2.12.6",
 		"jest": "29.4.0",
 		"ts-jest": "29.0.5",

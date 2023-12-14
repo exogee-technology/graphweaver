@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-databases",
-	"version": "0.2.8",
+	"version": "0.2.9",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a MySQL and PostgreSQL database together.",
@@ -34,7 +34,7 @@
 		"graphql": "16.8.1"
 	},
 	"devDependencies": {
-		"@types/node": "14.14.10",
+		"@types/node": "20.2.5",
 		"typescript": "5.0.2"
 	},
 	"keywords": [
