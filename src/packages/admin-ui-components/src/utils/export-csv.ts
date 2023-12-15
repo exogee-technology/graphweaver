@@ -1,15 +1,29 @@
 import Papa from 'papaparse';
 import type { Column } from 'react-data-grid';
+import { SelectOption } from '../multi-select';
 
-export const getExportDataFromSource = <T, V>(columns: Column<T, unknown>[], source: T[]) => {
-	console.log(source);
-	console.log(columns);
-	const data = source.map((row, index) => columns.map((c) => row[c.key as keyof T])) || [];
+export const getExportDataFromSource = <T>(columns: Column<T, unknown>[], source: T[]) => {
+	const data =
+		source.map((row, index) =>
+			columns.map((c) => {
+				const value = row[c.key as keyof T] as any;
+				if (value) {
+					if (value.hasOwnProperty('label')) {
+						return (value as SelectOption).label;
+					} else if (Array.isArray(value)) {
+						return value
+							.map((v) => (v.hasOwnProperty('label') ? (v as SelectOption).label : v))
+							.join(',');
+					}
+				}
+				return value;
+			})
+		) || [];
 
 	return data;
 };
 
-export const exportToCSV = <T>(entityname: string, columns: Column<T>[], source: T[]) => {
+export const exportToCSV = <T>(entityname: string, columns: Column<T, unknown>[], source: T[]) => {
 	const data = getExportDataFromSource(columns, source);
 	const dataString = Papa.unparse(
 		{

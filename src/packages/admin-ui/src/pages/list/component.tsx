@@ -124,7 +124,7 @@ export const List = () => {
 		return { ...row, ...overrides } as typeof row;
 	});
 
-	const columns = columnsForEntity<TableRowItem>(entityByName(entity), entityByType);
+	const columns = columnsForEntity(entityByName(entity), entityByType);
 
 	const handleExportToCSV = () => {
 		exportToCSV(entityByName(entity).name, columns, rows);
