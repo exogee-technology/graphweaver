@@ -41,7 +41,8 @@ export const createAwsCognitoUserResolver = ({
 			return (await getManyUsers(client, UserPoolId, filter)).map(mapId);
 		},
 		create: async ({ client, UserPoolId }, entity) => {
-			return mapId(await createUser(client, UserPoolId, entity));
+			const result = await createUser(client, UserPoolId, entity);
+			return mapId(result.User);
 		},
 		update: async ({ client, UserPoolId }, entityId: string, entityWithChanges) => {
 			const existingUser = await getOneUser(client, UserPoolId, entityId);
