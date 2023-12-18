@@ -37,11 +37,11 @@ export const exportToCSV = <T>(entityname: string, columns: Column<T, unknown>[]
 	downloadFile(`${entityname} ${new Date().toString()}.csv`, blob);
 };
 
-function downloadFile(fileName: string, data: Blob) {
+const downloadFile = (fileName: string, data: Blob) => {
 	const downloadLink = document.createElement('a');
 	downloadLink.download = fileName;
 	const url = URL.createObjectURL(data);
 	downloadLink.href = url;
 	downloadLink.click();
 	URL.revokeObjectURL(url);
-}
+};
