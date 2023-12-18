@@ -175,8 +175,11 @@ export const DetailPanel = () => {
 		// a good editing interface for them.
 		if (field.relationshipType === 'MANY_TO_MANY') return false;
 
-		// We also don't show the related ID field for the same reason
-		if (field.relationshipType && field.name === 'id') return false;
+		// We also don't show the ID field
+		if (field.name === 'id') return false;
+
+		// Don't show readonly field
+		if (field.attributes?.isReadOnly) return false;
 
 		// And we want to filter out any fields that will be overridden with custom fields.
 		if (customFieldsToShow.find((customField) => customField.name === field.name)) return false;
