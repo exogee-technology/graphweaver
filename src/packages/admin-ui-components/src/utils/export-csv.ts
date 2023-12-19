@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 
-export const convertObjectPropertyValueToString = <T>(source: T[]) => {
+export const convertObjectValueToString = <T>(source: T[]) => {
 	const data = source.map(
 		(obj) =>
 			obj &&
@@ -15,7 +15,7 @@ export const convertObjectPropertyValueToString = <T>(source: T[]) => {
 };
 
 export const exportToCSV = <T>(entityname: string, source: T[]) => {
-	const data = convertObjectPropertyValueToString(source);
+	const data = convertObjectValueToString(source);
 	const dataString = Papa.unparse(data);
 	const blob = new Blob([dataString], { type: 'text/csv;charset=utf-8' });
 	downloadFile(`${entityname} ${new Date().toString()}.csv`, blob);

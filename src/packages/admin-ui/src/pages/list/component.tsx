@@ -4,7 +4,6 @@ import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-do
 
 import {
 	exportToCSV,
-	columnsForEntity,
 	Table,
 	useSchema,
 	PAGE_SIZE,
@@ -124,8 +123,6 @@ export const List = () => {
 		return { ...row, ...overrides } as typeof row;
 	});
 
-	const columns = columnsForEntity(entityByName(entity), entityByType);
-
 	const handleExportToCSV = () => {
 		exportToCSV(entityByName(entity).name, data?.result ?? []);
 	};
@@ -137,7 +134,6 @@ export const List = () => {
 			</Header>
 
 			<Table
-				columns={columns}
 				rows={rows}
 				orderBy={sort ?? []}
 				requestRefetch={requestRefetch}
