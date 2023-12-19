@@ -27,7 +27,6 @@ pnpm graphweaver start
 pnpm graphweaver start --host 0.0.0.0
 ```
 
-Once started, connect to `http://localhost:9001/connect` to authorize your Xero account-
-you'll receive a message telling you that the `token.json` has been stored.
+Once started, `http://localhost:9000` will redirect you to Xero to login via the `XeroAuthApolloPlugin`. Xero will then redirect you to your `XERO_CLIENT_REDIRECT_URIS` with credentials in the url.
 
-Once the token is stored, connect to `http://localhost:9000/` to access the Graphweaver dashboard.
+The `XeroAuthCodeReceiver` handles setting your auth in local storage.
