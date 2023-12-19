@@ -1,5 +1,8 @@
 # Graphweaver Helpers
 
+_DEPRECATED_
+This package is not supported. To create a new data provider see [the docs](https://docs.graphweaver.com/create-a-data-provider).
+
 A package that contains helpers for working with graphweaver schemas.
 
 ## Resolver
