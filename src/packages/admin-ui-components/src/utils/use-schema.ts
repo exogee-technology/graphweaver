@@ -30,6 +30,7 @@ export enum AdminUIFilterType {
 	NUMERIC = 'NUMERIC',
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
+	JSON = 'JSON',
 }
 
 export type EntityFieldType = 'Boolean' | 'custom' | 'ID!' | 'ID' | 'JSON';

@@ -66,49 +66,60 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const getFilterComponents = (entityName: string) => {
 		const rowEntity = entityByName(entityName);
+		console.log('************************\n');
+		console.log('getFilterComponents\n');
+		console.log(rowEntity);
+		console.log('************************\n');
 
 		// @todo - currently the filters are not fitting on the screen
 		// we plan to redo this filter bar so that it is a drop down
 		// for now the workaround is to reduce the number of filters to 5
-		const showOnlyFiveFilters = rowEntity.fields.length > 5 ? 5 : rowEntity.fields.length;
-		return rowEntity.fields.slice(0, showOnlyFiveFilters).map((field) => {
-			if (!field.filter?.type) return null;
-			const options = {
-				key: field.name,
-				fieldName: field.name,
-				entity: entity,
-				onChange: onFilter,
-				resetCount: resetCount,
-			};
 
-			switch (field.filter.type) {
-				case AdminUIFilterType.TEXT:
-					return createElement(TextFilter, {
-						...options,
-						initialFilter: filter[field.name] as Filter<string> | undefined,
-					});
-				case AdminUIFilterType.RELATIONSHIP:
-					return createElement(RelationshipFilter, {
-						...options,
-						initialFilter: filter[field.name] as Filter<RelationshipFilterType> | undefined,
-					});
-				case AdminUIFilterType.ENUM:
-					return createElement(EnumFilter, {
-						...options,
-						initialFilter: filter[field.name] as Filter<string> | undefined,
-					});
-				case AdminUIFilterType.NUMERIC:
-					return createElement(NumericFilter, {
-						...options,
-						initialFilter: filter[field.name] as Filter<number> | undefined,
-					});
-				case AdminUIFilterType.DATE_RANGE:
-					return createElement(DateRangeFilter, {
-						...options,
-						initialFilter: filter[field.name] as Filter<DateRangeFilterType> | undefined,
-					});
-			}
-		});
+		const showOnlyFiveFilters = rowEntity.fields.length > 5 ? 5 : rowEntity.fields.length;
+		return (
+			rowEntity.fields
+				// filter out rowEntity.fields with the JSON type
+				.filter((field) => field.type !== AdminUIFilterType.JSON)
+				.slice(0, showOnlyFiveFilters)
+				.map((field) => {
+					if (!field.filter?.type) return null;
+					const options = {
+						key: field.name,
+						fieldName: field.name,
+						entity: entity,
+						onChange: onFilter,
+						resetCount: resetCount,
+					};
+
+					switch (field.filter.type) {
+						case AdminUIFilterType.TEXT:
+							return createElement(TextFilter, {
+								...options,
+								initialFilter: filter[field.name] as Filter<string> | undefined,
+							});
+						case AdminUIFilterType.RELATIONSHIP:
+							return createElement(RelationshipFilter, {
+								...options,
+								initialFilter: filter[field.name] as Filter<RelationshipFilterType> | undefined,
+							});
+						case AdminUIFilterType.ENUM:
+							return createElement(EnumFilter, {
+								...options,
+								initialFilter: filter[field.name] as Filter<string> | undefined,
+							});
+						case AdminUIFilterType.NUMERIC:
+							return createElement(NumericFilter, {
+								...options,
+								initialFilter: filter[field.name] as Filter<number> | undefined,
+							});
+						case AdminUIFilterType.DATE_RANGE:
+							return createElement(DateRangeFilter, {
+								...options,
+								initialFilter: filter[field.name] as Filter<DateRangeFilterType> | undefined,
+							});
+					}
+				})
+		);
 	};
 
 	useEffect(() => {
