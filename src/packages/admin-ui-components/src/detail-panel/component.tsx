@@ -1,6 +1,6 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
-import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
+import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -11,7 +11,6 @@ import {
 	CustomField,
 	decodeSearchParams,
 	EntityField,
-	EntityFieldType,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -62,16 +61,9 @@ const DetailField = ({ field }: { field: EntityField }) => {
 	);
 };
 
-const CustomField = ({ field }: { field: CustomField }) => {
-	const { selectedEntity } = useSelectedEntity();
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
-	return (
-		<div className={styles.detailField}>
-			{field.component({ entity: selectedEntity, context: 'detail-form' })}
-		</div>
-	);
-};
+const CustomField = ({ field, entity }: { field: CustomField; entity: Record<string, any> }) => (
+	<div className={styles.detailField}>{field.component({ entity, context: 'detail-form' })}</div>
+);
 
 const PersistForm = ({ name }: { name: string }) => {
 	const { values, isSubmitting, submitForm } = useFormikContext();
@@ -114,7 +106,13 @@ const DetailForm = ({
 							if (field.type === 'custom') {
 								if ((field as CustomField).hideOnDetailForm) return null;
 
-								return <CustomField key={field.name} field={field as CustomField} />;
+								return (
+									<CustomField
+										key={field.name}
+										field={field as CustomField}
+										entity={initialValues}
+									/>
+								);
 							} else {
 								return <DetailField key={field.name} field={field} />;
 							}
