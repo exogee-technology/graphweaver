@@ -127,7 +127,7 @@ export const List = () => {
 	const columns = columnsForEntity(entityByName(entity), entityByType);
 
 	const handleExportToCSV = () => {
-		exportToCSV(entityByName(entity).name, columns, rows);
+		exportToCSV(entityByName(entity).name, data?.result ?? []);
 	};
 
 	return (
