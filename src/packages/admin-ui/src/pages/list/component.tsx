@@ -52,7 +52,7 @@ export const List = () => {
 
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
-	const { entityByName, entityByType } = useSchema();
+	const { entityByName } = useSchema();
 
 	const { sort, page, filters } = decodeSearchParams(search);
 	const orderBy = {
