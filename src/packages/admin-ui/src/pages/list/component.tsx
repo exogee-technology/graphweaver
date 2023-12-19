@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
+	exportToCSV,
 	Table,
 	useSchema,
 	PAGE_SIZE,
@@ -27,7 +28,11 @@ const andFilters = (filters: FieldFilter) => {
 	return { _and: filter };
 };
 
-export const ListToolBar = () => {
+interface ListToolBarProps {
+	onExportToCSV: () => void;
+}
+
+export const ListToolBar = ({ onExportToCSV }: ListToolBarProps) => {
 	const { entity } = useParams();
 	const { entityByName } = useSchema();
 	return (
@@ -36,6 +41,7 @@ export const ListToolBar = () => {
 			subtitle={
 				entity && entityByName(entity) ? `From ${entityByName(entity).backendId}` : undefined
 			}
+			onExportToCSV={onExportToCSV}
 		/>
 	);
 };
@@ -117,10 +123,14 @@ export const List = () => {
 		return { ...row, ...overrides } as typeof row;
 	});
 
+	const handleExportToCSV = () => {
+		exportToCSV(entityByName(entity).name, data?.result ?? []);
+	};
+
 	return (
 		<>
 			<Header>
-				<ListToolBar />
+				<ListToolBar onExportToCSV={handleExportToCSV} />
 			</Header>
 
 			<Table

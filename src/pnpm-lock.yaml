@@ -601,6 +601,9 @@ importers:
       luxon:
         specifier: 2.5.2
         version: 2.5.2
+      papaparse:
+        specifier: 5.4.1
+        version: 5.4.1
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
@@ -617,6 +620,9 @@ importers:
       '@types/luxon':
         specifier: 2.0.7
         version: 2.0.7
+      '@types/papaparse':
+        specifier: 5.3.14
+        version: 5.3.14
       '@types/pluralize':
         specifier: 0.0.29
         version: 0.0.29
@@ -8683,6 +8689,12 @@ packages:
     resolution: {integrity: sha512-QsMc+jgx2WX5ciAwc4Wj37eaGYGnoQcUishOWUgpZ+8nypK6hr5jgUE3xumQ7hvX4AC+gxZktpg/dUHWa4FZRA==}
     dev: true
 
+  /@types/papaparse@5.3.14:
+    resolution: {integrity: sha512-LxJ4iEFcpqc6METwp9f6BV6VVc43m6MfH0VqFosHvrUgfXiFe6ww7R3itkOQ+TCK6Y+Iv/+RnnvtRZnkc5Kc9g==}
+    dependencies:
+      '@types/node': 20.2.5
+    dev: true
+
   /@types/parse-json@4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
     dev: true
@@ -15528,6 +15540,10 @@ packages:
     resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
     dev: false
 
+  /papaparse@5.4.1:
+    resolution: {integrity: sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==}
+    dev: false
+
   /param-case@3.0.4:
     resolution: {integrity: sha512-RXlj7zCYokReqWpOPH9oYivUzLYZ5vAPIfEmCTNViosC78F8F0H9y7T7gG2M39ymgutxF5gcFEsyZQSph9Bp3A==}
     dependencies:
@@ -17717,6 +17733,7 @@ packages:
     dependencies:
       '@babel/core': 7.23.6
       bs-logger: 0.2.6
+      esbuild: 0.15.5
       fast-json-stable-stringify: 2.1.0
       jest: 29.4.0(@types/node@20.2.5)
       jest-util: 29.6.1

@@ -14,9 +14,10 @@ import { decodeSearchParams, routeFor, useSelectedEntity } from '../utils';
 export interface ToolBarProps {
 	title?: string;
 	subtitle?: string;
+	onExportToCSV: () => void;
 }
 
-export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
+export const ToolBar = ({ title, subtitle, onExportToCSV }: ToolBarProps) => {
 	const { selectedEntity } = useSelectedEntity();
 	const [search] = useSearchParams();
 	const { filters, sort } = decodeSearchParams(search);
@@ -47,6 +48,9 @@ export const ToolBar = ({ title, subtitle }: ToolBarProps) => {
 							<OpenPlaygroundIcon />
 						</Button>
 					</Link>
+					<Button className={styles.toolBarTrailingButton} onClick={onExportToCSV}>
+						Export to CSV
+					</Button>
 					<Link
 						className={styles.toolBarTrailingButton}
 						to={routeFor({
