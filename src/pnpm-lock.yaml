@@ -367,9 +367,6 @@ importers:
       dotenv:
         specifier: 16.0.0
         version: 16.0.0
-      formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
       got:
         specifier: 11.8.5
         version: 11.8.5
