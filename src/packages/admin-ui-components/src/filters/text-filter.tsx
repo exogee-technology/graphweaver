@@ -30,9 +30,14 @@ export const TextFilter = ({
 	const handleOnChange = (options?: SelectOption[]) => {
 		onChange?.(
 			fieldName,
-			(options ?? [])?.length > 0
-				? // @todo this can be expanded to support the in operator { [`${fieldName}_in`]: options?.map((option) => option.value) }
-				  ({ [fieldName]: options?.[0]?.value } as Filter<string>)
+			(options ?? [])?.length > 1
+				? // if there are multiple options, use the _in filter
+				  {
+						[`${fieldName}_in`]: options?.map((option) => option.value),
+				  }
+				: // if there is only one option, use the equals filter
+				options?.length === 1
+				? ({ [fieldName]: options?.[0]?.value } as Filter<string>)
 				: undefined
 		);
 	};

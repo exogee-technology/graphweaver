@@ -42,10 +42,26 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	const onFilter = (fieldName: string, filter?: Filter) => {
-		setFilter((_filter) => ({
-			..._filter,
-			...{ [fieldName]: filter },
-		}));
+		console.log('************************\n');
+		console.log('onFilter\n');
+
+		console.log(filter);
+		console.log('************************\n');
+
+		setFilter((_filter) => {
+			console.log('************************\n');
+			console.log('Setting Filter\n');
+
+			console.log('new filter', filter);
+			console.log('existing filter', _filter);
+
+			console.log('************************\n');
+
+			return {
+				..._filter,
+				...{ [fieldName]: filter },
+			};
+		});
 	};
 
 	const getFilterComponents = (entityName: string) => {
@@ -96,6 +112,13 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	useEffect(() => {
+		console.log('************************\n');
+
+		console.log('filter useEffect');
+		console.log(filter);
+
+		console.log('************************\n');
+
 		const { sort } = decodeSearchParams(search);
 		navigate(
 			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort })
