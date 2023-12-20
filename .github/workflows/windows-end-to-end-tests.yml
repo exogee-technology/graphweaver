@@ -51,7 +51,7 @@ jobs:
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
-          killall node
+          taskkill /F /IM node.exe /T
 
         env:
           CI: true
