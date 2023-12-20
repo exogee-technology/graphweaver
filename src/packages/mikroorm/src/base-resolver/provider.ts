@@ -30,6 +30,11 @@ import { assign } from './assign';
 import { QueryBuilder, SqlEntityRepository } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
+type PostgresError = {
+	code: string;
+	routine: string;
+};
+
 const objectOperations = new Set(['_and', '_or', '_not']);
 const mikroObjectOperations = new Set(['$and', '$or', '$not']);
 const nonJoinKeys = new Set([
@@ -317,10 +322,28 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 			query.populate(additionalOptionsForBackend.populate);
 		}
 
-		const result = await query.getResult();
-		logger.trace(`find ${this.entityType.name} result: ${result.length} rows`);
+		try {
+			const result = await query.getResult();
+			logger.trace(`find ${this.entityType.name} result: ${result.length} rows`);
 
-		return result;
+			return result;
+		} catch (err) {
+			logger.error(`find ${this.entityType.name} error: ${JSON.stringify(err)}`);
+
+			if ((err as PostgresError)?.routine === 'InitializeSessionUserId') {
+				// Throw if the user credentials are incorrect
+				throw new Error(
+					'Database connection failed, please check you are using the correct user credentials for the database.'
+				);
+			} else if ((err as PostgresError)?.code === 'ECONNREFUSED') {
+				// Throw if the database address or port is incorrect
+				throw new Error(
+					'Database connection failed, please check you are using the correct address and port for the database.'
+				);
+			} else {
+				throw err;
+			}
+		}
 	}
 
 	public async findOne(filter: Filter<G>): Promise<D | null> {
