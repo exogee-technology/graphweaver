@@ -27,6 +27,7 @@ import {
 } from '../filters';
 
 import styles from './styles.module.css';
+import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity } = useParams();
@@ -42,21 +43,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	const onFilter = (fieldName: string, filter?: Filter) => {
-		console.log('************************\n');
-		console.log('onFilter\n');
-
-		console.log(filter);
-		console.log('************************\n');
-
 		setFilter((_filter) => {
-			console.log('************************\n');
-			console.log('Setting Filter\n');
-
-			console.log('new filter', filter);
-			console.log('existing filter', _filter);
-
-			console.log('************************\n');
-
 			return {
 				..._filter,
 				...{ [fieldName]: filter },
@@ -79,7 +66,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		return (
 			rowEntity.fields
 				// filter out rowEntity.fields with the JSON type
-				.filter((field) => field.type !== AdminUIFilterType.JSON)
+				.filter((field) => field.type !== 'JSON')
 				.slice(0, showOnlyFiveFilters)
 				.map((field) => {
 					if (!field.filter?.type) return null;
@@ -94,6 +81,15 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					switch (field.filter.type) {
 						case AdminUIFilterType.TEXT:
 							return createElement(TextFilter, {
+								...options,
+								initialFilter: filter[field.name] as Filter<string> | undefined,
+							});
+						case AdminUIFilterType.BOOLEAN:
+							console.log('************************\n');
+							console.log('ADMINUI FILTER TYPE BOOLEAN');
+							console.log(field.filter);
+							console.log('************************\n');
+							return createElement(BooleanFilter, {
 								...options,
 								initialFilter: filter[field.name] as Filter<string> | undefined,
 							});
@@ -123,13 +119,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	useEffect(() => {
-		console.log('************************\n');
-
-		console.log('filter useEffect');
-		console.log(filter);
-
-		console.log('************************\n');
-
 		const { sort } = decodeSearchParams(search);
 		navigate(
 			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort })

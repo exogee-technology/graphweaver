@@ -30,7 +30,7 @@ export enum AdminUIFilterType {
 	NUMERIC = 'NUMERIC',
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
-	JSON = 'JSON',
+	BOOLEAN = 'BOOLEAN',
 }
 
 export type EntityFieldType = 'Boolean' | 'custom' | 'ID!' | 'ID' | 'JSON';
@@ -127,6 +127,8 @@ const generateTypePolicyFields = (entityMap: EntityMap) => {
 export const useSchema = () => {
 	const { data, loading, error, client } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
 	const cache = client.cache as Cache;
+
+	console.log('useSchema', data);
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {

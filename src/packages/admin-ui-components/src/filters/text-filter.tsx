@@ -25,6 +25,11 @@ export const TextFilter = ({
 		queryForFilterText(entity, fieldName, entityByName)
 	);
 
+	console.log('************************\n');
+	console.log('TEXT FILTER');
+	console.log(data);
+	console.log('************************\n');
+
 	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 
 	const handleOnChange = (options?: SelectOption[]) => {

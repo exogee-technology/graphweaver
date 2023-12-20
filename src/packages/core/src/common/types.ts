@@ -134,6 +134,7 @@ export enum AdminUIFilterType {
 	NUMERIC = 'NUMERIC',
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
+	BOOLEAN = 'BOOLEAN',
 }
 
 export type AdminUISettingsType = {

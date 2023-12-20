@@ -24,6 +24,15 @@ export const queryForFilterText = (
 	const entity = entityByType(entityName);
 	const pluralName = pluralize(entity.name);
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
+	console.log(
+		'queryForFilterText',
+		entityName,
+		fieldName,
+		entityByType,
+		entity,
+		pluralName,
+		queryName
+	);
 
 	return gql`
 		query TextFilter {
