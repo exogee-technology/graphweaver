@@ -33,6 +33,7 @@
 	"devDependencies": {
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
+		"glob": "10.3.10",
 		"typescript": "5.0.2"
 	},
 	"keywords": [

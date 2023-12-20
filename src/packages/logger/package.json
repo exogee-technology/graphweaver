@@ -23,6 +23,7 @@
 	"devDependencies": {
 		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
+		"glob": "10.3.10",
 		"typescript": "5.0.2"
 	},
 	"keywords": [

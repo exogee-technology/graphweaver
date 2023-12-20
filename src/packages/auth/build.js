@@ -3,15 +3,15 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 
 (async () => {
 	const esbuild = await import('esbuild');
+	const { glob } = await import('glob');
+
+	const entryPoints = await glob('./src/**/*.ts', { ignore: './src/**/*.test.ts' });
 	await esbuild.build({
 		outdir: 'lib',
 		format: 'cjs',
-		bundle: true,
-		minify: false,
 		platform: 'node',
 		sourcemap: 'linked',
-		entryPoints: ['src/index.ts'],
-		external: ['mock-aws-s3', 'nock'],
+		entryPoints,
 		watch: flagIncludes('watch'),
 	});
 })();

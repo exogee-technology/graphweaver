@@ -27,26 +27,27 @@
 		"decimal.js": "10.3.1",
 		"dotenv": "16.0.0",
 		"graphql": "16.8.1",
-		"reflect-metadata": "0.1.13",
-		"pluralize": "8.0.0"
+		"pluralize": "8.0.0",
+		"reflect-metadata": "0.1.13"
 	},
 	"devDependencies": {
 		"@mikro-orm/core": "5.7.14",
+		"@mikro-orm/knex": "5.7.14",
 		"@mikro-orm/mysql": "5.7.14",
 		"@mikro-orm/postgresql": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
-		"@mikro-orm/knex": "5.7.14",
 		"@types/node": "20.2.5",
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
+		"glob": "10.3.10",
 		"ts-node": "10.4.0",
 		"typescript": "5.0.2"
 	},
 	"optionalDependencies": {
+		"@mikro-orm/knex": "5.7.14",
 		"@mikro-orm/mysql": "5.7.14",
 		"@mikro-orm/postgresql": "5.7.14",
-		"@mikro-orm/sqlite": "5.7.14",
-		"@mikro-orm/knex": "5.7.14"
+		"@mikro-orm/sqlite": "5.7.14"
 	},
 	"peerDependencies": {
 		"@mikro-orm/core": "5.7.14",

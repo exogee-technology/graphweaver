@@ -36,6 +36,7 @@
 	"devDependencies": {
 		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
+		"glob": "10.3.10",
 		"prettier": "2.8.8",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
