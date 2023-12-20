@@ -53,10 +53,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	const getFilterComponents = (entityName: string) => {
 		const rowEntity = entityByName(entityName);
-		console.log('************************\n');
-		console.log('getFilterComponents\n');
-		console.log(rowEntity);
-		console.log('************************\n');
 
 		// @todo - currently the filters are not fitting on the screen
 		// we plan to redo this filter bar so that it is a drop down
@@ -85,10 +81,6 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 								initialFilter: filter[field.name] as Filter<string> | undefined,
 							});
 						case AdminUIFilterType.BOOLEAN:
-							console.log('************************\n');
-							console.log('ADMINUI FILTER TYPE BOOLEAN');
-							console.log(field.filter);
-							console.log('************************\n');
 							return createElement(BooleanFilter, {
 								...options,
 								initialFilter: filter[field.name] as Filter<string> | undefined,

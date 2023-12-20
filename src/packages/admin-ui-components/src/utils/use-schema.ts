@@ -128,8 +128,6 @@ export const useSchema = () => {
 	const { data, loading, error, client } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
 	const cache = client.cache as Cache;
 
-	console.log('useSchema', data);
-
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
 		const result: { [backendId: string]: Entity[] } = {};
