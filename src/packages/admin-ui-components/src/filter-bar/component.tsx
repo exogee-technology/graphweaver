@@ -43,12 +43,10 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	const onFilter = (fieldName: string, filter?: Filter) => {
-		setFilter((_filter) => {
-			return {
-				..._filter,
-				...{ [fieldName]: filter },
-			};
-		});
+		setFilter((_filter) => ({
+			..._filter,
+			...{ [fieldName]: filter },
+		}));
 	};
 
 	const getFilterComponents = (entityName: string) => {
