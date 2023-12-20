@@ -13,7 +13,7 @@
 	],
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --format=cjs `find src \\( -name '*.ts' \\)`",
+		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"version": "npm version --no-git-tag-version"
 	},
