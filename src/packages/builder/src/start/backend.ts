@@ -4,6 +4,8 @@ import { build } from 'esbuild';
 import cssModulesPlugin from 'esbuild-css-modules-plugin';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
+import os from 'os';
+
 import {
 	baseEsbuildConfig,
 	inputPathFor,
@@ -19,8 +21,13 @@ import { config } from '@exogee/graphweaver-config';
 
 const rimraf = promisify(rimrafCallback);
 
+const isWindows = () => os.platform() === 'win32';
+
 const getProjectRoot = () => {
 	const cwd = process.cwd();
+
+	if (!isWindows()) return cwd;
+
 	const root = path.parse(cwd).root; // This is either '/' or 'C:\' on windows.
 	const [_, projectRoot] = cwd.split(root);
 	return projectRoot;
