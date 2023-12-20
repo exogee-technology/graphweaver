@@ -19,9 +19,16 @@ import { config } from '@exogee/graphweaver-config';
 
 const rimraf = promisify(rimrafCallback);
 
+const getProjectRoot = () => {
+	const cwd = process.cwd();
+	const root = path.parse(cwd).root; // This is either '/' or 'C:\' on windows.
+	const [_, projectRoot] = cwd.split(root);
+	return projectRoot;
+};
+
 const builtInBackendFunctions: Record<string, any> = {
 	'graphweaver-backend': {
-		handler: path.join(process.cwd(), '.graphweaver', 'backend', 'index.handler'),
+		handler: path.join(getProjectRoot(), '.graphweaver', 'backend', 'index.handler'),
 		environment: dotenv.config().parsed,
 		events: [
 			{
