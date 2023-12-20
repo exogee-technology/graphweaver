@@ -5,7 +5,7 @@
 	"scripts": {
 		"preinstall": "echo '\nWARNING: @exogee/graphweaver-helpers is deprecated. See https://docs.graphweaver.com/create-a-data-provider.\n'",
 		"build": "pnpm build:js && pnpm build:types",
-		"build:js": "esbuild src/index.ts --bundle '--external:@exogee/graphweaver' '--external:type-graphql' '--external:graphql-type-json' --platform=node --outdir=dist --format=cjs  --sourcemap=linked",
+		"build:js": "node build.js",
 		"build:types": "tsc --build --force --emitDeclarationOnly",
 		"format": "prettier --write .",
 		"test": "npm run test:format && npm run test:typescript",
