@@ -32,6 +32,10 @@ async function main() {
 		).toString();
 		console.log(init);
 
+		// Create .env file
+		const env = `DATABASE=sqlite`;
+		await fs.promises.writeFile('.env.sqlite', env);
+
 		// Install dependencies
 		process.chdir('./app');
 		const pwd = execSync('pwd').toString();
@@ -48,10 +52,6 @@ async function main() {
 			'pnpm run import sqlite --database=databases/database.sqlite --o'
 		).toString();
 		console.log(runImport);
-
-		// Create .env file
-		const env = `DATABASE=sqlite`;
-		await fs.promises.writeFile('.env.sqlite', env);
 	} catch (error) {
 		console.error('Error:', error);
 	}
