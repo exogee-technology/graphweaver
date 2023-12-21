@@ -20,7 +20,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 		{
 			variables: {
 				pagination: {
-					orderBy: relationshipEntityType
+					orderBy: relationshipEntityType?.summaryField
 						? {
 								[relationshipEntityType.summaryField as string]: 'ASC',
 						  }
