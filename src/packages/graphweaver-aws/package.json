@@ -37,8 +37,8 @@
 		"graphql": "16.8.1"
 	},
 	"dependencies": {
-		"@aws-sdk/client-cognito-identity-provider": "3.341.0",
-		"@aws-sdk/client-lambda": "3.342.0",
+		"@aws-sdk/client-cognito-identity-provider": "3.370.0",
+		"@aws-sdk/client-lambda": "3.370.0",
 		"@exogee/graphweaver-helpers": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.8.1",
