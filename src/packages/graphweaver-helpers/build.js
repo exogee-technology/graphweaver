@@ -1,6 +1,6 @@
 (async () => {
 	const esbuild = await import('esbuild');
-	
+
 	await esbuild.build({
 		outdir: 'dist',
 		format: 'cjs',
