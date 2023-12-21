@@ -11,7 +11,7 @@
 	],
 	"scripts": {
 		"build": "pnpm build:js && pnpm build:types",
-		"build:js": "esbuild src/index.ts --bundle '--external:@exogee/graphweaver' '--external:type-graphql' '--external:graphql-type-json' --platform=node --outdir=lib --format=cjs  --sourcemap=linked",
+		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"format": "prettier --write .",
 		"test": "npm run test:format && npm run test:typescript",
@@ -22,19 +22,20 @@
 	"devDependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"esbuild": "0.17.18",
+		"glob": "10.3.10",
+		"graphql": "16.8.1",
+		"graphql-type-json": "0.3.2",
 		"prettier": "2.8.8",
 		"reflect-metadata": "0.1.13",
 		"type-graphql": "2.0.0-beta.2",
-		"typescript": "5.0.4",
-		"graphql-type-json": "0.3.2",
-		"graphql": "16.8.1"
+		"typescript": "5.0.4"
 	},
 	"peerDependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
-		"type-graphql": "2.0.0-beta.2",
+		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
-		"graphql": "16.8.1"
+		"type-graphql": "2.0.0-beta.2"
 	},
 	"dependencies": {
 		"@aws-sdk/client-cognito-identity-provider": "3.341.0",

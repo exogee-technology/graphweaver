@@ -4,7 +4,7 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
-		"import-database-sqlite": ". ./scripts/import-sqlite.sh",
+		"import-database-sqlite": "tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": ". ./scripts/import-postgres.sh",
 		"import-database-mysql": ". ./scripts/import-mysql.sh",
 		"seed-postgres": "node ./scripts/seed-postgres.js",
@@ -15,7 +15,7 @@
 		"test-auth": "jest --runInBand --forceExit -- api/auth",
 		"test-mysql": "export DATEBASE=mysql && jest --runInBand -- api/mysql",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
-		"test-sqlite": "export DATABASE=sqlite && jest --runInBand --forceExit ---- api/sqlite",
+		"test-sqlite": "dotenv -e .env.sqlite -- jest --runInBand --forceExit ---- api/sqlite",
 		"test-scalars": "jest --runInBand --forceExit ---- api/scalars",
 		"test-aws-cognito": "jest --runInBand --forceExit ---- api/aws-cognito",
 		"test-ui": "pnpm exec playwright test",
@@ -32,6 +32,7 @@
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"class-validator": "0.14.0",
+		"dotenv-cli": "7.3.0",
 		"ethers": "6.3.0",
 		"graphql": "16.8.1",
 		"graphweaver": "*",
@@ -51,6 +52,7 @@
 		"pg": "8.11.1",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.0.5",
+		"tsx": "4.7.0",
 		"typescript": "5.0.2"
 	},
 	"keywords": [

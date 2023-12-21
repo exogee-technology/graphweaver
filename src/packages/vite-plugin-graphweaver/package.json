@@ -13,13 +13,14 @@
 	],
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
-		"build:js": "esbuild --outdir=lib --platform=node --bundle src/index.ts",
+		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"version": "npm version --no-git-tag-version"
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
+		"glob": "10.3.10",
 		"typescript": "5.0.2",
 		"vite": "4.3.9"
 	},
