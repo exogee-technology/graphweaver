@@ -37,6 +37,8 @@ const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): Admi
 			return AdminUIFilterType.TEXT;
 		case 'ISOString':
 			return AdminUIFilterType.DATE_RANGE;
+		case 'Boolean':
+			return AdminUIFilterType.BOOLEAN;
 		default:
 			return AdminUIFilterType.TEXT;
 	}

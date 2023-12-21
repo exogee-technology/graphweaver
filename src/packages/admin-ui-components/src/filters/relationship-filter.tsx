@@ -4,7 +4,7 @@ import { Select, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
-export type RelationshipFilterType = { [x: string]: { id: string } } | undefined;
+export type RelationshipFilterType = Record<string, { id: string }[]> | undefined;
 
 export interface RelationshipFilterProps {
 	fieldName: string;
@@ -47,8 +47,7 @@ export const RelationshipFilter = ({
 			(options ?? [])?.length > 0
 				? ({
 						[fieldName]: {
-							// @todo this can be expanded to support the in operator id_in: options?.map((option) => option.value),
-							id: options?.[0]?.value,
+							id_in: options?.map((option) => option.value),
 						},
 				  } as Filter<RelationshipFilterType>)
 				: undefined
