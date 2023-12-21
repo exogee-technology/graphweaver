@@ -9,7 +9,7 @@ export const pgConnection = {
 		entities: [User],
 		driver: PostgreSqlDriver,
 		dbName: 'todo_app',
-		user: 'postgresd',
+		user: 'postgres',
 		password: '',
 		port: 5432,
 	},
