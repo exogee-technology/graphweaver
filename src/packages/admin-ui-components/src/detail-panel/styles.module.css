@@ -45,19 +45,6 @@
 	gap: 10px;
 }
 
-.fieldLabel {
-	flex: none;
-
-	font-family: 'Inter';
-	font-style: normal;
-	font-size: 14px;
-	line-height: 150%;
-	/* identical to box height, or 21px */
-
-	color: rgba(237, 232, 242, 0.6);
-	font-weight: 600;
-}
-
 .textInputField,
 .selectField {
 	box-sizing: border-box;
@@ -106,9 +93,9 @@
 }
 
 .link {
-	background: none!important;
+	background: none !important;
 	border: none;
-	padding: 0!important;
+	padding: 0 !important;
 	font-family: 'Inter';
 	font-style: normal;
 	color: white;

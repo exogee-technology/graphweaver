@@ -22,6 +22,7 @@ import { generateCreateEntityMutation, generateUpdateEntityMutation } from './gr
 
 import styles from './styles.module.css';
 import { BooleanField, EnumField, JSONField, SelectField } from './fields';
+import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
 interface ResultBaseType {
 	id: string;
@@ -53,9 +54,8 @@ const getField = ({ field }: { field: EntityField }) => {
 const DetailField = ({ field }: { field: EntityField }) => {
 	return (
 		<div className={styles.detailField}>
-			<label htmlFor={field.name} className={styles.fieldLabel}>
-				{field.name}
-			</label>
+			<DetailPanelFieldLabel fieldName={field.name} />
+
 			{getField({ field })}
 		</div>
 	);

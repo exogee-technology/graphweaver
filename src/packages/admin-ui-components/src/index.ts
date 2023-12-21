@@ -3,6 +3,7 @@ export * from './apollo';
 export * from './assets';
 export * from './button';
 export * from './detail-panel';
+export * from './detail-panel-field-label';
 export * from './header';
 export * from './layouts';
 export * from './loader';
