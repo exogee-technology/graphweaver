@@ -12,6 +12,6 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 		platform: 'node',
 		sourcemap: 'linked',
 		entryPoints,
-		watch: flagIncludes('watch')
+		watch: flagIncludes('watch'),
 	});
 })();
