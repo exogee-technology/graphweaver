@@ -1,4 +1,5 @@
 import { exit, cwd } from 'process';
+import path from 'path';
 import validatePackageName from 'validate-npm-package-name';
 import { valid as validateSemver } from 'semver';
 
@@ -109,9 +110,10 @@ export const init = async ({
 				type: 'confirm',
 				name: 'createDirectory',
 				message: (answers) =>
-					`OK, we're ready- I'm going to create a new app in "${cwd()}/${
+					`OK, we're ready- I'm going to create a new app in "${path.join(
+						cwd(),
 						answers.name
-					}" - is that OK?`,
+					)}" - is that OK?`,
 			},
 		]);
 
