@@ -1,5 +1,4 @@
 import { getMetadataStorage } from 'type-graphql';
-import { ReturnTypeFunc } from 'type-graphql/dist/decorators/types';
 import { findType } from 'type-graphql/dist/helpers/findType';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 import { BaseLoaders } from '../base-loader';
@@ -23,6 +22,14 @@ type RelationshipFieldOptions<D> = {
 	id?: (keyof D & string) | ((dataEntity: D) => string | number | undefined);
 	nullable?: boolean;
 };
+
+interface ClassType<T extends GraphQLEntity<BaseDataEntity>> {
+	new (...args: any[]): T;
+}
+interface RecursiveArray<TValue> extends Array<RecursiveArray<TValue> | TValue> {}
+type TypeValue = ClassType<GraphQLEntity<BaseDataEntity>>;
+type ReturnTypeFuncValue = TypeValue | RecursiveArray<TypeValue>;
+type ReturnTypeFunc = () => ReturnTypeFuncValue;
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
