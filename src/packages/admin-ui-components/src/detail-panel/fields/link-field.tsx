@@ -1,7 +1,6 @@
 import { useField, useFormikContext } from 'formik';
-import { EntityField, routeFor, useSchema } from '../../utils';
 import { Link, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { EntityField, routeFor, useSchema } from '../../utils';
 
 export const LinkField = ({ name, entity }: { name: string; entity: EntityField }) => {
 	const { dirty } = useFormikContext();
