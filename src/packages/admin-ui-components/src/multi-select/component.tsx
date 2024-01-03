@@ -32,7 +32,7 @@ export const Select = ({
 	mode = SelectMode.MULTI,
 }: SelectProps) => {
 	const [open, setOpen] = useState(false);
-	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
+	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value.flat());
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
