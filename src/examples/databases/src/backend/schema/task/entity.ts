@@ -1,4 +1,12 @@
-import { GraphQLEntity, RelationshipField, Field, ID, ObjectType, Root } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	RelationshipField,
+	Field,
+	ID,
+	ObjectType,
+	Root,
+	ReadOnlyProperty,
+} from '@exogee/graphweaver';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 import { Task as OrmTask } from '../../entities';
@@ -26,6 +34,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 		};
 	}
 
+	@ReadOnlyProperty()
 	@RelationshipField<Task>(() => User, { id: 'userId' })
 	user!: User;
 }
