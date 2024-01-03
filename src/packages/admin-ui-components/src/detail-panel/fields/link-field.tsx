@@ -1,37 +1,47 @@
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 import { EntityField, routeFor, useSchema } from '../../utils';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const LinkField = ({ name, entity }: { name: string; entity: EntityField }) => {
+	const { dirty } = useFormikContext();
+	const navigate = useNavigate();
 	const [_, meta, helpers] = useField({ name: name, multiple: false });
-	console.log('meta', meta);
-	const { entityByType } = useSchema();
-	const { initialValue } = meta;
-	const relationshipEntityType = entityByType(entity.type);
-	console.log('relationshipEntityType', relationshipEntityType);
-	console.log('initialValue', initialValue);
+	const { initialValue: formEntity } = meta;
 
 	// Handle if the form has changed when clicking a link, if it has pop up a confirmation modal
+	const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, route: string) => {
+		e.preventDefault();
+		if (dirty) {
+			// @todo: implement confirmation modal
+		} else {
+			navigate(route);
+		}
+	};
 
 	return entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE' ? (
-		<Link
-			key={initialValue.id}
-			to={routeFor({ type: entity.type, id: initialValue.value as string })}
-			// onClick={gobbleEvent}
+		<a
+			key={formEntity.id}
+			onClick={(e) =>
+				handleLinkClick(e, routeFor({ type: entity.type, id: formEntity.id as string }))
+			}
 		>
-			{initialValue.label}
-		</Link>
+			{formEntity.label}
+		</a>
 	) : (
 		<>
-			{initialValue.map((value: any) => (
-				<Link
-					key={value.id}
-					to={routeFor({ type: value.type, id: value.value as string })}
-					// onClick={gobbleEvent}
-				>
-					{value.label}
-				</Link>
-			))}
+			{formEntity.map((value: any) => {
+				return (
+					<a
+						key={value.value}
+						onClick={(e) =>
+							handleLinkClick(e, routeFor({ type: entity.type, id: value.value as string }))
+						}
+					>
+						{value.label}
+					</a>
+				);
+			})}
 		</>
 	);
 };
