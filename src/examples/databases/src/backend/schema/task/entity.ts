@@ -34,7 +34,6 @@ export class Task extends GraphQLEntity<OrmTask> {
 		};
 	}
 
-	@ReadOnlyProperty()
 	@RelationshipField<Task>(() => User, { id: 'userId' })
 	user!: User;
 }
