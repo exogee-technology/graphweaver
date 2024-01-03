@@ -12,7 +12,7 @@ export enum Roles {
 	DARK_SIDE = 'DARK_SIDE',
 }
 
-const graphweaver = new Graphweaver<AuthorizationContext>({
+export const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(addUserToContext)],

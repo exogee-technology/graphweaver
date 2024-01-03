@@ -1,4 +1,5 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
+import { GraphQLSchema } from 'graphql';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
@@ -54,6 +55,7 @@ export interface GraphweaverConfig {
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
+	private resolvers: any = [];
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
@@ -85,8 +87,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
-		const eMap = EntityMetadataMap;
-		for (const metadata of eMap.values()) {
+		for (const metadata of EntityMetadataMap.values()) {
 			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
 				// only push unique plugins
 				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
@@ -96,13 +97,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 			}
 		}
 
-		const resolvers = (this.config.resolvers || []) as any;
+		this.resolvers = (this.config.resolvers || []) as any;
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
-			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
+			this.resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
-		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
+		logger.trace(`Graphweaver buildSchemaSync with ${this.resolvers.length} resolvers`);
 
 		// Order is important here
 		const plugins = [
@@ -118,10 +119,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
 		removeInvalidFilterArg();
 
+		// @todo build schema and check for authChecker in diff
 		const schema = buildSchemaSync({
-			resolvers,
+			resolvers: this.resolvers,
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
+			emitSchemaFile: true,
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
@@ -129,6 +132,14 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.apolloServerOptions as any),
 			plugins,
 			schema,
+		});
+	}
+
+	public build(): GraphQLSchema {
+		return buildSchemaSync({
+			resolvers: this.resolvers,
+			authChecker: this.config.authChecker ?? (() => true),
+			validate: this.config.enableValidationRules,
 		});
 	}
 

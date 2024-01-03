@@ -1,11 +1,12 @@
 import fetch from 'cross-fetch';
-import { getIntrospectionQuery, buildClientSchema } from 'graphql';
+import { getIntrospectionQuery, buildClientSchema, GraphQLSchema } from 'graphql';
 
 const backendEndpoint = 'http://localhost:9001';
 
 let schema: any;
 
-export default async () => {
+export default async (preGeneratedSchema?: GraphQLSchema) => {
+	if (preGeneratedSchema) return preGeneratedSchema;
 	if (schema) return schema;
 
 	const introspectionQuery = getIntrospectionQuery();

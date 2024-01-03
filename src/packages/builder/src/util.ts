@@ -35,6 +35,15 @@ export const baseEsbuildConfig: BuildOptions = {
 	format: 'cjs',
 	watch: true,
 	keepNames: true,
+	external: [
+		'mock-aws-s3',
+		'better-sqlite3',
+		'tedious',
+		'mysql',
+		'oracledb',
+		'pg-query-stream',
+		'nock',
+	],
 };
 
 export const makeAllPackagesExternalPlugin = () => ({
