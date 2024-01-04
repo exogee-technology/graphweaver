@@ -37,9 +37,6 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Build CLI tool
-        run: pnpm build
-
       - name: Build with Auth
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
