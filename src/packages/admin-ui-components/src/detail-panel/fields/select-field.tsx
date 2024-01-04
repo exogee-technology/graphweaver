@@ -42,7 +42,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	return (
 		<Select
 			options={options}
-			value={initialValue ? [initialValue] : []}
+			value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
 			onChange={handleOnChange}
 			mode={
 				entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE'
