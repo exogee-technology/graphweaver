@@ -1,4 +1,5 @@
 import yargs from 'yargs';
+import { execSync } from 'child_process';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
@@ -156,6 +157,9 @@ yargs
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
+			}
+			if (environment === 'types' || environment === 'all') {
+				execSync('gw-types');
 			}
 
 			// Note, this will leave the ESBuild service process around:
