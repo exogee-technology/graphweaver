@@ -1,7 +1,8 @@
+import { describe, it, expect } from 'vitest';
 import { processFormValues } from './util';
 
 describe('processFormValues', () => {
-	it('should process the form values correctly', () => {
+	it('Should replace objects representing related entities with an object containing just an ID field', () => {
 		const formValues = {
 			id: '1',
 			title: 'For Those About To Rock We Salute 2',
