@@ -7,3 +7,4 @@
 .eslintrc.js
 packages/cli/bin/index.js
 packages/cli/test-init.js
+**/app/**
