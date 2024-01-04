@@ -11,7 +11,7 @@
 		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
-		"test": "jest",
+		"test": "vitest",
 		"test:tsc": "tsc --noEmit",
 		"test:prettier": "prettier --check .",
 		"version": "npm version --no-git-tag-version"
@@ -47,7 +47,6 @@
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.0",
-		"@types/jest": "26.0.23",
 		"@types/luxon": "2.0.7",
 		"@types/papaparse": "5.3.14",
 		"@types/pluralize": "0.0.29",
@@ -60,7 +59,8 @@
 		"react-router-dom": "6.4.3",
 		"typescript": "5.0.2",
 		"vite": "4.3.9",
-		"vite-plugin-svgr": "3.2.0"
+		"vite-plugin-svgr": "3.2.0",
+		"vitest": "1.1.1"
 	},
 	"keywords": [
 		"graphql",
