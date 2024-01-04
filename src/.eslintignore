@@ -7,5 +7,4 @@
 .eslintrc.js
 packages/cli/bin/index.js
 packages/cli/test-init.js
-argon2-bundled.js
 **/app/**
