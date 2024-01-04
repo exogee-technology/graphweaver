@@ -1,5 +1,5 @@
 import { BackendProvider, Resolver } from '@exogee/graphweaver';
-import * as argon2 from 'argon2-browser/../../dist/argon2-bundled.js';
+import * as argon2 from 'argon2-browser/dist/argon2-bundled.min.js';
 
 import { PasswordStorage } from '../../entities';
 import { createBasePasswordAuthResolver } from './base-resolver';

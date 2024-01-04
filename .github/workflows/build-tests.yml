@@ -43,4 +43,4 @@ jobs:
       - name: Build with Auth
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
-        run: pnpm build-auth
+        run: pnpm test-build
