@@ -23,6 +23,7 @@ import { generateCreateEntityMutation, generateUpdateEntityMutation } from './gr
 import styles from './styles.module.css';
 import { BooleanField, EnumField, JSONField, SelectField } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
+import { processFormValues } from './util';
 
 interface ResultBaseType {
 	id: string;
@@ -233,15 +234,7 @@ export const DetailPanel = () => {
 
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
-		const values = (Object.entries(formValues) ?? []).reduce((acc, [key, value]: [string, any]) => {
-			// Check if we have a relationship value if so let's only send the id to the server
-			acc[key] =
-				value && typeof value === 'object' && value.hasOwnProperty('value')
-					? { id: value.value }
-					: value;
-
-			return acc;
-		}, {} as Record<string, any>);
+		const values = processFormValues(formValues);
 
 		try {
 			let result: FetchResult;
