@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
-	"version": "0.2.11",
+	"version": "0.2.12",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database.",
