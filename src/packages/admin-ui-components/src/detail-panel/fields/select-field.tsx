@@ -5,6 +5,14 @@ import { SelectOption, Select, SelectMode } from '../../multi-select';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
+const mode = (entity: EntityField) => {
+	if (entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE') {
+		return SelectMode.SINGLE;
+	}
+
+	return SelectMode.MULTI;
+};
+
 export const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
@@ -36,7 +44,9 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue(selected ?? []);
+		const newValue = mode(entity) === SelectMode.MULTI ? selected : selected[0];
+
+		helpers.setValue(newValue);
 	};
 
 	return (
@@ -44,11 +54,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 			options={options}
 			value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
 			onChange={handleOnChange}
-			mode={
-				entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE'
-					? SelectMode.SINGLE
-					: SelectMode.MULTI
-			}
+			mode={mode(entity)}
 		/>
 	);
 };
