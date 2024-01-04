@@ -36,7 +36,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue(selected?.[0]);
+		helpers.setValue(selected ?? []);
 	};
 
 	return (
