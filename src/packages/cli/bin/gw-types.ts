@@ -31,7 +31,12 @@ export const buildTypes = async () => {
 		throw new Error('Could not generate types');
 	}
 
-	const typesPath = './.graphweaver/types.ts';
+	const dirPath = path.join(process.cwd(), './.graphweaver');
+	if (!fs.existsSync(dirPath)) {
+		fs.mkdirSync(dirPath);
+	}
+
+	const typesPath = path.join(process.cwd(), './.graphweaver/types.ts');
 	fs.promises.writeFile(typesPath, types, 'utf8');
 };
 
