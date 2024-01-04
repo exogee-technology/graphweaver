@@ -14,7 +14,7 @@
 	],
 	"scripts": {
 		"build": "graphweaver build",
-		"build:types": "tsx ./types.ts",
+		"build:types": "gw-types",
 		"start": "graphweaver start",
 		"watch": "graphweaver watch",
 		"version": "npm version --no-git-tag-version"
@@ -37,7 +37,6 @@
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",
-		"tsx": "4.7.0",
 		"typescript": "5.0.2"
 	},
 	"keywords": [

@@ -14,12 +14,14 @@
 	"source": "src/index.ts",
 	"bin": {
 		"graphweaver": "bin/gw-bin.js",
-		"gw": "bin/gw-bin.js"
+		"gw": "bin/gw-bin.js",
+		"gw-types": "bin/gw-types.ts"
 	},
 	"files": [
 		"bin"
 	],
 	"dependencies": {
+		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
@@ -30,7 +32,8 @@
 		"ora": "5.4.1",
 		"semver": "7.5.4",
 		"validate-npm-package-name": "5.0.0",
-		"yargs": "17.6.2"
+		"yargs": "17.6.2",
+		"tsx": "4.7.0"
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.3",

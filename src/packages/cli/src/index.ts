@@ -6,7 +6,6 @@ import {
 	analyseBundle,
 	buildBackend,
 	buildFrontend,
-	buildTypes,
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
@@ -157,9 +156,6 @@ yargs
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
-			}
-			if (environment === 'types' || environment === 'all') {
-				await buildTypes();
 			}
 
 			// Note, this will leave the ESBuild service process around:
