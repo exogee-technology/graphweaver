@@ -130,6 +130,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
+      '@exogee/graphweaver-builder':
+        specifier: workspace:*
+        version: link:../../packages/builder
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../../packages/mikroorm
@@ -164,6 +167,9 @@ importers:
       '@types/node':
         specifier: 20.2.5
         version: 20.2.5
+      tsx:
+        specifier: 4.7.0
+        version: 4.7.0
       typescript:
         specifier: 5.0.2
         version: 5.0.2

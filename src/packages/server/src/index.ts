@@ -119,12 +119,10 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
 		removeInvalidFilterArg();
 
-		// @todo build schema and check for authChecker in diff
 		const schema = buildSchemaSync({
 			resolvers: this.resolvers,
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
-			emitSchemaFile: true,
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
@@ -132,14 +130,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.apolloServerOptions as any),
 			plugins,
 			schema,
-		});
-	}
-
-	public build(): GraphQLSchema {
-		return buildSchemaSync({
-			resolvers: this.resolvers,
-			authChecker: this.config.authChecker ?? (() => true),
-			validate: this.config.enableValidationRules,
 		});
 	}
 
