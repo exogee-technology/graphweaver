@@ -1,6 +1,6 @@
 import fs from 'fs';
+import path from 'path';
 import { executeCodegen } from '@graphql-codegen/cli';
-import { Types } from '@graphql-codegen/plugin-helpers';
 import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset';
 import { GraphQLSchema } from 'graphql';
 
@@ -12,9 +12,7 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async (
-	schema?: GraphQLSchema
-): Promise<Types.FileOutput[] | undefined> => {
+export const codeGenerator = async (schema?: GraphQLSchema) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
@@ -61,11 +59,21 @@ export const codeGenerator = async (
 			},
 		});
 
-		await Promise.all(
-			files.map(async (file) => fs.promises.writeFile(file.filename, file.content, 'utf8'))
-		);
+		// ensure that we have a graphweaver directory
+		const dirPath = path.join(process.cwd(), './.graphweaver');
+		if (!fs.existsSync(dirPath)) {
+			fs.mkdirSync(dirPath);
+		}
 
-		return files;
+		await Promise.all(
+			files.flatMap(async (file) => [
+				fs.promises.writeFile(file.filename, file.content, 'utf8'),
+				// We save the types to two locations src and .graphweaver
+				...(file.filename === 'src/types.generated.ts'
+					? [fs.promises.writeFile('.graphweaver/types.ts', file.content, 'utf8')]
+					: []),
+			])
+		);
 	} catch (err: any) {
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {
