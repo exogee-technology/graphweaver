@@ -154,12 +154,10 @@ yargs
 		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
+				execSync('gw-types');
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
-			}
-			if (environment === 'types' || environment === 'all') {
-				execSync('gw-types');
 			}
 
 			// Note, this will leave the ESBuild service process around:
@@ -168,6 +166,13 @@ yargs
 			//
 			// It does not give us a way to kill it gracefully, so we'll do it here.
 			process.exit(0);
+		},
+	})
+	.command({
+		command: ['build-types'],
+		describe: 'Builds your graphweaver types.',
+		handler: async () => {
+			execSync('gw-types');
 		},
 	})
 	.command({
@@ -194,6 +199,7 @@ yargs
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
+				execSync('gw-types');
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
