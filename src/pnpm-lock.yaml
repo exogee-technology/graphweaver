@@ -1268,7 +1268,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -1462,12 +1462,15 @@ importers:
       '@aws-sdk/client-s3':
         specifier: 3.485.0
         version: 3.485.0
+      '@aws-sdk/s3-request-presigner':
+        specifier: 3.485.0
+        version: 3.485.0
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
-      fs:
-        specifier: 0.0.1-security
-        version: 0.0.1-security
     devDependencies:
       esbuild:
         specifier: 0.15.5
@@ -2662,6 +2665,20 @@ packages:
       tslib: 2.6.0
     dev: false
 
+  /@aws-sdk/s3-request-presigner@3.485.0:
+    resolution: {integrity: sha512-5TCyl1H/PdBH0XDSILb9y1d/fU+tDEQ7Fkqeb2gIYENDG09dX68TtcZVGs0sMZtC9CLUFpmEp8R/3LtfuoeY6w==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@aws-sdk/signature-v4-multi-region': 3.485.0
+      '@aws-sdk/types': 3.485.0
+      '@aws-sdk/util-format-url': 3.485.0
+      '@smithy/middleware-endpoint': 2.3.0
+      '@smithy/protocol-http': 3.0.12
+      '@smithy/smithy-client': 2.2.1
+      '@smithy/types': 2.8.0
+      tslib: 2.6.0
+    dev: false
+
   /@aws-sdk/signature-v4-multi-region@3.485.0:
     resolution: {integrity: sha512-168ipXkbG75l9cKQmsBtx/4+AYjGsBoy724bXosW13t2/l/E3IzJAYUjDROiK0JXVMG85xAnGWbFwZkjxVXzrQ==}
     engines: {node: '>=14.0.0'}
@@ -2770,6 +2787,16 @@ packages:
     dependencies:
       '@aws-sdk/types': 3.485.0
       '@smithy/util-endpoints': 1.0.8
+      tslib: 2.6.0
+    dev: false
+
+  /@aws-sdk/util-format-url@3.485.0:
+    resolution: {integrity: sha512-CW82AQ8UD88jhI2OyAgT5yA8NH2KE0mgludRXYDT5uvwj6nlA7c2B+c2UJwbkMdlsUZip/XvN+jFoRR7AJH1GQ==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      '@aws-sdk/types': 3.485.0
+      '@smithy/querystring-builder': 2.0.16
+      '@smithy/types': 2.8.0
       tslib: 2.6.0
     dev: false
 
@@ -6320,7 +6347,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -12698,10 +12725,6 @@ packages:
       ignore: 5.2.4
       memoizee: 0.4.15
       type: 2.7.2
-    dev: false
-
-  /fs@0.0.1-security:
-    resolution: {integrity: sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w==}
     dev: false
 
   /fsevents@2.3.2:

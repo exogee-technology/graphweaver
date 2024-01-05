@@ -25,6 +25,10 @@
       "path": "src/examples/aws-cognito"
     },
     {
+      "name": "➡️ Example: AWS S3",
+      "path": "src/examples/s3-storage"
+    },
+    {
       "name": "🤖 graphweaver",
       "path": "src/packages/cli"
     },
@@ -93,8 +97,8 @@
       "path": "src/packages/graphweaver-helpers"
     },
     {
-      "name": "📦 @exogee/storage-provider",
-      "path": "src/packages/storage-provider"
+      "name": "📦 @exogee/graphweaver-storage-provider",
+      "path": "src/packages/graphweaver-storage-provider"
     }
   ],
   "settings": {}
