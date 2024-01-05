@@ -14,7 +14,7 @@
 	],
 	"scripts": {
 		"build": "graphweaver build",
-		"build:types": "graphweaver build-types",
+		"build:types": "graphweaver build-types --outdir ./",
 		"start": "graphweaver start",
 		"watch": "graphweaver watch",
 		"version": "npm version --no-git-tag-version"

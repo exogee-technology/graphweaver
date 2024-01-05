@@ -19,11 +19,12 @@ const importResolvers = async () => {
 };
 
 export const buildTypes = async () => {
+	const outdir = process.argv[2] || './.graphweaver';
 	const resolvers = await importResolvers();
 	const schema = await buildSchema({
 		resolvers,
 	});
-	await codeGenerator(schema);
+	await codeGenerator(schema, outdir);
 };
 
 buildTypes();

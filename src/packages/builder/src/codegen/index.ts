@@ -12,7 +12,7 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async (schema?: GraphQLSchema) => {
+export const codeGenerator = async (schema?: GraphQLSchema, outdir?: string) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
@@ -60,17 +60,19 @@ export const codeGenerator = async (schema?: GraphQLSchema) => {
 		});
 
 		// ensure that we have a graphweaver directory
-		const dirPath = path.join(process.cwd(), './.graphweaver');
+		const dirPath = path.join(process.cwd(), outdir || './.graphweaver');
 		if (!fs.existsSync(dirPath)) {
-			fs.mkdirSync(dirPath);
+			fs.mkdirSync(dirPath, { recursive: true });
 		}
+
+		console.log(dirPath);
 
 		await Promise.all(
 			files.flatMap(async (file) => [
 				fs.promises.writeFile(file.filename, file.content, 'utf8'),
-				// We save the types to two locations src and .graphweaver
+				// We save the types to two locations src and .graphweaver / outdir
 				...(file.filename === 'src/types.generated.ts'
-					? [fs.promises.writeFile('.graphweaver/types.ts', file.content, 'utf8')]
+					? [fs.promises.writeFile(`${dirPath}/types.ts`, file.content, 'utf8')]
 					: []),
 			])
 		);

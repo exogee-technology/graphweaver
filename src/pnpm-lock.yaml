@@ -832,9 +832,6 @@ importers:
       '@graphql-codegen/near-operation-file-preset':
         specifier: 2.5.0
         version: 2.5.0(graphql@16.8.1)
-      '@graphql-codegen/plugin-helpers':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.8.1)
       '@graphql-codegen/typescript':
         specifier: 4.0.1
         version: 4.0.1(graphql@16.8.1)

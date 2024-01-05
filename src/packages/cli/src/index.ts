@@ -170,9 +170,15 @@ yargs
 	})
 	.command({
 		command: ['build-types'],
-		describe: 'Builds your graphweaver types.',
-		handler: async () => {
-			execSync('gw-types');
+		describe: 'Builds your Graphweaver types.',
+		builder: (yargs) =>
+			yargs.option('outdir', {
+				type: 'string',
+				default: './.graphweaver',
+				describe: 'Specify a directory path to store the types file',
+			}),
+		handler: async ({ outdir }) => {
+			execSync(`gw-types ${outdir}`);
 		},
 	})
 	.command({
