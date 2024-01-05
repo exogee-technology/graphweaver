@@ -36,12 +36,14 @@ export const baseEsbuildConfig: BuildOptions = {
 	watch: true,
 	keepNames: true,
 	external: [
-		'mock-aws-s3',
-		'better-sqlite3',
 		'tedious',
-		'mysql',
-		'oracledb',
 		'pg-query-stream',
+		'oracledb',
+		'bun:ffi',
+		'mysql',
+		'sqlite3',
+		'better-sqlite3',
+		'mock-aws-s3',
 		'nock',
 	],
 };
