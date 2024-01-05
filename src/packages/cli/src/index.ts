@@ -155,7 +155,7 @@ yargs
 		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
-				execSync('gw-types');
+				execSync('gw-types', { stdio: 'inherit' });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
@@ -179,7 +179,7 @@ yargs
 				describe: 'Specify a directory path to store the types file',
 			}),
 		handler: async ({ outdir }) => {
-			execSync(`gw-types ${outdir}`);
+			execSync(`gw-types ${outdir}`, { stdio: 'inherit' });
 		},
 	})
 	.command({
@@ -211,7 +211,7 @@ yargs
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				execSync(`gw-types ${args.typesdir}`);
+				execSync(`gw-types ${args.typesdir}`, { stdio: 'inherit' });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -260,7 +260,7 @@ yargs
 
 				// Build Types
 				console.log('Generating files...');
-				execSync(`gw-types ${args.typesdir}`);
+				execSync(`gw-types ${args.typesdir}`, { stdio: 'inherit' });
 				console.log('Generating files complete.\n\n');
 
 				console.log('Waiting for changes... \n\n');
@@ -268,7 +268,7 @@ yargs
 				// Restart the process on file change
 				watcher.on('change', async () => {
 					console.log('File changed. Rebuilding generated files...');
-					execSync(`gw-types ${args.typesdir}`);
+					execSync(`gw-types ${args.typesdir}`, { stdio: 'inherit' });
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
 				});

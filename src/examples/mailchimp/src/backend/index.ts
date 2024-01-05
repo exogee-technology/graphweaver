@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
 
-import { interest, category, mailingList, member } from './schema';
+import { resolvers } from './schema';
 
 const {
 	MAILCHIMP_API_KEY,
@@ -14,8 +14,6 @@ if (!MAILCHIMP_SERVER_PREFIX) throw new Error('MAILCHIMP_SERVER_PREFIX is requir
 if (!MAILCHIMP_LIST_ID) throw new Error('MAILCHIMP_LIST_ID is required in environment');
 if (!MAILCHIMP_PROJECTS_CATEGORY_ID)
 	throw new Error('MAILCHIMP_PROJECTS_CATEGORY_ID is required in environment');
-
-const resolvers = [interest, category, mailingList, member];
 
 const graphweaver = new Graphweaver({
 	resolvers,
