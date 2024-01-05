@@ -399,6 +399,61 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(vite@4.3.9)
 
+  examples/s3-storage:
+    dependencies:
+      '@apollo/client':
+        specifier: 3.8.8
+        version: 3.8.8(graphql@16.8.1)
+      '@apollo/server':
+        specifier: 4.9.3
+        version: 4.9.3(graphql@16.8.1)
+      '@as-integrations/aws-lambda':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.9.3)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@exogee/graphweaver-storage-provider':
+        specifier: workspace:*
+        version: link:../../packages/graphweaver-storage-provider
+      '@mikro-orm/core':
+        specifier: 5.7.14
+        version: 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
+      '@mikro-orm/mysql':
+        specifier: 5.7.14
+        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
+      '@mikro-orm/postgresql':
+        specifier: 5.7.14
+        version: 5.7.14(@mikro-orm/core@5.7.14)
+      class-validator:
+        specifier: 0.14.0
+        version: 0.14.0
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+    devDependencies:
+      '@types/node':
+        specifier: 20.2.5
+        version: 20.2.5
+      typescript:
+        specifier: 5.0.2
+        version: 5.0.2
+
   examples/xero:
     dependencies:
       '@apollo/client':
@@ -1217,6 +1272,31 @@ importers:
         specifier: 5.0.4
         version: 5.0.4
 
+  packages/graphweaver-storage-provider:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: 3.485.0
+        version: 3.485.0
+      '@aws-sdk/s3-request-presigner':
+        specifier: 3.485.0
+        version: 3.485.0
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
+      '@exogee/logger':
+        specifier: workspace:*
+        version: link:../logger
+    devDependencies:
+      esbuild:
+        specifier: 0.15.5
+        version: 0.15.5
+      glob:
+        specifier: 10.3.10
+        version: 10.3.10
+      typescript:
+        specifier: 5.0.2
+        version: 5.0.2
+
   packages/logger:
     dependencies:
       pino:
@@ -1457,31 +1537,6 @@ importers:
         specifier: 10.3.10
         version: 10.3.10
 
-  packages/storage-provider:
-    dependencies:
-      '@aws-sdk/client-s3':
-        specifier: 3.485.0
-        version: 3.485.0
-      '@aws-sdk/s3-request-presigner':
-        specifier: 3.485.0
-        version: 3.485.0
-      '@exogee/graphweaver':
-        specifier: workspace:*
-        version: link:../core
-      '@exogee/logger':
-        specifier: workspace:*
-        version: link:../logger
-    devDependencies:
-      esbuild:
-        specifier: 0.15.5
-        version: 0.15.5
-      glob:
-        specifier: 10.3.10
-        version: 10.3.10
-      typescript:
-        specifier: 5.0.2
-        version: 5.0.2
-
   packages/vite-plugin-graphweaver:
     dependencies:
       '@exogee/graphweaver-config':
@@ -1615,6 +1670,39 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+      response-iterator: 0.2.6
+      symbol-observable: 4.0.0
+      ts-invariant: 0.10.3
+      tslib: 2.6.0
+      zen-observable-ts: 1.2.5
+    dev: false
+
+  /@apollo/client@3.8.8(graphql@16.8.1):
+    resolution: {integrity: sha512-omjd9ryGDkadZrKW6l5ktUAdS4SNaFOccYQ4ZST0HLW83y8kQaSZOCTNlpkoBUK8cv6qP8+AxOKwLm2ho8qQ+Q==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+      graphql-ws: ^5.5.5
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+    peerDependenciesMeta:
+      graphql-ws:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      subscriptions-transport-ws:
+        optional: true
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
+      '@wry/equality': 0.5.6
+      '@wry/trie': 0.5.0
+      graphql: 16.8.1
+      graphql-tag: 2.12.6(graphql@16.8.1)
+      hoist-non-react-statics: 3.3.2
+      optimism: 0.18.0
+      prop-types: 15.8.1
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -1906,7 +1994,7 @@ packages:
   /@aws-crypto/util@3.0.0:
     resolution: {integrity: sha512-2OJlpeJpCR48CC8r+uKVChzs9Iungj9wkZrl8Z041DWEWvyIHILYKCPNzJghKsivj+S3mLo6BVc7mBNzdxA46w==}
     dependencies:
-      '@aws-sdk/types': 3.370.0
+      '@aws-sdk/types': 3.485.0
       '@aws-sdk/util-utf8-browser': 3.259.0
       tslib: 1.14.1
     dev: false
@@ -9375,6 +9463,13 @@ packages:
       tslib: 2.6.0
     dev: false
 
+  /@wry/caches@1.0.1:
+    resolution: {integrity: sha512-bXuaUNLVVkD20wcGBWRyo7j9N3TxePEWFZj2Y+r9OoUzfqmavM84+mFykRicNsBqatba5JLay1t48wxaXaWnlA==}
+    engines: {node: '>=8'}
+    dependencies:
+      tslib: 2.6.0
+    dev: false
+
   /@wry/context@0.7.3:
     resolution: {integrity: sha512-Nl8WTesHp89RF803Se9X3IiHjdmLBrIvPMaJkl+rKVJAYyPsz1TEUbu89943HpvujtSJgDUx9W4vZw3K1Mr3sA==}
     engines: {node: '>=8'}
@@ -9391,6 +9486,20 @@ packages:
 
   /@wry/trie@0.3.2:
     resolution: {integrity: sha512-yRTyhWSls2OY/pYLfwff867r8ekooZ4UI+/gxot5Wj8EFwSf2rG+n+Mo/6LoLQm1TKA4GRj2+LCpbfS937dClQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      tslib: 2.6.0
+    dev: false
+
+  /@wry/trie@0.4.3:
+    resolution: {integrity: sha512-I6bHwH0fSf6RqQcnnXLJKhkSXG45MFral3GxPaY4uAl0LYDZM+YDVDAiU9bYwjTuysy1S0IeecWtmq1SZA3M1w==}
+    engines: {node: '>=8'}
+    dependencies:
+      tslib: 2.6.0
+    dev: false
+
+  /@wry/trie@0.5.0:
+    resolution: {integrity: sha512-FNoYzHawTMk/6KMQoEG5O4PuioX19UbwdQKF44yw0nLfOypfQdjtfZzo/UIJWAJ23sNIFbD1Ug9lbaDGMwbqQA==}
     engines: {node: '>=8'}
     dependencies:
       tslib: 2.6.0
@@ -15767,6 +15876,15 @@ packages:
     dependencies:
       '@wry/context': 0.7.3
       '@wry/trie': 0.3.2
+    dev: false
+
+  /optimism@0.18.0:
+    resolution: {integrity: sha512-tGn8+REwLRNFnb9WmcY5IfpOqeX2kpaYJ1s6Ae3mn12AeydLkR3j+jSCmVQFoXqU8D41PAJ1RG1rCRNWmNZVmQ==}
+    dependencies:
+      '@wry/caches': 1.0.1
+      '@wry/context': 0.7.3
+      '@wry/trie': 0.4.3
+      tslib: 2.6.0
     dev: false
 
   /optionator@0.9.3:
