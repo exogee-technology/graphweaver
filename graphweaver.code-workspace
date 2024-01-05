@@ -97,8 +97,8 @@
       "path": "src/packages/graphweaver-helpers"
     },
     {
-      "name": "📦 @exogee/graphweaver-storage-provider",
-      "path": "src/packages/graphweaver-storage-provider"
+      "name": "📦 @exogee/storage-provider",
+      "path": "src/packages/storage-provider"
     }
   ],
   "settings": {}
