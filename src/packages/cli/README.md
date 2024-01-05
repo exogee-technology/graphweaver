@@ -51,6 +51,7 @@
     - [graphweaver import \[source\]](#graphweaver-import-source)
     - [graphweaver analyse \[target\]](#graphweaver-analyse-target)
     - [graphweaver build \[environment\]](#graphweaver-build-environment)
+    - [graphweaver build-types \[outdir\]](#graphweaver-build-types-outdir)
     - [graphweaver start \[environment\]](#graphweaver-start-environment)
     - [graphweaver watch \[environment\]](#graphweaver-watch-environment)
 - [Contributing](#contributing)
@@ -120,6 +121,7 @@ npm install -g graphweaver
     * graphweaver import [source]
     * graphweaver analyse [target]
     * graphweaver build [environment]
+    * graphweaver build-types
     * graphweaver start [environment]
     * graphweaver watch [environment]
 
@@ -223,6 +225,19 @@ ARGUMENTS
 FLAGS
     --adminUiBase <value>
     Specify the base path for the Admin UI
+```
+
+#### graphweaver build-types [outdir]
+
+Builds a `types.ts` file containing all the types in the Graphweaver schema.
+
+```
+USAGE
+    $ graphweaver build-types [--outdir <value>]
+
+FLAGS
+    --outdir <value>
+    Specify the base path for where the types.ts file will be created. By default this is `./.graphweaver`
 ```
 
 #### graphweaver start [environment]
