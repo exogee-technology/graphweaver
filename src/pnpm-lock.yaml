@@ -457,6 +457,61 @@ importers:
         specifier: 5.0.2
         version: 5.0.2
 
+  examples/s3-storage:
+    dependencies:
+      '@apollo/client':
+        specifier: 3.8.8
+        version: 3.8.8(graphql@16.8.1)
+      '@apollo/server':
+        specifier: 4.9.3
+        version: 4.9.3(graphql@16.8.1)
+      '@as-integrations/aws-lambda':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.9.3)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@exogee/graphweaver-storage-provider':
+        specifier: workspace:*
+        version: link:../../packages/graphweaver-storage-provider
+      '@mikro-orm/core':
+        specifier: 5.7.14
+        version: 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
+      '@mikro-orm/mysql':
+        specifier: 5.7.14
+        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
+      '@mikro-orm/postgresql':
+        specifier: 5.7.14
+        version: 5.7.14(@mikro-orm/core@5.7.14)
+      class-validator:
+        specifier: 0.14.0
+        version: 0.14.0
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+    devDependencies:
+      '@types/node':
+        specifier: 20.2.5
+        version: 20.2.5
+      typescript:
+        specifier: 5.0.2
+        version: 5.0.2
+
   examples/xero:
     dependencies:
       '@apollo/client':
@@ -1560,31 +1615,6 @@ importers:
       glob:
         specifier: 10.3.10
         version: 10.3.10
-
-  packages/storage-provider:
-    dependencies:
-      '@aws-sdk/client-s3':
-        specifier: 3.485.0
-        version: 3.485.0
-      '@aws-sdk/s3-request-presigner':
-        specifier: 3.485.0
-        version: 3.485.0
-      '@exogee/graphweaver':
-        specifier: workspace:*
-        version: link:../core
-      '@exogee/logger':
-        specifier: workspace:*
-        version: link:../logger
-    devDependencies:
-      esbuild:
-        specifier: 0.15.5
-        version: 0.15.5
-      glob:
-        specifier: 10.3.10
-        version: 10.3.10
-      typescript:
-        specifier: 5.0.2
-        version: 5.0.2
 
   packages/vite-plugin-graphweaver:
     dependencies:
