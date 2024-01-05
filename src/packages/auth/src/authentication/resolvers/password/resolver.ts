@@ -1,5 +1,8 @@
 import { BackendProvider, Resolver } from '@exogee/graphweaver';
-import * as argon2 from 'argon2';
+// we need to directly import the bundled js because the default import requires a WASM loader
+// there is a newer argons-browser-bw that supersedes argon2-browser
+// but this doesn't have the bundled js so we need to write our own bundler to upgrade
+import * as argon2 from 'argon2-browser/dist/argon2-bundled.min.js';
 
 import { PasswordStorage } from '../../entities';
 import { createBasePasswordAuthResolver } from './base-resolver';

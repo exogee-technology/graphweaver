@@ -5,7 +5,7 @@
 		"rootDir": "./src",
 		"noUnusedLocals": false
 	},
-	"include": ["./src"],
+	"include": ["./src", "../../@types"],
 	"exclude": ["src/**/*.test.ts"],
 	"references": [{ "path": "../core" }, { "path": "../logger" }]
 }
