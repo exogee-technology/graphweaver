@@ -3,7 +3,7 @@ import { UserProfile } from '@exogee/graphweaver-auth';
 import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 
 import { User } from '../schema/user';
-import { Roles } from '..';
+import { Roles } from './roles';
 import { Credential } from '../entities/mysql';
 import { myConnection } from '../database';
 

@@ -1,6 +1,6 @@
 import { MetadataHookParams } from '@exogee/graphweaver-server';
 import { AuthorizationContext, ForbiddenError } from '@exogee/graphweaver-auth';
-import { Roles } from '..';
+import { Roles } from './roles';
 
 export const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
 	// Ensure only logged in users can access the admin ui metadata
