@@ -91,6 +91,10 @@
     {
       "name": "📦 @exogee/graphweaver-helpers",
       "path": "src/packages/graphweaver-helpers"
+    },
+    {
+      "name": "📦 @exogee/storage-provider",
+      "path": "src/packages/storage-provider"
     }
   ],
   "settings": {}
