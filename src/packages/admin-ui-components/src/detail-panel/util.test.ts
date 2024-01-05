@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { processFormValues } from './util';
+import { mapFormikValuesToGqlRequestValues } from './util';
 
-describe('processFormValues', () => {
+describe('mapFormikValuesToGqlRequestValues', () => {
 	it('Should replace objects representing related entities with an object containing just an ID field', () => {
 		const formValues = {
 			id: '1',
@@ -105,6 +105,6 @@ describe('processFormValues', () => {
 			],
 		};
 
-		expect(processFormValues(formValues)).toEqual(expected);
+		expect(mapFormikValuesToGqlRequestValues(formValues)).toEqual(expected);
 	});
 });

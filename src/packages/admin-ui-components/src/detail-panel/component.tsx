@@ -23,7 +23,7 @@ import { generateCreateEntityMutation, generateUpdateEntityMutation } from './gr
 import styles from './styles.module.css';
 import { BooleanField, EnumField, JSONField, SelectField } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-import { processFormValues } from './util';
+import { mapFormikValuesToGqlRequestValues } from './util';
 
 interface ResultBaseType {
 	id: string;
@@ -234,7 +234,7 @@ export const DetailPanel = () => {
 
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
-		const values = processFormValues(formValues);
+		const values = mapFormikValuesToGqlRequestValues(formValues);
 
 		try {
 			let result: FetchResult;
