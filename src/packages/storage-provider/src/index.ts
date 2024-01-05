@@ -1,12 +1,7 @@
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 
-// snippet-start:[s3.JavaScript.buckets.uploadV3]
 import { PutObjectCommand, GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
-
-const client = new S3Client({
-	region: 'ap-southeast-2',
-});
 
 export const uploadToS3 = async (buffer: Buffer, key: string): Promise<string> => {
 	const bucket = process.env.AWS_S3_BUCKET;
@@ -29,6 +24,7 @@ export const uploadToS3 = async (buffer: Buffer, key: string): Promise<string> =
 };
 
 export const getObjectFromS3 = async (key: string) => {
+	const s3 = new S3Client({});
 	const bucket = process.env.AWS_S3_BUCKET;
 	const command = new GetObjectCommand({
 		Bucket: bucket,
@@ -36,7 +32,7 @@ export const getObjectFromS3 = async (key: string) => {
 	});
 
 	try {
-		const response = await client.send(command);
+		const response = await s3.send(command);
 		// The Body object also has 'transformToByteArray' and 'transformToWebStream' methods.
 		const str = await response.Body?.transformToString();
 		console.log(str);

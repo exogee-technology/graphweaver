@@ -1,5 +1,5 @@
 {
-	"name": "@exogee/storage-provider",
+	"name": "@exogee/graphweaver-storage-provider",
 	"version": "0.2.11",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "MIT",
@@ -20,7 +20,9 @@
 	],
 	"dependencies": {
 		"@aws-sdk/client-s3": "3.485.0",
-		"@exogee/logger": "workspace:*"
+		"@aws-sdk/s3-request-presigner": "3.485.0",
+		"@exogee/logger": "workspace:*",
+		"@exogee/graphweaver": "workspace:*"
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",
