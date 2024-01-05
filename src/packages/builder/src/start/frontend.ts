@@ -11,12 +11,7 @@ export interface StartOptions {
 
 let server: ViteDevServer | undefined = undefined;
 
-export const startFrontend = async ({ host, port }: StartOptions, codeGen = false) => {
-	// We can now generate the front end functions and types
-	if (codeGen) {
-		await codeGenerator();
-	}
-
+export const startFrontend = async ({ host, port }: StartOptions) => {
 	// Let's check if we need to start the server
 	if (!server) {
 		const { onResolveViteConfiguration } = config().start;

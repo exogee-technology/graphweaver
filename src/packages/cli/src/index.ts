@@ -15,6 +15,7 @@ import { importDataSource } from './import';
 import pkg from '../package.json';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
+const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
 
 yargs
 	.env('GRAPHWEAVER')
@@ -174,7 +175,7 @@ yargs
 		builder: (yargs) =>
 			yargs.option('outdir', {
 				type: 'string',
-				default: './.graphweaver',
+				default: DEFAULT_TYPES_OUT_DIR,
 				describe: 'Specify a directory path to store the types file',
 			}),
 		handler: async ({ outdir }) => {
@@ -201,11 +202,16 @@ yargs
 					default: 9000,
 					describe:
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				})
+				.option('typesdir', {
+					type: 'string',
+					default: DEFAULT_TYPES_OUT_DIR,
+					describe: 'Specify a directory path to store the types file',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				execSync('gw-types');
+				execSync(`gw-types ${args.typesdir}`);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -232,6 +238,11 @@ yargs
 					default: 9000,
 					describe:
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				})
+				.option('typesdir', {
+					type: 'string',
+					default: DEFAULT_TYPES_OUT_DIR,
+					describe: 'Specify a directory path to store the types file',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
@@ -240,17 +251,26 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
 				console.log('Watch process started...');
-				await startFrontend(args as StartOptions, true);
+				await startFrontend(args as StartOptions);
 
 				// Watch the directory for file changes
 				const watcher = chokidar.watch('./src/**', {
 					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
 				});
 
+				// Build Types
+				console.log('Generating files...');
+				execSync(`gw-types ${args.typesdir}`);
+				console.log('Generating files complete.\n\n');
+
+				console.log('Waiting for changes... \n\n');
+
 				// Restart the process on file change
 				watcher.on('change', async () => {
-					console.log('File changed. Restarting the process...');
-					await startFrontend(args as StartOptions, true);
+					console.log('File changed. Rebuilding generated files...');
+					execSync(`gw-types ${args.typesdir}`);
+					console.log('Rebuild complete.\n\n');
+					console.log('Waiting for changes... \n\n');
 				});
 			}
 		},
