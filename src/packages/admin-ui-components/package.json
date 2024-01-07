@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "0.2.10",
+	"version": "0.2.12",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -11,6 +11,7 @@
 		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
+		"test": "vitest",
 		"test:tsc": "tsc --noEmit",
 		"test:prettier": "prettier --check .",
 		"version": "npm version --no-git-tag-version"
@@ -58,7 +59,8 @@
 		"react-router-dom": "6.4.3",
 		"typescript": "5.0.2",
 		"vite": "4.3.9",
-		"vite-plugin-svgr": "3.2.0"
+		"vite-plugin-svgr": "3.2.0",
+		"vitest": "1.1.1"
 	},
 	"keywords": [
 		"graphql",

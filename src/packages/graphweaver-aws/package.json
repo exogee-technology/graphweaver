@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-aws",
-	"version": "0.2.7",
+	"version": "0.2.12",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -16,7 +16,8 @@
 		"format": "prettier --write .",
 		"test": "npm run test:format && npm run test:typescript",
 		"test:typescript": "tsc --noEmit",
-		"test:format": "prettier --check ."
+		"test:format": "prettier --check .",
+		"version": "npm version --no-git-tag-version"
 	},
 	"license": "UNLICENSED",
 	"devDependencies": {
