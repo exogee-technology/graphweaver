@@ -55,7 +55,6 @@ export interface GraphweaverConfig {
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
-	private resolvers: any = [];
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
@@ -97,13 +96,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 			}
 		}
 
-		this.resolvers = (this.config.resolvers || []) as any;
+		const resolvers = (this.config.resolvers || []) as any;
 
 		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
-			this.resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
+			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
 		}
-		logger.trace(`Graphweaver buildSchemaSync with ${this.resolvers.length} resolvers`);
+		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
 		// Order is important here
 		const plugins = [
@@ -120,7 +119,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		removeInvalidFilterArg();
 
 		const schema = buildSchemaSync({
-			resolvers: this.resolvers,
+			resolvers,
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
 		});

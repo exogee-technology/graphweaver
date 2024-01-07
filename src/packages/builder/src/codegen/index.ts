@@ -65,8 +65,6 @@ export const codeGenerator = async (schema?: GraphQLSchema, outdir?: string) => 
 			fs.mkdirSync(dirPath, { recursive: true });
 		}
 
-		console.log(dirPath);
-
 		await Promise.all(
 			files.flatMap(async (file) => [
 				fs.promises.writeFile(file.filename, file.content, 'utf8'),
