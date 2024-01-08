@@ -7,5 +7,5 @@ export class Submission extends BaseEntity {
 	id!: string;
 
 	@Property({ type: String })
-	key!: string;
+	url!: string;
 }
