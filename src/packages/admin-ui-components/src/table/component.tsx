@@ -49,7 +49,7 @@ const columnsForEntity = <T extends TableRowItem>(
 						relatedEntity ? (
 							<Link
 								key={value.id}
-								to={routeFor({ type: field.type, id: value.id as string })}
+								to={routeFor({ type: field.type, id: value.value as string })}
 								onClick={gobbleEvent}
 							>
 								{value.label}
