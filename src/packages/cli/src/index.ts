@@ -12,7 +12,7 @@ import {
 import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
-import { generateTypes } from './types';
+import { createSchemaFile, generateTypes } from './types';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
@@ -161,7 +161,8 @@ yargs
 		handler: async ({ environment, adminUiBase, typesDir }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
-				generateTypes(typesDir);
+				await createSchemaFile();
+				await generateTypes(typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
@@ -187,7 +188,8 @@ yargs
 
 		handler: async ({ outDir }) => {
 			await buildBackend({});
-			generateTypes(outDir);
+			await createSchemaFile();
+			await generateTypes(outDir);
 		},
 	})
 	.command({
