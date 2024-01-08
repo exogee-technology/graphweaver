@@ -39,6 +39,11 @@ export const buildTypes = async () => {
 
 	console.log('Resolvers imported.\n\n');
 
+	if (resolvers.length === 0) {
+		console.log('No resolvers found. Skipping schema build.');
+		process.exit(0);
+	}
+
 	const schema = await buildSchema({
 		resolvers,
 	});
