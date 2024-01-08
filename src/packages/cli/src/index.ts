@@ -220,6 +220,8 @@ yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
+				await buildBackend({});
+				await createSchemaFile();
 				await startBackend(args as any);
 				generateTypes(args.typesDir);
 			}
