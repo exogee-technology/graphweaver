@@ -74,6 +74,13 @@ export const encodeSearchParams = (searchParams: SearchParams) => {
 	const { sort, filters, page } = searchParams;
 	let search = '';
 	let encoded: EncodedParams = {};
+
+	if (filters !== undefined) {
+		// Remove all undefined attributes from the filters object as it borks the subsequent URL encoding logic
+		Object.entries(filters).forEach(([key, value]) => {
+			if (value === undefined) delete filters[key];
+		});
+	}
 	if (sort && sort.length > 0) {
 		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
 	}
