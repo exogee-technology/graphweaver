@@ -40,7 +40,6 @@ const columnsForEntity = <T extends TableRowItem>(
 		// We only need a formatter for relationships.
 		formatter: field.relationshipType
 			? ({ row }: FormatterProps<T, unknown>) => {
-
 					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
 
