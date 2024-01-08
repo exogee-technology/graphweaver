@@ -15,7 +15,7 @@ if (!MAILCHIMP_LIST_ID) throw new Error('MAILCHIMP_LIST_ID is required in enviro
 if (!MAILCHIMP_PROJECTS_CATEGORY_ID)
 	throw new Error('MAILCHIMP_PROJECTS_CATEGORY_ID is required in environment');
 
-const graphweaver = new Graphweaver({
+export const graphweaver = new Graphweaver({
 	resolvers,
 });
 

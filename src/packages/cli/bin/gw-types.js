@@ -17,6 +17,14 @@ var generateTypes = async () => {
 
 	const buildDir = import_path3.join(process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
+
+	if (!graphweaver?.schema) {
+		console.warn(
+			'No schema found. To generate types make sure that you export Graphweaver from your index file.'
+		);
+		process.exit(0);
+	}
+
 	const sdl = (0, import_utils.printSchemaWithDirectives)(graphweaver.schema);
 	await (0, import_graphweaver_builder.codeGenerator)(sdl, outdir);
 };
