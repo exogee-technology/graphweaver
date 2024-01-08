@@ -1,13 +1,13 @@
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
-import { User } from './entities';
+import { Submission, User } from './entities';
 
 export const pgConnection = {
 	connectionManagerId: 'pg',
 	mikroOrmConfig: {
-		entities: [User],
+		entities: [User, Submission],
 		driver: PostgreSqlDriver,
-		dbName: 'todo_app',
+		dbName: 'gw-storage-provider',
 		user: 'postgres',
 		password: '',
 		port: 5432,
