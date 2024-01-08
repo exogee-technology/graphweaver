@@ -234,9 +234,9 @@ yargs
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				execSync(`gw-types --outdir=${args.typesDir} --resolvers=${args.resolvers}`, {
-					stdio: 'inherit',
-				});
+				// execSync(`gw-types --outdir=${args.typesDir} --resolvers=${args.resolvers}`, {
+				// 	stdio: 'inherit',
+				// });
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
