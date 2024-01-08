@@ -2,9 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { executeCodegen } from '@graphql-codegen/cli';
 import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset';
-import { GraphQLSchema } from 'graphql';
-
-import loader from './loader';
 
 const content = `/* eslint-disable */
 /* 
@@ -12,16 +9,12 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async (schema?: GraphQLSchema, outdir?: string) => {
+export const codeGenerator = async (outdir?: string) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
 			pluginLoader: async (plugin: string) => import(plugin),
-			schema: {
-				graphweaver: {
-					loader: () => loader(schema),
-				} as any,
-			},
+			schema: './.graphweaver/schema.gql',
 			ignoreNoDocuments: true,
 			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {

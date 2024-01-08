@@ -7,6 +7,7 @@ settings:
 overrides:
   d3-color: 3.1.0
   '@babel/traverse': 7.23.2
+  graphql: 16.8.1
 
 importers:
 

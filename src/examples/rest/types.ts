@@ -17,6 +17,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
 
@@ -118,6 +119,173 @@ export type Mutation = {
   verifyWeb3Challenge: Token;
 };
 
+
+export type MutationChallengePasswordArgs = {
+  password: Scalars['String']['input'];
+};
+
+
+export type MutationCreateLoginPasswordArgs = {
+  confirm: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+
+export type MutationCreateOrUpdateTagsArgs = {
+  input: TagsCreateOrUpdateManyInput;
+};
+
+
+export type MutationCreateOrUpdateTasksArgs = {
+  input: TasksCreateOrUpdateManyInput;
+};
+
+
+export type MutationCreateOrUpdateUsersArgs = {
+  input: UsersCreateOrUpdateManyInput;
+};
+
+
+export type MutationCreateTagArgs = {
+  data: TagInsertInput;
+};
+
+
+export type MutationCreateTagsArgs = {
+  input: TagsInsertManyInput;
+};
+
+
+export type MutationCreateTaskArgs = {
+  data: TaskInsertInput;
+};
+
+
+export type MutationCreateTasksArgs = {
+  input: TasksInsertManyInput;
+};
+
+
+export type MutationCreateUserArgs = {
+  data: UserInsertInput;
+};
+
+
+export type MutationCreateUsersArgs = {
+  input: UsersInsertManyInput;
+};
+
+
+export type MutationDeleteTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteTaskArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationEnrolWalletArgs = {
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationLoginPasswordArgs = {
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+
+export type MutationPasskeyVerifyAuthenticationResponseArgs = {
+  authenticationResponse: PasskeyAuthenticationResponse;
+};
+
+
+export type MutationPasskeyVerifyRegistrationResponseArgs = {
+  registrationResponse: PasskeyRegistrationResponse;
+};
+
+
+export type MutationSendLoginMagicLinkArgs = {
+  username: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateTagArgs = {
+  data: TagCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateTagsArgs = {
+  input: TagsUpdateManyInput;
+};
+
+
+export type MutationUpdateTaskArgs = {
+  data: TaskCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateTasksArgs = {
+  input: TasksUpdateManyInput;
+};
+
+
+export type MutationUpdateUserArgs = {
+  data: UserCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateUsersArgs = {
+  input: UsersUpdateManyInput;
+};
+
+
+export type MutationVerifyChallengeMagicLinkArgs = {
+  token: Scalars['String']['input'];
+};
+
+
+export type MutationVerifyLoginMagicLinkArgs = {
+  token: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+
+export type MutationVerifyOtpChallengeArgs = {
+  code: Scalars['String']['input'];
+};
+
+
+export type MutationVerifyWeb3ChallengeArgs = {
+  token: Scalars['String']['input'];
+};
+
+export type PasskeyAuthenticationResponse = {
+  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
+  clientExtensionResults: Scalars['JSON']['input'];
+  id: Scalars['ID']['input'];
+  rawId: Scalars['String']['input'];
+  response: Scalars['JSON']['input'];
+  type: Scalars['String']['input'];
+};
+
+export type PasskeyRegistrationResponse = {
+  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
+  clientExtensionResults: Scalars['JSON']['input'];
+  id: Scalars['ID']['input'];
+  rawId: Scalars['String']['input'];
+  response: Scalars['JSON']['input'];
+  type: Scalars['String']['input'];
+};
+
 export enum Priority {
   /** HIGH */
   High = 'HIGH',
@@ -139,6 +307,44 @@ export type Query = {
   users: Array<User>;
 };
 
+
+export type QueryTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTagsArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+  pagination?: InputMaybe<TagsPaginationInput>;
+};
+
+
+export type QueryTaskArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+  pagination?: InputMaybe<TasksPaginationInput>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryUsersArgs = {
+  filter?: InputMaybe<UsersListFilter>;
+  pagination?: InputMaybe<UsersPaginationInput>;
+};
+
+export enum Sort {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
+
 export type Tag = {
   __typename?: 'Tag';
   id: Scalars['ID']['output'];
@@ -149,6 +355,25 @@ export type Tag = {
 
 export type TagTasksArgs = {
   filter?: InputMaybe<TasksListFilter>;
+};
+
+export type TagCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
+};
+
+export type TagInsertInput = {
+  name: Scalars['String']['input'];
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
+};
+
+export type TagsCreateOrUpdateManyInput = {
+  data: Array<TagCreateOrUpdateInput>;
+};
+
+export type TagsInsertManyInput = {
+  data: Array<TagInsertInput>;
 };
 
 export type TagsListFilter = {
@@ -172,6 +397,22 @@ export type TagsListFilter = {
   tasks?: InputMaybe<TasksListFilter>;
 };
 
+export type TagsOrderByInput = {
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  tasks?: InputMaybe<Sort>;
+};
+
+export type TagsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TagsOrderByInput>;
+};
+
+export type TagsUpdateManyInput = {
+  data: Array<TagCreateOrUpdateInput>;
+};
+
 export type Task = {
   __typename?: 'Task';
   description: Scalars['String']['output'];
@@ -186,6 +427,33 @@ export type Task = {
 
 export type TaskTagsArgs = {
   filter?: InputMaybe<TagsListFilter>;
+};
+
+export type TaskCreateOrUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
+};
+
+export type TaskInsertInput = {
+  description: Scalars['String']['input'];
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
+};
+
+export type TasksCreateOrUpdateManyInput = {
+  data: Array<TaskCreateOrUpdateInput>;
+};
+
+export type TasksInsertManyInput = {
+  data: Array<TaskInsertInput>;
 };
 
 export type TasksListFilter = {
@@ -221,8 +489,25 @@ export type TasksListFilter = {
   slug_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   slug_notnull?: InputMaybe<Scalars['String']['input']>;
   slug_null?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<UsersListFilter>;
+  tags?: InputMaybe<TagsListFilter>;
   user?: InputMaybe<UsersListFilter>;
+};
+
+export type TasksOrderByInput = {
+  description?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  priority?: InputMaybe<Sort>;
+  slug?: InputMaybe<Sort>;
+};
+
+export type TasksPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TasksOrderByInput>;
+};
+
+export type TasksUpdateManyInput = {
+  data: Array<TaskCreateOrUpdateInput>;
 };
 
 export type Token = {
@@ -234,6 +519,23 @@ export type User = {
   __typename?: 'User';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+};
+
+export type UserCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UserInsertInput = {
+  name: Scalars['String']['input'];
+};
+
+export type UsersCreateOrUpdateManyInput = {
+  data: Array<UserCreateOrUpdateInput>;
+};
+
+export type UsersInsertManyInput = {
+  data: Array<UserInsertInput>;
 };
 
 export type UsersListFilter = {
@@ -254,4 +556,19 @@ export type UsersListFilter = {
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['String']['input']>;
   name_null?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UsersOrderByInput = {
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+};
+
+export type UsersPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<UsersOrderByInput>;
+};
+
+export type UsersUpdateManyInput = {
+  data: Array<UserCreateOrUpdateInput>;
 };

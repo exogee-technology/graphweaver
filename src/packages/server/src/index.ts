@@ -1,5 +1,4 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
-import { GraphQLSchema } from 'graphql';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
@@ -122,6 +121,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
+			emitSchemaFile: {
+				path: './.graphweaver/schema.gql',
+			},
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);

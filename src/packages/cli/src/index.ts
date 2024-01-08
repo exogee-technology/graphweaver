@@ -157,16 +157,11 @@ yargs
 					type: 'string',
 					default: DEFAULT_TYPES_OUT_DIR,
 					describe: 'Specify a directory path to store the types file',
-				})
-				.option('resolvers', {
-					type: 'string',
-					default: DEFAULT_RESOLVERS_FILE_PATH,
-					describe: 'Specify a filepath that exports the resolvers array',
 				}),
-		handler: async ({ environment, adminUiBase, typesDir, resolvers }) => {
+		handler: async ({ environment, adminUiBase, typesDir }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
-				generateTypes(typesDir, resolvers);
+				generateTypes(typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
@@ -184,20 +179,15 @@ yargs
 		command: ['build-types'],
 		describe: 'Builds your Graphweaver types.',
 		builder: (yargs) =>
-			yargs
-				.option('outDir', {
-					type: 'string',
-					default: DEFAULT_TYPES_OUT_DIR,
-					describe: 'Specify a directory path to store the types file',
-				})
-				.option('resolvers', {
-					type: 'string',
-					default: DEFAULT_RESOLVERS_FILE_PATH,
-					describe: 'Specify a filepath that exports the resolvers array',
-				}),
+			yargs.option('outDir', {
+				type: 'string',
+				default: DEFAULT_TYPES_OUT_DIR,
+				describe: 'Specify a directory path to store the types file',
+			}),
 
-		handler: async ({ outDir, resolvers }) => {
-			generateTypes(outDir, resolvers);
+		handler: async ({ outDir }) => {
+			await buildBackend({});
+			generateTypes(outDir);
 		},
 	})
 	.command({
@@ -225,16 +215,11 @@ yargs
 					type: 'string',
 					default: DEFAULT_TYPES_OUT_DIR,
 					describe: 'Specify a directory path to store the types file',
-				})
-				.option('resolvers', {
-					type: 'string',
-					default: DEFAULT_RESOLVERS_FILE_PATH,
-					describe: 'Specify a filepath that exports the resolvers array',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				generateTypes(args.typesDir, args.resolvers);
+				generateTypes(args.typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -266,11 +251,6 @@ yargs
 					type: 'string',
 					default: DEFAULT_TYPES_OUT_DIR,
 					describe: 'Specify a directory path to store the types file',
-				})
-				.option('resolvers', {
-					type: 'string',
-					default: DEFAULT_RESOLVERS_FILE_PATH,
-					describe: 'Specify a filepath that exports the resolvers array',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
@@ -288,7 +268,7 @@ yargs
 
 				// Build Types
 				console.log('Generating files...');
-				generateTypes(args.typesDir, args.resolvers);
+				generateTypes(args.typesDir);
 				console.log('Generating files complete.\n\n');
 
 				console.log('Waiting for changes... \n\n');
@@ -296,7 +276,7 @@ yargs
 				// Restart the process on file change
 				watcher.on('change', async () => {
 					console.log('File changed. Rebuilding generated files...');
-					generateTypes(args.typesDir, args.resolvers);
+					generateTypes(args.typesDir);
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
 				});
