@@ -75,8 +75,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 		}
 	}
 
-	console.log();
-	console.log('Finished!');
+	console.log('\nBackend Build Finished! ');
 
 	// Note, this will leave the ESBuild service process around:
 	// https://github.com/evanw/esbuild/issues/985

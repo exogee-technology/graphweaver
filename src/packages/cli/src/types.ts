@@ -1,11 +1,7 @@
-import { codeGenerator } from '@exogee/graphweaver-builder';
-import path from 'path';
-
-export const createSchemaFile = async () => {
-	const buildDir = path.join(process.cwd(), './dist/backend/index.js');
-	await import(buildDir);
-};
+import { execSync } from 'child_process';
 
 export const generateTypes = async (outdir: string) => {
-	await codeGenerator(outdir);
+	execSync(`gw-types --outdir=${outdir}`, {
+		stdio: 'inherit',
+	});
 };

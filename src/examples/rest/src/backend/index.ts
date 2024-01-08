@@ -7,7 +7,7 @@ import { resolvers } from './schema';
 import { beforeRead, afterRead } from './auth/admin-ui';
 import { addUserToContext } from './auth/context';
 
-const graphweaver = new Graphweaver<AuthorizationContext>({
+export const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(addUserToContext)],

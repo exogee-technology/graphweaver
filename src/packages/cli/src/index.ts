@@ -12,11 +12,10 @@ import {
 import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
-import { createSchemaFile, generateTypes } from './types';
+import { generateTypes } from './types';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
-const DEFAULT_RESOLVERS_FILE_PATH = './src/backend/schema/index';
 
 yargs
 	.env('GRAPHWEAVER')
@@ -161,7 +160,6 @@ yargs
 		handler: async ({ environment, adminUiBase, typesDir }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
-				await createSchemaFile();
 				await generateTypes(typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
@@ -188,7 +186,6 @@ yargs
 
 		handler: async ({ outDir }) => {
 			await buildBackend({});
-			await createSchemaFile();
 			await generateTypes(outDir);
 		},
 	})
@@ -220,8 +217,6 @@ yargs
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await buildBackend({});
-				await createSchemaFile();
 				await startBackend(args as any);
 				generateTypes(args.typesDir);
 			}
@@ -272,7 +267,7 @@ yargs
 
 				// Build Types
 				console.log('Generating files...');
-				generateTypes(args.typesDir);
+				await generateTypes(args.typesDir);
 				console.log('Generating files complete.\n\n');
 
 				console.log('Waiting for changes... \n\n');
@@ -280,7 +275,8 @@ yargs
 				// Restart the process on file change
 				watcher.on('change', async () => {
 					console.log('File changed. Rebuilding generated files...');
-					generateTypes(args.typesDir);
+					await buildBackend(args as any);
+					await generateTypes(args.typesDir);
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
 				});

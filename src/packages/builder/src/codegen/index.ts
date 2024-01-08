@@ -9,12 +9,12 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async (outdir?: string) => {
+export const codeGenerator = async (schema: any, outdir?: string) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
 			pluginLoader: async (plugin: string) => import(plugin),
-			schema: './.graphweaver/schema.gql',
+			schema,
 			ignoreNoDocuments: true,
 			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {

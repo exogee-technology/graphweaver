@@ -54,6 +54,7 @@ export interface GraphweaverConfig {
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
+	public schema: any;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
@@ -117,20 +118,17 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
 		removeInvalidFilterArg();
 
-		const schema = buildSchemaSync({
+		this.schema = buildSchemaSync({
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
-			emitSchemaFile: {
-				path: './.graphweaver/schema.gql',
-			},
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
 		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
 			plugins,
-			schema,
+			schema: this.schema,
 		});
 	}
 
