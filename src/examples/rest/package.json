@@ -13,9 +13,9 @@
 		"lib"
 	],
 	"scripts": {
-		"build": "graphweaver build",
-		"start": "graphweaver start",
-		"watch": "graphweaver watch",
+		"build": "graphweaver build --typesDir=./ --resolvers=./src/backend/index",
+		"start": "graphweaver start --typesDir=./ --resolvers=./src/backend/index",
+		"watch": "graphweaver watch --typesDir=./ --resolvers=./src/backend/index",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {

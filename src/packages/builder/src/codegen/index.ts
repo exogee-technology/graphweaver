@@ -65,15 +65,16 @@ export const codeGenerator = async (schema?: GraphQLSchema, outdir?: string) => 
 			fs.mkdirSync(dirPath, { recursive: true });
 		}
 
-		await Promise.all(
-			files.flatMap(async (file) => [
-				fs.promises.writeFile(file.filename, file.content, 'utf8'),
-				// We save the types to two locations src and .graphweaver / outdir
-				...(file.filename === 'src/types.generated.ts'
-					? [fs.promises.writeFile(`${dirPath}/types.ts`, file.content, 'utf8')]
-					: []),
-			])
-		);
+		const writeOperations = files.flatMap((file) => [
+			fs.promises.writeFile(file.filename, file.content, 'utf8'),
+			// We save the types to two locations src and .graphweaver / outdir
+			...(file.filename === 'src/types.generated.ts'
+				? [fs.promises.writeFile(`${dirPath}/types.ts`, file.content, 'utf8')]
+				: []),
+		]);
+
+		// Write the files to disk
+		await Promise.all(writeOperations);
 	} catch (err: any) {
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {
