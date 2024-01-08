@@ -69,13 +69,7 @@ export const codeGenerator = async (schema?: GraphQLSchema, outdir?: string) => 
 			fs.promises.writeFile(path.join(process.cwd(), file.filename), file.content, 'utf8'),
 			// We save the types to two locations src and .graphweaver / outdir
 			...(file.filename === 'src/types.generated.ts'
-				? [
-						fs.promises.writeFile(
-							path.join(process.cwd(), `${dirPath}/types.ts`),
-							file.content,
-							'utf8'
-						),
-				  ]
+				? [fs.promises.writeFile(path.join(dirPath, `types.ts`), file.content, 'utf8')]
 				: []),
 		]);
 
