@@ -21,6 +21,10 @@ import { ApolloError } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
+// Without stopping propagation on our links, the grid will be notified about the click,
+// which is not what we want. We want to navigate and not let the grid handle it
+const gobbleEvent = (e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation();
+
 const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
@@ -36,9 +40,6 @@ const columnsForEntity = <T extends TableRowItem>(
 		// We only need a formatter for relationships.
 		formatter: field.relationshipType
 			? ({ row }: FormatterProps<T, unknown>) => {
-					// Without stopping propagation on our links, the grid will be notified about the click,
-					// which is not what we want. We want to navigate and not let the grid handle it
-					const gobbleEvent = (e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation();
 
 					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
