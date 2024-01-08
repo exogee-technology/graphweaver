@@ -1,5 +1,4 @@
 import yargs from 'yargs';
-import { execSync } from 'child_process';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
@@ -13,6 +12,7 @@ import {
 import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
+import { generateTypes } from './types';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
@@ -166,7 +166,7 @@ yargs
 		handler: async ({ environment, adminUiBase, typesDir, resolvers }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
-				execSync(`gw-types --outdir=${typesDir} --resolvers=${resolvers}`, { stdio: 'inherit' });
+				generateTypes(typesDir, resolvers);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
@@ -197,7 +197,7 @@ yargs
 				}),
 
 		handler: async ({ outDir, resolvers }) => {
-			execSync(`gw-types --outdir=${outDir} --resolvers=${resolvers}`, { stdio: 'inherit' });
+			generateTypes(outDir, resolvers);
 		},
 	})
 	.command({
@@ -234,9 +234,7 @@ yargs
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				execSync(`gw-types --outdir=${args.typesDir} --resolvers=${args.resolvers}`, {
-					stdio: 'inherit',
-				});
+				generateTypes(args.typesDir, args.resolvers);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -290,9 +288,7 @@ yargs
 
 				// Build Types
 				console.log('Generating files...');
-				execSync(`gw-types --outdir=${args.typesDir} --resolvers=${args.resolvers}`, {
-					stdio: 'inherit',
-				});
+				generateTypes(args.typesDir, args.resolvers);
 				console.log('Generating files complete.\n\n');
 
 				console.log('Waiting for changes... \n\n');
@@ -300,9 +296,7 @@ yargs
 				// Restart the process on file change
 				watcher.on('change', async () => {
 					console.log('File changed. Rebuilding generated files...');
-					execSync(`gw-types --outdir=${args.typesDir} --resolvers=${args.resolvers}`, {
-						stdio: 'inherit',
-					});
+					generateTypes(args.typesDir, args.resolvers);
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
 				});
