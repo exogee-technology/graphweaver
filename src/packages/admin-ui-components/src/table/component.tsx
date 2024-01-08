@@ -38,10 +38,8 @@ const columnsForEntity = <T extends TableRowItem>(
 			? ({ row }: FormatterProps<T, unknown>) => {
 					// Without stopping propagation on our links, the grid will be notified about the click,
 					// which is not what we want. We want to navigate and not let the grid handle it
-					const gobbleEvent = useCallback(
-						(e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation(),
-						[]
-					);
+					const gobbleEvent = (e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation();
+
 					const value = row[field.name as keyof typeof row];
 					const relatedEntity = entityByType(field.type);
 
