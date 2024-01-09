@@ -30,7 +30,7 @@ import styles from './styles.module.css';
 import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
-	const { entity } = useParams();
+	const { entity, id } = useParams();
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
@@ -117,7 +117,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			});
 		}
 		navigate(
-			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort })
+			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort, id })
 		);
 	}, [filter]);
 
