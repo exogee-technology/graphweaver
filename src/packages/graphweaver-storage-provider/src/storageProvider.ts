@@ -13,47 +13,22 @@ type StorageConfig = {
 	expiresIn?: number;
 };
 
-export interface IStorageProvider {
-	getDownloadUrl(key: string): Promise<string>;
-}
-
-export interface IStorageResolver {
-	getUploadUrl(key: string): Promise<string>;
-}
 const EXPIRE_TIME = 3600;
 
 @Resolver()
 export class S3StorageResolver {
-	private storageProvider: S3StorageProvider;
-	constructor(config: StorageConfig) {
-		this.storageProvider = new S3StorageProvider(config);
-	}
-
-	@Mutation(() => String)
-	async getUploadUrl(@Arg('key', () => ID) key: string): Promise<string> {
-		const uploadURL = await this.storageProvider.getUploadUrl(key);
-		return uploadURL;
-	}
-
-	@Query(() => String)
-	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
-		const downloadURL = await this.storageProvider.getDownloadUrl(key);
-		return downloadURL;
-	}
-}
-
-export class S3StorageProvider {
 	bucketName: string;
 	region: string | undefined;
 	expiresIn: number;
 
-	constructor(config: StorageConfig) {
+	constructor(private config: StorageConfig) {
 		this.bucketName = config.bucketName;
 		this.region = config.region;
 		this.expiresIn = config.expiresIn || EXPIRE_TIME;
 	}
 
-	async getUploadUrl(key: string): Promise<string> {
+	@Mutation(() => String)
+	async getUploadUrl(@Arg('key', () => ID) key: string): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
 		const s3 = new S3Client({
@@ -68,7 +43,20 @@ export class S3StorageProvider {
 		const uploadURL = await getSignedUrl(s3, command, { expiresIn: this.expiresIn });
 		return uploadURL;
 	}
+}
 
+@Resolver()
+export class S3StorageProvider {
+	bucketName: string;
+	region: string | undefined;
+	expiresIn: number;
+
+	constructor(private config: StorageConfig) {
+		this.bucketName = config.bucketName;
+		this.region = config.region;
+		this.expiresIn = config.expiresIn || EXPIRE_TIME;
+	}
+	@Query(() => String)
 	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
