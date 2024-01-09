@@ -15,7 +15,7 @@ var generateTypes = async () => {
 
 	const outdir = argv.outdir;
 
-	const buildDir = import_path3.join(process.cwd(), `./.graphweaver/backend/index.js`);
+	const buildDir = import_path3.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
 
 	if (!graphweaver?.schema) {
