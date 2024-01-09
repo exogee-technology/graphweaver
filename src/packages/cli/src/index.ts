@@ -178,15 +178,21 @@ yargs
 		command: ['build-types'],
 		describe: 'Builds your Graphweaver types.',
 		builder: (yargs) =>
-			yargs.option('outDir', {
+			yargs.option('typesDir', {
 				type: 'string',
 				default: DEFAULT_TYPES_OUT_DIR,
 				describe: 'Specify a directory path to store the types file',
 			}),
-
-		handler: async ({ outDir }) => {
+		handler: async ({ typesDir }) => {
 			await buildBackend({});
-			await generateTypes(outDir);
+			await generateTypes(typesDir);
+
+			// Note, this will leave the ESBuild service process around:
+			// https://github.com/evanw/esbuild/issues/985
+			// console.log('Handles: ', (process as any)._getActiveHandles());
+			//
+			// It does not give us a way to kill it gracefully, so we'll do it here.
+			process.exit(0);
 		},
 	})
 	.command({
@@ -218,7 +224,7 @@ yargs
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				generateTypes(args.typesDir);
+				await generateTypes(args.typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);

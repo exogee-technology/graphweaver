@@ -9,11 +9,13 @@ var yargs_helpers = require('yargs/helpers');
 var generateTypes = async () => {
 	const argv = await yargs(yargs_helpers.hideBin(process.argv))
 		.options({
-			outdir: { type: 'string', default: './.graphweaver' },
+			outDir: { type: 'string', default: './.graphweaver' },
 		})
 		.parse();
 
-	const outdir = argv.outdir;
+	const outDir = argv.outdir;
+
+	console.log(`Generating types in ${outDir}`);
 
 	const buildDir = import_path3.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
@@ -26,7 +28,7 @@ var generateTypes = async () => {
 	}
 
 	const sdl = (0, import_utils.printSchemaWithDirectives)(graphweaver.schema);
-	await (0, import_graphweaver_builder.codeGenerator)(sdl, outdir);
+	await (0, import_graphweaver_builder.codeGenerator)(sdl, outDir);
 };
 
 generateTypes()

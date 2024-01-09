@@ -1,7 +1,7 @@
 import { execSync } from 'child_process';
 
-export const generateTypes = async (outdir: string) => {
-	execSync(`gw-types --outdir=${outdir}`, {
+export const generateTypes = async (outDir: string) => {
+	execSync(`gw-types --outdir=${outDir}`, {
 		stdio: 'inherit',
 	});
 };
