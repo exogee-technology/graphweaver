@@ -1,6 +1,5 @@
 import { GraphQLEntity, Field, ID, ObjectType, Root } from '@exogee/graphweaver';
 import { S3StorageProvider, StorageType } from '@exogee/graphweaver-storage-provider';
-import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 import { Submission as OrmSubmission } from '../../entities';
 

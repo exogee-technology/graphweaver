@@ -1,15 +1,16 @@
 import { UserResolver } from './user';
 import { SubmissionResolver } from './submission';
-import { S3StorageResolver } from '@exogee/graphweaver-storage-provider';
+import { S3StorageResolver, StorageType } from '@exogee/graphweaver-storage-provider';
 import { Resolver } from '@exogee/graphweaver';
 
 @Resolver()
 class MyS3StorageResolver extends S3StorageResolver {
 	constructor() {
+		if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
 		super({
-			bucketName: 'graphweaver-test',
+			bucketName: process.env.AWS_S3_BUCKET,
 			region: process.env.AWS_REGION,
-			type: 's3',
+			type: StorageType.S3,
 		});
 	}
 }
