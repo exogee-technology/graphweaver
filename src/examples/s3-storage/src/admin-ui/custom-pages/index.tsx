@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { gql, useMutation } from '@apollo/client';
 
 export const customPages = {
@@ -10,9 +10,9 @@ export const customPages = {
 	],
 };
 
-const generateUploadUrlMutation = gql`
-	mutation GenerateUploadUrl($key: ID!) {
-		generateUploadUrl(key: $key)
+const getUploadUrlMutation = gql`
+	mutation GetUploadUrl($key: ID!) {
+		getUploadUrl(key: $key)
 	}
 `;
 
@@ -20,21 +20,17 @@ const createSubmissionMutation = gql`
 	mutation Mutation($createSubmissionData: SubmissionInsertInput!) {
 		createSubmission(data: $createSubmissionData) {
 			id
-			url
 		}
 	}
 `;
 
 const GetSignedURLComponent = () => {
-	const [getPresignedURL, { data }] = useMutation(generateUploadUrlMutation);
+	const [getUploadUrl] = useMutation(getUploadUrlMutation);
 	const [createSubmission] = useMutation(createSubmissionMutation);
 
 	const handleFileUpload = async (file: any) => {
-		const res = await getPresignedURL({ variables: { key: file.name } });
-		console.log(res);
-
-		const uploadURL = res.data.generateUploadUrl;
-
+		const res = await getUploadUrl({ variables: { key: file.name } });
+		const uploadURL = res.data.getUploadUrl;
 		if (!uploadURL) {
 			console.error('Upload URL is not available');
 			return;
@@ -49,19 +45,16 @@ const GetSignedURLComponent = () => {
 					'Content-Type': file.type,
 				},
 			});
-			console.log(response);
+
 			if (response.ok) {
-				console.log('File uploaded successfully!');
-				// Now we can save the url to a new submission entity
+				// Save the download url to a new submission entity
 				const submission = await createSubmission({
 					variables: {
 						createSubmissionData: {
-							url: uploadURL,
+							key: file.name,
 						},
 					},
 				});
-
-				console.log(submission);
 			} else {
 				console.error('Error uploading file:', response.statusText);
 			}

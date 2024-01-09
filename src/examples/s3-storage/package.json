@@ -3,7 +3,7 @@
 	"version": "0.2.11",
 	"license": "MIT",
 	"private": true,
-	"description": "Example of connecting an AWS S3 bucket.",
+	"description": "Example of connecting Graphweaver to an AWS S3 bucket.",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
