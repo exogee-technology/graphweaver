@@ -11,4 +11,4 @@ export const graphweaver = new Graphweaver({
 	resolvers,
 });
 
-exports.handler = graphweaver.handler();
+export const handler = graphweaver.handler();
