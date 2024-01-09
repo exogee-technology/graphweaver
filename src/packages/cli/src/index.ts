@@ -145,7 +145,7 @@ yargs
 					type: 'string',
 					choices: ['backend', 'frontend', 'all'],
 					default: 'all',
-					describe: 'Choose whether you want to build the backend, frontend or all.',
+					describe: 'Choose whether you want to build the backend, frontend, or both.',
 				})
 				.option('adminUiBase', {
 					type: 'string',

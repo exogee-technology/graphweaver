@@ -1,5 +1,6 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { logger } from '@exogee/logger';
@@ -54,7 +55,7 @@ export interface GraphweaverConfig {
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
-	public schema: any;
+	public schema: GraphQLSchema;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
