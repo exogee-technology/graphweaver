@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "0.2.12",
+	"version": "0.2.13",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
