@@ -1,1 +1,1 @@
-export * from './generateUploadUrl';
+export * from './storageProvider';
