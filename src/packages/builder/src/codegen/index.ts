@@ -9,7 +9,7 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async (schema: any, outdir?: string) => {
+export const codeGenerator = async (schema: string, outdir?: string) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),

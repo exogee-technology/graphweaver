@@ -49,7 +49,7 @@ jobs:
         timeout-minutes: 2
         run: |
           pnpm start-server &
-          sleep 10 &&
+          sleep 3 &&
           pnpm test-sqlite &&
           taskkill /F /IM node.exe /T
 
