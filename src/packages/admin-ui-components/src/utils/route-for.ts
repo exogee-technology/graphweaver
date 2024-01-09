@@ -74,6 +74,7 @@ export const encodeSearchParams = (searchParams: SearchParams) => {
 	const { sort, filters, page } = searchParams;
 	let search = '';
 	let encoded: EncodedParams = {};
+
 	if (sort && sort.length > 0) {
 		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
 	}
