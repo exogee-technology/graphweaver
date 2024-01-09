@@ -117,6 +117,7 @@ export const importDataSource = async (
 			prompts.push({
 				type: 'input',
 				name: 'user',
+				default: source === 'postgresql' ? 'postgres' : 'root',
 				message: `What is the username to access the database server?`,
 			});
 		}
