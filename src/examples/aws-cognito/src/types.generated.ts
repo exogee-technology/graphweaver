@@ -19,6 +19,67 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AdminUiEntityAttributeMetadata = {
+  __typename?: 'AdminUiEntityAttributeMetadata';
+  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type AdminUiEntityMetadata = {
+  __typename?: 'AdminUiEntityMetadata';
+  attributes: AdminUiEntityAttributeMetadata;
+  backendId?: Maybe<Scalars['String']['output']>;
+  fields: Array<AdminUiFieldMetadata>;
+  name: Scalars['String']['output'];
+  summaryField?: Maybe<Scalars['String']['output']>;
+};
+
+export type AdminUiEnumMetadata = {
+  __typename?: 'AdminUiEnumMetadata';
+  name: Scalars['String']['output'];
+  values: Array<AdminUiEnumValueMetadata>;
+};
+
+export type AdminUiEnumValueMetadata = {
+  __typename?: 'AdminUiEnumValueMetadata';
+  name: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type AdminUiFieldAttributeMetadata = {
+  __typename?: 'AdminUiFieldAttributeMetadata';
+  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type AdminUiFieldMetadata = {
+  __typename?: 'AdminUiFieldMetadata';
+  attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  filter?: Maybe<AdminUiFilterMetadata>;
+  name: Scalars['String']['output'];
+  relatedEntity?: Maybe<Scalars['String']['output']>;
+  relationshipType?: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type AdminUiFilterMetadata = {
+  __typename?: 'AdminUiFilterMetadata';
+  type: AdminUiFilterType;
+};
+
+export enum AdminUiFilterType {
+  Boolean = 'BOOLEAN',
+  DateRange = 'DATE_RANGE',
+  Enum = 'ENUM',
+  Numeric = 'NUMERIC',
+  Relationship = 'RELATIONSHIP',
+  Text = 'TEXT'
+}
+
+export type AdminUiMetadata = {
+  __typename?: 'AdminUiMetadata';
+  entities: Array<AdminUiEntityMetadata>;
+  enums: Array<AdminUiEnumMetadata>;
+};
+
 export type CognitoUser = {
   __typename?: 'CognitoUser';
   attributes?: Maybe<Scalars['String']['output']>;
@@ -171,6 +232,7 @@ export type MutationUpdateCognitoUsersArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  _graphweaver: AdminUiMetadata;
   cognitoUser?: Maybe<CognitoUser>;
   cognitoUsers: Array<CognitoUser>;
 };
@@ -187,6 +249,6 @@ export type QueryCognitoUsersArgs = {
 };
 
 export enum Sort {
-  Asc = 'asc',
-  Desc = 'desc'
+  Asc = 'ASC',
+  Desc = 'DESC'
 }
