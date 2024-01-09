@@ -1,7 +1,7 @@
 import fs from 'fs';
+import path from 'path';
 import { executeCodegen } from '@graphql-codegen/cli';
 import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset';
-import loader from './loader';
 
 const content = `/* eslint-disable */
 /* 
@@ -9,16 +9,12 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async () => {
+export const codeGenerator = async (schema: string, outdir?: string) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
 			pluginLoader: async (plugin: string) => import(plugin),
-			schema: {
-				graphweaver: {
-					loader: loader as any,
-				},
-			},
+			schema,
 			ignoreNoDocuments: true,
 			documents: ['./src/**/!(*.generated).{ts,tsx}'],
 			generates: {
@@ -56,9 +52,22 @@ export const codeGenerator = async () => {
 			},
 		});
 
-		await Promise.all(
-			files.map(async (file) => fs.promises.writeFile(file.filename, file.content, 'utf8'))
-		);
+		// ensure that we have a graphweaver directory
+		const dirPath = path.join(process.cwd(), outdir || './.graphweaver');
+		if (!fs.existsSync(dirPath)) {
+			fs.mkdirSync(dirPath, { recursive: true });
+		}
+
+		const writeOperations = files.flatMap((file) => [
+			fs.promises.writeFile(path.join(process.cwd(), file.filename), file.content, 'utf8'),
+			// We save the types to two locations src and .graphweaver / outdir
+			...(file.filename === 'src/types.generated.ts'
+				? [fs.promises.writeFile(path.join(dirPath, `types.ts`), file.content, 'utf8')]
+				: []),
+		]);
+
+		// Write the files to disk
+		await Promise.all(writeOperations);
 	} catch (err: any) {
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {

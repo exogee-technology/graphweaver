@@ -19,8 +19,14 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AdminUiEntityAttributeMetadata = {
+  __typename?: 'AdminUiEntityAttributeMetadata';
+  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
+  attributes: AdminUiEntityAttributeMetadata;
   backendId?: Maybe<Scalars['String']['output']>;
   fields: Array<AdminUiFieldMetadata>;
   name: Scalars['String']['output'];
@@ -39,8 +45,14 @@ export type AdminUiEnumValueMetadata = {
   value: Scalars['String']['output'];
 };
 
+export type AdminUiFieldAttributeMetadata = {
+  __typename?: 'AdminUiFieldAttributeMetadata';
+  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
+  attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
@@ -54,6 +66,7 @@ export type AdminUiFilterMetadata = {
 };
 
 export enum AdminUiFilterType {
+  Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
@@ -67,403 +80,175 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
+export type CognitoUser = {
+  __typename?: 'CognitoUser';
+  attributes?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  enabled: Scalars['Boolean']['output'];
+  groups: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  userStatus: Scalars['String']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type CognitoUserCreateOrUpdateInput = {
+  attributes?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  groups?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  userStatus?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CognitoUserInsertInput = {
+  attributes?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  groups: Scalars['String']['input'];
+  userStatus: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type CognitoUsersCreateOrUpdateManyInput = {
+  data: Array<CognitoUserCreateOrUpdateInput>;
+};
+
+export type CognitoUsersInsertManyInput = {
+  data: Array<CognitoUserInsertInput>;
+};
+
+export type CognitoUsersListFilter = {
+  _and?: InputMaybe<Array<CognitoUsersListFilter>>;
+  _not?: InputMaybe<CognitoUsersListFilter>;
+  _or?: InputMaybe<Array<CognitoUsersListFilter>>;
+  attributes?: InputMaybe<Scalars['String']['input']>;
+  attributes_ilike?: InputMaybe<Scalars['String']['input']>;
+  attributes_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  attributes_like?: InputMaybe<Scalars['String']['input']>;
+  attributes_ne?: InputMaybe<Scalars['String']['input']>;
+  attributes_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  attributes_notnull?: InputMaybe<Scalars['String']['input']>;
+  attributes_null?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  email_ilike?: InputMaybe<Scalars['String']['input']>;
+  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_like?: InputMaybe<Scalars['String']['input']>;
+  email_ne?: InputMaybe<Scalars['String']['input']>;
+  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_notnull?: InputMaybe<Scalars['String']['input']>;
+  email_null?: InputMaybe<Scalars['String']['input']>;
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  groups?: InputMaybe<Scalars['String']['input']>;
+  groups_ilike?: InputMaybe<Scalars['String']['input']>;
+  groups_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  groups_like?: InputMaybe<Scalars['String']['input']>;
+  groups_ne?: InputMaybe<Scalars['String']['input']>;
+  groups_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  groups_notnull?: InputMaybe<Scalars['String']['input']>;
+  groups_null?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  userStatus?: InputMaybe<Scalars['String']['input']>;
+  userStatus_ilike?: InputMaybe<Scalars['String']['input']>;
+  userStatus_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  userStatus_like?: InputMaybe<Scalars['String']['input']>;
+  userStatus_ne?: InputMaybe<Scalars['String']['input']>;
+  userStatus_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  userStatus_notnull?: InputMaybe<Scalars['String']['input']>;
+  userStatus_null?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['String']['input']>;
+  username_null?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CognitoUsersOrderByInput = {
+  attributes?: InputMaybe<Sort>;
+  email?: InputMaybe<Sort>;
+  groups?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  userStatus?: InputMaybe<Sort>;
+  username?: InputMaybe<Sort>;
+};
+
+export type CognitoUsersPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<CognitoUsersOrderByInput>;
+};
+
+export type CognitoUsersUpdateManyInput = {
+  data: Array<CognitoUserCreateOrUpdateInput>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  createOrUpdateTags: Array<Tag>;
-  createOrUpdateTasks: Array<Task>;
-  createOrUpdateUsers: Array<User>;
-  createTag: Tag;
-  createTags: Array<Tag>;
-  createTask: Task;
-  createTasks: Array<Task>;
-  createUser: User;
-  createUsers: Array<User>;
-  deleteTag: Scalars['Boolean']['output'];
-  deleteTask: Scalars['Boolean']['output'];
-  deleteUser: Scalars['Boolean']['output'];
-  login: Token;
-  updateTag: Tag;
-  updateTags: Array<Tag>;
-  updateTask: Task;
-  updateTasks: Array<Task>;
-  updateUser: User;
-  updateUsers: Array<User>;
+  createCognitoUser: CognitoUser;
+  createCognitoUsers: Array<CognitoUser>;
+  createOrUpdateCognitoUsers: Array<CognitoUser>;
+  deleteCognitoUser: Scalars['Boolean']['output'];
+  updateCognitoUser: CognitoUser;
+  updateCognitoUsers: Array<CognitoUser>;
 };
 
 
-export type MutationCreateOrUpdateTagsArgs = {
-  input: TagsCreateOrUpdateManyInput;
+export type MutationCreateCognitoUserArgs = {
+  data: CognitoUserInsertInput;
 };
 
 
-export type MutationCreateOrUpdateTasksArgs = {
-  input: TasksCreateOrUpdateManyInput;
+export type MutationCreateCognitoUsersArgs = {
+  input: CognitoUsersInsertManyInput;
 };
 
 
-export type MutationCreateOrUpdateUsersArgs = {
-  input: UsersCreateOrUpdateManyInput;
+export type MutationCreateOrUpdateCognitoUsersArgs = {
+  input: CognitoUsersCreateOrUpdateManyInput;
 };
 
 
-export type MutationCreateTagArgs = {
-  data: TagInsertInput;
-};
-
-
-export type MutationCreateTagsArgs = {
-  input: TagsInsertManyInput;
-};
-
-
-export type MutationCreateTaskArgs = {
-  data: TaskInsertInput;
-};
-
-
-export type MutationCreateTasksArgs = {
-  input: TasksInsertManyInput;
-};
-
-
-export type MutationCreateUserArgs = {
-  data: UserInsertInput;
-};
-
-
-export type MutationCreateUsersArgs = {
-  input: UsersInsertManyInput;
-};
-
-
-export type MutationDeleteTagArgs = {
+export type MutationDeleteCognitoUserArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type MutationDeleteTaskArgs = {
-  id: Scalars['ID']['input'];
+export type MutationUpdateCognitoUserArgs = {
+  data: CognitoUserCreateOrUpdateInput;
 };
 
 
-export type MutationDeleteUserArgs = {
-  id: Scalars['ID']['input'];
+export type MutationUpdateCognitoUsersArgs = {
+  input: CognitoUsersUpdateManyInput;
 };
-
-
-export type MutationLoginArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-};
-
-
-export type MutationUpdateTagArgs = {
-  data: TagCreateOrUpdateInput;
-};
-
-
-export type MutationUpdateTagsArgs = {
-  input: TagsUpdateManyInput;
-};
-
-
-export type MutationUpdateTaskArgs = {
-  data: TaskCreateOrUpdateInput;
-};
-
-
-export type MutationUpdateTasksArgs = {
-  input: TasksUpdateManyInput;
-};
-
-
-export type MutationUpdateUserArgs = {
-  data: UserCreateOrUpdateInput;
-};
-
-
-export type MutationUpdateUsersArgs = {
-  input: UsersUpdateManyInput;
-};
-
-export enum Priority {
-  /** HIGH */
-  High = 'HIGH',
-  /** LOW */
-  Low = 'LOW',
-  /** MEDIUM */
-  Medium = 'MEDIUM'
-}
 
 export type Query = {
   __typename?: 'Query';
   _graphweaver: AdminUiMetadata;
-  tag?: Maybe<Tag>;
-  tags: Array<Tag>;
-  task?: Maybe<Task>;
-  tasks: Array<Task>;
-  user?: Maybe<User>;
-  users: Array<User>;
+  cognitoUser?: Maybe<CognitoUser>;
+  cognitoUsers: Array<CognitoUser>;
 };
 
 
-export type QueryTagArgs = {
+export type QueryCognitoUserArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type QueryTagsArgs = {
-  filter?: InputMaybe<TagsListFilter>;
-  pagination?: InputMaybe<TagsPaginationInput>;
-};
-
-
-export type QueryTaskArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryTasksArgs = {
-  filter?: InputMaybe<TasksListFilter>;
-  pagination?: InputMaybe<TasksPaginationInput>;
-};
-
-
-export type QueryUserArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryUsersArgs = {
-  filter?: InputMaybe<UsersListFilter>;
-  pagination?: InputMaybe<UsersPaginationInput>;
+export type QueryCognitoUsersArgs = {
+  filter?: InputMaybe<CognitoUsersListFilter>;
+  pagination?: InputMaybe<CognitoUsersPaginationInput>;
 };
 
 export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
-
-export type Tag = {
-  __typename?: 'Tag';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  tasks?: Maybe<Array<Task>>;
-};
-
-
-export type TagTasksArgs = {
-  filter?: InputMaybe<TasksListFilter>;
-};
-
-export type TagCreateOrUpdateInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
-};
-
-export type TagInsertInput = {
-  name: Scalars['String']['input'];
-  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
-};
-
-export type TagsCreateOrUpdateManyInput = {
-  data: Array<TagCreateOrUpdateInput>;
-};
-
-export type TagsInsertManyInput = {
-  data: Array<TagInsertInput>;
-};
-
-export type TagsListFilter = {
-  _and?: InputMaybe<Array<TagsListFilter>>;
-  _not?: InputMaybe<TagsListFilter>;
-  _or?: InputMaybe<Array<TagsListFilter>>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  name_ilike?: InputMaybe<Scalars['String']['input']>;
-  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_like?: InputMaybe<Scalars['String']['input']>;
-  name_ne?: InputMaybe<Scalars['String']['input']>;
-  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_notnull?: InputMaybe<Scalars['String']['input']>;
-  name_null?: InputMaybe<Scalars['String']['input']>;
-  tasks?: InputMaybe<TasksListFilter>;
-};
-
-export type TagsOrderByInput = {
-  id?: InputMaybe<Sort>;
-  name?: InputMaybe<Sort>;
-  tasks?: InputMaybe<Sort>;
-};
-
-export type TagsPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TagsOrderByInput>;
-};
-
-export type TagsUpdateManyInput = {
-  data: Array<TagCreateOrUpdateInput>;
-};
-
-export type Task = {
-  __typename?: 'Task';
-  description: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  priority?: Maybe<Priority>;
-  slug?: Maybe<Scalars['String']['output']>;
-  tags?: Maybe<Array<Tag>>;
-  user?: Maybe<User>;
-};
-
-
-export type TaskTagsArgs = {
-  filter?: InputMaybe<TagsListFilter>;
-};
-
-export type TaskCreateOrUpdateInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  priority?: InputMaybe<Priority>;
-  slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
-  user?: InputMaybe<UserCreateOrUpdateInput>;
-};
-
-export type TaskInsertInput = {
-  description: Scalars['String']['input'];
-  priority?: InputMaybe<Priority>;
-  slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
-  user?: InputMaybe<UserCreateOrUpdateInput>;
-};
-
-export type TasksCreateOrUpdateManyInput = {
-  data: Array<TaskCreateOrUpdateInput>;
-};
-
-export type TasksInsertManyInput = {
-  data: Array<TaskInsertInput>;
-};
-
-export type TasksListFilter = {
-  _and?: InputMaybe<Array<TasksListFilter>>;
-  _not?: InputMaybe<TasksListFilter>;
-  _or?: InputMaybe<Array<TasksListFilter>>;
-  description?: InputMaybe<Scalars['String']['input']>;
-  description_ilike?: InputMaybe<Scalars['String']['input']>;
-  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  description_like?: InputMaybe<Scalars['String']['input']>;
-  description_ne?: InputMaybe<Scalars['String']['input']>;
-  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  description_notnull?: InputMaybe<Scalars['String']['input']>;
-  description_null?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
-  priority?: InputMaybe<Priority>;
-  priority_in?: InputMaybe<Array<Priority>>;
-  priority_ne?: InputMaybe<Priority>;
-  priority_nin?: InputMaybe<Array<Priority>>;
-  priority_notnull?: InputMaybe<Priority>;
-  priority_null?: InputMaybe<Priority>;
-  slug?: InputMaybe<Scalars['String']['input']>;
-  slug_ilike?: InputMaybe<Scalars['String']['input']>;
-  slug_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  slug_like?: InputMaybe<Scalars['String']['input']>;
-  slug_ne?: InputMaybe<Scalars['String']['input']>;
-  slug_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  slug_notnull?: InputMaybe<Scalars['String']['input']>;
-  slug_null?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<TagsListFilter>;
-  user?: InputMaybe<UsersListFilter>;
-};
-
-export type TasksOrderByInput = {
-  description?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
-  priority?: InputMaybe<Sort>;
-  slug?: InputMaybe<Sort>;
-};
-
-export type TasksPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TasksOrderByInput>;
-};
-
-export type TasksUpdateManyInput = {
-  data: Array<TaskCreateOrUpdateInput>;
-};
-
-export type Token = {
-  __typename?: 'Token';
-  authToken: Scalars['String']['output'];
-};
-
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-};
-
-export type UserCreateOrUpdateInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UserInsertInput = {
-  name: Scalars['String']['input'];
-};
-
-export type UsersCreateOrUpdateManyInput = {
-  data: Array<UserCreateOrUpdateInput>;
-};
-
-export type UsersInsertManyInput = {
-  data: Array<UserInsertInput>;
-};
-
-export type UsersListFilter = {
-  _and?: InputMaybe<Array<UsersListFilter>>;
-  _not?: InputMaybe<UsersListFilter>;
-  _or?: InputMaybe<Array<UsersListFilter>>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  name_ilike?: InputMaybe<Scalars['String']['input']>;
-  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_like?: InputMaybe<Scalars['String']['input']>;
-  name_ne?: InputMaybe<Scalars['String']['input']>;
-  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_notnull?: InputMaybe<Scalars['String']['input']>;
-  name_null?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UsersOrderByInput = {
-  id?: InputMaybe<Sort>;
-  name?: InputMaybe<Sort>;
-};
-
-export type UsersPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<UsersOrderByInput>;
-};
-
-export type UsersUpdateManyInput = {
-  data: Array<UserCreateOrUpdateInput>;
-};

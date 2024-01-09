@@ -14,15 +14,18 @@
 	"source": "src/index.ts",
 	"bin": {
 		"graphweaver": "bin/gw-bin.js",
-		"gw": "bin/gw-bin.js"
+		"gw": "bin/gw-bin.js",
+		"gw-types": "bin/gw-types.js"
 	},
 	"files": [
 		"bin"
 	],
 	"dependencies": {
+		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"@graphql-tools/utils": "10.0.12",
 		"chokidar": "3.5.3",
 		"esbuild": "0.15.5",
 		"inquirer": "9.2.1",

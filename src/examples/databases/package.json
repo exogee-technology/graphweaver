@@ -14,6 +14,7 @@
 	],
 	"scripts": {
 		"build": "graphweaver build",
+		"build:types": "graphweaver build-types --typesDir=./",
 		"start": "graphweaver start",
 		"watch": "graphweaver watch",
 		"version": "npm version --no-git-tag-version"
@@ -22,16 +23,17 @@
 		"@apollo/server": "4.9.3",
 		"@as-integrations/aws-lambda": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-builder": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"graphweaver": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/mysql": "5.7.14",
 		"@mikro-orm/postgresql": "5.7.14",
-		"reflect-metadata": "0.1.13",
 		"class-validator": "0.14.0",
-		"graphql": "16.8.1"
+		"graphql": "16.8.1",
+		"graphweaver": "workspace:*",
+		"reflect-metadata": "0.1.13"
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",

@@ -12,8 +12,10 @@ import {
 import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
+import { generateTypes } from './types';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
+const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
 
 yargs
 	.env('GRAPHWEAVER')
@@ -149,14 +151,41 @@ yargs
 					type: 'string',
 					default: '/',
 					describe: 'Specify the base path for the Admin UI',
+				})
+				.option('typesDir', {
+					type: 'string',
+					default: DEFAULT_TYPES_OUT_DIR,
+					describe: 'Specify a directory path to store the types file',
 				}),
-		handler: async ({ environment, adminUiBase }) => {
+		handler: async ({ environment, adminUiBase, typesDir }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
+				await generateTypes(typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
 			}
+
+			// Note, this will leave the ESBuild service process around:
+			// https://github.com/evanw/esbuild/issues/985
+			// console.log('Handles: ', (process as any)._getActiveHandles());
+			//
+			// It does not give us a way to kill it gracefully, so we'll do it here.
+			process.exit(0);
+		},
+	})
+	.command({
+		command: ['build-types'],
+		describe: 'Builds your Graphweaver types.',
+		builder: (yargs) =>
+			yargs.option('typesDir', {
+				type: 'string',
+				default: DEFAULT_TYPES_OUT_DIR,
+				describe: 'Specify a directory path to store the types file',
+			}),
+		handler: async ({ typesDir }) => {
+			await buildBackend({});
+			await generateTypes(typesDir);
 
 			// Note, this will leave the ESBuild service process around:
 			// https://github.com/evanw/esbuild/issues/985
@@ -186,10 +215,16 @@ yargs
 					default: 9000,
 					describe:
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				})
+				.option('typesDir', {
+					type: 'string',
+					default: DEFAULT_TYPES_OUT_DIR,
+					describe: 'Specify a directory path to store the types file',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
+				await generateTypes(args.typesDir);
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -216,6 +251,11 @@ yargs
 					default: 9000,
 					describe:
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
+				})
+				.option('typesDir', {
+					type: 'string',
+					default: DEFAULT_TYPES_OUT_DIR,
+					describe: 'Specify a directory path to store the types file',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
@@ -224,17 +264,27 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
 				console.log('Watch process started...');
-				await startFrontend(args as StartOptions, true);
+				await startFrontend(args as StartOptions);
 
 				// Watch the directory for file changes
 				const watcher = chokidar.watch('./src/**', {
 					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
 				});
 
+				// Build Types
+				console.log('Generating files...');
+				await generateTypes(args.typesDir);
+				console.log('Generating files complete.\n\n');
+
+				console.log('Waiting for changes... \n\n');
+
 				// Restart the process on file change
 				watcher.on('change', async () => {
-					console.log('File changed. Restarting the process...');
-					await startFrontend(args as StartOptions, true);
+					console.log('File changed. Rebuilding generated files...');
+					await buildBackend(args as any);
+					await generateTypes(args.typesDir);
+					console.log('Rebuild complete.\n\n');
+					console.log('Waiting for changes... \n\n');
 				});
 			}
 		},

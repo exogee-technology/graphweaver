@@ -54,3 +54,5 @@ export const member: MemberResolver =
 		},
 		process.env.MAILCHIMP_LIST_ID
 	);
+
+export const resolvers = [interest, category, mailingList, member];

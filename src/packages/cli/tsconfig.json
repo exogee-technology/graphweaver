@@ -9,6 +9,7 @@
 	"references": [
 		{ "path": "../vite-plugin-graphweaver" },
 		{ "path": "../builder" },
+		{ "path": "../core" },
 		{ "path": "../mikroorm" }
 	]
 }

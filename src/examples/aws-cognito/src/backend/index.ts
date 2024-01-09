@@ -4,7 +4,7 @@ import { AuthorizationContext } from '@exogee/graphweaver-auth';
 
 import { resolvers } from './schema';
 
-const graphweaver = new Graphweaver<AuthorizationContext>({
+export const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 });
 

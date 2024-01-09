@@ -25,7 +25,7 @@ import {
 import { Task as OrmTask, Priority } from '../../entities';
 import { User } from '../user';
 import { Tag } from '../tag';
-import { Roles } from '../..';
+import { Roles } from '../../auth/roles';
 
 type ReadHook = ReadHookParams<Task, AuthorizationContext>;
 type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, AuthorizationContext>;

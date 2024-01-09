@@ -130,6 +130,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
+      '@exogee/graphweaver-builder':
+        specifier: workspace:*
+        version: link:../../packages/builder
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../../packages/mikroorm
@@ -908,6 +911,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
       '@exogee/graphweaver-admin-ui':
         specifier: workspace:*
         version: link:../admin-ui
@@ -917,6 +923,9 @@ importers:
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../mikroorm
+      '@graphql-tools/utils':
+        specifier: 10.0.12
+        version: 10.0.12(graphql@16.8.1)
       chokidar:
         specifier: 3.5.3
         version: 3.5.3
@@ -4747,6 +4756,19 @@ packages:
       - bufferutil
       - encoding
       - utf-8-validate
+    dev: false
+
+  /@graphql-tools/utils@10.0.12(graphql@16.8.1):
+    resolution: {integrity: sha512-+yS1qlFwXlwU3Gv8ek/h2aJ95quog4yF22haC11M0zReMSTddbGJZ5yXKkE3sXoY2BcL1utilSFjylJ9uXpSNQ==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
+      cross-inspect: 1.0.0
+      dset: 3.1.2
+      graphql: 16.8.1
+      tslib: 2.6.0
     dev: false
 
   /@graphql-tools/utils@10.0.3(graphql@16.8.1):
@@ -9788,6 +9810,13 @@ packages:
       node-fetch: 2.6.12
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /cross-inspect@1.0.0:
+    resolution: {integrity: sha512-4PFfn4b5ZN6FMNGSZlyb7wUhuN8wvj8t/VQHZdM4JsDcruGJ8L2kf9zao98QIrBPFCpdk27qst/AGTl7pL3ypQ==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      tslib: 2.6.0
     dev: false
 
   /cross-spawn@6.0.5:
