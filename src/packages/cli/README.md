@@ -51,7 +51,7 @@
     - [graphweaver import \[source\]](#graphweaver-import-source)
     - [graphweaver analyse \[target\]](#graphweaver-analyse-target)
     - [graphweaver build \[environment\]](#graphweaver-build-environment)
-    - [graphweaver build-types \[outdir\]](#graphweaver-build-types-outdir)
+    - [graphweaver build-types \[typesDir\]](#graphweaver-build-types-typesdir)
     - [graphweaver start \[environment\]](#graphweaver-start-environment)
     - [graphweaver watch \[environment\]](#graphweaver-watch-environment)
 - [Contributing](#contributing)
@@ -227,16 +227,16 @@ FLAGS
     Specify the base path for the Admin UI
 ```
 
-#### graphweaver build-types [outdir]
+#### graphweaver build-types [typesDir]
 
 Builds a `types.ts` file containing all the types in the Graphweaver schema.
 
 ```
 USAGE
-    $ graphweaver build-types [--outdir <value>]
+    $ graphweaver build-types [--typesDir=<value>]
 
 FLAGS
-    --outdir <value>
+    --typesDir=<value>
     Specify the base path for where the types.ts file will be created. By default this is `./.graphweaver`
 ```
 
