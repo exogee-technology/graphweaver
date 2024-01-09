@@ -143,9 +143,9 @@ yargs
 			yargs
 				.positional('environment', {
 					type: 'string',
-					choices: ['backend', 'frontend', 'types', 'all'],
+					choices: ['backend', 'frontend', 'all'],
 					default: 'all',
-					describe: 'Choose whether you want to build the backend, frontend, types or all.',
+					describe: 'Choose whether you want to build the backend, frontend or all.',
 				})
 				.option('adminUiBase', {
 					type: 'string',
