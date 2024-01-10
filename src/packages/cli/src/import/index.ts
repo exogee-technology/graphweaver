@@ -105,19 +105,20 @@ export const importDataSource = async (
 				message: `What is the port?`,
 			});
 		}
+		if (!user) {
+			prompts.push({
+				type: 'input',
+				name: 'user',
+				default: source === 'postgresql' ? 'postgres' : 'root',
+				message: `What is the username to access the database server?`,
+			});
+		}
 		if (!password) {
 			prompts.push({
 				type: 'password',
 				mask: '*',
 				name: 'password',
 				message: `What is the password for this user?`,
-			});
-		}
-		if (!user) {
-			prompts.push({
-				type: 'input',
-				name: 'user',
-				message: `What is the username to access the database server?`,
 			});
 		}
 	}
