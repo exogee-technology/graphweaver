@@ -16,26 +16,10 @@ var generateTypes = async () => {
 	}
 
 	// Get the types output path from the config
-	const typesOutputPath = graphweaver.config.fileAutoGenerationOptions?.typesOutputPath;
-	const typesOutput = ['./src/frontend/types.ts'];
-
-	// If the typesOutputPath is a string or an array of strings, add it to the typesOutput array
-	if (typesOutputPath && typeof typesOutputPath === 'string') {
-		typesOutput.push(typesOutputPath);
-	}
-	if (typesOutputPath && Array.isArray(typesOutputPath)) {
-		typesOutput.push(...typesOutputPath);
-	}
-
-	// Ensure that all paths have a filename and add one if it does not exist
-	typesOutput.forEach((path, index) => {
-		if (!path.includes('.ts')) {
-			typesOutput[index] = `${path}/types.ts`;
-		}
-	});
+	const codegenOptions = graphweaver.config.fileAutoGenerationOptions;
 
 	const sdl = (0, import_utils.printSchemaWithDirectives)(graphweaver.schema);
-	await (0, import_graphweaver_builder.codeGenerator)(sdl, { typesOutput });
+	await (0, import_graphweaver_builder.codeGenerator)(sdl, codegenOptions);
 };
 
 generateTypes()

@@ -4,7 +4,7 @@ import { executeCodegen } from '@graphql-codegen/cli';
 import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset';
 
 type CodegenOptions = {
-	typesOutput: string[];
+	typesOutputPath?: string | string[];
 };
 
 const content = `/* eslint-disable */
@@ -13,7 +13,7 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
-export const codeGenerator = async (schema: string, options: CodegenOptions) => {
+export const codeGenerator = async (schema: string, options?: CodegenOptions) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
@@ -56,23 +56,14 @@ export const codeGenerator = async (schema: string, options: CodegenOptions) => 
 			},
 		});
 
-		// Ensure that the typesOutput directories exist
-		console.log('Generating types in the following paths:');
-		for (const outputPath of options.typesOutput) {
-			const dirPath = path.dirname(path.join(process.cwd(), outputPath));
-			if (!fs.existsSync(dirPath)) {
-				fs.mkdirSync(dirPath, { recursive: true });
-			}
-
-			console.log(dirPath);
-		}
+		const typesOutputPaths = formatListOfTypeOutputPaths(options?.typesOutputPath);
 
 		// Write the files to disk
 		const writeOperations = files.flatMap((file) => [
-			fs.promises.writeFile(path.join(process.cwd(), file.filename), file.content, 'utf8'),
+			fs.promises.writeFile(path.join(file.filename), file.content, 'utf8'),
 			// We save the types to two locations src and .graphweaver / outdir
 			...(file.filename === 'src/types.generated.ts'
-				? options.typesOutput.map((outputPath: string) =>
+				? typesOutputPaths.map((outputPath: string) =>
 						fs.promises.writeFile(outputPath, file.content, 'utf8')
 				  )
 				: []),
@@ -88,4 +79,36 @@ export const codeGenerator = async (schema: string, options: CodegenOptions) => 
 			console.log(err.message + `\n in ${err.source?.name}`);
 		}
 	}
+};
+
+const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
+	const typesOutput = ['./src/frontend/types.ts'];
+
+	// If the typesOutputPath is a string or an array of strings, add it to the typesOutput array
+	if (typesOutputPath && typeof typesOutputPath === 'string') {
+		typesOutput.push(typesOutputPath);
+	}
+	if (typesOutputPath && Array.isArray(typesOutputPath)) {
+		typesOutput.push(...typesOutputPath);
+	}
+
+	// Ensure that all paths have a filename and add one if it does not exist
+	typesOutput.forEach((path, index) => {
+		if (!path.includes('.ts')) {
+			typesOutput[index] = `${path}/types.ts`;
+		}
+	});
+
+	// Ensure that the typesOutput directories exist
+	console.log('Generating types in the following paths:');
+	for (const outputPath of typesOutput) {
+		const dirPath = path.dirname(path.join(process.cwd(), outputPath));
+		if (!fs.existsSync(dirPath)) {
+			fs.mkdirSync(dirPath, { recursive: true });
+		}
+
+		console.log(dirPath);
+	}
+
+	return typesOutput;
 };
