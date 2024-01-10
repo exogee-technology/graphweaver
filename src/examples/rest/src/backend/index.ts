@@ -20,6 +20,9 @@ export const graphweaver = new Graphweaver<AuthorizationContext>({
 			afterRead,
 		},
 	},
+	fileAutoGenerationOptions: {
+		typesOutputPath: ['./'],
+	},
 });
 
 export const handler = graphweaver.handler();

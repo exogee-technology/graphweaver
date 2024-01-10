@@ -3,20 +3,8 @@
 var import_graphweaver_builder = require('@exogee/graphweaver-builder');
 var import_utils = require('@graphql-tools/utils');
 var import_path3 = require('path');
-var yargs = require('yargs');
-var yargs_helpers = require('yargs/helpers');
 
 var generateTypes = async () => {
-	const argv = await yargs(yargs_helpers.hideBin(process.argv))
-		.options({
-			outDir: { type: 'string', default: './.graphweaver' },
-		})
-		.parse();
-
-	const outDir = argv.outdir;
-
-	console.log(`Generating types in ${outDir}`);
-
 	const buildDir = import_path3.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
 
@@ -27,8 +15,27 @@ var generateTypes = async () => {
 		process.exit(0);
 	}
 
+	// Get the types output path from the config
+	const typesOutputPath = graphweaver.config.fileAutoGenerationOptions?.typesOutputPath;
+	const typesOutput = ['./src/frontend/types.ts'];
+
+	// If the typesOutputPath is a string or an array of strings, add it to the typesOutput array
+	if (typesOutputPath && typeof typesOutputPath === 'string') {
+		typesOutput.push(typesOutputPath);
+	}
+	if (typesOutputPath && Array.isArray(typesOutputPath)) {
+		typesOutput.push(...typesOutputPath);
+	}
+
+	// Ensure that all paths have a filename and add one if it does not exist
+	typesOutput.forEach((path, index) => {
+		if (!path.includes('.ts')) {
+			typesOutput[index] = `${path}/types.ts`;
+		}
+	});
+
 	const sdl = (0, import_utils.printSchemaWithDirectives)(graphweaver.schema);
-	await (0, import_graphweaver_builder.codeGenerator)(sdl, outDir);
+	await (0, import_graphweaver_builder.codeGenerator)(sdl, { typesOutput });
 };
 
 generateTypes()

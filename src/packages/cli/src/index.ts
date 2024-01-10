@@ -151,16 +151,11 @@ yargs
 					type: 'string',
 					default: '/',
 					describe: 'Specify the base path for the Admin UI',
-				})
-				.option('typesDir', {
-					type: 'string',
-					default: DEFAULT_TYPES_OUT_DIR,
-					describe: 'Specify a directory path to store the types file',
 				}),
-		handler: async ({ environment, adminUiBase, typesDir }) => {
+		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
-				await generateTypes(typesDir);
+				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
@@ -177,15 +172,9 @@ yargs
 	.command({
 		command: ['build-types'],
 		describe: 'Builds your Graphweaver types.',
-		builder: (yargs) =>
-			yargs.option('typesDir', {
-				type: 'string',
-				default: DEFAULT_TYPES_OUT_DIR,
-				describe: 'Specify a directory path to store the types file',
-			}),
-		handler: async ({ typesDir }) => {
+		handler: async () => {
 			await buildBackend({});
-			await generateTypes(typesDir);
+			await generateTypes();
 
 			// Note, this will leave the ESBuild service process around:
 			// https://github.com/evanw/esbuild/issues/985
@@ -215,16 +204,11 @@ yargs
 					default: 9000,
 					describe:
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
-				})
-				.option('typesDir', {
-					type: 'string',
-					default: DEFAULT_TYPES_OUT_DIR,
-					describe: 'Specify a directory path to store the types file',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
-				await generateTypes(args.typesDir);
+				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -251,11 +235,6 @@ yargs
 					default: 9000,
 					describe:
 						'Specify a base port to listen on. Frontend will start on this port, and backend will start on port+1',
-				})
-				.option('typesDir', {
-					type: 'string',
-					default: DEFAULT_TYPES_OUT_DIR,
-					describe: 'Specify a directory path to store the types file',
 				}),
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
@@ -273,7 +252,7 @@ yargs
 
 				// Build Types
 				console.log('Generating files...');
-				await generateTypes(args.typesDir);
+				await generateTypes();
 				console.log('Generating files complete.\n\n');
 
 				console.log('Waiting for changes... \n\n');
@@ -282,7 +261,7 @@ yargs
 				watcher.on('change', async () => {
 					console.log('File changed. Rebuilding generated files...');
 					await buildBackend(args as any);
-					await generateTypes(args.typesDir);
+					await generateTypes();
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
 				});
