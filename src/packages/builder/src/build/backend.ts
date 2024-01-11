@@ -3,7 +3,6 @@ import { build } from 'esbuild';
 import rimrafCallback from 'rimraf';
 import { promisify } from 'util';
 import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
-import CssModulesPlugin from 'esbuild-css-modules-plugin';
 
 import {
 	baseEsbuildConfig,
@@ -31,7 +30,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 			...baseEsbuildConfig,
 
 			// Anything in node_modules should be marked as external for running.
-			plugins: [makeAllPackagesExternalPlugin(), CssModulesPlugin()],
+			plugins: [makeAllPackagesExternalPlugin()],
 
 			entryPoints: ['./src/backend/index.ts'],
 			outfile: '.graphweaver/backend/index.js',
