@@ -51,6 +51,9 @@ export interface GraphweaverConfig {
 		enabled: boolean;
 	};
 	enableValidationRules?: boolean;
+	fileAutoGenerationOptions?: {
+		typesOutputPath?: string[] | string;
+	};
 }
 
 export default class Graphweaver<TContext extends BaseContext> {

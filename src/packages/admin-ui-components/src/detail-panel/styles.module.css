@@ -54,6 +54,10 @@
 	border-radius: 6px;
 	padding: 10px;
 }
+.textInputField:disabled,
+.selectField:disabled {
+	opacity: 0.5;
+}
 
 .modalOverlay {
 	position: fixed;
