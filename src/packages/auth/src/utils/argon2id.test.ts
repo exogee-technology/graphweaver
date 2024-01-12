@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { hashPassword, verifyPassword } from './argon2id';
+import { hashPassword, verifyPassword, generateSalt } from './argon2id';
 
 describe('Argon2', () => {
 	it('should hash and verify a password', async () => {
@@ -14,5 +14,13 @@ describe('Argon2', () => {
 		const isValid = await verifyPassword('not_password', passwordHash);
 
 		expect(isValid).toBe(false);
+	});
+
+	it('should return a salt with random Uint8Array array', async () => {
+		const salt = generateSalt();
+		expect(salt).toBeInstanceOf(Uint8Array);
+		expect(salt.length).toBe(16);
+		// The salt should be random each time
+		expect(salt).not.toEqual(generateSalt());
 	});
 });
