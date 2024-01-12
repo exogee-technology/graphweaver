@@ -41,6 +41,7 @@ export const baseEsbuildConfig: BuildOptions = {
 		'oracledb',
 		'bun:ffi',
 		'mysql',
+		'mysql2',
 		'sqlite3',
 		'better-sqlite3',
 		'mock-aws-s3',
