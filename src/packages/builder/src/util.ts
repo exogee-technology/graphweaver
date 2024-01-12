@@ -31,7 +31,7 @@ export const baseEsbuildConfig: BuildOptions = {
 	bundle: true,
 	sourcemap: true,
 	platform: 'node',
-	target: ['node16'],
+	target: ['node18'],
 	format: 'cjs',
 	watch: true,
 	keepNames: true,
