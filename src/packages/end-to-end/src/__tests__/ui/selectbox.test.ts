@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { config } from '../../config';
 
 test('Check Select field displays correct number of selected items based on initial values', async ({
 	page,
 }) => {
-	await page.goto('http://localhost:9000/');
-	await page.getByRole('link', { name: 'mikro-orm-sqlite' }).click();
+	await page.goto(config.adminUiUrl);
+	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('gridcell', { name: 'For Those About To Rock' }).first().click();
 
@@ -15,8 +16,8 @@ test('Check Select field displays correct number of selected items based on init
 test('Check Select field shows correct number of selected items after adding additional item to selection', async ({
 	page,
 }) => {
-	await page.goto('http://localhost:9000/');
-	await page.getByRole('link', { name: 'mikro-orm-sqlite' }).click();
+	await page.goto(config.adminUiUrl);
+	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('gridcell', { name: '3', exact: true }).click();
 	await page.getByText('3 Selected').click();
@@ -27,8 +28,8 @@ test('Check Select field shows correct number of selected items after adding add
 test('Check adding additional item to OneToMany field and saving functions as expected', async ({
 	page,
 }) => {
-	await page.goto('http://localhost:9000/');
-	await page.getByRole('link', { name: 'mikro-orm-sqlite' }).click();
+	await page.goto(config.adminUiUrl);
+	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('gridcell', { name: 'For Those About To Rock We' }).click();
 	await page.getByText('10 Selected×For Those About').click();
