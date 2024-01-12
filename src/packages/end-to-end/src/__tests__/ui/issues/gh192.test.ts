@@ -3,7 +3,7 @@ import { config } from '../../../config';
 
 test('ensure toast is displayed with the name of the item after creation', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'mikro-orm-sqlite' }).click();
+	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 
 	await page.locator('_react=Select', { hasText: 'Artist' }).click();
