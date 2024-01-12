@@ -82,6 +82,7 @@ export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
 				return { path: resolvedPath, external: false };
 			} catch (error) {
 				// Ok, it's out.
+				console.log('Externalising package:', path);
 				return { path, external: true };
 			}
 		});
