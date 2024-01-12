@@ -17,7 +17,7 @@ cd $SRC_DIR
 cd $END_TO_END_DIR
 mkdir -p $STANDALONE_TEST_APP_DIR
 cd $STANDALONE_TEST_APP_DIR
-# cd $APP_DIR # This directory will not exist on a fresh clone
+cd $APP_DIR
 
 # Almost ready, before we start, define cleanup procedure
 cleanup() {
@@ -40,9 +40,8 @@ pnpm i
 pnpm build
 # Create the end-to-end test app/ directory and graphweaver import the 'postgres' database in the local Postgres instance
 cd $END_TO_END_DIR
-pnpm seed-postgres:reseed
 pnpm import-database-postgres
-# Check the resulting app successfully builds
+# Check the app successfully builds
 cd $APP_DIR
 pnpm build
 # Now go back out and copy the build output into the app-123 directory 
@@ -60,27 +59,7 @@ echo "Now in standalone test app directory:"
 pwd
 # Create a PNPM project so that we can use serverless offline and http-server
 pnpm init
-pnpm add serverless@3.38.0 serverless-offline@13.3.2 http-server@14.1.1
-# Let's prepare the Postgres database
-cd $END_TO_END_DIR
+pnpm add serverless serverless-offline http-server
 # We should be all set, run the UI test suite
-cd $STANDALONE_TEST_APP_DIR
-pnpm serverless offline start & echo "Let's wait a few seconds for things to load..." && sleep 5
-cd $END_TO_END_DIR
-echo "Run backend tests..."
-pnpm test-postgres 
-echo "Backend tests complete."
-echo "Stop the backend process..."
-killall node
-echo "Reset the database..."
-cd $END_TO_END_DIR
-pnpm seed-postgres:reseed
-cd $STANDALONE_TEST_APP_DIR
-echo "Database reset complete."
-echo "Start the backend and frontend..."
-pnpm serverless offline start & pnpm http-server ./admin-ui/ -p 9000 -c-1 & echo "Let's wait a few seconds for things to load..." && sleep 5
-echo "Run the frontend tests..."
-cd $END_TO_END_DIR
-pnpm test-ui:postgres
-echo "Frontend tests complete."
+pnpm serverless offline start & pnpm http-server ./admin-ui/ -p 9000 -c-1  & echo "Let's wait a few seconds for things to load..." && sleep 5 && cd $SCRIPTS_DIR && pnpm test-postgres
 # All done, cleanup will run automatically
