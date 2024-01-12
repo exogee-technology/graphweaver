@@ -68,7 +68,14 @@ export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
 			// If it's available locally then it should be bundled,
 			// otherwise let it be external in the resulting bundle.
 			try {
-				const resolvedPath = require.resolve(path);
+				// If we are running Graphweaver build as part of an end-to-end
+				// test, then let's look up the end-to-end node_modules dir,
+				// rather than the one in the 'builder' package
+				const resolvedPath = require.resolve(path, {
+					...(process.cwd().includes('end-to-end')
+						? { paths: ['../end-to-end/node_modules'] }
+						: {}),
+				});
 
 				return { path: resolvedPath, external: false };
 			} catch (error) {
