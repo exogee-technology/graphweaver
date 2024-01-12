@@ -46,6 +46,7 @@ export const baseEsbuildConfig: BuildOptions = {
 		'better-sqlite3',
 		'mock-aws-s3',
 		'nock',
+		'aws-sdk',
 	],
 };
 
