@@ -47,8 +47,7 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 		if (!credential.password)
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
 
-		const isValid = await verifyPassword(password, credential.password);
-		if (isValid) {
+		if (await verifyPassword(password, credential.password)) {
 			return this.getUser(credential.id, PasswordOperation.LOGIN, params);
 		}
 
@@ -59,7 +58,6 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 
 	async save(username: string, password: string, params: RequestParams): Promise<UserProfile> {
 		const passwordHash = await hashPassword(password);
-
 		const credential = await this.provider.createOne({ username, password: passwordHash });
 
 		if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
