@@ -44,18 +44,13 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm playwright install --with-deps chromium
 
-      - name: Start Rest Example instance
-        working-directory: src/examples/rest
-        timeout-minutes: 2
-        run: |
-          pnpm start &
-          sleep 3
-
-      - name: Test Rest Example
+      - name: Start and Test Rest Example
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm test-ui-auth &&
+          pnpm start-auth-server &
+          sleep 3 &&
+          pnpm test-ui &&
           killall node
 
       - uses: actions/upload-artifact@v3
