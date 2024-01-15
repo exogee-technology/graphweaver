@@ -60,6 +60,27 @@ pwd
 # Create a PNPM project so that we can use serverless offline and http-server
 pnpm init
 pnpm add serverless serverless-offline http-server
+# Let's prepare the Postgres database
+cd $END_TO_END_DIR
+pnpm seed-postgres:reseed
+cd $STANDALONE_TEST_APP_DIR
 # We should be all set, run the UI test suite
-pnpm serverless offline start & pnpm http-server ./admin-ui/ -p 9000 -c-1  & echo "Let's wait a few seconds for things to load..." && sleep 5 && cd $SCRIPTS_DIR && pnpm test-postgres
+pnpm serverless offline start & echo "Let's wait a few seconds for things to load..." && sleep 5
+cd $END_TO_END_DIR
+echo "Run backend tests..."
+pnpm test-postgres 
+echo "Backend tests complete."
+echo "Stop the backend process..."
+killall node
+echo "Reset the database..."
+cd $END_TO_END_DIR
+pnpm seed-postgres:reseed
+cd $STANDALONE_TEST_APP_DIR
+echo "Database reset complete."
+echo "Start the backend and frontend..."
+pnpm serverless offline start & pnpm http-server ./admin-ui/ -p 9000 -c-1 & echo "Let's wait a few seconds for things to load..." && sleep 5
+echo "Run the frontend tests..."
+cd $END_TO_END_DIR
+pnpm test-ui:postgres
+echo "Frontend tests complete."
 # All done, cleanup will run automatically
