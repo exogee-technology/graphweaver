@@ -1,14 +1,4 @@
-import {
-	BackendProvider,
-	BaseDataEntity,
-	CreateOrUpdateHookParams,
-	Filter,
-	GraphqlEntityType,
-	HookParams,
-	HookRegister,
-	Resolver,
-	hookManagerMap,
-} from '@exogee/graphweaver';
+import { BackendProvider, BaseDataEntity, Resolver } from '@exogee/graphweaver';
 
 import { Credential, CredentialStorage } from '../../entities';
 import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
@@ -22,11 +12,61 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
-export class PasswordStrengthError extends ApolloError {
-	constructor(message: string, extensions?: Record<string, any>) {
-		super(message, 'WEAK_PASSWORD', extensions);
+@Resolver()
+export class PasswordAuthResolver<
+	G,
+	D extends BaseDataEntity
+> extends createBasePasswordAuthResolver() {
+	private provider!: PasswordProvider;
+	protected onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
+	protected onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
 
-		Object.defineProperty(this, 'name', { value: 'WeakPasswordError' });
+	constructor(_: G, provider: PasswordProvider) {
+		super();
+		this.provider = provider;
+	}
+
+	async getUserProfile(
+		id: string,
+		operation: PasswordOperation,
+		params: RequestParams
+	): Promise<UserProfile> {
+		// Use the operation type to decide what actions to perform
+		// A register action could send an email verification for example
+		throw new Error(
+			'Method getUser not implemented for PasswordAuthResolver: Override this function to return a user profile'
+		);
+	}
+
+	async authenticate(
+		username: string,
+		password: string,
+		params: RequestParams
+	): Promise<UserProfile> {
+		const credential = await this.provider.findOne({ username });
+
+		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
+		if (!credential.password)
+			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
+
+		if (await verifyPassword(password, credential.password)) {
+			return this.getUserProfile(credential.id, PasswordOperation.LOGIN, params);
+		}
+
+		this.onUserAuthenticated?.(credential.id, params);
+
+		throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
+	}
+
+	async save(username: string, password: string, params: RequestParams): Promise<UserProfile> {
+		const passwordHash = await hashPassword(password);
+		const credential = await this.provider.createOne({ username, password: passwordHash });
+
+		if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+
+		this.onUserRegistered?.(credential.id, params);
+
+		return this.getUserProfile(credential.id, PasswordOperation.REGISTER, params);
 	}
 }
 
