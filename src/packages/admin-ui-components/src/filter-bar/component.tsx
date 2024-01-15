@@ -30,7 +30,7 @@ import styles from './styles.module.css';
 import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
-	const { entity } = useParams();
+	const { entity, id } = useParams();
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
@@ -110,8 +110,14 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	useEffect(() => {
 		const { sort } = decodeSearchParams(search);
+		if (filter && Object.keys(filter).length > 0) {
+			// Remove all undefined attributes from the filters object as it borks the subsequent URL encoding logic
+			Object.entries(filter).forEach(([key, value]) => {
+				if (value === undefined) delete filter[key];
+			});
+		}
 		navigate(
-			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort })
+			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort, id })
 		);
 	}, [filter]);
 

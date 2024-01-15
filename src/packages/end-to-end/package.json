@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "0.2.11",
+	"version": "0.2.14",
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
@@ -20,6 +20,8 @@
 		"test-scalars": "jest --runInBand --forceExit ---- api/scalars",
 		"test-aws-cognito": "jest --runInBand --forceExit ---- api/aws-cognito",
 		"test-ui": "pnpm exec playwright test",
+		"test-ui:init": "pnpm exec playwright install",
+		"test-ui:report": "pnpm exec playwright show-report",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {

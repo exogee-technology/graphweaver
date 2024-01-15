@@ -12,8 +12,10 @@ import {
 import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
+import { generateTypes } from './types';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
+const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
 
 yargs
 	.env('GRAPHWEAVER')
@@ -153,10 +155,26 @@ yargs
 		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await buildBackend({});
+				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await buildFrontend({ adminUiBase });
 			}
+
+			// Note, this will leave the ESBuild service process around:
+			// https://github.com/evanw/esbuild/issues/985
+			// console.log('Handles: ', (process as any)._getActiveHandles());
+			//
+			// It does not give us a way to kill it gracefully, so we'll do it here.
+			process.exit(0);
+		},
+	})
+	.command({
+		command: ['build-types'],
+		describe: 'Builds your Graphweaver types.',
+		handler: async () => {
+			await buildBackend({});
+			await generateTypes();
 
 			// Note, this will leave the ESBuild service process around:
 			// https://github.com/evanw/esbuild/issues/985
@@ -190,6 +208,7 @@ yargs
 		handler: async ({ environment, ...args }) => {
 			if (environment === 'backend' || environment === 'all') {
 				await startBackend(args as any);
+				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
 				await startFrontend(args as StartOptions);
@@ -224,17 +243,27 @@ yargs
 			if (environment === 'frontend' || environment === 'all') {
 				// Logic to start the process
 				console.log('Watch process started...');
-				await startFrontend(args as StartOptions, true);
+				await startFrontend(args as StartOptions);
 
 				// Watch the directory for file changes
 				const watcher = chokidar.watch('./src/**', {
 					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
 				});
 
+				// Build Types
+				console.log('Generating files...');
+				await generateTypes();
+				console.log('Generating files complete.\n\n');
+
+				console.log('Waiting for changes... \n\n');
+
 				// Restart the process on file change
 				watcher.on('change', async () => {
-					console.log('File changed. Restarting the process...');
-					await startFrontend(args as StartOptions, true);
+					console.log('File changed. Rebuilding generated files...');
+					await buildBackend(args as any);
+					await generateTypes();
+					console.log('Rebuild complete.\n\n');
+					console.log('Waiting for changes... \n\n');
 				});
 			}
 		},

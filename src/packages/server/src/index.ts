@@ -1,5 +1,6 @@
 import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
+import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 
 import { logger } from '@exogee/logger';
@@ -50,10 +51,14 @@ export interface GraphweaverConfig {
 		enabled: boolean;
 	};
 	enableValidationRules?: boolean;
+	fileAutoGenerationOptions?: {
+		typesOutputPath?: string[] | string;
+	};
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
+	public schema: GraphQLSchema;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
@@ -85,8 +90,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
-		const eMap = EntityMetadataMap;
-		for (const metadata of eMap.values()) {
+		for (const metadata of EntityMetadataMap.values()) {
 			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
 				// only push unique plugins
 				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
@@ -118,7 +122,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
 		removeInvalidFilterArg();
 
-		const schema = buildSchemaSync({
+		this.schema = buildSchemaSync({
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
@@ -128,7 +132,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
 			plugins,
-			schema,
+			schema: this.schema,
 		});
 	}
 

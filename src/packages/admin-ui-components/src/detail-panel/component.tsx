@@ -1,9 +1,9 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
-import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
+import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
@@ -15,6 +15,7 @@ import {
 	routeFor,
 	useSchema,
 	useSelectedEntity,
+	EntityFieldType,
 } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
@@ -23,6 +24,8 @@ import { generateCreateEntityMutation, generateUpdateEntityMutation } from './gr
 import styles from './styles.module.css';
 import { BooleanField, EnumField, JSONField, SelectField } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
+import { LinkField } from './fields/link-field';
+import { mapFormikValuesToGqlRequestValues } from './util';
 
 interface ResultBaseType {
 	id: string;
@@ -30,7 +33,12 @@ interface ResultBaseType {
 }
 
 const getField = ({ field }: { field: EntityField }) => {
+	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 	if (field.relationshipType) {
+		// If the field is readonly and a relationship, show a link to the entity/entities
+		if (isReadonly) {
+			return <LinkField name={field.name} entity={field} />;
+		}
 		return <SelectField name={field.name} entity={field} />;
 	}
 
@@ -48,7 +56,14 @@ const getField = ({ field }: { field: EntityField }) => {
 		return <EnumField name={field.name} typeEnum={enumField} />;
 	}
 
-	return <Field id={field.name} name={field.name} className={styles.textInputField} />;
+	return (
+		<Field
+			id={field.name}
+			name={field.name}
+			className={styles.textInputField}
+			disabled={isReadonly}
+		/>
+	);
 };
 
 const DetailField = ({ field }: { field: EntityField }) => {
@@ -233,15 +248,7 @@ export const DetailPanel = () => {
 
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
-		const values = (Object.entries(formValues) ?? []).reduce((acc, [key, value]: [string, any]) => {
-			// Check if we have a relationship value if so let's only send the id to the server
-			acc[key] =
-				value && typeof value === 'object' && value.hasOwnProperty('value')
-					? { id: value.value }
-					: value;
-
-			return acc;
-		}, {} as Record<string, any>);
+		const values = mapFormikValuesToGqlRequestValues(formValues);
 
 		try {
 			let result: FetchResult;

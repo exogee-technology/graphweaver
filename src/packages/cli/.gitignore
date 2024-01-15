@@ -1,5 +1,6 @@
 test
 !bin/gw-bin.js
+!bin/gw-types.js
 bin
 node_modules
 *.log

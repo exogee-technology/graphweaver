@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "0.2.11",
+	"version": "0.2.14",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
