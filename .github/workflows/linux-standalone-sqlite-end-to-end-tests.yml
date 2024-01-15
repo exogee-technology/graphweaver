@@ -12,7 +12,7 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: postgres
         ports:
           - 5432:5432
@@ -43,6 +43,10 @@ jobs:
           node-version: "18"
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Set up environment variables
+        run: |
+          echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
 
       - name: Run end-to-end tests
         run: |
