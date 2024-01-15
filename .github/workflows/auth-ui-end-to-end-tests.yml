@@ -50,7 +50,7 @@ jobs:
         run: |
           pnpm start-auth-server &
           sleep 3 &&
-          pnpm test-ui &&
+          pnpm test-ui-auth &&
           killall node
 
       - uses: actions/upload-artifact@v3
