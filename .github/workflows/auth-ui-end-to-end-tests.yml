@@ -1,11 +1,11 @@
-name: Auth UI End to End Tests
+name: UI End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  auth-ui-end-to-end-tests:
+  ui-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -34,9 +34,6 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
-      - name: 🔥 Initialize MySQL
-        run: sudo systemctl start mysql.service
-
       - name: Install dependencies
         run: pnpm i
 
@@ -47,35 +44,17 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm playwright install --with-deps chromium
 
-      - name: Setup Rest Database
+      - name: Start Rest Example instance
         working-directory: src/examples/rest
         timeout-minutes: 2
         run: |
-          pnpm import-database
-        env:
-          CI: true
-          DATABASE_HOST: 127.0.0.1
-          DATABASE_USERNAME: root
-          DATABASE_PASSWORD: root
+          pnpm start &
+          sleep 3
 
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_REST_BASE_URL: "https://swapi.info/api"
-          envkey_DATABASE_HOST: 127.0.0.1
-          envkey_DATABASE_USERNAME: root
-          envkey_DATABASE_PASSWORD: root
-          envkey_AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
-          envkey_AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
-          envkey_AUTH_WHITELIST_DOMAINS: localhost
-          directory: src/examples/rest
-
-      - name: Start and Test Rest Example
-        working-directory: src/packages/end-to-end
+      - name: Test Rest Example
+        working-directory: src/examples/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm start-auth-server &
-          sleep 5 &&
           pnpm test-ui-auth &&
           killall node
 
