@@ -1,4 +1,4 @@
-import { BackendProvider, Resolver } from '@exogee/graphweaver';
+import { BackendProvider, BaseDataEntity, Resolver } from '@exogee/graphweaver';
 
 import { PasswordStorage } from '../../entities';
 import { createBasePasswordAuthResolver } from './base-resolver';
@@ -14,17 +14,20 @@ export enum PasswordOperation {
 }
 
 @Resolver()
-export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
-	private provider: PasswordProvider;
+export class PasswordAuthResolver<
+	G,
+	D extends BaseDataEntity
+> extends createBasePasswordAuthResolver() {
+	private provider!: PasswordProvider;
 	protected onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
 	protected onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
 
-	constructor({ provider }: { provider: PasswordProvider }) {
+	constructor(_: G, provider: PasswordProvider) {
 		super();
 		this.provider = provider;
 	}
 
-	async getUser(
+	async getUserProfile(
 		id: string,
 		operation: PasswordOperation,
 		params: RequestParams
@@ -48,7 +51,7 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
 
 		if (await verifyPassword(password, credential.password)) {
-			return this.getUser(credential.id, PasswordOperation.LOGIN, params);
+			return this.getUserProfile(credential.id, PasswordOperation.LOGIN, params);
 		}
 
 		this.onUserAuthenticated?.(credential.id, params);
@@ -64,6 +67,6 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 
 		this.onUserRegistered?.(credential.id, params);
 
-		return this.getUser(credential.id, PasswordOperation.REGISTER, params);
+		return this.getUserProfile(credential.id, PasswordOperation.REGISTER, params);
 	}
 }

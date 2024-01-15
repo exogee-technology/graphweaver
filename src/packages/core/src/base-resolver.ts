@@ -60,6 +60,7 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
+class DefaultBaseResolver {}
 export interface BaseResolverInterface {}
 
 export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
@@ -70,8 +71,15 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
+	provider: BackendProvider<D, G>,
+	baseResolverToExtend: new (
+		gqlEntityType: GraphqlEntityType<G, D>,
+		provider: BackendProvider<D, G>
+	) => any = DefaultBaseResolver
+): abstract new (
+	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G>
-): abstract new () => BaseResolverInterface {
+) => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -299,7 +307,11 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	@Resolver()
-	abstract class BaseResolver implements BaseResolverInterface {
+	abstract class BaseResolver extends baseResolverToExtend implements BaseResolverInterface {
+		constructor() {
+			super(gqlEntityType, provider);
+		}
+
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}
