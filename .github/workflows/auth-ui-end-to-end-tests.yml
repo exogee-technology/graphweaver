@@ -1,11 +1,11 @@
-name: UI End to End Tests
+name: Auth UI End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  ui-end-to-end-tests:
+  auth-ui-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
