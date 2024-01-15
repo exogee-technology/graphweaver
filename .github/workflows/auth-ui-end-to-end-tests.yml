@@ -1,0 +1,69 @@
+name: UI End to End Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  ui-end-to-end-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8.6.9
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Install Playwright Browsers
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Start Rest Example instance
+        working-directory: src/examples/rest
+        timeout-minutes: 2
+        run: |
+          pnpm start &
+          sleep 3
+
+      - name: Test Rest Example
+        working-directory: src/examples/end-to-end
+        timeout-minutes: 2
+        run: |
+          pnpm test-ui-auth &&
+          killall node
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: src/packages/end-to-end/playwright-report/
+          retention-days: 30
+
+        env:
+          CI: true
