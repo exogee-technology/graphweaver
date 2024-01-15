@@ -21,6 +21,14 @@ jobs:
       run:
         working-directory: src
 
+    env:
+      CI: true
+      DATABASE_HOST: localhost
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      DATABASE_PORT: 5432
+      DATABASE_NAME: gw
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -43,10 +51,6 @@ jobs:
           node-version: "18"
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
-
-      - name: Set up environment variables
-        run: |
-          echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
 
       - name: Run end-to-end tests
         run: |
