@@ -3,36 +3,35 @@ import {
 	PasswordOperation,
 	RequestParams,
 	UserProfile,
+	Credential,
 } from '@exogee/graphweaver-auth';
-import { BaseLoaders, Resolver } from '@exogee/graphweaver';
+import { BaseLoaders, Resolver, callChildMutation, createBaseResolver } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { User } from '../../user';
 import { mapUserToProfile } from '../../../auth/context';
 import { myConnection } from '../../../database';
-import { Credential } from '../../../entities/mysql';
-import { callChildMutation } from '@exogee/graphweaver';
+import { Credential as OrmCredential } from '../../../entities/mysql';
+
+const provider = new MikroBackendProvider(OrmCredential, myConnection);
 
 @Resolver()
-export class PasswordAuthResolver extends AuthResolver {
-	constructor() {
-		super({
-			provider: new MikroBackendProvider(Credential, myConnection),
-		});
-	}
-
+export class PasswordAuthResolver extends createBaseResolver<
+	Credential<OrmCredential>,
+	OrmCredential
+>(Credential, provider, AuthResolver) {
 	protected async onUserAuthenticated(userId: string, params: RequestParams): Promise<null> {
 		// This is called after a user has authenticated
 		return;
 	}
 
 	protected async onUserRegistered(userId: string, params: RequestParams): Promise<null> {
-		// As an example we are sending an OTP challenge to the user during registration
-		await callChildMutation('sendOTPChallenge', {}, params.info, params.ctx);
+		// This is called after a user has registered
 		return;
 	}
 
-	async getUser(
+	// This is called when a user has logged in to get the profile
+	async getUserProfile(
 		id: string,
 		operation: PasswordOperation,
 		params: RequestParams
