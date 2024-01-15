@@ -52,7 +52,7 @@ jobs:
           sleep 3
 
       - name: Test Rest Example
-        working-directory: src/examples/end-to-end
+        working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
           pnpm test-ui-auth &&
