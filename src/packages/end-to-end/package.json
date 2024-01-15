@@ -10,6 +10,7 @@
 		"import-database-mysql": ". ./scripts/import-mysql.sh",
 		"seed-postgres": "node ./scripts/seed-postgres.js",
 		"start-server": "cd app && pnpm start",
+		"start-auth-server": "cd ../../examples/rest && pnpm start",
 		"dev-sqlite": "pnpm import-database-sqlite && pnpm start-server",
 		"dev-postgres": "createdb gw && pnpm seed-postgres && pnpm import-database-postgres  && pnpm start-server",
 		"dev-mysql": "pnpm import-database-mysql && pnpm start-server",
