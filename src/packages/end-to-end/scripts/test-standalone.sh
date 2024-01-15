@@ -17,7 +17,7 @@ cd $SRC_DIR
 cd $END_TO_END_DIR
 mkdir -p $STANDALONE_TEST_APP_DIR
 cd $STANDALONE_TEST_APP_DIR
-cd $APP_DIR
+# cd $APP_DIR # This directory will not exist on a fresh clone
 
 # Almost ready, before we start, define cleanup procedure
 cleanup() {
