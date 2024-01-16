@@ -4,6 +4,18 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
 
+env:
+  CI: true
+  DATABASE_HOST: 127.0.0.1
+  DATABASE_USERNAME: root
+  DATABASE_PASSWORD: root
+  REST_BASE_URL: "https://swapi.info/api"
+  AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+  AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
+  AUTH_BASE_URI: "http://localhost:9000"
+  AUTH_WHITELIST_DOMAINS: "localhost"
+  AUTH_MAGIC_LINK_RATE_LIMIT: "500"
+
 jobs:
   auth-ui-end-to-end-tests:
     runs-on: ubuntu-latest
@@ -34,6 +46,9 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
+      - name: 🔥 Initialize MySQL
+        run: sudo systemctl start mysql.service
+
       - name: Install dependencies
         run: pnpm i
 
@@ -44,12 +59,18 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm playwright install --with-deps chromium
 
+      - name: Setup Rest Database
+        working-directory: src/examples/rest
+        timeout-minutes: 2
+        run: |
+          pnpm import-database
+
       - name: Start and Test Rest Example
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
           pnpm start-auth-server &
-          sleep 3 &&
+          sleep 5 &&
           pnpm test-ui-auth &&
           killall node
 

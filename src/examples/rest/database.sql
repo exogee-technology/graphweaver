@@ -34,8 +34,8 @@ CREATE TABLE task_tags (
 );
 
 CREATE TABLE credential (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) NOT NULL UNIQUE,
+  id INT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL
 );
 
