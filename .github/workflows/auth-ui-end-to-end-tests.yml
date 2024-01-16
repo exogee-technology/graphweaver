@@ -52,7 +52,6 @@ jobs:
         timeout-minutes: 2
         run: |
           pnpm import-database
-
         env:
           CI: true
           DATABASE_HOST: 127.0.0.1
@@ -67,7 +66,6 @@ jobs:
           sleep 5 &&
           pnpm test-ui-auth &&
           killall node
-
         env:
           CI: true
           DATABASE_HOST: 127.0.0.1
@@ -86,6 +84,5 @@ jobs:
           name: playwright-report
           path: src/packages/end-to-end/playwright-report/
           retention-days: 30
-
         env:
           CI: true
