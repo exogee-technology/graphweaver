@@ -61,6 +61,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
+          envkey_REST_BASE_URL: "https://swapi.info/api"
           envkey_DATABASE_HOST: 127.0.0.1
           envkey_DATABASE_USERNAME: root
           envkey_DATABASE_PASSWORD: root
