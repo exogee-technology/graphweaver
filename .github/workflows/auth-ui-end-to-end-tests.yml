@@ -58,6 +58,17 @@ jobs:
           DATABASE_USERNAME: root
           DATABASE_PASSWORD: root
 
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_DATABASE_HOST: 127.0.0.1
+          envkey_DATABASE_USERNAME: root
+          envkey_DATABASE_PASSWORD: root
+          envkey_AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+          envkey_AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
+          envkey_AUTH_WHITELIST_DOMAINS: localhost
+          directory: src/examples/rest
+
       - name: Start and Test Rest Example
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
@@ -66,17 +77,6 @@ jobs:
           sleep 5 &&
           pnpm test-ui-auth &&
           killall node
-        env:
-          CI: true
-          DATABASE_HOST: 127.0.0.1
-          DATABASE_USERNAME: root
-          DATABASE_PASSWORD: root
-          REST_BASE_URL: "https://swapi.info/api"
-          AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
-          AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
-          AUTH_BASE_URI: "http://localhost:9000"
-          AUTH_WHITELIST_DOMAINS: "localhost"
-          AUTH_MAGIC_LINK_RATE_LIMIT: "500"
 
       - uses: actions/upload-artifact@v3
         if: always()
