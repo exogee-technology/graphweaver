@@ -85,11 +85,17 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					);
 					const fields = visibleFields?.map((field) => {
 						const typeValue = field.getType() as any;
-						const entityName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
-						const relatedObject = objectTypeData[entityName];
+						const typeName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
+
+						// Start here, need to get mediaType from DownloadUrlField decorator
+						console.log('**********************\n');
+						console.log('typeName', typeName);
+						console.log('**********************\n');
+
+						const relatedObject = objectTypeData[typeName];
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
-							type: relatedObject?.name || entityName,
+							type: relatedObject?.name || typeName,
 						};
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
