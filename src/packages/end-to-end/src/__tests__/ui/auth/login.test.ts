@@ -9,5 +9,5 @@ test('should allow a successful login', async ({ page }) => {
 	await page.getByPlaceholder('Password').click();
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByRole('button', { name: 'Login' }).click();
-	await expect(page.getByRole('link', { name: 'mikro-orm-my' })).toBeVisible();
+	await expect(page.getByRole('link', { name: 'mikro-orm-my-sql' })).toBeVisible();
 });
