@@ -3,9 +3,12 @@ import {
 	S3StorageProvider,
 	StorageType,
 	DownloadUrlField,
+	MediaType,
 } from '@exogee/graphweaver-storage-provider';
 
 import { Submission as OrmSubmission } from '../../entities';
+
+if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
 
 const s3 = new S3StorageProvider({
 	bucketName: process.env.AWS_S3_BUCKET,
@@ -25,6 +28,6 @@ export class Submission extends GraphQLEntity<OrmSubmission> {
 	key!: string;
 
 	// "key" must match the name of the field on the entity that gets the url from s3
-	@DownloadUrlField({ provider: s3, key: 'key' })
+	@DownloadUrlField({ storageProvider: s3, key: 'key', mediaType: MediaType.IMAGE })
 	downloadUrl!: string;
 }
