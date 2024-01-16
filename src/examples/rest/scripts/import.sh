@@ -1,0 +1,1 @@
+mysql -h$DATABASE_HOST -u$DATABASE_USERNAME --password=$DATABASE_PASSWORD todo_app < database.sql
