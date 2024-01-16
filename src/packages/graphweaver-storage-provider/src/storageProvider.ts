@@ -13,6 +13,13 @@ type StorageConfig = {
 	expiresIn?: number;
 };
 
+export interface IStorageProvider {
+	getDownloadUrl(key: string): Promise<string>;
+}
+
+export interface IStorageResolver {
+	getUploadUrl(key: string): Promise<string>;
+}
 const EXPIRE_TIME = 3600;
 
 @Resolver()
