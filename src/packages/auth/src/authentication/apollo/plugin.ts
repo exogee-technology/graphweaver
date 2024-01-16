@@ -34,7 +34,7 @@ const buildRedirectUri = (
 };
 
 const isURLWhitelisted = (authRedirect: URL) => {
-	const whitelist = requireEnvironmentVariable('AUTH_WHITELIST_DOMAINS')?.split?.(' ');
+	const whitelist = (process.env.AUTH_WHITELIST_DOMAINS ?? 'localhost')?.split?.(' ');
 
 	const redirectDomain = authRedirect.hostname.toLowerCase();
 	// Check if the current domain matches any domain in the whitelist
