@@ -33,6 +33,12 @@ export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
 export const createCredentialEntity = <D extends BaseDataEntity>(
 	acl?: AccessControlList<Credential<D>, AuthorizationContext>
 ) => {
-	ApplyAccessControlList(acl ?? {})(Credential);
+	const defaultAcl: AccessControlList<Credential<D>, AuthorizationContext> = {
+		Everyone: {
+			// everyone can read their own credentials by default
+			read: (context) => ({ id: context.user?.id }),
+		},
+	};
+	ApplyAccessControlList(acl ?? defaultAcl)(Credential);
 	return Credential;
 };
