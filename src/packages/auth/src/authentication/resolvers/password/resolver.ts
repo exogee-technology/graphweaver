@@ -19,9 +19,9 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
-export const createPasswordAuthResolver = <G extends WithId, D extends BaseDataEntity>(
-	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>
+export const createPasswordAuthResolver = <D extends BaseDataEntity>(
+	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
+	provider: BackendProvider<D, Credential<D>>
 ) => {
 	@Resolver()
 	class PasswordAuthResolver extends createBasePasswordAuthResolver(gqlEntityType, provider) {

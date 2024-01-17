@@ -14,7 +14,7 @@ import { Credential as OrmCredential } from '../../../entities/mysql';
 import { Credential } from './entity';
 
 @Resolver()
-export class PasswordAuthResolver extends createPasswordAuthResolver(
+export class PasswordAuthResolver extends createPasswordAuthResolver<OrmCredential>(
 	Credential,
 	new MikroBackendProvider(OrmCredential, myConnection)
 ) {
