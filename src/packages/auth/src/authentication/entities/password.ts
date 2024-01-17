@@ -15,24 +15,26 @@ export interface PasswordStorage {
 	id: string;
 	username: string;
 	password?: string;
+	isCollection: (fieldName: string, dataField: any) => boolean;
+	isReference: (fieldName: string, dataField: any) => boolean;
 }
 
-export const createCredentialEntity = <D extends BaseDataEntity>(
+@ReadOnly({ adminUI: false, backend: true })
+@ObjectType('Credential')
+export class Credential extends GraphQLEntity<PasswordStorage> {
+	public dataEntity!: PasswordStorage;
+
+	@Field(() => ID)
+	id!: string;
+
+	@SummaryField()
+	@Field(() => String)
+	username!: string;
+}
+
+export const createCredentialEntity = (
 	acl?: AccessControlList<Credential, AuthorizationContext>
 ) => {
-	@ApplyAccessControlList(acl ?? {})
-	@ReadOnly({ adminUI: false, backend: true })
-	@ObjectType('Credential')
-	class Credential extends GraphQLEntity<D> {
-		public dataEntity!: D;
-
-		@Field(() => ID)
-		id!: string;
-
-		@SummaryField()
-		@Field(() => String)
-		username!: string;
-	}
-
-	return Credential as GraphqlEntityType<Credential, D>;
+	ApplyAccessControlList(acl ?? {})(Credential);
+	return Credential;
 };

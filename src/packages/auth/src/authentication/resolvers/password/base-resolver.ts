@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Ctx, Info } from 'type-graphql';
+import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field } from 'type-graphql';
 import {
 	BackendProvider,
 	BaseDataEntity,
@@ -13,6 +13,19 @@ import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../toke
 import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { GraphQLResolveInfo } from 'graphql';
+import { Credential, PasswordStorage } from '../../entities';
+
+@InputType(`CredentialInsertInput`)
+class CreateCredentialInputArgs {
+	@Field(() => String)
+	username!: string;
+
+	@Field(() => String)
+	password!: string;
+
+	@Field(() => String)
+	confirm!: string;
+}
 
 export const createBasePasswordAuthResolver = <G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
@@ -27,23 +40,26 @@ export const createBasePasswordAuthResolver = <G extends WithId, D extends BaseD
 		): Promise<UserProfile>;
 		abstract save(username: string, password: string, params: RequestParams): Promise<UserProfile>;
 
-		@Mutation(() => Token)
+		@Mutation(() => Credential)
 		async createCredential(
-			@Arg('username', () => String) username: string,
-			@Arg('password', () => String) password: string,
-			@Arg('confirm', () => String) confirm: string,
+			@Arg('data', () => CreateCredentialInputArgs) data: CreateCredentialInputArgs,
 			@Ctx() ctx: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<Token> {
-			if (password !== confirm)
+		): Promise<Credential | null> {
+			if (data.password !== data.confirm)
 				throw new AuthenticationError('Login unsuccessful: Passwords do not match.');
 
-			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
-			const userProfile = await this.save(username, password, { ctx, info });
+			const userProfile = await this.save(data.username, data.password, { ctx, info });
 			if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
-			const authToken = await tokenProvider.generateToken(userProfile);
-			return verifyAndCreateTokenFromAuthToken(authToken);
+			if (!userProfile.id) throw new AuthenticationError('Login unsuccessful: ID missing.');
+			if (!userProfile.username)
+				throw new AuthenticationError('Login unsuccessful: Username missing.');
+
+			return Credential.fromBackendEntity({
+				id: userProfile.id,
+				username: userProfile.username,
+			} as PasswordStorage);
 		}
 
 		@Mutation(() => Token)
