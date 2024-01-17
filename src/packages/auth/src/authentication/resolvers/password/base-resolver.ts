@@ -1,4 +1,11 @@
 import { Resolver, Mutation, Arg, Ctx, Info } from 'type-graphql';
+import {
+	BackendProvider,
+	BaseDataEntity,
+	GraphqlEntityType,
+	WithId,
+	createBaseResolver,
+} from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext, RequestParams } from '../../../types';
@@ -7,9 +14,12 @@ import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { GraphQLResolveInfo } from 'graphql';
 
-export const createBasePasswordAuthResolver = () => {
+export const createBasePasswordAuthResolver = <G extends WithId, D extends BaseDataEntity>(
+	gqlEntityType: GraphqlEntityType<G, D>,
+	provider: BackendProvider<D, G>
+) => {
 	@Resolver((of) => Token)
-	abstract class BasePasswordAuthResolver {
+	abstract class BasePasswordAuthResolver extends createBaseResolver(gqlEntityType, provider) {
 		abstract authenticate(
 			username: string,
 			password: string,
@@ -18,7 +28,7 @@ export const createBasePasswordAuthResolver = () => {
 		abstract save(username: string, password: string, params: RequestParams): Promise<UserProfile>;
 
 		@Mutation(() => Token)
-		async createLoginPassword(
+		async createCredential(
 			@Arg('username', () => String) username: string,
 			@Arg('password', () => String) password: string,
 			@Arg('confirm', () => String) confirm: string,

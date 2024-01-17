@@ -1,7 +1,7 @@
 import {
 	EntityMetadataMap,
 	isSummaryField,
-	isReadOnly,
+	isReadOnlyAdminUI,
 	isReadOnlyProperty,
 	AdminUISettingsMap,
 	AdminUIFilterType,
@@ -77,7 +77,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						isSummaryField(objectType.target, field.name)
 					)?.name;
 					const attributes = new AdminUiEntityAttributeMetadata();
-					if (isReadOnly(objectType.target)) {
+					if (isReadOnlyAdminUI(objectType.target)) {
 						attributes.isReadOnly = true;
 					}
 					const visibleFields = objectType.fields?.filter(

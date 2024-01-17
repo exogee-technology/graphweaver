@@ -21,7 +21,7 @@ export const createCredentialEntity = <D extends BaseDataEntity>(
 	acl?: AccessControlList<Credential, AuthorizationContext>
 ) => {
 	@ApplyAccessControlList(acl ?? {})
-	@ReadOnly()
+	@ReadOnly({ adminUI: false, backend: true })
 	@ObjectType('Credential')
 	class Credential extends GraphQLEntity<D> {
 		public dataEntity!: D;
