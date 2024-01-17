@@ -87,11 +87,6 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						const typeValue = field.getType() as any;
 						const typeName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
 
-						// Start here, need to get mediaType from DownloadUrlField decorator
-						console.log('**********************\n');
-						console.log('typeName', typeName);
-						console.log('**********************\n');
-
 						const relatedObject = objectTypeData[typeName];
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
@@ -139,6 +134,9 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					value,
 				})),
 			}));
+			console.log('***************************\n');
+			console.log('entities', entities[1]?.fields);
+			console.log('***************************\n');
 
 			const params = hooks?.afterRead
 				? await hooks.afterRead({ context, metadata: { entities, enums } })
