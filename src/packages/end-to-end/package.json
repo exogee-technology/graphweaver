@@ -21,7 +21,7 @@
 		"test-scalars": "jest --runInBand --forceExit ---- api/scalars",
 		"test-aws-cognito": "jest --runInBand --forceExit ---- api/aws-cognito",
 		"test-ui": "pnpm exec playwright test",
-		"test-ui:postgres": "export TEST_DATASOURCE=mikro-orm-postgres && pnpm exec playwright test",
+		"test-ui:postgres": "export TEST_DATASOURCE=mikro-orm-postgres && pnpm exec playwright test --reporter line",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
 		"version": "npm version --no-git-tag-version"
