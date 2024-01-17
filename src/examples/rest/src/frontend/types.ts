@@ -111,6 +111,12 @@ export type CredentialInsertInput = {
 	username: Scalars['String']['input'];
 };
 
+export type CredentialInsertInput = {
+	confirm: Scalars['String']['input'];
+	password: Scalars['String']['input'];
+	username: Scalars['String']['input'];
+};
+
 export type CredentialsListFilter = {
 	_and?: InputMaybe<Array<CredentialsListFilter>>;
 	_not?: InputMaybe<CredentialsListFilter>;
