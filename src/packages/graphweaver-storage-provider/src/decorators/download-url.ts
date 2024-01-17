@@ -37,7 +37,6 @@ export function DownloadUrlField({
 			typeOptions: { nullable: true },
 		});
 
-		// @todo logic to check what kind of media we have, media scalar
 		const getType = () => {
 			switch (mediaType) {
 				case MediaTypes.IMAGE:
@@ -48,24 +47,16 @@ export function DownloadUrlField({
 		};
 		const prototype = target.constructor.prototype;
 
-		const options = {
-			name: mediaType,
-			description: undefined,
-			complexity: undefined,
-			deprecationReason: undefined,
-			simple: undefined,
-		};
-
 		metadata.collectClassFieldMetadata({
 			name: propertyKey,
 			schemaName: propertyKey,
 			getType,
 			typeOptions,
-			complexity: options.complexity,
+			complexity: undefined,
 			target: prototype.constructor,
-			description: options.description,
-			deprecationReason: options.deprecationReason,
-			simple: options.simple,
+			description: undefined,
+			deprecationReason: undefined,
+			simple: undefined,
 		});
 
 		metadata.collectHandlerParamMetadata({
@@ -80,9 +71,9 @@ export function DownloadUrlField({
 		metadata.collectFieldResolverMetadata({
 			kind: 'internal',
 			methodName: propertyKey,
-			schemaName: options.name || propertyKey,
+			schemaName: propertyKey,
 			target: prototype.constructor,
-			complexity: options.complexity,
+			complexity: undefined,
 		});
 
 		const fieldResolver = async (root: any) => {

@@ -37,6 +37,7 @@ const columnsForEntity = <T extends TableRowItem>(
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
 
+		//
 		formatter: field.relationshipType
 			? ({ row }: FormatterProps<T, unknown>) => {
 					const value = row[field.name as keyof typeof row];
@@ -66,12 +67,19 @@ const columnsForEntity = <T extends TableRowItem>(
 			  }
 			: field.type === 'Image'
 			? ({ row }: FormatterProps<T, unknown>) => {
-					const imageUrl = row[field.name as keyof typeof row] as string;
+					console.log('Image');
+					console.log(row);
+					console.log(field);
+
+					const imageUrl = row[field.name as keyof typeof row] as string; // this only works because the name of the field is downloadUrl. This is also present on row.downloadUrl;
+					// const altText = row.altText as string; // @todo, how to handle other fields on submission being used in img tag?
+					const altText = 'alt text';
+					// style position image to center of image
 
 					return (
 						<img
 							src={imageUrl}
-							// alt={altText} @todo - implement alt text
+							alt={altText}
 							style={{
 								position: 'absolute',
 								top: '50%',
@@ -79,15 +87,6 @@ const columnsForEntity = <T extends TableRowItem>(
 								transform: 'translate(-50%, -50%)',
 							}}
 						/>
-					);
-			  }
-			: field.type === 'Media'
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const mediaUrl = row[field.name as keyof typeof row] as string;
-					return (
-						<a href={mediaUrl} target="_blank" rel="noreferrer">
-							{mediaUrl}
-						</a>
 					);
 			  }
 			: undefined,
