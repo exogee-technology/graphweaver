@@ -40,8 +40,9 @@ pnpm i
 pnpm build
 # Create the end-to-end test app/ directory and graphweaver import the 'postgres' database in the local Postgres instance
 cd $END_TO_END_DIR
+pnpm seed-postgres:reseed
 pnpm import-database-postgres
-# Check the app successfully builds
+# Check the resulting app successfully builds
 cd $APP_DIR
 pnpm build
 # Now go back out and copy the build output into the app-123 directory 
@@ -62,9 +63,8 @@ pnpm init
 pnpm add serverless serverless-offline http-server
 # Let's prepare the Postgres database
 cd $END_TO_END_DIR
-pnpm seed-postgres:reseed
-cd $STANDALONE_TEST_APP_DIR
 # We should be all set, run the UI test suite
+cd $STANDALONE_TEST_APP_DIR
 pnpm serverless offline start & echo "Let's wait a few seconds for things to load..." && sleep 5
 cd $END_TO_END_DIR
 echo "Run backend tests..."
