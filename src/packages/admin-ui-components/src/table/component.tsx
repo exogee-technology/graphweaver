@@ -37,7 +37,7 @@ const columnsForEntity = <T extends TableRowItem>(
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
 
-		// We only need a formatter for relationships.
+		//
 		formatter: field.relationshipType
 			? ({ row }: FormatterProps<T, unknown>) => {
 					const value = row[field.name as keyof typeof row];
@@ -64,6 +64,30 @@ const columnsForEntity = <T extends TableRowItem>(
 					} else {
 						return null;
 					}
+			  }
+			: field.type === 'Image'
+			? ({ row }: FormatterProps<T, unknown>) => {
+					console.log('Image');
+					console.log(row);
+					console.log(field);
+
+					const imageUrl = row[field.name as keyof typeof row] as string; // this only works because the name of the field is downloadUrl. This is also present on row.downloadUrl;
+					// const altText = row.altText as string; // @todo, how to handle other fields on submission being used in img tag?
+					const altText = 'alt text';
+					// style position image to center of image
+
+					return (
+						<img
+							src={imageUrl}
+							alt={altText}
+							style={{
+								position: 'absolute',
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+							}}
+						/>
+					);
 			  }
 			: undefined,
 	}));
