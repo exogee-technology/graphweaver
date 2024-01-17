@@ -7,7 +7,7 @@ import {
 	WithId,
 } from '@exogee/graphweaver';
 
-import { PasswordStorage } from '../../entities';
+import { Credential, PasswordStorage } from '../../entities';
 import { createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationError } from 'apollo-server-errors';
@@ -19,9 +19,9 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
-export const createPasswordAuthResolver = <G extends WithId, D extends BaseDataEntity>(
-	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>
+export const createPasswordAuthResolver = <D extends BaseDataEntity>(
+	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
+	provider: BackendProvider<D, Credential<D>>
 ) => {
 	@Resolver()
 	class PasswordAuthResolver extends createBasePasswordAuthResolver(gqlEntityType, provider) {

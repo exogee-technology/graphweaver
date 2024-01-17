@@ -27,9 +27,9 @@ class CreateCredentialInputArgs {
 	confirm!: string;
 }
 
-export const createBasePasswordAuthResolver = <G extends WithId, D extends BaseDataEntity>(
-	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>
+export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
+	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
+	provider: BackendProvider<D, Credential<D>>
 ) => {
 	@Resolver((of) => Token)
 	abstract class BasePasswordAuthResolver extends createBaseResolver(gqlEntityType, provider) {
@@ -45,7 +45,7 @@ export const createBasePasswordAuthResolver = <G extends WithId, D extends BaseD
 			@Arg('data', () => CreateCredentialInputArgs) data: CreateCredentialInputArgs,
 			@Ctx() ctx: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<Credential | null> {
+		): Promise<Credential<BaseDataEntity> | null> {
 			if (data.password !== data.confirm)
 				throw new AuthenticationError('Login unsuccessful: Passwords do not match.');
 
@@ -59,7 +59,7 @@ export const createBasePasswordAuthResolver = <G extends WithId, D extends BaseD
 			return Credential.fromBackendEntity({
 				id: userProfile.id,
 				username: userProfile.username,
-			} as PasswordStorage);
+			} as PasswordStorage & { isCollection: any; isReference: any });
 		}
 
 		@Mutation(() => Token)

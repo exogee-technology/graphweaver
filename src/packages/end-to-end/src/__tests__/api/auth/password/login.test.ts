@@ -9,7 +9,9 @@ import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
+	Credential,
 } from '@exogee/graphweaver-auth';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 const user = new UserProfile({
 	id: '1',
@@ -18,10 +20,16 @@ const user = new UserProfile({
 });
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver() {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
+	}
+	async save(username: string, password: string) {
+		return user;
 	}
 }
 
