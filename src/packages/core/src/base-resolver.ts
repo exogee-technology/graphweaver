@@ -32,11 +32,7 @@ import type {
 	BaseContext,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
-import {
-	isExcludedFromFilterType,
-	isReadOnlyBackend,
-	isReadOnlyPropertyBackend,
-} from './decorators';
+import { isExcludedFromFilterType, isReadOnlyBackend, isReadOnlyProperty } from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities } from './utils/create-or-update-entities';
@@ -71,11 +67,7 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>,
-	baseResolverToExtend: new (
-		gqlEntityType: GraphqlEntityType<G, D>,
-		provider: BackendProvider<D, G>
-	) => any = DefaultBaseResolver
+	provider: BackendProvider<D, G>
 ): abstract new (
 	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G>
@@ -307,11 +299,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	@Resolver()
-	abstract class BaseResolver extends baseResolverToExtend implements BaseResolverInterface {
-		constructor() {
-			super(gqlEntityType, provider);
-		}
-
+	abstract class BaseResolver implements BaseResolverInterface {
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}

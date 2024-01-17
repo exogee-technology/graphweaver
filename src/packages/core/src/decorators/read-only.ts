@@ -15,14 +15,17 @@ export function ReadOnly({ backend, adminUI }: Props = { backend: true, adminUI:
 			if (backend) Reflect.metadata(readOnlyBackendKey, true)(target, propertyKey);
 			return;
 		}
+
 		if (adminUI) Reflect.metadata(readOnlyAdminUIKey, true)(target);
 		if (backend) Reflect.metadata(readOnlyBackendKey, true)(target);
 		return target;
 	};
 }
+
 export function isReadOnlyBackend(target: any) {
 	return !!Reflect.getMetadata(readOnlyBackendKey, target);
 }
+
 export function isReadOnlyAdminUI(target: any) {
 	return !!Reflect.getMetadata(readOnlyAdminUIKey, target);
 }

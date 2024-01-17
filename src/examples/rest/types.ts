@@ -122,7 +122,7 @@ export type CredentialsPaginationInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword: Token;
-  createLoginPassword: Token;
+  createCredential: Token;
   createOrUpdateTags: Array<Tag>;
   createOrUpdateTasks: Array<Task>;
   createOrUpdateUsers: Array<User>;
@@ -162,7 +162,7 @@ export type MutationChallengePasswordArgs = {
 };
 
 
-export type MutationCreateLoginPasswordArgs = {
+export type MutationCreateCredentialArgs = {
   confirm: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];

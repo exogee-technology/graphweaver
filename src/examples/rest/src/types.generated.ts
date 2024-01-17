@@ -25,6 +25,288 @@ export type Scalars = {
 	JSON: { input: any; output: any };
 };
 
+export type AdminUiEntityAttributeMetadata = {
+	__typename?: 'AdminUiEntityAttributeMetadata';
+	isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type AdminUiEntityMetadata = {
+	__typename?: 'AdminUiEntityMetadata';
+	attributes: AdminUiEntityAttributeMetadata;
+	backendId?: Maybe<Scalars['String']['output']>;
+	fields: Array<AdminUiFieldMetadata>;
+	name: Scalars['String']['output'];
+	summaryField?: Maybe<Scalars['String']['output']>;
+};
+
+export type AdminUiEnumMetadata = {
+	__typename?: 'AdminUiEnumMetadata';
+	name: Scalars['String']['output'];
+	values: Array<AdminUiEnumValueMetadata>;
+};
+
+export type AdminUiEnumValueMetadata = {
+	__typename?: 'AdminUiEnumValueMetadata';
+	name: Scalars['String']['output'];
+	value: Scalars['String']['output'];
+};
+
+export type AdminUiFieldAttributeMetadata = {
+	__typename?: 'AdminUiFieldAttributeMetadata';
+	isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type AdminUiFieldMetadata = {
+	__typename?: 'AdminUiFieldMetadata';
+	attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+	filter?: Maybe<AdminUiFilterMetadata>;
+	name: Scalars['String']['output'];
+	relatedEntity?: Maybe<Scalars['String']['output']>;
+	relationshipType?: Maybe<Scalars['String']['output']>;
+	type: Scalars['String']['output'];
+};
+
+export type AdminUiFilterMetadata = {
+	__typename?: 'AdminUiFilterMetadata';
+	type: AdminUiFilterType;
+};
+
+export enum AdminUiFilterType {
+	Boolean = 'BOOLEAN',
+	DateRange = 'DATE_RANGE',
+	Enum = 'ENUM',
+	Numeric = 'NUMERIC',
+	Relationship = 'RELATIONSHIP',
+	Text = 'TEXT',
+}
+
+export type AdminUiMetadata = {
+	__typename?: 'AdminUiMetadata';
+	entities: Array<AdminUiEntityMetadata>;
+	enums: Array<AdminUiEnumMetadata>;
+};
+
+export type Credential = {
+	__typename?: 'Credential';
+	id: Scalars['ID']['output'];
+	username: Scalars['String']['output'];
+};
+
+export type CredentialsListFilter = {
+	_and?: InputMaybe<Array<CredentialsListFilter>>;
+	_not?: InputMaybe<CredentialsListFilter>;
+	_or?: InputMaybe<Array<CredentialsListFilter>>;
+	id?: InputMaybe<Scalars['ID']['input']>;
+	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	id_ne?: InputMaybe<Scalars['ID']['input']>;
+	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	id_notnull?: InputMaybe<Scalars['ID']['input']>;
+	id_null?: InputMaybe<Scalars['ID']['input']>;
+	username?: InputMaybe<Scalars['String']['input']>;
+	username_ilike?: InputMaybe<Scalars['String']['input']>;
+	username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+	username_like?: InputMaybe<Scalars['String']['input']>;
+	username_ne?: InputMaybe<Scalars['String']['input']>;
+	username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+	username_notnull?: InputMaybe<Scalars['String']['input']>;
+	username_null?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CredentialsOrderByInput = {
+	id?: InputMaybe<Sort>;
+	username?: InputMaybe<Sort>;
+};
+
+export type CredentialsPaginationInput = {
+	limit?: InputMaybe<Scalars['Int']['input']>;
+	offset?: InputMaybe<Scalars['Int']['input']>;
+	orderBy?: InputMaybe<CredentialsOrderByInput>;
+};
+
+export type Mutation = {
+	__typename?: 'Mutation';
+	challengePassword: Token;
+	createCredential: Token;
+	createOrUpdateTags: Array<Tag>;
+	createOrUpdateTasks: Array<Task>;
+	createOrUpdateUsers: Array<User>;
+	createTag: Tag;
+	createTags: Array<Tag>;
+	createTask: Task;
+	createTasks: Array<Task>;
+	createUser: User;
+	createUsers: Array<User>;
+	deleteTag: Scalars['Boolean']['output'];
+	deleteTask: Scalars['Boolean']['output'];
+	deleteUser: Scalars['Boolean']['output'];
+	enrolWallet: Scalars['Boolean']['output'];
+	loginPassword: Token;
+	passkeyGenerateAuthenticationOptions: Scalars['JSON']['output'];
+	passkeyGenerateRegistrationOptions: Scalars['JSON']['output'];
+	passkeyVerifyAuthenticationResponse: Token;
+	passkeyVerifyRegistrationResponse: Scalars['Boolean']['output'];
+	sendChallengeMagicLink: Scalars['Boolean']['output'];
+	sendLoginMagicLink: Scalars['Boolean']['output'];
+	sendOTPChallenge: Scalars['Boolean']['output'];
+	updateTag: Tag;
+	updateTags: Array<Tag>;
+	updateTask: Task;
+	updateTasks: Array<Task>;
+	updateUser: User;
+	updateUsers: Array<User>;
+	verifyChallengeMagicLink: Token;
+	verifyLoginMagicLink: Token;
+	verifyOTPChallenge: Token;
+	verifyWeb3Challenge: Token;
+};
+
+export type MutationChallengePasswordArgs = {
+	password: Scalars['String']['input'];
+};
+
+export type MutationCreateCredentialArgs = {
+	confirm: Scalars['String']['input'];
+	password: Scalars['String']['input'];
+	username: Scalars['String']['input'];
+};
+
+export type MutationCreateOrUpdateTagsArgs = {
+	input: TagsCreateOrUpdateManyInput;
+};
+
+export type MutationCreateOrUpdateTasksArgs = {
+	input: TasksCreateOrUpdateManyInput;
+};
+
+export type MutationCreateOrUpdateUsersArgs = {
+	input: UsersCreateOrUpdateManyInput;
+};
+
+export type MutationCreateTagArgs = {
+	data: TagInsertInput;
+};
+
+export type MutationCreateTagsArgs = {
+	input: TagsInsertManyInput;
+};
+
+export type MutationCreateTaskArgs = {
+	data: TaskInsertInput;
+};
+
+export type MutationCreateTasksArgs = {
+	input: TasksInsertManyInput;
+};
+
+export type MutationCreateUserArgs = {
+	data: UserInsertInput;
+};
+
+export type MutationCreateUsersArgs = {
+	input: UsersInsertManyInput;
+};
+
+export type MutationDeleteTagArgs = {
+	id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteTaskArgs = {
+	id: Scalars['ID']['input'];
+};
+
+export type MutationDeleteUserArgs = {
+	id: Scalars['ID']['input'];
+};
+
+export type MutationEnrolWalletArgs = {
+	token: Scalars['String']['input'];
+};
+
+export type MutationLoginPasswordArgs = {
+	password: Scalars['String']['input'];
+	username: Scalars['String']['input'];
+};
+
+export type MutationPasskeyVerifyAuthenticationResponseArgs = {
+	authenticationResponse: PasskeyAuthenticationResponse;
+};
+
+export type MutationPasskeyVerifyRegistrationResponseArgs = {
+	registrationResponse: PasskeyRegistrationResponse;
+};
+
+export type MutationSendLoginMagicLinkArgs = {
+	username: Scalars['String']['input'];
+};
+
+export type MutationUpdateTagArgs = {
+	data: TagCreateOrUpdateInput;
+};
+
+export type MutationUpdateTagsArgs = {
+	input: TagsUpdateManyInput;
+};
+
+export type MutationUpdateTaskArgs = {
+	data: TaskCreateOrUpdateInput;
+};
+
+export type MutationUpdateTasksArgs = {
+	input: TasksUpdateManyInput;
+};
+
+export type MutationUpdateUserArgs = {
+	data: UserCreateOrUpdateInput;
+};
+
+export type MutationUpdateUsersArgs = {
+	input: UsersUpdateManyInput;
+};
+
+export type MutationVerifyChallengeMagicLinkArgs = {
+	token: Scalars['String']['input'];
+};
+
+export type MutationVerifyLoginMagicLinkArgs = {
+	token: Scalars['String']['input'];
+	username: Scalars['String']['input'];
+};
+
+export type MutationVerifyOtpChallengeArgs = {
+	code: Scalars['String']['input'];
+};
+
+export type MutationVerifyWeb3ChallengeArgs = {
+	token: Scalars['String']['input'];
+};
+
+export type PasskeyAuthenticationResponse = {
+	authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
+	clientExtensionResults: Scalars['JSON']['input'];
+	id: Scalars['ID']['input'];
+	rawId: Scalars['String']['input'];
+	response: Scalars['JSON']['input'];
+	type: Scalars['String']['input'];
+};
+
+export type PasskeyRegistrationResponse = {
+	authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
+	clientExtensionResults: Scalars['JSON']['input'];
+	id: Scalars['ID']['input'];
+	rawId: Scalars['String']['input'];
+	response: Scalars['JSON']['input'];
+	type: Scalars['String']['input'];
+};
+
+export enum Priority {
+	/** HIGH */
+	High = 'HIGH',
+	/** LOW */
+	Low = 'LOW',
+	/** MEDIUM */
+	Medium = 'MEDIUM',
+}
+
 export type Query = {
 	__typename?: 'Query';
 	canEnrolWallet: Scalars['Boolean']['output'];
