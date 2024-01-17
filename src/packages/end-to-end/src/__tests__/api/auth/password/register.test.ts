@@ -7,17 +7,23 @@ import {
 	authApolloPlugin,
 	UserProfile,
 	RequestParams,
+	Credential,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 const user = new UserProfile({
 	id: '1',
 	roles: ['admin'],
 	displayName: 'Test User',
+	username: 'test',
 });
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver() {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+) {
 	async authenticate(username: string, password: string) {
 		return user;
 	}
@@ -36,30 +42,28 @@ const graphweaver = new Graphweaver({
 describe('Password Authentication - Register', () => {
 	test('should register an unauthenticated user.', async () => {
 		const response = await graphweaver.server.executeOperation<{
-			createLoginPassword: { authToken: string };
+			createCredential: { id: string };
 		}>({
 			query: gql`
-				mutation createLoginPassword($username: String!, $password: String!, $confirm: String!) {
-					createLoginPassword(username: $username, password: $password, confirm: $confirm) {
-						authToken
+				mutation createCredential($data: CredentialInsertInput!) {
+					createCredential(data: $data) {
+						id
 					}
 				}
 			`,
 			variables: {
-				username: '',
-				password: '',
-				confirm: '',
+				data: {
+					username: 'test',
+					password: 'test',
+					confirm: 'test',
+				},
 			},
 		});
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
 
-		const token = response.body.singleResult.data?.createLoginPassword?.authToken;
-		expect(token).toContain('Bearer ');
-
-		const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
-		// Check that the token expires in the future
-		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
+		const token = response.body.singleResult.data?.createCredential?.id;
+		expect(token).toBeDefined();
 	});
 });

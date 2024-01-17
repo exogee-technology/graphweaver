@@ -2,14 +2,16 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { ObjectType, Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
 	createBaseOneTimePasswordAuthResolver,
 	createBasePasswordAuthResolver,
 	OneTimePassword,
+	Credential,
 } from '@exogee/graphweaver-auth';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 const MOCK_CODE = '123456';
 const MOCK_CREATED_AT = new Date();
@@ -51,10 +53,16 @@ class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 }
 
 @Resolver()
-class CredentialAuthResolver extends createBasePasswordAuthResolver() {
+class CredentialAuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
+	}
+	async save(username: string, password: string) {
+		return user;
 	}
 }
 

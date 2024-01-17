@@ -9,6 +9,7 @@ import {
 	AuthenticationBaseEntity,
 	WalletAddress,
 	AuthenticationType,
+	Credential,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -16,6 +17,7 @@ import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
 import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 // Setup ethers for signing
 const phrase =
@@ -64,10 +66,16 @@ class AuthResolver extends createBaseWeb3AuthResolver() {
 }
 
 @Resolver()
-class CredentialAuthResolver extends createBasePasswordAuthResolver() {
+class CredentialAuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
+	}
+	async save(username: string, password: string) {
+		return user;
 	}
 }
 

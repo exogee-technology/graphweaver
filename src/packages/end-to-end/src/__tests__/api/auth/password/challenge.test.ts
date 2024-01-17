@@ -21,6 +21,7 @@ import {
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
 	createBasePasswordAuthResolver,
+	Credential,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -89,10 +90,20 @@ const user = new UserProfile({
 });
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver() {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+) {
+	/**
+	 * Dummy method to simulate a password authentication
+	 */
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
+	}
+
+	async save(username: string, password: string) {
+		return user;
 	}
 }
 
