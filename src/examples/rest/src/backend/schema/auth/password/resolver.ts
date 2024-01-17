@@ -2,6 +2,7 @@ import {
 	PasswordOperation,
 	RequestParams,
 	UserProfile,
+	createPasswordAuthResolver,
 } from '@exogee/graphweaver-auth';
 import { BaseLoaders, Resolver, callChildMutation, createBaseResolver } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
@@ -13,17 +14,16 @@ import { Credential as OrmCredential } from '../../../entities/mysql';
 import { Credential } from './entity';
 
 @Resolver()
-export class PasswordAuthResolver extends createBaseResolver(
+export class PasswordAuthResolver extends createPasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(OrmCredential, myConnection),
-	AuthResolver
+	new MikroBackendProvider(OrmCredential, myConnection)
 ) {
-	protected async onUserAuthenticated(userId: string, params: RequestParams): Promise<null> {
+	async onUserAuthenticated(userId: string, params: RequestParams): Promise<null> {
 		// This is called after a user has authenticated
 		return;
 	}
 
-	protected async onUserRegistered(userId: string, params: RequestParams): Promise<null> {
+	async onUserRegistered(userId: string, params: RequestParams): Promise<null> {
 		// This is called after a user has registered
 		return;
 	}
