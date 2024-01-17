@@ -1,9 +1,17 @@
-import { GraphQLEntity, Field, ID, ObjectType, Root } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	Field,
+	ID,
+	ObjectType,
+	Root,
+	ExcludeFromFilterType,
+	ReadOnlyProperty,
+} from '@exogee/graphweaver';
 import {
 	S3StorageProvider,
 	StorageType,
 	DownloadUrlField,
-	MediaType,
+	MediaTypes,
 } from '@exogee/graphweaver-storage-provider';
 
 import { Submission as OrmSubmission } from '../../entities';
@@ -28,6 +36,8 @@ export class Submission extends GraphQLEntity<OrmSubmission> {
 	key!: string;
 
 	// "key" must match the name of the field on the entity that gets the url from s3
-	@DownloadUrlField({ storageProvider: s3, key: 'key', mediaType: MediaType.IMAGE })
+	// @ExcludeFromFilterType()
+	// @ReadOnlyProperty()
+	@DownloadUrlField({ storageProvider: s3, key: 'key', mediaType: MediaTypes.IMAGE })
 	downloadUrl!: string;
 }
