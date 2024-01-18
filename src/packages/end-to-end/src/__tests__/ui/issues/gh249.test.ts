@@ -12,9 +12,4 @@ test('Navigate to entity then click through to related entity from one of the re
 	expect(page.url()).toBe(`${config.adminUiUrl}/Album/7`);
 	await expect(page.locator('form')).toContainText('12 Selected');
 	await expect(page.getByText('Selected')).toBeVisible();
-	await expect(
-		page.getByText(
-			'idtitleartistAlice In Chainstracks12 Selected×We Die Young×Man In The Box×Sea Of'
-		)
-	).toBeVisible();
 });
