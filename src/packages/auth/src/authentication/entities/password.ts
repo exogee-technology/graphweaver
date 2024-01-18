@@ -11,7 +11,7 @@ import {
 import { AccessControlList, AuthorizationContext } from '../../types';
 import { ApplyAccessControlList } from '../../decorators';
 
-export interface PasswordStorage {
+export interface CredentialStorage {
 	id: string;
 	username: string;
 	password?: string;
