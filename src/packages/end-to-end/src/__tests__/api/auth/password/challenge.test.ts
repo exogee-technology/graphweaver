@@ -7,6 +7,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
+	CreateOrUpdateHookParams,
 	Field,
 	GraphQLEntity,
 	ID,
@@ -23,6 +24,7 @@ import {
 	createBasePasswordAuthResolver,
 	Credential,
 	RequestParams,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -103,7 +105,7 @@ class AuthResolver extends createBasePasswordAuthResolver(
 		throw new Error('Unknown username or password, please try again');
 	}
 
-	async create(username: string, password: string) {
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
 		return user;
 	}
 

@@ -1,16 +1,18 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
 import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	RequestParams,
 	Credential,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { SqliteDriver } from '@mikro-orm/sqlite';
 
 const user = new UserProfile({
 	id: '1',
@@ -19,15 +21,24 @@ const user = new UserProfile({
 	username: 'test',
 });
 
+const connection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		entities: [],
+		driver: SqliteDriver,
+		dbName: 'databases/database.sqlite',
+	},
+};
+
 @Resolver()
 class AuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, connection)
 ) {
 	async authenticate(username: string, password: string) {
 		return user;
 	}
-	async create(username: string, password: string, params: RequestParams): Promise<UserProfile> {
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
 		return user;
 	}
 	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {

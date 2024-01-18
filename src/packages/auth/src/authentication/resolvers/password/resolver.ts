@@ -1,14 +1,17 @@
 import {
 	BackendProvider,
 	BaseDataEntity,
+	CreateOrUpdateHookParams,
 	Filter,
 	GraphqlEntityType,
+	HookParams,
+	HookRegister,
 	Resolver,
-	WithId,
+	hookManagerMap,
 } from '@exogee/graphweaver';
 
 import { Credential, CredentialStorage } from '../../entities';
-import { createBasePasswordAuthResolver } from './base-resolver';
+import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
@@ -63,18 +66,51 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 		}
 
-		async create(username: string, password: string, params: RequestParams): Promise<UserProfile> {
-			const passwordHash = await hashPassword(password);
+		public async runAfterHooks<H extends HookParams<CredentialCreateOrUpdateInputArgs>>(
+			hookRegister: HookRegister,
+			hookParams: H,
+			entities: (CredentialCreateOrUpdateInputArgs | null)[]
+		): Promise<(CredentialCreateOrUpdateInputArgs | null)[]> {
+			const hookManager = hookManagerMap.get('Credential');
+			const { entities: hookEntities = [] } = hookManager
+				? await hookManager.runHooks(hookRegister, {
+						...hookParams,
+						entities,
+				  })
+				: { entities };
+
+			return hookEntities;
+		}
+
+		async create(
+			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+		): Promise<UserProfile> {
+			const [item] = params.args.items;
+			if (!item) throw new Error('No data specified cannot continue.');
+
+			if (!item.username)
+				throw new AuthenticationError('Create unsuccessful: Username not defined.');
+
+			if (!item.password)
+				throw new AuthenticationError('Create unsuccessful: Password not defined.');
+
+			if (item.password !== item.confirm)
+				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
+
+			const passwordHash = await hashPassword(item.password);
 			const credential = (await this.provider.createOne({
-				username,
+				username: item.username,
 				password: passwordHash,
 			} as any)) as unknown as CredentialStorage;
 
-			if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+			const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [credential]);
+			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+			this.onUserRegistered?.(entity.id, { info: params.info, ctx: params.context });
 
-			this.onUserRegistered?.(credential.id, params);
-
-			return this.getUserProfile(credential.id, PasswordOperation.REGISTER, params);
+			return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
+				info: params.info,
+				ctx: params.context,
+			});
 		}
 
 		async update(
