@@ -51,6 +51,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
+      
+      - name: Install dependencies
+        run: pnpm i
     
       - name: Store Playwright's version for caching purposes
         run: |
@@ -67,7 +70,7 @@ jobs:
 
       - name: Setup Playwright Using Cache If Available
         if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-        run: npx playwright install --with-deps
+        run: pnpm playwright install --with-deps chromium
 
       - name: Run end-to-end tests
         run: |
