@@ -76,7 +76,9 @@ class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
 		return user;
 	}
-	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
+	async update(
+		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+	): Promise<UserProfile> {
 		return user;
 	}
 }
