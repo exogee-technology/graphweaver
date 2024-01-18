@@ -10,6 +10,7 @@ import {
 	createBasePasswordAuthResolver,
 	OneTimePassword,
 	Credential,
+	RequestParams,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -61,7 +62,10 @@ class CredentialAuthResolver extends createBasePasswordAuthResolver(
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
 	}
-	async save(username: string, password: string) {
+	async create(username: string, password: string) {
+		return user;
+	}
+	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
 		return user;
 	}
 }
