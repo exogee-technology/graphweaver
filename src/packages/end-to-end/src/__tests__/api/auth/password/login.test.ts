@@ -11,7 +11,6 @@ import {
 	UserProfile,
 	Credential,
 	RequestParams,
-	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -30,12 +29,10 @@ class AuthResolver extends createBasePasswordAuthResolver(
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
 	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
+	async create(username: string, password: string) {
 		return user;
 	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
+	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
 		return user;
 	}
 }

@@ -10,7 +10,6 @@ import {
 	ForbiddenError,
 	Credential,
 	RequestParams,
-	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -28,12 +27,10 @@ class AuthResolver extends createBasePasswordAuthResolver(
 	async authenticate(username: string, password: string) {
 		return user;
 	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
+	async create(username: string, password: string) {
 		return user;
 	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
+	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
 		return user;
 	}
 }

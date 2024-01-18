@@ -38,12 +38,10 @@ class AuthResolver extends createBasePasswordAuthResolver(
 	async authenticate(username: string, password: string) {
 		return user;
 	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
+	async create(username: string, password: string, params: RequestParams): Promise<UserProfile> {
 		return user;
 	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
+	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
 		return user;
 	}
 }
