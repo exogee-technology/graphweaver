@@ -40,7 +40,7 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
       - uses: pnpm/action-setup@v2.2.4
         with:
@@ -54,9 +54,9 @@ jobs:
     
       - name: Store Playwright's version for caching purposes
         run: |
-        PLAYWRIGHT_VERSION=$(pnpm ls --long @playwright/test | grep ^@playwright | sed 's/.*@//')
-        echo "Playwright's Version: $PLAYWRIGHT_VERSION"
-        echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+          PLAYWRIGHT_VERSION=$(pnpm ls --long @playwright/test | grep ^@playwright | sed 's/.*@//')
+          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
 
       - name: Cache Playwright Browsers for a given Playwright version
         uses: actions/cache@v3
@@ -71,6 +71,6 @@ jobs:
 
       - name: Run end-to-end tests
         run: |
-        cd packages/end-to-end/scripts
-        chmod +x test-standalone.sh
-        ./test-standalone.sh
+          cd packages/end-to-end/scripts
+          chmod +x test-standalone.sh
+          ./test-standalone.sh
