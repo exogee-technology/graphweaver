@@ -27,7 +27,10 @@ class AuthResolver extends createBasePasswordAuthResolver(
 	async authenticate(username: string, password: string) {
 		return user;
 	}
-	async save(username: string, password: string, params: RequestParams): Promise<UserProfile> {
+	async create(username: string, password: string, params: RequestParams): Promise<UserProfile> {
+		return user;
+	}
+	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
 		return user;
 	}
 }
@@ -40,7 +43,7 @@ const graphweaver = new Graphweaver({
 });
 
 describe('Password Authentication - Register', () => {
-	test('should register an unauthenticated user.', async () => {
+	test('should create a new user.', async () => {
 		const response = await graphweaver.server.executeOperation<{
 			createCredential: { id: string };
 		}>({
