@@ -60,7 +60,7 @@ echo "Now in standalone test app directory:"
 pwd
 # Create a PNPM project so that we can use serverless offline and http-server
 pnpm init
-pnpm add serverless serverless-offline http-server
+pnpm add serverless@3.38.0 serverless-offline@13.3.2 http-server@14.1.1
 # Let's prepare the Postgres database
 cd $END_TO_END_DIR
 # We should be all set, run the UI test suite
