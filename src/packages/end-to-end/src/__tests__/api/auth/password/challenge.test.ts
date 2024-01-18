@@ -109,7 +109,9 @@ class AuthResolver extends createBasePasswordAuthResolver(
 		return user;
 	}
 
-	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
+	async update(
+		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+	): Promise<UserProfile> {
 		return user;
 	}
 }

@@ -69,8 +69,8 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 		public async runAfterHooks<H extends HookParams<CredentialCreateOrUpdateInputArgs>>(
 			hookRegister: HookRegister,
 			hookParams: H,
-			entities: (CredentialCreateOrUpdateInputArgs | null)[]
-		): Promise<(CredentialCreateOrUpdateInputArgs | null)[]> {
+			entities: (D | null)[]
+		): Promise<((D & { id: string }) | null)[]> {
 			const hookManager = hookManagerMap.get('Credential');
 			const { entities: hookEntities = [] } = hookManager
 				? await hookManager.runHooks(hookRegister, {
@@ -79,7 +79,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 				  })
 				: { entities };
 
-			return hookEntities;
+			return hookEntities as ((D & { id: string }) | null)[];
 		}
 
 		async create(
@@ -98,10 +98,10 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
 
 			const passwordHash = await hashPassword(item.password);
-			const credential = (await this.provider.createOne({
+			const credential = await this.provider.createOne({
 				username: item.username,
 				password: passwordHash,
-			} as any)) as unknown as CredentialStorage;
+			} as Credential<D> & { password: string });
 
 			const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [credential]);
 			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
@@ -114,18 +114,32 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 		}
 
 		async update(
-			id: string,
-			data: { username?: string; password?: string },
-			params: RequestParams
+			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile> {
-			if (data.password) {
-				data.password = await hashPassword(data.password);
+			const [item] = params.args.items;
+			if (!item.id) throw new AuthenticationError('Update unsuccessful: No ID sent in request.');
+
+			if (item.password && item.password !== item.confirm)
+				throw new AuthenticationError('Update unsuccessful: Passwords do not match.');
+
+			if (!item.username && !item.password)
+				throw new AuthenticationError('Update unsuccessful: Nothing to update.');
+
+			if (item.password) {
+				item.password = await hashPassword(item.password);
 			}
-			const credential = (await this.provider.updateOne(id, data)) as unknown as CredentialStorage;
+			const credential = await this.provider.updateOne(item.id, {
+				...(item.username ? { username: item.username } : {}),
+				...(item.password ? { password: item.password } : {}),
+			});
 
-			if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+			const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
+			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
-			return this.getUserProfile(credential.id, PasswordOperation.REGISTER, params);
+			return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
+				info: params.info,
+				ctx: params.context,
+			});
 		}
 	}
 
