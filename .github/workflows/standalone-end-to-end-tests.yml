@@ -12,14 +12,14 @@ jobs:
         working-directory: src
     services:
         postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        ports:
-        - 5432:5432
+          image: postgres:latest
+          env:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+          ports:
+          - 5432:5432
     env:
       CI: true
       DATABASE_HOST: localhost
@@ -44,13 +44,13 @@ jobs:
 
       - uses: pnpm/action-setup@v2.2.4
         with:
-        version: 8.6.9
+          version: 8.6.9
 
       - uses: actions/setup-node@v3
         with:
-        node-version: "18"
-        cache: "pnpm"
-        cache-dependency-path: src/pnpm-lock.yaml
+          node-version: "18"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
     
       - name: Store Playwright's version for caching purposes
         run: |
