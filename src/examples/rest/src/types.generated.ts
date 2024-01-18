@@ -132,7 +132,7 @@ export type CredentialsPaginationInput = {
 export type Mutation = {
 	__typename?: 'Mutation';
 	challengePassword: Token;
-	createCredential: Token;
+	createCredential: Credential;
 	createOrUpdateTags: Array<Tag>;
 	createOrUpdateTasks: Array<Task>;
 	createOrUpdateUsers: Array<User>;

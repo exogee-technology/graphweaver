@@ -39,8 +39,7 @@ export class PasswordAuthResolver extends createPasswordAuthResolver<OrmCredenti
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
 		if (operation === PasswordOperation.REGISTER) {
-			// As an example we are sending an OTP challenge to the user during registration
-			await callChildMutation('sendOTPChallenge', {}, params.info, params.ctx);
+			// As an example we could send an email to the newly registered user
 		}
 
 		return mapUserToProfile(user);
