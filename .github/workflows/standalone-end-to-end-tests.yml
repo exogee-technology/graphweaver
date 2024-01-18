@@ -12,14 +12,14 @@ jobs:
         working-directory: src
     services:
         postgres:
-          image: postgres:latest
-          env:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: postgres
-          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-          ports:
-          - 5432:5432
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+        - 5432:5432
     env:
       CI: true
       DATABASE_HOST: localhost
@@ -40,26 +40,23 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+          ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
       - uses: pnpm/action-setup@v2.2.4
         with:
-          version: 8.6.9
+        version: 8.6.9
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "18"
-          cache: "pnpm"
-          cache-dependency-path: src/pnpm-lock.yaml
-      
-      - name: Install dependencies
-        run: pnpm i
+        node-version: "18"
+        cache: "pnpm"
+        cache-dependency-path: src/pnpm-lock.yaml
     
       - name: Store Playwright's version for caching purposes
         run: |
-          PLAYWRIGHT_VERSION=$(cd packages/end-to-end && pnpm ls --long @playwright/test | grep ^@playwright | sed 's/.* //')
-          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
-          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+        PLAYWRIGHT_VERSION=$(pnpm ls --long @playwright/test | grep ^@playwright | sed 's/.*@//')
+        echo "Playwright's Version: $PLAYWRIGHT_VERSION"
+        echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
 
       - name: Cache Playwright Browsers for a given Playwright version
         uses: actions/cache@v3
@@ -68,12 +65,12 @@ jobs:
           path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
 
-      - name: Setup Playwright If Cache Miss
+      - name: Setup Playwright Using Cache If Available
         if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-        run: cd packages/end-to-end && pnpm playwright install --with-deps chromium
+        run: npx playwright install --with-deps
 
       - name: Run end-to-end tests
         run: |
-          cd packages/end-to-end/scripts
-          chmod +x test-standalone.sh
-          ./test-standalone.sh
+        cd packages/end-to-end/scripts
+        chmod +x test-standalone.sh
+        ./test-standalone.sh
