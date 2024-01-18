@@ -38,5 +38,9 @@ test('should not allow a non-admin to create a user', async ({ page }) => {
 	await page.getByPlaceholder('Password').press('Tab');
 	await page.getByPlaceholder('Confirm').fill('test123');
 	await page.getByRole('button', { name: 'Save' }).click();
-	expect(await page.getByText('text=Create unsuccessful: Failed to save credential.')).toBeTruthy();
+	expect(
+		await page.getByText(
+			'text=Permission Denied: You do not have permission to create credentials.'
+		)
+	).toBeTruthy();
 });
