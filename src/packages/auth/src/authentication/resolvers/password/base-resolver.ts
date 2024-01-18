@@ -61,12 +61,7 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile>;
 		abstract update(
-			id: string,
-			data: {
-				username?: string;
-				password?: string;
-			},
-			params: RequestParams
+			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile>;
 
 		public async withTransaction<T>(callback: () => Promise<T>) {
@@ -90,7 +85,7 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			@Arg('data', () => CreateCredentialInputArgs) data: CreateCredentialInputArgs,
 			@Ctx() context: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<Credential<BaseDataEntity> | null> {
+		): Promise<Credential<D> | null> {
 			return this.withTransaction<Credential<D> | null>(async () => {
 				const params = {
 					args: { items: [data] },
@@ -128,42 +123,38 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 		@Mutation(() => Credential)
 		async updateCredential(
 			@Arg('data', () => CredentialCreateOrUpdateInputArgs) data: CredentialCreateOrUpdateInputArgs,
-			@Ctx() ctx: AuthorizationContext,
+			@Ctx() context: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<Credential<BaseDataEntity> | null> {
-			if (!data.id) throw new AuthenticationError('Update unsuccessful: No ID sent in request.');
+		): Promise<Credential<D> | null> {
+			return this.withTransaction<Credential<D> | null>(async () => {
+				const params = {
+					args: { items: [data] },
+					info,
+					context,
+					transactional,
+				};
 
-			if (data.password && data.password !== data.confirm)
-				throw new AuthenticationError('Update unsuccessful: Passwords do not match.');
+				const hookParams = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, params);
 
-			if (!data.username && !data.password)
-				throw new AuthenticationError('Update unsuccessful: Nothing to update.');
+				let userProfile;
+				try {
+					userProfile = await this.update(hookParams);
+				} catch (err) {
+					console.log(err);
+					throw new AuthenticationError('Update unsuccessful: Failed to save credential.');
+				}
 
-			let userProfile;
-			try {
-				userProfile = await this.update(
-					data.id,
-					{
-						...(data.username ? { username: data.username } : {}),
-						...(data.password ? { password: data.password } : {}),
-					},
-					{ ctx, info }
-				);
-			} catch (err) {
-				console.log(err);
-				throw new AuthenticationError('Update unsuccessful: Failed to save credential.');
-			}
+				if (!userProfile)
+					throw new AuthenticationError('Update unsuccessful: Failed to get user profile.');
+				if (!userProfile.id) throw new AuthenticationError('Update unsuccessful: ID missing.');
+				if (!userProfile.username)
+					throw new AuthenticationError('Update unsuccessful: Username missing.');
 
-			if (!userProfile)
-				throw new AuthenticationError('Update unsuccessful: Failed to get user profile.');
-			if (!userProfile.id) throw new AuthenticationError('Update unsuccessful: ID missing.');
-			if (!userProfile.username)
-				throw new AuthenticationError('Update unsuccessful: Username missing.');
-
-			return Credential.fromBackendEntity({
-				id: userProfile.id,
-				username: userProfile.username,
-			} as { id: string; username: string } & BaseDataEntity) as Credential<BaseDataEntity> | null;
+				return Credential.fromBackendEntity({
+					id: userProfile.id,
+					username: userProfile.username,
+				} as { id: string; username: string } & BaseDataEntity) as Credential<D> | null;
+			});
 		}
 
 		@Mutation(() => Token)
