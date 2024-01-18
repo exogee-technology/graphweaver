@@ -210,7 +210,6 @@ export type Mutation = {
 	sendChallengeMagicLink: Scalars['Boolean']['output'];
 	sendLoginMagicLink: Scalars['Boolean']['output'];
 	sendOTPChallenge: Scalars['Boolean']['output'];
-	updateCredential: Credential;
 	updateTag: Tag;
 	updateTags: Array<Tag>;
 	updateTask: Task;

@@ -20,13 +20,11 @@ customFields.set('Credential', [
 		type: 'custom',
 		component: PasswordComponent,
 		hideOnTable: true,
-		initialValue: '',
 	},
 	{
 		name: 'confirm',
 		type: 'custom',
 		component: ConfirmComponent,
 		hideOnTable: true,
-		initialValue: '',
 	},
 ]);

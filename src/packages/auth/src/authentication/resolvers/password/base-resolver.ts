@@ -76,98 +76,28 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			@Arg('data', () => CreateCredentialInputArgs) data: CreateCredentialInputArgs,
 			@Ctx() context: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<Credential<D> | null> {
-			return this.withTransaction<Credential<D> | null>(async () => {
-				const params = {
-					args: { items: [data] },
-					info,
-					context,
-					transactional,
-				};
+		): Promise<Credential<BaseDataEntity> | null> {
+			if (data.password !== data.confirm)
+				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
 
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
-					HookRegister.BEFORE_CREATE,
-					params,
-					'Credential'
-				);
+			let userProfile;
+			try {
+				userProfile = await this.save(data.username, data.password, { ctx, info });
+			} catch (err) {
+				console.log(err);
+				throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
+			}
 
-				let userProfile;
-				try {
-					userProfile = await this.create(hookParams);
-				} catch (err) {
-					logger.error(err);
+			if (!userProfile)
+				throw new AuthenticationError('Create unsuccessful: Failed to get user profile.');
+			if (!userProfile.id) throw new AuthenticationError('Create unsuccessful: ID missing.');
+			if (!userProfile.username)
+				throw new AuthenticationError('Create unsuccessful: Username missing.');
 
-					if (err instanceof PasswordStrengthError) throw err;
-					if (err instanceof ValidationError) throw err;
-					if (err instanceof ForbiddenError)
-						throw new ForbiddenError(
-							'Permission Denied: You do not have permission to create credentials.'
-						);
-
-					throw new AuthenticationError(
-						'Create unsuccessful: You do not have permission to perform this action.'
-					);
-				}
-
-				if (!userProfile)
-					throw new AuthenticationError('Create unsuccessful: Failed to get user profile.');
-				if (!userProfile.id) throw new AuthenticationError('Create unsuccessful: ID missing.');
-				if (!userProfile.username)
-					throw new AuthenticationError('Create unsuccessful: Username missing.');
-
-				return Credential.fromBackendEntity({
-					id: userProfile.id,
-					username: userProfile.username,
-				} as { id: string; username: string } & BaseDataEntity) as Credential<D> | null;
-			});
-		}
-
-		@Mutation(() => Credential)
-		async updateCredential(
-			@Arg('data', () => CredentialCreateOrUpdateInputArgs) data: CredentialCreateOrUpdateInputArgs,
-			@Ctx() context: AuthorizationContext,
-			@Info() info: GraphQLResolveInfo
-		): Promise<Credential<D> | null> {
-			return this.withTransaction<Credential<D> | null>(async () => {
-				const params = {
-					args: { items: [data] },
-					info,
-					context,
-					transactional,
-				};
-
-				let userProfile;
-				try {
-					const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
-						HookRegister.BEFORE_UPDATE,
-						params,
-						'Credential'
-					);
-					userProfile = await this.update(hookParams);
-				} catch (err) {
-					logger.error(err);
-					if (err instanceof PasswordStrengthError) throw err;
-					if (err instanceof ValidationError) throw err;
-					if (err instanceof ForbiddenError)
-						throw new ForbiddenError(
-							'Permission Denied: You do not have permission to update credentials.'
-						);
-					throw new AuthenticationError(
-						`Update unsuccessful: You do not have permission to perform this action.`
-					);
-				}
-
-				if (!userProfile)
-					throw new ValidationError('Update unsuccessful: Failed to get user profile.');
-				if (!userProfile.id) throw new ValidationError('Update unsuccessful: ID missing.');
-				if (!userProfile.username)
-					throw new ValidationError('Update unsuccessful: Username missing.');
-
-				return Credential.fromBackendEntity({
-					id: userProfile.id,
-					username: userProfile.username,
-				} as { id: string; username: string } & BaseDataEntity) as Credential<D> | null;
-			});
+			return Credential.fromBackendEntity({
+				id: userProfile.id,
+				username: userProfile.username,
+			} as { id: string; username: string } & BaseDataEntity) as Credential<BaseDataEntity> | null;
 		}
 
 		@Mutation(() => Token)
