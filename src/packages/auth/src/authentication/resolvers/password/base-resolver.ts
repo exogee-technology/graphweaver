@@ -4,7 +4,6 @@ import {
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
-	HookRegister,
 	createBaseResolver,
 	hookManagerMap,
 	runWritableBeforeHooks,
@@ -18,7 +17,6 @@ import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { GraphQLResolveInfo } from 'graphql';
 import { Credential } from '../../entities';
-import { PasswordStrengthError } from './resolver';
 
 @InputType(`CredentialInsertInput`)
 class CreateCredentialInputArgs {
@@ -33,7 +31,7 @@ class CreateCredentialInputArgs {
 }
 
 @InputType(`CredentialCreateOrUpdateInput`)
-export class CredentialCreateOrUpdateInputArgs {
+class CredentialCreateOrUpdateInputArgs {
 	@Field(() => ID)
 	id!: string;
 
@@ -61,15 +59,18 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			params: RequestParams
 		): Promise<UserProfile>;
 		abstract create(
-			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+			username: string,
+			password: string,
+			params: RequestParams
 		): Promise<UserProfile>;
 		abstract update(
-			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+			id: string,
+			data: {
+				username?: string;
+				password?: string;
+			},
+			params: RequestParams
 		): Promise<UserProfile>;
-
-		public async withTransaction<T>(callback: () => Promise<T>) {
-			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
-		}
 
 		@Mutation(() => Credential)
 		async createCredential(
@@ -82,7 +83,7 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 
 			let userProfile;
 			try {
-				userProfile = await this.save(data.username, data.password, { ctx, info });
+				userProfile = await this.create(data.username, data.password, { ctx, info });
 			} catch (err) {
 				console.log(err);
 				throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
@@ -93,6 +94,47 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			if (!userProfile.id) throw new AuthenticationError('Create unsuccessful: ID missing.');
 			if (!userProfile.username)
 				throw new AuthenticationError('Create unsuccessful: Username missing.');
+
+			return Credential.fromBackendEntity({
+				id: userProfile.id,
+				username: userProfile.username,
+			} as { id: string; username: string } & BaseDataEntity) as Credential<BaseDataEntity> | null;
+		}
+
+		@Mutation(() => Credential)
+		async updateCredential(
+			@Arg('data', () => CredentialCreateOrUpdateInputArgs) data: CredentialCreateOrUpdateInputArgs,
+			@Ctx() ctx: AuthorizationContext,
+			@Info() info: GraphQLResolveInfo
+		): Promise<Credential<BaseDataEntity> | null> {
+			if (!data.id) throw new AuthenticationError('Update unsuccessful: No ID sent in request.');
+
+			if (data.password && data.password !== data.confirm)
+				throw new AuthenticationError('Update unsuccessful: Passwords do not match.');
+
+			if (!data.username && !data.password)
+				throw new AuthenticationError('Update unsuccessful: Nothing to update.');
+
+			let userProfile;
+			try {
+				userProfile = await this.update(
+					data.id,
+					{
+						...(data.username ? { username: data.username } : {}),
+						...(data.password ? { password: data.password } : {}),
+					},
+					{ ctx, info }
+				);
+			} catch (err) {
+				console.log(err);
+				throw new AuthenticationError('Update unsuccessful: Failed to save credential.');
+			}
+
+			if (!userProfile)
+				throw new AuthenticationError('Update unsuccessful: Failed to get user profile.');
+			if (!userProfile.id) throw new AuthenticationError('Update unsuccessful: ID missing.');
+			if (!userProfile.username)
+				throw new AuthenticationError('Update unsuccessful: Username missing.');
 
 			return Credential.fromBackendEntity({
 				id: userProfile.id,

@@ -8,7 +8,7 @@ import {
 } from '@exogee/graphweaver';
 
 import { Credential, CredentialStorage } from '../../entities';
-import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
+import { createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
 import { ApolloError, AuthenticationError, ValidationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
@@ -48,7 +48,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 		): Promise<UserProfile> {
 			const credential = (await this.provider.findOne({
 				username,
-			} as Filter<PasswordStorage>)) as PasswordStorage | null;
+			} as Filter<CredentialStorage>)) as CredentialStorage | null;
 
 			if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 			if (!credential.password)
@@ -63,16 +63,31 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 		}
 
-		async save(username: string, password: string, params: RequestParams): Promise<UserProfile> {
+		async create(username: string, password: string, params: RequestParams): Promise<UserProfile> {
 			const passwordHash = await hashPassword(password);
 			const credential = (await this.provider.createOne({
 				username,
 				password: passwordHash,
-			} as any)) as unknown as PasswordStorage;
+			} as any)) as unknown as CredentialStorage;
 
 			if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
 			this.onUserRegistered?.(credential.id, params);
+
+			return this.getUserProfile(credential.id, PasswordOperation.REGISTER, params);
+		}
+
+		async update(
+			id: string,
+			data: { username?: string; password?: string },
+			params: RequestParams
+		): Promise<UserProfile> {
+			if (data.password) {
+				data.password = await hashPassword(data.password);
+			}
+			const credential = (await this.provider.updateOne(id, data)) as unknown as CredentialStorage;
+
+			if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
 			return this.getUserProfile(credential.id, PasswordOperation.REGISTER, params);
 		}
