@@ -30,7 +30,7 @@ export default defineConfig({
 	],
 
 	/* Set a more aggressive default per-test timeout */
-	timeout: 20 * 1000,
+	timeout: 12 * 1000,
 	/* Just in case all goes wrong */
 	globalTimeout: 3 * 60 * 1000,
 });
