@@ -1,14 +1,11 @@
 import { BackendProvider, Resolver } from '@exogee/graphweaver';
-// we need to directly import the bundled js because the default import requires a WASM loader
-// there is a newer argons-browser-bw that supersedes argon2-browser
-// but this doesn't have the bundled js so we need to write our own bundler to upgrade
-import * as argon2 from 'argon2-browser/dist/argon2-bundled.min.js';
 
 import { PasswordStorage } from '../../entities';
 import { createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
+import { hashPassword, verifyPassword } from '../../../utils/argon2id';
 
 type PasswordProvider = BackendProvider<PasswordStorage, PasswordStorage>;
 export enum PasswordOperation {
@@ -50,7 +47,7 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 		if (!credential.password)
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
 
-		if (await argon2.verify(credential.password, password)) {
+		if (await verifyPassword(password, credential.password)) {
 			return this.getUser(credential.id, PasswordOperation.LOGIN, params);
 		}
 
@@ -60,7 +57,7 @@ export class PasswordAuthResolver extends createBasePasswordAuthResolver() {
 	}
 
 	async save(username: string, password: string, params: RequestParams): Promise<UserProfile> {
-		const passwordHash = await argon2.hash(password);
+		const passwordHash = await hashPassword(password);
 		const credential = await this.provider.createOne({ username, password: passwordHash });
 
 		if (!credential) throw new AuthenticationError('Bad Request: Authentication Save Failed.');

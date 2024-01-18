@@ -686,9 +686,6 @@ importers:
       apollo-server-errors:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.8.1)
-      argon2-browser:
-        specifier: 1.18.0
-        version: 1.18.0
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
@@ -698,6 +695,9 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
+      hash-wasm:
+        specifier: 4.11.0
+        version: 4.11.0
       jsonwebtoken:
         specifier: 9.0.0
         version: 9.0.0
@@ -9535,10 +9535,6 @@ packages:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
     dev: true
 
-  /argon2-browser@1.18.0:
-    resolution: {integrity: sha512-ImVAGIItnFnvET1exhsQB7apRztcoC5TnlSqernMJDUjbc/DLq3UEYeXFrLPrlaIl8cVfwnXb6wX2KpFf2zxHw==}
-    dev: false
-
   /argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
     dependencies:
@@ -13072,6 +13068,10 @@ packages:
       inherits: 2.0.4
       readable-stream: 3.6.2
       safe-buffer: 5.2.1
+    dev: false
+
+  /hash-wasm@4.11.0:
+    resolution: {integrity: sha512-HVusNXlVqHe0fzIzdQOGolnFN6mX/fqcrSAOcTBXdvzrXVHwTz11vXeKRmkR5gTuwVpvHZEIyKoePDvuAR+XwQ==}
     dev: false
 
   /hash.js@1.1.7:
