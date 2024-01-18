@@ -51,6 +51,23 @@ jobs:
           node-version: "18"
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
+      
+      - name: Store Playwright's version for caching purposes
+        run: |
+          PLAYWRIGHT_VERSION=$(pnpm ls --long @playwright/test | grep ^@playwright | sed 's/.*@//')
+          echo "Playwright's Version: $PLAYWRIGHT_VERSION"
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+
+      - name: Cache Playwright Browsers for a given Playwright version
+        uses: actions/cache@v3
+        id: cache-playwright-browsers    
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}
+
+      - name: Setup Playwright Using Cache If Available
+        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
 
       - name: Run end-to-end tests
         run: |
