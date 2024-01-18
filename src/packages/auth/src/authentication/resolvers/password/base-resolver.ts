@@ -47,19 +47,26 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo
 		): Promise<Credential<BaseDataEntity> | null> {
 			if (data.password !== data.confirm)
-				throw new AuthenticationError('Login unsuccessful: Passwords do not match.');
+				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
 
-			const userProfile = await this.save(data.username, data.password, { ctx, info });
-			if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
+			let userProfile;
+			try {
+				userProfile = await this.save(data.username, data.password, { ctx, info });
+			} catch (err) {
+				console.log(err);
+				throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
+			}
 
-			if (!userProfile.id) throw new AuthenticationError('Login unsuccessful: ID missing.');
+			if (!userProfile)
+				throw new AuthenticationError('Create unsuccessful: Failed to get user profile.');
+			if (!userProfile.id) throw new AuthenticationError('Create unsuccessful: ID missing.');
 			if (!userProfile.username)
-				throw new AuthenticationError('Login unsuccessful: Username missing.');
+				throw new AuthenticationError('Create unsuccessful: Username missing.');
 
 			return Credential.fromBackendEntity({
 				id: userProfile.id,
 				username: userProfile.username,
-			} as PasswordStorage & { isCollection: any; isReference: any });
+			} as { id: string; username: string } & BaseDataEntity) as Credential<BaseDataEntity> | null;
 		}
 
 		@Mutation(() => Token)
