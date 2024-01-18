@@ -11,6 +11,7 @@ import {
 	AuthenticationType,
 	Credential,
 	RequestParams,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -19,6 +20,7 @@ import { Resolver } from 'type-graphql';
 import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { CreateOrUpdateHookParams } from '@exogee/graphweaver';
 
 // Setup ethers for signing
 const phrase =
@@ -75,7 +77,7 @@ class CredentialAuthResolver extends createBasePasswordAuthResolver(
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
 	}
-	async create(username: string, password: string) {
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
 		return user;
 	}
 	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {

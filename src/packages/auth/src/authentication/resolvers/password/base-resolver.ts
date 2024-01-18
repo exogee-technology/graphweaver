@@ -2,10 +2,13 @@ import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field, ID } from 'type-g
 import {
 	BackendProvider,
 	BaseDataEntity,
+	CreateOrUpdateHookParams,
 	GraphqlEntityType,
+	HookRegister,
 	createBaseResolver,
+	hookManagerMap,
 } from '@exogee/graphweaver';
-import { AuthenticationError } from 'apollo-server-errors';
+import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext, RequestParams } from '../../../types';
 import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
@@ -27,7 +30,7 @@ class CreateCredentialInputArgs {
 }
 
 @InputType(`CredentialCreateOrUpdateInput`)
-class CredentialCreateOrUpdateInputArgs {
+export class CredentialCreateOrUpdateInputArgs {
 	@Field(() => ID)
 	id!: string;
 
@@ -45,6 +48,8 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
 	provider: BackendProvider<D, Credential<D>>
 ) => {
+	const transactional = !!provider.withTransaction;
+
 	@Resolver((of) => Token)
 	abstract class BasePasswordAuthResolver extends createBaseResolver(gqlEntityType, provider) {
 		abstract authenticate(
@@ -53,9 +58,7 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			params: RequestParams
 		): Promise<UserProfile>;
 		abstract create(
-			username: string,
-			password: string,
-			params: RequestParams
+			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile>;
 		abstract update(
 			id: string,
@@ -66,33 +69,60 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			params: RequestParams
 		): Promise<UserProfile>;
 
+		public async withTransaction<T>(callback: () => Promise<T>) {
+			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
+		}
+
+		async runWritableBeforeHooks(
+			hookRegister: HookRegister,
+			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+		): Promise<CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>> {
+			const hookManager = hookManagerMap.get('Credential');
+			const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
+
+			const items = hookParams.args?.items;
+			if (!items) throw new Error('No data specified cannot continue.');
+			return params;
+		}
+
 		@Mutation(() => Credential)
 		async createCredential(
 			@Arg('data', () => CreateCredentialInputArgs) data: CreateCredentialInputArgs,
-			@Ctx() ctx: AuthorizationContext,
+			@Ctx() context: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
 		): Promise<Credential<BaseDataEntity> | null> {
-			if (data.password !== data.confirm)
-				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
+			return this.withTransaction<Credential<D> | null>(async () => {
+				const params = {
+					args: { items: [data] },
+					info,
+					context,
+					transactional,
+				};
 
-			let userProfile;
-			try {
-				userProfile = await this.create(data.username, data.password, { ctx, info });
-			} catch (err) {
-				console.log(err);
-				throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
-			}
+				const hookParams = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, params);
 
-			if (!userProfile)
-				throw new AuthenticationError('Create unsuccessful: Failed to get user profile.');
-			if (!userProfile.id) throw new AuthenticationError('Create unsuccessful: ID missing.');
-			if (!userProfile.username)
-				throw new AuthenticationError('Create unsuccessful: Username missing.');
+				let userProfile;
+				try {
+					userProfile = await this.create(hookParams);
+				} catch (err) {
+					if (err instanceof ForbiddenError)
+						throw new ForbiddenError(
+							'Permission Denied: You do not have permission to create credentials.'
+						);
+					throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
+				}
 
-			return Credential.fromBackendEntity({
-				id: userProfile.id,
-				username: userProfile.username,
-			} as { id: string; username: string } & BaseDataEntity) as Credential<BaseDataEntity> | null;
+				if (!userProfile)
+					throw new AuthenticationError('Create unsuccessful: Failed to get user profile.');
+				if (!userProfile.id) throw new AuthenticationError('Create unsuccessful: ID missing.');
+				if (!userProfile.username)
+					throw new AuthenticationError('Create unsuccessful: Username missing.');
+
+				return Credential.fromBackendEntity({
+					id: userProfile.id,
+					username: userProfile.username,
+				} as { id: string; username: string } & BaseDataEntity) as Credential<D> | null;
+			});
 		}
 
 		@Mutation(() => Credential)

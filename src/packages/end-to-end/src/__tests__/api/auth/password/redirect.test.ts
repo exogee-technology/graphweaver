@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
 import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
@@ -10,6 +10,7 @@ import {
 	ForbiddenError,
 	Credential,
 	RequestParams,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -27,7 +28,7 @@ class AuthResolver extends createBasePasswordAuthResolver(
 	async authenticate(username: string, password: string) {
 		return user;
 	}
-	async create(username: string, password: string) {
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
 		return user;
 	}
 	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {

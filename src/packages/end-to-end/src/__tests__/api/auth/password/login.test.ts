@@ -4,13 +4,14 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
 import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	Credential,
 	RequestParams,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -29,7 +30,7 @@ class AuthResolver extends createBasePasswordAuthResolver(
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
 	}
-	async create(username: string, password: string) {
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
 		return user;
 	}
 	async update(id: string, data: any, params: RequestParams): Promise<UserProfile> {
