@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  standlone-end-to-end-tests:
+  standalone-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,7 +21,7 @@ jobs:
         ports:
         - 5432:5432
     env:
-        CI: true
+      CI: true
       DATABASE_HOST: localhost
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: postgres
