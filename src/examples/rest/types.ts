@@ -98,6 +98,13 @@ export type Credential = {
 	username: Scalars['String']['output'];
 };
 
+export type CredentialCreateOrUpdateInput = {
+	confirm?: InputMaybe<Scalars['String']['input']>;
+	id: Scalars['ID']['input'];
+	password?: InputMaybe<Scalars['String']['input']>;
+	username?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CredentialInsertInput = {
 	confirm: Scalars['String']['input'];
 	password: Scalars['String']['input'];
@@ -160,6 +167,7 @@ export type Mutation = {
 	sendChallengeMagicLink: Scalars['Boolean']['output'];
 	sendLoginMagicLink: Scalars['Boolean']['output'];
 	sendOTPChallenge: Scalars['Boolean']['output'];
+	updateCredential: Credential;
 	updateTag: Tag;
 	updateTags: Array<Tag>;
 	updateTask: Task;
@@ -247,6 +255,10 @@ export type MutationPasskeyVerifyRegistrationResponseArgs = {
 
 export type MutationSendLoginMagicLinkArgs = {
 	username: Scalars['String']['input'];
+};
+
+export type MutationUpdateCredentialArgs = {
+	data: CredentialCreateOrUpdateInput;
 };
 
 export type MutationUpdateCredentialArgs = {
