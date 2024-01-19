@@ -43,6 +43,9 @@ export interface EntityField {
 		type: AdminUIFilterType;
 	};
 	attributes?: EntityFieldAttributes;
+	extensions?: {
+		key: string;
+	};
 }
 
 export interface EntityFieldAttributes {

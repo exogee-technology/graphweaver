@@ -32,7 +32,7 @@ import type {
 	BaseContext,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
-import { isExcludedFromFilterType, isReadOnly, isReadOnlyProperty } from './decorators';
+import { isExcludedFromFilterType, isReadOnlyBackend, isReadOnlyProperty } from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities } from './utils/create-or-update-entities';
@@ -389,7 +389,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	// If it's read only we're done here.
-	if (isReadOnly(gqlEntityType)) return BaseResolver;
+	if (isReadOnlyBackend(gqlEntityType)) return BaseResolver;
 
 	// Create Insert Input Args:
 	@InputType(`${gqlEntityTypeName}InsertInput`)

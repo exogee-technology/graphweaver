@@ -118,8 +118,11 @@ export const List = () => {
 			} else if (field?.type === 'Boolean') {
 				overrides[key as OverrideKey] = `${row[key as OverrideKey]}`;
 			} else if (field?.type === 'Image') {
-				console.log('Image');
+				//console.log('Image');
 			}
+			// else if (field?.type === 'Media') {
+			// 	console.log('Media');
+			// }
 		}
 		// override any arrays we have found
 		return { ...row, ...overrides } as typeof row;
