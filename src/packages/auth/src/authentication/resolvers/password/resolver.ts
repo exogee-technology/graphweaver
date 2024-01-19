@@ -13,7 +13,7 @@ import {
 import { Credential, CredentialStorage } from '../../entities';
 import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
-import { ApolloError, AuthenticationError, ValidationError } from 'apollo-server-errors';
+import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
 import { hashPassword, verifyPassword } from '../../../utils/argon2id';
 
@@ -22,13 +22,28 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
+export class PasswordStrengthError extends ApolloError {
+	constructor(message: string, extensions?: Record<string, any>) {
+		super(message, 'WEAK_PASSWORD', extensions);
+
+		Object.defineProperty(this, 'name', { value: 'WeakPasswordError' });
+	}
+}
+
+const defaultPasswordStrength = (password?: string) => {
+	if (password && password.length > 8) return true;
+	throw new PasswordStrengthError('Password not strong enough.');
+};
+
 export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
-	provider: BackendProvider<D, Credential<D>>
+	provider: BackendProvider<D, Credential<D>>,
+	assertPasswordStrength?: (password?: string) => boolean
 ) => {
 	@Resolver()
 	class PasswordAuthResolver extends createBasePasswordAuthResolver(gqlEntityType, provider) {
-		public provider = provider;
+		provider = provider;
+		assertPasswordStrength = assertPasswordStrength ?? defaultPasswordStrength;
 		onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
 		onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
 
@@ -94,6 +109,8 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			if (!item.password)
 				throw new AuthenticationError('Create unsuccessful: Password not defined.');
 
+			this.assertPasswordStrength(item.password);
+
 			if (item.password !== item.confirm)
 				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
 
@@ -121,6 +138,8 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 
 			if (item.password && item.password !== item.confirm)
 				throw new AuthenticationError('Update unsuccessful: Passwords do not match.');
+
+			this.assertPasswordStrength(item.password);
 
 			if (!item.username && !item.password)
 				throw new AuthenticationError('Update unsuccessful: Nothing to update.');
