@@ -57,6 +57,7 @@ export interface GraphweaverConfig {
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
+	isStarted = false;
 	server: ApolloServer<TContext>;
 	public schema: GraphQLSchema;
 	private config: GraphweaverConfig = {
@@ -139,16 +140,19 @@ export default class Graphweaver<TContext extends BaseContext> {
 	public async init() {
 		// Do some async here if necessary
 		logger.info(`Graphweaver async called`);
+		this.isStarted = true;
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {
 		logger.info(`Graphweaver handler called`);
 
-		return startServerAndCreateLambdaHandler(
-			// @todo: fix this type, TContext extends BaseContext, this should work
-			this.server as unknown as ApolloServer<BaseContext>,
-			handlers.createAPIGatewayProxyEventRequestHandler()
-		);
+		return this.isStarted
+			? startServerAndCreateLambdaHandler(
+					// @todo: fix this type, TContext extends BaseContext, this should work
+					this.server as unknown as ApolloServer<BaseContext>,
+					handlers.createAPIGatewayProxyEventRequestHandler()
+			  )
+			: ({} as AWSLambda.APIGatewayProxyHandler);
 	}
 }
 
