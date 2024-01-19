@@ -29,6 +29,6 @@ export class Submission extends GraphQLEntity<OrmSubmission> {
 	key?: string;
 
 	// "key" must match the name of the field on the entity that gets the url from s3
-	@DownloadUrlField({ storageProvider: s3, key: 'key', mediaType: MediaTypes.IMAGE })
+	@DownloadUrlField({ storageProvider: s3, key: 'key', mediaType: MediaTypes.VIDEO })
 	downloadUrl?: string;
 }
