@@ -19,10 +19,12 @@ const generateTypes = async () => {
 
 	const sdl = utils.printSchemaWithDirectives(graphweaver.schema);
 	await builder.codeGenerator(sdl, codegenOptions);
+
+	graphweaver.stop();
 };
 
 generateTypes()
-	.then()
+	.then(() => {})
 	.catch((e) => {
 		console.error(e);
 		process.exit(1);
