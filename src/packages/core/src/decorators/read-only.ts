@@ -8,18 +8,22 @@ type Props = {
 	adminUI?: boolean;
 };
 
+// @todo - do this in Read Only Property
 export function ReadOnly({ backend, adminUI }: Props = { backend: true, adminUI: true }) {
-	return (target: any) => {
+	return (target: any, propertyKey?: string | symbol) => {
+		if (propertyKey) {
+			if (adminUI) Reflect.metadata(readOnlyAdminUIKey, true)(target, propertyKey);
+			if (backend) Reflect.metadata(readOnlyBackendKey, true)(target, propertyKey);
+			return;
+		}
 		if (adminUI) Reflect.metadata(readOnlyAdminUIKey, true)(target);
 		if (backend) Reflect.metadata(readOnlyBackendKey, true)(target);
 		return target;
 	};
 }
-
 export function isReadOnlyBackend(target: any) {
 	return !!Reflect.getMetadata(readOnlyBackendKey, target);
 }
-
 export function isReadOnlyAdminUI(target: any) {
 	return !!Reflect.getMetadata(readOnlyAdminUIKey, target);
 }

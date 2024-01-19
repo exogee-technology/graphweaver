@@ -46,7 +46,6 @@ export interface EntityField {
 	extensions?: {
 		key: string;
 	};
-	initialValue?: string | number | boolean;
 }
 
 export interface EntityFieldAttributes {

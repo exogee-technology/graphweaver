@@ -86,6 +86,8 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					);
 
 					const fields = visibleFields?.map((field) => {
+						// in the fields we should have the metadata extentions with our key
+						console.log(field);
 						const typeValue = field.getType() as any;
 						const typeName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
 
@@ -93,6 +95,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
 							type: relatedObject?.name || typeName,
+							extensions: field.extensions || {},
 						};
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
@@ -134,9 +137,6 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					value,
 				})),
 			}));
-			console.log('***************************\n');
-			console.log('entities', entities[1]?.fields);
-			console.log('***************************\n');
 
 			const params = hooks?.afterRead
 				? await hooks.afterRead({ context, metadata: { entities, enums } })

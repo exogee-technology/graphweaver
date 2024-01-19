@@ -45,3 +45,11 @@ export const getUploadUrlMutation = gql`
 		getUploadUrl(key: $key)
 	}
 `;
+
+export const createSubmissionMutation = gql`
+	mutation Mutation($createSubmissionData: SubmissionInsertInput!) {
+		createSubmission(data: $createSubmissionData) {
+			id
+		}
+	}
+`;

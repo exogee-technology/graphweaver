@@ -67,14 +67,9 @@ const columnsForEntity = <T extends TableRowItem>(
 			  }
 			: field.type === 'Image'
 			? ({ row }: FormatterProps<T, unknown>) => {
-					console.log('Image');
-					console.log(row);
-					console.log(field);
-
 					const imageUrl = row[field.name as keyof typeof row] as string; // this only works because the name of the field is downloadUrl. This is also present on row.downloadUrl;
 					// const altText = row.altText as string; // @todo, how to handle other fields on submission being used in img tag?
 					const altText = 'alt text';
-					// style position image to center of image
 
 					return (
 						<img
