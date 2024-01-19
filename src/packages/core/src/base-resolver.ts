@@ -32,7 +32,11 @@ import type {
 	BaseContext,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
-import { isExcludedFromFilterType, isReadOnlyBackend, isReadOnlyProperty } from './decorators';
+import {
+	isExcludedFromFilterType,
+	isReadOnlyBackend,
+	isReadOnlyPropertyBackend,
+} from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities } from './utils/create-or-update-entities';
@@ -397,7 +401,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	TypeMap[`${gqlEntityTypeName}InsertInput`] = InsertInputArgs;
 
 	for (const field of entityFields) {
-		if (field.name === 'id' || isReadOnlyProperty(field.target, field.name)) {
+		if (field.name === 'id' || isReadOnlyPropertyBackend(field.target, field.name)) {
 			continue;
 		}
 		const fieldCopy = Object.assign({}, field);
@@ -439,7 +443,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	TypeMap[`${plural}CreateOrUpdateInput`] = UpdateInputArgs;
 
 	for (const field of entityFields) {
-		if (isReadOnlyProperty(field.target, field.name)) continue;
+		if (isReadOnlyPropertyBackend(field.target, field.name)) continue;
 
 		const fieldCopy = Object.assign({}, field);
 		fieldCopy.target = UpdateInputArgs;

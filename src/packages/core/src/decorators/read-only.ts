@@ -8,7 +8,6 @@ type Props = {
 	adminUI?: boolean;
 };
 
-// @todo - do this in Read Only Property
 export function ReadOnly({ backend, adminUI }: Props = { backend: true, adminUI: true }) {
 	return (target: any, propertyKey?: string | symbol) => {
 		if (propertyKey) {
