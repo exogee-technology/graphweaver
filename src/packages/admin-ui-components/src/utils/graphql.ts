@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { Entity } from './use-schema';
 
 export const SCHEMA_QUERY = gql`
-	{
+	query graphweaver {
 		result: _graphweaver {
 			entities {
 				name

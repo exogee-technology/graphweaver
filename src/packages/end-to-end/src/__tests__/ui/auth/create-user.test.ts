@@ -3,6 +3,7 @@ import { config } from '../../../config';
 import { randomUUID } from 'crypto';
 
 test('should allow an admin to create a user', async ({ page }) => {
+	const username = randomUUID();
 	await page.goto(config.adminUiUrl);
 	await page.getByPlaceholder('Username').click();
 	await page.getByPlaceholder('Username').fill('darth');
@@ -13,7 +14,7 @@ test('should allow an admin to create a user', async ({ page }) => {
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('button', { name: 'Create New Credential' }).click();
 	await page.getByLabel('username').click();
-	await page.getByLabel('username').fill(randomUUID());
+	await page.getByLabel('username').fill(username);
 	await page.getByPlaceholder('Password').click();
 	await page.getByPlaceholder('Password').fill('test123');
 	await page.getByPlaceholder('Confirm').click();
@@ -21,6 +22,10 @@ test('should allow an admin to create a user', async ({ page }) => {
 	await page.getByRole('button', { name: 'Save' }).click();
 	const element = await page.getByText('has been successfully created');
 	await expect(element).toHaveCount(1);
+
+	// Check that the created item is in the table
+	const tableElement = await page.getByRole('gridcell', { name: username });
+	await expect(tableElement).toHaveCount(1);
 });
 
 test('should not allow a non-admin to create a user', async ({ page }) => {

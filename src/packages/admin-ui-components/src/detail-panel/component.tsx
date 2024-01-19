@@ -265,6 +265,7 @@ export const DetailPanel = () => {
 					variables: {
 						data: values,
 					},
+					refetchQueries: [`AdminUIListPage`],
 				});
 			}
 
