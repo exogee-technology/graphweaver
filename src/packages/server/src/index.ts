@@ -59,8 +59,8 @@ export interface GraphweaverConfig {
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
 	public schema: GraphQLSchema;
-	public stopServer() {
-		this.server.stop();
+	public async stopServer() {
+		await this.server.stop();
 	}
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },

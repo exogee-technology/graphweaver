@@ -20,7 +20,7 @@ const generateTypes = async () => {
 	const sdl = utils.printSchemaWithDirectives(graphweaver.schema);
 	await builder.codeGenerator(sdl, codegenOptions);
 
-	graphweaver.stopServer();
+	await graphweaver.stopServer();
 };
 
 generateTypes()
