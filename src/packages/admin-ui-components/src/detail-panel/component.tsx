@@ -19,10 +19,21 @@ import {
 } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
-import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
+import {
+	createSubmissionMutation,
+	generateCreateEntityMutation,
+	generateUpdateEntityMutation,
+} from './graphql';
 
 import styles from './styles.module.css';
-import { BooleanField, EnumField, JSONField, SelectField } from './fields';
+import {
+	BooleanField,
+	EnumField,
+	ImageField,
+	JSONField,
+	SelectField,
+	uploadFileToSignedURL,
+} from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
 import { mapFormikValuesToGqlRequestValues } from './util';
@@ -32,7 +43,7 @@ interface ResultBaseType {
 	[x: string]: unknown;
 }
 
-const getField = ({ field }: { field: EntityField }) => {
+const getField = ({ field, entity }: { field: EntityField; entity?: Record<string, any> }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
@@ -48,6 +59,13 @@ const getField = ({ field }: { field: EntityField }) => {
 
 	if (field.type === 'Boolean') {
 		return <BooleanField name={field.name} />;
+	}
+
+	if (field.type === 'Image') {
+		if (!entity) throw new Error('Image field must have an entity');
+
+		// @todo - refactor to not use the entity, can get the entity from initialValues
+		return <ImageField field={field} entity={entity} />;
 	}
 
 	const { enumByName } = useSchema();
@@ -66,12 +84,12 @@ const getField = ({ field }: { field: EntityField }) => {
 	);
 };
 
-const DetailField = ({ field }: { field: EntityField }) => {
+const DetailField = ({ field, entity }: { field: EntityField; entity?: Record<string, any> }) => {
 	return (
 		<div className={styles.detailField}>
 			<DetailPanelFieldLabel fieldName={field.name} />
 
-			{getField({ field })}
+			{getField({ field, entity })}
 		</div>
 	);
 };
@@ -112,6 +130,8 @@ const DetailForm = ({
 	persistName: string;
 	isReadOnly?: boolean;
 }) => {
+	console.log('initialValues', initialValues);
+	console.log('detailFields', detailFields);
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
 			{({ isSubmitting }) => (
@@ -129,7 +149,7 @@ const DetailForm = ({
 									/>
 								);
 							} else {
-								return <DetailField key={field.name} field={field} />;
+								return <DetailField key={field.name} field={field} entity={initialValues} />;
 							}
 						})}
 						<div className={styles.detailButtonContainer}>
@@ -221,6 +241,7 @@ export const DetailPanel = () => {
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
+	const [createSubmission] = useMutation(createSubmissionMutation);
 
 	const slideAnimationTime = useMemo(() => {
 		const slideAnimationTimeCssVar = getComputedStyle(document.documentElement)
@@ -249,10 +270,28 @@ export const DetailPanel = () => {
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
 		const values = mapFormikValuesToGqlRequestValues(formValues);
-
+		console.log('formValues', formValues);
+		console.log('values', values);
+		console.log('selectedEntity', selectedEntity);
 		try {
 			let result: FetchResult;
 			if (id && !isNew) {
+				if (formValues.uploadUrl && formValues.file) {
+					await uploadFileToSignedURL(values.uploadUrl, values.file);
+					// remove the uploadUrl and file from the values. These are set in the <ImageField> on upload file
+					delete values.uploadUrl;
+					delete values.file;
+					// delete the value where the name is the field that has the image type
+					delete values[selectedEntity.fields.find((field) => field.type === 'Image')?.name ?? ''];
+				}
+
+				console.log('values', values);
+
+				// if uploadUrl and downloadUrl are there, remove them because theyre not on SubmissionCreateOrUpdateInput
+				if (values.uploadUrl === null) delete values.uploadUrl;
+				if (values.downloadUrl === null) delete values.downloadUrl;
+				if (values.file === null) delete values.file;
+
 				result = await updateEntity({
 					variables: {
 						data: {
@@ -262,6 +301,13 @@ export const DetailPanel = () => {
 					},
 				});
 			} else {
+				// If the form values contain an image, then do seperate mutation to upload the image
+				if (formValues.uploadUrl && formValues.file) {
+					await uploadFileToSignedURL(values.uploadUrl, values.file);
+					// remove the uploadUrl and file from the values
+					delete values.uploadUrl;
+					delete values.file;
+				}
 				result = await createEntity({
 					variables: {
 						data: values,

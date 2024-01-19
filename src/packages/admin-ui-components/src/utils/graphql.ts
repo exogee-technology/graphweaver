@@ -19,6 +19,9 @@ export const SCHEMA_QUERY = gql`
 					attributes {
 						isReadOnly
 					}
+					extensions {
+						key
+					}
 				}
 				attributes {
 					isReadOnly
