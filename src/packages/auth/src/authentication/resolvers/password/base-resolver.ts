@@ -8,6 +8,7 @@ import {
 	createBaseResolver,
 	hookManagerMap,
 } from '@exogee/graphweaver';
+import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext, RequestParams } from '../../../types';
@@ -100,6 +101,8 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 				try {
 					userProfile = await this.create(hookParams);
 				} catch (err) {
+					logger.error(err);
+
 					if (err instanceof ForbiddenError)
 						throw new ForbiddenError(
 							'Permission Denied: You do not have permission to create credentials.'
@@ -134,13 +137,17 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 					transactional,
 				};
 
-				const hookParams = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, params);
-
 				let userProfile;
 				try {
+					const hookParams = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, params);
 					userProfile = await this.update(hookParams);
 				} catch (err) {
-					console.log(err);
+					logger.error(err);
+					console.log(err instanceof ForbiddenError);
+					if (err instanceof ForbiddenError)
+						throw new ForbiddenError(
+							'Permission Denied: You do not have permission to update credentials.'
+						);
 					throw new AuthenticationError('Update unsuccessful: Failed to save credential.');
 				}
 
