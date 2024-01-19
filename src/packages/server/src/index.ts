@@ -136,7 +136,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.apolloServerOptions as any),
 			plugins,
 			schema: this.schema,
-			stopOnTerminationSignals: true,
 		});
 	}
 
