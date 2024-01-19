@@ -17,6 +17,7 @@ import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { GraphQLResolveInfo } from 'graphql';
 import { Credential } from '../../entities';
+import { PasswordStrengthError } from './resolver';
 
 @InputType(`CredentialInsertInput`)
 class CreateCredentialInputArgs {
@@ -103,10 +104,12 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 				} catch (err) {
 					logger.error(err);
 
+					if (err instanceof PasswordStrengthError) throw err;
 					if (err instanceof ForbiddenError)
 						throw new ForbiddenError(
 							'Permission Denied: You do not have permission to create credentials.'
 						);
+
 					throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
 				}
 
@@ -143,7 +146,7 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 					userProfile = await this.update(hookParams);
 				} catch (err) {
 					logger.error(err);
-					console.log(err instanceof ForbiddenError);
+					if (err instanceof PasswordStrengthError) throw err;
 					if (err instanceof ForbiddenError)
 						throw new ForbiddenError(
 							'Permission Denied: You do not have permission to update credentials.'
