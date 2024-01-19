@@ -1,0 +1,22 @@
+.row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.fileInput::file-selector-button {
+	cursor: pointer;
+
+	/* Button styles */
+	background: var(--primary-color);
+	border: 1px solid rgba(237, 232, 242, 0.2);
+	box-shadow: 0 1px 3px rgba(9, 5, 16, 0.1);
+	border-radius: 6px;
+	font-weight: 500;
+	padding: 8px 12px;
+}
+
+.fileInput::file-selector-button:hover {
+	background-color: var(--secondary-color);
+}

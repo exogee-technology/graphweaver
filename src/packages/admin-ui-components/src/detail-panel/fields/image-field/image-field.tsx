@@ -1,6 +1,6 @@
 import { useField, useFormikContext } from 'formik';
 import { Link, useNavigate } from 'react-router-dom';
-import { EntityField, routeFor, useSchema } from '../../utils';
+import { EntityField, routeFor, useSchema } from '../../../utils';
 import {
 	ApolloCache,
 	DefaultContext,
@@ -9,8 +9,10 @@ import {
 	gql,
 	useMutation,
 } from '@apollo/client';
-import { createSubmissionMutation, getUploadUrlMutation } from '../graphql';
+import { createSubmissionMutation, getUploadUrlMutation } from '../../graphql';
 import { useState } from 'react';
+import styles from './styles.module.css';
+import { Button } from '../../../button';
 
 export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 	try {
@@ -107,16 +109,18 @@ export const ImageField = ({
 	return (
 		<div>
 			{entity.downloadUrl ? (
-				<div>
-					<button type="button" onClick={handleOnDelete}>
-						Delete
-					</button>
-					<input type="file" onChange={handleFileInputChange} />
+				<>
+					<div className={styles.row}>
+						<Button type="button" onClick={handleOnDelete}>
+							Delete
+						</Button>
+						<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
+					</div>
 					{!imageHasChanged && <img src={entity.downloadUrl} />}
-				</div>
+				</>
 			) : (
-				<div>
-					<input type="file" onChange={handleFileInputChange} />
+				<div className={styles.row}>
+					<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
 				</div>
 			)}
 		</div>
