@@ -16,9 +16,9 @@ test('should allow an admin to create a user', async ({ page }) => {
 	await page.getByLabel('username').click();
 	await page.getByLabel('username').fill(username);
 	await page.getByPlaceholder('Password').click();
-	await page.getByPlaceholder('Password').fill('test12345');
+	await page.getByPlaceholder('Password').fill('test1234');
 	await page.getByPlaceholder('Confirm').click();
-	await page.getByPlaceholder('Confirm').fill('test12345');
+	await page.getByPlaceholder('Confirm').fill('test1234');
 	await page.getByRole('button', { name: 'Save' }).click();
 	const element = await page.getByText('has been successfully created');
 	await expect(element).toHaveCount(1);
@@ -41,9 +41,9 @@ test('should not allow a non-admin to create a user', async ({ page }) => {
 	await page.getByLabel('username').click();
 	await page.getByLabel('username').fill('test_test');
 	await page.getByLabel('username').press('Tab');
-	await page.getByPlaceholder('Password').fill('test12345');
+	await page.getByPlaceholder('Password').fill('test1234');
 	await page.getByPlaceholder('Password').press('Tab');
-	await page.getByPlaceholder('Confirm').fill('test12345');
+	await page.getByPlaceholder('Confirm').fill('test1234');
 	await page.getByRole('button', { name: 'Save' }).click();
 	const element = await page.getByText(
 		'Permission Denied: You do not have permission to create credentials'
