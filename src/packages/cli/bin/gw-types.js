@@ -12,7 +12,6 @@ const generateTypes = async () => {
 		console.warn(
 			'No schema found. To generate types make sure that you export Graphweaver from your index file.'
 		);
-		process.exit(0);
 	}
 
 	// Get the types output path from the config
@@ -23,9 +22,7 @@ const generateTypes = async () => {
 };
 
 generateTypes()
-	.then(() => {
-		process.exit(0);
-	})
+	.then()
 	.catch((e) => {
 		console.error(e);
 		process.exit(1);
