@@ -135,12 +135,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 			plugins,
 			schema: this.schema,
 		});
+
+		this.isStarted = true;
 	}
 
 	public async init() {
 		// Do some async here if necessary
 		logger.info(`Graphweaver async called`);
-		this.isStarted = true;
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {
