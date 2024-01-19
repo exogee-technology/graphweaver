@@ -44,6 +44,7 @@ interface ResultBaseType {
 }
 
 const getField = ({ field, entity }: { field: EntityField; entity?: Record<string, any> }) => {
+	console.log('field', field);
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities

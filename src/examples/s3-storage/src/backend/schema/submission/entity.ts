@@ -1,4 +1,4 @@
-import { GraphQLEntity, Field, ID, ObjectType } from '@exogee/graphweaver';
+import { GraphQLEntity, Field, ID, ObjectType, ReadOnlyProperty } from '@exogee/graphweaver';
 import {
 	S3StorageProvider,
 	StorageType,
@@ -24,7 +24,7 @@ export class Submission extends GraphQLEntity<OrmSubmission> {
 	@Field(() => ID)
 	id!: string;
 
-	//@ReadOnlyProperty()
+	@ReadOnlyProperty({ adminUI: true, backend: false })
 	@Field(() => String, { nullable: true })
 	key?: string;
 
