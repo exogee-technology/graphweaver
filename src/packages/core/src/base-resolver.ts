@@ -32,7 +32,11 @@ import type {
 	BaseContext,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
-import { isExcludedFromFilterType, isReadOnlyBackend, isReadOnlyProperty } from './decorators';
+import {
+	isExcludedFromFilterType,
+	isReadOnlyBackend,
+	isReadOnlyPropertyBackend,
+} from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
