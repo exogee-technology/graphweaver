@@ -1,7 +1,6 @@
 import path from 'path';
 import rimrafCallback from 'rimraf';
 import { build } from 'esbuild';
-import cssModulesPlugin from 'esbuild-css-modules-plugin';
 import { promisify } from 'util';
 import dotenv from 'dotenv';
 import os from 'os';
@@ -71,7 +70,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 			...baseEsbuildConfig,
 
 			// Anything in node_modules should be marked as external for running.
-			plugins: [makeAllPackagesExternalPlugin(), cssModulesPlugin()],
+			plugins: [makeAllPackagesExternalPlugin()],
 
 			entryPoints: ['./src/backend/index.ts'],
 			outfile: '.graphweaver/backend/index.js',
