@@ -1,4 +1,3 @@
-import { UserResolver } from './user';
 import { SubmissionResolver } from './submission';
 import { S3StorageResolver, StorageType } from '@exogee/graphweaver-storage-provider';
 import { Resolver } from '@exogee/graphweaver';
@@ -15,4 +14,4 @@ class MyS3StorageResolver extends S3StorageResolver {
 	}
 }
 
-export const resolvers = [UserResolver, SubmissionResolver, MyS3StorageResolver];
+export const resolvers = [SubmissionResolver, MyS3StorageResolver];
