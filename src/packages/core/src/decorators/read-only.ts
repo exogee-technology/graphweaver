@@ -9,13 +9,7 @@ type Props = {
 };
 
 export function ReadOnly({ backend, adminUI }: Props = { backend: true, adminUI: true }) {
-	return (target: any, propertyKey?: string | symbol) => {
-		if (propertyKey) {
-			if (adminUI) Reflect.metadata(readOnlyAdminUIKey, true)(target, propertyKey);
-			if (backend) Reflect.metadata(readOnlyBackendKey, true)(target, propertyKey);
-			return;
-		}
-
+	return (target: any) => {
 		if (adminUI) Reflect.metadata(readOnlyAdminUIKey, true)(target);
 		if (backend) Reflect.metadata(readOnlyBackendKey, true)(target);
 		return target;
