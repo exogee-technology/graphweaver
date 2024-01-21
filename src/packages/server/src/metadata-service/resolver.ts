@@ -86,26 +86,10 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					);
 
 					const fields = visibleFields?.map((field) => {
-						// in the fields we should have the metadata extentions with our key
-						// console.log(field);
 						const typeValue = field.getType() as any;
 						const typeName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
 
 						const relatedObject = objectTypeData[typeName];
-
-						// console.log('****************************\n');
-						// console.log('field.name', field.name);
-						// console.log('objectType.target', objectType.target);
-						// console.log('field', field);
-						// console.log(
-						// 	'isReadOnlyPropertyAdminUI(objectType.target)',
-						// 	isReadOnlyPropertyAdminUI(objectType.target, field.name)
-						// );
-						// console.log(
-						// 	'isReadOnlyPropertyAdminUI(objectType.target)',
-						// 	isReadOnlyPropertyAdminUI(field, field.name)
-						// );
-						// console.log('****************************\n');
 
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,

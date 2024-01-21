@@ -41,12 +41,7 @@
 	},
 	"keywords": [
 		"graphql",
-		"gql",
-		"headless",
-		"cms",
-		"postgres",
-		"postgresql",
-		"mysql",
-		"sqlite"
+		"s3",
+		"aws"
 	]
 }

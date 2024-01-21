@@ -66,14 +66,12 @@ const columnsForEntity = <T extends TableRowItem>(
 			  }
 			: field.type === 'Image'
 			? ({ row }: FormatterProps<T, unknown>) => {
-					const imageUrl = row[field.name as keyof typeof row] as string; // this works because the name of the field is downloadUrl. This is also present on row.downloadUrl;
-					// const altText = row.altText as string; // @todo, how to handle other fields on submission being used in img tag?
-					const altText = 'alt text';
+					const imageUrl = row[field.name as keyof typeof row] as string;
 
 					return (
 						<img
 							src={imageUrl}
-							alt={altText}
+							// alt={altText} @todo - implement alt text
 							style={{
 								position: 'absolute',
 								top: '50%',
@@ -87,7 +85,7 @@ const columnsForEntity = <T extends TableRowItem>(
 			? ({ row }: FormatterProps<T, unknown>) => {
 					const mediaUrl = row[field.name as keyof typeof row] as string;
 					return (
-						<a href={mediaUrl} target="_blank">
+						<a href={mediaUrl} target="_blank" rel="noreferrer">
 							{mediaUrl}
 						</a>
 					);

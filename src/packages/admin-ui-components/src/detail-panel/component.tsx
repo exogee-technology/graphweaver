@@ -18,11 +18,7 @@ import {
 } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
-import {
-	createSubmissionMutation,
-	generateCreateEntityMutation,
-	generateUpdateEntityMutation,
-} from './graphql';
+import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
 import {
@@ -43,8 +39,7 @@ interface ResultBaseType {
 	[x: string]: unknown;
 }
 
-const getField = ({ field, entity }: { field: EntityField; entity?: Record<string, any> }) => {
-	console.log('field', field);
+const getField = ({ field }: { field: EntityField }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
@@ -63,17 +58,11 @@ const getField = ({ field, entity }: { field: EntityField; entity?: Record<strin
 	}
 
 	if (field.type === 'Image') {
-		if (!entity) throw new Error('Image field must have an entity');
-
-		// @todo - refactor to not use the entity, can get the entity from initialValues
-		return <ImageField field={field} entity={entity} />;
+		return <ImageField field={field} />;
 	}
 
 	if (field.type === 'Media') {
-		if (!entity) throw new Error('Image field must have an entity');
-
-		// @todo - refactor to not use the entity, can get the entity from initialValues
-		return <MediaField field={field} entity={entity} />;
+		return <MediaField field={field} />;
 	}
 
 	const { enumByName } = useSchema();
@@ -92,12 +81,12 @@ const getField = ({ field, entity }: { field: EntityField; entity?: Record<strin
 	);
 };
 
-const DetailField = ({ field, entity }: { field: EntityField; entity?: Record<string, any> }) => {
+const DetailField = ({ field }: { field: EntityField }) => {
 	return (
 		<div className={styles.detailField}>
 			<DetailPanelFieldLabel fieldName={field.name} />
 
-			{getField({ field, entity })}
+			{getField({ field })}
 		</div>
 	);
 };
@@ -138,8 +127,6 @@ const DetailForm = ({
 	persistName: string;
 	isReadOnly?: boolean;
 }) => {
-	console.log('initialValues', initialValues);
-	console.log('detailFields', detailFields);
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
 			{({ isSubmitting }) => (
@@ -157,7 +144,7 @@ const DetailForm = ({
 									/>
 								);
 							} else {
-								return <DetailField key={field.name} field={field} entity={initialValues} />;
+								return <DetailField key={field.name} field={field} />;
 							}
 						})}
 						<div className={styles.detailButtonContainer}>
@@ -249,7 +236,6 @@ export const DetailPanel = () => {
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
-	const [createSubmission] = useMutation(createSubmissionMutation);
 
 	const slideAnimationTime = useMemo(() => {
 		const slideAnimationTimeCssVar = getComputedStyle(document.documentElement)
@@ -278,9 +264,7 @@ export const DetailPanel = () => {
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
 		const values = mapFormikValuesToGqlRequestValues(formValues);
-		console.log('formValues', formValues);
-		console.log('values', values);
-		console.log('selectedEntity', selectedEntity);
+
 		try {
 			let result: FetchResult;
 			if (id && !isNew) {
@@ -294,8 +278,6 @@ export const DetailPanel = () => {
 					delete values[selectedEntity.fields.find((field) => field.type === 'Image')?.name ?? ''];
 					delete values[selectedEntity.fields.find((field) => field.type === 'Media')?.name ?? ''];
 				}
-
-				console.log('values', values);
 
 				// if uploadUrl and downloadUrl are there, remove them because theyre not on SubmissionCreateOrUpdateInput
 				if (values.uploadUrl === null) delete values.uploadUrl;
