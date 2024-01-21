@@ -54,7 +54,7 @@ export function DownloadUrlField({
 			typeOptions,
 			complexity: undefined,
 			target: target.constructor,
-			description: `${key}`,
+			description: undefined,
 			deprecationReason: undefined,
 			simple: undefined,
 		});
