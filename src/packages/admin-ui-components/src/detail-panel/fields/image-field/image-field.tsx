@@ -1,15 +1,7 @@
 import { useField, useFormikContext } from 'formik';
-import { Link, useNavigate } from 'react-router-dom';
-import { EntityField, routeFor, useSchema } from '../../../utils';
-import {
-	ApolloCache,
-	DefaultContext,
-	MutationFunctionOptions,
-	OperationVariables,
-	gql,
-	useMutation,
-} from '@apollo/client';
-import { createSubmissionMutation, getUploadUrlMutation } from '../../graphql';
+import { EntityField } from '../../../utils';
+import { useMutation } from '@apollo/client';
+import { getUploadUrlMutation } from '../../graphql';
 import { useState } from 'react';
 import styles from './styles.module.css';
 import { Button } from '../../../button';
@@ -25,14 +17,6 @@ export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 		});
 
 		if (response.ok) {
-			// Save the download url to a new submission entity
-			// const submission = await createEntity({
-			// 	variables: {
-			// 		createSubmissionData: {
-			// 			key: file.name,
-			// 		},
-			// 	},
-			// });
 			return file.name;
 		} else {
 			console.error('Error uploading file:', response.statusText);
@@ -42,24 +26,13 @@ export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 	}
 };
 
-export const ImageField = ({
-	field,
-	entity,
-}: {
-	field: EntityField;
-	entity: Record<string, any>;
-}) => {
-	const { dirty, setValues } = useFormikContext();
-	const navigate = useNavigate();
+export const ImageField = ({ field }: { field: EntityField }) => {
+	const { setValues } = useFormikContext();
 	const [_, meta, helpers] = useField({ name: field.name, multiple: false });
-	const { initialValue: formEntity } = meta;
+	const { initialValue: downloadUrl } = meta;
 	const [imageHasChanged, setImageHasChanged] = useState(false);
 
-	// console.log('name', name);
-	// console.log('entity', entity);
-
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
-	// const [createSubmission] = useMutation(createSubmissionMutation);
 
 	const handleFileUpload = async (file: any) => {
 		const res = await getUploadUrl({ variables: { key: file.name } });
@@ -74,8 +47,7 @@ export const ImageField = ({
 			return;
 		}
 		const imageKey = field.extensions.key;
-		// console.log('imageKey', imageKey);
-		// console.log('[uploadURL]', { [imageKey]: field.extensions?.key });
+
 		setValues((prev: any) => ({
 			...prev,
 			uploadUrl: uploadURL,
@@ -93,9 +65,6 @@ export const ImageField = ({
 	};
 
 	const handleOnDelete = () => {
-		// set the entity.downloadUrl to null
-		// set the formik value to the entity
-		// set the key to null
 		setValues((prev: any) => ({
 			...prev,
 			key: null,
@@ -108,7 +77,7 @@ export const ImageField = ({
 
 	return (
 		<div>
-			{entity.downloadUrl ? (
+			{downloadUrl ? (
 				<>
 					<div className={styles.row}>
 						<Button type="button" onClick={handleOnDelete}>
@@ -116,7 +85,7 @@ export const ImageField = ({
 						</Button>
 						<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
 					</div>
-					{!imageHasChanged && <img src={entity.downloadUrl} />}
+					{!imageHasChanged && <img src={downloadUrl} />}
 				</>
 			) : (
 				<div className={styles.row}>
