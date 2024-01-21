@@ -56,7 +56,6 @@ export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue
 	scalarTypes.set(scalarType, treatAsType);
 }
 
-class DefaultBaseResolver {}
 export interface BaseResolverInterface {}
 
 export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
