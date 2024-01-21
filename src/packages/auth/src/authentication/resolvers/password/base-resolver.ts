@@ -7,6 +7,7 @@ import {
 	HookRegister,
 	createBaseResolver,
 	hookManagerMap,
+	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
@@ -70,18 +71,6 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}
 
-		async runWritableBeforeHooks(
-			hookRegister: HookRegister,
-			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-		): Promise<CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>> {
-			const hookManager = hookManagerMap.get('Credential');
-			const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
-
-			const items = hookParams.args?.items;
-			if (!items) throw new Error('No data specified cannot continue.');
-			return params;
-		}
-
 		@Mutation(() => Credential)
 		async createCredential(
 			@Arg('data', () => CreateCredentialInputArgs) data: CreateCredentialInputArgs,
@@ -96,7 +85,11 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 					transactional,
 				};
 
-				const hookParams = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, params);
+				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
+					HookRegister.BEFORE_CREATE,
+					params,
+					'Credential'
+				);
 
 				let userProfile;
 				try {
@@ -142,7 +135,11 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 
 				let userProfile;
 				try {
-					const hookParams = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, params);
+					const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
+						HookRegister.BEFORE_UPDATE,
+						params,
+						'Credential'
+					);
 					userProfile = await this.update(hookParams);
 				} catch (err) {
 					logger.error(err);
