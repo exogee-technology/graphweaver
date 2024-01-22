@@ -3,8 +3,8 @@ import Graphweaver from '@exogee/graphweaver-server';
 
 import { resolvers } from './schema';
 
-const graphweaver = new Graphweaver({
+export const graphweaver = new Graphweaver({
 	resolvers,
 });
 
-exports.handler = graphweaver.handler();
+export const handler = graphweaver.handler();

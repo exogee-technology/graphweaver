@@ -10,20 +10,20 @@ export enum MediaTypes {
 
 type DownloadUrlFieldOptions = {
 	storageProvider: IStorageProvider;
-	key?: string;
+	resourceId?: string;
 	mediaType: MediaTypes;
 };
 
 export function DownloadUrlField({
 	storageProvider,
-	key,
+	resourceId,
 	mediaType,
 }: DownloadUrlFieldOptions): PropertyDecorator {
 	return function (target: any, propertyKey: string | symbol) {
 		if (typeof propertyKey === 'symbol') {
 			throw new Error(`@DownloadUrlField decorator key must be a string.`);
 		}
-		if (!key) return '';
+		if (!resourceId) return '';
 
 		ExcludeFromFilterType()(target, propertyKey);
 		ReadOnlyProperty()(target, propertyKey);
@@ -62,7 +62,7 @@ export function DownloadUrlField({
 		metadata.collectExtensionsFieldMetadata({
 			target: target.constructor,
 			fieldName: propertyKey,
-			extensions: { key },
+			extensions: { key: resourceId },
 		});
 
 		metadata.collectHandlerParamMetadata({
@@ -84,13 +84,13 @@ export function DownloadUrlField({
 
 		const fieldResolver = async (root: any) => {
 			// If the key is set to null, we don't want to return a download url, an return empty string
-			if (root[key] === null) return '';
+			if (root[resourceId] === null) return '';
 
 			// Check that key is a property on the object
-			if (!root[key]) {
+			if (!root[resourceId]) {
 				throw new Error(`@DownloadUrlField decorator key must be a key on the object.`);
 			}
-			return storageProvider.getDownloadUrl(root[key]);
+			return storageProvider.getDownloadUrl(root[resourceId]);
 		};
 
 		Object.defineProperty(target, propertyKey, {
