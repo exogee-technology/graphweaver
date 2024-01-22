@@ -45,17 +45,32 @@ jobs:
         timeout-minutes: 2
         run: pnpm test-build
 
-      - name: Check app package for native modules
+      - name: Check for native modules in app package
         id: check-for-native-modules
         working-directory: src/packages/end-to-end/app
-        run: for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check.txt; done
-        
-      - name: Fail if native modules found in app package
         run: |
+          for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check.txt; done
           if [[ -s ~/.native.check.txt ]]; then
             echo "Dependencies containing native modules were found in the app package. See output below:"
             cat ~/.native.check.txt
             exit 1
           else
             echo "No native modules found in app package, continuing."
+          fi
+
+      - name: Intentionally add native module
+        working-directory: src/packages/end-to-end/app
+        run: |
+          pnpm add sqlite3
+        
+      - name: Check for native modules in app package
+        id: check-for-native-modules
+        working-directory: src/packages/end-to-end/app
+        run: |
+          for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check2.txt; done
+          if [[ -s ~/.native.check2.txt ]]; then
+            echo "Dependencies containing native modules were found in the app package. Test passed."
+          else
+            echo "No native modules found in app package - test failed."
+            exit 1
           fi
