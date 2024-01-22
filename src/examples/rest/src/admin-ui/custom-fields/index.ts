@@ -1,5 +1,5 @@
 import { CustomField } from '@exogee/graphweaver-admin-ui-components';
-import { ResetPasswordComponent } from '@exogee/graphweaver-auth-ui-components';
+import { ConfirmComponent, PasswordComponent } from '@exogee/graphweaver-auth-ui-components';
 
 import { Link } from './link';
 
@@ -18,7 +18,15 @@ customFields.set('Credential', [
 	{
 		name: 'password',
 		type: 'custom',
-		component: ResetPasswordComponent,
+		component: PasswordComponent,
 		hideOnTable: true,
+		initialValue: '',
+	},
+	{
+		name: 'confirm',
+		type: 'custom',
+		component: ConfirmComponent,
+		hideOnTable: true,
+		initialValue: '',
 	},
 ]);

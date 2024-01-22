@@ -13,7 +13,7 @@ import styles from './styles.module.css';
 
 import { LOGIN_MUTATION } from './graphql';
 import { formatRedirectUrl } from '../../../utils/urls';
-import { PasswordComponent } from '../confirm-password';
+import { PasswordFieldComponent } from '../password';
 
 interface Form {
 	username: string;
@@ -64,7 +64,7 @@ export const PasswordLogin = () => {
 						name="username"
 						className={styles.textInputField}
 					/>
-					<PasswordComponent />
+					<PasswordFieldComponent />
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
 							Login
