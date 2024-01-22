@@ -172,7 +172,10 @@ test('Should return isReadOnly attribute for each entity in getAdminUiMetadata',
 
 	const fieldNameField = customerEntity?.fields.find((field) => field.name === 'firstName');
 	expect(fieldNameField).not.toBeNull();
-	expect(fieldNameField?.attributes).toBeNull();
+	expect(fieldNameField?.attributes).toStrictEqual({
+		__typename: 'AdminUiFieldAttributeMetadata',
+		isReadOnly: false,
+	});
 
 	const companyField = customerEntity?.fields.find((field) => field.name === 'company');
 	expect(companyField).not.toBeNull();
