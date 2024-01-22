@@ -440,9 +440,6 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
-      graphweaver:
-        specifier: workspace:*
-        version: link:../../packages/cli
       reflect-metadata:
         specifier: 0.1.13
         version: 0.1.13
@@ -450,6 +447,9 @@ importers:
       '@types/node':
         specifier: 20.2.5
         version: 20.2.5
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
       typescript:
         specifier: 5.0.2
         version: 5.0.2
