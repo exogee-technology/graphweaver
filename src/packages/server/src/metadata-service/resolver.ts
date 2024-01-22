@@ -95,9 +95,11 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							name: field.name,
 							type: relatedObject?.name || typeName,
 							extensions: field.extensions || {},
-							attributes: {
-								isReadOnly: isReadOnlyPropertyAdminUI(objectType.target, field.name),
-							},
+							attributes: isReadOnlyPropertyAdminUI(objectType.target, field.name)
+								? {
+										isReadOnly: isReadOnlyPropertyAdminUI(objectType.target, field.name),
+								  }
+								: undefined,
 						};
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
