@@ -24,18 +24,36 @@ const EXPIRE_TIME = 3600;
 
 @Resolver()
 export class S3StorageResolver {
+	private storageProvider: S3StorageProvider;
+	constructor(config: StorageConfig) {
+		this.storageProvider = new S3StorageProvider(config);
+	}
+
+	@Mutation(() => String)
+	async getUploadUrl(@Arg('key', () => ID) key: string): Promise<string> {
+		const uploadURL = await this.storageProvider.getUploadUrl(key);
+		return uploadURL;
+	}
+
+	@Query(() => String)
+	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
+		const downloadURL = await this.storageProvider.getDownloadUrl(key);
+		return downloadURL;
+	}
+}
+
+export class S3StorageProvider {
 	bucketName: string;
 	region: string | undefined;
 	expiresIn: number;
 
-	constructor(private config: StorageConfig) {
+	constructor(config: StorageConfig) {
 		this.bucketName = config.bucketName;
 		this.region = config.region;
 		this.expiresIn = config.expiresIn || EXPIRE_TIME;
 	}
 
-	@Mutation(() => String)
-	async getUploadUrl(@Arg('key', () => ID) key: string): Promise<string> {
+	async getUploadUrl(key: string): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
 		const s3 = new S3Client({
@@ -50,20 +68,7 @@ export class S3StorageResolver {
 		const uploadURL = await getSignedUrl(s3, command, { expiresIn: this.expiresIn });
 		return uploadURL;
 	}
-}
 
-@Resolver()
-export class S3StorageProvider {
-	bucketName: string;
-	region: string | undefined;
-	expiresIn: number;
-
-	constructor(private config: StorageConfig) {
-		this.bucketName = config.bucketName;
-		this.region = config.region;
-		this.expiresIn = config.expiresIn || EXPIRE_TIME;
-	}
-	@Query(() => String)
 	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
