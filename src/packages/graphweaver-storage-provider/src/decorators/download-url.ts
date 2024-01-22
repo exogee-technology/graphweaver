@@ -88,8 +88,6 @@ export function DownloadUrlField({
 
 			// Check that key is a property on the object
 			if (!root[key]) {
-				console.log('root', root);
-				console.log('key', key);
 				throw new Error(`@DownloadUrlField decorator key must be a key on the object.`);
 			}
 			return storageProvider.getDownloadUrl(root[key]);
