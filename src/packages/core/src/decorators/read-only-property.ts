@@ -16,9 +16,9 @@ export function ReadOnlyProperty({ backend, adminUI }: Props = { backend: true, 
 			if (backend)
 				Reflect.metadata(readOnlyPropertyBackendKey, true)(target.constructor, propertyKey);
 			return;
-		}
-		if (adminUI) Reflect.metadata(readOnlyPropertyAdminUIKey, true)(target.constructor);
-		if (backend) Reflect.metadata(readOnlyPropertyBackendKey, true)(target.constructor);
+		}else{
+			throw new Error(`@ReadOnlyProperty decorator must decorate a property.`);
+		
 		return target;
 	};
 }
