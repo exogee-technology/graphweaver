@@ -51,11 +51,11 @@ jobs:
         run: for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check.txt; done
         
       - name: Fail if native modules found in app package
-      run: |
-        if [[ -s ~/.native.check.txt ]]; then
-          echo "Dependencies containing native modules were found in the app package. See output below:"
-          cat ~/.native.check.txt
-          exit 1
-        else
-          echo "No native modules found in app package, continuing."
-        fi
+        run: |
+          if [[ -s ~/.native.check.txt ]]; then
+            echo "Dependencies containing native modules were found in the app package. See output below:"
+            cat ~/.native.check.txt
+            exit 1
+          else
+            echo "No native modules found in app package, continuing."
+          fi
