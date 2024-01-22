@@ -48,8 +48,14 @@ jobs:
       - name: Check app package for native modules
         id: check-for-native-modules
         working-directory: src/packages/end-to-end/app
-        run: for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> $GITHUB_OUTPUT; done
+        run: for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check.txt; done
         
       - name: Fail if native modules found in app package
-        if: steps.check-for-native-modules.outputs.stdout != ''
-        run: echo "Native modules detected in test Graphweaver project dependency tree!" && echo $GITHUB_OUTPUT && exit 1
+      run: |
+        if [[ -s ~/.native.check.txt ]]; then
+          echo "Dependencies containing native modules were found in the app package. See output below:"
+          cat ~/.native.check.txt
+          exit 1
+        else
+          echo "No native modules found in app package, continuing."
+        fi
