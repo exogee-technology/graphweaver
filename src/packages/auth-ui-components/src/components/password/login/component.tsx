@@ -64,7 +64,7 @@ export const PasswordLogin = () => {
 						name="username"
 						className={styles.textInputField}
 					/>
-					<PasswordComponent />
+					<PasswordFieldComponent />
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
 							Login
