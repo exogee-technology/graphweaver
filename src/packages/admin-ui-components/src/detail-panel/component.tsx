@@ -214,7 +214,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = savedSessionState ?? data?.result;
 		const value = result?.[field.name as keyof typeof result];
-		acc[field.name] = value ?? undefined;
+		acc[field.name] = value ?? field.initialValue ?? undefined;
 		return acc;
 	}, {} as Record<string, any>);
 

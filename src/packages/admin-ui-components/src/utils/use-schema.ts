@@ -43,6 +43,7 @@ export interface EntityField {
 		type: AdminUIFilterType;
 	};
 	attributes?: EntityFieldAttributes;
+	initialValue?: string | number | boolean;
 }
 
 export interface EntityFieldAttributes {

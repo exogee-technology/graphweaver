@@ -2,7 +2,7 @@ import { Field } from 'formik';
 
 import styles from './styles.module.css';
 
-export const PasswordComponent = () => {
+export const PasswordFieldComponent = () => {
 	return (
 		<Field
 			type="password"
@@ -14,7 +14,7 @@ export const PasswordComponent = () => {
 	);
 };
 
-export const ConfirmComponent = () => {
+export const ConfirmFieldComponent = () => {
 	return (
 		<Field
 			type="password"
@@ -26,17 +26,24 @@ export const ConfirmComponent = () => {
 	);
 };
 
-export const ResetPasswordComponent = () => {
+export const PasswordComponent = () => {
 	return (
 		<>
 			<label htmlFor="password" className={styles.fieldLabel}>
 				password
 			</label>
-			<PasswordComponent />
+			<PasswordFieldComponent />
+		</>
+	);
+};
+
+export const ConfirmComponent = () => {
+	return (
+		<>
 			<label htmlFor="confirm" className={styles.fieldLabel}>
 				confirm
 			</label>
-			<ConfirmComponent />
+			<ConfirmFieldComponent />
 		</>
 	);
 };
