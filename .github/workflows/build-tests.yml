@@ -40,13 +40,13 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Build
+      - name: Build test app
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: pnpm test-build
 
       - name: Check for native modules in app package for Postgres-based project
-        working-directory: src/packages/end-to-end/app
+        working-directory: src/packages/end-to-end
         run: pnpm test-check-deps
 
       - name: Repeat native module check for SQLite-based project including Auth package
