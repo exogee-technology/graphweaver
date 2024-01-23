@@ -1,2 +1,2 @@
 export * from './storageProvider';
-export * from './decorators/download-url';
+export * from './decorators/media-field';

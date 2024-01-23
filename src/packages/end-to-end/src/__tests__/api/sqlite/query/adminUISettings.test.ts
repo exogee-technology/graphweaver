@@ -16,6 +16,7 @@ import {
 } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
+import { MediaField, MediaTypes } from '@exogee/graphweaver-storage-provider';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -49,6 +50,14 @@ class OrmArtist extends BaseEntity {
 	albums = new Collection<OrmAlbum>(this);
 }
 
+// Unless we run a local version of s3
+// We can't test that we get a signed url back
+// We can't test that we get a downwload url back from s3
+// This is a mock to test the decorator
+
+const mockS3StorageProvider = {
+	getDownloadUrl: (key: string) => Promise.resolve(`https://example.com/${key}`),
+};
 @AdminUISettings({
 	hideFromDisplay: true,
 })
@@ -85,6 +94,20 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	})
 	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
+
+	@MediaField({
+		storageProvider: mockS3StorageProvider,
+		resourceId: 'title',
+		mediaType: MediaTypes.IMAGE,
+	})
+	imageDownloadUrl?: string;
+
+	@MediaField({
+		storageProvider: mockS3StorageProvider,
+		resourceId: 'title',
+		mediaType: MediaTypes.VIDEO,
+	})
+	videoDownloadUrl?: string;
 }
 
 const connection = {
@@ -134,6 +157,10 @@ test('Test the decorator adminUISettings', async () => {
 								isReadOnly
 								__typename
 							}
+							extensions {
+								key
+								__typename
+							}
 							__typename
 						}
 						attributes {
@@ -176,4 +203,30 @@ test('Test the decorator adminUISettings', async () => {
 	const albumsField = artistEntity?.fields.find((field) => field.name === 'albums');
 	expect(albumsField).not.toBeNull();
 	expect(albumsField?.filter).toBeNull();
+
+	// Test that the type of the imageDownloadUrl field is Image
+	const imageDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'imageDownloadUrl'
+	);
+	expect(imageDownloadUrlField).not.toBeNull();
+	expect(imageDownloadUrlField?.type).toBe('Image');
+
+	// Test that the type of the videoDownloadUrl field is Media
+	const videoDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'videoDownloadUrl'
+	);
+
+	console.log(videoDownloadUrlField);
+	expect(videoDownloadUrlField).not.toBeNull();
+	expect(videoDownloadUrlField?.type).toBe('Media');
+
+	// Test that the field is readonly
+	expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
+	expect(videoDownloadUrlField?.attributes?.isReadOnly).toBe(true);
+
+	// Test that the extension object exists and includes the key
+	expect(imageDownloadUrlField?.extensions).not.toBeNull();
+	expect(videoDownloadUrlField?.extensions).not.toBeNull();
+	expect(imageDownloadUrlField?.extensions?.key).toBe('title');
+	expect(videoDownloadUrlField?.extensions?.key).toBe('title');
 });
