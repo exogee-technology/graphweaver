@@ -1,10 +1,26 @@
 import fs from 'fs';
 import path from 'path';
+import { codegen } from '@graphql-codegen/core';
 import { executeCodegen } from '@graphql-codegen/cli';
 import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset';
+import typescriptOperations from '@graphql-codegen/typescript-operations';
+import typescriptReactApollo from '@graphql-codegen/typescript-react-apollo';
+import { GraphQLSchema, buildSchema, printSchema, parse, DocumentNode } from 'graphql';
+import * as typescript from '@graphql-codegen/typescript';
+import { loadDocuments } from '@graphql-tools/load';
+import { CodeFileLoader } from '@graphql-tools/code-file-loader';
+import { Source } from '@graphql-tools/utils';
+import { glob } from 'glob';
 
 type CodegenOptions = {
 	typesOutputPath?: string | string[];
+};
+
+type CodegenConfig = { [key: string]: any };
+
+type GeneratedFile = {
+	filename: string;
+	content: string;
 };
 
 const content = `/* eslint-disable */
@@ -13,7 +29,108 @@ const content = `/* eslint-disable */
 * Please do not edit it directly.
 */`;
 
+const generateCombinedTypeFiles = async (
+	config: CodegenConfig,
+	schema: DocumentNode,
+	documents: Source[]
+) => {
+	console.info('GENERATING types.ts & types.generated.ts');
+	const typesFileContent = await codegen({
+		schema,
+		documents,
+		filename: 'src/types.generated.ts',
+		config,
+		plugins: [{ typescriptPlugin: {} }],
+		pluginMap: {
+			typescriptPlugin: typescript,
+		},
+	});
+	fs.writeFileSync('src/types.generated.ts', content.concat('\n', typesFileContent));
+	fs.writeFileSync('src/frontend/types.ts', content.concat('\n', typesFileContent));
+	console.info('DONE');
+};
+
+const generateIndividualTypeFiles = async (
+	config: CodegenConfig,
+	schema: DocumentNode,
+	documents: Source[],
+	typesOutputPaths: string[]
+) => {
+	console.info('PLUCKING GQL');
+
+	const fileList = await glob('./src/**/!(*.generated).{ts,tsx}');
+
+	for (const filename of fileList) {
+		console.info('filename', filename);
+		const fileparts = filename.split('.') ?? [];
+		const outfile = fileparts[0].concat('.generated.', fileparts[1]);
+		console.info('outfile', outfile);
+		const source: Source = {
+			location: filename,
+		};
+
+		const fileContent = await codegen({
+			plugins: [{ typescriptOperationsPlugin: {} }, { typescriptReactApolloPlugin: {} }],
+			schema,
+			documents: [source],
+			filename: outfile,
+			config,
+			pluginMap: {
+				typescriptOperationsPlugin: typescriptOperations,
+				typescriptReactApolloPlugin: typescriptReactApollo,
+			},
+		});
+
+		typesOutputPaths.forEach((outputPath: string) => {
+			console.info(`writing file ${outfile}`);
+			fs.writeFileSync(path.join(outputPath, outfile), content.concat('\n', fileContent));
+		});
+	}
+
+	console.info('DONE');
+};
+
+const generateFiles = async (schemaAsString: string, typesOutputPaths: string[]) => {
+	console.info('typesOutputPaths', typesOutputPaths);
+	const gqlSchema: GraphQLSchema = buildSchema(schemaAsString);
+	const schema = parse(printSchema(gqlSchema));
+
+	const config = {
+		skipDocumentsValidation: {
+			skipDuplicateValidation: true, // A flag to disable the validation for duplicate query and mutation names we don't need this as we are using near-operation-file
+		},
+	};
+
+	let documents: Source[] | undefined = undefined;
+	try {
+		console.info('STARTING TO GENERATE FILES');
+		documents = await loadDocuments('./src/**/!(*.generated).{ts,tsx}', {
+			loaders: [new CodeFileLoader()],
+		});
+	} catch (e) {
+		documents = [];
+	}
+
+	console.info('STARTING TYPE FILES');
+	await generateCombinedTypeFiles(config, schema, documents);
+	await generateIndividualTypeFiles(config, schema, documents, typesOutputPaths);
+};
+
 export const codeGenerator = async (schema: string, options?: CodegenOptions) => {
+	try {
+		const typesOutputPaths = formatListOfTypeOutputPaths(options?.typesOutputPath);
+		await generateFiles(schema, typesOutputPaths);
+	} catch (err: any) {
+		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
+		if (err.message && err.message.includes(defaultStateMessage)) {
+			// do nothing for now and silently fail
+		} else {
+			console.log(err.message + `\n in ${err.source?.name}`);
+		}
+	}
+};
+
+export const codeGenerator1 = async (schema: string, options?: CodegenOptions) => {
 	try {
 		const files = await executeCodegen({
 			cwd: process.cwd(),
@@ -93,9 +210,9 @@ const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
 	}
 
 	// Ensure that all paths have a filename and add one if it does not exist
-	typesOutput.forEach((path, index) => {
-		if (!path.includes('.ts')) {
-			typesOutput[index] = `${path}/types.ts`;
+	typesOutput.forEach((filepath, index) => {
+		if (!filepath.includes('.ts')) {
+			typesOutput[index] = path.join(filepath, '/types.ts');
 		}
 	});
 
