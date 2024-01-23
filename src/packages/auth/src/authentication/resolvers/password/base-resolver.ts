@@ -148,7 +148,12 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 						throw new ForbiddenError(
 							'Permission Denied: You do not have permission to update credentials.'
 						);
-					throw new AuthenticationError('Update unsuccessful: Failed to save credential.');
+					if (err instanceof AuthenticationError)
+						throw new AuthenticationError(
+							`Update unsuccessful: Failed to save credential - ${err}`
+						);
+
+					throw new AuthenticationError(`Update unsuccessful: Failed to save credential.`);
 				}
 
 				if (!userProfile)
