@@ -45,7 +45,7 @@ jobs:
         timeout-minutes: 2
         run: pnpm test-build
 
-      - name: Check for native modules in app package
+      - name: Check for native modules in app package for Postgres-based project
         working-directory: src/packages/end-to-end/app
         run: |
           for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check.txt; done
@@ -62,7 +62,7 @@ jobs:
         run: |
           pnpm add sqlite3 --ignore-workspace --no-lockfile
 
-      - name: Check for native modules in app package
+      - name: Ensure test is picking up native module as expected
         working-directory: src/packages/end-to-end/app
         run: |
           for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check2.txt; done
@@ -71,4 +71,19 @@ jobs:
           else
             echo "No native modules found in app package - test failed."
             exit 1
+          fi
+      
+      - name: Repeat native module check for SQLite-based project
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 2
+        run: |
+          pnpm import-database-sqlite
+          cd app
+          for package in $(find node_modules -type f -name "*.node" | cut -d'/' -f3 | cut -d'@' -f1); do pnpm why -r -P $package >> ~/.native.check.txt; done
+          if [[ -s ~/.native.check.txt ]]; then
+            echo "Dependencies containing native modules were found in the app package. See output below:"
+            cat ~/.native.check.txt
+            exit 1
+          else
+            echo "No native modules found in app package, check succeeded."
           fi
