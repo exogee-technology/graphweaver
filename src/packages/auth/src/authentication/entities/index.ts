@@ -1,3 +1,3 @@
 export * from './authentication';
 export * from './token';
-export * from './password';
+export * from './credential';
