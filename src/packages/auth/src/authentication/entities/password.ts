@@ -42,5 +42,5 @@ export const createCredentialEntity = <D extends BaseDataEntity>(
 	// Call the decorator to apply the ACL to the default entity above
 	ApplyAccessControlList(acl ?? defaultAcl)(Credential);
 	// Return the entity with the ACL applied
-	return Credential;
+	return Credential<D>;
 };
