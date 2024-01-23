@@ -34,6 +34,7 @@
 		"@exogee/graphweaver-mikroorm": "*",
 		"@exogee/graphweaver-scalars": "*",
 		"@exogee/graphweaver-server": "*",
+		"@exogee/graphweaver-storage-provider": "workspace:*",
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"@mikro-orm/postgresql": "5.7.14",

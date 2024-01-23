@@ -39,3 +39,9 @@ export const getRelationshipQuery = (entityName: string, summaryField?: string) 
     }
   `;
 };
+
+export const getUploadUrlMutation = gql`
+	mutation GetUploadUrl($key: ID!) {
+		getUploadUrl(key: $key)
+	}
+`;

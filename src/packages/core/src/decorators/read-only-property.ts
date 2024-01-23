@@ -1,15 +1,28 @@
 import 'reflect-metadata';
 
-const readOnlyPropertyKey = Symbol('BaseResolverReadOnlyProperty');
+const readOnlyPropertyBackendKey = Symbol('BaseResolverReadOnlyBackend');
+const readOnlyPropertyAdminUIKey = Symbol('BaseResolverReadOnlyAdminUI');
 
-export function ReadOnlyProperty() {
+type Props = {
+	backend?: boolean;
+	adminUI?: boolean;
+};
+
+export function ReadOnlyProperty({ backend, adminUI }: Props = { backend: true, adminUI: true }) {
 	return (target: any, propertyKey: string | symbol) => {
-		// Normally we'd just return Reflect.metadata(), but TypeGraphQL works on the constructor
-		// as the target, so we need to as well for later.
-		Reflect.metadata(readOnlyPropertyKey, true)(target.constructor, propertyKey);
+		if (propertyKey) {
+			if (adminUI)
+				Reflect.metadata(readOnlyPropertyAdminUIKey, true)(target.constructor, propertyKey);
+			if (backend)
+				Reflect.metadata(readOnlyPropertyBackendKey, true)(target.constructor, propertyKey);
+			return;
+		}
 	};
 }
 
-export function isReadOnlyProperty(target: any, propertyKey: string) {
-	return !!Reflect.getMetadata(readOnlyPropertyKey, target, propertyKey);
+export function isReadOnlyPropertyBackend(target: any, propertyKey: string) {
+	return !!Reflect.getMetadata(readOnlyPropertyBackendKey, target, propertyKey);
+}
+export function isReadOnlyPropertyAdminUI(target: any, propertyKey: string) {
+	return !!Reflect.getMetadata(readOnlyPropertyAdminUIKey, target, propertyKey);
 }

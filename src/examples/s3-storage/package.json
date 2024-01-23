@@ -1,0 +1,47 @@
+{
+	"name": "@exogee/graphweaver-example-s3-storage",
+	"version": "0.2.14",
+	"license": "MIT",
+	"private": true,
+	"description": "Example of connecting Graphweaver to an AWS S3 bucket.",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build": "graphweaver build",
+		"start": "graphweaver start",
+		"watch": "graphweaver watch",
+		"version": "npm version --no-git-tag-version"
+	},
+	"dependencies": {
+		"@apollo/client": "3.8.8",
+		"@apollo/server": "4.9.3",
+		"@as-integrations/aws-lambda": "2.0.1",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"@exogee/graphweaver-storage-provider": "workspace:*",
+		"@mikro-orm/core": "5.7.14",
+		"@mikro-orm/mysql": "5.7.14",
+		"@mikro-orm/postgresql": "5.7.14",
+		"reflect-metadata": "0.1.13",
+		"class-validator": "0.14.0",
+		"graphql": "16.8.1"
+	},
+	"devDependencies": {
+		"@types/node": "20.2.5",
+		"typescript": "5.0.2",
+		"graphweaver": "workspace:*"
+	},
+	"keywords": [
+		"graphql",
+		"s3",
+		"aws"
+	]
+}
