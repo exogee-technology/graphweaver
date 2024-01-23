@@ -37,7 +37,6 @@ const columnsForEntity = <T extends TableRowItem>(
 		// We don't support sorting by relationships yet.
 		sortable: !field.relationshipType,
 
-		// We only need a formatter for relationships.
 		formatter: field.relationshipType
 			? ({ row }: FormatterProps<T, unknown>) => {
 					const value = row[field.name as keyof typeof row];
@@ -64,6 +63,32 @@ const columnsForEntity = <T extends TableRowItem>(
 					} else {
 						return null;
 					}
+			  }
+			: field.type === 'Image'
+			? ({ row }: FormatterProps<T, unknown>) => {
+					const imageUrl = row[field.name as keyof typeof row] as string;
+
+					return (
+						<img
+							src={imageUrl}
+							// alt={altText} @todo - implement alt text
+							style={{
+								position: 'absolute',
+								top: '50%',
+								left: '50%',
+								transform: 'translate(-50%, -50%)',
+							}}
+						/>
+					);
+			  }
+			: field.type === 'Media'
+			? ({ row }: FormatterProps<T, unknown>) => {
+					const mediaUrl = row[field.name as keyof typeof row] as string;
+					return (
+						<a href={mediaUrl} target="_blank" rel="noreferrer">
+							{mediaUrl}
+						</a>
+					);
 			  }
 			: undefined,
 	}));

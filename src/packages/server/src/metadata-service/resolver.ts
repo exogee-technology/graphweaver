@@ -2,7 +2,7 @@ import {
 	EntityMetadataMap,
 	isSummaryField,
 	isReadOnlyAdminUI,
-	isReadOnlyProperty,
+	isReadOnlyPropertyAdminUI,
 	AdminUISettingsMap,
 	AdminUIFilterType,
 	RelationshipType,
@@ -72,6 +72,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						return;
 					}
 
+					// Here we get data from the EntityMetadataMap
 					const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
 					const summaryField = objectType.fields?.find((field) =>
 						isSummaryField(objectType.target, field.name)
@@ -83,13 +84,22 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const visibleFields = objectType.fields?.filter(
 						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay
 					);
+
 					const fields = visibleFields?.map((field) => {
 						const typeValue = field.getType() as any;
-						const entityName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
-						const relatedObject = objectTypeData[entityName];
+						const typeName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
+
+						const relatedObject = objectTypeData[typeName];
+
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
-							type: relatedObject?.name || entityName,
+							type: relatedObject?.name || typeName,
+							extensions: field.extensions || {},
+							attributes: isReadOnlyPropertyAdminUI(objectType.target, field.name)
+								? {
+										isReadOnly: isReadOnlyPropertyAdminUI(objectType.target, field.name),
+								  }
+								: undefined,
 						};
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
@@ -111,9 +121,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							: {
 									type: mapFilterType(fieldObject, metadata.enums),
 							  };
-						if (isReadOnlyProperty(objectType.target, field.name)) {
-							fieldObject.attributes = { isReadOnly: true };
-						}
+
 						return fieldObject;
 					});
 					return {
