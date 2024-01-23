@@ -16,4 +16,4 @@ const acl: AccessControlList<Credential, AuthorizationContext> = {
 	},
 };
 
-export const Credential = createCredentialEntity<OrmCredential>(acl);
+export class Credential extends createCredentialEntity<OrmCredential>(acl) {}
