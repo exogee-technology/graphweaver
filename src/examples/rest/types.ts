@@ -61,6 +61,11 @@ export type AdminUiFieldExtentionsMetadata = {
 	key?: Maybe<Scalars['String']['output']>;
 };
 
+export type AdminUiFieldExtentionsMetadata = {
+	__typename?: 'AdminUiFieldExtentionsMetadata';
+	key?: Maybe<Scalars['String']['output']>;
+};
+
 export type AdminUiFieldMetadata = {
 	__typename?: 'AdminUiFieldMetadata';
 	attributes?: Maybe<AdminUiFieldAttributeMetadata>;
