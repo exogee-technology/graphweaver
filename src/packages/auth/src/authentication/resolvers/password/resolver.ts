@@ -13,7 +13,7 @@ import {
 import { Credential, CredentialStorage } from '../../entities';
 import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
-import { ApolloError, AuthenticationError } from 'apollo-server-errors';
+import { ApolloError, AuthenticationError, ValidationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
 import { hashPassword, verifyPassword } from '../../../utils/argon2id';
 
@@ -104,16 +104,14 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			const [item] = params.args.items;
 			if (!item) throw new Error('No data specified cannot continue.');
 
-			if (!item.username)
-				throw new AuthenticationError('Create unsuccessful: Username not defined.');
+			if (!item.username) throw new ValidationError('Create unsuccessful: Username not defined.');
 
-			if (!item.password)
-				throw new AuthenticationError('Create unsuccessful: Password not defined.');
+			if (!item.password) throw new ValidationError('Create unsuccessful: Password not defined.');
 
 			this.assertPasswordStrength(item.password);
 
 			if (item.password !== item.confirm)
-				throw new AuthenticationError('Create unsuccessful: Passwords do not match.');
+				throw new ValidationError('Create unsuccessful: Passwords do not match.');
 
 			const passwordHash = await hashPassword(item.password);
 			const credential = await this.provider.createOne({
@@ -135,12 +133,13 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile> {
 			const [item] = params.args.items;
-			if (!item.id) throw new AuthenticationError('No ID sent in request.');
+			if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
 
 			if (item.password && item.password !== item.confirm)
-				throw new AuthenticationError('Passwords do not match.');
+				throw new ValidationError('Update unsuccessful: Passwords do not match.');
 
-			if (!item.username && !item.password) throw new AuthenticationError('Nothing to update.');
+			if (!item.username && !item.password)
+				throw new ValidationError('Update unsuccessful: Nothing to update.');
 
 			let passwordHash = undefined;
 			if (item.password && this.assertPasswordStrength(item.password)) {
