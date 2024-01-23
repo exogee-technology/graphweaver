@@ -10,7 +10,7 @@ import {
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
+import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext, RequestParams } from '../../../types';
 import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
@@ -98,12 +98,15 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 					logger.error(err);
 
 					if (err instanceof PasswordStrengthError) throw err;
+					if (err instanceof ValidationError) throw err;
 					if (err instanceof ForbiddenError)
 						throw new ForbiddenError(
 							'Permission Denied: You do not have permission to create credentials.'
 						);
 
-					throw new AuthenticationError('Create unsuccessful: Failed to save credential.');
+					throw new AuthenticationError(
+						'Create unsuccessful: You do not have permission to perform this action.'
+					);
 				}
 
 				if (!userProfile)
@@ -144,18 +147,21 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 				} catch (err) {
 					logger.error(err);
 					if (err instanceof PasswordStrengthError) throw err;
+					if (err instanceof ValidationError) throw err;
 					if (err instanceof ForbiddenError)
 						throw new ForbiddenError(
 							'Permission Denied: You do not have permission to update credentials.'
 						);
-					throw new AuthenticationError('Update unsuccessful: Failed to save credential.');
+					throw new AuthenticationError(
+						`Update unsuccessful: You do not have permission to perform this action.`
+					);
 				}
 
 				if (!userProfile)
-					throw new AuthenticationError('Update unsuccessful: Failed to get user profile.');
-				if (!userProfile.id) throw new AuthenticationError('Update unsuccessful: ID missing.');
+					throw new ValidationError('Update unsuccessful: Failed to get user profile.');
+				if (!userProfile.id) throw new ValidationError('Update unsuccessful: ID missing.');
 				if (!userProfile.username)
-					throw new AuthenticationError('Update unsuccessful: Username missing.');
+					throw new ValidationError('Update unsuccessful: Username missing.');
 
 				return Credential.fromBackendEntity({
 					id: userProfile.id,
