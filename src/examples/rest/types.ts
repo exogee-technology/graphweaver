@@ -52,9 +52,15 @@ export type AdminUiFieldAttributeMetadata = {
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type AdminUiFieldExtentionsMetadata = {
+  __typename?: 'AdminUiFieldExtentionsMetadata';
+  key?: Maybe<Scalars['String']['output']>;
+};
+
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
