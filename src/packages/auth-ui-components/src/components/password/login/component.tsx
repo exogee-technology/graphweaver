@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Field, Form, Formik, FormikHelpers, replace } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import {
 	GraphweaverLogo,
@@ -13,6 +13,7 @@ import styles from './styles.module.css';
 
 import { LOGIN_MUTATION } from './graphql';
 import { formatRedirectUrl } from '../../../utils/urls';
+import { PasswordFieldComponent } from '../password';
 
 interface Form {
 	username: string;
@@ -63,13 +64,7 @@ export const PasswordLogin = () => {
 						name="username"
 						className={styles.textInputField}
 					/>
-					<Field
-						type="password"
-						placeholder="Password"
-						id="password"
-						name="password"
-						className={styles.textInputField}
-					/>
+					<PasswordFieldComponent />
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
 							Login

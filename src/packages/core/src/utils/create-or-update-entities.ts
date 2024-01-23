@@ -5,11 +5,14 @@ import pluralize from 'pluralize';
 import {
 	BaseContext,
 	BaseDataEntity,
+	CreateOrUpdateHookParams,
 	EntityMetadataMap,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphqlEntityType,
+	HookRegister,
 	WithId,
+	hookManagerMap,
 } from '..';
 
 // Checks if we have an object
@@ -196,4 +199,17 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 	}
 
 	throw new Error(`Unexpected Error: trying to create entity ${entityTypeName}`);
+};
+
+export const runWritableBeforeHooks = async <G>(
+	hookRegister: HookRegister,
+	params: CreateOrUpdateHookParams<G>,
+	gqlEntityTypeName: string
+): Promise<CreateOrUpdateHookParams<G>> => {
+	const hookManager = hookManagerMap.get(gqlEntityTypeName);
+	const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
+
+	const items = hookParams.args?.items;
+	if (!items) throw new Error('No data specified cannot continue.');
+	return params;
 };

@@ -39,7 +39,7 @@ import {
 } from './decorators';
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
-import { createOrUpdateEntities } from './utils/create-or-update-entities';
+import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -71,7 +71,10 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
 	provider: BackendProvider<D, G>
-): abstract new () => BaseResolverInterface {
+): abstract new (
+	gqlEntityType: GraphqlEntityType<G, D>,
+	provider: BackendProvider<D, G>
+) => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -487,18 +490,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	@Resolver()
 	abstract class WritableBaseResolver extends BaseResolver {
-		private async runWritableBeforeHooks(
-			hookRegister: HookRegister,
-			params: CreateOrUpdateHookParams<G>
-		): Promise<CreateOrUpdateHookParams<G>> {
-			const hookManager = hookManagerMap.get(gqlEntityTypeName);
-			const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
-
-			const items = hookParams.args?.items;
-			if (!items) throw new Error('No data specified cannot continue.');
-			return params;
-		}
-
 		// Create many items in a transaction
 		@Mutation((returns) => [gqlEntityType], { name: `create${plural}` })
 		async createMany(
@@ -507,12 +498,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
 			return this.withTransaction<Array<G | null>>(async () => {
-				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
-					args: { items: createItems.data },
-					info,
-					context,
-					transactional,
-				});
+				const params = await runWritableBeforeHooks(
+					HookRegister.BEFORE_CREATE,
+					{
+						args: { items: createItems.data },
+						info,
+						context,
+						transactional,
+					},
+					gqlEntityTypeName
+				);
 				const { items } = params.args;
 				const entities = (await createOrUpdateEntities(
 					items,
@@ -532,12 +527,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			return this.withTransaction<G | null>(async () => {
-				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_CREATE, {
-					args: { items: [createItemData] },
-					info,
-					context,
-					transactional,
-				});
+				const params = await runWritableBeforeHooks(
+					HookRegister.BEFORE_CREATE,
+					{
+						args: { items: [createItemData] },
+						info,
+						context,
+						transactional,
+					},
+					gqlEntityTypeName
+				);
 				const [item] = params.args.items;
 
 				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
@@ -554,12 +553,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
 			return this.withTransaction<Array<G | null>>(async () => {
-				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
-					args: { items: updateItems.data },
-					info,
-					context,
-					transactional,
-				});
+				const params = await runWritableBeforeHooks(
+					HookRegister.BEFORE_UPDATE,
+					{
+						args: { items: updateItems.data },
+						info,
+						context,
+						transactional,
+					},
+					gqlEntityTypeName
+				);
 				const { items } = params.args;
 
 				// Check that all objects have IDs
@@ -665,12 +668,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			return this.withTransaction<G | null>(async () => {
-				const params = await this.runWritableBeforeHooks(HookRegister.BEFORE_UPDATE, {
-					args: { items: [updateItemData] },
-					info,
-					context,
-					transactional,
-				});
+				const params = await runWritableBeforeHooks(
+					HookRegister.BEFORE_UPDATE,
+					{
+						args: { items: [updateItemData] },
+						info,
+						context,
+						transactional,
+					},
+					gqlEntityTypeName
+				);
 				const [item] = params.args.items;
 
 				if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');

@@ -13,6 +13,7 @@
 		"lib"
 	],
 	"scripts": {
+		"import-database": "dotenv -- bash ./scripts/import.sh",
 		"build": "graphweaver build",
 		"start": "graphweaver start",
 		"watch": "graphweaver watch",
@@ -41,6 +42,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",
+		"dotenv-cli": "7.3.0",
 		"typescript": "5.0.2",
 		"vite": "4.5.2",
 		"vite-plugin-svgr": "3.2.0"

@@ -1,27 +1,49 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
 import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	RequestParams,
+	Credential,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
+import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { SqliteDriver } from '@mikro-orm/sqlite';
 
 const user = new UserProfile({
 	id: '1',
 	roles: ['admin'],
 	displayName: 'Test User',
+	username: 'test',
 });
 
+const connection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		entities: [],
+		driver: SqliteDriver,
+		dbName: 'databases/database.sqlite',
+	},
+};
+
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver() {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, connection)
+) {
 	async authenticate(username: string, password: string) {
 		return user;
 	}
-	async save(username: string, password: string, params: RequestParams): Promise<UserProfile> {
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
+		return user;
+	}
+	async update(
+		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+	): Promise<UserProfile> {
 		return user;
 	}
 }
@@ -34,32 +56,30 @@ const graphweaver = new Graphweaver({
 });
 
 describe('Password Authentication - Register', () => {
-	test('should register an unauthenticated user.', async () => {
+	test('should create a new user.', async () => {
 		const response = await graphweaver.server.executeOperation<{
-			createLoginPassword: { authToken: string };
+			createCredential: { id: string };
 		}>({
 			query: gql`
-				mutation createLoginPassword($username: String!, $password: String!, $confirm: String!) {
-					createLoginPassword(username: $username, password: $password, confirm: $confirm) {
-						authToken
+				mutation createCredential($data: CredentialInsertInput!) {
+					createCredential(data: $data) {
+						id
 					}
 				}
 			`,
 			variables: {
-				username: '',
-				password: '',
-				confirm: '',
+				data: {
+					username: 'test',
+					password: 'test',
+					confirm: 'test',
+				},
 			},
 		});
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
 
-		const token = response.body.singleResult.data?.createLoginPassword?.authToken;
-		expect(token).toContain('Bearer ');
-
-		const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
-		// Check that the token expires in the future
-		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
+		const token = response.body.singleResult.data?.createCredential?.id;
+		expect(token).toBeDefined();
 	});
 });

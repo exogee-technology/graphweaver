@@ -3,7 +3,7 @@ import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
@@ -230,7 +230,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = savedSessionState ?? data?.result;
 		const value = result?.[field.name as keyof typeof result];
-		acc[field.name] = value ?? undefined;
+		acc[field.name] = value ?? field.initialValue ?? undefined;
 		return acc;
 	}, {} as Record<string, any>);
 
@@ -305,6 +305,7 @@ export const DetailPanel = () => {
 					variables: {
 						data: values,
 					},
+					refetchQueries: [`AdminUIListPage`],
 				});
 			}
 
