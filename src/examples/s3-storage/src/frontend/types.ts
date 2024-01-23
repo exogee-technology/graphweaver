@@ -17,8 +17,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Image type scalar */
-  Image: { input: any; output: any; }
+  /** Media type scalar */
+  Media: { input: any; output: any; }
 };
 
 export type AdminUiEntityAttributeMetadata = {
@@ -165,7 +165,7 @@ export enum Sort {
 
 export type Submission = {
   __typename?: 'Submission';
-  downloadUrl?: Maybe<Scalars['Image']['output']>;
+  downloadUrl?: Maybe<Scalars['Media']['output']>;
   id: Scalars['ID']['output'];
   key?: Maybe<Scalars['String']['output']>;
 };
