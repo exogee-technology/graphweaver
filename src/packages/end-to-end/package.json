@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"scripts": {
 		"test-build": ". ./scripts/test-build.sh",
+		"test-check-deps": "tsx ./scripts/check-for-native-deps.ts",
 		"import-database-sqlite": "tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": ". ./scripts/import-postgres.sh",
 		"import-database-mysql": ". ./scripts/import-mysql.sh",
