@@ -135,22 +135,20 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile> {
 			const [item] = params.args.items;
-			if (!item.id) throw new AuthenticationError('Update unsuccessful: No ID sent in request.');
+			if (!item.id) throw new AuthenticationError('No ID sent in request.');
 
 			if (item.password && item.password !== item.confirm)
-				throw new AuthenticationError('Update unsuccessful: Passwords do not match.');
+				throw new AuthenticationError('Passwords do not match.');
 
-			if (item.password) this.assertPasswordStrength(item.password);
+			if (!item.username && !item.password) throw new AuthenticationError('Nothing to update.');
 
-			if (!item.username && !item.password)
-				throw new AuthenticationError('Update unsuccessful: Nothing to update.');
-
-			if (item.password) {
-				item.password = await hashPassword(item.password);
+			let passwordHash = undefined;
+			if (item.password && this.assertPasswordStrength(item.password)) {
+				passwordHash = await hashPassword(item.password);
 			}
 			const credential = await this.provider.updateOne(item.id, {
 				...(item.username ? { username: item.username } : {}),
-				...(item.password ? { password: item.password } : {}),
+				...(passwordHash ? { password: passwordHash } : {}),
 			});
 
 			const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
