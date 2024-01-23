@@ -140,7 +140,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			if (item.password && item.password !== item.confirm)
 				throw new AuthenticationError('Update unsuccessful: Passwords do not match.');
 
-			this.assertPasswordStrength(item.password);
+			if (item.password) this.assertPasswordStrength(item.password);
 
 			if (!item.username && !item.password)
 				throw new AuthenticationError('Update unsuccessful: Nothing to update.');
