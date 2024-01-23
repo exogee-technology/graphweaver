@@ -56,4 +56,6 @@ jobs:
           pnpm import-database-sqlite
           cd ./app
           pnpm link ../../auth
+          pnpm i --ignore-workspace --no-lockfile
+          cd ..
           pnpm test-check-deps
