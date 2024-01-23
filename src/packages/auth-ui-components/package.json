@@ -50,7 +50,7 @@
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
 		"typescript": "5.0.2",
-		"vite": "4.3.9",
+		"vite": "4.5.2",
 		"vite-plugin-svgr": "3.2.0",
 		"@simplewebauthn/typescript-types": "8.0.0"
 	},
