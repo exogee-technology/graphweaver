@@ -60,8 +60,8 @@ jobs:
       - name: Intentionally add native module
         working-directory: src/packages/end-to-end/app
         run: |
-          pnpm add sqlite3
-        
+          pnpm add sqlite3 --ignore-workspace --no-lockfile
+
       - name: Check for native modules in app package
         working-directory: src/packages/end-to-end/app
         run: |
