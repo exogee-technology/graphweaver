@@ -1113,6 +1113,9 @@ importers:
       '@exogee/graphweaver-server':
         specifier: '*'
         version: link:../server
+      '@exogee/graphweaver-storage-provider':
+        specifier: workspace:*
+        version: link:../graphweaver-storage-provider
       '@mikro-orm/core':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)

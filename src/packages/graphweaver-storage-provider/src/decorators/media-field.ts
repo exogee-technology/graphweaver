@@ -14,7 +14,7 @@ type DownloadUrlFieldOptions = {
 	mediaType: MediaTypes;
 };
 
-export function DownloadUrlField({
+export function MediaField({
 	storageProvider,
 	resourceId,
 	mediaType,
