@@ -27,6 +27,10 @@ Please follow the project's coding style and conventions when submitting code ch
 
 Before submitting a pull request, ensure that all existing tests pass and add new tests where relevant to cover your changes within the end to end test package. Make sure to run the test suite locally to confirm that everything works as expected.
 
+## Use of packages containing native modules
+
+We are working to keep Graphweaver free of dependencies that contain native modules. This increases deployment complexity as native code cannot be bundled, which increases complexity in the deployment process. We have included a standalone test (in the `end-to-end` test project) as well as a check in Github Actions to help detect if native modules have made their way into Graphweaver project dependencies. Note this restriction only applies to production dependencies - dev dependencies are allowed to contain native modules as they are not included in production builds.
+
 ## Documentation
 
 Improvements to the project's documentation are always welcome. If you find any parts of the documentation that are unclear or incomplete, please feel free to report the issue and we can work to update it.
