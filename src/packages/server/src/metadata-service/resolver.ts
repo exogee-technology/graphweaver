@@ -2,7 +2,7 @@ import {
 	EntityMetadataMap,
 	isSummaryField,
 	isReadOnlyAdminUI,
-	isReadOnlyProperty,
+	isReadOnlyPropertyAdminUI,
 	AdminUISettingsMap,
 	AdminUIFilterType,
 	RelationshipType,

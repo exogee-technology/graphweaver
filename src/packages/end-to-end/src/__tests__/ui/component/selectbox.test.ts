@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { config } from '../../config';
+import { config } from '../../../config';
 
 test('Check Select field displays correct number of selected items based on initial values', async ({
 	page,
