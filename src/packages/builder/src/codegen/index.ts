@@ -80,7 +80,7 @@ const generateFiles = async (schemaAsString: string) => {
 		},
 	};
 
-	let documents: Source[] | undefined = undefined;
+	let documents: Source[] = [];
 	try {
 		documents = await loadDocuments('./src/**/!(*.generated).{ts,tsx}', {
 			loaders: [new CodeFileLoader()],
@@ -88,7 +88,6 @@ const generateFiles = async (schemaAsString: string) => {
 	} catch (e) {
 		// typically the error is that none of the matching files are relevant
 		console.info(e);
-		documents = [];
 	}
 
 	await generateCombinedTypeFiles(config, schema, documents);
