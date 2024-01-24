@@ -3,13 +3,14 @@ import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
 import {
 	CustomField,
 	decodeSearchParams,
+	Entity,
 	EntityField,
 	queryForEntity,
 	routeFor,
@@ -38,6 +39,10 @@ interface ResultBaseType {
 	id: string;
 	[x: string]: unknown;
 }
+// click link
+// puhs redirect url from link component "confrimRedirectUrl=title"
+// modall will watvh watch for redirct url variale
+// cance
 
 const getField = ({ field }: { field: EntityField }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
@@ -167,12 +172,14 @@ const SLIDE_ANIMATION_TIME_CSS_VAR_NAME = '--detail-panel-slide-animation-time';
 
 export const DetailPanel = () => {
 	const [open, setOpen] = useState(false);
+	const [search, setSearchParams] = useSearchParams();
+
+	const modalRedirectUrl = search.get('modalRedirectUrl');
 
 	const { id, entity } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName, entityByType } = useSchema();
-	const [search] = useSearchParams();
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
@@ -186,10 +193,17 @@ export const DetailPanel = () => {
 		}
 	);
 
-	const onClose = useCallback(() => {
+	const onClose = () => {
+		const path = window.location.pathname;
+		// If the path does not include the entity name, then we've already moved to a different entity
+		// Navigate to that path to close the overlay
+		if (!path.includes(selectedEntity.name)) {
+			navigate(path);
+			return;
+		}
 		const { filters, sort } = decodeSearchParams(search);
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
-	}, [search, selectedEntity]);
+	};
 
 	const customFieldsToShow = (customFields?.get(selectedEntity.name) || []).filter(
 		(customField) => {
@@ -348,32 +362,67 @@ export const DetailPanel = () => {
 		window.sessionStorage.removeItem(persistName);
 	};
 
+	// Callback to be called when the user confirms leaving the page
+	const handleConfirmLeave = () => {
+		if (!modalRedirectUrl) return;
+		// @todo
+		// if the modalRedirectUrl is local, then navigate to it
+		// if it's not local open it in a new tab
+
+		navigate(modalRedirectUrl, { replace: true });
+	};
+	// Callback to be called when the user cancels leaving the page
+	const handleCancelLeave = () => {
+		// Close the unsaved changes modal via clearing the modalRedirectUrl
+		setSearchParams({ modalRedirectUrl: '' });
+	};
+
 	return (
-		<Modal
-			isOpen
-			onRequestClose={closeModal}
-			shouldCloseOnEsc
-			shouldCloseOnOverlayClick
-			className={open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer}
-			title={selectedEntity.name}
-			modalContent={
-				<>
-					{loading ? (
-						<Spinner />
-					) : error ? (
-						<p>Failed to load entity.</p>
-					) : (
-						<DetailForm
-							initialValues={initialValues}
-							detailFields={formFields}
-							onCancel={closeModal}
-							onSubmit={handleOnSubmit}
-							persistName={persistName}
-							isReadOnly={selectedEntity.attributes.isReadOnly}
-						/>
-					)}
-				</>
-			}
-		/>
+		<>
+			<Modal
+				key={selectedEntity.name}
+				isOpen
+				onRequestClose={closeModal}
+				shouldCloseOnEsc
+				shouldCloseOnOverlayClick
+				className={
+					open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer
+				}
+				title={selectedEntity.name}
+				modalContent={
+					<>
+						{loading ? (
+							<Spinner />
+						) : error ? (
+							<p>Failed to load entity.</p>
+						) : (
+							<>
+								<DetailForm
+									initialValues={initialValues}
+									detailFields={formFields}
+									onCancel={closeModal}
+									onSubmit={handleOnSubmit}
+									persistName={persistName}
+									isReadOnly={selectedEntity.attributes.isReadOnly}
+								/>
+							</>
+						)}
+					</>
+				}
+			/>
+			<Modal
+				isOpen={!!modalRedirectUrl}
+				title="You have unsaved changes"
+				modalContent={
+					<div>Are you sure you want to leave this entity? Your changes will not be saved.</div>
+				}
+				footerContent={
+					<>
+						<button onClick={handleCancelLeave}>Cancel</button>
+						<button onClick={handleConfirmLeave}>Discard Changes</button>
+					</>
+				}
+			/>
+		</>
 	);
 };
