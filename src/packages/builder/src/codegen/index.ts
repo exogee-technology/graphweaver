@@ -38,7 +38,7 @@ const generateCombinedTypeFiles = async (
 		},
 	});
 	fs.writeFileSync('src/types.generated.ts', content.concat('\n', typesFileContent));
-	fs.writeFileSync('src/frontend/types.ts', content.concat('\n', typesFileContent));
+	fs.writeFileSync('src/frontend/types.generated.ts', content.concat('\n', typesFileContent));
 };
 
 const generateIndividualTypeFiles = async (
