@@ -1,10 +1,13 @@
 :root {
 	font-family: 'Inter', sans-serif;
 	--body-copy-color: #ede8f2;
+	--body-copy-color-rbg: 237, 232, 242;
 	--body-bg-color: #100a1c;
 	--primary-color: #7038c2;
 	--secondary-color: #853af2;
 	--detail-bg-color: #171221;
+	--detail-border-color: rgba(var(--body-copy-color-rbg), 0.1);
+
 
 	--color-light-blue: #abbce9;
 	--color-light-green: #abe9b8;

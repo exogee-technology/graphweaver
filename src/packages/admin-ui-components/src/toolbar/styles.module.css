@@ -20,7 +20,7 @@
 
 .search {
 	background: rgba(237, 232, 242, 0.02);
-	border: 1px solid rgba(237, 232, 242, 0.1);
+	border: 1px solid var(--detail-border-color);
 	border-radius: 6px;
 	padding-left: 32px;
 	background-size: 16px 16px;

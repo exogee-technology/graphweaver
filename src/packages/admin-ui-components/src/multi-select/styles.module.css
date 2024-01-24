@@ -1,7 +1,7 @@
 :root {
 	--select-background: rgba(237, 232, 242, 0.05);
 	--select-hover-background: rgba(237, 232, 242, 0.15);
-	--select-border-color: rgba(237, 232, 242, 0.1);
+	--select-border-color: var(--detail-border-color);
 	--select-selected-option-color: #12170d;
 }
 
