@@ -1,0 +1,16 @@
+.exportContainer {
+	background: var(--detail-bg-color);
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 6px;
+}
+
+.contentContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.buttonContainer {
+	display: flex;
+	justify-content: flex-start;
+}

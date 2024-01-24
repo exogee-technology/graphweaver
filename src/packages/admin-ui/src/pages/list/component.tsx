@@ -1,32 +1,23 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
-	exportToCSV,
 	Table,
 	useSchema,
 	PAGE_SIZE,
 	decodeSearchParams,
 	ToolBar,
-	FieldFilter,
-	Filter,
 	TableRowItem,
 	routeFor,
 	RequestRefetchOptions,
 	Header,
+	ExportModal,
+	getAndFiltersQuery,
+	getOrderByQuery,
 } from '@exogee/graphweaver-admin-ui-components';
 import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { queryForEntityPage } from './graphql';
-
-const andFilters = (filters: FieldFilter) => {
-	const filter = Object.entries(filters)
-		.map(([_, _filter]) => _filter)
-		.filter((_filter): _filter is Filter => _filter !== undefined);
-
-	if (filter.length === 0) return undefined;
-	return { _and: filter };
-};
 
 interface ListToolBarProps {
 	onExportToCSV: () => void;
@@ -54,20 +45,17 @@ export const List = () => {
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 
+	const [showExportModal, setShowExportModal] = useState(false);
+
 	const { sort, page, filters } = decodeSearchParams(search);
-	const orderBy = {
-		...(sort
-			? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
-			: { id: 'ASC' }),
-	};
 
 	const queryVariables = {
 		pagination: {
 			offset: Math.max(page - 1, 0) * PAGE_SIZE,
 			limit: PAGE_SIZE,
-			orderBy,
+			orderBy: getOrderByQuery(sort),
 		},
-		...(filters ? { filter: andFilters(filters) } : {}),
+		...(filters ? { filter: getAndFiltersQuery(filters) } : {}),
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<{ result: TableRowItem[] }>(
@@ -124,7 +112,7 @@ export const List = () => {
 	});
 
 	const handleExportToCSV = () => {
-		exportToCSV(entityByName(entity).name, data?.result ?? []);
+		setShowExportModal(true);
 	};
 
 	return (
@@ -142,6 +130,12 @@ export const List = () => {
 				error={error}
 			/>
 			<Outlet />
+			<ExportModal
+				showModal={showExportModal}
+				closeModal={() => setShowExportModal(false)}
+				sort={sort}
+				filters={filters}
+			/>
 		</>
 	);
 };
