@@ -43,6 +43,7 @@ export const ExportModal = ({
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	const closeAndReset = () => {
+		abortRef.current = false;
 		closeModal();
 		setDisplayPageNumber(1);
 	};
@@ -82,11 +83,11 @@ export const ExportModal = ({
 			}
 
 			exportToCSV(selectedEntity.name, allResults);
-			closeAndReset();
 		} catch (error) {
 			toast.error(String(error), {
 				duration: 5000,
 			});
+		} finally {
 			closeAndReset();
 		}
 	};
@@ -113,7 +114,6 @@ export const ExportModal = ({
 						<Button
 							onClick={() => {
 								abortRef.current = true;
-								closeAndReset();
 							}}
 						>
 							Cancel
