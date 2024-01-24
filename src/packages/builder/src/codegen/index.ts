@@ -62,12 +62,6 @@ const generateIndividualTypeFiles = async (
 		baseOutputDir: '.',
 	});
 
-	for (const args of argsList) {
-		const output = await codegen(args);
-
-		fs.writeFileSync(args.filename, output);
-	}
-
 	const tasks = argsList.map(async (args) => {
 		const output = await codegen(args);
 		fs.promises.writeFile(args.filename, output);
