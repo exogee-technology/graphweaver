@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-graphweaver",
-	"version": "0.2.14",
+	"version": "0.2.15",
 	"description": "A vite plugin for use with @exogee/graphweaver's admin UI",
 	"license": "MIT",
 	"main": "lib/index.js",
@@ -22,7 +22,7 @@
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
 		"typescript": "5.0.2",
-		"vite": "4.3.9"
+		"vite": "4.5.2"
 	},
 	"peerDependencies": {
 		"vite": "4"

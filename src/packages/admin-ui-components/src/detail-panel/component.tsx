@@ -1,9 +1,9 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
-import { Field, Form, Formik, FormikHelpers, useField, useFormikContext } from 'formik';
+import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
@@ -15,17 +15,24 @@ import {
 	routeFor,
 	useSchema,
 	useSelectedEntity,
-	EntityFieldType,
 } from '../utils';
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
-import { BooleanField, EnumField, JSONField, SelectField } from './fields';
+import {
+	BooleanField,
+	EnumField,
+	ImageField,
+	JSONField,
+	SelectField,
+	uploadFileToSignedURL,
+} from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
 import { mapFormikValuesToGqlRequestValues } from './util';
+import { MediaField } from './fields/media-field';
 
 interface ResultBaseType {
 	id: string;
@@ -48,6 +55,14 @@ const getField = ({ field }: { field: EntityField }) => {
 
 	if (field.type === 'Boolean') {
 		return <BooleanField name={field.name} />;
+	}
+
+	if (field.type === 'Image') {
+		return <ImageField field={field} />;
+	}
+
+	if (field.type === 'Media') {
+		return <MediaField field={field} />;
 	}
 
 	const { enumByName } = useSchema();
@@ -215,7 +230,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce((acc, field) => {
 		const result = savedSessionState ?? data?.result;
 		const value = result?.[field.name as keyof typeof result];
-		acc[field.name] = value ?? undefined;
+		acc[field.name] = value ?? field.initialValue ?? undefined;
 		return acc;
 	}, {} as Record<string, any>);
 
@@ -253,6 +268,22 @@ export const DetailPanel = () => {
 		try {
 			let result: FetchResult;
 			if (id && !isNew) {
+				// Update an existing entity
+				if (formValues.uploadUrl && formValues.file) {
+					await uploadFileToSignedURL(values.uploadUrl, values.file);
+					// remove the uploadUrl and file from the values. These are set in the <ImageField> on upload file
+					delete values.uploadUrl;
+					delete values.file;
+					// delete the value where the name is the field that has the image or media type
+					delete values[selectedEntity.fields.find((field) => field.type === 'Image')?.name ?? ''];
+					delete values[selectedEntity.fields.find((field) => field.type === 'Media')?.name ?? ''];
+				}
+
+				// if uploadUrl and downloadUrl are there, remove them because theyre not on SubmissionCreateOrUpdateInput
+				if (values.uploadUrl === null) delete values.uploadUrl;
+				if (values.downloadUrl === null || values.downloadUrl === '') delete values.downloadUrl;
+				if (values.file === null) delete values.file;
+
 				result = await updateEntity({
 					variables: {
 						data: {
@@ -262,10 +293,19 @@ export const DetailPanel = () => {
 					},
 				});
 			} else {
+				// Create a new entity
+				// If the form values contain an image, then do seperate mutation to upload the image
+				if (formValues.uploadUrl && formValues.file) {
+					await uploadFileToSignedURL(values.uploadUrl, values.file);
+					// remove the uploadUrl and file from the formik values
+					delete values.uploadUrl;
+					delete values.file;
+				}
 				result = await createEntity({
 					variables: {
 						data: values,
 					},
+					refetchQueries: [`AdminUIListPage`],
 				});
 			}
 

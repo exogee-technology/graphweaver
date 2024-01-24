@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "0.2.14",
+	"version": "0.2.15",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -37,7 +37,7 @@
 		"serverless-dotenv-plugin": "4.0.2",
 		"serverless-offline": "12.0.2",
 		"type-graphql": "2.0.0-beta.2",
-		"vite": "4.3.9",
+		"vite": "4.5.2",
 		"vite-plugin-graphweaver": "workspace:*",
 		"vite-plugin-svgr": "3.2.0"
 	},

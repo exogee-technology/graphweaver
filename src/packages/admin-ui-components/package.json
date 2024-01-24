@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "0.2.14",
+	"version": "0.2.15",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -58,7 +58,7 @@
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
 		"typescript": "5.0.2",
-		"vite": "4.3.9",
+		"vite": "4.5.2",
 		"vite-plugin-svgr": "3.2.0",
 		"vitest": "1.1.1"
 	},

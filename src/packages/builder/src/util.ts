@@ -31,7 +31,7 @@ export const baseEsbuildConfig: BuildOptions = {
 	bundle: true,
 	sourcemap: true,
 	platform: 'node',
-	target: ['node16'],
+	target: ['node18'],
 	format: 'cjs',
 	watch: true,
 	keepNames: true,
@@ -41,10 +41,12 @@ export const baseEsbuildConfig: BuildOptions = {
 		'oracledb',
 		'bun:ffi',
 		'mysql',
+		'mysql2',
 		'sqlite3',
 		'better-sqlite3',
 		'mock-aws-s3',
 		'nock',
+		'aws-sdk',
 	],
 };
 
@@ -68,11 +70,19 @@ export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
 			// If it's available locally then it should be bundled,
 			// otherwise let it be external in the resulting bundle.
 			try {
-				const resolvedPath = require.resolve(path);
+				// If we are running Graphweaver build as part of an end-to-end
+				// test, then let's look up the end-to-end node_modules dir,
+				// rather than the one in the 'builder' package
+				const resolvedPath = require.resolve(path, {
+					...(process.cwd().includes('end-to-end')
+						? { paths: ['../end-to-end/node_modules'] }
+						: {}),
+				});
 
 				return { path: resolvedPath, external: false };
 			} catch (error) {
 				// Ok, it's out.
+				console.log('Externalising package:', path);
 				return { path, external: true };
 			}
 		});

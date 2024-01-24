@@ -1,5 +1,5 @@
 import { Arg, Field, ID, ObjectType, Root, getMetadataStorage } from 'type-graphql';
-import { BaseDataEntity, GraphQLEntity, ReadOnly } from '@exogee/graphweaver';
+import { BaseDataEntity, GraphQLEntity, ReadOnly, ReadOnlyProperty } from '@exogee/graphweaver';
 
 import { CognitoUserBackendEntity } from './backendEntity';
 
@@ -8,7 +8,7 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	@Field(() => ID)
 	id!: string;
 
-	@ReadOnly()
+	@ReadOnlyProperty()
 	@Field(() => String)
 	async username(@Root() dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Username;
@@ -19,7 +19,7 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 		return dataEntity.dataEntity.Enabled;
 	}
 
-	@ReadOnly()
+	@ReadOnlyProperty()
 	@Field(() => String, { nullable: true })
 	async email(@Root() dataEntity: CognitoUserBackendEntity) {
 		return (

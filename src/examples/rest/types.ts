@@ -52,9 +52,15 @@ export type AdminUiFieldAttributeMetadata = {
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type AdminUiFieldExtentionsMetadata = {
+  __typename?: 'AdminUiFieldExtentionsMetadata';
+  key?: Maybe<Scalars['String']['output']>;
+};
+
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
@@ -82,10 +88,60 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
+export type Credential = {
+  __typename?: 'Credential';
+  id: Scalars['ID']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type CredentialCreateOrUpdateInput = {
+  confirm?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CredentialInsertInput = {
+  confirm: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
+export type CredentialsListFilter = {
+  _and?: InputMaybe<Array<CredentialsListFilter>>;
+  _not?: InputMaybe<CredentialsListFilter>;
+  _or?: InputMaybe<Array<CredentialsListFilter>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['String']['input']>;
+  username_null?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CredentialsOrderByInput = {
+  id?: InputMaybe<Sort>;
+  username?: InputMaybe<Sort>;
+};
+
+export type CredentialsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<CredentialsOrderByInput>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword: Token;
-  createLoginPassword: Token;
+  createCredential: Credential;
   createOrUpdateTags: Array<Tag>;
   createOrUpdateTasks: Array<Task>;
   createOrUpdateUsers: Array<User>;
@@ -107,6 +163,7 @@ export type Mutation = {
   sendChallengeMagicLink: Scalars['Boolean']['output'];
   sendLoginMagicLink: Scalars['Boolean']['output'];
   sendOTPChallenge: Scalars['Boolean']['output'];
+  updateCredential: Credential;
   updateTag: Tag;
   updateTags: Array<Tag>;
   updateTask: Task;
@@ -125,10 +182,8 @@ export type MutationChallengePasswordArgs = {
 };
 
 
-export type MutationCreateLoginPasswordArgs = {
-  confirm: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  username: Scalars['String']['input'];
+export type MutationCreateCredentialArgs = {
+  data: CredentialInsertInput;
 };
 
 
@@ -218,6 +273,11 @@ export type MutationSendLoginMagicLinkArgs = {
 };
 
 
+export type MutationUpdateCredentialArgs = {
+  data: CredentialCreateOrUpdateInput;
+};
+
+
 export type MutationUpdateTagArgs = {
   data: TagCreateOrUpdateInput;
 };
@@ -299,12 +359,25 @@ export type Query = {
   __typename?: 'Query';
   _graphweaver: AdminUiMetadata;
   canEnrolWallet: Scalars['Boolean']['output'];
+  credential?: Maybe<Credential>;
+  credentials: Array<Credential>;
   tag?: Maybe<Tag>;
   tags: Array<Tag>;
   task?: Maybe<Task>;
   tasks: Array<Task>;
   user?: Maybe<User>;
   users: Array<User>;
+};
+
+
+export type QueryCredentialArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryCredentialsArgs = {
+  filter?: InputMaybe<CredentialsListFilter>;
+  pagination?: InputMaybe<CredentialsPaginationInput>;
 };
 
 

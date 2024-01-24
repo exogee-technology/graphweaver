@@ -1,14 +1,18 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
 import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	AuthorizationContext,
 	ForbiddenError,
+	Credential,
+	RequestParams,
+	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 const user = new UserProfile({
 	id: '1',
@@ -17,8 +21,19 @@ const user = new UserProfile({
 });
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver() {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+) {
 	async authenticate(username: string, password: string) {
+		return user;
+	}
+	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
+		return user;
+	}
+	async update(
+		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+	): Promise<UserProfile> {
 		return user;
 	}
 }

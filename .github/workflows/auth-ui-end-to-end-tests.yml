@@ -1,0 +1,89 @@
+name: Auth UI End to End Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  auth-ui-end-to-end-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 8.6.9
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: 🔥 Initialize MySQL
+        run: sudo systemctl start mysql.service
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Install Playwright Browsers
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Setup Rest Database
+        working-directory: src/examples/rest
+        timeout-minutes: 2
+        run: |
+          pnpm import-database
+        env:
+          CI: true
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: root
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_REST_BASE_URL: "https://swapi.info/api"
+          envkey_DATABASE_HOST: 127.0.0.1
+          envkey_DATABASE_USERNAME: root
+          envkey_DATABASE_PASSWORD: root
+          envkey_AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+          envkey_AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
+          envkey_AUTH_WHITELIST_DOMAINS: localhost
+          directory: src/examples/rest
+
+      - name: Start and Test Rest Example
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 2
+        run: |
+          pnpm start-auth-server &
+          sleep 5 &&
+          pnpm test-ui-auth &&
+          killall node
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: src/packages/end-to-end/playwright-report/
+          retention-days: 30
+        env:
+          CI: true
