@@ -112,6 +112,7 @@ export const ExportModal = ({
 					<Spinner />
 					<div className={styles.buttonContainer}>
 						<Button
+							type="reset"
 							onClick={() => {
 								abortRef.current = true;
 							}}
