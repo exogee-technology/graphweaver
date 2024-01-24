@@ -56,38 +56,49 @@ const generateIndividualTypeFiles = async (
 	documents: Source[],
 	typesOutputPaths: string[]
 ) => {
-	console.info('PLUCKING GQL');
+	console.info('PLUCKING GQL from custom components');
 
-	const fileList = await glob('./src/**/!(*.generated).{ts,tsx}');
+	const list = await nearOperationFilePreset.buildGeneratesSection({
+		presetConfig: {
+			extension: '.generated.ts',
+			baseTypesPath: 'types.generated.ts',
+		},
+		plugins: [{ typescriptOperationsPlugin: {} }, { typescriptReactApolloPlugin: {} }],
+		schema,
+		documents,
+		config,
+		pluginMap: {
+			typescriptOperationsPlugin: typescriptOperations,
+			typescriptReactApolloPlugin: typescriptReactApollo,
+		},
+		baseOutputDir: '.',
+	});
 
-	for (const filename of fileList) {
-		console.info('filename', filename);
-		const fileparts = filename.split('.') ?? [];
-		const outfile = fileparts[0].concat('.generated.', fileparts[1]);
-		console.info('outfile', outfile);
-		const source: Source = {
-			location: filename,
-		};
+	console.info('list', list);
 
-		const fileContent = await codegen({
-			plugins: [{ typescriptOperationsPlugin: {} }, { typescriptReactApolloPlugin: {} }],
-			schema,
-			documents: [source],
-			filename: outfile,
-			config,
-			pluginMap: {
-				typescriptOperationsPlugin: typescriptOperations,
-				typescriptReactApolloPlugin: typescriptReactApollo,
-			},
-		});
+	const result: GeneratedFile[] = [];
 
-		typesOutputPaths.forEach((outputPath: string) => {
-			console.info(`writing file ${outfile}`);
-			fs.writeFileSync(path.join(outputPath, outfile), content.concat('\n', fileContent));
-		});
-	}
+	list.forEach((args) => {
+		codegen({
+			...args,
+		})
+			.then((output) => {
+				result.push({
+					filename: args.filename,
+					content: output,
+				});
+			})
+			.catch((e) => console.error(e));
+	});
 
-	console.info('DONE');
+	console.info('result', result);
+
+	result.forEach((f) => {
+		fs.writeFileSync(f.filename, f.content);
+		console.info(f.filename);
+	});
+
+	console.info('DONE PLUCKING');
 };
 
 const generateFiles = async (schemaAsString: string, typesOutputPaths: string[]) => {
@@ -212,7 +223,7 @@ const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
 	// Ensure that all paths have a filename and add one if it does not exist
 	typesOutput.forEach((filepath, index) => {
 		if (!filepath.includes('.ts')) {
-			typesOutput[index] = path.join(filepath, '/types.ts');
+			typesOutput[index] = path.join(filepath, '/types.generated.ts');
 		}
 	});
 
