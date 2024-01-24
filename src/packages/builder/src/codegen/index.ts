@@ -86,6 +86,8 @@ const generateFiles = async (schemaAsString: string) => {
 			loaders: [new CodeFileLoader()],
 		});
 	} catch (e) {
+		// typically the error is that none of the matching files are relevant
+		console.info(e);
 		documents = [];
 	}
 
