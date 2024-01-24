@@ -15,7 +15,7 @@ export const getOrderByQuery = (sort?: SortField[]) => ({
 		: { id: 'ASC' }),
 });
 
-export const getAndFiltersQuery = (filters: FieldFilter) => {
+export const wrapFilterWithAndOperator = (filters: FieldFilter) => {
 	const filter = Object.entries(filters)
 		.map(([_, _filter]) => _filter)
 		.filter((_filter): _filter is Filter => _filter !== undefined);
