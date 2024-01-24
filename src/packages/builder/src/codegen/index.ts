@@ -62,7 +62,7 @@ const generateIndividualTypeFiles = async (
 
 	const tasks = argsList.map(async (args) => {
 		const output = await codegen(args);
-		fs.promises.writeFile(args.filename, output);
+		fs.promises.writeFile(args.filename, content.concat('\n', output));
 	});
 
 	await Promise.all(tasks);
@@ -76,6 +76,7 @@ const generateFiles = async (schemaAsString: string) => {
 		skipDocumentsValidation: {
 			skipDuplicateValidation: true, // A flag to disable the validation for duplicate query and mutation names we don't need this as we are using near-operation-file
 		},
+		sort: true,
 	};
 
 	let documents: Source[] = [];
