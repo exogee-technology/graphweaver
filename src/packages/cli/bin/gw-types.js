@@ -23,8 +23,7 @@ const generateTypes = async () => {
 	await graphweaver.stopServer();
 };
 
-generateTypes()
-	.catch((e) => {
-		console.error(e);
-		process.exit(1);
-	});
+generateTypes().catch((e) => {
+	console.error(e);
+	process.exit(1);
+});
