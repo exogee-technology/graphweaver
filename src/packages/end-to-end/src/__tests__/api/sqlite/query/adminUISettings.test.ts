@@ -105,9 +105,9 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	@MediaField({
 		storageProvider: mockS3StorageProvider,
 		resourceId: 'title',
-		mediaType: MediaTypes.VIDEO,
+		mediaType: MediaTypes.OTHER,
 	})
-	videoDownloadUrl?: string;
+	otherMediaDownloadUrl?: string;
 }
 
 const connection = {
@@ -211,22 +211,22 @@ test('Test the decorator adminUISettings', async () => {
 	expect(imageDownloadUrlField).not.toBeNull();
 	expect(imageDownloadUrlField?.type).toBe('Image');
 
-	// Test that the type of the videoDownloadUrl field is Media
-	const videoDownloadUrlField = artistEntity?.fields.find(
-		(field) => field.name === 'videoDownloadUrl'
+	// Test that the type of the otherMediaDownloadUrl field is Media
+	const otherMediaDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'otherMediaDownloadUrl'
 	);
 
-	console.log(videoDownloadUrlField);
-	expect(videoDownloadUrlField).not.toBeNull();
-	expect(videoDownloadUrlField?.type).toBe('Media');
+	console.log(otherMediaDownloadUrlField);
+	expect(otherMediaDownloadUrlField).not.toBeNull();
+	expect(otherMediaDownloadUrlField?.type).toBe('Media');
 
 	// Test that the field is readonly
 	expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
-	expect(videoDownloadUrlField?.attributes?.isReadOnly).toBe(true);
+	expect(otherMediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
 
 	// Test that the extension object exists and includes the key
 	expect(imageDownloadUrlField?.extensions).not.toBeNull();
-	expect(videoDownloadUrlField?.extensions).not.toBeNull();
+	expect(otherMediaDownloadUrlField?.extensions).not.toBeNull();
 	expect(imageDownloadUrlField?.extensions?.key).toBe('title');
-	expect(videoDownloadUrlField?.extensions?.key).toBe('title');
+	expect(otherMediaDownloadUrlField?.extensions?.key).toBe('title');
 });
