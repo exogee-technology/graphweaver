@@ -7,7 +7,7 @@ export interface ModalProps {
 	isOpen: boolean;
 	onRequestClose?: () => void;
 	className?: string;
-	title: string | React.ReactElement;
+	title?: string | React.ReactElement;
 	modalContent?: React.ReactElement;
 	footerContent?: React.ReactElement;
 	hideCloseX?: boolean;
@@ -75,20 +75,22 @@ export const Modal = ({
 						className={classNames(className || [styles.wrapper, fullScreen && styles.fullScreen])}
 					>
 						<div className={styles.content}>
-							<div className={styles.headerWrapper}>
-								<div className={styles.header}>
-									<div className={styles.title}>{title}</div>
-									{hideCloseX ? null : (
-										<div className={styles.iconContainer} onClick={onRequestClose}>
-											<div className={styles.closeIconWrapper}>
-												<div className={styles.closeIconLeft}>
-													<div className={styles.closeIconRight}></div>
+							{title && (
+								<div className={styles.headerWrapper}>
+									<div className={styles.header}>
+										<div className={styles.title}>{title}</div>
+										{hideCloseX ? null : (
+											<div className={styles.iconContainer} onClick={onRequestClose}>
+												<div className={styles.closeIconWrapper}>
+													<div className={styles.closeIconLeft}>
+														<div className={styles.closeIconRight}></div>
+													</div>
 												</div>
 											</div>
-										</div>
-									)}
+										)}
+									</div>
 								</div>
-							</div>
+							)}
 							{modalContent && <div className={styles.contentWrapper}>{modalContent}</div>}
 							{footerContent && <div className={styles.footerWrapper}>{footerContent}</div>}
 						</div>

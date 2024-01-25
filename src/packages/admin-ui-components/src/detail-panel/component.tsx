@@ -1,16 +1,15 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
-import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 
 import {
 	CustomField,
 	decodeSearchParams,
-	Entity,
 	EntityField,
 	queryForEntity,
 	routeFor,
@@ -39,10 +38,6 @@ interface ResultBaseType {
 	id: string;
 	[x: string]: unknown;
 }
-// click link
-// puhs redirect url from link component "confrimRedirectUrl=title"
-// modall will watvh watch for redirct url variale
-// cance
 
 const getField = ({ field }: { field: EntityField }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
@@ -195,12 +190,17 @@ export const DetailPanel = () => {
 
 	const onClose = () => {
 		const path = window.location.pathname;
+		const entityName = selectedEntity.name;
+
+		// This pattern checks that the entity name exists between two forward slashes
+		const regexPattern = new RegExp(`/${entityName}/`);
 		// If the path does not include the entity name, then we've already moved to a different entity
-		// Navigate to that path to close the overlay
-		if (!path.includes(selectedEntity.name)) {
+		// Navigate to the current path to close the overlay
+		if (!regexPattern.test(path)) {
 			navigate(path);
 			return;
 		}
+
 		const { filters, sort } = decodeSearchParams(search);
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	};
@@ -365,9 +365,6 @@ export const DetailPanel = () => {
 	// Callback to be called when the user confirms leaving the page
 	const handleConfirmLeave = () => {
 		if (!modalRedirectUrl) return;
-		// @todo
-		// if the modalRedirectUrl is local, then navigate to it
-		// if it's not local open it in a new tab
 
 		navigate(modalRedirectUrl, { replace: true });
 	};
@@ -412,16 +409,24 @@ export const DetailPanel = () => {
 			/>
 			<Modal
 				isOpen={!!modalRedirectUrl}
-				title="You have unsaved changes"
+				hideCloseX
 				modalContent={
-					<div>Are you sure you want to leave this entity? Your changes will not be saved.</div>
-				}
-				footerContent={
 					<>
-						<button onClick={handleCancelLeave}>Cancel</button>
-						<button onClick={handleConfirmLeave}>Discard Changes</button>
+						<div className={styles.unsavedChangesTitle}>You have unsaved changes</div>
+						<div className={styles.unsavedChangesContent}>
+							Are you sure you want to leave this entity? Your changes will not be saved.
+						</div>
+						<div className={styles.unsavedChangesButtonRow}>
+							<Button className={styles.unsavedChangesButton} onClick={handleCancelLeave}>
+								Cancel
+							</Button>
+							<Button className={styles.unsavedChangesButton} onClick={handleConfirmLeave}>
+								Discard Changes
+							</Button>
+						</div>
 					</>
 				}
+				className={styles.unsavedChangesModal}
 			/>
 		</>
 	);
