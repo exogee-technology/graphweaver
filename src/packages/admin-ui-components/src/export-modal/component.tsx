@@ -25,12 +25,10 @@ const pageSizeVar = import.meta.env.VITE_EXPORT_PAGE_SIZE;
 const pageSize = pageSizeVar ? parseInt(pageSizeVar) : 200;
 
 export const ExportModal = ({
-	showModal,
 	closeModal,
 	sort,
 	filters,
 }: {
-	showModal: boolean;
 	closeModal: () => void;
 	sort?: SortField[];
 	filters?: FieldFilter;
@@ -41,12 +39,6 @@ export const ExportModal = ({
 	const abortRef = useRef(false);
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
-	const closeAndReset = () => {
-		abortRef.current = false;
-		closeModal();
-		setDisplayPageNumber(1);
-	};
 
 	const fetchAll = async () => {
 		try {
@@ -88,20 +80,18 @@ export const ExportModal = ({
 				duration: 5000,
 			});
 		} finally {
-			closeAndReset();
+			closeModal();
 		}
 	};
 
 	useEffect(() => {
-		if (showModal) {
-			fetchAll();
-		}
-	}, [showModal]);
+		fetchAll();
+	}, []);
 
 	return (
 		<Modal
 			hideCloseX
-			isOpen={showModal}
+			isOpen
 			className={styles.exportContainer}
 			title={`Export ${selectedEntity.name} to CSV`}
 			modalContent={
@@ -115,6 +105,7 @@ export const ExportModal = ({
 							type="reset"
 							onClick={() => {
 								abortRef.current = true;
+								closeModal();
 							}}
 						>
 							Cancel

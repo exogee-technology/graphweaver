@@ -130,12 +130,9 @@ export const List = () => {
 				error={error}
 			/>
 			<Outlet />
-			<ExportModal
-				showModal={showExportModal}
-				closeModal={() => setShowExportModal(false)}
-				sort={sort}
-				filters={filters}
-			/>
+			{showExportModal ? (
+				<ExportModal closeModal={() => setShowExportModal(false)} sort={sort} filters={filters} />
+			) : null}
 		</>
 	);
 };
