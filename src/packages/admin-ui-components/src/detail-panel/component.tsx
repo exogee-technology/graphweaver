@@ -362,13 +362,12 @@ export const DetailPanel = () => {
 		window.sessionStorage.removeItem(persistName);
 	};
 
-	// Callback to be called when the user confirms leaving the page
 	const handleConfirmLeave = () => {
 		if (!modalRedirectUrl) return;
 
 		navigate(modalRedirectUrl, { replace: true });
 	};
-	// Callback to be called when the user cancels leaving the page
+
 	const handleCancelLeave = () => {
 		// Close the unsaved changes modal via clearing the modalRedirectUrl
 		setSearchParams({ modalRedirectUrl: '' });
