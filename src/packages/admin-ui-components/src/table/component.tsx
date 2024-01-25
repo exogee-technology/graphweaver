@@ -57,7 +57,7 @@ const columnsForEntity = <T extends TableRowItem>(
 
 					if (Array.isArray(value)) {
 						// We're in a many relationship. Return an array of links.
-						return value.map(linkForValue);
+						return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
 					} else if (value) {
 						return linkForValue(value);
 					} else {
