@@ -21,9 +21,6 @@ import {
 } from '../utils';
 import { GetEntity } from './graphql';
 
-const pageSizeVar = import.meta.env.VITE_EXPORT_PAGE_SIZE;
-const pageSize = pageSizeVar ? parseInt(pageSizeVar) : 200;
-
 export const ExportModal = ({
 	closeModal,
 	sort,
@@ -39,6 +36,8 @@ export const ExportModal = ({
 	const abortRef = useRef(false);
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
+	const pageSize = selectedEntity.attributes.exportPageSize || 200;
 
 	const fetchAll = async () => {
 		try {
