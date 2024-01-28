@@ -59,6 +59,12 @@ export interface GraphweaverConfig {
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
 	public schema: GraphQLSchema;
+	public async assertServerStarted() {
+		this.server.assertStarted('The server is not running');
+	}
+	public async startServer() {
+		await this.server.start();
+	}
 	public async stopServer() {
 		await this.server.stop();
 	}
