@@ -216,7 +216,6 @@ test('Test the decorator adminUISettings', async () => {
 		(field) => field.name === 'otherMediaDownloadUrl'
 	);
 
-	console.log(otherMediaDownloadUrlField);
 	expect(otherMediaDownloadUrlField).not.toBeNull();
 	expect(otherMediaDownloadUrlField?.type).toBe('Media');
 

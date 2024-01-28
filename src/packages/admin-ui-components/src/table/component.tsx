@@ -69,16 +69,22 @@ const columnsForEntity = <T extends TableRowItem>(
 					const imageUrl = row[field.name as keyof typeof row] as string;
 
 					return (
-						<img
-							src={imageUrl}
-							// alt={altText} @todo - implement alt text
-							style={{
-								position: 'absolute',
-								top: '50%',
-								left: '50%',
-								transform: 'translate(-50%, -50%)',
-							}}
-						/>
+						<div className={styles.imageContainer}>
+							<img
+								src={imageUrl}
+								// alt={altText} @todo - implement alt text
+								style={{
+									position: 'absolute',
+									top: '50%',
+									left: '50%',
+									transform: 'translate(-50%, -50%)',
+									// clipPath:
+									// 	'polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%)',
+									borderRadius: '10px',
+									objectFit: 'cover',
+								}}
+							/>
+						</div>
 					);
 			  }
 			: field.type === 'Media'
