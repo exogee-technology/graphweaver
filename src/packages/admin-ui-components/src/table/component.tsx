@@ -25,6 +25,10 @@ import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 // which is not what we want. We want to navigate and not let the grid handle it
 const gobbleEvent = (e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation();
 
+const hideImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+	e.currentTarget.style.display = 'none';
+};
+
 const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
@@ -69,22 +73,20 @@ const columnsForEntity = <T extends TableRowItem>(
 					const imageUrl = row[field.name as keyof typeof row] as string;
 
 					return (
-						<div className={styles.imageContainer}>
-							<img
-								src={imageUrl}
-								// alt={altText} @todo - implement alt text
-								style={{
-									position: 'absolute',
-									top: '50%',
-									left: '50%',
-									transform: 'translate(-50%, -50%)',
-									// clipPath:
-									// 	'polygon(15% 0, 85% 0, 100% 15%, 100% 85%, 85% 100%, 15% 100%, 0 85%, 0 15%)',
-									borderRadius: '10px',
-									objectFit: 'cover',
-								}}
-							/>
-						</div>
+						<img
+							src={imageUrl}
+							// alt={altText} @todo - implement alt text
+							style={{
+								width: '100%',
+								height: '100%',
+								objectFit: 'cover',
+								padding: 2,
+								borderRadius: 8,
+								objectPosition: 'center center',
+								textIndent: -9999,
+							}}
+							onError={hideImage}
+						/>
 					);
 			  }
 			: field.type === 'Media'
