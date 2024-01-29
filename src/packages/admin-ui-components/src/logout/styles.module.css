@@ -1,0 +1,16 @@
+.buttonContainer {
+    height: 28px;
+    left: 8px;
+    padding: 0px 16px;
+    border-radius: 6px;
+}
+
+.logoutButton, .logoutButton:hover {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.logoutButton:hover {
+    text-decoration: underline;
+}
