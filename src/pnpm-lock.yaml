@@ -647,6 +647,9 @@ importers:
       '@graphiql/toolkit':
         specifier: 0.8.2
         version: 0.8.2(graphql@16.8.1)
+      CheckBox:
+        specifier: link:@inovua/reactdatagrid-community/packages/CheckBox
+        version: link:@inovua/reactdatagrid-community/packages/CheckBox
       classnames:
         specifier: 2.3.2
         version: 2.3.2

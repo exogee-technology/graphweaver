@@ -1,4 +1,10 @@
-import DataGrid, { Column, FormatterProps, SortColumn } from 'react-data-grid';
+import DataGrid, {
+	Column,
+	FormatterProps,
+	SortColumn,
+	SelectColumn,
+	CalculatedColumn,
+} from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -29,69 +35,71 @@ const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
-	const entityColumns = entity.fields.map((field) => ({
-		key: field.name,
-		name: field.name,
-		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
+	const entityColumns = [SelectColumn].concat(
+		entity.fields.map((field) => ({
+			key: field.name,
+			name: field.name,
+			width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
 
-		// We don't support sorting by relationships yet.
-		sortable: !field.relationshipType,
+			// We don't support sorting by relationships yet.
+			sortable: !field.relationshipType,
 
-		formatter: field.relationshipType
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const value = row[field.name as keyof typeof row];
-					const relatedEntity = entityByType(field.type);
+			formatter: field.relationshipType
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const value = row[field.name as keyof typeof row];
+						const relatedEntity = entityByType(field.type);
 
-					const linkForValue = (value: any) =>
-						relatedEntity ? (
-							<Link
-								key={value.value}
-								to={routeFor({ type: field.type, id: value.value as string })}
-								onClick={gobbleEvent}
-							>
-								{value.label}
-							</Link>
-						) : (
-							value.label
+						const linkForValue = (value: any) =>
+							relatedEntity ? (
+								<Link
+									key={value.value}
+									to={routeFor({ type: field.type, id: value.value as string })}
+									onClick={gobbleEvent}
+								>
+									{value.label}
+								</Link>
+							) : (
+								value.label
+							);
+
+						if (Array.isArray(value)) {
+							// We're in a many relationship. Return an array of links.
+							return value.map(linkForValue);
+						} else if (value) {
+							return linkForValue(value);
+						} else {
+							return null;
+						}
+				  }
+				: field.type === 'Image'
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const imageUrl = row[field.name as keyof typeof row] as string;
+
+						return (
+							<img
+								src={imageUrl}
+								// alt={altText} @todo - implement alt text
+								style={{
+									position: 'absolute',
+									top: '50%',
+									left: '50%',
+									transform: 'translate(-50%, -50%)',
+								}}
+							/>
 						);
-
-					if (Array.isArray(value)) {
-						// We're in a many relationship. Return an array of links.
-						return value.map(linkForValue);
-					} else if (value) {
-						return linkForValue(value);
-					} else {
-						return null;
-					}
-			  }
-			: field.type === 'Image'
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const imageUrl = row[field.name as keyof typeof row] as string;
-
-					return (
-						<img
-							src={imageUrl}
-							// alt={altText} @todo - implement alt text
-							style={{
-								position: 'absolute',
-								top: '50%',
-								left: '50%',
-								transform: 'translate(-50%, -50%)',
-							}}
-						/>
-					);
-			  }
-			: field.type === 'Media'
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const mediaUrl = row[field.name as keyof typeof row] as string;
-					return (
-						<a href={mediaUrl} target="_blank" rel="noreferrer">
-							{mediaUrl}
-						</a>
-					);
-			  }
-			: undefined,
-	}));
+				  }
+				: field.type === 'Media'
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const mediaUrl = row[field.name as keyof typeof row] as string;
+						return (
+							<a href={mediaUrl} target="_blank" rel="noreferrer">
+								{mediaUrl}
+							</a>
+						);
+				  }
+				: undefined,
+		}))
+	);
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
@@ -160,6 +168,7 @@ export const Table = <T extends TableRowItem>({
 	const [search] = useSearchParams();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
+	const [selectedRows, setSelectedRows] = useState((): ReadonlySet<string> => new Set());
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
 		// Return true when the scrollTop reaches the bottom ...
@@ -189,7 +198,16 @@ export const Table = <T extends TableRowItem>({
 	}, [sortColumns]);
 
 	const navigateToDetailForEntity = useCallback(
-		(row: T) => {
+		(row: T, column: CalculatedColumn<T, unknown>) => {
+			console.log('row', row);
+			console.log('column', column);
+			// Don't navigate if the user has just selected this row
+			// if the last selected row is the same as the id of the row we're clicking on, then we're just selecting it. Not navigating
+			if (column.key === 'select-row') {
+				console.log('not navigating because row is selected');
+				return;
+			}
+
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
 			// Don't set the filter in the route
 			const { filters, sort } = decodeSearchParams(search);
@@ -207,6 +225,12 @@ export const Table = <T extends TableRowItem>({
 		return <pre>{`Error! ${error.message}`}</pre>;
 	}
 
+	const handleSelectedRowsChange = (selectedRows: Set<string>) => {
+		// console.log('selected rows', selectedRows);
+		// convert the string set to a number set
+		const selectedRowsAsNumbers = new Set<number>([...selectedRows].map((id) => parseInt(id)));
+		setSelectedRows(selectedRows);
+	};
 	return (
 		<>
 			<DataGrid
@@ -216,6 +240,8 @@ export const Table = <T extends TableRowItem>({
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
 				defaultColumnOptions={{ resizable: true }}
+				onSelectedRowsChange={handleSelectedRowsChange}
+				selectedRows={selectedRows}
 				onRowClick={navigateToDetailForEntity}
 				rowClass={rowClass}
 				onScroll={handleScroll}
@@ -224,6 +250,11 @@ export const Table = <T extends TableRowItem>({
 			{loadingNext && (
 				<div className={styles.spinner}>
 					<Spinner />
+				</div>
+			)}
+			{selectedRows.size > 0 && (
+				<div className={styles.selectedRows}>
+					{selectedRows.size} row{selectedRows.size > 1 ? 's' : ''} selected
 				</div>
 			)}
 		</>
