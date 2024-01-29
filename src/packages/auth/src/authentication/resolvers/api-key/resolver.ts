@@ -30,18 +30,6 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 	class PasswordAuthResolver extends createApiKeyBaseResolver(gqlEntityType, provider) {
 		provider = provider;
 
-		async getUserProfile(
-			id: string,
-			operation: SecretOperation,
-			params: RequestParams
-		): Promise<UserProfile> {
-			// Use the operation type to decide what actions to perform
-			// A register action could send an email verification for example
-			throw new Error(
-				'Method getUser not implemented for PasswordAuthResolver: Override this function to return a user profile'
-			);
-		}
-
 		async authenticate(key: string, secret: string, params: RequestParams): Promise<ApiKeyStorage> {
 			const apiKey = await this.provider.findOne({
 				key,
@@ -50,12 +38,14 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 			if (!apiKey) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 			if (!apiKey.secret)
 				throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
+			if (!apiKey.revoked)
+				throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 
 			if (await verifyPassword(secret, apiKey.secret)) {
 				return apiKey;
 			}
 
-			throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
+			throw new AuthenticationError('Bad Request: Authentication Failed. (E0004)');
 		}
 
 		public async runAfterHooks<H extends HookParams<ApiKeyCreateOrUpdateInputArgs>>(

@@ -6,6 +6,10 @@ import { AuthTokenProvider, isExpired } from '../token';
 import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
 import { UserProfile } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
+import { AuthenticationError } from 'apollo-server-errors';
+import { verifyPassword } from '../../utils/argon2id';
+import { BackendProvider } from '@exogee/graphweaver';
+import { ApiKey, ApiKeyStorage } from '../entities';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -43,8 +47,9 @@ const isURLWhitelisted = (authRedirect: URL) => {
 	);
 };
 
-export const authApolloPlugin = (
-	addUserToContext: (userId: string) => Promise<UserProfile>
+export const authApolloPlugin = <D extends ApiKeyStorage>(
+	addUserToContext: (userId: string) => Promise<UserProfile>,
+	provider?: BackendProvider<D, ApiKey<D>>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
@@ -58,6 +63,7 @@ export const authApolloPlugin = (
 
 			// We may need to return a redirect to the client. If so, we'll set this variable.
 			const authHeader = request.http?.headers.get('authorization');
+			const apiKeyHeader = request.http?.headers.get('X-API-Key');
 			const authRedirect = new URL(
 				request.http?.headers.get(REDIRECT_HEADER) ?? requireEnvironmentVariable('AUTH_BASE_URI')
 			);
@@ -71,8 +77,36 @@ export const authApolloPlugin = (
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
 
-			// Case 1. No auth header or it has expired.
-			if (!authHeader || isExpired(authHeader)) {
+			if (apiKeyHeader && provider) {
+				// Case 1. API Key auth header found.
+				logger.trace('X-API-Key header found checking validity.');
+
+				const credentials = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
+				const key = credentials[0];
+				const secret = credentials[1];
+
+				const apiKey = await provider?.findOne({
+					key,
+				});
+
+				if (!apiKey) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
+				if (!apiKey.secret)
+					throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
+				if (!apiKey.revoked)
+					throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
+
+				if (await verifyPassword(secret, apiKey.secret)) {
+					// We are a guest and have not logged in yet.
+					contextValue.user = new UserProfile({
+						id: key,
+						roles: ['SYSTEM_USER'],
+					});
+					upsertAuthorizationContext(contextValue);
+				} else {
+					throw new AuthenticationError('Bad Request: Authentication Failed. (E0004)');
+				}
+			} else if (!authHeader || isExpired(authHeader)) {
+				// Case 1. No auth header or it has expired.
 				logger.trace('No Auth header, setting redirect');
 
 				// We are a guest and have not logged in yet.

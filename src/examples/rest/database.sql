@@ -42,7 +42,8 @@ CREATE TABLE credential (
 CREATE TABLE api_key (
   id INT AUTO_INCREMENT PRIMARY KEY,
   api_key VARCHAR(255) NOT NULL UNIQUE,
-  secret VARCHAR(255) NOT NULL
+  secret VARCHAR(255) NOT NULL,
+	revoked BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE authentication (

@@ -12,4 +12,7 @@ export class ApiKey extends BaseEntity implements ApiKeyStorage {
 
 	@Property({ type: String })
 	secret!: string;
+
+	@Property({ type: Boolean })
+	revoked!: boolean;
 }
