@@ -22,8 +22,7 @@ describe('GraphQL JSON Scalar Type', () => {
 			resolvers: [JsonResolver],
 		});
 
-		graphweaver.handler();
-		assert(graphweaver.server !== undefined);
+		graphweaver.startServer();
 
 		const response = await graphweaver.server?.executeOperation({
 			query: gql`

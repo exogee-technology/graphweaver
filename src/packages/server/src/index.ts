@@ -136,16 +136,27 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.info(`Graphweaver async called`);
 	}
 
-	public handler(): AWSLambda.APIGatewayProxyHandler {
-		logger.info(`Graphweaver handler called`);
-
+	public startServer() {
 		logger.trace(`Graphweaver starting ApolloServer`);
-		if (!this.server)
+		if (this.server) logger.trace('ApolloServer is already instantiated');
+		else
 			this.server = new ApolloServer<TContext>({
 				...(this.config.apolloServerOptions as any),
 				plugins: this.plugins,
 				schema: this.schema,
 			});
+	}
+
+	public stopServer() {
+		logger.trace(`Graphweaver starting ApolloServer`);
+		if (this.server) this.server.stop();
+		else logger.trace('ApolloServer was not instantiated');
+	}
+
+	public handler(): AWSLambda.APIGatewayProxyHandler {
+		logger.info(`Graphweaver handler called`);
+
+		this.startServer();
 
 		return startServerAndCreateLambdaHandler(
 			// @todo: fix this type, TContext extends BaseContext, this should work
