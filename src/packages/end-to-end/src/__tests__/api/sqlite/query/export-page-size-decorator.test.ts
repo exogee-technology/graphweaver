@@ -84,7 +84,7 @@ class ArtistResolver extends createBaseResolver<Artist, OrmArtist>(
 	new MikroBackendProvider(OrmArtist, connection)
 ) {}
 
-test('Should return isReadOnly attribute for each entity in getAdminUiMetadata', async () => {
+test('Should return exportPageSize attribute for each entity in getAdminUiMetadata', async () => {
 	const graphweaver = new Graphweaver({
 		resolvers: [AlbumResolver, ArtistResolver],
 	});

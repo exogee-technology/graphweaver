@@ -115,7 +115,7 @@ export class CustomerResolver extends createBaseResolver<Customer, OrmCustomer>(
 	new MikroBackendProvider(OrmCustomer, connection)
 ) {}
 
-test('Should return isReadOnly attribute for each entity in getAdminUiMetadata', async () => {
+test('Should return isReadOnly attribute for each field in getAdminUiMetadata', async () => {
 	const graphweaver = new Graphweaver({
 		resolvers: [CustomerResolver],
 	});
