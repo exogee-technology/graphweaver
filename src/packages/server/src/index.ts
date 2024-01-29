@@ -57,17 +57,10 @@ export interface GraphweaverConfig {
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
-	server: ApolloServer<TContext>;
+	server?: ApolloServer<TContext> = undefined;
 	public schema: GraphQLSchema;
-	public async assertServerStarted() {
-		this.server.assertStarted('The server is not running');
-	}
-	public async startServer() {
-		await this.server.start();
-	}
-	public async stopServer() {
-		await this.server.stop();
-	}
+	private plugins: any[];
+
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		resolvers: [],
@@ -118,7 +111,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
 		// Order is important here
-		const plugins = [
+		this.plugins = [
 			MutexRequestsInDevelopment,
 			LogRequests,
 			LogErrors,
@@ -136,13 +129,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			authChecker: config.authChecker ?? (() => true),
 			validate: this.config.enableValidationRules,
 		});
-
-		logger.trace(`Graphweaver starting ApolloServer`);
-		this.server = new ApolloServer<TContext>({
-			...(this.config.apolloServerOptions as any),
-			plugins,
-			schema: this.schema,
-		});
 	}
 
 	public async init() {
@@ -152,6 +138,14 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {
 		logger.info(`Graphweaver handler called`);
+
+		logger.trace(`Graphweaver starting ApolloServer`);
+		if (!this.server)
+			this.server = new ApolloServer<TContext>({
+				...(this.config.apolloServerOptions as any),
+				plugins: [],
+				schema: this.schema,
+			});
 
 		return startServerAndCreateLambdaHandler(
 			// @todo: fix this type, TContext extends BaseContext, this should work

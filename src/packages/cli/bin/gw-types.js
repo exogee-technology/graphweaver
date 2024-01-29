@@ -19,13 +19,6 @@ const generateTypes = async () => {
 
 	const sdl = utils.printSchemaWithDirectives(graphweaver.schema);
 	await builder.codeGenerator(sdl, codegenOptions);
-
-	try {
-		await graphweaver.stopServer();
-	} catch (e) {
-		// typically the error is that the server is not running
-		console.info(e);
-	}
 };
 
 generateTypes().catch((e) => {
