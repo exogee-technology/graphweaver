@@ -2,7 +2,7 @@ import Papa from 'papaparse';
 
 export const convertObjectValueToString = <T>(source: T[]) => {
 	const getObjectValue = (item: any) =>
-		item.hasOwnProperty('label') ? (item as any)['label'] : JSON.stringify(item);
+		item.hasOwnProperty('label') ? item['label'] : JSON.stringify(item);
 
 	const data = source.map(
 		(obj) =>
