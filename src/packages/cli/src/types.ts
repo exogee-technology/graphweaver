@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 
-const asyncExec = async (command: string) => {
-	const output = await new Promise((resolve, reject) => {
+const asyncExec = async (command: string) =>
+	new Promise((resolve, reject) => {
 		const childProcess = exec(command);
 		if (childProcess.stdout)
 			childProcess.stdout.on('data', (data) => {
@@ -21,8 +21,6 @@ const asyncExec = async (command: string) => {
 			resolve(`exec error: ${error}`);
 		});
 	});
-	return output;
-};
 
 export const generateTypes = async () => {
 	await asyncExec(`gw-types`);
