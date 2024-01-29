@@ -84,9 +84,11 @@ const generateFiles = async (schemaAsString: string) => {
 		documents = await loadDocuments('./src/**/!(*.generated).{ts,tsx}', {
 			loaders: [new CodeFileLoader()],
 		});
-	} catch (e) {
-		// typically the error is that none of the matching files are relevant
-		console.info(e);
+	} catch (e: any) {
+		if (e.message.includes('Unable to find any GraphQL type definitions'))
+			// typically none of the matching files are relevant but that's okay
+			console.info('No components found with embedded GQL queries');
+		else console.warn(e);
 	}
 
 	await generateCombinedTypeFiles(config, schema, documents);
