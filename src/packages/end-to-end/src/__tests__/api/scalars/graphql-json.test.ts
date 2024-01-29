@@ -22,6 +22,9 @@ describe('GraphQL JSON Scalar Type', () => {
 			resolvers: [JsonResolver],
 		});
 
+		graphweaver.handler();
+		assert(graphweaver.server !== undefined);
+
 		const response = await graphweaver.server?.executeOperation({
 			query: gql`
 				query {
@@ -29,6 +32,7 @@ describe('GraphQL JSON Scalar Type', () => {
 				}
 			`,
 		});
+
 		assert(response !== undefined);
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.data?.testJson).toMatchObject({ test: 'test' });
