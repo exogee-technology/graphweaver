@@ -7,7 +7,7 @@ export interface ModalProps {
 	isOpen: boolean;
 	onRequestClose?: () => void;
 	className?: string;
-	title: string | React.ReactElement;
+	title?: string | React.ReactElement;
 	modalContent?: React.ReactElement;
 	footerContent?: React.ReactElement;
 	hideCloseX?: boolean;
@@ -31,6 +31,7 @@ export const Modal = ({
 	overlay = true,
 }: ModalProps) => {
 	const modalRef = useRef<HTMLDivElement>(null);
+	const overlayRef = useRef<HTMLDivElement>(null);
 
 	function handleMouseDownEvent(event: DocumentEventMap['mousedown']) {
 		// No ref or target to compare? Return with no action
@@ -44,8 +45,10 @@ export const Modal = ({
 			return;
 		}
 
-		// Otherwise, click was outside the element, check props and trigger event.
-		if (shouldCloseOnOverlayClick) onRequestClose?.();
+		// If the overlay was clicked, close the modal
+		if (shouldCloseOnOverlayClick && overlayRef.current?.contains(event.target as Node)) {
+			onRequestClose?.();
+		}
 	}
 
 	useEffect(() => {
@@ -66,26 +69,28 @@ export const Modal = ({
 	return (
 		<>
 			{isOpen && (
-				<div className={classNames(overlay ? styles.overlay : styles.noOverlay)}>
+				<div ref={overlayRef} className={classNames(overlay ? styles.overlay : styles.noOverlay)}>
 					<div
 						ref={modalRef}
 						className={classNames(className || [styles.wrapper, fullScreen && styles.fullScreen])}
 					>
 						<div className={styles.content}>
-							<div className={styles.headerWrapper}>
-								<div className={styles.header}>
-									<div className={styles.title}>{title}</div>
-									{hideCloseX ? null : (
-										<div className={styles.iconContainer} onClick={onRequestClose}>
-											<div className={styles.closeIconWrapper}>
-												<div className={styles.closeIconLeft}>
-													<div className={styles.closeIconRight}></div>
+							{title && (
+								<div className={styles.headerWrapper}>
+									<div className={styles.header}>
+										<div className={styles.title}>{title}</div>
+										{hideCloseX ? null : (
+											<div className={styles.iconContainer} onClick={onRequestClose}>
+												<div className={styles.closeIconWrapper}>
+													<div className={styles.closeIconLeft}>
+														<div className={styles.closeIconRight}></div>
+													</div>
 												</div>
 											</div>
-										</div>
-									)}
+										)}
+									</div>
 								</div>
-							</div>
+							)}
 							{modalContent && <div className={styles.contentWrapper}>{modalContent}</div>}
 							{footerContent && <div className={styles.footerWrapper}>{footerContent}</div>}
 						</div>

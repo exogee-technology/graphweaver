@@ -1,7 +1,7 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -167,12 +167,14 @@ const SLIDE_ANIMATION_TIME_CSS_VAR_NAME = '--detail-panel-slide-animation-time';
 
 export const DetailPanel = () => {
 	const [open, setOpen] = useState(false);
+	const [search, setSearchParams] = useSearchParams();
+
+	const modalRedirectUrl = search.get('modalRedirectUrl');
 
 	const { id, entity } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName, entityByType } = useSchema();
-	const [search] = useSearchParams();
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
@@ -186,10 +188,22 @@ export const DetailPanel = () => {
 		}
 	);
 
-	const onClose = useCallback(() => {
+	const onClose = () => {
+		const path = window.location.pathname;
+		const entityName = selectedEntity.name;
+
+		// This pattern checks that the entity name exists between two forward slashes
+		const regexPattern = new RegExp(`/${entityName}/`);
+		// If the path does not include the entity name, then we've already moved to a different entity
+		// Navigate to the current path to close the overlay
+		if (!regexPattern.test(path)) {
+			navigate(path);
+			return;
+		}
+
 		const { filters, sort } = decodeSearchParams(search);
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
-	}, [search, selectedEntity]);
+	};
 
 	const customFieldsToShow = (customFields?.get(selectedEntity.name) || []).filter(
 		(customField) => {
@@ -349,32 +363,71 @@ export const DetailPanel = () => {
 		window.sessionStorage.removeItem(persistName);
 	};
 
+	const handleConfirmLeave = () => {
+		if (!modalRedirectUrl) return;
+
+		navigate(modalRedirectUrl, { replace: true });
+	};
+
+	const handleCancelLeave = () => {
+		// Close the unsaved changes modal via clearing the modalRedirectUrl
+		setSearchParams({ modalRedirectUrl: '' });
+	};
+
 	return (
-		<Modal
-			isOpen
-			onRequestClose={closeModal}
-			shouldCloseOnEsc
-			shouldCloseOnOverlayClick
-			className={open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer}
-			title={selectedEntity.name}
-			modalContent={
-				<>
-					{loading ? (
-						<Spinner />
-					) : error ? (
-						<p>Failed to load entity.</p>
-					) : (
-						<DetailForm
-							initialValues={initialValues}
-							detailFields={formFields}
-							onCancel={closeModal}
-							onSubmit={handleOnSubmit}
-							persistName={persistName}
-							isReadOnly={selectedEntity.attributes.isReadOnly}
-						/>
-					)}
-				</>
-			}
-		/>
+		<>
+			<Modal
+				key={selectedEntity.name}
+				isOpen
+				onRequestClose={closeModal}
+				shouldCloseOnEsc
+				shouldCloseOnOverlayClick
+				className={
+					open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer
+				}
+				title={selectedEntity.name}
+				modalContent={
+					<>
+						{loading ? (
+							<Spinner />
+						) : error ? (
+							<p>Failed to load entity.</p>
+						) : (
+							<>
+								<DetailForm
+									initialValues={initialValues}
+									detailFields={formFields}
+									onCancel={closeModal}
+									onSubmit={handleOnSubmit}
+									persistName={persistName}
+									isReadOnly={selectedEntity.attributes.isReadOnly}
+								/>
+							</>
+						)}
+					</>
+				}
+			/>
+			<Modal
+				isOpen={!!modalRedirectUrl}
+				hideCloseX
+				modalContent={
+					<>
+						<div className={styles.unsavedChangesTitle}>You have unsaved changes</div>
+						<div className={styles.unsavedChangesContent}>
+							Are you sure you want to leave this entity? Your changes will not be saved.
+						</div>
+						<div className={styles.unsavedChangesButtonRow}>
+							<Button className={styles.unsavedChangesButton} onClick={handleCancelLeave}>
+								Cancel
+							</Button>
+							<Button className={styles.unsavedChangesButton} onClick={handleConfirmLeave}>
+								Discard Changes
+							</Button>
+						</div>
+					</>
+				}
+				className={styles.unsavedChangesModal}
+			/>
+		</>
 	);
 };
