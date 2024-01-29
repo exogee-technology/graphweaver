@@ -1,4 +1,4 @@
-import { SuccessIcon } from '../assets';
+import { SuccessCheckmark, CloseIcon } from '../assets';
 import { toast, ToastBar, Toaster } from 'react-hot-toast';
 
 import styles from './styles.module.css';
@@ -16,8 +16,8 @@ export const DismissibleToast = () => {
 						padding: '8px 16px',
 					},
 					success: {
-						duration: 60_000,
-						icon: <SuccessIcon className={styles.successIcon} />,
+						duration: 300_000,
+						icon: <SuccessCheckmark className={styles.successIcon} />,
 						style: {
 							background: '#302A3C',
 							color: 'white',
@@ -36,22 +36,16 @@ export const DismissibleToast = () => {
 				{(t) => (
 					<ToastBar toast={t}>
 						{({ icon, message }) => (
-							<>
+							<div className={styles.innerToastContainer}>
 								{icon}
+								{/* Start here, this message includes the 'Success' and the message set by the implmented toast. Can I seperate them? */}
 								{message}
 								{t.type !== 'loading' && (
-									<>
-										<div className={styles.divider} />
-										<div className={styles.iconContainer} onClick={() => toast.dismiss(t.id)}>
-											<div className={styles.closeIconWrapper}>
-												<div className={styles.closeIconLeft}>
-													<div className={styles.closeIconRight}></div>
-												</div>
-											</div>
-										</div>
-									</>
+									<div className={styles.iconContainer} onClick={() => toast.dismiss(t.id)}>
+										<CloseIcon />,
+									</div>
 								)}
-							</>
+							</div>
 						)}
 					</ToastBar>
 				)}

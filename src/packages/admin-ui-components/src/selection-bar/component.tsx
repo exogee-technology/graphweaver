@@ -1,7 +1,6 @@
 import styles from './styles.module.css';
 
 import { Button } from '../button';
-import { useState } from 'react';
 import { Dropdown } from '../dropdown';
 
 export interface SelectionBarProps {
@@ -15,14 +14,8 @@ export const SelectionBar = ({
 	setSelectedRows,
 	handleDelete,
 }: SelectionBarProps) => {
-	const [showActionsDropdown, setShowActionsDropdown] = useState(false);
 	const handleDeselect = () => {
 		setSelectedRows(new Set());
-	};
-
-	const handleActions = () => {
-		console.log('handleActions');
-		setShowActionsDropdown(true);
 	};
 	return (
 		<>
@@ -32,9 +25,18 @@ export const SelectionBar = ({
 						{selectedRows.size} row{selectedRows.size > 1 ? 's' : ''} selected
 					</span>
 					<div className={styles.buttonsContainer}>
-						<Button onClick={handleDeselect}>Deselect</Button>
+						<Button type="reset" onClick={handleDeselect}>
+							Deselect
+						</Button>
 						<Dropdown
-							items={[{ id: 'delete-items', name: 'Delete', onClick: handleDelete }]}
+							items={[
+								{
+									id: 'delete-items',
+									name: 'Delete selected rows',
+									onClick: handleDelete,
+									className: styles.deleteSelectedRows,
+								},
+							]}
 							isDropup
 						>
 							Actions
@@ -42,12 +44,6 @@ export const SelectionBar = ({
 					</div>
 				</div>
 			)}
-
-			{/* {showActionsDropdown && (
-				<Dropdown items={[{ id: 'delete-items', name: 'Delete', onClick: () => {} }]}>
-					Actions
-				</Dropdown>
-			)} */}
 		</>
 	);
 };

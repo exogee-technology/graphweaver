@@ -48,13 +48,14 @@
 	display: none;
 }
 
+/* Drop Up Styles */
 .dropup {
 	position: absolute;
 	display: flex;
 	flex-direction: column;
 
-	bottom: 100%;
-	left: 0;
+	bottom: 160%;
+	left: -60%;
 
 	background: #201b2b;
 	border: 1px solid var(--detail-border-color);
@@ -64,4 +65,18 @@
 	padding: 8px 0;
 
 	flex-wrap: nowrap;
+}
+
+.dropup li {
+	padding: 8px 16px 8px 16px;
+	height: 32px;
+	display: block;
+	text-align: left;
+	flex-shrink: 0;
+	white-space: nowrap;
+
+	font-family: 'Inter';
+
+	font-style: normal;
+	font-weight: 500;
 }

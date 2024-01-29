@@ -307,8 +307,10 @@ export const Table = <T extends TableRowItem>({
 						<p>Are you sure you want to delete these rows?</p>
 						<p>This action cannot be undone.</p>
 						<div className={styles.deleteEntitiesModalFooter}>
-							<Button onClick={() => setShowDeleteConfirmation(false)}>Cancel</Button>
-							<Button type="button" onClick={handleDeleteEntities}>
+							<Button type="reset" onClick={() => setShowDeleteConfirmation(false)}>
+								Cancel
+							</Button>
+							<Button type="button" onClick={handleDeleteEntities} className={styles.deleteButton}>
 								Delete
 							</Button>
 						</div>

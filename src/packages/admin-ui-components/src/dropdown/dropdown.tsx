@@ -16,6 +16,7 @@ export interface DropdownItem {
 		| void
 		| boolean /** Event emitted when the dropdown item is clicked- return false to prevent closing the dropdown  */;
 	renderAfter?(): ReactNode /** Render function after the item */;
+	className?: string;
 }
 
 export interface DropdownProps extends Partial<ButtonProps> {
@@ -54,18 +55,23 @@ export const Dropdown = ({
 	const DropDownList = useMemo(
 		() => (
 			<>
-				{items.map((item) => (
-					<li key={item.id}>
-						{!item.href ? (
-							<span onClick={handleOnClickItem(item)}>{item.name}</span>
-						) : (
-							<a href={item.href} onClick={handleOnClickItem(item)}>
-								{item.name}
-							</a>
-						)}
-						{item.renderAfter?.()}
-					</li>
-				))}
+				{items.map((item) => {
+					console.log('item', item);
+					return (
+						<li key={item.id}>
+							{!item.href ? (
+								<span className={item.className} onClick={handleOnClickItem(item)}>
+									{item.name}
+								</span>
+							) : (
+								<a className={item.className} href={item.href} onClick={handleOnClickItem(item)}>
+									{item.name}
+								</a>
+							)}
+							{item.renderAfter?.()}
+						</li>
+					);
+				})}
 			</>
 		),
 		[items]

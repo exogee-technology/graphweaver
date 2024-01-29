@@ -28,3 +28,7 @@
 .buttonsContainer button {
 	margin-right: 5px;
 }
+
+.deleteSelectedRows {
+	color: #fb3d0e;
+}

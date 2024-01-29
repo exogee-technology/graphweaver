@@ -33,6 +33,7 @@
 	font-weight: 600;
 	line-height: 34px;
 	text-align: left;
+	margin-top: 24px;
 }
 
 .deleteEntitiesModalFooter {
@@ -46,4 +47,16 @@
 .deleteEntitiesModalFooter button {
 	font-weight: 500;
 	margin-left: 10px;
+}
+
+.deleteButton {
+	background: #f12316;
+	border-radius: 6px;
+	color: var(--body-copy-color);
+	padding: 8px 16px;
+}
+
+.deleteButton:hover {
+	background: #f12316;
+	opacity: 0.6;
 }

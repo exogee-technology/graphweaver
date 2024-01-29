@@ -5,11 +5,11 @@
 	justify-content: center;
 }
 
-.divider {
+/* .divider {
 	border-left: 1px solid white;
 	height: 80%;
 	padding-right: 16px;
-}
+} */
 
 .iconContainer {
 	display: flex;
@@ -27,7 +27,7 @@
 	width: 100%;
 }
 
-.closeIconLeft {
+/* .closeIconLeft {
 	height: 100%;
 	width: 2px;
 	margin-left: 12px;
@@ -40,10 +40,10 @@
 	width: 2px;
 	background-color: #fff;
 	transform: rotate(90deg);
-}
+} */
 
-.successIcon {
+/* .successIcon {
 	fill: white;
 	width: 26px;
-  	height: 26px;
-}
+	height: 26px;
+} */
