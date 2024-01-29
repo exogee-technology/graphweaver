@@ -143,7 +143,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		if (!this.server)
 			this.server = new ApolloServer<TContext>({
 				...(this.config.apolloServerOptions as any),
-				plugins: [],
+				plugins: this.plugins,
 				schema: this.schema,
 			});
 
