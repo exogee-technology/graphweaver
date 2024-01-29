@@ -78,6 +78,8 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 			const apiKey = await this.provider.createOne({
 				key: item.key,
 				secret: secretHash,
+				...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
+				...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
 			} as D);
 
 			const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [apiKey]);
@@ -100,6 +102,8 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 			const apiKey = await this.provider.updateOne(item.id, {
 				...(item.key ? { key: item.key } : {}),
 				...(secretHash ? { secret: secretHash } : {}),
+				...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
+				...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
 			});
 
 			const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [apiKey]);

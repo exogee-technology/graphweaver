@@ -34,6 +34,12 @@ export class ApiKeyCreateOrUpdateInputArgs {
 
 	@Field(() => String, { nullable: true })
 	secret?: string;
+
+	@Field(() => Boolean, { nullable: true })
+	revoked?: boolean;
+
+	@Field(() => [String], { nullable: true })
+	roles?: string[];
 }
 
 export const createApiKeyBaseResolver = (
@@ -96,10 +102,7 @@ export const createApiKeyBaseResolver = (
 					);
 				}
 
-				return ApiKey.fromBackendEntity({
-					id: apiKey.id,
-					key: apiKey.key,
-				} as { id: string; key: string } & BaseDataEntity) as ApiKey<ApiKeyStorage> | null;
+				return ApiKey.fromBackendEntity<ApiKeyStorage, ApiKey<ApiKeyStorage>>(apiKey);
 			});
 		}
 
@@ -137,10 +140,7 @@ export const createApiKeyBaseResolver = (
 					);
 				}
 
-				return ApiKey.fromBackendEntity({
-					id: apiKey.id,
-					key: apiKey.key,
-				} as { id: string; key: string } & BaseDataEntity) as ApiKey<ApiKeyStorage> | null;
+				return ApiKey.fromBackendEntity<ApiKeyStorage, ApiKey<ApiKeyStorage>>(apiKey);
 			});
 		}
 	}

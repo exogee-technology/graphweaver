@@ -4,7 +4,7 @@ import { logger } from '@exogee/logger';
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
-import { UserProfile } from '../../user-profile';
+import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { AuthenticationError } from 'apollo-server-errors';
 import { verifyPassword } from '../../utils/argon2id';
@@ -49,7 +49,7 @@ const isURLWhitelisted = (authRedirect: URL) => {
 
 export const authApolloPlugin = <D extends ApiKeyStorage>(
 	addUserToContext: (userId: string) => Promise<UserProfile>,
-	provider?: BackendProvider<D, ApiKey<D>>
+	apiKeyDataProvider?: BackendProvider<D, ApiKey<D>>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
@@ -77,15 +77,13 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
 
-			if (apiKeyHeader && provider) {
+			if (apiKeyHeader && apiKeyDataProvider) {
 				// Case 1. API Key auth header found.
 				logger.trace('X-API-Key header found checking validity.');
 
-				const credentials = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
-				const key = credentials[0];
-				const secret = credentials[1];
+				const [key, secret] = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
 
-				const apiKey = await provider?.findOne({
+				const apiKey = await apiKeyDataProvider?.findOne({
 					key,
 				});
 
@@ -99,8 +97,9 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 				if (await verifyPassword(secret, apiKey.secret)) {
 					// We are a guest and have not logged in yet.
 					contextValue.user = new UserProfile({
-						id: key,
-						roles: ['DARK_SIDE'],
+						id: apiKey.id,
+						roles: apiKey.roles ?? [],
+						type: UserProfileType.SERVICE,
 					});
 					contextValue.token = {};
 					upsertAuthorizationContext(contextValue);
@@ -108,7 +107,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					throw new AuthenticationError('Bad Request: Authentication Failed. (E0004)');
 				}
 			} else if (!authHeader || isExpired(authHeader)) {
-				// Case 1. No auth header or it has expired.
+				// Case 2. No auth header or it has expired.
 				logger.trace('No Auth header, setting redirect');
 
 				// We are a guest and have not logged in yet.
@@ -118,7 +117,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 				});
 				upsertAuthorizationContext(contextValue);
 			} else {
-				// Case 2. There is a valid auth header
+				// Case 3. There is a valid auth header
 				logger.trace('Got a token, checking it is valid.');
 
 				const tokenProvider = new AuthTokenProvider();

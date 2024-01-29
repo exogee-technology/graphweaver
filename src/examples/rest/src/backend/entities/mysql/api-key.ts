@@ -1,4 +1,4 @@
-import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { ArrayType, BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { ApiKeyStorage } from '@exogee/graphweaver-auth';
 
@@ -15,4 +15,7 @@ export class ApiKey extends BaseEntity implements ApiKeyStorage {
 
 	@Property({ type: Boolean })
 	revoked!: boolean;
+
+	@Property({ type: ArrayType, default: [] })
+	roles!: string[];
 }

@@ -14,7 +14,8 @@ export interface ApiKeyStorage extends BaseDataEntity {
 	id: string;
 	key: string;
 	secret?: string;
-	revoked: boolean;
+	revoked?: boolean;
+	roles?: string[];
 }
 
 @ReadOnly({ adminUI: false, backend: true })
@@ -31,6 +32,9 @@ export class ApiKey<D extends BaseDataEntity> extends GraphQLEntity<D> {
 
 	@Field(() => Boolean)
 	revoked!: boolean;
+
+	@Field(() => [String], { nullable: true })
+	roles?: string[];
 }
 
 export const createApiKeyEntity = <D extends BaseDataEntity>(
