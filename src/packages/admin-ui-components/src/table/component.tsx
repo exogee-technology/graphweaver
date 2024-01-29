@@ -23,9 +23,15 @@ import 'react-data-grid/lib/styles.css';
 import './table-styles.css';
 import styles from './styles.module.css';
 import { Loader } from '../loader';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { Button } from '../button';
+import { Modal } from '../modal';
+import { generateDeleteEntityMutation } from '../detail-panel/graphql';
+import toast from 'react-hot-toast';
+import { Dropdown } from '../dropdown';
+import { SelectionBar } from '../selection-bar';
 
 // Without stopping propagation on our links, the grid will be notified about the click,
 // which is not what we want. We want to navigate and not let the grid handle it
@@ -169,6 +175,10 @@ export const Table = <T extends TableRowItem>({
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
 	const [selectedRows, setSelectedRows] = useState((): ReadonlySet<string> => new Set());
+	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
+	const [deleteEntity] = useMutation(generateDeleteEntityMutation(selectedEntity));
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
 		// Return true when the scrollTop reaches the bottom ...
@@ -216,8 +226,6 @@ export const Table = <T extends TableRowItem>({
 		[search, selectedEntity]
 	);
 
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
 	if (loading) {
 		return <Loader />;
 	}
@@ -226,11 +234,46 @@ export const Table = <T extends TableRowItem>({
 	}
 
 	const handleSelectedRowsChange = (selectedRows: Set<string>) => {
-		// console.log('selected rows', selectedRows);
-		// convert the string set to a number set
-		const selectedRowsAsNumbers = new Set<number>([...selectedRows].map((id) => parseInt(id)));
 		setSelectedRows(selectedRows);
 	};
+
+	const handleDelete = () => {
+		// pop up a confirmation dialog
+		setShowDeleteConfirmation(true);
+	};
+
+	const handleDeleteEntities = () => {
+		const ids = Array.from(selectedRows);
+		console.log('delete ids', ids);
+
+		// For each id, call a separate delete mutation
+		const results = [];
+
+		for (const id of ids) {
+			// If it's the last one, then we can refetch
+			if (id === ids[ids.length - 1]) {
+				results.push(deleteEntity({ variables: { id }, refetchQueries: [`AdminUIListPage`] }));
+			} else {
+				results.push(deleteEntity({ variables: { id } }));
+			}
+		}
+
+		console.log(results);
+		setSelectedRows(new Set());
+		setShowDeleteConfirmation(false);
+
+		// pop success toast
+		toast.success(
+			<div>
+				<span>Success</span> <span>Rows deleted</span>
+			</div>
+		);
+	};
+
+	const handleDeselect = () => {
+		setSelectedRows(new Set());
+	};
+
 	return (
 		<>
 			<DataGrid
@@ -240,7 +283,7 @@ export const Table = <T extends TableRowItem>({
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
 				defaultColumnOptions={{ resizable: true }}
-				onSelectedRowsChange={handleSelectedRowsChange}
+				onSelectedRowsChange={setSelectedRows}
 				selectedRows={selectedRows}
 				onRowClick={navigateToDetailForEntity}
 				rowClass={rowClass}
@@ -252,10 +295,33 @@ export const Table = <T extends TableRowItem>({
 					<Spinner />
 				</div>
 			)}
+			<Modal
+				isOpen={showDeleteConfirmation}
+				hideCloseX
+				className={styles.deleteEntitiesModal}
+				modalContent={
+					<div>
+						<div className={styles.deleteEntitiesModalTitle}>
+							Delete {selectedRows.size} row{selectedRows.size > 1 ? 's' : ''}
+						</div>
+						<p>Are you sure you want to delete these rows?</p>
+						<p>This action cannot be undone.</p>
+						<div className={styles.deleteEntitiesModalFooter}>
+							<Button onClick={() => setShowDeleteConfirmation(false)}>Cancel</Button>
+							<Button type="button" onClick={handleDeleteEntities}>
+								Delete
+							</Button>
+						</div>
+					</div>
+				}
+			/>
+
 			{selectedRows.size > 0 && (
-				<div className={styles.selectedRows}>
-					{selectedRows.size} row{selectedRows.size > 1 ? 's' : ''} selected
-				</div>
+				<SelectionBar
+					selectedRows={selectedRows}
+					setSelectedRows={handleSelectedRowsChange}
+					handleDelete={handleDelete}
+				/>
 			)}
 		</>
 	);

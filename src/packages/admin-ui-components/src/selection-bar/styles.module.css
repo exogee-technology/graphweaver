@@ -1,0 +1,30 @@
+.selectedRowsContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+
+	position: fixed;
+	bottom: 3%;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: #302a3c;
+	padding: 10px;
+	border-radius: 12px;
+	border: 1px solid #ede8f21a;
+
+	z-index: 1;
+	width: 398px;
+
+	box-shadow: 0px 1px 8px 0px #100a1c33;
+	box-shadow: 0px 1px 4px 0px #100a1c;
+}
+
+.buttonsContainer {
+	display: flex;
+	flex-direction: row;
+}
+
+.buttonsContainer button {
+	margin-right: 5px;
+}

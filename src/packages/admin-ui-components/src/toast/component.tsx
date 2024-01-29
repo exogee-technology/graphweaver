@@ -9,6 +9,7 @@ export const DismissibleToast = () => {
 			<Toaster
 				position="top-center"
 				toastOptions={{
+					position: 'bottom-right',
 					className: styles.toastContainer,
 					style: {
 						borderRadius: '6px',
@@ -18,7 +19,7 @@ export const DismissibleToast = () => {
 						duration: 60_000,
 						icon: <SuccessIcon className={styles.successIcon} />,
 						style: {
-							background: '#1B9266',
+							background: '#302A3C',
 							color: 'white',
 						},
 					},
