@@ -89,18 +89,20 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					key,
 				});
 
-				if (!apiKey) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
+				if (!apiKey)
+					throw new AuthenticationError('Bad Request: API Key Authentication Failed. (E0001)');
 				if (!apiKey.secret)
-					throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
-				if (!apiKey.revoked)
-					throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
+					throw new AuthenticationError('Bad Request: API Key Authentication Failed. (E0002)');
+				if (apiKey.revoked)
+					throw new AuthenticationError('Bad Request: API Key Authentication Failed. (E0003)');
 
 				if (await verifyPassword(secret, apiKey.secret)) {
 					// We are a guest and have not logged in yet.
 					contextValue.user = new UserProfile({
 						id: key,
-						roles: ['SYSTEM_USER'],
+						roles: ['DARK_SIDE'],
 					});
+					contextValue.token = {};
 					upsertAuthorizationContext(contextValue);
 				} else {
 					throw new AuthenticationError('Bad Request: Authentication Failed. (E0004)');

@@ -38,7 +38,7 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 			if (!apiKey) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 			if (!apiKey.secret)
 				throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
-			if (!apiKey.revoked)
+			if (apiKey.revoked)
 				throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 
 			if (await verifyPassword(secret, apiKey.secret)) {

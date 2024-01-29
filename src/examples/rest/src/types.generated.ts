@@ -92,6 +92,7 @@ export type ApiKey = {
   __typename?: 'ApiKey';
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
+  revoked: Scalars['Boolean']['output'];
 };
 
 export type ApiKeyCreateOrUpdateInput = {
@@ -123,6 +124,7 @@ export type ApiKeysListFilter = {
   key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   key_notnull?: InputMaybe<Scalars['String']['input']>;
   key_null?: InputMaybe<Scalars['String']['input']>;
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type ApiKeysOrderByInput = {
