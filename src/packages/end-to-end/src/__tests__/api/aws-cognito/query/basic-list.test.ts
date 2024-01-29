@@ -20,12 +20,12 @@ const graphweaver = new Graphweaver({
 });
 
 beforeAll(async () => {
-	await graphweaver.handler();
+	await graphweaver.startServer();
 });
 
 describe('basic query', () => {
 	test('should get cognito users', async () => {
-		const response = await graphweaver.server.executeOperation<{ cognitoUsers: CognitoUser[] }>({
+		const response = await graphweaver.server?.executeOperation<{ cognitoUsers: CognitoUser[] }>({
 			query: gql`
 				query {
 					cognitoUsers {
@@ -34,9 +34,9 @@ describe('basic query', () => {
 				}
 			`,
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
-
 		expect(response.body.singleResult.data?.cognitoUsers).toHaveLength(1);
 	});
 });

@@ -10,7 +10,6 @@ import {
 	authApolloPlugin,
 	UserProfile,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
@@ -47,9 +46,13 @@ const graphweaver = new Graphweaver({
 	},
 });
 
+beforeAll(() => {
+	graphweaver.startServer();
+});
+
 describe('Password Authentication - Login', () => {
 	test('should return a valid user and successfully login.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -64,6 +67,7 @@ describe('Password Authentication - Login', () => {
 				password: 'test123',
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
@@ -77,7 +81,7 @@ describe('Password Authentication - Login', () => {
 	});
 
 	test('should return an error when the password is incorrect.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -92,6 +96,7 @@ describe('Password Authentication - Login', () => {
 				password: 'incorrect',
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeDefined();

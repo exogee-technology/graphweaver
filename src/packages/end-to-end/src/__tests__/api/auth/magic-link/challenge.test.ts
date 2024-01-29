@@ -57,12 +57,16 @@ const graphweaver = new Graphweaver({
 });
 
 describe('Magic Link Authentication - Challenge', () => {
+	beforeAll(() => {
+		graphweaver.startServer();
+	});
+
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -76,6 +80,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -84,7 +89,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if using incorrect token.', async () => {
-		const sendResponse = await graphweaver.server.executeOperation<{
+		const sendResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -96,11 +101,12 @@ describe('Magic Link Authentication - Challenge', () => {
 				username: 'test',
 			},
 		});
+		assert(sendResponse !== undefined);
 
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -115,13 +121,14 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 
 		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -136,6 +143,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: 'FAKE TOKEN',
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -144,7 +152,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if ttl expired.', async () => {
-		const sendResponse = await graphweaver.server.executeOperation<{
+		const sendResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -156,11 +164,12 @@ describe('Magic Link Authentication - Challenge', () => {
 				username: 'test',
 			},
 		});
+		assert(sendResponse !== undefined);
 
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -175,6 +184,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 
@@ -190,7 +200,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				} as MagicLink)
 		);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -205,6 +215,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -213,7 +224,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should pass challenge if using correct token.', async () => {
-		const sendResponse = await graphweaver.server.executeOperation<{
+		const sendResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -225,11 +236,12 @@ describe('Magic Link Authentication - Challenge', () => {
 				username: 'test',
 			},
 		});
+		assert(sendResponse !== undefined);
 
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -244,13 +256,14 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 
 		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			result: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -265,6 +278,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();

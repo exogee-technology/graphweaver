@@ -120,7 +120,9 @@ test('Should return isReadOnly attribute for each entity in getAdminUiMetadata',
 		resolvers: [CustomerResolver],
 	});
 
-	const response = await graphweaver.server.executeOperation({
+	graphweaver.startServer();
+
+	const response = await graphweaver.server?.executeOperation({
 		query: gql`
 			{
 				result: _graphweaver {
@@ -163,6 +165,8 @@ test('Should return isReadOnly attribute for each entity in getAdminUiMetadata',
 			}
 		`,
 	});
+	assert(response !== undefined);
+
 	assert(response.body.kind === 'single');
 	const result = response.body.singleResult.data?.result as unknown as Schema;
 	expect(result.entities).toHaveLength(1);

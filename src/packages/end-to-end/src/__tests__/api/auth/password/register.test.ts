@@ -57,7 +57,9 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Register', () => {
 	test('should create a new user.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		graphweaver.startServer();
+
+		const response = await graphweaver.server?.executeOperation<{
 			createCredential: { id: string };
 		}>({
 			query: gql`
@@ -75,6 +77,7 @@ describe('Password Authentication - Register', () => {
 				},
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();

@@ -123,9 +123,13 @@ const graphweaver = new Graphweaver({
 	},
 });
 
+beforeAll(() => {
+	graphweaver.startServer();
+});
+
 describe('Password Authentication - Challenge', () => {
 	test('should return an error to initiate a challenge for a password.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -141,6 +145,7 @@ describe('Password Authentication - Challenge', () => {
 				},
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -149,7 +154,7 @@ describe('Password Authentication - Challenge', () => {
 	});
 
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -171,6 +176,7 @@ describe('Password Authentication - Challenge', () => {
 				},
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -179,7 +185,7 @@ describe('Password Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -193,6 +199,7 @@ describe('Password Authentication - Challenge', () => {
 				password: 'test',
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -202,7 +209,7 @@ describe('Password Authentication - Challenge', () => {
 
 	test('should step up auth for password after login.', async () => {
 		// 1. Login to the server
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -217,6 +224,7 @@ describe('Password Authentication - Challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -225,7 +233,7 @@ describe('Password Authentication - Challenge', () => {
 		assert(token);
 
 		// 2. Step up auth to include password MFA
-		const challengeResponse = await graphweaver.server.executeOperation<{
+		const challengeResponse = await graphweaver.server?.executeOperation<{
 			challengePassword: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -240,6 +248,7 @@ describe('Password Authentication - Challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(challengeResponse !== undefined);
 
 		assert(challengeResponse.body.kind === 'single');
 
@@ -257,7 +266,7 @@ describe('Password Authentication - Challenge', () => {
 		expect(payload.exp).toBe(originalPayload.exp);
 
 		// 3. Make a new request with the stepped up auth it should not throw
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.server?.executeOperation({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
 			query: gql`
 				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
@@ -272,6 +281,7 @@ describe('Password Authentication - Challenge', () => {
 				},
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
@@ -282,7 +292,7 @@ describe('Password Authentication - Challenge', () => {
 		MockDate.set(today);
 
 		// 4. Make a new request one hour later with the stepped up auth it should throw as it expired after 30m
-		const expiredResponse = await graphweaver.server.executeOperation<{
+		const expiredResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
@@ -299,6 +309,7 @@ describe('Password Authentication - Challenge', () => {
 				},
 			},
 		});
+		assert(expiredResponse !== undefined);
 
 		assert(expiredResponse.body.kind === 'single');
 		expect(expiredResponse.body.singleResult.errors?.[0]?.extensions?.code).toBe('CHALLENGE');

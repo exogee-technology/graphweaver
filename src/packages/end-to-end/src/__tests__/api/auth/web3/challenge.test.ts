@@ -95,12 +95,16 @@ const graphweaver = new Graphweaver({
 });
 
 describe('web3 challenge', () => {
+	beforeAll(() => {
+		graphweaver.startServer();
+	});
+
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
 	it('should return an OTP challenge when checking if we can enrol an web3 wallet address', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -115,6 +119,7 @@ describe('web3 challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -122,7 +127,7 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.server?.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -130,6 +135,7 @@ describe('web3 challenge', () => {
 				}
 			`,
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -139,7 +145,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return OTP challenge when enrolling a wallet and auth token contains no otp step up', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -154,6 +160,7 @@ describe('web3 challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -161,7 +168,7 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.server?.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation enrolWallet($token: String!) {
@@ -172,6 +179,7 @@ describe('web3 challenge', () => {
 				token: 'MOCK TOKEN',
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -181,7 +189,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return true for enrol wallet', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -196,6 +204,7 @@ describe('web3 challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -214,7 +223,7 @@ describe('web3 challenge', () => {
 		const spy = jest.spyOn(AuthResolver.prototype, 'saveWalletAddress');
 		const web3Address = await ethers_signer.getAddress();
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.server?.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation enrolWallet($token: String!) {
@@ -225,6 +234,7 @@ describe('web3 challenge', () => {
 				token: web3Token,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();
@@ -232,7 +242,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return true for verify wallet and step up the token with wb3', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -247,6 +257,7 @@ describe('web3 challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -258,7 +269,7 @@ describe('web3 challenge', () => {
 			expires_in: '1d',
 		});
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			result: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -273,6 +284,7 @@ describe('web3 challenge', () => {
 				token: web3Token,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();

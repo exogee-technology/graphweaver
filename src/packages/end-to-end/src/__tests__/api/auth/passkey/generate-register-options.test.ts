@@ -92,7 +92,9 @@ const graphweaver = new Graphweaver({
 
 describe('passkey registration', () => {
 	it('should allow the registration of a device', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		graphweaver.startServer();
+
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -107,6 +109,7 @@ describe('passkey registration', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -114,7 +117,7 @@ describe('passkey registration', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			result: PublicKeyCredentialCreationOptionsJSON;
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -124,6 +127,7 @@ describe('passkey registration', () => {
 				}
 			`,
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();

@@ -9,10 +9,10 @@ import {
 	AuthorizationContext,
 	ForbiddenError,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import assert from 'assert';
 
 const user = new UserProfile({
 	id: '1',
@@ -59,7 +59,9 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Redirect', () => {
 	test('should redirect an unauthenticated user to the login screen.', async () => {
-		const response = await graphweaver.server.executeOperation({
+		graphweaver.startServer();
+
+		const response = await graphweaver.server?.executeOperation({
 			query: gql`
 				{
 					_graphweaver {
@@ -70,6 +72,7 @@ describe('Password Authentication - Redirect', () => {
 				}
 			`,
 		});
+		assert(response !== undefined);
 
 		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
 			`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=${encodeURIComponent(

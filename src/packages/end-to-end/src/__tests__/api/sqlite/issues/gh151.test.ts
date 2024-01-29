@@ -100,7 +100,9 @@ describe('RelationshipField', () => {
 			resolvers: [AlbumResolver, ArtistResolver],
 		});
 
-		const response = await graphweaver.server.executeOperation({
+		graphweaver.startServer();
+
+		const response = await graphweaver.server?.executeOperation({
 			query: gql`
 				query {
 					testAlbums {
@@ -112,6 +114,8 @@ describe('RelationshipField', () => {
 				}
 			`,
 		});
+		assert(response !== undefined);
+
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.data?.testAlbums).toHaveLength(347);
 	});

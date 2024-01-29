@@ -81,12 +81,16 @@ const graphweaver = new Graphweaver({
 });
 
 describe('One Time Password Authentication - Challenge', () => {
+	beforeAll(() => {
+		graphweaver.startServer();
+	});
+
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -100,6 +104,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				code: MOCK_CODE,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -108,7 +113,7 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if ttl expired.', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -123,6 +128,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -139,7 +145,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				} as OneTimePassword)
 		);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -154,6 +160,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				code: MOCK_CODE,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
@@ -162,7 +169,7 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should pass challenge if using correct token.', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -177,6 +184,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				password: 'test123',
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 		expect(loginResponse.body.singleResult.errors).toBeUndefined();
@@ -184,7 +192,7 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.server?.executeOperation<{
 			result: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -199,6 +207,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				code: MOCK_CODE,
 			},
 		});
+		assert(response !== undefined);
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeUndefined();

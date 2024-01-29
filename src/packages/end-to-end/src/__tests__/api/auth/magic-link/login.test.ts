@@ -67,7 +67,9 @@ describe('Magic Link Authentication - Login', () => {
 			.spyOn(AuthResolver.prototype, 'redeemMagicLink')
 			.mockImplementation(async () => true);
 
-		const sendResponse = await graphweaver.server.executeOperation<{
+		graphweaver.startServer();
+
+		const sendResponse = await graphweaver.server?.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -79,11 +81,12 @@ describe('Magic Link Authentication - Login', () => {
 				username: 'test',
 			},
 		});
+		assert(sendResponse !== undefined);
 
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.server?.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -98,6 +101,7 @@ describe('Magic Link Authentication - Login', () => {
 				token: MOCK_TOKEN,
 			},
 		});
+		assert(loginResponse !== undefined);
 
 		assert(loginResponse.body.kind === 'single');
 
