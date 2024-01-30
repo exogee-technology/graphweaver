@@ -209,12 +209,8 @@ export const Table = <T extends TableRowItem>({
 
 	const navigateToDetailForEntity = useCallback(
 		(row: T, column: CalculatedColumn<T, unknown>) => {
-			console.log('row', row);
-			console.log('column', column);
-			// Don't navigate if the user has just selected this row
-			// if the last selected row is the same as the id of the row we're clicking on, then we're just selecting it. Not navigating
+			// Don't navigate if the user has clicked the checkbox column
 			if (column.key === 'select-row') {
-				console.log('not navigating because row is selected');
 				return;
 			}
 
@@ -244,7 +240,6 @@ export const Table = <T extends TableRowItem>({
 
 	const handleDeleteEntities = () => {
 		const ids = Array.from(selectedRows);
-		console.log('delete ids', ids);
 
 		// For each id, call a separate delete mutation
 		const results = [];
@@ -258,7 +253,6 @@ export const Table = <T extends TableRowItem>({
 			}
 		}
 
-		console.log(results);
 		setSelectedRows(new Set());
 		setShowDeleteConfirmation(false);
 
@@ -268,10 +262,6 @@ export const Table = <T extends TableRowItem>({
 				<div>Success</div> <div className={styles.deletedText}>Rows deleted</div>
 			</div>
 		);
-	};
-
-	const handleDeselect = () => {
-		setSelectedRows(new Set());
 	};
 
 	return (

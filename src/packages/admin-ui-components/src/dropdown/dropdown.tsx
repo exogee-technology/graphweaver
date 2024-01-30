@@ -56,7 +56,6 @@ export const Dropdown = ({
 		() => (
 			<>
 				{items.map((item) => {
-					console.log('item', item);
 					return (
 						<li key={item.id}>
 							{!item.href ? (

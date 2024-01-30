@@ -38,7 +38,6 @@ export const DismissibleToast = () => {
 						{({ icon, message }) => (
 							<>
 								<div className={styles.iconContainer}>{icon}</div>
-								{/* Start here, this message includes the 'Success' and the message set by the implmented toast. Can I seperate them? */}
 								{message}
 								{t.type !== 'loading' && (
 									<div className={styles.iconContainer} onClick={() => toast.dismiss(t.id)}>
