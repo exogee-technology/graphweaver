@@ -5,7 +5,7 @@ import { ImageScalar, MediaScalar } from '@exogee/graphweaver-scalars';
 
 export enum MediaTypes {
 	IMAGE = 'Image',
-	VIDEO = 'Video',
+	OTHER = 'Other',
 }
 
 type DownloadUrlFieldOptions = {

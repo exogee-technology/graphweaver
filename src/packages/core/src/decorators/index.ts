@@ -5,3 +5,4 @@ export * from './read-only-property';
 export * from './summary-field';
 export * from './hook';
 export * from './relationship-field';
+export * from './export-page-size';
