@@ -60,3 +60,12 @@
 	background: #f12316;
 	opacity: 0.6;
 }
+
+.successToast {
+	display: flex;
+	flex-direction: column;
+}
+
+.deletedText {
+	color: #ede8f2b2;
+}

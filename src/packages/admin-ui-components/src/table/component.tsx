@@ -264,8 +264,8 @@ export const Table = <T extends TableRowItem>({
 
 		// pop success toast
 		toast.success(
-			<div>
-				<span>Success</span> <span>Rows deleted</span>
+			<div className={styles.successToast}>
+				<div>Success</div> <div className={styles.deletedText}>Rows deleted</div>
 			</div>
 		);
 	};
