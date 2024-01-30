@@ -242,7 +242,6 @@ export const Table = <T extends TableRowItem>({
 	};
 
 	const handleDelete = () => {
-		// pop up a confirmation dialog
 		setShowDeleteConfirmation(true);
 	};
 
@@ -264,12 +263,22 @@ export const Table = <T extends TableRowItem>({
 		setSelectedRows(new Set());
 		setShowDeleteConfirmation(false);
 
-		// pop success toast
-		toast.success(
-			<div className={styles.successToast}>
-				<div>Success</div> <div className={styles.deletedText}>Rows deleted</div>
-			</div>
-		);
+		Promise.all(results)
+			.then(() => {
+				toast.success(
+					<div className={styles.successToast}>
+						<div>Success</div> <div className={styles.deletedText}>Rows deleted</div>
+					</div>
+				);
+			})
+			.catch((e) => {
+				console.error(e);
+				toast.error(
+					<div className={styles.errorToast}>
+						<div>An error occured while deleting rows</div>
+					</div>
+				);
+			});
 	};
 
 	return (

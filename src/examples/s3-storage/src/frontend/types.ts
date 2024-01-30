@@ -23,6 +23,7 @@ export type Scalars = {
 
 export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
+  exportPageSize?: Maybe<Scalars['Float']['output']>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 

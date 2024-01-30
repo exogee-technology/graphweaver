@@ -54,8 +54,8 @@
 	display: flex;
 	flex-direction: column;
 
-	bottom: 160%;
-	left: -60%;
+	bottom: 120%;
+	left: 55%;
 
 	background: #201b2b;
 	border: 1px solid var(--detail-border-color);

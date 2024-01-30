@@ -1,4 +1,4 @@
-import { ReactNode, useState, useMemo } from 'react';
+import { ReactNode, useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '../button';
@@ -42,10 +42,16 @@ export const Dropdown = ({
 		};
 	}
 
-	function handleOnClickOutside() {
-		setIsOpen(false);
-		props.onClickOutside?.();
-	}
+	const handleOnOutsideClick = useCallback(
+		(e: any) => {
+			// if the click was on an element with an id that matches an item id, don't close the dropdown
+			if (e.target.id && items.some((item) => item.id === e.target.id)) {
+				return;
+			}
+			setIsOpen(false);
+		},
+		[items]
+	);
 
 	function handleOnClickButton() {
 		setIsOpen(!isOpen);
@@ -59,11 +65,16 @@ export const Dropdown = ({
 					return (
 						<li key={item.id}>
 							{!item.href ? (
-								<span className={item.className} onClick={handleOnClickItem(item)}>
+								<span id={item.id} className={item.className} onClick={handleOnClickItem(item)}>
 									{item.name}
 								</span>
 							) : (
-								<a className={item.className} href={item.href} onClick={handleOnClickItem(item)}>
+								<a
+									id={item.id}
+									className={item.className}
+									href={item.href}
+									onClick={handleOnClickItem(item)}
+								>
 									{item.name}
 								</a>
 							)}
@@ -77,8 +88,16 @@ export const Dropdown = ({
 	);
 
 	return (
-		<Button {...props} onClickOutside={handleOnClickOutside} onClick={handleOnClickButton}>
-			{defaultValue?.name ?? children}
+		<>
+			<Button
+				{...props}
+				onClickOutside={(e: any) => handleOnOutsideClick(e)}
+				onClick={handleOnClickButton}
+			>
+				{defaultValue?.name ?? children}
+
+				<DownChevronIcon />
+			</Button>
 			<ul
 				className={classNames(
 					{ [styles.dropdownList]: isOpen && !isDropup },
@@ -88,8 +107,6 @@ export const Dropdown = ({
 			>
 				{DropDownList}
 			</ul>
-
-			<DownChevronIcon />
-		</Button>
+		</>
 	);
 };

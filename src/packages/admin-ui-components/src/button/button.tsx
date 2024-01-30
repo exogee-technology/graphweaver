@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
-	onClickOutside?(): any /** Event emitted when outside */;
+	onClickOutside?(e: DocumentEventMap['mousedown']): any /** Event emitted when outside */;
 	className?: string /** alternative styling */;
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
@@ -34,14 +34,13 @@ export const Button = ({
 			return;
 		}
 
-		// Target of the click is the button,return with no action.
-		// @todo check children as well?
+		// Target of the click is the button or its children, return with no action.
 		if (buttonRef.current.contains(event.target as Node)) {
 			return;
 		}
 
 		// Otherwise, click was outside the element, emit an event.
-		onClickOutside?.();
+		onClickOutside?.(event);
 	}
 
 	useEffect(() => {
