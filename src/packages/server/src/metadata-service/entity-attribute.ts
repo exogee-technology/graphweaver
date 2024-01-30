@@ -4,4 +4,7 @@ import { Field, ObjectType } from 'type-graphql';
 export class AdminUiEntityAttributeMetadata {
 	@Field(() => Boolean, { nullable: true })
 	isReadOnly?: boolean;
+
+	@Field(() => Number, { nullable: true })
+	exportPageSize?: number;
 }

@@ -7,6 +7,7 @@ import {
 	AdminUIFilterType,
 	RelationshipType,
 	BaseContext,
+	getExportPageSize,
 } from '@exogee/graphweaver';
 import { Ctx, getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
@@ -80,6 +81,10 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const attributes = new AdminUiEntityAttributeMetadata();
 					if (isReadOnlyAdminUI(objectType.target)) {
 						attributes.isReadOnly = true;
+					}
+					const exportPageSize = getExportPageSize(objectType.target);
+					if (exportPageSize) {
+						attributes.exportPageSize = exportPageSize;
 					}
 					const visibleFields = objectType.fields?.filter(
 						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay

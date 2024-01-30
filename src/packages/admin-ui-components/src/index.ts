@@ -22,3 +22,4 @@ export * from './date-picker';
 export * from './input';
 export * from './toast';
 export * from './export-modal';
+export * from './logout';

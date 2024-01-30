@@ -2,6 +2,9 @@ import classnames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { localStorageAuthKey } from '../config';
+import { Logout } from '../logout';
+
 // This is injected by vite-plugin-graphweaver
 import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-custom-pages';
 
@@ -67,14 +70,18 @@ export const SideBar = () => {
 
 			<Spacer grow={1} />
 
-			<div className={styles.sideBarFooter}>
-				<div className={styles.footerText}>
-					Powered by{' '}
-					<a href="https://graphweaver.com/" target="_blank">
-						Graphweaver
-					</a>
+			{localStorage.getItem(localStorageAuthKey) ? (
+				<Logout />
+			) : (
+				<div className={styles.sideBarFooter}>
+					<div className={styles.footerText}>
+						Powered by{' '}
+						<a href="https://graphweaver.com/" target="_blank">
+							Graphweaver
+						</a>
+					</div>
 				</div>
-			</div>
+			)}
 
 			<Spacer height={10} />
 		</div>

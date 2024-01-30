@@ -37,6 +37,10 @@ import { SelectionBar } from '../selection-bar';
 // which is not what we want. We want to navigate and not let the grid handle it
 const gobbleEvent = (e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation();
 
+const hideImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+	e.currentTarget.style.display = 'none';
+};
+
 const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
@@ -70,7 +74,7 @@ const columnsForEntity = <T extends TableRowItem>(
 
 						if (Array.isArray(value)) {
 							// We're in a many relationship. Return an array of links.
-							return value.map(linkForValue);
+							return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
 						} else if (value) {
 							return linkForValue(value);
 						} else {
@@ -86,11 +90,15 @@ const columnsForEntity = <T extends TableRowItem>(
 								src={imageUrl}
 								// alt={altText} @todo - implement alt text
 								style={{
-									position: 'absolute',
-									top: '50%',
-									left: '50%',
-									transform: 'translate(-50%, -50%)',
+									width: '100%',
+									height: '100%',
+									objectFit: 'cover',
+									padding: 2,
+									borderRadius: 8,
+									objectPosition: 'center center',
+									textIndent: -9999,
 								}}
+								onError={hideImage}
 							/>
 						);
 				  }

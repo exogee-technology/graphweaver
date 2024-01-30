@@ -16,3 +16,4 @@ export { ReactComponent as ErrorIcon } from './16-error.svg';
 export { ReactComponent as InfoIcon } from './16-info.svg';
 export { ReactComponent as WarningIcon } from './16-warning.svg';
 export { ReactComponent as CloseIcon } from './close-icon.svg';
+export { ReactComponent as LogoutIcon } from './16-logout.svg';
