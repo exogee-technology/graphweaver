@@ -1,7 +1,6 @@
 import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field, ID } from 'type-graphql';
 import {
 	BackendProvider,
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
 	HookRegister,
@@ -10,9 +9,9 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
-
-import { AuthorizationContext, RequestParams } from '../../../types';
 import { GraphQLResolveInfo } from 'graphql';
+
+import { AuthorizationContext } from '../../../types';
 import { ApiKey, ApiKeyStorage } from '../../entities';
 
 @InputType(`ApiKeyInsertInput`)
