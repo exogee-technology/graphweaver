@@ -76,6 +76,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
+			let apiKeyVerificationFailed = '';
 
 			if (apiKeyHeader && apiKeyDataProvider) {
 				// Case 1. API Key auth header found.
@@ -87,14 +88,9 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					key,
 				});
 
-				if (!apiKey)
-					throw new AuthenticationError('Bad Request: API Key Authentication Failed. (E0001)');
-				if (!apiKey.secret)
-					throw new AuthenticationError('Bad Request: API Key Authentication Failed. (E0002)');
-				if (apiKey.revoked)
-					throw new AuthenticationError('Bad Request: API Key Authentication Failed. (E0003)');
-
-				if (await verifyPassword(secret, apiKey.secret)) {
+				if (!apiKey || !apiKey.secret || apiKey.revoked) {
+					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0001)';
+				} else if (apiKey?.secret && (await verifyPassword(secret, apiKey.secret))) {
 					// We are a guest and have not logged in yet.
 					contextValue.user = new UserProfile({
 						id: apiKey.id,
@@ -104,7 +100,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					contextValue.token = {};
 					upsertAuthorizationContext(contextValue);
 				} else {
-					throw new AuthenticationError('Bad Request: Authentication Failed. (E0004)');
+					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0002)';
 				}
 			} else if (!authHeader || isExpired(authHeader)) {
 				// Case 2. No auth header or it has expired.
@@ -140,6 +136,9 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 			}
 
 			return {
+				didResolveOperation: async (context) => {
+					if (apiKeyVerificationFailed) throw new AuthenticationError(apiKeyVerificationFailed);
+				},
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
 					const errors = (response.body as any)?.singleResult?.errors;
