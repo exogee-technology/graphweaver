@@ -1,9 +1,11 @@
 import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field, ID } from 'type-graphql';
 import {
 	BackendProvider,
+	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
 	HookRegister,
+	WithId,
 	createBaseResolver,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
@@ -12,10 +14,9 @@ import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-ser
 import { GraphQLResolveInfo } from 'graphql';
 
 import { AuthorizationContext } from '../../../types';
-import { ApiKey, ApiKeyStorage } from '../../entities';
 
 @InputType(`ApiKeyInsertInput`)
-class CreateApiKeyInputArgs {
+export class ApiKeyInputArgs {
 	@Field(() => String)
 	key!: string;
 
@@ -47,32 +48,28 @@ export class ApiKeyCreateOrUpdateInputArgs {
 	roles?: string[];
 }
 
-export const createApiKeyBaseResolver = (
-	gqlEntityType: GraphqlEntityType<ApiKey<ApiKeyStorage>, ApiKeyStorage>,
-	provider: BackendProvider<ApiKeyStorage, ApiKey<ApiKeyStorage>>
+export const createApiKeyBaseResolver = <G extends WithId, D extends BaseDataEntity>(
+	gqlEntityType: GraphqlEntityType<G, D>,
+	provider: BackendProvider<D, G>
 ) => {
 	const transactional = !!provider.withTransaction;
 
-	@Resolver((of) => ApiKey)
+	@Resolver()
 	abstract class ApiKeyBaseResolver extends createBaseResolver(gqlEntityType, provider) {
-		abstract create(
-			params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
-		): Promise<ApiKeyStorage>;
-		abstract update(
-			params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
-		): Promise<ApiKeyStorage>;
+		abstract create(params: CreateOrUpdateHookParams<ApiKeyInputArgs>): Promise<D>;
+		abstract update(params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>): Promise<D>;
 
 		public async withTransaction<T>(callback: () => Promise<T>) {
 			return provider.withTransaction ? provider.withTransaction<T>(callback) : callback();
 		}
 
-		@Mutation(() => ApiKey)
+		@Mutation(() => gqlEntityType)
 		async createApiKey(
-			@Arg('data', () => CreateApiKeyInputArgs) data: CreateApiKeyInputArgs,
+			@Arg('data', () => ApiKeyInputArgs) data: ApiKeyInputArgs,
 			@Ctx() context: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<ApiKey<ApiKeyStorage> | null> {
-			return this.withTransaction<ApiKey<ApiKeyStorage> | null>(async () => {
+		): Promise<G | null> {
+			return this.withTransaction(async () => {
 				const params = {
 					args: { items: [data] },
 					info,
@@ -80,7 +77,7 @@ export const createApiKeyBaseResolver = (
 					transactional,
 				};
 
-				const hookParams = await runWritableBeforeHooks<ApiKeyCreateOrUpdateInputArgs>(
+				const hookParams = await runWritableBeforeHooks<ApiKeyInputArgs>(
 					HookRegister.BEFORE_CREATE,
 					params,
 					'ApiKey'
@@ -102,17 +99,21 @@ export const createApiKeyBaseResolver = (
 					);
 				}
 
-				return ApiKey.fromBackendEntity<ApiKeyStorage, ApiKey<ApiKeyStorage>>(apiKey);
+				if (gqlEntityType.fromBackendEntity) {
+					return gqlEntityType.fromBackendEntity(apiKey);
+				}
+
+				return apiKey as any;
 			});
 		}
 
-		@Mutation(() => ApiKey)
+		@Mutation(() => gqlEntityType)
 		async updateApiKey(
 			@Arg('data', () => ApiKeyCreateOrUpdateInputArgs) data: ApiKeyCreateOrUpdateInputArgs,
 			@Ctx() context: AuthorizationContext,
 			@Info() info: GraphQLResolveInfo
-		): Promise<ApiKey<ApiKeyStorage> | null> {
-			return this.withTransaction<ApiKey<ApiKeyStorage> | null>(async () => {
+		): Promise<G | null> {
+			return this.withTransaction(async () => {
 				const params = {
 					args: { items: [data] },
 					info,
@@ -140,7 +141,11 @@ export const createApiKeyBaseResolver = (
 					);
 				}
 
-				return ApiKey.fromBackendEntity<ApiKeyStorage, ApiKey<ApiKeyStorage>>(apiKey);
+				if (gqlEntityType.fromBackendEntity) {
+					return gqlEntityType.fromBackendEntity(apiKey);
+				}
+
+				return apiKey as any;
 			});
 		}
 	}

@@ -1,6 +1,6 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider } from '@exogee/graphweaver';
+import { BackendProvider, WithId } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -9,7 +9,7 @@ import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../he
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
-import { ApiKey, ApiKeyStorage } from '../entities';
+import { ApiKeyStorage } from '../entities';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -47,9 +47,9 @@ const isURLWhitelisted = (authRedirect: URL) => {
 	);
 };
 
-export const authApolloPlugin = <D extends ApiKeyStorage>(
+export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
 	addUserToContext: (userId: string) => Promise<UserProfile>,
-	apiKeyDataProvider?: BackendProvider<D, ApiKey<D>>
+	apiKeyDataProvider?: BackendProvider<D, G>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
@@ -86,7 +86,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 
 				const apiKey = await apiKeyDataProvider?.findOne({
 					key,
-				});
+				} as D);
 
 				if (!apiKey || !apiKey.secret) {
 					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0001)';

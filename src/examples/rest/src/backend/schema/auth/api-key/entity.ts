@@ -1,16 +1,36 @@
 import {
 	AccessControlList,
-	ApiKey as BaseApiKey,
+	ApiKeyStorage,
+	ApplyAccessControlList,
 	AuthorizationContext,
-	createApiKeyEntity,
 } from '@exogee/graphweaver-auth';
+import { ID, ObjectType, Field, SummaryField, ReadOnly, GraphQLEntity } from '@exogee/graphweaver';
+
 import { ApiKey as OrmApiKey } from '../../../entities';
 
-const acl: AccessControlList<BaseApiKey<OrmApiKey>, AuthorizationContext> = {
+const acl: AccessControlList<ApiKey, AuthorizationContext> = {
 	DARK_SIDE: {
 		// Dark side user role can perform operations on any api keys
 		all: true,
 	},
 };
 
-export class ApiKey extends createApiKeyEntity<OrmApiKey>(acl) {}
+@ReadOnly({ adminUI: false, backend: true })
+@ApplyAccessControlList(acl)
+@ObjectType('ApiKey')
+export class ApiKey extends GraphQLEntity<OrmApiKey> {
+	public dataEntity!: OrmApiKey;
+
+	@Field(() => ID)
+	id!: string;
+
+	@SummaryField()
+	@Field(() => String)
+	key!: string;
+
+	@Field(() => Boolean)
+	revoked!: boolean;
+
+	@Field(() => [String], { nullable: true })
+	roles?: string[];
+}

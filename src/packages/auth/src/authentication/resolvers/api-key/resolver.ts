@@ -1,33 +1,34 @@
 import {
 	BackendProvider,
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
-	Filter,
 	GraphqlEntityType,
 	HookParams,
 	HookRegister,
 	Resolver,
+	WithId,
 	hookManagerMap,
 } from '@exogee/graphweaver';
 import { AuthenticationError, ValidationError } from 'apollo-server-errors';
 
-import { ApiKey, ApiKeyStorage } from '../../entities';
-import { ApiKeyCreateOrUpdateInputArgs, createApiKeyBaseResolver } from './base-resolver';
+import { ApiKeyStorage } from '../../entities';
+import {
+	ApiKeyInputArgs,
+	ApiKeyCreateOrUpdateInputArgs,
+	createApiKeyBaseResolver,
+} from './base-resolver';
 import { hashPassword } from '../../../utils/argon2id';
 
-export const createApiKeyResolver = <D extends ApiKeyStorage>(
-	gqlEntityType: GraphqlEntityType<ApiKey<D>, D>,
-	provider: BackendProvider<D, ApiKey<D>>
+export const createApiKeyResolver = <G extends WithId, D extends ApiKeyStorage>(
+	gqlEntityType: GraphqlEntityType<G, D>,
+	provider: BackendProvider<D, G>
 ) => {
 	@Resolver()
-	class PasswordAuthResolver extends createApiKeyBaseResolver(gqlEntityType, provider) {
+	class ApiKeyAuthResolver extends createApiKeyBaseResolver(gqlEntityType, provider) {
 		provider = provider;
 
-		public async runAfterHooks<H extends HookParams<ApiKeyCreateOrUpdateInputArgs>>(
-			hookRegister: HookRegister,
-			hookParams: H,
-			entities: (ApiKeyStorage | null)[]
-		): Promise<(ApiKeyStorage | null)[]> {
+		public async runAfterHooks<
+			H extends HookParams<ApiKeyInputArgs | ApiKeyCreateOrUpdateInputArgs>
+		>(hookRegister: HookRegister, hookParams: H, entities: (D | null)[]): Promise<(D | null)[]> {
 			const hookManager = hookManagerMap.get('ApiKey');
 			const { entities: hookEntities = [] } = hookManager
 				? await hookManager.runHooks(hookRegister, {
@@ -36,12 +37,10 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 				  })
 				: { entities };
 
-			return hookEntities as (ApiKeyStorage | null)[];
+			return hookEntities;
 		}
 
-		async create(
-			params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
-		): Promise<ApiKeyStorage> {
+		async create(params: CreateOrUpdateHookParams<ApiKeyInputArgs>): Promise<D> {
 			const [item] = params.args.items;
 			if (!item) throw new ValidationError('No data specified cannot continue.');
 
@@ -55,7 +54,7 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 				secret: secretHash,
 				...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
 				...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
-			} as D);
+			} as unknown as Partial<G>);
 
 			const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [apiKey]);
 			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
@@ -63,9 +62,7 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 			return entity;
 		}
 
-		async update(
-			params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
-		): Promise<ApiKeyStorage> {
+		async update(params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>): Promise<D> {
 			const [item] = params.args.items;
 			if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
 
@@ -79,7 +76,7 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 				...(secretHash ? { secret: secretHash } : {}),
 				...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
 				...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
-			});
+			} as Partial<G>);
 
 			const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [apiKey]);
 			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
@@ -88,5 +85,5 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 		}
 	}
 
-	return PasswordAuthResolver;
+	return ApiKeyAuthResolver;
 };

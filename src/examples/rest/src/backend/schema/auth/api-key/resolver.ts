@@ -9,7 +9,7 @@ import { ApiKey } from './entity';
 export const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, myConnection);
 
 @Resolver()
-export class ApiKeyAuthResolver extends createApiKeyResolver<OrmApiKey>(
+export class ApiKeyAuthResolver extends createApiKeyResolver<ApiKey, OrmApiKey>(
 	ApiKey,
 	apiKeyDataProvider
 ) {}

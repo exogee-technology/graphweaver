@@ -23,6 +23,7 @@ export type Scalars = {
 
 export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
+  exportPageSize?: Maybe<Scalars['Float']['output']>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -91,19 +92,20 @@ export type AdminUiMetadata = {
 export type ApiKey = {
   __typename?: 'ApiKey';
   id: Scalars['ID']['output'];
-  key: Scalars['String']['output'];
-  revoked: Scalars['Boolean']['output'];
-  roles?: Maybe<Array<Scalars['String']['output']>>;
 };
 
 export type ApiKeyCreateOrUpdateInput = {
   id: Scalars['ID']['input'];
   key?: InputMaybe<Scalars['String']['input']>;
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
+  roles?: InputMaybe<Array<Scalars['String']['input']>>;
   secret?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ApiKeyInsertInput = {
   key: Scalars['String']['input'];
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
+  roles?: InputMaybe<Array<Scalars['String']['input']>>;
   secret: Scalars['String']['input'];
 };
 
@@ -117,29 +119,10 @@ export type ApiKeysListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['ID']['input']>;
   id_null?: InputMaybe<Scalars['ID']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
-  key_ilike?: InputMaybe<Scalars['String']['input']>;
-  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_like?: InputMaybe<Scalars['String']['input']>;
-  key_ne?: InputMaybe<Scalars['String']['input']>;
-  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_notnull?: InputMaybe<Scalars['String']['input']>;
-  key_null?: InputMaybe<Scalars['String']['input']>;
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Scalars['String']['input']>;
-  roles_ilike?: InputMaybe<Scalars['String']['input']>;
-  roles_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  roles_like?: InputMaybe<Scalars['String']['input']>;
-  roles_ne?: InputMaybe<Scalars['String']['input']>;
-  roles_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  roles_notnull?: InputMaybe<Scalars['String']['input']>;
-  roles_null?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ApiKeysOrderByInput = {
   id?: InputMaybe<Sort>;
-  key?: InputMaybe<Sort>;
-  roles?: InputMaybe<Sort>;
 };
 
 export type ApiKeysPaginationInput = {
