@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
 import { AuthorizationContext, authApolloPlugin } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { resolvers } from './schema';
 // Auth Functions
