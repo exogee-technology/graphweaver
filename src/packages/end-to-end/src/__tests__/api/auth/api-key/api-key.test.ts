@@ -94,10 +94,27 @@ describe('API Key Authentication', () => {
 		await ConnectionManager.connect('InMemory', connection);
 		const database = ConnectionManager.database('InMemory');
 		await database?.orm.schema.createSchema();
+		const testApiKey = database?.em.create(OrmApiKey, {
+			key: 'test',
+			secret:
+				'$argon2id$v=19$m=65536,t=3,p=4$VCKXMZROC0Bg0Flbi9Khsg$NCOmYbM/wkuwUqB82JoOr0KzCyYsPd2WRGjy3cik0mk',
+			revoked: false,
+			roles: ['admin'],
+		});
+		if (testApiKey) database?.em.persistAndFlush(testApiKey);
+
+		const testRevokedApiKey = database?.em.create(OrmApiKey, {
+			key: 'test_revoked',
+			secret:
+				'$argon2id$v=19$m=65536,t=3,p=4$VCKXMZROC0Bg0Flbi9Khsg$NCOmYbM/wkuwUqB82JoOr0KzCyYsPd2WRGjy3cik0mk',
+			revoked: true,
+			roles: ['admin'],
+		});
+		if (testRevokedApiKey) database?.em.persistAndFlush(testRevokedApiKey);
 	});
 
-	test('should return an error when no system user is found.', async () => {
-		const base64EncodedCredentials = Buffer.from('testf:test').toString('base64');
+	test('should return a E0001 error when no system user is found.', async () => {
+		const base64EncodedCredentials = Buffer.from('test_fail:test').toString('base64');
 		console.log(base64EncodedCredentials);
 
 		const response = await graphweaver.server.executeOperation({
@@ -116,5 +133,68 @@ describe('API Key Authentication', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
 			'Bad Request: API Key Authentication Failed. (E0001)'
 		);
+	});
+
+	test('should return a E0002 error when API Key has been revoked.', async () => {
+		const base64EncodedCredentials = Buffer.from('test_revoked:test').toString('base64');
+		console.log(base64EncodedCredentials);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
+			query: gql`
+				query {
+					tasks {
+						id
+					}
+				}
+			`,
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeDefined();
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Bad Request: API Key Authentication Failed. (E0002)'
+		);
+	});
+
+	test('should return a E0003 error when password does not match.', async () => {
+		const base64EncodedCredentials = Buffer.from('test:test_fail').toString('base64');
+		console.log(base64EncodedCredentials);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
+			query: gql`
+				query {
+					tasks {
+						id
+					}
+				}
+			`,
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeDefined();
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Bad Request: API Key Authentication Failed. (E0003)'
+		);
+	});
+
+	test('should return data when using a valid system user.', async () => {
+		const base64EncodedCredentials = Buffer.from('test:test').toString('base64');
+		console.log(base64EncodedCredentials);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
+			query: gql`
+				query {
+					tasks {
+						id
+					}
+				}
+			`,
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
 	});
 });

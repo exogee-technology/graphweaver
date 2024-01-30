@@ -50,11 +50,6 @@ export const createApiKeyBaseResolver = (
 
 	@Resolver((of) => ApiKey)
 	abstract class ApiKeyBaseResolver extends createBaseResolver(gqlEntityType, provider) {
-		abstract authenticate(
-			key: string,
-			secret: string,
-			params: RequestParams
-		): Promise<ApiKeyStorage>;
 		abstract create(
 			params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
 		): Promise<ApiKeyStorage>;

@@ -88,8 +88,10 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					key,
 				});
 
-				if (!apiKey || !apiKey.secret || apiKey.revoked) {
+				if (!apiKey || !apiKey.secret) {
 					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0001)';
+				} else if (apiKey.revoked) {
+					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0002)';
 				} else if (apiKey?.secret && (await verifyPassword(secret, apiKey.secret))) {
 					// We are a guest and have not logged in yet.
 					contextValue.user = new UserProfile({
@@ -100,7 +102,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					contextValue.token = {};
 					upsertAuthorizationContext(contextValue);
 				} else {
-					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0002)';
+					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0003)';
 				}
 			} else if (!authHeader || isExpired(authHeader)) {
 				// Case 2. No auth header or it has expired.

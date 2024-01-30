@@ -30,24 +30,6 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 	class PasswordAuthResolver extends createApiKeyBaseResolver(gqlEntityType, provider) {
 		provider = provider;
 
-		async authenticate(key: string, secret: string, params: RequestParams): Promise<ApiKeyStorage> {
-			const apiKey = await this.provider.findOne({
-				key,
-			});
-
-			if (!apiKey) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
-			if (!apiKey.secret)
-				throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
-			if (apiKey.revoked)
-				throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
-
-			if (await verifyPassword(secret, apiKey.secret)) {
-				return apiKey;
-			}
-
-			throw new AuthenticationError('Bad Request: Authentication Failed. (E0004)');
-		}
-
 		public async runAfterHooks<H extends HookParams<ApiKeyCreateOrUpdateInputArgs>>(
 			hookRegister: HookRegister,
 			hookParams: H,
