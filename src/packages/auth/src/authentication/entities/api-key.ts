@@ -45,5 +45,5 @@ export const createApiKeyEntity = <D extends BaseDataEntity>(
 	// Call the decorator to apply the ACL to the default entity above
 	ApplyAccessControlList(acl ?? defaultAcl)(ApiKey);
 	// Return the entity with the ACL applied
-	return ApiKey;
+	return ApiKey<D>;
 };
