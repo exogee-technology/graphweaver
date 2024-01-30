@@ -6,8 +6,10 @@ import { myConnection } from '../../../database';
 import { ApiKey as OrmApiKey } from '../../../entities/mysql';
 import { apiKey } from './entity';
 
+export const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, myConnection);
+
 @Resolver()
 export class ApiKeyAuthResolver extends createApiKeyResolver<OrmApiKey>(
 	apiKey,
-	new MikroBackendProvider(OrmApiKey, myConnection)
+	apiKeyDataProvider
 ) {}

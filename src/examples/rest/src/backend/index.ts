@@ -8,14 +8,13 @@ import { resolvers } from './schema';
 import { beforeRead, afterRead } from './auth/admin-ui';
 import { addUserToContext } from './auth/context';
 
-// Auth Plugin Configuration
-import { ApiKey } from './entities';
-import { myConnection } from './database';
+// API Key Data Provider
+import { apiKeyDataProvider } from './schema/auth';
 
 export const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(addUserToContext, new MikroBackendProvider(ApiKey, myConnection))],
+		plugins: [authApolloPlugin(addUserToContext, apiKeyDataProvider)],
 	},
 	adminMetadata: {
 		enabled: true,
