@@ -21,6 +21,12 @@ class CreateApiKeyInputArgs {
 
 	@Field(() => String)
 	secret!: string;
+
+	@Field(() => Boolean, { nullable: true })
+	revoked?: boolean;
+
+	@Field(() => [String], { nullable: true })
+	roles?: string[];
 }
 
 @InputType(`ApiKeyCreateOrUpdateInput`)

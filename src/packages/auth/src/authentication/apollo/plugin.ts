@@ -1,14 +1,14 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
+import { BackendProvider } from '@exogee/graphweaver';
+import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
-import { AuthenticationError } from 'apollo-server-errors';
 import { verifyPassword } from '../../utils/argon2id';
-import { BackendProvider } from '@exogee/graphweaver';
 import { ApiKey, ApiKeyStorage } from '../entities';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
@@ -76,7 +76,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
-			let apiKeyVerificationFailed = '';
+			let apiKeyVerificationFailedMessage: string | undefined = undefined;
 
 			if (apiKeyHeader && apiKeyDataProvider) {
 				// Case 1. API Key auth header found.
@@ -89,11 +89,10 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 				});
 
 				if (!apiKey || !apiKey.secret) {
-					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0001)';
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0001)';
 				} else if (apiKey.revoked) {
-					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0002)';
-				} else if (apiKey?.secret && (await verifyPassword(secret, apiKey.secret))) {
-					// We are a guest and have not logged in yet.
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0002)';
+				} else if (await verifyPassword(secret, apiKey.secret)) {
 					contextValue.user = new UserProfile({
 						id: apiKey.id,
 						roles: apiKey.roles ?? [],
@@ -102,7 +101,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 					contextValue.token = {};
 					upsertAuthorizationContext(contextValue);
 				} else {
-					apiKeyVerificationFailed = 'Bad Request: API Key Authentication Failed. (E0003)';
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0003)';
 				}
 			} else if (!authHeader || isExpired(authHeader)) {
 				// Case 2. No auth header or it has expired.
@@ -139,7 +138,8 @@ export const authApolloPlugin = <D extends ApiKeyStorage>(
 
 			return {
 				didResolveOperation: async (context) => {
-					if (apiKeyVerificationFailed) throw new AuthenticationError(apiKeyVerificationFailed);
+					if (apiKeyVerificationFailedMessage)
+						throw new AuthenticationError(apiKeyVerificationFailedMessage);
 				},
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors

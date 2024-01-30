@@ -9,18 +9,11 @@ import {
 	Resolver,
 	hookManagerMap,
 } from '@exogee/graphweaver';
+import { AuthenticationError, ValidationError } from 'apollo-server-errors';
 
 import { ApiKey, ApiKeyStorage } from '../../entities';
 import { ApiKeyCreateOrUpdateInputArgs, createApiKeyBaseResolver } from './base-resolver';
-import { UserProfile } from '../../../user-profile';
-import { AuthenticationError, ValidationError } from 'apollo-server-errors';
-import { RequestParams } from '../../../types';
-import { hashPassword, verifyPassword } from '../../../utils/argon2id';
-
-export enum SecretOperation {
-	LOGIN = 'login',
-	REGISTER = 'register',
-}
+import { hashPassword } from '../../../utils/argon2id';
 
 export const createApiKeyResolver = <D extends ApiKeyStorage>(
 	gqlEntityType: GraphqlEntityType<ApiKey<D>, D>,
@@ -50,7 +43,7 @@ export const createApiKeyResolver = <D extends ApiKeyStorage>(
 			params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
 		): Promise<ApiKeyStorage> {
 			const [item] = params.args.items;
-			if (!item) throw new Error('No data specified cannot continue.');
+			if (!item) throw new ValidationError('No data specified cannot continue.');
 
 			if (!item.key) throw new ValidationError('Create unsuccessful: Key not defined.');
 
