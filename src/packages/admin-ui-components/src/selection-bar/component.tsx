@@ -1,7 +1,7 @@
 import styles from './styles.module.css';
 
 import { Button } from '../button';
-import { Dropdown } from '../dropdown';
+import { Popover } from '../popover';
 
 export interface SelectionBarProps {
 	selectedRows: ReadonlySet<string>;
@@ -28,7 +28,7 @@ export const SelectionBar = ({
 						<Button type="reset" onClick={handleDeselect}>
 							Deselect
 						</Button>
-						<Dropdown
+						<Popover
 							items={[
 								{
 									id: 'delete-items',
@@ -37,10 +37,10 @@ export const SelectionBar = ({
 									className: styles.deleteSelectedRows,
 								},
 							]}
-							isDropup
+							position="top"
 						>
 							Actions
-						</Dropdown>
+						</Popover>
 					</div>
 				</div>
 			)}

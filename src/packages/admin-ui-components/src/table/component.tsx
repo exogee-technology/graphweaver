@@ -30,7 +30,6 @@ import { Button } from '../button';
 import { Modal } from '../modal';
 import { generateDeleteEntityMutation } from '../detail-panel/graphql';
 import toast from 'react-hot-toast';
-import { Dropdown } from '../dropdown';
 import { SelectionBar } from '../selection-bar';
 
 // Without stopping propagation on our links, the grid will be notified about the click,
