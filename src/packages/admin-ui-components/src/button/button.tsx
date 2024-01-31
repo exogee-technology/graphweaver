@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
 
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
-	onClickOutside?(e: React.MouseEvent<HTMLElement>): any /** Event emitted when outside */;
+	onClickOutside?(e: MouseEvent): any /** Event emitted when outside */;
 	className?: string /** alternative styling */;
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
@@ -40,7 +40,7 @@ export const Button = ({
 		}
 
 		// Otherwise, click was outside the element, emit an event.
-		onClickOutside?.(event as unknown as React.MouseEvent<HTMLElement>);
+		onClickOutside?.(event);
 	}
 
 	useEffect(() => {

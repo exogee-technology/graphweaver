@@ -42,7 +42,7 @@ export const Popover = ({
 	};
 
 	const handleOnOutsideClick = useCallback(
-		(e: React.MouseEvent<HTMLElement>) => {
+		(e: MouseEvent) => {
 			const target = e.target;
 			if (target instanceof Element) {
 				// if the click was on an element with an id that matches an item id, don't close the Popover
