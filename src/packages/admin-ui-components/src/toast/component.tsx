@@ -1,4 +1,4 @@
-import { SuccessIcon } from '../assets';
+import { SuccessCheckmark, CloseIcon } from '../assets';
 import { toast, ToastBar, Toaster } from 'react-hot-toast';
 
 import styles from './styles.module.css';
@@ -9,6 +9,7 @@ export const DismissibleToast = () => {
 			<Toaster
 				position="top-center"
 				toastOptions={{
+					position: 'bottom-right',
 					className: styles.toastContainer,
 					style: {
 						borderRadius: '6px',
@@ -16,9 +17,9 @@ export const DismissibleToast = () => {
 					},
 					success: {
 						duration: 60_000,
-						icon: <SuccessIcon className={styles.successIcon} />,
+						icon: <SuccessCheckmark className={styles.successIcon} />,
 						style: {
-							background: '#1B9266',
+							background: '#302A3C',
 							color: 'white',
 						},
 					},
@@ -36,19 +37,12 @@ export const DismissibleToast = () => {
 					<ToastBar toast={t}>
 						{({ icon, message }) => (
 							<>
-								{icon}
+								<div className={styles.iconContainer}>{icon}</div>
 								{message}
 								{t.type !== 'loading' && (
-									<>
-										<div className={styles.divider} />
-										<div className={styles.iconContainer} onClick={() => toast.dismiss(t.id)}>
-											<div className={styles.closeIconWrapper}>
-												<div className={styles.closeIconLeft}>
-													<div className={styles.closeIconRight}></div>
-												</div>
-											</div>
-										</div>
-									</>
+									<div className={styles.iconContainer} onClick={() => toast.dismiss(t.id)}>
+										<CloseIcon />
+									</div>
 								)}
 							</>
 						)}

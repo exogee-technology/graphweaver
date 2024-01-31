@@ -1,22 +1,14 @@
 .toastContainer {
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: center;
-}
-
-.divider {
-	border-left: 1px solid white;
-	height: 80%;
-	padding-right: 16px;
+	width: 320px;
 }
 
 .iconContainer {
-	display: flex;
-	min-width: 32px;
+	margin-top: 4px;
 	cursor: pointer;
-	min-height: 20px;
-	max-height: 20px;
 }
 
 .iconContainer:hover {
@@ -27,23 +19,6 @@
 	width: 100%;
 }
 
-.closeIconLeft {
-	height: 100%;
-	width: 2px;
-	margin-left: 12px;
-	background-color: #fff;
-	transform: rotate(45deg);
-}
-
-.closeIconRight {
-	height: 100%;
-	width: 2px;
-	background-color: #fff;
-	transform: rotate(90deg);
-}
-
-.successIcon {
-	fill: white;
-	width: 26px;
-  	height: 26px;
+div[role='status'][aria-live='polite'] {
+	justify-content: flex-start;
 }

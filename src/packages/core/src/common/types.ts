@@ -84,6 +84,9 @@ export interface BackendProvider<D, G> {
 	createMany(entities: Partial<G>[]): Promise<D[]>;
 	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
 	deleteOne(filter: Filter<G>): Promise<boolean>;
+	//optional deleteMany
+	deleteMany?(ids: string[]): Promise<boolean>;
+
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
 
@@ -120,6 +123,10 @@ export interface ReadHookParams<G, TContext = BaseContext> extends HookParams<G,
 
 export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
 	args: { filter: Filter<G> };
+}
+
+export interface DeleteManyHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
+	args: { ids: string[] };
 }
 
 export interface GraphqlEntityType<G, D> {

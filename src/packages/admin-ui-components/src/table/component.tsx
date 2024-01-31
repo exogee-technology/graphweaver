@@ -1,4 +1,10 @@
-import DataGrid, { Column, FormatterProps, SortColumn } from 'react-data-grid';
+import DataGrid, {
+	Column,
+	FormatterProps,
+	SortColumn,
+	SelectColumn,
+	CalculatedColumn,
+} from 'react-data-grid';
 import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -17,9 +23,17 @@ import 'react-data-grid/lib/styles.css';
 import './table-styles.css';
 import styles from './styles.module.css';
 import { Loader } from '../loader';
-import { ApolloError } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { Button } from '../button';
+import { Modal } from '../modal';
+import {
+	generateDeleteEntityMutation,
+	generateDeleteManyEntitiesMutation,
+} from '../detail-panel/graphql';
+import toast from 'react-hot-toast';
+import { SelectionBar } from '../selection-bar';
 
 // Without stopping propagation on our links, the grid will be notified about the click,
 // which is not what we want. We want to navigate and not let the grid handle it
@@ -33,73 +47,75 @@ const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
-	const entityColumns = entity.fields.map((field) => ({
-		key: field.name,
-		name: field.name,
-		width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
+	const entityColumns = [SelectColumn].concat(
+		entity.fields.map((field) => ({
+			key: field.name,
+			name: field.name,
+			width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
 
-		// We don't support sorting by relationships yet.
-		sortable: !field.relationshipType,
+			// We don't support sorting by relationships yet.
+			sortable: !field.relationshipType,
 
-		formatter: field.relationshipType
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const value = row[field.name as keyof typeof row];
-					const relatedEntity = entityByType(field.type);
+			formatter: field.relationshipType
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const value = row[field.name as keyof typeof row];
+						const relatedEntity = entityByType(field.type);
 
-					const linkForValue = (value: any) =>
-						relatedEntity ? (
-							<Link
-								key={value.value}
-								to={routeFor({ type: field.type, id: value.value as string })}
-								onClick={gobbleEvent}
-							>
-								{value.label}
-							</Link>
-						) : (
-							value.label
+						const linkForValue = (value: any) =>
+							relatedEntity ? (
+								<Link
+									key={value.value}
+									to={routeFor({ type: field.type, id: value.value as string })}
+									onClick={gobbleEvent}
+								>
+									{value.label}
+								</Link>
+							) : (
+								value.label
+							);
+
+						if (Array.isArray(value)) {
+							// We're in a many relationship. Return an array of links.
+							return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
+						} else if (value) {
+							return linkForValue(value);
+						} else {
+							return null;
+						}
+				  }
+				: field.type === 'Image'
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const imageUrl = row[field.name as keyof typeof row] as string;
+
+						return (
+							<img
+								src={imageUrl}
+								// alt={altText} @todo - implement alt text
+								style={{
+									width: '100%',
+									height: '100%',
+									objectFit: 'cover',
+									padding: 2,
+									borderRadius: 8,
+									objectPosition: 'center center',
+									textIndent: -9999,
+								}}
+								onError={hideImage}
+							/>
 						);
-
-					if (Array.isArray(value)) {
-						// We're in a many relationship. Return an array of links.
-						return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
-					} else if (value) {
-						return linkForValue(value);
-					} else {
-						return null;
-					}
-			  }
-			: field.type === 'Image'
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const imageUrl = row[field.name as keyof typeof row] as string;
-
-					return (
-						<img
-							src={imageUrl}
-							// alt={altText} @todo - implement alt text
-							style={{
-								width: '100%',
-								height: '100%',
-								objectFit: 'cover',
-								padding: 2,
-								borderRadius: 8,
-								objectPosition: 'center center',
-								textIndent: -9999,
-							}}
-							onError={hideImage}
-						/>
-					);
-			  }
-			: field.type === 'Media'
-			? ({ row }: FormatterProps<T, unknown>) => {
-					const mediaUrl = row[field.name as keyof typeof row] as string;
-					return (
-						<a href={mediaUrl} target="_blank" rel="noreferrer">
-							{mediaUrl}
-						</a>
-					);
-			  }
-			: undefined,
-	}));
+				  }
+				: field.type === 'Media'
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const mediaUrl = row[field.name as keyof typeof row] as string;
+						return (
+							<a href={mediaUrl} target="_blank" rel="noreferrer">
+								{mediaUrl}
+							</a>
+						);
+				  }
+				: undefined,
+		}))
+	);
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
@@ -168,6 +184,11 @@ export const Table = <T extends TableRowItem>({
 	const [search] = useSearchParams();
 	const rowKeyGetter = useCallback((row: T) => row.id, []);
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
+	const [selectedRows, setSelectedRows] = useState((): ReadonlySet<string> => new Set());
+	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
+	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(selectedEntity));
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
 		// Return true when the scrollTop reaches the bottom ...
@@ -197,7 +218,12 @@ export const Table = <T extends TableRowItem>({
 	}, [sortColumns]);
 
 	const navigateToDetailForEntity = useCallback(
-		(row: T) => {
+		(row: T, column: CalculatedColumn<T, unknown>) => {
+			// Don't navigate if the user has clicked the checkbox column
+			if (column.key === 'select-row') {
+				return;
+			}
+
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
 			// Don't set the filter in the route
 			const { filters, sort } = decodeSearchParams(search);
@@ -206,14 +232,46 @@ export const Table = <T extends TableRowItem>({
 		[search, selectedEntity]
 	);
 
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
 	if (loading) {
 		return <Loader />;
 	}
 	if (error) {
 		return <pre>{`Error! ${error.message}`}</pre>;
 	}
+
+	const handleSelectedRowsChange = (selectedRows: Set<string>) => {
+		setSelectedRows(selectedRows);
+	};
+
+	const handleDelete = () => {
+		setShowDeleteConfirmation(true);
+	};
+
+	const handleDeleteEntities = () => {
+		const ids = Array.from(selectedRows);
+
+		const result = deleteEntities({ variables: { ids }, refetchQueries: [`AdminUIListPage`] });
+
+		setSelectedRows(new Set());
+		setShowDeleteConfirmation(false);
+
+		result
+			.then(() => {
+				toast.success(
+					<div className={styles.successToast}>
+						<div>Success</div> <div className={styles.deletedText}>Rows deleted</div>
+					</div>
+				);
+			})
+			.catch((e) => {
+				console.error(e);
+				toast.error(
+					<div className={styles.errorToast}>
+						<div>An error occured while deleting rows</div>
+					</div>
+				);
+			});
+	};
 
 	return (
 		<>
@@ -224,6 +282,8 @@ export const Table = <T extends TableRowItem>({
 				sortColumns={sortColumns}
 				onSortColumnsChange={setSortColumns}
 				defaultColumnOptions={{ resizable: true }}
+				onSelectedRowsChange={setSelectedRows}
+				selectedRows={selectedRows}
 				onRowClick={navigateToDetailForEntity}
 				rowClass={rowClass}
 				onScroll={handleScroll}
@@ -233,6 +293,36 @@ export const Table = <T extends TableRowItem>({
 				<div className={styles.spinner}>
 					<Spinner />
 				</div>
+			)}
+			<Modal
+				isOpen={showDeleteConfirmation}
+				hideCloseX
+				className={styles.deleteEntitiesModal}
+				modalContent={
+					<div>
+						<div className={styles.deleteEntitiesModalTitle}>
+							Delete {selectedRows.size} row{selectedRows.size > 1 ? 's' : ''}
+						</div>
+						<p>Are you sure you want to delete these rows?</p>
+						<p>This action cannot be undone.</p>
+						<div className={styles.deleteEntitiesModalFooter}>
+							<Button type="reset" onClick={() => setShowDeleteConfirmation(false)}>
+								Cancel
+							</Button>
+							<Button type="button" onClick={handleDeleteEntities} className={styles.deleteButton}>
+								Delete
+							</Button>
+						</div>
+					</div>
+				}
+			/>
+
+			{selectedRows.size > 0 && (
+				<SelectionBar
+					selectedRows={selectedRows}
+					setSelectedRows={handleSelectedRowsChange}
+					handleDelete={handleDelete}
+				/>
 			)}
 		</>
 	);

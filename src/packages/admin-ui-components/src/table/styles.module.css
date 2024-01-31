@@ -11,3 +11,61 @@
 	line-height: 35px;
 	background: var(--body-bg-color);
 }
+
+.deleteEntitiesModal {
+	background: var(--detail-bg-color);
+	border: 1px solid rgba(237, 232, 242, 0.1);
+	border-radius: 12px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.deleteEntitiesModal p {
+	color: var(--body-copy-color);
+}
+
+.deleteEntitiesModalTitle {
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 34px;
+	text-align: left;
+	margin-top: 24px;
+}
+
+.deleteEntitiesModalFooter {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	margin-top: 25px;
+	padding: 10px;
+}
+
+.deleteEntitiesModalFooter button {
+	font-weight: 500;
+	margin-left: 10px;
+}
+
+.deleteButton {
+	background: #f12316;
+	border-radius: 6px;
+	color: var(--body-copy-color);
+	padding: 8px 16px;
+}
+
+.deleteButton:hover {
+	background: #f12316;
+	opacity: 0.6;
+}
+
+.successToast {
+	display: flex;
+	flex-direction: column;
+}
+
+.deletedText {
+	color: #ede8f2b2;
+}

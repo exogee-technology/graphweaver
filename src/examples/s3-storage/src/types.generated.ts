@@ -23,6 +23,7 @@ export type Scalars = {
 
 export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
+  exportPageSize?: Maybe<Scalars['Float']['output']>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -94,6 +95,7 @@ export type Mutation = {
   createSubmission: Submission;
   createSubmissions: Array<Submission>;
   deleteSubmission: Scalars['Boolean']['output'];
+  deleteSubmissions: Scalars['Boolean']['output'];
   getUploadUrl: Scalars['String']['output'];
   updateSubmission: Submission;
   updateSubmissions: Array<Submission>;
@@ -117,6 +119,11 @@ export type MutationCreateSubmissionsArgs = {
 
 export type MutationDeleteSubmissionArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteSubmissionsArgs = {
+  ids: Array<Scalars['ID']['input']>;
 };
 
 
