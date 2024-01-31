@@ -45,12 +45,11 @@ export const Popover = ({
 		(e: React.MouseEvent<HTMLElement>) => {
 			const target = e.target;
 			if (target instanceof Element) {
+				// if the click was on an element with an id that matches an item id, don't close the Popover
 				if (target.id && items.some((item) => item.id === target.id)) {
 					return;
 				}
 			}
-			console.log(typeof e.target);
-			// if the click was on an element with an id that matches an item id, don't close the Popover
 
 			setIsOpen(false);
 		},
