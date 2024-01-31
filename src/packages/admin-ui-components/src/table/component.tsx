@@ -28,7 +28,10 @@ import { ApolloError, useMutation } from '@apollo/client';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Button } from '../button';
 import { Modal } from '../modal';
-import { generateDeleteEntityMutation } from '../detail-panel/graphql';
+import {
+	generateDeleteEntityMutation,
+	generateDeleteManyEntitiesMutation,
+} from '../detail-panel/graphql';
 import toast from 'react-hot-toast';
 import { SelectionBar } from '../selection-bar';
 
@@ -185,7 +188,8 @@ export const Table = <T extends TableRowItem>({
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	const [deleteEntity] = useMutation(generateDeleteEntityMutation(selectedEntity));
+	//const [deleteEntity] = useMutation(generateDeleteEntityMutation(selectedEntity));
+	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(selectedEntity));
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
 		// Return true when the scrollTop reaches the bottom ...
@@ -247,22 +251,12 @@ export const Table = <T extends TableRowItem>({
 	const handleDeleteEntities = () => {
 		const ids = Array.from(selectedRows);
 
-		// For each id, call a separate delete mutation
-		const results = [];
-
-		for (const id of ids) {
-			// If it's the last one, then we can refetch
-			if (id === ids[ids.length - 1]) {
-				results.push(deleteEntity({ variables: { id }, refetchQueries: [`AdminUIListPage`] }));
-			} else {
-				results.push(deleteEntity({ variables: { id } }));
-			}
-		}
+		const result = deleteEntities({ variables: { ids }, refetchQueries: [`AdminUIListPage`] });
 
 		setSelectedRows(new Set());
 		setShowDeleteConfirmation(false);
 
-		Promise.all(results)
+		result
 			.then(() => {
 				toast.success(
 					<div className={styles.successToast}>

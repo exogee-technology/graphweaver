@@ -42,7 +42,7 @@ export const Popover = ({
 	}
 
 	const handleOnOutsideClick = useCallback(
-		(e: MouseEvent) => {
+		(e: any) => {
 			// if the click was on an element with an id that matches an item id, don't close the Popover
 			if (e.target?.id && items.some((item) => item.id === e.target?.id)) {
 				return;
