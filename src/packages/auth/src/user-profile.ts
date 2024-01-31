@@ -1,5 +1,10 @@
 import { BaseDataEntity } from '@exogee/graphweaver';
 
+export enum UserProfileType {
+	SERVICE = 'service',
+	USER = 'user',
+}
+
 export type UserProfileData = {
 	id?: string;
 	username?: string;
@@ -11,6 +16,7 @@ export type UserProfileData = {
 	};
 	email?: string;
 	roles?: string[];
+	type?: UserProfileType;
 };
 
 export class UserProfile implements BaseDataEntity {
@@ -24,6 +30,7 @@ export class UserProfile implements BaseDataEntity {
 	};
 	email?: string; // This users email address
 	roles?: string[]; // The roles assigned to this user.
+	type?: UserProfileType = UserProfileType.USER; // The type of user this is.
 
 	constructor(userProfileData: UserProfileData) {
 		this.id = userProfileData.id;
@@ -32,6 +39,7 @@ export class UserProfile implements BaseDataEntity {
 		this.name = userProfileData.name;
 		this.email = userProfileData.email;
 		this.roles = userProfileData.roles;
+		this.type = userProfileData.type;
 	}
 
 	isReference(fieldName: string, dataField: any) {

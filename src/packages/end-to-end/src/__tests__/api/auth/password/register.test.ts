@@ -6,12 +6,11 @@ import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
-	RequestParams,
 	Credential,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
-import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 const user = new UserProfile({
