@@ -16,7 +16,7 @@ export const DismissibleToast = () => {
 						padding: '8px 16px',
 					},
 					success: {
-						duration: 300_000,
+						duration: 60_000,
 						icon: <SuccessCheckmark className={styles.successIcon} />,
 						style: {
 							background: '#302A3C',

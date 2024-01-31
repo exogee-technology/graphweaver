@@ -5,7 +5,7 @@ import styles from './styles.module.css';
 
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
-	onClickOutside?(e: DocumentEventMap['mousedown']): any /** Event emitted when outside */;
+	onClickOutside?(e: React.MouseEvent<HTMLElement>): any /** Event emitted when outside */;
 	className?: string /** alternative styling */;
 	children?: ReactNode;
 	type?: 'submit' | 'reset' | 'button';
@@ -28,7 +28,7 @@ export const Button = ({
 		onClick?.();
 	}
 
-	function handleMouseDownEvent(event: DocumentEventMap['mousedown']) {
+	function handleMouseDownEvent(event: MouseEvent) {
 		// No ref or target to compare? Return with no action
 		if (!buttonRef?.current || !event.target) {
 			return;
@@ -40,7 +40,7 @@ export const Button = ({
 		}
 
 		// Otherwise, click was outside the element, emit an event.
-		onClickOutside?.(event);
+		onClickOutside?.(event as unknown as React.MouseEvent<HTMLElement>);
 	}
 
 	useEffect(() => {

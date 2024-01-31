@@ -188,7 +188,6 @@ export const Table = <T extends TableRowItem>({
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	//const [deleteEntity] = useMutation(generateDeleteEntityMutation(selectedEntity));
 	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(selectedEntity));
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {

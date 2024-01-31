@@ -34,28 +34,33 @@ export const Popover = ({
 }: PopoverProps): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	function handleOnClickItem(item: PopoverItem) {
+	const handleOnClickItem = (item: PopoverItem) => {
 		return () => {
 			const result = item.onClick?.();
 			if (result !== false) setIsOpen(false);
 		};
-	}
+	};
 
 	const handleOnOutsideClick = useCallback(
-		(e: any) => {
-			// if the click was on an element with an id that matches an item id, don't close the Popover
-			if (e.target?.id && items.some((item) => item.id === e.target?.id)) {
-				return;
+		(e: React.MouseEvent<HTMLElement>) => {
+			const target = e.target;
+			if (target instanceof Element) {
+				if (target.id && items.some((item) => item.id === target.id)) {
+					return;
+				}
 			}
+			console.log(typeof e.target);
+			// if the click was on an element with an id that matches an item id, don't close the Popover
+
 			setIsOpen(false);
 		},
 		[items]
 	);
 
-	function handleOnClickButton() {
+	const handleOnClickButton = () => {
 		setIsOpen(!isOpen);
 		props.onClick?.();
-	}
+	};
 
 	const PopoverList = useMemo(
 		() => (
