@@ -30,6 +30,7 @@ import type {
 	ReadHookParams,
 	HookParams,
 	BaseContext,
+	DeleteManyHookParams,
 } from './common/types';
 import { Sort, TypeMap } from './common/types';
 import {
@@ -718,6 +719,45 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				}));
 
 			return success;
+		}
+
+		// Delete many items in a transaction
+		@Mutation((returns) => Boolean, { name: `delete${plural}` })
+		async deleteMany(
+			@Arg('ids', () => [ID]) ids: string[],
+			@Info() info: GraphQLResolveInfo,
+			@Ctx() context: BaseContext
+		) {
+			return this.withTransaction<boolean>(async () => {
+				if (!provider.deleteMany)
+					throw new Error('Provider has not implemented DeleteMany not implemented');
+
+				const hookManager = hookManagerMap.get(gqlEntityTypeName);
+				const params: DeleteManyHookParams<G> = {
+					args: {
+						ids,
+					},
+					info,
+					context,
+					transactional,
+				};
+
+				const hookParams = hookManager
+					? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+					: params;
+
+				if (!hookParams.args?.ids) throw new Error('No delete ids specified cannot continue.');
+
+				const success = await provider.deleteMany(hookParams.args?.ids);
+
+				hookManager &&
+					(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+						...hookParams,
+						deleted: success,
+					}));
+
+				return success;
+			});
 		}
 	}
 

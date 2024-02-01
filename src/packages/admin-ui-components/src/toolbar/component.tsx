@@ -1,8 +1,8 @@
 import { Link, useSearchParams } from 'react-router-dom';
 
 import { Button } from '../button';
-import { Dropdown } from '../dropdown';
-import type { DropdownItem } from '../dropdown';
+import { Popover } from '../popover';
+import type { PopoverItem } from '../popover';
 
 import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external.svg';
 import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
@@ -25,7 +25,7 @@ export const ToolBar = ({ title, subtitle, onExportToCSV }: ToolBarProps) => {
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	// @todo allow to be extended
-	const externalLinkItems: DropdownItem[] = [];
+	const externalLinkItems: PopoverItem[] = [];
 
 	return (
 		<div className={styles.toolBarContainer}>
@@ -66,7 +66,7 @@ export const ToolBar = ({ title, subtitle, onExportToCSV }: ToolBarProps) => {
 						</Button>
 					</Link>
 
-					{externalLinkItems.length > 0 && <Dropdown items={externalLinkItems}>Links</Dropdown>}
+					{externalLinkItems.length > 0 && <Popover items={externalLinkItems}>Links</Popover>}
 				</div>
 			</div>
 			<FilterBar key={`filterBar:${title}:${subtitle}`} iconBefore={<FilterIcon />} />

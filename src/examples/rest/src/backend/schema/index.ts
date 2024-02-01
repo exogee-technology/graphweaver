@@ -4,6 +4,7 @@ import {
 	OneTimePasswordAuthResolver,
 	Web3AuthResolver,
 	PasskeyAuthResolver,
+	ApiKeyAuthResolver,
 } from './auth';
 import { UserResolver } from './user';
 import { TaskResolver } from './task';
@@ -15,6 +16,7 @@ export const resolvers = [
 	OneTimePasswordAuthResolver,
 	Web3AuthResolver,
 	PasskeyAuthResolver,
+	ApiKeyAuthResolver,
 	UserResolver,
 	TaskResolver,
 	TagResolver,

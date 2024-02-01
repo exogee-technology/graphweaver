@@ -1,11 +1,15 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
+import { BackendProvider, WithId } from '@exogee/graphweaver';
+import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
-import { UserProfile } from '../../user-profile';
+import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
+import { verifyPassword } from '../../utils/argon2id';
+import { ApiKeyStorage } from '../entities';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -43,8 +47,9 @@ const isURLWhitelisted = (authRedirect: URL) => {
 	);
 };
 
-export const authApolloPlugin = (
-	addUserToContext: (userId: string) => Promise<UserProfile>
+export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
+	addUserToContext: (userId: string) => Promise<UserProfile>,
+	apiKeyDataProvider?: BackendProvider<D, G>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
@@ -58,6 +63,7 @@ export const authApolloPlugin = (
 
 			// We may need to return a redirect to the client. If so, we'll set this variable.
 			const authHeader = request.http?.headers.get('authorization');
+			const apiKeyHeader = request.http?.headers.get('X-API-Key');
 			const authRedirect = new URL(
 				request.http?.headers.get(REDIRECT_HEADER) ?? requireEnvironmentVariable('AUTH_BASE_URI')
 			);
@@ -70,9 +76,35 @@ export const authApolloPlugin = (
 
 			// If verification fails then set this flag
 			let tokenVerificationFailed = false;
+			let apiKeyVerificationFailedMessage: string | undefined = undefined;
 
-			// Case 1. No auth header or it has expired.
-			if (!authHeader || isExpired(authHeader)) {
+			if (apiKeyHeader && apiKeyDataProvider) {
+				// Case 1. API Key auth header found.
+				logger.trace('X-API-Key header found checking validity.');
+
+				const [key, secret] = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
+
+				const apiKey = await apiKeyDataProvider?.findOne({
+					key,
+				} as D);
+
+				if (!apiKey || !apiKey.secret) {
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0001)';
+				} else if (apiKey.revoked) {
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0002)';
+				} else if (await verifyPassword(secret, apiKey.secret)) {
+					contextValue.user = new UserProfile({
+						id: apiKey.id,
+						roles: apiKey.roles ?? [],
+						type: UserProfileType.SERVICE,
+					});
+					contextValue.token = {};
+					upsertAuthorizationContext(contextValue);
+				} else {
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0003)';
+				}
+			} else if (!authHeader || isExpired(authHeader)) {
+				// Case 2. No auth header or it has expired.
 				logger.trace('No Auth header, setting redirect');
 
 				// We are a guest and have not logged in yet.
@@ -82,7 +114,7 @@ export const authApolloPlugin = (
 				});
 				upsertAuthorizationContext(contextValue);
 			} else {
-				// Case 2. There is a valid auth header
+				// Case 3. There is a valid auth header
 				logger.trace('Got a token, checking it is valid.');
 
 				const tokenProvider = new AuthTokenProvider();
@@ -105,6 +137,10 @@ export const authApolloPlugin = (
 			}
 
 			return {
+				didResolveOperation: async (context) => {
+					if (apiKeyVerificationFailedMessage)
+						throw new AuthenticationError(apiKeyVerificationFailedMessage);
+				},
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
 					const errors = (response.body as any)?.singleResult?.errors;

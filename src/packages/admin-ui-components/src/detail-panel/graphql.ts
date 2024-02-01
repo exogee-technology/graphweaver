@@ -26,6 +26,18 @@ export const generateCreateEntityMutation = (
     }
   `;
 
+export const generateDeleteEntityMutation = (entity: Entity) => gql`
+    mutation deleteEntity ($id: ID!){
+      delete${entity.name} (id: $id)
+    }
+  `;
+
+export const generateDeleteManyEntitiesMutation = (entity: Entity) => gql`
+mutation deleteManyEntities ($ids: [ID!]!){
+  delete${pluralize(entity.name)} (ids: $ids)
+}
+`;
+
 export const getRelationshipQuery = (entityName: string, summaryField?: string) => {
 	const pluralName = pluralize(entityName);
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);

@@ -192,6 +192,7 @@ export const DetailPanel = () => {
 		const path = window.location.pathname;
 		const entityName = selectedEntity.name;
 
+		//@todo - this is a hack, need to figure out how to remove this function when the entity changes.
 		// This pattern checks that the entity name exists between two forward slashes
 		const regexPattern = new RegExp(`/${entityName}/`);
 		// If the path does not include the entity name, then we've already moved to a different entity
