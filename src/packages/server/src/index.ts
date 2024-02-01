@@ -53,6 +53,7 @@ export interface GraphweaverConfig {
 	enableValidationRules?: boolean;
 	fileAutoGenerationOptions?: {
 		typesOutputPath?: string[] | string;
+		clientPath?: string[];
 	};
 }
 
