@@ -5,7 +5,7 @@ import nearOperationFilePreset from '@graphql-codegen/near-operation-file-preset
 
 type CodegenOptions = {
 	typesOutputPath?: string | string[];
-	clientPath?: string[];
+	watchForFileChangesInPaths?: string[];
 };
 
 const content = `/* eslint-disable */
@@ -25,7 +25,9 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 			ignoreNoDocuments: true,
 			documents: [
 				path.join('./src', extensions),
-				...(options?.clientPath?.map((clientPath) => path.join(clientPath, extensions)) || []),
+				...(options?.watchForFileChangesInPaths?.map((clientPath) =>
+					path.join(clientPath, extensions)
+				) || []),
 			],
 			generates: {
 				'src/types.generated.ts': {
