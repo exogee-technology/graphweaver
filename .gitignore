@@ -115,3 +115,5 @@ node_modules
 
 # Session-specific authentication
 token.json
+
+*.pem
