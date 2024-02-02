@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { ApolloCache, TypePolicy, useQuery } from '@apollo/client';
 import { SCHEMA_QUERY } from './graphql';
 import pluralize from 'pluralize';
+import { PanelMode } from '../detail-panel';
 
 export interface Schema {
 	entities: Entity[];
@@ -61,6 +62,7 @@ export interface EntityAttributes {
 export interface CustomFieldArgs<T = unknown> {
 	entity: T;
 	context: 'table' | 'detail-form';
+	panelMode: PanelMode;
 }
 
 export interface CustomField<T = unknown> extends EntityField {
@@ -71,6 +73,7 @@ export interface CustomField<T = unknown> extends EntityField {
 
 	hideOnTable?: boolean;
 	hideOnDetailForm?: boolean;
+	panelMode?: PanelMode;
 }
 
 // @todo this needs typing correctly
