@@ -5,21 +5,20 @@ import { useState } from 'react';
 
 export const SecretFieldComponent = (args: CustomFieldArgs) => {
 	const [hasGeneratedSecret, setHasGeneratedSecret] = useState(false);
-	const { setFieldValue, initialValues } = useFormikContext();
+	const { setFieldValue } = useFormikContext();
 
 	const isCreatePanel = args.panelMode === PanelMode.CREATE;
 
 	const handleGenerateSecret = async () => {
-		// generate secret
+		// Generate secret
 		await (async function () {
-			const k = await window.crypto.subtle.generateKey(
+			const secretKey = await window.crypto.subtle.generateKey(
 				{ name: 'AES-GCM', length: 256 },
 				true,
-				// @todo - ensure this is what we want
-				['encrypt', 'decrypt']
+				['encrypt']
 			);
-			const jwk = await crypto.subtle.exportKey('jwk', k);
-			setFieldValue('secret', jwk.k);
+			const { k: secretValue } = await crypto.subtle.exportKey('jwk', secretKey);
+			setFieldValue('secret', secretValue);
 		})();
 
 		const generatedKey = window.crypto.randomUUID();

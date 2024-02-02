@@ -73,7 +73,7 @@ export interface CustomField<T = unknown> extends EntityField {
 
 	hideOnTable?: boolean;
 	hideOnDetailForm?: boolean;
-	panelMode: PanelMode;
+	panelMode?: PanelMode;
 }
 
 // @todo this needs typing correctly
