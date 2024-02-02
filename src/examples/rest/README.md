@@ -52,3 +52,15 @@ Once the database is up and running you can start the example with:
 pnpm i
 pnpm start
 ```
+
+## Making a request via APIKey
+
+After generating an API key via the adminUI, taking note of the secret as the API key is created, you can use this to make a request to a Graphweaver server.
+Encode the `<key>:<secret>` in Base64 following Basic Access Authentication. Using that, you can make a curl request, ex:
+
+```
+curl --location 'http://localhost:9001/' \
+--header 'x-api-key: <your-encoded-key>' \
+--header 'Content-Type: application/json' \
+--data '{"query":"query {\n    tasks {\n        id\n    }\n}","variables":{}}'
+```
