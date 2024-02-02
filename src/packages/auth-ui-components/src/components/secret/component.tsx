@@ -11,15 +11,14 @@ export const SecretFieldComponent = (args: CustomFieldArgs) => {
 
 	const handleGenerateSecret = async () => {
 		// Generate secret
-		await (async function () {
-			const secretKey = await window.crypto.subtle.generateKey(
-				{ name: 'AES-GCM', length: 256 },
-				true,
-				['encrypt']
-			);
-			const { k: secretValue } = await crypto.subtle.exportKey('jwk', secretKey);
-			setFieldValue('secret', secretValue);
-		})();
+
+		const secretKey = await window.crypto.subtle.generateKey(
+			{ name: 'AES-GCM', length: 256 },
+			true,
+			['encrypt']
+		);
+		const { k: secretValue } = await crypto.subtle.exportKey('jwk', secretKey);
+		setFieldValue('secret', secretValue);
 
 		const generatedKey = window.crypto.randomUUID();
 		setFieldValue('key', generatedKey);
