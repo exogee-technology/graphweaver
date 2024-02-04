@@ -66,7 +66,7 @@ const getField = ({ field }: { field: EntityField }) => {
 	}
 
 	const { enumByName } = useSchema();
-	const enumField = enumByName(field.type);
+	const enumField = enumByName(field.type.replace('[]', ''));
 	if (enumField) {
 		return (
 			<EnumField name={field.name} typeEnum={enumField} multiple={field.type.endsWith('[]')} />

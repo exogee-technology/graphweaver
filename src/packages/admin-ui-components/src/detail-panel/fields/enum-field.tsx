@@ -3,8 +3,16 @@ import { useEffect } from 'react';
 import { SelectOption, Select, SelectMode } from '../../multi-select';
 import { Enum } from '../../utils';
 
-export const EnumField = ({ name, typeEnum }: { name: string; typeEnum: Enum }) => {
-	const [_, meta, helpers] = useField({ name, multiple: false });
+export const EnumField = ({
+	name,
+	typeEnum,
+	multiple,
+}: {
+	name: string;
+	typeEnum: Enum;
+	multiple?: boolean;
+}) => {
+	const [_, meta, helpers] = useField({ name, multiple });
 	const { initialValue } = meta;
 
 	useEffect(() => {
@@ -30,7 +38,7 @@ export const EnumField = ({ name, typeEnum }: { name: string; typeEnum: Enum }) 
 			options={enumOptions}
 			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
 			onChange={handleOnChange}
-			mode={SelectMode.SINGLE}
+			mode={multiple ? SelectMode.MULTI : SelectMode.SINGLE}
 		/>
 	);
 };
