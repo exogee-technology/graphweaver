@@ -218,8 +218,11 @@ export type Mutation = {
   createUser: User;
   createUsers: Array<User>;
   deleteTag: Scalars['Boolean']['output'];
+  deleteTags: Scalars['Boolean']['output'];
   deleteTask: Scalars['Boolean']['output'];
+  deleteTasks: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
+  deleteUsers: Scalars['Boolean']['output'];
   enrolWallet: Scalars['Boolean']['output'];
   loginPassword: Token;
   passkeyGenerateAuthenticationOptions: Scalars['JSON']['output'];
@@ -309,13 +312,28 @@ export type MutationDeleteTagArgs = {
 };
 
 
+export type MutationDeleteTagsArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationDeleteTaskArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+export type MutationDeleteTasksArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationDeleteUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteUsersArgs = {
+  ids: Array<Scalars['ID']['input']>;
 };
 
 

@@ -39,6 +39,11 @@ interface ResultBaseType {
 	[x: string]: unknown;
 }
 
+export enum PanelMode {
+	CREATE = 'CREATE',
+	EDIT = 'EDIT',
+}
+
 const getField = ({ field }: { field: EntityField }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 	if (field.relationshipType) {
@@ -93,8 +98,18 @@ const DetailField = ({ field }: { field: EntityField }) => {
 	);
 };
 
-const CustomField = ({ field, entity }: { field: CustomField; entity: Record<string, any> }) => (
-	<div className={styles.detailField}>{field.component({ entity, context: 'detail-form' })}</div>
+const CustomField = ({
+	field,
+	entity,
+	panelMode,
+}: {
+	field: CustomField;
+	entity: Record<string, any>;
+	panelMode: PanelMode;
+}) => (
+	<div className={styles.detailField}>
+		{field.component({ entity, context: 'detail-form', panelMode })}
+	</div>
 );
 
 const PersistForm = ({ name }: { name: string }) => {
@@ -121,6 +136,7 @@ const DetailForm = ({
 	onSubmit,
 	persistName,
 	isReadOnly,
+	panelMode,
 }: {
 	initialValues: Record<string, any>;
 	detailFields: (EntityField | CustomField)[];
@@ -128,6 +144,7 @@ const DetailForm = ({
 	onCancel: () => void;
 	persistName: string;
 	isReadOnly?: boolean;
+	panelMode: PanelMode;
 }) => {
 	return (
 		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
@@ -143,6 +160,7 @@ const DetailForm = ({
 										key={field.name}
 										field={field as CustomField}
 										entity={initialValues}
+										panelMode={panelMode}
 									/>
 								);
 							} else {
@@ -180,13 +198,13 @@ export const DetailPanel = () => {
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	const isNew = id === 'graphweaver-admin-new-entity';
+	const panelMode = id === 'graphweaver-admin-new-entity' ? PanelMode.CREATE : PanelMode.EDIT;
 
 	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
 		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
-			skip: isNew,
+			skip: panelMode === PanelMode.CREATE,
 		}
 	);
 
@@ -284,7 +302,7 @@ export const DetailPanel = () => {
 
 		try {
 			let result: FetchResult;
-			if (id && !isNew) {
+			if (id && panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				if (formValues.uploadUrl && formValues.file) {
 					await uploadFileToSignedURL(values.uploadUrl, values.file);
@@ -335,7 +353,9 @@ export const DetailPanel = () => {
 			clearSessionState();
 			onClose();
 
-			const entityname = `${id && !isNew ? 'update' : 'create'}${selectedEntity.name}`;
+			const entityname = `${id && panelMode === PanelMode.EDIT ? 'update' : 'create'}${
+				selectedEntity.name
+			}`;
 
 			toast.success(
 				<div>
@@ -350,7 +370,7 @@ export const DetailPanel = () => {
 							  }`
 							: result.data?.[entityname].id}
 					</button>{' '}
-					has been successfully {id && !isNew ? 'updated' : 'created'}.
+					has been successfully {id && panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
 				</div>
 			);
 		} catch (error: unknown) {
@@ -404,6 +424,7 @@ export const DetailPanel = () => {
 									onSubmit={handleOnSubmit}
 									persistName={persistName}
 									isReadOnly={selectedEntity.attributes.isReadOnly}
+									panelMode={panelMode}
 								/>
 							</>
 						)}
