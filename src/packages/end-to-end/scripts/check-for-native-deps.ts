@@ -23,7 +23,6 @@ const extractPackageName = (path: string) => {
 	const splitPath = path.split('/');
 	const lastNodeModulesIndex = splitPath.lastIndexOf('node_modules');
 	const packageName = splitPath[lastNodeModulesIndex + 1];
-	console.log('Extracted package name:', path, packageName);
 	return packageName;
 };
 
@@ -44,24 +43,29 @@ if (!existsSync(dir)) {
 }
 
 const nativeModules = findFiles(dir, '.node');
+
+if (!nativeModules.length) {
+	console.log('No native modules found in production dependencies.');
+	process.exit(0);
+}
+
+// Looks like some native deps were found, let's describe them to the user
 let output = '';
+const processedPackageNames = new Set<string>();
 
 nativeModules.forEach((filePath) => {
+	console.log('Found native module:', filePath);
 	const packageName = extractPackageName(filePath);
-	const whyResult = runPnpmWhy(packageName);
-	if (whyResult) {
-		output += `Why ${packageName} exists in the project:`;
+	if (!processedPackageNames.has(packageName)) {
+		const whyResult = runPnpmWhy(packageName);
+		output += `Why ${packageName} exists in the project:` + '\n';
 		output += whyResult + '\n\n';
+		processedPackageNames.add(packageName);
 	}
 });
 
-if (output) {
-	console.log(
-		`Found native modules in production dependencies! See the "pnpm why" output below for details:`
-	);
-	console.log(output);
-	process.exit(1);
-} else {
-	// No native modules found, hurrah!
-	process.exit(0);
-}
+console.log(
+	`Found native modules in production dependencies! See the "pnpm why" output below for details:`
+);
+console.log(output);
+process.exit(1);
