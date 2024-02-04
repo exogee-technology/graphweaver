@@ -51,7 +51,7 @@
 		"@types/papaparse": "5.3.14",
 		"@types/pluralize": "0.0.29",
 		"@types/react": "18.0.25",
-		"esbuild": "0.15.5",
+		"esbuild": "0.20.0",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-svgr": "1.0.1",
 		"react": "18.2.0",

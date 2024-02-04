@@ -1,6 +1,5 @@
 import path from 'path';
-import fs from 'fs';
-import { BuildOptions, Message } from 'esbuild';
+import { BuildOptions, Plugin } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -33,8 +32,8 @@ export const baseEsbuildConfig: BuildOptions = {
 	platform: 'node',
 	target: ['node18'],
 	format: 'cjs',
-	watch: true,
 	keepNames: true,
+	metafile: true,
 	external: [
 		'tedious',
 		'pg-query-stream',
@@ -50,23 +49,23 @@ export const baseEsbuildConfig: BuildOptions = {
 	],
 };
 
-export const makeAllPackagesExternalPlugin = () => ({
+export const makeAllPackagesExternalPlugin = (): Plugin => ({
 	name: 'make-all-packages-external',
-	setup(build: any) {
+	setup(build) {
 		// On Windows, packages in the monorepo are resolved as full file paths starting with C:\ ...
 		// And Go (used by esbuild) does not support regex with negative lookaheads
 		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // Must not start with "/" or "./" or "../" or a drive letter
-		build.onResolve({ filter }, ({ path }: any) => {
+		build.onResolve({ filter }, ({ path }) => {
 			return { path, external: true };
 		});
 	},
 });
 
-export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
+export const makeOptionalMikroOrmPackagesExternalPlugin = (): Plugin => ({
 	name: 'make-mikro-orm-packages-external',
-	setup(build: any) {
+	setup(build) {
 		const filter = /^@mikro-orm/;
-		build.onResolve({ filter }, ({ path }: any) => {
+		build.onResolve({ filter }, ({ path }) => {
 			// If it's available locally then it should be bundled,
 			// otherwise let it be external in the resulting bundle.
 			try {

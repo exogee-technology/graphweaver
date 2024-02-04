@@ -38,7 +38,7 @@
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.0",
 		"@types/pluralize": "0.0.29",
-		"esbuild": "0.15.5",
+		"esbuild": "0.20.0",
 		"glob": "10.3.10"
 	},
 	"keywords": [

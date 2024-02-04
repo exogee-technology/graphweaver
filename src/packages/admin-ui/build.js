@@ -3,9 +3,6 @@ import svgrPlugin from 'esbuild-plugin-svgr';
 import cssModulesPlugin from 'esbuild-css-modules-plugin';
 import { copy } from 'esbuild-plugin-copy';
 
-const flags = process.argv.slice(0);
-const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName}`);
-
 (async () => {
 	await esbuild.build({
 		outdir: 'dist',
@@ -45,6 +42,5 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 				],
 			}),
 		],
-		watch: flagIncludes('watch'),
 	});
 })();

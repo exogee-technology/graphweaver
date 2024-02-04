@@ -1,4 +1,5 @@
 import path from 'path';
+import { writeFileSync } from 'fs';
 import { build } from 'esbuild';
 import rimrafCallback from 'rimraf';
 import { promisify } from 'util';
@@ -61,7 +62,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 				)}.js`
 			);
 
-			await build(
+			const result = await build(
 				onResolveEsbuildConfiguration({
 					...baseEsbuildConfig,
 
@@ -71,6 +72,12 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})
 			);
+
+			if (result.metafile)
+				writeFileSync(
+					`${buildOutputPathFor(backendFunction.handlerPath)}.json`,
+					JSON.stringify(result.metafile, null, 2)
+				);
 		}
 	}
 

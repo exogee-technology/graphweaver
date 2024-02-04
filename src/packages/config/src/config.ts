@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { merge } from 'lodash';
+import merge from 'lodash/merge';
 
 export interface BackendOptions {
 	additionalFunctions: Array<AdditionalFunctionOptions>;
