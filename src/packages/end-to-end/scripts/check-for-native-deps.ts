@@ -42,26 +42,28 @@ if (!existsSync(dir)) {
 	process.exit(0);
 }
 
-const nativeModules = findFiles(dir, '.node');
+// We support SQLite mainly for internal testing purposes, but it does use native modules. Let's ignore for this test
+const allowList = new Set(['sqlite3', 'better-sqlite3']);
 
-if (!nativeModules.length) {
+const packagesWithNativeModules = new Set(
+	findFiles(dir, '.node')
+		.map((module) => extractPackageName(module))
+		.filter((pkg) => !allowList.has(pkg))
+);
+
+if (!packagesWithNativeModules.size) {
 	console.log('No native modules found in production dependencies.');
 	process.exit(0);
 }
 
 // Looks like some native deps were found, let's describe them to the user
 let output = '';
-const processedPackageNames = new Set<string>();
 
-nativeModules.forEach((filePath) => {
-	console.log('Found native module:', filePath);
-	const packageName = extractPackageName(filePath);
-	if (!processedPackageNames.has(packageName)) {
-		const whyResult = runPnpmWhy(packageName);
-		output += `Why ${packageName} exists in the project:` + '\n';
-		output += whyResult + '\n\n';
-		processedPackageNames.add(packageName);
-	}
+packagesWithNativeModules.forEach((packageName) => {
+	console.log('Found package containing native module:', packageName);
+	const whyResult = runPnpmWhy(packageName);
+	output += `Why ${packageName} exists in the project:` + '\n';
+	output += whyResult + '\n\n';
 });
 
 console.log(
