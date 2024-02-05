@@ -20,12 +20,11 @@ export const EnumField = ({
 	}, []);
 
 	const handleOnChange = (selected: SelectOption[]) => {
-		const value = selected?.[0]?.value;
-		if (value === undefined) {
-			helpers.setValue(undefined);
-		} else {
-			helpers.setValue(value);
+		if (multiple) {
+			return helpers.setValue(selected.map((option) => option.value));
 		}
+		const value = selected?.[0]?.value;
+		return helpers.setValue(value);
 	};
 
 	const enumOptions = Array.from(typeEnum.values).map((v) => ({
@@ -36,7 +35,13 @@ export const EnumField = ({
 	return (
 		<Select
 			options={enumOptions}
-			value={initialValue ? [{ value: initialValue, label: `${initialValue}` }] : []}
+			value={[].concat(
+				(initialValue &&
+					(Array.isArray(initialValue)
+						? initialValue.map((val) => ({ value: val, label: `${val}` }))
+						: { value: initialValue, label: `${initialValue}` })) ||
+					[]
+			)}
 			onChange={handleOnChange}
 			mode={multiple ? SelectMode.MULTI : SelectMode.SINGLE}
 		/>
