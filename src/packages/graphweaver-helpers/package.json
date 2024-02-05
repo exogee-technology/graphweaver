@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-helpers",
 	"version": "1.0.0",
-	"main": "dist/index.js",
+	"main": "lib/index.js",
 	"scripts": {
 		"preinstall": "echo '\nWARNING: @exogee/graphweaver-helpers is deprecated. See https://docs.graphweaver.com/create-a-data-provider.\n'",
 		"build": "pnpm build:js && pnpm build:types",

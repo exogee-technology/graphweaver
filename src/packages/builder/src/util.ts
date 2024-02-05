@@ -25,6 +25,13 @@ export const buildOutputPathFor = (userSuppliedPath: string) => {
 	);
 };
 
+const optionalModules = new Set([
+	...Object.keys(require('knex/package.json').browser),
+	...Object.keys(require('@mikro-orm/core/package.json').peerDependencies),
+	...Object.keys(require('@mikro-orm/knex/package.json').peerDependencies),
+	'@mikro-orm/knex',
+]);
+
 export const baseEsbuildConfig: BuildOptions = {
 	minify: false,
 	bundle: true,
@@ -46,6 +53,7 @@ export const baseEsbuildConfig: BuildOptions = {
 		'mock-aws-s3',
 		'nock',
 		'aws-sdk',
+		...[...optionalModules],
 	],
 };
 

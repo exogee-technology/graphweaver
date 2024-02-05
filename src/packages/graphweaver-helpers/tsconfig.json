@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"experimentalDecorators": true,
 		"skipLibCheck": true,
-		"outDir": "dist",
+		"outDir": "lib",
 		"composite": true,
 		"rootDir": "src",
 		"sourceMap": true

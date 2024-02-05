@@ -1,19 +1,13 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { build } = require('esbuild');
-const { dependencies, devDependencies } = require('./package.json');
-
 (async () => {
-	await build({
-		entryPoints: ['./src/index.ts'],
+	const esbuild = await import('esbuild');
+	const { glob } = await import('glob');
+
+	const entryPoints = await glob('./src/**/*.ts');
+	await esbuild.build({
 		outdir: 'lib',
-		bundle: true,
+		format: 'cjs',
 		platform: 'node',
-		banner: { js: '#!/usr/bin/env node' },
-		external: [
-			// Our dependencies will be installed in node_modules. The bundling is
-			// just to ensure our own files are pulled in
-			...Object.keys(dependencies),
-			...Object.keys(devDependencies),
-		],
+		sourcemap: 'linked',
+		entryPoints,
 	});
 })();
