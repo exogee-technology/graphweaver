@@ -1,12 +1,19 @@
+const { build } = require('esbuild');
+const { dependencies, devDependencies } = require('./package.json');
+
 (async () => {
-	const esbuild = await import('esbuild');
-	const { glob } = await import('glob');
-	const entryPoints = await glob('./src/**/*.ts');
-	await esbuild.build({
+	await build({
 		outdir: 'lib',
 		format: 'cjs',
 		platform: 'node',
 		sourcemap: 'linked',
-		entryPoints,
+		bundle: true,
+		entryPoints: ['./src/index.ts'],
+		external: [
+			// Our dependencies will be installed in node_modules. The bundling is
+			// just to ensure our own files are pulled in
+			...Object.keys(dependencies),
+			...Object.keys(devDependencies),
+		],
 	});
 })();

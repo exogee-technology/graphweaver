@@ -10,14 +10,13 @@ import {
 	WalletAddress,
 	AuthenticationType,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
 import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
-import Web3Token from 'web3-token';
+import { sign } from 'web3-token';
 import * as Ethers from 'ethers';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { CreateOrUpdateHookParams } from '@exogee/graphweaver';
@@ -203,7 +202,7 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const web3Token = await Web3Token.sign((body: any) => ethers_signer.signMessage(body), {
+		const web3Token = await sign((body: any) => ethers_signer.signMessage(body), {
 			expires_in: '1d',
 		});
 
@@ -254,7 +253,7 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const web3Token = await Web3Token.sign((body: any) => ethers_signer.signMessage(body), {
+		const web3Token = await sign((body: any) => ethers_signer.signMessage(body), {
 			expires_in: '1d',
 		});
 

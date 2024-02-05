@@ -11,7 +11,7 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
-import { GraphQLResolveInfo } from 'graphql';
+import type { GraphQLResolveInfo } from 'graphql';
 
 import { AuthorizationContext } from '../../../types';
 

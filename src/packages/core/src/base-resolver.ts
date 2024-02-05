@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
+import type { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
 import pluralize from 'pluralize';
 import {
 	Arg,

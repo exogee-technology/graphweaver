@@ -11,7 +11,7 @@ import {
 import { Form, Formik } from 'formik';
 import { Config, DAppProvider, Mainnet, useEthers } from '@usedapp/core';
 import { ethers, getDefaultProvider } from 'ethers';
-import Web3Token from 'web3-token';
+import { sign } from 'web3-token';
 
 import { CAN_ENROL_WALLET_QUERY, ENROL_WALLET_MUTATION, VERIFY_WEB3_MUTATION } from './graphql';
 import { formatRedirectUrl } from '../../../utils/urls';
@@ -43,7 +43,7 @@ const ConnectButton = () => {
 		// Prompt user for account connections
 		await provider.send('eth_requestAccounts', []);
 		const signer = provider.getSigner();
-		const token = await Web3Token.sign(async (msg: string) => await signer.signMessage(msg), {
+		const token = await sign(async (msg: string) => await signer.signMessage(msg), {
 			statement: `Use my wallet to verify my identity on ${domain}.`,
 			domain,
 			expires_in: expiresIn,
@@ -83,7 +83,7 @@ const VerifyButton = () => {
 
 			if (library !== undefined && 'getSigner' in library && account !== undefined) {
 				const signer = library.getSigner();
-				const token = await Web3Token.sign(async (msg: string) => await signer.signMessage(msg), {
+				const token = await sign(async (msg: string) => await signer.signMessage(msg), {
 					statement: `Use my wallet to verify my identity.`,
 					domain,
 					expires_in: expiresIn,

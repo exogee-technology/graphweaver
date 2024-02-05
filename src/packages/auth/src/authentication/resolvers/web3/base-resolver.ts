@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Arg, Ctx, Query } from 'type-graphql';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
-import Web3Token from 'web3-token';
+import { verify } from 'web3-token';
 
 import {
 	AccessType,
@@ -60,7 +60,7 @@ export const createBaseWeb3AuthResolver = () => {
 				const mfa = await this.getMultiFactorAuthentication();
 				if (mfa) await checkAuthentication(mfa, AccessType.Create, ctx.token);
 
-				const { address } = await Web3Token.verify(token);
+				const { address } = await verify(token);
 
 				return this.saveWalletAddress(ctx.user.id, address);
 			} catch (e) {
@@ -86,7 +86,7 @@ export const createBaseWeb3AuthResolver = () => {
 				if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 
 				// Verify wallet address belongs to the logged in user
-				const { address } = await Web3Token.verify(web3Token);
+				const { address } = await verify(web3Token);
 				const walletAddress = await this.getWalletAddress(userId, address);
 
 				// Double check the wallet address is for the current user

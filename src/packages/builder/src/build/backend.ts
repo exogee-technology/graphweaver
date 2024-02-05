@@ -12,6 +12,7 @@ import {
 	makeAllPackagesExternalPlugin,
 	makeOptionalMikroOrmPackagesExternalPlugin,
 } from '../util';
+import nodeExternalsPlugin from 'esbuild-node-externals';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -31,7 +32,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 			...baseEsbuildConfig,
 
 			// Anything in node_modules should be marked as external for running.
-			plugins: [makeAllPackagesExternalPlugin()],
+			plugins: [makeAllPackagesExternalPlugin(), nodeExternalsPlugin()],
 
 			entryPoints: ['./src/backend/index.ts'],
 			outfile: '.graphweaver/backend/index.js',
@@ -66,7 +67,10 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 				onResolveEsbuildConfiguration({
 					...baseEsbuildConfig,
 
-					plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
+					plugins: [
+						makeOptionalMikroOrmPackagesExternalPlugin(),
+						nodeExternalsPlugin({ dependencies: false }),
+					],
 
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,

@@ -1,6 +1,8 @@
-import { GraphQLError, GraphQLResolveInfo, OperationTypeNode } from 'graphql';
+import { GraphQLError, OperationTypeNode } from 'graphql';
 import { delegateToSchema } from '@graphql-tools/delegate';
 import pluralize from 'pluralize';
+
+import type { GraphQLResolveInfo } from 'graphql';
 
 import {
 	BaseContext,

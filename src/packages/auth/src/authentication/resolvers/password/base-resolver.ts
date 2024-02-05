@@ -16,7 +16,7 @@ import { AuthenticationMethod, AuthorizationContext, RequestParams } from '../..
 import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
-import { GraphQLResolveInfo } from 'graphql';
+import type { GraphQLResolveInfo } from 'graphql';
 import { Credential } from '../../entities';
 import { PasswordStrengthError } from './resolver';
 

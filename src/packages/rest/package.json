@@ -25,7 +25,7 @@
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.14.0",
 		"dataloader": "2.2.2",
-		"dotenv": "10.0.0",
+		"dotenv": "16.3.1",
 		"graphql": "16.8.1",
 		"luxon": "2.5.2",
 		"pluralize": "8.0.0",
