@@ -11,34 +11,34 @@ import {
 
 import styles from './styles.module.css';
 
-import { SEND_FORGOTTEN_PASSWORD_LINK } from './graphql';
+import { RESET_PASSWORD } from './graphql';
 import { formatRedirectUrl } from '../../../utils/urls';
 
 interface Form {
-	username: string;
 	password: string;
+	confirmPassword: string;
 }
 
-export const ForgottenPassword = () => {
-	const [sendForgottenPasswordLink] = useMutation<{ result: boolean }>(
-		SEND_FORGOTTEN_PASSWORD_LINK
-	);
+export const ResetPassword = () => {
+	const [resetPassword] = useMutation<{ result: boolean }>(RESET_PASSWORD);
 	const [error, setError] = useState<Error | undefined>();
 	const [hasSent, setHasSent] = useState(false);
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 
-	// const redirectUri = searchParams.get('redirect_uri');
-	// if (!redirectUri) throw new Error('Missing redirect URL');
-
 	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
 		let token;
 		setError(undefined);
 
+		if (values.password !== values.confirmPassword) {
+			setError(new Error('Passwords do not match'));
+			return;
+		}
+
 		try {
-			const { data } = await sendForgottenPasswordLink({
+			const { data } = await resetPassword({
 				variables: {
-					username: values.username,
+					password: values.password,
 				},
 			});
 
@@ -59,7 +59,7 @@ export const ForgottenPassword = () => {
 			<div className={styles.titleContainer}>Success! A password reset link has been sent.</div>
 		</div>
 	) : (
-		<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
+		<Formik<Form> initialValues={{ password: '', confirmPassword: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
@@ -67,15 +67,22 @@ export const ForgottenPassword = () => {
 						Please enter your user name to get a forgotten password link.
 					</div>
 					<Field
-						placeholder="Username"
-						id="username"
-						name="username"
+						placeholder="Password"
+						id="password"
+						name="password"
+						className={styles.textInputField}
+					/>
+
+					<Field
+						placeholder="Confirm Password"
+						id="confirm-password"
+						name="confirmPassword"
 						className={styles.textInputField}
 					/>
 
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-							Send Forgotten Password Link
+							Submit
 						</Button>
 					</div>
 					{!!error && <Alert>{error.message}</Alert>}

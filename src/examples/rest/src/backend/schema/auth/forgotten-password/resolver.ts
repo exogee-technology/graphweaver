@@ -49,13 +49,9 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 			any
 		>;
 
-		console.log('provider', provider);
-
 		if (!provider) throw new Error('Bad Request: Unknown provider.');
 
 		const user = await provider?.findOne({ username });
-
-		console.log('user', user);
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 

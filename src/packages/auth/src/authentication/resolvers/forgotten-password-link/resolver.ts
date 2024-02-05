@@ -89,8 +89,6 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 			userId: string,
 			period: Date
 		): Promise<ForgottenPasswordLink[]> {
-			console.log('getForgottenPasswordLinks - provider', this.provider);
-
 			const existingLinks = await this.provider.find({
 				type: AuthenticationType.ForgottenPasswordLink,
 				userId,
@@ -99,7 +97,6 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 				createdAt_gt: Date; // @todo - extend filter<G> to include
 			});
 
-			console.log('existingLinks', existingLinks);
 			return existingLinks.map((link) => {
 				return link.data as ForgottenPasswordLink;
 			});

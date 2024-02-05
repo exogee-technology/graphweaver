@@ -114,12 +114,10 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				return true;
 			}
 
+			// Send the link
+			await this.sendForgottenPasswordLink(url, link);
+
 			return true;
-
-			// url.pathname = 'auth/login';
-			// url.searchParams.set('username', username);
-
-			// return await this.sendForgottenPasswordLink(url, link);
 		}
 	}
 	return BaseForgottenPasswordLinkAuthResolver;
