@@ -113,6 +113,14 @@ const columnsForEntity = <T extends TableRowItem>(
 							</a>
 						);
 				  }
+				: field.type.endsWith('[]')
+				? ({ row }: FormatterProps<T, unknown>) => {
+						const value = row[field.name as keyof typeof row];
+						if (Array.isArray(value)) {
+							return value.join(', ');
+						}
+						return value;
+				  }
 				: undefined,
 		}))
 	);
