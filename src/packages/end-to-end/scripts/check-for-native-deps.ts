@@ -28,7 +28,7 @@ const extractPackageName = (path: string) => {
 
 const runPnpmWhy = (packageName: string) => {
 	const command = `pnpm why -r -P ${packageName}`;
-	const output = execSync(command, { cwd: './app' }).toString();
+	const output = execSync(command, { cwd: './app' }).toString().trim();
 	return output;
 };
 
@@ -51,23 +51,28 @@ const packagesWithNativeModules = new Set(
 		.filter((pkg) => !allowList.has(pkg))
 );
 
-if (!packagesWithNativeModules.size) {
+// Let's check if any of the modules that were found are linked to production dependencies
+let output = '';
+let foundProdNativeModules = false;
+
+packagesWithNativeModules.forEach((packageName) => {
+	const whyResult = runPnpmWhy(packageName);
+	// If the result is blank, it means the package is not linked to a production dependency
+	if (whyResult) {
+		console.log('Found package containing native module:', packageName);
+		output += `Why ${packageName} exists in the project:` + '\n';
+		output += whyResult + '\n\n';
+		foundProdNativeModules = true;
+	}
+});
+
+if (foundProdNativeModules) {
+	console.log(
+		`Found native modules in production dependencies! See the "pnpm why" output below for details:`
+	);
+	console.log(output);
+	process.exit(1);
+} else {
 	console.log('No native modules found in production dependencies.');
 	process.exit(0);
 }
-
-// Looks like some native deps were found, let's describe them to the user
-let output = '';
-
-packagesWithNativeModules.forEach((packageName) => {
-	console.log('Found package containing native module:', packageName);
-	const whyResult = runPnpmWhy(packageName);
-	output += `Why ${packageName} exists in the project:` + '\n';
-	output += whyResult + '\n\n';
-});
-
-console.log(
-	`Found native modules in production dependencies! See the "pnpm why" output below for details:`
-);
-console.log(output);
-process.exit(1);
