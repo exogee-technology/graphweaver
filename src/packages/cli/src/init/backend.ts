@@ -8,6 +8,7 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				'@exogee/graphweaver-mikroorm': graphweaverVersion(version, 'mikroorm'),
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/postgresql': MIKRO_ORM_TARGET_VERSION,
+				pg: '8.11.1',
 			};
 
 		case Backend.Mysql:
@@ -15,6 +16,7 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				'@exogee/graphweaver-mikroorm': graphweaverVersion(version, 'mikroorm'),
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/mysql': MIKRO_ORM_TARGET_VERSION,
+				mysql2: '3.5.2',
 			};
 
 		case Backend.Sqlite:
@@ -22,6 +24,7 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				'@exogee/graphweaver-mikroorm': graphweaverVersion(version, 'mikroorm'),
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/sqlite': MIKRO_ORM_TARGET_VERSION,
+				sqlite3: '5.1.6',
 			};
 
 		case Backend.Rest:

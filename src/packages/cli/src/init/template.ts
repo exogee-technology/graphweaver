@@ -28,7 +28,6 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
-			'class-validator': '0.14.0',
 			graphql: '16.8.1',
 		},
 		devDependencies: {

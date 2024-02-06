@@ -19,6 +19,32 @@ export interface BackendBuildOptions {}
 export const buildBackend = async (_: BackendBuildOptions) => {
 	console.log('Building backend....');
 
+	const externalModules = new Set([
+		...Object.keys(require('knex/package.json').browser),
+		...Object.keys(require('@mikro-orm/core/package.json').peerDependencies),
+		...Object.keys(require('@mikro-orm/knex/package.json').peerDependencies),
+		...Object.keys(require('type-graphql/package.json').peerDependencies),
+		'@mikro-orm/knex',
+		'bun:ffi',
+		'mock-aws-s3',
+		'nock',
+		'aws-sdk',
+	]);
+
+	const requiredModules = new Set([
+		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
+	]);
+
+	for (const value of requiredModules) {
+		externalModules.delete(value);
+	}
+
+	console.log("The following modules are external and won't be bundled:");
+	console.log(externalModules);
+	console.log(
+		'If you want to bundle any of these, you can add them as a dependency in your package.json file.'
+	);
+
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
 
@@ -64,7 +90,8 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 			await build(
 				onResolveEsbuildConfiguration({
 					...baseEsbuildConfig,
-
+					minify: true,
+					external: [...externalModules],
 					plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
 
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
