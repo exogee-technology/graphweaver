@@ -1,4 +1,6 @@
-import { argon2id, argon2Verify } from 'hash-wasm';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore This file is the only one we need for the bundle
+import { argon2id, argon2Verify } from 'hash-wasm/dist/argon2.umd.min.js';
 import crypto from 'crypto';
 
 export const generateSalt = (): Uint8Array => {
