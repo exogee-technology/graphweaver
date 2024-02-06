@@ -1,12 +1,12 @@
 import {
 	AccessControlList,
 	AuthorizationContext,
-	ForgottenPasswordLinkData,
+	ForgottenPasswordLink,
 	createAuthenticationEntity,
 } from '@exogee/graphweaver-auth';
 import { Authentication as OrmAuthentication } from '../../../entities';
 
-const acl: AccessControlList<OrmAuthentication<ForgottenPasswordLinkData>, AuthorizationContext> = {
+const acl: AccessControlList<OrmAuthentication<ForgottenPasswordLink>, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		// Users can only perform read operations on their own Authentications
 		read: (context) => ({ id: context.user?.id }),
@@ -18,4 +18,4 @@ const acl: AccessControlList<OrmAuthentication<ForgottenPasswordLinkData>, Autho
 };
 
 export const Authentication =
-	createAuthenticationEntity<OrmAuthentication<ForgottenPasswordLinkData>>(acl);
+	createAuthenticationEntity<OrmAuthentication<ForgottenPasswordLink>>(acl);

@@ -4,7 +4,7 @@ import {
 	ForgottenPasswordLinkData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
-import { BaseLoaders, EntityMetadataMap, Resolver } from '@exogee/graphweaver';
+import { EntityMetadataMap, Resolver } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { myConnection } from '../../../database';
@@ -13,14 +13,13 @@ import {
 	Authentication as OrmAuthentication,
 } from '../../../entities/mysql';
 import { Authentication } from './entity';
-import { mapCredentialToUserProfile, mapUserToProfile } from '../../../auth/context';
 
 @Resolver()
 export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
-	OrmAuthentication<ForgottenPasswordLinkData>
+	OrmAuthentication<ForgottenPasswordLink>
 >(
 	Authentication,
-	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLinkData>, myConnection)
+	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLink>, myConnection)
 ) {
 	/**
 	 * A callback that can be used to send the forgotten link via channels such as email or SMS
@@ -54,10 +53,6 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 		const user = await provider?.findOne({ username });
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
-
-		console.log('********************\n');
-		console.log('getUser user', user);
-		console.log('********************\n');
 
 		return user;
 	}

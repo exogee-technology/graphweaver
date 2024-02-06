@@ -30,9 +30,3 @@ export const addUserToContext = async (userId: string) => {
 
 	return await mapUserToProfile(user);
 };
-
-export const mapCredentialToUserProfile = async (credential: Credential): Promise<UserProfile> => {
-	const database = ConnectionManager.database(myConnection.connectionManagerId);
-	const user = await database.em.findOneOrFail(User, { id: credential.id });
-	return mapUserToProfile(user);
-};

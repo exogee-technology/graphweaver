@@ -16,7 +16,6 @@ import { formatRedirectUrl } from '../../../utils/urls';
 
 interface Form {
 	username: string;
-	password: string;
 }
 
 export const ForgottenPassword = () => {
@@ -25,14 +24,8 @@ export const ForgottenPassword = () => {
 	);
 	const [error, setError] = useState<Error | undefined>();
 	const [hasSent, setHasSent] = useState(false);
-	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
-
-	// const redirectUri = searchParams.get('redirect_uri');
-	// if (!redirectUri) throw new Error('Missing redirect URL');
 
 	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
-		let token;
 		setError(undefined);
 
 		try {
@@ -42,7 +35,6 @@ export const ForgottenPassword = () => {
 				},
 			});
 
-			console.log('data', data);
 			if (data?.result === true) {
 				setHasSent(true);
 			} else {
@@ -59,7 +51,7 @@ export const ForgottenPassword = () => {
 			<div className={styles.titleContainer}>Success! A password reset link has been sent.</div>
 		</div>
 	) : (
-		<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
+		<Formik<Form> initialValues={{ username: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />

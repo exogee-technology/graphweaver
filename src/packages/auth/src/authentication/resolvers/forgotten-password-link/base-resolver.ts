@@ -75,7 +75,6 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 
 			// Check if the user created X links in the last X period
 			const { rate } = config;
-			// Current date minus the rate limit period
 
 			// @todo - check this, getting period 2024-02-04T23:29:09.780Z
 			// which is greater than 24hrs from now

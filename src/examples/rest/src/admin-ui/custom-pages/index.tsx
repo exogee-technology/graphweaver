@@ -6,6 +6,7 @@ import {
 	ResetPassword,
 } from '@exogee/graphweaver-auth-ui-components';
 
+const canResetPassword = true;
 export const customPages = {
 	routes: () => [
 		{
@@ -14,20 +15,19 @@ export const customPages = {
 			children: [
 				{
 					path: 'login',
-					element: <PasswordLogin />,
+					element: <PasswordLogin canResetPassword={canResetPassword} />,
 				},
 				{
 					path: 'challenge',
 					element: <Challenge />,
 				},
-				// @todo - make these paths optional via a config
-				{
-					path: 'forgot-password',
-					element: <ForgottenPassword />,
-				},
-				{
+				canResetPassword && {
 					path: 'reset-password',
 					element: <ResetPassword />,
+				},
+				canResetPassword && {
+					path: 'forgot-password',
+					element: <ForgottenPassword />,
 				},
 			],
 		},

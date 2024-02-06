@@ -20,7 +20,7 @@ interface Form {
 	password: string;
 }
 
-export const PasswordLogin = () => {
+export const PasswordLogin = ({ canResetPassword }: { canResetPassword: boolean }) => {
 	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
@@ -75,7 +75,7 @@ export const PasswordLogin = () => {
 					</Form>
 				)}
 			</Formik>
-			<Link to="../forgot-password">Forgot Password?</Link>
+			{canResetPassword && <Link to="../forgot-password">Forgot Password?</Link>}
 		</>
 	);
 };

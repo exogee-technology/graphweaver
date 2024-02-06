@@ -2,17 +2,11 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
-import {
-	GraphweaverLogo,
-	Alert,
-	Button,
-	localStorageAuthKey,
-} from '@exogee/graphweaver-admin-ui-components';
+import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
 
 import { RESET_PASSWORD } from './graphql';
-import { formatRedirectUrl } from '../../../utils/urls';
 
 interface Form {
 	password: string;
@@ -22,12 +16,10 @@ interface Form {
 export const ResetPassword = () => {
 	const [resetPassword] = useMutation<{ result: boolean }>(RESET_PASSWORD);
 	const [error, setError] = useState<Error | undefined>();
-	const [hasSent, setHasSent] = useState(false);
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 
 	const token = searchParams.get('token');
-	console.log('token', token);
 
 	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
 		setError(undefined);
@@ -44,8 +36,7 @@ export const ResetPassword = () => {
 					token,
 				},
 			});
-
-			console.log('data', data);
+			navigate('/auth/login');
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
