@@ -30,7 +30,7 @@ export class PasswordStrengthError extends ApolloError {
 	}
 }
 
-const defaultPasswordStrength = (password?: string) => {
+export const defaultPasswordStrength = (password?: string) => {
 	// Default password strength check is 8 characters or more
 	if (password && password.length > 7) return true;
 	throw new PasswordStrengthError('Password not strong enough.');

@@ -3,6 +3,7 @@ import {
 	Challenge,
 	PasswordLogin,
 	ForgottenPassword,
+	ResetPassword,
 } from '@exogee/graphweaver-auth-ui-components';
 
 export const customPages = {
@@ -19,9 +20,14 @@ export const customPages = {
 					path: 'challenge',
 					element: <Challenge />,
 				},
+				// @todo - make these paths optional via a config
 				{
 					path: 'forgot-password',
 					element: <ForgottenPassword />,
+				},
+				{
+					path: 'reset-password',
+					element: <ResetPassword />,
 				},
 			],
 		},

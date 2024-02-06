@@ -26,8 +26,10 @@ export const ResetPassword = () => {
 	const [searchParams] = useSearchParams();
 	const navigate = useNavigate();
 
+	const token = searchParams.get('token');
+	console.log('token', token);
+
 	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
-		let token;
 		setError(undefined);
 
 		if (values.password !== values.confirmPassword) {
@@ -39,33 +41,23 @@ export const ResetPassword = () => {
 			const { data } = await resetPassword({
 				variables: {
 					password: values.password,
+					token,
 				},
 			});
 
 			console.log('data', data);
-			if (data?.result === true) {
-				setHasSent(true);
-			} else {
-				throw new Error('Failed to send forgotten password link');
-			}
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
 		}
 	};
 
-	return hasSent ? (
-		<div className={styles.wrapper}>
-			<div className={styles.titleContainer}>Success! A password reset link has been sent.</div>
-		</div>
-	) : (
+	return (
 		<Formik<Form> initialValues={{ password: '', confirmPassword: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
-					<div className={styles.titleContainer}>
-						Please enter your user name to get a forgotten password link.
-					</div>
+					<div className={styles.titleContainer}>Please enter your new password</div>
 					<Field
 						placeholder="Password"
 						id="password"

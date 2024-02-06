@@ -15,6 +15,7 @@ import {
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationType } from '../../../types';
 import { AuthenticationError } from 'apollo-server-errors';
+import { defaultPasswordStrength } from '../password';
 
 type ForgottenPasswordLinkProvider = BackendProvider<
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
@@ -25,14 +26,12 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Authentication<D>, D>,
 	provider: BackendProvider<D, Authentication<D>>
 ) => {
-	console.log('createForgottenPasswordAuthResolver - provider', provider);
 	@Resolver()
 	class ForgottenPasswordLinkAuthResolver extends createBaseForgottenPasswordLinkAuthResolver(
 		gqlEntityType,
 		provider
 	) {
 		provider = provider;
-
 		/**
 		 * A callback that can be used to send the magic link via channels such as email or SMS
 		 * @param forgottenPasswordLink the URL that was generated and should be sent to the user
@@ -59,25 +58,25 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 			);
 		}
 
-		// /**
-		//  * Return a specific token for this user
-		//  * @param userId users ID
-		//  * @param token token string
-		//  * @returns Array of ForgottenPasswordLink compatible entities
-		//  */
-		// async getForgottenPasswordLink(userId: string, token: string): Promise<ForgottenPasswordLink> {
-		// 	const link = await this.provider.findOne({
-		// 		type: AuthenticationType.ForgottenPasswordLink,
-		// 		userId,
-		// 		data: {
-		// 			token,
-		// 			redeemedAt: 'null',
-		// 		},
-		// 	});
+		/**
+		 * Return a specific token for this user
+		 * @param token token string
+		 * @returns ForgottenPasswordLink entity
+		 */
+		async getForgottenPasswordLink(token: string): Promise<ForgottenPasswordLink> {
+			const link: ForgottenPasswordLink = (await this.provider.findOne({
+				type: AuthenticationType.ForgottenPasswordLink,
+				data: {
+					token,
+					redeemedAt: 'null',
+				} as any,
+			})) as any;
 
-		// 	if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
-		// 	return link;
-		// }
+			console.log('link', link);
+
+			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
+			return link;
+		}
 
 		/**
 		 * Return all magic links that are valid in the current period for this user
@@ -97,8 +96,10 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 				createdAt_gt: Date; // @todo - extend filter<G> to include
 			});
 
-			return existingLinks.map((link) => {
-				return link.data as ForgottenPasswordLink;
+			console.log('existingLinks', existingLinks);
+
+			return existingLinks.map((link: any) => {
+				return link.data; //ForgottenPasswordLink;
 			});
 		}
 
@@ -119,8 +120,14 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 					token,
 					redeemedAt: 'null',
 				},
-			});
-			return link;
+			} as any);
+			//as AuthenticationBaseEntity<ForgottenPasswordLink>);
+			console.log('*************************\n');
+			console.log('link', link);
+			console.log('*************************\n');
+
+			//@todo - type this and ^^
+			return link as any;
 		}
 	}
 

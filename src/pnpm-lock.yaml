@@ -732,6 +732,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../mikroorm
       '@exogee/graphweaver-scalars':
         specifier: workspace:*
         version: link:../scalars

@@ -55,6 +55,10 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
+		console.log('********************\n');
+		console.log('getUser user', user);
+		console.log('********************\n');
+
 		return user;
 	}
 }
