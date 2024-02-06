@@ -92,8 +92,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 
 					const fields = visibleFields?.map((field) => {
 						const typeValue = field.getType() as any;
-						const enumValue = enumMetadata.get(typeValue);
-						const typeName = typeValue.name ?? enumValue?.name;
+						const typeName = typeValue.name ?? enumMetadata.get(typeValue)?.name;
 
 						const relatedObject = objectTypeData[typeName];
 
