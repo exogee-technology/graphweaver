@@ -24,7 +24,6 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			'@exogee/graphweaver': graphweaverVersion(version, 'core'),
 			'@exogee/graphweaver-scalars': graphweaverVersion(version, 'scalars'),
 			'@exogee/graphweaver-server': graphweaverVersion(version, 'server'),
-			graphweaver: graphweaverVersion(version, 'cli'),
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
@@ -32,6 +31,7 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 		},
 		devDependencies: {
 			'@types/node': '20.2.5',
+			graphweaver: graphweaverVersion(version, 'cli'),
 			typescript: '5.0.2',
 		},
 	};

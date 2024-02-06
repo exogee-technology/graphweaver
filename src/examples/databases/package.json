@@ -32,6 +32,8 @@
 		"@mikro-orm/postgresql": "5.7.14",
 		"class-validator": "0.14.0",
 		"graphql": "16.8.1",
+		"mysql2": "3.5.2",
+		"pg": "8.11.1",
 		"graphweaver": "workspace:*",
 		"reflect-metadata": "0.1.13"
 	},
