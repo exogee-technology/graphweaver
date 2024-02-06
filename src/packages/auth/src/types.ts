@@ -7,7 +7,6 @@ export enum AuthenticationMethod {
 	ONE_TIME_PASSWORD = 'otp',
 	WEB3 = 'wb3',
 	PASSKEY = 'pky',
-	FORGOTTEN_PASSWORD_LINK = 'fpl',
 }
 
 export interface JwtPayload {
@@ -93,7 +92,6 @@ export enum AuthenticationType {
 	Web3WalletAddress = 'Web3WalletAddress',
 	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
 	MagicLinkChallenge = 'MagicLinkChallenge',
-	ForgottenPasswordLink = 'ForgottenPasswordLink',
 }
 
 export type RequestParams = {

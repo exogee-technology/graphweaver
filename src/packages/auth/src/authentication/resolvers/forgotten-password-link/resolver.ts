@@ -71,8 +71,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 					redeemedAt: 'null',
 				} as any,
 			})) as any;
-
-			console.log('link', link);
+			// @todo - type this
 
 			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
 			return link;
@@ -95,8 +94,6 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 			} as Filter<Authentication<D>> & {
 				createdAt_gt: Date; // @todo - extend filter<G> to include
 			});
-
-			console.log('existingLinks', existingLinks);
 
 			return existingLinks.map((link: any) => {
 				return link.data; //ForgottenPasswordLink;
@@ -122,9 +119,6 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 				},
 			} as any);
 			//as AuthenticationBaseEntity<ForgottenPasswordLink>);
-			console.log('*************************\n');
-			console.log('link', link);
-			console.log('*************************\n');
 
 			//@todo - type this and ^^
 			return link as any;

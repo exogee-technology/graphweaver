@@ -97,7 +97,7 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
 			);
 
-			// @todo - Get the custom reset password component path here
+			// @todo - Pass in the custom reset password component path here
 			const url = new URL(`${redirect.origin}/auth/reset-password`);
 
 			url.searchParams.set('redirect_uri', redirect.toString());
@@ -107,7 +107,7 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 		}
 
 		@Mutation((returns) => Boolean)
-		async sendForgottenPasswordLinky(
+		async sendResetPasswordLink(
 			@Arg('username', () => String) username: string,
 			@Ctx() ctx: AuthorizationContext
 		): Promise<boolean> {
@@ -131,9 +131,10 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			@Arg('password', () => String) password: string
 		): Promise<boolean> {
 			const link = await this.getForgottenPasswordLink(token);
+
+			// @todo - do we want to be specific about why the link failed?
 			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
 
-			// These checks won't run they are in getForgottenPasswordLink
 			if (link.data.redeemedAt !== 'null') {
 				throw new AuthenticationError('Authentication Failed: Link already redeemed');
 			}
@@ -141,10 +142,6 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			if (link.createdAt < new Date(new Date().getTime() - ms(config.ttl))) {
 				throw new AuthenticationError('Authentication Failed: Link expired');
 			}
-
-			console.log('*******************\n');
-			console.log('link', link);
-			console.log('*******************\n');
 
 			// Get the user
 			const userProvider = EntityMetadataMap.get('User')?.provider as MikroBackendProvider<
@@ -169,22 +166,13 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			});
 
 			// Update the user's password
-			console.log('*******************\n');
-			console.log('credential', credential);
-			console.log('*******************\n');
-
 			this.assertPasswordStrength(password);
 			const passwordHash = await hashPassword(password);
 
-			// update the user's password
 			const updatedCredential = await credentialProvider.updateOne(credential.id, {
 				...credential,
 				password: passwordHash,
 			});
-
-			console.log('*******************\n');
-			console.log('updatedCredential', updatedCredential);
-			console.log('*******************\n');
 
 			// redeem the link's token
 			const updatedLink = await provider.updateOne(link.id, {
@@ -194,9 +182,6 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				} as any,
 			});
 
-			console.log('*******************\n');
-			console.log('updatedLink', updatedLink);
-			console.log('*******************\n');
 			return true;
 		}
 	}
