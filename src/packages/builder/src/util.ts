@@ -26,6 +26,18 @@ export const buildOutputPathFor = (userSuppliedPath: string) => {
 	);
 };
 
+const externalModules = new Set([
+	...Object.keys(require('knex/package.json').browser),
+	...Object.keys(require('@mikro-orm/core/package.json').peerDependencies),
+	...Object.keys(require('@mikro-orm/knex/package.json').peerDependencies),
+	...Object.keys(require('type-graphql/package.json').peerDependencies),
+	'@mikro-orm/knex',
+	'bun:ffi',
+	'mock-aws-s3',
+	'nock',
+	'aws-sdk',
+]);
+
 export const baseEsbuildConfig: BuildOptions = {
 	minify: false,
 	bundle: true,
@@ -35,18 +47,7 @@ export const baseEsbuildConfig: BuildOptions = {
 	format: 'cjs',
 	watch: true,
 	keepNames: true,
-	external: [
-		'tedious',
-		'pg-query-stream',
-		'oracledb',
-		'bun:ffi',
-		'mysql',
-		'sqlite3',
-		'better-sqlite3',
-		'mock-aws-s3',
-		'nock',
-		'aws-sdk',
-	],
+	external: [...externalModules],
 };
 
 export const makeAllPackagesExternalPlugin = () => ({
