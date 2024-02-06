@@ -21,7 +21,6 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 			// And these can't because they're peer dependencies, and we need to use
 			// the version supplied by the ultimate consumer of the library.
 			'graphql',
-			'formik',
 			'react',
 			'react-dom',
 			'react-router',
