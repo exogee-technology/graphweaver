@@ -71,7 +71,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 						makeOptionalMikroOrmPackagesExternalPlugin(),
 						nodeExternalsPlugin({ dependencies: false }),
 					],
-
+					minify: true,
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})

@@ -29,6 +29,7 @@ const optionalModules = new Set([
 	...Object.keys(require('knex/package.json').browser),
 	...Object.keys(require('@mikro-orm/core/package.json').peerDependencies),
 	...Object.keys(require('@mikro-orm/knex/package.json').peerDependencies),
+	...Object.keys(require('type-graphql/package.json').peerDependencies),
 	'@mikro-orm/knex',
 ]);
 
@@ -56,6 +57,8 @@ export const baseEsbuildConfig: BuildOptions = {
 		...[...optionalModules],
 	],
 };
+
+console.log('Optional modules:', baseEsbuildConfig);
 
 export const makeAllPackagesExternalPlugin = (): Plugin => ({
 	name: 'make-all-packages-external',

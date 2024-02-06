@@ -6,7 +6,6 @@ import {
 	GraphqlEntityType,
 	HookRegister,
 	createBaseResolver,
-	hookManagerMap,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
