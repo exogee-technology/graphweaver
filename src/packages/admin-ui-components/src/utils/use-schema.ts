@@ -39,6 +39,7 @@ export type EntityFieldType = 'Boolean' | 'custom' | 'ID!' | 'ID' | 'JSON' | 'Im
 export interface EntityField {
 	name: string;
 	type: EntityFieldType;
+	isArray?: boolean;
 	relationshipType?: 'MANY_TO_MANY' | 'MANY_TO_ONE' | 'ONE_TO_MANY' | 'ONE_TO_ONE';
 	filter?: {
 		type: AdminUIFilterType;
