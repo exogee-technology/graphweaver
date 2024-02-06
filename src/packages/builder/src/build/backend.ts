@@ -16,14 +16,22 @@ const rimraf = promisify(rimrafCallback);
 
 export interface BackendBuildOptions {}
 
-export const buildBackend = async (_: BackendBuildOptions) => {
-	console.log('Building backend....');
+const requireSilent = (module: string) => {
+	try {
+		return require(module);
+	} catch {
+		// If we are here we might not have the package installed so we'll just return an empty object.
+		return { browser: {}, peerDependencies: {} };
+	}
+};
 
+const getExternalModules = (): string[] => {
+	// These modules make the bundle much larger and are not required for at runtime.
 	const externalModules = new Set([
-		...Object.keys(require('knex/package.json').browser),
-		...Object.keys(require('@mikro-orm/core/package.json').peerDependencies),
-		...Object.keys(require('@mikro-orm/knex/package.json').peerDependencies),
-		...Object.keys(require('type-graphql/package.json').peerDependencies),
+		...Object.keys(requireSilent('knex/package.json').browser),
+		...Object.keys(requireSilent('@mikro-orm/core/package.json').peerDependencies),
+		...Object.keys(requireSilent('@mikro-orm/knex/package.json').peerDependencies),
+		...Object.keys(requireSilent('type-graphql/package.json').peerDependencies),
 		'@mikro-orm/knex',
 		'bun:ffi',
 		'mock-aws-s3',
@@ -31,6 +39,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 		'aws-sdk',
 	]);
 
+	// The end user might explicitly require these, so we'll exclude them from the list of external modules.
 	const requiredModules = new Set([
 		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
 	]);
@@ -44,6 +53,12 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 	console.log(
 		'If you want to bundle any of these, you can add them as a dependency in your package.json file.'
 	);
+
+	return [...externalModules];
+};
+
+export const buildBackend = async (_: BackendBuildOptions) => {
+	console.log('Building backend....');
 
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
@@ -91,7 +106,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 				onResolveEsbuildConfiguration({
 					...baseEsbuildConfig,
 					minify: true,
-					external: [...externalModules],
+					external: getExternalModules(),
 					plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
 
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
