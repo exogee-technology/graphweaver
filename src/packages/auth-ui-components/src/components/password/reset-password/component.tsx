@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
 
 import { RESET_PASSWORD } from './graphql';
+import {
+	ConfirmComponent,
+	ConfirmFieldComponent,
+	PasswordComponent,
+	PasswordFieldComponent,
+} from '../password/component';
 
 interface Form {
 	password: string;
-	confirmPassword: string;
+	confirm: string;
 }
 
 export const ResetPassword = () => {
@@ -25,7 +31,7 @@ export const ResetPassword = () => {
 	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
 		setError(undefined);
 
-		if (values.password !== values.confirmPassword) {
+		if (values.password !== values.confirm) {
 			setError(new Error('Passwords do not match'));
 			return;
 		}
@@ -48,26 +54,14 @@ export const ResetPassword = () => {
 	};
 
 	return (
-		<Formik<Form> initialValues={{ password: '', confirmPassword: '' }} onSubmit={handleOnSubmit}>
+		<Formik<Form> initialValues={{ password: '', confirm: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
 					<div className={styles.titleContainer}>Please enter your new password</div>
-					<Field
-						placeholder="Password"
-						type="password"
-						id="password"
-						name="password"
-						className={styles.textInputField}
-					/>
+					<PasswordComponent />
 
-					<Field
-						placeholder="Confirm Password"
-						type="password"
-						id="confirm-password"
-						name="confirmPassword"
-						className={styles.textInputField}
-					/>
+					<ConfirmComponent />
 
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
