@@ -79,11 +79,8 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			// Check if the user created X links in the last X period
 			const { rate } = config;
 
-			// @todo - check this, getting period 2024-02-04T23:29:09.780Z
 			// which is greater than 24hrs from now
 			const period = new Date(new Date().getTime() - ms(rate.period));
-			console.log('rate.period', rate.period);
-			console.log('period', period);
 			const links = await this.getForgottenPasswordLinks(user.id, period);
 
 			// Check rate limiting conditions for forgotten password link creation
@@ -135,7 +132,6 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 		): Promise<boolean> {
 			const link = await this.getForgottenPasswordLink(token);
 
-			// @todo - do we want to be specific about why the link failed?
 			if (!link) {
 				logger.warn(`Failed to reset password: E0001.`);
 				throw new AuthenticationError('Authentication Failed: Link not found');
@@ -164,23 +160,6 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				link.userId,
 				password
 			);
-
-			console.log('****************************\n');
-			console.log('updatedCredential', updatedCredential);
-			console.log('****************************\n');
-
-			// this.assertPasswordStrength(password);
-			// const passwordHash = await hashPassword(password);
-
-			// const updatedCredential = await credentialProvider.updateOne(link.userId, {
-			// 	password: passwordHash,
-			// });
-
-			// use shared function between password update resolver
-
-			// // Use the hook manager to run the after update hooks
-			// // Use utils
-			// const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
 
 			// redeem the link's token
 			const updatedLink = await provider.updateOne(link.id, {
