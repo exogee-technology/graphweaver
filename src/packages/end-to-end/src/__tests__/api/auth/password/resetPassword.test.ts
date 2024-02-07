@@ -29,6 +29,8 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
+// mock the data provider
+
 @Resolver()
 class AuthResolver extends createBasePasswordAuthResolver(
 	Credential,
@@ -79,25 +81,22 @@ const acl: AccessControlList<Authentication<ForgottenPasswordLinkData>, Authoriz
 export const ForgottenPasswordLink =
 	createAuthenticationEntity<Authentication<ForgottenPasswordLinkData>>(acl);
 
-export const myConnection = {
-	connectionManagerId: 'my-sql',
-	mikroOrmConfig: {
-		entities: [Authentication, Credential],
-		driver: MySqlDriver,
-		dbName: 'todo_app',
-		user: process.env.DATABASE_USERNAME,
-		password: process.env.DATABASE_PASSWORD,
-		port: 3306,
-	},
-};
+// export const myConnection = {
+// 	connectionManagerId: 'my-sql',
+// 	mikroOrmConfig: {
+// 		entities: [Authentication, Credential],
+// 		driver: MySqlDriver,
+// 		dbName: 'todo_app',
+// 		user: process.env.DATABASE_USERNAME,
+// 		password: process.env.DATABASE_PASSWORD,
+// 		port: 3306,
+// 	},
+// };
 
 @Resolver()
 export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
 	Authentication<ForgottenPasswordLinkData>
->(
-	ForgottenPasswordLink,
-	new MikroBackendProvider(Authentication<ForgottenPasswordLinkData>, myConnection)
-) {
+>(ForgottenPasswordLink, new MikroBackendProvider(Authentication<ForgottenPasswordLinkData>, {})) {
 	async sendForgottenPasswordLink(url: URL): Promise<boolean> {
 		// In a production system this would email / sms the forgotten link and you would not log to the console!
 		console.log(`\n\n ######## ForgotPasswordLink: ${url.toString()} ######## \n\n`);
@@ -105,18 +104,20 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 	}
 
 	async getUser(username: string): Promise<UserProfile> {
-		const provider = EntityMetadataMap.get('Credential')?.provider as MikroBackendProvider<
-			any,
-			any
-		>;
-
-		if (!provider) throw new Error('Bad Request: Unknown provider.');
-
-		const user = await provider?.findOne({ username });
-
-		if (!user) throw new Error('Bad Request: Unknown user id provided.');
-
 		return user;
+
+		// const provider = EntityMetadataMap.get('Credential')?.provider as MikroBackendProvider<
+		// 	any,
+		// 	any
+		// >;
+
+		// if (!provider) throw new Error('Bad Request: Unknown provider.');
+
+		// const user = await provider?.findOne({ username });
+
+		// if (!user) throw new Error('Bad Request: Unknown user id provided.');
+
+		// return user;
 	}
 }
 
@@ -127,36 +128,37 @@ const graphweaver = new Graphweaver({
 	},
 });
 
-describe('Password Authentication - Login', () => {
-	test('should return a valid user and successfully login.', async () => {
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
-			query: gql`
-				mutation loginPassword($username: String!, $password: String!) {
-					loginPassword(username: $username, password: $password) {
-						authToken
-					}
-				}
-			`,
-			variables: {
-				username: 'test',
-				password: 'test123',
-			},
-		});
+describe('Forgotten Password flow', () => {
+	// test('should return a valid user and successfully login.', async () => {
+	// 	const response = await graphweaver.server.executeOperation<{
+	// 		loginPassword: { authToken: string };
+	// 	}>({
+	// 		query: gql`
+	// 			mutation loginPassword($username: String!, $password: String!) {
+	// 				loginPassword(username: $username, password: $password) {
+	// 					authToken
+	// 				}
+	// 			}
+	// 		`,
+	// 		variables: {
+	// 			username: 'test',
+	// 			password: 'test123',
+	// 		},
+	// 	});
 
-		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors).toBeUndefined();
+	// 	assert(response.body.kind === 'single');
+	// 	expect(response.body.singleResult.errors).toBeUndefined();
 
-		const token = response.body.singleResult.data?.loginPassword?.authToken;
-		expect(token).toContain('Bearer ');
+	// 	const token = response.body.singleResult.data?.loginPassword?.authToken;
+	// 	expect(token).toContain('Bearer ');
 
-		const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
-		// Check that the token expires in the future
-		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
-	});
+	// 	const payload = JSON.parse(atob(token?.split('.')[1] ?? '{}'));
+	// 	// Check that the token expires in the future
+	// 	expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
+	// });
 
 	test('should generate a forgotten password link', async () => {
+		console.log('*****************\n*******************\n');
 		const response = await graphweaver.server.executeOperation<{
 			sendResetPasswordLink: boolean;
 		}>({

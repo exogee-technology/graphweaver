@@ -16,6 +16,7 @@
 		"dev-postgres": "createdb gw && pnpm seed-postgres && pnpm import-database-postgres  && pnpm start-server",
 		"dev-mysql": "pnpm import-database-mysql && pnpm start-server",
 		"test-auth": "jest --runInBand --forceExit -- api/auth",
+		"test-forgot-password": "jest --runInBand --forceExit -- api/auth/password/resetPassword.test.ts",
 		"test-mysql": "export DATABASE=mysql && jest --runInBand -- api/mysql",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-sqlite": "dotenv -e .env.sqlite -- jest --runInBand --forceExit ---- api/sqlite",
