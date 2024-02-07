@@ -1,6 +1,5 @@
 import {
 	createForgottenPasswordAuthResolver,
-	ForgottenPasswordLink,
 	ForgottenPasswordLinkData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
@@ -12,14 +11,14 @@ import {
 	Credential as OrmCredential,
 	Authentication as OrmAuthentication,
 } from '../../../entities/mysql';
-import { Authentication } from './entity';
+import { ForgottenPasswordLink } from './entity';
 
 @Resolver()
 export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
-	OrmAuthentication<ForgottenPasswordLink>
+	OrmAuthentication<ForgottenPasswordLinkData>
 >(
-	Authentication,
-	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLink>, myConnection)
+	ForgottenPasswordLink,
+	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLinkData>, myConnection)
 ) {
 	/**
 	 * A callback that can be used to send the forgotten link via channels such as email or SMS
@@ -27,10 +26,7 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 	 * @param forgotPasswordLink the forgotten password link entity that was generated
 	 * @returns a boolean to indicate that the URL has been sent
 	 */
-	async sendForgottenPasswordLink(
-		url: URL,
-		forgotPasswordLink: ForgottenPasswordLink
-	): Promise<boolean> {
+	async sendForgottenPasswordLink(url: URL): Promise<boolean> {
 		// In a production system this would email / sms the forgotten link and you would not log to the console!
 		console.log(`\n\n ######## ForgotPasswordLink: ${url.toString()} ######## \n\n`);
 		return true;

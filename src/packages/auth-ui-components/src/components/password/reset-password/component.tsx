@@ -20,6 +20,7 @@ export const ResetPassword = () => {
 	const navigate = useNavigate();
 
 	const token = searchParams.get('token');
+	const redirectUri = searchParams.get('redirect_uri');
 
 	const handleOnSubmit = async (values: Form, { resetForm }: FormikHelpers<Form>) => {
 		setError(undefined);
@@ -36,7 +37,10 @@ export const ResetPassword = () => {
 					token,
 				},
 			});
-			navigate('/auth/login');
+			console.log('redirectUri', redirectUri);
+			// @todo - it would be better to get the redirect URL from the flow from the login page -> forgot password -> reset password -> reset password success
+			const redirectUrl = redirectUri ?? new URL('/');
+			navigate(`/auth/login?redirect_uri=${redirectUrl}`, { replace: true });
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));

@@ -8,23 +8,21 @@ import {
 
 import { Authentication, AuthenticationBaseEntity } from '../../entities';
 import {
-	ForgottenPasswordLink,
 	ForgottenPasswordLinkData,
 	createBaseForgottenPasswordLinkAuthResolver,
 } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
 import { AuthenticationType } from '../../../types';
 import { AuthenticationError } from 'apollo-server-errors';
-import { defaultPasswordStrength } from '../password';
 
-type ForgottenPasswordLinkProvider = BackendProvider<
+export type ForgottenPasswordLinkProvider = BackendProvider<
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>
 >;
 
 export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Authentication<D>, D>,
-	provider: BackendProvider<D, Authentication<D>>
+	provider: ForgottenPasswordLinkProvider
 ) => {
 	@Resolver()
 	class ForgottenPasswordLinkAuthResolver extends createBaseForgottenPasswordLinkAuthResolver(
@@ -39,7 +37,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 		 */
 		async sendForgottenPasswordLink(
 			url: URL,
-			forgottenPasswordLink: ForgottenPasswordLink
+			forgottenPasswordLink: AuthenticationBaseEntity<ForgottenPasswordLinkData>
 		): Promise<boolean> {
 			// Override this method in your implementation to send the link to the user
 			throw new Error(
@@ -63,15 +61,16 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 		 * @param token token string
 		 * @returns ForgottenPasswordLink entity
 		 */
-		async getForgottenPasswordLink(token: string): Promise<ForgottenPasswordLink> {
-			const link: ForgottenPasswordLink = (await this.provider.findOne({
+		async getForgottenPasswordLink(
+			token: string
+		): Promise<AuthenticationBaseEntity<ForgottenPasswordLinkData>> {
+			const link = await this.provider.findOne({
 				type: AuthenticationType.ForgottenPasswordLink,
 				data: {
 					token,
 					redeemedAt: 'null',
-				} as any,
-			})) as any;
-			// @todo - type this
+				},
+			});
 
 			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
 			return link;
@@ -86,7 +85,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 		async getForgottenPasswordLinks(
 			userId: string,
 			period: Date
-		): Promise<ForgottenPasswordLink[]> {
+		): Promise<AuthenticationBaseEntity<ForgottenPasswordLinkData>[]> {
 			const existingLinks = await this.provider.find({
 				type: AuthenticationType.ForgottenPasswordLink,
 				userId,
@@ -95,9 +94,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 				createdAt_gt: Date; // @todo - extend filter<G> to include
 			});
 
-			return existingLinks.map((link: any) => {
-				return link.data; //ForgottenPasswordLink;
-			});
+			return existingLinks;
 		}
 
 		/**
@@ -109,7 +106,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 		async createForgottenPasswordLink(
 			userId: string,
 			token: string
-		): Promise<ForgottenPasswordLink> {
+		): Promise<AuthenticationBaseEntity<ForgottenPasswordLinkData>> {
 			const link = await this.provider.createOne({
 				type: AuthenticationType.ForgottenPasswordLink,
 				userId,
@@ -117,11 +114,9 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 					token,
 					redeemedAt: 'null',
 				},
-			} as any);
-			//as AuthenticationBaseEntity<ForgottenPasswordLink>);
+			});
 
-			//@todo - type this and ^^
-			return link as any;
+			return link;
 		}
 	}
 

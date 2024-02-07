@@ -231,9 +231,9 @@ export type Mutation = {
   passkeyVerifyRegistrationResponse: Scalars['Boolean']['output'];
   resetPassword: Scalars['Boolean']['output'];
   sendChallengeMagicLink: Scalars['Boolean']['output'];
-  sendForgottenPasswordLinky: Scalars['Boolean']['output'];
   sendLoginMagicLink: Scalars['Boolean']['output'];
   sendOTPChallenge: Scalars['Boolean']['output'];
+  sendResetPasswordLink: Scalars['Boolean']['output'];
   updateApiKey: ApiKey;
   updateCredential: Credential;
   updateTag: Tag;
@@ -366,12 +366,12 @@ export type MutationResetPasswordArgs = {
 };
 
 
-export type MutationSendForgottenPasswordLinkyArgs = {
+export type MutationSendLoginMagicLinkArgs = {
   username: Scalars['String']['input'];
 };
 
 
-export type MutationSendLoginMagicLinkArgs = {
+export type MutationSendResetPasswordLinkArgs = {
   username: Scalars['String']['input'];
 };
 

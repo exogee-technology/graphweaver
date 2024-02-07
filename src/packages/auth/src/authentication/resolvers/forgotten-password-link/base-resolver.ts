@@ -13,10 +13,18 @@ import {
 	GraphqlEntityType,
 	BackendProvider,
 	EntityMetadataMap,
+	HookParams,
+	HookRegister,
 } from '@exogee/graphweaver';
-import { Authentication, Credential as OrmCredential } from '../../entities';
+import {
+	Authentication,
+	AuthenticationBaseEntity,
+	Credential as OrmCredential,
+} from '../../entities';
 import { defaultPasswordStrength } from '../password';
 import { hashPassword } from '../../../utils/argon2id';
+import { ForgottenPasswordLinkProvider } from './resolver';
+import { runAfterHooks, updatePassword } from '../utils';
 
 const config = {
 	rate: {
@@ -31,35 +39,30 @@ export interface ForgottenPasswordLinkData {
 	redeemedAt?: Date | 'null';
 }
 
-export interface ForgottenPasswordLink {
-	id: string;
-	userId: string;
-	createdAt: Date;
-	data: ForgottenPasswordLinkData;
-}
-
 const createToken = randomUUID;
 
 export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Authentication<D>, D>,
-	provider: BackendProvider<D, Authentication<D>>,
+	provider: ForgottenPasswordLinkProvider,
 	assertPasswordStrength?: (password?: string) => boolean
 ) => {
 	@Resolver()
 	abstract class BaseForgottenPasswordLinkAuthResolver {
 		abstract getUser(username: string): Promise<UserProfile>;
-		abstract getForgottenPasswordLink(token: string): Promise<ForgottenPasswordLink>;
+		abstract getForgottenPasswordLink(
+			token: string
+		): Promise<AuthenticationBaseEntity<ForgottenPasswordLinkData>>;
 		abstract getForgottenPasswordLinks(
 			userId: string,
 			period: Date
-		): Promise<ForgottenPasswordLink[]>;
+		): Promise<AuthenticationBaseEntity<ForgottenPasswordLinkData>[]>;
 		abstract createForgottenPasswordLink(
 			userId: string,
 			token: string
-		): Promise<ForgottenPasswordLink>;
+		): Promise<AuthenticationBaseEntity<ForgottenPasswordLinkData>>;
 		abstract sendForgottenPasswordLink(
 			url: URL,
-			ForgottenPasswordLink: ForgottenPasswordLink
+			ForgottenPasswordLink: AuthenticationBaseEntity<ForgottenPasswordLinkData>
 		): Promise<boolean>;
 		assertPasswordStrength = assertPasswordStrength ?? defaultPasswordStrength;
 
@@ -99,8 +102,8 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 
 			// @todo - Pass in the custom reset password component path here
 			const url = new URL(`${redirect.origin}/auth/reset-password`);
-
-			url.searchParams.set('redirect_uri', redirect.toString());
+			// @todo - The redirect always ends up being the forgot password page, removing for now
+			url.searchParams.set('redirect_uri', redirect.origin.toString());
 			url.searchParams.set('token', link.data.token);
 
 			return { link, url };
@@ -133,53 +136,58 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			const link = await this.getForgottenPasswordLink(token);
 
 			// @todo - do we want to be specific about why the link failed?
-			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
+			if (!link) {
+				logger.warn(`Failed to reset password: E0001.`);
+				throw new AuthenticationError('Authentication Failed: Link not found');
+			}
 
 			if (link.data.redeemedAt !== 'null') {
+				logger.warn(`Failed to reset password: E0002.`);
 				throw new AuthenticationError('Authentication Failed: Link already redeemed');
 			}
 
 			if (link.createdAt < new Date(new Date().getTime() - ms(config.ttl))) {
+				logger.warn(`Failed to reset password: E0003.`);
 				throw new AuthenticationError('Authentication Failed: Link expired');
 			}
 
-			// Get the user
-			const userProvider = EntityMetadataMap.get('User')?.provider as MikroBackendProvider<
-				UserProfile,
+			// Get the user's credential
+			const credentialProvider = EntityMetadataMap.get('Credential')?.provider as BackendProvider<
+				any,
 				any
 			>;
 
-			const user = await userProvider.findOne({ id: link.userId });
-
-			if (!user?.id) {
-				throw new AuthenticationError('Authentication Failed: User not found');
-			}
-
-			// Get the user's credential
-
-			const credentialProvider = EntityMetadataMap.get('Credential')
-				?.provider as MikroBackendProvider<any, any>;
-			//MikroBackendProvider<OrmCredential<any>, any>;
-
-			const credential = await credentialProvider.findOne({
-				username: user.username,
-			});
-
 			// Update the user's password
-			this.assertPasswordStrength(password);
-			const passwordHash = await hashPassword(password);
+			const updatedCredential = await updatePassword(
+				this.assertPasswordStrength,
+				credentialProvider,
+				link.userId,
+				password
+			);
 
-			const updatedCredential = await credentialProvider.updateOne(credential.id, {
-				...credential,
-				password: passwordHash,
-			});
+			console.log('****************************\n');
+			console.log('updatedCredential', updatedCredential);
+			console.log('****************************\n');
+
+			// this.assertPasswordStrength(password);
+			// const passwordHash = await hashPassword(password);
+
+			// const updatedCredential = await credentialProvider.updateOne(link.userId, {
+			// 	password: passwordHash,
+			// });
+
+			// use shared function between password update resolver
+
+			// // Use the hook manager to run the after update hooks
+			// // Use utils
+			// const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
 
 			// redeem the link's token
 			const updatedLink = await provider.updateOne(link.id, {
 				data: {
 					...link.data,
 					redeemedAt: new Date(),
-				} as any,
+				},
 			});
 
 			return true;

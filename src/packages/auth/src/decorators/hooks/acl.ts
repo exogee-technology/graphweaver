@@ -28,6 +28,10 @@ const assertTransactional = (transactional: boolean) => {
 export const afterCreateOrUpdate = async <G>(
 	params: CreateOrUpdateHookParams<G, AuthorizationContext>
 ) => {
+	console.log('************************\n');
+	console.log('afterCreateOrUpdate', params);
+	console.log('************************\n');
+
 	const items = params.args.items;
 	const entities = (params.entities ?? []) as GraphQLEntity<BaseDataEntity>[];
 

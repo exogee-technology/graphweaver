@@ -16,6 +16,7 @@ import { UserProfile } from '../../../user-profile';
 import { ApolloError, AuthenticationError, ValidationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
 import { hashPassword, verifyPassword } from '../../../utils/argon2id';
+import { runAfterHooks, updatePassword } from '../utils';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
@@ -82,21 +83,21 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 		}
 
-		public async runAfterHooks<H extends HookParams<CredentialCreateOrUpdateInputArgs>>(
-			hookRegister: HookRegister,
-			hookParams: H,
-			entities: (D | null)[]
-		): Promise<((D & { id: string }) | null)[]> {
-			const hookManager = hookManagerMap.get('Credential');
-			const { entities: hookEntities = [] } = hookManager
-				? await hookManager.runHooks(hookRegister, {
-						...hookParams,
-						entities,
-				  })
-				: { entities };
+		// public async runAfterHooks<H extends HookParams<CredentialCreateOrUpdateInputArgs>>(
+		// 	hookRegister: HookRegister,
+		// 	hookParams: H,
+		// 	entities: (D | null)[]
+		// ): Promise<((D & { id: string }) | null)[]> {
+		// 	const hookManager = hookManagerMap.get('Credential');
+		// 	const { entities: hookEntities = [] } = hookManager
+		// 		? await hookManager.runHooks(hookRegister, {
+		// 				...hookParams,
+		// 				entities,
+		// 		  })
+		// 		: { entities };
 
-			return hookEntities as ((D & { id: string }) | null)[];
-		}
+		// 	return hookEntities as ((D & { id: string }) | null)[];
+		// }
 
 		async create(
 			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
@@ -119,7 +120,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 				password: passwordHash,
 			} as Credential<D> & { password: string });
 
-			const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [credential]);
+			const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], params);
 			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 			this.onUserRegistered?.(entity.id, { info: params.info, ctx: params.context });
 
@@ -141,17 +142,26 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			if (!item.username && !item.password)
 				throw new ValidationError('Update unsuccessful: Nothing to update.');
 
-			let passwordHash = undefined;
-			if (item.password && this.assertPasswordStrength(item.password)) {
-				passwordHash = await hashPassword(item.password);
-			}
-			const credential = await this.provider.updateOne(item.id, {
-				...(item.username ? { username: item.username } : {}),
-				...(passwordHash ? { password: passwordHash } : {}),
-			});
+			const entity = await updatePassword(
+				this.assertPasswordStrength,
+				this.provider,
+				item.id,
+				item.password,
+				undefined,
+				params
+			);
 
-			const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
-			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+			// let passwordHash = undefined;
+			// if (item.password && this.assertPasswordStrength(item.password)) {
+			// 	passwordHash = await hashPassword(item.password);
+			// }
+			// const credential = await this.provider.updateOne(item.id, {
+			// 	...(item.username ? { username: item.username } : {}),
+			// 	...(passwordHash ? { password: passwordHash } : {}),
+			// });
+
+			// const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
+			// if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
 			return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
 				info: params.info,
