@@ -22,7 +22,7 @@ import {
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider, BaseEntity, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
-import { BigIntType, Enum, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { BigIntType, Enum, EnumArrayType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
@@ -44,7 +44,7 @@ class OrmApiKey extends BaseEntity implements ApiKeyStorage {
 	@Property({ type: Boolean })
 	revoked!: boolean;
 
-	@Enum({ type: 'enumArray', items: () => Roles, array: true, default: [] })
+	@Enum({ type: EnumArrayType, items: () => Roles, array: true, default: [] })
 	roles!: Roles[];
 }
 
