@@ -5,24 +5,17 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 const flags = process.argv.slice(0);
 const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName}`);
 
+const { glob } = await import('glob');
+const entryPoints = await glob('./src/**/*.{ts,tsx,css}');
+
 (async () => {
 	await esbuild.build({
 		outdir: 'lib',
 		format: 'esm',
-		bundle: true,
+		bundle: false,
 		minify: false,
 		sourcemap: 'linked',
-		external: [
-			'@exogee/graphweaver-admin-ui-components',
-			'@remix-run/router',
-			'formik',
-			'graphql',
-			'react',
-			'react-dom',
-			'react-router',
-			'react-router-dom',
-		],
-		entryPoints: ['src/index.ts'],
+		entryPoints,
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],
 		watch: flagIncludes('watch'),
 	});
