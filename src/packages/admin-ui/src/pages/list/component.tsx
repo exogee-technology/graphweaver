@@ -16,7 +16,6 @@ import {
 	wrapFilterWithAndOperator,
 	getOrderByQuery,
 } from '@exogee/graphweaver-admin-ui-components';
-import '@exogee/graphweaver-admin-ui-components/lib/index.css';
 import { queryForEntityPage } from './graphql';
 
 interface ListToolBarProps {
