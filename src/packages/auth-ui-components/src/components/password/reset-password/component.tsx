@@ -7,12 +7,7 @@ import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-com
 import styles from './styles.module.css';
 
 import { RESET_PASSWORD } from './graphql';
-import {
-	ConfirmComponent,
-	ConfirmFieldComponent,
-	PasswordComponent,
-	PasswordFieldComponent,
-} from '../password/component';
+import { ConfirmComponent, PasswordComponent } from '../password/component';
 
 interface Form {
 	password: string;

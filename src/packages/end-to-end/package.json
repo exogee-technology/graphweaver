@@ -40,6 +40,7 @@
 		"@mikro-orm/core": "5.7.14",
 		"@mikro-orm/sqlite": "5.7.14",
 		"@mikro-orm/postgresql": "5.7.14",
+		"@mikro-orm/mysql": "5.7.14",
 		"class-validator": "0.14.0",
 		"dotenv-cli": "7.3.0",
 		"ethers": "6.3.0",
