@@ -3,7 +3,6 @@ import ms from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'crypto';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { AuthorizationContext } from '../../../types';
 import { UserProfile } from '../../../user-profile';
@@ -13,8 +12,6 @@ import {
 	GraphqlEntityType,
 	BackendProvider,
 	EntityMetadataMap,
-	HookParams,
-	HookRegister,
 } from '@exogee/graphweaver';
 import {
 	Authentication,
@@ -22,9 +19,8 @@ import {
 	Credential as OrmCredential,
 } from '../../entities';
 import { defaultPasswordStrength } from '../password';
-import { hashPassword } from '../../../utils/argon2id';
 import { ForgottenPasswordLinkProvider } from './resolver';
-import { runAfterHooks, updatePassword } from '../utils';
+import { updatePassword } from '../utils';
 
 const config = {
 	rate: {

@@ -55,6 +55,7 @@ export const ResetPassword = () => {
 					<div className={styles.titleContainer}>Please enter your new password</div>
 					<Field
 						placeholder="Password"
+						type="password"
 						id="password"
 						name="password"
 						className={styles.textInputField}
@@ -62,6 +63,7 @@ export const ResetPassword = () => {
 
 					<Field
 						placeholder="Confirm Password"
+						type="password"
 						id="confirm-password"
 						name="confirmPassword"
 						className={styles.textInputField}
