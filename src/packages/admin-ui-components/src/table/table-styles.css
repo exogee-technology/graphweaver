@@ -54,7 +54,17 @@
 	width: 16px;
 	height: 16px;
 	border-radius: 3px;
-	border: 1px;
+	border: 1px solid rgba(234, 229, 240, 0.2);
+	border-top-right-radius: 3px;
+}
+
+/* Override the default styles for the column checkbox */
+.rdg-header-row div:last-child .rdg-checkbox {
+	border-top-right-radius: 3px;
+}
+
+.rdg-header-row .rdg-cell .rdg-checkbox {
+	border-top-right-radius: 3px; /* Applying border radius to the top right corner */
 }
 
 .rdg-checkbox-label input:checked {
