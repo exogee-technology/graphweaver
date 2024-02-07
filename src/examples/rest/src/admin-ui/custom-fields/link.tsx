@@ -1,4 +1,5 @@
 import { MouseEventHandler } from 'react';
+import { useFormikContext } from 'formik';
 
 import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
 import { CustomFieldArgs } from '@exogee/graphweaver-admin-ui-components';
@@ -11,6 +12,10 @@ interface Task {
 }
 
 export const Link = ({ entity }: CustomFieldArgs<Task>) => {
+	const { values } = useFormikContext();
+
+	console.log('Custom field values', values);
+
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
 		e.preventDefault();
 		e.stopPropagation();
