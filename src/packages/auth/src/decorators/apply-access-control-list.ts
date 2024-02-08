@@ -8,7 +8,13 @@ import {
 } from '@exogee/graphweaver';
 import { AccessControlList, AclMap, AuthorizationContext } from '..';
 
-import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeUpdate } from './hooks/acl';
+import {
+	afterCreateOrUpdate,
+	beforeDelete,
+	beforeRead,
+	beforeUpdate,
+	beforeCreate,
+} from './hooks/acl';
 
 export function ApplyAccessControlList<G, TContext extends AuthorizationContext>(
 	acl: Partial<AccessControlList<G, TContext>>
@@ -22,6 +28,10 @@ export function ApplyAccessControlList<G, TContext extends AuthorizationContext>
 		const hookManager =
 			(hookManagerMap.get(constructor.name) as HookManager<G>) || new HookManager<G>();
 
+		hookManager.registerHook<CreateOrUpdateHookParams<G, AuthorizationContext>>(
+			HookRegister.BEFORE_CREATE,
+			beforeCreate(constructor.name)
+		);
 		hookManager.registerHook<ReadHookParams<G, AuthorizationContext>>(
 			HookRegister.BEFORE_READ,
 			beforeRead(constructor.name)

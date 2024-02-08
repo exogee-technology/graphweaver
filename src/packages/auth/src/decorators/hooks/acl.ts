@@ -8,21 +8,26 @@ import {
 	ReadHookParams,
 	hasId,
 } from '@exogee/graphweaver';
+import { logger } from '@exogee/logger';
 
 import { AccessType, AuthorizationContext } from '../../types';
 import { andFilters } from '../../helper-functions';
 import {
+	GENERIC_AUTH_ERROR_MESSAGE,
 	assertUserCanPerformRequestedAction,
 	checkAuthorization,
 	getACL,
 	getAccessFilter,
 } from '../../auth-utils';
 
+const isPopulatedFilter = (filter: any): boolean => Object.keys(filter).length > 0;
 const assertTransactional = (transactional: boolean) => {
-	if (!transactional)
-		throw new Error(
+	if (!transactional) {
+		logger.error(
 			'Row Level Security can only be applied within a transaction and this hook is not transactional.'
 		);
+		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+	}
 };
 
 export const afterCreateOrUpdate = async <G>(
@@ -69,8 +74,29 @@ export const beforeRead = (gqlEntityTypeName: string) => {
 	};
 };
 
+export const beforeCreate = (gqlEntityTypeName: string) => {
+	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		// 1. Fetch the ACL for this entity
+		const acl = getACL(gqlEntityTypeName);
+		// 2. Check permissions for this entity based on the currently logged in user
+		assertUserCanPerformRequestedAction(acl, AccessType.Create);
+		// 3. Fetch the filter for the currently logged in user
+		const accessFilter = await getAccessFilter(acl, AccessType.Create);
+		// 4. Check if the filter has values and then assert we are in a transaction
+		// You can only use a filter in this way when you are in a transaction
+		if (isPopulatedFilter(accessFilter)) assertTransactional(params.transactional);
+
+		return params;
+	};
+};
+
 export const beforeUpdate = (gqlEntityTypeName: string) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		// 1. Fetch the ACL for this entity
+		const acl = getACL(gqlEntityTypeName);
+		// 2. Check permissions for this entity based on the currently logged in user
+		assertUserCanPerformRequestedAction(acl, AccessType.Update);
+
 		const items = params.args.items.filter(hasId);
 		const { entity } = EntityMetadataMap.get(gqlEntityTypeName) ?? {};
 
@@ -85,9 +111,9 @@ export const beforeUpdate = (gqlEntityTypeName: string) => {
 			BaseDataEntity
 		>;
 
-		// 1. Check to ensure we are within a transaction
+		// 3. Check to ensure we are within a transaction
 		assertTransactional(params.transactional);
-		// 2. Check user has permission for each item
+		// 4. Check user has permission for each item
 		const authChecks = items.map((item) =>
 			checkAuthorization(target, item.id, item, AccessType.Update)
 		);

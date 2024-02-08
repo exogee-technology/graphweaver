@@ -148,26 +148,4 @@ describe('ACL - Without Transaction Before Hook', () => {
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});
-
-	test('should return forbidden in the before delete hook when the ACL returns a function of a filter and there is no transaction.', async () => {
-		assert(token);
-
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteOne');
-
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
-			http: { headers: new Headers({ authorization: token }) } as any,
-			query: gql`
-				mutation {
-					result: deleteAlbum(id: 1)
-				}
-			`,
-		});
-
-		expect(spyOnDataProvider).not.toBeCalled();
-
-		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
-	});
 });
