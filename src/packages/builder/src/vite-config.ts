@@ -35,13 +35,7 @@ export const viteConfig = ({
 			...(port ? { port } : {}),
 		},
 		optimizeDeps: {
-			include: [
-				'react-dom/client',
-				'react-dom',
-				'classnames',
-				'graphql-deduplicator',
-				'hoist-non-react-statics',
-			],
+			include: ['react-dom/client', 'react-dom', 'classnames', 'graphql-deduplicator'],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
 				// our vite plugin directly.
