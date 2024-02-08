@@ -1,6 +1,5 @@
 import {
 	AccessControlList,
-	ApiKeyStorage,
 	ApplyAccessControlList,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
@@ -10,10 +9,12 @@ import {
 	Field,
 	SummaryField,
 	ReadOnly,
+	registerEnumType,
 	GraphQLEntity,
 	ReadOnlyProperty,
 } from '@exogee/graphweaver';
 
+import { Roles } from '../../../auth/roles';
 import { ApiKey as OrmApiKey } from '../../../entities';
 
 const acl: AccessControlList<ApiKey, AuthorizationContext> = {
@@ -22,6 +23,10 @@ const acl: AccessControlList<ApiKey, AuthorizationContext> = {
 		all: true,
 	},
 };
+
+registerEnumType(Roles, {
+	name: 'Roles',
+});
 
 @ReadOnly({ adminUI: false, backend: true })
 @ApplyAccessControlList(acl)
@@ -40,6 +45,6 @@ export class ApiKey extends GraphQLEntity<OrmApiKey> {
 	@Field(() => Boolean)
 	revoked!: boolean;
 
-	@Field(() => [String], { nullable: true })
-	roles?: string[];
+	@Field(() => [Roles], { nullable: true })
+	roles?: Roles[];
 }

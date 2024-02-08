@@ -63,6 +63,7 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
   relationshipType?: Maybe<Scalars['String']['output']>;
@@ -94,7 +95,7 @@ export type ApiKey = {
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
   revoked: Scalars['Boolean']['output'];
-  roles?: Maybe<Array<Scalars['String']['output']>>;
+  roles?: Maybe<Array<Roles>>;
 };
 
 export type ApiKeyCreateOrUpdateInput = {
@@ -131,14 +132,12 @@ export type ApiKeysListFilter = {
   key_notnull?: InputMaybe<Scalars['String']['input']>;
   key_null?: InputMaybe<Scalars['String']['input']>;
   revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Scalars['String']['input']>;
-  roles_ilike?: InputMaybe<Scalars['String']['input']>;
-  roles_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  roles_like?: InputMaybe<Scalars['String']['input']>;
-  roles_ne?: InputMaybe<Scalars['String']['input']>;
-  roles_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  roles_notnull?: InputMaybe<Scalars['String']['input']>;
-  roles_null?: InputMaybe<Scalars['String']['input']>;
+  roles?: InputMaybe<Roles>;
+  roles_in?: InputMaybe<Array<Roles>>;
+  roles_ne?: InputMaybe<Roles>;
+  roles_nin?: InputMaybe<Array<Roles>>;
+  roles_notnull?: InputMaybe<Roles>;
+  roles_null?: InputMaybe<Roles>;
 };
 
 export type ApiKeysOrderByInput = {
@@ -520,6 +519,11 @@ export type QueryUsersArgs = {
   filter?: InputMaybe<UsersListFilter>;
   pagination?: InputMaybe<UsersPaginationInput>;
 };
+
+export enum Roles {
+  DarkSide = 'DARK_SIDE',
+  LightSide = 'LIGHT_SIDE'
+}
 
 export enum Sort {
   Asc = 'ASC',

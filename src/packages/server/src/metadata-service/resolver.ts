@@ -92,13 +92,14 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 
 					const fields = visibleFields?.map((field) => {
 						const typeValue = field.getType() as any;
-						const typeName = typeValue.name ? typeValue.name : enumMetadata.get(typeValue)?.name;
+						const typeName = typeValue.name ?? enumMetadata.get(typeValue)?.name;
 
 						const relatedObject = objectTypeData[typeName];
 
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
 							type: relatedObject?.name || typeName,
+							isArray: field.typeOptions.array,
 							extensions: field.extensions || {},
 							attributes: isReadOnlyPropertyAdminUI(objectType.target, field.name)
 								? {

@@ -11,6 +11,7 @@ export const SCHEMA_QUERY = gql`
 				fields {
 					name
 					type
+					isArray
 					relationshipType
 					relatedEntity
 					filter {

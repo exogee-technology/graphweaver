@@ -44,7 +44,7 @@ CREATE TABLE api_key (
   api_key VARCHAR(255) NOT NULL UNIQUE,
   secret VARCHAR(255) NOT NULL,
   revoked BOOLEAN NOT NULL DEFAULT false,
-  roles JSON NOT NULL DEFAULT (JSON_ARRAY())
+  roles TEXT NOT NULL
 );
 
 CREATE TABLE authentication (
