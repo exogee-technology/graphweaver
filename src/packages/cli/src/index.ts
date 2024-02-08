@@ -13,6 +13,7 @@ import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
 import { generateTypes } from './types';
+import * as path from 'path';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
@@ -245,10 +246,30 @@ yargs
 				console.log('Watch process started...');
 				await startFrontend(args as StartOptions);
 
+				const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+				const { graphweaver } = await import(buildDir);
+				const codegenOptions = graphweaver?.config?.fileAutoGenerationOptions;
+
 				// Watch the directory for file changes
-				const watcher = chokidar.watch('./src/**', {
-					ignored: [/node_modules/, /__generated__/, /.*\.generated\.tsx$/, /.*\.generated\.ts$/],
-				});
+				const watcher = chokidar.watch(
+					[
+						'./src/**',
+						...(codegenOptions?.watchForFileChangesInPaths
+							? codegenOptions.watchForFileChangesInPaths.map((filePath: string) =>
+									path.join(filePath, '/**')
+							  )
+							: []),
+					],
+					{
+						ignored: [
+							/node_modules/,
+							/types.ts/,
+							/__generated__/,
+							/.*\.generated\.tsx$/,
+							/.*\.generated\.ts$/,
+						],
+					}
+				);
 
 				// Build Types
 				console.log('Generating files...');
