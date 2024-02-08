@@ -28,7 +28,7 @@
 		"@apollo/client": "3.7.1",
 		"@graphiql/toolkit": "0.8.2",
 		"classnames": "2.3.2",
-		"formik": "2.2.9",
+		"formik": "2.4.5",
 		"graphiql": "2.4.5",
 		"graphql": "16.8.1",
 		"graphql-deduplicator": "2.0.6",
@@ -39,7 +39,6 @@
 		"react-hot-toast": "2.4.1"
 	},
 	"peerDependencies": {
-		"formik": "2.2.9",
 		"graphql": "16.8.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",

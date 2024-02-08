@@ -371,8 +371,8 @@ importers:
         specifier: 16.0.0
         version: 16.0.0
       formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
+        specifier: 2.4.5
+        version: 2.4.5(react@18.2.0)
       got:
         specifier: 11.8.5
         version: 11.8.5
@@ -575,8 +575,8 @@ importers:
         specifier: 2.3.2
         version: 2.3.2
       formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
+        specifier: 2.4.5
+        version: 2.4.5(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -657,8 +657,8 @@ importers:
         specifier: 2.3.2
         version: 2.3.2
       formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
+        specifier: 2.4.5
+        version: 2.4.5(react@18.2.0)
       graphiql:
         specifier: 2.4.5
         version: 2.4.5(@codemirror/language@6.0.0)(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
@@ -839,8 +839,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
+        specifier: 2.4.5
+        version: 2.4.5(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -9872,6 +9872,13 @@ packages:
     resolution: {integrity: sha512-swUwj5hWF1yFzbUXStLJrUa0ksAt11B8+SwhsAjQAX0LYJ1LLioAyuDcJ9bovWbsNzIXJYXLvljSPQw8nR728w==}
     dev: true
 
+  /@types/hoist-non-react-statics@3.3.5:
+    resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
+    dependencies:
+      '@types/react': 18.0.25
+      hoist-non-react-statics: 3.3.2
+    dev: false
+
   /@types/http-cache-semantics@4.0.1:
     resolution: {integrity: sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==}
 
@@ -13725,11 +13732,12 @@ packages:
       once: 1.4.0
       qs: 6.11.2
 
-  /formik@2.2.9(react@18.2.0):
-    resolution: {integrity: sha512-LQLcISMmf1r5at4/gyJigGn0gOwFbeEAlji+N9InZF6LIMXnFNkO42sCI8Jt84YZggpD4cPWObAZaxpEFtSzNA==}
+  /formik@2.4.5(react@18.2.0):
+    resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}
     peerDependencies:
       react: '>=16.8.0'
     dependencies:
+      '@types/hoist-non-react-statics': 3.3.5
       deepmerge: 2.2.1
       hoist-non-react-statics: 3.3.2
       lodash: 4.17.21
@@ -13737,7 +13745,7 @@ packages:
       react: 18.2.0
       react-fast-compare: 2.0.4
       tiny-warning: 1.0.3
-      tslib: 1.14.1
+      tslib: 2.6.0
     dev: false
 
   /forwarded@0.2.0:
