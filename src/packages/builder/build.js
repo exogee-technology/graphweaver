@@ -1,27 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// import { exec as nodeExec } from 'child_process';
+const { exec: nodeExec } = require('child_process');
+const { promisify } = require('util');
 
-// const { exec: nodeExec } = require('child_process');
-import { promisify } from 'util';
-// const { promisify } = require('util');
+const { build } = require('esbuild');
+const { dependencies, devDependencies } = require('./package.json');
+const path = require('path');
 
-import { readFileSync } from 'fs';
-import { build } from 'esbuild';
-// const { build } = require('esbuild');
-
-// eslint-disable-next-line prettier/prettier
-// import { dependencies, devDependencies } from "./package.json" with { type: "json" };
-// const { dependencies, devDependencies } = require('./package.json');
-// const path = require('path');
-
-// import { path } from 'path';
-
-// const exec = promisify(nodeExec);
-
-// Load the contents of package.json into a variable
-const loadJSON = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url)));
-
-const pjson = loadJSON('./package.json');
+const exec = promisify(nodeExec);
 
 (async () => {
 	await build({
@@ -34,8 +19,8 @@ const pjson = loadJSON('./package.json');
 		external: [
 			// Our dependencies will be installed in node_modules. The bundling is
 			// just to ensure our own files are pulled in
-			...Object.keys(pjson.dependencies),
-			...Object.keys(pjson.devDependencies),
+			...Object.keys(dependencies),
+			...Object.keys(devDependencies),
 		],
 	});
 })();
