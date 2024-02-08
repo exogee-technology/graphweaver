@@ -83,22 +83,6 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
 		}
 
-		// public async runAfterHooks<H extends HookParams<CredentialCreateOrUpdateInputArgs>>(
-		// 	hookRegister: HookRegister,
-		// 	hookParams: H,
-		// 	entities: (D | null)[]
-		// ): Promise<((D & { id: string }) | null)[]> {
-		// 	const hookManager = hookManagerMap.get('Credential');
-		// 	const { entities: hookEntities = [] } = hookManager
-		// 		? await hookManager.runHooks(hookRegister, {
-		// 				...hookParams,
-		// 				entities,
-		// 		  })
-		// 		: { entities };
-
-		// 	return hookEntities as ((D & { id: string }) | null)[];
-		// }
-
 		async create(
 			params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
 		): Promise<UserProfile> {
@@ -150,18 +134,6 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 				undefined,
 				params
 			);
-
-			// let passwordHash = undefined;
-			// if (item.password && this.assertPasswordStrength(item.password)) {
-			// 	passwordHash = await hashPassword(item.password);
-			// }
-			// const credential = await this.provider.updateOne(item.id, {
-			// 	...(item.username ? { username: item.username } : {}),
-			// 	...(passwordHash ? { password: passwordHash } : {}),
-			// });
-
-			// const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
-			// if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
 			return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
 				info: params.info,
