@@ -1,6 +1,7 @@
-import { ArrayType, BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { BigIntType, Enum, EnumArrayType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { ApiKeyStorage } from '@exogee/graphweaver-auth';
+import { Roles } from '../../auth/roles';
 
 @Entity({ tableName: 'api_key' })
 export class ApiKey extends BaseEntity implements ApiKeyStorage {
@@ -16,6 +17,6 @@ export class ApiKey extends BaseEntity implements ApiKeyStorage {
 	@Property({ type: Boolean, default: false })
 	revoked!: boolean;
 
-	@Property({ type: ArrayType, default: [] })
-	roles!: string[];
+	@Enum({ type: EnumArrayType, items: () => Roles, array: true, default: [] })
+	roles!: Roles[];
 }

@@ -73,7 +73,7 @@ const getField = ({ field }: { field: EntityField }) => {
 	const { enumByName } = useSchema();
 	const enumField = enumByName(field.type);
 	if (enumField) {
-		return <EnumField name={field.name} typeEnum={enumField} />;
+		return <EnumField name={field.name} typeEnum={enumField} multiple={field.isArray} />;
 	}
 
 	return (

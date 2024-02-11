@@ -24,4 +24,7 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => AdminUiFieldExtentionsMetadata, { nullable: true })
 	extensions?: AdminUiFieldExtentionsMetadata;
+
+	@Field(() => Boolean, { nullable: true })
+	isArray?: boolean;
 }
