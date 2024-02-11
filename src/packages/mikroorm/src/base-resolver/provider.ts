@@ -523,16 +523,20 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return deletedRows === 1;
 	}
 
-	public async deleteMany(ids: string[]): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityType.name} with ids ${ids}`);
+	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityType.name}`);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
-			const deletedCount = await this.getRepository().nativeDelete({
-				id: { $in: ids },
-			} as FilterQuery<any>); // We can remove this cast when Typescript knows that T has an `id` property.
+			const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+			const whereWithAppliedExternalIdFields =
+				where && this.applyExternalIdFields(this.entityType, where);
 
-			if (deletedCount !== ids.length) {
-				throw new Error('We did not delete all the rows, rolling back');
+			const deletedCount = await this.getRepository().nativeDelete(
+				whereWithAppliedExternalIdFields
+			);
+
+			if (deletedCount === 0) {
+				throw new Error('We did not delete any rows, rolling back.');
 			}
 
 			return deletedCount;
@@ -540,7 +544,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 		logger.trace(`delete ${this.entityType.name} result: deleted ${deletedRows} row(s)`);
 
-		return deletedRows === ids.length;
+		return true;
 	}
 
 	public getRelatedEntityId(entity: any, relatedIdField: string) {

@@ -34,7 +34,7 @@ export const generateDeleteEntityMutation = (entity: Entity) => gql`
 
 export const generateDeleteManyEntitiesMutation = (entity: Entity) => gql`
 mutation deleteManyEntities ($ids: [ID!]!){
-  delete${pluralize(entity.name)} (ids: $ids)
+  delete${pluralize(entity.name)} (filter: { id_in: $ids })
 }
 `;
 

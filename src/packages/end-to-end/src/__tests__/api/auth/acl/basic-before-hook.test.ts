@@ -179,7 +179,29 @@ describe('ACL - Basic Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: deleteAlbum(id: 1)
+					result: deleteAlbum(filter: { id: 1 })
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
+	test('should return forbidden in the before delete hook when no permission applied.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteMany');
+
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation {
+					result: deleteAlbums(filter: { id: 1 })
 				}
 			`,
 		});

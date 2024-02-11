@@ -53,7 +53,7 @@ export class Provider<D, G> implements BackendProvider<D, G> {
 		throw new Error('DeleteOne Not implemented');
 	}
 
-	public async deleteMany(ids: string[]): Promise<boolean> {
+	public async deleteMany(filter: Filter<G>): Promise<boolean> {
 		throw new Error('DeleteMany Not implemented');
 	}
 
