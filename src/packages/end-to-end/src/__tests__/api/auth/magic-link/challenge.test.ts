@@ -52,13 +52,13 @@ class AuthResolver extends createBaseMagicLinkAuthResolver() {
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 
 describe('Magic Link Authentication - Challenge', () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		jest.restoreAllMocks();
 	});
 
 	test('should fail challenge if not logged in.', async () => {

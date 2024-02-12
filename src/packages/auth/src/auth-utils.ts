@@ -110,14 +110,8 @@ export const assertObjectLevelPermissions = <G, TContext extends AuthorizationCo
 export async function checkEntityPermission<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
 	D extends BaseDataEntity
->(entity: G, id: string | number, accessType: AccessType) {
-	const { name } = entity;
-	if (!name) {
-		logger.error('Raising ForbiddenError: Could not determine entity name');
-		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
-	}
-
-	const acl = getACL(name);
+>(entityName: string, id: string | number, accessType: AccessType) {
+	const acl = getACL(entityName);
 	const accessControlEntry = buildAccessControlEntryForUser(
 		acl,
 		getRolesFromAuthorizationContext()
@@ -150,7 +144,7 @@ export async function checkEntityPermission<
 	};
 
 	try {
-		const { provider } = EntityMetadataMap.get(name) ?? {};
+		const { provider } = EntityMetadataMap.get(entityName) ?? {};
 		const result = await provider?.findOne(where);
 		if (!result) {
 			logger.trace('Raising ForbiddenError: User is not allowed to access this record');
@@ -168,17 +162,22 @@ export async function checkEntityPermission<
 export async function checkAuthorization<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
 	D extends BaseDataEntity
->(entity: G, id: string | number, requestInput: Partial<G>, requiredPermission: AccessType) {
+>(
+	entityName: string,
+	id: string | number,
+	requestInput: Partial<G>,
+	requiredPermission: AccessType
+) {
 	// Get ACL first
-	const acl = getACL(entity.name);
-	const meta = EntityMetadataMap.get(entity.name);
+	const acl = getACL(entityName);
+	const meta = EntityMetadataMap.get(entityName);
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
 	assertUserCanPerformRequestedAction(acl, requiredPermission);
 
 	// Now check whether the root entity passes permissions filters (if set)
-	await checkEntityPermission(entity as any, id, requiredPermission);
+	await checkEntityPermission(entityName, id, requiredPermission);
 
 	// Recurse through the list
 	const relatedEntityAuthChecks: Promise<any>[] = [];
@@ -211,7 +210,7 @@ export async function checkAuthorization<
 				// The creation hook will triggered for that entity and the permissions checked
 				if (relatedId) {
 					relatedEntityAuthChecks.push(
-						checkAuthorization(relatedEntity, relatedId, item, accessType)
+						checkAuthorization(relatedEntity.name, relatedId, item, accessType)
 					);
 				}
 			}

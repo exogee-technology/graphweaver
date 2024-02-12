@@ -20,7 +20,6 @@ import {
 	UserProfile,
 	Credential,
 	CredentialCreateOrUpdateInputArgs,
-	ApplyAccessControlList,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -29,11 +28,6 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-@ApplyAccessControlList({
-	ROLE_NOT_FOUND_IN_USER_PROFILE: {
-		all: true,
-	},
-})
 @ObjectType('Album')
 export class Album extends GraphQLEntity<any> {
 	public dataEntity!: any;
@@ -75,7 +69,7 @@ const graphweaver = new Graphweaver({
 
 let token: string | undefined;
 
-describe('ACL - Basic Before Hook', () => {
+describe('ACL - Implicit Deny', () => {
 	beforeAll(async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };

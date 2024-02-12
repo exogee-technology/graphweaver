@@ -173,7 +173,7 @@ export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): Filter<G> 
 		(filter): filter is Filter<G> =>
 			!isEmptyObject(filter) && filter !== undefined && filter !== null
 	);
-	console.log(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
+	logger.trace(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
 
 	return nonEmptyFilters.length > 1 ? { _and: nonEmptyFilters } : nonEmptyFilters[0];
 };

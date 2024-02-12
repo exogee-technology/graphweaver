@@ -160,14 +160,17 @@ const generatePermissionListFromArgs = <G>() => {
 	return recurseThroughArgs;
 };
 
-export const beforeCreateOrUpdate = (gqlEntityTypeName: string) => {
+export const beforeCreateOrUpdate = (
+	gqlEntityTypeName: string,
+	accessType: AccessType.Create | AccessType.Update
+) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
 		assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Fetch the filter for the currently logged in user
-		const accessFilter = await getAccessFilter(acl, AccessType.Create);
+		const accessFilter = await getAccessFilter(acl, accessType);
 		// 4. Check if the filter has values and then assert we are in a transaction
 		// You can only use a filter in this way when you are in a transaction
 		if (isPopulatedFilter(accessFilter)) assertTransactional(params.transactional);
@@ -176,28 +179,26 @@ export const beforeCreateOrUpdate = (gqlEntityTypeName: string) => {
 	};
 };
 
-export const afterCreateOrUpdate = async <G>(
-	params: CreateOrUpdateHookParams<G, AuthorizationContext>
+export const afterCreateOrUpdate = (
+	gqlEntityTypeName: string,
+	accessType: AccessType.Create | AccessType.Update
 ) => {
-	const items = params.args.items;
-	const entities = (params.entities ?? []) as GraphQLEntity<BaseDataEntity>[];
+	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		const items = params.args.items;
+		const entities = (params.entities ?? []) as GraphQLEntity<BaseDataEntity>[];
 
-	// 1. Check to ensure we are within a transaction
-	assertTransactional(params.transactional);
-	// 2. Check user has permission for each
-	// @todo what if the order returned is not the same as the input?
-	const authChecks = entities.map((entity, index) =>
-		entity?.id
-			? checkAuthorization(
-					Object.getPrototypeOf(entity).constructor,
-					entity.id,
-					items[index],
-					AccessType.Create
-			  )
-			: undefined
-	);
-	await Promise.all(authChecks);
-	return params;
+		// 1. Check to ensure we are within a transaction
+		assertTransactional(params.transactional);
+		// 2. Check user has permission for each
+		// @todo what if the order returned is not the same as the input?
+		const authChecks = entities.map((entity, index) =>
+			entity?.id
+				? checkAuthorization(gqlEntityTypeName, entity.id, items[index], accessType)
+				: undefined
+		);
+		await Promise.all(authChecks);
+		return params;
+	};
 };
 
 export const beforeRead = (gqlEntityTypeName: string) => {

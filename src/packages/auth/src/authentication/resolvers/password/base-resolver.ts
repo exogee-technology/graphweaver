@@ -2,11 +2,11 @@ import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field, ID } from 'type-g
 import {
 	BackendProvider,
 	BaseDataEntity,
+	BaseInsertInputArgs,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
 	HookRegister,
 	createBaseResolver,
-	hookManagerMap,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
@@ -21,7 +21,7 @@ import { Credential } from '../../entities';
 import { PasswordStrengthError } from './resolver';
 
 @InputType(`CredentialInsertInput`)
-class CreateCredentialInputArgs {
+class CreateCredentialInputArgs extends BaseInsertInputArgs {
 	@Field(() => String)
 	username!: string;
 

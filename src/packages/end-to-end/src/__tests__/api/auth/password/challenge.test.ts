@@ -119,7 +119,7 @@ class AuthResolver extends createBasePasswordAuthResolver(
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver, TaskResolver, TagResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 

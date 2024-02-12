@@ -76,13 +76,13 @@ class CredentialAuthResolver extends createBasePasswordAuthResolver(
 const graphweaver = new Graphweaver({
 	resolvers: [OTPAuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 
 describe('One Time Password Authentication - Challenge', () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		jest.restoreAllMocks();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
