@@ -1,9 +1,11 @@
-import { BackendProvider, Filter, PaginationOptions } from './common/types';
+import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './common/types';
 
 export class Provider<D, G> implements BackendProvider<D, G> {
 	constructor(readonly backendId: string) {
 		if (!backendId) throw new Error('BackendId must be defined');
 	}
+
+	backendProviderConfig?: BackendProviderConfig;
 
 	// READ METHODS
 	public async find(
