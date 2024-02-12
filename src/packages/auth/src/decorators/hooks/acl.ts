@@ -55,30 +55,34 @@ const assertUserCanPerformRequest = <G>(
 	info: GraphQLResolveInfo,
 	args: GraphQLArgs<G>
 ) => {
-	for (const nodes of info.fieldNodes) {
-		const permissionsFromFields = generatePermissionListFromFields()(
-			gqlEntityTypeName,
-			nodes.selectionSet
-		);
-		const permissionsFromItemsArgs = args.items
-			? generatePermissionListFromArgs()(gqlEntityTypeName, args.items)
-			: [];
-		const permissionsFromFilterArgs = args.filter
-			? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter])
-			: [];
+	const permissionsFromItemsArgs = args.items
+		? generatePermissionListFromArgs()(gqlEntityTypeName, args.items)
+		: [];
+	const permissionsFromFilterArgs = args.filter
+		? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter])
+		: [];
 
-		const permissionsList = new Set([
-			...permissionsFromFields,
-			...permissionsFromItemsArgs,
-			...permissionsFromFilterArgs,
-		]);
+	const selectionSets = info.fieldNodes
+		.filter((node) => node.selectionSet)
+		.flatMap((node) => node.selectionSet);
 
-		// Check the permissions
-		for (const permission of permissionsList) {
-			const [entityName, action] = permission.split(':');
-			const acl = getACL(entityName);
-			assertUserCanPerformRequestedAction(acl, action as AccessType);
-		}
+	const permissionsFromFields = new Set(
+		...selectionSets.map((selectionSet) =>
+			generatePermissionListFromFields()(gqlEntityTypeName, selectionSet)
+		)
+	);
+
+	const permissionsList = new Set([
+		...permissionsFromFields,
+		...permissionsFromItemsArgs,
+		...permissionsFromFilterArgs,
+	]);
+
+	// Check the permissions
+	for (const permission of permissionsList) {
+		const [entityName, action] = permission.split(':');
+		const acl = getACL(entityName);
+		assertUserCanPerformRequestedAction(acl, action as AccessType);
 	}
 };
 

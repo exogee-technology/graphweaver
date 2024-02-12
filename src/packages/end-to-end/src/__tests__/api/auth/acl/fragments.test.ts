@@ -11,6 +11,7 @@ import {
 	ID,
 	ObjectType,
 	Provider,
+	RelationshipField,
 	Resolver,
 	createBaseResolver,
 } from '@exogee/graphweaver';
@@ -30,7 +31,7 @@ const user = new UserProfile({
 });
 
 @ApplyAccessControlList({
-	ROLE_NOT_FOUND_IN_USER_PROFILE: {
+	Everyone: {
 		all: true,
 	},
 })
@@ -43,12 +44,35 @@ export class Album extends GraphQLEntity<any> {
 
 	@Field(() => String)
 	description!: string;
+
+	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id, nullable: true })
+	artist?: Artist;
+}
+
+@ApplyAccessControlList({})
+@ObjectType('Artist')
+export class Artist extends GraphQLEntity<any> {
+	public dataEntity!: any;
+
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String)
+	description!: string;
+
+	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	albums!: Album[];
 }
 
 const albumDataProvider = new Provider<any, Album>('album');
 
 @Resolver((of) => Album)
 class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
+
+const artistDataProvider = new Provider<any, Artist>('artist');
+
+@Resolver((of) => Artist)
+class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}
 
 @Resolver()
 class AuthResolver extends createBasePasswordAuthResolver(Credential, new Provider('auth')) {
@@ -67,7 +91,7 @@ class AuthResolver extends createBasePasswordAuthResolver(Credential, new Provid
 }
 
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, AlbumResolver],
+	resolvers: [AuthResolver, AlbumResolver, ArtistResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},
@@ -75,7 +99,7 @@ const graphweaver = new Graphweaver({
 
 let token: string | undefined;
 
-describe('ACL - Basic Before Hook', () => {
+describe('ACL - Fragments', () => {
 	beforeAll(async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
@@ -100,7 +124,7 @@ describe('ACL - Basic Before Hook', () => {
 		expect(token).toContain('Bearer ');
 	});
 
-	test('should return forbidden in the before read hook when listing an entity when no permission applied.', async () => {
+	test.only('should return forbidden in the before read hook when listing an entity when no permission applied through an Album fragment spread.', async () => {
 		assert(token);
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
@@ -110,9 +134,15 @@ describe('ACL - Basic Before Hook', () => {
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
+				fragment albumFields on Album {
+					album: artist {
+						id
+					}
+				}
 				query {
 					result: albums {
 						id
+						...albumFields
 					}
 				}
 			`,
@@ -124,7 +154,7 @@ describe('ACL - Basic Before Hook', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});
 
-	test('should return forbidden in the before read hook when listing an entity multiple times when no permission applied.', async () => {
+	test('should return forbidden in the before read hook when listing an entity when no permission applied through an Artist fragment spread.', async () => {
 		assert(token);
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
@@ -134,105 +164,16 @@ describe('ACL - Basic Before Hook', () => {
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
-				query queryOne {
-					albums {
-						id
-					}
+				fragment artistFields on Artist {
+					id
+				}
+				query {
 					result: albums {
 						id
+						artist {
+							...artistFields
+						}
 					}
-				}
-			`,
-		});
-
-		expect(spyOnDataProvider).not.toBeCalled();
-
-		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
-	});
-
-	test('should return forbidden in the before create hook when no permission applied.', async () => {
-		assert(token);
-
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
-
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
-			http: { headers: new Headers({ authorization: token }) } as any,
-			query: gql`
-				mutation {
-					result: createAlbum(data: { description: "test" }) {
-						id
-					}
-				}
-			`,
-		});
-
-		expect(spyOnDataProvider).not.toBeCalled();
-
-		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
-	});
-
-	test('should return forbidden in the before update hook when no permission applied.', async () => {
-		assert(token);
-
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
-
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
-			http: { headers: new Headers({ authorization: token }) } as any,
-			query: gql`
-				mutation {
-					result: updateAlbum(data: { id: 1, description: "test" }) {
-						id
-					}
-				}
-			`,
-		});
-
-		expect(spyOnDataProvider).not.toBeCalled();
-
-		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
-	});
-
-	test('should return forbidden in the before delete hook when no permission applied.', async () => {
-		assert(token);
-
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteOne');
-
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
-			http: { headers: new Headers({ authorization: token }) } as any,
-			query: gql`
-				mutation {
-					result: deleteAlbum(filter: { id: 1 })
-				}
-			`,
-		});
-
-		expect(spyOnDataProvider).not.toBeCalled();
-
-		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
-	});
-
-	test('should return forbidden in the before delete hook when no permission applied.', async () => {
-		assert(token);
-
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteMany');
-
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
-			http: { headers: new Headers({ authorization: token }) } as any,
-			query: gql`
-				mutation {
-					result: deleteAlbums(filter: { id: 1 })
 				}
 			`,
 		});

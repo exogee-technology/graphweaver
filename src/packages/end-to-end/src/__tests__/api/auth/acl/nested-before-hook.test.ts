@@ -153,6 +153,35 @@ describe('ACL - Nested Before Hook', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});
 
+	test('should return forbidden in the before read hook when listing a nested entity when no permission applied and renaming the field.', async () => {
+		assert(token);
+
+		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
+		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					result: albums {
+						id
+						album: artist {
+							id
+						}
+					}
+				}
+			`,
+		});
+
+		expect(spyOnAlbumDataProvider).not.toBeCalled();
+		expect(spyOnArtistDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
 	test('should return forbidden in the before read hook when filtering by an entity without permission.', async () => {
 		assert(token);
 
