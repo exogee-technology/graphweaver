@@ -124,7 +124,7 @@ describe('ACL - Fragments', () => {
 		expect(token).toContain('Bearer ');
 	});
 
-	test.only('should return forbidden in the before read hook when listing an entity when no permission applied through an Album fragment spread.', async () => {
+	test('should return forbidden in the before read hook when listing an entity when no permission applied through an Album fragment spread.', async () => {
 		assert(token);
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
@@ -172,6 +172,35 @@ describe('ACL - Fragments', () => {
 						id
 						artist {
 							...artistFields
+						}
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
+	test('should return forbidden in the before read hook when listing an entity when no permission applied through an inline fragment.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
+
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					albums {
+						id
+						... on Album {
+							artist {
+								id
+							}
 						}
 					}
 				}

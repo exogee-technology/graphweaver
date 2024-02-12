@@ -55,22 +55,22 @@ const assertUserCanPerformRequest = <G>(
 	info: GraphQLResolveInfo,
 	args: GraphQLArgs<G>
 ) => {
-	const permissionsFromItemsArgs = args.items
-		? generatePermissionListFromArgs()(gqlEntityTypeName, args.items)
-		: [];
-	const permissionsFromFilterArgs = args.filter
-		? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter])
-		: [];
-
 	const selectionSets = info.fieldNodes
 		.filter((node) => node.selectionSet)
 		.flatMap((node) => node.selectionSet);
 
 	const permissionsFromFields = new Set(
 		...selectionSets.map((selectionSet) =>
-			generatePermissionListFromFields()(gqlEntityTypeName, selectionSet)
+			generatePermissionListFromFields(info.fragments)(gqlEntityTypeName, selectionSet)
 		)
 	);
+
+	const permissionsFromItemsArgs = args.items
+		? generatePermissionListFromArgs()(gqlEntityTypeName, args.items)
+		: [];
+	const permissionsFromFilterArgs = args.filter
+		? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter])
+		: [];
 
 	const permissionsList = new Set([
 		...permissionsFromFields,
@@ -86,7 +86,7 @@ const assertUserCanPerformRequest = <G>(
 	}
 };
 
-const generatePermissionListFromFields = () => {
+const generatePermissionListFromFields = (fragments: GraphQLResolveInfo['fragments']) => {
 	const permissionsList = new Set<RequiredPermission>();
 
 	const recurseThroughFields = (entityName: string, selectionSet: SelectionSetNode | undefined) => {
@@ -107,6 +107,11 @@ const generatePermissionListFromFields = () => {
 					// Let's check the user has permission to read the related entity
 					recurseThroughFields(fieldType.name, node.selectionSet);
 				}
+			} else if (node.kind === 'FragmentSpread') {
+				const fragment = fragments[node.name.value];
+				recurseThroughFields(entityName, fragment.selectionSet);
+			} else if (node.kind === 'InlineFragment') {
+				recurseThroughFields(entityName, node.selectionSet);
 			}
 		}
 
