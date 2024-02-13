@@ -112,7 +112,7 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 		for (const value of acv) {
 			if (typeof value === 'function') {
 				const filterValue = await value(authContext as TContext);
-				if (filterValue === false) {
+				if (filterValue === false || filterValue === undefined) {
 					throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 				}
 			}

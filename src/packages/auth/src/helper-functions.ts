@@ -210,7 +210,10 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 			})
 		);
 
-		const filters = evaluatedFilters.filter((filter) => typeof filter !== 'boolean') as Filter<G>[];
+		// Only return the filters that are Objects
+		const filters = evaluatedFilters.filter(
+			(filter): filter is Filter<G> => typeof filter === 'object' && filter !== null
+		);
 
 		// Apply to original search criteria
 		return filters.length > 1 ? { _or: filters } : filters[0];
