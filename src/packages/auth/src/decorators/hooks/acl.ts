@@ -19,7 +19,7 @@ import {
 	BaseListInputFilterArgs,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { GraphQLResolveInfo, SelectionSetNode } from 'graphql';
+import { ArgumentNode, GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
 
 import { AccessType, AuthorizationContext } from '../../types';
 import { andFilters } from '../../helper-functions';
@@ -65,17 +65,27 @@ const assertUserCanPerformRequest = <G>(
 		)
 	);
 
-	const permissionsFromItemsArgs = args.items
+	const permissionsFromInputArgs = args.items
 		? generatePermissionListFromArgs()(gqlEntityTypeName, args.items)
 		: [];
+
 	const permissionsFromFilterArgs = args.filter
 		? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter])
 		: [];
 
+	const permissionsFromFilterArgsOnFields = new Set(
+		...selectionSets.map((selectionSet) => {
+			// Get the filter arguments on the fields for this selection set
+			const filterArgs = getFilterArgumentsOnFields()(gqlEntityTypeName, selectionSet);
+			return generatePermissionListFromArgumentsOnFields()(filterArgs);
+		})
+	);
+
 	const permissionsList = new Set([
 		...permissionsFromFields,
-		...permissionsFromItemsArgs,
+		...permissionsFromInputArgs,
 		...permissionsFromFilterArgs,
+		...permissionsFromFilterArgsOnFields,
 	]);
 
 	// Check the permissions
@@ -119,6 +129,71 @@ const generatePermissionListFromFields = (fragments: GraphQLResolveInfo['fragmen
 	};
 
 	return recurseThroughFields;
+};
+
+// Returns a function that walks through the selection set and checks each relationship field to see if it contains a filter argument
+const getFilterArgumentsOnFields = () => {
+	const argumentsList = new Map<string, ValueNode>();
+
+	const recurseThroughFields = (entityName: string, selectionSet: SelectionSetNode | undefined) => {
+		const entityFields = metadata.fields.filter((field) => field.target.name === entityName);
+
+		for (const node of selectionSet?.selections ?? []) {
+			if (node.kind === 'Field' && node.arguments?.length && node.selectionSet) {
+				const field = entityFields.find((field) => field.name === node.name.value);
+				const fieldType = field?.getType() as GraphQLEntityConstructor<
+					GraphQLEntity<BaseDataEntity>,
+					BaseDataEntity
+				>;
+				const isRelationshipField = fieldType && fieldType?.prototype instanceof GraphQLEntity;
+				if (isRelationshipField) {
+					const filterArgument = node.arguments.find((arg) => arg.name.value === 'filter');
+					if (filterArgument) {
+						argumentsList.set(fieldType.name, filterArgument.value);
+					}
+					recurseThroughFields(fieldType.name, node.selectionSet);
+				}
+			}
+		}
+		return argumentsList;
+	};
+	return recurseThroughFields;
+};
+
+// Returns a function that walks through the filter arguments and checks each relationship field to see if it is an entity and if so, adds the required permission to the list
+const generatePermissionListFromArgumentsOnFields = () => {
+	const permissionsList = new Set<RequiredPermission>();
+
+	const recurseThroughArgs = (argumentNode: Map<string, ValueNode>) => {
+		for (const [entityName, node] of argumentNode) {
+			const entityFields = metadata.fields.filter((field) => field.target.name === entityName);
+			permissionsList.add(`${entityName}:${AccessType.Read}`);
+
+			if (node.kind === Kind.OBJECT && Array.isArray(node.fields)) {
+				for (const field of node.fields) {
+					if (field.kind === Kind.OBJECT_FIELD) {
+						const relationship = entityFields.find(
+							(entityField) => entityField.name === field.name.value
+						);
+						const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
+							GraphQLEntity<BaseDataEntity>,
+							BaseDataEntity
+						>;
+						const isRelatedEntity =
+							relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
+						if (isRelatedEntity) {
+							// Let's check the user has permission to read the related entity
+							recurseThroughArgs(new Map([[relatedEntity.name, field.value]]));
+						}
+					}
+				}
+			}
+		}
+
+		return permissionsList;
+	};
+
+	return recurseThroughArgs;
 };
 
 const generatePermissionListFromArgs = <G>() => {
