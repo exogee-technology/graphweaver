@@ -531,11 +531,12 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 			const whereWithAppliedExternalIdFields =
 				where && this.applyExternalIdFields(this.entityType, where);
 
+			const toDelete = await this.database.em.count(whereWithAppliedExternalIdFields);
 			const deletedCount = await this.getRepository().nativeDelete(
 				whereWithAppliedExternalIdFields
 			);
 
-			if (deletedCount === 0) {
+			if (deletedCount !== toDelete) {
 				throw new Error('We did not delete any rows, rolling back.');
 			}
 

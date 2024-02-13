@@ -210,7 +210,7 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 			})
 		);
 
-		// Only return the filters that are Objects
+		// Filter out the non-object filters as these are checked elsewhere
 		const filters = evaluatedFilters.filter(
 			(filter): filter is Filter<G> => typeof filter === 'object' && filter !== null
 		);

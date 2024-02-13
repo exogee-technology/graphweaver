@@ -100,6 +100,30 @@ describe('ACL - Basic Before Hook', () => {
 		expect(token).toContain('Bearer ');
 	});
 
+	test('should return forbidden in the before read hook when listing a single entity when no permission applied.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'findOne');
+
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					album(id: 1) {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
 	test('should return forbidden in the before read hook when listing an entity when no permission applied.', async () => {
 		assert(token);
 

@@ -61,7 +61,7 @@ const applyImplicitAllow = () => {
 	for (const key of EntityMetadataMap.keys()) {
 		const acl = AclMap.get(key);
 		if (!acl) {
-			// An empty ACL means we allow access to all operations
+			// Allow access to all operations
 			registerAccessControlListHook(key, {
 				Everyone: {
 					all: true,
@@ -94,11 +94,11 @@ export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
 		async requestDidStart({ request, contextValue }) {
 			logger.trace('authApolloPlugin requestDidStart');
 
-			// If the implicitAllow option is set, we allow access to all entities by default
+			// If the implicitAllow option is set, we allow access to all entities that do not have an ACL defined.
 			if (options?.implicitAllow) {
 				applyImplicitAllow();
 			} else {
-				// By default we deny access to all entities
+				// By default we deny access to all entities and the developer must define each ACL.
 				applyImplicitDeny();
 			}
 

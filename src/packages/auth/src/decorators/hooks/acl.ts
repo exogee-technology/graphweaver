@@ -192,6 +192,7 @@ const generatePermissionListFromArgumentsOnFields = () => {
 	return recurseThroughArgs;
 };
 
+// Returns a function that walks through the input arguments and checks their type to see which type of operation is being performed and adds the required permission to the list
 const generatePermissionListFromArgs = <G>() => {
 	const permissionsList = new Set<RequiredPermission>();
 
@@ -272,8 +273,7 @@ export const afterCreateOrUpdate = (
 
 		// 1. Check to ensure we are within a transaction
 		assertTransactional(params.transactional);
-		// 2. Check user has permission for each
-		// @todo what if the order returned is not the same as the input?
+		// 2. Check user has permission for each for each entity
 		const authChecks = entities.map((entity, index) =>
 			entity?.id
 				? checkAuthorization(gqlEntityTypeName, entity.id, items[index], accessType)
@@ -313,8 +313,6 @@ export const beforeDelete = (gqlEntityTypeName: string) => {
 		// 3. Combine the access filter with the original filter
 		const accessFilter = await getAccessFilter(acl, AccessType.Delete);
 		const consolidatedFilter = andFilters(params.args.filter, accessFilter);
-
-		// @todo test delete many
 
 		return {
 			...params,
