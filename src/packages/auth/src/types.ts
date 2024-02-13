@@ -58,7 +58,7 @@ export type AccessControlValue<G, TContext extends AuthorizationContext> =
 
 export type AccessControlFilterFunction<G, TContext extends AuthorizationContext> = (
 	context: TContext
-) => Filter<G> | Promise<Filter<G>>;
+) => Filter<G> | Promise<Filter<G>> | boolean | Promise<boolean>;
 
 export type ConsolidatedAccessControlValue<G, TContext extends AuthorizationContext> =
 	| true

@@ -206,8 +206,10 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 			})
 		);
 
+		const filters = evaluatedFilters.filter((filter) => typeof filter !== 'boolean') as Filter<G>[];
+
 		// Apply to original search criteria
-		return evaluatedFilters.length > 1 ? { _or: evaluatedFilters } : evaluatedFilters[0];
+		return filters.length > 1 ? { _or: filters } : filters[0];
 	} else {
 		logger.error('Raising ForbiddenError: Unexpected error processing filter based access');
 		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);

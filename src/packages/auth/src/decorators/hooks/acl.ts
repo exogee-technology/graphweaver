@@ -9,12 +9,7 @@ import {
 	getMetadataStorage,
 	BaseFilterInputArgs,
 	BaseInsertInputArgs,
-	BaseInsertManyInputArgs,
 	BaseUpdateInputArgs,
-	BaseUpdateManyInputArgs,
-	BaseOrderByInputArgs,
-	BasePaginationInputArgs,
-	BaseCreateOrUpdateManyInputArgs,
 	BaseDeleteInputArgs,
 	BaseListInputFilterArgs,
 } from '@exogee/graphweaver';
