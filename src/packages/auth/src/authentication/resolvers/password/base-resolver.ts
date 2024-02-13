@@ -3,6 +3,7 @@ import {
 	BackendProvider,
 	BaseDataEntity,
 	BaseInsertInputArgs,
+	BaseUpdateInputArgs,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
 	HookRegister,
@@ -33,7 +34,7 @@ class CreateCredentialInputArgs extends BaseInsertInputArgs {
 }
 
 @InputType(`CredentialCreateOrUpdateInput`)
-export class CredentialCreateOrUpdateInputArgs {
+export class CredentialCreateOrUpdateInputArgs extends BaseUpdateInputArgs {
 	@Field(() => ID)
 	id!: string;
 
@@ -85,14 +86,14 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 					transactional,
 				};
 
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
-					HookRegister.BEFORE_CREATE,
-					params,
-					'Credential'
-				);
-
 				let userProfile;
 				try {
+					const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
+						HookRegister.BEFORE_CREATE,
+						params,
+						'Credential'
+					);
+
 					userProfile = await this.create(hookParams);
 				} catch (err) {
 					logger.error(err);

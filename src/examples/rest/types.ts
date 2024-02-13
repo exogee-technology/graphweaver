@@ -307,7 +307,7 @@ export type MutationCreateUsersArgs = {
 
 
 export type MutationDeleteTagArgs = {
-  id: TagDeleteInput;
+  filter: TagDeleteInput;
 };
 
 
@@ -317,7 +317,7 @@ export type MutationDeleteTagsArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  id: TaskDeleteInput;
+  filter: TaskDeleteInput;
 };
 
 
@@ -327,7 +327,7 @@ export type MutationDeleteTasksArgs = {
 
 
 export type MutationDeleteUserArgs = {
-  id: UserDeleteInput;
+  filter: UserDeleteInput;
 };
 
 

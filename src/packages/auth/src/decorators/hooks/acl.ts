@@ -12,6 +12,7 @@ import {
 	BaseUpdateInputArgs,
 	BaseDeleteInputArgs,
 	BaseListInputFilterArgs,
+	BaseGetOneInputArgs,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
@@ -198,6 +199,9 @@ const generatePermissionListFromArgs = <G>() => {
 		for (const node of argumentNode) {
 			const prototype = node?.constructor?.prototype;
 			switch (true) {
+				case prototype instanceof BaseGetOneInputArgs:
+					permissionsList.add(`${entityName}:${AccessType.Read}`);
+					break;
 				case prototype instanceof BaseListInputFilterArgs:
 					permissionsList.add(`${entityName}:${AccessType.Read}`);
 					break;

@@ -61,7 +61,7 @@ const applyImplicitAllow = () => {
 	for (const key of EntityMetadataMap.keys()) {
 		const acl = AclMap.get(key);
 		if (!acl) {
-			// An empty ACL means we deny access to all operations
+			// An empty ACL means we allow access to all operations
 			registerAccessControlListHook(key, {
 				Everyone: {
 					all: true,

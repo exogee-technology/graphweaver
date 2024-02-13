@@ -67,6 +67,7 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
 };
 
+// These are the base input types that are used to create the input types for the resolvers
 export abstract class BaseListInputFilterArgs {}
 export abstract class BaseFilterInputArgs<G> {
 	filter?: Filter<G>;
@@ -88,6 +89,10 @@ export abstract class BasePaginationInputArgs {}
 export abstract class BaseCreateOrUpdateManyInputArgs {
 	data?: BaseUpdateInputArgs | BaseInsertInputArgs[];
 }
+export abstract class BaseGetOneInputArgs {
+	id!: string;
+}
+class GetOneInputArgs extends BaseGetOneInputArgs {}
 
 // G = GraphQL entity
 // D = Data Entity
@@ -394,8 +399,12 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+
+			const args = new GetOneInputArgs();
+			args.id = id;
+
 			const params: ReadHookParams<G> = {
-				args: { filter: { id } },
+				args: { filter: args as Filter<G> },
 				info,
 				context,
 				transactional: false,
