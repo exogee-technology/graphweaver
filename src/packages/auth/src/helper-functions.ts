@@ -67,6 +67,10 @@ export function clearAuthorizationContext() {
 	authContext = undefined;
 }
 
+export function getAuthorizationContext() {
+	return authContext;
+}
+
 export function getRolesFromAuthorizationContext() {
 	if (!authContext) {
 		throw new Error('Authorization context not set');

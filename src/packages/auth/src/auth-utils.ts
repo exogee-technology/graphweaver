@@ -12,6 +12,7 @@ import {
 	AclMap,
 	buildAccessControlEntryForUser,
 	evaluateAccessControlValue,
+	getAuthorizationContext,
 	getRolesFromAuthorizationContext,
 } from './helper-functions';
 import {
@@ -32,13 +33,13 @@ export const getACL = (gqlEntityTypeName: string) => {
 	return acl;
 };
 
-export const assertUserCanPerformRequestedAction = (
+export const assertUserCanPerformRequestedAction = async (
 	acl: Partial<AccessControlList<any, any>>,
 	requiredPermission: AccessType
 ) => {
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
-	assertObjectLevelPermissions(
+	await assertObjectLevelPermissions(
 		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext()),
 		requiredPermission
 	);
@@ -92,20 +93,37 @@ const permissionsErrorHandler = (error: any) => {
 	throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 };
 
-const assertAccessControlValueNotEmpty = <G, TContext extends AuthorizationContext>(
+const assertAccessControlValueNotEmpty = async <G, TContext extends AuthorizationContext>(
 	acv: ConsolidatedAccessControlValue<G, TContext> | undefined
 ) => {
 	if (!(acv === true || acv !== undefined)) {
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
+	if (Array.isArray(acv) && acv.length === 0) {
+		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
+	}
+	if (Array.isArray(acv)) {
+		const authContext = getAuthorizationContext();
+
+		if (!authContext) {
+			throw new Error('Authorisation context provider not initialised');
+		}
+
+		for (const value of acv) {
+			if (typeof value === 'function') {
+				const filterValue = await value(authContext as TContext);
+				if (filterValue === false) {
+					throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
+				}
+			}
+		}
+	}
 };
 
-export const assertObjectLevelPermissions = <G, TContext extends AuthorizationContext>(
+export const assertObjectLevelPermissions = async <G, TContext extends AuthorizationContext>(
 	userPermission: ConsolidatedAccessControlEntry<G, TContext>,
 	requiredPermission: AccessType
-) => {
-	assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
-};
+) => assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
 
 export async function checkEntityPermission<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
@@ -174,7 +192,7 @@ export async function checkAuthorization<
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
-	assertUserCanPerformRequestedAction(acl, requiredPermission);
+	await assertUserCanPerformRequestedAction(acl, requiredPermission);
 
 	// Now check whether the root entity passes permissions filters (if set)
 	await checkEntityPermission(entityName, id, requiredPermission);

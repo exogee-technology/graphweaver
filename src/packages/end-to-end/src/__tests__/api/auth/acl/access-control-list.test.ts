@@ -11,7 +11,6 @@ import {
 	ID,
 	ObjectType,
 	Provider,
-	RelationshipField,
 	Resolver,
 	createBaseResolver,
 } from '@exogee/graphweaver';
@@ -22,6 +21,7 @@ import {
 	Credential,
 	CredentialCreateOrUpdateInputArgs,
 	ApplyAccessControlList,
+	AclMap,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -30,11 +30,6 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-@ApplyAccessControlList({
-	Everyone: {
-		all: () => false,
-	},
-})
 @ObjectType('Artist')
 export class Artist extends GraphQLEntity<any> {
 	public dataEntity!: any;
@@ -105,6 +100,44 @@ describe('ACL - Access Control Lists', () => {
 		assert(token);
 
 		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		AclMap.delete('Artist');
+		ApplyAccessControlList({
+			Everyone: {
+				all: () => false,
+			},
+		})(Artist);
+
+		const response = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					artists {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
+	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to promise false.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		AclMap.delete('Artist');
+		ApplyAccessControlList({
+			Everyone: {
+				all: async () => false,
+			},
+		})(Artist);
 
 		const response = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };

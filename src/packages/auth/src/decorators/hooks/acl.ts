@@ -14,7 +14,7 @@ import {
 	BaseListInputFilterArgs,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { ArgumentNode, GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
+import { GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
 
 import { AccessType, AuthorizationContext } from '../../types';
 import { andFilters } from '../../helper-functions';
@@ -45,7 +45,7 @@ type RequiredPermission = `${EntityName}:${AccessType}`;
 // This function walks through the selection set and checks each relationship field to see if it is an entity and if so, checks the ACL
 // This is not checking the filter only the boolean permission
 // This is checked in all before hooks and before calling the data provider
-const assertUserCanPerformRequest = <G>(
+const assertUserCanPerformRequest = async <G>(
 	gqlEntityTypeName: string,
 	info: GraphQLResolveInfo,
 	args: GraphQLArgs<G>
@@ -87,7 +87,7 @@ const assertUserCanPerformRequest = <G>(
 	for (const permission of permissionsList) {
 		const [entityName, action] = permission.split(':');
 		const acl = getACL(entityName);
-		assertUserCanPerformRequestedAction(acl, action as AccessType);
+		await assertUserCanPerformRequestedAction(acl, action as AccessType);
 	}
 };
 
@@ -245,7 +245,7 @@ export const beforeCreateOrUpdate = (
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
+		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Fetch the filter for the currently logged in user
@@ -283,7 +283,7 @@ export const afterCreateOrUpdate = (
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
+		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Combine the access filter with the original filter
@@ -303,7 +303,7 @@ export const beforeRead = (gqlEntityTypeName: string) => {
 export const beforeDelete = (gqlEntityTypeName: string) => {
 	return async <G>(params: DeleteHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
+		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Combine the access filter with the original filter
