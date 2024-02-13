@@ -22,6 +22,7 @@
 	"dependencies": {
 		"@apollo/server": "4.9.3",
 		"@as-integrations/aws-lambda": "2.0.1",
+		"@escape.tech/graphql-armor": "2.4.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/graphql-file-loader": "7.5.17",

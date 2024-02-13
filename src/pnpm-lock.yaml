@@ -1505,6 +1505,9 @@ importers:
       '@as-integrations/aws-lambda':
         specifier: 2.0.1
         version: 2.0.1(@apollo/server@4.9.3)
+      '@escape.tech/graphql-armor':
+        specifier: 2.4.0
+        version: 2.4.0(@apollo/server@4.9.3)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -4217,6 +4220,44 @@ packages:
       '@cspotcode/source-map-consumer': 0.8.0
     dev: true
 
+  /@envelop/core@4.0.3:
+    resolution: {integrity: sha512-O0Vz8E0TObT6ijAob8jYFVJavcGywKThM3UAsxUIBBVPYZTMiqI9lo2gmAnbMUnrDcAYkUTZEW9FDYPRdF5l6g==}
+    engines: {node: '>=16.0.0'}
+    requiresBuild: true
+    dependencies:
+      '@envelop/types': 4.0.1
+      tslib: 2.6.2
+    dev: false
+    optional: true
+
+  /@envelop/core@5.0.0:
+    resolution: {integrity: sha512-aJdnH/ptv+cvwfvciCBe7TSvccBwo9g0S5f6u35TBVzRVqIGkK03lFlIL+x1cnfZgN9EfR2b1PH2galrT1CdCQ==}
+    engines: {node: '>=18.0.0'}
+    requiresBuild: true
+    dependencies:
+      '@envelop/types': 5.0.0
+      tslib: 2.6.2
+    dev: false
+    optional: true
+
+  /@envelop/types@4.0.1:
+    resolution: {integrity: sha512-ULo27/doEsP7uUhm2iTnElx13qTO6I5FKvmLoX41cpfuw8x6e0NUFknoqhEsLzAbgz8xVS5mjwcxGCXh4lDYzg==}
+    engines: {node: '>=16.0.0'}
+    requiresBuild: true
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+    optional: true
+
+  /@envelop/types@5.0.0:
+    resolution: {integrity: sha512-IPjmgSc4KpQRlO4qbEDnBEixvtb06WDmjKfi/7fkZaryh5HuOmTtixe1EupQI5XfXO8joc3d27uUZ0QdC++euA==}
+    engines: {node: '>=18.0.0'}
+    requiresBuild: true
+    dependencies:
+      tslib: 2.6.2
+    dev: false
+    optional: true
+
   /@esbuild/aix-ppc64@0.19.12:
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}
     engines: {node: '>=12'}
@@ -4805,6 +4846,98 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /@escape.tech/graphql-armor-block-field-suggestions@2.1.0:
+    resolution: {integrity: sha512-Sna+jK02oUDJMWSfA7ica69HdtBroP3VakeMUK0+QgWlAEBEphT+SzKGDX5vn6sS7sAsEoY50gUAIgtTG+2qVw==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 4.0.3
+    dev: false
+
+  /@escape.tech/graphql-armor-cost-limit@2.1.0:
+    resolution: {integrity: sha512-zejjLm3vn4MQDpXRaPGXclo1Tq1lc93Ltoh3UoqUDiFV29ZUAnSnuuEw/AdbkK+YFrSIfZYMAGDV8AZ2Xz76RQ==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 4.0.3
+      '@escape.tech/graphql-armor-types': 0.5.0
+    dev: false
+
+  /@escape.tech/graphql-armor-max-aliases@2.3.0:
+    resolution: {integrity: sha512-h0AfPx929MWBnDlWnn/hcLHHNIAnUjws30OmyPLj9GqVmsBpj3338LELvORuuf3N1ciWI0xgkQd3NRSrmgr3ig==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 5.0.0
+      '@escape.tech/graphql-armor-types': 0.5.0
+    dev: false
+
+  /@escape.tech/graphql-armor-max-depth@2.2.0:
+    resolution: {integrity: sha512-v0z2yelQL614mYFpYL/iRkieq/7H2XKbvJ6RvbGMFFSqo3eSIz8fyX0f6pyswR7myQxki4ur0MFxSn8S5jjfqw==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 4.0.3
+      '@escape.tech/graphql-armor-types': 0.5.0
+    dev: false
+
+  /@escape.tech/graphql-armor-max-directives@2.1.0:
+    resolution: {integrity: sha512-0OuvWBbOVdphyLPafqTknM4EIrFsGHjv9DcSw8mM7Ol0kKLwYG7tGuBmEzwopRntkqW3utID5tMtf/B6px/Eyw==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 4.0.3
+      '@escape.tech/graphql-armor-types': 0.5.0
+    dev: false
+
+  /@escape.tech/graphql-armor-max-tokens@2.3.0:
+    resolution: {integrity: sha512-4aqtUhT4ONUVWY6Z7crjPFyOK2/quUGHFU3G2+s4GYFxQHn3F5HjdI2KoY5ot2Sdijh4X+gx0ebBjUzriLNtbg==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 5.0.0
+      '@escape.tech/graphql-armor-types': 0.5.0
+    dev: false
+
+  /@escape.tech/graphql-armor-types@0.5.0:
+    resolution: {integrity: sha512-a7KMhb1qVHFFWw4bvGYQI637YaIZRozbfc+Fj1Vv/pwnTCJOzOgnvKO8+WBXJsFFGJ2Kj+fRORmSpz7J+lJF1w==}
+    requiresBuild: true
+    dependencies:
+      graphql: 16.8.1
+    dev: false
+    optional: true
+
+  /@escape.tech/graphql-armor@2.4.0(@apollo/server@4.9.3):
+    resolution: {integrity: sha512-/ef11cDjzg3Rjsa7jxtUzM9hRVlj+GB4z/YCChNqNGW+BvYrv6E6esbdGzIiaoauKfszXSQXSu0CgPXe0I7NbQ==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      '@apollo/server': ^4.0.0
+      '@envelop/core': ^5.0.0
+      '@escape.tech/graphql-armor-types': 0.5.0
+    peerDependenciesMeta:
+      '@apollo/server':
+        optional: true
+      '@envelop/core':
+        optional: true
+      '@escape.tech/graphql-armor-types':
+        optional: true
+    dependencies:
+      '@apollo/server': 4.9.3(graphql@16.8.1)
+      '@escape.tech/graphql-armor-block-field-suggestions': 2.1.0
+      '@escape.tech/graphql-armor-cost-limit': 2.1.0
+      '@escape.tech/graphql-armor-max-aliases': 2.3.0
+      '@escape.tech/graphql-armor-max-depth': 2.2.0
+      '@escape.tech/graphql-armor-max-directives': 2.1.0
+      '@escape.tech/graphql-armor-max-tokens': 2.3.0
+      graphql: 16.8.1
+    dev: false
 
   /@eslint/eslintrc@1.4.1:
     resolution: {integrity: sha512-XXrH9Uarn0stsyldqDYq8r++mROmWRI1xKMXa640Bb//SY1+ECYX6VzT6Lcx5frD0V30XieqJ0oX9I2Xj5aoMA==}
@@ -6688,7 +6821,6 @@ packages:
       globby: 11.1.0
       mikro-orm: 5.7.14
       reflect-metadata: 0.1.13
-    dev: false
 
   /@mikro-orm/core@5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14):
     resolution: {integrity: sha512-og2TJ4mRdGKF8ok/xSdGNbznm+WFF6VJosJnneulmY4VirRNfDfp7uNPBOinewigS4Q8Ntdirmponx4KrOoMBg==}
@@ -6810,7 +6942,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
+      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)
       fs-extra: 11.1.1
       knex: 2.5.1(mysql2@3.5.2)(pg@8.11.1)
       mysql2: 3.5.2
@@ -6909,7 +7041,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
+      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)
       '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       mysql2: 3.5.2
     transitivePeerDependencies:
@@ -6979,7 +7111,6 @@ packages:
       - sqlite3
       - supports-color
       - tedious
-    dev: false
 
   /@mikro-orm/sqlite@5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1):
     resolution: {integrity: sha512-CypXOHukNwtpnviI6tOBaw76cTj7Vf7Tad5PL5bfgPEH19gajAgbGGMn6qGQ5kwIGWbTHkpVPoevwuQKL2u40w==}

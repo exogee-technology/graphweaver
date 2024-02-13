@@ -2,6 +2,7 @@ import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import { ApolloArmor } from '@escape.tech/graphql-armor';
 
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -130,9 +131,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
+		const armor = new ApolloArmor();
+		const protection = armor.protect();
 		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
-			plugins,
+			...protection,
+			plugins: [...plugins, ...protection.plugins],
 			schema: this.schema,
 		});
 	}
