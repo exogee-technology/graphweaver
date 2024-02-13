@@ -71,7 +71,7 @@ const graphweaver = new Graphweaver({
 
 let token: string | undefined;
 
-describe('ACL - Roles', () => {
+describe('ACL - Multiple Roles', () => {
 	beforeAll(async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
