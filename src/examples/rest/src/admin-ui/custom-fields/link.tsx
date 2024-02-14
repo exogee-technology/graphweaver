@@ -12,9 +12,9 @@ interface Task {
 }
 
 export const Link = ({ entity }: CustomFieldArgs<Task>) => {
-	const { values } = useFormikContext();
+	const context = useFormikContext();
 
-	console.log('Custom field values', values);
+	console.log('Custom field values', context);
 
 	const handleClick = (e: MouseEventHandler<HTMLDivElement>) => {
 		e.preventDefault();

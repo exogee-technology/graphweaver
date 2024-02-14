@@ -35,7 +35,7 @@ export const viteConfig = ({
 			...(port ? { port } : {}),
 		},
 		optimizeDeps: {
-			include: ['react-dom/client', 'react-dom', 'classnames', 'graphql-deduplicator'],
+			include: ['react-dom/client', 'react-dom'],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
 				// our vite plugin directly.
@@ -43,6 +43,6 @@ export const viteConfig = ({
 				'virtual:graphweaver-user-supplied-custom-fields',
 			],
 		},
-		plugins: [svgr(), react()],
+		plugins: [svgr(), react(), graphweaver()],
 	};
 };

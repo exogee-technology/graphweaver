@@ -371,8 +371,8 @@ importers:
         specifier: 16.0.0
         version: 16.0.0
       formik:
-        specifier: 2.4.5
-        version: 2.4.5(react@18.2.0)
+        specifier: 2.2.9
+        version: 2.2.9(react@18.2.0)
       got:
         specifier: 11.8.5
         version: 11.8.5
@@ -1111,25 +1111,25 @@ importers:
   packages/end-to-end:
     dependencies:
       '@exogee/graphweaver':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../core
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
       '@exogee/graphweaver-auth':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../auth
       '@exogee/graphweaver-aws':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../graphweaver-aws
       '@exogee/graphweaver-mikroorm':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../mikroorm
       '@exogee/graphweaver-scalars':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../scalars
       '@exogee/graphweaver-server':
-        specifier: '*'
+        specifier: workspace:*
         version: link:../server
       '@exogee/graphweaver-storage-provider':
         specifier: workspace:*
@@ -1156,7 +1156,7 @@ importers:
         specifier: 16.8.1
         version: 16.8.1
       graphweaver:
-        specifier: '*'
+        specifier: workspace:*
         version: link:../cli
       reflect-metadata:
         specifier: 0.1.13
@@ -13731,6 +13731,21 @@ packages:
       hexoid: 1.0.0
       once: 1.4.0
       qs: 6.11.2
+
+  /formik@2.2.9(react@18.2.0):
+    resolution: {integrity: sha512-LQLcISMmf1r5at4/gyJigGn0gOwFbeEAlji+N9InZF6LIMXnFNkO42sCI8Jt84YZggpD4cPWObAZaxpEFtSzNA==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      deepmerge: 2.2.1
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      react: 18.2.0
+      react-fast-compare: 2.0.4
+      tiny-warning: 1.0.3
+      tslib: 1.14.1
+    dev: false
 
   /formik@2.4.5(react@18.2.0):
     resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}
