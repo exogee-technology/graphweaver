@@ -11,6 +11,7 @@ import {
 	ID,
 	ObjectType,
 	Provider,
+	RelationshipField,
 	Resolver,
 	createBaseResolver,
 } from '@exogee/graphweaver';
@@ -26,7 +27,7 @@ import {
 
 const user = new UserProfile({
 	id: '1',
-	roles: ['admin', 'user'],
+	roles: ['admin'],
 	displayName: 'Test User',
 });
 
@@ -71,7 +72,7 @@ const graphweaver = new Graphweaver({
 
 let token: string | undefined;
 
-describe('ACL - Multiple Roles', () => {
+describe('ACL - Create Or Update', () => {
 	beforeAll(async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
@@ -96,26 +97,24 @@ describe('ACL - Multiple Roles', () => {
 		expect(token).toContain('Bearer ');
 	});
 
-	test('should return forbidden in the before read hook when listing a single entity and one role explicitly denys access.', async () => {
+	test('should return forbidden in the before create hook when user only has permission to update.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'findOne');
+		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
-			admin: {
-				all: true,
-			},
-			user: {
-				all: () => false,
+			Everyone: {
+				read: true,
+				update: true,
 			},
 		})(Album);
 
 		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
-				query {
-					album(id: 1) {
+				mutation {
+					createOrUpdateAlbums(input: { data: [{ description: "test" }] }) {
 						id
 					}
 				}
@@ -126,5 +125,62 @@ describe('ACL - Multiple Roles', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
+	test('should return forbidden in the before update hook when user only has permission to create.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			Everyone: {
+				read: true,
+				create: true,
+			},
+		})(Album);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation {
+					createOrUpdateAlbums(input: { data: [{ id: "1", description: "test" }] }) {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
+	test('should allow in the before update hook when user has permission to create.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			Everyone: {
+				read: true,
+				create: true,
+			},
+		})(Album);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation {
+					createOrUpdateAlbums(input: { data: [{ description: "test" }] }) {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).toBeCalled();
 	});
 });

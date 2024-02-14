@@ -129,9 +129,7 @@ describe('ACL - Fragments', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				fragment albumFields on Album {
@@ -159,9 +157,7 @@ describe('ACL - Fragments', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				fragment artistFields on Artist {
@@ -189,9 +185,7 @@ describe('ACL - Fragments', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {

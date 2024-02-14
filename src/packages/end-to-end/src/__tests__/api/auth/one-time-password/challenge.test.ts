@@ -139,9 +139,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				} as OneTimePassword)
 		);
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation verifyOTPChallenge($code: String!) {
@@ -162,9 +160,7 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should pass challenge if using correct token.', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const loginResponse = await graphweaver.server.executeOperation({
 			query: gql`
 				mutation loginPassword($username: String!, $password: String!) {
 					loginPassword(username: $username, password: $password) {

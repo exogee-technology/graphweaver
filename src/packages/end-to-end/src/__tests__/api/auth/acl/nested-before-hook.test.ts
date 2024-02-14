@@ -130,9 +130,7 @@ describe('ACL - Nested Before Hook', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -159,9 +157,7 @@ describe('ACL - Nested Before Hook', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -188,9 +184,7 @@ describe('ACL - Nested Before Hook', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -214,9 +208,7 @@ describe('ACL - Nested Before Hook', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'createOne');
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'createOne');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -245,9 +237,7 @@ describe('ACL - Nested Before Hook', () => {
 		);
 		const spyOnArtistDataProviderFind = jest.spyOn(artistDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -275,9 +265,7 @@ describe('ACL - Nested Before Hook', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -300,9 +288,7 @@ describe('ACL - Nested Before Hook', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'updateOne');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -327,9 +313,7 @@ describe('ACL - Nested Before Hook', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {

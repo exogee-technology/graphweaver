@@ -169,9 +169,7 @@ describe('ACL - Fragments', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 		const spyOnTrackDataProvider = jest.spyOn(trackDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query artists {

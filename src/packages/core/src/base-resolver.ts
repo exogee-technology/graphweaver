@@ -638,7 +638,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 				// Separate Create and Update items
 				const updateItems = items.data.filter(hasId);
-				const createItems = items.data.filter((value) => !hasId(value));
+				const createItems = items.data
+					.filter((value) => !hasId(value))
+					.map((value) => {
+						const item = new InsertInputArgs();
+						Object.assign(item, value);
+						return item;
+					});
 
 				// Extract ids of items being updated
 				const updateItemIds = updateItems.map((item) => item.id) ?? [];

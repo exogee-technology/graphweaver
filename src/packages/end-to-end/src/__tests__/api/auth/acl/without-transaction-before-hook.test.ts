@@ -106,9 +106,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -130,9 +128,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
