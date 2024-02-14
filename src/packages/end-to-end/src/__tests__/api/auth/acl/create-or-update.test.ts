@@ -97,10 +97,15 @@ describe('ACL - Create Or Update', () => {
 		expect(token).toContain('Bearer ');
 	});
 
+	beforeEach(() => {
+		jest.resetAllMocks();
+	});
+
 	test('should return forbidden in the before create hook when user only has permission to update.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -121,7 +126,8 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProviderUpdateOne).not.toBeCalled();
+		expect(spyOnDataProviderCreateOne).not.toBeCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -130,7 +136,8 @@ describe('ACL - Create Or Update', () => {
 	test('should return forbidden in the before update hook when user only has permission to create.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -151,16 +158,18 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProviderUpdateOne).not.toBeCalled();
+		expect(spyOnDataProviderCreateOne).not.toBeCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});
 
-	test('should allow in the before update hook when user has permission to create.', async () => {
+	test('should allow in the before create hook when user has permission to create.', async () => {
 		assert(token);
 
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
+		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -181,6 +190,36 @@ describe('ACL - Create Or Update', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).toBeCalled();
+		expect(spyOnDataProviderCreateOne).toBeCalled();
+		expect(spyOnDataProviderUpdateOne).not.toBeCalled();
+	});
+
+	test('should allow in the before update hook when user has permission to update.', async () => {
+		assert(token);
+
+		const spyOnDataProviderUpdateOne = jest.spyOn(albumDataProvider, 'updateOne');
+		const spyOnDataProviderCreateOne = jest.spyOn(albumDataProvider, 'createOne');
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			Everyone: {
+				read: true,
+				update: true,
+			},
+		})(Album);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation {
+					createOrUpdateAlbums(input: { data: [{ id: "1", description: "test" }] }) {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProviderUpdateOne).toBeCalled();
+		expect(spyOnDataProviderCreateOne).not.toBeCalled();
 	});
 });
