@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-storage-provider",
-	"version": "0.2.17",
+	"version": "0.2.18",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "MIT",
 	"scripts": {
