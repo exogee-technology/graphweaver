@@ -7,6 +7,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
 		"version": "npm version --no-git-tag-version"

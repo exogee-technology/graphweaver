@@ -9,6 +9,7 @@
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"build:watch": "pnpm build:js --watch",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
 		"test:tsc": "tsc --noEmit",

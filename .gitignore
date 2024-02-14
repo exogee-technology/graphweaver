@@ -117,3 +117,6 @@ node_modules
 token.json
 
 *.pem
+
+# packs - used to store prebuilt packages
+packs

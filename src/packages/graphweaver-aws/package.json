@@ -14,6 +14,7 @@
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"format": "prettier --write .",
+		"package:pack": "pnpm pack",
 		"test": "npm run test:format && npm run test:typescript",
 		"test:typescript": "tsc --noEmit",
 		"test:format": "prettier --check .",

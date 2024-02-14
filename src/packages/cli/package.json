@@ -6,6 +6,7 @@
 	"scripts": {
 		"build": "npm run build:js",
 		"build:js": "node build.js",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
 		"version": "npm version --no-git-tag-version"
