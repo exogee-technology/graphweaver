@@ -1366,7 +1366,7 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 5.7.14
-        version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+        version: 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       '@mikro-orm/mysql':
         specifier: 5.7.14
         version: 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)
@@ -1508,9 +1508,6 @@ importers:
       '@escape.tech/graphql-armor':
         specifier: 2.4.0
         version: 2.4.0(@apollo/server@4.9.3)(@escape.tech/graphql-armor-types@0.5.0)
-      '@escape.tech/graphql-armor-types':
-        specifier: 0.5.0
-        version: 0.5.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1548,6 +1545,9 @@ importers:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
+      '@escape.tech/graphql-armor-types':
+        specifier: 0.5.0
+        version: 0.5.0
       '@types/graphql-deduplicator':
         specifier: 2.0.0
         version: 2.0.0
@@ -4914,7 +4914,6 @@ packages:
     requiresBuild: true
     dependencies:
       graphql: 16.8.1
-    dev: false
 
   /@escape.tech/graphql-armor@2.4.0(@apollo/server@4.9.3)(@escape.tech/graphql-armor-types@0.5.0):
     resolution: {integrity: sha512-/ef11cDjzg3Rjsa7jxtUzM9hRVlj+GB4z/YCChNqNGW+BvYrv6E6esbdGzIiaoauKfszXSQXSu0CgPXe0I7NbQ==}
@@ -6824,6 +6823,7 @@ packages:
       globby: 11.1.0
       mikro-orm: 5.7.14
       reflect-metadata: 0.1.13
+    dev: false
 
   /@mikro-orm/core@5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14):
     resolution: {integrity: sha512-og2TJ4mRdGKF8ok/xSdGNbznm+WFF6VJosJnneulmY4VirRNfDfp7uNPBOinewigS4Q8Ntdirmponx4KrOoMBg==}
@@ -6945,7 +6945,7 @@ packages:
       sqlite3:
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)
+      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
       fs-extra: 11.1.1
       knex: 2.5.1(mysql2@3.5.2)(pg@8.11.1)
       mysql2: 3.5.2
@@ -7044,7 +7044,7 @@ packages:
       '@mikro-orm/seeder':
         optional: true
     dependencies:
-      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)
+      '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
       '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       mysql2: 3.5.2
     transitivePeerDependencies:
@@ -7074,7 +7074,7 @@ packages:
         optional: true
     dependencies:
       '@mikro-orm/core': 5.7.14(@mikro-orm/mysql@5.7.14)(@mikro-orm/postgresql@5.7.14)(@mikro-orm/sqlite@5.7.14)
-      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1)(sqlite3@5.1.6)
+      '@mikro-orm/knex': 5.7.14(@mikro-orm/core@5.7.14)(mysql2@3.5.2)(pg@8.11.1)
       pg: 8.11.1
     transitivePeerDependencies:
       - better-sqlite3
@@ -7114,6 +7114,7 @@ packages:
       - sqlite3
       - supports-color
       - tedious
+    dev: false
 
   /@mikro-orm/sqlite@5.7.14(@mikro-orm/core@5.7.14)(pg@8.11.1):
     resolution: {integrity: sha512-CypXOHukNwtpnviI6tOBaw76cTj7Vf7Tad5PL5bfgPEH19gajAgbGGMn6qGQ5kwIGWbTHkpVPoevwuQKL2u40w==}
