@@ -48,6 +48,8 @@ jobs:
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
+          cwd &&
+          ls &&
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
