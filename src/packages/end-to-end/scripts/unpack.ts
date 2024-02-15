@@ -14,7 +14,7 @@ async function main() {
 		process.chdir('../../');
 
 		// Publish all local packages
-		execSync('pnpm publish:local', { stdio: 'inherit' });
+		execSync('pnpm pack:all', { stdio: 'inherit' });
 
 		// Copy the .packs directory to a new local_modules directory
 		await fs.promises.cp('.packs', './packages/end-to-end/local_modules', { recursive: true });
