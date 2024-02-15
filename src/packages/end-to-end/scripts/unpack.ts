@@ -2,9 +2,15 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { execSync } from 'child_process';
 
+async function removeDirectory(directoryPath: string) {
+	if (fs.existsSync(directoryPath)) {
+		await fs.promises.rm(directoryPath, { recursive: true });
+	}
+}
+
 async function main() {
 	try {
-		await fs.promises.rm(`local_modules`, { recursive: true });
+		await removeDirectory(`local_modules`);
 		process.chdir('../../');
 
 		// Publish all local packages
