@@ -219,7 +219,9 @@ const generatePermissionListFromArgs = <G>() => {
 					permissionsList.add(`${entityName}:${AccessType.Delete}`);
 					break;
 				default:
-					throw new Error('Unknown Base Input Arg.');
+					throw new Error(
+						'Unrecognized input argument type, have you added a new input type without extending the base input types?'
+					);
 			}
 
 			// Now we have an array or an object lets see if its a related entity
