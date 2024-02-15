@@ -18,8 +18,8 @@ export const resetDatabase = async () => {
 	if (database === Database.SQLITE) {
 		execSync('pwd', { stdio: 'inherit' });
 		fs.copyFileSync(
-			'databases/database.sqlite',
-			path.join(config.appDirectory, '/databases/database.sqlite')
+			path.join(process.cwd(), 'databases', 'database.sqlite'),
+			path.join(process.cwd(), config.appDirectory, 'databases', 'database.sqlite')
 		);
 		return;
 	}
