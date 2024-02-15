@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import { config } from './config';
 
 const database = process.env.DATABASE;
@@ -15,8 +16,8 @@ export const resetDatabase = async () => {
 	}
 	if (database === Database.SQLITE) {
 		fs.copyFileSync(
-			'./databases/database.sqlite',
-			`${config.appDirectory}/databases/database.sqlite`
+			'databases/database.sqlite',
+			path.join(config.appDirectory, '/databases/database.sqlite')
 		);
 		return;
 	}
