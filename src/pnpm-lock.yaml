@@ -771,6 +771,9 @@ importers:
       otp-generator:
         specifier: 4.0.1
         version: 4.0.1
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)

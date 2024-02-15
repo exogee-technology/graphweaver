@@ -1,4 +1,9 @@
-import { BaseContext, BaseListInputFilterArgs, Filter, GraphQLResolveInfo } from '@exogee/graphweaver';
+import {
+	BaseContext,
+	BaseListInputFilterArgs,
+	Filter,
+	GraphQLResolveInfo,
+} from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
 
 export enum AuthenticationMethod {
