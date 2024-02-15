@@ -111,12 +111,24 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 
 		// Let's resolve the filter functions and check if any of them return false or undefined
 		const filterFunctions = acv.map(async (value) => value(authContext as TContext));
-		const resolvedFilterFunctions = await Promise.all(filterFunctions);
+		const resolvedFilterFunctions = await Promise.allSettled(filterFunctions);
 
-		for (const filterValue of resolvedFilterFunctions) {
-			if (filterValue === false || filterValue === undefined) {
-				throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
-			}
+		// Filter rejections and log them
+		resolvedFilterFunctions
+			.filter(
+				(filter): filter is { status: 'rejected'; reason: string } => filter.status === 'rejected'
+			)
+			.forEach((filter) =>
+				logger.error('Error while evaluating permissions filter: ', filter.reason)
+			);
+
+		// If any of the filters returned false or undefined, we should reject the request
+		const hasAccess = resolvedFilterFunctions.every(
+			(filter) => filter.status === 'fulfilled' && filter.value === true
+		);
+
+		if (!hasAccess) {
+			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 		}
 	}
 };
