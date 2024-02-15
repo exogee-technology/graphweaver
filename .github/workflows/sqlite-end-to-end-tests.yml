@@ -43,6 +43,10 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Install Playwright Browsers
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
       - name: Init and Import SQLite Chinook Database
         working-directory: src/packages/end-to-end
         run: |
@@ -55,7 +59,15 @@ jobs:
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
+          pnpm test-ui &&
           killall node
+
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: playwright-report
+          path: src/packages/end-to-end/playwright-report/
+          retention-days: 30
 
         env:
           CI: true
