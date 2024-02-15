@@ -4,7 +4,6 @@
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
-		"test-build": ". ./scripts/test-build.sh",
 		"import-database-sqlite": "pnpm unpack && tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": ". ./scripts/import-postgres.sh",
 		"import-database-mysql": "pnpm unpack && . ./scripts/import-mysql.sh",
