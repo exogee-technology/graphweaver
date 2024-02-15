@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { Filter } from '@exogee/graphweaver';
+import { BaseFilterInputArgs, Filter } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -13,6 +13,7 @@ import {
 	MultiFactorAuthentication,
 	MultiFactorAuthenticationRule,
 	AuthenticationMethod,
+	ListInputFilterArgs,
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 import { ChallengeError } from './errors';
@@ -172,14 +173,16 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
  * @param filters The list of individual filters to be combined into a single 'anded' filter
  * @returns A single filter object imposing all of the input filter conditions together
  */
-export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): Filter<G> => {
+export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): ListInputFilterArgs => {
 	const nonEmptyFilters = filters.filter(
 		(filter): filter is Filter<G> =>
 			!isEmptyObject(filter) && filter !== undefined && filter !== null
 	);
 	logger.trace(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
 
-	return nonEmptyFilters.length > 1 ? { _and: nonEmptyFilters } : nonEmptyFilters[0];
+	const andFilter = new ListInputFilterArgs();
+	const filter = nonEmptyFilters.length > 1 ? { _and: nonEmptyFilters } : nonEmptyFilters[0];
+	return Object.assign(andFilter, filter);
 };
 
 /**

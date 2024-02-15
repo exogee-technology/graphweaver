@@ -1,4 +1,4 @@
-import { BaseContext, Filter, GraphQLResolveInfo } from '@exogee/graphweaver';
+import { BaseContext, BaseListInputFilterArgs, Filter, GraphQLResolveInfo } from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
 
 export enum AuthenticationMethod {
@@ -35,6 +35,8 @@ export enum AccessType {
 
 export const BASE_ROLE_EVERYONE = 'Everyone';
 
+export class ListInputFilterArgs extends BaseListInputFilterArgs {}
+
 export type AccessControlList<G, TContext extends AuthorizationContext = AuthorizationContext> = {
 	[K in string]?: AccessControlEntry<G, TContext>;
 };
@@ -56,9 +58,15 @@ export type AccessControlValue<G, TContext extends AuthorizationContext> =
 	| true
 	| AccessControlFilterFunction<G, TContext>;
 
+export type AccessControlFilterFunctionResult<G> =
+	| Filter<G>
+	| Promise<Filter<G>>
+	| boolean
+	| Promise<boolean>;
+
 export type AccessControlFilterFunction<G, TContext extends AuthorizationContext> = (
 	context: TContext
-) => Filter<G> | Promise<Filter<G>> | boolean | Promise<boolean>;
+) => AccessControlFilterFunctionResult<G>;
 
 export type ConsolidatedAccessControlValue<G, TContext extends AuthorizationContext> =
 	| true

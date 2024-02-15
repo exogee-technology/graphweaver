@@ -3,6 +3,7 @@ import { ForbiddenError } from 'apollo-server-errors';
 
 import {
 	AccessControlList,
+	AccessControlValue,
 	AccessType,
 	AuthorizationContext,
 	ConsolidatedAccessControlEntry,
@@ -18,11 +19,15 @@ import {
 import {
 	BaseDataEntity,
 	EntityMetadataMap,
+	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 } from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
+
+export const isPopulatedFilter = <G>(filter: boolean | Filter<G>): filter is Filter<G> =>
+	Object.keys(filter).length > 0;
 
 export const getACL = (gqlEntityTypeName: string) => {
 	const acl = AclMap.get(gqlEntityTypeName);
@@ -111,7 +116,9 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 
 		// Let's resolve the filter functions and check if any of them return false or undefined
 		const filterFunctions = acv.map(async (value) => value(authContext as TContext));
-		const resolvedFilterFunctions = await Promise.allSettled(filterFunctions);
+		const resolvedFilterFunctions = await Promise.allSettled<Promise<boolean | Filter<G>>>(
+			filterFunctions
+		);
 
 		// Filter rejections and log them
 		resolvedFilterFunctions
@@ -124,7 +131,8 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 
 		// If any of the filters returned false or undefined, we should reject the request
 		const hasAccess = resolvedFilterFunctions.every(
-			(filter) => filter.status === 'fulfilled' && filter.value === true
+			(filter) =>
+				filter.status === 'fulfilled' && (filter.value === true || isPopulatedFilter(filter.value))
 		);
 
 		if (!hasAccess) {

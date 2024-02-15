@@ -25,10 +25,10 @@ import {
 	checkAuthorization,
 	getACL,
 	getAccessFilter,
+	isPopulatedFilter,
 } from '../../auth-utils';
 
 const metadata = getMetadataStorage();
-const isPopulatedFilter = (filter: any): boolean => Object.keys(filter).length > 0;
 
 // In order to support Row Level Security, we need to ensure that the hooks are transactional
 // This is checked in the Create and Update hooks when we find a ACL filter
