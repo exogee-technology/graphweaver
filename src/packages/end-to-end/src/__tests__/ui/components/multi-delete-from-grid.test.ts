@@ -12,7 +12,7 @@ test('Expect deleting from grid to remove the album', async ({ page }) => {
 	// Wait for the delete to complete
 	await page.waitForSelector('text=Select 2 Movies', { state: 'detached' });
 	// expect that row to be gone
-	expect(page.locator('text=Select 2 Movies').count()).toBe(0);
+	expect(await page.locator('text=Select 2 Movies').count()).toBe(0);
 
 	// Now handle the error case
 	await page.goto('http://localhost:9000/Album');
@@ -27,7 +27,7 @@ test('Expect deleting from grid to remove the album', async ({ page }) => {
 	await page.getByRole('button', { name: 'Delete' }).click();
 	// Expect the row to still be there
 	expect(
-		page
+		await page
 			.getByRole('row', {
 				name: "Select 4 Let There Be Rock AC/DC Go Down, Dog Eat Dog, Let There Be Rock, Bad Boy Boogie, Problem Child, Overdose, Hell Ain't A Bad Place To Be, Whole Lotta Rosie",
 			})
