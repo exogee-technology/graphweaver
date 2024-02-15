@@ -160,7 +160,9 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should pass challenge if using correct token.', async () => {
-		const loginResponse = await graphweaver.server.executeOperation({
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
 			query: gql`
 				mutation loginPassword($username: String!, $password: String!) {
 					loginPassword(username: $username, password: $password) {
