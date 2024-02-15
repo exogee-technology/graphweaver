@@ -27,7 +27,7 @@ import {
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
 export const isPopulatedFilter = <G>(filter: boolean | Filter<G>): filter is Filter<G> =>
-	Object.keys(filter).length > 0;
+	filter && Object.keys(filter).length > 0;
 
 export const getACL = (gqlEntityTypeName: string) => {
 	const acl = AclMap.get(gqlEntityTypeName);

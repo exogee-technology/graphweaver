@@ -154,6 +154,64 @@ describe('ACL - Access Control Lists', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});
 
+	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to promise null.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		AclMap.delete('Artist');
+		ApplyAccessControlList({
+			Everyone: {
+				all: async () => null,
+			},
+		})(Artist);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					artists {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
+	test('should return forbidden in the before read hook when listing an entity when no an acl evaluates to promise undefined.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		AclMap.delete('Artist');
+		ApplyAccessControlList({
+			Everyone: {
+				all: async () => undefined,
+			},
+		})(Artist);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					artists {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).not.toBeCalled();
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+	});
+
 	test('should call the data provider when a filter function returns a filter object.', async () => {
 		assert(token);
 
@@ -165,6 +223,58 @@ describe('ACL - Access Control Lists', () => {
 				all: async () => ({
 					id: '1',
 				}),
+			},
+		})(Artist);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					artists {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).toBeCalled();
+	});
+
+	test('should call the data provider when a filter function returns a boolean true.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		AclMap.delete('Artist');
+		ApplyAccessControlList({
+			Everyone: {
+				all: async () => true,
+			},
+		})(Artist);
+
+		const response = await graphweaver.server.executeOperation({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					artists {
+						id
+					}
+				}
+			`,
+		});
+
+		expect(spyOnDataProvider).toBeCalled();
+	});
+
+	test('should call the data provider when a acl returns a boolean of true.', async () => {
+		assert(token);
+
+		const spyOnDataProvider = jest.spyOn(artistDataProvider, 'find');
+
+		AclMap.delete('Artist');
+		ApplyAccessControlList({
+			Everyone: {
+				all: true,
 			},
 		})(Artist);
 
