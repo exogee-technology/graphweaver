@@ -1,4 +1,7 @@
 rm -rf ./app 
+cd ../../
+pnpm publish:local
+cd packages/end-to-end
 node ../cli/bin init --name=app --backend=mysql --useVersion=\"local\" 
 cd app 
 pnpm i --ignore-workspace --no-lockfile
