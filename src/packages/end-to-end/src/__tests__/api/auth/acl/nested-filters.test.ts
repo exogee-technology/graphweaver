@@ -137,7 +137,7 @@ const graphweaver = new Graphweaver({
 
 let token: string | undefined;
 
-describe('ACL - Fragments', () => {
+describe('ACL - Nested Filters', () => {
 	beforeAll(async () => {
 		const loginResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
