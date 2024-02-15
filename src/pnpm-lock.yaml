@@ -638,6 +638,9 @@ importers:
       esbuild-plugin-svgr:
         specifier: 1.0.1
         version: 1.0.1
+      glob:
+        specifier: 10.3.10
+        version: 10.3.10
       typescript:
         specifier: 5.0.2
         version: 5.0.2

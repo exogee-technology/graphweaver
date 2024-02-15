@@ -5,7 +5,7 @@
 	"license": "MIT",
 	"scripts": {
 		"import-database-sqlite": "pnpm unpack && tsx ./scripts/import-sqlite.ts",
-		"import-database-postgres": ". ./scripts/import-postgres.sh",
+		"import-database-postgres": "pnpm unpack && . ./scripts/import-postgres.sh",
 		"import-database-mysql": "pnpm unpack && . ./scripts/import-mysql.sh",
 		"seed-postgres:reseed": "export DATABASE_RESEED=true && node ./scripts/seed-postgres.js",
 		"seed-postgres": "node ./scripts/seed-postgres.js",
