@@ -75,3 +75,12 @@ export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
 		});
 	},
 });
+
+export const requireSilent = (module: string) => {
+	try {
+		return require(module);
+	} catch {
+		// If we are here we might not have the package installed so we'll just return an empty object.
+		return { browser: {}, peerDependencies: {}, dependencies: {} };
+	}
+};

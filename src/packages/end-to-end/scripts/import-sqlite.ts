@@ -21,7 +21,7 @@ async function main() {
 		execSync('pnpm publish:local', { stdio: 'inherit' });
 
 		// get list of all directories in the packs directory
-		const packDirectories = await fs.promises.readdir('./packs/@exogee');
+		const packDirectories = await fs.promises.readdir('./.packs/@exogee');
 
 		// Update all packs package.json references to local files
 		const packNames = [
@@ -32,7 +32,7 @@ async function main() {
 
 		// Update the local packages with references to one another
 		for (const packName of packNames) {
-			const packageJsonPath = path.join(`packs`, packName, `package.json`);
+			const packageJsonPath = path.join(`.packs`, packName, `package.json`);
 			const packageJson = JSON.parse(await fs.promises.readFile(packageJsonPath, 'utf-8'));
 
 			// loop through the package dependencies and update the local references
@@ -49,7 +49,7 @@ async function main() {
 			await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 		}
 
-		process.chdir('./packs/graphweaver');
+		process.chdir('./.packs/graphweaver');
 		execSync('pnpm i --ignore-workspace --no-lockfile', { stdio: 'inherit' });
 
 		process.chdir('../../packages/end-to-end');
@@ -58,7 +58,7 @@ async function main() {
 
 		// Create a new instance of the app
 		execSync(
-			'node ../../packs/graphweaver/bin init --name=app --backend=sqlite --useVersion="local"',
+			'node ../../.packs/graphweaver/bin init --name=app --backend=sqlite --useVersion="local"',
 			{ stdio: 'inherit' }
 		);
 

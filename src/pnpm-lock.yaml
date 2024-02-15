@@ -705,9 +705,15 @@ importers:
       esbuild-css-modules-plugin:
         specifier: 2.7.1
         version: 2.7.1(esbuild@0.15.5)
+      esbuild-plugin-copy:
+        specifier: 2.1.1
+        version: 2.1.1(esbuild@0.15.5)
       esbuild-plugin-svgr:
         specifier: 1.0.1
         version: 1.0.1
+      glob:
+        specifier: 10.3.10
+        version: 10.3.10
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -863,6 +869,9 @@ importers:
       esbuild-plugin-svgr:
         specifier: 1.0.1
         version: 1.0.1
+      glob:
+        specifier: 10.3.10
+        version: 10.3.10
       react:
         specifier: 18.2.0
         version: 18.2.0

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-
 import {
 	Table,
 	useSchema,
@@ -16,7 +15,7 @@ import {
 	wrapFilterWithAndOperator,
 	getOrderByQuery,
 } from '@exogee/graphweaver-admin-ui-components';
-import '@exogee/graphweaver-admin-ui-components/lib/index.css';
+
 import { queryForEntityPage } from './graphql';
 
 interface ListToolBarProps {
