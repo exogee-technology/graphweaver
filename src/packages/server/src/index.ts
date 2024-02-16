@@ -2,6 +2,8 @@ import { getAdminUiMetadataResolver } from './metadata-service';
 import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
+import { ApolloArmor } from '@escape.tech/graphql-armor';
+import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -45,6 +47,7 @@ export interface GraphweaverConfig {
 	resolvers: Array<any>;
 	// We omit schema here because we will build it from your resolvers.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
+	graphQLArmorOptions?: GraphQLArmorConfig;
 	authChecker?: AuthChecker<any, any>;
 	corsOptions?: CorsPluginOptions;
 	graphqlDeduplicator?: {
@@ -130,9 +133,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);
+		logger.trace(`Protecting with GraphQL Armor 🛡️`);
+		const armor = new ApolloArmor(config.graphQLArmorOptions);
+		const protection = armor.protect();
 		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
-			plugins,
+			...protection,
+			plugins: [...plugins, ...protection.plugins],
 			schema: this.schema,
 		});
 	}

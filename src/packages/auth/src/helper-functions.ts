@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { Filter } from '@exogee/graphweaver';
+import { BaseFilterInputArgs, Filter } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -13,6 +13,7 @@ import {
 	MultiFactorAuthentication,
 	MultiFactorAuthenticationRule,
 	AuthenticationMethod,
+	ListInputFilterArgs,
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 import { ChallengeError } from './errors';
@@ -65,6 +66,10 @@ export function upsertAuthorizationContext(context: AuthorizationContext) {
 
 export function clearAuthorizationContext() {
 	authContext = undefined;
+}
+
+export function getAuthorizationContext() {
+	return authContext;
 }
 
 export function getRolesFromAuthorizationContext() {
@@ -168,14 +173,16 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
  * @param filters The list of individual filters to be combined into a single 'anded' filter
  * @returns A single filter object imposing all of the input filter conditions together
  */
-export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): Filter<G> => {
+export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): ListInputFilterArgs => {
 	const nonEmptyFilters = filters.filter(
 		(filter): filter is Filter<G> =>
 			!isEmptyObject(filter) && filter !== undefined && filter !== null
 	);
-	console.log(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
+	logger.trace(`NonEmpty Filters: ${JSON.stringify(nonEmptyFilters)}`);
 
-	return nonEmptyFilters.length > 1 ? { _and: nonEmptyFilters } : nonEmptyFilters[0];
+	const andFilter = new ListInputFilterArgs();
+	const filter = nonEmptyFilters.length > 1 ? { _and: nonEmptyFilters } : nonEmptyFilters[0];
+	return Object.assign(andFilter, filter);
 };
 
 /**
@@ -206,8 +213,13 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 			})
 		);
 
+		// Filter out the non-object filters as these are checked elsewhere
+		const filters = evaluatedFilters.filter(
+			(filter): filter is Filter<G> => typeof filter === 'object' && filter !== null
+		);
+
 		// Apply to original search criteria
-		return evaluatedFilters.length > 1 ? { _or: evaluatedFilters } : evaluatedFilters[0];
+		return filters.length > 1 ? { _or: filters } : filters[0];
 	} else {
 		logger.error('Raising ForbiddenError: Unexpected error processing filter based access');
 		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);

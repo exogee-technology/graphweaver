@@ -2,11 +2,12 @@ import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field, ID } from 'type-g
 import {
 	BackendProvider,
 	BaseDataEntity,
+	BaseInsertInputArgs,
+	BaseUpdateInputArgs,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
 	HookRegister,
 	createBaseResolver,
-	hookManagerMap,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
@@ -21,7 +22,7 @@ import { Credential } from '../../entities';
 import { PasswordStrengthError } from './resolver';
 
 @InputType(`CredentialInsertInput`)
-class CreateCredentialInputArgs {
+class CreateCredentialInputArgs extends BaseInsertInputArgs {
 	@Field(() => String)
 	username!: string;
 
@@ -33,7 +34,7 @@ class CreateCredentialInputArgs {
 }
 
 @InputType(`CredentialCreateOrUpdateInput`)
-export class CredentialCreateOrUpdateInputArgs {
+export class CredentialCreateOrUpdateInputArgs extends BaseUpdateInputArgs {
 	@Field(() => ID)
 	id!: string;
 
@@ -85,14 +86,14 @@ export const createBasePasswordAuthResolver = <D extends BaseDataEntity>(
 					transactional,
 				};
 
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
-					HookRegister.BEFORE_CREATE,
-					params,
-					'Credential'
-				);
-
 				let userProfile;
 				try {
+					const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
+						HookRegister.BEFORE_CREATE,
+						params,
+						'Credential'
+					);
+
 					userProfile = await this.create(hookParams);
 				} catch (err) {
 					logger.error(err);

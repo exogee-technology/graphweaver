@@ -95,12 +95,12 @@ class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	new MikroBackendProvider(OrmTask, connection)
 ) {}
 
-const dataProvider = new MikroBackendProvider(OrmApiKey, connection);
+const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
 
 const graphweaver = new Graphweaver({
 	resolvers: [TaskResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => ({} as UserProfile), dataProvider)],
+		plugins: [authApolloPlugin(async () => ({} as UserProfile), { apiKeyDataProvider })],
 	},
 });
 

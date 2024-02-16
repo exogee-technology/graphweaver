@@ -67,6 +67,33 @@ export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
 	return 'id' in obj && typeof obj.id === 'string';
 };
 
+// These are the base input types that are used to create the input types for the resolvers
+export abstract class BaseListInputFilterArgs {}
+export abstract class BaseFilterInputArgs<G> {
+	filter?: Filter<G>;
+}
+export abstract class BaseInsertInputArgs {}
+export abstract class BaseInsertManyInputArgs {
+	data?: BaseInsertInputArgs[];
+}
+export abstract class BaseUpdateInputArgs {}
+export abstract class BaseUpdateManyInputArgs {
+	data?: BaseUpdateInputArgs[];
+}
+export abstract class BaseDeleteInputArgs {}
+export abstract class BaseDeleteManyInputArgs {
+	data?: BaseUpdateInputArgs[];
+}
+export abstract class BaseOrderByInputArgs {}
+export abstract class BasePaginationInputArgs {}
+export abstract class BaseCreateOrUpdateManyInputArgs {
+	data?: BaseUpdateInputArgs | BaseInsertInputArgs[];
+}
+export abstract class BaseGetOneInputArgs {
+	id!: string;
+}
+class GetOneInputArgs extends BaseGetOneInputArgs {}
+
 // G = GraphQL entity
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
@@ -115,7 +142,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	// Create if  data provider supports filter
 	// Create List Filter Args:
 	@InputType(`${plural}ListFilter`)
-	class ListInputFilterArgs {
+	class ListInputFilterArgs extends BaseListInputFilterArgs {
 		@Field(() => [ListInputFilterArgs], { nullable: true })
 		_and?: ListInputFilterArgs[];
 
@@ -196,9 +223,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	@InputType(`${plural}FilterInput`)
-	class FilterInputArgs {
+	class FilterInputArgs extends BaseFilterInputArgs<G> {
 		@Field(() => FilterInputArgs, { nullable: true })
-		filter?: typeof gqlEntityTypeName;
+		filter?: Filter<G>;
 	}
 	TypeMap[`${plural}FilterInput`] = FilterInputArgs;
 
@@ -270,9 +297,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create Pagination Input Types;
 	@InputType(`${plural}OrderByInput`)
-	class OrderByInputArgs {}
+	class OrderByInputArgs extends BaseOrderByInputArgs {}
 	@InputType(`${plural}PaginationInput`)
-	class PaginationInputArgs {
+	class PaginationInputArgs extends BasePaginationInputArgs {
 		@Field(() => Int, { nullable: true })
 		limit?: number;
 
@@ -372,8 +399,12 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
 			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+
+			const args = new GetOneInputArgs();
+			args.id = id;
+
 			const params: ReadHookParams<G> = {
-				args: { filter: { id } },
+				args: { filter: args as Filter<G> },
 				info,
 				context,
 				transactional: false,
@@ -401,7 +432,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create Insert Input Args:
 	@InputType(`${gqlEntityTypeName}InsertInput`)
-	class InsertInputArgs {}
+	class InsertInputArgs extends BaseInsertInputArgs {}
 	TypeMap[`${gqlEntityTypeName}InsertInput`] = InsertInputArgs;
 
 	for (const field of entityFields) {
@@ -435,7 +466,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create Insert Many Input Args:
 	@InputType(`${plural}InsertManyInput`)
-	class InsertManyInputArgs {
+	class InsertManyInputArgs extends BaseInsertManyInputArgs {
 		@Field(() => [InsertInputArgs])
 		data?: InsertInputArgs[];
 	}
@@ -443,7 +474,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create Update Input Args:
 	@InputType(`${gqlEntityTypeName}CreateOrUpdateInput`)
-	class UpdateInputArgs {}
+	class UpdateInputArgs extends BaseUpdateInputArgs {}
 	TypeMap[`${plural}CreateOrUpdateInput`] = UpdateInputArgs;
 
 	for (const field of entityFields) {
@@ -475,7 +506,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create Update Many Input Args:
 	@InputType(`${plural}UpdateManyInput`)
-	class UpdateManyInputArgs {
+	class UpdateManyInputArgs extends BaseUpdateManyInputArgs {
 		@Field(() => [UpdateInputArgs])
 		data?: UpdateInputArgs[];
 	}
@@ -483,11 +514,20 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create or Update Many Input Args:
 	@InputType(`${plural}CreateOrUpdateManyInput`)
-	class CreateOrUpdateManyInputArgs {
+	class CreateOrUpdateManyInputArgs extends BaseCreateOrUpdateManyInputArgs {
 		@Field(() => [UpdateInputArgs, InsertInputArgs])
 		data?: UpdateInputArgs | InsertInputArgs[];
 	}
 	TypeMap[`${plural}CreateOrUpdateManyInput`] = CreateOrUpdateManyInputArgs;
+
+	@InputType(`${gqlEntityTypeName}DeleteInput`)
+	class DeleteInputArgs extends BaseDeleteInputArgs {
+		@Field(() => ID)
+		id!: string;
+	}
+
+	@InputType(`${gqlEntityTypeName}DeleteManyInput`)
+	class DeleteManyInputArgs extends FilterInputArgs {}
 
 	@Resolver()
 	abstract class WritableBaseResolver extends BaseResolver {
@@ -598,7 +638,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 				// Separate Create and Update items
 				const updateItems = items.data.filter(hasId);
-				const createItems = items.data.filter((value) => !hasId(value));
+				const createItems = items.data
+					.filter((value) => !hasId(value))
+					.map((value) => {
+						const item = new InsertInputArgs();
+						Object.assign(item, value);
+						return item;
+					});
 
 				// Extract ids of items being updated
 				const updateItemIds = updateItems.map((item) => item.id) ?? [];
@@ -692,16 +738,16 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		// Delete
 		@Mutation((returns) => Boolean, { name: `delete${gqlEntityTypeName}` })
 		async deleteItem(
-			@Arg('id', () => ID) id: string,
+			@Arg('filter', () => DeleteInputArgs) filter: Filter<G>,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		) {
 			const hookManager = hookManagerMap.get(gqlEntityTypeName);
 			const params: DeleteHookParams<G> = {
-				args: { filter: { id } },
+				args: { filter },
 				info,
 				context,
-				transactional: false,
+				transactional,
 			};
 
 			const hookParams = hookManager
@@ -724,7 +770,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		// Delete many items in a transaction
 		@Mutation((returns) => Boolean, { name: `delete${plural}` })
 		async deleteMany(
-			@Arg('ids', () => [ID]) ids: string[],
+			@Arg('filter', () => DeleteManyInputArgs) filter: Filter<G>,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		) {
@@ -734,9 +780,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 				const hookManager = hookManagerMap.get(gqlEntityTypeName);
 				const params: DeleteManyHookParams<G> = {
-					args: {
-						ids,
-					},
+					args: { filter },
 					info,
 					context,
 					transactional,
@@ -746,9 +790,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 					? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 					: params;
 
-				if (!hookParams.args?.ids) throw new Error('No delete ids specified cannot continue.');
+				if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
 
-				const success = await provider.deleteMany(hookParams.args?.ids);
+				const success = await provider.deleteMany(hookParams.args?.filter);
 
 				hookManager &&
 					(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
