@@ -8,6 +8,7 @@ import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
 import {
 	baseEsbuildConfig,
 	buildOutputPathFor,
+	checkPackageForNativeModules,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
 	requireSilent,
@@ -100,7 +101,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 					minify: true,
 					metafile: true,
 					external: getExternalModules(),
-					plugins: [],
+					plugins: [checkPackageForNativeModules()],
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})
