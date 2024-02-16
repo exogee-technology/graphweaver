@@ -10,7 +10,6 @@ import {
 	buildOutputPathFor,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
-	makeOptionalMikroOrmPackagesExternalPlugin,
 	requireSilent,
 } from '../util';
 
@@ -101,8 +100,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 					minify: true,
 					metafile: true,
 					external: getExternalModules(),
-					plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
-
+					plugins: [],
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})
