@@ -9,46 +9,14 @@ import {
 	baseEsbuildConfig,
 	buildOutputPathFor,
 	checkPackageForNativeModules,
+	getExternalModules,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
-	requireSilent,
 } from '../util';
 
 const rimraf = promisify(rimrafCallback);
 
 export interface BackendBuildOptions {}
-
-const getExternalModules = (): string[] => {
-	// These modules make the bundle much larger and are not required for at runtime.
-	const externalModules = new Set([
-		...Object.keys(requireSilent('knex/package.json').browser),
-		...Object.keys(requireSilent('@mikro-orm/core/package.json').peerDependencies),
-		...Object.keys(requireSilent('@mikro-orm/knex/package.json').peerDependencies),
-		...Object.keys(requireSilent('type-graphql/package.json').peerDependencies),
-		'@mikro-orm/knex',
-		'bun:ffi',
-		'mock-aws-s3',
-		'nock',
-		'aws-sdk',
-	]);
-
-	// The end user might explicitly require these, so we'll exclude them from the list of external modules.
-	const requiredModules = new Set([
-		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
-	]);
-
-	for (const value of requiredModules) {
-		externalModules.delete(value);
-	}
-
-	console.log("The following modules are external and won't be bundled:");
-	console.log(externalModules);
-	console.log(
-		'If you want to bundle any of these, you can add them as a dependency in your package.json file.'
-	);
-
-	return [...externalModules];
-};
 
 export const buildBackend = async (_: BackendBuildOptions) => {
 	console.log('Building backend....');
