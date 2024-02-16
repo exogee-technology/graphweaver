@@ -46,6 +46,7 @@ async function main() {
 		execSync('pnpm build', { stdio: 'inherit' });
 	} catch (error) {
 		console.error('Error:', error);
+		throw error;
 	}
 }
 
