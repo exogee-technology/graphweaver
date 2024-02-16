@@ -41,6 +41,9 @@ async function main() {
 		execSync('pnpm run import sqlite --database=databases/database.sqlite --o', {
 			stdio: 'inherit',
 		});
+
+		// Build the app
+		execSync('pnpm build', { stdio: 'inherit' });
 	} catch (error) {
 		console.error('Error:', error);
 	}

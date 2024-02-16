@@ -1,5 +1,5 @@
 import path from 'path';
-import { BuildOptions, PluginBuild, OnResolveArgs } from 'esbuild';
+import { BuildOptions, PluginBuild, OnResolveArgs, OnLoadArgs } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -65,10 +65,15 @@ export const checkPackageForNativeModules = () => ({
 	setup(build: PluginBuild) {
 		// A set to store the packages that have native modules
 		const modulesWithNativeModules = new Set<string>();
+		const externals = build.initialOptions.external || [];
 
 		// Filter only imports that are external, must not start with "/" or "./" or "../" or a drive letter
 		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // We are only interested in external packages
 		build.onResolve({ filter }, async (args: OnResolveArgs) => {
+			// If the package is already external we don't need to check it
+			if (externals.includes(args.path)) {
+				return undefined;
+			}
 			// get the package.json file for the imported path
 			const packageInfo = requireSilent(`${args.path}/package.json`);
 			// Check if the package has native modules and add it to the set
