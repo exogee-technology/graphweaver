@@ -63,6 +63,7 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
   relationshipType?: Maybe<Scalars['String']['output']>;
@@ -98,7 +99,9 @@ export type Mutation = {
   createUser: User;
   createUsers: Array<User>;
   deleteTask: Scalars['Boolean']['output'];
+  deleteTasks: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
+  deleteUsers: Scalars['Boolean']['output'];
   updateTask: Task;
   updateTasks: Array<Task>;
   updateUser: User;
@@ -141,8 +144,18 @@ export type MutationDeleteTaskArgs = {
 };
 
 
+export type MutationDeleteTasksArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationDeleteUserArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteUsersArgs = {
+  ids: Array<Scalars['ID']['input']>;
 };
 
 
