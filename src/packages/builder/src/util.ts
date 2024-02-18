@@ -1,5 +1,5 @@
 import path from 'path';
-import { BuildOptions, PluginBuild, OnResolveArgs, OnLoadArgs } from 'esbuild';
+import { BuildOptions, PluginBuild, OnResolveArgs } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -52,6 +52,7 @@ export const getExternalModules = (): string[] => {
 
 	// The end user might explicitly require these, so we'll exclude them from the list of external modules.
 	const requiredModules = new Set([
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
 	]);
 
