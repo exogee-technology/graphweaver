@@ -37,7 +37,7 @@ export const baseEsbuildConfig: BuildOptions = {
 };
 
 export const getExternalModules = (): string[] => {
-	// These modules make the bundle much larger and are not required for at runtime.
+	// These modules make the bundle much larger and are not required at runtime.
 	const externalModules = new Set([
 		...Object.keys(requireSilent('knex/package.json').browser),
 		...Object.keys(requireSilent('@mikro-orm/core/package.json').peerDependencies),
@@ -100,10 +100,10 @@ export const checkPackageForNativeModules = () => ({
 		const modulesWithNativeModules = new Set<string>();
 		const externals = build.initialOptions.external || [];
 
-		// Filter only imports that are external, must not start with "/" or "./" or "../" or a drive letter
-		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // We are only interested in external packages
+		// Filter only imports that are published to npm, they must not start with "/" or "./" or "../" or a drive letter
+		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // We are only interested in published packages
 		build.onResolve({ filter }, async (args: OnResolveArgs) => {
-			// If the package is already external we don't need to check it
+			// If the package is already added esbuild external, we can skip it
 			if (externals.includes(args.path)) {
 				return undefined;
 			}

@@ -66,8 +66,8 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
 
-	// Check if the prod build works before doing the dev build
-	const dummyProductionBuild = build(
+	// Check if the prod build works, this build is not used at this stage, this is an early warning system to check for native modules.
+	const checkNativeModules = build(
 		onResolveEsbuildConfiguration({
 			...baseEsbuildConfig,
 			write: false, // disable writing to disk
@@ -81,7 +81,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	);
 
 	// Put the index.js file in there.
-	const unbundledBuild = build(
+	const buildBackend = build(
 		onResolveEsbuildConfiguration({
 			...baseEsbuildConfig,
 
@@ -93,7 +93,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 		})
 	);
 
-	await Promise.all([dummyProductionBuild, unbundledBuild]);
+	await Promise.all([checkNativeModules, buildBackend]);
 
 	// Are there any custom additional functions we need to build?
 	for (const additionalFunction of additionalFunctions) {
@@ -132,7 +132,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 		}
 	}
 
-	// Sadly there's no easy way to trigger Serverless programatically:
+	// Sadly there's no easy way to trigger Serverless programmatically:
 	// https://github.com/serverless/serverless/issues/1678
 	// And also there's no way to have the config file outside of the project files:
 	// https://github.com/serverless/serverless/issues/9095
