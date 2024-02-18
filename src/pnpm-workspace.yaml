@@ -4,4 +4,4 @@ packages:
   - 'examples/**'
   # exclude packages end-to-end test package
   - '!packages/end-to-end/app'
-  - '!packages/end-to-end/local_modules'
+  - '!packages/end-to-end/local_modules/**'
