@@ -34,7 +34,15 @@ export enum AdminUIFilterType {
 	BOOLEAN = 'BOOLEAN',
 }
 
-export type EntityFieldType = 'Boolean' | 'custom' | 'ID!' | 'ID' | 'JSON' | 'Image' | 'Media';
+export type EntityFieldType =
+	| 'Boolean'
+	| 'custom'
+	| 'ID!'
+	| 'ID'
+	| 'JSON'
+	| 'Image'
+	| 'Media'
+	| 'Number';
 
 export interface EntityField {
 	name: string;

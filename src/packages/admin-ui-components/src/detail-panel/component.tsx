@@ -76,10 +76,13 @@ const getField = ({ field }: { field: EntityField }) => {
 		return <EnumField name={field.name} typeEnum={enumField} multiple={field.isArray} />;
 	}
 
+	const fieldType = field.type === 'Number' ? 'number' : 'text';
+
 	return (
 		<Field
 			id={field.name}
 			name={field.name}
+			type={fieldType}
 			className={styles.textInputField}
 			disabled={isReadonly}
 		/>
