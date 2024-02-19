@@ -150,7 +150,7 @@ export enum AdminUIFilterType {
 	BOOLEAN = 'BOOLEAN',
 }
 
-export type AdminUISettingsOptions<G> = {
+export type AdminUIEntitySettings<G> = {
 	defaultFilter?: Filter<G>;
 	hideFromDisplay?: boolean;
 	hideFromFilterBar?: boolean;
@@ -158,9 +158,12 @@ export type AdminUISettingsOptions<G> = {
 
 export type AdminUISettingsType<G> = {
 	fields?: {
-		[x: string]: AdminUISettingsOptions<G>;
+		[x: string]: {
+			hideFromDisplay?: boolean;
+			hideFromFilterBar?: boolean;
+		};
 	};
-	entity?: AdminUISettingsOptions<G>;
+	entity?: AdminUIEntitySettings<G>;
 };
 
 export enum RelationshipType {

@@ -1,5 +1,5 @@
 import {
-	AdminUISettingsOptions,
+	AdminUIEntitySettings,
 	AdminUISettingsMap,
 	BaseDataEntity,
 	GraphQLEntity,
@@ -17,7 +17,7 @@ const expandFilter = (filter?: Filter<unknown>) => {
 };
 
 export function AdminUISettings<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
-	props?: AdminUISettingsOptions<G>
+	props?: AdminUIEntitySettings<G>
 ) {
 	return (target: GraphQLEntityConstructor<G, D>, propertyKey?: string | symbol) => {
 		const entityName = target.name || target.constructor.name;
