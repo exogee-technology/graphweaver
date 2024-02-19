@@ -9,7 +9,7 @@ import {
 
 import { User as OrmUser } from '../../entities';
 
-@AdminUISettings<User, OrmUser>({
+@AdminUISettings<User>({
 	defaultFilter: {
 		deleted: false,
 	},
