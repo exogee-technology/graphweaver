@@ -76,7 +76,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						case AdminUIFilterType.BOOLEAN:
 							return createElement(BooleanFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<string> | undefined,
+								initialFilter: filter[field.name] as Filter<boolean> | undefined,
 							});
 						case AdminUIFilterType.RELATIONSHIP:
 							return createElement(RelationshipFilter, {
