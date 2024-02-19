@@ -2,6 +2,8 @@ import { Resolver, Mutation, Arg, Ctx, Info, InputType, Field, ID } from 'type-g
 import {
 	BackendProvider,
 	BaseDataEntity,
+	BaseInsertInputArgs,
+	BaseUpdateInputArgs,
 	CreateOrUpdateHookParams,
 	GraphqlEntityType,
 	HookRegister,
@@ -16,7 +18,7 @@ import { GraphQLResolveInfo } from 'graphql';
 import { AuthorizationContext } from '../../../types';
 
 @InputType(`ApiKeyInsertInput`)
-export class ApiKeyInputArgs {
+export class ApiKeyInputArgs extends BaseInsertInputArgs {
 	@Field(() => String)
 	key!: string;
 
@@ -31,7 +33,7 @@ export class ApiKeyInputArgs {
 }
 
 @InputType(`ApiKeyCreateOrUpdateInput`)
-export class ApiKeyCreateOrUpdateInputArgs {
+export class ApiKeyCreateOrUpdateInputArgs extends BaseUpdateInputArgs {
 	@Field(() => ID)
 	id!: string;
 

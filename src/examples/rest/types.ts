@@ -307,32 +307,32 @@ export type MutationCreateUsersArgs = {
 
 
 export type MutationDeleteTagArgs = {
-  id: Scalars['ID']['input'];
+  filter: TagDeleteInput;
 };
 
 
 export type MutationDeleteTagsArgs = {
-  ids: Array<Scalars['ID']['input']>;
+  filter: TagDeleteManyInput;
 };
 
 
 export type MutationDeleteTaskArgs = {
-  id: Scalars['ID']['input'];
+  filter: TaskDeleteInput;
 };
 
 
 export type MutationDeleteTasksArgs = {
-  ids: Array<Scalars['ID']['input']>;
+  filter: TaskDeleteManyInput;
 };
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['ID']['input'];
+  filter: UserDeleteInput;
 };
 
 
 export type MutationDeleteUsersArgs = {
-  ids: Array<Scalars['ID']['input']>;
+  filter: UserDeleteManyInput;
 };
 
 
@@ -548,6 +548,29 @@ export type TagCreateOrUpdateInput = {
   tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
 };
 
+export type TagDeleteInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type TagDeleteManyInput = {
+  filter?: InputMaybe<TagsFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TasksFilterInput>;
+};
+
 export type TagInsertInput = {
   name: Scalars['String']['input'];
   tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
@@ -555,6 +578,25 @@ export type TagInsertInput = {
 
 export type TagsCreateOrUpdateManyInput = {
   data: Array<TagCreateOrUpdateInput>;
+};
+
+export type TagsFilterInput = {
+  filter?: InputMaybe<TagsFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TasksFilterInput>;
 };
 
 export type TagsInsertManyInput = {
@@ -624,6 +666,45 @@ export type TaskCreateOrUpdateInput = {
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
+export type TaskDeleteInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type TaskDeleteManyInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['String']['input']>;
+  description_null?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<TasksFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<Priority>;
+  priority_in?: InputMaybe<Array<Priority>>;
+  priority_ne?: InputMaybe<Priority>;
+  priority_nin?: InputMaybe<Array<Priority>>;
+  priority_notnull?: InputMaybe<Priority>;
+  priority_null?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slug_ilike?: InputMaybe<Scalars['String']['input']>;
+  slug_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug_like?: InputMaybe<Scalars['String']['input']>;
+  slug_ne?: InputMaybe<Scalars['String']['input']>;
+  slug_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug_notnull?: InputMaybe<Scalars['String']['input']>;
+  slug_null?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<TagsFilterInput>;
+  user?: InputMaybe<UsersFilterInput>;
+};
+
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
@@ -635,6 +716,41 @@ export type TaskInsertInput = {
 
 export type TasksCreateOrUpdateManyInput = {
   data: Array<TaskCreateOrUpdateInput>;
+};
+
+export type TasksFilterInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['String']['input']>;
+  description_null?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<TasksFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<Priority>;
+  priority_in?: InputMaybe<Array<Priority>>;
+  priority_ne?: InputMaybe<Priority>;
+  priority_nin?: InputMaybe<Array<Priority>>;
+  priority_notnull?: InputMaybe<Priority>;
+  priority_null?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  slug_ilike?: InputMaybe<Scalars['String']['input']>;
+  slug_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug_like?: InputMaybe<Scalars['String']['input']>;
+  slug_ne?: InputMaybe<Scalars['String']['input']>;
+  slug_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  slug_notnull?: InputMaybe<Scalars['String']['input']>;
+  slug_null?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<TagsFilterInput>;
+  user?: InputMaybe<UsersFilterInput>;
 };
 
 export type TasksInsertManyInput = {
@@ -711,12 +827,52 @@ export type UserCreateOrUpdateInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserDeleteInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type UserDeleteManyInput = {
+  filter?: InputMaybe<UsersFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UserInsertInput = {
   name: Scalars['String']['input'];
 };
 
 export type UsersCreateOrUpdateManyInput = {
   data: Array<UserCreateOrUpdateInput>;
+};
+
+export type UsersFilterInput = {
+  filter?: InputMaybe<UsersFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersInsertManyInput = {

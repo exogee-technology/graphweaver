@@ -13,7 +13,7 @@ import { apiKeyDataProvider } from './schema/auth';
 export const graphweaver = new Graphweaver<AuthorizationContext>({
 	resolvers,
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(addUserToContext, apiKeyDataProvider)],
+		plugins: [authApolloPlugin(addUserToContext, { apiKeyDataProvider })],
 	},
 	adminMetadata: {
 		enabled: true,

@@ -57,6 +57,12 @@ export type Filter<G> = {
 	| (FilterEntity<G> & FilterTopLevelProperties<G>)
 );
 
+export interface GraphQLArgs<G> {
+	items?: Partial<G>[];
+	filter?: Filter<G>;
+	pagination?: PaginationOptions;
+}
+
 // D = Data entity returned from the datastore
 // G = GraphQL entity
 export interface BackendProvider<D, G> {
@@ -85,7 +91,7 @@ export interface BackendProvider<D, G> {
 	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
 	deleteOne(filter: Filter<G>): Promise<boolean>;
 	//optional deleteMany
-	deleteMany?(ids: string[]): Promise<boolean>;
+	deleteMany?(filter: Filter<G>): Promise<boolean>;
 
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: any): boolean;
@@ -126,7 +132,7 @@ export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<
 }
 
 export interface DeleteManyHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
-	args: { ids: string[] };
+	args: { filter: Filter<G> };
 }
 
 export interface GraphqlEntityType<G, D> {

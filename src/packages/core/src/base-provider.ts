@@ -1,9 +1,11 @@
-import { BackendProvider, Filter, PaginationOptions } from './common/types';
+import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './common/types';
 
 export class Provider<D, G> implements BackendProvider<D, G> {
 	constructor(readonly backendId: string) {
 		if (!backendId) throw new Error('BackendId must be defined');
 	}
+
+	backendProviderConfig?: BackendProviderConfig;
 
 	// READ METHODS
 	public async find(
@@ -53,7 +55,7 @@ export class Provider<D, G> implements BackendProvider<D, G> {
 		throw new Error('DeleteOne Not implemented');
 	}
 
-	public async deleteMany(ids: string[]): Promise<boolean> {
+	public async deleteMany(filter: Filter<G>): Promise<boolean> {
 		throw new Error('DeleteMany Not implemented');
 	}
 
