@@ -11,10 +11,9 @@ import { User as OrmUser } from '../../entities';
 
 @AdminUISettings<User, OrmUser>({
 	defaultFilter: {
-		deleted: false,
-		username: 'darth',
+		deleted: { deleted: false },
 	},
-})
+} as any)
 @ObjectType('User')
 export class User extends GraphQLEntity<OrmUser> {
 	public dataEntity!: OrmUser;

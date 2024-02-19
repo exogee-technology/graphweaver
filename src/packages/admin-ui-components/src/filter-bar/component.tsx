@@ -24,13 +24,14 @@ import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity, id } = useParams();
+	if (!entity) throw new Error('There should always be an entity at this point.');
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
 	const [filter, setFilter] = useState<FieldFilter>(
-		searchParams.filters ?? { deleted: { deleted: false } }
+		searchParams.filters ?? entityByName(entity).defaultFilter ?? {}
 	);
 
 	if (!entity) {
