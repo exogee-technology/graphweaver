@@ -1,12 +1,13 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "0.2.17",
+	"version": "0.2.18",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
 		"version": "npm version --no-git-tag-version"

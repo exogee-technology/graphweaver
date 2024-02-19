@@ -11,20 +11,12 @@ import {
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
 	makeOptionalMikroOrmPackagesExternalPlugin,
+	requireSilent,
 } from '../util';
 
 const rimraf = promisify(rimrafCallback);
 
 export interface BackendBuildOptions {}
-
-const requireSilent = (module: string) => {
-	try {
-		return require(module);
-	} catch {
-		// If we are here we might not have the package installed so we'll just return an empty object.
-		return { browser: {}, peerDependencies: {} };
-	}
-};
 
 const getExternalModules = (): string[] => {
 	// These modules make the bundle much larger and are not required for at runtime.

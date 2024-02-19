@@ -1,13 +1,16 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
-  "build:types": {
-      "dependsOn": ["^build:types"],
-      "cache": false
-    } ,
-  "build:js": {
-      "dependsOn": ["^build:js"],
-      "cache": false
-    } 
+	"$schema": "https://turbo.build/schema.json",
+	"pipeline": {
+		"build:types": {
+			"dependsOn": ["^build:types"],
+			"cache": false
+		},
+		"build:js": {
+			"dependsOn": ["^build:js"],
+			"cache": false
+		},
+		"package:pack": {
+			"cache": false
+		}
+	}
 }
-} 

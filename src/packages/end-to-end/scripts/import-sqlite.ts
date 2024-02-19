@@ -1,15 +1,6 @@
-// rm -rf ./app
-// node ../cli/bin init --name=app --backend=sqlite --useVersion=\"local\"
-// cd app
-// pnpm i --ignore-workspace --no-lockfile
-// mkdir databases
-// cp ../databases/database.sqlite databases/database.sqlite
-// pnpm run import sqlite --database=databases/database.sqlite --o
-
 import * as fs from 'fs';
 import * as path from 'path';
-import * as util from 'util';
-import { execSync } from 'child_process';
+import { exec } from 'promisify-child-process';
 
 async function removeDirectory(directoryPath: string) {
 	if (fs.existsSync(directoryPath)) {
@@ -22,15 +13,26 @@ async function copyFile(source: string, destination: string) {
 	await fs.promises.copyFile(source, destination);
 }
 
+async function execAsync(command: string) {
+	const child = exec(command);
+	child.stdout?.on('data', (data) => {
+		console.log(data);
+	});
+	child.stderr?.on('data', (data) => {
+		console.error(data);
+	});
+	return child;
+}
+
 async function main() {
 	try {
+		await execAsync('pwd');
 		await removeDirectory('./app');
 
 		// Create a new instance of the app
-		const init = execSync(
-			'node ../cli/bin init --name=app --backend=sqlite --useVersion="local"'
-		).toString();
-		console.log(init);
+		await execAsync(
+			'node ./local_modules/graphweaver/bin init --name=app --backend=sqlite --useVersion="local"'
+		);
 
 		// Create .env file
 		const env = `DATABASE=sqlite`;
@@ -38,20 +40,15 @@ async function main() {
 
 		// Install dependencies
 		process.chdir('./app');
-		const pwd = execSync('pwd').toString();
-		console.log(pwd);
-		const install = execSync('pnpm i --ignore-workspace --no-lockfile').toString();
-		console.log(install);
+		await execAsync('pwd');
+		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 
 		// Copy the database
 		await fs.promises.mkdir('databases');
 		await copyFile('../databases/database.sqlite', 'databases/database.sqlite');
 
 		// Import the database
-		const runImport = execSync(
-			'pnpm run import sqlite --database=databases/database.sqlite --o'
-		).toString();
-		console.log(runImport);
+		await execAsync('pnpm run import sqlite --database=databases/database.sqlite --o');
 	} catch (error) {
 		console.error('Error:', error);
 	}

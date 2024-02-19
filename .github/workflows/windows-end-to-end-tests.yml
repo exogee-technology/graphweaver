@@ -39,6 +39,10 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Install Playwright Browsers
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
       - name: Init and Import SQLite Chinook Database
         working-directory: src/packages/end-to-end
         run: |
@@ -51,6 +55,7 @@ jobs:
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
+          pnpm test-ui &&
           taskkill /F /IM node.exe /T
 
         env:

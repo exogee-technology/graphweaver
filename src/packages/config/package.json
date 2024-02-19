@@ -1,12 +1,13 @@
 {
 	"name": "@exogee/graphweaver-config",
-	"version": "0.2.17",
+	"version": "0.2.18",
 	"description": "Retrieve and parse Graphweaver configurations",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"version": "npm version --no-git-tag-version"
 	},

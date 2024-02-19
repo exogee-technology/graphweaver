@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth",
-	"version": "0.2.17",
+	"version": "0.2.18",
 	"description": "Row-Level Security support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -8,6 +8,7 @@
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"build:watch": "pnpm build:js --watch",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
 		"version": "npm version --no-git-tag-version",

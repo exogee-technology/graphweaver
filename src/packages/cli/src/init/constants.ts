@@ -6,7 +6,7 @@ export const AWS_LAMBDA_VERSION = '2.0.1';
 
 export const graphweaverVersion = (versionOverride?: string, packageName?: string) => {
 	if (versionOverride === 'local' && packageName) {
-		return `link:../../${packageName}`;
+		return `file:../local_modules/${packageName}`;
 	}
 	return versionOverride ? versionOverride : GRAPHWEAVER_TARGET_VERSION;
 };

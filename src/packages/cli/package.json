@@ -1,11 +1,12 @@
 {
 	"name": "graphweaver",
-	"version": "0.2.17",
+	"version": "0.2.18",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js",
 		"build:js": "node build.js",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
 		"version": "npm version --no-git-tag-version"

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "0.2.17",
+	"version": "0.2.18",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -14,6 +14,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"test:prettier": "prettier --check .",
 		"version": "npm version --no-git-tag-version"
@@ -44,6 +45,7 @@
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "1.0.1",
+		"glob": "10.3.10",
 		"typescript": "5.0.2",
 		"vite": "4.5.2"
 	},
