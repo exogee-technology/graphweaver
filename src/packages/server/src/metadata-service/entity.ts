@@ -20,7 +20,7 @@ export class AdminUiEntityMetadata {
 	fields?: AdminUiFieldMetadata[] = [];
 
 	@Field(() => GraphQLJSON, { nullable: true })
-	defaultFilter?: Filter<any>;
+	defaultFilter?: Filter<unknown>;
 
 	@Field(() => AdminUiEntityAttributeMetadata)
 	attributes?: AdminUiEntityAttributeMetadata;
