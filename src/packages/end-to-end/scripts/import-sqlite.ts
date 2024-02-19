@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import { exec } from 'promisify-child-process';
 
 async function removeDirectory(directoryPath: string) {
 	if (fs.existsSync(directoryPath)) {
@@ -13,15 +13,25 @@ async function copyFile(source: string, destination: string) {
 	await fs.promises.copyFile(source, destination);
 }
 
+async function execAsync(command: string) {
+	const child = exec(command);
+	child.stdout?.on('data', (data) => {
+		console.log(data);
+	});
+	child.stderr?.on('data', (data) => {
+		console.error(data);
+	});
+	return child;
+}
+
 async function main() {
 	try {
-		execSync('pwd', { stdio: 'inherit' });
+		await execAsync('pwd');
 		await removeDirectory('./app');
 
 		// Create a new instance of the app
-		execSync(
-			'node ./local_modules/graphweaver/bin init --name=app --backend=sqlite --useVersion="local"',
-			{ stdio: 'inherit' }
+		await execAsync(
+			'node ./local_modules/graphweaver/bin init --name=app --backend=sqlite --useVersion="local"'
 		);
 
 		// Create .env file
@@ -30,17 +40,15 @@ async function main() {
 
 		// Install dependencies
 		process.chdir('./app');
-		execSync('pwd', { stdio: 'inherit' });
-		execSync('pnpm i --ignore-workspace --no-lockfile', { stdio: 'inherit' });
+		await execAsync('pwd');
+		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 
 		// Copy the database
 		await fs.promises.mkdir('databases');
 		await copyFile('../databases/database.sqlite', 'databases/database.sqlite');
 
 		// Import the database
-		execSync('pnpm run import sqlite --database=databases/database.sqlite --o', {
-			stdio: 'inherit',
-		});
+		await execAsync('pnpm run import sqlite --database=databases/database.sqlite --o');
 	} catch (error) {
 		console.error('Error:', error);
 	}

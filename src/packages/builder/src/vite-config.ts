@@ -20,6 +20,8 @@ export const viteConfig = ({
 	backendUrl,
 	base = '/',
 }: ViteConfigOptions): InlineConfig => {
+	// This is a fix to the issue where the bundled components are not being optimized for esm.
+	// Issue: https://github.com/exogee-technology/graphweaver/issues/290
 	const optimizeDeps = [
 		...Object.keys(
 			requireSilent('@exogee/graphweaver-admin-ui-components/package.json').dependencies

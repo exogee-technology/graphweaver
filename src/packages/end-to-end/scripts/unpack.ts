@@ -1,11 +1,22 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { execSync } from 'child_process';
+import { exec } from 'promisify-child-process';
 
 async function removeDirectory(directoryPath: string) {
 	if (fs.existsSync(directoryPath)) {
 		await fs.promises.rm(directoryPath, { recursive: true });
 	}
+}
+
+async function execAsync(command: string) {
+	const child = exec(command);
+	child.stdout?.on('data', (data) => {
+		console.log(data);
+	});
+	child.stderr?.on('data', (data) => {
+		console.error(data);
+	});
+	return child;
 }
 
 async function main() {
@@ -14,7 +25,7 @@ async function main() {
 		process.chdir('../../');
 
 		// Publish all local packages
-		execSync('pnpm pack:all', { stdio: 'inherit' });
+		await execAsync('pnpm pack:all');
 
 		// Copy the .packs directory to a new local_modules directory
 		await fs.promises.cp('.packs', './packages/end-to-end/local_modules', { recursive: true });
@@ -24,7 +35,7 @@ async function main() {
 		const tarballs = await fs.promises.readdir('local_modules');
 		await fs.promises.mkdir('local_modules/@exogee', { recursive: true });
 		for (const tarball of tarballs) {
-			execSync(`tar -xzf local_modules/${tarball} -C local_modules`);
+			await execAsync(`tar -xzf local_modules/${tarball} -C local_modules`);
 			const packageName = JSON.parse(
 				await fs.promises.readFile(`local_modules/package/package.json`, 'utf-8')
 			).name;
@@ -63,7 +74,7 @@ async function main() {
 		}
 
 		process.chdir('./local_modules/graphweaver');
-		execSync('pnpm i --ignore-workspace --no-lockfile', { stdio: 'inherit' });
+		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 	} catch (error) {
 		console.error(error);
 	}
