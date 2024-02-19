@@ -21,7 +21,7 @@ export interface BaseDataEntity {
 }
 
 // This map is used to store the Admin UI Settings Metadata
-export const AdminUISettingsMap = new Map<string, AdminUISettingsType>();
+export const AdminUISettingsMap = new Map<string, AdminUISettingsType<unknown>>();
 
 @ObjectType()
 export class GraphQLEntity<D extends BaseDataEntity> {

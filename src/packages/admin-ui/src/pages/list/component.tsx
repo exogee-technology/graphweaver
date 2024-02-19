@@ -45,7 +45,6 @@ export const List = () => {
 	const { entityByName } = useSchema();
 
 	const [showExportModal, setShowExportModal] = useState(false);
-
 	const { sort, page, filters } = decodeSearchParams(search);
 
 	const queryVariables = {

@@ -11,4 +11,7 @@ export class User extends BaseEntity {
 
 	@Property({ type: String })
 	email!: string;
+
+	@Property({ type: Boolean })
+	deleted!: boolean;
 }

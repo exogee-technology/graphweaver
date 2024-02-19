@@ -8,6 +8,7 @@ export const SCHEMA_QUERY = gql`
 				name
 				backendId
 				summaryField
+				defaultFilter
 				fields {
 					name
 					type

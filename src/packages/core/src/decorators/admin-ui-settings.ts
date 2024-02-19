@@ -1,12 +1,15 @@
-import { AdminUISettingsMap } from '..';
+import {
+	AdminUISettingsOptions,
+	AdminUISettingsMap,
+	BaseDataEntity,
+	GraphQLEntity,
+	GraphQLEntityConstructor,
+} from '..';
 
-type Props = {
-	hideFromDisplay?: boolean;
-	hideFromFilterBar?: boolean;
-};
-
-export function AdminUISettings(props?: Props) {
-	return (target: any, propertyKey?: string | symbol) => {
+export function AdminUISettings<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+	props?: AdminUISettingsOptions<G>
+) {
+	return (target: GraphQLEntityConstructor<G, D>, propertyKey?: string | symbol) => {
 		const entityName = target.name || target.constructor.name;
 		const settings = AdminUISettingsMap.get(entityName)
 			? AdminUISettingsMap.get(entityName) ?? {}

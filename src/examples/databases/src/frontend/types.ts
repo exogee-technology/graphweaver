@@ -31,6 +31,7 @@ export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
   attributes: AdminUiEntityAttributeMetadata;
   backendId?: Maybe<Scalars['String']['output']>;
+  defaultFilter?: Maybe<Scalars['JSON']['output']>;
   fields: Array<AdminUiFieldMetadata>;
   name: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
@@ -63,6 +64,7 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
   relationshipType?: Maybe<Scalars['String']['output']>;
@@ -98,7 +100,9 @@ export type Mutation = {
   createUser: User;
   createUsers: Array<User>;
   deleteTask: Scalars['Boolean']['output'];
+  deleteTasks: Scalars['Boolean']['output'];
   deleteUser: Scalars['Boolean']['output'];
+  deleteUsers: Scalars['Boolean']['output'];
   updateTask: Task;
   updateTasks: Array<Task>;
   updateUser: User;
@@ -137,12 +141,22 @@ export type MutationCreateUsersArgs = {
 
 
 export type MutationDeleteTaskArgs = {
-  id: Scalars['ID']['input'];
+  filter: TaskDeleteInput;
+};
+
+
+export type MutationDeleteTasksArgs = {
+  filter: TaskDeleteManyInput;
 };
 
 
 export type MutationDeleteUserArgs = {
-  id: Scalars['ID']['input'];
+  filter: UserDeleteInput;
+};
+
+
+export type MutationDeleteUsersArgs = {
+  filter: UserDeleteManyInput;
 };
 
 
@@ -223,6 +237,31 @@ export type TaskCreateOrUpdateInput = {
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
+export type TaskDeleteInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type TaskDeleteManyInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['String']['input']>;
+  description_null?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<TasksFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
+  user?: InputMaybe<UsersFilterInput>;
+};
+
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
@@ -232,6 +271,27 @@ export type TaskInsertInput = {
 
 export type TasksCreateOrUpdateManyInput = {
   data: Array<TaskCreateOrUpdateInput>;
+};
+
+export type TasksFilterInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['String']['input']>;
+  description_null?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<TasksFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
+  user?: InputMaybe<UsersFilterInput>;
 };
 
 export type TasksInsertManyInput = {
@@ -278,24 +338,85 @@ export type TasksUpdateManyInput = {
 
 export type User = {
   __typename?: 'User';
+  deleted: Scalars['Boolean']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   username: Scalars['String']['output'];
 };
 
 export type UserCreateOrUpdateInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UserDeleteInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type UserDeleteManyInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  email_ilike?: InputMaybe<Scalars['String']['input']>;
+  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_like?: InputMaybe<Scalars['String']['input']>;
+  email_ne?: InputMaybe<Scalars['String']['input']>;
+  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_notnull?: InputMaybe<Scalars['String']['input']>;
+  email_null?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<UsersFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['String']['input']>;
+  username_null?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type UserInsertInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
 
 export type UsersCreateOrUpdateManyInput = {
   data: Array<UserCreateOrUpdateInput>;
+};
+
+export type UsersFilterInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  email_ilike?: InputMaybe<Scalars['String']['input']>;
+  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_like?: InputMaybe<Scalars['String']['input']>;
+  email_ne?: InputMaybe<Scalars['String']['input']>;
+  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_notnull?: InputMaybe<Scalars['String']['input']>;
+  email_null?: InputMaybe<Scalars['String']['input']>;
+  filter?: InputMaybe<UsersFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['String']['input']>;
+  username_null?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersInsertManyInput = {
@@ -306,6 +427,7 @@ export type UsersListFilter = {
   _and?: InputMaybe<Array<UsersListFilter>>;
   _not?: InputMaybe<UsersListFilter>;
   _or?: InputMaybe<Array<UsersListFilter>>;
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_ilike?: InputMaybe<Scalars['String']['input']>;
   email_in?: InputMaybe<Array<Scalars['String']['input']>>;

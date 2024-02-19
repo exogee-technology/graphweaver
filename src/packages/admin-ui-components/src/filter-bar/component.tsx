@@ -1,11 +1,4 @@
-import {
-	ReactNode,
-	useEffect,
-	useReducer,
-	useState,
-	createElement,
-	FunctionComponent,
-} from 'react';
+import { ReactNode, useEffect, useState, createElement } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
 import {
@@ -36,7 +29,9 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const [filter, setFilter] = useState<FieldFilter>(searchParams.filters ?? {});
+	const [filter, setFilter] = useState<FieldFilter>(
+		searchParams.filters ?? { deleted: { deleted: false } }
+	);
 
 	if (!entity) {
 		throw Error('Entity should be in URL here');
