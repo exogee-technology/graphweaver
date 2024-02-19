@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { config } from '../../../config';
 
-test('test', async ({ page }) => {
+test('should update number field from the detail panel', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'InvoiceLine' }).click();
