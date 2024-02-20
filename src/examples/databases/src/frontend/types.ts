@@ -217,7 +217,7 @@ export enum Sort {
 
 export type Task = {
   __typename?: 'Task';
-  description: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta: Scalars['JSON']['output'];
@@ -263,7 +263,7 @@ export type TaskDeleteManyInput = {
 };
 
 export type TaskInsertInput = {
-  description: Scalars['String']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;

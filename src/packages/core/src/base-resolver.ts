@@ -16,6 +16,7 @@ import {
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
+import * as classValidator from 'class-validator';
 
 import { BaseDataEntity, GraphQLEntity } from '.';
 import type {
@@ -104,6 +105,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	provider: BackendProvider<D, G>
 ) => BaseResolverInterface {
 	const metadata = getMetadataStorage();
+	const classValidatorMetadata = classValidator.getMetadataStorage();
+
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
 	);
@@ -117,6 +120,12 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	const plural = pluralize(gqlEntityTypeName);
 	const transactional = !!provider.withTransaction;
 
+	const validators = classValidatorMetadata.getTargetValidationMetadatas(
+		gqlEntityType as any,
+		gqlEntityTypeName,
+		false,
+		false
+	);
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
@@ -502,6 +511,25 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				: field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
+	}
+
+	// Add any validators to the input types
+	for (const validator of validators) {
+		if (!validator.name) continue;
+		// @todo - there must be a better way than capitalize first letter
+		const name = validator.name.charAt(0).toUpperCase() + validator.name.slice(1);
+		const decorator = (classValidator as any)[name];
+		const { each, message, groups, always, context } = validator;
+		decorator?.({ each, message, groups, always, context })(
+			InsertInputArgs.prototype,
+			validator.propertyName,
+			0
+		);
+		decorator?.({ each, message, groups, always, context })(
+			UpdateInputArgs.prototype,
+			validator.propertyName,
+			0
+		);
 	}
 
 	// Create Update Many Input Args:

@@ -1,5 +1,6 @@
 import { GraphQLEntity, RelationshipField, Field, ID, ObjectType, Root } from '@exogee/graphweaver';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import { IsNotEmpty } from 'class-validator';
 
 import { Task as OrmTask } from '../../entities';
 import { User } from '../user';
@@ -11,8 +12,9 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String)
-	description!: string;
+	@Field(() => String, { nullable: true })
+	@IsNotEmpty({ message: 'Description should not be empty' })
+	description?: string;
 
 	@Field(() => Boolean)
 	isCompleted!: boolean;
