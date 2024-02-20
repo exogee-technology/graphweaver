@@ -105,7 +105,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	provider: BackendProvider<D, G>
 ) => BaseResolverInterface {
 	const metadata = getMetadataStorage();
-	const classValidatorMetadata = classValidator.getMetadataStorage();
 
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
@@ -120,12 +119,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	const plural = pluralize(gqlEntityTypeName);
 	const transactional = !!provider.withTransaction;
 
-	const validators = classValidatorMetadata.getTargetValidationMetadatas(
-		gqlEntityType as any,
-		gqlEntityTypeName,
-		false,
-		false
-	);
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
@@ -513,23 +506,24 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		metadata.collectClassFieldMetadata(fieldCopy);
 	}
 
+	const classValidatorMetadata = classValidator.getMetadataStorage();
+	const validators = classValidatorMetadata.getTargetValidationMetadatas(
+		gqlEntityType as any,
+		gqlEntityTypeName,
+		false, // @todo Where can I get these values from?
+		false // @todo Where can I get these values from?
+	);
+
 	// Add any validators to the input types
 	for (const validator of validators) {
-		if (!validator.name) continue;
-		// @todo - there must be a better way than capitalize first letter
-		const name = validator.name.charAt(0).toUpperCase() + validator.name.slice(1);
-		const decorator = (classValidator as any)[name];
-		const { each, message, groups, always, context } = validator;
-		decorator?.({ each, message, groups, always, context })(
-			InsertInputArgs.prototype,
-			validator.propertyName,
-			0
-		);
-		decorator?.({ each, message, groups, always, context })(
-			UpdateInputArgs.prototype,
-			validator.propertyName,
-			0
-		);
+		classValidatorMetadata.addValidationMetadata({
+			...validator,
+			target: InsertInputArgs,
+		});
+		classValidatorMetadata.addValidationMetadata({
+			...validator,
+			target: UpdateInputArgs,
+		});
 	}
 
 	// Create Update Many Input Args:
