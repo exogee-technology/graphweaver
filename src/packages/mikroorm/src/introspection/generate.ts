@@ -57,14 +57,14 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 				if (inverseProp) inverseProp.inversedBy = newProp.name;
 
 				if (prop.reference === ReferenceType.MANY_TO_ONE) {
-					const name = pascalToCamelCaseString(meta.tableName);
+					const name = pascalToCamelCaseString(meta.className);
 					newProp.name = pluralize(name);
 					newProp.reference = ReferenceType.ONE_TO_MANY;
 				} else if (prop.reference === ReferenceType.ONE_TO_ONE && !prop.mappedBy) {
 					newProp.reference = ReferenceType.ONE_TO_ONE;
 					newProp.nullable = true;
 				} else if (prop.reference === ReferenceType.MANY_TO_MANY && !prop.mappedBy) {
-					const name = pascalToCamelCaseString(meta.tableName);
+					const name = pascalToCamelCaseString(meta.className);
 					newProp.name = pluralize(name);
 					newProp.reference = ReferenceType.MANY_TO_MANY;
 				} else {
