@@ -76,6 +76,11 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	artist!: Artist;
 }
 
+@AdminUISettings<Artist>({
+	defaultFilter: {
+		name: 'test',
+	},
+})
 @ObjectType('Artist')
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
@@ -143,6 +148,7 @@ test('Test the decorator adminUISettings', async () => {
 					entities {
 						name
 						backendId
+						defaultFilter
 						summaryField
 						fields {
 							name
@@ -192,6 +198,7 @@ test('Test the decorator adminUISettings', async () => {
 
 	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
+	expect(artistEntity?.defaultFilter).toStrictEqual({ name: { name: 'test' } });
 
 	const idField = artistEntity?.fields.find((field) => field.name === 'id');
 	expect(idField).not.toBeNull();

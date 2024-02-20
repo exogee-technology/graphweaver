@@ -1,11 +1,4 @@
-import {
-	ReactNode,
-	useEffect,
-	useReducer,
-	useState,
-	createElement,
-	FunctionComponent,
-} from 'react';
+import { ReactNode, useEffect, useState, createElement } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
 import {
@@ -31,12 +24,15 @@ import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity, id } = useParams();
+	if (!entity) throw new Error('There should always be an entity at this point.');
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const [filter, setFilter] = useState<FieldFilter>(searchParams.filters ?? {});
+	const [filter, setFilter] = useState<FieldFilter>(
+		searchParams.filters ?? entityByName(entity).defaultFilter ?? {}
+	);
 
 	if (!entity) {
 		throw Error('Entity should be in URL here');
@@ -81,7 +77,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						case AdminUIFilterType.BOOLEAN:
 							return createElement(BooleanFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<string> | undefined,
+								initialFilter: filter[field.name] as Filter<boolean> | undefined,
 							});
 						case AdminUIFilterType.RELATIONSHIP:
 							return createElement(RelationshipFilter, {

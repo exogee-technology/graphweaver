@@ -4,7 +4,7 @@ export interface BooleanFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<string>;
+	initialFilter?: Filter<boolean>;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -36,7 +36,9 @@ export const BooleanFilter = ({
 		<Select
 			key={`${fieldName}:${resetCount}`}
 			options={options}
-			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
+			value={
+				initialValue !== undefined ? [{ value: initialValue, label: initialValue.toString() }] : []
+			}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}

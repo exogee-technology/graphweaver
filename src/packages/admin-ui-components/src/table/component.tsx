@@ -215,15 +215,13 @@ export const Table = <T extends TableRowItem>({
 		requestRefetch({});
 	};
 
-	const handleSort = () => {
+	const handleSort = (newSortColumns: SortColumn[]) => {
+		setSortColumns(newSortColumns);
+
 		requestRefetch({
-			sortFields: sortColumns.map((c) => ({ field: c.columnKey, direction: c.direction })),
+			sortFields: newSortColumns.map((c) => ({ field: c.columnKey, direction: c.direction })),
 		});
 	};
-
-	useEffect(() => {
-		handleSort();
-	}, [sortColumns]);
 
 	const navigateToDetailForEntity = useCallback(
 		(row: T, column: CalculatedColumn<T, unknown>) => {
@@ -288,7 +286,7 @@ export const Table = <T extends TableRowItem>({
 				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}
-				onSortColumnsChange={setSortColumns}
+				onSortColumnsChange={handleSort}
 				defaultColumnOptions={{ resizable: true }}
 				onSelectedRowsChange={setSelectedRows}
 				selectedRows={selectedRows}

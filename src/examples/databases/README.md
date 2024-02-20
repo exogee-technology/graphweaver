@@ -11,15 +11,16 @@ The user table in PostgreSQL looks like this:
 ```
 CREATE DATABASE todo_app;
 
-CREATE TABLE user (
+CREATE TABLE "user" (
   id SERIAL PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
+  deleted boolean NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Seed data for user table
-INSERT INTO user (username, email)
+INSERT INTO "user" (username, email)
 VALUES
   ('john_doe', 'john.doe@example.com'),
   ('jane_smith', 'jane.smith@example.com'),
