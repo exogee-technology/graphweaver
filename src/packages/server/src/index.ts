@@ -129,11 +129,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		this.schema = buildSchemaSync({
 			resolvers,
 			authChecker: config.authChecker ?? (() => true),
-			validate: {
-				skipNullProperties: false,
-				skipMissingProperties: false,
-				skipUndefinedProperties: false,
-			},
+			validate: this.config.enableValidationRules,
 		});
 
 		logger.trace(`Graphweaver starting ApolloServer`);

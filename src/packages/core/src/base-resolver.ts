@@ -104,7 +104,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	provider: BackendProvider<D, G>
 ) => BaseResolverInterface {
 	const metadata = getMetadataStorage();
-
 	const objectNames = metadata.objectTypes.filter(
 		(objectType) => objectType.target === gqlEntityType
 	);

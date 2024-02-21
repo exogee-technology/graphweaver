@@ -69,6 +69,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const name = objectType.name;
 					const adminUISettings = AdminUISettingsMap.get(name);
 					const defaultFilter = adminUISettings?.entity?.defaultFilter;
+
 					if (adminUISettings?.entity?.hideFromDisplay) {
 						return;
 					}

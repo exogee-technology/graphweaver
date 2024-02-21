@@ -46,7 +46,6 @@ export enum PanelMode {
 
 const getField = ({ field }: { field: EntityField }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
-
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
@@ -151,7 +150,7 @@ const DetailForm = ({
 	isReadOnly?: boolean;
 	panelMode: PanelMode;
 }) => {
-	// We need to validate the form before submitting for required fields
+	// We need to validate the form for required fields before submitting
 	const validate = useCallback(
 		(values: any) => {
 			const errors: Record<string, string> = {};
@@ -170,6 +169,7 @@ const DetailForm = ({
 			const fieldsInError = Object.keys(errors);
 			if (fieldsInError.length === 0) return {};
 
+			// @todo - instead of using toast, we should use a formik error message on the form itself
 			toast.error(
 				`${fieldsInError.join(', ')} ${fieldsInError.length > 1 ? 'are' : 'is a'} required field${
 					fieldsInError.length > 1 ? 's' : ''
@@ -186,8 +186,8 @@ const DetailForm = ({
 	return (
 		<Formik
 			validate={validate}
-			validateOnChange={false}
-			validateOnBlur={false}
+			validateOnChange={false} // We don't want to validate on change because it will trigger a toast message on every keystroke
+			validateOnBlur={false} // We don't want to validate on blur because it will trigger a toast message
 			initialValues={initialValues}
 			onSubmit={onSubmit}
 			onReset={onCancel}
