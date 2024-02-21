@@ -69,7 +69,6 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					const name = objectType.name;
 					const adminUISettings = AdminUISettingsMap.get(name);
 					const defaultFilter = adminUISettings?.entity?.defaultFilter;
-
 					if (adminUISettings?.entity?.hideFromDisplay) {
 						return;
 					}
@@ -97,16 +96,19 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 
 						const relatedObject = objectTypeData[typeName];
 
+						// Define field attributes
+						const isReadOnly = isReadOnlyPropertyAdminUI(objectType.target, field.name);
+						const isRequired = !isReadOnly && !field.typeOptions.nullable;
+
 						const fieldObject: AdminUiFieldMetadata = {
 							name: field.name,
 							type: relatedObject?.name || typeName,
 							isArray: field.typeOptions.array,
 							extensions: field.extensions || {},
-							attributes: isReadOnlyPropertyAdminUI(objectType.target, field.name)
-								? {
-										isReadOnly: isReadOnlyPropertyAdminUI(objectType.target, field.name),
-								  }
-								: undefined,
+							attributes: {
+								isReadOnly,
+								isRequired,
+							},
 						};
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {

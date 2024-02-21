@@ -16,7 +16,6 @@ import {
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
-import * as classValidator from 'class-validator';
 
 import { BaseDataEntity, GraphQLEntity } from '.';
 import type {
@@ -504,26 +503,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				: field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
-	}
-
-	const classValidatorMetadata = classValidator.getMetadataStorage();
-	const validators = classValidatorMetadata.getTargetValidationMetadatas(
-		gqlEntityType as any,
-		gqlEntityTypeName,
-		false, // @todo Where can I get these values from?
-		false // @todo Where can I get these values from?
-	);
-
-	// Add any validators to the input types
-	for (const validator of validators) {
-		classValidatorMetadata.addValidationMetadata({
-			...validator,
-			target: InsertInputArgs,
-		});
-		classValidatorMetadata.addValidationMetadata({
-			...validator,
-			target: UpdateInputArgs,
-		});
 	}
 
 	// Create Update Many Input Args:
