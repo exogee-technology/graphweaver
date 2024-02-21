@@ -73,7 +73,7 @@ export const makeDatabase = (projectName: string, backends: Backend[]) => {
 	},
 };`;
 
-	const liteDriverImport = `import { SqliteDriver } from '@mikro-orm/sqlite';`;
+	const liteDriverImport = `import { SqliteDriver } from 'mikro-orm-sqlite-wasm';`;
 	const liteConnection = `export const liteConnection = {
 	connectionManagerId: 'sqlite',
 	mikroOrmConfig: {

@@ -51,6 +51,7 @@ async function main() {
 		const packNames = [
 			'graphweaver',
 			'vite-plugin-graphweaver',
+			'mikro-orm-sqlite-wasm',
 			...packDirectories.map((dir) => `@exogee/${dir}`),
 		];
 
@@ -65,8 +66,10 @@ async function main() {
 					packageJson.dependencies[key] = `file:../${key.replace('@exogee/', '')}`;
 				} else if (key.startsWith('@exogee')) {
 					packageJson.dependencies[key] = `file:../${key}`;
-				} else if (packName.startsWith('@exogee') && key === 'vite-plugin-graphweaver') {
+				} else if (key === 'vite-plugin-graphweaver') {
 					packageJson.dependencies[key] = `file:../../vite-plugin-graphweaver`;
+				} else if (key === 'mikro-orm-sqlite-wasm') {
+					packageJson.dependencies[key] = `file:../../mikro-orm-sqlite-wasm`;
 				}
 			}
 

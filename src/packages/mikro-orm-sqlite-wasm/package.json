@@ -1,0 +1,44 @@
+{
+	"name": "mikro-orm-sqlite-wasm",
+	"version": "0.2.18",
+	"description": "MikroORM SQLite Driver Wasm",
+	"license": "MIT",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
+		"prettier": "prettier --write src/**/*.ts",
+		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
+		"version": "npm version --no-git-tag-version"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"dependencies": {
+		"@mikro-orm/knex": "5.7.14",
+		"@mikro-orm/sqlite": "5.7.14",
+		"node-sqlite3-wasm": "0.6.9"
+	},
+	"devDependencies": {
+		"@types/node": "20.2.5",
+		"esbuild": "0.15.5",
+		"glob": "10.3.10",
+		"typescript": "5.0.2"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
+}

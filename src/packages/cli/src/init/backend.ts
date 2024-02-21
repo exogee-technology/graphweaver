@@ -27,7 +27,8 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/knex': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/sqlite': MIKRO_ORM_TARGET_VERSION,
-				sqlite3: '5.1.6',
+				'mikro-orm-sqlite-wasm': graphweaverVersion(version, 'mikro-orm-sqlite-wasm'),
+				'node-sqlite3-wasm': '0.6.9',
 			};
 
 		case Backend.Rest:
