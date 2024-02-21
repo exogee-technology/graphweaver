@@ -169,7 +169,7 @@ const DetailForm = ({
 			const fieldsInError = Object.keys(errors);
 			if (fieldsInError.length === 0) return {};
 
-			// @todo - instead of using toast, we should use a formik error message on the form itself
+			// @todo - EXOGW-150: instead of using toast, we should use a formik error message on the form itself
 			toast.error(
 				`${fieldsInError.join(', ')} ${fieldsInError.length > 1 ? 'are' : 'is a'} required field${
 					fieldsInError.length > 1 ? 's' : ''
