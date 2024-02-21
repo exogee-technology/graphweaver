@@ -91,11 +91,9 @@ const getField = ({ field }: { field: EntityField }) => {
 
 const DetailField = ({ field }: { field: EntityField }) => {
 	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
-	const displayName = `${field.name}${isRequired ? '*' : ''}`;
-
 	return (
 		<div className={styles.detailField}>
-			<DetailPanelFieldLabel fieldName={displayName} />
+			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
 			{getField({ field })}
 		</div>
