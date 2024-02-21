@@ -1,7 +1,8 @@
 import { Field, ObjectType } from 'type-graphql';
 import { AdminUiFilterMetadata } from './filter';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
-import { AdminUiFieldExtentionsMetadata as AdminUiFieldExtensionsMetadata } from './field-extensions';
+import { AdminUiFieldExtensionsMetadata } from './field-extensions';
+
 @ObjectType('AdminUiFieldMetadata')
 export class AdminUiFieldMetadata {
 	@Field(() => String)

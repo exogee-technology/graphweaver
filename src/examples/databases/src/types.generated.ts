@@ -51,18 +51,19 @@ export type AdminUiEnumValueMetadata = {
 
 export type AdminUiFieldAttributeMetadata = {
   __typename?: 'AdminUiFieldAttributeMetadata';
-  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+  isReadOnly: Scalars['Boolean']['output'];
+  isRequired: Scalars['Boolean']['output'];
 };
 
-export type AdminUiFieldExtentionsMetadata = {
-  __typename?: 'AdminUiFieldExtentionsMetadata';
+export type AdminUiFieldExtensionsMetadata = {
+  __typename?: 'AdminUiFieldExtensionsMetadata';
   key?: Maybe<Scalars['String']['output']>;
 };
 
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
-  extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
+  extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
@@ -217,7 +218,7 @@ export enum Sort {
 
 export type Task = {
   __typename?: 'Task';
-  description?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta: Scalars['JSON']['output'];
@@ -263,7 +264,7 @@ export type TaskDeleteManyInput = {
 };
 
 export type TaskInsertInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
+  description: Scalars['String']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;

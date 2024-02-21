@@ -1,3 +1,6 @@
+export const isValueEmpty = (value: unknown) =>
+	value === '' || value === null || value === undefined;
+
 export const mapFormikValuesToGqlRequestValues = (formValues: any) => {
 	const result = Object.entries(formValues ?? []).reduce((acc, [key, value]: [string, any]) => {
 		// Check if we have a relationship value if so let's only send the id to the server

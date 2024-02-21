@@ -1,7 +1,7 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -31,7 +31,7 @@ import {
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
-import { mapFormikValuesToGqlRequestValues } from './util';
+import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
 import { MediaField } from './fields/media-field';
 
 interface ResultBaseType {
@@ -46,6 +46,7 @@ export enum PanelMode {
 
 const getField = ({ field }: { field: EntityField }) => {
 	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
+
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
@@ -90,9 +91,12 @@ const getField = ({ field }: { field: EntityField }) => {
 };
 
 const DetailField = ({ field }: { field: EntityField }) => {
+	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
+	const displayName = `${field.name}${isRequired ? '*' : ''}`;
+
 	return (
 		<div className={styles.detailField}>
-			<DetailPanelFieldLabel fieldName={field.name} />
+			<DetailPanelFieldLabel fieldName={displayName} />
 
 			{getField({ field })}
 		</div>
@@ -147,8 +151,47 @@ const DetailForm = ({
 	isReadOnly?: boolean;
 	panelMode: PanelMode;
 }) => {
+	// We need to validate the form before submitting for required fields
+	const validate = useCallback(
+		(values: any) => {
+			const errors: Record<string, string> = {};
+			for (const field of detailFields) {
+				if (
+					field.attributes?.isRequired &&
+					field.type !== 'ID' &&
+					field.type !== 'ID!' &&
+					field.type !== 'custom' &&
+					isValueEmpty(values[field.name])
+				) {
+					errors[field.name] = 'Required';
+				}
+			}
+
+			const fieldsInError = Object.keys(errors);
+			if (fieldsInError.length === 0) return {};
+
+			toast.error(
+				`${fieldsInError.join(', ')} ${fieldsInError.length > 1 ? 'are' : 'is a'} required field${
+					fieldsInError.length > 1 ? 's' : ''
+				}.`,
+				{
+					duration: 5000,
+				}
+			);
+			return errors;
+		},
+		[detailFields]
+	);
+
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
+		<Formik
+			validate={validate}
+			validateOnChange={false}
+			validateOnBlur={false}
+			initialValues={initialValues}
+			onSubmit={onSubmit}
+			onReset={onCancel}
+		>
 			{({ isSubmitting }) => (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
