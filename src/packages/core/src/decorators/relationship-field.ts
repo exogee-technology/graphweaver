@@ -36,7 +36,7 @@ export function RelationshipField<
 	D extends BaseDataEntity = G['dataEntity']
 >(
 	returnTypeFunc: ReturnTypeFunc,
-	{ relatedField, id, nullable = true }: RelationshipFieldOptions<D>
+	{ relatedField, id, nullable = false }: RelationshipFieldOptions<D>
 ) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
