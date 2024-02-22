@@ -36,7 +36,7 @@
 		"graphweaver": "workspace:*",
 		"isomorphic-fetch": "3.0.0",
 		"react": "18.2.0",
-		"reflect-metadata": "0.1.13"
+		"reflect-metadata": "0.2.1"
 	},
 	"devDependencies": {
 		"@types/jest": "26.0.23",

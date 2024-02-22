@@ -17,6 +17,7 @@ export interface CredentialStorage {
 	password?: string;
 }
 
+@ReadOnly({ adminUI: false, backend: true })
 @ObjectType('Credential')
 export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	public dataEntity!: D;
@@ -40,7 +41,6 @@ export const createCredentialEntity = <D extends BaseDataEntity>(
 	};
 	// Call the decorator to apply the ACL to the default entity above
 	ApplyAccessControlList(acl ?? defaultAcl)(Credential);
-	ReadOnly({ adminUI: false, backend: true })(Credential);
 	// Return the entity with the ACL applied
 	return Credential;
 };

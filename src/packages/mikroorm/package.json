@@ -29,7 +29,7 @@
 		"dotenv": "16.0.0",
 		"graphql": "16.8.1",
 		"pluralize": "8.0.0",
-		"reflect-metadata": "0.1.13"
+		"reflect-metadata": "0.2.1"
 	},
 	"devDependencies": {
 		"@mikro-orm/core": "6.1.5",

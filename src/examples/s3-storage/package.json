@@ -30,7 +30,7 @@
 		"@mikro-orm/core": "6.1.5",
 		"@mikro-orm/postgresql": "6.1.5",
 		"pg": "8.11.1",
-		"reflect-metadata": "0.1.13",
+		"reflect-metadata": "0.2.1",
 		"graphql": "16.8.1"
 	},
 	"devDependencies": {

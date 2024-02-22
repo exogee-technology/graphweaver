@@ -35,7 +35,7 @@
 		"mysql2": "3.5.2",
 		"pg": "8.11.1",
 		"graphweaver": "workspace:*",
-		"reflect-metadata": "0.1.13"
+		"reflect-metadata": "0.2.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",
