@@ -9,7 +9,7 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/knex': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/postgresql': MIKRO_ORM_TARGET_VERSION,
-				pg: '8.11.1',
+				pg: '8.11.3',
 			};
 
 		case Backend.Mysql:
@@ -18,7 +18,7 @@ export const packagesForBackend = (backend: Backend, version?: string): Record<s
 				'@mikro-orm/core': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/knex': MIKRO_ORM_TARGET_VERSION,
 				'@mikro-orm/mysql': MIKRO_ORM_TARGET_VERSION,
-				mysql2: '3.5.2',
+				mysql2: '3.6.2',
 			};
 
 		case Backend.Sqlite:
