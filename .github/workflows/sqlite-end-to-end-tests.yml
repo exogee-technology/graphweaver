@@ -62,6 +62,18 @@ jobs:
           pnpm test-ui &&
           killall node
 
+      - name: Add Native Module
+        working-directory: src/packages/end-to-end/app
+        id: native-module
+        run: |
+          pnpm add sqlite3
+          pnpm build
+        continue-on-error: true
+
+      - name: Check Native Module Failures
+        if: steps.native-module.outcome == 'success'
+        run: exit 1
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:
