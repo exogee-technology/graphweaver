@@ -63,6 +63,7 @@ jobs:
           killall node
 
       - name: Add Native Module
+        # This step is expected to fail, as we sqlite3 contains native code
         working-directory: src/packages/end-to-end/app
         id: native-module
         run: |
@@ -71,6 +72,7 @@ jobs:
         continue-on-error: true
 
       - name: Check Native Module Failures
+        # If the native module build succeeds, we want to fail the build as the native module is not supported
         if: steps.native-module.outcome == 'success'
         run: exit 1
 
