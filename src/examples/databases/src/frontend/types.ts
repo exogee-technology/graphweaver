@@ -151,11 +151,6 @@ export type MutationDeleteTasksArgs = {
 };
 
 
-export type MutationDeleteTasksArgs = {
-  ids: Array<Scalars['ID']['input']>;
-};
-
-
 export type MutationDeleteUserArgs = {
   filter: UserDeleteInput;
 };
@@ -163,11 +158,6 @@ export type MutationDeleteUserArgs = {
 
 export type MutationDeleteUsersArgs = {
   filter: UserDeleteManyInput;
-};
-
-
-export type MutationDeleteUsersArgs = {
-  ids: Array<Scalars['ID']['input']>;
 };
 
 
@@ -231,8 +221,8 @@ export type Task = {
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
-  meta: Scalars['JSON']['output'];
-  user?: Maybe<User>;
+  meta?: Maybe<Scalars['JSON']['output']>;
+  user: User;
 };
 
 
@@ -244,7 +234,6 @@ export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
-  meta?: InputMaybe<Scalars['JSON']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
@@ -276,7 +265,6 @@ export type TaskDeleteManyInput = {
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
-  meta?: InputMaybe<Scalars['JSON']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 

@@ -40,7 +40,6 @@ export const getExternalModules = (): string[] => {
 	// These modules make the bundle much larger and are not required at runtime.
 	const externalModules = new Set([
 		...Object.keys(requireSilent('knex/package.json').browser),
-		...Object.keys(requireSilent('@mikro-orm/core/package.json').peerDependencies),
 		...Object.keys(requireSilent('@mikro-orm/knex/package.json').peerDependencies),
 		...Object.keys(requireSilent('type-graphql/package.json').peerDependencies),
 		'@mikro-orm/knex',
