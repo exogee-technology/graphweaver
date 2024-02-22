@@ -51,18 +51,19 @@ export type AdminUiEnumValueMetadata = {
 
 export type AdminUiFieldAttributeMetadata = {
   __typename?: 'AdminUiFieldAttributeMetadata';
-  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+  isReadOnly: Scalars['Boolean']['output'];
+  isRequired: Scalars['Boolean']['output'];
 };
 
-export type AdminUiFieldExtentionsMetadata = {
-  __typename?: 'AdminUiFieldExtentionsMetadata';
+export type AdminUiFieldExtensionsMetadata = {
+  __typename?: 'AdminUiFieldExtensionsMetadata';
   key?: Maybe<Scalars['String']['output']>;
 };
 
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
-  extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
+  extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];

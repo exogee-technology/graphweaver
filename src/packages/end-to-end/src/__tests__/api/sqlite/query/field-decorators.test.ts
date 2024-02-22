@@ -139,6 +139,7 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 							}
 							attributes {
 								isReadOnly
+								isRequired
 								__typename
 							}
 							__typename
@@ -172,15 +173,19 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 
 	const fieldNameField = customerEntity?.fields.find((field) => field.name === 'firstName');
 	expect(fieldNameField).not.toBeNull();
-	expect(fieldNameField?.attributes).toBeNull();
+	expect(fieldNameField?.attributes).not.toBeNull();
+	expect(fieldNameField?.attributes?.isReadOnly).toEqual(false);
+	expect(fieldNameField?.attributes?.isRequired).toEqual(true);
 
 	const companyField = customerEntity?.fields.find((field) => field.name === 'company');
 	expect(companyField).not.toBeNull();
 	expect(companyField?.attributes).not.toBeNull();
 	expect(companyField?.attributes?.isReadOnly).toEqual(true);
+	expect(companyField?.attributes?.isRequired).toEqual(false);
 
 	const addressField = customerEntity?.fields.find((field) => field.name === 'address');
 	expect(addressField).not.toBeNull();
 	expect(addressField?.attributes).not.toBeNull();
 	expect(addressField?.attributes?.isReadOnly).toEqual(true);
+	expect(addressField?.attributes?.isRequired).toEqual(false);
 });

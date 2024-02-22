@@ -42,8 +42,8 @@ export class ApiKey extends GraphQLEntity<OrmApiKey> {
 	@Field(() => String)
 	key!: string;
 
-	@Field(() => Boolean)
-	revoked!: boolean;
+	@Field(() => Boolean, { nullable: true })
+	revoked?: boolean;
 
 	@Field(() => [Roles], { nullable: true })
 	roles?: Roles[];

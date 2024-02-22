@@ -61,7 +61,8 @@ export interface EntityField {
 }
 
 export interface EntityFieldAttributes {
-	isReadOnly?: boolean;
+	isReadOnly: boolean;
+	isRequired: boolean;
 }
 
 export interface EntityAttributes {
