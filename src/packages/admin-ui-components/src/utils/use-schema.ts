@@ -22,6 +22,7 @@ export interface Entity {
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
 	fields: EntityField[];
+	defaultFilter: FieldFilter;
 	attributes: EntityAttributes;
 }
 
@@ -60,7 +61,8 @@ export interface EntityField {
 }
 
 export interface EntityFieldAttributes {
-	isReadOnly?: boolean;
+	isReadOnly: boolean;
+	isRequired: boolean;
 }
 
 export interface EntityAttributes {

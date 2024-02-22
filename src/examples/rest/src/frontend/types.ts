@@ -31,6 +31,7 @@ export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
   attributes: AdminUiEntityAttributeMetadata;
   backendId?: Maybe<Scalars['String']['output']>;
+  defaultFilter?: Maybe<Scalars['JSON']['output']>;
   fields: Array<AdminUiFieldMetadata>;
   name: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
@@ -50,18 +51,19 @@ export type AdminUiEnumValueMetadata = {
 
 export type AdminUiFieldAttributeMetadata = {
   __typename?: 'AdminUiFieldAttributeMetadata';
-  isReadOnly?: Maybe<Scalars['Boolean']['output']>;
+  isReadOnly: Scalars['Boolean']['output'];
+  isRequired: Scalars['Boolean']['output'];
 };
 
-export type AdminUiFieldExtentionsMetadata = {
-  __typename?: 'AdminUiFieldExtentionsMetadata';
+export type AdminUiFieldExtensionsMetadata = {
+  __typename?: 'AdminUiFieldExtensionsMetadata';
   key?: Maybe<Scalars['String']['output']>;
 };
 
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
-  extensions?: Maybe<AdminUiFieldExtentionsMetadata>;
+  extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
@@ -94,7 +96,7 @@ export type ApiKey = {
   __typename?: 'ApiKey';
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
-  revoked: Scalars['Boolean']['output'];
+  revoked?: Maybe<Scalars['Boolean']['output']>;
   roles?: Maybe<Array<Roles>>;
 };
 
@@ -534,7 +536,7 @@ export type Tag = {
   __typename?: 'Tag';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  tasks?: Maybe<Array<Task>>;
+  tasks: Array<Task>;
 };
 
 
@@ -647,8 +649,8 @@ export type Task = {
   isCompleted: Scalars['Boolean']['output'];
   priority?: Maybe<Priority>;
   slug?: Maybe<Scalars['String']['output']>;
-  tags?: Maybe<Array<Tag>>;
-  user?: Maybe<User>;
+  tags: Array<Tag>;
+  user: User;
 };
 
 

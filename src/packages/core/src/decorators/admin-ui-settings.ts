@@ -1,11 +1,24 @@
-import { AdminUISettingsMap } from '..';
+import {
+	AdminUIEntitySettings,
+	AdminUISettingsMap,
+	BaseDataEntity,
+	GraphQLEntity,
+	GraphQLEntityConstructor,
+	Filter,
+} from '..';
 
-type Props = {
-	hideFromDisplay?: boolean;
-	hideFromFilterBar?: boolean;
+// @todo This should be removed once we resolve https://exogee.atlassian.net/browse/EXOGW-325
+// This is a temporary fix to expand the filter to the correct format
+const expandFilter = (filter?: Filter<unknown>) => {
+	if (!filter) return undefined;
+	return Object.entries(filter).reduce((prev, [key, value]) => {
+		return { ...prev, [key]: { [key]: value } };
+	}, {});
 };
 
-export function AdminUISettings(props?: Props) {
+export function AdminUISettings<
+	G extends GraphQLEntity<BaseDataEntity> = GraphQLEntity<BaseDataEntity>
+>(props?: AdminUIEntitySettings<G>) {
 	return (target: any, propertyKey?: string | symbol) => {
 		const entityName = target.name || target.constructor.name;
 		const settings = AdminUISettingsMap.get(entityName)
@@ -16,7 +29,7 @@ export function AdminUISettings(props?: Props) {
 			if (!settings.fields) settings.fields = {};
 			settings.fields[propertyKey as keyof typeof settings.fields] = { ...props };
 		} else {
-			settings.entity = { ...props };
+			settings.entity = { ...props, defaultFilter: expandFilter(props?.defaultFilter) };
 		}
 
 		AdminUISettingsMap.set(entityName, settings);

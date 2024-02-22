@@ -1,7 +1,7 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import classnames from 'classnames';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -31,7 +31,7 @@ import {
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
-import { mapFormikValuesToGqlRequestValues } from './util';
+import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
 import { MediaField } from './fields/media-field';
 
 interface ResultBaseType {
@@ -90,9 +90,10 @@ const getField = ({ field }: { field: EntityField }) => {
 };
 
 const DetailField = ({ field }: { field: EntityField }) => {
+	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
 	return (
 		<div className={styles.detailField}>
-			<DetailPanelFieldLabel fieldName={field.name} />
+			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
 			{getField({ field })}
 		</div>
@@ -147,8 +148,48 @@ const DetailForm = ({
 	isReadOnly?: boolean;
 	panelMode: PanelMode;
 }) => {
+	// We need to validate the form for required fields before submitting
+	const validate = useCallback(
+		(values: any) => {
+			const errors: Record<string, string> = {};
+			for (const field of detailFields) {
+				if (
+					field.attributes?.isRequired &&
+					field.type !== 'ID' &&
+					field.type !== 'ID!' &&
+					field.type !== 'custom' &&
+					isValueEmpty(values[field.name])
+				) {
+					errors[field.name] = 'Required';
+				}
+			}
+
+			const fieldsInError = Object.keys(errors);
+			if (fieldsInError.length === 0) return {};
+
+			// TODO EXOGW-150: instead of using toast, we should use a formik error message on the form itself
+			toast.error(
+				`${fieldsInError.join(', ')} ${fieldsInError.length > 1 ? 'are' : 'is a'} required field${
+					fieldsInError.length > 1 ? 's' : ''
+				}.`,
+				{
+					duration: 5000,
+				}
+			);
+			return errors;
+		},
+		[detailFields]
+	);
+
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
+		<Formik
+			validate={validate}
+			validateOnChange={false} // We don't want to validate on change because it will trigger a toast message on every keystroke
+			validateOnBlur={false} // We don't want to validate on blur because it will trigger a toast message
+			initialValues={initialValues}
+			onSubmit={onSubmit}
+			onReset={onCancel}
+		>
 			{({ isSubmitting }) => (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
