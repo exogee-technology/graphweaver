@@ -11,7 +11,7 @@ import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import type {
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/typescript-types';
+} from '@simplewebauthn/types';
 import { logger } from '@exogee/logger';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../../types';
@@ -20,7 +20,7 @@ import { PasskeyRegistrationResponse, PasskeyAuthenticationResponse } from './en
 import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
 import { ChallengeError } from '../../../errors';
 
-export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/typescript-types';
+export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/types';
 
 export interface PasskeyAuthenticatorDevice {
 	id: string;

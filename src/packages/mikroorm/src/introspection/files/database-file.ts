@@ -22,7 +22,7 @@ export class DatabaseFile {
 		const imports = [
 			...(isPostgresql ? [`import { PostgreSqlDriver } from '@mikro-orm/postgresql';`] : []),
 			...(isMySQL ? [`import { MySqlDriver } from '@mikro-orm/mysql';`] : []),
-			...(isSQLite ? [`import { SqliteDriver } from '@mikro-orm/sqlite';`] : []),
+			...(isSQLite ? [`import { SqliteDriver } from 'mikro-orm-sqlite-wasm';`] : []),
 			`import { entities } from './entities';`,
 		];
 		const exports = [`export const connections = [connection];`];

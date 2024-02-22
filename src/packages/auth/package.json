@@ -27,7 +27,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@simplewebauthn/server": "8.2.0",
+		"@simplewebauthn/server": "9.0.3",
 		"apollo-server-errors": "3.3.1",
 		"class-validator": "0.14.0",
 		"dotenv": "10.0.0",
@@ -41,7 +41,7 @@
 		"reflect-metadata": "0.1.13"
 	},
 	"devDependencies": {
-		"@simplewebauthn/typescript-types": "8.0.0",
+		"@simplewebauthn/types": "9.0.1",
 		"@types/jsonwebtoken": "9.0.2",
 		"@types/ms": "0.7.31",
 		"@types/node": "20.2.5",

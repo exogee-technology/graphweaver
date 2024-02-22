@@ -1,14 +1,15 @@
 {
-	"name": "@exogee/graphweaver-config",
+	"name": "mikro-orm-sqlite-wasm",
 	"version": "0.2.18",
-	"description": "Retrieve and parse Graphweaver configurations",
+	"description": "MikroORM SQLite Driver Wasm",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
-		"prettier": "prettier --write .",
+		"prettier": "prettier --write src/**/*.ts",
+		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -20,13 +21,15 @@
 		"lib"
 	],
 	"dependencies": {
-		"lodash": "4.17.21"
+		"@mikro-orm/knex": "5.7.14",
+		"@mikro-orm/sqlite": "5.7.14",
+		"node-sqlite3-wasm": "0.6.9"
 	},
 	"devDependencies": {
-		"@types/lodash": "4.14.192",
 		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
-		"prettier": "2.8.8"
+		"glob": "10.3.10",
+		"typescript": "5.0.2"
 	},
 	"keywords": [
 		"graphql",

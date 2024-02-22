@@ -13,7 +13,7 @@ import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
 import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
-import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/typescript-types';
+import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/types';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { CreateOrUpdateHookParams } from '@exogee/graphweaver';
 

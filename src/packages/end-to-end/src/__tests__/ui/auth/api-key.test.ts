@@ -27,7 +27,5 @@ test('should allow a successful api key creation', async ({ page }) => {
 	await page.getByRole('button', { name: 'Save' }).click();
 
 	// post-condition: new record found on the grid page
-	await expect(page.getByText(apiKey)).toBeVisible();
-	const actualRowCount = await page.getByRole('gridcell', { name: 'LIGHT_SIDE' }).count();
-	expect(actualRowCount).toBeGreaterThan(0);
+	await expect(await page.getByRole('gridcell', { name: apiKey })).toBeVisible();
 });

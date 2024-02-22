@@ -47,10 +47,11 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm playwright install --with-deps chromium
 
-      - name: Setup Rest Database
+      - name: Build and Setup Rest Database
         working-directory: src/examples/rest
         timeout-minutes: 2
         run: |
+          pnpm build
           pnpm import-database
         env:
           CI: true

@@ -10,13 +10,15 @@ import {
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
 	devOutputPathFor,
+	checkPackageForNativeModules,
+	getExternalModules,
 } from '../util';
 
 // The Serverless Offline logger should report any errors and such to the console as well.
 // This is how we configure the Serverless log reporter to use console.log().
 import '@serverless/utils/log-reporters/node';
 
-import { config } from '@exogee/graphweaver-config';
+import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
 
 const rimraf = promisify(rimrafCallback);
 
@@ -64,8 +66,22 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	// Clear the folder
 	await rimraf(path.join('.graphweaver', 'backend'));
 
+	// Check if the prod build works, this build is not used at this stage, this is an early warning system to check for native modules.
+	const checkNativeModules = build(
+		onResolveEsbuildConfiguration({
+			...baseEsbuildConfig,
+			write: false, // disable writing to disk
+
+			external: getExternalModules(),
+			plugins: [checkPackageForNativeModules()],
+
+			entryPoints: [inputPathFor('./src/backend/index')],
+			outfile: `${devOutputPathFor('./src/backend/index')}.js`,
+		})
+	);
+
 	// Put the index.js file in there.
-	await build(
+	const buildBackend = build(
 		onResolveEsbuildConfiguration({
 			...baseEsbuildConfig,
 
@@ -76,6 +92,8 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 			outfile: '.graphweaver/backend/index.js',
 		})
 	);
+
+	await Promise.all([checkNativeModules, buildBackend]);
 
 	// Are there any custom additional functions we need to build?
 	for (const additionalFunction of additionalFunctions) {
@@ -114,7 +132,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 		}
 	}
 
-	// Sadly there's no easy way to trigger Serverless programatically:
+	// Sadly there's no easy way to trigger Serverless programmatically:
 	// https://github.com/serverless/serverless/issues/1678
 	// And also there's no way to have the config file outside of the project files:
 	// https://github.com/serverless/serverless/issues/9095

@@ -151,6 +151,11 @@ export type MutationDeleteTasksArgs = {
 };
 
 
+export type MutationDeleteTasksArgs = {
+  ids: Array<Scalars['ID']['input']>;
+};
+
+
 export type MutationDeleteUserArgs = {
   filter: UserDeleteInput;
 };
@@ -158,6 +163,11 @@ export type MutationDeleteUserArgs = {
 
 export type MutationDeleteUsersArgs = {
   filter: UserDeleteManyInput;
+};
+
+
+export type MutationDeleteUsersArgs = {
+  ids: Array<Scalars['ID']['input']>;
 };
 
 

@@ -62,6 +62,20 @@ jobs:
           pnpm test-ui &&
           killall node
 
+      - name: Add Native Module
+        # This step is expected to fail, as we sqlite3 contains native code
+        working-directory: src/packages/end-to-end/app
+        id: native-module
+        run: |
+          pnpm add sqlite3
+          pnpm build
+        continue-on-error: true
+
+      - name: Check Native Module Failures
+        # If the native module build succeeds, we want to fail the build as the native module is not supported
+        if: steps.native-module.outcome == 'success'
+        run: exit 1
+
       - uses: actions/upload-artifact@v3
         if: always()
         with:

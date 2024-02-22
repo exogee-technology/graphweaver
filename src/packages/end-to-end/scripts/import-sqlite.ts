@@ -49,8 +49,10 @@ async function main() {
 
 		// Import the database
 		await execAsync('pnpm run import sqlite --database=databases/database.sqlite --o');
+		await execAsync('pnpm build');
 	} catch (error) {
 		console.error('Error:', error);
+		throw error;
 	}
 }
 
