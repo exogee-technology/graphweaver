@@ -38,7 +38,7 @@
 		"prettier": "2.8.8",
 		"ts-jest": "29.0.5",
 		"turbo": "1.10.1",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"pnpm": {
 		"overrides": {

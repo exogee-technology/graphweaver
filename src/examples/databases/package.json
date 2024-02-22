@@ -39,7 +39,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"keywords": [
 		"graphql",

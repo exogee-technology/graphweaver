@@ -1,4 +1,4 @@
-import { join } from 'node:path';
+import { join } from 'path';
 import { merge } from 'lodash';
 
 export interface BackendOptions {

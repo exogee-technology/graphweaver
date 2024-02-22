@@ -46,7 +46,7 @@
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "1.0.1",
 		"glob": "10.3.10",
-		"typescript": "5.0.2",
+		"typescript": "5.3.3",
 		"vite": "4.5.2"
 	},
 	"keywords": [
