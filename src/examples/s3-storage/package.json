@@ -27,8 +27,8 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "5.7.14",
-		"@mikro-orm/postgresql": "5.7.14",
+		"@mikro-orm/core": "6.1.5",
+		"@mikro-orm/postgresql": "6.1.5",
 		"pg": "8.11.1",
 		"reflect-metadata": "0.1.13",
 		"graphql": "16.8.1"

@@ -5,7 +5,6 @@ import {
 	EventSubscriber,
 	FlushEventArgs,
 	Reference,
-	Subscriber,
 } from '@mikro-orm/core';
 
 import { AuditChange, AuditRelatedEntityChange } from '../entities';
@@ -13,7 +12,6 @@ import { AuthenticationContext } from './authentication-context';
 import { TrackedEntity } from './tracked-entity';
 import { isUntrackedProperty } from './untracked-property';
 
-@Subscriber()
 export class ChangeTracker implements EventSubscriber {
 	async afterFlush({ uow, em }: FlushEventArgs): Promise<void> {
 		const changesets = uow
