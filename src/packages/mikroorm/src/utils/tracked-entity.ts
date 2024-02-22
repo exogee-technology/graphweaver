@@ -3,8 +3,8 @@ import { BigIntType, PrimaryKey } from '@mikro-orm/core';
 import { BaseEntity } from '../entities';
 
 export abstract class TrackedEntity<T extends TrackedEntity<T>> extends BaseEntity {
-	@PrimaryKey()
-	id!: bigint;
+	@PrimaryKey({ type: new BigIntType('string') })
+	id!: string;
 
 	get relatedTrackedEntities():
 		| {

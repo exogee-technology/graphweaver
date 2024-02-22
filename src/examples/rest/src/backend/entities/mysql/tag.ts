@@ -5,7 +5,7 @@ import { Task } from './task';
 
 @Entity()
 export class Tag extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })

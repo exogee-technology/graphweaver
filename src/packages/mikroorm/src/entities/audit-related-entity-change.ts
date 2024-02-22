@@ -5,8 +5,8 @@ import { BaseEntity } from './base-entity';
 @Entity()
 @Index({ properties: ['relatedEntityType', 'relatedEntityId'] })
 export class AuditRelatedEntityChange extends BaseEntity {
-	@PrimaryKey()
-	id!: bigint;
+	@PrimaryKey({ type: new BigIntType('string') })
+	id!: string;
 
 	@ManyToOne(() => AuditChange, { deleteRule: 'cascade', ref: true })
 	change!: Ref<AuditChange>;
