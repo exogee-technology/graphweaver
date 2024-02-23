@@ -7,6 +7,16 @@ export const connectToDatabase = (
 	options: ConnectionOptions[] | ConnectionOptions
 ): ApolloServerPlugin => {
 	return {
+		requestDidStart: async () => {
+			return {
+				willSendResponse: async () => {
+					for (const connectionId of connectionIds) {
+						await ConnectionManager.close(connectionId);
+						connectionIds.delete(connectionId);
+					}
+				},
+			};
+		},
 		serverWillStart: async () => {
 			if (Array.isArray(options)) {
 				for (const option of options) {
