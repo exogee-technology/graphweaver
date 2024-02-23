@@ -218,7 +218,6 @@ class DatabaseImplementation {
 			},
 			...params,
 			debug: true,
-			dataloader: DataloaderType.ALL,
 		});
 
 		logger.trace('Creating connection to %s on %s', params.dbName, params.host);

@@ -11,8 +11,8 @@ export const connectToDatabase = (
 			return {
 				willSendResponse: async () => {
 					for (const connectionId of connectionIds) {
-						await ConnectionManager.close(connectionId);
-						connectionIds.delete(connectionId);
+						// await ConnectionManager.close(connectionId);
+						// connectionIds.delete(connectionId);
 					}
 				},
 			};

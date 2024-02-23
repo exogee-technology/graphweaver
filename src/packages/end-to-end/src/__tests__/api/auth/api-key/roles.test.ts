@@ -108,6 +108,7 @@ describe('Role Assignment for API Key Authentication', () => {
 	beforeAll(async () => {
 		await ConnectionManager.connect('InMemory', connection);
 		const database = ConnectionManager.database('InMemory');
+		await database?.orm.connect();
 		await database?.orm.schema.createSchema();
 
 		// Standard working test API Key
