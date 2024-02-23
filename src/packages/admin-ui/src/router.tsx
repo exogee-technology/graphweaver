@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Loader, DefaultLayout, DetailPanel } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Loader,
+	DefaultLayout,
+	DefaultErrorFallback,
+	DetailPanel,
+} from '@exogee/graphweaver-admin-ui-components';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
@@ -10,6 +15,7 @@ const defaultRoutes = [
 	{
 		path: '/',
 		element: <DefaultLayout />,
+		errorElement: <DefaultErrorFallback />,
 		children: [
 			{
 				path: '/',
