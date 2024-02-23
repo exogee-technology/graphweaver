@@ -1,6 +1,10 @@
 import { MySqlDriver } from '@mikro-orm/mysql';
 import { Authentication, Credential, ApiKey, Tag, Task } from './entities';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore test to see if it fixes tests
+MySqlDriver.prototype.getAutoIncrementIncrement = async () => 1;
+
 // Define the database connection
 export const myConnection = {
 	connectionManagerId: 'my-sql',
