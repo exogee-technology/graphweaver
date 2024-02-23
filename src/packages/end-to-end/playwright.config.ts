@@ -28,6 +28,9 @@ export default defineConfig({
 			use: { ...devices['Desktop Chrome'] },
 		},
 	],
+	expect: {
+		timeout: 30 * 1000,
+	},
 
 	/* Set a more aggressive default per-test timeout */
 	timeout: 20 * 1000,

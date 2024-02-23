@@ -5,6 +5,7 @@ import {
 	AnyEntity,
 	Configuration,
 	Connection,
+	DataloaderType,
 	EntityName,
 	IDatabaseDriver,
 	MikroORM,
@@ -216,6 +217,8 @@ class DatabaseImplementation {
 				max: 1,
 			},
 			...params,
+			debug: true,
+			dataloader: DataloaderType.ALL,
 		});
 
 		logger.trace('Creating connection to %s on %s', params.dbName, params.host);
