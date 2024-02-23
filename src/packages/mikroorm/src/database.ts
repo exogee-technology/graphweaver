@@ -219,7 +219,7 @@ class DatabaseImplementation {
 		});
 
 		logger.trace('Creating connection to %s on %s', params.dbName, params.host);
-		// await orm.connect();
+		await orm.connect();
 
 		logger.trace('Caching connection');
 		this.cachedOrm = orm;
