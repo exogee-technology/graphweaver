@@ -5,64 +5,40 @@
       "path": "."
     },
     {
+      "name": "➡️ Example: AWS Cognito",
+      "path": "src/examples/aws-cognito"
+    },
+    {
       "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
     },
     {
-      "name": "➡️ Example: Rest and MySQL Database",
-      "path": "src/examples/rest"
-    },
-    {
-      "name": "➡️ Example: Xero",
-      "path": "src/examples/xero"
+      "name": "➡️ Example: Eventbrite",
+      "path": "src/examples/eventbrite"
     },
     {
       "name": "➡️ Example: Mailchimp",
       "path": "src/examples/mailchimp"
     },
     {
-      "name": "➡️ Example: AWS Cognito",
-      "path": "src/examples/aws-cognito"
+      "name": "➡️ Example: REST API and MySQL Database",
+      "path": "src/examples/rest"
     },
     {
-      "name": "➡️ Example: AWS S3",
+      "name": "➡️ Example: AWS S3 Storage",
       "path": "src/examples/s3-storage"
     },
     {
-      "name": "🤖 graphweaver",
-      "path": "src/packages/cli"
-    },
-    {
-      "name": "📦 @exogee/graphweaver",
-      "path": "src/packages/core"
+      "name": "➡️ Example: Xero",
+      "path": "src/examples/xero"
     },
     {
       "name": "📦 @exogee/graphweaver-admin-ui",
       "path": "src/packages/admin-ui"
     },
     {
-      "name": "📦  @exogee/graphweaver-aws",
-      "path": "src/packages/graphweaver-aws"
-    },
-    {
       "name": "📦 @exogee/graphweaver-admin-ui-components",
       "path": "src/packages/admin-ui-components"
-    },
-    {
-      "name": "📦 @exogee/graphweaver-server",
-      "path": "src/packages/server"
-    },
-    {
-      "name": "📦 @exogee/graphweaver-builder",
-      "path": "src/packages/builder"
-    },
-    {
-      "name": "📦 @exogee/graphweaver-mikroorm",
-      "path": "src/packages/mikroorm"
-    },
-    {
-      "name": "📦 @exogee/graphweaver-rest",
-      "path": "src/packages/rest"
     },
     {
       "name": "📦 @exogee/graphweaver-auth",
@@ -73,24 +49,28 @@
       "path": "src/packages/auth-ui-components"
     },
     {
-      "name": "📦 @exogee/graphweaver-scalars",
-      "path": "src/packages/scalars"
+      "name": "📦 @exogee/graphweaver-builder",
+      "path": "src/packages/builder"
     },
     {
-      "name": "📦 @exogee/graphweaver-xero",
-      "path": "src/packages/xero"
+      "name": "🤖 graphweaver",
+      "path": "src/packages/cli"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-config",
+      "path": "src/packages/config"
+    },
+    {
+      "name": "📦 @exogee/graphweaver",
+      "path": "src/packages/core"
     },
     {
       "name": "📦 @exogee/graphweaver-end-to-end",
       "path": "src/packages/end-to-end"
     },
     {
-      "name": "📦 @exogee/logger",
-      "path": "src/packages/logger"
-    },
-    {
-      "name": "📦 vite-plugin-graphweaver",
-      "path": "src/packages/vite-plugin-graphweaver"
+      "name": "📦 @exogee/graphweaver-aws",
+      "path": "src/packages/graphweaver-aws"
     },
     {
       "name": "📦 @exogee/graphweaver-helpers",
@@ -99,6 +79,38 @@
     {
       "name": "📦 @exogee/graphweaver-storage-provider",
       "path": "src/packages/graphweaver-storage-provider"
+    },
+    {
+      "name": "📦 @exogee/logger",
+      "path": "src/packages/logger"
+    },
+    {
+      "name": "📦 mikro-orm-sqlite-wasm",
+      "path": "src/packages/mikro-orm-sqlite-wasm"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-mikroorm",
+      "path": "src/packages/mikroorm"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-rest",
+      "path": "src/packages/rest"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-scalars",
+      "path": "src/packages/scalars"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-server",
+      "path": "src/packages/server"
+    },
+    {
+      "name": "📦 vite-plugin-graphweaver",
+      "path": "src/packages/vite-plugin-graphweaver"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-xero",
+      "path": "src/packages/xero"
     }
   ],
   "settings": {}
