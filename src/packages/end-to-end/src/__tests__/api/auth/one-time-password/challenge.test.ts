@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, ObjectType, Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Provider, Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -10,10 +10,8 @@ import {
 	createBasePasswordAuthResolver,
 	OneTimePassword,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 const MOCK_CODE = '123456';
 const MOCK_CREATED_AT = new Date();
@@ -57,7 +55,7 @@ class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new Provider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;

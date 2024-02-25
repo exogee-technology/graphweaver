@@ -95,7 +95,12 @@ const user = new UserProfile({
 @Resolver()
 class AuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {
+		connectionManagerId: 'sqlite',
+		mikroOrmConfig: {
+			driver: SqliteDriver,
+		},
+	})
 ) {
 	/**
 	 * Dummy method to simulate a password authentication
