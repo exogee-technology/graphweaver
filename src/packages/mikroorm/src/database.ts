@@ -3,9 +3,7 @@ import './utils/change-tracker';
 
 import {
 	AnyEntity,
-	Configuration,
 	Connection,
-	DataloaderType,
 	EntityName,
 	IDatabaseDriver,
 	MikroORM,
