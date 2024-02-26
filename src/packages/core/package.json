@@ -28,14 +28,14 @@
 		"graphql": "16.8.1",
 		"graphql-parse-resolve-info": "4.13.0",
 		"pluralize": "8.0.0",
-		"reflect-metadata": "0.1.13",
+		"reflect-metadata": "0.2.1",
 		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"keywords": [
 		"graphql",

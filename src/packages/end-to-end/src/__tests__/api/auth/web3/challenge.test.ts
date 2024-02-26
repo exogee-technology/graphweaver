@@ -10,7 +10,6 @@ import {
 	WalletAddress,
 	AuthenticationType,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -19,8 +18,7 @@ import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
 import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { CreateOrUpdateHookParams } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Provider } from '@exogee/graphweaver';
 
 // Setup ethers for signing
 const phrase =
@@ -71,7 +69,7 @@ class AuthResolver extends createBaseWeb3AuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new Provider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;

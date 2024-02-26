@@ -20,7 +20,7 @@ import { ArrayType, BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/
 // Create Entity
 @Entity({ tableName: 'api_key' })
 class OrmApiKey extends BaseEntity implements ApiKeyStorage {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String, fieldName: 'api_key' })
@@ -38,7 +38,7 @@ class OrmApiKey extends BaseEntity implements ApiKeyStorage {
 
 @Entity()
 export class OrmTask extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })

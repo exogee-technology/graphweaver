@@ -4,7 +4,7 @@ import { CredentialStorage } from '@exogee/graphweaver-auth';
 
 @Entity()
 export class Credential extends BaseEntity implements CredentialStorage {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })

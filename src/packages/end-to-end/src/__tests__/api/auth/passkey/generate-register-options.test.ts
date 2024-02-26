@@ -6,7 +6,6 @@ import {
 	PasskeyAuthenticatorDevice,
 	createBasePasswordAuthResolver,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -14,8 +13,7 @@ import assert from 'assert';
 import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
 import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/types';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { CreateOrUpdateHookParams } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, Provider } from '@exogee/graphweaver';
 
 const user = new UserProfile({
 	id: '1',
@@ -67,7 +65,7 @@ class AuthResolver extends createBasePasskeyAuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new Provider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;

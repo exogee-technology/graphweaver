@@ -4,13 +4,13 @@ import type { AuthenticationBaseEntity } from '@exogee/graphweaver-auth';
 
 @Entity()
 export class Authentication<T> extends BaseEntity implements AuthenticationBaseEntity<T> {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
 	type!: string;
 
-	@Property({ type: BigIntType })
+	@Property({ type: new BigIntType('string') })
 	userId!: string;
 
 	@Property({ type: JsonType })

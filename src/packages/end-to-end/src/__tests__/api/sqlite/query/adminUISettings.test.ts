@@ -31,7 +31,7 @@ class OrmAlbum extends BaseEntity {
 
 	@ManyToOne({
 		entity: () => OrmArtist,
-		wrappedReference: true,
+		ref: true,
 		fieldName: 'ArtistId',
 		index: 'IFK_AlbumArtistId',
 	})

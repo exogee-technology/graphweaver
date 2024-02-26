@@ -5,7 +5,7 @@ import { Roles } from '../../auth/roles';
 
 @Entity({ tableName: 'api_key' })
 export class ApiKey extends BaseEntity implements ApiKeyStorage {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String, fieldName: 'api_key' })

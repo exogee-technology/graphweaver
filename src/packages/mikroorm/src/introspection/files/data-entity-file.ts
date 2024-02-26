@@ -31,7 +31,7 @@ import type {
 	NamingStrategy,
 	Platform,
 } from '@mikro-orm/core';
-import { ReferenceType, UnknownType, Utils } from '@mikro-orm/core';
+import { ReferenceKind, UnknownType, Utils } from '@mikro-orm/core';
 import { BaseFile } from './base-file';
 import { DatabaseType } from '../../database';
 import { pascalToKebabCaseString } from '../utils';
@@ -122,7 +122,7 @@ export class DataEntityFile extends BaseFile {
 	protected getPropertyDefinition(prop: EntityProperty): string {
 		const padding = '\t';
 
-		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
+		if ([ReferenceKind.ONE_TO_MANY, ReferenceKind.MANY_TO_MANY].includes(prop.kind)) {
 			this.coreImports.add('Collection');
 			this.entityImports.add(prop.type);
 			return `${padding}${prop.name} = new Collection<${prop.type}>(this);\n`;
@@ -133,10 +133,10 @@ export class DataEntityFile extends BaseFile {
 		const useDefault = prop.default != null && isEnumOrNonStringDefault;
 		const optional = prop.nullable ? '?' : useDefault ? '' : '!';
 
-		if (prop.wrappedReference) {
-			this.coreImports.add('IdentifiedReference');
+		if (prop.ref) {
+			this.coreImports.add('Ref');
 			this.entityImports.add(prop.type);
-			return `${padding}${prop.name}${optional}: IdentifiedReference<${prop.type}>;\n`;
+			return `${padding}${prop.name}${optional}: Ref<${prop.type}>;\n`;
 		}
 
 		if (prop.primary) {
@@ -193,11 +193,11 @@ export class DataEntityFile extends BaseFile {
 		let decorator = this.getDecoratorType(prop);
 		this.coreImports.add(decorator.substring(1));
 
-		if (prop.reference === ReferenceType.MANY_TO_MANY) {
+		if (prop.kind === ReferenceKind.MANY_TO_MANY) {
 			this.getManyToManyDecoratorOptions(options, prop);
-		} else if (prop.reference === ReferenceType.ONE_TO_MANY) {
+		} else if (prop.kind === ReferenceKind.ONE_TO_MANY) {
 			this.getOneToManyDecoratorOptions(options, prop);
-		} else if (prop.reference !== ReferenceType.SCALAR) {
+		} else if (prop.kind !== ReferenceKind.SCALAR) {
 			this.getForeignKeyDecoratorOptions(options, prop);
 		} else {
 			this.getScalarPropertyDecoratorOptions(options, prop);
@@ -225,7 +225,7 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getPropertyIndexes(prop: EntityProperty, options: Dictionary): string[] {
-		if (prop.reference === ReferenceType.SCALAR) {
+		if (prop.kind === ReferenceKind.SCALAR) {
 			const ret: string[] = [];
 
 			if (prop.index) {
@@ -250,7 +250,7 @@ export class DataEntityFile extends BaseFile {
 			options[type] = defaultName === prop[type] ? 'true' : `'${prop[type]}'`;
 			const expected = {
 				index: this.platform.indexForeignKeys(),
-				unique: prop.reference === ReferenceType.ONE_TO_ONE,
+				unique: prop.kind === ReferenceKind.ONE_TO_ONE,
 			};
 
 			if (expected[type] && options[type] === 'true') {
@@ -363,8 +363,8 @@ export class DataEntityFile extends BaseFile {
 		this.entityImports.add(prop.type);
 		options.entity = `() => ${prop.type}`;
 
-		if (prop.wrappedReference) {
-			options.wrappedReference = true;
+		if (prop.ref) {
+			options.ref = true;
 		}
 
 		if (prop.mappedBy) {
@@ -385,19 +385,19 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {
-		if (prop.reference === ReferenceType.ONE_TO_ONE) {
+		if (prop.kind === ReferenceKind.ONE_TO_ONE) {
 			return '@OneToOne';
 		}
 
-		if (prop.reference === ReferenceType.MANY_TO_ONE) {
+		if (prop.kind === ReferenceKind.MANY_TO_ONE) {
 			return '@ManyToOne';
 		}
 
-		if (prop.reference === ReferenceType.ONE_TO_MANY) {
+		if (prop.kind === ReferenceKind.ONE_TO_MANY) {
 			return '@OneToMany';
 		}
 
-		if (prop.reference === ReferenceType.MANY_TO_MANY) {
+		if (prop.kind === ReferenceKind.MANY_TO_MANY) {
 			return '@ManyToMany';
 		}
 

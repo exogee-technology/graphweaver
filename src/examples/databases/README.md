@@ -40,12 +40,12 @@ The todo table is in MySQL and looks like this:
 CREATE DATABASE todo_app;
 
 CREATE TABLE task (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   description VARCHAR(255) NOT NULL,
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  user_id INT NOT NULL
+  user_id BIGINT NOT NULL
 );
 
 -- Seed data for task table
