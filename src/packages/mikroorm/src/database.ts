@@ -215,7 +215,6 @@ class DatabaseImplementation {
 				max: 1,
 			},
 			...params,
-			debug: true,
 		});
 
 		logger.trace('Creating connection to %s on %s', params.dbName, params.host);
