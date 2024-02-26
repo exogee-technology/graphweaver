@@ -43,7 +43,10 @@ export const DefaultErrorFallback = () => {
 				<p>
 					If you are a developer, this is likely a problem in a custom field or page. It could also
 					be a problem in Graphweaver itself. If you believe this is a Graphweaver bug, please{' '}
-					<a href="" target="_blank">
+					<a
+						href="https://github.com/exogee-technology/graphweaver/issues/new/choose"
+						target="_blank"
+					>
 						open a GitHub issue
 					</a>
 					.
