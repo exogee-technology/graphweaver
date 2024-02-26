@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-databases",
-	"version": "0.2.19",
+	"version": "0.2.20",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a MySQL and PostgreSQL database together.",
