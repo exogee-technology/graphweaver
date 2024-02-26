@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-helpers",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"main": "dist/index.js",
 	"scripts": {
 		"preinstall": "echo '\nWARNING: @exogee/graphweaver-helpers is deprecated. See https://docs.graphweaver.com/create-a-data-provider.\n'",
@@ -11,7 +11,8 @@
 		"package:pack": "pnpm pack",
 		"test": "npm run test:format && npm run test:typescript",
 		"test:typescript": "tsc --noEmit",
-		"test:format": "prettier --check ."
+		"test:format": "prettier --check .",
+		"version": "npm version --no-git-tag-version"
 	},
 	"private": true,
 	"license": "UNLICENSED",
