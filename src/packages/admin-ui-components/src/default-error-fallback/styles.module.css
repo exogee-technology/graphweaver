@@ -36,12 +36,15 @@
 }
 
 .headerRow > h2 {
-	color: var(--color-light-red);
 	font-size: 1.2em;
 }
 
 .headerRow > svg > path {
-	fill: var(--color-light-red);
+	fill: var(--body-copy-color);
+}
+
+.copyErrorInfoButton {
+	margin: auto;
 }
 
 .footer {

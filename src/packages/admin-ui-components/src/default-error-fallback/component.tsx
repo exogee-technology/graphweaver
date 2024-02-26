@@ -1,10 +1,14 @@
+import { useState } from 'react';
 import { Link, useRouteError } from 'react-router-dom';
-import { GraphweaverLogo, Spacer } from '..';
+import { Button, GraphweaverLogo, Spacer } from '..';
 import { ErrorIcon } from '../assets';
 import styles from './styles.module.css';
 
+const originalButtonText = 'Copy Error Information to Clipboard';
+
 export const DefaultErrorFallback = () => {
 	const error = useRouteError();
+	const [showingCopied, setShowingCopied] = useState(false);
 
 	// Ensure we log the error to the console so the developer can see it.
 	console.error(error);
@@ -12,6 +16,8 @@ export const DefaultErrorFallback = () => {
 	return (
 		<div className={styles.wrapper}>
 			<div className={styles.errorBox}>
+				<Spacer height={20} />
+
 				<Link to="/" className={styles.logoWrapper}>
 					<GraphweaverLogo width="52" />
 				</Link>
@@ -42,6 +48,20 @@ export const DefaultErrorFallback = () => {
 					</a>
 					.
 				</p>
+				<Spacer height={40} />
+				<Button
+					onClick={() => {
+						navigator.clipboard.writeText(
+							JSON.stringify(error, Object.getOwnPropertyNames(error), 4)
+						);
+						setShowingCopied(true);
+						setTimeout(() => setShowingCopied(false), 2000);
+					}}
+					className={styles.copyErrorInfoButton}
+				>
+					{showingCopied ? 'Copied!' : originalButtonText}
+				</Button>
+				<Spacer height={20} />
 			</div>
 			<Spacer height={30} />
 
