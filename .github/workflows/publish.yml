@@ -45,6 +45,6 @@ jobs:
 
       # Publish version to public repository
       - name: Publish package on NPM 📦
-        run: pnpm -r publish --no-bail --no-git-checks --access=public
+        run: pnpm -r --no-bail publish --no-git-checks --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
