@@ -463,6 +463,58 @@ importers:
         specifier: 5.3.3
         version: 5.3.3
 
+  examples/sqlite:
+    dependencies:
+      '@as-integrations/aws-lambda':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.9.3)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@mikro-orm/core':
+        specifier: 6.1.5
+        version: 6.1.5
+      '@mikro-orm/knex':
+        specifier: 6.1.5
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
+      '@mikro-orm/sqlite':
+        specifier: 6.1.5
+        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      mikro-orm-sqlite-wasm:
+        specifier: workspace:*
+        version: link:../../packages/mikro-orm-sqlite-wasm
+      node-sqlite3-wasm:
+        specifier: 0.6.9
+        version: 0.6.9
+      reflect-metadata:
+        specifier: 0.1.13
+        version: 0.1.13
+      type-graphql:
+        specifier: 2.0.0-beta.2
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+    devDependencies:
+      '@types/node':
+        specifier: 20.2.5
+        version: 20.2.5
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      typescript:
+        specifier: 5.0.2
+        version: 5.0.2
+
   examples/xero:
     dependencies:
       '@apollo/client':
@@ -17530,6 +17582,10 @@ packages:
       resolve: 1.22.8
     dev: false
 
+  /reflect-metadata@0.1.13:
+    resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
+    dev: false
+
   /reflect-metadata@0.2.1:
     resolution: {integrity: sha512-i5lLI6iw9AU3Uu4szRNPPEkomnkjRTaVt9hy/bn5g/oSzekBSMeLZblcjP74AW0vBabqERLLIrz+gR8QYR54Tw==}
 
@@ -19298,6 +19354,12 @@ packages:
       for-each: 0.3.3
       is-typed-array: 1.1.13
     dev: false
+
+  /typescript@5.0.2:
+    resolution: {integrity: sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==}
+    engines: {node: '>=12.20'}
+    hasBin: true
+    dev: true
 
   /typescript@5.0.4:
     resolution: {integrity: sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==}
