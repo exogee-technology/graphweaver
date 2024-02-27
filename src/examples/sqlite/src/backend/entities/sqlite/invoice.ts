@@ -43,6 +43,7 @@ export class Invoice extends BaseEntity {
 	billingPostalCode?: string;
 
 	@Property({ fieldName: 'Total', type: 'NUMERIC(10,2)' })
+	// Mikro-orm serializes this as a string for precision, but it's a number in the database
 	total!: string;
 
 	@OneToMany({ entity: () => InvoiceLine, mappedBy: 'invoice' })

@@ -33,6 +33,7 @@ export class Invoice extends GraphQLEntity<OrmInvoice> {
 	billingPostalCode?: string;
 
 	@Field(() => String)
+	// This as a string for precision, but it's a number in the database
 	total!: string;
 
 	@RelationshipField<InvoiceLine>(() => [InvoiceLine], { relatedField: 'invoice' })

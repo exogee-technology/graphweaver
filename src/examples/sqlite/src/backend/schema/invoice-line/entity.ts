@@ -17,6 +17,7 @@ export class InvoiceLine extends GraphQLEntity<OrmInvoiceLine> {
 	track!: Track;
 
 	@Field(() => String)
+	// This as a string for precision, but it's a number in the database
 	unitPrice!: string;
 
 	@Field(() => Number)

@@ -43,6 +43,7 @@ export class Track extends GraphQLEntity<OrmTrack> {
 	bytes?: number;
 
 	@Field(() => String)
+	// This as a string for precision, but it's a number in the database
 	unitPrice!: string;
 
 	@RelationshipField<InvoiceLine>(() => [InvoiceLine], { relatedField: 'track' })
