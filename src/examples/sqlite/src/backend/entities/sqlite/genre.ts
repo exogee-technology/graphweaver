@@ -8,7 +8,7 @@ export class Genre extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: unknown;
+	name?: string;
 
 	@OneToMany({ entity: () => Track, mappedBy: 'genre' })
 	tracks = new Collection<Track>(this);

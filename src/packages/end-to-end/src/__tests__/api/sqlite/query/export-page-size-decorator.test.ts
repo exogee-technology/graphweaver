@@ -25,7 +25,7 @@ class OrmAlbum extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Title', type: 'NVARCHAR(160)' })
-	title!: unknown;
+	title!: string;
 }
 
 @Entity({ tableName: 'Artist' })
@@ -34,7 +34,7 @@ class OrmArtist extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: unknown;
+	name?: string;
 }
 
 @ExportPageSize(500)

@@ -24,37 +24,37 @@ export class OrmCustomer extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'FirstName', type: 'NVARCHAR(40)' })
-	firstName!: unknown;
+	firstName!: string;
 
 	@Property({ fieldName: 'LastName', type: 'NVARCHAR(20)' })
-	lastName!: unknown;
+	lastName!: string;
 
 	@Property({ fieldName: 'Company', type: 'NVARCHAR(80)', nullable: true })
-	company?: unknown;
+	company?: string;
 
 	@Property({ fieldName: 'Address', type: 'NVARCHAR(70)', nullable: true })
-	address?: unknown;
+	address?: string;
 
 	@Property({ fieldName: 'City', type: 'NVARCHAR(40)', nullable: true })
-	city?: unknown;
+	city?: string;
 
 	@Property({ fieldName: 'State', type: 'NVARCHAR(40)', nullable: true })
-	state?: unknown;
+	state?: string;
 
 	@Property({ fieldName: 'Country', type: 'NVARCHAR(40)', nullable: true })
-	country?: unknown;
+	country?: string;
 
 	@Property({ fieldName: 'PostalCode', type: 'NVARCHAR(10)', nullable: true })
-	postalCode?: unknown;
+	postalCode?: string;
 
 	@Property({ fieldName: 'Phone', type: 'NVARCHAR(24)', nullable: true })
-	phone?: unknown;
+	phone?: string;
 
 	@Property({ fieldName: 'Fax', type: 'NVARCHAR(24)', nullable: true })
-	fax?: unknown;
+	fax?: string;
 
 	@Property({ fieldName: 'Email', type: 'NVARCHAR(60)' })
-	email!: unknown;
+	email!: string;
 }
 
 @ObjectType('Customer')
