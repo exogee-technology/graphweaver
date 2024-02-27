@@ -9,8 +9,8 @@
       "path": "src/examples/aws-cognito"
     },
     {
-      "name": "➡️ Example: MySQL and PostgreSQL Databases",
-      "path": "src/examples/databases"
+      "name": "➡️ Example: AWS S3 Storage",
+      "path": "src/examples/s3-storage"
     },
     {
       "name": "➡️ Example: Eventbrite",
@@ -21,12 +21,16 @@
       "path": "src/examples/mailchimp"
     },
     {
+      "name": "➡️ Example: MySQL and PostgreSQL Databases",
+      "path": "src/examples/databases"
+    },
+    {
       "name": "➡️ Example: REST API and MySQL Database",
       "path": "src/examples/rest"
     },
     {
-      "name": "➡️ Example: AWS S3 Storage",
-      "path": "src/examples/s3-storage"
+      "name": "➡️ Example: SQLite Database",
+      "path": "src/examples/sqlite"
     },
     {
       "name": "➡️ Example: Xero",
