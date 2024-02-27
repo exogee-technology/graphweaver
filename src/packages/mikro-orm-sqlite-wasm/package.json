@@ -1,6 +1,6 @@
 {
 	"name": "mikro-orm-sqlite-wasm",
-	"version": "0.2.19",
+	"version": "0.2.20",
 	"description": "MikroORM SQLite Driver Wasm",
 	"license": "MIT",
 	"scripts": {
