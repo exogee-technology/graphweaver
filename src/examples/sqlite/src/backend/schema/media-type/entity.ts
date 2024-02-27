@@ -1,4 +1,11 @@
-import { Field, GraphQLEntity, ID, ObjectType, RelationshipField, SummaryField } from '@exogee/graphweaver';
+import {
+	Field,
+	GraphQLEntity,
+	ID,
+	ObjectType,
+	RelationshipField,
+	SummaryField,
+} from '@exogee/graphweaver';
 import { Track } from '../track';
 import { MediaType as OrmMediaType } from '../../entities';
 

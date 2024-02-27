@@ -1,4 +1,11 @@
-import { Field, GraphQLEntity, ID, ObjectType, RelationshipField, SummaryField } from '@exogee/graphweaver';
+import {
+	Field,
+	GraphQLEntity,
+	ID,
+	ObjectType,
+	RelationshipField,
+	SummaryField,
+} from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { Customer } from '../customer';
 import { Employee as OrmEmployee } from '../../entities';
@@ -20,7 +27,10 @@ export class Employee extends GraphQLEntity<OrmEmployee> {
 	@Field(() => String, { nullable: true })
 	title?: string;
 
-	@RelationshipField<Employee>(() => Employee, { id: (entity) => entity.employee?.id, nullable: true })
+	@RelationshipField<Employee>(() => Employee, {
+		id: (entity) => entity.employee?.id,
+		nullable: true,
+	})
 	employee?: Employee;
 
 	@Field(() => ISODateStringScalar, { nullable: true })

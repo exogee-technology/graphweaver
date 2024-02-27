@@ -1,4 +1,12 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import {
+	Collection,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryKey,
+	Property,
+	Ref,
+} from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Customer } from './customer';
 
@@ -16,7 +24,13 @@ export class Employee extends BaseEntity {
 	@Property({ fieldName: 'Title', type: 'NVARCHAR(30)', nullable: true })
 	title?: unknown;
 
-	@ManyToOne({ entity: () => Employee, ref: true, fieldName: 'ReportsTo', nullable: true, index: 'IFK_EmployeeReportsTo' })
+	@ManyToOne({
+		entity: () => Employee,
+		ref: true,
+		fieldName: 'ReportsTo',
+		nullable: true,
+		index: 'IFK_EmployeeReportsTo',
+	})
 	employee?: Ref<Employee>;
 
 	@Property({ fieldName: 'BirthDate', type: 'Date', nullable: true })

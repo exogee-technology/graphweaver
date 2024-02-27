@@ -1,4 +1,11 @@
-import { Field, GraphQLEntity, ID, ObjectType, RelationshipField, SummaryField } from '@exogee/graphweaver';
+import {
+	Field,
+	GraphQLEntity,
+	ID,
+	ObjectType,
+	RelationshipField,
+	SummaryField,
+} from '@exogee/graphweaver';
 import { Album } from '../album';
 import { Artist as OrmArtist } from '../../entities';
 
