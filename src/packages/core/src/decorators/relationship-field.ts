@@ -5,7 +5,6 @@ import { BaseLoaders } from '../base-loader';
 import {
 	BaseContext,
 	BaseDataEntity,
-	EntityMetadataMap,
 	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
@@ -15,7 +14,7 @@ import {
 	hookManagerMap,
 } from '..';
 import { TypeMap } from '../common/types';
-import pluralize from 'pluralize';
+import { getMetadataForEntity } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
@@ -55,13 +54,16 @@ export function RelationshipField<
 			returnTypeFunc,
 			typeOptions: { nullable },
 		});
+
 		const getRelatedType = () => {
 			const relatedEntityType = getType() as GraphQLEntityConstructor<G, D>;
 			const typeName = relatedEntityType.name;
 			const objectTypeName = (metadata.objectTypes as ObjectClassMetadata[]).find(
 				(objectType: ObjectClassMetadata) => objectType.target?.name === typeName
 			)?.name;
-			return TypeMap[`${pluralize(objectTypeName || typeName)}ListFilter`];
+			const entityMetadata = getMetadataForEntity(objectTypeName || typeName);
+
+			return TypeMap[`${entityMetadata.plural}ListFilter`];
 		};
 
 		// next we need to add the below function as a field resolver

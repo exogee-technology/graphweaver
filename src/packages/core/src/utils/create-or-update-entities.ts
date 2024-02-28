@@ -6,7 +6,6 @@ import {
 	BaseContext,
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
-	EntityMetadataMap,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphqlEntityType,
@@ -14,6 +13,7 @@ import {
 	WithId,
 	hookManagerMap,
 } from '..';
+import { getMetadataForEntity } from '../metadata';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -25,15 +25,6 @@ const isLinking = <G>(node: Partial<G> | Partial<G>[]) =>
 // Used to check if we have only {id: ''} object
 const isIdOnly = <G>(node: Partial<G>) =>
 	('id' in node && node.id && Object.keys(node).length === 1) ?? false;
-
-// Get the meta data for this entity and error check
-const getMeta = (name: string) => {
-	const meta = EntityMetadataMap.get(name);
-	if (!meta) {
-		throw new Error(`Unexpected Error: entity not found in metadata map`);
-	}
-	return meta;
-};
 
 // Determine the name of the mutation that we should call
 const getMutationName = <G extends WithId>(
@@ -98,7 +89,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const meta = getMeta(entityTypeName);
+	const meta = getMetadataForEntity(entityTypeName);
 	const gqlEntityType: GraphqlEntityType<G, D> = meta.entity.target;
 
 	if (Array.isArray(input)) {
@@ -151,7 +142,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = getMeta(relatedEntity.name);
+					const childMeta = getMetadataForEntity(relatedEntity.name);
 					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
 					if (!parentField) {
 						throw new Error(

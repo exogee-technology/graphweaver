@@ -1,5 +1,4 @@
 import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
-import pluralize from 'pluralize';
 import {
 	Arg,
 	Ctx,
@@ -14,10 +13,8 @@ import {
 	Resolver,
 } from 'type-graphql';
 import { TypeValue } from 'type-graphql/dist/decorators/types';
-import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
-import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 
-import { BaseDataEntity, GraphQLEntity } from '.';
+import { BaseDataEntity } from '.';
 import type {
 	BackendProvider,
 	CreateOrUpdateHookParams,
@@ -41,21 +38,19 @@ import {
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
+import { pluralise } from './utils/plural';
+import { BaseResolverMetadataEntry, EntityMetadataMap, getMetadataForEntity } from './metadata';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
 const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
-export const EntityMetadataMap = new Map<string, BaseResolverMetadataEntry<any>>();
 export const hookManagerMap = new Map<string, HookManager<any>>([]);
 
-export interface BaseResolverMetadataEntry<D extends BaseDataEntity> {
-	provider: BackendProvider<D, GraphQLEntity<D>>;
-	entity: ObjectClassMetadata;
-	fields: FieldMetadata[];
-	enums: EnumMetadata[];
-}
+export type CreateBaseResolverOptions = {
+	plural?: string;
+};
 
 export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue) {
 	scalarTypes.set(scalarType, treatAsType);
@@ -98,10 +93,12 @@ class GetOneInputArgs extends BaseGetOneInputArgs {}
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>
+	provider: BackendProvider<D, G>,
+	options: CreateBaseResolverOptions = {}
 ): abstract new (
 	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>
+	provider: BackendProvider<D, G>,
+	options: CreateBaseResolverOptions
 ) => BaseResolverInterface {
 	const metadata = getMetadataStorage();
 	const objectNames = metadata.objectTypes.filter(
@@ -114,7 +111,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	const gqlEntityTypeName = objectNames[0].name;
-	const plural = pluralize(gqlEntityTypeName);
+	const plural = options.plural ?? pluralise(gqlEntityTypeName);
 	const transactional = !!provider.withTransaction;
 
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
@@ -125,6 +122,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		entity: objectNames[0],
 		fields: entityFields,
 		enums: metadata.enums,
+		plural,
 	};
 
 	EntityMetadataMap.set(objectNames[0].name, entityMetadata);
@@ -171,10 +169,11 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
+			const entityMetadata = getMetadataForEntity(typeName);
 
 			// If it doesn't have a name it might be an enum or similar.
 			return typeName
-				? TypeMap[`${pluralize(typeName)}ListFilter`] || field.getType()
+				? TypeMap[`${entityMetadata.plural}ListFilter`] || field.getType()
 				: field.getType();
 		};
 
@@ -246,10 +245,11 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated FilterInput class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
+			const entityMetadata = getMetadataForEntity(typeName);
 
 			// If it doesn't have a name it might be an enum or similar.
 			return typeName
-				? TypeMap[`${pluralize(typeName)}FilterInput`] || field.getType()
+				? TypeMap[`${entityMetadata.plural}FilterInput`] || field.getType()
 				: field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
@@ -451,9 +451,11 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
+			const entityMetadata = getMetadataForEntity(typeName);
+
 			// If it doesn't have a name it might be an enum or similar.
 			return typeName
-				? TypeMap[`${pluralize(typeName)}CreateOrUpdateInput`] || field.getType()
+				? TypeMap[`${entityMetadata.plural}CreateOrUpdateInput`] || field.getType()
 				: field.getType();
 		};
 
@@ -496,9 +498,11 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
+			const entityMetadata = getMetadataForEntity(typeName);
+
 			// If it doesn't have a name it might be an enum or similar.
 			return typeName
-				? TypeMap[`${pluralize(typeName)}CreateOrUpdateInput`] || field.getType()
+				? TypeMap[`${entityMetadata.plural}CreateOrUpdateInput`] || field.getType()
 				: field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
