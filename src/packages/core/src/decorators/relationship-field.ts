@@ -1,10 +1,11 @@
-import { getMetadataStorage } from 'type-graphql';
+import { Field, InputType, getMetadataStorage } from 'type-graphql';
 import { findType } from 'type-graphql/dist/helpers/findType';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 import { BaseLoaders } from '../base-loader';
 import {
 	BaseContext,
 	BaseDataEntity,
+	FieldMetadata,
 	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
@@ -30,6 +31,44 @@ type TypeValue = ClassType<GraphQLEntity<BaseDataEntity>>;
 type ReturnTypeFuncValue = TypeValue | RecursiveArray<TypeValue>;
 type ReturnTypeFunc = () => ReturnTypeFuncValue;
 
+export const addChildFilter = (entityName: string, field: FieldMetadata) => {
+	const entity = graphweaverMetadata.getEntity(entityName);
+	const relatedType = field.getType() as { name?: string };
+
+	if (!relatedType.name) return;
+
+	const relatedEntity = graphweaverMetadata.hasEntity(relatedType.name || '')
+		? graphweaverMetadata.getEntity(relatedType.name)
+		: undefined;
+
+	if (relatedEntity?.provider.backendProviderConfig?.filter?.childByChild) {
+		// add the child filter to the related field
+		const metadata = getMetadataStorage();
+
+		// Create filter arg for all relationship fields - we filter these by data provider support in the apollo package
+		metadata.collectHandlerParamMetadata({
+			kind: 'arg',
+			target: entity.target,
+			methodName: field.name,
+			index: 3,
+			name: 'filter',
+			description: 'Filter the related entities',
+			deprecationReason: undefined,
+			getType: () => TypeMap[`${relatedEntity.plural}ListFilter`],
+			typeOptions: { nullable: true },
+			validate: undefined,
+		});
+	}
+};
+
+export const addChildFiltersToRelatedFields = () => {
+	for (const entity of graphweaverMetadata.entities) {
+		for (const field of entity.fields) {
+			addChildFilter(entity.name, field);
+		}
+	}
+};
+
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
 	D extends BaseDataEntity = G['dataEntity']
@@ -54,17 +93,6 @@ export function RelationshipField<
 			returnTypeFunc,
 			typeOptions: { nullable },
 		});
-
-		const getRelatedType = () => {
-			const relatedEntityType = getType() as GraphQLEntityConstructor<G, D>;
-			const typeName = relatedEntityType.name;
-			const objectTypeName = (metadata.objectTypes as ObjectClassMetadata[]).find(
-				(objectType: ObjectClassMetadata) => objectType.target?.name === typeName
-			)?.name;
-			const entityMetadata = graphweaverMetadata.getEntity(objectTypeName || typeName);
-
-			return TypeMap[`${entityMetadata.plural}ListFilter`];
-		};
 
 		// next we need to add the below function as a field resolver
 		metadata.collectClassFieldMetadata({
@@ -109,20 +137,6 @@ export function RelationshipField<
 			methodName: key,
 			index: 2,
 			propertyName: undefined,
-		});
-
-		// Create filter arg for all relationship fields - we filter these by data provider support in the apollo package
-		metadata.collectHandlerParamMetadata({
-			kind: 'arg',
-			target: target.constructor,
-			methodName: key,
-			index: 3,
-			name: 'filter',
-			description: 'Filter the related entities',
-			deprecationReason: undefined,
-			getType: getRelatedType,
-			typeOptions: { nullable: true },
-			validate: undefined,
 		});
 
 		// we then declare the field resolver for this field:

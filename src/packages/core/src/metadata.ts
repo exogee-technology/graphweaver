@@ -1,7 +1,9 @@
+import { getMetadataStorage } from 'type-graphql';
 import { FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
+import { MetadataStorage } from 'type-graphql/dist/metadata/metadata-storage';
 
-import { BaseDataEntity, GraphQLEntity, getMetadataStorage } from '.';
+import { BaseDataEntity, GraphQLEntity } from '.';
 import { BackendProvider } from './common/types';
 
 export interface BaseResolverMetadataEntry<D extends BaseDataEntity> extends ObjectClassMetadata {
@@ -13,7 +15,11 @@ export interface BaseResolverMetadataEntry<D extends BaseDataEntity> extends Obj
 
 class Metadata {
 	private entityMap = new Map<string, BaseResolverMetadataEntry<any>>();
-	private typeGraphQLMetadata = getMetadataStorage();
+	private typeGraphQLMetadata: MetadataStorage;
+
+	constructor() {
+		this.typeGraphQLMetadata = getMetadataStorage();
+	}
 
 	// get the metadata for a specific entity
 	public getEntity(name: string) {
