@@ -9,8 +9,7 @@ import {
 	getExportPageSize,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
-import { Ctx, getMetadataStorage, Query, Resolver } from 'type-graphql';
-import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
+import { Ctx, Query, Resolver } from 'type-graphql';
 import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
 import { AdminUiMetadata } from './metadata';
 import { AdminUiFieldMetadata } from './field';
@@ -18,14 +17,14 @@ import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { AdminMetadata } from '..';
 
-const mapFilterType = (field: AdminUiFieldMetadata, enums: EnumMetadata[]): AdminUIFilterType => {
+const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
 	if (field.relationshipType) {
 		return AdminUIFilterType.RELATIONSHIP;
 	}
 
 	// Check if we have an enum
-	const isEnum = enums.find((value) => value.name === field.type);
+	const isEnum = graphweaverMetadata.enums.find((value) => value.name === field.type);
 	if (isEnum) return AdminUIFilterType.ENUM;
 
 	// Otherwise check the type
@@ -52,10 +51,8 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 		public async getAdminUiMetadata<C extends BaseContext>(@Ctx() context: C) {
 			await hooks?.beforeRead?.({ context });
 
-			const metadata = getMetadataStorage();
-
 			const enumMetadata = new Map<object, EnumMetadata>();
-			for (const registeredEnum of metadata.enums) {
+			for (const registeredEnum of graphweaverMetadata.enums) {
 				enumMetadata.set(registeredEnum.enumObj, registeredEnum);
 			}
 
@@ -130,7 +127,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						fieldObject.filter = adminUISettings?.fields?.[field.name]?.hideFromFilterBar
 							? undefined
 							: {
-									type: mapFilterType(fieldObject, metadata.enums),
+									type: mapFilterType(fieldObject),
 							  };
 
 						return fieldObject;
@@ -147,7 +144,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 				})
 				.filter((entity) => entity && !!entity.backendId);
 
-			const enums = metadata.enums.map((registeredEnum) => ({
+			const enums = graphweaverMetadata.enums.map((registeredEnum) => ({
 				name: registeredEnum.name,
 				values: Object.entries(registeredEnum.enumObj).map(([name, value]) => ({
 					name,

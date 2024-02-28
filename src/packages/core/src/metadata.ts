@@ -1,4 +1,4 @@
-import { EnumMetadata, FieldMetadata } from 'type-graphql/dist/metadata/definitions';
+import { FieldMetadata } from 'type-graphql/dist/metadata/definitions';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
 
 import { BaseDataEntity, GraphQLEntity, getMetadataStorage } from '.';
@@ -13,6 +13,7 @@ export interface BaseResolverMetadataEntry<D extends BaseDataEntity> extends Obj
 
 class Metadata {
 	private entityMap = new Map<string, BaseResolverMetadataEntry<any>>();
+	private typeGraphQLMetadata = getMetadataStorage();
 
 	// get the metadata for a specific entity
 	public getEntity(name: string) {
@@ -41,6 +42,10 @@ class Metadata {
 	// get a list of all the entity metadata in the metadata map
 	public get entities() {
 		return Array.from(this.entityMap.values());
+	}
+
+	public get enums() {
+		return this.typeGraphQLMetadata.enums;
 	}
 }
 
