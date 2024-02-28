@@ -1,15 +1,13 @@
-name: action-jira-linker-and-linter
+name: action-jira-linker
 on: [pull_request]
 
 jobs:
-  action-jira-linter:
+  action-jira-linker:
     runs-on: ubuntu-latest
     steps:
-      - uses: btwrk/action-jira-linter@v1.0.1
+      - uses: exogee-technology/action-jira-linker
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-user: ${{ secrets.JIRA_USER }}
           jira-base-url: https://exogee.atlassian.net
-          skip-branches: "^(production|master|main|staging|development)$"
-          skip-comments: true
