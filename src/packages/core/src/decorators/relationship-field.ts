@@ -14,7 +14,7 @@ import {
 	hookManagerMap,
 } from '..';
 import { TypeMap } from '../common/types';
-import { getMetadataForEntity } from '../metadata';
+import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
@@ -61,7 +61,7 @@ export function RelationshipField<
 			const objectTypeName = (metadata.objectTypes as ObjectClassMetadata[]).find(
 				(objectType: ObjectClassMetadata) => objectType.target?.name === typeName
 			)?.name;
-			const entityMetadata = getMetadataForEntity(objectTypeName || typeName);
+			const entityMetadata = graphweaverMetadata.getEntity(objectTypeName || typeName);
 
 			return TypeMap[`${entityMetadata.plural}ListFilter`];
 		};

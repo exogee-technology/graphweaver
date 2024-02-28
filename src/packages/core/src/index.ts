@@ -6,4 +6,6 @@ export * from './hook-manager';
 export * from './common/types';
 export * from './decorators';
 export * from './utils/create-or-update-entities';
+export * from './utils/plural';
+export * from './metadata';
 export * from 'type-graphql';

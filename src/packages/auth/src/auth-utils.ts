@@ -3,7 +3,6 @@ import { ForbiddenError } from 'apollo-server-errors';
 
 import {
 	AccessControlList,
-	AccessControlValue,
 	AccessType,
 	AuthorizationContext,
 	ConsolidatedAccessControlEntry,
@@ -18,10 +17,10 @@ import {
 } from './helper-functions';
 import {
 	BaseDataEntity,
-	EntityMetadataMap,
 	Filter,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
+	graphweaverMetadata,
 } from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
@@ -183,7 +182,7 @@ export async function checkEntityPermission<
 	};
 
 	try {
-		const { provider } = EntityMetadataMap.get(entityName) ?? {};
+		const { provider } = graphweaverMetadata.getEntity(entityName) ?? {};
 		const result = await provider?.findOne(where);
 		if (!result) {
 			logger.trace('Raising ForbiddenError: User is not allowed to access this record');
@@ -209,7 +208,7 @@ export async function checkAuthorization<
 ) {
 	// Get ACL first
 	const acl = getACL(entityName);
-	const meta = EntityMetadataMap.get(entityName);
+	const meta = graphweaverMetadata.getEntity(entityName);
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters

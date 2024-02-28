@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { ApolloCache, TypePolicy, useQuery } from '@apollo/client';
 import { SCHEMA_QUERY } from './graphql';
-import pluralize from 'pluralize';
 import { PanelMode } from '../detail-panel';
 
 export interface Schema {
@@ -18,6 +17,7 @@ export interface Enum {
 }
 export interface Entity {
 	name: string;
+	plural: string;
 	backendId: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
@@ -133,7 +133,8 @@ const generateTypePolicyFields = (entityMap: EntityMap) => {
 	};
 
 	const mapEntityToPolicy = (entity: Entity) => ({
-		[pluralize(entity.name).toLowerCase()]: policy,
+		// @todo why is this being lowercased?
+		[entity.plural.toLowerCase()]: policy,
 	});
 
 	return {

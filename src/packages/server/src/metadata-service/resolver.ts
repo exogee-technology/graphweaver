@@ -1,5 +1,4 @@
 import {
-	EntityMetadataMap,
 	isSummaryField,
 	isReadOnlyAdminUI,
 	isReadOnlyPropertyAdminUI,
@@ -8,6 +7,7 @@ import {
 	RelationshipType,
 	BaseContext,
 	getExportPageSize,
+	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { Ctx, getMetadataStorage, Query, Resolver } from 'type-graphql';
 import { ObjectClassMetadata } from 'type-graphql/dist/metadata/definitions/object-class-metdata';
@@ -51,22 +51,17 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 		@Query(() => AdminUiMetadata, { name: '_graphweaver' })
 		public async getAdminUiMetadata<C extends BaseContext>(@Ctx() context: C) {
 			await hooks?.beforeRead?.({ context });
-			const metadata = getMetadataStorage();
 
-			// Build some lookups for more efficient data locating later.
-			const objectTypeData: { [entityName: string]: ObjectClassMetadata } = {};
-			for (const objectType of metadata.objectTypes) {
-				objectTypeData[objectType.target.name] = objectType;
-			}
+			const metadata = getMetadataStorage();
 
 			const enumMetadata = new Map<object, EnumMetadata>();
 			for (const registeredEnum of metadata.enums) {
 				enumMetadata.set(registeredEnum.enumObj, registeredEnum);
 			}
 
-			const entities: (AdminUiEntityMetadata | undefined)[] = metadata.objectTypes
-				.map((objectType) => {
-					const name = objectType.name;
+			const entities: (AdminUiEntityMetadata | undefined)[] = graphweaverMetadata.entities
+				.map((entity) => {
+					const name = entity.name;
 					const adminUISettings = AdminUISettingsMap.get(name);
 					const defaultFilter = adminUISettings?.entity?.defaultFilter;
 
@@ -74,31 +69,37 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						return;
 					}
 
-					// Here we get data from the EntityMetadataMap
-					const backendId = EntityMetadataMap.get(name)?.provider?.backendId ?? null;
-					const summaryField = objectType.fields?.find((field) =>
-						isSummaryField(objectType.target, field.name)
+					const backendId = entity.provider?.backendId;
+					const plural = entity.plural;
+
+					const visibleFields = entity.fields.filter(
+						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay
+					);
+
+					const summaryField = visibleFields.find((field) =>
+						isSummaryField(entity.target, field.name)
 					)?.name;
+
 					const attributes = new AdminUiEntityAttributeMetadata();
-					if (isReadOnlyAdminUI(objectType.target)) {
+					if (isReadOnlyAdminUI(entity.target)) {
 						attributes.isReadOnly = true;
 					}
-					const exportPageSize = getExportPageSize(objectType.target);
+
+					const exportPageSize = getExportPageSize(entity.target);
 					if (exportPageSize) {
 						attributes.exportPageSize = exportPageSize;
 					}
-					const visibleFields = objectType.fields?.filter(
-						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay
-					);
 
 					const fields = visibleFields?.map((field) => {
 						const typeValue = field.getType() as any;
 						const typeName = typeValue.name ?? enumMetadata.get(typeValue)?.name;
 
-						const relatedObject = objectTypeData[typeName];
+						const relatedObject = graphweaverMetadata.hasEntity(typeName)
+							? graphweaverMetadata.getEntity(typeName)
+							: undefined;
 
 						// Define field attributes
-						const isReadOnly = isReadOnlyPropertyAdminUI(objectType.target, field.name);
+						const isReadOnly = isReadOnlyPropertyAdminUI(entity.target, field.name);
 						const isRequired = !field.typeOptions.nullable;
 
 						const fieldObject: AdminUiFieldMetadata = {
@@ -113,9 +114,9 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 						};
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
-							const relatedEntity = relatedObject.fields?.find((field) => {
+							const relatedEntity = relatedObject.fields.find((field) => {
 								const fieldType = field.getType() as any;
-								return fieldType.name === objectType.target.name;
+								return fieldType.name === entity.target.name;
 							});
 							if (relatedEntity?.typeOptions) {
 								fieldObject.relationshipType = relatedEntity.typeOptions.array
@@ -136,6 +137,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					});
 					return {
 						name,
+						plural,
 						defaultFilter,
 						backendId,
 						summaryField,

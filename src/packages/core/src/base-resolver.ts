@@ -39,7 +39,7 @@ import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
 import { pluralise } from './utils/plural';
-import { BaseResolverMetadataEntry, EntityMetadataMap, getMetadataForEntity } from './metadata';
+import { BaseResolverMetadataEntry, graphweaverMetadata } from './metadata';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -118,14 +118,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
 	const entityMetadata: BaseResolverMetadataEntry<D> = {
-		provider,
-		entity: objectNames[0],
-		fields: entityFields,
-		enums: metadata.enums,
 		plural,
+		provider,
+		...objectNames[0],
+		fields: entityFields,
 	};
 
-	EntityMetadataMap.set(objectNames[0].name, entityMetadata);
+	graphweaverMetadata.setEntity(entityMetadata.name, entityMetadata);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -152,7 +151,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 	TypeMap[`${plural}ListFilter`] = ListInputFilterArgs;
 
-	for (const field of entityFields) {
+	for (const field of entityMetadata.fields) {
 		// We can explicitly exclude a field from filtering with a decorator.
 		if (isExcludedFromFilterType(field.target, field.name)) {
 			continue;
@@ -169,12 +168,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
-			const entityMetadata = getMetadataForEntity(typeName);
+
+			if (graphweaverMetadata.hasEntity(typeName)) {
+				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
+				const inputTypeName = `${pluralName}ListFilter`;
+				return TypeMap[inputTypeName] || field.getType();
+			}
 
 			// If it doesn't have a name it might be an enum or similar.
-			return typeName
-				? TypeMap[`${entityMetadata.plural}ListFilter`] || field.getType()
-				: field.getType();
+			return field.getType();
 		};
 
 		metadata.collectClassFieldMetadata(fieldCopy);
@@ -228,7 +230,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 	TypeMap[`${plural}FilterInput`] = FilterInputArgs;
 
-	for (const field of entityFields) {
+	for (const field of entityMetadata.fields) {
 		// We can explicitly exclude a field from filtering with a decorator.
 		if (isExcludedFromFilterType(field.target, field.name)) {
 			continue;
@@ -245,12 +247,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated FilterInput class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
-			const entityMetadata = getMetadataForEntity(typeName);
+
+			if (graphweaverMetadata.hasEntity(typeName)) {
+				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
+				const inputTypeName = `${pluralName}FilterInput`;
+				return TypeMap[inputTypeName] || field.getType();
+			}
 
 			// If it doesn't have a name it might be an enum or similar.
-			return typeName
-				? TypeMap[`${entityMetadata.plural}FilterInput`] || field.getType()
-				: field.getType();
+			return field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
 
@@ -310,7 +315,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		orderBy?: OrderByOptions;
 	}
 	TypeMap[`${plural}PaginationInput`] = PaginationInputArgs;
-	for (const field of entityFields) {
+	for (const field of entityMetadata.fields) {
 		const fieldType = field.getType() as any;
 
 		if (
@@ -435,7 +440,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	class InsertInputArgs extends BaseInsertInputArgs {}
 	TypeMap[`${gqlEntityTypeName}InsertInput`] = InsertInputArgs;
 
-	for (const field of entityFields) {
+	for (const field of entityMetadata.fields) {
 		if (field.name === 'id' || isReadOnlyPropertyBackend(field.target, field.name)) {
 			continue;
 		}
@@ -451,12 +456,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
-			const entityMetadata = getMetadataForEntity(typeName);
+
+			if (graphweaverMetadata.hasEntity(typeName)) {
+				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
+				const inputTypeName = `${pluralName}CreateOrUpdateInput`;
+				return TypeMap[inputTypeName] || field.getType();
+			}
 
 			// If it doesn't have a name it might be an enum or similar.
-			return typeName
-				? TypeMap[`${entityMetadata.plural}CreateOrUpdateInput`] || field.getType()
-				: field.getType();
+			return field.getType();
 		};
 
 		if (field.getType() !== String && field.getType() !== Number) {
@@ -479,7 +487,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	class UpdateInputArgs extends BaseUpdateInputArgs {}
 	TypeMap[`${plural}CreateOrUpdateInput`] = UpdateInputArgs;
 
-	for (const field of entityFields) {
+	for (const field of entityMetadata.fields) {
 		if (isReadOnlyPropertyBackend(field.target, field.name)) continue;
 
 		const fieldCopy = Object.assign({}, field);
@@ -498,12 +506,14 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
 			const typeName = determineTypeName(field.getType());
-			const entityMetadata = getMetadataForEntity(typeName);
 
-			// If it doesn't have a name it might be an enum or similar.
-			return typeName
-				? TypeMap[`${entityMetadata.plural}CreateOrUpdateInput`] || field.getType()
-				: field.getType();
+			if (graphweaverMetadata.hasEntity(typeName)) {
+				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
+				const inputTypeName = `${pluralName}CreateOrUpdateInput`;
+				return TypeMap[inputTypeName] || field.getType();
+			}
+
+			return field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
 	}

@@ -1,6 +1,5 @@
 import { GraphQLError, GraphQLResolveInfo, OperationTypeNode } from 'graphql';
 import { delegateToSchema } from '@graphql-tools/delegate';
-import pluralize from 'pluralize';
 
 import {
 	BaseContext,
@@ -13,7 +12,7 @@ import {
 	WithId,
 	hookManagerMap,
 } from '..';
-import { getMetadataForEntity } from '../metadata';
+import { graphweaverMetadata } from '../metadata';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -31,7 +30,8 @@ const getMutationName = <G extends WithId>(
 	name: string,
 	data: Partial<G> | Partial<G>[]
 ): string => {
-	const plural = pluralize(name);
+	const entityMetadata = graphweaverMetadata.getEntity(name);
+	const plural = entityMetadata.plural;
 	if (Array.isArray(data)) {
 		const isUpdateMany = data.every((object) => object.id);
 		if (isUpdateMany) return `update${plural}`;
@@ -89,8 +89,8 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const meta = getMetadataForEntity(entityTypeName);
-	const gqlEntityType: GraphqlEntityType<G, D> = meta.entity.target;
+	const meta = graphweaverMetadata.getEntity(entityTypeName);
+	const gqlEntityType: GraphqlEntityType<G, D> = meta.target;
 
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements
@@ -142,7 +142,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = getMetadataForEntity(relatedEntity.name);
+					const childMeta = graphweaverMetadata.getEntity(relatedEntity.name);
 					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
 					if (!parentField) {
 						throw new Error(

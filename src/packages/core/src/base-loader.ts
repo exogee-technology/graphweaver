@@ -2,7 +2,7 @@ import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 import { getMetadataStorage } from 'type-graphql';
 
-import { BaseDataEntity, EntityMetadataMap, Filter, GraphQLEntity } from '.';
+import { BaseDataEntity, Filter, GraphQLEntity, graphweaverMetadata } from '.';
 import { GraphQLEntityConstructor } from './base-entity';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
@@ -42,7 +42,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 ) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
-		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntity(gqlTypeName)?.provider;
 		if (!provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		}
@@ -94,7 +94,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
 	if (!relatedIdLoaderMap[loaderKey]) {
-		const provider = EntityMetadataMap.get(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntity(gqlTypeName)?.provider;
 		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {

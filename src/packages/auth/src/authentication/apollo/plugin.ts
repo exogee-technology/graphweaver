@@ -1,11 +1,6 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import {
-	BackendProvider,
-	EntityMetadataMap,
-	WithId,
-	getMetadataStorage,
-} from '@exogee/graphweaver';
+import { BackendProvider, WithId, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -58,7 +53,7 @@ const isURLWhitelisted = (authRedirect: URL) => {
 };
 
 const applyImplicitAllow = () => {
-	for (const key of EntityMetadataMap.keys()) {
+	for (const key of graphweaverMetadata.entityNames) {
 		const acl = AclMap.get(key);
 		if (!acl) {
 			// Allow access to all operations
@@ -72,7 +67,7 @@ const applyImplicitAllow = () => {
 };
 
 const applyImplicitDeny = () => {
-	for (const key of EntityMetadataMap.keys()) {
+	for (const key of graphweaverMetadata.entityNames) {
 		const acl = AclMap.get(key);
 		if (!acl) {
 			// An empty ACL means we deny access to all operations

@@ -55,7 +55,7 @@ export const RelationshipFilter = ({
 	};
 
 	const [getRelationship, { data, loading, error }] = useLazyQuery<{ result: any[] }>(
-		getRelationshipQuery(field.type, relationshipEntityType.summaryField),
+		getRelationshipQuery(relationshipEntityType.plural, relationshipEntityType.summaryField),
 		{
 			variables: {
 				pagination: {

@@ -19,7 +19,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import { EntityMetadataMap } from '@exogee/graphweaver';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 import { removeInvalidFilterArg } from './typegraphql-params';
 
 export * from '@apollo/server';
@@ -94,7 +94,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
-		for (const metadata of EntityMetadataMap.values()) {
+		for (const metadata of graphweaverMetadata.entities) {
 			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
 				// only push unique plugins
 				const eMetadataProviderPlugins = metadata.provider.plugins.filter(

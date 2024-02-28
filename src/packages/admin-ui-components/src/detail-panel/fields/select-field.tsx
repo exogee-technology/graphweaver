@@ -24,7 +24,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(entity.type, relationshipEntityType?.summaryField),
+		getRelationshipQuery(relationshipEntityType.plural, relationshipEntityType?.summaryField),
 		{
 			variables: {
 				pagination: {

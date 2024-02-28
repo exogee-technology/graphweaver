@@ -1,6 +1,6 @@
 import pluralize from 'pluralize';
 
-import { EntityMetadataMap } from '@exogee/graphweaver';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 import { getMetadataStorage } from 'type-graphql';
 import { ArgParamMetadata } from 'type-graphql/dist/metadata/definitions';
 
@@ -27,11 +27,11 @@ export const removeInvalidFilterArg = () => {
 			pluralize.singular(param.methodName).charAt(0).toUpperCase() +
 			pluralize.singular(param.methodName).slice(1);
 
-		// If this param's methodName is not in the EntityMetadataMap, don't touch it
-		if (!EntityMetadataMap.has(pluralize.singular(eMapKey))) {
+		// If this param's methodName is not in the Graphweaver Metadata store, don't touch it
+		if (!graphweaverMetadata.hasEntity(pluralize.singular(eMapKey))) {
 			return true;
 		}
-		const entityMetadata = EntityMetadataMap.get(pluralize.singular(eMapKey));
+		const entityMetadata = graphweaverMetadata.getEntity(pluralize.singular(eMapKey));
 		// If this provider supports filtering, keep the param, otherwise remove it
 		if (entityMetadata?.provider?.backendProviderConfig?.filter?.childByChild) {
 			return true;
