@@ -9,7 +9,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
-          jira-user: kevin.brown
+          jira-user: ${{ secrets.JIRA_USER }}
           jira-base-url: https://exogee.atlassian.net
           skip-branches: "^(production|master|main|staging|development)$"
           skip-comments: true
