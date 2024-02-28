@@ -15,6 +15,7 @@ export interface BaseResolverMetadataEntry<D extends BaseDataEntity> extends Obj
 
 class Metadata {
 	private entityMap = new Map<string, BaseResolverMetadataEntry<any>>();
+	private fieldsStore: FieldMetadata[] = [];
 	private typeGraphQLMetadata: MetadataStorage;
 
 	constructor() {
@@ -38,6 +39,7 @@ class Metadata {
 	// set the metadata for a specific entity
 	public setEntity<D extends BaseDataEntity>(name: string, meta: BaseResolverMetadataEntry<D>) {
 		this.entityMap.set(name, meta);
+		this.fieldsStore.push(...meta.fields);
 	}
 
 	// get a list of all the entity names in the metadata map
@@ -52,6 +54,10 @@ class Metadata {
 
 	public get enums() {
 		return this.typeGraphQLMetadata.enums;
+	}
+
+	public get fields() {
+		return this.fieldsStore;
 	}
 }
 
