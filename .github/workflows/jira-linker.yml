@@ -14,4 +14,4 @@ jobs:
           comment-header: |
             If you work at Exogee, you can find more information about this pull request in JIRA.
 
-            ---
+            ---\n
