@@ -5,24 +5,16 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
-	CreateOrUpdateHookParams,
 	Field,
 	GraphQLEntity,
 	ID,
 	ObjectType,
-	Provider,
+	BaseDataProvider,
 	RelationshipField,
 	Resolver,
 	createBaseResolver,
 } from '@exogee/graphweaver';
-import {
-	createBasePasswordAuthResolver,
-	authApolloPlugin,
-	UserProfile,
-	Credential,
-	CredentialCreateOrUpdateInputArgs,
-	ApplyAccessControlList,
-} from '@exogee/graphweaver-auth';
+import { authApolloPlugin, UserProfile, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
 	id: '1',
@@ -68,12 +60,12 @@ export class Artist extends GraphQLEntity<any> {
 	albums!: Album[];
 }
 
-const albumDataProvider = new Provider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
 
 @Resolver((of) => Album)
 class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
 
-const artistDataProvider = new Provider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
 
 @Resolver((of) => Artist)
 class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}
