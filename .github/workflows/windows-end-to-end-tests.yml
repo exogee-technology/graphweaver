@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  sqlite-end-to-end-tests:
+  windows-end-to-end-tests:
     runs-on: windows-latest
     defaults:
       run:
