@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  metadata-end-to-end-tests:
+  metadata-scalars-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:

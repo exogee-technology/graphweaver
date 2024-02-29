@@ -4,7 +4,7 @@ import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
-import { addChildFiltersToRelatedFields, graphweaverMetadata } from '@exogee/graphweaver';
+import { addChildFiltersToRelationshipFields, graphweaverMetadata } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
@@ -122,7 +122,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		];
 
 		// Add any child filters to the schema
-		addChildFiltersToRelatedFields();
+		addChildFiltersToRelationshipFields();
 
 		this.schema = buildSchemaSync({
 			resolvers,

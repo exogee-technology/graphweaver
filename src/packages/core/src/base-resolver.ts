@@ -172,7 +172,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				return TypeMap[inputTypeName] || field.getType();
 			}
 
-			// If it doesn't have a name it might be an enum or similar.
+			// If it is not an entity then it might be an enum or similar.
 			return field.getType();
 		};
 
@@ -251,7 +251,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				return TypeMap[inputTypeName] || field.getType();
 			}
 
-			// If it doesn't have a name it might be an enum or similar.
+			// If it is not an entity then it might be an enum or similar.
 			return field.getType();
 		};
 		metadata.collectClassFieldMetadata(fieldCopy);
@@ -491,7 +491,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				return TypeMap[inputTypeName] || field.getType();
 			}
 
-			// If it doesn't have a name it might be an enum or similar.
+			// If it is not an entity then it might be an enum or similar.
 			return field.getType();
 		};
 

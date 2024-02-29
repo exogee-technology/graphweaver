@@ -7,5 +7,5 @@ export const pluralise = (str: string, userOverride: boolean): string => {
 		return formatString(str);
 	}
 	const plural = pluralize.plural(str);
-	return plural === str ? `Multiple${formatString(str)}` : plural;
+	return plural === str ? `Multiple${formatString(str)}` : formatString(plural);
 };
