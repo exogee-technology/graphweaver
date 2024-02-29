@@ -22,10 +22,24 @@ class Metadata {
 		this.typeGraphQLMetadata = getMetadataStorage();
 	}
 
-	public reset() {
-		this.entityMap.clear();
-		this.fieldsStore = [];
-		this.typeGraphQLMetadata = getMetadataStorage();
+	// get a list of all the entity metadata in the metadata map
+	public get entities() {
+		return Array.from(this.entityMap.values());
+	}
+
+	// get a list of all the entity names in the metadata map
+	public get entityNames() {
+		return Array.from(this.entityMap.keys());
+	}
+
+	// get a list of all the enums in the metadata map
+	public get enums() {
+		return this.typeGraphQLMetadata.enums;
+	}
+
+	// get a list of all the fields in the metadata map
+	public get fields() {
+		return this.fieldsStore;
 	}
 
 	// get the metadata for a specific entity
@@ -48,22 +62,10 @@ class Metadata {
 		this.fieldsStore.push(...entity.fields);
 	}
 
-	// get a list of all the entity names in the metadata map
-	public get entityNames() {
-		return Array.from(this.entityMap.keys());
-	}
-
-	// get a list of all the entity metadata in the metadata map
-	public get entities() {
-		return Array.from(this.entityMap.values());
-	}
-
-	public get enums() {
-		return this.typeGraphQLMetadata.enums;
-	}
-
-	public get fields() {
-		return this.fieldsStore;
+	public clear() {
+		this.entityMap.clear();
+		this.fieldsStore = [];
+		this.typeGraphQLMetadata = getMetadataStorage();
 	}
 }
 

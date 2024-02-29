@@ -64,12 +64,12 @@ export class Artist extends GraphQLEntity<any> {
 	albums!: Album[];
 }
 
-const albumDataProvider = new Provider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
 
 @Resolver((of) => Album)
 class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
 
-const artistDataProvider = new Provider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
 
 @Resolver((of) => Artist)
 class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}

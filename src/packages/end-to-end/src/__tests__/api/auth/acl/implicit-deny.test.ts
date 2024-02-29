@@ -39,7 +39,7 @@ export class Album extends GraphQLEntity<any> {
 	description!: string;
 }
 
-const albumDataProvider = new Provider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
 
 @Resolver((of) => Album)
 class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}

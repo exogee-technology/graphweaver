@@ -35,7 +35,7 @@ class User extends GraphQLEntity<any> {
 describe('Metadata Plural', () => {
 	beforeEach(() => {
 		// Clear metadata
-		graphweaverMetadata.reset();
+		graphweaverMetadata.clear();
 	});
 	test('should correctly plural name for User', async () => {
 		@Resolver((of) => User)

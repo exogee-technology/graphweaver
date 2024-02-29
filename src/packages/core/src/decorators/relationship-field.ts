@@ -31,7 +31,7 @@ type TypeValue = ClassType<GraphQLEntity<BaseDataEntity>>;
 type ReturnTypeFuncValue = TypeValue | RecursiveArray<TypeValue>;
 type ReturnTypeFunc = () => ReturnTypeFuncValue;
 
-export const addChildFilter = (field: FieldMetadata) => {
+export const addChildRelationshipFilterArg = (field: FieldMetadata) => {
 	const relatedType = field.getType() as { name?: string };
 
 	if (!relatedType.name) return;
@@ -44,7 +44,7 @@ export const addChildFilter = (field: FieldMetadata) => {
 		// add the child filter to the related field
 		const metadata = getMetadataStorage();
 
-		// Create filter arg for all relationship fields - we filter these by data provider support in the apollo package
+		// Create filter arg for relationship field
 		metadata.collectHandlerParamMetadata({
 			kind: 'arg',
 			target: field.target,
@@ -62,7 +62,8 @@ export const addChildFilter = (field: FieldMetadata) => {
 
 export const addChildFiltersToRelatedFields = () => {
 	for (const field of graphweaverMetadata.fields) {
-		addChildFilter(field);
+		// if the field is an array, then we can add a filter
+		if (field.typeOptions.array) addChildRelationshipFilterArg(field);
 	}
 };
 

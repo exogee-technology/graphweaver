@@ -133,7 +133,7 @@ const generateTypePolicyFields = (entityMap: EntityMap) => {
 	};
 
 	const mapEntityToPolicy = (entity: Entity) => ({
-		[entity.plural[0].toLowerCase() + entity.plural.slice(1)]: policy,
+		[entity.plural.charAt(0).toLowerCase() + entity.plural.slice(1)]: policy,
 	});
 
 	return {

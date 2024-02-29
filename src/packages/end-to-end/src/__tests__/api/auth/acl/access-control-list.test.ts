@@ -41,7 +41,7 @@ export class Artist extends GraphQLEntity<any> {
 	description!: string;
 }
 
-const artistDataProvider = new Provider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
 
 @Resolver((of) => Artist)
 class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}
