@@ -1,0 +1,14 @@
+name: action-jira-linker
+on: [pull_request]
+
+jobs:
+  action-jira-linker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: exogee-technology/action-jira-linker@v1.1.1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          jira-token: ${{ secrets.JIRA_TOKEN }}
+          jira-user: ${{ secrets.JIRA_USER }}
+          jira-base-url: https://exogee.atlassian.net
+          comment-header: "If you work at [Exogee](https://exogee.com), you can find more information about this pull request in JIRA.\n\n---\n\n"
