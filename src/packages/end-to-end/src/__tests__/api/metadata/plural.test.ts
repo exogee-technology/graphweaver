@@ -11,6 +11,7 @@ import {
 	Resolver,
 	createBaseResolver,
 	graphweaverMetadata,
+	getMetadataStorage,
 } from '@exogee/graphweaver';
 
 @ObjectType('Fish')
@@ -237,5 +238,18 @@ describe('Metadata Plural', () => {
 
 		expect(queryNames).toContain('fish');
 		expect(queryNames).toContain('fishes');
+	});
+
+	test('should throw when plural name matches an existing entity', async () => {
+		try {
+			createBaseResolver<User, any>(User, new BaseDataProvider('user'));
+			createBaseResolver<Fish, any>(Fish, new BaseDataProvider('fish'), {
+				plural: 'users',
+			});
+		} catch (e: any) {
+			expect(e.message).toMatch(
+				'Graphweaver Startup Error: Failed to generate base resolver queries (users). Check your custom queries for any name collisions or duplicate plural name usage.'
+			);
+		}
 	});
 });

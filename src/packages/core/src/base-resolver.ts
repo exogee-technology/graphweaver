@@ -39,7 +39,8 @@ import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
 import { pluralise } from './utils/plural';
-import { BaseResolverMetadataEntry, graphweaverMetadata } from './metadata';
+import { EntityMetadata, graphweaverMetadata } from './metadata';
+import { checkSchemaForCollisions } from './utils/check-schema';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -110,21 +111,17 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		);
 	}
 
-	const gqlEntityTypeName = objectNames[0].name;
-	const plural = pluralise(options.plural ?? gqlEntityTypeName, !!options.plural);
 	const transactional = !!provider.withTransaction;
-
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
-	const entityMetadata: BaseResolverMetadataEntry<D> = {
-		plural,
+	const entity: EntityMetadata<D> = {
+		plural: pluralise(options.plural ?? objectNames[0].name, !!options.plural),
 		provider,
 		...objectNames[0],
 		fields: entityFields,
 	};
-
-	graphweaverMetadata.setEntity(entityMetadata.name, entityMetadata);
+	graphweaverMetadata.setEntity(entity);
 
 	const determineTypeName = (inputType: any) => {
 		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
@@ -138,7 +135,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 	// Create if  data provider supports filter
 	// Create List Filter Args:
-	@InputType(`${plural}ListFilter`)
+	@InputType(`${entity.plural}ListFilter`)
 	class ListInputFilterArgs extends BaseListInputFilterArgs {
 		@Field(() => [ListInputFilterArgs], { nullable: true })
 		_and?: ListInputFilterArgs[];
@@ -149,9 +146,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		@Field(() => ListInputFilterArgs, { nullable: true })
 		_not?: ListInputFilterArgs;
 	}
-	TypeMap[`${plural}ListFilter`] = ListInputFilterArgs;
+	TypeMap[`${entity.plural}ListFilter`] = ListInputFilterArgs;
 
-	for (const field of entityMetadata.fields) {
+	for (const field of entity.fields) {
 		// We can explicitly exclude a field from filtering with a decorator.
 		if (isExcludedFromFilterType(field.target, field.name)) {
 			continue;
@@ -223,14 +220,14 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 	}
 
-	@InputType(`${plural}FilterInput`)
+	@InputType(`${entity.plural}FilterInput`)
 	class FilterInputArgs extends BaseFilterInputArgs<G> {
 		@Field(() => FilterInputArgs, { nullable: true })
 		filter?: Filter<G>;
 	}
-	TypeMap[`${plural}FilterInput`] = FilterInputArgs;
+	TypeMap[`${entity.plural}FilterInput`] = FilterInputArgs;
 
-	for (const field of entityMetadata.fields) {
+	for (const field of entity.fields) {
 		// We can explicitly exclude a field from filtering with a decorator.
 		if (isExcludedFromFilterType(field.target, field.name)) {
 			continue;
@@ -301,9 +298,9 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	// Create Pagination Input Types;
-	@InputType(`${plural}OrderByInput`)
+	@InputType(`${entity.plural}OrderByInput`)
 	class OrderByInputArgs extends BaseOrderByInputArgs {}
-	@InputType(`${plural}PaginationInput`)
+	@InputType(`${entity.plural}PaginationInput`)
 	class PaginationInputArgs extends BasePaginationInputArgs {
 		@Field(() => Int, { nullable: true })
 		limit?: number;
@@ -314,8 +311,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		@Field(() => OrderByInputArgs, { nullable: true })
 		orderBy?: OrderByOptions;
 	}
-	TypeMap[`${plural}PaginationInput`] = PaginationInputArgs;
-	for (const field of entityMetadata.fields) {
+	TypeMap[`${entity.plural}PaginationInput`] = PaginationInputArgs;
+	for (const field of entity.fields) {
 		const fieldType = field.getType() as any;
 
 		if (
@@ -334,9 +331,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		metadata.collectClassFieldMetadata(fieldCopy);
 	}
 
-	const currentQueriesCount = metadata.queries.length;
-	const oneQueryName = gqlEntityTypeName.charAt(0).toLowerCase() + gqlEntityTypeName.substring(1);
-	const listQueryName = plural.charAt(0).toLowerCase() + plural.substring(1);
+	// Generate Query Names
+	const oneQueryName = entity.name.charAt(0).toLowerCase() + entity.name.substring(1);
+	const listQueryName = entity.plural.charAt(0).toLowerCase() + entity.plural.substring(1);
+
+	// Check that we have a unique set of query names
+	checkSchemaForCollisions({
+		operations: [oneQueryName, listQueryName],
+		mode: 'queries',
+	});
 
 	@Resolver()
 	abstract class BaseResolver implements BaseResolverInterface {
@@ -349,7 +352,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			hookParams: H,
 			entities: (G | null)[]
 		): Promise<(G | null)[]> {
-			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const hookManager = hookManagerMap.get(entity.name);
 			const { entities: hookEntities = [] } = hookManager
 				? await hookManager.runHooks(hookRegister, {
 						...hookParams,
@@ -370,7 +373,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const hookManager = hookManagerMap.get(entity.name);
 			const params: ReadHookParams<G> = {
 				args: { filter, pagination },
 				info,
@@ -382,7 +385,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				: params;
 
 			const result = await QueryManager.find<D, G>({
-				entityName: gqlEntityTypeName,
+				entityName: entity.name,
 				filter: hookParams.args?.filter,
 				pagination: hookParams.args?.pagination,
 			});
@@ -405,7 +408,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
-			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const hookManager = hookManagerMap.get(entity.name);
 
 			const args = new GetOneInputArgs();
 			args.id = id;
@@ -434,26 +437,38 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 	}
 
-	// Check that exactly two queries were added to the metadata if not throw an error
-	if (metadata.queries.length !== currentQueriesCount + 2) {
-		throw new Error(
-			`Failed to generate base resolver queries. Expected to add two queries for ${oneQueryName} and ${listQueryName} but added ${
-				metadata.queries.length - currentQueriesCount
-			} queries instead. Check your custom queries for any name collisions.`
-		);
-	}
-
 	// If it's read only we're done here.
 	if (isReadOnlyBackend(gqlEntityType)) return BaseResolver;
 
-	const currentMutationCount = metadata.mutations.length;
+	// Generate Mutation Names
+	const createMany = `create${entity.plural}`;
+	const createOne = `create${entity.name}`;
+	const updateMany = `update${entity.plural}`;
+	const updateOne = `update${entity.name}`;
+	const createOrUpdateMany = `createOrUpdate${entity.plural}`;
+	const deleteOne = `delete${entity.name}`;
+	const deleteMany = `delete${entity.plural}`;
+
+	// Check that we have a unique set of mutation names
+	checkSchemaForCollisions({
+		operations: [
+			createMany,
+			createOne,
+			updateMany,
+			updateOne,
+			createOrUpdateMany,
+			deleteOne,
+			deleteMany,
+		],
+		mode: 'queries',
+	});
 
 	// Create Insert Input Args:
-	@InputType(`${gqlEntityTypeName}InsertInput`)
+	@InputType(`${entity.name}InsertInput`)
 	class InsertInputArgs extends BaseInsertInputArgs {}
-	TypeMap[`${gqlEntityTypeName}InsertInput`] = InsertInputArgs;
+	TypeMap[`${entity.name}InsertInput`] = InsertInputArgs;
 
-	for (const field of entityMetadata.fields) {
+	for (const field of entity.fields) {
 		if (field.name === 'id' || isReadOnlyPropertyBackend(field.target, field.name)) {
 			continue;
 		}
@@ -488,19 +503,19 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	// Create Insert Many Input Args:
-	@InputType(`${plural}InsertManyInput`)
+	@InputType(`${entity.plural}InsertManyInput`)
 	class InsertManyInputArgs extends BaseInsertManyInputArgs {
 		@Field(() => [InsertInputArgs])
 		data?: InsertInputArgs[];
 	}
-	TypeMap[`${plural}InsertManyInput`] = InsertManyInputArgs;
+	TypeMap[`${entity.plural}InsertManyInput`] = InsertManyInputArgs;
 
 	// Create Update Input Args:
-	@InputType(`${gqlEntityTypeName}CreateOrUpdateInput`)
+	@InputType(`${entity.name}CreateOrUpdateInput`)
 	class UpdateInputArgs extends BaseUpdateInputArgs {}
-	TypeMap[`${plural}CreateOrUpdateInput`] = UpdateInputArgs;
+	TypeMap[`${entity.plural}CreateOrUpdateInput`] = UpdateInputArgs;
 
-	for (const field of entityMetadata.fields) {
+	for (const field of entity.fields) {
 		if (isReadOnlyPropertyBackend(field.target, field.name)) continue;
 
 		const fieldCopy = Object.assign({}, field);
@@ -532,34 +547,34 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	// Create Update Many Input Args:
-	@InputType(`${plural}UpdateManyInput`)
+	@InputType(`${entity.plural}UpdateManyInput`)
 	class UpdateManyInputArgs extends BaseUpdateManyInputArgs {
 		@Field(() => [UpdateInputArgs])
 		data?: UpdateInputArgs[];
 	}
-	TypeMap[`${plural}UpdateManyInput`] = UpdateManyInputArgs;
+	TypeMap[`${entity.plural}UpdateManyInput`] = UpdateManyInputArgs;
 
 	// Create or Update Many Input Args:
-	@InputType(`${plural}CreateOrUpdateManyInput`)
+	@InputType(`${entity.plural}CreateOrUpdateManyInput`)
 	class CreateOrUpdateManyInputArgs extends BaseCreateOrUpdateManyInputArgs {
 		@Field(() => [UpdateInputArgs, InsertInputArgs])
 		data?: UpdateInputArgs | InsertInputArgs[];
 	}
-	TypeMap[`${plural}CreateOrUpdateManyInput`] = CreateOrUpdateManyInputArgs;
+	TypeMap[`${entity.plural}CreateOrUpdateManyInput`] = CreateOrUpdateManyInputArgs;
 
-	@InputType(`${gqlEntityTypeName}DeleteInput`)
+	@InputType(`${entity.name}DeleteInput`)
 	class DeleteInputArgs extends BaseDeleteInputArgs {
 		@Field(() => ID)
 		id!: string;
 	}
 
-	@InputType(`${gqlEntityTypeName}DeleteManyInput`)
+	@InputType(`${entity.name}DeleteManyInput`)
 	class DeleteManyInputArgs extends FilterInputArgs {}
 
 	@Resolver()
 	abstract class WritableBaseResolver extends BaseResolver {
 		// Create many items in a transaction
-		@Mutation((returns) => [gqlEntityType], { name: `create${plural}` })
+		@Mutation((returns) => [gqlEntityType], { name: createMany })
 		async createMany(
 			@Arg('input', () => InsertManyInputArgs) createItems: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
@@ -574,7 +589,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					gqlEntityTypeName
+					entity.name
 				);
 				const { items } = params.args;
 				const entities = (await createOrUpdateEntities(
@@ -588,7 +603,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Create
-		@Mutation((returns) => gqlEntityType, { name: `create${gqlEntityTypeName}` })
+		@Mutation((returns) => gqlEntityType, { name: createOne })
 		async createItem(
 			@Arg('data', () => InsertInputArgs) createItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
@@ -603,18 +618,18 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					gqlEntityTypeName
+					entity.name
 				);
 				const [item] = params.args.items;
 
 				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
-				const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
-				return entity;
+				const [updatedItem] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [result]);
+				return updatedItem;
 			});
 		}
 
 		// Update many items in a transaction
-		@Mutation((returns) => [gqlEntityType], { name: `update${plural}` })
+		@Mutation((returns) => [gqlEntityType], { name: updateMany })
 		async updateMany(
 			@Arg('input', () => UpdateManyInputArgs) updateItems: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
@@ -629,7 +644,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					gqlEntityTypeName
+					entity.name
 				);
 				const { items } = params.args;
 
@@ -648,7 +663,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// CreateOrUpdate many items in a transaction
-		@Mutation((returns) => [gqlEntityType], { name: `createOrUpdate${plural}` })
+		@Mutation((returns) => [gqlEntityType], { name: createOrUpdateMany })
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
@@ -656,7 +671,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		): Promise<Array<G | null>> {
 			return this.withTransaction<Array<G | null>>(async () => {
 				// Extracted common properties
-				const hookManager = hookManagerMap.get(gqlEntityTypeName);
+				const hookManager = hookManagerMap.get(entity.name);
 				const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
 					info,
 					context,
@@ -735,7 +750,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Update
-		@Mutation((returns) => gqlEntityType, { name: `update${gqlEntityTypeName}` })
+		@Mutation((returns) => gqlEntityType, { name: updateOne })
 		async update(
 			@Arg('data', () => UpdateInputArgs) updateItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
@@ -750,26 +765,26 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					gqlEntityTypeName
+					entity.name
 				);
 				const [item] = params.args.items;
 
 				if (!updateItemData.id) throw new Error('No ID found in input so cannot update entity.');
 
 				const result = (await createOrUpdateEntities(item, gqlEntityType.name, info, context)) as G;
-				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [result]);
-				return entity;
+				const [updateItem] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [result]);
+				return updateItem;
 			});
 		}
 
 		// Delete
-		@Mutation((returns) => Boolean, { name: `delete${gqlEntityTypeName}` })
+		@Mutation((returns) => Boolean, { name: deleteOne })
 		async deleteItem(
 			@Arg('filter', () => DeleteInputArgs) filter: Filter<G>,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		) {
-			const hookManager = hookManagerMap.get(gqlEntityTypeName);
+			const hookManager = hookManagerMap.get(entity.name);
 			const params: DeleteHookParams<G> = {
 				args: { filter },
 				info,
@@ -795,7 +810,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Delete many items in a transaction
-		@Mutation((returns) => Boolean, { name: `delete${plural}` })
+		@Mutation((returns) => Boolean, { name: deleteMany })
 		async deleteMany(
 			@Arg('filter', () => DeleteManyInputArgs) filter: Filter<G>,
 			@Info() info: GraphQLResolveInfo,
@@ -805,7 +820,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				if (!provider.deleteMany)
 					throw new Error('Provider has not implemented DeleteMany not implemented');
 
-				const hookManager = hookManagerMap.get(gqlEntityTypeName);
+				const hookManager = hookManagerMap.get(entity.name);
 				const params: DeleteManyHookParams<G> = {
 					args: { filter },
 					info,
@@ -830,15 +845,6 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				return success;
 			});
 		}
-	}
-
-	// Check that exactly seven mutations were added to the metadata if not throw an error
-	if (metadata.mutations.length !== currentMutationCount + 7) {
-		throw new Error(
-			`Failed to generate base resolver mutations. Expected to add seven mutations for ${gqlEntityTypeName} with plural name ${plural} but added ${
-				metadata.mutations.length - currentMutationCount
-			} mutations instead. Check your custom mutations for any name collisions.`
-		);
 	}
 
 	return WritableBaseResolver;

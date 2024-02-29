@@ -1,7 +1,7 @@
 import pluralize from 'pluralize';
 
 const formatString = (str: string): string =>
-	`${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`;
+	`${str.charAt(0).toUpperCase()}${str.slice(1).toLowerCase()}`;
 
 export const pluralise = (str: string, userOverride: boolean): string => {
 	if (userOverride) {

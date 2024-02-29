@@ -6,7 +6,7 @@ import { MetadataStorage } from 'type-graphql/dist/metadata/metadata-storage';
 import { BaseDataEntity, GraphQLEntity } from '.';
 import { BackendProvider } from './common/types';
 
-export interface BaseResolverMetadataEntry<D extends BaseDataEntity> extends ObjectClassMetadata {
+export interface EntityMetadata<D extends BaseDataEntity> extends ObjectClassMetadata {
 	name: string;
 	plural: string;
 	provider: BackendProvider<D, GraphQLEntity<D>>;
@@ -14,7 +14,7 @@ export interface BaseResolverMetadataEntry<D extends BaseDataEntity> extends Obj
 }
 
 class Metadata {
-	private entityMap = new Map<string, BaseResolverMetadataEntry<any>>();
+	private entityMap = new Map<string, EntityMetadata<any>>();
 	private fieldsStore: FieldMetadata[] = [];
 	private typeGraphQLMetadata: MetadataStorage;
 
@@ -43,9 +43,9 @@ class Metadata {
 	}
 
 	// set the metadata for a specific entity
-	public setEntity<D extends BaseDataEntity>(name: string, meta: BaseResolverMetadataEntry<D>) {
-		this.entityMap.set(name, meta);
-		this.fieldsStore.push(...meta.fields);
+	public setEntity<D extends BaseDataEntity>(entity: EntityMetadata<D>) {
+		this.entityMap.set(entity.name, entity);
+		this.fieldsStore.push(...entity.fields);
 	}
 
 	// get a list of all the entity names in the metadata map
