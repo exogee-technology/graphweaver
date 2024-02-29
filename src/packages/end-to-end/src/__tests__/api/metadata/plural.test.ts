@@ -14,30 +14,24 @@ import {
 	getMetadataStorage,
 } from '@exogee/graphweaver';
 
-@ObjectType('Fish')
-class Fish extends GraphQLEntity<any> {
-	@Field(() => ID)
-	id!: string;
-
-	@Field(() => String)
-	name!: string;
-}
-
-@ObjectType('User')
-class User extends GraphQLEntity<any> {
-	@Field(() => ID)
-	id!: string;
-
-	@Field(() => String)
-	name!: string;
-}
-
 describe('Metadata Plural', () => {
 	beforeEach(() => {
 		// Clear metadata
 		graphweaverMetadata.clear();
+		const metadata = getMetadataStorage();
+		// reset the TypeGraphQL metadata
+		metadata.queries = metadata.queries.filter((query) => query.schemaName === '_graphweaver');
+		metadata.mutations = [];
 	});
 	test('should correctly plural name for User', async () => {
+		@ObjectType('User')
+		class User extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
 		@Resolver((of) => User)
 		class UserResolver extends createBaseResolver<User, any>(User, new BaseDataProvider('user')) {}
 
@@ -105,6 +99,15 @@ describe('Metadata Plural', () => {
 	});
 
 	test('should return multipleFish as plural name for Fish', async () => {
+		@ObjectType('Fish')
+		class Fish extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
+
 		@Resolver((of) => Fish)
 		class FishResolver extends createBaseResolver<Fish, any>(Fish, new BaseDataProvider('fish')) {}
 
@@ -172,6 +175,15 @@ describe('Metadata Plural', () => {
 	});
 
 	test('should return fishes as plural name when overridden', async () => {
+		@ObjectType('Fish')
+		class Fish extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
+
 		@Resolver((of) => Fish)
 		class FishResolver extends createBaseResolver<Fish, any>(Fish, new BaseDataProvider('fish'), {
 			plural: 'fishes',
@@ -241,6 +253,23 @@ describe('Metadata Plural', () => {
 	});
 
 	test('should throw when plural name matches an existing entity', async () => {
+		@ObjectType('Fish')
+		class Fish extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
+
+		@ObjectType('User')
+		class User extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
 		try {
 			createBaseResolver<User, any>(User, new BaseDataProvider('user'));
 			createBaseResolver<Fish, any>(Fish, new BaseDataProvider('fish'), {
@@ -249,6 +278,34 @@ describe('Metadata Plural', () => {
 		} catch (e: any) {
 			expect(e.message).toMatch(
 				'Graphweaver Startup Error: Failed to generate base resolver queries (users). Check your custom queries for any name collisions or duplicate plural name usage.'
+			);
+		}
+	});
+
+	test('should throw when plural name matches an existing entity', async () => {
+		@ObjectType('Fish')
+		class Fish extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
+
+		@ObjectType('User')
+		class User extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => String)
+			name!: string;
+		}
+		try {
+			createBaseResolver<User, any>(User, new BaseDataProvider('user'), { plural: 'multipleFish' });
+			createBaseResolver<Fish, any>(Fish, new BaseDataProvider('fish'));
+		} catch (e: any) {
+			expect(e.message).toMatch(
+				'Graphweaver Startup Error: Failed to generate base resolver queries (multipleFish). Check your custom queries for any name collisions or duplicate plural name usage.'
 			);
 		}
 	});
