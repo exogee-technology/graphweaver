@@ -10,7 +10,7 @@ import {
 	GraphQLEntity,
 	ID,
 	ObjectType,
-	Provider,
+	BaseDataProvider,
 	RelationshipField,
 	Resolver,
 	createBaseResolver,
@@ -48,7 +48,10 @@ const albumDataProvider = new Provider<any, Album>('album');
 class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(Credential, new Provider('auth')) {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new BaseDataProvider('auth')
+) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');

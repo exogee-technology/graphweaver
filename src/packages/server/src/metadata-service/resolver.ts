@@ -16,6 +16,7 @@ import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { AdminMetadata } from '..';
+import { logger } from '@exogee/logger';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -88,7 +89,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 					}
 
 					const fields = visibleFields?.map((field) => {
-						const typeValue = field.getType() as any;
+						const typeValue = field.getType() as { name: string };
 						const typeName = typeValue.name ?? enumMetadata.get(typeValue)?.name;
 
 						const relatedObject = graphweaverMetadata.hasEntity(typeName)

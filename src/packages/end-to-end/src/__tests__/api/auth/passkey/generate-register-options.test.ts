@@ -13,7 +13,7 @@ import assert from 'assert';
 import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
 import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/types';
-import { CreateOrUpdateHookParams, Provider } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, BaseDataProvider } from '@exogee/graphweaver';
 
 const user = new UserProfile({
 	id: '1',
@@ -65,7 +65,7 @@ class AuthResolver extends createBasePasskeyAuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new Provider('my-provider')
+	new BaseDataProvider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;

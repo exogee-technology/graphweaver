@@ -1,6 +1,6 @@
 import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './common/types';
 
-export class Provider<D, G> implements BackendProvider<D, G> {
+export class BaseDataProvider<D, G> implements BackendProvider<D, G> {
 	constructor(readonly backendId: string) {
 		if (!backendId) throw new Error('BackendId must be defined');
 	}

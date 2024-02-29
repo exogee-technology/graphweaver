@@ -22,6 +22,12 @@ class Metadata {
 		this.typeGraphQLMetadata = getMetadataStorage();
 	}
 
+	public reset() {
+		this.entityMap.clear();
+		this.fieldsStore = [];
+		this.typeGraphQLMetadata = getMetadataStorage();
+	}
+
 	// get the metadata for a specific entity
 	public getEntity(name: string) {
 		const meta = this.entityMap.get(name);

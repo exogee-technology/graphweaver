@@ -111,7 +111,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	}
 
 	const gqlEntityTypeName = objectNames[0].name;
-	const plural = options.plural ?? pluralise(gqlEntityTypeName);
+	const plural = pluralise(options.plural ?? gqlEntityTypeName, !!options.plural);
 	const transactional = !!provider.withTransaction;
 
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);

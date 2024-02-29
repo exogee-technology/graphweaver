@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, Provider, Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, BaseDataProvider, Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -55,7 +55,7 @@ class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new Provider('my-provider')
+	new BaseDataProvider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;

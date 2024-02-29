@@ -10,7 +10,7 @@ import {
 	GraphQLEntity,
 	ID,
 	ObjectType,
-	Provider,
+	BaseDataProvider,
 	RelationshipField,
 	Resolver,
 	createBaseResolver,
@@ -113,7 +113,10 @@ const trackDataProvider = new Provider<any, Track>('track');
 class TrackResolver extends createBaseResolver<Track, any>(Track, trackDataProvider) {}
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(Credential, new Provider('auth')) {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new BaseDataProvider('auth')
+) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');
