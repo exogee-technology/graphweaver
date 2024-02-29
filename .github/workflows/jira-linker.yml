@@ -5,9 +5,13 @@ jobs:
   action-jira-linker:
     runs-on: ubuntu-latest
     steps:
-      - uses: exogee-technology/action-jira-linker@v1.0.0
+      - uses: exogee-technology/action-jira-linker@v1.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
           jira-user: ${{ secrets.JIRA_USER }}
           jira-base-url: https://exogee.atlassian.net
+          comment-header: |
+            If you work at Exogee, you can find more information about this pull request in JIRA.
+
+            ---
