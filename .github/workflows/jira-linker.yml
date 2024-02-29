@@ -5,7 +5,7 @@ jobs:
   action-jira-linker:
     runs-on: ubuntu-latest
     steps:
-      - uses: exogee-technology/action-jira-linker@v1.1.0
+      - uses: exogee-technology/action-jira-linker@v1.1.1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
