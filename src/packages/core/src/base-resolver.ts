@@ -334,6 +334,10 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		metadata.collectClassFieldMetadata(fieldCopy);
 	}
 
+	const currentQueriesCount = metadata.queries.length;
+	const oneQueryName = gqlEntityTypeName.charAt(0).toLowerCase() + gqlEntityTypeName.substring(1);
+	const listQueryName = plural.charAt(0).toLowerCase() + plural.substring(1);
+
 	@Resolver()
 	abstract class BaseResolver implements BaseResolverInterface {
 		public async withTransaction<T>(callback: () => Promise<T>) {
@@ -357,9 +361,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// List
-		@Query(() => [gqlEntityType], {
-			name: plural.charAt(0).toLowerCase() + plural.substring(1),
-		})
+		@Query(() => [gqlEntityType], { name: listQueryName })
 		public async list(
 			@Arg('filter', () => ListInputFilterArgs, { nullable: true })
 			filter: Filter<G>,
@@ -395,7 +397,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 		// Get One
 		@Query(() => gqlEntityType, {
-			name: gqlEntityTypeName.charAt(0).toLowerCase() + gqlEntityTypeName.substring(1),
+			name: oneQueryName,
 			nullable: true,
 		})
 		public async getOne(
@@ -432,8 +434,19 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 	}
 
+	// Check that exactly two queries were added to the metadata if not throw an error
+	if (metadata.queries.length !== currentQueriesCount + 2) {
+		throw new Error(
+			`Failed to generate base resolver queries. Expected to add two queries for ${oneQueryName} and ${listQueryName} but added ${
+				metadata.queries.length - currentQueriesCount
+			} queries instead. Check your custom queries for any name collisions.`
+		);
+	}
+
 	// If it's read only we're done here.
 	if (isReadOnlyBackend(gqlEntityType)) return BaseResolver;
+
+	const currentMutationCount = metadata.mutations.length;
 
 	// Create Insert Input Args:
 	@InputType(`${gqlEntityTypeName}InsertInput`)
@@ -817,6 +830,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				return success;
 			});
 		}
+	}
+
+	// Check that exactly seven mutations were added to the metadata if not throw an error
+	if (metadata.mutations.length !== currentMutationCount + 7) {
+		throw new Error(
+			`Failed to generate base resolver mutations. Expected to add seven mutations for ${gqlEntityTypeName} with plural name ${plural} but added ${
+				metadata.mutations.length - currentMutationCount
+			} mutations instead. Check your custom mutations for any name collisions.`
+		);
 	}
 
 	return WritableBaseResolver;
