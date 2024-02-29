@@ -17,20 +17,20 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const { initialValue } = meta;
-	const relationshipEntityType = entityByType(entity.type);
+	const relatedEntity = entityByType(entity.type);
 
 	useEffect(() => {
 		helpers.setValue(initialValue);
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(relationshipEntityType.plural, relationshipEntityType?.summaryField),
+		getRelationshipQuery(relatedEntity.plural, relatedEntity?.summaryField),
 		{
 			variables: {
 				pagination: {
-					orderBy: relationshipEntityType?.summaryField
+					orderBy: relatedEntity?.summaryField
 						? {
-								[relationshipEntityType.summaryField as string]: 'ASC',
+								[relatedEntity.summaryField as string]: 'ASC',
 						  }
 						: { id: 'ASC' },
 				},
@@ -39,7 +39,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	);
 
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relationshipEntityType?.summaryField || 'id';
+		const label = relatedEntity?.summaryField || 'id';
 		return { label: item[label], value: item.id };
 	});
 
