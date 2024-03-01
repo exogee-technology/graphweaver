@@ -66,24 +66,32 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}, [filters]);
 
 	// This function updates the filter in state based on the filter keys updated and the newFilter value
-	const onFilter = (keys: string[], newFilter?: Filter) => {
+	const onFilter = (newFilters: { key: string; newFilter?: Filter }[]) => {
 		setFilters((currentFilter) => {
-			if (!newFilter) {
-				// If no newFilter provided, remove the existing one for this fieldName from current filter
-				for (const key of keys) {
-					delete currentFilter?.[key];
+			// Delete filters that have been removed
+			for (const filter of newFilters) {
+				if (!filter.newFilter) {
+					delete currentFilter?.[filter.key];
 				}
-
-				// Return undefined if there's nothing left in the filter.
-				const filterIsEmpty = Object.keys(currentFilter ?? {}).length === 0;
-				if (filterIsEmpty) return undefined;
-
-				// If filter is not empty, return a copy of currentFilter (to prevent mutations to state directly affecting future rendering)
-				return { ...currentFilter };
 			}
 
-			// If newFilter provided, update the existing one for this fieldName with new values
-			return { ...currentFilter, ...newFilter };
+			// Combine all new filters into one object
+			const combinedNewFilter = newFilters
+				.filter((filter) => filter.newFilter)
+				.reduce(
+					(acc, filter) => ({
+						...acc,
+						...filter.newFilter,
+					}),
+					{ ...currentFilter } as Filter
+				);
+
+			// Return undefined if there's nothing left in the filter.
+			const combinedNewFilterIsEmpty = Object.keys(combinedNewFilter ?? {}).length === 0;
+			if (combinedNewFilterIsEmpty) return undefined;
+
+			// If filter is not empty, return a copy of currentFilter (to prevent mutations to state directly affecting future rendering)
+			return { ...combinedNewFilter };
 		});
 	};
 

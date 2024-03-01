@@ -3,7 +3,7 @@ import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
 export interface BooleanFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (keys: string[], newFilter?: Filter) => void;
+	onChange?: (newFilters: { key: string; newFilter?: Filter }[]) => void;
 	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -24,14 +24,17 @@ export const BooleanFilter = ({
 	];
 
 	const handleOnChange = (options: SelectOption[]) => {
-		onChange?.(
-			[fieldName],
-			(options ?? [])?.length > 0
-				? {
-						[fieldName]: Boolean(options?.[0]?.value),
-				  }
-				: undefined
-		);
+		onChange?.([
+			{
+				key: fieldName,
+				newFilter:
+					(options ?? [])?.length > 0
+						? {
+								[fieldName]: Boolean(options?.[0]?.value),
+						  }
+						: undefined,
+			},
+		]);
 	};
 
 	return (

@@ -8,7 +8,7 @@ export type DateRangeFilterType = { [x: string]: string } | undefined;
 export interface DateRangeFilterProps {
 	fieldName: string;
 	entity: string; // Not used but added to conform to API
-	onChange?: (keys: string[], newFilter?: Filter) => void;
+	onChange?: (newFilters: { key: string; newFilter?: Filter }[]) => void;
 	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -30,15 +30,16 @@ export const DateRangeFilter = ({
 	const initialEndDate = getInitialDateWithKeyFromFilter(endKey, initialFilter);
 
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
-		onChange?.(
-			[startKey, endKey],
-			startDate && endDate
-				? {
-						[startKey]: startDate.startOf('day').toISO(),
-						[endKey]: endDate.endOf('day').toISO(),
-				  }
-				: undefined
-		);
+		onChange?.([
+			{
+				key: startKey,
+				newFilter: startDate ? { [startKey]: startDate.toISO() } : undefined,
+			},
+			{
+				key: endKey,
+				newFilter: endDate ? { [endKey]: endDate.toISO() } : undefined,
+			},
+		]);
 	};
 
 	return (

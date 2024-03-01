@@ -9,7 +9,7 @@ export type RelationshipFilterType = { id_in: string[] } | undefined;
 export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (keys: string[], newFilter?: Filter) => void;
+	onChange?: (newFilters: { key: string; newFilter?: Filter }[]) => void;
 	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -44,14 +44,17 @@ export const RelationshipFilter = ({
 	};
 
 	const handleOnChange = (options?: SelectOption[]) => {
-		onChange?.(
-			[fieldName],
-			(options ?? [])?.length > 0
-				? {
-						[fieldName]: { id_in: options?.map((option) => option.value) },
-				  }
-				: undefined
-		);
+		onChange?.([
+			{
+				key: fieldName,
+				newFilter:
+					(options ?? [])?.length > 0
+						? {
+								[fieldName]: { id_in: options?.map((option) => option.value) },
+						  }
+						: undefined,
+			},
+		]);
 	};
 
 	const [getRelationship, { data, loading, error }] = useLazyQuery<{ result: any[] }>(

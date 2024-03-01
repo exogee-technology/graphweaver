@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (keys: string[], newFilter?: Filter) => void;
+	onChange?: (newFilters: { key: string; newFilter?: Filter }[]) => void;
 	initialFilter?: Filter | undefined;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -33,14 +33,22 @@ export const TextFilter = ({
 	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 
 	const handleOnChange = (options?: SelectOption[]) => {
-		onChange?.(
-			[`${fieldName}_in`],
-			(options ?? [])?.length > 0
-				? {
-						[`${fieldName}_in`]: options?.map((option) => option.value),
-				  }
-				: undefined
-		);
+		onChange?.([
+			{
+				// We always send the key with the _in suffix so remove the existing filter
+				key: fieldName,
+				newFilter: undefined,
+			},
+			{
+				key: `${fieldName}_in`,
+				newFilter:
+					(options ?? [])?.length > 0
+						? {
+								[`${fieldName}_in`]: options?.map((option) => option.value),
+						  }
+						: undefined,
+			},
+		]);
 	};
 
 	const handleOnOpen = () => {
