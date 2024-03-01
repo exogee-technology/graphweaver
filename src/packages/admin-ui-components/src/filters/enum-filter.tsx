@@ -5,7 +5,7 @@ export interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<string>;
+	initialValue?: string;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -13,7 +13,7 @@ export const EnumFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialFilter,
+	initialValue,
 	resetCount,
 }: EnumFilterProps) => {
 	const { entityByName, enumByName } = useSchema();
@@ -42,9 +42,7 @@ export const EnumFilter = ({
 		<Select
 			key={`${fieldName}:${resetCount}`}
 			options={enumOptions}
-			value={
-				initialFilter?.[fieldName] ? [{ value: initialFilter?.[fieldName], label: undefined }] : []
-			}
+			value={initialValue ? [{ value: initialValue, label: undefined }] : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>

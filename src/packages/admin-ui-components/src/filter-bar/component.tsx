@@ -1,14 +1,7 @@
 import { ReactNode, useEffect, useState, createElement } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
-import {
-	AdminUIFilterType,
-	decodeSearchParams,
-	FieldFilter,
-	Filter,
-	routeFor,
-	useSchema,
-} from '../utils';
+import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
 	DateRangeFilter,
 	DateRangeFilterType,
@@ -30,19 +23,30 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const [filter, setFilter] = useState<FieldFilter>(
-		searchParams.filters ?? entityByName(entity).defaultFilter ?? {}
-	);
+	const [filter, setFilter] = useState(searchParams.filters ?? entityByName(entity).defaultFilter);
 
 	if (!entity) {
 		throw Error('Entity should be in URL here');
 	}
 
-	const onFilter = (fieldName: string, filter?: Filter) => {
-		setFilter((_filter) => ({
-			..._filter,
-			...{ [fieldName]: filter },
-		}));
+	// This function updates the filter in state based on fieldName and newFilter values
+	const onFilter = (fieldName: string, newFilter?: Filter) => {
+		setFilter((currentFilter) => {
+			if (!newFilter) {
+				// If no newFilter provided, remove the existing one for this fieldName from current filter
+				delete currentFilter?.[fieldName];
+
+				// Return undefined if there's nothing left in the filter.
+				const filterIsEmpty = Object.keys(currentFilter ?? {}).length === 0;
+				if (filterIsEmpty) return undefined;
+
+				// If filter is not empty, return a copy of currentFilter (to prevent mutations to state directly affecting future rendering)
+				return { ...currentFilter };
+			}
+
+			// If newFilter provided, update the existing one for this fieldName with new values
+			return { ...currentFilter, ...newFilter };
+		});
 	};
 
 	const getFilterComponents = (entityName: string) => {
@@ -72,32 +76,32 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						case AdminUIFilterType.TEXT:
 							return createElement(TextFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<string> | undefined,
+								initialValue: filter?.[field.name] as string | undefined,
 							});
 						case AdminUIFilterType.BOOLEAN:
 							return createElement(BooleanFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<boolean> | undefined,
+								initialValue: filter?.[field.name] as boolean | undefined,
 							});
 						case AdminUIFilterType.RELATIONSHIP:
 							return createElement(RelationshipFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<RelationshipFilterType> | undefined,
+								initialValue: filter?.[field.name] as RelationshipFilterType | undefined,
 							});
 						case AdminUIFilterType.ENUM:
 							return createElement(EnumFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<string> | undefined,
+								initialValue: filter?.[field.name] as string | undefined,
 							});
 						case AdminUIFilterType.NUMERIC:
 							return createElement(NumericFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<number> | undefined,
+								initialValue: filter?.[field.name] as number | undefined,
 							});
 						case AdminUIFilterType.DATE_RANGE:
 							return createElement(DateRangeFilter, {
 								...options,
-								initialFilter: filter[field.name] as Filter<DateRangeFilterType> | undefined,
+								initialValue: filter?.[field.name] as DateRangeFilterType | undefined,
 							});
 					}
 				})
@@ -106,14 +110,13 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 
 	useEffect(() => {
 		const { sort } = decodeSearchParams(search);
-		if (filter && Object.keys(filter).length > 0) {
-			// Remove all undefined attributes from the filters object as it borks the subsequent URL encoding logic
-			Object.entries(filter).forEach(([key, value]) => {
-				if (value === undefined) delete filter[key];
-			});
-		}
 		navigate(
-			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort, id })
+			routeFor({
+				entity,
+				filters: Object.keys(filter ?? {}).length > 0 ? filter : undefined,
+				sort,
+				id,
+			})
 		);
 	}, [filter]);
 

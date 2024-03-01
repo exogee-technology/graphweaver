@@ -4,13 +4,13 @@ import { Select, SelectOption } from '../multi-select';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
-export type RelationshipFilterType = Record<string, { id: string }[]> | undefined;
+export type RelationshipFilterType = { id_in: string[] } | undefined;
 
 export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<RelationshipFilterType>;
+	initialValue?: RelationshipFilterType;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -18,7 +18,7 @@ export const RelationshipFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialFilter,
+	initialValue,
 	resetCount,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
@@ -45,11 +45,9 @@ export const RelationshipFilter = ({
 		onChange?.(
 			fieldName,
 			(options ?? [])?.length > 0
-				? ({
-						[fieldName]: {
-							id_in: options?.map((option) => option.value),
-						},
-				  } as Filter<RelationshipFilterType>)
+				? {
+						[fieldName]: { id_in: options?.map((option) => option.value) },
+				  }
 				: undefined
 		);
 	};
@@ -81,8 +79,11 @@ export const RelationshipFilter = ({
 			key={`${fieldName}:${resetCount}`}
 			options={relationshipOptions}
 			value={
-				initialFilter?.[fieldName]?.id
-					? [{ value: initialFilter?.[fieldName]?.id, label: undefined }]
+				initialValue?.id_in
+					? initialValue.id_in.map((id) => ({
+							value: id,
+							label: id,
+					  }))
 					: []
 			}
 			placeholder={fieldName}

@@ -12,7 +12,6 @@ import {
 	RequestRefetchOptions,
 	Header,
 	ExportModal,
-	wrapFilterWithAndOperator,
 	getOrderByQuery,
 } from '@exogee/graphweaver-admin-ui-components';
 
@@ -53,7 +52,7 @@ export const List = () => {
 			limit: PAGE_SIZE,
 			orderBy: getOrderByQuery(sort),
 		},
-		...(filters ? { filter: wrapFilterWithAndOperator(filters) } : {}),
+		...(filters ? { filter: filters } : {}),
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<{ result: TableRowItem[] }>(

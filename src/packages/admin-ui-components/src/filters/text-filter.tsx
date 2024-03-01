@@ -7,7 +7,7 @@ export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<string>;
+	initialValue?: string;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -15,11 +15,10 @@ export const TextFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialFilter,
+	initialValue,
 	resetCount,
 }: TextFilterProps) => {
 	const { entityByName } = useSchema();
-	const initialValue = initialFilter?.[fieldName];
 
 	const [getData, { loading, error, data }] = useLazyQuery<{ result: Record<string, string>[] }>(
 		queryForFilterText(entity, fieldName, entityByName)

@@ -107,11 +107,9 @@ export const Select = ({
 									? `${selectedOptions.length} Selected`
 									: selectedOptions?.[0].label}
 							</span>
-							{mode === SelectMode.MULTI && (
-								<span className={styles.deleteOption} onClick={handleDeleteAll}>
-									&times;
-								</span>
-							)}
+							<span className={styles.deleteOption} onClick={handleDeleteAll}>
+								&times;
+							</span>
 						</div>
 					</div>
 				) : (

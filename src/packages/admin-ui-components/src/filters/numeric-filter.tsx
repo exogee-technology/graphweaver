@@ -5,21 +5,19 @@ export interface NumericFilterProps {
 	fieldName: string;
 	entity: string; // Unused but defined for a consistent API
 	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<number | undefined>;
+	initialValue?: number;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const NumericFilter = ({
 	fieldName,
 	onChange,
-	initialFilter,
+	initialValue,
 	resetCount,
 }: NumericFilterProps) => {
-	const value = initialFilter?.[fieldName];
-
 	const handleOnChange = (fieldName: string, newValue?: string) => {
 		const inputValue = newValue && !isNaN(+newValue) ? parseInt(newValue) : undefined;
-		if (value !== inputValue)
+		if (initialValue !== inputValue)
 			onChange?.(fieldName, newValue === '' ? undefined : { [fieldName]: inputValue });
 	};
 
@@ -28,7 +26,7 @@ export const NumericFilter = ({
 			key={`${fieldName}:${resetCount}`}
 			inputMode="numeric"
 			fieldName={fieldName}
-			value={value !== undefined ? value + '' : ''}
+			value={initialValue !== undefined ? initialValue + '' : ''}
 			onChange={handleOnChange}
 		/>
 	);
