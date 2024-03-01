@@ -30,11 +30,13 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	// This function updates the filter in state based on fieldName and newFilter values
-	const onFilter = (key: string, newFilter?: Filter) => {
+	const onFilter = (keys: string[], newFilter?: Filter) => {
 		setFilter((currentFilter) => {
 			if (!newFilter) {
 				// If no newFilter provided, remove the existing one for this fieldName from current filter
-				delete currentFilter?.[key];
+				for (const key of keys) {
+					delete currentFilter?.[key];
+				}
 
 				// Return undefined if there's nothing left in the filter.
 				const filterIsEmpty = Object.keys(currentFilter ?? {}).length === 0;
@@ -70,39 +72,22 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						entity: entity,
 						onChange: onFilter,
 						resetCount: resetCount,
+						initialFilter: filter,
 					};
 
 					switch (field.filter.type) {
 						case AdminUIFilterType.TEXT:
-							return createElement(TextFilter, {
-								...options,
-								initialValue: filter?.[field.name] as string | undefined,
-							});
+							return createElement(TextFilter, options);
 						case AdminUIFilterType.BOOLEAN:
-							return createElement(BooleanFilter, {
-								...options,
-								initialValue: filter?.[field.name] as boolean | undefined,
-							});
+							return createElement(BooleanFilter, options);
 						case AdminUIFilterType.RELATIONSHIP:
-							return createElement(RelationshipFilter, {
-								...options,
-								initialValue: filter?.[field.name] as RelationshipFilterType | undefined,
-							});
+							return createElement(RelationshipFilter, options);
 						case AdminUIFilterType.ENUM:
-							return createElement(EnumFilter, {
-								...options,
-								initialValue: filter?.[field.name] as string | undefined,
-							});
+							return createElement(EnumFilter, options);
 						case AdminUIFilterType.NUMERIC:
-							return createElement(NumericFilter, {
-								...options,
-								initialValue: filter?.[field.name] as number | undefined,
-							});
+							return createElement(NumericFilter, options);
 						case AdminUIFilterType.DATE_RANGE:
-							return createElement(DateRangeFilter, {
-								...options,
-								initialValue: filter?.[field.name] as DateRangeFilterType | undefined,
-							});
+							return createElement(DateRangeFilter, options);
 					}
 				})
 		);

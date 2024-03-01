@@ -3,8 +3,8 @@ import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
 export interface BooleanFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (key: string, newFilter?: Filter) => void;
-	initialValue?: boolean;
+	onChange?: (keys: string[], newFilter?: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -12,9 +12,12 @@ export const BooleanFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialValue,
+	initialFilter,
 	resetCount,
 }: BooleanFilterProps) => {
+	const key = fieldName;
+	const initialValue = initialFilter?.[key] as boolean | undefined;
+
 	const options = [
 		{ value: true, label: 'true' },
 		{ value: false, label: 'false' },
@@ -22,7 +25,7 @@ export const BooleanFilter = ({
 
 	const handleOnChange = (options: SelectOption[]) => {
 		onChange?.(
-			fieldName,
+			[fieldName],
 			(options ?? [])?.length > 0
 				? {
 						[fieldName]: Boolean(options?.[0]?.value),

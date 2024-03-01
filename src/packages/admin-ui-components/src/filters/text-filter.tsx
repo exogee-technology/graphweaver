@@ -6,8 +6,8 @@ import { queryForFilterText } from './graphql';
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (key: string, newFilter?: Filter) => void;
-	initialValue?: string;
+	onChange?: (keys: string[], newFilter?: Filter) => void;
+	initialFilter?: Filter | undefined;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -15,9 +15,11 @@ export const TextFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialValue,
+	initialFilter,
 	resetCount,
 }: TextFilterProps) => {
+	const key = `${fieldName}_in`;
+	const initialValue = initialFilter?.[key] as string[] | undefined;
 	const { entityByName } = useSchema();
 
 	const [getData, { loading, error, data }] = useLazyQuery<{ result: Record<string, string>[] }>(
@@ -28,7 +30,7 @@ export const TextFilter = ({
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		onChange?.(
-			`${fieldName}_in`,
+			[`${fieldName}_in`],
 			(options ?? [])?.length > 0
 				? {
 						[`${fieldName}_in`]: options?.map((option) => option.value),
@@ -47,7 +49,7 @@ export const TextFilter = ({
 		<Select
 			key={`${fieldName}:${resetCount}`}
 			options={[...textOptions].map((value) => ({ value, label: value }))}
-			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
+			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}

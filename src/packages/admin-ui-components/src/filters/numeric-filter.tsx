@@ -4,21 +4,23 @@ import { Input } from '../input';
 export interface NumericFilterProps {
 	fieldName: string;
 	entity: string; // Unused but defined for a consistent API
-	onChange?: (key: string, newFilter?: Filter) => void;
-	initialValue?: number;
+	onChange?: (keys: string[], newFilter?: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const NumericFilter = ({
 	fieldName,
 	onChange,
-	initialValue,
+	initialFilter,
 	resetCount,
 }: NumericFilterProps) => {
+	const key = fieldName;
+	const initialValue = initialFilter?.[key] as number | undefined;
 	const handleOnChange = (fieldName: string, newValue?: string) => {
 		const inputValue = newValue && !isNaN(+newValue) ? parseInt(newValue) : undefined;
 		if (initialValue !== inputValue)
-			onChange?.(fieldName, newValue === '' ? undefined : { [fieldName]: inputValue });
+			onChange?.([fieldName], newValue === '' ? undefined : { [fieldName]: inputValue });
 	};
 
 	return (

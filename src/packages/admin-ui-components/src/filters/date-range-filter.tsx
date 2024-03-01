@@ -8,30 +8,30 @@ export type DateRangeFilterType = { [x: string]: string } | undefined;
 export interface DateRangeFilterProps {
 	fieldName: string;
 	entity: string; // Not used but added to conform to API
-	onChange?: (key: string, newFilter?: Filter) => void;
-	initialValue?: DateRangeFilterType;
+	onChange?: (keys: string[], newFilter?: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
-const getInitialDateWithKeyFromFilter = (key: string, filter?: DateRangeFilterType) => {
-	const iSOString = filter?.[key];
+const getInitialDateWithKeyFromFilter = (key: string, filter?: Filter) => {
+	const iSOString = filter?.[key] as string | undefined;
 	return iSOString ? DateTime.fromISO(iSOString) : undefined;
 };
 
 export const DateRangeFilter = ({
 	fieldName,
 	onChange,
-	initialValue,
+	initialFilter,
 	resetCount,
 }: DateRangeFilterProps) => {
 	const startKey = `${fieldName}_gte`;
 	const endKey = `${fieldName}_lte`;
-	const initialStartDate = getInitialDateWithKeyFromFilter(startKey, initialValue);
-	const initialEndDate = getInitialDateWithKeyFromFilter(endKey, initialValue);
+	const initialStartDate = getInitialDateWithKeyFromFilter(startKey, initialFilter);
+	const initialEndDate = getInitialDateWithKeyFromFilter(endKey, initialFilter);
 
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
 		onChange?.(
-			fieldName,
+			[startKey, endKey],
 			startDate && endDate
 				? {
 						[startKey]: startDate.startOf('day').toISO(),

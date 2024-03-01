@@ -4,8 +4,8 @@ import { Filter, useSchema } from '../utils';
 export interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (key: string, newFilter?: Filter) => void;
-	initialValue?: string;
+	onChange?: (keys: string[], newFilter?: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -13,9 +13,11 @@ export const EnumFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialValue,
+	initialFilter,
 	resetCount,
 }: EnumFilterProps) => {
+	const key = `${fieldName}_in`;
+	const initialValue = initialFilter?.[key] as string[] | undefined;
 	const { entityByName, enumByName } = useSchema();
 	const entityType = entityByName(entity);
 
@@ -31,7 +33,7 @@ export const EnumFilter = ({
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		onChange?.(
-			`${fieldName}_in`,
+			[`${fieldName}_in`],
 			(options ?? [])?.length > 0
 				? { [`${fieldName}_in`]: options?.map((option) => option.value) }
 				: undefined
@@ -42,7 +44,7 @@ export const EnumFilter = ({
 		<Select
 			key={`${fieldName}:${resetCount}`}
 			options={enumOptions}
-			value={initialValue ? [{ value: initialValue, label: undefined }] : []}
+			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 		/>

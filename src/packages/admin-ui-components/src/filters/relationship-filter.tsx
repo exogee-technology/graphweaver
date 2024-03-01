@@ -9,8 +9,8 @@ export type RelationshipFilterType = { id_in: string[] } | undefined;
 export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (key: string, newFilter?: Filter) => void;
-	initialValue?: RelationshipFilterType;
+	onChange?: (keys: string[], newFilter?: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -18,9 +18,11 @@ export const RelationshipFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialValue,
+	initialFilter,
 	resetCount,
 }: RelationshipFilterProps) => {
+	const key = fieldName;
+	const initialValue = initialFilter?.[key] as RelationshipFilterType | undefined;
 	const { entityByName, entities } = useSchema();
 
 	const entityType = entityByName(entity);
@@ -43,7 +45,7 @@ export const RelationshipFilter = ({
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		onChange?.(
-			fieldName,
+			[fieldName],
 			(options ?? [])?.length > 0
 				? {
 						[fieldName]: { id_in: options?.map((option) => option.value) },
