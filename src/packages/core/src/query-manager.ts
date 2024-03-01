@@ -1,15 +1,13 @@
 import { logger } from '@exogee/logger';
 import { TypeValue } from 'type-graphql/dist/decorators/types';
 
-import { EntityMetadataMap } from './base-resolver';
 import { BackendProvider, Filter, PaginationOptions } from './common/types';
+import { graphweaverMetadata } from './metadata';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
 const getFieldFromEntity = (entityName: string, fieldName: string) => {
-	const metadata = EntityMetadataMap.get(entityName);
-	if (!metadata)
-		throw new Error(`Could not locate entity with name ${entityName} in metadata map.`);
+	const metadata = graphweaverMetadata.getEntity(entityName);
 
 	// Strip the operators out of the field name
 	let normalisedFieldName = fieldName;
@@ -56,10 +54,10 @@ const visit = async <D, G>(
 			const field = getFieldFromEntity(currentEntityName, fieldName);
 
 			// We only need to recurse on fields that actually have a target set.
-			const nextMetadata = EntityMetadataMap.get(entityNameFromType(field.getType()));
+			const nextMetadata = graphweaverMetadata.getEntity(entityNameFromType(field.getType()));
 			if (nextMetadata) {
 				// Let's look up the related entity and recurse
-				const result = await visit(nextMetadata.entity.name, nextMetadata.provider, value);
+				const result = await visit(nextMetadata.name, nextMetadata.provider, value);
 
 				// Ok, now that we've explored the branch, do we need to run a query and splatter our filter,
 				// or are we good to just let this cascade on up?
@@ -99,8 +97,7 @@ class QueryManagerImplementation {
 		filter?: Filter<G>;
 		pagination?: PaginationOptions;
 	}) => {
-		const metadata = EntityMetadataMap.get(entityName);
-		if (!metadata) throw new Error(`Could not get provider for '${entityName}' entity.`);
+		const metadata = graphweaverMetadata.getEntity(entityName);
 
 		logger.trace('Handling cross-datasource queries');
 		logger.trace('Original filter: ', filter);

@@ -635,9 +635,6 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
-      pluralize:
-        specifier: 8.0.0
-        version: 8.0.0
       prop-types:
         specifier: 15.8.1
         version: 15.8.1

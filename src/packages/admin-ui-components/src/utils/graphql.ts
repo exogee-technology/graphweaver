@@ -6,6 +6,7 @@ export const SCHEMA_QUERY = gql`
 		result: _graphweaver {
 			entities {
 				name
+				plural
 				backendId
 				summaryField
 				defaultFilter

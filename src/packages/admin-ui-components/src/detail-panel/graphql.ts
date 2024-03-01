@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import pluralize from 'pluralize';
 import { Entity, generateGqlSelectForEntityFields } from '../utils';
 
 export const generateUpdateEntityMutation = (
@@ -34,12 +33,11 @@ export const generateDeleteEntityMutation = (entity: Entity) => gql`
 
 export const generateDeleteManyEntitiesMutation = (entity: Entity) => gql`
 mutation deleteManyEntities ($ids: [ID!]!){
-  delete${pluralize(entity.name)} (filter: { id_in: $ids })
+  delete${entity.plural} (filter: { id_in: $ids })
 }
 `;
 
-export const getRelationshipQuery = (entityName: string, summaryField?: string) => {
-	const pluralName = pluralize(entityName);
+export const getRelationshipQuery = (pluralName: string, summaryField?: string) => {
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`

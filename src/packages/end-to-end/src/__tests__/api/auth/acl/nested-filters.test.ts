@@ -10,7 +10,7 @@ import {
 	GraphQLEntity,
 	ID,
 	ObjectType,
-	Provider,
+	BaseDataProvider,
 	RelationshipField,
 	Resolver,
 	createBaseResolver,
@@ -79,7 +79,7 @@ export class Track extends GraphQLEntity<any> {
 	description!: string;
 }
 
-const albumDataProvider = new Provider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
 albumDataProvider.backendProviderConfig = {
 	filter: {
 		root: true,
@@ -102,18 +102,21 @@ albumDataProvider.backendProviderConfig = {
 @Resolver((of) => Album)
 class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
 
-const artistDataProvider = new Provider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
 
 @Resolver((of) => Artist)
 class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}
 
-const trackDataProvider = new Provider<any, Track>('track');
+const trackDataProvider = new BaseDataProvider<any, Track>('track');
 
 @Resolver((of) => Track)
 class TrackResolver extends createBaseResolver<Track, any>(Track, trackDataProvider) {}
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(Credential, new Provider('auth')) {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new BaseDataProvider('auth')
+) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
 		throw new Error('Unknown username or password, please try again');

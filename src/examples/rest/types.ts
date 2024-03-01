@@ -34,6 +34,7 @@ export type AdminUiEntityMetadata = {
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
   fields: Array<AdminUiFieldMetadata>;
   name: Scalars['String']['output'];
+  plural: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
 };
 
