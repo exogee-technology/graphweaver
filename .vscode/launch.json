@@ -43,7 +43,7 @@
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/src/examples/mailchimp"
     },
-     {
+    {
       "name": "End to End - Auth",
       "type": "node",
       "request": "launch",
