@@ -2,6 +2,7 @@ import { useLazyQuery } from '@apollo/client';
 
 import { Filter, Select, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
+import toast from 'react-hot-toast';
 
 export interface TextFilterProps {
 	fieldName: string;
@@ -18,8 +19,11 @@ export const TextFilter = ({
 	initialFilter,
 	resetCount,
 }: TextFilterProps) => {
-	const key = `${fieldName}_in`;
-	const initialValue = initialFilter?.[key] as string[] | undefined;
+	const initialValue = (
+		initialFilter?.[`${fieldName}_in`] ?? initialFilter?.[fieldName]
+			? [initialFilter?.[fieldName]]
+			: undefined
+	) as string[] | undefined;
 	const { entityByName } = useSchema();
 
 	const [getData, { loading, error, data }] = useLazyQuery<{ result: Record<string, string>[] }>(

@@ -1,8 +1,12 @@
-import { ReactNode, useEffect, useState, createElement } from 'react';
+import { ReactNode, useEffect, useState, createElement, useCallback } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 import { Button } from '../button';
 import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
+	BooleanFilter,
+	checkAndCleanFilter,
 	DateRangeFilter,
 	EnumFilter,
 	NumericFilter,
@@ -11,23 +15,55 @@ import {
 } from '../filters';
 
 import styles from './styles.module.css';
-import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
-	const { entity, id } = useParams();
-	if (!entity) throw new Error('There should always be an entity at this point.');
+	const { entity: entityName, id } = useParams();
+	if (!entityName) throw new Error('There should always be an entity at this point.');
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
 	const [filters, setFilters] = useState(
-		searchParams.filters ?? entityByName(entity).defaultFilter
+		searchParams.filters ?? entityByName(entityName).defaultFilter
 	);
 
-	if (!entity) {
-		throw Error('Entity should be in URL here');
-	}
+	useEffect(() => {
+		// On mount, check if the filters are supported by the entity
+		const entity = entityByName(entityName);
+		const showOnlyFiveFilters = entity.fields.length > 5 ? 5 : entity.fields.length;
+		const fields = entity.fields
+			// filter out rowEntity.fields with the JSON type
+			.filter((field) => field.type !== 'JSON')
+			.slice(0, showOnlyFiveFilters);
+
+		const { filter, unsupportedKeys } = checkAndCleanFilter(fields, filters);
+
+		if (unsupportedKeys.length) {
+			const plural = unsupportedKeys.length > 1;
+			toast.error(
+				`Found unsupported filter ${plural ? 'properties' : 'property'} (${unsupportedKeys.join(
+					', '
+				)}) which ${plural ? 'have' : 'has'} been removed.`,
+				{
+					duration: 5000,
+				}
+			);
+			setFilters(filter);
+		}
+	}, []);
+
+	useEffect(() => {
+		const { sort } = decodeSearchParams(search);
+		navigate(
+			routeFor({
+				entity: entityName,
+				filters,
+				sort,
+				id,
+			})
+		);
+	}, [filters]);
 
 	// This function updates the filter in state based on the filter keys updated and the newFilter value
 	const onFilter = (keys: string[], newFilter?: Filter) => {
@@ -51,67 +87,52 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		});
 	};
 
-	const getFilterComponents = (entityName: string) => {
-		const rowEntity = entityByName(entityName);
-
-		// @todo - currently the filters are not fitting on the screen
-		// we plan to redo this filter bar so that it is a drop down
-		// for now the workaround is to reduce the number of filters to 5
-
-		const showOnlyFiveFilters = rowEntity.fields.length > 5 ? 5 : rowEntity.fields.length;
-		return (
-			rowEntity.fields
-				// filter out rowEntity.fields with the JSON type
-				.filter((field) => field.type !== 'JSON')
-				.slice(0, showOnlyFiveFilters)
-				.map((field) => {
-					if (!field.filter?.type) return null;
-					const options = {
-						key: field.name,
-						fieldName: field.name,
-						entity: entity,
-						onChange: onFilter,
-						resetCount: resetCount,
-						initialFilter: filters,
-					};
-
-					switch (field.filter.type) {
-						case AdminUIFilterType.TEXT:
-							return createElement(TextFilter, options);
-						case AdminUIFilterType.BOOLEAN:
-							return createElement(BooleanFilter, options);
-						case AdminUIFilterType.RELATIONSHIP:
-							return createElement(RelationshipFilter, options);
-						case AdminUIFilterType.ENUM:
-							return createElement(EnumFilter, options);
-						case AdminUIFilterType.NUMERIC:
-							return createElement(NumericFilter, options);
-						case AdminUIFilterType.DATE_RANGE:
-							return createElement(DateRangeFilter, options);
-					}
-				})
-		);
-	};
-
-	useEffect(() => {
-		const { sort } = decodeSearchParams(search);
-		navigate(
-			routeFor({
-				entity,
-				filters,
-				sort,
-				id,
-			})
-		);
-	}, [filters]);
-
-	const filterComponents = getFilterComponents(entity);
-
 	const clearAllFilters = () => {
 		setFilters(undefined);
 		setResetCount((resetCount) => resetCount + 1);
 	};
 
+	const getFilterComponents = useCallback(() => {
+		const entity = entityByName(entityName);
+
+		// @todo - currently the filters are not fitting on the screen
+		// we plan to redo this filter bar so that it is a drop down
+		// for now the workaround is to reduce the number of filters to 5
+		const showOnlyFiveFilters = entity.fields.length > 5 ? 5 : entity.fields.length;
+		const fields = entity.fields
+			// filter out rowEntity.fields with the JSON type
+			.filter((field) => field.type !== 'JSON')
+			.slice(0, showOnlyFiveFilters);
+
+		return fields.map((field) => {
+			if (!field.filter?.type) return null;
+			const options = {
+				key: field.name,
+				fieldName: field.name,
+				entity: entityName,
+				onChange: onFilter,
+				resetCount: resetCount,
+				initialFilter: filters,
+			};
+
+			switch (field.filter.type) {
+				case AdminUIFilterType.TEXT:
+					return createElement(TextFilter, options);
+				case AdminUIFilterType.BOOLEAN:
+					return createElement(BooleanFilter, options);
+				case AdminUIFilterType.RELATIONSHIP:
+					return createElement(RelationshipFilter, options);
+				case AdminUIFilterType.ENUM:
+					return createElement(EnumFilter, options);
+				case AdminUIFilterType.NUMERIC:
+					return createElement(NumericFilter, options);
+				case AdminUIFilterType.DATE_RANGE:
+					return createElement(DateRangeFilter, options);
+			}
+		});
+	}, [entityName, filters, resetCount]);
+
+	const filterComponents = getFilterComponents();
 	if (filterComponents.length === 0) return null;
 
 	return (
