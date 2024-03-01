@@ -6,7 +6,7 @@ import { Button } from '../button';
 import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
 	BooleanFilter,
-	checkAndCleanFilter,
+	validateFilter,
 	DateRangeFilter,
 	EnumFilter,
 	NumericFilter,
@@ -37,7 +37,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			.filter((field) => field.type !== 'JSON')
 			.slice(0, showOnlyFiveFilters);
 
-		const { filter, unsupportedKeys } = checkAndCleanFilter(fields, filters);
+		const { filter, unsupportedKeys } = validateFilter(fields, filters);
 
 		if (unsupportedKeys.length) {
 			const plural = unsupportedKeys.length > 1;
