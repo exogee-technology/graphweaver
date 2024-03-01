@@ -4,11 +4,9 @@ import { Button } from '../button';
 import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
 	DateRangeFilter,
-	DateRangeFilterType,
 	EnumFilter,
 	NumericFilter,
 	RelationshipFilter,
-	RelationshipFilterType,
 	TextFilter,
 } from '../filters';
 
@@ -23,15 +21,17 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const [filter, setFilter] = useState(searchParams.filters ?? entityByName(entity).defaultFilter);
+	const [filters, setFilters] = useState(
+		searchParams.filters ?? entityByName(entity).defaultFilter
+	);
 
 	if (!entity) {
 		throw Error('Entity should be in URL here');
 	}
 
-	// This function updates the filter in state based on fieldName and newFilter values
+	// This function updates the filter in state based on the filter keys updated and the newFilter value
 	const onFilter = (keys: string[], newFilter?: Filter) => {
-		setFilter((currentFilter) => {
+		setFilters((currentFilter) => {
 			if (!newFilter) {
 				// If no newFilter provided, remove the existing one for this fieldName from current filter
 				for (const key of keys) {
@@ -72,7 +72,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						entity: entity,
 						onChange: onFilter,
 						resetCount: resetCount,
-						initialFilter: filter,
+						initialFilter: filters,
 					};
 
 					switch (field.filter.type) {
@@ -98,17 +98,17 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		navigate(
 			routeFor({
 				entity,
-				filters: Object.keys(filter ?? {}).length > 0 ? filter : undefined,
+				filters,
 				sort,
 				id,
 			})
 		);
-	}, [filter]);
+	}, [filters]);
 
 	const filterComponents = getFilterComponents(entity);
 
 	const clearAllFilters = () => {
-		setFilter({});
+		setFilters(undefined);
 		setResetCount((resetCount) => resetCount + 1);
 	};
 
