@@ -30,11 +30,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}
 
 	// This function updates the filter in state based on fieldName and newFilter values
-	const onFilter = (fieldName: string, newFilter?: Filter) => {
+	const onFilter = (key: string, newFilter?: Filter) => {
 		setFilter((currentFilter) => {
 			if (!newFilter) {
 				// If no newFilter provided, remove the existing one for this fieldName from current filter
-				delete currentFilter?.[fieldName];
+				delete currentFilter?.[key];
 
 				// Return undefined if there's nothing left in the filter.
 				const filterIsEmpty = Object.keys(currentFilter ?? {}).length === 0;

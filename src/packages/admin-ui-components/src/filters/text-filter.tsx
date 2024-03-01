@@ -6,7 +6,7 @@ import { queryForFilterText } from './graphql';
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
+	onChange?: (key: string, newFilter?: Filter) => void;
 	initialValue?: string;
 	resetCount: number; // We use this to reset the filter using the key
 }
@@ -28,15 +28,11 @@ export const TextFilter = ({
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		onChange?.(
-			fieldName,
-			(options ?? [])?.length > 1
-				? // if there are multiple options, use the _in filter
-				  {
+			`${fieldName}_in`,
+			(options ?? [])?.length > 0
+				? {
 						[`${fieldName}_in`]: options?.map((option) => option.value),
 				  }
-				: // if there is only one option, use the equals filter
-				options?.length === 1
-				? ({ [fieldName]: options?.[0]?.value } as Filter<string>)
 				: undefined
 		);
 	};

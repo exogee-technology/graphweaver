@@ -3,7 +3,7 @@ import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
 export interface BooleanFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
+	onChange?: (key: string, newFilter?: Filter) => void;
 	initialValue?: boolean;
 	resetCount: number; // We use this to reset the filter using the key
 }

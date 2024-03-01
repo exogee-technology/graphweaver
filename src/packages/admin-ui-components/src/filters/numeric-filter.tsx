@@ -4,7 +4,7 @@ import { Input } from '../input';
 export interface NumericFilterProps {
 	fieldName: string;
 	entity: string; // Unused but defined for a consistent API
-	onChange?: (fieldName: string, filter?: Filter) => void;
+	onChange?: (key: string, newFilter?: Filter) => void;
 	initialValue?: number;
 	resetCount: number; // We use this to reset the filter using the key
 }
