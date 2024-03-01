@@ -75,7 +75,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				}
 			}
 
-			// Combine all new filters into one object
+			// Combine all filters into one object
 			const combinedNewFilter = newFilters
 				.filter((filter) => filter.newFilter)
 				.reduce(
@@ -83,11 +83,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 						...acc,
 						...filter.newFilter,
 					}),
-					{ ...currentFilter } as Filter
+					currentFilter ?? {}
 				);
 
 			// Return undefined if there's nothing left in the filter.
-			const combinedNewFilterIsEmpty = Object.keys(combinedNewFilter ?? {}).length === 0;
+			const combinedNewFilterIsEmpty = Object.keys(combinedNewFilter).length === 0;
 			if (combinedNewFilterIsEmpty) return undefined;
 
 			// If filter is not empty, return a copy of currentFilter (to prevent mutations to state directly affecting future rendering)
