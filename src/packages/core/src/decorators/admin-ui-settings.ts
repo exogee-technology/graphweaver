@@ -1,20 +1,4 @@
-import {
-	AdminUIEntitySettings,
-	AdminUISettingsMap,
-	BaseDataEntity,
-	GraphQLEntity,
-	GraphQLEntityConstructor,
-	Filter,
-} from '..';
-
-// @todo This should be removed once we resolve https://exogee.atlassian.net/browse/EXOGW-325
-// This is a temporary fix to expand the filter to the correct format
-const expandFilter = (filter?: Filter<unknown>) => {
-	if (!filter) return undefined;
-	return Object.entries(filter).reduce((prev, [key, value]) => {
-		return { ...prev, [key]: { [key]: value } };
-	}, {});
-};
+import { AdminUIEntitySettings, AdminUISettingsMap, BaseDataEntity, GraphQLEntity } from '..';
 
 export function AdminUISettings<
 	G extends GraphQLEntity<BaseDataEntity> = GraphQLEntity<BaseDataEntity>
@@ -29,7 +13,7 @@ export function AdminUISettings<
 			if (!settings.fields) settings.fields = {};
 			settings.fields[propertyKey as keyof typeof settings.fields] = { ...props };
 		} else {
-			settings.entity = { ...props, defaultFilter: expandFilter(props?.defaultFilter) };
+			settings.entity = { ...props };
 		}
 
 		AdminUISettingsMap.set(entityName, settings);
