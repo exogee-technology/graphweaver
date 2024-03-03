@@ -2,15 +2,14 @@ import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
 
 export interface BooleanFilterProps {
 	fieldName: string;
-	entity: string;
-	onChange?: (newFilters: { key: string; newFilter?: Filter }[]) => void;
+	entity: string; // Not used but added to conform to API
+	onChange?: (entityName: string, newFilter: Filter) => void;
 	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const BooleanFilter = ({
 	fieldName,
-	entity,
 	onChange,
 	initialFilter,
 	resetCount,
@@ -24,17 +23,8 @@ export const BooleanFilter = ({
 	];
 
 	const handleOnChange = (options: SelectOption[]) => {
-		onChange?.([
-			{
-				key: fieldName,
-				newFilter:
-					(options ?? [])?.length > 0
-						? {
-								[fieldName]: Boolean(options?.[0]?.value),
-						  }
-						: undefined,
-			},
-		]);
+		const hasSelectedOptions = (options ?? [])?.length > 0;
+		onChange?.(fieldName, hasSelectedOptions ? { [fieldName]: Boolean(options?.[0]?.value) } : {});
 	};
 
 	return (

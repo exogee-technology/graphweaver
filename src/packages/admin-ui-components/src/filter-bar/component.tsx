@@ -28,15 +28,23 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		searchParams.filters ?? entityByName(entityName).defaultFilter
 	);
 
-	useEffect(() => {
-		// On mount, check if the filters are supported by the entity
+	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
+		// @todo - currently the filters are not fitting on the screen
+		// we plan to redo this filter bar so that it is a drop down
+		// for now the workaround is to reduce the number of filters to 5
 		const showOnlyFiveFilters = entity.fields.length > 5 ? 5 : entity.fields.length;
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON type
 			.filter((field) => field.type !== 'JSON')
 			.slice(0, showOnlyFiveFilters);
 
+		return fields;
+	}, [entityName]);
+
+	useEffect(() => {
+		// On mount, check if the filters are supported by the entity
+		const fields = filterFieldsOnEntity();
 		const { filter, unsupportedKeys } = validateFilter(fields, filters);
 
 		if (unsupportedKeys.length) {
@@ -66,29 +74,24 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}, [filters]);
 
 	// This function updates the filter in state based on the filter keys updated and the newFilter value
-	const onFilter = (newFilters: { key: string; newFilter?: Filter }[]) => {
+	const onFilter = (entityName: string, newFilter: Filter) => {
 		setFilters((currentFilter) => {
-			// Delete filters that have been removed
-			for (const filter of newFilters) {
-				if (!filter.newFilter) {
-					delete currentFilter?.[filter.key];
-				}
+			// Remove any filters from the currentFilter that start with the same entityName
+			const currentFilterKeys = Object.keys(currentFilter ?? {});
+			const keysToRemove = currentFilterKeys.filter((key) => key.startsWith(entityName));
+			for (const key of keysToRemove) {
+				delete currentFilter?.[key];
 			}
 
 			// Combine all filters into one object
-			const combinedNewFilter = newFilters
-				.filter((filter) => filter.newFilter)
-				.reduce(
-					(acc, filter) => ({
-						...acc,
-						...filter.newFilter,
-					}),
-					currentFilter ?? {}
-				);
+			const combinedNewFilter = {
+				...currentFilter,
+				...newFilter,
+			};
 
 			// Return undefined if there's nothing left in the filter.
-			const combinedNewFilterIsEmpty = Object.keys(combinedNewFilter).length === 0;
-			if (combinedNewFilterIsEmpty) return undefined;
+			const isFilterEmpty = Object.keys(combinedNewFilter).length === 0;
+			if (isFilterEmpty) return undefined;
 
 			// If filter is not empty, return a copy of currentFilter (to prevent mutations to state directly affecting future rendering)
 			return { ...combinedNewFilter };
@@ -101,16 +104,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	};
 
 	const getFilterComponents = useCallback(() => {
-		const entity = entityByName(entityName);
-
-		// @todo - currently the filters are not fitting on the screen
-		// we plan to redo this filter bar so that it is a drop down
-		// for now the workaround is to reduce the number of filters to 5
-		const showOnlyFiveFilters = entity.fields.length > 5 ? 5 : entity.fields.length;
-		const fields = entity.fields
-			// filter out rowEntity.fields with the JSON type
-			.filter((field) => field.type !== 'JSON')
-			.slice(0, showOnlyFiveFilters);
+		const fields = filterFieldsOnEntity();
 
 		return fields.map((field) => {
 			if (!field.filter?.type) return null;
