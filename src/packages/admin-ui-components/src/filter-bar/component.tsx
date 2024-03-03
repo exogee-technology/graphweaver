@@ -48,11 +48,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		const { filter, unsupportedKeys } = validateFilter(fields, filters);
 
 		if (unsupportedKeys.length) {
-			const plural = unsupportedKeys.length > 1;
+			const isPlural = unsupportedKeys.length > 1;
 			toast.error(
-				`Found unsupported filter ${plural ? 'properties' : 'property'} (${unsupportedKeys.join(
+				`Found unsupported filter ${isPlural ? 'properties' : 'property'} (${unsupportedKeys.join(
 					', '
-				)}) which ${plural ? 'have' : 'has'} been removed.`,
+				)}) which ${isPlural ? 'have' : 'has'} been removed.`,
 				{
 					duration: 5000,
 				}
