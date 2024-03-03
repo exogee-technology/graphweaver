@@ -30,10 +30,10 @@ export const DateRangeFilter = ({
 	const initialEndDate = getInitialDateWithKeyFromFilter(endKey, initialFilter);
 
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
-		onChange?.(fieldName, {
-			...(startDate ? { [startKey]: startDate.toISO() } : {}),
-			...(endDate ? { [endKey]: endDate.toISO() } : {}),
-		});
+		onChange?.(
+			fieldName,
+			startDate && endDate ? { [startKey]: startDate.toISO(), [endKey]: endDate.toISO() } : {}
+		);
 	};
 
 	return (
