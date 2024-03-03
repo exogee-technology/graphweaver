@@ -1,9 +1,7 @@
 import { gql } from '@apollo/client';
-import pluralize from 'pluralize';
 import { Entity } from '../utils';
 
-export const getRelationshipQuery = (entityName: string, summaryField?: string) => {
-	const pluralName = pluralize(entityName);
+export const getRelationshipQuery = (pluralName: string, summaryField?: string) => {
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`
@@ -22,7 +20,7 @@ export const queryForFilterText = (
 	entityByType: (type: string) => Entity
 ) => {
 	const entity = entityByType(entityName);
-	const pluralName = pluralize(entity.name);
+	const pluralName = entity.plural;
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`

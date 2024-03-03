@@ -35,7 +35,7 @@ export const RelationshipFilter = ({
 			: undefined;
 
 	if (!relationshipEntity) return null;
-	const relationshipEntityType = entityByName(relationshipEntity);
+	const relatedEntity = entityByName(relationshipEntity);
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		const hasSelectedOptions = (options ?? [])?.length > 0;
@@ -46,13 +46,13 @@ export const RelationshipFilter = ({
 	};
 
 	const [getRelationship, { data, loading, error }] = useLazyQuery<{ result: any[] }>(
-		getRelationshipQuery(field.type, relationshipEntityType.summaryField),
+		getRelationshipQuery(relatedEntity.plural, relatedEntity.summaryField),
 		{
 			variables: {
-				...(relationshipEntityType.summaryField
+				...(relatedEntity.summaryField
 					? {
 							pagination: {
-								orderBy: { [relationshipEntityType.summaryField]: 'ASC' },
+								orderBy: { [relatedEntity.summaryField]: 'ASC' },
 							},
 					  }
 					: {}),
@@ -67,7 +67,7 @@ export const RelationshipFilter = ({
 	};
 
 	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
-		const label = relationshipEntityType.summaryField ?? 'id';
+		const label = relatedEntity.summaryField ?? 'id';
 		return { label: label ? (item as any)[label] : 'notfound', value: item.id };
 	});
 

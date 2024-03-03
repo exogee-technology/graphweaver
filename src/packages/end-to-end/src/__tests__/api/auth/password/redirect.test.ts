@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, Provider, Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, BaseDataProvider, Resolver } from '@exogee/graphweaver';
 import {
 	createBasePasswordAuthResolver,
 	authApolloPlugin,
@@ -19,7 +19,10 @@ const user = new UserProfile({
 });
 
 @Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(Credential, new Provider('my-provider')) {
+class AuthResolver extends createBasePasswordAuthResolver(
+	Credential,
+	new BaseDataProvider('my-provider')
+) {
 	async authenticate(username: string, password: string) {
 		return user;
 	}

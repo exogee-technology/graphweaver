@@ -10,6 +10,9 @@ export class AdminUiEntityMetadata {
 	@Field(() => String)
 	name!: string;
 
+	@Field(() => String)
+	plural!: string;
+
 	@Field(() => String, { nullable: true })
 	backendId?: string | null;
 

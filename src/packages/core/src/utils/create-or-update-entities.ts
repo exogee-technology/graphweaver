@@ -1,12 +1,10 @@
 import { GraphQLError, GraphQLResolveInfo, OperationTypeNode } from 'graphql';
 import { delegateToSchema } from '@graphql-tools/delegate';
-import pluralize from 'pluralize';
 
 import {
 	BaseContext,
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
-	EntityMetadataMap,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphqlEntityType,
@@ -14,6 +12,7 @@ import {
 	WithId,
 	hookManagerMap,
 } from '..';
+import { graphweaverMetadata } from '../metadata';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -26,21 +25,13 @@ const isLinking = <G>(node: Partial<G> | Partial<G>[]) =>
 const isIdOnly = <G>(node: Partial<G>) =>
 	('id' in node && node.id && Object.keys(node).length === 1) ?? false;
 
-// Get the meta data for this entity and error check
-const getMeta = (name: string) => {
-	const meta = EntityMetadataMap.get(name);
-	if (!meta) {
-		throw new Error(`Unexpected Error: entity not found in metadata map`);
-	}
-	return meta;
-};
-
 // Determine the name of the mutation that we should call
 const getMutationName = <G extends WithId>(
 	name: string,
 	data: Partial<G> | Partial<G>[]
 ): string => {
-	const plural = pluralize(name);
+	const entityMetadata = graphweaverMetadata.getEntity(name);
+	const plural = entityMetadata.plural;
 	if (Array.isArray(data)) {
 		const isUpdateMany = data.every((object) => object.id);
 		if (isUpdateMany) return `update${plural}`;
@@ -98,8 +89,8 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const meta = getMeta(entityTypeName);
-	const gqlEntityType: GraphqlEntityType<G, D> = meta.entity.target;
+	const meta = graphweaverMetadata.getEntity(entityTypeName);
+	const gqlEntityType: GraphqlEntityType<G, D> = meta.target;
 
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements
@@ -151,7 +142,7 @@ export const createOrUpdateEntities = async <G extends WithId, D extends BaseDat
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = getMeta(relatedEntity.name);
+					const childMeta = graphweaverMetadata.getEntity(relatedEntity.name);
 					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
 					if (!parentField) {
 						throw new Error(

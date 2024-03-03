@@ -4,7 +4,7 @@ import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
-
+import { addChildFiltersToRelationshipFields, graphweaverMetadata } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
@@ -19,8 +19,6 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import { EntityMetadataMap } from '@exogee/graphweaver';
-import { removeInvalidFilterArg } from './typegraphql-params';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -94,7 +92,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
-		for (const metadata of EntityMetadataMap.values()) {
+		for (const metadata of graphweaverMetadata.entities) {
 			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
 				// only push unique plugins
 				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
@@ -123,8 +121,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
 
-		// Remove filter arg from typegraphql metadata for entities whose provider does not support filtering
-		removeInvalidFilterArg();
+		// Add any child filters to the schema
+		addChildFiltersToRelationshipFields();
 
 		this.schema = buildSchemaSync({
 			resolvers,

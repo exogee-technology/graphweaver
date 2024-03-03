@@ -18,7 +18,7 @@ import gql from 'graphql-tag';
 import { Resolver } from 'type-graphql';
 import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
-import { CreateOrUpdateHookParams, Provider } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, BaseDataProvider } from '@exogee/graphweaver';
 
 // Setup ethers for signing
 const phrase =
@@ -69,7 +69,7 @@ class AuthResolver extends createBaseWeb3AuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new Provider('my-provider')
+	new BaseDataProvider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
