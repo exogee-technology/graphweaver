@@ -20,9 +20,7 @@ export const TextFilter = ({
 	resetCount,
 }: TextFilterProps) => {
 	const initialValue = (
-		initialFilter?.[`${fieldName}_in`] ?? initialFilter?.[fieldName]
-			? [initialFilter?.[fieldName]]
-			: undefined
+		initialFilter?.[fieldName] ? [initialFilter?.[fieldName]] : initialFilter?.[`${fieldName}_in`]
 	) as string[] | undefined;
 	const { entityByName } = useSchema();
 

@@ -35,13 +35,7 @@ export const RelationshipFilter = ({
 			: undefined;
 
 	if (!relationshipEntity) return null;
-
 	const relationshipEntityType = entityByName(relationshipEntity);
-	if (!relationshipEntityType.summaryField) return null;
-
-	const orderBy = {
-		[relationshipEntityType.summaryField]: 'ASC',
-	};
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		const hasSelectedOptions = (options ?? [])?.length > 0;
@@ -55,9 +49,13 @@ export const RelationshipFilter = ({
 		getRelationshipQuery(field.type, relationshipEntityType.summaryField),
 		{
 			variables: {
-				pagination: {
-					orderBy,
-				},
+				...(relationshipEntityType.summaryField
+					? {
+							pagination: {
+								orderBy: { [relationshipEntityType.summaryField]: 'ASC' },
+							},
+					  }
+					: {}),
 			},
 		}
 	);
@@ -69,7 +67,7 @@ export const RelationshipFilter = ({
 	};
 
 	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
-		const label = relationshipEntityType.summaryField;
+		const label = relationshipEntityType.summaryField ?? 'id';
 		return { label: label ? (item as any)[label] : 'notfound', value: item.id };
 	});
 
