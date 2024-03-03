@@ -74,11 +74,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}, [filters]);
 
 	// This function updates the filter in state based on the filter keys updated and the newFilter value
-	const onFilter = (entityName: string, newFilter: Filter) => {
+	const onFilter = (fieldName: string, newFilter: Filter) => {
 		setFilters((currentFilter) => {
-			// Remove any filters from the currentFilter that start with the same entityName
+			// Remove any filters from the currentFilter that start with the same fieldName
 			const currentFilterKeys = Object.keys(currentFilter ?? {});
-			const keysToRemove = currentFilterKeys.filter((key) => key.startsWith(entityName));
+			const keysToRemove = currentFilterKeys.filter((key) => key.startsWith(fieldName));
 			for (const key of keysToRemove) {
 				delete currentFilter?.[key];
 			}

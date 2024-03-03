@@ -9,7 +9,7 @@ export type RelationshipFilterType = { id_in: string[] } | undefined;
 export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (entityName: string, newFilter: Filter) => void;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
 	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }

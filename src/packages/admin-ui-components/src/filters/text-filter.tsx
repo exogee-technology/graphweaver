@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (entityName: string, newFilter: Filter) => void;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
 	initialFilter?: Filter | undefined;
 	resetCount: number; // We use this to reset the filter using the key
 }

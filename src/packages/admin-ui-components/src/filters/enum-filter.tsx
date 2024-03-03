@@ -4,7 +4,7 @@ import { Filter, useSchema } from '../utils';
 export interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (entityName: string, newFilter: Filter) => void;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
 	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
