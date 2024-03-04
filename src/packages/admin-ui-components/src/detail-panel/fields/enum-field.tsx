@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../multi-select';
+import { SelectOption, Select, SelectMode } from '../../select';
 import { Enum } from '../../utils';
 
 export const EnumField = ({

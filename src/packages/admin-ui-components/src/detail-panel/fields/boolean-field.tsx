@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../multi-select';
+import { SelectOption, Select, SelectMode } from '../../select';
 
 export const BooleanField = ({ name }: { name: string }) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });

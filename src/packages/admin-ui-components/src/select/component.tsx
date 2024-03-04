@@ -86,7 +86,7 @@ export const Select = ({
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
 				{...getToggleButtonProps()}
 			>
-				{selectedItems ? (
+				{selectedItems.length > 0 ? (
 					<div className={styles.selectedOptions}>
 						<div className={styles.optionPill}>
 							<span className={styles.optionPillLabel}>

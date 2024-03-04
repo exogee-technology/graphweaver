@@ -14,7 +14,7 @@ export * from './input';
 export * from './layouts';
 export * from './loader';
 export * from './logout';
-export * from './multi-select';
+export * from './select';
 export * from './playground';
 export * from './require-schema';
 export * from './side-bar';

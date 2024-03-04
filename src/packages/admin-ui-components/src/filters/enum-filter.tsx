@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '../multi-select';
+import { Select, SelectMode, SelectOption } from '../select';
 import { Filter, useSchema } from '../utils';
 
 export interface EnumFilterProps {
@@ -47,6 +47,7 @@ export const EnumFilter = ({
 			}
 			placeholder={fieldName}
 			onChange={handleOnChange}
+			mode={SelectMode.MULTI}
 		/>
 	);
 };

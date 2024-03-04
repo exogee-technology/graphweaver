@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { Select, SelectOption } from '../multi-select';
+import { Select, SelectMode, SelectOption } from '../select';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
@@ -89,6 +89,7 @@ export const RelationshipFilter = ({
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}
 			loading={loading}
+			mode={SelectMode.MULTI}
 		/>
 	);
 };
