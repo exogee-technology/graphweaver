@@ -3,6 +3,7 @@ import { useSelect } from 'downshift';
 
 import { Spinner } from '../spinner';
 import styles from './styles.module.css';
+import { useEffect, useRef, useState } from 'react';
 
 export interface SelectOption {
 	value: unknown;
@@ -26,32 +27,31 @@ export const Select = ({
 	placeholder = 'Select',
 	loading = false,
 }: SelectProps) => {
-	const {
-		isOpen,
-		selectedItem,
-		getToggleButtonProps,
-		getMenuProps,
-		highlightedIndex,
-		getItemProps,
-	} = useSelect({
+	const [selectedItem, setSelectedItem] = useState<SelectOption>(value?.[0]);
+	const { isOpen, getToggleButtonProps, getMenuProps, highlightedIndex, getItemProps } = useSelect({
 		items: options,
+		selectedItem: value[0],
+		onSelectedItemChange: ({ selectedItem }) => {
+			if (selectedItem) {
+				setSelectedItem(selectedItem);
+			}
+		},
 		itemToString: (item) => (item?.label ? item.label : ''),
 	});
 
-	console.log(highlightedIndex, selectedItem);
+	useEffect(() => {
+		if (isOpen) onOpen?.();
+	}, [isOpen]);
+
+	useEffect(() => {
+		value?.[0] !== selectedItem && onChange([selectedItem]);
+	}, [selectedItem]);
 
 	return (
 		<div className={styles.select}>
 			<div
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
-				{...getToggleButtonProps({
-					onClick: (event: any) => {
-						console.log('clicked');
-						console.log(this);
-						event.target.focus();
-						event.currentTarget.focus();
-					},
-				})}
+				{...getToggleButtonProps()}
 			>
 				<span className={`${styles.selection} ${selectedItem ? '' : styles.placeholder}`}>
 					{selectedItem ? selectedItem.label : placeholder}
