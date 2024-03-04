@@ -53,9 +53,15 @@ export const Select = ({
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
 				{...getToggleButtonProps()}
 			>
-				<span className={`${styles.selection} ${selectedItem ? '' : styles.placeholder}`}>
-					{selectedItem ? selectedItem.label : placeholder}
-				</span>
+				{selectedItem ? (
+					<div className={styles.selectedOptions}>
+						<div className={styles.optionPill}>
+							<span className={styles.optionPillLabel}>{selectedItem.label}</span>
+						</div>
+					</div>
+				) : (
+					<span className={styles.placeholder}>{placeholder}</span>
+				)}
 
 				<span className={`${styles.arrow} ${isOpen ? styles.arrowUp : styles.arrowDown}`}></span>
 			</div>
