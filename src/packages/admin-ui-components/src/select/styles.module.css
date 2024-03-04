@@ -5,7 +5,7 @@
 	--select-selected-option-color: #12170d;
 }
 
-.multiSelect {
+.select {
 	position: relative;
 	width: 100%;
 	flex: 1;
@@ -53,25 +53,22 @@
 	margin-left: 8px;
 }
 
-.placeholder {
-	color: #6c757d;
-	padding: 8px;
-	text-transform: capitalize;
+.selection {
+    padding: 8px;
 }
 
-.optionsDropdownBackground {
-	width: 30px;
+.placeholder {
+	color: #6c757d;
+	text-transform: capitalize;
 }
 
 .optionsDropdown {
 	background: #271f36;
 	border-radius: 4px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	display: none;
 	max-height: 185px;
 	overflow-y: auto;
 	position: absolute;
-	top: 120%;
 	left: 0;
 	right: 0;
 	z-index: 1;
@@ -86,6 +83,8 @@
 	display: block;
 }
 
+
+
 .option {
 	cursor: pointer;
 	padding: 8px;
@@ -94,9 +93,12 @@
 	text-overflow: ellipsis;
 }
 
-.option.selected {
-	background-color: var(--select-selected-option-color);
-	color: #fff;
+.selected {
+    background-color: #0000003a;
+}
+
+.highlighted {
+    background-color: #ffffff1d;
 }
 
 .selectBox.open:after {

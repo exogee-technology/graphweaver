@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 import { useEffect } from 'react';
 import { SelectOption, Select, SelectMode } from '../../multi-select';
+import { Select as SingleSelect } from '../../select';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
@@ -48,6 +49,16 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 
 		helpers.setValue(newValue);
 	};
+
+	if (mode(entity) === SelectMode.SINGLE) {
+		return (
+			<SingleSelect
+				options={options}
+				value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
+				onChange={handleOnChange}
+			/>
+		);
+	}
 
 	return (
 		<Select

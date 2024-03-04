@@ -36,6 +36,7 @@ export type AdminUiEntityMetadata = {
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
   fields: Array<AdminUiFieldMetadata>;
   name: Scalars['String']['output'];
+  plural: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
 };
 
@@ -100,11 +101,6 @@ export type Album = {
   id: Scalars['ID']['output'];
   title: Scalars['String']['output'];
   tracks: Array<Track>;
-};
-
-
-export type AlbumArtistArgs = {
-  filter?: InputMaybe<ArtistsListFilter>;
 };
 
 
@@ -340,11 +336,6 @@ export type Customer = {
   phone?: Maybe<Scalars['String']['output']>;
   postalCode?: Maybe<Scalars['String']['output']>;
   state?: Maybe<Scalars['String']['output']>;
-};
-
-
-export type CustomerEmployeeArgs = {
-  filter?: InputMaybe<EmployeesListFilter>;
 };
 
 
@@ -749,11 +740,6 @@ export type Employee = {
 
 export type EmployeeCustomersArgs = {
   filter?: InputMaybe<CustomersListFilter>;
-};
-
-
-export type EmployeeEmployeeArgs = {
-  filter?: InputMaybe<EmployeesListFilter>;
 };
 
 
@@ -1330,11 +1316,6 @@ export type Invoice = {
 };
 
 
-export type InvoiceCustomerArgs = {
-  filter?: InputMaybe<CustomersListFilter>;
-};
-
-
 export type InvoiceInvoiceLinesArgs = {
   filter?: InputMaybe<InvoiceLinesListFilter>;
 };
@@ -1445,16 +1426,6 @@ export type InvoiceLine = {
   quantity: Scalars['Float']['output'];
   track: Track;
   unitPrice: Scalars['String']['output'];
-};
-
-
-export type InvoiceLineInvoiceArgs = {
-  filter?: InputMaybe<InvoicesListFilter>;
-};
-
-
-export type InvoiceLineTrackArgs = {
-  filter?: InputMaybe<TracksListFilter>;
 };
 
 export type InvoiceLineCreateOrUpdateInput = {
@@ -2565,23 +2536,8 @@ export type Track = {
 };
 
 
-export type TrackAlbumArgs = {
-  filter?: InputMaybe<AlbumsListFilter>;
-};
-
-
-export type TrackGenreArgs = {
-  filter?: InputMaybe<GenresListFilter>;
-};
-
-
 export type TrackInvoiceLinesArgs = {
   filter?: InputMaybe<InvoiceLinesListFilter>;
-};
-
-
-export type TrackMediaTypeArgs = {
-  filter?: InputMaybe<MediaTypesListFilter>;
 };
 
 
