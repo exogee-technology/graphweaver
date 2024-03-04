@@ -702,6 +702,9 @@ importers:
       '@apollo/client':
         specifier: 3.7.1
         version: 3.7.1(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@exogee/graphweaver-apollo-client':
+        specifier: workspace:*
+        version: link:../apollo-client
       '@graphiql/toolkit':
         specifier: 0.8.2
         version: 0.8.2(graphql@16.8.1)
@@ -787,6 +790,15 @@ importers:
       vitest:
         specifier: 1.1.1
         version: 1.1.1
+
+  packages/apollo-client:
+    devDependencies:
+      esbuild:
+        specifier: 0.15.5
+        version: 0.15.5
+      typescript:
+        specifier: 5.3.3
+        version: 5.3.3
 
   packages/auth:
     dependencies:

@@ -44,6 +44,10 @@
       "name": "📦 @exogee/graphweaver-admin-ui-components",
       "path": "src/packages/admin-ui-components"
     },
+        {
+      "name": "📦 @exogee/graphweaver-apollo-client",
+      "path": "src/packages/apollo-client"
+    },
     {
       "name": "📦 @exogee/graphweaver-auth",
       "path": "src/packages/auth"

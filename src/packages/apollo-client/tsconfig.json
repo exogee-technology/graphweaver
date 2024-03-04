@@ -8,9 +8,7 @@
 		"jsx": "react-jsx",
 		"outDir": "./lib",
 		"rootDir": "./src",
-		"types": ["vite/client"]
 	},
-	"include": ["./src", "./@types"],
-	"exclude": ["src/**/*.test.ts"],
-	"references": [{ "path": "../apollo-client" }]
+	"include": ["./src"],
+	"exclude": ["src/**/*.test.ts"]
 }
