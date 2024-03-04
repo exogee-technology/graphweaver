@@ -106,12 +106,12 @@ export interface SortField {
 	direction: SortDirection;
 }
 
-type EntityMap = {
-	[entityName: string]: Entity;
-};
-
 type Cache = ApolloCache<unknown> & {
 	policies: { addTypePolicies: (policy: { Query: TypePolicy }) => void };
+};
+
+type EntityMap = {
+	[entityName: string]: Entity;
 };
 
 export const useSchema = () => {
@@ -165,7 +165,7 @@ export const useSchema = () => {
 		error,
 		entities: Object.keys(entityMap),
 		backends: Object.keys(dataSourceMap),
-		entityByName: (entityName: string) => entityMap[entityName as keyof typeof entityMap],
+		entityByName: (entityName: string) => entityMap[entityName],
 		entityByType: (entityType: string) => {
 			const entityName = entityType.replaceAll(/[^a-zA-Z\d]/g, '');
 			return entityMap[entityName];
