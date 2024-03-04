@@ -38,7 +38,6 @@ export const Select = ({
 
 	const { isOpen, getToggleButtonProps, getMenuProps, highlightedIndex, getItemProps } = useSelect({
 		items: options,
-		selectedItem: value[0],
 		onSelectedItemChange: handleSelectionChange,
 		itemToString: (item) => (item?.label ? item.label : ''),
 	});
@@ -77,6 +76,11 @@ export const Select = ({
 		setSelectedItems([]);
 	};
 
+	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+		if (mode !== SelectMode.MULTI) return;
+		if (e.key === 'Backspace') handleDeleteAll();
+	};
+
 	// Store the selected ids in an array for easy lookup
 	const selectedIds = useMemo(() => selectedItems.map((item) => item.value), [selectedItems]);
 
@@ -88,7 +92,11 @@ export const Select = ({
 			>
 				{selectedItems.length > 0 ? (
 					<div className={styles.selectedOptions}>
-						<div className={styles.optionPill}>
+						<div
+							className={styles.optionPill}
+							tabIndex={mode === SelectMode.MULTI ? 0 : -1}
+							onKeyDown={handleOnPillKeyDown}
+						>
 							<span className={styles.optionPillLabel}>
 								{selectedItems.length > 1 || !selectedItems?.[0]?.label
 									? `${selectedItems.length} Selected`
