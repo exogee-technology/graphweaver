@@ -7,11 +7,11 @@ import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
 const mode = (entity: EntityField) => {
-	if (entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE') {
-		return SelectMode.SINGLE;
+	if (entity.relationshipType === 'ONE_TO_MANY' || entity.relationshipType === 'MANY_TO_MANY') {
+		return SelectMode.MULTI;
 	}
 
-	return SelectMode.MULTI;
+	return SelectMode.SINGLE;
 };
 
 export const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
@@ -54,8 +54,9 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 		return (
 			<SingleSelect
 				options={options}
-				value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
+				value={[].concat(initialValue || [])}
 				onChange={handleOnChange}
+				mode={mode(entity)}
 			/>
 		);
 	}

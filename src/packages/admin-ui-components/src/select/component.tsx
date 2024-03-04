@@ -3,7 +3,12 @@ import { useSelect } from 'downshift';
 
 import { Spinner } from '../spinner';
 import styles from './styles.module.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+
+export enum SelectMode {
+	SINGLE = 'SINGLE',
+	MULTI = 'MULTI',
+}
 
 export interface SelectOption {
 	value: unknown;
@@ -13,6 +18,7 @@ export interface SelectOption {
 interface SelectProps {
 	options: SelectOption[];
 	onChange: (selected: SelectOption[]) => void;
+	mode: SelectMode;
 	onOpen?: () => void;
 	value?: SelectOption[];
 	placeholder?: string;
@@ -26,16 +32,14 @@ export const Select = ({
 	value = [],
 	placeholder = 'Select',
 	loading = false,
+	mode,
 }: SelectProps) => {
-	const [selectedItem, setSelectedItem] = useState<SelectOption>(value?.[0]);
+	const [selectedItems, setSelectedItems] = useState<SelectOption[]>(value);
+
 	const { isOpen, getToggleButtonProps, getMenuProps, highlightedIndex, getItemProps } = useSelect({
 		items: options,
 		selectedItem: value[0],
-		onSelectedItemChange: ({ selectedItem }) => {
-			if (selectedItem) {
-				setSelectedItem(selectedItem);
-			}
-		},
+		onSelectedItemChange: handleSelectionChange,
 		itemToString: (item) => (item?.label ? item.label : ''),
 	});
 
@@ -44,8 +48,37 @@ export const Select = ({
 	}, [isOpen]);
 
 	useEffect(() => {
-		value?.[0] !== selectedItem && onChange([selectedItem]);
-	}, [selectedItem]);
+		value !== selectedItems && onChange(selectedItems);
+	}, [selectedItems]);
+
+	function handleSelectionChange({ selectedItem }: any) {
+		if (!selectedItem) return;
+		if (mode === SelectMode.SINGLE) {
+			setSelectedItems([selectedItem]);
+		} else {
+			setSelectedItems((_selectedOptions) => {
+				const isOptionAlreadySelected = _selectedOptions.some(
+					(selected) => selected.value === selectedItem.value
+				);
+
+				if (!isOptionAlreadySelected) {
+					// If option is not found in _selectedOptions
+					return [..._selectedOptions, selectedItem];
+				}
+
+				// return the original array as nothing has changed
+				return _selectedOptions;
+			});
+		}
+	}
+
+	// This is only used when multi select is enabled
+	const handleDeleteAll = () => {
+		setSelectedItems([]);
+	};
+
+	// Store the selected ids in an array for easy lookup
+	const selectedIds = useMemo(() => selectedItems.map((item) => item.value), [selectedItems]);
 
 	return (
 		<div className={styles.select}>
@@ -53,10 +86,19 @@ export const Select = ({
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
 				{...getToggleButtonProps()}
 			>
-				{selectedItem ? (
+				{selectedItems ? (
 					<div className={styles.selectedOptions}>
 						<div className={styles.optionPill}>
-							<span className={styles.optionPillLabel}>{selectedItem.label}</span>
+							<span className={styles.optionPillLabel}>
+								{selectedItems.length > 1 || !selectedItems?.[0]?.label
+									? `${selectedItems.length} Selected`
+									: selectedItems?.[0].label}
+							</span>
+							{mode === SelectMode.MULTI && (
+								<span className={styles.deleteOption} onClick={handleDeleteAll}>
+									&times;
+								</span>
+							)}
 						</div>
 					</div>
 				) : (
@@ -73,7 +115,7 @@ export const Select = ({
 					options.map((item, index) => (
 						<li
 							className={`${highlightedIndex === index ? styles.highlighted : ''} ${
-								selectedItem === item ? styles.selected : ''
+								selectedIds.includes(item.value) ? styles.selected : ''
 							} ${styles.option}`}
 							key={item.value as any}
 							{...getItemProps({ item, index })}
