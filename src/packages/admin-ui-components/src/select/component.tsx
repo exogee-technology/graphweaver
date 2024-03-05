@@ -3,7 +3,7 @@ import { useSelect } from 'downshift';
 
 import { Spinner } from '../spinner';
 import styles from './styles.module.css';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 export enum SelectMode {
 	SINGLE = 'SINGLE',
@@ -39,7 +39,7 @@ export const Select = ({
 	const { isOpen, getToggleButtonProps, getMenuProps, highlightedIndex, getItemProps } = useSelect({
 		items: options,
 		onSelectedItemChange: handleSelectionChange,
-		itemToString: (item) => (item?.label ? item.label : ''),
+		itemToString: (item) => item?.label ?? '',
 	});
 
 	useEffect(() => {
@@ -75,7 +75,6 @@ export const Select = ({
 	const handleDeleteAll = () => setSelectedItems([]);
 
 	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-		if (mode !== SelectMode.MULTI) return;
 		if (e.key === 'Backspace') handleDeleteAll();
 		if (e.key === 'Delete') handleDeleteAll();
 	};
@@ -101,11 +100,9 @@ export const Select = ({
 									? `${selectedItems.length} Selected`
 									: selectedItems?.[0].label}
 							</span>
-							{mode === SelectMode.MULTI && (
-								<span className={styles.deleteOption} onClick={handleDeleteAll}>
-									&times;
-								</span>
-							)}
+							<span className={styles.deleteOption} onClick={handleDeleteAll}>
+								&times;
+							</span>
 						</div>
 					</div>
 				) : (
@@ -121,9 +118,10 @@ export const Select = ({
 					) : (
 						options.map((item, index) => (
 							<li
-								className={`${highlightedIndex === index ? styles.highlighted : ''} ${
-									selectedIds.includes(item.value) ? styles.selected : ''
-								} ${styles.option}`}
+								className={classNames(styles.option, {
+									[styles.highlighted]: highlightedIndex === index,
+									[styles.selected]: selectedIds.includes(item.value),
+								})}
 								key={item.value as any}
 								{...getItemProps({ item, index })}
 							>
