@@ -42,14 +42,17 @@ export const validateFilter = (
 	const supportedKeys = getValidFilterProperties(fields);
 
 	// This is a list of all the keys in the filter that are not supported
-	const unsupportedKeys = Object.keys(filter).filter((key) => !supportedKeys.has(key));
+	const unsupportedKeys: string[] = [];
 
 	// Create a copy of the filter
 	const validFilter = { ...filter };
 
 	// Remove any unsupported keys from the filter
-	for (const key of unsupportedKeys) {
-		delete validFilter[key];
+	for (const key of Object.keys(filter)) {
+		if (!supportedKeys.has(key)) {
+			unsupportedKeys.push(key);
+			delete validFilter[key];
+		}
 	}
 
 	return {

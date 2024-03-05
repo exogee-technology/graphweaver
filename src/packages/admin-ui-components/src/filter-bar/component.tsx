@@ -77,10 +77,8 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const onFilter = (fieldName: string, newFilter: Filter) => {
 		setFilters((currentFilter) => {
 			// Remove any filters from the currentFilter that start with the same fieldName
-			const currentFilterKeys = Object.keys(currentFilter ?? {});
-			const keysToRemove = currentFilterKeys.filter((key) => key.startsWith(fieldName));
-			for (const key of keysToRemove) {
-				delete currentFilter?.[key];
+			for (const key of Object.keys(currentFilter ?? {})) {
+				if (key.startsWith(fieldName)) delete currentFilter?.[key];
 			}
 
 			// Combine all filters into one object
@@ -92,9 +90,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			// Return undefined if there's nothing left in the filter.
 			const isFilterEmpty = Object.keys(combinedNewFilter).length === 0;
 			if (isFilterEmpty) return undefined;
-
-			// If filter is not empty, return a copy of currentFilter (to prevent mutations to state directly affecting future rendering)
-			return { ...combinedNewFilter };
+			return combinedNewFilter;
 		});
 	};
 
