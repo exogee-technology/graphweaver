@@ -12,9 +12,11 @@ const generateTypePolicyFields = (entityNames: string[]) => {
 			return btoa(`${filter}:${orderBy}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
-			const merged = [...existing, ...incoming];
-			const uniqueItems = new Set(merged.map((item) => item.__ref));
-			return [...uniqueItems].map((__ref) => merged.find((item) => item.__ref === __ref));
+			const mergeMap = new Map<string, { __ref: string }>();
+			for (const entity of [...existing, ...incoming]) {
+				mergeMap.set(entity.__ref, entity);
+			}
+			return [...mergeMap.values()];
 		},
 	};
 
