@@ -1,16 +1,16 @@
 import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../multi-select';
+import { SelectOption, Select, SelectMode } from '../../select';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
 const mode = (entity: EntityField) => {
-	if (entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE') {
-		return SelectMode.SINGLE;
+	if (entity.relationshipType === 'ONE_TO_MANY' || entity.relationshipType === 'MANY_TO_MANY') {
+		return SelectMode.MULTI;
 	}
 
-	return SelectMode.MULTI;
+	return SelectMode.SINGLE;
 };
 
 export const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {

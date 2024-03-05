@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { Filter, Select, SelectOption, useSchema } from '..';
+import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
 
 export interface TextFilterProps {
@@ -57,6 +57,7 @@ export const TextFilter = ({
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}
 			loading={loading}
+			mode={SelectMode.MULTI}
 		/>
 	);
 };
