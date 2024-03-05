@@ -72,9 +72,7 @@ export const Select = ({
 	}
 
 	// This is only used when multi select is enabled
-	const handleDeleteAll = () => {
-		setSelectedItems([]);
-	};
+	const handleDeleteAll = () => setSelectedItems([]);
 
 	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
 		if (mode !== SelectMode.MULTI) return;
