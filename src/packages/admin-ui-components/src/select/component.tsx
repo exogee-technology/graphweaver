@@ -116,24 +116,25 @@ export const Select = ({
 
 				<span className={`${styles.arrow} ${isOpen ? styles.arrowUp : styles.arrowDown}`}></span>
 			</div>
-			<ul className={styles.optionsDropdown} {...getMenuProps()}>
-				{isOpen && loading ? (
-					<Spinner />
-				) : (
-					isOpen &&
-					options.map((item, index) => (
-						<li
-							className={`${highlightedIndex === index ? styles.highlighted : ''} ${
-								selectedIds.includes(item.value) ? styles.selected : ''
-							} ${styles.option}`}
-							key={item.value as any}
-							{...getItemProps({ item, index })}
-						>
-							<span>{item.label}</span>
-						</li>
-					))
-				)}
-			</ul>
+			{isOpen && (
+				<ul className={styles.optionsDropdown} {...getMenuProps()}>
+					{loading ? (
+						<Spinner />
+					) : (
+						options.map((item, index) => (
+							<li
+								className={`${highlightedIndex === index ? styles.highlighted : ''} ${
+									selectedIds.includes(item.value) ? styles.selected : ''
+								} ${styles.option}`}
+								key={item.value as any}
+								{...getItemProps({ item, index })}
+							>
+								<span>{item.label}</span>
+							</li>
+						))
+					)}
+				</ul>
+			)}
 		</div>
 	);
 };
