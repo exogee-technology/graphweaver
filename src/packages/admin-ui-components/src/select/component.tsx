@@ -79,6 +79,7 @@ export const Select = ({
 	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
 		if (mode !== SelectMode.MULTI) return;
 		if (e.key === 'Backspace') handleDeleteAll();
+		if (e.key === 'Delete') handleDeleteAll();
 	};
 
 	// Store the selected ids in an array for easy lookup
