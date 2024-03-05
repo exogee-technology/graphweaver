@@ -1,8 +1,6 @@
 import { gql } from '@apollo/client';
 
 import { Entity } from './use-schema';
-// Can't use useApolloClient/useQuery/useParams here if not using Loader
-import { apolloClient } from '../apollo';
 
 import { generateGqlSelectForEntityFields } from './graphql';
 
