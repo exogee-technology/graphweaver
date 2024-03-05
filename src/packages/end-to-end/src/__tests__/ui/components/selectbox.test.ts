@@ -32,7 +32,7 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('gridcell', { name: 'For Those About To Rock We' }).click();
-	await page.getByText('10 Selected ×').click();
+	await page.getByText('10 Selected×').click();
 	await page.getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('11 Selected');
 	await page.getByRole('button', { name: 'Save' }).click();
@@ -47,11 +47,11 @@ test('Should allow navigation around using a keyboard', async ({ page }) => {
 	await page.getByRole('link', { name: 'Album' }).click();
 
 	await page.locator('[id="downshift-\\:r3\\:-toggle-button"]').click();
-	await page.locator('[id="downshift-\\:r3\\:-toggle-button"]').press('Tab');
-	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('Enter');
-	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('ArrowDown');
-	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('ArrowDown');
-	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('Enter');
+	await page.locator('[id="downshift-\\:r3\\:-toggle-button"]').press('Tab', { delay: 300 });
+	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('Enter', { delay: 300 });
+	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('ArrowDown', { delay: 300 });
+	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('ArrowDown', { delay: 300 });
+	await page.locator('[id="downshift-\\:r5\\:-toggle-button"]').press('Enter', { delay: 300 });
 	await expect(await page.getByText('AC/DC×')).toBeVisible();
 	await page.getByText('AC/DC×').press('Delete');
 	await expect(await page.getByText('AC/DC×')).not.toBeVisible();
