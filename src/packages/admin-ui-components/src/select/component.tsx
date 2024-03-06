@@ -45,7 +45,7 @@ export const Select = ({
 		itemToString: (item) => item?.label ?? '',
 	});
 
-	const toggleButtonRef = useRef<HTMLDivElement>(null);
+	const toggleButtonRef = useRef<HTMLButtonElement>(null);
 	useEffect(() => {
 		if (autoFocus) {
 			setTimeout(() => {
@@ -96,11 +96,14 @@ export const Select = ({
 
 	return (
 		<div className={styles.select}>
-			<div
+			<button
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
 				{...getToggleButtonProps({
 					ref: toggleButtonRef,
-					onClick: () => toggleButtonRef.current?.focus(),
+					onClick: (e) => {
+						e.preventDefault();
+						toggleButtonRef.current?.focus();
+					},
 				})}
 			>
 				{selectedItems.length > 0 ? (
@@ -121,7 +124,7 @@ export const Select = ({
 				)}
 
 				<span className={`${styles.arrow} ${isOpen ? styles.arrowUp : styles.arrowDown}`}></span>
-			</div>
+			</button>
 
 			<ul className={styles.optionsDropdown} {...getMenuProps()}>
 				{isOpen &&
