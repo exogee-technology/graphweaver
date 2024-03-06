@@ -100,10 +100,6 @@ export const Select = ({
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
 				{...getToggleButtonProps({
 					ref: toggleButtonRef,
-					onClick: (e) => {
-						e.preventDefault();
-						toggleButtonRef.current?.focus();
-					},
 				})}
 			>
 				{selectedItems.length > 0 ? (
