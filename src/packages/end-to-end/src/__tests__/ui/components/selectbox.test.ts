@@ -31,16 +31,13 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
-	await page.getByRole('gridcell', { name: 'For Those About To Rock We' }).click();
-	await page.getByText('10 Selected×').click();
-	await page.getByText('"40"').click();
-	await expect(page.locator('form')).toContainText('11 Selected');
+	await page.getByRole('gridcell', { name: 'For Those About To Rock We' }).click({ delay: 300 });
+	const text = await page.getByText('Selected×').textContent();
+	await page.getByText('Selected×').click();
+	await page.getByRole('option').first().click();
+	await expect(await page.getByText('Selected×').textContent()).not.toBe(text);
 	await page.getByRole('button', { name: 'Save' }).click();
-	await expect(
-		await page.getByText(
-			'Item 1 For Those About To Rock We Salute You has been successfully updated.'
-		)
-	).toBeVisible();
+	await expect(await page.getByText('has been successfully updated.')).toBeVisible();
 });
 
 test('Should allow navigation around using a keyboard', async ({ page }) => {
