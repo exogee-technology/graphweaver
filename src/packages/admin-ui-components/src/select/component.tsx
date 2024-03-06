@@ -1,9 +1,10 @@
 import classNames from 'classnames';
 import { useSelect } from 'downshift';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { autoFocusDelay } from '../config';
 import { Spinner } from '../spinner';
 import styles from './styles.module.css';
-import { useEffect, useMemo, useState } from 'react';
 
 export enum SelectMode {
 	SINGLE = 'SINGLE',
@@ -23,6 +24,7 @@ interface SelectProps {
 	value?: SelectOption[];
 	placeholder?: string;
 	loading?: boolean;
+	autoFocus?: boolean;
 }
 
 export const Select = ({
@@ -33,6 +35,7 @@ export const Select = ({
 	placeholder = 'Select',
 	loading = false,
 	mode,
+	autoFocus = false,
 }: SelectProps) => {
 	const [selectedItems, setSelectedItems] = useState<SelectOption[]>(value);
 
@@ -41,6 +44,15 @@ export const Select = ({
 		onSelectedItemChange: handleSelectionChange,
 		itemToString: (item) => item?.label ?? '',
 	});
+
+	const toggleButtonRef = useRef<HTMLDivElement>(null);
+	useEffect(() => {
+		if (autoFocus) {
+			setTimeout(() => {
+				toggleButtonRef.current?.focus();
+			}, autoFocusDelay);
+		}
+	}, [autoFocus]);
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();
@@ -86,15 +98,14 @@ export const Select = ({
 		<div className={styles.select}>
 			<div
 				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
-				{...getToggleButtonProps()}
+				{...getToggleButtonProps({
+					ref: toggleButtonRef,
+					onClick: () => toggleButtonRef.current?.focus(),
+				})}
 			>
 				{selectedItems.length > 0 ? (
 					<div className={styles.selectedOptions}>
-						<div
-							className={styles.optionPill}
-							tabIndex={mode === SelectMode.MULTI ? 0 : -1}
-							onKeyDown={handleOnPillKeyDown}
-						>
+						<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
 							<span className={styles.optionPillLabel}>
 								{selectedItems.length > 1 || !selectedItems?.[0]?.label
 									? `${selectedItems.length} Selected`
@@ -111,9 +122,10 @@ export const Select = ({
 
 				<span className={`${styles.arrow} ${isOpen ? styles.arrowUp : styles.arrowDown}`}></span>
 			</div>
-			{isOpen && (
-				<ul className={styles.optionsDropdown} {...getMenuProps()}>
-					{loading ? (
+
+			<ul className={styles.optionsDropdown} {...getMenuProps()}>
+				{isOpen &&
+					(loading ? (
 						<Spinner />
 					) : (
 						options.map((item, index) => (
@@ -128,9 +140,8 @@ export const Select = ({
 								<span>{item.label}</span>
 							</li>
 						))
-					)}
-				</ul>
-			)}
+					))}
+			</ul>
 		</div>
 	);
 };

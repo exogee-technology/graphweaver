@@ -2,7 +2,7 @@ import { useField } from 'formik';
 import { useEffect } from 'react';
 import { SelectOption, Select, SelectMode } from '../../select';
 
-export const BooleanField = ({ name }: { name: string }) => {
+export const BooleanField = ({ name, autoFocus }: { name: string; autoFocus: boolean }) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { initialValue } = meta;
 
@@ -28,6 +28,7 @@ export const BooleanField = ({ name }: { name: string }) => {
 			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
+			autoFocus={autoFocus}
 		/>
 	);
 };
