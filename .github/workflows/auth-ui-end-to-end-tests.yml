@@ -74,7 +74,7 @@ jobs:
       - name: Install Playwright's dependencies
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         working-directory: src/packages/end-to-end
-        run: npx playwright install --with-deps chromium
+        run: pnpm playwright install --with-deps chromium
 
       - name: Build and Setup Rest Database
         working-directory: src/examples/rest

@@ -27,21 +27,21 @@
 }
 
 .selectedOptions {
-    pointer-events: none;
-    z-index: 2;
+	pointer-events: none;
+	z-index: 2;
 	display: flex;
 	flex-wrap: nowrap;
 	padding: 4px;
 }
 
 .selectInput {
-    position: absolute;
-    background: transparent;
-    border: 0;
-    color: transparent;
-    width: 100%;
-    height: 39px;
-    cursor: pointer;
+	position: absolute;
+	background: transparent;
+	border: 0;
+	color: transparent;
+	width: 100%;
+	height: 39px;
+	cursor: pointer;
 }
 
 .optionPill {
@@ -69,12 +69,12 @@
 	color: #fff;
 	cursor: pointer;
 	font-size: 16px;
-    margin-left: 8px;
-    pointer-events: all;
+	margin-left: 8px;
+	pointer-events: all;
 }
 
 .selection {
-    padding: 8px;
+	padding: 8px;
 }
 
 .placeholder {
@@ -105,8 +105,6 @@
 	display: block;
 }
 
-
-
 .option {
 	cursor: pointer;
 	padding: 8px;
@@ -116,11 +114,11 @@
 }
 
 .selected {
-    background-color: #0000003a;
+	background-color: #0000003a;
 }
 
 .highlighted {
-    background-color: #ffffff1d;
+	background-color: #ffffff1d;
 }
 
 .selectBox.open:after {
