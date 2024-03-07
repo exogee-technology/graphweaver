@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { Select, SelectMode, SelectOption } from '../select';
+import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
@@ -77,7 +77,7 @@ export const RelationshipFilter = ({
 	});
 
 	return (
-		<Select
+		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={relationshipOptions}
 			value={

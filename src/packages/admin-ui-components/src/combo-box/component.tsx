@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useSelect } from 'downshift';
+import { useCombobox } from 'downshift';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { autoFocusDelay } from '../config';
@@ -27,7 +27,7 @@ interface SelectProps {
 	autoFocus?: boolean;
 }
 
-export const Select = ({
+export const ComboBox = ({
 	options,
 	onChange,
 	onOpen,
@@ -39,17 +39,17 @@ export const Select = ({
 }: SelectProps) => {
 	const [selectedItems, setSelectedItems] = useState<SelectOption[]>(value);
 
-	const { isOpen, getToggleButtonProps, getMenuProps, highlightedIndex, getItemProps } = useSelect({
+	const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps } = useCombobox({
 		items: options,
 		onSelectedItemChange: handleSelectionChange,
 		itemToString: (item) => item?.label ?? '',
 	});
 
-	const toggleButtonRef = useRef<HTMLDivElement>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 	useEffect(() => {
 		if (autoFocus) {
 			setTimeout(() => {
-				toggleButtonRef.current?.focus();
+				inputRef.current?.focus();
 			}, autoFocusDelay);
 		}
 	}, [autoFocus]);
@@ -96,10 +96,8 @@ export const Select = ({
 
 	return (
 		<div className={styles.select}>
-			<div
-				className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}
-				{...getToggleButtonProps({ ref: toggleButtonRef })}
-			>
+			<div className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}>
+				<input readOnly className={styles.selectInput} {...getInputProps({ ref: inputRef })} />
 				{selectedItems.length > 0 ? (
 					<div className={styles.selectedOptions}>
 						<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>

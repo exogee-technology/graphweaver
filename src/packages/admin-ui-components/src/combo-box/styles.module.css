@@ -32,7 +32,17 @@
 	padding: 4px;
 }
 
+.selectInput {
+    position: absolute;
+    background: transparent;
+    border: 0;
+    color: transparent;
+    width: 100%;
+    height: 39px;
+}
+
 .optionPill {
+    z-index: 1;
 	background-color: var(--primary-color);
 	border-radius: 16px;
 	color: #fff;

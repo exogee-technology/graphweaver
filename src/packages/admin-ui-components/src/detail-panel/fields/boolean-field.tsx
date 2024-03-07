@@ -1,6 +1,6 @@
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../select';
+import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 
 export const BooleanField = ({ name, autoFocus }: { name: string; autoFocus: boolean }) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });
@@ -20,7 +20,7 @@ export const BooleanField = ({ name, autoFocus }: { name: string; autoFocus: boo
 	};
 
 	return (
-		<Select
+		<ComboBox
 			options={[
 				{ value: true, label: 'true' },
 				{ value: false, label: 'false' },
