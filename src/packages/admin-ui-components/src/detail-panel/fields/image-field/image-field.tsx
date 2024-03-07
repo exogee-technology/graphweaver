@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useMutation } from '@apollo/client';
 
 import { EntityField } from '../../../utils';
 import { getUploadUrlMutation } from '../../graphql';
 import { Button } from '../../../button';
-import { autoFocusDelay } from '../../../config';
+import { useAutoFocus } from '../../../hooks';
 
 import styles from './styles.module.css';
 
@@ -37,15 +37,7 @@ export const ImageField = ({ field, autoFocus }: { field: EntityField; autoFocus
 
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
 
-	const inputRef = useRef<HTMLInputElement>(null);
-	// We cant use the autoFocus prop directly on the input field because it will break the animation
-	useEffect(() => {
-		if (autoFocus) {
-			setTimeout(() => {
-				inputRef.current?.focus();
-			}, autoFocusDelay);
-		}
-	}, []);
+	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 
 	const handleFileUpload = async (file: any) => {
 		const res = await getUploadUrl({ variables: { key: file.name } });

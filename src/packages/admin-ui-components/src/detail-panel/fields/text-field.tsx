@@ -1,8 +1,8 @@
 import { Field } from 'formik';
-import { useEffect, useRef } from 'react';
+
+import { useAutoFocus } from '../../hooks';
 
 import styles from '../styles.module.css';
-import { autoFocusDelay } from '../../config';
 
 export const TextField = ({
 	name,
@@ -15,20 +15,11 @@ export const TextField = ({
 	disabled?: boolean;
 	type: 'number' | 'text';
 }) => {
-	const textRef = useRef<HTMLInputElement>();
-
-	// We cant use the autoFocus prop directly on the input field because it will break the animation
-	useEffect(() => {
-		if (autoFocus) {
-			setTimeout(() => {
-				textRef.current?.focus();
-			}, autoFocusDelay);
-		}
-	}, []);
+	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	return (
 		<Field
 			id={name}
-			innerRef={textRef}
+			innerRef={inputRef}
 			name={name}
 			type={type}
 			className={styles.textInputField}

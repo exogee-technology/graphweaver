@@ -1,9 +1,9 @@
 import classNames from 'classnames';
 import { useCombobox } from 'downshift';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
-import { autoFocusDelay } from '../config';
 import { Spinner } from '../spinner';
+import { useAutoFocus } from '../hooks';
 import styles from './styles.module.css';
 
 export enum SelectMode {
@@ -39,20 +39,12 @@ export const ComboBox = ({
 }: SelectProps) => {
 	const [selectedItems, setSelectedItems] = useState<SelectOption[]>(value);
 
+	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps } = useCombobox({
 		items: options,
 		onSelectedItemChange: handleSelectionChange,
 		itemToString: (item) => item?.label ?? '',
 	});
-
-	const inputRef = useRef<HTMLInputElement>(null);
-	useEffect(() => {
-		if (autoFocus) {
-			setTimeout(() => {
-				inputRef.current?.focus();
-			}, autoFocusDelay);
-		}
-	}, [autoFocus]);
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();
