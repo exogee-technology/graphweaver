@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 import { SelectOption } from '../';
 import { useDebounce } from '../hooks';
@@ -42,7 +42,7 @@ export const Input = ({
 
 	return (
 		<div className={styles.inputWrapper}>
-			<div className={classNames(value && styles.inputHighlighted, styles.input)}>
+			<div className={clsx(value && styles.inputHighlighted, styles.input)}>
 				<input
 					type="text"
 					inputMode={inputMode}

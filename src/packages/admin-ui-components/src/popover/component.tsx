@@ -1,11 +1,11 @@
 import { ReactNode, useState, useMemo, useCallback } from 'react';
+import clsx from 'clsx';
 
 import { Button } from '../button';
 import type { ButtonProps } from '../button';
 import { ReactComponent as DownChevronIcon } from '../assets/16-chevron-down.svg';
 
 import styles from './styles.module.css';
-import classNames from 'classnames';
 
 export interface PopoverItem {
 	id: string /** Unique ID for this item */;
@@ -96,7 +96,7 @@ export const Popover = ({
 				<DownChevronIcon />
 			</Button>
 			<ul
-				className={classNames(
+				className={clsx(
 					{ [styles.popoverList]: isOpen && position === 'bottom' },
 					{ [styles.hide]: !isOpen },
 					{ [styles.dropup]: isOpen && position === 'top' }
