@@ -1,6 +1,6 @@
-import classNames from 'classnames';
-import { useCombobox } from 'downshift';
 import { useEffect, useMemo, useState } from 'react';
+import clsx from 'clsx';
+import { useCombobox } from 'downshift';
 
 import { Spinner } from '../spinner';
 import { useAutoFocus } from '../hooks';
@@ -117,7 +117,7 @@ export const ComboBox = ({
 					) : (
 						options.map((item, index) => (
 							<li
-								className={classNames(styles.option, {
+								className={clsx(styles.option, {
 									[styles.highlighted]: highlightedIndex === index,
 									[styles.selected]: selectedIds.includes(item.value),
 								})}

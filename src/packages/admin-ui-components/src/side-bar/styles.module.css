@@ -48,6 +48,12 @@
 
 .logo {
 	margin: 40px auto 32px 24px;
+	min-height: 26px;
+	height: 26px;
+}
+
+.logoLoading {
+	display: none;
 }
 
 .subtext {

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
@@ -461,9 +461,7 @@ export const DetailPanel = () => {
 				onRequestClose={closeModal}
 				shouldCloseOnEsc
 				shouldCloseOnOverlayClick
-				className={
-					open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer
-				}
+				className={open ? clsx(styles.detailContainer, styles.slideIn) : styles.detailContainer}
 				title={selectedEntity.name}
 				modalContent={
 					<>

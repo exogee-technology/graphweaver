@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useRef, ReactNode } from 'react';
 import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
@@ -55,7 +55,7 @@ export const Button = ({
 		<button
 			ref={buttonRef}
 			onClick={handleOnClickButton}
-			className={classNames([className, styles.button, disabled && styles.disabled])}
+			className={clsx([className, styles.button, disabled && styles.disabled])}
 			type={type}
 			disabled={disabled}
 		>

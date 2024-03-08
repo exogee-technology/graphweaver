@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 import { ErrorIcon, WarningIcon, InfoIcon, SuccessIcon } from '../assets';
 import { Spacer } from '../spacer';
@@ -25,7 +25,7 @@ export const Alert = ({ severity = 'error', children }: AlertProps): JSX.Element
 	};
 
 	return (
-		<div className={classNames(styles.severity, severityClass[severity])}>
+		<div className={clsx(styles.severity, severityClass[severity])}>
 			{severityIcon[severity]}
 			<Spacer width={10} />
 			<div className={styles.message}>{children}</div>

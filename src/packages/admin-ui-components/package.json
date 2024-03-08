@@ -26,10 +26,10 @@
 		"lib"
 	],
 	"dependencies": {
-		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@apollo/client": "3.7.1",
+		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.8.2",
-		"classnames": "2.3.2",
+		"clsx": "2.1.0",
 		"downshift": "8.4.0",
 		"formik": "2.2.9",
 		"graphiql": "2.4.5",
