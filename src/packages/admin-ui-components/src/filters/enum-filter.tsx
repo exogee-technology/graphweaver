@@ -4,8 +4,8 @@ import { Filter, useSchema } from '../utils';
 export interface EnumFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<string>;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -16,6 +16,8 @@ export const EnumFilter = ({
 	initialFilter,
 	resetCount,
 }: EnumFilterProps) => {
+	const key = `${fieldName}_in`;
+	const initialValue = initialFilter?.[key] as string[] | undefined;
 	const { entityByName, enumByName } = useSchema();
 	const entityType = entityByName(entity);
 
@@ -30,11 +32,10 @@ export const EnumFilter = ({
 	}
 
 	const handleOnChange = (options?: SelectOption[]) => {
+		const hasSelectedOptions = (options ?? [])?.length > 0;
 		onChange?.(
 			fieldName,
-			(options ?? [])?.length > 0
-				? { [`${fieldName}_in`]: options?.map((option) => option.value) }
-				: undefined
+			hasSelectedOptions ? { [`${fieldName}_in`]: options?.map((option) => option.value) } : {}
 		);
 	};
 
@@ -42,9 +43,7 @@ export const EnumFilter = ({
 		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={enumOptions}
-			value={
-				initialFilter?.[fieldName] ? [{ value: initialFilter?.[fieldName], label: undefined }] : []
-			}
+			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			mode={SelectMode.MULTI}

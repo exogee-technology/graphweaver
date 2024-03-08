@@ -24,7 +24,7 @@ export interface Entity {
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
 	fields: EntityField[];
-	defaultFilter: FieldFilter;
+	defaultFilter?: Filter;
 	attributes: EntityAttributes;
 }
 
@@ -87,12 +87,6 @@ export interface CustomField<T = unknown> extends EntityField {
 	hideOnTable?: boolean;
 	hideOnDetailForm?: boolean;
 	panelMode?: PanelMode;
-}
-
-// @todo this needs typing correctly
-
-export interface FieldFilter {
-	[x: string]: Filter | undefined;
 }
 
 export interface Filter<T = unknown> {

@@ -15,9 +15,8 @@ import {
 	useSelectedEntity,
 	useSchema,
 	SortField,
-	FieldFilter,
-	wrapFilterWithAndOperator,
 	getOrderByQuery,
+	Filter,
 } from '../utils';
 import { GetEntity } from './graphql';
 
@@ -28,7 +27,7 @@ export const ExportModal = ({
 }: {
 	closeModal: () => void;
 	sort?: SortField[];
-	filters?: FieldFilter;
+	filters?: Filter;
 }) => {
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName } = useSchema();
@@ -59,7 +58,7 @@ export const ExportModal = ({
 							limit: pageSize,
 							orderBy: getOrderByQuery(sort),
 						},
-						...(filters ? { filter: wrapFilterWithAndOperator(filters) } : {}),
+						...(filters ? { filter: filters } : {}),
 					},
 					fetchPolicy: 'no-cache',
 				});

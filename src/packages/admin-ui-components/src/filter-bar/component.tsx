@@ -1,129 +1,135 @@
-import { ReactNode, useEffect, useState, createElement } from 'react';
+import { ReactNode, useEffect, useState, createElement, useCallback } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
+
 import { Button } from '../button';
+import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
-	AdminUIFilterType,
-	decodeSearchParams,
-	FieldFilter,
-	Filter,
-	routeFor,
-	useSchema,
-} from '../utils';
-import {
+	BooleanFilter,
+	validateFilter,
 	DateRangeFilter,
-	DateRangeFilterType,
 	EnumFilter,
 	NumericFilter,
 	RelationshipFilter,
-	RelationshipFilterType,
 	TextFilter,
 } from '../filters';
 
 import styles from './styles.module.css';
-import { BooleanFilter } from '../filters/boolean-filter';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
-	const { entity, id } = useParams();
-	if (!entity) throw new Error('There should always be an entity at this point.');
+	const { entity: entityName, id } = useParams();
+	if (!entityName) throw new Error('There should always be an entity at this point.');
 	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const [filter, setFilter] = useState<FieldFilter>(
-		searchParams.filters ?? entityByName(entity).defaultFilter ?? {}
+	const [filters, setFilters] = useState(
+		searchParams.filters ?? entityByName(entityName).defaultFilter
 	);
 
-	if (!entity) {
-		throw Error('Entity should be in URL here');
-	}
-
-	const onFilter = (fieldName: string, filter?: Filter) => {
-		setFilter((_filter) => ({
-			..._filter,
-			...{ [fieldName]: filter },
-		}));
-	};
-
-	const getFilterComponents = (entityName: string) => {
-		const rowEntity = entityByName(entityName);
-
+	const filterFieldsOnEntity = useCallback(() => {
+		const entity = entityByName(entityName);
 		// @todo - currently the filters are not fitting on the screen
 		// we plan to redo this filter bar so that it is a drop down
 		// for now the workaround is to reduce the number of filters to 5
+		const fields = entity.fields
+			// filter out rowEntity.fields with the JSON type
+			.filter((field) => field.type !== 'JSON')
+			.slice(0, 5);
 
-		const showOnlyFiveFilters = rowEntity.fields.length > 5 ? 5 : rowEntity.fields.length;
-		return (
-			rowEntity.fields
-				// filter out rowEntity.fields with the JSON type
-				.filter((field) => field.type !== 'JSON')
-				.slice(0, showOnlyFiveFilters)
-				.map((field) => {
-					if (!field.filter?.type) return null;
-					const options = {
-						key: field.name,
-						fieldName: field.name,
-						entity: entity,
-						onChange: onFilter,
-						resetCount: resetCount,
-					};
+		return fields;
+	}, [entityName]);
 
-					switch (field.filter.type) {
-						case AdminUIFilterType.TEXT:
-							return createElement(TextFilter, {
-								...options,
-								initialFilter: filter[field.name] as Filter<string> | undefined,
-							});
-						case AdminUIFilterType.BOOLEAN:
-							return createElement(BooleanFilter, {
-								...options,
-								initialFilter: filter[field.name] as Filter<boolean> | undefined,
-							});
-						case AdminUIFilterType.RELATIONSHIP:
-							return createElement(RelationshipFilter, {
-								...options,
-								initialFilter: filter[field.name] as Filter<RelationshipFilterType> | undefined,
-							});
-						case AdminUIFilterType.ENUM:
-							return createElement(EnumFilter, {
-								...options,
-								initialFilter: filter[field.name] as Filter<string> | undefined,
-							});
-						case AdminUIFilterType.NUMERIC:
-							return createElement(NumericFilter, {
-								...options,
-								initialFilter: filter[field.name] as Filter<number> | undefined,
-							});
-						case AdminUIFilterType.DATE_RANGE:
-							return createElement(DateRangeFilter, {
-								...options,
-								initialFilter: filter[field.name] as Filter<DateRangeFilterType> | undefined,
-							});
-					}
-				})
-		);
-	};
+	useEffect(() => {
+		// On mount, check if the filters are supported by the entity
+		const fields = filterFieldsOnEntity();
+		const { filter, unsupportedKeys } = validateFilter(fields, filters);
+
+		if (unsupportedKeys.length) {
+			const isPlural = unsupportedKeys.length > 1;
+			toast.error(
+				`Found unsupported filter ${isPlural ? 'properties' : 'property'} (${unsupportedKeys.join(
+					', '
+				)}) which ${isPlural ? 'have' : 'has'} been removed.`,
+				{
+					duration: 5000,
+				}
+			);
+			setFilters(filter);
+		}
+	}, []);
 
 	useEffect(() => {
 		const { sort } = decodeSearchParams(search);
-		if (filter && Object.keys(filter).length > 0) {
-			// Remove all undefined attributes from the filters object as it borks the subsequent URL encoding logic
-			Object.entries(filter).forEach(([key, value]) => {
-				if (value === undefined) delete filter[key];
-			});
-		}
 		navigate(
-			routeFor({ entity, filters: Object.keys(filter).length > 0 ? filter : undefined, sort, id })
+			routeFor({
+				entity: entityName,
+				filters,
+				sort,
+				id,
+			})
 		);
-	}, [filter]);
+	}, [filters]);
 
-	const filterComponents = getFilterComponents(entity);
+	// This function updates the filter in state based on the filter keys updated and the newFilter value
+	const onFilter = (fieldName: string, newFilter: Filter) => {
+		setFilters((currentFilter) => {
+			// Remove any filters from the currentFilter that start with the same fieldName
+			for (const key of Object.keys(currentFilter ?? {})) {
+				if (key.startsWith(fieldName)) delete currentFilter?.[key];
+			}
+
+			// Combine all filters into one object
+			const combinedNewFilter = {
+				...currentFilter,
+				...newFilter,
+			};
+
+			// Return undefined if there's nothing left in the filter.
+			const isFilterEmpty = Object.keys(combinedNewFilter).length === 0;
+			if (isFilterEmpty) return undefined;
+			return combinedNewFilter;
+		});
+	};
 
 	const clearAllFilters = () => {
-		setFilter({});
+		setFilters(undefined);
 		setResetCount((resetCount) => resetCount + 1);
 	};
 
+	const getFilterComponents = useCallback(() => {
+		const fields = filterFieldsOnEntity();
+
+		return fields.map((field) => {
+			if (!field.filter?.type) return null;
+			const options = {
+				key: field.name,
+				fieldName: field.name,
+				entity: entityName,
+				onChange: onFilter,
+				resetCount: resetCount,
+				initialFilter: filters,
+			};
+
+			switch (field.filter.type) {
+				case AdminUIFilterType.TEXT:
+					return createElement(TextFilter, options);
+				case AdminUIFilterType.BOOLEAN:
+					return createElement(BooleanFilter, options);
+				case AdminUIFilterType.RELATIONSHIP:
+					return createElement(RelationshipFilter, options);
+				case AdminUIFilterType.ENUM:
+					return createElement(EnumFilter, options);
+				case AdminUIFilterType.NUMERIC:
+					return createElement(NumericFilter, options);
+				case AdminUIFilterType.DATE_RANGE:
+					return createElement(DateRangeFilter, options);
+			}
+		});
+	}, [entityName, filters, resetCount]);
+
+	const filterComponents = getFilterComponents();
 	if (filterComponents.length === 0) return null;
 
 	return (

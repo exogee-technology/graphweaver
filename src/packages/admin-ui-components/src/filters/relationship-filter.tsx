@@ -4,13 +4,13 @@ import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 
-export type RelationshipFilterType = Record<string, { id: string }[]> | undefined;
+export type RelationshipFilterType = { id_in: string[] } | undefined;
 
 export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<RelationshipFilterType>;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -21,6 +21,8 @@ export const RelationshipFilter = ({
 	initialFilter,
 	resetCount,
 }: RelationshipFilterProps) => {
+	const key = fieldName;
+	const initialValue = initialFilter?.[key] as RelationshipFilterType | undefined;
 	const { entityByName, entities } = useSchema();
 
 	const entityType = entityByName(entity);
@@ -33,24 +35,13 @@ export const RelationshipFilter = ({
 			: undefined;
 
 	if (!relationshipEntity) return null;
-
 	const relatedEntity = entityByName(relationshipEntity);
-	if (!relatedEntity.summaryField) return null;
-
-	const orderBy = {
-		[relatedEntity.summaryField]: 'ASC',
-	};
 
 	const handleOnChange = (options?: SelectOption[]) => {
+		const hasSelectedOptions = (options ?? [])?.length > 0;
 		onChange?.(
 			fieldName,
-			(options ?? [])?.length > 0
-				? ({
-						[fieldName]: {
-							id_in: options?.map((option) => option.value),
-						},
-				  } as Filter<RelationshipFilterType>)
-				: undefined
+			hasSelectedOptions ? { [fieldName]: { id_in: options?.map((option) => option.value) } } : {}
 		);
 	};
 
@@ -58,9 +49,13 @@ export const RelationshipFilter = ({
 		getRelationshipQuery(relatedEntity.plural, relatedEntity.summaryField),
 		{
 			variables: {
-				pagination: {
-					orderBy,
-				},
+				...(relatedEntity.summaryField
+					? {
+							pagination: {
+								orderBy: { [relatedEntity.summaryField]: 'ASC' },
+							},
+					  }
+					: {}),
 			},
 		}
 	);
@@ -72,7 +67,7 @@ export const RelationshipFilter = ({
 	};
 
 	const relationshipOptions = (data?.result ?? []).map<SelectOption>((item) => {
-		const label = relatedEntity.summaryField;
+		const label = relatedEntity.summaryField ?? 'id';
 		return { label: label ? (item as any)[label] : 'notfound', value: item.id };
 	});
 
@@ -81,8 +76,11 @@ export const RelationshipFilter = ({
 			key={`${fieldName}:${resetCount}`}
 			options={relationshipOptions}
 			value={
-				initialFilter?.[fieldName]?.id
-					? [{ value: initialFilter?.[fieldName]?.id, label: undefined }]
+				initialValue?.id_in
+					? initialValue.id_in.map((id) => ({
+							value: id,
+							label: id,
+					  }))
 					: []
 			}
 			placeholder={fieldName}

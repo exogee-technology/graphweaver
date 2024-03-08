@@ -2,34 +2,29 @@ import { Filter, ComboBox, SelectMode, SelectOption } from '..';
 
 export interface BooleanFilterProps {
 	fieldName: string;
-	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<boolean>;
+	entity: string; // Not used but added to conform to API
+	onChange?: (fieldName: string, newFilter: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
 export const BooleanFilter = ({
 	fieldName,
-	entity,
 	onChange,
 	initialFilter,
 	resetCount,
 }: BooleanFilterProps) => {
-	const initialValue = initialFilter?.[fieldName];
+	const key = fieldName;
+	const initialValue = initialFilter?.[key] as boolean | undefined;
+
 	const options = [
 		{ value: true, label: 'true' },
 		{ value: false, label: 'false' },
 	];
 
 	const handleOnChange = (options: SelectOption[]) => {
-		onChange?.(
-			fieldName,
-			(options ?? [])?.length > 0
-				? {
-						[fieldName]: Boolean(options?.[0]?.value),
-				  }
-				: undefined
-		);
+		const hasSelectedOptions = (options ?? [])?.length > 0;
+		onChange?.(fieldName, hasSelectedOptions ? { [fieldName]: Boolean(options?.[0]?.value) } : {});
 	};
 
 	return (

@@ -116,10 +116,6 @@
 	opacity: 1;
 }
 
-.subListItem.active span {
-	background-image: url(../../assets/16-table-light.svg);
-}
-
 .sideBarFooter {
 	display: flex;
 	justify-content: center;
