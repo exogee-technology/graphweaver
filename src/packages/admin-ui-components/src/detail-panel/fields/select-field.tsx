@@ -1,7 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../select';
+
+import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
@@ -13,7 +14,15 @@ const mode = (entity: EntityField) => {
 	return SelectMode.SINGLE;
 };
 
-export const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
+export const SelectField = ({
+	name,
+	entity,
+	autoFocus,
+}: {
+	name: string;
+	entity: EntityField;
+	autoFocus: boolean;
+}) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const { initialValue } = meta;
@@ -50,11 +59,12 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	};
 
 	return (
-		<Select
+		<ComboBox
 			options={options}
 			value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
 			onChange={handleOnChange}
 			mode={mode(entity)}
+			autoFocus={autoFocus}
 		/>
 	);
 };

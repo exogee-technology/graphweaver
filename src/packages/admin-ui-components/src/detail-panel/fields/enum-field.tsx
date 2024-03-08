@@ -1,16 +1,18 @@
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../select';
+import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 import { Enum } from '../../utils';
 
 export const EnumField = ({
 	name,
 	typeEnum,
 	multiple,
+	autoFocus = false,
 }: {
 	name: string;
 	typeEnum: Enum;
 	multiple?: boolean;
+	autoFocus?: boolean;
 }) => {
 	const [_, meta, helpers] = useField({ name, multiple });
 	const { initialValue } = meta;
@@ -33,7 +35,7 @@ export const EnumField = ({
 	}));
 
 	return (
-		<Select
+		<ComboBox
 			options={enumOptions}
 			value={[].concat(
 				(initialValue &&
@@ -44,6 +46,7 @@ export const EnumField = ({
 			)}
 			onChange={handleOnChange}
 			mode={multiple ? SelectMode.MULTI : SelectMode.SINGLE}
+			autoFocus={autoFocus}
 		/>
 	);
 };

@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
+import { Filter, ComboBox, SelectMode, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
 
 export interface TextFilterProps {
@@ -49,7 +49,7 @@ export const TextFilter = ({
 	};
 
 	return (
-		<Select
+		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={[...textOptions].map((value) => ({ value, label: value }))}
 			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
