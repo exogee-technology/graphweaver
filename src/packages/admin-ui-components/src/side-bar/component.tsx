@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -60,7 +60,7 @@ export const SideBar = () => {
 					*/
 					src={`${graphweaverLogo}?hostname=${window.location.hostname}`}
 					width="52"
-					className={classnames({
+					className={clsx({
 						[styles.logo]: imageLoaded,
 						[styles.logoLoading]: !imageLoaded,
 					})}
@@ -75,7 +75,7 @@ export const SideBar = () => {
 						<p className={styles.subtext}>Dashboards</p>
 						<ul
 							//className={classnames(styles.entity, styles.closed)}
-							className={classnames(styles.closed)}
+							className={clsx(styles.closed)}
 						>
 							{userDashboardLinks.map((link) => (
 								<DashboardRow key={link.route} name={link.name} route={link.route} />

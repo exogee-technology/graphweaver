@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
 import styles from './styles.module.css';
@@ -69,10 +69,10 @@ export const Modal = ({
 	return (
 		<>
 			{isOpen && (
-				<div ref={overlayRef} className={classNames(overlay ? styles.overlay : styles.noOverlay)}>
+				<div ref={overlayRef} className={clsx(overlay ? styles.overlay : styles.noOverlay)}>
 					<div
 						ref={modalRef}
-						className={classNames(className || [styles.wrapper, fullScreen && styles.fullScreen])}
+						className={clsx(className || [styles.wrapper, fullScreen && styles.fullScreen])}
 					>
 						<div className={styles.content}>
 							{title && (

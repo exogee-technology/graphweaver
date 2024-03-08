@@ -1,4 +1,4 @@
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { NavLink } from 'react-router-dom';
 
 import { TableIcon } from '../../assets';
@@ -9,7 +9,7 @@ export const DashboardRow = ({ name, route }: { name: string; route: string }) =
 	<li>
 		<NavLink
 			to={route}
-			className={({ isActive }) => classnames(styles.subListItem, isActive && styles.active)}
+			className={({ isActive }) => clsx(styles.subListItem, isActive && styles.active)}
 			end
 		>
 			<TableIcon />

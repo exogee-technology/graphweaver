@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 
 type SpacerProps = {
 	height?: number;
@@ -36,5 +36,5 @@ export const Spacer = ({ height, width, flex = 1, grow, shrink, className }: Spa
 
 	const classNamesArray = className ? [className] : [];
 
-	return <div style={styles} className={classNames(classNamesArray)} />;
+	return <div style={styles} className={clsx(classNamesArray)} />;
 };

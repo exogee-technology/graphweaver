@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { useSelect } from 'downshift';
 
 import { Spinner } from '../spinner';
@@ -118,7 +118,7 @@ export const Select = ({
 					) : (
 						options.map((item, index) => (
 							<li
-								className={classNames(styles.option, {
+								className={clsx(styles.option, {
 									[styles.highlighted]: highlightedIndex === index,
 									[styles.selected]: selectedIds.includes(item.value),
 								})}
