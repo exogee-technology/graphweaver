@@ -16,12 +16,19 @@ test('should allow a successful api key creation', async ({ page }) => {
 	await page.getByRole('link', { name: 'ApiKey' }).click();
 	await page.getByRole('button', { name: 'Create New ApiKey' }).click();
 
+	// wait for animation to complete
+	await page.waitForTimeout(1000);
+
 	// fill up the page
 	await page.getByRole('button', { name: 'Generate Secret and API Key' }).click();
 
 	const apiKey = await page.inputValue('input#key');
 
-	await page.locator('form').getByText('Select').nth(1).click();
+	await page
+		.locator('div')
+		.filter({ hasText: /^rolesSelect$/ })
+		.getByRole('combobox')
+		.click();
 	await page.locator('form').getByText('LIGHT_SIDE').click();
 
 	await page.getByRole('button', { name: 'Save' }).click();
