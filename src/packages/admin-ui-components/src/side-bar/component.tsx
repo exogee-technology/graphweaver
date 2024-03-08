@@ -2,7 +2,7 @@ import classnames from 'classnames';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { localStorageAuthKey } from '../config';
+import { graphweaverLogo, localStorageAuthKey } from '../config';
 import { Logout } from '../logout';
 
 // This is injected by vite-plugin-graphweaver
@@ -19,6 +19,7 @@ import styles from './styles.module.css';
 export const SideBar = () => {
 	const schema = useSchema();
 	const [loading, setLoading] = useState(true);
+	const [imageLoaded, setImageLoading] = useState(false);
 	const [userDashboardLinks, setUserDashboardLinks] = useState<NavLinkExport[]>([]);
 
 	useEffect(() => {
@@ -33,6 +34,10 @@ export const SideBar = () => {
 		})();
 	}, []);
 
+	const handleOnImageLoad = () => {
+		setImageLoading(true);
+	};
+
 	if (loading)
 		return (
 			<div className={styles.sideBar}>
@@ -43,7 +48,25 @@ export const SideBar = () => {
 	return (
 		<div className={styles.sideBar}>
 			<Link to="/">
-				<GraphweaverLogo width="52" className={styles.logo} />
+				<img
+					/*
+						This image is being loaded from our servers for analytics purposes. 
+						We do not store any personal data, only the hostname of the page where 
+						the Admin UI is used and the IP address of the request. 
+						Without this, we have no idea how much adoption Graphweaver is getting 
+						or who is using it. There is no further tracking of any kind used in 
+						this product. If you disagree with us collecting this information, 
+						please raise a GitHub issue, we’re happy to discuss.
+					*/
+					src={`${graphweaverLogo}?hostname=${window.location.hostname}`}
+					width="52"
+					className={classnames({
+						[styles.logo]: imageLoaded,
+						[styles.logoLoading]: !imageLoaded,
+					})}
+					onLoad={handleOnImageLoad}
+				/>
+				{!imageLoaded && <GraphweaverLogo width="52" className={styles.logo} />}
 			</Link>
 
 			<div className={styles.sideBarContent}>
