@@ -19,7 +19,7 @@ import styles from './styles.module.css';
 export const SideBar = () => {
 	const schema = useSchema();
 	const [loading, setLoading] = useState(true);
-	const [imageLoaded, setImageLoading] = useState(false);
+	const [imageLoaded, setImageLoaded] = useState(false);
 	const [userDashboardLinks, setUserDashboardLinks] = useState<NavLinkExport[]>([]);
 
 	useEffect(() => {
@@ -35,7 +35,7 @@ export const SideBar = () => {
 	}, []);
 
 	const handleOnImageLoad = () => {
-		setImageLoading(true);
+		setImageLoaded(true);
 	};
 
 	if (loading)
