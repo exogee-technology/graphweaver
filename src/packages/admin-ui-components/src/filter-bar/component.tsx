@@ -33,11 +33,10 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// @todo - currently the filters are not fitting on the screen
 		// we plan to redo this filter bar so that it is a drop down
 		// for now the workaround is to reduce the number of filters to 5
-		const showOnlyFiveFilters = entity.fields.length > 5 ? 5 : entity.fields.length;
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON type
 			.filter((field) => field.type !== 'JSON')
-			.slice(0, showOnlyFiveFilters);
+			.slice(0, 5);
 
 		return fields;
 	}, [entityName]);
