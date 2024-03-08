@@ -1,6 +1,6 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { Filter, Select, SelectOption, useSchema } from '..';
+import { Filter, ComboBox, SelectMode, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
 import toast from 'react-hot-toast';
 
@@ -45,7 +45,7 @@ export const TextFilter = ({
 	};
 
 	return (
-		<Select
+		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={[...textOptions].map((value) => ({ value, label: value }))}
 			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
@@ -53,6 +53,7 @@ export const TextFilter = ({
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}
 			loading={loading}
+			mode={SelectMode.MULTI}
 		/>
 	);
 };

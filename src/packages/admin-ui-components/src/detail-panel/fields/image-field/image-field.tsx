@@ -1,10 +1,13 @@
-import { useField, useFormikContext } from 'formik';
-import { EntityField } from '../../../utils';
-import { useMutation } from '@apollo/client';
-import { getUploadUrlMutation } from '../../graphql';
 import { useState } from 'react';
-import styles from './styles.module.css';
+import { useField, useFormikContext } from 'formik';
+import { useMutation } from '@apollo/client';
+
+import { EntityField } from '../../../utils';
+import { getUploadUrlMutation } from '../../graphql';
 import { Button } from '../../../button';
+import { useAutoFocus } from '../../../hooks';
+
+import styles from './styles.module.css';
 
 export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 	try {
@@ -26,13 +29,15 @@ export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 	}
 };
 
-export const ImageField = ({ field }: { field: EntityField }) => {
+export const ImageField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const { setValues } = useFormikContext();
 	const [_, meta, helpers] = useField({ name: field.name, multiple: false });
 	const { initialValue: downloadUrl } = meta;
 	const [imageHasChanged, setImageHasChanged] = useState(false);
 
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
+
+	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 
 	const handleFileUpload = async (file: any) => {
 		const res = await getUploadUrl({ variables: { key: file.name } });
@@ -89,7 +94,12 @@ export const ImageField = ({ field }: { field: EntityField }) => {
 				</>
 			) : (
 				<div className={styles.row}>
-					<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
+					<input
+						className={styles.fileInput}
+						type="file"
+						onChange={handleFileInputChange}
+						ref={inputRef}
+					/>
 				</div>
 			)}
 		</div>

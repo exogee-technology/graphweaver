@@ -1,17 +1,22 @@
-import { useField, useFormikContext } from 'formik';
-import { EntityField } from '../../../utils';
-import { useMutation } from '@apollo/client';
-import { getUploadUrlMutation } from '../../graphql';
 import { useState } from 'react';
-import styles from './styles.module.css';
-import { Button } from '../../../button';
+import { useField, useFormikContext } from 'formik';
+import { useMutation } from '@apollo/client';
 
-export const MediaField = ({ field }: { field: EntityField }) => {
+import { EntityField } from '../../../utils';
+import { getUploadUrlMutation } from '../../graphql';
+import { Button } from '../../../button';
+import { useAutoFocus } from '../../../hooks';
+
+import styles from './styles.module.css';
+
+export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const { setValues } = useFormikContext();
 	const [mediaHasChanged, setMediaHasChanged] = useState(false);
 	const [_, meta] = useField({ name: field.name, multiple: false });
 	const { initialValue: downloadUrl } = meta;
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
+
+	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 
 	const handleFileUpload = async (file: any) => {
 		const res = await getUploadUrl({ variables: { key: file.name } });
@@ -72,7 +77,12 @@ export const MediaField = ({ field }: { field: EntityField }) => {
 				</>
 			) : (
 				<div className={styles.row}>
-					<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
+					<input
+						className={styles.fileInput}
+						type="file"
+						onChange={handleFileInputChange}
+						ref={inputRef}
+					/>
 				</div>
 			)}
 		</div>

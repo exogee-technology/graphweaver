@@ -1,4 +1,4 @@
-import { Filter, Select, SelectMode, SelectOption, useSchema } from '..';
+import { Filter, ComboBox, SelectMode, SelectOption } from '..';
 
 export interface BooleanFilterProps {
 	fieldName: string;
@@ -28,7 +28,7 @@ export const BooleanFilter = ({
 	};
 
 	return (
-		<Select
+		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={options}
 			value={

@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '../multi-select';
+import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 
 export interface EnumFilterProps {
@@ -40,12 +40,13 @@ export const EnumFilter = ({
 	};
 
 	return (
-		<Select
+		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={enumOptions}
 			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
+			mode={SelectMode.MULTI}
 		/>
 	);
 };
