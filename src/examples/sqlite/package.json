@@ -1,8 +1,8 @@
 {
     "name": "@exogee/graphweaver-example-sqlite",
-    "version": "0.2.20",
+    "version": "0.2.21",
     "license": "MIT",
-	"private": true,
+    "private": true,
     "description": "Example of connecting a SQLite database.",
     "scripts": {
         "build": "graphweaver build",
