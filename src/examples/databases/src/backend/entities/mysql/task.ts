@@ -3,7 +3,7 @@ import { BaseEntity, ExternalIdField } from '@exogee/graphweaver-mikroorm';
 
 @Entity()
 export class Task extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
@@ -13,6 +13,6 @@ export class Task extends BaseEntity {
 	isCompleted!: boolean;
 
 	@ExternalIdField({ from: 'user' })
-	@Property({ type: BigIntType })
+	@Property({ type: new BigIntType('string') })
 	userId!: string;
 }

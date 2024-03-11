@@ -14,7 +14,9 @@
 		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
 		"clean": "./clean.sh && pnpm build",
 		"format": "pnpm prettier",
+		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write \"*.[tj]s\" \"packages/**/*.[tj]s\" \"examples/**/*.[tj]s\"",
+		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build && pnpm packages:pack",
 		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",
 		"publish:dry": "pnpm build && pnpm -r publish --no-git-checks --access public --dry-run",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -25,10 +27,10 @@
 		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "5.49.0",
-		"@typescript-eslint/parser": "5.49.0",
+		"@typescript-eslint/eslint-plugin": "7.0.2",
+		"@typescript-eslint/parser": "7.0.2",
 		"concurrently": "7.6.0",
-		"eslint": "8.32.0",
+		"eslint": "8.56.0",
 		"eslint-config-prettier": "8.6.0",
 		"eslint-plugin-prettier": "4.2.1",
 		"eslint-plugin-simple-import-sort": "9.0.0",
@@ -36,7 +38,7 @@
 		"prettier": "2.8.8",
 		"ts-jest": "29.0.5",
 		"turbo": "1.10.1",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"pnpm": {
 		"overrides": {

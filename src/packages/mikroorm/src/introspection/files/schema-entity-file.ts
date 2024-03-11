@@ -5,7 +5,7 @@ import type {
 	NamingStrategy,
 	Platform,
 } from '@mikro-orm/core';
-import { ReferenceType, Utils } from '@mikro-orm/core';
+import { ReferenceKind, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
 import { pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
@@ -128,7 +128,7 @@ export class SchemaEntityFile extends BaseFile {
 	protected getPropertyDefinition(prop: EntityProperty): string {
 		const padding = '\t';
 
-		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
+		if ([ReferenceKind.ONE_TO_MANY, ReferenceKind.MANY_TO_MANY].includes(prop.kind)) {
 			this.entityImports.add(prop.type);
 			return `${padding}${prop.name}!: ${prop.type}[];\n`;
 		}
@@ -189,7 +189,7 @@ export class SchemaEntityFile extends BaseFile {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
 		}
 
-		if ([ReferenceType.MANY_TO_MANY, ReferenceType.ONE_TO_MANY].includes(prop.reference)) {
+		if ([ReferenceKind.MANY_TO_MANY, ReferenceKind.ONE_TO_MANY].includes(prop.kind)) {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
 		}
 
@@ -205,11 +205,11 @@ export class SchemaEntityFile extends BaseFile {
 		const options = {} as Dictionary;
 		let decorator = this.getDecoratorType(prop);
 
-		if (prop.reference === ReferenceType.MANY_TO_MANY) {
+		if (prop.kind === ReferenceKind.MANY_TO_MANY) {
 			this.getManyToManyDecoratorOptions(options, prop);
-		} else if (prop.reference === ReferenceType.ONE_TO_MANY) {
+		} else if (prop.kind === ReferenceKind.ONE_TO_MANY) {
 			this.getOneToManyDecoratorOptions(options, prop);
-		} else if (prop.reference !== ReferenceType.SCALAR) {
+		} else if (prop.kind !== ReferenceKind.SCALAR) {
 			this.getForeignKeyDecoratorOptions(options, prop);
 		}
 
@@ -247,12 +247,12 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {
-		if ([ReferenceType.ONE_TO_ONE, ReferenceType.MANY_TO_ONE].includes(prop.reference)) {
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
 			this.coreImports.add('RelationshipField');
 			return `@RelationshipField<${this.meta.className}>`;
 		}
 
-		if ([ReferenceType.ONE_TO_MANY, ReferenceType.MANY_TO_MANY].includes(prop.reference)) {
+		if ([ReferenceKind.ONE_TO_MANY, ReferenceKind.MANY_TO_MANY].includes(prop.kind)) {
 			this.coreImports.add('RelationshipField');
 			return `@RelationshipField<${prop.type}>`;
 		}

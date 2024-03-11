@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-scalars",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"description": "Common scalar types for use with @exogee/graphweaver",
 	"license": "MIT",
 	"main": "lib/index.js",
@@ -15,6 +15,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
@@ -28,7 +29,7 @@
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
 		"graphql": "16.8.1",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"keywords": [
 		"graphql",

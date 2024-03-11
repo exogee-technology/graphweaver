@@ -95,7 +95,12 @@ const user = new UserProfile({
 @Resolver()
 class AuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {
+		connectionManagerId: 'sqlite',
+		mikroOrmConfig: {
+			driver: SqliteDriver,
+		},
+	})
 ) {
 	/**
 	 * Dummy method to simulate a password authentication
@@ -119,15 +124,13 @@ class AuthResolver extends createBasePasswordAuthResolver(
 const graphweaver = new Graphweaver({
 	resolvers: [AuthResolver, TaskResolver, TagResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 
 describe('Password Authentication - Challenge', () => {
 	test('should return an error to initiate a challenge for a password.', async () => {
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			query: gql`
 				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
 					updateTask(data: $data) {
@@ -149,9 +152,7 @@ describe('Password Authentication - Challenge', () => {
 	});
 
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			query: gql`
 				mutation updateEntity($data: TagCreateOrUpdateInput!) {
 					updateTag(data: $data) {
@@ -179,9 +180,7 @@ describe('Password Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			query: gql`
 				mutation challengePassword($password: String!) {
 					result: challengePassword(password: $password) {
@@ -282,9 +281,7 @@ describe('Password Authentication - Challenge', () => {
 		MockDate.set(today);
 
 		// 4. Make a new request one hour later with the stepped up auth it should throw as it expired after 30m
-		const expiredResponse = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const expiredResponse = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
 			query: gql`
 				mutation updateEntity($data: TaskCreateOrUpdateInput!) {

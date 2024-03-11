@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-aws-cognito",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"license": "MIT",
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",
@@ -27,19 +27,20 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-aws": "workspace:*",
-		"@mikro-orm/core": "5.7.14",
-		"@mikro-orm/mysql": "5.7.14",
+		"@mikro-orm/core": "6.1.5",
+		"@mikro-orm/mysql": "6.1.5",
 		"class-validator": "0.14.0",
 		"dotenv": "16.0.0",
 		"got": "11.8.5",
 		"graphql": "16.8.1",
-		"graphweaver": "workspace:*",
+		"mysql2": "3.6.2",
 		"react": "18.2.0",
-		"reflect-metadata": "0.1.13"
+		"reflect-metadata": "0.2.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.2.5",
-		"typescript": "5.0.2",
+		"graphweaver": "workspace:*",
+		"typescript": "5.3.3",
 		"vite": "4.5.2",
 		"vite-plugin-svgr": "3.2.0"
 	},

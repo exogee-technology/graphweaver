@@ -18,12 +18,20 @@ const authLink = new ApolloLink((operation, forward) => {
 			'Current Graphweaver Auth Token is invalid, it should be in the form "[type] [credential]"'
 		);
 
+	const currentRedirectSearchParam = new URLSearchParams(window.location.search).get(
+		'redirect_uri'
+	);
+	const redirectUri =
+		operation.getContext()?.headers?.[REDIRECT_HEADER] ??
+		currentRedirectSearchParam ??
+		window.location.origin;
+
 	operation.setContext({
 		headers: {
 			'Apollo-Require-Preflight': 'true',
 			'Content-Type': 'application/json',
 			...(currentAuthToken ? { Authorization: currentAuthToken } : {}),
-			[REDIRECT_HEADER]: operation.getContext()?.headers?.[REDIRECT_HEADER] ?? window.location.href,
+			[REDIRECT_HEADER]: redirectUri,
 		},
 	});
 

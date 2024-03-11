@@ -11,7 +11,7 @@ import { startRegistration, startAuthentication } from '@simplewebauthn/browser'
 import {
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialRequestOptionsJSON,
-} from '@simplewebauthn/typescript-types';
+} from '@simplewebauthn/types';
 import { Form, Formik } from 'formik';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 

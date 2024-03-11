@@ -10,10 +10,9 @@ import {
 import { logger } from '@exogee/logger';
 
 import {
-	FilterQuery,
 	LockMode,
 	QueryFlag,
-	ReferenceType,
+	ReferenceKind,
 	Utils,
 	ConnectionManager,
 	externalIdFieldMap,
@@ -27,7 +26,7 @@ import {
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
 
-import { QueryBuilder, SqlEntityRepository } from '@mikro-orm/postgresql';
+import { SqlEntityRepository } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 type PostgresError = {
@@ -236,10 +235,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		for (const [key, value] of Object.entries(updateArgBranch ?? {})) {
 			if (
 				// If it's a relationship, go ahead and and '.' it in, recurse.
-				properties[key]?.reference === ReferenceType.ONE_TO_ONE ||
-				properties[key]?.reference === ReferenceType.ONE_TO_MANY ||
-				properties[key]?.reference === ReferenceType.MANY_TO_ONE ||
-				properties[key]?.reference === ReferenceType.MANY_TO_MANY
+				properties[key]?.kind === ReferenceKind.ONE_TO_ONE ||
+				properties[key]?.kind === ReferenceKind.ONE_TO_MANY ||
+				properties[key]?.kind === ReferenceKind.MANY_TO_ONE ||
+				properties[key]?.kind === ReferenceKind.MANY_TO_MANY
 			) {
 				if (Array.isArray(value)) {
 					// In the case where the array is empty we also need to make sure we load the collection.
@@ -400,7 +399,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		}
 
 		await this.mapAndAssignKeys(entity, this.entityType, updateArgs);
-		await this.getRepository().persistAndFlush(entity);
+		await this.database.em.persistAndFlush(entity);
 
 		logger.trace(`update ${this.entityType.name} entity`, entity);
 
@@ -478,7 +477,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 		const entity = new this.entityType();
 		await this.mapAndAssignKeys(entity, this.entityType, createArgs);
-		await this.getRepository().persistAndFlush(entity);
+		await this.database.em.persistAndFlush(entity);
 
 		logger.trace(`create ${this.entityType.name} result`, entity);
 
@@ -512,7 +511,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);
 
-		const deletedRows = await this.getRepository().nativeDelete(whereWithAppliedExternalIdFields);
+		const deletedRows = await this.database.em.nativeDelete(
+			this.entityType,
+			whereWithAppliedExternalIdFields
+		);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');
@@ -523,16 +525,25 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return deletedRows === 1;
 	}
 
-	public async deleteMany(ids: string[]): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityType.name} with ids ${ids}`);
+	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityType.name}`);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
-			const deletedCount = await this.getRepository().nativeDelete({
-				id: { $in: ids },
-			} as FilterQuery<any>); // We can remove this cast when Typescript knows that T has an `id` property.
+			const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+			const whereWithAppliedExternalIdFields =
+				where && this.applyExternalIdFields(this.entityType, where);
 
-			if (deletedCount !== ids.length) {
-				throw new Error('We did not delete all the rows, rolling back');
+			const toDelete = await this.database.em.count(
+				this.entityType,
+				whereWithAppliedExternalIdFields
+			);
+			const deletedCount = await this.database.em.nativeDelete(
+				this.entityType,
+				whereWithAppliedExternalIdFields
+			);
+
+			if (deletedCount !== toDelete) {
+				throw new Error('We did not delete any rows, rolling back.');
 			}
 
 			return deletedCount;
@@ -540,7 +551,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 		logger.trace(`delete ${this.entityType.name} result: deleted ${deletedRows} row(s)`);
 
-		return deletedRows === ids.length;
+		return true;
 	}
 
 	public getRelatedEntityId(entity: any, relatedIdField: string) {

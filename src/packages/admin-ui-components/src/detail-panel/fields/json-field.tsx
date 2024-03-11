@@ -1,7 +1,16 @@
 import { useField } from 'formik';
 
-export const JSONField = ({ name }: { name: string }) => {
+import { useAutoFocus } from '../../hooks';
+
+export const JSONField = ({ name, autoFocus }: { name: string; autoFocus: boolean }) => {
 	const [_, meta] = useField({ name, multiple: false });
 	const { initialValue } = meta;
-	return <code>{JSON.stringify(initialValue, null, 4)}</code>;
+
+	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
+
+	return (
+		<code ref={inputRef} tabIndex={0}>
+			{JSON.stringify(initialValue, null, 4)}
+		</code>
+	);
 };

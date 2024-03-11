@@ -3,7 +3,6 @@ import './utils/change-tracker';
 
 import {
 	AnyEntity,
-	Configuration,
 	Connection,
 	EntityName,
 	IDatabaseDriver,
@@ -17,7 +16,7 @@ import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
 type EntityManager = PgEntityManager<PostgreSqlDriver> | MyEntityManager<MySqlDriver>;
 
-export type DatabaseType = keyof typeof Configuration.PLATFORMS;
+export type DatabaseType = 'mysql' | 'postgresql' | 'sqlite';
 
 export interface ConnectionOptions {
 	mikroOrmConfig?: Options | (() => Options | Promise<Options>);

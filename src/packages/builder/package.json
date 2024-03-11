@@ -1,12 +1,13 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"postinstall": "node build.js",
 		"version": "npm version --no-git-tag-version"
@@ -14,7 +15,6 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"dependencies": {
-		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
 		"@graphql-codegen/add": "5.0.0",
 		"@graphql-codegen/cli": "4.0.1",
@@ -29,6 +29,7 @@
 		"dotenv": "16.0.3",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
+		"glob": "10.3.10",
 		"graphql": "16.8.1",
 		"graphql-tag": "2.12.6",
 		"rimraf": "3.0.2",

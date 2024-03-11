@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
-import classnames from 'classnames';
+import clsx from 'clsx';
 
 import { Button } from '../button';
 import { DateSelector } from './date-selector';
@@ -76,7 +76,7 @@ export const DatePicker = ({
 		<div className={styles.container}>
 			<div className={styles.inputSelector}>
 				<div
-					className={classnames(startDate && styles.inputFieldActive, styles.inputField)}
+					className={clsx(startDate && styles.inputFieldActive, styles.inputField)}
 					onClick={() => setIsOpen((isOpen) => !isOpen)}
 				>
 					{displayText()}

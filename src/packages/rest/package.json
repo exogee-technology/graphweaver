@@ -1,12 +1,13 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"description": "RESTful backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
 		"version": "npm version --no-git-tag-version"
@@ -42,7 +43,7 @@
 		"prettier": "2.8.8",
 		"ts-node": "9.0.0",
 		"tsc-watch": "4.2.9",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"keywords": [
 		"graphql",

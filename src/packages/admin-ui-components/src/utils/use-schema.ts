@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { ApolloCache, TypePolicy, useQuery } from '@apollo/client';
+import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
+
 import { SCHEMA_QUERY } from './graphql';
-import pluralize from 'pluralize';
 import { PanelMode } from '../detail-panel';
 
 export interface Schema {
@@ -18,10 +19,12 @@ export interface Enum {
 }
 export interface Entity {
 	name: string;
+	plural: string;
 	backendId: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
 	fields: EntityField[];
+	defaultFilter?: Filter;
 	attributes: EntityAttributes;
 }
 
@@ -34,11 +37,20 @@ export enum AdminUIFilterType {
 	BOOLEAN = 'BOOLEAN',
 }
 
-export type EntityFieldType = 'Boolean' | 'custom' | 'ID!' | 'ID' | 'JSON' | 'Image' | 'Media';
+export type EntityFieldType =
+	| 'Boolean'
+	| 'custom'
+	| 'ID!'
+	| 'ID'
+	| 'JSON'
+	| 'Image'
+	| 'Media'
+	| 'Number';
 
 export interface EntityField {
 	name: string;
 	type: EntityFieldType;
+	isArray?: boolean;
 	relationshipType?: 'MANY_TO_MANY' | 'MANY_TO_ONE' | 'ONE_TO_MANY' | 'ONE_TO_ONE';
 	filter?: {
 		type: AdminUIFilterType;
@@ -51,7 +63,8 @@ export interface EntityField {
 }
 
 export interface EntityFieldAttributes {
-	isReadOnly?: boolean;
+	isReadOnly: boolean;
+	isRequired: boolean;
 }
 
 export interface EntityAttributes {
@@ -76,12 +89,6 @@ export interface CustomField<T = unknown> extends EntityField {
 	panelMode?: PanelMode;
 }
 
-// @todo this needs typing correctly
-
-export interface FieldFilter {
-	[x: string]: Filter | undefined;
-}
-
 export interface Filter<T = unknown> {
 	[x: string]: T;
 }
@@ -99,37 +106,6 @@ type Cache = ApolloCache<unknown> & {
 
 type EntityMap = {
 	[entityName: string]: Entity;
-};
-
-const generateTypePolicyFields = (entityMap: EntityMap) => {
-	const policy = {
-		keyArgs: (
-			args: {
-				filter?: Record<string, unknown>;
-				pagination?: { orderBy: Record<string, unknown> };
-			} | null
-		) => {
-			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
-			const filter = args?.filter ? JSON.stringify(args.filter) : '';
-			const orderBy = args?.pagination?.orderBy ? JSON.stringify(args.pagination.orderBy) : '';
-			return btoa(`${filter}:${orderBy}`);
-		},
-		merge(existing = [], incoming: { __ref: string }[]) {
-			const merged = [...existing, ...incoming];
-			const uniqueItems = new Set(merged.map((item) => item.__ref));
-			return [...uniqueItems].map((__ref) => merged.find((item) => item.__ref === __ref));
-		},
-	};
-
-	const mapEntityToPolicy = (entity: Entity) => ({
-		[pluralize(entity.name).toLowerCase()]: policy,
-	});
-
-	return {
-		...Object.values(entityMap)
-			.map(mapEntityToPolicy)
-			.reduce((acc, policy) => ({ ...acc, ...policy }), {}),
-	};
 };
 
 export const useSchema = () => {
@@ -153,7 +129,7 @@ export const useSchema = () => {
 
 	// We already have an array of entities but we should pre-build a lookup by name.
 	const entityMap = useMemo(() => {
-		const result: { [entityName: string]: Entity } = {};
+		const result: EntityMap = {};
 		if (!data?.result?.entities) return result;
 
 		for (const entity of data.result.entities) {
@@ -161,13 +137,9 @@ export const useSchema = () => {
 		}
 
 		// Now we have our entities we can create the type policy
-		const typePolicy: { Query: TypePolicy } = {
-			Query: {
-				keyFields: ['id'], // This is the default and is here for clarity
-				fields: generateTypePolicyFields(result),
-			},
-		};
-		cache.policies.addTypePolicies(typePolicy);
+		const entityNames = data.result.entities.map((entity) => entity.plural);
+		const typePolicies = generateTypePolicies(entityNames);
+		cache.policies.addTypePolicies(typePolicies);
 
 		return result;
 	}, [data]);
@@ -194,8 +166,5 @@ export const useSchema = () => {
 		},
 		enumByName: (enumName: string) => enumMap[enumName],
 		entitiesForBackend: (backendId: string) => dataSourceMap[backendId],
-		entityInBackend: (entityName: string, backendId: string) =>
-			// TODO: This could be an O(1) lookup if we build one first.
-			!!dataSourceMap[backendId].find((entity) => entity.name === entityName),
 	};
 };

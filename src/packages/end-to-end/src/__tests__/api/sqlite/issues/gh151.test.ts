@@ -2,14 +2,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Entity,
-	Collection,
-	IdentifiedReference,
-	ManyToOne,
-	OneToMany,
-	PrimaryKey,
-} from '@mikro-orm/core';
+import { Entity, Collection, Ref, ManyToOne, OneToMany, PrimaryKey } from '@mikro-orm/core';
 import {
 	createBaseResolver,
 	Field,
@@ -33,11 +26,11 @@ class OrmAlbum extends BaseEntity {
 
 	@ManyToOne({
 		entity: () => OrmArtist,
-		wrappedReference: true,
+		ref: true,
 		fieldName: 'ArtistId',
 		index: 'IFK_AlbumArtistId',
 	})
-	artist!: IdentifiedReference<OrmArtist>;
+	artist!: Ref<OrmArtist>;
 }
 
 @Entity({ tableName: 'Artist' })

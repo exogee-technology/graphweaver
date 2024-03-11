@@ -1,0 +1,57 @@
+.wrapper {
+	flex-direction: column;
+	user-select: none;
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.logoWrapper {
+	align-self: center;
+}
+
+.errorBox {
+	display: flex;
+	flex-direction: column;
+	background: hsl(264, 40%, 10%);
+	border: 1px solid var(--detail-border-color);
+	border-radius: 8px;
+	padding: 10px;
+	max-width: 50%;
+}
+@media only screen and (max-width: 600px) {
+	.errorBox {
+		max-width: 90%;
+	}
+}
+
+.headerRow {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 5px;
+}
+
+.headerRow > h2 {
+	font-size: 1.2em;
+}
+
+.headerRow > svg > path {
+	fill: var(--body-copy-color);
+}
+
+.copyErrorInfoButton {
+	margin: auto;
+}
+
+.footer {
+	display: flex;
+	justify-content: center;
+}
+
+.footerText {
+	opacity: 0.6;
+}

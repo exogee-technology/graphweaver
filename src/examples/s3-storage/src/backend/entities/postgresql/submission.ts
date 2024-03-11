@@ -3,7 +3,7 @@ import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 
 @Entity()
 export class Submission extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })

@@ -145,8 +145,8 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		throw new Error('Not implemented');
 	}
 
-	public async deleteMany(ids: string[]): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName} with ids ${ids}`);
+	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+		logger.trace(`Running delete ${this.entityTypeName}`);
 
 		throw new Error('Not implemented');
 	}

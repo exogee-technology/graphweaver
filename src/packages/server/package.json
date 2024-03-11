@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -8,6 +8,7 @@
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"build:watch": "pnpm build:js --watch",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"version": "npm version --no-git-tag-version"
 	},
@@ -22,7 +23,9 @@
 	"dependencies": {
 		"@apollo/server": "4.9.3",
 		"@as-integrations/aws-lambda": "2.0.1",
+		"@escape.tech/graphql-armor": "2.4.0",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/graphql-file-loader": "7.5.17",
 		"@graphql-tools/load": "7.8.14",
@@ -36,6 +39,7 @@
 		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
+		"@escape.tech/graphql-armor-types": "0.5.0",
 		"@types/graphql-deduplicator": "2.0.0",
 		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",

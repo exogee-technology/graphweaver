@@ -1,7 +1,8 @@
 import { Field, ObjectType } from 'type-graphql';
 import { AdminUiFilterMetadata } from './filter';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
-import { AdminUiFieldExtentionsMetadata } from './field-extensions';
+import { AdminUiFieldExtensionsMetadata } from './field-extensions';
+
 @ObjectType('AdminUiFieldMetadata')
 export class AdminUiFieldMetadata {
 	@Field(() => String)
@@ -22,6 +23,9 @@ export class AdminUiFieldMetadata {
 	@Field(() => AdminUiFieldAttributeMetadata, { nullable: true })
 	attributes?: AdminUiFieldAttributeMetadata;
 
-	@Field(() => AdminUiFieldExtentionsMetadata, { nullable: true })
-	extensions?: AdminUiFieldExtentionsMetadata;
+	@Field(() => AdminUiFieldExtensionsMetadata, { nullable: true })
+	extensions?: AdminUiFieldExtensionsMetadata;
+
+	@Field(() => Boolean, { nullable: true })
+	isArray?: boolean;
 }

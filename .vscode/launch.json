@@ -54,6 +54,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "End to End - Metadata",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["test-metadata"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/end-to-end"
+    },
+    {
       "name": "AWS Cognito Example",
       "type": "node",
       "request": "launch",

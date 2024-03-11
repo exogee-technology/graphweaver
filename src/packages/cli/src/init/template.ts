@@ -21,18 +21,17 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 		},
 		dependencies: {
 			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
-			'@exogee/graphweaver': graphweaverVersion(version, 'core'),
-			'@exogee/graphweaver-scalars': graphweaverVersion(version, 'scalars'),
-			'@exogee/graphweaver-server': graphweaverVersion(version, 'server'),
-			graphweaver: graphweaverVersion(version, 'cli'),
+			'@exogee/graphweaver': graphweaverVersion(version, '@exogee/graphweaver'),
+			'@exogee/graphweaver-scalars': graphweaverVersion(version, '@exogee/graphweaver-scalars'),
+			'@exogee/graphweaver-server': graphweaverVersion(version, '@exogee/graphweaver-server'),
 			...backendPackages,
 			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
-			'class-validator': '0.14.0',
 			graphql: '16.8.1',
 		},
 		devDependencies: {
 			'@types/node': '20.2.5',
+			graphweaver: graphweaverVersion(version, 'graphweaver'),
 			typescript: '5.0.2',
 		},
 	};
@@ -74,7 +73,7 @@ export const makeDatabase = (projectName: string, backends: Backend[]) => {
 	},
 };`;
 
-	const liteDriverImport = `import { SqliteDriver } from '@mikro-orm/sqlite';`;
+	const liteDriverImport = `import { SqliteDriver } from 'mikro-orm-sqlite-wasm';`;
 	const liteConnection = `export const liteConnection = {
 	connectionManagerId: 'sqlite',
 	mikroOrmConfig: {

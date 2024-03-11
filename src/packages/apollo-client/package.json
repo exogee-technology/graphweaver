@@ -1,0 +1,38 @@
+{
+	"name": "@exogee/graphweaver-apollo-client",
+	"version": "0.2.21",
+	"description": "Useful helpers for working with Apollo Client and Graphweaver",
+	"license": "MIT",
+	"type": "module",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
+		"build:watch": "pnpm build:js --watch",
+		"prettier": "prettier --write .",
+		"version": "npm version --no-git-tag-version"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"devDependencies": {
+		"esbuild": "0.15.5",
+		"typescript": "5.3.3"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
+}

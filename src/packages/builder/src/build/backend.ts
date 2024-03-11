@@ -1,4 +1,5 @@
 import path from 'path';
+import { writeFileSync } from 'fs';
 import { build } from 'esbuild';
 import rimrafCallback from 'rimraf';
 import { promisify } from 'util';
@@ -7,9 +8,10 @@ import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
 import {
 	baseEsbuildConfig,
 	buildOutputPathFor,
+	checkPackageForNativeModules,
+	getExternalModules,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
-	makeOptionalMikroOrmPackagesExternalPlugin,
 } from '../util';
 
 const rimraf = promisify(rimrafCallback);
@@ -61,16 +63,23 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 				)}.js`
 			);
 
-			await build(
+			const result = await build(
 				onResolveEsbuildConfiguration({
 					...baseEsbuildConfig,
-
-					plugins: [makeOptionalMikroOrmPackagesExternalPlugin()],
-
+					minify: true,
+					metafile: true,
+					external: getExternalModules(),
+					plugins: [checkPackageForNativeModules()],
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})
 			);
+
+			if (result.metafile)
+				writeFileSync(
+					`${buildOutputPathFor(backendFunction.handlerPath)}.json`,
+					JSON.stringify(result.metafile, null, 2)
+				);
 		}
 	}
 

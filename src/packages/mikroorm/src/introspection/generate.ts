@@ -3,7 +3,7 @@ import {
 	EntityMetadata,
 	EntityProperty,
 	NamingStrategy,
-	ReferenceType,
+	ReferenceKind,
 	Utils,
 } from '@mikro-orm/core';
 import pluralize from 'pluralize';
@@ -56,17 +56,17 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 				const inverseProp = inverseMeta?.props.find((p) => p.name === newProp.mappedBy);
 				if (inverseProp) inverseProp.inversedBy = newProp.name;
 
-				if (prop.reference === ReferenceType.MANY_TO_ONE) {
-					const name = pascalToCamelCaseString(meta.tableName);
+				if (prop.kind === ReferenceKind.MANY_TO_ONE) {
+					const name = pascalToCamelCaseString(meta.className);
 					newProp.name = pluralize(name);
-					newProp.reference = ReferenceType.ONE_TO_MANY;
-				} else if (prop.reference === ReferenceType.ONE_TO_ONE && !prop.mappedBy) {
-					newProp.reference = ReferenceType.ONE_TO_ONE;
+					newProp.kind = ReferenceKind.ONE_TO_MANY;
+				} else if (prop.kind === ReferenceKind.ONE_TO_ONE && !prop.mappedBy) {
+					newProp.kind = ReferenceKind.ONE_TO_ONE;
 					newProp.nullable = true;
-				} else if (prop.reference === ReferenceType.MANY_TO_MANY && !prop.mappedBy) {
-					const name = pascalToCamelCaseString(meta.tableName);
+				} else if (prop.kind === ReferenceKind.MANY_TO_MANY && !prop.mappedBy) {
+					const name = pascalToCamelCaseString(meta.className);
 					newProp.name = pluralize(name);
-					newProp.reference = ReferenceType.MANY_TO_MANY;
+					newProp.kind = ReferenceKind.MANY_TO_MANY;
 				} else {
 					continue;
 				}
@@ -84,7 +84,7 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 			meta.primaryKeys.length === meta.relations.length && // all relations are PKs
 			meta.relations.length === 2 && // there are exactly two relation properties
 			meta.relations.length === meta.props.length && // all properties are relations
-			meta.relations.every((prop) => prop.reference === ReferenceType.MANY_TO_ONE) // all relations are m:1
+			meta.relations.every((prop) => prop.kind === ReferenceKind.MANY_TO_ONE) // all relations are m:1
 		) {
 			meta.pivotTable = true;
 			const owner = metadata.find((m) => m.className === meta.relations[0].type);
@@ -92,7 +92,7 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 			const name = pascalToCamelCaseString(meta.relations?.[1]?.type);
 			owner.addProperty({
 				name: pluralize(name),
-				reference: ReferenceType.MANY_TO_MANY,
+				kind: ReferenceKind.MANY_TO_MANY,
 				pivotTable: meta.tableName,
 				type: meta.relations[1].type,
 				joinColumns: meta.relations[0].fieldNames,
@@ -105,10 +105,10 @@ const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: N
 const generateIdentifiedReferences = (metadata: EntityMetadata[]): void => {
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		for (const prop of meta.relations) {
-			if ([ReferenceType.MANY_TO_ONE, ReferenceType.ONE_TO_ONE].includes(prop.reference)) {
+			if ([ReferenceKind.MANY_TO_ONE, ReferenceKind.ONE_TO_ONE].includes(prop.kind)) {
 				const name = pascalToCamelCaseString(prop.type);
 				prop.name = pluralize.singular(name);
-				prop.wrappedReference = true;
+				prop.ref = true;
 			}
 		}
 	}
@@ -145,7 +145,7 @@ const convertSchemaToMetadata = async (
 	const metadata = schema
 		.getTables()
 		.sort((a, b) => a.name.localeCompare(b.name))
-		.map((table) => table.getEntityDeclaration(namingStrategy, helper));
+		.map((table) => table.getEntityDeclaration(namingStrategy, helper, 'never'));
 
 	if (metadata.length === 0) {
 		throw new IntrospectionError(
@@ -164,9 +164,14 @@ const convertSchemaToMetadata = async (
 };
 
 const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
+	const PLATFORMS = {
+		mysql: { className: 'MySqlDriver', module: () => require('@mikro-orm/mysql') },
+		postgresql: { className: 'PostgreSqlDriver', module: () => require('@mikro-orm/postgresql') },
+		sqlite: { className: 'SqliteDriver', module: () => require('@mikro-orm/sqlite') },
+	};
 	await ConnectionManager.connect(CONNECTION_MANAGER_ID, {
 		mikroOrmConfig: {
-			type,
+			driver: PLATFORMS[type].module()[PLATFORMS[type].className],
 			...options.mikroOrmConfig,
 		},
 	});

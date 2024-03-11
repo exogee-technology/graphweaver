@@ -1,7 +1,7 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
@@ -31,8 +31,9 @@ import {
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
-import { mapFormikValuesToGqlRequestValues } from './util';
+import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
 import { MediaField } from './fields/media-field';
+import { TextField } from './fields/text-field';
 
 interface ResultBaseType {
 	id: string;
@@ -44,54 +45,63 @@ export enum PanelMode {
 	EDIT = 'EDIT',
 }
 
-const getField = ({ field }: { field: EntityField }) => {
-	const isReadonly = field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
+const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
+	field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
+
+const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
+	const isReadonly = isFieldReadonly(field);
+
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
 			return <LinkField name={field.name} entity={field} />;
 		}
-		return <SelectField name={field.name} entity={field} />;
+		return <SelectField name={field.name} entity={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'JSON') {
-		return <JSONField name={field.name} />;
+		return <JSONField name={field.name} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'Boolean') {
-		return <BooleanField name={field.name} />;
+		return <BooleanField name={field.name} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'Image') {
-		return <ImageField field={field} />;
+		return <ImageField field={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'Media') {
-		return <MediaField field={field} />;
+		return <MediaField field={field} autoFocus={autoFocus} />;
 	}
 
 	const { enumByName } = useSchema();
 	const enumField = enumByName(field.type);
 	if (enumField) {
-		return <EnumField name={field.name} typeEnum={enumField} />;
+		return (
+			<EnumField
+				name={field.name}
+				typeEnum={enumField}
+				multiple={field.isArray}
+				autoFocus={autoFocus}
+			/>
+		);
 	}
 
+	const fieldType = field.type === 'Number' ? 'number' : 'text';
+
 	return (
-		<Field
-			id={field.name}
-			name={field.name}
-			className={styles.textInputField}
-			disabled={isReadonly}
-		/>
+		<TextField name={field.name} type={fieldType} disabled={isReadonly} autoFocus={autoFocus} />
 	);
 };
 
-const DetailField = ({ field }: { field: EntityField }) => {
+const DetailField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
+	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
 	return (
 		<div className={styles.detailField}>
-			<DetailPanelFieldLabel fieldName={field.name} />
+			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
-			{getField({ field })}
+			{getField({ field, autoFocus })}
 		</div>
 	);
 };
@@ -144,8 +154,50 @@ const DetailForm = ({
 	isReadOnly?: boolean;
 	panelMode: PanelMode;
 }) => {
+	// We need to validate the form for required fields before submitting
+	const validate = useCallback(
+		(values: any) => {
+			const errors: Record<string, string> = {};
+			for (const field of detailFields) {
+				if (
+					field.attributes?.isRequired &&
+					field.type !== 'ID' &&
+					field.type !== 'ID!' &&
+					field.type !== 'custom' &&
+					isValueEmpty(values[field.name])
+				) {
+					errors[field.name] = 'Required';
+				}
+			}
+
+			const fieldsInError = Object.keys(errors);
+			if (fieldsInError.length === 0) return {};
+
+			// TODO EXOGW-150: instead of using toast, we should use a formik error message on the form itself
+			toast.error(
+				`${fieldsInError.join(', ')} ${fieldsInError.length > 1 ? 'are' : 'is a'} required field${
+					fieldsInError.length > 1 ? 's' : ''
+				}.`,
+				{
+					duration: 5000,
+				}
+			);
+			return errors;
+		},
+		[detailFields]
+	);
+
+	const firstEditableField = detailFields.find((field) => !isFieldReadonly(field));
+
 	return (
-		<Formik initialValues={initialValues} onSubmit={onSubmit} onReset={onCancel}>
+		<Formik
+			validate={validate}
+			validateOnChange={false} // We don't want to validate on change because it will trigger a toast message on every keystroke
+			validateOnBlur={false} // We don't want to validate on blur because it will trigger a toast message
+			initialValues={initialValues}
+			onSubmit={onSubmit}
+			onReset={onCancel}
+		>
 			{({ isSubmitting }) => (
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
@@ -162,7 +214,13 @@ const DetailForm = ({
 									/>
 								);
 							} else {
-								return <DetailField key={field.name} field={field} />;
+								return (
+									<DetailField
+										key={field.name}
+										field={field}
+										autoFocus={field === firstEditableField}
+									/>
+								);
 							}
 						})}
 						<div className={styles.detailButtonContainer}>
@@ -403,9 +461,7 @@ export const DetailPanel = () => {
 				onRequestClose={closeModal}
 				shouldCloseOnEsc
 				shouldCloseOnOverlayClick
-				className={
-					open ? classnames(styles.detailContainer, styles.slideIn) : styles.detailContainer
-				}
+				className={open ? clsx(styles.detailContainer, styles.slideIn) : styles.detailContainer}
 				title={selectedEntity.name}
 				modalContent={
 					<>

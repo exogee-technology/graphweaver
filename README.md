@@ -161,8 +161,11 @@ There are two options to connect a data source:
 
 We welcome contributions from the community! If you're interested in improving Graphweaver, please refer to our Contribution Guidelines for detailed instructions.
 
-We use [Gitleaks](https://github.com/gitleaks/gitleaks) to ensure that secrets remain secret.
-To update Gitleaks, run `pre-commit autoupdate`
+We use [Gitleaks](https://github.com/gitleaks/gitleaks) to ensure that secrets remain secret:
+
+* `brew install gitleaks`
+* `brew install pre-commit`
+* `pre-commit autoupdate`
 
 ## Publishing
 

@@ -6,12 +6,19 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      deployments: write
     defaults:
       run:
         working-directory: src
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - uses: chrnorm/deployment-action@v2
+        name: Create GitHub deployment
+        id: deployment
+        with:
+          token: '${{ github.token }}'
 
       - uses: actions/cache@v3
         env:
@@ -48,3 +55,21 @@ jobs:
         run: pnpm -r publish --no-git-checks --access=public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Update deployment status (success)
+        if: success()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'success'
+
+      - name: Update deployment status (failure)
+        if: failure()
+        uses: chrnorm/deployment-status@v2
+        with:
+          token: '${{ github.token }}'
+          environment-url: ${{ steps.deployment.outputs.environment_url }}
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+          state: 'failure'

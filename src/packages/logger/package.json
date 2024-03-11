@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {
@@ -15,6 +15,7 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
@@ -24,7 +25,7 @@
 		"@types/node": "20.2.5",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"keywords": [
 		"graphql",

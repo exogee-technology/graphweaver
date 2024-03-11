@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  sqlite-end-to-end-tests:
+  windows-end-to-end-tests:
     runs-on: windows-latest
     defaults:
       run:
@@ -39,6 +39,10 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Install Playwright Browsers
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
       - name: Init and Import SQLite Chinook Database
         working-directory: src/packages/end-to-end
         run: |
@@ -46,11 +50,12 @@ jobs:
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
-        timeout-minutes: 2
+        timeout-minutes: 4
         run: |
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
+          pnpm test-ui &&
           taskkill /F /IM node.exe /T
 
         env:

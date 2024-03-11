@@ -11,55 +11,57 @@ CREATE DATABASE todo_app;
 USE todo_app;
 
 CREATE TABLE task (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   description VARCHAR(255) NOT NULL,
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  user_id INT NOT NULL,
+  user_id BIGINT(20) NOT NULL,
   priority ENUM('HIGH', 'MEDIUM', 'LOW')
 );
 
 CREATE TABLE tag (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE task_tags (
-  task_id INT NOT NULL,
-  tag_id INT NOT NULL,
+  task_id BIGINT(20) NOT NULL,
+  tag_id BIGINT(20) NOT NULL,
   PRIMARY KEY (task_id, tag_id),
   FOREIGN KEY (task_id) REFERENCES task(id),
   FOREIGN KEY (tag_id) REFERENCES tag(id)
 );
 
 CREATE TABLE credential (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE api_key (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   api_key VARCHAR(255) NOT NULL UNIQUE,
   secret VARCHAR(255) NOT NULL,
   revoked BOOLEAN NOT NULL DEFAULT false,
-  roles JSON NOT NULL DEFAULT (JSON_ARRAY())
+  roles TEXT NOT NULL
 );
 
 CREATE TABLE authentication (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT(20) AUTO_INCREMENT PRIMARY KEY,
   type VARCHAR(255) NOT NULL,
-  user_id INT NOT NULL,
+  user_id BIGINT(20) NOT NULL,
   data JSON NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES credential(id)
 );
 
-INSERT INTO credential (id, username, password)
+INSERT INTO credential (username, password)
 VALUES
-  (1, 'luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
-  (4, 'darth', '$argon2id$v=19$m=65536,t=3,p=4$vM5N5I6+Ed46GWe7YCH0pQ$Lc7+o27PIhE4eK4cDvKz2TT9e/UW2LCcf7ExAX7y7gQ')
+  ('luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
+  ('c3po', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
+  ('r2d2', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),
+  ('darth', '$argon2id$v=19$m=65536,t=3,p=4$vM5N5I6+Ed46GWe7YCH0pQ$Lc7+o27PIhE4eK4cDvKz2TT9e/UW2LCcf7ExAX7y7gQ')
   ;
 
 -- Seed data for task table

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -45,7 +45,7 @@
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
-		"reflect-metadata": "0.1.13",
+		"reflect-metadata": "0.2.1",
 		"uuid": "8.3.2",
 		"xero-node": "4.30.0"
 	},
@@ -55,7 +55,7 @@
 		"prettier": "2.8.8",
 		"ts-node": "10.4.0",
 		"tsc-watch": "4.2.9",
-		"typescript": "5.0.2",
+		"typescript": "5.3.3",
 		"vite": "4.5.2"
 	}
 }

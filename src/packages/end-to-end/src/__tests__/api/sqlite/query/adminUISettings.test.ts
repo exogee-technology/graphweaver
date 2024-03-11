@@ -27,11 +27,11 @@ class OrmAlbum extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Title', type: 'NVARCHAR(160)' })
-	title!: unknown;
+	title!: string;
 
 	@ManyToOne({
 		entity: () => OrmArtist,
-		wrappedReference: true,
+		ref: true,
 		fieldName: 'ArtistId',
 		index: 'IFK_AlbumArtistId',
 	})
@@ -44,7 +44,7 @@ class OrmArtist extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: unknown;
+	name?: string;
 
 	@OneToMany({ entity: () => OrmAlbum, mappedBy: 'artist' })
 	albums = new Collection<OrmAlbum>(this);
@@ -76,6 +76,11 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	artist!: Artist;
 }
 
+@AdminUISettings<Artist>({
+	defaultFilter: {
+		name: 'test',
+	},
+})
 @ObjectType('Artist')
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
@@ -143,6 +148,7 @@ test('Test the decorator adminUISettings', async () => {
 					entities {
 						name
 						backendId
+						defaultFilter
 						summaryField
 						fields {
 							name
@@ -192,6 +198,7 @@ test('Test the decorator adminUISettings', async () => {
 
 	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
+	expect(artistEntity?.defaultFilter).toStrictEqual({ name: 'test' });
 
 	const idField = artistEntity?.fields.find((field) => field.name === 'id');
 	expect(idField).not.toBeNull();

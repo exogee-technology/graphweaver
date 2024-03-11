@@ -1,6 +1,5 @@
 import path from 'path';
-import fs from 'fs';
-import { BuildOptions, Message } from 'esbuild';
+import { BuildOptions, PluginBuild, OnResolveArgs } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -35,56 +34,106 @@ export const baseEsbuildConfig: BuildOptions = {
 	format: 'cjs',
 	watch: true,
 	keepNames: true,
-	external: [
-		'tedious',
-		'pg-query-stream',
-		'oracledb',
+};
+
+export const getExternalModules = (): string[] => {
+	// These modules make the bundle much larger and are not required at runtime.
+	const externalModules = new Set([
+		...Object.keys(requireSilent('knex/package.json').browser),
+		...Object.keys(requireSilent('@mikro-orm/knex/package.json').peerDependencies),
+		...Object.keys(requireSilent('type-graphql/package.json').peerDependencies),
+		'@mikro-orm/knex',
 		'bun:ffi',
-		'mysql',
-		'mysql2',
-		'sqlite3',
-		'better-sqlite3',
 		'mock-aws-s3',
 		'nock',
 		'aws-sdk',
-	],
+	]);
+
+	// The end user might explicitly require these, so we'll exclude them from the list of external modules.
+	const requiredModules = new Set([
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
+	]);
+
+	for (const value of requiredModules) {
+		externalModules.delete(value);
+	}
+
+	console.log("The following modules are external and won't be bundled:");
+	console.log(externalModules);
+	console.log(
+		'If you want to bundle any of these, you can add them as a dependency in your package.json file.'
+	);
+
+	return [...externalModules];
 };
 
 export const makeAllPackagesExternalPlugin = () => ({
 	name: 'make-all-packages-external',
-	setup(build: any) {
+	setup(build: PluginBuild) {
 		// On Windows, packages in the monorepo are resolved as full file paths starting with C:\ ...
 		// And Go (used by esbuild) does not support regex with negative lookaheads
 		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // Must not start with "/" or "./" or "../" or a drive letter
-		build.onResolve({ filter }, ({ path }: any) => {
+		build.onResolve({ filter }, ({ path }: OnResolveArgs) => {
 			return { path, external: true };
 		});
 	},
 });
 
-export const makeOptionalMikroOrmPackagesExternalPlugin = () => ({
-	name: 'make-mikro-orm-packages-external',
-	setup(build: any) {
-		const filter = /^@mikro-orm/;
-		build.onResolve({ filter }, ({ path }: any) => {
-			// If it's available locally then it should be bundled,
-			// otherwise let it be external in the resulting bundle.
-			try {
-				// If we are running Graphweaver build as part of an end-to-end
-				// test, then let's look up the end-to-end node_modules dir,
-				// rather than the one in the 'builder' package
-				const resolvedPath = require.resolve(path, {
-					...(process.cwd().includes('end-to-end')
-						? { paths: ['../end-to-end/node_modules'] }
-						: {}),
-				});
+// A function that will return true if the package.json file has any native modules
+const isNative = (pkg: any) =>
+	(pkg.dependencies &&
+		(pkg.dependencies.bindings ||
+			pkg.dependencies.prebuild ||
+			pkg.dependencies.nan ||
+			pkg.dependencies['node-pre-gyp'] ||
+			pkg.dependencies['node-gyp-build'])) ||
+	pkg.gypfile ||
+	pkg.binary;
 
-				return { path: resolvedPath, external: false };
-			} catch (error) {
-				// Ok, it's out.
-				console.log('Externalising package:', path);
-				return { path, external: true };
+// esbuild plugin that will check the package.json file for each package
+export const checkPackageForNativeModules = () => ({
+	name: 'has-native-modules',
+	setup(build: PluginBuild) {
+		// A set to store the packages that have native modules
+		const modulesWithNativeModules = new Set<string>();
+		const externals = build.initialOptions.external || [];
+
+		// Filter only imports that are published to npm, they must not start with "/" or "./" or "../" or a drive letter
+		const filter = /^[^./]|^\.[^./]|^\.\.[^/]|^[A-Z]:\\/; // We are only interested in published packages
+		build.onResolve({ filter }, async (args: OnResolveArgs) => {
+			// If the package is already added esbuild external, we can skip it
+			if (externals.includes(args.path)) {
+				return undefined;
+			}
+			// get the package.json file for the imported path
+			const packageInfo = requireSilent(`${args.path}/package.json`);
+			// Check if the package has native modules and add it to the set
+			if (isNative(packageInfo)) {
+				console.warn(`The package ${args.path} has native modules and cannot be bundled.`);
+				modulesWithNativeModules.add(args.path);
+			}
+
+			return undefined;
+		});
+
+		build.onEnd(() => {
+			if (modulesWithNativeModules.size > 0) {
+				throw new Error(
+					`The following packages have native modules and cannot be bundled: ${Array.from(
+						modulesWithNativeModules
+					).join(', ')}`
+				);
 			}
 		});
 	},
 });
+
+export const requireSilent = (module: string) => {
+	try {
+		return require(module);
+	} catch {
+		// If we are here we might not have the package installed so we'll just return an empty object.
+		return { browser: {}, peerDependencies: {}, dependencies: {} };
+	}
+};

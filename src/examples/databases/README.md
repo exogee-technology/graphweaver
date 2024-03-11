@@ -11,15 +11,16 @@ The user table in PostgreSQL looks like this:
 ```
 CREATE DATABASE todo_app;
 
-CREATE TABLE user (
+CREATE TABLE "user" (
   id SERIAL PRIMARY KEY,
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
+  deleted boolean NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Seed data for user table
-INSERT INTO user (username, email)
+INSERT INTO "user" (username, email)
 VALUES
   ('john_doe', 'john.doe@example.com'),
   ('jane_smith', 'jane.smith@example.com'),
@@ -39,12 +40,12 @@ The todo table is in MySQL and looks like this:
 CREATE DATABASE todo_app;
 
 CREATE TABLE task (
-  id INT AUTO_INCREMENT PRIMARY KEY,
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
   description VARCHAR(255) NOT NULL,
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  user_id INT NOT NULL
+  user_id BIGINT NOT NULL
 );
 
 -- Seed data for task table

@@ -20,7 +20,7 @@ import { ArrayType, BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/
 // Create Entity
 @Entity({ tableName: 'api_key' })
 class OrmApiKey extends BaseEntity implements ApiKeyStorage {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String, fieldName: 'api_key' })
@@ -38,7 +38,7 @@ class OrmApiKey extends BaseEntity implements ApiKeyStorage {
 
 @Entity()
 export class OrmTask extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
@@ -72,12 +72,17 @@ class TaskResolver extends createBaseResolver<Task, OrmTask>(
 	new MikroBackendProvider(OrmTask, connection)
 ) {}
 
-const dataProvider = new MikroBackendProvider(OrmApiKey, connection);
+const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
 
 const graphweaver = new Graphweaver({
 	resolvers: [TaskResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => ({} as UserProfile), dataProvider)],
+		plugins: [
+			authApolloPlugin(async () => ({} as UserProfile), {
+				apiKeyDataProvider,
+				implicitAllow: true,
+			}),
+		],
 	},
 });
 

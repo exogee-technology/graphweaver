@@ -3,7 +3,7 @@ import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 
 @Entity()
 export class User extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
@@ -11,4 +11,7 @@ export class User extends BaseEntity {
 
 	@Property({ type: String })
 	email!: string;
+
+	@Property({ type: Boolean })
+	deleted!: boolean;
 }

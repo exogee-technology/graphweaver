@@ -10,3 +10,12 @@
 	color: rgba(237, 232, 242, 0.6);
 	font-weight: 600;
 }
+
+.required {
+	font-family: 'Inter';
+	font-style: normal;
+	font-size: 14px;
+	line-height: 150%;
+	color: rgba(237, 232, 242, 0.6);
+	font-weight: 600;
+}

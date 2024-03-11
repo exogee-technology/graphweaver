@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-
 import {
 	Table,
 	useSchema,
@@ -13,10 +12,9 @@ import {
 	RequestRefetchOptions,
 	Header,
 	ExportModal,
-	wrapFilterWithAndOperator,
 	getOrderByQuery,
 } from '@exogee/graphweaver-admin-ui-components';
-import '@exogee/graphweaver-admin-ui-components/lib/index.css';
+
 import { queryForEntityPage } from './graphql';
 
 interface ListToolBarProps {
@@ -46,7 +44,6 @@ export const List = () => {
 	const { entityByName } = useSchema();
 
 	const [showExportModal, setShowExportModal] = useState(false);
-
 	const { sort, page, filters } = decodeSearchParams(search);
 
 	const queryVariables = {
@@ -55,7 +52,7 @@ export const List = () => {
 			limit: PAGE_SIZE,
 			orderBy: getOrderByQuery(sort),
 		},
-		...(filters ? { filter: wrapFilterWithAndOperator(filters) } : {}),
+		...(filters ? { filter: filters } : {}),
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<{ result: TableRowItem[] }>(

@@ -3,6 +3,7 @@ import svgr from 'vite-plugin-svgr';
 import graphweaver from 'vite-plugin-graphweaver';
 import { InlineConfig } from 'vite';
 import path from 'path';
+import { requireSilent } from './util';
 
 export interface ViteConfigOptions {
 	rootDirectory: string;
@@ -19,6 +20,17 @@ export const viteConfig = ({
 	backendUrl,
 	base = '/',
 }: ViteConfigOptions): InlineConfig => {
+	// This is a fix to the issue where the bundled components are not being optimized for esm.
+	// Issue: https://github.com/exogee-technology/graphweaver/issues/290
+	const optimizeDeps = [
+		...Object.keys(
+			requireSilent('@exogee/graphweaver-admin-ui-components/package.json').dependencies
+		),
+		...Object.keys(
+			requireSilent('@exogee/graphweaver-auth-ui-components/package.json').dependencies
+		),
+	];
+
 	return {
 		configFile: false,
 		root: rootDirectory,
@@ -35,7 +47,7 @@ export const viteConfig = ({
 			...(port ? { port } : {}),
 		},
 		optimizeDeps: {
-			include: ['react-dom/client', 'react-dom'],
+			include: ['react-dom/client', 'react-dom', ...optimizeDeps],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
 				// our vite plugin directly.

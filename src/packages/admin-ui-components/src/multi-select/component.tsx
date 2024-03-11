@@ -32,7 +32,7 @@ export const Select = ({
 	mode = SelectMode.MULTI,
 }: SelectProps) => {
 	const [open, setOpen] = useState(false);
-	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value.flat());
+	const [selectedOptions, setSelectedOptions] = useState<SelectOption[]>(value);
 	const selectBoxRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -107,11 +107,9 @@ export const Select = ({
 									? `${selectedOptions.length} Selected`
 									: selectedOptions?.[0].label}
 							</span>
-							{mode === SelectMode.MULTI && (
-								<span className={styles.deleteOption} onClick={handleDeleteAll}>
-									&times;
-								</span>
-							)}
+							<span className={styles.deleteOption} onClick={handleDeleteAll}>
+								&times;
+							</span>
 						</div>
 					</div>
 				) : (

@@ -24,37 +24,37 @@ export class OrmCustomer extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'FirstName', type: 'NVARCHAR(40)' })
-	firstName!: unknown;
+	firstName!: string;
 
 	@Property({ fieldName: 'LastName', type: 'NVARCHAR(20)' })
-	lastName!: unknown;
+	lastName!: string;
 
 	@Property({ fieldName: 'Company', type: 'NVARCHAR(80)', nullable: true })
-	company?: unknown;
+	company?: string;
 
 	@Property({ fieldName: 'Address', type: 'NVARCHAR(70)', nullable: true })
-	address?: unknown;
+	address?: string;
 
 	@Property({ fieldName: 'City', type: 'NVARCHAR(40)', nullable: true })
-	city?: unknown;
+	city?: string;
 
 	@Property({ fieldName: 'State', type: 'NVARCHAR(40)', nullable: true })
-	state?: unknown;
+	state?: string;
 
 	@Property({ fieldName: 'Country', type: 'NVARCHAR(40)', nullable: true })
-	country?: unknown;
+	country?: string;
 
 	@Property({ fieldName: 'PostalCode', type: 'NVARCHAR(10)', nullable: true })
-	postalCode?: unknown;
+	postalCode?: string;
 
 	@Property({ fieldName: 'Phone', type: 'NVARCHAR(24)', nullable: true })
-	phone?: unknown;
+	phone?: string;
 
 	@Property({ fieldName: 'Fax', type: 'NVARCHAR(24)', nullable: true })
-	fax?: unknown;
+	fax?: string;
 
 	@Property({ fieldName: 'Email', type: 'NVARCHAR(60)' })
-	email!: unknown;
+	email!: string;
 }
 
 @ObjectType('Customer')
@@ -139,6 +139,7 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 							}
 							attributes {
 								isReadOnly
+								isRequired
 								__typename
 							}
 							__typename
@@ -172,15 +173,19 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 
 	const fieldNameField = customerEntity?.fields.find((field) => field.name === 'firstName');
 	expect(fieldNameField).not.toBeNull();
-	expect(fieldNameField?.attributes).toBeNull();
+	expect(fieldNameField?.attributes).not.toBeNull();
+	expect(fieldNameField?.attributes?.isReadOnly).toEqual(false);
+	expect(fieldNameField?.attributes?.isRequired).toEqual(true);
 
 	const companyField = customerEntity?.fields.find((field) => field.name === 'company');
 	expect(companyField).not.toBeNull();
 	expect(companyField?.attributes).not.toBeNull();
 	expect(companyField?.attributes?.isReadOnly).toEqual(true);
+	expect(companyField?.attributes?.isRequired).toEqual(false);
 
 	const addressField = customerEntity?.fields.find((field) => field.name === 'address');
 	expect(addressField).not.toBeNull();
 	expect(addressField?.attributes).not.toBeNull();
 	expect(addressField?.attributes?.isReadOnly).toEqual(true);
+	expect(addressField?.attributes?.isRequired).toEqual(false);
 });

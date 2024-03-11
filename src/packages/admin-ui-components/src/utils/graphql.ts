@@ -6,11 +6,14 @@ export const SCHEMA_QUERY = gql`
 		result: _graphweaver {
 			entities {
 				name
+				plural
 				backendId
 				summaryField
+				defaultFilter
 				fields {
 					name
 					type
+					isArray
 					relationshipType
 					relatedEntity
 					filter {
@@ -18,6 +21,7 @@ export const SCHEMA_QUERY = gql`
 					}
 					attributes {
 						isReadOnly
+						isRequired
 					}
 					extensions {
 						key

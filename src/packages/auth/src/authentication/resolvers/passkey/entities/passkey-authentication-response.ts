@@ -2,7 +2,7 @@ import { Field, InputType, ID } from '@exogee/graphweaver';
 import type {
 	AuthenticatorAssertionResponseJSON,
 	AuthenticationResponseJSON,
-} from '@simplewebauthn/typescript-types';
+} from '@simplewebauthn/types';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 @InputType()

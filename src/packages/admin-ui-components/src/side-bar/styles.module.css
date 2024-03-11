@@ -48,6 +48,12 @@
 
 .logo {
 	margin: 40px auto 32px 24px;
+	min-height: 26px;
+	height: 26px;
+}
+
+.logoLoading {
+	display: none;
 }
 
 .subtext {
@@ -108,10 +114,6 @@
 .subListItem.active {
 	background-color: var(--primary-color);
 	opacity: 1;
-}
-
-.subListItem.active span {
-	background-image: url(../../assets/16-table-light.svg);
 }
 
 .sideBarFooter {

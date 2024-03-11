@@ -6,7 +6,7 @@ import {
 	EntityProperty,
 	FilterQuery,
 	Reference,
-	ReferenceType,
+	ReferenceKind,
 	Utils,
 	wrap,
 } from '@mikro-orm/core';
@@ -52,8 +52,8 @@ export const assign = async <T extends AnyEntity<T>>(
 			| undefined;
 
 		if (
-			propertyMetadata?.reference === ReferenceType.MANY_TO_MANY ||
-			propertyMetadata?.reference === ReferenceType.ONE_TO_MANY
+			propertyMetadata?.kind === ReferenceKind.MANY_TO_MANY ||
+			propertyMetadata?.kind === ReferenceKind.ONE_TO_MANY
 		) {
 			if (!Array.isArray(value))
 				throw new Error(
@@ -95,7 +95,7 @@ export const assign = async <T extends AnyEntity<T>>(
 							entity =
 								((await em.findOne(propertyMetadata.type, {
 									id: subvalue.id,
-								} as FilterQuery<T>)) as T | null) ?? undefined;
+								})) as T | null) ?? undefined;
 						}
 					}
 
@@ -134,8 +134,8 @@ export const assign = async <T extends AnyEntity<T>>(
 				entityPropertyValue.getItems().filter((entity) => !visitedEntities.has(entity))
 			);
 		} else if (
-			propertyMetadata?.reference == ReferenceType.MANY_TO_ONE ||
-			propertyMetadata?.reference === ReferenceType.ONE_TO_ONE
+			propertyMetadata?.kind == ReferenceKind.MANY_TO_ONE ||
+			propertyMetadata?.kind === ReferenceKind.ONE_TO_ONE
 		) {
 			if (value === null) {
 				// If the value is null, unset the reference

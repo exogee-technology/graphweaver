@@ -1,13 +1,14 @@
 import { useLazyQuery } from '@apollo/client';
 
-import { Filter, Select, SelectOption, useSchema } from '..';
+import { Filter, ComboBox, SelectMode, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
+import toast from 'react-hot-toast';
 
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<string>;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
+	initialFilter?: Filter | undefined;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
@@ -18,8 +19,10 @@ export const TextFilter = ({
 	initialFilter,
 	resetCount,
 }: TextFilterProps) => {
+	const initialValue = (
+		initialFilter?.[fieldName] ? [initialFilter?.[fieldName]] : initialFilter?.[`${fieldName}_in`]
+	) as string[] | undefined;
 	const { entityByName } = useSchema();
-	const initialValue = initialFilter?.[fieldName];
 
 	const [getData, { loading, error, data }] = useLazyQuery<{ result: Record<string, string>[] }>(
 		queryForFilterText(entity, fieldName, entityByName)
@@ -28,17 +31,10 @@ export const TextFilter = ({
 	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 
 	const handleOnChange = (options?: SelectOption[]) => {
+		const hasSelectedOptions = (options ?? [])?.length > 0;
 		onChange?.(
 			fieldName,
-			(options ?? [])?.length > 1
-				? // if there are multiple options, use the _in filter
-				  {
-						[`${fieldName}_in`]: options?.map((option) => option.value),
-				  }
-				: // if there is only one option, use the equals filter
-				options?.length === 1
-				? ({ [fieldName]: options?.[0]?.value } as Filter<string>)
-				: undefined
+			hasSelectedOptions ? { [`${fieldName}_in`]: options?.map((option) => option.value) } : {}
 		);
 	};
 
@@ -49,14 +45,15 @@ export const TextFilter = ({
 	};
 
 	return (
-		<Select
+		<ComboBox
 			key={`${fieldName}:${resetCount}`}
 			options={[...textOptions].map((value) => ({ value, label: value }))}
-			value={initialValue ? [{ value: initialValue, label: initialValue }] : []}
+			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}
 			loading={loading}
+			mode={SelectMode.MULTI}
 		/>
 	);
 };

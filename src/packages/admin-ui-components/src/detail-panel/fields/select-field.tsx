@@ -1,36 +1,45 @@
 import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 import { useEffect } from 'react';
-import { SelectOption, Select, SelectMode } from '../../multi-select';
+
+import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
 const mode = (entity: EntityField) => {
-	if (entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE') {
-		return SelectMode.SINGLE;
+	if (entity.relationshipType === 'ONE_TO_MANY' || entity.relationshipType === 'MANY_TO_MANY') {
+		return SelectMode.MULTI;
 	}
 
-	return SelectMode.MULTI;
+	return SelectMode.SINGLE;
 };
 
-export const SelectField = ({ name, entity }: { name: string; entity: EntityField }) => {
+export const SelectField = ({
+	name,
+	entity,
+	autoFocus,
+}: {
+	name: string;
+	entity: EntityField;
+	autoFocus: boolean;
+}) => {
 	const [_, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const { initialValue } = meta;
-	const relationshipEntityType = entityByType(entity.type);
+	const relatedEntity = entityByType(entity.type);
 
 	useEffect(() => {
 		helpers.setValue(initialValue);
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(entity.type, relationshipEntityType?.summaryField),
+		getRelationshipQuery(relatedEntity.plural, relatedEntity?.summaryField),
 		{
 			variables: {
 				pagination: {
-					orderBy: relationshipEntityType?.summaryField
+					orderBy: relatedEntity?.summaryField
 						? {
-								[relationshipEntityType.summaryField as string]: 'ASC',
+								[relatedEntity.summaryField as string]: 'ASC',
 						  }
 						: { id: 'ASC' },
 				},
@@ -39,7 +48,7 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	);
 
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relationshipEntityType?.summaryField || 'id';
+		const label = relatedEntity?.summaryField || 'id';
 		return { label: item[label], value: item.id };
 	});
 
@@ -50,11 +59,12 @@ export const SelectField = ({ name, entity }: { name: string; entity: EntityFiel
 	};
 
 	return (
-		<Select
+		<ComboBox
 			options={options}
 			value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
 			onChange={handleOnChange}
 			mode={mode(entity)}
+			autoFocus={autoFocus}
 		/>
 	);
 };

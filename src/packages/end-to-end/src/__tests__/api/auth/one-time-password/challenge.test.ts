@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, ObjectType, Resolver } from '@exogee/graphweaver';
+import { CreateOrUpdateHookParams, BaseDataProvider, Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -10,10 +10,8 @@ import {
 	createBasePasswordAuthResolver,
 	OneTimePassword,
 	Credential,
-	RequestParams,
 	CredentialCreateOrUpdateInputArgs,
 } from '@exogee/graphweaver-auth';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 const MOCK_CODE = '123456';
 const MOCK_CREATED_AT = new Date();
@@ -57,7 +55,7 @@ class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
 @Resolver()
 class CredentialAuthResolver extends createBasePasswordAuthResolver(
 	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
+	new BaseDataProvider('my-provider')
 ) {
 	async authenticate(username: string, password: string) {
 		if (password === 'test123') return user;
@@ -76,13 +74,13 @@ class CredentialAuthResolver extends createBasePasswordAuthResolver(
 const graphweaver = new Graphweaver({
 	resolvers: [OTPAuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 
 describe('One Time Password Authentication - Challenge', () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		jest.restoreAllMocks();
 	});
 
 	test('should fail challenge if not logged in.', async () => {
@@ -139,9 +137,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				} as OneTimePassword)
 		);
 
-		const response = await graphweaver.server.executeOperation<{
-			loginPassword: { authToken: string };
-		}>({
+		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation verifyOTPChallenge($code: String!) {

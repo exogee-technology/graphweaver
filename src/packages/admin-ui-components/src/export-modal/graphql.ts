@@ -1,9 +1,8 @@
 import { gql } from '@apollo/client';
 import { Entity, generateGqlSelectForEntityFields } from '../utils';
-import pluralize from 'pluralize';
 
 export const GetEntity = (entity: Entity, entityByType?: (entityType: string) => Entity) => {
-	const pluralName = pluralize(entity.name);
+	const pluralName = entity.plural;
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`

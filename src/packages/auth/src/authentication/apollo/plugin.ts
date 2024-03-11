@@ -1,15 +1,20 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider, WithId } from '@exogee/graphweaver';
+import { BackendProvider, WithId, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
-import { requireEnvironmentVariable, upsertAuthorizationContext } from '../../helper-functions';
+import {
+	AclMap,
+	requireEnvironmentVariable,
+	upsertAuthorizationContext,
+} from '../../helper-functions';
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
 import { ApiKeyStorage } from '../entities';
+import { registerAccessControlListHook } from '../../decorators';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -47,13 +52,51 @@ const isURLWhitelisted = (authRedirect: URL) => {
 	);
 };
 
+const applyImplicitAllow = () => {
+	for (const key of graphweaverMetadata.entityNames) {
+		const acl = AclMap.get(key);
+		if (!acl) {
+			// Allow access to all operations
+			registerAccessControlListHook(key, {
+				Everyone: {
+					all: true,
+				},
+			});
+		}
+	}
+};
+
+const applyImplicitDeny = () => {
+	for (const key of graphweaverMetadata.entityNames) {
+		const acl = AclMap.get(key);
+		if (!acl) {
+			// An empty ACL means we deny access to all operations
+			registerAccessControlListHook(key, {});
+		}
+	}
+};
+
+type AuthApolloPluginOptions<D, G> = {
+	implicitAllow?: boolean;
+	apiKeyDataProvider?: BackendProvider<D, G>;
+};
+
 export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
 	addUserToContext: (userId: string) => Promise<UserProfile>,
-	apiKeyDataProvider?: BackendProvider<D, G>
+	options?: AuthApolloPluginOptions<D, G>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
 			logger.trace('authApolloPlugin requestDidStart');
+
+			// If the implicitAllow option is set, we allow access to all entities that do not have an ACL defined.
+			if (options?.implicitAllow) {
+				applyImplicitAllow();
+			} else {
+				// By default we deny access to all entities and the developer must define each ACL.
+				applyImplicitDeny();
+			}
+
 			// We have two use cases this needs to handle:
 			// 1. No auth header, initial request for a guest operation.
 			//    - Some requests are allowed when accessed by a guest defined above.
@@ -78,13 +121,13 @@ export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
 			let tokenVerificationFailed = false;
 			let apiKeyVerificationFailedMessage: string | undefined = undefined;
 
-			if (apiKeyHeader && apiKeyDataProvider) {
+			if (apiKeyHeader && options?.apiKeyDataProvider) {
 				// Case 1. API Key auth header found.
 				logger.trace('X-API-Key header found checking validity.');
 
 				const [key, secret] = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
 
-				const apiKey = await apiKeyDataProvider?.findOne({
+				const apiKey = await options.apiKeyDataProvider?.findOne({
 					key,
 				} as D);
 

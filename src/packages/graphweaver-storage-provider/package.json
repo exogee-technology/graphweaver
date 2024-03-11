@@ -1,12 +1,13 @@
 {
 	"name": "@exogee/graphweaver-storage-provider",
-	"version": "0.2.16",
+	"version": "0.2.21",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"version": "npm version --no-git-tag-version"
 	},
@@ -29,7 +30,7 @@
 	"devDependencies": {
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
-		"typescript": "5.0.2"
+		"typescript": "5.3.3"
 	},
 	"keywords": [
 		"graphweaver",

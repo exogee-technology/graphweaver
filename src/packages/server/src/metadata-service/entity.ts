@@ -1,4 +1,7 @@
 import { Field, ObjectType } from 'type-graphql';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import { Filter } from '@exogee/graphweaver';
+
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 
@@ -6,6 +9,9 @@ import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 export class AdminUiEntityMetadata {
 	@Field(() => String)
 	name!: string;
+
+	@Field(() => String)
+	plural!: string;
 
 	@Field(() => String, { nullable: true })
 	backendId?: string | null;
@@ -15,6 +21,9 @@ export class AdminUiEntityMetadata {
 
 	@Field(() => [AdminUiFieldMetadata])
 	fields?: AdminUiFieldMetadata[] = [];
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	defaultFilter?: Filter<unknown>;
 
 	@Field(() => AdminUiEntityAttributeMetadata)
 	attributes?: AdminUiEntityAttributeMetadata;

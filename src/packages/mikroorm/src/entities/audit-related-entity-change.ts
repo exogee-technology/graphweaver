@@ -1,23 +1,15 @@
-import {
-	BigIntType,
-	Entity,
-	IdentifiedReference,
-	Index,
-	ManyToOne,
-	PrimaryKey,
-	Property,
-} from '@mikro-orm/core';
+import { BigIntType, Entity, Ref, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { AuditChange } from './audit-change';
 import { BaseEntity } from './base-entity';
 @Entity()
 @Index({ properties: ['relatedEntityType', 'relatedEntityId'] })
 export class AuditRelatedEntityChange extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
-	@ManyToOne(() => AuditChange, { onDelete: 'cascade', wrappedReference: true })
-	change!: IdentifiedReference<AuditChange>;
+	@ManyToOne(() => AuditChange, { deleteRule: 'cascade', ref: true })
+	change!: Ref<AuditChange>;
 
 	@Property({ type: 'string' })
 	relatedEntityType!: string;

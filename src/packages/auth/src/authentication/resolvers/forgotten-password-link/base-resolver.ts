@@ -11,13 +11,9 @@ import {
 	BaseDataEntity,
 	GraphqlEntityType,
 	BackendProvider,
-	EntityMetadataMap,
+	graphweaverMetadata,
 } from '@exogee/graphweaver';
-import {
-	Authentication,
-	AuthenticationBaseEntity,
-	Credential as OrmCredential,
-} from '../../entities';
+import { Authentication, AuthenticationBaseEntity } from '../../entities';
 import { defaultPasswordStrength } from '../password';
 import { ForgottenPasswordLinkProvider } from './resolver';
 import { updatePassword } from '../utils';
@@ -144,10 +140,8 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			}
 
 			// Get the user's credential
-			const credentialProvider = EntityMetadataMap.get('Credential')?.provider as BackendProvider<
-				any,
-				any
-			>;
+			const credentialProvider = graphweaverMetadata.getEntity('Credential')
+				?.provider as BackendProvider<any, any>;
 
 			// Update the user's password
 			const updatedCredential = await updatePassword(

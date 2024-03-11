@@ -16,7 +16,7 @@ import { BaseEntity } from './base-entity';
 @Entity()
 @Index({ properties: ['entityType', 'entityId'] })
 export class AuditChange extends BaseEntity {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Enum({ items: () => ChangeSetType, type: 'string' })

@@ -3,18 +3,18 @@ import { DateTime } from 'luxon';
 import { Filter } from '../';
 import { DatePicker } from '../date-picker';
 
-export type DateRangeFilterType = { [x: string]: string }[] | undefined;
+export type DateRangeFilterType = { [x: string]: string } | undefined;
 
 export interface DateRangeFilterProps {
 	fieldName: string;
 	entity: string; // Not used but added to conform to API
-	onChange?: (fieldName: string, filter?: Filter) => void;
-	initialFilter?: Filter<DateRangeFilterType>;
+	onChange?: (fieldName: string, newFilter: Filter) => void;
+	initialFilter?: Filter;
 	resetCount: number; // We use this to reset the filter using the key
 }
 
-const getInitialDateWithKeyFromFilter = (key: string, filter?: Filter<DateRangeFilterType>) => {
-	const iSOString = filter?._and?.find((_filter) => _filter[key])?.[key];
+const getInitialDateWithKeyFromFilter = (key: string, filter?: Filter) => {
+	const iSOString = filter?.[key] as string | undefined;
 	return iSOString ? DateTime.fromISO(iSOString) : undefined;
 };
 
@@ -32,14 +32,7 @@ export const DateRangeFilter = ({
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
 		onChange?.(
 			fieldName,
-			startDate && endDate
-				? {
-						_and: [
-							{ [startKey]: startDate.startOf('day').toISO() },
-							{ [endKey]: endDate.endOf('day').toISO() },
-						],
-				  }
-				: undefined
+			startDate && endDate ? { [startKey]: startDate.toISO(), [endKey]: endDate.toISO() } : {}
 		);
 	};
 
