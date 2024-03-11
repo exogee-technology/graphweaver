@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 
 import Graphweaver from '@exogee/graphweaver-server';
-import { Provider, Resolver } from '@exogee/graphweaver';
+import { BaseDataProvider, Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -58,12 +58,12 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-const mockForgotPasswordProvider = Provider<
+const mockForgotPasswordProvider = BaseDataProvider<
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>
 >;
 
-const mockPasswordProvider = Provider<OrmCredential, Credential<OrmCredential>>;
+const mockPasswordProvider = BaseDataProvider<OrmCredential, Credential<OrmCredential>>;
 
 const acl: AccessControlList<Authentication<ForgottenPasswordLinkData>, AuthorizationContext> = {
 	LIGHT_SIDE: {
