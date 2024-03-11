@@ -511,7 +511,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);
 
-		const deletedRows = await this.getRepository().nativeDelete(whereWithAppliedExternalIdFields);
+		const deletedRows = await this.database.em.nativeDelete(
+			this.entityType,
+			whereWithAppliedExternalIdFields
+		);
 
 		if (deletedRows > 1) {
 			throw new Error('Multiple deleted rows');
@@ -530,8 +533,12 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 			const whereWithAppliedExternalIdFields =
 				where && this.applyExternalIdFields(this.entityType, where);
 
-			const toDelete = await this.database.em.count(whereWithAppliedExternalIdFields);
-			const deletedCount = await this.getRepository().nativeDelete(
+			const toDelete = await this.database.em.count(
+				this.entityType,
+				whereWithAppliedExternalIdFields
+			);
+			const deletedCount = await this.database.em.nativeDelete(
+				this.entityType,
 				whereWithAppliedExternalIdFields
 			);
 
