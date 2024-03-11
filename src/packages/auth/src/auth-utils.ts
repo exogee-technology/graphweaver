@@ -101,9 +101,11 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 	acv: ConsolidatedAccessControlValue<G, TContext> | undefined
 ) => {
 	if (!(acv === true || acv !== undefined)) {
+		logger.trace('Raising ForbiddenError: Access control value is either false or not defined.');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 	if (Array.isArray(acv) && acv.length === 0) {
+		logger.trace('Raising ForbiddenError: Access control value is an empty array.');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 	if (Array.isArray(acv)) {
@@ -135,6 +137,9 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 		);
 
 		if (!hasAccess) {
+			logger.trace(
+				'Raising ForbiddenError: A filter function returned false or undefined, so the request is rejected.'
+			);
 			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 		}
 	}
