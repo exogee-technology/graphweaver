@@ -20,7 +20,7 @@ interface Form {
 	password: string;
 }
 
-export const PasswordLogin = ({ canResetPassword }: { canResetPassword: boolean }) => {
+export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: boolean }) => {
 	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
