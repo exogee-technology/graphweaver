@@ -10,6 +10,7 @@ import {
 import { BaseEntity, ExternalIdField } from '@exogee/graphweaver-mikroorm';
 
 import { Tag } from './tag';
+import { Fish } from './fish';
 
 export enum Priority {
 	HIGH = 'HIGH',
@@ -34,6 +35,9 @@ export class Task extends BaseEntity {
 
 	@ManyToMany(() => Tag, (tag) => tag.tasks, { owner: true })
 	tags: Collection<Tag> = new Collection<Tag>(this);
+
+	@ManyToMany(() => Fish, (fish) => fish.tasks, { owner: true })
+	fish: Collection<Fish> = new Collection<Fish>(this);
 
 	@Enum({ items: () => Priority, type: 'string' })
 	priority?: string;

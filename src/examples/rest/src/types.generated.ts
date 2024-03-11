@@ -205,11 +205,124 @@ export type CredentialsPaginationInput = {
   orderBy?: InputMaybe<CredentialsOrderByInput>;
 };
 
+export type Fish = {
+  __typename?: 'Fish';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  tasks: Array<Task>;
+};
+
+
+export type FishTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+};
+
+export type FishCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
+};
+
+export type FishDeleteInput = {
+  id: Scalars['ID']['input'];
+};
+
+export type FishDeleteManyInput = {
+  filter?: InputMaybe<MultipleFishFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TasksFilterInput>;
+};
+
+export type FishInsertInput = {
+  name: Scalars['String']['input'];
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
+};
+
+export type MultipleFishCreateOrUpdateManyInput = {
+  data: Array<FishCreateOrUpdateInput>;
+};
+
+export type MultipleFishFilterInput = {
+  filter?: InputMaybe<MultipleFishFilterInput>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TasksFilterInput>;
+};
+
+export type MultipleFishInsertManyInput = {
+  data: Array<FishInsertInput>;
+};
+
+export type MultipleFishListFilter = {
+  _and?: InputMaybe<Array<MultipleFishListFilter>>;
+  _not?: InputMaybe<MultipleFishListFilter>;
+  _or?: InputMaybe<Array<MultipleFishListFilter>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['ID']['input']>;
+  id_null?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['String']['input']>;
+  name_null?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TasksListFilter>;
+};
+
+export type MultipleFishOrderByInput = {
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  tasks?: InputMaybe<Sort>;
+};
+
+export type MultipleFishPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<MultipleFishOrderByInput>;
+};
+
+export type MultipleFishUpdateManyInput = {
+  data: Array<FishCreateOrUpdateInput>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword: Token;
   createApiKey: ApiKey;
   createCredential: Credential;
+  createFish: Fish;
+  createMultipleFish: Array<Fish>;
+  createOrUpdateMultipleFish: Array<Fish>;
   createOrUpdateTags: Array<Tag>;
   createOrUpdateTasks: Array<Task>;
   createOrUpdateUsers: Array<User>;
@@ -219,6 +332,8 @@ export type Mutation = {
   createTasks: Array<Task>;
   createUser: User;
   createUsers: Array<User>;
+  deleteFish: Scalars['Boolean']['output'];
+  deleteMultipleFish: Scalars['Boolean']['output'];
   deleteTag: Scalars['Boolean']['output'];
   deleteTags: Scalars['Boolean']['output'];
   deleteTask: Scalars['Boolean']['output'];
@@ -236,6 +351,8 @@ export type Mutation = {
   sendOTPChallenge: Scalars['Boolean']['output'];
   updateApiKey: ApiKey;
   updateCredential: Credential;
+  updateFish: Fish;
+  updateMultipleFish: Array<Fish>;
   updateTag: Tag;
   updateTags: Array<Tag>;
   updateTask: Task;
@@ -261,6 +378,21 @@ export type MutationCreateApiKeyArgs = {
 
 export type MutationCreateCredentialArgs = {
   data: CredentialInsertInput;
+};
+
+
+export type MutationCreateFishArgs = {
+  data: FishInsertInput;
+};
+
+
+export type MutationCreateMultipleFishArgs = {
+  input: MultipleFishInsertManyInput;
+};
+
+
+export type MutationCreateOrUpdateMultipleFishArgs = {
+  input: MultipleFishCreateOrUpdateManyInput;
 };
 
 
@@ -306,6 +438,16 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateUsersArgs = {
   input: UsersInsertManyInput;
+};
+
+
+export type MutationDeleteFishArgs = {
+  filter: FishDeleteInput;
+};
+
+
+export type MutationDeleteMultipleFishArgs = {
+  filter: FishDeleteManyInput;
 };
 
 
@@ -372,6 +514,16 @@ export type MutationUpdateApiKeyArgs = {
 
 export type MutationUpdateCredentialArgs = {
   data: CredentialCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateFishArgs = {
+  data: FishCreateOrUpdateInput;
+};
+
+
+export type MutationUpdateMultipleFishArgs = {
+  input: MultipleFishUpdateManyInput;
 };
 
 
@@ -460,6 +612,8 @@ export type Query = {
   canEnrolWallet: Scalars['Boolean']['output'];
   credential?: Maybe<Credential>;
   credentials: Array<Credential>;
+  fish?: Maybe<Fish>;
+  multipleFish: Array<Fish>;
   tag?: Maybe<Tag>;
   tags: Array<Tag>;
   task?: Maybe<Task>;
@@ -488,6 +642,17 @@ export type QueryCredentialArgs = {
 export type QueryCredentialsArgs = {
   filter?: InputMaybe<CredentialsListFilter>;
   pagination?: InputMaybe<CredentialsPaginationInput>;
+};
+
+
+export type QueryFishArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryMultipleFishArgs = {
+  filter?: InputMaybe<MultipleFishListFilter>;
+  pagination?: InputMaybe<MultipleFishPaginationInput>;
 };
 
 
@@ -646,6 +811,7 @@ export type TagsUpdateManyInput = {
 export type Task = {
   __typename?: 'Task';
   description: Scalars['String']['output'];
+  fish: Array<Fish>;
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
   priority?: Maybe<Priority>;
@@ -655,12 +821,18 @@ export type Task = {
 };
 
 
+export type TaskFishArgs = {
+  filter?: InputMaybe<MultipleFishListFilter>;
+};
+
+
 export type TaskTagsArgs = {
   filter?: InputMaybe<TagsListFilter>;
 };
 
 export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
+  fish?: InputMaybe<Array<FishCreateOrUpdateInput>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   priority?: InputMaybe<Priority>;
@@ -683,6 +855,7 @@ export type TaskDeleteManyInput = {
   description_notnull?: InputMaybe<Scalars['String']['input']>;
   description_null?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<TasksFilterInput>;
+  fish?: InputMaybe<MultipleFishFilterInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
@@ -710,6 +883,7 @@ export type TaskDeleteManyInput = {
 
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
+  fish?: InputMaybe<Array<FishCreateOrUpdateInput>>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
@@ -731,6 +905,7 @@ export type TasksFilterInput = {
   description_notnull?: InputMaybe<Scalars['String']['input']>;
   description_null?: InputMaybe<Scalars['String']['input']>;
   filter?: InputMaybe<TasksFilterInput>;
+  fish?: InputMaybe<MultipleFishFilterInput>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
@@ -772,6 +947,7 @@ export type TasksListFilter = {
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['String']['input']>;
   description_null?: InputMaybe<Scalars['String']['input']>;
+  fish?: InputMaybe<MultipleFishListFilter>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;

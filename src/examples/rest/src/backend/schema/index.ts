@@ -9,6 +9,7 @@ import {
 import { UserResolver } from './user';
 import { TaskResolver } from './task';
 import { TagResolver } from './tag';
+import { FishResolver } from './fish';
 
 export const resolvers = [
 	PasswordAuthResolver,
@@ -20,4 +21,5 @@ export const resolvers = [
 	UserResolver,
 	TaskResolver,
 	TagResolver,
+	FishResolver,
 ];

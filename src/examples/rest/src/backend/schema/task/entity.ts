@@ -26,6 +26,7 @@ import { Task as OrmTask, Priority } from '../../entities';
 import { User } from '../user';
 import { Tag } from '../tag';
 import { Roles } from '../../auth/roles';
+import { Fish } from '../fish';
 
 type ReadHook = ReadHookParams<Task, AuthorizationContext>;
 type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, AuthorizationContext>;
@@ -107,6 +108,9 @@ export class Task extends GraphQLEntity<OrmTask> {
 
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
+
+	@RelationshipField<Fish>(() => [Fish], { relatedField: 'tasks' })
+	fish!: Fish[];
 
 	@Field(() => Priority, { nullable: true })
 	priority?: Priority;
