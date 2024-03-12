@@ -1,18 +1,11 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
-import {
-	GraphweaverLogo,
-	Alert,
-	Button,
-	localStorageAuthKey,
-} from '@exogee/graphweaver-admin-ui-components';
+import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
 
 import styles from './styles.module.css';
 
 import { SEND_FORGOTTEN_PASSWORD_LINK } from './graphql';
-import { formatRedirectUrl } from '../../../utils/urls';
 
 interface Form {
 	username: string;
@@ -56,7 +49,7 @@ export const ForgottenPassword = () => {
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
 					<div className={styles.titleContainer}>
-						Please enter your user name to get a forgotten password link.
+						Please enter your username to get a forgotten password link.
 					</div>
 					<Field
 						placeholder="Username"
