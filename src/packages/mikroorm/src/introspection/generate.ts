@@ -1,4 +1,4 @@
-import { DatabaseSchema, AbstractSqlPlatform } from '@mikro-orm/knex';
+import { DatabaseSchema, AbstractSqlPlatform, DatabaseTable } from '@mikro-orm/knex';
 import {
 	EntityMetadata,
 	EntityProperty,
@@ -133,6 +133,31 @@ const convertToCamelCasePropertyNames = (metadata: EntityMetadata[]): void => {
 	}
 };
 
+const assertUniqueForeignKeys = (table: DatabaseTable): void => {
+	const uniqueForeignKeys = new Set();
+	const definedForeignKeys = Object.values(table.getForeignKeys());
+
+	for (const foreignKey of definedForeignKeys) {
+		const { localTableName, referencedTableName, columnNames, referencedColumnNames } = foreignKey;
+		const serializedValue = JSON.stringify({
+			localTableName,
+			columnNames,
+			referencedTableName,
+			referencedColumnNames,
+		});
+
+		if (uniqueForeignKeys.has(serializedValue)) {
+			throw new Error(
+				`\n\nImport Failed: Duplicate foreign keys detected on column/s (${columnNames.toString()}) in table "${
+					table.name
+				}".`
+			);
+		}
+
+		uniqueForeignKeys.add(serializedValue);
+	}
+};
+
 const convertSchemaToMetadata = async (
 	schema: DatabaseSchema,
 	platform: AbstractSqlPlatform,
@@ -145,7 +170,10 @@ const convertSchemaToMetadata = async (
 	const metadata = schema
 		.getTables()
 		.sort((a, b) => a.name.localeCompare(b.name))
-		.map((table) => table.getEntityDeclaration(namingStrategy, helper, 'never'));
+		.map((table) => {
+			assertUniqueForeignKeys(table);
+			return table.getEntityDeclaration(namingStrategy, helper, 'never');
+		});
 
 	if (metadata.length === 0) {
 		throw new IntrospectionError(
