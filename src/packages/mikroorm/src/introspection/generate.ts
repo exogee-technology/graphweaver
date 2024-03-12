@@ -141,9 +141,9 @@ const assertUniqueForeignKeys = (table: DatabaseTable): void => {
 		const { localTableName, referencedTableName, columnNames, referencedColumnNames } = foreignKey;
 		const serializedValue = JSON.stringify({
 			localTableName,
-			columnNames,
+			columnNames: columnNames.sort(),
 			referencedTableName,
-			referencedColumnNames,
+			referencedColumnNames: referencedColumnNames.sort(),
 		});
 
 		if (uniqueForeignKeys.has(serializedValue)) {
