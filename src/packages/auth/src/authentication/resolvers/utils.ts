@@ -5,16 +5,30 @@ import {
 	HookRegister,
 	hookManagerMap,
 } from '@exogee/graphweaver';
+import { ApolloError, AuthenticationError } from 'apollo-server-errors';
+
 import { hashPassword } from '../../utils/argon2id';
-import { AuthenticationError } from 'apollo-server-errors';
 import { CredentialCreateOrUpdateInputArgs } from './password';
+
+export class PasswordStrengthError extends ApolloError {
+	constructor(message: string, extensions?: Record<string, any>) {
+		super(message, 'WEAK_PASSWORD', extensions);
+
+		Object.defineProperty(this, 'name', { value: 'WeakPasswordError' });
+	}
+}
+
+export const defaultPasswordStrength = (password?: string) => {
+	// Default password strength check is 8 characters or more
+	if (password && password.length > 7) return true;
+	throw new PasswordStrengthError('Password not strong enough.');
+};
 
 export const updatePassword = async <D extends BaseDataEntity>(
 	assertPasswordStrength: (password: string) => boolean,
 	provider: BackendProvider<D, any>,
 	id: string,
 	password?: string,
-	username?: string,
 	params?: HookParams<CredentialCreateOrUpdateInputArgs>
 ) => {
 	let passwordHash = undefined;
@@ -22,7 +36,6 @@ export const updatePassword = async <D extends BaseDataEntity>(
 		passwordHash = await hashPassword(password);
 	}
 	const credential = await provider.updateOne(id, {
-		...(username ? { username: username } : {}),
 		...(passwordHash ? { password: passwordHash } : {}),
 	});
 

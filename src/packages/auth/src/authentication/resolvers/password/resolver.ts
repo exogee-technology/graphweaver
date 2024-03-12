@@ -4,38 +4,22 @@ import {
 	CreateOrUpdateHookParams,
 	Filter,
 	GraphqlEntityType,
-	HookParams,
 	HookRegister,
 	Resolver,
-	hookManagerMap,
 } from '@exogee/graphweaver';
+import { AuthenticationError, ValidationError } from 'apollo-server-errors';
 
 import { Credential, CredentialStorage } from '../../entities';
 import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
-import { ApolloError, AuthenticationError, ValidationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
 import { hashPassword, verifyPassword } from '../../../utils/argon2id';
-import { runAfterHooks, updatePassword } from '../utils';
+import { defaultPasswordStrength, runAfterHooks, updatePassword } from '../utils';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
 	REGISTER = 'register',
 }
-
-export class PasswordStrengthError extends ApolloError {
-	constructor(message: string, extensions?: Record<string, any>) {
-		super(message, 'WEAK_PASSWORD', extensions);
-
-		Object.defineProperty(this, 'name', { value: 'WeakPasswordError' });
-	}
-}
-
-export const defaultPasswordStrength = (password?: string) => {
-	// Default password strength check is 8 characters or more
-	if (password && password.length > 7) return true;
-	throw new PasswordStrengthError('Password not strong enough.');
-};
 
 export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
@@ -131,7 +115,6 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 				this.provider,
 				item.id,
 				item.password,
-				undefined,
 				params
 			);
 

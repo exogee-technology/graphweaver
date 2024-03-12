@@ -12,9 +12,10 @@ import {
 	GraphqlEntityType,
 	BackendProvider,
 	graphweaverMetadata,
+	GraphQLEntity,
 } from '@exogee/graphweaver';
 import { Authentication, AuthenticationBaseEntity } from '../../entities';
-import { defaultPasswordStrength } from '../password';
+import { defaultPasswordStrength } from '../utils';
 import { ForgottenPasswordLinkProvider } from './resolver';
 import { updatePassword } from '../utils';
 
@@ -89,9 +90,7 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
 			);
 
-			// @todo - Pass in the custom reset password component path here
 			const url = new URL(`${redirect.origin}/auth/reset-password`);
-			// @todo - The redirect always ends up being the forgot password page, removing for now
 			url.searchParams.set('redirect_uri', redirect.origin.toString());
 			url.searchParams.set('token', link.data.token);
 
@@ -125,34 +124,29 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			const link = await this.getForgottenPasswordLink(token);
 
 			if (!link) {
-				logger.warn(`Failed to reset password: E0001.`);
-				throw new AuthenticationError('Authentication Failed: Link not found');
+				logger.warn(`Failed to reset password: E0001: Link not found`);
+				throw new AuthenticationError('Reset Password Failed: E0001.');
 			}
 
 			if (link.data.redeemedAt !== 'null') {
-				logger.warn(`Failed to reset password: E0002.`);
-				throw new AuthenticationError('Authentication Failed: Link already redeemed');
+				logger.warn(`Failed to reset password: E0002: Link already redeemed`);
+				throw new AuthenticationError('Reset Password Failed: E0002.');
 			}
 
 			if (link.createdAt < new Date(new Date().getTime() - ms(config.ttl))) {
-				logger.warn(`Failed to reset password: E0003.`);
-				throw new AuthenticationError('Authentication Failed: Link expired');
+				logger.warn(`Failed to reset password: E0003: Link expired`);
+				throw new AuthenticationError('Reset Password Failed: E0003.');
 			}
 
 			// Get the user's credential
 			const credentialProvider = graphweaverMetadata.getEntity('Credential')
-				?.provider as BackendProvider<any, any>;
+				?.provider as BackendProvider<D, GraphQLEntity<D>>;
 
 			// Update the user's password
-			const updatedCredential = await updatePassword(
-				this.assertPasswordStrength,
-				credentialProvider,
-				link.userId,
-				password
-			);
+			await updatePassword(this.assertPasswordStrength, credentialProvider, link.userId, password);
 
 			// redeem the link's token
-			const updatedLink = await provider.updateOne(link.id, {
+			await provider.updateOne(link.id, {
 				data: {
 					...link.data,
 					redeemedAt: new Date(),
