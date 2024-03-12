@@ -93,7 +93,6 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLinkData>, connection)
 ) {
 	async sendForgottenPasswordLink(url: URL): Promise<boolean> {
-		console.log(`\n\n ######## ForgotPasswordLink: ${url.toString()} ######## \n\n`);
 		token = url.searchParams.get('token') ?? '';
 		return true;
 	}
@@ -163,7 +162,5 @@ describe('Forgotten Password flow', () => {
 		assert(resetPasswordResponse.body.kind === 'single');
 		expect(resetPasswordResponse.body.singleResult.errors).toBeUndefined();
 		expect(resetPasswordResponse.body.singleResult.data?.resetPassword).toBe(true);
-
-		console.log('Reset Password Response:', response.body.singleResult.data);
 	});
 });
