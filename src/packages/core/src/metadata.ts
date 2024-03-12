@@ -6,15 +6,15 @@ import { MetadataStorage } from 'type-graphql/dist/metadata/metadata-storage';
 import { BaseDataEntity, GraphQLEntity } from '.';
 import { BackendProvider } from './common/types';
 
-export interface EntityMetadata<D extends BaseDataEntity> extends ObjectClassMetadata {
+export interface EntityMetadata<D extends BaseDataEntity, G> extends ObjectClassMetadata {
 	name: string;
 	plural: string;
-	provider: BackendProvider<D, GraphQLEntity<D>>;
+	provider: BackendProvider<D, G>;
 	fields: FieldMetadata[];
 }
 
 class Metadata {
-	private entityMap = new Map<string, EntityMetadata<any>>();
+	private entityMap = new Map<string, EntityMetadata<any, unknown>>();
 	private fieldsStore: FieldMetadata[] = [];
 	private typeGraphQLMetadata: MetadataStorage;
 
@@ -43,7 +43,7 @@ class Metadata {
 	}
 
 	// get the metadata for a specific entity
-	public getEntity(name: string) {
+	public getEntity<D extends BaseDataEntity, G>(name: string): EntityMetadata<D, G> {
 		const meta = this.entityMap.get(name);
 		if (!meta) {
 			throw new Error(`Unexpected Error: entity (${name}) not found in metadata map`);
@@ -57,7 +57,7 @@ class Metadata {
 	}
 
 	// set the metadata for a specific entity
-	public setEntity<D extends BaseDataEntity>(entity: EntityMetadata<D>) {
+	public setEntity<D extends BaseDataEntity, G>(entity: EntityMetadata<D, G>) {
 		this.entityMap.set(entity.name, entity);
 		this.fieldsStore.push(...entity.fields);
 	}
