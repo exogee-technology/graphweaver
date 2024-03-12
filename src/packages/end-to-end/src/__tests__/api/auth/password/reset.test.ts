@@ -106,7 +106,11 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 export class PasswordAuthResolver extends createPasswordAuthResolver<OrmCredential>(
 	Credential,
 	new MikroBackendProvider(OrmCredential, connection)
-) {}
+) {
+	async getUser(username: string): Promise<UserProfile> {
+		return user;
+	}
+}
 
 const graphweaver = new Graphweaver({
 	resolvers: [ForgottenPasswordLinkResolver, PasswordAuthResolver],

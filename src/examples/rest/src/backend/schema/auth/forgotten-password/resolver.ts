@@ -4,7 +4,7 @@ import {
 	ForgottenPasswordLinkData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
-import { Filter, graphweaverMetadata, Resolver } from '@exogee/graphweaver';
+import { BaseLoaders, Filter, graphweaverMetadata, Resolver } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { myConnection } from '../../../database';
@@ -39,7 +39,6 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 	 * @returns return a UserProfile compatible entity
 	 */
 	async getUser(username: string): Promise<UserProfile> {
-		//@todo - extend the base loaders to handle filters - find by filter.
 		const provider = graphweaverMetadata.getEntity('Credential')?.provider;
 
 		if (!provider)
