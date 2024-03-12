@@ -14,7 +14,7 @@ import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } fro
 import { UserProfile } from '../../../user-profile';
 import { RequestParams } from '../../../types';
 import { hashPassword, verifyPassword } from '../../../utils/argon2id';
-import { defaultPasswordStrength, runAfterHooks, updatePassword } from '../utils';
+import { defaultPasswordStrength, runAfterHooks, updatePasswordCredential } from '../utils';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
@@ -110,13 +110,14 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			if (!item.username && !item.password)
 				throw new ValidationError('Update unsuccessful: Nothing to update.');
 
-			const entity = await updatePassword(
-				this.assertPasswordStrength,
-				this.provider,
-				item.id,
-				item.password,
-				params
-			);
+			const entity = await updatePasswordCredential({
+				assertPasswordStrength: this.assertPasswordStrength,
+				provider: this.provider,
+				id: item.id,
+				password: item.password,
+				username: item.username,
+				params,
+			});
 
 			return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
 				info: params.info,

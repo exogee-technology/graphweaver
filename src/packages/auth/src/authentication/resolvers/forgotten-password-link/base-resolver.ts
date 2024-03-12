@@ -17,7 +17,7 @@ import {
 import { Authentication, AuthenticationBaseEntity } from '../../entities';
 import { defaultPasswordStrength } from '../utils';
 import { ForgottenPasswordLinkProvider } from './resolver';
-import { updatePassword } from '../utils';
+import { updatePasswordCredential } from '../utils';
 
 const config = {
 	rate: {
@@ -143,7 +143,12 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				?.provider as BackendProvider<D, GraphQLEntity<D>>;
 
 			// Update the user's password
-			await updatePassword(this.assertPasswordStrength, credentialProvider, link.userId, password);
+			await updatePasswordCredential({
+				assertPasswordStrength: this.assertPasswordStrength,
+				provider: credentialProvider,
+				id: link.userId,
+				password,
+			});
 
 			// redeem the link's token
 			await provider.updateOne(link.id, {

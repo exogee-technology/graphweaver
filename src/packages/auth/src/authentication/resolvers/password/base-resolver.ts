@@ -19,7 +19,7 @@ import { Token } from '../../entities/token';
 import { UserProfile } from '../../../user-profile';
 import { GraphQLResolveInfo } from 'graphql';
 import { Credential } from '../../entities';
-import { PasswordStrengthError } from './resolver';
+import { PasswordStrengthError } from '../utils';
 
 @InputType(`CredentialInsertInput`)
 class CreateCredentialInputArgs extends BaseInsertInputArgs {

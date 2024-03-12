@@ -24,18 +24,28 @@ export const defaultPasswordStrength = (password?: string) => {
 	throw new PasswordStrengthError('Password not strong enough.');
 };
 
-export const updatePassword = async <D extends BaseDataEntity>(
-	assertPasswordStrength: (password: string) => boolean,
-	provider: BackendProvider<D, any>,
-	id: string,
-	password?: string,
-	params?: HookParams<CredentialCreateOrUpdateInputArgs>
-) => {
+export type updatePasswordCredentialOptions<D> = {
+	assertPasswordStrength: (password: string) => boolean;
+	provider: BackendProvider<D, any>;
+	id: string;
+	password?: string;
+	username?: string;
+	params?: HookParams<CredentialCreateOrUpdateInputArgs>;
+};
+export const updatePasswordCredential = async <D extends BaseDataEntity>({
+	assertPasswordStrength,
+	provider,
+	id,
+	password,
+	username,
+	params,
+}: updatePasswordCredentialOptions<D>) => {
 	let passwordHash = undefined;
 	if (password && assertPasswordStrength(password)) {
 		passwordHash = await hashPassword(password);
 	}
 	const credential = await provider.updateOne(id, {
+		...(username ? { username } : {}),
 		...(passwordHash ? { password: passwordHash } : {}),
 	});
 
