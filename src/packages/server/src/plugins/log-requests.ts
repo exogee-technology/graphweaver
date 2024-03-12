@@ -7,9 +7,12 @@ export const LogRequests: ApolloServerPlugin = {
 	async requestDidStart({ request: { variables, query } }) {
 		const variablesCopy = { ...variables };
 
-		logger.info('Query received', {
-			query: query ? stripIgnoredCharacters(query) : query,
-			variables: JSON.stringify(variablesCopy),
-		});
+		logger.info(
+			{
+				query: query ? stripIgnoredCharacters(query) : query,
+				variables: JSON.stringify(variablesCopy),
+			},
+			'Query received'
+		);
 	},
 };
