@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 
 import Graphweaver from '@exogee/graphweaver-server';
-import { BaseDataProvider, Resolver } from '@exogee/graphweaver';
+import { Resolver } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -18,20 +18,20 @@ import {
 	Credential,
 	createPasswordAuthResolver,
 	CredentialStorage,
-	AuthenticationType,
 } from '@exogee/graphweaver-auth';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
+import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Entity, PrimaryKey, BigIntType, Property, JsonType } from '@mikro-orm/core';
+import { SqliteDriver } from '@mikro-orm/sqlite';
 
 @Entity()
-export class Authentication<T> extends BaseEntity implements AuthenticationBaseEntity<T> {
-	@PrimaryKey({ type: BigIntType })
+export class OrmAuthentication<T> extends BaseEntity implements AuthenticationBaseEntity<T> {
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
 	type!: string;
 
-	@Property({ type: BigIntType })
+	@Property({ type: new BigIntType('string') })
 	userId!: string;
 
 	@Property({ type: JsonType })
@@ -40,9 +40,10 @@ export class Authentication<T> extends BaseEntity implements AuthenticationBaseE
 	@Property({ type: Date })
 	createdAt!: Date;
 }
+
 @Entity()
 class OrmCredential extends BaseEntity implements CredentialStorage {
-	@PrimaryKey({ type: BigIntType })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
@@ -52,20 +53,25 @@ class OrmCredential extends BaseEntity implements CredentialStorage {
 	password!: string;
 }
 
+let token = '';
+
 const user = new UserProfile({
 	id: '1',
 	roles: ['admin'],
 	displayName: 'Test User',
 });
 
-const mockForgotPasswordProvider = BaseDataProvider<
-	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
-	AuthenticationBaseEntity<ForgottenPasswordLinkData>
->;
+// Create Data Provider
+const connection = {
+	connectionManagerId: 'InMemory',
+	mikroOrmConfig: {
+		entities: [OrmCredential, OrmAuthentication],
+		dbName: ':memory:',
+		driver: SqliteDriver,
+	},
+};
 
-const mockPasswordProvider = BaseDataProvider<OrmCredential, Credential<OrmCredential>>;
-
-const acl: AccessControlList<Authentication<ForgottenPasswordLinkData>, AuthorizationContext> = {
+const acl: AccessControlList<OrmAuthentication<ForgottenPasswordLinkData>, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		// Users can only perform read operations on their own Authentications
 		read: (context) => ({ id: context.user?.id }),
@@ -77,14 +83,18 @@ const acl: AccessControlList<Authentication<ForgottenPasswordLinkData>, Authoriz
 };
 
 export const ForgottenPasswordLink =
-	createAuthenticationEntity<Authentication<ForgottenPasswordLinkData>>(acl);
+	createAuthenticationEntity<OrmAuthentication<ForgottenPasswordLinkData>>(acl);
 
 @Resolver()
 export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
-	Authentication<ForgottenPasswordLinkData>
->(ForgottenPasswordLink, new mockForgotPasswordProvider('mock-forgot-provider')) {
+	OrmAuthentication<ForgottenPasswordLinkData>
+>(
+	ForgottenPasswordLink,
+	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLinkData>, connection)
+) {
 	async sendForgottenPasswordLink(url: URL): Promise<boolean> {
 		console.log(`\n\n ######## ForgotPasswordLink: ${url.toString()} ######## \n\n`);
+		token = url.searchParams.get('token') ?? '';
 		return true;
 	}
 
@@ -96,51 +106,29 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 @Resolver()
 export class PasswordAuthResolver extends createPasswordAuthResolver<OrmCredential>(
 	Credential,
-	new mockPasswordProvider('mock-password-provider')
+	new MikroBackendProvider(OrmCredential, connection)
 ) {}
 
 const graphweaver = new Graphweaver({
 	resolvers: [ForgottenPasswordLinkResolver, PasswordAuthResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 
 describe('Forgotten Password flow', () => {
-	let token = '';
-	beforeAll(() => {
-		// Forgotten Password Provider
-		jest
-			.spyOn(mockForgotPasswordProvider.prototype, 'createOne')
-			.mockImplementation(async (res) => {
-				console.log('Mocked ForgotPassword createOne');
-				const link = {
-					type: AuthenticationType.ForgottenPasswordLink,
-					userId: user.id,
-					data: {
-						token: res.data.token,
-						redeemedAt: 'null',
-					},
-				};
-				token = res.data.token;
-				return link;
-			});
-		jest.spyOn(mockForgotPasswordProvider.prototype, 'find').mockImplementation(async (data) => {
-			return [data];
-		});
-		jest.spyOn(mockForgotPasswordProvider.prototype, 'findOne').mockImplementation(async (data) => {
-			return data;
-		});
+	beforeAll(async () => {
+		await ConnectionManager.connect('InMemory', connection);
+		const database = ConnectionManager.database('InMemory');
+		await database?.orm.schema.createSchema();
 
-		// // Password Provider
-		jest.spyOn(mockPasswordProvider.prototype, 'updateOne').mockImplementation(async (data) => {
-			console.log('Mocked Password updateOne');
-			console.log('Data:', data);
-			return data;
-		});
+		const credential = new OrmCredential();
+		credential.username = 'test';
+		credential.password = 'forgotPassword';
+		database?.em.persistAndFlush(credential);
 	});
 
-	test('should generate a forgotten password link', async () => {
+	test('should generate a forgotten password link and allow resetting', async () => {
 		const response = await graphweaver.server.executeOperation<{
 			sendResetPasswordLink: boolean;
 		}>({
@@ -158,29 +146,24 @@ describe('Forgotten Password flow', () => {
 		expect(response.body.singleResult.errors).toBeUndefined();
 		expect(response.body.singleResult.data?.sendResetPasswordLink).toBe(true);
 
-		console.log('Response:', JSON.stringify(response.body.singleResult.data));
+		const resetPasswordResponse = await graphweaver.server.executeOperation<{
+			resetPassword: boolean;
+		}>({
+			query: gql`
+				mutation resetPassword($token: String!, $password: String!) {
+					resetPassword(token: $token, password: $password)
+				}
+			`,
+			variables: {
+				token,
+				password: 'newPassword',
+			},
+		});
+
+		assert(resetPasswordResponse.body.kind === 'single');
+		expect(resetPasswordResponse.body.singleResult.errors).toBeUndefined();
+		expect(resetPasswordResponse.body.singleResult.data?.resetPassword).toBe(true);
+
+		console.log('Reset Password Response:', response.body.singleResult.data);
 	});
-
-	// test('should reset the password via the token', async () => {
-	// 	// The Authentication Save fails
-	// 	const response = await graphweaver.server.executeOperation<{
-	// 		passwordReset: boolean;
-	// 	}>({
-	// 		query: gql`
-	// 			mutation resetPassword($token: String!, $password: String!) {
-	// 				resetPassword(token: $token, password: $password)
-	// 			}
-	// 		`,
-	// 		variables: {
-	// 			token,
-	// 			password: 'newPassword',
-	// 		},
-	// 	});
-
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors).toBeUndefined();
-	// 	expect(response.body.singleResult.data?.passwordReset).toBe(true);
-
-	// 	console.log('Reset Password Response:', response.body.singleResult.data);
-	// });
 });

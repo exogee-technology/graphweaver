@@ -114,6 +114,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 					token,
 					redeemedAt: 'null',
 				},
+				createdAt: new Date(),
 			});
 
 			return link;
