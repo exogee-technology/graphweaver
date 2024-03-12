@@ -53,16 +53,19 @@ export const ResetPassword = () => {
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
 					<div className={styles.titleContainer}>Please enter your new password</div>
-					<PasswordComponent />
 
-					<ConfirmComponent />
+					{!!error && <Alert>{error.message}</Alert>}
+
+					<div className={styles.inputContainer}>
+						<PasswordComponent />
+						<ConfirmComponent />
+					</div>
 
 					<div className={styles.buttonContainer}>
 						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
 							Submit
 						</Button>
 					</div>
-					{!!error && <Alert>{error.message}</Alert>}
 				</Form>
 			)}
 		</Formik>

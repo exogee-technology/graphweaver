@@ -18,6 +18,14 @@
 	justify-content: start;
 }
 
+.inputContainer {
+	display: flex;
+	width: 100%;
+	justify-content: start;
+	flex-direction: column;
+	gap: 12px;
+}
+
 .buttonContainer {
 	display: flex;
 	width: 100%;

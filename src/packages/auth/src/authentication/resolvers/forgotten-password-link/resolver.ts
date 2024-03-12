@@ -72,7 +72,7 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 				},
 			});
 
-			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
+			if (!link) throw new AuthenticationError('Authentication Failed: Link may have expired.');
 			return link;
 		}
 
