@@ -42,7 +42,8 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 		//@todo - extend the base loaders to handle filters - find by filter.
 		const provider = graphweaverMetadata.getEntity('Credential')?.provider;
 
-		if (!provider) throw new Error('Bad Request: Unknown provider.');
+		if (!provider)
+			throw new Error('Bad Request: No provider associated with the Credential entity.');
 
 		const user = await provider?.findOne({ username } as Filter<Credential<OrmCredential>>);
 

@@ -139,8 +139,7 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 			}
 
 			// Get the user's credential
-			const credentialProvider = graphweaverMetadata.getEntity('Credential')
-				?.provider as BackendProvider<D, GraphQLEntity<D>>;
+			const credentialProvider = graphweaverMetadata.getEntity('Credential')?.provider;
 
 			// Update the user's password
 			await updatePasswordCredential({
