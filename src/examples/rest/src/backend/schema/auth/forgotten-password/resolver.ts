@@ -4,7 +4,7 @@ import {
 	ForgottenPasswordLinkData,
 	UserProfile,
 } from '@exogee/graphweaver-auth';
-import { graphweaverMetadata, Resolver } from '@exogee/graphweaver';
+import { Filter, graphweaverMetadata, Resolver } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { myConnection } from '../../../database';
@@ -40,13 +40,11 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 	 */
 	async getUser(username: string): Promise<UserProfile> {
 		//@todo - extend the base loaders to handle filters - find by filter.
-		const provider = graphweaverMetadata.getEntity<OrmCredential, Credential<OrmCredential>>(
-			'Credential'
-		)?.provider;
+		const provider = graphweaverMetadata.getEntity('Credential')?.provider;
 
 		if (!provider) throw new Error('Bad Request: Unknown provider.');
 
-		const user = await provider?.findOne({ username });
+		const user = await provider?.findOne({ username } as Filter<Credential<OrmCredential>>);
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
