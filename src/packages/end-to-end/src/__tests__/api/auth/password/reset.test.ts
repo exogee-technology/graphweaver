@@ -124,7 +124,7 @@ describe('Forgotten Password flow', () => {
 		const credential = new OrmCredential();
 		credential.username = 'test';
 		credential.password = 'forgotPassword';
-		database?.em.persistAndFlush(credential);
+		await database?.em.persistAndFlush(credential);
 	});
 
 	test('should generate a forgotten password link and allow resetting', async () => {
@@ -162,5 +162,31 @@ describe('Forgotten Password flow', () => {
 		assert(resetPasswordResponse.body.kind === 'single');
 		expect(resetPasswordResponse.body.singleResult.errors).toBeUndefined();
 		expect(resetPasswordResponse.body.singleResult.data?.resetPassword).toBe(true);
+
+		const loginResponse = await graphweaver.server.executeOperation<{
+			loginPassword: { authToken: string };
+		}>({
+			query: gql`
+				mutation loginPassword($username: String!, $password: String!) {
+					loginPassword(username: $username, password: $password) {
+						authToken
+					}
+				}
+			`,
+			variables: {
+				username: 'test',
+				password: 'newPassword',
+			},
+		});
+
+		assert(loginResponse.body.kind === 'single');
+		expect(loginResponse.body.singleResult.errors).toBeUndefined();
+
+		const authToken = loginResponse.body.singleResult.data?.loginPassword?.authToken;
+		expect(authToken).toContain('Bearer ');
+
+		const payload = JSON.parse(atob(authToken?.split('.')[1] ?? '{}'));
+		// Check that the token expires in the future
+		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 	});
 });
