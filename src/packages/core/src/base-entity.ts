@@ -16,6 +16,7 @@ export interface GraphQLEntityConstructor<G extends GraphQLEntity<D>, D extends 
 export type FieldMetadata = TypeGraphQLFieldMetadata;
 
 export interface BaseDataEntity {
+	id?: string | number;
 	isCollection: (fieldName: string, dataField: any) => boolean;
 	isReference: (fieldName: string, dataField: any) => boolean;
 }

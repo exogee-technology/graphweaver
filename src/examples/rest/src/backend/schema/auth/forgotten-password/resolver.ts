@@ -39,12 +39,14 @@ export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthRe
 	 * @returns return a UserProfile compatible entity
 	 */
 	async getUser(username: string): Promise<UserProfile> {
-		const provider = graphweaverMetadata.getEntity('Credential')?.provider;
+		const provider = graphweaverMetadata.getEntity<OrmCredential, Credential<OrmCredential>>(
+			'Credential'
+		)?.provider;
 
 		if (!provider)
 			throw new Error('Bad Request: No provider associated with the Credential entity.');
 
-		const user = await provider?.findOne({ username } as Filter<Credential<OrmCredential>>);
+		const user = await provider?.findOne({ username });
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 

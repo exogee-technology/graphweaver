@@ -43,5 +43,5 @@ export const createAuthenticationEntity = <D extends BaseDataEntity>(
 	// Call the decorator to apply the ACL to the default entity above
 	ApplyAccessControlList(acl ?? defaultAcl)(Authentication);
 	// Return the entity with the ACL applied
-	return Authentication;
+	return Authentication<D>;
 };

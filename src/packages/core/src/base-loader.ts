@@ -25,18 +25,6 @@ const getGqlEntityName = (gqlEntityType: any) => {
 	return objectNames[0].name;
 };
 
-// @todo - cache as won't change regardless of user or request, so worth memoizing this function.
-const getFieldMetadata = (fieldName: string, gqlEntityType: any) => {
-	const entityFields = metadata.fields.filter(
-		(field) => field.target === gqlEntityType && field.name === fieldName
-	);
-	if (entityFields.length !== 1) {
-		throw new Error(`No match found for ${fieldName} in object ${gqlEntityType}`);
-	}
-
-	return entityFields[0];
-};
-
 const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
 	gqlEntityType: GraphQLEntityConstructor<G, D>
 ) => {
@@ -64,7 +52,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D } = {};
 			for (const record of records) {
-				lookup[record.id] = record;
+				lookup[record.id as keyof typeof lookup] = record as D;
 			}
 			return keys.map((key) => lookup[key]);
 		};
@@ -107,20 +95,20 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			// @todo Check if this is a many-to-many field - get mikroorm metadata
 			//const fieldMetadata = getFieldMetadata(relatedField, gqlEntityType);
 
-			const records = await provider.findByRelatedId(
+			const records = (await provider.findByRelatedId(
 				provider.entityType,
 				relatedField,
 				keys,
 				filter
-			);
+			)) as D[];
 			logger.trace(`DataLoader: Loading ${gqlTypeName} got ${records.length} result(s).`);
 
 			// Need to return in the same order as was requested. Iterate once and create
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D[] } = {};
 			for (const record of records) {
-				const relatedRecord = record[relatedField];
-				if (provider.isCollection(relatedRecord)) {
+				const relatedRecord = record[relatedField as keyof D];
+				if (provider.isCollection(relatedRecord) && Array.isArray(relatedRecord)) {
 					// ManyToManys come back this way.
 					for (const subRecord of relatedRecord) {
 						if (!lookup[subRecord.id]) lookup[subRecord.id] = [];

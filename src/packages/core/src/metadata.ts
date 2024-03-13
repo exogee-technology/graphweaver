@@ -43,7 +43,7 @@ class Metadata {
 	}
 
 	// get the metadata for a specific entity
-	public getEntity(name: string) {
+	public getEntity<D extends BaseDataEntity, G>(name: string): EntityMetadata<D, G> {
 		const meta = this.entityMap.get(name);
 		if (!meta) {
 			throw new Error(`Unexpected Error: entity (${name}) not found in metadata map`);
