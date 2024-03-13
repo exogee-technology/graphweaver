@@ -40,7 +40,7 @@ import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
 import { pluralise } from './utils/plural';
 import { EntityMetadata, graphweaverMetadata } from './metadata';
-import { checkSchemaForCollisions } from './utils/check-schema';
+import { CollisionsOptionsMode, checkSchemaForCollisions } from './utils/check-schema';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
@@ -338,7 +338,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	// Check that we have a unique set of query names
 	checkSchemaForCollisions({
 		operations: [oneQueryName, listQueryName],
-		mode: 'queries',
+		mode: CollisionsOptionsMode.QUERY,
 	});
 
 	@Resolver()
@@ -460,7 +460,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			deleteOne,
 			deleteMany,
 		],
-		mode: 'queries',
+		mode: CollisionsOptionsMode.MUTATION,
 	});
 
 	// Create Insert Input Args:

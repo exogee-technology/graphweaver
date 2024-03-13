@@ -1,8 +1,13 @@
 import { getMetadataStorage } from 'type-graphql';
 
+export enum CollisionsOptionsMode {
+	QUERY = 'queries',
+	MUTATION = 'mutations',
+}
+
 export type CheckSchemaForCollisionsOptions = {
 	operations: string[];
-	mode: 'queries' | 'mutations';
+	mode: CollisionsOptionsMode;
 };
 
 export const checkSchemaForCollisions = ({ operations, mode }: CheckSchemaForCollisionsOptions) => {
