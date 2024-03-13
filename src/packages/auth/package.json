@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth",
-	"version": "0.2.21",
+	"version": "0.2.22",
 	"description": "Row-Level Security support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
