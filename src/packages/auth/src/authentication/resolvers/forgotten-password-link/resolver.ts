@@ -90,8 +90,6 @@ export const createForgottenPasswordAuthResolver = <D extends BaseDataEntity>(
 				type: AuthenticationType.ForgottenPasswordLink,
 				userId,
 				createdAt_gt: period,
-			} as Filter<Authentication<D>> & {
-				createdAt_gt: Date; // @todo - extend filter<G> to include
 			});
 
 			return existingLinks;

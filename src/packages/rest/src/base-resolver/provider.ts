@@ -94,12 +94,12 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 			);
 		}
 
-		const orFilters: Filter<G>[] = relatedFieldIds.map((id) => ({ [relatedField]: id }));
+		const orFilters = relatedFieldIds.map((id) => ({ [relatedField]: id }));
 
 		return this.find({
 			_or: orFilters,
 			...filter,
-		});
+		} as Filter<G>);
 	}
 
 	// PUT METHODS

@@ -115,7 +115,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
 	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
 
-	const entity: EntityMetadata<D> = {
+	const entity: EntityMetadata<D, G> = {
 		plural: pluralise(options.plural ?? objectNames[0].name, !!options.plural),
 		provider,
 		...objectNames[0],

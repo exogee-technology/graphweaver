@@ -193,7 +193,7 @@ export const andFilters = <G>(...filters: (Filter<G> | undefined)[]): ListInputF
  */
 export const evaluateAccessControlValue = async <G, TContext extends AuthorizationContext>(
 	consolidatedAccessControlValue: ConsolidatedAccessControlValue<G, TContext>
-): Promise<Filter<G>> => {
+): Promise<Awaited<Filter<G>> | Filter<G> | { _or: Awaited<Filter<G>>[] }> => {
 	if (consolidatedAccessControlValue === true) {
 		// Return an unconditional filter
 		return {};
@@ -215,7 +215,7 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 
 		// Filter out the non-object filters as these are checked elsewhere
 		const filters = evaluatedFilters.filter(
-			(filter): filter is Filter<G> => typeof filter === 'object' && filter !== null
+			(filter): filter is Awaited<Filter<G>> => typeof filter === 'object' && filter !== null
 		);
 
 		// Apply to original search criteria

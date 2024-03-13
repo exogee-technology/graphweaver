@@ -33,12 +33,26 @@ export type PaginationOptions = {
 	limit: number;
 };
 
+export type IdOperator = 'ne' | 'in' | 'nin' | 'notnull' | 'null';
+export type StringOperator = 'ne' | 'in' | 'nin' | 'like' | 'ilike' | 'notnull' | 'null';
+export type OtherOperator = 'gt' | 'gte' | 'lt' | 'lte' | 'ne' | 'in' | 'nin' | 'notnull' | 'null';
+
+export type FilterWithOperators<G> = {
+	[K in keyof G as K extends 'id'
+		? `${K & string}_${IdOperator}`
+		: G[K] extends string
+		? `${K & string}_${StringOperator}`
+		: `${K & string}_${OtherOperator}`]?: FilterValue<G[K]>;
+};
+
+export type FilterValue<T> = T | T[];
+
 export type FilterEntity<G> = {
 	[K in keyof G]?: G[K] extends (...args: any[]) => Promise<infer C>
-		? Filter<C>
+		? Filter<C> // Functions remains the same
 		: G[K] extends Promise<infer C>
-		? Filter<C>
-		: Filter<G[K]>;
+		? Filter<C> // Promises remains the same
+		: Partial<G[K]>; // Other types
 };
 
 export type FilterTopLevelProperties<G> = {
@@ -47,15 +61,10 @@ export type FilterTopLevelProperties<G> = {
 	_not?: Filter<G>[];
 };
 
-// G is the root GraphQL entity
-// C is a child GraphQL entity
-export type Filter<G> = {
-	id?: string | number; // Optional id property
-} & (
-	| FilterEntity<G>
-	| FilterTopLevelProperties<G>
-	| (FilterEntity<G> & FilterTopLevelProperties<G>)
-);
+export type Filter<G> = Partial<WithId> &
+	FilterEntity<G> &
+	FilterTopLevelProperties<G> &
+	FilterWithOperators<G>;
 
 export interface GraphQLArgs<G> {
 	items?: Partial<G>[];

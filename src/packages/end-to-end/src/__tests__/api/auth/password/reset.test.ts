@@ -18,6 +18,8 @@ import {
 	Credential,
 	createPasswordAuthResolver,
 	CredentialStorage,
+	PasswordOperation,
+	RequestParams,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Entity, PrimaryKey, BigIntType, Property, JsonType } from '@mikro-orm/core';
@@ -107,7 +109,11 @@ export class PasswordAuthResolver extends createPasswordAuthResolver<OrmCredenti
 	Credential,
 	new MikroBackendProvider(OrmCredential, connection)
 ) {
-	async getUser(username: string): Promise<UserProfile> {
+	async getUserProfile(
+		id: string,
+		operation: PasswordOperation,
+		params: RequestParams
+	): Promise<UserProfile> {
 		return user;
 	}
 }

@@ -41,7 +41,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			// Use the operation type to decide what actions to perform
 			// A register action could send an email verification for example
 			throw new Error(
-				'Method getUser not implemented for PasswordAuthResolver: Override this function to return a user profile'
+				'Method getUserProfile not implemented for PasswordAuthResolver: Override this function to return a user profile'
 			);
 		}
 
@@ -52,7 +52,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 		): Promise<UserProfile> {
 			const credential = (await this.provider.findOne({
 				username,
-			} as Filter<CredentialStorage>)) as CredentialStorage | null;
+			})) as CredentialStorage | null;
 
 			if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 			if (!credential.password)

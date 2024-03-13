@@ -141,7 +141,7 @@ export function RelationshipField<
 			root: any,
 			info: GraphQLResolveInfo,
 			context: BaseContext,
-			filter?: Filter<D>
+			filter?: Filter<G>
 		) => {
 			const idValue = !id
 				? undefined
@@ -156,11 +156,11 @@ export function RelationshipField<
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
-			const relatedEntityFilter = filter
+			const relatedEntityFilter: Filter<G> = filter
 				? filter
-				: idValue
-				? { id: idValue }
-				: { [relatedField as string]: { id: root.id } };
+				: idValue && typeof idValue === 'string'
+				? ({ id: idValue } as Filter<G>)
+				: ({ [relatedField as keyof G]: { id: root.id } } as Filter<G>);
 
 			const params: ReadHookParams<G> = {
 				args: { filter },

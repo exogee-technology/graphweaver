@@ -1,6 +1,6 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider, WithId, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, Filter, WithId, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -76,7 +76,7 @@ const applyImplicitDeny = () => {
 	}
 };
 
-type AuthApolloPluginOptions<D, G> = {
+type AuthApolloPluginOptions<D extends ApiKeyStorage, G> = {
 	implicitAllow?: boolean;
 	apiKeyDataProvider?: BackendProvider<D, G>;
 };
@@ -129,7 +129,7 @@ export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
 
 				const apiKey = await options.apiKeyDataProvider?.findOne({
 					key,
-				} as D);
+				} as unknown as Filter<G>);
 
 				if (!apiKey || !apiKey.secret) {
 					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0001)';

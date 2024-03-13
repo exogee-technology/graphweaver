@@ -1,4 +1,4 @@
-import { BaseDataEntity, GraphQLEntity, SummaryField } from '@exogee/graphweaver';
+import { BaseDataEntity, GraphQLEntity } from '@exogee/graphweaver';
 import { ObjectType, Field, ID } from 'type-graphql';
 import { ApplyAccessControlList } from '../../decorators';
 import { AccessControlList, AuthorizationContext } from '../../types';

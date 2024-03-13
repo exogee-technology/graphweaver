@@ -52,13 +52,11 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 				`DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s): (${keys.join(', ')})`
 			);
 
-			const filter: Filter<D> = {
+			const records = await provider.find({
 				_or: keys.map((k) => {
 					return { id: k };
 				}),
-			};
-
-			const records = await provider.find(filter);
+			});
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
 
@@ -86,7 +84,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 }: {
 	gqlEntityType: GraphQLEntityConstructor<G, D>;
 	relatedField: string;
-	filter?: Filter<D>;
+	filter?: Filter<G>;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	const loaderKey = `${gqlTypeName}-${relatedField}-${JSON.stringify(
@@ -162,7 +160,7 @@ export const BaseLoaders = {
 		gqlEntityType: GraphQLEntityConstructor<G, D>;
 		relatedField: Omit<keyof D, 'isCollection' | 'isReference'> & string;
 		id: string;
-		filter?: Filter<D>;
+		filter?: Filter<G>;
 	}) => {
 		const loader = getBaseRelatedIdLoader(args);
 		return loader.load(args.id) as unknown as Promise<D[]>;
