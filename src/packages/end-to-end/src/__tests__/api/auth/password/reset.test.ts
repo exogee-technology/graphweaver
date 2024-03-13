@@ -12,8 +12,6 @@ import {
 	ForgottenPasswordLinkData,
 	createForgottenPasswordAuthResolver,
 	AuthenticationBaseEntity,
-	AccessControlList,
-	AuthorizationContext,
 	createAuthenticationEntity,
 	Credential,
 	createPasswordAuthResolver,
@@ -73,7 +71,9 @@ const connection = {
 	},
 };
 
-const acl: AccessControlList<OrmAuthentication<ForgottenPasswordLinkData>, AuthorizationContext> = {
+export const ForgottenPasswordLink = createAuthenticationEntity<
+	OrmAuthentication<ForgottenPasswordLinkData>
+>({
 	LIGHT_SIDE: {
 		// Users can only perform read operations on their own Authentications
 		read: (context) => ({ id: context.user?.id }),
@@ -82,10 +82,7 @@ const acl: AccessControlList<OrmAuthentication<ForgottenPasswordLinkData>, Autho
 		// Dark side user role can perform operations on any Authentications
 		all: true,
 	},
-};
-
-export const ForgottenPasswordLink =
-	createAuthenticationEntity<OrmAuthentication<ForgottenPasswordLinkData>>(acl);
+});
 
 @Resolver()
 export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
