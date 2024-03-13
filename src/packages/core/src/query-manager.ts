@@ -98,7 +98,7 @@ class QueryManagerImplementation {
 		filter?: Filter<G>;
 		pagination?: PaginationOptions;
 	}) => {
-		const metadata = graphweaverMetadata.getEntity<D, G>(entityName);
+		const metadata = graphweaverMetadata.getEntity<G, D>(entityName);
 
 		logger.trace('Handling cross-datasource queries');
 		logger.trace('Original filter: ', filter);

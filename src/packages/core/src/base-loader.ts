@@ -30,7 +30,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 ) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
-		const provider = graphweaverMetadata.getEntity<D, unknown>(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntity<unknown, D>(gqlTypeName)?.provider;
 		if (!provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		}
@@ -78,7 +78,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
 	if (!relatedIdLoaderMap[loaderKey]) {
-		const provider = graphweaverMetadata.getEntity<D, unknown>(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntity<unknown, D>(gqlTypeName)?.provider;
 		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
