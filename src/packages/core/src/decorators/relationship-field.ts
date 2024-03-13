@@ -156,11 +156,11 @@ export function RelationshipField<
 
 			const gqlEntityType = getType() as GraphQLEntityConstructor<G, D>;
 
-			const relatedEntityFilter: Filter<G> = filter
+			const relatedEntityFilter = filter
 				? filter
 				: idValue && typeof idValue === 'string'
-				? ({ id: idValue } as Filter<G>)
-				: ({ [relatedField as keyof G]: { id: root.id } } as Filter<G>);
+				? { id: idValue }
+				: { [relatedField as keyof G]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
 				args: { filter },
@@ -180,7 +180,7 @@ export function RelationshipField<
 					gqlEntityType,
 					relatedField: relatedField,
 					id: root.id,
-					filter: relatedEntityFilter,
+					filter: relatedEntityFilter as Filter<G>,
 				});
 			}
 
