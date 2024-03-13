@@ -125,17 +125,17 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 
 			if (!link) {
 				logger.warn(`Failed to reset password: E0001: Link not found`);
-				throw new AuthenticationError('Reset Password Failed: E0001.');
+				throw new AuthenticationError('Reset Password Failed');
 			}
 
 			if (link.data.redeemedAt !== 'null') {
 				logger.warn(`Failed to reset password: E0002: Link already redeemed`);
-				throw new AuthenticationError('Reset Password Failed: E0002.');
+				throw new AuthenticationError('Reset Password Failed');
 			}
 
 			if (link.createdAt < new Date(new Date().getTime() - ms(config.ttl))) {
 				logger.warn(`Failed to reset password: E0003: Link expired`);
-				throw new AuthenticationError('Reset Password Failed: E0003.');
+				throw new AuthenticationError('Reset Password Failed');
 			}
 
 			// Get the user's credential
