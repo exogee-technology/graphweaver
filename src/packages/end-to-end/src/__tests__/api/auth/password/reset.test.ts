@@ -5,19 +5,19 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { Resolver, ObjectType } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
 	ForgottenPasswordLinkData,
 	createForgottenPasswordAuthResolver,
 	AuthenticationBaseEntity,
-	createAuthenticationEntity,
 	Credential,
 	createPasswordAuthResolver,
 	CredentialStorage,
 	PasswordOperation,
 	RequestParams,
+	Authentication,
 } from '@exogee/graphweaver-auth';
 import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Entity, PrimaryKey, BigIntType, Property, JsonType } from '@mikro-orm/core';
@@ -71,18 +71,10 @@ const connection = {
 	},
 };
 
-export const ForgottenPasswordLink = createAuthenticationEntity<
+@ObjectType('ForgottenPasswordLink')
+export class ForgottenPasswordLink extends Authentication<
 	OrmAuthentication<ForgottenPasswordLinkData>
->({
-	LIGHT_SIDE: {
-		// Users can only perform read operations on their own Authentications
-		read: (context) => ({ id: context.user?.id }),
-	},
-	DARK_SIDE: {
-		// Dark side user role can perform operations on any Authentications
-		all: true,
-	},
-});
+> {}
 
 @Resolver()
 export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
