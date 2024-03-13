@@ -103,7 +103,7 @@ export interface BackendProvider<D, G> {
 	deleteMany?(filter: Filter<G>): Promise<boolean>;
 
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
-	isCollection(entity: any): boolean;
+	isCollection(entity: unknown): entity is Iterable<unknown & WithId>;
 
 	// Optional, allows the resolver to start a transaction
 	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;

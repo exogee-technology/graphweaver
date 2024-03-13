@@ -21,7 +21,7 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
-export const createPasswordAuthResolver = <D extends BaseDataEntity>(
+export const createPasswordAuthResolver = <D extends CredentialStorage & BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
 	provider: BackendProvider<D, Credential<D>>,
 	assertPasswordStrength?: (password?: string) => boolean
@@ -50,9 +50,9 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			password: string,
 			params: RequestParams
 		): Promise<UserProfile> {
-			const credential = (await this.provider.findOne({
+			const credential = await this.provider.findOne({
 				username,
-			})) as CredentialStorage | null;
+			});
 
 			if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 			if (!credential.password)

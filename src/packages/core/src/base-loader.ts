@@ -5,8 +5,8 @@ import { getMetadataStorage } from 'type-graphql';
 import { BaseDataEntity, Filter, GraphQLEntity, graphweaverMetadata } from '.';
 import { GraphQLEntityConstructor } from './base-entity';
 
-let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
-let relatedIdLoaderMap: { [key: string]: DataLoader<string, any> } = {};
+let loadOneLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
+let relatedIdLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
 
 const metadata = getMetadataStorage();
 
@@ -30,7 +30,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 ) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
-		const provider = graphweaverMetadata.getEntity(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntity<D, unknown>(gqlTypeName)?.provider;
 		if (!provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		}
@@ -41,9 +41,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 			);
 
 			const records = await provider.find({
-				_or: keys.map((k) => {
-					return { id: k };
-				}),
+				_or: keys.map((id) => ({ id })),
 			});
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
@@ -52,7 +50,7 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D } = {};
 			for (const record of records) {
-				lookup[record.id as keyof typeof lookup] = record as D;
+				record.id && (lookup[record.id] = record);
 			}
 			return keys.map((key) => lookup[key]);
 		};
@@ -80,7 +78,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
 	if (!relatedIdLoaderMap[loaderKey]) {
-		const provider = graphweaverMetadata.getEntity(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntity<D, unknown>(gqlTypeName)?.provider;
 		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
@@ -95,12 +93,12 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			// @todo Check if this is a many-to-many field - get mikroorm metadata
 			//const fieldMetadata = getFieldMetadata(relatedField, gqlEntityType);
 
-			const records = (await provider.findByRelatedId(
+			const records = await provider.findByRelatedId(
 				provider.entityType,
 				relatedField,
 				keys,
 				filter
-			)) as D[];
+			);
 			logger.trace(`DataLoader: Loading ${gqlTypeName} got ${records.length} result(s).`);
 
 			// Need to return in the same order as was requested. Iterate once and create
@@ -108,7 +106,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			const lookup: { [key: string]: D[] } = {};
 			for (const record of records) {
 				const relatedRecord = record[relatedField as keyof D];
-				if (provider.isCollection(relatedRecord) && Array.isArray(relatedRecord)) {
+				if (provider.isCollection(relatedRecord)) {
 					// ManyToManys come back this way.
 					for (const subRecord of relatedRecord) {
 						if (!lookup[subRecord.id]) lookup[subRecord.id] = [];
@@ -141,7 +139,7 @@ export const BaseLoaders = {
 		id: string;
 	}) => {
 		const loader = getBaseLoadOneLoader(gqlEntityType);
-		return loader.load(id) as unknown as Promise<D>;
+		return loader.load(id);
 	},
 
 	loadByRelatedId: <G extends GraphQLEntity<D>, D extends BaseDataEntity>(args: {
@@ -151,7 +149,7 @@ export const BaseLoaders = {
 		filter?: Filter<G>;
 	}) => {
 		const loader = getBaseRelatedIdLoader(args);
-		return loader.load(args.id) as unknown as Promise<D[]>;
+		return loader.load(args.id);
 	},
 
 	clearCache: () => {

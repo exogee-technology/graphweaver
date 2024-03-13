@@ -61,7 +61,7 @@ export const runAfterHooks = async <
 	hookRegister: HookRegister,
 	entities: (D | null)[],
 	hookParams?: H
-): Promise<((D & { id: string }) | null)[]> => {
+): Promise<(D | null)[]> => {
 	const hookManager = hookManagerMap.get('Credential');
 
 	const { entities: hookEntities = [] } =
@@ -72,5 +72,5 @@ export const runAfterHooks = async <
 			  })
 			: { entities };
 
-	return hookEntities as ((D & { id: string }) | null)[];
+	return hookEntities;
 };

@@ -76,14 +76,14 @@ const applyImplicitDeny = () => {
 	}
 };
 
-type AuthApolloPluginOptions<D extends ApiKeyStorage, G> = {
+type AuthApolloPluginOptions<D> = {
 	implicitAllow?: boolean;
-	apiKeyDataProvider?: BackendProvider<D, G>;
+	apiKeyDataProvider?: BackendProvider<D, ApiKeyStorage>;
 };
 
-export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
+export const authApolloPlugin = <D extends ApiKeyStorage>(
 	addUserToContext: (userId: string) => Promise<UserProfile>,
-	options?: AuthApolloPluginOptions<D, G>
+	options?: AuthApolloPluginOptions<D>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
@@ -129,7 +129,7 @@ export const authApolloPlugin = <G extends WithId, D extends ApiKeyStorage>(
 
 				const apiKey = await options.apiKeyDataProvider?.findOne({
 					key,
-				} as unknown as Filter<G>);
+				});
 
 				if (!apiKey || !apiKey.secret) {
 					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0001)';

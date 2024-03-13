@@ -171,7 +171,7 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			throw new Error('not implemented: getRelatedEntityId');
 		}
 
-		isCollection(entity: unknown): boolean {
+		public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
 			return false;
 		}
 	}
