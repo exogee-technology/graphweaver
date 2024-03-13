@@ -90,7 +90,10 @@ export const createBaseForgottenPasswordLinkAuthResolver = <D extends BaseDataEn
 				ctx?.redirectUri?.toString() ?? requireEnvironmentVariable('AUTH_BASE_URI')
 			);
 
-			const url = new URL(`${redirect.origin}/auth/reset-password`);
+			const authPath = process.env.AUTH_PATH ?? '/auth';
+			const resetPasswordPath = process.env.AUTH_RESET_PASSWORD_PATH ?? '/reset-password';
+
+			const url = new URL(`${redirect.origin}${authPath}${resetPasswordPath}`);
 			url.searchParams.set('redirect_uri', redirect.origin.toString());
 			url.searchParams.set('token', link.data.token);
 

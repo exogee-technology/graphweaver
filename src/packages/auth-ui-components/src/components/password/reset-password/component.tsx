@@ -14,6 +14,9 @@ interface Form {
 	confirm: string;
 }
 
+const authPath = import.meta.env.VITE_ADMIN_UI_AUTH_PATH ?? '/auth';
+const loginPath = import.meta.env.VITE_ADMIN_UI_AUTH_LOGIN_PATH ?? '/login';
+
 export const ResetPassword = () => {
 	const [resetPassword] = useMutation<{ result: boolean }>(RESET_PASSWORD);
 	const [error, setError] = useState<Error | undefined>();
@@ -40,7 +43,7 @@ export const ResetPassword = () => {
 			});
 
 			const redirectUrl = redirectUri ?? new URL('/');
-			navigate(`/auth/login?redirect_uri=${redirectUrl}`, { replace: true });
+			navigate(`${authPath}${loginPath}?redirect_uri=${redirectUrl}`, { replace: true });
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
