@@ -158,9 +158,9 @@ export function RelationshipField<
 
 			const relatedEntityFilter = filter
 				? filter
-				: idValue && typeof idValue === 'string'
+				: idValue
 				? { id: idValue }
-				: { [relatedField as keyof G]: { id: root.id } };
+				: { [relatedField as string]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
 				args: { filter },
