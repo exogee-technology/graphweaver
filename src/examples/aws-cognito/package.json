@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-aws-cognito",
-	"version": "0.2.21",
+	"version": "0.2.22",
 	"license": "MIT",
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",

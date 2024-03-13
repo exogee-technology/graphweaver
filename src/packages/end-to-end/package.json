@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "0.2.21",
+	"version": "0.2.22",
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
