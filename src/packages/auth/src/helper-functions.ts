@@ -203,23 +203,22 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 	) {
 		logger.trace(`Got permission filters: `, consolidatedAccessControlValue);
 
+		if (!authContext) {
+			throw new Error('Authorisation context provider not initialised');
+		}
+
 		// Evaluate each filter function
 		const evaluatedFilters = await Promise.all(
-			consolidatedAccessControlValue.map((filter) => {
-				if (!authContext) {
-					throw new Error('Authorisation context provider not initialised');
-				}
-				return filter(authContext as TContext);
-			})
+			consolidatedAccessControlValue.map((filter) => filter(authContext as TContext))
 		);
 
 		// Filter out the non-object filters as these are checked elsewhere
-		const filters = evaluatedFilters.filter(
-			(filter): filter is Filter<G> => typeof filter === 'object' && filter !== null
+		const filters: Filter<G>[] = evaluatedFilters.filter(
+			(filter): filter is Awaited<Filter<G>> => typeof filter === 'object' && filter !== null
 		);
 
 		// Apply to original search criteria
-		return filters.length > 1 ? { _or: filters } : filters[0];
+		return filters.length > 1 ? ({ _or: filters } as Filter<G>) : filters[0];
 	} else {
 		logger.error('Raising ForbiddenError: Unexpected error processing filter based access');
 		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);

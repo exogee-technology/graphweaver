@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import {
@@ -20,7 +20,7 @@ interface Form {
 	password: string;
 }
 
-export const PasswordLogin = () => {
+export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: boolean }) => {
 	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
@@ -53,26 +53,29 @@ export const PasswordLogin = () => {
 	};
 
 	return (
-		<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
-			{({ isSubmitting }) => (
-				<Form className={styles.wrapper}>
-					<GraphweaverLogo width="52" className={styles.logo} />
-					<div className={styles.titleContainer}>Login</div>
-					<Field
-						placeholder="Username"
-						id="username"
-						name="username"
-						className={styles.textInputField}
-					/>
-					<PasswordFieldComponent />
-					<div className={styles.buttonContainer}>
-						<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
-							Login
-						</Button>
-					</div>
-					{!!error && <Alert>{error.message}</Alert>}
-				</Form>
-			)}
-		</Formik>
+		<>
+			<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
+				{({ isSubmitting }) => (
+					<Form className={styles.wrapper}>
+						<GraphweaverLogo width="52" className={styles.logo} />
+						<div className={styles.titleContainer}>Login</div>
+						<Field
+							placeholder="Username"
+							id="username"
+							name="username"
+							className={styles.textInputField}
+						/>
+						<PasswordFieldComponent />
+						<div className={styles.buttonContainer}>
+							<Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+								Login
+							</Button>
+						</div>
+						{!!error && <Alert>{error.message}</Alert>}
+					</Form>
+				)}
+			</Formik>
+			{canResetPassword && <Link to="../forgot-password">Forgot Password?</Link>}
+		</>
 	);
 };

@@ -105,6 +105,7 @@ export enum AuthenticationType {
 	Web3WalletAddress = 'Web3WalletAddress',
 	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
 	MagicLinkChallenge = 'MagicLinkChallenge',
+	ForgottenPasswordLink = 'ForgottenPasswordLink',
 }
 
 export type RequestParams = {

@@ -6,6 +6,7 @@ import {
 	GraphQLEntity,
 	BaseDataEntity,
 	BackendProviderConfig,
+	WithId,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -565,7 +566,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
-	public isCollection(entity: any) {
+	public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
 		return Utils.isCollection(entity);
 	}
 

@@ -6,6 +6,7 @@ import {
 	PaginationOptions,
 	Sort,
 	BackendProviderConfig,
+	WithId,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { TokenSet, XeroClient } from 'xero-node';
@@ -252,7 +253,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
-	public isCollection(entity: any) {
+	public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
 		return false;
 	}
 }

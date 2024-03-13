@@ -2,7 +2,7 @@ import { Resolver } from 'type-graphql';
 import { createProvider } from '@exogee/graphweaver-helpers';
 
 import type { ItemWithId } from '@exogee/graphweaver-helpers';
-import { createBaseResolver } from '@exogee/graphweaver';
+import { Filter, createBaseResolver } from '@exogee/graphweaver';
 import { getOneUser, getManyUsers, mapId, createUser, toggleUserStatus } from '../util';
 
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';

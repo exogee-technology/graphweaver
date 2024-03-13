@@ -4,39 +4,24 @@ import {
 	CreateOrUpdateHookParams,
 	Filter,
 	GraphqlEntityType,
-	HookParams,
 	HookRegister,
 	Resolver,
-	hookManagerMap,
 } from '@exogee/graphweaver';
+import { AuthenticationError, ValidationError } from 'apollo-server-errors';
 
 import { Credential, CredentialStorage } from '../../entities';
 import { CredentialCreateOrUpdateInputArgs, createBasePasswordAuthResolver } from './base-resolver';
 import { UserProfile } from '../../../user-profile';
-import { ApolloError, AuthenticationError, ValidationError } from 'apollo-server-errors';
 import { RequestParams } from '../../../types';
 import { hashPassword, verifyPassword } from '../../../utils/argon2id';
+import { defaultPasswordStrength, runAfterHooks, updatePasswordCredential } from '../utils';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
 	REGISTER = 'register',
 }
 
-export class PasswordStrengthError extends ApolloError {
-	constructor(message: string, extensions?: Record<string, any>) {
-		super(message, 'WEAK_PASSWORD', extensions);
-
-		Object.defineProperty(this, 'name', { value: 'WeakPasswordError' });
-	}
-}
-
-const defaultPasswordStrength = (password?: string) => {
-	// Default password strength check is 8 characters or more
-	if (password && password.length > 7) return true;
-	throw new PasswordStrengthError('Password not strong enough.');
-};
-
-export const createPasswordAuthResolver = <D extends BaseDataEntity>(
+export const createPasswordAuthResolver = <D extends CredentialStorage & BaseDataEntity>(
 	gqlEntityType: GraphqlEntityType<Credential<D>, D>,
 	provider: BackendProvider<D, Credential<D>>,
 	assertPasswordStrength?: (password?: string) => boolean
@@ -56,7 +41,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			// Use the operation type to decide what actions to perform
 			// A register action could send an email verification for example
 			throw new Error(
-				'Method getUser not implemented for PasswordAuthResolver: Override this function to return a user profile'
+				'Method getUserProfile not implemented for PasswordAuthResolver: Override this function to return a user profile'
 			);
 		}
 
@@ -65,9 +50,9 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			password: string,
 			params: RequestParams
 		): Promise<UserProfile> {
-			const credential = (await this.provider.findOne({
+			const credential = await this.provider.findOne({
 				username,
-			} as Filter<CredentialStorage>)) as CredentialStorage | null;
+			});
 
 			if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 			if (!credential.password)
@@ -80,22 +65,6 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			this.onUserAuthenticated?.(credential.id, params);
 
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
-		}
-
-		public async runAfterHooks<H extends HookParams<CredentialCreateOrUpdateInputArgs>>(
-			hookRegister: HookRegister,
-			hookParams: H,
-			entities: (D | null)[]
-		): Promise<((D & { id: string }) | null)[]> {
-			const hookManager = hookManagerMap.get('Credential');
-			const { entities: hookEntities = [] } = hookManager
-				? await hookManager.runHooks(hookRegister, {
-						...hookParams,
-						entities,
-				  })
-				: { entities };
-
-			return hookEntities as ((D & { id: string }) | null)[];
 		}
 
 		async create(
@@ -119,7 +88,7 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 				password: passwordHash,
 			} as Credential<D> & { password: string });
 
-			const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [credential]);
+			const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], params);
 			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 			this.onUserRegistered?.(entity.id, { info: params.info, ctx: params.context });
 
@@ -141,17 +110,14 @@ export const createPasswordAuthResolver = <D extends BaseDataEntity>(
 			if (!item.username && !item.password)
 				throw new ValidationError('Update unsuccessful: Nothing to update.');
 
-			let passwordHash = undefined;
-			if (item.password && this.assertPasswordStrength(item.password)) {
-				passwordHash = await hashPassword(item.password);
-			}
-			const credential = await this.provider.updateOne(item.id, {
-				...(item.username ? { username: item.username } : {}),
-				...(passwordHash ? { password: passwordHash } : {}),
+			const entity = await updatePasswordCredential({
+				assertPasswordStrength: this.assertPasswordStrength,
+				provider: this.provider,
+				id: item.id,
+				password: item.password,
+				username: item.username,
+				params,
 			});
-
-			const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [credential]);
-			if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
 			return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
 				info: params.info,

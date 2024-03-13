@@ -1,4 +1,10 @@
-import { Auth, Challenge, PasswordLogin } from '@exogee/graphweaver-auth-ui-components';
+import {
+	Auth,
+	Challenge,
+	PasswordLogin,
+	ForgottenPassword,
+	ResetPassword,
+} from '@exogee/graphweaver-auth-ui-components';
 
 export const customPages = {
 	routes: () => [
@@ -13,6 +19,14 @@ export const customPages = {
 				{
 					path: 'challenge',
 					element: <Challenge />,
+				},
+				{
+					path: 'reset-password',
+					element: <ResetPassword />,
+				},
+				{
+					path: 'forgot-password',
+					element: <ForgottenPassword />,
 				},
 			],
 		},

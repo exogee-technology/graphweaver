@@ -3,6 +3,7 @@ import { TypeValue } from 'type-graphql/dist/decorators/types';
 
 import { BackendProvider, Filter, PaginationOptions } from './common/types';
 import { graphweaverMetadata } from './metadata';
+import { BaseDataEntity } from '.';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -88,7 +89,7 @@ const visit = async <D, G>(
 };
 
 class QueryManagerImplementation {
-	find = async <D, G>({
+	find = async <D extends BaseDataEntity, G>({
 		entityName,
 		filter,
 		pagination,
@@ -97,7 +98,7 @@ class QueryManagerImplementation {
 		filter?: Filter<G>;
 		pagination?: PaginationOptions;
 	}) => {
-		const metadata = graphweaverMetadata.getEntity(entityName);
+		const metadata = graphweaverMetadata.getEntity<G, D>(entityName);
 
 		logger.trace('Handling cross-datasource queries');
 		logger.trace('Original filter: ', filter);
@@ -105,8 +106,7 @@ class QueryManagerImplementation {
 		logger.trace('Filter after ID flattening: ', filter);
 
 		// Ok, at this point we're good to go, we can just pass the find on down to the provider.
-		const provider: BackendProvider<D, G> = metadata.provider;
-		return provider.find(result.filter, pagination);
+		return metadata.provider.find(result.filter, pagination);
 	};
 }
 

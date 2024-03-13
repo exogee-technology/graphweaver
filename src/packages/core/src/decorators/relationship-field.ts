@@ -141,7 +141,7 @@ export function RelationshipField<
 			root: any,
 			info: GraphQLResolveInfo,
 			context: BaseContext,
-			filter?: Filter<D>
+			filter?: Filter<G>
 		) => {
 			const idValue = !id
 				? undefined
@@ -180,7 +180,7 @@ export function RelationshipField<
 					gqlEntityType,
 					relatedField: relatedField,
 					id: root.id,
-					filter: relatedEntityFilter,
+					filter: relatedEntityFilter as Filter<G>,
 				});
 			}
 
