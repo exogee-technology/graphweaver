@@ -415,7 +415,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.7
-        version: 3.9.7(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.7(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/server':
         specifier: 4.9.3
         version: 4.9.3(graphql@16.8.1)
@@ -519,7 +519,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.7
-        version: 3.9.7(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.7(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/server':
         specifier: 4.9.3
         version: 4.9.3(graphql@16.8.1)
@@ -622,7 +622,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.7
-        version: 3.9.7(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.7(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -664,8 +664,8 @@ importers:
         specifier: 0.0.29
         version: 0.0.29
       '@types/react':
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: 18.2.65
+        version: 18.2.65
       '@types/react-dom':
         specifier: 18.0.9
         version: 18.0.9
@@ -701,7 +701,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.7
-        version: 3.9.7(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.7(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -719,7 +719,7 @@ importers:
         version: 2.2.9(react@18.2.0)
       graphiql:
         specifier: 2.4.5
-        version: 2.4.5(@codemirror/language@6.0.0)(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
+        version: 2.4.5(@codemirror/language@6.0.0)(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -755,8 +755,8 @@ importers:
         specifier: 0.0.29
         version: 0.0.29
       '@types/react':
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: 18.2.65
+        version: 18.2.65
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -895,7 +895,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.7
-        version: 3.9.7(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.7(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@simplewebauthn/browser':
         specifier: 9.0.1
         version: 9.0.1
@@ -925,8 +925,8 @@ importers:
         specifier: 9.0.1
         version: 9.0.1
       '@types/react':
-        specifier: 18.0.25
-        version: 18.0.25
+        specifier: 18.2.65
+        version: 18.2.65
       '@types/react-dom':
         specifier: 18.0.9
         version: 18.0.9
@@ -1771,7 +1771,7 @@ packages:
       graphql: 16.8.1
     dev: false
 
-  /@apollo/client@3.9.7(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
+  /@apollo/client@3.9.7(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-OEEwt55bkFhqihCT5d75KUxZt50JZ9MuIYwG7VZlyPPIAb9K+qzVWlXWlf3tB5DaV43yXkUSLQfNpdIBFOB55Q==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
@@ -1800,7 +1800,7 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      rehackt: 0.0.6(@types/react@18.0.25)(react@18.2.0)
+      rehackt: 0.0.6(@types/react@18.2.65)(react@18.2.0)
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -5294,7 +5294,7 @@ packages:
     dev: false
     optional: true
 
-  /@graphiql/react@0.17.6(@codemirror/language@6.0.0)(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0):
+  /@graphiql/react@0.17.6(@codemirror/language@6.0.0)(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0):
     resolution: {integrity: sha512-3k1paSRbRwVNxr2U80xnRhkws8tSErWlETJvEQBmqRcWbt0+WmwFJorkLnG1n3Wj0Ho6k4a2BAiTfJ6F4SPrLg==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
@@ -5303,7 +5303,7 @@ packages:
     dependencies:
       '@graphiql/toolkit': 0.8.4(graphql@16.8.1)
       '@reach/combobox': 0.17.0(react-dom@18.2.0)(react@18.2.0)
-      '@reach/dialog': 0.17.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0)
+      '@reach/dialog': 0.17.0(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0)
       '@reach/listbox': 0.17.0(react-dom@18.2.0)(react@18.2.0)
       '@reach/menu-button': 0.17.0(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
       '@reach/tooltip': 0.17.0(react-dom@18.2.0)(react@18.2.0)
@@ -7479,7 +7479,7 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@reach/dialog@0.17.0(@types/react@18.0.25)(react-dom@18.2.0)(react@18.2.0):
+  /@reach/dialog@0.17.0(@types/react@18.2.65)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-AnfKXugqDTGbeG3c8xDcrQDE4h9b/vnc27Sa118oQSquz52fneUeX9MeFb5ZEiBJK8T5NJpv7QUTBIKnFCAH5A==}
     peerDependencies:
       react: ^16.8.0 || 17.x
@@ -7490,8 +7490,8 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-      react-focus-lock: 2.11.2(@types/react@18.0.25)(react@18.2.0)
-      react-remove-scroll: 2.5.7(@types/react@18.0.25)(react@18.2.0)
+      react-focus-lock: 2.11.2(@types/react@18.2.65)(react@18.2.0)
+      react-remove-scroll: 2.5.7(@types/react@18.2.65)(react@18.2.0)
       tslib: 2.6.2
     transitivePeerDependencies:
       - '@types/react'
@@ -9415,23 +9415,23 @@ packages:
   /@types/react-dom@18.0.9:
     resolution: {integrity: sha512-qnVvHxASt/H7i+XG1U1xMiY5t+IHcPGUK7TDMDzom08xa7e86eCeKOiLZezwCKVxJn6NEiiy2ekgX8aQssjIKg==}
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
     dev: true
 
   /@types/react-lifecycles-compat@3.0.4:
     resolution: {integrity: sha512-1CM48Y9ztL5S4wjt7DK2izrkgPp/Ql0zCJu/vHzhgl7J+BD4UbSGjHN1M2TlePms472JvOazUtAO1/G3oFZqIQ==}
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
     dev: false
 
   /@types/react-modal@3.13.1:
     resolution: {integrity: sha512-iY/gPvTDIy6Z+37l+ibmrY+GTV4KQTHcCyR5FIytm182RQS69G5ps4PH2FxtC7bAQ2QRHXMevsBgck7IQruHNg==}
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
     dev: true
 
-  /@types/react@18.0.25:
-    resolution: {integrity: sha512-xD6c0KDT4m7n9uD4ZHi02lzskaiqcBxf4zi+tXZY98a04wvc0hi/TcCPC2FOESZi51Nd7tlUeOJY8RofL799/g==}
+  /@types/react@18.2.65:
+    resolution: {integrity: sha512-98TsY0aW4jqx/3RqsUXwMDZSWR1Z4CUlJNue8ueS2/wcxZOsz4xmW1X8ieaWVRHcmmQM3R8xVA4XWB3dJnWwDQ==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
@@ -13371,14 +13371,14 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /graphiql@2.4.5(@codemirror/language@6.0.0)(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0):
+  /graphiql@2.4.5(@codemirror/language@6.0.0)(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0):
     resolution: {integrity: sha512-i+vedgQ9tMJ1uoBgUNS1F2naJODaAGPe7xInIHCscU+xPb4WwjRj9dI9rbAnHCNkcZgCdJNJNz0D6z6tLm1Ucw==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      '@graphiql/react': 0.17.6(@codemirror/language@6.0.0)(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
+      '@graphiql/react': 0.17.6(@codemirror/language@6.0.0)(@types/react@18.2.65)(graphql@16.8.1)(react-dom@18.2.0)(react-is@17.0.2)(react@18.2.0)
       '@graphiql/toolkit': 0.8.4(graphql@16.8.1)
       graphql: 16.8.1
       graphql-language-service: 5.2.0(graphql@16.8.1)
@@ -17041,7 +17041,7 @@ packages:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
     dev: false
 
-  /react-focus-lock@2.11.2(@types/react@18.0.25)(react@18.2.0):
+  /react-focus-lock@2.11.2(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-DDTbEiov0+RthESPVSTIdAWPPKic+op3sCcP+icbMRobvQNt7LuAlJ3KoarqQv5sCgKArru3kXmlmFTa27/CdQ==}
     peerDependencies:
       '@types/react': ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -17051,13 +17051,13 @@ packages:
         optional: true
     dependencies:
       '@babel/runtime': 7.24.0
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       focus-lock: 1.3.4
       prop-types: 15.8.1
       react: 18.2.0
       react-clientside-effect: 1.2.6(react@18.2.0)
-      use-callback-ref: 1.3.1(@types/react@18.0.25)(react@18.2.0)
-      use-sidecar: 1.1.2(@types/react@18.0.25)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.2.65)(react@18.2.0)
+      use-sidecar: 1.1.2(@types/react@18.2.65)(react@18.2.0)
     dev: false
 
   /react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@18.2.0)(react@18.2.0):
@@ -17107,7 +17107,7 @@ packages:
     resolution: {integrity: sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==}
     engines: {node: '>=0.10.0'}
 
-  /react-remove-scroll-bar@2.3.5(@types/react@18.0.25)(react@18.2.0):
+  /react-remove-scroll-bar@2.3.5(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-3cqjOqg6s0XbOjWvmasmqHch+RLxIEk2r/70rzGXuz3iIGQsQheEQyqYCBb5EECoD01Vo2SIbDqW4paLeLTASw==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -17117,13 +17117,13 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       react: 18.2.0
-      react-style-singleton: 2.2.1(@types/react@18.0.25)(react@18.2.0)
+      react-style-singleton: 2.2.1(@types/react@18.2.65)(react@18.2.0)
       tslib: 2.6.2
     dev: false
 
-  /react-remove-scroll@2.5.7(@types/react@18.0.25)(react@18.2.0):
+  /react-remove-scroll@2.5.7(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-FnrTWO4L7/Bhhf3CYBNArEG/yROV0tKmTv7/3h9QCFvH6sndeFf1wPqOcbFVu5VAulS5dV1wGT3GZZ/1GawqiA==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -17133,13 +17133,13 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       react: 18.2.0
-      react-remove-scroll-bar: 2.3.5(@types/react@18.0.25)(react@18.2.0)
-      react-style-singleton: 2.2.1(@types/react@18.0.25)(react@18.2.0)
+      react-remove-scroll-bar: 2.3.5(@types/react@18.2.65)(react@18.2.0)
+      react-style-singleton: 2.2.1(@types/react@18.2.65)(react@18.2.0)
       tslib: 2.6.2
-      use-callback-ref: 1.3.1(@types/react@18.0.25)(react@18.2.0)
-      use-sidecar: 1.1.2(@types/react@18.0.25)(react@18.2.0)
+      use-callback-ref: 1.3.1(@types/react@18.2.65)(react@18.2.0)
+      use-sidecar: 1.1.2(@types/react@18.2.65)(react@18.2.0)
     dev: false
 
   /react-router-dom@6.4.3(react-dom@18.2.0)(react@18.2.0):
@@ -17163,7 +17163,7 @@ packages:
       '@remix-run/router': 1.0.3
       react: 18.2.0
 
-  /react-style-singleton@2.2.1(@types/react@18.0.25)(react@18.2.0):
+  /react-style-singleton@2.2.1(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -17173,7 +17173,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.2.0
@@ -17255,7 +17255,7 @@ packages:
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
 
-  /rehackt@0.0.6(@types/react@18.0.25)(react@18.2.0):
+  /rehackt@0.0.6(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-l3WEzkt4ntlEc/IB3/mF6SRgNHA6zfQR7BlGOgBTOmx7IJJXojDASav+NsgXHFjHn+6RmwqsGPFgZpabWpeOdw==}
     peerDependencies:
       '@types/react': '*'
@@ -17266,7 +17266,7 @@ packages:
       react:
         optional: true
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       react: 18.2.0
     dev: false
 
@@ -19068,7 +19068,7 @@ packages:
     resolution: {integrity: sha512-Qp95D4TPJl1kC9SKigDcqgyM2VDVO4RiJc2d4qe5GrYm+zbIQCWWKAFaJNQ4BhdFeDGwBmAxqJBwWSJDb9T3BQ==}
     dev: false
 
-  /use-callback-ref@1.3.1(@types/react@18.0.25)(react@18.2.0):
+  /use-callback-ref@1.3.1(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-Lg4Vx1XZQauB42Hw3kK7JM6yjVjgFmFC5/Ab797s79aARomD2nEErc4mCgM8EZrARLmmbWpi5DGCadmK50DcAQ==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -19078,12 +19078,12 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       react: 18.2.0
       tslib: 2.6.2
     dev: false
 
-  /use-sidecar@1.1.2(@types/react@18.0.25)(react@18.2.0):
+  /use-sidecar@1.1.2(@types/react@18.2.65)(react@18.2.0):
     resolution: {integrity: sha512-epTbsLuzZ7lPClpz2TyryBfztm7m+28DlEv2ZCQ3MDr5ssiwyOwGH/e5F9CkfWjJ1t4clvI58yF822/GUkjjhw==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -19093,7 +19093,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@types/react': 18.0.25
+      '@types/react': 18.2.65
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.6.2
