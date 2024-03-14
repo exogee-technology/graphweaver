@@ -88,8 +88,8 @@ importers:
         specifier: 0.14.0
         version: 0.14.0
       dotenv:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       got:
         specifier: 11.8.5
         version: 11.8.5
@@ -213,8 +213,8 @@ importers:
         specifier: 0.14.0
         version: 0.14.0
       dotenv:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -289,8 +289,8 @@ importers:
         specifier: 3.0.80
         version: 3.0.80
       dotenv:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -374,8 +374,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       dotenv:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       got:
         specifier: 11.8.5
         version: 11.8.5
@@ -827,8 +827,8 @@ importers:
         specifier: 0.14.0
         version: 0.14.0
       dotenv:
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -997,8 +997,8 @@ importers:
         specifier: 3.1.6
         version: 3.1.6
       dotenv:
-        specifier: 16.0.3
-        version: 16.0.3
+        specifier: 16.4.5
+        version: 16.4.5
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -1251,8 +1251,8 @@ importers:
         specifier: 26.0.23
         version: 26.0.23
       dotenv:
-        specifier: 16.3.1
-        version: 16.3.1
+        specifier: 16.4.5
+        version: 16.4.5
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.8.1)
@@ -1456,8 +1456,8 @@ importers:
         specifier: 10.3.1
         version: 10.3.1
       dotenv:
-        specifier: 16.0.0
-        version: 16.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1521,8 +1521,8 @@ importers:
         specifier: 2.2.2
         version: 2.2.2
       dotenv:
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 16.4.5
+        version: 16.4.5
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -6027,7 +6027,7 @@ packages:
       '@whatwg-node/fetch': 0.9.17
       chalk: 4.1.2
       debug: 4.3.4(supports-color@8.1.1)
-      dotenv: 16.3.1
+      dotenv: 16.4.5
       graphql: 16.8.1
       graphql-request: 6.1.0(graphql@16.8.1)
       http-proxy-agent: 7.0.2
@@ -11861,7 +11861,7 @@ packages:
     hasBin: true
     dependencies:
       cross-spawn: 7.0.3
-      dotenv: 16.3.1
+      dotenv: 16.4.5
       dotenv-expand: 10.0.0
       minimist: 1.2.8
 
@@ -11874,27 +11874,12 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /dotenv@10.0.0:
-    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
-    engines: {node: '>=10'}
-    dev: false
-
-  /dotenv@16.0.0:
-    resolution: {integrity: sha512-qD9WU0MPM4SWLPJy/r2Be+2WgQj8plChsyrCNQzW/0WjvcJQiKQJ9mH3ZgB3fxbUUxgc/11ZJ0Fi5KiimWGz2Q==}
-    engines: {node: '>=12'}
-    dev: false
-
-  /dotenv@16.0.3:
-    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
-    engines: {node: '>=12'}
-    dev: false
-
-  /dotenv@16.3.1:
-    resolution: {integrity: sha512-IPzF4w4/Rd94bA9imS68tZBaYyBWSCE47V1RGuMrB94iyTOIEwRmVL2x/4An+6mETpLrKJ5hQkB8W4kFAadeIQ==}
-    engines: {node: '>=12'}
-
   /dotenv@16.4.4:
     resolution: {integrity: sha512-XvPXc8XAQThSjAbY6cQ/9PcBXmFoWuw1sQ3b8HqUCR6ziGXjkTi//kB9SWa2UwqlgdAIuRqAa/9hVljzPehbYg==}
+    engines: {node: '>=12'}
+
+  /dotenv@16.4.5:
+    resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
 
   /dotenv@8.6.0:
@@ -18002,7 +17987,7 @@ packages:
       serverless: 1 || 2 || pre-3 || 3
     dependencies:
       chalk: 4.1.2
-      dotenv: 16.3.1
+      dotenv: 16.4.5
       dotenv-expand: 8.0.3
       serverless: 3.34.0
     dev: false
@@ -18108,7 +18093,7 @@ packages:
       d: 1.0.2
       dayjs: 1.11.10
       decompress: 4.2.1
-      dotenv: 16.3.1
+      dotenv: 16.4.5
       dotenv-expand: 10.0.0
       essentials: 1.2.0
       ext: 1.7.0
@@ -18177,7 +18162,7 @@ packages:
       d: 1.0.2
       dayjs: 1.11.10
       decompress: 4.2.1
-      dotenv: 16.3.1
+      dotenv: 16.4.5
       dotenv-expand: 10.0.0
       essentials: 1.2.0
       ext: 1.7.0
