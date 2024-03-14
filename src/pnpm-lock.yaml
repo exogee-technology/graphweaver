@@ -85,8 +85,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -155,8 +155,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -210,8 +210,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/logger
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -497,7 +497,7 @@ importers:
         version: 0.1.13
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@types/node':
         specifier: 20.11.27
@@ -557,8 +557,8 @@ importers:
         specifier: 0.5.0
         version: 0.5.0
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       decimal.js:
         specifier: 10.4.3
         version: 10.4.3
@@ -809,8 +809,8 @@ importers:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.8.1)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -834,7 +834,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -976,8 +976,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(vite@5.1.6)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -1013,7 +1013,7 @@ importers:
         version: 13.3.3(serverless@3.34.0)
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       vite:
         specifier: 5.1.6
         version: 5.1.6(@types/node@20.11.27)
@@ -1126,8 +1126,8 @@ importers:
         specifier: 9.0.35
         version: 9.0.35(graphql@16.8.1)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dataloader:
         specifier: 2.2.2
         version: 2.2.2
@@ -1145,7 +1145,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@types/pluralize':
         specifier: 0.0.33
@@ -1196,8 +1196,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dotenv-cli:
         specifier: 7.3.0
         version: 7.3.0
@@ -1218,7 +1218,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -1310,7 +1310,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -1340,7 +1340,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -1364,7 +1364,7 @@ importers:
         version: link:../logger
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       esbuild:
         specifier: 0.15.5
@@ -1497,8 +1497,8 @@ importers:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.8.1)
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dataloader:
         specifier: 2.2.2
         version: 2.2.2
@@ -1516,7 +1516,7 @@ importers:
         version: 2.5.2
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@types/lodash':
         specifier: 4.17.0
@@ -1610,8 +1610,8 @@ importers:
         specifier: 0.5.0
         version: 0.5.0
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       decimal.js:
         specifier: 10.4.3
         version: 10.4.3
@@ -1623,7 +1623,7 @@ importers:
         version: 2.0.6
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@escape.tech/graphql-armor-types':
         specifier: 0.5.0
@@ -1672,8 +1672,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
+        specifier: 0.14.1
+        version: 0.14.1
       dataloader:
         specifier: 2.2.2
         version: 2.2.2
@@ -10872,8 +10872,8 @@ packages:
     resolution: {integrity: sha512-0TNiGstbQmCFwt4akjjBg5pLRTSyj/PkWQ1ZoO2zntmg9yLqSRxwEa4iCfQLGjqhiqBfOJa7W/E8wfGrTDmlZQ==}
     dev: true
 
-  /class-validator@0.14.0:
-    resolution: {integrity: sha512-ct3ltplN8I9fOwUd8GrP8UQixwff129BkEtuWDKL5W45cQuLd19xqmTLu5ge78YDm/fdje6FMt0hGOhl0lii3A==}
+  /class-validator@0.14.1:
+    resolution: {integrity: sha512-2VEG9JICxIqTpoK1eMzZqaV+u/EiwEJkMGzTrZf6sU/fwsnOITVgYJ8yojSy6CaXtO9V0Cc6ZQZ8h8m4UBuLwQ==}
     dependencies:
       '@types/validator': 13.11.9
       libphonenumber-js: 1.10.58
@@ -18823,7 +18823,7 @@ packages:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
     engines: {node: '>=14.16'}
 
-  /type-graphql@2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1):
+  /type-graphql@2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1):
     resolution: {integrity: sha512-MCGxRvNADu5Wp9QEudI/WQgiqHJfjanGcKRk/ErCow6IaG04NNI7o3bjjxQVWC+qDundSOhmaquNdjDiiTbcqQ==}
     engines: {node: '>= 14.5.0'}
     peerDependencies:
@@ -18835,7 +18835,7 @@ packages:
     dependencies:
       '@types/node': 20.11.27
       '@types/semver': 7.5.8
-      class-validator: 0.14.0
+      class-validator: 0.14.1
       graphql: 16.8.1
       graphql-query-complexity: 0.12.0(graphql@16.8.1)
       graphql-subscriptions: 2.0.0(graphql@16.8.1)
