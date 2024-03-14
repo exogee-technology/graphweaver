@@ -47,7 +47,7 @@ export const viteConfig = ({
 			...(port ? { port } : {}),
 		},
 		optimizeDeps: {
-			include: ['react-dom/client', 'react-dom', ...optimizeDeps],
+			include: ['react-dom/client', 'react-dom', 'react-router-dom', ...optimizeDeps],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
 				// our vite plugin directly.
