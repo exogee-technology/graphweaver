@@ -41,7 +41,7 @@
 		"react-hot-toast": "2.4.1"
 	},
 	"peerDependencies": {
-		"formik": "2.2.9",
+		"formik": "2.4.5",
 		"graphql": "16.8.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
@@ -57,7 +57,7 @@
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "1.0.1",
-		"formik": "2.2.9",
+		"formik": "2.4.5",
 		"glob": "10.3.10",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
