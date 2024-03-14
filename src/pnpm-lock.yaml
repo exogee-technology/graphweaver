@@ -887,9 +887,6 @@ importers:
       '@usedapp/core':
         specifier: 1.2.13
         version: 1.2.13(ethers@5.7.2)(react@18.2.0)
-      classnames:
-        specifier: 2.3.2
-        version: 2.3.2
       ethers:
         specifier: 5.7.2
         version: 5.7.2
@@ -10878,10 +10875,6 @@ packages:
       '@types/validator': 13.11.9
       libphonenumber-js: 1.10.58
       validator: 13.11.0
-
-  /classnames@2.3.2:
-    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
-    dev: false
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
