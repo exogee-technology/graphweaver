@@ -442,7 +442,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -485,7 +485,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1091,8 +1091,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0
       yargs:
-        specifier: 17.6.2
-        version: 17.6.2
+        specifier: 17.7.2
+        version: 17.7.2
     devDependencies:
       '@types/inquirer':
         specifier: 9.0.3
@@ -1107,8 +1107,8 @@ importers:
         specifier: 4.0.0
         version: 4.0.0
       '@types/yargs':
-        specifier: 17.0.24
-        version: 17.0.24
+        specifier: 17.0.32
+        version: 17.0.32
       prettier:
         specifier: 2.8.8
         version: 2.8.8
@@ -1209,7 +1209,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1417,7 +1417,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1470,13 +1470,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -6693,7 +6693,7 @@ packages:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
       '@types/node': 20.2.5
-      '@types/yargs': 17.0.24
+      '@types/yargs': 17.0.32
       chalk: 4.1.2
     dev: true
 
@@ -6873,28 +6873,6 @@ packages:
       - better-sqlite3
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.1.5(@mikro-orm/core@6.1.5):
-    resolution: {integrity: sha512-LkTbT9ys06hRV/ZxClEZKcMvtvl9ciqhMOe5XCe71AR+7DveOELKNr59c1s0l2Co6LtYwOw88NPxfTzu92654w==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.5
-      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -9613,8 +9591,8 @@ packages:
       '@types/yargs-parser': 21.0.3
     dev: true
 
-  /@types/yargs@17.0.24:
-    resolution: {integrity: sha512-6i0aC7jV6QzQB8ne1joVZ0eSFIstHsCrobmOtghM11yGlH0j43FKL2UhWdELkyps0zuf7qVTUVCCR+tgSlyLLw==}
+  /@types/yargs@17.0.32:
+    resolution: {integrity: sha512-xQ67Yc/laOG5uMfX/093MRlGGCIBzZMarVa+gfNKJxWAIgykYpVGkBdbqEzGDDfCrVUj6Hiff4mTZ5BA6TmAog==}
     dependencies:
       '@types/yargs-parser': 21.0.3
     dev: true
@@ -11309,7 +11287,7 @@ packages:
       spawn-command: 0.0.2-1
       supports-color: 8.1.1
       tree-kill: 1.2.2
-      yargs: 17.6.2
+      yargs: 17.7.2
     dev: true
 
   /console-control-strings@1.1.0:
@@ -14707,7 +14685,7 @@ packages:
       jest-config: 29.7.0(@types/node@20.2.5)
       jest-util: 29.7.0
       jest-validate: 29.7.0
-      yargs: 17.6.2
+      yargs: 17.7.2
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -20313,6 +20291,19 @@ packages:
 
   /yargs@17.6.2:
     resolution: {integrity: sha512-1/9UrdHjDZc0eOU0HxOHoS78C69UD3JRMvzlJ7S79S2nTaWRA/whGCTV8o9e/N/1Va9YIV7Q4sOxD8VV4pCWOw==}
+    engines: {node: '>=12'}
+    dependencies:
+      cliui: 8.0.1
+      escalade: 3.1.2
+      get-caller-file: 2.0.5
+      require-directory: 2.1.1
+      string-width: 4.2.3
+      y18n: 5.0.8
+      yargs-parser: 21.1.1
+    dev: false
+
+  /yargs@17.7.2:
+    resolution: {integrity: sha512-7dSzzRQ++CKnNI/krKnYRV7JKKPUXMEh61soaHKg9mrWEhzFWhFnxPxGl+69cD1Ou63C13NUPCnmIcrvqCuM6w==}
     engines: {node: '>=12'}
     dependencies:
       cliui: 8.0.1
