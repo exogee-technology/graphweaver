@@ -34,7 +34,7 @@
 		"graphiql": "2.4.5",
 		"graphql": "16.8.1",
 		"graphql-deduplicator": "2.0.6",
-		"luxon": "2.5.2",
+		"luxon": "3.4.4",
 		"papaparse": "5.4.1",
 		"react-data-grid": "7.0.0-beta.20",
 		"react-hot-toast": "2.4.1"
@@ -48,7 +48,7 @@
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
-		"@types/luxon": "2.0.7",
+		"@types/luxon": "3.4.2",
 		"@types/papaparse": "5.3.14",
 		"@types/react": "18.0.25",
 		"esbuild": "0.15.5",

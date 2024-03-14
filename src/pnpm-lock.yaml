@@ -715,8 +715,8 @@ importers:
         specifier: 2.0.6
         version: 2.0.6
       luxon:
-        specifier: 2.5.2
-        version: 2.5.2
+        specifier: 3.4.4
+        version: 3.4.4
       papaparse:
         specifier: 5.4.1
         version: 5.4.1
@@ -734,8 +734,8 @@ importers:
         specifier: 2.0.2
         version: 2.0.2
       '@types/luxon':
-        specifier: 2.0.7
-        version: 2.0.7
+        specifier: 3.4.2
+        version: 3.4.2
       '@types/papaparse':
         specifier: 5.3.14
         version: 5.3.14
@@ -1509,8 +1509,8 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       luxon:
-        specifier: 2.5.2
-        version: 2.5.2
+        specifier: 3.4.4
+        version: 3.4.4
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -1519,8 +1519,8 @@ importers:
         specifier: 4.17.0
         version: 4.17.0
       '@types/luxon':
-        specifier: 2.0.7
-        version: 2.0.7
+        specifier: 3.4.2
+        version: 3.4.2
       '@types/node':
         specifier: 20.11.27
         version: 20.11.27
@@ -1549,15 +1549,15 @@ importers:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.8.1)
       luxon:
-        specifier: 2.5.2
-        version: 2.5.2
+        specifier: 3.4.4
+        version: 3.4.4
     devDependencies:
       '@types/jest':
         specifier: 26.0.23
         version: 26.0.23
       '@types/luxon':
-        specifier: 2.0.7
-        version: 2.0.7
+        specifier: 3.4.2
+        version: 3.4.2
       decimal.js:
         specifier: 10.4.3
         version: 10.4.3
@@ -9287,8 +9287,8 @@ packages:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
     dev: false
 
-  /@types/luxon@2.0.7:
-    resolution: {integrity: sha512-AxiYycfO+/M4VIH0ribSr2iPFC+APewpJIaQSydwVnzorK3mjSFXkA3HmhQidGx44MpwaatFyEkbW/WD4zdDaQ==}
+  /@types/luxon@3.4.2:
+    resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
     dev: true
 
   /@types/md5@2.3.5:
@@ -15364,11 +15364,6 @@ packages:
     resolution: {integrity: sha512-BpdYkt9EvGl8OfWHDQPISVpcl5xZthb+XPsbELj5AQXxIC8IriDZIQYjBJPEm5rS420sjZ0TLEzRcq5KdBhYrQ==}
     dependencies:
       es5-ext: 0.10.64
-
-  /luxon@2.5.2:
-    resolution: {integrity: sha512-Yg7/RDp4nedqmLgyH0LwgGRvMEKVzKbUdkBYyCosbHgJ+kaOUx0qzSiSatVc3DFygnirTPYnMM2P5dg2uH1WvA==}
-    engines: {node: '>=12'}
-    dev: false
 
   /luxon@3.4.4:
     resolution: {integrity: sha512-zobTr7akeGHnv7eBOXcRgMeCP6+uyYsczwmeRCauvpvaAltgNyTbLH/+VaEAPUeWBT+1GuNmz4wC/6jtQzbbVA==}
