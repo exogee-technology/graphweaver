@@ -12,7 +12,7 @@
         "version": "npm version --no-git-tag-version"
     },
     "dependencies": {
-        "@as-integrations/aws-lambda": "2.0.1",
+        "@as-integrations/aws-lambda": "3.1.0",
         "@exogee/graphweaver": "workspace:*",
         "@exogee/graphweaver-scalars": "workspace:*",
         "@exogee/graphweaver-server": "workspace:*",
