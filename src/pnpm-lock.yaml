@@ -660,9 +660,6 @@ importers:
       '@chialab/esbuild-plugin-html':
         specifier: 0.17.2
         version: 0.17.2
-      '@types/pluralize':
-        specifier: 0.0.29
-        version: 0.0.29
       '@types/react':
         specifier: 18.0.25
         version: 18.0.25
@@ -732,9 +729,6 @@ importers:
       papaparse:
         specifier: 5.4.1
         version: 5.4.1
-      pluralize:
-        specifier: 8.0.0
-        version: 8.0.0
       react-data-grid:
         specifier: 7.0.0-beta.20
         version: 7.0.0-beta.20(react-dom@18.2.0)(react@18.2.0)
@@ -751,9 +745,6 @@ importers:
       '@types/papaparse':
         specifier: 5.3.14
         version: 5.3.14
-      '@types/pluralize':
-        specifier: 0.0.29
-        version: 0.0.29
       '@types/react':
         specifier: 18.0.25
         version: 18.0.25
@@ -1532,9 +1523,6 @@ importers:
       luxon:
         specifier: 2.5.2
         version: 2.5.2
-      pluralize:
-        specifier: 8.0.0
-        version: 8.0.0
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
@@ -1548,9 +1536,6 @@ importers:
       '@types/node':
         specifier: 20.11.27
         version: 20.11.27
-      '@types/pluralize':
-        specifier: 0.0.29
-        version: 0.0.29
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -1645,9 +1630,6 @@ importers:
       graphql-deduplicator:
         specifier: 2.0.6
         version: 2.0.6
-      pluralize:
-        specifier: 8.0.0
-        version: 8.0.0
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
@@ -1658,9 +1640,6 @@ importers:
       '@types/graphql-deduplicator':
         specifier: 2.0.0
         version: 2.0.0
-      '@types/pluralize':
-        specifier: 0.0.29
-        version: 0.0.29
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
