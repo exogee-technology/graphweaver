@@ -590,8 +590,8 @@ importers:
         specifier: 0.2.1
         version: 0.2.1
       uuid:
-        specifier: 8.3.2
-        version: 8.3.2
+        specifier: 9.0.1
+        version: 9.0.1
       xero-node:
         specifier: 4.30.0
         version: 4.30.0
@@ -1305,8 +1305,8 @@ importers:
         specifier: 16.8.1
         version: 16.8.1
       uuid:
-        specifier: 9.0.0
-        version: 9.0.0
+        specifier: 9.0.1
+        version: 9.0.1
     devDependencies:
       '@exogee/graphweaver':
         specifier: workspace:*
@@ -1872,7 +1872,7 @@ packages:
       negotiator: 0.6.3
       node-abort-controller: 3.1.1
       node-fetch: 2.7.0
-      uuid: 9.0.0
+      uuid: 9.0.1
       whatwg-mimetype: 3.0.0
     transitivePeerDependencies:
       - encoding
@@ -19593,7 +19593,6 @@ packages:
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
-    dev: true
 
   /v8-to-istanbul@9.2.0:
     resolution: {integrity: sha512-/EH/sDgxU2eGxajKdwLCDmQ4FWq+kpi3uCmBGpw1xJtnAxEjlD8j8PEiGWpCIMIs3ciNAgH0d3TTJiUkYzyZjA==}
