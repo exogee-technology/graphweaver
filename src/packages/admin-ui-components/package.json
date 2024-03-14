@@ -30,7 +30,7 @@
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.8.2",
 		"clsx": "2.1.0",
-		"downshift": "8.4.0",
+		"downshift": "8.5.0",
 		"formik": "2.2.9",
 		"graphiql": "2.4.5",
 		"graphql": "16.8.1",
