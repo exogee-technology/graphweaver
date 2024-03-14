@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth-ui-components",
-	"version": "0.2.22",
+	"version": "0.2.23",
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -30,11 +30,11 @@
 		"@usedapp/core": "1.2.13",
 		"classnames": "2.3.2",
 		"ethers": "5.7.2",
-		"formik": "2.2.9",
 		"web3-token": "1.0.6"
 	},
 	"peerDependencies": {
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
+		"formik": "2.2.9",
 		"graphql": "16.8.1",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
@@ -50,9 +50,8 @@
 		"glob": "10.3.10",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
-		"react-router-dom": "6.4.3",
 		"typescript": "5.3.3",
-		"vite": "4.5.2",
+		"vite": "5.1.6",
 		"vite-plugin-svgr": "3.2.0",
 		"@simplewebauthn/types": "9.0.1"
 	},

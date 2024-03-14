@@ -1,16 +1,16 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "0.2.22",
+	"version": "0.2.23",
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
+		"import-auth": "pnpm unpack && tsx ./scripts/import-auth.ts",
 		"import-database-sqlite": "pnpm unpack && tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": "pnpm unpack && . ./scripts/import-postgres.sh",
 		"import-database-mysql": "pnpm unpack && . ./scripts/import-mysql.sh",
 		"seed-postgres:reseed": "export DATABASE_RESEED=true && node ./scripts/seed-postgres.js",
 		"seed-postgres": "node ./scripts/seed-postgres.js",
 		"start-server": "cd app && pnpm start",
-		"start-auth-server": "cd ../../examples/rest && pnpm start",
 		"dev-sqlite": "pnpm import-database-sqlite && pnpm start-server",
 		"dev-postgres": "createdb gw && pnpm seed-postgres && pnpm import-database-postgres  && pnpm start-server",
 		"dev-mysql": "pnpm import-database-mysql && pnpm start-server",

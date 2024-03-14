@@ -29,6 +29,7 @@ export const viteConfig = ({
 		...Object.keys(
 			requireSilent('@exogee/graphweaver-auth-ui-components/package.json').dependencies
 		),
+		...Object.keys(requireSilent('@exogee/graphweaver-admin-ui/package.json').dependencies),
 	];
 
 	return {
@@ -47,7 +48,7 @@ export const viteConfig = ({
 			...(port ? { port } : {}),
 		},
 		optimizeDeps: {
-			include: ['react-dom/client', 'react-dom', ...optimizeDeps],
+			include: ['react-dom/client', ...optimizeDeps],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
 				// our vite plugin directly.

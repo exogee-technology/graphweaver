@@ -192,14 +192,16 @@ const convertSchemaToMetadata = async (
 };
 
 const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
+	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	const module = require(`@mikro-orm/${type}`);
 	const PLATFORMS = {
-		mysql: { className: 'MySqlDriver', module: () => require('@mikro-orm/mysql') },
-		postgresql: { className: 'PostgreSqlDriver', module: () => require('@mikro-orm/postgresql') },
-		sqlite: { className: 'SqliteDriver', module: () => require('@mikro-orm/sqlite') },
+		mysql: 'MySqlDriver',
+		postgresql: 'PostgreSqlDriver',
+		sqlite: 'SqliteDriver',
 	};
 	await ConnectionManager.connect(CONNECTION_MANAGER_ID, {
 		mikroOrmConfig: {
-			driver: PLATFORMS[type].module()[PLATFORMS[type].className],
+			driver: module[PLATFORMS[type]],
 			...options.mikroOrmConfig,
 		},
 	});
