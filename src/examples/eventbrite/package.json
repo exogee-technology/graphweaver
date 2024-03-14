@@ -30,7 +30,7 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"class-validator": "0.14.0",
-		"dotenv": "16.0.0",
+		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
 		"graphweaver": "workspace:*",

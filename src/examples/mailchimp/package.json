@@ -29,7 +29,7 @@
 		"@exogee/graphweaver-helpers": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@mailchimp/mailchimp_marketing": "3.0.80",
-		"dotenv": "16.0.0",
+		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
 		"graphweaver": "workspace:*",
 		"md5": "2.3.0",
