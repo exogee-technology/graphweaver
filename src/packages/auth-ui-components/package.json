@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@types/react": "18.0.25",
-		"@types/react-dom": "18.0.9",
+		"@types/react-dom": "18.2.22",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-svgr": "1.0.1",
