@@ -32,7 +32,7 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@nivo/bump": "0.83.0",
+		"@nivo/bump": "0.85.1",
 		"@nivo/core": "0.83.0",
 		"@nivo/line": "0.83.0",
 		"@nivo/tooltip": "0.83.0",
