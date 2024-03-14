@@ -23,7 +23,7 @@
 	"license": "UNLICENSED",
 	"devDependencies": {
 		"@exogee/graphweaver": "workspace:*",
-		"esbuild": "0.17.18",
+		"esbuild": "0.20.1",
 		"glob": "10.3.10",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",

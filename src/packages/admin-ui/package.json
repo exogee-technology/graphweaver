@@ -40,7 +40,7 @@
 		"@types/react-dom": "18.0.9",
 		"@types/react-modal": "3.13.1",
 		"@vitejs/plugin-react": "3.1.0",
-		"esbuild": "0.15.5",
+		"esbuild": "0.20.1",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "1.0.1",

@@ -51,7 +51,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "20.11.27",
-		"esbuild": "0.15.5",
+		"esbuild": "0.20.1",
 		"prettier": "2.8.8",
 		"ts-node": "10.4.0",
 		"tsc-watch": "4.2.9",
