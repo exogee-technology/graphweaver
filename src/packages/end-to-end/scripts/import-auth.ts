@@ -8,11 +8,6 @@ async function removeDirectory(directoryPath: string) {
 	}
 }
 
-async function copyFile(source: string, destination: string) {
-	await fs.promises.mkdir(path.dirname(destination), { recursive: true });
-	await fs.promises.copyFile(source, destination);
-}
-
 async function execAsync(command: string) {
 	const child = exec(command);
 	child.stdout?.on('data', (data) => {
