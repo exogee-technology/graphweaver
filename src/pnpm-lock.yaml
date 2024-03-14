@@ -731,8 +731,8 @@ importers:
         version: 6.4.3(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@types/graphql-deduplicator':
-        specifier: 2.0.0
-        version: 2.0.0
+        specifier: 2.0.2
+        version: 2.0.2
       '@types/luxon':
         specifier: 2.0.7
         version: 2.0.7
@@ -1629,8 +1629,8 @@ importers:
         specifier: 0.5.0
         version: 0.5.0
       '@types/graphql-deduplicator':
-        specifier: 2.0.0
-        version: 2.0.0
+        specifier: 2.0.2
+        version: 2.0.2
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -9219,8 +9219,8 @@ packages:
       '@types/node': 20.11.27
     dev: true
 
-  /@types/graphql-deduplicator@2.0.0:
-    resolution: {integrity: sha512-swUwj5hWF1yFzbUXStLJrUa0ksAt11B8+SwhsAjQAX0LYJ1LLioAyuDcJ9bovWbsNzIXJYXLvljSPQw8nR728w==}
+  /@types/graphql-deduplicator@2.0.2:
+    resolution: {integrity: sha512-dZ4znGxshnZ/4pePy5A20ROUJcrZziTu4FRjIoFsv7h0zdVL9U/Bgd6YPEZIHWkI4y11T/VngAyX9Q/1SxjoPw==}
     dev: true
 
   /@types/http-cache-semantics@4.0.4:
