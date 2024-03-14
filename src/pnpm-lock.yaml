@@ -560,8 +560,8 @@ importers:
         specifier: 0.83.0
         version: 0.83.0(prop-types@15.8.1)(react-dom@18.2.0)(react@18.2.0)
       async-mutex:
-        specifier: 0.3.1
-        version: 0.3.1
+        specifier: 0.5.0
+        version: 0.5.0
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
@@ -1631,8 +1631,8 @@ importers:
         specifier: 8.5.1
         version: 8.5.1(graphql@16.8.1)
       async-mutex:
-        specifier: 0.3.2
-        version: 0.3.2
+        specifier: 0.5.0
+        version: 0.5.0
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
@@ -10297,14 +10297,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /async-mutex@0.3.1:
-    resolution: {integrity: sha512-vRfQwcqBnJTLzVQo72Sf7KIUbcSUP5hNchx6udI1U6LuPQpfePgdjJzlCe76yFZ8pxlLjn9lwcl/Ya0TSOv0Tw==}
-    dependencies:
-      tslib: 2.6.2
-    dev: false
-
-  /async-mutex@0.3.2:
-    resolution: {integrity: sha512-HuTK7E7MT7jZEh1P9GtRW9+aTWiDWWi9InbZ5hjxrnRa39KS4BW04+xLBhYNS2aXhHUIKZSw3gj4Pn1pj+qGAA==}
+  /async-mutex@0.5.0:
+    resolution: {integrity: sha512-1A94B18jkJ3DYq284ohPxoXbfTA5HsQ7/Mf4DEhcyLx3Bz27Rh59iScbB6EPiP+B+joue6YCxcMXSbFC1tZKwA==}
     dependencies:
       tslib: 2.6.2
     dev: false
