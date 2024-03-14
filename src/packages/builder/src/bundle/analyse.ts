@@ -1,5 +1,5 @@
 import path from 'path';
-import { build } from 'vite';
+import { PluginOption, build } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { viteConfig } from '../vite-config';
 
@@ -15,7 +15,7 @@ export const analyseBundle = async () => {
 
 	await build({
 		...config,
-		plugins: [...(config.plugins || []), visualizer({ open: true })],
+		plugins: [...(config.plugins || []), visualizer({ open: true })] as PluginOption[],
 	});
 
 	console.log('Build complete!');
