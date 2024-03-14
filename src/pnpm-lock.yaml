@@ -993,9 +993,6 @@ importers:
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
-      cross-fetch:
-        specifier: 3.1.6
-        version: 3.1.6
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -18104,6 +18101,9 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
+    peerDependenciesMeta:
+      node-gyp:
+        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0
