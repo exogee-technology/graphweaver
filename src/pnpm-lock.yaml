@@ -1018,8 +1018,8 @@ importers:
         specifier: 3.0.2
         version: 3.0.2
       rollup-plugin-visualizer:
-        specifier: 5.8.3
-        version: 5.8.3
+        specifier: 5.12.0
+        version: 5.12.0
       serverless:
         specifier: 3.34.0
         version: 3.34.0
@@ -17434,19 +17434,20 @@ packages:
       bn.js: 5.2.1
     dev: false
 
-  /rollup-plugin-visualizer@5.8.3:
-    resolution: {integrity: sha512-QGJk4Bqe4AOat5AjipOh8esZH1nck5X2KFpf4VytUdSUuuuSwvIQZjMGgjcxe/zXexltqaXp5Vx1V3LmnQH15Q==}
+  /rollup-plugin-visualizer@5.12.0:
+    resolution: {integrity: sha512-8/NU9jXcHRs7Nnj07PF2o4gjxmm9lXIrZ8r175bT9dK8qoLlvKTwRMArRCMgpMGlq8CTLugRvEmyMeMXIU2pNQ==}
     engines: {node: '>=14'}
     hasBin: true
     peerDependencies:
-      rollup: 2.x || 3.x
+      rollup: 2.x || 3.x || 4.x
     peerDependenciesMeta:
       rollup:
         optional: true
     dependencies:
       open: 8.4.2
+      picomatch: 2.3.1
       source-map: 0.7.4
-      yargs: 17.6.2
+      yargs: 17.7.2
     dev: false
 
   /rollup@3.29.4:
