@@ -64,7 +64,7 @@
 		"mockdate": "3.0.5",
 		"pg": "8.11.3",
 		"serverless": "3.38.0",
-		"serverless-offline": "13.3.2",
+		"serverless-offline": "13.3.3",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.0.5",
 		"tsx": "4.7.0",

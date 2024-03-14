@@ -36,7 +36,7 @@
 		"rollup-plugin-visualizer": "5.8.3",
 		"serverless": "3.34.0",
 		"serverless-dotenv-plugin": "4.0.2",
-		"serverless-offline": "12.0.2",
+		"serverless-offline": "13.3.3",
 		"type-graphql": "2.0.0-beta.2",
 		"vite": "4.5.2",
 		"vite-plugin-graphweaver": "workspace:*",
