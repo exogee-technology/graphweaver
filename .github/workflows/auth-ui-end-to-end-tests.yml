@@ -56,8 +56,8 @@ jobs:
       - uses: actions/cache@v3
         id: playwright-cache
         with:
-          path: '~/.cache/ms-playwright'
-          key: '${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}'
+          path: "~/.cache/ms-playwright"
+          key: "${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}"
           # As a fallback, if the Playwright version has changed, try use the
           # most recently cached version. There's a good chance that at least one
           # of the browser binary versions haven't been updated, so Playwright can
@@ -77,11 +77,10 @@ jobs:
         run: pnpm playwright install --with-deps chromium
 
       - name: Build and Setup Rest Database
-        working-directory: src/examples/rest
+        working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm build
-          pnpm import-database
+          pnpm import-auth
         env:
           CI: true
           DATABASE_HOST: 127.0.0.1
@@ -104,7 +103,7 @@ jobs:
         working-directory: src/packages/end-to-end
         timeout-minutes: 4
         run: |
-          pnpm start-auth-server &
+          pnpm start-server &
           sleep 5 &&
           pnpm test-ui-auth &&
           killall node
