@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: exogee-technology/action-jira-linker@v1.1.1
+        # We don't want to try to link JIRA issues if we're running from an external collaborator / dependabot / etc as
+        # none of these secrets will be available to us and it'll just error.
+        if: github.secret_source == 'Actions'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           jira-token: ${{ secrets.JIRA_TOKEN }}
