@@ -40,7 +40,7 @@
 		"@types/inquirer": "9.0.3",
 		"@types/node": "20.11.27",
 		"@types/semver": "7.5.8",
-		"@types/validate-npm-package-name": "4.0.0",
+		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.32",
 		"prettier": "2.8.8"
 	},
