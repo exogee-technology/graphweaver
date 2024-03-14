@@ -34,14 +34,14 @@
 		"ora": "5.4.1",
 		"semver": "7.5.4",
 		"validate-npm-package-name": "5.0.0",
-		"yargs": "17.6.2"
+		"yargs": "17.7.2"
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.3",
 		"@types/node": "20.2.5",
 		"@types/semver": "7.5.0",
 		"@types/validate-npm-package-name": "4.0.0",
-		"@types/yargs": "17.0.24",
+		"@types/yargs": "17.0.32",
 		"prettier": "2.8.8"
 	},
 	"keywords": [
