@@ -442,7 +442,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -485,10 +485,10 @@ importers:
         version: 6.1.5
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.9
+        version: 6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -503,7 +503,7 @@ importers:
         version: 0.1.13
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
       '@types/node':
         specifier: 20.11.27
@@ -1209,10 +1209,10 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.9
+        version: 6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3)
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
@@ -1328,7 +1328,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -1358,7 +1358,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -1382,7 +1382,7 @@ importers:
         version: link:../logger
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
       esbuild:
         specifier: 0.15.5
@@ -1417,10 +1417,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.9
+        version: 6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3)
       node-sqlite3-wasm:
         specifier: 0.6.9
         version: 0.6.9
@@ -1470,16 +1470,16 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.9
+        version: 6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.1.5
@@ -6839,8 +6839,8 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/knex@6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7):
-    resolution: {integrity: sha512-8DaxqSY3B+ZDwGqyfxnKrWquYulDxWdq0j4OB+7TMUpIW2hF/o4VvKiVyumORkfhbMbO0xzynwsgteh3/Gb4TQ==}
+  /@mikro-orm/knex@6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7):
+    resolution: {integrity: sha512-kmldPyHVhViEUDYGZeQK90w89B+YzMpNwpL808awZJm3Vo5syakxFlKdRsNPEKEHEwX9vpt6dJCpqQRuPqS9Aw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
@@ -6879,28 +6879,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.5(@mikro-orm/core@6.1.5):
-    resolution: {integrity: sha512-LkTbT9ys06hRV/ZxClEZKcMvtvl9ciqhMOe5XCe71AR+7DveOELKNr59c1s0l2Co6LtYwOw88NPxfTzu92654w==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.5
-      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2):
     resolution: {integrity: sha512-LkTbT9ys06hRV/ZxClEZKcMvtvl9ciqhMOe5XCe71AR+7DveOELKNr59c1s0l2Co6LtYwOw88NPxfTzu92654w==}
     engines: {node: '>= 18.12.0'}
@@ -6923,14 +6901,14 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/sqlite@6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3):
-    resolution: {integrity: sha512-XK9Rni7iPFXyNCNbb2xRjw7TmxE/JMelbTpBO0GmQgbEiqel/hNtQTWgZx9oCSQ5bPhwR67llO4qOp4Er8vsDA==}
+  /@mikro-orm/sqlite@6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3):
+    resolution: {integrity: sha512-b4EBfVMQ+BU59fPehj2tidf2/ZyA15TMJT+r6JGDmwrJKeMJJa0xwt5j4L9liRUdkpogXuBX7s3f+xM8dyXRvQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
       '@mikro-orm/core': 6.1.5
-      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+      '@mikro-orm/knex': 6.1.9(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
       fs-extra: 11.2.0
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -9545,6 +9523,7 @@ packages:
 
   /@types/semver@7.5.8:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
+    dev: true
 
   /@types/send@0.17.4:
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
@@ -9601,7 +9580,6 @@ packages:
 
   /@types/validator@13.11.9:
     resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
-    dev: false
 
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
@@ -11053,7 +11031,6 @@ packages:
       '@types/validator': 13.11.9
       libphonenumber-js: 1.10.57
       validator: 13.11.0
-    dev: false
 
   /classnames@2.3.2:
     resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
@@ -11062,6 +11039,7 @@ packages:
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dev: false
 
   /cli-boxes@3.0.0:
@@ -14101,6 +14079,7 @@ packages:
   /indent-string@4.0.0:
     resolution: {integrity: sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: false
 
   /infer-owner@1.0.4:
@@ -15444,7 +15423,6 @@ packages:
 
   /libphonenumber-js@1.10.57:
     resolution: {integrity: sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==}
-    dev: false
 
   /lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -19373,27 +19351,8 @@ packages:
         optional: true
     dependencies:
       '@types/node': 20.11.27
-      '@types/semver': 7.5.8
-      class-validator: 0.14.0
-      graphql: 16.8.1
-      graphql-query-complexity: 0.12.0(graphql@16.8.1)
-      graphql-subscriptions: 2.0.0(graphql@16.8.1)
-      semver: 7.6.0
-      tslib: 2.6.2
-    dev: false
-
-  /type-graphql@2.0.0-beta.2(graphql@16.8.1):
-    resolution: {integrity: sha512-MCGxRvNADu5Wp9QEudI/WQgiqHJfjanGcKRk/ErCow6IaG04NNI7o3bjjxQVWC+qDundSOhmaquNdjDiiTbcqQ==}
-    engines: {node: '>= 14.5.0'}
-    peerDependencies:
-      class-validator: '>=0.14.0'
-      graphql: ^16.6.0
-    peerDependenciesMeta:
-      class-validator:
-        optional: true
-    dependencies:
-      '@types/node': 20.11.27
       '@types/semver': 7.5.0
+      class-validator: 0.14.0
       graphql: 16.8.1
       graphql-query-complexity: 0.12.0(graphql@16.8.1)
       graphql-subscriptions: 2.0.0(graphql@16.8.1)
@@ -19703,7 +19662,6 @@ packages:
   /validator@13.11.0:
     resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
     engines: {node: '>= 0.10'}
-    dev: false
 
   /valtio@1.10.5(react@18.2.0):
     resolution: {integrity: sha512-jTp0k63VXf4r5hPoaC6a6LCG4POkVSh629WLi1+d5PlajLsbynTMd7qAgEiOSPxzoX5iNvbN7iZ/k/g29wrNiQ==}
