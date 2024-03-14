@@ -25,11 +25,11 @@ importers:
         specifier: 8.57.0
         version: 8.57.0
       eslint-config-prettier:
-        specifier: 8.6.0
-        version: 8.6.0(eslint@8.57.0)
+        specifier: 9.1.0
+        version: 9.1.0(eslint@8.57.0)
       eslint-plugin-prettier:
         specifier: 4.2.1
-        version: 4.2.1(eslint-config-prettier@8.6.0)(eslint@8.57.0)(prettier@2.8.8)
+        version: 4.2.1(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@2.8.8)
       eslint-plugin-simple-import-sort:
         specifier: 12.0.0
         version: 12.0.0(eslint@8.57.0)
@@ -436,7 +436,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
+        version: 6.1.5(@mikro-orm/core@6.1.5)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -479,7 +479,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1203,7 +1203,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
+        version: 6.1.5(@mikro-orm/core@6.1.5)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1411,7 +1411,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1464,13 +1464,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
+        version: 6.1.5(@mikro-orm/core@6.1.5)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -6814,6 +6814,28 @@ packages:
       - better-sqlite3
       - mysql
       - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    dev: false
+
+  /@mikro-orm/postgresql@6.1.5(@mikro-orm/core@6.1.5):
+    resolution: {integrity: sha512-LkTbT9ys06hRV/ZxClEZKcMvtvl9ciqhMOe5XCe71AR+7DveOELKNr59c1s0l2Co6LtYwOw88NPxfTzu92654w==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+    dependencies:
+      '@mikro-orm/core': 6.1.5
+      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+      pg: 8.11.3
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -12277,8 +12299,8 @@ packages:
     engines: {node: '>=12'}
     dev: false
 
-  /eslint-config-prettier@8.6.0(eslint@8.57.0):
-    resolution: {integrity: sha512-bAF0eLpLVqP5oEVUFKpMA+NnRFICwn9X8B5jrR9FcqnYBuPbqWEjTEspPWMj5ye6czoSLDweCzSo3Ko7gGrZaA==}
+  /eslint-config-prettier@9.1.0(eslint@8.57.0):
+    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -12286,7 +12308,7 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@8.6.0)(eslint@8.57.0)(prettier@2.8.8):
+  /eslint-plugin-prettier@4.2.1(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@2.8.8):
     resolution: {integrity: sha512-f/0rXLXUt0oFYs8ra4w49wYZBG5GKZpAYsJSm6rnYL5uVDjd+zowwMwVZHnAjf4edNrKpCDYfXDgmRE/Ak7QyQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
@@ -12298,7 +12320,7 @@ packages:
         optional: true
     dependencies:
       eslint: 8.57.0
-      eslint-config-prettier: 8.6.0(eslint@8.57.0)
+      eslint-config-prettier: 9.1.0(eslint@8.57.0)
       prettier: 2.8.8
       prettier-linter-helpers: 1.0.0
     dev: true
