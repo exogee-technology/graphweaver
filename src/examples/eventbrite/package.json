@@ -20,7 +20,7 @@
 		"test": "jest --runInBand --forceExit"
 	},
 	"dependencies": {
-		"@apollo/server": "4.9.3",
+		"@apollo/server": "4.10.1",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
