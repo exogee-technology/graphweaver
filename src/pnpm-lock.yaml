@@ -503,7 +503,7 @@ importers:
         version: 0.1.13
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
       '@types/node':
         specifier: 20.11.27
@@ -1242,8 +1242,8 @@ importers:
         version: 1.0.6(react@18.2.0)
     devDependencies:
       '@playwright/test':
-        specifier: 1.37.1
-        version: 1.37.1
+        specifier: 1.42.1
+        version: 1.42.1
       '@simplewebauthn/types':
         specifier: 9.0.1
         version: 9.0.1
@@ -1328,7 +1328,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -1358,7 +1358,7 @@ importers:
         version: 0.2.1
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
       typescript:
         specifier: 5.0.4
         version: 5.0.4
@@ -1382,7 +1382,7 @@ importers:
         version: link:../logger
       type-graphql:
         specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(graphql@16.8.1)
+        version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
       esbuild:
         specifier: 0.15.5
@@ -7406,15 +7406,12 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@playwright/test@1.37.1:
-    resolution: {integrity: sha512-bq9zTli3vWJo8S3LwB91U0qDNQDpEXnw7knhxLM0nwDvexQAwx9tO8iKDZSqqneVq+URd/WIoz+BALMqUTgdSg==}
+  /@playwright/test@1.42.1:
+    resolution: {integrity: sha512-Gq9rmS54mjBL/7/MvBaNOBwbfnh7beHvS6oS4srqXFcQHpQCV1+c8JXWE8VLPyRDhgS3H8x8A7hztqI9VnwrAQ==}
     engines: {node: '>=16'}
     hasBin: true
     dependencies:
-      '@types/node': 20.11.27
-      playwright-core: 1.37.1
-    optionalDependencies:
-      fsevents: 2.3.2
+      playwright: 1.42.1
     dev: true
 
   /@protobufjs/aspromise@1.1.2:
@@ -9493,6 +9490,7 @@ packages:
 
   /@types/semver@7.5.8:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
+    dev: true
 
   /@types/send@0.17.4:
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
@@ -9549,7 +9547,6 @@ packages:
 
   /@types/validator@13.11.9:
     resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
-    dev: false
 
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
@@ -10994,7 +10991,6 @@ packages:
       '@types/validator': 13.11.9
       libphonenumber-js: 1.10.57
       validator: 13.11.0
-    dev: false
 
   /classnames@2.3.2:
     resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
@@ -15370,7 +15366,6 @@ packages:
 
   /libphonenumber-js@1.10.57:
     resolution: {integrity: sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==}
-    dev: false
 
   /lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -16935,10 +16930,20 @@ packages:
       pathe: 1.1.2
     dev: true
 
-  /playwright-core@1.37.1:
-    resolution: {integrity: sha512-17EuQxlSIYCmEMwzMqusJ2ztDgJePjrbttaefgdsiqeLWidjYz9BxXaTaZWxH1J95SHGk6tjE+dwgWILJoUZfA==}
+  /playwright-core@1.42.1:
+    resolution: {integrity: sha512-mxz6zclokgrke9p1vtdy/COWBH+eOZgYUVVU34C73M+4j4HLlQJHtfcqiqqxpP0o8HhMkflvfbquLX5dg6wlfA==}
     engines: {node: '>=16'}
     hasBin: true
+    dev: true
+
+  /playwright@1.42.1:
+    resolution: {integrity: sha512-PgwB03s2DZBcNRoW+1w9E+VkLBxweib6KTXM0M3tkiT4jVxKSi6PmVJ591J+0u10LUrgxB7dLRbiJqO5s2QPMg==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      playwright-core: 1.42.1
+    optionalDependencies:
+      fsevents: 2.3.2
     dev: true
 
   /pluralize@8.0.0:
@@ -19307,27 +19312,8 @@ packages:
         optional: true
     dependencies:
       '@types/node': 20.11.27
-      '@types/semver': 7.5.8
-      class-validator: 0.14.0
-      graphql: 16.8.1
-      graphql-query-complexity: 0.12.0(graphql@16.8.1)
-      graphql-subscriptions: 2.0.0(graphql@16.8.1)
-      semver: 7.6.0
-      tslib: 2.6.2
-    dev: false
-
-  /type-graphql@2.0.0-beta.2(graphql@16.8.1):
-    resolution: {integrity: sha512-MCGxRvNADu5Wp9QEudI/WQgiqHJfjanGcKRk/ErCow6IaG04NNI7o3bjjxQVWC+qDundSOhmaquNdjDiiTbcqQ==}
-    engines: {node: '>= 14.5.0'}
-    peerDependencies:
-      class-validator: '>=0.14.0'
-      graphql: ^16.6.0
-    peerDependenciesMeta:
-      class-validator:
-        optional: true
-    dependencies:
-      '@types/node': 20.11.27
       '@types/semver': 7.5.0
+      class-validator: 0.14.0
       graphql: 16.8.1
       graphql-query-complexity: 0.12.0(graphql@16.8.1)
       graphql-subscriptions: 2.0.0(graphql@16.8.1)
@@ -19637,7 +19623,6 @@ packages:
   /validator@13.11.0:
     resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
     engines: {node: '>= 0.10'}
-    dev: false
 
   /valtio@1.10.5(react@18.2.0):
     resolution: {integrity: sha512-jTp0k63VXf4r5hPoaC6a6LCG4POkVSh629WLi1+d5PlajLsbynTMd7qAgEiOSPxzoX5iNvbN7iZ/k/g29wrNiQ==}
