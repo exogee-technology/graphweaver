@@ -1148,8 +1148,8 @@ importers:
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
       '@types/pluralize':
-        specifier: 0.0.29
-        version: 0.0.29
+        specifier: 0.0.33
+        version: 0.0.33
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -1470,8 +1470,8 @@ importers:
         specifier: 20.11.27
         version: 20.11.27
       '@types/pluralize':
-        specifier: 0.0.29
-        version: 0.0.29
+        specifier: 0.0.33
+        version: 0.0.33
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -9350,8 +9350,8 @@ packages:
       '@types/node': 20.11.27
     dev: false
 
-  /@types/pluralize@0.0.29:
-    resolution: {integrity: sha512-BYOID+l2Aco2nBik+iYS4SZX0Lf20KPILP5RGmM1IgzdwNdTs0eebiFriOPcej1sX9mLnSoiNte5zcFxssgpGA==}
+  /@types/pluralize@0.0.33:
+    resolution: {integrity: sha512-JOqsl+ZoCpP4e8TDke9W79FDcSgPAR0l6pixx2JHkhnRjvShyYiAYw2LVsnA7K08Y6DeOnaU6ujmENO4os/cYg==}
     dev: true
 
   /@types/prop-types@15.7.11:
@@ -18026,9 +18026,6 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0
