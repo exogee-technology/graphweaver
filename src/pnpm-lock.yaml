@@ -1120,8 +1120,8 @@ importers:
         version: 4.17.21
     devDependencies:
       '@types/lodash':
-        specifier: 4.14.192
-        version: 4.14.192
+        specifier: 4.17.0
+        version: 4.17.0
       '@types/node':
         specifier: 20.11.27
         version: 20.11.27
@@ -1540,8 +1540,8 @@ importers:
         version: 2.0.0-beta.2(class-validator@0.14.0)(graphql@16.8.1)
     devDependencies:
       '@types/lodash':
-        specifier: 4.14.192
-        version: 4.14.192
+        specifier: 4.17.0
+        version: 4.17.0
       '@types/luxon':
         specifier: 2.0.7
         version: 2.0.7
@@ -7946,7 +7946,7 @@ packages:
   /@serverless/event-mocks@1.1.1:
     resolution: {integrity: sha512-YAV5V/y+XIOfd+HEVeXfPWZb8C6QLruFk9tBivoX2roQLWVq145s4uxf8D0QioCueuRzkukHUS4JIj+KVoS34A==}
     dependencies:
-      '@types/lodash': 4.14.192
+      '@types/lodash': 4.17.0
       lodash: 4.17.21
 
   /@serverless/platform-client@4.5.1(supports-color@8.1.1):
@@ -9382,8 +9382,8 @@ packages:
     dependencies:
       '@types/node': 20.11.27
 
-  /@types/lodash@4.14.192:
-    resolution: {integrity: sha512-km+Vyn3BYm5ytMO13k9KTp27O75rbQ0NFw+U//g+PX7VZyjCioXaRFisqSIJRECljcTv73G3i6BpglNGHgUQ5A==}
+  /@types/lodash@4.17.0:
+    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
 
   /@types/long@4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
