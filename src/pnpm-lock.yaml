@@ -1622,8 +1622,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@graphql-tools/graphql-file-loader':
-        specifier: 7.5.17
-        version: 7.5.17(graphql@16.8.1)
+        specifier: 8.0.1
+        version: 8.0.1(graphql@16.8.1)
       '@graphql-tools/load':
         specifier: 7.8.14
         version: 7.8.14(graphql@16.8.1)
@@ -5858,19 +5858,6 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-tools/graphql-file-loader@7.5.17(graphql@16.8.1):
-    resolution: {integrity: sha512-hVwwxPf41zOYgm4gdaZILCYnKB9Zap7Ys9OhY1hbwuAuC4MMNY9GpUjoTU3CQc3zUiPoYStyRtUGkHSJZ3HxBw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      '@graphql-tools/import': 6.7.18(graphql@16.8.1)
-      '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
-      globby: 11.1.0
-      graphql: 16.8.1
-      tslib: 2.6.2
-      unixify: 1.0.0
-    dev: false
-
   /@graphql-tools/graphql-file-loader@8.0.1(graphql@16.8.1):
     resolution: {integrity: sha512-7gswMqWBabTSmqbaNyWSmRRpStWlcCkBc73E6NZNlh4YNuiyKOwbvSkOUYFOqFMfEL+cFsXgAvr87Vz4XrYSbA==}
     engines: {node: '>=16.0.0'}
@@ -5901,17 +5888,6 @@ packages:
       tslib: 2.6.2
     transitivePeerDependencies:
       - supports-color
-    dev: false
-
-  /@graphql-tools/import@6.7.18(graphql@16.8.1):
-    resolution: {integrity: sha512-XQDdyZTp+FYmT7as3xRWH/x8dx0QZA2WZqfMF5EWb36a0PiH7WwlRQYIdyYXj8YCLpiWkeBXgBRHmMnwEYR8iQ==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
-      graphql: 16.8.1
-      resolve-from: 5.0.0
-      tslib: 2.6.2
     dev: false
 
   /@graphql-tools/import@7.0.1(graphql@16.8.1):

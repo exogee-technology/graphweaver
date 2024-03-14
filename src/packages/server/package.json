@@ -27,7 +27,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@graphql-tools/graphql-file-loader": "7.5.17",
+		"@graphql-tools/graphql-file-loader": "8.0.1",
 		"@graphql-tools/load": "7.8.14",
 		"@graphql-tools/schema": "8.5.1",
 		"async-mutex": "0.5.0",
