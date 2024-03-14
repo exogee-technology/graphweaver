@@ -670,8 +670,8 @@ importers:
         specifier: 18.0.9
         version: 18.0.9
       '@types/react-modal':
-        specifier: 3.13.1
-        version: 3.13.1
+        specifier: 3.16.3
+        version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 3.1.0
         version: 3.1.0(vite@4.5.2)
@@ -9424,8 +9424,8 @@ packages:
       '@types/react': 18.0.25
     dev: false
 
-  /@types/react-modal@3.13.1:
-    resolution: {integrity: sha512-iY/gPvTDIy6Z+37l+ibmrY+GTV4KQTHcCyR5FIytm182RQS69G5ps4PH2FxtC7bAQ2QRHXMevsBgck7IQruHNg==}
+  /@types/react-modal@3.16.3:
+    resolution: {integrity: sha512-xXuGavyEGaFQDgBv4UVm8/ZsG+qxeQ7f77yNrW3n+1J6XAstUy5rYHeIHPh1KzsGc6IkCIdu6lQ2xWzu1jBTLg==}
     dependencies:
       '@types/react': 18.0.25
     dev: true
