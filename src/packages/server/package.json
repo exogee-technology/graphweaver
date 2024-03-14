@@ -35,13 +35,11 @@
 		"decimal.js": "10.4.3",
 		"graphql": "16.8.1",
 		"graphql-deduplicator": "2.0.6",
-		"pluralize": "8.0.0",
 		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@escape.tech/graphql-armor-types": "0.5.0",
 		"@types/graphql-deduplicator": "2.0.0",
-		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10"
 	},

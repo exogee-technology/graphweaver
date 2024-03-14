@@ -30,14 +30,12 @@
 		"graphql": "16.8.1",
 		"lodash": "4.17.21",
 		"luxon": "2.5.2",
-		"pluralize": "8.0.0",
 		"type-graphql": "2.0.0-beta.2"
 	},
 	"devDependencies": {
 		"@types/lodash": "4.17.0",
 		"@types/luxon": "2.0.7",
 		"@types/node": "20.11.27",
-		"@types/pluralize": "0.0.29",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
 		"prettier": "2.8.8",

@@ -36,7 +36,6 @@
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "2.5.2",
 		"papaparse": "5.4.1",
-		"pluralize": "8.0.0",
 		"react-data-grid": "7.0.0-beta.20",
 		"react-hot-toast": "2.4.1"
 	},
@@ -51,7 +50,6 @@
 		"@types/graphql-deduplicator": "2.0.0",
 		"@types/luxon": "2.0.7",
 		"@types/papaparse": "5.3.14",
-		"@types/pluralize": "0.0.29",
 		"@types/react": "18.0.25",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
