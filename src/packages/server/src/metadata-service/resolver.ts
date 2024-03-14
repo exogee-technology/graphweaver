@@ -109,18 +109,22 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 								isRequired,
 							},
 						};
+
 						// Check if we have an array of related entities
 						if (field.typeOptions.array && relatedObject) {
-							const relatedEntity = relatedObject.fields.find((field) => {
-								const fieldType = field.getType() as any;
+							// Ok, it's a relationship to another object type that is an array, e.g. "to many".
+							// We'll default to one to many, then if we can find a field on the other side that points
+							// back to us and it's also an array, then it's a many to many.
+							fieldObject.relatedEntity = relatedObject.name;
+							fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
+
+							const relatedEntityField = relatedObject.fields.find((field) => {
+								const fieldType = field.getType() as { name?: string };
 								return fieldType.name === entity.target.name;
 							});
-							if (relatedEntity?.typeOptions) {
-								fieldObject.relationshipType = relatedEntity.typeOptions.array
-									? RelationshipType.MANY_TO_MANY
-									: RelationshipType.ONE_TO_MANY;
+							if (relatedEntityField?.typeOptions.array) {
+								fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
 							}
-							fieldObject.relatedEntity = relatedObject.name;
 						} else if (relatedObject) {
 							fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 						}
