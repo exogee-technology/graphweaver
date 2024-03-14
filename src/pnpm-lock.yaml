@@ -867,8 +867,8 @@ importers:
         specifier: 20.11.27
         version: 20.11.27
       '@types/otp-generator':
-        specifier: 4.0.0
-        version: 4.0.0
+        specifier: 4.0.2
+        version: 4.0.2
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -9451,8 +9451,8 @@ packages:
     dependencies:
       undici-types: 5.26.5
 
-  /@types/otp-generator@4.0.0:
-    resolution: {integrity: sha512-QsMc+jgx2WX5ciAwc4Wj37eaGYGnoQcUishOWUgpZ+8nypK6hr5jgUE3xumQ7hvX4AC+gxZktpg/dUHWa4FZRA==}
+  /@types/otp-generator@4.0.2:
+    resolution: {integrity: sha512-9+qqWzuFb332hXPbLgjUyOXlbcaTQkmkmqQjTduvNuOmPV5fW+iLv70JsVEhdUy0DWi4kY34++HDCaWl6N0AYg==}
     dev: true
 
   /@types/papaparse@5.3.14:
