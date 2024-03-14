@@ -25,7 +25,6 @@
 		"@serverless/utils": "6.8.2",
 		"@vitejs/plugin-react": "3.1.0",
 		"class-validator": "0.14.0",
-		"cross-fetch": "3.1.6",
 		"dotenv": "16.4.5",
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
