@@ -26,11 +26,11 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.7.1",
+		"@apollo/client": "3.9.7",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.8.2",
 		"clsx": "2.1.0",
-		"downshift": "8.4.0",
+		"downshift": "8.5.0",
 		"graphiql": "2.4.5",
 		"graphql": "16.8.1",
 		"graphql-deduplicator": "2.0.6",

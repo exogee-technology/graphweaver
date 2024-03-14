@@ -53,10 +53,10 @@
 		"web3-token": "1.0.6"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.37.1",
+		"@playwright/test": "1.42.1",
 		"@simplewebauthn/types": "9.0.1",
 		"@types/jest": "26.0.23",
-		"dotenv": "16.3.1",
+		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
 		"graphql-tag": "2.12.6",
 		"http-server": "14.1.1",
@@ -64,7 +64,7 @@
 		"mockdate": "3.0.5",
 		"pg": "8.11.3",
 		"serverless": "3.38.0",
-		"serverless-offline": "13.3.2",
+		"serverless-offline": "13.3.3",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.0.5",
 		"tsx": "4.7.0",

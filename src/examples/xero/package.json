@@ -22,9 +22,9 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.7.1",
+		"@apollo/client": "3.9.7",
 		"@apollo/server": "4.9.3",
-		"@as-integrations/aws-lambda": "2.0.1",
+		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
@@ -36,7 +36,7 @@
 		"@nivo/core": "0.83.0",
 		"@nivo/line": "0.83.0",
 		"@nivo/tooltip": "0.83.0",
-		"async-mutex": "0.3.1",
+		"async-mutex": "0.5.0",
 		"class-validator": "0.14.0",
 		"decimal.js": "10.4.3",
 		"graphql": "16.8.1",
@@ -46,7 +46,7 @@
 		"react-dom": "18.2.0",
 		"react-router-dom": "6.4.3",
 		"reflect-metadata": "0.2.1",
-		"uuid": "8.3.2",
+		"uuid": "9.0.1",
 		"xero-node": "4.30.0"
 	},
 	"devDependencies": {

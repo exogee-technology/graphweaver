@@ -45,6 +45,6 @@
 		"@exogee/graphweaver-helpers": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.8.1",
-		"uuid": "9.0.0"
+		"uuid": "9.0.1"
 	}
 }
