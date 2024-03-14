@@ -32,7 +32,7 @@
 		"@graphql-tools/schema": "8.5.1",
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.0",
-		"decimal.js": "10.3.1",
+		"decimal.js": "10.4.3",
 		"graphql": "16.8.1",
 		"graphql-deduplicator": "2.0.6",
 		"pluralize": "8.0.0",
