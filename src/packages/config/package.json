@@ -26,7 +26,7 @@
 		"@types/lodash": "4.17.0",
 		"@types/node": "20.11.27",
 		"esbuild": "0.15.5",
-		"prettier": "2.8.8"
+		"prettier": "3.2.5"
 	},
 	"keywords": [
 		"graphql",
