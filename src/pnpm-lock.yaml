@@ -481,8 +481,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1190,8 +1190,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -1398,8 +1398,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       node-sqlite3-wasm:
         specifier: 0.6.9
         version: 0.6.9
@@ -1457,8 +1457,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.1.5
@@ -6702,6 +6702,27 @@ packages:
       mikro-orm: 6.1.5
       reflect-metadata: 0.2.1
 
+  /@mikro-orm/knex@6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7):
+    resolution: {integrity: sha512-Nv5BMJm45kRYcelZxYJ3RAX5WjjFENc0V/Efj4D2S46Md/kWwrjIlKiDPMbC43aBcZ8+K6AbzT5zzbY0nxIkgw==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+    dependencies:
+      '@mikro-orm/core': 6.1.5
+      fs-extra: 11.2.0
+      knex: 3.1.0(pg@8.11.3)(sqlite3@5.1.7)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    dev: false
+
   /@mikro-orm/knex@6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3):
     resolution: {integrity: sha512-8DaxqSY3B+ZDwGqyfxnKrWquYulDxWdq0j4OB+7TMUpIW2hF/o4VvKiVyumORkfhbMbO0xzynwsgteh3/Gb4TQ==}
     engines: {node: '>= 18.12.0'}
@@ -6732,27 +6753,6 @@ packages:
       '@mikro-orm/core': 6.1.5
       fs-extra: 11.2.0
       knex: 3.1.0(mysql2@3.9.1)(pg@8.11.3)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/knex@6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7):
-    resolution: {integrity: sha512-8DaxqSY3B+ZDwGqyfxnKrWquYulDxWdq0j4OB+7TMUpIW2hF/o4VvKiVyumORkfhbMbO0xzynwsgteh3/Gb4TQ==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.5
-      fs-extra: 11.2.0
-      knex: 3.1.0(pg@8.11.3)(sqlite3@5.1.7)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -6806,14 +6806,14 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/sqlite@6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3):
-    resolution: {integrity: sha512-XK9Rni7iPFXyNCNbb2xRjw7TmxE/JMelbTpBO0GmQgbEiqel/hNtQTWgZx9oCSQ5bPhwR67llO4qOp4Er8vsDA==}
+  /@mikro-orm/sqlite@6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3):
+    resolution: {integrity: sha512-czHRiWBBf/kW+MGi6O1syYzm82ppPdWXVBywB7cg/+rWyW8GhTAg1af82ySQqathn244NHZ4IvW/Dk+nEgVngw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
       '@mikro-orm/core': 6.1.5
-      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
       fs-extra: 11.2.0
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
