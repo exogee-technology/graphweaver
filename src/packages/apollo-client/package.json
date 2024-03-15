@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"devDependencies": {
-		"esbuild": "0.15.5",
+		"esbuild": "0.20.2",
 		"typescript": "5.4.2"
 	},
 	"keywords": [
