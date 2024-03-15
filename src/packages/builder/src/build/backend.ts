@@ -1,8 +1,7 @@
 import path from 'path';
 import { writeFileSync } from 'fs';
 import { build } from 'esbuild';
-import rimrafCallback from 'rimraf';
-import { promisify } from 'util';
+import { rimraf } from 'rimraf';
 import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
 
 import {
@@ -13,8 +12,6 @@ import {
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
 } from '../util';
-
-const rimraf = promisify(rimrafCallback);
 
 export interface BackendBuildOptions {}
 

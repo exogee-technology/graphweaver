@@ -1,7 +1,6 @@
 import path from 'path';
-import rimrafCallback from 'rimraf';
+import { rimraf } from 'rimraf';
 import { build } from 'esbuild';
-import { promisify } from 'util';
 import dotenv from 'dotenv';
 import os from 'os';
 
@@ -19,8 +18,6 @@ import {
 import '@serverless/utils/log-reporters/node';
 
 import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
-
-const rimraf = promisify(rimrafCallback);
 
 const isWindows = () => os.platform() === 'win32';
 
