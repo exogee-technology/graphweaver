@@ -1,6 +1,6 @@
 import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import clsx from 'clsx';
-import { Field, Form, Formik, FormikHelpers, useFormikContext } from 'formik';
+import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
@@ -106,7 +106,7 @@ const DetailField = ({ field, autoFocus }: { field: EntityField; autoFocus: bool
 	);
 };
 
-const CustomField = ({
+const CustomFieldComponent = ({
 	field,
 	entity,
 	panelMode,
@@ -206,7 +206,7 @@ const DetailForm = ({
 								if ((field as CustomField).hideOnDetailForm) return null;
 
 								return (
-									<CustomField
+									<CustomFieldComponent
 										key={field.name}
 										field={field as CustomField}
 										entity={initialValues}

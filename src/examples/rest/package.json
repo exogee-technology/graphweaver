@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@types/node": "20.11.27",
 		"dotenv-cli": "7.4.1",
-		"typescript": "5.3.3"
+		"typescript": "5.4.2"
 	},
 	"keywords": [
 		"graphql",
