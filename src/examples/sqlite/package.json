@@ -29,6 +29,6 @@
 	"devDependencies": {
 		"@types/node": "20.11.27",
 		"graphweaver": "workspace:*",
-		"typescript": "5.0.2"
+		"typescript": "5.4.2"
 	}
 }
