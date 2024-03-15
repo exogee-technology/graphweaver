@@ -697,8 +697,8 @@ importers:
         specifier: workspace:*
         version: link:../apollo-client
       '@graphiql/toolkit':
-        specifier: 0.8.2
-        version: 0.8.2(graphql@16.8.1)
+        specifier: 0.9.1
+        version: 0.9.1(graphql@16.8.1)
       clsx:
         specifier: 2.1.0
         version: 2.1.0
@@ -4596,8 +4596,8 @@ packages:
       - react-is
     dev: false
 
-  /@graphiql/toolkit@0.8.2(graphql@16.8.1):
-    resolution: {integrity: sha512-FGtXBYTzcPuwfpaC+0BGeriLD6kwTdcF5xugGvjutk5J93Dgy2vw+SkBdbi1QGzz/jooETi1kEtFeDuWTzIG7Q==}
+  /@graphiql/toolkit@0.8.4(graphql@16.8.1):
+    resolution: {integrity: sha512-cFUGqh3Dau+SD3Vq9EFlZrhzYfaHKyOJveFtaCR+U5Cn/S68p7oy+vQBIdwtO6J2J58FncnwBbVRfr+IvVfZqQ==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       graphql-ws: '>= 4.5.0'
@@ -4612,8 +4612,8 @@ packages:
       - '@types/node'
     dev: false
 
-  /@graphiql/toolkit@0.8.4(graphql@16.8.1):
-    resolution: {integrity: sha512-cFUGqh3Dau+SD3Vq9EFlZrhzYfaHKyOJveFtaCR+U5Cn/S68p7oy+vQBIdwtO6J2J58FncnwBbVRfr+IvVfZqQ==}
+  /@graphiql/toolkit@0.9.1(graphql@16.8.1):
+    resolution: {integrity: sha512-LVt9pdk0830so50ZnU2Znb2rclcoWznG8r8asqAENzV0U1FM1kuY0sdPpc/rBc9MmmNgnB6A+WZzDhq6dbhTHA==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       graphql-ws: '>= 4.5.0'
