@@ -41,7 +41,8 @@
 	background: linear-gradient(90deg, var(--body-copy-color) 0%, var(--primary-color) 100%);
 	border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
 
-	animation: blobbing 2.9s ease-in-out infinite alternate,
+	animation:
+		blobbing 2.9s ease-in-out infinite alternate,
 		width-smoosh 1.6s ease-in-out infinite alternate,
 		height-smoosh 2.02s ease-in-out infinite alternate;
 }

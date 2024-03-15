@@ -257,7 +257,7 @@ yargs
 						...(codegenOptions?.watchForFileChangesInPaths
 							? codegenOptions.watchForFileChangesInPaths.map((filePath: string) =>
 									path.join(filePath, '/**')
-							  )
+								)
 							: []),
 					],
 					{

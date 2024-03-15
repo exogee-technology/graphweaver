@@ -82,46 +82,46 @@ const columnsForEntity = <T extends TableRowItem>(
 						} else {
 							return null;
 						}
-				  }
+					}
 				: field.type === 'Image'
-				? ({ row }: FormatterProps<T, unknown>) => {
-						const imageUrl = row[field.name as keyof typeof row] as string;
+					? ({ row }: FormatterProps<T, unknown>) => {
+							const imageUrl = row[field.name as keyof typeof row] as string;
 
-						return (
-							<img
-								src={imageUrl}
-								// alt={altText} @todo - implement alt text
-								style={{
-									width: '100%',
-									height: '100%',
-									objectFit: 'cover',
-									padding: 2,
-									borderRadius: 8,
-									objectPosition: 'center center',
-									textIndent: -9999,
-								}}
-								onError={hideImage}
-							/>
-						);
-				  }
-				: field.type === 'Media'
-				? ({ row }: FormatterProps<T, unknown>) => {
-						const mediaUrl = row[field.name as keyof typeof row] as string;
-						return (
-							<a href={mediaUrl} target="_blank" rel="noreferrer">
-								{mediaUrl}
-							</a>
-						);
-				  }
-				: field.isArray
-				? ({ row }: FormatterProps<T, unknown>) => {
-						const value = row[field.name as keyof typeof row];
-						if (Array.isArray(value)) {
-							return value.join(', ');
+							return (
+								<img
+									src={imageUrl}
+									// alt={altText} @todo - implement alt text
+									style={{
+										width: '100%',
+										height: '100%',
+										objectFit: 'cover',
+										padding: 2,
+										borderRadius: 8,
+										objectPosition: 'center center',
+										textIndent: -9999,
+									}}
+									onError={hideImage}
+								/>
+							);
 						}
-						return value;
-				  }
-				: undefined,
+					: field.type === 'Media'
+						? ({ row }: FormatterProps<T, unknown>) => {
+								const mediaUrl = row[field.name as keyof typeof row] as string;
+								return (
+									<a href={mediaUrl} target="_blank" rel="noreferrer">
+										{mediaUrl}
+									</a>
+								);
+							}
+						: field.isArray
+							? ({ row }: FormatterProps<T, unknown>) => {
+									const value = row[field.name as keyof typeof row];
+									if (Array.isArray(value)) {
+										return value.join(', ');
+									}
+									return value;
+								}
+							: undefined,
 		}))
 	);
 
@@ -219,7 +219,10 @@ export const Table = <T extends TableRowItem>({
 		setSortColumns(newSortColumns);
 
 		requestRefetch({
-			sortFields: newSortColumns.map((c) => ({ field: c.columnKey, direction: c.direction })),
+			sortFields: newSortColumns.map((c) => ({
+				field: c.columnKey,
+				direction: c.direction,
+			})),
 		});
 	};
 
@@ -256,7 +259,10 @@ export const Table = <T extends TableRowItem>({
 	const handleDeleteEntities = () => {
 		const ids = Array.from(selectedRows);
 
-		const result = deleteEntities({ variables: { ids }, refetchQueries: [`AdminUIListPage`] });
+		const result = deleteEntities({
+			variables: { ids },
+			refetchQueries: [`AdminUIListPage`],
+		});
 
 		setSelectedRows(new Set());
 		setShowDeleteConfirmation(false);

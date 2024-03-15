@@ -181,7 +181,7 @@ describe('Magic Link Authentication - Challenge', () => {
 					userId: user.id,
 					data: { token: MOCK_TOKEN },
 					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				} as MagicLink)
+				}) as MagicLink
 		);
 
 		const response = await graphweaver.server.executeOperation({

@@ -1,7 +1,7 @@
 import { AdminUIEntitySettings, AdminUISettingsMap, BaseDataEntity, GraphQLEntity } from '..';
 
 export function AdminUISettings<
-	G extends GraphQLEntity<BaseDataEntity> = GraphQLEntity<BaseDataEntity>
+	G extends GraphQLEntity<BaseDataEntity> = GraphQLEntity<BaseDataEntity>,
 >(props?: AdminUIEntitySettings<G>) {
 	return (target: any, propertyKey?: string | symbol) => {
 		const entityName = target.name || target.constructor.name;

@@ -17,4 +17,5 @@ EVENTBRITE_ORG_ID=
 pnpm graphweaver start
 
 ```
+
 Once started, connect to `http://localhost:9000/` to access the Graphweaver dashboard.

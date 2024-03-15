@@ -10,15 +10,13 @@ describe('basic create', () => {
 
 	test('should create an album', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
-			.mutate(
-				gql`
-					mutation CreateAlbum($data: AlbumInsertInput!) {
-						createAlbum(data: $data) {
-							id
-						}
+			.mutate(gql`
+				mutation CreateAlbum($data: AlbumInsertInput!) {
+					createAlbum(data: $data) {
+						id
 					}
-				`
-			)
+				}
+			`)
 			.variables({ data: { artist: { id: 1 }, title: 'string' } })
 			.expectNoErrors();
 

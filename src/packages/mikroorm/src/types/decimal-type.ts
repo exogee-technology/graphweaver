@@ -2,7 +2,10 @@ import { EntityProperty, Platform, Type, ValidationError } from '@mikro-orm/core
 import { Decimal } from 'decimal.js';
 
 export class DecimalType extends Type {
-	constructor(private readonly precision = 12, private readonly scale = 4) {
+	constructor(
+		private readonly precision = 12,
+		private readonly scale = 4
+	) {
 		super();
 	}
 

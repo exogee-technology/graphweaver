@@ -56,7 +56,7 @@ export const updatePasswordCredential = async <D extends BaseDataEntity>({
 
 export const runAfterHooks = async <
 	D extends BaseDataEntity,
-	H extends HookParams<CredentialCreateOrUpdateInputArgs>
+	H extends HookParams<CredentialCreateOrUpdateInputArgs>,
 >(
 	hookRegister: HookRegister,
 	entities: (D | null)[],
@@ -69,7 +69,7 @@ export const runAfterHooks = async <
 			? await hookManager.runHooks(hookRegister, {
 					...hookParams,
 					entities,
-			  })
+				})
 			: { entities };
 
 	return hookEntities;

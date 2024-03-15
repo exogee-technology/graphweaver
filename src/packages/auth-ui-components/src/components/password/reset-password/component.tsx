@@ -43,7 +43,9 @@ export const ResetPassword = () => {
 			});
 
 			const redirectUrl = redirectUri ?? new URL('/');
-			navigate(`${authPath}${loginPath}?redirect_uri=${redirectUrl}`, { replace: true });
+			navigate(`${authPath}${loginPath}?redirect_uri=${redirectUrl}`, {
+				replace: true,
+			});
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));

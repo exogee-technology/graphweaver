@@ -25,7 +25,10 @@ const CONNECTION_MANAGER_ID = 'generate';
 
 export class IntrospectionError extends Error {
 	protected type: string;
-	constructor(protected title = '', message = '') {
+	constructor(
+		protected title = '',
+		message = ''
+	) {
 		super(message);
 		this.type = 'IntrospectionError';
 		this.title = title;

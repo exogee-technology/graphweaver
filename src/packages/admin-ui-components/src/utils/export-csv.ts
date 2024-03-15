@@ -12,7 +12,7 @@ export const convertObjectValueToString = <T>(source: T[]) => {
 					key,
 					value !== null && typeof value === 'object'
 						? (Array.isArray(value) && value.map((item) => getObjectValue(item)).join(', ')) ||
-						  getObjectValue(value)
+							getObjectValue(value)
 						: `${value}`,
 				])
 			)

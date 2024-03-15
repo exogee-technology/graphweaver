@@ -62,7 +62,10 @@ const isObject = (value: unknown) => {
 };
 
 export class EntityManager<T extends BaseEntity> {
-	constructor(private _entity: EntityConstructor<T>, private options: EntityManagerOptions = {}) {}
+	constructor(
+		private _entity: EntityConstructor<T>,
+		private options: EntityManagerOptions = {}
+	) {}
 
 	private assertEntityProperties(condition: unknown): asserts condition {
 		if (condition) {

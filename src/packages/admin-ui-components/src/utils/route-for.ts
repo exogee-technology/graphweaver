@@ -76,10 +76,16 @@ export const encodeSearchParams = (searchParams: SearchParams) => {
 	let encoded: EncodedParams = {};
 
 	if (sort && sort.length > 0) {
-		encoded = { ...encoded, sort: encodeURIComponent(btoa(JSON.stringify(sort))) };
+		encoded = {
+			...encoded,
+			sort: encodeURIComponent(btoa(JSON.stringify(sort))),
+		};
 	}
 	if (filters && Object.keys(filters).length > 0) {
-		encoded = { ...encoded, filters: encodeURIComponent(btoa(JSON.stringify(filters))) };
+		encoded = {
+			...encoded,
+			filters: encodeURIComponent(btoa(JSON.stringify(filters))),
+		};
 	}
 	if (page) {
 		encoded = { ...encoded, page };

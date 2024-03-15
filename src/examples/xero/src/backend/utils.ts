@@ -75,26 +75,26 @@ export const inMemoryFilterFor = (filter: Record<string, any>) => (item: Record<
 					return isNumeric(value) && isNumeric(filterValue)
 						? +value > +filterValue
 						: isDate(value) && isDate(filterValue)
-						? new Date(value).valueOf() > new Date(filterValue).valueOf()
-						: (value as string).localeCompare(filterValue as string) > 0;
+							? new Date(value).valueOf() > new Date(filterValue).valueOf()
+							: (value as string).localeCompare(filterValue as string) > 0;
 				case 'gte':
 					return isNumeric(value) && isNumeric(filterValue)
 						? +value >= +filterValue
 						: isDate(value) && isDate(filterValue)
-						? new Date(value).valueOf() >= new Date(filterValue).valueOf()
-						: (value as string).localeCompare(filterValue as string) >= 0;
+							? new Date(value).valueOf() >= new Date(filterValue).valueOf()
+							: (value as string).localeCompare(filterValue as string) >= 0;
 				case 'lt':
 					return isNumeric(value) && isNumeric(filterValue)
 						? +value < +filterValue
 						: isDate(value) && isDate(filterValue)
-						? new Date(value).valueOf() < new Date(filterValue).valueOf()
-						: (value as string).localeCompare(filterValue as string) < 0;
+							? new Date(value).valueOf() < new Date(filterValue).valueOf()
+							: (value as string).localeCompare(filterValue as string) < 0;
 				case 'lte':
 					return isNumeric(value) && isNumeric(filterValue)
 						? +value <= +filterValue
 						: isDate(value) && isDate(filterValue)
-						? new Date(value).valueOf() <= new Date(filterValue).valueOf()
-						: (value as string).localeCompare(filterValue as string) <= 0;
+							? new Date(value).valueOf() <= new Date(filterValue).valueOf()
+							: (value as string).localeCompare(filterValue as string) <= 0;
 				default:
 					throw new Error(`Filter ${filterKey} not yet implemented.`);
 			}

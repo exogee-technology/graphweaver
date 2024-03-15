@@ -357,7 +357,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				? await hookManager.runHooks(hookRegister, {
 						...hookParams,
 						entities,
-				  })
+					})
 				: { entities };
 
 			return hookEntities;

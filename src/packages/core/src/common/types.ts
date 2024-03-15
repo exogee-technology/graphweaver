@@ -41,8 +41,8 @@ export type FilterWithOperators<G> = {
 	[K in keyof G as K extends 'id'
 		? `${K & string}_${IdOperator}`
 		: G[K] extends string
-		? `${K & string}_${StringOperator}`
-		: `${K & string}_${OtherOperator}`]?: FilterValue<G[K]>;
+			? `${K & string}_${StringOperator}`
+			: `${K & string}_${OtherOperator}`]?: FilterValue<G[K]>;
 };
 
 export type FilterValue<T> = T | T[];
@@ -51,8 +51,8 @@ export type FilterEntity<G> = {
 	[K in keyof G]?: G[K] extends (...args: any[]) => Promise<infer C>
 		? Filter<C> // Functions remains the same
 		: G[K] extends Promise<infer C>
-		? Filter<C> // Promises remains the same
-		: Partial<G[K]>; // Other types
+			? Filter<C> // Promises remains the same
+			: Partial<G[K]>; // Other types
 };
 
 export type FilterTopLevelProperties<G> = {

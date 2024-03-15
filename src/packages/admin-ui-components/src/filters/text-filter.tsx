@@ -24,9 +24,9 @@ export const TextFilter = ({
 	) as string[] | undefined;
 	const { entityByName } = useSchema();
 
-	const [getData, { loading, error, data }] = useLazyQuery<{ result: Record<string, string>[] }>(
-		queryForFilterText(entity, fieldName, entityByName)
-	);
+	const [getData, { loading, error, data }] = useLazyQuery<{
+		result: Record<string, string>[];
+	}>(queryForFilterText(entity, fieldName, entityByName));
 
 	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 

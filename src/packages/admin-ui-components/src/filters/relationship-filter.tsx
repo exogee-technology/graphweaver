@@ -45,20 +45,19 @@ export const RelationshipFilter = ({
 		);
 	};
 
-	const [getRelationship, { data, loading, error }] = useLazyQuery<{ result: any[] }>(
-		getRelationshipQuery(relatedEntity.plural, relatedEntity.summaryField),
-		{
-			variables: {
-				...(relatedEntity.summaryField
-					? {
-							pagination: {
-								orderBy: { [relatedEntity.summaryField]: 'ASC' },
-							},
-					  }
-					: {}),
-			},
-		}
-	);
+	const [getRelationship, { data, loading, error }] = useLazyQuery<{
+		result: any[];
+	}>(getRelationshipQuery(relatedEntity.plural, relatedEntity.summaryField), {
+		variables: {
+			...(relatedEntity.summaryField
+				? {
+						pagination: {
+							orderBy: { [relatedEntity.summaryField]: 'ASC' },
+						},
+					}
+				: {}),
+		},
+	});
 
 	const handleOnOpen = () => {
 		if (!data && !loading && !error) {
@@ -80,7 +79,7 @@ export const RelationshipFilter = ({
 					? initialValue.id_in.map((id) => ({
 							value: id,
 							label: id,
-					  }))
+						}))
 					: []
 			}
 			placeholder={fieldName}

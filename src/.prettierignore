@@ -5,5 +5,7 @@
 **/dist/**
 **/.graphweaver/**
 .eslintrc.js
-packages/cli/bin/index.js
-packages/create-graphweaver/bin/index.js
+*.generated.ts
+pnpm-lock.yaml
+pnpm-workspace.yaml
+examples/**/src/frontend/types.ts

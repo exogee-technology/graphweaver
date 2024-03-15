@@ -117,9 +117,8 @@ const assertAccessControlValueNotEmpty = async <G, TContext extends Authorizatio
 
 		// Let's resolve the filter functions and check if any of them return false or undefined
 		const filterFunctions = acv.map(async (value) => value(authContext as TContext));
-		const resolvedFilterFunctions = await Promise.allSettled<Promise<boolean | Filter<G>>>(
-			filterFunctions
-		);
+		const resolvedFilterFunctions =
+			await Promise.allSettled<Promise<boolean | Filter<G>>>(filterFunctions);
 
 		// Filter rejections and log them
 		resolvedFilterFunctions
@@ -152,7 +151,7 @@ export const assertObjectLevelPermissions = async <G, TContext extends Authoriza
 
 export async function checkEntityPermission<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
-	D extends BaseDataEntity
+	D extends BaseDataEntity,
 >(entityName: string, id: string | number, accessType: AccessType) {
 	const acl = getACL(entityName);
 	const accessControlEntry = buildAccessControlEntryForUser(
@@ -204,7 +203,7 @@ export async function checkEntityPermission<
 
 export async function checkAuthorization<
 	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
-	D extends BaseDataEntity
+	D extends BaseDataEntity,
 >(
 	entityName: string,
 	id: string | number,

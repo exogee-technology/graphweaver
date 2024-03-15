@@ -19,7 +19,10 @@ export interface RestDataAccessor<T> {
 
 export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provider<D, G> {
 	public readonly backendId = 'rest-api';
-	public constructor(protected entityTypeName: string, protected accessor?: RestDataAccessor<D>) {}
+	public constructor(
+		protected entityTypeName: string,
+		protected accessor?: RestDataAccessor<D>
+	) {}
 
 	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
