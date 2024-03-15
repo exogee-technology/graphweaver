@@ -649,8 +649,8 @@ importers:
         version: 6.4.3(react-dom@18.2.0)(react@18.2.0)
     devDependencies:
       '@chialab/esbuild-plugin-html':
-        specifier: 0.17.2
-        version: 0.17.2
+        specifier: 0.18.2
+        version: 0.18.2
       '@types/react':
         specifier: 18.0.25
         version: 18.0.25
@@ -4121,32 +4121,36 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@chialab/esbuild-plugin-html@0.17.2:
-    resolution: {integrity: sha512-IoPRjmiLzoOzJBCJ5sFR5fEjYfQ6EMwuWL1VhZrw1IyDCK34zIqOwmkKk49Tw84VHGkPy/+RUsu8nNP1Ax6liQ==}
-    engines: {node: '>=13'}
+  /@chialab/esbuild-plugin-html@0.18.2:
+    resolution: {integrity: sha512-8dBqIZIL1tkLYyMko+HY8b80QoDOIGlydbIQO8ALLv4e59UO0MGQjFG3RCD0V5sMbpjeNrJ3MCKz29wGL16Wrg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      htmlnano: ^2.0.0
+    peerDependenciesMeta:
+      htmlnano:
+        optional: true
     dependencies:
-      '@chialab/esbuild-rna': 0.17.8
-      '@chialab/node-resolve': 0.17.1
+      '@chialab/esbuild-rna': 0.18.2
     dev: true
 
-  /@chialab/esbuild-rna@0.17.8:
-    resolution: {integrity: sha512-hovU4W5zlyMnbJjexdczpQ9mcUfFsJuv9FWUhzpXiQwPprlp5lul+frTed9s8AyVDTDq2yq3Gx2Ac411QsXYGA==}
-    engines: {node: '>=13'}
+  /@chialab/esbuild-rna@0.18.2:
+    resolution: {integrity: sha512-ckzskez7bxstVQ4c5cxbx0DRP2teldzrcSGQl2KPh1VJGdO2ZmRrb6vNkBBD5K3dx9tgTyvskWp4dV+Fbg07Ag==}
+    engines: {node: '>=18'}
     dependencies:
-      '@chialab/estransform': 0.17.5
-      '@chialab/node-resolve': 0.17.1
+      '@chialab/estransform': 0.18.1
+      '@chialab/node-resolve': 0.18.0
     dev: true
 
-  /@chialab/estransform@0.17.5:
-    resolution: {integrity: sha512-maJUFkwk0ie0L4VvDO74NDYyRvaTQAI0qmSmrms8bZxUkZ+zQZd1ByWKDCYTRwtR6AOzTvgEOl2ZvEG+OUKv/A==}
-    engines: {node: '>=13'}
+  /@chialab/estransform@0.18.1:
+    resolution: {integrity: sha512-W/WmjpQL2hndD0/XfR0FcPBAUj+aLNeoAVehOjV/Q9bSnioz0GVSAXXhzp59S33ZynxJBBfn8DNiMTVNJmk4Aw==}
+    engines: {node: '>=18'}
     dependencies:
       '@parcel/source-map': 2.1.1
     dev: true
 
-  /@chialab/node-resolve@0.17.1:
-    resolution: {integrity: sha512-YWaK0MKKeB0FILI6j7qiAlGoSC9MqJZDFXzlAgfOaMCbn8Feqh6njxv7mI3oVkdi7QwV6zPRaTN6hKig/NriMA==}
-    engines: {node: '>=13'}
+  /@chialab/node-resolve@0.18.0:
+    resolution: {integrity: sha512-eV1m70Qn9pLY9xwFmZ2FlcOzwiaUywsJ7NB/ud8VB7DouvCQtIHkQ3Om7uPX0ojXGEG1LCyO96kZkvbNTxNu0Q==}
+    engines: {node: '>=18'}
     dev: true
 
   /@codemirror/language@6.0.0:
