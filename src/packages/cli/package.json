@@ -26,7 +26,7 @@
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"@graphql-tools/utils": "10.0.12",
+		"@graphql-tools/utils": "10.1.2",
 		"chokidar": "3.6.0",
 		"esbuild": "0.15.5",
 		"inquirer": "9.2.1",
