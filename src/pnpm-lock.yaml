@@ -82,8 +82,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5
       '@mikro-orm/mysql':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -149,8 +149,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5
       '@mikro-orm/mysql':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
@@ -371,8 +371,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5
       '@mikro-orm/mysql':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -1451,8 +1451,8 @@ importers:
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/mysql':
-        specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
+        specifier: 6.1.10
+        version: 6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
@@ -6713,15 +6713,15 @@ packages:
       mikro-orm: 6.1.5
       reflect-metadata: 0.2.1
 
-  /@mikro-orm/knex@6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3):
-    resolution: {integrity: sha512-8DaxqSY3B+ZDwGqyfxnKrWquYulDxWdq0j4OB+7TMUpIW2hF/o4VvKiVyumORkfhbMbO0xzynwsgteh3/Gb4TQ==}
+  /@mikro-orm/knex@6.1.10(@mikro-orm/core@6.1.5)(mysql2@3.9.2)(pg@8.11.3):
+    resolution: {integrity: sha512-Nv5BMJm45kRYcelZxYJ3RAX5WjjFENc0V/Efj4D2S46Md/kWwrjIlKiDPMbC43aBcZ8+K6AbzT5zzbY0nxIkgw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
       '@mikro-orm/core': 6.1.5
       fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.6.2)(pg@8.11.3)
+      knex: 3.1.0(mysql2@3.9.2)(pg@8.11.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -6734,7 +6734,7 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/knex@6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.9.1)(pg@8.11.3):
+  /@mikro-orm/knex@6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3):
     resolution: {integrity: sha512-8DaxqSY3B+ZDwGqyfxnKrWquYulDxWdq0j4OB+7TMUpIW2hF/o4VvKiVyumORkfhbMbO0xzynwsgteh3/Gb4TQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
@@ -6742,7 +6742,7 @@ packages:
     dependencies:
       '@mikro-orm/core': 6.1.5
       fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.9.1)(pg@8.11.3)
+      knex: 3.1.0(mysql2@3.6.2)(pg@8.11.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -6776,15 +6776,15 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/mysql@6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3):
-    resolution: {integrity: sha512-LWpRWJn3CObRINo0BlWmiVNIh5cvagPIp269YaFYmI3JSLKDkf+p1QXWKK0UGQ8kYcsX+/uSMf0Az5UyhHEGWQ==}
+  /@mikro-orm/mysql@6.1.10(@mikro-orm/core@6.1.5)(pg@8.11.3):
+    resolution: {integrity: sha512-jh9HOFEaER5yjD5FoLu+7qDf7Io+Wxu6CLZrppN9Rj5oaMz7O6u9ezWjZULoA930y9dsRtF09dVLkaaGTeaHjQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
       '@mikro-orm/core': 6.1.5
-      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.9.1)(pg@8.11.3)
-      mysql2: 3.9.1
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.5)(mysql2@3.9.2)(pg@8.11.3)
+      mysql2: 3.9.2
     transitivePeerDependencies:
       - better-sqlite3
       - mysql
@@ -14856,7 +14856,7 @@ packages:
       - supports-color
     dev: false
 
-  /knex@3.1.0(mysql2@3.9.1)(pg@8.11.3):
+  /knex@3.1.0(mysql2@3.9.2)(pg@8.11.3):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
     engines: {node: '>=16'}
     hasBin: true
@@ -14893,7 +14893,7 @@ packages:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.9.1
+      mysql2: 3.9.2
       pg: 8.11.3
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
@@ -15723,8 +15723,8 @@ packages:
       sqlstring: 2.3.3
     dev: false
 
-  /mysql2@3.9.1:
-    resolution: {integrity: sha512-3njoWAAhGBYy0tWBabqUQcLtczZUxrmmtc2vszQUekg3kTJyZ5/IeLC3Fo04u6y6Iy5Sba7pIIa2P/gs8D3ZeQ==}
+  /mysql2@3.9.2:
+    resolution: {integrity: sha512-3Cwg/UuRkAv/wm6RhtPE5L7JlPB877vwSF6gfLAS68H+zhH+u5oa3AieqEd0D0/kC3W7qIhYbH419f7O9i/5nw==}
     engines: {node: '>= 8.0'}
     dependencies:
       denque: 2.1.0
