@@ -43,7 +43,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "20.11.27",
-		"@types/rimraf": "3.0.2",
+		"@types/rimraf": "4.0.5",
 		"prettier": "3.2.5"
 	},
 	"keywords": [
