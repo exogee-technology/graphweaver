@@ -1003,8 +1003,8 @@ importers:
         specifier: 3.38.0
         version: 3.38.0(@aws-sdk/credential-provider-node@3.533.0)
       serverless-dotenv-plugin:
-        specifier: 4.0.2
-        version: 4.0.2(serverless@3.38.0)
+        specifier: 6.0.0
+        version: 6.0.0(serverless@3.38.0)
       serverless-offline:
         specifier: 13.3.3
         version: 13.3.3(serverless@3.38.0)
@@ -11681,11 +11681,6 @@ packages:
     resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
     engines: {node: '>=12'}
 
-  /dotenv-expand@8.0.3:
-    resolution: {integrity: sha512-SErOMvge0ZUyWd5B0NXMQlDkN+8r+HhVUsxgOO7IoPDOdDRD2JjExpN6y3KnFR66jsJMwSn1pqIivhU5rcJiNg==}
-    engines: {node: '>=12'}
-    dev: false
-
   /dotenv@16.4.4:
     resolution: {integrity: sha512-XvPXc8XAQThSjAbY6cQ/9PcBXmFoWuw1sQ3b8HqUCR6ziGXjkTi//kB9SWa2UwqlgdAIuRqAa/9hVljzPehbYg==}
     engines: {node: '>=12'}
@@ -17508,14 +17503,14 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-dotenv-plugin@4.0.2(serverless@3.38.0):
-    resolution: {integrity: sha512-MOXsSSuJPMAiNp7bVvvCC+ahmEMMohlaPpaVU2w4wFgMVSvs+BU7xIwQGv/7TTMNdjYVS/W2JoS5ZSkCdjHzCg==}
+  /serverless-dotenv-plugin@6.0.0(serverless@3.38.0):
+    resolution: {integrity: sha512-8tLVNwHfDO0sBz6+m+DLTZquRk0AZq9rzqk3kphm1iIWKfan9R7RKt4hdq3eQ0kmDoqzudjPYBEXAJ5bUNKeGQ==}
     peerDependencies:
       serverless: 1 || 2 || pre-3 || 3
     dependencies:
       chalk: 4.1.2
       dotenv: 16.4.5
-      dotenv-expand: 8.0.3
+      dotenv-expand: 10.0.0
       serverless: 3.38.0(@aws-sdk/credential-provider-node@3.533.0)
     dev: false
 
