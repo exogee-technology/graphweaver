@@ -436,7 +436,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -479,7 +479,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -603,8 +603,8 @@ importers:
         specifier: 10.4.0
         version: 10.4.0(@types/node@20.11.27)(typescript@5.3.3)
       tsc-watch:
-        specifier: 4.2.9
-        version: 4.2.9(typescript@5.3.3)
+        specifier: 6.0.4
+        version: 6.0.4(typescript@5.3.3)
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -867,8 +867,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0(typescript@5.3.3)
       tsc-watch:
-        specifier: 4.2.9
-        version: 4.2.9(typescript@5.3.3)
+        specifier: 6.0.4
+        version: 6.0.4(typescript@5.3.3)
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -1188,7 +1188,7 @@ importers:
         version: 6.1.5
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1396,7 +1396,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1449,13 +1449,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.5
-        version: 6.1.5(@mikro-orm/core@6.1.5)
+        version: 6.1.5(@mikro-orm/core@6.1.5)(mysql2@3.6.2)
       '@mikro-orm/sqlite':
         specifier: 6.1.5
         version: 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)
@@ -1537,8 +1537,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0(typescript@5.3.3)
       tsc-watch:
-        specifier: 4.2.9
-        version: 4.2.9(typescript@5.3.3)
+        specifier: 6.0.4
+        version: 6.0.4(typescript@5.3.3)
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -6787,28 +6787,6 @@ packages:
       - better-sqlite3
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.1.5(@mikro-orm/core@6.1.5):
-    resolution: {integrity: sha512-LkTbT9ys06hRV/ZxClEZKcMvtvl9ciqhMOe5XCe71AR+7DveOELKNr59c1s0l2Co6LtYwOw88NPxfTzu92654w==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.5
-      '@mikro-orm/knex': 6.1.5(@mikro-orm/core@6.1.5)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -18045,9 +18023,6 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0
@@ -18144,8 +18119,8 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: false
 
-  /string-argv@0.1.2:
-    resolution: {integrity: sha512-mBqPGEOMNJKXRo7z0keX0wlAhbBAjilUdPW13nN0PecVryZxdHIeM7TqbsSUA7VYuS00HGC6mojP7DlQzfa9ZA==}
+  /string-argv@0.3.2:
+    resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
     dev: true
 
@@ -18710,9 +18685,9 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /tsc-watch@4.2.9(typescript@5.3.3):
-    resolution: {integrity: sha512-DlTaoDs74+KUpyWr7dCGhuscAUKCz6CiFduBN7R9RbLJSSN1moWdwoCLASE7+zLgGvV5AwXfYDiEMAsPGaO+Vw==}
-    engines: {node: '>=8.17.0'}
+  /tsc-watch@6.0.4(typescript@5.3.3):
+    resolution: {integrity: sha512-cHvbvhjO86w2aGlaHgSCeQRl+Aqw6X6XN4sQMPZKF88GoP30O+oTuh5lRIJr5pgFWrRpF1AgXnJJ2DoFEIPHyg==}
+    engines: {node: '>=12.12.0'}
     hasBin: true
     peerDependencies:
       typescript: '*'
@@ -18720,8 +18695,7 @@ packages:
       cross-spawn: 7.0.3
       node-cleanup: 2.1.2
       ps-tree: 1.2.0
-      string-argv: 0.1.2
-      strip-ansi: 6.0.1
+      string-argv: 0.3.2
       typescript: 5.3.3
     dev: true
 
