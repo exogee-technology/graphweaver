@@ -53,7 +53,7 @@
 		"@types/node": "20.11.27",
 		"esbuild": "0.15.5",
 		"prettier": "3.2.5",
-		"ts-node": "10.4.0",
+		"ts-node": "10.9.2",
 		"tsc-watch": "6.0.4",
 		"typescript": "5.4.2",
 		"vite": "4.5.2"

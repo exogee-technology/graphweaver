@@ -41,7 +41,7 @@
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
-		"ts-node": "10.4.0",
+		"ts-node": "10.9.2",
 		"typescript": "5.4.2"
 	},
 	"optionalDependencies": {
