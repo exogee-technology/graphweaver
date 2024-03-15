@@ -603,8 +603,8 @@ importers:
         specifier: 10.4.0
         version: 10.4.0(@types/node@20.11.27)(typescript@5.3.3)
       tsc-watch:
-        specifier: 4.2.9
-        version: 4.2.9(typescript@5.3.3)
+        specifier: 6.0.4
+        version: 6.0.4(typescript@5.3.3)
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -867,8 +867,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0(typescript@5.3.3)
       tsc-watch:
-        specifier: 4.2.9
-        version: 4.2.9(typescript@5.3.3)
+        specifier: 6.0.4
+        version: 6.0.4(typescript@5.3.3)
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -1537,8 +1537,8 @@ importers:
         specifier: 9.0.0
         version: 9.0.0(typescript@5.3.3)
       tsc-watch:
-        specifier: 4.2.9
-        version: 4.2.9(typescript@5.3.3)
+        specifier: 6.0.4
+        version: 6.0.4(typescript@5.3.3)
       typescript:
         specifier: 5.3.3
         version: 5.3.3
@@ -17986,8 +17986,8 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: false
 
-  /string-argv@0.1.2:
-    resolution: {integrity: sha512-mBqPGEOMNJKXRo7z0keX0wlAhbBAjilUdPW13nN0PecVryZxdHIeM7TqbsSUA7VYuS00HGC6mojP7DlQzfa9ZA==}
+  /string-argv@0.3.2:
+    resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
     dev: true
 
@@ -18552,9 +18552,9 @@ packages:
       yn: 3.1.1
     dev: true
 
-  /tsc-watch@4.2.9(typescript@5.3.3):
-    resolution: {integrity: sha512-DlTaoDs74+KUpyWr7dCGhuscAUKCz6CiFduBN7R9RbLJSSN1moWdwoCLASE7+zLgGvV5AwXfYDiEMAsPGaO+Vw==}
-    engines: {node: '>=8.17.0'}
+  /tsc-watch@6.0.4(typescript@5.3.3):
+    resolution: {integrity: sha512-cHvbvhjO86w2aGlaHgSCeQRl+Aqw6X6XN4sQMPZKF88GoP30O+oTuh5lRIJr5pgFWrRpF1AgXnJJ2DoFEIPHyg==}
+    engines: {node: '>=12.12.0'}
     hasBin: true
     peerDependencies:
       typescript: '*'
@@ -18562,8 +18562,7 @@ packages:
       cross-spawn: 7.0.3
       node-cleanup: 2.1.2
       ps-tree: 1.2.0
-      string-argv: 0.1.2
-      strip-ansi: 6.0.1
+      string-argv: 0.3.2
       typescript: 5.3.3
     dev: true
 
