@@ -16,6 +16,9 @@ updates:
       timezone: Australia/Sydney
     open-pull-requests-limit: 99
     groups:
+      aws-sdk:
+        patterns:
+          - "@aws-sdk*"
       graphql-tools:
         patterns:
           - "@graphql-tools*"
