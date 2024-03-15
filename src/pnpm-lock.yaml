@@ -949,8 +949,8 @@ importers:
         specifier: workspace:*
         version: link:../config
       '@graphql-codegen/add':
-        specifier: 5.0.0
-        version: 5.0.0(graphql@16.8.1)
+        specifier: 5.0.2
+        version: 5.0.2(graphql@16.8.1)
       '@graphql-codegen/cli':
         specifier: 4.0.1
         version: 4.0.1(@types/node@20.11.27)(graphql@16.8.1)(typescript@5.3.3)
@@ -5334,14 +5334,14 @@ packages:
       tslib: 2.4.1
     dev: false
 
-  /@graphql-codegen/add@5.0.0(graphql@16.8.1):
-    resolution: {integrity: sha512-ynWDOsK2yxtFHwcJTB9shoSkUd7YXd6ZE57f0nk7W5cu/nAgxZZpEsnTPEpZB/Mjf14YRGe2uJHQ7AfElHjqUQ==}
+  /@graphql-codegen/add@5.0.2(graphql@16.8.1):
+    resolution: {integrity: sha512-ouBkSvMFUhda5VoKumo/ZvsZM9P5ZTyDsI8LW18VxSNWOjrTeLXBWHG8Gfaai0HwhflPtCYVABbriEcOmrRShQ==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
       graphql: 16.8.1
-      tslib: 2.5.3
+      tslib: 2.6.2
     dev: false
 
   /@graphql-codegen/cli@4.0.1(@types/node@20.11.27)(graphql@16.8.1)(typescript@5.3.3):
