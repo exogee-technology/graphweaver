@@ -39,7 +39,7 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "6.1.5",
+		"@mikro-orm/core": "6.1.10",
 		"@mikro-orm/postgresql": "6.1.5",
 		"@mikro-orm/sqlite": "6.1.5",
 		"class-validator": "0.14.1",

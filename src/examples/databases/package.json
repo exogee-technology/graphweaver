@@ -27,7 +27,7 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.1.5",
+		"@mikro-orm/core": "6.1.10",
 		"@mikro-orm/mysql": "6.1.5",
 		"@mikro-orm/postgresql": "6.1.5",
 		"class-validator": "0.14.1",
