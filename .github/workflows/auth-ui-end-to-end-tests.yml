@@ -49,7 +49,7 @@ jobs:
 
       - name: Build and Setup Rest Database
         working-directory: src/packages/end-to-end
-        timeout-minutes: 2
+        timeout-minutes: 4
         run: |
           pnpm import-auth
         env:
