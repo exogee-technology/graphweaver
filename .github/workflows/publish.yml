@@ -12,7 +12,7 @@ jobs:
         working-directory: src
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: chrnorm/deployment-action@v2
         name: Create GitHub deployment
