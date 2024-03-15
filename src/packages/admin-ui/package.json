@@ -23,7 +23,7 @@
 		"@apollo/client": "3.9.7",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.0",
-		"formik": "2.2.9",
+		"formik": "2.4.5",
 		"graphql": "16.8.1",
 		"prop-types": "15.8.1",
 		"react": "18.2.0",

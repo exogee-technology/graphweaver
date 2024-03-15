@@ -624,8 +624,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
+        specifier: 2.4.5
+        version: 2.4.5(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -755,8 +755,8 @@ importers:
         specifier: 1.0.1
         version: 1.0.1
       formik:
-        specifier: 2.2.9
-        version: 2.2.9(react@18.2.0)
+        specifier: 2.4.5
+        version: 2.4.5(react@18.2.0)
       glob:
         specifier: 10.3.10
         version: 10.3.10
@@ -6088,7 +6088,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       graphql: 16.8.1
-      tslib: 2.4.1
+      tslib: 2.6.2
     dev: false
 
   /@graphql-tools/utils@8.9.0(graphql@16.8.1):
@@ -9182,6 +9182,12 @@ packages:
   /@types/graphql-deduplicator@2.0.2:
     resolution: {integrity: sha512-dZ4znGxshnZ/4pePy5A20ROUJcrZziTu4FRjIoFsv7h0zdVL9U/Bgd6YPEZIHWkI4y11T/VngAyX9Q/1SxjoPw==}
     dev: true
+
+  /@types/hoist-non-react-statics@3.3.5:
+    resolution: {integrity: sha512-SbcrWzkKBw2cdwRTwQAswfpB9g9LJWfjtUeW/jvNwbhC8cpmmNYVePa+ncbUe0rGTQ7G3Ff6mYUN2VMfLVr+Sg==}
+    dependencies:
+      '@types/react': 18.0.25
+      hoist-non-react-statics: 3.3.2
 
   /@types/http-cache-semantics@4.0.4:
     resolution: {integrity: sha512-1m0bIFVc7eJWyve9S0RnuRgcQqF/Xd5QsUZAZeQFr1Q3/p9JWoQQEqmVy+DPTNpGXwhgIetAoYF8JSc33q29QA==}
@@ -12954,6 +12960,22 @@ packages:
       react-fast-compare: 2.0.4
       tiny-warning: 1.0.3
       tslib: 1.14.1
+    dev: false
+
+  /formik@2.4.5(react@18.2.0):
+    resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}
+    peerDependencies:
+      react: '>=16.8.0'
+    dependencies:
+      '@types/hoist-non-react-statics': 3.3.5
+      deepmerge: 2.2.1
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      react: 18.2.0
+      react-fast-compare: 2.0.4
+      tiny-warning: 1.0.3
+      tslib: 2.6.2
 
   /forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
