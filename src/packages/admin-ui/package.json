@@ -41,7 +41,7 @@
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-copy": "2.1.1",
-		"esbuild-plugin-svgr": "1.0.1",
+		"esbuild-plugin-svgr": "2.1.0",
 		"glob": "10.3.10",
 		"typescript": "5.4.2",
 		"vite-plugin-svgr": "3.2.0",
