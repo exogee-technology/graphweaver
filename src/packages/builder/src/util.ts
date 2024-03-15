@@ -32,7 +32,6 @@ export const baseEsbuildConfig: BuildOptions = {
 	platform: 'node',
 	target: ['node18'],
 	format: 'cjs',
-	watch: true,
 	keepNames: true,
 };
 
