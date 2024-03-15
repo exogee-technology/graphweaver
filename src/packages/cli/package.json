@@ -29,7 +29,7 @@
 		"@graphql-tools/utils": "10.1.2",
 		"chokidar": "3.6.0",
 		"esbuild": "0.15.5",
-		"inquirer": "9.2.1",
+		"inquirer": "9.2.16",
 		"node-semver": "1.0.0",
 		"ora": "5.4.1",
 		"semver": "7.6.0",
@@ -37,7 +37,7 @@
 		"yargs": "17.7.2"
 	},
 	"devDependencies": {
-		"@types/inquirer": "9.0.3",
+		"@types/inquirer": "9.0.7",
 		"@types/node": "20.11.27",
 		"@types/semver": "7.5.8",
 		"@types/validate-npm-package-name": "4.0.2",
