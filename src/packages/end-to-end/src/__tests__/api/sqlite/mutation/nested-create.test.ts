@@ -10,19 +10,17 @@ describe('nested create', () => {
 
 	test('should create an album and an artist', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
-			.mutate(
-				gql`
-					mutation CreateAlbum($data: AlbumInsertInput!) {
-						createAlbum(data: $data) {
+			.mutate(gql`
+				mutation CreateAlbum($data: AlbumInsertInput!) {
+					createAlbum(data: $data) {
+						id
+						artist {
 							id
-							artist {
-								id
-								name
-							}
+							name
 						}
 					}
-				`
-			)
+				}
+			`)
 			.variables({ data: { artist: { name: 'string' }, title: 'string' } })
 			.expectNoErrors();
 
@@ -33,19 +31,17 @@ describe('nested create', () => {
 
 	test('should create an artist and an album', async () => {
 		const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
-			.mutate(
-				gql`
-					mutation CreateArtist($data: ArtistInsertInput!) {
-						createArtist(data: $data) {
+			.mutate(gql`
+				mutation CreateArtist($data: ArtistInsertInput!) {
+					createArtist(data: $data) {
+						id
+						albums {
 							id
-							albums {
-								id
-								title
-							}
+							title
 						}
 					}
-				`
-			)
+				}
+			`)
 			.variables({ data: { albums: [{ title: 'string' }], name: 'string' } })
 			.expectNoErrors();
 
@@ -56,19 +52,17 @@ describe('nested create', () => {
 
 	test('should update an artist and create an album', async () => {
 		const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
-			.mutate(
-				gql`
-					mutation UpdateArtist($data: ArtistCreateOrUpdateInput!) {
-						updateArtist(data: $data) {
+			.mutate(gql`
+				mutation UpdateArtist($data: ArtistCreateOrUpdateInput!) {
+					updateArtist(data: $data) {
+						id
+						albums {
 							id
-							albums {
-								id
-								title
-							}
+							title
 						}
 					}
-				`
-			)
+				}
+			`)
 			.variables({ data: { albums: [{ title: 'string' }], id: '1' } })
 			.expectNoErrors();
 

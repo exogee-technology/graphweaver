@@ -7,7 +7,7 @@
 		"module": "ESNext",
 		"jsx": "react-jsx",
 		"outDir": "./lib",
-		"rootDir": "./src",
+		"rootDir": "./src"
 	},
 	"include": ["./src"],
 	"exclude": ["src/**/*.test.ts"]

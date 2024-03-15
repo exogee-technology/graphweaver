@@ -134,7 +134,7 @@ describe('One Time Password Authentication - Challenge', () => {
 					userId: user.id,
 					data: { code: MOCK_CODE },
 					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				} as OneTimePassword)
+				}) as OneTimePassword
 		);
 
 		const response = await graphweaver.server.executeOperation({

@@ -34,9 +34,9 @@ const domain = import.meta.env.VITE_ADMIN_UI_AUTH_WEB3_TOKEN_DOMAIN ?? 'graphwea
 
 const ConnectButton = () => {
 	const { activateBrowserWallet, account: walletConnected } = useEthers();
-	const [registerDevice, { loading }] = useMutation<{ result: { authToken: string } }>(
-		ENROL_WALLET_MUTATION
-	);
+	const [registerDevice, { loading }] = useMutation<{
+		result: { authToken: string };
+	}>(ENROL_WALLET_MUTATION);
 
 	const handleOnActivate = useCallback(async () => {
 		const provider = new ethers.providers.Web3Provider((window as any).ethereum, 'any');

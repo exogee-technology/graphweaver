@@ -73,7 +73,7 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 			...(file.filename === 'src/types.generated.ts'
 				? typesOutputPaths.map((outputPath: string) =>
 						fs.promises.writeFile(outputPath, file.content, 'utf8')
-				  )
+					)
 				: []),
 		]);
 

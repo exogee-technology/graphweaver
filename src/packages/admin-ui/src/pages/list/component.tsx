@@ -55,13 +55,12 @@ export const List = () => {
 		...(filters ? { filter: filters } : {}),
 	};
 
-	const { data, loading, error, fetchMore } = useQuery<{ result: TableRowItem[] }>(
-		queryForEntityPage(entity, entityByName),
-		{
-			variables: queryVariables,
-			notifyOnNetworkStatusChange: true,
-		}
-	);
+	const { data, loading, error, fetchMore } = useQuery<{
+		result: TableRowItem[];
+	}>(queryForEntityPage(entity, entityByName), {
+		variables: queryVariables,
+		notifyOnNetworkStatusChange: true,
+	});
 
 	const initialLoading = !!(!data?.result && loading);
 	const loadingNext = !!(data?.result && loading);

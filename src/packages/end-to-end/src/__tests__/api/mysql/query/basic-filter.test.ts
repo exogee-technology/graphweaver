@@ -7,20 +7,18 @@ import { config } from '../../../../config';
 describe('basic filter', () => {
 	test('should filter Albums by Artist ID = "Black Sabbath"', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
-			.query(
-				gql`
-					query Albums($filter: AlbumsListFilter) {
-						albums(filter: $filter) {
+			.query(gql`
+				query Albums($filter: AlbumsListFilter) {
+					albums(filter: $filter) {
+						id
+						title
+						artist {
 							id
-							title
-							artist {
-								id
-								name
-							}
+							name
 						}
 					}
-				`
-			)
+				}
+			`)
 			.variables({
 				filter: {
 					artist: {

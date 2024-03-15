@@ -318,12 +318,15 @@ export const DetailPanel = () => {
 		return undefined;
 	}, []);
 
-	const initialValues = formFields.reduce((acc, field) => {
-		const result = savedSessionState ?? data?.result;
-		const value = result?.[field.name as keyof typeof result];
-		acc[field.name] = value ?? field.initialValue ?? undefined;
-		return acc;
-	}, {} as Record<string, any>);
+	const initialValues = formFields.reduce(
+		(acc, field) => {
+			const result = savedSessionState ?? data?.result;
+			const value = result?.[field.name as keyof typeof result];
+			acc[field.name] = value ?? field.initialValue ?? undefined;
+			return acc;
+		},
+		{} as Record<string, any>
+	);
 
 	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
 	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
@@ -423,7 +426,7 @@ export const DetailPanel = () => {
 						{selectedEntity.summaryField
 							? `${result.data?.[entityname].id} ${
 									result.data?.[entityname]?.[selectedEntity.summaryField]
-							  }`
+								}`
 							: result.data?.[entityname].id}
 					</button>{' '}
 					has been successfully {id && panelMode === PanelMode.EDIT ? 'updated' : 'created'}.

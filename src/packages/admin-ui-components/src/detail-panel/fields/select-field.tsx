@@ -40,7 +40,7 @@ export const SelectField = ({
 					orderBy: relatedEntity?.summaryField
 						? {
 								[relatedEntity.summaryField as string]: 'ASC',
-						  }
+							}
 						: { id: 'ASC' },
 				},
 			},

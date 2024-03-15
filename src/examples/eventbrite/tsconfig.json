@@ -15,6 +15,6 @@
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/auth" },
-		{ "path": "../../packages/graphweaver-helpers"}
+		{ "path": "../../packages/graphweaver-helpers" }
 	]
 }

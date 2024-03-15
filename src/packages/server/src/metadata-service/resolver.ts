@@ -132,7 +132,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 							? undefined
 							: {
 									type: mapFilterType(fieldObject),
-							  };
+								};
 
 						return fieldObject;
 					});
@@ -160,7 +160,7 @@ export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
 				? await hooks.afterRead({ context, metadata: { entities, enums } })
 				: {
 						metadata: { entities, enums },
-				  };
+					};
 
 			return params?.metadata;
 		}

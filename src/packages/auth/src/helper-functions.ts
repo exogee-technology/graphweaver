@@ -262,7 +262,7 @@ export const checkAuthentication = async (
 	// Get existing mfa authentications in the token
 	const tokenMfaValues = Object.entries(token?.acr?.values ?? {}) as [
 		AuthenticationMethod,
-		number
+		number,
 	][];
 	// Let's get the current timestamp to check if any mfa has expired
 	const timestamp = Math.floor(Date.now() / 1000);

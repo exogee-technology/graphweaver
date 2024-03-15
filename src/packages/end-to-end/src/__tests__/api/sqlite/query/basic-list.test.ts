@@ -10,15 +10,13 @@ describe('basic query', () => {
 
 	test('should get albums', async () => {
 		const { data } = await request<{ albums: Album[] }>(config.baseUrl)
-			.query(
-				gql`
-					query {
-						albums {
-							id
-						}
+			.query(gql`
+				query {
+					albums {
+						id
 					}
-				`
-			)
+				}
+			`)
 			.expectNoErrors();
 
 		expect(data?.albums).toHaveLength(347);

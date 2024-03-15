@@ -68,7 +68,7 @@ export const addChildFiltersToRelationshipFields = () => {
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
-	D extends BaseDataEntity = G['dataEntity']
+	D extends BaseDataEntity = G['dataEntity'],
 >(
 	returnTypeFunc: ReturnTypeFunc,
 	{ relatedField, id, nullable = false }: RelationshipFieldOptions<D>
@@ -146,8 +146,8 @@ export function RelationshipField<
 			const idValue = !id
 				? undefined
 				: typeof id === 'function'
-				? id(root.dataEntity)
-				: root.dataEntity[id];
+					? id(root.dataEntity)
+					: root.dataEntity[id];
 
 			if (!idValue && !relatedField) {
 				//id is null and we are loading a single instance so lets return null
@@ -159,8 +159,8 @@ export function RelationshipField<
 			const relatedEntityFilter = filter
 				? filter
 				: idValue
-				? { id: idValue }
-				: { [relatedField as string]: { id: root.id } };
+					? { id: idValue }
+					: { [relatedField as string]: { id: root.id } };
 
 			const params: ReadHookParams<G> = {
 				args: { filter },
@@ -200,7 +200,7 @@ export function RelationshipField<
 				? await hookManager.runHooks(HookRegister.AFTER_READ, {
 						...hookParams,
 						entities,
-				  })
+					})
 				: { entities };
 
 			return idValue ? hookEntities?.[0] : hookEntities;

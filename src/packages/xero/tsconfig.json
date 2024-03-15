@@ -6,8 +6,5 @@
 		"noUnusedLocals": false
 	},
 	"include": ["./src"],
-	"references": [
-		{ "path": "../core" },
-		{ "path": "../logger" }
-	]
+	"references": [{ "path": "../core" }, { "path": "../logger" }]
 }

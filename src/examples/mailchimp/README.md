@@ -19,4 +19,5 @@ MAILCHIMP_PROJECTS_CATEGORY_ID= # The unique id for the category object in Mailc
 pnpm graphweaver start
 
 ```
+
 Once started, connect to `http://localhost:9000/` to access the Graphweaver dashboard.

@@ -9,7 +9,7 @@
 		"module": "CommonJS",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
-		"jsx": "react-jsx",
+		"jsx": "react-jsx"
 	},
 	"include": ["./src"],
 	"references": [

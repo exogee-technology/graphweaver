@@ -27,14 +27,14 @@ export const createApiKeyResolver = <G extends WithId, D extends ApiKeyStorage>(
 		provider = provider;
 
 		public async runAfterHooks<
-			H extends HookParams<ApiKeyInputArgs | ApiKeyCreateOrUpdateInputArgs>
+			H extends HookParams<ApiKeyInputArgs | ApiKeyCreateOrUpdateInputArgs>,
 		>(hookRegister: HookRegister, hookParams: H, entities: (D | null)[]): Promise<(D | null)[]> {
 			const hookManager = hookManagerMap.get('ApiKey');
 			const { entities: hookEntities = [] } = hookManager
 				? await hookManager.runHooks(hookRegister, {
 						...hookParams,
 						entities,
-				  })
+					})
 				: { entities };
 
 			return hookEntities;

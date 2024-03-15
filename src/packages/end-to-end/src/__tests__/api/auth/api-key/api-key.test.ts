@@ -78,7 +78,7 @@ const graphweaver = new Graphweaver({
 	resolvers: [TaskResolver],
 	apolloServerOptions: {
 		plugins: [
-			authApolloPlugin(async () => ({} as UserProfile), {
+			authApolloPlugin(async () => ({}) as UserProfile, {
 				apiKeyDataProvider,
 				implicitAllow: true,
 			}),
