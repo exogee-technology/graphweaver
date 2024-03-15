@@ -29,7 +29,7 @@
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/graphql-file-loader": "7.5.17",
 		"@graphql-tools/load": "7.8.14",
-		"@graphql-tools/schema": "8.5.1",
+		"@graphql-tools/schema": "10.0.3",
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.1",
 		"decimal.js": "10.4.3",
