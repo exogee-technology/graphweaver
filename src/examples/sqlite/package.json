@@ -22,7 +22,7 @@
 		"@mikro-orm/sqlite": "6.1.5",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"node-sqlite3-wasm": "0.8.11",
-		"reflect-metadata": "0.1.13",
+		"reflect-metadata": "0.2.1",
 		"type-graphql": "2.0.0-beta.2",
 		"graphql": "16.8.1"
 	},
