@@ -22,7 +22,7 @@
 		"pino": "8.19.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.27",
+		"@types/node": "20.11.28",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
 		"typescript": "5.4.2"
