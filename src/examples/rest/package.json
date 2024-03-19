@@ -41,7 +41,7 @@
 		"reflect-metadata": "0.2.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.28",
+		"@types/node": "20.11.30",
 		"dotenv-cli": "7.4.1",
 		"typescript": "5.4.2"
 	},
