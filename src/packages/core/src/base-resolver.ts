@@ -1,18 +1,4 @@
-import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
-import {
-	Arg,
-	Ctx,
-	Field,
-	getMetadataStorage,
-	ID,
-	Info,
-	InputType,
-	Int,
-	Mutation,
-	Query,
-	Resolver,
-} from 'type-graphql';
-import { TypeValue } from 'type-graphql/dist/decorators/types';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLID as ID, GraphQLInt as Int } from 'graphql';
 
 import { BaseDataEntity } from '.';
 import type {
@@ -20,7 +6,7 @@ import type {
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	Filter,
-	GraphqlEntityType,
+	GraphQLEntityType,
 	WithId,
 	OrderByOptions,
 	PaginationOptions,
@@ -28,9 +14,11 @@ import type {
 	HookParams,
 	BaseContext,
 	DeleteManyHookParams,
+	TypeValue,
 } from './common/types';
-import { Sort, TypeMap } from './common/types';
+import { Sort } from './common/types';
 import {
+	Field,
 	isExcludedFromFilterType,
 	isReadOnlyBackend,
 	isReadOnlyPropertyBackend,
@@ -38,20 +26,15 @@ import {
 import { QueryManager } from './query-manager';
 import { HookManager, HookRegister } from './hook-manager';
 import { createOrUpdateEntities, runWritableBeforeHooks } from './utils/create-or-update-entities';
-import { pluralise } from './utils/plural';
-import { EntityMetadata, graphweaverMetadata } from './metadata';
+import { graphweaverMetadata } from './metadata';
 import { CollisionsOptionsMode, checkSchemaForCollisions } from './utils/check-schema';
+import { InputType } from './decorators/input-type';
 
 const arrayOperations = new Set(['in', 'nin']);
 const supportedOrderByTypes = new Set(['ID', 'String', 'Number', 'Date', 'ISOString']);
-const cachedTypeNames: Record<any, string> = {};
 const scalarTypes = new Map<TypeValue, TypeValue>();
 
 export const hookManagerMap = new Map<string, HookManager<any>>([]);
-
-export type CreateBaseResolverOptions = {
-	plural?: string;
-};
 
 export function registerScalarType(scalarType: TypeValue, treatAsType: TypeValue) {
 	scalarTypes.set(scalarType, treatAsType);
@@ -93,49 +76,24 @@ class GetOneInputArgs extends BaseGetOneInputArgs {}
 // G = GraphQL entity
 // D = Data Entity
 export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
-	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>,
-	options: CreateBaseResolverOptions = {}
+	gqlEntityType: GraphQLEntityType<G, D>,
+	provider: BackendProvider<D, G>
 ): abstract new (
-	gqlEntityType: GraphqlEntityType<G, D>,
-	provider: BackendProvider<D, G>,
-	options: CreateBaseResolverOptions
+	gqlEntityType: GraphQLEntityType<G, D>,
+	provider: BackendProvider<D, G>
 ) => BaseResolverInterface {
-	const metadata = getMetadataStorage();
-	const objectNames = metadata.objectTypes.filter(
-		(objectType) => objectType.target === gqlEntityType
-	);
-	if (objectNames.length !== 1) {
+	const objectName = graphweaverMetadata.nameForObjectType(gqlEntityType);
+	if (!objectName) {
 		throw new Error(
-			'ObjectType name parameter was not set for GQL entity deriving from BaseEntity'
+			'Could not find name for entity type. Have you used the ObjectType decorator on this entity?'
 		);
 	}
-
+	const entityMetadata = graphweaverMetadata.getEntity(objectName);
 	const transactional = !!provider.withTransaction;
-	const entityFields = metadata.fields.filter((field) => field.target === gqlEntityType);
-	const enumSet = new Set(metadata.enums.map((enumMetadata) => enumMetadata.enumObj));
-
-	const entity: EntityMetadata<G, D> = {
-		plural: pluralise(options.plural ?? objectNames[0].name, !!options.plural),
-		provider,
-		...objectNames[0],
-		fields: entityFields,
-	};
-	graphweaverMetadata.setEntity(entity);
-
-	const determineTypeName = (inputType: any) => {
-		if (cachedTypeNames[inputType]) return cachedTypeNames[inputType];
-		const typeNamesFromMetadata = metadata.objectTypes.filter(
-			(objectType) => objectType.target === inputType
-		);
-		const result = typeNamesFromMetadata?.[0]?.name ?? inputType.name;
-		cachedTypeNames[inputType] = result;
-		return result;
-	};
 
 	// Create if  data provider supports filter
 	// Create List Filter Args:
-	@InputType(`${entity.plural}ListFilter`)
+	@InputType(`${entityMetadata.plural}ListFilter`)
 	class ListInputFilterArgs extends BaseListInputFilterArgs {
 		@Field(() => [ListInputFilterArgs], { nullable: true })
 		_and?: ListInputFilterArgs[];
@@ -146,9 +104,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		@Field(() => ListInputFilterArgs, { nullable: true })
 		_not?: ListInputFilterArgs;
 	}
-	TypeMap[`${entity.plural}ListFilter`] = ListInputFilterArgs;
 
-	for (const field of entity.fields) {
+	for (const field of entityMetadata.fields) {
 		// We can explicitly exclude a field from filtering with a decorator.
 		if (isExcludedFromFilterType(field.target, field.name)) {
 			continue;
@@ -156,7 +113,8 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 		const fieldCopy = Object.assign({}, field);
 		fieldCopy.target = ListInputFilterArgs;
-		fieldCopy.typeOptions = { nullable: true };
+		fieldCopy.nullable = true;
+
 		// We need to translate from entity fields, e.g. a course => subject needs to actually become
 		// course list filter input => subject list filter input.
 		//
@@ -164,19 +122,19 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		fieldCopy.getType = () => {
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
-			const typeName = determineTypeName(field.getType());
-
-			if (graphweaverMetadata.hasEntity(typeName)) {
-				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
-				const inputTypeName = `${pluralName}ListFilter`;
-				return TypeMap[inputTypeName] || field.getType();
+			const relatedType = field.getType();
+			const relatedTypeMetadata = graphweaverMetadata.metadataForType(relatedType);
+			if (relatedTypeMetadata?.type === 'entity') {
+				const inputTypeName = `${relatedTypeMetadata.plural}ListFilter`;
+				if (graphweaverMetadata.hasInputType(inputTypeName)) {
+					return graphweaverMetadata.getInputType(inputTypeName);
+				}
 			}
 
-			// If it is not an entity then it might be an enum or similar.
+			// If it is not an entity then it might be an enum or similar. Pass it on through.
 			return field.getType();
 		};
-
-		metadata.collectClassFieldMetadata(fieldCopy);
+		graphweaverMetadata.collectFieldInformation(fieldCopy);
 
 		// There are extra operations for certain types. We also allow
 		// users to specify an alias type in case they want a scalar of theirs
@@ -187,26 +145,19 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 		const metadataForField = (operation: string) => ({
 			name: `${field.name}_${operation}`,
-			schemaName: `${field.name}_${operation}`,
-			description: undefined,
 			target: ListInputFilterArgs,
 			getType: () => fieldType,
-			typeOptions: {
-				nullable: true,
-				array: arrayOperations.has(operation),
-				arrayDepth: arrayOperations.has(operation) ? 1 : undefined,
-			},
-			deprecationReason: undefined,
-			complexity: 1,
+			nullable: true,
+			array: arrayOperations.has(operation),
 		});
 
-		if (fieldType === ID || enumSet.has(fieldType as any)) {
+		if (fieldType === ID || graphweaverMetadata.hasEnum(fieldType)) {
 			['ne', 'in', 'nin', 'notnull', 'null'].forEach((operation) =>
-				metadata.collectClassFieldMetadata(metadataForField(operation))
+				graphweaverMetadata.collectFieldInformation(metadataForField(operation))
 			);
 		} else if (fieldType === String) {
 			['ne', 'in', 'nin', 'like', 'ilike', 'notnull', 'null'].forEach((operation) =>
-				metadata.collectClassFieldMetadata(metadataForField(operation))
+				graphweaverMetadata.collectFieldInformation(metadataForField(operation))
 			);
 		} else if (
 			fieldType === Number ||
@@ -215,19 +166,18 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		) {
 			// @todo: Add support for other scalar types (i.e 'ISOString') there is a circular dependency issue at present
 			['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null'].forEach((operation) =>
-				metadata.collectClassFieldMetadata(metadataForField(operation))
+				graphweaverMetadata.collectFieldInformation(metadataForField(operation))
 			);
 		}
 	}
 
-	@InputType(`${entity.plural}FilterInput`)
+	@InputType(`${entityMetadata.plural}FilterInput`)
 	class FilterInputArgs extends BaseFilterInputArgs<G> {
 		@Field(() => FilterInputArgs, { nullable: true })
 		filter?: Filter<G>;
 	}
-	TypeMap[`${entity.plural}FilterInput`] = FilterInputArgs;
 
-	for (const field of entity.fields) {
+	for (const field of entityMetadata.fields) {
 		// We can explicitly exclude a field from filtering with a decorator.
 		if (isExcludedFromFilterType(field.target, field.name)) {
 			continue;
@@ -235,26 +185,27 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 
 		const fieldCopy = Object.assign({}, field);
 		fieldCopy.target = FilterInputArgs;
-		fieldCopy.typeOptions = { nullable: true };
+		fieldCopy.nullable = true;
 		// We need to translate from entity fields, e.g. a course => subject needs to actually become
 		// course list filter input => subject list filter input.
 		//
 		// Do this lazily to ensure we handle circular references.
 		fieldCopy.getType = () => {
-			// Look for an associated FilterInput class, or if it doesn't exist just pass the
+			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
-			const typeName = determineTypeName(field.getType());
-
-			if (graphweaverMetadata.hasEntity(typeName)) {
-				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
-				const inputTypeName = `${pluralName}FilterInput`;
-				return TypeMap[inputTypeName] || field.getType();
+			const relatedType = field.getType();
+			const relatedTypeMetadata = graphweaverMetadata.metadataForType(relatedType);
+			if (relatedTypeMetadata?.type === 'entity') {
+				const inputTypeName = `${relatedTypeMetadata.plural}ListFilter`;
+				if (graphweaverMetadata.hasInputType(inputTypeName)) {
+					return graphweaverMetadata.getInputType(inputTypeName);
+				}
 			}
 
-			// If it is not an entity then it might be an enum or similar.
+			// If it is not an entity then it might be an enum or similar. Pass it on through.
 			return field.getType();
 		};
-		metadata.collectClassFieldMetadata(fieldCopy);
+		graphweaverMetadata.collectFieldInformation(fieldCopy);
 
 		// There are extra operations for certain types. We also allow
 		// users to specify an alias type in case they want a scalar of theirs
@@ -278,13 +229,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			complexity: 1,
 		});
 
-		if (fieldType === ID || enumSet.has(fieldType as any)) {
+		if (fieldType === ID || graphweaverMetadata.hasEnum(fieldType)) {
 			['ne', 'in', 'nin', 'notnull', 'null'].forEach((operation) =>
-				metadata.collectClassFieldMetadata(metadataForField(operation))
+				graphweaverMetadata.collectFieldInformation(metadataForField(operation))
 			);
 		} else if (fieldType === String) {
 			['ne', 'in', 'nin', 'like', 'ilike', 'notnull', 'null'].forEach((operation) =>
-				metadata.collectClassFieldMetadata(metadataForField(operation))
+				graphweaverMetadata.collectFieldInformation(metadataForField(operation))
 			);
 		} else if (
 			fieldType === Number ||
@@ -292,15 +243,15 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			(fieldType as GraphQLScalarType)?.['name'] === 'ISOString'
 		) {
 			['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null'].forEach((operation) =>
-				metadata.collectClassFieldMetadata(metadataForField(operation))
+				graphweaverMetadata.collectFieldInformation(metadataForField(operation))
 			);
 		}
 	}
 
 	// Create Pagination Input Types;
-	@InputType(`${entity.plural}OrderByInput`)
+	@InputType(`${entityMetadata.plural}OrderByInput`)
 	class OrderByInputArgs extends BaseOrderByInputArgs {}
-	@InputType(`${entity.plural}PaginationInput`)
+	@InputType(`${entityMetadata.plural}PaginationInput`)
 	class PaginationInputArgs extends BasePaginationInputArgs {
 		@Field(() => Int, { nullable: true })
 		limit?: number;
@@ -311,29 +262,31 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		@Field(() => OrderByInputArgs, { nullable: true })
 		orderBy?: OrderByOptions;
 	}
-	TypeMap[`${entity.plural}PaginationInput`] = PaginationInputArgs;
-	for (const field of entity.fields) {
+
+	for (const field of entityMetadata.fields) {
 		const fieldType = field.getType() as any;
 
 		if (
 			field.name !== 'id' &&
 			fieldType &&
 			!supportedOrderByTypes.has(fieldType.name) &&
-			!enumSet.has(fieldType as any)
+			!graphweaverMetadata.hasEnum(fieldType)
 		) {
 			continue;
 		}
 
 		const fieldCopy = Object.assign({}, field);
 		fieldCopy.target = OrderByInputArgs;
-		fieldCopy.typeOptions = { nullable: true };
+		fieldCopy.nullable = true;
 		fieldCopy.getType = () => Sort;
-		metadata.collectClassFieldMetadata(fieldCopy);
+		graphweaverMetadata.collectFieldInformation(fieldCopy);
 	}
 
 	// Generate Query Names
-	const oneQueryName = entity.name.charAt(0).toLowerCase() + entity.name.substring(1);
-	const listQueryName = entity.plural.charAt(0).toLowerCase() + entity.plural.substring(1);
+	const oneQueryName =
+		entityMetadata.name.charAt(0).toLowerCase() + entityMetadata.name.substring(1);
+	const listQueryName =
+		entityMetadata.plural.charAt(0).toLowerCase() + entityMetadata.plural.substring(1);
 
 	// Check that we have a unique set of query names
 	checkSchemaForCollisions({
@@ -352,7 +305,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			hookParams: H,
 			entities: (G | null)[]
 		): Promise<(G | null)[]> {
-			const hookManager = hookManagerMap.get(entity.name);
+			const hookManager = hookManagerMap.get(entityMetadata.name);
 			const { entities: hookEntities = [] } = hookManager
 				? await hookManager.runHooks(hookRegister, {
 						...hookParams,
@@ -373,7 +326,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<Array<G | null>> {
-			const hookManager = hookManagerMap.get(entity.name);
+			const hookManager = hookManagerMap.get(entityMetadata.name);
 			const params: ReadHookParams<G> = {
 				args: { filter, pagination },
 				info,
@@ -385,7 +338,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				: params;
 
 			const result = await QueryManager.find<D, G>({
-				entityName: entity.name,
+				entityName: entityMetadata.name,
 				filter: hookParams.args?.filter,
 				pagination: hookParams.args?.pagination,
 			});
@@ -408,7 +361,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		): Promise<G | null> {
-			const hookManager = hookManagerMap.get(entity.name);
+			const hookManager = hookManagerMap.get(entityMetadata.name);
 
 			const args = new GetOneInputArgs();
 			args.id = id;
@@ -441,13 +394,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	if (isReadOnlyBackend(gqlEntityType)) return BaseResolver;
 
 	// Generate Mutation Names
-	const createMany = `create${entity.plural}`;
-	const createOne = `create${entity.name}`;
-	const updateMany = `update${entity.plural}`;
-	const updateOne = `update${entity.name}`;
-	const createOrUpdateMany = `createOrUpdate${entity.plural}`;
-	const deleteOne = `delete${entity.name}`;
-	const deleteMany = `delete${entity.plural}`;
+	const createMany = `create${entityMetadata.plural}`;
+	const createOne = `create${entityMetadata.name}`;
+	const updateMany = `update${entityMetadata.plural}`;
+	const updateOne = `update${entityMetadata.name}`;
+	const createOrUpdateMany = `createOrUpdate${entityMetadata.plural}`;
+	const deleteOne = `delete${entityMetadata.name}`;
+	const deleteMany = `delete${entityMetadata.plural}`;
 
 	// Check that we have a unique set of mutation names
 	checkSchemaForCollisions({
@@ -464,67 +417,62 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 	});
 
 	// Create Insert Input Args:
-	@InputType(`${entity.name}InsertInput`)
+	@InputType(`${entityMetadata.name}InsertInput`)
 	class InsertInputArgs extends BaseInsertInputArgs {}
-	TypeMap[`${entity.name}InsertInput`] = InsertInputArgs;
 
-	for (const field of entity.fields) {
+	for (const field of entityMetadata.fields) {
 		if (field.name === 'id' || isReadOnlyPropertyBackend(field.target, field.name)) {
 			continue;
 		}
 		const fieldCopy = Object.assign({}, field);
 		// To ensure we get a deep copy.
-		fieldCopy.typeOptions = { ...field.typeOptions };
+		fieldCopy.nullable = field.nullable;
 		fieldCopy.target = InsertInputArgs;
 		// We need to translate from entity fields, e.g. a course => subject needs to actually become
-		// course insert input args => subject insert input args.
+		// course list filter input => subject list filter input.
 		//
 		// Do this lazily to ensure we handle circular references.
 		fieldCopy.getType = () => {
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
-			const typeName = determineTypeName(field.getType());
-
-			if (graphweaverMetadata.hasEntity(typeName)) {
-				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
-				const inputTypeName = `${pluralName}CreateOrUpdateInput`;
-				return TypeMap[inputTypeName] || field.getType();
+			const relatedType = field.getType();
+			const relatedTypeMetadata = graphweaverMetadata.metadataForType(relatedType);
+			if (relatedTypeMetadata?.type === 'entity') {
+				const inputTypeName = `${relatedTypeMetadata.plural}ListFilter`;
+				if (graphweaverMetadata.hasInputType(inputTypeName)) {
+					return graphweaverMetadata.getInputType(inputTypeName);
+				}
 			}
 
-			// If it is not an entity then it might be an enum or similar.
+			// If it is not an entity then it might be an enum or similar. Pass it on through.
 			return field.getType();
 		};
 
 		if (field.getType() !== String && field.getType() !== Number) {
-			fieldCopy.typeOptions.nullable = true;
+			fieldCopy.nullable = true;
 		}
 
-		metadata.collectClassFieldMetadata(fieldCopy);
+		graphweaverMetadata.collectFieldInformation(fieldCopy);
 	}
 
 	// Create Insert Many Input Args:
-	@InputType(`${entity.plural}InsertManyInput`)
+	@InputType(`${entityMetadata.plural}InsertManyInput`)
 	class InsertManyInputArgs extends BaseInsertManyInputArgs {
 		@Field(() => [InsertInputArgs])
 		data?: InsertInputArgs[];
 	}
-	TypeMap[`${entity.plural}InsertManyInput`] = InsertManyInputArgs;
 
 	// Create Update Input Args:
-	@InputType(`${entity.name}CreateOrUpdateInput`)
+	@InputType(`${entityMetadata.name}CreateOrUpdateInput`)
 	class UpdateInputArgs extends BaseUpdateInputArgs {}
-	TypeMap[`${entity.plural}CreateOrUpdateInput`] = UpdateInputArgs;
 
-	for (const field of entity.fields) {
+	for (const field of entityMetadata.fields) {
 		if (isReadOnlyPropertyBackend(field.target, field.name)) continue;
 
 		const fieldCopy = Object.assign({}, field);
 		fieldCopy.target = UpdateInputArgs;
 		// All fields except ID are nullable in this type.
-		fieldCopy.typeOptions = {
-			...field.typeOptions,
-			nullable: true, // all fields optional to support nested create/update scenarios. Previously checked whether field.name !== 'id'
-		};
+		fieldCopy.nullable = true;
 
 		// We need to translate from entity fields, e.g. a course => subject needs to actually become
 		// course update input args => subject update input args.
@@ -533,42 +481,43 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		fieldCopy.getType = () => {
 			// Look for an associated ListFilter class, or if it doesn't exist just pass the
 			// original type, as we can also setup input args as the entities themselves.
-			const typeName = determineTypeName(field.getType());
-
-			if (graphweaverMetadata.hasEntity(typeName)) {
-				const pluralName = graphweaverMetadata.getEntity(typeName).plural;
-				const inputTypeName = `${pluralName}CreateOrUpdateInput`;
-				return TypeMap[inputTypeName] || field.getType();
+			const relatedType = field.getType();
+			const relatedTypeMetadata = graphweaverMetadata.metadataForType(relatedType);
+			if (relatedTypeMetadata?.type === 'entity') {
+				const inputTypeName = `${relatedTypeMetadata.plural}ListFilter`;
+				if (graphweaverMetadata.hasInputType(inputTypeName)) {
+					return graphweaverMetadata.getInputType(inputTypeName);
+				}
 			}
 
+			// If it is not an entity then it might be an enum or similar. Pass it on through.
 			return field.getType();
 		};
-		metadata.collectClassFieldMetadata(fieldCopy);
+
+		graphweaverMetadata.collectFieldInformation(fieldCopy);
 	}
 
 	// Create Update Many Input Args:
-	@InputType(`${entity.plural}UpdateManyInput`)
+	@InputType(`${entityMetadata.plural}UpdateManyInput`)
 	class UpdateManyInputArgs extends BaseUpdateManyInputArgs {
 		@Field(() => [UpdateInputArgs])
 		data?: UpdateInputArgs[];
 	}
-	TypeMap[`${entity.plural}UpdateManyInput`] = UpdateManyInputArgs;
 
 	// Create or Update Many Input Args:
-	@InputType(`${entity.plural}CreateOrUpdateManyInput`)
+	@InputType(`${entityMetadata.plural}CreateOrUpdateManyInput`)
 	class CreateOrUpdateManyInputArgs extends BaseCreateOrUpdateManyInputArgs {
 		@Field(() => [UpdateInputArgs, InsertInputArgs])
 		data?: UpdateInputArgs | InsertInputArgs[];
 	}
-	TypeMap[`${entity.plural}CreateOrUpdateManyInput`] = CreateOrUpdateManyInputArgs;
 
-	@InputType(`${entity.name}DeleteInput`)
+	@InputType(`${entityMetadata.name}DeleteInput`)
 	class DeleteInputArgs extends BaseDeleteInputArgs {
 		@Field(() => ID)
 		id!: string;
 	}
 
-	@InputType(`${entity.name}DeleteManyInput`)
+	@InputType(`${entityMetadata.name}DeleteManyInput`)
 	class DeleteManyInputArgs extends FilterInputArgs {}
 
 	@Resolver()
@@ -589,7 +538,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					entity.name
+					entityMetadata.name
 				);
 				const { items } = params.args;
 				const entities = (await createOrUpdateEntities(
@@ -603,7 +552,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Create
-		@Mutation((returns) => gqlEntityType, { name: createOne })
+		@Mutation(() => gqlEntityType, { name: createOne })
 		async createItem(
 			@Arg('data', () => InsertInputArgs) createItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
@@ -618,7 +567,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					entity.name
+					entityMetadata.name
 				);
 				const [item] = params.args.items;
 
@@ -644,7 +593,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					entity.name
+					entityMetadata.name
 				);
 				const { items } = params.args;
 
@@ -663,7 +612,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// CreateOrUpdate many items in a transaction
-		@Mutation((returns) => [gqlEntityType], { name: createOrUpdateMany })
+		@Mutation(() => [gqlEntityType], { name: createOrUpdateMany })
 		async createOrUpdateMany(
 			@Arg('input', () => CreateOrUpdateManyInputArgs) items: { data: Partial<G>[] },
 			@Info() info: GraphQLResolveInfo,
@@ -671,7 +620,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		): Promise<Array<G | null>> {
 			return this.withTransaction<Array<G | null>>(async () => {
 				// Extracted common properties
-				const hookManager = hookManagerMap.get(entity.name);
+				const hookManager = hookManagerMap.get(entityMetadata.name);
 				const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
 					info,
 					context,
@@ -750,7 +699,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Update
-		@Mutation((returns) => gqlEntityType, { name: updateOne })
+		@Mutation(() => gqlEntityType, { name: updateOne })
 		async update(
 			@Arg('data', () => UpdateInputArgs) updateItemData: Partial<G>,
 			@Info() info: GraphQLResolveInfo,
@@ -765,7 +714,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 						context,
 						transactional,
 					},
-					entity.name
+					entityMetadata.name
 				);
 				const [item] = params.args.items;
 
@@ -778,13 +727,13 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Delete
-		@Mutation((returns) => Boolean, { name: deleteOne })
+		@Mutation(() => Boolean, { name: deleteOne })
 		async deleteItem(
 			@Arg('filter', () => DeleteInputArgs) filter: Filter<G>,
 			@Info() info: GraphQLResolveInfo,
 			@Ctx() context: BaseContext
 		) {
-			const hookManager = hookManagerMap.get(entity.name);
+			const hookManager = hookManagerMap.get(entityMetadata.name);
 			const params: DeleteHookParams<G> = {
 				args: { filter },
 				info,
@@ -810,7 +759,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 		}
 
 		// Delete many items in a transaction
-		@Mutation((returns) => Boolean, { name: deleteMany })
+		@Mutation(() => Boolean, { name: deleteMany })
 		async deleteMany(
 			@Arg('filter', () => DeleteManyInputArgs) filter: Filter<G>,
 			@Info() info: GraphQLResolveInfo,
@@ -820,7 +769,7 @@ export function createBaseResolver<G extends WithId, D extends BaseDataEntity>(
 				if (!provider.deleteMany)
 					throw new Error('Provider has not implemented DeleteMany not implemented');
 
-				const hookManager = hookManagerMap.get(entity.name);
+				const hookManager = hookManagerMap.get(entityMetadata.name);
 				const params: DeleteManyHookParams<G> = {
 					args: { filter },
 					info,

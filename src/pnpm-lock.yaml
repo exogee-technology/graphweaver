@@ -495,9 +495,6 @@ importers:
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@types/node':
         specifier: 20.11.28
@@ -832,9 +829,6 @@ importers:
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -1008,9 +1002,6 @@ importers:
       serverless-offline:
         specifier: 13.3.3
         version: 13.3.3(serverless@3.38.0)
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       vite:
         specifier: 5.1.6
         version: 5.1.6(@types/node@20.11.28)
@@ -1134,15 +1125,15 @@ importers:
       graphql-parse-resolve-info:
         specifier: 4.13.0
         version: 4.13.0(graphql@16.8.1)
+      graphql-query-complexity:
+        specifier: 0.12.0
+        version: 0.12.0(graphql@16.8.1)
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@types/pluralize':
         specifier: 0.0.33
@@ -1213,9 +1204,6 @@ importers:
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -1305,9 +1293,6 @@ importers:
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       typescript:
         specifier: 5.4.2
         version: 5.4.2
@@ -1335,9 +1320,6 @@ importers:
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       typescript:
         specifier: 5.4.2
         version: 5.4.2
@@ -1359,9 +1341,6 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       esbuild:
         specifier: 0.15.5
@@ -1511,9 +1490,6 @@ importers:
       luxon:
         specifier: 3.4.4
         version: 3.4.4
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@types/lodash':
         specifier: 4.17.0
@@ -1618,9 +1594,6 @@ importers:
       graphql-deduplicator:
         specifier: 2.0.6
         version: 2.0.6
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
     devDependencies:
       '@escape.tech/graphql-armor-types':
         specifier: 0.5.0
@@ -8656,6 +8629,7 @@ packages:
 
   /@types/semver@7.5.8:
     resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
+    dev: true
 
   /@types/send@0.17.4:
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
@@ -8712,6 +8686,7 @@ packages:
 
   /@types/validator@13.11.9:
     resolution: {integrity: sha512-FCTsikRozryfayPuiI46QzH3fnrOoctTjvOYZkho9BTFLCOZ2rgZJHMOVgCOfttjPJcgOx52EpkY0CMfy87MIw==}
+    dev: false
 
   /@types/ws@8.5.10:
     resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
@@ -10035,6 +10010,7 @@ packages:
       '@types/validator': 13.11.9
       libphonenumber-js: 1.10.58
       validator: 13.11.0
+    dev: false
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -12487,6 +12463,7 @@ packages:
     dependencies:
       graphql: 16.8.1
       lodash.get: 4.4.2
+    dev: false
 
   /graphql-request@6.1.0(graphql@16.8.1):
     resolution: {integrity: sha512-p+XPfS4q7aIpKVcgmnZKhMNqhltk20hfXtkaIkTfjjmiKMJ5xrt5c743cL03y/K7y1rg3WrIC49xGiEQ4mxdNw==}
@@ -12499,14 +12476,6 @@ packages:
     transitivePeerDependencies:
       - encoding
     dev: false
-
-  /graphql-subscriptions@2.0.0(graphql@16.8.1):
-    resolution: {integrity: sha512-s6k2b8mmt9gF9pEfkxsaO1lTxaySfKoEJzEfmwguBbQ//Oq23hIXCfR1hm4kdh5hnR20RdwB+s3BCb+0duHSZA==}
-    peerDependencies:
-      graphql: ^15.7.2 || ^16.0.0
-    dependencies:
-      graphql: 16.8.1
-      iterall: 1.3.0
 
   /graphql-tag@2.12.6(graphql@16.8.1):
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
@@ -13220,6 +13189,7 @@ packages:
 
   /iterall@1.3.0:
     resolution: {integrity: sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==}
+    dev: true
 
   /jackspeak@2.3.6:
     resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
@@ -13972,6 +13942,7 @@ packages:
 
   /libphonenumber-js@1.10.58:
     resolution: {integrity: sha512-53A0IpJFL9LdHbpeatwizf8KSwPICrqn9H0g3Y7WQ+Jgeu9cQ4Ew3WrRtrLBu/CX2lXd5+rgT01/tGlkbkzOjw==}
+    dev: false
 
   /lie@3.3.0:
     resolution: {integrity: sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==}
@@ -16725,6 +16696,9 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
+    peerDependenciesMeta:
+      node-gyp:
+        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.0
@@ -17474,25 +17448,6 @@ packages:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
     engines: {node: '>=14.16'}
 
-  /type-graphql@2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1):
-    resolution: {integrity: sha512-MCGxRvNADu5Wp9QEudI/WQgiqHJfjanGcKRk/ErCow6IaG04NNI7o3bjjxQVWC+qDundSOhmaquNdjDiiTbcqQ==}
-    engines: {node: '>= 14.5.0'}
-    peerDependencies:
-      class-validator: '>=0.14.0'
-      graphql: ^16.6.0
-    peerDependenciesMeta:
-      class-validator:
-        optional: true
-    dependencies:
-      '@types/node': 20.11.28
-      '@types/semver': 7.5.8
-      class-validator: 0.14.1
-      graphql: 16.8.1
-      graphql-query-complexity: 0.12.0(graphql@16.8.1)
-      graphql-subscriptions: 2.0.0(graphql@16.8.1)
-      semver: 7.6.0
-      tslib: 2.6.2
-
   /type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
@@ -17724,6 +17679,7 @@ packages:
   /validator@13.11.0:
     resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
     engines: {node: '>= 0.10'}
+    dev: false
 
   /valtio@1.10.5(react@18.2.0):
     resolution: {integrity: sha512-jTp0k63VXf4r5hPoaC6a6LCG4POkVSh629WLi1+d5PlajLsbynTMd7qAgEiOSPxzoX5iNvbN7iZ/k/g29wrNiQ==}

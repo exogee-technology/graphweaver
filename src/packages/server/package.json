@@ -34,8 +34,7 @@
 		"class-validator": "0.14.1",
 		"decimal.js": "10.4.3",
 		"graphql": "16.8.1",
-		"graphql-deduplicator": "2.0.6",
-		"type-graphql": "2.0.0-beta.2"
+		"graphql-deduplicator": "2.0.6"
 	},
 	"devDependencies": {
 		"@escape.tech/graphql-armor-types": "0.5.0",

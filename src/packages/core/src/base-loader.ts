@@ -1,6 +1,5 @@
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
-import { getMetadataStorage } from 'type-graphql';
 
 import { BaseDataEntity, Filter, GraphQLEntity, graphweaverMetadata } from '.';
 import { GraphQLEntityConstructor } from './base-entity';
@@ -8,21 +7,12 @@ import { GraphQLEntityConstructor } from './base-entity';
 let loadOneLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
 let relatedIdLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
 
-const metadata = getMetadataStorage();
-
-// @todo - cache as won't change regardless of user or request, so worth memoizing this function.
 const getGqlEntityName = (gqlEntityType: any) => {
-	const objectNames = metadata.objectTypes.filter(
-		(objectType) => objectType.target === gqlEntityType
-	);
-
-	if (objectNames.length === 0) {
-		throw new Error(
-			'ObjectType name parameter was not set for GQL entity deriving from BaseEntity'
-		);
+	const gqlTypeName = graphweaverMetadata.nameForObjectType(gqlEntityType);
+	if (!gqlTypeName) {
+		throw new Error('Could not look up type name for entity.');
 	}
-
-	return objectNames[0].name;
+	return gqlTypeName;
 };
 
 const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
@@ -87,11 +77,6 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 					filter && `.${JSON.stringify(filter)}`
 				} in (${keys.join(', ')})`
 			);
-
-			// Check metadata storage
-
-			// @todo Check if this is a many-to-many field - get mikroorm metadata
-			//const fieldMetadata = getFieldMetadata(relatedField, gqlEntityType);
 
 			const records = await provider.findByRelatedId(
 				provider.entityType,

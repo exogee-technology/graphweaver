@@ -29,8 +29,7 @@
 		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
 		"lodash": "4.17.21",
-		"luxon": "3.4.4",
-		"type-graphql": "2.0.0-beta.2"
+		"luxon": "3.4.4"
 	},
 	"devDependencies": {
 		"@types/lodash": "4.17.0",

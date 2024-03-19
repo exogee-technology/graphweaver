@@ -7,7 +7,7 @@ import {
 	CreateOrUpdateHookParams,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
-	GraphqlEntityType,
+	GraphQLEntityType,
 	HookRegister,
 	WithId,
 	hookManagerMap,
@@ -67,7 +67,7 @@ export const callChildMutation = async <G>(
 // Covert the data entity from the backend to the GraphQL entity
 const fromBackendEntity = <G, D extends BaseDataEntity>(
 	dataEntity: D,
-	gqlEntityType: GraphqlEntityType<G, D>
+	gqlEntityType: GraphQLEntityType<G, D>
 ) => {
 	if (!gqlEntityType.fromBackendEntity) {
 		throw new Error(
@@ -83,14 +83,21 @@ const fromBackendEntity = <G, D extends BaseDataEntity>(
 	return entity;
 };
 
-export const createOrUpdateEntities = async <G extends WithId, D extends BaseDataEntity>(
+export const createOrUpdateEntities = async <
+	G extends WithId & { name: string },
+	D extends BaseDataEntity,
+>(
 	input: Partial<G> | Partial<G>[],
 	entityTypeName: string,
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const meta = graphweaverMetadata.getEntity(entityTypeName);
-	const gqlEntityType: GraphqlEntityType<G, D> = meta.target;
+	const meta = graphweaverMetadata.getEntity<G, D>(entityTypeName);
+	const gqlEntityType: GraphQLEntityType<G, D> = meta.target;
+
+	if (!meta.provider) {
+		throw new Error(`No provider found for ${entityTypeName}, cannot create or update entities`);
+	}
 
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements

@@ -1,7 +1,8 @@
-import { registerEnumType } from 'type-graphql';
-import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo } from 'graphql';
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
+import { ComplexityEstimator } from 'graphql-query-complexity';
+import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
+import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
+import { graphweaverMetadata } from '../metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -17,10 +18,9 @@ export enum Sort {
 	DESC = 'desc',
 }
 
-export const TypeMap: { [key: string]: any } = {};
-
-registerEnumType(Sort, {
+graphweaverMetadata.collectEnumInformation({
 	name: 'Sort',
+	target: Sort,
 });
 
 // TODO: When implementing multi-sort columns, Order By has to have its own order so a Record won't do
@@ -144,8 +144,8 @@ export interface DeleteManyHookParams<G, TContext = BaseContext> extends HookPar
 	args: { filter: Filter<G> };
 }
 
-export interface GraphqlEntityType<G, D> {
-	name: string; // note this is the built-in ES6 class.name attribute
+export interface GraphQLEntityType<G, D> {
+	name: string; // Note: this is the built-in ES6 class.name attribute
 	typeName?: string;
 	fromBackendEntity?(entity: D): G | null;
 }
@@ -198,4 +198,35 @@ export interface BackendProviderConfig {
 	sort: {
 		root: boolean;
 	};
+}
+
+export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
+	...arguments_: Arguments
+) => T;
+
+export type ClassType<T extends object = object, Arguments extends unknown[] = any[]> = Constructor<
+	T,
+	Arguments
+> & {
+	prototype: T;
+};
+
+// We want TypeValues to be able to just be generic Functions as well.
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type TypeValue = ClassType | GraphQLScalarType | Function | object | symbol;
+
+export type GetTypeFunction = (type?: void) => TypeValue;
+
+export type Complexity = ComplexityEstimator | number;
+
+export interface FieldMetadata<G> {
+	target: G;
+	name: string;
+	getType: GetTypeFunction;
+	description?: string;
+	deprecationReason?: string;
+	complexity?: Complexity;
+	defaultValue?: any;
+	nullable?: boolean | 'items' | 'itemsAndList';
+	excludeFromFilterType?: boolean;
 }

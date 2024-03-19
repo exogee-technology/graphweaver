@@ -1,9 +1,4 @@
-import { getMetadataStorage, ObjectType } from 'type-graphql';
-import { FieldMetadata as TypeGraphQLFieldMetadata } from 'type-graphql/dist/metadata/definitions';
-
-import { AdminUISettingsType, BackendProvider, GraphqlEntityType } from '.';
-
-const metadata = getMetadataStorage();
+import { graphweaverMetadata } from '.';
 
 export type DataEntity<T> = {
 	[x in keyof T]: T[x];
@@ -13,21 +8,17 @@ export interface GraphQLEntityConstructor<G extends GraphQLEntity<D>, D extends 
 	new (dataEntity: D): G;
 }
 
-export type FieldMetadata = TypeGraphQLFieldMetadata;
-
 export interface BaseDataEntity {
-	id?: string | number;
+	id: string | number;
 	isCollection: (fieldName: string, dataField: any) => boolean;
 	isReference: (fieldName: string, dataField: any) => boolean;
 }
 
-// This map is used to store the Admin UI Settings Metadata
-export const AdminUISettingsMap = new Map<string, AdminUISettingsType<unknown>>();
-
-@ObjectType()
 export class GraphQLEntity<D extends BaseDataEntity> {
-	public id?: string | number;
-	constructor(public dataEntity: D) {}
+	public id: string | number;
+	constructor(public dataEntity: D) {
+		this.id = dataEntity.id;
+	}
 
 	static fromBackendEntity<D extends BaseDataEntity, G extends GraphQLEntity<D>>(
 		this: new (dataEntity: D) => G,
@@ -37,19 +28,19 @@ export class GraphQLEntity<D extends BaseDataEntity> {
 
 		const entity = new this(dataEntity);
 
-		metadata.fields
-			.filter((field) => field.target === this)
-			.forEach((field) => {
-				const dataField = dataEntity?.[field.name as keyof D];
+		const metadata = graphweaverMetadata.getEntity(this.name);
+		for (const field of metadata.fields) {
+			const dataField = dataEntity?.[field.name as keyof D];
 
-				if (
-					typeof dataField !== 'undefined' &&
-					!dataEntity.isCollection?.(field.name, dataField) &&
-					!dataEntity.isReference?.(field.name, dataField) &&
-					typeof (entity as any)[field.name] !== 'function'
-				)
-					(entity as any)[field.name] = dataField;
-			});
+			if (
+				typeof dataField !== 'undefined' &&
+				!dataEntity.isCollection?.(field.name, dataField) &&
+				!dataEntity.isReference?.(field.name, dataField) &&
+				typeof (entity as Record<string, any>)[field.name] !== 'function'
+			) {
+				(entity as Record<string, any>)[field.name] = dataField;
+			}
+		}
 
 		return entity;
 	}
