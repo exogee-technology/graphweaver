@@ -50,7 +50,7 @@
 		"xero-node": "5.1.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.28",
+		"@types/node": "20.11.30",
 		"esbuild": "0.15.5",
 		"prettier": "3.2.5",
 		"ts-node": "10.9.2",
