@@ -26,7 +26,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.7",
+		"@apollo/client": "3.9.8",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.1",
 		"clsx": "2.1.0",
