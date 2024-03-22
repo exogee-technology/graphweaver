@@ -1,4 +1,5 @@
 import {
+	AdminUISettings,
 	Field,
 	GraphQLEntity,
 	ID,
@@ -20,6 +21,7 @@ export class Playlist extends GraphQLEntity<OrmPlaylist> {
 	@Field(() => String, { nullable: true })
 	name?: string;
 
+	@AdminUISettings({ hideFromDisplay: true })
 	@RelationshipField<Track>(() => [Track], { relatedField: 'playlists' })
 	tracks!: Track[];
 }

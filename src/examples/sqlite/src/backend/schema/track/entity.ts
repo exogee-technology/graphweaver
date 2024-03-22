@@ -1,4 +1,5 @@
 import {
+	AdminUISettings,
 	Field,
 	GraphQLEntity,
 	ID,
@@ -49,6 +50,7 @@ export class Track extends GraphQLEntity<OrmTrack> {
 	@RelationshipField<InvoiceLine>(() => [InvoiceLine], { relatedField: 'track' })
 	invoiceLines!: InvoiceLine[];
 
+	@AdminUISettings({ hideFromDisplay: true })
 	@RelationshipField<Playlist>(() => [Playlist], { relatedField: 'tracks' })
 	playlists!: Playlist[];
 }
