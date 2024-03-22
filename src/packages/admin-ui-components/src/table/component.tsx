@@ -202,7 +202,9 @@ export const Table = <T extends TableRowItem>({
 		// Return true when the scrollTop reaches the bottom ...
 		const { currentTarget } = event;
 		const target = currentTarget as Element;
-		const atEndOfSet = target.scrollTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
+		const tolerance = 175; // trigger when 5 rows from the end
+		const distanceFromTop = Math.round(target.scrollTop) + tolerance;
+		const atEndOfSet = distanceFromTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
 		return atEndOfSet;
 	};
 
