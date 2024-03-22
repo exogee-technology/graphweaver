@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-eventbrite",
-	"version": "0.2.23",
+	"version": "0.2.24",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect EventBrite.",
