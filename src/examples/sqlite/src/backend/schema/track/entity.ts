@@ -50,6 +50,7 @@ export class Track extends GraphQLEntity<OrmTrack> {
 	@RelationshipField<InvoiceLine>(() => [InvoiceLine], { relatedField: 'track' })
 	invoiceLines!: InvoiceLine[];
 
+	// This is a many-to-many relationship, and takes a long time to load so we hide it from the table in the admin UI
 	@AdminUISettings({ hideFromDisplay: true })
 	@RelationshipField<Playlist>(() => [Playlist], { relatedField: 'tracks' })
 	playlists!: Playlist[];
