@@ -52,11 +52,11 @@ importers:
   examples/aws-cognito:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -125,11 +125,11 @@ importers:
   examples/databases:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -183,11 +183,11 @@ importers:
   examples/eventbrite:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -262,11 +262,11 @@ importers:
   examples/mailchimp:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -338,11 +338,11 @@ importers:
   examples/rest:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -411,11 +411,11 @@ importers:
         specifier: 3.9.8
         version: 3.9.8(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -461,7 +461,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -515,11 +515,11 @@ importers:
         specifier: 3.9.8
         version: 3.9.8(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -791,8 +791,8 @@ importers:
   packages/auth:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1114,8 +1114,8 @@ importers:
   packages/core:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
@@ -1420,8 +1420,8 @@ importers:
   packages/mikroorm:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1577,14 +1577,14 @@ importers:
   packages/server:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.1)
+        version: 3.1.0(@apollo/server@4.10.2)
       '@escape.tech/graphql-armor':
         specifier: 2.4.0
-        version: 2.4.0(@apollo/server@4.10.1)(@escape.tech/graphql-armor-types@0.5.0)
+        version: 2.4.0(@apollo/server@4.10.2)(@escape.tech/graphql-armor-types@0.5.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1660,8 +1660,8 @@ importers:
   packages/xero:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.1
-        version: 4.10.1(graphql@16.8.1)
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1808,8 +1808,8 @@ packages:
       graphql: 16.8.1
     dev: false
 
-  /@apollo/server@4.10.1(graphql@16.8.1):
-    resolution: {integrity: sha512-XGMOgTyzV4EBHQq0xQVKFry9hZF7AA/6nxxGLamqdxodhdSdGbU9jrlb5/XDveeGuXP3+5JDdrB2HcziVLJcMA==}
+  /@apollo/server@4.10.2(graphql@16.8.1):
+    resolution: {integrity: sha512-qlTZE4XyzMPprtkxFjmPxMwc2KC4nvNQrKXk2PMotEACKcaLXVZFIgstxbSqBCNl2KgzbsgU1g6vvbV6Xcfikw==}
     engines: {node: '>=14.16.0'}
     peerDependencies:
       graphql: ^16.6.0
@@ -1986,13 +1986,13 @@ packages:
       - encoding
     dev: false
 
-  /@as-integrations/aws-lambda@3.1.0(@apollo/server@4.10.1):
+  /@as-integrations/aws-lambda@3.1.0(@apollo/server@4.10.2):
     resolution: {integrity: sha512-V7H9ICXgt5KDKfEjYSRB59lEVfQqi7oSIZEeBGzPrmfhSPIHyFCNJyHi1hXdJmRb6GHpCNmtffmqRgsB0i9k3w==}
     engines: {node: '>=16.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
     dependencies:
-      '@apollo/server': 4.10.1(graphql@16.8.1)
+      '@apollo/server': 4.10.2(graphql@16.8.1)
       '@types/aws-lambda': 8.10.136
     dev: false
 
@@ -4199,7 +4199,7 @@ packages:
     dependencies:
       graphql: 16.8.1
 
-  /@escape.tech/graphql-armor@2.4.0(@apollo/server@4.10.1)(@escape.tech/graphql-armor-types@0.5.0):
+  /@escape.tech/graphql-armor@2.4.0(@apollo/server@4.10.2)(@escape.tech/graphql-armor-types@0.5.0):
     resolution: {integrity: sha512-/ef11cDjzg3Rjsa7jxtUzM9hRVlj+GB4z/YCChNqNGW+BvYrv6E6esbdGzIiaoauKfszXSQXSu0CgPXe0I7NbQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
@@ -4214,7 +4214,7 @@ packages:
       '@escape.tech/graphql-armor-types':
         optional: true
     dependencies:
-      '@apollo/server': 4.10.1(graphql@16.8.1)
+      '@apollo/server': 4.10.2(graphql@16.8.1)
       '@escape.tech/graphql-armor-block-field-suggestions': 2.1.0
       '@escape.tech/graphql-armor-cost-limit': 2.1.0
       '@escape.tech/graphql-armor-max-aliases': 2.3.0
