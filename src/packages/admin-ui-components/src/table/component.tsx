@@ -47,8 +47,9 @@ const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
-	const entityColumns = [SelectColumn].concat(
-		entity.fields.map((field) => ({
+	const entityColumns = [
+		...(entity.attributes.isReadOnly ? [] : [SelectColumn]),
+		...entity.fields.map((field) => ({
 			key: field.name,
 			name: field.name,
 			width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
@@ -122,8 +123,8 @@ const columnsForEntity = <T extends TableRowItem>(
 									return value;
 								}
 							: undefined,
-		}))
-	);
+		})),
+	];
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
