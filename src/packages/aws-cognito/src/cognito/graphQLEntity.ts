@@ -14,7 +14,7 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	}
 
 	@Field(() => Boolean)
-	enabled(@Root() dataEntity: CognitoUserBackendEntity) {
+	async enabled(@Root() dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Enabled;
 	}
 

@@ -28,7 +28,6 @@ export const createUser = async (
 				{ Name: 'email', Value: email },
 				{ Name: 'email_verified', Value: 'True' },
 			],
-			MessageAction: 'SUPPRESS',
 		})
 	);
 

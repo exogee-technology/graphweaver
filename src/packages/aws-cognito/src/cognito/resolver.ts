@@ -7,10 +7,6 @@ import { CognitoUser } from './graphQLEntity';
 import { CognitoUserBackendEntity } from './backendEntity';
 import { createProvider } from '../base-resolver/provider';
 
-export interface ItemWithId {
-	id: string;
-	[key: string]: unknown;
-}
 type Entity = CognitoUser;
 type Context = {
 	client: CognitoIdentityProviderClient;
