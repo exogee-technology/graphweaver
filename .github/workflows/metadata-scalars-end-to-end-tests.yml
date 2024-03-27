@@ -1,11 +1,11 @@
-name: Metadata and Scalar End to End Tests
+name: Non-Database Specific End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  metadata-scalars-end-to-end-tests:
+  non-db-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -51,6 +51,12 @@ jobs:
         timeout-minutes: 2
         run: |
           pnpm test-metadata
+
+      - name: Test AWS Cognito
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 2
+        run: |
+          pnpm test-aws-cognito
 
         env:
           CI: true
