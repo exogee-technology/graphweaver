@@ -14,7 +14,11 @@ import { logger } from '@exogee/logger';
 
 import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
-type EntityManager = PgEntityManager<PostgreSqlDriver> | MyEntityManager<MySqlDriver>;
+import type { EntityManager as SqliteEntityManager, SqliteDriver } from '@mikro-orm/sqlite';
+type EntityManager =
+	| PgEntityManager<PostgreSqlDriver>
+	| MyEntityManager<MySqlDriver>
+	| SqliteEntityManager<SqliteDriver>;
 
 export type DatabaseType = 'mysql' | 'postgresql' | 'sqlite';
 

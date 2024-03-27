@@ -1,4 +1,4 @@
-import { GraphQLEntity, SummaryField, Field, ID, ObjectType } from '@exogee/graphweaver';
+import { GraphQLEntity, SummaryField, Field, ID, ObjectType, ReadOnly } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -19,6 +19,7 @@ const acl: AccessControlList<User, AuthorizationContext> = {
 };
 
 @ApplyAccessControlList(acl)
+@ReadOnly({ adminUI: true })
 @ObjectType('User')
 export class User extends GraphQLEntity<RestUser> {
 	public dataEntity!: RestUser;

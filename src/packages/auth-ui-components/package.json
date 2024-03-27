@@ -25,7 +25,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.8",
+		"@apollo/client": "3.9.9",
 		"@simplewebauthn/browser": "9.0.1",
 		"@usedapp/core": "1.2.13",
 		"ethers": "5.7.2",
@@ -50,7 +50,7 @@
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"typescript": "5.4.3",
-		"vite": "5.2.2",
+		"vite": "5.2.6",
 		"vite-plugin-svgr": "3.2.0",
 		"@simplewebauthn/types": "9.0.1"
 	},
