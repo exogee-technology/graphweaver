@@ -16,7 +16,6 @@
 		"dev-mysql": "pnpm import-database-mysql && pnpm start-server",
 		"unpack": "tsx ./scripts/unpack.ts",
 		"test-auth": "jest --runInBand --forceExit -- api/auth",
-		"test-forgot-password": "jest --runInBand --forceExit --silent=false -- api/auth/password/reset.test.ts",
 		"test-metadata": "jest --runInBand --forceExit ---- api/metadata",
 		"test-mysql": "export DATABASE=mysql && jest --runInBand -- api/mysql",
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
