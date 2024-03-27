@@ -45,7 +45,6 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 		read: ProviderOptions<Entity, Context, DataEntity>['read'];
 		update: ProviderOptions<Entity, Context, DataEntity>['update'];
 		remove: ProviderOptions<Entity, Context, DataEntity>['remove'];
-		search: ProviderOptions<Entity, Context, DataEntity>['search'];
 		initFn: Promise<void>;
 		dataEntity?: () => any;
 
@@ -56,7 +55,6 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			read,
 			update,
 			remove,
-			search,
 			init,
 			dataEntity,
 			backendId,
@@ -66,7 +64,6 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			this.read = read;
 			this.update = update;
 			this.remove = remove;
-			this.search = search;
 			this.dataEntity = dataEntity;
 
 			this.initFn = new Promise<void>((resolve) => {
@@ -107,14 +104,6 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			return this._mapDataEntity(result) || null;
 		}
 
-		async fullTextSearch(query: string): Promise<Array<DataEntity>> {
-			await this.initFn;
-			const result = await this.search(this.context as Context, query);
-			if (result === null) return [];
-			if (Array.isArray(result)) return result;
-			return [result];
-		}
-
 		async findByRelatedId(
 			entity: any,
 			relatedField: string,
@@ -136,7 +125,9 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 		async updateMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
 			await this.initFn;
 			if (!this.update) throw new Error('update not available');
-			return Promise.all(entities.map((entity) => this.updateOne(entity.id, entity)));
+			return Promise.all(
+				entities.map((entity) => this.updateOne(entity.id as Entity['id'], entity))
+			);
 		}
 
 		async createOne(entity: Partial<Entity>): Promise<DataEntity> {

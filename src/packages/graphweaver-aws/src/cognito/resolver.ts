@@ -1,17 +1,22 @@
 import { Resolver } from 'type-graphql';
-import { createProvider } from '@exogee/graphweaver-helpers';
-
-import type { ItemWithId } from '@exogee/graphweaver-helpers';
-import { Filter, createBaseResolver } from '@exogee/graphweaver';
+import { createBaseResolver } from '@exogee/graphweaver';
 import { getOneUser, getManyUsers, mapId, createUser, toggleUserStatus } from '../util';
 
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import { CognitoUser } from './graphQLEntity';
 import { CognitoUserBackendEntity } from './backendEntity';
+import { createProvider } from '../base-resolver/provider';
 
+export interface ItemWithId {
+	id: string;
+	[key: string]: unknown;
+}
 type Entity = ItemWithId;
-type Context = any;
-type DataEntity = any;
+type Context = {
+	client: CognitoIdentityProviderClient;
+	UserPoolId: string;
+};
+type DataEntity = CognitoUserBackendEntity;
 
 export interface CreateAwsCognitoUserResolverOptions {
 	region: string;
@@ -49,7 +54,7 @@ export const createAwsCognitoUserResolver = ({
 
 			// If the enabled status has changed, toggle it
 			if (existingUser.Enabled !== entityWithChanges.enabled) {
-				await toggleUserStatus(client, UserPoolId, entityId, entityWithChanges.enabled);
+				await toggleUserStatus(client, UserPoolId, entityId, entityWithChanges.enabled as boolean);
 			}
 
 			return mapId(await getOneUser(client, UserPoolId, entityId));

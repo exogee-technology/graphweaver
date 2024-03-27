@@ -13,14 +13,6 @@
       "path": "src/examples/s3-storage"
     },
     {
-      "name": "➡️ Example: Eventbrite",
-      "path": "src/examples/eventbrite"
-    },
-    {
-      "name": "➡️ Example: Mailchimp",
-      "path": "src/examples/mailchimp"
-    },
-    {
       "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
     },
@@ -44,7 +36,7 @@
       "name": "📦 @exogee/graphweaver-admin-ui-components",
       "path": "src/packages/admin-ui-components"
     },
-        {
+    {
       "name": "📦 @exogee/graphweaver-apollo-client",
       "path": "src/packages/apollo-client"
     },
@@ -79,10 +71,6 @@
     {
       "name": "📦 @exogee/graphweaver-aws",
       "path": "src/packages/graphweaver-aws"
-    },
-    {
-      "name": "📦 @exogee/graphweaver-helpers",
-      "path": "src/packages/graphweaver-helpers"
     },
     {
       "name": "📦 @exogee/graphweaver-storage-provider",

@@ -1,11 +1,10 @@
 import { createBaseResolver, Resolver } from '@exogee/graphweaver';
-import { AccessorParams, RestBackendProvider } from '@exogee/graphweaver-rest';
+import { AccessorParams, RestBackendProvider, inMemoryFilterFor } from '@exogee/graphweaver-rest';
 import url from 'url';
 
 import { User as RestUser } from '../../entities';
 import { User } from './entity';
 import { fetch } from '../../rest-client';
-import { inMemoryFilterFor } from '@exogee/graphweaver-helpers';
 
 @Resolver((of) => User)
 export class UserResolver extends createBaseResolver<User, RestUser>(
