@@ -21,16 +21,21 @@ type DataEntity = CognitoUserBackendEntity;
 export interface CreateAwsCognitoUserResolverOptions {
 	region: string;
 	userPoolId: string;
+	endpoint?: string;
 }
 
 export const createAwsCognitoUserResolver = ({
 	region,
 	userPoolId,
+	endpoint,
 }: CreateAwsCognitoUserResolverOptions) => {
 	const provider = createProvider<Entity, Context, DataEntity>({
 		backendId: 'AWS',
 		init: async () => {
-			const client = new CognitoIdentityProviderClient({ region });
+			const client = new CognitoIdentityProviderClient({
+				region,
+				...(endpoint ? { endpoint } : {}),
+			});
 
 			return {
 				client,

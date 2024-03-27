@@ -1,5 +1,5 @@
-import { Arg, Field, ID, ObjectType, Root, getMetadataStorage } from 'type-graphql';
-import { BaseDataEntity, GraphQLEntity, ReadOnly, ReadOnlyProperty } from '@exogee/graphweaver';
+import { Field, ID, ObjectType, Root } from 'type-graphql';
+import { GraphQLEntity, ReadOnlyProperty } from '@exogee/graphweaver';
 
 import { CognitoUserBackendEntity } from './backendEntity';
 
@@ -8,7 +8,6 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	@Field(() => ID)
 	id!: string;
 
-	@ReadOnlyProperty()
 	@Field(() => String)
 	async username(@Root() dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Username;
@@ -19,7 +18,6 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 		return dataEntity.dataEntity.Enabled;
 	}
 
-	@ReadOnlyProperty()
 	@Field(() => String, { nullable: true })
 	async email(@Root() dataEntity: CognitoUserBackendEntity) {
 		return (
@@ -29,12 +27,12 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 		);
 	}
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	async userStatus(@Root() dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.UserStatus;
 	}
 
-	@Field(() => String)
+	@Field(() => String, { nullable: true })
 	async groups(@Root() dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Groups?.join(',') ?? '';
 	}

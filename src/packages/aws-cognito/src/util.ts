@@ -28,6 +28,7 @@ export const createUser = async (
 				{ Name: 'email', Value: email },
 				{ Name: 'email_verified', Value: 'True' },
 			],
+			MessageAction: 'SUPPRESS',
 		})
 	);
 
@@ -47,7 +48,7 @@ export const createUser = async (
 	if (!user) return null;
 	return {
 		...user,
-		Groups: groups.split(','),
+		Groups: groups?.split(','),
 	};
 };
 

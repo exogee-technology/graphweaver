@@ -120,3 +120,6 @@ token.json
 
 # packs - used to store prebuilt packages
 .packs
+
+# npx cognito-local
+.cognito

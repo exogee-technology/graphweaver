@@ -69,9 +69,9 @@ importers:
       '@exogee/graphweaver-auth-ui-components':
         specifier: workspace:*
         version: link:../../packages/auth-ui-components
-      '@exogee/graphweaver-aws':
+      '@exogee/graphweaver-aws-cognito':
         specifier: workspace:*
-        version: link:../../packages/graphweaver-aws
+        version: link:../../packages/aws-cognito
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../../packages/mikroorm
@@ -785,6 +785,49 @@ importers:
         specifier: 3.2.0
         version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
 
+  packages/aws-cognito:
+    dependencies:
+      '@aws-sdk/client-cognito-identity-provider':
+        specifier: 3.540.0
+        version: 3.540.0
+      '@aws-sdk/client-lambda':
+        specifier: 3.540.0
+        version: 3.540.0
+      '@exogee/graphweaver-rest':
+        specifier: workspace:*
+        version: link:../rest
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      uuid:
+        specifier: 9.0.1
+        version: 9.0.1
+    devDependencies:
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
+      esbuild:
+        specifier: 0.17.18
+        version: 0.17.18
+      glob:
+        specifier: 10.3.10
+        version: 10.3.10
+      graphql-type-json:
+        specifier: 0.3.2
+        version: 0.3.2(graphql@16.8.1)
+      prettier:
+        specifier: 3.2.5
+        version: 3.2.5
+      reflect-metadata:
+        specifier: 0.2.1
+        version: 0.2.1
+      type-graphql:
+        specifier: 2.0.0-beta.2
+        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
+      typescript:
+        specifier: 5.4.3
+        version: 5.4.3
+
   packages/builder:
     dependencies:
       '@exogee/graphweaver-config':
@@ -1010,9 +1053,9 @@ importers:
       '@exogee/graphweaver-auth':
         specifier: workspace:*
         version: link:../auth
-      '@exogee/graphweaver-aws':
+      '@exogee/graphweaver-aws-cognito':
         specifier: workspace:*
-        version: link:../graphweaver-aws
+        version: link:../aws-cognito
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../mikroorm
@@ -1104,49 +1147,6 @@ importers:
       tsx:
         specifier: 4.7.1
         version: 4.7.1
-      typescript:
-        specifier: 5.4.3
-        version: 5.4.3
-
-  packages/graphweaver-aws:
-    dependencies:
-      '@aws-sdk/client-cognito-identity-provider':
-        specifier: 3.540.0
-        version: 3.540.0
-      '@aws-sdk/client-lambda':
-        specifier: 3.540.0
-        version: 3.540.0
-      '@exogee/graphweaver-rest':
-        specifier: workspace:*
-        version: link:../rest
-      graphql:
-        specifier: 16.8.1
-        version: 16.8.1
-      uuid:
-        specifier: 9.0.1
-        version: 9.0.1
-    devDependencies:
-      '@exogee/graphweaver':
-        specifier: workspace:*
-        version: link:../core
-      esbuild:
-        specifier: 0.17.18
-        version: 0.17.18
-      glob:
-        specifier: 10.3.10
-        version: 10.3.10
-      graphql-type-json:
-        specifier: 0.3.2
-        version: 0.3.2(graphql@16.8.1)
-      prettier:
-        specifier: 3.2.5
-        version: 3.2.5
-      reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
-      type-graphql:
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -1965,58 +1965,6 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-lambda@3.536.0:
-    resolution: {integrity: sha512-gzrJO9ZuRVnnTHPhSL+sN9MA0t4Cu3+iIEehF3F2ApLUa7SiCr6cNPqLnEReC8Q5FTWX0imxVQG5jHvuKY20BQ==}
-    engines: {node: '>=14.0.0'}
-    dependencies:
-      '@aws-crypto/sha256-browser': 3.0.0
-      '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sts': 3.535.0(@aws-sdk/credential-provider-node@3.535.0)
-      '@aws-sdk/core': 3.535.0
-      '@aws-sdk/credential-provider-node': 3.535.0
-      '@aws-sdk/middleware-host-header': 3.535.0
-      '@aws-sdk/middleware-logger': 3.535.0
-      '@aws-sdk/middleware-recursion-detection': 3.535.0
-      '@aws-sdk/middleware-user-agent': 3.535.0
-      '@aws-sdk/region-config-resolver': 3.535.0
-      '@aws-sdk/types': 3.535.0
-      '@aws-sdk/util-endpoints': 3.535.0
-      '@aws-sdk/util-user-agent-browser': 3.535.0
-      '@aws-sdk/util-user-agent-node': 3.535.0
-      '@smithy/config-resolver': 2.2.0
-      '@smithy/core': 1.4.0
-      '@smithy/eventstream-serde-browser': 2.2.0
-      '@smithy/eventstream-serde-config-resolver': 2.2.0
-      '@smithy/eventstream-serde-node': 2.2.0
-      '@smithy/fetch-http-handler': 2.5.0
-      '@smithy/hash-node': 2.2.0
-      '@smithy/invalid-dependency': 2.2.0
-      '@smithy/middleware-content-length': 2.2.0
-      '@smithy/middleware-endpoint': 2.5.0
-      '@smithy/middleware-retry': 2.2.0
-      '@smithy/middleware-serde': 2.3.0
-      '@smithy/middleware-stack': 2.2.0
-      '@smithy/node-config-provider': 2.3.0
-      '@smithy/node-http-handler': 2.5.0
-      '@smithy/protocol-http': 3.3.0
-      '@smithy/smithy-client': 2.5.0
-      '@smithy/types': 2.12.0
-      '@smithy/url-parser': 2.2.0
-      '@smithy/util-base64': 2.3.0
-      '@smithy/util-body-length-browser': 2.2.0
-      '@smithy/util-body-length-node': 2.3.0
-      '@smithy/util-defaults-mode-browser': 2.2.0
-      '@smithy/util-defaults-mode-node': 2.3.0
-      '@smithy/util-endpoints': 1.2.0
-      '@smithy/util-middleware': 2.2.0
-      '@smithy/util-retry': 2.2.0
-      '@smithy/util-stream': 2.2.0
-      '@smithy/util-utf8': 2.3.0
-      '@smithy/util-waiter': 2.2.0
-      tslib: 2.6.2
-    transitivePeerDependencies:
-      - aws-crt
-
   /@aws-sdk/client-lambda@3.540.0:
     resolution: {integrity: sha512-pAVEUlQqpzTCpOmdnSXub+wjTtyJAwJFdmGW7rHpYpwQ4HfPhmN/vB6bczdl2vQNArfwS86AzTJNsftc3ID46g==}
     engines: {node: '>=14.0.0'}
@@ -2068,7 +2016,6 @@ packages:
       tslib: 2.6.2
     transitivePeerDependencies:
       - aws-crt
-    dev: false
 
   /@aws-sdk/client-s3@3.540.0:
     resolution: {integrity: sha512-rYBuNB7uqCO9xZc0OAwM2K6QJAo2Syt1L5OhEaf7zG7FulNMyrK6kJPg1WrvNE90tW6gUdDaTy3XsQ7lq6O7uA==}
@@ -16353,7 +16300,7 @@ packages:
     peerDependencies:
       serverless: ^3.2.0
     dependencies:
-      '@aws-sdk/client-lambda': 3.536.0
+      '@aws-sdk/client-lambda': 3.540.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.7

@@ -1,5 +1,5 @@
 {
-	"name": "@exogee/graphweaver-aws",
+	"name": "@exogee/graphweaver-aws-cognito",
 	"version": "0.2.24",
 	"main": "lib/index.js",
 	"source": "src/index.ts",

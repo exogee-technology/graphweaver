@@ -3,7 +3,7 @@ import 'reflect-metadata';
 import assert from 'assert';
 
 import gql from 'graphql-tag';
-import { CognitoUser, createAwsCognitoUserResolver } from '@exogee/graphweaver-aws';
+import { CognitoUser, createAwsCognitoUserResolver } from '@exogee/graphweaver-aws-cognito';
 
 import Graphweaver from '@exogee/graphweaver-server';
 
