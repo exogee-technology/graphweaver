@@ -703,8 +703,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0
       downshift:
-        specifier: 8.5.0
-        version: 8.5.0(react@18.2.0)
+        specifier: 9.0.0
+        version: 9.0.0(react@18.2.0)
       graphiql:
         specifier: 3.1.1
         version: 3.1.1(@codemirror/language@6.0.0)(@types/react@18.0.25)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
@@ -10984,8 +10984,8 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
-  /downshift@8.5.0(react@18.2.0):
-    resolution: {integrity: sha512-BAr/KAZX8GGARwWl4aER6ABv8aAaRXZcVKP0m1oFPKpSIXCGuoqnhi6nRf87glHhYDd/CCPp9RVUK27JKJD/Fw==}
+  /downshift@9.0.0(react@18.2.0):
+    resolution: {integrity: sha512-C6v0a08SWnyFmcIXpFb7wutJt6Psso/diJZfwedw5gnzIkhbE6VNiONnNnO1OoUDyIb9upT+O/V+2U4kTl/q8A==}
     peerDependencies:
       react: '>=16.12.0'
     dependencies:
