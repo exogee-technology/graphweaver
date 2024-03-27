@@ -31,7 +31,7 @@
 		"@mikro-orm/mysql": "6.1.12",
 		"class-validator": "0.14.1",
 		"dotenv": "16.4.5",
-		"got": "11.8.5",
+		"got": "14.2.1",
 		"graphql": "16.8.1",
 		"mysql2": "3.9.3",
 		"react": "18.2.0",
