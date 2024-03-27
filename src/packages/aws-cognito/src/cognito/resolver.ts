@@ -11,7 +11,7 @@ export interface ItemWithId {
 	id: string;
 	[key: string]: unknown;
 }
-type Entity = ItemWithId;
+type Entity = CognitoUser;
 type Context = {
 	client: CognitoIdentityProviderClient;
 	UserPoolId: string;
@@ -58,8 +58,9 @@ export const createAwsCognitoUserResolver = ({
 			const existingUser = await getOneUser(client, UserPoolId, entityId);
 
 			// If the enabled status has changed, toggle it
-			if (existingUser.Enabled !== entityWithChanges.enabled) {
-				await toggleUserStatus(client, UserPoolId, entityId, entityWithChanges.enabled as boolean);
+			const enabled = entityWithChanges.dataEntity?.enabled;
+			if (enabled !== undefined && existingUser.Enabled !== enabled) {
+				await toggleUserStatus(client, UserPoolId, entityId, enabled);
 			}
 
 			return mapId(await getOneUser(client, UserPoolId, entityId));

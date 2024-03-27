@@ -1,5 +1,5 @@
 import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { GraphQLEntity, ReadOnlyProperty } from '@exogee/graphweaver';
+import { GraphQLEntity } from '@exogee/graphweaver';
 
 import { CognitoUserBackendEntity } from './backendEntity';
 
@@ -14,7 +14,7 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	}
 
 	@Field(() => Boolean)
-	async enabled(@Root() dataEntity: CognitoUserBackendEntity) {
+	enabled(@Root() dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Enabled;
 	}
 
