@@ -490,8 +490,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/mikro-orm-sqlite-wasm
       node-sqlite3-wasm:
-        specifier: 0.8.12
-        version: 0.8.12
+        specifier: 0.8.13
+        version: 0.8.13
       reflect-metadata:
         specifier: 0.2.1
         version: 0.2.1
@@ -1401,8 +1401,8 @@ importers:
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       node-sqlite3-wasm:
-        specifier: 0.8.12
-        version: 0.8.12
+        specifier: 0.8.13
+        version: 0.8.13
     devDependencies:
       '@types/node':
         specifier: 20.11.30
@@ -15082,8 +15082,8 @@ packages:
     deprecated: please use 'semver'
     dev: false
 
-  /node-sqlite3-wasm@0.8.12:
-    resolution: {integrity: sha512-vXSM405LxTCeXl8Co8hag871aaZp3+sD3uBVq0OlJxzR2/bQ7vwb/HbJpLI0P2u5SDa9rVjR5NoTKT46zj26MQ==}
+  /node-sqlite3-wasm@0.8.13:
+    resolution: {integrity: sha512-8mSrvUCFtfqE17EkJdcRC/r/lMuGoxS+wP/r5mcGul3Zf87Rc9yog1seZp385n4lXsUSLBbiNxV1C3zCGWsgUw==}
     dev: false
 
   /nopt@5.0.0:
