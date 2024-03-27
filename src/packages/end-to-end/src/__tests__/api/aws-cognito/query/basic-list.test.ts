@@ -35,6 +35,8 @@ describe('basic query', () => {
 			`,
 		});
 
+		console.log(response);
+
 		assert(response.body.kind === 'single');
 
 		expect(response.body.singleResult.data?.cognitoUsers).toHaveLength(1);
