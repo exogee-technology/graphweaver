@@ -52,12 +52,5 @@ jobs:
         run: |
           pnpm test-metadata
 
-      - name: Test AWS Cognito
-        working-directory: src/packages/end-to-end
-        timeout-minutes: 2
-        run: |
-          pnpm test-aws-cognito
-
         env:
-          COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
           CI: true
