@@ -1,11 +1,11 @@
-name: Non-Database Specific End to End Tests
+name: Other End to End Tests
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  non-db-end-to-end-tests:
+  other-end-to-end-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -55,6 +55,8 @@ jobs:
       - name: Test AWS Cognito
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
+        env:
+          COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
         run: |
           pnpm test-aws-cognito
 
