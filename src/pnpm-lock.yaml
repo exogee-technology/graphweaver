@@ -1053,9 +1053,6 @@ importers:
       '@exogee/graphweaver-auth':
         specifier: workspace:*
         version: link:../auth
-      '@exogee/graphweaver-aws-cognito':
-        specifier: workspace:*
-        version: link:../aws-cognito
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../mikroorm
