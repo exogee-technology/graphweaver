@@ -36,7 +36,7 @@
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.4.4",
 		"papaparse": "5.4.1",
-		"react-data-grid": "7.0.0-beta.20",
+		"react-data-grid": "7.0.0-beta.43",
 		"react-hot-toast": "2.4.1"
 	},
 	"peerDependencies": {
