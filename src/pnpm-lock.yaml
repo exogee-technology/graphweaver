@@ -640,8 +640,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.15.5)(typescript@5.4.3)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -722,8 +722,8 @@ importers:
         specifier: 2.4.5
         version: 2.4.5(react@18.2.0)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -822,8 +822,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -886,8 +886,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.15.5)(typescript@5.4.3)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -946,8 +946,8 @@ importers:
         specifier: 2.7.1
         version: 2.7.1(esbuild@0.15.5)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1112,8 +1112,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -1255,8 +1255,8 @@ importers:
         specifier: 0.17.18
         version: 0.17.18
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql-type-json:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.8.1)
@@ -1282,8 +1282,8 @@ importers:
         specifier: 0.17.18
         version: 0.17.18
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1328,8 +1328,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -1347,8 +1347,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -1372,8 +1372,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -1434,8 +1434,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.11.30)(typescript@5.4.3)
@@ -1489,8 +1489,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -1523,8 +1523,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1590,8 +1590,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
 
   packages/vite-plugin-graphweaver:
     dependencies:
@@ -1606,8 +1606,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.3
         version: 5.4.3
@@ -1646,8 +1646,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -12144,8 +12144,8 @@ packages:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
     dev: false
 
-  /glob@10.3.10:
-    resolution: {integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==}
+  /glob@10.3.12:
+    resolution: {integrity: sha512-TCNv8vJ+xz4QiqTpfOJA7HvYv+tNIRHKfUWw/q+v2jdgN4ebz+KY9tGx5J4rHP0o84mNP+ApH66HRX8us3Khqg==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
@@ -16066,7 +16066,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.3.10
+      glob: 10.3.12
 
   /ripemd160@2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}
