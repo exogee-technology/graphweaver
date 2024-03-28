@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
-import { AuthorizationContext } from '@exogee/graphweaver-auth';
 import { createAwsCognitoUserResolver } from '@exogee/graphweaver-aws-cognito';
 
 export const cognitoUser = createAwsCognitoUserResolver({
@@ -9,7 +8,7 @@ export const cognitoUser = createAwsCognitoUserResolver({
 	endpoint: process.env.COGNITO_ENDPOINT,
 });
 
-export const graphweaver = new Graphweaver<AuthorizationContext>({
+export const graphweaver = new Graphweaver({
 	resolvers: [cognitoUser.resolver],
 });
 
