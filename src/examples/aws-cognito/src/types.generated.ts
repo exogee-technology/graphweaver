@@ -98,18 +98,20 @@ export type CognitoUser = {
   attributes?: Maybe<Scalars['String']['output']>;
   email?: Maybe<Scalars['String']['output']>;
   enabled: Scalars['Boolean']['output'];
-  groups: Scalars['String']['output'];
+  groups?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  userStatus: Scalars['String']['output'];
+  userStatus?: Maybe<Scalars['String']['output']>;
   username: Scalars['String']['output'];
 };
 
 export type CognitoUserCreateOrUpdateInput = {
   attributes?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
   enabled?: InputMaybe<Scalars['Boolean']['input']>;
   groups?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   userStatus?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CognitoUserDeleteInput = {
@@ -169,9 +171,11 @@ export type CognitoUserDeleteManyInput = {
 
 export type CognitoUserInsertInput = {
   attributes?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
   enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  groups: Scalars['String']['input'];
-  userStatus: Scalars['String']['input'];
+  groups?: InputMaybe<Scalars['String']['input']>;
+  userStatus?: InputMaybe<Scalars['String']['input']>;
+  username: Scalars['String']['input'];
 };
 
 export type CognitoUsersCreateOrUpdateManyInput = {
