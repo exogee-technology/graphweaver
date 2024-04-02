@@ -220,11 +220,11 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
+        version: 3.2.0(typescript@5.4.3)(vite@5.2.7)
 
   examples/mailchimp:
     dependencies:
@@ -296,11 +296,11 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
+        version: 3.2.0(typescript@5.4.3)(vite@5.2.7)
 
   examples/rest:
     dependencies:
@@ -573,8 +573,8 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
 
   packages/admin-ui:
     dependencies:
@@ -626,7 +626,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.2.1
-        version: 4.2.1(vite@5.2.6)
+        version: 4.2.1(vite@5.2.7)
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -646,11 +646,11 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
+        version: 3.2.0(typescript@5.4.3)(vite@5.2.7)
 
   packages/admin-ui-components:
     dependencies:
@@ -734,11 +734,11 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
+        version: 3.2.0(typescript@5.4.3)(vite@5.2.7)
       vitest:
         specifier: 1.4.0
         version: 1.4.0(@types/node@20.12.2)
@@ -898,11 +898,11 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
+        version: 3.2.0(typescript@5.4.3)(vite@5.2.7)
 
   packages/builder:
     dependencies:
@@ -932,7 +932,7 @@ importers:
         version: 6.15.0
       '@vitejs/plugin-react':
         specifier: 4.2.1
-        version: 4.2.1(vite@5.2.6)
+        version: 4.2.1(vite@5.2.7)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -973,14 +973,14 @@ importers:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.3)(vite@5.2.6)
+        version: 3.2.0(typescript@5.4.3)(vite@5.2.7)
     devDependencies:
       '@types/node':
         specifier: 20.12.2
@@ -1612,8 +1612,8 @@ importers:
         specifier: 5.4.3
         version: 5.4.3
       vite:
-        specifier: 5.2.6
-        version: 5.2.6(@types/node@20.12.2)
+        specifier: 5.2.7
+        version: 5.2.7(@types/node@20.12.2)
 
   packages/xero:
     dependencies:
@@ -8685,7 +8685,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.2.1(vite@5.2.6):
+  /@vitejs/plugin-react@4.2.1(vite@5.2.7):
     resolution: {integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -8696,7 +8696,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.3)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.0
-      vite: 5.2.6(@types/node@20.12.2)
+      vite: 5.2.7(@types/node@20.12.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -17637,7 +17637,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.6(@types/node@20.12.2)
+      vite: 5.2.7(@types/node@20.12.2)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -17649,7 +17649,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-svgr@3.2.0(typescript@5.4.3)(vite@5.2.6):
+  /vite-plugin-svgr@3.2.0(typescript@5.4.3)(vite@5.2.7):
     resolution: {integrity: sha512-Uvq6niTvhqJU6ga78qLKBFJSDvxWhOnyfQSoKpDPMAGxJPo5S3+9hyjExE5YDj6Lpa4uaLkGc1cBgxXov+LjSw==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4
@@ -17657,14 +17657,14 @@ packages:
       '@rollup/pluginutils': 5.1.0
       '@svgr/core': 7.0.0(typescript@5.4.3)
       '@svgr/plugin-jsx': 7.0.0
-      vite: 5.2.6(@types/node@20.12.2)
+      vite: 5.2.7(@types/node@20.12.2)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
 
-  /vite@5.2.6(@types/node@20.12.2):
-    resolution: {integrity: sha512-FPtnxFlSIKYjZ2eosBQamz4CbyrTizbZ3hnGJlh/wMtCrlp1Hah6AzBLjGI5I2urTfNnpovpHdrL6YRuBOPnCA==}
+  /vite@5.2.7(@types/node@20.12.2):
+    resolution: {integrity: sha512-k14PWOKLI6pMaSzAuGtT+Cf0YmIx12z9YGon39onaJNy8DLBfBJrzg9FQEmkAM5lpHBZs9wksWAsyF/HkpEwJA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -17741,7 +17741,7 @@ packages:
       strip-literal: 2.0.0
       tinybench: 2.6.0
       tinypool: 0.8.3
-      vite: 5.2.6(@types/node@20.12.2)
+      vite: 5.2.7(@types/node@20.12.2)
       vite-node: 1.4.0(@types/node@20.12.2)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:

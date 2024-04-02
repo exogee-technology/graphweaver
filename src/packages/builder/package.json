@@ -37,7 +37,7 @@
 		"serverless-dotenv-plugin": "6.0.0",
 		"serverless-offline": "13.3.3",
 		"type-graphql": "2.0.0-beta.2",
-		"vite": "5.2.6",
+		"vite": "5.2.7",
 		"vite-plugin-graphweaver": "workspace:*",
 		"vite-plugin-svgr": "3.2.0"
 	},
