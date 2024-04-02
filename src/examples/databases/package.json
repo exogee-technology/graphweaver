@@ -33,7 +33,7 @@
 		"class-validator": "0.14.1",
 		"graphql": "16.8.1",
 		"mysql2": "3.9.3",
-		"pg": "8.11.3",
+		"pg": "8.11.4",
 		"graphweaver": "workspace:*",
 		"reflect-metadata": "0.2.1"
 	},
