@@ -42,7 +42,7 @@
 		"vite-plugin-svgr": "3.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.12.2",
+		"@types/node": "20.12.3",
 		"@types/rimraf": "4.0.5",
 		"prettier": "3.2.5"
 	},
