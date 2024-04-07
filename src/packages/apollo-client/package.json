@@ -23,7 +23,7 @@
 	],
 	"devDependencies": {
 		"esbuild": "0.15.5",
-		"typescript": "5.4.3"
+		"typescript": "5.4.4"
 	},
 	"keywords": [
 		"graphql",
