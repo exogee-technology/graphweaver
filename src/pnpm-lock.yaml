@@ -375,8 +375,8 @@ importers:
   examples/s3-storage:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.9
-        version: 3.9.9(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 3.9.10
+        version: 3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/server':
         specifier: 4.10.2
         version: 4.10.2(graphql@16.8.1)
@@ -479,8 +479,8 @@ importers:
   examples/xero:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.9
-        version: 3.9.9(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 3.9.10
+        version: 3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@apollo/server':
         specifier: 4.10.2
         version: 4.10.2(graphql@16.8.1)
@@ -579,8 +579,8 @@ importers:
   packages/admin-ui:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.9
-        version: 3.9.9(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 3.9.10
+        version: 3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -655,8 +655,8 @@ importers:
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.9
-        version: 3.9.9(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 3.9.10
+        version: 3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -840,8 +840,8 @@ importers:
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.9
-        version: 3.9.9(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 3.9.10
+        version: 3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
       '@simplewebauthn/browser':
         specifier: 9.0.1
         version: 9.0.1
@@ -1696,8 +1696,8 @@ packages:
       graphql: 16.8.1
     dev: false
 
-  /@apollo/client@3.9.9(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-/sMecU/M0WK9knrguts1lSLV8xFKzIgOMVb4mi6MOxgJXjliDB8PvOtmXhTqh2cVMMR4TzXgOnb+af/690zlQw==}
+  /@apollo/client@3.9.10(@types/react@18.2.74)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-w8i/Lk1P0vvWZF0Xb00XPonn79/0rgRJ1vopBlVudVuy9QP29/NZXK0rI2xJIN6VrKuEqJZaVGJC+7k23I2sfA==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5

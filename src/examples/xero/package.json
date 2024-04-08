@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.9",
+		"@apollo/client": "3.9.10",
 		"@apollo/server": "4.10.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
