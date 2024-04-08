@@ -22,7 +22,7 @@
 		"@types/node": "20.12.2",
 		"esbuild": "0.15.5",
 		"glob": "10.3.10",
-		"typescript": "5.4.3",
+		"typescript": "5.4.4",
 		"vite": "5.2.6"
 	},
 	"peerDependencies": {
