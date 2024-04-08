@@ -279,7 +279,7 @@ class SchemaBuilderImplementation {
 					if (fields[listQueryName]) {
 						throw new Error(`Duplicate query name: ${listQueryName}.`);
 					}
-					fields[oneQueryName] = {
+					fields[listQueryName] = {
 						description: `Get multiple ${entity.plural}.`,
 						type: graphQLTypeForEntity(entity),
 						args: {

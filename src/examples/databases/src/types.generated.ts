@@ -97,10 +97,14 @@ export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
-  /** Get multiple Tasks. */
+  /** Get a single Task. */
   task?: Maybe<Task>;
-  /** Get multiple Users. */
+  /** Get multiple Tasks. */
+  tasks?: Maybe<Task>;
+  /** Get a single User. */
   user?: Maybe<User>;
+  /** Get multiple Users. */
+  users?: Maybe<User>;
 };
 
 
@@ -109,7 +113,17 @@ export type QueryTaskArgs = {
 };
 
 
+export type QueryTasksArgs = {
+  filter?: InputMaybe<TaskFilterInput>;
+};
+
+
 export type QueryUserArgs = {
+  filter?: InputMaybe<UserFilterInput>;
+};
+
+
+export type QueryUsersArgs = {
   filter?: InputMaybe<UserFilterInput>;
 };
 
