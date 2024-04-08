@@ -6,6 +6,7 @@ import {
 	GraphQLFloat,
 	GraphQLInputFieldConfig,
 	GraphQLInputObjectType,
+	GraphQLInt,
 	GraphQLList,
 	GraphQLNonNull,
 	GraphQLObjectType,
@@ -28,6 +29,7 @@ import {
 	isEntityMetadata,
 	isEnumMetadata,
 	TypeValue,
+	Sort,
 } from '.';
 import * as resolvers from './resolvers';
 
@@ -39,6 +41,7 @@ const mathOperations = new Set(['gt', 'gte', 'lt', 'lte']);
 const entityTypes = new Map<string, GraphQLObjectType>();
 const enumTypes = new Map<string, GraphQLEnumType>();
 const filterTypes = new Map<string, GraphQLInputObjectType>();
+const paginationTypes = new Map<string, GraphQLInputObjectType>();
 
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
 const scalarShouldGetMathOperations = (
@@ -146,7 +149,7 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let filterType = filterTypes.get(entity.name);
 	if (!filterType) {
 		filterType = new GraphQLInputObjectType({
-			name: `${entity.name}FilterInput`,
+			name: `${entity.plural}ListFilter`,
 			description: entity.description,
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
@@ -210,6 +213,60 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return filterType;
 };
 
+const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
+	let paginationType = paginationTypes.get(entity.name);
+	const sortEnumMetadata = graphweaverMetadata.getEnumByName('Sort');
+	if (!sortEnumMetadata) throw new Error('Could not locate Sort enum, which should be built in.');
+	const sortEnum = graphQLTypeForEnum(sortEnumMetadata);
+
+	if (!paginationType) {
+		paginationType = new GraphQLInputObjectType({
+			name: `${entity.plural}PaginationInput`,
+			description: `Pagination options for ${entity.plural}.`,
+			fields: () => {
+				const fields: ObjMap<GraphQLInputFieldConfig> = {
+					offset: { type: GraphQLInt },
+					limit: { type: GraphQLInt },
+				};
+
+				// In order to know if we want to add orderBy to the type, we
+				// need to know how many sortable fields there actually are on the entity.
+				const orderByFields: ObjMap<GraphQLInputFieldConfig> = {};
+
+				for (const field of entity.fields) {
+					// Let's try to resolve the GraphQL type involved here.
+					const fieldType = field.getType();
+					const metadata = graphweaverMetadata.metadataForType(fieldType);
+
+					if (isEntityMetadata(metadata)) {
+						// We don't sort on relationships.
+						continue;
+					}
+
+					// But if we're here, we do allow sorting.
+					orderByFields[field.name] = { type: sortEnum };
+				}
+
+				if (Object.keys(orderByFields).length > 0) {
+					// Ok, there's something we can sort by, let's add the field.
+					fields['orderBy'] = {
+						type: new GraphQLInputObjectType({
+							name: `${entity.plural}OrderByInput`,
+							fields: orderByFields,
+						}),
+					};
+				}
+
+				return fields;
+			},
+		});
+
+		paginationTypes.set(entity.name, paginationType);
+	}
+
+	return paginationType;
+};
+
 export interface SchemaBuilderOptions {
 	authChecker?: AuthChecker<any, any>;
 }
@@ -243,6 +300,9 @@ class SchemaBuilderImplementation {
 			) {
 				yield filterTypeForEntity(entity);
 			}
+
+			// The input type for pagination and sorting
+			yield paginationTypeForEntity(entity);
 		}
 
 		for (const enumType of graphweaverMetadata.enums()) {
@@ -281,9 +341,10 @@ class SchemaBuilderImplementation {
 					}
 					fields[listQueryName] = {
 						description: `Get multiple ${entity.plural}.`,
-						type: graphQLTypeForEntity(entity),
+						type: new GraphQLList(graphQLTypeForEntity(entity)),
 						args: {
 							filter: { type: filterTypeForEntity(entity) },
+							pagination: { type: paginationTypeForEntity(entity) },
 						},
 						resolve: resolvers.list,
 					};
