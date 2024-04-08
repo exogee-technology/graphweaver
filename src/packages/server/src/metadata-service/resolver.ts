@@ -2,16 +2,12 @@ import {
 	isSummaryField,
 	isReadOnlyAdminUI,
 	isReadOnlyPropertyAdminUI,
-	AdminUISettingsMap,
 	AdminUIFilterType,
 	RelationshipType,
 	BaseContext,
 	getExportPageSize,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
-import { Ctx, Query, Resolver } from 'type-graphql';
-import { EnumMetadata } from 'type-graphql/dist/metadata/definitions';
-import { AdminUiMetadata } from './metadata';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
@@ -24,8 +20,7 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	}
 
 	// Check if we have an enum
-	const isEnum = graphweaverMetadata.enums.find((value) => value.name === field.type);
-	if (isEnum) return AdminUIFilterType.ENUM;
+	if (graphweaverMetadata.getEnumByName(field.type)) return AdminUIFilterType.ENUM;
 
 	// Otherwise check the type
 	switch (field.type) {
@@ -44,127 +39,229 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	}
 };
 
-export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
-	@Resolver((of) => AdminUiMetadata)
-	class AdminUiMetadataResolver {
-		@Query(() => AdminUiMetadata, { name: '_graphweaver' })
-		public async getAdminUiMetadata<C extends BaseContext>(@Ctx() context: C) {
-			await hooks?.beforeRead?.({ context });
+export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
+	return async <C extends BaseContext>(source: unknown, args: unknown, context: C) => {
+		await hooks?.beforeRead?.({ context });
 
-			const enumMetadata = new Map<object, EnumMetadata>();
-			for (const registeredEnum of graphweaverMetadata.enums) {
-				enumMetadata.set(registeredEnum.enumObj, registeredEnum);
-			}
+		const entities: (AdminUiEntityMetadata | undefined)[] = Array.from(
+			graphweaverMetadata.entities()
+		)
+			.map((entity) => {
+				const { name, adminUIOptions } = entity;
 
-			const entities: (AdminUiEntityMetadata | undefined)[] = graphweaverMetadata.entities
-				.map((entity) => {
-					const name = entity.name;
-					const adminUISettings = AdminUISettingsMap.get(name);
-					const defaultFilter = adminUISettings?.entity?.defaultFilter;
+				// If the entity is hidden from the display, return undefined
+				// so that it won't show up in the metadata.
+				if (adminUIOptions?.hideInSideBar) return;
 
-					if (adminUISettings?.entity?.hideFromDisplay) {
-						return;
-					}
+				const backendId = entity.provider?.backendId;
+				const plural = entity.plural;
 
-					const backendId = entity.provider?.backendId;
-					const plural = entity.plural;
+				const visibleFields = entity.fields.filter((field) => !field.hideInAdminUI);
 
-					const visibleFields = entity.fields.filter(
-						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay
-					);
+				const summaryField = visibleFields.find((field) =>
+					isSummaryField(entity.target, field.name)
+				)?.name;
 
-					const summaryField = visibleFields.find((field) =>
-						isSummaryField(entity.target, field.name)
-					)?.name;
+				const attributes = new AdminUiEntityAttributeMetadata();
+				attributes.isReadOnly = isReadOnlyAdminUI(entity.target);
+				attributes.exportPageSize = getExportPageSize(entity.target);
 
-					const attributes = new AdminUiEntityAttributeMetadata();
-					if (isReadOnlyAdminUI(entity.target)) {
-						attributes.isReadOnly = true;
-					}
+				const fields = visibleFields?.map((field) => {
+					const fieldType = field.getType();
+					const isArray = Array.isArray(fieldType);
+					const relatedObject = graphweaverMetadata.metadataForType(fieldType);
 
-					const exportPageSize = getExportPageSize(entity.target);
-					if (exportPageSize) {
-						attributes.exportPageSize = exportPageSize;
-					}
+					// Define field attributes
+					const isReadOnly = isReadOnlyPropertyAdminUI(entity.target, field.name);
+					const isRequired = !field.nullable;
 
-					const fields = visibleFields?.map((field) => {
-						const typeValue = field.getType() as { name: string };
-						const typeName = typeValue.name ?? enumMetadata.get(typeValue)?.name;
+					const fieldObject: AdminUiFieldMetadata = {
+						name: field.name,
+						type: relatedObject?.name || (fieldType as any).name,
+						isArray,
+						attributes: {
+							isReadOnly,
+							isRequired,
+						},
+					};
 
-						const relatedObject = graphweaverMetadata.hasEntity(typeName)
-							? graphweaverMetadata.getEntity(typeName)
-							: undefined;
+					// Check if we have an array of related entities
+					if (isArray && relatedObject?.type === 'entity') {
+						// Ok, it's a relationship to another object type that is an array, e.g. "to many".
+						// We'll default to one to many, then if we can find a field on the other side that points
+						// back to us and it's also an array, then it's a many to many.
+						fieldObject.relatedEntity = relatedObject.name;
+						fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
 
-						// Define field attributes
-						const isReadOnly = isReadOnlyPropertyAdminUI(entity.target, field.name);
-						const isRequired = !field.typeOptions.nullable;
-
-						const fieldObject: AdminUiFieldMetadata = {
-							name: field.name,
-							type: relatedObject?.name || typeName,
-							isArray: field.typeOptions.array,
-							extensions: field.extensions || {},
-							attributes: {
-								isReadOnly,
-								isRequired,
-							},
-						};
-
-						// Check if we have an array of related entities
-						if (field.typeOptions.array && relatedObject) {
-							// Ok, it's a relationship to another object type that is an array, e.g. "to many".
-							// We'll default to one to many, then if we can find a field on the other side that points
-							// back to us and it's also an array, then it's a many to many.
-							fieldObject.relatedEntity = relatedObject.name;
-							fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
-
-							const relatedEntityField = relatedObject.fields.find((field) => {
-								const fieldType = field.getType() as { name?: string };
-								return fieldType.name === entity.target.name;
-							});
-							if (relatedEntityField?.typeOptions.array) {
-								fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
-							}
-						} else if (relatedObject) {
-							fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
+						const relatedEntityField = relatedObject.fields.find((field) => {
+							const fieldType = field.getType() as { name?: string };
+							return fieldType.name === (entity.target as { name?: string }).name;
+						});
+						if (Array.isArray(relatedEntityField?.getType())) {
+							fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
 						}
-						fieldObject.filter = adminUISettings?.fields?.[field.name]?.hideFromFilterBar
-							? undefined
-							: {
-									type: mapFilterType(fieldObject),
-								};
+					} else if (relatedObject) {
+						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
+					}
 
-						return fieldObject;
-					});
-					return {
-						name,
-						plural,
-						defaultFilter,
-						backendId,
-						summaryField,
-						fields,
-						attributes,
-					};
-				})
-				.filter((entity) => entity && !!entity.backendId);
+					if (relatedObject?.type === 'entity' && !adminUIOptions?.hideInFilterBar) {
+						fieldObject.filter = { type: mapFilterType(fieldObject) };
+					}
 
-			const enums = graphweaverMetadata.enums.map((registeredEnum) => ({
-				name: registeredEnum.name,
-				values: Object.entries(registeredEnum.enumObj).map(([name, value]) => ({
+					return fieldObject;
+				});
+				return {
 					name,
-					value,
-				})),
-			}));
+					plural,
+					backendId,
+					summaryField,
+					fields,
+					attributes,
+					adminUIOptions: {
+						defaultFilter: adminUIOptions?.defaultFilter,
+					},
+				};
+			})
+			.filter((entity) => entity && !!entity.backendId);
 
-			const params = hooks?.afterRead
-				? await hooks.afterRead({ context, metadata: { entities, enums } })
-				: {
-						metadata: { entities, enums },
-					};
+		const enums = Array.from(graphweaverMetadata.enums()).map((registeredEnum) => ({
+			name: registeredEnum.name,
+			values: Object.entries(registeredEnum.target).map(([name, value]) => ({
+				name,
+				value,
+			})),
+		}));
 
-			return params?.metadata;
+		if (hooks?.afterRead) {
+			const result = await hooks.afterRead({ context, metadata: { entities, enums } });
+			return result.metadata;
 		}
-	}
 
-	return AdminUiMetadataResolver;
+		return { entities, enums };
+	};
 };
+
+// export const getAdminUiMetadataResolver = (hooks?: AdminMetadata['hooks']) => {
+// 	@Resolver((of) => AdminUiMetadata)
+// 	class AdminUiMetadataResolver {
+// 		@Query(() => AdminUiMetadata, { name: '_graphweaver' })
+// 		public async getAdminUiMetadata<C extends BaseContext>(@Ctx() context: C) {
+// 			await hooks?.beforeRead?.({ context });
+
+// 			const enumMetadata = new Map<object, EnumMetadata>();
+// 			for (const registeredEnum of graphweaverMetadata.enums) {
+// 				enumMetadata.set(registeredEnum.enumObj, registeredEnum);
+// 			}
+
+// 			const entities: (AdminUiEntityMetadata | undefined)[] = graphweaverMetadata.entities
+// 				.map((entity) => {
+// 					const name = entity.name;
+// 					const adminUISettings = AdminUISettingsMap.get(name);
+// 					const defaultFilter = adminUISettings?.entity?.defaultFilter;
+
+// 					if (adminUISettings?.entity?.hideFromDisplay) {
+// 						return;
+// 					}
+
+// 					const backendId = entity.provider?.backendId;
+// 					const plural = entity.plural;
+
+// 					const visibleFields = entity.fields.filter(
+// 						(field) => !adminUISettings?.fields?.[field.name]?.hideFromDisplay
+// 					);
+
+// 					const summaryField = visibleFields.find((field) =>
+// 						isSummaryField(entity.target, field.name)
+// 					)?.name;
+
+// 					const attributes = new AdminUiEntityAttributeMetadata();
+// 					if (isReadOnlyAdminUI(entity.target)) {
+// 						attributes.isReadOnly = true;
+// 					}
+
+// 					const exportPageSize = getExportPageSize(entity.target);
+// 					if (exportPageSize) {
+// 						attributes.exportPageSize = exportPageSize;
+// 					}
+
+// 					const fields = visibleFields?.map((field) => {
+// 						const typeValue = field.getType() as { name: string };
+// 						const typeName = typeValue.name ?? enumMetadata.get(typeValue)?.name;
+
+// 						const relatedObject = graphweaverMetadata.hasEntity(typeName)
+// 							? graphweaverMetadata.getEntity(typeName)
+// 							: undefined;
+
+// 						// Define field attributes
+// 						const isReadOnly = isReadOnlyPropertyAdminUI(entity.target, field.name);
+// 						const isRequired = !field.typeOptions.nullable;
+
+// 						const fieldObject: AdminUiFieldMetadata = {
+// 							name: field.name,
+// 							type: relatedObject?.name || typeName,
+// 							isArray: field.typeOptions.array,
+// 							extensions: field.extensions || {},
+// 							attributes: {
+// 								isReadOnly,
+// 								isRequired,
+// 							},
+// 						};
+
+// 						// Check if we have an array of related entities
+// 						if (field.typeOptions.array && relatedObject) {
+// 							// Ok, it's a relationship to another object type that is an array, e.g. "to many".
+// 							// We'll default to one to many, then if we can find a field on the other side that points
+// 							// back to us and it's also an array, then it's a many to many.
+// 							fieldObject.relatedEntity = relatedObject.name;
+// 							fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
+
+// 							const relatedEntityField = relatedObject.fields.find((field) => {
+// 								const fieldType = field.getType() as { name?: string };
+// 								return fieldType.name === entity.target.name;
+// 							});
+// 							if (relatedEntityField?.typeOptions.array) {
+// 								fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
+// 							}
+// 						} else if (relatedObject) {
+// 							fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
+// 						}
+// 						fieldObject.filter = adminUISettings?.fields?.[field.name]?.hideFromFilterBar
+// 							? undefined
+// 							: {
+// 									type: mapFilterType(fieldObject),
+// 								};
+
+// 						return fieldObject;
+// 					});
+// 					return {
+// 						name,
+// 						plural,
+// 						defaultFilter,
+// 						backendId,
+// 						summaryField,
+// 						fields,
+// 						attributes,
+// 					};
+// 				})
+// 				.filter((entity) => entity && !!entity.backendId);
+
+// 			const enums = graphweaverMetadata.enums.map((registeredEnum) => ({
+// 				name: registeredEnum.name,
+// 				values: Object.entries(registeredEnum.enumObj).map(([name, value]) => ({
+// 					name,
+// 					value,
+// 				})),
+// 			}));
+
+// 			const params = hooks?.afterRead
+// 				? await hooks.afterRead({ context, metadata: { entities, enums } })
+// 				: {
+// 						metadata: { entities, enums },
+// 					};
+
+// 			return params?.metadata;
+// 		}
+// 	}
+
+// 	return AdminUiMetadataResolver;
+// };

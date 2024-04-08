@@ -1,9 +1,11 @@
-import { AdminUIFilterType } from '@exogee/graphweaver';
-import { Field, ObjectType, registerEnumType } from 'type-graphql';
+import { AdminUIFilterType, Entity, Field, graphweaverMetadata } from '@exogee/graphweaver';
 
-registerEnumType(AdminUIFilterType, { name: 'AdminUiFilterType' });
+graphweaverMetadata.collectEnumInformation({
+	name: 'AdminUiFilterType',
+	target: AdminUIFilterType,
+});
 
-@ObjectType('AdminUiFilterMetadata')
+@Entity('AdminUiFilterMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
 export class AdminUiFilterMetadata {
 	@Field(() => AdminUIFilterType)
 	type!: AdminUIFilterType;

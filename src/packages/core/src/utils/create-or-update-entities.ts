@@ -30,7 +30,9 @@ const getMutationName = <G extends WithId>(
 	name: string,
 	data: Partial<G> | Partial<G>[]
 ): string => {
-	const entityMetadata = graphweaverMetadata.getEntity(name);
+	const entityMetadata = graphweaverMetadata.getEntityByName(name);
+	if (!entityMetadata) throw new Error(`Could not locate metadata for '${name}' entity.`);
+
 	const plural = entityMetadata.plural;
 	if (Array.isArray(data)) {
 		const isUpdateMany = data.every((object) => object.id);
@@ -92,7 +94,9 @@ export const createOrUpdateEntities = async <
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const meta = graphweaverMetadata.getEntity<G, D>(entityTypeName);
+	const meta = graphweaverMetadata.getEntityByName<G, D>(entityTypeName);
+	if (!meta) throw new Error(`Could not locate metadata for '${entityTypeName}' entity.`);
+
 	const gqlEntityType: GraphQLEntityType<G, D> = meta.target;
 
 	if (!meta.provider) {
@@ -149,7 +153,10 @@ export const createOrUpdateEntities = async <
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = graphweaverMetadata.getEntity(relatedEntity.name);
+					const childMeta = graphweaverMetadata.getEntityByName(relatedEntity.name);
+					if (!childMeta)
+						throw new Error(`Could not locate metadata for '${relatedEntity.name}' entity.`);
+
 					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
 					if (!parentField) {
 						throw new Error(

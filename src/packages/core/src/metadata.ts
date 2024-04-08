@@ -1,16 +1,53 @@
-import { BaseDataEntity } from '.';
-import { BackendProvider, FieldMetadata, Filter } from './common/types';
+import { BaseDataEntity, GraphQLFieldResolver } from '.';
+import { BackendProvider, FieldMetadata, Filter } from './types';
+import { logger } from '@exogee/logger';
 
 export interface EntityMetadata<G, D extends BaseDataEntity> {
 	type: 'entity';
 	name: string;
+	description?: string;
 	plural: string;
 	target: G;
 	provider?: BackendProvider<D, G>;
 	fields: FieldMetadata<G>[];
-	defaultFilter?: Filter<G>;
-	hideFromDisplay?: boolean;
-	hideFromFilterBar?: boolean;
+
+	apiOptions?: {
+		// This means that the entity should not be given the default list, find one, create, update, and delete
+		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
+		// enables excludeFromFiltering as well.
+		excludeFromBuiltInOperations?: boolean;
+
+		// This means that the entity should appear in the API but not have any options to filter queries
+		// by fields. This is useful for entities that are not backed by a fully fledged provider or are
+		// otherwise dynamically generated.
+		excludeFromFiltering?: boolean;
+	};
+
+	adminUIOptions?: {
+		// Specifies the default filter used in the Admin UI when viewing the list view.
+		// Users can still override this filter, but this is the default. This has no
+		// impact on the API, purely how entities are displayed in the Admin UI.
+		defaultFilter?: Filter<G>;
+
+		// If true, the entity will not show up in the side bar (on the left when you log in).
+		// If a property on another entity references this entity, it will still show up in
+		// the field of that entity using its display property.
+		hideInSideBar?: boolean;
+
+		// If true, properties that reference this entity from other entities will not be able
+		// to be filtered in the list view for those entities. This is
+		hideInFilterBar?: boolean;
+	};
+}
+
+export function isEntityMetadata<G, D extends BaseDataEntity>(
+	value: unknown
+): value is EntityMetadata<G, D> {
+	const test = value as EntityMetadata<G, D>;
+
+	return (
+		test?.type === 'entity' && typeof test?.name === 'string' && typeof test?.target === 'function'
+	);
 }
 
 export interface EnumMetadata<TEnum extends object> {
@@ -19,6 +56,14 @@ export interface EnumMetadata<TEnum extends object> {
 	name: string;
 	description?: string;
 	valuesConfig?: EnumValuesConfig<TEnum>;
+}
+
+export function isEnumMetadata<TEnum extends object>(value: unknown): value is EnumMetadata<TEnum> {
+	const test = value as EnumMetadata<TEnum>;
+
+	return (
+		test?.type === 'enum' && typeof test?.name === 'string' && typeof test?.target === 'object'
+	);
 }
 
 export type EnumValuesConfig<TEnum extends object> = Partial<
@@ -37,10 +82,17 @@ export type CollectEnumInformationArgs<TEnum extends object> = Omit<EnumMetadata
 
 export type CollectEntityInformationArgs<G, D extends BaseDataEntity> = Omit<
 	EntityMetadata<G, D>,
-	'type' | 'provider' | 'fields'
+	'type' | 'fields'
 >;
 
 export type CollectInputTypeInformationArgs<G> = Omit<InputTypeMetadata<G>, 'type' | 'fields'>;
+
+export interface AdditionalOperationInformation {
+	name: string;
+	getType: () => any;
+	resolver: GraphQLFieldResolver<any, any, any, unknown>;
+	description?: string;
+}
 
 class Metadata {
 	private metadataByType = new Map<
@@ -51,6 +103,9 @@ class Metadata {
 		string,
 		EntityMetadata<unknown, any> | EnumMetadata<any> | InputTypeMetadata<unknown>
 	>();
+
+	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
+	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
 
 	// We have to lazy load this because fields get their decorators run first. This means
 	// when the field creates the entity, we need to not look at the name until after the
@@ -74,68 +129,77 @@ class Metadata {
 	) {
 		// In most cases the entity info will already be in the map because field decorators run
 		// before class decorators. Override what we know our source of truth to be and keep rolling.
-		const existingMetadata = this.metadataByType.get(args.target);
-		if (existingMetadata?.type === 'entity') {
-			existingMetadata.name = args.name;
-			existingMetadata.plural = args.plural;
-		} else if (!existingMetadata) {
-			this.metadataByType.set(args.target, {
+		let existingMetadata = this.metadataByType.get(args.target) as EntityMetadata<G, D>;
+		if (!existingMetadata) {
+			existingMetadata = {
 				type: 'entity',
 				name: args.name,
 				plural: args.plural,
 				target: args.target,
 				fields: [],
-			});
-		} else {
-			throw new Error(
-				'Unexpected Error: Tried to collect entity information on a type that is not an entity'
-			);
+			};
 		}
+
+		// Copy the new info we have over into the metadata store. This is a shallow
+		// copy, but that should be fine in our case.
+		Object.assign(existingMetadata, args);
+
+		this.metadataByType.set(args.target, existingMetadata);
 	}
 
 	public collectProviderInformationForEntity<G, D extends BaseDataEntity>(args: {
 		provider: BackendProvider<D, G>;
 		target: G;
 	}) {
-		const existingMetadata = this.metadataByType.get(args.target);
-		if (existingMetadata?.type === 'entity') {
-			existingMetadata.provider = args.provider;
-		} else if (!existingMetadata) {
-			this.metadataByType.set(args.target, {
+		let existingMetadata = this.metadataByType.get(args.target) as EntityMetadata<G, D>;
+		if (!existingMetadata) {
+			existingMetadata = {
 				type: 'entity',
 				name: 'UnknownEntity',
 				plural: 'UnknownEntity',
 				target: args.target,
-				provider: args.provider,
 				fields: [],
-			});
-		} else {
-			throw new Error(
-				'Unexpected Error: Tried to collect provider information on a type that is not an entity'
-			);
+			};
 		}
+
+		existingMetadata.provider = args.provider;
+
+		this.metadataByType.set(args.target, existingMetadata);
 	}
 
 	public collectFieldInformation<G>(args: FieldMetadata<G>) {
-		const existingMetadata = this.metadataByType.get(args.target);
-		if (existingMetadata?.type === 'entity' || existingMetadata?.type === 'inputType') {
-			existingMetadata.fields.push(args);
-		} else {
-			this.metadataByType.set(args.target, {
-				// This could be overwritten later, for example to an Entity, but we'll default it to 'inputType' for the time being because it's the simplest.
-				type: 'inputType',
+		// We need to refer to the constructor here because the class doesn't exist yet.
+		// Later when we collect entity information this will line up as the same type.
+		const entity = (args.target as any).constructor;
+
+		let existingMetadata = this.metadataByType.get(entity) as EntityMetadata<G, any>;
+		if (!existingMetadata) {
+			existingMetadata = {
+				// This could be overwritten later, for example to an Input Type, but we'll default it to 'entity' for the time being because it's the most likely.
+				type: 'entity',
 
 				// This name will probably be overwritten later.
-				name: (args.target as any).name ?? 'UnknownEntity',
+				name: entity.name ?? 'UnknownEntity',
+				plural: entity.plural ?? 'UnknownEntityPlural',
 				target: args.target,
-				fields: [args],
-			});
+				fields: [],
+			};
 		}
+
+		existingMetadata.fields.push(args);
+
+		this.metadataByType.set(entity, existingMetadata);
 	}
 
 	public collectEnumInformation<TEnum extends object>(args: CollectEnumInformationArgs<TEnum>) {
 		if (this.metadataByType.has(args.target)) {
-			throw new Error(`Unexpected Error: duplicate enum (${args.name}) in metadata`);
+			logger.warn(
+				{
+					existing: this.metadataByType.get(args.target),
+					new: args,
+				},
+				`Enum with name ${args.name} already exists in metadata map. Overwriting with latest values provided.`
+			);
 		}
 
 		this.metadataByType.set(args.target, {
@@ -145,29 +209,34 @@ class Metadata {
 	}
 
 	public collectInputTypeInformation<G>(args: CollectInputTypeInformationArgs<G>) {
-		const existingMetadata = this.metadataByType.get(args.target);
-		if (existingMetadata?.type === 'inputType') {
-			existingMetadata.name = args.name;
-			existingMetadata.description = args.description;
-		} else if (!existingMetadata) {
-			this.metadataByType.set(args.target, {
+		let existingMetadata = this.metadataByType.get(args.target);
+
+		if (!existingMetadata) {
+			existingMetadata = {
 				type: 'inputType',
 				name: args.name,
 				description: args.description,
-				fields: [],
 				target: args.target,
-			});
-		} else {
-			throw new Error(
-				'Unexpected Error: Tried to collect input type information on a type that is not an input type'
-			);
+
+				fields: [],
+			};
 		}
+
+		Object.assign(existingMetadata, args);
+
+		this.metadataByType.set(args.target, existingMetadata);
 	}
 
 	// get a list of all the entity metadata in the metadata map
 	public *entities() {
 		for (const value of this.metadataByType.values()) {
 			if (value.type === 'entity') yield value;
+		}
+	}
+
+	public *entityNames() {
+		for (const entity of this.entities()) {
+			yield entity.name;
 		}
 	}
 
@@ -181,6 +250,12 @@ class Metadata {
 	public *inputTypes() {
 		for (const value of this.metadataByType.values()) {
 			if (value.type === 'inputType') yield value;
+		}
+	}
+
+	public *additionalQueries() {
+		for (const value of this.additionalQueriesLookup.values()) {
+			yield value;
 		}
 	}
 
@@ -198,6 +273,10 @@ class Metadata {
 	}
 
 	public metadataForType(type: unknown) {
+		if (Array.isArray(type)) {
+			return this.metadataByType.get(type[0]);
+		}
+
 		return this.metadataByType.get(type);
 	}
 
@@ -213,43 +292,46 @@ class Metadata {
 		return this.metadataByType.get(type)?.type === 'inputType';
 	}
 
+	public get typeCounts() {
+		const counts = {
+			entity: 0,
+			enum: 0,
+			inputType: 0,
+		};
+
+		for (const value of this.metadataByType.values()) {
+			counts[value.type]++;
+		}
+
+		return counts;
+	}
+
 	// get the metadata for a specific entity
-	public getEntity<G, D extends BaseDataEntity>(name: string): EntityMetadata<G, D> {
+	public getEntityByName<G, D extends BaseDataEntity>(
+		name: string
+	): EntityMetadata<G, D> | undefined {
 		const meta = this.getTypeForName(name);
 
-		if (!meta) {
-			throw new Error(`Unexpected Error: entity (${name}) not found in metadata map`);
-		}
-		if (meta.type !== 'entity') {
-			throw new Error(`Unexpected Error: entity (${name}) is '${meta.type}' not an entity`);
-		}
+		if (meta?.type !== 'entity') return undefined;
 
 		return meta as EntityMetadata<G, D>;
 	}
 
 	// check if the metadata map has a specific enum
-	public getEnum<TEnum extends object = object>(name: string): EnumMetadata<TEnum> {
+	public getEnumByName<TEnum extends object = object>(
+		name: string
+	): EnumMetadata<TEnum> | undefined {
 		const meta = this.getTypeForName(name);
 
-		if (!meta) {
-			throw new Error(`Unexpected Error: enum (${name}) not found in metadata map`);
-		}
-		if (meta.type !== 'enum') {
-			throw new Error(`Unexpected Error: enum (${name}) is '${meta.type}' not an enum`);
-		}
+		if (meta?.type !== 'enum') return undefined;
 
 		return meta;
 	}
 
-	public getInputType(name: string) {
+	public getInputTypeByName(name: string) {
 		const meta = this.getTypeForName(name);
 
-		if (!meta) {
-			throw new Error(`Unexpected Error: input type (${name}) not found in metadata map`);
-		}
-		if (meta.type !== 'inputType') {
-			throw new Error(`Unexpected Error: input type (${name}) is '${meta.type}' not an input type`);
-		}
+		if (meta?.type !== 'inputType') return undefined;
 
 		return meta;
 	}
@@ -259,9 +341,44 @@ class Metadata {
 		return this.metadataByType.get(type)?.name;
 	}
 
+	public addQuery(args: {
+		name: string;
+		getType: () => any;
+		resolver: GraphQLFieldResolver<any, any, any, unknown>;
+		description?: string;
+		intentionalOverride?: boolean;
+	}) {
+		if (this.additionalQueriesLookup.has(args.name) && !args.intentionalOverride) {
+			throw new Error(
+				`Query with name ${args.name} already exists and this is not an intentional override`
+			);
+		}
+
+		this.additionalQueriesLookup.set(args.name, args);
+	}
+
+	public addMutation(args: {
+		name: string;
+		getType: () => any;
+		resolver: () => any;
+		description?: string;
+		intentionalOverride?: boolean;
+	}) {
+		if (this.additionalMutationsLookup.has(args.name) && !args.intentionalOverride) {
+			throw new Error(
+				`Mutation with name ${args.name} already exists and this is not an intentional override`
+			);
+		}
+
+		// We'll copy it here just to be sure it doesn't get mutated later without our knowledge.
+		this.additionalMutationsLookup.set(args.name, { ...args });
+	}
+
 	public clear() {
 		this.metadataByType.clear();
 		this.nameLookupCache.clear();
+		this.additionalMutationsLookup.clear();
+		this.additionalQueriesLookup.clear();
 	}
 }
 

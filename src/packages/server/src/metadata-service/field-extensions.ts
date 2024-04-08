@@ -1,6 +1,6 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Entity, Field } from '@exogee/graphweaver';
 
-@ObjectType('AdminUiFieldExtensionsMetadata')
+@Entity('AdminUiFieldExtensionsMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
 export class AdminUiFieldExtensionsMetadata {
 	@Field(() => String, { nullable: true })
 	key?: string;

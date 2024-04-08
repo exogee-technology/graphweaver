@@ -1,5 +1,5 @@
 import { parseResolveInfo } from 'graphql-parse-resolve-info';
-import { HookParams } from './common/types';
+import { HookParams } from './types';
 
 export enum HookRegister {
 	BEFORE_CREATE = 'BEFORE_CREATE',
@@ -21,6 +21,8 @@ const augmentParamsWithFields = <G, P extends HookParams<G>>(params: P) => {
 };
 
 export type HookFunction<G, P extends HookParams<G> = HookParams<G>> = (params: P) => Promise<P>;
+
+export const hookManagerMap = new Map<string, HookManager<any>>([]);
 
 export class HookManager<G> {
 	private hooks: Record<HookRegister, HookFunction<G, any>[]> = {

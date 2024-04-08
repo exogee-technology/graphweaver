@@ -5,5 +5,5 @@
 		"outDir": "./lib"
 	},
 	"include": ["./src"],
-	"references": [{ "path": "../logger" }, { "path": "../auth" }]
+	"references": [{ "path": "../logger" }]
 }

@@ -1,9 +1,9 @@
-import { Field, ObjectType } from 'type-graphql';
+import { Entity, Field } from '@exogee/graphweaver';
 import { AdminUiFilterMetadata } from './filter';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
 import { AdminUiFieldExtensionsMetadata } from './field-extensions';
 
-@ObjectType('AdminUiFieldMetadata')
+@Entity('AdminUiFieldMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
 export class AdminUiFieldMetadata {
 	@Field(() => String)
 	name!: string;

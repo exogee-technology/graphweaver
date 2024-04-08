@@ -1,5 +1,4 @@
-import { Complexity, GetTypeFunction } from '..';
-import { graphweaverMetadata } from '..';
+import { Complexity, GetTypeFunction, graphweaverMetadata } from '..';
 
 export interface FieldOptions {
 	description?: string;

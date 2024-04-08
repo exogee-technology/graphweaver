@@ -1,0 +1,20 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"outDir": "./lib",
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"experimentalDecorators": true,
+		"target": "es2019",
+		"module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"jsx": "react-jsx"
+	},
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/graphweaver-helpers" },
+		{ "path": "../../packages/rest" }
+	]
+}

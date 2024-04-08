@@ -1,6 +1,6 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { Arg, ID, Mutation, Query, Resolver } from '@exogee/graphweaver';
+import { graphweaverMetadata, GraphQLID } from '@exogee/graphweaver';
 
 export enum StorageType {
 	S3 = 's3',
@@ -22,25 +22,37 @@ export interface IStorageResolver {
 }
 const EXPIRE_TIME = 3600;
 
-@Resolver()
-export class S3StorageResolver {
-	private storageProvider: S3StorageProvider;
-	constructor(config: StorageConfig) {
-		this.storageProvider = new S3StorageProvider(config);
-	}
+export const addMediaOperations = (config: StorageConfig) => {
+	const storageProvider = new S3StorageProvider(config);
 
-	@Mutation(() => String)
-	async getUploadUrl(@Arg('key', () => ID) key: string): Promise<string> {
-		const uploadURL = await this.storageProvider.getUploadUrl(key);
-		return uploadURL;
-	}
+	graphweaverMetadata.addQuery({
+		name: 'getUploadUrl',
+		getType: () => GraphQLID,
 
-	@Query(() => String)
-	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
-		const downloadURL = await this.storageProvider.getDownloadUrl(key);
-		return downloadURL;
-	}
-}
+		// @todo: Fix type on resolver for Add Query when we understand the type signature better.
+		resolver: (({ key }: { key: string }) => storageProvider.getUploadUrl(key)) as any,
+		// args: {
+		// 	key: GraphQLID,
+		// },
+	});
+};
+
+// @Resolver()
+// export class S3StorageResolver {
+// 	private storageProvider: S3StorageProvider;
+// 	constructor() {
+// 		this.storageProvider = new S3StorageProvider(config);
+// 	}
+
+// 	@Mutation(() => String)
+// 	async getUploadUrl(@Arg('key', () => ID) key: string): Promise<string> {}
+
+// 	@Query(() => String)
+// 	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
+// 		const downloadURL = await this.storageProvider.getDownloadUrl(key);
+// 		return downloadURL;
+// 	}
+// }
 
 export class S3StorageProvider {
 	bucketName: string;
@@ -69,16 +81,16 @@ export class S3StorageProvider {
 		return uploadURL;
 	}
 
-	async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
-		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
+	// async getDownloadUrl(@Arg('key', () => ID) key: string): Promise<string> {
+	// 	if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
-		const s3 = new S3Client({
-			region: this.region,
-		});
+	// 	const s3 = new S3Client({
+	// 		region: this.region,
+	// 	});
 
-		const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });
-		const downloadURL = getSignedUrl(s3, command, { expiresIn: this.expiresIn });
+	// 	const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });
+	// 	const downloadURL = getSignedUrl(s3, command, { expiresIn: this.expiresIn });
 
-		return downloadURL;
-	}
+	// 	return downloadURL;
+	// }
 }

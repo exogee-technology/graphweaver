@@ -1,23 +1,25 @@
 import { CollectEntityInformationArgs, graphweaverMetadata, pluralise } from '..';
 
-export type EntityOptions = Partial<
-	Omit<CollectEntityInformationArgs<unknown, any>, 'fields' | 'gqlEntityType'>
+export type EntityOptions<G> = Partial<
+	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
 
-export function Entity(name: string): ClassDecorator;
-export function Entity(options: EntityOptions): ClassDecorator;
-export function Entity(nameOrOptions?: string | EntityOptions) {
-	return <G>(target: G) => {
-		const options = typeof nameOrOptions === 'string' ? { name: nameOrOptions } : nameOrOptions;
-		const name = options?.name ?? (target as any).name;
+export function Entity<G>(name: string): ClassDecorator;
+export function Entity<G>(options: EntityOptions<G>): ClassDecorator;
+export function Entity<G>(name: string, options: EntityOptions<G>): ClassDecorator;
+export function Entity<G>(nameOrOptions?: string | EntityOptions<G>, options?: EntityOptions<G>) {
+	return (target: G) => {
+		const resolvedOptions =
+			options ?? (typeof nameOrOptions === 'string' ? { name: nameOrOptions } : nameOrOptions);
+		const name = resolvedOptions?.name ?? (target as any).name;
 
 		if (!name) {
 			throw new Error('Could not determine name for entity.');
 		}
-		const plural = pluralise(options?.plural ?? name, !!options?.plural);
+		const plural = pluralise(resolvedOptions?.plural ?? name, !!resolvedOptions?.plural);
 
 		graphweaverMetadata.collectEntityInformation({
-			...options,
+			...resolvedOptions,
 			name,
 			plural,
 			target,

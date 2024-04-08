@@ -1,10 +1,13 @@
-import { getAdminUiMetadataResolver } from './metadata-service';
-import { AuthChecker, buildSchemaSync } from 'type-graphql';
 import { GraphQLSchema } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
-import { addChildFiltersToRelationshipFields, graphweaverMetadata } from '@exogee/graphweaver';
+import {
+	AuthChecker,
+	SchemaBuilder,
+	addChildFiltersToRelationshipFields,
+	graphweaverMetadata,
+} from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
@@ -19,6 +22,8 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
+import { resolveAdminUiMetadata } from './metadata-service';
+import { AdminUiMetadata } from './metadata-service/metadata';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -42,16 +47,12 @@ export interface AdminMetadata {
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
-	resolvers: Array<any>;
-	// We omit schema here because we will build it from your resolvers.
+	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	graphQLArmorOptions?: GraphQLArmorConfig;
 	authChecker?: AuthChecker<any, any>;
 	corsOptions?: CorsPluginOptions;
-	graphqlDeduplicator?: {
-		enabled: boolean;
-	};
-	enableValidationRules?: boolean;
+	graphqlDeduplicator?: { enabled: boolean };
 	fileAutoGenerationOptions?: {
 		typesOutputPath?: string[] | string;
 		watchForFileChangesInPaths?: string[];
@@ -63,37 +64,29 @@ export default class Graphweaver<TContext extends BaseContext> {
 	public schema: GraphQLSchema;
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
-		resolvers: [],
 		apolloServerOptions: {
 			introspection: true,
 		},
 		graphqlDeduplicator: {
 			enabled: true,
 		},
-		enableValidationRules: false,
 	};
 
-	constructor(config: GraphweaverConfig) {
+	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
-		if (!config) {
-			throw new Error('Graphweaver config required');
-		}
-		if (!config.resolvers) {
-			throw new Error('Graphweaver resolvers required');
-		}
-		if (!config.authChecker) {
+		if (!config?.authChecker) {
 			logger.warn(
 				'Graphweaver authChecker not set, allowing all access from anywhere. Are you sure you want to do this? This should only happen in a non-real environment.'
 			);
 		}
 
 		// Assign default config
-		this.config = mergeConfig<GraphweaverConfig>(this.config, config);
+		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
-		for (const metadata of graphweaverMetadata.entities) {
-			if (metadata.provider.plugins && metadata.provider.plugins.length > 0) {
+		for (const metadata of graphweaverMetadata.entities()) {
+			if (metadata.provider?.plugins && metadata.provider.plugins.length > 0) {
 				// only push unique plugins
 				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
 					(plugin) => !apolloPlugins.includes(plugin)
@@ -102,13 +95,15 @@ export default class Graphweaver<TContext extends BaseContext> {
 			}
 		}
 
-		const resolvers = (this.config.resolvers || []) as any;
-
-		if (this.config.adminMetadata?.enabled && this.config.resolvers) {
+		if (this.config.adminMetadata?.enabled) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
-			resolvers.push(getAdminUiMetadataResolver(this.config.adminMetadata?.hooks));
+			graphweaverMetadata.addQuery({
+				name: '_graphweaver',
+				description: 'Query used by the Admin UI to introspect the schema and metadata.',
+				getType: () => AdminUiMetadata,
+				resolver: resolveAdminUiMetadata(this.config.adminMetadata?.hooks),
+			});
 		}
-		logger.trace(`Graphweaver buildSchemaSync with ${resolvers.length} resolvers`);
 
 		// Order is important here
 		const plugins = [
@@ -124,27 +119,28 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Add any child filters to the schema
 		addChildFiltersToRelationshipFields();
 
-		this.schema = buildSchemaSync({
-			resolvers,
-			authChecker: config.authChecker ?? (() => true),
-			validate: this.config.enableValidationRules,
+		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
+
+		this.schema = SchemaBuilder.build({
+			authChecker: config?.authChecker ?? (() => true),
 		});
 
+		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
+		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());
+
+		logger.trace(`Graphweaver buildSchemaSync finished.`);
 		logger.trace(`Graphweaver starting ApolloServer`);
 		logger.trace(`Protecting with GraphQL Armor 🛡️`);
-		const armor = new ApolloArmor(config.graphQLArmorOptions);
+		const armor = new ApolloArmor(config?.graphQLArmorOptions);
 		const protection = armor.protect();
 		this.server = new ApolloServer<TContext>({
 			...(this.config.apolloServerOptions as any),
 			...protection,
 			plugins: [...plugins, ...protection.plugins],
 			schema: this.schema,
-		});
-	}
 
-	public async init() {
-		// Do some async here if necessary
-		logger.info(`Graphweaver async called`);
+			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
+		});
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {
