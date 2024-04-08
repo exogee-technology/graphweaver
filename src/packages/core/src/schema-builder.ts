@@ -4,6 +4,7 @@ import {
 	GraphQLEnumValueConfigMap,
 	GraphQLFieldConfig,
 	GraphQLFloat,
+	GraphQLID,
 	GraphQLInputFieldConfig,
 	GraphQLInputObjectType,
 	GraphQLInt,
@@ -329,7 +330,7 @@ class SchemaBuilderImplementation {
 						description: `Get a single ${entity.name}.`,
 						type: graphQLTypeForEntity(entity),
 						args: {
-							filter: { type: filterTypeForEntity(entity) },
+							id: { type: new GraphQLNonNull(GraphQLID) },
 						},
 						resolve: resolvers.getOne,
 					};

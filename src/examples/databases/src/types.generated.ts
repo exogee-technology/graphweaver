@@ -214,7 +214,7 @@ export type Query = {
 
 
 export type QueryTaskArgs = {
-  filter?: InputMaybe<TasksListFilter>;
+  id: Scalars['ID']['input'];
 };
 
 
@@ -225,7 +225,7 @@ export type QueryTasksArgs = {
 
 
 export type QueryUserArgs = {
-  filter?: InputMaybe<UsersListFilter>;
+  id: Scalars['ID']['input'];
 };
 
 
