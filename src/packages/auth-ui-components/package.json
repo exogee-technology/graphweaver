@@ -46,7 +46,7 @@
 		"esbuild": "0.15.5",
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-svgr": "2.1.0",
-		"glob": "10.3.10",
+		"glob": "10.3.12",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"typescript": "5.4.5",
