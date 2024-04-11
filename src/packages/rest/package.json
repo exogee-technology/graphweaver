@@ -37,7 +37,7 @@
 		"@types/luxon": "3.4.2",
 		"@types/node": "20.12.5",
 		"esbuild": "0.15.5",
-		"glob": "10.3.10",
+		"glob": "10.3.12",
 		"prettier": "3.2.5",
 		"ts-node": "10.9.2",
 		"typescript": "5.4.5"

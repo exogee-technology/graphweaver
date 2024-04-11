@@ -403,7 +403,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -446,10 +446,10 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -640,8 +640,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.15.5)(typescript@5.4.5)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -722,8 +722,8 @@ importers:
         specifier: 2.4.5
         version: 2.4.5(react@18.2.0)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -822,8 +822,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -886,8 +886,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.15.5)(typescript@5.4.5)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -946,8 +946,8 @@ importers:
         specifier: 2.7.1
         version: 2.7.1(esbuild@0.15.5)
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1112,8 +1112,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1149,7 +1149,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1255,8 +1255,8 @@ importers:
         specifier: 0.17.18
         version: 0.17.18
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql-type-json:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.8.1)
@@ -1282,8 +1282,8 @@ importers:
         specifier: 0.17.18
         version: 0.17.18
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1328,8 +1328,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1347,8 +1347,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1357,10 +1357,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
@@ -1372,8 +1372,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1410,13 +1410,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -1434,8 +1434,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.12.5)(typescript@5.4.5)
@@ -1489,8 +1489,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -1523,8 +1523,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1590,8 +1590,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
 
   packages/vite-plugin-graphweaver:
     dependencies:
@@ -1606,8 +1606,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1646,8 +1646,8 @@ importers:
         specifier: 0.15.5
         version: 0.15.5
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.3.12
+        version: 10.3.12
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -6661,6 +6661,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
@@ -6722,28 +6723,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12):
-    resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.12
-      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4):
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
     engines: {node: '>= 18.12.0'}
@@ -6787,6 +6766,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5):
     resolution: {integrity: sha512-IOv0s5UYdO2dzCiHGpTcceo2FOZtddnMmlNmRkBXhKzYkYUEut0qJJqt20d8oJsMJuEk8Et7/MAgdJT5FbWTzA==}
@@ -12891,14 +12871,14 @@ packages:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
     dev: false
 
-  /glob@10.3.10:
-    resolution: {integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==}
+  /glob@10.3.12:
+    resolution: {integrity: sha512-TCNv8vJ+xz4QiqTpfOJA7HvYv+tNIRHKfUWw/q+v2jdgN4ebz+KY9tGx5J4rHP0o84mNP+ApH66HRX8us3Khqg==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
-      minimatch: 9.0.3
+      minimatch: 9.0.4
       minipass: 7.0.4
       path-scurry: 1.10.2
 
@@ -14654,6 +14634,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -15298,13 +15279,13 @@ packages:
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
+    dev: true
 
   /minimatch@9.0.4:
     resolution: {integrity: sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       brace-expansion: 2.0.1
-    dev: true
 
   /minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
@@ -16954,7 +16935,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.3.10
+      glob: 10.3.12
 
   /ripemd160@2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}

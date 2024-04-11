@@ -56,7 +56,7 @@
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "2.1.0",
 		"formik": "2.4.5",
-		"glob": "10.3.10",
+		"glob": "10.3.12",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"typescript": "5.4.5",
