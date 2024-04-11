@@ -76,8 +76,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.5
@@ -137,8 +137,8 @@ importers:
         specifier: 8.11.5
         version: 8.11.5
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.5
@@ -198,8 +198,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/jest':
         specifier: 29.5.12
@@ -271,8 +271,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/jest':
         specifier: 29.5.12
@@ -359,8 +359,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.5
@@ -411,8 +411,8 @@ importers:
         specifier: 8.11.5
         version: 8.11.5
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.5
@@ -460,8 +460,8 @@ importers:
         specifier: 0.8.13
         version: 0.8.13
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -548,8 +548,8 @@ importers:
         specifier: 6.22.3
         version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       uuid:
         specifier: 9.0.1
         version: 9.0.1
@@ -794,8 +794,8 @@ importers:
         specifier: 4.0.1
         version: 4.0.1
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -1099,8 +1099,8 @@ importers:
         specifier: 8.0.0
         version: 8.0.0
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -1172,8 +1172,8 @@ importers:
         specifier: 4.1.2
         version: 4.1.2
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -1264,8 +1264,8 @@ importers:
         specifier: 3.2.5
         version: 3.2.5
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -1294,8 +1294,8 @@ importers:
         specifier: 3.2.5
         version: 3.2.5
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
       type-graphql:
         specifier: 2.0.0-beta.2
         version: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
@@ -1405,8 +1405,8 @@ importers:
         specifier: 8.0.0
         version: 8.0.0
       reflect-metadata:
-        specifier: 0.2.1
-        version: 0.2.1
+        specifier: 0.2.2
+        version: 0.2.2
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
@@ -16815,6 +16815,10 @@ packages:
 
   /reflect-metadata@0.2.1:
     resolution: {integrity: sha512-i5lLI6iw9AU3Uu4szRNPPEkomnkjRTaVt9hy/bn5g/oSzekBSMeLZblcjP74AW0vBabqERLLIrz+gR8QYR54Tw==}
+    deprecated: This version has a critical bug in fallback handling. Please upgrade to reflect-metadata@0.2.2 or newer.
+
+  /reflect-metadata@0.2.2:
+    resolution: {integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==}
 
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
