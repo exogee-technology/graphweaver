@@ -29,7 +29,7 @@
 		"graphql-type-json": "0.3.2",
 		"prettier": "3.2.5",
 		"reflect-metadata": "0.2.2",
-		"type-graphql": "2.0.0-beta.2",
+		"type-graphql": "2.0.0-beta.6",
 		"typescript": "5.4.5"
 	},
 	"peerDependencies": {
@@ -37,7 +37,7 @@
 		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
-		"type-graphql": "2.0.0-beta.2"
+		"type-graphql": "2.0.0-beta.6"
 	},
 	"dependencies": {
 		"@aws-sdk/client-cognito-identity-provider": "3.552.0",
