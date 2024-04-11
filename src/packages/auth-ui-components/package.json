@@ -28,7 +28,7 @@
 		"@apollo/client": "3.9.11",
 		"@simplewebauthn/browser": "9.0.1",
 		"@usedapp/core": "1.2.13",
-		"ethers": "5.7.2",
+		"ethers": "6.11.1",
 		"web3-token": "1.0.6"
 	},
 	"peerDependencies": {
