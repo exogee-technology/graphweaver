@@ -26,7 +26,7 @@
 	],
 	"dependencies": {
 		"@apollo/client": "3.9.11",
-		"@simplewebauthn/browser": "9.0.1",
+		"@simplewebauthn/browser": "10.0.0",
 		"@usedapp/core": "1.2.13",
 		"ethers": "5.7.2",
 		"web3-token": "1.0.6"
