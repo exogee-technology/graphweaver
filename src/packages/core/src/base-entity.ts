@@ -31,7 +31,7 @@ export class GraphQLEntity<D extends BaseDataEntity> {
 		const metadata = graphweaverMetadata.getEntityByName(this.name);
 		if (!metadata) throw new Error(`Could not locate metadata for the '${this.name}' entity`);
 
-		for (const field of metadata.fields) {
+		for (const field of Object.values(metadata.fields)) {
 			const dataField = dataEntity?.[field.name as keyof D];
 
 			if (

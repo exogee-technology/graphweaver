@@ -1,4 +1,4 @@
-import { BaseDataEntity, GraphQLFieldResolver } from '.';
+import { BaseDataEntity, GraphQLFieldResolver, WithId } from '.';
 import { BackendProvider, FieldMetadata, Filter } from './types';
 import { logger } from '@exogee/logger';
 
@@ -9,7 +9,7 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 	plural: string;
 	target: G;
 	provider?: BackendProvider<D, G>;
-	fields: FieldMetadata<G>[];
+	fields: { [key: string]: FieldMetadata<G, D> };
 
 	apiOptions?: {
 		// This means that the entity should not be given the default list, find one, create, update, and delete
@@ -28,6 +28,14 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		// Users can still override this filter, but this is the default. This has no
 		// impact on the API, purely how entities are displayed in the Admin UI.
 		defaultFilter?: Filter<G>;
+
+		// Specifies what field on this entity should be used to summarise it in the Admin UI when
+		// referenced from other entities, e.g. if a Task in a to-do list application has an 'assigned to'
+		// field that references User, if the summary field on User is set to "name", then users in the
+		// task list in the admin area will be shown by their name.
+		//
+		// If no summary field is set for an entity, we default to showing the Id of the entity
+		summaryField?: Extract<keyof G, string>;
 
 		// If true, the entity will not show up in the side bar (on the left when you log in).
 		// If a property on another entity references this entity, it will still show up in
@@ -70,11 +78,11 @@ export type EnumValuesConfig<TEnum extends object> = Partial<
 	Record<keyof TEnum, { description?: string; deprecationReason?: string }>
 >;
 
-export interface InputTypeMetadata<G> {
+export interface InputTypeMetadata<G, D> {
 	type: 'inputType';
 	name: string;
 	description?: string;
-	fields: FieldMetadata<G>[];
+	fields: { [key: string]: FieldMetadata<G, D> };
 	target: G;
 }
 
@@ -85,7 +93,10 @@ export type CollectEntityInformationArgs<G, D extends BaseDataEntity> = Omit<
 	'type' | 'fields'
 >;
 
-export type CollectInputTypeInformationArgs<G> = Omit<InputTypeMetadata<G>, 'type' | 'fields'>;
+export type CollectInputTypeInformationArgs<G, D extends BaseDataEntity> = Omit<
+	InputTypeMetadata<G, D>,
+	'type' | 'fields'
+>;
 
 export interface AdditionalOperationInformation {
 	name: string;
@@ -97,11 +108,11 @@ export interface AdditionalOperationInformation {
 class Metadata {
 	private metadataByType = new Map<
 		unknown,
-		EntityMetadata<unknown, any> | EnumMetadata<any> | InputTypeMetadata<unknown>
+		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any>
 	>();
 	private nameLookupCache = new Map<
 		string,
-		EntityMetadata<unknown, any> | EnumMetadata<any> | InputTypeMetadata<unknown>
+		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any>
 	>();
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
@@ -136,13 +147,28 @@ class Metadata {
 				name: args.name,
 				plural: args.plural,
 				target: args.target,
-				fields: [],
+				fields: {},
 			};
 		}
+		if (
+			args.adminUIOptions?.summaryField &&
+			existingMetadata.adminUIOptions?.summaryField &&
+			existingMetadata.adminUIOptions.summaryField !== args.adminUIOptions.summaryField
+		) {
+			throw new Error(
+				`Entities can only declare one summary field. An attempt was made to set ${args.adminUIOptions?.summaryField} as the summary field for ${args.name} while ${existingMetadata.adminUIOptions.summaryField} is already set.`
+			);
+		}
 
-		// Copy the new info we have over into the metadata store. This is a shallow
-		// copy, but that should be fine in our case.
-		Object.assign(existingMetadata, args);
+		// Copy the new info we have over into the metadata store.
+		existingMetadata = {
+			...existingMetadata,
+			...args,
+			adminUIOptions: {
+				...existingMetadata.adminUIOptions,
+				...args.adminUIOptions,
+			},
+		};
 
 		this.metadataByType.set(args.target, existingMetadata);
 	}
@@ -158,7 +184,7 @@ class Metadata {
 				name: 'UnknownEntity',
 				plural: 'UnknownEntity',
 				target: args.target,
-				fields: [],
+				fields: {},
 			};
 		}
 
@@ -167,7 +193,7 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
-	public collectFieldInformation<G>(args: FieldMetadata<G>) {
+	public collectFieldInformation<G, D extends BaseDataEntity>(args: FieldMetadata<G, D>) {
 		// We need to refer to the constructor here because the class doesn't exist yet.
 		// Later when we collect entity information this will line up as the same type.
 		const entity = (args.target as any).constructor;
@@ -182,12 +208,27 @@ class Metadata {
 				name: entity.name ?? 'UnknownEntity',
 				plural: entity.plural ?? 'UnknownEntityPlural',
 				target: args.target,
-				fields: [],
+				fields: {},
 			};
 		}
 
-		existingMetadata.fields.push(args);
+		existingMetadata.fields[args.name] = args;
 
+		if (args.summaryField) {
+			if (
+				existingMetadata.adminUIOptions?.summaryField &&
+				existingMetadata.adminUIOptions.summaryField !== args.name
+			) {
+				throw new Error(
+					`Entities can only declare one summary field. An attempt was made to set ${args.name} as the summary field for ${entity.name} while ${entity.adminUiOptions.summaryField} is already set.`
+				);
+			}
+
+			existingMetadata.adminUIOptions = {
+				...existingMetadata.adminUIOptions,
+				summaryField: args.name as Extract<keyof G, string>,
+			};
+		}
 		this.metadataByType.set(entity, existingMetadata);
 	}
 
@@ -208,7 +249,9 @@ class Metadata {
 		});
 	}
 
-	public collectInputTypeInformation<G>(args: CollectInputTypeInformationArgs<G>) {
+	public collectInputTypeInformation<G, D extends BaseDataEntity>(
+		args: CollectInputTypeInformationArgs<G, D>
+	) {
 		let existingMetadata = this.metadataByType.get(args.target);
 
 		if (!existingMetadata) {
@@ -218,7 +261,7 @@ class Metadata {
 				description: args.description,
 				target: args.target,
 
-				fields: [],
+				fields: {},
 			};
 		}
 
@@ -255,6 +298,12 @@ class Metadata {
 
 	public *additionalQueries() {
 		for (const value of this.additionalQueriesLookup.values()) {
+			yield value;
+		}
+	}
+
+	public *additionalMutations() {
+		for (const value of this.additionalMutationsLookup.values()) {
 			yield value;
 		}
 	}

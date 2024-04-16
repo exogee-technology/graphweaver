@@ -1,5 +1,4 @@
 import {
-	isSummaryField,
 	isReadOnlyAdminUI,
 	isReadOnlyPropertyAdminUI,
 	AdminUIFilterType,
@@ -56,11 +55,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
 
-				const visibleFields = entity.fields.filter((field) => !field.hideInAdminUI);
-
-				const summaryField = visibleFields.find((field) =>
-					isSummaryField(entity.target, field.name)
-				)?.name;
+				const visibleFields = Object.values(entity.fields).filter((field) => !field.hideInAdminUI);
 
 				const attributes = new AdminUiEntityAttributeMetadata();
 				attributes.isReadOnly = isReadOnlyAdminUI(entity.target);
@@ -93,7 +88,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 						fieldObject.relatedEntity = relatedObject.name;
 						fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
 
-						const relatedEntityField = relatedObject.fields.find((field) => {
+						const relatedEntityField = Object.values(relatedObject.fields).find((field) => {
 							const fieldType = field.getType() as { name?: string };
 							return fieldType.name === (entity.target as { name?: string }).name;
 						});
@@ -114,7 +109,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 					name,
 					plural,
 					backendId,
-					summaryField,
+					summaryField: entity.adminUIOptions?.summaryField,
 					fields,
 					attributes,
 					adminUIOptions: {

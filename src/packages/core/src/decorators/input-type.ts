@@ -1,6 +1,9 @@
 import { InputTypeMetadata, graphweaverMetadata } from '..';
 
-export type InputTypeOptions = Omit<InputTypeMetadata<unknown>, 'type' | 'fields' | 'target'>;
+export type InputTypeOptions = Omit<
+	InputTypeMetadata<unknown, unknown>,
+	'type' | 'fields' | 'target'
+>;
 
 export function InputType(name: string): ClassDecorator;
 export function InputType(options: InputTypeOptions): ClassDecorator;

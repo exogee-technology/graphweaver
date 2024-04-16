@@ -198,6 +198,24 @@ export type MultipleAdminUiMetadataPaginationInput = {
   offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  /** Create a single Task. */
+  createTask?: Maybe<Task>;
+  /** Create a single User. */
+  createUser?: Maybe<User>;
+};
+
+
+export type MutationCreateTaskArgs = {
+  data: TaskInsertInput;
+};
+
+
+export type MutationCreateUserArgs = {
+  data: UserInsertInput;
+};
+
 export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
@@ -245,6 +263,15 @@ export type Task = {
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
+  user: User;
+};
+
+/** Data needed to create Tasks. */
+export type TaskInsertInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
+  user?: InputMaybe<UserInsertInput>;
 };
 
 export type TasksListFilter = {
@@ -258,6 +285,7 @@ export type TasksListFilter = {
   meta_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
   meta_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   meta_null?: InputMaybe<Scalars['Boolean']['input']>;
+  user?: InputMaybe<UsersListFilter>;
 };
 
 export type TasksOrderByInput = {
@@ -280,6 +308,13 @@ export type User = {
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   username: Scalars['String']['output'];
+};
+
+/** Data needed to create Users. */
+export type UserInsertInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersListFilter = {

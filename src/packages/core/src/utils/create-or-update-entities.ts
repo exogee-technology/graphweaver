@@ -5,6 +5,7 @@ import {
 	BaseContext,
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
+	EntityMetadata,
 	GraphQLEntity,
 	GraphQLEntityConstructor,
 	GraphQLEntityType,
@@ -90,24 +91,21 @@ export const createOrUpdateEntities = async <
 	D extends BaseDataEntity,
 >(
 	input: Partial<G> | Partial<G>[],
-	entityTypeName: string,
+	meta: EntityMetadata<G, D>,
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const meta = graphweaverMetadata.getEntityByName<G, D>(entityTypeName);
-	if (!meta) throw new Error(`Could not locate metadata for '${entityTypeName}' entity.`);
-
 	const gqlEntityType: GraphQLEntityType<G, D> = meta.target;
 
 	if (!meta.provider) {
-		throw new Error(`No provider found for ${entityTypeName}, cannot create or update entities`);
+		throw new Error(`No provider found for ${meta.name}, cannot create or update entities`);
 	}
 
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements
 		const nodes: Partial<G>[] = [];
 		for (const node of input) {
-			const updatedNode = await createOrUpdateEntities(node, entityTypeName, info, context);
+			const updatedNode = await createOrUpdateEntities(node, meta, info, context);
 			if (Array.isArray(updatedNode)) {
 				throw new Error('We should not have an array inside an array');
 			}
@@ -124,7 +122,7 @@ export const createOrUpdateEntities = async <
 			const [key, childNode]: [string, Partial<G> | Partial<G>[]] = entry;
 
 			// Check if the property represents a related entity
-			const relationship = meta.fields.find((field) => field.name === key);
+			const relationship = meta.fields[key];
 			const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
 				GraphQLEntity<BaseDataEntity>,
 				BaseDataEntity
@@ -157,7 +155,10 @@ export const createOrUpdateEntities = async <
 					if (!childMeta)
 						throw new Error(`Could not locate metadata for '${relatedEntity.name}' entity.`);
 
-					const parentField = childMeta.fields.find((field) => field?.getType() === gqlEntityType);
+					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
+					const parentField = Object.values(childMeta.fields).find(
+						(field) => field?.getType() === gqlEntityType
+					);
 					if (!parentField) {
 						throw new Error(
 							`Implementation Error: No parent field found for ${relatedEntity.name}`
@@ -203,7 +204,7 @@ export const createOrUpdateEntities = async <
 		}
 	}
 
-	throw new Error(`Unexpected Error: trying to create entity ${entityTypeName}`);
+	throw new Error(`Unexpected Error: trying to create entity ${meta.name}`);
 };
 
 export const runWritableBeforeHooks = async <G>(

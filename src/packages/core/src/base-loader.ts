@@ -15,12 +15,15 @@ const getGqlEntityName = (gqlEntityType: any) => {
 	return gqlTypeName;
 };
 
-const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+const getBaseLoadOneLoader = <
+	G extends GraphQLEntity<D> & { name: string },
+	D extends BaseDataEntity,
+>(
 	gqlEntityType: GraphQLEntityConstructor<G, D>
 ) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
-		const provider = graphweaverMetadata.getEntityByName<unknown, D>(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName)?.provider;
 		if (!provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		}
@@ -32,7 +35,8 @@ const getBaseLoadOneLoader = <G extends GraphQLEntity<D>, D extends BaseDataEnti
 
 			const records = await provider.find({
 				_or: keys.map((id) => ({ id })),
-			});
+				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
+			} as Filter<G>);
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
 
@@ -68,7 +72,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
 	if (!relatedIdLoaderMap[loaderKey]) {
-		const provider = graphweaverMetadata.getEntityByName<unknown, D>(gqlTypeName)?.provider;
+		const provider = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName)?.provider;
 		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
@@ -116,7 +120,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 };
 
 export const BaseLoaders = {
-	loadOne: <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
+	loadOne: <G extends GraphQLEntity<D> & { name: string }, D extends BaseDataEntity>({
 		gqlEntityType,
 		id,
 	}: {

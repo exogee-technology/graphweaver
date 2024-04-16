@@ -30,7 +30,6 @@ import {
 	isEntityMetadata,
 	isEnumMetadata,
 	TypeValue,
-	Sort,
 } from '.';
 import * as resolvers from './resolvers';
 
@@ -42,6 +41,7 @@ const mathOperations = new Set(['gt', 'gte', 'lt', 'lte']);
 const entityTypes = new Map<string, GraphQLObjectType>();
 const enumTypes = new Map<string, GraphQLEnumType>();
 const filterTypes = new Map<string, GraphQLInputObjectType>();
+const insertTypes = new Map<string, GraphQLInputObjectType>();
 const paginationTypes = new Map<string, GraphQLInputObjectType>();
 
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
@@ -92,7 +92,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 			fields: () => {
 				const fields: ObjMap<GraphQLFieldConfig<unknown, unknown>> = {};
 
-				for (const field of entity.fields) {
+				for (const field of Object.values(entity.fields)) {
 					let type = field.getType();
 					let isArray = false;
 					if (Array.isArray(type)) {
@@ -102,10 +102,13 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					// Let's try to resolve the GraphQL type involved here.
 					let graphQLType: GraphQLOutputType | undefined = undefined;
+					let resolve = undefined;
 
 					const metadata = graphweaverMetadata.metadataForType(type);
+
 					if (isEntityMetadata(metadata)) {
 						graphQLType = graphQLTypeForEntity(metadata);
+						resolve = resolvers.listRelationshipField;
 					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else if (isScalarType(field.getType())) {
@@ -133,7 +136,12 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = new GraphQLNonNull(graphQLType);
 					}
 
-					fields[field.name] = { type: graphQLType };
+					fields[field.name] = {
+						type: graphQLType,
+
+						// Typecast should not be required here as we know the context object, but this will get us building.
+						resolve: resolve as any,
+					};
 				}
 
 				return fields;
@@ -155,7 +163,7 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
-				for (const field of entity.fields) {
+				for (const field of Object.values(entity.fields)) {
 					const fieldType = field.getType();
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
@@ -234,7 +242,7 @@ const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				// need to know how many sortable fields there actually are on the entity.
 				const orderByFields: ObjMap<GraphQLInputFieldConfig> = {};
 
-				for (const field of entity.fields) {
+				for (const field of Object.values(entity.fields)) {
 					// Let's try to resolve the GraphQL type involved here.
 					const fieldType = field.getType();
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
@@ -268,6 +276,45 @@ const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return paginationType;
 };
 
+const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
+	let insertType = insertTypes.get(entity.name);
+
+	if (!insertType) {
+		insertType = new GraphQLInputObjectType({
+			name: `${entity.name}InsertInput`,
+			description: `Data needed to create ${entity.plural}.`,
+			fields: () => {
+				const fields: ObjMap<GraphQLInputFieldConfig> = {};
+
+				for (const field of Object.values(entity.fields)) {
+					if (field.name === 'id') continue;
+
+					// Let's try to resolve the GraphQL type involved here.
+					const fieldType = field.getType();
+					const metadata = graphweaverMetadata.metadataForType(fieldType);
+
+					if (isEntityMetadata(metadata)) {
+						// This if is separate to stop us cascading down to the scalar branch for entities that
+						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
+							fields[field.name] = { type: insertTypeForEntity(metadata) };
+						}
+					} else if (isScalarType(fieldType)) {
+						fields[field.name] = { type: fieldType };
+					} else {
+						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
+					}
+				}
+
+				return fields;
+			},
+		});
+
+		insertTypes.set(entity.name, insertType);
+	}
+
+	return insertType;
+};
+
 export interface SchemaBuilderOptions {
 	authChecker?: AuthChecker<any, any>;
 }
@@ -294,18 +341,22 @@ class SchemaBuilderImplementation {
 			// The core entity object type
 			yield graphQLTypeForEntity(entity);
 
-			// The input type for filtering
 			if (
 				!entity.apiOptions?.excludeFromBuiltInOperations &&
 				!entity.apiOptions?.excludeFromFiltering
 			) {
+				// The input type for filtering
 				yield filterTypeForEntity(entity);
+
+				// The input type for inserting
+				yield insertTypeForEntity(entity);
 			}
 
 			// The input type for pagination and sorting
 			yield paginationTypeForEntity(entity);
 		}
 
+		// Also emit all our enums.
 		for (const enumType of graphweaverMetadata.enums()) {
 			yield graphQLTypeForEnum(enumType);
 		}
@@ -384,7 +435,60 @@ class SchemaBuilderImplementation {
 	}
 
 	private buildMutationType(args?: SchemaBuilderOptions) {
-		return undefined;
+		return new GraphQLObjectType({
+			name: 'Mutation',
+			fields: () => {
+				const fields: ThunkObjMap<GraphQLFieldConfig<any, any, any>> = {};
+
+				for (const entity of graphweaverMetadata.entities()) {
+					// If it's excluded from built-in operations, skip it.
+					if (entity.apiOptions?.excludeFromBuiltInOperations) continue;
+
+					// Create One
+					const createOneName = `create${entity.name}`;
+					if (fields[createOneName]) {
+						throw new Error(`Duplicate mutation name: ${createOneName}.`);
+					}
+					fields[createOneName] = {
+						description: `Create a single ${entity.name}.`,
+						type: graphQLTypeForEntity(entity),
+						args: {
+							data: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
+						},
+						resolve: resolvers.create,
+					};
+				}
+
+				// Add any user-defined additional mutations too
+				for (const customMutation of graphweaverMetadata.additionalMutations()) {
+					if (fields[customMutation.name]) {
+						throw new Error(`Duplicate mutation name: ${customMutation.name}.`);
+					}
+
+					const type = customMutation.getType();
+					const metadata = graphweaverMetadata.metadataForType(type);
+
+					if (isEntityMetadata(metadata)) {
+						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
+						// a user or system defined additional query, so by definition it needs to be included here.
+						fields[customMutation.name] = {
+							...customMutation,
+
+							type: graphQLTypeForEntity(metadata),
+							resolve: customMutation.resolver,
+						};
+					} else {
+						fields[customMutation.name] = {
+							...customMutation,
+
+							type,
+							resolve: customMutation.resolver,
+						};
+					}
+				}
+				return fields;
+			},
+		});
 	}
 }
 

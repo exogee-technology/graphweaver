@@ -219,14 +219,19 @@ export type GetTypeFunction = (type?: void) => TypeValue;
 
 export type Complexity = ComplexityEstimator | number;
 
-export interface FieldMetadata<G> {
+export interface FieldMetadata<G, D> {
 	target: G;
 	name: string;
 	getType: GetTypeFunction;
+	relationshipInfo?: {
+		relatedField?: string;
+		id?: string | ((dataEntity: D) => string | number | undefined);
+	};
 	description?: string;
 	deprecationReason?: string;
 	complexity?: Complexity;
 	defaultValue?: any;
+	summaryField?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
 	hideInAdminUI?: boolean;

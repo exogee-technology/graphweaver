@@ -20,7 +20,8 @@ const getFieldFromEntity = (entityName: string, fieldName: string) => {
 		}
 	}
 
-	const field = metadata.fields.find((field) => field.name === normalisedFieldName);
+	const field = metadata.fields[normalisedFieldName];
+
 	if (!field) throw new Error(`Could not locate '${fieldName}' field on entity '${entityName}'`);
 
 	return field;

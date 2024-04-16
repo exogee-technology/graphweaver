@@ -1,4 +1,4 @@
-import { GraphQLEntity, SummaryField, Field, GraphQLID, Entity, Filter } from '@exogee/graphweaver';
+import { GraphQLEntity, Field, GraphQLID, Entity, Filter } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { User as OrmUser } from '../entities';
@@ -16,8 +16,7 @@ export class User extends GraphQLEntity<OrmUser> {
 	@Field(() => GraphQLID)
 	id!: string;
 
-	@SummaryField()
-	@Field(() => String)
+	@Field(() => String, { summaryField: true })
 	username!: string;
 
 	@Field(() => String)

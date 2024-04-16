@@ -5,6 +5,7 @@ export interface FieldOptions {
 	deprecationReason?: string;
 	complexity?: Complexity;
 	defaultValue?: any;
+	summaryField?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
 }

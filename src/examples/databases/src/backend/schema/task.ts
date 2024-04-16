@@ -6,12 +6,16 @@ import {
 	Entity,
 	ReadOnlyProperty,
 } from '@exogee/graphweaver';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 import { Task as OrmTask } from '../entities';
 import { User } from './user';
+import { myConnection } from '../database';
 
-@Entity('Task')
+@Entity('Task', {
+	provider: new MikroBackendProvider(OrmTask, myConnection),
+})
 export class Task extends GraphQLEntity<OrmTask> {
 	public dataEntity!: OrmTask;
 
