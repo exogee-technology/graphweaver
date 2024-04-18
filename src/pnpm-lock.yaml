@@ -120,7 +120,7 @@ importers:
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -131,8 +131,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       mysql2:
-        specifier: 3.9.4
-        version: 3.9.4
+        specifier: 3.9.6
+        version: 3.9.6
       pg:
         specifier: 8.11.5
         version: 8.11.5
@@ -353,8 +353,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       mysql2:
-        specifier: 3.9.4
-        version: 3.9.4
+        specifier: 3.9.6
+        version: 3.9.6
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -403,7 +403,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -446,7 +446,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1149,7 +1149,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1357,7 +1357,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1410,13 +1410,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -6620,7 +6620,7 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3):
+  /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)(pg@8.11.3):
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
@@ -6628,7 +6628,7 @@ packages:
     dependencies:
       '@mikro-orm/core': 6.1.12
       fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.9.4)(pg@8.11.3)
+      knex: 3.1.0(mysql2@3.9.6)(pg@8.11.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -6723,14 +6723,14 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4):
+  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6):
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
       '@mikro-orm/core': 6.1.12
-      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.6)(pg@8.11.3)
       pg: 8.11.3
       postgres-array: 3.0.2
       postgres-date: 2.1.0
@@ -14496,7 +14496,7 @@ packages:
       - supports-color
     dev: false
 
-  /knex@3.1.0(mysql2@3.9.4)(pg@8.11.3):
+  /knex@3.1.0(mysql2@3.9.6)(pg@8.11.3):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
     engines: {node: '>=16'}
     hasBin: true
@@ -14533,7 +14533,7 @@ packages:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.9.4
+      mysql2: 3.9.6
       pg: 8.11.3
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
@@ -15231,13 +15231,6 @@ packages:
     dependencies:
       brace-expansion: 2.0.1
 
-  /minimatch@9.0.3:
-    resolution: {integrity: sha512-RHiac9mvaRw0x3AYRgDC1CxAP7HTcNrrECeA8YYJeWnpo+2Q5CegtZjaotWTWxDG3UeGA1coE05iH1mPjT/2mg==}
-    engines: {node: '>=16 || 14 >=14.17'}
-    dependencies:
-      brace-expansion: 2.0.1
-    dev: true
-
   /minimatch@9.0.4:
     resolution: {integrity: sha512-KqWh+VchfxcMNRAJjj2tnsSJdNbHsVgnkBhTNrW7AjVo6OvLtxw8zfT9oLw1JSohlFzJ8jCoTgaoXvJ+kHt6fw==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -15389,8 +15382,8 @@ packages:
       sqlstring: 2.3.3
     dev: false
 
-  /mysql2@3.9.4:
-    resolution: {integrity: sha512-OEESQuwxMza803knC1YSt7NMuc1BrK9j7gZhCSs2WAyxr1vfiI7QLaLOKTh5c9SWGz98qVyQUbK8/WckevNQhg==}
+  /mysql2@3.9.6:
+    resolution: {integrity: sha512-9NYUMLQv6yXnu+5hUh8PZ5CdKoG6VWDzXbojIdTyob8upNZXU3rBNQK9viaEqfgw+LMifhd+53VEZPxZk3bTWA==}
     engines: {node: '>= 8.0'}
     dependencies:
       denque: 2.1.0
