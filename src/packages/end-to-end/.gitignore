@@ -1,0 +1,10 @@
+app
+node_modules
+*.log
+
+# Playwright Files
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+local_modules

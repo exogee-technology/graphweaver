@@ -106,12 +106,10 @@ export const makeIndex = (projectName: string) => {
 /* ${projectName} Graphweaver Project */
 import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
-import { resolvers } from './schema';
 
-export const graphweaver = new Graphweaver({
-	resolvers,
-});
+import './schema';
 
+export const graphweaver = new Graphweaver();
 export const handler = graphweaver.handler();
 
 `;
