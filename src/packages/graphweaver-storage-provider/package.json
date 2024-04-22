@@ -20,8 +20,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@aws-sdk/client-s3": "3.540.0",
-		"@aws-sdk/s3-request-presigner": "3.540.0",
+		"@aws-sdk/client-s3": "3.552.0",
+		"@aws-sdk/s3-request-presigner": "3.552.0",
 		"@exogee/logger": "workspace:*",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
@@ -29,8 +29,8 @@
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",
-		"glob": "10.3.10",
-		"typescript": "5.4.3"
+		"glob": "10.3.12",
+		"typescript": "5.4.5"
 	},
 	"keywords": [
 		"graphweaver",

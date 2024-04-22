@@ -54,6 +54,7 @@ export const PasswordChallenge = () => {
 	return (
 		<Formik<Form> initialValues={{ password: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
+				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
 					<div className={styles.titleContainer}>Confirm your Password</div>

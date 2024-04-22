@@ -32,14 +32,14 @@
 		"@mikro-orm/postgresql": "6.1.12",
 		"class-validator": "0.14.1",
 		"graphql": "16.8.1",
-		"mysql2": "3.9.3",
-		"pg": "8.11.3",
+		"mysql2": "3.9.4",
+		"pg": "8.11.5",
 		"graphweaver": "workspace:*",
-		"reflect-metadata": "0.2.1"
+		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.30",
-		"typescript": "5.4.3"
+		"@types/node": "20.12.7",
+		"typescript": "5.4.5"
 	},
 	"keywords": [
 		"graphql",
