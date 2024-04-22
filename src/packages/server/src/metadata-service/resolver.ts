@@ -99,9 +99,9 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 					}
 
-					if (relatedObject?.type === 'entity' && !adminUIOptions?.hideInFilterBar) {
-						fieldObject.filter = { type: mapFilterType(fieldObject) };
-					}
+					fieldObject.filter = adminUIOptions?.hideInFilterBar
+						? undefined
+						: { type: mapFilterType(fieldObject) };
 
 					return fieldObject;
 				});
