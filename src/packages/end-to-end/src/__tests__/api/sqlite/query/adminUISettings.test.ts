@@ -3,25 +3,14 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
-	Entity,
+	Entity as DataEntity,
 	Collection,
 	ManyToOne,
 	OneToMany,
 	PrimaryKey,
 	Property,
-	IDatabaseDriver,
 } from '@mikro-orm/core';
-import {
-	AdminUISettings,
-	createBaseResolver,
-	Field,
-	GraphQLEntity,
-	ID,
-	ObjectType,
-	RelationshipField,
-	Resolver,
-	SummaryField,
-} from '@exogee/graphweaver';
+import { Field, GraphQLEntity, GraphQLID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 import { MediaField, MediaTypes } from '@exogee/graphweaver-storage-provider';
@@ -29,7 +18,7 @@ import { MediaField, MediaTypes } from '@exogee/graphweaver-storage-provider';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
-@Entity({ tableName: 'Album' })
+@DataEntity({ tableName: 'Album' })
 class OrmAlbum extends BaseEntity {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
@@ -46,7 +35,7 @@ class OrmAlbum extends BaseEntity {
 	artist!: OrmArtist;
 }
 
-@Entity({ tableName: 'Artist' })
+@DataEntity({ tableName: 'Artist' })
 class OrmArtist extends BaseEntity {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	id!: number;
@@ -62,49 +51,63 @@ class OrmArtist extends BaseEntity {
 // We can't test that we get a signed url back
 // We can't test that we get a downwload url back from s3
 // This is a mock to test the decorator
-
 const mockS3StorageProvider = {
 	getDownloadUrl: (key: string) => Promise.resolve(`https://example.com/${key}`),
 };
-@AdminUISettings({
-	hideFromDisplay: true,
+
+const connection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		entities: [OrmAlbum, OrmArtist],
+		driver: SqliteDriver,
+		dbName: 'databases/database.sqlite',
+	},
+};
+
+@Entity('Album', {
+	provider: new MikroBackendProvider(OrmAlbum, connection),
+	adminUIOptions: {
+		hideInSideBar: true,
+	},
 })
-@ObjectType('Album')
 export class Album extends GraphQLEntity<OrmAlbum> {
 	public dataEntity!: OrmAlbum;
 
-	@Field(() => ID)
+	@Field(() => GraphQLID)
 	id!: number;
 
-	@SummaryField()
-	@Field(() => String)
+	@Field(() => String, { summaryField: true })
 	title!: string;
 
 	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
 	artist!: Artist;
 }
 
-@AdminUISettings<Artist>({
-	defaultFilter: {
-		name: 'test',
+@Entity('Artist', {
+	provider: new MikroBackendProvider(OrmArtist, connection),
+	adminUIOptions: {
+		defaultFilter: {
+			name: 'test',
+		} as any, // @todo remove cast,
 	},
 })
-@ObjectType('Artist')
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
 
-	@Field(() => ID)
+	@Field(() => GraphQLID)
 	id!: number;
 
-	@AdminUISettings({
-		hideFromDisplay: true,
-	})
+	// @todo implement hideFromDisplay
+	// @AdminUISettings({
+	// 	hideFromDisplay: true,
+	// })
 	@Field(() => String, { nullable: true })
 	name?: string;
 
-	@AdminUISettings({
-		hideFromFilterBar: true,
-	})
+	// @todo implement hideFromFilterBar
+	// @AdminUISettings({
+	// 	hideFromFilterBar: true,
+	// })
 	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
 
@@ -123,31 +126,8 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	otherMediaDownloadUrl?: string;
 }
 
-const connection = {
-	connectionManagerId: 'sqlite',
-	mikroOrmConfig: {
-		entities: [OrmAlbum, OrmArtist],
-		driver: SqliteDriver,
-		dbName: 'databases/database.sqlite',
-	},
-};
-
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, OrmAlbum>(
-	Album,
-	new MikroBackendProvider(OrmAlbum, connection)
-) {}
-
-@Resolver((of) => Artist)
-class ArtistResolver extends createBaseResolver<Artist, OrmArtist>(
-	Artist,
-	new MikroBackendProvider(OrmArtist, connection)
-) {}
-
 test('Test the decorator adminUISettings', async () => {
-	const graphweaver = new Graphweaver({
-		resolvers: [AlbumResolver, ArtistResolver],
-	});
+	const graphweaver = new Graphweaver();
 
 	const response = await graphweaver.server.executeOperation({
 		query: gql`

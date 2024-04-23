@@ -2,23 +2,15 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
-import {
-	createBaseResolver,
-	Field,
-	GraphQLEntity,
-	ID,
-	ObjectType,
-	Resolver,
-	ReadOnlyProperty,
-} from '@exogee/graphweaver';
+import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
+import { Field, GraphQLEntity, GraphQLID, Entity, ReadOnlyProperty } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
-@Entity({ tableName: 'Customer' })
+@DataEntity({ tableName: 'Customer' })
 export class OrmCustomer extends BaseEntity {
 	@PrimaryKey({ fieldName: 'CustomerId', type: 'number' })
 	id!: number;
@@ -57,11 +49,22 @@ export class OrmCustomer extends BaseEntity {
 	email!: string;
 }
 
-@ObjectType('Customer')
+const connection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		entities: [OrmCustomer],
+		driver: SqliteDriver,
+		dbName: 'databases/database.sqlite',
+	},
+};
+
+@Entity('Customer', {
+	provider: new MikroBackendProvider(OrmCustomer, connection),
+})
 export class Customer extends GraphQLEntity<OrmCustomer> {
 	public dataEntity!: OrmCustomer;
 
-	@Field(() => ID)
+	@Field(() => GraphQLID)
 	id!: number;
 
 	@Field(() => String)
@@ -100,25 +103,8 @@ export class Customer extends GraphQLEntity<OrmCustomer> {
 	email!: string;
 }
 
-const connection = {
-	connectionManagerId: 'sqlite',
-	mikroOrmConfig: {
-		entities: [OrmCustomer],
-		driver: SqliteDriver,
-		dbName: 'databases/database.sqlite',
-	},
-};
-
-@Resolver((of) => Customer)
-export class CustomerResolver extends createBaseResolver<Customer, OrmCustomer>(
-	Customer,
-	new MikroBackendProvider(OrmCustomer, connection)
-) {}
-
 test('Should return isReadOnly attribute for each field in getAdminUiMetadata', async () => {
-	const graphweaver = new Graphweaver({
-		resolvers: [CustomerResolver],
-	});
+	const graphweaver = new Graphweaver();
 
 	const response = await graphweaver.server.executeOperation({
 		query: gql`
