@@ -15,6 +15,8 @@ import {
 	GraphQLScalarType,
 	GraphQLSchema,
 	GraphQLString,
+	isListType,
+	isNonNullType,
 	isScalarType,
 	printSchema,
 	ThunkObjMap,
@@ -26,6 +28,7 @@ import {
 	AuthChecker,
 	EntityMetadata,
 	EnumMetadata,
+	FieldMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
 	isEnumMetadata,
@@ -67,6 +70,31 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	}
 
 	return enumType;
+};
+
+const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
+	const unwrapType = (type: TypeValue): TypeValue => {
+		if (isListType(type) || isNonNullType(type)) {
+			return unwrapType(type.ofType);
+		}
+		if (isGraphQLScalarForTypeScriptType(type)) {
+			return graphQLScalarForTypeScriptType(type);
+		}
+		return type;
+	};
+
+	return unwrapType(field.getType());
+};
+
+const isGraphQLScalarForTypeScriptType = (type: TypeValue): type is GraphQLScalarType => {
+	switch (type) {
+		case String:
+		case Number:
+		case Boolean:
+			return true;
+		default:
+			return false;
+	}
 };
 
 const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
@@ -111,7 +139,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						resolve = resolvers.listRelationshipField;
 					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
-					} else if (isScalarType(field.getType())) {
+					} else if (isScalarType(type)) {
 						graphQLType = type as GraphQLScalarType;
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
@@ -164,7 +192,7 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(entity.fields)) {
-					const fieldType = field.getType();
+					const fieldType = getFieldType(field);
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
 					if (isEntityMetadata(metadata)) {
@@ -180,6 +208,9 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 							};
 						}
 					} else if (isScalarType(fieldType)) {
+						// Scalars get a basic operation.
+						fields[field.name] = { type: fieldType };
+
 						// All scalars get array operations
 						for (const operation of arrayOperations) {
 							fields[`${field.name}_${operation}`] = {
