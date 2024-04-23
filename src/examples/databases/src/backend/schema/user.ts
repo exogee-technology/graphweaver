@@ -4,7 +4,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { User as OrmUser } from '../entities';
 import { pgConnection } from '../database';
 
-@Entity('User', {
+@Entity('RenamedUser', {
 	provider: new MikroBackendProvider(OrmUser, pgConnection),
 	adminUIOptions: {
 		defaultFilter: { deleted: false },

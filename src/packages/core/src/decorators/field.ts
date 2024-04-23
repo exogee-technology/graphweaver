@@ -19,10 +19,16 @@ export interface FieldOptions {
 	deprecationReason?: string;
 	complexity?: Complexity;
 	defaultValue?: any;
-	readonly?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
+	// This marks the field as read only in both the API and the admin UI.
+	// This will supersede any other read only settings.
+	readonly?: boolean;
 	adminUIOptions?: adminUIFieldOptions;
+	apiOptions?: {
+		// This marks the field as read only in the API.
+		readonly?: boolean;
+	};
 }
 
 export function Field(getType: GetTypeFunction, options?: FieldOptions) {

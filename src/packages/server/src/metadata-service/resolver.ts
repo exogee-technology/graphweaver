@@ -68,7 +68,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 					const typeName = isArray ? fieldType[0].name : (fieldType as any).name;
 
 					// Define field attributes
-					const isReadOnly = field.adminUIOptions?.readonly ?? false;
+					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
 					const isRequired = !field.nullable;
 
 					const fieldObject: AdminUiFieldMetadata = {
