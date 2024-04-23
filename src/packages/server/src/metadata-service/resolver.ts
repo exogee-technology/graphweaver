@@ -67,6 +67,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 					const fieldType = field.getType();
 					const isArray = Array.isArray(fieldType);
 					const relatedObject = graphweaverMetadata.metadataForType(fieldType);
+					const typeName = isArray ? fieldType[0].name : (fieldType as any).name;
 
 					// Define field attributes
 					const isReadOnly = isReadOnlyPropertyAdminUI(entity.target, field.name);
@@ -74,7 +75,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 
 					const fieldObject: AdminUiFieldMetadata = {
 						name: field.name,
-						type: relatedObject?.name || (fieldType as any).name,
+						type: relatedObject?.name || typeName,
 						isArray,
 						attributes: {
 							isReadOnly,

@@ -321,7 +321,10 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					if (field.name === 'id') continue;
 
 					// Let's try to resolve the GraphQL type involved here.
-					const fieldType = field.getType();
+					let fieldType = field.getType();
+					if (Array.isArray(fieldType)) {
+						fieldType = fieldType[0];
+					}
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
 					if (isEntityMetadata(metadata)) {
