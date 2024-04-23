@@ -9,6 +9,9 @@ export interface adminUIFieldOptions {
 
 	// This marks the field as hidden in the admin UI filter bar.
 	hideInFilterBar?: boolean;
+
+	// This marks the field as hidden in the admin UI and will no longer be editable.
+	readonly?: boolean;
 }
 
 export interface FieldOptions {
@@ -16,6 +19,7 @@ export interface FieldOptions {
 	deprecationReason?: string;
 	complexity?: Complexity;
 	defaultValue?: any;
+	readonly?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
 	adminUIOptions?: adminUIFieldOptions;

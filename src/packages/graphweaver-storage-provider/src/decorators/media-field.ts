@@ -1,4 +1,4 @@
-import { ReadOnlyProperty, graphweaverMetadata } from '@exogee/graphweaver';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 import { IStorageProvider } from '../storageProvider';
 import { ImageScalar, MediaScalar } from '@exogee/graphweaver-scalars';
 
@@ -24,8 +24,6 @@ export function MediaField({
 		}
 		if (!resourceId) return '';
 
-		ReadOnlyProperty()(target, propertyKey);
-
 		graphweaverMetadata.collectFieldInformation({
 			target: target.constructor,
 			name: propertyKey,
@@ -36,6 +34,9 @@ export function MediaField({
 					default:
 						return MediaScalar;
 				}
+			},
+			adminUIOptions: {
+				readonly: true,
 			},
 
 			excludeFromFilterType: true,

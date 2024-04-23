@@ -1,6 +1,4 @@
 import {
-	isReadOnlyAdminUI,
-	isReadOnlyPropertyAdminUI,
 	AdminUIFilterType,
 	RelationshipType,
 	BaseContext,
@@ -60,7 +58,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 				);
 
 				const attributes = new AdminUiEntityAttributeMetadata();
-				attributes.isReadOnly = isReadOnlyAdminUI(entity.target);
+				attributes.isReadOnly = entity.adminUIOptions?.readonly;
 				attributes.exportPageSize = getExportPageSize(entity.target);
 
 				const fields = visibleFields?.map((field) => {
@@ -70,7 +68,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 					const typeName = isArray ? fieldType[0].name : (fieldType as any).name;
 
 					// Define field attributes
-					const isReadOnly = isReadOnlyPropertyAdminUI(entity.target, field.name);
+					const isReadOnly = field.adminUIOptions?.readonly ?? false;
 					const isRequired = !field.nullable;
 
 					const fieldObject: AdminUiFieldMetadata = {

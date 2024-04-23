@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, GraphQLEntity, GraphQLID, Entity, ReadOnlyProperty } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, GraphQLID, Entity } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
@@ -73,12 +73,10 @@ export class Customer extends GraphQLEntity<OrmCustomer> {
 	@Field(() => String)
 	lastName!: string;
 
-	@ReadOnlyProperty()
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { readonly: true } })
 	company?: string;
 
-	@ReadOnlyProperty()
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { readonly: true } })
 	address?: string;
 
 	@Field(() => String, { nullable: true })

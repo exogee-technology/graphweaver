@@ -235,6 +235,7 @@ export interface FieldMetadata<G, D> {
 		summaryField?: boolean;
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		readonly?: boolean;
 	};
 	summaryField?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
