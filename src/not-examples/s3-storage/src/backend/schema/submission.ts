@@ -1,12 +1,14 @@
-import { GraphQLEntity, Field, ID, ObjectType, ReadOnlyProperty } from '@exogee/graphweaver';
+import { GraphQLEntity, Field, ID, Entity, ReadOnlyProperty } from '@exogee/graphweaver';
 import {
 	S3StorageProvider,
 	StorageType,
 	MediaField,
 	MediaTypes,
 } from '@exogee/graphweaver-storage-provider';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { Submission as OrmSubmission } from '../../entities';
+import { Submission as OrmSubmission } from '../entities';
+import { pgConnection } from '../database';
 
 if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
 
@@ -17,7 +19,9 @@ const s3 = new S3StorageProvider({
 	expiresIn: 3600,
 });
 
-@ObjectType('Submission')
+@Entity('Submission', {
+	provider: new MikroBackendProvider(OrmSubmission, pgConnection),
+})
 export class Submission extends GraphQLEntity<OrmSubmission> {
 	public dataEntity!: OrmSubmission;
 
