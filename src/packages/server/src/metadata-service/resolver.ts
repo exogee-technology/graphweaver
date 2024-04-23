@@ -55,7 +55,9 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
 
-				const visibleFields = Object.values(entity.fields).filter((field) => !field.hideInAdminUI);
+				const visibleFields = Object.values(entity.fields).filter(
+					(field) => !field.adminUIOptions?.hideInTable
+				);
 
 				const attributes = new AdminUiEntityAttributeMetadata();
 				attributes.isReadOnly = isReadOnlyAdminUI(entity.target);
@@ -99,7 +101,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 					}
 
-					fieldObject.filter = adminUIOptions?.hideInFilterBar
+					fieldObject.filter = field.adminUIOptions?.hideInFilterBar
 						? undefined
 						: { type: mapFilterType(fieldObject) };
 
@@ -112,9 +114,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 					summaryField: entity.adminUIOptions?.summaryField,
 					fields,
 					attributes,
-					adminUIOptions: {
-						defaultFilter: adminUIOptions?.defaultFilter,
-					},
+					defaultFilter: adminUIOptions?.defaultFilter,
 				};
 			})
 			.filter((entity) => entity && !!entity.backendId);

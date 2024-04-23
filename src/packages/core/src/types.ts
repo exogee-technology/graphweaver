@@ -231,6 +231,11 @@ export interface FieldMetadata<G, D> {
 	deprecationReason?: string;
 	complexity?: Complexity;
 	defaultValue?: any;
+	adminUIOptions?: {
+		summaryField?: boolean;
+		hideInTable?: boolean;
+		hideInFilterBar?: boolean;
+	};
 	summaryField?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;

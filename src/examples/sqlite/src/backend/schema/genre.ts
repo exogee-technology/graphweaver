@@ -13,7 +13,7 @@ export class Genre extends GraphQLEntity<OrmGenre> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { nullable: true, summaryField: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
 	@RelationshipField<Track>(() => [Track], { relatedField: 'genre' })

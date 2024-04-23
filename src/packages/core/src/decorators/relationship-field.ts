@@ -9,6 +9,7 @@ import {
 	GraphQLResolveInfo,
 	HookRegister,
 	ReadHookParams,
+	adminUIFieldOptions,
 	hookManagerMap,
 } from '..';
 import { graphweaverMetadata } from '../metadata';
@@ -17,6 +18,7 @@ type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
 	id?: (keyof D & string) | ((dataEntity: D) => string | number | undefined);
 	nullable?: boolean;
+	adminUIOptions?: adminUIFieldOptions;
 };
 
 interface ClassType<T extends GraphQLEntity<BaseDataEntity>> {
@@ -64,7 +66,7 @@ export function RelationshipField<
 	D extends BaseDataEntity = G['dataEntity'],
 >(
 	returnTypeFunc: ReturnTypeFunc,
-	{ relatedField, id, nullable = false }: RelationshipFieldOptions<D>
+	{ relatedField, id, nullable = false, adminUIOptions }: RelationshipFieldOptions<D>
 ) {
 	return (target: any, key: string) => {
 		if (!id && !relatedField)
@@ -81,6 +83,7 @@ export function RelationshipField<
 				relatedField,
 				id,
 			},
+			adminUIOptions,
 		});
 	};
 }

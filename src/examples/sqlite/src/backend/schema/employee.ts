@@ -20,10 +20,13 @@ export class Employee extends GraphQLEntity<OrmEmployee> {
 	@Field(() => String)
 	firstName!: string;
 
-	@Field(() => String, { nullable: true, summaryField: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	title?: string;
 
-	@RelationshipField<Employee>(() => Employee, { id: (entity) => entity.employee?.id, nullable: true })
+	@RelationshipField<Employee>(() => Employee, {
+		id: (entity) => entity.employee?.id,
+		nullable: true,
+	})
 	employee?: Employee;
 
 	@Field(() => ISODateStringScalar, { nullable: true })

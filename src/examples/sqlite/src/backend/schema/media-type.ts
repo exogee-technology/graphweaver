@@ -13,7 +13,7 @@ export class MediaType extends GraphQLEntity<OrmMediaType> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { nullable: true, summaryField: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 
 	@RelationshipField<Track>(() => [Track], { relatedField: 'mediaType' })

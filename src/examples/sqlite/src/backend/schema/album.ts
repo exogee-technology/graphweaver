@@ -14,7 +14,7 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { summaryField: true })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	title!: string;
 
 	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })

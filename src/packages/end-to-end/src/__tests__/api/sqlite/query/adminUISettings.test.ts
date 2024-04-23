@@ -76,7 +76,7 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { summaryField: true })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	title!: string;
 
 	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
@@ -97,18 +97,15 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	// @todo implement hideFromDisplay
-	// @AdminUISettings({
-	// 	hideFromDisplay: true,
-	// })
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { hideInTable: true } })
 	name?: string;
 
-	// @todo implement hideFromFilterBar
-	// @AdminUISettings({
-	// 	hideFromFilterBar: true,
-	// })
-	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	@RelationshipField<Album>(() => [Album], {
+		relatedField: 'artist',
+		adminUIOptions: {
+			hideInFilterBar: true,
+		},
+	})
 	albums!: Album[];
 
 	@MediaField({

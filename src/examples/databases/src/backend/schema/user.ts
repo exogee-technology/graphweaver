@@ -16,7 +16,7 @@ export class User extends GraphQLEntity<OrmUser> {
 	@Field(() => GraphQLID)
 	id!: string;
 
-	@Field(() => String, { summaryField: true })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	username!: string;
 
 	@Field(() => String)

@@ -47,7 +47,7 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { summaryField: true })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	title!: string;
 }
 
@@ -60,7 +60,7 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { nullable: true, summaryField: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;
 }
 

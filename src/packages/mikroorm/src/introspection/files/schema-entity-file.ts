@@ -219,7 +219,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		return `${decorator}(() => ${this.getGraphQLPropertyType(prop)}, { ${Object.entries(options)
-			.map(([opt, val]) => `${opt}: ${val}`)
+			.map(([opt, val]) => `${opt}: ${JSON.stringify(val).replaceAll('"', '')}`)
 			.join(', ')} })\n`;
 	}
 
@@ -228,7 +228,10 @@ export class SchemaEntityFile extends BaseFile {
 			options.nullable = true;
 		}
 		if (['name', 'title'].includes(prop.name.toLowerCase())) {
-			options.summaryField = true;
+			options.adminUIOptions = {
+				...options.adminUIOptions,
+				summaryField: true,
+			};
 		}
 	}
 

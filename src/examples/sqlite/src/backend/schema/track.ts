@@ -17,7 +17,7 @@ export class Track extends GraphQLEntity<OrmTrack> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { summaryField: true })
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	name!: string;
 
 	@RelationshipField<Track>(() => Album, { id: (entity) => entity.album?.id, nullable: true })
