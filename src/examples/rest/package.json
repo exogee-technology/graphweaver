@@ -36,7 +36,7 @@
 		"got-cjs": "12.5.4",
 		"graphql": "16.8.1",
 		"graphweaver": "workspace:*",
-		"mysql2": "3.9.4",
+		"mysql2": "3.9.7",
 		"react": "18.2.0",
 		"reflect-metadata": "0.2.2"
 	},
