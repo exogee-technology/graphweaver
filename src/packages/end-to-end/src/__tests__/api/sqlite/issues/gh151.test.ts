@@ -82,7 +82,9 @@ describe('RelationshipField', () => {
 	test('should not get error on buildSchema when object type name is not same as entity', async () => {
 		const graphweaver = new Graphweaver();
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.server.executeOperation<{
+			testAlbums: { id: string; renamedArtist: { id: string } }[];
+		}>({
 			query: gql`
 				query {
 					testAlbums {
@@ -95,7 +97,7 @@ describe('RelationshipField', () => {
 			`,
 		});
 		assert(response.body.kind === 'single');
-		console.log(response.body.singleResult.data);
 		expect(response.body.singleResult.data?.testAlbums).toHaveLength(347);
+		expect(response.body.singleResult.data?.testAlbums?.[0]?.renamedArtist).toBeTruthy();
 	});
 });
