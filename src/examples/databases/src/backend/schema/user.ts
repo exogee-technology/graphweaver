@@ -4,10 +4,11 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { User as OrmUser } from '../entities';
 import { pgConnection } from '../database';
 
-@Entity('User', {
+@Entity<User>('User', {
 	provider: new MikroBackendProvider(OrmUser, pgConnection),
 	adminUIOptions: {
 		defaultFilter: { deleted: false },
+		summaryField: 'username',
 	},
 })
 export class User extends GraphQLEntity<OrmUser> {
@@ -16,7 +17,7 @@ export class User extends GraphQLEntity<OrmUser> {
 	@Field(() => GraphQLID)
 	id!: string;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String)
 	username!: string;
 
 	@Field(() => String)

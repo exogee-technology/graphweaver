@@ -1,9 +1,6 @@
 import { Complexity, GetTypeFunction, graphweaverMetadata } from '..';
 
 export interface adminUIFieldOptions {
-	// This marks the field as a summary field in the admin UI.
-	summaryField?: boolean;
-
 	// This marks the field as hidden in the admin UI table.
 	hideInTable?: boolean;
 

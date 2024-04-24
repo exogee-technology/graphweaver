@@ -64,10 +64,11 @@ const connection = {
 	},
 };
 
-@Entity('Album', {
+@Entity<Album>('Album', {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
 	adminUIOptions: {
 		hideInSideBar: true,
+		summaryField: 'title',
 	},
 })
 export class Album extends GraphQLEntity<OrmAlbum> {
@@ -76,19 +77,20 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { adminUIOptions: { summaryField: true } })
+	@Field(() => String)
 	title!: string;
 
 	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
 	artist!: Artist;
 }
 
-@Entity('Artist', {
+@Entity<Artist>('Artist', {
 	provider: new MikroBackendProvider(OrmArtist, connection),
 	adminUIOptions: {
 		defaultFilter: {
 			name: 'test',
-		} as any, // @todo remove cast,
+		},
+		summaryField: 'name',
 	},
 })
 export class Artist extends GraphQLEntity<OrmArtist> {
@@ -97,7 +99,10 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	@Field(() => GraphQLID)
 	id!: number;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { hideInTable: true } })
+	@Field(() => String, {
+		nullable: true,
+		adminUIOptions: { hideInTable: true },
+	})
 	name?: string;
 
 	@RelationshipField<Album>(() => [Album], {
@@ -184,6 +189,7 @@ test('Test the decorator adminUISettings', async () => {
 	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
 	expect(artistEntity?.defaultFilter).toStrictEqual({ name: 'test' });
+	expect(artistEntity?.summaryField).toStrictEqual('name');
 
 	const idField = artistEntity?.fields.find((field) => field.name === 'id');
 	expect(idField).not.toBeNull();

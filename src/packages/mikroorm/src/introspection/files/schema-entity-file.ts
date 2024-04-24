@@ -68,7 +68,15 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		this.coreImports.add('Entity');
-		file += `@Entity(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n})\n`;
+		const summaryField = () => {
+			for (const prop of props) {
+				if (['name', 'title'].includes(prop.name.toLowerCase())) {
+					return `\tadminUIOptions: {\n\t\tsummaryField: ${this.quote(prop.name.toLowerCase())},\n\t},\n`;
+				}
+			}
+			return ``;
+		};
+		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n${summaryField()}})\n`;
 
 		this.coreImports.add('GraphQLEntity');
 		file += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
@@ -226,12 +234,6 @@ export class SchemaEntityFile extends BaseFile {
 	protected getCommonDecoratorOptions(options: Dictionary, prop: EntityProperty): void {
 		if (prop.nullable && !prop.mappedBy) {
 			options.nullable = true;
-		}
-		if (['name', 'title'].includes(prop.name.toLowerCase())) {
-			options.adminUIOptions = {
-				...options.adminUIOptions,
-				summaryField: true,
-			};
 		}
 	}
 
