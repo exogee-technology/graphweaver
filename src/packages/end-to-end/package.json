@@ -19,8 +19,7 @@
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-sqlite": "dotenv -e .env.sqlite -- jest --runInBand --forceExit ---- api/sqlite",
 		"test-scalars": "jest --runInBand --forceExit ---- api/scalars",
-		"test-ui": "pnpm exec playwright test ./components ./issues",
-		"test-ui:postgres": "export TEST_DATASOURCE=mikro-orm-postgres && pnpm test-ui --reporter line",
+		"test-ui": "pnpm exec playwright test",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
 		"version": "npm version --no-git-tag-version"

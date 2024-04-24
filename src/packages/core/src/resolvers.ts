@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLResolveInfo, isListType, isObjectType } from 'graphql';
+import { GraphQLResolveInfo, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { BaseContext, GraphQLArgs } from './types';
 import {
@@ -12,7 +12,6 @@ import {
 	createOrUpdateEntities,
 	graphweaverMetadata,
 	hookManagerMap,
-	isEntityMetadata,
 	runWritableBeforeHooks,
 } from '.';
 import { QueryManager } from './query-manager';
