@@ -169,8 +169,8 @@ export class SchemaEntityFile extends BaseFile {
 
 	private getGraphQLPropertyType(prop: EntityProperty): string {
 		if (prop.primary) {
-			this.coreImports.add('GraphQLID');
-			return 'GraphQLID';
+			this.coreImports.add('ID');
+			return 'ID';
 		}
 
 		if (prop.type === 'Date') {

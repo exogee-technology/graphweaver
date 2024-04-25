@@ -10,7 +10,7 @@ import {
 	OneToMany,
 	PrimaryKey,
 } from '@mikro-orm/core';
-import { Field, GraphQLEntity, GraphQLID, Entity, RelationshipField } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { resetDatabase } from '../../../../utils';
@@ -56,7 +56,7 @@ const connection = {
 export class Album extends GraphQLEntity<OrmAlbum> {
 	public dataEntity!: OrmAlbum;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
@@ -69,7 +69,7 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })

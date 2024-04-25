@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Entity, GraphQLID, Field, GraphQLEntity, BaseDataProvider } from '@exogee/graphweaver';
+import { Entity, ID, Field, GraphQLEntity, BaseDataProvider } from '@exogee/graphweaver';
 
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
@@ -21,7 +21,7 @@ describe('GraphQL JSON Scalar Type', () => {
 			provider: new DataProvider('user'),
 		})
 		class User extends GraphQLEntity<any> {
-			@Field(() => GraphQLID)
+			@Field(() => ID)
 			id!: string;
 
 			@Field(() => GraphQLJSON)

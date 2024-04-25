@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, GraphQLID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Track } from './track';
 import { MediaType as OrmMediaType } from '../entities';
@@ -10,7 +10,7 @@ import { connection } from '../database';
 export class MediaType extends GraphQLEntity<OrmMediaType> {
 	public dataEntity!: OrmMediaType;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })

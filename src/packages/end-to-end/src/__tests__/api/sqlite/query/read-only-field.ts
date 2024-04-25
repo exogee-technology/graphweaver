@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, GraphQLEntity, GraphQLID, Entity } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
@@ -64,7 +64,7 @@ const connection = {
 export class Customer extends GraphQLEntity<OrmCustomer> {
 	public dataEntity!: OrmCustomer;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String)

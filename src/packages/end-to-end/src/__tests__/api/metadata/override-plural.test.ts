@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, GraphQLEntity, GraphQLID, Entity, BaseDataProvider } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
 
 test('should return fishes as plural name when overridden', async () => {
 	@Entity('Fish', {
@@ -10,7 +10,7 @@ test('should return fishes as plural name when overridden', async () => {
 		plural: 'fishes',
 	})
 	class Fish extends GraphQLEntity<any> {
-		@Field(() => GraphQLID)
+		@Field(() => ID)
 		id!: string;
 
 		@Field(() => String)

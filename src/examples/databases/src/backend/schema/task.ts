@@ -1,4 +1,4 @@
-import { GraphQLEntity, RelationshipField, Field, GraphQLID, Entity } from '@exogee/graphweaver';
+import { GraphQLEntity, RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
@@ -12,7 +12,7 @@ import { myConnection } from '../database';
 export class Task extends GraphQLEntity<OrmTask> {
 	public dataEntity!: OrmTask;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: string;
 
 	@Field(() => String)

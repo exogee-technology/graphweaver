@@ -10,7 +10,7 @@ import {
 	PrimaryKey,
 	Property,
 } from '@mikro-orm/core';
-import { Field, GraphQLEntity, GraphQLID, Entity, RelationshipField } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 import { MediaField, MediaTypes } from '@exogee/graphweaver-storage-provider';
@@ -74,7 +74,7 @@ const connection = {
 export class Album extends GraphQLEntity<OrmAlbum> {
 	public dataEntity!: OrmAlbum;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String)
@@ -96,7 +96,7 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String, {

@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, GraphQLID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Album } from './album';
 import { Genre } from './genre';
@@ -14,7 +14,7 @@ import { connection } from '../database';
 export class Track extends GraphQLEntity<OrmTrack> {
 	public dataEntity!: OrmTrack;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String, { adminUIOptions: { summaryField: true } })

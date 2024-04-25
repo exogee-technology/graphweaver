@@ -1,4 +1,4 @@
-import { GraphQLEntity, SummaryField, Field, ID, ObjectType } from '@exogee/graphweaver';
+import { GraphQLEntity, SummaryField, Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,

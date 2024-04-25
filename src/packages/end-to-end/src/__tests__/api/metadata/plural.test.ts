@@ -2,14 +2,14 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, GraphQLEntity, GraphQLID, Entity, BaseDataProvider } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
 
 test('should correctly plural name for User', async () => {
 	@Entity('User', {
 		provider: new BaseDataProvider('user'),
 	})
 	class User extends GraphQLEntity<any> {
-		@Field(() => GraphQLID)
+		@Field(() => ID)
 		id!: string;
 
 		@Field(() => String)
@@ -83,7 +83,7 @@ test('should throw when plural name matches an existing entity', async () => {
 			plural: 'users',
 		})
 		class Fish extends GraphQLEntity<any> {
-			@Field(() => GraphQLID)
+			@Field(() => ID)
 			id!: string;
 
 			@Field(() => String)
@@ -94,7 +94,7 @@ test('should throw when plural name matches an existing entity', async () => {
 			provider: new BaseDataProvider('user'),
 		})
 		class User extends GraphQLEntity<any> {
-			@Field(() => GraphQLID)
+			@Field(() => ID)
 			id!: string;
 
 			@Field(() => String)
@@ -113,7 +113,7 @@ test('should throw when plural name matches an existing entity', async () => {
 			provider: new BaseDataProvider('user'),
 		})
 		class Fish extends GraphQLEntity<any> {
-			@Field(() => GraphQLID)
+			@Field(() => ID)
 			id!: string;
 
 			@Field(() => String)
@@ -125,7 +125,7 @@ test('should throw when plural name matches an existing entity', async () => {
 			plural: 'multipleFish',
 		})
 		class User extends GraphQLEntity<any> {
-			@Field(() => GraphQLID)
+			@Field(() => ID)
 			id!: string;
 
 			@Field(() => String)

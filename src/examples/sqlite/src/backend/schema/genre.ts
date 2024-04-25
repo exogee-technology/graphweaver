@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, GraphQLID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Track } from './track';
 import { Genre as OrmGenre } from '../entities';
@@ -10,7 +10,7 @@ import { connection } from '../database';
 export class Genre extends GraphQLEntity<OrmGenre> {
 	public dataEntity!: OrmGenre;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })

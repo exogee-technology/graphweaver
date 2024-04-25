@@ -1,4 +1,4 @@
-import { BaseDataEntity, Field, GraphQLEntity, GraphQLID, Entity } from '@exogee/graphweaver';
+import { BaseDataEntity, Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import { AccessControlList, AuthorizationContext } from '../../types';
 import { ApplyAccessControlList } from '../../decorators';
 
@@ -20,7 +20,7 @@ export interface CredentialStorage {
 export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	public dataEntity!: D;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: string;
 
 	@Field(() => String)

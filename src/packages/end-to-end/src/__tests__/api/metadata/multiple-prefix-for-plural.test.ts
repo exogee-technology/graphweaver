@@ -2,14 +2,14 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, GraphQLEntity, GraphQLID, Entity, BaseDataProvider } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
 
 test('should return multipleFish as plural name for Fish', async () => {
 	@Entity('Fish', {
 		provider: new BaseDataProvider('fish'),
 	})
 	class Fish extends GraphQLEntity<any> {
-		@Field(() => GraphQLID)
+		@Field(() => ID)
 		id!: string;
 
 		@Field(() => String)

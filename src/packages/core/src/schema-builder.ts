@@ -36,6 +36,8 @@ import {
 } from '.';
 import * as resolvers from './resolvers';
 
+export const ID = GraphQLID;
+
 const arrayOperations = new Set(['in', 'nin']);
 const basicOperations = new Set(['ne', 'notnull', 'null']);
 const likeOperations = new Set(['like', 'ilike']);
@@ -415,7 +417,7 @@ class SchemaBuilderImplementation {
 						description: `Get a single ${entity.name}.`,
 						type: graphQLTypeForEntity(entity),
 						args: {
-							id: { type: new GraphQLNonNull(GraphQLID) },
+							id: { type: new GraphQLNonNull(ID) },
 						},
 						resolve: resolvers.getOne,
 					};

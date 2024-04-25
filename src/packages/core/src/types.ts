@@ -1,7 +1,7 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, GraphQLID } from 'graphql';
 import { graphweaverMetadata } from './metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';

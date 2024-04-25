@@ -1,4 +1,4 @@
-import { Field, GraphQLID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import type {
 	AuthenticationExtensionsClientOutputs,
@@ -10,7 +10,7 @@ import type {
 
 @Entity('PasskeyRegistrationResponse')
 export class PasskeyRegistrationResponse implements RegistrationResponseJSON {
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: string;
 
 	@Field(() => String)
