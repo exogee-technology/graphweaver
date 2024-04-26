@@ -1,4 +1,4 @@
-import { Entity, Field } from '@exogee/graphweaver';
+import { Entity, Field } from '../decorators';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEnumMetadata } from './enum';
 

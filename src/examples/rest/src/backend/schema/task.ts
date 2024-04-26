@@ -9,10 +9,8 @@ import {
 	ResolveTree,
 	Field,
 	ID,
-	ObjectType,
-	registerEnumType,
-	Root,
-	SummaryField,
+	Entity,
+	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import {
 	AccessControlList,
@@ -21,11 +19,13 @@ import {
 	AuthenticationMethod,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { Task as OrmTask, Priority } from '../../entities';
-import { User } from '../user';
-import { Tag } from '../tag';
-import { Roles } from '../../auth/roles';
+import { Task as OrmTask, Priority } from '../entities';
+import { User } from './user';
+import { Tag } from './tag';
+import { Roles } from '../auth/roles';
+import { myConnection } from '../database';
 
 type ReadHook = ReadHookParams<Task, AuthorizationContext>;
 type CreateOrUpdateHook = CreateOrUpdateHookParams<Task, AuthorizationContext>;
@@ -42,19 +42,9 @@ const acl: AccessControlList<Task, AuthorizationContext> = {
 	},
 };
 
-registerEnumType(Priority, {
+graphweaverMetadata.collectEnumInformation({
 	name: 'Priority',
-	valuesConfig: {
-		HIGH: {
-			description: 'HIGH',
-		},
-		MEDIUM: {
-			description: 'MEDIUM',
-		},
-		LOW: {
-			description: 'LOW',
-		},
-	},
+	target: Priority,
 });
 
 type TaskField = keyof InstanceType<typeof Task>;
@@ -88,14 +78,18 @@ export const preventLightSideAccess = (
 	},
 }))
 @ApplyAccessControlList(acl)
-@ObjectType('Task')
+@Entity<Task>('Task', {
+	provider: new MikroBackendProvider(OrmTask, myConnection),
+	adminUIOptions: {
+		summaryField: 'description',
+	},
+})
 export class Task extends GraphQLEntity<OrmTask> {
 	public dataEntity!: OrmTask;
 
 	@Field(() => ID)
 	id!: string;
 
-	@SummaryField()
 	@Field(() => String)
 	description!: string;
 
@@ -112,7 +106,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	priority?: Priority;
 
 	@Field((type) => String, { nullable: true })
-	slug(@Root() task: Task) {
+	slug(task: Task) {
 		return `${task.id}:${task.description}`;
 	}
 

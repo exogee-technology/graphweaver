@@ -334,6 +334,8 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
 							fields[field.name] = { type: insertTypeForEntity(metadata) };
 						}
+					} else if (isEnumMetadata(metadata)) {
+						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
 					} else if (isScalarType(fieldType)) {
 						fields[field.name] = { type: fieldType };
 					} else {

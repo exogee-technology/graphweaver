@@ -417,7 +417,8 @@ class Metadata {
 	public addMutation(args: {
 		name: string;
 		getType: () => any;
-		resolver: () => any;
+		args?: any;
+		resolver: (...args: any) => any;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {

@@ -1,4 +1,4 @@
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, GraphQLBoolean, graphweaverMetadata } from '@exogee/graphweaver';
 import otpGenerator from 'otp-generator';
 import ms from 'ms';
 import { logger } from '@exogee/logger';
@@ -27,10 +27,10 @@ type OneTimePasswordProvider = BackendProvider<
 	AuthenticationBaseEntity<OneTimePasswordData>
 >;
 
-export type OneTimePasswordOptions = {
+export interface OneTimePasswordOptions {
 	provider: OneTimePasswordProvider;
 	sendOTP: (otp: OneTimePasswordEntity) => Promise<boolean>;
-};
+}
 
 const config = {
 	rate: {
@@ -58,13 +58,13 @@ export class OneTimePassword {
 
 		graphweaverMetadata.addMutation({
 			name: 'sendOTPChallenge',
-			getType: () => Boolean,
+			getType: () => GraphQLBoolean,
 			resolver: this.sendOTPChallenge as any,
 		});
 
 		graphweaverMetadata.addMutation({
 			name: 'verifyOTPChallenge',
-			getType: () => Boolean,
+			getType: () => GraphQLBoolean,
 			resolver: this.verifyOTPChallenge as any,
 		});
 	}

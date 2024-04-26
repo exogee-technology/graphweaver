@@ -1,11 +1,4 @@
-import {
-	GraphQLEntity,
-	RelationshipField,
-	Field,
-	ID,
-	ObjectType,
-	SummaryField,
-} from '@exogee/graphweaver';
+import { GraphQLEntity, RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -13,9 +6,11 @@ import {
 	AuthenticationMethod,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { Tag as OrmTag } from '../../entities';
-import { Task } from '../task';
+import { Tag as OrmTag } from '../entities';
+import { Task } from './task';
+import { myConnection } from '../database';
 
 const acl: AccessControlList<Tag, AuthorizationContext> = {
 	LIGHT_SIDE: {
@@ -35,14 +30,15 @@ const acl: AccessControlList<Tag, AuthorizationContext> = {
 	},
 }))
 @ApplyAccessControlList(acl)
-@ObjectType('Tag')
+@Entity('Tag', {
+	provider: new MikroBackendProvider(OrmTag, myConnection),
+})
 export class Tag extends GraphQLEntity<OrmTag> {
 	public dataEntity!: OrmTag;
 
 	@Field(() => ID)
 	id!: string;
 
-	@SummaryField()
 	@Field(() => String)
 	name!: string;
 

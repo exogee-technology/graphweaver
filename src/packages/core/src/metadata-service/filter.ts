@@ -1,4 +1,6 @@
-import { AdminUIFilterType, Entity, Field, graphweaverMetadata } from '@exogee/graphweaver';
+import { Entity, Field } from '../decorators';
+import { graphweaverMetadata } from '../metadata';
+import { AdminUIFilterType } from '../types';
 
 graphweaverMetadata.collectEnumInformation({
 	name: 'AdminUiFilterType',

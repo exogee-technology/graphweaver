@@ -68,15 +68,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		this.coreImports.add('Entity');
-		const summaryField = () => {
-			for (const prop of props) {
-				if (['name', 'title'].includes(prop.name.toLowerCase())) {
-					return `\tadminUIOptions: {\n\t\tsummaryField: ${this.quote(prop.name.toLowerCase())},\n\t},\n`;
-				}
-			}
-			return ``;
-		};
-		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n${summaryField()}})\n`;
+		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n})\n`;
 
 		this.coreImports.add('GraphQLEntity');
 		file += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;

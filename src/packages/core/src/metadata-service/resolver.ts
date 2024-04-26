@@ -1,14 +1,14 @@
+import { AdminUiFieldMetadata } from './field';
+import { AdminUiEntityMetadata } from './entity';
+import { AdminUiEntityAttributeMetadata } from './entity-attribute';
+
 import {
 	AdminUIFilterType,
 	RelationshipType,
 	BaseContext,
 	getExportPageSize,
 	graphweaverMetadata,
-} from '@exogee/graphweaver';
-import { AdminUiFieldMetadata } from './field';
-import { AdminUiEntityMetadata } from './entity';
-import { AdminUiEntityAttributeMetadata } from './entity-attribute';
-import { AdminMetadata } from '..';
+} from '..';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -36,7 +36,21 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	}
 };
 
-export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
+type MetadataHookParams<C> = {
+	context: C;
+	metadata?: { entities: any; enums: any };
+};
+
+type Hooks = {
+	beforeRead?: <C extends BaseContext>(
+		params: MetadataHookParams<C>
+	) => Promise<MetadataHookParams<C>>;
+	afterRead?: <C extends BaseContext>(
+		params: MetadataHookParams<C>
+	) => Promise<MetadataHookParams<C>>;
+};
+
+export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 	return async <C extends BaseContext>(source: unknown, args: unknown, context: C) => {
 		await hooks?.beforeRead?.({ context });
 
@@ -61,11 +75,17 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 				attributes.isReadOnly = entity.adminUIOptions?.readonly;
 				attributes.exportPageSize = getExportPageSize(entity.target);
 
+				let defaultSummaryField: 'name' | 'title' | undefined = undefined;
+
 				const fields = visibleFields?.map((field) => {
 					const fieldType = field.getType();
 					const isArray = Array.isArray(fieldType);
 					const relatedObject = graphweaverMetadata.metadataForType(fieldType);
 					const typeName = isArray ? fieldType[0].name : (fieldType as any).name;
+
+					// set the default summary field
+					if (['name', 'title'].includes(field.name))
+						defaultSummaryField = field.name as 'name' | 'title';
 
 					// Define field attributes
 					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
@@ -106,11 +126,14 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 
 					return fieldObject;
 				});
+
+				const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
+
 				return {
 					name,
 					plural,
 					backendId,
-					summaryField: entity.adminUIOptions?.summaryField,
+					summaryField,
 					fields,
 					attributes,
 					defaultFilter: adminUIOptions?.defaultFilter,

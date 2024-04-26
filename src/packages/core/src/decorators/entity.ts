@@ -1,4 +1,5 @@
-import { CollectEntityInformationArgs, graphweaverMetadata, pluralise } from '..';
+import { pluralise } from '../utils/plural';
+import { CollectEntityInformationArgs, graphweaverMetadata } from '../metadata';
 
 export type EntityOptions<G> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>

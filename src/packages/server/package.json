@@ -25,7 +25,6 @@
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@escape.tech/graphql-armor": "2.4.0",
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/graphql-file-loader": "8.0.1",
 		"@graphql-tools/load": "8.0.2",

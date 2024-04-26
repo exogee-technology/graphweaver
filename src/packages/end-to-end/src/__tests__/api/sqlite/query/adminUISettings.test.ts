@@ -68,7 +68,6 @@ const connection = {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
 	adminUIOptions: {
 		hideInSideBar: true,
-		summaryField: 'title',
 	},
 })
 export class Album extends GraphQLEntity<OrmAlbum> {
@@ -90,7 +89,6 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 		defaultFilter: {
 			name: 'test',
 		},
-		summaryField: 'name',
 	},
 })
 export class Artist extends GraphQLEntity<OrmArtist> {

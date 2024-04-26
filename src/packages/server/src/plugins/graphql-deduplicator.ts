@@ -9,7 +9,8 @@ export const dedupeGraphQL: ApolloServerPlugin = {
 					requestContext.response.body.kind == 'single' &&
 					requestContext.response.body.singleResult.data
 				) {
-					if (typeof requestContext.response.body.singleResult.data.result === 'object') {
+					const result = requestContext.response.body.singleResult.data.result;
+					if (result !== null && typeof result === 'object') {
 						requestContext.response.body.singleResult.data.result = deflate(
 							requestContext.response.body.singleResult.data.result as object
 						);

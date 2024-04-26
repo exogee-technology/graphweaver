@@ -21,6 +21,7 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.10.1",
+		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/delegate": "10.0.4",
 		"class-validator": "0.14.1",

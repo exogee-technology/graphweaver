@@ -1,4 +1,4 @@
-import { Entity, Field } from '@exogee/graphweaver';
+import { Entity, Field } from '../decorators';
 import { AdminUiFilterMetadata } from './filter';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
 import { AdminUiFieldExtensionsMetadata } from './field-extensions';

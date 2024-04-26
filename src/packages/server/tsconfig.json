@@ -6,10 +6,5 @@
 		"noUnusedLocals": false
 	},
 	"include": ["./src"],
-	"references": [
-		{ "path": "../core" },
-		{ "path": "../mikroorm" },
-		{ "path": "../logger" },
-		{ "path": "../scalars" }
-	]
+	"references": [{ "path": "../core" }, { "path": "../logger" }]
 }

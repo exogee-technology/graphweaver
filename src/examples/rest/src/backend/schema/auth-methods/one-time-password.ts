@@ -1,8 +1,8 @@
 import { OneTimePassword, OneTimePasswordData } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { Authentication } from '../../../entities/mysql';
-import { myConnection } from '../../../database';
+import { Authentication } from '../../entities/mysql';
+import { myConnection } from '../../database';
 
 export const oneTimePassword = new OneTimePassword({
 	provider: new MikroBackendProvider(Authentication<OneTimePasswordData>, myConnection),

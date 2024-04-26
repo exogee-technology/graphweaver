@@ -2,17 +2,17 @@ import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
 import { AuthorizationContext, authApolloPlugin } from '@exogee/graphweaver-auth';
 
-import { resolvers } from './schema';
+import './schema';
 // Auth Functions
 import { beforeRead, afterRead } from './auth/admin-ui';
 import { addUserToContext } from './auth/context';
 
 // API Key Data Provider
-import { apiKeyDataProvider } from './schema/auth';
+// import { apiKeyDataProvider } from './schema/auth';
 
 export const graphweaver = new Graphweaver<AuthorizationContext>({
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(addUserToContext, { apiKeyDataProvider })],
+		plugins: [authApolloPlugin(addUserToContext)], //, @todo { apiKeyDataProvider })],
 	},
 	adminMetadata: {
 		enabled: true,

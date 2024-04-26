@@ -1,6 +1,5 @@
 import { BaseDataEntity, Entity, Field, GraphQLEntity, ID } from '@exogee/graphweaver';
-import { ApplyAccessControlList } from '../../decorators';
-import { AccessControlList, AuthorizationContext } from '../../types';
+import { GraphQLJSON, ISODateStringScalar } from '@exogee/graphweaver-scalars';
 
 export interface AuthenticationBaseEntity<T> {
 	id: string;
@@ -23,9 +22,9 @@ export class Authentication<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	@Field(() => ID)
 	userId!: string;
 
-	@Field(() => JSON)
+	@Field(() => GraphQLJSON)
 	data!: D;
 
-	@Field(() => Date)
+	@Field(() => ISODateStringScalar)
 	createdAt!: Date;
 }

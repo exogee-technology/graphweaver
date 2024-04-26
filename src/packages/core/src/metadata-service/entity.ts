@@ -1,8 +1,9 @@
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
-import { Entity, Field, Filter } from '@exogee/graphweaver';
 
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
+import { Entity, Field } from '../decorators';
+import { Filter } from '../types';
 
 @Entity('AdminUiEntityMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
 export class AdminUiEntityMetadata {

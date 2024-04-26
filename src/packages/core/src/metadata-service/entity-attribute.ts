@@ -1,4 +1,4 @@
-import { Entity, Field } from '@exogee/graphweaver';
+import { Entity, Field } from '../decorators';
 
 @Entity('AdminUiEntityAttributeMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
 export class AdminUiEntityAttributeMetadata {
