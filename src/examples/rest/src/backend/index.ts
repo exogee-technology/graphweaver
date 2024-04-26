@@ -4,8 +4,7 @@ import { AuthorizationContext, authApolloPlugin } from '@exogee/graphweaver-auth
 
 import './schema';
 // Auth Functions
-import { beforeRead, afterRead } from './auth/admin-ui';
-import { addUserToContext } from './auth/context';
+import { beforeRead, afterRead, addUserToContext } from './auth';
 
 // API Key Data Provider
 // import { apiKeyDataProvider } from './schema/auth';

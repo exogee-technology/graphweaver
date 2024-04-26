@@ -116,7 +116,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						if (Array.isArray(relatedEntityField?.getType())) {
 							fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
 						}
-					} else if (relatedObject) {
+					} else if (relatedObject && relatedObject?.type === 'entity') {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 					}
 

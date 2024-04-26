@@ -2,8 +2,8 @@ import { PasswordOperation, UserProfile, Password } from '@exogee/graphweaver-au
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AccessControlList, AuthorizationContext } from '@exogee/graphweaver-auth';
 
-import { User } from '../user';
-import { mapUserToProfile } from '../../auth/context';
+import { User } from '../../schema/user';
+import { mapUserToProfile } from '../context';
 import { myConnection } from '../../database';
 import { Credential as OrmCredential } from '../../entities/mysql';
 import { BaseLoaders } from '@exogee/graphweaver';
