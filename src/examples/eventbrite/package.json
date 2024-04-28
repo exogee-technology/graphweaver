@@ -35,7 +35,7 @@
 		"graphql-type-json": "0.3.2",
 		"graphweaver": "workspace:*",
 		"isomorphic-fetch": "3.0.0",
-		"react": "18.2.0",
+		"react": "18.3.1",
 		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
