@@ -23,6 +23,6 @@ export class User extends GraphQLEntity<OrmUser> {
 	@Field(() => String)
 	email!: string;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { defaultValue: false })
 	deleted!: boolean;
 }

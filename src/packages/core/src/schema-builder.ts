@@ -320,6 +320,7 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(entity.fields)) {
+					// The ID field is never supplied for inserts.
 					if (field.name === 'id') continue;
 
 					// Let's try to resolve the GraphQL type involved here.
@@ -340,6 +341,11 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						fields[field.name] = { type: fieldType };
 					} else {
 						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
+					}
+
+					// If it's not a nullable field and has no default then we should wrap it now in a not null.
+					if (!field.nullable && typeof field.defaultValue === 'undefined') {
+						fields[field.name] = { type: new GraphQLNonNull(fields[field.name].type) };
 					}
 				}
 

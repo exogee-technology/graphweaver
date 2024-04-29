@@ -268,10 +268,10 @@ export type Task = {
 
 /** Data needed to create Tasks. */
 export type TaskInsertInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  description: Scalars['String']['input'];
+  isCompleted: Scalars['Boolean']['input'];
   meta?: InputMaybe<Scalars['JSON']['input']>;
-  user?: InputMaybe<UserInsertInput>;
+  user: UserInsertInput;
 };
 
 export type TasksListFilter = {
@@ -329,8 +329,8 @@ export type User = {
 /** Data needed to create Users. */
 export type UserInsertInput = {
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type UsersListFilter = {
