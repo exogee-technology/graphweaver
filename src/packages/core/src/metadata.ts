@@ -29,13 +29,9 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		// impact on the API, purely how entities are displayed in the Admin UI.
 		defaultFilter?: Filter<G>;
 
-		// Specifies what field on this entity should be used to summarise it in the Admin UI when
-		// referenced from other entities, e.g. if a Task in a to-do list application has an 'assigned to'
-		// field that references User, if the summary field on User is set to "name", then users in the
-		// task list in the admin area will be shown by their name.
-		//
-		// If no summary field is set for an entity, we default to showing the Id of the entity
-		summaryField?: Extract<keyof G, string>;
+		// Specifies how many entities should be requested per page during a CSV export.
+		// If not set, the default is 200.
+		exportPageSize?: number;
 
 		// If true, the entity will not show up in the side bar (on the left when you log in).
 		// If a property on another entity references this entity, it will still show up in
@@ -45,6 +41,14 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		// If true, properties that reference this entity from other entities will not be able
 		// to be filtered in the list view for those entities. This is
 		hideInFilterBar?: boolean;
+
+		// Specifies what field on this entity should be used to summarise it in the Admin UI when
+		// referenced from other entities, e.g. if a Task in a to-do list application has an 'assigned to'
+		// field that references User, if the summary field on User is set to "name", then users in the
+		// task list in the admin area will be shown by their name.
+		//
+		// If no summary field is set for an entity, we default to showing the 'id' field.
+		summaryField?: Extract<keyof G, string>;
 	};
 }
 

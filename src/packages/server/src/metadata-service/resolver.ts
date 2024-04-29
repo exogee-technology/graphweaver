@@ -4,7 +4,6 @@ import {
 	AdminUIFilterType,
 	RelationshipType,
 	BaseContext,
-	getExportPageSize,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { AdminUiFieldMetadata } from './field';
@@ -59,7 +58,7 @@ export const resolveAdminUiMetadata = (hooks?: AdminMetadata['hooks']) => {
 
 				const attributes = new AdminUiEntityAttributeMetadata();
 				attributes.isReadOnly = isReadOnlyAdminUI(entity.target);
-				attributes.exportPageSize = getExportPageSize(entity.target);
+				attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
 
 				const fields = visibleFields?.map((field) => {
 					const fieldType = field.getType();
