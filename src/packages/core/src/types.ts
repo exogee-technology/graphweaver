@@ -220,6 +220,15 @@ export type GetTypeFunction = (type?: void) => TypeValue;
 export type Complexity = ComplexityEstimator | number;
 
 export interface FieldMetadata<G, D> {
+	adminUIOptions?: {
+		summaryField?: boolean;
+		hideInTable?: boolean;
+		hideInFilterBar?: boolean;
+		readonly?: boolean;
+	};
+	apiOptions?: {
+		readonly?: boolean;
+	};
 	target: G;
 	name: string;
 	getType: GetTypeFunction;
@@ -231,6 +240,11 @@ export interface FieldMetadata<G, D> {
 	deprecationReason?: string;
 	complexity?: Complexity;
 	defaultValue?: any;
+
+	// This marks the field as read only in both the API and the admin UI.
+	// This will supersede any other read only settings.
+	readonly?: boolean;
+
 	summaryField?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;

@@ -275,11 +275,27 @@ export type TaskInsertInput = {
 };
 
 export type TasksListFilter = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  description_ilike?: InputMaybe<Scalars['String']['input']>;
+  description_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_like?: InputMaybe<Scalars['String']['input']>;
+  description_ne?: InputMaybe<Scalars['String']['input']>;
+  description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  isCompleted_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  isCompleted_ne?: InputMaybe<Scalars['Boolean']['input']>;
+  isCompleted_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  isCompleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  isCompleted_null?: InputMaybe<Scalars['Boolean']['input']>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
   meta_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   meta_ne?: InputMaybe<Scalars['JSON']['input']>;
   meta_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
@@ -318,11 +334,34 @@ export type UserInsertInput = {
 };
 
 export type UsersListFilter = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  deleted_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  deleted_ne?: InputMaybe<Scalars['Boolean']['input']>;
+  deleted_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  deleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  deleted_null?: InputMaybe<Scalars['Boolean']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  email_ilike?: InputMaybe<Scalars['String']['input']>;
+  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_like?: InputMaybe<Scalars['String']['input']>;
+  email_ne?: InputMaybe<Scalars['String']['input']>;
+  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  email_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  email_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  username_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UsersOrderByInput = {

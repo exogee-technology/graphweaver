@@ -1,6 +1,6 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { graphweaverMetadata, GraphQLID } from '@exogee/graphweaver';
+import { graphweaverMetadata, ID } from '@exogee/graphweaver';
 
 export enum StorageType {
 	S3 = 's3',
@@ -27,12 +27,12 @@ export const addMediaOperations = (config: StorageConfig) => {
 
 	graphweaverMetadata.addQuery({
 		name: 'getUploadUrl',
-		getType: () => GraphQLID,
+		getType: () => ID,
 
 		// @todo: Fix type on resolver for Add Query when we understand the type signature better.
 		resolver: (({ key }: { key: string }) => storageProvider.getUploadUrl(key)) as any,
 		// args: {
-		// 	key: GraphQLID,
+		// 	key: ID,
 		// },
 	});
 };

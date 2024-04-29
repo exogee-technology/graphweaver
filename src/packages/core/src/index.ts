@@ -4,6 +4,7 @@ export * from './base-loader';
 export * from './decorators';
 export * from './hook-manager';
 export * from './metadata';
+export * from './metadata-service';
 export * from './schema-builder';
 export * from './types';
 export * from './utils/create-or-update-entities';

@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLResolveInfo, isListType, isObjectType } from 'graphql';
+import { GraphQLResolveInfo, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { BaseContext, GraphQLArgs } from './types';
 import {
@@ -12,7 +12,6 @@ import {
 	createOrUpdateEntities,
 	graphweaverMetadata,
 	hookManagerMap,
-	isEntityMetadata,
 	runWritableBeforeHooks,
 } from '.';
 import { QueryManager } from './query-manager';
@@ -239,7 +238,15 @@ export const listRelationshipField = async <
 		return null;
 	}
 
-	const gqlEntityType = field.getType() as GraphQLEntityConstructor<G, D>;
+	let gqlEntityType = field.getType() as
+		| GraphQLEntityConstructor<G, D>
+		| GraphQLEntityConstructor<G, D>[];
+	let isList = false;
+
+	if (Array.isArray(gqlEntityType)) {
+		isList = true;
+		gqlEntityType = gqlEntityType[0];
+	}
 
 	// @todo: Should the user specifie dfilter be and-ed here?
 	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
@@ -306,9 +313,9 @@ export const listRelationshipField = async <
 
 	logger.trace({ before: entities, after: hookEntities }, 'After read hooks ran');
 
-	if (!isListType(info.returnType)) {
-		return hookEntities[0];
-	} else {
+	if (isList) {
 		return hookEntities;
+	} else {
+		return hookEntities[0];
 	}
 };

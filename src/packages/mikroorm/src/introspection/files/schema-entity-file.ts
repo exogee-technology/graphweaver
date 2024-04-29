@@ -26,12 +26,12 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	getBasePath() {
-		const dirName = pascalToKebabCaseString(this.meta.className);
-		return `backend/schema/${dirName}/`;
+		return `backend/schema/`;
 	}
 
 	getBaseName() {
-		return 'entity.ts';
+		const fileName = pascalToKebabCaseString(this.meta.className);
+		return `${fileName}.ts`;
 	}
 
 	generate(): string {
@@ -46,11 +46,6 @@ export class SchemaEntityFile extends BaseFile {
 				classBody += '\n';
 			}
 
-			// Add a summary field if we have a name or title attribute
-			if (['name', 'title'].includes(prop.name.toLowerCase())) {
-				this.coreImports.add('SummaryField');
-				classBody += `\t@SummaryField()\n`;
-			}
 			classBody += decorator;
 			classBody += definition;
 
@@ -72,8 +67,8 @@ export class SchemaEntityFile extends BaseFile {
 			file += '\n\n';
 		}
 
-		this.coreImports.add('ObjectType');
-		file += `@ObjectType(${this.quote(this.meta.className)})\n`;
+		this.coreImports.add('Entity');
+		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n})\n`;
 
 		this.coreImports.add('GraphQLEntity');
 		file += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
@@ -92,15 +87,18 @@ export class SchemaEntityFile extends BaseFile {
 			);
 		}
 
+		imports.push(`import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';`);
+
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
-			imports.push(`import { ${entity} } from '../${pascalToKebabCaseString(entity)}';`);
+			imports.push(`import { ${entity} } from './${pascalToKebabCaseString(entity)}';`);
 		});
 
 		imports.push(
 			`import { ${this.enumImports.size > 0 ? [...this.enumImports].sort().join(', ') + ', ' : ''}${
 				this.meta.className
-			} as Orm${this.meta.className} } from '../../entities';`
+			} as Orm${this.meta.className} } from '../entities';`,
+			`import { connection } from '../database';`
 		);
 
 		file = `${imports.join('\n')}\n\n${file}`;
@@ -221,7 +219,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		return `${decorator}(() => ${this.getGraphQLPropertyType(prop)}, { ${Object.entries(options)
-			.map(([opt, val]) => `${opt}: ${val}`)
+			.map(([opt, val]) => `${opt}: ${JSON.stringify(val).replaceAll('"', '')}`)
 			.join(', ')} })\n`;
 	}
 

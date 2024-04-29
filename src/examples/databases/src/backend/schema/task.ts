@@ -1,11 +1,4 @@
-import {
-	GraphQLEntity,
-	RelationshipField,
-	Field,
-	GraphQLID,
-	Entity,
-	ReadOnlyProperty,
-} from '@exogee/graphweaver';
+import { GraphQLEntity, RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
@@ -19,7 +12,7 @@ import { myConnection } from '../database';
 export class Task extends GraphQLEntity<OrmTask> {
 	public dataEntity!: OrmTask;
 
-	@Field(() => GraphQLID)
+	@Field(() => ID)
 	id!: string;
 
 	@Field(() => String)
@@ -29,8 +22,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	isCompleted!: boolean;
 
 	// Example of a field resolver using a json type
-	@ReadOnlyProperty()
-	@Field(() => GraphQLJSON, { nullable: true })
+	@Field(() => GraphQLJSON, { nullable: true, readonly: true })
 	meta(task: Task) {
 		return {
 			id: task.id,

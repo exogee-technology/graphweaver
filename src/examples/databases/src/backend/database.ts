@@ -22,7 +22,7 @@ export const myConnection = {
 		driver: MySqlDriver,
 		dbName: 'todo_app',
 		user: 'root',
-		password: 'password',
+		password: '',
 		port: 3306,
 	},
 };

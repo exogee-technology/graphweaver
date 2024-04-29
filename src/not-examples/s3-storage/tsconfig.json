@@ -9,6 +9,7 @@
 	"references": [
 		{ "path": "../../packages/core" },
 		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/scalars" }
+		{ "path": "../../packages/scalars" },
+		{ "path": "../../packages/storage-provider" }
 	]
 }

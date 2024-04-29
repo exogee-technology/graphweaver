@@ -7,6 +7,8 @@ import {
 	SchemaBuilder,
 	addChildFiltersToRelationshipFields,
 	graphweaverMetadata,
+	resolveAdminUiMetadata,
+	AdminUiMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -22,8 +24,6 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
-import { resolveAdminUiMetadata } from './metadata-service';
-import { AdminUiMetadata } from './metadata-service/metadata';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';

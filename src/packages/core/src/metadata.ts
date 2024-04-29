@@ -21,6 +21,10 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		// by fields. This is useful for entities that are not backed by a fully fledged provider or are
 		// otherwise dynamically generated.
 		excludeFromFiltering?: boolean;
+
+		// This means that the entity should not be able to be created, updated, or deleted. This is useful
+		// for entities that are read-only or are managed by some other system.
+		readonly?: boolean;
 	};
 
 	adminUIOptions?: {
@@ -49,6 +53,10 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		//
 		// If no summary field is set for an entity, we default to showing the 'id' field.
 		summaryField?: Extract<keyof G, string>;
+
+		// If true, the entity will not be editable in the Admin UI. This is useful for entities
+		// that are managed by some other system or we don't want a user to update from the adminUI.
+		readonly?: boolean;
 	};
 }
 
@@ -413,7 +421,8 @@ class Metadata {
 	public addMutation(args: {
 		name: string;
 		getType: () => any;
-		resolver: () => any;
+		args?: any;
+		resolver: (...args: any) => any;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {

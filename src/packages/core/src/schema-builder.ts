@@ -15,6 +15,8 @@ import {
 	GraphQLScalarType,
 	GraphQLSchema,
 	GraphQLString,
+	isListType,
+	isNonNullType,
 	isScalarType,
 	printSchema,
 	ThunkObjMap,
@@ -26,12 +28,15 @@ import {
 	AuthChecker,
 	EntityMetadata,
 	EnumMetadata,
+	FieldMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
 	isEnumMetadata,
 	TypeValue,
 } from '.';
 import * as resolvers from './resolvers';
+
+export const ID = GraphQLID;
 
 const arrayOperations = new Set(['in', 'nin']);
 const basicOperations = new Set(['ne', 'notnull', 'null']);
@@ -67,6 +72,31 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	}
 
 	return enumType;
+};
+
+const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
+	const unwrapType = (type: TypeValue): TypeValue => {
+		if (isListType(type) || isNonNullType(type)) {
+			return unwrapType(type.ofType);
+		}
+		if (isGraphQLScalarForTypeScriptType(type)) {
+			return graphQLScalarForTypeScriptType(type);
+		}
+		return type;
+	};
+
+	return unwrapType(field.getType());
+};
+
+const isGraphQLScalarForTypeScriptType = (type: TypeValue): type is GraphQLScalarType => {
+	switch (type) {
+		case String:
+		case Number:
+		case Boolean:
+			return true;
+		default:
+			return false;
+	}
 };
 
 const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
@@ -111,7 +141,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						resolve = resolvers.listRelationshipField;
 					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
-					} else if (isScalarType(field.getType())) {
+					} else if (isScalarType(type)) {
 						graphQLType = type as GraphQLScalarType;
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
@@ -164,7 +194,7 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(entity.fields)) {
-					const fieldType = field.getType();
+					const fieldType = getFieldType(field);
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
 					if (isEntityMetadata(metadata)) {
@@ -180,6 +210,9 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 							};
 						}
 					} else if (isScalarType(fieldType)) {
+						// Scalars get a basic operation.
+						fields[field.name] = { type: fieldType };
+
 						// All scalars get array operations
 						for (const operation of arrayOperations) {
 							fields[`${field.name}_${operation}`] = {
@@ -290,7 +323,10 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					if (field.name === 'id') continue;
 
 					// Let's try to resolve the GraphQL type involved here.
-					const fieldType = field.getType();
+					let fieldType = field.getType();
+					if (Array.isArray(fieldType)) {
+						fieldType = fieldType[0];
+					}
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
 					if (isEntityMetadata(metadata)) {
@@ -298,6 +334,8 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
 							fields[field.name] = { type: insertTypeForEntity(metadata) };
 						}
+					} else if (isEnumMetadata(metadata)) {
+						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
 					} else if (isScalarType(fieldType)) {
 						fields[field.name] = { type: fieldType };
 					} else {
@@ -381,7 +419,7 @@ class SchemaBuilderImplementation {
 						description: `Get a single ${entity.name}.`,
 						type: graphQLTypeForEntity(entity),
 						args: {
-							id: { type: new GraphQLNonNull(GraphQLID) },
+							id: { type: new GraphQLNonNull(ID) },
 						},
 						resolve: resolvers.getOne,
 					};
