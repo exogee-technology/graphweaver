@@ -16,9 +16,7 @@ import {
 	runWritableBeforeHooks,
 } from '.';
 import { QueryManager } from './query-manager';
-import { withTransaction } from './utils/with-transaction';
-import { applyDefaultValues } from './utils/apply-default-values';
-import { hasId } from './utils/has-id';
+import { applyDefaultValues, hasId, withTransaction } from './utils';
 
 export const getOne = async <G, C extends BaseContext>(
 	source: unknown,

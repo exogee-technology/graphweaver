@@ -397,7 +397,8 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
 					}
 
-					// Everything is nullable in this type because it can be used for updates as well as inserts.
+					// Everything is nullable in this type because it can be used for updates as well as inserts, hence
+					// no wrapping with new GraphQLNonNull.
 				}
 
 				return fields;
