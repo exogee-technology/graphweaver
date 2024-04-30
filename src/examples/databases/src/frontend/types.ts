@@ -200,6 +200,10 @@ export type MultipleAdminUiMetadataPaginationInput = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Create or update many Tasks. */
+  createOrUpdateTasks?: Maybe<Array<Maybe<Task>>>;
+  /** Create or update many Users. */
+  createOrUpdateUsers?: Maybe<Array<Maybe<User>>>;
   /** Create a single Task. */
   createTask?: Maybe<Task>;
   /** Create a single User. */
@@ -207,13 +211,23 @@ export type Mutation = {
 };
 
 
+export type MutationCreateOrUpdateTasksArgs = {
+  input: Array<TaskCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateUsersArgs = {
+  input: Array<UserCreateOrUpdateInput>;
+};
+
+
 export type MutationCreateTaskArgs = {
-  data: TaskInsertInput;
+  input: TaskInsertInput;
 };
 
 
 export type MutationCreateUserArgs = {
-  data: UserInsertInput;
+  input: UserInsertInput;
 };
 
 export type Query = {
@@ -264,6 +278,15 @@ export type Task = {
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
   user: User;
+};
+
+/** Data needed to create or update Tasks. If an ID is passed, this is an update, otherwise it's an insert. */
+export type TaskCreateOrUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
+  user?: InputMaybe<UserInsertInput>;
 };
 
 /** Data needed to create Tasks. */
@@ -324,6 +347,14 @@ export type User = {
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   username: Scalars['String']['output'];
+};
+
+/** Data needed to create or update Users. If an ID is passed, this is an update, otherwise it's an insert. */
+export type UserCreateOrUpdateInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data needed to create Users. */

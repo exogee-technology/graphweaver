@@ -1,6 +1,6 @@
 import { BaseDataEntity, EntityMetadata, WithId, graphweaverMetadata, isEntityMetadata } from '..';
 
-export const applyDefaultValues = <G extends WithId & { name: string }>(
+export const applyDefaultValues = <G>(
 	data: Partial<G> | Partial<G>[],
 	entityMetadata: EntityMetadata<G, BaseDataEntity>
 ) => {

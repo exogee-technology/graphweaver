@@ -47,6 +47,7 @@ const entityTypes = new Map<string, GraphQLObjectType>();
 const enumTypes = new Map<string, GraphQLEnumType>();
 const filterTypes = new Map<string, GraphQLInputObjectType>();
 const insertTypes = new Map<string, GraphQLInputObjectType>();
+const createOrUpdateTypes = new Map<string, GraphQLInputObjectType>();
 const paginationTypes = new Map<string, GraphQLInputObjectType>();
 
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
@@ -359,6 +360,56 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return insertType;
 };
 
+const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
+	let createOrUpdateType = createOrUpdateTypes.get(entity.name);
+
+	if (!createOrUpdateType) {
+		createOrUpdateType = new GraphQLInputObjectType({
+			name: `${entity.name}CreateOrUpdateInput`,
+			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
+			fields: () => {
+				const fields: ObjMap<GraphQLInputFieldConfig> = {};
+
+				for (const field of Object.values(entity.fields)) {
+					if (field.name === 'id') {
+						fields[field.name] = { type: ID };
+
+						continue;
+					}
+
+					// Let's try to resolve the GraphQL type involved here.
+					let fieldType = field.getType();
+					if (Array.isArray(fieldType)) {
+						fieldType = fieldType[0];
+					}
+					const metadata = graphweaverMetadata.metadataForType(fieldType);
+
+					if (isEntityMetadata(metadata)) {
+						// This if is separate to stop us cascading down to the scalar branch for entities that
+						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
+							fields[field.name] = { type: insertTypeForEntity(metadata) };
+						}
+					} else if (isEnumMetadata(metadata)) {
+						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
+					} else if (isScalarType(fieldType)) {
+						fields[field.name] = { type: fieldType };
+					} else {
+						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
+					}
+
+					// Everything is nullable in this type because it can be used for updates as well as inserts.
+				}
+
+				return fields;
+			},
+		});
+
+		createOrUpdateTypes.set(entity.name, createOrUpdateType);
+	}
+
+	return createOrUpdateType;
+};
+
 export interface SchemaBuilderOptions {
 	authChecker?: AuthChecker<any, any>;
 }
@@ -394,6 +445,9 @@ class SchemaBuilderImplementation {
 
 				// The input type for inserting
 				yield insertTypeForEntity(entity);
+
+				// The input type for creating or updating
+				yield createOrUpdateTypeForEntity(entity);
 			}
 
 			// The input type for pagination and sorting
@@ -500,6 +554,24 @@ class SchemaBuilderImplementation {
 							input: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
 						},
 						resolve: resolvers.create,
+					};
+
+					// Create or Update Many
+					const createOrUpdateManyName = `createOrUpdate${entity.plural}`;
+					if (fields[createOrUpdateManyName]) {
+						throw new Error(`Duplicate mutation name: ${createOrUpdateManyName}.`);
+					}
+					fields[createOrUpdateManyName] = {
+						description: `Create or update many ${entity.plural}.`,
+						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						args: {
+							input: {
+								type: new GraphQLNonNull(
+									new GraphQLList(new GraphQLNonNull(createOrUpdateTypeForEntity(entity)))
+								),
+							},
+						},
+						resolve: resolvers.createOrUpdate,
 					};
 				}
 

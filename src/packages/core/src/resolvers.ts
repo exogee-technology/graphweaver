@@ -4,6 +4,7 @@ import { BaseContext, GraphQLArgs } from './types';
 import {
 	BaseDataEntity,
 	BaseLoaders,
+	CreateOrUpdateHookParams,
 	Filter,
 	GraphQLEntityConstructor,
 	HookRegister,
@@ -17,6 +18,7 @@ import {
 import { QueryManager } from './query-manager';
 import { withTransaction } from './utils/with-transaction';
 import { applyDefaultValues } from './utils/apply-default-values';
+import { hasId } from './utils/has-id';
 
 export const getOne = async <G, C extends BaseContext>(
 	source: unknown,
@@ -177,7 +179,7 @@ export const create = async <G extends WithId & { name: string }, C extends Base
 
 	const transactional = !!entity.provider.withTransaction;
 
-	return withTransaction<G | null>(entity.provider, async () => {
+	return withTransaction(entity.provider, async () => {
 		const params = await runWritableBeforeHooks(
 			HookRegister.BEFORE_CREATE,
 			{
@@ -203,6 +205,117 @@ export const create = async <G extends WithId & { name: string }, C extends Base
 		}
 
 		return result;
+	});
+};
+
+export const createOrUpdate = async <G extends WithId & { name: string }, C extends BaseContext>(
+	source: unknown,
+	{ input }: { input: Partial<G> | Partial<G>[] },
+	context: C,
+	info: GraphQLResolveInfo
+) => {
+	logger.trace({ input, context, info }, 'Create or Update resolver called.');
+
+	let name;
+
+	if (isObjectType(info.returnType)) {
+		name = info.returnType.name;
+	} else if (isListType(info.returnType) && isObjectType(info.returnType.ofType)) {
+		name = info.returnType.ofType.name;
+	} else {
+		throw new Error('Could not determine entity name from return type.');
+	}
+
+	const entity = graphweaverMetadata.getEntityByName<G, BaseDataEntity>(name);
+
+	if (!entity) {
+		throw new Error(`Entity ${name} not found in metadata.`);
+	}
+
+	if (!entity.provider) {
+		throw new Error(
+			`Entity ${name} does not have a provider, cannot resolve create or update operation.`
+		);
+	}
+
+	// Ok, now let's apply our default values to the data.
+	applyDefaultValues(input, entity);
+
+	const transactional = !!entity.provider.withTransaction;
+	const inputArray = Array.isArray(input) ? input : [input];
+
+	return withTransaction(entity.provider, async () => {
+		// Extracted common properties
+		const hookManager = hookManagerMap.get(entity.name);
+		const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
+			info,
+			context,
+			transactional,
+		};
+
+		// Separate Create and Update items
+		const updateItems = [];
+		const createItems = [];
+		for (const item of inputArray) {
+			if (hasId(item)) {
+				updateItems.push(item);
+			} else {
+				createItems.push(item);
+			}
+		}
+
+		// Extract ids of items being updated
+		const updateItemIds = updateItems.map((item) => item.id) ?? [];
+
+		// Prepare updateParams and run hook if needed
+		const updateParams: CreateOrUpdateHookParams<G> = {
+			args: { items: updateItems },
+			...commonParams,
+		};
+		const updateHookParams =
+			updateItems.length && hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
+				: updateParams;
+
+		// Prepare createParams and run hook if needed
+		const createParams: CreateOrUpdateHookParams<G> = {
+			args: { items: createItems },
+			...commonParams,
+		};
+		const createHookParams =
+			createItems.length && hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
+				: createParams;
+
+		// Combine update and create items into a single array
+		const data = [...(updateHookParams.args?.items ?? []), ...(createHookParams.args?.items ?? [])];
+
+		const entities = (await createOrUpdateEntities(data, entity, info, context)) as G[];
+
+		// Filter update and create entities
+		let updatedEntities = entities.filter((entity) => entity && updateItemIds.includes(entity.id));
+		let createdEntities = entities.filter((entity) => entity && !updateItemIds.includes(entity.id));
+
+		// Run after hooks for update and create entities
+		if (hookManager) {
+			createdEntities = (
+				await hookManager.runHooks(HookRegister.AFTER_CREATE, {
+					...createHookParams,
+					entities: createdEntities,
+				})
+			).entities;
+
+			updatedEntities = (
+				await hookManager.runHooks(HookRegister.AFTER_UPDATE, {
+					...updateHookParams,
+					entities: updatedEntities,
+				})
+			).entities;
+		}
+
+		// Return combined results if it's a multi update, otherwise just one.
+		if (isListType(info.returnType)) return [...createdEntities, ...updatedEntities];
+		else return createdEntities[0] ?? updatedEntities[0];
 	});
 };
 
