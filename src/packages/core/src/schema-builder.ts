@@ -497,7 +497,7 @@ class SchemaBuilderImplementation {
 						description: `Create a single ${entity.name}.`,
 						type: graphQLTypeForEntity(entity),
 						args: {
-							data: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
+							input: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
 						},
 						resolve: resolvers.create,
 					};

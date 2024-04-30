@@ -151,11 +151,11 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 
 export const create = async <G extends WithId & { name: string }, C extends BaseContext>(
 	source: unknown,
-	{ data }: { data: Partial<G> | Partial<G>[] },
+	{ input }: { input: Partial<G> | Partial<G>[] },
 	context: C,
 	info: GraphQLResolveInfo
 ) => {
-	logger.trace({ data, context, info }, 'Create resolver called.');
+	logger.trace({ input, context, info }, 'Create resolver called.');
 
 	if (!isObjectType(info.returnType)) {
 		throw new Error('Graphweaver getOne resolver can only be used to return single objects.');
@@ -173,7 +173,7 @@ export const create = async <G extends WithId & { name: string }, C extends Base
 	}
 
 	// Ok, now let's apply our default values to the data.
-	applyDefaultValues(data, entity);
+	applyDefaultValues(input, entity);
 
 	const transactional = !!entity.provider.withTransaction;
 
@@ -181,7 +181,7 @@ export const create = async <G extends WithId & { name: string }, C extends Base
 		const params = await runWritableBeforeHooks(
 			HookRegister.BEFORE_CREATE,
 			{
-				args: { items: Array.isArray(data) ? data : [data] },
+				args: { items: Array.isArray(input) ? input : [input] },
 				info,
 				context,
 				transactional,
