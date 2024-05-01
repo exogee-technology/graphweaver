@@ -24,7 +24,7 @@ export interface FieldOptions {
 	adminUIOptions?: adminUIFieldOptions;
 	apiOptions?: {
 		// This marks the field as read only in the API.
-		readonly?: boolean;
+		excludeFromBuiltInWriteOperations?: boolean;
 	};
 }
 
