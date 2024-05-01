@@ -344,7 +344,10 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					if (isEntityMetadata(metadata)) {
 						// This if is separate to stop us cascading down to the scalar branch for entities that
-						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
+						if (
+							!metadata.apiOptions?.excludeFromBuiltInOperations &&
+							!metadata.apiOptions?.excludeFromBuiltInWriteOperations
+						) {
 							let type: GraphQLInputType = insertTypeForEntity(metadata);
 
 							if (Array.isArray(fieldType)) {
@@ -408,7 +411,10 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					if (isEntityMetadata(metadata)) {
 						// This if is separate to stop us cascading down to the scalar branch for entities that
-						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
+						if (
+							!metadata.apiOptions?.excludeFromBuiltInOperations &&
+							!metadata.apiOptions?.excludeFromBuiltInWriteOperations
+						) {
 							fields[field.name] = { type: insertTypeForEntity(metadata) };
 						}
 					} else if (isEnumMetadata(metadata)) {
@@ -516,7 +522,12 @@ class SchemaBuilderImplementation {
 			) {
 				// The input type for filtering
 				yield filterTypeForEntity(entity);
+			}
 
+			if (
+				!entity.apiOptions?.excludeFromBuiltInOperations &&
+				!entity.apiOptions?.excludeFromBuiltInWriteOperations
+			) {
 				// The input type for inserting
 				yield insertTypeForEntity(entity);
 
@@ -627,6 +638,7 @@ class SchemaBuilderImplementation {
 				for (const entity of graphweaverMetadata.entities()) {
 					// If it's excluded from built-in operations, skip it.
 					if (entity.apiOptions?.excludeFromBuiltInOperations) continue;
+					if (entity.apiOptions?.excludeFromBuiltInWriteOperations) continue;
 
 					// Create One
 					const createOneName = `create${entity.name}`;

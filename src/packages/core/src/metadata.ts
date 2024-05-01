@@ -17,14 +17,14 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		// enables excludeFromFiltering as well.
 		excludeFromBuiltInOperations?: boolean;
 
+		// This means that the entity should not be given the default create, update, and delete operations. This is
+		// useful for entities that are read only or are managed by some other system.
+		excludeFromBuiltInWriteOperations?: boolean;
+
 		// This means that the entity should appear in the API but not have any options to filter queries
 		// by fields. This is useful for entities that are not backed by a fully fledged provider or are
 		// otherwise dynamically generated.
 		excludeFromFiltering?: boolean;
-
-		// This means that the entity should not be able to be created, updated, or deleted. This is useful
-		// for entities that are read-only or are managed by some other system.
-		readonly?: boolean;
 	};
 
 	adminUIOptions?: {

@@ -104,71 +104,6 @@ export type Authentication = {
   userId: Scalars['ID']['output'];
 };
 
-/** Data needed to create or update Authentications. If an ID is passed, this is an update, otherwise it's an insert. */
-export type AuthenticationCreateOrUpdateInput = {
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  data?: InputMaybe<Scalars['JSON']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['ID']['input']>;
-};
-
-/** Data needed to create Authentications. */
-export type AuthenticationInsertInput = {
-  createdAt: Scalars['ISOString']['input'];
-  data: Scalars['JSON']['input'];
-  type: Scalars['String']['input'];
-  userId: Scalars['ID']['input'];
-};
-
-/** Data needed to update Authentications. An ID must be passed. */
-export type AuthenticationUpdateInput = {
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  data?: InputMaybe<Scalars['JSON']['input']>;
-  id: Scalars['ID']['input'];
-  type?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['ID']['input']>;
-};
-
-export type AuthenticationsListFilter = {
-  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-  data?: InputMaybe<Scalars['JSON']['input']>;
-  data_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  data_ne?: InputMaybe<Scalars['JSON']['input']>;
-  data_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  data_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  data_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  type?: InputMaybe<Scalars['String']['input']>;
-  type_ilike?: InputMaybe<Scalars['String']['input']>;
-  type_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  type_like?: InputMaybe<Scalars['String']['input']>;
-  type_ne?: InputMaybe<Scalars['String']['input']>;
-  type_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  type_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  type_null?: InputMaybe<Scalars['Boolean']['input']>;
-  userId?: InputMaybe<Scalars['ID']['input']>;
-  userId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  userId_ne?: InputMaybe<Scalars['ID']['input']>;
-  userId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  userId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  userId_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type AuthenticationsOrderByInput = {
   createdAt?: InputMaybe<Sort>;
   data?: InputMaybe<Sort>;
@@ -188,6 +123,23 @@ export type Credential = {
   __typename?: 'Credential';
   id: Scalars['ID']['output'];
   username: Scalars['String']['output'];
+};
+
+export type CredentialsListFilter = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+  username_ilike?: InputMaybe<Scalars['String']['input']>;
+  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_like?: InputMaybe<Scalars['String']['input']>;
+  username_ne?: InputMaybe<Scalars['String']['input']>;
+  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  username_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  username_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CredentialsOrderByInput = {
@@ -314,19 +266,11 @@ export type MultipleAdminUiMetadataPaginationInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword?: Maybe<Scalars['Boolean']['output']>;
-  /** Create a single Authentication. */
-  createAuthentication?: Maybe<Authentication>;
-  /** Create many Authentications. */
-  createAuthentications?: Maybe<Array<Maybe<Authentication>>>;
   createCredential?: Maybe<Scalars['Boolean']['output']>;
-  /** Create or update many Authentications. */
-  createOrUpdateAuthentications?: Maybe<Array<Maybe<Authentication>>>;
   /** Create or update many Tags. */
   createOrUpdateTags?: Maybe<Array<Maybe<Tag>>>;
   /** Create or update many Tasks. */
   createOrUpdateTasks?: Maybe<Array<Maybe<Task>>>;
-  /** Create or update many Tokens. */
-  createOrUpdateTokens?: Maybe<Array<Maybe<Token>>>;
   /** Create or update many Users. */
   createOrUpdateUsers?: Maybe<Array<Maybe<User>>>;
   /** Create a single Tag. */
@@ -337,18 +281,10 @@ export type Mutation = {
   createTask?: Maybe<Task>;
   /** Create many Tasks. */
   createTasks?: Maybe<Array<Maybe<Task>>>;
-  /** Create a single Token. */
-  createToken?: Maybe<Token>;
-  /** Create many Tokens. */
-  createTokens?: Maybe<Array<Maybe<Token>>>;
   /** Create a single User. */
   createUser?: Maybe<User>;
   /** Create many Users. */
   createUsers?: Maybe<Array<Maybe<User>>>;
-  /** Delete a single Authentication. */
-  deleteAuthentication?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete many Authentications with a filter. */
-  deleteAuthentications?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Tag. */
   deleteTag?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Tags with a filter. */
@@ -357,20 +293,12 @@ export type Mutation = {
   deleteTask?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Tasks with a filter. */
   deleteTasks?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete a single Token. */
-  deleteToken?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete many Tokens with a filter. */
-  deleteTokens?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single User. */
   deleteUser?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Users with a filter. */
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
   sendOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
-  /** Update a single Authentication. */
-  updateAuthentication?: Maybe<Authentication>;
-  /** Update many Authentications. */
-  updateAuthentications?: Maybe<Array<Maybe<Authentication>>>;
   updateCredential?: Maybe<Scalars['Boolean']['output']>;
   /** Update a single Tag. */
   updateTag?: Maybe<Tag>;
@@ -380,30 +308,11 @@ export type Mutation = {
   updateTask?: Maybe<Task>;
   /** Update many Tasks. */
   updateTasks?: Maybe<Array<Maybe<Task>>>;
-  /** Update a single Token. */
-  updateToken?: Maybe<Token>;
-  /** Update many Tokens. */
-  updateTokens?: Maybe<Array<Maybe<Token>>>;
   /** Update a single User. */
   updateUser?: Maybe<User>;
   /** Update many Users. */
   updateUsers?: Maybe<Array<Maybe<User>>>;
   verifyOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
-};
-
-
-export type MutationCreateAuthenticationArgs = {
-  input: AuthenticationInsertInput;
-};
-
-
-export type MutationCreateAuthenticationsArgs = {
-  input: Array<AuthenticationInsertInput>;
-};
-
-
-export type MutationCreateOrUpdateAuthenticationsArgs = {
-  input: Array<AuthenticationCreateOrUpdateInput>;
 };
 
 
@@ -414,11 +323,6 @@ export type MutationCreateOrUpdateTagsArgs = {
 
 export type MutationCreateOrUpdateTasksArgs = {
   input: Array<TaskCreateOrUpdateInput>;
-};
-
-
-export type MutationCreateOrUpdateTokensArgs = {
-  input: Array<TokenCreateOrUpdateInput>;
 };
 
 
@@ -447,16 +351,6 @@ export type MutationCreateTasksArgs = {
 };
 
 
-export type MutationCreateTokenArgs = {
-  input: TokenInsertInput;
-};
-
-
-export type MutationCreateTokensArgs = {
-  input: Array<TokenInsertInput>;
-};
-
-
 export type MutationCreateUserArgs = {
   input: UserInsertInput;
 };
@@ -464,16 +358,6 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateUsersArgs = {
   input: Array<UserInsertInput>;
-};
-
-
-export type MutationDeleteAuthenticationArgs = {
-  filter: DeleteOneFilterInput;
-};
-
-
-export type MutationDeleteAuthenticationsArgs = {
-  filter: AuthenticationsListFilter;
 };
 
 
@@ -497,16 +381,6 @@ export type MutationDeleteTasksArgs = {
 };
 
 
-export type MutationDeleteTokenArgs = {
-  filter: DeleteOneFilterInput;
-};
-
-
-export type MutationDeleteTokensArgs = {
-  filter: TokensListFilter;
-};
-
-
 export type MutationDeleteUserArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -520,16 +394,6 @@ export type MutationDeleteUsersArgs = {
 export type MutationLoginPasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
-};
-
-
-export type MutationUpdateAuthenticationArgs = {
-  input: AuthenticationUpdateInput;
-};
-
-
-export type MutationUpdateAuthenticationsArgs = {
-  input: Array<AuthenticationUpdateInput>;
 };
 
 
@@ -553,16 +417,6 @@ export type MutationUpdateTasksArgs = {
 };
 
 
-export type MutationUpdateTokenArgs = {
-  input: TokenUpdateInput;
-};
-
-
-export type MutationUpdateTokensArgs = {
-  input: Array<TokenUpdateInput>;
-};
-
-
 export type MutationUpdateUserArgs = {
   input: UserUpdateInput;
 };
@@ -582,10 +436,10 @@ export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
-  /** Get a single Authentication. */
-  authentication?: Maybe<Authentication>;
-  /** Get multiple Authentications. */
-  authentications?: Maybe<Array<Maybe<Authentication>>>;
+  /** Get a single Credential. */
+  credential?: Maybe<Credential>;
+  /** Get multiple Credentials. */
+  credentials?: Maybe<Array<Maybe<Credential>>>;
   /** Get a single Tag. */
   tag?: Maybe<Tag>;
   /** Get multiple Tags. */
@@ -594,10 +448,6 @@ export type Query = {
   task?: Maybe<Task>;
   /** Get multiple Tasks. */
   tasks?: Maybe<Array<Maybe<Task>>>;
-  /** Get a single Token. */
-  token?: Maybe<Token>;
-  /** Get multiple Tokens. */
-  tokens?: Maybe<Array<Maybe<Token>>>;
   /** Get a single User. */
   user?: Maybe<User>;
   /** Get multiple Users. */
@@ -605,14 +455,14 @@ export type Query = {
 };
 
 
-export type QueryAuthenticationArgs = {
+export type QueryCredentialArgs = {
   id: Scalars['ID']['input'];
 };
 
 
-export type QueryAuthenticationsArgs = {
-  filter?: InputMaybe<AuthenticationsListFilter>;
-  pagination?: InputMaybe<AuthenticationsPaginationInput>;
+export type QueryCredentialsArgs = {
+  filter?: InputMaybe<CredentialsListFilter>;
+  pagination?: InputMaybe<CredentialsPaginationInput>;
 };
 
 
@@ -635,17 +485,6 @@ export type QueryTaskArgs = {
 export type QueryTasksArgs = {
   filter?: InputMaybe<TasksListFilter>;
   pagination?: InputMaybe<TasksPaginationInput>;
-};
-
-
-export type QueryTokenArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryTokensArgs = {
-  filter?: InputMaybe<TokensListFilter>;
-  pagination?: InputMaybe<TokensPaginationInput>;
 };
 
 
@@ -815,32 +654,6 @@ export type TasksPaginationInput = {
 export type Token = {
   __typename?: 'Token';
   authToken: Scalars['String']['output'];
-};
-
-/** Data needed to create or update Tokens. If an ID is passed, this is an update, otherwise it's an insert. */
-export type TokenCreateOrUpdateInput = {
-  authToken?: InputMaybe<Scalars['String']['input']>;
-};
-
-/** Data needed to create Tokens. */
-export type TokenInsertInput = {
-  authToken: Scalars['String']['input'];
-};
-
-/** Data needed to update Tokens. An ID must be passed. */
-export type TokenUpdateInput = {
-  authToken?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type TokensListFilter = {
-  authToken?: InputMaybe<Scalars['String']['input']>;
-  authToken_ilike?: InputMaybe<Scalars['String']['input']>;
-  authToken_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  authToken_like?: InputMaybe<Scalars['String']['input']>;
-  authToken_ne?: InputMaybe<Scalars['String']['input']>;
-  authToken_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  authToken_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  authToken_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type TokensOrderByInput = {

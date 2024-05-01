@@ -227,7 +227,7 @@ export interface FieldMetadata<G, D> {
 		readonly?: boolean;
 	};
 	apiOptions?: {
-		readonly?: boolean;
+		excludeFromBuiltInWriteOperations?: boolean;
 	};
 	target: G;
 	name: string;

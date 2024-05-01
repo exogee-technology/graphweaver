@@ -17,7 +17,11 @@ export class AuthToken implements BaseDataEntity {
 	}
 }
 
-@Entity('Token')
+@Entity('Token', {
+	apiOptions: {
+		excludeFromBuiltInOperations: true,
+	},
+})
 export class Token extends GraphQLEntity<AuthToken> {
 	public dataEntity!: AuthToken;
 

@@ -9,7 +9,11 @@ export interface AuthenticationBaseEntity<T> {
 	createdAt: Date;
 }
 
-@Entity('Authentication')
+@Entity('Authentication', {
+	apiOptions: {
+		excludeFromBuiltInOperations: true,
+	},
+})
 export class Authentication<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	public dataEntity!: D;
 

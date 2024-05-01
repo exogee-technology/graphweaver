@@ -19,8 +19,7 @@ export interface CredentialStorage {
 		summaryField: 'username',
 	},
 	apiOptions: {
-		readonly: true,
-		excludeFromBuiltInOperations: true,
+		excludeFromBuiltInWriteOperations: true,
 	},
 })
 export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
