@@ -121,6 +121,15 @@ export type AuthenticationInsertInput = {
   userId: Scalars['ID']['input'];
 };
 
+/** Data needed to update Authentications. An ID must be passed. */
+export type AuthenticationUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  data?: InputMaybe<Scalars['JSON']['input']>;
+  id: Scalars['ID']['input'];
+  type?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type AuthenticationsListFilter = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -191,6 +200,10 @@ export type CredentialsPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<CredentialsOrderByInput>;
+};
+
+export type DeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
 };
 
 export type MultipleAdminUiEntityAttributeMetadataOrderByInput = {
@@ -303,6 +316,8 @@ export type Mutation = {
   challengePassword?: Maybe<Scalars['Boolean']['output']>;
   /** Create a single Authentication. */
   createAuthentication?: Maybe<Authentication>;
+  /** Create many Authentications. */
+  createAuthentications?: Maybe<Array<Maybe<Authentication>>>;
   createCredential?: Maybe<Scalars['Boolean']['output']>;
   /** Create or update many Authentications. */
   createOrUpdateAuthentications?: Maybe<Array<Maybe<Authentication>>>;
@@ -316,21 +331,74 @@ export type Mutation = {
   createOrUpdateUsers?: Maybe<Array<Maybe<User>>>;
   /** Create a single Tag. */
   createTag?: Maybe<Tag>;
+  /** Create many Tags. */
+  createTags?: Maybe<Array<Maybe<Tag>>>;
   /** Create a single Task. */
   createTask?: Maybe<Task>;
+  /** Create many Tasks. */
+  createTasks?: Maybe<Array<Maybe<Task>>>;
   /** Create a single Token. */
   createToken?: Maybe<Token>;
+  /** Create many Tokens. */
+  createTokens?: Maybe<Array<Maybe<Token>>>;
   /** Create a single User. */
   createUser?: Maybe<User>;
+  /** Create many Users. */
+  createUsers?: Maybe<Array<Maybe<User>>>;
+  /** Delete a single Authentication. */
+  deleteAuthentication?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Authentications with a filter. */
+  deleteAuthentications?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single Tag. */
+  deleteTag?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Tags with a filter. */
+  deleteTags?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single Task. */
+  deleteTask?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Tasks with a filter. */
+  deleteTasks?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single Token. */
+  deleteToken?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Tokens with a filter. */
+  deleteTokens?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single User. */
+  deleteUser?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Users with a filter. */
+  deleteUsers?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
   sendOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
+  /** Update a single Authentication. */
+  updateAuthentication?: Maybe<Authentication>;
+  /** Update many Authentications. */
+  updateAuthentications?: Maybe<Array<Maybe<Authentication>>>;
   updateCredential?: Maybe<Scalars['Boolean']['output']>;
+  /** Update a single Tag. */
+  updateTag?: Maybe<Tag>;
+  /** Update many Tags. */
+  updateTags?: Maybe<Array<Maybe<Tag>>>;
+  /** Update a single Task. */
+  updateTask?: Maybe<Task>;
+  /** Update many Tasks. */
+  updateTasks?: Maybe<Array<Maybe<Task>>>;
+  /** Update a single Token. */
+  updateToken?: Maybe<Token>;
+  /** Update many Tokens. */
+  updateTokens?: Maybe<Array<Maybe<Token>>>;
+  /** Update a single User. */
+  updateUser?: Maybe<User>;
+  /** Update many Users. */
+  updateUsers?: Maybe<Array<Maybe<User>>>;
   verifyOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
 export type MutationCreateAuthenticationArgs = {
   input: AuthenticationInsertInput;
+};
+
+
+export type MutationCreateAuthenticationsArgs = {
+  input: Array<AuthenticationInsertInput>;
 };
 
 
@@ -364,8 +432,18 @@ export type MutationCreateTagArgs = {
 };
 
 
+export type MutationCreateTagsArgs = {
+  input: Array<TagInsertInput>;
+};
+
+
 export type MutationCreateTaskArgs = {
   input: TaskInsertInput;
+};
+
+
+export type MutationCreateTasksArgs = {
+  input: Array<TaskInsertInput>;
 };
 
 
@@ -374,14 +452,124 @@ export type MutationCreateTokenArgs = {
 };
 
 
+export type MutationCreateTokensArgs = {
+  input: Array<TokenInsertInput>;
+};
+
+
 export type MutationCreateUserArgs = {
   input: UserInsertInput;
+};
+
+
+export type MutationCreateUsersArgs = {
+  input: Array<UserInsertInput>;
+};
+
+
+export type MutationDeleteAuthenticationArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteAuthenticationsArgs = {
+  filter: AuthenticationsListFilter;
+};
+
+
+export type MutationDeleteTagArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteTagsArgs = {
+  filter: TagsListFilter;
+};
+
+
+export type MutationDeleteTaskArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteTasksArgs = {
+  filter: TasksListFilter;
+};
+
+
+export type MutationDeleteTokenArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteTokensArgs = {
+  filter: TokensListFilter;
+};
+
+
+export type MutationDeleteUserArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteUsersArgs = {
+  filter: UsersListFilter;
 };
 
 
 export type MutationLoginPasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdateAuthenticationArgs = {
+  input: AuthenticationUpdateInput;
+};
+
+
+export type MutationUpdateAuthenticationsArgs = {
+  input: Array<AuthenticationUpdateInput>;
+};
+
+
+export type MutationUpdateTagArgs = {
+  input: TagUpdateInput;
+};
+
+
+export type MutationUpdateTagsArgs = {
+  input: Array<TagUpdateInput>;
+};
+
+
+export type MutationUpdateTaskArgs = {
+  input: TaskUpdateInput;
+};
+
+
+export type MutationUpdateTasksArgs = {
+  input: Array<TaskUpdateInput>;
+};
+
+
+export type MutationUpdateTokenArgs = {
+  input: TokenUpdateInput;
+};
+
+
+export type MutationUpdateTokensArgs = {
+  input: Array<TokenUpdateInput>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UserUpdateInput;
+};
+
+
+export type MutationUpdateUsersArgs = {
+  input: Array<UserUpdateInput>;
 };
 
 export enum Priority {
@@ -496,6 +684,13 @@ export type TagInsertInput = {
   tasks?: InputMaybe<TaskInsertInput>;
 };
 
+/** Data needed to update Tags. An ID must be passed. */
+export type TagUpdateInput = {
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TaskInsertInput>;
+};
+
 export type TagsListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -552,6 +747,17 @@ export type TaskCreateOrUpdateInput = {
 export type TaskInsertInput = {
   description: Scalars['String']['input'];
   isCompleted: Scalars['Boolean']['input'];
+  priority?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<TagInsertInput>;
+  user?: InputMaybe<UserInsertInput>;
+};
+
+/** Data needed to update Tasks. An ID must be passed. */
+export type TaskUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<TagInsertInput>;
@@ -621,6 +827,11 @@ export type TokenInsertInput = {
   authToken: Scalars['String']['input'];
 };
 
+/** Data needed to update Tokens. An ID must be passed. */
+export type TokenUpdateInput = {
+  authToken?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type TokensListFilter = {
   authToken?: InputMaybe<Scalars['String']['input']>;
   authToken_ilike?: InputMaybe<Scalars['String']['input']>;
@@ -658,6 +869,12 @@ export type UserCreateOrUpdateInput = {
 /** Data needed to create Users. */
 export type UserInsertInput = {
   name: Scalars['String']['input'];
+};
+
+/** Data needed to update Users. An ID must be passed. */
+export type UserUpdateInput = {
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersListFilter = {
