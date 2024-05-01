@@ -3,6 +3,7 @@ import {
 	GraphQLEnumType,
 	GraphQLEnumValueConfigMap,
 	GraphQLFieldConfig,
+	GraphQLFieldConfigArgumentMap,
 	GraphQLFloat,
 	GraphQLID,
 	GraphQLInputFieldConfig,
@@ -461,6 +462,17 @@ class SchemaBuilderImplementation {
 		}
 	}
 
+	private graphQLTypeForArgs(args?: Record<string, unknown>): GraphQLFieldConfigArgumentMap {
+		const map: GraphQLFieldConfigArgumentMap = {};
+		if (!args) return map;
+
+		for (const [name, type] of Object.entries(args)) {
+			map[name] = { type: GraphQLString };
+		}
+
+		return map;
+	}
+
 	private buildQueryType(args?: SchemaBuilderOptions) {
 		return new GraphQLObjectType({
 			name: 'Query',
@@ -509,20 +521,21 @@ class SchemaBuilderImplementation {
 
 					const type = customQuery.getType();
 					const metadata = graphweaverMetadata.metadataForType(type);
+					const customArgs = this.graphQLTypeForArgs(customQuery.args);
 
 					if (isEntityMetadata(metadata)) {
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
 						fields[customQuery.name] = {
 							...customQuery,
-
+							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
 							resolve: customQuery.resolver,
 						};
 					} else {
 						fields[customQuery.name] = {
 							...customQuery,
-
+							args: customArgs,
 							type,
 							resolve: customQuery.resolver,
 						};
@@ -584,20 +597,21 @@ class SchemaBuilderImplementation {
 
 					const type = customMutation.getType();
 					const metadata = graphweaverMetadata.metadataForType(type);
+					const customArgs = this.graphQLTypeForArgs(customMutation.args);
 
 					if (isEntityMetadata(metadata)) {
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
 						fields[customMutation.name] = {
 							...customMutation,
-
+							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
 							resolve: customMutation.resolver,
 						};
 					} else {
 						fields[customMutation.name] = {
 							...customMutation,
-
+							args: customArgs,
 							type,
 							resolve: customMutation.resolver,
 						};

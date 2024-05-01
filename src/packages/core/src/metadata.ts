@@ -1,4 +1,4 @@
-import { BaseDataEntity, GraphQLFieldResolver, WithId } from '.';
+import { BaseDataEntity, GraphQLFieldConfigArgumentMap, GraphQLFieldResolver, WithId } from '.';
 import { BackendProvider, FieldMetadata, Filter } from './types';
 import { logger } from '@exogee/logger';
 
@@ -114,6 +114,7 @@ export interface AdditionalOperationInformation {
 	name: string;
 	getType: () => any;
 	resolver: GraphQLFieldResolver<any, any, any, unknown>;
+	args?: Record<string, unknown>;
 	description?: string;
 }
 
@@ -420,9 +421,9 @@ class Metadata {
 
 	public addMutation(args: {
 		name: string;
-		getType: () => any;
-		args?: any;
-		resolver: (...args: any) => any;
+		getType: () => unknown;
+		resolver: GraphQLFieldResolver<any, any, any, unknown>;
+		args?: Record<string, unknown>;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {
