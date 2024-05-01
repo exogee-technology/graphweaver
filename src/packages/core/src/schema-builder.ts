@@ -7,6 +7,7 @@ import {
 	GraphQLID,
 	GraphQLInputFieldConfig,
 	GraphQLInputObjectType,
+	GraphQLInputType,
 	GraphQLInt,
 	GraphQLList,
 	GraphQLNonNull,
@@ -47,6 +48,7 @@ const entityTypes = new Map<string, GraphQLObjectType>();
 const enumTypes = new Map<string, GraphQLEnumType>();
 const filterTypes = new Map<string, GraphQLInputObjectType>();
 const insertTypes = new Map<string, GraphQLInputObjectType>();
+const updateTypes = new Map<string, GraphQLInputObjectType>();
 const createOrUpdateTypes = new Map<string, GraphQLInputObjectType>();
 const paginationTypes = new Map<string, GraphQLInputObjectType>();
 
@@ -74,6 +76,14 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 
 	return enumType;
 };
+
+// All entities are identified by a field called 'id' so we only need one of these.
+const deleteInput = new GraphQLInputObjectType({
+	name: 'DeleteOneFilterInput',
+	fields: {
+		id: { type: new GraphQLNonNull(ID) },
+	},
+});
 
 const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
@@ -334,7 +344,14 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					if (isEntityMetadata(metadata)) {
 						// This if is separate to stop us cascading down to the scalar branch for entities that
 						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
-							fields[field.name] = { type: insertTypeForEntity(metadata) };
+							let type: GraphQLInputType = insertTypeForEntity(metadata);
+
+							if (Array.isArray(fieldType)) {
+								// If it's a many relationship we need to wrap in non-null and list.
+								type = new GraphQLList(new GraphQLNonNull(type));
+							}
+
+							fields[field.name] = { type };
 						}
 					} else if (isEnumMetadata(metadata)) {
 						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
@@ -409,6 +426,57 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	}
 
 	return createOrUpdateType;
+};
+
+const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
+	let updateType = updateTypes.get(entity.name);
+
+	if (!updateType) {
+		updateType = new GraphQLInputObjectType({
+			name: `${entity.name}UpdateInput`,
+			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
+			fields: () => {
+				const fields: ObjMap<GraphQLInputFieldConfig> = {};
+
+				for (const field of Object.values(entity.fields)) {
+					if (field.name === 'id') {
+						fields[field.name] = { type: new GraphQLNonNull(ID) };
+
+						continue;
+					}
+
+					// Let's try to resolve the GraphQL type involved here.
+					let fieldType = field.getType();
+					if (Array.isArray(fieldType)) {
+						fieldType = fieldType[0];
+					}
+					const metadata = graphweaverMetadata.metadataForType(fieldType);
+
+					if (isEntityMetadata(metadata)) {
+						// This if is separate to stop us cascading down to the scalar branch for entities that
+						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
+							fields[field.name] = { type: insertTypeForEntity(metadata) };
+						}
+					} else if (isEnumMetadata(metadata)) {
+						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
+					} else if (isScalarType(fieldType)) {
+						fields[field.name] = { type: fieldType };
+					} else {
+						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
+					}
+
+					// Everything is nullable in this type because it can be used for updates as well as inserts, hence
+					// no wrapping with new GraphQLNonNull.
+				}
+
+				return fields;
+			},
+		});
+
+		updateTypes.set(entity.name, updateType);
+	}
+
+	return updateType;
 };
 
 export interface SchemaBuilderOptions {
@@ -554,7 +622,57 @@ class SchemaBuilderImplementation {
 						args: {
 							input: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
 						},
-						resolve: resolvers.create,
+						resolve: resolvers.createOrUpdate,
+					};
+
+					// Create Many
+					const createManyName = `create${entity.plural}`;
+					if (fields[createManyName]) {
+						throw new Error(`Duplicate mutation name: ${createManyName}.`);
+					}
+					fields[createManyName] = {
+						description: `Create many ${entity.plural}.`,
+						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						args: {
+							input: {
+								type: new GraphQLNonNull(
+									new GraphQLList(new GraphQLNonNull(insertTypeForEntity(entity)))
+								),
+							},
+						},
+						resolve: resolvers.createOrUpdate,
+					};
+
+					// Update One
+					const updateOneName = `update${entity.name}`;
+					if (fields[updateOneName]) {
+						throw new Error(`Duplicate mutation name: ${updateOneName}.`);
+					}
+					fields[updateOneName] = {
+						description: `Update a single ${entity.name}.`,
+						type: graphQLTypeForEntity(entity),
+						args: {
+							input: { type: new GraphQLNonNull(updateTypeForEntity(entity)) },
+						},
+						resolve: resolvers.createOrUpdate,
+					};
+
+					// Update Many
+					const updateManyName = `update${entity.plural}`;
+					if (fields[updateManyName]) {
+						throw new Error(`Duplicate mutation name: ${updateManyName}.`);
+					}
+					fields[updateManyName] = {
+						description: `Update many ${entity.plural}.`,
+						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						args: {
+							input: {
+								type: new GraphQLNonNull(
+									new GraphQLList(new GraphQLNonNull(updateTypeForEntity(entity)))
+								),
+							},
+						},
+						resolve: resolvers.createOrUpdate,
 					};
 
 					// Create or Update Many
@@ -573,6 +691,36 @@ class SchemaBuilderImplementation {
 							},
 						},
 						resolve: resolvers.createOrUpdate,
+					};
+
+					// Delete One
+					const deleteOneName = `delete${entity.name}`;
+					if (fields[deleteOneName]) {
+						throw new Error(`Duplicate mutation name: ${deleteOneName}.`);
+					}
+					fields[deleteOneName] = {
+						description: `Delete a single ${entity.name}.`,
+						type: GraphQLBoolean,
+						args: {
+							filter: {
+								type: new GraphQLNonNull(deleteInput),
+							},
+						},
+						resolve: resolvers.deleteOne(entity),
+					};
+
+					// Delete Many
+					const deleteManyName = `delete${entity.plural}`;
+					if (fields[deleteManyName]) {
+						throw new Error(`Duplicate mutation name: ${deleteManyName}.`);
+					}
+					fields[deleteManyName] = {
+						description: `Delete many ${entity.plural} with a filter.`,
+						type: GraphQLBoolean,
+						args: {
+							filter: { type: new GraphQLNonNull(filterTypeForEntity(entity)) },
+						},
+						resolve: resolvers.deleteMany(entity),
 					};
 				}
 

@@ -93,6 +93,10 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
+export type DeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
+};
+
 export type MultipleAdminUiEntityAttributeMetadataOrderByInput = {
   exportPageSize?: InputMaybe<Sort>;
   isReadOnly?: InputMaybe<Sort>;
@@ -206,8 +210,28 @@ export type Mutation = {
   createOrUpdateUsers?: Maybe<Array<Maybe<User>>>;
   /** Create a single Task. */
   createTask?: Maybe<Task>;
+  /** Create many Tasks. */
+  createTasks?: Maybe<Array<Maybe<Task>>>;
   /** Create a single User. */
   createUser?: Maybe<User>;
+  /** Create many Users. */
+  createUsers?: Maybe<Array<Maybe<User>>>;
+  /** Delete a single Task. */
+  deleteTask?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Tasks with a filter. */
+  deleteTasks?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete a single User. */
+  deleteUser?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many Users with a filter. */
+  deleteUsers?: Maybe<Scalars['Boolean']['output']>;
+  /** Update a single Task. */
+  updateTask?: Maybe<Task>;
+  /** Update many Tasks. */
+  updateTasks?: Maybe<Array<Maybe<Task>>>;
+  /** Update a single User. */
+  updateUser?: Maybe<User>;
+  /** Update many Users. */
+  updateUsers?: Maybe<Array<Maybe<User>>>;
 };
 
 
@@ -226,8 +250,58 @@ export type MutationCreateTaskArgs = {
 };
 
 
+export type MutationCreateTasksArgs = {
+  input: Array<TaskInsertInput>;
+};
+
+
 export type MutationCreateUserArgs = {
   input: UserInsertInput;
+};
+
+
+export type MutationCreateUsersArgs = {
+  input: Array<UserInsertInput>;
+};
+
+
+export type MutationDeleteTaskArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteTasksArgs = {
+  filter: TasksListFilter;
+};
+
+
+export type MutationDeleteUserArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteUsersArgs = {
+  filter: UsersListFilter;
+};
+
+
+export type MutationUpdateTaskArgs = {
+  input: TaskUpdateInput;
+};
+
+
+export type MutationUpdateTasksArgs = {
+  input: Array<TaskUpdateInput>;
+};
+
+
+export type MutationUpdateUserArgs = {
+  input: UserUpdateInput;
+};
+
+
+export type MutationUpdateUsersArgs = {
+  input: Array<UserUpdateInput>;
 };
 
 export type Query = {
@@ -297,6 +371,15 @@ export type TaskInsertInput = {
   user: UserInsertInput;
 };
 
+/** Data needed to update Tasks. An ID must be passed. */
+export type TaskUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  meta?: InputMaybe<Scalars['JSON']['input']>;
+  user?: InputMaybe<UserInsertInput>;
+};
+
 export type TasksListFilter = {
   description?: InputMaybe<Scalars['String']['input']>;
   description_ilike?: InputMaybe<Scalars['String']['input']>;
@@ -362,6 +445,14 @@ export type UserInsertInput = {
   deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+/** Data needed to update Users. An ID must be passed. */
+export type UserUpdateInput = {
+  deleted?: InputMaybe<Scalars['Boolean']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersListFilter = {

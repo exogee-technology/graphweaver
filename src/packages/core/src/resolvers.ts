@@ -5,6 +5,9 @@ import {
 	BaseDataEntity,
 	BaseLoaders,
 	CreateOrUpdateHookParams,
+	DeleteHookParams,
+	DeleteManyHookParams,
+	EntityMetadata,
 	Filter,
 	GraphQLEntityConstructor,
 	HookRegister,
@@ -48,7 +51,7 @@ export const getOne = async <G, C extends BaseContext>(
 		args: { filter: { id } as any },
 		info,
 		context,
-		transactional: false,
+		transactional: !!entity.provider.withTransaction,
 	};
 
 	const hookParams = hookManager
@@ -110,7 +113,7 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 		args: { filter, pagination },
 		info,
 		context,
-		transactional: false,
+		transactional: !!entity.provider.withTransaction,
 	};
 	const hookParams = hookManager
 		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
@@ -149,63 +152,6 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 	return result;
 };
 
-export const create = async <G extends WithId & { name: string }, C extends BaseContext>(
-	source: unknown,
-	{ input }: { input: Partial<G> | Partial<G>[] },
-	context: C,
-	info: GraphQLResolveInfo
-) => {
-	logger.trace({ input, context, info }, 'Create resolver called.');
-
-	if (!isObjectType(info.returnType)) {
-		throw new Error('Graphweaver getOne resolver can only be used to return single objects.');
-	}
-
-	const { name } = info.returnType;
-	const entity = graphweaverMetadata.getEntityByName<G, BaseDataEntity>(name);
-
-	if (!entity) {
-		throw new Error(`Entity ${name} not found in metadata.`);
-	}
-
-	if (!entity.provider) {
-		throw new Error(`Entity ${name} does not have a provider, cannot resolve create operation.`);
-	}
-
-	// Ok, now let's apply our default values to the data.
-	applyDefaultValues(input, entity);
-
-	const transactional = !!entity.provider.withTransaction;
-
-	return withTransaction(entity.provider, async () => {
-		const params = await runWritableBeforeHooks(
-			HookRegister.BEFORE_CREATE,
-			{
-				args: { items: Array.isArray(input) ? input : [input] },
-				info,
-				context,
-				transactional,
-			},
-			entity.name
-		);
-		const [item] = params.args.items;
-
-		let result = (await createOrUpdateEntities(item, entity, info, context)) as G;
-
-		// Run any after hooks if we have them.
-		const hookManager = hookManagerMap.get(entity.name);
-		if (hookManager) {
-			const { entities } = await hookManager.runHooks(HookRegister.AFTER_CREATE, {
-				...params,
-				entities: [result],
-			});
-			result = entities[0];
-		}
-
-		return result;
-	});
-};
-
 export const createOrUpdate = async <G extends WithId & { name: string }, C extends BaseContext>(
 	source: unknown,
 	{ input }: { input: Partial<G> | Partial<G>[] },
@@ -239,7 +185,6 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 	// Ok, now let's apply our default values to the data.
 	applyDefaultValues(input, entity);
 
-	const transactional = !!entity.provider.withTransaction;
 	const inputArray = Array.isArray(input) ? input : [input];
 
 	return withTransaction(entity.provider, async () => {
@@ -248,7 +193,7 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 		const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
 			info,
 			context,
-			transactional,
+			transactional: !!entity.provider?.withTransaction,
 		};
 
 		// Separate Create and Update items
@@ -317,6 +262,88 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 	});
 };
 
+// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
+export const deleteOne =
+	(entity: EntityMetadata<any, any>) =>
+	async <G extends WithId & { name: string }, C extends BaseContext>(
+		source: unknown,
+		{ filter }: { filter: Filter<G> },
+		context: C,
+		info: GraphQLResolveInfo
+	) => {
+		if (!entity.provider) {
+			throw new Error(
+				`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
+			);
+		}
+
+		const hookManager = hookManagerMap.get(entity.name);
+		const params: DeleteHookParams<G> = {
+			args: { filter },
+			info,
+			context,
+			transactional: false,
+		};
+
+		const hookParams = hookManager
+			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+			: params;
+
+		if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
+
+		const success = await entity.provider.deleteOne(hookParams.args.filter);
+
+		hookManager &&
+			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+				...hookParams,
+				deleted: success,
+			}));
+
+		return success;
+	};
+
+export const deleteMany =
+	(entity: EntityMetadata<any, any>) =>
+	async <G extends WithId & { name: string }, C extends BaseContext>(
+		source: unknown,
+		{ filter }: { filter: Filter<G> },
+		context: C,
+		info: GraphQLResolveInfo
+	) => {
+		if (!entity.provider) {
+			throw new Error(
+				`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
+			);
+		}
+		return withTransaction(entity.provider, async () => {
+			if (!entity.provider?.deleteMany) throw new Error('Provider has not implemented DeleteMany.');
+
+			const hookManager = hookManagerMap.get(entity.name);
+			const params: DeleteManyHookParams<G> = {
+				args: { filter },
+				info,
+				context,
+				transactional: !!entity.provider.withTransaction,
+			};
+
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+				: params;
+
+			if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
+
+			const success = await entity.provider.deleteMany(hookParams.args?.filter);
+
+			hookManager &&
+				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+					...hookParams,
+					deleted: success,
+				}));
+
+			return success;
+		});
+	};
+
 export const listRelationshipField = async <
 	G extends WithId & { name: string } & { dataEntity: D },
 	D extends BaseDataEntity,
@@ -363,7 +390,7 @@ export const listRelationshipField = async <
 		gqlEntityType = gqlEntityType[0];
 	}
 
-	// @todo: Should the user specifie dfilter be and-ed here?
+	// @todo: Should the user specified filter be and-ed here?
 	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
 	const relatedEntityFilter =
 		input.filter ?? idValue ? { id: idValue } : { [relatedField as string]: { id: source.id } };
@@ -372,7 +399,7 @@ export const listRelationshipField = async <
 		args: { filter: input.filter },
 		info,
 		context,
-		transactional: false,
+		transactional: !!entity.provider?.withTransaction,
 	};
 	const hookManager = hookManagerMap.get(gqlEntityType.name);
 	const hookParams = hookManager
