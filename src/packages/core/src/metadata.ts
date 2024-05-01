@@ -186,6 +186,19 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
+	public collectProviderInformationForName<G, D extends BaseDataEntity>(args: {
+		provider: BackendProvider<D, G>;
+		entityName: string;
+	}) {
+		const entity = this.getEntityByName(args.entityName);
+
+		if (!entity) {
+			throw new Error(`Could not find entity with name ${args.entityName}`);
+		}
+
+		this.collectProviderInformationForEntity({ provider: args.provider, target: entity.target });
+	}
+
 	public collectProviderInformationForEntity<G, D extends BaseDataEntity>(args: {
 		provider: BackendProvider<D, G>;
 		target: G;

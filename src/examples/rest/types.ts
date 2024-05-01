@@ -104,12 +104,21 @@ export type Authentication = {
   userId: Scalars['ID']['output'];
 };
 
-/** Data needed to create Authentications. */
-export type AuthenticationInsertInput = {
+/** Data needed to create or update Authentications. If an ID is passed, this is an update, otherwise it's an insert. */
+export type AuthenticationCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   data?: InputMaybe<Scalars['JSON']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
   userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+/** Data needed to create Authentications. */
+export type AuthenticationInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
+  data: Scalars['JSON']['input'];
+  type: Scalars['String']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 export type AuthenticationsListFilter = {
@@ -295,6 +304,16 @@ export type Mutation = {
   /** Create a single Authentication. */
   createAuthentication?: Maybe<Authentication>;
   createCredential?: Maybe<Scalars['Boolean']['output']>;
+  /** Create or update many Authentications. */
+  createOrUpdateAuthentications?: Maybe<Array<Maybe<Authentication>>>;
+  /** Create or update many Tags. */
+  createOrUpdateTags?: Maybe<Array<Maybe<Tag>>>;
+  /** Create or update many Tasks. */
+  createOrUpdateTasks?: Maybe<Array<Maybe<Task>>>;
+  /** Create or update many Tokens. */
+  createOrUpdateTokens?: Maybe<Array<Maybe<Token>>>;
+  /** Create or update many Users. */
+  createOrUpdateUsers?: Maybe<Array<Maybe<User>>>;
   /** Create a single Tag. */
   createTag?: Maybe<Tag>;
   /** Create a single Task. */
@@ -311,27 +330,52 @@ export type Mutation = {
 
 
 export type MutationCreateAuthenticationArgs = {
-  data: AuthenticationInsertInput;
+  input: AuthenticationInsertInput;
+};
+
+
+export type MutationCreateOrUpdateAuthenticationsArgs = {
+  input: Array<AuthenticationCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateTagsArgs = {
+  input: Array<TagCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateTasksArgs = {
+  input: Array<TaskCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateTokensArgs = {
+  input: Array<TokenCreateOrUpdateInput>;
+};
+
+
+export type MutationCreateOrUpdateUsersArgs = {
+  input: Array<UserCreateOrUpdateInput>;
 };
 
 
 export type MutationCreateTagArgs = {
-  data: TagInsertInput;
+  input: TagInsertInput;
 };
 
 
 export type MutationCreateTaskArgs = {
-  data: TaskInsertInput;
+  input: TaskInsertInput;
 };
 
 
 export type MutationCreateTokenArgs = {
-  data: TokenInsertInput;
+  input: TokenInsertInput;
 };
 
 
 export type MutationCreateUserArgs = {
-  data: UserInsertInput;
+  input: UserInsertInput;
 };
 
 
@@ -439,9 +483,16 @@ export type Tag = {
   tasks: Array<Task>;
 };
 
+/** Data needed to create or update Tags. If an ID is passed, this is an update, otherwise it's an insert. */
+export type TagCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  tasks?: InputMaybe<TaskInsertInput>;
+};
+
 /** Data needed to create Tags. */
 export type TagInsertInput = {
-  name?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
   tasks?: InputMaybe<TaskInsertInput>;
 };
 
@@ -486,10 +537,21 @@ export type Task = {
   user: User;
 };
 
+/** Data needed to create or update Tasks. If an ID is passed, this is an update, otherwise it's an insert. */
+export type TaskCreateOrUpdateInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<Priority>;
+  slug?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<TagInsertInput>;
+  user?: InputMaybe<UserInsertInput>;
+};
+
 /** Data needed to create Tasks. */
 export type TaskInsertInput = {
-  description?: InputMaybe<Scalars['String']['input']>;
-  isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
+  description: Scalars['String']['input'];
+  isCompleted: Scalars['Boolean']['input'];
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<TagInsertInput>;
@@ -549,9 +611,14 @@ export type Token = {
   authToken: Scalars['String']['output'];
 };
 
+/** Data needed to create or update Tokens. If an ID is passed, this is an update, otherwise it's an insert. */
+export type TokenCreateOrUpdateInput = {
+  authToken?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Data needed to create Tokens. */
 export type TokenInsertInput = {
-  authToken?: InputMaybe<Scalars['String']['input']>;
+  authToken: Scalars['String']['input'];
 };
 
 export type TokensListFilter = {
@@ -582,9 +649,15 @@ export type User = {
   name: Scalars['String']['output'];
 };
 
+/** Data needed to create or update Users. If an ID is passed, this is an update, otherwise it's an insert. */
+export type UserCreateOrUpdateInput = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** Data needed to create Users. */
 export type UserInsertInput = {
-  name?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type UsersListFilter = {

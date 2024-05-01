@@ -94,6 +94,11 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 			AclMap.set('Credential', acl);
 		}
 
+		graphweaverMetadata.collectProviderInformationForName({
+			provider: this.provider,
+			entityName: 'Credential',
+		});
+
 		graphweaverMetadata.addMutation({
 			name: 'createCredential',
 			getType: () => GraphQLBoolean,

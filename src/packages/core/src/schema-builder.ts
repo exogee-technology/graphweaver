@@ -363,7 +363,11 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					}
 
 					// If it's not a nullable field and has no default then we should wrap it now in a not null.
-					if (!field.nullable && typeof field.defaultValue === 'undefined') {
+					if (
+						!field.nullable &&
+						typeof field.defaultValue === 'undefined' &&
+						field.relationshipInfo === undefined
+					) {
 						fields[field.name] = { type: new GraphQLNonNull(fields[field.name].type) };
 					}
 				}
