@@ -112,15 +112,10 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 			name: 'loginPassword',
 			getType: () => Token,
 			args: {
-				username: { type: GraphQLString },
-				password: { type: GraphQLString },
+				username: String,
+				password: String,
 			},
-			resolver: (
-				_: Source,
-				args: { username: string; password: string },
-				ctx: AuthorizationContext,
-				info: GraphQLResolveInfo
-			) => this.loginPassword(args.username, args.password, ctx, info),
+			resolver: (...args) => this.loginPassword(...args),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -314,13 +309,13 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	}
 
 	async loginPassword(
-		username: string,
-		password: string,
+		_: Source,
+		args: { username: string; password: string },
 		ctx: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Token> {
 		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
-		const userProfile = await this.authenticate(username, password, { ctx, info });
+		const userProfile = await this.authenticate(args.username, args.password, { ctx, info });
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
