@@ -21,8 +21,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@mikro-orm/knex": "6.1.12",
-		"@mikro-orm/sqlite": "6.1.12",
+		"@mikro-orm/knex": "6.2.4",
+		"@mikro-orm/sqlite": "6.2.4",
 		"node-sqlite3-wasm": "0.8.13"
 	},
 	"devDependencies": {
