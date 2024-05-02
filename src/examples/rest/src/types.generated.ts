@@ -119,10 +119,23 @@ export type AuthenticationsPaginationInput = {
   orderBy?: InputMaybe<AuthenticationsOrderByInput>;
 };
 
+export type CreateCredentialInput = {
+  confirm: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+};
+
 export type Credential = {
   __typename?: 'Credential';
   id: Scalars['ID']['output'];
   username: Scalars['String']['output'];
+};
+
+export type CredentialCreateOrUpdateInput = {
+  confirm?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CredentialsListFilter = {
@@ -316,6 +329,11 @@ export type Mutation = {
 };
 
 
+export type MutationCreateCredentialArgs = {
+  data?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationCreateOrUpdateTagsArgs = {
   input: Array<TagCreateOrUpdateInput>;
 };
@@ -394,6 +412,11 @@ export type MutationDeleteUsersArgs = {
 export type MutationLoginPasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdateCredentialArgs = {
+  data?: InputMaybe<Scalars['String']['input']>;
 };
 
 

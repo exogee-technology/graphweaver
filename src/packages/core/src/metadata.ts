@@ -1,4 +1,4 @@
-import { BaseDataEntity, GraphQLFieldConfigArgumentMap, GraphQLFieldResolver, WithId } from '.';
+import { BaseDataEntity, GraphQLFieldResolver } from '.';
 import { BackendProvider, FieldMetadata, Filter } from './types';
 import { logger } from '@exogee/logger';
 
@@ -186,19 +186,6 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
-	public collectProviderInformationForName<G, D extends BaseDataEntity>(args: {
-		provider: BackendProvider<D, G>;
-		entityName: string;
-	}) {
-		const entity = this.getEntityByName(args.entityName);
-
-		if (!entity) {
-			throw new Error(`Could not find entity with name ${args.entityName}`);
-		}
-
-		this.collectProviderInformationForEntity({ provider: args.provider, target: entity.target });
-	}
-
 	public collectProviderInformationForEntity<G, D extends BaseDataEntity>(args: {
 		provider: BackendProvider<D, G>;
 		target: G;
@@ -224,6 +211,7 @@ class Metadata {
 		// Later when we collect entity information this will line up as the same type.
 		const entity = (args.target as any).constructor;
 
+		// This could be an input type or an entity, but we'll default it to entity for now.
 		let existingMetadata = this.metadataByType.get(entity) as EntityMetadata<G, any>;
 		if (!existingMetadata) {
 			existingMetadata = {
@@ -231,8 +219,8 @@ class Metadata {
 				type: 'entity',
 
 				// This name will probably be overwritten later.
-				name: entity.name ?? 'UnknownEntity',
-				plural: entity.plural ?? 'UnknownEntityPlural',
+				name: entity.name ?? 'UnknownType',
+				plural: entity.plural ?? 'UnknownTypePlural',
 				target: args.target,
 				fields: {},
 			};
@@ -292,6 +280,9 @@ class Metadata {
 		}
 
 		Object.assign(existingMetadata, args);
+
+		// Ensure the type is set to inputType as it is set to entity by default
+		existingMetadata.type = 'inputType';
 
 		this.metadataByType.set(args.target, existingMetadata);
 	}

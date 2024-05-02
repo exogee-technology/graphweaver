@@ -32,6 +32,7 @@ import {
 	EnumMetadata,
 	FieldMetadata,
 	graphweaverMetadata,
+	InputTypeMetadata,
 	isEntityMetadata,
 	isEnumMetadata,
 	TypeValue,
@@ -46,6 +47,7 @@ const likeOperations = new Set(['like', 'ilike']);
 const mathOperations = new Set(['gt', 'gte', 'lt', 'lte']);
 
 const entityTypes = new Map<string, GraphQLObjectType>();
+const inputTypes = new Map<string, GraphQLInputObjectType>();
 const enumTypes = new Map<string, GraphQLEnumType>();
 const filterTypes = new Map<string, GraphQLInputObjectType>();
 const insertTypes = new Map<string, GraphQLInputObjectType>();
@@ -122,6 +124,69 @@ const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
 		default:
 			throw new Error(`Could not map TypeScript type ${String(type)} to a GraphQL scalar.`);
 	}
+};
+
+const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
+	let inputType = inputTypes.get(input.name);
+
+	if (!inputType) {
+		inputType = new GraphQLInputObjectType({
+			name: input.name,
+			description: input.description,
+			fields: () => {
+				const fields: ObjMap<GraphQLInputFieldConfig> = {};
+
+				for (const field of Object.values(input.fields)) {
+					let type = field.getType();
+					let isArray = false;
+					if (Array.isArray(type)) {
+						type = type[0];
+						isArray = true;
+					}
+
+					// Let's try to resolve the GraphQL type involved here.
+					let graphQLType: GraphQLInputType | undefined = undefined;
+
+					const metadata = graphweaverMetadata.metadataForType(type);
+
+					if (isEnumMetadata(metadata)) {
+						graphQLType = graphQLTypeForEnum(metadata);
+					} else if (isScalarType(type)) {
+						graphQLType = type;
+					} else {
+						// Ok, it's some kind of in-built scalar we need to map.
+						const scalar = graphQLScalarForTypeScriptType(type);
+
+						if (!scalar) {
+							throw new Error(
+								`Could not map field ${field.name} on entity ${input.name} of type ${String(field.getType())} to a GraphQL scalar.`
+							);
+						}
+
+						graphQLType = scalar;
+					}
+
+					// If it's an array, wrap it in a list and make it not nullable within the list.
+					if (isArray) {
+						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
+					}
+
+					// And finally, if it's not marked as nullable, wrap whatever it is in Non Null.
+					if (!field.nullable) {
+						graphQLType = new GraphQLNonNull(graphQLType);
+					}
+
+					fields[field.name] = { type: graphQLType };
+				}
+
+				return fields;
+			},
+		});
+	}
+
+	inputTypes.set(input.name, inputType);
+
+	return inputType;
 };
 
 const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
@@ -537,6 +602,11 @@ class SchemaBuilderImplementation {
 
 			// The input type for pagination and sorting
 			yield paginationTypeForEntity(entity);
+		}
+
+		// Also emit all our input types.
+		for (const input of graphweaverMetadata.inputTypes()) {
+			yield graphQLTypeForInput(input);
 		}
 
 		// Also emit all our enums.

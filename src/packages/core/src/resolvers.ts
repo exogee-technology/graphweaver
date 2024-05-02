@@ -153,7 +153,7 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 };
 
 export const createOrUpdate = async <G extends WithId & { name: string }, C extends BaseContext>(
-	source: unknown,
+	_source: unknown,
 	{ input }: { input: Partial<G> | Partial<G>[] },
 	context: C,
 	info: GraphQLResolveInfo

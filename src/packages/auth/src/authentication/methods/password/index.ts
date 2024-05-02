@@ -2,10 +2,11 @@ import {
 	BackendProvider,
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
+	Field,
 	GraphQLBoolean,
 	GraphQLResolveInfo,
-	GraphQLString,
 	HookRegister,
+	InputType,
 	graphweaverMetadata,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
@@ -36,16 +37,30 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
-class CreateCredentialInputArgs {
+@InputType(`CreateCredentialInput`)
+class CreateCredentialInput {
+	@Field(() => String)
 	username!: string;
+
+	@Field(() => String)
 	password!: string;
+
+	@Field(() => String)
 	confirm!: string;
 }
 
-export class CredentialCreateOrUpdateInputArgs {
+@InputType(`CredentialCreateOrUpdateInput`)
+export class CredentialCreateOrUpdateInput {
+	@Field(() => String)
 	id!: string;
+
+	@Field(() => String, { nullable: true })
 	username?: string;
+
+	@Field(() => String, { nullable: true })
 	password?: string;
+
+	@Field(() => String, { nullable: true })
 	confirm?: string;
 }
 
@@ -94,9 +109,9 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 			AclMap.set('Credential', acl);
 		}
 
-		graphweaverMetadata.collectProviderInformationForName({
-			provider: this.provider,
-			entityName: 'Credential',
+		graphweaverMetadata.collectProviderInformationForEntity<typeof Credential, D>({
+			provider: this.provider as BackendProvider<D, typeof Credential>,
+			target: Credential,
 		});
 
 		graphweaverMetadata.addMutation({
@@ -104,6 +119,9 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 			getType: () => GraphQLBoolean,
 			resolver: this.createCredential as any,
 			intentionalOverride: true,
+			args: {
+				data: CreateCredentialInput,
+			},
 		});
 
 		graphweaverMetadata.addMutation({
@@ -111,6 +129,9 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 			getType: () => GraphQLBoolean,
 			resolver: this.updateCredential as any,
 			intentionalOverride: true,
+			args: {
+				data: CredentialCreateOrUpdateInput,
+			},
 		});
 
 		graphweaverMetadata.addMutation({
@@ -157,7 +178,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	}
 
 	async create(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInput>
 	): Promise<UserProfile> {
 		const [item] = params.args.items;
 		if (!item) throw new Error('No data specified cannot continue.');
@@ -188,7 +209,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	}
 
 	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
+		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInput>
 	): Promise<UserProfile> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
@@ -217,13 +238,14 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	// The below methods are exposed as mutations via GraphQL
 
 	async createCredential(
-		data: CreateCredentialInputArgs,
+		_: Source,
+		args: { data: CreateCredentialInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Credential<D> | null> {
 		return this.withTransaction<Credential<D> | null>(async () => {
 			const params = {
-				args: { items: [data] },
+				args: { items: [args.data] },
 				info,
 				context,
 				transactional: this.transactional,
@@ -231,7 +253,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 			let userProfile;
 			try {
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
+				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInput>(
 					HookRegister.BEFORE_CREATE,
 					params,
 					'Credential'
@@ -267,7 +289,8 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	}
 
 	async updateCredential(
-		data: CredentialCreateOrUpdateInputArgs,
+		_: Source,
+		data: CredentialCreateOrUpdateInput,
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Credential<D> | null> {
@@ -281,7 +304,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 			let userProfile;
 			try {
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInputArgs>(
+				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInput>(
 					HookRegister.BEFORE_UPDATE,
 					params,
 					'Credential'
