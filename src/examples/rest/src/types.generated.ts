@@ -145,111 +145,6 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
-export type MultipleAdminUiEntityAttributeMetadataOrderByInput = {
-  exportPageSize?: InputMaybe<Sort>;
-  isReadOnly?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiEntityAttributeMetadata. */
-export type MultipleAdminUiEntityAttributeMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiEntityAttributeMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiEntityMetadataOrderByInput = {
-  backendId?: InputMaybe<Sort>;
-  defaultFilter?: InputMaybe<Sort>;
-  name?: InputMaybe<Sort>;
-  plural?: InputMaybe<Sort>;
-  summaryField?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiEntityMetadata. */
-export type MultipleAdminUiEntityMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiEntityMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiEnumMetadataOrderByInput = {
-  name?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiEnumMetadata. */
-export type MultipleAdminUiEnumMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiEnumMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiEnumValueMetadataOrderByInput = {
-  name?: InputMaybe<Sort>;
-  value?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiEnumValueMetadata. */
-export type MultipleAdminUiEnumValueMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiEnumValueMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiFieldAttributeMetadataOrderByInput = {
-  isReadOnly?: InputMaybe<Sort>;
-  isRequired?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiFieldAttributeMetadata. */
-export type MultipleAdminUiFieldAttributeMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiFieldAttributeMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiFieldExtensionsMetadataOrderByInput = {
-  key?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiFieldExtensionsMetadata. */
-export type MultipleAdminUiFieldExtensionsMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiFieldExtensionsMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiFieldMetadataOrderByInput = {
-  isArray?: InputMaybe<Sort>;
-  name?: InputMaybe<Sort>;
-  relatedEntity?: InputMaybe<Sort>;
-  relationshipType?: InputMaybe<Sort>;
-  type?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiFieldMetadata. */
-export type MultipleAdminUiFieldMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiFieldMetadataOrderByInput>;
-};
-
-export type MultipleAdminUiFilterMetadataOrderByInput = {
-  type?: InputMaybe<Sort>;
-};
-
-/** Pagination options for MultipleAdminUiFilterMetadata. */
-export type MultipleAdminUiFilterMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<MultipleAdminUiFilterMetadataOrderByInput>;
-};
-
-/** Pagination options for MultipleAdminUiMetadata. */
-export type MultipleAdminUiMetadataPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword?: Maybe<Token>;
@@ -674,17 +569,6 @@ export type TasksPaginationInput = {
 export type Token = {
   __typename?: 'Token';
   authToken: Scalars['String']['output'];
-};
-
-export type TokensOrderByInput = {
-  authToken?: InputMaybe<Sort>;
-};
-
-/** Pagination options for Tokens. */
-export type TokensPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<TokensOrderByInput>;
 };
 
 export type User = {

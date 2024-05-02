@@ -598,7 +598,10 @@ class SchemaBuilderImplementation {
 			}
 
 			// The input type for pagination and sorting
-			yield paginationTypeForEntity(entity);
+			// This is only emitted if the entity has a provider, as it's only used for querying.
+			if (entity.provider) {
+				yield paginationTypeForEntity(entity);
+			}
 		}
 
 		// Also emit all our input types.
@@ -667,7 +670,7 @@ class SchemaBuilderImplementation {
 						type: new GraphQLList(graphQLTypeForEntity(entity)),
 						args: {
 							filter: { type: filterTypeForEntity(entity) },
-							pagination: { type: paginationTypeForEntity(entity) },
+							...(entity.provider ? { pagination: { type: paginationTypeForEntity(entity) } } : {}),
 						},
 						resolve: resolvers.list,
 					};
