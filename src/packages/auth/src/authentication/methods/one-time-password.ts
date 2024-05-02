@@ -4,11 +4,12 @@ import ms from 'ms';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 
-import { AuthenticationMethod, AuthenticationType, AuthorizationContext } from '../../../types';
-import { AuthenticationBaseEntity } from '../../entities';
-import { Token } from '../../entities/token';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
-import { ChallengeError } from '../../../errors';
+import { AuthenticationMethod, AuthenticationType, AuthorizationContext } from '../../types';
+import { AuthenticationBaseEntity } from '../entities';
+import { Token } from '../entities/token';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { ChallengeError } from '../../errors';
+import { GraphQLResolveInfo, Source } from 'graphql';
 
 export interface OneTimePasswordData {
 	code: string;
@@ -59,13 +60,16 @@ export class OneTimePassword {
 		graphweaverMetadata.addMutation({
 			name: 'sendOTPChallenge',
 			getType: () => GraphQLBoolean,
-			resolver: this.sendOTPChallenge as any,
+			resolver: this.sendOTPChallenge.bind(this),
 		});
 
 		graphweaverMetadata.addMutation({
 			name: 'verifyOTPChallenge',
-			getType: () => GraphQLBoolean,
-			resolver: this.verifyOTPChallenge as any,
+			args: {
+				code: String,
+			},
+			getType: () => Token,
+			resolver: this.verifyOTPChallenge.bind(this),
 		});
 	}
 
@@ -153,9 +157,14 @@ export class OneTimePassword {
 	 * @param ctx the context to use for the OTP generation
 	 * @returns a boolean to indicate that the code has been sent
 	 */
-	async sendOTPChallenge(ctx: AuthorizationContext): Promise<boolean> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-		const userId = ctx.user?.id;
+	async sendOTPChallenge(
+		_: Source,
+		_args: Record<string, undefined>,
+		context: AuthorizationContext,
+		_info: GraphQLResolveInfo
+	): Promise<boolean> {
+		if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+		const userId = context.user?.id;
 		if (!userId) throw new AuthenticationError('Challenge unsuccessful: User ID missing.');
 
 		// Check if the user created X links in the last X period
@@ -185,11 +194,16 @@ export class OneTimePassword {
 	 * @param ctx the context to use for the verification
 	 * @returns a new token
 	 */
-	async verifyOTPChallenge(code: string, ctx: AuthorizationContext): Promise<Token> {
+	async verifyOTPChallenge(
+		_: Source,
+		{ code }: { code: string },
+		context: AuthorizationContext,
+		_info: GraphQLResolveInfo
+	): Promise<Token> {
 		try {
 			if (!code) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
-			if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
-			const userId = ctx.user?.id;
+			if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+			const userId = context.user?.id;
 			if (!userId) throw new AuthenticationError('Challenge unsuccessful: User ID missing.');
 
 			const otp = await this.getOTP(userId, code);
@@ -201,7 +215,9 @@ export class OneTimePassword {
 			// Step up existing token
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.ONE_TIME_PASSWORD);
 			const existingAuthToken =
-				typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
+				typeof context.token === 'string'
+					? await tokenProvider.decodeToken(context.token)
+					: context.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 			const token = verifyAndCreateTokenFromAuthToken(authToken);
 

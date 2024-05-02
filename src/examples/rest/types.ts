@@ -325,7 +325,7 @@ export type Mutation = {
   updateUser?: Maybe<User>;
   /** Update many Users. */
   updateUsers?: Maybe<Array<Maybe<User>>>;
-  verifyOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
+  verifyOTPChallenge?: Maybe<Token>;
 };
 
 
@@ -452,6 +452,11 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateUsersArgs = {
   input: Array<UserUpdateInput>;
+};
+
+
+export type MutationVerifyOtpChallengeArgs = {
+  code?: InputMaybe<Scalars['String']['input']>;
 };
 
 export enum Priority {

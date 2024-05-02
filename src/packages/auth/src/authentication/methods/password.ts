@@ -3,7 +3,6 @@ import {
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	Field,
-	GraphQLBoolean,
 	GraphQLResolveInfo,
 	HookRegister,
 	InputType,
@@ -14,23 +13,23 @@ import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-ser
 import { logger } from '@exogee/logger';
 import { Source } from 'graphql';
 
-import { UserProfile } from '../../../user-profile';
+import { UserProfile } from '../../user-profile';
 import {
 	AccessControlList,
 	AuthenticationMethod,
 	AuthorizationContext,
 	RequestParams,
-} from '../../../types';
-import { Credential, CredentialStorage, Token } from '../../entities';
+} from '../../types';
+import { Credential, CredentialStorage, Token } from '../entities';
 import {
 	PasswordStrengthError,
 	defaultPasswordStrength,
 	runAfterHooks,
 	updatePasswordCredential,
-} from '../utils';
-import { hashPassword, verifyPassword } from '../../../utils/argon2id';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../../token';
-import { AclMap } from '../../../helper-functions';
+} from './utils';
+import { hashPassword, verifyPassword } from '../../utils/argon2id';
+import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AclMap } from '../../helper-functions';
 
 export enum PasswordOperation {
 	LOGIN = 'login',

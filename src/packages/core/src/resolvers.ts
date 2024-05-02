@@ -16,7 +16,6 @@ import {
 	createOrUpdateEntities,
 	graphweaverMetadata,
 	hookManagerMap,
-	runWritableBeforeHooks,
 } from '.';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
@@ -305,7 +304,7 @@ export const deleteOne =
 export const deleteMany =
 	(entity: EntityMetadata<any, any>) =>
 	async <G extends WithId & { name: string }, C extends BaseContext>(
-		source: unknown,
+		_source: unknown,
 		{ filter }: { filter: Filter<G> },
 		context: C,
 		info: GraphQLResolveInfo

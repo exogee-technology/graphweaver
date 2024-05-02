@@ -74,7 +74,7 @@ export const preventLightSideAccess = (
 @ApplyMultiFactorAuthentication<Task>(() => ({
 	Everyone: {
 		// all users must provide a password mfa when writing data
-		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.WEB3] }],
+		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.ONE_TIME_PASSWORD] }],
 	},
 }))
 @ApplyAccessControlList(acl)
