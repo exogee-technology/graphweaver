@@ -1,4 +1,4 @@
-import { BaseDataEntity, GraphQLFieldResolver } from '.';
+import { BaseDataEntity, GetTypeFunction, GraphQLFieldResolver } from '.';
 import { BackendProvider, FieldMetadata, Filter } from './types';
 import { logger } from '@exogee/logger';
 
@@ -421,7 +421,7 @@ class Metadata {
 
 	public addQuery(args: {
 		name: string;
-		getType: () => any;
+		getType: GetTypeFunction;
 		resolver: GraphQLFieldResolver<any, any, any, unknown>;
 		description?: string;
 		intentionalOverride?: boolean;
@@ -437,7 +437,7 @@ class Metadata {
 
 	public addMutation(args: {
 		name: string;
-		getType: () => unknown;
+		getType: GetTypeFunction;
 		resolver: GraphQLFieldResolver<any, any, any, unknown>;
 		args?: Record<string, unknown>;
 		description?: string;

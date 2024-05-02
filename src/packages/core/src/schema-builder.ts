@@ -620,22 +620,27 @@ class SchemaBuilderImplementation {
 		}
 	}
 
+	private graphQLTypeForUnknownType(type: unknown) {
+		const metadata = graphweaverMetadata.metadataForType(type);
+
+		if (isInputMetadata(metadata)) {
+			return new GraphQLNonNull(graphQLTypeForInput(metadata));
+		} else if (isEnumMetadata(type)) {
+			return graphQLTypeForEnum(type);
+		} else if (isScalarType(type)) {
+			return type;
+		} else {
+			return graphQLScalarForTypeScriptType(type as TypeValue);
+		}
+	}
+
 	private graphQLTypeForArgs(args?: Record<string, unknown>): GraphQLFieldConfigArgumentMap {
 		const map: GraphQLFieldConfigArgumentMap = {};
 		if (!args) return map;
 
 		for (const [name, type] of Object.entries(args)) {
-			const metadata = graphweaverMetadata.metadataForType(type);
-
-			if (isInputMetadata(metadata)) {
-				map[name] = { type: new GraphQLNonNull(graphQLTypeForInput(metadata)) };
-			} else if (isEnumMetadata(type)) {
-				map[name] = { type: graphQLTypeForEnum(type) };
-			} else if (isScalarType(type)) {
-				map[name] = { type };
-			} else {
-				map[name] = { type: graphQLScalarForTypeScriptType(type as TypeValue) };
-			}
+			const inputType = this.graphQLTypeForUnknownType(type);
+			map[name] = { type: inputType };
 		}
 
 		return map;

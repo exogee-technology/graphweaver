@@ -311,7 +311,9 @@ export type Mutation = {
   /** Delete many Users with a filter. */
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
+  resetPassword?: Maybe<Scalars['Boolean']['output']>;
   sendOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
+  sendResetPasswordLink?: Maybe<Scalars['Boolean']['output']>;
   updateCredential?: Maybe<Credential>;
   /** Update a single Tag. */
   updateTag?: Maybe<Tag>;
@@ -416,6 +418,17 @@ export type MutationDeleteUsersArgs = {
 
 export type MutationLoginPasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationResetPasswordArgs = {
+  password?: InputMaybe<Scalars['String']['input']>;
+  token?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSendResetPasswordLinkArgs = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
