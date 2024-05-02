@@ -146,8 +146,11 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 		graphweaverMetadata.addMutation({
 			name: 'challengePassword',
-			getType: () => GraphQLBoolean,
-			resolver: this.challengePassword as any,
+			args: {
+				password: String,
+			},
+			getType: () => Token,
+			resolver: this.challengePassword.bind(this),
 		});
 	}
 
@@ -351,7 +354,8 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	}
 
 	async challengePassword(
-		password: string,
+		_: Source,
+		{ password }: { password: string },
 		ctx: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Token> {
