@@ -405,7 +405,9 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					// Let's try to resolve the GraphQL type involved here.
 					let fieldType = field.getType();
+					let isArray = false;
 					if (Array.isArray(fieldType)) {
+						isArray = true;
 						fieldType = fieldType[0];
 					}
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
@@ -416,9 +418,9 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 							!metadata.apiOptions?.excludeFromBuiltInOperations &&
 							!metadata.apiOptions?.excludeFromBuiltInWriteOperations
 						) {
-							let type: GraphQLInputType = insertTypeForEntity(metadata);
+							let type: GraphQLInputType = createOrUpdateTypeForEntity(metadata);
 
-							if (Array.isArray(fieldType)) {
+							if (isArray) {
 								// If it's a many relationship we need to wrap in non-null and list.
 								type = new GraphQLList(new GraphQLNonNull(type));
 							}

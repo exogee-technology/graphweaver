@@ -543,7 +543,7 @@ export type TagCreateOrUpdateInput = {
 /** Data needed to create Tags. */
 export type TagInsertInput = {
   name: Scalars['String']['input'];
-  tasks?: InputMaybe<TaskInsertInput>;
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
 };
 
 /** Data needed to update Tags. An ID must be passed. */
@@ -611,8 +611,8 @@ export type TaskInsertInput = {
   isCompleted: Scalars['Boolean']['input'];
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<TagInsertInput>;
-  user?: InputMaybe<UserInsertInput>;
+  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 /** Data needed to update Tasks. An ID must be passed. */

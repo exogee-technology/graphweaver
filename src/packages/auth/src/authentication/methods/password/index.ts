@@ -239,13 +239,13 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 	async createCredential(
 		_: Source,
-		args: { data: CredentialInsertInput },
+		args: { input: CredentialInsertInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Credential<D> | null> {
 		return this.withTransaction<Credential<D> | null>(async () => {
 			const params = {
-				args: { items: [args.data] },
+				args: { items: [args.input] },
 				info,
 				context,
 				transactional: this.transactional,
@@ -290,13 +290,13 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 	async updateCredential(
 		_: Source,
-		data: CredentialCreateOrUpdateInput,
+		args: { input: CredentialCreateOrUpdateInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Credential<D> | null> {
 		return this.withTransaction<Credential<D> | null>(async () => {
 			const params = {
-				args: { items: [data] },
+				args: { items: [args.input] },
 				info,
 				context,
 				transactional: this.transactional,
