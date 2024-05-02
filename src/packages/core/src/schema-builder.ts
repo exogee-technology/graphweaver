@@ -35,6 +35,7 @@ import {
 	InputTypeMetadata,
 	isEntityMetadata,
 	isEnumMetadata,
+	isInputMetadata,
 	TypeValue,
 } from '.';
 import * as resolvers from './resolvers';
@@ -149,7 +150,9 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 
 					const metadata = graphweaverMetadata.metadataForType(type);
 
-					if (isEnumMetadata(metadata)) {
+					if (isInputMetadata(metadata)) {
+						graphQLType = graphQLTypeForInput(metadata);
+					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else if (isScalarType(type)) {
 						graphQLType = type;
@@ -620,7 +623,17 @@ class SchemaBuilderImplementation {
 		if (!args) return map;
 
 		for (const [name, type] of Object.entries(args)) {
-			map[name] = { type: GraphQLString };
+			const metadata = graphweaverMetadata.metadataForType(type);
+
+			if (isInputMetadata(metadata)) {
+				map[name] = { type: new GraphQLNonNull(graphQLTypeForInput(metadata)) };
+			} else if (isEnumMetadata(type)) {
+				map[name] = { type: graphQLTypeForEnum(type) };
+			} else if (isScalarType(type)) {
+				map[name] = { type };
+			} else {
+				map[name] = { type: graphQLScalarForTypeScriptType(type as TypeValue) };
+			}
 		}
 
 		return map;

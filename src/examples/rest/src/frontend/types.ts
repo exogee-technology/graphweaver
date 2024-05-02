@@ -119,12 +119,6 @@ export type AuthenticationsPaginationInput = {
   orderBy?: InputMaybe<AuthenticationsOrderByInput>;
 };
 
-export type CreateCredentialInput = {
-  confirm: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  username: Scalars['String']['input'];
-};
-
 export type Credential = {
   __typename?: 'Credential';
   id: Scalars['ID']['output'];
@@ -136,6 +130,12 @@ export type CredentialCreateOrUpdateInput = {
   id: Scalars['String']['input'];
   password?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CredentialInsertInput = {
+  confirm: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+  username: Scalars['String']['input'];
 };
 
 export type CredentialsListFilter = {
@@ -330,7 +330,7 @@ export type Mutation = {
 
 
 export type MutationCreateCredentialArgs = {
-  data?: InputMaybe<Scalars['String']['input']>;
+  data?: InputMaybe<CredentialInsertInput>;
 };
 
 
@@ -416,7 +416,7 @@ export type MutationLoginPasswordArgs = {
 
 
 export type MutationUpdateCredentialArgs = {
-  data?: InputMaybe<Scalars['String']['input']>;
+  data?: InputMaybe<CredentialCreateOrUpdateInput>;
 };
 
 

@@ -37,8 +37,8 @@ export enum PasswordOperation {
 	REGISTER = 'register',
 }
 
-@InputType(`CreateCredentialInput`)
-class CreateCredentialInput {
+@InputType(`CredentialInsertInput`)
+class CredentialInsertInput {
 	@Field(() => String)
 	username!: string;
 
@@ -120,7 +120,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 			resolver: this.createCredential as any,
 			intentionalOverride: true,
 			args: {
-				data: CreateCredentialInput,
+				data: CredentialInsertInput,
 			},
 		});
 
@@ -239,7 +239,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 	async createCredential(
 		_: Source,
-		args: { data: CreateCredentialInput },
+		args: { data: CredentialInsertInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Credential<D> | null> {

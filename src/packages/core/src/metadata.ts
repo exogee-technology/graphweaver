@@ -60,6 +60,18 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 	};
 }
 
+export function isInputMetadata<G, D extends BaseDataEntity>(
+	value: unknown
+): value is InputTypeMetadata<G, D> {
+	const test = value as InputTypeMetadata<G, D>;
+
+	return (
+		test?.type === 'inputType' &&
+		typeof test?.name === 'string' &&
+		typeof test?.target === 'function'
+	);
+}
+
 export function isEntityMetadata<G, D extends BaseDataEntity>(
 	value: unknown
 ): value is EntityMetadata<G, D> {
