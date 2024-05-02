@@ -1,4 +1,4 @@
-import { BaseDataEntity, GetTypeFunction, GraphQLFieldResolver } from '.';
+import { BaseDataEntity, FieldOptions, GetTypeFunction, GraphQLFieldResolver } from '.';
 import { BackendProvider, FieldMetadata, Filter } from './types';
 import { logger } from '@exogee/logger';
 
@@ -218,7 +218,10 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
-	public collectFieldInformation<G, D extends BaseDataEntity>(args: FieldMetadata<G, D>) {
+	public collectFieldInformation<G, D extends BaseDataEntity>(
+		args: FieldOptions &
+			Pick<FieldMetadata<G, D>, 'target' | 'name' | 'getType' | 'relationshipInfo'>
+	) {
 		// We need to refer to the constructor here because the class doesn't exist yet.
 		// Later when we collect entity information this will line up as the same type.
 		const entity = (args.target as any).constructor;
@@ -240,7 +243,7 @@ class Metadata {
 
 		existingMetadata.fields[args.name] = args;
 
-		if (args.summaryField) {
+		if (args.adminUIOptions?.summaryField) {
 			if (
 				existingMetadata.adminUIOptions?.summaryField &&
 				existingMetadata.adminUIOptions.summaryField !== args.name

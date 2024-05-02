@@ -115,6 +115,8 @@ const isGraphQLScalarForTypeScriptType = (type: TypeValue): type is GraphQLScala
 };
 
 const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
+	if (isScalarType(type)) return type;
+
 	switch (type) {
 		case String:
 			return GraphQLString;
@@ -154,8 +156,6 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 						graphQLType = graphQLTypeForInput(metadata);
 					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
-					} else if (isScalarType(type)) {
-						graphQLType = type;
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
 						const scalar = graphQLScalarForTypeScriptType(type);
@@ -221,8 +221,6 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						resolve = resolvers.listRelationshipField;
 					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
-					} else if (isScalarType(type)) {
-						graphQLType = type as GraphQLScalarType;
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
 						const scalar = graphQLScalarForTypeScriptType(type);
@@ -429,8 +427,6 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						}
 					} else if (isEnumMetadata(metadata)) {
 						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-					} else if (isScalarType(fieldType)) {
-						fields[field.name] = { type: fieldType };
 					} else {
 						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
 					}
@@ -489,8 +485,6 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						}
 					} else if (isEnumMetadata(metadata)) {
 						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-					} else if (isScalarType(fieldType)) {
-						fields[field.name] = { type: fieldType };
 					} else {
 						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
 					}
@@ -540,8 +534,6 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						}
 					} else if (isEnumMetadata(metadata)) {
 						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-					} else if (isScalarType(fieldType)) {
-						fields[field.name] = { type: fieldType };
 					} else {
 						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
 					}
@@ -620,26 +612,21 @@ class SchemaBuilderImplementation {
 		}
 	}
 
-	private graphQLTypeForUnknownType(type: unknown) {
-		const metadata = graphweaverMetadata.metadataForType(type);
-
-		if (isInputMetadata(metadata)) {
-			return new GraphQLNonNull(graphQLTypeForInput(metadata));
-		} else if (isEnumMetadata(type)) {
-			return graphQLTypeForEnum(type);
-		} else if (isScalarType(type)) {
-			return type;
-		} else {
-			return graphQLScalarForTypeScriptType(type as TypeValue);
-		}
-	}
-
 	private graphQLTypeForArgs(args?: Record<string, unknown>): GraphQLFieldConfigArgumentMap {
 		const map: GraphQLFieldConfigArgumentMap = {};
 		if (!args) return map;
 
 		for (const [name, type] of Object.entries(args)) {
-			const inputType = this.graphQLTypeForUnknownType(type);
+			const metadata = graphweaverMetadata.metadataForType(type);
+
+			let inputType: GraphQLInputType;
+			if (isInputMetadata(metadata)) {
+				inputType = new GraphQLNonNull(graphQLTypeForInput(metadata));
+			} else if (isEnumMetadata(type)) {
+				inputType = graphQLTypeForEnum(type);
+			} else {
+				inputType = graphQLScalarForTypeScriptType(type as TypeValue);
+			}
 			map[name] = { type: inputType };
 		}
 
@@ -866,7 +853,7 @@ class SchemaBuilderImplementation {
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
-							type,
+							type: graphQLScalarForTypeScriptType(type),
 							resolve: customMutation.resolver,
 						};
 					}

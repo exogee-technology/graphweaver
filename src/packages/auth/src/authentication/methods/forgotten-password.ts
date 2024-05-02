@@ -3,14 +3,13 @@ import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'crypto';
 import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { GraphQLResolveInfo, Source } from 'graphql';
 
 import { AuthorizationContext, AuthenticationType } from '../../types';
 import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
 import { AuthenticationBaseEntity } from '../entities';
 import { defaultPasswordStrength, updatePasswordCredential } from './utils';
-
-import { GraphQLBoolean, GraphQLResolveInfo, Source } from 'graphql';
 
 const config = {
 	rate: {
@@ -79,7 +78,7 @@ export class ForgottenPassword {
 			args: {
 				username: String,
 			},
-			getType: () => GraphQLBoolean,
+			getType: () => Boolean,
 			resolver: this.sendResetPasswordLink.bind(this),
 		});
 
@@ -89,7 +88,7 @@ export class ForgottenPassword {
 				token: String,
 				password: String,
 			},
-			getType: () => GraphQLBoolean,
+			getType: () => Boolean,
 			resolver: this.resetPassword.bind(this),
 		});
 	}

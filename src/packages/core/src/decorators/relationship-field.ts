@@ -1,24 +1,15 @@
-import { BaseLoaders } from '../base-loader';
-import {
-	BaseContext,
-	BaseDataEntity,
-	FieldMetadata,
-	Filter,
-	GraphQLEntity,
-	GraphQLEntityConstructor,
-	GraphQLResolveInfo,
-	HookRegister,
-	ReadHookParams,
-	adminUIFieldOptions,
-	hookManagerMap,
-} from '..';
+import { BaseDataEntity, FieldMetadata, GraphQLEntity } from '..';
 import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
 	id?: (keyof D & string) | ((dataEntity: D) => string | number | undefined);
 	nullable?: boolean;
-	adminUIOptions?: adminUIFieldOptions;
+	adminUIOptions?: {
+		hideInTable?: boolean;
+		hideInFilterBar?: boolean;
+		readonly?: boolean;
+	};
 };
 
 interface ClassType<T extends GraphQLEntity<BaseDataEntity>> {

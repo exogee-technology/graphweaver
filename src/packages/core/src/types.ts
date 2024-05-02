@@ -221,7 +221,6 @@ export type Complexity = ComplexityEstimator | number;
 
 export interface FieldMetadata<G, D> {
 	adminUIOptions?: {
-		summaryField?: boolean;
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
 		readonly?: boolean;

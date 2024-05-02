@@ -17,8 +17,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
-  ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
@@ -93,30 +91,6 @@ export type AdminUiMetadata = {
   __typename?: 'AdminUiMetadata';
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
-};
-
-export type Authentication = {
-  __typename?: 'Authentication';
-  createdAt: Scalars['ISOString']['output'];
-  data: Scalars['JSON']['output'];
-  id: Scalars['ID']['output'];
-  type: Scalars['String']['output'];
-  userId: Scalars['ID']['output'];
-};
-
-export type AuthenticationsOrderByInput = {
-  createdAt?: InputMaybe<Sort>;
-  data?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
-  type?: InputMaybe<Sort>;
-  userId?: InputMaybe<Sort>;
-};
-
-/** Pagination options for Authentications. */
-export type AuthenticationsPaginationInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<AuthenticationsOrderByInput>;
 };
 
 export type Credential = {

@@ -1,4 +1,4 @@
-import { BackendProvider, GraphQLBoolean, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
 import otpGenerator from 'otp-generator';
 import ms from 'ms';
 import { logger } from '@exogee/logger';
@@ -59,7 +59,7 @@ export class OneTimePassword {
 
 		graphweaverMetadata.addMutation({
 			name: 'sendOTPChallenge',
-			getType: () => GraphQLBoolean,
+			getType: () => Boolean,
 			resolver: this.sendOTPChallenge.bind(this),
 		});
 
