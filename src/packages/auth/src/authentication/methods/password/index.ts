@@ -116,32 +116,32 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 		graphweaverMetadata.addMutation({
 			name: 'createCredential',
-			getType: () => GraphQLBoolean,
-			resolver: this.createCredential as any,
-			intentionalOverride: true,
 			args: {
-				data: CredentialInsertInput,
+				input: CredentialInsertInput,
 			},
+			getType: () => Credential,
+			resolver: this.createCredential.bind(this),
+			intentionalOverride: true,
 		});
 
 		graphweaverMetadata.addMutation({
 			name: 'updateCredential',
-			getType: () => GraphQLBoolean,
-			resolver: this.updateCredential as any,
-			intentionalOverride: true,
 			args: {
-				data: CredentialCreateOrUpdateInput,
+				input: CredentialCreateOrUpdateInput,
 			},
+			getType: () => Credential,
+			resolver: this.updateCredential.bind(this),
+			intentionalOverride: true,
 		});
 
 		graphweaverMetadata.addMutation({
 			name: 'loginPassword',
-			getType: () => Token,
 			args: {
 				username: String,
 				password: String,
 			},
-			resolver: (...args) => this.loginPassword(...args),
+			getType: () => Token,
+			resolver: this.loginPassword.bind(this),
 		});
 
 		graphweaverMetadata.addMutation({

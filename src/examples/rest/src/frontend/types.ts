@@ -279,7 +279,7 @@ export type MultipleAdminUiMetadataPaginationInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword?: Maybe<Scalars['Boolean']['output']>;
-  createCredential?: Maybe<Scalars['Boolean']['output']>;
+  createCredential?: Maybe<Credential>;
   /** Create or update many Tags. */
   createOrUpdateTags?: Maybe<Array<Maybe<Tag>>>;
   /** Create or update many Tasks. */
@@ -312,7 +312,7 @@ export type Mutation = {
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
   sendOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
-  updateCredential?: Maybe<Scalars['Boolean']['output']>;
+  updateCredential?: Maybe<Credential>;
   /** Update a single Tag. */
   updateTag?: Maybe<Tag>;
   /** Update many Tags. */
@@ -330,7 +330,7 @@ export type Mutation = {
 
 
 export type MutationCreateCredentialArgs = {
-  data?: InputMaybe<CredentialInsertInput>;
+  input: CredentialInsertInput;
 };
 
 
@@ -416,7 +416,7 @@ export type MutationLoginPasswordArgs = {
 
 
 export type MutationUpdateCredentialArgs = {
-  data?: InputMaybe<CredentialCreateOrUpdateInput>;
+  input: CredentialCreateOrUpdateInput;
 };
 
 
