@@ -180,6 +180,10 @@ export type Mutation = {
   /** Delete many Users with a filter. */
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
+  passkeyGenerateAuthenticationOptions?: Maybe<Scalars['JSON']['output']>;
+  passkeyGenerateRegistrationOptions?: Maybe<Scalars['JSON']['output']>;
+  passkeyVerifyAuthenticationResponse?: Maybe<Token>;
+  passkeyVerifyRegistrationResponse?: Maybe<Scalars['Boolean']['output']>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
   sendChallengeMagicLink?: Maybe<Token>;
   sendLoginMagicLink?: Maybe<Scalars['Boolean']['output']>;
@@ -295,6 +299,16 @@ export type MutationLoginPasswordArgs = {
 };
 
 
+export type MutationPasskeyVerifyAuthenticationResponseArgs = {
+  authenticationResponse: PasskeyAuthenticationResponse;
+};
+
+
+export type MutationPasskeyVerifyRegistrationResponseArgs = {
+  registrationResponse: PasskeyRegistrationResponse;
+};
+
+
 export type MutationResetPasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
   token?: InputMaybe<Scalars['String']['input']>;
@@ -359,6 +373,24 @@ export type MutationVerifyLoginMagicLinkArgs = {
 
 export type MutationVerifyOtpChallengeArgs = {
   code?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type PasskeyAuthenticationResponse = {
+  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
+  clientExtensionResults: Scalars['JSON']['input'];
+  id: Scalars['ID']['input'];
+  rawId: Scalars['String']['input'];
+  response: Scalars['JSON']['input'];
+  type: Scalars['String']['input'];
+};
+
+export type PasskeyRegistrationResponse = {
+  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
+  clientExtensionResults: Scalars['JSON']['input'];
+  id: Scalars['ID']['input'];
+  rawId: Scalars['String']['input'];
+  response: Scalars['JSON']['input'];
+  type: Scalars['String']['input'];
 };
 
 export enum Priority {
