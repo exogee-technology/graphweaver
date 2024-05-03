@@ -181,6 +181,8 @@ export type Mutation = {
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
   resetPassword?: Maybe<Scalars['Boolean']['output']>;
+  sendChallengeMagicLink?: Maybe<Token>;
+  sendLoginMagicLink?: Maybe<Scalars['Boolean']['output']>;
   sendOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
   sendResetPasswordLink?: Maybe<Scalars['Boolean']['output']>;
   updateCredential?: Maybe<Credential>;
@@ -196,6 +198,8 @@ export type Mutation = {
   updateUser?: Maybe<User>;
   /** Update many Users. */
   updateUsers?: Maybe<Array<Maybe<User>>>;
+  verifyChallengeMagicLink?: Maybe<Token>;
+  verifyLoginMagicLink?: Maybe<Token>;
   verifyOTPChallenge?: Maybe<Token>;
 };
 
@@ -297,6 +301,11 @@ export type MutationResetPasswordArgs = {
 };
 
 
+export type MutationSendLoginMagicLinkArgs = {
+  username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationSendResetPasswordLinkArgs = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -334,6 +343,17 @@ export type MutationUpdateUserArgs = {
 
 export type MutationUpdateUsersArgs = {
   input: Array<UserUpdateInput>;
+};
+
+
+export type MutationVerifyChallengeMagicLinkArgs = {
+  token?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationVerifyLoginMagicLinkArgs = {
+  token?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 
