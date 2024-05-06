@@ -776,6 +776,9 @@ importers:
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
+      '@exogee/graphweaver-auth':
+        specifier: workspace:*
+        version: link:../auth
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../mikroorm
