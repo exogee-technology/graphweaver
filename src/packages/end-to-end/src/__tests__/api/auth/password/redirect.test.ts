@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
-import { BaseDataEntity, BaseDataProvider } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -20,8 +20,8 @@ const user = new UserProfile({
 });
 
 class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage & BaseDataEntity,
-	Credential<BaseDataEntity>
+	CredentialStorage,
+	Credential<CredentialStorage>
 > {}
 
 export const password = new Password({

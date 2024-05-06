@@ -12,7 +12,7 @@ import {
 import assert from 'assert';
 import { BaseDataEntity, BaseDataProvider } from '@exogee/graphweaver';
 
-const user: CredentialStorage & BaseDataEntity = {
+const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
@@ -21,8 +21,8 @@ const user: CredentialStorage & BaseDataEntity = {
 };
 
 class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage & BaseDataEntity,
-	Credential<BaseDataEntity>
+	CredentialStorage,
+	Credential<CredentialStorage>
 > {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();

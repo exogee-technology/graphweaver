@@ -3,6 +3,8 @@ import {
 	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	Field,
+	Filter,
+	GraphQLEntity,
 	GraphQLResolveInfo,
 	HookRegister,
 	InputType,
@@ -63,8 +65,8 @@ export class CredentialCreateOrUpdateInput {
 	confirm?: string;
 }
 
-export type PasswordOptions<D extends CredentialStorage & BaseDataEntity> = {
-	provider: BackendProvider<D, Credential<D>>;
+export type PasswordOptions<D extends CredentialStorage> = {
+	provider: BackendProvider<D, GraphQLEntity<D>>;
 	getUserProfile: (
 		id: string,
 		operation: PasswordOperation,
@@ -76,8 +78,8 @@ export type PasswordOptions<D extends CredentialStorage & BaseDataEntity> = {
 	onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
 };
 
-export class Password<D extends CredentialStorage & BaseDataEntity> {
-	private provider: BackendProvider<D, Credential<D>>;
+export class Password<D extends CredentialStorage> {
+	private provider: BackendProvider<D, GraphQLEntity<D>>;
 	private getUserProfile: (
 		id: string,
 		operation: PasswordOperation,
@@ -164,7 +166,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 	): Promise<UserProfile> {
 		const credential = await this.provider.findOne({
 			username,
-		});
+		} as Filter<GraphQLEntity<D>>);
 
 		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 		if (!credential.password)

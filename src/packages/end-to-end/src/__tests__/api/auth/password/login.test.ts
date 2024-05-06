@@ -4,7 +4,7 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { BaseDataProvider, BaseDataEntity } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -15,7 +15,7 @@ import {
 	hashPassword,
 } from '@exogee/graphweaver-auth';
 
-const user: CredentialStorage & BaseDataEntity = {
+const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
@@ -24,8 +24,8 @@ const user: CredentialStorage & BaseDataEntity = {
 };
 
 class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage & BaseDataEntity,
-	Credential<BaseDataEntity>
+	CredentialStorage,
+	Credential<CredentialStorage>
 > {
 	async findOne() {
 		user.password = await hashPassword(user.password ?? '');

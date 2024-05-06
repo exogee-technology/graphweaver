@@ -1,7 +1,7 @@
 import { BaseDataEntity, Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '../../decorators';
 
-export interface CredentialStorage {
+export interface CredentialStorage extends BaseDataEntity {
 	id: string;
 	username: string;
 	password?: string;
