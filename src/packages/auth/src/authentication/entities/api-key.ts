@@ -1,9 +1,45 @@
-import { BaseDataEntity } from '@exogee/graphweaver';
+import { BaseDataEntity, Entity } from '@exogee/graphweaver';
+import { ID, Field, GraphQLEntity } from '@exogee/graphweaver';
+import { ApplyAccessControlList } from '../../decorators';
 
-export interface ApiKeyStorage extends BaseDataEntity {
+export interface ApiKeyStorage<R> extends BaseDataEntity {
 	id: string;
 	key: string;
-	secret?: string;
+	secret: string;
+	revoked: boolean;
+	roles: R[];
+}
+
+@ApplyAccessControlList({
+	Everyone: {
+		// everyone can read
+		read: true,
+	},
+})
+@Entity('ApiKey', {
+	adminUIOptions: {
+		readonly: false,
+		summaryField: 'key',
+	},
+	apiOptions: {
+		excludeFromBuiltInWriteOperations: true,
+	},
+})
+export class ApiKeyEntity<D extends BaseDataEntity> extends GraphQLEntity<D> {
+	public dataEntity!: D;
+
+	@Field(() => ID)
+	id!: string;
+
+	@Field(() => String, {
+		adminUIOptions: { readonly: true },
+		apiOptions: { excludeFromBuiltInWriteOperations: true },
+	})
+	key!: string;
+
+	@Field(() => Boolean, { nullable: true })
 	revoked?: boolean;
-	roles?: string[];
+
+	@Field(() => [String], { nullable: true })
+	roles?: any[];
 }

@@ -93,6 +93,66 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
+export type ApiKey = {
+  __typename?: 'ApiKey';
+  id: Scalars['ID']['output'];
+  key: Scalars['String']['output'];
+  revoked?: Maybe<Scalars['Boolean']['output']>;
+  roles?: Maybe<Array<Scalars['String']['output']>>;
+};
+
+export type ApiKeyCreateOrUpdateInput = {
+  id: Scalars['ID']['input'];
+  key?: InputMaybe<Scalars['String']['input']>;
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
+  roles?: InputMaybe<Array<Scalars['String']['input']>>;
+  secret?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ApiKeyInsertInput = {
+  key: Scalars['String']['input'];
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
+  roles?: InputMaybe<Array<Scalars['String']['input']>>;
+  secret: Scalars['String']['input'];
+};
+
+export type ApiKeysListFilter = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  key_ilike?: InputMaybe<Scalars['String']['input']>;
+  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  key_like?: InputMaybe<Scalars['String']['input']>;
+  key_ne?: InputMaybe<Scalars['String']['input']>;
+  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  key_null?: InputMaybe<Scalars['Boolean']['input']>;
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
+  revoked_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  revoked_ne?: InputMaybe<Scalars['Boolean']['input']>;
+  revoked_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  revoked_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  revoked_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type ApiKeysOrderByInput = {
+  id?: InputMaybe<Sort>;
+  key?: InputMaybe<Sort>;
+  revoked?: InputMaybe<Sort>;
+  roles?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ApiKeys. */
+export type ApiKeysPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ApiKeysOrderByInput>;
+};
+
 export type Credential = {
   __typename?: 'Credential';
   id: Scalars['ID']['output'];
@@ -148,6 +208,7 @@ export type DeleteOneFilterInput = {
 export type Mutation = {
   __typename?: 'Mutation';
   challengePassword?: Maybe<Token>;
+  createApiKey?: Maybe<ApiKey>;
   createCredential?: Maybe<Credential>;
   /** Create or update many Tags. */
   createOrUpdateTags?: Maybe<Array<Maybe<Tag>>>;
@@ -179,6 +240,7 @@ export type Mutation = {
   deleteUser?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Users with a filter. */
   deleteUsers?: Maybe<Scalars['Boolean']['output']>;
+  enrolWallet?: Maybe<Scalars['Boolean']['output']>;
   loginPassword?: Maybe<Token>;
   passkeyGenerateAuthenticationOptions?: Maybe<Scalars['JSON']['output']>;
   passkeyGenerateRegistrationOptions?: Maybe<Scalars['JSON']['output']>;
@@ -189,6 +251,7 @@ export type Mutation = {
   sendLoginMagicLink?: Maybe<Scalars['Boolean']['output']>;
   sendOTPChallenge?: Maybe<Scalars['Boolean']['output']>;
   sendResetPasswordLink?: Maybe<Scalars['Boolean']['output']>;
+  updateApiKey?: Maybe<ApiKey>;
   updateCredential?: Maybe<Credential>;
   /** Update a single Tag. */
   updateTag?: Maybe<Tag>;
@@ -205,11 +268,17 @@ export type Mutation = {
   verifyChallengeMagicLink?: Maybe<Token>;
   verifyLoginMagicLink?: Maybe<Token>;
   verifyOTPChallenge?: Maybe<Token>;
+  verifyWeb3Challenge?: Maybe<Token>;
 };
 
 
 export type MutationChallengePasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationCreateApiKeyArgs = {
+  input: ApiKeyInsertInput;
 };
 
 
@@ -293,6 +362,11 @@ export type MutationDeleteUsersArgs = {
 };
 
 
+export type MutationEnrolWalletArgs = {
+  token?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationLoginPasswordArgs = {
   password?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
@@ -322,6 +396,11 @@ export type MutationSendLoginMagicLinkArgs = {
 
 export type MutationSendResetPasswordLinkArgs = {
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationUpdateApiKeyArgs = {
+  input: ApiKeyCreateOrUpdateInput;
 };
 
 
@@ -375,6 +454,11 @@ export type MutationVerifyOtpChallengeArgs = {
   code?: InputMaybe<Scalars['String']['input']>;
 };
 
+
+export type MutationVerifyWeb3ChallengeArgs = {
+  token?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type PasskeyAuthenticationResponse = {
   authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
   clientExtensionResults: Scalars['JSON']['input'];
@@ -403,6 +487,11 @@ export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
+  /** Get a single ApiKey. */
+  apiKey?: Maybe<ApiKey>;
+  /** Get multiple ApiKeys. */
+  apiKeys?: Maybe<Array<Maybe<ApiKey>>>;
+  canEnrolWallet?: Maybe<Scalars['Boolean']['output']>;
   /** Get a single Credential. */
   credential?: Maybe<Credential>;
   /** Get multiple Credentials. */
@@ -419,6 +508,17 @@ export type Query = {
   user?: Maybe<User>;
   /** Get multiple Users. */
   users?: Maybe<Array<Maybe<User>>>;
+};
+
+
+export type QueryApiKeyArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryApiKeysArgs = {
+  filter?: InputMaybe<ApiKeysListFilter>;
+  pagination?: InputMaybe<ApiKeysPaginationInput>;
 };
 
 
@@ -464,6 +564,11 @@ export type QueryUsersArgs = {
   filter?: InputMaybe<UsersListFilter>;
   pagination?: InputMaybe<UsersPaginationInput>;
 };
+
+export enum Roles {
+  DarkSide = 'DARK_SIDE',
+  LightSide = 'LIGHT_SIDE'
+}
 
 export enum Sort {
   Asc = 'ASC',

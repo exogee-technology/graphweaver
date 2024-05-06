@@ -699,7 +699,7 @@ class SchemaBuilderImplementation {
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type,
+							type: graphQLScalarForTypeScriptType(type),
 							resolve: customQuery.resolver,
 						};
 					}
