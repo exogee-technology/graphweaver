@@ -29,7 +29,7 @@
 		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
-		"@types/node": "20.12.7",
+		"@types/node": "20.12.10",
 		"graphweaver": "workspace:*",
 		"typescript": "5.4.5"
 	},
