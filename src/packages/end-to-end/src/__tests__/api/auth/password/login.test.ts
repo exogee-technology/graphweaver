@@ -14,7 +14,6 @@ import {
 	PasswordOperation,
 	hashPassword,
 } from '@exogee/graphweaver-auth';
-// import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 
 const user: CredentialStorage & BaseDataEntity = {
 	id: '1',
