@@ -4,3 +4,4 @@ export * from './helper-functions';
 export * from './authentication';
 export * from './errors';
 export * from './user-profile';
+export * from './utils/argon2id';

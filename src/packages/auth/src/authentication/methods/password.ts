@@ -176,7 +176,7 @@ export class Password<D extends CredentialStorage & BaseDataEntity> {
 
 		this.onUserAuthenticated?.(credential.id, params);
 
-		throw new AuthenticationError('Bad Request: Authentication Failed. (E0003)');
+		throw new AuthenticationError('Unknown username or password, please try again');
 	}
 
 	async create(
