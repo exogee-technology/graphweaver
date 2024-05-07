@@ -26,6 +26,15 @@ const isLinking = <G>(node: Partial<G> | Partial<G>[]) =>
 const isIdOnly = <G>(node: Partial<G>) =>
 	('id' in node && node.id && Object.keys(node).length === 1) ?? false;
 
+const isRelatedEntity = (unknownType: unknown): unknownType is typeof GraphQLEntity => {
+	return !!(
+		unknownType &&
+		typeof unknownType === 'function' &&
+		'prototype' in unknownType &&
+		unknownType.prototype instanceof GraphQLEntity
+	);
+};
+
 // Determine the name of the mutation that we should call
 const getMutationName = <G extends WithId>(
 	name: string,
@@ -57,7 +66,7 @@ export const callChildMutation = async <G>(
 		schema: info.schema,
 		operation: OperationTypeNode.MUTATION,
 		fieldName: mutationName,
-		args: Array.isArray(data) ? { input: { data } } : { data },
+		args: { input: data },
 		context,
 		info,
 	});
@@ -123,13 +132,12 @@ export const createOrUpdateEntities = async <
 
 			// Check if the property represents a related entity
 			const relationship = meta.fields[key];
-			const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
-				GraphQLEntity<BaseDataEntity>,
-				BaseDataEntity
-			>;
-			const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
+			let type = relationship?.getType() as unknown;
+			if (Array.isArray(type)) {
+				type = type[0];
+			}
 
-			if (isRelatedEntity) {
+			if (isRelatedEntity(type)) {
 				if (isLinking(childNode)) {
 					// If it's a linking entity or an array of linking entities, nothing to do here
 				} else if (Array.isArray(childNode)) {
@@ -147,22 +155,21 @@ export const createOrUpdateEntities = async <
 						parentId = parent?.id;
 					}
 					if (!parentId) {
-						throw new Error(`Implementation Error: No parent id found for ${relatedEntity.name}`);
+						throw new Error(`Implementation Error: No parent id found for ${type.name}`);
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = graphweaverMetadata.getEntityByName(relatedEntity.name);
-					if (!childMeta)
-						throw new Error(`Could not locate metadata for '${relatedEntity.name}' entity.`);
+					const childMeta = graphweaverMetadata.getEntityByName(type.name);
+					if (!childMeta) throw new Error(`Could not locate metadata for '${type.name}' entity.`);
 
 					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
-					const parentField = Object.values(childMeta.fields).find(
-						(field) => field?.getType() === gqlEntityType
-					);
+					const parentField = Object.values(childMeta.fields).find((field) => {
+						let type = field?.getType();
+						type = Array.isArray(type) ? type[0] : type;
+						return type === gqlEntityType;
+					});
 					if (!parentField) {
-						throw new Error(
-							`Implementation Error: No parent field found for ${relatedEntity.name}`
-						);
+						throw new Error(`Implementation Error: No parent field found for ${type.name}`);
 					}
 					const childEntities = childNode.map((child) => ({
 						...child,
@@ -170,12 +177,12 @@ export const createOrUpdateEntities = async <
 					}));
 
 					// Now create/update the children
-					const mutationName = getMutationName(relatedEntity.name, childEntities);
+					const mutationName = getMutationName(type.name, childEntities);
 					await callChildMutation(mutationName, childEntities, info, context);
 					// on the next line lets make sure we have an object with at least 1 key
 				} else if (Object.keys(childNode).length > 0) {
 					// If only one object, create or update it first, then update the parent reference
-					const mutationName = getMutationName(relatedEntity.name, childNode);
+					const mutationName = getMutationName(type.name, childNode);
 					const result = await callChildMutation(mutationName, childNode, info, context);
 
 					node = {

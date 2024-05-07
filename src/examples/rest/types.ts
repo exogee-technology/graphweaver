@@ -586,7 +586,7 @@ export type Tag = {
 export type TagCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
-  tasks?: InputMaybe<TaskInsertInput>;
+  tasks?: InputMaybe<TaskCreateOrUpdateInput>;
 };
 
 /** Data needed to create Tags. */
@@ -599,7 +599,7 @@ export type TagInsertInput = {
 export type TagUpdateInput = {
   id: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
-  tasks?: InputMaybe<TaskInsertInput>;
+  tasks?: InputMaybe<Array<TaskCreateOrUpdateInput>>;
 };
 
 export type TagsListFilter = {
@@ -650,8 +650,8 @@ export type TaskCreateOrUpdateInput = {
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<TagInsertInput>;
-  user?: InputMaybe<UserInsertInput>;
+  tags?: InputMaybe<TagCreateOrUpdateInput>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 /** Data needed to create Tasks. */
@@ -671,8 +671,8 @@ export type TaskUpdateInput = {
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<TagInsertInput>;
-  user?: InputMaybe<UserInsertInput>;
+  tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 export type TasksListFilter = {

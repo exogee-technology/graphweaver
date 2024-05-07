@@ -481,7 +481,7 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 							!metadata.apiOptions?.excludeFromBuiltInOperations &&
 							!metadata.apiOptions?.excludeFromBuiltInWriteOperations
 						) {
-							fields[field.name] = { type: insertTypeForEntity(metadata) };
+							fields[field.name] = { type: createOrUpdateTypeForEntity(metadata) };
 						}
 					} else if (isEnumMetadata(metadata)) {
 						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
@@ -522,15 +522,21 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					// Let's try to resolve the GraphQL type involved here.
 					let fieldType = field.getType();
+					let isArray = false;
 					if (Array.isArray(fieldType)) {
+						isArray = true;
 						fieldType = fieldType[0];
 					}
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
 					if (isEntityMetadata(metadata)) {
 						// This if is separate to stop us cascading down to the scalar branch for entities that
+						const type = isArray
+							? new GraphQLList(new GraphQLNonNull(createOrUpdateTypeForEntity(metadata)))
+							: createOrUpdateTypeForEntity(metadata);
+
 						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
-							fields[field.name] = { type: insertTypeForEntity(metadata) };
+							fields[field.name] = { type };
 						}
 					} else if (isEnumMetadata(metadata)) {
 						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
@@ -592,6 +598,9 @@ class SchemaBuilderImplementation {
 			) {
 				// The input type for inserting
 				yield insertTypeForEntity(entity);
+
+				// The input type for inserting
+				yield updateTypeForEntity(entity);
 
 				// The input type for creating or updating
 				yield createOrUpdateTypeForEntity(entity);
