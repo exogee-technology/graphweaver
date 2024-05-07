@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { config } from '../../../config';
+import { config } from '../../../../config';
 
 test('Ensure filtering by multiple items works', async ({ page }) => {
 	await page.goto(config.adminUiUrl);

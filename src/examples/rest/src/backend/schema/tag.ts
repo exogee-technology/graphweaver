@@ -42,6 +42,6 @@ export class Tag extends GraphQLEntity<OrmTag> {
 	@Field(() => String)
 	name!: string;
 
-	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
+	@RelationshipField<Task>(() => [Task], { relatedField: 'tags', nullable: true })
 	tasks!: Task[];
 }

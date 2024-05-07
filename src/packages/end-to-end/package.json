@@ -21,9 +21,10 @@
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-sqlite": "dotenv -e .env.sqlite -- jest --runInBand --forceExit ---- api/sqlite",
 		"test-scalars": "jest --runInBand --forceExit ---- api/scalars",
-		"test-ui": "pnpm exec playwright test",
+		"test-ui-auth": "pnpm exec playwright test ./auth",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
+		"test-ui-sqlite": "pnpm exec playwright test ./sqlite",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {

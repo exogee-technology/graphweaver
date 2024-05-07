@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { config } from '../../../config';
+import { config } from '../../../../config';
 
 test('should update number field from the detail panel', async ({ page }) => {
 	await page.goto(config.adminUiUrl);

@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { config } from '../../../config';
+import { config } from '../../../../config';
 
 test('Navigate to entity then click through to related entity from one of the records', async ({
 	page,

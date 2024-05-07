@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { config } from '../../../config';
+import { config } from '../../../../config';
 
 test('ensure toast is displayed with the name of the item after creation', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
