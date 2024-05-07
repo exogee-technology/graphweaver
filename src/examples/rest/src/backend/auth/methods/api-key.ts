@@ -18,8 +18,10 @@ const acl: AccessControlList<ApiKeyEntity<ApiKeyStorage<Roles>>, AuthorizationCo
 	},
 };
 
+export const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, myConnection);
+
 export const apiKey = new ApiKey({
-	provider: new MikroBackendProvider(OrmApiKey, myConnection),
+	provider: apiKeyDataProvider,
 	acl,
 	roles: Roles,
 });
