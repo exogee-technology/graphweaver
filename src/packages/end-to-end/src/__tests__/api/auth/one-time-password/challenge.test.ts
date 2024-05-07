@@ -20,35 +20,6 @@ import {
 const MOCK_CODE = '123456';
 const MOCK_CREATED_AT = new Date();
 
-// @Resolver()
-// class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
-// 	async getUser(_: string): Promise<UserProfile> {
-// 		return user;
-// 	}
-
-// 	async getOTP(userId: string, code: string): Promise<OneTimePassword> {
-// 		if (code === MOCK_CODE)
-// 			return { userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT };
-// 		throw new Error('No otp found');
-// 	}
-
-// 	async getOTPs(userId: string, _: Date): Promise<OneTimePassword[]> {
-// 		return [{ userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT }];
-// 	}
-
-// 	async createOTP(userId: string, _: string): Promise<OneTimePassword> {
-// 		return { userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT };
-// 	}
-
-// 	async redeemOTP(_: OneTimePassword): Promise<boolean> {
-// 		return true;
-// 	}
-
-// 	async sendOTP(_: OneTimePassword): Promise<boolean> {
-// 		return true;
-// 	}
-// }
-
 class OTPBackendProvider extends BaseDataProvider<
 	AuthenticationBaseEntity<OneTimePasswordData>,
 	AuthenticationBaseEntity<OneTimePasswordData>
