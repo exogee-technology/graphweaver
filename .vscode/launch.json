@@ -5,43 +5,21 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Xero Example",
-      "request": "launch",
-      "cwd": "${workspaceFolder}/src/examples/xero",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["start"],
-      "type": "node",
-      "env": { "LOGGING_LEVEL": "trace" }
-    },
-    {
-      "name": "MySQL and PostgreSQL Database Example",
+      "name": "AWS Cognito Example",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start"],
       "restart": true,
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/examples/databases"
+      "cwd": "${workspaceFolder}/src/packages/graphweaver-aws"
     },
     {
-      "name": "Rest Example",
-      "type": "node",
+      "type": "chrome",
       "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["start"],
-      "restart": true,
-      "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/examples/rest"
-    },
-    {
-      "name": "Mailchimp Example",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["start"],
-      "restart": true,
-      "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/examples/mailchimp"
+      "name": "Admin UI in Chrome",
+      "url": "http://localhost:9000",
+      "webRoot": "${workspaceFolder}"
     },
     {
       "name": "End to End - Auth",
@@ -64,21 +42,63 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
-      "name": "AWS Cognito Example",
+      "name": "End to End - Start Server",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start-server"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/end-to-end"
+    },
+    {
+      "name": "Mailchimp Example",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start"],
       "restart": true,
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/packages/graphweaver-aws"
+      "cwd": "${workspaceFolder}/src/examples/mailchimp"
     },
     {
-      "type": "chrome",
+      "name": "MySQL and PostgreSQL Database Example",
+      "type": "node",
       "request": "launch",
-      "name": "Admin UI in Chrome",
-      "url": "http://localhost:9000",
-      "webRoot": "${workspaceFolder}"
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/databases"
+    },
+    {
+      "name": "Rest Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/rest"
+    },
+    {
+      "name": "SQLite Database Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/sqlite"
+    },
+    {
+      "name": "Xero Example",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/examples/xero",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "type": "node",
+      "env": { "LOGGING_LEVEL": "trace" }
     }
   ]
 }

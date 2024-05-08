@@ -1,46 +1,33 @@
-import {
-	BaseDataEntity,
-	Field,
-	GraphQLEntity,
-	GraphqlEntityType,
-	ID,
-	ObjectType,
-	ReadOnly,
-	SummaryField,
-} from '@exogee/graphweaver';
-import { AccessControlList, AuthorizationContext } from '../../types';
+import { BaseDataEntity, Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '../../decorators';
 
-export interface CredentialStorage {
+export interface CredentialStorage extends BaseDataEntity {
 	id: string;
 	username: string;
 	password?: string;
 }
 
-@ReadOnly({ adminUI: false, backend: true })
-@ObjectType('Credential')
+@ApplyAccessControlList({
+	Everyone: {
+		// everyone can read their own credentials by default
+		read: (context) => ({ id: context.user?.id }),
+	},
+})
+@Entity('Credential', {
+	adminUIOptions: {
+		readonly: false,
+		summaryField: 'username',
+	},
+	apiOptions: {
+		excludeFromBuiltInWriteOperations: true,
+	},
+})
 export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	public dataEntity!: D;
 
 	@Field(() => ID)
 	id!: string;
 
-	@SummaryField()
 	@Field(() => String)
 	username!: string;
 }
-
-export const createCredentialEntity = <D extends BaseDataEntity>(
-	acl?: AccessControlList<Credential<D>, AuthorizationContext>
-) => {
-	const defaultAcl: AccessControlList<Credential<D>, AuthorizationContext> = {
-		Everyone: {
-			// everyone can read their own credentials by default
-			read: (context) => ({ id: context.user?.id }),
-		},
-	};
-	// Call the decorator to apply the ACL to the default entity above
-	ApplyAccessControlList(acl ?? defaultAcl)(Credential);
-	// Return the entity with the ACL applied
-	return Credential;
-};

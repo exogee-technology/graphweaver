@@ -1,15 +1,16 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, BaseDataProvider, Resolver } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	AuthorizationContext,
 	ForbiddenError,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
+	CredentialStorage,
+	Password,
+	PasswordOperation,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -18,23 +19,15 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-@Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new BaseDataProvider('my-provider')
-) {
-	async authenticate(username: string, password: string) {
-		return user;
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
-		return user;
-	}
-}
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {}
+
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile> => user,
+});
 
 const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
 	// Ensure only logged in users can access the admin ui metadata
@@ -43,7 +36,6 @@ const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookPa
 };
 
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},

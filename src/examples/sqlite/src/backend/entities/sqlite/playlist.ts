@@ -8,13 +8,8 @@ export class Playlist extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: string;
+	name?: unknown;
 
-	@ManyToMany({
-		entity: () => Track,
-		pivotTable: 'PlaylistTrack',
-		joinColumn: 'PlaylistId',
-		inverseJoinColumn: 'TrackId',
-	})
+	@ManyToMany({ entity: () => Track, pivotTable: 'PlaylistTrack', joinColumn: 'PlaylistId', inverseJoinColumn: 'TrackId' })
 	tracks = new Collection<Track>(this);
 }

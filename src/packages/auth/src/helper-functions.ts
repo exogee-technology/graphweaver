@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { BaseFilterInputArgs, Filter } from '@exogee/graphweaver';
+import { Filter } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,

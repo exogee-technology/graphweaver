@@ -4,29 +4,21 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
 	ArrayType,
-	Entity,
+	Entity as DataEntity,
 	Collection,
 	ManyToOne,
 	OneToMany,
 	PrimaryKey,
 	Property,
 } from '@mikro-orm/core';
-import {
-	createBaseResolver,
-	Field,
-	GraphQLEntity,
-	ID,
-	ObjectType,
-	RelationshipField,
-	Resolver,
-} from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
-@Entity({ tableName: 'Album' })
+@DataEntity({ tableName: 'Album' })
 class OrmAlbum extends BaseEntity {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
@@ -43,7 +35,7 @@ class OrmAlbum extends BaseEntity {
 	artist!: OrmArtist;
 }
 
-@Entity({ tableName: 'Artist' })
+@DataEntity({ tableName: 'Artist' })
 class OrmArtist extends BaseEntity {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	id!: number;
@@ -52,7 +44,18 @@ class OrmArtist extends BaseEntity {
 	albums = new Collection<OrmAlbum>(this);
 }
 
-@ObjectType('Album')
+const connection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		entities: [OrmAlbum, OrmArtist],
+		driver: SqliteDriver,
+		dbName: 'databases/database.sqlite',
+	},
+};
+
+@Entity('Album', {
+	provider: new MikroBackendProvider(OrmAlbum, connection),
+})
 export class Album extends GraphQLEntity<OrmAlbum> {
 	public dataEntity!: OrmAlbum;
 
@@ -66,7 +69,9 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	artist!: Artist;
 }
 
-@ObjectType('Artist')
+@Entity('Artist', {
+	provider: new MikroBackendProvider(OrmArtist, connection),
+})
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
 
@@ -77,31 +82,8 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	albums!: Album[];
 }
 
-const connection = {
-	connectionManagerId: 'sqlite',
-	mikroOrmConfig: {
-		entities: [OrmAlbum, OrmArtist],
-		driver: SqliteDriver,
-		dbName: 'databases/database.sqlite',
-	},
-};
-
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, OrmAlbum>(
-	Album,
-	new MikroBackendProvider(OrmAlbum, connection)
-) {}
-
-@Resolver((of) => Artist)
-class ArtistResolver extends createBaseResolver<Artist, OrmArtist>(
-	Artist,
-	new MikroBackendProvider(OrmArtist, connection)
-) {}
-
 test('Should return isArray = true if field property is defined as array', async () => {
-	const graphweaver = new Graphweaver({
-		resolvers: [AlbumResolver, ArtistResolver],
-	});
+	const graphweaver = new Graphweaver();
 
 	const response = await graphweaver.server.executeOperation({
 		query: gql`

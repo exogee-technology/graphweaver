@@ -1,12 +1,4 @@
-import {
-	Collection,
-	Entity,
-	ManyToOne,
-	OneToMany,
-	PrimaryKey,
-	Property,
-	Ref,
-} from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Employee } from './employee';
 import { Invoice } from './invoice';
@@ -17,45 +9,39 @@ export class Customer extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'FirstName', type: 'NVARCHAR(40)' })
-	firstName!: string;
+	firstName!: unknown;
 
 	@Property({ fieldName: 'LastName', type: 'NVARCHAR(20)' })
-	lastName!: string;
+	lastName!: unknown;
 
 	@Property({ fieldName: 'Company', type: 'NVARCHAR(80)', nullable: true })
-	company?: string;
+	company?: unknown;
 
 	@Property({ fieldName: 'Address', type: 'NVARCHAR(70)', nullable: true })
-	address?: string;
+	address?: unknown;
 
 	@Property({ fieldName: 'City', type: 'NVARCHAR(40)', nullable: true })
-	city?: string;
+	city?: unknown;
 
 	@Property({ fieldName: 'State', type: 'NVARCHAR(40)', nullable: true })
-	state?: string;
+	state?: unknown;
 
 	@Property({ fieldName: 'Country', type: 'NVARCHAR(40)', nullable: true })
-	country?: string;
+	country?: unknown;
 
 	@Property({ fieldName: 'PostalCode', type: 'NVARCHAR(10)', nullable: true })
-	postalCode?: string;
+	postalCode?: unknown;
 
 	@Property({ fieldName: 'Phone', type: 'NVARCHAR(24)', nullable: true })
-	phone?: string;
+	phone?: unknown;
 
 	@Property({ fieldName: 'Fax', type: 'NVARCHAR(24)', nullable: true })
-	fax?: string;
+	fax?: unknown;
 
 	@Property({ fieldName: 'Email', type: 'NVARCHAR(60)' })
-	email!: string;
+	email!: unknown;
 
-	@ManyToOne({
-		entity: () => Employee,
-		ref: true,
-		fieldName: 'SupportRepId',
-		nullable: true,
-		index: 'IFK_CustomerSupportRepId',
-	})
+	@ManyToOne({ entity: () => Employee, ref: true, fieldName: 'SupportRepId', nullable: true, index: 'IFK_CustomerSupportRepId' })
 	employee?: Ref<Employee>;
 
 	@OneToMany({ entity: () => Invoice, mappedBy: 'customer' })

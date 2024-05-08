@@ -1,4 +1,4 @@
 export * from './token';
-export * from './resolvers';
+export * from './methods';
 export * from './apollo';
 export * from './entities';

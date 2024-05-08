@@ -5,22 +5,20 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
-	CreateOrUpdateHookParams,
 	Field,
 	GraphQLEntity,
 	ID,
-	ObjectType,
+	Entity,
 	BaseDataProvider,
 	RelationshipField,
-	Resolver,
-	createBaseResolver,
 } from '@exogee/graphweaver';
 import {
-	createBasePasswordAuthResolver,
+	CredentialStorage,
 	authApolloPlugin,
 	UserProfile,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
+	hashPassword,
+	Password,
 	ApplyAccessControlList,
 } from '@exogee/graphweaver-auth';
 
@@ -30,12 +28,16 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
+
 @ApplyAccessControlList({
 	Everyone: {
 		all: true,
 	},
 })
-@ObjectType('Album')
+@Entity('Album', {
+	provider: albumDataProvider,
+})
 export class Album extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -49,8 +51,12 @@ export class Album extends GraphQLEntity<any> {
 	artist?: Artist;
 }
 
+const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
+
 @ApplyAccessControlList({})
-@ObjectType('Artist')
+@Entity('Artist', {
+	provider: artistDataProvider,
+})
 export class Artist extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -64,37 +70,30 @@ export class Artist extends GraphQLEntity<any> {
 	albums!: Album[];
 }
 
-const albumDataProvider = new BaseDataProvider<any, Album>('album');
+const cred: CredentialStorage = {
+	id: '1',
+	username: 'test',
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
+};
 
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
-
-const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
-
-@Resolver((of) => Artist)
-class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}
-
-@Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new BaseDataProvider('auth')
-) {
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
-		return user;
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
+		cred.password = await hashPassword(cred.password ?? '');
+		return cred;
 	}
 }
 
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string) => user,
+});
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, AlbumResolver, ArtistResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},
@@ -147,8 +146,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
-		expect(spyOnArtistDataProvider).not.toBeCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -174,8 +173,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
-		expect(spyOnArtistDataProvider).not.toBeCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -198,8 +197,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
-		expect(spyOnArtistDataProvider).not.toBeCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -215,15 +214,15 @@ describe('ACL - Nested Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: createAlbum(data: { description: "test", artist: { description: "test" } }) {
+					result: createAlbum(input: { description: "test", artist: { description: "test" } }) {
 						id
 					}
 				}
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
-		expect(spyOnArtistDataProvider).not.toBeCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -244,7 +243,7 @@ describe('ACL - Nested Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: createAlbum(data: { description: "test" }) {
+					result: createAlbum(input: { description: "test" }) {
 						id
 						artist {
 							id
@@ -254,10 +253,10 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
-		expect(spyOnArtistDataProviderFindOne).not.toBeCalled();
-		expect(spyOnArtistDataProviderFindByRelatedId).not.toBeCalled();
-		expect(spyOnArtistDataProviderFind).not.toBeCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProviderFindOne).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProviderFindByRelatedId).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProviderFind).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -272,14 +271,14 @@ describe('ACL - Nested Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: createAlbum(data: { description: "test", artist: { id: "1" } }) {
+					result: createAlbum(input: { description: "test", artist: { id: "1" } }) {
 						id
 					}
 				}
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -296,7 +295,7 @@ describe('ACL - Nested Before Hook', () => {
 			query: gql`
 				mutation {
 					result: updateAlbum(
-						data: { id: 1, description: "test", artist: { id: 1, description: "test" } }
+						input: { id: 1, description: "test", artist: { id: 1, description: "test" } }
 					) {
 						id
 					}
@@ -304,8 +303,8 @@ describe('ACL - Nested Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnAlbumDataProvider).not.toBeCalled();
-		expect(spyOnArtistDataProvider).not.toBeCalled();
+		expect(spyOnAlbumDataProvider).not.toHaveBeenCalled();
+		expect(spyOnArtistDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -320,14 +319,14 @@ describe('ACL - Nested Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: updateAlbum(data: { id: 1, description: "test", artist: { id: 1 } }) {
+					result: updateAlbum(input: { id: 1, description: "test", artist: { id: 1 } }) {
 						id
 					}
 				}
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
 	});

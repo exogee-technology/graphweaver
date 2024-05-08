@@ -2,13 +2,14 @@ import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	createBaseMagicLinkAuthResolver,
 	MagicLink,
 	AuthenticationMethod,
+	AuthenticationBaseEntity,
+	MagicLinkData,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
@@ -21,37 +22,53 @@ const user = new UserProfile({
 	username: 'test',
 });
 
-@Resolver()
-class AuthResolver extends createBaseMagicLinkAuthResolver() {
-	async getUser(_: string): Promise<UserProfile> {
-		return user;
-	}
-
-	async getMagicLink(userId: string, token: string): Promise<MagicLink> {
-		if (token === MOCK_TOKEN)
-			return { id: '1', userId, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT };
+class MagicLinkBackendProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<MagicLinkData>,
+	AuthenticationBaseEntity<MagicLinkData>
+> {
+	async findOne({ data, userId }: any) {
+		if (data.token === MOCK_TOKEN)
+			return {
+				id: '1',
+				userId,
+				data: { token: MOCK_TOKEN },
+				createdAt: MOCK_CREATED_AT,
+			} as AuthenticationBaseEntity<MagicLinkData>;
 		throw new Error('No magic link found');
 	}
-
-	async getMagicLinks(userId: string, _: Date): Promise<MagicLink[]> {
-		return [{ id: '1', userId, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT }];
+	async find({ userId }: any) {
+		return [
+			{
+				id: '1',
+				type: AuthenticationMethod.MAGIC_LINK,
+				userId,
+				data: { token: MOCK_TOKEN },
+				createdAt: MOCK_CREATED_AT,
+			},
+		];
 	}
-
-	async createMagicLink(userId: string, _: string): Promise<MagicLink> {
-		return { id: '1', userId, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT };
-	}
-
-	async redeemMagicLink(_: MagicLink): Promise<boolean> {
-		return true;
-	}
-
-	async sendMagicLink(_: URL): Promise<boolean> {
-		return true;
+	async createOne({ userId }: any) {
+		return {
+			id: '1',
+			type: AuthenticationMethod.MAGIC_LINK,
+			userId,
+			data: { token: MOCK_TOKEN },
+			createdAt: MOCK_CREATED_AT,
+		};
 	}
 }
 
+const sendMagicLink = jest.fn(() => Promise.resolve(true));
+
+export const magicLink = new MagicLink({
+	provider: new MagicLinkBackendProvider('magicLink'),
+	getUser: async (): Promise<UserProfile> => {
+		return user;
+	},
+	sendMagicLink,
+});
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},
@@ -59,12 +76,8 @@ const graphweaver = new Graphweaver({
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
-		const sendMagicLinkSpy = jest
-			.spyOn(AuthResolver.prototype, 'sendMagicLink')
-			.mockImplementation(async () => true);
-
 		const redeemMagicLinkSpy = jest
-			.spyOn(AuthResolver.prototype, 'redeemMagicLink')
+			.spyOn(MagicLink.prototype, 'redeemMagicLink')
 			.mockImplementation(async () => true);
 
 		const sendResponse = await graphweaver.server.executeOperation<{
@@ -109,12 +122,18 @@ describe('Magic Link Authentication - Login', () => {
 		expect(payload.exp).toBeGreaterThan(Math.floor(Date.now() / 1000));
 
 		// Check that the email and redeem methods have been called
-		expect(sendMagicLinkSpy).toHaveBeenCalledTimes(1);
-		expect(sendMagicLinkSpy).toHaveBeenCalledWith(
+		expect(sendMagicLink).toHaveBeenCalledTimes(1);
+		expect(sendMagicLink).toHaveBeenCalledWith(
 			new URL(
 				`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=http%3A%2F%2Flocalhost%3A9000%2F&providers=${AuthenticationMethod.MAGIC_LINK}&token=${MOCK_TOKEN}&username=${user.username}`
 			),
-			{ id: '1', userId: user.id, data: { token: MOCK_TOKEN }, createdAt: MOCK_CREATED_AT }
+			{
+				id: '1',
+				type: 'mgl',
+				userId: user.id,
+				data: { token: MOCK_TOKEN },
+				createdAt: MOCK_CREATED_AT,
+			}
 		);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledWith({

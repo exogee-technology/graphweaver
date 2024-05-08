@@ -5,8 +5,8 @@ export const generateUpdateEntityMutation = (
 	entity: Entity,
 	entityByType: (entityType: string) => Entity
 ) => gql`
-    mutation updateEntity ($data: ${entity.name}CreateOrUpdateInput!){
-      update${entity.name} (data: $data) {
+    mutation updateEntity ($input: ${entity.name}CreateOrUpdateInput!){
+      update${entity.name} (input: $input) {
         id
         ${generateGqlSelectForEntityFields(entity, entityByType)}
       }
@@ -17,8 +17,8 @@ export const generateCreateEntityMutation = (
 	entity: Entity,
 	entityByType: (entityType: string) => Entity
 ) => gql`
-    mutation createEntity ($data: ${entity.name}InsertInput!){
-      create${entity.name} (data: $data) {
+    mutation createEntity ($input: ${entity.name}InsertInput!){
+      create${entity.name} (input: $input) {
         id
         ${generateGqlSelectForEntityFields(entity, entityByType)}
       }

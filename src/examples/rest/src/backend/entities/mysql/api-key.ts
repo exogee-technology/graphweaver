@@ -4,7 +4,7 @@ import { ApiKeyStorage } from '@exogee/graphweaver-auth';
 import { Roles } from '../../auth/roles';
 
 @Entity({ tableName: 'api_key' })
-export class ApiKey extends BaseEntity implements ApiKeyStorage {
+export class ApiKey extends BaseEntity implements ApiKeyStorage<Roles> {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

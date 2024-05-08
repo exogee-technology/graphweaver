@@ -15,8 +15,6 @@ import {
 	DataSourceIndexFile,
 	SchemaEntityFile,
 	SchemaIndexFile,
-	SchemaResolverFile,
-	SchemaEntityIndexFile,
 	DatabaseFile,
 } from './files';
 import { pascalToCamelCaseString } from './utils';
@@ -219,9 +217,7 @@ const closeConnection = async () => {
 type File =
 	| DataEntityFile
 	| SchemaEntityFile
-	| SchemaEntityIndexFile
 	| SchemaIndexFile
-	| SchemaResolverFile
 	| DataEntityIndexFile
 	| DataSourceIndexFile
 	| DatabaseFile;
@@ -257,17 +253,11 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 			if (!meta.pivotTable) {
 				const dataEntityFile = new DataEntityFile(meta, namingStrategy, platform, databaseType);
 				const schemaEntityFile = new SchemaEntityFile(meta, namingStrategy, platform);
-				const schemaIndexFile = new SchemaEntityIndexFile(meta, namingStrategy, platform);
-				const schemaResolverFile = new SchemaResolverFile(meta, namingStrategy, platform);
-				source.push(dataEntityFile, schemaEntityFile, schemaIndexFile, schemaResolverFile);
+				source.push(dataEntityFile, schemaEntityFile);
 				summaryOfEntities.push({
 					name: meta.className,
 					entityFilePath: `${dataEntityFile.getBasePath()}${dataEntityFile.getBaseName()}`,
-					schemaFilePath: `${schemaIndexFile.getBasePath()}: ${[
-						schemaIndexFile.getBaseName(),
-						schemaEntityFile.getBaseName(),
-						schemaResolverFile.getBaseName(),
-					].join(', ')}`,
+					schemaFilePath: `${schemaEntityFile.getBasePath()}${schemaEntityFile.getBaseName()}`,
 				});
 			}
 		}

@@ -1,12 +1,4 @@
-import {
-	Collection,
-	Entity,
-	ManyToOne,
-	OneToMany,
-	PrimaryKey,
-	Property,
-	Ref,
-} from '@mikro-orm/core';
+import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Customer } from './customer';
 
@@ -16,21 +8,15 @@ export class Employee extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'LastName', type: 'NVARCHAR(20)' })
-	lastName!: string;
+	lastName!: unknown;
 
 	@Property({ fieldName: 'FirstName', type: 'NVARCHAR(20)' })
-	firstName!: string;
+	firstName!: unknown;
 
 	@Property({ fieldName: 'Title', type: 'NVARCHAR(30)', nullable: true })
-	title?: string;
+	title?: unknown;
 
-	@ManyToOne({
-		entity: () => Employee,
-		ref: true,
-		fieldName: 'ReportsTo',
-		nullable: true,
-		index: 'IFK_EmployeeReportsTo',
-	})
+	@ManyToOne({ entity: () => Employee, ref: true, fieldName: 'ReportsTo', nullable: true, index: 'IFK_EmployeeReportsTo' })
 	employee?: Ref<Employee>;
 
 	@Property({ fieldName: 'BirthDate', type: 'Date', nullable: true })
@@ -40,28 +26,28 @@ export class Employee extends BaseEntity {
 	hireDate?: Date;
 
 	@Property({ fieldName: 'Address', type: 'NVARCHAR(70)', nullable: true })
-	address?: string;
+	address?: unknown;
 
 	@Property({ fieldName: 'City', type: 'NVARCHAR(40)', nullable: true })
-	city?: string;
+	city?: unknown;
 
 	@Property({ fieldName: 'State', type: 'NVARCHAR(40)', nullable: true })
-	state?: string;
+	state?: unknown;
 
 	@Property({ fieldName: 'Country', type: 'NVARCHAR(40)', nullable: true })
-	country?: string;
+	country?: unknown;
 
 	@Property({ fieldName: 'PostalCode', type: 'NVARCHAR(10)', nullable: true })
-	postalCode?: string;
+	postalCode?: unknown;
 
 	@Property({ fieldName: 'Phone', type: 'NVARCHAR(24)', nullable: true })
-	phone?: string;
+	phone?: unknown;
 
 	@Property({ fieldName: 'Fax', type: 'NVARCHAR(24)', nullable: true })
-	fax?: string;
+	fax?: unknown;
 
 	@Property({ fieldName: 'Email', type: 'NVARCHAR(60)', nullable: true })
-	email?: string;
+	email?: unknown;
 
 	@OneToMany({ entity: () => Customer, mappedBy: 'employee' })
 	customers = new Collection<Customer>(this);

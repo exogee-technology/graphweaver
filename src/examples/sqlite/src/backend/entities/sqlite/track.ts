@@ -1,13 +1,4 @@
-import {
-	Collection,
-	Entity,
-	ManyToMany,
-	ManyToOne,
-	OneToMany,
-	PrimaryKey,
-	Property,
-	Ref,
-} from '@mikro-orm/core';
+import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Album } from './album';
 import { Genre } from './genre';
@@ -21,36 +12,19 @@ export class Track extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(200)' })
-	name!: string;
+	name!: unknown;
 
-	@ManyToOne({
-		entity: () => Album,
-		ref: true,
-		fieldName: 'AlbumId',
-		nullable: true,
-		index: 'IFK_TrackAlbumId',
-	})
+	@ManyToOne({ entity: () => Album, ref: true, fieldName: 'AlbumId', nullable: true, index: 'IFK_TrackAlbumId' })
 	album?: Ref<Album>;
 
-	@ManyToOne({
-		entity: () => MediaType,
-		ref: true,
-		fieldName: 'MediaTypeId',
-		index: 'IFK_TrackMediaTypeId',
-	})
+	@ManyToOne({ entity: () => MediaType, ref: true, fieldName: 'MediaTypeId', index: 'IFK_TrackMediaTypeId' })
 	mediaType!: Ref<MediaType>;
 
-	@ManyToOne({
-		entity: () => Genre,
-		ref: true,
-		fieldName: 'GenreId',
-		nullable: true,
-		index: 'IFK_TrackGenreId',
-	})
+	@ManyToOne({ entity: () => Genre, ref: true, fieldName: 'GenreId', nullable: true, index: 'IFK_TrackGenreId' })
 	genre?: Ref<Genre>;
 
 	@Property({ fieldName: 'Composer', type: 'NVARCHAR(220)', nullable: true })
-	composer?: string;
+	composer?: unknown;
 
 	@Property({ fieldName: 'Milliseconds', type: 'number' })
 	milliseconds!: number;
@@ -59,7 +33,6 @@ export class Track extends BaseEntity {
 	bytes?: number;
 
 	@Property({ fieldName: 'UnitPrice', type: 'NUMERIC(10,2)' })
-	// Mikro-orm serializes this as a string for precision, but it's a number in the database
 	unitPrice!: string;
 
 	@OneToMany({ entity: () => InvoiceLine, mappedBy: 'track' })

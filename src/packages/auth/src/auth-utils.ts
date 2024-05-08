@@ -186,7 +186,14 @@ export async function checkEntityPermission<
 	};
 
 	try {
-		const { provider } = graphweaverMetadata.getEntity(entityName) ?? {};
+		const { provider } = graphweaverMetadata.getEntityByName(entityName) ?? {};
+		if (!provider) {
+			logger.trace(
+				`Entity '${entityName}' has no configured provider. Can't check in DB, so this user is not allowed to access the record. If you want to allow access for this entity, it either needs a provider, or it needs to use a simple filter.`
+			);
+			throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
+		}
+
 		const result = await provider?.findOne(where);
 		if (!result) {
 			logger.trace('Raising ForbiddenError: User is not allowed to access this record');
@@ -212,7 +219,7 @@ export async function checkAuthorization<
 ) {
 	// Get ACL first
 	const acl = getACL(entityName);
-	const meta = graphweaverMetadata.getEntity(entityName);
+	const meta = graphweaverMetadata.getEntityByName(entityName);
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
@@ -234,7 +241,7 @@ export async function checkAuthorization<
 		}
 
 		// If we are here then we have an array or an object lets see if its a related entity
-		const relationship = meta?.fields.find((field) => field.name === key);
+		const relationship = meta?.fields[key];
 		const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
 			GraphQLEntity<BaseDataEntity>,
 			BaseDataEntity

@@ -1,9 +1,9 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider, Filter, WithId, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
-import { AuthenticationMethod, AuthorizationContext } from '../../types';
+import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import {
 	AclMap,
@@ -53,9 +53,8 @@ const isURLWhitelisted = (authRedirect: URL) => {
 };
 
 const applyImplicitAllow = () => {
-	for (const key of graphweaverMetadata.entityNames) {
-		const acl = AclMap.get(key);
-		if (!acl) {
+	for (const key of graphweaverMetadata.entityNames()) {
+		if (!AclMap.has(key)) {
 			// Allow access to all operations
 			registerAccessControlListHook(key, {
 				Everyone: {
@@ -67,27 +66,53 @@ const applyImplicitAllow = () => {
 };
 
 const applyImplicitDeny = () => {
-	for (const key of graphweaverMetadata.entityNames) {
-		const acl = AclMap.get(key);
-		if (!acl) {
+	for (const key of graphweaverMetadata.entityNames()) {
+		if (!AclMap.has(key)) {
 			// An empty ACL means we deny access to all operations
 			registerAccessControlListHook(key, {});
 		}
 	}
 };
 
-type AuthApolloPluginOptions<D> = {
-	implicitAllow?: boolean;
-	apiKeyDataProvider?: BackendProvider<D, ApiKeyStorage>;
+export const applyDefaultMetadataACL = () => {
+	// By default we allow all users to read the admin metadata
+	const defaultAcl: AccessControlList<any, AuthorizationContext> = {
+		Everyone: { read: true },
+	};
+
+	const metadataEntities = [
+		'AdminUiEntityAttributeMetadata',
+		'AdminUiEntityMetadata',
+		'AdminUiEnumMetadata',
+		'AdminUiEnumValueMetadata',
+		'AdminUiFieldAttributeMetadata',
+		'AdminUiFieldExtensionsMetadata',
+		'AdminUiFieldMetadata',
+		'AdminUiFilterMetadata',
+	];
+
+	for (const entity of metadataEntities) {
+		if (!AclMap.has(entity)) {
+			registerAccessControlListHook(entity, defaultAcl);
+		}
+	}
 };
 
-export const authApolloPlugin = <D extends ApiKeyStorage>(
+type AuthApolloPluginOptions<D, R> = {
+	implicitAllow?: boolean;
+	apiKeyDataProvider?: BackendProvider<D, ApiKeyStorage<R>>;
+};
+
+export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
 	addUserToContext: (userId: string) => Promise<UserProfile>,
-	options?: AuthApolloPluginOptions<D>
+	options?: AuthApolloPluginOptions<D, R>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
 			logger.trace('authApolloPlugin requestDidStart');
+
+			// Apply the default ACL to the admin metadata
+			applyDefaultMetadataACL();
 
 			// If the implicitAllow option is set, we allow access to all entities that do not have an ACL defined.
 			if (options?.implicitAllow) {

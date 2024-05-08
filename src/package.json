@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver-monorepo",
-	"description": "Graphweaver: Quickly build a GraphQL server using type-graphql and dataloader",
+	"description": "Graphweaver: Quickly build a GraphQL server which connects to all your datasources",
 	"private": true,
 	"license": "MIT",
 	"repository": {

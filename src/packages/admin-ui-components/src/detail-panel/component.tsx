@@ -380,7 +380,7 @@ export const DetailPanel = () => {
 
 				result = await updateEntity({
 					variables: {
-						data: {
+						input: {
 							id,
 							...values,
 						},
@@ -397,7 +397,7 @@ export const DetailPanel = () => {
 				}
 				result = await createEntity({
 					variables: {
-						data: values,
+						input: values,
 					},
 					refetchQueries: [`AdminUIListPage`],
 				});
@@ -470,7 +470,7 @@ export const DetailPanel = () => {
 					<>
 						{loading ? (
 							<Spinner />
-						) : error ? (
+						) : error || data?.result === null ? (
 							<p>Failed to load entity.</p>
 						) : (
 							<>

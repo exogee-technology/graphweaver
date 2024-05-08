@@ -8,7 +8,7 @@ export class MediaType extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: string;
+	name?: unknown;
 
 	@OneToMany({ entity: () => Track, mappedBy: 'mediaType' })
 	tracks = new Collection<Track>(this);

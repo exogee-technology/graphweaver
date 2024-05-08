@@ -1,54 +1,54 @@
 import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
 import {
-	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
+	CredentialStorage,
+	hashPassword,
+	Password,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+import { BaseDataEntity, BaseDataProvider } from '@exogee/graphweaver';
 
-const user = new UserProfile({
+const user: CredentialStorage = {
 	id: '1',
-	roles: ['admin'],
-	displayName: 'Test User',
 	username: 'test',
-});
-
-const connection = {
-	connectionManagerId: 'sqlite',
-	mikroOrmConfig: {
-		entities: [],
-		driver: SqliteDriver,
-		dbName: 'databases/database.sqlite',
-	},
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
 };
 
-@Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, connection)
-) {
-	async authenticate(username: string, password: string) {
-		return user;
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return await callback();
 	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
+	async createOne() {
+		user.password = await hashPassword(user.password ?? '');
 		return user;
 	}
 }
 
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	acl: {
+		Everyone: {
+			all: true,
+		},
+	},
+	getUserProfile: async (id: string): Promise<UserProfile> => {
+		return new UserProfile({
+			id: user.id,
+			username: user.username,
+		});
+	},
+});
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
@@ -60,17 +60,17 @@ describe('Password Authentication - Register', () => {
 			createCredential: { id: string };
 		}>({
 			query: gql`
-				mutation createCredential($data: CredentialInsertInput!) {
-					createCredential(data: $data) {
+				mutation createCredential($input: CredentialInsertInput!) {
+					createCredential(input: $input) {
 						id
 					}
 				}
 			`,
 			variables: {
-				data: {
+				input: {
 					username: 'test',
-					password: 'test',
-					confirm: 'test',
+					password: 'test1234',
+					confirm: 'test1234',
 				},
 			},
 		});
