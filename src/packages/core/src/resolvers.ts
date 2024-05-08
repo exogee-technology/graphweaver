@@ -392,7 +392,7 @@ export const listRelationshipField = async <
 	// @todo: Should the user specified filter be and-ed here?
 	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
 	const relatedEntityFilter =
-		input.filter ?? idValue ? { id: idValue } : { [relatedField as string]: { id: source.id } };
+		input.filter ?? (idValue ? { id: idValue } : { [relatedField as string]: { id: source.id } });
 
 	const params: ReadHookParams<G> = {
 		args: { filter: input.filter },

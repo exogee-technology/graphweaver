@@ -1,4 +1,5 @@
 import {
+	GraphQLArgumentConfig,
 	GraphQLBoolean,
 	GraphQLEnumType,
 	GraphQLEnumValueConfigMap,
@@ -213,12 +214,19 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					// Let's try to resolve the GraphQL type involved here.
 					let graphQLType: GraphQLOutputType | undefined = undefined;
 					let resolve = undefined;
+					const args: ObjMap<GraphQLArgumentConfig> = {};
 
 					const metadata = graphweaverMetadata.metadataForType(type);
 
 					if (isEntityMetadata(metadata)) {
 						graphQLType = graphQLTypeForEntity(metadata);
 						resolve = resolvers.listRelationshipField;
+
+						if (metadata.provider) {
+							args['filter'] = {
+								type: filterTypeForEntity(metadata),
+							};
+						}
 					} else if (isEnumMetadata(metadata)) {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
@@ -246,7 +254,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					fields[field.name] = {
 						type: graphQLType,
-
+						args,
 						// Typecast should not be required here as we know the context object, but this will get us building.
 						resolve: resolve as any,
 					};

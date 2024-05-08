@@ -177,10 +177,13 @@ const getFilterArgumentsOnFields = () => {
 		for (const node of selectionSet?.selections ?? []) {
 			if (node.kind === 'Field' && node.arguments?.length && node.selectionSet) {
 				const field = entityFields?.[node.name.value];
-				const fieldType = field?.getType() as GraphQLEntityConstructor<
+				let fieldType = field?.getType() as GraphQLEntityConstructor<
 					GraphQLEntity<BaseDataEntity>,
 					BaseDataEntity
 				>;
+				if (Array.isArray(fieldType)) {
+					fieldType = fieldType[0];
+				}
 				const isRelationshipField = fieldType && fieldType?.prototype instanceof GraphQLEntity;
 				if (isRelationshipField) {
 					const filterArgument = node.arguments.find((arg) => arg.name.value === 'filter');
@@ -209,10 +212,13 @@ const generatePermissionListFromArgumentsOnFields = () => {
 				for (const field of node.fields) {
 					if (field.kind === Kind.OBJECT_FIELD) {
 						const relationship = entityFields?.[field.name.value];
-						const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
+						let relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
 							GraphQLEntity<BaseDataEntity>,
 							BaseDataEntity
 						>;
+						if (relatedEntity && Array.isArray(relatedEntity)) {
+							relatedEntity = relatedEntity[0];
+						}
 						const isRelatedEntity =
 							relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
 						if (isRelatedEntity) {
