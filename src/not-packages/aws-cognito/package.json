@@ -28,14 +28,8 @@
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
 		"prettier": "3.2.5",
-<<<<<<<< HEAD:src/packages/aws-cognito/package.json
 		"reflect-metadata": "0.2.2",
-		"type-graphql": "2.0.0-beta.2",
 		"typescript": "5.4.5"
-========
-		"reflect-metadata": "0.2.1",
-		"typescript": "5.4.2"
->>>>>>>> EXOGW-342:src/not-packages/graphweaver-aws/package.json
 	},
 	"peerDependencies": {
 		"@exogee/graphweaver": "workspace:*",
