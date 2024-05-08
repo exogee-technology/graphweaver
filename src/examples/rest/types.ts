@@ -579,7 +579,7 @@ export type Tag = {
   __typename?: 'Tag';
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  tasks: Array<Task>;
+  tasks?: Maybe<Array<Task>>;
 };
 
 /** Data needed to create or update Tags. If an ID is passed, this is an update, otherwise it's an insert. */

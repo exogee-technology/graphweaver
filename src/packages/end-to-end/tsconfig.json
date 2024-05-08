@@ -107,7 +107,8 @@
 		"skipLibCheck": true /* Skip type checking all .d.ts files. */
 	},
 	"references": [
-		{ "path": "../../packages/graphweaver-aws" },
+		{ "path": "../../packages/auth" },
+		{ "path": "../../packages/core" },
 		{ "path": "../../packages/admin-ui-components" }
 	]
 }
