@@ -470,7 +470,7 @@ export const DetailPanel = () => {
 					<>
 						{loading ? (
 							<Spinner />
-						) : error ? (
+						) : error || data?.result === null ? (
 							<p>Failed to load entity.</p>
 						) : (
 							<>
