@@ -2,6 +2,8 @@ import {
 	BackendProvider,
 	CreateOrUpdateHookParams,
 	Field,
+	FieldMetadata,
+	FieldOptions,
 	HookParams,
 	HookRegister,
 	ID,
@@ -75,6 +77,7 @@ export class ApiKey<R> {
 			AclMap.set('ApiKey', acl);
 		}
 
+		// Collect the provider information for the API Key entity
 		graphweaverMetadata.collectProviderInformationForEntity<
 			typeof ApiKeyEntity<ApiKeyStorage<R>>,
 			ApiKeyStorage<R>
@@ -86,6 +89,18 @@ export class ApiKey<R> {
 			target: ApiKeyEntity<ApiKeyStorage<R>>,
 		});
 
+		// Override the roles field for the API Key entity
+		const metadata = graphweaverMetadata.getEntityByName('ApiKey');
+		const roleFieldMetadata = metadata?.fields.roles as Pick<
+			FieldMetadata<ApiKeyEntity<ApiKeyStorage<R>>, ApiKeyStorage<R>>,
+			'target' | 'name' | 'getType' | 'relationshipInfo'
+		>;
+		graphweaverMetadata.collectFieldInformation({
+			...roleFieldMetadata,
+			getType: () => [roles],
+		});
+
+		// Add the createApiKey and updateApiKey mutations
 		graphweaverMetadata.addMutation({
 			name: 'createApiKey',
 			args: {

@@ -98,7 +98,7 @@ export type ApiKey = {
   id: Scalars['ID']['output'];
   key: Scalars['String']['output'];
   revoked?: Maybe<Scalars['Boolean']['output']>;
-  roles?: Maybe<Array<Scalars['String']['output']>>;
+  roles?: Maybe<Array<Roles>>;
 };
 
 export type ApiKeyCreateOrUpdateInput = {
