@@ -1,11 +1,8 @@
-import { Resolver } from 'type-graphql';
-import { createBaseResolver } from '@exogee/graphweaver';
 import { getOneUser, getManyUsers, mapId, createUser, toggleUserStatus } from '../util';
 
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
-import { CognitoUser } from './graphQLEntity';
-import { CognitoUserBackendEntity } from './backendEntity';
-import { createProvider } from '../provider/provider';
+import { CognitoUser, CognitoUserBackendEntity } from '../entities';
+import { createProvider } from './provider';
 
 type Entity = CognitoUser;
 type Context = {
@@ -20,7 +17,7 @@ export interface CreateAwsCognitoUserResolverOptions {
 	endpoint?: string;
 }
 
-export const createAwsCognitoUserResolver = ({
+export const createAwsCognitoUserProvider = ({
 	region,
 	userPoolId,
 	endpoint,
@@ -63,14 +60,7 @@ export const createAwsCognitoUserResolver = ({
 		},
 	});
 
-	@Resolver((of) => CognitoUser)
-	class CognitoUserResolver extends createBaseResolver<CognitoUser, CognitoUserBackendEntity>(
-		CognitoUser,
-		provider
-	) {}
-
 	return {
-		resolver: CognitoUserResolver,
 		entity: CognitoUser,
 		provider,
 	};

@@ -12,9 +12,5 @@
 		"jsx": "react-jsx"
 	},
 	"include": ["./src"],
-	"references": [
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/graphweaver-helpers" },
-		{ "path": "../../packages/rest" }
-	]
+	"references": [{ "path": "../../packages/core" }, { "path": "../../packages/rest" }]
 }

@@ -1,25 +1,24 @@
-import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { GraphQLEntity } from '@exogee/graphweaver';
+import { GraphQLEntity, ID, Entity, Field } from '@exogee/graphweaver';
 
-import { CognitoUserBackendEntity } from './backendEntity';
+import { CognitoUserBackendEntity } from './backend-entity';
 
-@ObjectType('CognitoUser')
+@Entity('CognitoUser')
 export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	@Field(() => ID)
 	id!: string;
 
 	@Field(() => String)
-	async username(@Root() dataEntity: CognitoUserBackendEntity) {
+	async username(dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Username;
 	}
 
 	@Field(() => Boolean)
-	async enabled(@Root() dataEntity: CognitoUserBackendEntity) {
+	async enabled(dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Enabled;
 	}
 
 	@Field(() => String, { nullable: true })
-	async email(@Root() dataEntity: CognitoUserBackendEntity) {
+	async email(dataEntity: CognitoUserBackendEntity) {
 		return (
 			dataEntity.dataEntity.Attributes.find(
 				(attribute: { Name: string }) => attribute.Name === 'email'
@@ -28,17 +27,17 @@ export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
 	}
 
 	@Field(() => String, { nullable: true })
-	async userStatus(@Root() dataEntity: CognitoUserBackendEntity) {
+	async userStatus(dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.UserStatus;
 	}
 
 	@Field(() => String, { nullable: true })
-	async groups(@Root() dataEntity: CognitoUserBackendEntity) {
+	async groups(dataEntity: CognitoUserBackendEntity) {
 		return dataEntity.dataEntity.Groups?.join(',') ?? '';
 	}
 
 	@Field(() => String, { nullable: true })
-	async attributes(@Root() dataEntity: CognitoUserBackendEntity) {
+	async attributes(dataEntity: CognitoUserBackendEntity) {
 		return JSON.stringify(dataEntity.dataEntity.Attributes);
 	}
 }

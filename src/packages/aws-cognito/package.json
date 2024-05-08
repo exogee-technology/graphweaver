@@ -33,7 +33,6 @@
 	},
 	"peerDependencies": {
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2"
 	},
