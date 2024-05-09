@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-storage-provider",
-	"version": "0.2.23",
+	"version": "0.2.24",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "MIT",
 	"scripts": {
@@ -20,16 +20,16 @@
 		"lib"
 	],
 	"dependencies": {
-		"@aws-sdk/client-s3": "3.535.0",
-		"@aws-sdk/s3-request-presigner": "3.535.0",
+		"@aws-sdk/client-s3": "3.552.0",
+		"@aws-sdk/s3-request-presigner": "3.552.0",
 		"@exogee/logger": "workspace:*",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*"
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",
-		"glob": "10.3.10",
-		"typescript": "5.4.2"
+		"glob": "10.3.12",
+		"typescript": "5.4.5"
 	},
 	"keywords": [
 		"graphweaver",

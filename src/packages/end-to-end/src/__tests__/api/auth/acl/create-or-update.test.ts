@@ -1,17 +1,9 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	CreateOrUpdateHookParams,
-	Field,
-	GraphQLEntity,
-	ID,
-	BaseDataProvider,
-	Entity,
-} from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
 import {
 	CredentialStorage,
 	authApolloPlugin,

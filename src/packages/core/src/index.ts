@@ -2,6 +2,7 @@ export * from './base-data-provider';
 export * from './base-entity';
 export * from './base-loader';
 export * from './decorators';
+export * from './field-resolver';
 export * from './hook-manager';
 export * from './metadata';
 export * from './metadata-service';

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "0.2.23",
+	"version": "0.2.24",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.1",
+		"@apollo/server": "4.10.2",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.2",
@@ -29,30 +29,30 @@
 		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
 		"pluralize": "8.0.0",
-		"reflect-metadata": "0.2.1"
+		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.1.10",
-		"@mikro-orm/knex": "6.1.10",
-		"@mikro-orm/mysql": "6.1.10",
-		"@mikro-orm/postgresql": "6.1.10",
-		"@mikro-orm/sqlite": "6.1.10",
-		"@types/node": "20.11.28",
+		"@mikro-orm/core": "6.1.12",
+		"@mikro-orm/knex": "6.1.12",
+		"@mikro-orm/mysql": "6.1.12",
+		"@mikro-orm/postgresql": "6.1.12",
+		"@mikro-orm/sqlite": "6.1.12",
+		"@types/node": "20.12.7",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.15.5",
-		"glob": "10.3.10",
+		"glob": "10.3.12",
 		"ts-node": "10.9.2",
-		"typescript": "5.4.2"
+		"typescript": "5.4.5"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/knex": "6.1.10",
-		"@mikro-orm/mysql": "6.1.10",
-		"@mikro-orm/postgresql": "6.1.10",
-		"@mikro-orm/sqlite": "6.1.10"
+		"@mikro-orm/knex": "6.1.12",
+		"@mikro-orm/mysql": "6.1.12",
+		"@mikro-orm/postgresql": "6.1.12",
+		"@mikro-orm/sqlite": "6.1.12"
 	},
 	"peerDependencies": {
-		"@mikro-orm/core": "6.1.10",
-		"@mikro-orm/knex": "6.1.10"
+		"@mikro-orm/core": "6.1.12",
+		"@mikro-orm/knex": "6.1.12"
 	},
 	"keywords": [
 		"graphql",
@@ -63,5 +63,10 @@
 		"postgresql",
 		"mysql",
 		"sqlite"
-	]
+	],
+	"pnpm": {
+		"overrides": {
+			"reflect-metadata": "0.2.2"
+		}
+	}
 }

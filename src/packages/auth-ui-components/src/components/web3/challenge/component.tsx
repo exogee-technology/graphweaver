@@ -113,6 +113,7 @@ const VerifyButton = () => {
 	return (
 		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleSignMessage}>
 			{({ isSubmitting }) => (
+				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<div className={styles.titleContainerCenter}>Verify Wallet</div>
 					<div className={styles.buttonContainerCenter}>

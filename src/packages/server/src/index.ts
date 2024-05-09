@@ -9,6 +9,7 @@ import {
 	graphweaverMetadata,
 	resolveAdminUiMetadata,
 	AdminUiMetadata,
+	fieldResolver,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -138,7 +139,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...protection,
 			plugins: [...plugins, ...protection.plugins],
 			schema: this.schema,
-
+			fieldResolver,
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
 	}

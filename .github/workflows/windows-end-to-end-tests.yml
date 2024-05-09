@@ -55,7 +55,7 @@ jobs:
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
-          pnpm test-ui &&
+          pnpm test-ui-sqlite &&
           taskkill /F /IM node.exe /T
 
         env:

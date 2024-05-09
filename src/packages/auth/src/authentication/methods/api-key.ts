@@ -36,8 +36,8 @@ export class ApiKeyInputArgs {
 	roles?: string[];
 }
 
-@InputType(`ApiKeyCreateOrUpdateInput`)
-export class ApiKeyCreateOrUpdateInputArgs {
+@InputType(`ApiKeyUpdateInput`)
+export class ApiKeyUpdateInputArgs {
 	@Field(() => ID)
 	id!: string;
 
@@ -114,7 +114,7 @@ export class ApiKey<R> {
 		graphweaverMetadata.addMutation({
 			name: 'updateApiKey',
 			args: {
-				input: ApiKeyCreateOrUpdateInputArgs,
+				input: ApiKeyUpdateInputArgs,
 			},
 			getType: () => ApiKeyEntity<ApiKeyStorage<R>>,
 			resolver: this.updateApiKey.bind(this),
@@ -126,7 +126,7 @@ export class ApiKey<R> {
 		return this.provider.withTransaction ? this.provider.withTransaction<T>(callback) : callback();
 	}
 
-	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs | ApiKeyCreateOrUpdateInputArgs>>(
+	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs | ApiKeyUpdateInputArgs>>(
 		hookRegister: HookRegister,
 		hookParams: H,
 		entities: (ApiKeyStorage<R> | null)[]
@@ -164,9 +164,7 @@ export class ApiKey<R> {
 		return entity;
 	}
 
-	async update(
-		params: CreateOrUpdateHookParams<ApiKeyCreateOrUpdateInputArgs>
-	): Promise<ApiKeyStorage<R>> {
+	async update(params: CreateOrUpdateHookParams<ApiKeyUpdateInputArgs>): Promise<ApiKeyStorage<R>> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
 
@@ -232,7 +230,7 @@ export class ApiKey<R> {
 
 	async updateApiKey(
 		_: Source,
-		{ input }: { input: ApiKeyCreateOrUpdateInputArgs },
+		{ input }: { input: ApiKeyUpdateInputArgs },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<ApiKeyEntity<ApiKeyStorage<R>> | null> {
@@ -246,7 +244,7 @@ export class ApiKey<R> {
 
 			let apiKey;
 			try {
-				const hookParams = await runWritableBeforeHooks<ApiKeyCreateOrUpdateInputArgs>(
+				const hookParams = await runWritableBeforeHooks<ApiKeyUpdateInputArgs>(
 					HookRegister.BEFORE_UPDATE,
 					params,
 					'ApiKey'

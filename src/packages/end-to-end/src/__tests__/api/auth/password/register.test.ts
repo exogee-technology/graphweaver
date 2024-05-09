@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver from '@exogee/graphweaver-server';
 import {

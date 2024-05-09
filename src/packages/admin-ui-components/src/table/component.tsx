@@ -47,8 +47,9 @@ const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
-	const entityColumns = [SelectColumn].concat(
-		entity.fields.map((field) => ({
+	const entityColumns = [
+		...(entity.attributes.isReadOnly ? [] : [SelectColumn]),
+		...entity.fields.map((field) => ({
 			key: field.name,
 			name: field.name,
 			width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
@@ -122,8 +123,8 @@ const columnsForEntity = <T extends TableRowItem>(
 									return value;
 								}
 							: undefined,
-		}))
-	);
+		})),
+	];
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
@@ -202,7 +203,9 @@ export const Table = <T extends TableRowItem>({
 		// Return true when the scrollTop reaches the bottom ...
 		const { currentTarget } = event;
 		const target = currentTarget as Element;
-		const atEndOfSet = target.scrollTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
+		const tolerance = 175; // trigger when 5 rows from the end
+		const distanceFromTop = Math.round(target.scrollTop) + tolerance;
+		const atEndOfSet = distanceFromTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
 		return atEndOfSet;
 	};
 

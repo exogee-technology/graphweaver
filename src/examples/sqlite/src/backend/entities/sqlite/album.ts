@@ -1,4 +1,12 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property, Ref } from '@mikro-orm/core';
+import {
+	Collection,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryKey,
+	Property,
+	Ref,
+} from '@mikro-orm/core';
 import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Artist } from './artist';
 import { Track } from './track';

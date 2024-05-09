@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { randomUUID } from 'crypto';
+
 import { config } from '../../../../config';
 
 test('ensure toast is displayed with the name of the item after creation', async ({ page }) => {
@@ -14,12 +16,12 @@ test('ensure toast is displayed with the name of the item after creation', async
 	await expect(page.getByText('A Cor Do Som')).toBeVisible();
 	await page.getByText('A Cor Do Som').click();
 
-	const title = 'Infinity';
+	const title = randomUUID();
 
 	// pre-condition: Infinity text not found on the page
 	await expect(page.getByText(title)).not.toBeVisible();
 
-	// create new album called Infinity
+	// create new album called Random UUID title
 	await page.getByRole('button', { name: 'Create New Album' }).click();
 	await page.waitForTimeout(1000);
 	await page.getByRole('textbox', { name: 'title' }).fill(title);
@@ -39,6 +41,6 @@ test('ensure toast is displayed with the name of the item after creation', async
 	await page.locator('form').getByText('#9 Dream').click();
 	await page.getByRole('button', { name: 'Save' }).click();
 
-	// post-condition: Infinity text found on the page
-	await expect(page.getByText(title)).toBeVisible();
+	// post-condition: Random UUID title text found on the page
+	await expect(page.getByText(title).first()).toBeVisible();
 });

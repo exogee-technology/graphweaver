@@ -410,7 +410,20 @@ export const listRelationshipField = async <
 
 	if (typeof existingData !== 'undefined') {
 		logger.trace({ existingData }, 'Existing data found, returning.');
-		return existingData;
+
+		const entities = [existingData].flat();
+
+		logger.trace('Running after read hooks');
+		const { entities: hookEntities = [] } = hookManager
+			? await hookManager.runHooks(HookRegister.AFTER_READ, {
+					...hookParams,
+					entities,
+				})
+			: { entities };
+
+		logger.trace({ before: existingData, after: hookEntities }, 'After read hooks ran');
+
+		return isList ? hookEntities : hookEntities[0];
 	}
 
 	logger.trace('Existing data not found. Loading from BaseLoaders');

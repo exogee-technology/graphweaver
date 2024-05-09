@@ -4,8 +4,7 @@ import {
 	ApplyAccessControlList,
 	AuthorizationContext,
 } from '@exogee/graphweaver-auth';
-import { AccessorParams, RestBackendProvider } from '@exogee/graphweaver-rest';
-import { inMemoryFilterFor } from '@exogee/graphweaver-helpers';
+import { AccessorParams, RestBackendProvider, inMemoryFilterFor } from '@exogee/graphweaver-rest';
 import url from 'url';
 
 import { fetch } from '../rest-client';

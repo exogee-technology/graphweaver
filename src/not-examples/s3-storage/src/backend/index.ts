@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
 
 import './schema';

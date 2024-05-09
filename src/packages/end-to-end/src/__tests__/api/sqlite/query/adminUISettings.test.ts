@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -99,7 +98,7 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 
 	@Field(() => String, {
 		nullable: true,
-		adminUIOptions: { hideInTable: true },
+		adminUIOptions: { hideInTable: true, summaryField: true },
 	})
 	name?: string;
 

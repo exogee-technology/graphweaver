@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
