@@ -1,10 +1,10 @@
 import Graphweaver from '@exogee/graphweaver-server';
 
-import { resolvers } from './schema';
 import { XeroAuthApolloPlugin } from '@exogee/graphweaver-xero';
 
+import './schema';
+
 export const graphweaver = new Graphweaver({
-	resolvers,
 	apolloServerOptions: {
 		plugins: [XeroAuthApolloPlugin],
 	},

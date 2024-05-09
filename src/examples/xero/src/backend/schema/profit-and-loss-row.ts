@@ -1,15 +1,27 @@
-import { createBaseResolver, Sort, Resolver } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	RelationshipField,
+	Field,
+	ID,
+	Entity,
+	Sort,
+	BaseDataEntity,
+} from '@exogee/graphweaver';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
-import { ProfitAndLossRow } from './entity';
 import { isUUID } from 'class-validator';
+
+import { Account } from './account';
+import { Tenant } from './tenant';
+
 import {
 	forEachTenant,
 	generateId,
 	inMemoryFilterFor,
 	offsetAndLimit,
 	orderedResult,
-} from '../../utils';
+} from '../utils';
 
 const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 
@@ -58,6 +70,8 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 								amount: parseFloat(value.value),
 								date,
 								description: description.value,
+								isCollection: () => false,
+								isReference: () => false,
 							})
 						);
 					}
@@ -85,25 +99,61 @@ const loadReportForTenant = async (xero: XeroClient, tenantId: string) => {
 	return parseReport(tenantId, body);
 };
 
-@Resolver((of) => ProfitAndLossRow)
-export class ProfitAndLossRowResolver extends createBaseResolver<ProfitAndLossRow, unknown>(
-	ProfitAndLossRow,
-	new XeroBackendProvider('ProfitAndLossRow', {
-		find: async ({ xero, filter, order, limit, offset }) => {
-			const result = await forEachTenant<ProfitAndLossRow>(
-				xero,
-				(tenant) => loadReportForTenant(xero, tenant.tenantId),
-				filter
-			);
+const provider = new XeroBackendProvider('ProfitAndLossRow', {
+	find: async ({ xero, filter, order, limit, offset }) => {
+		const result = await forEachTenant<ProfitAndLossRow>(
+			xero,
+			(tenant) => loadReportForTenant(xero, tenant.tenantId),
+			filter
+		);
 
-			const sortFields = order ?? defaultSort;
+		const sortFields = order ?? defaultSort;
 
-			// (filter) -> order -> limit/offset
-			return offsetAndLimit(
-				orderedResult(result.filter(inMemoryFilterFor(filter)), sortFields),
-				offset,
-				limit
-			);
-		},
-	})
-) {}
+		// (filter) -> order -> limit/offset
+		return offsetAndLimit<any>(
+			orderedResult(result.filter(inMemoryFilterFor(filter)), sortFields),
+			offset,
+			limit
+		);
+	},
+});
+
+export interface XeroProfitAndLossRow extends BaseDataEntity {
+	id: string;
+	date: Date;
+	description: string;
+	accountId: string;
+	tenantId: string;
+	amount: number;
+}
+
+@Entity('ProfitAndLossRow', {
+	provider,
+})
+export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
+	public dataEntity!: XeroProfitAndLossRow;
+
+	@Field(() => ID)
+	id!: string;
+
+	@Field(() => ISODateStringScalar)
+	date!: Date;
+
+	@Field(() => String)
+	description!: string;
+
+	@Field(() => Number)
+	amount!: number;
+
+	@Field(() => ID, { nullable: true, adminUIOptions: { hideInFilterBar: true } })
+	accountId?: string;
+
+	@RelationshipField<ProfitAndLossRow>(() => Account, { id: 'accountId', nullable: true })
+	account!: Account;
+
+	@Field(() => ID, { nullable: true, adminUIOptions: { hideInFilterBar: true } })
+	tenantId?: string;
+
+	@RelationshipField<ProfitAndLossRow>(() => Tenant, { id: 'tenantId' })
+	tenant!: Tenant;
+}

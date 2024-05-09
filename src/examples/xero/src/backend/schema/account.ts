@@ -1,45 +1,53 @@
-import { createBaseResolver, Filter, Sort, Resolver } from '@exogee/graphweaver';
+import {
+	GraphQLEntity,
+	RelationshipField,
+	Field,
+	ID,
+	Entity,
+	BaseDataEntity,
+	Filter,
+	Sort,
+	graphweaverMetadata,
+} from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
-import { forEachTenant, offsetAndLimit, orderByToString, splitFilter } from '../../utils';
-import { Account } from './entity';
-import { Account as XeroAccount } from 'xero-node';
+import { Account as XeroAccount, AccountType } from 'xero-node';
+
+import { Tenant } from './tenant';
+import { forEachTenant, offsetAndLimit, orderByToString, splitFilter } from '../utils';
+
 import { isUUID } from 'class-validator';
 
 const defaultSort: Record<string, Sort> = { ['name']: Sort.ASC };
 
-@Resolver((of) => Account)
-export class AccountResolver extends createBaseResolver<Account, XeroAccount>(
-	Account,
-	new XeroBackendProvider('Account', {
-		find: async ({ xero, filter, order, limit, offset }) => {
-			const fullSet = await forEachTenant<XeroAccount>(
-				xero,
-				async (tenant) => {
-					const sortFields = order ?? defaultSort;
-					const [_, remainingFilter] = splitFilter(filter);
-					const {
-						body: { accounts },
-					} = await xero.accountingApi.getAccounts(
-						tenant.tenantId,
-						undefined,
-						xeroFilterFrom(remainingFilter),
-						orderByToString(sortFields)
-					);
+const provider = new XeroBackendProvider('Account', {
+	find: async ({ xero, filter, order, limit, offset }) => {
+		const fullSet = await forEachTenant<XeroAccount>(
+			xero,
+			async (tenant) => {
+				const sortFields = order ?? defaultSort;
+				const [_, remainingFilter] = splitFilter(filter);
+				const {
+					body: { accounts },
+				} = await xero.accountingApi.getAccounts(
+					tenant.tenantId,
+					undefined,
+					xeroFilterFrom(remainingFilter),
+					orderByToString(sortFields)
+				);
 
-					for (const account of accounts) {
-						(account as XeroAccount & { id: string }).id = account.accountID;
-					}
+				for (const account of accounts) {
+					(account as XeroAccount & { id: string }).id = account.accountID;
+				}
 
-					return accounts;
-				},
-				filter
-			);
+				return accounts;
+			},
+			filter
+		);
 
-			// (filter) -> order -> limit/offset
-			return offsetAndLimit(fullSet, offset, limit);
-		},
-	})
-) {}
+		// (filter) -> order -> limit/offset
+		return offsetAndLimit<any>(fullSet, offset, limit);
+	},
+});
 
 // Moved from base-resolver provider as only used here
 // This takes:
@@ -98,3 +106,35 @@ const xeroFilterFrom = (filter: Filter<Account> | Filter<Account>[]) => {
 
 	return chunks.join(' AND ') || undefined;
 };
+
+graphweaverMetadata.collectEnumInformation({
+	target: AccountType,
+	name: 'AccountType',
+});
+
+type XeroAccountType = XeroAccount & BaseDataEntity;
+
+@Entity('Account', {
+	provider,
+})
+export class Account extends GraphQLEntity<XeroAccountType> {
+	public dataEntity!: XeroAccountType & { tenantId: string };
+
+	@Field(() => ID)
+	id!: string;
+
+	@Field(() => String, { nullable: true })
+	code?: string;
+
+	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
+	name?: string;
+
+	@Field(() => AccountType, { nullable: true })
+	type?: AccountType;
+
+	@Field(() => String, { adminUIOptions: { hideInFilterBar: true } })
+	tenantId!: string;
+
+	@RelationshipField<Account>(() => Tenant, { id: 'tenantId' })
+	tenant!: Tenant;
+}
