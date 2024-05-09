@@ -1,6 +1,6 @@
 # Graphweaver connecting to AWS Cognito
 
-This example documents how to connect Graphweaver to AWS Cognito.
+This example documents how to connect Graphweaver to AWS Cognito to pull data only this is not used to login at the moment.
 
 ## Getting Stared
 
