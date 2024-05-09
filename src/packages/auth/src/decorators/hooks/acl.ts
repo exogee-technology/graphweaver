@@ -6,12 +6,6 @@ import {
 	GraphQLEntityConstructor,
 	GraphQLArgs,
 	ReadHookParams,
-	// BaseFilterInputArgs,
-	// BaseInsertInputArgs,
-	// BaseUpdateInputArgs,
-	// BaseDeleteInputArgs,
-	// BaseListInputFilterArgs,
-	// BaseGetOneInputArgs,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';

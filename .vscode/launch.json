@@ -12,7 +12,7 @@
       "runtimeArgs": ["start"],
       "restart": true,
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/src/packages/graphweaver-aws"
+      "cwd": "${workspaceFolder}/src/examples/aws-cognito"
     },
     {
       "type": "chrome",
