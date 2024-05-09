@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import {
 	AuthenticationMethod,
 	UserProfile,
@@ -25,37 +24,6 @@ const mnemonic = (Ethers as any).Mnemonic.fromPhrase(phrase);
 const mnemonic_instance = (Ethers as any).HDNodeWallet.fromMnemonic(mnemonic);
 const ethers_provider = new (Ethers as any).JsonRpcProvider();
 const ethers_signer = new Ethers.Wallet(mnemonic_instance.privateKey, ethers_provider);
-
-// @Resolver()
-// class AuthResolver extends createBaseWeb3AuthResolver() {
-// 	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined> {
-// 		return {
-// 			Everyone: {
-// 				// all users must provide a magic link mfa when writing data
-// 				Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.ONE_TIME_PASSWORD] }],
-// 			},
-// 		};
-// 	}
-
-// 	async getWalletAddress(
-// 		userId: string,
-// 		address: string
-// 	): Promise<AuthenticationBaseEntity<WalletAddress>> {
-// 		return {
-// 			id: '1',
-// 			userId,
-// 			type: AuthenticationType.Web3WalletAddress,
-// 			data: {
-// 				address: address.toLowerCase(),
-// 			},
-// 			createdAt: new Date(),
-// 		};
-// 	}
-
-// 	async saveWalletAddress(userId: string, address: string): Promise<boolean> {
-// 		return true;
-// 	}
-// }
 
 class WalletAddressBackendProvider extends BaseDataProvider<
 	AuthenticationBaseEntity<WalletAddress>,

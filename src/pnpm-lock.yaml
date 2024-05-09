@@ -75,9 +75,6 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.7
@@ -136,9 +133,6 @@ importers:
       pg:
         specifier: 8.11.5
         version: 8.11.5
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.7
@@ -200,9 +194,6 @@ importers:
       react:
         specifier: 18.2.0
         version: 18.2.0
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.7
@@ -249,9 +240,6 @@ importers:
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
     devDependencies:
       '@types/node':
         specifier: 20.12.7
@@ -480,9 +468,6 @@ importers:
       otp-generator:
         specifier: 4.0.1
         version: 4.0.1
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -621,9 +606,6 @@ importers:
       prettier:
         specifier: 3.2.5
         version: 3.2.5
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -825,9 +807,6 @@ importers:
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
     devDependencies:
       '@types/pluralize':
         specifier: 0.0.33
@@ -892,9 +871,6 @@ importers:
       promisify-child-process:
         specifier: 4.1.2
         version: 4.1.2
-      reflect-metadata:
-        specifier: 0.2.2
-        version: 0.2.2
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -9249,8 +9225,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001616
-      electron-to-chromium: 1.4.759
+      caniuse-lite: 1.0.30001617
+      electron-to-chromium: 1.4.760
       node-releases: 2.0.14
       update-browserslist-db: 1.0.15(browserslist@4.23.0)
 
@@ -9461,8 +9437,8 @@ packages:
     resolution: {integrity: sha512-xlx1yCK2Oc1APsPXDL2LdlNP6+uu8OCDdhOBSVT279M/S+y75O30C2VuD8T2ogdePBBl7PfPF4504tnLgX3zfw==}
     engines: {node: '>=14.16'}
 
-  /caniuse-lite@1.0.30001616:
-    resolution: {integrity: sha512-RHVYKov7IcdNjVHJFNY/78RdG4oGVjbayxv8u5IO74Wv7Hlq4PnJE6mo/OjFijjVFNy5ijnCt6H3IIo4t+wfEw==}
+  /caniuse-lite@1.0.30001617:
+    resolution: {integrity: sha512-mLyjzNI9I+Pix8zwcrpxEbGlfqOkF9kM3ptzmKNw5tizSyYwMe+nGLTqMK9cO+0E+Bh6TsBxNAaHWEM8xwSsmA==}
 
   /capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -10420,8 +10396,8 @@ packages:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
     dev: false
 
-  /electron-to-chromium@1.4.759:
-    resolution: {integrity: sha512-qZJc+zsuI+/5UjOSFnpkJBwwLMH1AZgyKqJ7LUNnRsB7v/cDjMu9DvXgp9kH6PTTZxjnPXGp2Uhurw+2Ll4Hjg==}
+  /electron-to-chromium@1.4.760:
+    resolution: {integrity: sha512-xF6AWMVM/QGQseTPgXjUewfNjCW2fgUcV/z5cSG0r+SiYcgtvcmRAL3oH/MSZwHBBD+fyKTXdQ4qGENJMSedEQ==}
 
   /elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -15888,6 +15864,7 @@ packages:
 
   /reflect-metadata@0.2.2:
     resolution: {integrity: sha512-urBwgfrvVP/eAyXx4hluJivBKzuEbSQs9rKWCrCkbSxNv8mxPcUZKeuoF3Uy4mJl3Lwprp6yy5/39VWigZ4K6Q==}
+    dev: false
 
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}

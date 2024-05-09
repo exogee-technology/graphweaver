@@ -25,7 +25,6 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			'@exogee/graphweaver-scalars': graphweaverVersion(version, '@exogee/graphweaver-scalars'),
 			'@exogee/graphweaver-server': graphweaverVersion(version, '@exogee/graphweaver-server'),
 			...backendPackages,
-			'reflect-metadata': '0.1.13',
 			'type-graphql': '2.0.0-beta.2',
 			graphql: '16.8.1',
 		},
@@ -104,7 +103,6 @@ ${hasSqlite ? liteConnection : ``}
 export const makeIndex = (projectName: string) => {
 	const index = `\
 /* ${projectName} Graphweaver Project */
-import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
 
 import './schema';

@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 const untrackedPropertyMetadataKey = Symbol('UntrackedProperty');
 
 export function UntrackedProperty() {

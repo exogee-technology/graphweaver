@@ -43,7 +43,6 @@
 		"graphql": "16.8.1",
 		"graphweaver": "*",
 		"promisify-child-process": "4.1.2",
-		"reflect-metadata": "0.2.2",
 		"web3-token": "1.0.6"
 	},
 	"devDependencies": {
