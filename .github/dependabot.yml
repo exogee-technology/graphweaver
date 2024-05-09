@@ -6,7 +6,7 @@ updates:
       interval: daily
       time: "03:00"
       timezone: Australia/Sydney
-    open-pull-requests-limit: 99
+    open-pull-requests-limit: 5
 
   - package-ecosystem: npm
     directory: "/src"
@@ -14,7 +14,7 @@ updates:
       interval: daily
       time: "03:00"
       timezone: Australia/Sydney
-    open-pull-requests-limit: 99
+    open-pull-requests-limit: 10
     groups:
       aws-sdk:
         patterns:
