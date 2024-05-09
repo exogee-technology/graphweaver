@@ -104,6 +104,7 @@ export type CognitoUser = {
   username: Scalars['String']['output'];
 };
 
+/** Data needed to create or update CognitoUsers. If an ID is passed, this is an update, otherwise it's an insert. */
 export type CognitoUserCreateOrUpdateInput = {
   attributes?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
@@ -114,252 +115,164 @@ export type CognitoUserCreateOrUpdateInput = {
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CognitoUserDeleteInput = {
-  id: Scalars['ID']['input'];
-};
-
-export type CognitoUserDeleteManyInput = {
-  attributes?: InputMaybe<Scalars['String']['input']>;
-  attributes_ilike?: InputMaybe<Scalars['String']['input']>;
-  attributes_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  attributes_like?: InputMaybe<Scalars['String']['input']>;
-  attributes_ne?: InputMaybe<Scalars['String']['input']>;
-  attributes_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  attributes_notnull?: InputMaybe<Scalars['String']['input']>;
-  attributes_null?: InputMaybe<Scalars['String']['input']>;
-  email?: InputMaybe<Scalars['String']['input']>;
-  email_ilike?: InputMaybe<Scalars['String']['input']>;
-  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  email_like?: InputMaybe<Scalars['String']['input']>;
-  email_ne?: InputMaybe<Scalars['String']['input']>;
-  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  email_notnull?: InputMaybe<Scalars['String']['input']>;
-  email_null?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  filter?: InputMaybe<CognitoUsersFilterInput>;
-  groups?: InputMaybe<Scalars['String']['input']>;
-  groups_ilike?: InputMaybe<Scalars['String']['input']>;
-  groups_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  groups_like?: InputMaybe<Scalars['String']['input']>;
-  groups_ne?: InputMaybe<Scalars['String']['input']>;
-  groups_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  groups_notnull?: InputMaybe<Scalars['String']['input']>;
-  groups_null?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
-  userStatus?: InputMaybe<Scalars['String']['input']>;
-  userStatus_ilike?: InputMaybe<Scalars['String']['input']>;
-  userStatus_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  userStatus_like?: InputMaybe<Scalars['String']['input']>;
-  userStatus_ne?: InputMaybe<Scalars['String']['input']>;
-  userStatus_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  userStatus_notnull?: InputMaybe<Scalars['String']['input']>;
-  userStatus_null?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-  username_ilike?: InputMaybe<Scalars['String']['input']>;
-  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_like?: InputMaybe<Scalars['String']['input']>;
-  username_ne?: InputMaybe<Scalars['String']['input']>;
-  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_notnull?: InputMaybe<Scalars['String']['input']>;
-  username_null?: InputMaybe<Scalars['String']['input']>;
-};
-
+/** Data needed to create CognitoUsers. */
 export type CognitoUserInsertInput = {
   attributes?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  enabled: Scalars['Boolean']['input'];
   groups?: InputMaybe<Scalars['String']['input']>;
   userStatus?: InputMaybe<Scalars['String']['input']>;
   username: Scalars['String']['input'];
 };
 
-export type CognitoUsersCreateOrUpdateManyInput = {
-  data: Array<CognitoUserCreateOrUpdateInput>;
-};
-
-export type CognitoUsersFilterInput = {
+/** Data needed to update CognitoUsers. An ID must be passed. */
+export type CognitoUserUpdateInput = {
   attributes?: InputMaybe<Scalars['String']['input']>;
-  attributes_ilike?: InputMaybe<Scalars['String']['input']>;
-  attributes_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  attributes_like?: InputMaybe<Scalars['String']['input']>;
-  attributes_ne?: InputMaybe<Scalars['String']['input']>;
-  attributes_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  attributes_notnull?: InputMaybe<Scalars['String']['input']>;
-  attributes_null?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  email_ilike?: InputMaybe<Scalars['String']['input']>;
-  email_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  email_like?: InputMaybe<Scalars['String']['input']>;
-  email_ne?: InputMaybe<Scalars['String']['input']>;
-  email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  email_notnull?: InputMaybe<Scalars['String']['input']>;
-  email_null?: InputMaybe<Scalars['String']['input']>;
   enabled?: InputMaybe<Scalars['Boolean']['input']>;
-  filter?: InputMaybe<CognitoUsersFilterInput>;
   groups?: InputMaybe<Scalars['String']['input']>;
-  groups_ilike?: InputMaybe<Scalars['String']['input']>;
-  groups_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  groups_like?: InputMaybe<Scalars['String']['input']>;
-  groups_ne?: InputMaybe<Scalars['String']['input']>;
-  groups_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  groups_notnull?: InputMaybe<Scalars['String']['input']>;
-  groups_null?: InputMaybe<Scalars['String']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
+  id: Scalars['ID']['input'];
   userStatus?: InputMaybe<Scalars['String']['input']>;
-  userStatus_ilike?: InputMaybe<Scalars['String']['input']>;
-  userStatus_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  userStatus_like?: InputMaybe<Scalars['String']['input']>;
-  userStatus_ne?: InputMaybe<Scalars['String']['input']>;
-  userStatus_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  userStatus_notnull?: InputMaybe<Scalars['String']['input']>;
-  userStatus_null?: InputMaybe<Scalars['String']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
-  username_ilike?: InputMaybe<Scalars['String']['input']>;
-  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_like?: InputMaybe<Scalars['String']['input']>;
-  username_ne?: InputMaybe<Scalars['String']['input']>;
-  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_notnull?: InputMaybe<Scalars['String']['input']>;
-  username_null?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CognitoUsersInsertManyInput = {
-  data: Array<CognitoUserInsertInput>;
 };
 
 export type CognitoUsersListFilter = {
-  _and?: InputMaybe<Array<CognitoUsersListFilter>>;
-  _not?: InputMaybe<CognitoUsersListFilter>;
-  _or?: InputMaybe<Array<CognitoUsersListFilter>>;
   attributes?: InputMaybe<Scalars['String']['input']>;
   attributes_ilike?: InputMaybe<Scalars['String']['input']>;
   attributes_in?: InputMaybe<Array<Scalars['String']['input']>>;
   attributes_like?: InputMaybe<Scalars['String']['input']>;
   attributes_ne?: InputMaybe<Scalars['String']['input']>;
   attributes_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  attributes_notnull?: InputMaybe<Scalars['String']['input']>;
-  attributes_null?: InputMaybe<Scalars['String']['input']>;
+  attributes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  attributes_null?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_ilike?: InputMaybe<Scalars['String']['input']>;
   email_in?: InputMaybe<Array<Scalars['String']['input']>>;
   email_like?: InputMaybe<Scalars['String']['input']>;
   email_ne?: InputMaybe<Scalars['String']['input']>;
   email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  email_notnull?: InputMaybe<Scalars['String']['input']>;
-  email_null?: InputMaybe<Scalars['String']['input']>;
+  email_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  email_null?: InputMaybe<Scalars['Boolean']['input']>;
   enabled?: InputMaybe<Scalars['Boolean']['input']>;
+  enabled_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  enabled_ne?: InputMaybe<Scalars['Boolean']['input']>;
+  enabled_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  enabled_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  enabled_null?: InputMaybe<Scalars['Boolean']['input']>;
   groups?: InputMaybe<Scalars['String']['input']>;
   groups_ilike?: InputMaybe<Scalars['String']['input']>;
   groups_in?: InputMaybe<Array<Scalars['String']['input']>>;
   groups_like?: InputMaybe<Scalars['String']['input']>;
   groups_ne?: InputMaybe<Scalars['String']['input']>;
   groups_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  groups_notnull?: InputMaybe<Scalars['String']['input']>;
-  groups_null?: InputMaybe<Scalars['String']['input']>;
+  groups_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  groups_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['ID']['input']>;
-  id_null?: InputMaybe<Scalars['ID']['input']>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
   userStatus?: InputMaybe<Scalars['String']['input']>;
   userStatus_ilike?: InputMaybe<Scalars['String']['input']>;
   userStatus_in?: InputMaybe<Array<Scalars['String']['input']>>;
   userStatus_like?: InputMaybe<Scalars['String']['input']>;
   userStatus_ne?: InputMaybe<Scalars['String']['input']>;
   userStatus_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  userStatus_notnull?: InputMaybe<Scalars['String']['input']>;
-  userStatus_null?: InputMaybe<Scalars['String']['input']>;
+  userStatus_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  userStatus_null?: InputMaybe<Scalars['Boolean']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
   username_ilike?: InputMaybe<Scalars['String']['input']>;
   username_in?: InputMaybe<Array<Scalars['String']['input']>>;
   username_like?: InputMaybe<Scalars['String']['input']>;
   username_ne?: InputMaybe<Scalars['String']['input']>;
   username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_notnull?: InputMaybe<Scalars['String']['input']>;
-  username_null?: InputMaybe<Scalars['String']['input']>;
+  username_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  username_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type CognitoUsersOrderByInput = {
   attributes?: InputMaybe<Sort>;
   email?: InputMaybe<Sort>;
+  enabled?: InputMaybe<Sort>;
   groups?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   userStatus?: InputMaybe<Sort>;
   username?: InputMaybe<Sort>;
 };
 
+/** Pagination options for CognitoUsers. */
 export type CognitoUsersPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<CognitoUsersOrderByInput>;
 };
 
-export type CognitoUsersUpdateManyInput = {
-  data: Array<CognitoUserCreateOrUpdateInput>;
+export type DeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createCognitoUser: CognitoUser;
-  createCognitoUsers: Array<CognitoUser>;
-  createOrUpdateCognitoUsers: Array<CognitoUser>;
-  deleteCognitoUser: Scalars['Boolean']['output'];
-  deleteCognitoUsers: Scalars['Boolean']['output'];
-  updateCognitoUser: CognitoUser;
-  updateCognitoUsers: Array<CognitoUser>;
+  /** Create a single CognitoUser. */
+  createCognitoUser?: Maybe<CognitoUser>;
+  /** Create many CognitoUsers. */
+  createCognitoUsers?: Maybe<Array<Maybe<CognitoUser>>>;
+  /** Create or update many CognitoUsers. */
+  createOrUpdateCognitoUsers?: Maybe<Array<Maybe<CognitoUser>>>;
+  /** Delete a single CognitoUser. */
+  deleteCognitoUser?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many CognitoUsers with a filter. */
+  deleteCognitoUsers?: Maybe<Scalars['Boolean']['output']>;
+  /** Update a single CognitoUser. */
+  updateCognitoUser?: Maybe<CognitoUser>;
+  /** Update many CognitoUsers. */
+  updateCognitoUsers?: Maybe<Array<Maybe<CognitoUser>>>;
 };
 
 
 export type MutationCreateCognitoUserArgs = {
-  data: CognitoUserInsertInput;
+  input: CognitoUserInsertInput;
 };
 
 
 export type MutationCreateCognitoUsersArgs = {
-  input: CognitoUsersInsertManyInput;
+  input: Array<CognitoUserInsertInput>;
 };
 
 
 export type MutationCreateOrUpdateCognitoUsersArgs = {
-  input: CognitoUsersCreateOrUpdateManyInput;
+  input: Array<CognitoUserCreateOrUpdateInput>;
 };
 
 
 export type MutationDeleteCognitoUserArgs = {
-  filter: CognitoUserDeleteInput;
+  filter: DeleteOneFilterInput;
 };
 
 
 export type MutationDeleteCognitoUsersArgs = {
-  filter: CognitoUserDeleteManyInput;
+  filter: CognitoUsersListFilter;
 };
 
 
 export type MutationUpdateCognitoUserArgs = {
-  data: CognitoUserCreateOrUpdateInput;
+  input: CognitoUserUpdateInput;
 };
 
 
 export type MutationUpdateCognitoUsersArgs = {
-  input: CognitoUsersUpdateManyInput;
+  input: Array<CognitoUserUpdateInput>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  _graphweaver: AdminUiMetadata;
+  /** Query used by the Admin UI to introspect the schema and metadata. */
+  _graphweaver?: Maybe<AdminUiMetadata>;
+  /** Get a single CognitoUser. */
   cognitoUser?: Maybe<CognitoUser>;
-  cognitoUsers: Array<CognitoUser>;
+  /** Get multiple CognitoUsers. */
+  cognitoUsers?: Maybe<Array<Maybe<CognitoUser>>>;
 };
 
 

@@ -49,6 +49,46 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
 
+  examples/aws-cognito:
+    dependencies:
+      '@apollo/server':
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
+      '@as-integrations/aws-lambda':
+        specifier: 3.1.0
+        version: 3.1.0(@apollo/server@4.10.2)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-aws-cognito':
+        specifier: workspace:*
+        version: link:../../packages/aws-cognito
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      dotenv:
+        specifier: 16.4.5
+        version: 16.4.5
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      react:
+        specifier: 18.2.0
+        version: 18.2.0
+      reflect-metadata:
+        specifier: 0.2.2
+        version: 0.2.2
+    devDependencies:
+      '@types/node':
+        specifier: 20.12.7
+        version: 20.12.7
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
+
   examples/databases:
     dependencies:
       '@apollo/server':

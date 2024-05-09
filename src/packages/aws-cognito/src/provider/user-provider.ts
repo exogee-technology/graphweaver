@@ -2,7 +2,8 @@ import { getOneUser, getManyUsers, mapId, createUser, toggleUserStatus } from '.
 
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import { CognitoUser, CognitoUserBackendEntity } from '../entities';
-import { createProvider } from './provider';
+import { createProvider } from './base-provider';
+import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
 
 type Entity = CognitoUser;
 type Context = {
@@ -58,6 +59,12 @@ export const createAwsCognitoUserProvider = ({
 
 			return mapId(await getOneUser(client, UserPoolId, entityId));
 		},
+	});
+
+	// Attach the entity to this provider
+	graphweaverMetadata.collectProviderInformationForEntity<typeof CognitoUser, DataEntity>({
+		provider: provider as BackendProvider<DataEntity, typeof CognitoUser>,
+		target: CognitoUser,
 	});
 
 	return {
