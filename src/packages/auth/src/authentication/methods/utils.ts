@@ -8,7 +8,7 @@ import {
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { hashPassword } from '../../utils/argon2id';
-import { CredentialCreateOrUpdateInput } from './password';
+import { CredentialUpdateInput, CredentialInsertInput } from './password';
 
 export class PasswordStrengthError extends ApolloError {
 	constructor(message: string, extensions?: Record<string, any>) {
@@ -30,7 +30,7 @@ export type updatePasswordCredentialOptions<D> = {
 	id: string;
 	password?: string;
 	username?: string;
-	params?: HookParams<CredentialCreateOrUpdateInput>;
+	params?: HookParams<CredentialUpdateInput>;
 };
 export const updatePasswordCredential = async <D extends BaseDataEntity>({
 	assertPasswordStrength,
@@ -56,11 +56,11 @@ export const updatePasswordCredential = async <D extends BaseDataEntity>({
 
 export const runAfterHooks = async <
 	D extends BaseDataEntity,
-	H extends HookParams<CredentialCreateOrUpdateInput>,
+	H = CredentialInsertInput | CredentialUpdateInput,
 >(
 	hookRegister: HookRegister,
 	entities: (D | null)[],
-	hookParams?: H
+	hookParams?: HookParams<H>
 ): Promise<(D | null)[]> => {
 	const hookManager = hookManagerMap.get('Credential');
 

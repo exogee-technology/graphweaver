@@ -101,19 +101,19 @@ export type ApiKey = {
   roles?: Maybe<Array<Roles>>;
 };
 
-export type ApiKeyCreateOrUpdateInput = {
-  id: Scalars['ID']['input'];
-  key?: InputMaybe<Scalars['String']['input']>;
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Array<Scalars['String']['input']>>;
-  secret?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type ApiKeyInsertInput = {
   key: Scalars['String']['input'];
   revoked?: InputMaybe<Scalars['Boolean']['input']>;
   roles?: InputMaybe<Array<Scalars['String']['input']>>;
   secret: Scalars['String']['input'];
+};
+
+export type ApiKeyUpdateInput = {
+  id: Scalars['ID']['input'];
+  key?: InputMaybe<Scalars['String']['input']>;
+  revoked?: InputMaybe<Scalars['Boolean']['input']>;
+  roles?: InputMaybe<Array<Scalars['String']['input']>>;
+  secret?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ApiKeysListFilter = {
@@ -159,17 +159,17 @@ export type Credential = {
   username: Scalars['String']['output'];
 };
 
-export type CredentialCreateOrUpdateInput = {
-  confirm?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  password?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type CredentialInsertInput = {
   confirm: Scalars['String']['input'];
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
+};
+
+export type CredentialUpdateInput = {
+  confirm?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  password?: InputMaybe<Scalars['String']['input']>;
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CredentialsListFilter = {
@@ -400,12 +400,12 @@ export type MutationSendResetPasswordLinkArgs = {
 
 
 export type MutationUpdateApiKeyArgs = {
-  input: ApiKeyCreateOrUpdateInput;
+  input: ApiKeyUpdateInput;
 };
 
 
 export type MutationUpdateCredentialArgs = {
-  input: CredentialCreateOrUpdateInput;
+  input: CredentialUpdateInput;
 };
 
 

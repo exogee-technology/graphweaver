@@ -39,7 +39,7 @@ export enum PasswordOperation {
 }
 
 @InputType(`CredentialInsertInput`)
-class CredentialInsertInput {
+export class CredentialInsertInput {
 	@Field(() => String)
 	username!: string;
 
@@ -50,8 +50,8 @@ class CredentialInsertInput {
 	confirm!: string;
 }
 
-@InputType(`CredentialCreateOrUpdateInput`)
-export class CredentialCreateOrUpdateInput {
+@InputType(`CredentialUpdateInput`)
+export class CredentialUpdateInput {
 	@Field(() => String)
 	id!: string;
 
@@ -128,7 +128,7 @@ export class Password<D extends CredentialStorage> {
 		graphweaverMetadata.addMutation({
 			name: 'updateCredential',
 			args: {
-				input: CredentialCreateOrUpdateInput,
+				input: CredentialUpdateInput,
 			},
 			getType: () => Credential,
 			resolver: this.updateCredential.bind(this),
@@ -181,9 +181,7 @@ export class Password<D extends CredentialStorage> {
 		throw new AuthenticationError('Unknown username or password, please try again');
 	}
 
-	async create(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInput>
-	): Promise<UserProfile> {
+	async create(params: CreateOrUpdateHookParams<CredentialInsertInput>): Promise<UserProfile> {
 		const [item] = params.args.items;
 		if (!item) throw new Error('No data specified cannot continue.');
 
@@ -212,9 +210,7 @@ export class Password<D extends CredentialStorage> {
 		});
 	}
 
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInput>
-	): Promise<UserProfile> {
+	async update(params: CreateOrUpdateHookParams<CredentialUpdateInput>): Promise<UserProfile> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
 
@@ -257,7 +253,7 @@ export class Password<D extends CredentialStorage> {
 
 			let userProfile;
 			try {
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInput>(
+				const hookParams = await runWritableBeforeHooks<CredentialInsertInput>(
 					HookRegister.BEFORE_CREATE,
 					params,
 					'Credential'
@@ -294,7 +290,7 @@ export class Password<D extends CredentialStorage> {
 
 	async updateCredential(
 		_: Source,
-		args: { input: CredentialCreateOrUpdateInput },
+		args: { input: CredentialUpdateInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<Credential<D> | null> {
@@ -308,7 +304,7 @@ export class Password<D extends CredentialStorage> {
 
 			let userProfile;
 			try {
-				const hookParams = await runWritableBeforeHooks<CredentialCreateOrUpdateInput>(
+				const hookParams = await runWritableBeforeHooks<CredentialUpdateInput>(
 					HookRegister.BEFORE_UPDATE,
 					params,
 					'Credential'
