@@ -63,5 +63,10 @@
 		"postgresql",
 		"mysql",
 		"sqlite"
-	]
+	],
+	"pnpm": {
+		"overrides": {
+			"reflect-metadata": "0.2.2"
+		}
+	}
 }
