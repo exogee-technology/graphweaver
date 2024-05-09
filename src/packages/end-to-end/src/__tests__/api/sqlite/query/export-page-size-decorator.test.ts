@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, GraphQLEntity, ID, Entity, ExportPageSize } from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
@@ -37,9 +37,11 @@ const connection = {
 	},
 };
 
-@ExportPageSize(500)
 @Entity('Album', {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
+	adminUIOptions: {
+		exportPageSize: 500,
+	},
 })
 export class Album extends GraphQLEntity<OrmAlbum> {
 	public dataEntity!: OrmAlbum;
@@ -51,9 +53,11 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 	title!: string;
 }
 
-@ExportPageSize(100)
 @Entity('Artist', {
 	provider: new MikroBackendProvider(OrmArtist, connection),
+	adminUIOptions: {
+		exportPageSize: 100,
+	},
 })
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;

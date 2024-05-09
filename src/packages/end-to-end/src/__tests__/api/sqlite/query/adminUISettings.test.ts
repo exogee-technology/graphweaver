@@ -99,7 +99,7 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 
 	@Field(() => String, {
 		nullable: true,
-		adminUIOptions: { hideInTable: true },
+		adminUIOptions: { hideInTable: true, summaryField: true },
 	})
 	name?: string;
 
