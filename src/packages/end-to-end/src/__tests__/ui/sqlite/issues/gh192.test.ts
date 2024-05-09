@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import { randomUUID } from 'crypto';
+
 import { config } from '../../../../config';
 
 test('ensure toast is displayed with the name of the item after creation', async ({ page }) => {
@@ -14,7 +16,7 @@ test('ensure toast is displayed with the name of the item after creation', async
 	await expect(page.getByText('A Cor Do Som')).toBeVisible();
 	await page.getByText('A Cor Do Som').click();
 
-	const title = 'Infinity';
+	const title = randomUUID();
 
 	// pre-condition: Infinity text not found on the page
 	await expect(page.getByText(title)).not.toBeVisible();
@@ -40,5 +42,5 @@ test('ensure toast is displayed with the name of the item after creation', async
 	await page.getByRole('button', { name: 'Save' }).click();
 
 	// post-condition: Infinity text found on the page
-	await expect(page.getByText(title)).toBeVisible();
+	await expect(page.getByText(title).first()).toBeVisible();
 });
