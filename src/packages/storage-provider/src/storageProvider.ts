@@ -12,6 +12,7 @@ type StorageConfig = {
 	bucketName: string;
 	region?: string;
 	expiresIn?: number;
+	endpoint?: string;
 };
 
 const EXPIRE_TIME = 3600;
@@ -20,11 +21,13 @@ export class S3StorageProvider {
 	bucketName: string;
 	region: string | undefined;
 	expiresIn: number;
+	endpoint?: string;
 
 	constructor(config: StorageConfig) {
 		this.bucketName = config.bucketName;
 		this.region = config.region;
 		this.expiresIn = config.expiresIn || EXPIRE_TIME;
+		this.endpoint = config.endpoint;
 
 		graphweaverMetadata.addMutation({
 			name: 'getUploadUrl',
@@ -55,6 +58,11 @@ export class S3StorageProvider {
 
 		const s3 = new S3Client({
 			region: this.region,
+			...(this.endpoint ? { endpoint: this.endpoint } : {}),
+			credentials: {
+				accessKeyId: 'minio_access_key',
+				secretAccessKey: 'minio_secret_access_key',
+			},
 		});
 
 		const command = new PutObjectCommand({
@@ -76,6 +84,7 @@ export class S3StorageProvider {
 
 		const s3 = new S3Client({
 			region: this.region,
+			...(this.endpoint ? { endpoint: this.endpoint } : {}),
 		});
 
 		const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });

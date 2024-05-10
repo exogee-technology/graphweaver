@@ -47,11 +47,8 @@ export const ImageField = ({ field, autoFocus }: { field: EntityField; autoFocus
 			return;
 		}
 
-		if (!field.extensions?.key) {
-			console.error('Key not found on field extentions');
-			return;
-		}
-		const imageKey = field.extensions.key;
+		// @todo - this should be configurable from the backend
+		const imageKey = field.extensions?.key ?? 'key';
 
 		setValues((prev: any) => ({
 			...prev,

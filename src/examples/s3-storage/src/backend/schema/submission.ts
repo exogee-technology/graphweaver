@@ -17,6 +17,7 @@ const s3 = new S3StorageProvider({
 	region: process.env.AWS_REGION,
 	type: StorageType.S3,
 	expiresIn: 3600,
+	endpoint: process.env.AWS_S3_ENDPOINT,
 });
 
 @Entity('Submission', {

@@ -16,6 +16,12 @@ Create a new bucket here:
 
 Update the env variable `AWS_S3_BUCKET` with the new bucket name.
 
+Lastly, you need to create a user and access id / secret:
+
+[http://127.0.0.1:54902/identity/users](http://127.0.0.1:54902/identity/users)
+
+Save these values to the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` env vars.
+
 To run the example make sure that you have a local PostgreSQL database and that you seed the database as below.
 
 The user table in PostgreSQL looks like this:
