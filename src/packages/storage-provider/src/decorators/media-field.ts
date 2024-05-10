@@ -1,6 +1,7 @@
-import { graphweaverMetadata } from '@exogee/graphweaver';
-import { IStorageProvider } from '../storageProvider';
+import { BaseContext, GraphQLResolveInfo, graphweaverMetadata } from '@exogee/graphweaver';
+import { S3StorageProvider } from '../storageProvider';
 import { ImageScalar, MediaScalar } from '@exogee/graphweaver-scalars';
+import { Source } from 'graphql';
 
 export enum MediaTypes {
 	IMAGE = 'Image',
@@ -8,7 +9,7 @@ export enum MediaTypes {
 }
 
 type DownloadUrlFieldOptions = {
-	storageProvider: IStorageProvider;
+	storageProvider: S3StorageProvider;
 	resourceId?: string;
 	mediaType: MediaTypes;
 };
@@ -89,15 +90,25 @@ export function MediaField({
 		// 	complexity: undefined,
 		// });
 
-		const fieldResolver = async (root: any) => {
+		const fieldResolver = async (
+			source: Source,
+			args: unknown,
+			context: BaseContext,
+			info: GraphQLResolveInfo
+		) => {
 			// If the key is set to null, we don't want to return a download url, an return empty string
-			if (root[resourceId] === null) return '';
+			if (source[resourceId as keyof Source] === null) return '';
 
 			// Check that key is a property on the object
-			if (!root[resourceId]) {
+			if (!source[resourceId as keyof Source]) {
 				throw new Error(`@DownloadUrlField decorator key must be a key on the object.`);
 			}
-			return storageProvider.getDownloadUrl(root[resourceId]);
+			return storageProvider.getDownloadUrl(
+				source,
+				{ key: source[resourceId as keyof Source] as string },
+				context,
+				info
+			);
 		};
 
 		// Object.defineProperty(target, propertyKey, {

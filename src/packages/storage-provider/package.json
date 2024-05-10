@@ -24,7 +24,8 @@
 		"@aws-sdk/s3-request-presigner": "3.552.0",
 		"@exogee/logger": "workspace:*",
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-scalars": "workspace:*"
+		"@exogee/graphweaver-scalars": "workspace:*",
+		"graphql": "16.8.1"
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",

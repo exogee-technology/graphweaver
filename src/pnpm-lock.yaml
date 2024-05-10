@@ -205,6 +205,55 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
 
+  examples/s3-storage:
+    dependencies:
+      '@apollo/client':
+        specifier: 3.9.11
+        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+      '@apollo/server':
+        specifier: 4.10.2
+        version: 4.10.2(graphql@16.8.1)
+      '@as-integrations/aws-lambda':
+        specifier: 3.1.0
+        version: 3.1.0(@apollo/server@4.10.2)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@exogee/graphweaver-storage-provider':
+        specifier: workspace:*
+        version: link:../../packages/storage-provider
+      '@mikro-orm/core':
+        specifier: 6.1.12
+        version: 6.1.12
+      '@mikro-orm/postgresql':
+        specifier: 6.1.12
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+      pg:
+        specifier: 8.11.5
+        version: 8.11.5
+    devDependencies:
+      '@types/node':
+        specifier: 20.12.7
+        version: 20.12.7
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
+
   examples/sqlite:
     dependencies:
       '@as-integrations/aws-lambda':
@@ -940,7 +989,7 @@ importers:
         version: link:../server
       '@exogee/graphweaver-storage-provider':
         specifier: workspace:*
-        version: link:../graphweaver-storage-provider
+        version: link:../storage-provider
       '@mikro-orm/core':
         specifier: 6.1.12
         version: 6.1.12
@@ -1014,34 +1063,6 @@ importers:
       tsx:
         specifier: 4.7.2
         version: 4.7.2
-      typescript:
-        specifier: 5.4.5
-        version: 5.4.5
-
-  packages/graphweaver-storage-provider:
-    dependencies:
-      '@aws-sdk/client-s3':
-        specifier: 3.552.0
-        version: 3.552.0
-      '@aws-sdk/s3-request-presigner':
-        specifier: 3.552.0
-        version: 3.552.0
-      '@exogee/graphweaver':
-        specifier: workspace:*
-        version: link:../core
-      '@exogee/graphweaver-scalars':
-        specifier: workspace:*
-        version: link:../scalars
-      '@exogee/logger':
-        specifier: workspace:*
-        version: link:../logger
-    devDependencies:
-      esbuild:
-        specifier: 0.15.5
-        version: 0.15.5
-      glob:
-        specifier: 10.3.12
-        version: 10.3.12
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1295,6 +1316,37 @@ importers:
       glob:
         specifier: 10.3.12
         version: 10.3.12
+
+  packages/storage-provider:
+    dependencies:
+      '@aws-sdk/client-s3':
+        specifier: 3.552.0
+        version: 3.552.0
+      '@aws-sdk/s3-request-presigner':
+        specifier: 3.552.0
+        version: 3.552.0
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../scalars
+      '@exogee/logger':
+        specifier: workspace:*
+        version: link:../logger
+      graphql:
+        specifier: 16.8.1
+        version: 16.8.1
+    devDependencies:
+      esbuild:
+        specifier: 0.15.5
+        version: 0.15.5
+      glob:
+        specifier: 10.3.12
+        version: 10.3.12
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
 
   packages/vite-plugin-graphweaver:
     dependencies:
@@ -9329,8 +9381,8 @@ packages:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  /aws-sdk@2.1616.0:
-    resolution: {integrity: sha512-Wes2FOJn/5Bo35ku+KYvn/H+xnuPuI97mQKxhU+d3TczAY56rFH/qw7Bff8HI0Gi6m6lDEhhq76qvG4gfdPexg==}
+  /aws-sdk@2.1617.0:
+    resolution: {integrity: sha512-lIZtMv/0H0OJG/0sMscXB8e96M03AcqpfIEyuuNES4ZkytjyiTaLYCfviYudrRn7gcLbX/b3/TPphymBng4tHw==}
     engines: {node: '>= 10.0.0'}
     requiresBuild: true
     dependencies:
@@ -9612,7 +9664,7 @@ packages:
     hasBin: true
     dependencies:
       caniuse-lite: 1.0.30001617
-      electron-to-chromium: 1.4.760
+      electron-to-chromium: 1.4.762
       node-releases: 2.0.14
       update-browserslist-db: 1.0.15(browserslist@4.23.0)
 
@@ -9988,7 +10040,7 @@ packages:
     dependencies:
       '@types/validator': 13.11.9
       libphonenumber-js: 1.11.1
-      validator: 13.11.0
+      validator: 13.12.0
     dev: false
 
   /clean-stack@2.2.0:
@@ -10885,8 +10937,8 @@ packages:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
     dev: false
 
-  /electron-to-chromium@1.4.760:
-    resolution: {integrity: sha512-xF6AWMVM/QGQseTPgXjUewfNjCW2fgUcV/z5cSG0r+SiYcgtvcmRAL3oH/MSZwHBBD+fyKTXdQ4qGENJMSedEQ==}
+  /electron-to-chromium@1.4.762:
+    resolution: {integrity: sha512-rrFvGweLxPwwSwJOjIopy3Vr+J3cIPtZzuc74bmlvmBIgQO3VYJDvVrlj94iKZ3ukXUH64Ex31hSfRTLqvjYJQ==}
 
   /elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
@@ -12358,8 +12410,8 @@ packages:
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
 
-  /get-tsconfig@4.7.4:
-    resolution: {integrity: sha512-ofbkKj+0pjXjhejr007J/fLf+sW+8H7K5GCm+msC8q3IpvgjobpyPqSRFemNyIMxklC0zeJpi7VDFna19FacvQ==}
+  /get-tsconfig@4.7.5:
+    resolution: {integrity: sha512-ZCuZCnlqNzjb4QprAzXKdpp/gh6KTxSJuw3IBsPnV/7fV4NxC9ckB+vPTt8w7fJA0TaSD7c55BR47JD6MEDyDw==}
     dependencies:
       resolve-pkg-maps: 1.0.0
     dev: true
@@ -12397,8 +12449,8 @@ packages:
       foreground-child: 3.1.1
       jackspeak: 2.3.6
       minimatch: 9.0.4
-      minipass: 7.1.0
-      path-scurry: 1.10.2
+      minipass: 7.1.1
+      path-scurry: 1.11.0
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
@@ -14428,7 +14480,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       mlly: 1.7.0
-      pkg-types: 1.1.0
+      pkg-types: 1.1.1
     dev: true
 
   /locate-path@5.0.0:
@@ -14903,8 +14955,8 @@ packages:
     resolution: {integrity: sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==}
     engines: {node: '>=8'}
 
-  /minipass@7.1.0:
-    resolution: {integrity: sha512-oGZRv2OT1lO2UF1zUcwdTb3wqUwI0kBGTgt/T7OdSj6M6N5m3o5uPf0AIW6lVxGGoiWUR7e2AwTE+xiwK8WQig==}
+  /minipass@7.1.1:
+    resolution: {integrity: sha512-UZ7eQ+h8ywIRAW1hIEl2AqdwzJucU/Kp59+8kkZeSvafXhZjul247BvIJjEVFVeON6d7lM46XX1HXCduKAS8VA==}
     engines: {node: '>=16 || 14 >=14.17'}
 
   /minizlib@2.1.2:
@@ -14935,7 +14987,7 @@ packages:
     dependencies:
       acorn: 8.11.3
       pathe: 1.1.2
-      pkg-types: 1.1.0
+      pkg-types: 1.1.1
       ufo: 1.5.3
     dev: true
 
@@ -15545,12 +15597,12 @@ packages:
       path-root-regex: 0.1.2
     dev: false
 
-  /path-scurry@1.10.2:
-    resolution: {integrity: sha512-7xTavNy5RQXnsjANvVvMkEjvloOinkAjv/Z6Ildz9v2RinZ4SBKTWFOVRbaF8p0vpHnyjV/UwNDdKuUv6M5qcA==}
+  /path-scurry@1.11.0:
+    resolution: {integrity: sha512-LNHTaVkzaYaLGlO+0u3rQTz7QrHTFOuKyba9JMTQutkmtNew8dw8wOD7mTU/5fCPZzCWpfW0XnQKzY61P0aTaw==}
     engines: {node: '>=16 || 14 >=14.17'}
     dependencies:
       lru-cache: 10.2.2
-      minipass: 7.1.0
+      minipass: 7.1.1
 
   /path-to-regexp@0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
@@ -15744,8 +15796,8 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /pkg-types@1.1.0:
-    resolution: {integrity: sha512-/RpmvKdxKf8uILTtoOhAgf30wYbP2Qw+L9p3Rvshx1JZVX+XQNZQFjlbmGHEGIm4CkVPlSn+NXmIM8+9oWQaSA==}
+  /pkg-types@1.1.1:
+    resolution: {integrity: sha512-ko14TjmDuQJ14zsotODv7dBlwxKhUKQEhuhmbqo1uCi9BB0Z2alo/wAXg6q1dTR5TyuqYyWhjtfe/Tsh+X28jQ==}
     dependencies:
       confbox: 0.1.7
       mlly: 1.7.0
@@ -16781,7 +16833,7 @@ packages:
       ajv: 8.13.0
       ajv-formats: 2.1.1(ajv@8.13.0)
       archiver: 5.3.2
-      aws-sdk: 2.1616.0
+      aws-sdk: 2.1617.0
       bluebird: 3.7.2
       cachedir: 2.4.0
       chalk: 4.1.2
@@ -17726,7 +17778,7 @@ packages:
     hasBin: true
     dependencies:
       esbuild: 0.19.12
-      get-tsconfig: 4.7.4
+      get-tsconfig: 4.7.5
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
@@ -18113,8 +18165,8 @@ packages:
       builtins: 5.1.0
     dev: false
 
-  /validator@13.11.0:
-    resolution: {integrity: sha512-Ii+sehpSfZy+At5nPdnyMhx78fEoPDkR2XW/zimHEL3MyGJQOCQ7WeP20jPYRz7ZCpcKLB21NxuXHF3bxjStBQ==}
+  /validator@13.12.0:
+    resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
     dev: false
 

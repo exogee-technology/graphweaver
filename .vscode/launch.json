@@ -82,6 +82,16 @@
       "cwd": "${workspaceFolder}/src/examples/rest"
     },
     {
+      "name": "S3 Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/s3-storage"
+    },
+    {
       "name": "SQLite Database Example",
       "type": "node",
       "request": "launch",

@@ -426,6 +426,7 @@ class Metadata {
 		name: string;
 		getType: GetTypeFunction;
 		resolver: GraphQLFieldResolver<any, any, any, unknown>;
+		args?: Record<string, unknown>;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {

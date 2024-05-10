@@ -1,4 +1,4 @@
-import { GraphQLEntity, Field, ID, Entity, ReadOnlyProperty } from '@exogee/graphweaver';
+import { GraphQLEntity, Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	S3StorageProvider,
 	StorageType,
@@ -28,8 +28,7 @@ export class Submission extends GraphQLEntity<OrmSubmission> {
 	@Field(() => ID)
 	id!: string;
 
-	@ReadOnlyProperty({ adminUI: true, backend: false })
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, adminUIOptions: { readonly: true } })
 	key?: string;
 
 	// "resourceId" must match the name of the field on the entity that gets the url from s3

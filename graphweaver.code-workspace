@@ -90,7 +90,7 @@
     },
     {
       "name": "📦 @exogee/graphweaver-storage-provider",
-      "path": "src/packages/graphweaver-storage-provider"
+      "path": "src/packages/storage-provider"
     },
     {
       "name": "📦 @exogee/graphweaver-xero",
