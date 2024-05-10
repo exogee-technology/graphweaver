@@ -12,7 +12,7 @@ import {
 import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
-import { MediaField, MediaTypes } from '@exogee/graphweaver-storage-provider';
+import { MediaField, MediaTypes, S3StorageProvider } from '@exogee/graphweaver-storage-provider';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -51,8 +51,9 @@ class OrmArtist extends BaseEntity {
 // We can't test that we get a downwload url back from s3
 // This is a mock to test the decorator
 const mockS3StorageProvider = {
-	getDownloadUrl: (key: string) => Promise.resolve(`https://example.com/${key}`),
-};
+	getDownloadUrl: (_source: unknown, { key }: { key: string }, _ctx: unknown, _info: unknown) =>
+		Promise.resolve(`https://example.com/${key}`),
+} as S3StorageProvider;
 
 const connection = {
 	connectionManagerId: 'sqlite',
@@ -199,27 +200,26 @@ test('Test the decorator adminUISettings', async () => {
 	expect(albumsField).not.toBeNull();
 	expect(albumsField?.filter).toBeNull();
 
-	//@todo - MediaField is not implemented
 	// Test that the type of the imageDownloadUrl field is Image
-	// const imageDownloadUrlField = artistEntity?.fields.find(
-	// 	(field) => field.name === 'imageDownloadUrl'
-	// );
-	// expect(imageDownloadUrlField).not.toBeNull();
-	// expect(imageDownloadUrlField?.type).toBe('Image');
+	const imageDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'imageDownloadUrl'
+	);
+	expect(imageDownloadUrlField).not.toBeNull();
+	expect(imageDownloadUrlField?.type).toBe('Image');
 
-	// // Test that the type of the otherMediaDownloadUrl field is Media
-	// const otherMediaDownloadUrlField = artistEntity?.fields.find(
-	// 	(field) => field.name === 'otherMediaDownloadUrl'
-	// );
+	// Test that the type of the otherMediaDownloadUrl field is Media
+	const otherMediaDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'otherMediaDownloadUrl'
+	);
 
-	// expect(otherMediaDownloadUrlField).not.toBeNull();
-	// expect(otherMediaDownloadUrlField?.type).toBe('Media');
+	expect(otherMediaDownloadUrlField).not.toBeNull();
+	expect(otherMediaDownloadUrlField?.type).toBe('Media');
 
-	// // Test that the field is readonly
-	// expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
-	// expect(otherMediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
+	// Test that the field is readonly
+	expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
+	expect(otherMediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
 
-	// // Test that the extension object exists and includes the key
+	// Test that the extension object exists and includes the key
 	// expect(imageDownloadUrlField?.extensions).not.toBeNull();
 	// expect(otherMediaDownloadUrlField?.extensions).not.toBeNull();
 	// expect(imageDownloadUrlField?.extensions?.key).toBe('title');

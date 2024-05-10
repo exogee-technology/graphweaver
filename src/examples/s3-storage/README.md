@@ -31,7 +31,7 @@ CREATE DATABASE gw_storage_provider;
 
 CREATE TABLE "submission" (
   id SERIAL PRIMARY KEY,
-  key VARCHAR(255) NOT NULL
+  key VARCHAR(255)
 );
 
 ```
