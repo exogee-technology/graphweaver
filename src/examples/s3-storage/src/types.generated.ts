@@ -99,71 +99,28 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
-export type Function = {
-  __typename?: 'Function';
-  downloadUrl: Scalars['Image']['output'];
-};
-
-/** Data needed to create or update UnknownTypePlural. If an ID is passed, this is an update, otherwise it's an insert. */
-export type FunctionCreateOrUpdateInput = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
-};
-
-/** Data needed to create UnknownTypePlural. */
-export type FunctionInsertInput = {
-  downloadUrl: Scalars['Image']['input'];
-};
-
-/** Data needed to update UnknownTypePlural. An ID must be passed. */
-export type FunctionUpdateInput = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
-};
-
 export type Mutation = {
   __typename?: 'Mutation';
-  /** Create a single Function. */
-  createFunction?: Maybe<Function>;
   /** Create or update many Submissions. */
   createOrUpdateSubmissions?: Maybe<Array<Maybe<Submission>>>;
-  /** Create or update many UnknownTypePlural. */
-  createOrUpdateUnknownTypePlural?: Maybe<Array<Maybe<Function>>>;
   /** Create a single Submission. */
   createSubmission?: Maybe<Submission>;
   /** Create many Submissions. */
   createSubmissions?: Maybe<Array<Maybe<Submission>>>;
-  /** Create many UnknownTypePlural. */
-  createUnknownTypePlural?: Maybe<Array<Maybe<Function>>>;
-  /** Delete a single Function. */
-  deleteFunction?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Submission. */
   deleteSubmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Submissions with a filter. */
   deleteSubmissions?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete many UnknownTypePlural with a filter. */
-  deleteUnknownTypePlural?: Maybe<Scalars['Boolean']['output']>;
-  /** Update a single Function. */
-  updateFunction?: Maybe<Function>;
+  getUploadUrl?: Maybe<Scalars['String']['output']>;
   /** Update a single Submission. */
   updateSubmission?: Maybe<Submission>;
   /** Update many Submissions. */
   updateSubmissions?: Maybe<Array<Maybe<Submission>>>;
-  /** Update many UnknownTypePlural. */
-  updateUnknownTypePlural?: Maybe<Array<Maybe<Function>>>;
-};
-
-
-export type MutationCreateFunctionArgs = {
-  input: FunctionInsertInput;
 };
 
 
 export type MutationCreateOrUpdateSubmissionsArgs = {
   input: Array<SubmissionCreateOrUpdateInput>;
-};
-
-
-export type MutationCreateOrUpdateUnknownTypePluralArgs = {
-  input: Array<FunctionCreateOrUpdateInput>;
 };
 
 
@@ -177,16 +134,6 @@ export type MutationCreateSubmissionsArgs = {
 };
 
 
-export type MutationCreateUnknownTypePluralArgs = {
-  input: Array<FunctionInsertInput>;
-};
-
-
-export type MutationDeleteFunctionArgs = {
-  filter: DeleteOneFilterInput;
-};
-
-
 export type MutationDeleteSubmissionArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -197,13 +144,8 @@ export type MutationDeleteSubmissionsArgs = {
 };
 
 
-export type MutationDeleteUnknownTypePluralArgs = {
-  filter: UnknownTypePluralListFilter;
-};
-
-
-export type MutationUpdateFunctionArgs = {
-  input: FunctionUpdateInput;
+export type MutationGetUploadUrlArgs = {
+  key?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -216,39 +158,19 @@ export type MutationUpdateSubmissionsArgs = {
   input: Array<SubmissionUpdateInput>;
 };
 
-
-export type MutationUpdateUnknownTypePluralArgs = {
-  input: Array<FunctionUpdateInput>;
-};
-
 export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
-  /** Get a single Function. */
-  function?: Maybe<Function>;
   getDownloadUrl?: Maybe<Scalars['String']['output']>;
-  getUploadUrl?: Maybe<Scalars['String']['output']>;
   /** Get a single Submission. */
   submission?: Maybe<Submission>;
   /** Get multiple Submissions. */
   submissions?: Maybe<Array<Maybe<Submission>>>;
-  /** Get multiple UnknownTypePlural. */
-  unknownTypePlural?: Maybe<Array<Maybe<Function>>>;
-};
-
-
-export type QueryFunctionArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
 export type QueryGetDownloadUrlArgs = {
-  key?: InputMaybe<Scalars['ID']['input']>;
-};
-
-
-export type QueryGetUploadUrlArgs = {
   key?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -263,11 +185,6 @@ export type QuerySubmissionsArgs = {
   pagination?: InputMaybe<SubmissionsPaginationInput>;
 };
 
-
-export type QueryUnknownTypePluralArgs = {
-  filter?: InputMaybe<UnknownTypePluralListFilter>;
-};
-
 export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -275,28 +192,38 @@ export enum Sort {
 
 export type Submission = {
   __typename?: 'Submission';
+  downloadUrl?: Maybe<Scalars['Image']['output']>;
   id: Scalars['ID']['output'];
   key?: Maybe<Scalars['String']['output']>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SubmissionCreateOrUpdateInput = {
+  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   key?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data needed to create Submissions. */
 export type SubmissionInsertInput = {
+  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
   key?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data needed to update Submissions. An ID must be passed. */
 export type SubmissionUpdateInput = {
+  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
   id: Scalars['ID']['input'];
   key?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type SubmissionsListFilter = {
+  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
+  downloadUrl_in?: InputMaybe<Array<Scalars['Image']['input']>>;
+  downloadUrl_ne?: InputMaybe<Scalars['Image']['input']>;
+  downloadUrl_nin?: InputMaybe<Array<Scalars['Image']['input']>>;
+  downloadUrl_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  downloadUrl_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
@@ -314,6 +241,7 @@ export type SubmissionsListFilter = {
 };
 
 export type SubmissionsOrderByInput = {
+  downloadUrl?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   key?: InputMaybe<Sort>;
 };
@@ -323,13 +251,4 @@ export type SubmissionsPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<SubmissionsOrderByInput>;
-};
-
-export type UnknownTypePluralListFilter = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
-  downloadUrl_in?: InputMaybe<Array<Scalars['Image']['input']>>;
-  downloadUrl_ne?: InputMaybe<Scalars['Image']['input']>;
-  downloadUrl_nin?: InputMaybe<Array<Scalars['Image']['input']>>;
-  downloadUrl_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  downloadUrl_null?: InputMaybe<Scalars['Boolean']['input']>;
 };

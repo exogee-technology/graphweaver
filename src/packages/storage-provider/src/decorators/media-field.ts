@@ -26,7 +26,7 @@ export function MediaField({
 		if (!resourceId) return '';
 
 		graphweaverMetadata.collectFieldInformation({
-			target: target.constructor,
+			target,
 			name: propertyKey,
 			getType: () => {
 				switch (mediaType) {
@@ -39,19 +39,11 @@ export function MediaField({
 			adminUIOptions: {
 				readonly: true,
 			},
-
+			nullable: true,
 			excludeFromFilterType: true,
 		});
 
 		// const metadata = getMetadataStorage();
-
-		// const { typeOptions } = findType({
-		// 	metadataKey: 'design:returntype',
-		// 	prototype: target,
-		// 	propertyKey,
-		// 	returnTypeFunc: () => String,
-		// 	typeOptions: { nullable: true },
-		// });
 
 		// const getType = () => {};
 

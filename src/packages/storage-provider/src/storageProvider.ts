@@ -26,7 +26,7 @@ export class S3StorageProvider {
 		this.region = config.region;
 		this.expiresIn = config.expiresIn || EXPIRE_TIME;
 
-		graphweaverMetadata.addQuery({
+		graphweaverMetadata.addMutation({
 			name: 'getUploadUrl',
 			getType: () => String,
 			resolver: this.getUploadUrl.bind(this),
