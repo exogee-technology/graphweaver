@@ -12,7 +12,7 @@ import {
 import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
-import { MediaField, MediaTypes, S3StorageProvider } from '@exogee/graphweaver-storage-provider';
+import { MediaField, S3StorageProvider } from '@exogee/graphweaver-storage-provider';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -113,15 +113,11 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 
 	@MediaField({
 		storageProvider: mockS3StorageProvider,
-		resourceId: 'title',
-		mediaType: MediaTypes.IMAGE,
 	})
 	imageDownloadUrl?: string;
 
 	@MediaField({
 		storageProvider: mockS3StorageProvider,
-		resourceId: 'title',
-		mediaType: MediaTypes.OTHER,
 	})
 	otherMediaDownloadUrl?: string;
 }
@@ -218,10 +214,4 @@ test('Test the decorator adminUISettings', async () => {
 	// Test that the field is readonly
 	expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
 	expect(otherMediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
-
-	// Test that the extension object exists and includes the key
-	// expect(imageDownloadUrlField?.extensions).not.toBeNull();
-	// expect(otherMediaDownloadUrlField?.extensions).not.toBeNull();
-	// expect(imageDownloadUrlField?.extensions?.key).toBe('title');
-	// expect(otherMediaDownloadUrlField?.extensions?.key).toBe('title');
 });

@@ -17,8 +17,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Image type scalar */
-  Image: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
@@ -192,58 +190,45 @@ export enum Sort {
 
 export type Submission = {
   __typename?: 'Submission';
-  downloadUrl?: Maybe<Scalars['Image']['output']>;
   id: Scalars['ID']['output'];
-  key?: Maybe<Scalars['String']['output']>;
+  image?: Maybe<Scalars['JSON']['output']>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SubmissionCreateOrUpdateInput = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 /** Data needed to create Submissions. */
 export type SubmissionInsertInput = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 /** Data needed to update Submissions. An ID must be passed. */
 export type SubmissionUpdateInput = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
   id: Scalars['ID']['input'];
-  key?: InputMaybe<Scalars['String']['input']>;
+  image?: InputMaybe<Scalars['JSON']['input']>;
 };
 
 export type SubmissionsListFilter = {
-  downloadUrl?: InputMaybe<Scalars['Image']['input']>;
-  downloadUrl_in?: InputMaybe<Array<Scalars['Image']['input']>>;
-  downloadUrl_ne?: InputMaybe<Scalars['Image']['input']>;
-  downloadUrl_nin?: InputMaybe<Array<Scalars['Image']['input']>>;
-  downloadUrl_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  downloadUrl_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
-  key_ilike?: InputMaybe<Scalars['String']['input']>;
-  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_like?: InputMaybe<Scalars['String']['input']>;
-  key_ne?: InputMaybe<Scalars['String']['input']>;
-  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  key_null?: InputMaybe<Scalars['Boolean']['input']>;
+  image?: InputMaybe<Scalars['JSON']['input']>;
+  image_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  image_ne?: InputMaybe<Scalars['JSON']['input']>;
+  image_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  image_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  image_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SubmissionsOrderByInput = {
-  downloadUrl?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
-  key?: InputMaybe<Sort>;
+  image?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Submissions. */

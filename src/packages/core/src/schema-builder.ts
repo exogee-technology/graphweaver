@@ -220,9 +220,10 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 					if (isEntityMetadata(metadata)) {
 						graphQLType = graphQLTypeForEntity(metadata);
-						resolve = resolvers.listRelationshipField;
 
 						if (metadata.provider) {
+							resolve = resolvers.listRelationshipField;
+
 							args['filter'] = {
 								type: filterTypeForEntity(metadata),
 							};
@@ -483,18 +484,20 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					}
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
-					if (isEntityMetadata(metadata)) {
-						// This if is separate to stop us cascading down to the scalar branch for entities that
-						if (
-							!metadata.apiOptions?.excludeFromBuiltInOperations &&
-							!metadata.apiOptions?.excludeFromBuiltInWriteOperations
-						) {
-							fields[field.name] = { type: createOrUpdateTypeForEntity(metadata) };
+					if (!field.apiOptions?.excludeFromBuiltInWriteOperations) {
+						if (isEntityMetadata(metadata)) {
+							// This if is separate to stop us cascading down to the scalar branch for entities that
+							if (
+								!metadata.apiOptions?.excludeFromBuiltInOperations &&
+								!metadata.apiOptions?.excludeFromBuiltInWriteOperations
+							) {
+								fields[field.name] = { type: createOrUpdateTypeForEntity(metadata) };
+							}
+						} else if (isEnumMetadata(metadata)) {
+							fields[field.name] = { type: graphQLTypeForEnum(metadata) };
+						} else {
+							fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
 						}
-					} else if (isEnumMetadata(metadata)) {
-						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-					} else {
-						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
 					}
 
 					// Everything is nullable in this type because it can be used for updates as well as inserts, hence
@@ -662,6 +665,8 @@ class SchemaBuilderImplementation {
 				for (const entity of graphweaverMetadata.entities()) {
 					// If it's excluded from built-in operations, skip it.
 					if (entity.apiOptions?.excludeFromBuiltInOperations) continue;
+					// If this entity does not have a data provider, skip it.
+					if (!entity.provider) continue;
 
 					// Get One
 					const oneQueryName = entity.name.charAt(0).toLowerCase() + entity.name.substring(1);
@@ -736,6 +741,9 @@ class SchemaBuilderImplementation {
 					// If it's excluded from built-in operations, skip it.
 					if (entity.apiOptions?.excludeFromBuiltInOperations) continue;
 					if (entity.apiOptions?.excludeFromBuiltInWriteOperations) continue;
+
+					// If this entity does not have a data provider, skip it.
+					if (!entity.provider) continue;
 
 					// Create One
 					const createOneName = `create${entity.name}`;

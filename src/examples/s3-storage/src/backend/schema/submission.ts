@@ -3,7 +3,7 @@ import {
 	S3StorageProvider,
 	StorageType,
 	MediaField,
-	MediaTypes,
+	Media,
 } from '@exogee/graphweaver-storage-provider';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -29,10 +29,6 @@ export class Submission extends GraphQLEntity<OrmSubmission> {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String, { nullable: true, adminUIOptions: { readonly: true } })
-	key?: string;
-
-	// "resourceId" must match the name of the field on the entity that gets the url from s3
-	@MediaField({ storageProvider: s3, resourceId: 'key', mediaType: MediaTypes.IMAGE })
-	downloadUrl?: string;
+	@MediaField({ storageProvider: s3 })
+	image?: Media;
 }
