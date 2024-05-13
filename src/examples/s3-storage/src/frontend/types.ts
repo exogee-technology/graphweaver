@@ -100,23 +100,32 @@ export type DeleteOneFilterInput = {
 export type Media = {
   __typename?: 'Media';
   filename: Scalars['String']['output'];
+  type: MediaType;
   url: Scalars['String']['output'];
 };
 
 /** Data needed to create or update MultipleMedia. If an ID is passed, this is an update, otherwise it's an insert. */
 export type MediaCreateOrUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<MediaType>;
 };
 
 /** Data needed to create MultipleMedia. */
 export type MediaInsertInput = {
   filename: Scalars['String']['input'];
+  type: MediaType;
   url: Scalars['String']['input'];
 };
+
+export enum MediaType {
+  Image = 'IMAGE',
+  Other = 'OTHER'
+}
 
 /** Data needed to update MultipleMedia. An ID must be passed. */
 export type MediaUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<MediaType>;
   url?: InputMaybe<Scalars['String']['input']>;
 };
 

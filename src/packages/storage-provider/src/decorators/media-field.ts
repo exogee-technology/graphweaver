@@ -5,50 +5,68 @@ import {
 	FieldOptions,
 	GraphQLEntity,
 	graphweaverMetadata,
-	BaseContext,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
-import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
+import { Source } from 'graphql';
 
-export type Media = {
+export interface Media extends BaseDataEntity {
 	filename: string;
+	type: MediaType;
 	url?: string;
-};
+}
 
-export enum MediaTypes {
+export enum MediaType {
 	IMAGE = 'Image',
 	OTHER = 'Other',
 }
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'MediaType',
+	target: MediaType,
+});
 
 type MediaTypeFieldOptions = FieldOptions & {
 	storageProvider: S3StorageProvider;
 };
 
-interface MediaDataEntity extends BaseDataEntity {
-	filename: string;
-	url: string;
-}
+const isMedia = (value: unknown): value is Media =>
+	!!(
+		value &&
+		value !== null &&
+		typeof value == 'object' &&
+		'filename' in value &&
+		typeof value.filename === 'string' &&
+		'type' in value &&
+		typeof value.type === 'string'
+	);
 
 @Entity('Media')
-class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
-	public dataEntity!: MediaDataEntity;
+class MediaFieldEntity extends GraphQLEntity<Media> {
+	public dataEntity!: Media;
 
 	@Field(() => String)
 	filename!: string;
+
+	@Field(() => MediaType)
+	type!: MediaType;
 
 	@Field(() => String, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
 	url!: string;
 
 	static serialize = ({ value }: { value: unknown }) => {
-		if (
-			value &&
-			value !== null &&
-			typeof value == 'object' &&
-			'filename' in value &&
-			typeof value.filename === 'string'
-		)
-			return value.filename;
-		throw new Error('Invalid value for MediaFieldEntity');
+		if (isMedia(value)) {
+			return JSON.stringify(
+				{
+					filename: value.filename,
+					type: value.type,
+				},
+				null,
+				2
+			);
+		}
+		throw new Error(
+			'Invalid Media input data provided. Please sent a filename and type when creating or updating media.'
+		);
 	};
 
 	static deserialize = async (_args: {
@@ -79,16 +97,30 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 		});
 
 		MediaFieldEntity.deserialize = async ({ value, parent }) => {
-			if (options.storageProvider === undefined) throw new Error('Storage provider not set');
+			if (!value) return null;
 
-			const filename = value;
-			if (!filename) return null;
+			if (options.storageProvider === undefined)
+				throw new Error('Storage provider not set on media field.');
 
-			if (typeof filename !== 'string') throw new Error('Invalid value for MediaFieldEntity');
-			return {
-				filename,
-				url: await options.storageProvider.getDownloadUrl(parent, { key: filename }),
-			};
+			if (value && typeof value === 'string') {
+				try {
+					value = JSON.parse(value);
+				} catch (e) {
+					throw new Error('Unable to deserialize Media value from data provider.');
+				}
+			}
+
+			if (isMedia(value)) {
+				return {
+					filename: value.filename,
+					type: value.type,
+					url: await options.storageProvider.getDownloadUrl(parent, {
+						key: value.filename,
+					}),
+				};
+			}
+
+			throw new Error('Unable to deserialize Media value from data provider.');
 		};
 	};
 }

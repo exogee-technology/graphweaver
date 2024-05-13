@@ -31,7 +31,7 @@ CREATE DATABASE gw_storage_provider;
 
 CREATE TABLE "submission" (
   id SERIAL PRIMARY KEY,
-  image VARCHAR(255)
+  image jsonb
 );
 
 ```
