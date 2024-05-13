@@ -350,23 +350,18 @@ export const DetailPanel = () => {
 
 		try {
 			let result: FetchResult;
+
+			// If the form values contain an image, then do seperate mutation to upload the image
+			if (formValues.uploadUrl && formValues.file) {
+				await uploadFileToSignedURL(values.uploadUrl, values.file);
+			}
+
+			// if uploadUrl and file are there, remove them
+			delete values.uploadUrl;
+			delete values.file;
+
 			if (id && panelMode === PanelMode.EDIT) {
 				// Update an existing entity
-				if (formValues.uploadUrl && formValues.file) {
-					await uploadFileToSignedURL(values.uploadUrl, values.file);
-					// remove the uploadUrl and file from the values. These are set in the <ImageField> on upload file
-					delete values.uploadUrl;
-					delete values.file;
-					// delete the value where the name is the field that has the image or media type
-					delete values[selectedEntity.fields.find((field) => field.type === 'Image')?.name ?? ''];
-					delete values[selectedEntity.fields.find((field) => field.type === 'Media')?.name ?? ''];
-				}
-
-				// if uploadUrl and downloadUrl are there, remove them because theyre not on SubmissionCreateOrUpdateInput
-				if (values.uploadUrl === null) delete values.uploadUrl;
-				if (values.downloadUrl === null || values.downloadUrl === '') delete values.downloadUrl;
-				if (values.file === null) delete values.file;
-
 				result = await updateEntity({
 					variables: {
 						input: {
@@ -377,13 +372,6 @@ export const DetailPanel = () => {
 				});
 			} else {
 				// Create a new entity
-				// If the form values contain an image, then do seperate mutation to upload the image
-				if (formValues.uploadUrl && formValues.file) {
-					await uploadFileToSignedURL(values.uploadUrl, values.file);
-					// remove the uploadUrl and file from the formik values
-					delete values.uploadUrl;
-					delete values.file;
-				}
 				result = await createEntity({
 					variables: {
 						input: values,
@@ -419,7 +407,8 @@ export const DetailPanel = () => {
 							: result.data?.[entityname].id}
 					</button>{' '}
 					has been successfully {id && panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
-				</div>
+				</div>,
+				{ duration: 15000 }
 			);
 		} catch (error: unknown) {
 			toast.error(String(error), {

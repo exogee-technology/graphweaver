@@ -10,22 +10,18 @@ import { useAutoFocus } from '../../../hooks';
 import styles from './styles.module.css';
 
 export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
-	try {
-		const response = await fetch(uploadURL, {
-			method: 'PUT',
-			body: file,
-			headers: {
-				'Content-Type': file.type,
-			},
-		});
+	const response = await fetch(uploadURL, {
+		method: 'PUT',
+		body: file,
+		headers: {
+			'Content-Type': file.type,
+		},
+	});
 
-		if (response.ok) {
-			return file.name;
-		} else {
-			console.error('Error uploading file:', response.statusText);
-		}
-	} catch (error) {
-		console.error('Error uploading to storage provider and creating submission:', error);
+	if (response.ok) {
+		return file.name;
+	} else {
+		throw new Error(`Error uploading file: ${response?.statusText}`);
 	}
 };
 
@@ -33,7 +29,7 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 	const { setValues } = useFormikContext();
 	const [mediaHasChanged, setMediaHasChanged] = useState(false);
 	const [_, meta] = useField({ name: field.name, multiple: false });
-	const { initialValue: downloadUrl } = meta;
+	const { initialValue: media } = meta;
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
 
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
@@ -46,18 +42,13 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 			return;
 		}
 
-		if (!field.extensions?.key) {
-			console.error('Key not found on field extentions');
-			return;
-		}
-		const mediaKey = field.extensions.key;
-
 		setValues((prev: any) => ({
 			...prev,
 			uploadUrl: uploadURL,
 			file: file,
-			// overwrite the key form field value with the field.extensions.key
-			[mediaKey]: file.name,
+			[field.name]: {
+				filename: file.name,
+			},
 		}));
 		setMediaHasChanged(true);
 	};
@@ -71,17 +62,16 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 	const handleOnDelete = () => {
 		setValues((prev: any) => ({
 			...prev,
-			key: null,
 			uploadUrl: null,
 			file: null,
-			downloadUrl: null,
+			[field.name]: null,
 		}));
 		setMediaHasChanged(true);
 	};
 
 	return (
 		<div>
-			{downloadUrl ? (
+			{media ? (
 				<>
 					<div className={styles.row}>
 						<Button type="button" onClick={handleOnDelete}>
@@ -89,11 +79,12 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 						</Button>
 						<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
 					</div>
-					{!mediaHasChanged && (
-						<a href={downloadUrl} target="_blank" rel="noreferrer">
-							{downloadUrl}
+					{!mediaHasChanged && <img src={media.url} />}
+					{/* {!mediaHasChanged && (
+						<a href={media.url} target="_blank" rel="noreferrer">
+							{media.url}
 						</a>
-					)}
+					)} */}
 				</>
 			) : (
 				<div className={styles.row}>

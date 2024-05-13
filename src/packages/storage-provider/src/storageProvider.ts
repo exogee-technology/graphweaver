@@ -59,10 +59,6 @@ export class S3StorageProvider {
 		const s3 = new S3Client({
 			region: this.region,
 			...(this.endpoint ? { endpoint: this.endpoint } : {}),
-			credentials: {
-				accessKeyId: 'minio_access_key',
-				secretAccessKey: 'minio_secret_access_key',
-			},
 		});
 
 		const command = new PutObjectCommand({

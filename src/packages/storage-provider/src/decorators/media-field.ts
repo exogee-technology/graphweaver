@@ -32,8 +32,6 @@ interface MediaDataEntity extends BaseDataEntity {
 @Entity('Media')
 class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
 	public dataEntity!: MediaDataEntity;
-	public static storageProvider?: S3StorageProvider;
-	public static propertyKey?: string;
 
 	@Field(() => String)
 	filename!: string;
@@ -41,7 +39,7 @@ class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
 	@Field(() => String, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
 	url!: string;
 
-	static serialize = (value: unknown) => {
+	static serialize = ({ value }: { value: unknown }) => {
 		if (
 			value &&
 			value !== null &&
@@ -53,26 +51,12 @@ class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
 		throw new Error('Invalid value for MediaFieldEntity');
 	};
 
-	static deserialize = async (
-		source: Source,
-		_args: GraphQLArgument,
-		context: BaseContext,
-		info: GraphQLResolveInfo
-	) => {
-		if (MediaFieldEntity.storageProvider === undefined) throw new Error('Storage provider not set');
-		if (MediaFieldEntity.propertyKey === undefined) throw new Error('Property key not set');
-
-		const filename = source[MediaFieldEntity.propertyKey as keyof Source] as string | undefined;
-		if (!filename) return null;
-		return {
-			filename,
-			url: await MediaFieldEntity.storageProvider.getDownloadUrl(
-				source,
-				{ key: filename },
-				context,
-				info
-			),
-		};
+	static deserialize = async (_args: {
+		value: unknown;
+		parent: Source;
+	}): Promise<{ filename: string; url: any } | null> => {
+		// this is overridden by the @MediaField decorator
+		throw new Error('MediaFieldEntity.deserialize not implemented');
 	};
 }
 
@@ -94,7 +78,17 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 			...options,
 		});
 
-		MediaFieldEntity.storageProvider = options.storageProvider;
-		MediaFieldEntity.propertyKey = propertyKey;
+		MediaFieldEntity.deserialize = async ({ value, parent }) => {
+			if (options.storageProvider === undefined) throw new Error('Storage provider not set');
+
+			const filename = value;
+			if (!filename) return null;
+
+			if (typeof filename !== 'string') throw new Error('Invalid value for MediaFieldEntity');
+			return {
+				filename,
+				url: await options.storageProvider.getDownloadUrl(parent, { key: filename }),
+			};
+		};
 	};
 }

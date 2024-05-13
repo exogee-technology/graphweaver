@@ -145,7 +145,9 @@ export const createOrUpdateEntities = async <
 			if (isRelatedEntity(type)) {
 				if (isSerializable(type)) {
 					// If it's a serializable entity, we don't need to do anything here
-					node[key as keyof typeof node] = type.serialize(childNode) as G[keyof G] | undefined;
+					node[key as keyof typeof node] = type.serialize({ value: childNode }) as
+						| G[keyof G]
+						| undefined;
 				} else if (isLinking(childNode)) {
 					// If it's a linking entity or an array of linking entities, nothing to do here
 				} else if (Array.isArray(childNode)) {
