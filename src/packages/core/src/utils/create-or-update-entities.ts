@@ -7,7 +7,6 @@ import {
 	CreateOrUpdateHookParams,
 	EntityMetadata,
 	GraphQLEntity,
-	GraphQLEntityConstructor,
 	GraphQLEntityType,
 	HookRegister,
 	WithId,
@@ -21,6 +20,12 @@ const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object
 // Used to check if we have only {id: ''} or [{id: ''},...]
 const isLinking = <G>(node: Partial<G> | Partial<G>[]) =>
 	Array.isArray(node) ? node.every(isIdOnly) : isIdOnly(node);
+
+const isSerializable = (
+	entity: typeof GraphQLEntity
+): entity is typeof GraphQLEntity & {
+	serialize: <T>(value: unknown) => T;
+} => entity && entity.hasOwnProperty('serialize');
 
 // Used to check if we have only {id: ''} object
 const isIdOnly = <G>(node: Partial<G>) =>
@@ -138,7 +143,10 @@ export const createOrUpdateEntities = async <
 			}
 
 			if (isRelatedEntity(type)) {
-				if (isLinking(childNode)) {
+				if (isSerializable(type)) {
+					// If it's a serializable entity, we don't need to do anything here
+					node[key as keyof typeof node] = type.serialize(childNode) as G[keyof G] | undefined;
+				} else if (isLinking(childNode)) {
 					// If it's a linking entity or an array of linking entities, nothing to do here
 				} else if (Array.isArray(childNode)) {
 					// If we have an array, we may need to create the parent first as children need reference to the parent

@@ -16,6 +16,8 @@ export interface BaseDataEntity {
 
 export class GraphQLEntity<D extends BaseDataEntity> {
 	public id: string | number;
+	static serialize?: (value: unknown) => unknown;
+
 	constructor(public dataEntity: D) {
 		this.id = dataEntity.id;
 	}

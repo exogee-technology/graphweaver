@@ -1,12 +1,15 @@
 import {
 	BaseContext,
+	BaseDataEntity,
+	Entity,
+	Field,
 	FieldOptions,
+	GraphQLEntity,
 	GraphQLResolveInfo,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
 import { Source } from 'graphql';
-import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 export type Media = {
 	filename: string;
@@ -22,87 +25,33 @@ type MediaTypeFieldOptions = FieldOptions & {
 	storageProvider: S3StorageProvider;
 };
 
-// interface MediaDataEntity extends BaseDataEntity {
-// 	filename: string;
-// 	url: string;
-// }
+interface MediaDataEntity extends BaseDataEntity {
+	filename: string;
+	url: string;
+}
 
-// @Entity('Media')
-// class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
-// 	public dataEntity!: MediaDataEntity;
+@Entity('Media')
+class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
+	public dataEntity!: MediaDataEntity;
 
-// 	@Field(() => GraphQLString)
-// 	filename!: string;
+	@Field(() => String)
+	filename!: string;
 
-// 	@Field(() => GraphQLString, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
-// 	url!: string;
-// }
+	@Field(() => String, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
+	url!: string;
 
-// function identity(value: any) {
-// 	return value;
-// }
-
-// function ensureObject(value: any) {
-// 	if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-// 		throw new TypeError(`JSONObject cannot represent non-object value: ${value}`);
-// 	}
-
-// 	return value;
-// }
-
-// function parseObject(typeName: any, ast: any, variables: any) {
-// 	const value = Object.create(null);
-// 	ast.fields.forEach((field: any) => {
-// 		// eslint-disable-next-line no-use-before-define
-// 		value[field.name.value] = parseLiteral(typeName, field.value, variables);
-// 	});
-
-// 	return value;
-// }
-
-// function parseLiteral(typeName: any, ast: any, variables: any) {
-// 	switch (ast.kind) {
-// 		case Kind.STRING:
-// 		case Kind.BOOLEAN:
-// 			return ast.value;
-// 		case Kind.INT:
-// 		case Kind.FLOAT:
-// 			return parseFloat(ast.value);
-// 		case Kind.OBJECT:
-// 			return parseObject(typeName, ast, variables);
-// 		case Kind.LIST:
-// 			return ast.values.map((n: any) => parseLiteral(typeName, n, variables));
-// 		case Kind.NULL:
-// 			return null;
-// 		case Kind.VARIABLE:
-// 			return variables ? variables[ast.name.value] : undefined;
-// 		default:
-// 			throw new TypeError(`${typeName} cannot represent value: ${print(ast)}`);
-// 	}
-// }
-
-// export const GraphQLMediaType = new GraphQLScalarType({
-// 	name: 'Media',
-// 	description: `filename: String!;\nurl: String!;`,
-// 	serialize: ensureObject,
-// 	parseValue: ensureObject,
-// 	parseLiteral: (ast, variables) => {
-// 		if (ast.kind !== Kind.OBJECT) {
-// 			throw new TypeError(`JSONObject cannot represent non-object value: ${print(ast)}`);
-// 		}
-
-// 		return parseObject('JSONObject', ast, variables);
-// 	},
-// });
-
-// const GraphQLMediaType = new GraphQLObjectType({
-// 	name: 'Media',
-
-// 	fields: {
-// 		filename: { type: GraphQLString },
-// 		url: { type: GraphQLString },
-// 	},
-// });
+	static serialize = (value: unknown) => {
+		if (
+			value &&
+			value !== null &&
+			typeof value == 'object' &&
+			'filename' in value &&
+			typeof value.filename === 'string'
+		)
+			return value.filename;
+		throw new Error('Invalid value for MediaFieldEntity');
+	};
+}
 
 export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 	return function (target: any, propertyKey: string | symbol) {
@@ -113,7 +62,7 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 		graphweaverMetadata.collectFieldInformation({
 			target,
 			name: propertyKey,
-			getType: () => GraphQLJSON,
+			getType: () => MediaFieldEntity,
 			adminUIOptions: {
 				readonly: true,
 			},
