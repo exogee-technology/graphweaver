@@ -45,7 +45,12 @@ export const fieldResolver = (
 		}
 
 		if (type && isRelatedEntity(type) && isDeserializable(type)) {
-			return type.deserialize({ value: property, parentEntity: source });
+			return type.deserialize({
+				value: property,
+				parentEntity: source,
+				entityMetadata: metadata,
+				fieldMetadata: relationship,
+			});
 		}
 
 		if (isFunction(property)) {

@@ -5,6 +5,7 @@ import {
 	FieldOptions,
 	GraphQLEntity,
 	graphweaverMetadata,
+	FieldMetadata,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
 import { Source } from 'graphql';
@@ -69,12 +70,42 @@ class MediaFieldEntity extends GraphQLEntity<Media> {
 		);
 	};
 
-	static deserialize = async (_args: {
+	static deserialize = async ({
+		value,
+		parent,
+		fieldMetadata,
+	}: {
 		value: unknown;
 		parent: Source;
-	}): Promise<{ filename: string; url: any } | null> => {
-		// this is overridden by the @MediaField decorator
-		throw new Error('MediaFieldEntity.deserialize not implemented');
+		fieldMetadata: FieldMetadata<any, any>;
+	}) => {
+		if (!value) return null;
+
+		if (!fieldMetadata.additionalInformation?.storageProvider)
+			throw new Error('Storage provider not set on media field.');
+
+		if (value && typeof value === 'string') {
+			try {
+				value = JSON.parse(value);
+			} catch (e) {
+				throw new Error('Unable to deserialize Media value from data provider.');
+			}
+		}
+
+		if (isMedia(value)) {
+			const storageProvider = fieldMetadata.additionalInformation
+				.storageProvider as S3StorageProvider;
+
+			return {
+				filename: value.filename,
+				type: value.type,
+				url: await storageProvider.getDownloadUrl(parent, {
+					key: value.filename,
+				}),
+			};
+		}
+
+		throw new Error('Unable to deserialize Media value from data provider.');
 	};
 }
 
@@ -93,34 +124,10 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 			},
 			nullable: true,
 			excludeFromFilterType: true,
+			additionalInformation: {
+				MediaFieldStorageProvider: options.storageProvider,
+			},
 			...options,
 		});
-
-		MediaFieldEntity.deserialize = async ({ value, parent }) => {
-			if (!value) return null;
-
-			if (options.storageProvider === undefined)
-				throw new Error('Storage provider not set on media field.');
-
-			if (value && typeof value === 'string') {
-				try {
-					value = JSON.parse(value);
-				} catch (e) {
-					throw new Error('Unable to deserialize Media value from data provider.');
-				}
-			}
-
-			if (isMedia(value)) {
-				return {
-					filename: value.filename,
-					type: value.type,
-					url: await options.storageProvider.getDownloadUrl(parent, {
-						key: value.filename,
-					}),
-				};
-			}
-
-			throw new Error('Unable to deserialize Media value from data provider.');
-		};
 	};
 }

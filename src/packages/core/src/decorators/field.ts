@@ -20,6 +20,11 @@ export interface FieldOptions {
 		// This marks the field as read only in the API.
 		excludeFromBuiltInWriteOperations?: boolean;
 	};
+
+	// This can be used by any plugin to store additional information
+	// namespace your key to avoid conflicts
+	// See the `@MediaField` decorator for an example
+	additionalInformation?: Record<string, unknown>;
 }
 
 export function Field(getType: GetTypeFunction, options?: FieldOptions) {
