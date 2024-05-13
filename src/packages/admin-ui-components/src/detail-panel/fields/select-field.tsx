@@ -33,7 +33,7 @@ export const SelectField = ({
 	}, []);
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
-		getRelationshipQuery(relatedEntity.plural, relatedEntity?.summaryField),
+		getRelationshipQuery(relatedEntity),
 		{
 			variables: {
 				pagination: {
@@ -48,8 +48,8 @@ export const SelectField = ({
 	);
 
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relatedEntity?.summaryField || 'id';
-		return { label: item[label], value: item.id };
+		const label = relatedEntity?.summaryField || relatedEntity?.primaryKeyField || 'id';
+		return { label: item[label], value: item[relatedEntity?.primaryKeyField || 'id'] };
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {

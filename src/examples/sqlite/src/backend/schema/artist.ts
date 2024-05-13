@@ -10,8 +10,8 @@ import { connection } from '../database';
 export class Artist extends GraphQLEntity<OrmArtist> {
 	public dataEntity!: OrmArtist;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	artistId!: number;
 
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;

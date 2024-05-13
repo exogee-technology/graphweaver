@@ -7,11 +7,10 @@ import {
 	CreateOrUpdateHookParams,
 	EntityMetadata,
 	GraphQLEntity,
-	GraphQLEntityConstructor,
 	GraphQLEntityType,
 	HookRegister,
-	WithId,
 	hookManagerMap,
+	isEntityMetadata,
 } from '..';
 import { graphweaverMetadata } from '../metadata';
 
@@ -19,12 +18,17 @@ import { graphweaverMetadata } from '../metadata';
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
 
 // Used to check if we have only {id: ''} or [{id: ''},...]
-const isLinking = <G>(node: Partial<G> | Partial<G>[]) =>
-	Array.isArray(node) ? node.every(isIdOnly) : isIdOnly(node);
+const isLinking = <G>(entity: EntityMetadata<G, any>, node: Partial<G> | Partial<G>[]) =>
+	Array.isArray(node)
+		? node.every((innerNode) => isIdOnly(entity, innerNode))
+		: isIdOnly(entity, node);
 
 // Used to check if we have only {id: ''} object
-const isIdOnly = <G>(node: Partial<G>) =>
-	('id' in node && node.id && Object.keys(node).length === 1) ?? false;
+const isIdOnly = <G>(entity: EntityMetadata<G, any>, node: Partial<G>) => {
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
+
+	return primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length === 1;
+};
 
 const isRelatedEntity = (unknownType: unknown): unknownType is typeof GraphQLEntity => {
 	return !!(
@@ -36,22 +40,21 @@ const isRelatedEntity = (unknownType: unknown): unknownType is typeof GraphQLEnt
 };
 
 // Determine the name of the mutation that we should call
-const getMutationName = <G extends WithId>(
-	name: string,
-	data: Partial<G> | Partial<G>[]
-): string => {
+const getMutationName = <G>(name: string, data: Partial<G> | Partial<G>[]): string => {
 	const entityMetadata = graphweaverMetadata.getEntityByName(name);
 	if (!entityMetadata) throw new Error(`Could not locate metadata for '${name}' entity.`);
 
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata) as keyof G;
+
 	const plural = entityMetadata.plural;
 	if (Array.isArray(data)) {
-		const isUpdateMany = data.every((object) => object.id);
+		const isUpdateMany = data.every((object) => object[primaryKeyField]);
 		if (isUpdateMany) return `update${plural}`;
-		const isCreateMany = data.every((object) => object.id === undefined);
+		const isCreateMany = data.every((object) => object[primaryKeyField] === undefined);
 		if (isCreateMany) return `create${plural}`;
 		return `createOrUpdate${plural}`;
 	}
-	if (data.id) return `update${name}`;
+	if (data[primaryKeyField]) return `update${name}`;
 	return `create${name}`;
 };
 
@@ -95,10 +98,7 @@ const fromBackendEntity = <G, D extends BaseDataEntity>(
 	return entity;
 };
 
-export const createOrUpdateEntities = async <
-	G extends WithId & { name: string },
-	D extends BaseDataEntity,
->(
+export const createOrUpdateEntities = async <G extends { name: string }, D extends BaseDataEntity>(
 	input: Partial<G> | Partial<G>[],
 	meta: EntityMetadata<G, D>,
 	info: GraphQLResolveInfo,
@@ -109,6 +109,8 @@ export const createOrUpdateEntities = async <
 	if (!meta.provider) {
 		throw new Error(`No provider found for ${meta.name}, cannot create or update entities`);
 	}
+
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
 
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements
@@ -138,21 +140,31 @@ export const createOrUpdateEntities = async <
 			}
 
 			if (isRelatedEntity(type)) {
-				if (isLinking(childNode)) {
+				const relatedEntityMetadata = graphweaverMetadata.metadataForType(type);
+				if (!isEntityMetadata(relatedEntityMetadata)) {
+					throw new Error(
+						`Looking up related entity metadata for type '${type.name}' resulted in non-entity metadata.`
+					);
+				}
+
+				if (isLinking(relatedEntityMetadata, childNode)) {
 					// If it's a linking entity or an array of linking entities, nothing to do here
 				} else if (Array.isArray(childNode)) {
 					// If we have an array, we may need to create the parent first as children need reference to the parent
-
 					// As are updating the parent from the child, we can remove this key
 					delete node[key as keyof Partial<G>];
 
+					const relatedPrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(
+						relatedEntityMetadata
+					) as keyof G;
+
 					// Check if we already have the parent ID
-					let parentId = node.id ?? parent?.id;
+					let parentId = node[relatedPrimaryKeyField] ?? parent?.[primaryKeyField];
 					if (!parentId && !parent) {
 						// If there's no ID, create the parent first
 						const parentDataEntity = await meta.provider.createOne(node);
 						parent = fromBackendEntity(parentDataEntity, gqlEntityType);
-						parentId = parent?.id;
+						parentId = parent?.[primaryKeyField];
 					}
 					if (!parentId) {
 						throw new Error(`Implementation Error: No parent id found for ${type.name}`);
@@ -193,16 +205,16 @@ export const createOrUpdateEntities = async <
 			}
 		}
 
-		// Down here we have an entity and let's check if we need to create or update
+		// Down here we have an entity and need to check if we need to create or update
 		if (parent) {
 			// We needed to create the parent earlier, no need to create it again
 			return parent;
-		} else if (isIdOnly(node)) {
+		} else if (isIdOnly(meta, node)) {
 			// If it's just an ID, return it as is
 			return node;
-		} else if ('id' in node && node.id && Object.keys(node).length > 1) {
+		} else if (primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1) {
 			// If it's an object with an ID and other properties, update the entity
-			const result = await meta.provider.updateOne(node.id, node);
+			const result = await meta.provider.updateOne(String(node[primaryKeyField]), node);
 			return fromBackendEntity(result, gqlEntityType);
 		} else {
 			// If it's an object without an ID, create a new entity

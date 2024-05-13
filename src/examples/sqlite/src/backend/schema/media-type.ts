@@ -10,8 +10,8 @@ import { connection } from '../database';
 export class MediaType extends GraphQLEntity<OrmMediaType> {
 	public dataEntity!: OrmMediaType;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	mediaTypeId!: number;
 
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;

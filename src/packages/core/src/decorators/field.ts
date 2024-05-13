@@ -7,6 +7,8 @@ export interface FieldOptions {
 	defaultValue?: any;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
+	primaryKeyField?: boolean;
+
 	// This marks the field as read only in both the API and the admin UI.
 	// This will supersede any other read only settings.
 	readonly?: boolean;

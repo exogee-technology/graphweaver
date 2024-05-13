@@ -6,7 +6,7 @@ import { Track } from './track';
 @Entity({ tableName: 'InvoiceLine' })
 export class InvoiceLine extends BaseEntity {
 	@PrimaryKey({ fieldName: 'InvoiceLineId', type: 'number' })
-	id!: number;
+	invoiceLineId!: number;
 
 	@ManyToOne({
 		entity: () => Invoice,

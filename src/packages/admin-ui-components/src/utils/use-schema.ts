@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import { ApolloCache, TypePolicy, useQuery } from '@apollo/client';
+import { useEffect, useMemo } from 'react';
+import { ApolloCache, InMemoryCache, TypePolicy, useQuery } from '@apollo/client';
 import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
 
 import { SCHEMA_QUERY } from './graphql';
@@ -21,6 +21,7 @@ export interface Entity {
 	name: string;
 	plural: string;
 	backendId: string;
+	primaryKeyField: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
 	fields: EntityField[];
@@ -100,17 +101,22 @@ export interface SortField {
 	direction: SortDirection;
 }
 
-type Cache = ApolloCache<unknown> & {
-	policies: { addTypePolicies: (policy: { Query: TypePolicy }) => void };
-};
-
 type EntityMap = {
 	[entityName: string]: Entity;
 };
 
 export const useSchema = () => {
 	const { data, loading, error, client } = useQuery<{ result: Schema }>(SCHEMA_QUERY);
-	const cache = client.cache as Cache;
+
+	// Add type policies to the Apollo cache so that our entities are handled correctly.
+	useEffect(() => {
+		if (!data?.result?.entities) return;
+
+		// Now we have our entities we can create the type policies which tell Apollo
+		// what our primary keys are, how to handle collections, etc.
+		const typePolicies = generateTypePolicies(data.result.entities);
+		(client.cache as InMemoryCache).policies.addTypePolicies(typePolicies);
+	}, [client.cache, data?.result?.entities]);
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
@@ -135,11 +141,6 @@ export const useSchema = () => {
 		for (const entity of data.result.entities) {
 			if (entity.name) result[entity.name] = entity;
 		}
-
-		// Now we have our entities we can create the type policy
-		const entityNames = data.result.entities.map((entity) => entity.plural);
-		const typePolicies = generateTypePolicies(entityNames);
-		cache.policies.addTypePolicies(typePolicies);
 
 		return result;
 	}, [data]);

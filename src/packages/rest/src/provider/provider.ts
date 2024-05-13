@@ -5,7 +5,6 @@ import {
 	GraphQLEntity as GE,
 	PaginationOptions,
 	BackendProviderConfig,
-	WithId,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -165,7 +164,7 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
-	public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
+	public isCollection(entity: unknown): entity is Iterable<D> {
 		return false;
 	}
 }

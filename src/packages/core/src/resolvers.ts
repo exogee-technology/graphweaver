@@ -12,10 +12,10 @@ import {
 	GraphQLEntityConstructor,
 	HookRegister,
 	ReadHookParams,
-	WithId,
 	createOrUpdateEntities,
 	graphweaverMetadata,
 	hookManagerMap,
+	isEntityMetadata,
 } from '.';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
@@ -151,7 +151,7 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 	return result;
 };
 
-export const createOrUpdate = async <G extends WithId & { name: string }, C extends BaseContext>(
+export const createOrUpdate = async <G extends { name: string }, C extends BaseContext>(
 	_source: unknown,
 	{ input }: { input: Partial<G> | Partial<G>[] },
 	context: C,
@@ -196,10 +196,10 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 		};
 
 		// Separate Create and Update items
-		const updateItems = [];
-		const createItems = [];
+		const updateItems: Partial<G>[] = [];
+		const createItems: Partial<G>[] = [];
 		for (const item of inputArray) {
-			if (hasId(item)) {
+			if (hasId(entity, item)) {
 				updateItems.push(item);
 			} else {
 				createItems.push(item);
@@ -207,7 +207,9 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 		}
 
 		// Extract ids of items being updated
-		const updateItemIds = updateItems.map((item) => item.id) ?? [];
+		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
+		const updateItemIds =
+			updateItems.map((item) => item[primaryKeyField as keyof typeof item]) ?? [];
 
 		// Prepare updateParams and run hook if needed
 		const updateParams: CreateOrUpdateHookParams<G> = {
@@ -235,8 +237,12 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 		const entities = (await createOrUpdateEntities(data, entity, info, context)) as G[];
 
 		// Filter update and create entities
-		let updatedEntities = entities.filter((entity) => entity && updateItemIds.includes(entity.id));
-		let createdEntities = entities.filter((entity) => entity && !updateItemIds.includes(entity.id));
+		let updatedEntities = entities.filter(
+			(entity) => entity && updateItemIds.includes(entity[primaryKeyField])
+		);
+		let createdEntities = entities.filter(
+			(entity) => entity && !updateItemIds.includes(entity[primaryKeyField])
+		);
 
 		// Run after hooks for update and create entities
 		if (hookManager) {
@@ -264,7 +270,7 @@ export const createOrUpdate = async <G extends WithId & { name: string }, C exte
 // This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
 export const deleteOne =
 	(entity: EntityMetadata<any, any>) =>
-	async <G extends WithId & { name: string }, C extends BaseContext>(
+	async <G extends { name: string }, C extends BaseContext>(
 		source: unknown,
 		{ filter }: { filter: Filter<G> },
 		context: C,
@@ -303,7 +309,7 @@ export const deleteOne =
 
 export const deleteMany =
 	(entity: EntityMetadata<any, any>) =>
-	async <G extends WithId & { name: string }, C extends BaseContext>(
+	async <G extends { name: string }, C extends BaseContext>(
 		_source: unknown,
 		{ filter }: { filter: Filter<G> },
 		context: C,
@@ -344,7 +350,7 @@ export const deleteMany =
 	};
 
 export const listRelationshipField = async <
-	G extends WithId & { name: string } & { dataEntity: D },
+	G extends { name: string } & { dataEntity: D },
 	D extends BaseDataEntity,
 	C extends BaseContext,
 >(
@@ -364,7 +370,7 @@ export const listRelationshipField = async <
 	}
 
 	// If we've already resolved the data, we may want to return it, but we want the hooks to run first.
-	const existingData = source[info.fieldName as keyof typeof source];
+	const existingData = source[info.fieldName as keyof G];
 
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
@@ -388,11 +394,21 @@ export const listRelationshipField = async <
 		isList = true;
 		gqlEntityType = gqlEntityType[0];
 	}
+	const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
+	if (!isEntityMetadata(relatedEntityMetadata)) {
+		throw new Error(`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`);
+	}
+	const sourcePrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
+	const relatedPrimaryKeyField =
+		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
 	// @todo: Should the user specified filter be and-ed here?
 	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
 	const relatedEntityFilter =
-		input.filter ?? (idValue ? { id: idValue } : { [relatedField as string]: { id: source.id } });
+		input.filter ??
+		(idValue
+			? { [relatedPrimaryKeyField]: idValue }
+			: { [relatedField as string]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] } });
 
 	const params: ReadHookParams<G> = {
 		args: { filter: input.filter },
@@ -435,7 +451,7 @@ export const listRelationshipField = async <
 		dataEntities = await BaseLoaders.loadByRelatedId({
 			gqlEntityType,
 			relatedField: field.relationshipInfo.relatedField,
-			id: String(source.id),
+			id: String(source[sourcePrimaryKeyField]),
 			filter: relatedEntityFilter as Filter<G>,
 		});
 	} else if (idValue) {

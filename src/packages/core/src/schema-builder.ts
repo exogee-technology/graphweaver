@@ -59,8 +59,8 @@ const paginationTypes = new Map<string, GraphQLInputObjectType>();
 
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
 const scalarShouldGetMathOperations = (
-	scalar: GraphQLScalarType | NumberConstructor | DateConstructor
-) => scalar === Number || scalar === Date || scalar.name === 'ISOString';
+	scalar: GraphQLScalarType | NumberConstructor | DateConstructor | BigIntConstructor
+) => scalar === Number || scalar === Date || scalar === BigInt || scalar.name === 'ISOString';
 
 const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	let enumType = enumTypes.get(enumMetadata.name);
@@ -400,6 +400,8 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let insertType = insertTypes.get(entity.name);
 
 	if (!insertType) {
+		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+
 		insertType = new GraphQLInputObjectType({
 			name: `${entity.name}InsertInput`,
 			description: `Data needed to create ${entity.plural}.`,
@@ -408,7 +410,7 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 				for (const field of Object.values(entity.fields)) {
 					// The ID field is never supplied for inserts.
-					if (field.name === 'id') continue;
+					if (field.name === primaryKeyFieldName) continue;
 
 					// Let's try to resolve the GraphQL type involved here.
 					let fieldType = field.getType();
@@ -464,6 +466,8 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let createOrUpdateType = createOrUpdateTypes.get(entity.name);
 
 	if (!createOrUpdateType) {
+		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
@@ -471,7 +475,7 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(entity.fields)) {
-					if (field.name === 'id') {
+					if (field.name === primaryKeyFieldName) {
 						fields[field.name] = { type: ID };
 
 						continue;
@@ -518,6 +522,8 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let updateType = updateTypes.get(entity.name);
 
 	if (!updateType) {
+		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
@@ -525,7 +531,7 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(entity.fields)) {
-					if (field.name === 'id') {
+					if (field.name === primaryKeyFieldName) {
 						fields[field.name] = { type: new GraphQLNonNull(ID) };
 
 						continue;

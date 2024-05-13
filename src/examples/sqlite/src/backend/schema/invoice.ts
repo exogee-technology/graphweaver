@@ -12,10 +12,10 @@ import { connection } from '../database';
 export class Invoice extends GraphQLEntity<OrmInvoice> {
 	public dataEntity!: OrmInvoice;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	invoiceId!: number;
 
-	@RelationshipField<Invoice>(() => Customer, { id: (entity) => entity.customer?.id })
+	@RelationshipField<Invoice>(() => Customer, { id: (entity) => entity.customer?.customerId })
 	customer!: Customer;
 
 	@Field(() => ISODateStringScalar)

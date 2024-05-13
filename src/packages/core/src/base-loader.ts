@@ -23,8 +23,8 @@ const getBaseLoadOneLoader = <
 ) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
-		const provider = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName)?.provider;
-		if (!provider) {
+		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
+		if (!entity?.provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		}
 
@@ -32,9 +32,10 @@ const getBaseLoadOneLoader = <
 			logger.trace(
 				`DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s): (${keys.join(', ')})`
 			);
+			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
-			const records = await provider.find({
-				_or: keys.map((id) => ({ id })),
+			const records = await entity.provider!.find({
+				_or: keys.map((id) => ({ [primaryKeyField]: id })),
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
 			} as Filter<G>);
 
@@ -44,13 +45,20 @@ const getBaseLoadOneLoader = <
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D } = {};
 			for (const record of records) {
-				record.id && (lookup[record.id] = record);
+				const primaryKeyValue = record[primaryKeyField];
+				if (typeof primaryKeyValue === 'number' || typeof primaryKeyValue === 'string') {
+					lookup[String(record[primaryKeyField])] = record;
+				} else {
+					logger.warn(
+						`Ignoring primary key value ${primaryKeyValue} because it is not a string or number.`
+					);
+				}
 			}
 			return keys.map((key) => lookup[key]);
 		};
 
 		loadOneLoaderMap[gqlTypeName] = new DataLoader(fetchRecordsById, {
-			maxBatchSize: provider.maxDataLoaderBatchSize,
+			maxBatchSize: entity.provider.maxDataLoaderBatchSize,
 		});
 	}
 
@@ -72,8 +80,9 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
 	if (!relatedIdLoaderMap[loaderKey]) {
-		const provider = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName)?.provider;
-		if (!provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
+		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
+		if (!entity?.provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
+		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
 			logger.trace(
@@ -82,8 +91,8 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 				} in (${keys.join(', ')})`
 			);
 
-			const records = await provider.findByRelatedId(
-				provider.entityType,
+			const records = await entity.provider!.findByRelatedId(
+				entity.provider!.entityType,
 				relatedField,
 				keys,
 				filter
@@ -95,17 +104,18 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			const lookup: { [key: string]: D[] } = {};
 			for (const record of records) {
 				const relatedRecord = record[relatedField as keyof D];
-				if (provider.isCollection(relatedRecord)) {
+				if (entity.provider!.isCollection(relatedRecord)) {
 					// ManyToManys come back this way.
-					for (const subRecord of relatedRecord) {
-						if (!lookup[subRecord.id]) lookup[subRecord.id] = [];
-						lookup[subRecord.id].push(record as D);
+					for (const subRecord of relatedRecord as Iterable<D>) {
+						const stringPrimaryKey = String(subRecord[primaryKeyField]);
+						if (!lookup[stringPrimaryKey]) lookup[stringPrimaryKey] = [];
+						lookup[stringPrimaryKey].push(record);
 					}
 				} else {
 					// ManyToOnes come back this way
-					const relatedRecordId = provider.getRelatedEntityId(relatedRecord, relatedField);
+					const relatedRecordId = entity.provider!.getRelatedEntityId(relatedRecord, relatedField);
 					if (!lookup[relatedRecordId]) lookup[relatedRecordId] = [];
-					lookup[relatedRecordId].push(record as D);
+					lookup[relatedRecordId].push(record);
 				}
 			}
 
@@ -113,7 +123,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 		};
 
 		relatedIdLoaderMap[loaderKey] = new DataLoader(fetchRecordsByRelatedId, {
-			maxBatchSize: provider.maxDataLoaderBatchSize,
+			maxBatchSize: entity.provider.maxDataLoaderBatchSize,
 		});
 	}
 	return relatedIdLoaderMap[loaderKey] as DataLoader<string, D[]>;

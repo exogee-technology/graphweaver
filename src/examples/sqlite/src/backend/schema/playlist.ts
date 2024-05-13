@@ -10,8 +10,8 @@ import { connection } from '../database';
 export class Playlist extends GraphQLEntity<OrmPlaylist> {
 	public dataEntity!: OrmPlaylist;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	playlistId!: number;
 
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;

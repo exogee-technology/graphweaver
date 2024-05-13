@@ -122,11 +122,13 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				});
 
 				const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
+				const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
 
 				return {
 					name,
 					plural,
 					backendId,
+					primaryKeyField,
 					summaryField,
 					fields,
 					attributes,

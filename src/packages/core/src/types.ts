@@ -9,10 +9,6 @@ export type { GraphQLResolveInfo } from 'graphql';
 
 export interface BaseContext {}
 
-export type WithId = {
-	id: string | number;
-};
-
 export enum Sort {
 	ASC = 'asc',
 	DESC = 'desc',
@@ -33,16 +29,21 @@ export type PaginationOptions = {
 	limit: number;
 };
 
-export type IdOperator = 'ne' | 'in' | 'nin' | 'notnull' | 'null';
-export type StringOperator = 'ne' | 'in' | 'nin' | 'like' | 'ilike' | 'notnull' | 'null';
-export type OtherOperator = 'gt' | 'gte' | 'lt' | 'lte' | 'ne' | 'in' | 'nin' | 'notnull' | 'null';
+export type BaseOperator = 'ne' | 'notnull' | 'null';
+export type ArrayOperator = 'in' | 'nin';
+export type StringOperator = 'like' | 'ilike';
+export type NumericOperator = 'gt' | 'gte' | 'lt' | 'lte';
 
+// In English, this says:
+//   If the value in the field is a string, then apply the String Operators from above.
+//   Else if the value in the field is a number, bigint or Date then apply the Numeric Operators from above.
+//   Else apply only the Base Operators and Array Operators from above
 export type FilterWithOperators<G> = {
-	[K in keyof G as K extends 'id'
-		? `${K & string}_${IdOperator}`
-		: G[K] extends string
-			? `${K & string}_${StringOperator}`
-			: `${K & string}_${OtherOperator}`]?: FilterValue<G[K]>;
+	[K in keyof G as G[K] extends string
+		? `${K & string}_${BaseOperator | ArrayOperator | StringOperator}`
+		: G[K] extends number | bigint | Date
+			? `${K & string}_${BaseOperator | ArrayOperator | NumericOperator}`
+			: `${K & string}_${BaseOperator | ArrayOperator}`]?: FilterValue<G[K]>;
 };
 
 export type FilterValue<T> = T | T[];
@@ -61,10 +62,7 @@ export type FilterTopLevelProperties<G> = {
 	_not?: Filter<G>[];
 };
 
-export type Filter<G> = Partial<WithId> &
-	FilterEntity<G> &
-	FilterTopLevelProperties<G> &
-	FilterWithOperators<G>;
+export type Filter<G> = FilterEntity<G> & FilterTopLevelProperties<G> & FilterWithOperators<G>;
 
 export interface GraphQLArgs<G> {
 	items?: Partial<G>[];
@@ -94,7 +92,7 @@ export interface BackendProvider<D, G> {
 		filter?: Filter<G>
 	): Promise<D[]>;
 	updateOne(id: string | number, updateArgs: Partial<G>): Promise<D>;
-	updateMany(entities: (Partial<G> & WithId)[]): Promise<D[]>;
+	updateMany(entities: Partial<G>[]): Promise<D[]>;
 	createOne(entity: Partial<G>): Promise<D>;
 	createMany(entities: Partial<G>[]): Promise<D[]>;
 	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
@@ -103,7 +101,7 @@ export interface BackendProvider<D, G> {
 	deleteMany?(filter: Filter<G>): Promise<boolean>;
 
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
-	isCollection(entity: unknown): entity is Iterable<unknown & WithId>;
+	isCollection(entity: unknown): entity is Iterable<unknown>;
 
 	// Optional, allows the resolver to start a transaction
 	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
@@ -243,8 +241,6 @@ export interface FieldMetadata<G, D> {
 	// This marks the field as read only in both the API and the admin UI.
 	// This will supersede any other read only settings.
 	readonly?: boolean;
-
-	summaryField?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
 	hideInAdminUI?: boolean;

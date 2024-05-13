@@ -19,6 +19,9 @@ export class AdminUiEntityMetadata {
 	@Field(() => String, { nullable: true })
 	summaryField?: string | null;
 
+	@Field(() => String)
+	primaryKeyField!: string;
+
 	@Field(() => [AdminUiFieldMetadata])
 	fields?: AdminUiFieldMetadata[] = [];
 

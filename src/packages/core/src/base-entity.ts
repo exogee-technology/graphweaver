@@ -9,15 +9,15 @@ export interface GraphQLEntityConstructor<G extends GraphQLEntity<D>, D extends 
 }
 
 export interface BaseDataEntity {
-	id: string | number;
 	isCollection: (fieldName: string, dataField: any) => boolean;
 	isReference: (fieldName: string, dataField: any) => boolean;
 }
 
 export class GraphQLEntity<D extends BaseDataEntity> {
-	public id: string | number;
-	constructor(public dataEntity: D) {
-		this.id = dataEntity.id;
+	public dataEntity!: D;
+
+	constructor(dataEntity: D) {
+		this.dataEntity = dataEntity;
 	}
 
 	static fromBackendEntity<D extends BaseDataEntity, G extends GraphQLEntity<D>>(

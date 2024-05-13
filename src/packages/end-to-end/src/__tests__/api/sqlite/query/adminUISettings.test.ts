@@ -185,7 +185,7 @@ test('Test the decorator adminUISettings', async () => {
 	expect(artistEntity?.defaultFilter).toStrictEqual({ name: 'test' });
 	expect(artistEntity?.summaryField).toStrictEqual('name');
 
-	const idField = artistEntity?.fields.find((field) => field.name === 'id');
+	const idField = artistEntity?.fields.find((field) => field.name === 'artistId');
 	expect(idField).not.toBeNull();
 	expect(idField?.filter).not.toBeNull();
 

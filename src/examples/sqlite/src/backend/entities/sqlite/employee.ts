@@ -13,7 +13,7 @@ import { Customer } from './customer';
 @Entity({ tableName: 'Employee' })
 export class Employee extends BaseEntity {
 	@PrimaryKey({ fieldName: 'EmployeeId', type: 'number' })
-	id!: number;
+	employeeId!: number;
 
 	@Property({ fieldName: 'LastName', type: 'NVARCHAR(20)' })
 	lastName!: unknown;

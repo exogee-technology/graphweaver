@@ -11,13 +11,13 @@ import { connection } from '../database';
 export class Album extends GraphQLEntity<OrmAlbum> {
 	public dataEntity!: OrmAlbum;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	albumId!: number;
 
 	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	title!: string;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
+	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.artistId })
 	artist!: Artist;
 
 	@RelationshipField<Track>(() => [Track], { relatedField: 'album' })

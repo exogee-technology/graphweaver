@@ -14,7 +14,7 @@ import { Invoice } from './invoice';
 @Entity({ tableName: 'Customer' })
 export class Customer extends BaseEntity {
 	@PrimaryKey({ fieldName: 'CustomerId', type: 'number' })
-	id!: number;
+	customerId!: number;
 
 	@Property({ fieldName: 'FirstName', type: 'NVARCHAR(40)' })
 	firstName!: unknown;

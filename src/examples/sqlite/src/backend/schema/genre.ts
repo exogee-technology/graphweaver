@@ -10,8 +10,8 @@ import { connection } from '../database';
 export class Genre extends GraphQLEntity<OrmGenre> {
 	public dataEntity!: OrmGenre;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	genreId!: number;
 
 	@Field(() => String, { nullable: true, adminUIOptions: { summaryField: true } })
 	name?: string;

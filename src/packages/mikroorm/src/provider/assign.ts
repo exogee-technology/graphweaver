@@ -1,10 +1,8 @@
 import {
 	AnyEntity,
-	Collection,
 	EntityData,
 	EntityManager,
 	EntityProperty,
-	FilterQuery,
 	Reference,
 	ReferenceKind,
 	Utils,
@@ -142,7 +140,19 @@ export const assign = async <T extends AnyEntity<T>>(
 				(entity as any)[property] = null;
 			} else {
 				const valueKeys = Object.keys(value as any);
-				if (valueKeys.length === 1 && valueKeys[0] === 'id') {
+				const entity = em.getMetadata().find(propertyMetadata.entity());
+				if (!entity) {
+					throw new Error(
+						`Could not find entity ${propertyMetadata.entity()} in MikroORM metadata.`
+					);
+				}
+				if (entity.primaryKeys.length !== 1) {
+					throw new Error(
+						`Entity ${propertyMetadata.entity()} has ${entity.primaryKeys.length} primary keys, but we only support 1.`
+					);
+				}
+
+				if (valueKeys.length === 1 && valueKeys[0] === entity.primaryKeys[0]) {
 					// Ok, this is just the ID, set the reference and move on.
 					(entity as any)[property] = em.getReference(propertyMetadata.type, (value as any).id);
 				} else {

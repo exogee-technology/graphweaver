@@ -322,15 +322,26 @@ export const afterCreateOrUpdate = (
 	accessType: AccessType.Create | AccessType.Update
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		const entityMetadata = graphweaverMetadata.getEntityByName(gqlEntityTypeName);
+		if (!entityMetadata) throw new Error(`Could not locate entity '${gqlEntityTypeName}' by name.`);
+		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata) as keyof G;
+
 		const items = params.args.items;
-		const entities = (params.entities ?? []) as GraphQLEntity<BaseDataEntity>[];
+		const entities = (params.entities ?? []) as G[];
 
 		// 1. Check to ensure we are within a transaction
 		assertTransactional(params.transactional);
 		// 2. Check user has permission for each for each entity
 		const authChecks = entities.map((entity, index) =>
-			entity?.id
-				? checkAuthorization(gqlEntityTypeName, entity.id, items[index], accessType)
+			entity?.[primaryKeyField]
+				? checkAuthorization(
+						gqlEntityTypeName,
+						typeof entity[primaryKeyField] === 'number'
+							? Number(entity[primaryKeyField])
+							: String(entity[primaryKeyField]),
+						items[index],
+						accessType
+					)
 				: undefined
 		);
 		await Promise.all(authChecks);

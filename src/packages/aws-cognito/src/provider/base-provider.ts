@@ -1,4 +1,8 @@
-import { Filter, PaginationOptions, BackendProvider, WithId } from '@exogee/graphweaver';
+import { Filter, PaginationOptions, BackendProvider } from '@exogee/graphweaver';
+
+export interface WithId {
+	id: string;
+}
 
 export interface ProviderOptions<Entity, Context, DataEntity> {
 	init?(): Promise<Context>;

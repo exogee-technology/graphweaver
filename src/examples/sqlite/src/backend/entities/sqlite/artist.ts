@@ -5,7 +5,7 @@ import { Album } from './album';
 @Entity({ tableName: 'Artist' })
 export class Artist extends BaseEntity {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
-	id!: number;
+	artistId!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
 	name?: unknown;

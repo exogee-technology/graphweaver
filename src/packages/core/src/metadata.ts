@@ -11,6 +11,9 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 	provider?: BackendProvider<D, G>;
 	fields: { [key: string]: FieldMetadata<G, D> };
 
+	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
+	primaryKeyField?: keyof G;
+
 	apiOptions?: {
 		// This means that the entity should not be given the default list, find one, create, update, and delete
 		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
@@ -243,6 +246,16 @@ class Metadata {
 
 		existingMetadata.fields[args.name] = args;
 
+		if (args.primaryKeyField) {
+			if (existingMetadata.primaryKeyField && existingMetadata.primaryKeyField !== args.name) {
+				throw new Error(
+					`Entities can only declare one primary key field. An attempt was made to set ${args.name} as the primary key for ${entity.name} while ${entity.primaryKeyField} is already set.`
+				);
+			}
+
+			existingMetadata.primaryKeyField = args.name as keyof G;
+		}
+
 		if (args.adminUIOptions?.summaryField) {
 			if (
 				existingMetadata.adminUIOptions?.summaryField &&
@@ -420,6 +433,10 @@ class Metadata {
 	// look up the name of an entity or enum by its type
 	public nameForObjectType(type: unknown) {
 		return this.metadataByType.get(type)?.name;
+	}
+
+	public primaryKeyFieldForEntity(entity: EntityMetadata<any, any>) {
+		return String(entity.primaryKeyField ?? 'id');
 	}
 
 	public addQuery(args: {

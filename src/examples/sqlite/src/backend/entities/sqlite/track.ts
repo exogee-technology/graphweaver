@@ -18,7 +18,7 @@ import { Playlist } from './playlist';
 @Entity({ tableName: 'Track' })
 export class Track extends BaseEntity {
 	@PrimaryKey({ fieldName: 'TrackId', type: 'number' })
-	id!: number;
+	trackId!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(200)' })
 	name!: unknown;

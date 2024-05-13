@@ -14,7 +14,7 @@ import { InvoiceLine } from './invoice-line';
 @Entity({ tableName: 'Invoice' })
 export class Invoice extends BaseEntity {
 	@PrimaryKey({ fieldName: 'InvoiceId', type: 'number' })
-	id!: number;
+	invoiceId!: number;
 
 	@ManyToOne({
 		entity: () => Customer,

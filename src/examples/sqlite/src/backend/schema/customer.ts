@@ -11,8 +11,8 @@ import { connection } from '../database';
 export class Customer extends GraphQLEntity<OrmCustomer> {
 	public dataEntity!: OrmCustomer;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	customerId!: number;
 
 	@Field(() => String)
 	firstName!: string;

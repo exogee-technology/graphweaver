@@ -295,7 +295,7 @@ export const DetailPanel = () => {
 		if (field.relationshipType === 'MANY_TO_MANY') return false;
 
 		// We also don't show the related ID field for the same reason
-		if (field.relationshipType && field.name === 'id') return false;
+		if (field.relationshipType && field.name === selectedEntity.primaryKeyField) return false;
 
 		// And we want to filter out any fields that will be overridden with custom fields.
 		if (customFieldsToShow.find((customField) => customField.name === field.name)) return false;

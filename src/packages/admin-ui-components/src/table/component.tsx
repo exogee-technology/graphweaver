@@ -28,10 +28,7 @@ import { ApolloError, useMutation } from '@apollo/client';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Button } from '../button';
 import { Modal } from '../modal';
-import {
-	generateDeleteEntityMutation,
-	generateDeleteManyEntitiesMutation,
-} from '../detail-panel/graphql';
+import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
 import toast from 'react-hot-toast';
 import { SelectionBar } from '../selection-bar';
 

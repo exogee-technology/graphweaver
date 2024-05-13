@@ -6,7 +6,7 @@ import {
 	GraphQLEntity,
 	BaseDataEntity,
 	BackendProviderConfig,
-	WithId,
+	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -37,23 +37,6 @@ type PostgresError = {
 
 const objectOperations = new Set(['_and', '_or', '_not']);
 const mikroObjectOperations = new Set(['$and', '$or', '$not']);
-const nonJoinKeys = new Set([
-	'$and',
-	'$gt',
-	'$gte',
-	'$in',
-	'$lt',
-	'$lte',
-	'$ne',
-	'$nin',
-	'$not',
-	'$or',
-	'$like',
-	'$ilike',
-	'$null',
-	'$notnull',
-	'id', // @todo: remove this? Why is it here?
-]);
 
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
@@ -555,18 +538,25 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return true;
 	}
 
-	public getRelatedEntityId(entity: any, relatedIdField: string) {
-		if (typeof entity === 'string') {
-			return entity;
-		}
-		if (entity.id) {
-			return entity.id;
-		}
-		// No need to unwrap in Mikroorm version 5
+	// R in this context is the Related Entity, e.g. if we have a relationship between a Driver
+	// and a Car, if this entity is Driver then R would be Car in this case.
+	public getRelatedEntityId<R>(entity: string | R, fieldName: string): string {
+		if (typeof entity === 'string') return entity;
+
+		const meta = this.database.em.getMetadata();
+		const field = meta.get(this.entityType.name).properties[fieldName];
+		const [primaryKeyField, ...rest] = meta.get(field.entity()).primaryKeys as Array<keyof R>;
+		if (rest.length !== 0)
+			throw new Error(
+				`Composite primary keys are not supported but '${[primaryKeyField, ...rest].join(', ')}' were found on ${field.entity()}.`
+			);
+
+		if (entity[primaryKeyField]) return String(entity[primaryKeyField]);
+
 		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
 	}
 
-	public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
+	public isCollection(entity: unknown): entity is Iterable<D> {
 		return Utils.isCollection(entity);
 	}
 

@@ -1,4 +1,4 @@
-import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions, WithId } from './types';
+import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './types';
 
 export class BaseDataProvider<D, G> implements BackendProvider<D, G> {
 	constructor(readonly backendId: string) {
@@ -64,7 +64,7 @@ export class BaseDataProvider<D, G> implements BackendProvider<D, G> {
 		throw new Error('GetRelatedEntityId not implemented');
 	}
 
-	isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
+	isCollection(entity: unknown): entity is Iterable<D> {
 		throw new Error('IsCollection not implemented');
 	}
 }

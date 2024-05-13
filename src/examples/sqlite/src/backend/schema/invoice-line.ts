@@ -11,13 +11,13 @@ import { connection } from '../database';
 export class InvoiceLine extends GraphQLEntity<OrmInvoiceLine> {
 	public dataEntity!: OrmInvoiceLine;
 
-	@Field(() => ID)
-	id!: number;
+	@Field(() => ID, { primaryKeyField: true })
+	invoiceLineId!: number;
 
-	@RelationshipField<InvoiceLine>(() => Invoice, { id: (entity) => entity.invoice?.id })
+	@RelationshipField<InvoiceLine>(() => Invoice, { id: (entity) => entity.invoice?.invoiceId })
 	invoice!: Invoice;
 
-	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.id })
+	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.trackId })
 	track!: Track;
 
 	@Field(() => String)

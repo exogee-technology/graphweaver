@@ -42,7 +42,6 @@ export const List = () => {
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
-
 	const [showExportModal, setShowExportModal] = useState(false);
 	const { sort, page, filters } = decodeSearchParams(search);
 
@@ -50,7 +49,7 @@ export const List = () => {
 		pagination: {
 			offset: Math.max(page - 1, 0) * PAGE_SIZE,
 			limit: PAGE_SIZE,
-			orderBy: getOrderByQuery(sort),
+			orderBy: getOrderByQuery(entityByName(entity), sort),
 		},
 		...(filters ? { filter: filters } : {}),
 	};
