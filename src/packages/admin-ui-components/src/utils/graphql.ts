@@ -59,6 +59,9 @@ export const generateGqlSelectForEntityFields = (
 					label: ${relatedEntity?.summaryField || 'id'}
 				}`;
 			} else {
+				if (field.type === 'Media') {
+					return `${field.name} { filename, url }`;
+				}
 				return field.name;
 			}
 		})

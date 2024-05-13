@@ -96,7 +96,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					};
 
 					// Check if we have an array of related entities
-					if (isArray && relatedObject?.type === 'entity') {
+					if (isArray && relatedObject?.type === 'entity' && relatedObject.provider) {
 						// Ok, it's a relationship to another object type that is an array, e.g. "to many".
 						// We'll default to one to many, then if we can find a field on the other side that points
 						// back to us and it's also an array, then it's a many to many.
@@ -110,7 +110,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						if (Array.isArray(relatedEntityField?.getType())) {
 							fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
 						}
-					} else if (relatedObject && relatedObject?.type === 'entity') {
+					} else if (relatedObject && relatedObject?.type === 'entity' && relatedObject.provider) {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 					}
 

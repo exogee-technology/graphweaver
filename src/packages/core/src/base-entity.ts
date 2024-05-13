@@ -1,4 +1,5 @@
-import { graphweaverMetadata } from '.';
+import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
+import { BaseContext, graphweaverMetadata } from '.';
 
 export type DataEntity<T> = {
 	[x in keyof T]: T[x];
@@ -17,6 +18,12 @@ export interface BaseDataEntity {
 export class GraphQLEntity<D extends BaseDataEntity> {
 	public id: string | number;
 	static serialize?: (value: unknown) => unknown;
+	static deserialize?: (
+		source: Source,
+		args: GraphQLArgument,
+		context: BaseContext,
+		info: GraphQLResolveInfo
+	) => unknown;
 
 	constructor(public dataEntity: D) {
 		this.id = dataEntity.id;

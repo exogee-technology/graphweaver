@@ -21,14 +21,7 @@ import { Spinner } from '../spinner';
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
-import {
-	BooleanField,
-	EnumField,
-	ImageField,
-	JSONField,
-	SelectField,
-	uploadFileToSignedURL,
-} from './fields';
+import { BooleanField, EnumField, JSONField, SelectField, uploadFileToSignedURL } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
 import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
@@ -65,10 +58,6 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 
 	if (field.type === 'Boolean') {
 		return <BooleanField name={field.name} autoFocus={autoFocus} />;
-	}
-
-	if (field.type === 'Image') {
-		return <ImageField field={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'Media') {

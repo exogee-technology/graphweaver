@@ -31,7 +31,7 @@ const isSerializable = (
 const isIdOnly = <G>(node: Partial<G>) =>
 	('id' in node && node.id && Object.keys(node).length === 1) ?? false;
 
-const isRelatedEntity = (unknownType: unknown): unknownType is typeof GraphQLEntity => {
+export const isRelatedEntity = (unknownType: unknown): unknownType is typeof GraphQLEntity => {
 	return !!(
 		unknownType &&
 		typeof unknownType === 'function' &&

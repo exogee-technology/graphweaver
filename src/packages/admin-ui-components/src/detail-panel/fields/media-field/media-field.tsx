@@ -9,6 +9,26 @@ import { useAutoFocus } from '../../../hooks';
 
 import styles from './styles.module.css';
 
+export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
+	try {
+		const response = await fetch(uploadURL, {
+			method: 'PUT',
+			body: file,
+			headers: {
+				'Content-Type': file.type,
+			},
+		});
+
+		if (response.ok) {
+			return file.name;
+		} else {
+			console.error('Error uploading file:', response.statusText);
+		}
+	} catch (error) {
+		console.error('Error uploading to storage provider and creating submission:', error);
+	}
+};
+
 export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const { setValues } = useFormikContext();
 	const [mediaHasChanged, setMediaHasChanged] = useState(false);

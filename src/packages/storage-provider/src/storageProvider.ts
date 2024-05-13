@@ -77,8 +77,8 @@ export class S3StorageProvider {
 	async getDownloadUrl(
 		_source: Source,
 		{ key }: { key: string },
-		_ctx: BaseContext,
-		_info: GraphQLResolveInfo
+		_ctx?: BaseContext,
+		_info?: GraphQLResolveInfo
 	): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 

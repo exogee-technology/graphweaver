@@ -1,15 +1,14 @@
 import {
-	BaseContext,
 	BaseDataEntity,
 	Entity,
 	Field,
 	FieldOptions,
 	GraphQLEntity,
-	GraphQLResolveInfo,
 	graphweaverMetadata,
+	BaseContext,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
-import { Source } from 'graphql';
+import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
 
 export type Media = {
 	filename: string;
@@ -33,6 +32,8 @@ interface MediaDataEntity extends BaseDataEntity {
 @Entity('Media')
 class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
 	public dataEntity!: MediaDataEntity;
+	public static storageProvider?: S3StorageProvider;
+	public static propertyKey?: string;
 
 	@Field(() => String)
 	filename!: string;
@@ -50,6 +51,28 @@ class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
 		)
 			return value.filename;
 		throw new Error('Invalid value for MediaFieldEntity');
+	};
+
+	static deserialize = async (
+		source: Source,
+		_args: GraphQLArgument,
+		context: BaseContext,
+		info: GraphQLResolveInfo
+	) => {
+		if (MediaFieldEntity.storageProvider === undefined) throw new Error('Storage provider not set');
+		if (MediaFieldEntity.propertyKey === undefined) throw new Error('Property key not set');
+
+		const filename = source[MediaFieldEntity.propertyKey as keyof Source] as string | undefined;
+		if (!filename) return null;
+		return {
+			filename,
+			url: await MediaFieldEntity.storageProvider.getDownloadUrl(
+				source,
+				{ key: filename },
+				context,
+				info
+			),
+		};
 	};
 }
 
@@ -71,27 +94,7 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 			...options,
 		});
 
-		const fieldResolver = async (
-			source: Source & { dataEntity: Record<string, string> },
-			args: unknown,
-			context: BaseContext,
-			info: GraphQLResolveInfo
-		) => {
-			return {
-				filename: source.dataEntity[propertyKey],
-				url: await options.storageProvider.getDownloadUrl(
-					source,
-					{ key: source.dataEntity[propertyKey] as string },
-					context,
-					info
-				),
-			};
-		};
-
-		Object.defineProperty(target, propertyKey, {
-			enumerable: true,
-			configurable: true,
-			value: fieldResolver,
-		});
+		MediaFieldEntity.storageProvider = options.storageProvider;
+		MediaFieldEntity.propertyKey = propertyKey;
 	};
 }
