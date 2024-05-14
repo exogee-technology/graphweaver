@@ -86,32 +86,38 @@ const columnsForEntity = <T extends TableRowItem>(
 					}
 				: field.type === 'Media'
 					? ({ row }: FormatterProps<T, unknown>) => {
-							const media = row[field.name as keyof typeof row] as { url: string };
+							const media = row[field.name as keyof typeof row] as {
+								url: string;
+								type: 'IMAGE' | 'OTHER';
+							};
 							if (!media) {
 								return null;
 							}
-							return (
-								<img
-									src={media.url}
-									// alt={altText} @todo - implement alt text
-									style={{
-										width: '100%',
-										height: '100%',
-										objectFit: 'cover',
-										padding: 2,
-										borderRadius: 8,
-										objectPosition: 'center center',
-										textIndent: -9999,
-									}}
-									onError={hideImage}
-								/>
-							);
 
-							// return (
-							// 	<a href={media.url} target="_blank" rel="noreferrer">
-							// 		{media.url}
-							// 	</a>
-							// );
+							if (media.type === 'IMAGE') {
+								return (
+									<img
+										src={media.url}
+										// alt={altText} @todo - implement alt text
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+											padding: 2,
+											borderRadius: 8,
+											objectPosition: 'center center',
+											textIndent: -9999,
+										}}
+										onError={hideImage}
+									/>
+								);
+							}
+
+							return (
+								<a href={media.url} target="_blank" rel="noreferrer">
+									{media.url}
+								</a>
+							);
 						}
 					: field.isArray
 						? ({ row }: FormatterProps<T, unknown>) => {

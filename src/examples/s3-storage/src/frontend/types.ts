@@ -160,7 +160,8 @@ export type Mutation = {
   deleteSubmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Submissions with a filter. */
   deleteSubmissions?: Maybe<Scalars['Boolean']['output']>;
-  getUploadUrl?: Maybe<Scalars['String']['output']>;
+  getDeleteUrl?: Maybe<Scalars['String']['output']>;
+  getUploadUrl?: Maybe<Scalars['JSON']['output']>;
   /** Update a single Submission. */
   updateSubmission?: Maybe<Submission>;
   /** Update many Submissions. */
@@ -193,8 +194,13 @@ export type MutationDeleteSubmissionsArgs = {
 };
 
 
+export type MutationGetDeleteUrlArgs = {
+  key?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationGetUploadUrlArgs = {
-  key?: InputMaybe<Scalars['ID']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -220,7 +226,7 @@ export type Query = {
 
 
 export type QueryGetDownloadUrlArgs = {
-  key?: InputMaybe<Scalars['ID']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 

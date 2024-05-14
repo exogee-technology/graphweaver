@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"scripts": {
 		"import-auth": "pnpm unpack && tsx ./scripts/import-auth.ts",
+		"import-storage-provider": "pnpm unpack && tsx ./scripts/import-storage-provider.ts",
 		"import-database-sqlite": "pnpm unpack && tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": "pnpm unpack && . ./scripts/import-postgres.sh",
 		"import-database-mysql": "pnpm unpack && . ./scripts/import-mysql.sh",
@@ -23,6 +24,7 @@
 		"test-ui-auth": "pnpm exec playwright test ./auth",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
+		"test-ui-storage-provider": "pnpm exec playwright test ./storage-provider",
 		"test-ui-sqlite": "pnpm exec playwright test ./sqlite",
 		"version": "npm version --no-git-tag-version"
 	},

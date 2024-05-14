@@ -10,15 +10,15 @@ import {
 import { S3StorageProvider } from '../storageProvider';
 import { Source } from 'graphql';
 
-export interface Media extends BaseDataEntity {
+export interface MediaData extends BaseDataEntity {
 	filename: string;
 	type: MediaType;
 	url?: string;
 }
 
 export enum MediaType {
-	IMAGE = 'Image',
-	OTHER = 'Other',
+	IMAGE = 'IMAGE',
+	OTHER = 'OTHER',
 }
 
 graphweaverMetadata.collectEnumInformation({
@@ -30,7 +30,7 @@ type MediaTypeFieldOptions = FieldOptions & {
 	storageProvider: S3StorageProvider;
 };
 
-const isMedia = (value: unknown): value is Media =>
+const isMedia = (value: unknown): value is MediaData =>
 	!!(
 		value &&
 		value !== null &&
@@ -42,8 +42,8 @@ const isMedia = (value: unknown): value is Media =>
 	);
 
 @Entity('Media')
-class MediaFieldEntity extends GraphQLEntity<Media> {
-	public dataEntity!: Media;
+export class Media extends GraphQLEntity<MediaData> {
+	public dataEntity!: MediaData;
 
 	@Field(() => String)
 	filename!: string;
@@ -55,6 +55,7 @@ class MediaFieldEntity extends GraphQLEntity<Media> {
 	url!: string;
 
 	static serialize = ({ value }: { value: unknown }) => {
+		if (value === null) return null;
 		if (isMedia(value)) {
 			return JSON.stringify(
 				{
@@ -81,7 +82,7 @@ class MediaFieldEntity extends GraphQLEntity<Media> {
 	}) => {
 		if (!value) return null;
 
-		if (!fieldMetadata.additionalInformation?.storageProvider)
+		if (!fieldMetadata.additionalInformation?.MediaFieldStorageProvider)
 			throw new Error('Storage provider not set on media field.');
 
 		if (value && typeof value === 'string') {
@@ -94,7 +95,7 @@ class MediaFieldEntity extends GraphQLEntity<Media> {
 
 		if (isMedia(value)) {
 			const storageProvider = fieldMetadata.additionalInformation
-				.storageProvider as S3StorageProvider;
+				.MediaFieldStorageProvider as S3StorageProvider;
 
 			return {
 				filename: value.filename,
@@ -118,7 +119,7 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 		graphweaverMetadata.collectFieldInformation({
 			target,
 			name: propertyKey,
-			getType: () => MediaFieldEntity,
+			getType: () => Media,
 			adminUIOptions: {
 				readonly: true,
 			},

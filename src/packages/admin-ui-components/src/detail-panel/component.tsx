@@ -25,7 +25,7 @@ import { BooleanField, EnumField, JSONField, SelectField, uploadFileToSignedURL 
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
 import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
-import { MediaField } from './fields/media-field';
+import { deleteFileToSignedURL, MediaField } from './fields/media-field';
 import { TextField } from './fields/text-field';
 
 interface ResultBaseType {
@@ -351,12 +351,18 @@ export const DetailPanel = () => {
 		try {
 			let result: FetchResult;
 
+			// If the form values contains an deleteUrl, then do a seperate mutation to delete the file
+			if (formValues.deleteUrl) {
+				await deleteFileToSignedURL(values.deleteUrl);
+			}
+
 			// If the form values contain an image, then do seperate mutation to upload the image
 			if (formValues.uploadUrl && formValues.file) {
 				await uploadFileToSignedURL(values.uploadUrl, values.file);
 			}
 
-			// if uploadUrl and file are there, remove them
+			// if urls and file are there, remove them
+			delete values.deleteUrl;
 			delete values.uploadUrl;
 			delete values.file;
 

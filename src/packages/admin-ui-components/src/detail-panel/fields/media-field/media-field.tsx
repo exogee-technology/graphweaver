@@ -3,11 +3,24 @@ import { useField, useFormikContext } from 'formik';
 import { useMutation } from '@apollo/client';
 
 import { EntityField } from '../../../utils';
-import { getUploadUrlMutation } from '../../graphql';
+import { getDeleteUrlMutation, getUploadUrlMutation } from '../../graphql';
 import { Button } from '../../../button';
 import { useAutoFocus } from '../../../hooks';
 
 import styles from './styles.module.css';
+import toast from 'react-hot-toast';
+
+export const deleteFileToSignedURL = async (deleteURL: string) => {
+	const response = await fetch(deleteURL, {
+		method: 'DELETE',
+	});
+
+	if (response.ok) {
+		return true;
+	} else {
+		throw new Error(`Error deleting file: ${response?.statusText}`);
+	}
+};
 
 export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 	const response = await fetch(uploadURL, {
@@ -31,24 +44,39 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 	const [_, meta] = useField({ name: field.name, multiple: false });
 	const { initialValue: media } = meta;
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
+	const [getDeleteUrl] = useMutation(getDeleteUrlMutation);
 
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 
 	const handleFileUpload = async (file: any) => {
 		const res = await getUploadUrl({ variables: { key: file.name } });
-		const uploadURL = res.data.getUploadUrl;
-		if (!uploadURL) {
+		const uploadUrl = res.data.getUploadUrl;
+		if (!uploadUrl) {
 			console.error('Upload URL is not available');
+			toast.error('Unable to upload file, please try again later.');
 			return;
+		}
+
+		let deleteUrl = null;
+		if (media) {
+			const deleteRes = await getDeleteUrl({ variables: { key: media.filename } });
+			deleteUrl = deleteRes.data.getDeleteUrl;
+			if (!deleteUrl) {
+				console.error('Delete URL is not available');
+				toast.error('Unable to delete file, please try again later.');
+				return;
+			}
 		}
 
 		setValues((prev: any) => ({
 			...prev,
-			uploadUrl: uploadURL,
+			uploadUrl: uploadUrl.url,
 			file: file,
 			[field.name]: {
-				filename: file.name,
+				filename: uploadUrl.filename,
+				type: uploadUrl.type,
 			},
+			deleteUrl,
 		}));
 		setMediaHasChanged(true);
 	};
@@ -59,12 +87,20 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 		}
 	};
 
-	const handleOnDelete = () => {
+	const handleOnDelete = async () => {
+		const res = await getDeleteUrl({ variables: { key: media.filename } });
+		const deleteUrl = res.data.getDeleteUrl;
+		if (!deleteUrl) {
+			console.error('Delete URL is not available');
+			toast.error('Unable to delete file, please try again later.');
+			return;
+		}
 		setValues((prev: any) => ({
 			...prev,
 			uploadUrl: null,
 			file: null,
 			[field.name]: null,
+			deleteUrl,
 		}));
 		setMediaHasChanged(true);
 	};
@@ -79,12 +115,15 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 						</Button>
 						<input className={styles.fileInput} type="file" onChange={handleFileInputChange} />
 					</div>
-					{!mediaHasChanged && <img src={media.url} />}
-					{/* {!mediaHasChanged && (
-						<a href={media.url} target="_blank" rel="noreferrer">
-							{media.url}
-						</a>
-					)} */}
+					{!mediaHasChanged && media.type === 'IMAGE' ? (
+						<img src={media.url} />
+					) : (
+						!mediaHasChanged && (
+							<a href={media.url} target="_blank" rel="noreferrer">
+								{media.url}
+							</a>
+						)
+					)}
 				</>
 			) : (
 				<div className={styles.row}>

@@ -1,4 +1,4 @@
-name: Other End to End Tests
+name: Other (Metadata & Scalars) End to End Tests
 
 on:
   pull_request:

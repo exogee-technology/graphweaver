@@ -60,7 +60,7 @@ export const generateGqlSelectForEntityFields = (
 				}`;
 			} else {
 				if (field.type === 'Media') {
-					return `${field.name} { filename, url }`;
+					return `${field.name} { filename, type, url }`;
 				}
 				return field.name;
 			}

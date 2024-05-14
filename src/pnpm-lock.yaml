@@ -14,7 +14,7 @@ importers:
     devDependencies:
       '@typescript-eslint/eslint-plugin':
         specifier: 7.6.0
-        version: 7.6.0(@typescript-eslint/parser@7.6.0)(eslint@8.57.0)(typescript@5.4.5)
+        version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)
       '@typescript-eslint/parser':
         specifier: 7.6.0
         version: 7.6.0(eslint@8.57.0)(typescript@5.4.5)
@@ -29,19 +29,19 @@ importers:
         version: 9.1.0(eslint@8.57.0)
       eslint-plugin-prettier:
         specifier: 5.1.3
-        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.2.5)
+        version: 5.1.3(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.2.5)
       eslint-plugin-simple-import-sort:
         specifier: 12.0.0
         version: 12.0.0(eslint@8.57.0)
       jest:
         specifier: 29.7.0
-        version: 29.7.0
+        version: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       prettier:
         specifier: 3.2.5
         version: 3.2.5
       ts-jest:
         specifier: 29.1.2
-        version: 29.1.2(@babel/core@7.24.5)(jest@29.7.0)(typescript@5.4.5)
+        version: 29.1.2(@babel/core@7.24.5)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(esbuild@0.15.5)(jest@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)))(typescript@5.4.5)
       turbo:
         specifier: 1.13.2
         version: 1.13.2
@@ -53,10 +53,10 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -90,10 +90,10 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -145,10 +145,10 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -209,13 +209,13 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -247,6 +247,9 @@ importers:
       '@types/node':
         specifier: 20.12.7
         version: 20.12.7
+      dotenv-cli:
+        specifier: 7.4.1
+        version: 7.4.1
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
@@ -258,7 +261,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -304,13 +307,13 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -334,16 +337,16 @@ importers:
         version: link:../../packages/logger
       '@nivo/bump':
         specifier: 0.85.1
-        version: 0.85.1(react-dom@18.2.0)(react@18.2.0)
+        version: 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@nivo/core':
         specifier: 0.85.1
-        version: 0.85.1(react-dom@18.2.0)(react@18.2.0)
+        version: 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@nivo/line':
         specifier: 0.85.1
-        version: 0.85.1(react-dom@18.2.0)(react@18.2.0)
+        version: 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@nivo/tooltip':
         specifier: 0.85.1
-        version: 0.85.1(react-dom@18.2.0)(react@18.2.0)
+        version: 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
@@ -370,7 +373,7 @@ importers:
         version: 18.2.0(react@18.2.0)
       react-router-dom:
         specifier: 6.22.3
-        version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+        version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       uuid:
         specifier: 9.0.1
         version: 9.0.1
@@ -395,13 +398,13 @@ importers:
         version: 5.4.5
       vite:
         specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        version: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
 
   packages/admin-ui:
     dependencies:
       '@apollo/client':
         specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -422,16 +425,16 @@ importers:
         version: 18.2.0
       react-data-grid:
         specifier: 7.0.0-beta.20
-        version: 7.0.0-beta.20(react-dom@18.2.0)(react@18.2.0)
+        version: 7.0.0-beta.20(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       react-modal:
         specifier: 3.16.1
-        version: 3.16.1(react-dom@18.2.0)(react@18.2.0)
+        version: 3.16.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-router-dom:
         specifier: 6.22.3
-        version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+        version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
       '@chialab/esbuild-plugin-html':
         specifier: 0.18.2
@@ -447,7 +450,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.2.1
-        version: 4.2.1(vite@5.2.8)
+        version: 4.2.1(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -468,22 +471,22 @@ importers:
         version: 5.4.5
       vite:
         specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        version: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))
 
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
         specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
       '@graphiql/toolkit':
         specifier: 0.9.1
-        version: 0.9.1(graphql@16.8.1)
+        version: 0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)
       clsx:
         specifier: 2.1.0
         version: 2.1.0
@@ -492,7 +495,7 @@ importers:
         version: 8.5.0(react@18.2.0)
       graphiql:
         specifier: 3.2.0
-        version: 3.2.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.2.0(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -507,13 +510,13 @@ importers:
         version: 5.4.1
       react-data-grid:
         specifier: 7.0.0-beta.20
-        version: 7.0.0-beta.20(react-dom@18.2.0)(react@18.2.0)
+        version: 7.0.0-beta.20(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-hot-toast:
         specifier: 2.4.1
-        version: 2.4.1(csstype@3.1.3)(react-dom@18.2.0)(react@18.2.0)
+        version: 2.4.1(csstype@3.1.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react-router-dom:
         specifier: 6.22.3
-        version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+        version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
     devDependencies:
       '@types/graphql-deduplicator':
         specifier: 2.0.2
@@ -556,13 +559,13 @@ importers:
         version: 5.4.5
       vite:
         specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        version: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))
       vitest:
         specifier: 1.4.0
-        version: 1.4.0(@types/node@20.12.7)
+        version: 1.4.0(@types/node@20.12.7)(lightningcss@1.24.1)
 
   packages/apollo-client:
     devDependencies:
@@ -577,7 +580,7 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -589,7 +592,7 @@ importers:
         version: link:../logger
       '@simplewebauthn/server':
         specifier: 9.0.3
-        version: 9.0.3
+        version: 9.0.3(encoding@0.1.13)
       apollo-server-errors:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.8.1)
@@ -650,19 +653,19 @@ importers:
         version: 5.4.5
       vitest:
         specifier: 1.4.0
-        version: 1.4.0(@types/node@20.12.7)
+        version: 1.4.0(@types/node@20.12.7)(lightningcss@1.24.1)
 
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
         specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
       '@simplewebauthn/browser':
         specifier: 9.0.1
         version: 9.0.1
       '@usedapp/core':
         specifier: 1.2.13
-        version: 1.2.13(ethers@5.7.2)(react@18.2.0)
+        version: 1.2.13(ethers@5.7.2)(node-fetch@2.7.0)(react@18.2.0)
       ethers:
         specifier: 5.7.2
         version: 5.7.2
@@ -674,7 +677,7 @@ importers:
         version: 16.8.1
       react-router-dom:
         specifier: 6.22.3
-        version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+        version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@18.2.0)
@@ -714,10 +717,10 @@ importers:
         version: 5.4.5
       vite:
         specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        version: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))
 
   packages/aws-cognito:
     dependencies:
@@ -766,25 +769,25 @@ importers:
         version: 5.0.2(graphql@16.8.1)
       '@graphql-codegen/cli':
         specifier: 5.0.2
-        version: 5.0.2(@types/node@20.12.7)(graphql@16.8.1)(typescript@5.4.5)
+        version: 5.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)(typescript@5.4.5)
       '@graphql-codegen/near-operation-file-preset':
         specifier: 3.0.0
-        version: 3.0.0(graphql@16.8.1)
+        version: 3.0.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/typescript':
         specifier: 4.0.6
-        version: 4.0.6(graphql@16.8.1)
+        version: 4.0.6(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/typescript-operations':
         specifier: 4.2.0
-        version: 4.2.0(graphql@16.8.1)
+        version: 4.2.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/typescript-react-apollo':
         specifier: 4.3.0
-        version: 4.3.0(graphql-tag@2.12.6)(graphql@16.8.1)
+        version: 4.3.0(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)
       '@serverless/utils':
         specifier: 6.15.0
-        version: 6.15.0
+        version: 6.15.0(encoding@0.1.13)
       '@vitejs/plugin-react':
         specifier: 4.2.1
-        version: 4.2.1(vite@5.2.8)
+        version: 4.2.1(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -811,25 +814,25 @@ importers:
         version: 5.0.5
       rollup-plugin-visualizer:
         specifier: 5.12.0
-        version: 5.12.0
+        version: 5.12.0(rollup@4.17.2)
       serverless:
         specifier: 3.38.0
-        version: 3.38.0
+        version: 3.38.0(encoding@0.1.13)
       serverless-dotenv-plugin:
         specifier: 6.0.0
-        version: 6.0.0(serverless@3.38.0)
+        version: 6.0.0(serverless@3.38.0(encoding@0.1.13))
       serverless-offline:
         specifier: 13.3.3
-        version: 13.3.3(serverless@3.38.0)
+        version: 13.3.3(encoding@0.1.13)(serverless@3.38.0(encoding@0.1.13))
       vite:
         specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        version: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))
     devDependencies:
       '@types/node':
         specifier: 20.12.7
@@ -925,7 +928,7 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@exogee/graphweaver-scalars':
         specifier: workspace:*
         version: link:../scalars
@@ -1013,7 +1016,7 @@ importers:
         version: 16.8.1
       graphweaver:
         specifier: '*'
-        version: link:../cli
+        version: 0.2.24(@codemirror/language@6.0.0)(@mikro-orm/core@6.1.12)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(csstype@3.1.3)(encoding@0.1.13)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(lightningcss@1.24.1)(pg@8.11.5)(rollup@4.17.2)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))(typescript@5.4.5)
       promisify-child-process:
         specifier: 4.1.2
         version: 4.1.2
@@ -1041,7 +1044,7 @@ importers:
         version: 14.1.1
       jest:
         specifier: 29.7.0
-        version: 29.7.0
+        version: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       mockdate:
         specifier: 3.0.5
         version: 3.0.5
@@ -1050,16 +1053,16 @@ importers:
         version: 8.11.5
       serverless:
         specifier: 3.38.0
-        version: 3.38.0
+        version: 3.38.0(encoding@0.1.13)
       serverless-offline:
         specifier: 13.3.3
-        version: 13.3.3(serverless@3.38.0)
+        version: 13.3.3(encoding@0.1.13)(serverless@3.38.0(encoding@0.1.13))
       supertest-graphql:
         specifier: 1.1.4
         version: 1.1.4(graphql@16.8.1)
       ts-jest:
         specifier: 29.1.2
-        version: 29.1.2(@babel/core@7.24.5)(jest@29.7.0)(typescript@5.4.5)
+        version: 29.1.2(@babel/core@7.24.5)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(esbuild@0.15.5)(jest@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)))(typescript@5.4.5)
       tsx:
         specifier: 4.7.2
         version: 4.7.2
@@ -1115,7 +1118,7 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1266,13 +1269,13 @@ importers:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.2)
+        version: 3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))
       '@escape.tech/graphql-armor':
         specifier: 2.4.0
-        version: 2.4.0(@apollo/server@4.10.2)(@escape.tech/graphql-armor-types@0.5.0)
+        version: 2.4.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))(@envelop/core@5.0.1)(@escape.tech/graphql-armor-types@0.5.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1368,13 +1371,13 @@ importers:
         version: 5.4.5
       vite:
         specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.7)
+        version: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
 
   packages/xero:
     dependencies:
       '@apollo/server':
         specifier: 4.10.2
-        version: 4.10.2(graphql@16.8.1)
+        version: 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1414,7 +1417,7 @@ importers:
         version: 18.2.0(react@18.2.0)
       react-router-dom:
         specifier: 6.22.3
-        version: 6.22.3(react-dom@18.2.0)(react@18.2.0)
+        version: 6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1454,6 +1457,24 @@ packages:
       subscriptions-transport-ws:
         optional: true
 
+  '@apollo/client@3.9.7':
+    resolution: {integrity: sha512-OEEwt55bkFhqihCT5d75KUxZt50JZ9MuIYwG7VZlyPPIAb9K+qzVWlXWlf3tB5DaV43yXkUSLQfNpdIBFOB55Q==}
+    peerDependencies:
+      graphql: ^15.0.0 || ^16.0.0
+      graphql-ws: ^5.5.5
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      subscriptions-transport-ws: ^0.9.0 || ^0.11.0
+    peerDependenciesMeta:
+      graphql-ws:
+        optional: true
+      react:
+        optional: true
+      react-dom:
+        optional: true
+      subscriptions-transport-ws:
+        optional: true
+
   '@apollo/protobufjs@1.2.7':
     resolution: {integrity: sha512-Lahx5zntHPZia35myYDBRuF58tlwPskwHc5CWBZC/4bMKB6siTBWwtMrkqXcsNwQiFSzSx5hKdRPUmemrEp3Gg==}
     hasBin: true
@@ -1462,6 +1483,12 @@ packages:
     resolution: {integrity: sha512-pGwCl/po6+rxRmDMFgozKQo2pbsSwE91TpsDBAOgf74CRDPXHHtM88wbwjab0wMMZh95QfR45GGyDIdhY24bkQ==}
     peerDependencies:
       graphql: 14.x || 15.x || 16.x
+
+  '@apollo/server@4.10.1':
+    resolution: {integrity: sha512-XGMOgTyzV4EBHQq0xQVKFry9hZF7AA/6nxxGLamqdxodhdSdGbU9jrlb5/XDveeGuXP3+5JDdrB2HcziVLJcMA==}
+    engines: {node: '>=14.16.0'}
+    peerDependencies:
+      graphql: ^16.6.0
 
   '@apollo/server@4.10.2':
     resolution: {integrity: sha512-qlTZE4XyzMPprtkxFjmPxMwc2KC4nvNQrKXk2PMotEACKcaLXVZFIgstxbSqBCNl2KgzbsgU1g6vvbV6Xcfikw==}
@@ -2806,6 +2833,38 @@ packages:
   '@ethersproject/wordlists@5.7.0':
     resolution: {integrity: sha512-S2TFNJNfHWVHNE6cNDjbVlZ6MgE17MIxMbMg2zv3wn+3XSJGosL1m9ZVv3GXCf/2ymSsQ+hRI5IzoMJTG6aoVA==}
 
+  '@exogee/graphweaver-admin-ui-components@0.2.24':
+    resolution: {integrity: sha512-04UfQTOsxs9acOUXQ+CKhiAxafXY8kLp9O7Qg871mKOuTQs0Svv47hKdMUrKj53k4kRvl8lPKDYn2hR/BVN1UQ==}
+    peerDependencies:
+      formik: 2.4.5
+      graphql: 16.8.1
+      react: 18.2.0
+      react-dom: 18.2.0
+      react-router-dom: 6.4.3
+
+  '@exogee/graphweaver-admin-ui@0.2.24':
+    resolution: {integrity: sha512-JWGpQbMU/fbUO1KwPW71WWLYnCZYGqIRrclwtatiw0kIt+RB0dd1ZN7JCZD0cv3b1fKhYPGlZ/zlkRozyTeniA==}
+
+  '@exogee/graphweaver-apollo-client@0.2.24':
+    resolution: {integrity: sha512-7ChAfhIlqZ0nzGITAI/gXixj9V/sNyb8fvXFX8i9hz2qkJz+X4R1M3FxjnJHY3/evpj8ha+0TbFF6xDSOeLcmw==}
+
+  '@exogee/graphweaver-builder@0.2.24':
+    resolution: {integrity: sha512-A6jVPrPb53tqEyJdGj3cyFkce8dtu7VZ3mqqGqHhyShntVW9NfBe5RctCg00vWuDF9mgWf7adANjucra2Bo93A==}
+
+  '@exogee/graphweaver-config@0.2.24':
+    resolution: {integrity: sha512-IKDh00vkEXWcnQXBE3s0R1vRyPgZaV3YuPeGVPpeJpRP/a2rqBObStoPrUq+FuaZOcGRCjaH4WeB3gcLBsXigQ==}
+
+  '@exogee/graphweaver-mikroorm@0.2.24':
+    resolution: {integrity: sha512-y0XsEbsvKWWOtieUP0O/FaxmLwnV4TUFaGmRc6zPD1OjyI3mcu7/aEUwKmJ2HQBGBGm57SqbqTTI2kIJhy26iQ==}
+    peerDependencies:
+      '@mikro-orm/core': 6.1.10
+
+  '@exogee/graphweaver@0.2.24':
+    resolution: {integrity: sha512-fEBUsXKZxbpJV+uhLHpYNzI6VEvJYhLo1lDEzgb1wqmgePR3AwZ9rkOT7Zcs9MNH/4CcZYSajvWqFRcEYf2AEw==}
+
+  '@exogee/logger@0.2.24':
+    resolution: {integrity: sha512-flyjQ9huEEsV1tp15f601kyiHpiFl0Vm1tt2tfddXpFYlpjaVg/+SgIsuXnuWNGH18MrQUZgX/I43yvsLoeegA==}
+
   '@floating-ui/core@1.6.1':
     resolution: {integrity: sha512-42UH54oPZHPdRHdw6BgoBD6cg/eVTmVrFcgeRDM3jbO7uxSoipVcmcIGFcA5jmOHO5apcyvBhkSKES3fQJnu7A==}
 
@@ -2823,6 +2882,13 @@ packages:
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
+
+  '@graphiql/react@0.20.4':
+    resolution: {integrity: sha512-LDgIlHa65pSngk8G2O0hvohNz4B41VUa7Yg6iPwifa1XreXxHIXjhV6FC1qi5oSjdCIRp4T8dkZnHA6iI5eElg==}
+    peerDependencies:
+      graphql: ^15.5.0 || ^16.0.0
+      react: ^16.8.0 || ^17 || ^18
+      react-dom: ^16.8.0 || ^17 || ^18
 
   '@graphiql/react@0.21.0':
     resolution: {integrity: sha512-UlXzG78HC5+CgQYXw0jVZPoZX0Uh2jPIrqLBIxAdAWMZsmcHMZHAujZtION1pbIrv22cWxP95W+8RpDIHijYow==}
@@ -3369,8 +3435,20 @@ packages:
     resolution: {integrity: sha512-51/1iBdXoF+bODJMpW8cUsr1TsieIJobiAX4g9A6CgBU6v95vwzyEQRo9v73i+YuPfrjH4YrrSbRaAr1tKe38A==}
     engines: {node: '>= 18.12.0'}
 
+  '@mikro-orm/knex@6.1.10':
+    resolution: {integrity: sha512-Nv5BMJm45kRYcelZxYJ3RAX5WjjFENc0V/Efj4D2S46Md/kWwrjIlKiDPMbC43aBcZ8+K6AbzT5zzbY0nxIkgw==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+
   '@mikro-orm/knex@6.1.12':
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+
+  '@mikro-orm/mysql@6.1.10':
+    resolution: {integrity: sha512-jh9HOFEaER5yjD5FoLu+7qDf7Io+Wxu6CLZrppN9Rj5oaMz7O6u9ezWjZULoA930y9dsRtF09dVLkaaGTeaHjQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
@@ -3381,8 +3459,20 @@ packages:
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
 
+  '@mikro-orm/postgresql@6.1.10':
+    resolution: {integrity: sha512-ShBT7ykZhxaWGTY+u25baNSaLNMHni9RxaD6fy7gSj1kE89bHGJGUMjlJo7PpnBzuRxPZ0OYxHpXYjh0GFLMWA==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+
   '@mikro-orm/postgresql@6.1.12':
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': ^6.0.0
+
+  '@mikro-orm/sqlite@6.1.10':
+    resolution: {integrity: sha512-czHRiWBBf/kW+MGi6O1syYzm82ppPdWXVBywB7cg/+rWyW8GhTAg1af82ySQqathn244NHZ4IvW/Dk+nEgVngw==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
@@ -3897,6 +3987,10 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  '@remix-run/router@1.0.3':
+    resolution: {integrity: sha512-ceuyTSs7PZ/tQqi19YZNBc5X7kj1f8p+4DIyrcIYFY9h+hd1OKm4RqtiWldR9eGEvIiJfsqwM4BsuCtRIuEw6Q==}
+    engines: {node: '>=14'}
 
   '@remix-run/router@1.15.3':
     resolution: {integrity: sha512-Oy8rmScVrVxWZVOpEF57ovlnhpZ8CCPlnIIumVcV9nFdiSIrus99+Lw78ekXyGvVDlIsFJbSfmSovJUhCWYV3w==}
@@ -5872,6 +5966,9 @@ packages:
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
 
+  entities@2.1.0:
+    resolution: {integrity: sha512-hCx1oky9PFrJ611mf0ifBLBRW8lUUVRlFolb5gWRfIELabBlbp9xZvrqZLZAs+NxFnbfQoeGd8wDkygjg7U85w==}
+
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
     engines: {node: '>=0.12'}
@@ -6589,6 +6686,11 @@ packages:
   glob-to-regexp@0.4.1:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
 
+  glob@10.3.10:
+    resolution: {integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==}
+    engines: {node: '>=16 || 14 >=14.17'}
+    hasBin: true
+
   glob@10.3.12:
     resolution: {integrity: sha512-TCNv8vJ+xz4QiqTpfOJA7HvYv+tNIRHKfUWw/q+v2jdgN4ebz+KY9tGx5J4rHP0o84mNP+ApH66HRX8us3Khqg==}
     engines: {node: '>=16 || 14 >=14.17'}
@@ -6634,6 +6736,13 @@ packages:
 
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
+
+  graphiql@3.1.1:
+    resolution: {integrity: sha512-FMNa981Wj8JBJJRTdryNyrVteigS8B7q+Q1fh1rW4IsFPaXNIs1VMs8kwqIZ8zERj4Fc64Ea750g3n6r2w9Zcg==}
+    peerDependencies:
+      graphql: ^15.5.0 || ^16.0.0
+      react: ^16.8.0 || ^17 || ^18
+      react-dom: ^16.8.0 || ^17 || ^18
 
   graphiql@3.2.0:
     resolution: {integrity: sha512-HHZ9j47IVUdUhdEdOkwD/U3kMGxCGZocEf9rk1aou5lInK9vJRbjlDW4BbG9CvA5fNoe7DevRr72tv0ubvjjPA==}
@@ -6681,6 +6790,11 @@ packages:
     peerDependencies:
       graphql: 14 - 16
 
+  graphql-subscriptions@2.0.0:
+    resolution: {integrity: sha512-s6k2b8mmt9gF9pEfkxsaO1lTxaySfKoEJzEfmwguBbQ//Oq23hIXCfR1hm4kdh5hnR20RdwB+s3BCb+0duHSZA==}
+    peerDependencies:
+      graphql: ^15.7.2 || ^16.0.0
+
   graphql-tag@2.12.6:
     resolution: {integrity: sha512-FdSNcu2QQcWnM2VNvSCCDCVS5PpPqpzgFT8+GXzqJuoDd0CBncxCY278u4mhRO7tMgo2JjgJA5aZ+nWSQ/Z+xg==}
     engines: {node: '>=10'}
@@ -6701,6 +6815,10 @@ packages:
   graphql@16.8.1:
     resolution: {integrity: sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
+
+  graphweaver@0.2.24:
+    resolution: {integrity: sha512-eoDZCmq5LeoxnGyhrmB4+P7yUNomy7nTvAppnlWRVRmjPzMFP5nNmrvjpy7l0fk+RPmilqsBgnc7/aG1xlEnpg==}
+    hasBin: true
 
   has-bigints@1.0.2:
     resolution: {integrity: sha512-tSvCKtBr9lkF0Ex0aQiP9N+OpV4zi2r/Nee5VkRDbaqv35RLYMzbwQfFSZZH0kR+Rd6302UJZ2p/bJCEoR3VoQ==}
@@ -6890,6 +7008,10 @@ packages:
   inquirer@8.2.6:
     resolution: {integrity: sha512-M1WuAmb7pn9zdFRtQYk26ZBoY043Sse0wVDdk4Bppr+JOXyQYybdtvK+l9wUibhtjdjvtoiNy8tk+EgsYIUqKg==}
     engines: {node: '>=12.0.0'}
+
+  inquirer@9.2.16:
+    resolution: {integrity: sha512-qzgbB+yNjgSzk2omeqMDtO9IgJet/UL67luT1MaaggRpGK73DBQct5Q4pipwFQcIKK1GbMODYd4UfsRCkSP1DA==}
+    engines: {node: '>=18'}
 
   inquirer@9.2.17:
     resolution: {integrity: sha512-Vr3Ia2ud5sGnioURkE69endl4SkeJcMzTF6SosKcX5GALJfId7C+JvO5ZZb6y1LOXnEofCPbwzoQ1q0e8Gaduw==}
@@ -7535,6 +7657,9 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
+  linkify-it@3.0.3:
+    resolution: {integrity: sha512-ynTsyrFSdE5oZ/O9GEf00kPngmOfVwazR5GKDq6EYfhlpFug3J2zybX56a2PRRpc9P+FuSoGNAwjlbDs9jJBPQ==}
+
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
 
@@ -7730,12 +7855,19 @@ packages:
     resolution: {integrity: sha512-8y/eV9QQZCiyn1SprXSrCmqJN0yNRATe+PO8ztwqrvrbdRLA3eYJF0yaR0YayLWkMbsQSKWS9N2gPcGEc4UsZg==}
     engines: {node: '>=0.10.0'}
 
+  markdown-it@12.3.2:
+    resolution: {integrity: sha512-TchMembfxfNVpHkbtriWltGWc+m3xszaRD0CZup7GFFhzIgQqxIfn3eGj1yZpfuflzPvfkt611B2Q/Bsk1YnGg==}
+    hasBin: true
+
   markdown-it@14.1.0:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
     hasBin: true
 
   md5.js@1.3.5:
     resolution: {integrity: sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg==}
+
+  mdurl@1.0.1:
+    resolution: {integrity: sha512-/sKlQJCBYVY9Ers9hqzKou4H6V5UWc/M59TH2dvkt+84itfnq7uFOMLpOiOS4ujvHP4etln18fmIxA5R5fll0g==}
 
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
@@ -8355,11 +8487,18 @@ packages:
     resolution: {integrity: sha512-MnUuEycAemtSaeFSjXKW/aroV7akBbY+Sv+RkyqFjgAe73F+MR0TBWKBRDkmfWq/HiFmdavfZ1G7h4SPZXaCSg==}
     engines: {node: '>=0.10.0'}
 
+  pino-abstract-transport@1.1.0:
+    resolution: {integrity: sha512-lsleG3/2a/JIWUtf9Q5gUNErBqwIu1tUKTT3dUzaf5DySw9ra1wcqKjJjLX1VTY64Wk1eEOYsVGSaGfCK85ekA==}
+
   pino-abstract-transport@1.2.0:
     resolution: {integrity: sha512-Guhh8EZfPCfH+PMXAb6rKOjGQEoy0xlAIn+irODG5kgfYV+BQ0rGYYWTIel3P5mmyXqkYkPmdIkywsn6QKUR1Q==}
 
   pino-std-serializers@6.2.2:
     resolution: {integrity: sha512-cHjPPsE+vhj/tnhCy/wiMh3M3z3h/j15zHQX+S9GkTBgqJuTuJzYJ4gUyACLhDaJ7kk9ba9iRDmbH2tJU03OiA==}
+
+  pino@8.19.0:
+    resolution: {integrity: sha512-oswmokxkav9bADfJ2ifrvfHUwad6MLp73Uat0IkQWY3iAw5xTRoznXbXksZs8oaOUMpmhVWD+PZogNzllWpJaA==}
+    hasBin: true
 
   pino@8.20.0:
     resolution: {integrity: sha512-uhIfMj5TVp+WynVASaVEJFTncTUe4dHBq6CWplu/vBgvGHhvBvQfxz+vcOrnnBQdORH3izaGEurLfNlq3YxdFQ==}
@@ -8692,9 +8831,22 @@ packages:
       react: '>=16.8'
       react-dom: '>=16.8'
 
+  react-router-dom@6.4.3:
+    resolution: {integrity: sha512-MiaYQU8CwVCaOfJdYvt84KQNjT78VF0TJrA17SIQgNHRvLnXDJO6qsFqq8F/zzB1BWZjCFIrQpu4QxcshitziQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
   react-router@6.22.3:
     resolution: {integrity: sha512-dr2eb3Mj5zK2YISHK++foM9w4eBnO23eKnZEDs7c880P6oKbrjz/Svg9+nxqtHQK+oMW4OtjZca0RqPglXxguQ==}
     engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+
+  react-router@6.4.3:
+    resolution: {integrity: sha512-BT6DoGn6aV1FVP5yfODMOiieakp3z46P1Fk0RNzJMACzE7C339sFuHebfvWtnB4pzBvXXkHP2vscJzWRuUjTtA==}
+    engines: {node: '>=14'}
     peerDependencies:
       react: '>=16.8'
 
@@ -9559,6 +9711,16 @@ packages:
     resolution: {integrity: sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==}
     engines: {node: '>=14.16'}
 
+  type-graphql@2.0.0-beta.2:
+    resolution: {integrity: sha512-MCGxRvNADu5Wp9QEudI/WQgiqHJfjanGcKRk/ErCow6IaG04NNI7o3bjjxQVWC+qDundSOhmaquNdjDiiTbcqQ==}
+    engines: {node: '>= 14.5.0'}
+    peerDependencies:
+      class-validator: '>=0.14.0'
+      graphql: ^16.6.0
+    peerDependenciesMeta:
+      class-validator:
+        optional: true
+
   type-is@1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
     engines: {node: '>= 0.6'}
@@ -9593,6 +9755,9 @@ packages:
 
   ua-parser-js@1.0.37:
     resolution: {integrity: sha512-bhTyI94tZofjo+Dn8SN6Zv8nBDvyXTymAdM3LDI/0IboIUwTu1rEhW7v2TfiVsoYWgkQ4kOVqnI8APUFbIQIFQ==}
+
+  uc.micro@1.0.6:
+    resolution: {integrity: sha512-8Y75pvTYkLJW2hWQHXxoqRgV7qb9B+9vFEtidML+7koHUFapnVJAZ6cKs+Qjz5Aw3aZWHMC6u0wJE3At+nSGwA==}
 
   uc.micro@2.1.0:
     resolution: {integrity: sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A==}
@@ -9761,10 +9926,43 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
+  vite-plugin-graphweaver@0.2.24:
+    resolution: {integrity: sha512-hDBGb5Y5JWbyPxXF8Cv6MFCtpkfJJTfhCFxY+8/yu+0eyeCXLz8aJ1B5w1sNQN7QXkHD8LQwkcD+7AIim2qMpA==}
+    peerDependencies:
+      vite: '5'
+
   vite-plugin-svgr@3.2.0:
     resolution: {integrity: sha512-Uvq6niTvhqJU6ga78qLKBFJSDvxWhOnyfQSoKpDPMAGxJPo5S3+9hyjExE5YDj6Lpa4uaLkGc1cBgxXov+LjSw==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4
+
+  vite@5.2.2:
+    resolution: {integrity: sha512-FWZbz0oSdLq5snUI0b6sULbz58iXFXdvkZfZWR/F0ZJuKTSPO7v72QPXt6KqYeMFb0yytNp6kZosxJ96Nr/wDQ==}
+    engines: {node: ^18.0.0 || >=20.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || >=20.0.0
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.4.0
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
 
   vite@5.2.8:
     resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
@@ -10068,7 +10266,7 @@ snapshots:
     dependencies:
       graphql: 16.8.1
 
-  '@apollo/client@3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)':
+  '@apollo/client@3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
       '@wry/caches': 1.0.1
@@ -10079,14 +10277,42 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       optimism: 0.18.0
       prop-types: 15.8.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
       rehackt: 0.0.6(@types/react@18.2.75)(react@18.2.0)
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
       tslib: 2.6.2
       zen-observable-ts: 1.2.5
+    optionalDependencies:
+      graphql-ws: 5.16.0(graphql@16.8.1)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      subscriptions-transport-ws: 0.11.0(graphql@16.8.1)
+    transitivePeerDependencies:
+      - '@types/react'
+
+  '@apollo/client@3.9.7(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))':
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
+      '@wry/caches': 1.0.1
+      '@wry/equality': 0.5.7
+      '@wry/trie': 0.5.0
+      graphql: 16.8.1
+      graphql-tag: 2.12.6(graphql@16.8.1)
+      hoist-non-react-statics: 3.3.2
+      optimism: 0.18.0
+      prop-types: 15.8.1
+      rehackt: 0.0.6(@types/react@18.2.75)(react@18.2.0)
+      response-iterator: 0.2.6
+      symbol-observable: 4.0.0
+      ts-invariant: 0.10.3
+      tslib: 2.6.2
+      zen-observable-ts: 1.2.5
+    optionalDependencies:
+      graphql-ws: 5.16.0(graphql@16.8.1)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      subscriptions-transport-ws: 0.11.0(graphql@16.8.1)
     transitivePeerDependencies:
       - '@types/react'
 
@@ -10113,7 +10339,7 @@ snapshots:
       '@apollo/utils.logger': 2.0.1
       graphql: 16.8.1
 
-  '@apollo/server@4.10.2(graphql@16.8.1)':
+  '@apollo/server@4.10.1(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@apollo/cache-control-types': 1.0.3(graphql@16.8.1)
       '@apollo/server-gateway-interface': 1.1.1(graphql@16.8.1)
@@ -10138,7 +10364,39 @@ snapshots:
       lru-cache: 7.18.3
       negotiator: 0.6.3
       node-abort-controller: 3.1.1
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
+      uuid: 9.0.1
+      whatwg-mimetype: 3.0.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1)':
+    dependencies:
+      '@apollo/cache-control-types': 1.0.3(graphql@16.8.1)
+      '@apollo/server-gateway-interface': 1.1.1(graphql@16.8.1)
+      '@apollo/usage-reporting-protobuf': 4.1.1
+      '@apollo/utils.createhash': 2.0.1
+      '@apollo/utils.fetcher': 2.0.1
+      '@apollo/utils.isnodelike': 2.0.1
+      '@apollo/utils.keyvaluecache': 2.1.1
+      '@apollo/utils.logger': 2.0.1
+      '@apollo/utils.usagereporting': 2.1.0(graphql@16.8.1)
+      '@apollo/utils.withrequired': 2.0.1
+      '@graphql-tools/schema': 9.0.19(graphql@16.8.1)
+      '@josephg/resolvable': 1.0.1
+      '@types/express': 4.17.21
+      '@types/express-serve-static-core': 4.19.0
+      '@types/node-fetch': 2.6.11
+      async-retry: 1.3.3
+      cors: 2.8.5
+      express: 4.19.2
+      graphql: 16.8.1
+      loglevel: 1.9.1
+      lru-cache: 7.18.3
+      negotiator: 0.6.3
+      node-abort-controller: 3.1.1
+      node-fetch: 2.7.0(encoding@0.1.13)
       uuid: 9.0.1
       whatwg-mimetype: 3.0.0
     transitivePeerDependencies:
@@ -10198,7 +10456,7 @@ snapshots:
 
   '@apollo/utils.withrequired@2.0.1': {}
 
-  '@ardatan/relay-compiler@12.0.0(graphql@16.8.1)':
+  '@ardatan/relay-compiler@12.0.0(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@babel/core': 7.24.5
       '@babel/generator': 7.24.5
@@ -10209,28 +10467,28 @@ snapshots:
       babel-preset-fbjs: 3.4.0(@babel/core@7.24.5)
       chalk: 4.1.2
       fb-watchman: 2.0.2
-      fbjs: 3.0.5
+      fbjs: 3.0.5(encoding@0.1.13)
       glob: 7.2.3
       graphql: 16.8.1
       immutable: 3.7.6
       invariant: 2.2.4
       nullthrows: 1.1.1
-      relay-runtime: 12.0.0
+      relay-runtime: 12.0.0(encoding@0.1.13)
       signedsource: 1.0.0
       yargs: 15.4.1
     transitivePeerDependencies:
       - encoding
       - supports-color
 
-  '@ardatan/sync-fetch@0.0.1':
+  '@ardatan/sync-fetch@0.0.1(encoding@0.1.13)':
     dependencies:
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
-  '@as-integrations/aws-lambda@3.1.0(@apollo/server@4.10.2)':
+  '@as-integrations/aws-lambda@3.1.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))':
     dependencies:
-      '@apollo/server': 4.10.2(graphql@16.8.1)
+      '@apollo/server': 4.10.2(encoding@0.1.13)(graphql@16.8.1)
       '@types/aws-lambda': 8.10.137
 
   '@aws-crypto/crc32@3.0.0':
@@ -11912,17 +12170,19 @@ snapshots:
     dependencies:
       graphql: 16.8.1
 
-  '@escape.tech/graphql-armor@2.4.0(@apollo/server@4.10.2)(@escape.tech/graphql-armor-types@0.5.0)':
+  '@escape.tech/graphql-armor@2.4.0(@apollo/server@4.10.2(encoding@0.1.13)(graphql@16.8.1))(@envelop/core@5.0.1)(@escape.tech/graphql-armor-types@0.5.0)':
     dependencies:
-      '@apollo/server': 4.10.2(graphql@16.8.1)
       '@escape.tech/graphql-armor-block-field-suggestions': 2.1.0
       '@escape.tech/graphql-armor-cost-limit': 2.1.0
       '@escape.tech/graphql-armor-max-aliases': 2.3.0
       '@escape.tech/graphql-armor-max-depth': 2.2.0
       '@escape.tech/graphql-armor-max-directives': 2.1.0
       '@escape.tech/graphql-armor-max-tokens': 2.3.0
-      '@escape.tech/graphql-armor-types': 0.5.0
       graphql: 16.8.1
+    optionalDependencies:
+      '@apollo/server': 4.10.2(encoding@0.1.13)(graphql@16.8.1)
+      '@envelop/core': 5.0.1
+      '@escape.tech/graphql-armor-types': 0.5.0
 
   '@eslint-community/eslint-utils@4.4.0(eslint@8.57.0)':
     dependencies:
@@ -12202,6 +12462,157 @@ snapshots:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
 
+  '@exogee/graphweaver-admin-ui-components@0.2.24(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(csstype@3.1.3)(formik@2.4.5(react@18.2.0))(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react-router-dom@6.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))':
+    dependencies:
+      '@apollo/client': 3.9.7(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
+      '@exogee/graphweaver-apollo-client': 0.2.24
+      '@graphiql/toolkit': 0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)
+      clsx: 2.1.0
+      downshift: 8.5.0(react@18.2.0)
+      formik: 2.4.5(react@18.2.0)
+      graphiql: 3.1.1(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      graphql: 16.8.1
+      graphql-deduplicator: 2.0.6
+      luxon: 3.4.4
+      papaparse: 5.4.1
+      react: 18.2.0
+      react-data-grid: 7.0.0-beta.20(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-dom: 18.2.0(react@18.2.0)
+      react-hot-toast: 2.4.1(csstype@3.1.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-router-dom: 6.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - graphql-ws
+      - subscriptions-transport-ws
+
+  '@exogee/graphweaver-admin-ui@0.2.24(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(csstype@3.1.3)(graphql-ws@5.16.0(graphql@16.8.1))(subscriptions-transport-ws@0.11.0(graphql@16.8.1))':
+    dependencies:
+      '@apollo/client': 3.9.7(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
+      '@exogee/graphweaver-admin-ui-components': 0.2.24(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(csstype@3.1.3)(formik@2.4.5(react@18.2.0))(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react-router-dom@6.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
+      clsx: 2.1.0
+      formik: 2.4.5(react@18.2.0)
+      graphql: 16.8.1
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-data-grid: 7.0.0-beta.20(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-dom: 18.2.0(react@18.2.0)
+      react-modal: 3.16.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      react-router-dom: 6.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - graphql-ws
+      - subscriptions-transport-ws
+
+  '@exogee/graphweaver-apollo-client@0.2.24': {}
+
+  '@exogee/graphweaver-builder@0.2.24(@types/node@20.12.7)(encoding@0.1.13)(lightningcss@1.24.1)(rollup@4.17.2)(typescript@5.4.5)':
+    dependencies:
+      '@exogee/graphweaver-config': 0.2.24
+      '@graphql-codegen/add': 5.0.2(graphql@16.8.1)
+      '@graphql-codegen/cli': 5.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)(typescript@5.4.5)
+      '@graphql-codegen/near-operation-file-preset': 3.0.0(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript-operations': 4.2.0(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript-react-apollo': 4.3.0(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)
+      '@serverless/utils': 6.15.0(encoding@0.1.13)
+      '@vitejs/plugin-react': 4.2.1(vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1))
+      class-validator: 0.14.1
+      dotenv: 16.4.5
+      esbuild: 0.15.5
+      esbuild-css-modules-plugin: 2.7.1(esbuild@0.15.5)
+      glob: 10.3.10
+      graphql: 16.8.1
+      graphql-tag: 2.12.6(graphql@16.8.1)
+      rimraf: 5.0.5
+      rollup-plugin-visualizer: 5.12.0(rollup@4.17.2)
+      serverless: 3.38.0(encoding@0.1.13)
+      serverless-dotenv-plugin: 6.0.0(serverless@3.38.0(encoding@0.1.13))
+      serverless-offline: 13.3.3(encoding@0.1.13)(serverless@3.38.0(encoding@0.1.13))
+      type-graphql: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
+      vite: 5.2.2(@types/node@20.12.7)(lightningcss@1.24.1)
+      vite-plugin-graphweaver: 0.2.24(vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1))
+      vite-plugin-svgr: 3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1))
+    transitivePeerDependencies:
+      - '@parcel/watcher'
+      - '@types/node'
+      - aws-crt
+      - bufferutil
+      - cosmiconfig-toml-loader
+      - debug
+      - encoding
+      - enquirer
+      - less
+      - lightningcss
+      - rollup
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - typescript
+      - utf-8-validate
+
+  '@exogee/graphweaver-config@0.2.24':
+    dependencies:
+      lodash: 4.17.21
+
+  '@exogee/graphweaver-mikroorm@0.2.24(@mikro-orm/core@6.1.12)(encoding@0.1.13)(pg@8.11.5)':
+    dependencies:
+      '@apollo/server': 4.10.1(encoding@0.1.13)(graphql@16.8.1)
+      '@exogee/graphweaver': 0.2.24(encoding@0.1.13)
+      '@exogee/logger': 0.2.24
+      '@mikro-orm/core': 6.1.12
+      dataloader: 2.2.2
+      decimal.js: 10.4.3
+      dotenv: 16.4.5
+      graphql: 16.8.1
+      pluralize: 8.0.0
+      reflect-metadata: 0.2.1
+    optionalDependencies:
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)
+      '@mikro-orm/mysql': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)
+      '@mikro-orm/postgresql': 6.1.10(@mikro-orm/core@6.1.12)
+      '@mikro-orm/sqlite': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - encoding
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@exogee/graphweaver@0.2.24(encoding@0.1.13)':
+    dependencies:
+      '@apollo/server': 4.10.1(encoding@0.1.13)(graphql@16.8.1)
+      '@exogee/logger': 0.2.24
+      '@graphql-tools/delegate': 10.0.4(graphql@16.8.1)
+      class-validator: 0.14.1
+      dataloader: 2.2.2
+      graphql: 16.8.1
+      graphql-parse-resolve-info: 4.13.0(graphql@16.8.1)
+      pluralize: 8.0.0
+      reflect-metadata: 0.2.1
+      type-graphql: 2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1)
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@exogee/logger@0.2.24':
+    dependencies:
+      pino: 8.19.0
+
   '@floating-ui/core@1.6.1':
     dependencies:
       '@floating-ui/utils': 0.2.2
@@ -12211,7 +12622,7 @@ snapshots:
       '@floating-ui/core': 1.6.1
       '@floating-ui/utils': 0.2.2
 
-  '@floating-ui/react-dom@2.0.9(react-dom@18.2.0)(react@18.2.0)':
+  '@floating-ui/react-dom@2.0.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@floating-ui/dom': 1.6.5
       react: 18.2.0
@@ -12222,20 +12633,47 @@ snapshots:
   '@gar/promisify@1.1.3':
     optional: true
 
-  '@graphiql/react@0.21.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)':
+  '@graphiql/react@0.20.4(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@graphiql/toolkit': 0.9.1(graphql@16.8.1)
-      '@headlessui/react': 1.7.19(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-dialog': 1.0.5(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-dropdown-menu': 2.0.6(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-tooltip': 1.0.7(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-visually-hidden': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@graphiql/toolkit': 0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)
+      '@headlessui/react': 1.7.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-dropdown-menu': 2.0.6(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-tooltip': 1.0.7(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-visually-hidden': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/codemirror': 5.60.15
       clsx: 1.2.1
       codemirror: 5.65.16
       codemirror-graphql: 2.0.11(@codemirror/language@6.0.0)(codemirror@5.65.16)(graphql@16.8.1)
       copy-to-clipboard: 3.3.3
-      framer-motion: 6.5.1(react-dom@18.2.0)(react@18.2.0)
+      framer-motion: 6.5.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      graphql: 16.8.1
+      graphql-language-service: 5.2.0(graphql@16.8.1)
+      markdown-it: 12.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      set-value: 4.1.0
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - graphql-ws
+
+  '@graphiql/react@0.21.0(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
+    dependencies:
+      '@graphiql/toolkit': 0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)
+      '@headlessui/react': 1.7.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-dialog': 1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-dropdown-menu': 2.0.6(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-tooltip': 1.0.7(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-visually-hidden': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@types/codemirror': 5.60.15
+      clsx: 1.2.1
+      codemirror: 5.65.16
+      codemirror-graphql: 2.0.11(@codemirror/language@6.0.0)(codemirror@5.65.16)(graphql@16.8.1)
+      copy-to-clipboard: 3.3.3
+      framer-motion: 6.5.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       graphql: 16.8.1
       graphql-language-service: 5.2.0(graphql@16.8.1)
       markdown-it: 14.1.0
@@ -12249,11 +12687,13 @@ snapshots:
       - '@types/react-dom'
       - graphql-ws
 
-  '@graphiql/toolkit@0.9.1(graphql@16.8.1)':
+  '@graphiql/toolkit@0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)':
     dependencies:
       '@n1ru4l/push-pull-async-iterable-iterator': 3.2.0
       graphql: 16.8.1
       meros: 1.3.0(@types/node@20.12.7)
+    optionalDependencies:
+      graphql-ws: 5.16.0(graphql@16.8.1)
     transitivePeerDependencies:
       - '@types/node'
 
@@ -12269,23 +12709,23 @@ snapshots:
       graphql: 16.8.1
       tslib: 2.6.2
 
-  '@graphql-codegen/cli@5.0.2(@types/node@20.12.7)(graphql@16.8.1)(typescript@5.4.5)':
+  '@graphql-codegen/cli@5.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)(typescript@5.4.5)':
     dependencies:
       '@babel/generator': 7.24.5
       '@babel/template': 7.24.0
       '@babel/types': 7.24.5
-      '@graphql-codegen/client-preset': 4.2.5(graphql@16.8.1)
+      '@graphql-codegen/client-preset': 4.2.5(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/core': 4.0.2(graphql@16.8.1)
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
-      '@graphql-tools/apollo-engine-loader': 8.0.1(graphql@16.8.1)
+      '@graphql-tools/apollo-engine-loader': 8.0.1(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/code-file-loader': 8.1.1(graphql@16.8.1)
       '@graphql-tools/git-loader': 8.0.5(graphql@16.8.1)
-      '@graphql-tools/github-loader': 8.0.1(@types/node@20.12.7)(graphql@16.8.1)
+      '@graphql-tools/github-loader': 8.0.1(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/graphql-file-loader': 8.0.1(graphql@16.8.1)
       '@graphql-tools/json-file-loader': 8.0.1(graphql@16.8.1)
       '@graphql-tools/load': 8.0.2(graphql@16.8.1)
-      '@graphql-tools/prisma-loader': 8.0.4(@types/node@20.12.7)(graphql@16.8.1)
-      '@graphql-tools/url-loader': 8.0.2(@types/node@20.12.7)(graphql@16.8.1)
+      '@graphql-tools/prisma-loader': 8.0.4(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-tools/url-loader': 8.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       '@whatwg-node/fetch': 0.8.8
       chalk: 4.1.2
@@ -12293,7 +12733,7 @@ snapshots:
       debounce: 1.2.1
       detect-indent: 6.1.0
       graphql: 16.8.1
-      graphql-config: 5.0.3(@types/node@20.12.7)(graphql@16.8.1)(typescript@5.4.5)
+      graphql-config: 5.0.3(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)(typescript@5.4.5)
       inquirer: 8.2.6
       is-glob: 4.0.3
       jiti: 1.21.0
@@ -12317,17 +12757,17 @@ snapshots:
       - typescript
       - utf-8-validate
 
-  '@graphql-codegen/client-preset@4.2.5(graphql@16.8.1)':
+  '@graphql-codegen/client-preset@4.2.5(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@babel/helper-plugin-utils': 7.24.5
       '@babel/template': 7.24.0
       '@graphql-codegen/add': 5.0.2(graphql@16.8.1)
-      '@graphql-codegen/gql-tag-operations': 4.0.6(graphql@16.8.1)
+      '@graphql-codegen/gql-tag-operations': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
-      '@graphql-codegen/typed-document-node': 5.0.6(graphql@16.8.1)
-      '@graphql-codegen/typescript': 4.0.6(graphql@16.8.1)
-      '@graphql-codegen/typescript-operations': 4.2.0(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 5.1.0(graphql@16.8.1)
+      '@graphql-codegen/typed-document-node': 5.0.6(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript-operations': 4.2.0(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/documents': 1.0.0(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
@@ -12345,10 +12785,10 @@ snapshots:
       graphql: 16.8.1
       tslib: 2.6.2
 
-  '@graphql-codegen/gql-tag-operations@4.0.6(graphql@16.8.1)':
+  '@graphql-codegen/gql-tag-operations@4.0.6(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 5.1.0(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       auto-bind: 4.0.0
       graphql: 16.8.1
@@ -12357,11 +12797,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/near-operation-file-preset@3.0.0(graphql@16.8.1)':
+  '@graphql-codegen/near-operation-file-preset@3.0.0(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/add': 3.2.3(graphql@16.8.1)
       '@graphql-codegen/plugin-helpers': 3.1.2(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 2.13.1(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       graphql: 16.8.1
       parse-filepath: 1.0.2
@@ -12407,10 +12847,10 @@ snapshots:
       graphql: 16.8.1
       tslib: 2.6.2
 
-  '@graphql-codegen/typed-document-node@5.0.6(graphql@16.8.1)':
+  '@graphql-codegen/typed-document-node@5.0.6(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 5.1.0(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       auto-bind: 4.0.0
       change-case-all: 1.0.15
       graphql: 16.8.1
@@ -12419,11 +12859,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/typescript-operations@4.2.0(graphql@16.8.1)':
+  '@graphql-codegen/typescript-operations@4.2.0(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
-      '@graphql-codegen/typescript': 4.0.6(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 5.1.0(graphql@16.8.1)
+      '@graphql-codegen/typescript': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       auto-bind: 4.0.0
       graphql: 16.8.1
       tslib: 2.6.2
@@ -12431,10 +12871,10 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/typescript-react-apollo@4.3.0(graphql-tag@2.12.6)(graphql@16.8.1)':
+  '@graphql-codegen/typescript-react-apollo@4.3.0(encoding@0.1.13)(graphql-tag@2.12.6(graphql@16.8.1))(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 3.1.2(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 2.13.1(encoding@0.1.13)(graphql@16.8.1)
       auto-bind: 4.0.0
       change-case-all: 1.0.15
       graphql: 16.8.1
@@ -12444,11 +12884,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/typescript@4.0.6(graphql@16.8.1)':
+  '@graphql-codegen/typescript@4.0.6(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
       '@graphql-codegen/schema-ast': 4.0.2(graphql@16.8.1)
-      '@graphql-codegen/visitor-plugin-common': 5.1.0(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       auto-bind: 4.0.0
       graphql: 16.8.1
       tslib: 2.6.2
@@ -12456,11 +12896,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/visitor-plugin-common@2.13.1(graphql@16.8.1)':
+  '@graphql-codegen/visitor-plugin-common@2.13.1(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.8.1)
       '@graphql-tools/optimize': 1.4.0(graphql@16.8.1)
-      '@graphql-tools/relay-operation-optimizer': 6.5.18(graphql@16.8.1)
+      '@graphql-tools/relay-operation-optimizer': 6.5.18(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 8.13.1(graphql@16.8.1)
       auto-bind: 4.0.0
       change-case-all: 1.0.14
@@ -12473,11 +12913,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/visitor-plugin-common@5.1.0(graphql@16.8.1)':
+  '@graphql-codegen/visitor-plugin-common@5.1.0(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
       '@graphql-tools/optimize': 2.0.0(graphql@16.8.1)
-      '@graphql-tools/relay-operation-optimizer': 7.0.1(graphql@16.8.1)
+      '@graphql-tools/relay-operation-optimizer': 7.0.1(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       auto-bind: 4.0.0
       change-case-all: 1.0.15
@@ -12490,9 +12930,9 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-tools/apollo-engine-loader@8.0.1(graphql@16.8.1)':
+  '@graphql-tools/apollo-engine-loader@8.0.1(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
-      '@ardatan/sync-fetch': 0.0.1
+      '@ardatan/sync-fetch': 0.0.1(encoding@0.1.13)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       '@whatwg-node/fetch': 0.9.17
       graphql: 16.8.1
@@ -12594,9 +13034,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@graphql-tools/github-loader@8.0.1(@types/node@20.12.7)(graphql@16.8.1)':
+  '@graphql-tools/github-loader@8.0.1(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
-      '@ardatan/sync-fetch': 0.0.1
+      '@ardatan/sync-fetch': 0.0.1(encoding@0.1.13)
       '@graphql-tools/executor-http': 1.0.9(@types/node@20.12.7)(graphql@16.8.1)
       '@graphql-tools/graphql-tag-pluck': 8.3.0(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
@@ -12676,9 +13116,9 @@ snapshots:
       graphql: 16.8.1
       tslib: 2.6.2
 
-  '@graphql-tools/prisma-loader@8.0.4(@types/node@20.12.7)(graphql@16.8.1)':
+  '@graphql-tools/prisma-loader@8.0.4(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
-      '@graphql-tools/url-loader': 8.0.2(@types/node@20.12.7)(graphql@16.8.1)
+      '@graphql-tools/url-loader': 8.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       '@types/js-yaml': 4.0.9
       '@whatwg-node/fetch': 0.9.17
@@ -12686,7 +13126,7 @@ snapshots:
       debug: 4.3.4(supports-color@8.1.1)
       dotenv: 16.4.5
       graphql: 16.8.1
-      graphql-request: 6.1.0(graphql@16.8.1)
+      graphql-request: 6.1.0(encoding@0.1.13)(graphql@16.8.1)
       http-proxy-agent: 7.0.2
       https-proxy-agent: 7.0.4
       jose: 5.2.4
@@ -12702,9 +13142,9 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@graphql-tools/relay-operation-optimizer@6.5.18(graphql@16.8.1)':
+  '@graphql-tools/relay-operation-optimizer@6.5.18(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
-      '@ardatan/relay-compiler': 12.0.0(graphql@16.8.1)
+      '@ardatan/relay-compiler': 12.0.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 9.2.1(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
@@ -12712,9 +13152,9 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-tools/relay-operation-optimizer@7.0.1(graphql@16.8.1)':
+  '@graphql-tools/relay-operation-optimizer@7.0.1(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
-      '@ardatan/relay-compiler': 12.0.0(graphql@16.8.1)
+      '@ardatan/relay-compiler': 12.0.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       graphql: 16.8.1
       tslib: 2.6.2
@@ -12738,9 +13178,9 @@ snapshots:
       tslib: 2.6.2
       value-or-promise: 1.0.12
 
-  '@graphql-tools/url-loader@8.0.2(@types/node@20.12.7)(graphql@16.8.1)':
+  '@graphql-tools/url-loader@8.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
-      '@ardatan/sync-fetch': 0.0.1
+      '@ardatan/sync-fetch': 0.0.1(encoding@0.1.13)
       '@graphql-tools/delegate': 10.0.4(graphql@16.8.1)
       '@graphql-tools/executor-graphql-ws': 1.1.2(graphql@16.8.1)
       '@graphql-tools/executor-http': 1.0.9(@types/node@20.12.7)(graphql@16.8.1)
@@ -12962,9 +13402,9 @@ snapshots:
       '@hapi/bourne': 3.0.0
       '@hapi/hoek': 11.0.4
 
-  '@headlessui/react@1.7.19(react-dom@18.2.0)(react@18.2.0)':
+  '@headlessui/react@1.7.19(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@tanstack/react-virtual': 3.5.0(react-dom@18.2.0)(react@18.2.0)
+      '@tanstack/react-virtual': 3.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -13011,7 +13451,7 @@ snapshots:
       jest-util: 29.7.0
       slash: 3.0.0
 
-  '@jest/core@29.7.0':
+  '@jest/core@29.7.0(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))':
     dependencies:
       '@jest/console': 29.7.0
       '@jest/reporters': 29.7.0
@@ -13025,7 +13465,7 @@ snapshots:
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 29.7.0
-      jest-config: 29.7.0(@types/node@20.12.7)
+      jest-config: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       jest-haste-map: 29.7.0
       jest-message-util: 29.7.0
       jest-regex-util: 29.6.3
@@ -13232,6 +13672,57 @@ snapshots:
       mikro-orm: 6.1.12
       reflect-metadata: 0.2.1
 
+  '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.5)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      fs-extra: 11.2.0
+      knex: 3.1.0(mysql2@3.9.2)(pg@8.11.5)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    optional: true
+
+  '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.3)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      fs-extra: 11.2.0
+      knex: 3.1.0(mysql2@3.9.4)(pg@8.11.3)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    optional: true
+
+  '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      fs-extra: 11.2.0
+      knex: 3.1.0(pg@8.11.5)(sqlite3@5.1.7)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    optional: true
+
   '@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.3)':
     dependencies:
       '@mikro-orm/core': 6.1.12
@@ -13314,6 +13805,21 @@ snapshots:
       - supports-color
       - tedious
 
+  '@mikro-orm/mysql@6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.5)
+      mysql2: 3.9.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    optional: true
+
   '@mikro-orm/mysql@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)':
     dependencies:
       '@mikro-orm/core': 6.1.12
@@ -13343,6 +13849,24 @@ snapshots:
       - supports-color
       - tedious
 
+  '@mikro-orm/postgresql@6.1.10(@mikro-orm/core@6.1.12)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.3)
+      pg: 8.11.3
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    optional: true
+
   '@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)':
     dependencies:
       '@mikro-orm/core': 6.1.12
@@ -13359,6 +13883,24 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
+
+  '@mikro-orm/sqlite@6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)
+      fs-extra: 11.2.0
+      sqlite3: 5.1.7
+      sqlstring-sqlite: 0.1.1
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - supports-color
+      - tedious
+    optional: true
 
   '@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)':
     dependencies:
@@ -13451,11 +13993,11 @@ snapshots:
 
   '@n1ru4l/push-pull-async-iterable-iterator@3.2.0': {}
 
-  '@nivo/annotations@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/annotations@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/colors': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/colors': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-spring/web': 9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/prop-types': 15.7.12
       lodash: 4.17.21
       prop-types: 15.8.1
@@ -13463,11 +14005,11 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/axes@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/axes@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@nivo/scales': 0.85.1
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
+      '@react-spring/web': 9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/d3-format': 1.4.5
       '@types/d3-time-format': 2.3.4
       '@types/prop-types': 15.7.12
@@ -13478,15 +14020,15 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/bump@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/bump@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/axes': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/colors': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/legends': 0.85.1(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/axes': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/colors': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/legends': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@nivo/scales': 0.85.1
-      '@nivo/tooltip': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/tooltip': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-spring/web': 9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/d3-scale': 4.0.8
       '@types/d3-shape': 2.1.7
       d3-scale: 4.0.2
@@ -13495,9 +14037,9 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/colors@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/colors@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/d3-color': 3.1.3
       '@types/d3-scale': 4.0.8
       '@types/d3-scale-chromatic': 3.0.3
@@ -13511,11 +14053,11 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/core@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/core@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@nivo/recompose': 0.85.0(react@18.2.0)
-      '@nivo/tooltip': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/tooltip': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-spring/web': 9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/d3-shape': 2.1.7
       d3-color: 3.1.0
       d3-format: 1.4.5
@@ -13530,10 +14072,10 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/legends@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/legends@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/colors': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/colors': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/d3-scale': 4.0.8
       '@types/prop-types': 15.7.12
       d3-scale: 4.0.2
@@ -13542,17 +14084,17 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/line@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/line@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/annotations': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/axes': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/colors': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/legends': 0.85.1(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/annotations': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/axes': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/colors': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/legends': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@nivo/scales': 0.85.1
-      '@nivo/tooltip': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@nivo/voronoi': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/tooltip': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@nivo/voronoi': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-spring/web': 9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       d3-shape: 1.3.7
       prop-types: 15.8.1
       react: 18.2.0
@@ -13577,17 +14119,17 @@ snapshots:
       d3-time-format: 3.0.0
       lodash: 4.17.21
 
-  '@nivo/tooltip@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/tooltip@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
-      '@react-spring/web': 9.7.3(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@react-spring/web': 9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/voronoi@0.85.1(react-dom@18.2.0)(react@18.2.0)':
+  '@nivo/voronoi@0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@nivo/core': 0.85.1(react-dom@18.2.0)(react@18.2.0)
+      '@nivo/core': 0.85.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@types/d3-delaunay': 5.3.4
       '@types/d3-scale': 4.0.8
       d3-delaunay: 5.3.0
@@ -13712,269 +14254,309 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.24.5
 
-  '@radix-ui/react-arrow@1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-arrow@1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.75
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-collection@1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-collection@1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-slot': 1.0.2(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/react-compose-refs@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   '@radix-ui/react-context@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  '@radix-ui/react-dialog@1.0.5(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-dialog@1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-focus-guards': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-focus-scope': 1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-focus-scope': 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-id': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-portal': 1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-presence': 1.0.1(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-portal': 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-presence': 1.0.1(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-slot': 1.0.2(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       aria-hidden: 1.2.4
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-remove-scroll: 2.5.5(@types/react@18.2.75)(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/react-direction@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  '@radix-ui/react-dismissable-layer@1.0.5(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-dismissable-layer@1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-escape-keydown': 1.0.3(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-dropdown-menu@2.0.6(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-dropdown-menu@2.0.6(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-id': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-menu': 2.0.6(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-menu': 2.0.6(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/react-focus-guards@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  '@radix-ui/react-focus-scope@1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-focus-scope@1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/react-id@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  '@radix-ui/react-menu@2.0.6(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-menu@2.0.6(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/primitive': 1.0.1
-      '@radix-ui/react-collection': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-collection': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-direction': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-focus-guards': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-focus-scope': 1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-focus-scope': 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-id': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-popper': 1.1.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-portal': 1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-presence': 1.0.1(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-roving-focus': 1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-popper': 1.1.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-portal': 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-presence': 1.0.1(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-roving-focus': 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-slot': 1.0.2(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       aria-hidden: 1.2.4
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-remove-scroll: 2.5.5(@types/react@18.2.75)(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-popper@1.1.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-popper@1.1.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@floating-ui/react-dom': 2.0.9(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-arrow': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@floating-ui/react-dom': 2.0.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-arrow': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-rect': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-size': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/rect': 1.0.1
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-portal@1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-portal@1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.75
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-presence@1.0.1(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-presence@1.0.1(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-primitive@1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-primitive@1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-slot': 1.0.2(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
-  '@radix-ui/react-roving-focus@1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-roving-focus@1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/primitive': 1.0.1
-      '@radix-ui/react-collection': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-collection': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-direction': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-id': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/react-slot@1.0.2(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  '@radix-ui/react-tooltip@1.0.7(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-tooltip@1.0.7(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/primitive': 1.0.1
       '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-context': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-dismissable-layer': 1.0.5(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-id': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-popper': 1.1.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-portal': 1.0.4(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-presence': 1.0.1(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
+      '@radix-ui/react-popper': 1.1.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-portal': 1.0.4(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-presence': 1.0.1(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@radix-ui/react-slot': 1.0.2(@types/react@18.2.75)(react@18.2.0)
       '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@radix-ui/react-visually-hidden': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.75
+      '@radix-ui/react-visually-hidden': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/react-use-callback-ref@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   '@radix-ui/react-use-controllable-state@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   '@radix-ui/react-use-escape-keydown@1.0.3(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   '@radix-ui/react-use-layout-effect@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   '@radix-ui/react-use-rect@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/rect': 1.0.1
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   '@radix-ui/react-use-size@1.0.1(@types/react@18.2.75)(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
       '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.75)(react@18.2.0)
-      '@types/react': 18.2.75
       react: 18.2.0
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  '@radix-ui/react-visually-hidden@1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)':
+  '@radix-ui/react-visually-hidden@1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@babel/runtime': 7.24.5
-      '@radix-ui/react-primitive': 1.0.3(@types/react@18.2.75)(react-dom@18.2.0)(react@18.2.0)
-      '@types/react': 18.2.75
+      '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.24)(@types/react@18.2.75)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
+      '@types/react-dom': 18.2.24
 
   '@radix-ui/rect@1.0.1':
     dependencies:
@@ -14000,7 +14582,7 @@ snapshots:
 
   '@react-spring/types@9.7.3': {}
 
-  '@react-spring/web@9.7.3(react-dom@18.2.0)(react@18.2.0)':
+  '@react-spring/web@9.7.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@react-spring/animated': 9.7.3(react@18.2.0)
       '@react-spring/core': 9.7.3(react@18.2.0)
@@ -14009,15 +14591,19 @@ snapshots:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
 
+  '@remix-run/router@1.0.3': {}
+
   '@remix-run/router@1.15.3': {}
 
   '@repeaterjs/repeater@3.0.6': {}
 
-  '@rollup/pluginutils@5.1.0':
+  '@rollup/pluginutils@5.1.0(rollup@4.17.2)':
     dependencies:
       '@types/estree': 1.0.5
       estree-walker: 2.0.2
       picomatch: 2.3.1
+    optionalDependencies:
+      rollup: 4.17.2
 
   '@rollup/rollup-android-arm-eabi@4.17.2':
     optional: true
@@ -14067,13 +14653,13 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.17.2':
     optional: true
 
-  '@serverless/dashboard-plugin@7.2.3(supports-color@8.1.1)':
+  '@serverless/dashboard-plugin@7.2.3(encoding@0.1.13)(supports-color@8.1.1)':
     dependencies:
       '@aws-sdk/client-cloudformation': 3.572.0
       '@aws-sdk/client-sts': 3.572.0
       '@serverless/event-mocks': 1.1.1
       '@serverless/platform-client': 4.5.1(supports-color@8.1.1)
-      '@serverless/utils': 6.15.0
+      '@serverless/utils': 6.15.0(encoding@0.1.13)
       child-process-ext: 3.0.2
       chokidar: 3.6.0
       flat: 5.0.2
@@ -14084,7 +14670,7 @@ snapshots:
       memoizee: 0.4.15
       ncjsm: 4.3.2
       node-dir: 0.1.17
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       open: 7.4.2
       semver: 7.6.0
       simple-git: 3.24.0(supports-color@8.1.1)
@@ -14128,7 +14714,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  '@serverless/utils@6.15.0':
+  '@serverless/utils@6.15.0(encoding@0.1.13)':
     dependencies:
       archive-type: 4.0.0
       chalk: 4.1.2
@@ -14154,7 +14740,7 @@ snapshots:
       memoizee: 0.4.15
       ms: 2.1.3
       ncjsm: 4.3.2
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       open: 8.4.2
       p-event: 4.2.0
       supports-color: 8.1.1
@@ -14170,7 +14756,7 @@ snapshots:
     dependencies:
       '@simplewebauthn/types': 9.0.1
 
-  '@simplewebauthn/server@9.0.3':
+  '@simplewebauthn/server@9.0.3(encoding@0.1.13)':
     dependencies:
       '@hexagon/base64': 1.1.28
       '@levischuck/tiny-cbor': 0.2.2
@@ -14180,7 +14766,7 @@ snapshots:
       '@peculiar/asn1-schema': 2.3.8
       '@peculiar/asn1-x509': 2.3.8
       '@simplewebauthn/types': 9.0.1
-      cross-fetch: 4.0.0
+      cross-fetch: 4.0.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -14640,7 +15226,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0)':
+  '@svgr/plugin-jsx@8.1.0(@svgr/core@8.1.0(typescript@5.4.5))':
     dependencies:
       '@babel/core': 7.24.5
       '@svgr/babel-preset': 8.1.0(@babel/core@7.24.5)
@@ -14654,7 +15240,7 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tanstack/react-virtual@3.5.0(react-dom@18.2.0)(react@18.2.0)':
+  '@tanstack/react-virtual@3.5.0(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       '@tanstack/virtual-core': 3.5.0
       react: 18.2.0
@@ -14942,7 +15528,7 @@ snapshots:
 
   '@types/zen-observable@0.8.3': {}
 
-  '@typescript-eslint/eslint-plugin@7.6.0(@typescript-eslint/parser@7.6.0)(eslint@8.57.0)(typescript@5.4.5)':
+  '@typescript-eslint/eslint-plugin@7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.4.5))(eslint@8.57.0)(typescript@5.4.5)':
     dependencies:
       '@eslint-community/regexpp': 4.10.0
       '@typescript-eslint/parser': 7.6.0(eslint@8.57.0)(typescript@5.4.5)
@@ -14957,6 +15543,7 @@ snapshots:
       natural-compare: 1.4.0
       semver: 7.6.0
       ts-api-utils: 1.3.0(typescript@5.4.5)
+    optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
@@ -14969,6 +15556,7 @@ snapshots:
       '@typescript-eslint/visitor-keys': 7.6.0
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.57.0
+    optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
@@ -14985,6 +15573,7 @@ snapshots:
       debug: 4.3.4(supports-color@8.1.1)
       eslint: 8.57.0
       ts-api-utils: 1.3.0(typescript@5.4.5)
+    optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
@@ -15001,6 +15590,7 @@ snapshots:
       minimatch: 9.0.4
       semver: 7.6.0
       ts-api-utils: 1.3.0(typescript@5.4.5)
+    optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
@@ -15028,12 +15618,12 @@ snapshots:
 
   '@uniswap/token-lists@1.0.0-beta.34': {}
 
-  '@usedapp/core@1.2.13(ethers@5.7.2)(react@18.2.0)':
+  '@usedapp/core@1.2.13(ethers@5.7.2)(node-fetch@2.7.0)(react@18.2.0)':
     dependencies:
       '@metamask/detect-provider': 2.0.0
       '@uniswap/token-lists': 1.0.0-beta.34
       ethers: 5.7.2
-      fetch-mock: 9.11.0
+      fetch-mock: 9.11.0(node-fetch@2.7.0)
       lodash.merge: 4.6.2
       lodash.pickby: 4.6.0
       nanoid: 3.3.4
@@ -15042,14 +15632,25 @@ snapshots:
       - node-fetch
       - supports-color
 
-  '@vitejs/plugin-react@4.2.1(vite@5.2.8)':
+  '@vitejs/plugin-react@4.2.1(vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1))':
     dependencies:
       '@babel/core': 7.24.5
       '@babel/plugin-transform-react-jsx-self': 7.24.5(@babel/core@7.24.5)
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.5)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.2(@types/node@20.12.7)(lightningcss@1.24.1)
+    transitivePeerDependencies:
+      - supports-color
+
+  '@vitejs/plugin-react@4.2.1(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1))':
+    dependencies:
+      '@babel/core': 7.24.5
+      '@babel/plugin-transform-react-jsx-self': 7.24.5(@babel/core@7.24.5)
+      '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.5)
+      '@types/babel__core': 7.20.5
+      react-refresh: 0.14.2
+      vite: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -15207,7 +15808,7 @@ snapshots:
       indent-string: 4.0.0
 
   ajv-formats@2.1.1(ajv@8.13.0):
-    dependencies:
+    optionalDependencies:
       ajv: 8.13.0
 
   ajv@6.12.6:
@@ -16041,6 +16642,7 @@ snapshots:
       js-yaml: 4.1.0
       parse-json: 5.2.0
       path-type: 4.0.0
+    optionalDependencies:
       typescript: 5.4.5
 
   crc-32@1.2.2: {}
@@ -16067,13 +16669,13 @@ snapshots:
       safe-buffer: 5.2.1
       sha.js: 2.4.11
 
-  create-jest@29.7.0:
+  create-jest@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)):
     dependencies:
       '@jest/types': 29.6.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
-      jest-config: 29.7.0(@types/node@20.12.7)
+      jest-config: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       jest-util: 29.7.0
       prompts: 2.4.2
     transitivePeerDependencies:
@@ -16088,15 +16690,15 @@ snapshots:
     dependencies:
       luxon: 3.4.4
 
-  cross-fetch@3.1.8:
+  cross-fetch@3.1.8(encoding@0.1.13):
     dependencies:
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
-  cross-fetch@4.0.0:
+  cross-fetch@4.0.0(encoding@0.1.13):
     dependencies:
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
@@ -16225,6 +16827,7 @@ snapshots:
   debug@4.3.4(supports-color@8.1.1):
     dependencies:
       ms: 2.1.2
+    optionalDependencies:
       supports-color: 8.1.1
 
   decamelize@1.2.0: {}
@@ -16444,6 +17047,8 @@ snapshots:
     dependencies:
       once: 1.4.0
 
+  entities@2.1.0: {}
+
   entities@4.5.0: {}
 
   env-paths@2.2.1:
@@ -16630,7 +17235,7 @@ snapshots:
   esbuild-plugin-svgr@2.1.0(esbuild@0.15.5)(typescript@5.4.5):
     dependencies:
       '@svgr/core': 8.1.0(typescript@5.4.5)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
+      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0(typescript@5.4.5))
       esbuild: 0.15.5
     transitivePeerDependencies:
       - supports-color
@@ -16763,13 +17368,14 @@ snapshots:
     dependencies:
       eslint: 8.57.0
 
-  eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.2.5):
+  eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0(eslint@8.57.0))(eslint@8.57.0)(prettier@3.2.5):
     dependencies:
       eslint: 8.57.0
-      eslint-config-prettier: 9.1.0(eslint@8.57.0)
       prettier: 3.2.5
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.8
+    optionalDependencies:
+      eslint-config-prettier: 9.1.0(eslint@8.57.0)
 
   eslint-plugin-simple-import-sort@12.0.0(eslint@8.57.0):
     dependencies:
@@ -17106,9 +17712,9 @@ snapshots:
 
   fbjs-css-vars@1.0.2: {}
 
-  fbjs@3.0.5:
+  fbjs@3.0.5(encoding@0.1.13):
     dependencies:
-      cross-fetch: 3.1.8
+      cross-fetch: 3.1.8(encoding@0.1.13)
       fbjs-css-vars: 1.0.2
       loose-envify: 1.4.0
       object-assign: 4.1.1
@@ -17122,7 +17728,7 @@ snapshots:
     dependencies:
       pend: 1.2.0
 
-  fetch-mock@9.11.0:
+  fetch-mock@9.11.0(node-fetch@2.7.0):
     dependencies:
       '@babel/core': 7.24.5
       '@babel/runtime': 7.24.5
@@ -17134,6 +17740,8 @@ snapshots:
       path-to-regexp: 2.4.0
       querystring: 0.2.1
       whatwg-url: 6.5.0
+    optionalDependencies:
+      node-fetch: 2.7.0(encoding@0.1.13)
     transitivePeerDependencies:
       - supports-color
 
@@ -17263,7 +17871,7 @@ snapshots:
 
   forwarded@0.2.0: {}
 
-  framer-motion@6.5.1(react-dom@18.2.0)(react@18.2.0):
+  framer-motion@6.5.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@motionone/dom': 10.12.0
       framesync: 6.0.1
@@ -17413,6 +18021,14 @@ snapshots:
 
   glob-to-regexp@0.4.1: {}
 
+  glob@10.3.10:
+    dependencies:
+      foreground-child: 3.1.1
+      jackspeak: 2.3.6
+      minimatch: 9.0.4
+      minipass: 7.1.1
+      path-scurry: 1.11.0
+
   glob@10.3.12:
     dependencies:
       foreground-child: 3.1.1
@@ -17491,10 +18107,26 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphiql@3.2.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0):
+  graphiql@3.1.1(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      '@graphiql/react': 0.21.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.2.0)(react@18.2.0)
-      '@graphiql/toolkit': 0.9.1(graphql@16.8.1)
+      '@graphiql/react': 0.20.4(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@graphiql/toolkit': 0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)
+      graphql: 16.8.1
+      graphql-language-service: 5.2.0(graphql@16.8.1)
+      markdown-it: 12.3.2
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - graphql-ws
+
+  graphiql@3.2.0(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      '@graphiql/react': 0.21.0(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@graphiql/toolkit': 0.9.1(@types/node@20.12.7)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)
       graphql: 16.8.1
       graphql-language-service: 5.2.0(graphql@16.8.1)
       markdown-it: 14.1.0
@@ -17511,13 +18143,13 @@ snapshots:
     dependencies:
       lodash: 4.17.21
 
-  graphql-config@5.0.3(@types/node@20.12.7)(graphql@16.8.1)(typescript@5.4.5):
+  graphql-config@5.0.3(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)(typescript@5.4.5):
     dependencies:
       '@graphql-tools/graphql-file-loader': 8.0.1(graphql@16.8.1)
       '@graphql-tools/json-file-loader': 8.0.1(graphql@16.8.1)
       '@graphql-tools/load': 8.0.2(graphql@16.8.1)
       '@graphql-tools/merge': 9.0.4(graphql@16.8.1)
-      '@graphql-tools/url-loader': 8.0.2(@types/node@20.12.7)(graphql@16.8.1)
+      '@graphql-tools/url-loader': 8.0.2(@types/node@20.12.7)(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
       cosmiconfig: 8.3.6(typescript@5.4.5)
       graphql: 16.8.1
@@ -17553,13 +18185,18 @@ snapshots:
       graphql: 16.8.1
       lodash.get: 4.4.2
 
-  graphql-request@6.1.0(graphql@16.8.1):
+  graphql-request@6.1.0(encoding@0.1.13)(graphql@16.8.1):
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
-      cross-fetch: 3.1.8
+      cross-fetch: 3.1.8(encoding@0.1.13)
       graphql: 16.8.1
     transitivePeerDependencies:
       - encoding
+
+  graphql-subscriptions@2.0.0(graphql@16.8.1):
+    dependencies:
+      graphql: 16.8.1
+      iterall: 1.3.0
 
   graphql-tag@2.12.6(graphql@16.8.1):
     dependencies:
@@ -17575,6 +18212,57 @@ snapshots:
       graphql: 16.8.1
 
   graphql@16.8.1: {}
+
+  graphweaver@0.2.24(@codemirror/language@6.0.0)(@mikro-orm/core@6.1.12)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(csstype@3.1.3)(encoding@0.1.13)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(lightningcss@1.24.1)(pg@8.11.5)(rollup@4.17.2)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))(typescript@5.4.5):
+    dependencies:
+      '@exogee/graphweaver': 0.2.24(encoding@0.1.13)
+      '@exogee/graphweaver-admin-ui': 0.2.24(@codemirror/language@6.0.0)(@types/node@20.12.7)(@types/react-dom@18.2.24)(@types/react@18.2.75)(csstype@3.1.3)(graphql-ws@5.16.0(graphql@16.8.1))(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
+      '@exogee/graphweaver-builder': 0.2.24(@types/node@20.12.7)(encoding@0.1.13)(lightningcss@1.24.1)(rollup@4.17.2)(typescript@5.4.5)
+      '@exogee/graphweaver-mikroorm': 0.2.24(@mikro-orm/core@6.1.12)(encoding@0.1.13)(pg@8.11.5)
+      '@graphql-tools/utils': 10.1.2(graphql@16.8.1)
+      chokidar: 3.6.0
+      esbuild: 0.15.5
+      inquirer: 9.2.16
+      node-semver: 1.0.0
+      ora: 5.4.1
+      semver: 7.6.0
+      validate-npm-package-name: 5.0.0
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@mikro-orm/core'
+      - '@parcel/watcher'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - aws-crt
+      - better-sqlite3
+      - bluebird
+      - bufferutil
+      - cosmiconfig-toml-loader
+      - csstype
+      - debug
+      - encoding
+      - enquirer
+      - graphql
+      - graphql-ws
+      - less
+      - lightningcss
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - rollup
+      - sass
+      - sqlite3
+      - stylus
+      - subscriptions-transport-ws
+      - sugarss
+      - supports-color
+      - tedious
+      - terser
+      - typescript
+      - utf-8-validate
 
   has-bigints@1.0.2: {}
 
@@ -17793,6 +18481,24 @@ snapshots:
       string-width: 4.2.3
       strip-ansi: 6.0.1
       through: 2.3.8
+      wrap-ansi: 6.2.0
+
+  inquirer@9.2.16:
+    dependencies:
+      '@ljharb/through': 2.3.13
+      ansi-escapes: 4.3.2
+      chalk: 5.3.0
+      cli-cursor: 3.1.0
+      cli-width: 4.1.0
+      external-editor: 3.1.0
+      figures: 3.2.0
+      lodash: 4.17.21
+      mute-stream: 1.0.0
+      ora: 5.4.1
+      run-async: 3.0.0
+      rxjs: 7.8.1
+      string-width: 4.2.3
+      strip-ansi: 6.0.1
       wrap-ansi: 6.2.0
 
   inquirer@9.2.17:
@@ -18100,16 +18806,16 @@ snapshots:
       - babel-plugin-macros
       - supports-color
 
-  jest-cli@29.7.0:
+  jest-cli@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)):
     dependencies:
-      '@jest/core': 29.7.0
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       '@jest/test-result': 29.7.0
       '@jest/types': 29.6.3
       chalk: 4.1.2
-      create-jest: 29.7.0
+      create-jest: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       exit: 0.1.2
       import-local: 3.1.0
-      jest-config: 29.7.0(@types/node@20.12.7)
+      jest-config: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       jest-util: 29.7.0
       jest-validate: 29.7.0
       yargs: 17.7.2
@@ -18119,12 +18825,11 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-config@29.7.0(@types/node@20.12.7):
+  jest-config@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)):
     dependencies:
       '@babel/core': 7.24.5
       '@jest/test-sequencer': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.12.7
       babel-jest: 29.7.0(@babel/core@7.24.5)
       chalk: 4.1.2
       ci-info: 3.9.0
@@ -18144,6 +18849,9 @@ snapshots:
       pretty-format: 29.7.0
       slash: 3.0.0
       strip-json-comments: 3.1.1
+    optionalDependencies:
+      '@types/node': 20.12.7
+      ts-node: 10.9.2(@types/node@20.12.7)(typescript@5.4.5)
     transitivePeerDependencies:
       - babel-plugin-macros
       - supports-color
@@ -18225,7 +18933,7 @@ snapshots:
       jest-util: 29.7.0
 
   jest-pnp-resolver@1.2.3(jest-resolve@29.7.0):
-    dependencies:
+    optionalDependencies:
       jest-resolve: 29.7.0
 
   jest-regex-util@29.6.3: {}
@@ -18363,12 +19071,12 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@29.7.0:
+  jest@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)):
     dependencies:
-      '@jest/core': 29.7.0
+      '@jest/core': 29.7.0(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       '@jest/types': 29.6.3
       import-local: 3.1.0
-      jest-cli: 29.7.0
+      jest-cli: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
     transitivePeerDependencies:
       - '@types/node'
       - babel-plugin-macros
@@ -18512,13 +19220,14 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.9.2
-      pg: 8.11.3
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.9.2
+      pg: 8.11.3
     transitivePeerDependencies:
       - supports-color
     optional: true
@@ -18534,13 +19243,14 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.9.2
-      pg: 8.11.5
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.9.2
+      pg: 8.11.5
     transitivePeerDependencies:
       - supports-color
 
@@ -18555,13 +19265,14 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.9.4
-      pg: 8.11.3
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.9.4
+      pg: 8.11.3
     transitivePeerDependencies:
       - supports-color
 
@@ -18576,13 +19287,14 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      pg: 8.11.3
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
-      sqlite3: 5.1.7
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      pg: 8.11.3
+      sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
     optional: true
@@ -18598,13 +19310,14 @@ snapshots:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      pg: 8.11.5
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
       resolve-from: 5.0.0
-      sqlite3: 5.1.7
       tarn: 3.0.2
       tildify: 2.0.0
+    optionalDependencies:
+      pg: 8.11.5
+      sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
 
@@ -18667,6 +19380,10 @@ snapshots:
       lightningcss-win32-x64-msvc: 1.24.1
 
   lines-and-columns@1.2.4: {}
+
+  linkify-it@3.0.3:
+    dependencies:
+      uc.micro: 1.0.6
 
   linkify-it@5.0.0:
     dependencies:
@@ -18877,6 +19594,14 @@ snapshots:
 
   map-cache@0.2.2: {}
 
+  markdown-it@12.3.2:
+    dependencies:
+      argparse: 2.0.1
+      entities: 2.1.0
+      linkify-it: 3.0.3
+      mdurl: 1.0.1
+      uc.micro: 1.0.6
+
   markdown-it@14.1.0:
     dependencies:
       argparse: 2.0.1
@@ -18891,6 +19616,8 @@ snapshots:
       hash-base: 3.1.0
       inherits: 2.0.4
       safe-buffer: 5.2.1
+
+  mdurl@1.0.1: {}
 
   mdurl@2.0.0: {}
 
@@ -18914,7 +19641,7 @@ snapshots:
   merge2@1.4.1: {}
 
   meros@1.3.0(@types/node@20.12.7):
-    dependencies:
+    optionalDependencies:
       '@types/node': 20.12.7
 
   methods@1.1.2: {}
@@ -19116,9 +19843,11 @@ snapshots:
     dependencies:
       minimatch: 3.1.2
 
-  node-fetch@2.7.0:
+  node-fetch@2.7.0(encoding@0.1.13):
     dependencies:
       whatwg-url: 5.0.0
+    optionalDependencies:
+      encoding: 0.1.13
 
   node-gyp-build@4.8.1: {}
 
@@ -19170,12 +19899,12 @@ snapshots:
 
   normalize-url@6.1.0: {}
 
-  npm-registry-utilities@1.0.0:
+  npm-registry-utilities@1.0.0(encoding@0.1.13):
     dependencies:
       ext: 1.7.0
       fs2: 0.3.9
       memoizee: 0.4.15
-      node-fetch: 2.7.0
+      node-fetch: 2.7.0(encoding@0.1.13)
       semver: 7.6.0
       type: 2.7.2
       validate-npm-package-name: 3.0.0
@@ -19504,12 +20233,31 @@ snapshots:
 
   pinkie@2.0.4: {}
 
+  pino-abstract-transport@1.1.0:
+    dependencies:
+      readable-stream: 4.5.2
+      split2: 4.2.0
+
   pino-abstract-transport@1.2.0:
     dependencies:
       readable-stream: 4.5.2
       split2: 4.2.0
 
   pino-std-serializers@6.2.2: {}
+
+  pino@8.19.0:
+    dependencies:
+      atomic-sleep: 1.0.0
+      fast-redact: 3.5.0
+      on-exit-leak-free: 2.1.2
+      pino-abstract-transport: 1.1.0
+      pino-std-serializers: 6.2.2
+      process-warning: 3.0.0
+      quick-format-unescaped: 4.0.4
+      real-require: 0.2.0
+      safe-stable-stringify: 2.4.3
+      sonic-boom: 3.8.1
+      thread-stream: 2.7.0
 
   pino@8.20.0:
     dependencies:
@@ -19773,7 +20521,7 @@ snapshots:
       minimist: 1.2.8
       strip-json-comments: 2.0.1
 
-  react-data-grid@7.0.0-beta.20(react-dom@18.2.0)(react@18.2.0):
+  react-data-grid@7.0.0-beta.20(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       clsx: 1.2.1
       react: 18.2.0
@@ -19787,7 +20535,7 @@ snapshots:
 
   react-fast-compare@2.0.4: {}
 
-  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@18.2.0)(react@18.2.0):
+  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       goober: 2.1.14(csstype@3.1.3)
       react: 18.2.0
@@ -19801,7 +20549,7 @@ snapshots:
 
   react-lifecycles-compat@3.0.4: {}
 
-  react-modal@3.16.1(react-dom@18.2.0)(react@18.2.0):
+  react-modal@3.16.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       exenv: 1.2.2
       prop-types: 15.8.1
@@ -19814,40 +20562,55 @@ snapshots:
 
   react-remove-scroll-bar@2.3.6(@types/react@18.2.75)(react@18.2.0):
     dependencies:
-      '@types/react': 18.2.75
       react: 18.2.0
       react-style-singleton: 2.2.1(@types/react@18.2.75)(react@18.2.0)
       tslib: 2.6.2
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   react-remove-scroll@2.5.5(@types/react@18.2.75)(react@18.2.0):
     dependencies:
-      '@types/react': 18.2.75
       react: 18.2.0
       react-remove-scroll-bar: 2.3.6(@types/react@18.2.75)(react@18.2.0)
       react-style-singleton: 2.2.1(@types/react@18.2.75)(react@18.2.0)
       tslib: 2.6.2
       use-callback-ref: 1.3.2(@types/react@18.2.75)(react@18.2.0)
       use-sidecar: 1.1.2(@types/react@18.2.75)(react@18.2.0)
+    optionalDependencies:
+      '@types/react': 18.2.75
 
-  react-router-dom@6.22.3(react-dom@18.2.0)(react@18.2.0):
+  react-router-dom@6.22.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
       '@remix-run/router': 1.15.3
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-router: 6.22.3(react@18.2.0)
 
+  react-router-dom@6.4.3(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+    dependencies:
+      '@remix-run/router': 1.0.3
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-router: 6.4.3(react@18.2.0)
+
   react-router@6.22.3(react@18.2.0):
     dependencies:
       '@remix-run/router': 1.15.3
       react: 18.2.0
 
+  react-router@6.4.3(react@18.2.0):
+    dependencies:
+      '@remix-run/router': 1.0.3
+      react: 18.2.0
+
   react-style-singleton@2.2.1(@types/react@18.2.75)(react@18.2.0):
     dependencies:
-      '@types/react': 18.2.75
       get-nonce: 1.0.1
       invariant: 2.2.4
       react: 18.2.0
       tslib: 2.6.2
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   react@18.2.0:
     dependencies:
@@ -19909,14 +20672,14 @@ snapshots:
       set-function-name: 2.0.2
 
   rehackt@0.0.6(@types/react@18.2.75)(react@18.2.0):
-    dependencies:
+    optionalDependencies:
       '@types/react': 18.2.75
       react: 18.2.0
 
-  relay-runtime@12.0.0:
+  relay-runtime@12.0.0(encoding@0.1.13):
     dependencies:
       '@babel/runtime': 7.24.5
-      fbjs: 3.0.5
+      fbjs: 3.0.5(encoding@0.1.13)
       invariant: 2.2.4
     transitivePeerDependencies:
       - encoding
@@ -19992,12 +20755,14 @@ snapshots:
     dependencies:
       bn.js: 5.2.1
 
-  rollup-plugin-visualizer@5.12.0:
+  rollup-plugin-visualizer@5.12.0(rollup@4.17.2):
     dependencies:
       open: 8.4.2
       picomatch: 2.3.1
       source-map: 0.7.4
       yargs: 17.7.2
+    optionalDependencies:
+      rollup: 4.17.2
 
   rollup@4.17.2:
     dependencies:
@@ -20123,20 +20888,20 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serverless-dotenv-plugin@6.0.0(serverless@3.38.0):
+  serverless-dotenv-plugin@6.0.0(serverless@3.38.0(encoding@0.1.13)):
     dependencies:
       chalk: 4.1.2
       dotenv: 16.4.5
       dotenv-expand: 10.0.0
-      serverless: 3.38.0
+      serverless: 3.38.0(encoding@0.1.13)
 
-  serverless-offline@13.3.3(serverless@3.38.0):
+  serverless-offline@13.3.3(encoding@0.1.13)(serverless@3.38.0(encoding@0.1.13)):
     dependencies:
       '@aws-sdk/client-lambda': 3.552.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.9
-      '@serverless/utils': 6.15.0
+      '@serverless/utils': 6.15.0(encoding@0.1.13)
       array-unflat-js: 0.1.3
       boxen: 7.1.1
       chalk: 5.3.0
@@ -20154,7 +20919,7 @@ snapshots:
       node-schedule: 2.1.1
       p-memoize: 7.1.1
       p-retry: 6.2.0
-      serverless: 3.38.0
+      serverless: 3.38.0(encoding@0.1.13)
       velocityjs: 2.0.6
       ws: 8.17.0
     transitivePeerDependencies:
@@ -20164,11 +20929,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  serverless@3.38.0:
+  serverless@3.38.0(encoding@0.1.13):
     dependencies:
-      '@serverless/dashboard-plugin': 7.2.3(supports-color@8.1.1)
+      '@serverless/dashboard-plugin': 7.2.3(encoding@0.1.13)(supports-color@8.1.1)
       '@serverless/platform-client': 4.5.1(supports-color@8.1.1)
-      '@serverless/utils': 6.15.0
+      '@serverless/utils': 6.15.0(encoding@0.1.13)
       abort-controller: 3.0.0
       ajv: 8.13.0
       ajv-formats: 2.1.1(ajv@8.13.0)
@@ -20202,8 +20967,8 @@ snapshots:
       lodash: 4.17.21
       memoizee: 0.4.15
       micromatch: 4.0.5
-      node-fetch: 2.7.0
-      npm-registry-utilities: 1.0.0
+      node-fetch: 2.7.0(encoding@0.1.13)
+      npm-registry-utilities: 1.0.0(encoding@0.1.13)
       object-hash: 3.0.0
       open: 8.4.2
       path2: 0.1.0
@@ -20749,12 +21514,11 @@ snapshots:
     dependencies:
       tslib: 2.6.2
 
-  ts-jest@29.1.2(@babel/core@7.24.5)(jest@29.7.0)(typescript@5.4.5):
+  ts-jest@29.1.2(@babel/core@7.24.5)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(esbuild@0.15.5)(jest@29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5)))(typescript@5.4.5):
     dependencies:
-      '@babel/core': 7.24.5
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 29.7.0
+      jest: 29.7.0(@types/node@20.12.7)(ts-node@10.9.2(@types/node@20.12.7)(typescript@5.4.5))
       jest-util: 29.7.0
       json5: 2.2.3
       lodash.memoize: 4.1.2
@@ -20762,6 +21526,11 @@ snapshots:
       semver: 7.6.0
       typescript: 5.4.5
       yargs-parser: 21.1.1
+    optionalDependencies:
+      '@babel/core': 7.24.5
+      '@jest/types': 29.6.3
+      babel-jest: 29.7.0(@babel/core@7.24.5)
+      esbuild: 0.15.5
 
   ts-log@2.2.5: {}
 
@@ -20843,6 +21612,18 @@ snapshots:
 
   type-fest@3.13.1: {}
 
+  type-graphql@2.0.0-beta.2(class-validator@0.14.1)(graphql@16.8.1):
+    dependencies:
+      '@types/node': 20.12.7
+      '@types/semver': 7.5.8
+      graphql: 16.8.1
+      graphql-query-complexity: 0.12.0(graphql@16.8.1)
+      graphql-subscriptions: 2.0.0(graphql@16.8.1)
+      semver: 7.6.0
+      tslib: 2.6.2
+    optionalDependencies:
+      class-validator: 0.14.1
+
   type-is@1.6.18:
     dependencies:
       media-typer: 0.3.0
@@ -20894,6 +21675,8 @@ snapshots:
   typescript@5.4.5: {}
 
   ua-parser-js@1.0.37: {}
+
+  uc.micro@1.0.6: {}
 
   uc.micro@2.1.0: {}
 
@@ -20974,16 +21757,18 @@ snapshots:
 
   use-callback-ref@1.3.2(@types/react@18.2.75)(react@18.2.0):
     dependencies:
-      '@types/react': 18.2.75
       react: 18.2.0
       tslib: 2.6.2
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   use-sidecar@1.1.2(@types/react@18.2.75)(react@18.2.0):
     dependencies:
-      '@types/react': 18.2.75
       detect-node-es: 1.1.0
       react: 18.2.0
       tslib: 2.6.2
+    optionalDependencies:
+      '@types/react': 18.2.75
 
   use-sync-external-store@1.2.0(react@18.2.0):
     dependencies:
@@ -21028,8 +21813,9 @@ snapshots:
   valtio@1.10.5(react@18.2.0):
     dependencies:
       proxy-compare: 2.5.1
-      react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
+    optionalDependencies:
+      react: 18.2.0
 
   value-or-promise@1.0.12: {}
 
@@ -21041,13 +21827,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vite-node@1.4.0(@types/node@20.12.7):
+  vite-node@1.4.0(@types/node@20.12.7)(lightningcss@1.24.1):
     dependencies:
       cac: 6.7.14
       debug: 4.3.4(supports-color@8.1.1)
       pathe: 1.1.2
       picocolors: 1.0.0
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -21058,29 +21844,55 @@ snapshots:
       - supports-color
       - terser
 
-  vite-plugin-svgr@3.2.0(typescript@5.4.5)(vite@5.2.8):
+  vite-plugin-graphweaver@0.2.24(vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1)):
     dependencies:
-      '@rollup/pluginutils': 5.1.0
+      '@exogee/graphweaver-config': 0.2.24
+      vite: 5.2.2(@types/node@20.12.7)(lightningcss@1.24.1)
+
+  vite-plugin-svgr@3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1)):
+    dependencies:
+      '@rollup/pluginutils': 5.1.0(rollup@4.17.2)
       '@svgr/core': 7.0.0(typescript@5.4.5)
       '@svgr/plugin-jsx': 7.0.0
-      vite: 5.2.8(@types/node@20.12.7)
+      vite: 5.2.2(@types/node@20.12.7)(lightningcss@1.24.1)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
 
-  vite@5.2.8(@types/node@20.12.7):
+  vite-plugin-svgr@3.2.0(rollup@4.17.2)(typescript@5.4.5)(vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)):
     dependencies:
-      '@types/node': 20.12.7
+      '@rollup/pluginutils': 5.1.0(rollup@4.17.2)
+      '@svgr/core': 7.0.0(typescript@5.4.5)
+      '@svgr/plugin-jsx': 7.0.0
+      vite: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - typescript
+
+  vite@5.2.2(@types/node@20.12.7)(lightningcss@1.24.1):
+    dependencies:
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.17.2
     optionalDependencies:
-      fsevents: 2.3.3
-
-  vitest@1.4.0(@types/node@20.12.7):
-    dependencies:
       '@types/node': 20.12.7
+      fsevents: 2.3.3
+      lightningcss: 1.24.1
+
+  vite@5.2.8(@types/node@20.12.7)(lightningcss@1.24.1):
+    dependencies:
+      esbuild: 0.20.2
+      postcss: 8.4.38
+      rollup: 4.17.2
+    optionalDependencies:
+      '@types/node': 20.12.7
+      fsevents: 2.3.3
+      lightningcss: 1.24.1
+
+  vitest@1.4.0(@types/node@20.12.7)(lightningcss@1.24.1):
+    dependencies:
       '@vitest/expect': 1.4.0
       '@vitest/runner': 1.4.0
       '@vitest/snapshot': 1.4.0
@@ -21098,9 +21910,11 @@ snapshots:
       strip-literal: 2.1.0
       tinybench: 2.8.0
       tinypool: 0.8.4
-      vite: 5.2.8(@types/node@20.12.7)
-      vite-node: 1.4.0(@types/node@20.12.7)
+      vite: 5.2.8(@types/node@20.12.7)(lightningcss@1.24.1)
+      vite-node: 1.4.0(@types/node@20.12.7)(lightningcss@1.24.1)
       why-is-node-running: 2.2.2
+    optionalDependencies:
+      '@types/node': 20.12.7
     transitivePeerDependencies:
       - less
       - lightningcss
