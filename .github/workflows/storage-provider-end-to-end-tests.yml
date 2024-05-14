@@ -74,17 +74,6 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm playwright install --with-deps chromium
 
-      - name: Build and Setup App and Postgres Database
-        working-directory: src/packages/end-to-end
-        timeout-minutes: 4
-        run: |
-          pnpm import-storage-provider
-        env:
-          CI: true
-          PGDATABASE: gw_storage_provider
-          PGUSER: postgres
-          PGPASSWORD: postgres
-
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
@@ -96,7 +85,18 @@ jobs:
           envkey_PGDATABASE: gw_storage_provider
           envkey_PGUSER: postgres
           envkey_PGPASSWORD: postgres
-          directory: src/packages/end-to-end/app
+          directory: src/examples/s3-storage
+
+      - name: Build and Setup App and Postgres Database
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 4
+        run: |
+          pnpm import-storage-provider
+        env:
+          CI: true
+          PGDATABASE: gw_storage_provider
+          PGUSER: postgres
+          PGPASSWORD: postgres
 
       - name: Start and Test Storage Provider Example
         working-directory: src/packages/end-to-end
