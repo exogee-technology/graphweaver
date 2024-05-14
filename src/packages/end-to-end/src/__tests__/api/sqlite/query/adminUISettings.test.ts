@@ -114,12 +114,7 @@ export class Artist extends GraphQLEntity<OrmArtist> {
 	@MediaField({
 		storageProvider: mockS3StorageProvider,
 	})
-	imageDownloadUrl?: string;
-
-	@MediaField({
-		storageProvider: mockS3StorageProvider,
-	})
-	otherMediaDownloadUrl?: string;
+	mediaDownloadUrlField?: string;
 }
 
 test('Test the decorator adminUISettings', async () => {
@@ -196,22 +191,14 @@ test('Test the decorator adminUISettings', async () => {
 	expect(albumsField).not.toBeNull();
 	expect(albumsField?.filter).toBeNull();
 
-	// Test that the type of the imageDownloadUrl field is Image
-	const imageDownloadUrlField = artistEntity?.fields.find(
-		(field) => field.name === 'imageDownloadUrl'
-	);
-	expect(imageDownloadUrlField).not.toBeNull();
-	expect(imageDownloadUrlField?.type).toBe('Image');
-
-	// Test that the type of the otherMediaDownloadUrl field is Media
-	const otherMediaDownloadUrlField = artistEntity?.fields.find(
-		(field) => field.name === 'otherMediaDownloadUrl'
+	// Test that the type of the mediaDownloadUrlField field is Media
+	const mediaDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'mediaDownloadUrlField'
 	);
 
-	expect(otherMediaDownloadUrlField).not.toBeNull();
-	expect(otherMediaDownloadUrlField?.type).toBe('Media');
+	expect(mediaDownloadUrlField).not.toBeNull();
+	expect(mediaDownloadUrlField?.type).toBe('Media');
 
 	// Test that the field is readonly
-	expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
-	expect(otherMediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
+	expect(mediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
 });
