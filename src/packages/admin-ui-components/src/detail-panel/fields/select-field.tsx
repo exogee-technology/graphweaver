@@ -37,19 +37,19 @@ export const SelectField = ({
 		{
 			variables: {
 				pagination: {
-					orderBy: relatedEntity?.summaryField
+					orderBy: relatedEntity.summaryField
 						? {
 								[relatedEntity.summaryField as string]: 'ASC',
 							}
-						: { id: 'ASC' },
+						: { [relatedEntity.primaryKeyField]: 'ASC' },
 				},
 			},
 		}
 	);
 
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
-		const label = relatedEntity?.summaryField || relatedEntity?.primaryKeyField || 'id';
-		return { label: item[label], value: item[relatedEntity?.primaryKeyField || 'id'] };
+		const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
+		return { label: item[label], value: item[relatedEntity.primaryKeyField] };
 	});
 
 	const handleOnChange = (selected: SelectOption[]) => {
