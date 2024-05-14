@@ -82,6 +82,8 @@ jobs:
           envkey_AWS_REGION: "us-east-1"
           envkey_AWS_ACCESS_KEY_ID: localstack
           envkey_AWS_SECRET_ACCESS_KEY: localstack
+          envkey_PGHOST: localhost
+          envkey_PGPORT: 5432
           envkey_PGDATABASE: gw_storage_provider
           envkey_PGUSER: postgres
           envkey_PGPASSWORD: postgres
