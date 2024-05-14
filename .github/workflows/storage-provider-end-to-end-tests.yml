@@ -62,7 +62,7 @@ jobs:
           aws configure set aws_access_key_id localstack
           aws configure set aws_secret_access_key localstack
           aws configure set default.region ap-northeast-1
-          aws mb s3://my-bucket --endpoint-url=http://localhost:4566
+          aws s3 mb s3://my-bucket --endpoint-url=http://localhost:4566
 
       - name: Install dependencies
         run: pnpm i
@@ -88,6 +88,7 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
+          envkey_AWS_S3_BUCKET: my-bucket
           envkey_AWS_S3_ENDPOINT: http://localhost:4566
           envkey_AWS_REGION: "us-east-1"
           envkey_AWS_ACCESS_KEY_ID: localstack
