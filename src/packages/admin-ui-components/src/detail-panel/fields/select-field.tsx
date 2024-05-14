@@ -61,7 +61,7 @@ export const SelectField = ({
 	return (
 		<ComboBox
 			options={options}
-			value={[].concat(initialValue || [])} // supports both Many-To-One and One-To-Many relationships
+			value={initialValue ? [initialValue] : []} // supports both Many-To-One and One-To-Many relationships
 			onChange={handleOnChange}
 			mode={mode(entity)}
 			autoFocus={autoFocus}

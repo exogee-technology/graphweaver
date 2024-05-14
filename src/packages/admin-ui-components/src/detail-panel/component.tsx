@@ -357,11 +357,11 @@ export const DetailPanel = () => {
 
 	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
 		// Format form values as GraphQL input parameters
-		const values = mapFormikValuesToGqlRequestValues(formValues);
+		const values = mapFormikValuesToGqlRequestValues(selectedEntity, entityByName, formValues);
 
 		try {
 			let result: FetchResult;
-			if (id && panelMode === PanelMode.EDIT) {
+			if (panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				if (formValues.uploadUrl && formValues.file) {
 					await uploadFileToSignedURL(values.uploadUrl, values.file);
@@ -380,10 +380,7 @@ export const DetailPanel = () => {
 
 				result = await updateEntity({
 					variables: {
-						input: {
-							id,
-							...values,
-						},
+						input: values,
 					},
 				});
 			} else {
@@ -412,7 +409,7 @@ export const DetailPanel = () => {
 			clearSessionState();
 			onClose();
 
-			const entityname = `${id && panelMode === PanelMode.EDIT ? 'update' : 'create'}${
+			const entityname = `${panelMode === PanelMode.EDIT ? 'update' : 'create'}${
 				selectedEntity.name
 			}`;
 
@@ -421,15 +418,17 @@ export const DetailPanel = () => {
 					Item{' '}
 					<button
 						className={styles.link}
-						onClick={() => navigateToDetailForEntity(result.data?.[entityname].id)}
+						onClick={() =>
+							navigateToDetailForEntity(result.data?.[entityname][selectedEntity.primaryKeyField])
+						}
 					>
 						{selectedEntity.summaryField
-							? `${result.data?.[entityname].id} ${
+							? `${result.data?.[entityname][selectedEntity.primaryKeyField]} ${
 									result.data?.[entityname]?.[selectedEntity.summaryField]
 								}`
-							: result.data?.[entityname].id}
+							: result.data?.[entityname][selectedEntity.primaryKeyField]}
 					</button>{' '}
-					has been successfully {id && panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
+					has been successfully {panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
 				</div>
 			);
 		} catch (error: unknown) {

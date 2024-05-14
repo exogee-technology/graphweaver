@@ -1,4 +1,4 @@
-// In some cases when linking across from CRM to GoCollect (or the other way around), it's very handy
+// In some cases when linking across from one data source to another, it's very handy
 // to flatten entities from:
 //
 // job.account = { id : 'whatever' }
