@@ -332,7 +332,18 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	public async findOne(filter: Filter<G>): Promise<D | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
 
-		const [result] = await this.find(filter, { orderBy: { id: Sort.DESC }, offset: 0, limit: 1 });
+		const metadata = this.em.getMetadata().get(this.entityType.name);
+		if (metadata.primaryKeys.length !== 1) {
+			throw new Error(
+				`Entity ${this.entityType.name} has ${metadata.primaryKeys.length} primary keys. We only support entities with a single primary key at this stage.`
+			);
+		}
+
+		const [result] = await this.find(filter, {
+			orderBy: { [metadata.primaryKeys[0]]: Sort.DESC },
+			offset: 0,
+			limit: 1,
+		});
 
 		logger.trace(`findOne ${this.entityType.name} result`, { result });
 
@@ -545,11 +556,12 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 		const meta = this.database.em.getMetadata();
 		const field = meta.get(this.entityType.name).properties[fieldName];
-		const [primaryKeyField, ...rest] = meta.get(field.entity()).primaryKeys as Array<keyof R>;
-		if (rest.length !== 0)
+		const primaryKeys = meta.get(field.entity()).primaryKeys as Array<keyof R>;
+		if (primaryKeys.length !== 1)
 			throw new Error(
-				`Composite primary keys are not supported but '${[primaryKeyField, ...rest].join(', ')}' were found on ${field.entity()}.`
+				`Composite primary keys are not supported but '${primaryKeys.join(', ')}' were found on ${field.entity()}.`
 			);
+		const primaryKeyField = primaryKeys[0];
 
 		if (entity[primaryKeyField]) return String(entity[primaryKeyField]);
 

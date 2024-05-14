@@ -26,7 +26,7 @@ export const TextFilter = ({
 
 	const [getData, { loading, error, data }] = useLazyQuery<{
 		result: Record<string, string>[];
-	}>(queryForFilterText(entity, fieldName, entityByName));
+	}>(queryForFilterText(entityByName(entity), fieldName));
 
 	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 

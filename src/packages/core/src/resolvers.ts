@@ -43,11 +43,11 @@ export const getOne = async <G, C extends BaseContext>(
 		throw new Error(`Entity ${name} does not have a provider, cannot resolve.`);
 	}
 
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
 	const hookManager = hookManagerMap.get(entity.name);
 
 	const params: ReadHookParams<G> = {
-		// TODO: Can we fix the as any here?
-		args: { filter: { id } as any },
+		args: { filter: { [primaryKeyField]: id } as Filter<G> },
 		info,
 		context,
 		transactional: !!entity.provider.withTransaction,
