@@ -240,6 +240,9 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
       pg:
         specifier: 8.11.5
         version: 8.11.5
@@ -250,9 +253,6 @@ importers:
       dotenv-cli:
         specifier: 7.4.1
         version: 7.4.1
-      graphweaver:
-        specifier: workspace:*
-        version: link:../../packages/cli
       typescript:
         specifier: 5.4.5
         version: 5.4.5

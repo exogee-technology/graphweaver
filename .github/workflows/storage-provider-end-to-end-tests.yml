@@ -30,7 +30,8 @@ jobs:
         image: localstack/localstack
         env:
           SERVICES: s3
-          DEFAULT_REGION: us-east-1
+          DISABLE_CUSTOM_CORS_S3: 1
+          DISABLE_CORS_CHECKS: 1
           DATA_DIR: /tmp/localstack/data
         ports: ["4566:4566"]
 
@@ -62,7 +63,7 @@ jobs:
           aws configure set aws_access_key_id localstack
           aws configure set aws_secret_access_key localstack
           aws configure set default.region us-east-1
-          aws s3 mb s3://my-bucket --endpoint-url=http://localhost:4566
+          aws s3 mb s3://my-bucket --endpoint-url=http://s3.us-east-1.localhost.localstack.cloud:4566
 
       - name: Install dependencies
         run: pnpm i
@@ -78,7 +79,7 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_AWS_S3_BUCKET: my-bucket
-          envkey_AWS_S3_ENDPOINT: http://localhost:4566
+          envkey_AWS_S3_ENDPOINT: http://s3.us-east-1.localhost.localstack.cloud:4566
           envkey_AWS_REGION: "us-east-1"
           envkey_AWS_ACCESS_KEY_ID: localstack
           envkey_AWS_SECRET_ACCESS_KEY: localstack
