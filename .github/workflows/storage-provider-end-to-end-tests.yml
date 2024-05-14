@@ -106,7 +106,7 @@ jobs:
         run: |
           pnpm start-server &
           sleep 5 &&
-          pnpm test-ui-storage=provider &&
+          pnpm test-ui-storage-provider &&
           killall node
 
       - uses: actions/upload-artifact@v4
