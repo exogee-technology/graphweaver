@@ -58,10 +58,17 @@ export const SelectField = ({
 		helpers.setValue(newValue);
 	};
 
+	let value = [];
+	if (Array.isArray(initialValue)) {
+		value = initialValue;
+	} else if (initialValue !== null && initialValue !== undefined) {
+		value = [initialValue];
+	}
+
 	return (
 		<ComboBox
 			options={options}
-			value={initialValue ? [initialValue] : []} // supports both Many-To-One and One-To-Many relationships
+			value={value}
 			onChange={handleOnChange}
 			mode={mode(entity)}
 			autoFocus={autoFocus}
