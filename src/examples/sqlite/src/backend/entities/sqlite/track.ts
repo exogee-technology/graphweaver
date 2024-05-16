@@ -21,7 +21,7 @@ export class Track extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(200)' })
-	name!: unknown;
+	name!: string;
 
 	@ManyToOne({
 		entity: () => Album,
@@ -50,7 +50,7 @@ export class Track extends BaseEntity {
 	genre?: Ref<Genre>;
 
 	@Property({ fieldName: 'Composer', type: 'NVARCHAR(220)', nullable: true })
-	composer?: unknown;
+	composer?: string;
 
 	@Property({ fieldName: 'Milliseconds', type: 'number' })
 	milliseconds!: number;
@@ -59,6 +59,7 @@ export class Track extends BaseEntity {
 	bytes?: number;
 
 	@Property({ fieldName: 'UnitPrice', type: 'NUMERIC(10,2)' })
+	// Mikro-orm serializes this as a string for precision, but it's a number in the database
 	unitPrice!: string;
 
 	@OneToMany({ entity: () => InvoiceLine, mappedBy: 'track' })

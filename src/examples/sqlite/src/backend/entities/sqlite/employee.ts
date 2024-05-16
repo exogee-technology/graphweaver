@@ -16,13 +16,13 @@ export class Employee extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'LastName', type: 'NVARCHAR(20)' })
-	lastName!: unknown;
+	lastName!: string;
 
 	@Property({ fieldName: 'FirstName', type: 'NVARCHAR(20)' })
-	firstName!: unknown;
+	firstName!: string;
 
 	@Property({ fieldName: 'Title', type: 'NVARCHAR(30)', nullable: true })
-	title?: unknown;
+	title?: string;
 
 	@ManyToOne({
 		entity: () => Employee,
@@ -40,28 +40,28 @@ export class Employee extends BaseEntity {
 	hireDate?: Date;
 
 	@Property({ fieldName: 'Address', type: 'NVARCHAR(70)', nullable: true })
-	address?: unknown;
+	address?: string;
 
 	@Property({ fieldName: 'City', type: 'NVARCHAR(40)', nullable: true })
-	city?: unknown;
+	city?: string;
 
 	@Property({ fieldName: 'State', type: 'NVARCHAR(40)', nullable: true })
-	state?: unknown;
+	state?: string;
 
 	@Property({ fieldName: 'Country', type: 'NVARCHAR(40)', nullable: true })
-	country?: unknown;
+	country?: string;
 
 	@Property({ fieldName: 'PostalCode', type: 'NVARCHAR(10)', nullable: true })
-	postalCode?: unknown;
+	postalCode?: string;
 
 	@Property({ fieldName: 'Phone', type: 'NVARCHAR(24)', nullable: true })
-	phone?: unknown;
+	phone?: string;
 
 	@Property({ fieldName: 'Fax', type: 'NVARCHAR(24)', nullable: true })
-	fax?: unknown;
+	fax?: string;
 
 	@Property({ fieldName: 'Email', type: 'NVARCHAR(60)', nullable: true })
-	email?: unknown;
+	email?: string;
 
 	@OneToMany({ entity: () => Customer, mappedBy: 'employee' })
 	customers = new Collection<Customer>(this);

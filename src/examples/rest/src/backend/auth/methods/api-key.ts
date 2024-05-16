@@ -11,7 +11,7 @@ import { ApiKey as OrmApiKey } from '../../entities/mysql';
 import { myConnection } from '../../database';
 import { Roles } from '../roles';
 
-const acl: AccessControlList<ApiKeyEntity<ApiKeyStorage<Roles>>, AuthorizationContext> = {
+const acl: AccessControlList<ApiKeyEntity<ApiKeyStorage<Roles>, Roles>, AuthorizationContext> = {
 	DARK_SIDE: {
 		// Dark side user role can perform operations on any api keys
 		all: true,
