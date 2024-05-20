@@ -53,7 +53,7 @@ enum Roles {
 
 class ApiKeyBackendProvider extends BaseDataProvider<
 	ApiKeyStorage<Roles>,
-	ApiKeyEntity<ApiKeyStorage<Roles>>
+	ApiKeyEntity<ApiKeyStorage<Roles>, Roles>
 > {
 	async findOne({ key }: any): Promise<any> {
 		if (key === 'test_fail') {
