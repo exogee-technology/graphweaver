@@ -37,7 +37,7 @@ export type ForgottenPasswordOptions = {
 		url: URL,
 		forgottenPasswordLink: AuthenticationBaseEntity<ForgottenPasswordLinkData>
 	) => Promise<boolean>;
-	getUser: (username: string) => Promise<UserProfile>;
+	getUser: (username: string) => Promise<UserProfile<unknown>>;
 	assertPasswordStrength?: (password?: string) => boolean;
 };
 
@@ -60,7 +60,7 @@ export class ForgottenPassword {
 	 * @param username fetch user details using a username
 	 * @returns return a UserProfile compatible entity
 	 */
-	private getUser: (username: string) => Promise<UserProfile>;
+	private getUser: (username: string) => Promise<UserProfile<unknown>>;
 
 	constructor({
 		provider,

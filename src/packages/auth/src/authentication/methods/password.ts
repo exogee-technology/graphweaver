@@ -71,7 +71,7 @@ export type PasswordOptions<D extends CredentialStorage> = {
 		id: string,
 		operation: PasswordOperation,
 		params: RequestParams
-	) => Promise<UserProfile>;
+	) => Promise<UserProfile<unknown>>;
 	acl?: AccessControlList<Credential<D>, AuthorizationContext>;
 	assertPasswordStrength?: (password?: string) => boolean;
 	onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
@@ -84,7 +84,7 @@ export class Password<D extends CredentialStorage> {
 		id: string,
 		operation: PasswordOperation,
 		params: RequestParams
-	) => Promise<UserProfile>;
+	) => Promise<UserProfile<unknown>>;
 	private assertPasswordStrength: (password?: string) => boolean;
 	private onUserAuthenticated?: (userId: string, params: RequestParams) => Promise<null>;
 	private onUserRegistered?: (userId: string, params: RequestParams) => Promise<null>;
@@ -163,7 +163,7 @@ export class Password<D extends CredentialStorage> {
 		username: string,
 		password: string,
 		params: RequestParams
-	): Promise<UserProfile> {
+	): Promise<UserProfile<unknown>> {
 		const credential = await this.provider.findOne({
 			username,
 		} as Filter<GraphQLEntity<D>>);
@@ -181,7 +181,9 @@ export class Password<D extends CredentialStorage> {
 		throw new AuthenticationError('Unknown username or password, please try again');
 	}
 
-	async create(params: CreateOrUpdateHookParams<CredentialInsertInput>): Promise<UserProfile> {
+	async create(
+		params: CreateOrUpdateHookParams<CredentialInsertInput>
+	): Promise<UserProfile<unknown>> {
 		const [item] = params.args.items;
 		if (!item) throw new Error('No data specified cannot continue.');
 
@@ -210,7 +212,9 @@ export class Password<D extends CredentialStorage> {
 		});
 	}
 
-	async update(params: CreateOrUpdateHookParams<CredentialUpdateInput>): Promise<UserProfile> {
+	async update(
+		params: CreateOrUpdateHookParams<CredentialUpdateInput>
+	): Promise<UserProfile<unknown>> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
 

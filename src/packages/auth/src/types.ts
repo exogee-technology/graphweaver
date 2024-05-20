@@ -22,7 +22,7 @@ export interface JwtPayload {
 // Consumers will extend the base context type
 export interface AuthorizationContext extends BaseContext {
 	token?: string | JwtPayload;
-	user?: UserProfile;
+	user?: UserProfile<unknown>;
 	redirectUri?: URL;
 }
 

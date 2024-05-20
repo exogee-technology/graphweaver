@@ -3,7 +3,7 @@ import { AuthToken } from '../entities';
 import { UserProfile } from '../../user-profile';
 
 export interface BaseAuthTokenProvider {
-	generateToken: (user: UserProfile) => Promise<AuthToken>;
+	generateToken: (user: UserProfile<unknown>) => Promise<AuthToken>;
 	decodeToken: (authToken: string) => Promise<JwtPayload>;
 	stepUpToken: (existingTokenPayload: JwtPayload) => Promise<AuthToken>;
 }

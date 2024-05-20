@@ -40,7 +40,7 @@ type MagicLinkProvider = BackendProvider<
 
 export interface MagicLinkOptions {
 	provider: MagicLinkProvider;
-	getUser: (username: string) => Promise<UserProfile>;
+	getUser: (username: string) => Promise<UserProfile<unknown>>;
 	sendMagicLink: (url: URL, magicLink: MagicLinkEntity) => Promise<boolean>;
 }
 
@@ -49,7 +49,7 @@ const createToken = randomUUID;
 
 export class MagicLink {
 	private provider: MagicLinkProvider;
-	private getUser: (username: string) => Promise<UserProfile>;
+	private getUser: (username: string) => Promise<UserProfile<unknown>>;
 	private sendMagicLink: (url: URL, magicLink: MagicLinkEntity) => Promise<boolean>;
 
 	constructor({ provider, getUser, sendMagicLink }: MagicLinkOptions) {
