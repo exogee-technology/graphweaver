@@ -5,7 +5,6 @@ import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 import {
 	AuthChecker,
 	SchemaBuilder,
-	addChildFiltersToRelationshipFields,
 	graphweaverMetadata,
 	resolveAdminUiMetadata,
 	AdminUiMetadata,
@@ -116,9 +115,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
-
-		// Add any child filters to the schema
-		addChildFiltersToRelationshipFields();
 
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
