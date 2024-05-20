@@ -88,7 +88,7 @@ class PasswordBackendProvider extends BaseDataProvider<
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),
-	getUserProfile: async (id: string): Promise<UserProfile> => {
+	getUserProfile: async (id: string): Promise<UserProfile<unknown>> => {
 		return new UserProfile({
 			id: user.id,
 			username: user.username,

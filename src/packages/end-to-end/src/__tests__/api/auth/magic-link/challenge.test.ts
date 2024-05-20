@@ -65,7 +65,7 @@ const sendMagicLink = jest.fn(() => Promise.resolve(true));
 
 export const magicLink = new MagicLink({
 	provider: new MagicLinkBackendProvider('magicLink'),
-	getUser: async (): Promise<UserProfile> => {
+	getUser: async (): Promise<UserProfile<unknown>> => {
 		return user;
 	},
 	sendMagicLink,

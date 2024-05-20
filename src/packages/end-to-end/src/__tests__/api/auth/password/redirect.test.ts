@@ -25,7 +25,8 @@ class PasswordBackendProvider extends BaseDataProvider<
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),
-	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile> => user,
+	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile<unknown>> =>
+		user,
 });
 
 const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {

@@ -94,7 +94,7 @@ const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
 
 const graphweaver = new Graphweaver({
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => ({}) as UserProfile, { apiKeyDataProvider })],
+		plugins: [authApolloPlugin(async () => ({}) as UserProfile<any>, { apiKeyDataProvider })],
 	},
 });
 

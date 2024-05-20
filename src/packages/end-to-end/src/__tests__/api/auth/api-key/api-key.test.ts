@@ -89,7 +89,7 @@ const apiKeyDataProvider = new ApiKeyBackendProvider('ApiKey');
 const graphweaver = new Graphweaver({
 	apolloServerOptions: {
 		plugins: [
-			authApolloPlugin(async () => ({}) as UserProfile, {
+			authApolloPlugin(async () => ({}) as UserProfile<any>, {
 				apiKeyDataProvider,
 				implicitAllow: true,
 			}),
