@@ -90,6 +90,24 @@ const deleteInput = new GraphQLInputObjectType({
 	},
 });
 
+export const getFieldTypeFromFieldMetadata = (
+	field: FieldMetadata<any, any>
+): {
+	fieldType: TypeValue;
+	isList: boolean;
+	metadata?: EnumMetadata<any> | EntityMetadata<any, any> | InputTypeMetadata<any, any>;
+} => {
+	let fieldType = field.getType();
+	let isList = false;
+	if (Array.isArray(fieldType)) {
+		isList = true;
+		fieldType = fieldType[0];
+	}
+	const metadata = graphweaverMetadata.metadataForType(fieldType);
+
+	return { fieldType, isList, metadata };
+};
+
 const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
 		if (isListType(type) || isNonNullType(type)) {
@@ -141,17 +159,9 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(input.fields)) {
-					let type = field.getType();
-					let isArray = false;
-					if (Array.isArray(type)) {
-						type = type[0];
-						isArray = true;
-					}
-
 					// Let's try to resolve the GraphQL type involved here.
+					const { fieldType, isList, metadata } = getFieldTypeFromFieldMetadata(field);
 					let graphQLType: GraphQLInputType | undefined = undefined;
-
-					const metadata = graphweaverMetadata.metadataForType(type);
 
 					if (isInputMetadata(metadata)) {
 						graphQLType = graphQLTypeForInput(metadata);
@@ -159,7 +169,7 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
-						const scalar = graphQLScalarForTypeScriptType(type);
+						const scalar = graphQLScalarForTypeScriptType(fieldType);
 
 						if (!scalar) {
 							throw new Error(
@@ -171,7 +181,7 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
-					if (isArray) {
+					if (isList) {
 						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
 					}
 
@@ -204,19 +214,11 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLFieldConfig<unknown, unknown>> = {};
 
 				for (const field of Object.values(entity.fields)) {
-					let type = field.getType();
-					let isArray = false;
-					if (Array.isArray(type)) {
-						type = type[0];
-						isArray = true;
-					}
-
 					// Let's try to resolve the GraphQL type involved here.
+					const { fieldType, isList, metadata } = getFieldTypeFromFieldMetadata(field);
 					let graphQLType: GraphQLOutputType | undefined = undefined;
 					let resolve = undefined;
 					const args: ObjMap<GraphQLArgumentConfig> = {};
-
-					const metadata = graphweaverMetadata.metadataForType(type);
 
 					if (isEntityMetadata(metadata)) {
 						graphQLType = graphQLTypeForEntity(metadata);
@@ -232,7 +234,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
-						const scalar = graphQLScalarForTypeScriptType(type);
+						const scalar = graphQLScalarForTypeScriptType(fieldType);
 
 						if (!scalar) {
 							throw new Error(
@@ -244,7 +246,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
-					if (isArray) {
+					if (isList) {
 						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
 					}
 
@@ -411,13 +413,7 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					if (field.name === 'id') continue;
 
 					// Let's try to resolve the GraphQL type involved here.
-					let fieldType = field.getType();
-					let isArray = false;
-					if (Array.isArray(fieldType)) {
-						isArray = true;
-						fieldType = fieldType[0];
-					}
-					const metadata = graphweaverMetadata.metadataForType(fieldType);
+					const { fieldType, metadata, isList } = getFieldTypeFromFieldMetadata(field);
 
 					if (isEntityMetadata(metadata)) {
 						// This if is separate to stop us cascading down to the scalar branch for entities that
@@ -427,7 +423,7 @@ const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						) {
 							let type: GraphQLInputType = createOrUpdateTypeForEntity(metadata);
 
-							if (isArray) {
+							if (isList) {
 								// If it's a many relationship we need to wrap in non-null and list.
 								type = new GraphQLList(new GraphQLNonNull(type));
 							}
@@ -478,11 +474,7 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					}
 
 					// Let's try to resolve the GraphQL type involved here.
-					let fieldType = field.getType();
-					if (Array.isArray(fieldType)) {
-						fieldType = fieldType[0];
-					}
-					const metadata = graphweaverMetadata.metadataForType(fieldType);
+					const { fieldType, metadata } = getFieldTypeFromFieldMetadata(field);
 
 					if (!field.apiOptions?.excludeFromBuiltInWriteOperations) {
 						if (isEntityMetadata(metadata)) {
@@ -532,17 +524,11 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					}
 
 					// Let's try to resolve the GraphQL type involved here.
-					let fieldType = field.getType();
-					let isArray = false;
-					if (Array.isArray(fieldType)) {
-						isArray = true;
-						fieldType = fieldType[0];
-					}
-					const metadata = graphweaverMetadata.metadataForType(fieldType);
+					const { fieldType, metadata, isList } = getFieldTypeFromFieldMetadata(field);
 
 					if (isEntityMetadata(metadata)) {
 						// This if is separate to stop us cascading down to the scalar branch for entities that
-						const type = isArray
+						const type = isList
 							? new GraphQLList(new GraphQLNonNull(createOrUpdateTypeForEntity(metadata)))
 							: createOrUpdateTypeForEntity(metadata);
 

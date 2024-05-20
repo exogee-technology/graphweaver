@@ -2,7 +2,13 @@ import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 
-import { AdminUIFilterType, RelationshipType, BaseContext, graphweaverMetadata } from '..';
+import {
+	AdminUIFilterType,
+	RelationshipType,
+	BaseContext,
+	graphweaverMetadata,
+	getFieldTypeFromFieldMetadata,
+} from '..';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -72,10 +78,12 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				let defaultSummaryField: 'name' | 'title' | undefined = undefined;
 
 				const fields = visibleFields?.map((field) => {
-					const fieldType = field.getType();
-					const isArray = Array.isArray(fieldType);
-					const relatedObject = graphweaverMetadata.metadataForType(fieldType);
-					const typeName = isArray ? fieldType[0].name : (fieldType as any).name;
+					const {
+						fieldType,
+						isList,
+						metadata: relatedObject,
+					} = getFieldTypeFromFieldMetadata(field);
+					const typeName = (fieldType as any).name;
 
 					// set the default summary field
 					if (['name', 'title'].includes(field.name))
@@ -88,7 +96,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					const fieldObject: AdminUiFieldMetadata = {
 						name: field.name,
 						type: relatedObject?.name || typeName,
-						isArray,
+						isArray: isList,
 						attributes: {
 							isReadOnly,
 							isRequired,
@@ -96,7 +104,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					};
 
 					// Check if we have an array of related entities
-					if (isArray && relatedObject?.type === 'entity' && relatedObject.provider) {
+					if (isList && relatedObject?.type === 'entity' && relatedObject.provider) {
 						// Ok, it's a relationship to another object type that is an array, e.g. "to many".
 						// We'll default to one to many, then if we can find a field on the other side that points
 						// back to us and it's also an array, then it's a many to many.

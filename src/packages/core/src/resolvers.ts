@@ -14,6 +14,7 @@ import {
 	ReadHookParams,
 	WithId,
 	createOrUpdateEntities,
+	getFieldTypeFromFieldMetadata,
 	graphweaverMetadata,
 	hookManagerMap,
 } from '.';
@@ -379,15 +380,7 @@ export const listRelationshipField = async <
 		return null;
 	}
 
-	let gqlEntityType = field.getType() as
-		| GraphQLEntityConstructor<G, D>
-		| GraphQLEntityConstructor<G, D>[];
-	let isList = false;
-
-	if (Array.isArray(gqlEntityType)) {
-		isList = true;
-		gqlEntityType = gqlEntityType[0];
-	}
+	const { fieldType: gqlEntityType, isList } = getFieldTypeFromFieldMetadata(field);
 
 	// @todo: Should the user specified filter be and-ed here?
 	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
@@ -433,7 +426,7 @@ export const listRelationshipField = async <
 		logger.trace('Loading with loadByRelatedId');
 
 		dataEntities = await BaseLoaders.loadByRelatedId({
-			gqlEntityType,
+			gqlEntityType: gqlEntityType as GraphQLEntityConstructor<G, D>,
 			relatedField: field.relationshipInfo.relatedField,
 			id: String(source.id),
 			filter: relatedEntityFilter as Filter<G>,
@@ -442,7 +435,7 @@ export const listRelationshipField = async <
 		logger.trace('Loading with loadOne');
 
 		const dataEntity = await BaseLoaders.loadOne({
-			gqlEntityType,
+			gqlEntityType: gqlEntityType as GraphQLEntityConstructor<G, D>,
 			id: idValue,
 		});
 		dataEntities = [dataEntity];

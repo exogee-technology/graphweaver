@@ -1,4 +1,4 @@
-import { BaseDataEntity, FieldMetadata, GraphQLEntity } from '..';
+import { BaseDataEntity, GraphQLEntity } from '..';
 import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
@@ -19,38 +19,6 @@ interface RecursiveArray<TValue> extends Array<RecursiveArray<TValue> | TValue> 
 type TypeValue = ClassType<GraphQLEntity<BaseDataEntity>>;
 type ReturnTypeFuncValue = TypeValue | RecursiveArray<TypeValue>;
 type ReturnTypeFunc = () => ReturnTypeFuncValue;
-
-export const addChildRelationshipFilterArg = <G, D extends BaseDataEntity>(
-	field: FieldMetadata<G, D>
-) => {
-	// const relatedType = field.getType() as { name?: string };
-	// if (!relatedType.name) return;
-	// const relatedEntity = graphweaverMetadata.hasEntity(relatedType.name || '')
-	// 	? graphweaverMetadata.getEntity(relatedType.name)
-	// 	: undefined;
-	// if (relatedEntity?.provider?.backendProviderConfig?.filter?.childByChild) {
-	// 	// Create filter arg for relationship field
-	// 	graphweaverMetadata.collectHandlerParamMetadata({
-	// 		kind: 'arg',
-	// 		target: field.target,
-	// 		methodName: field.name,
-	// 		index: 3,
-	// 		name: 'filter',
-	// 		description: 'Filter the related entities',
-	// 		deprecationReason: undefined,
-	// 		getType: () => graphweaverMetadata.getInputType(`${relatedEntity.plural}ListFilter`),
-	// 		typeOptions: { nullable: true },
-	// 		validate: undefined,
-	// 	});
-	// }
-};
-
-export const addChildFiltersToRelationshipFields = () => {
-	// for (const field of graphweaverMetadata.fields) {
-	// 	// if the field is an array, then it might be a relationship, let's check if we should add a filter
-	// 	if (field.typeOptions.array) addChildRelationshipFilterArg(field);
-	// }
-};
 
 export function RelationshipField<
 	G extends GraphQLEntity<D> = any,
