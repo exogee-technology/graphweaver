@@ -246,7 +246,6 @@ export interface FieldMetadata<G, D> {
 
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
-	hideInAdminUI?: boolean;
 
 	// This can be used by any plugin to store additional information
 	// namespace your key to avoid conflicts

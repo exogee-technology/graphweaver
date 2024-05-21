@@ -506,9 +506,7 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return updateType;
 };
 
-export interface SchemaBuilderOptions {
-	authChecker?: AuthChecker<any, any>;
-}
+export interface SchemaBuilderOptions {}
 
 class SchemaBuilderImplementation {
 	public build(args?: SchemaBuilderOptions) {

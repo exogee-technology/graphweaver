@@ -98,7 +98,6 @@ const columnsForEntity = <T extends TableRowItem>(
 								return (
 									<img
 										src={media.url}
-										// alt={altText} @todo - implement alt text
 										style={{
 											width: '100%',
 											height: '100%',

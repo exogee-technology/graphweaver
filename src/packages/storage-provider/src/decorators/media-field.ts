@@ -6,9 +6,9 @@ import {
 	GraphQLEntity,
 	graphweaverMetadata,
 	FieldMetadata,
+	Source,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
-import { Source } from 'graphql';
 
 export interface MediaData extends BaseDataEntity {
 	filename: string;
@@ -57,14 +57,10 @@ export class Media extends GraphQLEntity<MediaData> {
 	static serialize = ({ value }: { value: unknown }) => {
 		if (value === null) return null;
 		if (isMedia(value)) {
-			return JSON.stringify(
-				{
-					filename: value.filename,
-					type: value.type,
-				},
-				null,
-				2
-			);
+			return JSON.stringify({
+				filename: value.filename,
+				type: value.type,
+			});
 		}
 		throw new Error(
 			'Invalid Media input data provided. Please sent a filename and type when creating or updating media.'

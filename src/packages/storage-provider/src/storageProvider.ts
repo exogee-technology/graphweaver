@@ -5,8 +5,7 @@ import {
 	DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { graphweaverMetadata, BaseContext } from '@exogee/graphweaver';
-import { GraphQLResolveInfo, Source } from 'graphql';
+import { graphweaverMetadata, BaseContext, GraphQLResolveInfo, Source } from '@exogee/graphweaver';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { randomUUID } from 'crypto';
 import { MediaType } from './decorators/media-field';
@@ -91,9 +90,7 @@ export class S3StorageProvider {
 			throw new Error('Invalid file extension');
 		}
 
-		// generate uuid from crypto module
 		const uuid = randomUUID();
-
 		const command = new PutObjectCommand({
 			Bucket: this.bucketName,
 			Key: `${uuid}.${fileExtension}`,
