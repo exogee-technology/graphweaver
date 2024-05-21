@@ -11,17 +11,6 @@ const isObject = (value: unknown): value is Record<string, unknown> => {
 	return typeof value == 'object' && value !== null;
 };
 
-const isFunction = (
-	property: unknown
-): property is (
-	source: Source,
-	args: GraphQLArgument,
-	context: BaseContext,
-	info: GraphQLResolveInfo
-) => unknown => {
-	return typeof property === 'function';
-};
-
 const isDeserializable = (
 	entity: typeof GraphQLEntity
 ): entity is typeof GraphQLEntity & {
@@ -56,7 +45,7 @@ export const fieldResolver = (
 			});
 		}
 
-		if (isFunction(property)) {
+		if (typeof property === 'function') {
 			return property(source, args, context, info);
 		}
 

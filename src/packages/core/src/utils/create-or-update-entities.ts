@@ -173,7 +173,7 @@ export const createOrUpdateEntities = async <
 
 					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
 					const parentField = Object.values(childMeta.fields).find((field) => {
-						const { fieldType: type } = getFieldTypeFromFieldMetadata(relationship);
+						const { fieldType: type } = getFieldTypeFromFieldMetadata(field);
 						return type === gqlEntityType;
 					});
 					if (!parentField) {
