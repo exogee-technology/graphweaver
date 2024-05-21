@@ -47,8 +47,7 @@ export const getOne = async <G, C extends BaseContext>(
 	const hookManager = hookManagerMap.get(entity.name);
 
 	const params: ReadHookParams<G> = {
-		// TODO: Can we fix the as any here?
-		args: { filter: { id } as any },
+		args: { filter: { id } as Filter<G> },
 		info,
 		context,
 		transactional: !!entity.provider.withTransaction,
