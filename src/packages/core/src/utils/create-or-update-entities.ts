@@ -10,6 +10,7 @@ import {
 	GraphQLEntityType,
 	HookRegister,
 	WithId,
+	getFieldTypeFromFieldMetadata,
 	hookManagerMap,
 } from '..';
 import { graphweaverMetadata } from '../metadata';
@@ -137,15 +138,12 @@ export const createOrUpdateEntities = async <
 
 			// Check if the property represents a related entity
 			const relationship = meta.fields[key];
-			let type = relationship?.getType() as unknown;
-			if (Array.isArray(type)) {
-				type = type[0];
-			}
+			const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
 
-			if (isRelatedEntity(type)) {
-				if (isSerializable(type)) {
+			if (isRelatedEntity(fieldType)) {
+				if (isSerializable(fieldType)) {
 					// If it's a serializable entity, we don't need to do anything here
-					node[key as keyof typeof node] = type.serialize({ value: childNode }) as
+					node[key as keyof typeof node] = fieldType.serialize({ value: childNode }) as
 						| G[keyof G]
 						| undefined;
 				} else if (isLinking(childNode)) {
@@ -165,12 +163,13 @@ export const createOrUpdateEntities = async <
 						parentId = parent?.id;
 					}
 					if (!parentId) {
-						throw new Error(`Implementation Error: No parent id found for ${type.name}`);
+						throw new Error(`Implementation Error: No parent id found for ${fieldType.name}`);
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = graphweaverMetadata.getEntityByName(type.name);
-					if (!childMeta) throw new Error(`Could not locate metadata for '${type.name}' entity.`);
+					const childMeta = graphweaverMetadata.getEntityByName(fieldType.name);
+					if (!childMeta)
+						throw new Error(`Could not locate metadata for '${fieldType.name}' entity.`);
 
 					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
 					const parentField = Object.values(childMeta.fields).find((field) => {
@@ -179,7 +178,7 @@ export const createOrUpdateEntities = async <
 						return type === gqlEntityType;
 					});
 					if (!parentField) {
-						throw new Error(`Implementation Error: No parent field found for ${type.name}`);
+						throw new Error(`Implementation Error: No parent field found for ${fieldType.name}`);
 					}
 					const childEntities = childNode.map((child) => ({
 						...child,
@@ -187,12 +186,12 @@ export const createOrUpdateEntities = async <
 					}));
 
 					// Now create/update the children
-					const mutationName = getMutationName(type.name, childEntities);
+					const mutationName = getMutationName(fieldType.name, childEntities);
 					await callChildMutation(mutationName, childEntities, info, context);
 					// on the next line lets make sure we have an object with at least 1 key
 				} else if (Object.keys(childNode).length > 0) {
 					// If only one object, create or update it first, then update the parent reference
-					const mutationName = getMutationName(type.name, childNode);
+					const mutationName = getMutationName(fieldType.name, childNode);
 					const result = await callChildMutation(mutationName, childNode, info, context);
 
 					node = {

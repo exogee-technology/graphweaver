@@ -1,6 +1,11 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
 import { BaseContext } from './types';
-import { GraphQLEntity, graphweaverMetadata, isRelatedEntity } from '.';
+import {
+	GraphQLEntity,
+	getFieldTypeFromFieldMetadata,
+	graphweaverMetadata,
+	isRelatedEntity,
+} from '.';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
 	return typeof value == 'object' && value !== null;
@@ -39,13 +44,11 @@ export const fieldResolver = (
 		if (!metadata) throw new Error(`Could not locate metadata for the '${parent}' entity`);
 
 		const relationship = metadata.fields[key];
-		let type = relationship?.getType() as unknown;
-		if (Array.isArray(type)) {
-			type = type[0];
-		}
 
-		if (type && isRelatedEntity(type) && isDeserializable(type)) {
-			return type.deserialize({
+		const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
+
+		if (fieldType && isRelatedEntity(fieldType) && isDeserializable(fieldType)) {
+			return fieldType.deserialize({
 				value: property,
 				parentEntity: source,
 				entityMetadata: metadata,
