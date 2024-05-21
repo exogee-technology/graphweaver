@@ -383,13 +383,20 @@ export const listRelationshipField = async <
 	const { fieldType, isList } = getFieldTypeFromFieldMetadata(field);
 	const gqlEntityType = fieldType as GraphQLEntityConstructor<G, D>;
 
-	// @todo: Should the user specified filter be and-ed here?
-	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
-	const relatedEntityFilter =
-		input.filter ?? (idValue ? { id: idValue } : { [relatedField as string]: { id: source.id } });
+	// We need to construct a filter for the related entity and _and it with the user supplied filter.
+	const _and: Filter<G>[] = [];
+
+	// If we have a user supplied filter, add it to the _and array.
+	if (input.filter) _and.push(input.filter);
+
+	// Lets check the relationship type and add the appropriate filter.
+	if (idValue) _and.push({ id: idValue });
+	else if (relatedField) _and.push({ [relatedField]: { id: source.id } } as Filter<G>);
+
+	const relatedEntityFilter = { _and } as Filter<G>;
 
 	const params: ReadHookParams<G> = {
-		args: { filter: input.filter },
+		args: { filter: relatedEntityFilter },
 		info,
 		context,
 		transactional: !!entity.provider?.withTransaction,
@@ -430,7 +437,7 @@ export const listRelationshipField = async <
 			gqlEntityType,
 			relatedField: field.relationshipInfo.relatedField,
 			id: String(source.id),
-			filter: relatedEntityFilter as Filter<G>,
+			filter: relatedEntityFilter,
 		});
 	} else if (idValue) {
 		logger.trace('Loading with loadOne');
