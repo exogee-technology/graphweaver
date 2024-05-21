@@ -24,7 +24,7 @@ async function main() {
 		await execAsync('pwd');
 		await removeDirectory('./app');
 
-		// Copy the rest example over for testing
+		// Copy the auth example over for testing
 		await execAsync('cp -r ../../examples/rest ./app');
 
 		// Update to use the local dependencies

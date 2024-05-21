@@ -24,7 +24,7 @@ async function main() {
 		await execAsync('pwd');
 		await removeDirectory('./app');
 
-		// Copy the rest example over for testing
+		// Copy the storage example over for testing
 		await execAsync('cp -r ../../examples/s3-storage ./app');
 
 		// Update to use the local dependencies
