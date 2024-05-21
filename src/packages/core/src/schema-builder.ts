@@ -398,6 +398,10 @@ const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return paginationType;
 };
 
+const graphQLInputFieldsForEntity = (entity: EntityMetadata<any, any>) => {
+	const fields: ObjMap<GraphQLInputFieldConfig> = {};
+	
+
 const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let insertType = insertTypes.get(entity.name);
 
