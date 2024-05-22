@@ -191,7 +191,7 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 					}
 					const childEntities = childNode.map((child) => ({
 						...child,
-						[parentField.name]: { id: parentId },
+						[parentField.name]: { [primaryKeyField]: parentId },
 					}));
 
 					// Now create/update the children
