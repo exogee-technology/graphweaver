@@ -114,7 +114,6 @@ export type MediaCreateOrUpdateInput = {
 export type MediaInsertInput = {
   filename: Scalars['String']['input'];
   type: MediaType;
-  url: Scalars['String']['input'];
 };
 
 export enum MediaType {
@@ -126,7 +125,6 @@ export enum MediaType {
 export type MediaUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<MediaType>;
-  url?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type MultipleMediaListFilter = {
