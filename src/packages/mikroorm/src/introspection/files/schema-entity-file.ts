@@ -254,7 +254,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 		const [primaryKey] = relatedEntity.getPrimaryProps();
 
-		options.id = `(entity) => entity.${prop.name}?.${primaryKey.name}`;
+		options.id = `(entity) => entity.${prop.name}?.unwrap().${primaryKey.name}`;
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {
