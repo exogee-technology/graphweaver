@@ -208,8 +208,8 @@ importers:
   examples/s3-storage:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@apollo/server':
         specifier: 4.10.2
         version: 4.10.2(graphql@16.8.1)
@@ -236,7 +236,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -279,10 +279,10 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -306,8 +306,8 @@ importers:
   examples/xero:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@apollo/server':
         specifier: 4.10.2
         version: 4.10.2(graphql@16.8.1)
@@ -403,8 +403,8 @@ importers:
   packages/admin-ui:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -479,8 +479,8 @@ importers:
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -658,8 +658,8 @@ importers:
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@simplewebauthn/browser':
         specifier: 9.0.1
         version: 9.0.1
@@ -998,7 +998,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1093,10 +1093,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
@@ -1146,13 +1146,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -1446,8 +1446,8 @@ packages:
       graphql: 16.8.1
     dev: false
 
-  /@apollo/client@3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
-    resolution: {integrity: sha512-H7e9m7cRcFO93tokwzqrsbnfKorkpV24xU30hFH5u2g6B+c1DMo/ouyF/YrBPdrTzqxQCjTUmds/FLmJ7626GA==}
+  /@apollo/client@3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
+    resolution: {integrity: sha512-51gk0xOwN6Ls1EbTG5svFva1kdm2APHYTzmFhaAdvUQoJFDxfc0UwQgDxGptzH84vkPlo1qunY1FuboyF9LI3Q==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -1475,7 +1475,7 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.3.1(react@18.2.0)
-      rehackt: 0.0.6(@types/react@18.2.75)(react@18.2.0)
+      rehackt: 0.1.0(@types/react@18.2.75)(react@18.2.0)
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -5653,6 +5653,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
@@ -5714,28 +5715,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12):
-    resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.12
-      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4):
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
     engines: {node: '>= 18.12.0'}
@@ -5779,6 +5758,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5):
     resolution: {integrity: sha512-IOv0s5UYdO2dzCiHGpTcceo2FOZtddnMmlNmRkBXhKzYkYUEut0qJJqt20d8oJsMJuEk8Et7/MAgdJT5FbWTzA==}
@@ -13733,6 +13713,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -15910,8 +15891,8 @@ packages:
       es-errors: 1.3.0
       set-function-name: 2.0.2
 
-  /rehackt@0.0.6(@types/react@18.2.75)(react@18.2.0):
-    resolution: {integrity: sha512-l3WEzkt4ntlEc/IB3/mF6SRgNHA6zfQR7BlGOgBTOmx7IJJXojDASav+NsgXHFjHn+6RmwqsGPFgZpabWpeOdw==}
+  /rehackt@0.1.0(@types/react@18.2.75)(react@18.2.0):
+    resolution: {integrity: sha512-7kRDOuLHB87D/JESKxQoRwv4DzbIdwkAGQ7p6QKGdVlY1IZheUnVhlk/4UZlNUVxdAXpyxikE3URsG067ybVzw==}
     peerDependencies:
       '@types/react': '*'
       react: '*'
