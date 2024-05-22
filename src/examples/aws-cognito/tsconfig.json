@@ -14,11 +14,6 @@
 		"sourceMap": true
 	},
 	"include": ["./src"],
-	"references": [
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/rest" },
-		{ "path": "../../packages/auth" }
-	],
+	"references": [{ "path": "../../packages/core" }],
 	"sourceMap": true
 }

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "0.2.23",
+	"version": "1.0.0-beta.1",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -28,7 +28,7 @@
 		"dotenv": "16.4.5",
 		"esbuild": "0.20.2",
 		"esbuild-css-modules-plugin": "2.7.1",
-		"glob": "10.3.10",
+		"glob": "10.3.12",
 		"graphql": "16.8.1",
 		"graphql-tag": "2.12.6",
 		"rimraf": "5.0.5",
@@ -36,13 +36,12 @@
 		"serverless": "3.38.0",
 		"serverless-dotenv-plugin": "6.0.0",
 		"serverless-offline": "13.3.3",
-		"type-graphql": "2.0.0-beta.2",
-		"vite": "5.1.6",
+		"vite": "5.2.11",
 		"vite-plugin-graphweaver": "workspace:*",
 		"vite-plugin-svgr": "3.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.27",
+		"@types/node": "20.12.12",
 		"@types/rimraf": "4.0.5",
 		"prettier": "3.2.5"
 	},

@@ -1,6 +1,5 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -9,18 +8,17 @@ import {
 	Field,
 	GraphQLEntity,
 	ID,
-	ObjectType,
 	BaseDataProvider,
-	Resolver,
-	createBaseResolver,
+	Entity,
 } from '@exogee/graphweaver';
 import {
-	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
 	ApplyAccessControlList,
+	CredentialStorage,
+	hashPassword,
+	Password,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -29,12 +27,16 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
+
 @ApplyAccessControlList({
 	ROLE_NOT_FOUND_IN_USER_PROFILE: {
 		all: true,
 	},
 })
-@ObjectType('Album')
+@Entity('Album', {
+	provider: albumDataProvider,
+})
 export class Album extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -45,32 +47,30 @@ export class Album extends GraphQLEntity<any> {
 	description!: string;
 }
 
-const albumDataProvider = new BaseDataProvider<any, Album>('album');
+const cred: CredentialStorage = {
+	id: '1',
+	username: 'test',
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
+};
 
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
-
-@Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new BaseDataProvider('auth')
-) {
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
-		return user;
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
+		cred.password = await hashPassword(cred.password ?? '');
+		return cred;
 	}
 }
 
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string) => user,
+});
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, AlbumResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},
@@ -119,7 +119,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -141,7 +141,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -166,7 +166,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -181,14 +181,14 @@ describe('ACL - Basic Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: createAlbum(data: { description: "test" }) {
+					result: createAlbum(input: { description: "test" }) {
 						id
 					}
 				}
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -203,14 +203,14 @@ describe('ACL - Basic Before Hook', () => {
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
-					result: updateAlbum(data: { id: 1, description: "test" }) {
+					result: updateAlbum(input: { id: 1, description: "test" }) {
 						id
 					}
 				}
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -230,7 +230,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
@@ -250,7 +250,7 @@ describe('ACL - Basic Before Hook', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
+		expect(spyOnDataProvider).not.toHaveBeenCalled();
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');

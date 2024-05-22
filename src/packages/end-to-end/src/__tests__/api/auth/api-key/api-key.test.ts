@@ -1,53 +1,43 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
+	BaseDataEntity,
+	BaseDataProvider,
 	Field,
 	GraphQLEntity,
 	ID,
-	ObjectType,
-	Resolver,
-	createBaseResolver,
+	Entity,
 } from '@exogee/graphweaver';
-import { authApolloPlugin, UserProfile, ApiKeyStorage } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider, BaseEntity, ConnectionManager } from '@exogee/graphweaver-mikroorm';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-import { ArrayType, BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	authApolloPlugin,
+	UserProfile,
+	ApiKeyStorage,
+	ApiKeyEntity,
+} from '@exogee/graphweaver-auth';
 
-// Create Entity
-@Entity({ tableName: 'api_key' })
-class OrmApiKey extends BaseEntity implements ApiKeyStorage {
-	@PrimaryKey({ type: new BigIntType('string') })
-	id!: string;
-
-	@Property({ type: String, fieldName: 'api_key' })
-	key!: string;
-
-	@Property({ type: String })
-	secret!: string;
-
-	@Property({ type: Boolean })
-	revoked!: boolean;
-
-	@Property({ type: ArrayType, default: [] })
-	roles!: string[];
+class TaskProvider extends BaseDataProvider<any, Task> {
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return await callback();
+	}
+	async findOne({ id }: any) {
+		return {
+			id,
+			description: 'Test Task',
+		};
+	}
+	async find() {
+		return [{ id: '1', description: 'Test Task' }];
+	}
 }
 
-@Entity()
-export class OrmTask extends BaseEntity {
-	@PrimaryKey({ type: new BigIntType('string') })
-	id!: string;
-
-	@Property({ type: String })
-	description!: string;
-}
-
-@ObjectType('Task')
-export class Task extends GraphQLEntity<OrmTask> {
-	public dataEntity!: OrmTask;
+@Entity('Task', {
+	provider: new TaskProvider('TaskProvider'),
+})
+export class Task extends GraphQLEntity<BaseDataEntity> {
+	public dataEntity!: BaseDataEntity;
 
 	@Field(() => ID)
 	id!: number;
@@ -56,29 +46,50 @@ export class Task extends GraphQLEntity<OrmTask> {
 	description!: string;
 }
 
-// Create Data Provider
-const connection = {
-	connectionManagerId: 'InMemory',
-	mikroOrmConfig: {
-		entities: [OrmApiKey, OrmTask],
-		dbName: ':memory:',
-		driver: SqliteDriver,
-	},
-};
+enum Roles {
+	LIGHT_SIDE = 'LIGHT_SIDE',
+	DARK_SIDE = 'DARK_SIDE',
+}
 
-@Resolver((of) => Task)
-class TaskResolver extends createBaseResolver<Task, OrmTask>(
-	Task,
-	new MikroBackendProvider(OrmTask, connection)
-) {}
+class ApiKeyBackendProvider extends BaseDataProvider<
+	ApiKeyStorage<Roles>,
+	ApiKeyEntity<ApiKeyStorage<Roles>, Roles>
+> {
+	async findOne({ key }: any): Promise<any> {
+		if (key === 'test_fail') {
+			return null;
+		}
 
-const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
+		if (key === 'test_revoked') {
+			return {
+				id: '1',
+				key: 'test_revoked',
+				secret:
+					'$argon2id$v=19$m=65536,t=3,p=4$VCKXMZROC0Bg0Flbi9Khsg$NCOmYbM/wkuwUqB82JoOr0KzCyYsPd2WRGjy3cik0mk',
+				revoked: true,
+				roles: ['admin'],
+			};
+		}
+
+		if (key === 'test') {
+			return {
+				id: '2',
+				key: 'test',
+				secret:
+					'$argon2id$v=19$m=65536,t=3,p=4$VCKXMZROC0Bg0Flbi9Khsg$NCOmYbM/wkuwUqB82JoOr0KzCyYsPd2WRGjy3cik0mk',
+				revoked: false,
+				roles: ['admin'],
+			};
+		}
+		return null;
+	}
+}
+const apiKeyDataProvider = new ApiKeyBackendProvider('ApiKey');
 
 const graphweaver = new Graphweaver({
-	resolvers: [TaskResolver],
 	apolloServerOptions: {
 		plugins: [
-			authApolloPlugin(async () => ({}) as UserProfile, {
+			authApolloPlugin(async () => ({}) as UserProfile<any>, {
 				apiKeyDataProvider,
 				implicitAllow: true,
 			}),
@@ -87,32 +98,6 @@ const graphweaver = new Graphweaver({
 });
 
 describe('API Key Authentication', () => {
-	beforeAll(async () => {
-		await ConnectionManager.connect('InMemory', connection);
-		const database = ConnectionManager.database('InMemory');
-		await database?.orm.schema.createSchema();
-
-		// Standard working test API Key
-		const testApiKey = database?.em.create(OrmApiKey, {
-			key: 'test',
-			secret:
-				'$argon2id$v=19$m=65536,t=3,p=4$VCKXMZROC0Bg0Flbi9Khsg$NCOmYbM/wkuwUqB82JoOr0KzCyYsPd2WRGjy3cik0mk',
-			revoked: false,
-			roles: ['admin'],
-		});
-		if (testApiKey) database?.em.persistAndFlush(testApiKey);
-
-		// Revoked test API Key
-		const testRevokedApiKey = database?.em.create(OrmApiKey, {
-			key: 'test_revoked',
-			secret:
-				'$argon2id$v=19$m=65536,t=3,p=4$VCKXMZROC0Bg0Flbi9Khsg$NCOmYbM/wkuwUqB82JoOr0KzCyYsPd2WRGjy3cik0mk',
-			revoked: true,
-			roles: ['admin'],
-		});
-		if (testRevokedApiKey) database?.em.persistAndFlush(testRevokedApiKey);
-	});
-
 	test('should return a E0001 error when no system user is found.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_fail:test').toString('base64');
 

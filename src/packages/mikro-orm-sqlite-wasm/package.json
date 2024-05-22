@@ -1,6 +1,6 @@
 {
 	"name": "mikro-orm-sqlite-wasm",
-	"version": "0.2.23",
+	"version": "1.0.0-beta.1",
 	"description": "MikroORM SQLite Driver Wasm",
 	"license": "MIT",
 	"scripts": {
@@ -21,15 +21,15 @@
 		"lib"
 	],
 	"dependencies": {
-		"@mikro-orm/knex": "6.1.10",
-		"@mikro-orm/sqlite": "6.1.10",
-		"node-sqlite3-wasm": "0.8.11"
+		"@mikro-orm/knex": "6.1.12",
+		"@mikro-orm/sqlite": "6.1.12",
+		"node-sqlite3-wasm": "0.8.13"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.27",
+		"@types/node": "20.12.12",
 		"esbuild": "0.20.2",
-		"glob": "10.3.10",
-		"typescript": "5.4.2"
+		"glob": "10.3.12",
+		"typescript": "5.4.5"
 	},
 	"keywords": [
 		"graphql",

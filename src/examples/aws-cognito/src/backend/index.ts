@@ -1,11 +1,12 @@
-import 'reflect-metadata';
 import Graphweaver from '@exogee/graphweaver-server';
-import { AuthorizationContext } from '@exogee/graphweaver-auth';
+import { createAwsCognitoUserProvider } from '@exogee/graphweaver-aws-cognito';
 
-import { resolvers } from './schema';
-
-export const graphweaver = new Graphweaver<AuthorizationContext>({
-	resolvers,
+export const cognitoUser = createAwsCognitoUserProvider({
+	userPoolId: process.env.COGNITO_USER_POOL_ID,
+	region: process.env.AWS_REGION,
+	endpoint: process.env.COGNITO_ENDPOINT,
 });
+
+export const graphweaver = new Graphweaver();
 
 export const handler = graphweaver.handler();

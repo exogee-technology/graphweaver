@@ -56,6 +56,7 @@ export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: 
 		<>
 			<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
 				{({ isSubmitting }) => (
+					// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 					<Form className={styles.wrapper}>
 						<GraphweaverLogo width="52" className={styles.logo} />
 						<div className={styles.titleContainer}>Login</div>

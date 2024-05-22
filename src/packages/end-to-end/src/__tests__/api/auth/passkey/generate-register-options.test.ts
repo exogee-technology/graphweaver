@@ -1,88 +1,85 @@
-import 'reflect-metadata';
 import {
 	UserProfile,
-	createBasePasskeyAuthResolver,
 	authApolloPlugin,
-	PasskeyAuthenticatorDevice,
-	createBasePasswordAuthResolver,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
+	Passkey,
+	CredentialStorage,
+	hashPassword,
+	Password,
+	PasskeyChallenge,
+	AuthenticationBaseEntity,
+	PasskeyAuthenticator,
+	AuthenticationMethod,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
 import gql from 'graphql-tag';
-import { Resolver } from 'type-graphql';
 import { PublicKeyCredentialCreationOptionsJSON } from '@simplewebauthn/types';
-import { CreateOrUpdateHookParams, BaseDataProvider } from '@exogee/graphweaver';
-
-const user = new UserProfile({
-	id: '1',
-	roles: ['admin'],
-	displayName: 'Test User',
-	username: 'test',
-});
+import { BaseDataProvider } from '@exogee/graphweaver';
 
 const MOCK_CHALLENGE = 'MOCK CHALLENGE';
+const MOCK_CREATED_AT = new Date();
 
-@Resolver()
-class AuthResolver extends createBasePasskeyAuthResolver() {
-	public async getUserCurrentChallenge(userId: string): Promise<string> {
-		return MOCK_CHALLENGE;
-	}
+const user: CredentialStorage = {
+	id: '1',
+	username: 'test',
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
+};
 
-	public async setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean> {
-		return true;
-	}
-
-	public async getUserAuthenticators(userId: string): Promise<PasskeyAuthenticatorDevice[]> {
-		return [];
-	}
-
-	public async getUserAuthenticator(
-		_: string,
-		credentialID: string
-	): Promise<PasskeyAuthenticatorDevice> {
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
 		return {
-			id: '1',
-			credentialID,
-			counter: 1,
-			credentialPublicKey: 'test',
+			...user,
+			password: await hashPassword(user.password ?? ''),
 		};
 	}
+}
 
-	public async saveNewUserAuthenticator(
-		_: string,
-		__: PasskeyAuthenticatorDevice
-	): Promise<boolean> {
-		return true;
-	}
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string): Promise<UserProfile<unknown>> => {
+		return new UserProfile({
+			id: user.id,
+			username: user.username,
+		});
+	},
+});
 
-	public async saveUpdatedAuthenticatorCounter(_: string, __: number): Promise<boolean> {
-		return true;
+class PasskeyChallengeBackendProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<PasskeyChallenge>,
+	AuthenticationBaseEntity<PasskeyChallenge>
+> {
+	async createOne() {
+		return {
+			id: '1',
+			type: AuthenticationMethod.PASSKEY,
+			userId: '1',
+			data: { challenge: MOCK_CHALLENGE },
+			createdAt: MOCK_CREATED_AT,
+		};
 	}
 }
 
-@Resolver()
-class CredentialAuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new BaseDataProvider('my-provider')
-) {
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
-		return user;
+class PasskeyAuthenticatorBackendProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<PasskeyAuthenticator>,
+	AuthenticationBaseEntity<PasskeyAuthenticator>
+> {
+	async find() {
+		return [];
 	}
 }
+
+export const passkey = new Passkey({
+	passkeyChallengeProvider: new PasskeyChallengeBackendProvider('PasskeyChallenge'),
+	passkeyAuthenticatorProvider: new PasskeyAuthenticatorBackendProvider('PasskeyAuthenticator'),
+});
 
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},

@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { BaseFilterInputArgs, Filter } from '@exogee/graphweaver';
+import { Filter } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -252,7 +252,7 @@ export const checkAuthentication = async (
 	if (typeof token === 'string') throw new Error('Authentication Error: Expected JWT Payload.');
 
 	// Check the roles of the logged in user
-	const roles = getRolesFromAuthorizationContext();
+	const roles = getRolesFromAuthorizationContext() as string[];
 	// Get the rules associated with the users roles
 	const rules = getRulesForRoles(mfa, roles, operation);
 

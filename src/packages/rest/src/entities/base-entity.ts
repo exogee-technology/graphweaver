@@ -15,7 +15,13 @@ export type Relationship<T> = {
 export type RelationshipMap<T> = Map<string, Relationship<T>>;
 
 export class BaseEntity implements BaseDataEntity {
+	public id: string | number;
 	public dataEntity: any;
+
+	constructor(dataEntity: any) {
+		this.dataEntity = dataEntity;
+		this.id = dataEntity.id;
+	}
 
 	public isReference(_: string, dataField: any) {
 		return (dataField.fieldName as string).endsWith('Id') ? true : false;

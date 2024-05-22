@@ -1,4 +1,4 @@
-import got from 'got';
+import got from 'got-cjs';
 
 const baseUrl = process.env.REST_BASE_URL;
 

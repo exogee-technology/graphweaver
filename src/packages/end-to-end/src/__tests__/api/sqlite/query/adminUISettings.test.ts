@@ -1,27 +1,23 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Entity, Collection, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import {
-	AdminUISettings,
-	createBaseResolver,
-	Field,
-	GraphQLEntity,
-	ID,
-	ObjectType,
-	RelationshipField,
-	Resolver,
-	SummaryField,
-} from '@exogee/graphweaver';
+	Entity as DataEntity,
+	Collection,
+	ManyToOne,
+	OneToMany,
+	PrimaryKey,
+	Property,
+} from '@mikro-orm/core';
+import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
-import { MediaField, MediaTypes } from '@exogee/graphweaver-storage-provider';
+import { MediaField, S3StorageProvider } from '@exogee/graphweaver-storage-provider';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
-@Entity({ tableName: 'Album' })
+@DataEntity({ tableName: 'Album' })
 class OrmAlbum extends BaseEntity {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
@@ -38,7 +34,7 @@ class OrmAlbum extends BaseEntity {
 	artist!: OrmArtist;
 }
 
-@Entity({ tableName: 'Artist' })
+@DataEntity({ tableName: 'Artist' })
 class OrmArtist extends BaseEntity {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	id!: number;
@@ -54,66 +50,10 @@ class OrmArtist extends BaseEntity {
 // We can't test that we get a signed url back
 // We can't test that we get a downwload url back from s3
 // This is a mock to test the decorator
-
 const mockS3StorageProvider = {
-	getDownloadUrl: (key: string) => Promise.resolve(`https://example.com/${key}`),
-};
-@AdminUISettings({
-	hideFromDisplay: true,
-})
-@ObjectType('Album')
-export class Album extends GraphQLEntity<OrmAlbum> {
-	public dataEntity!: OrmAlbum;
-
-	@Field(() => ID)
-	id!: number;
-
-	@SummaryField()
-	@Field(() => String)
-	title!: string;
-
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
-	artist!: Artist;
-}
-
-@AdminUISettings<Artist>({
-	defaultFilter: {
-		name: 'test',
-	},
-})
-@ObjectType('Artist')
-export class Artist extends GraphQLEntity<OrmArtist> {
-	public dataEntity!: OrmArtist;
-
-	@Field(() => ID)
-	id!: number;
-
-	@AdminUISettings({
-		hideFromDisplay: true,
-	})
-	@Field(() => String, { nullable: true })
-	name?: string;
-
-	@AdminUISettings({
-		hideFromFilterBar: true,
-	})
-	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
-	albums!: Album[];
-
-	@MediaField({
-		storageProvider: mockS3StorageProvider,
-		resourceId: 'title',
-		mediaType: MediaTypes.IMAGE,
-	})
-	imageDownloadUrl?: string;
-
-	@MediaField({
-		storageProvider: mockS3StorageProvider,
-		resourceId: 'title',
-		mediaType: MediaTypes.OTHER,
-	})
-	otherMediaDownloadUrl?: string;
-}
+	getDownloadUrl: (_source: unknown, { key }: { key: string }, _ctx: unknown, _info: unknown) =>
+		Promise.resolve(`https://example.com/${key}`),
+} as S3StorageProvider;
 
 const connection = {
 	connectionManagerId: 'sqlite',
@@ -124,22 +64,61 @@ const connection = {
 	},
 };
 
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, OrmAlbum>(
-	Album,
-	new MikroBackendProvider(OrmAlbum, connection)
-) {}
+@Entity<Album>('Album', {
+	provider: new MikroBackendProvider(OrmAlbum, connection),
+	adminUIOptions: {
+		hideInSideBar: true,
+	},
+})
+export class Album extends GraphQLEntity<OrmAlbum> {
+	public dataEntity!: OrmAlbum;
 
-@Resolver((of) => Artist)
-class ArtistResolver extends createBaseResolver<Artist, OrmArtist>(
-	Artist,
-	new MikroBackendProvider(OrmArtist, connection)
-) {}
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String)
+	title!: string;
+
+	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
+	artist!: Artist;
+}
+
+@Entity<Artist>('Artist', {
+	provider: new MikroBackendProvider(OrmArtist, connection),
+	adminUIOptions: {
+		defaultFilter: {
+			name: 'test',
+		},
+	},
+})
+export class Artist extends GraphQLEntity<OrmArtist> {
+	public dataEntity!: OrmArtist;
+
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String, {
+		nullable: true,
+		adminUIOptions: { hideInTable: true, summaryField: true },
+	})
+	name?: string;
+
+	@RelationshipField<Album>(() => [Album], {
+		relatedField: 'artist',
+		adminUIOptions: {
+			hideInFilterBar: true,
+		},
+	})
+	albums!: Album[];
+
+	@MediaField({
+		storageProvider: mockS3StorageProvider,
+	})
+	mediaDownloadUrlField?: string;
+}
 
 test('Test the decorator adminUISettings', async () => {
-	const graphweaver = new Graphweaver({
-		resolvers: [AlbumResolver, ArtistResolver],
-	});
+	const graphweaver = new Graphweaver();
 
 	const response = await graphweaver.server.executeOperation({
 		query: gql`
@@ -199,6 +178,7 @@ test('Test the decorator adminUISettings', async () => {
 	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
 	expect(artistEntity?.defaultFilter).toStrictEqual({ name: 'test' });
+	expect(artistEntity?.summaryField).toStrictEqual('name');
 
 	const idField = artistEntity?.fields.find((field) => field.name === 'id');
 	expect(idField).not.toBeNull();
@@ -211,28 +191,14 @@ test('Test the decorator adminUISettings', async () => {
 	expect(albumsField).not.toBeNull();
 	expect(albumsField?.filter).toBeNull();
 
-	// Test that the type of the imageDownloadUrl field is Image
-	const imageDownloadUrlField = artistEntity?.fields.find(
-		(field) => field.name === 'imageDownloadUrl'
-	);
-	expect(imageDownloadUrlField).not.toBeNull();
-	expect(imageDownloadUrlField?.type).toBe('Image');
-
-	// Test that the type of the otherMediaDownloadUrl field is Media
-	const otherMediaDownloadUrlField = artistEntity?.fields.find(
-		(field) => field.name === 'otherMediaDownloadUrl'
+	// Test that the type of the mediaDownloadUrlField field is Media
+	const mediaDownloadUrlField = artistEntity?.fields.find(
+		(field) => field.name === 'mediaDownloadUrlField'
 	);
 
-	expect(otherMediaDownloadUrlField).not.toBeNull();
-	expect(otherMediaDownloadUrlField?.type).toBe('Media');
+	expect(mediaDownloadUrlField).not.toBeNull();
+	expect(mediaDownloadUrlField?.type).toBe('Media');
 
 	// Test that the field is readonly
-	expect(imageDownloadUrlField?.attributes?.isReadOnly).toBe(true);
-	expect(otherMediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
-
-	// Test that the extension object exists and includes the key
-	expect(imageDownloadUrlField?.extensions).not.toBeNull();
-	expect(otherMediaDownloadUrlField?.extensions).not.toBeNull();
-	expect(imageDownloadUrlField?.extensions?.key).toBe('title');
-	expect(otherMediaDownloadUrlField?.extensions?.key).toBe('title');
+	expect(mediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);
 });

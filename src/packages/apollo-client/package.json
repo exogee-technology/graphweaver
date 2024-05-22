@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-apollo-client",
-	"version": "0.2.23",
+	"version": "1.0.0-beta.1",
 	"description": "Useful helpers for working with Apollo Client and Graphweaver",
 	"license": "MIT",
 	"type": "module",
@@ -23,7 +23,7 @@
 	],
 	"devDependencies": {
 		"esbuild": "0.20.2",
-		"typescript": "5.4.2"
+		"typescript": "5.4.5"
 	},
 	"keywords": [
 		"graphql",

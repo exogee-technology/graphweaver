@@ -1,24 +1,21 @@
-import 'reflect-metadata';
 import {
 	AuthenticationMethod,
 	UserProfile,
-	createBaseWeb3AuthResolver,
 	authApolloPlugin,
-	MultiFactorAuthentication,
-	createBasePasswordAuthResolver,
-	AuthenticationBaseEntity,
 	WalletAddress,
-	AuthenticationType,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
+	CredentialStorage,
+	hashPassword,
+	Password,
+	Web3,
+	AuthenticationBaseEntity,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
 import gql from 'graphql-tag';
-import { Resolver } from 'type-graphql';
 import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
-import { CreateOrUpdateHookParams, BaseDataProvider } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 
 // Setup ethers for signing
 const phrase =
@@ -28,67 +25,86 @@ const mnemonic_instance = (Ethers as any).HDNodeWallet.fromMnemonic(mnemonic);
 const ethers_provider = new (Ethers as any).JsonRpcProvider();
 const ethers_signer = new Ethers.Wallet(mnemonic_instance.privateKey, ethers_provider);
 
-const user = new UserProfile({
-	id: '1',
-	roles: ['admin'],
-	displayName: 'Test User',
-	username: 'test',
-});
-
-@Resolver()
-class AuthResolver extends createBaseWeb3AuthResolver() {
-	async getMultiFactorAuthentication(): Promise<MultiFactorAuthentication | undefined> {
-		return {
-			Everyone: {
-				// all users must provide a magic link mfa when writing data
-				Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.ONE_TIME_PASSWORD] }],
-			},
-		};
+class WalletAddressBackendProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<WalletAddress>,
+	AuthenticationBaseEntity<WalletAddress>
+> {
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return await callback();
 	}
-
-	async getWalletAddress(
-		userId: string,
-		address: string
-	): Promise<AuthenticationBaseEntity<WalletAddress>> {
+	async findOne({ userId, data }: any) {
 		return {
 			id: '1',
 			userId,
-			type: AuthenticationType.Web3WalletAddress,
+			type: AuthenticationMethod.WEB3,
 			data: {
-				address: address.toLowerCase(),
+				address: data.address.toLowerCase(),
 			},
 			createdAt: new Date(),
 		};
 	}
-
-	async saveWalletAddress(userId: string, address: string): Promise<boolean> {
-		return true;
+	async createOne(...args: any) {
+		console.log(args);
+		return {
+			id: '1',
+			userId: '1',
+			type: AuthenticationMethod.WEB3,
+			data: {
+				address: '0x1234567890123456789012345678901234567890',
+			},
+			createdAt: new Date(),
+		};
 	}
 }
 
-@Resolver()
-class CredentialAuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new BaseDataProvider('my-provider')
-) {
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
-		return user;
+export const web3 = new Web3({
+	provider: new WalletAddressBackendProvider('WalletAddress'),
+	multiFactorAuthentication: async () => ({
+		Everyone: {
+			// all users must provide a OTP mfa when saving a wallet address
+			Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.ONE_TIME_PASSWORD] }],
+		},
+	}),
+});
+
+const user: CredentialStorage = {
+	id: '1',
+	username: 'test',
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
+};
+
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
+		return {
+			...user,
+			password: await hashPassword(user.password ?? ''),
+		};
 	}
 }
+
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string): Promise<UserProfile<unknown>> => {
+		return new UserProfile({
+			id: user.id,
+			username: user.username,
+		});
+	},
+});
 
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
+		plugins: [
+			authApolloPlugin(async () => ({
+				...user,
+				roles: ['user'],
+			})),
+		],
 	},
 });
 
@@ -205,11 +221,9 @@ describe('web3 challenge', () => {
 			expires_in: '1d',
 		});
 
-		jest
-			.spyOn(AuthResolver.prototype, 'getMultiFactorAuthentication')
-			.mockImplementation(async () => undefined);
+		jest.spyOn(web3 as any, 'multiFactorAuthentication').mockImplementation(() => undefined);
 
-		const spy = jest.spyOn(AuthResolver.prototype, 'saveWalletAddress');
+		const spy = jest.spyOn(Web3.prototype, 'saveWalletAddress');
 		const web3Address = await ethers_signer.getAddress();
 
 		const response = await graphweaver.server.executeOperation({

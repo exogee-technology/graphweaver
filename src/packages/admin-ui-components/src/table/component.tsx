@@ -47,8 +47,9 @@ const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
 	entityByType: (type: string) => Entity
 ): Column<T, unknown>[] => {
-	const entityColumns = [SelectColumn].concat(
-		entity.fields.map((field) => ({
+	const entityColumns = [
+		...(entity.attributes.isReadOnly ? [] : [SelectColumn]),
+		...entity.fields.map((field) => ({
 			key: field.name,
 			name: field.name,
 			width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
@@ -83,47 +84,51 @@ const columnsForEntity = <T extends TableRowItem>(
 							return null;
 						}
 					}
-				: field.type === 'Image'
+				: field.type === 'Media'
 					? ({ row }: FormatterProps<T, unknown>) => {
-							const imageUrl = row[field.name as keyof typeof row] as string;
+							const media = row[field.name as keyof typeof row] as {
+								url: string;
+								type: 'IMAGE' | 'OTHER';
+							};
+							if (!media) {
+								return null;
+							}
 
-							return (
-								<img
-									src={imageUrl}
-									// alt={altText} @todo - implement alt text
-									style={{
-										width: '100%',
-										height: '100%',
-										objectFit: 'cover',
-										padding: 2,
-										borderRadius: 8,
-										objectPosition: 'center center',
-										textIndent: -9999,
-									}}
-									onError={hideImage}
-								/>
-							);
-						}
-					: field.type === 'Media'
-						? ({ row }: FormatterProps<T, unknown>) => {
-								const mediaUrl = row[field.name as keyof typeof row] as string;
+							if (media.type === 'IMAGE') {
 								return (
-									<a href={mediaUrl} target="_blank" rel="noreferrer">
-										{mediaUrl}
-									</a>
+									<img
+										src={media.url}
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+											padding: 2,
+											borderRadius: 8,
+											objectPosition: 'center center',
+											textIndent: -9999,
+										}}
+										onError={hideImage}
+									/>
 								);
 							}
-						: field.isArray
-							? ({ row }: FormatterProps<T, unknown>) => {
-									const value = row[field.name as keyof typeof row];
-									if (Array.isArray(value)) {
-										return value.join(', ');
-									}
-									return value;
+
+							return (
+								<a href={media.url} target="_blank" rel="noreferrer">
+									{media.url}
+								</a>
+							);
+						}
+					: field.isArray
+						? ({ row }: FormatterProps<T, unknown>) => {
+								const value = row[field.name as keyof typeof row];
+								if (Array.isArray(value)) {
+									return value.join(', ');
 								}
-							: undefined,
-		}))
-	);
+								return value;
+							}
+						: undefined,
+		})),
+	];
 
 	// Which custom fields do we need to show here?
 	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
@@ -202,7 +207,9 @@ export const Table = <T extends TableRowItem>({
 		// Return true when the scrollTop reaches the bottom ...
 		const { currentTarget } = event;
 		const target = currentTarget as Element;
-		const atEndOfSet = target.scrollTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
+		const tolerance = 175; // trigger when 5 rows from the end
+		const distanceFromTop = Math.round(target.scrollTop) + tolerance;
+		const atEndOfSet = distanceFromTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
 		return atEndOfSet;
 	};
 

@@ -82,6 +82,7 @@ const RegisterButton = ({
 	return (
 		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleOnRegister}>
 			{({ isSubmitting }) => (
+				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<div className={styles.titleContainerCenter}>Connect Passkey</div>
 					<div className={styles.buttonContainerCenter}>
@@ -147,6 +148,7 @@ const AuthenticateButton = ({
 	return (
 		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleOnAuthenticate}>
 			{({ isSubmitting }) => (
+				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<div className={styles.titleContainerCenter}>Verify Passkey</div>
 					<div className={styles.buttonContainerCenter}>

@@ -39,7 +39,8 @@ export const ToolBar = ({ title, subtitle, onExportToCSV }: ToolBarProps) => {
 					<Link
 						className={styles.toolBarTrailingButton}
 						to={{ pathname: '/playground' }}
-						target="_blank"
+						// If we are in an iframe then open in the same window otherwise open in a new tab
+						target={window === window.parent ? '_blank' : '_self'}
 						rel="noopener noreferrer"
 						aria-label={`Open Playground`}
 					>
