@@ -54,7 +54,7 @@ const forgottenPassword = new ForgottenPassword({
 		token = url.searchParams.get('token') ?? '';
 		return true;
 	},
-	getUser: async (username: string): Promise<UserProfile> => {
+	getUser: async (username: string): Promise<UserProfile<unknown>> => {
 		return user;
 	},
 });
@@ -83,7 +83,7 @@ class PasswordBackendProvider extends BaseDataProvider<
 const password = new Password({
 	provider: new PasswordBackendProvider('PasswordBackendProvider'),
 	// This is called when a user has logged in to get the profile
-	getUserProfile: async (): Promise<UserProfile> => {
+	getUserProfile: async (): Promise<UserProfile<unknown>> => {
 		return user;
 	},
 });

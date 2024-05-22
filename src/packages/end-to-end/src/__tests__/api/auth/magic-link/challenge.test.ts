@@ -59,13 +59,22 @@ class MagicLinkBackendProvider extends BaseDataProvider<
 			createdAt: MOCK_CREATED_AT,
 		};
 	}
+	async updateOne(id: string, { data: { redeemedAt } }: any) {
+		return {
+			id: '1',
+			type: AuthenticationMethod.MAGIC_LINK,
+			userId: '1',
+			data: { token: MOCK_TOKEN, redeemedAt },
+			createdAt: MOCK_CREATED_AT,
+		};
+	}
 }
 
 const sendMagicLink = jest.fn(() => Promise.resolve(true));
 
 export const magicLink = new MagicLink({
 	provider: new MagicLinkBackendProvider('magicLink'),
-	getUser: async (): Promise<UserProfile> => {
+	getUser: async (): Promise<UserProfile<unknown>> => {
 		return user;
 	},
 	sendMagicLink,
@@ -118,8 +127,6 @@ describe('Magic Link Authentication - Challenge', () => {
 
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
-
-		jest.spyOn(MagicLink.prototype, 'redeemMagicLink').mockImplementation(async () => true);
 
 		const loginResponse = await graphweaver.server.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
@@ -177,8 +184,6 @@ describe('Magic Link Authentication - Challenge', () => {
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		jest.spyOn(MagicLink.prototype, 'redeemMagicLink').mockImplementation(async () => true);
-
 		const loginResponse = await graphweaver.server.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
@@ -200,13 +205,13 @@ describe('Magic Link Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		assert(token);
 
-		jest.spyOn(MagicLink.prototype, 'getMagicLink').mockImplementation(
+		jest.spyOn(MagicLinkBackendProvider.prototype, 'findOne').mockImplementationOnce(
 			async () =>
 				({
 					userId: user.id,
 					data: { token: MOCK_TOKEN },
 					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				}) as MagicLinkEntity
+				}) as AuthenticationBaseEntity<MagicLinkData>
 		);
 
 		const response = await graphweaver.server.executeOperation({
@@ -243,8 +248,6 @@ describe('Magic Link Authentication - Challenge', () => {
 
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
-
-		jest.spyOn(MagicLink.prototype, 'redeemMagicLink').mockImplementation(async () => true);
 
 		const loginResponse = await graphweaver.server.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };

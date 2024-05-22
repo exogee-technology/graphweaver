@@ -104,7 +104,7 @@ type AuthApolloPluginOptions<D, R> = {
 };
 
 export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
-	addUserToContext: (userId: string) => Promise<UserProfile>,
+	addUserToContext: (userId: string) => Promise<UserProfile<R>>,
 	options?: AuthApolloPluginOptions<D, R>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {

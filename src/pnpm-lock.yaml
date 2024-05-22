@@ -175,7 +175,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/mysql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -236,10 +236,13 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
       pg:
         specifier: 8.11.5
         version: 8.11.5
@@ -247,9 +250,9 @@ importers:
       '@types/node':
         specifier: 20.12.7
         version: 20.12.7
-      graphweaver:
-        specifier: workspace:*
-        version: link:../../packages/cli
+      dotenv-cli:
+        specifier: 7.4.1
+        version: 7.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -276,7 +279,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -566,9 +569,6 @@ importers:
 
   packages/apollo-client:
     devDependencies:
-      '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql-ws@5.16.0(graphql@16.8.1))(graphql@16.8.1)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(subscriptions-transport-ws@0.11.0(graphql@16.8.1))
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -998,7 +998,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1093,7 +1093,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1146,13 +1146,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
+        version: 6.1.12(@mikro-orm/core@6.1.12)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -1337,9 +1337,6 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
-      graphql:
-        specifier: 16.8.1
-        version: 16.8.1
     devDependencies:
       esbuild:
         specifier: 0.15.5
@@ -13693,7 +13690,7 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.1.12
       fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.9.4)(pg@8.11.3)
+      knex: 3.1.0(mysql2@3.9.2)(pg@8.11.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -13738,7 +13735,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
 
   '@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.5)':
     dependencies:
@@ -13833,7 +13829,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
 
   '@mikro-orm/mysql@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)':
     dependencies:
@@ -13866,6 +13861,23 @@ snapshots:
       - supports-color
       - tedious
     optional: true
+
+  '@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)':
+    dependencies:
+      '@mikro-orm/core': 6.1.12
+      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.3)
+      pg: 8.11.3
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
 
   '@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)':
     dependencies:
@@ -19230,7 +19242,6 @@ snapshots:
       pg: 8.11.3
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   knex@3.1.0(mysql2@3.9.2)(pg@8.11.5):
     dependencies:

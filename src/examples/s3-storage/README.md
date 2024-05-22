@@ -31,7 +31,7 @@ CREATE DATABASE gw_storage_provider;
 
 CREATE TABLE "submission" (
   id SERIAL PRIMARY KEY,
-  image VARCHAR(255)
+  image jsonb
 );
 
 ```
@@ -48,3 +48,19 @@ You can start the example with:
 pnpm i
 pnpm start
 ```
+
+## Using with Localstack
+
+```
+brew install localstack/tap/localstack-cli
+SERVICES=s3 DISABLE_CUSTOM_CORS_S3=1 DISABLE_CORS_CHECKS=1 localstack start
+aws configure set aws_access_key_id localstack
+aws configure set aws_secret_access_key localstack
+aws configure set default.region us-east-1
+```
+
+Create Bucket:
+`aws s3 mb s3://test --endpoint-url=http://s3.us-east-1.localhost.localstack.cloud:4566`
+
+List Bucket:
+`aws s3 ls s3://test --endpoint-url=http://s3.us-east-1.localhost.localstack.cloud:4566`

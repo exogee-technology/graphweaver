@@ -13,6 +13,7 @@ import {
 	HookRegister,
 	ReadHookParams,
 	createOrUpdateEntities,
+	getFieldTypeFromFieldMetadata,
 	graphweaverMetadata,
 	hookManagerMap,
 	isEntityMetadata,
@@ -385,15 +386,9 @@ export const listRelationshipField = async <
 		return null;
 	}
 
-	let gqlEntityType = field.getType() as
-		| GraphQLEntityConstructor<G, D>
-		| GraphQLEntityConstructor<G, D>[];
-	let isList = false;
+	const { fieldType, isList } = getFieldTypeFromFieldMetadata(field);
+	const gqlEntityType = fieldType as GraphQLEntityConstructor<G, D>;
 
-	if (Array.isArray(gqlEntityType)) {
-		isList = true;
-		gqlEntityType = gqlEntityType[0];
-	}
 	const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
 	if (!isEntityMetadata(relatedEntityMetadata)) {
 		throw new Error(`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`);
@@ -402,16 +397,25 @@ export const listRelationshipField = async <
 	const relatedPrimaryKeyField =
 		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
-	// @todo: Should the user specified filter be and-ed here?
-	//        My worry is if we just pass the filter through, it could be used to circumvent the relationship join.
-	const relatedEntityFilter =
-		input.filter ??
-		(idValue
-			? { [relatedPrimaryKeyField]: idValue }
-			: { [relatedField as string]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] } });
+	// We need to construct a filter for the related entity and _and it with the user supplied filter.
+	const _and: Filter<G>[] = [];
+
+	// If we have a user supplied filter, add it to the _and array.
+	if (input.filter) _and.push(input.filter);
+
+	// Lets check the relationship type and add the appropriate filter.
+	if (idValue) {
+		_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<G>);
+	} else if (relatedField) {
+		_and.push({
+			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
+		} as Filter<G>);
+	}
+
+	const relatedEntityFilter = { _and } as Filter<G>;
 
 	const params: ReadHookParams<G> = {
-		args: { filter: input.filter },
+		args: { filter: relatedEntityFilter },
 		info,
 		context,
 		transactional: !!entity.provider?.withTransaction,

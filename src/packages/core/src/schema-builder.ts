@@ -28,7 +28,6 @@ import { ObjMap } from 'graphql/jsutils/ObjMap';
 import { logger } from '@exogee/logger';
 
 import {
-	AuthChecker,
 	EntityMetadata,
 	EnumMetadata,
 	FieldMetadata,
@@ -90,6 +89,24 @@ const deleteInput = new GraphQLInputObjectType({
 	},
 });
 
+export const getFieldTypeFromFieldMetadata = (
+	field: FieldMetadata<any, any>
+): {
+	fieldType: TypeValue;
+	isList: boolean;
+	metadata?: EnumMetadata<any> | EntityMetadata<any, any> | InputTypeMetadata<any, any>;
+} => {
+	let fieldType = field.getType();
+	let isList = false;
+	if (Array.isArray(fieldType)) {
+		isList = true;
+		fieldType = fieldType[0];
+	}
+	const metadata = graphweaverMetadata.metadataForType(fieldType);
+
+	return { fieldType, isList, metadata };
+};
+
 const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
 		if (isListType(type) || isNonNullType(type)) {
@@ -141,17 +158,9 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
 				for (const field of Object.values(input.fields)) {
-					let type = field.getType();
-					let isArray = false;
-					if (Array.isArray(type)) {
-						type = type[0];
-						isArray = true;
-					}
-
 					// Let's try to resolve the GraphQL type involved here.
+					const { fieldType, isList, metadata } = getFieldTypeFromFieldMetadata(field);
 					let graphQLType: GraphQLInputType | undefined = undefined;
-
-					const metadata = graphweaverMetadata.metadataForType(type);
 
 					if (isInputMetadata(metadata)) {
 						graphQLType = graphQLTypeForInput(metadata);
@@ -159,7 +168,7 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
-						const scalar = graphQLScalarForTypeScriptType(type);
+						const scalar = graphQLScalarForTypeScriptType(fieldType);
 
 						if (!scalar) {
 							throw new Error(
@@ -171,7 +180,7 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
-					if (isArray) {
+					if (isList) {
 						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
 					}
 
@@ -204,19 +213,11 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 				const fields: ObjMap<GraphQLFieldConfig<unknown, unknown>> = {};
 
 				for (const field of Object.values(entity.fields)) {
-					let type = field.getType();
-					let isArray = false;
-					if (Array.isArray(type)) {
-						type = type[0];
-						isArray = true;
-					}
-
 					// Let's try to resolve the GraphQL type involved here.
+					const { fieldType, isList, metadata } = getFieldTypeFromFieldMetadata(field);
 					let graphQLType: GraphQLOutputType | undefined = undefined;
 					let resolve = undefined;
 					const args: ObjMap<GraphQLArgumentConfig> = {};
-
-					const metadata = graphweaverMetadata.metadataForType(type);
 
 					if (isEntityMetadata(metadata)) {
 						graphQLType = graphQLTypeForEntity(metadata);
@@ -232,7 +233,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
-						const scalar = graphQLScalarForTypeScriptType(type);
+						const scalar = graphQLScalarForTypeScriptType(fieldType);
 
 						if (!scalar) {
 							throw new Error(
@@ -244,7 +245,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
-					if (isArray) {
+					if (isList) {
 						graphQLType = new GraphQLList(new GraphQLNonNull(graphQLType));
 					}
 
@@ -396,64 +397,74 @@ const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return paginationType;
 };
 
+const generateGraphQLInputFieldsForEntity =
+	(entity: EntityMetadata<any, any>, input: 'insert' | 'update' | 'createOrUpdate') => () => {
+		const fields: ObjMap<GraphQLInputFieldConfig> = {};
+		for (const field of Object.values(entity.fields)) {
+			// If it's excluded from built-in write operations, skip it.
+			if (field.apiOptions?.excludeFromBuiltInWriteOperations) continue;
+
+			// The ID field is a special case based on the input type.
+			if (field.name === entity.primaryKeyField ?? 'id') {
+				switch (input) {
+					case 'createOrUpdate':
+						fields[field.name] = { type: ID };
+						break;
+					case 'update':
+						fields[field.name] = { type: new GraphQLNonNull(ID) };
+						break;
+					default:
+						break;
+				}
+				continue;
+			}
+
+			// Let's try to resolve the GraphQL type involved here.
+			const { fieldType, metadata, isList } = getFieldTypeFromFieldMetadata(field);
+
+			if (isEntityMetadata(metadata)) {
+				// This if is separate to stop us cascading down to the scalar branch for entities that
+				if (
+					!metadata.apiOptions?.excludeFromBuiltInOperations &&
+					!metadata.apiOptions?.excludeFromBuiltInWriteOperations
+				) {
+					let type: GraphQLInputType = createOrUpdateTypeForEntity(metadata);
+
+					if (isList) {
+						// If it's a many relationship we need to wrap in non-null and list.
+						type = new GraphQLList(new GraphQLNonNull(type));
+					}
+
+					fields[field.name] = { type };
+				}
+			} else if (isEnumMetadata(metadata)) {
+				fields[field.name] = { type: graphQLTypeForEnum(metadata) };
+			} else {
+				fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
+			}
+
+			// If it's not a nullable field and has no default then we should wrap it now in a not null.
+			if (
+				input === 'insert' &&
+				!field.nullable &&
+				typeof field.defaultValue === 'undefined' &&
+				field.relationshipInfo === undefined
+			) {
+				fields[field.name] = { type: new GraphQLNonNull(fields[field.name].type) };
+			}
+		}
+
+		return fields;
+	};
+
 const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let insertType = insertTypes.get(entity.name);
 
 	if (!insertType) {
-		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
-
 		insertType = new GraphQLInputObjectType({
 			name: `${entity.name}InsertInput`,
 			description: `Data needed to create ${entity.plural}.`,
-			fields: () => {
-				const fields: ObjMap<GraphQLInputFieldConfig> = {};
-
-				for (const field of Object.values(entity.fields)) {
-					// The ID field is never supplied for inserts.
-					if (field.name === primaryKeyFieldName) continue;
-
-					// Let's try to resolve the GraphQL type involved here.
-					let fieldType = field.getType();
-					let isArray = false;
-					if (Array.isArray(fieldType)) {
-						isArray = true;
-						fieldType = fieldType[0];
-					}
-					const metadata = graphweaverMetadata.metadataForType(fieldType);
-
-					if (isEntityMetadata(metadata)) {
-						// This if is separate to stop us cascading down to the scalar branch for entities that
-						if (
-							!metadata.apiOptions?.excludeFromBuiltInOperations &&
-							!metadata.apiOptions?.excludeFromBuiltInWriteOperations
-						) {
-							let type: GraphQLInputType = createOrUpdateTypeForEntity(metadata);
-
-							if (isArray) {
-								// If it's a many relationship we need to wrap in non-null and list.
-								type = new GraphQLList(new GraphQLNonNull(type));
-							}
-
-							fields[field.name] = { type };
-						}
-					} else if (isEnumMetadata(metadata)) {
-						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-					} else {
-						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
-					}
-
-					// If it's not a nullable field and has no default then we should wrap it now in a not null.
-					if (
-						!field.nullable &&
-						typeof field.defaultValue === 'undefined' &&
-						field.relationshipInfo === undefined
-					) {
-						fields[field.name] = { type: new GraphQLNonNull(fields[field.name].type) };
-					}
-				}
-
-				return fields;
-			},
+			fields: generateGraphQLInputFieldsForEntity(entity, 'insert'),
 		});
 
 		insertTypes.set(entity.name, insertType);
@@ -471,45 +482,7 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
-			fields: () => {
-				const fields: ObjMap<GraphQLInputFieldConfig> = {};
-
-				for (const field of Object.values(entity.fields)) {
-					if (field.name === primaryKeyFieldName) {
-						fields[field.name] = { type: ID };
-
-						continue;
-					}
-
-					// Let's try to resolve the GraphQL type involved here.
-					let fieldType = field.getType();
-					if (Array.isArray(fieldType)) {
-						fieldType = fieldType[0];
-					}
-					const metadata = graphweaverMetadata.metadataForType(fieldType);
-
-					if (!field.apiOptions?.excludeFromBuiltInWriteOperations) {
-						if (isEntityMetadata(metadata)) {
-							// This if is separate to stop us cascading down to the scalar branch for entities that
-							if (
-								!metadata.apiOptions?.excludeFromBuiltInOperations &&
-								!metadata.apiOptions?.excludeFromBuiltInWriteOperations
-							) {
-								fields[field.name] = { type: createOrUpdateTypeForEntity(metadata) };
-							}
-						} else if (isEnumMetadata(metadata)) {
-							fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-						} else {
-							fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
-						}
-					}
-
-					// Everything is nullable in this type because it can be used for updates as well as inserts, hence
-					// no wrapping with new GraphQLNonNull.
-				}
-
-				return fields;
-			},
+			fields: generateGraphQLInputFieldsForEntity(entity, 'createOrUpdate'),
 		});
 
 		createOrUpdateTypes.set(entity.name, createOrUpdateType);
@@ -527,46 +500,7 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
-			fields: () => {
-				const fields: ObjMap<GraphQLInputFieldConfig> = {};
-
-				for (const field of Object.values(entity.fields)) {
-					if (field.name === primaryKeyFieldName) {
-						fields[field.name] = { type: new GraphQLNonNull(ID) };
-
-						continue;
-					}
-
-					// Let's try to resolve the GraphQL type involved here.
-					let fieldType = field.getType();
-					let isArray = false;
-					if (Array.isArray(fieldType)) {
-						isArray = true;
-						fieldType = fieldType[0];
-					}
-					const metadata = graphweaverMetadata.metadataForType(fieldType);
-
-					if (isEntityMetadata(metadata)) {
-						// This if is separate to stop us cascading down to the scalar branch for entities that
-						const type = isArray
-							? new GraphQLList(new GraphQLNonNull(createOrUpdateTypeForEntity(metadata)))
-							: createOrUpdateTypeForEntity(metadata);
-
-						if (!metadata.apiOptions?.excludeFromBuiltInOperations) {
-							fields[field.name] = { type };
-						}
-					} else if (isEnumMetadata(metadata)) {
-						fields[field.name] = { type: graphQLTypeForEnum(metadata) };
-					} else {
-						fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
-					}
-
-					// Everything is nullable in this type because it can be used for updates as well as inserts, hence
-					// no wrapping with new GraphQLNonNull.
-				}
-
-				return fields;
-			},
+			fields: generateGraphQLInputFieldsForEntity(entity, 'update'),
 		});
 
 		updateTypes.set(entity.name, updateType);
@@ -575,9 +509,7 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return updateType;
 };
 
-export interface SchemaBuilderOptions {
-	authChecker?: AuthChecker<any, any>;
-}
+export interface SchemaBuilderOptions {}
 
 class SchemaBuilderImplementation {
 	public build(args?: SchemaBuilderOptions) {

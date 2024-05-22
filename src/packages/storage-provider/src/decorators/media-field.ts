@@ -1,108 +1,110 @@
 import {
-	BaseContext,
+	BaseDataEntity,
+	Entity,
+	Field,
 	FieldOptions,
-	GraphQLResolveInfo,
+	GraphQLEntity,
 	graphweaverMetadata,
+	FieldMetadata,
+	Source,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
-import { Source } from 'graphql';
-import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
-export type Media = {
+export interface MediaData extends BaseDataEntity {
 	filename: string;
+	type: MediaType;
 	url?: string;
-};
-
-export enum MediaTypes {
-	IMAGE = 'Image',
-	OTHER = 'Other',
 }
+
+export enum MediaType {
+	IMAGE = 'IMAGE',
+	OTHER = 'OTHER',
+}
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'MediaType',
+	target: MediaType,
+});
 
 type MediaTypeFieldOptions = FieldOptions & {
 	storageProvider: S3StorageProvider;
 };
 
-// interface MediaDataEntity extends BaseDataEntity {
-// 	filename: string;
-// 	url: string;
-// }
+const isMedia = (value: unknown): value is MediaData =>
+	!!(
+		value &&
+		value !== null &&
+		typeof value == 'object' &&
+		'filename' in value &&
+		typeof value.filename === 'string' &&
+		'type' in value &&
+		typeof value.type === 'string'
+	);
 
-// @Entity('Media')
-// class MediaFieldEntity extends GraphQLEntity<MediaDataEntity> {
-// 	public dataEntity!: MediaDataEntity;
+@Entity('Media')
+export class Media extends GraphQLEntity<MediaData> {
+	public dataEntity!: MediaData;
 
-// 	@Field(() => GraphQLString)
-// 	filename!: string;
+	@Field(() => String)
+	filename!: string;
 
-// 	@Field(() => GraphQLString, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
-// 	url!: string;
-// }
+	@Field(() => MediaType)
+	type!: MediaType;
 
-// function identity(value: any) {
-// 	return value;
-// }
+	@Field(() => String, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
+	url!: string;
 
-// function ensureObject(value: any) {
-// 	if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-// 		throw new TypeError(`JSONObject cannot represent non-object value: ${value}`);
-// 	}
+	static serialize = ({ value }: { value: unknown }) => {
+		if (value === null) return null;
+		if (isMedia(value)) {
+			return JSON.stringify({
+				filename: value.filename,
+				type: value.type,
+			});
+		}
+		throw new Error(
+			'Invalid Media input data provided. Please sent a filename and type when creating or updating media.'
+		);
+	};
 
-// 	return value;
-// }
+	static deserialize = async ({
+		value,
+		parent,
+		fieldMetadata,
+	}: {
+		value: unknown;
+		parent: Source;
+		fieldMetadata: FieldMetadata<any, any>;
+	}) => {
+		if (!value) return null;
 
-// function parseObject(typeName: any, ast: any, variables: any) {
-// 	const value = Object.create(null);
-// 	ast.fields.forEach((field: any) => {
-// 		// eslint-disable-next-line no-use-before-define
-// 		value[field.name.value] = parseLiteral(typeName, field.value, variables);
-// 	});
+		if (!fieldMetadata.additionalInformation?.MediaFieldStorageProvider)
+			throw new Error('Storage provider not set on media field.');
 
-// 	return value;
-// }
+		if (value && typeof value === 'string') {
+			try {
+				value = JSON.parse(value);
+			} catch (e) {
+				throw new Error('Unable to deserialize Media value from data provider.');
+			}
+		}
 
-// function parseLiteral(typeName: any, ast: any, variables: any) {
-// 	switch (ast.kind) {
-// 		case Kind.STRING:
-// 		case Kind.BOOLEAN:
-// 			return ast.value;
-// 		case Kind.INT:
-// 		case Kind.FLOAT:
-// 			return parseFloat(ast.value);
-// 		case Kind.OBJECT:
-// 			return parseObject(typeName, ast, variables);
-// 		case Kind.LIST:
-// 			return ast.values.map((n: any) => parseLiteral(typeName, n, variables));
-// 		case Kind.NULL:
-// 			return null;
-// 		case Kind.VARIABLE:
-// 			return variables ? variables[ast.name.value] : undefined;
-// 		default:
-// 			throw new TypeError(`${typeName} cannot represent value: ${print(ast)}`);
-// 	}
-// }
+		if (isMedia(value)) {
+			const storageProvider = fieldMetadata.additionalInformation
+				.MediaFieldStorageProvider as S3StorageProvider;
 
-// export const GraphQLMediaType = new GraphQLScalarType({
-// 	name: 'Media',
-// 	description: `filename: String!;\nurl: String!;`,
-// 	serialize: ensureObject,
-// 	parseValue: ensureObject,
-// 	parseLiteral: (ast, variables) => {
-// 		if (ast.kind !== Kind.OBJECT) {
-// 			throw new TypeError(`JSONObject cannot represent non-object value: ${print(ast)}`);
-// 		}
+			return {
+				filename: value.filename,
+				type: value.type,
+				url: await storageProvider.getDownloadUrl(parent, {
+					key: value.filename,
+				}),
+			};
+		}
 
-// 		return parseObject('JSONObject', ast, variables);
-// 	},
-// });
-
-// const GraphQLMediaType = new GraphQLObjectType({
-// 	name: 'Media',
-
-// 	fields: {
-// 		filename: { type: GraphQLString },
-// 		url: { type: GraphQLString },
-// 	},
-// });
+		throw new Error('Unable to deserialize Media value from data provider.');
+	};
+}
 
 export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 	return function (target: any, propertyKey: string | symbol) {
@@ -113,36 +115,16 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 		graphweaverMetadata.collectFieldInformation({
 			target,
 			name: propertyKey,
-			getType: () => GraphQLJSON,
+			getType: () => Media,
 			adminUIOptions: {
 				readonly: true,
 			},
 			nullable: true,
 			excludeFromFilterType: true,
+			additionalInformation: {
+				MediaFieldStorageProvider: options.storageProvider,
+			},
 			...options,
-		});
-
-		const fieldResolver = async (
-			source: Source & { dataEntity: Record<string, string> },
-			args: unknown,
-			context: BaseContext,
-			info: GraphQLResolveInfo
-		) => {
-			return {
-				filename: source.dataEntity[propertyKey],
-				url: await options.storageProvider.getDownloadUrl(
-					source,
-					{ key: source.dataEntity[propertyKey] as string },
-					context,
-					info
-				),
-			};
-		};
-
-		Object.defineProperty(target, propertyKey, {
-			enumerable: true,
-			configurable: true,
-			value: fieldResolver,
 		});
 	};
 }

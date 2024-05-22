@@ -5,7 +5,6 @@ import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 import {
 	AuthChecker,
 	SchemaBuilder,
-	addChildFiltersToRelationshipFields,
 	graphweaverMetadata,
 	resolveAdminUiMetadata,
 	AdminUiMetadata,
@@ -51,7 +50,6 @@ export interface GraphweaverConfig {
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	graphQLArmorOptions?: GraphQLArmorConfig;
-	authChecker?: AuthChecker<any, any>;
 	corsOptions?: CorsPluginOptions;
 	graphqlDeduplicator?: { enabled: boolean };
 	fileAutoGenerationOptions?: {
@@ -75,11 +73,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
-		if (!config?.authChecker) {
-			logger.warn(
-				'Graphweaver authChecker not set, allowing all access from anywhere. Are you sure you want to do this? This should only happen in a non-real environment.'
-			);
-		}
 
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
@@ -117,14 +110,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),
 		];
 
-		// Add any child filters to the schema
-		addChildFiltersToRelationshipFields();
-
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
-		this.schema = SchemaBuilder.build({
-			authChecker: config?.authChecker ?? (() => true),
-		});
+		this.schema = SchemaBuilder.build();
 
 		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
 		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());

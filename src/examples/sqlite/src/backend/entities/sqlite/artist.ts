@@ -8,7 +8,7 @@ export class Artist extends BaseEntity {
 	artistId!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: unknown;
+	name?: string;
 
 	@OneToMany({ entity: () => Album, mappedBy: 'artist' })
 	albums = new Collection<Album>(this);

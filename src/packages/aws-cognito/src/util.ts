@@ -47,7 +47,7 @@ export const createUser = async (
 	if (!user) return null;
 	return {
 		...user,
-		Groups: groups?.split(','),
+		Groups: groups?.split(',') ?? [],
 	};
 };
 

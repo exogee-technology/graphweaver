@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-storage-provider",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"description": "Graphweaver Storage Provider Package",
 	"license": "MIT",
 	"scripts": {
@@ -24,8 +24,7 @@
 		"@aws-sdk/s3-request-presigner": "3.552.0",
 		"@exogee/logger": "workspace:*",
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-scalars": "workspace:*",
-		"graphql": "16.8.1"
+		"@exogee/graphweaver-scalars": "workspace:*"
 	},
 	"devDependencies": {
 		"esbuild": "0.15.5",

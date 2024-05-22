@@ -53,7 +53,7 @@ enum Roles {
 
 class ApiKeyBackendProvider extends BaseDataProvider<
 	ApiKeyStorage<Roles>,
-	ApiKeyEntity<ApiKeyStorage<Roles>>
+	ApiKeyEntity<ApiKeyStorage<Roles>, Roles>
 > {
 	async findOne({ key }: any): Promise<any> {
 		if (key === 'test_fail') {
@@ -89,7 +89,7 @@ const apiKeyDataProvider = new ApiKeyBackendProvider('ApiKey');
 const graphweaver = new Graphweaver({
 	apolloServerOptions: {
 		plugins: [
-			authApolloPlugin(async () => ({}) as UserProfile, {
+			authApolloPlugin(async () => ({}) as UserProfile<any>, {
 				apiKeyDataProvider,
 				implicitAllow: true,
 			}),

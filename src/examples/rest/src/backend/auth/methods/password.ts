@@ -9,13 +9,12 @@ import {
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AccessControlList, AuthorizationContext } from '@exogee/graphweaver-auth';
-import { graphweaverMetadata } from '@exogee/graphweaver';
+import { graphweaverMetadata, BaseLoaders } from '@exogee/graphweaver';
 
 import { User } from '../../schema/user';
 import { mapUserToProfile } from '../context';
 import { myConnection } from '../../database';
 import { Authentication, Credential as OrmCredential } from '../../entities/mysql';
-import { BaseLoaders } from '@exogee/graphweaver';
 
 export const forgottenPassword = new ForgottenPassword({
 	provider: new MikroBackendProvider(Authentication<ForgottenPasswordLinkData>, myConnection),

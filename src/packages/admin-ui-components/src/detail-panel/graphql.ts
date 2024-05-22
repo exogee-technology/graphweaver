@@ -50,7 +50,13 @@ export const getRelationshipQuery = (entity: Entity) => {
 };
 
 export const getUploadUrlMutation = gql`
-	mutation GetUploadUrl($key: ID!) {
+	mutation GetUploadUrl($key: String!) {
 		getUploadUrl(key: $key)
+	}
+`;
+
+export const getDeleteUrlMutation = gql`
+	mutation GetDeleteUrl($key: String!) {
+		getDeleteUrl(key: $key)
 	}
 `;

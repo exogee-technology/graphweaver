@@ -243,7 +243,11 @@ export interface FieldMetadata<G, D> {
 	readonly?: boolean;
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
-	hideInAdminUI?: boolean;
+
+	// This can be used by any plugin to store additional information
+	// namespace your key to avoid conflicts
+	// See the `@MediaField` decorator for an example
+	additionalInformation?: Record<string, unknown>;
 }
 
 export type AuthChecker<TContextType extends object = object, TRoleType = string> = (

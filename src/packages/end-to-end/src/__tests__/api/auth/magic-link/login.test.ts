@@ -13,6 +13,7 @@ import {
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
 const MOCK_CREATED_AT = new Date();
+let redeemedAt: Date | 'null' | undefined = undefined;
 
 const user = new UserProfile({
 	id: '1',
@@ -55,13 +56,23 @@ class MagicLinkBackendProvider extends BaseDataProvider<
 			createdAt: MOCK_CREATED_AT,
 		};
 	}
+	async updateOne(id: string, { data: { redeemedAt: _redeemedAt } }: any) {
+		redeemedAt = _redeemedAt;
+		return {
+			id: '1',
+			type: AuthenticationMethod.MAGIC_LINK,
+			userId: '1',
+			data: { token: MOCK_TOKEN, redeemedAt },
+			createdAt: MOCK_CREATED_AT,
+		};
+	}
 }
 
 const sendMagicLink = jest.fn(() => Promise.resolve(true));
 
 export const magicLink = new MagicLink({
 	provider: new MagicLinkBackendProvider('magicLink'),
-	getUser: async (): Promise<UserProfile> => {
+	getUser: async (): Promise<UserProfile<unknown>> => {
 		return user;
 	},
 	sendMagicLink,
@@ -75,9 +86,7 @@ const graphweaver = new Graphweaver({
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
-		const redeemMagicLinkSpy = jest
-			.spyOn(MagicLink.prototype, 'redeemMagicLink')
-			.mockImplementation(async () => true);
+		const redeemMagicLinkSpy = jest.spyOn(MagicLinkBackendProvider.prototype, 'updateOne');
 
 		const sendResponse = await graphweaver.server.executeOperation<{
 			loginPassword: { authToken: string };
@@ -135,11 +144,8 @@ describe('Magic Link Authentication - Login', () => {
 			}
 		);
 		expect(redeemMagicLinkSpy).toHaveBeenCalledTimes(1);
-		expect(redeemMagicLinkSpy).toHaveBeenCalledWith({
-			id: '1',
-			userId: user.id,
-			data: { token: MOCK_TOKEN },
-			createdAt: MOCK_CREATED_AT,
+		expect(redeemMagicLinkSpy).toHaveBeenCalledWith('1', {
+			data: { token: MOCK_TOKEN, redeemedAt },
 		});
 	});
 });

@@ -1,7 +1,14 @@
-import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+	GetObjectCommand,
+	PutObjectCommand,
+	S3Client,
+	DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { graphweaverMetadata, ID, BaseContext } from '@exogee/graphweaver';
-import { GraphQLResolveInfo, Source } from 'graphql';
+import { graphweaverMetadata, BaseContext, GraphQLResolveInfo, Source } from '@exogee/graphweaver';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import { randomUUID } from 'crypto';
+import { MediaType } from './decorators/media-field';
 
 export enum StorageType {
 	S3 = 's3',
@@ -17,6 +24,14 @@ type StorageConfig = {
 
 const EXPIRE_TIME = 3600;
 
+const getMediaType = (ext: string) => {
+	// if image extension return image type
+	if (['png', 'jpeg', 'jpg', 'gif'].includes(ext)) {
+		return MediaType.IMAGE;
+	}
+	return MediaType.OTHER;
+};
+
 export class S3StorageProvider {
 	bucketName: string;
 	region: string | undefined;
@@ -31,10 +46,19 @@ export class S3StorageProvider {
 
 		graphweaverMetadata.addMutation({
 			name: 'getUploadUrl',
-			getType: () => String,
+			getType: () => GraphQLJSON,
 			resolver: this.getUploadUrl.bind(this),
 			args: {
-				key: ID,
+				key: String,
+			},
+		});
+
+		graphweaverMetadata.addMutation({
+			name: 'getDeleteUrl',
+			getType: () => String,
+			resolver: this.getDeleteUrl.bind(this),
+			args: {
+				key: String,
 			},
 		});
 
@@ -43,7 +67,7 @@ export class S3StorageProvider {
 			getType: () => String,
 			resolver: this.getDownloadUrl.bind(this),
 			args: {
-				key: ID,
+				key: String,
 			},
 		});
 	}
@@ -53,28 +77,34 @@ export class S3StorageProvider {
 		{ key }: { key: string },
 		_ctx: BaseContext,
 		_info: GraphQLResolveInfo
-	): Promise<string> {
+	): Promise<{ url: string; filename: string; type: MediaType }> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
 		const s3 = new S3Client({
 			region: this.region,
 			...(this.endpoint ? { endpoint: this.endpoint } : {}),
-			credentials: {
-				accessKeyId: 'minio_access_key',
-				secretAccessKey: 'minio_secret_access_key',
-			},
 		});
 
+		const fileExtension = key.split('.').pop();
+		if (!fileExtension) {
+			throw new Error('Invalid file extension');
+		}
+
+		const uuid = randomUUID();
 		const command = new PutObjectCommand({
 			Bucket: this.bucketName,
-			Key: key,
+			Key: `${uuid}.${fileExtension}`,
 		});
 
 		const uploadURL = await getSignedUrl(s3, command, { expiresIn: this.expiresIn });
-		return uploadURL;
+		return {
+			url: uploadURL,
+			filename: `${uuid}.${fileExtension}`,
+			type: getMediaType(fileExtension),
+		};
 	}
 
-	async getDownloadUrl(
+	async getDeleteUrl(
 		_source: Source,
 		{ key }: { key: string },
 		_ctx: BaseContext,
@@ -87,9 +117,31 @@ export class S3StorageProvider {
 			...(this.endpoint ? { endpoint: this.endpoint } : {}),
 		});
 
-		const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });
-		const downloadURL = getSignedUrl(s3, command, { expiresIn: this.expiresIn });
+		const command = new DeleteObjectCommand({
+			Bucket: this.bucketName,
+			Key: key,
+		});
 
-		return downloadURL;
+		return getSignedUrl(s3, command, { expiresIn: this.expiresIn });
+	}
+
+	async getDownloadUrl(
+		_source: Source,
+		{ key }: { key: string },
+		_ctx?: BaseContext,
+		_info?: GraphQLResolveInfo
+	): Promise<string> {
+		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
+
+		const s3 = new S3Client({
+			region: this.region,
+			...(this.endpoint ? { endpoint: this.endpoint } : {}),
+		});
+
+		const command = new GetObjectCommand({
+			Bucket: this.bucketName,
+			Key: key,
+		});
+		return getSignedUrl(s3, command, { expiresIn: this.expiresIn });
 	}
 }

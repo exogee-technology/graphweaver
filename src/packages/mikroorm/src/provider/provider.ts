@@ -357,7 +357,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		filter?: any
 	): Promise<D[]> {
 		const queryFilter = {
-			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[filter ?? []]],
+			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[gqlToMikro(filter) ?? []]],
 		};
 
 		const populate = [relatedField as `${string}.`];

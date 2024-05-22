@@ -8,4 +8,4 @@
 *.generated.ts
 pnpm-lock.yaml
 pnpm-workspace.yaml
-examples/**/src/frontend/types.ts
+examples/**/src/frontend/types.generated.ts

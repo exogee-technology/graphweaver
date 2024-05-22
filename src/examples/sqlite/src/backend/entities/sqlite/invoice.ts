@@ -28,21 +28,22 @@ export class Invoice extends BaseEntity {
 	invoiceDate!: Date;
 
 	@Property({ fieldName: 'BillingAddress', type: 'NVARCHAR(70)', nullable: true })
-	billingAddress?: unknown;
+	billingAddress?: string;
 
 	@Property({ fieldName: 'BillingCity', type: 'NVARCHAR(40)', nullable: true })
-	billingCity?: unknown;
+	billingCity?: string;
 
 	@Property({ fieldName: 'BillingState', type: 'NVARCHAR(40)', nullable: true })
-	billingState?: unknown;
+	billingState?: string;
 
 	@Property({ fieldName: 'BillingCountry', type: 'NVARCHAR(40)', nullable: true })
-	billingCountry?: unknown;
+	billingCountry?: string;
 
 	@Property({ fieldName: 'BillingPostalCode', type: 'NVARCHAR(10)', nullable: true })
-	billingPostalCode?: unknown;
+	billingPostalCode?: string;
 
 	@Property({ fieldName: 'Total', type: 'NUMERIC(10,2)' })
+	// Mikro-orm serializes this as a string for precision, but it's a number in the database
 	total!: string;
 
 	@OneToMany({ entity: () => InvoiceLine, mappedBy: 'invoice' })

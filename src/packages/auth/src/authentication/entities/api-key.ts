@@ -12,7 +12,7 @@ export interface ApiKeyStorage<R> extends BaseDataEntity {
 
 @ApplyAccessControlList({
 	Everyone: {
-		// everyone can read
+		// By default everyone can read this can then be overridden by the APIKey auth method constructor
 		read: true,
 	},
 })
@@ -25,7 +25,7 @@ export interface ApiKeyStorage<R> extends BaseDataEntity {
 		excludeFromBuiltInWriteOperations: true,
 	},
 })
-export class ApiKeyEntity<D extends BaseDataEntity> extends GraphQLEntity<D> {
+export class ApiKeyEntity<D extends BaseDataEntity, R> extends GraphQLEntity<D> {
 	public dataEntity!: D;
 
 	@Field(() => ID)
@@ -41,5 +41,5 @@ export class ApiKeyEntity<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	revoked?: boolean;
 
 	@Field(() => [String], { nullable: true })
-	roles?: any[];
+	roles?: R[];
 }

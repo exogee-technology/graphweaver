@@ -40,7 +40,7 @@ type MagicLinkProvider = BackendProvider<
 
 export interface MagicLinkOptions {
 	provider: MagicLinkProvider;
-	getUser: (username: string) => Promise<UserProfile>;
+	getUser: (username: string) => Promise<UserProfile<unknown>>;
 	sendMagicLink: (url: URL, magicLink: MagicLinkEntity) => Promise<boolean>;
 }
 
@@ -49,7 +49,7 @@ const createToken = randomUUID;
 
 export class MagicLink {
 	private provider: MagicLinkProvider;
-	private getUser: (username: string) => Promise<UserProfile>;
+	private getUser: (username: string) => Promise<UserProfile<unknown>>;
 	private sendMagicLink: (url: URL, magicLink: MagicLinkEntity) => Promise<boolean>;
 
 	constructor({ provider, getUser, sendMagicLink }: MagicLinkOptions) {
@@ -92,88 +92,6 @@ export class MagicLink {
 		});
 	}
 
-	/**
-	 * Return a specific token for this user
-	 * @param userId users ID
-	 * @param token token string
-	 * @returns Array of MagicLink compatible entities
-	 */
-	async getMagicLink(userId: string, token: string): Promise<MagicLinkEntity> {
-		const link = await this.provider.findOne({
-			type: AuthenticationType.MagicLinkChallenge,
-			userId,
-			data: {
-				token,
-				redeemedAt: 'null',
-			},
-		});
-
-		if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
-		return link;
-	}
-
-	/**
-	 * Return all magic links that are valid in the current period for this user
-	 * @param userId user ID to search for
-	 * @param period the earliest date that is valid for this period
-	 * @returns MagicLink compatible entity
-	 */
-	async getMagicLinks(userId: string, period: Date): Promise<MagicLinkEntity[]> {
-		return this.provider.find({
-			type: AuthenticationType.MagicLinkChallenge,
-			userId,
-			createdAt_gt: period,
-		} as {
-			type: AuthenticationType.MagicLinkChallenge;
-			userId: string;
-			createdAt_gt: Date;
-		});
-	}
-
-	/**
-	 * A callback to persist the Magic Link in the data source of choice
-	 * @param userId user ID to search for
-	 * @param token the token generated for this magic link
-	 * @returns MagicLink compatible entity
-	 */
-	async createMagicLink(userId: string, token: string): Promise<MagicLinkEntity> {
-		const link = await this.provider.createOne({
-			type: AuthenticationType.MagicLinkChallenge,
-			userId,
-			data: {
-				token,
-				redeemedAt: 'null',
-			},
-		});
-		return link;
-	}
-
-	/**
-	 * A callback to persist the redeeming of a Magic Link
-	 * @param magicLink the magicLink that was updated
-	 * @returns boolean to indicate the successful saving of the redeem operation
-	 */
-	async redeemMagicLink({ id }: MagicLinkEntity): Promise<boolean> {
-		if (!id) throw new AuthenticationError('Authentication Failed: Magic Link not found');
-
-		const link = await this.provider.findOne({
-			id,
-		});
-
-		if (!link) {
-			throw new AuthenticationError('Authentication Failed: Magic Link not found');
-		}
-
-		await this.provider.updateOne(id, {
-			data: {
-				...link.data,
-				redeemedAt: new Date(),
-			},
-		});
-
-		return true;
-	}
-
 	async generateMagicLink(username: string, ctx: AuthorizationContext) {
 		// check that the user exists
 		const user = await this.getUser(username);
@@ -188,7 +106,15 @@ export class MagicLink {
 		const { rate } = config;
 		// Current date minus the rate limit period
 		const period = new Date(new Date().getTime() - ms(rate.period));
-		const links = await this.getMagicLinks(user.id, period);
+		const links = await this.provider.find({
+			type: AuthenticationType.MagicLinkChallenge,
+			userId: user.id,
+			createdAt_gt: period,
+		} as {
+			type: AuthenticationType.MagicLinkChallenge;
+			userId: string;
+			createdAt_gt: Date;
+		});
 
 		// Check rate limiting conditions for magic link creation
 		if (links.length >= rate.limit) {
@@ -197,7 +123,14 @@ export class MagicLink {
 		}
 
 		// Create a magic link and save it to the database
-		const link = await this.createMagicLink(user.id, createToken());
+		const link = await this.provider.createOne({
+			type: AuthenticationType.MagicLinkChallenge,
+			userId: user.id,
+			data: {
+				token: createToken(),
+				redeemedAt: 'null',
+			},
+		});
 
 		// Get Redirect URL
 		const redirect = new URL(
@@ -222,7 +155,17 @@ export class MagicLink {
 			if (!userProfile?.id)
 				throw new AuthenticationError('Auth unsuccessful: Authentication failed.');
 
-			const link = await this.getMagicLink(userProfile.id, magicLinkToken);
+			const link = await this.provider.findOne({
+				type: AuthenticationType.MagicLinkChallenge,
+				userId: userProfile.id,
+				data: {
+					token: magicLinkToken,
+					redeemedAt: 'null',
+				},
+			});
+
+			if (!link) throw new AuthenticationError('Authentication Failed: Link not found');
+
 			// Check that the magic link is still valid
 			const ttl = new Date(new Date().getTime() - ms(config.ttl));
 			if (link.createdAt < ttl)
@@ -235,8 +178,13 @@ export class MagicLink {
 
 			const token = verifyAndCreateTokenFromAuthToken(authToken);
 
-			// Callback to the client to mark the magic link as used
-			await this.redeemMagicLink(link);
+			// Mark the magic link as used
+			await this.provider.updateOne(link.id, {
+				data: {
+					...link.data,
+					redeemedAt: new Date(),
+				},
+			});
 
 			return token;
 		} catch (e) {

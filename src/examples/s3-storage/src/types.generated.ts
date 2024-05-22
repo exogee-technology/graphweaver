@@ -97,6 +97,55 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
+export type Media = {
+  __typename?: 'Media';
+  filename: Scalars['String']['output'];
+  type: MediaType;
+  url: Scalars['String']['output'];
+};
+
+/** Data needed to create or update MultipleMedia. If an ID is passed, this is an update, otherwise it's an insert. */
+export type MediaCreateOrUpdateInput = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<MediaType>;
+};
+
+/** Data needed to create MultipleMedia. */
+export type MediaInsertInput = {
+  filename: Scalars['String']['input'];
+  type: MediaType;
+};
+
+export enum MediaType {
+  Image = 'IMAGE',
+  Other = 'OTHER'
+}
+
+/** Data needed to update MultipleMedia. An ID must be passed. */
+export type MediaUpdateInput = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<MediaType>;
+};
+
+export type MultipleMediaListFilter = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  filename_ilike?: InputMaybe<Scalars['String']['input']>;
+  filename_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  filename_like?: InputMaybe<Scalars['String']['input']>;
+  filename_ne?: InputMaybe<Scalars['String']['input']>;
+  filename_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  filename_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  filename_null?: InputMaybe<Scalars['Boolean']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+  url_ilike?: InputMaybe<Scalars['String']['input']>;
+  url_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  url_like?: InputMaybe<Scalars['String']['input']>;
+  url_ne?: InputMaybe<Scalars['String']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   /** Create or update many Submissions. */
@@ -109,7 +158,8 @@ export type Mutation = {
   deleteSubmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Submissions with a filter. */
   deleteSubmissions?: Maybe<Scalars['Boolean']['output']>;
-  getUploadUrl?: Maybe<Scalars['String']['output']>;
+  getDeleteUrl?: Maybe<Scalars['String']['output']>;
+  getUploadUrl?: Maybe<Scalars['JSON']['output']>;
   /** Update a single Submission. */
   updateSubmission?: Maybe<Submission>;
   /** Update many Submissions. */
@@ -142,8 +192,13 @@ export type MutationDeleteSubmissionsArgs = {
 };
 
 
+export type MutationGetDeleteUrlArgs = {
+  key?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationGetUploadUrlArgs = {
-  key?: InputMaybe<Scalars['ID']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -169,7 +224,7 @@ export type Query = {
 
 
 export type QueryGetDownloadUrlArgs = {
-  key?: InputMaybe<Scalars['ID']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -191,24 +246,24 @@ export enum Sort {
 export type Submission = {
   __typename?: 'Submission';
   id: Scalars['ID']['output'];
-  image?: Maybe<Scalars['JSON']['output']>;
+  image?: Maybe<Media>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SubmissionCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
-  image?: InputMaybe<Scalars['JSON']['input']>;
+  image?: InputMaybe<MediaCreateOrUpdateInput>;
 };
 
 /** Data needed to create Submissions. */
 export type SubmissionInsertInput = {
-  image?: InputMaybe<Scalars['JSON']['input']>;
+  image?: InputMaybe<MediaCreateOrUpdateInput>;
 };
 
 /** Data needed to update Submissions. An ID must be passed. */
 export type SubmissionUpdateInput = {
   id: Scalars['ID']['input'];
-  image?: InputMaybe<Scalars['JSON']['input']>;
+  image?: InputMaybe<MediaCreateOrUpdateInput>;
 };
 
 export type SubmissionsListFilter = {
@@ -218,17 +273,11 @@ export type SubmissionsListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  image?: InputMaybe<Scalars['JSON']['input']>;
-  image_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  image_ne?: InputMaybe<Scalars['JSON']['input']>;
-  image_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  image_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  image_null?: InputMaybe<Scalars['Boolean']['input']>;
+  image?: InputMaybe<MultipleMediaListFilter>;
 };
 
 export type SubmissionsOrderByInput = {
   id?: InputMaybe<Sort>;
-  image?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Submissions. */

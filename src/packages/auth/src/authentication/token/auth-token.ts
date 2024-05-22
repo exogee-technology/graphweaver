@@ -40,7 +40,7 @@ const TOKEN_PREFIX = 'Bearer';
 export class AuthTokenProvider implements BaseAuthTokenProvider {
 	constructor(private authMethod?: AuthenticationMethod) {}
 
-	async generateToken(user: UserProfile) {
+	async generateToken(user: UserProfile<unknown>) {
 		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
 
