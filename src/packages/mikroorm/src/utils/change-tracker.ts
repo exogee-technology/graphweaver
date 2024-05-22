@@ -57,7 +57,7 @@ const dataForChangeSet = <T extends TrackedEntity<T>>(cs: ChangeSet<TrackedEntit
 	if (cs.payload && cs.type !== ChangeSetType.DELETE) {
 		const entries = Object.entries(cs.payload)
 			.filter(([k]) => !isUntrackedProperty(cs.entity, k))
-			.map(([k]) => processPayloadEntry(k, cs.type, cs.entity, cs.originalEntity));
+			.map(([k]) => processPayloadEntry(k, cs));
 		const id = cs.type === ChangeSetType.CREATE ? { to: cs.entity.id } : undefined;
 		if (entries.length || id) return { ...Object.fromEntries(entries), id };
 	}
