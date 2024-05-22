@@ -20,7 +20,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.2",
+		"@apollo/server": "4.10.4",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/delegate": "10.0.4",
