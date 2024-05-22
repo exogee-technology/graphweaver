@@ -412,8 +412,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       formik:
-        specifier: 2.4.5
-        version: 2.4.5(react@18.2.0)
+        specifier: 2.4.6
+        version: 2.4.6(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -543,8 +543,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.15.5)(typescript@5.4.5)
       formik:
-        specifier: 2.4.5
-        version: 2.4.5(react@18.2.0)
+        specifier: 2.4.6
+        version: 2.4.6(react@18.2.0)
       glob:
         specifier: 10.3.12
         version: 10.3.12
@@ -11648,8 +11648,8 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /formik@2.4.5(react@18.2.0):
-    resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}
+  /formik@2.4.6(react@18.2.0):
+    resolution: {integrity: sha512-A+2EI7U7aG296q2TLGvNapDNTZp1khVt5Vk0Q/fyfSROss0V/V6+txt2aJnwEos44IxTCW/LYAi/zgWzlevj+g==}
     peerDependencies:
       react: '>=16.8.0'
     dependencies:
