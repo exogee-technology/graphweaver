@@ -199,8 +199,8 @@ importers:
         specifier: 20.12.12
         version: 20.12.12
       dotenv-cli:
-        specifier: 7.4.1
-        version: 7.4.1
+        specifier: 7.4.2
+        version: 7.4.2
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -236,7 +236,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -251,8 +251,8 @@ importers:
         specifier: 20.12.12
         version: 20.12.12
       dotenv-cli:
-        specifier: 7.4.1
-        version: 7.4.1
+        specifier: 7.4.2
+        version: 7.4.2
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -279,10 +279,10 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -998,7 +998,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1006,8 +1006,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dotenv-cli:
-        specifier: 7.4.1
-        version: 7.4.1
+        specifier: 7.4.2
+        version: 7.4.2
       ethers:
         specifier: 6.3.0
         version: 6.3.0
@@ -1093,10 +1093,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
@@ -1146,13 +1146,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -5653,6 +5653,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
@@ -5714,28 +5715,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12):
-    resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.12
-      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4):
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
     engines: {node: '>= 18.12.0'}
@@ -5779,6 +5758,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5):
     resolution: {integrity: sha512-IOv0s5UYdO2dzCiHGpTcceo2FOZtddnMmlNmRkBXhKzYkYUEut0qJJqt20d8oJsMJuEk8Et7/MAgdJT5FbWTzA==}
@@ -10391,8 +10371,8 @@ packages:
       no-case: 3.0.4
       tslib: 2.6.2
 
-  /dotenv-cli@7.4.1:
-    resolution: {integrity: sha512-fE1aywjRrWGxV3miaiUr3d2zC/VAiuzEGghi+QzgIA9fEf/M5hLMaRSXb4IxbUAwGmaLi0IozdZddnVU96acag==}
+  /dotenv-cli@7.4.2:
+    resolution: {integrity: sha512-SbUj8l61zIbzyhIbg0FwPJq6+wjbzdn9oEtozQpZ6kW2ihCcapKVZj49oCT3oPM+mgQm+itgvUQcG5szxVrZTA==}
     hasBin: true
     dependencies:
       cross-spawn: 7.0.3
@@ -13733,6 +13713,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
