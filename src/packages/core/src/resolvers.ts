@@ -209,8 +209,7 @@ export const createOrUpdate = async <G extends { name: string }, C extends BaseC
 
 		// Extract ids of items being updated
 		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
-		const updateItemIds =
-			updateItems.map((item) => item[primaryKeyField as keyof typeof item]) ?? [];
+		const updateItemIds = updateItems.map((item) => item[primaryKeyField as keyof typeof item]);
 
 		// Prepare updateParams and run hook if needed
 		const updateParams: CreateOrUpdateHookParams<G> = {
