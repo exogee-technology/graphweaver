@@ -24,7 +24,13 @@ import {
 
 const metadata = graphweaverMetadata;
 
-const getAccessTypeForArg = (node: unknown): AccessType => {
+// This function is called recursively on each nested relationship node of an input arg
+// Relationships can be nested multiple levels deep so we need to check each level
+// The function will determine the access type of the relationship node based on the fields it contains
+// This is a pre hook and is called before any data provider is called
+// ❗ DELETE is not checked as it is possible a nested entity is being deleted and this must be checked after the data provider is called ❗
+// ❗ Therefore, this is not an exhaustive check and only infers the access type based on the fields in the node ❗
+const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
 	// If we have an object with only an id then we are reading
 	if (
 		typeof node === 'object' &&
@@ -279,7 +285,7 @@ const generatePermissionListFromArgs = <G>() => {
 						// Check the access type of the relationship
 						const relationshipAccessType = filter
 							? accessType
-							: getAccessTypeForArg(relationshipNode);
+							: getRelationshipAccessTypeForArg(relationshipNode);
 
 						// Let's check the user has permission to read the related entity
 						recurseThroughArgs(
