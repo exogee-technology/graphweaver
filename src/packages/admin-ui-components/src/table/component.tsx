@@ -84,45 +84,49 @@ const columnsForEntity = <T extends TableRowItem>(
 							return null;
 						}
 					}
-				: field.type === 'Image'
+				: field.type === 'Media'
 					? ({ row }: FormatterProps<T, unknown>) => {
-							const imageUrl = row[field.name as keyof typeof row] as string;
+							const media = row[field.name as keyof typeof row] as {
+								url: string;
+								type: 'IMAGE' | 'OTHER';
+							};
+							if (!media) {
+								return null;
+							}
 
-							return (
-								<img
-									src={imageUrl}
-									// alt={altText} @todo - implement alt text
-									style={{
-										width: '100%',
-										height: '100%',
-										objectFit: 'cover',
-										padding: 2,
-										borderRadius: 8,
-										objectPosition: 'center center',
-										textIndent: -9999,
-									}}
-									onError={hideImage}
-								/>
-							);
-						}
-					: field.type === 'Media'
-						? ({ row }: FormatterProps<T, unknown>) => {
-								const mediaUrl = row[field.name as keyof typeof row] as string;
+							if (media.type === 'IMAGE') {
 								return (
-									<a href={mediaUrl} target="_blank" rel="noreferrer">
-										{mediaUrl}
-									</a>
+									<img
+										src={media.url}
+										style={{
+											width: '100%',
+											height: '100%',
+											objectFit: 'cover',
+											padding: 2,
+											borderRadius: 8,
+											objectPosition: 'center center',
+											textIndent: -9999,
+										}}
+										onError={hideImage}
+									/>
 								);
 							}
-						: field.isArray
-							? ({ row }: FormatterProps<T, unknown>) => {
-									const value = row[field.name as keyof typeof row];
-									if (Array.isArray(value)) {
-										return value.join(', ');
-									}
-									return value;
+
+							return (
+								<a href={media.url} target="_blank" rel="noreferrer">
+									{media.url}
+								</a>
+							);
+						}
+					: field.isArray
+						? ({ row }: FormatterProps<T, unknown>) => {
+								const value = row[field.name as keyof typeof row];
+								if (Array.isArray(value)) {
+									return value.join(', ');
 								}
-							: undefined,
+								return value;
+							}
+						: undefined,
 		})),
 	];
 

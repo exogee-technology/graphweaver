@@ -6,6 +6,6 @@ export class Submission extends BaseEntity {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
-	@Property({ type: String })
-	key!: string;
+	@Property({ type: 'json', nullable: true })
+	image?: { filename: string; type: string };
 }

@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import './utils/change-tracker';
 
 import {

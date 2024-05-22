@@ -1,9 +1,4 @@
-import {
-	BaseContext,
-	BaseListInputFilterArgs,
-	Filter,
-	GraphQLResolveInfo,
-} from '@exogee/graphweaver';
+import { BaseContext, Filter, GraphQLResolveInfo } from '@exogee/graphweaver';
 import { UserProfile } from './user-profile';
 
 export enum AuthenticationMethod {
@@ -27,7 +22,7 @@ export interface JwtPayload {
 // Consumers will extend the base context type
 export interface AuthorizationContext extends BaseContext {
 	token?: string | JwtPayload;
-	user?: UserProfile;
+	user?: UserProfile<unknown>;
 	redirectUri?: URL;
 }
 
@@ -40,7 +35,7 @@ export enum AccessType {
 
 export const BASE_ROLE_EVERYONE = 'Everyone';
 
-export class ListInputFilterArgs extends BaseListInputFilterArgs {}
+export class ListInputFilterArgs {} //extends BaseListInputFilterArgs {}
 
 export type AccessControlList<G, TContext extends AuthorizationContext = AuthorizationContext> = {
 	[K in string]?: AccessControlEntry<G, TContext>;

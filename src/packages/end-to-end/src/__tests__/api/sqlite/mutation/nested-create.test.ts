@@ -11,8 +11,8 @@ describe('nested create', () => {
 	test('should create an album and an artist', async () => {
 		const { data } = await request<{ createAlbum: Album }>(config.baseUrl)
 			.mutate(gql`
-				mutation CreateAlbum($data: AlbumInsertInput!) {
-					createAlbum(data: $data) {
+				mutation CreateAlbum($input: AlbumInsertInput!) {
+					createAlbum(input: $input) {
 						id
 						artist {
 							id
@@ -21,7 +21,7 @@ describe('nested create', () => {
 					}
 				}
 			`)
-			.variables({ data: { artist: { name: 'string' }, title: 'string' } })
+			.variables({ input: { artist: { name: 'string' }, title: 'string' } })
 			.expectNoErrors();
 
 		expect(data?.createAlbum?.id).toBe('348');
@@ -32,8 +32,8 @@ describe('nested create', () => {
 	test('should create an artist and an album', async () => {
 		const { data } = await request<{ createArtist: Artist }>(config.baseUrl)
 			.mutate(gql`
-				mutation CreateArtist($data: ArtistInsertInput!) {
-					createArtist(data: $data) {
+				mutation CreateArtist($input: ArtistInsertInput!) {
+					createArtist(input: $input) {
 						id
 						albums {
 							id
@@ -42,7 +42,7 @@ describe('nested create', () => {
 					}
 				}
 			`)
-			.variables({ data: { albums: [{ title: 'string' }], name: 'string' } })
+			.variables({ input: { albums: [{ title: 'string' }], name: 'string' } })
 			.expectNoErrors();
 
 		expect(data?.createArtist?.id).toBe('276');
@@ -53,8 +53,8 @@ describe('nested create', () => {
 	test('should update an artist and create an album', async () => {
 		const { data } = await request<{ updateArtist: Artist }>(config.baseUrl)
 			.mutate(gql`
-				mutation UpdateArtist($data: ArtistCreateOrUpdateInput!) {
-					updateArtist(data: $data) {
+				mutation UpdateArtist($input: ArtistUpdateInput!) {
+					updateArtist(input: $input) {
 						id
 						albums {
 							id
@@ -63,7 +63,7 @@ describe('nested create', () => {
 					}
 				}
 			`)
-			.variables({ data: { albums: [{ title: 'string' }], id: '1' } })
+			.variables({ input: { albums: [{ title: 'string' }], id: '1' } })
 			.expectNoErrors();
 
 		expect(data?.updateArtist?.id).toBe('1');

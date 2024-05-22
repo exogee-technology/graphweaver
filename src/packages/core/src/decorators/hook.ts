@@ -1,5 +1,5 @@
 import { BaseContext, hookManagerMap } from '..';
-import { HookParams } from '../common/types';
+import { HookParams } from '../types';
 import { HookManager, HookRegister } from '../hook-manager';
 
 export function Hook<G, P extends HookParams<G, BaseContext>>(hookType: HookRegister) {

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database.",
@@ -26,7 +26,6 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
 		"@exogee/graphweaver-auth-ui-components": "workspace:*",
-		"@exogee/graphweaver-helpers": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
@@ -37,8 +36,7 @@
 		"graphql": "16.8.1",
 		"graphweaver": "workspace:*",
 		"mysql2": "3.9.4",
-		"react": "18.2.0",
-		"reflect-metadata": "0.2.2"
+		"react": "18.2.0"
 	},
 	"devDependencies": {
 		"@types/node": "20.12.7",

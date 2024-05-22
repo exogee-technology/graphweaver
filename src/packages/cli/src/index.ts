@@ -263,7 +263,7 @@ yargs
 					{
 						ignored: [
 							/node_modules/,
-							/types.ts/,
+							/types.generated.ts/,
 							/__generated__/,
 							/.*\.generated\.tsx$/,
 							/.*\.generated\.ts$/,

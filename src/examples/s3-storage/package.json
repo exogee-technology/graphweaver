@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-s3-storage",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting Graphweaver to an AWS S3 bucket.",
@@ -13,6 +13,7 @@
 		"lib"
 	],
 	"scripts": {
+		"import-database": "dotenv -- bash ./scripts/import.sh",
 		"build": "graphweaver build",
 		"start": "graphweaver start",
 		"watch": "graphweaver watch",
@@ -27,16 +28,16 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
+		"graphweaver": "workspace:*",
 		"@mikro-orm/core": "6.1.12",
 		"@mikro-orm/postgresql": "6.1.12",
 		"pg": "8.11.5",
-		"reflect-metadata": "0.2.2",
 		"graphql": "16.8.1"
 	},
 	"devDependencies": {
 		"@types/node": "20.12.7",
 		"typescript": "5.4.5",
-		"graphweaver": "workspace:*"
+		"dotenv-cli": "7.4.1"
 	},
 	"keywords": [
 		"graphql",

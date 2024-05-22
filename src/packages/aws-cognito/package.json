@@ -1,0 +1,45 @@
+{
+	"name": "@exogee/graphweaver-aws-cognito",
+	"version": "1.0.0-beta.1",
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"scripts": {
+		"build": "pnpm build:js && pnpm build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"format": "prettier --write .",
+		"package:pack": "pnpm pack",
+		"test": "npm run test:format && npm run test:typescript",
+		"test:typescript": "tsc --noEmit",
+		"test:format": "prettier --check .",
+		"version": "npm version --no-git-tag-version"
+	},
+	"license": "UNLICENSED",
+	"devDependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"esbuild": "0.17.18",
+		"glob": "10.3.12",
+		"graphql": "16.8.1",
+		"graphql-type-json": "0.3.2",
+		"prettier": "3.2.5",
+		"typescript": "5.4.5"
+	},
+	"peerDependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"graphql": "16.8.1",
+		"graphql-type-json": "0.3.2"
+	},
+	"dependencies": {
+		"@aws-sdk/client-cognito-identity-provider": "3.552.0",
+		"@aws-sdk/client-lambda": "3.552.0",
+		"@exogee/graphweaver-rest": "workspace:*",
+		"graphql": "16.8.1",
+		"uuid": "9.0.1"
+	}
+}

@@ -41,7 +41,6 @@ export const getExternalModules = (): string[] => {
 	const externalModules = new Set([
 		...Object.keys(requireSilent('knex/package.json').browser),
 		...Object.keys(requireSilent('@mikro-orm/knex/package.json').peerDependencies),
-		...Object.keys(requireSilent('type-graphql/package.json').peerDependencies),
 		'@mikro-orm/knex',
 		'bun:ffi',
 		'mock-aws-s3',

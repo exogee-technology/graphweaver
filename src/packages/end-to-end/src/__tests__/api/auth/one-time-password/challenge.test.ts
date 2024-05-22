@@ -1,78 +1,102 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, BaseDataProvider, Resolver } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	createBaseOneTimePasswordAuthResolver,
-	createBasePasswordAuthResolver,
-	OneTimePassword,
 	Credential,
-	CredentialCreateOrUpdateInputArgs,
+	AuthenticationBaseEntity,
+	Password,
+	hashPassword,
+	CredentialStorage,
+	OneTimePassword,
+	OneTimePasswordData,
+	AuthenticationMethod,
+	OneTimePasswordEntity,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_CODE = '123456';
 const MOCK_CREATED_AT = new Date();
 
-const user = new UserProfile({
-	id: '1',
-	roles: ['admin'],
-	displayName: 'Test User',
-	username: 'test',
-});
-
-@Resolver()
-class OTPAuthResolver extends createBaseOneTimePasswordAuthResolver() {
-	async getUser(_: string): Promise<UserProfile> {
-		return user;
+class OTPBackendProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<OneTimePasswordData>,
+	AuthenticationBaseEntity<OneTimePasswordData>
+> {
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return await callback();
 	}
-
-	async getOTP(userId: string, code: string): Promise<OneTimePassword> {
-		if (code === MOCK_CODE)
-			return { userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT };
+	async findOne({ data, userId }: any) {
+		if (data.code === MOCK_CODE)
+			return {
+				id: '1',
+				userId,
+				type: AuthenticationMethod.ONE_TIME_PASSWORD,
+				data: { code: MOCK_CODE },
+				createdAt: MOCK_CREATED_AT,
+			};
 		throw new Error('No otp found');
 	}
-
-	async getOTPs(userId: string, _: Date): Promise<OneTimePassword[]> {
-		return [{ userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT }];
+	async find({ userId }: any) {
+		return [
+			{
+				id: '1',
+				userId,
+				type: AuthenticationMethod.ONE_TIME_PASSWORD,
+				data: { code: MOCK_CODE },
+				createdAt: MOCK_CREATED_AT,
+			},
+		];
 	}
-
-	async createOTP(userId: string, _: string): Promise<OneTimePassword> {
-		return { userId, data: { code: MOCK_CODE }, createdAt: MOCK_CREATED_AT };
+	async createOne({ userId }: any) {
+		return {
+			id: '1',
+			userId,
+			type: AuthenticationMethod.ONE_TIME_PASSWORD,
+			data: { code: MOCK_CODE },
+			createdAt: MOCK_CREATED_AT,
+		};
 	}
+}
 
-	async redeemOTP(_: OneTimePassword): Promise<boolean> {
+export const oneTimePassword = new OneTimePassword({
+	provider: new OTPBackendProvider('oneTimePassword'),
+	sendOTP: async (_) => {
 		return true;
-	}
+	},
+});
 
-	async sendOTP(_: OneTimePassword): Promise<boolean> {
-		return true;
+const user: CredentialStorage = {
+	id: '1',
+	username: 'test',
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
+};
+
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
+		return {
+			...user,
+			password: await hashPassword(user.password ?? ''),
+		};
 	}
 }
 
-@Resolver()
-class CredentialAuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new BaseDataProvider('my-provider')
-) {
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
-		return user;
-	}
-}
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string): Promise<UserProfile<unknown>> => {
+		return new UserProfile({
+			id: user.id,
+			username: user.username,
+		});
+	},
+});
 
 const graphweaver = new Graphweaver({
-	resolvers: [OTPAuthResolver, CredentialAuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
@@ -128,13 +152,13 @@ describe('One Time Password Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		jest.spyOn(OTPAuthResolver.prototype, 'getOTP').mockImplementation(
+		jest.spyOn(OneTimePassword.prototype, 'getOTP').mockImplementation(
 			async () =>
 				({
 					userId: user.id,
 					data: { code: MOCK_CODE },
 					createdAt: new Date(MOCK_CREATED_AT.getDate() - 1),
-				}) as OneTimePassword
+				}) as OneTimePasswordEntity
 		);
 
 		const response = await graphweaver.server.executeOperation({
@@ -179,6 +203,8 @@ describe('One Time Password Authentication - Challenge', () => {
 
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
+
+		jest.spyOn(OneTimePassword.prototype, 'redeemOTP').mockImplementation(async () => true);
 
 		const response = await graphweaver.server.executeOperation<{
 			result: { authToken: string };

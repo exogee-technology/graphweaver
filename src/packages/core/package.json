@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
@@ -21,15 +21,15 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.10.2",
+		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/delegate": "10.0.4",
 		"class-validator": "0.14.1",
 		"dataloader": "2.2.2",
 		"graphql": "16.8.1",
 		"graphql-parse-resolve-info": "4.13.0",
-		"pluralize": "8.0.0",
-		"reflect-metadata": "0.2.2",
-		"type-graphql": "2.0.0-beta.2"
+		"graphql-query-complexity": "0.12.0",
+		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
 		"@types/pluralize": "0.0.33",
