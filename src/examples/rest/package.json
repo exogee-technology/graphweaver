@@ -39,7 +39,7 @@
 		"react": "18.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.12.7",
+		"@types/node": "20.12.12",
 		"dotenv-cli": "7.4.1",
 		"typescript": "5.4.5"
 	},
