@@ -36,8 +36,8 @@
 		"graphql-type-json": "0.3.2"
 	},
 	"dependencies": {
-		"@aws-sdk/client-cognito-identity-provider": "3.552.0",
-		"@aws-sdk/client-lambda": "3.552.0",
+		"@aws-sdk/client-cognito-identity-provider": "3.577.0",
+		"@aws-sdk/client-lambda": "3.577.0",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.8.1",
 		"uuid": "9.0.1"
