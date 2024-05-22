@@ -29,7 +29,7 @@
 		"@apollo/client": "3.9.11",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.1",
-		"clsx": "2.1.0",
+		"clsx": "2.1.1",
 		"downshift": "8.5.0",
 		"graphiql": "3.2.0",
 		"graphql": "16.8.1",

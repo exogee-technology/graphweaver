@@ -409,8 +409,8 @@ importers:
         specifier: workspace:*
         version: link:../admin-ui-components
       clsx:
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.1.1
+        version: 2.1.1
       formik:
         specifier: 2.4.5
         version: 2.4.5(react@18.2.0)
@@ -488,8 +488,8 @@ importers:
         specifier: 0.9.1
         version: 0.9.1(graphql@16.8.1)
       clsx:
-        specifier: 2.1.0
-        version: 2.1.0
+        specifier: 2.1.1
+        version: 2.1.1
       downshift:
         specifier: 8.5.0
         version: 8.5.0(react@18.2.0)
@@ -9652,8 +9652,8 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /clsx@2.1.0:
-    resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
+  /clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
     dev: false
 
