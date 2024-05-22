@@ -208,8 +208,8 @@ importers:
   examples/s3-storage:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@apollo/server':
         specifier: 4.10.2
         version: 4.10.2(graphql@16.8.1)
@@ -236,7 +236,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -279,10 +279,10 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -306,8 +306,8 @@ importers:
   examples/xero:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@apollo/server':
         specifier: 4.10.2
         version: 4.10.2(graphql@16.8.1)
@@ -397,14 +397,14 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.12)
+        specifier: 5.2.11
+        version: 5.2.11(@types/node@20.12.12)
 
   packages/admin-ui:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -412,8 +412,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1
       formik:
-        specifier: 2.4.5
-        version: 2.4.5(react@18.2.0)
+        specifier: 2.4.6
+        version: 2.4.6(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -450,7 +450,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.2.1
-        version: 4.2.1(vite@5.2.8)
+        version: 4.2.1(vite@5.2.11)
       esbuild:
         specifier: 0.15.5
         version: 0.15.5
@@ -470,17 +470,17 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.12)
+        specifier: 5.2.11
+        version: 5.2.11(@types/node@20.12.12)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(typescript@5.4.5)(vite@5.2.11)
 
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -494,8 +494,8 @@ importers:
         specifier: 8.5.0
         version: 8.5.0(react@18.2.0)
       graphiql:
-        specifier: 3.2.0
-        version: 3.2.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.2.2
+        version: 3.2.2(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -543,8 +543,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.15.5)(typescript@5.4.5)
       formik:
-        specifier: 2.4.5
-        version: 2.4.5(react@18.2.0)
+        specifier: 2.4.6
+        version: 2.4.6(react@18.2.0)
       glob:
         specifier: 10.3.12
         version: 10.3.12
@@ -558,11 +558,11 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.12)
+        specifier: 5.2.11
+        version: 5.2.11(@types/node@20.12.12)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(typescript@5.4.5)(vite@5.2.11)
       vitest:
         specifier: 1.4.0
         version: 1.4.0(@types/node@20.12.12)
@@ -658,8 +658,8 @@ importers:
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.9.11
-        version: 3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+        specifier: 3.10.4
+        version: 3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@simplewebauthn/browser':
         specifier: 9.0.1
         version: 9.0.1
@@ -716,11 +716,11 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.12)
+        specifier: 5.2.11
+        version: 5.2.11(@types/node@20.12.12)
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(typescript@5.4.5)(vite@5.2.11)
 
   packages/aws-cognito:
     dependencies:
@@ -787,7 +787,7 @@ importers:
         version: 6.15.0
       '@vitejs/plugin-react':
         specifier: 4.2.1
-        version: 4.2.1(vite@5.2.8)
+        version: 4.2.1(vite@5.2.11)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -825,14 +825,14 @@ importers:
         specifier: 13.3.3
         version: 13.3.3(serverless@3.38.0)
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.12)
+        specifier: 5.2.11
+        version: 5.2.11(@types/node@20.12.12)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
       vite-plugin-svgr:
         specifier: 3.2.0
-        version: 3.2.0(typescript@5.4.5)(vite@5.2.8)
+        version: 3.2.0(typescript@5.4.5)(vite@5.2.11)
     devDependencies:
       '@types/node':
         specifier: 20.12.12
@@ -877,8 +877,8 @@ importers:
         specifier: 5.4.1
         version: 5.4.1
       semver:
-        specifier: 7.6.0
-        version: 7.6.0
+        specifier: 7.6.2
+        version: 7.6.2
       validate-npm-package-name:
         specifier: 5.0.1
         version: 5.0.1
@@ -998,7 +998,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1073,8 +1073,8 @@ importers:
   packages/logger:
     dependencies:
       pino:
-        specifier: 8.20.0
-        version: 8.20.0
+        specifier: 9.1.0
+        version: 9.1.0
     devDependencies:
       '@types/node':
         specifier: 20.12.12
@@ -1093,10 +1093,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
@@ -1146,13 +1146,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -1367,8 +1367,8 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
       vite:
-        specifier: 5.2.8
-        version: 5.2.8(@types/node@20.12.12)
+        specifier: 5.2.11
+        version: 5.2.11(@types/node@20.12.12)
 
   packages/xero:
     dependencies:
@@ -1446,8 +1446,8 @@ packages:
       graphql: 16.8.1
     dev: false
 
-  /@apollo/client@3.9.11(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
-    resolution: {integrity: sha512-H7e9m7cRcFO93tokwzqrsbnfKorkpV24xU30hFH5u2g6B+c1DMo/ouyF/YrBPdrTzqxQCjTUmds/FLmJ7626GA==}
+  /@apollo/client@3.10.4(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
+    resolution: {integrity: sha512-51gk0xOwN6Ls1EbTG5svFva1kdm2APHYTzmFhaAdvUQoJFDxfc0UwQgDxGptzH84vkPlo1qunY1FuboyF9LI3Q==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -1475,7 +1475,7 @@ packages:
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.3.1(react@18.2.0)
-      rehackt: 0.0.6(@types/react@18.2.75)(react@18.2.0)
+      rehackt: 0.1.0(@types/react@18.2.75)(react@18.2.0)
       response-iterator: 0.2.6
       symbol-observable: 4.0.0
       ts-invariant: 0.10.3
@@ -4116,8 +4116,8 @@ packages:
     dev: false
     optional: true
 
-  /@graphiql/react@0.21.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
-    resolution: {integrity: sha512-UlXzG78HC5+CgQYXw0jVZPoZX0Uh2jPIrqLBIxAdAWMZsmcHMZHAujZtION1pbIrv22cWxP95W+8RpDIHijYow==}
+  /@graphiql/react@0.22.1(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
+    resolution: {integrity: sha512-PBClhO2juCvVvmE5qD4PHivJLkhp0dqIX1zgId8Z83UCKpxO2M+bEspRL9aOQQaE4F4xqExCUk5B2AL+wc+agg==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17 || ^18
@@ -5653,6 +5653,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
@@ -5714,28 +5715,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12):
-    resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.12
-      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4):
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
     engines: {node: '>= 18.12.0'}
@@ -5779,6 +5758,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5):
     resolution: {integrity: sha512-IOv0s5UYdO2dzCiHGpTcceo2FOZtddnMmlNmRkBXhKzYkYUEut0qJJqt20d8oJsMJuEk8Et7/MAgdJT5FbWTzA==}
@@ -6098,7 +6078,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.6.0
+      semver: 7.6.2
     dev: false
     optional: true
 
@@ -6991,7 +6971,7 @@ packages:
       node-dir: 0.1.17
       node-fetch: 2.7.0
       open: 7.4.2
-      semver: 7.6.0
+      semver: 7.6.2
       simple-git: 3.24.0(supports-color@8.1.1)
       timers-ext: 0.1.7
       type: 2.7.2
@@ -8318,7 +8298,7 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.4
-      semver: 7.6.0
+      semver: 7.6.2
       ts-api-utils: 1.3.0(typescript@5.4.5)
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -8378,7 +8358,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.2.1(vite@5.2.8):
+  /@vitejs/plugin-react@4.2.1(vite@5.2.11):
     resolution: {integrity: sha512-oojO9IDc4nCUUi8qIR11KoQm0XFFLIwsRBwHRR4d/88IWghn1y6ckz/bJ8GHDCsYEJee8mDzqtJxh15/cisJNQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -8389,7 +8369,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.1(@babel/core@7.24.5)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.2.8(@types/node@20.12.12)
+      vite: 5.2.11(@types/node@20.12.12)
     transitivePeerDependencies:
       - supports-color
 
@@ -11668,8 +11648,8 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /formik@2.4.5(react@18.2.0):
-    resolution: {integrity: sha512-Gxlht0TD3vVdzMDHwkiNZqJ7Mvg77xQNfmBRrNtvzcHZs72TJppSTDKHpImCMJZwcWPBJ8jSQQ95GJzXFf1nAQ==}
+  /formik@2.4.6(react@18.2.0):
+    resolution: {integrity: sha512-A+2EI7U7aG296q2TLGvNapDNTZp1khVt5Vk0Q/fyfSROss0V/V6+txt2aJnwEos44IxTCW/LYAi/zgWzlevj+g==}
     peerDependencies:
       react: '>=16.8.0'
     dependencies:
@@ -12023,14 +12003,14 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /graphiql@3.2.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
-    resolution: {integrity: sha512-HHZ9j47IVUdUhdEdOkwD/U3kMGxCGZocEf9rk1aou5lInK9vJRbjlDW4BbG9CvA5fNoe7DevRr72tv0ubvjjPA==}
+  /graphiql@3.2.2(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0):
+    resolution: {integrity: sha512-Tpv9gz9/xfOCJq2RTU/ByPgCFkh3ftN16xmcJxNms3j7C0eJ9z7xg6J0lASGGJ6mTeIW9myEI98SJBPL1c4vcA==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
     dependencies:
-      '@graphiql/react': 0.21.0(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
+      '@graphiql/react': 0.22.1(@codemirror/language@6.0.0)(@types/react@18.2.75)(graphql@16.8.1)(react-dom@18.3.1)(react@18.2.0)
       '@graphiql/toolkit': 0.9.1(graphql@16.8.1)
       graphql: 16.8.1
       graphql-language-service: 5.2.0(graphql@16.8.1)
@@ -12888,7 +12868,7 @@ packages:
       '@babel/parser': 7.24.5
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13273,7 +13253,7 @@ packages:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13733,6 +13713,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -14180,7 +14161,7 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.6.2
 
   /make-error@1.3.6:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
@@ -14591,7 +14572,7 @@ packages:
     resolution: {integrity: sha512-CPMcGa+y33xuL1E0TcNIu4YyaZCxnnvkVaEXrsosR3FxN+fV8xvb7Mzpb7IgKler10qeMkE6+Dp8qJhpzdq35g==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.6.2
     dev: false
 
   /node-abort-controller@3.1.1:
@@ -14642,7 +14623,7 @@ packages:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.6.0
+      semver: 7.6.2
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -14713,7 +14694,7 @@ packages:
       fs2: 0.3.9
       memoizee: 0.4.15
       node-fetch: 2.7.0
-      semver: 7.6.0
+      semver: 7.6.2
       type: 2.7.2
       validate-npm-package-name: 3.0.0
     transitivePeerDependencies:
@@ -15245,25 +15226,25 @@ packages:
       split2: 4.2.0
     dev: false
 
-  /pino-std-serializers@6.2.2:
-    resolution: {integrity: sha512-cHjPPsE+vhj/tnhCy/wiMh3M3z3h/j15zHQX+S9GkTBgqJuTuJzYJ4gUyACLhDaJ7kk9ba9iRDmbH2tJU03OiA==}
+  /pino-std-serializers@7.0.0:
+    resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
     dev: false
 
-  /pino@8.20.0:
-    resolution: {integrity: sha512-uhIfMj5TVp+WynVASaVEJFTncTUe4dHBq6CWplu/vBgvGHhvBvQfxz+vcOrnnBQdORH3izaGEurLfNlq3YxdFQ==}
+  /pino@9.1.0:
+    resolution: {integrity: sha512-qUcgfrlyOtjwhNLdbhoL7NR4NkHjzykAPw0V2QLFbvu/zss29h4NkRnibyFzBrNCbzCOY3WZ9hhKSwfOkNggYA==}
     hasBin: true
     dependencies:
       atomic-sleep: 1.0.0
       fast-redact: 3.5.0
       on-exit-leak-free: 2.1.2
       pino-abstract-transport: 1.2.0
-      pino-std-serializers: 6.2.2
+      pino-std-serializers: 7.0.0
       process-warning: 3.0.0
       quick-format-unescaped: 4.0.4
       real-require: 0.2.0
       safe-stable-stringify: 2.4.3
-      sonic-boom: 3.8.1
-      thread-stream: 2.7.0
+      sonic-boom: 4.0.1
+      thread-stream: 3.0.0
     dev: false
 
   /pirates@4.0.6:
@@ -15910,8 +15891,8 @@ packages:
       es-errors: 1.3.0
       set-function-name: 2.0.2
 
-  /rehackt@0.0.6(@types/react@18.2.75)(react@18.2.0):
-    resolution: {integrity: sha512-l3WEzkt4ntlEc/IB3/mF6SRgNHA6zfQR7BlGOgBTOmx7IJJXojDASav+NsgXHFjHn+6RmwqsGPFgZpabWpeOdw==}
+  /rehackt@0.1.0(@types/react@18.2.75)(react@18.2.0):
+    resolution: {integrity: sha512-7kRDOuLHB87D/JESKxQoRwv4DzbIdwkAGQ7p6QKGdVlY1IZheUnVhlk/4UZlNUVxdAXpyxikE3URsG067ybVzw==}
     peerDependencies:
       '@types/react': '*'
       react: '*'
@@ -16207,6 +16188,11 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+
+  /semver@7.6.2:
+    resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
+    engines: {node: '>=10'}
+    hasBin: true
 
   /send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
@@ -16548,8 +16534,8 @@ packages:
     dev: false
     optional: true
 
-  /sonic-boom@3.8.1:
-    resolution: {integrity: sha512-y4Z8LCDBuum+PBP3lSV7RHrXscqksve/bi0as7mhwVnBW+/wUqKT/2Kb7um8yqcFy0duYbbPxzt89Zy2nOCaxg==}
+  /sonic-boom@4.0.1:
+    resolution: {integrity: sha512-hTSD/6JMLyT4r9zeof6UtuBDpjJ9sO08/nmS5djaA9eozT9oOlNdpXSnzcgj4FTqpk3nkLrs61l4gip9r1HCrQ==}
     dependencies:
       atomic-sleep: 1.0.0
     dev: false
@@ -16864,7 +16850,7 @@ packages:
       mime: 2.6.0
       qs: 6.12.1
       readable-stream: 3.6.2
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
 
@@ -16882,7 +16868,7 @@ packages:
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.12.1
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -17031,8 +17017,8 @@ packages:
     resolution: {integrity: sha512-N+8UisAXDGk8PFXP4HAzVR9nbfmVJ3zYLAWiTIoqC5v5isinhr+r5uaO8+7r3BMfuNIufIsA7RdpVgacC2cSpw==}
     dev: true
 
-  /thread-stream@2.7.0:
-    resolution: {integrity: sha512-qQiRWsU/wvNolI6tbbCKd9iKaTnCXsTwVxhhKM6nctPdujTyztjlbUkUTUymidWcMnZ5pWR0ej4a0tjsW021vw==}
+  /thread-stream@3.0.0:
+    resolution: {integrity: sha512-oUIFjxaUT6knhPtWgDMc29zF1FcSl0yXpapkyrQrCGEfYA2HUZXCilUtKyYIv6HkCyqSPAMkY+EG0GbyIrNDQg==}
     dependencies:
       real-require: 0.2.0
     dev: false
@@ -17200,7 +17186,7 @@ packages:
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
-      semver: 7.6.0
+      semver: 7.6.2
       typescript: 5.4.5
       yargs-parser: 21.1.1
     dev: true
@@ -17692,7 +17678,7 @@ packages:
       debug: 4.3.4(supports-color@8.1.1)
       pathe: 1.1.2
       picocolors: 1.0.1
-      vite: 5.2.8(@types/node@20.12.12)
+      vite: 5.2.11(@types/node@20.12.12)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -17704,7 +17690,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-svgr@3.2.0(typescript@5.4.5)(vite@5.2.8):
+  /vite-plugin-svgr@3.2.0(typescript@5.4.5)(vite@5.2.11):
     resolution: {integrity: sha512-Uvq6niTvhqJU6ga78qLKBFJSDvxWhOnyfQSoKpDPMAGxJPo5S3+9hyjExE5YDj6Lpa4uaLkGc1cBgxXov+LjSw==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4
@@ -17712,14 +17698,14 @@ packages:
       '@rollup/pluginutils': 5.1.0
       '@svgr/core': 7.0.0(typescript@5.4.5)
       '@svgr/plugin-jsx': 7.0.0
-      vite: 5.2.8(@types/node@20.12.12)
+      vite: 5.2.11(@types/node@20.12.12)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
 
-  /vite@5.2.8(@types/node@20.12.12):
-    resolution: {integrity: sha512-OyZR+c1CE8yeHw5V5t59aXsUPPVTHMDjEZz8MgguLL/Q7NblxhZUlTu9xSPqlsUO/y+X7dlU05jdhvyycD55DA==}
+  /vite@5.2.11(@types/node@20.12.12):
+    resolution: {integrity: sha512-HndV31LWW05i1BLPMUCE1B9E9GFbOu1MbenhS58FuK6owSO5qHm7GiCotrNY1YE5rMeQSFBGmT5ZaLEjFizgiQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -17796,7 +17782,7 @@ packages:
       strip-literal: 2.1.0
       tinybench: 2.8.0
       tinypool: 0.8.4
-      vite: 5.2.8(@types/node@20.12.12)
+      vite: 5.2.11(@types/node@20.12.12)
       vite-node: 1.4.0(@types/node@20.12.12)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:

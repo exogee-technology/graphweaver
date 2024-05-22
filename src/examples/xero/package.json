@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.11",
+		"@apollo/client": "3.10.4",
 		"@apollo/server": "4.10.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
@@ -54,6 +54,6 @@
 		"prettier": "3.2.5",
 		"ts-node": "10.9.2",
 		"typescript": "5.4.5",
-		"vite": "5.2.8"
+		"vite": "5.2.11"
 	}
 }

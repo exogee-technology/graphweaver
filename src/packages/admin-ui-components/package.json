@@ -26,12 +26,12 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.11",
+		"@apollo/client": "3.10.4",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.1",
 		"clsx": "2.1.1",
 		"downshift": "8.5.0",
-		"graphiql": "3.2.0",
+		"graphiql": "3.2.2",
 		"graphql": "16.8.1",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.4.4",
@@ -40,7 +40,7 @@
 		"react-hot-toast": "2.4.1"
 	},
 	"peerDependencies": {
-		"formik": "2.4.5",
+		"formik": "2.4.6",
 		"graphql": "16.8.1",
 		"react": "18.2.0",
 		"react-dom": "18.3.1",
@@ -55,12 +55,12 @@
 		"esbuild-css-modules-plugin": "2.7.1",
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "2.1.0",
-		"formik": "2.4.5",
+		"formik": "2.4.6",
 		"glob": "10.3.12",
 		"react": "18.2.0",
 		"react-dom": "18.3.1",
 		"typescript": "5.4.5",
-		"vite": "5.2.8",
+		"vite": "5.2.11",
 		"vite-plugin-svgr": "3.2.0",
 		"vitest": "1.4.0"
 	},
