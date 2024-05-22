@@ -54,7 +54,7 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 		// field that references User, if the summary field on User is set to "name", then users in the
 		// task list in the admin area will be shown by their name.
 		//
-		// If no summary field is set for an entity, we default to showing the 'id' field.
+		// If no summary field is set for an entity, we default to showing the primary key field.
 		summaryField?: Extract<keyof G, string>;
 
 		// If true, the entity will not be editable in the Admin UI. This is useful for entities

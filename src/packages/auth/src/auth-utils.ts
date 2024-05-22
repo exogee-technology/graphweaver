@@ -174,15 +174,22 @@ export async function checkEntityPermission<
 
 	const accessFilter = await evaluateAccessControlValue(accessControlValue);
 
+	const entityMetadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
+	if (!entityMetadata) throw new Error(`Could not locate metadata for '${entityName}' entity.`);
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata);
+
 	// Some filters will work by filtering by ID so we need to check that they match
-	if (Object(accessFilter).hasOwnProperty('id') && Object(accessFilter).id !== id) {
+	if (
+		Object(accessFilter).hasOwnProperty(primaryKeyField) &&
+		Object(accessFilter)[primaryKeyField] !== id
+	) {
 		logger.trace('Raising ForbiddenError: Request rejected because ID based filter did not match');
 		throw new ForbiddenError(GENERIC_AUTH_ERROR_MESSAGE);
 	}
 
-	// All the easy checks have been performed, go ahead and run the filter against the db
+	// All the easy checks have been performed, go ahead and run the filter against the DB
 	const where = {
-		_and: [{ id }, accessFilter],
+		_and: [{ [primaryKeyField]: id }, accessFilter],
 	};
 
 	try {

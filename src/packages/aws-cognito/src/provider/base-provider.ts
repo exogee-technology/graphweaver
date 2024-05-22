@@ -12,7 +12,7 @@ export interface ProviderOptions<Entity, Context, DataEntity> {
 		filter: Filter<Entity>,
 		pagination?: Partial<PaginationOptions>
 	): Promise<DataEntity | Array<DataEntity> | null>;
-	update?(context: Context, id: WithId['id'], entity: Partial<Entity>): Promise<DataEntity>;
+	update?(context: Context, id: string, entity: Partial<Entity>): Promise<DataEntity>;
 	remove?(context: Context, filter: Filter<Entity>): Promise<boolean>;
 	search?(context: Context, term: string): Promise<Array<DataEntity> | null>;
 	backendId: string;

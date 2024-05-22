@@ -81,7 +81,7 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	return enumType;
 };
 
-// All entities are identified by a field called 'id' so we only need one of these.
+// All entities are deleted by primary key, so we only need one of these.
 const deleteInput = new GraphQLInputObjectType({
 	name: 'DeleteOneFilterInput',
 	fields: {

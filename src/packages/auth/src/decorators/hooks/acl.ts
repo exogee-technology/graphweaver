@@ -7,6 +7,8 @@ import {
 	GraphQLArgs,
 	ReadHookParams,
 	graphweaverMetadata,
+	EntityMetadata,
+	isEntityMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
@@ -30,13 +32,18 @@ const metadata = graphweaverMetadata;
 // This is a pre hook and is called before any data provider is called
 // ❗ DELETE is not checked as it is possible a nested entity is being deleted and this must be checked after the data provider is called ❗
 // ❗ Therefore, this is not an exhaustive check and only infers the access type based on the fields in the node ❗
-const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
-	// If we have an object with only an id then we are reading
+const getRelationshipAccessTypeForArg = (
+	entityMetadata: EntityMetadata<any, any>,
+	node: unknown
+): AccessType => {
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata);
+
+	// If we have an object with only a primary key then we are reading
 	if (
 		typeof node === 'object' &&
 		node !== null &&
 		Object.keys(node).length === 1 &&
-		Object.prototype.hasOwnProperty.call(node, 'id')
+		Object.prototype.hasOwnProperty.call(node, primaryKeyField)
 	) {
 		return AccessType.Read;
 	}
@@ -46,7 +53,7 @@ const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
 		typeof node === 'object' &&
 		node !== null &&
 		Object.keys(node).length > 1 &&
-		Object.prototype.hasOwnProperty.call(node, 'id')
+		Object.prototype.hasOwnProperty.call(node, primaryKeyField)
 	) {
 		return AccessType.Update;
 	}
@@ -55,7 +62,7 @@ const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
 	if (
 		typeof node === 'object' &&
 		node !== null &&
-		!Object.prototype.hasOwnProperty.call(node, 'id')
+		!Object.prototype.hasOwnProperty.call(node, primaryKeyField)
 	) {
 		return AccessType.Create;
 	}
@@ -275,9 +282,9 @@ const generatePermissionListFromArgs = <G>() => {
 			for (const [key, value] of Object.entries(node)) {
 				// If we are here then we have an array or an object lets see if its a related entity
 				const relationship = entityFields?.[key];
-				const relatedEntity = relationship?.getType();
+				const relatedEntityMetadata = graphweaverMetadata.metadataForType(relationship?.getType());
 
-				if (isRelatedEntity(relatedEntity)) {
+				if (isEntityMetadata(relatedEntityMetadata)) {
 					const relationshipNodes = Array.isArray(value) ? value : [value];
 
 					// We need to loop through the relationship nodes and check the access type as it could be a mixture of read, create, update
@@ -285,11 +292,11 @@ const generatePermissionListFromArgs = <G>() => {
 						// Check the access type of the relationship
 						const relationshipAccessType = filter
 							? accessType
-							: getRelationshipAccessTypeForArg(relationshipNode);
+							: getRelationshipAccessTypeForArg(relatedEntityMetadata, relationshipNode);
 
 						// Let's check the user has permission to read the related entity
 						recurseThroughArgs(
-							relatedEntity.name,
+							relatedEntityMetadata.name,
 							[relationshipNode],
 							relationshipAccessType,
 							filter
@@ -298,6 +305,7 @@ const generatePermissionListFromArgs = <G>() => {
 				}
 			}
 		}
+
 		return permissionsList;
 	};
 
