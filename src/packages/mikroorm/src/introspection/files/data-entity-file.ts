@@ -212,10 +212,6 @@ export class DataEntityFile extends BaseFile {
 			options.items = `() => ${prop.type}`;
 		}
 
-		if (prop.primary && prop.name !== 'id' && prop.fieldNames?.[0]) {
-			options.fieldName = this.quote(prop.fieldNames[0]);
-		}
-
 		this.getCommonDecoratorOptions(options, prop);
 		const indexes = this.getPropertyIndexes(prop, options);
 		decorator = [...indexes.sort(), decorator].map((d) => padding + d).join('\n');
