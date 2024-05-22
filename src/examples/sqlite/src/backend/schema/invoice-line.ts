@@ -14,10 +14,12 @@ export class InvoiceLine extends GraphQLEntity<OrmInvoiceLine> {
 	@Field(() => ID, { primaryKeyField: true })
 	invoiceLineId!: number;
 
-	@RelationshipField<InvoiceLine>(() => Invoice, { id: (entity) => entity.invoice?.invoiceId })
+	@RelationshipField<InvoiceLine>(() => Invoice, {
+		id: (entity) => entity.invoice?.unwrap().invoiceId,
+	})
 	invoice!: Invoice;
 
-	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.trackId })
+	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.unwrap().trackId })
 	track!: Track;
 
 	@Field(() => String)

@@ -48,7 +48,7 @@ export class Customer extends GraphQLEntity<OrmCustomer> {
 	email!: string;
 
 	@RelationshipField<Customer>(() => Employee, {
-		id: (entity) => entity.employee?.id,
+		id: (entity) => entity.employee?.unwrap().employeeId,
 		nullable: true,
 	})
 	employee?: Employee;

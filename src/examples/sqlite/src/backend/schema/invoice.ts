@@ -15,7 +15,9 @@ export class Invoice extends GraphQLEntity<OrmInvoice> {
 	@Field(() => ID, { primaryKeyField: true })
 	invoiceId!: number;
 
-	@RelationshipField<Invoice>(() => Customer, { id: (entity) => entity.customer?.customerId })
+	@RelationshipField<Invoice>(() => Customer, {
+		id: (entity) => entity.customer?.unwrap().customerId,
+	})
 	customer!: Customer;
 
 	@Field(() => ISODateStringScalar)

@@ -24,7 +24,7 @@ export class Employee extends GraphQLEntity<OrmEmployee> {
 	title?: string;
 
 	@RelationshipField<Employee>(() => Employee, {
-		id: (entity) => entity.employee?.employeeId,
+		id: (entity) => entity.employee?.unwrap().employeeId,
 		nullable: true,
 	})
 	employee?: Employee;

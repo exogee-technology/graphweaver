@@ -20,13 +20,21 @@ export class Track extends GraphQLEntity<OrmTrack> {
 	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	name!: string;
 
-	@RelationshipField<Track>(() => Album, { id: (entity) => entity.album?.albumId, nullable: true })
+	@RelationshipField<Track>(() => Album, {
+		id: (entity) => entity.album?.unwrap().albumId,
+		nullable: true,
+	})
 	album?: Album;
 
-	@RelationshipField<Track>(() => MediaType, { id: (entity) => entity.mediaType?.mediaTypeId })
+	@RelationshipField<Track>(() => MediaType, {
+		id: (entity) => entity.mediaType?.unwrap().mediaTypeId,
+	})
 	mediaType!: MediaType;
 
-	@RelationshipField<Track>(() => Genre, { id: (entity) => entity.genre?.genreId, nullable: true })
+	@RelationshipField<Track>(() => Genre, {
+		id: (entity) => entity.genre?.unwrap().genreId,
+		nullable: true,
+	})
 	genre?: Genre;
 
 	@Field(() => String, { nullable: true })
