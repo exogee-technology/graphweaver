@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-apollo-client",
-	"version": "1.0.0-beta-.1",
+	"version": "1.0.0-beta.1",
 	"description": "Useful helpers for working with Apollo Client and Graphweaver",
 	"license": "MIT",
 	"type": "module",
