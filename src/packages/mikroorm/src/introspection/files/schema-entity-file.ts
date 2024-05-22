@@ -20,7 +20,8 @@ export class SchemaEntityFile extends BaseFile {
 	constructor(
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
-		protected readonly platform: Platform
+		protected readonly platform: Platform,
+		protected readonly entityLookup: Map<string, EntityMetadata<any>>
 	) {
 		super(meta, namingStrategy, platform);
 	}
@@ -242,9 +243,18 @@ export class SchemaEntityFile extends BaseFile {
 	protected getForeignKeyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
 
-		// Note: You'd think you want to look up the primary key field name for the related entity,
-		// but the Ref type from MikroORM actually just hardcodes `id` here, so we need to do that as well.
-		options.id = `(entity) => entity.${prop.name}?.id`;
+		const relatedEntity = this.entityLookup.get(prop.type);
+		if (!relatedEntity) {
+			throw new Error(
+				`Internal Error: Related entity ${prop.type} should exist but could not be found in the entity lookup.`
+			);
+		}
+		if (relatedEntity.primaryKeys.length !== 1) {
+			throw new Error(`Composite primary keys are not supported.`);
+		}
+		const [primaryKey] = relatedEntity.getPrimaryProps();
+
+		options.id = `(entity) => entity.${prop.name}?.${primaryKey.name}`;
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {

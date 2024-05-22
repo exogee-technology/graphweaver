@@ -244,6 +244,12 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		console.log('Building metadata...');
 		const metadata = await convertSchemaToMetadata(schema, platform, namingStrategy);
 
+		// Build a lookup for efficient cross-referencing later.
+		const entityLookup = new Map<string, EntityMetadata<any>>();
+		for (const meta of metadata) {
+			entityLookup.set(meta.className, meta);
+		}
+
 		const source: File[] = [];
 
 		const summaryOfEntities: { name: string; entityFilePath: string; schemaFilePath: string }[] =
@@ -252,7 +258,7 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 		for (const meta of metadata) {
 			if (!meta.pivotTable) {
 				const dataEntityFile = new DataEntityFile(meta, namingStrategy, platform, databaseType);
-				const schemaEntityFile = new SchemaEntityFile(meta, namingStrategy, platform);
+				const schemaEntityFile = new SchemaEntityFile(meta, namingStrategy, platform, entityLookup);
 				source.push(dataEntityFile, schemaEntityFile);
 				summaryOfEntities.push({
 					name: meta.className,
