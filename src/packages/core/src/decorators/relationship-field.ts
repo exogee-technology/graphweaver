@@ -3,7 +3,7 @@ import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
 	relatedField?: keyof D & string;
-	id?: (keyof D & string) | ((dataEntity: D) => string | number | undefined);
+	id?: (keyof D & (string | number)) | ((dataEntity: D) => string | number | undefined);
 	nullable?: boolean;
 	adminUIOptions?: {
 		hideInTable?: boolean;
