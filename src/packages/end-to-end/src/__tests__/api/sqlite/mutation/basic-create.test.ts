@@ -13,13 +13,13 @@ describe('basic create', () => {
 			.mutate(gql`
 				mutation CreateAlbum($input: AlbumInsertInput!) {
 					createAlbum(input: $input) {
-						id
+						albumId
 					}
 				}
 			`)
-			.variables({ input: { artist: { id: 1 }, title: 'string' } })
+			.variables({ input: { artist: { artistId: 1 }, title: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.createAlbum?.id).toBe('348');
+		expect(data?.createAlbum?.albumId).toBe('348');
 	});
 });

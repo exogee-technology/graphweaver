@@ -13,10 +13,10 @@ describe('basic filter', () => {
 			.query(gql`
 				query Albums($filter: AlbumsListFilter) {
 					albums(filter: $filter) {
-						id
+						albumId
 						title
 						artist {
-							id
+							artistId
 							name
 						}
 					}

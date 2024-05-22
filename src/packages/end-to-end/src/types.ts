@@ -75,7 +75,7 @@ export type AdminUiMetadata = {
 export type Album = {
 	__typename?: 'Album';
 	artist?: Maybe<Artist>;
-	id: Scalars['ID']['output'];
+	albumId: Scalars['ID']['output'];
 	title: Scalars['String']['output'];
 	tracks?: Maybe<Array<Track>>;
 };
@@ -90,7 +90,7 @@ export type AlbumTracksArgs = {
 
 export type AlbumCreateOrUpdateInput = {
 	artist?: InputMaybe<ArtistCreateOrUpdateInput>;
-	id?: InputMaybe<Scalars['ID']['input']>;
+	albumId?: InputMaybe<Scalars['ID']['input']>;
 	title?: InputMaybe<Scalars['String']['input']>;
 	tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
@@ -114,12 +114,12 @@ export type AlbumsListFilter = {
 	_not?: InputMaybe<AlbumsListFilter>;
 	_or?: InputMaybe<Array<AlbumsListFilter>>;
 	artist?: InputMaybe<ArtistsListFilter>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	albumId?: InputMaybe<Scalars['ID']['input']>;
+	albumId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	albumId_ne?: InputMaybe<Scalars['ID']['input']>;
+	albumId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	albumId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	albumId_null?: InputMaybe<Scalars['ID']['input']>;
 	title?: InputMaybe<Scalars['String']['input']>;
 	title_ilike?: InputMaybe<Scalars['String']['input']>;
 	title_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -132,7 +132,7 @@ export type AlbumsListFilter = {
 };
 
 export type AlbumsOrderByInput = {
-	id?: InputMaybe<Sort>;
+	albumId?: InputMaybe<Sort>;
 	title?: InputMaybe<Sort>;
 };
 
@@ -149,7 +149,7 @@ export type AlbumsUpdateManyInput = {
 export type Artist = {
 	__typename?: 'Artist';
 	albums?: Maybe<Array<Album>>;
-	id: Scalars['ID']['output'];
+	artistId: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
 };
 
@@ -159,7 +159,7 @@ export type ArtistAlbumsArgs = {
 
 export type ArtistCreateOrUpdateInput = {
 	albums?: InputMaybe<Array<AlbumCreateOrUpdateInput>>;
-	id?: InputMaybe<Scalars['ID']['input']>;
+	artistId?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -181,12 +181,12 @@ export type ArtistsListFilter = {
 	_not?: InputMaybe<ArtistsListFilter>;
 	_or?: InputMaybe<Array<ArtistsListFilter>>;
 	albums?: InputMaybe<AlbumsListFilter>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	artistId?: InputMaybe<Scalars['ID']['input']>;
+	artistId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	artistId_ne?: InputMaybe<Scalars['ID']['input']>;
+	artistId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	artistId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	artistId_null?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	name_ilike?: InputMaybe<Scalars['String']['input']>;
 	name_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -199,7 +199,7 @@ export type ArtistsListFilter = {
 
 export type ArtistsOrderByInput = {
 	albums?: InputMaybe<Sort>;
-	id?: InputMaybe<Sort>;
+	artistId?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
 };
 
@@ -219,11 +219,11 @@ export type Customer = {
 	city?: Maybe<Scalars['String']['output']>;
 	company?: Maybe<Scalars['String']['output']>;
 	country?: Maybe<Scalars['String']['output']>;
+	customerId: Scalars['ID']['output'];
 	email: Scalars['String']['output'];
 	employee?: Maybe<Employee>;
 	fax?: Maybe<Scalars['String']['output']>;
 	firstName: Scalars['String']['output'];
-	id: Scalars['ID']['output'];
 	invoices?: Maybe<Array<Invoice>>;
 	lastName: Scalars['String']['output'];
 	phone?: Maybe<Scalars['String']['output']>;
@@ -244,11 +244,11 @@ export type CustomerCreateOrUpdateInput = {
 	city?: InputMaybe<Scalars['String']['input']>;
 	company?: InputMaybe<Scalars['String']['input']>;
 	country?: InputMaybe<Scalars['String']['input']>;
+	customerId?: InputMaybe<Scalars['ID']['input']>;
 	email?: InputMaybe<Scalars['String']['input']>;
 	employee?: InputMaybe<EmployeeCreateOrUpdateInput>;
 	fax?: InputMaybe<Scalars['String']['input']>;
 	firstName?: InputMaybe<Scalars['String']['input']>;
-	id?: InputMaybe<Scalars['ID']['input']>;
 	invoices?: InputMaybe<Array<InvoiceCreateOrUpdateInput>>;
 	lastName?: InputMaybe<Scalars['String']['input']>;
 	phone?: InputMaybe<Scalars['String']['input']>;
@@ -316,6 +316,12 @@ export type CustomersListFilter = {
 	country_nin?: InputMaybe<Array<Scalars['String']['input']>>;
 	country_notnull?: InputMaybe<Scalars['String']['input']>;
 	country_null?: InputMaybe<Scalars['String']['input']>;
+	customerId?: InputMaybe<Scalars['ID']['input']>;
+	customerId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	customerId_ne?: InputMaybe<Scalars['ID']['input']>;
+	customerId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	customerId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	customerId_null?: InputMaybe<Scalars['ID']['input']>;
 	email?: InputMaybe<Scalars['String']['input']>;
 	email_ilike?: InputMaybe<Scalars['String']['input']>;
 	email_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -341,12 +347,6 @@ export type CustomersListFilter = {
 	firstName_nin?: InputMaybe<Array<Scalars['String']['input']>>;
 	firstName_notnull?: InputMaybe<Scalars['String']['input']>;
 	firstName_null?: InputMaybe<Scalars['String']['input']>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
 	invoices?: InputMaybe<InvoicesListFilter>;
 	lastName?: InputMaybe<Scalars['String']['input']>;
 	lastName_ilike?: InputMaybe<Scalars['String']['input']>;
@@ -387,10 +387,10 @@ export type CustomersOrderByInput = {
 	city?: InputMaybe<Sort>;
 	company?: InputMaybe<Sort>;
 	country?: InputMaybe<Sort>;
+	customerId?: InputMaybe<Sort>;
 	email?: InputMaybe<Sort>;
 	fax?: InputMaybe<Sort>;
 	firstName?: InputMaybe<Sort>;
-	id?: InputMaybe<Sort>;
 	invoices?: InputMaybe<Sort>;
 	lastName?: InputMaybe<Sort>;
 	phone?: InputMaybe<Sort>;
@@ -417,11 +417,11 @@ export type Employee = {
 	customers?: Maybe<Array<Customer>>;
 	email?: Maybe<Scalars['String']['output']>;
 	employee?: Maybe<Employee>;
+	employeeId: Scalars['ID']['output'];
 	employees?: Maybe<Array<Employee>>;
 	fax?: Maybe<Scalars['String']['output']>;
 	firstName: Scalars['String']['output'];
 	hireDate?: Maybe<Scalars['ISOString']['output']>;
-	id: Scalars['ID']['output'];
 	lastName: Scalars['String']['output'];
 	phone?: Maybe<Scalars['String']['output']>;
 	postalCode?: Maybe<Scalars['String']['output']>;
@@ -449,11 +449,11 @@ export type EmployeeCreateOrUpdateInput = {
 	customers?: InputMaybe<Array<CustomerCreateOrUpdateInput>>;
 	email?: InputMaybe<Scalars['String']['input']>;
 	employee?: InputMaybe<EmployeeCreateOrUpdateInput>;
+	employeeId?: InputMaybe<Scalars['ID']['input']>;
 	employees?: InputMaybe<Array<EmployeeCreateOrUpdateInput>>;
 	fax?: InputMaybe<Scalars['String']['input']>;
 	firstName?: InputMaybe<Scalars['String']['input']>;
 	hireDate?: InputMaybe<Scalars['ISOString']['input']>;
-	id?: InputMaybe<Scalars['ID']['input']>;
 	lastName?: InputMaybe<Scalars['String']['input']>;
 	phone?: InputMaybe<Scalars['String']['input']>;
 	postalCode?: InputMaybe<Scalars['String']['input']>;
@@ -536,6 +536,12 @@ export type EmployeesListFilter = {
 	email_notnull?: InputMaybe<Scalars['String']['input']>;
 	email_null?: InputMaybe<Scalars['String']['input']>;
 	employee?: InputMaybe<EmployeesListFilter>;
+	employeeId?: InputMaybe<Scalars['ID']['input']>;
+	employeeId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	employeeId_ne?: InputMaybe<Scalars['ID']['input']>;
+	employeeId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	employeeId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	employeeId_null?: InputMaybe<Scalars['ID']['input']>;
 	employees?: InputMaybe<EmployeesListFilter>;
 	fax?: InputMaybe<Scalars['String']['input']>;
 	fax_ilike?: InputMaybe<Scalars['String']['input']>;
@@ -563,12 +569,6 @@ export type EmployeesListFilter = {
 	hireDate_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
 	hireDate_notnull?: InputMaybe<Scalars['ISOString']['input']>;
 	hireDate_null?: InputMaybe<Scalars['ISOString']['input']>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
 	lastName?: InputMaybe<Scalars['String']['input']>;
 	lastName_ilike?: InputMaybe<Scalars['String']['input']>;
 	lastName_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -618,10 +618,10 @@ export type EmployeesOrderByInput = {
 	country?: InputMaybe<Sort>;
 	customers?: InputMaybe<Sort>;
 	email?: InputMaybe<Sort>;
+	employeeId?: InputMaybe<Sort>;
 	fax?: InputMaybe<Sort>;
 	firstName?: InputMaybe<Sort>;
 	hireDate?: InputMaybe<Sort>;
-	id?: InputMaybe<Sort>;
 	lastName?: InputMaybe<Sort>;
 	phone?: InputMaybe<Sort>;
 	postalCode?: InputMaybe<Sort>;
@@ -641,7 +641,7 @@ export type EmployeesUpdateManyInput = {
 
 export type Genre = {
 	__typename?: 'Genre';
-	id: Scalars['ID']['output'];
+	genreId: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
 	tracks?: Maybe<Array<Track>>;
 };
@@ -651,7 +651,7 @@ export type GenreTracksArgs = {
 };
 
 export type GenreCreateOrUpdateInput = {
-	id?: InputMaybe<Scalars['ID']['input']>;
+	genreId?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
@@ -673,12 +673,12 @@ export type GenresListFilter = {
 	_and?: InputMaybe<Array<GenresListFilter>>;
 	_not?: InputMaybe<GenresListFilter>;
 	_or?: InputMaybe<Array<GenresListFilter>>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	genreId?: InputMaybe<Scalars['ID']['input']>;
+	genreId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	genreId_ne?: InputMaybe<Scalars['ID']['input']>;
+	genreId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	genreId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	genreId_null?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	name_ilike?: InputMaybe<Scalars['String']['input']>;
 	name_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -691,7 +691,7 @@ export type GenresListFilter = {
 };
 
 export type GenresOrderByInput = {
-	id?: InputMaybe<Sort>;
+	genreId?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
 	tracks?: InputMaybe<Sort>;
 };
@@ -714,7 +714,7 @@ export type Invoice = {
 	billingPostalCode?: Maybe<Scalars['String']['output']>;
 	billingState?: Maybe<Scalars['String']['output']>;
 	customer?: Maybe<Customer>;
-	id: Scalars['ID']['output'];
+	invoiceId: Scalars['ID']['output'];
 	invoiceDate: Scalars['ISOString']['output'];
 	invoiceLines?: Maybe<Array<InvoiceLine>>;
 	total: Scalars['String']['output'];
@@ -735,7 +735,7 @@ export type InvoiceCreateOrUpdateInput = {
 	billingPostalCode?: InputMaybe<Scalars['String']['input']>;
 	billingState?: InputMaybe<Scalars['String']['input']>;
 	customer?: InputMaybe<CustomerCreateOrUpdateInput>;
-	id?: InputMaybe<Scalars['ID']['input']>;
+	invoiceId?: InputMaybe<Scalars['ID']['input']>;
 	invoiceDate?: InputMaybe<Scalars['ISOString']['input']>;
 	invoiceLines?: InputMaybe<Array<InvoiceLineCreateOrUpdateInput>>;
 	total?: InputMaybe<Scalars['String']['input']>;
@@ -755,7 +755,7 @@ export type InvoiceInsertInput = {
 
 export type InvoiceLine = {
 	__typename?: 'InvoiceLine';
-	id: Scalars['ID']['output'];
+	invoiceLineId: Scalars['ID']['output'];
 	invoice?: Maybe<Invoice>;
 	quantity: Scalars['Float']['output'];
 	track?: Maybe<Track>;
@@ -771,7 +771,7 @@ export type InvoiceLineTrackArgs = {
 };
 
 export type InvoiceLineCreateOrUpdateInput = {
-	id?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId?: InputMaybe<Scalars['ID']['input']>;
 	invoice?: InputMaybe<InvoiceCreateOrUpdateInput>;
 	quantity?: InputMaybe<Scalars['Float']['input']>;
 	track?: InputMaybe<TrackCreateOrUpdateInput>;
@@ -797,12 +797,12 @@ export type InvoiceLinesListFilter = {
 	_and?: InputMaybe<Array<InvoiceLinesListFilter>>;
 	_not?: InputMaybe<InvoiceLinesListFilter>;
 	_or?: InputMaybe<Array<InvoiceLinesListFilter>>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	invoiceLineId_ne?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	invoiceLineId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId_null?: InputMaybe<Scalars['ID']['input']>;
 	invoice?: InputMaybe<InvoicesListFilter>;
 	quantity?: InputMaybe<Scalars['Float']['input']>;
 	quantity_gt?: InputMaybe<Scalars['Float']['input']>;
@@ -826,7 +826,7 @@ export type InvoiceLinesListFilter = {
 };
 
 export type InvoiceLinesOrderByInput = {
-	id?: InputMaybe<Sort>;
+	invoiceLineId?: InputMaybe<Sort>;
 	quantity?: InputMaybe<Sort>;
 	track?: InputMaybe<Sort>;
 	unitPrice?: InputMaybe<Sort>;
@@ -895,12 +895,12 @@ export type InvoicesListFilter = {
 	billingState_notnull?: InputMaybe<Scalars['String']['input']>;
 	billingState_null?: InputMaybe<Scalars['String']['input']>;
 	customer?: InputMaybe<CustomersListFilter>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	invoiceLineId_ne?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	invoiceLineId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	invoiceLineId_null?: InputMaybe<Scalars['ID']['input']>;
 	invoiceDate?: InputMaybe<Scalars['ISOString']['input']>;
 	invoiceDate_gt?: InputMaybe<Scalars['ISOString']['input']>;
 	invoiceDate_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -928,7 +928,7 @@ export type InvoicesOrderByInput = {
 	billingCountry?: InputMaybe<Sort>;
 	billingPostalCode?: InputMaybe<Sort>;
 	billingState?: InputMaybe<Sort>;
-	id?: InputMaybe<Sort>;
+	invoiceId?: InputMaybe<Sort>;
 	invoiceDate?: InputMaybe<Sort>;
 	invoiceLines?: InputMaybe<Sort>;
 	total?: InputMaybe<Sort>;
@@ -946,7 +946,7 @@ export type InvoicesUpdateManyInput = {
 
 export type MediaType = {
 	__typename?: 'MediaType';
-	id: Scalars['ID']['output'];
+	mediaTypeId: Scalars['ID']['output'];
 	name?: Maybe<Scalars['String']['output']>;
 	tracks?: Maybe<Array<Track>>;
 };
@@ -956,7 +956,7 @@ export type MediaTypeTracksArgs = {
 };
 
 export type MediaTypeCreateOrUpdateInput = {
-	id?: InputMaybe<Scalars['ID']['input']>;
+	mediaTypeId?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
@@ -978,12 +978,12 @@ export type MediaTypesListFilter = {
 	_and?: InputMaybe<Array<MediaTypesListFilter>>;
 	_not?: InputMaybe<MediaTypesListFilter>;
 	_or?: InputMaybe<Array<MediaTypesListFilter>>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	mediaTypeId?: InputMaybe<Scalars['ID']['input']>;
+	mediaTypeId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	mediaTypeId_ne?: InputMaybe<Scalars['ID']['input']>;
+	mediaTypeId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	mediaTypeId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	mediaTypeId_null?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	name_ilike?: InputMaybe<Scalars['String']['input']>;
 	name_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -996,7 +996,7 @@ export type MediaTypesListFilter = {
 };
 
 export type MediaTypesOrderByInput = {
-	id?: InputMaybe<Sort>;
+	mediaTypeId?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
 	tracks?: InputMaybe<Sort>;
 };
@@ -1349,12 +1349,12 @@ export type PlaylistsListFilter = {
 	_and?: InputMaybe<Array<PlaylistsListFilter>>;
 	_not?: InputMaybe<PlaylistsListFilter>;
 	_or?: InputMaybe<Array<PlaylistsListFilter>>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	playlistId?: InputMaybe<Scalars['ID']['input']>;
+	playlistId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	playlistId_ne?: InputMaybe<Scalars['ID']['input']>;
+	playlistId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	playlistId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	playlistId_null?: InputMaybe<Scalars['ID']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	name_ilike?: InputMaybe<Scalars['String']['input']>;
 	name_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -1367,7 +1367,7 @@ export type PlaylistsListFilter = {
 };
 
 export type PlaylistsOrderByInput = {
-	id?: InputMaybe<Sort>;
+	playlistId?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
 	tracks?: InputMaybe<Sort>;
 };
@@ -1408,7 +1408,7 @@ export type Query = {
 };
 
 export type QueryAlbumArgs = {
-	id: Scalars['ID']['input'];
+	albumId: Scalars['ID']['input'];
 };
 
 export type QueryAlbumsArgs = {
@@ -1417,7 +1417,7 @@ export type QueryAlbumsArgs = {
 };
 
 export type QueryArtistArgs = {
-	id: Scalars['ID']['input'];
+	artistId: Scalars['ID']['input'];
 };
 
 export type QueryArtistsArgs = {
@@ -1426,7 +1426,7 @@ export type QueryArtistsArgs = {
 };
 
 export type QueryCustomerArgs = {
-	id: Scalars['ID']['input'];
+	customerId: Scalars['ID']['input'];
 };
 
 export type QueryCustomersArgs = {
@@ -1435,7 +1435,7 @@ export type QueryCustomersArgs = {
 };
 
 export type QueryEmployeeArgs = {
-	id: Scalars['ID']['input'];
+	employeeId: Scalars['ID']['input'];
 };
 
 export type QueryEmployeesArgs = {
@@ -1444,7 +1444,7 @@ export type QueryEmployeesArgs = {
 };
 
 export type QueryGenreArgs = {
-	id: Scalars['ID']['input'];
+	genreId: Scalars['ID']['input'];
 };
 
 export type QueryGenresArgs = {
@@ -1453,11 +1453,11 @@ export type QueryGenresArgs = {
 };
 
 export type QueryInvoiceArgs = {
-	id: Scalars['ID']['input'];
+	invoiceId: Scalars['ID']['input'];
 };
 
 export type QueryInvoiceLineArgs = {
-	id: Scalars['ID']['input'];
+	invoiceLineId: Scalars['ID']['input'];
 };
 
 export type QueryInvoiceLinesArgs = {
@@ -1471,7 +1471,7 @@ export type QueryInvoicesArgs = {
 };
 
 export type QueryMediaTypeArgs = {
-	id: Scalars['ID']['input'];
+	mediaTypeId: Scalars['ID']['input'];
 };
 
 export type QueryMediaTypesArgs = {
@@ -1480,7 +1480,7 @@ export type QueryMediaTypesArgs = {
 };
 
 export type QueryPlaylistArgs = {
-	id: Scalars['ID']['input'];
+	playlistId: Scalars['ID']['input'];
 };
 
 export type QueryPlaylistsArgs = {
@@ -1489,7 +1489,7 @@ export type QueryPlaylistsArgs = {
 };
 
 export type QueryTrackArgs = {
-	id: Scalars['ID']['input'];
+	trackId: Scalars['ID']['input'];
 };
 
 export type QueryTracksArgs = {
@@ -1508,12 +1508,12 @@ export type Track = {
 	bytes?: Maybe<Scalars['Float']['output']>;
 	composer?: Maybe<Scalars['String']['output']>;
 	genre?: Maybe<Genre>;
-	id: Scalars['ID']['output'];
 	invoiceLines?: Maybe<Array<InvoiceLine>>;
 	mediaType?: Maybe<MediaType>;
 	milliseconds: Scalars['Float']['output'];
 	name: Scalars['String']['output'];
 	playlists?: Maybe<Array<Playlist>>;
+	trackId: Scalars['ID']['output'];
 	unitPrice: Scalars['String']['output'];
 };
 
@@ -1542,12 +1542,12 @@ export type TrackCreateOrUpdateInput = {
 	bytes?: InputMaybe<Scalars['Float']['input']>;
 	composer?: InputMaybe<Scalars['String']['input']>;
 	genre?: InputMaybe<GenreCreateOrUpdateInput>;
-	id?: InputMaybe<Scalars['ID']['input']>;
 	invoiceLines?: InputMaybe<Array<InvoiceLineCreateOrUpdateInput>>;
 	mediaType?: InputMaybe<MediaTypeCreateOrUpdateInput>;
 	milliseconds?: InputMaybe<Scalars['Float']['input']>;
 	name?: InputMaybe<Scalars['String']['input']>;
 	playlists?: InputMaybe<Array<PlaylistCreateOrUpdateInput>>;
+	trackId?: InputMaybe<Scalars['ID']['input']>;
 	unitPrice?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1596,12 +1596,12 @@ export type TracksListFilter = {
 	composer_notnull?: InputMaybe<Scalars['String']['input']>;
 	composer_null?: InputMaybe<Scalars['String']['input']>;
 	genre?: InputMaybe<GenresListFilter>;
-	id?: InputMaybe<Scalars['ID']['input']>;
-	id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_ne?: InputMaybe<Scalars['ID']['input']>;
-	id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-	id_notnull?: InputMaybe<Scalars['ID']['input']>;
-	id_null?: InputMaybe<Scalars['ID']['input']>;
+	trackId?: InputMaybe<Scalars['ID']['input']>;
+	trackId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+	trackId_ne?: InputMaybe<Scalars['ID']['input']>;
+	trackId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+	trackId_notnull?: InputMaybe<Scalars['ID']['input']>;
+	trackId_null?: InputMaybe<Scalars['ID']['input']>;
 	invoiceLines?: InputMaybe<InvoiceLinesListFilter>;
 	mediaType?: InputMaybe<MediaTypesListFilter>;
 	milliseconds?: InputMaybe<Scalars['Float']['input']>;
@@ -1637,7 +1637,7 @@ export type TracksOrderByInput = {
 	album?: InputMaybe<Sort>;
 	bytes?: InputMaybe<Sort>;
 	composer?: InputMaybe<Sort>;
-	id?: InputMaybe<Sort>;
+	trackId?: InputMaybe<Sort>;
 	milliseconds?: InputMaybe<Sort>;
 	name?: InputMaybe<Sort>;
 	unitPrice?: InputMaybe<Sort>;

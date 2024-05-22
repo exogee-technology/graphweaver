@@ -136,10 +136,6 @@ export class SchemaEntityFile extends BaseFile {
 		const useDefault = prop.default != null && isEnumOrNonStringDefault;
 		const optional = prop.nullable ? '?' : useDefault ? '' : '!';
 
-		if (prop.primary) {
-			return `${padding}id!: ${this.getTypescriptPropertyType(prop)};`;
-		}
-
 		const file = `${prop.name}${optional}: ${this.getTypescriptPropertyType(prop)}`;
 
 		if (!useDefault) {
@@ -227,6 +223,10 @@ export class SchemaEntityFile extends BaseFile {
 		if (prop.nullable && !prop.mappedBy) {
 			options.nullable = true;
 		}
+
+		if (prop.primary) {
+			options.primaryKeyField = true;
+		}
 	}
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
@@ -241,6 +241,9 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getForeignKeyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
+
+		// Note: You'd think you want to look up the primary key field name for the related entity,
+		// but the Ref type from MikroORM actually just hardcodes `id` here, so we need to do that as well.
 		options.id = `(entity) => entity.${prop.name}?.id`;
 	}
 

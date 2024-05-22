@@ -139,10 +139,6 @@ export class DataEntityFile extends BaseFile {
 			return `${padding}${prop.name}${optional}: Ref<${prop.type}>;\n`;
 		}
 
-		if (prop.primary) {
-			return `${padding}id!: ${this.getPropertyType(prop)};`;
-		}
-
 		const file = `${prop.name}${optional}: ${this.getPropertyType(prop)}`;
 
 		if (!useDefault) {

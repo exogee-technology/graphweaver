@@ -13,9 +13,9 @@ describe('nested create', () => {
 			.mutate(gql`
 				mutation CreateAlbum($input: AlbumInsertInput!) {
 					createAlbum(input: $input) {
-						id
+						albumId
 						artist {
-							id
+							artistId
 							name
 						}
 					}
@@ -24,8 +24,8 @@ describe('nested create', () => {
 			.variables({ input: { artist: { name: 'string' }, title: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.createAlbum?.id).toBe('348');
-		expect(data?.createAlbum?.artist?.id).toBe('276');
+		expect(data?.createAlbum?.albumId).toBe('348');
+		expect(data?.createAlbum?.artist?.artistId).toBe('276');
 		expect(data?.createAlbum?.artist?.name).toBe('string');
 	});
 
@@ -34,9 +34,9 @@ describe('nested create', () => {
 			.mutate(gql`
 				mutation CreateArtist($input: ArtistInsertInput!) {
 					createArtist(input: $input) {
-						id
+						artistId
 						albums {
-							id
+							albumId
 							title
 						}
 					}
@@ -45,8 +45,8 @@ describe('nested create', () => {
 			.variables({ input: { albums: [{ title: 'string' }], name: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.createArtist?.id).toBe('276');
-		expect(data?.createArtist?.albums?.[0]?.id).toBe('348');
+		expect(data?.createArtist?.artistId).toBe('276');
+		expect(data?.createArtist?.albums?.[0]?.albumId).toBe('348');
 		expect(data?.createArtist?.albums?.[0]?.title).toBe('string');
 	});
 
@@ -55,19 +55,19 @@ describe('nested create', () => {
 			.mutate(gql`
 				mutation UpdateArtist($input: ArtistUpdateInput!) {
 					updateArtist(input: $input) {
-						id
+						artistId
 						albums {
-							id
+							albumId
 							title
 						}
 					}
 				}
 			`)
-			.variables({ input: { albums: [{ title: 'string' }], id: '1' } })
+			.variables({ input: { albums: [{ title: 'string' }], artistId: '1' } })
 			.expectNoErrors();
 
-		expect(data?.updateArtist?.id).toBe('1');
-		expect(data?.updateArtist?.albums?.map((album) => album.id)).toContain('348');
+		expect(data?.updateArtist?.artistId).toBe('1');
+		expect(data?.updateArtist?.albums?.map((album) => album.albumId)).toContain('348');
 		expect(data?.updateArtist?.albums?.map((album) => album.title)).toContain('string');
 	});
 });
