@@ -236,7 +236,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -279,10 +279,10 @@ importers:
         version: 6.1.12
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -877,8 +877,8 @@ importers:
         specifier: 5.4.1
         version: 5.4.1
       semver:
-        specifier: 7.6.0
-        version: 7.6.0
+        specifier: 7.6.2
+        version: 7.6.2
       validate-npm-package-name:
         specifier: 5.0.1
         version: 5.0.1
@@ -998,7 +998,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -1093,10 +1093,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
@@ -1146,13 +1146,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)(pg@8.11.3)
       '@mikro-orm/mysql':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       '@mikro-orm/postgresql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
@@ -5653,6 +5653,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-bGRDTM13ASYcmte8BglikDwfoYmCo8YUW5LY4Mn5GUCyzjLV7XP23SrTaerLIxXlNiTnJhTO+On3cOyndFwHpw==}
@@ -5714,28 +5715,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12):
-    resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.1.12
-      '@mikro-orm/knex': 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)(sqlite3@5.1.7)
-      pg: 8.11.3
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.4):
     resolution: {integrity: sha512-wiegkUtiQ3hnz+Dk0QaXR+A32U3r3yWF/VM+pBIQ/4aR1EBCaOJaGkQD+oncuznpeRVbT7Z/dYt2Fkm8PdM8Jw==}
     engines: {node: '>= 18.12.0'}
@@ -5779,6 +5758,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5):
     resolution: {integrity: sha512-IOv0s5UYdO2dzCiHGpTcceo2FOZtddnMmlNmRkBXhKzYkYUEut0qJJqt20d8oJsMJuEk8Et7/MAgdJT5FbWTzA==}
@@ -6098,7 +6078,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@gar/promisify': 1.1.3
-      semver: 7.6.0
+      semver: 7.6.2
     dev: false
     optional: true
 
@@ -6991,7 +6971,7 @@ packages:
       node-dir: 0.1.17
       node-fetch: 2.7.0
       open: 7.4.2
-      semver: 7.6.0
+      semver: 7.6.2
       simple-git: 3.24.0(supports-color@8.1.1)
       timers-ext: 0.1.7
       type: 2.7.2
@@ -8318,7 +8298,7 @@ packages:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.4
-      semver: 7.6.0
+      semver: 7.6.2
       ts-api-utils: 1.3.0(typescript@5.4.5)
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -12888,7 +12868,7 @@ packages:
       '@babel/parser': 7.24.5
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13273,7 +13253,7 @@ packages:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -13733,6 +13713,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.11.5)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -14180,7 +14161,7 @@ packages:
     resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.6.2
 
   /make-error@1.3.6:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
@@ -14591,7 +14572,7 @@ packages:
     resolution: {integrity: sha512-CPMcGa+y33xuL1E0TcNIu4YyaZCxnnvkVaEXrsosR3FxN+fV8xvb7Mzpb7IgKler10qeMkE6+Dp8qJhpzdq35g==}
     engines: {node: '>=10'}
     dependencies:
-      semver: 7.6.0
+      semver: 7.6.2
     dev: false
 
   /node-abort-controller@3.1.1:
@@ -14642,7 +14623,7 @@ packages:
       nopt: 5.0.0
       npmlog: 6.0.2
       rimraf: 3.0.2
-      semver: 7.6.0
+      semver: 7.6.2
       tar: 6.2.1
       which: 2.0.2
     transitivePeerDependencies:
@@ -14713,7 +14694,7 @@ packages:
       fs2: 0.3.9
       memoizee: 0.4.15
       node-fetch: 2.7.0
-      semver: 7.6.0
+      semver: 7.6.2
       type: 2.7.2
       validate-npm-package-name: 3.0.0
     transitivePeerDependencies:
@@ -16208,6 +16189,11 @@ packages:
     dependencies:
       lru-cache: 6.0.0
 
+  /semver@7.6.2:
+    resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   /send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
     engines: {node: '>= 0.8.0'}
@@ -16864,7 +16850,7 @@ packages:
       mime: 2.6.0
       qs: 6.12.1
       readable-stream: 3.6.2
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
 
@@ -16882,7 +16868,7 @@ packages:
       methods: 1.1.2
       mime: 2.6.0
       qs: 6.12.1
-      semver: 7.6.0
+      semver: 7.6.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -17200,7 +17186,7 @@ packages:
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
-      semver: 7.6.0
+      semver: 7.6.2
       typescript: 5.4.5
       yargs-parser: 21.1.1
     dev: true
