@@ -41,7 +41,7 @@ export const assign = async <T extends AnyEntity<T>>(
 	const metadata = wrap(entity, true).__meta!;
 
 	for (const [property, value] of Object.entries(data)) {
-		const entityPropertyValue = (entity as any)[property];
+		const entityPropertyValue = entity[property as keyof T];
 
 		// We're going to need the metadata for this property so we can ensure it exists and so that we can
 		// navigate to related entities.
@@ -170,7 +170,7 @@ export const assign = async <T extends AnyEntity<T>>(
 
 				if (valueKeys.length === 1 && valueKeys[0] === relatedPrimaryKeyField) {
 					// Ok, this is just the ID, set the reference and move on.
-					(relatedEntity as any)[property] = em.getReference(
+					entity[property as keyof T] = em.getReference(
 						propertyMetadata.type,
 						(value as any)[relatedPrimaryKeyField]
 					);
@@ -181,14 +181,14 @@ export const assign = async <T extends AnyEntity<T>>(
 						);
 					}
 
-					if (entityPropertyValue && !entityPropertyValue.isInitialized()) {
+					if (Reference.isReference(entityPropertyValue) && !entityPropertyValue.isInitialized()) {
 						throw new Error(
 							`Trying to merge to related property ${property} on entity ${metadata.name} which is not initialised.`
 						);
 					}
 
 					const newEntity = await createOrAssignEntity<T>({
-						entity: entityPropertyValue?.unwrap() as T,
+						entity: (entityPropertyValue as Reference<T>)?.unwrap(),
 						entityType: propertyMetadata.type,
 						primaryKeyField: relatedPrimaryKeyField,
 						data: value as EntityData<T>,
