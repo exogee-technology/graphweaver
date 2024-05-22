@@ -112,8 +112,17 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getPropertyType(prop: EntityProperty): string {
-		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
+		const columnType = prop.columnTypes?.[0]?.toLowerCase();
+
+		if (['jsonb', 'json', 'any'].includes(columnType)) {
 			return `Record<string, unknown>`;
+		}
+
+		// Mikro doesn't infer column types for some columns very well. We can augment.
+		if (prop.type === 'unknown') {
+			if (columnType?.startsWith('nvarchar(') || columnType?.startsWith('varchar(')) {
+				return 'string';
+			}
 		}
 
 		return prop.type;
