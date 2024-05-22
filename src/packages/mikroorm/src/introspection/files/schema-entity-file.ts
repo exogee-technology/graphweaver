@@ -228,6 +228,14 @@ export class SchemaEntityFile extends BaseFile {
 		if (prop.primary) {
 			options.primaryKeyField = true;
 		}
+
+		// If there's a property called 'name' it should be the summary field. If not, and there's a field called 'title'
+		// then it should be the summary field.
+		if (prop.name === 'name') {
+			options.adminUIOptions = { summaryField: true };
+		} else if (prop.name === 'title' && !this.meta.props.find((prop) => prop.name === 'name')) {
+			options.adminUIOptions = { summaryField: true };
+		}
 	}
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
