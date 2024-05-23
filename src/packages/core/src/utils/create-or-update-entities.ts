@@ -180,9 +180,15 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 					// If only one object, create or update it first, then update the parent reference
 					const result = await runChildCreateOrUpdate(childMeta, childNode, context);
 
+					// Now we need to pull the ID out to link the result.
+					const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(childMeta);
+					if (!primaryKeyField) {
+						throw new Error(`No primary key field found for ${childMeta.name}`);
+					}
+
 					node = {
 						...node,
-						[key]: result,
+						[key]: { [primaryKeyField]: result[primaryKeyField as keyof typeof result] },
 					};
 				}
 			}
