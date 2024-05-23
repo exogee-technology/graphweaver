@@ -97,7 +97,7 @@ export const assign = async <T extends AnyEntity<T>>(
 									propertyMetadata.type,
 									{
 										id: subvalue.id,
-									} as any // this will be removed with the id work
+									} as any // @todo this will be removed with the id work
 								)) as T | null) ?? undefined;
 						}
 					}
