@@ -155,7 +155,6 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<G>) => {
 		// Clean the input and remove any GraphQL classes from the object
-		// const cleanInput = JSON.parse(JSON.stringify(inputArgs));
 		const assignmentObj = this.applyExternalIdFields(entityType, inputArgs);
 		return assign(result, assignmentObj, undefined, undefined, this.database.em);
 	};
