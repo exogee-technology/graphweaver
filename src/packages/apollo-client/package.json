@@ -22,12 +22,8 @@
 		"lib"
 	],
 	"devDependencies": {
-		"@apollo/client": "3.10.4",
-		"esbuild": "0.15.5",
+		"esbuild": "0.20.2",
 		"typescript": "5.4.5"
-	},
-	"peerDependencies": {
-		"@apollo/client": "^3.10.4"
 	},
 	"keywords": [
 		"graphql",
