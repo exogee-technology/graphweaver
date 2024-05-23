@@ -290,8 +290,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/mikro-orm-sqlite-wasm
       node-sqlite3-wasm:
-        specifier: 0.8.13
-        version: 0.8.13
+        specifier: 0.8.14
+        version: 0.8.14
     devDependencies:
       '@types/node':
         specifier: 20.12.12
@@ -378,8 +378,8 @@ importers:
         specifier: 9.0.1
         version: 9.0.1
       xero-node:
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 6.0.0
+        version: 6.0.0
     devDependencies:
       '@types/node':
         specifier: 20.12.12
@@ -864,9 +864,9 @@ importers:
       node-semver:
         specifier: 1.0.0
         version: 1.0.0
-      ora:
-        specifier: 5.4.1
-        version: 5.4.1
+      ora-classic:
+        specifier: 5.4.2
+        version: 5.4.2
       semver:
         specifier: 7.6.2
         version: 7.6.2
@@ -1086,8 +1086,8 @@ importers:
         specifier: 6.1.12
         version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
       node-sqlite3-wasm:
-        specifier: 0.8.13
-        version: 0.8.13
+        specifier: 0.8.14
+        version: 0.8.14
     devDependencies:
       '@types/node':
         specifier: 20.12.12
@@ -1370,8 +1370,8 @@ importers:
         specifier: 16.8.1
         version: 16.8.1
       xero-node:
-        specifier: 5.1.0
-        version: 5.1.0
+        specifier: 6.0.0
+        version: 6.0.0
     devDependencies:
       '@types/node':
         specifier: 20.12.12
@@ -14436,8 +14436,8 @@ packages:
     deprecated: please use 'semver'
     dev: false
 
-  /node-sqlite3-wasm@0.8.13:
-    resolution: {integrity: sha512-8mSrvUCFtfqE17EkJdcRC/r/lMuGoxS+wP/r5mcGul3Zf87Rc9yog1seZp385n4lXsUSLBbiNxV1C3zCGWsgUw==}
+  /node-sqlite3-wasm@0.8.14:
+    resolution: {integrity: sha512-oOpn6fzCxbDbinJSfsUmCjubxWPj/Ucaw+CGq+C2fuEj1WrVNy0ikpcTDwM485uctnZGwYQuxRLAp+y277zTpQ==}
     dev: false
 
   /nopt@5.0.0:
@@ -14630,6 +14630,21 @@ packages:
       type-check: 0.4.0
       word-wrap: 1.2.5
     dev: true
+
+  /ora-classic@5.4.2:
+    resolution: {integrity: sha512-/xX8D5AMHB+LnvEJHOglmq6pXwm65CQ/gqPrIjIN5GJ1Bl9KC9fSmgzR/FwjrtalDj/WVxukAVuH8GP00Zpiaw==}
+    engines: {node: '>=10'}
+    dependencies:
+      bl: 4.1.0
+      chalk: 4.1.2
+      cli-cursor: 3.1.0
+      cli-spinners: 2.9.2
+      is-interactive: 1.0.0
+      is-unicode-supported: 0.1.0
+      log-symbols: 4.1.0
+      strip-ansi: 6.0.1
+      wcwidth: 1.0.1
+    dev: false
 
   /ora@5.4.1:
     resolution: {integrity: sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==}
@@ -17719,8 +17734,8 @@ packages:
         optional: true
     dev: false
 
-  /xero-node@5.1.0:
-    resolution: {integrity: sha512-5Eld/e1GyKClkugLtOAd4ieRrLYgCxdifUqmI5/nhQngnhsne3mW/WE1acgtTyKcE5eG7SYhWRyoFBxiEyya1Q==}
+  /xero-node@6.0.0:
+    resolution: {integrity: sha512-k4BOWWPc9GdEG/K6gdaNnQMekev/chNkYlDhbCsgXZVhfZk6NYIhIbgfRbC6O/YPlzDXXJj5Erd2tbkonZXWcA==}
     dependencies:
       axios: 1.7.2
       openid-client: 4.9.1
