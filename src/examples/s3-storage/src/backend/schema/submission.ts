@@ -26,7 +26,7 @@ const s3 = new S3StorageProvider({
 export class Submission extends GraphQLEntity<OrmSubmission> {
 	public dataEntity!: OrmSubmission;
 
-	@Field(() => ID)
+	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
 	@MediaField({ storageProvider: s3 })
