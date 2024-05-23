@@ -15,10 +15,6 @@ import {
 import { graphweaverMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
 
-type GraphQLResolveInfoFacade = Partial<{
-	-readonly [K in keyof GraphQLResolveInfo]: GraphQLResolveInfo[K];
-}>;
-
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
 
@@ -59,7 +55,7 @@ const runChildCreateOrUpdate = <G extends { name: string }>(
 
 	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
 	// result type. The only thing we read in it is the return type, so we'll just stub that.
-	const infoFacade: GraphQLResolveInfoFacade = {
+	const infoFacade: Partial<GraphQLResolveInfo> = {
 		returnType: Array.isArray(data) ? new GraphQLList(graphQLType) : graphQLType,
 	};
 
