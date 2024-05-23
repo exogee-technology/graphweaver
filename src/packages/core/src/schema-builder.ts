@@ -202,7 +202,9 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 	return inputType;
 };
 
-const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
+// This is exported because deep within the create or update logic we need to stub a GraphQLResolveInfo object.
+// It's not meant to be used as a public API, please use the SchemaBuilder export unless you have a good reason not to.
+export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let entityType = entityTypes.get(entity.name);
 
 	if (!entityType) {

@@ -1,5 +1,4 @@
-import { GraphQLError, GraphQLResolveInfo, OperationTypeNode } from 'graphql';
-import { delegateToSchema } from '@graphql-tools/delegate';
+import { GraphQLList, GraphQLResolveInfo } from 'graphql';
 
 import {
 	BaseContext,
@@ -10,10 +9,15 @@ import {
 	GraphQLEntityType,
 	HookRegister,
 	getFieldTypeFromFieldMetadata,
+	graphQLTypeForEntity,
 	hookManagerMap,
-	isEntityMetadata,
 } from '..';
 import { graphweaverMetadata } from '../metadata';
+import { createOrUpdate } from '../resolvers';
+
+type GraphQLResolveInfoFacade = Partial<{
+	-readonly [K in keyof GraphQLResolveInfo]: GraphQLResolveInfo[K];
+}>;
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -46,44 +50,20 @@ export const isRelatedEntity = (unknownType: unknown): unknownType is typeof Gra
 	);
 };
 
-// Determine the name of the mutation that we should call
-const getMutationName = <G>(name: string, data: Partial<G> | Partial<G>[]): string => {
-	const entityMetadata = graphweaverMetadata.getEntityByName(name);
-	if (!entityMetadata) throw new Error(`Could not locate metadata for '${name}' entity.`);
-
-	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata) as keyof G;
-
-	const plural = entityMetadata.plural;
-	if (Array.isArray(data)) {
-		const isUpdateMany = data.every((object) => object[primaryKeyField]);
-		if (isUpdateMany) return `update${plural}`;
-		const isCreateMany = data.every((object) => object[primaryKeyField] === undefined);
-		if (isCreateMany) return `create${plural}`;
-		return `createOrUpdate${plural}`;
-	}
-	if (data[primaryKeyField]) return `update${name}`;
-	return `create${name}`;
-};
-
-// This function is used to call the child's base resolver create/update mutation
-export const callChildMutation = async <G>(
-	mutationName: string,
-	data: Partial<G>,
-	info: GraphQLResolveInfo,
+const runChildCreateOrUpdate = <G extends { name: string }>(
+	entityMetadata: EntityMetadata<any, any>,
+	data: Partial<G> | Partial<G>[],
 	context: BaseContext
-) => {
-	const result = await delegateToSchema({
-		schema: info.schema,
-		operation: OperationTypeNode.MUTATION,
-		fieldName: mutationName,
-		args: { input: data },
-		context,
-		info,
-	});
-	if (result.name === 'GraphQLError') {
-		throw new GraphQLError(result.message, { ...result });
-	}
-	return result;
+): Promise<G | G[]> => {
+	const graphQLType = graphQLTypeForEntity(entityMetadata);
+
+	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
+	// result type. The only thing we read in it is the return type, so we'll just stub that.
+	const infoFacade: GraphQLResolveInfoFacade = {
+		returnType: Array.isArray(data) ? new GraphQLList(graphQLType) : graphQLType,
+	};
+
+	return createOrUpdate(undefined, { input: data }, context, infoFacade as GraphQLResolveInfo);
 };
 
 // Covert the data entity from the backend to the GraphQL entity
@@ -195,13 +175,14 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 					}));
 
 					// Now create/update the children
-					const mutationName = getMutationName(fieldType.name, childEntities);
-					await callChildMutation(mutationName, childEntities, info, context);
-					// on the next line lets make sure we have an object with at least 1 key
+					await runChildCreateOrUpdate(childMeta, childEntities, context);
 				} else if (Object.keys(childNode).length > 0) {
+					const childMeta = graphweaverMetadata.getEntityByName(fieldType.name);
+					if (!childMeta)
+						throw new Error(`Could not locate metadata for '${fieldType.name}' entity.`);
+
 					// If only one object, create or update it first, then update the parent reference
-					const mutationName = getMutationName(fieldType.name, childNode);
-					const result = await callChildMutation(mutationName, childNode, info, context);
+					const result = await runChildCreateOrUpdate(childMeta, childNode, context);
 
 					node = {
 						...node,
