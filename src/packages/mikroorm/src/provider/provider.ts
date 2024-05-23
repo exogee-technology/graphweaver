@@ -27,7 +27,7 @@ import {
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
 
-import { SqlEntityRepository } from '@mikro-orm/postgresql';
+import { AutoPath, PopulateHint, SqlEntityRepository } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 type PostgresError = {
@@ -366,7 +366,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[gqlToMikro(filter) ?? []]],
 		};
 
-		const populate = [relatedField as `${string}.`];
+		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
 		const result = await this.database.em.find(entity, queryFilter, {
 			populate,
 		});
