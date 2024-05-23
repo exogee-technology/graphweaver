@@ -454,9 +454,6 @@ importers:
       esbuild:
         specifier: 0.20.2
         version: 0.20.2
-      esbuild-css-modules-plugin:
-        specifier: 3.1.2
-        version: 3.1.2(esbuild@0.20.2)
       esbuild-plugin-copy:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.20.2)
@@ -533,9 +530,6 @@ importers:
       esbuild:
         specifier: 0.20.2
         version: 0.20.2
-      esbuild-css-modules-plugin:
-        specifier: 3.1.2
-        version: 3.1.2(esbuild@0.20.2)
       esbuild-plugin-copy:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.20.2)
@@ -697,9 +691,6 @@ importers:
       esbuild:
         specifier: 0.20.2
         version: 0.20.2
-      esbuild-css-modules-plugin:
-        specifier: 3.1.2
-        version: 3.1.2(esbuild@0.20.2)
       esbuild-plugin-svgr:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.20.2)(typescript@5.4.5)
