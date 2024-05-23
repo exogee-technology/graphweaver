@@ -7,6 +7,10 @@
 		"type": "git",
 		"url": "https://github.com/exogee-technology/graphweaver.git"
 	},
+	"engines": {
+		"node": ">=18",
+		"pnpm": "8"
+	},
 	"scripts": {
 		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
 		"build:types": "turbo --filter \"!./examples/**\" build:types",
