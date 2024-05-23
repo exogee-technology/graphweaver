@@ -10,7 +10,7 @@ describe('basic query', () => {
 			.query(gql`
 				query {
 					albums {
-						id
+						albumId
 					}
 				}
 			`)
