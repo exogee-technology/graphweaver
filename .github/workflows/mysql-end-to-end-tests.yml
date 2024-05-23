@@ -19,7 +19,7 @@ jobs:
       run:
         working-directory: src
 
-    steps:         
+    steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -34,7 +34,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4.0.0
         with:
-          version: 8.6.9
+          version: 9
 
       - uses: actions/setup-node@v4
         with:
@@ -50,7 +50,7 @@ jobs:
 
       - name: 🔥 Initialize MySQL
         run: sudo systemctl start mysql.service
-              
+
       - name: Import Mysql Chinook Database
         working-directory: src/packages/end-to-end
         run: pnpm import-database-mysql
@@ -63,4 +63,3 @@ jobs:
           sleep 3 &&
           pnpm test-mysql &&
           killall node
-
