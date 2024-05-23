@@ -175,7 +175,7 @@ importers:
         version: 6.1.12
       '@mikro-orm/mysql':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -282,7 +282,7 @@ importers:
         version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.7)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -455,8 +455,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       esbuild-css-modules-plugin:
-        specifier: 2.7.1
-        version: 2.7.1(esbuild@0.20.2)
+        specifier: 3.1.2
+        version: 3.1.2(esbuild@0.20.2)
       esbuild-plugin-copy:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.20.2)
@@ -534,8 +534,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       esbuild-css-modules-plugin:
-        specifier: 2.7.1
-        version: 2.7.1(esbuild@0.20.2)
+        specifier: 3.1.2
+        version: 3.1.2(esbuild@0.20.2)
       esbuild-plugin-copy:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.20.2)
@@ -698,8 +698,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       esbuild-css-modules-plugin:
-        specifier: 2.7.1
-        version: 2.7.1(esbuild@0.20.2)
+        specifier: 3.1.2
+        version: 3.1.2(esbuild@0.20.2)
       esbuild-plugin-svgr:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.20.2)(typescript@5.4.5)
@@ -798,8 +798,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       esbuild-css-modules-plugin:
-        specifier: 2.7.1
-        version: 2.7.1(esbuild@0.20.2)
+        specifier: 3.1.2
+        version: 3.1.2(esbuild@0.20.2)
       glob:
         specifier: 10.3.12
         version: 10.3.12
@@ -1096,7 +1096,7 @@ importers:
         version: 6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.7)(pg@8.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.1.12
-        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)
+        version: 6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.3)
       node-sqlite3-wasm:
         specifier: 0.8.13
         version: 0.8.13
@@ -5742,6 +5742,12 @@ packages:
   esbuild-css-modules-plugin@2.7.1:
     resolution: {integrity: sha512-lyz7oztJaqkSzXFTnMBW4nOqiXdw28DIpSZyOf73n9kxe3W5NV9VP/bJfg9ceX80B2xGhLYicb/n0oiGi0Mfnw==}
     engines: {node: '>= 16'}
+    peerDependencies:
+      esbuild: '*'
+
+  esbuild-css-modules-plugin@3.1.2:
+    resolution: {integrity: sha512-XRpRuRT3m1Pk456djTvrq1AOEj+OB8sa8PdGN/Yha6eL8Im0TIYPq0CELgQU6DDKkHlYET++3sXZVjiF/kcgQw==}
+    engines: {node: '>= 16.20.0'}
     peerDependencies:
       esbuild: '*'
 
@@ -12201,7 +12207,7 @@ snapshots:
       pluralize: 8.0.0
       reflect-metadata: 0.2.1
     optionalDependencies:
-      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.5)
       '@mikro-orm/mysql': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)
       '@mikro-orm/postgresql': 6.1.10(@mikro-orm/core@6.1.12)
       '@mikro-orm/sqlite': 6.1.10(@mikro-orm/core@6.1.12)(pg@8.11.5)
@@ -13436,7 +13442,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
 
   '@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(mysql2@3.9.2)(pg@8.11.5)':
     dependencies:
@@ -13485,7 +13490,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
 
   '@mikro-orm/knex@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)(sqlite3@5.1.7)':
     dependencies:
@@ -13531,7 +13535,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
 
   '@mikro-orm/mysql@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)':
     dependencies:
@@ -13616,7 +13619,6 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
-    optional: true
 
   '@mikro-orm/sqlite@6.1.12(@mikro-orm/core@6.1.12)(pg@8.11.5)':
     dependencies:
@@ -17095,15 +17097,11 @@ snapshots:
       postcss-modules: 6.0.0(postcss@8.4.38)
       tmp: 0.2.3
 
-  esbuild-css-modules-plugin@2.7.1(esbuild@0.20.2):
+  esbuild-css-modules-plugin@3.1.2(esbuild@0.20.2):
     dependencies:
       esbuild: 0.20.2
-      fs-extra: 10.1.0
       lightningcss: 1.25.0
-      lodash: 4.17.21
-      postcss: 8.4.38
-      postcss-modules: 6.0.0(postcss@8.4.38)
-      tmp: 0.2.3
+      lodash-es: 4.17.21
 
   esbuild-darwin-64@0.15.5:
     optional: true
@@ -19127,7 +19125,6 @@ snapshots:
       pg: 8.11.3
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   knex@3.1.0(mysql2@3.9.2)(pg@8.11.5):
     dependencies:
@@ -19194,7 +19191,6 @@ snapshots:
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   knex@3.1.0(pg@8.11.5)(sqlite3@5.1.7):
     dependencies:

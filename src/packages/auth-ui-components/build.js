@@ -8,9 +8,13 @@ import cssModulesPlugin from 'esbuild-css-modules-plugin';
 
 	await esbuild.build({
 		outdir: 'lib',
+		outbase: 'src',
 		format: 'esm',
 		sourcemap: 'linked',
 		entryPoints,
+		loader: {
+			'.module.css': 'css',
+		},
 		plugins: [cssModulesPlugin(), svgrPlugin({ exportType: 'named' })],
 	});
 })();

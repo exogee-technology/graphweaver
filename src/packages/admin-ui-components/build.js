@@ -9,9 +9,13 @@ import { copy } from 'esbuild-plugin-copy';
 
 	await esbuild.build({
 		outdir: 'lib',
+		outbase: 'src',
 		format: 'esm',
 		sourcemap: 'linked',
 		entryPoints,
+		loader: {
+			'.module.css': 'css',
+		},
 		plugins: [
 			cssModulesPlugin(),
 			svgrPlugin({ exportType: 'named' }),
