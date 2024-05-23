@@ -136,12 +136,8 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 					// As are updating the parent from the child, we can remove this key
 					delete node[key as keyof Partial<G>];
 
-					const relatedPrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(
-						relatedEntityMetadata
-					) as keyof G;
-
 					// Check if we already have the parent ID
-					let parentId = node[relatedPrimaryKeyField] ?? parent?.[primaryKeyField];
+					let parentId = node[primaryKeyField] ?? parent?.[primaryKeyField];
 					if (!parentId && !parent) {
 						// If there's no ID, create the parent first
 						const parentDataEntity = await meta.provider.createOne(node);
