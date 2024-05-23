@@ -407,7 +407,7 @@ const generateGraphQLInputFieldsForEntity =
 			if (field.apiOptions?.excludeFromBuiltInWriteOperations) continue;
 
 			// The ID field is a special case based on the input type.
-			if (field.name === entity.primaryKeyField ?? 'id') {
+			if (field.name === entity.primaryKeyField) {
 				switch (input) {
 					case 'createOrUpdate':
 						fields[field.name] = { type: ID };
