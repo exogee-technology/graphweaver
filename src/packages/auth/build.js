@@ -1,6 +1,3 @@
-const flags = process.argv.slice(0);
-const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName}`);
-
 (async () => {
 	const esbuild = await import('esbuild');
 	const { glob } = await import('glob');
@@ -12,6 +9,5 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 		platform: 'node',
 		sourcemap: 'linked',
 		entryPoints,
-		watch: flagIncludes('watch'),
 	});
 })();

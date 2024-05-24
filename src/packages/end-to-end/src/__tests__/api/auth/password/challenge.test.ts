@@ -1,33 +1,37 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
 
-import 'reflect-metadata';
 import MockDate from 'mockdate';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
-	CreateOrUpdateHookParams,
+	BaseDataProvider,
+	Entity,
 	Field,
 	GraphQLEntity,
 	ID,
-	ObjectType,
 	RelationshipField,
-	Resolver,
-	createBaseResolver,
 } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
-	createBasePasswordAuthResolver,
 	Credential,
-	RequestParams,
-	CredentialCreateOrUpdateInputArgs,
+	Password,
+	CredentialStorage,
+	hashPassword,
 } from '@exogee/graphweaver-auth';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { SqliteDriver } from '@mikro-orm/sqlite';
+
+class TaskProvider extends BaseDataProvider<any, Task> {
+	public async withTransaction<T>(callback: () => Promise<T>) {
+		return await callback();
+	}
+	async updateOne(data: any) {
+		return data;
+	}
+}
 
 @ApplyMultiFactorAuthentication<Task>(() => ({
 	Everyone: {
@@ -35,7 +39,9 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
 	},
 }))
-@ObjectType('Task')
+@Entity('Task', {
+	provider: new TaskProvider('Task'),
+})
 class Task extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -49,7 +55,9 @@ class Task extends GraphQLEntity<any> {
 	tags!: Tag[];
 }
 
-@ObjectType('Tag')
+@Entity('Tag', {
+	provider: new BaseDataProvider('Tag'),
+})
 class Tag extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -63,28 +71,6 @@ class Tag extends GraphQLEntity<any> {
 	tasks!: Task[];
 }
 
-@Resolver((of) => Task)
-class TaskResolver extends createBaseResolver<Task, any>(
-	Task,
-	new MikroBackendProvider(class OrmTask extends BaseEntity {}, {
-		connectionManagerId: 'sqlite',
-		mikroOrmConfig: {
-			driver: SqliteDriver,
-		},
-	})
-) {}
-
-@Resolver((of) => Tag)
-class TagResolver extends createBaseResolver<Tag, any>(
-	Tag,
-	new MikroBackendProvider(class OrmTag extends BaseEntity {}, {
-		connectionManagerId: 'sqlite',
-		mikroOrmConfig: {
-			driver: SqliteDriver,
-		},
-	})
-) {}
-
 const user = new UserProfile({
 	id: '1',
 	roles: ['admin'],
@@ -92,37 +78,33 @@ const user = new UserProfile({
 	username: 'test',
 });
 
-@Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {
-		connectionManagerId: 'sqlite',
-		mikroOrmConfig: {
-			driver: SqliteDriver,
-		},
-	})
-) {
-	/**
-	 * Dummy method to simulate a password authentication
-	 */
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
+		const user: CredentialStorage = {
+			id: '1',
+			username: 'test',
+			password: await hashPassword('test123'),
+			isCollection: () => false,
+			isReference: () => false,
+		};
 		return user;
 	}
 }
 
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (id: string): Promise<UserProfile<unknown>> => {
+		return new UserProfile({
+			id: user.id,
+			username: user.username,
+		});
+	},
+});
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver, TaskResolver, TagResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
@@ -132,14 +114,14 @@ describe('Password Authentication - Challenge', () => {
 	test('should return an error to initiate a challenge for a password.', async () => {
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
-				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
-					updateTask(data: $data) {
+				mutation updateEntity($input: TaskUpdateInput!) {
+					updateTask(input: $input) {
 						id
 					}
 				}
 			`,
 			variables: {
-				data: {
+				input: {
 					id: '1',
 				},
 			},
@@ -154,14 +136,14 @@ describe('Password Authentication - Challenge', () => {
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
-				mutation updateEntity($data: TagCreateOrUpdateInput!) {
-					updateTag(data: $data) {
+				mutation updateEntity($input: TagUpdateInput!) {
+					updateTag(input: $input) {
 						id
 					}
 				}
 			`,
 			variables: {
-				data: {
+				input: {
 					id: '1',
 					tasks: [
 						{
@@ -259,14 +241,14 @@ describe('Password Authentication - Challenge', () => {
 		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
 			query: gql`
-				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
-					updateTask(data: $data) {
+				mutation updateEntity($input: TaskUpdateInput!) {
+					updateTask(input: $input) {
 						id
 					}
 				}
 			`,
 			variables: {
-				data: {
+				input: {
 					id: '1',
 				},
 			},
@@ -284,14 +266,14 @@ describe('Password Authentication - Challenge', () => {
 		const expiredResponse = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
 			query: gql`
-				mutation updateEntity($data: TaskCreateOrUpdateInput!) {
-					updateTask(data: $data) {
+				mutation updateEntity($input: TaskUpdateInput!) {
+					updateTask(input: $input) {
 						id
 					}
 				}
 			`,
 			variables: {
-				data: {
+				input: {
 					id: '1',
 				},
 			},

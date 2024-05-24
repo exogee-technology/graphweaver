@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth-ui-components",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -25,7 +25,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.11",
+		"@apollo/client": "3.10.4",
 		"@simplewebauthn/browser": "10.0.0",
 		"@usedapp/core": "1.2.13",
 		"ethers": "5.7.2",
@@ -35,23 +35,22 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"formik": "2.2.9",
 		"graphql": "16.8.1",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
 		"react-router-dom": "6.22.3"
 	},
 	"devDependencies": {
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@types/react": "18.2.75",
-		"@types/react-dom": "18.2.24",
-		"esbuild": "0.15.5",
-		"esbuild-css-modules-plugin": "2.7.1",
+		"@types/react": "18.3.2",
+		"@types/react-dom": "18.3.0",
+		"esbuild": "0.20.2",
 		"esbuild-plugin-svgr": "2.1.0",
 		"glob": "10.3.12",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
 		"typescript": "5.4.5",
-		"vite": "5.2.8",
-		"vite-plugin-svgr": "3.2.0",
+		"vite": "5.2.11",
+		"vite-plugin-svgr": "4.2.0",
 		"@simplewebauthn/types": "10.0.0"
 	},
 	"keywords": [

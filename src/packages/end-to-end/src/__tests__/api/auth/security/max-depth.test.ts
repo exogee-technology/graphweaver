@@ -1,6 +1,5 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
@@ -8,11 +7,9 @@ import {
 	Field,
 	GraphQLEntity,
 	ID,
-	ObjectType,
 	BaseDataProvider,
 	RelationshipField,
-	Resolver,
-	createBaseResolver,
+	Entity,
 } from '@exogee/graphweaver';
 import { authApolloPlugin, UserProfile, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
@@ -22,12 +19,16 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
+const albumDataProvider = new BaseDataProvider<any, Album>('album');
+
 @ApplyAccessControlList({
 	Everyone: {
 		all: true,
 	},
 })
-@ObjectType('Album')
+@Entity('Album', {
+	provider: albumDataProvider,
+})
 export class Album extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -41,12 +42,16 @@ export class Album extends GraphQLEntity<any> {
 	artist?: Artist;
 }
 
+const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
+
 @ApplyAccessControlList({
 	Everyone: {
 		all: true,
 	},
 })
-@ObjectType('Artist')
+@Entity('Artist', {
+	provider: artistDataProvider,
+})
 export class Artist extends GraphQLEntity<any> {
 	public dataEntity!: any;
 
@@ -60,18 +65,7 @@ export class Artist extends GraphQLEntity<any> {
 	albums!: Album[];
 }
 
-const albumDataProvider = new BaseDataProvider<any, Album>('album');
-
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, any>(Album, albumDataProvider) {}
-
-const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
-
-@Resolver((of) => Artist)
-class ArtistResolver extends createBaseResolver<Artist, any>(Artist, artistDataProvider) {}
-
 const graphweaver = new Graphweaver({
-	resolvers: [AlbumResolver, ArtistResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},

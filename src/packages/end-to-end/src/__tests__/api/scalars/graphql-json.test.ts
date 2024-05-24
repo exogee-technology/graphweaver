@@ -1,35 +1,50 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Query, Resolver } from '@exogee/graphweaver';
+import { Entity, ID, Field, GraphQLEntity, BaseDataProvider } from '@exogee/graphweaver';
 
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
-@Resolver()
-class JsonResolver {
-	@Query(() => GraphQLJSON)
-	async testJson(): Promise<{ test: string }> {
-		return {
-			test: 'test',
-		};
-	}
-}
-
 describe('GraphQL JSON Scalar Type', () => {
-	test('should not get error when requesting GraphQL Json scalar types', async () => {
-		const graphweaver = new Graphweaver({
-			resolvers: [JsonResolver],
-		});
+	test('should return json when requesting GraphQL Json scalar types', async () => {
+		class DataProvider extends BaseDataProvider<{ id: string }, User> {
+			async find() {
+				return [
+					{
+						id: '1',
+					},
+				];
+			}
+		}
+		@Entity('User', {
+			provider: new DataProvider('user'),
+		})
+		class User extends GraphQLEntity<any> {
+			@Field(() => ID)
+			id!: string;
+
+			@Field(() => GraphQLJSON)
+			async testJson(): Promise<{ test: string }> {
+				return {
+					test: 'test',
+				};
+			}
+		}
+		const graphweaver = new Graphweaver();
 
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
 				query {
-					testJson
+					users {
+						id
+						testJson
+					}
 				}
 			`,
 		});
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.data?.testJson).toMatchObject({ test: 'test' });
+		expect(response.body.singleResult.data?.users).toMatchObject([
+			{ id: '1', testJson: { test: 'test' } },
+		]);
 	});
 });

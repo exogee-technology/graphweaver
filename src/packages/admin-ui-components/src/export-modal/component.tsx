@@ -20,6 +20,8 @@ import {
 } from '../utils';
 import { GetEntity } from './graphql';
 
+const DEFAULT_EXPORT_PAGE_SIZE = 200;
+
 export const ExportModal = ({
 	closeModal,
 	sort,
@@ -36,7 +38,7 @@ export const ExportModal = ({
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
-	const pageSize = selectedEntity.attributes.exportPageSize || 200;
+	const pageSize = selectedEntity.attributes.exportPageSize || DEFAULT_EXPORT_PAGE_SIZE;
 
 	const fetchAll = async () => {
 		try {

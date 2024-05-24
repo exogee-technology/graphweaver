@@ -17,7 +17,7 @@ export class Album extends BaseEntity {
 	id!: number;
 
 	@Property({ fieldName: 'Title', type: 'NVARCHAR(160)' })
-	title!: unknown;
+	title!: string;
 
 	@ManyToOne({ entity: () => Artist, ref: true, fieldName: 'ArtistId', index: 'IFK_AlbumArtistId' })
 	artist!: Ref<Artist>;

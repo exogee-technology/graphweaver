@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-aws-cognito",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"license": "MIT",
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",
@@ -18,18 +18,17 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "4.10.2",
+		"@apollo/server": "4.10.4",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@exogee/graphweaver-aws": "workspace:*",
+		"@exogee/graphweaver-aws-cognito": "workspace:*",
 		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
-		"react": "18.2.0",
-		"reflect-metadata": "0.2.2"
+		"react": "18.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.12.7",
+		"@types/node": "20.12.12",
 		"graphweaver": "workspace:*",
 		"typescript": "5.4.5"
 	},

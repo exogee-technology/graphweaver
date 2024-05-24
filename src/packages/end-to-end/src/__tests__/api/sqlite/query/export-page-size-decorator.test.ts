@@ -1,25 +1,15 @@
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Entity, Property, PrimaryKey } from '@mikro-orm/core';
-import {
-	createBaseResolver,
-	Field,
-	GraphQLEntity,
-	ID,
-	ObjectType,
-	Resolver,
-	SummaryField,
-	ExportPageSize,
-} from '@exogee/graphweaver';
+import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
+import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
-@Entity({ tableName: 'Album' })
+@DataEntity({ tableName: 'Album' })
 class OrmAlbum extends BaseEntity {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
@@ -28,38 +18,12 @@ class OrmAlbum extends BaseEntity {
 	title!: string;
 }
 
-@Entity({ tableName: 'Artist' })
+@DataEntity({ tableName: 'Artist' })
 class OrmArtist extends BaseEntity {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	id!: number;
 
 	@Property({ fieldName: 'Name', type: 'NVARCHAR(120)', nullable: true })
-	name?: string;
-}
-
-@ExportPageSize(500)
-@ObjectType('Album')
-export class Album extends GraphQLEntity<OrmAlbum> {
-	public dataEntity!: OrmAlbum;
-
-	@Field(() => ID)
-	id!: number;
-
-	@SummaryField()
-	@Field(() => String)
-	title!: string;
-}
-
-@ExportPageSize(100)
-@ObjectType('Artist')
-export class Artist extends GraphQLEntity<OrmArtist> {
-	public dataEntity!: OrmArtist;
-
-	@Field(() => ID)
-	id!: number;
-
-	@SummaryField()
-	@Field(() => String, { nullable: true })
 	name?: string;
 }
 
@@ -72,22 +36,40 @@ const connection = {
 	},
 };
 
-@Resolver((of) => Album)
-class AlbumResolver extends createBaseResolver<Album, OrmAlbum>(
-	Album,
-	new MikroBackendProvider(OrmAlbum, connection)
-) {}
+@Entity('Album', {
+	provider: new MikroBackendProvider(OrmAlbum, connection),
+	adminUIOptions: {
+		exportPageSize: 500,
+	},
+})
+export class Album extends GraphQLEntity<OrmAlbum> {
+	public dataEntity!: OrmAlbum;
 
-@Resolver((of) => Artist)
-class ArtistResolver extends createBaseResolver<Artist, OrmArtist>(
-	Artist,
-	new MikroBackendProvider(OrmArtist, connection)
-) {}
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String)
+	title!: string;
+}
+
+@Entity('Artist', {
+	provider: new MikroBackendProvider(OrmArtist, connection),
+	adminUIOptions: {
+		exportPageSize: 100,
+	},
+})
+export class Artist extends GraphQLEntity<OrmArtist> {
+	public dataEntity!: OrmArtist;
+
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String, { nullable: true })
+	name?: string;
+}
 
 test('Should return exportPageSize attribute for each entity in getAdminUiMetadata', async () => {
-	const graphweaver = new Graphweaver({
-		resolvers: [AlbumResolver, ArtistResolver],
-	});
+	const graphweaver = new Graphweaver();
 
 	const response = await graphweaver.server.executeOperation({
 		query: gql`

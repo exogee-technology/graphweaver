@@ -32,7 +32,6 @@ export const baseEsbuildConfig: BuildOptions = {
 	platform: 'node',
 	target: ['node18'],
 	format: 'cjs',
-	watch: true,
 	keepNames: true,
 };
 
@@ -41,12 +40,13 @@ export const getExternalModules = (): string[] => {
 	const externalModules = new Set([
 		...Object.keys(requireSilent('knex/package.json').browser),
 		...Object.keys(requireSilent('@mikro-orm/knex/package.json').peerDependencies),
-		...Object.keys(requireSilent('type-graphql/package.json').peerDependencies),
 		'@mikro-orm/knex',
 		'bun:ffi',
 		'mock-aws-s3',
 		'nock',
 		'aws-sdk',
+		'libsql',
+		'mariadb/callback',
 	]);
 
 	// The end user might explicitly require these, so we'll exclude them from the list of external modules.

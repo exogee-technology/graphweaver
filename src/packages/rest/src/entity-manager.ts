@@ -187,11 +187,6 @@ export class EntityManager<T extends BaseEntity> {
 		mapAsInput?: boolean;
 	}) => (!value ? value : this.mapValueWithEntity(this._entity, value, mapAsInput));
 
-	private queryHasFieldsWithFormattedValues = (value: any) =>
-		value?.select?.filter((property: unknown) =>
-			this._entity.prototype._withFormattedValuesFor?.has(property)
-		).length > 0 ?? false;
-
 	public readonly list = async (query?: Partial<QueryOptions<T>>) => {
 		const { entityPath, entityName } = this._entity;
 		this.assertEntityProperties(entityPath !== undefined && entityName !== undefined);

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-xero",
-	"version": "0.2.24",
+	"version": "1.0.0-beta.1",
 	"description": "Xero backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,26 +21,26 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.2",
+		"@apollo/server": "4.10.4",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"class-validator": "0.14.1",
 		"dataloader": "2.2.2",
 		"graphql": "16.8.1",
-		"xero-node": "5.1.0"
+		"xero-node": "6.0.0"
 	},
 	"peerDependencies": {
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
 		"react-router-dom": "6.22.3"
 	},
 	"devDependencies": {
-		"@types/node": "20.12.7",
-		"esbuild": "0.15.5",
+		"@types/node": "20.12.12",
+		"esbuild": "0.20.2",
 		"glob": "10.3.12",
 		"prettier": "3.2.5",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
 		"react-router-dom": "6.22.3",
 		"typescript": "5.4.5"
 	},

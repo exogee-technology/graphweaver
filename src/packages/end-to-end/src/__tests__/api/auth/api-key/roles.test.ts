@@ -1,17 +1,9 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Field,
-	GraphQLEntity,
-	ID,
-	ObjectType,
-	Resolver,
-	createBaseResolver,
-} from '@exogee/graphweaver';
+import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -22,7 +14,14 @@ import {
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider, BaseEntity, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
-import { BigIntType, Enum, EnumArrayType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+	BigIntType,
+	Enum,
+	EnumArrayType,
+	Entity as OrmEntity,
+	PrimaryKey,
+	Property,
+} from '@mikro-orm/core';
 
 enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
@@ -30,8 +29,8 @@ enum Roles {
 }
 
 // Create Entity
-@Entity({ tableName: 'api_key' })
-class OrmApiKey extends BaseEntity implements ApiKeyStorage {
+@OrmEntity({ tableName: 'api_key' })
+class OrmApiKey extends BaseEntity implements ApiKeyStorage<Roles> {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
@@ -48,34 +47,12 @@ class OrmApiKey extends BaseEntity implements ApiKeyStorage {
 	roles!: Roles[];
 }
 
-@Entity()
+@OrmEntity()
 export class OrmTask extends BaseEntity {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
 	@Property({ type: String })
-	description!: string;
-}
-
-const acl: AccessControlList<Task, AuthorizationContext> = {
-	LIGHT_SIDE: {
-		// Users can only read tags
-		read: true,
-	},
-	DARK_SIDE: {
-		// Dark side user role can perform operations on any tag
-		all: true,
-	},
-};
-@ApplyAccessControlList(acl)
-@ObjectType('Task')
-export class Task extends GraphQLEntity<OrmTask> {
-	public dataEntity!: OrmTask;
-
-	@Field(() => ID)
-	id!: number;
-
-	@Field(() => String)
 	description!: string;
 }
 
@@ -89,18 +66,35 @@ const connection = {
 	},
 };
 
-@Resolver((of) => Task)
-class TaskResolver extends createBaseResolver<Task, OrmTask>(
-	Task,
-	new MikroBackendProvider(OrmTask, connection)
-) {}
+const acl: AccessControlList<Task, AuthorizationContext> = {
+	LIGHT_SIDE: {
+		// Users can only read tags
+		read: true,
+	},
+	DARK_SIDE: {
+		// Dark side user role can perform operations on any tag
+		all: true,
+	},
+};
+@ApplyAccessControlList(acl)
+@Entity('Task', {
+	provider: new MikroBackendProvider(OrmTask, connection),
+})
+export class Task extends GraphQLEntity<OrmTask> {
+	public dataEntity!: OrmTask;
+
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String)
+	description!: string;
+}
 
 const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
 
 const graphweaver = new Graphweaver({
-	resolvers: [TaskResolver],
 	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => ({}) as UserProfile, { apiKeyDataProvider })],
+		plugins: [authApolloPlugin(async () => ({}) as UserProfile<any>, { apiKeyDataProvider })],
 	},
 });
 
@@ -136,15 +130,15 @@ describe('Role Assignment for API Key Authentication', () => {
 		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
-				mutation createEntity($data: TaskInsertInput!) {
-					createTask(data: $data) {
+				mutation createEntity($input: TaskInsertInput!) {
+					createTask(input: $input) {
 						id
 						description
 						__typename
 					}
 				}
 			`,
-			variables: { data: { description: 'create dark side entity' } },
+			variables: { input: { description: 'create dark side entity' } },
 		});
 
 		assert(response.body.kind === 'single');
@@ -159,15 +153,15 @@ describe('Role Assignment for API Key Authentication', () => {
 		const response = await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
-				mutation createEntity($data: TaskInsertInput!) {
-					createTask(data: $data) {
+				mutation createEntity($input: TaskInsertInput!) {
+					createTask(input: $input) {
 						id
 						description
 						__typename
 					}
 				}
 			`,
-			variables: { data: { description: 'create light side entity' } },
+			variables: { input: { description: 'create light side entity' } },
 		});
 
 		assert(response.body.kind === 'single');

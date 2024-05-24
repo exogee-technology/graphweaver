@@ -1,6 +1,6 @@
 import { introspection } from '@exogee/graphweaver-mikroorm';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import ora from 'ora';
+import ora from 'ora-classic';
 import path from 'path';
 import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
 
