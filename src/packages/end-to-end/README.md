@@ -14,6 +14,42 @@ https://github.com/lerocha/chinook-database
 
 The SQLite file has been copied from the above directory and stored in `database.sqlite`.
 
+## To Run Tests: Auth
+
+1. Set up your environment variables. You'll need a public/private ES256 key pair that will be used to sign JWT tokens:
+
+```
+# Generate a private key
+openssl ecparam -name prime256v1 -genkey -noout -out ecdsa-private-key.pem
+# Derive the public key for the private key
+openssl ec -in ecdsa-private-key.pem -pubout -out ecdsa-public-key.pem
+```
+
+Then, encode the PEM formatted keys as base64 strings:
+
+```
+# Output the private key in base64 format
+cat ecdsa-private-key.pem | base64
+# Output the public key in base64 format
+cat ecdsa-public-key.pem | base64
+```
+
+Now we're ready to set the environment variables we'll need for the tests:
+
+```console
+export AUTH_PRIVATE_KEY_PEM_BASE64="base64_encoded_pem_private_key"
+export AUTH_PUBLIC_KEY_PEM_BASE64="base64_encoded_pem_public_key"
+export AUTH_BASE_URI="http://localhost:9000"
+export AUTH_WHITELIST_DOMAINS="localhost"
+export AUTH_MAGIC_LINK_RATE_LIMIT="500"
+```
+
+Finally you can kick them off!
+
+```console
+pnpm test-auth
+```
+
 ## To Run Tests: SQLite
 
 1. Run `pnpm dev-sqlite` This will start the test server, leave this running to start the tests
