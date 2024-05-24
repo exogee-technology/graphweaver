@@ -24,7 +24,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v3.0.0
+      - uses: pnpm/action-setup@v4.0.0
         with:
           version: 8.6.9
 
@@ -54,12 +54,12 @@ jobs:
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
-        timeout-minutes: 2
+        timeout-minutes: 4
         run: |
           pnpm start-server &
           sleep 3 &&
           pnpm test-sqlite &&
-          pnpm test-ui &&
+          pnpm test-ui-sqlite &&
           killall node
 
       - name: Add Native Module
@@ -76,7 +76,7 @@ jobs:
         if: steps.native-module.outcome == 'success'
         run: exit 1
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report

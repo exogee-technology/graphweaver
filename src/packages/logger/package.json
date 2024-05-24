@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "0.2.23",
+	"version": "1.0.0-beta.1",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {
@@ -19,13 +19,13 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"pino": "8.19.0"
+		"pino": "9.1.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.27",
-		"esbuild": "0.15.5",
-		"glob": "10.3.10",
-		"typescript": "5.4.2"
+		"@types/node": "20.12.12",
+		"esbuild": "0.20.2",
+		"glob": "10.3.12",
+		"typescript": "5.4.5"
 	},
 	"keywords": [
 		"graphql",

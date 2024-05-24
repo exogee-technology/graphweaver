@@ -8,10 +8,10 @@ export const pgConnection = {
 	mikroOrmConfig: {
 		entities: [User],
 		driver: PostgreSqlDriver,
-		dbName: 'todo_app',
-		user: 'postgres',
-		password: '',
-		port: 5432,
+		dbName: process.env.POSTGRES_DB_NAME ?? 'todo_app',
+		user: process.env.POSTGRES_DB_USER ?? 'postgres',
+		password: process.env.POSTGRES_DB_PASSWORD ?? '',
+		port: process.env.POSTGRES_DB_PORT ?? 5432,
 	},
 };
 
@@ -20,9 +20,9 @@ export const myConnection = {
 	mikroOrmConfig: {
 		entities: [Task],
 		driver: MySqlDriver,
-		dbName: 'todo_app',
-		user: 'root',
-		password: 'password',
-		port: 3306,
+		dbName: process.env.MYSQL_DB_NAME ?? 'todo_app',
+		user: process.env.MYSQL_DB_USER ?? 'root',
+		password: process.env.MYSQL_DB_PASSWORD ?? '',
+		port: process.env.MYSQL_DB_PORT ?? 3306,
 	},
 };

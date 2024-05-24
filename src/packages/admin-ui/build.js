@@ -1,10 +1,6 @@
 import esbuild from 'esbuild';
 import svgrPlugin from 'esbuild-plugin-svgr';
-import cssModulesPlugin from 'esbuild-css-modules-plugin';
 import { copy } from 'esbuild-plugin-copy';
-
-const flags = process.argv.slice(0);
-const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName}`);
 
 (async () => {
 	const { glob } = await import('glob');
@@ -12,12 +8,15 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 
 	await esbuild.build({
 		outdir: 'dist',
+		outbase: 'src',
 		format: 'esm',
 		minify: false,
 		sourcemap: 'linked',
 		entryPoints,
+		loader: {
+			'.module.css': 'css',
+		},
 		plugins: [
-			cssModulesPlugin({ inject: true }),
 			svgrPlugin({ exportType: 'named' }),
 			copy({
 				assets: [
@@ -32,6 +31,5 @@ const flagIncludes = (flagName) => !!flags.find((flag) => flag === `--${flagName
 				],
 			}),
 		],
-		watch: flagIncludes('watch'),
 	});
 })();

@@ -1,10 +1,4 @@
-import {
-	BackendProvider,
-	BackendProviderConfig,
-	Filter,
-	PaginationOptions,
-	WithId,
-} from './common/types';
+import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions, WithId } from './types';
 
 export class BaseDataProvider<D, G> implements BackendProvider<D, G> {
 	constructor(readonly backendId: string) {

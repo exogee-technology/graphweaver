@@ -4,6 +4,10 @@ import { build } from 'esbuild';
 import dotenv from 'dotenv';
 import os from 'os';
 
+// @ts-expect-error There are no types for this module, but we're not calling anything on it directly
+// so we don't actually care.
+import serverlessLogger from '@serverless/utils/log';
+
 import {
 	baseEsbuildConfig,
 	inputPathFor,
@@ -13,11 +17,7 @@ import {
 	getExternalModules,
 } from '../util';
 
-// The Serverless Offline logger should report any errors and such to the console as well.
-// This is how we configure the Serverless log reporter to use console.log().
-import '@serverless/utils/log-reporters/node';
-
-import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
+import { config } from '@exogee/graphweaver-config';
 
 const isWindows = () => os.platform() === 'win32';
 
@@ -144,7 +144,6 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	const { default: ServerlessOffline } = await import('serverless-offline');
 
 	const logLevel = process.env.LOGGING_LEVEL || 'trace';
-	const SLS_DEBUG = process.env.SLS_DEBUG || (logLevel === 'trace' ? '*' : undefined);
 
 	// Shim in a kind of serverless config so the plugin kicks up and does its job.
 	const slsOffline = new ServerlessOffline(
@@ -160,7 +159,6 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 					environment: {
 						// In dev it's helpful to trace.
 						LOGGING_LEVEL: logLevel,
-						SLS_DEBUG,
 					},
 				},
 				custom: {
@@ -179,7 +177,8 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 		{
 			printOutput: true,
 			reloadHandler: true,
-		}
+		},
+		serverlessLogger
 	);
 
 	console.log(`Backend Log Level: ${logLevel}`);

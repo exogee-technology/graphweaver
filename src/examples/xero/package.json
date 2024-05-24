@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "0.2.23",
+	"version": "1.0.0-beta.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -22,8 +22,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.9.7",
-		"@apollo/server": "4.10.1",
+		"@apollo/client": "3.10.4",
+		"@apollo/server": "4.10.4",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
@@ -42,20 +42,18 @@
 		"graphql": "16.8.1",
 		"graphweaver": "workspace:*",
 		"prop-types": "15.8.1",
-		"react": "18.2.0",
-		"react-dom": "18.2.0",
-		"react-router-dom": "6.4.3",
-		"reflect-metadata": "0.2.1",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
+		"react-router-dom": "6.22.3",
 		"uuid": "9.0.1",
-		"xero-node": "5.1.0"
+		"xero-node": "6.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.11.27",
-		"esbuild": "0.15.5",
+		"@types/node": "20.12.12",
+		"esbuild": "0.20.2",
 		"prettier": "3.2.5",
 		"ts-node": "10.9.2",
-		"tsc-watch": "6.0.4",
-		"typescript": "5.4.2",
-		"vite": "5.1.6"
+		"typescript": "5.4.5",
+		"vite": "5.2.11"
 	}
 }

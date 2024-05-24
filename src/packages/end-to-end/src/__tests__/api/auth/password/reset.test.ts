@@ -1,131 +1,100 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 
 import Graphweaver from '@exogee/graphweaver-server';
-import { Resolver, ObjectType } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
 	ForgottenPasswordLinkData,
-	createForgottenPasswordAuthResolver,
 	AuthenticationBaseEntity,
 	Credential,
-	createPasswordAuthResolver,
 	CredentialStorage,
-	PasswordOperation,
-	RequestParams,
-	Authentication,
+	ForgottenPassword,
+	Password,
+	hashPassword,
 } from '@exogee/graphweaver-auth';
-import { BaseEntity, ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { Entity, PrimaryKey, BigIntType, Property, JsonType } from '@mikro-orm/core';
-import { SqliteDriver } from '@mikro-orm/sqlite';
-
-@Entity()
-export class OrmAuthentication<T> extends BaseEntity implements AuthenticationBaseEntity<T> {
-	@PrimaryKey({ type: new BigIntType('string') })
-	id!: string;
-
-	@Property({ type: String })
-	type!: string;
-
-	@Property({ type: new BigIntType('string') })
-	userId!: string;
-
-	@Property({ type: JsonType })
-	data!: T;
-
-	@Property({ type: Date })
-	createdAt!: Date;
-}
-
-@Entity()
-class OrmCredential extends BaseEntity implements CredentialStorage {
-	@PrimaryKey({ type: new BigIntType('string') })
-	id!: string;
-
-	@Property({ type: String })
-	username!: string;
-
-	@Property({ type: String })
-	password!: string;
-}
 
 let token = '';
-
 const user = new UserProfile({
 	id: '1',
 	roles: ['admin'],
 	displayName: 'Test User',
 });
 
-// Create Data Provider
-const connection = {
-	connectionManagerId: 'InMemory',
-	mikroOrmConfig: {
-		entities: [OrmCredential, OrmAuthentication],
-		dbName: ':memory:',
-		driver: SqliteDriver,
-	},
-};
+class ForgottenPasswordBackendProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
+	AuthenticationBaseEntity<ForgottenPasswordLinkData>
+> {
+	private data: any;
+	async find() {
+		return [{}] as AuthenticationBaseEntity<ForgottenPasswordLinkData>[];
+	}
+	async createOne(data: any) {
+		this.data = data;
+		return { ...data } as AuthenticationBaseEntity<ForgottenPasswordLinkData>;
+	}
+	async updateOne(data: any) {
+		this.data = {
+			...this.data,
+			...data,
+		};
+		return { ...this.data } as AuthenticationBaseEntity<ForgottenPasswordLinkData>;
+	}
+	async findOne() {
+		return this.data as AuthenticationBaseEntity<ForgottenPasswordLinkData>;
+	}
+}
 
-@ObjectType('ForgottenPasswordLink')
-export class ForgottenPasswordLink extends Authentication<
-	OrmAuthentication<ForgottenPasswordLinkData>
-> {}
-
-@Resolver()
-export class ForgottenPasswordLinkResolver extends createForgottenPasswordAuthResolver<
-	OrmAuthentication<ForgottenPasswordLinkData>
->(
-	ForgottenPasswordLink,
-	new MikroBackendProvider(OrmAuthentication<ForgottenPasswordLinkData>, connection)
-) {
-	async sendForgottenPasswordLink(url: URL): Promise<boolean> {
+const forgottenPassword = new ForgottenPassword({
+	provider: new ForgottenPasswordBackendProvider('ForgottenPasswordBackendProvider'),
+	sendForgottenPasswordLink: async (url: URL): Promise<boolean> => {
 		token = url.searchParams.get('token') ?? '';
 		return true;
-	}
-
-	async getUser(username: string): Promise<UserProfile> {
+	},
+	getUser: async (username: string): Promise<UserProfile<unknown>> => {
 		return user;
+	},
+});
+
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	private password: string = '';
+
+	async findOne() {
+		return {
+			id: '1',
+			username: 'test',
+			password: this.password,
+			isCollection: () => false,
+			isReference: () => false,
+		};
+	}
+	async updateOne(_id: string, { password }: CredentialStorage) {
+		this.password = password ?? '';
+		return {} as CredentialStorage;
 	}
 }
 
-@Resolver()
-export class PasswordAuthResolver extends createPasswordAuthResolver<OrmCredential>(
-	Credential,
-	new MikroBackendProvider(OrmCredential, connection)
-) {
-	async getUserProfile(
-		id: string,
-		operation: PasswordOperation,
-		params: RequestParams
-	): Promise<UserProfile> {
+const password = new Password({
+	provider: new PasswordBackendProvider('PasswordBackendProvider'),
+	// This is called when a user has logged in to get the profile
+	getUserProfile: async (): Promise<UserProfile<unknown>> => {
 		return user;
-	}
-}
+	},
+});
 
 const graphweaver = new Graphweaver({
-	resolvers: [ForgottenPasswordLinkResolver, PasswordAuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
 	},
 });
 
 describe('Forgotten Password flow', () => {
-	beforeAll(async () => {
-		await ConnectionManager.connect('InMemory', connection);
-		const database = ConnectionManager.database('InMemory');
-		await database?.orm.schema.createSchema();
-
-		const credential = new OrmCredential();
-		credential.username = 'test';
-		credential.password = 'forgotPassword';
-		await database?.em.persistAndFlush(credential);
-	});
-
 	test('should generate a forgotten password link and allow resetting', async () => {
 		const response = await graphweaver.server.executeOperation<{
 			sendResetPasswordLink: boolean;

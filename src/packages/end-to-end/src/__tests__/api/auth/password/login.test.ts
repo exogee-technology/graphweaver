@@ -1,47 +1,51 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 
-import 'reflect-metadata';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { CreateOrUpdateHookParams, Resolver } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	createBasePasswordAuthResolver,
 	authApolloPlugin,
 	UserProfile,
 	Credential,
-	RequestParams,
-	CredentialCreateOrUpdateInputArgs,
+	Password,
+	CredentialStorage,
+	PasswordOperation,
+	hashPassword,
 } from '@exogee/graphweaver-auth';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-const user = new UserProfile({
+const user: CredentialStorage = {
 	id: '1',
-	roles: ['admin'],
-	displayName: 'Test User',
-});
+	username: 'test',
+	password: 'test123',
+	isCollection: () => false,
+	isReference: () => false,
+};
 
-@Resolver()
-class AuthResolver extends createBasePasswordAuthResolver(
-	Credential,
-	new MikroBackendProvider(class OrmCred extends BaseEntity {}, {})
-) {
-	async authenticate(username: string, password: string) {
-		if (password === 'test123') return user;
-		throw new Error('Unknown username or password, please try again');
-	}
-	async create(params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>) {
-		return user;
-	}
-	async update(
-		params: CreateOrUpdateHookParams<CredentialCreateOrUpdateInputArgs>
-	): Promise<UserProfile> {
+class PasswordBackendProvider extends BaseDataProvider<
+	CredentialStorage,
+	Credential<CredentialStorage>
+> {
+	async findOne() {
+		user.password = await hashPassword(user.password ?? '');
 		return user;
 	}
 }
 
+export const password = new Password({
+	provider: new PasswordBackendProvider('password'),
+	getUserProfile: async (
+		id: string,
+		operation: PasswordOperation
+	): Promise<UserProfile<unknown>> => {
+		return new UserProfile({
+			id: user.id,
+			username: user.username,
+		});
+	},
+});
+
 const graphweaver = new Graphweaver({
-	resolvers: [AuthResolver],
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => user)],
 	},

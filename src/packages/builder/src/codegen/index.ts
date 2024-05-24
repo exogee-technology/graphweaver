@@ -90,7 +90,7 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 };
 
 const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
-	const typesOutput = ['./src/frontend/types.ts'];
+	const typesOutput = ['./src/frontend/types.generated.ts'];
 
 	// If the typesOutputPath is a string or an array of strings, add it to the typesOutput array
 	if (typesOutputPath && typeof typesOutputPath === 'string') {
@@ -103,7 +103,7 @@ const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
 	// Ensure that all paths have a filename and add one if it does not exist
 	typesOutput.forEach((path, index) => {
 		if (!path.includes('.ts')) {
-			typesOutput[index] = `${path}/types.ts`;
+			typesOutput[index] = `${path}/types.generated.ts`;
 		}
 	});
 

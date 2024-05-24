@@ -5,7 +5,7 @@ dotenv.config({
 	path: `.env.${(process.env.NODE_ENV || 'development').toLowerCase()}`,
 }); // TODO: The path to .env file in pnpm workspaces seems to use the workspace package.json path. Need to ensure it uses the local version (if required)
 
-export * from './base-resolver';
+export * from './provider';
 export * from './entities';
 export * from './decorators';
 export * from './database';

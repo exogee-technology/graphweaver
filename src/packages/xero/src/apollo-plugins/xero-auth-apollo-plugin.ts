@@ -2,7 +2,7 @@ import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 import { TokenSet, XeroClient } from 'xero-node';
 import { GraphQLError } from 'graphql';
-import { XeroBackendProvider } from '../base-resolver';
+import { XeroBackendProvider } from '../provider';
 
 const { XERO_CLIENT_ID, XERO_CLIENT_SECRET, XERO_CLIENT_REDIRECT_URIS } = process.env;
 if (!XERO_CLIENT_ID) throw new Error('XERO_CLIENT_ID is required in environment');

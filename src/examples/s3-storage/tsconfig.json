@@ -1,14 +1,15 @@
 {
-	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"rootDir": "./src",
 		"outDir": "./lib",
-		"lib": ["ES2019"]
+		"rootDir": "./src",
+		"noUnusedLocals": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"target": "es2019",
+		"module": "CommonJS",
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true
 	},
-	"include": ["./src"],
-	"references": [
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/scalars" }
-	]
+	"exclude": ["**/node_modules/**", "**/lib/**"],
+	"include": ["./src"]
 }

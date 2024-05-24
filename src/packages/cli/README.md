@@ -229,7 +229,7 @@ FLAGS
 
 #### graphweaver build-types
 
-Builds a `types.ts` file containing all the types in the Graphweaver schema.
+Builds a `types.generated.ts` file containing all the types in the Graphweaver schema.
 
 ```
 USAGE
