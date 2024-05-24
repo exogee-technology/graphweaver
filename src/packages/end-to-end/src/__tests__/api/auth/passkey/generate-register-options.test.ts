@@ -6,10 +6,9 @@ import {
 	CredentialStorage,
 	hashPassword,
 	Password,
-	PasskeyChallenge,
 	AuthenticationBaseEntity,
-	PasskeyAuthenticator,
 	AuthenticationMethod,
+	PasskeyData,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -50,10 +49,13 @@ export const password = new Password({
 	},
 });
 
-class PasskeyChallengeBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<PasskeyChallenge>,
-	AuthenticationBaseEntity<PasskeyChallenge>
+class PasskeyDataProvider extends BaseDataProvider<
+	AuthenticationBaseEntity<PasskeyData>,
+	AuthenticationBaseEntity<PasskeyData>
 > {
+	async find() {
+		return [];
+	}
 	async createOne() {
 		return {
 			id: '1',
@@ -65,18 +67,8 @@ class PasskeyChallengeBackendProvider extends BaseDataProvider<
 	}
 }
 
-class PasskeyAuthenticatorBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<PasskeyAuthenticator>,
-	AuthenticationBaseEntity<PasskeyAuthenticator>
-> {
-	async find() {
-		return [];
-	}
-}
-
 export const passkey = new Passkey({
-	passkeyChallengeProvider: new PasskeyChallengeBackendProvider('PasskeyChallenge'),
-	passkeyAuthenticatorProvider: new PasskeyAuthenticatorBackendProvider('PasskeyAuthenticator'),
+	dataProvider: new PasskeyDataProvider('Passkey'),
 });
 
 const graphweaver = new Graphweaver({

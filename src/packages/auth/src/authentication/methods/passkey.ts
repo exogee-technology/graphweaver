@@ -11,6 +11,7 @@ import type {
 	AuthenticationResponseJSON,
 	AuthenticatorAssertionResponseJSON,
 	AuthenticatorAttestationResponseJSON,
+	CredentialDeviceType,
 	PublicKeyCredentialCreationOptionsJSON,
 	PublicKeyCredentialRequestOptionsJSON,
 	RegistrationResponseJSON,
@@ -33,32 +34,24 @@ import { GraphQLResolveInfo, Source } from 'graphql';
 
 export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/types';
 
-export type PasskeyChallenge = {
-	challenge: string;
-};
-
-export type PasskeyAuthenticator = {
-	credentialID: string;
-	credentialPublicKey: string;
-	counter: number;
-};
-
-type PasskeyChallengeProvider = BackendProvider<
-	AuthenticationBaseEntity<PasskeyChallenge>,
-	AuthenticationBaseEntity<PasskeyChallenge>
->;
-
-type PasskeyAuthenticatorProvider = BackendProvider<
-	AuthenticationBaseEntity<PasskeyAuthenticator>,
-	AuthenticationBaseEntity<PasskeyAuthenticator>
->;
-
-export interface PasskeyAuthenticatorDevice {
+export interface PasskeyAuthenticatorDeviceJSON {
 	id: string;
-	credentialPublicKey: string;
-	credentialID: string;
+	webAuthnUserID: string;
+	publicKey: string;
 	counter: number;
+	deviceType: CredentialDeviceType;
+	backedUp: boolean;
 }
+
+export type PasskeyData =
+	| PublicKeyCredentialCreationOptionsJSON
+	| PublicKeyCredentialRequestOptionsJSON
+	| PasskeyAuthenticatorDeviceJSON;
+
+type PasskeyDataProvider = BackendProvider<
+	AuthenticationBaseEntity<PasskeyData>,
+	AuthenticationBaseEntity<PasskeyData>
+>;
 
 @InputType('PasskeyRegistrationResponse')
 export class PasskeyRegistrationResponse implements RegistrationResponseJSON {
@@ -111,17 +104,9 @@ const config = {
 };
 
 export class Passkey {
-	private passkeyChallengeProvider: PasskeyChallengeProvider;
-	private passkeyAuthenticatorProvider: PasskeyAuthenticatorProvider;
-	constructor({
-		passkeyChallengeProvider,
-		passkeyAuthenticatorProvider,
-	}: {
-		passkeyChallengeProvider: PasskeyChallengeProvider;
-		passkeyAuthenticatorProvider: PasskeyAuthenticatorProvider;
-	}) {
-		this.passkeyChallengeProvider = passkeyChallengeProvider;
-		this.passkeyAuthenticatorProvider = passkeyAuthenticatorProvider;
+	private dataProvider: PasskeyDataProvider;
+	constructor({ dataProvider }: { dataProvider: PasskeyDataProvider }) {
+		this.dataProvider = dataProvider;
 
 		graphweaverMetadata.addMutation({
 			name: 'passkeyGenerateRegistrationOptions',
@@ -154,107 +139,71 @@ export class Passkey {
 		});
 	}
 
-	public async getUserCurrentChallenge(userId: string): Promise<string> {
-		const result = await this.passkeyChallengeProvider.find(
-			{
-				type: AuthenticationType.PasskeyChallenge,
-				userId,
-			},
-			{ limit: 1, orderBy: { id: Sort.DESC }, offset: 0 }
-		);
-
-		const [passkeyChallenge] = result;
-		return passkeyChallenge.data.challenge;
-	}
-
-	public async setUserCurrentChallenge(userId: string, challenge: string): Promise<boolean> {
-		await this.passkeyChallengeProvider.createOne({
-			type: AuthenticationType.PasskeyChallenge,
+	public async getUserPasskeys(userId: string): Promise<PasskeyAuthenticatorDeviceJSON[]> {
+		const passkeyAuthentications = (await this.dataProvider.find({
+			type: AuthenticationType.PasskeyAuthenticatorDevice,
 			userId,
-			data: {
-				challenge,
-			},
-		});
+		})) as AuthenticationBaseEntity<PasskeyAuthenticatorDeviceJSON>[];
 
-		return true;
+		return passkeyAuthentications.map<PasskeyAuthenticatorDeviceJSON>(({ data }) => data);
 	}
 
-	public async getUserAuthenticators(userId: string): Promise<PasskeyAuthenticatorDevice[]> {
-		const authenticators = await this.passkeyAuthenticatorProvider.find({
-			type: AuthenticationType.PasskeyAuthenticator,
-			userId,
-		});
-
-		return authenticators.map<PasskeyAuthenticatorDevice>(
-			({ id, data: { credentialID, credentialPublicKey, counter } }) => ({
-				id: id,
-				credentialID,
-				credentialPublicKey,
-				counter,
-			})
-		);
-	}
-
-	public async getUserAuthenticator(
+	public async getUserPasskeyWithID(
 		userId: string,
-		credentialID: string
-	): Promise<PasskeyAuthenticatorDevice> {
-		const authenticators = await this.passkeyAuthenticatorProvider.find(
+		id: string
+	): Promise<PasskeyAuthenticatorDeviceJSON> {
+		const passkeyAuthentications = (await this.dataProvider.find(
 			{
-				type: AuthenticationType.PasskeyAuthenticator,
+				type: AuthenticationType.PasskeyAuthenticatorDevice,
 				userId,
 				data: {
-					credentialID,
+					id,
 				},
 			},
 			{ limit: 1, orderBy: { id: Sort.DESC }, offset: 0 }
-		);
+		)) as AuthenticationBaseEntity<PasskeyAuthenticatorDeviceJSON>[];
 
-		const [authenticator] = authenticators;
+		const [passkeyAuthentication] = passkeyAuthentications;
 
-		if (!authenticator) {
+		if (!passkeyAuthentication) {
 			throw new AuthenticationError('Passkey Authenticator not found');
 		}
 
-		return {
-			id: authenticator.id,
-			credentialID,
-			credentialPublicKey: authenticator.data.credentialPublicKey,
-			counter: authenticator.data.counter,
-		};
+		return passkeyAuthentication.data;
 	}
 
-	public async saveNewUserAuthenticator(
+	public async saveNewPasskey(
 		userId: string,
-		authenticator: PasskeyAuthenticatorDevice | Omit<PasskeyAuthenticatorDevice, 'id'>
+		passkey: PasskeyAuthenticatorDeviceJSON
 	): Promise<boolean> {
-		await this.passkeyAuthenticatorProvider.createOne({
-			type: AuthenticationType.PasskeyAuthenticator,
+		await this.dataProvider.createOne({
+			type: AuthenticationType.PasskeyAuthenticatorDevice,
 			userId,
-			data: {
-				credentialID: authenticator.credentialID,
-				credentialPublicKey: authenticator.credentialPublicKey,
-				counter: authenticator.counter,
-			},
+			data: passkey,
 		});
 		return true;
 	}
 
-	public async saveUpdatedAuthenticatorCounter(
-		authenticatorId: string,
+	public async saveUpdatedPasskeyCounter(
+		userId: string,
+		passkeyId: string,
 		counter: number
 	): Promise<boolean> {
-		const authenticator = await this.passkeyAuthenticatorProvider.findOne({
-			id: authenticatorId,
+		const passkeyAuthentication = await this.dataProvider.findOne({
+			type: AuthenticationType.PasskeyAuthenticatorDevice,
+			userId,
+			data: {
+				id: passkeyId,
+			},
 		});
 
-		if (!authenticator) {
+		if (!passkeyAuthentication) {
 			throw new AuthenticationError('Passkey Authenticator not found');
 		}
 
-		await this.passkeyAuthenticatorProvider.updateOne(authenticatorId, {
+		await this.dataProvider.updateOne(passkeyAuthentication.id, {
 			data: {
-				...authenticator.data,
+				...passkeyAuthentication.data,
 				counter,
 			},
 		});
@@ -276,20 +225,24 @@ export class Passkey {
 		const username = context.user?.username;
 		if (!username) throw new AuthenticationError('Authentication failed.');
 
-		const userAuthenticators = await this.getUserAuthenticators(userId);
+		const userPasskeys = await this.getUserPasskeys(userId);
 
 		const options = await generateRegistrationOptions({
 			rpName: config.rp.name,
 			rpID: config.rp.id,
 			userName: username,
 			attestationType: 'none',
-			excludeCredentials: userAuthenticators.map((authenticator) => ({
-				id: authenticator.credentialID,
-				type: 'public-key',
+			excludeCredentials: userPasskeys.map((passkey) => ({
+				id: passkey.id,
 			})),
 		});
 
-		await this.setUserCurrentChallenge(userId, options.challenge);
+		// Remember this creation challenge for this user
+		await this.dataProvider.createOne({
+			type: AuthenticationType.PasskeyCredentialCreationOptions,
+			userId,
+			data: options,
+		});
 
 		return options;
 	}
@@ -306,11 +259,19 @@ export class Passkey {
 			const userId = context.user?.id;
 			if (!userId) throw new AuthenticationError('Authentication failed.');
 
-			const expectedChallenge = await this.getUserCurrentChallenge(userId);
+			const [currentOptions] = (await this.dataProvider.find(
+				{
+					type: AuthenticationType.PasskeyCredentialCreationOptions,
+					userId,
+				},
+				{ limit: 1, orderBy: { id: Sort.DESC }, offset: 0 }
+			)) as AuthenticationBaseEntity<PublicKeyCredentialCreationOptionsJSON>[];
+
+			if (!currentOptions) throw new AuthenticationError('Authentication failed.');
 
 			const verification = await verifyRegistrationResponse({
 				response: registrationResponse,
-				expectedChallenge,
+				expectedChallenge: currentOptions.data.challenge,
 				expectedOrigin: config.origin,
 				expectedRPID: config.rp.id,
 			});
@@ -321,13 +282,18 @@ export class Passkey {
 				if (!registrationInfo?.credentialPublicKey)
 					throw new AuthenticationError('Authentication failed: No Public Key Found');
 
-				const newAuthenticator: Omit<PasskeyAuthenticatorDevice, 'id'> = {
-					credentialID: registrationInfo.credentialID,
-					credentialPublicKey: isoBase64URL.fromBuffer(registrationInfo.credentialPublicKey),
+				const newPasskey: PasskeyAuthenticatorDeviceJSON = {
+					id: registrationInfo.credentialID,
+					// Created by `generateRegistrationOptions()`
+					webAuthnUserID: currentOptions.data.user.id,
+					publicKey: isoBase64URL.fromBuffer(registrationInfo.credentialPublicKey),
 					counter: registrationInfo.counter ?? 0,
+					deviceType: registrationInfo.credentialDeviceType,
+					// Whether the passkey has been backed up in some way
+					backedUp: registrationInfo.credentialBackedUp,
 				};
 
-				await this.saveNewUserAuthenticator(userId, newAuthenticator);
+				await this.saveNewPasskey(userId, newPasskey);
 			}
 
 			return verified;
@@ -352,20 +318,22 @@ export class Passkey {
 		const userId = context.user?.id;
 		if (!userId) throw new AuthenticationError('Authentication failed.');
 
-		const userAuthenticators = await this.getUserAuthenticators(userId);
+		const userPasskeys = await this.getUserPasskeys(userId);
 
 		const options = await generateAuthenticationOptions({
 			rpID: config.rp.id,
-			// Require users to use a previously-registered authenticator
-			allowCredentials: userAuthenticators.map((authenticator) => ({
-				id: authenticator.credentialID,
-				type: 'public-key',
+			// Require users to use a previously-registered passkey
+			allowCredentials: userPasskeys.map((passkey) => ({
+				id: passkey.id,
 			})),
-			userVerification: 'preferred',
 		});
 
 		// Remember this challenge for this user
-		await this.setUserCurrentChallenge(userId, options.challenge);
+		await this.dataProvider.createOne({
+			type: AuthenticationType.PasskeyCredentialRequestOptions,
+			userId,
+			data: options,
+		});
 
 		return options;
 	}
@@ -382,24 +350,33 @@ export class Passkey {
 			const userId = context.user?.id;
 			if (!userId) throw new AuthenticationError('Authentication failed.');
 
-			const expectedChallenge = await this.getUserCurrentChallenge(userId);
-			const authenticator = await this.getUserAuthenticator(userId, authenticationResponse.id);
+			const [currentOptions] = (await this.dataProvider.find(
+				{
+					type: AuthenticationType.PasskeyCredentialRequestOptions,
+					userId,
+				},
+				{ limit: 1, orderBy: { id: Sort.DESC }, offset: 0 }
+			)) as AuthenticationBaseEntity<PublicKeyCredentialRequestOptionsJSON>[];
 
-			if (!authenticator) {
+			if (!currentOptions) throw new AuthenticationError('Authentication failed.');
+
+			const passkey = await this.getUserPasskeyWithID(userId, authenticationResponse.id);
+
+			if (!passkey) {
 				throw new AuthenticationError(
-					`Could not find authenticator ${authenticationResponse.id} for user ${userId}`
+					`Could not find passkey ${authenticationResponse.id} for user ${userId}`
 				);
 			}
 
 			const verification = await verifyAuthenticationResponse({
 				response: authenticationResponse,
-				expectedChallenge,
+				expectedChallenge: currentOptions.data.challenge,
 				expectedOrigin: config.origin,
 				expectedRPID: config.rp.id,
 				authenticator: {
-					credentialID: authenticator.credentialID,
-					credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
-					counter: authenticator.counter,
+					credentialID: passkey.id,
+					credentialPublicKey: isoBase64URL.toBuffer(passkey.publicKey),
+					counter: passkey.counter,
 				},
 			});
 
@@ -410,7 +387,7 @@ export class Passkey {
 			const { authenticationInfo } = verification;
 			const { newCounter } = authenticationInfo;
 
-			await this.saveUpdatedAuthenticatorCounter(authenticator.id, newCounter);
+			await this.saveUpdatedPasskeyCounter(userId, passkey.id, newCounter);
 
 			// Upgrade Token
 			const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSKEY);

@@ -95,8 +95,9 @@ export type MultiFactorAuthenticationRule = {
 };
 
 export enum AuthenticationType {
-	PasskeyChallenge = 'PasskeyChallenge',
-	PasskeyAuthenticator = 'PasskeyAuthenticator',
+	PasskeyCredentialCreationOptions = 'PasskeyCredentialCreationOptions',
+	PasskeyCredentialRequestOptions = 'PasskeyCredentialRequestOptions',
+	PasskeyAuthenticatorDevice = 'PasskeyAuthenticatorDevice',
 	Web3WalletAddress = 'Web3WalletAddress',
 	OneTimePasswordChallenge = 'OneTimePasswordChallenge',
 	MagicLinkChallenge = 'MagicLinkChallenge',
