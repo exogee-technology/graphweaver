@@ -93,12 +93,9 @@ export const assign = async <T extends AnyEntity<T>>(
 							// Business unit 1 -> Business unit 2. In this scenario we prefetch the one that's currently on the entity, but the one we're changing
 							// to is not in the unit of work.
 							entity =
-								((await em.findOne(
-									propertyMetadata.type,
-									{
-										id: subvalue.id,
-									} as any // @todo this will be removed with the id work
-								)) as T | null) ?? undefined;
+								((await em.findOne<any>(propertyMetadata.type, {
+									id: subvalue.id,
+								})) as T | null) ?? undefined;
 						}
 					}
 
