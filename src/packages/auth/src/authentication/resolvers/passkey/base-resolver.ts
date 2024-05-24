@@ -73,11 +73,10 @@ export const createBasePasskeyAuthResolver = () => {
 			const options = await generateRegistrationOptions({
 				rpName: config.rp.name,
 				rpID: config.rp.id,
-				userID: userId,
 				userName: username,
 				attestationType: 'none',
 				excludeCredentials: userAuthenticators.map((authenticator) => ({
-					id: isoBase64URL.toBuffer(authenticator.credentialID),
+					id: authenticator.credentialID,
 					type: 'public-key',
 				})),
 			});
@@ -115,7 +114,7 @@ export const createBasePasskeyAuthResolver = () => {
 						throw new AuthenticationError('Authentication failed: No Public Key Found');
 
 					const newAuthenticator: Omit<PasskeyAuthenticatorDevice, 'id'> = {
-						credentialID: isoBase64URL.fromBuffer(registrationInfo.credentialID),
+						credentialID: registrationInfo.credentialID,
 						credentialPublicKey: isoBase64URL.fromBuffer(registrationInfo.credentialPublicKey),
 						counter: registrationInfo.counter ?? 0,
 					};
@@ -146,9 +145,10 @@ export const createBasePasskeyAuthResolver = () => {
 			const userAuthenticators = await this.getUserAuthenticators(userId);
 
 			const options = await generateAuthenticationOptions({
+				rpID: config.rp.id,
 				// Require users to use a previously-registered authenticator
 				allowCredentials: userAuthenticators.map((authenticator) => ({
-					id: isoBase64URL.toBuffer(authenticator.credentialID),
+					id: authenticator.credentialID,
 					type: 'public-key',
 				})),
 				userVerification: 'preferred',
@@ -187,8 +187,8 @@ export const createBasePasskeyAuthResolver = () => {
 					expectedOrigin: config.origin,
 					expectedRPID: config.rp.id,
 					authenticator: {
+						credentialID: authenticator.credentialID,
 						credentialPublicKey: isoBase64URL.toBuffer(authenticator.credentialPublicKey),
-						credentialID: isoBase64URL.toBuffer(authenticator.credentialID),
 						counter: authenticator.counter,
 					},
 				});
