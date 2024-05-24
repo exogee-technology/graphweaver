@@ -69,3 +69,15 @@ Then
 2. Run `pnpm test-ui` in another terminal, this will execute the end to end test suite against the server started above
 
 To run the recorder use `pnpm playwright codegen`
+
+## Running the Storage Provider End to End tests:
+
+Before running the Storage Provider make sure that you have followed the steps in the Storage Provider Example readme. This will create a local running S3 service and setup a test db.
+
+Once you have this and have created a bucket make sure to configure the `.env` file in the storage provider example (This will get copied across when you run the below scripts).
+
+Once you have setup these pre-requisites you can run the following scripts:
+
+`pnpm import-storage-provider` // this will copy over the example app to the local `./app` directory and use the packed node modules.
+`pnpm start-server` // this will start the app from the `./app` directory
+`pnpm test-ui-storage-provider` // This will run the playwright UI tests
