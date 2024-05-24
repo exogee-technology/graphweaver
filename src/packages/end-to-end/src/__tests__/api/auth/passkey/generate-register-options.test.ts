@@ -127,6 +127,6 @@ describe('passkey registration', () => {
 		assert(generateRegistrationOptions);
 
 		expect(generateRegistrationOptions?.challenge).toBeDefined();
-		expect(generateRegistrationOptions?.user.id).toBe(user.id);
+		expect(generateRegistrationOptions?.user.name).toBe(user.username);
 	});
 });
