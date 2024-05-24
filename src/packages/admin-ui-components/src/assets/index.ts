@@ -1,19 +1,41 @@
-export { ReactComponent as ChevronDownIcon } from './16-chevron-down.svg';
-export { ReactComponent as CloseIcon } from './close-icon.svg';
-export { ReactComponent as ControlsIcon } from './16-filter.svg';
-export { ReactComponent as DatabaseIcon } from './16-database.svg';
-export { ReactComponent as DatabaseIcon24 } from './24-database.svg';
-export { ReactComponent as DataSourcesIcon } from './64-data-sources.svg';
-export { ReactComponent as ErrorIcon } from './16-error.svg';
-export { ReactComponent as ExitIcon } from './close-button-svgrepo-com.svg';
-export { ReactComponent as FilterIcon } from './16-filter.svg';
-export { ReactComponent as GraphweaverLogo } from './graphweaver-logo.svg';
-export { ReactComponent as InfoIcon } from './16-info.svg';
-export { ReactComponent as LogoutIcon } from './16-logout.svg';
-export { ReactComponent as OpenExternalIcon } from './16-open-external.svg';
-export { ReactComponent as SearchIcon } from './16-search.svg';
-export { ReactComponent as SuccessCheckmark } from './success-checkmark.svg';
-export { ReactComponent as SuccessIcon } from './16-success.svg';
-export { ReactComponent as TableIcon } from './16-table.svg';
-export { ReactComponent as TableLightIcon } from './16-table-light.svg';
-export { ReactComponent as WarningIcon } from './16-warning.svg';
+import ChevronDownIcon from './16-chevron-down.svg';
+import CloseIcon from './close-icon.svg';
+import ControlsIcon from './16-filter.svg';
+import DatabaseIcon from './16-database.svg';
+import DatabaseIcon24 from './24-database.svg';
+import DataSourcesIcon from './64-data-sources.svg';
+import ErrorIcon from './16-error.svg';
+import ExitIcon from './close-button-svgrepo-com.svg';
+import FilterIcon from './16-filter.svg';
+import GraphweaverLogo from './graphweaver-logo.svg';
+import InfoIcon from './16-info.svg';
+import LogoutIcon from './16-logout.svg';
+import OpenExternalIcon from './16-open-external.svg';
+import SearchIcon from './16-search.svg';
+import SuccessCheckmark from './success-checkmark.svg';
+import SuccessIcon from './16-success.svg';
+import TableIcon from './16-table.svg';
+import TableLightIcon from './16-table-light.svg';
+import WarningIcon from './16-warning.svg';
+
+export {
+	ChevronDownIcon,
+	CloseIcon,
+	ControlsIcon,
+	DatabaseIcon,
+	DatabaseIcon24,
+	DataSourcesIcon,
+	ErrorIcon,
+	ExitIcon,
+	FilterIcon,
+	GraphweaverLogo,
+	InfoIcon,
+	LogoutIcon,
+	OpenExternalIcon,
+	SearchIcon,
+	SuccessCheckmark,
+	SuccessIcon,
+	TableIcon,
+	TableLightIcon,
+	WarningIcon,
+};
