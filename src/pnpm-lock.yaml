@@ -765,8 +765,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/typescript':
-        specifier: 4.0.6
-        version: 4.0.6(encoding@0.1.13)(graphql@16.8.1)
+        specifier: 4.0.7
+        version: 4.0.7(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/typescript-operations':
         specifier: 4.2.0
         version: 4.2.0(encoding@0.1.13)(graphql@16.8.1)
@@ -1016,8 +1016,8 @@ importers:
         version: 1.0.6(react@18.2.0)
     devDependencies:
       '@playwright/test':
-        specifier: 1.44.0
-        version: 1.44.0
+        specifier: 1.44.1
+        version: 1.44.1
       '@simplewebauthn/types':
         specifier: 10.0.0
         version: 10.0.0
@@ -1265,8 +1265,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))
       '@escape.tech/graphql-armor':
-        specifier: 2.4.0
-        version: 2.4.0(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))(@envelop/core@5.0.0)(@escape.tech/graphql-armor-types@0.5.0)
+        specifier: 3.0.0
+        version: 3.0.0(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))(@envelop/core@5.0.0)(@escape.tech/graphql-armor-types@0.5.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -2259,17 +2259,9 @@ packages:
   '@emotion/memoize@0.7.4':
     resolution: {integrity: sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==}
 
-  '@envelop/core@4.0.3':
-    resolution: {integrity: sha512-O0Vz8E0TObT6ijAob8jYFVJavcGywKThM3UAsxUIBBVPYZTMiqI9lo2gmAnbMUnrDcAYkUTZEW9FDYPRdF5l6g==}
-    engines: {node: '>=16.0.0'}
-
   '@envelop/core@5.0.0':
     resolution: {integrity: sha512-aJdnH/ptv+cvwfvciCBe7TSvccBwo9g0S5f6u35TBVzRVqIGkK03lFlIL+x1cnfZgN9EfR2b1PH2galrT1CdCQ==}
     engines: {node: '>=18.0.0'}
-
-  '@envelop/types@4.0.1':
-    resolution: {integrity: sha512-ULo27/doEsP7uUhm2iTnElx13qTO6I5FKvmLoX41cpfuw8x6e0NUFknoqhEsLzAbgz8xVS5mjwcxGCXh4lDYzg==}
-    engines: {node: '>=16.0.0'}
 
   '@envelop/types@5.0.0':
     resolution: {integrity: sha512-IPjmgSc4KpQRlO4qbEDnBEixvtb06WDmjKfi/7fkZaryh5HuOmTtixe1EupQI5XfXO8joc3d27uUZ0QdC++euA==}
@@ -2419,40 +2411,43 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@escape.tech/graphql-armor-block-field-suggestions@2.1.0':
-    resolution: {integrity: sha512-Sna+jK02oUDJMWSfA7ica69HdtBroP3VakeMUK0+QgWlAEBEphT+SzKGDX5vn6sS7sAsEoY50gUAIgtTG+2qVw==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-block-field-suggestions@2.2.0':
+    resolution: {integrity: sha512-a8E/mwDzlQsjv5WDxeG+cI7JprR+d0GbMKvwfNyuiS1f2yfSOiZjY45ZNbOhhPbIgvF8QtJysD+ZFax2cPcfUA==}
+    engines: {node: '>=18.0.0'}
 
-  '@escape.tech/graphql-armor-cost-limit@2.1.0':
-    resolution: {integrity: sha512-zejjLm3vn4MQDpXRaPGXclo1Tq1lc93Ltoh3UoqUDiFV29ZUAnSnuuEw/AdbkK+YFrSIfZYMAGDV8AZ2Xz76RQ==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-cost-limit@2.2.0':
+    resolution: {integrity: sha512-26y2WOg7tTtgGthbmGF1HEIhyG+MCTmf6Kzk5uEbNKE6ct+RV/VwNXs8mb0DJPc3xpYHtnJWO8NiJMVRDre6Sw==}
+    engines: {node: '>=18.0.0'}
 
-  '@escape.tech/graphql-armor-max-aliases@2.3.0':
-    resolution: {integrity: sha512-h0AfPx929MWBnDlWnn/hcLHHNIAnUjws30OmyPLj9GqVmsBpj3338LELvORuuf3N1ciWI0xgkQd3NRSrmgr3ig==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-max-aliases@2.4.0':
+    resolution: {integrity: sha512-d4V9EgtPRG9HIoPHuanFNLHj1ENB1YkZi9FbiBiH88x5VahCjVpMXDgKQGkG6RUTOODU4XKp0/ZgaOq0pX5oEA==}
+    engines: {node: '>=18.0.0'}
 
-  '@escape.tech/graphql-armor-max-depth@2.2.0':
-    resolution: {integrity: sha512-v0z2yelQL614mYFpYL/iRkieq/7H2XKbvJ6RvbGMFFSqo3eSIz8fyX0f6pyswR7myQxki4ur0MFxSn8S5jjfqw==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-max-depth@2.3.0':
+    resolution: {integrity: sha512-EgqJU2yOaKaFeNDqMn18fIOI6UNjboWV950G9I39ebXyxsQmIaAx0Hs9hJoCBEHdLY9SCKWsEZFipHXqvaphdw==}
+    engines: {node: '>=18.0.0'}
 
-  '@escape.tech/graphql-armor-max-directives@2.1.0':
-    resolution: {integrity: sha512-0OuvWBbOVdphyLPafqTknM4EIrFsGHjv9DcSw8mM7Ol0kKLwYG7tGuBmEzwopRntkqW3utID5tMtf/B6px/Eyw==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-max-directives@2.2.0':
+    resolution: {integrity: sha512-DYU2Y2Qiq5Ui+NhDpdN22eU9jvxSnbCborrhdCO1ISzgCyYyCqiYBLBt0KRsEuIr4fpIpA3zBzzT97Y2qcj7Vw==}
+    engines: {node: '>=18.0.0'}
 
-  '@escape.tech/graphql-armor-max-tokens@2.3.0':
-    resolution: {integrity: sha512-4aqtUhT4ONUVWY6Z7crjPFyOK2/quUGHFU3G2+s4GYFxQHn3F5HjdI2KoY5ot2Sdijh4X+gx0ebBjUzriLNtbg==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-max-tokens@2.4.0':
+    resolution: {integrity: sha512-apKQBcYc6vsrITR+uKGXTC9yWV4zUEP4usb5zO0vebYT6e4KLcS2gwIQOsDLCnD5IyU5sUOzHBWmkFyBPz5keQ==}
+    engines: {node: '>=18.0.0'}
 
   '@escape.tech/graphql-armor-types@0.5.0':
     resolution: {integrity: sha512-a7KMhb1qVHFFWw4bvGYQI637YaIZRozbfc+Fj1Vv/pwnTCJOzOgnvKO8+WBXJsFFGJ2Kj+fRORmSpz7J+lJF1w==}
 
-  '@escape.tech/graphql-armor@2.4.0':
-    resolution: {integrity: sha512-/ef11cDjzg3Rjsa7jxtUzM9hRVlj+GB4z/YCChNqNGW+BvYrv6E6esbdGzIiaoauKfszXSQXSu0CgPXe0I7NbQ==}
-    engines: {node: '>=16.0.0'}
+  '@escape.tech/graphql-armor-types@0.6.0':
+    resolution: {integrity: sha512-Y3X6JgkB1N1MMaHNXaE2IeJWIs6wT4XcPvXM8PRWmT2DblZfY4NYiV1mh0GTInKdlnrEr5hquOR9XV+M3Da43w==}
+
+  '@escape.tech/graphql-armor@3.0.0':
+    resolution: {integrity: sha512-wI21VK7Hhfnw1Q6ulLE5/gi2/gNLmaM/xJKeVAlcZje70TUL8rhIi1POzOmj5kX53LnEdvHSY+24qJ/hcHN5MQ==}
+    engines: {node: '>=18.0.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
       '@envelop/core': ^5.0.0
-      '@escape.tech/graphql-armor-types': 0.5.0
+      '@escape.tech/graphql-armor-types': 0.6.0
     peerDependenciesMeta:
       '@apollo/server':
         optional: true
@@ -2698,6 +2693,11 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
+  '@graphql-codegen/plugin-helpers@5.0.4':
+    resolution: {integrity: sha512-MOIuHFNWUnFnqVmiXtrI+4UziMTYrcquljaI5f/T/Bc7oO7sXcfkAvgkNWEEi9xWreYwvuer3VHCuPI/lAFWbw==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+
   '@graphql-codegen/schema-ast@4.0.2':
     resolution: {integrity: sha512-5mVAOQQK3Oz7EtMl/l3vOQdc2aYClUzVDHHkMvZlunc+KlGgl81j8TLa+X7ANIllqU4fUEsQU3lJmk4hXP6K7Q==}
     peerDependencies:
@@ -2725,6 +2725,11 @@ packages:
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
+  '@graphql-codegen/typescript@4.0.7':
+    resolution: {integrity: sha512-Gn+JNvQBJhBqH7s83piAJ6UeU/MTj9GXWFO9bdbl8PMLCAM1uFAtg04iHfkGCtDKXcUg5a3Dt/SZG85uk5KuhA==}
+    peerDependencies:
+      graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+
   '@graphql-codegen/visitor-plugin-common@2.13.1':
     resolution: {integrity: sha512-mD9ufZhDGhyrSaWQGrU1Q1c5f01TeWtSWy/cDwXYjJcHIj1Y/DG2x0tOflEfCvh5WcnmHNIw4lzDsg1W7iFJEg==}
     peerDependencies:
@@ -2732,6 +2737,11 @@ packages:
 
   '@graphql-codegen/visitor-plugin-common@5.1.0':
     resolution: {integrity: sha512-eamQxtA9bjJqI2lU5eYoA1GbdMIRT2X8m8vhWYsVQVWD3qM7sx/IqJU0kx0J3Vd4/CSd36BzL6RKwksibytDIg==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+
+  '@graphql-codegen/visitor-plugin-common@5.2.0':
+    resolution: {integrity: sha512-0p8AwmARaZCAlDFfQu6Sz+JV6SjbPDx3y2nNM7WAAf0au7Im/GpJ7Ke3xaIYBc1b2rTZ+DqSTJI/zomENGD9NA==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
@@ -3380,8 +3390,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@playwright/test@1.44.0':
-    resolution: {integrity: sha512-rNX5lbNidamSUorBhB4XZ9SQTjAqfe5M+p37Z8ic0jPFBMo5iCtQz1kRWkEMg+rYOKSlVycpQmpqjSFq7LXOfg==}
+  '@playwright/test@1.44.1':
+    resolution: {integrity: sha512-1hZ4TNvD5z9VuhNJ/walIjvMVvYkZKf71axoF/uiAqpntQJXpG64dlXhoDXE3OczPuTuvjf/M5KWFg5VAVUS3Q==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -8327,13 +8337,13 @@ packages:
   pkg-types@1.0.3:
     resolution: {integrity: sha512-nN7pYi0AQqJnoLPC9eHFQ8AcyaixBUOwvqc5TDnIKCMEE6I0y8P7OKA7fPexsXGCGxQDl/cmrLAp26LhcwxZ4A==}
 
-  playwright-core@1.44.0:
-    resolution: {integrity: sha512-ZTbkNpFfYcGWohvTTl+xewITm7EOuqIqex0c7dNZ+aXsbrLj0qI8XlGKfPpipjm0Wny/4Lt4CJsWJk1stVS5qQ==}
+  playwright-core@1.44.1:
+    resolution: {integrity: sha512-wh0JWtYTrhv1+OSsLPgFzGzt67Y7BE/ZS3jEqgGBlp2ppp1ZDj8c+9IARNW4dwf1poq5MgHreEM2KV/GuR4cFA==}
     engines: {node: '>=16'}
     hasBin: true
 
-  playwright@1.44.0:
-    resolution: {integrity: sha512-F9b3GUCLQ3Nffrfb6dunPOkE5Mh68tR7zN32L4jCk4FjQamgesGay7/dAAe1WaMEGV04DkdJfcJzjoCKygUaRQ==}
+  playwright@1.44.1:
+    resolution: {integrity: sha512-qr/0UJ5CFAtloI3avF95Y0L1xQo6r3LQArLIg/z/PoGJ6xa+EwzrwO5lpNr/09STxdHuUoP2mvuELJS+hLdtgg==}
     engines: {node: '>=16'}
     hasBin: true
 
@@ -11764,20 +11774,9 @@ snapshots:
   '@emotion/memoize@0.7.4':
     optional: true
 
-  '@envelop/core@4.0.3':
-    dependencies:
-      '@envelop/types': 4.0.1
-      tslib: 2.6.2
-    optional: true
-
   '@envelop/core@5.0.0':
     dependencies:
       '@envelop/types': 5.0.0
-      tslib: 2.6.2
-    optional: true
-
-  '@envelop/types@4.0.1':
-    dependencies:
       tslib: 2.6.2
     optional: true
 
@@ -11858,59 +11857,64 @@ snapshots:
   '@esbuild/win32-x64@0.20.2':
     optional: true
 
-  '@escape.tech/graphql-armor-block-field-suggestions@2.1.0':
-    dependencies:
-      graphql: 16.8.1
-    optionalDependencies:
-      '@envelop/core': 4.0.3
-
-  '@escape.tech/graphql-armor-cost-limit@2.1.0':
-    dependencies:
-      graphql: 16.8.1
-    optionalDependencies:
-      '@envelop/core': 4.0.3
-      '@escape.tech/graphql-armor-types': 0.5.0
-
-  '@escape.tech/graphql-armor-max-aliases@2.3.0':
+  '@escape.tech/graphql-armor-block-field-suggestions@2.2.0':
     dependencies:
       graphql: 16.8.1
     optionalDependencies:
       '@envelop/core': 5.0.0
-      '@escape.tech/graphql-armor-types': 0.5.0
 
-  '@escape.tech/graphql-armor-max-depth@2.2.0':
-    dependencies:
-      graphql: 16.8.1
-    optionalDependencies:
-      '@envelop/core': 4.0.3
-      '@escape.tech/graphql-armor-types': 0.5.0
-
-  '@escape.tech/graphql-armor-max-directives@2.1.0':
-    dependencies:
-      graphql: 16.8.1
-    optionalDependencies:
-      '@envelop/core': 4.0.3
-      '@escape.tech/graphql-armor-types': 0.5.0
-
-  '@escape.tech/graphql-armor-max-tokens@2.3.0':
+  '@escape.tech/graphql-armor-cost-limit@2.2.0':
     dependencies:
       graphql: 16.8.1
     optionalDependencies:
       '@envelop/core': 5.0.0
-      '@escape.tech/graphql-armor-types': 0.5.0
+      '@escape.tech/graphql-armor-types': 0.6.0
+
+  '@escape.tech/graphql-armor-max-aliases@2.4.0':
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 5.0.0
+      '@escape.tech/graphql-armor-types': 0.6.0
+
+  '@escape.tech/graphql-armor-max-depth@2.3.0':
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 5.0.0
+      '@escape.tech/graphql-armor-types': 0.6.0
+
+  '@escape.tech/graphql-armor-max-directives@2.2.0':
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 5.0.0
+      '@escape.tech/graphql-armor-types': 0.6.0
+
+  '@escape.tech/graphql-armor-max-tokens@2.4.0':
+    dependencies:
+      graphql: 16.8.1
+    optionalDependencies:
+      '@envelop/core': 5.0.0
+      '@escape.tech/graphql-armor-types': 0.6.0
 
   '@escape.tech/graphql-armor-types@0.5.0':
     dependencies:
       graphql: 16.8.1
 
-  '@escape.tech/graphql-armor@2.4.0(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))(@envelop/core@5.0.0)(@escape.tech/graphql-armor-types@0.5.0)':
+  '@escape.tech/graphql-armor-types@0.6.0':
     dependencies:
-      '@escape.tech/graphql-armor-block-field-suggestions': 2.1.0
-      '@escape.tech/graphql-armor-cost-limit': 2.1.0
-      '@escape.tech/graphql-armor-max-aliases': 2.3.0
-      '@escape.tech/graphql-armor-max-depth': 2.2.0
-      '@escape.tech/graphql-armor-max-directives': 2.1.0
-      '@escape.tech/graphql-armor-max-tokens': 2.3.0
+      graphql: 16.8.1
+    optional: true
+
+  '@escape.tech/graphql-armor@3.0.0(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))(@envelop/core@5.0.0)(@escape.tech/graphql-armor-types@0.5.0)':
+    dependencies:
+      '@escape.tech/graphql-armor-block-field-suggestions': 2.2.0
+      '@escape.tech/graphql-armor-cost-limit': 2.2.0
+      '@escape.tech/graphql-armor-max-aliases': 2.4.0
+      '@escape.tech/graphql-armor-max-depth': 2.3.0
+      '@escape.tech/graphql-armor-max-directives': 2.2.0
+      '@escape.tech/graphql-armor-max-tokens': 2.4.0
       graphql: 16.8.1
     optionalDependencies:
       '@apollo/server': 4.10.4(encoding@0.1.13)(graphql@16.8.1)
@@ -12505,7 +12509,7 @@ snapshots:
       '@graphql-codegen/gql-tag-operations': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
       '@graphql-codegen/typed-document-node': 5.0.6(encoding@0.1.13)(graphql@16.8.1)
-      '@graphql-codegen/typescript': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript': 4.0.7(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/typescript-operations': 4.2.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/documents': 1.0.0(graphql@16.8.1)
@@ -12580,6 +12584,16 @@ snapshots:
       lodash: 4.17.21
       tslib: 2.6.2
 
+  '@graphql-codegen/plugin-helpers@5.0.4(graphql@16.8.1)':
+    dependencies:
+      '@graphql-tools/utils': 10.2.0(graphql@16.8.1)
+      change-case-all: 1.0.15
+      common-tags: 1.8.2
+      graphql: 16.8.1
+      import-from: 4.0.0
+      lodash: 4.17.21
+      tslib: 2.6.2
+
   '@graphql-codegen/schema-ast@4.0.2(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
@@ -12602,7 +12616,7 @@ snapshots:
   '@graphql-codegen/typescript-operations@4.2.0(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
-      '@graphql-codegen/typescript': 4.0.6(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-codegen/typescript': 4.0.7(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-codegen/visitor-plugin-common': 5.1.0(encoding@0.1.13)(graphql@16.8.1)
       auto-bind: 4.0.0
       graphql: 16.8.1
@@ -12636,6 +12650,18 @@ snapshots:
       - encoding
       - supports-color
 
+  '@graphql-codegen/typescript@4.0.7(encoding@0.1.13)(graphql@16.8.1)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.8.1)
+      '@graphql-codegen/schema-ast': 4.0.2(graphql@16.8.1)
+      '@graphql-codegen/visitor-plugin-common': 5.2.0(encoding@0.1.13)(graphql@16.8.1)
+      auto-bind: 4.0.0
+      graphql: 16.8.1
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
   '@graphql-codegen/visitor-plugin-common@2.13.1(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 2.7.2(graphql@16.8.1)
@@ -12656,6 +12682,23 @@ snapshots:
   '@graphql-codegen/visitor-plugin-common@5.1.0(encoding@0.1.13)(graphql@16.8.1)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.3(graphql@16.8.1)
+      '@graphql-tools/optimize': 2.0.0(graphql@16.8.1)
+      '@graphql-tools/relay-operation-optimizer': 7.0.1(encoding@0.1.13)(graphql@16.8.1)
+      '@graphql-tools/utils': 10.2.0(graphql@16.8.1)
+      auto-bind: 4.0.0
+      change-case-all: 1.0.15
+      dependency-graph: 0.11.0
+      graphql: 16.8.1
+      graphql-tag: 2.12.6(graphql@16.8.1)
+      parse-filepath: 1.0.2
+      tslib: 2.6.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@graphql-codegen/visitor-plugin-common@5.2.0(encoding@0.1.13)(graphql@16.8.1)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.8.1)
       '@graphql-tools/optimize': 2.0.0(graphql@16.8.1)
       '@graphql-tools/relay-operation-optimizer': 7.0.1(encoding@0.1.13)(graphql@16.8.1)
       '@graphql-tools/utils': 10.2.0(graphql@16.8.1)
@@ -13912,9 +13955,9 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@playwright/test@1.44.0':
+  '@playwright/test@1.44.1':
     dependencies:
-      playwright: 1.44.0
+      playwright: 1.44.1
 
   '@protobufjs/aspromise@1.1.2': {}
 
@@ -20361,11 +20404,11 @@ snapshots:
       mlly: 1.6.1
       pathe: 1.1.2
 
-  playwright-core@1.44.0: {}
+  playwright-core@1.44.1: {}
 
-  playwright@1.44.0:
+  playwright@1.44.1:
     dependencies:
-      playwright-core: 1.44.0
+      playwright-core: 1.44.1
     optionalDependencies:
       fsevents: 2.3.2
 
