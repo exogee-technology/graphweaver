@@ -22,10 +22,7 @@ const user = new UserProfile({
 	username: 'test',
 });
 
-class MagicLinkBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<MagicLinkData>,
-	AuthenticationBaseEntity<MagicLinkData>
-> {
+class MagicLinkBackendProvider extends BaseDataProvider<AuthenticationBaseEntity<MagicLinkData>> {
 	async findOne({ data, userId }: any) {
 		if (data.token === MOCK_TOKEN)
 			return {

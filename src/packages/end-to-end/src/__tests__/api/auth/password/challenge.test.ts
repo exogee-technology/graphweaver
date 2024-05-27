@@ -5,14 +5,7 @@ import MockDate from 'mockdate';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	BaseDataProvider,
-	Entity,
-	Field,
-	GraphQLEntity,
-	ID,
-	RelationshipField,
-} from '@exogee/graphweaver';
+import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -24,7 +17,7 @@ import {
 	hashPassword,
 } from '@exogee/graphweaver-auth';
 
-class TaskProvider extends BaseDataProvider<any, Task> {
+class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
@@ -42,32 +35,28 @@ class TaskProvider extends BaseDataProvider<any, Task> {
 @Entity('Task', {
 	provider: new TaskProvider('Task'),
 })
-class Task extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+class Task {
 	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
+	@RelationshipField<Task, Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
 }
 
 @Entity('Tag', {
 	provider: new BaseDataProvider('Tag'),
 })
-class Tag extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+class Tag {
 	@Field(() => ID)
 	id!: string;
 
 	@Field(() => String)
 	name!: string;
 
-	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
+	@RelationshipField<Tag, Task>(() => [Task], { relatedField: 'tags' })
 	tasks!: Task[];
 }
 
@@ -78,17 +67,12 @@ const user = new UserProfile({
 	username: 'test',
 });
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		const user: CredentialStorage = {
 			id: '1',
 			username: 'test',
 			password: await hashPassword('test123'),
-			isCollection: () => false,
-			isReference: () => false,
 		};
 		return user;
 	}

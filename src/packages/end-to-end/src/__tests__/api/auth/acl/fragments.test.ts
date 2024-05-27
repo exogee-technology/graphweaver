@@ -3,19 +3,11 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Field,
-	GraphQLEntity,
-	ID,
-	Entity,
-	BaseDataProvider,
-	RelationshipField,
-} from '@exogee/graphweaver';
+import { Field, ID, Entity, BaseDataProvider, RelationshipField } from '@exogee/graphweaver';
 import {
 	CredentialStorage,
 	authApolloPlugin,
 	UserProfile,
-	Credential,
 	hashPassword,
 	Password,
 	ApplyAccessControlList,
@@ -27,7 +19,7 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-const albumDataProvider = new BaseDataProvider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any>('album');
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -37,7 +29,7 @@ const albumDataProvider = new BaseDataProvider<any, Album>('album');
 @Entity('Album', {
 	provider: albumDataProvider,
 })
-export class Album extends GraphQLEntity<any> {
+export class Album {
 	public dataEntity!: any;
 
 	@Field(() => ID)
@@ -46,17 +38,20 @@ export class Album extends GraphQLEntity<any> {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id, nullable: true })
+	@RelationshipField<Album, Album>(() => Artist, {
+		id: (entity) => entity.artist?.id,
+		nullable: true,
+	})
 	artist?: Artist;
 }
 
-const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any>('artist');
 
 @ApplyAccessControlList({})
 @Entity('Artist', {
 	provider: artistDataProvider,
 })
-export class Artist extends GraphQLEntity<any> {
+export class Artist {
 	public dataEntity!: any;
 
 	@Field(() => ID)
@@ -65,7 +60,7 @@ export class Artist extends GraphQLEntity<any> {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	@RelationshipField<Album, Album>(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
 }
 
@@ -73,14 +68,9 @@ const cred: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		cred.password = await hashPassword(cred.password ?? '');
 		return cred;
