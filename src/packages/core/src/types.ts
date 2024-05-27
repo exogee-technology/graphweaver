@@ -1,6 +1,6 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
 import { ComplexityEstimator } from 'graphql-query-complexity';
-import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
+import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLScalarType } from 'graphql';
 import { graphweaverMetadata } from './metadata';
 
@@ -56,11 +56,16 @@ export type FilterEntity<G> = {
 			: Partial<G[K]>; // Other types
 };
 
+// ❗ There's also a hard coded list just below this. If you're updating this type you need to update that list too.
 export type FilterTopLevelProperties<G> = {
 	_and?: Filter<G>[];
 	_or?: Filter<G>[];
 	_not?: Filter<G>[];
 };
+
+// ❗ This is used by the permissions system, so if you update the above, then update this list too.
+const topLevelFilterProperties = new Set(['_and', '_or', '_not']);
+export const isTopLevelFilterProperty = (key: string) => topLevelFilterProperties.has(key);
 
 export type Filter<G> = FilterEntity<G> & FilterTopLevelProperties<G> & FilterWithOperators<G>;
 
@@ -118,7 +123,7 @@ export interface BackendProvider<D> {
 export interface HookParams<G, TContext = BaseContext> {
 	context: TContext;
 	transactional: boolean;
-	fields?: FieldsByTypeName | { [str: string]: ResolveTree };
+	fields?: ResolveTree;
 	entities?: (G | null)[];
 	deleted?: boolean; // Used by a delete operation to indicate if successful
 }

@@ -197,7 +197,6 @@ export class ApiKey<R extends string[]> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
-				info,
 				context,
 				transactional: this.transactional,
 			};

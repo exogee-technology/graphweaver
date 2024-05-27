@@ -131,14 +131,16 @@ export const list = async <G, D, C extends BaseContext>(
 	logger.trace({ result }, 'Got result');
 
 	// If there's a fromBackendEntity function on the entity, go ahead and run it.
-	const gqlEntityType = entity.target as any;
-	if (gqlEntityType.fromBackendEntity) {
+	const entityClass = entity.target;
+	if (isTransformableGraphQLEntityClass(entityClass)) {
 		logger.trace(
-			{ entityName: gqlEntityType.name },
+			{ entityName: entity.target.name },
 			'Entity implements fromBackendEntity, converting'
 		);
 
-		result = result.map((entity) => gqlEntityType.fromBackendEntity.call(gqlEntityType, entity));
+		result = result.map((resultEntry) =>
+			entityClass.fromBackendEntity.call(entityClass, resultEntry)
+		);
 
 		logger.trace({ result }, 'Converted entities');
 	}
