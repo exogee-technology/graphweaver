@@ -70,11 +70,7 @@ export class SchemaEntityFile extends BaseFile {
 
 		this.coreImports.add('Entity');
 		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n})\n`;
-
-		this.coreImports.add('GraphQLEntity');
-		file += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
-		file += `\tpublic dataEntity!: Orm${this.meta.className};`;
-
+		file += `export class ${this.meta.className} {\n`;
 		file += `${classBody}}\n`;
 		const imports = [
 			`import { ${[...this.coreImports].sort().join(', ')} } from '@exogee/graphweaver';`,

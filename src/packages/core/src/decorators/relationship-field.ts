@@ -1,3 +1,4 @@
+import { GetTypeFunction } from '..';
 import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
@@ -11,16 +12,11 @@ type RelationshipFieldOptions<D> = {
 	};
 };
 
-interface RecursiveArray<TValue> extends Array<RecursiveArray<TValue> | TValue> {}
-type GraphQLEntityType<G> = { new (...args: any[]): G };
-type ReturnTypeFuncValue<G> = GraphQLEntityType<G> | RecursiveArray<GraphQLEntityType<G>>;
-type ReturnTypeFunc<G> = () => ReturnTypeFuncValue<G>;
-
 export function RelationshipField<G = unknown, D = unknown>(
-	returnTypeFunc: ReturnTypeFunc<G>,
+	returnTypeFunc: GetTypeFunction,
 	{ relatedField, id, nullable = false, adminUIOptions }: RelationshipFieldOptions<D>
 ) {
-	return (target: GraphQLEntityType<G>, key: string) => {
+	return (target: G, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
 				`Implementation Error: You must specify either an ID or a related field and neither was specified.`
@@ -30,7 +26,7 @@ export function RelationshipField<G = unknown, D = unknown>(
 			name: key,
 			getType: returnTypeFunc,
 			nullable,
-			target,
+			target: target as { new (...args: any[]): G },
 			relationshipInfo: {
 				relatedField,
 				id,
