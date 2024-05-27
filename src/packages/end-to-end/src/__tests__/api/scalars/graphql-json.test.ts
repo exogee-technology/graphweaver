@@ -7,7 +7,7 @@ import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 describe('GraphQL JSON Scalar Type', () => {
 	test('should return json when requesting GraphQL Json scalar types', async () => {
-		class DataProvider extends BaseDataProvider<{ id: string }, User> {
+		class DataProvider extends BaseDataProvider<{ id: string }> {
 			async find() {
 				return [
 					{
