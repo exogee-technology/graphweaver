@@ -27,14 +27,14 @@ import {
 } from '.';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
-import { parseResolveInfo } from 'graphql-parse-resolve-info';
+import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
 export const baseResolver = (resolver: Resolver) => {
 	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
 		return resolver({
 			args,
 			context,
-			fields: parseResolveInfo(info)?.fieldsByTypeName ?? {},
+			fields: (parseResolveInfo(info) ?? {}) as ResolveTree,
 			info,
 			source,
 		});

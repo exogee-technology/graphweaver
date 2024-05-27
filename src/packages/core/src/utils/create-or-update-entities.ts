@@ -5,6 +5,7 @@ import {
 	CreateOrUpdateHookParams,
 	EntityMetadata,
 	HookRegister,
+	ResolveTree,
 	getFieldTypeFromFieldMetadata,
 	graphQLTypeForEntity,
 	hookManagerMap,
@@ -56,7 +57,7 @@ const runChildCreateOrUpdate = <G = unknown>(
 		args: { input: data },
 		context,
 		info: infoFacade as GraphQLResolveInfo,
-		fields: {}, // @todo: What should this be?
+		fields: {} as ResolveTree, // @todo: What should this be?
 	});
 };
 
