@@ -4,25 +4,23 @@ export interface WithId {
 	id: string;
 }
 
-export interface ProviderOptions<Entity, Context, DataEntity> {
+export interface ProviderOptions<Context, D> {
 	init?(): Promise<Context>;
-	create?(context: Context, entity: Partial<Entity>): Promise<DataEntity>;
+	create?(context: Context, entity: Partial<D>): Promise<D>;
 	read(
 		context: Context,
-		filter: Filter<Entity>,
+		filter: Filter<D>,
 		pagination?: Partial<PaginationOptions>
-	): Promise<DataEntity | Array<DataEntity> | null>;
-	update?(context: Context, id: string, entity: Partial<Entity>): Promise<DataEntity>;
-	remove?(context: Context, filter: Filter<Entity>): Promise<boolean>;
-	search?(context: Context, term: string): Promise<Array<DataEntity> | null>;
+	): Promise<D | D[]>;
+	update?(context: Context, id: string, entity: Partial<D>): Promise<D>;
+	remove?(context: Context, filter: Filter<D>): Promise<boolean>;
+	search?(context: Context, term: string): Promise<D[]>;
 	backendId: string;
-	dataEntity?: () => any;
+	dataEntity?: () => { new (...args: any[]): D };
 }
 
-export const createProvider = <Entity extends WithId, Context, DataEntity extends WithId = any>(
-	options: ProviderOptions<Entity, Context, DataEntity>
-) => {
-	class Provider<Entity extends WithId, Context> implements BackendProvider<DataEntity, Entity> {
+export const createProvider = <Context, D extends WithId>(options: ProviderOptions<Context, D>) => {
+	class Provider<G, Context> implements BackendProvider<D> {
 		readonly backendId: string;
 
 		// @todo configurable
@@ -45,10 +43,10 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			},
 		};
 
-		create: ProviderOptions<Entity, Context, DataEntity>['create'];
-		read: ProviderOptions<Entity, Context, DataEntity>['read'];
-		update: ProviderOptions<Entity, Context, DataEntity>['update'];
-		remove: ProviderOptions<Entity, Context, DataEntity>['remove'];
+		create: ProviderOptions<Context, D>['create'];
+		read: ProviderOptions<Context, D>['read'];
+		update: ProviderOptions<Context, D>['update'];
+		remove: ProviderOptions<Context, D>['remove'];
 		initFn: Promise<void>;
 		dataEntity?: () => any;
 
@@ -62,7 +60,7 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			init,
 			dataEntity,
 			backendId,
-		}: ProviderOptions<Entity, Context, DataEntity>) {
+		}: ProviderOptions<Context, D>) {
 			this.backendId = backendId;
 			this.create = create;
 			this.read = read;
@@ -82,7 +80,7 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			});
 		}
 
-		_mapDataEntity(dataEntity: DataEntity): DataEntity {
+		_mapDataEntity(dataEntity: D): D {
 			if (!this?.dataEntity || typeof this.dataEntity !== 'function') return dataEntity;
 			const entity = Object.assign(new (this.dataEntity())(), dataEntity, {
 				id: dataEntity.id,
@@ -90,10 +88,7 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			return entity;
 		}
 
-		async find(
-			filter: Filter<Entity>,
-			pagination?: Partial<PaginationOptions>
-		): Promise<Array<DataEntity>> {
+		async find(filter: Filter<D>, pagination?: Partial<PaginationOptions>): Promise<D[]> {
 			await this.initFn;
 
 			const result = await this.read(this.context as Context, filter, pagination);
@@ -103,8 +98,8 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			return [this._mapDataEntity(result)];
 		}
 
-		async findOne(filter: Filter<Entity>): Promise<DataEntity | null> {
-			const result = (await this.find(filter, { limit: 1 }))?.[0];
+		async findOne(filter: Filter<D>): Promise<D | null> {
+			const result = (await this.find(filter, { limit: 1 }))[0];
 			return this._mapDataEntity(result) || null;
 		}
 
@@ -112,13 +107,13 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			entity: any,
 			relatedField: string,
 			relatedIds: readonly string[],
-			filter?: Filter<Entity>
-		): Promise<Array<DataEntity>> {
+			filter?: Filter<D>
+		): Promise<D[]> {
 			await this.initFn;
 			throw new Error('Not implemented: findByRelatedId');
 		}
 
-		async updateOne(id: Entity['id'], entity: Partial<Entity>): Promise<DataEntity> {
+		async updateOne(id: string, entity: Partial<D>): Promise<D> {
 			await this.initFn;
 			if (!this.update) {
 				throw new Error('update not available');
@@ -126,27 +121,30 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			return this.update(this.context as Context, id, entity);
 		}
 
-		async updateMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
+		async updateMany(entities: Partial<D>[]): Promise<D[]> {
 			await this.initFn;
 			if (!this.update) throw new Error('update not available');
 			return Promise.all(
-				entities.map((entity) => this.updateOne(entity.id as Entity['id'], entity))
+				entities.map((entity) => {
+					if (!entity.id) throw new Error('updateMany requires id');
+					return this.updateOne(entity.id, entity);
+				})
 			);
 		}
 
-		async createOne(entity: Partial<Entity>): Promise<DataEntity> {
+		async createOne(entity: Partial<D>): Promise<D> {
 			await this.initFn;
 			if (!this.create) throw new Error('create not available');
 			return this.create(this.context as Context, entity);
 		}
 
-		async createMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
+		async createMany(entities: Partial<D>[]): Promise<D[]> {
 			await this.initFn;
 			if (!this.create) throw new Error('create not available');
 			return Promise.all(entities.map((entity) => this.createOne(entity)));
 		}
 
-		async createOrUpdateMany(entities: Array<Partial<Entity>>): Promise<Array<DataEntity>> {
+		async createOrUpdateMany(entities: Partial<D>[]): Promise<D[]> {
 			await this.initFn;
 			if (!this.update || !this.create) throw new Error('create/update not available');
 			return Promise.all(
@@ -156,18 +154,8 @@ export const createProvider = <Entity extends WithId, Context, DataEntity extend
 			);
 		}
 
-		async deleteOne(filter: Filter<Entity>): Promise<boolean> {
-			await this.initFn;
-			if (!this.remove) throw new Error('delete not available');
+		async deleteOne(filter: Filter<D>): Promise<boolean> {
 			throw new Error('Not implemented: deleteOne');
-		}
-
-		getRelatedEntityId(entity: any, relatedIdField: string): string {
-			throw new Error('not implemented: getRelatedEntityId');
-		}
-
-		public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
-			return false;
 		}
 	}
 

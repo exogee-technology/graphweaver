@@ -1,10 +1,9 @@
 import { BigIntType, Entity, Ref, Index, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 
 import { AuditChange } from './audit-change';
-import { BaseEntity } from './base-entity';
 @Entity()
 @Index({ properties: ['relatedEntityType', 'relatedEntityId'] })
-export class AuditRelatedEntityChange extends BaseEntity {
+export class AuditRelatedEntityChange {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

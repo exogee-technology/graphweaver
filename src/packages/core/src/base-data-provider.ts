@@ -61,13 +61,4 @@ export class BaseDataProvider<D> implements BackendProvider<D> {
 	public async deleteMany(filter: Filter<D>): Promise<boolean> {
 		throw new Error('DeleteMany Not implemented');
 	}
-
-	// HELPER METHODS
-	getRelatedEntityId(entity: any, relatedIdField: string): string {
-		throw new Error('GetRelatedEntityId not implemented');
-	}
-
-	isCollection(entity: unknown): entity is Iterable<D> {
-		throw new Error('IsCollection not implemented');
-	}
 }

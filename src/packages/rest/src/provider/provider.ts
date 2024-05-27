@@ -151,18 +151,4 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 
 		throw new Error('Not implemented');
 	}
-
-	public getRelatedEntityId(entity: any, relatedIdField: string) {
-		if (typeof entity === 'string') {
-			return entity;
-		}
-		if (entity.id) {
-			return entity.id;
-		}
-		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
-	}
-
-	public isCollection(entity: unknown): entity is Iterable<D> {
-		return false;
-	}
 }

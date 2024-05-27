@@ -11,11 +11,10 @@ import {
 } from '@mikro-orm/core';
 
 import { AuditRelatedEntityChange } from './audit-related-entity-change';
-import { BaseEntity } from './base-entity';
 
 @Entity()
 @Index({ properties: ['entityType', 'entityId'] })
-export class AuditChange extends BaseEntity {
+export class AuditChange {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

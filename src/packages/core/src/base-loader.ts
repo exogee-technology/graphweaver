@@ -1,7 +1,12 @@
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 
-import { Filter, graphweaverMetadata, isTransformableGraphQLEntityClass } from '.';
+import {
+	Filter,
+	graphweaverMetadata,
+	isEntityMetadata,
+	isTransformableGraphQLEntityClass,
+} from '.';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
 let relatedIdLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
@@ -112,19 +117,28 @@ const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D[] } = {};
 			for (const record of records) {
-				const relatedRecord = record[relatedField as keyof D];
-				if (entity.provider.isCollection(relatedRecord)) {
-					// ManyToManys come back this way.
-					for (const subRecord of relatedRecord as Iterable<D>) {
-						const stringPrimaryKey = String(subRecord[primaryKeyField]);
-						if (!lookup[stringPrimaryKey]) lookup[stringPrimaryKey] = [];
-						lookup[stringPrimaryKey].push(record);
+				const fieldMetadata = entity.fields[relatedField];
+				const fieldType = fieldMetadata?.getType();
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+				if (isEntityMetadata(fieldTypeMetadata)) {
+					const relatedRecord = record[relatedField as keyof D];
+					if (Array.isArray(fieldType)) {
+						// ManyToManys come back this way.
+						for (const subRecord of relatedRecord as Iterable<D>) {
+							const stringPrimaryKey = String(subRecord[primaryKeyField]);
+							if (!lookup[stringPrimaryKey]) lookup[stringPrimaryKey] = [];
+							lookup[stringPrimaryKey].push(record);
+						}
+					} else {
+						// ManyToOnes come back this way
+						const relatedRecordId = String(
+							relatedRecord[
+								(fieldTypeMetadata.primaryKeyField ?? 'id') as keyof typeof relatedRecord
+							]
+						);
+						if (!lookup[relatedRecordId]) lookup[relatedRecordId] = [];
+						lookup[relatedRecordId].push(record);
 					}
-				} else {
-					// ManyToOnes come back this way
-					const relatedRecordId = entity.provider!.getRelatedEntityId(relatedRecord, relatedField);
-					if (!lookup[relatedRecordId]) lookup[relatedRecordId] = [];
-					lookup[relatedRecordId].push(record);
 				}
 			}
 

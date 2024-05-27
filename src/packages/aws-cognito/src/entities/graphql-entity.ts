@@ -1,9 +1,11 @@
-import { GraphQLEntity, ID, Entity, Field } from '@exogee/graphweaver';
+import { ID, Entity, Field } from '@exogee/graphweaver';
 
 import { CognitoUserBackendEntity } from './backend-entity';
 
 @Entity('CognitoUser')
-export class CognitoUser extends GraphQLEntity<CognitoUserBackendEntity> {
+export class CognitoUser {
+	public dataEntity!: CognitoUserBackendEntity;
+
 	@Field(() => ID)
 	id!: string;
 

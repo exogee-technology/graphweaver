@@ -23,7 +23,7 @@ export const createAwsCognitoUserProvider = ({
 	userPoolId,
 	endpoint,
 }: CreateAwsCognitoUserResolverOptions) => {
-	const provider = createProvider<Entity, Context, DataEntity>({
+	const provider = createProvider<Context, DataEntity>({
 		backendId: 'AWS',
 		init: async () => {
 			const client = new CognitoIdentityProviderClient({
@@ -62,8 +62,8 @@ export const createAwsCognitoUserProvider = ({
 	});
 
 	// Attach the entity to this provider
-	graphweaverMetadata.collectProviderInformationForEntity<typeof CognitoUser, DataEntity>({
-		provider: provider as BackendProvider<DataEntity, typeof CognitoUser>,
+	graphweaverMetadata.collectProviderInformationForEntity<CognitoUser, DataEntity>({
+		provider: provider as BackendProvider<DataEntity>,
 		target: CognitoUser,
 	});
 
