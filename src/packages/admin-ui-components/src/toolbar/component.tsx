@@ -4,8 +4,8 @@ import { Button } from '../button';
 import { Popover } from '../popover';
 import type { PopoverItem } from '../popover';
 
-import { ReactComponent as OpenPlaygroundIcon } from '../assets/16-open-external.svg';
-import { ReactComponent as FilterIcon } from '../assets/16-filter.svg';
+import OpenPlaygroundIcon from '../assets/16-open-external.svg';
+import FilterIcon from '../assets/16-filter.svg';
 import styles from './styles.module.css';
 
 import { FilterBar } from '../filter-bar';

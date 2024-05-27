@@ -1,5 +1,5 @@
 import { SqlitePlatform, SqliteConnection } from '@mikro-orm/sqlite';
-import { AbstractSqlDriver } from '@mikro-orm/knex';
+import { AbstractSqlDriver, MonkeyPatchable } from '@mikro-orm/knex';
 import sqlite3 from 'node-sqlite3-wasm';
 
 class Connection extends SqliteConnection {
@@ -10,7 +10,7 @@ class Connection extends SqliteConnection {
 	private getPatchedWasmDialect() {
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore - we need to call the private message
-		const Sqlite3Dialect = this.getPatchedDialect();
+		const { Sqlite3Dialect } = MonkeyPatchable;
 
 		if (Sqlite3Dialect.prototype.___patched) {
 			return Sqlite3Dialect;

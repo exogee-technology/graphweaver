@@ -1,6 +1,6 @@
 import { MouseEventHandler } from 'react';
 
-import { ReactComponent as OpenIcon } from '../assets/16-open-external.svg';
+import OpenIcon from '../assets/16-open-external.svg';
 import { CustomFieldArgs } from '@exogee/graphweaver-admin-ui-components';
 
 interface Task {

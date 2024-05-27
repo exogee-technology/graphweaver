@@ -45,6 +45,8 @@ export const getExternalModules = (): string[] => {
 		'mock-aws-s3',
 		'nock',
 		'aws-sdk',
+		'libsql',
+		'mariadb/callback',
 	]);
 
 	// The end user might explicitly require these, so we'll exclude them from the list of external modules.

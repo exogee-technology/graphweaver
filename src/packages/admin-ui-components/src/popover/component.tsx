@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import { Button } from '../button';
 import type { ButtonProps } from '../button';
-import { ReactComponent as DownChevronIcon } from '../assets/16-chevron-down.svg';
+import DownChevronIcon from '../assets/16-chevron-down.svg';
 
 import styles from './styles.module.css';
 

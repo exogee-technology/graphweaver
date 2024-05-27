@@ -1,6 +1,6 @@
 import DataGrid, {
 	Column,
-	FormatterProps,
+	RenderCellProps,
 	SortColumn,
 	SelectColumn,
 	CalculatedColumn,
@@ -54,8 +54,8 @@ const columnsForEntity = <T extends TableRowItem>(
 			// We don't support sorting by relationships yet.
 			sortable: !field.relationshipType,
 
-			formatter: field.relationshipType
-				? ({ row }: FormatterProps<T, unknown>) => {
+			renderCell: field.relationshipType
+				? ({ row }: RenderCellProps<T, unknown>) => {
 						const value = row[field.name as keyof typeof row];
 						const relatedEntity = entityByType(field.type);
 
@@ -82,7 +82,7 @@ const columnsForEntity = <T extends TableRowItem>(
 						}
 					}
 				: field.type === 'Media'
-					? ({ row }: FormatterProps<T, unknown>) => {
+					? ({ row }: RenderCellProps<T, unknown>) => {
 							const media = row[field.name as keyof typeof row] as {
 								url: string;
 								type: 'IMAGE' | 'OTHER';
@@ -116,7 +116,7 @@ const columnsForEntity = <T extends TableRowItem>(
 							);
 						}
 					: field.isArray
-						? ({ row }: FormatterProps<T, unknown>) => {
+						? ({ row }: RenderCellProps<T, unknown>) => {
 								const value = row[field.name as keyof typeof row];
 								if (Array.isArray(value)) {
 									return value.join(', ');
@@ -150,7 +150,7 @@ const columnsForEntity = <T extends TableRowItem>(
 				name: customField.name,
 				width: 200,
 				sortable: false,
-				formatter: ({ row }: FormatterProps<T, unknown>) =>
+				renderCell: ({ row }: RenderCellProps<T, unknown>) =>
 					customField.component?.({ context: 'table', entity: row }),
 			});
 		}
@@ -235,7 +235,7 @@ export const Table = <T extends TableRowItem>({
 	};
 
 	const navigateToDetailForEntity = useCallback(
-		(row: T, column: CalculatedColumn<T, unknown>) => {
+		({ row, column }: { row: T; column: CalculatedColumn<T, unknown> }) => {
 			// Don't navigate if the user has clicked the checkbox column
 			if (column.key === 'select-row') {
 				return;
@@ -311,7 +311,7 @@ export const Table = <T extends TableRowItem>({
 				defaultColumnOptions={{ resizable: true }}
 				onSelectedRowsChange={setSelectedRows}
 				selectedRows={selectedRows}
-				onRowClick={navigateToDetailForEntity}
+				onCellClick={navigateToDetailForEntity}
 				rowClass={rowClass}
 				onScroll={handleScroll}
 				className={styles.tableWrapper}

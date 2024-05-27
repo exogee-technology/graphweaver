@@ -56,6 +56,6 @@ export const viteConfig = ({
 				'virtual:graphweaver-user-supplied-custom-fields',
 			],
 		},
-		plugins: [svgr(), react(), graphweaver()],
+		plugins: [svgr({ include: '**/*.svg' }), react(), graphweaver()],
 	};
 };
