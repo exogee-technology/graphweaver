@@ -1,6 +1,5 @@
 import {
 	BackendProvider,
-	BaseDataEntity,
 	GraphQLResolveInfo,
 	HookParams,
 	HookRegister,
@@ -25,22 +24,24 @@ export const defaultPasswordStrength = (password?: string) => {
 	throw new PasswordStrengthError('Password not strong enough.');
 };
 
-export type updatePasswordCredentialOptions<D> = {
+export type UpdatePasswordCredentialOptions<D> = {
 	assertPasswordStrength: (password: string) => boolean;
-	provider: BackendProvider<D, any>;
+	provider: BackendProvider<D>;
 	id: string;
 	password?: string;
 	username?: string;
 	params?: HookParams<CredentialUpdateInput>;
+	info: GraphQLResolveInfo;
 };
-export const updatePasswordCredential = async <D extends BaseDataEntity>({
+export const updatePasswordCredential = async <D>({
 	assertPasswordStrength,
 	provider,
 	id,
 	password,
 	username,
 	params,
-}: updatePasswordCredentialOptions<D>) => {
+	info,
+}: UpdatePasswordCredentialOptions<D>) => {
 	let passwordHash = undefined;
 	if (password && assertPasswordStrength(password)) {
 		passwordHash = await hashPassword(password);
@@ -50,15 +51,12 @@ export const updatePasswordCredential = async <D extends BaseDataEntity>({
 		...(passwordHash ? { password: passwordHash } : {}),
 	});
 
-	const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, [credential], params);
+	const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, [credential], info, params);
 	if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 	return entity;
 };
 
-export const runAfterHooks = async <
-	D extends BaseDataEntity,
-	H = CredentialInsertInput | CredentialUpdateInput,
->(
+export const runAfterHooks = async <D, H = CredentialInsertInput | CredentialUpdateInput>(
 	hookRegister: HookRegister,
 	entities: (D | null)[],
 	info: GraphQLResolveInfo,

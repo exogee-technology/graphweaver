@@ -1,10 +1,7 @@
 import {
 	BackendProvider,
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	Field,
-	Filter,
-	GraphQLEntity,
 	GraphQLResolveInfo,
 	HookRegister,
 	InputType,
@@ -30,7 +27,7 @@ import {
 	updatePasswordCredential,
 } from './utils';
 import { hashPassword, verifyPassword } from '../../utils/argon2id';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AuthTokenProvider, verifyToken } from '../token';
 import { AclMap } from '../../helper-functions';
 
 export enum PasswordOperation {
@@ -72,7 +69,7 @@ export type PasswordOptions<D extends CredentialStorage> = {
 		operation: PasswordOperation,
 		params: RequestParams
 	) => Promise<UserProfile<unknown>>;
-	acl?: AccessControlList<Credential<D>, AuthorizationContext>;
+	acl?: AccessControlList<Credential, AuthorizationContext>;
 	assertPasswordStrength?: (password?: string) => boolean;
 	onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
 	onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
@@ -110,7 +107,7 @@ export class Password<D extends CredentialStorage> {
 			AclMap.set('Credential', acl);
 		}
 
-		graphweaverMetadata.collectProviderInformationForEntity<typeof Credential, D>({
+		graphweaverMetadata.collectProviderInformationForEntity<Credential, D>({
 			provider: this.provider as BackendProvider<D>,
 			target: Credential,
 		});
@@ -182,7 +179,8 @@ export class Password<D extends CredentialStorage> {
 	}
 
 	async create(
-		params: CreateOrUpdateHookParams<CredentialInsertInput>
+		params: CreateOrUpdateHookParams<CredentialInsertInput>,
+		info: GraphQLResolveInfo
 	): Promise<UserProfile<unknown>> {
 		const [item] = params.args.items;
 		if (!item) throw new Error('No data specified cannot continue.');
@@ -200,20 +198,21 @@ export class Password<D extends CredentialStorage> {
 		const credential = await this.provider.createOne({
 			username: item.username,
 			password: passwordHash,
-		} as Credential<D> & { password: string });
+		} as Credential & { password: string });
 
-		const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], params);
+		const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], info, params);
 		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-		this.onUserRegistered?.(entity.id, { info: params.info, ctx: params.context });
+		this.onUserRegistered?.(entity.id, { info, ctx: params.context });
 
 		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
-			info: params.info,
+			info,
 			ctx: params.context,
 		});
 	}
 
 	async update(
-		params: CreateOrUpdateHookParams<CredentialUpdateInput>
+		params: CreateOrUpdateHookParams<CredentialUpdateInput>,
+		info: GraphQLResolveInfo
 	): Promise<UserProfile<unknown>> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
@@ -231,10 +230,11 @@ export class Password<D extends CredentialStorage> {
 			password: item.password,
 			username: item.username,
 			params,
+			info,
 		});
 
 		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
-			info: params.info,
+			info,
 			ctx: params.context,
 		});
 	}
@@ -246,8 +246,8 @@ export class Password<D extends CredentialStorage> {
 		args: { input: CredentialInsertInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
-	): Promise<Credential<D> | null> {
-		return this.withTransaction<Credential<D> | null>(async () => {
+	): Promise<Credential | null> {
+		return this.withTransaction<Credential | null>(async () => {
 			const params = {
 				args: { items: [args.input] },
 				info,
@@ -260,10 +260,11 @@ export class Password<D extends CredentialStorage> {
 				const hookParams = await runWritableBeforeHooks<CredentialInsertInput>(
 					HookRegister.BEFORE_CREATE,
 					params,
-					'Credential'
+					'Credential',
+					info
 				);
 
-				userProfile = await this.create(hookParams);
+				userProfile = await this.create(hookParams, info);
 			} catch (err) {
 				logger.error(err);
 
@@ -285,10 +286,7 @@ export class Password<D extends CredentialStorage> {
 			if (!userProfile.username)
 				throw new AuthenticationError('Create unsuccessful: Username missing.');
 
-			return Credential.fromBackendEntity({
-				id: userProfile.id,
-				username: userProfile.username,
-			} as { id: string; username: string } & BaseDataEntity) as Credential<D> | null;
+			return { id: userProfile.id, username: userProfile.username };
 		});
 	}
 
@@ -297,8 +295,8 @@ export class Password<D extends CredentialStorage> {
 		args: { input: CredentialUpdateInput },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
-	): Promise<Credential<D> | null> {
-		return this.withTransaction<Credential<D> | null>(async () => {
+	): Promise<Credential | null> {
+		return this.withTransaction<Credential | null>(async () => {
 			const params = {
 				args: { items: [args.input] },
 				info,
@@ -311,9 +309,10 @@ export class Password<D extends CredentialStorage> {
 				const hookParams = await runWritableBeforeHooks<CredentialUpdateInput>(
 					HookRegister.BEFORE_UPDATE,
 					params,
-					'Credential'
+					'Credential',
+					info
 				);
-				userProfile = await this.update(hookParams);
+				userProfile = await this.update(hookParams, info);
 			} catch (err) {
 				logger.error(err);
 				if (err instanceof PasswordStrengthError) throw err;
@@ -333,10 +332,7 @@ export class Password<D extends CredentialStorage> {
 			if (!userProfile.username)
 				throw new ValidationError('Update unsuccessful: Username missing.');
 
-			return Credential.fromBackendEntity({
-				id: userProfile.id,
-				username: userProfile.username,
-			} as { id: string; username: string } & BaseDataEntity) as Credential<D> | null;
+			return { id: userProfile.id, username: userProfile.username };
 		});
 	}
 
@@ -351,7 +347,7 @@ export class Password<D extends CredentialStorage> {
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
-		return verifyAndCreateTokenFromAuthToken(authToken);
+		return verifyToken(authToken);
 	}
 
 	async challengePassword(
@@ -372,6 +368,6 @@ export class Password<D extends CredentialStorage> {
 		if (!userProfile) throw new AuthenticationError('Challenge unsuccessful: Userprofile missing.');
 
 		const authToken = await tokenProvider.stepUpToken(existingToken);
-		return verifyAndCreateTokenFromAuthToken(authToken);
+		return verifyToken(authToken);
 	}
 }

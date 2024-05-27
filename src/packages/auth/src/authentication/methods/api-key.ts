@@ -1,11 +1,8 @@
 import {
 	BackendProvider,
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	Field,
 	FieldMetadata,
-	FieldOptions,
-	GraphQLEntity,
 	HookParams,
 	HookRegister,
 	ID,
@@ -19,7 +16,7 @@ import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-ser
 import { GraphQLResolveInfo, Source } from 'graphql';
 
 import { AccessControlList, AuthorizationContext } from '../../types';
-import { ApiKeyEntity, ApiKeyStorageEntity } from '../entities';
+import { ApiKeyEntity } from '../entities';
 import { hashPassword } from '../../utils/argon2id';
 import { AclMap } from '../../helper-functions';
 
@@ -56,7 +53,7 @@ export class ApiKeyUpdateInputArgs<R> {
 	roles?: R[];
 }
 
-type ApiKeyProvider<R> = BackendProvider<ApiKeyStorageEntity<R>>;
+type ApiKeyProvider<R> = BackendProvider<ApiKeyEntity<R>>;
 
 export class ApiKey<R extends string[]> {
 	private provider: ApiKeyProvider<R>;
@@ -69,7 +66,7 @@ export class ApiKey<R extends string[]> {
 	}: {
 		provider: ApiKeyProvider<R>;
 		roles: unknown;
-		acl?: AccessControlList<ApiKeyEntity<ApiKeyStorageEntity<R>, R>, AuthorizationContext>;
+		acl?: AccessControlList<ApiKeyEntity<R>, AuthorizationContext>;
 	}) {
 		this.provider = provider;
 		this.transactional = !!provider.withTransaction;
@@ -88,7 +85,7 @@ export class ApiKey<R extends string[]> {
 		// Override the roles field for the API Key entity
 		const metadata = graphweaverMetadata.getEntityByName('ApiKey');
 		const roleFieldMetadata = metadata?.fields.roles as unknown as Pick<
-			FieldMetadata<ApiKeyEntity<ApiKeyStorageEntity<R>, R>, ApiKeyStorageEntity<R>>,
+			FieldMetadata<ApiKeyEntity<R>, ApiKeyEntity<R>>,
 			'target' | 'name' | 'getType' | 'relationshipInfo'
 		>;
 		graphweaverMetadata.collectFieldInformation({
@@ -102,7 +99,7 @@ export class ApiKey<R extends string[]> {
 			args: {
 				input: ApiKeyInputArgs,
 			},
-			getType: () => ApiKeyEntity<ApiKeyStorageEntity<R>, R>,
+			getType: () => ApiKeyEntity<R>,
 			resolver: this.createApiKey.bind(this),
 			intentionalOverride: true,
 		});
@@ -112,7 +109,7 @@ export class ApiKey<R extends string[]> {
 			args: {
 				input: ApiKeyUpdateInputArgs,
 			},
-			getType: () => ApiKeyEntity<ApiKeyStorageEntity<R>, R>,
+			getType: () => ApiKeyEntity<R>,
 			resolver: this.updateApiKey.bind(this),
 			intentionalOverride: true,
 		});
@@ -126,8 +123,8 @@ export class ApiKey<R extends string[]> {
 		hookRegister: HookRegister,
 		hookParams: H,
 		info: GraphQLResolveInfo,
-		entities: (ApiKeyStorageEntity<R> | null)[]
-	): Promise<(ApiKeyStorageEntity<R> | null)[]> {
+		entities: (ApiKeyEntity<R> | null)[]
+	): Promise<(ApiKeyEntity<R> | null)[]> {
 		const hookManager = hookManagerMap.get('ApiKey');
 		const { entities: hookEntities = [] } = hookManager
 			? await hookManager.runHooks(
@@ -146,12 +143,10 @@ export class ApiKey<R extends string[]> {
 	async create(
 		params: CreateOrUpdateHookParams<ApiKeyInputArgs>,
 		info: GraphQLResolveInfo
-	): Promise<ApiKeyStorageEntity<R>> {
+	): Promise<ApiKeyEntity<R>> {
 		const [item] = params.args.items;
 		if (!item) throw new ValidationError('No data specified cannot continue.');
-
 		if (!item.key) throw new ValidationError('Create unsuccessful: Key not defined.');
-
 		if (!item.secret) throw new ValidationError('Create unsuccessful: Secret not defined.');
 
 		const secretHash = await hashPassword(item.secret);
@@ -171,7 +166,7 @@ export class ApiKey<R extends string[]> {
 	async update(
 		params: CreateOrUpdateHookParams<ApiKeyUpdateInputArgs<R>>,
 		info: GraphQLResolveInfo
-	): Promise<ApiKeyStorageEntity<R>> {
+	): Promise<ApiKeyEntity<R>> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
 
@@ -198,7 +193,7 @@ export class ApiKey<R extends string[]> {
 		{ input }: { input: ApiKeyInputArgs },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<ApiKeyStorageEntity<R>, R> | null> {
+	): Promise<ApiKeyEntity<R> | null> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
@@ -230,10 +225,7 @@ export class ApiKey<R extends string[]> {
 				);
 			}
 
-			return ApiKeyEntity.fromBackendEntity<
-				ApiKeyStorageEntity<R>,
-				ApiKeyEntity<ApiKeyStorageEntity<R>, R>
-			>(apiKey);
+			return apiKey;
 		});
 	}
 
@@ -242,7 +234,7 @@ export class ApiKey<R extends string[]> {
 		{ input }: { input: ApiKeyUpdateInputArgs<R> },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<ApiKeyStorageEntity<R>, R> | null> {
+	): Promise<ApiKeyEntity<R> | null> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
@@ -272,10 +264,7 @@ export class ApiKey<R extends string[]> {
 				);
 			}
 
-			return ApiKeyEntity.fromBackendEntity<
-				ApiKeyStorageEntity<R>,
-				ApiKeyEntity<ApiKeyStorageEntity<R>, R>
-			>(apiKey);
+			return apiKey;
 		});
 	}
 }

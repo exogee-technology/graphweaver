@@ -219,7 +219,7 @@ export class ForgottenPassword {
 		_source: Source,
 		{ token, password }: { token: string; password: string },
 		_ctx: AuthorizationContext,
-		_info: GraphQLResolveInfo
+		info: GraphQLResolveInfo
 	): Promise<boolean> {
 		const link = await this.getForgottenPasswordLink(token);
 
@@ -251,6 +251,7 @@ export class ForgottenPassword {
 			provider: credentialProvider,
 			id: link.userId,
 			password,
+			info,
 		});
 
 		// redeem the link's token

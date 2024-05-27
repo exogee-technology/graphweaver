@@ -7,7 +7,7 @@ import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 import { AuthenticationMethod, AuthenticationType, AuthorizationContext } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
 import { Token } from '../entities/token';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AuthTokenProvider, verifyToken } from '../token';
 import { ChallengeError } from '../../errors';
 import { GraphQLResolveInfo, Source } from 'graphql';
 
@@ -216,7 +216,7 @@ export class OneTimePassword {
 					? await tokenProvider.decodeToken(context.token)
 					: context.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
-			const token = verifyAndCreateTokenFromAuthToken(authToken);
+			const token = verifyToken(authToken);
 
 			// Callback to the client to mark the otp as used
 			await this.redeemOTP(otp);

@@ -10,7 +10,7 @@ import {
 	MultiFactorAuthentication,
 } from '../../types';
 import { Token, AuthenticationBaseEntity } from '../entities';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AuthTokenProvider, verifyToken } from '../token';
 import { checkAuthentication } from '../../helper-functions';
 import { ChallengeError } from '../../errors';
 import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
@@ -19,10 +19,7 @@ export type WalletAddress = {
 	address: string;
 };
 
-type Web3AuthProvider = BackendProvider<
-	AuthenticationBaseEntity<WalletAddress>,
-	AuthenticationBaseEntity<WalletAddress>
->;
+type Web3AuthProvider = BackendProvider<AuthenticationBaseEntity<WalletAddress>>;
 
 export class Web3 {
 	private provider: Web3AuthProvider;
@@ -208,7 +205,7 @@ export class Web3 {
 					: context.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 
-			return verifyAndCreateTokenFromAuthToken(authToken);
+			return verifyToken(authToken);
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 

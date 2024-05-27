@@ -1,14 +1,13 @@
 import {
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
-	GraphQLEntity,
-	GraphQLEntityConstructor,
 	GraphQLArgs,
 	ReadHookParams,
 	graphweaverMetadata,
 	EntityMetadata,
 	isEntityMetadata,
+	FieldsByTypeName,
+	ResolveTree,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
@@ -70,12 +69,6 @@ const getRelationshipAccessTypeForArg = (
 	throw new Error('Unrecognized node access type, unable to apply permissions');
 };
 
-const isRelatedEntity = (
-	entity: any
-): entity is GraphQLEntityConstructor<GraphQLEntity<BaseDataEntity>, BaseDataEntity> => {
-	return !!(entity && entity.prototype instanceof GraphQLEntity);
-};
-
 // In order to support Row Level Security, we need to ensure that the hooks are transactional
 // This is checked in the Create and Update hooks when we find a ACL filter
 const assertTransactional = (transactional: boolean) => {
@@ -94,7 +87,7 @@ type RequiredPermission = `${EntityName}:${AccessType}`;
 // This is checked in all before hooks and before calling the data provider
 const assertUserCanPerformRequest = async <G>(
 	gqlEntityTypeName: string,
-	info: GraphQLResolveInfo,
+	fields: FieldsByTypeName | { [str: string]: ResolveTree } | undefined,
 	args: GraphQLArgs<G>,
 	accessType: AccessType
 ) => {
@@ -149,16 +142,12 @@ const generatePermissionListFromFields = (fragments: GraphQLResolveInfo['fragmen
 		for (const node of selectionSet?.selections ?? []) {
 			// Check if the field has a selection set of its own which infers this node is an entity
 			if (node.kind === 'Field' && node.selectionSet) {
-				const field = entityFields?.[node.name.value];
-				const fieldType = field?.getType() as GraphQLEntityConstructor<
-					GraphQLEntity<BaseDataEntity>,
-					BaseDataEntity
-				>;
+				const fieldType = entityFields?.[node.name.value]?.getType();
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-				const isRelationshipField = fieldType && fieldType?.prototype instanceof GraphQLEntity;
-				if (isRelationshipField) {
+				if (isEntityMetadata(fieldTypeMetadata)) {
 					// Let's check the user has permission to read the related entity
-					recurseThroughFields(fieldType.name, node.selectionSet);
+					recurseThroughFields(fieldTypeMetadata.name, node.selectionSet);
 				}
 			} else if (node.kind === 'FragmentSpread') {
 				const fragment = fragments[node.name.value];
@@ -183,21 +172,18 @@ const getFilterArgumentsOnFields = () => {
 
 		for (const node of selectionSet?.selections ?? []) {
 			if (node.kind === 'Field' && node.arguments?.length && node.selectionSet) {
-				const field = entityFields?.[node.name.value];
-				let fieldType = field?.getType() as GraphQLEntityConstructor<
-					GraphQLEntity<BaseDataEntity>,
-					BaseDataEntity
-				>;
+				let fieldType = entityFields?.[node.name.value]?.getType();
 				if (Array.isArray(fieldType)) {
 					fieldType = fieldType[0];
 				}
-				const isRelationshipField = fieldType && fieldType?.prototype instanceof GraphQLEntity;
-				if (isRelationshipField) {
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+
+				if (isEntityMetadata(fieldTypeMetadata)) {
 					const filterArgument = node.arguments.find((arg) => arg.name.value === 'filter');
 					if (filterArgument) {
-						argumentsList.set(fieldType.name, filterArgument.value);
+						argumentsList.set(fieldTypeMetadata.name, filterArgument.value);
 					}
-					recurseThroughFields(fieldType.name, node.selectionSet);
+					recurseThroughFields(fieldTypeMetadata.name, node.selectionSet);
 				}
 			}
 		}
@@ -218,19 +204,15 @@ const generatePermissionListFromArgumentsOnFields = () => {
 			if (node.kind === Kind.OBJECT && Array.isArray(node.fields)) {
 				for (const field of node.fields) {
 					if (field.kind === Kind.OBJECT_FIELD) {
-						const relationship = entityFields?.[field.name.value];
-						let relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
-							GraphQLEntity<BaseDataEntity>,
-							BaseDataEntity
-						>;
-						if (relatedEntity && Array.isArray(relatedEntity)) {
-							relatedEntity = relatedEntity[0];
+						let fieldType = entityFields?.[field.name.value]?.getType();
+						if (fieldType && Array.isArray(fieldType)) {
+							fieldType = fieldType[0];
 						}
-						const isRelatedEntity =
-							relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
-						if (isRelatedEntity) {
+						const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+
+						if (isEntityMetadata(fieldTypeMetadata)) {
 							// Let's check the user has permission to read the related entity
-							recurseThroughArgs(new Map([[relatedEntity.name, field.value]]));
+							recurseThroughArgs(new Map([[fieldTypeMetadata.name, field.value]]));
 						}
 					}
 				}
@@ -318,7 +300,7 @@ export const beforeCreateOrUpdate = (
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args, accessType);
+		await assertUserCanPerformRequest(gqlEntityTypeName, params.fields, params.args, accessType);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Fetch the filter for the currently logged in user
@@ -366,7 +348,7 @@ export const afterCreateOrUpdate = (
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args, AccessType.Read);
+		await assertUserCanPerformRequest(gqlEntityTypeName, info, params.args, AccessType.Read);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Combine the access filter with the original filter
@@ -384,14 +366,9 @@ export const beforeRead = (gqlEntityTypeName: string) => {
 };
 
 export const beforeDelete = (gqlEntityTypeName: string) => {
-	return async <G>(params: DeleteHookParams<G, AuthorizationContext>) => {
+	return async <G>(params: DeleteHookParams<G, AuthorizationContext>, info: GraphQLResolveInfo) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		await assertUserCanPerformRequest(
-			gqlEntityTypeName,
-			params.info,
-			params.args,
-			AccessType.Delete
-		);
+		await assertUserCanPerformRequest(gqlEntityTypeName, info, params.args, AccessType.Delete);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Combine the access filter with the original filter

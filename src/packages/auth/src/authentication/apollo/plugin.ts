@@ -1,6 +1,6 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider, GraphQLEntity, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -13,7 +13,7 @@ import {
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
-import { ApiKeyEntity, ApiKeyStorageEntity } from '../entities';
+import { ApiKeyEntity } from '../entities';
 import { registerAccessControlListHook } from '../../decorators';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
@@ -98,12 +98,12 @@ export const applyDefaultMetadataACL = () => {
 	}
 };
 
-type AuthApolloPluginOptions<D extends ApiKeyStorageEntity<R>, R> = {
+type AuthApolloPluginOptions<D extends ApiKeyEntity<R>, R> = {
 	implicitAllow?: boolean;
 	apiKeyDataProvider?: BackendProvider<D>;
 };
 
-export const authApolloPlugin = <D extends ApiKeyStorageEntity<R>, R>(
+export const authApolloPlugin = <D extends ApiKeyEntity<R>, R>(
 	addUserToContext: (userId: string) => Promise<UserProfile<R>>,
 	options?: AuthApolloPluginOptions<D, R>
 ): ApolloServerPlugin<AuthorizationContext> => {

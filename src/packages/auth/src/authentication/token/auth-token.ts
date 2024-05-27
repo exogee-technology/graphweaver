@@ -110,9 +110,8 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 }
 
-export const verifyAndCreateTokenFromAuthToken = (authToken: AuthToken) => {
+export const verifyToken = (authToken?: AuthToken) => {
 	if (!authToken) throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
-	const token = Token.fromBackendEntity(authToken);
-	if (!token) throw new AuthenticationError('Auth unsuccessful.');
-	return token;
+
+	return authToken;
 };

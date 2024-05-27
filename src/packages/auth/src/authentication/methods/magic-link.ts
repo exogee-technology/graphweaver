@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto';
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../types';
 import { Token } from '../entities/token';
 import { UserProfile } from '../../user-profile';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AuthTokenProvider, verifyToken } from '../token';
 import { requireEnvironmentVariable } from '../../helper-functions';
 import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
 import { GraphQLResolveInfo, Source } from 'graphql';
@@ -173,7 +173,7 @@ export class MagicLink {
 				? await tokenProvider.stepUpToken(existingAuthToken)
 				: await tokenProvider.generateToken(userProfile);
 
-			const token = verifyAndCreateTokenFromAuthToken(authToken);
+			const token = verifyToken(authToken);
 
 			// Mark the magic link as used
 			await this.provider.updateOne(link.id, {

@@ -1,14 +1,6 @@
-import { BaseDataEntity, Entity, Filter } from '@exogee/graphweaver';
-import { ID, Field, GraphQLEntity } from '@exogee/graphweaver';
+import { Entity } from '@exogee/graphweaver';
+import { ID, Field } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '../../decorators';
-
-export interface ApiKeyStorageEntity<R> extends BaseDataEntity {
-	id: string | number;
-	key: string;
-	secret: string;
-	revoked: boolean;
-	roles: R[];
-}
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -24,9 +16,7 @@ export interface ApiKeyStorageEntity<R> extends BaseDataEntity {
 		excludeFromBuiltInWriteOperations: true,
 	},
 })
-export class ApiKeyEntity<D extends BaseDataEntity, R> extends GraphQLEntity<D> {
-	public dataEntity!: D;
-
+export class ApiKeyEntity<R> {
 	@Field(() => ID)
 	id!: string;
 
@@ -35,6 +25,10 @@ export class ApiKeyEntity<D extends BaseDataEntity, R> extends GraphQLEntity<D> 
 		apiOptions: { excludeFromBuiltInWriteOperations: true },
 	})
 	key!: string;
+
+	// There's no @Field decorator here intentionally. We don't want to expose
+	// the secret in the API. It's only accessible to our backend code.
+	secret!: string;
 
 	@Field(() => Boolean, { nullable: true })
 	revoked?: boolean;

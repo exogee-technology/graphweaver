@@ -118,7 +118,7 @@ export interface BackendProvider<D> {
 export interface HookParams<G, TContext = BaseContext> {
 	context: TContext;
 	transactional: boolean;
-	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
+	fields?: FieldsByTypeName | { [str: string]: ResolveTree };
 	entities?: (G | null)[];
 	deleted?: boolean; // Used by a delete operation to indicate if successful
 }

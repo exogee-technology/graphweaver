@@ -15,13 +15,7 @@ import {
 	getAuthorizationContext,
 	getRolesFromAuthorizationContext,
 } from './helper-functions';
-import {
-	BaseDataEntity,
-	Filter,
-	GraphQLEntity,
-	GraphQLEntityConstructor,
-	graphweaverMetadata,
-} from '@exogee/graphweaver';
+import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -149,7 +143,7 @@ export const assertObjectLevelPermissions = async <G, TContext extends Authoriza
 	requiredPermission: AccessType
 ) => assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
 
-export async function checkEntityPermission<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+export async function checkEntityPermission<G = unknown, D = unknown>(
 	entityName: string,
 	id: string | number,
 	accessType: AccessType
@@ -216,7 +210,7 @@ export async function checkEntityPermission<G extends GraphQLEntity<D>, D extend
 	}
 }
 
-export async function checkAuthorization<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+export async function checkAuthorization<G = unknown>(
 	entityName: string,
 	id: string | number,
 	requestInput: Partial<G>,
@@ -245,26 +239,23 @@ export async function checkAuthorization<G extends GraphQLEntity<D>, D extends B
 			continue;
 		}
 
-		// If we are here then we have an array or an object lets see if its a related entity
-		const relationship = meta?.fields[key];
-		const relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
-			GraphQLEntity<BaseDataEntity>,
-			BaseDataEntity
-		>;
-		const isRelatedEntity = relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
-		if (isRelatedEntity) {
-			// Now we have a related entity, lets check we have permission
+		// If we are here then we have an array or an object. Let's see if its a related entity.
+		const relatedEntity = meta?.fields[key]?.getType();
+		const relatedEntityMetadata = graphweaverMetadata.metadataForType(relatedEntity);
+
+		if (isEntityMetadata(relatedEntityMetadata)) {
+			// Now we have a related entity, let's check and make sure we have permission
 			const accessType = requiredPermissionsForAction(value);
 			const values = Array.isArray(value) ? value : [value];
 			for (const item of values) {
-				const relatedId = item?.id;
+				const relatedId = item[relatedEntityMetadata.primaryKeyField ?? 'id'];
 
 				// We only check the nested inputs with ID's, this is because if there was no ID
 				// supplied in the input args then the entity has been created in the data source.
 				// The creation hook will triggered for that entity and the permissions checked
 				if (relatedId) {
 					relatedEntityAuthChecks.push(
-						checkAuthorization(relatedEntity.name, relatedId, item, accessType)
+						checkAuthorization(relatedEntityMetadata.name, relatedId, item, accessType)
 					);
 				}
 			}
