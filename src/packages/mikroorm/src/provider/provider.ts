@@ -367,7 +367,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return result as D[];
 	}
 
-	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
+	public async updateOne(
+		id: string | number,
+		updateArgs: Partial<G & { version?: number }>
+	): Promise<D> {
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
 			updateArgs: JSON.stringify(updateArgs),

@@ -66,7 +66,7 @@ export class CredentialUpdateInput {
 }
 
 export type PasswordOptions<D extends CredentialStorage> = {
-	provider: BackendProvider<D, GraphQLEntity<D>>;
+	provider: BackendProvider<D>;
 	getUserProfile: (
 		id: string,
 		operation: PasswordOperation,
@@ -79,7 +79,7 @@ export type PasswordOptions<D extends CredentialStorage> = {
 };
 
 export class Password<D extends CredentialStorage> {
-	private provider: BackendProvider<D, GraphQLEntity<D>>;
+	private provider: BackendProvider<CredentialStorage>;
 	private getUserProfile: (
 		id: string,
 		operation: PasswordOperation,
@@ -111,7 +111,7 @@ export class Password<D extends CredentialStorage> {
 		}
 
 		graphweaverMetadata.collectProviderInformationForEntity<typeof Credential, D>({
-			provider: this.provider as BackendProvider<D, typeof Credential>,
+			provider: this.provider as BackendProvider<D>,
 			target: Credential,
 		});
 
@@ -166,7 +166,7 @@ export class Password<D extends CredentialStorage> {
 	): Promise<UserProfile<unknown>> {
 		const credential = await this.provider.findOne({
 			username,
-		} as Filter<GraphQLEntity<D>>);
+		});
 
 		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
 		if (!credential.password)

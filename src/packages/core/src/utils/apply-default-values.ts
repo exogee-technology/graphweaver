@@ -1,8 +1,8 @@
-import { BaseDataEntity, EntityMetadata, graphweaverMetadata, isEntityMetadata } from '..';
+import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '..';
 
-export const applyDefaultValues = <G>(
+export const applyDefaultValues = <G = unknown, D = unknown>(
 	data: Partial<G> | Partial<G>[],
-	entityMetadata: EntityMetadata<G, BaseDataEntity>
+	entityMetadata: EntityMetadata<G, D>
 ) => {
 	const dataArray = Array.isArray(data) ? data : [data];
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata);

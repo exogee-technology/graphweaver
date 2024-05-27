@@ -1,6 +1,7 @@
 import {
 	BackendProvider,
 	BaseDataEntity,
+	GraphQLResolveInfo,
 	HookParams,
 	HookRegister,
 	hookManagerMap,
@@ -60,16 +61,21 @@ export const runAfterHooks = async <
 >(
 	hookRegister: HookRegister,
 	entities: (D | null)[],
+	info: GraphQLResolveInfo,
 	hookParams?: HookParams<H>
 ): Promise<(D | null)[]> => {
 	const hookManager = hookManagerMap.get('Credential');
 
 	const { entities: hookEntities = [] } =
 		hookManager && hookParams
-			? await hookManager.runHooks(hookRegister, {
-					...hookParams,
-					entities,
-				})
+			? await hookManager.runHooks(
+					hookRegister,
+					{
+						...hookParams,
+						entities,
+					},
+					info
+				)
 			: { entities };
 
 	return hookEntities;

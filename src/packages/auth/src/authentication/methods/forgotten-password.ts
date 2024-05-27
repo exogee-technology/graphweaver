@@ -20,7 +20,6 @@ const config = {
 };
 
 type ForgottenPasswordLinkProvider = BackendProvider<
-	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>
 >;
 

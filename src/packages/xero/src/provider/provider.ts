@@ -1,8 +1,6 @@
 import {
 	BackendProvider,
-	BaseDataEntity as DE,
 	Filter,
-	GraphQLEntity as GE,
 	PaginationOptions,
 	Sort,
 	BackendProviderConfig,
@@ -10,14 +8,14 @@ import {
 import { logger } from '@exogee/logger';
 import { TokenSet, XeroClient } from 'xero-node';
 
-export interface XeroDataAccessor<T, G> {
+export interface XeroDataAccessor<D> {
 	find: (args: {
 		xero: XeroClient;
-		filter: Filter<G>;
+		filter: Filter<D>;
 		order?: Record<string, Sort>;
 		limit?: number;
 		offset?: number;
-	}) => Promise<T[]>;
+	}) => Promise<D[]>;
 }
 
 const xeroOrderFrom = (pagination?: PaginationOptions) => {
@@ -42,7 +40,7 @@ const xeroOffsetFrom = (pagination?: PaginationOptions) => {
 	return pagination.offset;
 };
 
-export class XeroBackendProvider<D extends DE, G extends GE<D>> implements BackendProvider<D, G> {
+export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	public readonly backendId = 'xero-api';
 	public readonly supportsInFilter = true;
 
@@ -68,7 +66,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 
 	public constructor(
 		protected entityTypeName: string,
-		protected accessor?: XeroDataAccessor<D, G>,
+		protected accessor?: XeroDataAccessor<D>,
 		backendProviderConfig?: BackendProviderConfig
 	) {}
 
@@ -119,7 +117,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 
 	// GET METHODS
 	public async find(
-		filter: Filter<G>,
+		filter: Filter<D>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
 	): Promise<D[]> {
@@ -155,7 +153,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 		}
 	}
 
-	public async findOne(filter: Filter<G>): Promise<D | null> {
+	public async findOne(filter: Filter<D>): Promise<D | null> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running findOne ${this.entityTypeName} with filter ${filter}`);
@@ -191,7 +189,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
+	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running update one ${this.entityTypeName} with args`, {
@@ -202,7 +200,7 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
+	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		logger.trace(`Running update many ${this.entityTypeName} with args`, {
@@ -212,16 +210,16 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
 		throw new Error('Not implemented');
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<G>): Promise<D> {
+	public async createOne(createArgs: Partial<D>): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
+	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});
@@ -230,13 +228,13 @@ export class XeroBackendProvider<D extends DE, G extends GE<D>> implements Backe
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+	public async deleteOne(filter: Filter<D>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');
 	}
 
-	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+	public async deleteMany(filter: Filter<D>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityTypeName}`);
 
 		throw new Error('Not implemented');

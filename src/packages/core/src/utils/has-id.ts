@@ -1,11 +1,11 @@
-import { BaseDataEntity, EntityMetadata, graphweaverMetadata } from '..';
+import { EntityMetadata, graphweaverMetadata } from '..';
 
-export const hasId = <G, D extends BaseDataEntity>(
+export const hasId = <G = unknown, D = unknown>(
 	entityMetdata: EntityMetadata<G, D>,
 	value: Partial<G>
 ) => {
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetdata);
-	const typeOfPrimaryKeyValue = typeof value[primaryKeyField as keyof typeof value];
+	const typeOfPrimaryKeyValue = typeof value[primaryKeyField as keyof G];
 
 	return typeOfPrimaryKeyValue === 'string' || typeOfPrimaryKeyValue === 'number';
 };

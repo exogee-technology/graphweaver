@@ -33,10 +33,7 @@ export interface MagicLinkEntity {
 	data: MagicLinkData;
 }
 
-type MagicLinkProvider = BackendProvider<
-	AuthenticationBaseEntity<MagicLinkData>,
-	AuthenticationBaseEntity<MagicLinkData>
->;
+type MagicLinkProvider = BackendProvider<AuthenticationBaseEntity<MagicLinkData>>;
 
 export interface MagicLinkOptions {
 	provider: MagicLinkProvider;

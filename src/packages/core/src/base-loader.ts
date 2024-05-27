@@ -1,8 +1,7 @@
 import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 
-import { BaseDataEntity, Filter, GraphQLEntity, graphweaverMetadata } from '.';
-import { GraphQLEntityConstructor } from './base-entity';
+import { Filter, graphweaverMetadata, isTransformableGraphQLEntityClass } from '.';
 
 let loadOneLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
 let relatedIdLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
@@ -15,12 +14,9 @@ const getGqlEntityName = (gqlEntityType: any) => {
 	return gqlTypeName;
 };
 
-const getBaseLoadOneLoader = <
-	G extends GraphQLEntity<D> & { name: string },
-	D extends BaseDataEntity,
->(
-	gqlEntityType: GraphQLEntityConstructor<G, D>
-) => {
+const getBaseLoadOneLoader = <G = unknown, D = unknown>(gqlEntityType: {
+	new (...args: any[]): G;
+}) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!loadOneLoaderMap[gqlTypeName]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
@@ -34,10 +30,16 @@ const getBaseLoadOneLoader = <
 			);
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
-			const records = await entity.provider!.find({
+			const filter = {
 				_or: keys.map((id) => ({ [primaryKeyField]: id })),
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
-			} as Filter<G>);
+			} as Filter<G>;
+
+			const backendFilter = isTransformableGraphQLEntityClass(entity.target)
+				? entity.target.toBackendEntityFilter(filter)
+				: (filter as Filter<D>);
+
+			const records = await entity.provider!.find(backendFilter);
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
 
@@ -65,12 +67,12 @@ const getBaseLoadOneLoader = <
 	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, D>;
 };
 
-const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEntity>({
+const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 	gqlEntityType,
 	relatedField,
 	filter,
 }: {
-	gqlEntityType: GraphQLEntityConstructor<G, D>;
+	gqlEntityType: { new (...args: any[]): G };
 	relatedField: string;
 	filter?: Filter<G>;
 }) => {
@@ -85,18 +87,25 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
 		const fetchRecordsByRelatedId = async (keys: readonly string[]) => {
+			if (!entity?.provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
+
 			logger.trace(
 				`DataLoader: Loading ${gqlTypeName}.${relatedField}${
 					filter && `.${JSON.stringify(filter)}`
 				} in (${keys.join(', ')})`
 			);
 
+			const backendFilter = isTransformableGraphQLEntityClass(entity.target)
+				? entity.target.toBackendEntityFilter(filter ?? {})
+				: (filter as Filter<D> | undefined);
+
 			const records = await entity.provider!.findByRelatedId(
-				entity.provider!.entityType,
+				entity.provider.entityType,
 				relatedField,
 				keys,
-				filter
+				backendFilter
 			);
+
 			logger.trace(`DataLoader: Loading ${gqlTypeName} got ${records.length} result(s).`);
 
 			// Need to return in the same order as was requested. Iterate once and create
@@ -104,7 +113,7 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 			const lookup: { [key: string]: D[] } = {};
 			for (const record of records) {
 				const relatedRecord = record[relatedField as keyof D];
-				if (entity.provider!.isCollection(relatedRecord)) {
+				if (entity.provider.isCollection(relatedRecord)) {
 					// ManyToManys come back this way.
 					for (const subRecord of relatedRecord as Iterable<D>) {
 						const stringPrimaryKey = String(subRecord[primaryKeyField]);
@@ -130,24 +139,24 @@ const getBaseRelatedIdLoader = <G extends GraphQLEntity<D>, D extends BaseDataEn
 };
 
 export const BaseLoaders = {
-	loadOne: <G extends GraphQLEntity<D> & { name: string }, D extends BaseDataEntity>({
+	loadOne: <G = unknown, D = unknown>({
 		gqlEntityType,
 		id,
 	}: {
-		gqlEntityType: GraphQLEntityConstructor<G, D>;
+		gqlEntityType: { new (...args: any[]): G };
 		id: string;
 	}) => {
-		const loader = getBaseLoadOneLoader(gqlEntityType);
+		const loader = getBaseLoadOneLoader<G, D>(gqlEntityType);
 		return loader.load(id);
 	},
 
-	loadByRelatedId: <G extends GraphQLEntity<D>, D extends BaseDataEntity>(args: {
-		gqlEntityType: GraphQLEntityConstructor<G, D>;
-		relatedField: Omit<keyof D, 'isCollection' | 'isReference'> & string;
+	loadByRelatedId: <G = unknown, D = unknown>(args: {
+		gqlEntityType: { new (...args: any[]): G };
+		relatedField: keyof D & string;
 		id: string;
 		filter?: Filter<G>;
 	}) => {
-		const loader = getBaseRelatedIdLoader(args);
+		const loader = getBaseRelatedIdLoader<G, D>(args);
 		return loader.load(args.id);
 	},
 

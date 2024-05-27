@@ -107,7 +107,7 @@ export const getFieldTypeFromFieldMetadata = (
 	return { fieldType, isList, metadata };
 };
 
-const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
+const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
 		if (isListType(type) || isNonNullType(type)) {
 			return unwrapType(type.ofType);

@@ -1,7 +1,7 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
+import { GraphQLScalarType } from 'graphql';
 import { graphweaverMetadata } from './metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
@@ -71,8 +71,7 @@ export interface GraphQLArgs<G> {
 }
 
 // D = Data entity returned from the datastore
-// G = GraphQL entity
-export interface BackendProvider<D, G> {
+export interface BackendProvider<D> {
 	// This is used for query splitting, so we know where to break your
 	// queries when you query across data sources.
 	readonly backendId: string;
@@ -80,25 +79,25 @@ export interface BackendProvider<D, G> {
 	entityType?: new () => D;
 
 	find(
-		filter: Filter<G>,
+		filter: Filter<D>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any
 	): Promise<D[]>;
-	findOne(filter: Filter<G>): Promise<D | null>;
+	findOne(filter: Filter<D>): Promise<D | null>;
 	findByRelatedId(
 		entity: any,
 		relatedField: string,
 		relatedIds: readonly string[],
-		filter?: Filter<G>
+		filter?: Filter<D>
 	): Promise<D[]>;
-	updateOne(id: string | number, updateArgs: Partial<G>): Promise<D>;
-	updateMany(entities: Partial<G>[]): Promise<D[]>;
-	createOne(entity: Partial<G>): Promise<D>;
-	createMany(entities: Partial<G>[]): Promise<D[]>;
-	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
-	deleteOne(filter: Filter<G>): Promise<boolean>;
+	updateOne(id: string | number, updateArgs: Partial<D>): Promise<D>;
+	updateMany(entities: Partial<D>[]): Promise<D[]>;
+	createOne(entity: Partial<D>): Promise<D>;
+	createMany(entities: Partial<D>[]): Promise<D[]>;
+	createOrUpdateMany(entities: Partial<D>[]): Promise<D[]>;
+	deleteOne(filter: Filter<D>): Promise<boolean>;
 	//optional deleteMany
-	deleteMany?(filter: Filter<G>): Promise<boolean>;
+	deleteMany?(filter: Filter<D>): Promise<boolean>;
 
 	getRelatedEntityId(entity: any, relatedIdField: string): string;
 	isCollection(entity: unknown): entity is Iterable<unknown>;
@@ -118,7 +117,6 @@ export interface BackendProvider<D, G> {
 // TContext = GraphQL Context
 export interface HookParams<G, TContext = BaseContext> {
 	context: TContext;
-	info: GraphQLResolveInfo;
 	transactional: boolean;
 	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
 	entities?: (G | null)[];
@@ -140,12 +138,6 @@ export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<
 
 export interface DeleteManyHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
 	args: { filter: Filter<G> };
-}
-
-export interface GraphQLEntityType<G, D> {
-	name: string; // Note: this is the built-in ES6 class.name attribute
-	typeName?: string;
-	fromBackendEntity?(entity: D): G | null;
 }
 
 export enum AdminUIFilterType {
@@ -217,7 +209,7 @@ export type GetTypeFunction = (type?: void) => TypeValue;
 
 export type Complexity = ComplexityEstimator | number;
 
-export interface FieldMetadata<G, D> {
+export interface FieldMetadata<G = unknown, D = unknown> {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
@@ -226,7 +218,7 @@ export interface FieldMetadata<G, D> {
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;
 	};
-	target: G;
+	target: { new (...args: any[]): G };
 	name: string;
 	getType: GetTypeFunction;
 	relationshipInfo?: {

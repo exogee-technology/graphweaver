@@ -1,4 +1,3 @@
-import { BaseDataEntity, GraphQLEntity } from '..';
 import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
@@ -12,22 +11,16 @@ type RelationshipFieldOptions<D> = {
 	};
 };
 
-interface ClassType<T extends GraphQLEntity<BaseDataEntity>> {
-	new (...args: any[]): T;
-}
 interface RecursiveArray<TValue> extends Array<RecursiveArray<TValue> | TValue> {}
-type TypeValue = ClassType<GraphQLEntity<BaseDataEntity>>;
-type ReturnTypeFuncValue = TypeValue | RecursiveArray<TypeValue>;
-type ReturnTypeFunc = () => ReturnTypeFuncValue;
+type GraphQLEntityType<G> = { new (...args: any[]): G };
+type ReturnTypeFuncValue<G> = GraphQLEntityType<G> | RecursiveArray<GraphQLEntityType<G>>;
+type ReturnTypeFunc<G> = () => ReturnTypeFuncValue<G>;
 
-export function RelationshipField<
-	G extends GraphQLEntity<D> = any,
-	D extends BaseDataEntity = G['dataEntity'],
->(
-	returnTypeFunc: ReturnTypeFunc,
+export function RelationshipField<G = unknown, D = unknown>(
+	returnTypeFunc: ReturnTypeFunc<G>,
 	{ relatedField, id, nullable = false, adminUIOptions }: RelationshipFieldOptions<D>
 ) {
-	return (target: any, key: string) => {
+	return (target: GraphQLEntityType<G>, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
 				`Implementation Error: You must specify either an ID or a related field and neither was specified.`

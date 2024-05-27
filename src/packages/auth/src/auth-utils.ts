@@ -149,10 +149,11 @@ export const assertObjectLevelPermissions = async <G, TContext extends Authoriza
 	requiredPermission: AccessType
 ) => assertAccessControlValueNotEmpty(userPermission[requiredPermission]);
 
-export async function checkEntityPermission<
-	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
-	D extends BaseDataEntity,
->(entityName: string, id: string | number, accessType: AccessType) {
+export async function checkEntityPermission<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
+	entityName: string,
+	id: string | number,
+	accessType: AccessType
+) {
 	const acl = getACL(entityName);
 	const accessControlEntry = buildAccessControlEntryForUser(
 		acl,
@@ -215,10 +216,7 @@ export async function checkEntityPermission<
 	}
 }
 
-export async function checkAuthorization<
-	G extends GraphQLEntityConstructor<GraphQLEntity<D>, D>,
-	D extends BaseDataEntity,
->(
+export async function checkAuthorization<G extends GraphQLEntity<D>, D extends BaseDataEntity>(
 	entityName: string,
 	id: string | number,
 	requestInput: Partial<G>,

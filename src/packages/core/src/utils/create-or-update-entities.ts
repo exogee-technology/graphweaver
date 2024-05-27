@@ -2,15 +2,15 @@ import { GraphQLList, GraphQLResolveInfo } from 'graphql';
 
 import {
 	BaseContext,
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	EntityMetadata,
-	GraphQLEntity,
-	GraphQLEntityType,
 	HookRegister,
 	getFieldTypeFromFieldMetadata,
 	graphQLTypeForEntity,
 	hookManagerMap,
+	isEntityMetadata,
+	isSerializableGraphQLEntityClass,
+	isTransformableGraphQLEntityClass,
 } from '..';
 import { graphweaverMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
@@ -19,34 +19,26 @@ import { createOrUpdate } from '../resolvers';
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
 
 // Used to check if we have only {id: ''} or [{id: ''},...]
-const isLinking = <G>(entity: EntityMetadata<G, any>, node: Partial<G> | Partial<G>[]) =>
-	Array.isArray(node)
-		? node.every((innerNode) => isIdOnly(entity, innerNode))
-		: isIdOnly(entity, node);
-
-const isSerializable = (
-	entity: typeof GraphQLEntity
-): entity is typeof GraphQLEntity & {
-	serialize: <T>(value: unknown) => T;
-} => entity && entity.hasOwnProperty('serialize');
+const isLinking = <G = unknown, D = unknown>(
+	entity: EntityMetadata<G, D>,
+	node: Partial<G> | Partial<G>[]
+) => {
+	return Array.isArray(node)
+		? node.every((innerNode) => isPrimaryKeyOnly(entity, innerNode))
+		: isPrimaryKeyOnly(entity, node);
+};
 
 // Used to check if we have only {id: ''} object
-const isIdOnly = <G>(entity: EntityMetadata<G, any>, node: Partial<G>) => {
+const isPrimaryKeyOnly = <G = unknown, D = unknown>(
+	entity: EntityMetadata<G, D>,
+	node: Partial<G>
+) => {
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
 
 	return primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length === 1;
 };
 
-export const isRelatedEntity = (unknownType: unknown): unknownType is typeof GraphQLEntity => {
-	return !!(
-		unknownType &&
-		typeof unknownType === 'function' &&
-		'prototype' in unknownType &&
-		unknownType.prototype instanceof GraphQLEntity
-	);
-};
-
-const runChildCreateOrUpdate = <G extends { name: string }>(
+const runChildCreateOrUpdate = <G = unknown>(
 	entityMetadata: EntityMetadata<any, any>,
 	data: Partial<G> | Partial<G>[],
 	context: BaseContext
@@ -63,32 +55,27 @@ const runChildCreateOrUpdate = <G extends { name: string }>(
 };
 
 // Covert the data entity from the backend to the GraphQL entity
-const fromBackendEntity = <G, D extends BaseDataEntity>(
+const fromBackendEntity = <G = unknown, D = unknown>(
 	dataEntity: D,
-	gqlEntityType: GraphQLEntityType<G, D>
+	gqlEntityType: { new (...args: any[]): G }
 ) => {
-	if (!gqlEntityType.fromBackendEntity) {
-		throw new Error(
-			`Implementation Error: No fromBackendEntity method supplied for ${gqlEntityType.name}`
-		);
+	// By default we just cast for performance, but if you want or need to override this behaviour so you can transform the fields
+	// on the way through from D to G, no worries, implement fromBackendEntity on your entity class and we'll call it.
+	let entity = dataEntity as unknown as G;
+
+	if (isTransformableGraphQLEntityClass<G, D>(gqlEntityType)) {
+		entity = gqlEntityType.fromBackendEntity(dataEntity);
 	}
-	const entity = gqlEntityType.fromBackendEntity.call(gqlEntityType, dataEntity);
-	if (entity === null) {
-		throw new Error(
-			`Implementation Error: fromBackendEntity returned null for ${gqlEntityType.name}`
-		);
-	}
+
 	return entity;
 };
 
-export const createOrUpdateEntities = async <G extends { name: string }, D extends BaseDataEntity>(
+export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 	input: Partial<G> | Partial<G>[],
 	meta: EntityMetadata<G, D>,
 	info: GraphQLResolveInfo,
 	context: BaseContext
 ) => {
-	const gqlEntityType: GraphQLEntityType<G, D> = meta.target;
-
 	if (!meta.provider) {
 		throw new Error(`No provider found for ${meta.name}, cannot create or update entities`);
 	}
@@ -113,18 +100,15 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 
 		// Loop through the properties and check for nested entities
 		for (const entry of Object.entries(input)) {
-			const [key, childNode]: [string, Partial<G> | Partial<G>[]] = entry;
+			const [key, childNode]: [string, Partial<G> | Partial<G>[]] = entry as any;
 
 			// Check if the property represents a related entity
 			const relationship = meta.fields[key];
 			const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
+			const relatedEntityMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-			if (isRelatedEntity(fieldType)) {
-				const relatedEntityMetadata = graphweaverMetadata.metadataForType(
-					fieldType
-				) as EntityMetadata<any, any>;
-
-				if (isSerializable(fieldType)) {
+			if (isEntityMetadata(relatedEntityMetadata)) {
+				if (isSerializableGraphQLEntityClass(fieldType)) {
 					// If it's a serializable entity, we should delegate the serialization to it.
 					node[key as keyof typeof node] = fieldType.serialize({ value: childNode }) as
 						| G[keyof G]
@@ -140,26 +124,31 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 					let parentId = node[primaryKeyField] ?? parent?.[primaryKeyField];
 					if (!parentId && !parent) {
 						// If there's no ID, create the parent first
-						const parentDataEntity = await meta.provider.createOne(node);
-						parent = fromBackendEntity(parentDataEntity, gqlEntityType);
+						const backendEntity = isTransformableGraphQLEntityClass<G, D>(meta.target)
+							? meta.target.toBackendEntity(node)
+							: (node as unknown as D);
+						const parentDataEntity = await meta.provider.createOne(backendEntity);
+						parent = fromBackendEntity(parentDataEntity, meta.target);
 						parentId = parent?.[primaryKeyField];
 					}
+
+					// By now we should have a parent ID.
 					if (!parentId) {
-						throw new Error(`Implementation Error: No parent id found for ${fieldType.name}`);
+						throw new Error(
+							`Implementation Error: No parent id found for ${relatedEntityMetadata.name}`
+						);
 					}
 
 					// Add parent ID to children and perform the mutation
-					const childMeta = graphweaverMetadata.getEntityByName(fieldType.name);
-					if (!childMeta)
-						throw new Error(`Could not locate metadata for '${fieldType.name}' entity.`);
-
 					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
-					const parentField = Object.values(childMeta.fields).find((field) => {
+					const parentField = Object.values(relatedEntityMetadata.fields).find((field) => {
 						const { fieldType: type } = getFieldTypeFromFieldMetadata(field);
-						return type === gqlEntityType;
+						return type === meta.target;
 					});
 					if (!parentField) {
-						throw new Error(`Implementation Error: No parent field found for ${fieldType.name}`);
+						throw new Error(
+							`Implementation Error: No parent field found for ${relatedEntityMetadata.name}`
+						);
 					}
 					const childEntities = childNode.map((child) => ({
 						...child,
@@ -167,19 +156,16 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 					}));
 
 					// Now create/update the children
-					await runChildCreateOrUpdate(childMeta, childEntities, context);
+					await runChildCreateOrUpdate(relatedEntityMetadata, childEntities, context);
 				} else if (Object.keys(childNode).length > 0) {
-					const childMeta = graphweaverMetadata.getEntityByName(fieldType.name);
-					if (!childMeta)
-						throw new Error(`Could not locate metadata for '${fieldType.name}' entity.`);
-
 					// If only one object, create or update it first, then update the parent reference
-					const result = await runChildCreateOrUpdate(childMeta, childNode, context);
+					const result = await runChildCreateOrUpdate(relatedEntityMetadata, childNode, context);
 
 					// Now we need to pull the ID out to link the result.
-					const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(childMeta);
+					const primaryKeyField =
+						graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 					if (!primaryKeyField) {
-						throw new Error(`No primary key field found for ${childMeta.name}`);
+						throw new Error(`No primary key field found for ${relatedEntityMetadata.name}`);
 					}
 
 					node = {
@@ -194,17 +180,27 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 		if (parent) {
 			// We needed to create the parent earlier, no need to create it again
 			return parent;
-		} else if (isIdOnly(meta, node)) {
+		} else if (isPrimaryKeyOnly(meta, node)) {
 			// If it's just an ID, return it as is
 			return node;
 		} else if (primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1) {
 			// If it's an object with an ID and other properties, update the entity
-			const result = await meta.provider.updateOne(String(node[primaryKeyField]), node);
-			return fromBackendEntity(result, gqlEntityType);
+			const result = await meta.provider.updateOne(
+				String(node[primaryKeyField]),
+				isTransformableGraphQLEntityClass<G, D>(meta.target)
+					? meta.target.toBackendEntity(node)
+					: (node as unknown as Partial<D>)
+			);
+			return fromBackendEntity(result, meta.target);
 		} else {
 			// If it's an object without an ID, create a new entity
-			const result = await meta.provider.createOne(node);
-			return fromBackendEntity(result, gqlEntityType);
+			const result = await meta.provider.createOne(
+				isTransformableGraphQLEntityClass<G, D>(meta.target)
+					? meta.target.toBackendEntity(node)
+					: (node as unknown as Partial<D>)
+			);
+
+			return fromBackendEntity(result, meta.target);
 		}
 	}
 
@@ -214,10 +210,11 @@ export const createOrUpdateEntities = async <G extends { name: string }, D exten
 export const runWritableBeforeHooks = async <G>(
 	hookRegister: HookRegister,
 	params: CreateOrUpdateHookParams<G>,
-	gqlEntityTypeName: string
+	gqlEntityTypeName: string,
+	info: GraphQLResolveInfo
 ): Promise<CreateOrUpdateHookParams<G>> => {
 	const hookManager = hookManagerMap.get(gqlEntityTypeName);
-	const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
+	const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params, info) : params;
 
 	const items = hookParams.args?.items;
 	if (!items) throw new Error('No data specified cannot continue.');

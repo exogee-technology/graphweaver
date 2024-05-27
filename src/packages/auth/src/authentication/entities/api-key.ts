@@ -1,9 +1,9 @@
-import { BaseDataEntity, Entity } from '@exogee/graphweaver';
+import { BaseDataEntity, Entity, Filter } from '@exogee/graphweaver';
 import { ID, Field, GraphQLEntity } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '../../decorators';
 
-export interface ApiKeyStorage<R> extends BaseDataEntity {
-	id: string;
+export interface ApiKeyStorageEntity<R> extends BaseDataEntity {
+	id: string | number;
 	key: string;
 	secret: string;
 	revoked: boolean;
@@ -19,7 +19,6 @@ export interface ApiKeyStorage<R> extends BaseDataEntity {
 @Entity('ApiKey', {
 	adminUIOptions: {
 		readonly: false,
-		summaryField: 'key',
 	},
 	apiOptions: {
 		excludeFromBuiltInWriteOperations: true,
@@ -32,7 +31,7 @@ export class ApiKeyEntity<D extends BaseDataEntity, R> extends GraphQLEntity<D> 
 	id!: string;
 
 	@Field(() => String, {
-		adminUIOptions: { readonly: true },
+		adminUIOptions: { readonly: true, summaryField: true },
 		apiOptions: { excludeFromBuiltInWriteOperations: true },
 	})
 	key!: string;

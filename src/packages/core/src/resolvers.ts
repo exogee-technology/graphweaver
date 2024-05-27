@@ -2,14 +2,12 @@ import { GraphQLResolveInfo, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { BaseContext, GraphQLArgs } from './types';
 import {
-	BaseDataEntity,
 	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	DeleteManyHookParams,
 	EntityMetadata,
 	Filter,
-	GraphQLEntityConstructor,
 	HookRegister,
 	ReadHookParams,
 	createOrUpdateEntities,
@@ -17,6 +15,7 @@ import {
 	graphweaverMetadata,
 	hookManagerMap,
 	isEntityMetadata,
+	isTransformableGraphQLEntityClass,
 } from '.';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
@@ -49,13 +48,12 @@ export const getOne = async <G, C extends BaseContext>(
 
 	const params: ReadHookParams<G> = {
 		args: { filter: { [primaryKeyField]: id } as Filter<G> },
-		info,
 		context,
 		transactional: !!entity.provider.withTransaction,
 	};
 
 	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params, info)
 		: params;
 
 	if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
@@ -70,10 +68,14 @@ export const getOne = async <G, C extends BaseContext>(
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
-		const { entities } = await hookManager.runHooks(HookRegister.AFTER_READ, {
-			...hookParams,
-			entities: [result],
-		});
+		const { entities } = await hookManager.runHooks(
+			HookRegister.AFTER_READ,
+			{
+				...hookParams,
+				entities: [result],
+			},
+			info
+		);
 		result = entities[0];
 	}
 
@@ -81,7 +83,7 @@ export const getOne = async <G, C extends BaseContext>(
 	return result;
 };
 
-export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
+export const list = async <G, D, C extends BaseContext>(
 	source: unknown,
 	{ filter, pagination }: Omit<GraphQLArgs<G>, 'items'>,
 	context: C,
@@ -98,7 +100,7 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 	}
 
 	const { name } = info.returnType.ofType;
-	const entity = graphweaverMetadata.getEntityByName(name);
+	const entity = graphweaverMetadata.getEntityByName<any, any>(name);
 
 	if (!entity) {
 		throw new Error(`Entity ${name} not found in metadata.`);
@@ -111,17 +113,19 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 	const hookManager = hookManagerMap.get(entity.name);
 	const params: ReadHookParams<G> = {
 		args: { filter, pagination },
-		info,
 		context,
 		transactional: !!entity.provider.withTransaction,
 	};
 	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params, info)
 		: params;
 
-	let result = await QueryManager.find<D, G>({
+	let result = await QueryManager.find<D>({
 		entityName: entity.name,
-		filter: hookParams.args?.filter,
+		filter:
+			hookParams.args?.filter && isTransformableGraphQLEntityClass(entity.target)
+				? entity.target.toBackendEntityFilter(hookParams.args?.filter)
+				: (hookParams.args?.filter as Filter<D> | undefined),
 		pagination: hookParams.args?.pagination,
 	});
 	logger.trace({ result }, 'Got result');
@@ -141,10 +145,14 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
-		const { entities } = await hookManager.runHooks(HookRegister.AFTER_READ, {
-			...hookParams,
-			entities: result,
-		});
+		const { entities } = await hookManager.runHooks(
+			HookRegister.AFTER_READ,
+			{
+				...hookParams,
+				entities: result,
+			},
+			info
+		);
 		result = entities;
 	}
 
@@ -152,7 +160,7 @@ export const list = async <G, D extends BaseDataEntity, C extends BaseContext>(
 	return result;
 };
 
-export const createOrUpdate = async <G extends { name: string }, C extends BaseContext>(
+export const createOrUpdate = async <G, D, C extends BaseContext>(
 	_source: unknown,
 	{ input }: { input: Partial<G> | Partial<G>[] },
 	context: C,
@@ -170,7 +178,7 @@ export const createOrUpdate = async <G extends { name: string }, C extends BaseC
 		throw new Error('Could not determine entity name from return type.');
 	}
 
-	const entity = graphweaverMetadata.getEntityByName<G, BaseDataEntity>(name);
+	const entity = graphweaverMetadata.getEntityByName<G, D>(name);
 
 	if (!entity) {
 		throw new Error(`Entity ${name} not found in metadata.`);
@@ -191,7 +199,6 @@ export const createOrUpdate = async <G extends { name: string }, C extends BaseC
 		// Extracted common properties
 		const hookManager = hookManagerMap.get(entity.name);
 		const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
-			info,
 			context,
 			transactional: !!entity.provider?.withTransaction,
 		};
@@ -218,7 +225,7 @@ export const createOrUpdate = async <G extends { name: string }, C extends BaseC
 		};
 		const updateHookParams =
 			updateItems.length && hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
+				? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams, info)
 				: updateParams;
 
 		// Prepare createParams and run hook if needed
@@ -228,7 +235,7 @@ export const createOrUpdate = async <G extends { name: string }, C extends BaseC
 		};
 		const createHookParams =
 			createItems.length && hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
+				? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams, info)
 				: createParams;
 
 		// Combine update and create items into a single array
@@ -247,17 +254,25 @@ export const createOrUpdate = async <G extends { name: string }, C extends BaseC
 		// Run after hooks for update and create entities
 		if (hookManager) {
 			createdEntities = (
-				await hookManager.runHooks(HookRegister.AFTER_CREATE, {
-					...createHookParams,
-					entities: createdEntities,
-				})
+				await hookManager.runHooks(
+					HookRegister.AFTER_CREATE,
+					{
+						...createHookParams,
+						entities: createdEntities,
+					},
+					info
+				)
 			).entities;
 
 			updatedEntities = (
-				await hookManager.runHooks(HookRegister.AFTER_UPDATE, {
-					...updateHookParams,
-					entities: updatedEntities,
-				})
+				await hookManager.runHooks(
+					HookRegister.AFTER_UPDATE,
+					{
+						...updateHookParams,
+						entities: updatedEntities,
+					},
+					info
+				)
 			).entities;
 		}
 
@@ -285,13 +300,12 @@ export const deleteOne =
 		const hookManager = hookManagerMap.get(entity.name);
 		const params: DeleteHookParams<G> = {
 			args: { filter },
-			info,
 			context,
 			transactional: false,
 		};
 
 		const hookParams = hookManager
-			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params, info)
 			: params;
 
 		if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
@@ -299,17 +313,21 @@ export const deleteOne =
 		const success = await entity.provider.deleteOne(hookParams.args.filter);
 
 		hookManager &&
-			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
-				...hookParams,
-				deleted: success,
-			}));
+			(await hookManager.runHooks(
+				HookRegister.AFTER_DELETE,
+				{
+					...hookParams,
+					deleted: success,
+				},
+				info
+			));
 
 		return success;
 	};
 
 export const deleteMany =
 	(entity: EntityMetadata<any, any>) =>
-	async <G extends { name: string }, C extends BaseContext>(
+	async <G, C extends BaseContext>(
 		_source: unknown,
 		{ filter }: { filter: Filter<G> },
 		context: C,
@@ -326,13 +344,12 @@ export const deleteMany =
 			const hookManager = hookManagerMap.get(entity.name);
 			const params: DeleteManyHookParams<G> = {
 				args: { filter },
-				info,
 				context,
 				transactional: !!entity.provider.withTransaction,
 			};
 
 			const hookParams = hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params, info)
 				: params;
 
 			if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
@@ -340,22 +357,22 @@ export const deleteMany =
 			const success = await entity.provider.deleteMany(hookParams.args?.filter);
 
 			hookManager &&
-				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
-					...hookParams,
-					deleted: success,
-				}));
+				(await hookManager.runHooks(
+					HookRegister.AFTER_DELETE,
+					{
+						...hookParams,
+						deleted: success,
+					},
+					info
+				));
 
 			return success;
 		});
 	};
 
-export const listRelationshipField = async <
-	G extends { name: string } & { dataEntity: D },
-	D extends BaseDataEntity,
-	C extends BaseContext,
->(
+export const listRelationshipField = async <G, D, R, C extends BaseContext>(
 	source: G,
-	input: { filter: Filter<G> },
+	input: { filter: Filter<R> },
 	context: C,
 	info: GraphQLResolveInfo
 ) => {
@@ -366,7 +383,7 @@ export const listRelationshipField = async <
 
 	const entity = graphweaverMetadata.getEntityByName(info.path.typename);
 	if (!entity) {
-		throw new Error(`Entity ${source.name} not found in metadata. This should not happen.`);
+		throw new Error(`Entity ${info.path.typename} not found in metadata. This should not happen.`);
 	}
 
 	// If we've already resolved the data, we may want to return it, but we want the hooks to run first.
@@ -374,11 +391,7 @@ export const listRelationshipField = async <
 
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
-	const idValue = !id
-		? undefined
-		: typeof id === 'function'
-			? id(source.dataEntity)
-			: (source.dataEntity as any)[id];
+	const idValue = !id ? undefined : typeof id === 'function' ? id(source) : (source as any)[id];
 
 	if (typeof existingData === 'undefined' && !idValue && !field.relationshipInfo?.relatedField) {
 		// id is null and we are loading a single instance so let's return null
@@ -386,7 +399,7 @@ export const listRelationshipField = async <
 	}
 
 	const { fieldType, isList } = getFieldTypeFromFieldMetadata(field);
-	const gqlEntityType = fieldType as GraphQLEntityConstructor<G, D>;
+	const gqlEntityType = fieldType as { new (...args: any[]): R };
 
 	const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
 	if (!isEntityMetadata(relatedEntityMetadata)) {
@@ -397,31 +410,30 @@ export const listRelationshipField = async <
 		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
 	// We need to construct a filter for the related entity and _and it with the user supplied filter.
-	const _and: Filter<G>[] = [];
+	const _and: Filter<R>[] = [];
 
 	// If we have a user supplied filter, add it to the _and array.
 	if (input.filter) _and.push(input.filter);
 
 	// Lets check the relationship type and add the appropriate filter.
 	if (idValue) {
-		_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<G>);
+		_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
 	} else if (relatedField) {
 		_and.push({
 			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-		} as Filter<G>);
+		} as Filter<R>);
 	}
 
-	const relatedEntityFilter = { _and } as Filter<G>;
+	const relatedEntityFilter = { _and } as Filter<R>;
 
-	const params: ReadHookParams<G> = {
+	const params: ReadHookParams<R> = {
 		args: { filter: relatedEntityFilter },
-		info,
 		context,
 		transactional: !!entity.provider?.withTransaction,
 	};
 	const hookManager = hookManagerMap.get(gqlEntityType.name);
 	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params, info)
 		: params;
 
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
@@ -434,10 +446,14 @@ export const listRelationshipField = async <
 
 		logger.trace('Running after read hooks');
 		const { entities: hookEntities = [] } = hookManager
-			? await hookManager.runHooks(HookRegister.AFTER_READ, {
-					...hookParams,
-					entities,
-				})
+			? await hookManager.runHooks(
+					HookRegister.AFTER_READ,
+					{
+						...hookParams,
+						entities,
+					},
+					info
+				)
 			: { entities };
 
 		logger.trace({ before: existingData, after: hookEntities }, 'After read hooks ran');
@@ -451,16 +467,17 @@ export const listRelationshipField = async <
 	if (field.relationshipInfo?.relatedField) {
 		logger.trace('Loading with loadByRelatedId');
 
-		dataEntities = await BaseLoaders.loadByRelatedId({
+		// This should be typed as <gqlEntityType, relatedEntityType>
+		dataEntities = await BaseLoaders.loadByRelatedId<R, D>({
 			gqlEntityType,
-			relatedField: field.relationshipInfo.relatedField,
+			relatedField: field.relationshipInfo.relatedField as keyof D & string,
 			id: String(source[sourcePrimaryKeyField]),
-			filter: relatedEntityFilter as Filter<G>,
+			filter: relatedEntityFilter as Filter<typeof gqlEntityType>,
 		});
 	} else if (idValue) {
 		logger.trace('Loading with loadOne');
 
-		const dataEntity = await BaseLoaders.loadOne({
+		const dataEntity = await BaseLoaders.loadOne<R, D>({
 			gqlEntityType,
 			id: idValue,
 		});
@@ -478,10 +495,14 @@ export const listRelationshipField = async <
 
 	logger.trace('Running after read hooks');
 	const { entities: hookEntities = [] } = hookManager
-		? await hookManager.runHooks(HookRegister.AFTER_READ, {
-				...hookParams,
-				entities,
-			})
+		? await hookManager.runHooks(
+				HookRegister.AFTER_READ,
+				{
+					...hookParams,
+					entities,
+				},
+				info
+			)
 		: { entities };
 
 	logger.trace({ before: entities, after: hookEntities }, 'After read hooks ran');

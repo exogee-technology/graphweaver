@@ -1,6 +1,6 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, GraphQLEntity, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -13,7 +13,7 @@ import {
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
-import { ApiKeyStorage } from '../entities';
+import { ApiKeyEntity, ApiKeyStorageEntity } from '../entities';
 import { registerAccessControlListHook } from '../../decorators';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
@@ -98,12 +98,12 @@ export const applyDefaultMetadataACL = () => {
 	}
 };
 
-type AuthApolloPluginOptions<D, R> = {
+type AuthApolloPluginOptions<D extends ApiKeyStorageEntity<R>, R> = {
 	implicitAllow?: boolean;
-	apiKeyDataProvider?: BackendProvider<D, ApiKeyStorage<R>>;
+	apiKeyDataProvider?: BackendProvider<D>;
 };
 
-export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
+export const authApolloPlugin = <D extends ApiKeyStorageEntity<R>, R>(
 	addUserToContext: (userId: string) => Promise<UserProfile<R>>,
 	options?: AuthApolloPluginOptions<D, R>
 ): ApolloServerPlugin<AuthorizationContext> => {
@@ -152,6 +152,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
 
 				const [key, secret] = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
 
+				// @ts-expect-error Key is definitely a valid filter on D. What is going on?
 				const apiKey = await options.apiKeyDataProvider?.findOne({
 					key,
 				});
@@ -162,7 +163,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
 					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0002)';
 				} else if (await verifyPassword(secret, apiKey.secret)) {
 					contextValue.user = new UserProfile({
-						id: apiKey.id,
+						id: String(apiKey.id),
 						roles: apiKey.roles ?? [],
 						type: UserProfileType.SERVICE,
 					});

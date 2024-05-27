@@ -23,10 +23,7 @@ export interface OneTimePasswordEntity {
 	createdAt: Date;
 }
 
-type OneTimePasswordProvider = BackendProvider<
-	AuthenticationBaseEntity<OneTimePasswordData>,
-	AuthenticationBaseEntity<OneTimePasswordData>
->;
+type OneTimePasswordProvider = BackendProvider<AuthenticationBaseEntity<OneTimePasswordData>>;
 
 export interface OneTimePasswordOptions {
 	provider: OneTimePasswordProvider;

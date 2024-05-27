@@ -1,16 +1,14 @@
 import {
-	BaseDataEntity,
 	Entity,
 	Field,
 	FieldOptions,
-	GraphQLEntity,
 	graphweaverMetadata,
 	FieldMetadata,
 	Source,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
 
-export interface MediaData extends BaseDataEntity {
+export interface MediaData {
 	filename: string;
 	type: MediaType;
 	url?: string;
@@ -42,9 +40,7 @@ const isMedia = (value: unknown): value is MediaData =>
 	);
 
 @Entity('Media')
-export class Media extends GraphQLEntity<MediaData> {
-	public dataEntity!: MediaData;
-
+export class Media {
 	@Field(() => String)
 	filename!: string;
 

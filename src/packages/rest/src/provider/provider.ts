@@ -1,8 +1,6 @@
 import {
 	BackendProvider as Provider,
-	BaseDataEntity as DE,
 	Filter,
-	GraphQLEntity as GE,
 	PaginationOptions,
 	BackendProviderConfig,
 } from '@exogee/graphweaver';
@@ -16,7 +14,7 @@ export interface RestDataAccessor<T> {
 	find: (args: AccessorParams) => Promise<T[]>;
 }
 
-export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provider<D, G> {
+export class RestBackendProvider<D = unknown> implements Provider<D> {
 	public readonly backendId = 'rest-api';
 	public constructor(
 		protected entityTypeName: string,
@@ -44,7 +42,7 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 	};
 
 	// GET METHODS
-	public async find(filter: Filter<G>, pagination?: PaginationOptions): Promise<D[]> {
+	public async find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]> {
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
@@ -72,7 +70,7 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		}
 	}
 
-	public async findOne(filter: Filter<G>): Promise<D | null> {
+	public async findOne(filter: Filter<D>): Promise<D | null> {
 		logger.trace(`Running findOne ${this.entityTypeName} with Filter ${filter}`);
 
 		if (!this.accessor) {
@@ -89,7 +87,7 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		entity: unknown,
 		relatedField: string,
 		relatedFieldIds: string[],
-		filter?: Filter<G>
+		filter?: Filter<D>
 	): Promise<D[]> {
 		if (!this.accessor) {
 			throw new Error(
@@ -102,11 +100,11 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		return this.find({
 			_or: orFilters,
 			...filter,
-		} as Filter<G>);
+		} as Filter<D>);
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
+	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
 		logger.trace(`Running update one ${this.entityTypeName} with args`, {
 			id,
 			updateArgs,
@@ -115,7 +113,7 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
+	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
 		logger.trace(`Running update many ${this.entityTypeName} with args`, {
 			updateItems: updateItems,
 		});
@@ -123,17 +121,17 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
 		// not something we can do with REST
 		return Promise.reject();
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<G>): Promise<D> {
+	public async createOne(createArgs: Partial<D>): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
+	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityTypeName} with args`, {
 			createItems,
 		});
@@ -142,13 +140,13 @@ export class RestBackendProvider<D extends DE, G extends GE<D>> implements Provi
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+	public async deleteOne(filter: Filter<D>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
 
 		throw new Error('Not implemented');
 	}
 
-	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+	public async deleteMany(filter: Filter<D>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityTypeName}`);
 
 		throw new Error('Not implemented');

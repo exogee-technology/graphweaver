@@ -1,14 +1,14 @@
-import { BaseDataEntity, FieldOptions, GetTypeFunction, GraphQLFieldResolver } from '.';
+import { FieldOptions, GetTypeFunction, GraphQLFieldResolver } from '.';
 import { BackendProvider, FieldMetadata, Filter } from './types';
 import { logger } from '@exogee/logger';
 
-export interface EntityMetadata<G, D extends BaseDataEntity> {
+export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
 	name: string;
 	description?: string;
 	plural: string;
-	target: G;
-	provider?: BackendProvider<D, G>;
+	target: { new (...args: any[]): G };
+	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
@@ -63,7 +63,7 @@ export interface EntityMetadata<G, D extends BaseDataEntity> {
 	};
 }
 
-export function isInputMetadata<G, D extends BaseDataEntity>(
+export function isInputMetadata<G = unknown, D = unknown>(
 	value: unknown
 ): value is InputTypeMetadata<G, D> {
 	const test = value as InputTypeMetadata<G, D>;
@@ -75,7 +75,7 @@ export function isInputMetadata<G, D extends BaseDataEntity>(
 	);
 }
 
-export function isEntityMetadata<G, D extends BaseDataEntity>(
+export function isEntityMetadata<G = unknown, D = unknown>(
 	value: unknown
 ): value is EntityMetadata<G, D> {
 	const test = value as EntityMetadata<G, D>;
@@ -105,7 +105,7 @@ export type EnumValuesConfig<TEnum extends object> = Partial<
 	Record<keyof TEnum, { description?: string; deprecationReason?: string }>
 >;
 
-export interface InputTypeMetadata<G, D> {
+export interface InputTypeMetadata<G = unknown, D = unknown> {
 	type: 'inputType';
 	name: string;
 	description?: string;
@@ -115,12 +115,12 @@ export interface InputTypeMetadata<G, D> {
 
 export type CollectEnumInformationArgs<TEnum extends object> = Omit<EnumMetadata<TEnum>, 'type'>;
 
-export type CollectEntityInformationArgs<G, D extends BaseDataEntity> = Omit<
+export type CollectEntityInformationArgs<G = unknown, D = unknown> = Omit<
 	EntityMetadata<G, D>,
 	'type' | 'fields'
 >;
 
-export type CollectInputTypeInformationArgs<G, D extends BaseDataEntity> = Omit<
+export type CollectInputTypeInformationArgs<G = unknown, D = unknown> = Omit<
 	InputTypeMetadata<G, D>,
 	'type' | 'fields'
 >;
@@ -163,7 +163,7 @@ class Metadata {
 		}
 	}
 
-	public collectEntityInformation<G, D extends BaseDataEntity>(
+	public collectEntityInformation<G = unknown, D = unknown>(
 		args: CollectEntityInformationArgs<G, D>
 	) {
 		// In most cases the entity info will already be in the map because field decorators run
@@ -201,9 +201,9 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
-	public collectProviderInformationForEntity<G, D extends BaseDataEntity>(args: {
-		provider: BackendProvider<D, G>;
-		target: G;
+	public collectProviderInformationForEntity<G = unknown, D = unknown>(args: {
+		provider: BackendProvider<D>;
+		target: any;
 	}) {
 		let existingMetadata = this.metadataByType.get(args.target) as EntityMetadata<G, D>;
 		if (!existingMetadata) {
@@ -221,7 +221,7 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
-	public collectFieldInformation<G, D extends BaseDataEntity>(
+	public collectFieldInformation<G = unknown, D = unknown>(
 		args: FieldOptions &
 			Pick<FieldMetadata<G, D>, 'target' | 'name' | 'getType' | 'relationshipInfo'>
 	) {
@@ -291,7 +291,7 @@ class Metadata {
 		});
 	}
 
-	public collectInputTypeInformation<G, D extends BaseDataEntity>(
+	public collectInputTypeInformation<G = unknown, D = unknown>(
 		args: CollectInputTypeInformationArgs<G, D>
 	) {
 		let existingMetadata = this.metadataByType.get(args.target);
@@ -401,14 +401,12 @@ class Metadata {
 	}
 
 	// get the metadata for a specific entity
-	public getEntityByName<G, D extends BaseDataEntity>(
-		name: string
-	): EntityMetadata<G, D> | undefined {
+	public getEntityByName<G = unknown, D = unknown>(name: string): EntityMetadata<G, D> | undefined {
 		const meta = this.getTypeForName(name);
 
-		if (meta?.type !== 'entity') return undefined;
+		if (!isEntityMetadata(meta)) return undefined;
 
-		return meta as EntityMetadata<G, D>;
+		return meta;
 	}
 
 	// check if the metadata map has a specific enum
@@ -417,7 +415,7 @@ class Metadata {
 	): EnumMetadata<TEnum> | undefined {
 		const meta = this.getTypeForName(name);
 
-		if (meta?.type !== 'enum') return undefined;
+		if (!isEnumMetadata(meta)) return undefined;
 
 		return meta;
 	}
@@ -425,7 +423,7 @@ class Metadata {
 	public getInputTypeByName(name: string) {
 		const meta = this.getTypeForName(name);
 
-		if (meta?.type !== 'inputType') return undefined;
+		if (!isInputMetadata(meta)) return undefined;
 
 		return meta;
 	}

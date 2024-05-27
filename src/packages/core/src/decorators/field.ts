@@ -30,7 +30,9 @@ export interface FieldOptions {
 }
 
 export function Field(getType: GetTypeFunction, options?: FieldOptions) {
-	return <G>(target: G, fieldName: string) => {
+	// Fields can be used on both Entities and InputObjects. When used on input objects we can't actually assert they're
+	// on an entity, hence why Field's target is typed as `any`. It's actually G | any, but that's the same as just any.
+	return (target: any, fieldName: string) => {
 		graphweaverMetadata.collectFieldInformation({
 			getType,
 			target,

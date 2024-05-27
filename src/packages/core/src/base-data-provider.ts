@@ -1,6 +1,6 @@
 import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './types';
 
-export class BaseDataProvider<D, G> implements BackendProvider<D, G> {
+export class BaseDataProvider<D> implements BackendProvider<D> {
 	constructor(readonly backendId: string) {
 		if (!backendId) throw new Error('BackendId must be defined');
 	}
@@ -9,53 +9,56 @@ export class BaseDataProvider<D, G> implements BackendProvider<D, G> {
 
 	// READ METHODS
 	public async find(
-		filter: Filter<G>,
+		filter: Filter<D>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any
 	): Promise<D[]> {
 		throw new Error('Find not implemented.');
 	}
 
-	public async findOne(filter: Filter<G>): Promise<D | null> {
+	public async findOne(filter: Filter<D>): Promise<D | null> {
 		throw new Error('FindOne not implemented.');
 	}
 	public async findByRelatedId(
 		entity: any,
 		relatedField: string,
 		relatedIds: readonly string[],
-		filter?: Filter<G>
+		filter?: Filter<D>
 	): Promise<D[]> {
 		throw new Error('FindByRelatedId not implemented.');
 	}
 
 	// UPDATE METHODS
-	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
+	public async updateOne(
+		id: string | number,
+		updateArgs: Partial<D & { version?: number }>
+	): Promise<D> {
 		throw new Error('UpdateOne not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
+	public async updateMany(updateItems: Partial<D>[]): Promise<D[]> {
 		throw new Error('UpdateMany not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
 		throw new Error('CreateOrUpdateMany not implemented');
 	}
 
 	// CREATE METHODS
-	public async createOne(createArgs: Partial<G>): Promise<D> {
+	public async createOne(createArgs: Partial<D>): Promise<D> {
 		throw new Error('CreateOne not implemented');
 	}
 
-	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
+	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
 		throw new Error('CreateMany not implemented');
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+	public async deleteOne(filter: Filter<D>): Promise<boolean> {
 		throw new Error('DeleteOne Not implemented');
 	}
 
-	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+	public async deleteMany(filter: Filter<D>): Promise<boolean> {
 		throw new Error('DeleteMany Not implemented');
 	}
 

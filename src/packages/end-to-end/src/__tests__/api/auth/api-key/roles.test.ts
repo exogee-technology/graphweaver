@@ -10,7 +10,7 @@ import {
 	AuthorizationContext,
 	authApolloPlugin,
 	UserProfile,
-	ApiKeyStorage,
+	ApiKeyStorageEntity,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider, BaseEntity, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -30,7 +30,7 @@ enum Roles {
 
 // Create Entity
 @OrmEntity({ tableName: 'api_key' })
-class OrmApiKey extends BaseEntity implements ApiKeyStorage<Roles> {
+class OrmApiKey extends BaseEntity implements ApiKeyStorageEntity<Roles> {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

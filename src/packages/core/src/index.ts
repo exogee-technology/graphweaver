@@ -1,5 +1,5 @@
 export * from './base-data-provider';
-export * from './base-entity';
+export * from './base-entities';
 export * from './base-loader';
 export * from './decorators';
 export * from './field-resolver';

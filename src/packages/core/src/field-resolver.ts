@@ -1,21 +1,15 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
 import { BaseContext } from './types';
 import {
-	GraphQLEntity,
 	getFieldTypeFromFieldMetadata,
 	graphweaverMetadata,
-	isRelatedEntity,
+	isEntityMetadata,
+	isSerializableGraphQLEntityClass,
 } from '.';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
 	return typeof value == 'object' && value !== null;
 };
-
-const isDeserializable = (
-	entity: typeof GraphQLEntity
-): entity is typeof GraphQLEntity & {
-	deserialize: <T>(value: unknown) => T;
-} => entity && entity.hasOwnProperty('deserialize');
 
 export const fieldResolver = (
 	source: Source,
@@ -35,11 +29,12 @@ export const fieldResolver = (
 		const relationship = metadata.fields[key];
 
 		const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
+		const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-		if (fieldType && isRelatedEntity(fieldType) && isDeserializable(fieldType)) {
+		if (isEntityMetadata(fieldTypeMetadata) && isSerializableGraphQLEntityClass(fieldType)) {
 			return fieldType.deserialize({
 				value: property,
-				parentEntity: source,
+				parent: source,
 				entityMetadata: metadata,
 				fieldMetadata: relationship,
 			});

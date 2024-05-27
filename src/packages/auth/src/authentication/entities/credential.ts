@@ -14,13 +14,8 @@ export interface CredentialStorage extends BaseDataEntity {
 	},
 })
 @Entity('Credential', {
-	adminUIOptions: {
-		readonly: false,
-		summaryField: 'username',
-	},
-	apiOptions: {
-		excludeFromBuiltInWriteOperations: true,
-	},
+	adminUIOptions: { readonly: false },
+	apiOptions: { excludeFromBuiltInWriteOperations: true },
 })
 export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	public dataEntity!: D;
@@ -28,6 +23,6 @@ export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String)
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	username!: string;
 }

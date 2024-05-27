@@ -43,15 +43,8 @@ export type PasskeyAuthenticator = {
 	counter: number;
 };
 
-type PasskeyChallengeProvider = BackendProvider<
-	AuthenticationBaseEntity<PasskeyChallenge>,
-	AuthenticationBaseEntity<PasskeyChallenge>
->;
-
-type PasskeyAuthenticatorProvider = BackendProvider<
-	AuthenticationBaseEntity<PasskeyAuthenticator>,
-	AuthenticationBaseEntity<PasskeyAuthenticator>
->;
+type PasskeyChallengeProvider = BackendProvider<AuthenticationBaseEntity<PasskeyChallenge>>;
+type PasskeyAuthenticatorProvider = BackendProvider<AuthenticationBaseEntity<PasskeyAuthenticator>>;
 
 export interface PasskeyAuthenticatorDevice {
 	id: string;

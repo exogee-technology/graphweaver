@@ -3,7 +3,6 @@ import { TypeValue } from './types';
 
 import { BackendProvider, Filter, PaginationOptions } from './types';
 import { graphweaverMetadata } from './metadata';
-import { BaseDataEntity } from '.';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -32,7 +31,7 @@ const entityNameFromType = (type: TypeValue) => (type as any).name || type.toStr
 const visit = async <D, G>(
 	currentEntityName: string,
 	currentFilter: any,
-	currentProvider?: BackendProvider<D, G>
+	currentProvider?: BackendProvider<D>
 ) => {
 	// If there's no filter at this level, it's fine, just bail.
 	if (!currentFilter) {
@@ -99,13 +98,13 @@ const visit = async <D, G>(
 };
 
 class QueryManagerImplementation {
-	find = async <D extends BaseDataEntity, G>({
+	find = async <G = unknown, D = unknown>({
 		entityName,
 		filter,
 		pagination,
 	}: {
 		entityName: string;
-		filter?: Filter<G>;
+		filter?: Filter<D>;
 		pagination?: PaginationOptions;
 	}) => {
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
