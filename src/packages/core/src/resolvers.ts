@@ -134,26 +134,30 @@ export const list = async <G, D>({
 		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 		: params;
 
+	const transformedFilter =
+		hookParams.args?.filter &&
+		isTransformableGraphQLEntityClass(entity.target) &&
+		entity.target.toBackendEntityFilter
+			? entity.target.toBackendEntityFilter(hookParams.args?.filter)
+			: (hookParams.args?.filter as Filter<D> | undefined);
+
 	let result = await QueryManager.find<D>({
 		entityName: entity.name,
-		filter:
-			hookParams.args?.filter && isTransformableGraphQLEntityClass(entity.target)
-				? entity.target.toBackendEntityFilter(hookParams.args?.filter)
-				: (hookParams.args?.filter as Filter<D> | undefined),
+		filter: transformedFilter,
 		pagination: hookParams.args?.pagination,
 	});
 	logger.trace({ result }, 'Got result');
 
 	// If there's a fromBackendEntity function on the entity, go ahead and run it.
 	const entityClass = entity.target;
-	if (isTransformableGraphQLEntityClass(entityClass)) {
+	if (isTransformableGraphQLEntityClass(entityClass) && entityClass.fromBackendEntity) {
 		logger.trace(
 			{ entityName: entity.target.name },
 			'Entity implements fromBackendEntity, converting'
 		);
 
 		result = result.map((resultEntry) =>
-			entityClass.fromBackendEntity.call(entityClass, resultEntry)
+			entityClass.fromBackendEntity!.call(entityClass, resultEntry)
 		);
 
 		logger.trace({ result }, 'Converted entities');

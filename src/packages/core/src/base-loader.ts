@@ -40,9 +40,10 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>(gqlEntityType: {
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
 			} as Filter<G>;
 
-			const backendFilter = isTransformableGraphQLEntityClass(entity.target)
-				? entity.target.toBackendEntityFilter(filter)
-				: (filter as Filter<D>);
+			const backendFilter =
+				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
+					? entity.target.toBackendEntityFilter(filter)
+					: (filter as Filter<D>);
 
 			const records = await entity.provider!.find(backendFilter);
 
@@ -100,9 +101,10 @@ const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 				} in (${keys.join(', ')})`
 			);
 
-			const backendFilter = isTransformableGraphQLEntityClass(entity.target)
-				? entity.target.toBackendEntityFilter(filter ?? {})
-				: (filter as Filter<D> | undefined);
+			const backendFilter =
+				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
+					? entity.target.toBackendEntityFilter(filter ?? {})
+					: (filter as Filter<D> | undefined);
 
 			const records = await entity.provider!.findByRelatedId(
 				entity.provider.entityType,

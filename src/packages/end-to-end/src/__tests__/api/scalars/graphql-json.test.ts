@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Entity, ID, Field, GraphQLEntity, BaseDataProvider } from '@exogee/graphweaver';
+import { Entity, ID, Field, BaseDataProvider } from '@exogee/graphweaver';
 
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
@@ -16,20 +16,28 @@ describe('GraphQL JSON Scalar Type', () => {
 				];
 			}
 		}
+
 		@Entity('User', {
 			provider: new DataProvider('user'),
 		})
-		class User extends GraphQLEntity<any> {
+		class User {
 			@Field(() => ID)
 			id!: string;
 
 			@Field(() => GraphQLJSON)
-			async testJson(): Promise<{ test: string }> {
+			testJson(): { test: string } {
 				return {
 					test: 'test',
 				};
 			}
+
+			static fromBackendEntity(data: { id: string }) {
+				const user = new User();
+				Object.assign(user, data);
+				return user;
+			}
 		}
+
 		const graphweaver = new Graphweaver();
 
 		const response = await graphweaver.server.executeOperation({

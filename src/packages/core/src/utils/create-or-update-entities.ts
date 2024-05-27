@@ -70,7 +70,7 @@ const fromBackendEntity = <G = unknown, D = unknown>(
 	// on the way through from D to G, no worries, implement fromBackendEntity on your entity class and we'll call it.
 	let entity = dataEntity as unknown as G;
 
-	if (isTransformableGraphQLEntityClass<G, D>(gqlEntityType)) {
+	if (isTransformableGraphQLEntityClass<G, D>(gqlEntityType) && gqlEntityType.fromBackendEntity) {
 		entity = gqlEntityType.fromBackendEntity(dataEntity);
 	}
 
@@ -131,9 +131,10 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					let parentId = node[primaryKeyField] ?? parent?.[primaryKeyField];
 					if (!parentId && !parent) {
 						// If there's no ID, create the parent first
-						const backendEntity = isTransformableGraphQLEntityClass<G, D>(meta.target)
-							? meta.target.toBackendEntity(node)
-							: (node as unknown as D);
+						const backendEntity =
+							isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
+								? meta.target.toBackendEntity(node)
+								: (node as unknown as D);
 						const parentDataEntity = await meta.provider.createOne(backendEntity);
 						parent = fromBackendEntity(parentDataEntity, meta.target);
 						parentId = parent?.[primaryKeyField];
@@ -194,7 +195,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			// If it's an object with an ID and other properties, update the entity
 			const result = await meta.provider.updateOne(
 				String(node[primaryKeyField]),
-				isTransformableGraphQLEntityClass<G, D>(meta.target)
+				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 					? meta.target.toBackendEntity(node)
 					: (node as unknown as Partial<D>)
 			);
@@ -202,7 +203,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 		} else {
 			// If it's an object without an ID, create a new entity
 			const result = await meta.provider.createOne(
-				isTransformableGraphQLEntityClass<G, D>(meta.target)
+				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 					? meta.target.toBackendEntity(node)
 					: (node as unknown as Partial<D>)
 			);

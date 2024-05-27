@@ -20,9 +20,9 @@ export const isSerializableGraphQLEntityClass = <G>(
 };
 
 export interface TransformableGraphQLEntityClass<G = unknown, D = unknown> {
-	fromBackendEntity(this: new (dataEntity: D) => G, dataEntity: D): G;
-	toBackendEntity(this: new (dataEntity: D) => G, graphqlEntity: Partial<G>): D;
-	toBackendEntityFilter(this: new (dataEntity: D) => G, graphqlFilter: Filter<G>): Filter<D>;
+	fromBackendEntity?(this: new (dataEntity: D) => G, dataEntity: D): G;
+	toBackendEntity?(this: new (dataEntity: D) => G, graphqlEntity: Partial<G>): D;
+	toBackendEntityFilter?(this: new (dataEntity: D) => G, graphqlFilter: Filter<G>): Filter<D>;
 }
 
 export function isTransformableGraphQLEntityClass<G = unknown, D = unknown>(
@@ -31,8 +31,8 @@ export function isTransformableGraphQLEntityClass<G = unknown, D = unknown>(
 	const test = value as TransformableGraphQLEntityClass<G, D>;
 
 	return (
-		typeof test?.fromBackendEntity === 'function' &&
-		typeof test?.toBackendEntity === 'function' &&
+		typeof test?.fromBackendEntity === 'function' ||
+		typeof test?.toBackendEntity === 'function' ||
 		typeof test?.toBackendEntityFilter === 'function'
 	);
 }
