@@ -21,7 +21,7 @@ import { hashPassword } from '../../utils/argon2id';
 import { AclMap } from '../../helper-functions';
 
 @InputType(`ApiKeyInsertInput`)
-export class ApiKeyInputArgs {
+export class ApiKeyInputArgs<R> {
 	@Field(() => String)
 	key!: string;
 
@@ -32,7 +32,7 @@ export class ApiKeyInputArgs {
 	revoked?: boolean;
 
 	@Field(() => [String], { nullable: true })
-	roles?: string[];
+	roles?: R[];
 }
 
 @InputType(`ApiKeyUpdateInput`)
@@ -119,7 +119,7 @@ export class ApiKey<R extends string[]> {
 		return this.provider.withTransaction ? this.provider.withTransaction<T>(callback) : callback();
 	}
 
-	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs | ApiKeyUpdateInputArgs<R>>>(
+	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs<R> | ApiKeyUpdateInputArgs<R>>>(
 		hookRegister: HookRegister,
 		hookParams: H,
 		info: GraphQLResolveInfo,
@@ -140,57 +140,9 @@ export class ApiKey<R extends string[]> {
 		return hookEntities;
 	}
 
-	async create(
-		params: CreateOrUpdateHookParams<ApiKeyInputArgs>,
-		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<R>> {
-		const [item] = params.args.items;
-		if (!item) throw new ValidationError('No data specified cannot continue.');
-		if (!item.key) throw new ValidationError('Create unsuccessful: Key not defined.');
-		if (!item.secret) throw new ValidationError('Create unsuccessful: Secret not defined.');
-
-		const secretHash = await hashPassword(item.secret);
-		const apiKey = await this.provider.createOne({
-			key: item.key,
-			secret: secretHash,
-			...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
-			...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
-		});
-
-		const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, info, [apiKey]);
-		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-
-		return entity;
-	}
-
-	async update(
-		params: CreateOrUpdateHookParams<ApiKeyUpdateInputArgs<R>>,
-		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<R>> {
-		const [item] = params.args.items;
-		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
-
-		if (!item.key && !item.key)
-			throw new ValidationError('Update unsuccessful: Nothing to update.');
-
-		const secretHash = item.secret ? await hashPassword(item.secret) : undefined;
-
-		const apiKey = await this.provider.updateOne(item.id, {
-			...(item.key ? { key: item.key } : {}),
-			...(secretHash ? { secret: secretHash } : {}),
-			...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
-			...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
-		});
-
-		const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, info, [apiKey]);
-		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-
-		return apiKey;
-	}
-
 	async createApiKey(
 		_: Source,
-		{ input }: { input: ApiKeyInputArgs },
+		{ input }: { input: ApiKeyInputArgs<R> },
 		context: AuthorizationContext,
 		info: GraphQLResolveInfo
 	): Promise<ApiKeyEntity<R> | null> {
@@ -201,7 +153,7 @@ export class ApiKey<R extends string[]> {
 				transactional: this.transactional,
 			};
 
-			const hookParams = await runWritableBeforeHooks<ApiKeyInputArgs>(
+			const hookParams = await runWritableBeforeHooks<ApiKeyInputArgs<R>>(
 				HookRegister.BEFORE_CREATE,
 				params,
 				'ApiKey',
@@ -210,7 +162,26 @@ export class ApiKey<R extends string[]> {
 
 			let apiKey;
 			try {
-				apiKey = await this.create(hookParams, info);
+				const [item] = hookParams.args.items;
+				if (!item) throw new ValidationError('No data specified cannot continue.');
+				if (!item.key) throw new ValidationError('Create unsuccessful: Key not defined.');
+				if (!item.secret) throw new ValidationError('Create unsuccessful: Secret not defined.');
+
+				const secretHash = await hashPassword(item.secret);
+				const newApiKey = await this.provider.createOne({
+					key: item.key,
+					secret: secretHash,
+					...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
+					...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
+				});
+
+				const entities = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, info, [
+					newApiKey,
+				]);
+				if (!entities?.[0])
+					throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+
+				apiKey = entities[0];
 			} catch (err) {
 				logger.error(err);
 				if (err instanceof ValidationError) throw err;
@@ -250,7 +221,27 @@ export class ApiKey<R extends string[]> {
 					'ApiKey',
 					info
 				);
-				apiKey = await this.update(hookParams, info);
+				const [item] = hookParams.args.items;
+				if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
+
+				if (!item.key && !item.key)
+					throw new ValidationError('Update unsuccessful: Nothing to update.');
+
+				const secretHash = item.secret ? await hashPassword(item.secret) : undefined;
+
+				const newApiKey = await this.provider.updateOne(item.id, {
+					...(item.key ? { key: item.key } : {}),
+					...(secretHash ? { secret: secretHash } : {}),
+					...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
+					...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
+				});
+
+				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, info, [
+					newApiKey,
+				]);
+				if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+
+				apiKey = entity;
 			} catch (err) {
 				logger.error(err);
 				if (err instanceof ValidationError) throw err;
