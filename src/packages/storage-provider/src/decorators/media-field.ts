@@ -92,9 +92,7 @@ export class Media {
 			return {
 				filename: value.filename,
 				type: value.type,
-				url: await storageProvider.getDownloadUrl(parent, {
-					key: value.filename,
-				}),
+				url: await storageProvider.getDownloadUrlForKey(value.filename),
 			};
 		}
 

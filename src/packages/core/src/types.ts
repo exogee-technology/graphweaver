@@ -1,7 +1,8 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLScalarType } from 'graphql';
+import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
+
 import { graphweaverMetadata } from './metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
@@ -248,3 +249,17 @@ export type AuthChecker<TContextType extends object = object, TRoleType = string
 	context: TContextType,
 	roles: TRoleType[]
 ) => boolean | Promise<boolean>;
+
+export type ResolverOptions<TArgs = any, TContext = BaseContext, TSource = Source> = {
+	source: TSource;
+	args: TArgs;
+	context: TContext;
+	fields: ResolveTree;
+	info: GraphQLResolveInfo;
+};
+
+export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = ({
+	args,
+	context,
+	fields,
+}: ResolverOptions<TArgs, TContext>) => TResult;

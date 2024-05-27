@@ -1,4 +1,4 @@
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import otpGenerator from 'otp-generator';
 import ms from 'ms';
 import { logger } from '@exogee/logger';
@@ -154,12 +154,9 @@ export class OneTimePassword {
 	 * @param ctx the context to use for the OTP generation
 	 * @returns a boolean to indicate that the code has been sent
 	 */
-	async sendOTPChallenge(
-		_: Source,
-		_args: Record<string, undefined>,
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async sendOTPChallenge({
+		context,
+	}: ResolverOptions<unknown, AuthorizationContext>): Promise<boolean> {
 		if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 		const userId = context.user?.id;
 		if (!userId) throw new AuthenticationError('Challenge unsuccessful: User ID missing.');
@@ -191,12 +188,10 @@ export class OneTimePassword {
 	 * @param ctx the context to use for the verification
 	 * @returns a new token
 	 */
-	async verifyOTPChallenge(
-		_: Source,
-		{ code }: { code: string },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<Token> {
+	async verifyOTPChallenge({
+		args: { code },
+		context,
+	}: ResolverOptions<{ code: string }, AuthorizationContext>): Promise<Token> {
 		try {
 			if (!code) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
 			if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');

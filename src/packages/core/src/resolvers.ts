@@ -1,4 +1,10 @@
-import { GraphQLResolveInfo, isListType, isObjectType } from 'graphql';
+import {
+	GraphQLFieldResolver,
+	GraphQLResolveInfo,
+	Source,
+	isListType,
+	isObjectType,
+} from 'graphql';
 import { logger } from '@exogee/logger';
 import { BaseContext, GraphQLArgs } from './types';
 import {
@@ -10,6 +16,8 @@ import {
 	Filter,
 	HookRegister,
 	ReadHookParams,
+	Resolver,
+	ResolverOptions,
 	createOrUpdateEntities,
 	getFieldTypeFromFieldMetadata,
 	graphweaverMetadata,
@@ -19,13 +27,21 @@ import {
 } from '.';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
+import { parseResolveInfo } from 'graphql-parse-resolve-info';
 
-export const getOne = async <G, C extends BaseContext>(
-	source: unknown,
-	{ id }: { id: string },
-	context: C,
-	info: GraphQLResolveInfo
-) => {
+export const baseResolver = (resolver: Resolver) => {
+	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
+		return resolver({
+			args,
+			context,
+			fields: parseResolveInfo(info)?.fieldsByTypeName ?? {},
+			info,
+			source,
+		});
+	};
+};
+
+export const getOne = async <G>({ args: { id }, context, fields, info }: ResolverOptions) => {
 	logger.trace({ id, context, info }, 'Get One resolver called.');
 
 	if (!isObjectType(info.returnType)) {
@@ -49,11 +65,12 @@ export const getOne = async <G, C extends BaseContext>(
 	const params: ReadHookParams<G> = {
 		args: { filter: { [primaryKeyField]: id } as Filter<G> },
 		context,
+		fields,
 		transactional: !!entity.provider.withTransaction,
 	};
 
 	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params, info)
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 		: params;
 
 	if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
@@ -68,14 +85,10 @@ export const getOne = async <G, C extends BaseContext>(
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
-		const { entities } = await hookManager.runHooks(
-			HookRegister.AFTER_READ,
-			{
-				...hookParams,
-				entities: [result],
-			},
-			info
-		);
+		const { entities } = await hookManager.runHooks(HookRegister.AFTER_READ, {
+			...hookParams,
+			entities: [result],
+		});
 		result = entities[0];
 	}
 
@@ -83,12 +96,12 @@ export const getOne = async <G, C extends BaseContext>(
 	return result;
 };
 
-export const list = async <G, D, C extends BaseContext>(
-	source: unknown,
-	{ filter, pagination }: Omit<GraphQLArgs<G>, 'items'>,
-	context: C,
-	info: GraphQLResolveInfo
-) => {
+export const list = async <G, D>({
+	args: { filter, pagination },
+	context,
+	info,
+	fields,
+}: ResolverOptions) => {
 	logger.trace({ filter, pagination, context, info }, 'List resolver called.');
 
 	if (!isListType(info.returnType)) {
@@ -114,10 +127,11 @@ export const list = async <G, D, C extends BaseContext>(
 	const params: ReadHookParams<G> = {
 		args: { filter, pagination },
 		context,
+		fields,
 		transactional: !!entity.provider.withTransaction,
 	};
 	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params, info)
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 		: params;
 
 	let result = await QueryManager.find<D>({
@@ -147,14 +161,10 @@ export const list = async <G, D, C extends BaseContext>(
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
-		const { entities } = await hookManager.runHooks(
-			HookRegister.AFTER_READ,
-			{
-				...hookParams,
-				entities: result,
-			},
-			info
-		);
+		const { entities } = await hookManager.runHooks(HookRegister.AFTER_READ, {
+			...hookParams,
+			entities: result,
+		});
 		result = entities;
 	}
 
@@ -162,12 +172,12 @@ export const list = async <G, D, C extends BaseContext>(
 	return result;
 };
 
-export const createOrUpdate = async <G, D, C extends BaseContext>(
-	_source: unknown,
-	{ input }: { input: Partial<G> | Partial<G>[] },
-	context: C,
-	info: GraphQLResolveInfo
-) => {
+export const createOrUpdate = async <G, D>({
+	args: { input },
+	context,
+	info,
+	fields,
+}: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>) => {
 	logger.trace({ input, context, info }, 'Create or Update resolver called.');
 
 	let name;
@@ -202,6 +212,7 @@ export const createOrUpdate = async <G, D, C extends BaseContext>(
 		const hookManager = hookManagerMap.get(entity.name);
 		const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
 			context,
+			fields,
 			transactional: !!entity.provider?.withTransaction,
 		};
 
@@ -227,7 +238,7 @@ export const createOrUpdate = async <G, D, C extends BaseContext>(
 		};
 		const updateHookParams =
 			updateItems.length && hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams, info)
+				? await hookManager.runHooks(HookRegister.BEFORE_UPDATE, updateParams)
 				: updateParams;
 
 		// Prepare createParams and run hook if needed
@@ -237,7 +248,7 @@ export const createOrUpdate = async <G, D, C extends BaseContext>(
 		};
 		const createHookParams =
 			createItems.length && hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams, info)
+				? await hookManager.runHooks(HookRegister.BEFORE_CREATE, createParams)
 				: createParams;
 
 		// Combine update and create items into a single array
@@ -256,25 +267,17 @@ export const createOrUpdate = async <G, D, C extends BaseContext>(
 		// Run after hooks for update and create entities
 		if (hookManager) {
 			createdEntities = (
-				await hookManager.runHooks(
-					HookRegister.AFTER_CREATE,
-					{
-						...createHookParams,
-						entities: createdEntities,
-					},
-					info
-				)
+				await hookManager.runHooks(HookRegister.AFTER_CREATE, {
+					...createHookParams,
+					entities: createdEntities,
+				})
 			).entities;
 
 			updatedEntities = (
-				await hookManager.runHooks(
-					HookRegister.AFTER_UPDATE,
-					{
-						...updateHookParams,
-						entities: updatedEntities,
-					},
-					info
-				)
+				await hookManager.runHooks(HookRegister.AFTER_UPDATE, {
+					...updateHookParams,
+					entities: updatedEntities,
+				})
 			).entities;
 		}
 
@@ -287,12 +290,11 @@ export const createOrUpdate = async <G, D, C extends BaseContext>(
 // This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
 export const deleteOne =
 	(entity: EntityMetadata<any, any>) =>
-	async <G extends { name: string }, C extends BaseContext>(
-		source: unknown,
-		{ filter }: { filter: Filter<G> },
-		context: C,
-		info: GraphQLResolveInfo
-	) => {
+	async <G extends { name: string }>({
+		args: { filter },
+		context,
+		fields,
+	}: ResolverOptions<{ filter: Filter<G> }>) => {
 		if (!entity.provider) {
 			throw new Error(
 				`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
@@ -303,11 +305,12 @@ export const deleteOne =
 		const params: DeleteHookParams<G> = {
 			args: { filter },
 			context,
+			fields,
 			transactional: false,
 		};
 
 		const hookParams = hookManager
-			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params, info)
+			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 			: params;
 
 		if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
@@ -315,26 +318,17 @@ export const deleteOne =
 		const success = await entity.provider.deleteOne(hookParams.args.filter);
 
 		hookManager &&
-			(await hookManager.runHooks(
-				HookRegister.AFTER_DELETE,
-				{
-					...hookParams,
-					deleted: success,
-				},
-				info
-			));
+			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+				...hookParams,
+				deleted: success,
+			}));
 
 		return success;
 	};
 
 export const deleteMany =
 	(entity: EntityMetadata<any, any>) =>
-	async <G, C extends BaseContext>(
-		_source: unknown,
-		{ filter }: { filter: Filter<G> },
-		context: C,
-		info: GraphQLResolveInfo
-	) => {
+	async <G>({ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>) => {
 		if (!entity.provider) {
 			throw new Error(
 				`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
@@ -347,11 +341,12 @@ export const deleteMany =
 			const params: DeleteManyHookParams<G> = {
 				args: { filter },
 				context,
+				fields,
 				transactional: !!entity.provider.withTransaction,
 			};
 
 			const hookParams = hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params, info)
+				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 				: params;
 
 			if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
@@ -359,25 +354,22 @@ export const deleteMany =
 			const success = await entity.provider.deleteMany(hookParams.args?.filter);
 
 			hookManager &&
-				(await hookManager.runHooks(
-					HookRegister.AFTER_DELETE,
-					{
-						...hookParams,
-						deleted: success,
-					},
-					info
-				));
+				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+					...hookParams,
+					deleted: success,
+				}));
 
 			return success;
 		});
 	};
 
-export const listRelationshipField = async <G, D, R, C extends BaseContext>(
-	source: G,
-	input: { filter: Filter<R> },
-	context: C,
-	info: GraphQLResolveInfo
-) => {
+export const listRelationshipField = async <G, D, R, C extends BaseContext>({
+	source,
+	args: { filter },
+	context,
+	fields,
+	info,
+}: ResolverOptions<{ filter: Filter<R> }, C, G>) => {
 	logger.trace(`Resolving ${info.parentType.name}.${info.fieldName}`);
 
 	if (!info.path.typename)
@@ -415,7 +407,7 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const _and: Filter<R>[] = [];
 
 	// If we have a user supplied filter, add it to the _and array.
-	if (input.filter) _and.push(input.filter);
+	if (filter) _and.push(filter);
 
 	// Lets check the relationship type and add the appropriate filter.
 	if (idValue) {
@@ -431,11 +423,12 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const params: ReadHookParams<R> = {
 		args: { filter: relatedEntityFilter },
 		context,
+		fields,
 		transactional: !!entity.provider?.withTransaction,
 	};
 	const hookManager = hookManagerMap.get(gqlEntityType.name);
 	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params, info)
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 		: params;
 
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
@@ -448,14 +441,10 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 		logger.trace('Running after read hooks');
 		const { entities: hookEntities = [] } = hookManager
-			? await hookManager.runHooks(
-					HookRegister.AFTER_READ,
-					{
-						...hookParams,
-						entities,
-					},
-					info
-				)
+			? await hookManager.runHooks(HookRegister.AFTER_READ, {
+					...hookParams,
+					entities,
+				})
 			: { entities };
 
 		logger.trace({ before: existingData, after: hookEntities }, 'After read hooks ran');
@@ -497,14 +486,10 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	logger.trace('Running after read hooks');
 	const { entities: hookEntities = [] } = hookManager
-		? await hookManager.runHooks(
-				HookRegister.AFTER_READ,
-				{
-					...hookParams,
-					entities,
-				},
-				info
-			)
+		? await hookManager.runHooks(HookRegister.AFTER_READ, {
+				...hookParams,
+				entities,
+			})
 		: { entities };
 
 	logger.trace({ before: entities, after: hookEntities }, 'After read hooks ran');

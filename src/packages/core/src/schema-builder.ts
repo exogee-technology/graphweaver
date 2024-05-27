@@ -225,7 +225,7 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = graphQLTypeForEntity(metadata);
 
 						if (metadata.provider) {
-							resolve = resolvers.listRelationshipField;
+							resolve = resolvers.baseResolver(resolvers.listRelationshipField);
 
 							args['filter'] = {
 								type: filterTypeForEntity(metadata),
@@ -619,7 +619,7 @@ class SchemaBuilderImplementation {
 						args: {
 							id: { type: new GraphQLNonNull(ID) },
 						},
-						resolve: resolvers.getOne,
+						resolve: resolvers.baseResolver(resolvers.getOne),
 					};
 
 					// List
@@ -634,7 +634,7 @@ class SchemaBuilderImplementation {
 							filter: { type: filterTypeForEntity(entity) },
 							...(entity.provider ? { pagination: { type: paginationTypeForEntity(entity) } } : {}),
 						},
-						resolve: resolvers.list,
+						resolve: resolvers.baseResolver(resolvers.list),
 					};
 				}
 
@@ -655,14 +655,14 @@ class SchemaBuilderImplementation {
 							...customQuery,
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
-							resolve: customQuery.resolver,
+							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					} else {
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
 							type: graphQLScalarForTypeScriptType(type),
-							resolve: customQuery.resolver,
+							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					}
 				}
@@ -696,7 +696,7 @@ class SchemaBuilderImplementation {
 						args: {
 							input: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Create Many
@@ -714,7 +714,7 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Update One
@@ -728,7 +728,7 @@ class SchemaBuilderImplementation {
 						args: {
 							input: { type: new GraphQLNonNull(updateTypeForEntity(entity)) },
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Update Many
@@ -746,7 +746,7 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Create or Update Many
@@ -764,7 +764,7 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Delete One
@@ -780,7 +780,7 @@ class SchemaBuilderImplementation {
 								type: new GraphQLNonNull(deleteInput),
 							},
 						},
-						resolve: resolvers.deleteOne(entity),
+						resolve: resolvers.baseResolver(resolvers.deleteOne(entity)),
 					};
 
 					// Delete Many
@@ -794,7 +794,7 @@ class SchemaBuilderImplementation {
 						args: {
 							filter: { type: new GraphQLNonNull(filterTypeForEntity(entity)) },
 						},
-						resolve: resolvers.deleteMany(entity),
+						resolve: resolvers.baseResolver(resolvers.deleteMany(entity)),
 					};
 				}
 
@@ -815,14 +815,14 @@ class SchemaBuilderImplementation {
 							...customMutation,
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
-							resolve: customMutation.resolver,
+							resolve: resolvers.baseResolver(customMutation.resolver),
 						};
 					} else {
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
 							type: graphQLScalarForTypeScriptType(type),
-							resolve: customMutation.resolver,
+							resolve: resolvers.baseResolver(customMutation.resolver),
 						};
 					}
 				}

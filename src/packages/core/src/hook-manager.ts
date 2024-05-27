@@ -1,5 +1,4 @@
-import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo, HookParams } from './types';
+import { HookParams } from './types';
 
 export enum HookRegister {
 	BEFORE_CREATE = 'BEFORE_CREATE',
@@ -11,12 +10,6 @@ export enum HookRegister {
 	BEFORE_DELETE = 'BEFORE_DELETE',
 	AFTER_DELETE = 'AFTER_DELETE',
 }
-
-const augmentParamsWithFields = <G, P extends HookParams<G>>(params: P, info: GraphQLResolveInfo) =>
-	({
-		...params,
-		fields: (parseResolveInfo(info) ?? {}) as ResolveTree,
-	}) as P;
 
 export type HookFunction<G, P extends HookParams<G> = HookParams<G>> = (params: P) => Promise<P>;
 
@@ -39,17 +32,13 @@ export class HookManager<G> {
 		this.hooks[hookType] = [...existingHooks, hook];
 	}
 
-	async runHooks<P extends HookParams<G>>(
-		hookType: HookRegister,
-		params: P,
-		info: GraphQLResolveInfo
-	): Promise<P> {
+	async runHooks<P extends HookParams<G>>(hookType: HookRegister, params: P): Promise<P> {
 		const hooks = this.hooks[hookType];
 		if (!hooks || hooks.length === 0) {
 			return params;
 		}
 
-		let currentParams = augmentParamsWithFields(params, info);
+		let currentParams = params;
 
 		for (const hook of hooks) {
 			currentParams = await hook(currentParams);

@@ -26,6 +26,7 @@ import {
 	Field,
 	ID,
 	InputType,
+	ResolverOptions,
 	Sort,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
@@ -255,12 +256,12 @@ export class Passkey {
 		return true;
 	}
 
-	async passkeyGenerateRegistrationOptions(
-		_: Source,
-		_args: Record<string, undefined>,
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<PublicKeyCredentialCreationOptionsJSON> {
+	async passkeyGenerateRegistrationOptions({
+		context,
+	}: ResolverOptions<
+		unknown,
+		AuthorizationContext
+	>): Promise<PublicKeyCredentialCreationOptionsJSON> {
 		if (!context.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
 
 		const userId = context.user?.id;
@@ -288,12 +289,13 @@ export class Passkey {
 		return options;
 	}
 
-	async passkeyVerifyRegistrationResponse(
-		_: Source,
-		{ registrationResponse }: { registrationResponse: PasskeyRegistrationResponse },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async passkeyVerifyRegistrationResponse({
+		args: { registrationResponse },
+		context,
+	}: ResolverOptions<
+		{ registrationResponse: PasskeyRegistrationResponse },
+		AuthorizationContext
+	>): Promise<boolean> {
 		try {
 			if (!context.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
 
@@ -335,12 +337,12 @@ export class Passkey {
 		}
 	}
 
-	async passkeyGenerateAuthenticationOptions(
-		_: Source,
-		_args: Record<string, undefined>,
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<PublicKeyCredentialRequestOptionsJSON> {
+	async passkeyGenerateAuthenticationOptions({
+		context,
+	}: ResolverOptions<
+		unknown,
+		AuthorizationContext
+	>): Promise<PublicKeyCredentialRequestOptionsJSON> {
 		if (!context.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
 
 		const userId = context.user?.id;
@@ -363,12 +365,13 @@ export class Passkey {
 		return options;
 	}
 
-	async passkeyVerifyAuthenticationResponse(
-		_: Source,
-		{ authenticationResponse }: { authenticationResponse: PasskeyAuthenticationResponse },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<Token> {
+	async passkeyVerifyAuthenticationResponse({
+		args: { authenticationResponse },
+		context,
+	}: ResolverOptions<
+		{ authenticationResponse: PasskeyAuthenticationResponse },
+		AuthorizationContext
+	>): Promise<Token> {
 		try {
 			if (!context.token) throw new ForbiddenError('Challenge unsuccessful: Token missing.');
 

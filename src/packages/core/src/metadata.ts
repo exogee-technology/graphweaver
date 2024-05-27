@@ -1,5 +1,5 @@
-import { FieldOptions, GetTypeFunction, GraphQLFieldResolver } from '.';
-import { BackendProvider, FieldMetadata, Filter } from './types';
+import { FieldOptions, GetTypeFunction } from '.';
+import { BackendProvider, FieldMetadata, Filter, Resolver } from './types';
 import { logger } from '@exogee/logger';
 
 export interface EntityMetadata<G = unknown, D = unknown> {
@@ -128,7 +128,7 @@ export type CollectInputTypeInformationArgs<G = unknown, D = unknown> = Omit<
 export interface AdditionalOperationInformation {
 	name: string;
 	getType: () => any;
-	resolver: GraphQLFieldResolver<any, any, any, unknown>;
+	resolver: Resolver;
 	args?: Record<string, unknown>;
 	description?: string;
 }
@@ -440,7 +440,7 @@ class Metadata {
 	public addQuery(args: {
 		name: string;
 		getType: GetTypeFunction;
-		resolver: GraphQLFieldResolver<any, any, any, unknown>;
+		resolver: Resolver;
 		args?: Record<string, unknown>;
 		description?: string;
 		intentionalOverride?: boolean;
@@ -457,7 +457,7 @@ class Metadata {
 	public addMutation(args: {
 		name: string;
 		getType: GetTypeFunction;
-		resolver: GraphQLFieldResolver<any, any, any, unknown>;
+		resolver: Resolver;
 		args?: Record<string, unknown>;
 		description?: string;
 		intentionalOverride?: boolean;

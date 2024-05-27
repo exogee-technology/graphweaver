@@ -8,6 +8,7 @@ import {
 	BaseContext,
 	graphweaverMetadata,
 	getFieldTypeFromFieldMetadata,
+	ResolverOptions,
 } from '..';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
@@ -51,7 +52,7 @@ type Hooks = {
 };
 
 export const resolveAdminUiMetadata = (hooks?: Hooks) => {
-	return async <C extends BaseContext>(source: unknown, args: unknown, context: C) => {
+	return async <C extends BaseContext>({ context }: ResolverOptions<unknown, C>) => {
 		await hooks?.beforeRead?.({ context });
 
 		const entities: (AdminUiEntityMetadata | undefined)[] = Array.from(

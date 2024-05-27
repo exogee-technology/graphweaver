@@ -1,6 +1,6 @@
 import {
 	BackendProvider,
-	CreateOrUpdateHookParams,
+	ResolverOptions,
 	Field,
 	FieldMetadata,
 	HookParams,
@@ -13,7 +13,6 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
-import { GraphQLResolveInfo, Source } from 'graphql';
 
 import { AccessControlList, AuthorizationContext } from '../../types';
 import { ApiKeyEntity } from '../entities';
@@ -122,42 +121,36 @@ export class ApiKey<R extends string[]> {
 	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs<R> | ApiKeyUpdateInputArgs<R>>>(
 		hookRegister: HookRegister,
 		hookParams: H,
-		info: GraphQLResolveInfo,
 		entities: (ApiKeyEntity<R> | null)[]
 	): Promise<(ApiKeyEntity<R> | null)[]> {
 		const hookManager = hookManagerMap.get('ApiKey');
 		const { entities: hookEntities = [] } = hookManager
-			? await hookManager.runHooks(
-					hookRegister,
-					{
-						...hookParams,
-						entities,
-					},
-					info
-				)
+			? await hookManager.runHooks(hookRegister, {
+					...hookParams,
+					entities,
+				})
 			: { entities };
 
 		return hookEntities;
 	}
 
-	async createApiKey(
-		_: Source,
-		{ input }: { input: ApiKeyInputArgs<R> },
-		context: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<R> | null> {
+	async createApiKey({
+		args: { input },
+		context,
+		fields,
+	}: ResolverOptions<{ input: ApiKeyInputArgs<R> }>): Promise<ApiKeyEntity<R> | null> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
 				context,
+				fields,
 				transactional: this.transactional,
 			};
 
 			const hookParams = await runWritableBeforeHooks<ApiKeyInputArgs<R>>(
 				HookRegister.BEFORE_CREATE,
 				params,
-				'ApiKey',
-				info
+				'ApiKey'
 			);
 
 			let apiKey;
@@ -175,9 +168,7 @@ export class ApiKey<R extends string[]> {
 					...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
 				});
 
-				const entities = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, info, [
-					newApiKey,
-				]);
+				const entities = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [newApiKey]);
 				if (!entities?.[0])
 					throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
@@ -199,16 +190,15 @@ export class ApiKey<R extends string[]> {
 		});
 	}
 
-	async updateApiKey(
-		_: Source,
-		{ input }: { input: ApiKeyUpdateInputArgs<R> },
-		context: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<R> | null> {
+	async updateApiKey({
+		args: { input },
+		context,
+		fields,
+	}: ResolverOptions<{ input: ApiKeyUpdateInputArgs<R> }>): Promise<ApiKeyEntity<R> | null> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
-				info,
+				fields,
 				context,
 				transactional: this.transactional,
 			};
@@ -218,8 +208,7 @@ export class ApiKey<R extends string[]> {
 				const hookParams = await runWritableBeforeHooks<ApiKeyUpdateInputArgs<R>>(
 					HookRegister.BEFORE_UPDATE,
 					params,
-					'ApiKey',
-					info
+					'ApiKey'
 				);
 				const [item] = hookParams.args.items;
 				if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
@@ -236,9 +225,7 @@ export class ApiKey<R extends string[]> {
 					...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
 				});
 
-				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, info, [
-					newApiKey,
-				]);
+				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [newApiKey]);
 				if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 
 				apiKey = entity;

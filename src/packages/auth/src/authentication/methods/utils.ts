@@ -32,7 +32,6 @@ export type UpdatePasswordCredentialOptions = {
 	password?: string;
 	username?: string;
 	params?: HookParams<CredentialUpdateInput>;
-	info: GraphQLResolveInfo;
 };
 export const updatePasswordCredential = async ({
 	assertPasswordStrength,
@@ -41,7 +40,6 @@ export const updatePasswordCredential = async ({
 	password,
 	username,
 	params,
-	info,
 }: UpdatePasswordCredentialOptions) => {
 	let passwordHash = undefined;
 	if (password && assertPasswordStrength(password)) {
@@ -53,7 +51,7 @@ export const updatePasswordCredential = async ({
 		...(passwordHash ? { password: passwordHash } : {}),
 	});
 
-	const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, [credential], info, params);
+	const [entity] = await runAfterHooks(HookRegister.AFTER_UPDATE, [credential], params);
 	if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
 	return entity;
 };
@@ -61,21 +59,16 @@ export const updatePasswordCredential = async ({
 export const runAfterHooks = async <D, H = CredentialInsertInput | CredentialUpdateInput>(
 	hookRegister: HookRegister,
 	entities: (D | null)[],
-	info: GraphQLResolveInfo,
 	hookParams?: HookParams<H>
 ): Promise<(D | null)[]> => {
 	const hookManager = hookManagerMap.get('Credential');
 
 	const { entities: hookEntities = [] } =
 		hookManager && hookParams
-			? await hookManager.runHooks(
-					hookRegister,
-					{
-						...hookParams,
-						entities,
-					},
-					info
-				)
+			? await hookManager.runHooks(hookRegister, {
+					...hookParams,
+					entities,
+				})
 			: { entities };
 
 	return hookEntities;

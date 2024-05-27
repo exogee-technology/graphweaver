@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLResolveInfo } from 'graphql';
+import { GraphQLList, GraphQLResolveInfo, Source } from 'graphql';
 
 import {
 	BaseContext,
@@ -51,7 +51,13 @@ const runChildCreateOrUpdate = <G = unknown>(
 		returnType: Array.isArray(data) ? new GraphQLList(graphQLType) : graphQLType,
 	};
 
-	return createOrUpdate(undefined, { input: data }, context, infoFacade as GraphQLResolveInfo);
+	return createOrUpdate({
+		source: {} as Source, // @todo: What should this be?
+		args: { input: data },
+		context,
+		info: infoFacade as GraphQLResolveInfo,
+		fields: {}, // @todo: What should this be?
+	});
 };
 
 // Covert the data entity from the backend to the GraphQL entity
@@ -210,11 +216,10 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 export const runWritableBeforeHooks = async <G>(
 	hookRegister: HookRegister,
 	params: CreateOrUpdateHookParams<G>,
-	gqlEntityTypeName: string,
-	info: GraphQLResolveInfo
+	gqlEntityTypeName: string
 ): Promise<CreateOrUpdateHookParams<G>> => {
 	const hookManager = hookManagerMap.get(gqlEntityTypeName);
-	const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params, info) : params;
+	const hookParams = hookManager ? await hookManager.runHooks(hookRegister, params) : params;
 
 	const items = hookParams.args?.items;
 	if (!items) throw new Error('No data specified cannot continue.');

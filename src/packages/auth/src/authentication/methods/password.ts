@@ -2,9 +2,9 @@ import {
 	BackendProvider,
 	CreateOrUpdateHookParams,
 	Field,
-	GraphQLResolveInfo,
 	HookRegister,
 	InputType,
+	ResolverOptions,
 	graphweaverMetadata,
 	runWritableBeforeHooks,
 } from '@exogee/graphweaver';
@@ -13,12 +13,7 @@ import { logger } from '@exogee/logger';
 import { Source } from 'graphql';
 
 import { UserProfile } from '../../user-profile';
-import {
-	AccessControlList,
-	AuthenticationMethod,
-	AuthorizationContext,
-	RequestParams,
-} from '../../types';
+import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
 import { Credential, CredentialStorage, Token } from '../entities';
 import {
 	PasswordStrengthError,
@@ -67,12 +62,12 @@ export type PasswordOptions<D extends CredentialStorage> = {
 	getUserProfile: (
 		id: string,
 		operation: PasswordOperation,
-		params: RequestParams
+		context: AuthorizationContext
 	) => Promise<UserProfile<unknown>>;
 	acl?: AccessControlList<Credential, AuthorizationContext>;
 	assertPasswordStrength?: (password?: string) => boolean;
-	onUserAuthenticated?(userId: string, params: RequestParams): Promise<null>;
-	onUserRegistered?(userId: string, params: RequestParams): Promise<null>;
+	onUserAuthenticated?(userId: string, context: AuthorizationContext): Promise<null>;
+	onUserRegistered?(userId: string, context: AuthorizationContext): Promise<null>;
 };
 
 export class Password<D extends CredentialStorage> {
@@ -80,11 +75,11 @@ export class Password<D extends CredentialStorage> {
 	private getUserProfile: (
 		id: string,
 		operation: PasswordOperation,
-		params: RequestParams
+		context: AuthorizationContext
 	) => Promise<UserProfile<unknown>>;
 	private assertPasswordStrength: (password?: string) => boolean;
-	private onUserAuthenticated?: (userId: string, params: RequestParams) => Promise<null>;
-	private onUserRegistered?: (userId: string, params: RequestParams) => Promise<null>;
+	private onUserAuthenticated?: (userId: string, context: AuthorizationContext) => Promise<null>;
+	private onUserRegistered?: (userId: string, context: AuthorizationContext) => Promise<null>;
 	private transactional: boolean;
 
 	constructor({
@@ -159,7 +154,7 @@ export class Password<D extends CredentialStorage> {
 	async authenticate(
 		username: string,
 		password: string,
-		params: RequestParams
+		context: AuthorizationContext
 	): Promise<UserProfile<unknown>> {
 		const credential = await this.provider.findOne({
 			username,
@@ -170,17 +165,16 @@ export class Password<D extends CredentialStorage> {
 			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
 
 		if (await verifyPassword(password, credential.password)) {
-			return this.getUserProfile(credential.id, PasswordOperation.LOGIN, params);
+			return this.getUserProfile(credential.id, PasswordOperation.LOGIN, context);
 		}
 
-		this.onUserAuthenticated?.(credential.id, params);
+		this.onUserAuthenticated?.(credential.id, context);
 
 		throw new AuthenticationError('Unknown username or password, please try again');
 	}
 
 	async create(
-		params: CreateOrUpdateHookParams<CredentialInsertInput>,
-		info: GraphQLResolveInfo
+		params: CreateOrUpdateHookParams<CredentialInsertInput>
 	): Promise<UserProfile<unknown>> {
 		const [item] = params.args.items;
 		if (!item) throw new Error('No data specified cannot continue.');
@@ -200,19 +194,15 @@ export class Password<D extends CredentialStorage> {
 			password: passwordHash,
 		} as Credential & { password: string });
 
-		const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], info, params);
+		const [entity] = await runAfterHooks(HookRegister.AFTER_CREATE, [credential], params);
 		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-		this.onUserRegistered?.(entity.id, { info, ctx: params.context });
+		this.onUserRegistered?.(entity.id, params.context);
 
-		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
-			info,
-			ctx: params.context,
-		});
+		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, params.context);
 	}
 
 	async update(
-		params: CreateOrUpdateHookParams<CredentialUpdateInput>,
-		info: GraphQLResolveInfo
+		params: CreateOrUpdateHookParams<CredentialUpdateInput>
 	): Promise<UserProfile<unknown>> {
 		const [item] = params.args.items;
 		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
@@ -230,27 +220,25 @@ export class Password<D extends CredentialStorage> {
 			password: item.password,
 			username: item.username,
 			params,
-			info,
 		});
 
-		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, {
-			info,
-			ctx: params.context,
-		});
+		return this.getUserProfile(entity.id, PasswordOperation.REGISTER, params.context);
 	}
 
 	// The below methods are exposed as mutations via GraphQL
 
-	async createCredential(
-		_: Source,
-		args: { input: CredentialInsertInput },
-		context: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<Credential | null> {
+	async createCredential({
+		args,
+		context,
+		fields,
+	}: ResolverOptions<
+		{ input: CredentialInsertInput },
+		AuthorizationContext
+	>): Promise<Credential | null> {
 		return this.withTransaction<Credential | null>(async () => {
 			const params = {
 				args: { items: [args.input] },
-				info,
+				fields,
 				context,
 				transactional: this.transactional,
 			};
@@ -260,11 +248,10 @@ export class Password<D extends CredentialStorage> {
 				const hookParams = await runWritableBeforeHooks<CredentialInsertInput>(
 					HookRegister.BEFORE_CREATE,
 					params,
-					'Credential',
-					info
+					'Credential'
 				);
 
-				userProfile = await this.create(hookParams, info);
+				userProfile = await this.create(hookParams);
 			} catch (err) {
 				logger.error(err);
 
@@ -290,16 +277,18 @@ export class Password<D extends CredentialStorage> {
 		});
 	}
 
-	async updateCredential(
-		_: Source,
-		args: { input: CredentialUpdateInput },
-		context: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<Credential | null> {
+	async updateCredential({
+		args,
+		context,
+		fields,
+	}: ResolverOptions<
+		{ input: CredentialUpdateInput },
+		AuthorizationContext
+	>): Promise<Credential | null> {
 		return this.withTransaction<Credential | null>(async () => {
 			const params = {
 				args: { items: [args.input] },
-				info,
+				fields,
 				context,
 				transactional: this.transactional,
 			};
@@ -309,10 +298,9 @@ export class Password<D extends CredentialStorage> {
 				const hookParams = await runWritableBeforeHooks<CredentialUpdateInput>(
 					HookRegister.BEFORE_UPDATE,
 					params,
-					'Credential',
-					info
+					'Credential'
 				);
-				userProfile = await this.update(hookParams, info);
+				userProfile = await this.update(hookParams);
 			} catch (err) {
 				logger.error(err);
 				if (err instanceof PasswordStrengthError) throw err;
@@ -336,35 +324,36 @@ export class Password<D extends CredentialStorage> {
 		});
 	}
 
-	async loginPassword(
-		_: Source,
-		args: { username: string; password: string },
-		ctx: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<Token> {
+	async loginPassword({
+		args,
+		context,
+	}: ResolverOptions<
+		{ username: string; password: string },
+		AuthorizationContext
+	>): Promise<Token> {
 		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
-		const userProfile = await this.authenticate(args.username, args.password, { ctx, info });
+		const userProfile = await this.authenticate(args.username, args.password, context);
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
 		return verifyToken(authToken);
 	}
 
-	async challengePassword(
-		_: Source,
-		{ password }: { password: string },
-		ctx: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<Token> {
-		if (!ctx.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
+	async challengePassword({
+		args: { password },
+		context,
+	}: ResolverOptions<{ password: string }, AuthorizationContext>): Promise<Token> {
+		if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.PASSWORD);
 		const existingToken =
-			typeof ctx.token === 'string' ? await tokenProvider.decodeToken(ctx.token) : ctx.token;
+			typeof context.token === 'string'
+				? await tokenProvider.decodeToken(context.token)
+				: context.token;
 
-		const username = ctx.user?.username;
+		const username = context.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
-		const userProfile = await this.authenticate(username, password, { ctx, info });
+		const userProfile = await this.authenticate(username, password, context);
 		if (!userProfile) throw new AuthenticationError('Challenge unsuccessful: Userprofile missing.');
 
 		const authToken = await tokenProvider.stepUpToken(existingToken);

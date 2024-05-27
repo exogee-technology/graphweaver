@@ -8,7 +8,7 @@ import { Token } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthTokenProvider, verifyToken } from '../token';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import { GraphQLResolveInfo, Source } from 'graphql';
 import { AuthenticationType } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
@@ -192,12 +192,10 @@ export class MagicLink {
 		}
 	}
 
-	async sendLoginMagicLink(
-		_source: Source,
-		{ username }: { username: string },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async sendLoginMagicLink({
+		args: { username },
+		context,
+	}: ResolverOptions<{ username: string }, AuthorizationContext>): Promise<boolean> {
 		const { url, link } = (await this.generateMagicLink(username, context)) ?? {};
 
 		// fail silently
@@ -212,21 +210,15 @@ export class MagicLink {
 		return this.sendMagicLink(url, link);
 	}
 
-	async verifyLoginMagicLink(
-		_source: Source,
-		{ username, token }: { username: string; token: string },
-		_context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<Token> {
+	async verifyLoginMagicLink({
+		args: { username, token },
+	}: ResolverOptions<{ username: string; token: string }>): Promise<Token> {
 		return this.verifyMagicLink(username, token);
 	}
 
-	async sendChallengeMagicLink(
-		_source: Source,
-		_args: Record<string, never>,
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async sendChallengeMagicLink({
+		context,
+	}: ResolverOptions<unknown, AuthorizationContext>): Promise<boolean> {
 		const username = context.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
@@ -244,12 +236,10 @@ export class MagicLink {
 		return this.sendMagicLink(url, link);
 	}
 
-	async verifyChallengeMagicLink(
-		_source: Source,
-		{ token }: { token: string },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<Token> {
+	async verifyChallengeMagicLink({
+		args: { token },
+		context,
+	}: ResolverOptions<{ token: string }, AuthorizationContext>): Promise<Token> {
 		if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
 		const existingToken =
