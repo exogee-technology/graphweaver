@@ -8,7 +8,7 @@ import { GraphQLResolveInfo, Source } from 'graphql';
 import { AuthorizationContext, AuthenticationType } from '../../types';
 import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import { AuthenticationBaseEntity } from '../entities';
+import { AuthenticationBaseEntity, CredentialStorage } from '../entities';
 import { defaultPasswordStrength, updatePasswordCredential } from './utils';
 
 const config = {
@@ -239,7 +239,9 @@ export class ForgottenPassword {
 		}
 
 		// Get the user's credential
-		const credentialProvider = graphweaverMetadata.getEntityByName('Credential')?.provider;
+		const credentialProvider = graphweaverMetadata.getEntityByName<Credential, CredentialStorage>(
+			'Credential'
+		)?.provider;
 
 		if (!credentialProvider) {
 			throw new Error('Bad Request: No provider associated with the Credential entity.');

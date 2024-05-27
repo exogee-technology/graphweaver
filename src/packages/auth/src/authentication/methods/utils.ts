@@ -9,6 +9,7 @@ import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { hashPassword } from '../../utils/argon2id';
 import { CredentialUpdateInput, CredentialInsertInput } from './password';
+import { CredentialStorage } from '../entities';
 
 export class PasswordStrengthError extends ApolloError {
 	constructor(message: string, extensions?: Record<string, any>) {
@@ -24,16 +25,16 @@ export const defaultPasswordStrength = (password?: string) => {
 	throw new PasswordStrengthError('Password not strong enough.');
 };
 
-export type UpdatePasswordCredentialOptions<D> = {
+export type UpdatePasswordCredentialOptions = {
 	assertPasswordStrength: (password: string) => boolean;
-	provider: BackendProvider<D>;
+	provider: BackendProvider<CredentialStorage>;
 	id: string;
 	password?: string;
 	username?: string;
 	params?: HookParams<CredentialUpdateInput>;
 	info: GraphQLResolveInfo;
 };
-export const updatePasswordCredential = async <D>({
+export const updatePasswordCredential = async ({
 	assertPasswordStrength,
 	provider,
 	id,
@@ -41,11 +42,12 @@ export const updatePasswordCredential = async <D>({
 	username,
 	params,
 	info,
-}: UpdatePasswordCredentialOptions<D>) => {
+}: UpdatePasswordCredentialOptions) => {
 	let passwordHash = undefined;
 	if (password && assertPasswordStrength(password)) {
 		passwordHash = await hashPassword(password);
 	}
+
 	const credential = await provider.updateOne(id, {
 		...(username ? { username } : {}),
 		...(passwordHash ? { password: passwordHash } : {}),
