@@ -37,7 +37,7 @@
 		"graphql": "16.8.1",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.22.3"
+		"react-router-dom": "6.23.1"
 	},
 	"devDependencies": {
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
