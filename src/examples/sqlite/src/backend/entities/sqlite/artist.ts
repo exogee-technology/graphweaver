@@ -1,9 +1,8 @@
 import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Album } from './album';
 
 @Entity({ tableName: 'Artist' })
-export class Artist extends BaseEntity {
+export class Artist {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	artistId!: number;
 

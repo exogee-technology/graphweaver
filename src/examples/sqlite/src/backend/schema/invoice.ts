@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Customer } from './customer';
@@ -9,14 +9,12 @@ import { connection } from '../database';
 @Entity('Invoice', {
 	provider: new MikroBackendProvider(OrmInvoice, connection),
 })
-export class Invoice extends GraphQLEntity<OrmInvoice> {
-	public dataEntity!: OrmInvoice;
-
+export class Invoice {
 	@Field(() => ID, { primaryKeyField: true })
 	invoiceId!: number;
 
 	@RelationshipField<Invoice>(() => Customer, {
-		id: (entity) => entity.customer?.unwrap().customerId,
+		id: (entity) => entity.customer?.customerId,
 	})
 	customer!: Customer;
 

@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Customer } from './customer';
@@ -8,9 +8,7 @@ import { connection } from '../database';
 @Entity('Employee', {
 	provider: new MikroBackendProvider(OrmEmployee, connection),
 })
-export class Employee extends GraphQLEntity<OrmEmployee> {
-	public dataEntity!: OrmEmployee;
-
+export class Employee {
 	@Field(() => ID, { primaryKeyField: true })
 	employeeId!: number;
 
@@ -24,7 +22,7 @@ export class Employee extends GraphQLEntity<OrmEmployee> {
 	title?: string;
 
 	@RelationshipField<Employee>(() => Employee, {
-		id: (entity) => entity.employee?.unwrap().employeeId,
+		id: (entity) => entity.employee?.employeeId,
 		nullable: true,
 	})
 	employee?: Employee;

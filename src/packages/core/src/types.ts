@@ -102,11 +102,15 @@ export interface BackendProvider<D> {
 	createMany(entities: Partial<D>[]): Promise<D[]>;
 	createOrUpdateMany(entities: Partial<D>[]): Promise<D[]>;
 	deleteOne(filter: Filter<D>): Promise<boolean>;
-	//optional deleteMany
+	// Optional deleteMany
 	deleteMany?(filter: Filter<D>): Promise<boolean>;
 
 	// Optional, allows the resolver to start a transaction
 	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
+
+	// Optional. Queried to get foriegn key values from fields for relationship fields to
+	// allow the GraphQL entities to work completely at the GQL level.
+	foreignKeyForRelationshipField?(field: FieldMetadata<any, D>, dataEntity: D): string | number;
 
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;

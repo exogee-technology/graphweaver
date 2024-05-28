@@ -7,12 +7,11 @@ import {
 	Property,
 	Ref,
 } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Customer } from './customer';
 import { InvoiceLine } from './invoice-line';
 
 @Entity({ tableName: 'Invoice' })
-export class Invoice extends BaseEntity {
+export class Invoice {
 	@PrimaryKey({ fieldName: 'InvoiceId', type: 'number' })
 	invoiceId!: number;
 

@@ -23,6 +23,7 @@ import {
 	graphweaverMetadata,
 	hookManagerMap,
 	isEntityMetadata,
+	isPrimaryKeyOnly,
 	isTransformableGraphQLEntityClass,
 } from '.';
 import { QueryManager } from './query-manager';
@@ -422,7 +423,10 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
 
-	if (typeof existingData !== 'undefined') {
+	if (
+		typeof existingData !== 'undefined' &&
+		!isPrimaryKeyOnly(relatedEntityMetadata, existingData as Partial<R>)
+	) {
 		logger.trace({ existingData }, 'Existing data found, returning.');
 
 		const entities = [existingData].flat();

@@ -4,7 +4,7 @@ import {
 	Sort,
 	Filter,
 	BackendProviderConfig,
-	graphweaverMetadata,
+	FieldMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -12,7 +12,6 @@ import {
 	LockMode,
 	QueryFlag,
 	ReferenceKind,
-	Utils,
 	ConnectionManager,
 	externalIdFieldMap,
 	AnyEntity,
@@ -25,7 +24,8 @@ import {
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
 
-import { AutoPath, PopulateHint, SqlEntityRepository } from '@mikro-orm/postgresql';
+import { Reference } from '@mikro-orm/core';
+import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 type PostgresError = {
@@ -538,6 +538,32 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		logger.trace(`delete ${this.entityType.name} result: deleted ${deletedRows} row(s)`);
 
 		return true;
+	}
+
+	public foreignKeyForRelationshipField?(field: FieldMetadata, dataEntity: D) {
+		const value = dataEntity[field.name as keyof D];
+
+		if (Reference.isReference(value)) {
+			const { properties } = this.database.em.getMetadata().get(this.entityType);
+			const property = properties[field.name];
+			const [primaryKey] = property.targetMeta?.primaryKeys ?? [];
+			if (!primaryKey) {
+				throw new Error(
+					`Could not determine primary key for ${field.name} on ${this.entityType.name}`
+				);
+			}
+
+			const foreignKey = (value.unwrap() as any)[primaryKey];
+			if (foreignKey === undefined || foreignKey === null) {
+				throw new Error(
+					`Could not read foreign key from reference: ${value.unwrap()} with primary key name ${primaryKey}`
+				);
+			}
+
+			return foreignKey;
+		}
+
+		return null;
 	}
 
 	public get plugins(): ApolloServerPlugin<BaseContext>[] {

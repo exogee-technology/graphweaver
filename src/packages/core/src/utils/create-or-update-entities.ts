@@ -31,7 +31,7 @@ const isLinking = <G = unknown, D = unknown>(
 };
 
 // Used to check if we have only {id: ''} object
-const isPrimaryKeyOnly = <G = unknown, D = unknown>(
+export const isPrimaryKeyOnly = <G = unknown, D = unknown>(
 	entity: EntityMetadata<G, D>,
 	node: Partial<G>
 ) => {

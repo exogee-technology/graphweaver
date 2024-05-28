@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Album } from './album';
 import { Genre } from './genre';
@@ -11,9 +11,7 @@ import { connection } from '../database';
 @Entity('Track', {
 	provider: new MikroBackendProvider(OrmTrack, connection),
 })
-export class Track extends GraphQLEntity<OrmTrack> {
-	public dataEntity!: OrmTrack;
-
+export class Track {
 	@Field(() => ID, { primaryKeyField: true })
 	trackId!: number;
 
@@ -21,18 +19,18 @@ export class Track extends GraphQLEntity<OrmTrack> {
 	name!: string;
 
 	@RelationshipField<Track>(() => Album, {
-		id: (entity) => entity.album?.unwrap().albumId,
+		id: (entity) => entity.album?.albumId,
 		nullable: true,
 	})
 	album?: Album;
 
 	@RelationshipField<Track>(() => MediaType, {
-		id: (entity) => entity.mediaType?.unwrap().mediaTypeId,
+		id: (entity) => entity.mediaType?.mediaTypeId,
 	})
 	mediaType!: MediaType;
 
 	@RelationshipField<Track>(() => Genre, {
-		id: (entity) => entity.genre?.unwrap().genreId,
+		id: (entity) => entity.genre?.genreId,
 		nullable: true,
 	})
 	genre?: Genre;

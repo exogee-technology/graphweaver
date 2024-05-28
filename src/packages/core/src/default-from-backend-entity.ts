@@ -47,7 +47,14 @@ const defaultFromBackendEntity = <G, D>(entityMetadata: EntityMetadata<G, D>, da
 		const fieldTypeMetadata = graphweaverMetadata.metadataForType(field.getType());
 
 		// We don't want to copy relationships.
-		if (!isEntityMetadata(fieldTypeMetadata)) {
+		if (isEntityMetadata(fieldTypeMetadata)) {
+			if (field.relationshipInfo?.id) {
+				// In this scenario we own the foreign key. We need to grab it and set it as an entity placeholder so that
+				// relationship field ID functions can work.
+				const id = entityMetadata.provider?.foreignKeyForRelationshipField?.(field, dataEntity);
+				entity[field.name as keyof G] = { [fieldTypeMetadata.primaryKeyField ?? 'id']: id } as any;
+			}
+		} else {
 			const dataField = dataEntity?.[fields[i].name as keyof D];
 
 			if (typeof dataField !== 'undefined' && typeof entity[field.name as keyof G] !== 'function') {
