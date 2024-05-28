@@ -795,14 +795,14 @@ importers:
         specifier: 5.12.0
         version: 5.12.0(rollup@4.18.0)
       serverless:
-        specifier: 3.38.0
-        version: 3.38.0(encoding@0.1.13)
+        specifier: 4.0.24
+        version: 4.0.24
       serverless-dotenv-plugin:
         specifier: 6.0.0
-        version: 6.0.0(serverless@3.38.0(encoding@0.1.13))
+        version: 6.0.0(serverless@4.0.24)
       serverless-offline:
         specifier: 13.6.0
-        version: 13.6.0(serverless@3.38.0(encoding@0.1.13))
+        version: 13.6.0(serverless@4.0.24)
       vite:
         specifier: 5.2.11
         version: 5.2.11(@types/node@20.12.12)(lightningcss@1.25.1)
@@ -1030,12 +1030,6 @@ importers:
       pg:
         specifier: 8.11.5
         version: 8.11.5
-      serverless:
-        specifier: 3.38.0
-        version: 3.38.0(encoding@0.1.13)
-      serverless-offline:
-        specifier: 13.6.0
-        version: 13.6.0(serverless@3.38.0(encoding@0.1.13))
       supertest-graphql:
         specifier: 1.1.4
         version: 1.1.4(graphql@16.8.1)
@@ -4702,6 +4696,9 @@ packages:
   aws-sdk@2.1628.0:
     resolution: {integrity: sha512-mUjvITHmV46JbCTQR8TovWzJEHZtbC9cTRySXyuIuuYQNjA2RrbfqLXXKR/xru+vPFKnfTLw+QQ/BC2l1/Ln5g==}
     engines: {node: '>= 10.0.0'}
+
+  axios-proxy-builder@0.1.2:
+    resolution: {integrity: sha512-6uBVsBZzkB3tCC8iyx59mCjQckhB8+GQrI9Cop8eC7ybIsvs/KtnNgEBfRMSEa7GqK2VBGUzgjNYMdPIfotyPA==}
 
   axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
@@ -8832,6 +8829,11 @@ packages:
     engines: {node: '>=12.0'}
     hasBin: true
 
+  serverless@4.0.24:
+    resolution: {integrity: sha512-TuDhJ27kQalHDTR78wreR5fuWiMzwbaMXFrpfvJXdSeUsFQ2OQU+OaH3p/zlJlPdCg9tKald/OeA8sJ/wK7byw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
 
@@ -9361,6 +9363,10 @@ packages:
 
   tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
+
+  tunnel@0.0.6:
+    resolution: {integrity: sha512-1h/Lnq9yajKY2PEbBadPXj3VxsDDu844OnaAo52UVmIzIvwwtBPIuNvkjuzBlTWpfJyUbG3ez0KSBibQkj4ojg==}
+    engines: {node: '>=0.6.11 <=0.7.0 || >=0.7.3'}
 
   turbo-darwin-64@1.13.3:
     resolution: {integrity: sha512-glup8Qx1qEFB5jerAnXbS8WrL92OKyMmg5Hnd4PleLljAeYmx+cmmnsmLT7tpaVZIN58EAAwu8wHC6kIIqhbWA==}
@@ -15583,6 +15589,10 @@ snapshots:
       uuid: 8.0.0
       xml2js: 0.6.2
 
+  axios-proxy-builder@0.1.2:
+    dependencies:
+      tunnel: 0.0.6
+
   axios@1.7.2:
     dependencies:
       follow-redirects: 1.15.6
@@ -15823,7 +15833,7 @@ snapshots:
   buffer@4.9.2:
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
 
   buffer@5.7.1:
@@ -20553,6 +20563,13 @@ snapshots:
       dotenv-expand: 10.0.0
       serverless: 3.38.0(encoding@0.1.13)
 
+  serverless-dotenv-plugin@6.0.0(serverless@4.0.24):
+    dependencies:
+      chalk: 4.1.2
+      dotenv: 16.4.5
+      dotenv-expand: 10.0.0
+      serverless: 4.0.24
+
   serverless-offline@13.3.3(encoding@0.1.13)(serverless@3.38.0(encoding@0.1.13)):
     dependencies:
       '@aws-sdk/client-lambda': 3.583.0
@@ -20587,7 +20604,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  serverless-offline@13.6.0(serverless@3.38.0(encoding@0.1.13)):
+  serverless-offline@13.6.0(serverless@4.0.24):
     dependencies:
       '@aws-sdk/client-lambda': 3.583.0
       '@hapi/boom': 10.0.1
@@ -20609,7 +20626,7 @@ snapshots:
       luxon: 3.4.4
       node-schedule: 2.1.1
       p-memoize: 7.1.1
-      serverless: 3.38.0(encoding@0.1.13)
+      serverless: 4.0.24
       velocityjs: 2.0.6
       ws: 8.17.0
     transitivePeerDependencies:
@@ -20682,6 +20699,14 @@ snapshots:
       - debug
       - encoding
       - utf-8-validate
+
+  serverless@4.0.24:
+    dependencies:
+      axios: 1.7.2
+      axios-proxy-builder: 0.1.2
+      rimraf: 5.0.5
+    transitivePeerDependencies:
+      - debug
 
   set-blocking@2.0.0: {}
 
@@ -21268,6 +21293,8 @@ snapshots:
   tunnel-agent@0.6.0:
     dependencies:
       safe-buffer: 5.2.1
+
+  tunnel@0.0.6: {}
 
   turbo-darwin-64@1.13.3:
     optional: true
