@@ -134,15 +134,12 @@ const generatePermissionListFromFields = <G>(
 	const permissionsList: RequiredPermission[] = [`${entityMetadata.name}:${AccessType.Read}`];
 
 	for (const fields of Object.values(requestedFields.fieldsByTypeName)) {
-		for (const [fieldName, fieldValue] of Object.entries(fields)) {
-			const fieldMetadata = entityMetadata.fields[fieldName];
-
-			if (fieldMetadata) {
-				const fieldType = fieldMetadata.getType();
-				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-				if (isEntityMetadata(fieldTypeMetadata)) {
-					permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
-				}
+		for (const fieldValue of Object.values(fields)) {
+			const fieldMetadata = entityMetadata.fields[fieldValue.name];
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+			if (isEntityMetadata(fieldTypeMetadata)) {
+				permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
 			}
 		}
 	}
@@ -177,16 +174,13 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	}
 
 	for (const fields of Object.values(resolveTree.fieldsByTypeName)) {
-		for (const [fieldName, value] of Object.entries(fields)) {
-			const fieldMetadata = entityMetadata.fields[fieldName];
+		for (const fieldValue of Object.values(fields)) {
+			const fieldMetadata = entityMetadata.fields[fieldValue.name];
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-			if (fieldMetadata) {
-				const fieldType = fieldMetadata.getType();
-				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-
-				if (isEntityMetadata(fieldTypeMetadata)) {
-					getFilterArgumentsOnFields(fieldTypeMetadata, value);
-				}
+			if (isEntityMetadata(fieldTypeMetadata)) {
+				getFilterArgumentsOnFields(fieldTypeMetadata, fieldValue);
 			}
 		}
 	}
