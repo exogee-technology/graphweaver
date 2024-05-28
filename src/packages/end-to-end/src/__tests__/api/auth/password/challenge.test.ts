@@ -42,7 +42,7 @@ class Task {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Task, Tag>(() => [Tag], { relatedField: 'tasks' })
+	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
 	tags!: Tag[];
 }
 
@@ -56,7 +56,7 @@ class Tag {
 	@Field(() => String)
 	name!: string;
 
-	@RelationshipField<Tag, Task>(() => [Task], { relatedField: 'tags' })
+	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
 	tasks!: Task[];
 }
 
