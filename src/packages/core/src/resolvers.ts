@@ -23,13 +23,16 @@ import {
 	graphweaverMetadata,
 	hookManagerMap,
 	isEntityMetadata,
-	isPrimaryKeyOnly,
 	isTransformableGraphQLEntityClass,
 } from '.';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
-import { fromBackendEntity } from './default-from-backend-entity';
+import {
+	WithDataEntity,
+	dataEntityForGraphQLEntity,
+	fromBackendEntity,
+} from './default-from-backend-entity';
 
 export const baseResolver = (resolver: Resolver) => {
 	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
@@ -374,7 +377,11 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
-	const idValue = !id ? undefined : typeof id === 'function' ? id(source) : (source as any)[id];
+	const idValue = !id
+		? undefined
+		: typeof id === 'function'
+			? id(dataEntityForGraphQLEntity<G, D>(source as any))
+			: (source as any)[id];
 
 	if (typeof existingData === 'undefined' && !idValue && !field.relationshipInfo?.relatedField) {
 		// id is null and we are loading a single instance so let's return null
@@ -423,10 +430,7 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
 
-	if (
-		typeof existingData !== 'undefined' &&
-		!isPrimaryKeyOnly(relatedEntityMetadata, existingData as Partial<R>)
-	) {
+	if (typeof existingData !== 'undefined') {
 		logger.trace({ existingData }, 'Existing data found, returning.');
 
 		const entities = [existingData].flat();

@@ -53,14 +53,12 @@ const connection = {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
 })
 export class Album {
-	constructor(public dataEntity: OrmAlbum) {
-		this.id = dataEntity.id;
-	}
-
 	@Field(() => ID)
 	id!: number;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
+	@RelationshipField<OrmAlbum>(() => Artist, {
+		id: (entity) => entity.artist?.unwrap().id,
+	})
 	renamed_artist!: Artist;
 }
 
@@ -68,19 +66,11 @@ export class Album {
 	provider: new MikroBackendProvider(OrmArtist, connection),
 })
 export class Artist {
-	constructor(public dataEntity: OrmArtist) {
-		this.id = dataEntity.id;
-	}
-
 	@Field(() => ID)
 	id!: number;
 
 	@RelationshipField<Album>(() => [Album], { relatedField: 'renamed_artist' })
 	renamed_albums!: Album[];
-
-	static fromBackendEntity(entity: OrmArtist) {
-		return new Artist(entity);
-	}
 }
 
 describe('RelationshipField', () => {

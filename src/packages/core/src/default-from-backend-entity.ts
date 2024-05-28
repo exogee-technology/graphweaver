@@ -5,6 +5,15 @@ import {
 	isTransformableGraphQLEntityClass,
 } from '.';
 
+const dataEntityPropertyKey = Symbol('dataEntity');
+
+export interface WithDataEntity<D> {
+	[dataEntityPropertyKey]: D;
+}
+
+export const dataEntityForGraphQLEntity = <G, D>(entity: G & WithDataEntity<D>): D =>
+	entity[dataEntityPropertyKey];
+
 // Covert the data entity from the backend to the GraphQL entity
 export const fromBackendEntity = <G = unknown, D = unknown>(
 	entityMetadata: EntityMetadata<G, D>,
@@ -21,7 +30,7 @@ export const fromBackendEntity = <G = unknown, D = unknown>(
 		entity = entityMetadata.target.fromBackendEntity(dataEntity);
 	} else if (
 		entityMetadata.provider &&
-		// @ts-expect-error We know that G and D have no overlap here from a type theory, but they are sometimes the same class
+		// @ts-expect-error We know that G and D have no overlap here from a type theory perspective, but they are sometimes the same class
 		// and that is what we're checking for. This comparison is intentional.
 		entityMetadata.target !== entityMetadata.provider.entityType
 	) {
@@ -29,6 +38,10 @@ export const fromBackendEntity = <G = unknown, D = unknown>(
 		// but haven't implemented fromBackendEntity, we'll copy across for them.
 		entity = defaultFromBackendEntity<G, D>(entityMetadata, dataEntity) as G;
 	}
+
+	// Always tag on the original data entity in a hidden way so that we can read it from
+	// resolvers and access it later.
+	(entity as WithDataEntity<D>)[dataEntityPropertyKey] = dataEntity;
 
 	return entity;
 };
@@ -47,14 +60,7 @@ const defaultFromBackendEntity = <G, D>(entityMetadata: EntityMetadata<G, D>, da
 		const fieldTypeMetadata = graphweaverMetadata.metadataForType(field.getType());
 
 		// We don't want to copy relationships.
-		if (isEntityMetadata(fieldTypeMetadata)) {
-			if (field.relationshipInfo?.id) {
-				// In this scenario we own the foreign key. We need to grab it and set it as an entity placeholder so that
-				// relationship field ID functions can work.
-				const id = entityMetadata.provider?.foreignKeyForRelationshipField?.(field, dataEntity);
-				entity[field.name as keyof G] = { [fieldTypeMetadata.primaryKeyField ?? 'id']: id } as any;
-			}
-		} else {
+		if (!isEntityMetadata(fieldTypeMetadata)) {
 			const dataField = dataEntity?.[fields[i].name as keyof D];
 
 			if (typeof dataField !== 'undefined' && typeof entity[field.name as keyof G] !== 'function') {

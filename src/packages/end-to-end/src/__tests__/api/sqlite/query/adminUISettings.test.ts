@@ -79,7 +79,7 @@ export class Album {
 	@Field(() => String)
 	title!: string;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id })
+	@RelationshipField<OrmAlbum>(() => Artist, { id: (entity) => entity.artist?.id })
 	artist!: Artist;
 }
 
