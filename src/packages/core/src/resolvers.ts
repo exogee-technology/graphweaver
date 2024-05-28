@@ -28,11 +28,7 @@ import {
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
-import {
-	WithDataEntity,
-	dataEntityForGraphQLEntity,
-	fromBackendEntity,
-} from './default-from-backend-entity';
+import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
 
 export const baseResolver = (resolver: Resolver) => {
 	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
