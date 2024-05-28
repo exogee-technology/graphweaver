@@ -9,8 +9,8 @@ import {
 	OneToMany,
 	PrimaryKey,
 } from '@mikro-orm/core';
-import { Field, GraphQLEntity, ID, Entity, RelationshipField } from '@exogee/graphweaver';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { resetDatabase } from '../../../../utils';
 
@@ -18,7 +18,7 @@ import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
 @DataEntity({ tableName: 'Album' })
-class OrmAlbum extends BaseEntity {
+class OrmAlbum {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
 
@@ -32,7 +32,7 @@ class OrmAlbum extends BaseEntity {
 }
 
 @DataEntity({ tableName: 'Artist' })
-class OrmArtist extends BaseEntity {
+class OrmArtist {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	id!: number;
 
@@ -52,8 +52,10 @@ const connection = {
 @Entity('Album', {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
 })
-export class Album extends GraphQLEntity<OrmAlbum> {
-	public dataEntity!: OrmAlbum;
+export class Album {
+	constructor(public dataEntity: OrmAlbum) {
+		this.id = dataEntity.id;
+	}
 
 	@Field(() => ID)
 	id!: number;
@@ -65,14 +67,20 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 @Entity('Artist', {
 	provider: new MikroBackendProvider(OrmArtist, connection),
 })
-export class Artist extends GraphQLEntity<OrmArtist> {
-	public dataEntity!: OrmArtist;
+export class Artist {
+	constructor(public dataEntity: OrmArtist) {
+		this.id = dataEntity.id;
+	}
 
 	@Field(() => ID)
 	id!: number;
 
-	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	@RelationshipField<Album>(() => [Album], { relatedField: 'renamed_artist' })
 	renamed_albums!: Album[];
+
+	static fromBackendEntity(entity: OrmArtist) {
+		return new Artist(entity);
+	}
 }
 
 describe('RelationshipField', () => {

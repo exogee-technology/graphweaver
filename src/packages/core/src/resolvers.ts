@@ -28,6 +28,7 @@ import {
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
+import { fromBackendEntity } from './default-from-backend-entity';
 
 export const baseResolver = (resolver: Resolver) => {
 	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
@@ -76,12 +77,8 @@ export const getOne = async <G>({ args: { id }, context, fields, info }: Resolve
 	if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
 
 	let result = await entity.provider.findOne(hookParams.args.filter);
-	const gqlEntityType = entity.target as any;
 
-	// If there's a fromBackendEntity function on the entity, go ahead and run it.
-	if (result && gqlEntityType.fromBackendEntity) {
-		result = gqlEntityType.fromBackendEntity.call(gqlEntityType, result);
-	}
+	result = fromBackendEntity(entity, result);
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
@@ -148,20 +145,7 @@ export const list = async <G, D>({
 	});
 	logger.trace({ result }, 'Got result');
 
-	// If there's a fromBackendEntity function on the entity, go ahead and run it.
-	const entityClass = entity.target;
-	if (isTransformableGraphQLEntityClass(entityClass) && entityClass.fromBackendEntity) {
-		logger.trace(
-			{ entityName: entity.target.name },
-			'Entity implements fromBackendEntity, converting'
-		);
-
-		result = result.map((resultEntry) =>
-			entityClass.fromBackendEntity!.call(entityClass, resultEntry)
-		);
-
-		logger.trace({ result }, 'Converted entities');
-	}
+	result = result.map((resultRow) => fromBackendEntity(entity, resultRow));
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
@@ -479,14 +463,9 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 		dataEntities = [dataEntity];
 	}
 
-	let entities = dataEntities;
-	if ('fromBackendEntity' in gqlEntityType) {
-		logger.trace('Running fromBackendEntity on result');
-
-		entities = dataEntities?.map((dataEntity) =>
-			(gqlEntityType as any).fromBackendEntity(dataEntity)
-		);
-	}
+	const entities = dataEntities?.map((dataEntity) =>
+		fromBackendEntity(relatedEntityMetadata, dataEntity)
+	);
 
 	logger.trace('Running after read hooks');
 	const { entities: hookEntities = [] } = hookManager

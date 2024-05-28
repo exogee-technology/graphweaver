@@ -2,15 +2,15 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Field, ID, Entity } from '@exogee/graphweaver';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
 @DataEntity({ tableName: 'Customer' })
-export class OrmCustomer extends BaseEntity {
+export class OrmCustomer {
 	@PrimaryKey({ fieldName: 'CustomerId', type: 'number' })
 	id!: number;
 
@@ -60,7 +60,7 @@ const connection = {
 @Entity('Customer', {
 	provider: new MikroBackendProvider(OrmCustomer, connection),
 })
-export class Customer extends GraphQLEntity<OrmCustomer> {
+export class Customer {
 	public dataEntity!: OrmCustomer;
 
 	@Field(() => ID)

@@ -12,11 +12,11 @@ type RelationshipFieldOptions<D> = {
 	};
 };
 
-export function RelationshipField<G = unknown, D = unknown>(
+export function RelationshipField<RelatedType = unknown>(
 	returnTypeFunc: GetTypeFunction,
-	{ relatedField, id, nullable = false, adminUIOptions }: RelationshipFieldOptions<D>
+	{ relatedField, id, nullable = false, adminUIOptions }: RelationshipFieldOptions<RelatedType>
 ) {
-	return (target: G, key: string) => {
+	return (target: unknown, key: string) => {
 		if (!id && !relatedField)
 			throw new Error(
 				`Implementation Error: You must specify either an ID or a related field and neither was specified.`
@@ -26,7 +26,7 @@ export function RelationshipField<G = unknown, D = unknown>(
 			name: key,
 			getType: returnTypeFunc,
 			nullable,
-			target: target as { new (...args: any[]): G },
+			target: target as new (...args: any[]) => unknown,
 			relationshipInfo: {
 				relatedField,
 				id,

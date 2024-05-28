@@ -15,6 +15,7 @@ import {
 } from '..';
 import { graphweaverMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
+import { fromBackendEntity } from '../default-from-backend-entity';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -59,22 +60,6 @@ const runChildCreateOrUpdate = <G = unknown>(
 		info: infoFacade as GraphQLResolveInfo,
 		fields: {} as ResolveTree, // @todo: What should this be?
 	});
-};
-
-// Covert the data entity from the backend to the GraphQL entity
-const fromBackendEntity = <G = unknown, D = unknown>(
-	dataEntity: D,
-	gqlEntityType: { new (...args: any[]): G }
-) => {
-	// By default we just cast for performance, but if you want or need to override this behaviour so you can transform the fields
-	// on the way through from D to G, no worries, implement fromBackendEntity on your entity class and we'll call it.
-	let entity = dataEntity as unknown as G;
-
-	if (isTransformableGraphQLEntityClass<G, D>(gqlEntityType) && gqlEntityType.fromBackendEntity) {
-		entity = gqlEntityType.fromBackendEntity(dataEntity);
-	}
-
-	return entity;
 };
 
 export const createOrUpdateEntities = async <G = unknown, D = unknown>(
@@ -136,7 +121,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 								? meta.target.toBackendEntity(node)
 								: (node as unknown as D);
 						const parentDataEntity = await meta.provider.createOne(backendEntity);
-						parent = fromBackendEntity(parentDataEntity, meta.target);
+						parent = fromBackendEntity(meta, parentDataEntity);
 						parentId = parent?.[primaryKeyField];
 					}
 
@@ -199,7 +184,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					? meta.target.toBackendEntity(node)
 					: (node as unknown as Partial<D>)
 			);
-			return fromBackendEntity(result, meta.target);
+			return fromBackendEntity(meta, result);
 		} else {
 			// If it's an object without an ID, create a new entity
 			const result = await meta.provider.createOne(
@@ -208,7 +193,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					: (node as unknown as Partial<D>)
 			);
 
-			return fromBackendEntity(result, meta.target);
+			return fromBackendEntity(meta, result);
 		}
 	}
 

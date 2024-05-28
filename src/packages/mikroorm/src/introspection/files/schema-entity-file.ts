@@ -37,13 +37,13 @@ export class SchemaEntityFile extends BaseFile {
 
 	generate(): string {
 		const enumDefinitions: string[] = [];
-		let classBody = '\n';
+		let classBody = '';
 		const props = Object.values(this.meta.properties);
 		props.forEach((prop) => {
 			const decorator = this.getPropertyDecorator(prop);
 			const definition = this.getPropertyDefinition(prop);
 
-			if (!classBody.endsWith('\n\n')) {
+			if (classBody && !classBody.endsWith('\n\n')) {
 				classBody += '\n';
 			}
 
@@ -258,7 +258,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 		const [primaryKey] = relatedEntity.getPrimaryProps();
 
-		options.id = `(entity) => entity.${prop.name}?.unwrap().${primaryKey.name}`;
+		options.id = `(entity) => entity.${prop.name}?.${primaryKey.name}`;
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {

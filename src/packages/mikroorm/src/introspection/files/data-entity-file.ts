@@ -89,7 +89,6 @@ export class DataEntityFile extends BaseFile {
 		this.coreImports.add('Entity');
 		const imports = [
 			`import { ${[...this.coreImports].sort().join(', ')} } from '@mikro-orm/core';`,
-			`import { BaseEntity } from '@exogee/graphweaver-mikroorm';`,
 		];
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
@@ -102,7 +101,7 @@ export class DataEntityFile extends BaseFile {
 		}
 
 		file += `@Entity(${this.getCollectionDecl()})\n`;
-		file += `export class ${this.meta.className} extends BaseEntity {`;
+		file += `export class ${this.meta.className} {`;
 
 		file += `${classBody}}\n`;
 
