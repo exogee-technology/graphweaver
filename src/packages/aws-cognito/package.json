@@ -24,7 +24,7 @@
 	"devDependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"esbuild": "0.20.2",
-		"glob": "10.3.12",
+		"glob": "10.4.1",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
 		"prettier": "3.2.5",

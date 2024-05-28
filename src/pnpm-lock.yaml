@@ -455,8 +455,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.20.2)(typescript@5.4.5)
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -534,8 +534,8 @@ importers:
         specifier: 2.4.6
         version: 2.4.6(react@18.3.1)
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -628,8 +628,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -689,8 +689,8 @@ importers:
         specifier: 2.1.0
         version: 2.1.0(esbuild@0.20.2)(typescript@5.4.5)
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -732,8 +732,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       graphql-type-json:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.8.1)
@@ -786,8 +786,8 @@ importers:
         specifier: 3.1.2
         version: 3.1.2(esbuild@0.20.2)
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -949,8 +949,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1068,8 +1068,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1093,8 +1093,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1155,8 +1155,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.12.12)(typescript@5.4.5)
@@ -1207,8 +1207,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.10
-        version: 10.3.10
+        specifier: 10.4.1
+        version: 10.4.1
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -1238,8 +1238,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1299,8 +1299,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
 
   packages/storage-provider:
     dependencies:
@@ -1324,8 +1324,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1343,8 +1343,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1383,8 +1383,8 @@ importers:
         specifier: 0.20.2
         version: 0.20.2
       glob:
-        specifier: 10.3.12
-        version: 10.3.12
+        specifier: 10.4.1
+        version: 10.4.1
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -11157,25 +11157,13 @@ packages:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
     dev: false
 
-  /glob@10.3.10:
-    resolution: {integrity: sha512-fa46+tv1Ak0UPK1TOy/pZrIybNNt4HCv7SDzwyfiOZkvZLEbjsZkJBPtDHVshZjbecAoAGSC20MjLDG/qr679g==}
-    engines: {node: '>=16 || 14 >=14.17'}
+  /glob@10.4.1:
+    resolution: {integrity: sha512-2jelhlq3E4ho74ZyVLN03oKdAZVUa6UDZzFLVH1H7dnoax+y9qyaq8zBkfDIggjniU19z0wU18y16jMB2eyVIw==}
+    engines: {node: '>=16 || 14 >=14.18'}
     hasBin: true
     dependencies:
       foreground-child: 3.1.1
-      jackspeak: 2.3.6
-      minimatch: 9.0.4
-      minipass: 7.1.2
-      path-scurry: 1.11.1
-    dev: true
-
-  /glob@10.3.12:
-    resolution: {integrity: sha512-TCNv8vJ+xz4QiqTpfOJA7HvYv+tNIRHKfUWw/q+v2jdgN4ebz+KY9tGx5J4rHP0o84mNP+ApH66HRX8us3Khqg==}
-    engines: {node: '>=16 || 14 >=14.17'}
-    hasBin: true
-    dependencies:
-      foreground-child: 3.1.1
-      jackspeak: 2.3.6
+      jackspeak: 3.1.2
       minimatch: 9.0.4
       minipass: 7.1.2
       path-scurry: 1.11.1
@@ -12165,8 +12153,8 @@ packages:
     resolution: {integrity: sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==}
     dev: true
 
-  /jackspeak@2.3.6:
-    resolution: {integrity: sha512-N3yCS/NegsOBokc8GAdM8UcmfsKiSS8cipheD/nivzr700H+nsMOxJjQnvwOcRYVuFkdH0wGUvW2WbXGmrZGbQ==}
+  /jackspeak@3.1.2:
+    resolution: {integrity: sha512-kWmLKn2tRtfYMF/BakihVVRzBKOxz4gJMiL2Rj91WnAB5TPZumSH99R/Yf1qE1u4uRimvCSJfm6hnxohXeEXjQ==}
     engines: {node: '>=14'}
     dependencies:
       '@isaacs/cliui': 8.0.2
@@ -15042,7 +15030,7 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.3.12
+      glob: 10.4.1
 
   /ripemd160@2.0.2:
     resolution: {integrity: sha512-ii4iagi25WusVoiC4B4lq7pbXfAp3D9v5CwfkY33vffw2+pkDjY1D8GaN7spsxvCSx8dkPqOZCEZyfxcmJG2IA==}
