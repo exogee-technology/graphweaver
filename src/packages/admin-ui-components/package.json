@@ -50,7 +50,7 @@
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.4.2",
 		"@types/papaparse": "5.3.14",
-		"@types/react": "18.3.2",
+		"@types/react": "18.3.3",
 		"esbuild": "0.20.2",
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "2.1.0",
