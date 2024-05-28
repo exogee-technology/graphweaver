@@ -31,7 +31,7 @@ export class Album {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Album, Artist>(() => Artist, {
+	@RelationshipField<Artist>(() => Artist, {
 		id: (artist) => artist?.id,
 		nullable: true,
 	})
@@ -57,7 +57,7 @@ export class Artist {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Artist, Album>(() => [Album], { relatedField: 'artist' })
+	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
 }
 
