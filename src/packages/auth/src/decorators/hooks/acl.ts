@@ -180,7 +180,7 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
 			if (isEntityMetadata(fieldTypeMetadata)) {
-				getFilterArgumentsOnFields(fieldTypeMetadata, fieldValue);
+				permissionsList.push(...getFilterArgumentsOnFields(fieldTypeMetadata, fieldValue));
 			}
 		}
 	}
