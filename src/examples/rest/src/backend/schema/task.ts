@@ -1,7 +1,6 @@
 import {
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
-	GraphQLEntity,
 	Hook,
 	HookRegister,
 	ReadHookParams,
@@ -84,9 +83,7 @@ export const preventLightSideAccess = (
 		summaryField: 'description',
 	},
 })
-export class Task extends GraphQLEntity<OrmTask> {
-	public dataEntity!: OrmTask;
-
+export class Task {
 	@Field(() => ID)
 	id!: string;
 
@@ -96,7 +93,7 @@ export class Task extends GraphQLEntity<OrmTask> {
 	@Field(() => Boolean)
 	isCompleted!: boolean;
 
-	@RelationshipField<Task>(() => User, { id: 'userId' })
+	@RelationshipField<OrmTask>(() => User, { id: 'userId' })
 	user!: User;
 
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })

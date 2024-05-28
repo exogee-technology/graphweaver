@@ -7,7 +7,7 @@ import {
 	Collection,
 	Enum,
 } from '@mikro-orm/core';
-import { BaseEntity, ExternalIdField } from '@exogee/graphweaver-mikroorm';
+import { ExternalIdField } from '@exogee/graphweaver-mikroorm';
 
 import { Tag } from './tag';
 
@@ -18,7 +18,7 @@ export enum Priority {
 }
 
 @Entity()
-export class Task extends BaseEntity {
+export class Task {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

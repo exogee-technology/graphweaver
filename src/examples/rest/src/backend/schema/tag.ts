@@ -1,4 +1,4 @@
-import { GraphQLEntity, RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
+import { RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -33,9 +33,7 @@ const acl: AccessControlList<Tag, AuthorizationContext> = {
 @Entity('Tag', {
 	provider: new MikroBackendProvider(OrmTag, myConnection),
 })
-export class Tag extends GraphQLEntity<OrmTag> {
-	public dataEntity!: OrmTag;
-
+export class Tag {
 	@Field(() => ID)
 	id!: string;
 
