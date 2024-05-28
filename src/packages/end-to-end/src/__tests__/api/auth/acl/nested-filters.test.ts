@@ -57,10 +57,10 @@ export class Album {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Album, Track>(() => [Track], { relatedField: 'album' })
+	@RelationshipField<Track>(() => [Track], { relatedField: 'album' })
 	tracks!: Track[];
 
-	@RelationshipField<Album, Artist>(() => Artist, { relatedField: 'albums' })
+	@RelationshipField<Artist>(() => Artist, { relatedField: 'albums' })
 	artist!: Artist;
 }
 
@@ -83,7 +83,7 @@ export class Artist {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Artist, Album>(() => [Album], { relatedField: 'artist' })
+	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
 	albums!: Album[];
 }
 
@@ -101,7 +101,7 @@ export class Track {
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Track, Album>(() => Album, { relatedField: 'tracks' })
+	@RelationshipField<Album>(() => Album, { relatedField: 'tracks' })
 	album!: Album;
 }
 
