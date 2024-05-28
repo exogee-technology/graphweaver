@@ -136,10 +136,13 @@ const generatePermissionListFromFields = <G>(
 	for (const fields of Object.values(requestedFields.fieldsByTypeName)) {
 		for (const [fieldName, fieldValue] of Object.entries(fields)) {
 			const fieldMetadata = entityMetadata.fields[fieldName];
-			const fieldType = fieldMetadata.getType();
-			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-			if (isEntityMetadata(fieldTypeMetadata)) {
-				permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
+
+			if (fieldMetadata) {
+				const fieldType = fieldMetadata.getType();
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+				if (isEntityMetadata(fieldTypeMetadata)) {
+					permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
+				}
 			}
 		}
 	}
@@ -176,10 +179,14 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	for (const fields of Object.values(resolveTree.fieldsByTypeName)) {
 		for (const [fieldName, value] of Object.entries(fields)) {
 			const fieldMetadata = entityMetadata.fields[fieldName];
-			const fieldType = fieldMetadata.getType();
-			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-			if (isEntityMetadata(fieldTypeMetadata)) {
-				getFilterArgumentsOnFields(fieldTypeMetadata, value);
+
+			if (fieldMetadata) {
+				const fieldType = fieldMetadata.getType();
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+
+				if (isEntityMetadata(fieldTypeMetadata)) {
+					getFilterArgumentsOnFields(fieldTypeMetadata, value);
+				}
 			}
 		}
 	}
