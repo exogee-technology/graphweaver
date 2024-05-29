@@ -416,6 +416,7 @@ export const DetailPanel = () => {
 				{ duration: 15000 }
 			);
 		} catch (error: unknown) {
+			console.error(error);
 			toast.error(String(error), {
 				duration: 5000,
 			});

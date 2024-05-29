@@ -76,6 +76,8 @@ export const ExportModal = ({
 
 			exportToCSV(selectedEntity.name, allResults);
 		} catch (error) {
+			console.error(error);
+
 			toast.error(String(error), {
 				duration: 5000,
 			});
