@@ -33,5 +33,8 @@ export const mapFormikValuesToGqlRequestValues = (
 		}
 	}
 
-	return result;
+	return {
+		...formValues, // There maybe keys in the form values that are needed for the mutation but are not part of the entity
+		...result, // The entity fields are added next to override any form values
+	};
 };

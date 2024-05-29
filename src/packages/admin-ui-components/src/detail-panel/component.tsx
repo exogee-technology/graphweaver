@@ -352,13 +352,13 @@ export const DetailPanel = () => {
 			let result: FetchResult;
 
 			// If the form values contains an deleteUrl, then do a seperate mutation to delete the file
-			if (formValues.deleteUrl) {
-				await deleteFileToSignedURL(formValues.deleteUrl);
+			if (values.deleteUrl) {
+				await deleteFileToSignedURL(values.deleteUrl);
 			}
 
 			// If the form values contain an image, then do seperate mutation to upload the image
-			if (formValues.uploadUrl && formValues.file) {
-				await uploadFileToSignedURL(formValues.uploadUrl, formValues.file);
+			if (values.uploadUrl && values.file) {
+				await uploadFileToSignedURL(values.uploadUrl, values.file);
 			}
 
 			// if urls and file are there, remove them
@@ -369,9 +369,7 @@ export const DetailPanel = () => {
 			if (panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				result = await updateEntity({
-					variables: {
-						input: values,
-					},
+					variables: values,
 				});
 			} else {
 				// Create a new entity
