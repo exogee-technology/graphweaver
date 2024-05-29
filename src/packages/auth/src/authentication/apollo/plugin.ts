@@ -152,7 +152,6 @@ export const authApolloPlugin = <R>(
 
 				const [key, secret] = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
 
-				// @ts-expect-error Key is definitely a valid filter on D. What is going on?
 				const apiKey = await options.apiKeyDataProvider?.findOne({
 					key,
 				});
