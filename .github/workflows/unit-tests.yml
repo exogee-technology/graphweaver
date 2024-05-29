@@ -37,6 +37,9 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
+      - name: Build CLI tool
+        run: pnpm build
+
       - name: Run all unit tests
         timeout-minutes: 2
         run: |
