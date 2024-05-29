@@ -353,12 +353,12 @@ export const DetailPanel = () => {
 
 			// If the form values contains an deleteUrl, then do a seperate mutation to delete the file
 			if (formValues.deleteUrl) {
-				await deleteFileToSignedURL(values.deleteUrl);
+				await deleteFileToSignedURL(formValues.deleteUrl);
 			}
 
 			// If the form values contain an image, then do seperate mutation to upload the image
 			if (formValues.uploadUrl && formValues.file) {
-				await uploadFileToSignedURL(values.uploadUrl, values.file);
+				await uploadFileToSignedURL(formValues.uploadUrl, formValues.file);
 			}
 
 			// if urls and file are there, remove them
