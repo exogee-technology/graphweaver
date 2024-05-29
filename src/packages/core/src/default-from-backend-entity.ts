@@ -16,9 +16,17 @@ export const dataEntityForGraphQLEntity = <G, D>(entity: G & WithDataEntity<D>):
 
 // Covert the data entity from the backend to the GraphQL entity
 export const fromBackendEntity = <G = unknown, D = unknown>(
-	entityMetadata: EntityMetadata<G, D>,
+	entityOrMetadata: EntityMetadata<G, D> | (new (...args: any[]) => G),
 	dataEntity: D
 ) => {
+	const entityMetadata = isEntityMetadata(entityOrMetadata)
+		? entityOrMetadata
+		: graphweaverMetadata.metadataForType(entityOrMetadata);
+
+	if (!isEntityMetadata<G, D>(entityMetadata)) {
+		throw new Error('Entity metadata not found for entity.');
+	}
+
 	// By default we just cast for performance, but if you want or need to override this behaviour so you can transform the fields
 	// on the way through from D to G, no worries, implement fromBackendEntity on your entity class and we'll call it.
 	let entity: G = dataEntity as unknown as G;
@@ -30,7 +38,7 @@ export const fromBackendEntity = <G = unknown, D = unknown>(
 		entity = entityMetadata.target.fromBackendEntity(dataEntity);
 	} else if (
 		entityMetadata.provider &&
-		// @ts-expect-error We know that G and D have no overlap here from a type theory perspective, but they are sometimes the same class
+		// We know that G and D have no overlap here from a type theory perspective, but they are sometimes the same class
 		// and that is what we're checking for. This comparison is intentional.
 		entityMetadata.target !== entityMetadata.provider.entityType
 	) {

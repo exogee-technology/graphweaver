@@ -78,7 +78,7 @@ export class ApiKey<R extends string[]> {
 		// Collect the provider information for the API Key entity
 		graphweaverMetadata.collectProviderInformationForEntity({
 			provider: this.provider,
-			target: ApiKey<R>,
+			target: ApiKeyEntity,
 		});
 
 		// Override the roles field for the API Key entity

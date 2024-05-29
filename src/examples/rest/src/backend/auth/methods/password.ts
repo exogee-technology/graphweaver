@@ -9,12 +9,13 @@ import {
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AccessControlList, AuthorizationContext } from '@exogee/graphweaver-auth';
-import { graphweaverMetadata, BaseLoaders } from '@exogee/graphweaver';
+import { graphweaverMetadata, BaseLoaders, fromBackendEntity } from '@exogee/graphweaver';
 
 import { User } from '../../schema/user';
 import { mapUserToProfile } from '../context';
 import { myConnection } from '../../database';
 import { Authentication, Credential as OrmCredential } from '../../entities/mysql';
+import { Roles } from '../roles';
 
 export const forgottenPassword = new ForgottenPassword({
 	provider: new MikroBackendProvider(Authentication<ForgottenPasswordLinkData>, myConnection),
@@ -35,8 +36,8 @@ export const forgottenPassword = new ForgottenPassword({
 	 * @param username fetch user details using a username
 	 * @returns return a UserProfile compatible entity
 	 */
-	getUser: async (username: string): Promise<UserProfile> => {
-		const provider = graphweaverMetadata.getEntityByName<Credential<OrmCredential>, OrmCredential>(
+	getUser: async (username: string): Promise<UserProfile<Roles>> => {
+		const provider = graphweaverMetadata.getEntityByName<Credential, OrmCredential>(
 			'Credential'
 		)?.provider;
 
@@ -51,7 +52,7 @@ export const forgottenPassword = new ForgottenPassword({
 	},
 });
 
-const acl: AccessControlList<Credential<CredentialStorage>, AuthorizationContext> = {
+const acl: AccessControlList<Credential, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		// Users can only perform read operations on their own credentials
 		read: (context) => ({ id: context.user?.id }),
@@ -66,8 +67,8 @@ export const password = new Password({
 	provider: new MikroBackendProvider(OrmCredential, myConnection),
 	acl,
 	// This is called when a user has logged in to get the profile
-	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile> => {
-		const user = User.fromBackendEntity(await BaseLoaders.loadOne({ gqlEntityType: User, id }));
+	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile<Roles>> => {
+		const user = fromBackendEntity(User, await BaseLoaders.loadOne({ gqlEntityType: User, id }));
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 
