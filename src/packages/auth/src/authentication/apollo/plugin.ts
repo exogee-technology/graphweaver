@@ -98,14 +98,14 @@ export const applyDefaultMetadataACL = () => {
 	}
 };
 
-type AuthApolloPluginOptions<D extends ApiKeyEntity<R>, R> = {
+type AuthApolloPluginOptions<R> = {
 	implicitAllow?: boolean;
-	apiKeyDataProvider?: BackendProvider<D>;
+	apiKeyDataProvider?: BackendProvider<ApiKeyEntity<R>>;
 };
 
-export const authApolloPlugin = <D extends ApiKeyEntity<R>, R>(
+export const authApolloPlugin = <R>(
 	addUserToContext: (userId: string) => Promise<UserProfile<R>>,
-	options?: AuthApolloPluginOptions<D, R>
+	options?: AuthApolloPluginOptions<R>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
