@@ -1242,7 +1242,7 @@ importers:
         version: 3.1.0(@apollo/server@4.10.4)
       '@escape.tech/graphql-armor':
         specifier: 3.0.0
-        version: 3.0.0(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.5.0)
+        version: 3.0.0(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1275,8 +1275,8 @@ importers:
         version: 2.0.6
     devDependencies:
       '@escape.tech/graphql-armor-types':
-        specifier: 0.5.0
-        version: 0.5.0
+        specifier: 0.6.0
+        version: 0.6.0
       '@types/graphql-deduplicator':
         specifier: 2.0.2
         version: 2.0.2
@@ -3412,20 +3412,13 @@ packages:
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
-  /@escape.tech/graphql-armor-types@0.5.0:
-    resolution: {integrity: sha512-a7KMhb1qVHFFWw4bvGYQI637YaIZRozbfc+Fj1Vv/pwnTCJOzOgnvKO8+WBXJsFFGJ2Kj+fRORmSpz7J+lJF1w==}
-    dependencies:
-      graphql: 16.8.1
-
   /@escape.tech/graphql-armor-types@0.6.0:
     resolution: {integrity: sha512-Y3X6JgkB1N1MMaHNXaE2IeJWIs6wT4XcPvXM8PRWmT2DblZfY4NYiV1mh0GTInKdlnrEr5hquOR9XV+M3Da43w==}
     requiresBuild: true
     dependencies:
       graphql: 16.8.1
-    dev: false
-    optional: true
 
-  /@escape.tech/graphql-armor@3.0.0(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.5.0):
+  /@escape.tech/graphql-armor@3.0.0(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0):
     resolution: {integrity: sha512-wI21VK7Hhfnw1Q6ulLE5/gi2/gNLmaM/xJKeVAlcZje70TUL8rhIi1POzOmj5kX53LnEdvHSY+24qJ/hcHN5MQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -3447,7 +3440,7 @@ packages:
       '@escape.tech/graphql-armor-max-depth': 2.3.0
       '@escape.tech/graphql-armor-max-directives': 2.2.0
       '@escape.tech/graphql-armor-max-tokens': 2.4.0
-      '@escape.tech/graphql-armor-types': 0.5.0
+      '@escape.tech/graphql-armor-types': 0.6.0
       graphql: 16.8.1
     dev: false
 
