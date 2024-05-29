@@ -4,8 +4,6 @@ import { CognitoUserBackendEntity } from './backend-entity';
 
 @Entity('CognitoUser')
 export class CognitoUser {
-	public dataEntity!: CognitoUserBackendEntity;
-
 	@Field(() => ID)
 	id!: string;
 
