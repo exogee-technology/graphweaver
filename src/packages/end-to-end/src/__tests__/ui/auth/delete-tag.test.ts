@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 
 import { config } from '../../../config';
 
