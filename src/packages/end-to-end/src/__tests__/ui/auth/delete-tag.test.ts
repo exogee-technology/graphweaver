@@ -25,7 +25,7 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 	await page.getByText('Delete selected rows').click();
 	await page.getByRole('button', { name: 'Delete' }).click();
 	// Wait for the delete to complete
-	const deleteToast = await page.getByText('rows deleted');
+	const deleteToast = await page.getByText('row deleted');
 	await expect(deleteToast).toHaveCount(1);
 
 	// Check that the item is removed from the table
