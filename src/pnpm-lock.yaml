@@ -786,8 +786,8 @@ importers:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.8.1)
       rimraf:
-        specifier: 5.0.5
-        version: 5.0.5
+        specifier: 5.0.7
+        version: 5.0.7
       rollup-plugin-visualizer:
         specifier: 5.12.0
         version: 5.12.0
@@ -7589,7 +7589,7 @@ packages:
     resolution: {integrity: sha512-DTCZoIQotB2SUJnYgrEx43cQIUYOlNZz0AZPbKU4PSLYTUdML5Gox0++z4F9kQocxStrCmRNhi4x5x/UlwtKUA==}
     deprecated: This is a stub types definition. rimraf provides its own type definitions, so you do not need this installed.
     dependencies:
-      rimraf: 5.0.5
+      rimraf: 5.0.7
     dev: true
 
   /@types/secp256k1@4.0.6:
@@ -14608,9 +14608,9 @@ packages:
     dependencies:
       glob: 7.2.3
 
-  /rimraf@5.0.5:
-    resolution: {integrity: sha512-CqDakW+hMe/Bz202FPEymy68P+G50RfMQK+Qo5YUqc9SPipvbGjCGKd0RSKEelbsfQuw3g5NZDSrlZZAJurH1A==}
-    engines: {node: '>=14'}
+  /rimraf@5.0.7:
+    resolution: {integrity: sha512-nV6YcJo5wbLW77m+8KjH8aB/7/rxQy9SZ0HY5shnwULfS+9nmTtVXAJET5NdZmCzA4fPI/Hm1wo/Po/4mopOdg==}
+    engines: {node: '>=14.18'}
     hasBin: true
     dependencies:
       glob: 10.4.1
@@ -14851,7 +14851,7 @@ packages:
     dependencies:
       axios: 1.7.2
       axios-proxy-builder: 0.1.2
-      rimraf: 5.0.5
+      rimraf: 5.0.7
     transitivePeerDependencies:
       - debug
     dev: false
