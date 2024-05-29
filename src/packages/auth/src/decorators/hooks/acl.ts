@@ -155,11 +155,21 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	const recurseThroughArg = (entityMetadata: EntityMetadata, filter: Filter<unknown>) => {
 		permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
 
-		for (const [fieldName, value] of Object.entries(filter)) {
-			const fieldMetadata = entityMetadata.fields[fieldName];
+		for (const [filterKey, value] of Object.entries(filter)) {
+			const fieldMetadata = graphweaverMetadata.fieldMetadataForFilterKey(
+				entityMetadata,
+				filterKey
+			);
+
+			if (!fieldMetadata) {
+				throw new Error(
+					`Could not determine field metadata for filter key: '${filterKey} on ${entityMetadata.name} entity'`
+				);
+			}
+
 			const fieldType = fieldMetadata.getType();
 			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-			if (isTopLevelFilterProperty(fieldName)) {
+			if (isTopLevelFilterProperty(filterKey)) {
 				value.forEach((item) => {
 					recurseThroughArg(entityMetadata, item);
 				});

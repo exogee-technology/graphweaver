@@ -1,4 +1,4 @@
-import { FieldOptions, GetTypeFunction } from '.';
+import { FieldOptions, GetTypeFunction, SchemaBuilder } from '.';
 import { BackendProvider, FieldMetadata, Filter, Resolver } from './types';
 import { logger } from '@exogee/logger';
 
@@ -435,6 +435,28 @@ class Metadata {
 
 	public primaryKeyFieldForEntity(entity: EntityMetadata<any, any>) {
 		return String(entity.primaryKeyField ?? 'id');
+	}
+
+	// While an entity might have a field called something like 'id', the filter will have keys
+	// like 'id_in'. This function can be used to look up the correct field metadata in these cases.
+	public fieldMetadataForFilterKey(
+		entity: EntityMetadata<any, any>,
+		filterKey: string
+	): FieldMetadata<any, any> | undefined {
+		// If it's a direct match, go ahead and bail for performance.
+		if (entity.fields[filterKey]) return entity.fields[filterKey];
+
+		// Ok, let's look it up by pulling the last `_` off the key and seeing if it matches a field.
+		const keyParts = filterKey.split('_');
+		const key = keyParts.slice(0, keyParts.length - 2).join('_');
+
+		// Let's validate that the filter operation is one we recognise.
+		if (SchemaBuilder.isValidFilterOperation(keyParts[keyParts.length - 1])) {
+			// Ok, that'll be the field name.
+			return entity.fields[key];
+		}
+
+		return undefined;
 	}
 
 	public addQuery(args: {

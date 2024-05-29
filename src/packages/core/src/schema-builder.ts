@@ -46,6 +46,12 @@ const arrayOperations = new Set(['in', 'nin']);
 const basicOperations = new Set(['ne', 'notnull', 'null']);
 const likeOperations = new Set(['like', 'ilike']);
 const mathOperations = new Set(['gt', 'gte', 'lt', 'lte']);
+const allOperations = new Set([
+	...arrayOperations,
+	...basicOperations,
+	...likeOperations,
+	...mathOperations,
+]);
 
 const entityTypes = new Map<string, GraphQLObjectType>();
 const inputTypes = new Map<string, GraphQLInputObjectType>();
@@ -528,6 +534,10 @@ class SchemaBuilderImplementation {
 
 	public print(args?: SchemaBuilderOptions) {
 		return printSchema(this.build(args));
+	}
+
+	public isValidFilterOperation(filterOperation: string) {
+		return allOperations.has(filterOperation);
 	}
 
 	private *buildTypes() {
