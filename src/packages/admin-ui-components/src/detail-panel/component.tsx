@@ -348,6 +348,8 @@ export const DetailPanel = () => {
 		// Format form values as GraphQL input parameters
 		const values = mapFormikValuesToGqlRequestValues(selectedEntity, entityByName, formValues);
 
+		console.log(formValues, values);
+
 		try {
 			let result: FetchResult;
 
@@ -369,7 +371,9 @@ export const DetailPanel = () => {
 			if (panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				result = await updateEntity({
-					variables: values,
+					variables: {
+						input: values,
+					},
 				});
 			} else {
 				// Create a new entity
