@@ -278,7 +278,10 @@ export const Table = <T extends TableRowItem>({
 			.then(() => {
 				toast.success(
 					<div className={styles.successToast}>
-						<div>Success</div> <div className={styles.deletedText}>Rows deleted</div>
+						<div>Success</div>
+						<div className={styles.deletedText}>
+							Row{selectedRows.size === 1 ? '' : 's'} deleted
+						</div>
 					</div>
 				);
 			})

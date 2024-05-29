@@ -32,7 +32,7 @@ export const SelectionBar = ({
 							items={[
 								{
 									id: 'delete-items',
-									name: 'Delete selected rows',
+									name: `Delete selected row${selectedRows.size === 1 ? '' : 's'}`,
 									onClick: handleDelete,
 									className: styles.deleteSelectedRows,
 								},
