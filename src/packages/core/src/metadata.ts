@@ -448,7 +448,7 @@ class Metadata {
 
 		// Ok, let's look it up by pulling the last `_` off the key and seeing if it matches a field.
 		const keyParts = filterKey.split('_');
-		const key = keyParts.slice(0, keyParts.length - 2).join('_');
+		const key = keyParts.slice(0, keyParts.length - 1).join('_');
 
 		// Let's validate that the filter operation is one we recognise.
 		if (SchemaBuilder.isValidFilterOperation(keyParts[keyParts.length - 1])) {
