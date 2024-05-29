@@ -1,4 +1,4 @@
-name: Auth End to End Tests
+name: Unit Tests
 
 on:
   pull_request:
@@ -40,16 +40,7 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
-      - name: Start and Test Auth
-        working-directory: src/packages/end-to-end
+      - name: Run all unit tests
         timeout-minutes: 2
         run: |
-          pnpm test-auth
-
-        env:
-          CI: true
-          AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
-          AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
-          AUTH_BASE_URI: "http://localhost:9000"
-          AUTH_WHITELIST_DOMAINS: "localhost"
-          AUTH_MAGIC_LINK_RATE_LIMIT: "500"
+          pnpm -r test

@@ -38,7 +38,9 @@ export enum AdminUIFilterType {
 	BOOLEAN = 'BOOLEAN',
 }
 
+// The 'string' case is another entity name
 export type EntityFieldType =
+	| string
 	| 'Boolean'
 	| 'custom'
 	| 'ID!'
@@ -46,7 +48,8 @@ export type EntityFieldType =
 	| 'JSON'
 	| 'Image'
 	| 'Media'
-	| 'Number';
+	| 'Number'
+	| 'String';
 
 export interface EntityField {
 	name: string;

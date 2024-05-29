@@ -8,7 +8,26 @@ const entityMetadataStubs: Record<string, Entity> = {
 		plural: 'Albums',
 		primaryKeyField: 'albumId',
 		backendId: 'who-cares',
-		fields: [],
+		fields: [
+			{
+				name: 'albumId',
+				type: 'ID!',
+			},
+			{
+				name: 'title',
+				type: 'String',
+			},
+			{
+				name: 'artist',
+				type: 'Artist',
+				relationshipType: 'MANY_TO_MANY',
+			},
+			{
+				name: 'tracks',
+				type: 'Track',
+				relationshipType: 'ONE_TO_MANY',
+			},
+		],
 		attributes: {},
 	},
 	Artist: {
@@ -16,7 +35,21 @@ const entityMetadataStubs: Record<string, Entity> = {
 		plural: 'Artists',
 		primaryKeyField: 'artistId',
 		backendId: 'who-cares',
-		fields: [],
+		fields: [
+			{
+				name: 'artistId',
+				type: 'ID!',
+			},
+			{
+				name: 'name',
+				type: 'String',
+			},
+			{
+				name: 'albums',
+				type: 'Album',
+				relationshipType: 'MANY_TO_MANY',
+			},
+		],
 		attributes: {},
 	},
 	Track: {
@@ -24,7 +57,21 @@ const entityMetadataStubs: Record<string, Entity> = {
 		plural: 'Tracks',
 		primaryKeyField: 'trackId',
 		backendId: 'who-cares',
-		fields: [],
+		fields: [
+			{
+				name: 'trackId',
+				type: 'ID!',
+			},
+			{
+				name: 'title',
+				type: 'String',
+			},
+			{
+				name: 'album',
+				type: 'Album',
+				relationshipType: 'MANY_TO_ONE',
+			},
+		],
 		attributes: {},
 	},
 };
@@ -94,7 +141,10 @@ describe('mapFormikValuesToGqlRequestValues', () => {
 				},
 			],
 		};
-		const expected = {
+
+		expect(
+			mapFormikValuesToGqlRequestValues(entityMetadataStubs['Album'], getEntityByName, formValues)
+		).toEqual({
 			albumId: '1',
 			title: 'For Those About To Rock We Salute 2',
 			artist: {
@@ -132,9 +182,6 @@ describe('mapFormikValuesToGqlRequestValues', () => {
 					trackId: '14',
 				},
 			],
-		};
-		expect(
-			mapFormikValuesToGqlRequestValues(entityMetadataStubs['Album'], getEntityByName, formValues)
-		).toEqual(expected);
+		});
 	});
 });
