@@ -22,7 +22,7 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 
 	await page.getByRole('row', { name: tag }).locator('label div').click();
 	await page.getByRole('button', { name: 'Actions' }).click();
-	await page.getByText('Delete selected rows').click();
+	await page.getByText('Delete selected row').click();
 	await page.getByRole('button', { name: 'Delete' }).click();
 	// Wait for the delete to complete
 	const deleteToast = await page.getByText('row deleted');
