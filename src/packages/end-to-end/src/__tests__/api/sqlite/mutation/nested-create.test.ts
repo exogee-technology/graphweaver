@@ -1,9 +1,23 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album, Artist } from '../../../../types';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
+
+type Album = {
+	albumId: number;
+	title: string;
+	artist: {
+		artistId: number;
+		name: string;
+	};
+};
+
+type Artist = {
+	artistId: number;
+	name: string;
+	albums: Album[];
+};
 
 describe('nested create', () => {
 	beforeEach(resetDatabase);

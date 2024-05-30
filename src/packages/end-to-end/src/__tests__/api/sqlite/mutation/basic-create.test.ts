@@ -1,9 +1,17 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../../../../types';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
+
+type Album = {
+	albumId: number;
+	title: string;
+	artist: {
+		artistId: number;
+		name: string;
+	};
+};
 
 describe('basic create', () => {
 	beforeEach(resetDatabase);
