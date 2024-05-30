@@ -26,8 +26,6 @@ const albumDataProvider = new BaseDataProvider<any>('album');
 	provider: albumDataProvider,
 })
 export class Album {
-	public dataEntity!: any;
-
 	@Field(() => ID)
 	id!: number;
 

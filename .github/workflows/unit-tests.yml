@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  auth-end-to-end-tests:
+  unit-tests:
     runs-on: ubuntu-latest
     defaults:
       run:

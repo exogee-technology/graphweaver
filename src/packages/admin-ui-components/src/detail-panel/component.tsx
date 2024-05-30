@@ -348,8 +348,6 @@ export const DetailPanel = () => {
 		// Format form values as GraphQL input parameters
 		const values = mapFormikValuesToGqlRequestValues(selectedEntity, entityByName, formValues);
 
-		console.log(formValues, values);
-
 		try {
 			let result: FetchResult;
 

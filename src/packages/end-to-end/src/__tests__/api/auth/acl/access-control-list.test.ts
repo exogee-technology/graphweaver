@@ -27,8 +27,6 @@ const artistDataProvider = new BaseDataProvider<any>('artist');
 	provider: artistDataProvider,
 })
 export class Artist {
-	public dataEntity!: any;
-
 	@Field(() => ID)
 	id!: number;
 

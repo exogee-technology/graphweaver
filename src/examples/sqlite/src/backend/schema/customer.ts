@@ -9,8 +9,6 @@ import { connection } from '../database';
 	provider: new MikroBackendProvider(OrmCustomer, connection),
 })
 export class Customer {
-	public dataEntity!: OrmCustomer;
-
 	@Field(() => ID, { primaryKeyField: true })
 	customerId!: number;
 

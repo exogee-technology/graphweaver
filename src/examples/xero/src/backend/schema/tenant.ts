@@ -43,8 +43,6 @@ const provider = new XeroBackendProvider('Tenant', {
 	provider,
 })
 export class Tenant extends GraphQLEntity<XeroTenant> {
-	public dataEntity!: XeroTenant;
-
 	@Field(() => ID)
 	id!: string;
 

@@ -53,8 +53,6 @@ const connection = {
 	provider: new MikroBackendProvider(OrmAlbum, connection),
 })
 export class Album {
-	public dataEntity!: OrmAlbum;
-
 	@Field(() => ID)
 	id!: number;
 

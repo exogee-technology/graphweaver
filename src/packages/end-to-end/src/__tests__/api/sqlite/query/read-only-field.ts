@@ -61,8 +61,6 @@ const connection = {
 	provider: new MikroBackendProvider(OrmCustomer, connection),
 })
 export class Customer {
-	public dataEntity!: OrmCustomer;
-
 	@Field(() => ID)
 	id!: number;
 

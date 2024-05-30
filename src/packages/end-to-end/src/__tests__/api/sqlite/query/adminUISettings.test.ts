@@ -71,8 +71,6 @@ const connection = {
 	},
 })
 export class Album {
-	public dataEntity!: OrmAlbum;
-
 	@Field(() => ID)
 	id!: number;
 
@@ -92,8 +90,6 @@ export class Album {
 	},
 })
 export class Artist {
-	public dataEntity!: OrmArtist;
-
 	@Field(() => ID)
 	id!: number;
 

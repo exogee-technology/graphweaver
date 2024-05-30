@@ -81,8 +81,6 @@ const acl: AccessControlList<Task, AuthorizationContext> = {
 	provider: new MikroBackendProvider(OrmTask, connection),
 })
 export class Task {
-	public dataEntity!: OrmTask;
-
 	@Field(() => ID)
 	id!: number;
 

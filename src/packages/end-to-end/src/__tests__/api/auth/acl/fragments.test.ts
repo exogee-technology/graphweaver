@@ -30,8 +30,6 @@ const albumDataProvider = new BaseDataProvider<any>('album');
 	provider: albumDataProvider,
 })
 export class Album {
-	public dataEntity!: any;
-
 	@Field(() => ID)
 	id!: number;
 
@@ -52,8 +50,6 @@ const artistDataProvider = new BaseDataProvider<any>('artist');
 	provider: artistDataProvider,
 })
 export class Artist {
-	public dataEntity!: any;
-
 	@Field(() => ID)
 	id!: number;
 
