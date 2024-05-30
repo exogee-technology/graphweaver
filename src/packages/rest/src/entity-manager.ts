@@ -32,15 +32,6 @@ interface EntityManagerOptions {
 	overrideSelect?: any;
 }
 
-interface SearchOptions {
-	search: string;
-	entities: Array<EntityConstructor<BaseEntity>>;
-	filter?: string;
-	maxRetries?: number;
-	top?: number; // max number of results to return from dynamics maxes out at 100
-	limit?: number; // max number of results to return by combining requests no maximum
-}
-
 const privateProperties = new Set([
 	'_fieldMap',
 	'_relationshipMap',
@@ -222,14 +213,14 @@ export class EntityManager<T extends BaseEntity> {
 		return null;
 	};
 
-	public readonly createOne = async (entity: Partial<T>, expand?: (keyof T)[]) => {
+	public readonly createOne = async () => {
 		const { entityPath, entityName } = this._entity;
 		this.assertEntityProperties(entityName !== undefined && entityPath !== undefined);
 
 		return new this._entity(undefined);
 	};
 
-	public readonly updateOne = async (id: string, values: Partial<T>) => {
+	public readonly updateOne = async () => {
 		const { entityPath, entityName } = this._entity;
 		this.assertEntityProperties(entityName !== undefined && entityPath !== undefined);
 

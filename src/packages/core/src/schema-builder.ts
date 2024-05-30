@@ -485,8 +485,6 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let createOrUpdateType = createOrUpdateTypes.get(entity.name);
 
 	if (!createOrUpdateType) {
-		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
-
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
@@ -503,8 +501,6 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let updateType = updateTypes.get(entity.name);
 
 	if (!updateType) {
-		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
-
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
@@ -606,7 +602,7 @@ class SchemaBuilderImplementation {
 		return map;
 	}
 
-	private buildQueryType(args?: SchemaBuilderOptions) {
+	private buildQueryType() {
 		return new GraphQLObjectType({
 			name: 'Query',
 			fields: () => {
@@ -681,7 +677,7 @@ class SchemaBuilderImplementation {
 		});
 	}
 
-	private buildMutationType(args?: SchemaBuilderOptions) {
+	private buildMutationType() {
 		return new GraphQLObjectType({
 			name: 'Mutation',
 			fields: () => {

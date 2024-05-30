@@ -10,7 +10,6 @@ import {
 } from '@exogee/graphweaver';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
-import { Source } from 'graphql';
 
 import { UserProfile } from '../../user-profile';
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';

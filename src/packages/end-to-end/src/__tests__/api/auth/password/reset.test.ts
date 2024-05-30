@@ -45,13 +45,13 @@ class ForgottenPasswordBackendProvider extends BaseDataProvider<
 	}
 }
 
-const forgottenPassword = new ForgottenPassword({
+new ForgottenPassword({
 	provider: new ForgottenPasswordBackendProvider('ForgottenPasswordBackendProvider'),
 	sendForgottenPasswordLink: async (url: URL): Promise<boolean> => {
 		token = url.searchParams.get('token') ?? '';
 		return true;
 	},
-	getUser: async (username: string): Promise<UserProfile<unknown>> => {
+	getUser: async (): Promise<UserProfile<unknown>> => {
 		return user;
 	},
 });
@@ -74,7 +74,7 @@ class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	}
 }
 
-const password = new Password({
+new Password({
 	provider: new PasswordBackendProvider('PasswordBackendProvider'),
 	// This is called when a user has logged in to get the profile
 	getUserProfile: async (): Promise<UserProfile<unknown>> => {

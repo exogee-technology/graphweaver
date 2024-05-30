@@ -7,7 +7,6 @@ import { EntityConstructor, EntityManager } from '../entity-manager';
 let loadOneLoaderMap: { [key: string]: DataLoader<string, any> } = {};
 
 const REST_MAX_REQUEST_BATCH_SIZE = 100;
-const REST_RESULTS_PAGE_SIZE = 900;
 
 type LoadByRelatedIdProps<T extends BaseEntity, O extends BaseEntity> = {
 	restType: EntityConstructor<T>;
@@ -20,6 +19,8 @@ const getAllMatchingRecords = async <T extends BaseEntity>(
 	manager: EntityManager<T>,
 	filter: Record<string, any>
 ) => {
+	logger.trace({ manager, filter }, `getAllMatchingRecords call not implemented, returning [].`);
+
 	const results: T[] = [];
 
 	return results;

@@ -17,8 +17,8 @@ interface FieldOptions {
 	from?: string;
 }
 
-export function ExternalIdField<T extends BaseEntity, U>(options: FieldOptions): any {
-	return function (target: EntityConstructor<T>, propertyKey: keyof BaseEntity) {
+export function ExternalIdField<G extends BaseEntity>(options: FieldOptions): any {
+	return function (target: EntityConstructor<G>, propertyKey: keyof BaseEntity) {
 		if (options?.from) {
 			if (!target._externalEntityMap) {
 				target._externalEntityMap = new Map<string, string>();

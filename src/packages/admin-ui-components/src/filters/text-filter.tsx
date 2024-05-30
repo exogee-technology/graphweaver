@@ -2,7 +2,6 @@ import { useLazyQuery } from '@apollo/client';
 
 import { Filter, ComboBox, SelectMode, SelectOption, useSchema } from '..';
 import { queryForFilterText } from './graphql';
-import toast from 'react-hot-toast';
 
 export interface TextFilterProps {
 	fieldName: string;

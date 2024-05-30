@@ -1,13 +1,13 @@
 import { useField, useFormikContext } from 'formik';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { EntityField, routeFor, useSchema } from '../../utils';
+import { EntityField, routeFor } from '../../utils';
 
 export const LinkField = ({ name, entity }: { name: string; entity: EntityField }) => {
 	const { dirty } = useFormikContext();
 	const navigate = useNavigate();
-	const [_, meta, helpers] = useField({ name: name, multiple: false });
+	const [_, meta] = useField({ name: name, multiple: false });
 	const { initialValue: formEntity } = meta;
-	const [searchParams, setSearchParams] = useSearchParams();
+	const [__, setSearchParams] = useSearchParams();
 
 	// Handle if the form has changed when clicking a link, if it has pop up a confirmation modal
 	const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, route: string) => {

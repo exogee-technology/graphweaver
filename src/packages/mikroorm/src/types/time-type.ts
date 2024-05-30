@@ -1,4 +1,4 @@
-import { EntityProperty, Platform, Type, ValidationError } from '@mikro-orm/core';
+import { Type, ValidationError } from '@mikro-orm/core';
 
 const TimePattern = /^\d{2}:\d{2}:\d{2}$/;
 
@@ -20,14 +20,14 @@ export class Time {
 	}
 }
 export class TimeType extends Type {
-	convertToDatabaseValue(value: any, platform: Platform) {
+	convertToDatabaseValue(value: any) {
 		if (!value) return value;
 		if (value instanceof Time) return value;
 
 		throw ValidationError.invalidType(TimeType, value, 'JS');
 	}
 
-	convertToJSValue(value: any, platform: Platform) {
+	convertToJSValue(value: any) {
 		if (!value) return value;
 
 		if (typeof value === 'string' && TimePattern.test(value)) {
@@ -38,11 +38,11 @@ export class TimeType extends Type {
 		throw ValidationError.invalidType(TimeType, value, 'database');
 	}
 
-	getColumnType(prop: EntityProperty, platform: Platform) {
+	getColumnType() {
 		return 'time';
 	}
 
-	toJSON(value: any, platform: Platform) {
+	toJSON(value: any) {
 		if (!value) return value;
 		if (value instanceof Time) return Time.toString();
 		throw ValidationError.invalidType(TimeType, value, 'JS');

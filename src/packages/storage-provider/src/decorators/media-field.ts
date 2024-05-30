@@ -65,7 +65,6 @@ export class Media {
 
 	static deserialize = async ({
 		value,
-		parent,
 		fieldMetadata,
 	}: {
 		value: unknown;

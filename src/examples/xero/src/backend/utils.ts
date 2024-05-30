@@ -2,8 +2,6 @@ import { XeroClient } from 'xero-node';
 import { Sort } from '@exogee/graphweaver';
 import { XeroTenant } from './schema';
 
-const PAGE_SIZE = 100;
-
 export type WithTenantId<T> = T & { tenantId: string };
 
 type ForEachTenantCallback<T> = (tenant: XeroTenant) => T | T[] | Promise<T> | Promise<T[]>;

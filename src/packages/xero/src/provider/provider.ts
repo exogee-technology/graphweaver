@@ -66,8 +66,7 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 
 	public constructor(
 		protected entityTypeName: string,
-		protected accessor?: XeroDataAccessor<D>,
-		backendProviderConfig?: BackendProviderConfig
+		protected accessor?: XeroDataAccessor<D>
 	) {}
 
 	// Default backend provider config
@@ -116,11 +115,7 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	}
 
 	// GET METHODS
-	public async find(
-		filter: Filter<D>,
-		pagination?: PaginationOptions,
-		additionalOptionsForBackend?: any // @todo: Create a type for this
-	): Promise<D[]> {
+	public async find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]> {
 		await this.ensureAccessToken();
 
 		if (!this.accessor) {
@@ -210,12 +205,12 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
+	public async createOrUpdateMany(): Promise<D[]> {
 		throw new Error('Not implemented');
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<D>): Promise<D> {
+	public async createOne(): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
@@ -228,15 +223,11 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: Filter<D>): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
-
+	public async deleteOne(): Promise<boolean> {
 		throw new Error('Not implemented');
 	}
 
-	public async deleteMany(filter: Filter<D>): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName}`);
-
+	public async deleteMany(): Promise<boolean> {
 		throw new Error('Not implemented');
 	}
 }

@@ -1,9 +1,9 @@
-import { EntityProperty, Platform, Type, ValidationError } from '@mikro-orm/core';
+import { Type, ValidationError } from '@mikro-orm/core';
 
 const DatePattern = /^\d{4}-\d{1,2}-\d{1,2}$/;
 
 export class DateType extends Type {
-	convertToDatabaseValue(value: any, platform: Platform) {
+	convertToDatabaseValue(value: any) {
 		if (!value) return value;
 
 		if (typeof value === 'string') {
@@ -15,7 +15,7 @@ export class DateType extends Type {
 		throw ValidationError.invalidType(DateType, value, 'JS');
 	}
 
-	convertToJSValue(value: any, platform: Platform) {
+	convertToJSValue(value: any) {
 		if (!value) return value;
 
 		if (typeof value === 'string' && DatePattern.test(value)) {
@@ -25,11 +25,11 @@ export class DateType extends Type {
 		throw ValidationError.invalidType(DateType, value, 'database');
 	}
 
-	getColumnType(prop: EntityProperty, platform: Platform) {
+	getColumnType() {
 		return 'date';
 	}
 
-	toJSON(value: any, platform: Platform) {
+	toJSON(value: any) {
 		if (!value) return value;
 		if (value instanceof Date) {
 			return `${value.getFullYear()}-${value.getMonth() + 1}-${value.getDate()}`;

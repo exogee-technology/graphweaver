@@ -1,10 +1,4 @@
-import {
-	BackendProvider,
-	GraphQLResolveInfo,
-	HookParams,
-	HookRegister,
-	hookManagerMap,
-} from '@exogee/graphweaver';
+import { BackendProvider, HookParams, HookRegister, hookManagerMap } from '@exogee/graphweaver';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { hashPassword } from '../../utils/argon2id';

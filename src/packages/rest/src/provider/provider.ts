@@ -104,51 +104,33 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 	}
 
 	// PUT METHODS
-	public async updateOne(id: string, updateArgs: Partial<D & { version?: number }>): Promise<D> {
-		logger.trace(`Running update one ${this.entityTypeName} with args`, {
-			id,
-			updateArgs,
-		});
-
+	public async updateOne(): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
-		logger.trace(`Running update many ${this.entityTypeName} with args`, {
-			updateItems: updateItems,
-		});
-
+	public async updateMany(): Promise<D[]> {
 		throw new Error('Not implemented');
 	}
 
-	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
-		// not something we can do with REST
-		return Promise.reject();
+	public async createOrUpdateMany(): Promise<D[]> {
+		throw new Error('Not implemented');
 	}
 
 	// POST METHODS
-	public async createOne(createArgs: Partial<D>): Promise<D> {
+	public async createOne(): Promise<D> {
 		throw new Error('Not implemented');
 	}
 
-	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
-		logger.trace(`Running create ${this.entityTypeName} with args`, {
-			createItems,
-		});
-
+	public async createMany(): Promise<D[]> {
 		throw new Error('Not implemented');
 	}
 
 	// DELETE METHODS
-	public async deleteOne(filter: Filter<D>): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName} with filter ${filter}`);
-
+	public async deleteOne(): Promise<boolean> {
 		throw new Error('Not implemented');
 	}
 
-	public async deleteMany(filter: Filter<D>): Promise<boolean> {
-		logger.trace(`Running delete ${this.entityTypeName}`);
-
+	public async deleteMany(): Promise<boolean> {
 		throw new Error('Not implemented');
 	}
 }

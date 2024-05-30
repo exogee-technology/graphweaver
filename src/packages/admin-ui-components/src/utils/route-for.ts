@@ -1,4 +1,3 @@
-import { SortColumn } from 'react-data-grid';
 import { Entity, Filter, SortField } from './use-schema';
 
 interface RouteForEntity {

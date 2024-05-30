@@ -51,7 +51,7 @@ class OrmArtist {
 // We can't test that we get a downwload url back from s3
 // This is a mock to test the decorator
 const mockS3StorageProvider = {
-	getDownloadUrl: (_source: unknown, { key }: { key: string }, _ctx: unknown, _info: unknown) =>
+	getDownloadUrl: (_source: unknown, { key }: { key: string }) =>
 		Promise.resolve(`https://example.com/${key}`),
 } as S3StorageProvider;
 

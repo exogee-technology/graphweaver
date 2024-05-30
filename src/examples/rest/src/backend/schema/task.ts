@@ -102,7 +102,7 @@ export class Task {
 	@Field(() => Priority, { nullable: true })
 	priority?: Priority;
 
-	@Field((type) => String, { nullable: true })
+	@Field(() => String, { nullable: true })
 	slug(task: Task) {
 		return `${task.id}:${task.description}`;
 	}

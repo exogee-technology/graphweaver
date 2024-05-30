@@ -33,6 +33,8 @@ export const magicLink = new MagicLink({
 	 * @param magicLink the URL that was generated and should be sent to the user
 	 * @returns a boolean to indicate that the URL has been sent
 	 */
+	// This example is ok to show people what's passed in, we don't need to use this var.
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	sendMagicLink: async (url: URL, _magicLink: MagicLinkEntity): Promise<boolean> => {
 		// In a production system this would email / sms the magic link and you would not log to the console!
 		console.log(`\n\n ######## MagicLink: ${url.toString()} ######## \n\n`);
