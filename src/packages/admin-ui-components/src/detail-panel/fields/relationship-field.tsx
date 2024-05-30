@@ -56,8 +56,10 @@ export const RelationshipField = ({
 	};
 
 	useEffect(() => {
-		helpers.setValue(convertToGqlVariables(initialValue));
-	}, []);
+		helpers.setValue(
+			convertToGqlVariables(Array.isArray(initialValue) ? initialValue : [initialValue])
+		);
+	}, [initialValue]);
 
 	const handleOnChange = (selected: SelectOption[]) => {
 		helpers.setValue(convertToGqlVariables(selected));
