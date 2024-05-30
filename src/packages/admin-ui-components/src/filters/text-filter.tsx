@@ -53,6 +53,7 @@ export const TextFilter = ({
 			onOpen={handleOnOpen}
 			loading={loading}
 			mode={SelectMode.MULTI}
+			data-testid={`${fieldName}-filter`}
 		/>
 	);
 };

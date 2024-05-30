@@ -37,6 +37,7 @@ export const BooleanFilter = ({
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			mode={SelectMode.SINGLE}
+			data-testid={`${fieldName}-filter`}
 		/>
 	);
 };

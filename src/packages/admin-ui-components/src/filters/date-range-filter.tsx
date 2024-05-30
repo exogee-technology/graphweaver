@@ -44,6 +44,7 @@ export const DateRangeFilter = ({
 			isRangePicker
 			initialStartDate={initialStartDate}
 			initialEndDate={initialEndDate}
+			data-testid={`${fieldName}-filter`}
 		/>
 	);
 };

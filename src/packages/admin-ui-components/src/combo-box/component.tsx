@@ -25,6 +25,7 @@ interface SelectProps {
 	placeholder?: string;
 	loading?: boolean;
 	autoFocus?: boolean;
+	['data-testid']?: string;
 }
 
 export const ComboBox = ({
@@ -36,6 +37,7 @@ export const ComboBox = ({
 	loading = false,
 	mode,
 	autoFocus = false,
+	['data-testid']: testId,
 }: SelectProps) => {
 	const [selectedItems, setSelectedItems] = useState<SelectOption[]>(value);
 
@@ -90,7 +92,7 @@ export const ComboBox = ({
 	);
 
 	return (
-		<div className={styles.select}>
+		<div className={styles.select} data-testid={testId}>
 			<div className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}>
 				<input readOnly className={styles.selectInput} {...getInputProps({ ref: inputRef })} />
 				{selectedItems.length > 0 ? (

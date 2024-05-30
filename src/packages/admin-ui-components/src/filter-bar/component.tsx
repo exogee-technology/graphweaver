@@ -133,7 +133,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	if (filterComponents.length === 0) return null;
 
 	return (
-		<div className={styles.filterBarWrapper}>
+		<div className={styles.filterBarWrapper} data-testid="filter-bar">
 			{iconBefore}
 			{...filterComponents}
 			<Button onClick={clearAllFilters}>Clear Filters</Button>

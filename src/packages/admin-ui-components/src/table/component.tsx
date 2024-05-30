@@ -318,6 +318,7 @@ export const Table = <T extends TableRowItem>({
 				rowClass={rowClass}
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
+				data-testid="table"
 			/>
 			{loadingNext && (
 				<div className={styles.spinner}>
