@@ -184,7 +184,7 @@ const convertSchemaToMetadata = async (
 	}
 
 	convertToCamelCasePropertyNames(metadata);
-	detectManyToManyRelations(metadata, namingStrategy);
+	detectManyToManyRelations(metadata);
 	generateIdentifiedReferences(metadata);
 	generateBidirectionalRelations(metadata);
 	generateSingularTypeReferences(metadata);
