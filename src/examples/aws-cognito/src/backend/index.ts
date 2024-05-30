@@ -1,5 +1,5 @@
 import Graphweaver from '@exogee/graphweaver-server';
-import { createAwsCognitoUserProvider } from '@exogee/graphweaver-aws-cognito';
+import { createAwsCognitoUserProvider } from '@exogee/graphweaver-aws';
 
 export const cognitoUser = createAwsCognitoUserProvider({
 	userPoolId: process.env.COGNITO_USER_POOL_ID,

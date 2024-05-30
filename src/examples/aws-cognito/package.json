@@ -1,6 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-aws-cognito",
-	"version": "1.0.0-beta.1",
+	"private": true,
+	"version": "1.0.0-beta.2",
 	"license": "MIT",
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",
@@ -22,7 +23,7 @@
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@exogee/graphweaver-aws-cognito": "workspace:*",
+		"@exogee/graphweaver-aws": "workspace:*",
 		"dotenv": "16.4.5",
 		"graphql": "16.8.1",
 		"react": "18.3.1"
