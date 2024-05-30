@@ -12,7 +12,6 @@
 		"build:watch": "pnpm build:js --watch",
 		"prettier": "prettier --write .",
 		"codegen": "graphql-codegen --config ./codegen.yml",
-		"test": "vitest",
 		"test:tsc": "tsc --noEmit",
 		"test:prettier": "prettier --check .",
 		"version": "npm version --no-git-tag-version"
@@ -60,8 +59,7 @@
 		"react-dom": "18.3.1",
 		"typescript": "5.4.5",
 		"vite": "5.2.12",
-		"vite-plugin-svgr": "4.2.0",
-		"vitest": "1.6.0"
+		"vite-plugin-svgr": "4.2.0"
 	},
 	"keywords": [
 		"graphql",
