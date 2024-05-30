@@ -513,23 +513,21 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return updateType;
 };
 
-export interface SchemaBuilderOptions {}
-
 class SchemaBuilderImplementation {
-	public build(args?: SchemaBuilderOptions) {
+	public build() {
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
 		const types = Array.from(this.buildTypes());
-		const query = this.buildQueryType(args);
-		const mutation = this.buildMutationType(args);
+		const query = this.buildQueryType();
+		const mutation = this.buildMutationType();
 
 		logger.trace({ types, query, mutation }, 'Built schema');
 
 		return new GraphQLSchema({ types, query, mutation });
 	}
 
-	public print(args?: SchemaBuilderOptions) {
-		return printSchema(this.build(args));
+	public print() {
+		return printSchema(this.build());
 	}
 
 	public isValidFilterOperation(filterOperation: string) {
