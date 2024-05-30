@@ -3,7 +3,6 @@ import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aw
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 import {
-	AuthChecker,
 	SchemaBuilder,
 	graphweaverMetadata,
 	resolveAdminUiMetadata,

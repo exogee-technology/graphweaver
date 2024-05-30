@@ -16,7 +16,6 @@ import { generateTypes } from './types';
 import * as path from 'path';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
-const DEFAULT_TYPES_OUT_DIR = './.graphweaver';
 
 yargs
 	.env('GRAPHWEAVER')

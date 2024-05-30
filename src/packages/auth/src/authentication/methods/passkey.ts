@@ -30,7 +30,6 @@ import {
 	Sort,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
-import { GraphQLResolveInfo, Source } from 'graphql';
 
 export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/types';
 

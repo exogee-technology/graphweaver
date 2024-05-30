@@ -1,9 +1,5 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
-const zeroPad = (value: number, width = 2) => value.toString().padStart(width, '0');
-const formatDate = (date: Date) =>
-	`${date.getFullYear()}-${zeroPad(date.getMonth() + 1)}-${zeroPad(date.getDate())}`;
-
 export const DateScalar = new GraphQLScalarType({
 	name: 'Date',
 	description:

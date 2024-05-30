@@ -1,12 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { exec: nodeExec } = require('child_process');
-const { promisify } = require('util');
-
 const { build } = require('esbuild');
 const { dependencies, devDependencies } = require('./package.json');
-const path = require('path');
-
-const exec = promisify(nodeExec);
 
 (async () => {
 	await build({

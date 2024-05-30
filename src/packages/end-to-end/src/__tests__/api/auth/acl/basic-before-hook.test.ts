@@ -7,7 +7,6 @@ import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	Credential,
 	ApplyAccessControlList,
 	CredentialStorage,
 	hashPassword,
@@ -53,7 +52,7 @@ class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),
-	getUserProfile: async (id: string) => user,
+	getUserProfile: async () => user,
 });
 
 const graphweaver = new Graphweaver({

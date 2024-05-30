@@ -1,8 +1,8 @@
 import { exec } from 'child_process';
 
 const asyncExec = async (command: string) =>
-	new Promise((resolve, reject) => {
-		const childProcess = exec(command, (error) => {
+	new Promise<void>((resolve, reject) => {
+		exec(command, (error) => {
 			if (error) {
 				return reject(error);
 			}
@@ -15,7 +15,7 @@ export const generateTypes = async () => {
 		console.log(`Generating Types...`);
 		await asyncExec(`gw-types`);
 		console.log(`Types generated.`);
-	} catch (error) {
+	} catch (error: any) {
 		console.error(`Generate Types Failed: ${error.message}`);
 	}
 };

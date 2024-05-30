@@ -9,6 +9,7 @@ export const Loader = () => (
 				// the loader appears different each time it's shown
 				{ animationDelay: `-${Math.random() * 3}s` }
 			}
+			data-testid="loader"
 		/>
 	</div>
 );

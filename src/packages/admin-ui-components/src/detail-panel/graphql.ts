@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { Entity, EntityField, generateGqlSelectForEntityFields } from '../utils';
+import { Entity, generateGqlSelectForEntityFields } from '../utils';
 
 export const generateUpdateEntityMutation = (
 	entity: Entity,

@@ -28,7 +28,7 @@ const getFieldFromEntity = (entityName: string, fieldName: string) => {
 
 const entityNameFromType = (type: TypeValue) => (type as any).name || type.toString();
 
-const visit = async <D, G>(
+const visit = async <D>(
 	currentEntityName: string,
 	currentFilter: any,
 	currentProvider?: BackendProvider<D>

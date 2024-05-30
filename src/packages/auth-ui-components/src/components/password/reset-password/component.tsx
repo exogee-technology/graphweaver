@@ -35,7 +35,7 @@ export const ResetPassword = () => {
 		}
 
 		try {
-			const { data } = await resetPassword({
+			await resetPassword({
 				variables: {
 					password: values.password,
 					token,

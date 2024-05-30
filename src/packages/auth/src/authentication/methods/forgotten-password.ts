@@ -3,7 +3,6 @@ import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'crypto';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
-import { GraphQLResolveInfo, Source } from 'graphql';
 
 import { AuthorizationContext, AuthenticationType } from '../../types';
 import { UserProfile } from '../../user-profile';

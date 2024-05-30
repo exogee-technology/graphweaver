@@ -33,7 +33,7 @@ export const password = new Password({
 			all: true,
 		},
 	},
-	getUserProfile: async (id: string): Promise<UserProfile<unknown>> => {
+	getUserProfile: async (): Promise<UserProfile<unknown>> => {
 		return new UserProfile({
 			id: user.id,
 			username: user.username,

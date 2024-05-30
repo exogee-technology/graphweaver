@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react';
-import { ApolloCache, InMemoryCache, TypePolicy, useQuery } from '@apollo/client';
+import { InMemoryCache, useQuery } from '@apollo/client';
 import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
 
 import { SCHEMA_QUERY } from './graphql';

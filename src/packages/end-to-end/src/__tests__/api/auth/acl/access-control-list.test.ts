@@ -7,7 +7,6 @@ import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
-	Credential,
 	ApplyAccessControlList,
 	AclMap,
 	CredentialStorage,
@@ -49,7 +48,7 @@ class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),
-	getUserProfile: async (id: string) => user,
+	getUserProfile: async () => user,
 });
 
 const graphweaver = new Graphweaver({
@@ -215,7 +214,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -241,7 +240,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -267,7 +266,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {

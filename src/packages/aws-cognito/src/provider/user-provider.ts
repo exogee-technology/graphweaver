@@ -5,7 +5,6 @@ import { CognitoUser, CognitoUserBackendEntity } from '../entities';
 import { createProvider } from './base-provider';
 import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
 
-type Entity = CognitoUser;
 type Context = {
 	client: CognitoIdentityProviderClient;
 	UserPoolId: string;
@@ -36,13 +35,12 @@ export const createAwsCognitoUserProvider = ({
 				UserPoolId: userPoolId,
 			};
 		},
-		read: async ({ client, UserPoolId }, filter, pagination) => {
+		read: async ({ client, UserPoolId }, filter) => {
 			if (filter?.id) return mapId(await getOneUser(client, UserPoolId, String(filter.id)));
 
-			if (Array.isArray(filter?._or))
-				return (await getManyUsers(client, UserPoolId, filter)).map(mapId);
+			if (Array.isArray(filter?._or)) return (await getManyUsers(client, UserPoolId)).map(mapId);
 
-			return (await getManyUsers(client, UserPoolId, filter)).map(mapId);
+			return (await getManyUsers(client, UserPoolId)).map(mapId);
 		},
 		create: async ({ client, UserPoolId }, entity) => {
 			const result = await createUser(client, UserPoolId, entity);

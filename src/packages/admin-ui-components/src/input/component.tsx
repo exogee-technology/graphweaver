@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import clsx from 'clsx';
 
-import { SelectOption } from '../';
 import { useDebounce } from '../hooks';
 
 import styles from './styles.module.css';

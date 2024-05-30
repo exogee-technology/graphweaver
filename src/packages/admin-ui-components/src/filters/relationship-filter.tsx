@@ -92,6 +92,7 @@ export const RelationshipFilter = ({
 			onOpen={handleOnOpen}
 			loading={loading}
 			mode={SelectMode.MULTI}
+			data-testid={`${fieldName}-filter`}
 		/>
 	);
 };

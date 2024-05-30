@@ -3,7 +3,6 @@ import {
 	UserProfile,
 	authApolloPlugin,
 	WalletAddress,
-	Credential,
 	CredentialStorage,
 	hashPassword,
 	Password,
@@ -17,7 +16,10 @@ import Web3Token from 'web3-token';
 import * as Ethers from 'ethers';
 import { BaseDataProvider } from '@exogee/graphweaver';
 
+// ESLint, I know it looks like the entities in this file aren't used, but they actually are.
+/* eslint-disable @typescript-eslint/no-unused-vars */
 // Setup ethers for signing
+
 const phrase =
 	'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
 const mnemonic = (Ethers as any).Mnemonic.fromPhrase(phrase);

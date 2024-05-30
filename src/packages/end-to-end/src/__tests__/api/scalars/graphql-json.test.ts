@@ -5,6 +5,9 @@ import { Entity, ID, Field, BaseDataProvider } from '@exogee/graphweaver';
 
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
+// ESLint, I know it looks like the entities in this file aren't used, but they actually are.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 describe('GraphQL JSON Scalar Type', () => {
 	test('should return json when requesting GraphQL Json scalar types', async () => {
 		class DataProvider extends BaseDataProvider<{ id: string }> {

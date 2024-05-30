@@ -5,7 +5,7 @@ import DataGrid, {
 	SelectColumn,
 	CalculatedColumn,
 } from 'react-data-grid';
-import React, { useCallback, useState, MouseEvent, UIEventHandler, useEffect } from 'react';
+import React, { useCallback, useState, MouseEvent, UIEventHandler } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
@@ -318,6 +318,7 @@ export const Table = <T extends TableRowItem>({
 				rowClass={rowClass}
 				onScroll={handleScroll}
 				className={styles.tableWrapper}
+				data-testid="table"
 			/>
 			{loadingNext && (
 				<div className={styles.spinner}>

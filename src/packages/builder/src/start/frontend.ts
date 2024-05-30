@@ -2,7 +2,6 @@ import path from 'path';
 import { ViteDevServer, createServer } from 'vite';
 import { viteConfig } from '../vite-config';
 import { config } from '@exogee/graphweaver-config';
-import { codeGenerator } from '../codegen';
 
 export interface StartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;

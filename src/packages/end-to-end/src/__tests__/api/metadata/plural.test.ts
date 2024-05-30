@@ -3,6 +3,9 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
 
+// ESLint, I know it looks like the entities in this file aren't used, but they actually are.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 test('should correctly plural name for User', async () => {
 	@Entity('User', {
 		provider: new BaseDataProvider('user'),
