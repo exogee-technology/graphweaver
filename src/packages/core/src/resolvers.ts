@@ -1,12 +1,6 @@
-import {
-	GraphQLFieldResolver,
-	GraphQLResolveInfo,
-	Source,
-	isListType,
-	isObjectType,
-} from 'graphql';
+import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
-import { BaseContext, GraphQLArgs } from './types';
+import { BaseContext } from './types';
 import {
 	BaseLoaders,
 	CreateOrUpdateHookParams,

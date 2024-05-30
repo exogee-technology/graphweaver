@@ -48,7 +48,7 @@ class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),
-	getUserProfile: async (id: string) => user,
+	getUserProfile: async () => user,
 });
 
 const graphweaver = new Graphweaver({
@@ -166,7 +166,7 @@ describe('ACL - Create Or Update', () => {
 			},
 		})(Album);
 
-		const response = await graphweaver.server.executeOperation({
+		await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -195,7 +195,7 @@ describe('ACL - Create Or Update', () => {
 			},
 		})(Album);
 
-		const response = await graphweaver.server.executeOperation({
+		await graphweaver.server.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {

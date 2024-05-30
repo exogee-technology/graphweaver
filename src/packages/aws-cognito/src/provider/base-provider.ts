@@ -20,7 +20,7 @@ export interface ProviderOptions<Context, D> {
 }
 
 export const createProvider = <Context, D extends WithId>(options: ProviderOptions<Context, D>) => {
-	class Provider<G, Context> implements BackendProvider<D> {
+	class Provider<Context> implements BackendProvider<D> {
 		readonly backendId: string;
 
 		// @todo configurable
@@ -103,27 +103,21 @@ export const createProvider = <Context, D extends WithId>(options: ProviderOptio
 			return this._mapDataEntity(result) || null;
 		}
 
-		async findByRelatedId(
-			entity: any,
-			relatedField: string,
-			relatedIds: readonly string[],
-			filter?: Filter<D>
-		): Promise<D[]> {
-			await this.initFn;
+		async findByRelatedId(): Promise<D[]> {
 			throw new Error('Not implemented: findByRelatedId');
 		}
 
 		async updateOne(id: string, entity: Partial<D>): Promise<D> {
+			if (!this.update) throw new Error('update not available');
+
 			await this.initFn;
-			if (!this.update) {
-				throw new Error('update not available');
-			}
 			return this.update(this.context as Context, id, entity);
 		}
 
 		async updateMany(entities: Partial<D>[]): Promise<D[]> {
-			await this.initFn;
 			if (!this.update) throw new Error('update not available');
+
+			await this.initFn;
 			return Promise.all(
 				entities.map((entity) => {
 					if (!entity.id) throw new Error('updateMany requires id');
@@ -133,20 +127,23 @@ export const createProvider = <Context, D extends WithId>(options: ProviderOptio
 		}
 
 		async createOne(entity: Partial<D>): Promise<D> {
-			await this.initFn;
 			if (!this.create) throw new Error('create not available');
+
+			await this.initFn;
 			return this.create(this.context as Context, entity);
 		}
 
 		async createMany(entities: Partial<D>[]): Promise<D[]> {
-			await this.initFn;
 			if (!this.create) throw new Error('create not available');
+
+			await this.initFn;
 			return Promise.all(entities.map((entity) => this.createOne(entity)));
 		}
 
 		async createOrUpdateMany(entities: Partial<D>[]): Promise<D[]> {
-			await this.initFn;
 			if (!this.update || !this.create) throw new Error('create/update not available');
+
+			await this.initFn;
 			return Promise.all(
 				entities.map((entity) =>
 					typeof entity.id === 'string' ? this.updateOne(entity.id, entity) : this.createOne(entity)
@@ -154,7 +151,7 @@ export const createProvider = <Context, D extends WithId>(options: ProviderOptio
 			);
 		}
 
-		async deleteOne(filter: Filter<D>): Promise<boolean> {
+		async deleteOne(): Promise<boolean> {
 			throw new Error('Not implemented: deleteOne');
 		}
 	}

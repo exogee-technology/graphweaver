@@ -205,7 +205,7 @@ export const authApolloPlugin = <R>(
 			}
 
 			return {
-				didResolveOperation: async (context) => {
+				didResolveOperation: async () => {
 					if (apiKeyVerificationFailedMessage)
 						throw new AuthenticationError(apiKeyVerificationFailedMessage);
 				},

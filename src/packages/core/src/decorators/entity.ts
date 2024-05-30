@@ -5,7 +5,7 @@ export type EntityOptions<G = unknown> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
 
-export function Entity<G = unknown>(name: string): ClassDecorator;
+export function Entity(name: string): ClassDecorator;
 export function Entity<G = unknown>(options: EntityOptions<G>): ClassDecorator;
 export function Entity<G = unknown>(name: string, options: EntityOptions<G>): ClassDecorator;
 export function Entity<G = unknown>(

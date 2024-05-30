@@ -9,7 +9,6 @@ import {
 	AuthenticationBaseEntity,
 	MagicLinkData,
 	AuthenticationMethod,
-	MagicLinkEntity,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';

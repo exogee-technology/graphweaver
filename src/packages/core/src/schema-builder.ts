@@ -485,8 +485,6 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let createOrUpdateType = createOrUpdateTypes.get(entity.name);
 
 	if (!createOrUpdateType) {
-		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
-
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
@@ -503,8 +501,6 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let updateType = updateTypes.get(entity.name);
 
 	if (!updateType) {
-		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
-
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
@@ -517,23 +513,21 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return updateType;
 };
 
-export interface SchemaBuilderOptions {}
-
 class SchemaBuilderImplementation {
-	public build(args?: SchemaBuilderOptions) {
+	public build() {
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
 		const types = Array.from(this.buildTypes());
-		const query = this.buildQueryType(args);
-		const mutation = this.buildMutationType(args);
+		const query = this.buildQueryType();
+		const mutation = this.buildMutationType();
 
 		logger.trace({ types, query, mutation }, 'Built schema');
 
 		return new GraphQLSchema({ types, query, mutation });
 	}
 
-	public print(args?: SchemaBuilderOptions) {
-		return printSchema(this.build(args));
+	public print() {
+		return printSchema(this.build());
 	}
 
 	public isValidFilterOperation(filterOperation: string) {
@@ -606,7 +600,7 @@ class SchemaBuilderImplementation {
 		return map;
 	}
 
-	private buildQueryType(args?: SchemaBuilderOptions) {
+	private buildQueryType() {
 		return new GraphQLObjectType({
 			name: 'Query',
 			fields: () => {
@@ -681,7 +675,7 @@ class SchemaBuilderImplementation {
 		});
 	}
 
-	private buildMutationType(args?: SchemaBuilderOptions) {
+	private buildMutationType() {
 		return new GraphQLObjectType({
 			name: 'Mutation',
 			fields: () => {

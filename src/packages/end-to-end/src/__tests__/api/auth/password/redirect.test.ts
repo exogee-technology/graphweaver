@@ -8,7 +8,6 @@ import {
 	ForbiddenError,
 	CredentialStorage,
 	Password,
-	PasswordOperation,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -21,8 +20,7 @@ class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {}
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),
-	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile<unknown>> =>
-		user,
+	getUserProfile: async (): Promise<UserProfile<unknown>> => user,
 });
 
 const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {

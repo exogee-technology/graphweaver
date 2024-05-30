@@ -74,8 +74,7 @@ export const getOneUser = async (
 
 export const getManyUsers = async (
 	client: CognitoIdentityProviderClient,
-	UserPoolId: string,
-	_filter: any
+	UserPoolId: string
 ): Promise<any> => {
 	const mappedUsers = new Map();
 

@@ -18,8 +18,18 @@ module.exports = {
 		// foo.hasOwnProperty('bar');
 		'no-prototype-builtins': 'off',
 
-		// We've configured TypeScript itself to check this.
-		'@typescript-eslint/no-unused-vars': 'off',
+		'@typescript-eslint/no-unused-vars': [
+			'error',
+			{
+				// Any variable names that start with _ in an array destructure are meant to be placeholders.
+				destructuredArrayIgnorePattern: '^_',
+
+				// We want to error on unused variables but we don't want to error
+				// when they're part of a desctructure, as that's often used to pull out certain
+				// keys, or the second element of an array, etc.
+				ignoreRestSiblings: true,
+			},
+		],
 
 		// While it'd be nice to enforce this in general it gets confused with
 		// decorators and is otherwise very noisy.

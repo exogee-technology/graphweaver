@@ -1,7 +1,7 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { packagesForBackend } from './backend';
 import { AWS_LAMBDA_VERSION, graphweaverVersion } from './constants';
-import { Backend, needsDatabaseConnection } from '.';
+import { Backend } from '.';
 
 export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
 	const backendPackages = Object.assign(

@@ -5,7 +5,6 @@ import {
 	Credential,
 	ForgottenPassword,
 	ForgottenPasswordLinkData,
-	CredentialStorage,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { AccessControlList, AuthorizationContext } from '@exogee/graphweaver-auth';

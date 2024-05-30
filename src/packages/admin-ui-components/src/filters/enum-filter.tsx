@@ -47,6 +47,7 @@ export const EnumFilter = ({
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			mode={SelectMode.MULTI}
+			data-testid={`${fieldName}-filter`}
 		/>
 	);
 };

@@ -1,5 +1,8 @@
 import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './types';
 
+// ESLint, I know we have a lot of unused variables here, it's ok, they're just for reference.
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 export class BaseDataProvider<D> implements BackendProvider<D> {
 	constructor(readonly backendId: string) {
 		if (!backendId) throw new Error('BackendId must be defined');

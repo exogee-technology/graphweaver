@@ -6,13 +6,11 @@ import {
 	graphweaverMetadata,
 	EntityMetadata,
 	isEntityMetadata,
-	FieldsByTypeName,
 	ResolveTree,
 	Filter,
 	isTopLevelFilterProperty,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
 
 import { AccessType, AuthorizationContext } from '../../types';
 import { andFilters } from '../../helper-functions';

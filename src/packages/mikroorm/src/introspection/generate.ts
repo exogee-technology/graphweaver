@@ -78,7 +78,7 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 	}
 };
 
-const detectManyToManyRelations = (metadata: EntityMetadata[], namingStrategy: NamingStrategy) => {
+const detectManyToManyRelations = (metadata: EntityMetadata[]) => {
 	for (const meta of metadata) {
 		if (
 			meta.compositePK && // needs to have composite PK
@@ -184,7 +184,7 @@ const convertSchemaToMetadata = async (
 	}
 
 	convertToCamelCasePropertyNames(metadata);
-	detectManyToManyRelations(metadata, namingStrategy);
+	detectManyToManyRelations(metadata);
 	generateIdentifiedReferences(metadata);
 	generateBidirectionalRelations(metadata);
 	generateSingularTypeReferences(metadata);

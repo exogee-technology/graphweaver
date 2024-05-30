@@ -30,6 +30,7 @@ export const NumericFilter = ({
 			fieldName={fieldName}
 			value={initialValue !== undefined ? initialValue + '' : ''}
 			onChange={handleOnChange}
+			data-testid={`${fieldName}-filter`}
 		/>
 	);
 };

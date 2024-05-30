@@ -6,31 +6,22 @@ test('Ensure filtering by multiple items works', async ({ page }) => {
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 
-	// Select AC/DC in the artist filter
-	await page
-		.locator('div')
-		.filter({ hasText: /^artist$/ })
-		.nth(1)
-		.click();
+	await page.getByTestId('artist-filter').getByRole('combobox').click();
+	await page.getByRole('option', { name: 'AC/DC' }).click();
+	await page.getByTestId('artist-filter').getByRole('combobox').click();
+	await page.getByText('Aaron Copland & London').click();
 
-	// Expect Accept to not be visible
-	// See todo below
-	// await expect(page.getByText('Accept')).toBeHidden();
+	// Those rows should look like this:
+	await expect(await page.getByTestId('table').getByRole('row').nth(1)).toContainText(
+		'For Those About To Rock We Salute You'
+	);
+	await expect(await page.getByTestId('table').getByRole('row').nth(2)).toContainText(
+		'Let There Be Rock'
+	);
+	await expect(await page.getByTestId('table').getByRole('row').nth(3)).toContainText(
+		'A Copland Celebration, Vol. I'
+	);
 
-	// Select Accept in the artist filter
-	await page.getByRole('banner').getByText('AC/DC').click();
-	await page
-		.locator('div')
-		.filter({ hasText: /^AC\/DC$/ })
-		.nth(1)
-		.click();
-
-	// TODO: Cannot currently test selecting multiple items in the filter because
-	// selecting an item does not remove it from the filter list. This is a bug.
-	// This test should be updated once the bug is fixed.
-
-	// Expect Accept to be visible
-	// await expect(page.getByText('Accept')).toBeVisible();
-	// await page.getByText('Accept').click();
-	// await page.getByRole('link', { name: 'Accept' }).first().click();
+	// And there should be exactly 4 rows in the table: one header, and 3 data rows.
+	await expect(await page.getByTestId('table').getByRole('row').count()).toBe(4);
 });

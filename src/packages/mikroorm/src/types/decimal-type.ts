@@ -1,4 +1,4 @@
-import { EntityProperty, Platform, Type, ValidationError } from '@mikro-orm/core';
+import { Type, ValidationError } from '@mikro-orm/core';
 import { Decimal } from 'decimal.js';
 
 export class DecimalType extends Type {
@@ -9,7 +9,7 @@ export class DecimalType extends Type {
 		super();
 	}
 
-	convertToDatabaseValue(value: any, platform: Platform) {
+	convertToDatabaseValue(value: any) {
 		if (value == null) return value;
 		if (value instanceof Decimal) {
 			if (value.isNaN()) throw new Error('Decimal should not be NaN');
@@ -19,7 +19,7 @@ export class DecimalType extends Type {
 		throw ValidationError.invalidType(DecimalType, value, 'JS');
 	}
 
-	convertToJSValue(value: any, platform: Platform) {
+	convertToJSValue(value: any) {
 		if (value == null) return value;
 		const decimal = new Decimal(value);
 
@@ -28,11 +28,11 @@ export class DecimalType extends Type {
 		return decimal;
 	}
 
-	getColumnType(prop: EntityProperty, platform: Platform) {
+	getColumnType() {
 		return `numeric(${this.precision}, ${this.scale})`;
 	}
 
-	toJSON(value: any, platform: Platform) {
+	toJSON(value: any) {
 		if (value === null || typeof value === 'undefined') return value;
 		if (value instanceof Decimal) {
 			if (value.isNaN()) throw new Error('Decimal should not be NaN');
