@@ -69,9 +69,12 @@ const processPayloadEntry = (
 	key: string,
 	{ meta, originalEntity, entity: updatedEntity, type }: ChangeSet<TrackedEntity<any>>
 ) => {
-	let from = originalEntity ? originalEntity[key as keyof typeof originalEntity] : null;
+	let from: string | undefined | null | Record<string, any> = originalEntity
+		? originalEntity[key as keyof typeof originalEntity]
+		: null;
 	if (!from && type === ChangeSetType.CREATE) from = undefined;
-	let to = updatedEntity[key as keyof typeof updatedEntity] ?? null;
+	let to: string | undefined | null | Record<string, any> =
+		updatedEntity[key as keyof typeof updatedEntity] ?? null;
 
 	if (meta.primaryKeys.length !== 1) throw new Error('Composite primary keys are not supported');
 	const [primaryKey] = meta.primaryKeys;
@@ -88,14 +91,14 @@ const processPayloadEntry = (
 					type: relatedToEntity.constructor.name,
 					id,
 				},
-			} as any;
+			};
 		}
 		to = {
 			reference: {
 				type: relatedToEntity.constructor.name,
 				id: relatedToEntity.unwrap()[primaryKey],
 			},
-		} as any;
+		};
 	}
 	return [key, { from, to }];
 };
