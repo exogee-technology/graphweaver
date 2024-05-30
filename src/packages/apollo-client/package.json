@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"peerDependencies": {
-		"@apollo/client": "3.10.4"
+		"@apollo/client": "^3.10.4"
 	},
 	"devDependencies": {
 		"@apollo/client": "3.10.4",
