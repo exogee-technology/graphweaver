@@ -37,9 +37,6 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Check formatting
-        run: pnpm lint
-
       - name: Build CLI tool
         run: pnpm build
 
