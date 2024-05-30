@@ -1,9 +1,10 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "1.0.0-beta.1",
+	"version": "1.0.0-beta.2",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
+	"license": "MIT",
 	"directories": {
 		"dist": "dist"
 	},

@@ -1,6 +1,6 @@
 {
-	"name": "@exogee/graphweaver-aws-cognito",
-	"version": "1.0.0-beta.1",
+	"name": "@exogee/graphweaver-aws",
+	"version": "1.0.0-beta.2",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -18,7 +18,7 @@
 		"package:pack": "pnpm pack",
 		"version": "npm version --no-git-tag-version"
 	},
-	"license": "UNLICENSED",
+	"license": "MIT",
 	"devDependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"esbuild": "0.21.4",

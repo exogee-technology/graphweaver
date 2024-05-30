@@ -57,7 +57,7 @@
       "path": "src/packages/auth-ui-components"
     },
     {
-      "name": "📦 @exogee/graphweaver-aws-cognito",
+      "name": "📦 @exogee/graphweaver-aws",
       "path": "src/packages/aws-cognito"
     },
     {

@@ -163,9 +163,9 @@ We welcome contributions from the community! If you're interested in improving G
 
 We use [Gitleaks](https://github.com/gitleaks/gitleaks) to ensure that secrets remain secret:
 
-* `brew install gitleaks`
-* `brew install pre-commit`
-* `pre-commit autoupdate`
+- `brew install gitleaks`
+- `brew install pre-commit`
+- `pre-commit autoupdate`
 
 ## Publishing
 
@@ -182,6 +182,10 @@ Evaluate changes and adhere to Semantic Versioning (semver). Run the relevant co
 ```console
 $ pnpm version:bump patch
 ```
+
+To release a beta build run:
+
+`pnpm version:bump 1.0.0-beta.2`
 
 ## 3. Update Package References:
 
