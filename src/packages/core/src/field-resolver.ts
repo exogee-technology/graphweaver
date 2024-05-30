@@ -1,21 +1,16 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
 import { BaseContext } from './types';
 import {
-	GraphQLEntity,
 	getFieldTypeFromFieldMetadata,
 	graphweaverMetadata,
-	isRelatedEntity,
+	isEntityMetadata,
+	isSerializableGraphQLEntityClass,
 } from '.';
+import { dataEntityForGraphQLEntity } from './default-from-backend-entity';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
 	return typeof value == 'object' && value !== null;
 };
-
-const isDeserializable = (
-	entity: typeof GraphQLEntity
-): entity is typeof GraphQLEntity & {
-	deserialize: <T>(value: unknown) => T;
-} => entity && entity.hasOwnProperty('deserialize');
 
 export const fieldResolver = (
 	source: Source,
@@ -35,11 +30,15 @@ export const fieldResolver = (
 		const relationship = metadata.fields[key];
 
 		const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
+		const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-		if (fieldType && isRelatedEntity(fieldType) && isDeserializable(fieldType)) {
+		if (isEntityMetadata(fieldTypeMetadata) && isSerializableGraphQLEntityClass(fieldType)) {
 			return fieldType.deserialize({
-				value: property,
-				parentEntity: source,
+				// Yes, this is a lot of `as any`, but we know this is a GraphQLEntity and it will have come from
+				// our fromBackendEntity function, so we can go right to the data entity and pull out the appropriate
+				// field to pass through here.
+				value: (dataEntityForGraphQLEntity(source as any) as any)[info.fieldName],
+				parent: source,
 				entityMetadata: metadata,
 				fieldMetadata: relationship,
 			});

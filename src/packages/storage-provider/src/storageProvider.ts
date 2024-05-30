@@ -5,7 +5,7 @@ import {
 	DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { graphweaverMetadata, BaseContext, GraphQLResolveInfo, Source } from '@exogee/graphweaver';
+import { graphweaverMetadata, ResolverOptions } from '@exogee/graphweaver';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { randomUUID } from 'crypto';
 import { MediaType } from './decorators/media-field';
@@ -72,12 +72,11 @@ export class S3StorageProvider {
 		});
 	}
 
-	async getUploadUrl(
-		_source: Source,
-		{ key }: { key: string },
-		_ctx: BaseContext,
-		_info: GraphQLResolveInfo
-	): Promise<{ url: string; filename: string; type: MediaType }> {
+	async getUploadUrl({ args: { key } }: ResolverOptions<{ key: string }>): Promise<{
+		url: string;
+		filename: string;
+		type: MediaType;
+	}> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
 		const s3 = new S3Client({
@@ -104,12 +103,7 @@ export class S3StorageProvider {
 		};
 	}
 
-	async getDeleteUrl(
-		_source: Source,
-		{ key }: { key: string },
-		_ctx: BaseContext,
-		_info: GraphQLResolveInfo
-	): Promise<string> {
+	async getDeleteUrl({ args: { key } }: ResolverOptions<{ key: string }>): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
 		const s3 = new S3Client({
@@ -125,12 +119,7 @@ export class S3StorageProvider {
 		return getSignedUrl(s3, command, { expiresIn: this.expiresIn });
 	}
 
-	async getDownloadUrl(
-		_source: Source,
-		{ key }: { key: string },
-		_ctx?: BaseContext,
-		_info?: GraphQLResolveInfo
-	): Promise<string> {
+	async getDownloadUrlForKey(key: string): Promise<string> {
 		if (!this.bucketName) throw new Error('Missing required env AWS_S3_BUCKET');
 
 		const s3 = new S3Client({
@@ -143,5 +132,9 @@ export class S3StorageProvider {
 			Key: key,
 		});
 		return getSignedUrl(s3, command, { expiresIn: this.expiresIn });
+	}
+
+	async getDownloadUrl({ args: { key } }: ResolverOptions<{ key: string }>): Promise<string> {
+		return this.getDownloadUrlForKey(key);
 	}
 }

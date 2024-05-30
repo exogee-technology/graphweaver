@@ -1,16 +1,17 @@
-import { BaseDataEntity, EntityMetadata, graphweaverMetadata, isEntityMetadata } from '..';
+import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '..';
 
-export const applyDefaultValues = <G>(
+export const applyDefaultValues = <G = unknown, D = unknown>(
 	data: Partial<G> | Partial<G>[],
-	entityMetadata: EntityMetadata<G, BaseDataEntity>
+	entityMetadata: EntityMetadata<G, D>
 ) => {
 	const dataArray = Array.isArray(data) ? data : [data];
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata);
 
 	for (const item of dataArray) {
 		// If the item has an ID, then it is an update, and we should not apply default values.
 		// This function is called from createOrUpdate mutations, so we don't want to be applying defaults
 		// on updates where users are trying to set just one value.
-		if ((item as any).id !== undefined) continue;
+		if ((item as any)[primaryKeyField] !== undefined) continue;
 
 		for (const field of Object.values(entityMetadata.fields)) {
 			const currentValue = item[field.name as keyof G];

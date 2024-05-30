@@ -1,9 +1,8 @@
 import {
 	BackendProvider,
-	CreateOrUpdateHookParams,
+	ResolverOptions,
 	Field,
 	FieldMetadata,
-	FieldOptions,
 	HookParams,
 	HookRegister,
 	ID,
@@ -14,15 +13,14 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
-import { GraphQLResolveInfo, Source } from 'graphql';
 
 import { AccessControlList, AuthorizationContext } from '../../types';
-import { ApiKeyStorage, ApiKeyEntity } from '../entities';
+import { ApiKeyEntity } from '../entities';
 import { hashPassword } from '../../utils/argon2id';
 import { AclMap } from '../../helper-functions';
 
 @InputType(`ApiKeyInsertInput`)
-export class ApiKeyInputArgs {
+export class ApiKeyInputArgs<R> {
 	@Field(() => String)
 	key!: string;
 
@@ -33,7 +31,7 @@ export class ApiKeyInputArgs {
 	revoked?: boolean;
 
 	@Field(() => [String], { nullable: true })
-	roles?: string[];
+	roles?: R[];
 }
 
 @InputType(`ApiKeyUpdateInput`)
@@ -54,9 +52,9 @@ export class ApiKeyUpdateInputArgs<R> {
 	roles?: R[];
 }
 
-type ApiKeyProvider<R> = BackendProvider<ApiKeyStorage<R>, ApiKeyEntity<ApiKeyStorage<R>, R>>;
+type ApiKeyProvider<R> = BackendProvider<ApiKeyEntity<R>>;
 
-export class ApiKey<R> {
+export class ApiKey<R extends string[]> {
 	private provider: ApiKeyProvider<R>;
 	private transactional: boolean;
 
@@ -67,7 +65,7 @@ export class ApiKey<R> {
 	}: {
 		provider: ApiKeyProvider<R>;
 		roles: unknown;
-		acl?: AccessControlList<ApiKeyEntity<ApiKeyStorage<R>, R>, AuthorizationContext>;
+		acl?: AccessControlList<ApiKeyEntity<R>, AuthorizationContext>;
 	}) {
 		this.provider = provider;
 		this.transactional = !!provider.withTransaction;
@@ -78,21 +76,15 @@ export class ApiKey<R> {
 		}
 
 		// Collect the provider information for the API Key entity
-		graphweaverMetadata.collectProviderInformationForEntity<
-			typeof ApiKeyEntity<ApiKeyStorage<R>, R>,
-			ApiKeyStorage<R>
-		>({
-			provider: this.provider as BackendProvider<
-				ApiKeyStorage<R>,
-				typeof ApiKeyEntity<ApiKeyStorage<R>, R>
-			>,
-			target: ApiKeyEntity<ApiKeyStorage<R>, R>,
+		graphweaverMetadata.collectProviderInformationForEntity({
+			provider: this.provider,
+			target: ApiKeyEntity,
 		});
 
 		// Override the roles field for the API Key entity
 		const metadata = graphweaverMetadata.getEntityByName('ApiKey');
-		const roleFieldMetadata = metadata?.fields.roles as Pick<
-			FieldMetadata<ApiKeyEntity<ApiKeyStorage<R>, R>, ApiKeyStorage<R>>,
+		const roleFieldMetadata = metadata?.fields.roles as unknown as Pick<
+			FieldMetadata<ApiKeyEntity<R>, ApiKeyEntity<R>>,
 			'target' | 'name' | 'getType' | 'relationshipInfo'
 		>;
 		graphweaverMetadata.collectFieldInformation({
@@ -106,7 +98,7 @@ export class ApiKey<R> {
 			args: {
 				input: ApiKeyInputArgs,
 			},
-			getType: () => ApiKeyEntity<ApiKeyStorage<R>, R>,
+			getType: () => ApiKeyEntity<R>,
 			resolver: this.createApiKey.bind(this),
 			intentionalOverride: true,
 		});
@@ -116,7 +108,7 @@ export class ApiKey<R> {
 			args: {
 				input: ApiKeyUpdateInputArgs,
 			},
-			getType: () => ApiKeyEntity<ApiKeyStorage<R>, R>,
+			getType: () => ApiKeyEntity<R>,
 			resolver: this.updateApiKey.bind(this),
 			intentionalOverride: true,
 		});
@@ -126,11 +118,11 @@ export class ApiKey<R> {
 		return this.provider.withTransaction ? this.provider.withTransaction<T>(callback) : callback();
 	}
 
-	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs | ApiKeyUpdateInputArgs<R>>>(
+	public async runAfterHooks<H extends HookParams<ApiKeyInputArgs<R> | ApiKeyUpdateInputArgs<R>>>(
 		hookRegister: HookRegister,
 		hookParams: H,
-		entities: (ApiKeyStorage<R> | null)[]
-	): Promise<(ApiKeyStorage<R> | null)[]> {
+		entities: (ApiKeyEntity<R> | null)[]
+	): Promise<(ApiKeyEntity<R> | null)[]> {
 		const hookManager = hookManagerMap.get('ApiKey');
 		const { entities: hookEntities = [] } = hookManager
 			? await hookManager.runHooks(hookRegister, {
@@ -142,67 +134,20 @@ export class ApiKey<R> {
 		return hookEntities;
 	}
 
-	async create(params: CreateOrUpdateHookParams<ApiKeyInputArgs>): Promise<ApiKeyStorage<R>> {
-		const [item] = params.args.items;
-		if (!item) throw new ValidationError('No data specified cannot continue.');
-
-		if (!item.key) throw new ValidationError('Create unsuccessful: Key not defined.');
-
-		if (!item.secret) throw new ValidationError('Create unsuccessful: Secret not defined.');
-
-		const secretHash = await hashPassword(item.secret);
-		const apiKey = await this.provider.createOne({
-			key: item.key,
-			secret: secretHash,
-			...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
-			...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
-		} as ApiKeyStorage<R>);
-
-		const [entity] = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [apiKey]);
-		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-
-		return entity;
-	}
-
-	async update(
-		params: CreateOrUpdateHookParams<ApiKeyUpdateInputArgs<R>>
-	): Promise<ApiKeyStorage<R>> {
-		const [item] = params.args.items;
-		if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
-
-		if (!item.key && !item.key)
-			throw new ValidationError('Update unsuccessful: Nothing to update.');
-
-		const secretHash = item.secret ? await hashPassword(item.secret) : undefined;
-
-		const apiKey = await this.provider.updateOne(item.id, {
-			...(item.key ? { key: item.key } : {}),
-			...(secretHash ? { secret: secretHash } : {}),
-			...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
-			...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
-		});
-
-		const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [apiKey]);
-		if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
-
-		return apiKey;
-	}
-
-	async createApiKey(
-		_: Source,
-		{ input }: { input: ApiKeyInputArgs },
-		context: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<ApiKeyStorage<R>, R> | null> {
+	async createApiKey({
+		args: { input },
+		context,
+		fields,
+	}: ResolverOptions<{ input: ApiKeyInputArgs<R> }>): Promise<ApiKeyEntity<R> | null> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
-				info,
 				context,
+				fields,
 				transactional: this.transactional,
 			};
 
-			const hookParams = await runWritableBeforeHooks<ApiKeyInputArgs>(
+			const hookParams = await runWritableBeforeHooks<ApiKeyInputArgs<R>>(
 				HookRegister.BEFORE_CREATE,
 				params,
 				'ApiKey'
@@ -210,7 +155,24 @@ export class ApiKey<R> {
 
 			let apiKey;
 			try {
-				apiKey = await this.create(hookParams);
+				const [item] = hookParams.args.items;
+				if (!item) throw new ValidationError('No data specified cannot continue.');
+				if (!item.key) throw new ValidationError('Create unsuccessful: Key not defined.');
+				if (!item.secret) throw new ValidationError('Create unsuccessful: Secret not defined.');
+
+				const secretHash = await hashPassword(item.secret);
+				const newApiKey = await this.provider.createOne({
+					key: item.key,
+					secret: secretHash,
+					...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
+					...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
+				});
+
+				const entities = await this.runAfterHooks(HookRegister.AFTER_CREATE, params, [newApiKey]);
+				if (!entities?.[0])
+					throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+
+				apiKey = entities[0];
 			} catch (err) {
 				logger.error(err);
 				if (err instanceof ValidationError) throw err;
@@ -224,22 +186,19 @@ export class ApiKey<R> {
 				);
 			}
 
-			return ApiKeyEntity.fromBackendEntity<ApiKeyStorage<R>, ApiKeyEntity<ApiKeyStorage<R>, R>>(
-				apiKey
-			);
+			return apiKey;
 		});
 	}
 
-	async updateApiKey(
-		_: Source,
-		{ input }: { input: ApiKeyUpdateInputArgs<R> },
-		context: AuthorizationContext,
-		info: GraphQLResolveInfo
-	): Promise<ApiKeyEntity<ApiKeyStorage<R>, R> | null> {
+	async updateApiKey({
+		args: { input },
+		context,
+		fields,
+	}: ResolverOptions<{ input: ApiKeyUpdateInputArgs<R> }>): Promise<ApiKeyEntity<R> | null> {
 		return this.withTransaction(async () => {
 			const params = {
 				args: { items: [input] },
-				info,
+				fields,
 				context,
 				transactional: this.transactional,
 			};
@@ -251,7 +210,25 @@ export class ApiKey<R> {
 					params,
 					'ApiKey'
 				);
-				apiKey = await this.update(hookParams);
+				const [item] = hookParams.args.items;
+				if (!item.id) throw new ValidationError('Update unsuccessful: No ID sent in request.');
+
+				if (!item.key && !item.key)
+					throw new ValidationError('Update unsuccessful: Nothing to update.');
+
+				const secretHash = item.secret ? await hashPassword(item.secret) : undefined;
+
+				const newApiKey = await this.provider.updateOne(item.id, {
+					...(item.key ? { key: item.key } : {}),
+					...(secretHash ? { secret: secretHash } : {}),
+					...(Object(item).hasOwnProperty('revoked') ? { revoked: item.revoked } : {}),
+					...(Object(item).hasOwnProperty('roles') ? { roles: item.roles } : {}),
+				});
+
+				const [entity] = await this.runAfterHooks(HookRegister.AFTER_UPDATE, params, [newApiKey]);
+				if (!entity) throw new AuthenticationError('Bad Request: Authentication Save Failed.');
+
+				apiKey = entity;
 			} catch (err) {
 				logger.error(err);
 				if (err instanceof ValidationError) throw err;
@@ -264,9 +241,7 @@ export class ApiKey<R> {
 				);
 			}
 
-			return ApiKeyEntity.fromBackendEntity<ApiKeyStorage<R>, ApiKeyEntity<ApiKeyStorage<R>, R>>(
-				apiKey
-			);
+			return apiKey;
 		});
 	}
 }

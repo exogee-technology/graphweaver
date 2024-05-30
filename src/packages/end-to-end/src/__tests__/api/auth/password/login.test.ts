@@ -18,14 +18,9 @@ const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		user.password = await hashPassword(user.password ?? '');
 		return user;

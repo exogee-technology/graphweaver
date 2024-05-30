@@ -1,4 +1,4 @@
-import { Filter, SortField } from './use-schema';
+import { Entity, SortField } from './use-schema';
 
 export const isNumeric = (item: unknown): boolean => {
 	if (item === undefined || item === null) return false;
@@ -9,8 +9,8 @@ export const isNumeric = (item: unknown): boolean => {
 	return false;
 };
 
-export const getOrderByQuery = (sort?: SortField[]) => ({
+export const getOrderByQuery = (entity: Entity, sort?: SortField[]) => ({
 	...(sort
 		? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
-		: { id: 'ASC' }),
+		: { [entity.primaryKeyField]: 'ASC' }),
 });

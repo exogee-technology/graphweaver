@@ -6,7 +6,6 @@ import {
 	UserProfile,
 	AuthorizationContext,
 	ForbiddenError,
-	Credential,
 	CredentialStorage,
 	Password,
 	PasswordOperation,
@@ -18,10 +17,7 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {}
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {}
 
 export const password = new Password({
 	provider: new PasswordBackendProvider('password'),

@@ -1,4 +1,4 @@
-import { Entity, Field, GraphQLEntity, ID, RelationshipField } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Invoice } from './invoice';
 import { Track } from './track';
@@ -8,16 +8,16 @@ import { connection } from '../database';
 @Entity('InvoiceLine', {
 	provider: new MikroBackendProvider(OrmInvoiceLine, connection),
 })
-export class InvoiceLine extends GraphQLEntity<OrmInvoiceLine> {
-	public dataEntity!: OrmInvoiceLine;
+export class InvoiceLine {
+	@Field(() => ID, { primaryKeyField: true })
+	invoiceLineId!: number;
 
-	@Field(() => ID)
-	id!: number;
-
-	@RelationshipField<InvoiceLine>(() => Invoice, { id: (entity) => entity.invoice?.id })
+	@RelationshipField<InvoiceLine>(() => Invoice, {
+		id: (entity) => entity.invoice?.invoiceId,
+	})
 	invoice!: Invoice;
 
-	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.id })
+	@RelationshipField<InvoiceLine>(() => Track, { id: (entity) => entity.track?.trackId })
 	track!: Track;
 
 	@Field(() => String)

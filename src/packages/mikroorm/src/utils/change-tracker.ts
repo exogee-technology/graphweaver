@@ -57,7 +57,7 @@ const dataForChangeSet = <T extends TrackedEntity<T>>(cs: ChangeSet<TrackedEntit
 	if (cs.payload && cs.type !== ChangeSetType.DELETE) {
 		const entries = Object.entries(cs.payload)
 			.filter(([k]) => !isUntrackedProperty(cs.entity, k))
-			.map(([k]) => processPayloadEntry(k, cs.type, cs.entity, cs.originalEntity));
+			.map(([k]) => processPayloadEntry(k, cs));
 		const id = cs.type === ChangeSetType.CREATE ? { to: cs.entity.id } : undefined;
 		if (entries.length || id) return { ...Object.fromEntries(entries), id };
 	}
@@ -67,19 +67,24 @@ const dataForChangeSet = <T extends TrackedEntity<T>>(cs: ChangeSet<TrackedEntit
 
 const processPayloadEntry = (
 	key: string,
-	changeSetType: ChangeSetType,
-	updatedEntity: AnyEntity,
-	originalEntity?: AnyEntity
+	{ meta, originalEntity, entity: updatedEntity, type }: ChangeSet<TrackedEntity<any>>
 ) => {
-	let from = originalEntity ? originalEntity[key] : null;
-	if (!from && changeSetType === ChangeSetType.CREATE) from = undefined;
-	let to = updatedEntity[key] ?? null;
+	let from: string | undefined | null | Record<string, any> = originalEntity
+		? originalEntity[key as keyof typeof originalEntity]
+		: null;
+	if (!from && type === ChangeSetType.CREATE) from = undefined;
+	let to: string | undefined | null | Record<string, any> =
+		updatedEntity[key as keyof typeof updatedEntity] ?? null;
+
+	if (meta.primaryKeys.length !== 1) throw new Error('Composite primary keys are not supported');
+	const [primaryKey] = meta.primaryKeys;
 
 	if (Reference.isReference(to)) {
 		const relatedToEntity = to as Reference<AnyEntity>;
+		relatedToEntity.getEntity();
 		if (from) {
 			const id = Reference.isReference(from)
-				? (from as Reference<AnyEntity>).getProperty('id')
+				? (from as Reference<AnyEntity>).getProperty(primaryKey)
 				: from;
 			from = {
 				reference: {
@@ -91,7 +96,7 @@ const processPayloadEntry = (
 		to = {
 			reference: {
 				type: relatedToEntity.constructor.name,
-				id: relatedToEntity.unwrap().id,
+				id: relatedToEntity.unwrap()[primaryKey],
 			},
 		};
 	}

@@ -1,9 +1,17 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../../../../types';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
+
+type Album = {
+	albumId: number;
+	title: string;
+	artist: {
+		artistId: number;
+		name: string;
+	};
+};
 
 describe('basic create', () => {
 	beforeEach(resetDatabase);
@@ -13,13 +21,13 @@ describe('basic create', () => {
 			.mutate(gql`
 				mutation CreateAlbum($input: AlbumInsertInput!) {
 					createAlbum(input: $input) {
-						id
+						albumId
 					}
 				}
 			`)
-			.variables({ input: { artist: { id: 1 }, title: 'string' } })
+			.variables({ input: { artist: { artistId: 1 }, title: 'string' } })
 			.expectNoErrors();
 
-		expect(data?.createAlbum?.id).toBe('348');
+		expect(data?.createAlbum?.albumId).toBe('348');
 	});
 });

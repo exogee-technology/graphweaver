@@ -1,9 +1,17 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../../../../types';
 import { config } from '../../../../config';
 import { resetDatabase } from '../../../../utils';
+
+type Album = {
+	albumId: number;
+	title: string;
+	artist: {
+		artistId: number;
+		name: string;
+	};
+};
 
 describe('basic filter', () => {
 	beforeEach(resetDatabase);
@@ -13,10 +21,10 @@ describe('basic filter', () => {
 			.query(gql`
 				query Albums($filter: AlbumsListFilter) {
 					albums(filter: $filter) {
-						id
+						albumId
 						title
 						artist {
-							id
+							artistId
 							name
 						}
 					}

@@ -3,16 +3,16 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
 	AuthorizationContext,
 	authApolloPlugin,
 	UserProfile,
-	ApiKeyStorage,
+	ApiKeyEntity,
 } from '@exogee/graphweaver-auth';
-import { MikroBackendProvider, BaseEntity, ConnectionManager } from '@exogee/graphweaver-mikroorm';
+import { MikroBackendProvider, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
 import {
 	BigIntType,
@@ -30,7 +30,7 @@ enum Roles {
 
 // Create Entity
 @OrmEntity({ tableName: 'api_key' })
-class OrmApiKey extends BaseEntity implements ApiKeyStorage<Roles> {
+class OrmApiKey implements ApiKeyEntity<Roles> {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
@@ -48,7 +48,7 @@ class OrmApiKey extends BaseEntity implements ApiKeyStorage<Roles> {
 }
 
 @OrmEntity()
-export class OrmTask extends BaseEntity {
+export class OrmTask {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
@@ -80,9 +80,7 @@ const acl: AccessControlList<Task, AuthorizationContext> = {
 @Entity('Task', {
 	provider: new MikroBackendProvider(OrmTask, connection),
 })
-export class Task extends GraphQLEntity<OrmTask> {
-	public dataEntity!: OrmTask;
-
+export class Task {
 	@Field(() => ID)
 	id!: number;
 

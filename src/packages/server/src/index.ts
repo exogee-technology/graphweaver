@@ -112,7 +112,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
-		this.schema = SchemaBuilder.build();
+		try {
+			this.schema = SchemaBuilder.build();
+		} catch (error) {
+			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');
+			throw error;
+		}
 
 		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
 		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());

@@ -1,4 +1,4 @@
-import { GraphQLEntity, Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	S3StorageProvider,
 	StorageType,
@@ -23,9 +23,7 @@ const s3 = new S3StorageProvider({
 @Entity('Submission', {
 	provider: new MikroBackendProvider(OrmSubmission, pgConnection),
 })
-export class Submission extends GraphQLEntity<OrmSubmission> {
-	public dataEntity!: OrmSubmission;
-
+export class Submission {
 	@Field(() => ID)
 	id!: string;
 

@@ -1,10 +1,8 @@
 import {
 	AnyEntity,
-	Collection,
 	EntityData,
 	EntityManager,
 	EntityProperty,
-	FilterQuery,
 	Reference,
 	ReferenceKind,
 	Utils,
@@ -43,7 +41,7 @@ export const assign = async <T extends AnyEntity<T>>(
 	const metadata = wrap(entity, true).__meta!;
 
 	for (const [property, value] of Object.entries(data)) {
-		const entityPropertyValue = (entity as any)[property];
+		const entityPropertyValue = entity[property as keyof T];
 
 		// We're going to need the metadata for this property so we can ensure it exists and so that we can
 		// navigate to related entities.
@@ -67,25 +65,39 @@ export const assign = async <T extends AnyEntity<T>>(
 				);
 			}
 
+			const relatedEntity = em.getMetadata().find(propertyMetadata.entity());
+			if (relatedEntity?.primaryKeys.length !== 1) {
+				throw new Error(
+					`Entity ${propertyMetadata.entity()} has multiple primary keys, which is not yet supported.`
+				);
+			}
+			const [relatedPrimaryKeyField] = relatedEntity.primaryKeys;
+
 			const visitedEntities = new Set<T>();
 
 			for (const subvalue of value) {
 				let entity: T | undefined;
 
-				if (subvalue.id) {
+				if (subvalue[relatedPrimaryKeyField]) {
 					// Get the current entity from the ORM if there's an ID.
-					entity = em.getUnitOfWork().getById(propertyMetadata.type, subvalue.id);
+					entity = em
+						.getUnitOfWork()
+						.getById(propertyMetadata.type, subvalue[relatedPrimaryKeyField]);
 
 					if (!entity) {
 						// There are two cases here: either the user is trying to assign properties to the entity as well as changing members of a collection,
 						// or they're just changing members of a collection.
 						// For the former we actually need the entity from the DB, while for the latter we can let it slide and just pass an ID entity on down.
-						if (Object.keys(subvalue).length === 1) {
+						const subvalueKeys = Object.keys(subvalue);
+						if (subvalueKeys.length === 1 && subvalueKeys[0] === relatedPrimaryKeyField) {
 							// It's just the ID.
-							entity = em.getReference(propertyMetadata.type, subvalue.id) as T;
+							entity = em.getReference(
+								propertyMetadata.type,
+								subvalue[relatedPrimaryKeyField]
+							) as T;
 						} else {
 							logger.warn(
-								`Doing a full database fetch for ${propertyMetadata.type} with id ${subvalue.id}, this should ideally be prefetched into the Unit of Work before calling assign() for performance`
+								`Doing a full database fetch for ${propertyMetadata.type} with id ${subvalue[relatedPrimaryKeyField]}, this should ideally be prefetched into the Unit of Work before calling assign() for performance`
 							);
 
 							// We should be prefetching for performance in most cases here but if we don't have it we can load it now.
@@ -94,7 +106,7 @@ export const assign = async <T extends AnyEntity<T>>(
 							// to is not in the unit of work.
 							entity =
 								((await em.findOne<any>(propertyMetadata.type, {
-									id: subvalue.id,
+									[relatedPrimaryKeyField]: subvalue[relatedPrimaryKeyField],
 								})) as T | null) ?? undefined;
 						}
 					}
@@ -109,6 +121,7 @@ export const assign = async <T extends AnyEntity<T>>(
 				const newEntity = await createOrAssignEntity<T>({
 					entity,
 					entityType: propertyMetadata.type,
+					primaryKeyField: relatedPrimaryKeyField,
 					data: subvalue,
 					options,
 					visited,
@@ -128,7 +141,7 @@ export const assign = async <T extends AnyEntity<T>>(
 			// ------------
 			// ❗🐻 WARNING BEAR TRAP 🐻❗: If you're looking at this going, "But I just want to pass in the items I want to update and for it not to
 			//          mess with the rest of the collection", this is here because without this behaviour, there's no way to remove items from
-			//          Many to many properties. Consider the case of tags on an entity, when we pass ['a', 'b', 'c'] as the list of tags, that
+			//          Many to Many properties. Consider the case of tags on an entity, when we pass ['a', 'b', 'c'] as the list of tags, that
 			//          means we need to remove anything that isn't 'a', 'b', or 'c' because it's not in the array.
 			entityPropertyValue.remove(
 				entityPropertyValue.getItems().filter((entity) => !visitedEntities.has(entity))
@@ -142,9 +155,25 @@ export const assign = async <T extends AnyEntity<T>>(
 				(entity as any)[property] = null;
 			} else {
 				const valueKeys = Object.keys(value as any);
-				if (valueKeys.length === 1 && valueKeys[0] === 'id') {
+				const relatedEntity = em.getMetadata().find(propertyMetadata.entity());
+				if (!relatedEntity) {
+					throw new Error(
+						`Could not find entity ${propertyMetadata.entity()} in MikroORM metadata.`
+					);
+				}
+				if (relatedEntity.primaryKeys.length !== 1) {
+					throw new Error(
+						`Entity ${propertyMetadata.entity()} has ${relatedEntity.primaryKeys.length} primary keys, but we only support 1.`
+					);
+				}
+				const relatedPrimaryKeyField = relatedEntity.primaryKeys[0];
+
+				if (valueKeys.length === 1 && valueKeys[0] === relatedPrimaryKeyField) {
 					// Ok, this is just the ID, set the reference and move on.
-					(entity as any)[property] = em.getReference(propertyMetadata.type, (value as any).id);
+					entity[property as keyof T] = em.getReference(
+						propertyMetadata.type,
+						(value as any)[relatedPrimaryKeyField]
+					);
 				} else {
 					if (entityPropertyValue && !Reference.isReference(entityPropertyValue)) {
 						throw new Error(
@@ -152,22 +181,23 @@ export const assign = async <T extends AnyEntity<T>>(
 						);
 					}
 
-					if (entityPropertyValue && !entityPropertyValue.isInitialized()) {
+					if (Reference.isReference(entityPropertyValue) && !entityPropertyValue.isInitialized()) {
 						throw new Error(
 							`Trying to merge to related property ${property} on entity ${metadata.name} which is not initialised.`
 						);
 					}
 
 					const newEntity = await createOrAssignEntity<T>({
-						entity: entityPropertyValue?.unwrap() as T,
+						entity: (entityPropertyValue as Reference<T>)?.unwrap(),
 						entityType: propertyMetadata.type,
+						primaryKeyField: relatedPrimaryKeyField,
 						data: value as EntityData<T>,
 						options,
 						visited,
 						em,
 					});
 
-					(entity as any)[property] = Reference.create(newEntity);
+					(relatedEntity as any)[property] = Reference.create(newEntity);
 				}
 			}
 		} else {
@@ -182,6 +212,7 @@ export const assign = async <T extends AnyEntity<T>>(
 const createOrAssignEntity = <T extends AnyEntity<T>>({
 	entity,
 	entityType,
+	primaryKeyField,
 	data,
 	options,
 	visited,
@@ -189,6 +220,7 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 }: {
 	entity?: T;
 	entityType: string;
+	primaryKeyField: string;
 	data: EntityData<T>;
 	options?: AssignOptions;
 	visited: Set<AnyEntity<any>>;
@@ -197,7 +229,7 @@ const createOrAssignEntity = <T extends AnyEntity<T>>({
 	const create = options?.create ?? true;
 	const update = options?.update ?? true;
 
-	if ((data as any).id) {
+	if ((data as any)[primaryKeyField]) {
 		if (!update) {
 			throw new Error(
 				`Updates are disabled, but update value ${JSON.stringify(

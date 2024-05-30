@@ -10,19 +10,16 @@ import {
 	MultiFactorAuthentication,
 } from '../../types';
 import { Token, AuthenticationBaseEntity } from '../entities';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AuthTokenProvider } from '../token';
 import { checkAuthentication } from '../../helper-functions';
 import { ChallengeError } from '../../errors';
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 
 export type WalletAddress = {
 	address: string;
 };
 
-type Web3AuthProvider = BackendProvider<
-	AuthenticationBaseEntity<WalletAddress>,
-	AuthenticationBaseEntity<WalletAddress>
->;
+type Web3AuthProvider = BackendProvider<AuthenticationBaseEntity<WalletAddress>>;
 
 export class Web3 {
 	private provider: Web3AuthProvider;
@@ -129,11 +126,9 @@ export class Web3 {
 	}
 
 	// Use this query to check if you can enrol a wallet
-	async canEnrolWallet(
-		_source: unknown,
-		_args: unknown,
-		context: AuthorizationContext
-	): Promise<boolean> {
+	async canEnrolWallet({
+		context,
+	}: ResolverOptions<unknown, AuthorizationContext>): Promise<boolean> {
 		try {
 			if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 			if (!context.user?.id)
@@ -153,11 +148,10 @@ export class Web3 {
 		}
 	}
 
-	async enrolWallet(
-		_source: unknown,
-		{ token }: { token: string },
-		context: AuthorizationContext
-	): Promise<boolean> {
+	async enrolWallet({
+		args: { token },
+		context,
+	}: ResolverOptions<{ token: string }, AuthorizationContext>): Promise<boolean> {
 		try {
 			if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 			if (!context.user?.id)
@@ -180,11 +174,10 @@ export class Web3 {
 		}
 	}
 
-	async verifyWeb3Challenge(
-		_source: unknown,
-		{ token }: { token: string },
-		context: AuthorizationContext
-	): Promise<Token> {
+	async verifyWeb3Challenge({
+		args: { token },
+		context,
+	}: ResolverOptions<{ token: string }, AuthorizationContext>): Promise<Token> {
 		try {
 			const userId = context.user?.id;
 			if (!userId) throw new AuthenticationError('Challenge unsuccessful: Authentication failed.');
@@ -208,7 +201,7 @@ export class Web3 {
 					: context.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 
-			return verifyAndCreateTokenFromAuthToken(authToken);
+			return authToken;
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 

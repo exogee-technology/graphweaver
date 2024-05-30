@@ -1,12 +1,11 @@
 import { Entity, ManyToOne, PrimaryKey, Property, Ref } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { Invoice } from './invoice';
 import { Track } from './track';
 
 @Entity({ tableName: 'InvoiceLine' })
-export class InvoiceLine extends BaseEntity {
+export class InvoiceLine {
 	@PrimaryKey({ fieldName: 'InvoiceLineId', type: 'number' })
-	id!: number;
+	invoiceLineId!: number;
 
 	@ManyToOne({
 		entity: () => Invoice,

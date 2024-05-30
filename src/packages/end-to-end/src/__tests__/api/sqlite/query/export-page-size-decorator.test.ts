@@ -2,15 +2,15 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
-import { BaseEntity, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { Field, ID, Entity } from '@exogee/graphweaver';
+import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
 /** Setup entities and resolvers  */
 @DataEntity({ tableName: 'Album' })
-class OrmAlbum extends BaseEntity {
+class OrmAlbum {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
 
@@ -19,7 +19,7 @@ class OrmAlbum extends BaseEntity {
 }
 
 @DataEntity({ tableName: 'Artist' })
-class OrmArtist extends BaseEntity {
+class OrmArtist {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
 	id!: number;
 
@@ -42,9 +42,7 @@ const connection = {
 		exportPageSize: 500,
 	},
 })
-export class Album extends GraphQLEntity<OrmAlbum> {
-	public dataEntity!: OrmAlbum;
-
+export class Album {
 	@Field(() => ID)
 	id!: number;
 
@@ -58,9 +56,7 @@ export class Album extends GraphQLEntity<OrmAlbum> {
 		exportPageSize: 100,
 	},
 })
-export class Artist extends GraphQLEntity<OrmArtist> {
-	public dataEntity!: OrmArtist;
-
+export class Artist {
 	@Field(() => ID)
 	id!: number;
 

@@ -6,10 +6,9 @@ import { randomUUID } from 'crypto';
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../types';
 import { Token } from '../entities/token';
 import { UserProfile } from '../../user-profile';
-import { AuthTokenProvider, verifyAndCreateTokenFromAuthToken } from '../token';
+import { AuthTokenProvider } from '../token';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
-import { GraphQLResolveInfo, Source } from 'graphql';
+import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationType } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
 
@@ -33,10 +32,7 @@ export interface MagicLinkEntity {
 	data: MagicLinkData;
 }
 
-type MagicLinkProvider = BackendProvider<
-	AuthenticationBaseEntity<MagicLinkData>,
-	AuthenticationBaseEntity<MagicLinkData>
->;
+type MagicLinkProvider = BackendProvider<AuthenticationBaseEntity<MagicLinkData>>;
 
 export interface MagicLinkOptions {
 	provider: MagicLinkProvider;
@@ -176,8 +172,6 @@ export class MagicLink {
 				? await tokenProvider.stepUpToken(existingAuthToken)
 				: await tokenProvider.generateToken(userProfile);
 
-			const token = verifyAndCreateTokenFromAuthToken(authToken);
-
 			// Mark the magic link as used
 			await this.provider.updateOne(link.id, {
 				data: {
@@ -186,7 +180,7 @@ export class MagicLink {
 				},
 			});
 
-			return token;
+			return authToken;
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 
@@ -195,12 +189,10 @@ export class MagicLink {
 		}
 	}
 
-	async sendLoginMagicLink(
-		_source: Source,
-		{ username }: { username: string },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async sendLoginMagicLink({
+		args: { username },
+		context,
+	}: ResolverOptions<{ username: string }, AuthorizationContext>): Promise<boolean> {
 		const { url, link } = (await this.generateMagicLink(username, context)) ?? {};
 
 		// fail silently
@@ -215,21 +207,15 @@ export class MagicLink {
 		return this.sendMagicLink(url, link);
 	}
 
-	async verifyLoginMagicLink(
-		_source: Source,
-		{ username, token }: { username: string; token: string },
-		_context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<Token> {
+	async verifyLoginMagicLink({
+		args: { username, token },
+	}: ResolverOptions<{ username: string; token: string }>): Promise<Token> {
 		return this.verifyMagicLink(username, token);
 	}
 
-	async sendChallengeMagicLink(
-		_source: Source,
-		_args: Record<string, never>,
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async sendChallengeMagicLink({
+		context,
+	}: ResolverOptions<unknown, AuthorizationContext>): Promise<boolean> {
 		const username = context.user?.username;
 		if (!username) throw new AuthenticationError('Challenge unsuccessful: Username missing.');
 
@@ -247,12 +233,10 @@ export class MagicLink {
 		return this.sendMagicLink(url, link);
 	}
 
-	async verifyChallengeMagicLink(
-		_source: Source,
-		{ token }: { token: string },
-		context: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<Token> {
+	async verifyChallengeMagicLink({
+		args: { token },
+		context,
+	}: ResolverOptions<{ token: string }, AuthorizationContext>): Promise<Token> {
 		if (!context.token) throw new AuthenticationError('Challenge unsuccessful: Token missing.');
 		const tokenProvider = new AuthTokenProvider(AuthenticationMethod.MAGIC_LINK);
 		const existingToken =

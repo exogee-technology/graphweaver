@@ -1,7 +1,6 @@
 import {
 	UserProfile,
 	authApolloPlugin,
-	Credential,
 	Passkey,
 	CredentialStorage,
 	hashPassword,
@@ -24,14 +23,9 @@ const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		return {
 			...user,
@@ -51,7 +45,6 @@ export const password = new Password({
 });
 
 class PasskeyChallengeBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<PasskeyChallenge>,
 	AuthenticationBaseEntity<PasskeyChallenge>
 > {
 	async createOne() {
@@ -66,7 +59,6 @@ class PasskeyChallengeBackendProvider extends BaseDataProvider<
 }
 
 class PasskeyAuthenticatorBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<PasskeyAuthenticator>,
 	AuthenticationBaseEntity<PasskeyAuthenticator>
 > {
 	async find() {

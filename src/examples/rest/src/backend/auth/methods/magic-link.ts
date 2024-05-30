@@ -1,11 +1,12 @@
 import { MagicLink, MagicLinkData, MagicLinkEntity, UserProfile } from '@exogee/graphweaver-auth';
-import { BaseLoaders } from '@exogee/graphweaver';
+import { BaseLoaders, fromBackendEntity } from '@exogee/graphweaver';
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { mapUserToProfile } from '../../auth/context';
 import { myConnection } from '../../database';
 import { Credential, Authentication } from '../../entities/mysql';
 import { User } from '../../schema/user';
+import { Roles } from '../roles';
 
 export const magicLink = new MagicLink({
 	provider: new MikroBackendProvider(Authentication<MagicLinkData>, myConnection),
@@ -14,11 +15,12 @@ export const magicLink = new MagicLink({
 	 * @param username fetch user details using a username
 	 * @returns return a UserProfile compatible entity
 	 */
-	getUser: async (username: string): Promise<UserProfile> => {
+	getUser: async (username: string): Promise<UserProfile<Roles>> => {
 		const database = ConnectionManager.database(myConnection.connectionManagerId);
 		const credential = await database.em.findOneOrFail(Credential, { username });
 
-		const user = User.fromBackendEntity(
+		const user = fromBackendEntity(
+			User,
 			await BaseLoaders.loadOne({ gqlEntityType: User, id: credential.id })
 		);
 

@@ -10,11 +10,9 @@ import {
 	UserProfile,
 	ForgottenPasswordLinkData,
 	AuthenticationBaseEntity,
-	Credential,
 	CredentialStorage,
 	ForgottenPassword,
 	Password,
-	hashPassword,
 } from '@exogee/graphweaver-auth';
 
 let token = '';
@@ -25,7 +23,6 @@ const user = new UserProfile({
 });
 
 class ForgottenPasswordBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>
 > {
 	private data: any;
@@ -59,10 +56,7 @@ const forgottenPassword = new ForgottenPassword({
 	},
 });
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	private password: string = '';
 
 	async findOne() {

@@ -1,19 +1,8 @@
-import { GraphQLEntity, BaseDataEntity, Entity, Field } from '@exogee/graphweaver';
+import { Entity, Field } from '@exogee/graphweaver';
 
-export class AuthToken implements BaseDataEntity {
-	id: string;
-	authToken: string;
-
-	constructor(authToken: string) {
-		this.id = authToken;
+export class AuthToken {
+	constructor(public readonly authToken: string) {
 		this.authToken = authToken;
-	}
-
-	isReference() {
-		return false;
-	}
-	isCollection() {
-		return false;
 	}
 }
 
@@ -22,9 +11,7 @@ export class AuthToken implements BaseDataEntity {
 		excludeFromBuiltInOperations: true,
 	},
 })
-export class Token extends GraphQLEntity<AuthToken> {
-	public dataEntity!: AuthToken;
-
-	@Field(() => String)
+export class Token {
+	@Field(() => String, { primaryKeyField: true })
 	authToken!: string;
 }

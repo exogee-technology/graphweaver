@@ -1,8 +1,16 @@
 import request from 'supertest-graphql';
 import gql from 'graphql-tag';
 
-import { Album } from '../../../../types';
 import { config } from '../../../../config';
+
+type Album = {
+	albumId: number;
+	title: string;
+	artist: {
+		artistId: number;
+		name: string;
+	};
+};
 
 describe('basic query', () => {
 	test('should get albums', async () => {
@@ -10,7 +18,7 @@ describe('basic query', () => {
 			.query(gql`
 				query {
 					albums {
-						id
+						albumId
 					}
 				}
 			`)

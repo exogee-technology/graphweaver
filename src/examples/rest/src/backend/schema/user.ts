@@ -1,4 +1,4 @@
-import { GraphQLEntity, Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -41,9 +41,7 @@ const acl: AccessControlList<User, AuthorizationContext> = {
 
 @ApplyAccessControlList(acl)
 @Entity('User', { provider })
-export class User extends GraphQLEntity<RestUser> {
-	public dataEntity!: RestUser;
-
+export class User {
 	@Field(() => ID)
 	id!: string;
 

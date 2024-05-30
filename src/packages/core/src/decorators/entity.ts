@@ -1,15 +1,18 @@
 import { pluralise } from '../utils/plural';
 import { CollectEntityInformationArgs, graphweaverMetadata } from '../metadata';
 
-export type EntityOptions<G> = Partial<
+export type EntityOptions<G = unknown> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
 
-export function Entity<G>(name: string): ClassDecorator;
-export function Entity<G>(options: EntityOptions<G>): ClassDecorator;
-export function Entity<G>(name: string, options: EntityOptions<G>): ClassDecorator;
-export function Entity<G>(nameOrOptions?: string | EntityOptions<G>, options?: EntityOptions<G>) {
-	return (target: G) => {
+export function Entity<G = unknown>(name: string): ClassDecorator;
+export function Entity<G = unknown>(options: EntityOptions<G>): ClassDecorator;
+export function Entity<G = unknown>(name: string, options: EntityOptions<G>): ClassDecorator;
+export function Entity<G = unknown>(
+	nameOrOptions?: string | EntityOptions<G>,
+	options?: EntityOptions<G>
+) {
+	return ((target: { new (...args: any[]): G }) => {
 		const resolvedOptions =
 			typeof nameOrOptions === 'string'
 				? { ...(options ?? {}), name: nameOrOptions }
@@ -28,9 +31,9 @@ export function Entity<G>(nameOrOptions?: string | EntityOptions<G>, options?: E
 			...resolvedOptions,
 			name,
 			plural,
-			target,
+			target: target as any,
 		});
 
 		return target;
-	};
+	}) as ClassDecorator;
 }

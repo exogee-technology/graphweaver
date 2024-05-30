@@ -9,6 +9,7 @@ export const SCHEMA_QUERY = gql`
 				plural
 				backendId
 				summaryField
+				primaryKeyField
 				defaultFilter
 				fields {
 					name
@@ -51,12 +52,14 @@ export const generateGqlSelectForEntityFields = (
 		.map((field) => {
 			if (field.relationshipType) {
 				if (!entityByType) {
-					return `${field.name} { value: id }`;
+					throw new Error('entityByType is required for relationship fields');
 				}
 				const relatedEntity = entityByType(field.type);
+				if (!relatedEntity) throw new Error(`Related entity ${field.type} not found`);
+
 				return `${field.name} { 
-					value: id
-					label: ${relatedEntity?.summaryField || 'id'}
+					value: ${relatedEntity.primaryKeyField}
+					label: ${relatedEntity?.summaryField ?? relatedEntity?.primaryKeyField}
 				}`;
 			} else {
 				if (field.type === 'Media') {

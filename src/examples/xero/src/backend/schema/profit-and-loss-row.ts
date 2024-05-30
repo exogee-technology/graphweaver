@@ -131,8 +131,6 @@ export interface XeroProfitAndLossRow extends BaseDataEntity {
 	provider,
 })
 export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
-	public dataEntity!: XeroProfitAndLossRow;
-
 	@Field(() => ID)
 	id!: string;
 

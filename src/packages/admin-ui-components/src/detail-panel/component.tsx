@@ -21,10 +21,16 @@ import { Spinner } from '../spinner';
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
-import { BooleanField, EnumField, JSONField, SelectField, uploadFileToSignedURL } from './fields';
+import {
+	BooleanField,
+	EnumField,
+	JSONField,
+	RelationshipField,
+	uploadFileToSignedURL,
+} from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
-import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
+import { isValueEmpty } from './util';
 import { deleteFileToSignedURL, MediaField } from './fields/media-field';
 import { TextField } from './fields/text-field';
 
@@ -49,7 +55,7 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 		if (isReadonly) {
 			return <LinkField name={field.name} entity={field} />;
 		}
-		return <SelectField name={field.name} entity={field} autoFocus={autoFocus} />;
+		return <RelationshipField name={field.name} entity={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'JSON') {
@@ -284,7 +290,7 @@ export const DetailPanel = () => {
 		if (field.relationshipType === 'MANY_TO_MANY') return false;
 
 		// We also don't show the related ID field for the same reason
-		if (field.relationshipType && field.name === 'id') return false;
+		if (field.relationshipType && field.name === selectedEntity.primaryKeyField) return false;
 
 		// And we want to filter out any fields that will be overridden with custom fields.
 		if (customFieldsToShow.find((customField) => customField.name === field.name)) return false;
@@ -344,20 +350,17 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, id }));
 	};
 
-	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
-		// Format form values as GraphQL input parameters
-		const values = mapFormikValuesToGqlRequestValues(formValues);
-
+	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		try {
 			let result: FetchResult;
 
 			// If the form values contains an deleteUrl, then do a seperate mutation to delete the file
-			if (formValues.deleteUrl) {
+			if (values.deleteUrl) {
 				await deleteFileToSignedURL(values.deleteUrl);
 			}
 
 			// If the form values contain an image, then do seperate mutation to upload the image
-			if (formValues.uploadUrl && formValues.file) {
+			if (values.uploadUrl && values.file) {
 				await uploadFileToSignedURL(values.uploadUrl, values.file);
 			}
 
@@ -366,14 +369,11 @@ export const DetailPanel = () => {
 			delete values.uploadUrl;
 			delete values.file;
 
-			if (id && panelMode === PanelMode.EDIT) {
+			if (panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				result = await updateEntity({
 					variables: {
-						input: {
-							id,
-							...values,
-						},
+						input: values,
 					},
 				});
 			} else {
@@ -395,7 +395,7 @@ export const DetailPanel = () => {
 			clearSessionState();
 			onClose();
 
-			const entityname = `${id && panelMode === PanelMode.EDIT ? 'update' : 'create'}${
+			const entityname = `${panelMode === PanelMode.EDIT ? 'update' : 'create'}${
 				selectedEntity.name
 			}`;
 
@@ -404,19 +404,22 @@ export const DetailPanel = () => {
 					Item{' '}
 					<button
 						className={styles.link}
-						onClick={() => navigateToDetailForEntity(result.data?.[entityname].id)}
+						onClick={() =>
+							navigateToDetailForEntity(result.data?.[entityname][selectedEntity.primaryKeyField])
+						}
 					>
 						{selectedEntity.summaryField
-							? `${result.data?.[entityname].id} ${
+							? `${result.data?.[entityname][selectedEntity.primaryKeyField]} ${
 									result.data?.[entityname]?.[selectedEntity.summaryField]
 								}`
-							: result.data?.[entityname].id}
+							: result.data?.[entityname][selectedEntity.primaryKeyField]}
 					</button>{' '}
-					has been successfully {id && panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
+					has been successfully {panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
 				</div>,
 				{ duration: 15000 }
 			);
 		} catch (error: unknown) {
+			console.error(error);
 			toast.error(String(error), {
 				duration: 5000,
 			});

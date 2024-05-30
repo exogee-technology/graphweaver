@@ -89,7 +89,6 @@ export class DataEntityFile extends BaseFile {
 		this.coreImports.add('Entity');
 		const imports = [
 			`import { ${[...this.coreImports].sort().join(', ')} } from '@mikro-orm/core';`,
-			`import { BaseEntity } from '@exogee/graphweaver-mikroorm';`,
 		];
 		const entityImports = [...this.entityImports].filter((e) => e !== this.meta.className);
 		entityImports.sort().forEach((entity) => {
@@ -102,7 +101,7 @@ export class DataEntityFile extends BaseFile {
 		}
 
 		file += `@Entity(${this.getCollectionDecl()})\n`;
-		file += `export class ${this.meta.className} extends BaseEntity {`;
+		file += `export class ${this.meta.className} {`;
 
 		file += `${classBody}}\n`;
 
@@ -112,8 +111,17 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getPropertyType(prop: EntityProperty): string {
-		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
+		const columnType = prop.columnTypes?.[0]?.toLowerCase();
+
+		if (['jsonb', 'json', 'any'].includes(columnType)) {
 			return `Record<string, unknown>`;
+		}
+
+		// Mikro doesn't infer column types for some columns very well. We can augment.
+		if (prop.type === 'unknown') {
+			if (columnType?.startsWith('nvarchar(') || columnType?.startsWith('varchar(')) {
+				return 'string';
+			}
 		}
 
 		return prop.type;
@@ -137,10 +145,6 @@ export class DataEntityFile extends BaseFile {
 			this.coreImports.add('Ref');
 			this.entityImports.add(prop.type);
 			return `${padding}${prop.name}${optional}: Ref<${prop.type}>;\n`;
-		}
-
-		if (prop.primary) {
-			return `${padding}id!: ${this.getPropertyType(prop)};`;
 		}
 
 		const file = `${prop.name}${optional}: ${this.getPropertyType(prop)}`;
@@ -205,10 +209,6 @@ export class DataEntityFile extends BaseFile {
 
 		if (prop.enum) {
 			options.items = `() => ${prop.type}`;
-		}
-
-		if (prop.primary && prop.name !== 'id' && prop.fieldNames?.[0]) {
-			options.fieldName = this.quote(prop.fieldNames[0]);
 		}
 
 		this.getCommonDecoratorOptions(options, prop);

@@ -3,7 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, GraphQLEntity, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
+import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -21,14 +21,12 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any>('artist');
 
 @Entity('Artist', {
 	provider: artistDataProvider,
 })
-export class Artist extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+export class Artist {
 	@Field(() => ID)
 	id!: number;
 
@@ -40,14 +38,9 @@ const cred: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		cred.password = await hashPassword(cred.password ?? '');
 		return cred;

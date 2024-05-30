@@ -1,9 +1,8 @@
 import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 import { CredentialStorage } from '@exogee/graphweaver-auth';
 
 @Entity()
-export class Credential extends BaseEntity implements CredentialStorage {
+export class Credential implements CredentialStorage {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 
