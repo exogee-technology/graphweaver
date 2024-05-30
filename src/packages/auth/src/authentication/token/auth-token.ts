@@ -3,10 +3,9 @@ import { logger } from '@exogee/logger';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
-import { AuthToken, Token } from '../entities/token';
+import { AuthToken } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../types';
-import { AuthenticationError } from 'apollo-server-errors';
 
 const expiresIn = process.env.AUTH_JWT_EXPIRES_IN ?? '8h';
 const mfaExpiresIn = process.env.AUTH_JWT_CHALLENGE_EXPIRES_IN ?? '30m';
@@ -109,9 +108,3 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 		}
 	}
 }
-
-export const verifyToken = (authToken?: AuthToken) => {
-	if (!authToken) throw new AuthenticationError('Auth unsuccessful: Token generation failed.');
-
-	return authToken;
-};

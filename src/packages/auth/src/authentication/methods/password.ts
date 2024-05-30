@@ -22,7 +22,7 @@ import {
 	updatePasswordCredential,
 } from './utils';
 import { hashPassword, verifyPassword } from '../../utils/argon2id';
-import { AuthTokenProvider, verifyToken } from '../token';
+import { AuthTokenProvider } from '../token';
 import { AclMap } from '../../helper-functions';
 
 export enum PasswordOperation {
@@ -336,7 +336,7 @@ export class Password<D extends CredentialStorage> {
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
-		return verifyToken(authToken);
+		return authToken;
 	}
 
 	async challengePassword({
@@ -357,6 +357,6 @@ export class Password<D extends CredentialStorage> {
 		if (!userProfile) throw new AuthenticationError('Challenge unsuccessful: Userprofile missing.');
 
 		const authToken = await tokenProvider.stepUpToken(existingToken);
-		return verifyToken(authToken);
+		return authToken;
 	}
 }

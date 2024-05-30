@@ -10,7 +10,7 @@ import {
 	MultiFactorAuthentication,
 } from '../../types';
 import { Token, AuthenticationBaseEntity } from '../entities';
-import { AuthTokenProvider, verifyToken } from '../token';
+import { AuthTokenProvider } from '../token';
 import { checkAuthentication } from '../../helper-functions';
 import { ChallengeError } from '../../errors';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
@@ -201,7 +201,7 @@ export class Web3 {
 					: context.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 
-			return verifyToken(authToken);
+			return authToken;
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 

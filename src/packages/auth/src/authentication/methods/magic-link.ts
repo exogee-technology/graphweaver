@@ -6,10 +6,9 @@ import { randomUUID } from 'crypto';
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../types';
 import { Token } from '../entities/token';
 import { UserProfile } from '../../user-profile';
-import { AuthTokenProvider, verifyToken } from '../token';
+import { AuthTokenProvider } from '../token';
 import { requireEnvironmentVariable } from '../../helper-functions';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
-import { GraphQLResolveInfo, Source } from 'graphql';
 import { AuthenticationType } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
 
@@ -173,8 +172,6 @@ export class MagicLink {
 				? await tokenProvider.stepUpToken(existingAuthToken)
 				: await tokenProvider.generateToken(userProfile);
 
-			const token = verifyToken(authToken);
-
 			// Mark the magic link as used
 			await this.provider.updateOne(link.id, {
 				data: {
@@ -183,7 +180,7 @@ export class MagicLink {
 				},
 			});
 
-			return token;
+			return authToken;
 		} catch (e) {
 			if (e instanceof AuthenticationError) throw e;
 

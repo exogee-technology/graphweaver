@@ -19,7 +19,7 @@ import { logger } from '@exogee/logger';
 
 import { AuthenticationMethod, AuthenticationType, AuthorizationContext } from '../../types';
 import { AuthenticationBaseEntity, Token } from '../entities';
-import { AuthTokenProvider, verifyToken } from '../token';
+import { AuthTokenProvider } from '../token';
 import { ChallengeError } from '../../errors';
 import {
 	BackendProvider,
@@ -416,7 +416,7 @@ export class Passkey {
 					: context.token;
 			const authToken = await tokenProvider.stepUpToken(existingAuthToken);
 
-			return verifyToken(authToken);
+			return authToken;
 		} catch (e: any) {
 			if (e instanceof AuthenticationError) throw e;
 			if (e instanceof ChallengeError) throw e;
