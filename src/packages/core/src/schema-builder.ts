@@ -28,7 +28,6 @@ import { ObjMap } from 'graphql/jsutils/ObjMap';
 import { logger } from '@exogee/logger';
 
 import {
-	AuthChecker,
 	EntityMetadata,
 	EnumMetadata,
 	FieldMetadata,
@@ -47,6 +46,12 @@ const arrayOperations = new Set(['in', 'nin']);
 const basicOperations = new Set(['ne', 'notnull', 'null']);
 const likeOperations = new Set(['like', 'ilike']);
 const mathOperations = new Set(['gt', 'gte', 'lt', 'lte']);
+const allOperations = new Set([
+	...arrayOperations,
+	...basicOperations,
+	...likeOperations,
+	...mathOperations,
+]);
 
 const entityTypes = new Map<string, GraphQLObjectType>();
 const inputTypes = new Map<string, GraphQLInputObjectType>();
@@ -59,8 +64,8 @@ const paginationTypes = new Map<string, GraphQLInputObjectType>();
 
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
 const scalarShouldGetMathOperations = (
-	scalar: GraphQLScalarType | NumberConstructor | DateConstructor
-) => scalar === Number || scalar === Date || scalar.name === 'ISOString';
+	scalar: GraphQLScalarType | NumberConstructor | DateConstructor | BigIntConstructor
+) => scalar === Number || scalar === Date || scalar === BigInt || scalar.name === 'ISOString';
 
 const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	let enumType = enumTypes.get(enumMetadata.name);
@@ -82,7 +87,7 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	return enumType;
 };
 
-// All entities are identified by a field called 'id' so we only need one of these.
+// All entities are deleted by primary key, so we only need one of these.
 const deleteInput = new GraphQLInputObjectType({
 	name: 'DeleteOneFilterInput',
 	fields: {
@@ -108,7 +113,7 @@ export const getFieldTypeFromFieldMetadata = (
 	return { fieldType, isList, metadata };
 };
 
-const getFieldType = (field: FieldMetadata<unknown, unknown>): TypeValue => {
+const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
 		if (isListType(type) || isNonNullType(type)) {
 			return unwrapType(type.ofType);
@@ -203,7 +208,9 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 	return inputType;
 };
 
-const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
+// This is exported because deep within the create or update logic we need to stub a GraphQLResolveInfo object.
+// It's not meant to be used as a public API, please use the SchemaBuilder export unless you have a good reason not to.
+export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let entityType = entityTypes.get(entity.name);
 
 	if (!entityType) {
@@ -224,7 +231,7 @@ const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = graphQLTypeForEntity(metadata);
 
 						if (metadata.provider) {
-							resolve = resolvers.listRelationshipField;
+							resolve = resolvers.baseResolver(resolvers.listRelationshipField);
 
 							args['filter'] = {
 								type: filterTypeForEntity(metadata),
@@ -406,7 +413,7 @@ const generateGraphQLInputFieldsForEntity =
 			if (field.apiOptions?.excludeFromBuiltInWriteOperations) continue;
 
 			// The ID field is a special case based on the input type.
-			if (field.name === 'id') {
+			if (field.name === (entity.primaryKeyField ?? 'id')) {
 				switch (input) {
 					case 'createOrUpdate':
 						fields[field.name] = { type: ID };
@@ -478,6 +485,8 @@ const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let createOrUpdateType = createOrUpdateTypes.get(entity.name);
 
 	if (!createOrUpdateType) {
+		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
@@ -494,6 +503,8 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	let updateType = updateTypes.get(entity.name);
 
 	if (!updateType) {
+		const primaryKeyFieldName = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
@@ -523,6 +534,10 @@ class SchemaBuilderImplementation {
 
 	public print(args?: SchemaBuilderOptions) {
 		return printSchema(this.build(args));
+	}
+
+	public isValidFilterOperation(filterOperation: string) {
+		return allOperations.has(filterOperation);
 	}
 
 	private *buildTypes() {
@@ -614,7 +629,7 @@ class SchemaBuilderImplementation {
 						args: {
 							id: { type: new GraphQLNonNull(ID) },
 						},
-						resolve: resolvers.getOne,
+						resolve: resolvers.baseResolver(resolvers.getOne),
 					};
 
 					// List
@@ -629,7 +644,7 @@ class SchemaBuilderImplementation {
 							filter: { type: filterTypeForEntity(entity) },
 							...(entity.provider ? { pagination: { type: paginationTypeForEntity(entity) } } : {}),
 						},
-						resolve: resolvers.list,
+						resolve: resolvers.baseResolver(resolvers.list),
 					};
 				}
 
@@ -650,14 +665,14 @@ class SchemaBuilderImplementation {
 							...customQuery,
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
-							resolve: customQuery.resolver,
+							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					} else {
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
 							type: graphQLScalarForTypeScriptType(type),
-							resolve: customQuery.resolver,
+							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					}
 				}
@@ -691,7 +706,7 @@ class SchemaBuilderImplementation {
 						args: {
 							input: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Create Many
@@ -709,7 +724,7 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Update One
@@ -723,7 +738,7 @@ class SchemaBuilderImplementation {
 						args: {
 							input: { type: new GraphQLNonNull(updateTypeForEntity(entity)) },
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Update Many
@@ -741,7 +756,7 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Create or Update Many
@@ -759,7 +774,7 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
-						resolve: resolvers.createOrUpdate,
+						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
 					// Delete One
@@ -775,7 +790,7 @@ class SchemaBuilderImplementation {
 								type: new GraphQLNonNull(deleteInput),
 							},
 						},
-						resolve: resolvers.deleteOne(entity),
+						resolve: resolvers.baseResolver(resolvers.deleteOne(entity)),
 					};
 
 					// Delete Many
@@ -789,7 +804,7 @@ class SchemaBuilderImplementation {
 						args: {
 							filter: { type: new GraphQLNonNull(filterTypeForEntity(entity)) },
 						},
-						resolve: resolvers.deleteMany(entity),
+						resolve: resolvers.baseResolver(resolvers.deleteMany(entity)),
 					};
 				}
 
@@ -810,14 +825,14 @@ class SchemaBuilderImplementation {
 							...customMutation,
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
-							resolve: customMutation.resolver,
+							resolve: resolvers.baseResolver(customMutation.resolver),
 						};
 					} else {
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
 							type: graphQLScalarForTypeScriptType(type),
-							resolve: customMutation.resolver,
+							resolve: resolvers.baseResolver(customMutation.resolver),
 						};
 					}
 				}

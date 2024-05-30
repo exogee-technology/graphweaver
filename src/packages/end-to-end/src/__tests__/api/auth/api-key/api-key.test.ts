@@ -3,22 +3,10 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	BaseDataEntity,
-	BaseDataProvider,
-	Field,
-	GraphQLEntity,
-	ID,
-	Entity,
-} from '@exogee/graphweaver';
-import {
-	authApolloPlugin,
-	UserProfile,
-	ApiKeyStorage,
-	ApiKeyEntity,
-} from '@exogee/graphweaver-auth';
+import { BaseDataProvider, Field, ID, Entity } from '@exogee/graphweaver';
+import { authApolloPlugin, UserProfile, ApiKeyEntity } from '@exogee/graphweaver-auth';
 
-class TaskProvider extends BaseDataProvider<any, Task> {
+class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
@@ -36,9 +24,7 @@ class TaskProvider extends BaseDataProvider<any, Task> {
 @Entity('Task', {
 	provider: new TaskProvider('TaskProvider'),
 })
-export class Task extends GraphQLEntity<BaseDataEntity> {
-	public dataEntity!: BaseDataEntity;
-
+export class Task {
 	@Field(() => ID)
 	id!: number;
 
@@ -51,10 +37,7 @@ enum Roles {
 	DARK_SIDE = 'DARK_SIDE',
 }
 
-class ApiKeyBackendProvider extends BaseDataProvider<
-	ApiKeyStorage<Roles>,
-	ApiKeyEntity<ApiKeyStorage<Roles>, Roles>
-> {
+class ApiKeyBackendProvider extends BaseDataProvider<ApiKeyEntity<Roles>> {
 	async findOne({ key }: any): Promise<any> {
 		if (key === 'test_fail') {
 			return null;

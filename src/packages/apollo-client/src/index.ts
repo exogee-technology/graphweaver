@@ -1,4 +1,14 @@
-const generateTypePolicyFields = (entityNames: string[]) => {
+import type { TypePolicy } from '@apollo/client';
+
+// Note: Entity metadata contains more than just these three fields,
+//       but this is all that we need in the context of this example.
+interface Entity {
+	name: string;
+	plural: string;
+	primaryKeyField: string;
+}
+
+const generateTypePolicyFields = (entities: Entity[]) => {
 	const policy = {
 		keyArgs: (
 			args: {
@@ -20,16 +30,27 @@ const generateTypePolicyFields = (entityNames: string[]) => {
 		},
 	};
 
-	const mapEntityToPolicy = (entity: string) => ({
-		[entity.charAt(0).toLowerCase() + entity.slice(1)]: policy,
+	const mapEntityToPolicy = (entity: Entity) => ({
+		[entity.plural.charAt(0).toLowerCase() + entity.plural.slice(1)]: policy,
 	});
 
-	return entityNames.map(mapEntityToPolicy).reduce((acc, policy) => ({ ...acc, ...policy }), {});
+	return entities.map(mapEntityToPolicy).reduce((acc, policy) => ({ ...acc, ...policy }), {});
 };
 
-export const generateTypePolicies = (entityNames: string[]) => ({
-	Query: {
-		keyFields: ['id'], // This is the default and is here for clarity
-		fields: generateTypePolicyFields(entityNames),
-	},
-});
+export const generateTypePolicies = (entities: Entity[]) => {
+	const result: { [entityName: string]: TypePolicy } = {};
+
+	for (const entity of entities) {
+		if (result[entity.name]) throw new Error(`Duplicate entity name: '${entity.name}'`);
+
+		result[entity.name] = { keyFields: [entity.primaryKeyField] };
+	}
+
+	if (result.Query) throw new Error(`Duplicate entity name: 'Query'`);
+
+	result.Query = {
+		fields: generateTypePolicyFields(entities),
+	};
+
+	return result;
+};

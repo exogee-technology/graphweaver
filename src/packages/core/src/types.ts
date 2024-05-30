@@ -1,17 +1,14 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
 import { ComplexityEstimator } from 'graphql-query-complexity';
-import { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo, GraphQLScalarType } from 'graphql';
+import { ResolveTree } from 'graphql-parse-resolve-info';
+import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
+
 import { graphweaverMetadata } from './metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
 
 export interface BaseContext {}
-
-export type WithId = {
-	id: string | number;
-};
 
 export enum Sort {
 	ASC = 'asc',
@@ -33,16 +30,21 @@ export type PaginationOptions = {
 	limit: number;
 };
 
-export type IdOperator = 'ne' | 'in' | 'nin' | 'notnull' | 'null';
-export type StringOperator = 'ne' | 'in' | 'nin' | 'like' | 'ilike' | 'notnull' | 'null';
-export type OtherOperator = 'gt' | 'gte' | 'lt' | 'lte' | 'ne' | 'in' | 'nin' | 'notnull' | 'null';
+export type BaseOperator = 'ne' | 'notnull' | 'null';
+export type ArrayOperator = 'in' | 'nin';
+export type StringOperator = 'like' | 'ilike';
+export type NumericOperator = 'gt' | 'gte' | 'lt' | 'lte';
 
+// In English, this says:
+//   If the value in the field is a string, then apply the String Operators from above.
+//   Else if the value in the field is a number, bigint or Date then apply the Numeric Operators from above.
+//   Else apply only the Base Operators and Array Operators from above
 export type FilterWithOperators<G> = {
-	[K in keyof G as K extends 'id'
-		? `${K & string}_${IdOperator}`
-		: G[K] extends string
-			? `${K & string}_${StringOperator}`
-			: `${K & string}_${OtherOperator}`]?: FilterValue<G[K]>;
+	[K in keyof G as G[K] extends string
+		? `${K & string}_${BaseOperator | ArrayOperator | StringOperator}`
+		: G[K] extends number | bigint | Date
+			? `${K & string}_${BaseOperator | ArrayOperator | NumericOperator}`
+			: `${K & string}_${BaseOperator | ArrayOperator}`]?: FilterValue<G[K]>;
 };
 
 export type FilterValue<T> = T | T[];
@@ -55,16 +57,18 @@ export type FilterEntity<G> = {
 			: Partial<G[K]>; // Other types
 };
 
+// ❗ There's also a hard coded list just below this. If you're updating this type you need to update that list too.
 export type FilterTopLevelProperties<G> = {
 	_and?: Filter<G>[];
 	_or?: Filter<G>[];
 	_not?: Filter<G>[];
 };
 
-export type Filter<G> = Partial<WithId> &
-	FilterEntity<G> &
-	FilterTopLevelProperties<G> &
-	FilterWithOperators<G>;
+// ❗ This is used by the permissions system, so if you update the above, then update this list too.
+const topLevelFilterProperties = new Set(['_and', '_or', '_not']);
+export const isTopLevelFilterProperty = (key: string) => topLevelFilterProperties.has(key);
+
+export type Filter<G> = FilterEntity<G> & FilterTopLevelProperties<G> & FilterWithOperators<G>;
 
 export interface GraphQLArgs<G> {
 	items?: Partial<G>[];
@@ -73,8 +77,7 @@ export interface GraphQLArgs<G> {
 }
 
 // D = Data entity returned from the datastore
-// G = GraphQL entity
-export interface BackendProvider<D, G> {
+export interface BackendProvider<D> {
 	// This is used for query splitting, so we know where to break your
 	// queries when you query across data sources.
 	readonly backendId: string;
@@ -82,31 +85,32 @@ export interface BackendProvider<D, G> {
 	entityType?: new () => D;
 
 	find(
-		filter: Filter<G>,
+		filter: Filter<D>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any
 	): Promise<D[]>;
-	findOne(filter: Filter<G>): Promise<D | null>;
+	findOne(filter: Filter<D>): Promise<D | null>;
 	findByRelatedId(
 		entity: any,
 		relatedField: string,
 		relatedIds: readonly string[],
-		filter?: Filter<G>
+		filter?: Filter<D>
 	): Promise<D[]>;
-	updateOne(id: string | number, updateArgs: Partial<G>): Promise<D>;
-	updateMany(entities: (Partial<G> & WithId)[]): Promise<D[]>;
-	createOne(entity: Partial<G>): Promise<D>;
-	createMany(entities: Partial<G>[]): Promise<D[]>;
-	createOrUpdateMany(entities: Partial<G>[]): Promise<D[]>;
-	deleteOne(filter: Filter<G>): Promise<boolean>;
-	//optional deleteMany
-	deleteMany?(filter: Filter<G>): Promise<boolean>;
-
-	getRelatedEntityId(entity: any, relatedIdField: string): string;
-	isCollection(entity: unknown): entity is Iterable<unknown & WithId>;
+	updateOne(id: string | number, updateArgs: Partial<D>): Promise<D>;
+	updateMany(entities: Partial<D>[]): Promise<D[]>;
+	createOne(entity: Partial<D>): Promise<D>;
+	createMany(entities: Partial<D>[]): Promise<D[]>;
+	createOrUpdateMany(entities: Partial<D>[]): Promise<D[]>;
+	deleteOne(filter: Filter<D>): Promise<boolean>;
+	// Optional deleteMany
+	deleteMany?(filter: Filter<D>): Promise<boolean>;
 
 	// Optional, allows the resolver to start a transaction
 	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
+
+	// Optional. Queried to get foriegn key values from fields for relationship fields to
+	// allow the GraphQL entities to work completely at the GQL level.
+	foreignKeyForRelationshipField?(field: FieldMetadata<any, D>, dataEntity: D): string | number;
 
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
@@ -120,9 +124,8 @@ export interface BackendProvider<D, G> {
 // TContext = GraphQL Context
 export interface HookParams<G, TContext = BaseContext> {
 	context: TContext;
-	info: GraphQLResolveInfo;
 	transactional: boolean;
-	fields?: FieldsByTypeName | { [str: string]: ResolveTree } | undefined;
+	fields?: ResolveTree;
 	entities?: (G | null)[];
 	deleted?: boolean; // Used by a delete operation to indicate if successful
 }
@@ -142,12 +145,6 @@ export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<
 
 export interface DeleteManyHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
 	args: { filter: Filter<G> };
-}
-
-export interface GraphQLEntityType<G, D> {
-	name: string; // Note: this is the built-in ES6 class.name attribute
-	typeName?: string;
-	fromBackendEntity?(entity: D): G | null;
 }
 
 export enum AdminUIFilterType {
@@ -219,7 +216,7 @@ export type GetTypeFunction = (type?: void) => TypeValue;
 
 export type Complexity = ComplexityEstimator | number;
 
-export interface FieldMetadata<G, D> {
+export interface FieldMetadata<G = unknown, D = unknown> {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
@@ -228,12 +225,12 @@ export interface FieldMetadata<G, D> {
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;
 	};
-	target: G;
+	target: { new (...args: any[]): G };
 	name: string;
 	getType: GetTypeFunction;
 	relationshipInfo?: {
 		relatedField?: string;
-		id?: string | ((dataEntity: D) => string | number | undefined);
+		id?: (string | number) | ((dataEntity: D) => string | number | undefined);
 	};
 	description?: string;
 	deprecationReason?: string;
@@ -243,7 +240,6 @@ export interface FieldMetadata<G, D> {
 	// This marks the field as read only in both the API and the admin UI.
 	// This will supersede any other read only settings.
 	readonly?: boolean;
-
 	nullable?: boolean | 'items' | 'itemsAndList';
 	excludeFromFilterType?: boolean;
 
@@ -257,3 +253,17 @@ export type AuthChecker<TContextType extends object = object, TRoleType = string
 	context: TContextType,
 	roles: TRoleType[]
 ) => boolean | Promise<boolean>;
+
+export type ResolverOptions<TArgs = any, TContext = BaseContext, TSource = Source> = {
+	source: TSource;
+	args: TArgs;
+	context: TContext;
+	fields: ResolveTree;
+	info: GraphQLResolveInfo;
+};
+
+export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = ({
+	args,
+	context,
+	fields,
+}: ResolverOptions<TArgs, TContext>) => TResult;

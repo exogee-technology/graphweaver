@@ -3,14 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Field,
-	GraphQLEntity,
-	ID,
-	BaseDataProvider,
-	RelationshipField,
-	Entity,
-} from '@exogee/graphweaver';
+import { Field, ID, BaseDataProvider, RelationshipField, Entity } from '@exogee/graphweaver';
 import { authApolloPlugin, UserProfile, ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -19,7 +12,7 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-const albumDataProvider = new BaseDataProvider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any>('album');
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -29,20 +22,21 @@ const albumDataProvider = new BaseDataProvider<any, Album>('album');
 @Entity('Album', {
 	provider: albumDataProvider,
 })
-export class Album extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+export class Album {
 	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String)
 	description!: string;
 
-	@RelationshipField<Album>(() => Artist, { id: (entity) => entity.artist?.id, nullable: true })
+	@RelationshipField<Artist>(() => Artist, {
+		id: (artist) => artist?.id,
+		nullable: true,
+	})
 	artist?: Artist;
 }
 
-const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any>('artist');
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -52,9 +46,7 @@ const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
 @Entity('Artist', {
 	provider: artistDataProvider,
 })
-export class Artist extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+export class Artist {
 	@Field(() => ID)
 	id!: number;
 

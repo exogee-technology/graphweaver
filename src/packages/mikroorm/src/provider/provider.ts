@@ -3,10 +3,8 @@ import {
 	PaginationOptions,
 	Sort,
 	Filter,
-	GraphQLEntity,
-	BaseDataEntity,
 	BackendProviderConfig,
-	WithId,
+	FieldMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -14,7 +12,6 @@ import {
 	LockMode,
 	QueryFlag,
 	ReferenceKind,
-	Utils,
 	ConnectionManager,
 	externalIdFieldMap,
 	AnyEntity,
@@ -27,7 +24,8 @@ import {
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
 
-import { AutoPath, PopulateHint, SqlEntityRepository } from '@mikro-orm/postgresql';
+import { Reference } from '@mikro-orm/core';
+import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 type PostgresError = {
@@ -37,23 +35,6 @@ type PostgresError = {
 
 const objectOperations = new Set(['_and', '_or', '_not']);
 const mikroObjectOperations = new Set(['$and', '$or', '$not']);
-const nonJoinKeys = new Set([
-	'$and',
-	'$gt',
-	'$gte',
-	'$in',
-	'$lt',
-	'$lte',
-	'$ne',
-	'$nin',
-	'$not',
-	'$or',
-	'$like',
-	'$ilike',
-	'$null',
-	'$notnull',
-	'id', // @todo: remove this? Why is it here?
-]);
 
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
@@ -94,9 +75,7 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEntity<D>>
-	implements BackendProvider<D, G>
-{
+export class MikroBackendProvider<D> implements BackendProvider<D> {
 	private _backendId: string;
 
 	private connection: ConnectionOptions;
@@ -151,13 +130,6 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return this.database.em;
 	}
 
-	private getRepository: () => SqlEntityRepository<D> = () => {
-		const repository = this.database.em.getRepository<D>(this.entityType);
-		if (!repository) throw new Error('Could not find repository for ' + this.entityType.name);
-
-		return repository as SqlEntityRepository<D>;
-	};
-
 	public constructor(
 		mikroType: new () => D,
 		connection: ConnectionOptions,
@@ -170,9 +142,8 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		this.connection = connection;
 	}
 
-	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<G>) => {
+	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<D>) => {
 		// Clean the input and remove any GraphQL classes from the object
-		// const cleanInput = JSON.parse(JSON.stringify(inputArgs));
 		const assignmentObj = this.applyExternalIdFields(entityType, inputArgs);
 		return assign(result, assignmentObj, undefined, undefined, this.database.em);
 	};
@@ -270,7 +241,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 	};
 
 	public async find(
-		filter: Filter<G>,
+		filter: Filter<D>,
 		pagination?: PaginationOptions,
 		additionalOptionsForBackend?: any // @todo: Create a type for this
 	): Promise<D[]> {
@@ -297,7 +268,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 
 		// Regions need some fancy handling with Query Builder. Process the where further
 		// and return a Query Builder instance.
-		const query = this.getRepository().createQueryBuilder();
+		const query = this.em.createQueryBuilder(this.entityType);
 		if (Object.keys(whereWithAppliedExternalIdFields).length > 0) {
 			query.andWhere(whereWithAppliedExternalIdFields);
 		}
@@ -346,10 +317,21 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		}
 	}
 
-	public async findOne(filter: Filter<G>): Promise<D | null> {
+	public async findOne(filter: Filter<D>): Promise<D | null> {
 		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
 
-		const [result] = await this.find(filter, { orderBy: { id: Sort.DESC }, offset: 0, limit: 1 });
+		const metadata = this.em.getMetadata().get(this.entityType.name);
+		if (metadata.primaryKeys.length !== 1) {
+			throw new Error(
+				`Entity ${this.entityType.name} has ${metadata.primaryKeys.length} primary keys. We only support entities with a single primary key at this stage.`
+			);
+		}
+
+		const [result] = await this.find(filter, {
+			orderBy: { [metadata.primaryKeys[0]]: Sort.DESC },
+			offset: 0,
+			limit: 1,
+		});
 
 		logger.trace(`findOne ${this.entityType.name} result`, { result });
 
@@ -374,7 +356,10 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return result as D[];
 	}
 
-	public async updateOne(id: string, updateArgs: Partial<G & { version?: number }>): Promise<D> {
+	public async updateOne(
+		id: string | number,
+		updateArgs: Partial<D & { version?: number }>
+	): Promise<D> {
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
 			updateArgs: JSON.stringify(updateArgs),
@@ -407,7 +392,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return entity;
 	}
 
-	public async updateMany(updateItems: (Partial<G> & { id: string })[]): Promise<D[]> {
+	public async updateMany(updateItems: (Partial<D> & { id: string })[]): Promise<D[]> {
 		logger.trace(`Running update many ${this.entityType.name} with args`, {
 			updateItems: JSON.stringify(updateItems),
 		});
@@ -433,7 +418,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return entities;
 	}
 
-	public async createOrUpdateMany(items: Partial<G>[]): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<D>[]): Promise<D[]> {
 		logger.trace(`Running create or update many for ${this.entityType.name} with args`, {
 			items: JSON.stringify(items),
 		});
@@ -471,21 +456,21 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return entities;
 	}
 
-	public async createOne(createArgs: Partial<G>): Promise<D> {
+	public async createOne(createArgs: Partial<D>): Promise<D> {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createArgs),
 		});
 
 		const entity = new this.entityType();
 		await this.mapAndAssignKeys(entity, this.entityType, createArgs);
-		await this.database.em.persistAndFlush(entity);
+		await this.database.em.persistAndFlush(entity as Partial<D>);
 
 		logger.trace(`create ${this.entityType.name} result`, entity);
 
 		return entity;
 	}
 
-	public async createMany(createItems: Partial<G>[]): Promise<D[]> {
+	public async createMany(createItems: Partial<D>[]): Promise<D[]> {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createItems),
 		});
@@ -495,7 +480,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 				createItems.map(async (item) => {
 					const entity = new this.entityType();
 					await this.mapAndAssignKeys(entity, this.entityType, item);
-					this.database.em.persist(entity);
+					this.database.em.persist(entity as Partial<D>);
 					return entity;
 				})
 			);
@@ -506,7 +491,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return entities;
 	}
 
-	public async deleteOne(filter: Filter<G>): Promise<boolean> {
+	public async deleteOne(filter: Filter<D>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 		const whereWithAppliedExternalIdFields =
@@ -526,7 +511,7 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return deletedRows === 1;
 	}
 
-	public async deleteMany(filter: Filter<G>): Promise<boolean> {
+	public async deleteMany(filter: Filter<D>): Promise<boolean> {
 		logger.trace(`Running delete ${this.entityType.name}`);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
@@ -555,19 +540,30 @@ export class MikroBackendProvider<D extends BaseDataEntity, G extends GraphQLEnt
 		return true;
 	}
 
-	public getRelatedEntityId(entity: any, relatedIdField: string) {
-		if (typeof entity === 'string') {
-			return entity;
-		}
-		if (entity.id) {
-			return entity.id;
-		}
-		// No need to unwrap in Mikroorm version 5
-		throw new Error(`Unknown entity without an id: ${JSON.stringify(entity)}`);
-	}
+	public foreignKeyForRelationshipField?(field: FieldMetadata, dataEntity: D) {
+		const value = dataEntity[field.name as keyof D];
 
-	public isCollection(entity: unknown): entity is Iterable<unknown & WithId> {
-		return Utils.isCollection(entity);
+		if (Reference.isReference(value)) {
+			const { properties } = this.database.em.getMetadata().get(this.entityType);
+			const property = properties[field.name];
+			const [primaryKey] = property.targetMeta?.primaryKeys ?? [];
+			if (!primaryKey) {
+				throw new Error(
+					`Could not determine primary key for ${field.name} on ${this.entityType.name}`
+				);
+			}
+
+			const foreignKey = (value.unwrap() as any)[primaryKey];
+			if (foreignKey === undefined || foreignKey === null) {
+				throw new Error(
+					`Could not read foreign key from reference: ${value.unwrap()} with primary key name ${primaryKey}`
+				);
+			}
+
+			return foreignKey;
+		}
+
+		return null;
 	}
 
 	public get plugins(): ApolloServerPlugin<BaseContext>[] {

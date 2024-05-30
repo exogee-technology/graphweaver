@@ -1,14 +1,14 @@
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, GraphQLEntity, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
+import { Field, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
 
 test('should return fishes as plural name when overridden', async () => {
 	@Entity('Fish', {
 		provider: new BaseDataProvider('fish'),
 		plural: 'fishes',
 	})
-	class Fish extends GraphQLEntity<any> {
+	class Fish {
 		@Field(() => ID)
 		id!: string;
 

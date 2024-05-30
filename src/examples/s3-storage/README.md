@@ -6,6 +6,8 @@ For running locally it is handy to have a local S3 env. For this we recommend ru
 
 [https://min.io/docs/minio/macos/index.html](https://min.io/docs/minio/macos/index.html)
 
+** An alternative option is to use Localstack, see details below **
+
 Once Minio is installed and start the server with the following command:
 
 `minio server ~/data --address :9002`

@@ -27,6 +27,8 @@ generateTypes()
 		process.exit(0);
 	})
 	.catch((e) => {
-		console.error(e);
+		console.error(
+			`\n\nGenerating Types Error: \n\n${e?.message ?? 'An error occurred while generating types.'}\n\nPlease resolve the above error to auto-generate types.`
+		);
 		process.exit(1);
 	});

@@ -5,14 +5,7 @@ import MockDate from 'mockdate';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	BaseDataProvider,
-	Entity,
-	Field,
-	GraphQLEntity,
-	ID,
-	RelationshipField,
-} from '@exogee/graphweaver';
+import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import {
 	authApolloPlugin,
 	UserProfile,
@@ -24,7 +17,7 @@ import {
 	hashPassword,
 } from '@exogee/graphweaver-auth';
 
-class TaskProvider extends BaseDataProvider<any, Task> {
+class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
@@ -42,9 +35,7 @@ class TaskProvider extends BaseDataProvider<any, Task> {
 @Entity('Task', {
 	provider: new TaskProvider('Task'),
 })
-class Task extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+class Task {
 	@Field(() => ID)
 	id!: number;
 
@@ -58,9 +49,7 @@ class Task extends GraphQLEntity<any> {
 @Entity('Tag', {
 	provider: new BaseDataProvider('Tag'),
 })
-class Tag extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+class Tag {
 	@Field(() => ID)
 	id!: string;
 
@@ -78,17 +67,12 @@ const user = new UserProfile({
 	username: 'test',
 });
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		const user: CredentialStorage = {
 			id: '1',
 			username: 'test',
 			password: await hashPassword('test123'),
-			isCollection: () => false,
-			isReference: () => false,
 		};
 		return user;
 	}

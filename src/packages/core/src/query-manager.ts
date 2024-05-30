@@ -3,7 +3,6 @@ import { TypeValue } from './types';
 
 import { BackendProvider, Filter, PaginationOptions } from './types';
 import { graphweaverMetadata } from './metadata';
-import { BaseDataEntity } from '.';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -32,7 +31,7 @@ const entityNameFromType = (type: TypeValue) => (type as any).name || type.toStr
 const visit = async <D, G>(
 	currentEntityName: string,
 	currentFilter: any,
-	currentProvider?: BackendProvider<D, G>
+	currentProvider?: BackendProvider<D>
 ) => {
 	// If there's no filter at this level, it's fine, just bail.
 	if (!currentFilter) {
@@ -68,10 +67,13 @@ const visit = async <D, G>(
 					// Our backends are split, so we need to flatten down to a set of IDs.
 					// Is the query already a set of IDs? If so let it go on through as an optimisation, as there's
 					// no reason to go over the network to find the IDs for the list of IDs we already have.
+					const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(nextMetadata);
+
 					const [firstKey, ...rest] = Object.keys(result.filter);
 					if (
 						!result.provider ||
-						(rest.length === 0 && (firstKey === 'id' || firstKey === 'id_in'))
+						(rest.length === 0 &&
+							(firstKey === primaryKeyField || firstKey === `${primaryKeyField}_in`))
 					) {
 						// Nothing to do here, we can just let this cascade on up.
 					} else {
@@ -80,7 +82,9 @@ const visit = async <D, G>(
 
 						// And now set it up like:
 						// whatever: { id_in: [<ids we got from backend>] }
-						currentFilter[fieldName] = { id_in: rows.map((row) => (row as any).id) };
+						currentFilter[fieldName] = {
+							[`${primaryKeyField}_in`]: rows.map((row) => (row as any).id),
+						};
 					}
 				}
 			}
@@ -94,13 +98,13 @@ const visit = async <D, G>(
 };
 
 class QueryManagerImplementation {
-	find = async <D extends BaseDataEntity, G>({
+	find = async <G = unknown, D = unknown>({
 		entityName,
 		filter,
 		pagination,
 	}: {
 		entityName: string;
-		filter?: Filter<G>;
+		filter?: Filter<D>;
 		pagination?: PaginationOptions;
 	}) => {
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);

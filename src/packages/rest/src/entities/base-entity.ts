@@ -1,4 +1,4 @@
-import { BaseDataEntity, RelationshipType } from '@exogee/graphweaver';
+import { RelationshipType } from '@exogee/graphweaver';
 
 export type Relationship<T> = {
 	entity: () => T;
@@ -14,7 +14,7 @@ export type Relationship<T> = {
 
 export type RelationshipMap<T> = Map<string, Relationship<T>>;
 
-export class BaseEntity implements BaseDataEntity {
+export class BaseEntity {
 	public id: string | number;
 	public dataEntity: any;
 

@@ -14,5 +14,19 @@ export const LogRequests: ApolloServerPlugin = {
 			},
 			'Query received'
 		);
+
+		let operation: string | null;
+		return {
+			async didResolveOperation({ operationName }) {
+				operation = operationName;
+			},
+
+			async willSendResponse({ response }) {
+				logger.info(
+					{ operation },
+					`Sending ${JSON.stringify(response).length * 2} bytes in response.`
+				);
+			},
+		};
 	},
 };

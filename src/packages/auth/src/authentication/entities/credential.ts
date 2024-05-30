@@ -1,7 +1,7 @@
-import { BaseDataEntity, Field, GraphQLEntity, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import { ApplyAccessControlList } from '../../decorators';
 
-export interface CredentialStorage extends BaseDataEntity {
+export interface CredentialStorage {
 	id: string;
 	username: string;
 	password?: string;
@@ -14,20 +14,13 @@ export interface CredentialStorage extends BaseDataEntity {
 	},
 })
 @Entity('Credential', {
-	adminUIOptions: {
-		readonly: false,
-		summaryField: 'username',
-	},
-	apiOptions: {
-		excludeFromBuiltInWriteOperations: true,
-	},
+	adminUIOptions: { readonly: false },
+	apiOptions: { excludeFromBuiltInWriteOperations: true },
 })
-export class Credential<D extends BaseDataEntity> extends GraphQLEntity<D> {
-	public dataEntity!: D;
-
+export class Credential {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String)
+	@Field(() => String, { adminUIOptions: { summaryField: true } })
 	username!: string;
 }

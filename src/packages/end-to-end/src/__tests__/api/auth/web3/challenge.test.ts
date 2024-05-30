@@ -26,7 +26,6 @@ const ethers_provider = new (Ethers as any).JsonRpcProvider();
 const ethers_signer = new Ethers.Wallet(mnemonic_instance.privateKey, ethers_provider);
 
 class WalletAddressBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<WalletAddress>,
 	AuthenticationBaseEntity<WalletAddress>
 > {
 	public async withTransaction<T>(callback: () => Promise<T>) {
@@ -71,14 +70,9 @@ const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		return {
 			...user,

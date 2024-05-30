@@ -1,7 +1,7 @@
 (async () => {
 	const esbuild = await import('esbuild');
 	const { glob } = await import('glob');
-	const entryPoints = await glob('./src/**/*.ts');
+	const entryPoints = await glob('./src/**/*.ts', { ignore: '**/*.test.ts' });
 	await esbuild.build({
 		outdir: 'lib',
 		format: 'cjs',

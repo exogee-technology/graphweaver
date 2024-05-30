@@ -13,7 +13,7 @@ import {
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
-import { ApiKeyStorage } from '../entities';
+import { ApiKeyEntity } from '../entities';
 import { registerAccessControlListHook } from '../../decorators';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
@@ -98,14 +98,14 @@ export const applyDefaultMetadataACL = () => {
 	}
 };
 
-type AuthApolloPluginOptions<D, R> = {
+type AuthApolloPluginOptions<R> = {
 	implicitAllow?: boolean;
-	apiKeyDataProvider?: BackendProvider<D, ApiKeyStorage<R>>;
+	apiKeyDataProvider?: BackendProvider<ApiKeyEntity<R>>;
 };
 
-export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
+export const authApolloPlugin = <R>(
 	addUserToContext: (userId: string) => Promise<UserProfile<R>>,
-	options?: AuthApolloPluginOptions<D, R>
+	options?: AuthApolloPluginOptions<R>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
@@ -162,7 +162,7 @@ export const authApolloPlugin = <D extends ApiKeyStorage<R>, R>(
 					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0002)';
 				} else if (await verifyPassword(secret, apiKey.secret)) {
 					contextValue.user = new UserProfile({
-						id: apiKey.id,
+						id: String(apiKey.id),
 						roles: apiKey.roles ?? [],
 						type: UserProfileType.SERVICE,
 					});

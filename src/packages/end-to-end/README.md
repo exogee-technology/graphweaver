@@ -14,6 +14,42 @@ https://github.com/lerocha/chinook-database
 
 The SQLite file has been copied from the above directory and stored in `database.sqlite`.
 
+## To Run Tests: Auth
+
+1. Set up your environment variables. You'll need a public/private ES256 key pair that will be used to sign JWT tokens:
+
+```
+# Generate a private key
+openssl ecparam -name prime256v1 -genkey -noout -out ecdsa-private-key.pem
+# Derive the public key for the private key
+openssl ec -in ecdsa-private-key.pem -pubout -out ecdsa-public-key.pem
+```
+
+Then, encode the PEM formatted keys as base64 strings:
+
+```
+# Output the private key in base64 format
+cat ecdsa-private-key.pem | base64
+# Output the public key in base64 format
+cat ecdsa-public-key.pem | base64
+```
+
+Now we're ready to set the environment variables we'll need for the tests:
+
+```console
+export AUTH_PRIVATE_KEY_PEM_BASE64="base64_encoded_pem_private_key"
+export AUTH_PUBLIC_KEY_PEM_BASE64="base64_encoded_pem_public_key"
+export AUTH_BASE_URI="http://localhost:9000"
+export AUTH_WHITELIST_DOMAINS="localhost"
+export AUTH_MAGIC_LINK_RATE_LIMIT="500"
+```
+
+Finally you can kick them off!
+
+```console
+pnpm test-auth
+```
+
 ## To Run Tests: SQLite
 
 1. Run `pnpm dev-sqlite` This will start the test server, leave this running to start the tests
@@ -69,3 +105,15 @@ Then
 2. Run `pnpm test-ui` in another terminal, this will execute the end to end test suite against the server started above
 
 To run the recorder use `pnpm playwright codegen`
+
+## Running the Storage Provider End to End tests:
+
+Before running the Storage Provider make sure that you have followed the steps in the Storage Provider Example readme. This will create a local running S3 service and setup a test db.
+
+Once you have this and have created a bucket make sure to configure the `.env` file in the storage provider example (This will get copied across when you run the below scripts).
+
+Once you have setup these pre-requisites you can run the following scripts:
+
+`pnpm import-storage-provider` // this will copy over the example app to the local `./app` directory and use the packed node modules.
+`pnpm start-server` // this will start the app from the `./app` directory
+`pnpm test-ui-storage-provider` // This will run the playwright UI tests

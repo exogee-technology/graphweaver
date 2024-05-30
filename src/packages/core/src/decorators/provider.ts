@@ -1,7 +1,7 @@
-import { BackendProvider, BaseDataEntity, graphweaverMetadata } from '..';
+import { BackendProvider, graphweaverMetadata } from '..';
 
-export function Provider<G, D extends BaseDataEntity>(provider: BackendProvider<D, G>) {
-	return (target: G) => {
+export function Provider<G = unknown, D = unknown>(provider: BackendProvider<D>) {
+	return (target: { new (...args: any[]): G }) => {
 		graphweaverMetadata.collectProviderInformationForEntity({
 			provider,
 			target,

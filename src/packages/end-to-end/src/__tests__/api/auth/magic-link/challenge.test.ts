@@ -22,10 +22,7 @@ const user = new UserProfile({
 	username: 'test',
 });
 
-class MagicLinkBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<MagicLinkData>,
-	AuthenticationBaseEntity<MagicLinkData>
-> {
+class MagicLinkBackendProvider extends BaseDataProvider<AuthenticationBaseEntity<MagicLinkData>> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}

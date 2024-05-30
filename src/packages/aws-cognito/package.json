@@ -10,14 +10,12 @@
 		"lib"
 	],
 	"scripts": {
-		"build": "pnpm build:js && pnpm build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"build": "pnpm build:js && pnpm build:types",
 		"format": "prettier --write .",
+		"lint": "prettier --check .",
 		"package:pack": "pnpm pack",
-		"test": "npm run test:format && npm run test:typescript",
-		"test:typescript": "tsc --noEmit",
-		"test:format": "prettier --check .",
 		"version": "npm version --no-git-tag-version"
 	},
 	"license": "UNLICENSED",

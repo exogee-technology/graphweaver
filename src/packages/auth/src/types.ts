@@ -103,8 +103,3 @@ export enum AuthenticationType {
 	MagicLinkChallenge = 'MagicLinkChallenge',
 	ForgottenPasswordLink = 'ForgottenPasswordLink',
 }
-
-export type RequestParams = {
-	ctx: AuthorizationContext;
-	info: GraphQLResolveInfo;
-};

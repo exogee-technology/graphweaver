@@ -1,12 +1,15 @@
 import {
-	BaseDataEntity,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
-	GraphQLEntity,
-	GraphQLEntityConstructor,
 	GraphQLArgs,
 	ReadHookParams,
 	graphweaverMetadata,
+	EntityMetadata,
+	isEntityMetadata,
+	FieldsByTypeName,
+	ResolveTree,
+	Filter,
+	isTopLevelFilterProperty,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { GraphQLResolveInfo, Kind, SelectionSetNode, ValueNode } from 'graphql';
@@ -30,13 +33,18 @@ const metadata = graphweaverMetadata;
 // This is a pre hook and is called before any data provider is called
 // ❗ DELETE is not checked as it is possible a nested entity is being deleted and this must be checked after the data provider is called ❗
 // ❗ Therefore, this is not an exhaustive check and only infers the access type based on the fields in the node ❗
-const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
-	// If we have an object with only an id then we are reading
+const getRelationshipAccessTypeForArg = (
+	entityMetadata: EntityMetadata<any, any>,
+	node: unknown
+): AccessType => {
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata);
+
+	// If we have an object with only a primary key then we are reading
 	if (
 		typeof node === 'object' &&
 		node !== null &&
 		Object.keys(node).length === 1 &&
-		Object.prototype.hasOwnProperty.call(node, 'id')
+		Object.prototype.hasOwnProperty.call(node, primaryKeyField)
 	) {
 		return AccessType.Read;
 	}
@@ -46,7 +54,7 @@ const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
 		typeof node === 'object' &&
 		node !== null &&
 		Object.keys(node).length > 1 &&
-		Object.prototype.hasOwnProperty.call(node, 'id')
+		Object.prototype.hasOwnProperty.call(node, primaryKeyField)
 	) {
 		return AccessType.Update;
 	}
@@ -55,18 +63,12 @@ const getRelationshipAccessTypeForArg = (node: unknown): AccessType => {
 	if (
 		typeof node === 'object' &&
 		node !== null &&
-		!Object.prototype.hasOwnProperty.call(node, 'id')
+		!Object.prototype.hasOwnProperty.call(node, primaryKeyField)
 	) {
 		return AccessType.Create;
 	}
 
 	throw new Error('Unrecognized node access type, unable to apply permissions');
-};
-
-const isRelatedEntity = (
-	entity: any
-): entity is GraphQLEntityConstructor<GraphQLEntity<BaseDataEntity>, BaseDataEntity> => {
-	return !!(entity && entity.prototype instanceof GraphQLEntity);
 };
 
 // In order to support Row Level Security, we need to ensure that the hooks are transactional
@@ -87,19 +89,20 @@ type RequiredPermission = `${EntityName}:${AccessType}`;
 // This is checked in all before hooks and before calling the data provider
 const assertUserCanPerformRequest = async <G>(
 	gqlEntityTypeName: string,
-	info: GraphQLResolveInfo,
+	fields: ResolveTree | undefined,
 	args: GraphQLArgs<G>,
 	accessType: AccessType
 ) => {
-	const selectionSets = info.fieldNodes
-		.filter((node) => node.selectionSet)
-		.flatMap((node) => node.selectionSet);
+	const entityMetadata = graphweaverMetadata.getEntityByName(gqlEntityTypeName);
+	if (!entityMetadata) throw new Error(`Could not locate entity by name ${gqlEntityTypeName}.`);
 
-	const permissionsFromFields = new Set(
-		...selectionSets.map((selectionSet) =>
-			generatePermissionListFromFields(info.fragments)(gqlEntityTypeName, selectionSet)
-		)
-	);
+	const permissionsFromFields: RequiredPermission[] = [];
+	const permissionsFromFilterArgsOnFields: RequiredPermission[] = [];
+
+	if (fields) {
+		permissionsFromFields.push(...generatePermissionListFromFields(entityMetadata, fields));
+		permissionsFromFilterArgsOnFields.push(...getFilterArgumentsOnFields(entityMetadata, fields));
+	}
 
 	const permissionsFromInputArgs = args.items
 		? generatePermissionListFromArgs()(gqlEntityTypeName, args.items, accessType)
@@ -108,14 +111,6 @@ const assertUserCanPerformRequest = async <G>(
 	const permissionsFromFilterArgs = args.filter
 		? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter], accessType, true)
 		: [];
-
-	const permissionsFromFilterArgsOnFields = new Set(
-		...selectionSets.map((selectionSet) => {
-			// Get the filter arguments on the fields for this selection set
-			const filterArgs = getFilterArgumentsOnFields()(gqlEntityTypeName, selectionSet);
-			return generatePermissionListFromArgumentsOnFields()(filterArgs);
-		})
-	);
 
 	const permissionsList = new Set([
 		...permissionsFromFields,
@@ -132,113 +127,80 @@ const assertUserCanPerformRequest = async <G>(
 	}
 };
 
-const generatePermissionListFromFields = (fragments: GraphQLResolveInfo['fragments']) => {
-	const permissionsList = new Set<RequiredPermission>();
+const generatePermissionListFromFields = <G>(
+	entityMetadata: EntityMetadata<G>,
+	requestedFields: ResolveTree
+) => {
+	const permissionsList: RequiredPermission[] = [`${entityMetadata.name}:${AccessType.Read}`];
 
-	const recurseThroughFields = (entityName: string, selectionSet: SelectionSetNode | undefined) => {
-		permissionsList.add(`${entityName}:${AccessType.Read}`);
-		const entityFields = metadata.getEntityByName(entityName)?.fields;
-
-		for (const node of selectionSet?.selections ?? []) {
-			// Check if the field has a selection set of its own which infers this node is an entity
-			if (node.kind === 'Field' && node.selectionSet) {
-				const field = entityFields?.[node.name.value];
-				const fieldType = field?.getType() as GraphQLEntityConstructor<
-					GraphQLEntity<BaseDataEntity>,
-					BaseDataEntity
-				>;
-
-				const isRelationshipField = fieldType && fieldType?.prototype instanceof GraphQLEntity;
-				if (isRelationshipField) {
-					// Let's check the user has permission to read the related entity
-					recurseThroughFields(fieldType.name, node.selectionSet);
-				}
-			} else if (node.kind === 'FragmentSpread') {
-				const fragment = fragments[node.name.value];
-				recurseThroughFields(entityName, fragment.selectionSet);
-			} else if (node.kind === 'InlineFragment') {
-				recurseThroughFields(entityName, node.selectionSet);
+	for (const fields of Object.values(requestedFields.fieldsByTypeName)) {
+		for (const fieldValue of Object.values(fields)) {
+			const fieldMetadata = entityMetadata.fields[fieldValue.name];
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+			if (isEntityMetadata(fieldTypeMetadata)) {
+				permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
 			}
 		}
+	}
 
-		return permissionsList;
-	};
-
-	return recurseThroughFields;
+	return permissionsList;
 };
 
-// Returns a function that walks through the selection set and checks each relationship field to see if it contains a filter argument
-const getFilterArgumentsOnFields = () => {
-	const argumentsList = new Map<string, ValueNode>();
+// Check at each level of the resolve tree if there is a filter arg, and if so, recurse down it to make sure we're allowed to do
+// everything in the filter.
+const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree: ResolveTree) => {
+	const permissionsList: RequiredPermission[] = [];
 
-	const recurseThroughFields = (entityName: string, selectionSet: SelectionSetNode | undefined) => {
-		const entityFields = metadata.getEntityByName(entityName)?.fields;
+	const recurseThroughArg = (entityMetadata: EntityMetadata, filter: Filter<unknown>) => {
+		permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
 
-		for (const node of selectionSet?.selections ?? []) {
-			if (node.kind === 'Field' && node.arguments?.length && node.selectionSet) {
-				const field = entityFields?.[node.name.value];
-				let fieldType = field?.getType() as GraphQLEntityConstructor<
-					GraphQLEntity<BaseDataEntity>,
-					BaseDataEntity
-				>;
-				if (Array.isArray(fieldType)) {
-					fieldType = fieldType[0];
-				}
-				const isRelationshipField = fieldType && fieldType?.prototype instanceof GraphQLEntity;
-				if (isRelationshipField) {
-					const filterArgument = node.arguments.find((arg) => arg.name.value === 'filter');
-					if (filterArgument) {
-						argumentsList.set(fieldType.name, filterArgument.value);
-					}
-					recurseThroughFields(fieldType.name, node.selectionSet);
-				}
+		for (const [filterKey, value] of Object.entries(filter)) {
+			const fieldMetadata = graphweaverMetadata.fieldMetadataForFilterKey(
+				entityMetadata,
+				filterKey
+			);
+
+			if (!fieldMetadata) {
+				throw new Error(
+					`Could not determine field metadata for filter key: '${filterKey} on ${entityMetadata.name} entity'`
+				);
+			}
+
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+			if (isTopLevelFilterProperty(filterKey)) {
+				value.forEach((item) => {
+					recurseThroughArg(entityMetadata, item);
+				});
+			} else if (isEntityMetadata(fieldTypeMetadata)) {
+				recurseThroughArg(fieldTypeMetadata, value as Filter<unknown>);
 			}
 		}
-		return argumentsList;
 	};
-	return recurseThroughFields;
-};
 
-// Returns a function that walks through the filter arguments and checks each relationship field to see if it is an entity and if so, adds the required permission to the list
-const generatePermissionListFromArgumentsOnFields = () => {
-	const permissionsList = new Set<RequiredPermission>();
+	if (resolveTree.args.filter) {
+		recurseThroughArg(entityMetadata, resolveTree.args.filter as Filter<unknown>);
+	}
 
-	const recurseThroughArgs = (argumentNode: Map<string, ValueNode>) => {
-		for (const [entityName, node] of argumentNode) {
-			const entityFields = metadata.getEntityByName(entityName)?.fields;
-			permissionsList.add(`${entityName}:${AccessType.Read}`);
+	for (const fields of Object.values(resolveTree.fieldsByTypeName)) {
+		for (const fieldValue of Object.values(fields)) {
+			const fieldMetadata = entityMetadata.fields[fieldValue.name];
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-			if (node.kind === Kind.OBJECT && Array.isArray(node.fields)) {
-				for (const field of node.fields) {
-					if (field.kind === Kind.OBJECT_FIELD) {
-						const relationship = entityFields?.[field.name.value];
-						let relatedEntity = relationship?.getType() as GraphQLEntityConstructor<
-							GraphQLEntity<BaseDataEntity>,
-							BaseDataEntity
-						>;
-						if (relatedEntity && Array.isArray(relatedEntity)) {
-							relatedEntity = relatedEntity[0];
-						}
-						const isRelatedEntity =
-							relatedEntity && relatedEntity.prototype instanceof GraphQLEntity;
-						if (isRelatedEntity) {
-							// Let's check the user has permission to read the related entity
-							recurseThroughArgs(new Map([[relatedEntity.name, field.value]]));
-						}
-					}
-				}
+			if (isEntityMetadata(fieldTypeMetadata)) {
+				permissionsList.push(...getFilterArgumentsOnFields(fieldTypeMetadata, fieldValue));
 			}
 		}
+	}
 
-		return permissionsList;
-	};
-
-	return recurseThroughArgs;
+	return permissionsList;
 };
 
 // Returns a function that walks through the input arguments and checks their type to see which type of operation is being performed and adds the required permission to the list
 const generatePermissionListFromArgs = <G>() => {
-	const permissionsList = new Set<RequiredPermission>();
+	const permissionsList: RequiredPermission[] = [];
 
 	const recurseThroughArgs = (
 		entityName: string,
@@ -248,21 +210,21 @@ const generatePermissionListFromArgs = <G>() => {
 	) => {
 		for (const node of argumentNode) {
 			if (filter) {
-				permissionsList.add(`${entityName}:${AccessType.Read}`);
+				permissionsList.push(`${entityName}:${AccessType.Read}`);
 			} else {
 				// We are an input argument so we need to check the access type
 				switch (accessType) {
 					case AccessType.Read:
-						permissionsList.add(`${entityName}:${AccessType.Read}`);
+						permissionsList.push(`${entityName}:${AccessType.Read}`);
 						break;
 					case AccessType.Create:
-						permissionsList.add(`${entityName}:${AccessType.Create}`);
+						permissionsList.push(`${entityName}:${AccessType.Create}`);
 						break;
 					case AccessType.Update:
-						permissionsList.add(`${entityName}:${AccessType.Update}`);
+						permissionsList.push(`${entityName}:${AccessType.Update}`);
 						break;
 					case AccessType.Delete:
-						permissionsList.add(`${entityName}:${AccessType.Delete}`);
+						permissionsList.push(`${entityName}:${AccessType.Delete}`);
 						break;
 					default:
 						throw new Error('Unrecognized access type, unable to apply permissions');
@@ -275,9 +237,9 @@ const generatePermissionListFromArgs = <G>() => {
 			for (const [key, value] of Object.entries(node)) {
 				// If we are here then we have an array or an object lets see if its a related entity
 				const relationship = entityFields?.[key];
-				const relatedEntity = relationship?.getType();
+				const relatedEntityMetadata = graphweaverMetadata.metadataForType(relationship?.getType());
 
-				if (isRelatedEntity(relatedEntity)) {
+				if (isEntityMetadata(relatedEntityMetadata)) {
 					const relationshipNodes = Array.isArray(value) ? value : [value];
 
 					// We need to loop through the relationship nodes and check the access type as it could be a mixture of read, create, update
@@ -285,11 +247,11 @@ const generatePermissionListFromArgs = <G>() => {
 						// Check the access type of the relationship
 						const relationshipAccessType = filter
 							? accessType
-							: getRelationshipAccessTypeForArg(relationshipNode);
+							: getRelationshipAccessTypeForArg(relatedEntityMetadata, relationshipNode);
 
 						// Let's check the user has permission to read the related entity
 						recurseThroughArgs(
-							relatedEntity.name,
+							relatedEntityMetadata.name,
 							[relationshipNode],
 							relationshipAccessType,
 							filter
@@ -298,6 +260,7 @@ const generatePermissionListFromArgs = <G>() => {
 				}
 			}
 		}
+
 		return permissionsList;
 	};
 
@@ -310,7 +273,7 @@ export const beforeCreateOrUpdate = (
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args, accessType);
+		await assertUserCanPerformRequest(gqlEntityTypeName, params.fields, params.args, accessType);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Fetch the filter for the currently logged in user
@@ -328,15 +291,26 @@ export const afterCreateOrUpdate = (
 	accessType: AccessType.Create | AccessType.Update
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
+		const entityMetadata = graphweaverMetadata.getEntityByName(gqlEntityTypeName);
+		if (!entityMetadata) throw new Error(`Could not locate entity '${gqlEntityTypeName}' by name.`);
+		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata) as keyof G;
+
 		const items = params.args.items;
-		const entities = (params.entities ?? []) as GraphQLEntity<BaseDataEntity>[];
+		const entities = (params.entities ?? []) as G[];
 
 		// 1. Check to ensure we are within a transaction
 		assertTransactional(params.transactional);
 		// 2. Check user has permission for each for each entity
 		const authChecks = entities.map((entity, index) =>
-			entity?.id
-				? checkAuthorization(gqlEntityTypeName, entity.id, items[index], accessType)
+			entity?.[primaryKeyField]
+				? checkAuthorization(
+						gqlEntityTypeName,
+						typeof entity[primaryKeyField] === 'number'
+							? Number(entity[primaryKeyField])
+							: String(entity[primaryKeyField]),
+						items[index],
+						accessType
+					)
 				: undefined
 		);
 		await Promise.all(authChecks);
@@ -347,7 +321,12 @@ export const afterCreateOrUpdate = (
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
 		// 1. Check permissions for this entity based on the currently logged in user
-		await assertUserCanPerformRequest(gqlEntityTypeName, params.info, params.args, AccessType.Read);
+		await assertUserCanPerformRequest(
+			gqlEntityTypeName,
+			params.fields,
+			params.args,
+			AccessType.Read
+		);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Combine the access filter with the original filter
@@ -369,7 +348,7 @@ export const beforeDelete = (gqlEntityTypeName: string) => {
 		// 1. Check permissions for this entity based on the currently logged in user
 		await assertUserCanPerformRequest(
 			gqlEntityTypeName,
-			params.info,
+			params.fields,
 			params.args,
 			AccessType.Delete
 		);

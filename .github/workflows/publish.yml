@@ -18,7 +18,7 @@ jobs:
         name: Create GitHub deployment
         id: deployment
         with:
-          token: '${{ github.token }}'
+          token: "${{ github.token }}"
 
       - uses: actions/cache@v4
         env:
@@ -31,7 +31,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4.0.0
         with:
-          version: 8.6.9
+          version: 8.15.8
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -60,16 +60,16 @@ jobs:
         if: success()
         uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ github.token }}'
+          token: "${{ github.token }}"
           environment-url: ${{ steps.deployment.outputs.environment_url }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'success'
+          state: "success"
 
       - name: Update deployment status (failure)
         if: failure()
         uses: chrnorm/deployment-status@v2
         with:
-          token: '${{ github.token }}'
+          token: "${{ github.token }}"
           environment-url: ${{ steps.deployment.outputs.environment_url }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'failure'
+          state: "failure"

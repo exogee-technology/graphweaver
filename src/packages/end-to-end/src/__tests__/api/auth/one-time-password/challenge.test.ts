@@ -19,10 +19,7 @@ import {
 const MOCK_CODE = '123456';
 const MOCK_CREATED_AT = new Date();
 
-class OTPBackendProvider extends BaseDataProvider<
-	AuthenticationBaseEntity<OneTimePasswordData>,
-	AuthenticationBaseEntity<OneTimePasswordData>
-> {
+class OTPBackendProvider extends BaseDataProvider<AuthenticationBaseEntity<OneTimePasswordData>> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}
@@ -70,14 +67,9 @@ const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		return {
 			...user,

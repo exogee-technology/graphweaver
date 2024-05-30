@@ -21,7 +21,11 @@
 	"files": [
 		"lib"
 	],
+	"peerDependencies": {
+		"@apollo/client": "^3.10.4"
+	},
 	"devDependencies": {
+		"@apollo/client": "3.10.4",
 		"esbuild": "0.21.4",
 		"typescript": "5.4.5"
 	},

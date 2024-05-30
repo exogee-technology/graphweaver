@@ -3,14 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Field,
-	GraphQLEntity,
-	ID,
-	Entity,
-	BaseDataProvider,
-	RelationshipField,
-} from '@exogee/graphweaver';
+import { Field, ID, Entity, BaseDataProvider, RelationshipField } from '@exogee/graphweaver';
 import {
 	CredentialStorage,
 	authApolloPlugin,
@@ -27,7 +20,7 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-const albumDataProvider = new BaseDataProvider<any, Album>('album');
+const albumDataProvider = new BaseDataProvider<any>('album');
 albumDataProvider.backendProviderConfig = {
 	filter: {
 		root: true,
@@ -55,9 +48,7 @@ albumDataProvider.backendProviderConfig = {
 @Entity('Album', {
 	provider: albumDataProvider,
 })
-export class Album extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+export class Album {
 	@Field(() => ID)
 	id!: number;
 
@@ -66,9 +57,12 @@ export class Album extends GraphQLEntity<any> {
 
 	@RelationshipField<Track>(() => [Track], { relatedField: 'album' })
 	tracks!: Track[];
+
+	@RelationshipField<Artist>(() => Artist, { relatedField: 'albums' })
+	artist!: Artist;
 }
 
-const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
+const artistDataProvider = new BaseDataProvider<any>('artist');
 
 @ApplyAccessControlList({
 	Everyone: {
@@ -78,9 +72,7 @@ const artistDataProvider = new BaseDataProvider<any, Artist>('artist');
 @Entity('Artist', {
 	provider: artistDataProvider,
 })
-export class Artist extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+export class Artist {
 	@Field(() => ID)
 	id!: number;
 
@@ -91,33 +83,29 @@ export class Artist extends GraphQLEntity<any> {
 	albums!: Album[];
 }
 
-const trackDataProvider = new BaseDataProvider<any, Track>('track');
+const trackDataProvider = new BaseDataProvider<any>('track');
 
 @Entity('Track', {
 	provider: trackDataProvider,
 })
-export class Track extends GraphQLEntity<any> {
-	public dataEntity!: any;
-
+export class Track {
 	@Field(() => ID)
 	id!: number;
 
 	@Field(() => String)
 	description!: string;
+
+	@RelationshipField<Album>(() => Album, { relatedField: 'tracks' })
+	album!: Album;
 }
 
 const cred: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	async findOne() {
 		cred.password = await hashPassword(cred.password ?? '');
 		return cred;

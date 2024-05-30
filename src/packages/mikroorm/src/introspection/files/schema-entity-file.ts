@@ -20,7 +20,8 @@ export class SchemaEntityFile extends BaseFile {
 	constructor(
 		protected readonly meta: EntityMetadata,
 		protected readonly namingStrategy: NamingStrategy,
-		protected readonly platform: Platform
+		protected readonly platform: Platform,
+		protected readonly entityLookup: Map<string, EntityMetadata<any>>
 	) {
 		super(meta, namingStrategy, platform);
 	}
@@ -36,13 +37,13 @@ export class SchemaEntityFile extends BaseFile {
 
 	generate(): string {
 		const enumDefinitions: string[] = [];
-		let classBody = '\n';
+		let classBody = '';
 		const props = Object.values(this.meta.properties);
 		props.forEach((prop) => {
 			const decorator = this.getPropertyDecorator(prop);
 			const definition = this.getPropertyDefinition(prop);
 
-			if (!classBody.endsWith('\n\n')) {
+			if (classBody && !classBody.endsWith('\n\n')) {
 				classBody += '\n';
 			}
 
@@ -69,11 +70,7 @@ export class SchemaEntityFile extends BaseFile {
 
 		this.coreImports.add('Entity');
 		file += `@Entity<${this.meta.className}>(${this.quote(this.meta.className)}, {\n\tprovider: new MikroBackendProvider(Orm${this.meta.className}, connection),\n})\n`;
-
-		this.coreImports.add('GraphQLEntity');
-		file += `export class ${this.meta.className} extends GraphQLEntity<Orm${this.meta.className}> {\n`;
-		file += `\tpublic dataEntity!: Orm${this.meta.className};`;
-
+		file += `export class ${this.meta.className} {\n`;
 		file += `${classBody}}\n`;
 		const imports = [
 			`import { ${[...this.coreImports].sort().join(', ')} } from '@exogee/graphweaver';`,
@@ -135,10 +132,6 @@ export class SchemaEntityFile extends BaseFile {
 		const isEnumOrNonStringDefault = prop.enum || typeof prop.default !== 'string';
 		const useDefault = prop.default != null && isEnumOrNonStringDefault;
 		const optional = prop.nullable ? '?' : useDefault ? '' : '!';
-
-		if (prop.primary) {
-			return `${padding}id!: ${this.getTypescriptPropertyType(prop)};`;
-		}
 
 		const file = `${prop.name}${optional}: ${this.getTypescriptPropertyType(prop)}`;
 
@@ -227,6 +220,18 @@ export class SchemaEntityFile extends BaseFile {
 		if (prop.nullable && !prop.mappedBy) {
 			options.nullable = true;
 		}
+
+		if (prop.primary) {
+			options.primaryKeyField = true;
+		}
+
+		// If there's a property called 'name' it should be the summary field. If not, and there's a field called 'title'
+		// then it should be the summary field.
+		if (prop.name === 'name') {
+			options.adminUIOptions = { summaryField: true };
+		} else if (prop.name === 'title' && !this.meta.props.find((prop) => prop.name === 'name')) {
+			options.adminUIOptions = { summaryField: true };
+		}
 	}
 
 	protected getManyToManyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
@@ -241,7 +246,19 @@ export class SchemaEntityFile extends BaseFile {
 
 	protected getForeignKeyDecoratorOptions(options: Dictionary, prop: EntityProperty) {
 		this.entityImports.add(prop.type);
-		options.id = `(entity) => entity.${prop.name}?.id`;
+
+		const relatedEntity = this.entityLookup.get(prop.type);
+		if (!relatedEntity) {
+			throw new Error(
+				`Internal Error: Related entity ${prop.type} should exist but could not be found in the entity lookup.`
+			);
+		}
+		if (relatedEntity.primaryKeys.length !== 1) {
+			throw new Error(`Composite primary keys are not supported.`);
+		}
+		const [primaryKey] = relatedEntity.getPrimaryProps();
+
+		options.id = `(entity) => entity.${prop.name}?.unwrap().${primaryKey.name}`;
 	}
 
 	protected getDecoratorType(prop: EntityProperty): string {

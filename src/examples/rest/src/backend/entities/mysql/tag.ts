@@ -1,10 +1,9 @@
 import { BigIntType, Entity, PrimaryKey, Property, ManyToMany, Collection } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 
 import { Task } from './task';
 
 @Entity()
-export class Tag extends BaseEntity {
+export class Tag {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

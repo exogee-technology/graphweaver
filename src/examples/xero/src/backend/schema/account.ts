@@ -118,8 +118,6 @@ type XeroAccountType = XeroAccount & BaseDataEntity;
 	provider,
 })
 export class Account extends GraphQLEntity<XeroAccountType> {
-	public dataEntity!: XeroAccountType & { tenantId: string };
-
 	@Field(() => ID)
 	id!: string;
 

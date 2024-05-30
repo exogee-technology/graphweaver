@@ -58,7 +58,7 @@ export const ExportModal = ({
 						pagination: {
 							offset: pageNumber * pageSize,
 							limit: pageSize,
-							orderBy: getOrderByQuery(sort),
+							orderBy: getOrderByQuery(selectedEntity, sort),
 						},
 						...(filters ? { filter: filters } : {}),
 					},
@@ -76,6 +76,8 @@ export const ExportModal = ({
 
 			exportToCSV(selectedEntity.name, allResults);
 		} catch (error) {
+			console.error(error);
+
 			toast.error(String(error), {
 				duration: 5000,
 			});

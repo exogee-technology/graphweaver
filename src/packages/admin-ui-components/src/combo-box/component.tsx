@@ -84,7 +84,10 @@ export const ComboBox = ({
 	};
 
 	// Store the selected ids in an array for easy lookup
-	const selectedIds = useMemo(() => selectedItems.map((item) => item.value), [selectedItems]);
+	const selectedIds = useMemo(
+		() => new Set(selectedItems.map((item) => item.value)),
+		[selectedItems]
+	);
 
 	return (
 		<div className={styles.select}>
@@ -119,7 +122,7 @@ export const ComboBox = ({
 							<li
 								className={clsx(styles.option, {
 									[styles.highlighted]: highlightedIndex === index,
-									[styles.selected]: selectedIds.includes(item.value),
+									[styles.selected]: selectedIds.has(item.value),
 								})}
 								key={item.value as any}
 								{...getItemProps({ item, index })}

@@ -28,10 +28,7 @@ import { ApolloError, useMutation } from '@apollo/client';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Button } from '../button';
 import { Modal } from '../modal';
-import {
-	generateDeleteEntityMutation,
-	generateDeleteManyEntitiesMutation,
-} from '../detail-panel/graphql';
+import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
 import toast from 'react-hot-toast';
 import { SelectionBar } from '../selection-bar';
 
@@ -193,14 +190,18 @@ export const Table = <T extends TableRowItem>({
 	const navigate = useNavigate();
 	const { id } = useParams();
 	const { entityByType } = useSchema();
-	const { selectedEntity } = useSelectedEntity();
 	const [search] = useSearchParams();
-	const rowKeyGetter = useCallback((row: T) => row.id, []);
+	const { selectedEntity } = useSelectedEntity();
+	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
+
+	const rowKeyGetter = useCallback(
+		(row: T) => String(row[selectedEntity.primaryKeyField as keyof T]),
+		[selectedEntity]
+	);
+
 	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
 	const [selectedRows, setSelectedRows] = useState((): ReadonlySet<string> => new Set());
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
 	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(selectedEntity));
 
 	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
@@ -243,7 +244,14 @@ export const Table = <T extends TableRowItem>({
 			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
 			// Don't set the filter in the route
 			const { filters, sort } = decodeSearchParams(search);
-			navigate(routeFor({ entity: selectedEntity, id: row.id, sort, filters }));
+			navigate(
+				routeFor({
+					entity: selectedEntity,
+					id: String(row[selectedEntity.primaryKeyField as keyof T]),
+					sort,
+					filters,
+				})
+			);
 		},
 		[search, selectedEntity]
 	);

@@ -2,13 +2,13 @@ import ms from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
 import { randomUUID } from 'crypto';
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import { GraphQLResolveInfo, Source } from 'graphql';
 
 import { AuthorizationContext, AuthenticationType } from '../../types';
 import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import { AuthenticationBaseEntity } from '../entities';
+import { AuthenticationBaseEntity, CredentialStorage } from '../entities';
 import { defaultPasswordStrength, updatePasswordCredential } from './utils';
 
 const config = {
@@ -20,7 +20,6 @@ const config = {
 };
 
 type ForgottenPasswordLinkProvider = BackendProvider<
-	AuthenticationBaseEntity<ForgottenPasswordLinkData>,
 	AuthenticationBaseEntity<ForgottenPasswordLinkData>
 >;
 
@@ -196,13 +195,11 @@ export class ForgottenPassword {
 		return { link, url };
 	}
 
-	async sendResetPasswordLink(
-		_source: Source,
-		{ username }: { username: string },
-		ctx: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
-		const { url, link } = (await this.generateForgottenPasswordLink(username, ctx)) ?? {};
+	async sendResetPasswordLink({
+		args: { username },
+		context,
+	}: ResolverOptions<{ username: string }, AuthorizationContext>): Promise<boolean> {
+		const { url, link } = (await this.generateForgottenPasswordLink(username, context)) ?? {};
 
 		// fail silently
 		if (!link || !url) {
@@ -216,12 +213,9 @@ export class ForgottenPassword {
 		return true;
 	}
 
-	async resetPassword(
-		_source: Source,
-		{ token, password }: { token: string; password: string },
-		_ctx: AuthorizationContext,
-		_info: GraphQLResolveInfo
-	): Promise<boolean> {
+	async resetPassword({
+		args: { token, password },
+	}: ResolverOptions<{ token: string; password: string }>): Promise<boolean> {
 		const link = await this.getForgottenPasswordLink(token);
 
 		if (!link) {
@@ -240,7 +234,9 @@ export class ForgottenPassword {
 		}
 
 		// Get the user's credential
-		const credentialProvider = graphweaverMetadata.getEntityByName('Credential')?.provider;
+		const credentialProvider = graphweaverMetadata.getEntityByName<Credential, CredentialStorage>(
+			'Credential'
+		)?.provider;
 
 		if (!credentialProvider) {
 			throw new Error('Bad Request: No provider associated with the Credential entity.');

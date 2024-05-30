@@ -3,26 +3,20 @@ import Graphweaver from '@exogee/graphweaver-server';
 import {
 	authApolloPlugin,
 	UserProfile,
-	Credential,
 	CredentialStorage,
 	hashPassword,
 	Password,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
-import { BaseDataEntity, BaseDataProvider } from '@exogee/graphweaver';
+import { BaseDataProvider } from '@exogee/graphweaver';
 
 const user: CredentialStorage = {
 	id: '1',
 	username: 'test',
 	password: 'test123',
-	isCollection: () => false,
-	isReference: () => false,
 };
 
-class PasswordBackendProvider extends BaseDataProvider<
-	CredentialStorage,
-	Credential<CredentialStorage>
-> {
+class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
 		return await callback();
 	}

@@ -1,5 +1,11 @@
-import { WithId } from '..';
+import { EntityMetadata, graphweaverMetadata } from '..';
 
-export const hasId = <G>(obj: Partial<G>): obj is Partial<G> & WithId => {
-	return 'id' in obj && typeof obj.id === 'string';
+export const hasId = <G = unknown, D = unknown>(
+	entityMetdata: EntityMetadata<G, D>,
+	value: Partial<G>
+) => {
+	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetdata);
+	const typeOfPrimaryKeyValue = typeof value[primaryKeyField as keyof G];
+
+	return typeOfPrimaryKeyValue === 'string' || typeOfPrimaryKeyValue === 'number';
 };
