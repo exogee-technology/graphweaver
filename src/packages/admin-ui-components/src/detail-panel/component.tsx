@@ -21,10 +21,16 @@ import { Spinner } from '../spinner';
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
 
 import styles from './styles.module.css';
-import { BooleanField, EnumField, JSONField, SelectField, uploadFileToSignedURL } from './fields';
+import {
+	BooleanField,
+	EnumField,
+	JSONField,
+	RelationshipField,
+	uploadFileToSignedURL,
+} from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { LinkField } from './fields/link-field';
-import { isValueEmpty, mapFormikValuesToGqlRequestValues } from './util';
+import { isValueEmpty } from './util';
 import { deleteFileToSignedURL, MediaField } from './fields/media-field';
 import { TextField } from './fields/text-field';
 
@@ -49,7 +55,7 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 		if (isReadonly) {
 			return <LinkField name={field.name} entity={field} />;
 		}
-		return <SelectField name={field.name} entity={field} autoFocus={autoFocus} />;
+		return <RelationshipField name={field.name} entity={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'JSON') {
@@ -344,10 +350,7 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, id }));
 	};
 
-	const handleOnSubmit = async (formValues: any, actions: FormikHelpers<any>) => {
-		// Format form values as GraphQL input parameters
-		const values = mapFormikValuesToGqlRequestValues(selectedEntity, entityByName, formValues);
-
+	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		try {
 			let result: FetchResult;
 
