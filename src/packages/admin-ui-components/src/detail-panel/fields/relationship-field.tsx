@@ -29,9 +29,9 @@ export const RelationshipField = ({
 	const relatedEntity = entityByType(entity.type);
 
 	const convertToGqlVariables = (values: SelectOption[]) => {
-		// If there are no values we can just return undefined and not send this attribute to the server
+		// If there are no values we can just return undefined or an empty array
 		if (!values || values.length === 0) {
-			return undefined;
+			return mode(entity) === SelectMode.MULTI ? [] : undefined;
 		}
 
 		// If the field is a multi select field we need to convert the values to an array of IDs
@@ -56,10 +56,12 @@ export const RelationshipField = ({
 	};
 
 	useEffect(() => {
-		helpers.setValue(
-			convertToGqlVariables(Array.isArray(initialValue) ? initialValue : [initialValue])
-		);
-	}, [initialValue]);
+		if (initialValue && Array.isArray(initialValue)) {
+			helpers.setValue(convertToGqlVariables(initialValue));
+		} else if (initialValue !== null && initialValue !== undefined) {
+			helpers.setValue(convertToGqlVariables([initialValue]));
+		}
+	}, []);
 
 	const handleOnChange = (selected: SelectOption[]) => {
 		helpers.setValue(convertToGqlVariables(selected));
