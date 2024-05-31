@@ -1,8 +1,7 @@
 import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
-import { BaseEntity } from '@exogee/graphweaver-mikroorm';
 
 @Entity()
-export class User extends BaseEntity {
+export class User {
 	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
 

@@ -2,9 +2,8 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity, AdminUiEntityMetadata } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -67,7 +66,11 @@ export class Artist {
 test('Should return exportPageSize attribute for each entity in getAdminUiMetadata', async () => {
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation({
+	const response = await graphweaver.server.executeOperation<{
+		result: {
+			entities: AdminUiEntityMetadata[];
+		};
+	}>({
 		query: gql`
 			{
 				result: _graphweaver {
@@ -112,14 +115,14 @@ test('Should return exportPageSize attribute for each entity in getAdminUiMetada
 		`,
 	});
 	assert(response.body.kind === 'single');
-	const result = response.body.singleResult.data?.result as unknown as Schema;
-	expect(result.entities).toHaveLength(2);
+	const result = response.body.singleResult.data?.result;
+	expect(result?.entities).toHaveLength(2);
 
-	const albumEntity = result.entities.find((entity) => entity.name === 'Album');
+	const albumEntity = result?.entities.find((entity) => entity.name === 'Album');
 	expect(albumEntity).not.toBeNull();
-	expect(albumEntity?.attributes.exportPageSize).toEqual(500);
+	expect(albumEntity?.attributes?.exportPageSize).toEqual(500);
 
-	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
+	const artistEntity = result?.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
-	expect(artistEntity?.attributes.exportPageSize).toEqual(100);
+	expect(artistEntity?.attributes?.exportPageSize).toEqual(100);
 });

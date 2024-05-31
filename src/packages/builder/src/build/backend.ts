@@ -8,6 +8,7 @@ import {
 	baseEsbuildConfig,
 	buildOutputPathFor,
 	checkPackageForNativeModules,
+	checkTypescriptTypes,
 	getExternalModules,
 	inputPathFor,
 	makeAllPackagesExternalPlugin,
@@ -71,6 +72,8 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})
 			);
+
+			await checkTypescriptTypes();
 
 			if (result.metafile)
 				writeFileSync(

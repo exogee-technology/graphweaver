@@ -230,7 +230,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 	getType: GetTypeFunction;
 	relationshipInfo?: {
 		relatedField?: string;
-		id?: (string | number) | ((dataEntity: D) => string | number | undefined);
+		id?: string | ((dataEntity: D) => string | number | undefined);
 	};
 	description?: string;
 	deprecationReason?: string;

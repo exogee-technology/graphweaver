@@ -52,9 +52,9 @@ export class ApiKeyUpdateInputArgs<R> {
 	roles?: R[];
 }
 
-type ApiKeyProvider<R> = BackendProvider<ApiKeyEntity<R>>;
+export type ApiKeyProvider<R> = BackendProvider<ApiKeyEntity<R>>;
 
-export class ApiKey<R extends string[]> {
+export class ApiKey<R extends string> {
 	private provider: ApiKeyProvider<R>;
 	private transactional: boolean;
 

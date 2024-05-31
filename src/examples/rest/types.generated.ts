@@ -646,7 +646,7 @@ export type Task = {
   priority?: Maybe<Priority>;
   slug?: Maybe<Scalars['String']['output']>;
   tags: Array<Tag>;
-  user: User;
+  user?: Maybe<User>;
 };
 
 

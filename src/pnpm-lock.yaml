@@ -198,6 +198,12 @@ importers:
       typescript:
         specifier: 5.4.5
         version: 5.4.5
+      vite:
+        specifier: 5.2.12
+        version: 5.2.12(@types/node@20.12.13)(lightningcss@1.25.1)
+      vite-plugin-svgr:
+        specifier: 4.2.0
+        version: 4.2.0(rollup@4.18.0)(typescript@5.4.5)(vite@5.2.12(@types/node@20.12.13)(lightningcss@1.25.1))
 
   examples/s3-storage:
     dependencies:
@@ -387,6 +393,9 @@ importers:
       typescript:
         specifier: 5.4.5
         version: 5.4.5
+      vite:
+        specifier: 5.2.12
+        version: 5.2.12(@types/node@20.12.13)(lightningcss@1.25.1)
 
   packages/admin-ui:
     dependencies:
@@ -819,6 +828,9 @@ importers:
       prettier:
         specifier: 3.2.5
         version: 3.2.5
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
 
   packages/cli:
     dependencies:
@@ -948,9 +960,6 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
-      '@exogee/graphweaver-admin-ui-components':
-        specifier: workspace:*
-        version: link:../admin-ui-components
       '@exogee/graphweaver-auth':
         specifier: workspace:*
         version: link:../auth
@@ -3165,8 +3174,8 @@ packages:
   '@lezer/highlight@1.2.0':
     resolution: {integrity: sha512-WrS5Mw51sGrpqjlh3d4/fOwpEV2Hd3YOkp9DBt4k8XZQcoTHZFB7sx030A6OcahF4J1nDQAa3jXlTVVYH50IFA==}
 
-  '@lezer/lr@1.4.0':
-    resolution: {integrity: sha512-Wst46p51km8gH0ZUmeNrtpRYmdlRHUpN1DQd3GFAyKANi8WVz8c2jHYTf1CVScFaCjQw1iO3ZZdqGDxQPRErTg==}
+  '@lezer/lr@1.4.1':
+    resolution: {integrity: sha512-CHsKq8DMKBf9b3yXPDIU4DbH+ZJd/sJdYOW2llbW/HudP5u0VS6Bfq1hLYfgU7uAYGFIyGGQIsSOXGPEErZiJw==}
 
   '@lit-labs/ssr-dom-shim@1.2.0':
     resolution: {integrity: sha512-yWJKmpGE6lUURKAaIltoPIE/wrbY3TEkqQt+X0m+7fQNnAv0keydnYvbiJFP1PnMhizmIWRWOG5KLhYyc/xl+g==}
@@ -11435,7 +11444,7 @@ snapshots:
       '@codemirror/view': 6.26.3
       '@lezer/common': 1.2.1
       '@lezer/highlight': 1.2.0
-      '@lezer/lr': 1.4.0
+      '@lezer/lr': 1.4.1
       style-mod: 4.1.2
 
   '@codemirror/state@6.4.1': {}
@@ -13205,7 +13214,7 @@ snapshots:
     dependencies:
       '@lezer/common': 1.2.1
 
-  '@lezer/lr@1.4.0':
+  '@lezer/lr@1.4.1':
     dependencies:
       '@lezer/common': 1.2.1
 

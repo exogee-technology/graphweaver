@@ -35,6 +35,7 @@ export type AdminUiEntityMetadata = {
   fields: Array<AdminUiFieldMetadata>;
   name: Scalars['String']['output'];
   plural: Scalars['String']['output'];
+  primaryKeyField: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
 };
 

@@ -1,11 +1,11 @@
-import { GraphQLEntity, Field, ID, Entity, BaseDataEntity, Sort } from '@exogee/graphweaver';
+import { Field, ID, Entity, Sort } from '@exogee/graphweaver';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 
 import { inMemoryFilterFor, offsetAndLimit, orderedResult } from '../utils';
 
 // Xero doesn't provide a type for these for whatever reason. Both
 // xero.tenants and xero.updateTenants() are typed as any[].
-export interface XeroTenant extends BaseDataEntity {
+export interface XeroTenant {
 	id: string;
 	authEventId: string;
 	tenantId: string;
@@ -42,7 +42,7 @@ const provider = new XeroBackendProvider('Tenant', {
 @Entity('Tenant', {
 	provider,
 })
-export class Tenant extends GraphQLEntity<XeroTenant> {
+export class Tenant {
 	@Field(() => ID)
 	id!: string;
 

@@ -9,15 +9,10 @@
 		"module": "CommonJS",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
+		"skipLibCheck": true,
 		"jsx": "react-jsx",
 		"types": ["vite/client"]
 	},
-	"include": ["./src"],
-	"references": [
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/logger" },
-		{ "path": "../../packages/xero" },
-		{ "path": "../../packages/server" },
-		{ "path": "../../packages/scalars" }
-	]
+	"exclude": ["**/node_modules/**", "**/lib/**"],
+	"include": ["./src"]
 }

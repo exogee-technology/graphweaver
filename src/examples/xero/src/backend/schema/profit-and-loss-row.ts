@@ -1,12 +1,4 @@
-import {
-	GraphQLEntity,
-	RelationshipField,
-	Field,
-	ID,
-	Entity,
-	Sort,
-	BaseDataEntity,
-} from '@exogee/graphweaver';
+import { RelationshipField, Field, ID, Entity, Sort, fromBackendEntity } from '@exogee/graphweaver';
 import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { XeroBackendProvider } from '@exogee/graphweaver-xero';
 import { ReportWithRows, RowType, XeroClient } from 'xero-node';
@@ -56,7 +48,7 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 						);
 
 						results.push(
-							ProfitAndLossRow.fromBackendEntity({
+							fromBackendEntity(ProfitAndLossRow, {
 								// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
 								id: generateId(
 									tenantId +
@@ -118,7 +110,7 @@ const provider = new XeroBackendProvider('ProfitAndLossRow', {
 	},
 });
 
-export interface XeroProfitAndLossRow extends BaseDataEntity {
+export interface XeroProfitAndLossRow {
 	id: string;
 	date: Date;
 	description: string;
@@ -130,7 +122,7 @@ export interface XeroProfitAndLossRow extends BaseDataEntity {
 @Entity('ProfitAndLossRow', {
 	provider,
 })
-export class ProfitAndLossRow extends GraphQLEntity<XeroProfitAndLossRow> {
+export class ProfitAndLossRow {
 	@Field(() => ID)
 	id!: string;
 

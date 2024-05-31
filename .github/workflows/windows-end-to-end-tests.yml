@@ -37,7 +37,7 @@ jobs:
         run: pnpm i
 
       - name: Build CLI tool
-        run: pnpm build
+        run: pnpm build:packages
 
       - name: Install Playwright Browsers
         working-directory: src/packages/end-to-end

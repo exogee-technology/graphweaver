@@ -9,15 +9,10 @@
 		"module": "CommonJS",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
+		"skipLibCheck": true,
 		"jsx": "react-jsx",
 		"types": ["vite/client", "vite-plugin-svgr/client"]
 	},
-	"include": ["./src"],
-	"references": [
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/server" },
-		{ "path": "../../packages/mikroorm" },
-		{ "path": "../../packages/rest" },
-		{ "path": "../../packages/auth" }
-	]
+	"exclude": ["**/node_modules/**", "**/lib/**"],
+	"include": ["./src"]
 }

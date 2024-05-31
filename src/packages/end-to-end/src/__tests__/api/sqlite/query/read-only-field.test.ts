@@ -2,9 +2,8 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
-import { Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity, AdminUiEntityMetadata } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { Schema } from '@exogee/graphweaver-admin-ui-components';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -101,7 +100,11 @@ export class Customer {
 test('Should return isReadOnly attribute for each field in getAdminUiMetadata', async () => {
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation({
+	const response = await graphweaver.server.executeOperation<{
+		result: {
+			entities: AdminUiEntityMetadata[];
+		};
+	}>({
 		query: gql`
 			{
 				result: _graphweaver {
@@ -146,25 +149,25 @@ test('Should return isReadOnly attribute for each field in getAdminUiMetadata', 
 		`,
 	});
 	assert(response.body.kind === 'single');
-	const result = response.body.singleResult.data?.result as unknown as Schema;
-	expect(result.entities).toHaveLength(1);
+	const result = response.body.singleResult.data?.result;
+	expect(result?.entities).toHaveLength(1);
 
-	const customerEntity = result.entities.find((entity) => entity.name === 'Customer');
+	const customerEntity = result?.entities.find((entity) => entity.name === 'Customer');
 	expect(customerEntity).not.toBeNull();
 
-	const fieldNameField = customerEntity?.fields.find((field) => field.name === 'firstName');
+	const fieldNameField = customerEntity?.fields?.find((field) => field.name === 'firstName');
 	expect(fieldNameField).not.toBeNull();
 	expect(fieldNameField?.attributes).not.toBeNull();
 	expect(fieldNameField?.attributes?.isReadOnly).toEqual(false);
 	expect(fieldNameField?.attributes?.isRequired).toEqual(true);
 
-	const companyField = customerEntity?.fields.find((field) => field.name === 'company');
+	const companyField = customerEntity?.fields?.find((field) => field.name === 'company');
 	expect(companyField).not.toBeNull();
 	expect(companyField?.attributes).not.toBeNull();
 	expect(companyField?.attributes?.isReadOnly).toEqual(true);
 	expect(companyField?.attributes?.isRequired).toEqual(false);
 
-	const addressField = customerEntity?.fields.find((field) => field.name === 'address');
+	const addressField = customerEntity?.fields?.find((field) => field.name === 'address');
 	expect(addressField).not.toBeNull();
 	expect(addressField?.attributes).not.toBeNull();
 	expect(addressField?.attributes?.isReadOnly).toEqual(true);

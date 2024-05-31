@@ -9,9 +9,8 @@ import {
 	PrimaryKey,
 	Property,
 } from '@mikro-orm/core';
-import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
+import { Field, ID, Entity, RelationshipField, AdminUiEntityMetadata } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { Schema } from '@exogee/graphweaver-admin-ui-components';
 import { MediaField, S3StorageProvider } from '@exogee/graphweaver-storage-provider';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -116,7 +115,11 @@ export class Artist {
 test('Test the decorator adminUISettings', async () => {
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation({
+	const response = await graphweaver.server.executeOperation<{
+		result: {
+			entities: AdminUiEntityMetadata[];
+		};
+	}>({
 		query: gql`
 			{
 				result: _graphweaver {
@@ -165,30 +168,30 @@ test('Test the decorator adminUISettings', async () => {
 		`,
 	});
 	assert(response.body.kind === 'single');
-	const result = response.body.singleResult.data?.result as unknown as Schema;
-	expect(result.entities).toHaveLength(1);
+	const result = response.body.singleResult.data?.result;
+	expect(result?.entities).toHaveLength(1);
 
-	const albumEntity = result.entities.find((entity) => entity.name === 'Album');
+	const albumEntity = result?.entities.find((entity) => entity.name === 'Album');
 	expect(albumEntity).toBeUndefined();
 
-	const artistEntity = result.entities.find((entity) => entity.name === 'Artist');
+	const artistEntity = result?.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
 	expect(artistEntity?.defaultFilter).toStrictEqual({ name: 'test' });
 	expect(artistEntity?.summaryField).toStrictEqual('name');
 
-	const idField = artistEntity?.fields.find((field) => field.name === 'artistId');
+	const idField = artistEntity?.fields?.find((field) => field.name === 'artistId');
 	expect(idField).not.toBeNull();
 	expect(idField?.filter).not.toBeNull();
 
-	const nameField = artistEntity?.fields.find((field) => field.name === 'name');
+	const nameField = artistEntity?.fields?.find((field) => field.name === 'name');
 	expect(nameField).toBeUndefined();
 
-	const albumsField = artistEntity?.fields.find((field) => field.name === 'albums');
+	const albumsField = artistEntity?.fields?.find((field) => field.name === 'albums');
 	expect(albumsField).not.toBeNull();
 	expect(albumsField?.filter).toBeNull();
 
 	// Test that the type of the mediaDownloadUrlField field is Media
-	const mediaDownloadUrlField = artistEntity?.fields.find(
+	const mediaDownloadUrlField = artistEntity?.fields?.find(
 		(field) => field.name === 'mediaDownloadUrlField'
 	);
 

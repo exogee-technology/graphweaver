@@ -12,7 +12,9 @@
 		"pnpm": ">=8"
 	},
 	"scripts": {
-		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" \"pnpm build:examples\"",
+		"build:packages": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build:examples": "turbo --filter \"./examples/**\" build",
 		"build:types": "turbo --filter \"!./examples/**\" build:types",
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
 		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
@@ -20,7 +22,7 @@
 		"format": "pnpm prettier",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write .",
-		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build && pnpm packages:pack",
+		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && pnpm packages:pack",
 		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",
 		"publish:dry": "pnpm build && pnpm -r publish --no-git-checks --access public --dry-run",
 		"lint": "eslint . --ext .js,.jsx,.ts,.tsx",

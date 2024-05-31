@@ -11,6 +11,10 @@
 		},
 		"package:pack": {
 			"cache": false
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"cache": false
 		}
 	}
 }

@@ -11,7 +11,7 @@ export interface WithDataEntity<D> {
 	[dataEntityPropertyKey]: D;
 }
 
-export const dataEntityForGraphQLEntity = <G, D>(entity: G & WithDataEntity<D>): D =>
+export const dataEntityForGraphQLEntity = <G, D>(entity: G & WithDataEntity<D>): D | undefined =>
 	entity[dataEntityPropertyKey];
 
 // Covert the data entity from the backend to the GraphQL entity

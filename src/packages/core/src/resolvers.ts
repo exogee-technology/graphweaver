@@ -24,6 +24,8 @@ import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
 
+type ID = string | number | bigint;
+
 export const baseResolver = (resolver: Resolver) => {
 	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
 		return resolver({
@@ -367,11 +369,29 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
-	const idValue = !id
-		? undefined
-		: typeof id === 'function'
-			? id(dataEntityForGraphQLEntity<G, D>(source as any))
-			: (source as any)[id];
+
+	let idValue: ID | undefined = undefined;
+	if (id && typeof id === 'function') {
+		// If the id is a function, we'll call it with the source data to get the id value.
+		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
+	} else if (id) {
+		// else if the id is a string, we'll try to get the value from the source data.
+		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+
+		// If the value is a string or number, we'll use it as the id value.
+		if (
+			typeof valueOfForeignKey === 'string' ||
+			typeof valueOfForeignKey === 'number' ||
+			typeof valueOfForeignKey === 'bigint'
+		) {
+			idValue = valueOfForeignKey;
+		} else {
+			// The ID value must be a string or a number otherwise we'll throw an error.
+			throw new Error(
+				'Could not determine id value for relationship field only string or numbers are supported.'
+			);
+		}
+	}
 
 	if (typeof existingData === 'undefined' && !idValue && !field.relationshipInfo?.relatedField) {
 		// id is null and we are loading a single instance so let's return null
@@ -456,7 +476,7 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 
 		const dataEntity = await BaseLoaders.loadOne<R, D>({
 			gqlEntityType,
-			id: idValue,
+			id: String(idValue),
 		});
 		dataEntities = [dataEntity];
 	}
