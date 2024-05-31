@@ -47,6 +47,9 @@ export const fromBackendEntity = <G = unknown, D = unknown>(
 		entity = defaultFromBackendEntity<G, D>(entityMetadata, dataEntity) as G;
 	}
 
+	// It is possible that the entity is null returned from target or the defaultFromBackendEntity, so we need to check for that.
+	if (entity === null) return null;
+
 	// Always tag on the original data entity in a hidden way so that we can read it from
 	// resolvers and access it later.
 	(entity as WithDataEntity<D>)[dataEntityPropertyKey] = dataEntity;
