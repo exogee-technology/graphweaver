@@ -135,6 +135,7 @@ export const makeTsConfig = (projectName: string) => {
 			module: 'CommonJS',
 			allowSyntheticDefaultImports: true,
 			esModuleInterop: true,
+			skipLibCheck: true,
 		},
 		exclude: ['**/node_modules/**', '**/lib/**'],
 		include: ['./src'],

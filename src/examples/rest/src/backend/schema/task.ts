@@ -93,7 +93,7 @@ export class Task {
 	@Field(() => Boolean)
 	isCompleted!: boolean;
 
-	@RelationshipField<OrmTask>(() => User, { id: 'userId' })
+	@RelationshipField<OrmTask>(() => User, { id: (entity) => entity.userId })
 	user!: User;
 
 	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })

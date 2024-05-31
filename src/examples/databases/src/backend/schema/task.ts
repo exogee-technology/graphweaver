@@ -28,6 +28,6 @@ export class Task {
 		};
 	}
 
-	@RelationshipField<Task>(() => User, { id: 'userId' })
+	@RelationshipField<OrmTask>(() => User, { id: (entity) => entity.userId })
 	user!: User;
 }

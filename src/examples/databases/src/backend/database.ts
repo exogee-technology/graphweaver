@@ -11,7 +11,7 @@ export const pgConnection = {
 		dbName: process.env.POSTGRES_DB_NAME ?? 'todo_app',
 		user: process.env.POSTGRES_DB_USER ?? 'postgres',
 		password: process.env.POSTGRES_DB_PASSWORD ?? '',
-		port: process.env.POSTGRES_DB_PORT ?? 5432,
+		port: parseInt(process.env.POSTGRES_DB_PORT ?? '5432'),
 	},
 };
 
@@ -23,6 +23,6 @@ export const myConnection = {
 		dbName: process.env.MYSQL_DB_NAME ?? 'todo_app',
 		user: process.env.MYSQL_DB_USER ?? 'root',
 		password: process.env.MYSQL_DB_PASSWORD ?? '',
-		port: process.env.MYSQL_DB_PORT ?? 3306,
+		port: parseInt(process.env.MYSQL_DB_PORT ?? '3306'),
 	},
 };

@@ -1,4 +1,5 @@
 import path from 'path';
+import { spawn } from 'child_process';
 import { BuildOptions, PluginBuild, OnResolveArgs } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
@@ -135,5 +136,22 @@ export const requireSilent = (module: string) => {
 	} catch {
 		// If we are here we might not have the package installed so we'll just return an empty object.
 		return { browser: {}, peerDependencies: {}, dependencies: {} };
+	}
+};
+
+export const checkTypescriptTypes = async () => {
+	try {
+		console.log(`Checking Typescript types...`, process.cwd());
+		const child = spawn('tsc --noEmit', {
+			stdio: 'inherit',
+			shell: true,
+		});
+		child.on('exit', function (exitCode) {
+			if (exitCode !== 0) throw new Error('Typescript types failed check.');
+			console.log(`Typescript types passed.`);
+		});
+	} catch (error: any) {
+		console.error(`Checking of Typescript types failed: ${error}`);
+		throw new Error('Checking of Typescript types failed');
 	}
 };

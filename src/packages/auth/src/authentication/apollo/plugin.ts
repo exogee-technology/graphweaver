@@ -15,6 +15,7 @@ import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
 import { ApiKeyEntity } from '../entities';
 import { registerAccessControlListHook } from '../../decorators';
+import { ApiKeyProvider } from '../methods';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -100,7 +101,7 @@ export const applyDefaultMetadataACL = () => {
 
 type AuthApolloPluginOptions<R> = {
 	implicitAllow?: boolean;
-	apiKeyDataProvider?: BackendProvider<ApiKeyEntity<R>>;
+	apiKeyDataProvider?: ApiKeyProvider<R>;
 };
 
 export const authApolloPlugin = <R>(

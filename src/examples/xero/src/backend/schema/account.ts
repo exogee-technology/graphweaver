@@ -1,10 +1,8 @@
 import {
-	GraphQLEntity,
 	RelationshipField,
 	Field,
 	ID,
 	Entity,
-	BaseDataEntity,
 	Filter,
 	Sort,
 	graphweaverMetadata,
@@ -112,12 +110,10 @@ graphweaverMetadata.collectEnumInformation({
 	name: 'AccountType',
 });
 
-type XeroAccountType = XeroAccount & BaseDataEntity;
-
 @Entity('Account', {
 	provider,
 })
-export class Account extends GraphQLEntity<XeroAccountType> {
+export class Account {
 	@Field(() => ID)
 	id!: string;
 

@@ -28,8 +28,8 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@nivo/bump": "0.87.0",
@@ -53,6 +53,7 @@
 		"esbuild": "0.21.4",
 		"prettier": "3.2.5",
 		"ts-node": "10.9.2",
-		"typescript": "5.4.5"
+		"typescript": "5.4.5",
+		"vite": "5.2.12"
 	}
 }
