@@ -24,6 +24,8 @@ import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
 
+type ID = string | number | bigint;
+
 export const baseResolver = (resolver: Resolver) => {
 	return (source: Source, args: any, context: BaseContext, info: GraphQLResolveInfo) => {
 		return resolver({
@@ -368,7 +370,7 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
 
-	let idValue: string | number | undefined = undefined;
+	let idValue: ID | undefined = undefined;
 	if (id && typeof id === 'function') {
 		// If the id is a function, we'll call it with the source data to get the id value.
 		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
@@ -377,7 +379,11 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
 
 		// If the value is a string or number, we'll use it as the id value.
-		if (typeof valueOfForeignKey === 'string' || typeof valueOfForeignKey === 'number') {
+		if (
+			typeof valueOfForeignKey === 'string' ||
+			typeof valueOfForeignKey === 'number' ||
+			typeof valueOfForeignKey === 'bigint'
+		) {
 			idValue = valueOfForeignKey;
 		} else {
 			// The ID value must be a string or a number otherwise we'll throw an error.
