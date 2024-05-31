@@ -3,7 +3,6 @@ import {
 	ApiKey,
 	ApiKeyEntity,
 	AuthorizationContext,
-	ApiKeyProvider,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 

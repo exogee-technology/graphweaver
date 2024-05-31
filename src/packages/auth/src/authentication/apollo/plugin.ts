@@ -1,6 +1,6 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { BackendProvider, graphweaverMetadata } from '@exogee/graphweaver';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
@@ -13,7 +13,6 @@ import {
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
-import { ApiKeyEntity } from '../entities';
 import { registerAccessControlListHook } from '../../decorators';
 import { ApiKeyProvider } from '../methods';
 
