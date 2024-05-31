@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "1.0.0-beta.2",
+	"version": "1.0.0-beta.3",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
