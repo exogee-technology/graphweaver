@@ -56,7 +56,7 @@ export class Album {
 	@Field(() => ID)
 	id!: number;
 
-	@RelationshipField<OrmAlbum>(() => Artist, { id: (entity) => entity.artist?.unwrap().id })
+	@RelationshipField<OrmAlbum>(() => Artist, { id: (entity) => entity.artist?.id })
 	renamedArtist!: Artist;
 }
 
