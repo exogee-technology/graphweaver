@@ -76,7 +76,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements
-		const nodes: Partial<G>[] = [];
+		const nodes: Partial<G | null>[] = [];
 		for (const node of input) {
 			const updatedNode = await createOrUpdateEntities(node, meta, info, context);
 			if (Array.isArray(updatedNode)) {
@@ -88,7 +88,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 	} else if (isObject(input)) {
 		// If input is an object, check for nested entities and update/create them
 		let node = { ...input };
-		let parent: G | undefined = undefined;
+		let parent: G | undefined | null = undefined;
 
 		// Loop through the properties and check for nested entities
 		for (const entry of Object.entries(input)) {
