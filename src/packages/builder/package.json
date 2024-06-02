@@ -41,7 +41,7 @@
 		"vite-plugin-svgr": "4.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.12.13",
+		"@types/node": "20.13.0",
 		"@types/rimraf": "4.0.5",
 		"prettier": "3.2.5",
 		"typescript": "5.4.5"
