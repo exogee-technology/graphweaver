@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@types/node": "20.14.0",
 		"@types/rimraf": "4.0.5",
-		"prettier": "3.2.5",
+		"prettier": "3.3.0",
 		"typescript": "5.4.5"
 	},
 	"keywords": [

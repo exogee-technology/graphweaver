@@ -24,7 +24,7 @@
 		"esbuild": "0.21.4",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
-		"prettier": "3.2.5",
+		"prettier": "3.3.0",
 		"typescript": "5.4.5"
 	},
 	"peerDependencies": {
