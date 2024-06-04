@@ -13,6 +13,10 @@
       "path": "src/examples/s3-storage"
     },
     {
+      "name": "➡️ Example: Federation",
+      "path": "src/examples/federation"
+    },
+    {
       "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
     },

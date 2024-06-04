@@ -233,6 +233,8 @@ export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
+  /** Query used by the Admin UI to introspect the schema and metadata. */
+  _service?: Maybe<_Service>;
   /** Get a single Product. */
   product?: Maybe<Product>;
   /** Get multiple Products. */
@@ -254,3 +256,8 @@ export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type _Service = {
+  __typename?: '_service';
+  sdl: Scalars['String']['output'];
+};

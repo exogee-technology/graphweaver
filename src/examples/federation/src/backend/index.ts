@@ -86,6 +86,8 @@ export class Product {
 //   id: ID!
 //   deprecatedProducts: [DeprecatedProduct!]!
 
-export const graphweaver = new Graphweaver();
+export const graphweaver = new Graphweaver({
+	enableFederation: true,
+});
 
 export const handler = graphweaver.handler();

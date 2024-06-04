@@ -48,6 +48,7 @@ export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
+	enableFederation?: boolean;
 	graphQLArmorOptions?: GraphQLArmorConfig;
 	corsOptions?: CorsPluginOptions;
 	graphqlDeduplicator?: { enabled: boolean };
@@ -65,6 +66,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		apolloServerOptions: {
 			introspection: true,
 		},
+		enableFederation: false,
 		graphqlDeduplicator: {
 			enabled: true,
 		},
@@ -112,14 +114,22 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			this.schema = SchemaBuilder.build();
+			this.schema = SchemaBuilder.build({
+				enableFederation: this.config.enableFederation ?? false,
+			});
 		} catch (error) {
 			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');
 			throw error;
 		}
 
 		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
-		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());
+		if (logger.isLevelEnabled('trace'))
+			logger.trace(
+				'Schema: ',
+				SchemaBuilder.print({
+					enableFederation: this.config.enableFederation ?? false,
+				})
+			);
 
 		logger.trace(`Graphweaver buildSchemaSync finished.`);
 		logger.trace(`Graphweaver starting ApolloServer`);
