@@ -94,8 +94,27 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
+export type CaseStudy = {
+  __typename?: 'CaseStudy';
+  caseNumber: Scalars['ID']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+};
+
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
+};
+
+export type DeprecatedProduct = {
+  __typename?: 'DeprecatedProduct';
+  createdBy?: Maybe<User>;
+  package: Scalars['String']['output'];
+  reason?: Maybe<Scalars['String']['output']>;
+  sku: Scalars['String']['output'];
+};
+
+export type Inventory = {
+  __typename?: 'Inventory';
+  id: Scalars['ID']['output'];
 };
 
 export type Mutation = {
@@ -153,10 +172,14 @@ export type MutationUpdateProductsArgs = {
 
 export type Product = {
   __typename?: 'Product';
+  createdBy?: Maybe<User>;
+  dimensions?: Maybe<ProductDimension>;
   id: Scalars['ID']['output'];
-  notes: Scalars['String']['output'];
-  package: Scalars['String']['output'];
-  sku: Scalars['String']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
+  package?: Maybe<Scalars['String']['output']>;
+  research: Array<ProductResearch>;
+  sku?: Maybe<Scalars['String']['output']>;
+  variation?: Maybe<ProductVariation>;
 };
 
 /** Data needed to create or update Products. If an ID is passed, this is an update, otherwise it's an insert. */
@@ -167,11 +190,24 @@ export type ProductCreateOrUpdateInput = {
   sku?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ProductDimension = {
+  __typename?: 'ProductDimension';
+  size?: Maybe<Scalars['String']['output']>;
+  unit?: Maybe<Scalars['String']['output']>;
+  weight?: Maybe<Scalars['Float']['output']>;
+};
+
 /** Data needed to create Products. */
 export type ProductInsertInput = {
-  notes: Scalars['String']['input'];
-  package: Scalars['String']['input'];
-  sku: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
+  package?: InputMaybe<Scalars['String']['input']>;
+  sku?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProductResearch = {
+  __typename?: 'ProductResearch';
+  outcome?: Maybe<Scalars['String']['output']>;
+  study: CaseStudy;
 };
 
 /** Data needed to update Products. An ID must be passed. */
@@ -180,6 +216,11 @@ export type ProductUpdateInput = {
   notes?: InputMaybe<Scalars['String']['input']>;
   package?: InputMaybe<Scalars['String']['input']>;
   sku?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type ProductVariation = {
+  __typename?: 'ProductVariation';
+  id: Scalars['ID']['output'];
 };
 
 export type ProductsListFilter = {
@@ -233,12 +274,19 @@ export type Query = {
   __typename?: 'Query';
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
-  /** Query used by the Admin UI to introspect the schema and metadata. */
+  /** Query used by federation servers for introspection. */
   _service?: Maybe<_Service>;
+  deprecatedProduct?: Maybe<DeprecatedProduct>;
   /** Get a single Product. */
   product?: Maybe<Product>;
   /** Get multiple Products. */
   products?: Maybe<Array<Maybe<Product>>>;
+};
+
+
+export type QueryDeprecatedProductArgs = {
+  package: Scalars['String']['input'];
+  sku: Scalars['String']['input'];
 };
 
 
@@ -256,6 +304,15 @@ export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type User = {
+  __typename?: 'User';
+  averageProductsCreatedPerYear?: Maybe<Scalars['Int']['output']>;
+  email: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  totalProductsCreated?: Maybe<Scalars['Int']['output']>;
+  yearsOfEmployment: Scalars['Int']['output'];
+};
 
 export type _Service = {
   __typename?: '_service';

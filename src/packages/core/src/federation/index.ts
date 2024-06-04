@@ -64,7 +64,7 @@ const addServiceQuery = () => {
 
 	graphweaverMetadata.addQuery({
 		name: '_service',
-		description: 'Query used by the Admin UI to introspect the schema and metadata.',
+		description: 'Query used by federation servers for introspection.',
 		intentionalOverride: true,
 		getType: () => Service,
 		resolver: () => {
