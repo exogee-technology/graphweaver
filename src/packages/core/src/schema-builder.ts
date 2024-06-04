@@ -39,7 +39,6 @@ import {
 	TypeValue,
 } from '.';
 import * as resolvers from './resolvers';
-import { buildFederationType } from './federation';
 
 export const ID = GraphQLID;
 
@@ -514,16 +513,10 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return updateType;
 };
 
-export type SchemaBuildOptions = {
-	enableFederation: boolean;
-};
-
 class SchemaBuilderImplementation {
-	public build({ enableFederation }: SchemaBuildOptions) {
+	public build() {
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
-
-		if (enableFederation) buildFederationType();
 
 		const types = Array.from(this.buildTypes());
 		const query = this.buildQueryType();
@@ -534,8 +527,8 @@ class SchemaBuilderImplementation {
 		return new GraphQLSchema({ types, query, mutation });
 	}
 
-	public print({ enableFederation }: SchemaBuildOptions) {
-		return printSchema(this.build({ enableFederation }));
+	public print() {
+		return printSchema(this.build());
 	}
 
 	public isValidFilterOperation(filterOperation: string) {

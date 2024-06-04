@@ -8,6 +8,7 @@ import {
 	resolveAdminUiMetadata,
 	AdminUiMetadata,
 	fieldResolver,
+	enableFederation,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -114,22 +115,15 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			this.schema = SchemaBuilder.build({
-				enableFederation: this.config.enableFederation ?? false,
-			});
+			if (this.config.enableFederation) enableFederation();
+			this.schema = SchemaBuilder.build();
 		} catch (error) {
 			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');
 			throw error;
 		}
 
 		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
-		if (logger.isLevelEnabled('trace'))
-			logger.trace(
-				'Schema: ',
-				SchemaBuilder.print({
-					enableFederation: this.config.enableFederation ?? false,
-				})
-			);
+		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());
 
 		logger.trace(`Graphweaver buildSchemaSync finished.`);
 		logger.trace(`Graphweaver starting ApolloServer`);
