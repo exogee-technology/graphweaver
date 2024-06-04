@@ -1,4 +1,4 @@
-import { buildASTSchema, extendSchema, parse, printSchema } from 'graphql';
+import { buildASTSchema } from 'graphql';
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 
