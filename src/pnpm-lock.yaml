@@ -801,14 +801,14 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       serverless:
-        specifier: 4.0.24
-        version: 4.0.24
+        specifier: 4.0.35
+        version: 4.0.35
       serverless-dotenv-plugin:
         specifier: 6.0.0
-        version: 6.0.0(serverless@4.0.24)
+        version: 6.0.0(serverless@4.0.35)
       serverless-offline:
         specifier: 13.6.0
-        version: 13.6.0(serverless@4.0.24)
+        version: 13.6.0(serverless@4.0.35)
       vite:
         specifier: 5.2.12
         version: 5.2.12(@types/node@20.14.1)
@@ -15029,7 +15029,7 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-dotenv-plugin@6.0.0(serverless@4.0.24):
+  /serverless-dotenv-plugin@6.0.0(serverless@4.0.35):
     resolution: {integrity: sha512-8tLVNwHfDO0sBz6+m+DLTZquRk0AZq9rzqk3kphm1iIWKfan9R7RKt4hdq3eQ0kmDoqzudjPYBEXAJ5bUNKeGQ==}
     peerDependencies:
       serverless: 1 || 2 || pre-3 || 3
@@ -15037,10 +15037,10 @@ packages:
       chalk: 4.1.2
       dotenv: 16.4.5
       dotenv-expand: 10.0.0
-      serverless: 4.0.24
+      serverless: 4.0.35
     dev: false
 
-  /serverless-offline@13.6.0(serverless@4.0.24):
+  /serverless-offline@13.6.0(serverless@4.0.35):
     resolution: {integrity: sha512-aSMg9TNfFjVj4QFmHqPzLwbwCSVmrpeoe96ozOXaesn2VX+4lyS+kTF1TXh4pZd5/ef9cfcma3jcqmgnShrUyA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
@@ -15066,7 +15066,7 @@ packages:
       luxon: 3.4.4
       node-schedule: 2.1.1
       p-memoize: 7.1.1
-      serverless: 4.0.24
+      serverless: 4.0.35
       velocityjs: 2.0.6
       ws: 8.17.0
     transitivePeerDependencies:
@@ -15076,8 +15076,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /serverless@4.0.24:
-    resolution: {integrity: sha512-TuDhJ27kQalHDTR78wreR5fuWiMzwbaMXFrpfvJXdSeUsFQ2OQU+OaH3p/zlJlPdCg9tKald/OeA8sJ/wK7byw==}
+  /serverless@4.0.35:
+    resolution: {integrity: sha512-CcYB7pxxBTukcovKohKigTls9Cg1w5Bu+NGvXzlsV8UQ/4rM+Tn7+Mf6O5ep/nZWQhQ5/jHKWAzW2wp4skUVxA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
