@@ -199,6 +199,24 @@ const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
 	}
 };
 
+const graphQLTypeForScalarEnumOrUnion = (metadata: unknown, type: TypeValue) => {
+	if (isEnumMetadata(metadata)) {
+		return graphQLTypeForEnum(metadata);
+	} else if (isUnionMetadata(metadata)) {
+		return graphQLTypeForUnion(metadata);
+	}
+
+	return graphQLScalarForTypeScriptType(type);
+};
+
+type GraphQLInputTypes =
+	| GraphQLInputType
+	| GraphQLScalarType
+	| GraphQLEnumType
+	| GraphQLUnionType
+	| GraphQLList<any>
+	| GraphQLNonNull<any>;
+
 const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 	let inputType = inputTypes.get(input.name);
 
@@ -212,23 +230,12 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 				for (const field of Object.values(input.fields)) {
 					// Let's try to resolve the GraphQL type involved here.
 					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(field.getType);
-					let graphQLType: GraphQLInputType | undefined = undefined;
+					let graphQLType: GraphQLInputTypes | undefined = undefined;
 
 					if (isInputMetadata(metadata)) {
 						graphQLType = graphQLTypeForInput(metadata);
-					} else if (isEnumMetadata(metadata)) {
-						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
-						// Ok, it's some kind of in-built scalar we need to map.
-						const scalar = graphQLScalarForTypeScriptType(fieldType);
-
-						if (!scalar) {
-							throw new Error(
-								`Could not map field ${field.name} on entity ${input.name} of type ${String(field.getType())} to a GraphQL scalar.`
-							);
-						}
-
-						graphQLType = scalar;
+						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
@@ -283,19 +290,9 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 								type: filterTypeForEntity(metadata),
 							};
 						}
-					} else if (isEnumMetadata(metadata)) {
-						graphQLType = graphQLTypeForEnum(metadata);
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
-						const scalar = graphQLScalarForTypeScriptType(fieldType);
-
-						if (!scalar) {
-							throw new Error(
-								`Could not map field ${field.name} on entity ${entity.name} of type ${String(field.getType())} to a GraphQL scalar.`
-							);
-						}
-
-						graphQLType = scalar;
+						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
@@ -491,10 +488,10 @@ const generateGraphQLInputFieldsForEntity =
 
 					fields[field.name] = { type };
 				}
-			} else if (isEnumMetadata(metadata)) {
-				fields[field.name] = { type: graphQLTypeForEnum(metadata) };
 			} else {
-				fields[field.name] = { type: graphQLScalarForTypeScriptType(fieldType) };
+				fields[field.name] = {
+					type: graphQLTypeForScalarEnumOrUnion(metadata, fieldType) as GraphQLInputType,
+				};
 			}
 
 			// If it's not a nullable field and has no default then we should wrap it now in a not null.
@@ -636,13 +633,11 @@ class SchemaBuilderImplementation {
 
 			const { fieldType, metadata, isList } = getFieldTypeWithMetadata(getType);
 
-			let inputType: GraphQLInputType;
+			let inputType: GraphQLInputTypes;
 			if (isInputMetadata(metadata)) {
 				inputType = graphQLTypeForInput(metadata);
-			} else if (isEnumMetadata(metadata)) {
-				inputType = graphQLTypeForEnum(metadata);
 			} else {
-				inputType = graphQLScalarForTypeScriptType(fieldType);
+				inputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
 			}
 
 			if (isArgMetadata(details) && !details.nullable) {
@@ -707,8 +702,7 @@ class SchemaBuilderImplementation {
 						throw new Error(`Duplicate query name: ${customQuery.name}.`);
 					}
 
-					const type = customQuery.getType();
-					const metadata = graphweaverMetadata.metadataForType(type);
+					const { fieldType, metadata } = getFieldTypeWithMetadata(customQuery.getType);
 					const customArgs = this.graphQLTypeForArgs(customQuery.args);
 
 					if (isEntityMetadata(metadata)) {
@@ -721,20 +715,12 @@ class SchemaBuilderImplementation {
 							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					} else {
-						let fieldType: GraphQLOutputType | undefined = undefined;
-
-						if (isEnumMetadata(metadata)) {
-							fieldType = graphQLTypeForEnum(metadata);
-						} else if (isUnionMetadata(metadata)) {
-							fieldType = graphQLTypeForUnion(metadata);
-						} else {
-							fieldType = graphQLScalarForTypeScriptType(type);
-						}
+						const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
 
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type: fieldType,
+							type,
 							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					}
