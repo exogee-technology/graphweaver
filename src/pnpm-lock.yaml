@@ -29,13 +29,13 @@ importers:
         version: 9.1.0(eslint@8.57.0)
       eslint-plugin-prettier:
         specifier: 5.1.3
-        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.0)
+        version: 5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.1)
       eslint-plugin-simple-import-sort:
         specifier: 12.1.0
         version: 12.1.0(eslint@8.57.0)
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       turbo:
         specifier: 1.13.4
         version: 1.13.4
@@ -385,8 +385,8 @@ importers:
         specifier: 0.21.4
         version: 0.21.4
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.14.1)(typescript@5.4.5)
@@ -634,8 +634,8 @@ importers:
         specifier: 10.4.1
         version: 10.4.1
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.14.1)(typescript@5.4.5)
@@ -738,8 +738,8 @@ importers:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.8.1)
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -826,8 +826,8 @@ importers:
         specifier: 4.0.5
         version: 4.0.5
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -887,8 +887,8 @@ importers:
         specifier: 17.0.32
         version: 17.0.32
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
 
   packages/config:
     dependencies:
@@ -906,8 +906,8 @@ importers:
         specifier: 0.21.4
         version: 0.21.4
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
 
   packages/core:
     dependencies:
@@ -1201,8 +1201,8 @@ importers:
         specifier: 10.4.1
         version: 10.4.1
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.14.1)(typescript@5.4.5)
@@ -1368,8 +1368,8 @@ importers:
         specifier: 10.4.1
         version: 10.4.1
       prettier:
-        specifier: 3.3.0
-        version: 3.3.0
+        specifier: 3.3.1
+        version: 3.3.1
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -10282,7 +10282,7 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.0):
+  /eslint-plugin-prettier@5.1.3(eslint-config-prettier@9.1.0)(eslint@8.57.0)(prettier@3.3.1):
     resolution: {integrity: sha512-C9GCVAs4Eq7ZC/XFQHITLiHJxQngdtraXaM+LoUFoFp/lHNl2Zn8f3WQbe9HvTBBQ9YnKFB0/2Ajdqwo5D1EAw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -10298,7 +10298,7 @@ packages:
     dependencies:
       eslint: 8.57.0
       eslint-config-prettier: 9.1.0(eslint@8.57.0)
-      prettier: 3.3.0
+      prettier: 3.3.1
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.8
     dev: true
@@ -14421,8 +14421,8 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier@3.3.0:
-    resolution: {integrity: sha512-J9odKxERhCQ10OC2yb93583f6UnYutOeiV5i0zEDS7UGTdUt0u+y8erxl3lBKvwo/JHyyoEdXjwp4dke9oyZ/g==}
+  /prettier@3.3.1:
+    resolution: {integrity: sha512-7CAwy5dRsxs8PHXT3twixW9/OEll8MLE0VRPCJyl7CkS6VHGPSlsVaWTiASPTyGyYRyApxlaWTzwUxVNrhcwDg==}
     engines: {node: '>=14'}
     hasBin: true
     dev: true
