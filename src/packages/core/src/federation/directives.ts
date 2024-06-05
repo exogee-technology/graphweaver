@@ -2,12 +2,12 @@ import { DirectiveLocation } from 'graphql';
 
 import { graphweaverMetadata } from '..';
 import { LinkPurpose } from './enums';
-import { LinkImportType } from './scalars';
+import { LinkImportGraphQLType } from './scalars';
 
 const addLinkDirectives = () => {
 	graphweaverMetadata.collectDirectiveTypeInformation({
 		name: 'link',
-		target: {},
+		target: {}, // Do we need to pass the target here?
 		args: {
 			url: {
 				type: () => String,
@@ -22,7 +22,7 @@ const addLinkDirectives = () => {
 				nullable: true,
 			},
 			import: {
-				type: () => [LinkImportType],
+				type: () => [LinkImportGraphQLType],
 				nullable: true,
 			},
 		},

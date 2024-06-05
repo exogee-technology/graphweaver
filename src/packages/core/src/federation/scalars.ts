@@ -1,13 +1,13 @@
 import { GraphQLScalarType } from 'graphql';
 
-export const AnyType = new GraphQLScalarType({
+export const AnyGraphQLType = new GraphQLScalarType({
 	name: '_Any',
 	serialize(value) {
 		return value;
 	},
 });
 
-export const LinkImportType = new GraphQLScalarType({
+export const LinkImportGraphQLType = new GraphQLScalarType({
 	name: 'link__Import',
 	specifiedByURL: null,
 });

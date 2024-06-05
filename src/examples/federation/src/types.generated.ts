@@ -19,6 +19,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  _Any: { input: any; output: any; }
   link__Import: { input: any; output: any; }
 };
 
@@ -274,7 +275,7 @@ export type ProductsPaginationInput = {
 export type Query = {
   __typename?: 'Query';
   /** Union of all types in this subgraph. This information is needed by the Apollo federation gateway. */
-  _entities?: Maybe<Scalars['String']['output']>;
+  _entities: Array<Maybe<_Entity>>;
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
   /** The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied. */
@@ -284,6 +285,11 @@ export type Query = {
   product?: Maybe<Product>;
   /** Get multiple Products. */
   products?: Maybe<Array<Maybe<Product>>>;
+};
+
+
+export type Query_EntitiesArgs = {
+  representations?: InputMaybe<Array<Scalars['_Any']['input']>>;
 };
 
 
@@ -316,6 +322,8 @@ export type User = {
   totalProductsCreated?: Maybe<Scalars['Int']['output']>;
   yearsOfEmployment: Scalars['Int']['output'];
 };
+
+export type _Entity = CaseStudy | DeprecatedProduct | Inventory | Product | ProductDimension | ProductResearch | ProductVariation | User;
 
 export type _Service = {
   __typename?: '_service';

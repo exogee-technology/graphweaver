@@ -156,6 +156,24 @@ export interface DirectiveMetadata {
 
 export type CollectDirectiveTypeInformationArgs = Omit<DirectiveMetadata, 'type'>;
 
+export function isUnionMetadata(value: unknown): value is UnionMetadata {
+	const test = value as UnionMetadata;
+
+	return (
+		test?.type === 'union' && typeof test?.name === 'string' && typeof test?.target === 'object'
+	);
+}
+
+export interface UnionMetadata {
+	name: string;
+	type: 'union';
+	target: object;
+	description?: string;
+	getTypes: GetTypeFunction;
+}
+
+export type CollectUnionTypeInformationArgs = Omit<UnionMetadata, 'type' | 'target'>;
+
 export interface AdditionalOperationInformation {
 	name: string;
 	getType: () => any;
@@ -164,15 +182,16 @@ export interface AdditionalOperationInformation {
 	description?: string;
 }
 
+export type MetadataType =
+	| EntityMetadata<any, any>
+	| EnumMetadata<any>
+	| InputTypeMetadata<any, any>
+	| DirectiveMetadata
+	| UnionMetadata;
+
 class Metadata {
-	private metadataByType = new Map<
-		unknown,
-		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any> | DirectiveMetadata
-	>();
-	private nameLookupCache = new Map<
-		string,
-		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any> | DirectiveMetadata
-	>();
+	private metadataByType = new Map<unknown, MetadataType>();
+	private nameLookupCache = new Map<string, MetadataType>();
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
 	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
@@ -357,6 +376,18 @@ class Metadata {
 		});
 	}
 
+	public collectUnionTypeInformation(args: CollectUnionTypeInformationArgs) {
+		const target = {};
+
+		this.metadataByType.set(target, {
+			type: 'union',
+			target,
+			...args,
+		});
+
+		return target;
+	}
+
 	// get a list of all the entity metadata in the metadata map
 	public *entities() {
 		for (const value of this.metadataByType.values()) {
@@ -441,6 +472,7 @@ class Metadata {
 			enum: 0,
 			inputType: 0,
 			directive: 0,
+			union: 0,
 		};
 
 		for (const value of this.metadataByType.values()) {

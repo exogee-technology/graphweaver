@@ -19,6 +19,7 @@ import {
 	GraphQLScalarType,
 	GraphQLSchema,
 	GraphQLString,
+	GraphQLUnionType,
 	isListType,
 	isNonNullType,
 	isScalarType,
@@ -30,7 +31,6 @@ import { logger } from '@exogee/logger';
 
 import {
 	ArgsMetadata,
-	DirectiveMetadata,
 	EntityMetadata,
 	EnumMetadata,
 	FieldMetadata,
@@ -41,7 +41,10 @@ import {
 	isEntityMetadata,
 	isEnumMetadata,
 	isInputMetadata,
+	isUnionMetadata,
+	MetadataType,
 	TypeValue,
+	UnionMetadata,
 } from '.';
 import * as resolvers from './resolvers';
 
@@ -61,6 +64,7 @@ const allOperations = new Set([
 const entityTypes = new Map<string, GraphQLObjectType>();
 const inputTypes = new Map<string, GraphQLInputObjectType>();
 const enumTypes = new Map<string, GraphQLEnumType>();
+const unionTypes = new Map<string, GraphQLUnionType>();
 const filterTypes = new Map<string, GraphQLInputObjectType>();
 const insertTypes = new Map<string, GraphQLInputObjectType>();
 const updateTypes = new Map<string, GraphQLInputObjectType>();
@@ -92,6 +96,43 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	return enumType;
 };
 
+const graphQLTypeForUnion = (unionMetadata: UnionMetadata) => {
+	let unionType = unionTypes.get(unionMetadata.name);
+
+	if (!unionType) {
+		const entitiesInUnion = unionMetadata.getTypes();
+
+		// Ensure types is an array
+		if (!Array.isArray(entitiesInUnion)) {
+			throw new Error(`Union ${unionMetadata.name} has a non-array types field.`);
+		}
+
+		// Ensure types is not empty
+		if (entitiesInUnion.length === 0) {
+			throw new Error(`Union ${unionMetadata.name} has no types.`);
+		}
+
+		// Map types to GraphQL types
+		const graphQLTypes = entitiesInUnion.map((type) => {
+			const entityType = entityTypes.get(type.name);
+			if (!entityType) {
+				throw new Error(`Union ${unionMetadata.name} has non-entity types.`);
+			}
+			return entityType;
+		});
+
+		unionType = new GraphQLUnionType({
+			name: unionMetadata.name,
+			description: unionMetadata.description,
+			types: graphQLTypes,
+		});
+
+		unionTypes.set(unionMetadata.name, unionType);
+	}
+
+	return new GraphQLNonNull(new GraphQLList(unionType));
+};
+
 // All entities are deleted by primary key, so we only need one of these.
 const deleteInput = new GraphQLInputObjectType({
 	name: 'DeleteOneFilterInput',
@@ -105,11 +146,7 @@ export const getFieldTypeWithMetadata = (
 ): {
 	fieldType: TypeValue;
 	isList: boolean;
-	metadata?:
-		| EnumMetadata<any>
-		| EntityMetadata<any, any>
-		| InputTypeMetadata<any, any>
-		| DirectiveMetadata;
+	metadata?: MetadataType;
 } => {
 	let fieldType = getType();
 	let isList = false;
@@ -684,10 +721,20 @@ class SchemaBuilderImplementation {
 							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					} else {
+						let fieldType: GraphQLOutputType | undefined = undefined;
+
+						if (isEnumMetadata(metadata)) {
+							fieldType = graphQLTypeForEnum(metadata);
+						} else if (isUnionMetadata(metadata)) {
+							fieldType = graphQLTypeForUnion(metadata);
+						} else {
+							fieldType = graphQLScalarForTypeScriptType(type);
+						}
+
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type: graphQLScalarForTypeScriptType(type),
+							type: fieldType,
 							resolve: resolvers.baseResolver(customQuery.resolver),
 						};
 					}

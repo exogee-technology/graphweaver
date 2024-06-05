@@ -5,13 +5,6 @@ import { buildASTSchema } from 'graphql';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 
 export const federationSpec = `
-# Source: https://www.apollographql.com/docs/federation/subgraph-spec/
-
-# ⚠️ This definition must be created dynamically! The union
-#   must include every object type in the schema that uses
-#   the @key directive (i.e., all federated entities).
-union _Entity
-
 scalar _Any
 scalar FieldSet
 
