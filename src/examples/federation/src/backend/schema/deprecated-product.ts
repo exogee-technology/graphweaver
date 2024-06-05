@@ -34,8 +34,14 @@ graphweaverMetadata.addQuery({
 	name: 'deprecatedProduct',
 	intentionalOverride: true,
 	args: {
-		sku: String,
-		package: String,
+		sku: {
+			type: () => String,
+			nullable: false,
+		},
+		package: {
+			type: () => String,
+			nullable: false,
+		},
 	},
 	getType: () => DeprecatedProduct,
 	resolver: () => true,

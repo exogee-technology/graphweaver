@@ -1,6 +1,7 @@
 import {
 	GraphQLArgumentConfig,
 	GraphQLBoolean,
+	GraphQLDirective,
 	GraphQLEnumType,
 	GraphQLEnumValueConfigMap,
 	GraphQLFieldConfig,
@@ -28,11 +29,15 @@ import { ObjMap } from 'graphql/jsutils/ObjMap';
 import { logger } from '@exogee/logger';
 
 import {
+	ArgsMetadata,
+	DirectiveMetadata,
 	EntityMetadata,
 	EnumMetadata,
 	FieldMetadata,
+	GetTypeFunction,
 	graphweaverMetadata,
 	InputTypeMetadata,
+	isArgMetadata,
 	isEntityMetadata,
 	isEnumMetadata,
 	isInputMetadata,
@@ -95,14 +100,18 @@ const deleteInput = new GraphQLInputObjectType({
 	},
 });
 
-export const getFieldTypeFromFieldMetadata = (
-	field: FieldMetadata<any, any>
+export const getFieldTypeWithMetadata = (
+	getType: GetTypeFunction
 ): {
 	fieldType: TypeValue;
 	isList: boolean;
-	metadata?: EnumMetadata<any> | EntityMetadata<any, any> | InputTypeMetadata<any, any>;
+	metadata?:
+		| EnumMetadata<any>
+		| EntityMetadata<any, any>
+		| InputTypeMetadata<any, any>
+		| DirectiveMetadata;
 } => {
-	let fieldType = field.getType();
+	let fieldType = getType();
 	let isList = false;
 	if (Array.isArray(fieldType)) {
 		isList = true;
@@ -165,7 +174,7 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 
 				for (const field of Object.values(input.fields)) {
 					// Let's try to resolve the GraphQL type involved here.
-					const { fieldType, isList, metadata } = getFieldTypeFromFieldMetadata(field);
+					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(field.getType);
 					let graphQLType: GraphQLInputType | undefined = undefined;
 
 					if (isInputMetadata(metadata)) {
@@ -222,7 +231,7 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 
 				for (const field of Object.values(entity.fields)) {
 					// Let's try to resolve the GraphQL type involved here.
-					const { fieldType, isList, metadata } = getFieldTypeFromFieldMetadata(field);
+					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(field.getType);
 					let graphQLType: GraphQLOutputType | undefined = undefined;
 					let resolve = undefined;
 					const args: ObjMap<GraphQLArgumentConfig> = {};
@@ -428,7 +437,7 @@ const generateGraphQLInputFieldsForEntity =
 			}
 
 			// Let's try to resolve the GraphQL type involved here.
-			const { fieldType, metadata, isList } = getFieldTypeFromFieldMetadata(field);
+			const { fieldType, metadata, isList } = getFieldTypeWithMetadata(field.getType);
 
 			if (isEntityMetadata(metadata)) {
 				// This if is separate to stop us cascading down to the scalar branch for entities that
@@ -518,13 +527,14 @@ class SchemaBuilderImplementation {
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
 
+		const directives = Array.from(this.buildDirectives());
 		const types = Array.from(this.buildTypes());
 		const query = this.buildQueryType();
 		const mutation = this.buildMutationType();
 
-		logger.trace({ types, query, mutation }, 'Built schema');
+		logger.trace({ types, query, mutation, directives }, 'Built schema');
 
-		return new GraphQLSchema({ types, query, mutation });
+		return new GraphQLSchema({ types, query, mutation, directives });
 	}
 
 	public print() {
@@ -580,21 +590,32 @@ class SchemaBuilderImplementation {
 		}
 	}
 
-	private graphQLTypeForArgs(args?: Record<string, unknown>): GraphQLFieldConfigArgumentMap {
+	private graphQLTypeForArgs(args?: ArgsMetadata): GraphQLFieldConfigArgumentMap {
 		const map: GraphQLFieldConfigArgumentMap = {};
 		if (!args) return map;
 
-		for (const [name, type] of Object.entries(args)) {
-			const metadata = graphweaverMetadata.metadataForType(type);
+		for (const [name, details] of Object.entries(args)) {
+			const getType = isArgMetadata(details) ? details.type : details;
+
+			const { fieldType, metadata, isList } = getFieldTypeWithMetadata(getType);
 
 			let inputType: GraphQLInputType;
 			if (isInputMetadata(metadata)) {
-				inputType = new GraphQLNonNull(graphQLTypeForInput(metadata));
-			} else if (isEnumMetadata(type)) {
-				inputType = graphQLTypeForEnum(type);
+				inputType = graphQLTypeForInput(metadata);
+			} else if (isEnumMetadata(metadata)) {
+				inputType = graphQLTypeForEnum(metadata);
 			} else {
-				inputType = graphQLScalarForTypeScriptType(type as TypeValue);
+				inputType = graphQLScalarForTypeScriptType(fieldType);
 			}
+
+			if (isArgMetadata(details) && !details.nullable) {
+				inputType = new GraphQLNonNull(inputType);
+			}
+
+			if (isList) {
+				inputType = new GraphQLList(inputType);
+			}
+
 			map[name] = { type: inputType };
 		}
 
@@ -834,6 +855,20 @@ class SchemaBuilderImplementation {
 				return fields;
 			},
 		});
+	}
+
+	private *buildDirectives() {
+		for (const directive of graphweaverMetadata.directives()) {
+			const directiveType = new GraphQLDirective({
+				name: directive.name,
+				description: directive.description,
+				locations: directive.locations,
+				args: this.graphQLTypeForArgs(directive.args),
+				isRepeatable: directive.isRepeatable,
+			});
+
+			yield directiveType;
+		}
 	}
 }
 

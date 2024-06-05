@@ -194,12 +194,12 @@ export type MutationDeleteSubmissionsArgs = {
 
 
 export type MutationGetDeleteUrlArgs = {
-  key: Scalars['String']['input'];
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type MutationGetUploadUrlArgs = {
-  key: Scalars['String']['input'];
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -225,7 +225,7 @@ export type Query = {
 
 
 export type QueryGetDownloadUrlArgs = {
-  key: Scalars['String']['input'];
+  key?: InputMaybe<Scalars['String']['input']>;
 };
 
 

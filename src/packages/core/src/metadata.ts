@@ -1,3 +1,4 @@
+import { DirectiveLocation } from 'graphql';
 import { FieldOptions, GetTypeFunction, SchemaBuilder } from '.';
 import { BackendProvider, FieldMetadata, Filter, Resolver } from './types';
 import { logger } from '@exogee/logger';
@@ -125,22 +126,52 @@ export type CollectInputTypeInformationArgs<G = unknown, D = unknown> = Omit<
 	'type' | 'fields'
 >;
 
+export interface ArgMetadata {
+	type: GetTypeFunction;
+	description?: string;
+	defaultValue?: unknown;
+	deprecationReason?: string;
+	nullable?: boolean;
+}
+
+// isArgMetadata is a type guard for ArgMetadata
+export function isArgMetadata(value: unknown): value is ArgMetadata {
+	const test = value as ArgMetadata;
+	return typeof test?.type === 'function';
+}
+
+export interface ArgsMetadata {
+	[key: string]: ArgMetadata | GetTypeFunction;
+}
+
+export interface DirectiveMetadata {
+	name: string;
+	type: 'directive';
+	target: object;
+	description?: string;
+	args: ArgsMetadata;
+	isRepeatable: boolean;
+	locations: DirectiveLocation[];
+}
+
+export type CollectDirectiveTypeInformationArgs = Omit<DirectiveMetadata, 'type'>;
+
 export interface AdditionalOperationInformation {
 	name: string;
 	getType: () => any;
 	resolver: Resolver;
-	args?: Record<string, unknown>;
+	args?: ArgsMetadata;
 	description?: string;
 }
 
 class Metadata {
 	private metadataByType = new Map<
 		unknown,
-		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any>
+		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any> | DirectiveMetadata
 	>();
 	private nameLookupCache = new Map<
 		string,
-		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any>
+		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any> | DirectiveMetadata
 	>();
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
@@ -315,6 +346,17 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
+	public collectDirectiveTypeInformation(args: CollectDirectiveTypeInformationArgs) {
+		if (this.metadataByType.has(args.target)) {
+			throw new Error(`Directive with name ${args.name} already exists in metadata map.`);
+		}
+
+		this.metadataByType.set(args.target, {
+			type: 'directive',
+			...args,
+		});
+	}
+
 	// get a list of all the entity metadata in the metadata map
 	public *entities() {
 		for (const value of this.metadataByType.values()) {
@@ -350,6 +392,13 @@ class Metadata {
 	public *additionalMutations() {
 		for (const value of this.additionalMutationsLookup.values()) {
 			yield value;
+		}
+	}
+
+	// get a list of all the enums in the metadata map
+	public *directives() {
+		for (const value of this.metadataByType.values()) {
+			if (value.type === 'directive') yield value;
 		}
 	}
 
@@ -391,6 +440,7 @@ class Metadata {
 			entity: 0,
 			enum: 0,
 			inputType: 0,
+			directive: 0,
 		};
 
 		for (const value of this.metadataByType.values()) {
@@ -463,7 +513,7 @@ class Metadata {
 		name: string;
 		getType: GetTypeFunction;
 		resolver: Resolver;
-		args?: Record<string, unknown>;
+		args?: ArgsMetadata;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {
@@ -480,7 +530,7 @@ class Metadata {
 		name: string;
 		getType: GetTypeFunction;
 		resolver: Resolver;
-		args?: Record<string, unknown>;
+		args?: ArgsMetadata;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {

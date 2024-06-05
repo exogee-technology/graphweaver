@@ -19,6 +19,7 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  link__Import: { input: any; output: any; }
 };
 
 export type AdminUiEntityAttributeMetadata = {
@@ -272,9 +273,11 @@ export type ProductsPaginationInput = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Union of all types in this subgraph. This information is needed by the Apollo federation gateway. */
+  _entities?: Maybe<Scalars['String']['output']>;
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
-  /** Query used by federation servers for introspection. */
+  /** The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied. */
   _service?: Maybe<_Service>;
   deprecatedProduct?: Maybe<DeprecatedProduct>;
   /** Get a single Product. */
@@ -318,3 +321,8 @@ export type _Service = {
   __typename?: '_service';
   sdl: Scalars['String']['output'];
 };
+
+export enum Link__Purpose {
+  Execution = 'EXECUTION',
+  Security = 'SECURITY'
+}
