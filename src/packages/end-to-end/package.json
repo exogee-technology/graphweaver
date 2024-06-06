@@ -60,7 +60,7 @@
 		"pg": "8.12.0",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.1.4",
-		"tsx": "4.11.2",
+		"tsx": "4.12.0",
 		"typescript": "5.4.5"
 	},
 	"keywords": [
