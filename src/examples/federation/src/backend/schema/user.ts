@@ -17,14 +17,15 @@ const user = {
 };
 
 class JsonDataProvider extends BaseDataProvider<User> {
-	find(): Promise<User[]> {
-		return Promise.resolve([user]);
+	findOne(): Promise<User> {
+		return Promise.resolve(user);
 	}
 }
 
 @Entity('User', {
 	apiOptions: { excludeFromBuiltInOperations: true },
 	provider: new JsonDataProvider('User Management System'),
+	directives: { key: { fields: 'email' } },
 })
 export class User {
 	@Field(() => ID, { primaryKeyField: true })

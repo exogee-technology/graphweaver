@@ -2,9 +2,30 @@ import { DirectiveLocation } from 'graphql';
 
 import { graphweaverMetadata } from '..';
 import { LinkPurpose } from './enums';
-import { LinkImportGraphQLType } from './scalars';
+import { FieldSetGraphQLType, LinkImportGraphQLType } from './scalars';
 
-const addLinkDirectives = () => {
+const addKeyDirective = () => {
+	// directive @key(fields: FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
+	graphweaverMetadata.collectDirectiveTypeInformation({
+		name: 'key',
+		target: {}, // Do we need to pass the target here?
+		args: {
+			fields: {
+				type: () => FieldSetGraphQLType,
+				nullable: false,
+			},
+			resolvable: {
+				type: () => Boolean,
+				nullable: true,
+				defaultValue: true,
+			},
+		},
+		locations: [DirectiveLocation.OBJECT, DirectiveLocation.INTERFACE],
+		isRepeatable: true,
+	});
+};
+
+const addLinkDirective = () => {
 	graphweaverMetadata.collectDirectiveTypeInformation({
 		name: 'link',
 		target: {}, // Do we need to pass the target here?
@@ -32,5 +53,6 @@ const addLinkDirectives = () => {
 };
 
 export const addDirectives = () => {
-	addLinkDirectives();
+	addLinkDirective();
+	addKeyDirective();
 };

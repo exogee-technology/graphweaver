@@ -264,7 +264,7 @@ importers:
         version: 6.2.8
       '@mikro-orm/postgresql':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -307,7 +307,7 @@ importers:
         version: 6.2.8
       '@mikro-orm/knex':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -948,9 +948,6 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
-      '@graphql-tools/merge':
-        specifier: 9.0.4
-        version: 9.0.4(graphql@16.8.1)
       '@graphql-tools/utils':
         specifier: 10.2.1
         version: 10.2.1(graphql@16.8.1)
@@ -1014,7 +1011,7 @@ importers:
         version: 6.2.8
       '@mikro-orm/postgresql':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -1103,7 +1100,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -1156,13 +1153,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)(pg@8.11.5)
       '@mikro-orm/mysql':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -12124,7 +12121,7 @@ snapshots:
       pluralize: 8.0.0
       reflect-metadata: 0.2.1
     optionalDependencies:
-      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.2.8)(mysql2@3.9.2)(pg@8.11.5)
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/mysql': 6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/postgresql': 6.1.10(@mikro-orm/core@6.2.8)
       '@mikro-orm/sqlite': 6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -13327,6 +13324,23 @@ snapshots:
       - tedious
     optional: true
 
+  '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)':
+    dependencies:
+      '@mikro-orm/core': 6.2.8
+      fs-extra: 11.2.0
+      knex: 3.1.0(mysql2@3.10.0)(pg@8.11.5)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    optional: true
+
   '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.2.8
@@ -13365,22 +13379,6 @@ snapshots:
       '@mikro-orm/core': 6.2.8
       fs-extra: 11.2.0
       knex: 3.1.0(mysql2@3.9.7)(pg@8.11.5)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)':
-    dependencies:
-      '@mikro-orm/core': 6.2.8
-      fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.9.2)(pg@8.11.5)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -13454,23 +13452,6 @@ snapshots:
       - supports-color
       - tedious
     optional: true
-
-  '@mikro-orm/postgresql@6.2.8(@mikro-orm/core@6.2.8)':
-    dependencies:
-      '@mikro-orm/core': 6.2.8
-      '@mikro-orm/knex': 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
-      pg: 8.11.5
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
 
   '@mikro-orm/postgresql@6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)':
     dependencies:
@@ -19189,6 +19170,7 @@ snapshots:
       pg: 8.11.5
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   knex@3.1.0(mysql2@3.9.7)(pg@8.11.5):
     dependencies:

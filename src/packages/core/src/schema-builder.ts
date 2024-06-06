@@ -270,6 +270,9 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 		entityType = new GraphQLObjectType({
 			name: entity.name,
 			description: entity.description,
+			extensions: {
+				directives: entity.directives ?? {},
+			},
 			fields: () => {
 				const fields: ObjMap<GraphQLFieldConfig<unknown, unknown>> = {};
 
@@ -556,8 +559,11 @@ const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
 	return updateType;
 };
 
+type SchemaBuildOptions = { schemaDirectives?: Record<string, unknown> };
+
 class SchemaBuilderImplementation {
-	public build() {
+	public build(buildOptions?: SchemaBuildOptions) {
+		const { schemaDirectives } = buildOptions ?? {};
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
 
@@ -568,7 +574,13 @@ class SchemaBuilderImplementation {
 
 		logger.trace({ types, query, mutation, directives }, 'Built schema');
 
-		return new GraphQLSchema({ types, query, mutation, directives });
+		return new GraphQLSchema({
+			types,
+			query,
+			mutation,
+			directives,
+			extensions: { directives: schemaDirectives ?? {} },
+		});
 	}
 
 	public print() {

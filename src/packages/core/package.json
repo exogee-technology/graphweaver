@@ -24,7 +24,6 @@
 		"@apollo/server": "4.10.4",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@graphql-tools/merge": "9.0.4",
 		"@graphql-tools/utils": "10.2.1",
 		"class-validator": "0.14.1",
 		"dataloader": "2.2.2",

@@ -11,6 +11,7 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	target: { new (...args: any[]): G };
 	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
+	directives?: Record<string, unknown>;
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
 	primaryKeyField?: keyof G;

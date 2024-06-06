@@ -7,7 +7,6 @@ import { addServiceQuery } from './service';
 export const enableFederation = () => {
 	addEnums();
 	addDirectives();
-
 	addServiceQuery();
 	addEntitiesQuery();
 };

@@ -11,3 +11,7 @@ export const LinkImportGraphQLType = new GraphQLScalarType({
 	name: 'link__Import',
 	specifiedByURL: null,
 });
+
+export const FieldSetGraphQLType = new GraphQLScalarType({
+	name: 'FieldSet',
+});
