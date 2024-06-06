@@ -8,25 +8,7 @@ import {
 } from '..';
 import { AnyGraphQLType } from './scalars';
 import { getOne } from '../resolvers';
-
-const excludeGraphweaverTypes = [
-	'AdminUiEntityAttributeMetadata',
-	'AdminUiFilterMetadata',
-	'AdminUiFieldAttributeMetadata',
-	'AdminUiFieldExtensionsMetadata',
-	'AdminUiFieldMetadata',
-	'AdminUiEntityMetadata',
-	'AdminUiEnumValueMetadata',
-	'AdminUiEnumMetadata',
-	'AdminUiMetadata',
-	'_service',
-];
-
-const getEntityTargets = function* () {
-	for (const entity of graphweaverMetadata.entities()) {
-		if (!excludeGraphweaverTypes.includes(entity.name)) yield entity;
-	}
-};
+import { getEntityTargets } from './utils';
 
 export const addEntitiesQuery = () => {
 	const EntitiesUnion = graphweaverMetadata.collectUnionTypeInformation({

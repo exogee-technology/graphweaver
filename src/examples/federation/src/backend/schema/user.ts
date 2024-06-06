@@ -25,7 +25,6 @@ class JsonDataProvider extends BaseDataProvider<User> {
 @Entity('User', {
 	apiOptions: { excludeFromBuiltInOperations: true },
 	provider: new JsonDataProvider('User Management System'),
-	directives: { key: { fields: 'email' } },
 })
 export class User {
 	@Field(() => ID, { primaryKeyField: true })

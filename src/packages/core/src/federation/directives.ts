@@ -3,6 +3,7 @@ import { DirectiveLocation } from 'graphql';
 import { graphweaverMetadata } from '..';
 import { LinkPurpose } from './enums';
 import { FieldSetGraphQLType, LinkImportGraphQLType } from './scalars';
+import { getEntityTargets } from './utils';
 
 const addKeyDirective = () => {
 	// directive @key(fields: FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
@@ -23,6 +24,20 @@ const addKeyDirective = () => {
 		locations: [DirectiveLocation.OBJECT, DirectiveLocation.INTERFACE],
 		isRepeatable: true,
 	});
+
+	// Add the key directive to all entities
+	const entities = Array.from(getEntityTargets());
+
+	for (const entity of entities) {
+		graphweaverMetadata.collectEntityInformation({
+			...entity,
+			directives: {
+				key: {
+					fields: entity.primaryKeyField ?? 'id',
+				},
+			},
+		});
+	}
 };
 
 const addLinkDirective = () => {
