@@ -39,6 +39,7 @@ export type AdminUiEntityMetadata = {
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
+  supportedAggregationTypes: Array<AggregationType>;
 };
 
 export type AdminUiEnumMetadata = {
@@ -95,6 +96,15 @@ export type AdminUiMetadata = {
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
 };
+
+export type AggregationResult = {
+  __typename?: 'AggregationResult';
+  count: Scalars['Int']['output'];
+};
+
+export enum AggregationType {
+  Count = 'count'
+}
 
 export type Album = {
   __typename?: 'Album';
@@ -1601,42 +1611,62 @@ export type Query = {
   album?: Maybe<Album>;
   /** Get multiple Albums. */
   albums?: Maybe<Array<Maybe<Album>>>;
+  /** Get aggregated data for Albums. */
+  albums_aggregate?: Maybe<AggregationResult>;
   /** Get a single Artist. */
   artist?: Maybe<Artist>;
   /** Get multiple Artists. */
   artists?: Maybe<Array<Maybe<Artist>>>;
+  /** Get aggregated data for Artists. */
+  artists_aggregate?: Maybe<AggregationResult>;
   /** Get a single Customer. */
   customer?: Maybe<Customer>;
   /** Get multiple Customers. */
   customers?: Maybe<Array<Maybe<Customer>>>;
+  /** Get aggregated data for Customers. */
+  customers_aggregate?: Maybe<AggregationResult>;
   /** Get a single Employee. */
   employee?: Maybe<Employee>;
   /** Get multiple Employees. */
   employees?: Maybe<Array<Maybe<Employee>>>;
+  /** Get aggregated data for Employees. */
+  employees_aggregate?: Maybe<AggregationResult>;
   /** Get a single Genre. */
   genre?: Maybe<Genre>;
   /** Get multiple Genres. */
   genres?: Maybe<Array<Maybe<Genre>>>;
+  /** Get aggregated data for Genres. */
+  genres_aggregate?: Maybe<AggregationResult>;
   /** Get a single Invoice. */
   invoice?: Maybe<Invoice>;
   /** Get a single InvoiceLine. */
   invoiceLine?: Maybe<InvoiceLine>;
   /** Get multiple InvoiceLines. */
   invoiceLines?: Maybe<Array<Maybe<InvoiceLine>>>;
+  /** Get aggregated data for InvoiceLines. */
+  invoiceLines_aggregate?: Maybe<AggregationResult>;
   /** Get multiple Invoices. */
   invoices?: Maybe<Array<Maybe<Invoice>>>;
+  /** Get aggregated data for Invoices. */
+  invoices_aggregate?: Maybe<AggregationResult>;
   /** Get a single MediaType. */
   mediaType?: Maybe<MediaType>;
   /** Get multiple MediaTypes. */
   mediaTypes?: Maybe<Array<Maybe<MediaType>>>;
+  /** Get aggregated data for MediaTypes. */
+  mediaTypes_aggregate?: Maybe<AggregationResult>;
   /** Get a single Playlist. */
   playlist?: Maybe<Playlist>;
   /** Get multiple Playlists. */
   playlists?: Maybe<Array<Maybe<Playlist>>>;
+  /** Get aggregated data for Playlists. */
+  playlists_aggregate?: Maybe<AggregationResult>;
   /** Get a single Track. */
   track?: Maybe<Track>;
   /** Get multiple Tracks. */
   tracks?: Maybe<Array<Maybe<Track>>>;
+  /** Get aggregated data for Tracks. */
+  tracks_aggregate?: Maybe<AggregationResult>;
 };
 
 
@@ -1651,6 +1681,11 @@ export type QueryAlbumsArgs = {
 };
 
 
+export type QueryAlbums_AggregateArgs = {
+  filter?: InputMaybe<AlbumsListFilter>;
+};
+
+
 export type QueryArtistArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1659,6 +1694,11 @@ export type QueryArtistArgs = {
 export type QueryArtistsArgs = {
   filter?: InputMaybe<ArtistsListFilter>;
   pagination?: InputMaybe<ArtistsPaginationInput>;
+};
+
+
+export type QueryArtists_AggregateArgs = {
+  filter?: InputMaybe<ArtistsListFilter>;
 };
 
 
@@ -1673,6 +1713,11 @@ export type QueryCustomersArgs = {
 };
 
 
+export type QueryCustomers_AggregateArgs = {
+  filter?: InputMaybe<CustomersListFilter>;
+};
+
+
 export type QueryEmployeeArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1684,6 +1729,11 @@ export type QueryEmployeesArgs = {
 };
 
 
+export type QueryEmployees_AggregateArgs = {
+  filter?: InputMaybe<EmployeesListFilter>;
+};
+
+
 export type QueryGenreArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1692,6 +1742,11 @@ export type QueryGenreArgs = {
 export type QueryGenresArgs = {
   filter?: InputMaybe<GenresListFilter>;
   pagination?: InputMaybe<GenresPaginationInput>;
+};
+
+
+export type QueryGenres_AggregateArgs = {
+  filter?: InputMaybe<GenresListFilter>;
 };
 
 
@@ -1711,9 +1766,19 @@ export type QueryInvoiceLinesArgs = {
 };
 
 
+export type QueryInvoiceLines_AggregateArgs = {
+  filter?: InputMaybe<InvoiceLinesListFilter>;
+};
+
+
 export type QueryInvoicesArgs = {
   filter?: InputMaybe<InvoicesListFilter>;
   pagination?: InputMaybe<InvoicesPaginationInput>;
+};
+
+
+export type QueryInvoices_AggregateArgs = {
+  filter?: InputMaybe<InvoicesListFilter>;
 };
 
 
@@ -1728,6 +1793,11 @@ export type QueryMediaTypesArgs = {
 };
 
 
+export type QueryMediaTypes_AggregateArgs = {
+  filter?: InputMaybe<MediaTypesListFilter>;
+};
+
+
 export type QueryPlaylistArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1739,6 +1809,11 @@ export type QueryPlaylistsArgs = {
 };
 
 
+export type QueryPlaylists_AggregateArgs = {
+  filter?: InputMaybe<PlaylistsListFilter>;
+};
+
+
 export type QueryTrackArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1747,6 +1822,11 @@ export type QueryTrackArgs = {
 export type QueryTracksArgs = {
   filter?: InputMaybe<TracksListFilter>;
   pagination?: InputMaybe<TracksPaginationInput>;
+};
+
+
+export type QueryTracks_AggregateArgs = {
+  filter?: InputMaybe<TracksListFilter>;
 };
 
 export enum Sort {

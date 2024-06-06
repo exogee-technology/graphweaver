@@ -18,21 +18,24 @@ import {
 import { queryForEntityPage } from './graphql';
 
 interface ListToolBarProps {
+	count?: number;
 	onExportToCSV: () => void;
 }
 
-export const ListToolBar = ({ onExportToCSV }: ListToolBarProps) => {
+export const ListToolBar = ({ count, onExportToCSV }: ListToolBarProps) => {
 	const { entity } = useParams();
 	const { entityByName } = useSchema();
-	return (
-		<ToolBar
-			title={entity}
-			subtitle={
-				entity && entityByName(entity) ? `From ${entityByName(entity).backendId}` : undefined
-			}
-			onExportToCSV={onExportToCSV}
-		/>
-	);
+
+	let subtitle = '';
+	if (entity && entityByName(entity)) {
+		subtitle = `From ${entityByName(entity).backendId}`;
+	}
+	if (typeof count === 'number') {
+		if (subtitle) subtitle += ' ';
+		subtitle += `(${count} row${count === 1 ? '' : 's'})`;
+	}
+
+	return <ToolBar title={entity} subtitle={subtitle} onExportToCSV={onExportToCSV} />;
 };
 
 export const List = () => {
@@ -56,6 +59,7 @@ export const List = () => {
 
 	const { data, loading, error, fetchMore } = useQuery<{
 		result: TableRowItem[];
+		aggregate?: { count: number };
 	}>(queryForEntityPage(entity, entityByName), {
 		variables: queryVariables,
 		notifyOnNetworkStatusChange: true,
@@ -113,7 +117,7 @@ export const List = () => {
 	return (
 		<>
 			<Header>
-				<ListToolBar onExportToCSV={handleExportToCSV} />
+				<ListToolBar count={data?.aggregate?.count} onExportToCSV={handleExportToCSV} />
 			</Header>
 
 			<Table

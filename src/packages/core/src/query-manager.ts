@@ -110,16 +110,34 @@ class QueryManagerImplementation {
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
 		if (!metadata) throw new Error(`Could not locate entity '${entityName}'`);
 
+		// If there's no provider for this section of the filter, then we can't do anything.
+		if (!metadata.provider) return [];
+
 		logger.trace('Handling cross-datasource queries');
 		logger.trace('Original filter: ', filter);
 		const result = await visit(entityName, filter, metadata.provider);
 		logger.trace('Filter after ID flattening: ', filter);
 
-		// If there's no provider for this section of the filter, then we can't do anything.
-		if (!metadata.provider) return [];
-
 		// Ok, at this point we're good to go, we can just pass the find on down to the provider.
 		return metadata.provider.find(result.filter, pagination);
+	};
+
+	flattenFilter = async <G = unknown, D = unknown>({
+		entityName,
+		filter,
+	}: {
+		entityName: string;
+		filter?: Filter<D>;
+	}) => {
+		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
+		if (!metadata) throw new Error(`Could not locate entity '${entityName}'`);
+
+		logger.trace('Handling cross-datasource queries');
+		logger.trace('Original filter: ', filter);
+		const result = await visit(entityName, filter, metadata.provider);
+		logger.trace('Filter after ID flattening: ', filter);
+
+		return result.filter;
 	};
 }
 

@@ -2,6 +2,7 @@ import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { BaseContext } from './types';
 import {
+	AggregationType,
 	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
@@ -345,6 +346,67 @@ export const deleteMany =
 
 			return success;
 		});
+	};
+
+// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
+export const aggregate =
+	(entity: EntityMetadata<any, any>) =>
+	async <G extends { name: string }>({
+		args: { filter },
+		context,
+		fields,
+	}: ResolverOptions<{ filter: Filter<G> }>) => {
+		if (!entity.provider) {
+			throw new Error(
+				`Entity ${entity.name} does not have a provider, cannot resolve aggregate operation.`
+			);
+		}
+
+		if (!entity.provider.aggregate) {
+			throw new Error(
+				'Provider has not implemented aggregate, cannot resolve aggregate operation.'
+			);
+		}
+
+		const requestedFields = fields.fieldsByTypeName.AggregationResult;
+		const requestedAggregations = new Set<AggregationType>();
+		if (requestedFields.count) requestedAggregations.add(AggregationType.count);
+
+		const hookManager = hookManagerMap.get(entity.name);
+		const params: ReadHookParams<G> = {
+			args: { filter },
+			context,
+			fields,
+			transactional: !!entity.provider.withTransaction,
+		};
+		const hookParams = hookManager
+			? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			: params;
+
+		const transformedFilter =
+			hookParams.args?.filter &&
+			isTransformableGraphQLEntityClass(entity.target) &&
+			entity.target.toBackendEntityFilter
+				? entity.target.toBackendEntityFilter(hookParams.args?.filter)
+				: (hookParams.args?.filter as Filter<any> | undefined);
+
+		const flattenedFilter = await QueryManager.flattenFilter<any>({
+			entityName: entity.name,
+			filter: transformedFilter,
+		});
+
+		const success = await entity.provider.aggregate(flattenedFilter, requestedAggregations);
+
+		// If a hook manager is installed, run the after read hooks for this operation.
+		// We don't actually have any entities to pass to the hook, so we'll just pass an empty array.
+		if (hookManager) {
+			await hookManager.runHooks(HookRegister.AFTER_READ, {
+				...hookParams,
+				entities: [],
+			});
+		}
+
+		return success;
 	};
 
 export const listRelationshipField = async <G, D, R, C extends BaseContext>({

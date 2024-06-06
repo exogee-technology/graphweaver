@@ -37,6 +37,7 @@ export type AdminUiEntityMetadata = {
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
+  supportedAggregationTypes: Array<AggregationType>;
 };
 
 export type AdminUiEnumMetadata = {
@@ -93,6 +94,15 @@ export type AdminUiMetadata = {
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
 };
+
+export type AggregationResult = {
+  __typename?: 'AggregationResult';
+  count: Scalars['Int']['output'];
+};
+
+export enum AggregationType {
+  Count = 'count'
+}
 
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
@@ -221,6 +231,8 @@ export type Query = {
   submission?: Maybe<Submission>;
   /** Get multiple Submissions. */
   submissions?: Maybe<Array<Maybe<Submission>>>;
+  /** Get aggregated data for Submissions. */
+  submissions_aggregate?: Maybe<AggregationResult>;
 };
 
 
@@ -237,6 +249,11 @@ export type QuerySubmissionArgs = {
 export type QuerySubmissionsArgs = {
   filter?: InputMaybe<SubmissionsListFilter>;
   pagination?: InputMaybe<SubmissionsPaginationInput>;
+};
+
+
+export type QuerySubmissions_AggregateArgs = {
+  filter?: InputMaybe<SubmissionsListFilter>;
 };
 
 export enum Sort {

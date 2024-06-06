@@ -95,6 +95,17 @@ const deleteInput = new GraphQLInputObjectType({
 	},
 });
 
+// All aggregations follow the same shape so we only need one of those too.
+const aggregationResult = new GraphQLObjectType({
+	name: 'AggregationResult',
+	fields: {
+		count: {
+			type: new GraphQLNonNull(GraphQLInt),
+			resolve: (parent) => parent.count,
+		},
+	},
+});
+
 export const getFieldTypeFromFieldMetadata = (
 	field: FieldMetadata<any, any>
 ): {
@@ -577,6 +588,10 @@ class SchemaBuilderImplementation {
 		for (const enumType of graphweaverMetadata.enums()) {
 			yield graphQLTypeForEnum(enumType);
 		}
+
+		// We have some singleton types to emit here too.
+		yield aggregationResult;
+		yield deleteInput;
 	}
 
 	private graphQLTypeForArgs(args?: Record<string, unknown>): GraphQLFieldConfigArgumentMap {
@@ -636,10 +651,22 @@ class SchemaBuilderImplementation {
 						type: new GraphQLList(graphQLTypeForEntity(entity)),
 						args: {
 							filter: { type: filterTypeForEntity(entity) },
-							...(entity.provider ? { pagination: { type: paginationTypeForEntity(entity) } } : {}),
+							pagination: { type: paginationTypeForEntity(entity) },
 						},
 						resolve: resolvers.baseResolver(resolvers.list),
 					};
+
+					// Aggregrations
+					if ((entity.provider.supportedAggregationTypes?.size ?? 0) > 0) {
+						fields[`${listQueryName}_aggregate`] = {
+							description: `Get aggregated data for ${entity.plural}.`,
+							type: aggregationResult,
+							args: {
+								filter: { type: filterTypeForEntity(entity) },
+							},
+							resolve: resolvers.baseResolver(resolvers.aggregate(entity)),
+						};
+					}
 				}
 
 				// Add any user-defined additional queries too
