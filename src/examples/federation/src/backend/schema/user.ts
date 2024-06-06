@@ -1,4 +1,4 @@
-import { Entity, Field, ID, GraphQLInt } from '@exogee/graphweaver';
+import { Entity, Field, ID, GraphQLInt, BaseDataProvider } from '@exogee/graphweaver';
 
 // extend type User @key(fields: "email") {
 //   averageProductsCreatedPerYear: Int @requires(fields: "totalProductsCreated yearsOfEmployment")
@@ -8,8 +8,23 @@ import { Entity, Field, ID, GraphQLInt } from '@exogee/graphweaver';
 //   yearsOfEmployment: Int! @external
 // }
 
+const user = {
+	averageProductsCreatedPerYear: Math.round(1337 / 10),
+	email: 'support@apollographql.com',
+	name: 'Jane Smith',
+	totalProductsCreated: 1337,
+	yearsOfEmployment: 10,
+};
+
+class JsonDataProvider extends BaseDataProvider<User> {
+	find(): Promise<User[]> {
+		return Promise.resolve([user]);
+	}
+}
+
 @Entity('User', {
 	apiOptions: { excludeFromBuiltInOperations: true },
+	provider: new JsonDataProvider('User Management System'),
 })
 export class User {
 	@Field(() => ID, { primaryKeyField: true })

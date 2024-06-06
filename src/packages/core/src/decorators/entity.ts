@@ -26,6 +26,8 @@ export function Entity<G = unknown>(
 
 		// Let's make sure the new name is set on the target
 		Object.defineProperty(target, 'name', { value: name });
+		// Lets also set the __typename on the prototype for resolving union types
+		Object.defineProperty(target.prototype, '__typename', { value: name });
 
 		graphweaverMetadata.collectEntityInformation({
 			...resolvedOptions,
