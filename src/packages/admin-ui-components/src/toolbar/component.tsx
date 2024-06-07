@@ -1,76 +1,26 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
-import { Button } from '../button';
-import { Popover } from '../popover';
-import type { PopoverItem } from '../popover';
-
-import OpenPlaygroundIcon from '../assets/16-open-external.svg';
+import { FilterBar } from '../filter-bar';
+import { TitleBar } from '../title-bar';
 import FilterIcon from '../assets/16-filter.svg';
 import styles from './styles.module.css';
 
-import { FilterBar } from '../filter-bar';
-import { decodeSearchParams, routeFor, useSelectedEntity } from '../utils';
-
 export interface ToolBarProps {
-	title?: string;
-	subtitle?: string;
+	title: string;
+	subtitle: string;
 	onExportToCSV: () => void;
 }
 
 export const ToolBar = ({ title, subtitle, onExportToCSV }: ToolBarProps) => {
-	const { selectedEntity } = useSelectedEntity();
-	const [search] = useSearchParams();
-	const { filters, sort } = decodeSearchParams(search);
-
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
-	// @todo allow to be extended
-	const externalLinkItems: PopoverItem[] = [];
+	// We want to memoize this because when the title and subtitle props change we don't want to re-render
+	// the filter bar. If someone has clicked a filter it'll close on re-render, which is not necessary.
+	// It has no real dependencies we pass in via props either, so we can just roll with it.
+	const filterBar = useMemo(() => <FilterBar iconBefore={<FilterIcon />} />, [FilterIcon]);
 
 	return (
 		<div className={styles.toolBarContainer}>
-			<div className={styles.toolBarWrapper}>
-				<div className="titleWrapper">
-					<h1>{title}</h1>
-					<p className="subtext">{subtitle}</p>
-				</div>
-
-				<div className={styles.toolsWrapper}>
-					<Link
-						className={styles.toolBarTrailingButton}
-						to={{ pathname: '/playground' }}
-						// If we are in an iframe then open in the same window otherwise open in a new tab
-						target={window === window.parent ? '_blank' : '_self'}
-						rel="noopener noreferrer"
-						aria-label={`Open Playground`}
-					>
-						<Button>
-							Open Playground
-							<OpenPlaygroundIcon />
-						</Button>
-					</Link>
-					<Button className={styles.toolBarTrailingButton} onClick={onExportToCSV}>
-						Export to CSV
-					</Button>
-					<Link
-						className={styles.toolBarTrailingButton}
-						to={routeFor({
-							entity: selectedEntity,
-							id: 'graphweaver-admin-new-entity',
-							sort,
-							filters,
-						})}
-						aria-label={`Create New ${selectedEntity.name}`}
-					>
-						<Button disabled={selectedEntity.attributes.isReadOnly}>
-							Create New {selectedEntity.name}
-						</Button>
-					</Link>
-
-					{externalLinkItems.length > 0 && <Popover items={externalLinkItems}>Links</Popover>}
-				</div>
-			</div>
-			<FilterBar key={`filterBar:${title}:${subtitle}`} iconBefore={<FilterIcon />} />
+			<TitleBar title={title} subtitle={subtitle} onExportToCSV={onExportToCSV} />
+			{filterBar}
 		</div>
 	);
 };
