@@ -15,7 +15,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
-describe('Root Aggregation', () => {
+describe('Field Aggregation', () => {
 	/** Setup entities and resolvers  */
 	@DataEntity({ tableName: 'Album' })
 	class OrmAlbum {
@@ -85,40 +85,50 @@ describe('Root Aggregation', () => {
 
 	const graphweaver = new Graphweaver();
 
-	test('should correctly aggregate root album queries with no filter', async () => {
+	test('should correctly aggregate nested artist queries with no filter', async () => {
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
 				query {
-					albums_aggregate {
-						count
+					albums(pagination: { orderBy: { albumId: ASC }, limit: 2 }) {
+						artist_aggregate {
+							count
+						}
 					}
 				}
 			`,
 		});
 
 		assert(response.body.kind === 'single');
-
-		expect(response.body.singleResult.data?.albums_aggregate).toMatchObject({
-			count: 347,
+		expect((response.body.singleResult.data as any).albums[0].artist_aggregate).toMatchObject({
+			count: 1,
+		});
+		expect((response.body.singleResult.data as any).albums[1].artist_aggregate).toMatchObject({
+			count: 1,
 		});
 	});
 
-	test('should correctly aggregate root album queries with a filter', async () => {
+	test('should correctly aggregate nested album queries with no filter', async () => {
 		const response = await graphweaver.server.executeOperation({
 			query: gql`
 				query {
-					albums_aggregate(
-						filter: { title_in: ["Balls to the Wall", "Restless and Wild", "Let There Be Rock"] }
-					) {
-						count
+					artists(pagination: { orderBy: { artistId: ASC }, limit: 3 }) {
+						albums_aggregate {
+							count
+						}
 					}
 				}
 			`,
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.data?.albums_aggregate).toMatchObject({
-			count: 3,
+		expect((response.body.singleResult.data as any).artists[0].albums_aggregate).toMatchObject({
+			count: 2,
+		});
+		expect((response.body.singleResult.data as any).artists[1].albums_aggregate).toMatchObject({
+			count: 2,
+		});
+		expect((response.body.singleResult.data as any).artists[2].albums_aggregate).toMatchObject({
+			count: 1,
 		});
 	});
 });
