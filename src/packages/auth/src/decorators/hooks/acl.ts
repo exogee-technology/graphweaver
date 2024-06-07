@@ -23,7 +23,7 @@ import {
 	isPopulatedFilter,
 } from '../../auth-utils';
 
-const metadata = graphweaverMetadata;
+const aggregatePattern = /_aggregate$/;
 
 // This function is called recursively on each nested relationship node of an input arg
 // Relationships can be nested multiple levels deep so we need to check each level
@@ -137,12 +137,18 @@ const generatePermissionListFromFields = <G>(
 			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
 		} else {
 			for (const fieldValue of Object.values(fields)) {
-				const fieldMetadata = entityMetadata.fields[fieldValue.name];
+				let fieldMetadata = entityMetadata.fields[fieldValue.name];
+
+				if (!fieldMetadata && fieldValue.name.endsWith('_aggregate')) {
+					// It's an aggregate operation, we need to treat it as a relationship anyway. Let's strip the
+					// `_aggregate` off and try another lookup.
+					fieldMetadata = entityMetadata.fields[fieldValue.name.replace(aggregatePattern, '')];
+				}
 
 				if (!fieldMetadata) {
 					// If we're down here and can't figure out what the field is then we should throw an error
 					logger.error(
-						requestedFields.fieldsByTypeName,
+						requestedFields,
 						`Could not determine field metadata for field: '${fieldValue.name}' on ${entityMetadata.name} entity`
 					);
 
@@ -205,7 +211,25 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
 		} else {
 			for (const fieldValue of Object.values(fields)) {
-				const fieldMetadata = entityMetadata.fields[fieldValue.name];
+				let fieldMetadata = entityMetadata.fields[fieldValue.name];
+				if (!fieldMetadata && fieldValue.name.endsWith('_aggregate')) {
+					// It's an aggregate operation, we need to treat it as a relationship anyway. Let's strip the
+					// `_aggregate` off and try another lookup.
+					fieldMetadata = entityMetadata.fields[fieldValue.name.replace(aggregatePattern, '')];
+				}
+
+				if (!fieldMetadata) {
+					// If we're down here and can't figure out what the field is then we should throw an error
+					logger.error(
+						resolveTree,
+						`Could not determine field metadata for field: '${fieldValue.name}' on ${entityMetadata.name} entity`
+					);
+
+					throw new Error(
+						`Could not determine field metadata for field: '${fieldValue.name}' on ${entityMetadata.name} entity`
+					);
+				}
+
 				const fieldType = fieldMetadata.getType();
 				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
@@ -253,7 +277,7 @@ const generatePermissionListFromArgs = <G>() => {
 			}
 
 			// Now we have an array or an object lets see if its a related entity
-			const entityFields = metadata.getEntityByName(entityName)?.fields;
+			const entityFields = graphweaverMetadata.getEntityByName(entityName)?.fields;
 
 			for (const [key, value] of Object.entries(node)) {
 				// If we are here then we have an array or an object lets see if its a related entity
@@ -262,7 +286,7 @@ const generatePermissionListFromArgs = <G>() => {
 				if (!relationship && key.endsWith('_aggregate')) {
 					// It's an aggregate operation, we need to treat it as a relationship anyway. Let's strip the
 					// `_aggregate` off and try another lookup.
-					relationship = entityFields?.[key.replace(/_aggregate$/, '')];
+					relationship = entityFields?.[key.replace(aggregatePattern, '')];
 				}
 
 				const relatedEntityMetadata = graphweaverMetadata.metadataForType(relationship?.getType());
