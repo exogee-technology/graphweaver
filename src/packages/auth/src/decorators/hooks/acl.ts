@@ -131,13 +131,31 @@ const generatePermissionListFromFields = <G>(
 ) => {
 	const permissionsList: RequiredPermission[] = [`${entityMetadata.name}:${AccessType.Read}`];
 
-	for (const fields of Object.values(requestedFields.fieldsByTypeName)) {
-		for (const fieldValue of Object.values(fields)) {
-			const fieldMetadata = entityMetadata.fields[fieldValue.name];
-			const fieldType = fieldMetadata.getType();
-			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-			if (isEntityMetadata(fieldTypeMetadata)) {
-				permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
+	for (const [entityName, fields] of Object.entries(requestedFields.fieldsByTypeName)) {
+		if (entityName === 'AggregationResult') {
+			// We just need to record that they're trying to read the entity information via an aggregation and move on.
+			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
+		} else {
+			for (const fieldValue of Object.values(fields)) {
+				const fieldMetadata = entityMetadata.fields[fieldValue.name];
+
+				if (!fieldMetadata) {
+					// If we're down here and can't figure out what the field is then we should throw an error
+					logger.error(
+						requestedFields.fieldsByTypeName,
+						`Could not determine field metadata for field: '${fieldValue.name}' on ${entityMetadata.name} entity`
+					);
+
+					throw new Error(
+						`Could not determine field metadata for field: '${fieldValue.name}' on ${entityMetadata.name} entity`
+					);
+				}
+
+				const fieldType = fieldMetadata.getType();
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+				if (isEntityMetadata(fieldTypeMetadata)) {
+					permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
+				}
 			}
 		}
 	}
@@ -181,14 +199,19 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 		recurseThroughArg(entityMetadata, resolveTree.args.filter as Filter<unknown>);
 	}
 
-	for (const fields of Object.values(resolveTree.fieldsByTypeName)) {
-		for (const fieldValue of Object.values(fields)) {
-			const fieldMetadata = entityMetadata.fields[fieldValue.name];
-			const fieldType = fieldMetadata.getType();
-			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+	for (const [entityName, fields] of Object.entries(resolveTree.fieldsByTypeName)) {
+		if (entityName === 'AggregationResult') {
+			// We just need to record that they're trying to read the entity information via an aggregation and move on.
+			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
+		} else {
+			for (const fieldValue of Object.values(fields)) {
+				const fieldMetadata = entityMetadata.fields[fieldValue.name];
+				const fieldType = fieldMetadata.getType();
+				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
-			if (isEntityMetadata(fieldTypeMetadata)) {
-				permissionsList.push(...getFilterArgumentsOnFields(fieldTypeMetadata, fieldValue));
+				if (isEntityMetadata(fieldTypeMetadata)) {
+					permissionsList.push(...getFilterArgumentsOnFields(fieldTypeMetadata, fieldValue));
+				}
 			}
 		}
 	}
@@ -234,7 +257,14 @@ const generatePermissionListFromArgs = <G>() => {
 
 			for (const [key, value] of Object.entries(node)) {
 				// If we are here then we have an array or an object lets see if its a related entity
-				const relationship = entityFields?.[key];
+				let relationship = entityFields?.[key];
+
+				if (!relationship && key.endsWith('_aggregate')) {
+					// It's an aggregate operation, we need to treat it as a relationship anyway. Let's strip the
+					// `_aggregate` off and try another lookup.
+					relationship = entityFields?.[key.replace(/_aggregate$/, '')];
+				}
+
 				const relatedEntityMetadata = graphweaverMetadata.metadataForType(relationship?.getType());
 
 				if (isEntityMetadata(relatedEntityMetadata)) {
