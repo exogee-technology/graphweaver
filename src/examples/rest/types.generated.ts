@@ -654,11 +654,6 @@ export type TaskTagsArgs = {
   filter?: InputMaybe<TagsListFilter>;
 };
 
-
-export type TaskUserArgs = {
-  filter?: InputMaybe<UsersListFilter>;
-};
-
 /** Data needed to create or update Tasks. If an ID is passed, this is an update, otherwise it's an insert. */
 export type TaskCreateOrUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;

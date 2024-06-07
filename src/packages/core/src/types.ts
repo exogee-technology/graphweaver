@@ -179,22 +179,10 @@ export enum RelationshipType {
 }
 
 export interface BackendProviderConfig {
-	filter: {
-		root: boolean;
-		parentByChild: boolean;
-		childByChild: boolean;
-	};
-	pagination: {
-		root: boolean;
-		offset: boolean;
-		limit: boolean;
-	};
-	orderBy: {
-		root: boolean;
-	};
-	sort: {
-		root: boolean;
-	};
+	filter: boolean;
+	pagination: boolean;
+	orderBy: boolean;
+	sort: boolean;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
