@@ -14,7 +14,8 @@
 	],
 	"scripts": {
 		"build": "graphweaver build && cp dist/backend/index.js integration/index.js",
-		"start": "tsx src/backend/index.ts"
+		"start": "tsx src/backend/index.ts",
+		"test": "pnpm build && cd integration && npm test"
 	},
 	"dependencies": {
 		"@apollo/server": "4.10.4",

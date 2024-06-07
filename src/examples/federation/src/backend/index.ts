@@ -25,7 +25,7 @@ const start = async () => {
 	});
 
 	await hapi.start();
-	console.log('Server running on %s', hapi.info.uri)
+	console.log('Server running on %s', hapi.info.uri);
 };
 
 start();

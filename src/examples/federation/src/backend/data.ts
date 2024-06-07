@@ -18,7 +18,6 @@ const deprecatedProduct = {
 	package: '@apollo/federation-v1',
 	reason: 'Migrate to Federation V2',
 	createdBy: 'support@apollographql.com',
-	inventoryId: 'apollo-oss',
 };
 
 const productsResearch = [
@@ -63,6 +62,7 @@ const products = [
 
 const inventory = {
 	id: 'apollo-oss',
+	deprecatedProductId: 'apollo-federation-v1',
 };
 
 const variations = [

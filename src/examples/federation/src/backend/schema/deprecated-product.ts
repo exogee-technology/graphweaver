@@ -9,6 +9,9 @@ import { User } from './user';
 import { data } from '../data';
 
 class JsonDataProvider extends BaseDataProvider<DeprecatedProduct> {
+	find(): Promise<DeprecatedProduct[]> {
+		return Promise.resolve([data.deprecatedProduct]) as any;
+	}
 	findOne(): Promise<DeprecatedProduct> {
 		return Promise.resolve(data.deprecatedProduct) as any;
 	}

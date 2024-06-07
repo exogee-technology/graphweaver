@@ -1,17 +1,26 @@
-import { Entity, Field, ID } from '@exogee/graphweaver';
+import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { DeprecatedProduct } from './deprecated-product';
+import { data } from '../data';
 
 // type Inventory @interfaceObject @key(fields: "id") {
 //   id: ID!
 //   deprecatedProducts: [DeprecatedProduct!]!
 
+class JsonDataProvider extends BaseDataProvider<Inventory> {
+	findOne(): Promise<Inventory> {
+		return Promise.resolve(data.inventory) as any;
+	}
+}
+
 @Entity('Inventory', {
-	apiOptions: { excludeFromBuiltInOperations: true },
+	provider: new JsonDataProvider('Inventory'),
+	apiOptions: { excludeFromBuiltInWriteOperations: true },
+	directives: { interfaceObject: true },
 })
 export class Inventory {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	@Field(() => DeprecatedProduct)
+	@RelationshipField(() => [DeprecatedProduct], { id: 'deprecatedProductId', nullable: true })
 	deprecatedProducts!: DeprecatedProduct;
 }

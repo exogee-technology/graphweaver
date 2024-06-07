@@ -31,6 +31,7 @@ const addKeyDirective = () => {
 		graphweaverMetadata.collectEntityInformation({
 			...entity,
 			directives: {
+				...(entity.directives ? entity.directives : {}),
 				key: {
 					fields: entity.primaryKeyField ?? 'id',
 				},

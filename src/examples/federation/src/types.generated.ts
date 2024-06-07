@@ -128,9 +128,29 @@ export type DeprecatedProductsPaginationInput = {
   orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
 
+export type InventoriesListFilter = {
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type InventoriesOrderByInput = {
+  id?: InputMaybe<Sort>;
+};
+
+/** Pagination options for Inventories. */
+export type InventoriesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<InventoriesOrderByInput>;
+};
+
 export type Inventory = {
   __typename?: 'Inventory';
-  deprecatedProducts: DeprecatedProduct;
+  deprecatedProducts?: Maybe<Array<DeprecatedProduct>>;
   id: Scalars['ID']['output'];
 };
 
@@ -320,6 +340,10 @@ export type Query = {
   /** The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied. */
   _service?: Maybe<_Service>;
   deprecatedProduct?: Maybe<DeprecatedProduct>;
+  /** Get multiple Inventories. */
+  inventories?: Maybe<Array<Maybe<Inventory>>>;
+  /** Get a single Inventory. */
+  inventory?: Maybe<Inventory>;
   /** Get a single Product. */
   product?: Maybe<Product>;
   /** Get multiple Products. */
@@ -335,6 +359,17 @@ export type Query_EntitiesArgs = {
 export type QueryDeprecatedProductArgs = {
   package: Scalars['String']['input'];
   sku: Scalars['String']['input'];
+};
+
+
+export type QueryInventoriesArgs = {
+  filter?: InputMaybe<InventoriesListFilter>;
+  pagination?: InputMaybe<InventoriesPaginationInput>;
+};
+
+
+export type QueryInventoryArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
