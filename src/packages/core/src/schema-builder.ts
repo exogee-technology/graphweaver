@@ -5,7 +5,6 @@ import {
 	GraphQLEnumValueConfigMap,
 	GraphQLFieldConfig,
 	GraphQLFieldConfigArgumentMap,
-	GraphQLFieldResolver,
 	GraphQLFloat,
 	GraphQLID,
 	GraphQLInputFieldConfig,
@@ -37,7 +36,6 @@ import {
 	isEntityMetadata,
 	isEnumMetadata,
 	isInputMetadata,
-	Resolver,
 	TypeValue,
 } from '.';
 import * as resolvers from './resolvers';

@@ -613,7 +613,7 @@ export const aggregateRelationshipField =
 			}
 		}
 
-		const { fieldType, isList } = getFieldTypeFromFieldMetadata(field);
+		const { fieldType } = getFieldTypeFromFieldMetadata(field);
 		const gqlEntityType = fieldType as { new (...args: any[]): R };
 
 		const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
