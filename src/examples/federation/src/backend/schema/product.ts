@@ -1,11 +1,24 @@
-import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
+import {
+	BaseDataProvider,
+	Entity,
+	Field,
+	Filter,
+	ID,
+	RelationshipField,
+} from '@exogee/graphweaver';
 
 import { ProductVariation } from './product-variation';
 import { ProductDimension } from './product-dimension';
 import { ProductResearch } from './product-research';
 import { User } from './user';
+import { data } from '../data';
 
-class JsonDataProvider extends BaseDataProvider<Product> {}
+class JsonDataProvider extends BaseDataProvider<Product> {
+	findOne(filter: Filter<Product>): Promise<Product> {
+		const product = data.products.find((product) => product.id === filter.id);
+		return Promise.resolve(product) as any;
+	}
+}
 
 // type Product @custom @key(fields: "id") @key(fields: "sku package") @key(fields: "sku variation { id }") {
 //   id: ID!
@@ -37,10 +50,14 @@ export class Product {
 	@RelationshipField(() => ProductDimension, { id: 'dimensions', nullable: true })
 	dimensions?: ProductDimension;
 
-	@RelationshipField(() => User, { id: 'createdBy', nullable: true })
+	@RelationshipField(() => User, {
+		id: 'createdBy',
+		nullable: true,
+		directives: { provides: { fields: 'totalProductsCreated' } },
+	})
 	createdBy!: User;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, directives: { tag: { name: 'internal' } } })
 	notes?: string;
 
 	@RelationshipField(() => [ProductResearch], { id: 'research' })

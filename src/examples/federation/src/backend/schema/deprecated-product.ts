@@ -1,5 +1,18 @@
-import { Entity, Field, RelationshipField, graphweaverMetadata } from '@exogee/graphweaver';
+import {
+	BaseDataProvider,
+	Entity,
+	Field,
+	RelationshipField,
+	graphweaverMetadata,
+} from '@exogee/graphweaver';
 import { User } from './user';
+import { data } from '../data';
+
+class JsonDataProvider extends BaseDataProvider<DeprecatedProduct> {
+	findOne(): Promise<DeprecatedProduct> {
+		return Promise.resolve(data.deprecatedProduct) as any;
+	}
+}
 
 // type DeprecatedProduct @key(fields: "sku package") {
 //   sku: String!
@@ -9,6 +22,7 @@ import { User } from './user';
 // }
 
 @Entity('DeprecatedProduct', {
+	provider: new JsonDataProvider('Deprecated Products'),
 	apiOptions: { excludeFromBuiltInOperations: true },
 })
 export class DeprecatedProduct {

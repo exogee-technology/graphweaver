@@ -148,10 +148,9 @@ export interface ArgsMetadata {
 export interface DirectiveMetadata {
 	name: string;
 	type: 'directive';
-	target: object;
 	description?: string;
-	args: ArgsMetadata;
-	isRepeatable: boolean;
+	args?: ArgsMetadata;
+	isRepeatable?: boolean;
 	locations: DirectiveLocation[];
 }
 
@@ -367,18 +366,20 @@ class Metadata {
 	}
 
 	public collectDirectiveTypeInformation(args: CollectDirectiveTypeInformationArgs) {
-		if (this.metadataByType.has(args.target)) {
+		if (this.metadataByType.has(args.name)) {
 			throw new Error(`Directive with name ${args.name} already exists in metadata map.`);
 		}
 
-		this.metadataByType.set(args.target, {
+		this.metadataByType.set(args.name, {
 			type: 'directive',
+			args: {},
+			isRepeatable: false,
 			...args,
 		});
 	}
 
 	public collectUnionTypeInformation(args: CollectUnionTypeInformationArgs) {
-		const target = {};
+		const target = {}; // We need a target so it can be used in getTypes, should we create a union class?
 
 		this.metadataByType.set(target, {
 			type: 'union',

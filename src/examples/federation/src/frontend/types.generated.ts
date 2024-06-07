@@ -115,13 +115,22 @@ export type DeprecatedProduct = {
   sku: Scalars['String']['output'];
 };
 
+export type DeprecatedProductsOrderByInput = {
+  package?: InputMaybe<Sort>;
+  reason?: InputMaybe<Sort>;
+  sku?: InputMaybe<Sort>;
+};
 
-export type DeprecatedProductCreatedByArgs = {
-  filter?: InputMaybe<UsersListFilter>;
+/** Pagination options for DeprecatedProducts. */
+export type DeprecatedProductsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
 
 export type Inventory = {
   __typename?: 'Inventory';
+  deprecatedProducts: DeprecatedProduct;
   id: Scalars['ID']['output'];
 };
 
@@ -190,11 +199,6 @@ export type Product = {
   variation?: Maybe<ProductVariation>;
 };
 
-
-export type ProductCreatedByArgs = {
-  filter?: InputMaybe<UsersListFilter>;
-};
-
 /** Data needed to create or update Products. If an ID is passed, this is an update, otherwise it's an insert. */
 export type ProductCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
@@ -210,6 +214,19 @@ export type ProductDimension = {
   weight?: Maybe<Scalars['Float']['output']>;
 };
 
+export type ProductDimensionsOrderByInput = {
+  size?: InputMaybe<Sort>;
+  unit?: InputMaybe<Sort>;
+  weight?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ProductDimensions. */
+export type ProductDimensionsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProductDimensionsOrderByInput>;
+};
+
 /** Data needed to create Products. */
 export type ProductInsertInput = {
   notes?: InputMaybe<Scalars['String']['input']>;
@@ -221,6 +238,17 @@ export type ProductResearch = {
   __typename?: 'ProductResearch';
   outcome?: Maybe<Scalars['String']['output']>;
   study: CaseStudy;
+};
+
+export type ProductResearchesOrderByInput = {
+  outcome?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ProductResearches. */
+export type ProductResearchesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ProductResearchesOrderByInput>;
 };
 
 /** Data needed to update Products. An ID must be passed. */
@@ -332,41 +360,6 @@ export type User = {
   name?: Maybe<Scalars['String']['output']>;
   totalProductsCreated?: Maybe<Scalars['Int']['output']>;
   yearsOfEmployment: Scalars['Int']['output'];
-};
-
-export type UsersListFilter = {
-  averageProductsCreatedPerYear?: InputMaybe<Scalars['Int']['input']>;
-  averageProductsCreatedPerYear_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  averageProductsCreatedPerYear_ne?: InputMaybe<Scalars['Int']['input']>;
-  averageProductsCreatedPerYear_nin?: InputMaybe<Array<Scalars['Int']['input']>>;
-  averageProductsCreatedPerYear_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  averageProductsCreatedPerYear_null?: InputMaybe<Scalars['Boolean']['input']>;
-  email?: InputMaybe<Scalars['ID']['input']>;
-  email_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  email_ne?: InputMaybe<Scalars['ID']['input']>;
-  email_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  email_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  email_null?: InputMaybe<Scalars['Boolean']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
-  name_ilike?: InputMaybe<Scalars['String']['input']>;
-  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_like?: InputMaybe<Scalars['String']['input']>;
-  name_ne?: InputMaybe<Scalars['String']['input']>;
-  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  name_null?: InputMaybe<Scalars['Boolean']['input']>;
-  totalProductsCreated?: InputMaybe<Scalars['Int']['input']>;
-  totalProductsCreated_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  totalProductsCreated_ne?: InputMaybe<Scalars['Int']['input']>;
-  totalProductsCreated_nin?: InputMaybe<Array<Scalars['Int']['input']>>;
-  totalProductsCreated_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  totalProductsCreated_null?: InputMaybe<Scalars['Boolean']['input']>;
-  yearsOfEmployment?: InputMaybe<Scalars['Int']['input']>;
-  yearsOfEmployment_in?: InputMaybe<Array<Scalars['Int']['input']>>;
-  yearsOfEmployment_ne?: InputMaybe<Scalars['Int']['input']>;
-  yearsOfEmployment_nin?: InputMaybe<Array<Scalars['Int']['input']>>;
-  yearsOfEmployment_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  yearsOfEmployment_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UsersOrderByInput = {

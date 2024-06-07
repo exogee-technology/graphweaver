@@ -12,6 +12,6 @@ export class Inventory {
 	@Field(() => ID, { primaryKeyField: true })
 	id!: string;
 
-	// @Field(() => DeprecatedProduct)
-	// deprecatedProducts!: DeprecatedProduct;
+	@Field(() => DeprecatedProduct)
+	deprecatedProducts!: DeprecatedProduct;
 }

@@ -247,6 +247,9 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 	// namespace your key to avoid conflicts
 	// See the `@MediaField` decorator for an example
 	additionalInformation?: Record<string, unknown>;
+
+	// Add custom field directives to this field
+	directives?: Record<string, any>;
 }
 
 export type AuthChecker<TContextType extends object = object, TRoleType = string> = (

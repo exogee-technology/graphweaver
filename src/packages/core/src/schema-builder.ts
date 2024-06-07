@@ -289,9 +289,11 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						if (metadata.provider) {
 							resolve = resolvers.baseResolver(resolvers.listRelationshipField);
 
-							args['filter'] = {
-								type: filterTypeForEntity(metadata),
-							};
+							if (metadata.provider.backendProviderConfig?.filter) {
+								args['filter'] = {
+									type: filterTypeForEntity(metadata),
+								};
+							}
 						}
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
@@ -313,6 +315,9 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						args,
 						// Typecast should not be required here as we know the context object, but this will get us building.
 						resolve: resolve as any,
+						extensions: {
+							directives: field.directives ?? {},
+						},
 					};
 				}
 

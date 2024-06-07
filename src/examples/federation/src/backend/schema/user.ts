@@ -1,4 +1,5 @@
 import { Entity, Field, ID, GraphQLInt, BaseDataProvider } from '@exogee/graphweaver';
+import { data } from '../data';
 
 // extend type User @key(fields: "email") {
 //   averageProductsCreatedPerYear: Int @requires(fields: "totalProductsCreated yearsOfEmployment")
@@ -8,17 +9,12 @@ import { Entity, Field, ID, GraphQLInt, BaseDataProvider } from '@exogee/graphwe
 //   yearsOfEmployment: Int! @external
 // }
 
-const user = {
-	averageProductsCreatedPerYear: Math.round(1337 / 10),
-	email: 'support@apollographql.com',
-	name: 'Jane Smith',
-	totalProductsCreated: 1337,
-	yearsOfEmployment: 10,
-};
-
 class JsonDataProvider extends BaseDataProvider<User> {
+	find(): Promise<User[]> {
+		return Promise.resolve([data.user]);
+	}
 	findOne(): Promise<User> {
-		return Promise.resolve(user);
+		return Promise.resolve(data.user);
 	}
 }
 
@@ -27,18 +23,21 @@ class JsonDataProvider extends BaseDataProvider<User> {
 	provider: new JsonDataProvider('User Management System'),
 })
 export class User {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, { primaryKeyField: true, directives: { external: true } })
 	email!: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, directives: { override: { from: 'users' } } })
 	name?: string;
 
-	@Field(() => GraphQLInt, { nullable: true })
+	@Field(() => GraphQLInt, {
+		nullable: true,
+		directives: { requires: { fields: 'totalProductsCreated yearsOfEmployment' } },
+	})
 	averageProductsCreatedPerYear?: number;
 
-	@Field(() => GraphQLInt, { nullable: true })
+	@Field(() => GraphQLInt, { nullable: true, directives: { external: true } })
 	totalProductsCreated?: number;
 
-	@Field(() => GraphQLInt)
+	@Field(() => GraphQLInt, { directives: { external: true } })
 	yearsOfEmployment!: number;
 }
