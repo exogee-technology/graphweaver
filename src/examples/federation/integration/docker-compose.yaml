@@ -1,1 +1,5 @@
-version: "3"
+services:
+  products:
+    build: .
+    ports:
+      - 4001:4001

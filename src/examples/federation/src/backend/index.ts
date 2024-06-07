@@ -1,14 +1,31 @@
 import Graphweaver from '@exogee/graphweaver-server';
+import { Server } from '@hapi/hapi';
+import hapiApollo from '@as-integrations/hapi';
 
 import './schema';
-
-// extend type Query {
-//   product(id: ID!): Product
-//   deprecatedProduct(sku: String!, package: String!): DeprecatedProduct @deprecated(reason: "Use product query instead")
-// }
 
 export const graphweaver = new Graphweaver({
 	enableFederation: true,
 });
 
-export const handler = graphweaver.handler();
+const start = async () => {
+	await graphweaver.server.start();
+	// create the hapi server
+	const hapi = new Server({
+		host: '0.0.0.0',
+		port: 4001,
+	});
+
+	await hapi.register({
+		plugin: hapiApollo,
+		options: {
+			apolloServer: graphweaver.server,
+			path: '/',
+		},
+	});
+
+	await hapi.start();
+	console.log('Server running on %s', hapi.info.uri)
+};
+
+start();

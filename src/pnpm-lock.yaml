@@ -140,15 +140,18 @@ importers:
       '@apollo/server':
         specifier: 4.10.4
         version: 4.10.4(encoding@0.1.13)(graphql@16.8.1)
-      '@as-integrations/aws-lambda':
-        specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))
+      '@as-integrations/hapi':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))(@hapi/hapi@21.3.9)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
       '@exogee/graphweaver-server':
         specifier: workspace:*
         version: link:../../packages/server
+      '@hapi/hapi':
+        specifier: 21.3.9
+        version: 21.3.9
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -159,6 +162,9 @@ importers:
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
+      tsx:
+        specifier: 4.11.0
+        version: 4.11.0
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -264,7 +270,7 @@ importers:
         version: 6.2.8
       '@mikro-orm/postgresql':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)
+        version: 6.2.8(@mikro-orm/core@6.2.8)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -307,7 +313,7 @@ importers:
         version: 6.2.8
       '@mikro-orm/knex':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)(pg@8.11.5)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -1011,7 +1017,7 @@ importers:
         version: 6.2.8
       '@mikro-orm/postgresql':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)
+        version: 6.2.8(@mikro-orm/core@6.2.8)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -1100,7 +1106,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)(pg@8.11.5)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -1153,13 +1159,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)(pg@8.11.5)
+        version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/mysql':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.2.8
-        version: 6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)
+        version: 6.2.8(@mikro-orm/core@6.2.8)
       '@mikro-orm/sqlite':
         specifier: 6.2.8
         version: 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -1566,6 +1572,13 @@ packages:
     engines: {node: '>=16.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
+
+  '@as-integrations/hapi@2.0.1':
+    resolution: {integrity: sha512-FpPmT0tKbRBvQ+xt7pT8lCmShpylE2fU46SBa764IbWOcnOyZv7Cw9KujAcM5gW/NLeFI/xjADLabOTonwQghg==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@apollo/server': ^4.0.0
+      '@hapi/hapi': ^20.2.2 || ^21.0.0
 
   '@aws-crypto/crc32@3.0.0':
     resolution: {integrity: sha512-IzSgsrxUcsrejQbPVilIKy16kAT52EwB6zSaI+M3xxIhKh5+aldEyvI+z6erM7TCLB2BJsFrtHjp6/4/sr+3dA==}
@@ -10413,6 +10426,11 @@ snapshots:
       '@apollo/server': 4.10.4(encoding@0.1.13)(graphql@16.8.1)
       '@types/aws-lambda': 8.10.138
 
+  '@as-integrations/hapi@2.0.1(@apollo/server@4.10.4(encoding@0.1.13)(graphql@16.8.1))(@hapi/hapi@21.3.9)':
+    dependencies:
+      '@apollo/server': 4.10.4(encoding@0.1.13)(graphql@16.8.1)
+      '@hapi/hapi': 21.3.9
+
   '@aws-crypto/crc32@3.0.0':
     dependencies:
       '@aws-crypto/util': 3.0.0
@@ -12121,7 +12139,7 @@ snapshots:
       pluralize: 8.0.0
       reflect-metadata: 0.2.1
     optionalDependencies:
-      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)
+      '@mikro-orm/knex': 6.1.10(@mikro-orm/core@6.2.8)(mysql2@3.9.2)(pg@8.11.5)
       '@mikro-orm/mysql': 6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)
       '@mikro-orm/postgresql': 6.1.10(@mikro-orm/core@6.2.8)
       '@mikro-orm/sqlite': 6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)
@@ -13324,23 +13342,6 @@ snapshots:
       - tedious
     optional: true
 
-  '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)':
-    dependencies:
-      '@mikro-orm/core': 6.2.8
-      fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.10.0)(pg@8.11.5)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - better-sqlite3
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.1.10(@mikro-orm/core@6.2.8)(pg@8.11.5)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.2.8
@@ -13379,6 +13380,22 @@ snapshots:
       '@mikro-orm/core': 6.2.8
       fs-extra: 11.2.0
       knex: 3.1.0(mysql2@3.9.7)(pg@8.11.5)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/knex@6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)':
+    dependencies:
+      '@mikro-orm/core': 6.2.8
+      fs-extra: 11.2.0
+      knex: 3.1.0(mysql2@3.9.2)(pg@8.11.5)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - better-sqlite3
@@ -13452,6 +13469,23 @@ snapshots:
       - supports-color
       - tedious
     optional: true
+
+  '@mikro-orm/postgresql@6.2.8(@mikro-orm/core@6.2.8)':
+    dependencies:
+      '@mikro-orm/core': 6.2.8
+      '@mikro-orm/knex': 6.2.8(@mikro-orm/core@6.2.8)(pg@8.11.5)
+      pg: 8.11.5
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - mysql
+      - mysql2
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
 
   '@mikro-orm/postgresql@6.2.8(@mikro-orm/core@6.2.8)(mysql2@3.10.0)':
     dependencies:
@@ -19170,7 +19204,6 @@ snapshots:
       pg: 8.11.5
     transitivePeerDependencies:
       - supports-color
-    optional: true
 
   knex@3.1.0(mysql2@3.9.7)(pg@8.11.5):
     dependencies:
