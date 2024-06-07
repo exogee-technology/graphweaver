@@ -619,10 +619,16 @@ export type Tag = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   tasks?: Maybe<Array<Task>>;
+  tasks_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type TagTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+};
+
+
+export type TagTasks_AggregateArgs = {
   filter?: InputMaybe<TasksListFilter>;
 };
 
@@ -684,11 +690,17 @@ export type Task = {
   priority?: Maybe<Priority>;
   slug?: Maybe<Scalars['String']['output']>;
   tags: Array<Tag>;
+  tags_aggregate?: Maybe<AggregationResult>;
   user?: Maybe<User>;
 };
 
 
 export type TaskTagsArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+};
+
+
+export type TaskTags_AggregateArgs = {
   filter?: InputMaybe<TagsListFilter>;
 };
 

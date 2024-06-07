@@ -2,12 +2,14 @@ import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { BaseContext } from './types';
 import {
+	AggregationResult,
 	AggregationType,
 	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	DeleteManyHookParams,
 	EntityMetadata,
+	FieldMetadata,
 	Filter,
 	HookRegister,
 	ReadHookParams,
@@ -563,3 +565,112 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 		return hookEntities[0];
 	}
 };
+
+// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
+export const aggregateRelationshipField =
+	(parentEntity: EntityMetadata<any, any>, field: FieldMetadata) =>
+	async <G, D, R, C extends BaseContext>({
+		args: { filter },
+		context,
+		source,
+		fields,
+	}: ResolverOptions<{ filter: Filter<R> }, C, G>): Promise<AggregationResult> => {
+		logger.trace('Resolving aggregated relationship field');
+
+		const requestedFields = fields.fieldsByTypeName.AggregationResult;
+		const requestedAggregations = new Set<AggregationType>();
+		if (requestedFields.count) requestedAggregations.add(AggregationType.COUNT);
+
+		logger.trace(requestedAggregations, 'Requested aggregations');
+
+		if (requestedAggregations.size === 0) {
+			logger.trace(requestedAggregations, 'No requested aggregations, returning.');
+			return {};
+		}
+
+		const { id, relatedField } = field.relationshipInfo ?? {};
+
+		let idValue: ID | undefined = undefined;
+		if (id && typeof id === 'function') {
+			// If the id is a function, we'll call it with the source data to get the id value.
+			idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
+		} else if (id) {
+			// else if the id is a string, we'll try to get the value from the source data.
+			const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+
+			// If the value is a string or number, we'll use it as the id value.
+			if (
+				typeof valueOfForeignKey === 'string' ||
+				typeof valueOfForeignKey === 'number' ||
+				typeof valueOfForeignKey === 'bigint'
+			) {
+				idValue = valueOfForeignKey;
+			} else {
+				// The ID value must be a string or a number otherwise we'll throw an error.
+				throw new Error(
+					'Could not determine id value for relationship field only string or numbers are supported.'
+				);
+			}
+		}
+
+		const { fieldType, isList } = getFieldTypeFromFieldMetadata(field);
+		const gqlEntityType = fieldType as { new (...args: any[]): R };
+
+		const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
+		if (!isEntityMetadata(relatedEntityMetadata)) {
+			throw new Error(
+				`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`
+			);
+		}
+		const sourcePrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(
+			parentEntity
+		) as keyof G;
+		const relatedPrimaryKeyField =
+			graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
+
+		// We need to construct a filter for the related entity and _and it with the user supplied filter.
+		const _and: Filter<R>[] = [];
+
+		// If we have a user supplied filter, add it to the _and array.
+		if (filter) _and.push(filter);
+
+		// Lets check the relationship type and add the appropriate filter.
+		if (idValue) {
+			_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
+		} else if (relatedField) {
+			_and.push({
+				[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
+			} as Filter<R>);
+		}
+
+		const relatedEntityFilter = { _and } as Filter<R>;
+
+		const params: ReadHookParams<R> = {
+			args: { filter: relatedEntityFilter },
+			context,
+			fields,
+			transactional: !!parentEntity.provider?.withTransaction,
+		};
+		const hookManager = hookManagerMap.get(gqlEntityType.name);
+		const hookParams = hookManager
+			? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			: params;
+
+		logger.trace('Aggregating with related field');
+
+		const result = await relatedEntityMetadata.provider?.aggregate?.(
+			relatedEntityFilter,
+			requestedAggregations
+		);
+
+		if (!result) throw new Error('No result from aggregation.');
+
+		logger.trace('Running after read hooks');
+		if (hookManager) {
+			await hookManager.runHooks(HookRegister.AFTER_READ, hookParams);
+		}
+
+		logger.trace('After read hooks ran');
+
+		return result;
+	};

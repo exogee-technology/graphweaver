@@ -5,6 +5,7 @@ import {
 	GraphQLEnumValueConfigMap,
 	GraphQLFieldConfig,
 	GraphQLFieldConfigArgumentMap,
+	GraphQLFieldResolver,
 	GraphQLFloat,
 	GraphQLID,
 	GraphQLInputFieldConfig,
@@ -36,6 +37,7 @@ import {
 	isEntityMetadata,
 	isEnumMetadata,
 	isInputMetadata,
+	Resolver,
 	TypeValue,
 } from '.';
 import * as resolvers from './resolvers';
@@ -273,12 +275,41 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = new GraphQLNonNull(graphQLType);
 					}
 
+					if (fields[field.name]) {
+						throw new Error(`Duplicate field '${field.name}' on entity ${entity.name}.`);
+					}
+
 					fields[field.name] = {
 						type: graphQLType,
 						args,
 						// Typecast should not be required here as we know the context object, but this will get us building.
 						resolve: resolve as any,
 					};
+
+					// If the it's a related entity and the provider supports it, we should add aggregation to the relationship.
+					if (
+						isEntityMetadata(metadata) &&
+						metadata.provider?.supportedAggregationTypes?.size &&
+						metadata.provider?.backendProviderConfig?.filter.root
+					) {
+						if (fields[`${field.name}_aggregate`]) {
+							throw new Error(
+								`Duplicate field '${field.name}_aggregate' on entity ${entity.name}.`
+							);
+						}
+
+						fields[`${field.name}_aggregate`] = {
+							type: aggregationResult,
+							args: {
+								filter: { type: filterTypeForEntity(metadata) },
+							},
+
+							// TODO: Why is any required here?
+							resolve: resolvers.baseResolver(
+								resolvers.aggregateRelationshipField(entity, field)
+							) as any,
+						};
+					}
 				}
 
 				return fields;

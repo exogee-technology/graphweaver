@@ -110,8 +110,10 @@ export type Album = {
   __typename?: 'Album';
   albumId: Scalars['ID']['output'];
   artist: Artist;
+  artist_aggregate?: Maybe<AggregationResult>;
   title: Scalars['String']['output'];
   tracks: Array<Track>;
+  tracks_aggregate?: Maybe<AggregationResult>;
 };
 
 
@@ -120,7 +122,17 @@ export type AlbumArtistArgs = {
 };
 
 
+export type AlbumArtist_AggregateArgs = {
+  filter?: InputMaybe<ArtistsListFilter>;
+};
+
+
 export type AlbumTracksArgs = {
+  filter?: InputMaybe<TracksListFilter>;
+};
+
+
+export type AlbumTracks_AggregateArgs = {
   filter?: InputMaybe<TracksListFilter>;
 };
 
@@ -181,12 +193,18 @@ export type AlbumsPaginationInput = {
 export type Artist = {
   __typename?: 'Artist';
   albums: Array<Album>;
+  albums_aggregate?: Maybe<AggregationResult>;
   artistId: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
 };
 
 
 export type ArtistAlbumsArgs = {
+  filter?: InputMaybe<AlbumsListFilter>;
+};
+
+
+export type ArtistAlbums_AggregateArgs = {
   filter?: InputMaybe<AlbumsListFilter>;
 };
 
@@ -249,9 +267,11 @@ export type Customer = {
   customerId: Scalars['ID']['output'];
   email: Scalars['String']['output'];
   employee?: Maybe<Employee>;
+  employee_aggregate?: Maybe<AggregationResult>;
   fax?: Maybe<Scalars['String']['output']>;
   firstName: Scalars['String']['output'];
   invoices: Array<Invoice>;
+  invoices_aggregate?: Maybe<AggregationResult>;
   lastName: Scalars['String']['output'];
   phone?: Maybe<Scalars['String']['output']>;
   postalCode?: Maybe<Scalars['String']['output']>;
@@ -264,7 +284,17 @@ export type CustomerEmployeeArgs = {
 };
 
 
+export type CustomerEmployee_AggregateArgs = {
+  filter?: InputMaybe<EmployeesListFilter>;
+};
+
+
 export type CustomerInvoicesArgs = {
+  filter?: InputMaybe<InvoicesListFilter>;
+};
+
+
+export type CustomerInvoices_AggregateArgs = {
   filter?: InputMaybe<InvoicesListFilter>;
 };
 
@@ -453,10 +483,13 @@ export type Employee = {
   city?: Maybe<Scalars['String']['output']>;
   country?: Maybe<Scalars['String']['output']>;
   customers: Array<Customer>;
+  customers_aggregate?: Maybe<AggregationResult>;
   email?: Maybe<Scalars['String']['output']>;
   employee?: Maybe<Employee>;
   employeeId: Scalars['ID']['output'];
+  employee_aggregate?: Maybe<AggregationResult>;
   employees: Array<Employee>;
+  employees_aggregate?: Maybe<AggregationResult>;
   fax?: Maybe<Scalars['String']['output']>;
   firstName: Scalars['String']['output'];
   hireDate?: Maybe<Scalars['ISOString']['output']>;
@@ -473,12 +506,27 @@ export type EmployeeCustomersArgs = {
 };
 
 
+export type EmployeeCustomers_AggregateArgs = {
+  filter?: InputMaybe<CustomersListFilter>;
+};
+
+
 export type EmployeeEmployeeArgs = {
   filter?: InputMaybe<EmployeesListFilter>;
 };
 
 
+export type EmployeeEmployee_AggregateArgs = {
+  filter?: InputMaybe<EmployeesListFilter>;
+};
+
+
 export type EmployeeEmployeesArgs = {
+  filter?: InputMaybe<EmployeesListFilter>;
+};
+
+
+export type EmployeeEmployees_AggregateArgs = {
   filter?: InputMaybe<EmployeesListFilter>;
 };
 
@@ -693,10 +741,16 @@ export type Genre = {
   genreId: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
   tracks: Array<Track>;
+  tracks_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type GenreTracksArgs = {
+  filter?: InputMaybe<TracksListFilter>;
+};
+
+
+export type GenreTracks_AggregateArgs = {
   filter?: InputMaybe<TracksListFilter>;
 };
 
@@ -758,9 +812,11 @@ export type Invoice = {
   billingPostalCode?: Maybe<Scalars['String']['output']>;
   billingState?: Maybe<Scalars['String']['output']>;
   customer: Customer;
+  customer_aggregate?: Maybe<AggregationResult>;
   invoiceDate: Scalars['ISOString']['output'];
   invoiceId: Scalars['ID']['output'];
   invoiceLines: Array<InvoiceLine>;
+  invoiceLines_aggregate?: Maybe<AggregationResult>;
   total: Scalars['String']['output'];
 };
 
@@ -770,7 +826,17 @@ export type InvoiceCustomerArgs = {
 };
 
 
+export type InvoiceCustomer_AggregateArgs = {
+  filter?: InputMaybe<CustomersListFilter>;
+};
+
+
 export type InvoiceInvoiceLinesArgs = {
+  filter?: InputMaybe<InvoiceLinesListFilter>;
+};
+
+
+export type InvoiceInvoiceLines_AggregateArgs = {
   filter?: InputMaybe<InvoiceLinesListFilter>;
 };
 
@@ -805,8 +871,10 @@ export type InvoiceLine = {
   __typename?: 'InvoiceLine';
   invoice: Invoice;
   invoiceLineId: Scalars['ID']['output'];
+  invoice_aggregate?: Maybe<AggregationResult>;
   quantity: Scalars['Float']['output'];
   track: Track;
+  track_aggregate?: Maybe<AggregationResult>;
   unitPrice: Scalars['String']['output'];
 };
 
@@ -816,7 +884,17 @@ export type InvoiceLineInvoiceArgs = {
 };
 
 
+export type InvoiceLineInvoice_AggregateArgs = {
+  filter?: InputMaybe<InvoicesListFilter>;
+};
+
+
 export type InvoiceLineTrackArgs = {
+  filter?: InputMaybe<TracksListFilter>;
+};
+
+
+export type InvoiceLineTrack_AggregateArgs = {
   filter?: InputMaybe<TracksListFilter>;
 };
 
@@ -990,10 +1068,16 @@ export type MediaType = {
   mediaTypeId: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
   tracks: Array<Track>;
+  tracks_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type MediaTypeTracksArgs = {
+  filter?: InputMaybe<TracksListFilter>;
+};
+
+
+export type MediaTypeTracks_AggregateArgs = {
   filter?: InputMaybe<TracksListFilter>;
 };
 
@@ -1546,10 +1630,16 @@ export type Playlist = {
   name?: Maybe<Scalars['String']['output']>;
   playlistId: Scalars['ID']['output'];
   tracks: Array<Track>;
+  tracks_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type PlaylistTracksArgs = {
+  filter?: InputMaybe<TracksListFilter>;
+};
+
+
+export type PlaylistTracks_AggregateArgs = {
   filter?: InputMaybe<TracksListFilter>;
 };
 
@@ -1837,14 +1927,19 @@ export enum Sort {
 export type Track = {
   __typename?: 'Track';
   album?: Maybe<Album>;
+  album_aggregate?: Maybe<AggregationResult>;
   bytes?: Maybe<Scalars['Float']['output']>;
   composer?: Maybe<Scalars['String']['output']>;
   genre?: Maybe<Genre>;
+  genre_aggregate?: Maybe<AggregationResult>;
   invoiceLines: Array<InvoiceLine>;
+  invoiceLines_aggregate?: Maybe<AggregationResult>;
   mediaType: MediaType;
+  mediaType_aggregate?: Maybe<AggregationResult>;
   milliseconds: Scalars['Float']['output'];
   name: Scalars['String']['output'];
   playlists: Array<Playlist>;
+  playlists_aggregate?: Maybe<AggregationResult>;
   trackId: Scalars['ID']['output'];
   unitPrice: Scalars['String']['output'];
 };
@@ -1855,7 +1950,17 @@ export type TrackAlbumArgs = {
 };
 
 
+export type TrackAlbum_AggregateArgs = {
+  filter?: InputMaybe<AlbumsListFilter>;
+};
+
+
 export type TrackGenreArgs = {
+  filter?: InputMaybe<GenresListFilter>;
+};
+
+
+export type TrackGenre_AggregateArgs = {
   filter?: InputMaybe<GenresListFilter>;
 };
 
@@ -1865,12 +1970,27 @@ export type TrackInvoiceLinesArgs = {
 };
 
 
+export type TrackInvoiceLines_AggregateArgs = {
+  filter?: InputMaybe<InvoiceLinesListFilter>;
+};
+
+
 export type TrackMediaTypeArgs = {
   filter?: InputMaybe<MediaTypesListFilter>;
 };
 
 
+export type TrackMediaType_AggregateArgs = {
+  filter?: InputMaybe<MediaTypesListFilter>;
+};
+
+
 export type TrackPlaylistsArgs = {
+  filter?: InputMaybe<PlaylistsListFilter>;
+};
+
+
+export type TrackPlaylists_AggregateArgs = {
   filter?: InputMaybe<PlaylistsListFilter>;
 };
 

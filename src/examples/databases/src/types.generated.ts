@@ -272,10 +272,16 @@ export type Task = {
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
   user: User;
+  user_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type TaskUserArgs = {
+  filter?: InputMaybe<UsersListFilter>;
+};
+
+
+export type TaskUser_AggregateArgs = {
   filter?: InputMaybe<UsersListFilter>;
 };
 
