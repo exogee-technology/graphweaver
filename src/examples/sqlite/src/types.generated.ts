@@ -103,7 +103,7 @@ export type AggregationResult = {
 };
 
 export enum AggregationType {
-  Count = 'count'
+  Count = 'COUNT'
 }
 
 export type Album = {

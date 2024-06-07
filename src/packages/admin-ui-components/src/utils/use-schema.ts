@@ -40,7 +40,7 @@ export enum AdminUIFilterType {
 }
 
 export enum AggregationType {
-	COUNT = 'count',
+	COUNT = 'COUNT',
 }
 
 // The 'string' case is another entity name

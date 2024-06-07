@@ -87,7 +87,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	private transactionIsolationLevel!: IsolationLevel;
 
 	public readonly supportsInFilter = true;
-	public readonly supportedAggregationTypes = new Set<AggregationType>([AggregationType.count]);
+	public readonly supportedAggregationTypes = new Set<AggregationType>([AggregationType.COUNT]);
 
 	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
@@ -610,7 +610,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		const result: AggregationResult = {};
 
 		try {
-			if (requestedAggregations.has(AggregationType.count)) {
+			if (requestedAggregations.has(AggregationType.COUNT)) {
 				const meta = this.database.em.getMetadata().get(this.entityType.name);
 				result.count = await query.getCount(meta.primaryKeys);
 			}

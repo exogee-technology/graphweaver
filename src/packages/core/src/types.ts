@@ -77,7 +77,7 @@ export interface GraphQLArgs<G> {
 }
 
 export enum AggregationType {
-	count = 'count',
+	COUNT = 'COUNT',
 }
 
 export interface AggregationResult {

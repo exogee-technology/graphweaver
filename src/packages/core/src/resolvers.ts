@@ -370,7 +370,7 @@ export const aggregate =
 
 		const requestedFields = fields.fieldsByTypeName.AggregationResult;
 		const requestedAggregations = new Set<AggregationType>();
-		if (requestedFields.count) requestedAggregations.add(AggregationType.count);
+		if (requestedFields.count) requestedAggregations.add(AggregationType.COUNT);
 
 		const hookManager = hookManagerMap.get(entity.name);
 		const params: ReadHookParams<G> = {
