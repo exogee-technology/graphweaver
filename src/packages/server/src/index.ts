@@ -57,6 +57,7 @@ export interface GraphweaverConfig {
 		typesOutputPath?: string[] | string;
 		watchForFileChangesInPaths?: string[];
 	};
+	schemaDirectives?: Record<string, any>;
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -115,7 +116,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			if (this.config.enableFederation) enableFederation();
+			if (this.config.enableFederation)
+				enableFederation({ schemaDirectives: this.config.schemaDirectives });
 			this.schema = SchemaBuilder.build();
 		} catch (error) {
 			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');

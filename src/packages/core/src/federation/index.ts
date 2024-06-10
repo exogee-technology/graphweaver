@@ -3,9 +3,13 @@ import { addEntitiesQuery } from './entities';
 import { addEnums } from './enums';
 import { addServiceQuery } from './service';
 
-export const enableFederation = () => {
+export const enableFederation = ({
+	schemaDirectives,
+}: {
+	schemaDirectives?: Record<string, any>;
+}) => {
 	addEnums();
 	addDirectives();
-	addServiceQuery();
+	addServiceQuery({ schemaDirectives });
 	addEntitiesQuery();
 };

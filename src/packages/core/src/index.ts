@@ -15,4 +15,4 @@ export * from './utils/plural';
 
 // Make it easier for everyone to work with our version of GraphQL JS for their own purposes.
 export * from 'graphql/type';
-export { Source } from 'graphql';
+export { Source, DirectiveLocation } from 'graphql';

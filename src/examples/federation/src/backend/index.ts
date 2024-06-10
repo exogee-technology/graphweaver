@@ -1,11 +1,27 @@
 import Graphweaver from '@exogee/graphweaver-server';
 import { Server } from '@hapi/hapi';
 import hapiApollo from '@as-integrations/hapi';
+import { DirectiveLocation, graphweaverMetadata } from '@exogee/graphweaver';
 
 import './schema';
 
+// Register Custom Directive
+graphweaverMetadata.collectDirectiveTypeInformation({
+	name: 'custom',
+	locations: [DirectiveLocation.OBJECT],
+});
+
 export const graphweaver = new Graphweaver({
 	enableFederation: true,
+	schemaDirectives: {
+		composeDirective: {
+			name: '@custom',
+		},
+		link: {
+			url: 'https://myspecs.dev/myCustomDirective/v1.0',
+			import: ['@custom'],
+		},
+	},
 });
 
 const start = async () => {

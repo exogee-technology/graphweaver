@@ -33,6 +33,9 @@ class JsonDataProvider extends BaseDataProvider<Product> {
 
 @Entity('Product', {
 	provider: new JsonDataProvider('Product Management System'),
+	directives: {
+		custom: true,
+	},
 })
 export class Product {
 	@Field(() => ID, { primaryKeyField: true })
