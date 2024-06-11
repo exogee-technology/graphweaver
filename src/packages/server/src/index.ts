@@ -123,9 +123,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 			if (this.config.enableFederation) {
 				enableFederation({ schemaDirectives: this.config.schemaDirectives });
 
-				// Note that with this plugin installed in your app, any client can request a trace for any operation they run,
-				// which may reveal information about your server that you consider sensitive (such as how long each individual field takes to execute).
-				// Federated subgraphs generally should not be directly exposed to the public Internet and this is disabled by default.
+				// Caution: With this plugin, any client can request a trace for any operation, potentially revealing sensitive server information.
+				// It is recommended to ensure that federated subgraphs are not directly exposed to the public Internet. This feature is disabled by default for security reasons.
 				if (this.config.enableFederationTracing) plugins.push(ApolloServerPluginInlineTrace());
 
 				this.schema = buildFederationSchema({
