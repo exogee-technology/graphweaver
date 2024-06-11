@@ -16,7 +16,7 @@
 		"build": "graphweaver build && cp dist/backend/index.js integration/index.js",
 		"start": "tsx src/backend/index.ts",
 		"print": "graphweaver print-schema --output integration/schema.graphql",
-		"test": "pnpm build && cd integration && npm test"
+		"test:integration": "pnpm print && pnpm build && cd integration && npm run test:integration"
 	},
 	"dependencies": {
 		"@apollo/server": "4.10.4",
