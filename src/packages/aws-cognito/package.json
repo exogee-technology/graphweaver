@@ -37,6 +37,6 @@
 		"@aws-sdk/client-lambda": "3.592.0",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.8.1",
-		"uuid": "9.0.1"
+		"uuid": "10.0.0"
 	}
 }
