@@ -218,14 +218,10 @@ export type Query = {
   task?: Maybe<Task>;
   /** Get multiple Tasks. */
   tasks?: Maybe<Array<Maybe<Task>>>;
-  /** Get aggregated data for Tasks. */
-  tasks_aggregate?: Maybe<AggregationResult>;
   /** Get a single User. */
   user?: Maybe<User>;
   /** Get multiple Users. */
   users?: Maybe<Array<Maybe<User>>>;
-  /** Get aggregated data for Users. */
-  users_aggregate?: Maybe<AggregationResult>;
 };
 
 
@@ -240,11 +236,6 @@ export type QueryTasksArgs = {
 };
 
 
-export type QueryTasks_AggregateArgs = {
-  filter?: InputMaybe<TasksListFilter>;
-};
-
-
 export type QueryUserArgs = {
   id: Scalars['ID']['input'];
 };
@@ -253,11 +244,6 @@ export type QueryUserArgs = {
 export type QueryUsersArgs = {
   filter?: InputMaybe<UsersListFilter>;
   pagination?: InputMaybe<UsersPaginationInput>;
-};
-
-
-export type QueryUsers_AggregateArgs = {
-  filter?: InputMaybe<UsersListFilter>;
 };
 
 export enum Sort {
@@ -272,16 +258,10 @@ export type Task = {
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
   user: User;
-  user_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type TaskUserArgs = {
-  filter?: InputMaybe<UsersListFilter>;
-};
-
-
-export type TaskUser_AggregateArgs = {
   filter?: InputMaybe<UsersListFilter>;
 };
 

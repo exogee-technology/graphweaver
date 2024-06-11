@@ -231,8 +231,6 @@ export type Query = {
   submission?: Maybe<Submission>;
   /** Get multiple Submissions. */
   submissions?: Maybe<Array<Maybe<Submission>>>;
-  /** Get aggregated data for Submissions. */
-  submissions_aggregate?: Maybe<AggregationResult>;
 };
 
 
@@ -249,11 +247,6 @@ export type QuerySubmissionArgs = {
 export type QuerySubmissionsArgs = {
   filter?: InputMaybe<SubmissionsListFilter>;
   pagination?: InputMaybe<SubmissionsPaginationInput>;
-};
-
-
-export type QuerySubmissions_AggregateArgs = {
-  filter?: InputMaybe<SubmissionsListFilter>;
 };
 
 export enum Sort {
