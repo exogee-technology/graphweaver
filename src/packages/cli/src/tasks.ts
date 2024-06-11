@@ -19,3 +19,13 @@ export const generateTypes = async () => {
 		console.error(`Generate Types Failed: ${error.message}`);
 	}
 };
+
+export const printSchema = async (output?: string) => {
+	try {
+		console.log(`Generating Schema...`);
+		await asyncExec(`print-schema${output ? ` -o ${output}` : ''}`);
+		console.log(`Schema printed.`);
+	} catch (error: any) {
+		console.error(`Schema Print Failed: ${error.message}`);
+	}
+};

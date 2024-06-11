@@ -13,6 +13,7 @@ graphweaverMetadata.collectDirectiveTypeInformation({
 
 export const graphweaver = new Graphweaver({
 	enableFederation: true,
+	enableFederationTracing: true,
 	schemaDirectives: {
 		composeDirective: {
 			name: '@custom',

@@ -23,11 +23,11 @@ import {
 	isListType,
 	isNonNullType,
 	isScalarType,
-	printSchema,
 	ThunkObjMap,
 } from 'graphql';
 import { ObjMap } from 'graphql/jsutils/ObjMap';
 import { logger } from '@exogee/logger';
+import { printSchemaWithDirectives } from '@graphql-tools/utils';
 
 import {
 	ArgsMetadata,
@@ -588,8 +588,8 @@ class SchemaBuilderImplementation {
 		});
 	}
 
-	public print() {
-		return printSchema(this.build());
+	public print(buildOptions?: SchemaBuildOptions) {
+		return printSchemaWithDirectives(this.build(buildOptions));
 	}
 
 	public isValidFilterOperation(filterOperation: string) {

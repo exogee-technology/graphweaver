@@ -13,6 +13,7 @@ import {
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
+import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
 import {
 	ClearDataLoaderCache,
@@ -50,6 +51,7 @@ export interface GraphweaverConfig {
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
 	enableFederation?: boolean;
+	enableFederationTracing?: boolean;
 	graphQLArmorOptions?: GraphQLArmorConfig;
 	corsOptions?: CorsPluginOptions;
 	graphqlDeduplicator?: { enabled: boolean };
@@ -69,6 +71,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			introspection: true,
 		},
 		enableFederation: false,
+		enableFederationTracing: false,
 		graphqlDeduplicator: {
 			enabled: true,
 		},
@@ -116,8 +119,14 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			if (this.config.enableFederation)
+			if (this.config.enableFederation) {
 				enableFederation({ schemaDirectives: this.config.schemaDirectives });
+
+				// Note that when this plugin is installed in your app, any client can request a trace for any operation they run,
+				// which may reveal information about your server that you consider sensitive (such as how long each individual field takes to execute).
+				// Federated subgraphs generally should not be directly exposed to the public Internet.
+				if (this.config.enableFederationTracing) plugins.push(ApolloServerPluginInlineTrace());
+			}
 			this.schema = SchemaBuilder.build();
 		} catch (error) {
 			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');

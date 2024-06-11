@@ -30,23 +30,23 @@ We are aiming for v2 compatibility:
 *************
 Federation v1 compatibility
 *************
-_service FAIL
-@key (single) FAIL
+_service PASS
+@key (single) PASS
 @key (multi) WARNING
 @key (composite) WARNING
 repeatable @key WARNING
-@requires WARNING
-@provides WARNING
-federated tracing WARNING
+@requires PASS
+@provides PASS
+federated tracing PASS
 
 *************
 Federation v2 compatibility
 *************
-@link FAIL
-@shareable WARNING
-@tag WARNING
-@override WARNING
-@inaccessible WARNING
-@composeDirective WARNING
-@interfaceObject WARNING
+@link PASS
+@shareable PASS
+@tag PASS
+@override PASS
+@inaccessible PASS
+@composeDirective PASS
+@interfaceObject PASS
 ```
