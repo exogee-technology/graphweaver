@@ -4,9 +4,9 @@ import { CaseStudy } from './case-study';
 import { data } from '../data';
 
 class JsonDataProvider extends BaseDataProvider<ProductResearch> {
-	findOne(filter: Filter<ProductResearch>): Promise<ProductResearch> {
+	async findOne(filter: Filter<ProductResearch>): Promise<ProductResearch> {
 		const product = data.productsResearch.find((product) => product.productId === filter.productId);
-		return Promise.resolve(product) as any;
+		return product;
 	}
 }
 

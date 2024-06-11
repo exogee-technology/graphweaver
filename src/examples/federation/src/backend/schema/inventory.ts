@@ -7,8 +7,8 @@ import { data } from '../data';
 //   deprecatedProducts: [DeprecatedProduct!]!
 
 class JsonDataProvider extends BaseDataProvider<Inventory> {
-	findOne(): Promise<Inventory> {
-		return Promise.resolve(data.inventory) as any;
+	async findOne() {
+		return data.inventory as unknown as Inventory;
 	}
 }
 

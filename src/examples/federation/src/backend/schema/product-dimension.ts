@@ -8,11 +8,11 @@ import { data } from '../data';
 // }
 
 class JsonDataProvider extends BaseDataProvider<ProductDimension> {
-	find(): Promise<ProductDimension[]> {
-		return Promise.resolve([data.dimension]);
+	async find() {
+		return [data.dimension];
 	}
-	findOne(): Promise<ProductDimension> {
-		return Promise.resolve(data.dimension);
+	async findOne() {
+		return data.dimension;
 	}
 }
 

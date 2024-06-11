@@ -14,9 +14,9 @@ import { User } from './user';
 import { data } from '../data';
 
 class JsonDataProvider extends BaseDataProvider<Product> {
-	findOne(filter: Filter<Product>): Promise<Product> {
+	async findOne(filter: Filter<Product>) {
 		const product = data.products.find((product) => product.id === filter.id);
-		return Promise.resolve(product) as any;
+		return product as unknown as Product;
 	}
 }
 

@@ -10,11 +10,11 @@ import { data } from '../data';
 // }
 
 class JsonDataProvider extends BaseDataProvider<User> {
-	find(): Promise<User[]> {
-		return Promise.resolve([data.user]);
+	async find(): Promise<User[]> {
+		return [data.user];
 	}
-	findOne(): Promise<User> {
-		return Promise.resolve(data.user);
+	async findOne(): Promise<User> {
+		return data.user;
 	}
 }
 
