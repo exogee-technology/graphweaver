@@ -665,7 +665,13 @@ class SchemaBuilderImplementation {
 				inputType = new GraphQLList(inputType);
 			}
 
-			map[name] = { type: inputType };
+			map[name] = {
+				type: inputType,
+				// Apply the default value if there is one.
+				...(isArgMetadata(details) && details.defaultValue
+					? { defaultValue: details.defaultValue }
+					: {}),
+			};
 		}
 
 		return map;
@@ -748,7 +754,7 @@ class SchemaBuilderImplementation {
 	}
 
 	private buildMutationType() {
-		return new GraphQLObjectType({
+		const mutation = new GraphQLObjectType({
 			name: 'Mutation',
 			fields: () => {
 				const fields: ThunkObjMap<GraphQLFieldConfig<any, any, any>> = {};
@@ -905,6 +911,13 @@ class SchemaBuilderImplementation {
 				return fields;
 			},
 		});
+
+		// Check that we have mutations to add to the schema.
+		if (Object.keys(mutation.getFields()).length === 0) {
+			return undefined;
+		}
+
+		return mutation;
 	}
 
 	private *buildDirectives() {

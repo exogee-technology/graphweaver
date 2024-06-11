@@ -28,6 +28,11 @@ const addKeyDirective = () => {
 	const entities = Array.from(getEntityTargets());
 
 	for (const entity of entities) {
+		// Ensure that the entity has a primary key field
+		if (entity.fields[entity.primaryKeyField ?? ('id' as any)] === undefined) {
+			continue;
+		}
+
 		graphweaverMetadata.collectEntityInformation({
 			...entity,
 			directives: {

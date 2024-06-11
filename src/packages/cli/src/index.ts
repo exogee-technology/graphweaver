@@ -196,7 +196,6 @@ yargs
 			}),
 		handler: async ({ output }) => {
 			console.log('Printing schema...');
-			console.log('Output: ', output);
 			await buildBackend({});
 			await printSchema(output);
 		},

@@ -1,7 +1,7 @@
 test
 !bin/gw-bin.js
 !bin/gw-types.js
-!bin/print-schema.js
+!bin/gw-print-schema.js
 bin
 node_modules
 *.log

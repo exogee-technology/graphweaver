@@ -33,6 +33,7 @@ class JsonDataProvider extends BaseDataProvider<Product> {
 
 @Entity('Product', {
 	provider: new JsonDataProvider('Product Management System'),
+	apiOptions: { excludeFromBuiltInWriteOperations: true },
 	directives: {
 		custom: true,
 	},

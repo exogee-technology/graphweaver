@@ -1,6 +1,7 @@
 import { SchemaBuilder, graphweaverMetadata } from '..';
 import { Entity, Field } from '../decorators';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
+import { buildFederationSchema } from './utils';
 
 export const addServiceQuery = ({
 	schemaDirectives,
@@ -13,29 +14,6 @@ export const addServiceQuery = ({
 		sdl!: string;
 	}
 
-	const link = [
-		...(schemaDirectives?.link ? [schemaDirectives.link] : []),
-		{
-			url: 'https://specs.apollo.dev/federation/v2.3',
-			import: [
-				'@composeDirective',
-				'@extends',
-				'@external',
-				'@inaccessible',
-				'@interfaceObject',
-				'@key',
-				'@override',
-				'@provides',
-				'@requires',
-				'@shareable',
-				'@tag',
-			],
-		},
-	];
-
-	// Remove link directive from schemaDirectives if it exists as it is added above
-	delete schemaDirectives?.link;
-
 	graphweaverMetadata.addQuery({
 		name: '_service',
 		description:
@@ -43,14 +21,8 @@ export const addServiceQuery = ({
 		intentionalOverride: true,
 		getType: () => Service,
 		resolver: () => {
-			const schema = SchemaBuilder.build({
-				schemaDirectives: {
-					link,
-					...(schemaDirectives ? schemaDirectives : {}),
-				},
-			});
 			return {
-				sdl: printSchemaWithDirectives(schema),
+				sdl: printSchemaWithDirectives(buildFederationSchema({ schemaDirectives })),
 			};
 		},
 	});

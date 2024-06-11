@@ -14,7 +14,7 @@ class JsonDataProvider extends BaseDataProvider<Inventory> {
 
 @Entity('Inventory', {
 	provider: new JsonDataProvider('Inventory'),
-	apiOptions: { excludeFromBuiltInWriteOperations: true },
+	apiOptions: { excludeFromBuiltInOperations: true },
 	directives: { interfaceObject: true },
 })
 export class Inventory {

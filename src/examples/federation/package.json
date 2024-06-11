@@ -15,6 +15,7 @@
 	"scripts": {
 		"build": "graphweaver build && cp dist/backend/index.js integration/index.js",
 		"start": "tsx src/backend/index.ts",
+		"print": "graphweaver print-schema --output integration/schema.graphql",
 		"test": "pnpm build && cd integration && npm test"
 	},
 	"dependencies": {

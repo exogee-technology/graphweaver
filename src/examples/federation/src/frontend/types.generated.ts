@@ -17,10 +17,10 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  FieldSet: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
   _Any: { input: any; output: any; }
+  federation__FieldSet: { input: any; output: any; }
   link__Import: { input: any; output: any; }
 };
 
@@ -103,10 +103,6 @@ export type CaseStudy = {
   description?: Maybe<Scalars['String']['output']>;
 };
 
-export type DeleteOneFilterInput = {
-  id: Scalars['ID']['input'];
-};
-
 export type DeprecatedProduct = {
   __typename?: 'DeprecatedProduct';
   createdBy?: Maybe<User>;
@@ -128,15 +124,6 @@ export type DeprecatedProductsPaginationInput = {
   orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
 
-export type InventoriesListFilter = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type InventoriesOrderByInput = {
   id?: InputMaybe<Sort>;
 };
@@ -154,59 +141,6 @@ export type Inventory = {
   id: Scalars['ID']['output'];
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  /** Create or update many Products. */
-  createOrUpdateProducts?: Maybe<Array<Maybe<Product>>>;
-  /** Create a single Product. */
-  createProduct?: Maybe<Product>;
-  /** Create many Products. */
-  createProducts?: Maybe<Array<Maybe<Product>>>;
-  /** Delete a single Product. */
-  deleteProduct?: Maybe<Scalars['Boolean']['output']>;
-  /** Delete many Products with a filter. */
-  deleteProducts?: Maybe<Scalars['Boolean']['output']>;
-  /** Update a single Product. */
-  updateProduct?: Maybe<Product>;
-  /** Update many Products. */
-  updateProducts?: Maybe<Array<Maybe<Product>>>;
-};
-
-
-export type MutationCreateOrUpdateProductsArgs = {
-  input: Array<ProductCreateOrUpdateInput>;
-};
-
-
-export type MutationCreateProductArgs = {
-  input: ProductInsertInput;
-};
-
-
-export type MutationCreateProductsArgs = {
-  input: Array<ProductInsertInput>;
-};
-
-
-export type MutationDeleteProductArgs = {
-  filter: DeleteOneFilterInput;
-};
-
-
-export type MutationDeleteProductsArgs = {
-  filter: ProductsListFilter;
-};
-
-
-export type MutationUpdateProductArgs = {
-  input: ProductUpdateInput;
-};
-
-
-export type MutationUpdateProductsArgs = {
-  input: Array<ProductUpdateInput>;
-};
-
 export type Product = {
   __typename?: 'Product';
   createdBy?: Maybe<User>;
@@ -217,14 +151,6 @@ export type Product = {
   research: Array<ProductResearch>;
   sku?: Maybe<Scalars['String']['output']>;
   variation?: Maybe<ProductVariation>;
-};
-
-/** Data needed to create or update Products. If an ID is passed, this is an update, otherwise it's an insert. */
-export type ProductCreateOrUpdateInput = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  notes?: InputMaybe<Scalars['String']['input']>;
-  package?: InputMaybe<Scalars['String']['input']>;
-  sku?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ProductDimension = {
@@ -247,13 +173,6 @@ export type ProductDimensionsPaginationInput = {
   orderBy?: InputMaybe<ProductDimensionsOrderByInput>;
 };
 
-/** Data needed to create Products. */
-export type ProductInsertInput = {
-  notes?: InputMaybe<Scalars['String']['input']>;
-  package?: InputMaybe<Scalars['String']['input']>;
-  sku?: InputMaybe<Scalars['String']['input']>;
-};
-
 export type ProductResearch = {
   __typename?: 'ProductResearch';
   outcome?: Maybe<Scalars['String']['output']>;
@@ -269,14 +188,6 @@ export type ProductResearchesPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<ProductResearchesOrderByInput>;
-};
-
-/** Data needed to update Products. An ID must be passed. */
-export type ProductUpdateInput = {
-  id: Scalars['ID']['input'];
-  notes?: InputMaybe<Scalars['String']['input']>;
-  package?: InputMaybe<Scalars['String']['input']>;
-  sku?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type ProductVariation = {
@@ -340,10 +251,6 @@ export type Query = {
   /** The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied. */
   _service?: Maybe<_Service>;
   deprecatedProduct?: Maybe<DeprecatedProduct>;
-  /** Get multiple Inventories. */
-  inventories?: Maybe<Array<Maybe<Inventory>>>;
-  /** Get a single Inventory. */
-  inventory?: Maybe<Inventory>;
   /** Get a single Product. */
   product?: Maybe<Product>;
   /** Get multiple Products. */
@@ -359,17 +266,6 @@ export type Query_EntitiesArgs = {
 export type QueryDeprecatedProductArgs = {
   package: Scalars['String']['input'];
   sku: Scalars['String']['input'];
-};
-
-
-export type QueryInventoriesArgs = {
-  filter?: InputMaybe<InventoriesListFilter>;
-  pagination?: InputMaybe<InventoriesPaginationInput>;
-};
-
-
-export type QueryInventoryArgs = {
-  id: Scalars['ID']['input'];
 };
 
 

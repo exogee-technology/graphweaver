@@ -2,12 +2,13 @@ import { exec } from 'child_process';
 
 const asyncExec = async (command: string) =>
 	new Promise<void>((resolve, reject) => {
-		exec(command, (error) => {
+		const pro = exec(command, (error, stdout) => {
 			if (error) {
 				return reject(error);
 			}
 			resolve();
 		});
+		pro.stdout?.pipe(process.stdout);
 	});
 
 export const generateTypes = async () => {
@@ -23,8 +24,7 @@ export const generateTypes = async () => {
 export const printSchema = async (output?: string) => {
 	try {
 		console.log(`Generating Schema...`);
-		await asyncExec(`print-schema${output ? ` -o ${output}` : ''}`);
-		console.log(`Schema printed.`);
+		await asyncExec(`gw-print-schema${output ? ` -o ${output}` : ''}`);
 	} catch (error: any) {
 		console.error(`Schema Print Failed: ${error.message}`);
 	}

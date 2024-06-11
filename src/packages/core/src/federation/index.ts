@@ -3,6 +3,8 @@ import { addEntitiesQuery } from './entities';
 import { addEnums } from './enums';
 import { addServiceQuery } from './service';
 
+export { buildFederationSchema } from './utils';
+
 export const enableFederation = ({
 	schemaDirectives,
 }: {

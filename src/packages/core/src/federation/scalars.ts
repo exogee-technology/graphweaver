@@ -13,5 +13,5 @@ export const LinkImportGraphQLType = new GraphQLScalarType({
 });
 
 export const FieldSetGraphQLType = new GraphQLScalarType({
-	name: 'FieldSet',
+	name: 'federation__FieldSet',
 });

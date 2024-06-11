@@ -9,6 +9,7 @@ import {
 	AdminUiMetadata,
 	fieldResolver,
 	enableFederation,
+	buildFederationSchema,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -126,8 +127,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 				// which may reveal information about your server that you consider sensitive (such as how long each individual field takes to execute).
 				// Federated subgraphs generally should not be directly exposed to the public Internet.
 				if (this.config.enableFederationTracing) plugins.push(ApolloServerPluginInlineTrace());
+
+				this.schema = buildFederationSchema({
+					schemaDirectives: this.config.schemaDirectives,
+				});
+			} else {
+				this.schema = SchemaBuilder.build({ schemaDirectives: this.config.schemaDirectives });
 			}
-			this.schema = SchemaBuilder.build();
 		} catch (error) {
 			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');
 			throw error;

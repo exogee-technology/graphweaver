@@ -16,7 +16,8 @@
 	"bin": {
 		"graphweaver": "bin/gw-bin.js",
 		"gw": "bin/gw-bin.js",
-		"gw-types": "bin/gw-types.js"
+		"gw-types": "bin/gw-types.js",
+		"gw-print-schema": "bin/gw-print-schema.js"
 	},
 	"files": [
 		"bin"
