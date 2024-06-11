@@ -142,7 +142,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					fields,
 					attributes,
 					defaultFilter: adminUIOptions?.defaultFilter,
-					supportedAggregationTypes: [...(provider?.supportedAggregationTypes ?? new Set())],
+					supportedAggregationTypes: [
+						...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
+					],
 				};
 			})
 			.filter((entity) => entity && !!entity.backendId);

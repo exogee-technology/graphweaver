@@ -763,7 +763,7 @@ class SchemaBuilderImplementation {
 					};
 
 					// Aggregrations
-					if ((entity.provider.supportedAggregationTypes?.size ?? 0) > 0) {
+					if ((entity.provider.backendProviderConfig?.supportedAggregationTypes?.size ?? 0) > 0) {
 						fields[`${listQueryName}_aggregate`] = {
 							description: `Get aggregated data for ${entity.plural}.`,
 							type: aggregationResult,
