@@ -23,7 +23,7 @@ export const generateTypes = async () => {
 
 export const printSchema = async (output?: string) => {
 	try {
-		console.log(`Generating Schema...`);
+		console.log(`Printing Schema...`);
 		await asyncExec(`gw-print-schema${output ? ` -o ${output}` : ''}`);
 	} catch (error: any) {
 		console.error(`Schema Print Failed: ${error.message}`);
