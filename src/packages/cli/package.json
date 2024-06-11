@@ -38,11 +38,11 @@
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.7",
-		"@types/node": "20.14.1",
+		"@types/node": "20.14.2",
 		"@types/semver": "7.5.8",
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.32",
-		"prettier": "3.3.0"
+		"prettier": "3.3.1"
 	},
 	"keywords": [
 		"graphql",
