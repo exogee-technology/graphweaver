@@ -179,22 +179,10 @@ export enum RelationshipType {
 }
 
 export interface BackendProviderConfig {
-	filter: {
-		root: boolean;
-		parentByChild: boolean;
-		childByChild: boolean;
-	};
-	pagination: {
-		root: boolean;
-		offset: boolean;
-		limit: boolean;
-	};
-	orderBy: {
-		root: boolean;
-	};
-	sort: {
-		root: boolean;
-	};
+	filter: boolean;
+	pagination: boolean;
+	orderBy: boolean;
+	sort: boolean;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
@@ -247,6 +235,9 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 	// namespace your key to avoid conflicts
 	// See the `@MediaField` decorator for an example
 	additionalInformation?: Record<string, unknown>;
+
+	// Add custom field directives to this field
+	directives?: Record<string, any>;
 }
 
 export type AuthChecker<TContextType extends object = object, TRoleType = string> = (

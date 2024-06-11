@@ -6,7 +6,7 @@ import {
 	EntityMetadata,
 	HookRegister,
 	ResolveTree,
-	getFieldTypeFromFieldMetadata,
+	getFieldTypeWithMetadata,
 	graphQLTypeForEntity,
 	hookManagerMap,
 	isEntityMetadata,
@@ -96,7 +96,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 
 			// Check if the property represents a related entity
 			const relationship = meta.fields[key];
-			const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
+			const { fieldType } = getFieldTypeWithMetadata(relationship.getType);
 			const relatedEntityMetadata = graphweaverMetadata.metadataForType(fieldType);
 
 			if (isEntityMetadata(relatedEntityMetadata)) {
@@ -135,7 +135,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					// Add parent ID to children and perform the mutation
 					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
 					const parentField = Object.values(relatedEntityMetadata.fields).find((field) => {
-						const { fieldType: type } = getFieldTypeFromFieldMetadata(field);
+						const { fieldType: type } = getFieldTypeWithMetadata(field.getType);
 						return type === meta.target;
 					});
 					if (!parentField) {

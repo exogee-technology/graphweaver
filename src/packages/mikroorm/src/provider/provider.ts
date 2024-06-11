@@ -88,22 +88,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
-		filter: {
-			root: true,
-			parentByChild: true,
-			childByChild: true,
-		},
-		pagination: {
-			root: false,
-			offset: false,
-			limit: false,
-		},
-		orderBy: {
-			root: false,
-		},
-		sort: {
-			root: false,
-		},
+		filter: true,
+		pagination: false,
+		orderBy: false,
+		sort: false,
 	};
 
 	get backendId() {

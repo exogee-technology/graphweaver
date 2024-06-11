@@ -135,6 +135,40 @@ importers:
         specifier: 5.4.5
         version: 5.4.5
 
+  examples/federation:
+    dependencies:
+      '@apollo/server':
+        specifier: 4.10.4
+        version: 4.10.4(graphql@16.8.1)
+      '@as-integrations/hapi':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.9)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@hapi/hapi':
+        specifier: 21.3.9
+        version: 21.3.9
+      dotenv:
+        specifier: 16.4.5
+        version: 16.4.5
+    devDependencies:
+      '@types/node':
+        specifier: 20.14.0
+        version: 20.14.0
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      tsx:
+        specifier: 4.11.0
+        version: 4.11.0
+      typescript:
+        specifier: 5.4.5
+        version: 5.4.5
+
   examples/rest:
     dependencies:
       '@apollo/server':
@@ -279,10 +313,10 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -920,6 +954,9 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
+      '@graphql-tools/utils':
+        specifier: 10.2.1
+        version: 10.2.1(graphql@16.8.1)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -1069,13 +1106,13 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       node-sqlite3-wasm:
-        specifier: 0.8.15
-        version: 0.8.15
+        specifier: 0.8.16
+        version: 0.8.16
     devDependencies:
       '@types/node':
         specifier: 20.14.2
@@ -1659,6 +1696,17 @@ packages:
     dependencies:
       '@apollo/server': 4.10.4(graphql@16.8.1)
       '@types/aws-lambda': 8.10.138
+    dev: false
+
+  /@as-integrations/hapi@2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.9):
+    resolution: {integrity: sha512-FpPmT0tKbRBvQ+xt7pT8lCmShpylE2fU46SBa764IbWOcnOyZv7Cw9KujAcM5gW/NLeFI/xjADLabOTonwQghg==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@apollo/server': ^4.0.0
+      '@hapi/hapi': ^20.2.2 || ^21.0.0
+    dependencies:
+      '@apollo/server': 4.10.4(graphql@16.8.1)
+      '@hapi/hapi': 21.3.9
     dev: false
 
   /@aws-crypto/crc32@3.0.0:
@@ -5829,6 +5877,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0):
     resolution: {integrity: sha512-+ZdlKEtE8HmqbZWSm44MaZwfeS1AlrhMJrZfRr5tQfvdKi5VuRQ+I87Uxo03Ni5r0JXV1wEfFyWovK5c6h1iCQ==}
@@ -7952,6 +8001,12 @@ packages:
       '@types/node': 20.14.2
       form-data: 4.0.0
     dev: false
+
+  /@types/node@20.14.0:
+    resolution: {integrity: sha512-5cHBxFGJx6L4s56Bubp4fglrEpmyJypsqI6RgzMfBHWUJQGWAAi8cWcgetEbZXHYXo9C2Fa4EEds/uSyS4cxmA==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
 
   /@types/node@20.14.2:
     resolution: {integrity: sha512-xyu6WAMVwv6AKFLB+e/7ySZVr/0zLCzOa7rSpq6jNwpqOrUbcACDWC+53d4n2QHOnDou0fbIsg8wZu/sxrnI4Q==}
@@ -13911,8 +13966,8 @@ packages:
     deprecated: please use 'semver'
     dev: false
 
-  /node-sqlite3-wasm@0.8.15:
-    resolution: {integrity: sha512-k75GtlTgCZD+oasA0yWyQOHlncT06KHf5Q2gMZSNlfzT7o4F5iSLRAl/qy70byNirxvnLsNo6e6XvepQAvTTFg==}
+  /node-sqlite3-wasm@0.8.16:
+    resolution: {integrity: sha512-m+Oa62u3syQSqE/iuw9OA1AIBXEq1XsNx5+mok+yOVQxsYNQM4k/lrT/EoYY2pYRf5GBcq4+/l/bN5cAb3/C2w==}
     dev: false
 
   /nopt@5.0.0:
@@ -16208,6 +16263,17 @@ packages:
 
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
+
+  /tsx@4.11.0:
+    resolution: {integrity: sha512-vzGGELOgAupsNVssAmZjbUDfdm/pWP4R+Kg8TVdsonxbXk0bEpE1qh0yV6/QxUVXaVlNemgcPajGdJJ82n3stg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    dependencies:
+      esbuild: 0.20.2
+      get-tsconfig: 4.7.5
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
 
   /tsx@4.15.1:
     resolution: {integrity: sha512-k/6h17jA1KfUR7SpcteOa880zGmF56s8gMIcSqUR5avyNFi9nlCEKpMiHLrzrqyARGr52A/JablmGey1DEWbCA==}

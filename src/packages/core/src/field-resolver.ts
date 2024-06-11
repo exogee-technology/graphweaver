@@ -1,7 +1,7 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
 import { BaseContext } from './types';
 import {
-	getFieldTypeFromFieldMetadata,
+	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
 	isSerializableGraphQLEntityClass,
@@ -29,7 +29,7 @@ export const fieldResolver = (
 
 		const relationship = metadata.fields[key];
 
-		const { fieldType } = getFieldTypeFromFieldMetadata(relationship);
+		const { fieldType } = getFieldTypeWithMetadata(relationship.getType);
 		const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
 		if (isEntityMetadata(fieldTypeMetadata) && isSerializableGraphQLEntityClass(fieldType)) {

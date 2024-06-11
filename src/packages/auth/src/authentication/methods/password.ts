@@ -109,7 +109,7 @@ export class Password<D extends CredentialStorage> {
 		graphweaverMetadata.addMutation({
 			name: 'createCredential',
 			args: {
-				input: CredentialInsertInput,
+				input: () => CredentialInsertInput,
 			},
 			getType: () => Credential,
 			resolver: this.createCredential.bind(this),
@@ -119,7 +119,7 @@ export class Password<D extends CredentialStorage> {
 		graphweaverMetadata.addMutation({
 			name: 'updateCredential',
 			args: {
-				input: CredentialUpdateInput,
+				input: () => CredentialUpdateInput,
 			},
 			getType: () => Credential,
 			resolver: this.updateCredential.bind(this),
@@ -129,8 +129,8 @@ export class Password<D extends CredentialStorage> {
 		graphweaverMetadata.addMutation({
 			name: 'loginPassword',
 			args: {
-				username: String,
-				password: String,
+				username: () => String,
+				password: () => String,
 			},
 			getType: () => Token,
 			resolver: this.loginPassword.bind(this),
@@ -139,7 +139,7 @@ export class Password<D extends CredentialStorage> {
 		graphweaverMetadata.addMutation({
 			name: 'challengePassword',
 			args: {
-				password: String,
+				password: () => String,
 			},
 			getType: () => Token,
 			resolver: this.challengePassword.bind(this),

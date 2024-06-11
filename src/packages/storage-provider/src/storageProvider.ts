@@ -49,7 +49,7 @@ export class S3StorageProvider {
 			getType: () => GraphQLJSON,
 			resolver: this.getUploadUrl.bind(this),
 			args: {
-				key: String,
+				key: () => String,
 			},
 		});
 
@@ -58,7 +58,7 @@ export class S3StorageProvider {
 			getType: () => String,
 			resolver: this.getDeleteUrl.bind(this),
 			args: {
-				key: String,
+				key: () => String,
 			},
 		});
 
@@ -67,7 +67,7 @@ export class S3StorageProvider {
 			getType: () => String,
 			resolver: this.getDownloadUrl.bind(this),
 			args: {
-				key: String,
+				key: () => String,
 			},
 		});
 	}

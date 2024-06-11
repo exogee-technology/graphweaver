@@ -29,3 +29,7 @@ find ./packages/ -name .deploy -type d -exec rm -rf {} +
 
 echo "Installing dependencies"
 pnpm install
+
+echo "Installing federation dependencies"
+cd ./examples/federation/integration
+npm install
