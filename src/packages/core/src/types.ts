@@ -123,9 +123,7 @@ export interface BackendProvider<D> {
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
 
-	// Optional, if this is true then we'll automatically add aggregation queries
-	// anywhere that the provider is used.
-	readonly supportedAggregationTypes?: Set<AggregationType>;
+	// Optional, called during supported aggregation operations when your provider declares support via backendProviderConfig.supportedAggregationTypes
 	aggregate?(
 		filter: Filter<D> | undefined,
 		requestedAggregations: Set<AggregationType>
@@ -199,6 +197,7 @@ export interface BackendProviderConfig {
 	pagination: boolean;
 	orderBy: boolean;
 	sort: boolean;
+	supportedAggregationTypes: Set<AggregationType>;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
