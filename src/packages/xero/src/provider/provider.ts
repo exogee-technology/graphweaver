@@ -71,22 +71,10 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 
 	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
-		filter: {
-			root: false,
-			parentByChild: false,
-			childByChild: false,
-		},
-		pagination: {
-			root: false,
-			offset: false,
-			limit: false,
-		},
-		orderBy: {
-			root: false,
-		},
-		sort: {
-			root: false,
-		},
+		filter: false,
+		pagination: false,
+		orderBy: false,
+		sort: false,
 	};
 
 	public static clearTokens() {

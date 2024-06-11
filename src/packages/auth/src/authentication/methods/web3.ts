@@ -56,7 +56,7 @@ export class Web3 {
 			name: 'enrolWallet',
 			getType: () => Boolean,
 			args: {
-				token: String,
+				token: () => String,
 			},
 			resolver: this.enrolWallet.bind(this),
 		});
@@ -65,7 +65,7 @@ export class Web3 {
 			name: 'verifyWeb3Challenge',
 			getType: () => Token,
 			args: {
-				token: String,
+				token: () => String,
 			},
 			resolver: this.verifyWeb3Challenge.bind(this),
 		});

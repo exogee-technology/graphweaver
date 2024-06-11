@@ -10,11 +10,14 @@ type RelationshipFieldOptions<D> = {
 		hideInFilterBar?: boolean;
 		readonly?: boolean;
 	};
+
+	// Add custom field directives to this field
+	directives?: Record<string, any>;
 };
 
 export function RelationshipField<RelatedType = unknown>(
 	returnTypeFunc: GetTypeFunction,
-	{ relatedField, id, nullable = false, adminUIOptions }: RelationshipFieldOptions<RelatedType>
+	{ relatedField, id, nullable = false, ...remainingOptions }: RelationshipFieldOptions<RelatedType>
 ) {
 	return (target: unknown, key: string) => {
 		if (!id && !relatedField)
@@ -31,7 +34,7 @@ export function RelationshipField<RelatedType = unknown>(
 				relatedField,
 				id,
 			},
-			adminUIOptions,
+			...remainingOptions,
 		});
 	};
 }

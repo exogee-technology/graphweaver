@@ -1,3 +1,4 @@
+import { DirectiveLocation } from 'graphql';
 import { FieldOptions, GetTypeFunction, SchemaBuilder } from '.';
 import { BackendProvider, FieldMetadata, Filter, Resolver } from './types';
 import { logger } from '@exogee/logger';
@@ -10,6 +11,7 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	target: { new (...args: any[]): G };
 	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
+	directives?: Record<string, unknown>;
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
 	primaryKeyField?: keyof G;
@@ -125,23 +127,71 @@ export type CollectInputTypeInformationArgs<G = unknown, D = unknown> = Omit<
 	'type' | 'fields'
 >;
 
+export interface ArgMetadata {
+	type: GetTypeFunction;
+	description?: string;
+	defaultValue?: unknown;
+	deprecationReason?: string;
+	nullable?: boolean;
+}
+
+// isArgMetadata is a type guard for ArgMetadata
+export function isArgMetadata(value: unknown): value is ArgMetadata {
+	const test = value as ArgMetadata;
+	return typeof test?.type === 'function';
+}
+
+export interface ArgsMetadata {
+	[key: string]: ArgMetadata | GetTypeFunction;
+}
+
+export interface DirectiveMetadata {
+	name: string;
+	type: 'directive';
+	description?: string;
+	args?: ArgsMetadata;
+	isRepeatable?: boolean;
+	locations: DirectiveLocation[];
+}
+
+export type CollectDirectiveTypeInformationArgs = Omit<DirectiveMetadata, 'type'>;
+
+export function isUnionMetadata(value: unknown): value is UnionMetadata {
+	const test = value as UnionMetadata;
+
+	return (
+		test?.type === 'union' && typeof test?.name === 'string' && typeof test?.target === 'object'
+	);
+}
+
+export interface UnionMetadata {
+	name: string;
+	type: 'union';
+	target: object;
+	description?: string;
+	getTypes: GetTypeFunction;
+}
+
+export type CollectUnionTypeInformationArgs = Omit<UnionMetadata, 'type' | 'target'>;
+
 export interface AdditionalOperationInformation {
 	name: string;
 	getType: () => any;
 	resolver: Resolver;
-	args?: Record<string, unknown>;
+	args?: ArgsMetadata;
 	description?: string;
 }
 
+export type MetadataType =
+	| EntityMetadata<any, any>
+	| EnumMetadata<any>
+	| InputTypeMetadata<any, any>
+	| DirectiveMetadata
+	| UnionMetadata;
+
 class Metadata {
-	private metadataByType = new Map<
-		unknown,
-		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any>
-	>();
-	private nameLookupCache = new Map<
-		string,
-		EntityMetadata<any, any> | EnumMetadata<any> | InputTypeMetadata<any, any>
-	>();
+	private metadataByType = new Map<unknown, MetadataType>();
+	private nameLookupCache = new Map<string, MetadataType>();
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
 	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
@@ -315,6 +365,31 @@ class Metadata {
 		this.metadataByType.set(args.target, existingMetadata);
 	}
 
+	public collectDirectiveTypeInformation(args: CollectDirectiveTypeInformationArgs) {
+		if (this.metadataByType.has(args.name)) {
+			throw new Error(`Directive with name ${args.name} already exists in metadata map.`);
+		}
+
+		this.metadataByType.set(args.name, {
+			type: 'directive',
+			args: {},
+			isRepeatable: false,
+			...args,
+		});
+	}
+
+	public collectUnionTypeInformation(args: CollectUnionTypeInformationArgs) {
+		const target = {}; // We need a target so it can be used in getTypes, should we create a union class?
+
+		this.metadataByType.set(target, {
+			type: 'union',
+			target,
+			...args,
+		});
+
+		return target;
+	}
+
 	// get a list of all the entity metadata in the metadata map
 	public *entities() {
 		for (const value of this.metadataByType.values()) {
@@ -350,6 +425,13 @@ class Metadata {
 	public *additionalMutations() {
 		for (const value of this.additionalMutationsLookup.values()) {
 			yield value;
+		}
+	}
+
+	// get a list of all the enums in the metadata map
+	public *directives() {
+		for (const value of this.metadataByType.values()) {
+			if (value.type === 'directive') yield value;
 		}
 	}
 
@@ -391,6 +473,8 @@ class Metadata {
 			entity: 0,
 			enum: 0,
 			inputType: 0,
+			directive: 0,
+			union: 0,
 		};
 
 		for (const value of this.metadataByType.values()) {
@@ -463,7 +547,7 @@ class Metadata {
 		name: string;
 		getType: GetTypeFunction;
 		resolver: Resolver;
-		args?: Record<string, unknown>;
+		args?: ArgsMetadata;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {
@@ -480,7 +564,7 @@ class Metadata {
 		name: string;
 		getType: GetTypeFunction;
 		resolver: Resolver;
-		args?: Record<string, unknown>;
+		args?: ArgsMetadata;
 		description?: string;
 		intentionalOverride?: boolean;
 	}) {

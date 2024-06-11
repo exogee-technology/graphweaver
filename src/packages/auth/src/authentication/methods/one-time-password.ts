@@ -62,7 +62,7 @@ export class OneTimePassword {
 		graphweaverMetadata.addMutation({
 			name: 'verifyOTPChallenge',
 			args: {
-				code: String,
+				code: () => String,
 			},
 			getType: () => Token,
 			resolver: this.verifyOTPChallenge.bind(this),

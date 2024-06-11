@@ -74,7 +74,7 @@ export class ForgottenPassword {
 		graphweaverMetadata.addMutation({
 			name: 'sendResetPasswordLink',
 			args: {
-				username: String,
+				username: () => String,
 			},
 			getType: () => Boolean,
 			resolver: this.sendResetPasswordLink.bind(this),
@@ -83,8 +83,8 @@ export class ForgottenPassword {
 		graphweaverMetadata.addMutation({
 			name: 'resetPassword',
 			args: {
-				token: String,
-				password: String,
+				token: () => String,
+				password: () => String,
 			},
 			getType: () => Boolean,
 			resolver: this.resetPassword.bind(this),

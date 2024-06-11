@@ -123,3 +123,6 @@ token.json
 
 # npx cognito-local
 .cognito
+
+# Federation Tests
+supergraph.config.js

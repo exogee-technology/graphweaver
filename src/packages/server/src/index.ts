@@ -8,10 +8,13 @@ import {
 	resolveAdminUiMetadata,
 	AdminUiMetadata,
 	fieldResolver,
+	enableFederation,
+	buildFederationSchema,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerOptionsWithStaticSchema } from '@apollo/server/dist/esm/externalTypes/constructor';
+import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
 import {
 	ClearDataLoaderCache,
@@ -48,6 +51,8 @@ export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
+	enableFederation?: boolean;
+	enableFederationTracing?: boolean;
 	graphQLArmorOptions?: GraphQLArmorConfig;
 	corsOptions?: CorsPluginOptions;
 	graphqlDeduplicator?: { enabled: boolean };
@@ -55,6 +60,7 @@ export interface GraphweaverConfig {
 		typesOutputPath?: string[] | string;
 		watchForFileChangesInPaths?: string[];
 	};
+	schemaDirectives?: Record<string, any>;
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -65,6 +71,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 		apolloServerOptions: {
 			introspection: true,
 		},
+		enableFederation: false,
+		enableFederationTracing: false,
 		graphqlDeduplicator: {
 			enabled: true,
 		},
@@ -112,7 +120,19 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			this.schema = SchemaBuilder.build();
+			if (this.config.enableFederation) {
+				enableFederation({ schemaDirectives: this.config.schemaDirectives });
+
+				// Caution: With this plugin, any client can request a trace for any operation, potentially revealing sensitive server information.
+				// It is recommended to ensure that federated subgraphs are not directly exposed to the public Internet. This feature is disabled by default for security reasons.
+				if (this.config.enableFederationTracing) plugins.push(ApolloServerPluginInlineTrace());
+
+				this.schema = buildFederationSchema({
+					schemaDirectives: this.config.schemaDirectives,
+				});
+			} else {
+				this.schema = SchemaBuilder.build({ schemaDirectives: this.config.schemaDirectives });
+			}
 		} catch (error) {
 			logger.error(error, 'Unable to Start Graphweaver: Failed to build schema.');
 			throw error;

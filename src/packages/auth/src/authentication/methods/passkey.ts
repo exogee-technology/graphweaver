@@ -133,7 +133,7 @@ export class Passkey {
 		graphweaverMetadata.addMutation({
 			name: 'passkeyVerifyRegistrationResponse',
 			args: {
-				registrationResponse: PasskeyRegistrationResponse,
+				registrationResponse: () => PasskeyRegistrationResponse,
 			},
 			getType: () => Boolean,
 			resolver: this.passkeyVerifyRegistrationResponse.bind(this),
@@ -149,7 +149,7 @@ export class Passkey {
 			name: 'passkeyVerifyAuthenticationResponse',
 			getType: () => Token,
 			args: {
-				authenticationResponse: PasskeyAuthenticationResponse,
+				authenticationResponse: () => PasskeyAuthenticationResponse,
 			},
 			resolver: this.passkeyVerifyAuthenticationResponse.bind(this),
 		});

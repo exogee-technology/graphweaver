@@ -21,22 +21,10 @@ const user = new UserProfile({
 
 const albumDataProvider = new BaseDataProvider<any>('album');
 albumDataProvider.backendProviderConfig = {
-	filter: {
-		root: true,
-		parentByChild: true,
-		childByChild: true,
-	},
-	pagination: {
-		root: false,
-		offset: false,
-		limit: false,
-	},
-	orderBy: {
-		root: false,
-	},
-	sort: {
-		root: false,
-	},
+	filter: true,
+	pagination: false,
+	orderBy: false,
+	sort: false,
 };
 
 @ApplyAccessControlList({

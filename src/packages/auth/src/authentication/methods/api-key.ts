@@ -96,7 +96,7 @@ export class ApiKey<R extends string> {
 		graphweaverMetadata.addMutation({
 			name: 'createApiKey',
 			args: {
-				input: ApiKeyInputArgs,
+				input: () => ApiKeyInputArgs,
 			},
 			getType: () => ApiKeyEntity<R>,
 			resolver: this.createApiKey.bind(this),
@@ -106,7 +106,7 @@ export class ApiKey<R extends string> {
 		graphweaverMetadata.addMutation({
 			name: 'updateApiKey',
 			args: {
-				input: ApiKeyUpdateInputArgs,
+				input: () => ApiKeyUpdateInputArgs,
 			},
 			getType: () => ApiKeyEntity<R>,
 			resolver: this.updateApiKey.bind(this),

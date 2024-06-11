@@ -1,0 +1,10 @@
+# Working build files
+.esbuild
+.graphweaver
+
+# Subgraph Test Files
+supergraph*
+results.md 
+package-lock.json
+integration/index.js
+integration/schema.graphql

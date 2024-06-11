@@ -27,6 +27,9 @@ export interface FieldOptions {
 	// namespace your key to avoid conflicts
 	// See the `@MediaField` decorator for an example
 	additionalInformation?: Record<string, unknown>;
+
+	// Add custom field directives to this field
+	directives?: Record<string, any>;
 }
 
 export function Field(getType: GetTypeFunction, options?: FieldOptions) {
