@@ -113,6 +113,14 @@ const addExternalDirective = () => {
 	});
 };
 
+// directive @extends on OBJECT | INTERFACE
+const addExtendsDirective = () => {
+	graphweaverMetadata.collectDirectiveTypeInformation({
+		name: 'extends',
+		locations: [DirectiveLocation.OBJECT, DirectiveLocation.INTERFACE],
+	});
+};
+
 // directive @requires(fields: FieldSet!) on FIELD_DEFINITION
 const addRequiresDirective = () => {
 	graphweaverMetadata.collectDirectiveTypeInformation({
@@ -195,6 +203,7 @@ export const addDirectives = () => {
 	addTagDirective();
 	addShareableDirective();
 	addExternalDirective();
+	addExtendsDirective();
 	addRequiresDirective();
 	addProvidesDirective();
 	addInaccessibleDirective();
