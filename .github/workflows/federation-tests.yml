@@ -1,0 +1,65 @@
+name: Federation Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  federation-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v4.0.0
+        with:
+          version: 8.15.8
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Test Scalars
+        working-directory: src/examples/federation
+        timeout-minutes: 2
+        run: |
+          pnpm print
+
+      - uses: apollographql/federation-subgraph-compatibility@v2
+        with:
+          # [Required] Docker Compose file to start up the subgraph
+          compose: "docker-compose.yaml"
+          # [Required] Path to the GraphQL schema file
+          schema: "schema.graphql"
+          # Turn on debug mode with extra log info
+          debug: false
+          # Boolean flag to indicate whether any failing test should fail the script
+          failOnWarning: false
+          # Boolean flag to indicate whether any failing required functionality test should fail the script
+          failOnRequired: true
+          # Working directory to run the action from. Should be relative from the root of the project.
+          workingDirectory: "src/examples/federation/integration"
+
+        env:
+          CI: true
