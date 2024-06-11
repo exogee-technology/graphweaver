@@ -87,7 +87,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	private transactionIsolationLevel!: IsolationLevel;
 
 	public readonly supportsInFilter = true;
-	public readonly supportedAggregationTypes = new Set<AggregationType>([AggregationType.COUNT]);
 
 	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
@@ -95,6 +94,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		pagination: false,
 		orderBy: false,
 		sort: false,
+		supportedAggregationTypes: new Set<AggregationType>([AggregationType.COUNT]),
 	};
 
 	get backendId() {
