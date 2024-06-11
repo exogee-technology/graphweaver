@@ -2,7 +2,7 @@ import { exec } from 'child_process';
 
 const asyncExec = async (command: string) =>
 	new Promise<void>((resolve, reject) => {
-		const pro = exec(command, (error, stdout) => {
+		const pro = exec(command, (error) => {
 			if (error) {
 				return reject(error);
 			}

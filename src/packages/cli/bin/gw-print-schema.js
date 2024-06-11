@@ -4,7 +4,7 @@ const utils = require('@graphql-tools/utils');
 const { writeFileSync } = require('fs');
 const path = require('path');
 
-const printSchema = async (output) => {
+const printSchema = async () => {
 	const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
 
@@ -18,8 +18,6 @@ const printSchema = async (output) => {
 	const sdl = utils.printSchemaWithDirectives(graphweaver.schema);
 
 	const args = process.argv; 
-
-	console.log(args)
 
 	if (args.includes('--output') || args.includes('-o')) {
 		const outputIndex = args.indexOf('--output') + 1 || args.indexOf('-o') + 1;
