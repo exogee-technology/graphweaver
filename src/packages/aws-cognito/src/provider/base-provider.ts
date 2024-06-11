@@ -25,22 +25,10 @@ export const createProvider = <Context, D extends WithId>(options: ProviderOptio
 
 		// @todo configurable
 		readonly backendProviderConfig = {
-			filter: {
-				root: true,
-				parentByChild: true,
-				childByChild: true,
-			},
-			pagination: {
-				root: true,
-				offset: true,
-				limit: true,
-			},
-			orderBy: {
-				root: true,
-			},
-			sort: {
-				root: true,
-			},
+			filter: true,
+			pagination: true,
+			orderBy: true,
+			sort: true,
 		};
 
 		create: ProviderOptions<Context, D>['create'];

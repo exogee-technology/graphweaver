@@ -1,0 +1,12 @@
+{
+	"name": "federation-integration-test",
+	"type": "module",
+	"scripts": {
+		"build": "docker build --platform linux/amd64 -t gw-integration:test .",
+		"start": "docker run --platform linux/amd64 -p 4001:4001 gw-integration:test",
+		"test:integration": "npx fedtest docker --compose docker-compose.yaml --schema schema.graphql"
+	},
+	"dependencies": {
+		"@apollo/federation-subgraph-compatibility": "2.2.0"
+	}
+}

@@ -12,7 +12,7 @@ import {
 import { Backend, init } from './init';
 import { importDataSource } from './import';
 import pkg from '../package.json';
-import { generateTypes } from './types';
+import { generateTypes, printSchema } from './tasks';
 import * as path from 'path';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
@@ -182,6 +182,22 @@ yargs
 			//
 			// It does not give us a way to kill it gracefully, so we'll do it here.
 			process.exit(0);
+		},
+	})
+	// A command that will print the schema either to stdout or to a file
+	.command({
+		command: ['print-schema'],
+		describe: 'Prints the schema to stdout or to a file.',
+		builder: (yargs) =>
+			yargs.option('output', {
+				alias: 'o',
+				type: 'string',
+				describe: 'Specify the output file.',
+			}),
+		handler: async ({ output }) => {
+			console.log('Printing schema...');
+			await buildBackend({});
+			await printSchema(output);
 		},
 	})
 	.command({

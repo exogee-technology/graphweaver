@@ -1,7 +1,7 @@
 import ms from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 
 import { AuthorizationContext, AuthenticationType } from '../../types';
@@ -74,7 +74,7 @@ export class ForgottenPassword {
 		graphweaverMetadata.addMutation({
 			name: 'sendResetPasswordLink',
 			args: {
-				username: String,
+				username: () => String,
 			},
 			getType: () => Boolean,
 			resolver: this.sendResetPasswordLink.bind(this),
@@ -83,8 +83,8 @@ export class ForgottenPassword {
 		graphweaverMetadata.addMutation({
 			name: 'resetPassword',
 			args: {
-				token: String,
-				password: String,
+				token: () => String,
+				password: () => String,
 			},
 			getType: () => Boolean,
 			resolver: this.resetPassword.bind(this),

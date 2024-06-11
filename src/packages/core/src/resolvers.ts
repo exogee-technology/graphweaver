@@ -16,7 +16,7 @@ import {
 	Resolver,
 	ResolverOptions,
 	createOrUpdateEntities,
-	getFieldTypeFromFieldMetadata,
+	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	hookManagerMap,
 	isEntityMetadata,
@@ -462,7 +462,7 @@ export const listRelationshipField = async <G, D, R, C extends BaseContext>({
 		return null;
 	}
 
-	const { fieldType, isList } = getFieldTypeFromFieldMetadata(field);
+	const { fieldType, isList } = getFieldTypeWithMetadata(field.getType);
 	const gqlEntityType = fieldType as { new (...args: any[]): R };
 
 	const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
@@ -613,7 +613,7 @@ export const aggregateRelationshipField =
 			}
 		}
 
-		const { fieldType } = getFieldTypeFromFieldMetadata(field);
+		const { fieldType } = getFieldTypeWithMetadata(field.getType);
 		const gqlEntityType = fieldType as { new (...args: any[]): R };
 
 		const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);

@@ -1,7 +1,7 @@
 import ms from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 
 import { AuthenticationMethod, AuthorizationContext, JwtPayload } from '../../types';
 import { Token } from '../entities/token';
@@ -56,7 +56,7 @@ export class MagicLink {
 		graphweaverMetadata.addMutation({
 			name: 'sendLoginMagicLink',
 			args: {
-				username: String,
+				username: () => String,
 			},
 			getType: () => Boolean,
 			resolver: this.sendLoginMagicLink.bind(this),
@@ -65,8 +65,8 @@ export class MagicLink {
 		graphweaverMetadata.addMutation({
 			name: 'verifyLoginMagicLink',
 			args: {
-				username: String,
-				token: String,
+				username: () => String,
+				token: () => String,
 			},
 			getType: () => Token,
 			resolver: this.verifyLoginMagicLink.bind(this),
@@ -82,7 +82,7 @@ export class MagicLink {
 			name: 'verifyChallengeMagicLink',
 			getType: () => Token,
 			args: {
-				token: String,
+				token: () => String,
 			},
 			resolver: this.verifyChallengeMagicLink.bind(this),
 		});

@@ -289,12 +289,12 @@ export type MutationChallengePasswordArgs = {
 
 
 export type MutationCreateApiKeyArgs = {
-  input: ApiKeyInsertInput;
+  input?: InputMaybe<ApiKeyInsertInput>;
 };
 
 
 export type MutationCreateCredentialArgs = {
-  input: CredentialInsertInput;
+  input?: InputMaybe<CredentialInsertInput>;
 };
 
 
@@ -385,12 +385,12 @@ export type MutationLoginPasswordArgs = {
 
 
 export type MutationPasskeyVerifyAuthenticationResponseArgs = {
-  authenticationResponse: PasskeyAuthenticationResponse;
+  authenticationResponse?: InputMaybe<PasskeyAuthenticationResponse>;
 };
 
 
 export type MutationPasskeyVerifyRegistrationResponseArgs = {
-  registrationResponse: PasskeyRegistrationResponse;
+  registrationResponse?: InputMaybe<PasskeyRegistrationResponse>;
 };
 
 
@@ -411,12 +411,12 @@ export type MutationSendResetPasswordLinkArgs = {
 
 
 export type MutationUpdateApiKeyArgs = {
-  input: ApiKeyUpdateInput;
+  input?: InputMaybe<ApiKeyUpdateInput>;
 };
 
 
 export type MutationUpdateCredentialArgs = {
-  input: CredentialUpdateInput;
+  input?: InputMaybe<CredentialUpdateInput>;
 };
 
 
@@ -702,11 +702,6 @@ export type TaskTagsArgs = {
 
 export type TaskTags_AggregateArgs = {
   filter?: InputMaybe<TagsListFilter>;
-};
-
-
-export type TaskUserArgs = {
-  filter?: InputMaybe<UsersListFilter>;
 };
 
 /** Data needed to create or update Tasks. If an ID is passed, this is an update, otherwise it's an insert. */

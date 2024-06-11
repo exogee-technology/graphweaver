@@ -24,7 +24,7 @@
 		"esbuild": "0.21.4",
 		"graphql": "16.8.1",
 		"graphql-type-json": "0.3.2",
-		"prettier": "3.3.0",
+		"prettier": "3.3.1",
 		"typescript": "5.4.5"
 	},
 	"peerDependencies": {
@@ -33,10 +33,9 @@
 		"graphql-type-json": "0.3.2"
 	},
 	"dependencies": {
-		"@aws-sdk/client-cognito-identity-provider": "3.588.0",
-		"@aws-sdk/client-lambda": "3.588.0",
+		"@aws-sdk/client-cognito-identity-provider": "3.592.0",
+		"@aws-sdk/client-lambda": "3.592.0",
 		"@exogee/graphweaver-rest": "workspace:*",
-		"graphql": "16.8.1",
-		"uuid": "9.0.1"
+		"graphql": "16.8.1"
 	}
 }

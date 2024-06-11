@@ -7,7 +7,7 @@ import {
 	RelationshipType,
 	BaseContext,
 	graphweaverMetadata,
-	getFieldTypeFromFieldMetadata,
+	getFieldTypeWithMetadata,
 	ResolverOptions,
 } from '..';
 
@@ -83,7 +83,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						fieldType,
 						isList,
 						metadata: relatedObject,
-					} = getFieldTypeFromFieldMetadata(field);
+					} = getFieldTypeWithMetadata(field.getType);
 					const typeName = (fieldType as any).name;
 
 					// set the default summary field
