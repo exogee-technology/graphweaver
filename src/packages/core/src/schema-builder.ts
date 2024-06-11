@@ -338,7 +338,7 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					// If the it's a related entity and the provider supports it, we should add aggregation to the relationship.
 					if (
 						isEntityMetadata(metadata) &&
-						metadata.provider?.backendProviderConfig?.supportedAggregationTypes.size &&
+						metadata.provider?.backendProviderConfig?.supportedAggregationTypes?.size &&
 						metadata.provider?.backendProviderConfig?.filter
 					) {
 						if (fields[`${field.name}_aggregate`]) {

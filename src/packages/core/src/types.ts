@@ -197,7 +197,7 @@ export interface BackendProviderConfig {
 	pagination: boolean;
 	orderBy: boolean;
 	sort: boolean;
-	supportedAggregationTypes: Set<AggregationType>;
+	supportedAggregationTypes?: Set<AggregationType>;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
