@@ -7,6 +7,6 @@
 		"test:integration": "npx fedtest docker --compose docker-compose.yaml --schema schema.graphql"
 	},
 	"dependencies": {
-		"@apollo/federation-subgraph-compatibility": "^2.2.0"
+		"@apollo/federation-subgraph-compatibility": "2.2.0"
 	}
 }
