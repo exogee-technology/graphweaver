@@ -45,7 +45,10 @@ export const buildFederationSchema = ({
 	];
 
 	// Remove link directive from schemaDirectives if it exists as it is added above
-	delete schemaDirectives?.link;
+	if (schemaDirectives) {
+	  const { link, ...restDirectives } = schemaDirectives;
+	  schemaDirectives = restDirectives;
+	}
 
 	return SchemaBuilder.build({
 		schemaDirectives: {
