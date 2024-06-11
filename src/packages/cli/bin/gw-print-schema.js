@@ -17,7 +17,7 @@ const printSchema = async () => {
 
 	const sdl = utils.printSchemaWithDirectives(graphweaver.schema);
 
-	const args = process.argv; 
+	const args = process.argv;
 
 	if (args.includes('--output') || args.includes('-o')) {
 		const outputIndex = args.indexOf('--output') + 1 || args.indexOf('-o') + 1;
