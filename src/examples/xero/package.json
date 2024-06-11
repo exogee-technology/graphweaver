@@ -51,7 +51,7 @@
 	"devDependencies": {
 		"@types/node": "20.14.2",
 		"esbuild": "0.21.4",
-		"prettier": "3.3.0",
+		"prettier": "3.3.1",
 		"ts-node": "10.9.2",
 		"typescript": "5.4.5",
 		"vite": "5.2.13"
