@@ -2,25 +2,12 @@
 
 This directory holds the files needed to run the Federation Integration Tests.
 
-To run the tests locally:
-
-First make sure you are running the server in the example root:
+To run the tests locally,
 
 ```
 cd ..
-pnpm start
+pnpm test:integration
 ```
-
-This will start the federation example on port 9001.
-
-Once running you can:
-
-```
-npm i
-npm test
-```
-
-The test suite will now be run against the server.
 
 # Compatibility
 
@@ -50,3 +37,5 @@ Federation v2 compatibility
 @composeDirective PASS
 @interfaceObject PASS
 ```
+
+We currently only support single key attributes, however, all other tests pass.
