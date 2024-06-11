@@ -22,5 +22,5 @@ export class Inventory {
 	id!: string;
 
 	@RelationshipField(() => [DeprecatedProduct], { id: 'deprecatedProductId', nullable: true })
-	deprecatedProducts!: DeprecatedProduct;
+	deprecatedProducts!: DeprecatedProduct[];
 }
