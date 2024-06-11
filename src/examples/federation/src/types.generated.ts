@@ -40,6 +40,7 @@ export type AdminUiEntityMetadata = {
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
+  supportedAggregationTypes: Array<AggregationType>;
 };
 
 export type AdminUiEnumMetadata = {
@@ -97,10 +98,23 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
+export type AggregationResult = {
+  __typename?: 'AggregationResult';
+  count: Scalars['Int']['output'];
+};
+
+export enum AggregationType {
+  Count = 'COUNT'
+}
+
 export type CaseStudy = {
   __typename?: 'CaseStudy';
   caseNumber: Scalars['ID']['output'];
   description?: Maybe<Scalars['String']['output']>;
+};
+
+export type DeleteOneFilterInput = {
+  id: Scalars['ID']['input'];
 };
 
 export type DeprecatedProduct = {

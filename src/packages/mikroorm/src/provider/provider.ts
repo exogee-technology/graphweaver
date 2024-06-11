@@ -5,6 +5,8 @@ import {
 	Filter,
 	BackendProviderConfig,
 	FieldMetadata,
+	AggregationResult,
+	AggregationType,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -92,6 +94,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		pagination: false,
 		orderBy: false,
 		sort: false,
+		supportedAggregationTypes: new Set<AggregationType>([AggregationType.COUNT]),
 	};
 
 	get backendId() {
@@ -552,6 +555,72 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		}
 
 		return null;
+	}
+
+	public async aggregate(
+		filter: Filter<D>,
+		requestedAggregations: Set<AggregationType>
+	): Promise<AggregationResult> {
+		logger.trace(`Running aggregate ${this.entityType.name} with filter`, {
+			filter: JSON.stringify(filter),
+		});
+
+		// Strip custom types out of the equation.
+		// This query only works if we JSON.parse(JSON.stringify(filter)):
+		//
+		// query {
+		//   drivers (filter: { region: { name: "North Shore" }}) {
+		//     id
+		//   }
+		// }
+		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+
+		// Convert from: { account: {id: '6' }}
+		// to { accountId: '6' }
+		// This conversion only works on root level objects
+		const whereWithAppliedExternalIdFields = where
+			? this.applyExternalIdFields(this.entityType, where)
+			: {};
+
+		// Regions need some fancy handling with Query Builder. Process the where further
+		// and return a Query Builder instance.
+		const query = this.em.createQueryBuilder(this.entityType);
+
+		// Certain query filters can result in duplicate records once all joins are resolved
+		// These duplicates can be discarded as related entities are returned to the
+		// API consumer via field resolvers
+		query.setFlag(QueryFlag.DISTINCT);
+
+		if (Object.keys(whereWithAppliedExternalIdFields).length > 0) {
+			query.andWhere(whereWithAppliedExternalIdFields);
+		}
+
+		const result: AggregationResult = {};
+
+		try {
+			if (requestedAggregations.has(AggregationType.COUNT)) {
+				const meta = this.database.em.getMetadata().get(this.entityType.name);
+				result.count = await query.getCount(meta.primaryKeys);
+			}
+		} catch (err) {
+			logger.error(`find ${this.entityType.name} error: ${JSON.stringify(err)}`);
+
+			if ((err as PostgresError)?.routine === 'InitializeSessionUserId') {
+				// Throw if the user credentials are incorrect
+				throw new Error(
+					'Database connection failed, please check you are using the correct user credentials for the database.'
+				);
+			} else if ((err as PostgresError)?.code === 'ECONNREFUSED') {
+				// Throw if the database address or port is incorrect
+				throw new Error(
+					'Database connection failed, please check you are using the correct address and port for the database.'
+				);
+			} else {
+				throw err;
+			}
+		}
+
+		return result;
 	}
 
 	public get plugins(): ApolloServerPlugin<BaseContext>[] {

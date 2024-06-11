@@ -141,6 +141,17 @@ const deleteInput = new GraphQLInputObjectType({
 	},
 });
 
+// All aggregations follow the same shape so we only need one of those too.
+const aggregationResult = new GraphQLObjectType({
+	name: 'AggregationResult',
+	fields: {
+		count: {
+			type: new GraphQLNonNull(GraphQLInt),
+			resolve: (parent) => parent.count,
+		},
+	},
+});
+
 export const getFieldTypeWithMetadata = (
 	getType: GetTypeFunction
 ): {
@@ -310,6 +321,10 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						graphQLType = new GraphQLNonNull(graphQLType);
 					}
 
+					if (fields[field.name]) {
+						throw new Error(`Duplicate field '${field.name}' on entity ${entity.name}.`);
+					}
+
 					fields[field.name] = {
 						type: graphQLType,
 						args,
@@ -319,6 +334,31 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 							directives: field.directives ?? {},
 						},
 					};
+
+					// If the it's a related entity and the provider supports it, we should add aggregation to the relationship.
+					if (
+						isEntityMetadata(metadata) &&
+						metadata.provider?.backendProviderConfig?.supportedAggregationTypes?.size &&
+						metadata.provider?.backendProviderConfig?.filter
+					) {
+						if (fields[`${field.name}_aggregate`]) {
+							throw new Error(
+								`Duplicate field '${field.name}_aggregate' on entity ${entity.name}.`
+							);
+						}
+
+						fields[`${field.name}_aggregate`] = {
+							type: aggregationResult,
+							args: {
+								filter: { type: filterTypeForEntity(metadata) },
+							},
+
+							// TODO: Why is any required here?
+							resolve: resolvers.baseResolver(
+								resolvers.aggregateRelationshipField(entity, field)
+							) as any,
+						};
+					}
 				}
 
 				return fields;
@@ -639,6 +679,10 @@ class SchemaBuilderImplementation {
 		for (const enumType of graphweaverMetadata.enums()) {
 			yield graphQLTypeForEnum(enumType);
 		}
+
+		// We have some singleton types to emit here too.
+		yield aggregationResult;
+		yield deleteInput;
 	}
 
 	private graphQLTypeForArgs(args?: ArgsMetadata): GraphQLFieldConfigArgumentMap {
@@ -713,10 +757,22 @@ class SchemaBuilderImplementation {
 						type: new GraphQLList(graphQLTypeForEntity(entity)),
 						args: {
 							filter: { type: filterTypeForEntity(entity) },
-							...(entity.provider ? { pagination: { type: paginationTypeForEntity(entity) } } : {}),
+							pagination: { type: paginationTypeForEntity(entity) },
 						},
 						resolve: resolvers.baseResolver(resolvers.list),
 					};
+
+					// Aggregrations
+					if ((entity.provider.backendProviderConfig?.supportedAggregationTypes?.size ?? 0) > 0) {
+						fields[`${listQueryName}_aggregate`] = {
+							description: `Get aggregated data for ${entity.plural}.`,
+							type: aggregationResult,
+							args: {
+								filter: { type: filterTypeForEntity(entity) },
+							},
+							resolve: resolvers.baseResolver(resolvers.aggregate(entity)),
+						};
+					}
 				}
 
 				// Add any user-defined additional queries too

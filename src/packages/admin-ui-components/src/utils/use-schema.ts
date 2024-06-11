@@ -24,6 +24,7 @@ export interface Entity {
 	primaryKeyField: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
+	supportedAggregationTypes: AggregationType[];
 	fields: EntityField[];
 	defaultFilter?: Filter;
 	attributes: EntityAttributes;
@@ -36,6 +37,10 @@ export enum AdminUIFilterType {
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 	BOOLEAN = 'BOOLEAN',
+}
+
+export enum AggregationType {
+	COUNT = 'COUNT',
 }
 
 // The 'string' case is another entity name

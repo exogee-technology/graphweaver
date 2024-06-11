@@ -3,29 +3,3 @@
 	flex-direction: column;
 	width: 100%;
 }
-
-.toolBarWrapper {
-	width: 100%;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-end;
-}
-
-.toolsWrapper {
-	display: flex;
-	flex-direction: row;
-	gap: 12px;
-}
-
-.search {
-	background: rgba(237, 232, 242, 0.02);
-	border: 1px solid var(--detail-border-color);
-	border-radius: 6px;
-	padding-left: 32px;
-	background-size: 16px 16px;
-	background-repeat: no-repeat;
-	background-position-x: 8px;
-	background-position-y: center;
-	outline: 0;
-}

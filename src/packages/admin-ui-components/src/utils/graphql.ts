@@ -11,6 +11,7 @@ export const SCHEMA_QUERY = gql`
 				summaryField
 				primaryKeyField
 				defaultFilter
+				supportedAggregationTypes
 				fields {
 					name
 					type

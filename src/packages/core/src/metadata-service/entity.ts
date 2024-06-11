@@ -3,7 +3,13 @@ import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { Entity, Field } from '../decorators';
-import { Filter } from '../types';
+import { AggregationType, Filter } from '../types';
+import { graphweaverMetadata } from '..';
+
+graphweaverMetadata.collectEnumInformation({
+	target: AggregationType,
+	name: 'AggregationType',
+});
 
 @Entity('AdminUiEntityMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
 export class AdminUiEntityMetadata {
@@ -30,4 +36,7 @@ export class AdminUiEntityMetadata {
 
 	@Field(() => AdminUiEntityAttributeMetadata)
 	attributes?: AdminUiEntityAttributeMetadata;
+
+	@Field(() => [AggregationType])
+	supportedAggregationTypes!: AggregationType[];
 }

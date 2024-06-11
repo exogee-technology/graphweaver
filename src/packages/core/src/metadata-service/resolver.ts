@@ -59,7 +59,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			graphweaverMetadata.entities()
 		)
 			.map((entity) => {
-				const { name, adminUIOptions } = entity;
+				const { name, adminUIOptions, provider } = entity;
 
 				// If the entity is hidden from the display, return undefined
 				// so that it won't show up in the metadata.
@@ -142,6 +142,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					fields,
 					attributes,
 					defaultFilter: adminUIOptions?.defaultFilter,
+					supportedAggregationTypes: [
+						...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
+					],
 				};
 			})
 			.filter((entity) => entity && !!entity.backendId);

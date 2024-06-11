@@ -76,6 +76,14 @@ export interface GraphQLArgs<G> {
 	pagination?: PaginationOptions;
 }
 
+export enum AggregationType {
+	COUNT = 'COUNT',
+}
+
+export interface AggregationResult {
+	count?: number;
+}
+
 // D = Data entity returned from the datastore
 export interface BackendProvider<D> {
 	// This is used for query splitting, so we know where to break your
@@ -114,6 +122,12 @@ export interface BackendProvider<D> {
 
 	// Optional, tells dataloader to cap pages at this size.
 	readonly maxDataLoaderBatchSize?: number;
+
+	// Optional, called during supported aggregation operations when your provider declares support via backendProviderConfig.supportedAggregationTypes
+	aggregate?(
+		filter: Filter<D> | undefined,
+		requestedAggregations: Set<AggregationType>
+	): Promise<AggregationResult>;
 
 	backendProviderConfig?: BackendProviderConfig;
 	plugins?: ApolloServerPlugin<ApolloBaseContext>[];
@@ -183,6 +197,7 @@ export interface BackendProviderConfig {
 	pagination: boolean;
 	orderBy: boolean;
 	sort: boolean;
+	supportedAggregationTypes?: Set<AggregationType>;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
