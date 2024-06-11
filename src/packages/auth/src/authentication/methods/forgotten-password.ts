@@ -1,7 +1,7 @@
 import ms from 'ms';
 import { AuthenticationError } from 'apollo-server-errors';
 import { logger } from '@exogee/logger';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 
 import { AuthorizationContext, AuthenticationType } from '../../types';
