@@ -2,13 +2,13 @@ import { exec } from 'child_process';
 
 const asyncExec = async (command: string) =>
 	new Promise<void>((resolve, reject) => {
-		const pro = exec(command, (error) => {
+		const execCommand = exec(command, (error) => {
 			if (error) {
 				return reject(error);
 			}
 			resolve();
 		});
-		pro.stdout?.pipe(process.stdout);
+		execCommand.stdout?.pipe(process.stdout);
 	});
 
 export const generateTypes = async () => {
