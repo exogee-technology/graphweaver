@@ -37,10 +37,10 @@ jobs:
       - name: Install dependencies
         run: pnpm i
 
-      - name: Build CLI tool
+      - name: Build
         run: pnpm build
 
-      - name: Test Scalars
+      - name: Print Schema
         working-directory: src/examples/federation
         timeout-minutes: 2
         run: |
