@@ -6,7 +6,6 @@
 	"scripts": {
 		"build:types": "tsc --noEmit",
 		"import-auth": "pnpm unpack && tsx ./scripts/import-auth.ts",
-		"import-federation": "pnpm unpack && tsx ./scripts/import-federation.ts",
 		"import-storage-provider": "pnpm unpack && tsx ./scripts/import-storage-provider.ts",
 		"import-database-sqlite": "pnpm unpack && tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": "pnpm unpack && . ./scripts/import-postgres.sh",
