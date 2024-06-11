@@ -371,9 +371,6 @@ importers:
       react-router-dom:
         specifier: 6.23.1
         version: 6.23.1(react-dom@18.3.1)(react@18.3.1)
-      uuid:
-        specifier: 9.0.1
-        version: 9.0.1
       xero-node:
         specifier: 6.0.0
         version: 6.0.0
@@ -724,9 +721,6 @@ importers:
       graphql:
         specifier: 16.8.1
         version: 16.8.1
-      uuid:
-        specifier: 9.0.1
-        version: 9.0.1
     devDependencies:
       '@exogee/graphweaver':
         specifier: workspace:*
