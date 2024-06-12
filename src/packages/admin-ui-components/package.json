@@ -50,7 +50,7 @@
 		"@types/luxon": "3.4.2",
 		"@types/papaparse": "5.3.14",
 		"@types/react": "18.3.3",
-		"esbuild": "0.21.4",
+		"esbuild": "0.21.5",
 		"esbuild-plugin-copy": "2.1.1",
 		"esbuild-plugin-svgr": "2.1.0",
 		"formik": "2.4.6",
