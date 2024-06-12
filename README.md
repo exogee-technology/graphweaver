@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <a href="https://demo.graphweaver.com" target="_blank">
+  <a href="https://demo.graphweaver.com" target="_blank" rel="noopener noreferrer">
     🚀 Try the Demo 🚀
   </a>
 </p>
