@@ -17,6 +17,12 @@
   Graphweaver speeds up your GraphQL development by securely connecting all your data sources in one place.
 </p>
 
+<p align="center">
+  <a href="https://demo.graphweaver.com" target="_blank" rel="noopener noreferrer">
+    🚀 Try the Demo 🚀
+  </a>
+</p>
+
 <!-- PROJECT STATUS -->
 <p align="center">
   <a href="https://github.com/exogee-technology/graphweaver">

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-aws",
-	"version": "1.0.0-beta.3",
+	"version": "1.0.0",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
