@@ -31,3 +31,6 @@ updates:
       simplewebauthn:
         patterns:
           - "@simplewebauthn*"
+      typescript-eslint:
+        patterns:
+          - "@typescript-eslint*"
