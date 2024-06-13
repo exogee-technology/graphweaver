@@ -4,7 +4,7 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
-import { trace, TraceSpan } from './open-telemetry';
+import { trace, Trace } from './open-telemetry';
 
 const dataEntityPropertyKey = Symbol('dataEntity');
 
@@ -19,7 +19,7 @@ export const dataEntityForGraphQLEntity = <G, D>(entity: G & WithDataEntity<D>):
 const _fromBackendEntity = async <G = unknown, D = unknown>(
 	entityOrMetadata: EntityMetadata<G, D> | (new (...args: any[]) => G),
 	dataEntity: D,
-	span?: TraceSpan
+	trace?: Trace
 ) => {
 	const entityMetadata = isEntityMetadata(entityOrMetadata)
 		? entityOrMetadata
@@ -29,7 +29,7 @@ const _fromBackendEntity = async <G = unknown, D = unknown>(
 		throw new Error('Entity metadata not found for entity.');
 	}
 
-	span?.updateName(`From Backend Entity - ${entityMetadata.name}`);
+	trace?.span?.updateName(`From Backend Entity - ${entityMetadata.name}`);
 
 	// By default we just cast for performance, but if you want or need to override this behaviour so you can transform the fields
 	// on the way through from D to G, no worries, implement fromBackendEntity on your entity class and we'll call it.

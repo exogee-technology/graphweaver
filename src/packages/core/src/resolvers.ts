@@ -24,7 +24,7 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
-import { TraceSpan, trace } from './open-telemetry';
+import { Trace, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
@@ -37,9 +37,9 @@ export const baseResolver = (resolver: Resolver) => {
 		args: any,
 		context: BaseContext,
 		info: GraphQLResolveInfo,
-		span?: TraceSpan
+		trace?: Trace
 	) => {
-		span?.updateName(`Resolver - BaseResolver`);
+		trace?.span.updateName(`Resolver - BaseResolver`);
 		return resolver({
 			args,
 			context,
@@ -52,7 +52,7 @@ export const baseResolver = (resolver: Resolver) => {
 
 const _getOne = async <G>(
 	{ args: { id }, context, fields, info }: ResolverOptions,
-	span?: TraceSpan
+	trace?: Trace
 ) => {
 	logger.trace({ id, context, info }, 'Get One resolver called.');
 
@@ -62,7 +62,7 @@ const _getOne = async <G>(
 
 	const { name } = info.returnType;
 	const entity = graphweaverMetadata.getEntityByName(name);
-	span?.updateName(`Resolver - GetOne ${name}`);
+	trace?.span.updateName(`Resolver - GetOne ${name}`);
 
 	if (!entity) {
 		throw new Error(`Entity ${name} not found in metadata.`);
@@ -90,7 +90,7 @@ const _getOne = async <G>(
 
 	let result = await entity.provider.findOne(hookParams.args.filter);
 
-	result = fromBackendEntity(entity, result);
+	result = await fromBackendEntity(entity, result);
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
@@ -107,7 +107,7 @@ const _getOne = async <G>(
 
 const _list = async <G, D>(
 	{ args: { filter, pagination }, context, info, fields }: ResolverOptions,
-	span?: TraceSpan
+	trace?: Trace
 ) => {
 	logger.trace({ filter, pagination, context, info }, 'List resolver called.');
 
@@ -121,7 +121,7 @@ const _list = async <G, D>(
 
 	const { name } = info.returnType.ofType;
 	const entity = graphweaverMetadata.getEntityByName<any, any>(name);
-	span?.updateName(`Resolver - List ${name}`);
+	trace?.span.updateName(`Resolver - List ${name}`);
 
 	if (!entity) {
 		throw new Error(`Entity ${name} not found in metadata.`);
@@ -156,7 +156,9 @@ const _list = async <G, D>(
 	});
 	logger.trace({ result }, 'Got result');
 
-	result = result.map((resultRow) => fromBackendEntity(entity, resultRow));
+	result = await Promise.all(
+		result.map<Promise<G | null>>((resultRow) => fromBackendEntity<G, D>(entity, resultRow as D))
+	);
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
@@ -173,7 +175,7 @@ const _list = async <G, D>(
 
 const _createOrUpdate = async <G, D>(
 	{ args: { input }, context, info, fields }: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>,
-	span?: TraceSpan
+	trace?: Trace
 ) => {
 	logger.trace({ input, context, info }, 'Create or Update resolver called.');
 
@@ -187,7 +189,7 @@ const _createOrUpdate = async <G, D>(
 		throw new Error('Could not determine entity name from return type.');
 	}
 
-	span?.updateName(`Resolver - CreateOrUpdate ${name}`);
+	trace?.span.updateName(`Resolver - CreateOrUpdate ${name}`);
 	const entity = graphweaverMetadata.getEntityByName<G, D>(name);
 
 	if (!entity) {
@@ -290,9 +292,9 @@ export const deleteOne = (entity: EntityMetadata<any, any>) =>
 	trace(
 		async <G extends { name: string }>(
 			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-			span?: TraceSpan
+			trace?: Trace
 		) => {
-			span?.updateName(`Resolver - DeleteOne ${entity.name}`);
+			trace?.span.updateName(`Resolver - DeleteOne ${entity.name}`);
 			if (!entity.provider) {
 				throw new Error(
 					`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
@@ -329,9 +331,9 @@ export const deleteMany = (entity: EntityMetadata<any, any>) =>
 	trace(
 		async <G>(
 			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-			span?: TraceSpan
+			trace?: Trace
 		) => {
-			span?.updateName(`Resolver - DeleteMany ${entity.name}`);
+			trace?.span.updateName(`Resolver - DeleteMany ${entity.name}`);
 			if (!entity.provider) {
 				throw new Error(
 					`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
@@ -431,9 +433,9 @@ export const aggregate =
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
-	span?: TraceSpan
+	trace?: Trace
 ) => {
-	span?.updateName(`Resolver - ListRelationshipField ${info.path.typename}`);
+	trace?.span.updateName(`Resolver - ListRelationshipField ${info.path.typename}`);
 	logger.trace(`Resolving ${info.parentType.name}.${info.fieldName}`);
 
 	if (!info.path.typename)
@@ -561,8 +563,8 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		dataEntities = [dataEntity];
 	}
 
-	const entities = dataEntities?.map((dataEntity) =>
-		fromBackendEntity(relatedEntityMetadata, dataEntity)
+	const entities = await Promise.all(
+		(dataEntities ?? []).map((dataEntity) => fromBackendEntity(relatedEntityMetadata, dataEntity))
 	);
 
 	logger.trace('Running after read hooks');

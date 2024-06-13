@@ -3,7 +3,7 @@ import { TypeValue } from './types';
 
 import { BackendProvider, Filter, PaginationOptions } from './types';
 import { graphweaverMetadata } from './metadata';
-import { TraceMethod, TraceSpan } from './open-telemetry';
+import { TraceMethod, Trace } from './open-telemetry';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -110,9 +110,9 @@ class QueryManagerImplementation {
 			filter?: Filter<D>;
 			pagination?: PaginationOptions;
 		},
-		span?: TraceSpan
+		trace?: Trace
 	) {
-		span?.updateName(`Query Manager - Find ${entityName}`);
+		trace?.span.updateName(`Query Manager - Find ${entityName}`);
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
 		if (!metadata) throw new Error(`Could not locate entity '${entityName}'`);
 

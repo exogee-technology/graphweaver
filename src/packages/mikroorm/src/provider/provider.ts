@@ -7,6 +7,8 @@ import {
 	FieldMetadata,
 	AggregationResult,
 	AggregationType,
+	TraceMethod,
+	Trace,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -231,11 +233,15 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return collectedPaths;
 	};
 
+	@TraceMethod()
 	public async find(
 		filter: Filter<D>,
 		pagination?: PaginationOptions,
-		additionalOptionsForBackend?: any // @todo: Create a type for this
+		trace?: Trace
 	): Promise<D[]> {
+		// If we have a span, update the name
+		trace?.span.updateName(`Mikro-Orm - Find ${this.entityType.name}`);
+
 		logger.trace(`Running find ${this.entityType.name} with filter`, {
 			filter: JSON.stringify(filter),
 		});
@@ -248,7 +254,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		//     id
 		//   }
 		// }
+		const filterConversionSpan = trace?.tracer.startSpan('Convert filter to Mikro-Orm format');
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		filterConversionSpan?.end();
 
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
@@ -280,12 +288,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		const meta = this.database.em.getMetadata().get(this.entityType.name);
 		query.populate((driver as any).autoJoinOneToOneOwner(meta, []));
 
-		if (additionalOptionsForBackend?.populate) {
-			query.populate(additionalOptionsForBackend.populate);
-		}
-
 		try {
+			const getResultSpan = trace?.tracer.startSpan('Mikro-Orm - Fetch Data');
 			const result = await query.getResult();
+			getResultSpan?.end();
+
 			logger.trace(`find ${this.entityType.name} result: ${result.length} rows`);
 
 			return result;

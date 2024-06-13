@@ -1,5 +1,5 @@
 import process from 'process';
-import { Span, SpanOptions, SpanStatusCode, trace as traceApi } from '@opentelemetry/api';
+import { Span, SpanOptions, SpanStatusCode, Tracer, trace as traceApi } from '@opentelemetry/api';
 import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
@@ -24,10 +24,13 @@ export function TraceMethod() {
 	};
 }
 
-export interface TraceSpan extends Span {}
+export interface Trace {
+	span: Span;
+	tracer: Tracer;
+}
 
 export // A generic type to wrap the function args in an array and add Span
-type WithSpan<Args extends any[]> = [...Args, TraceSpan | undefined];
+type WithSpan<Args extends any[]> = [...Args, Trace | undefined];
 export const trace =
 	<Args extends any[], T>(
 		fn: (...params: WithSpan<Args>) => Promise<T>,
@@ -42,9 +45,10 @@ export const trace =
 
 		const tracer = traceApi.getTracer('graphweaver');
 
-		return tracer.startActiveSpan(spanName, spanOptions, async (span: TraceSpan) => {
+		return tracer.startActiveSpan(spanName, spanOptions, async (span: Span) => {
 			try {
-				const args = [...functionArgs, span] as WithSpan<Args>;
+				const traceArg: Trace = { span, tracer };
+				const args = [...functionArgs, traceArg] as WithSpan<Args>;
 				const result = await fn(...args);
 				span.setStatus({
 					code: SpanStatusCode.OK,

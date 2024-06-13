@@ -4,6 +4,7 @@ import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
 
 import { graphweaverMetadata } from './metadata';
+import { Trace } from './open-telemetry';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -92,11 +93,7 @@ export interface BackendProvider<D> {
 
 	entityType?: new () => D;
 
-	find(
-		filter: Filter<D>,
-		pagination?: PaginationOptions,
-		additionalOptionsForBackend?: any
-	): Promise<D[]>;
+	find(filter: Filter<D>, pagination?: PaginationOptions, trace?: Trace): Promise<D[]>;
 	findOne(filter: Filter<D>): Promise<D | null>;
 	findByRelatedId(
 		entity: any,
