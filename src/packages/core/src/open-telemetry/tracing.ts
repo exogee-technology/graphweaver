@@ -7,8 +7,27 @@ import { Resource } from '@opentelemetry/resources';
 // Check is env variable is set to enable tracing
 const enableTracing = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
 
-// A generic type to wrap the function args in an array and add Span
-type WithSpan<Args extends any[]> = [...Args, Span | undefined];
+// Decorator to add tracing to any instance method
+// Usage:
+// @Trace()
+// async myMethod() {
+//   // Do something
+// }
+export function TraceMethod() {
+	return (_target: any, _fieldName: string, descriptor: PropertyDescriptor) => {
+		if (enableTracing) {
+			const originalMethod = descriptor.value;
+			descriptor.value = function (...args: any[]) {
+				return trace(originalMethod.bind(this)).apply(this, args);
+			};
+		}
+	};
+}
+
+export interface TraceSpan extends Span {}
+
+export // A generic type to wrap the function args in an array and add Span
+type WithSpan<Args extends any[]> = [...Args, TraceSpan | undefined];
 export const trace =
 	<Args extends any[], T>(
 		fn: (...params: WithSpan<Args>) => Promise<T>,
@@ -23,7 +42,7 @@ export const trace =
 
 		const tracer = traceApi.getTracer('graphweaver');
 
-		return tracer.startActiveSpan(spanName, spanOptions, async (span: Span) => {
+		return tracer.startActiveSpan(spanName, spanOptions, async (span: TraceSpan) => {
 			try {
 				const args = [...functionArgs, span] as WithSpan<Args>;
 				const result = await fn(...args);

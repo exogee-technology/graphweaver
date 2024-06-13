@@ -1,4 +1,5 @@
 import { HookParams } from './types';
+import { TraceMethod, TraceSpan } from './open-telemetry';
 
 export enum HookRegister {
 	BEFORE_CREATE = 'BEFORE_CREATE',
@@ -32,7 +33,14 @@ export class HookManager<G> {
 		this.hooks[hookType] = [...existingHooks, hook];
 	}
 
-	async runHooks<P extends HookParams<G>>(hookType: HookRegister, params: P): Promise<P> {
+	@TraceMethod()
+	async runHooks<P extends HookParams<G>>(
+		hookType: HookRegister,
+		params: P,
+		span?: TraceSpan
+	): Promise<P> {
+		span?.updateName(`Hooks Manager - ${hookType}`);
+
 		const hooks = this.hooks[hookType];
 		if (!hooks || hooks.length === 0) {
 			return params;

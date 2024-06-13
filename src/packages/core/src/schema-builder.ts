@@ -43,6 +43,7 @@ import {
 	isInputMetadata,
 	isUnionMetadata,
 	MetadataType,
+	trace,
 	TypeValue,
 	UnionMetadata,
 } from '.';
@@ -759,10 +760,10 @@ class SchemaBuilderImplementation {
 							filter: { type: filterTypeForEntity(entity) },
 							pagination: { type: paginationTypeForEntity(entity) },
 						},
-						resolve: resolvers.baseResolver(resolvers.list),
+						resolve: trace(resolvers.baseResolver(resolvers.list)),
 					};
 
-					// Aggregrations
+					// Aggregations
 					if ((entity.provider.backendProviderConfig?.supportedAggregationTypes?.size ?? 0) > 0) {
 						fields[`${listQueryName}_aggregate`] = {
 							description: `Get aggregated data for ${entity.plural}.`,

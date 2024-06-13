@@ -17,7 +17,7 @@ import {
 
 const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 
-const parseReport = (tenantId: string, report: ReportWithRows) => {
+const parseReport = async (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
 
 	const results: ProfitAndLossRow[] = [];
@@ -48,7 +48,7 @@ const parseReport = (tenantId: string, report: ReportWithRows) => {
 						);
 
 						results.push(
-							fromBackendEntity(ProfitAndLossRow, {
+							await fromBackendEntity(ProfitAndLossRow, {
 								// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
 								id: generateId(
 									tenantId +
