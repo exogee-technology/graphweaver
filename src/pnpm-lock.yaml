@@ -142,7 +142,7 @@ importers:
         version: 4.10.4(graphql@16.8.1)
       '@as-integrations/hapi':
         specifier: 2.0.1
-        version: 2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.9)
+        version: 2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.10)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -150,8 +150,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       '@hapi/hapi':
-        specifier: 21.3.9
-        version: 21.3.9
+        specifier: 21.3.10
+        version: 21.3.10
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -1692,7 +1692,7 @@ packages:
       '@types/aws-lambda': 8.10.138
     dev: false
 
-  /@as-integrations/hapi@2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.9):
+  /@as-integrations/hapi@2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.10):
     resolution: {integrity: sha512-FpPmT0tKbRBvQ+xt7pT8lCmShpylE2fU46SBa764IbWOcnOyZv7Cw9KujAcM5gW/NLeFI/xjADLabOTonwQghg==}
     engines: {node: '>=16'}
     peerDependencies:
@@ -1700,7 +1700,7 @@ packages:
       '@hapi/hapi': ^20.2.2 || ^21.0.0
     dependencies:
       '@apollo/server': 4.10.4(graphql@16.8.1)
-      '@hapi/hapi': 21.3.9
+      '@hapi/hapi': 21.3.10
     dev: false
 
   /@aws-crypto/crc32@3.0.0:
@@ -5088,6 +5088,13 @@ packages:
       '@hapi/hoek': 11.0.4
     dev: false
 
+  /@hapi/catbox-memory@6.0.2:
+    resolution: {integrity: sha512-H1l4ugoFW/ZRkqeFrIo8p1rWN0PA4MDTfu4JmcoNDvnY975o29mqoZblqFTotxNHlEkMPpIiIBJTV+Mbi+aF0g==}
+    dependencies:
+      '@hapi/boom': 10.0.1
+      '@hapi/hoek': 11.0.4
+    dev: false
+
   /@hapi/catbox@12.1.1:
     resolution: {integrity: sha512-hDqYB1J+R0HtZg4iPH3LEnldoaBsar6bYp0EonBmNQ9t5CO+1CqgCul2ZtFveW1ReA5SQuze9GPSU7/aecERhw==}
     dependencies:
@@ -5122,6 +5129,30 @@ packages:
       '@hapi/hoek': 11.0.4
       '@hapi/validate': 2.0.1
       '@hapi/wreck': 18.1.0
+    dev: false
+
+  /@hapi/hapi@21.3.10:
+    resolution: {integrity: sha512-CmEcmTREW394MaGGKvWpoOK4rG8tKlpZLs30tbaBzhCrhiL2Ti/HARek9w+8Ya4nMBGcd+kDAzvU44OX8Ms0Jg==}
+    engines: {node: '>=14.15.0'}
+    dependencies:
+      '@hapi/accept': 6.0.3
+      '@hapi/ammo': 6.0.1
+      '@hapi/boom': 10.0.1
+      '@hapi/bounce': 3.0.1
+      '@hapi/call': 9.0.1
+      '@hapi/catbox': 12.1.1
+      '@hapi/catbox-memory': 6.0.2
+      '@hapi/heavy': 8.0.1
+      '@hapi/hoek': 11.0.4
+      '@hapi/mimos': 7.0.1
+      '@hapi/podium': 5.0.1
+      '@hapi/shot': 6.0.1
+      '@hapi/somever': 4.1.1
+      '@hapi/statehood': 8.1.1
+      '@hapi/subtext': 8.1.0
+      '@hapi/teamwork': 6.0.0
+      '@hapi/topo': 6.0.2
+      '@hapi/validate': 2.0.1
     dev: false
 
   /@hapi/hapi@21.3.9:

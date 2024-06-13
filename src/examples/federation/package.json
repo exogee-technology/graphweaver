@@ -23,7 +23,7 @@
 		"@as-integrations/hapi": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@hapi/hapi": "21.3.9",
+		"@hapi/hapi": "21.3.10",
 		"dotenv": "16.4.5"
 	},
 	"devDependencies": {
