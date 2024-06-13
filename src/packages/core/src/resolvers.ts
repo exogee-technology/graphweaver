@@ -1,5 +1,8 @@
 import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
+import { Span } from '@opentelemetry/api';
+import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
+
 import { BaseContext } from './types';
 import {
 	AggregationResult,
@@ -22,9 +25,9 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
+import { trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
-import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
 
 type ID = string | number | bigint;
@@ -41,7 +44,10 @@ export const baseResolver = (resolver: Resolver) => {
 	};
 };
 
-export const getOne = async <G>({ args: { id }, context, fields, info }: ResolverOptions) => {
+const _getOne = async <G>(
+	{ args: { id }, context, fields, info }: ResolverOptions,
+	span?: Span
+) => {
 	logger.trace({ id, context, info }, 'Get One resolver called.');
 
 	if (!isObjectType(info.returnType)) {
@@ -50,6 +56,7 @@ export const getOne = async <G>({ args: { id }, context, fields, info }: Resolve
 
 	const { name } = info.returnType;
 	const entity = graphweaverMetadata.getEntityByName(name);
+	span?.updateName(`Resolver - GetOne ${name}`);
 
 	if (!entity) {
 		throw new Error(`Entity ${name} not found in metadata.`);
@@ -92,12 +99,10 @@ export const getOne = async <G>({ args: { id }, context, fields, info }: Resolve
 	return result;
 };
 
-export const list = async <G, D>({
-	args: { filter, pagination },
-	context,
-	info,
-	fields,
-}: ResolverOptions) => {
+const _list = async <G, D>(
+	{ args: { filter, pagination }, context, info, fields }: ResolverOptions,
+	span?: Span
+) => {
 	logger.trace({ filter, pagination, context, info }, 'List resolver called.');
 
 	if (!isListType(info.returnType)) {
@@ -110,6 +115,7 @@ export const list = async <G, D>({
 
 	const { name } = info.returnType.ofType;
 	const entity = graphweaverMetadata.getEntityByName<any, any>(name);
+	span?.updateName(`Resolver - List ${name}`);
 
 	if (!entity) {
 		throw new Error(`Entity ${name} not found in metadata.`);
@@ -159,12 +165,10 @@ export const list = async <G, D>({
 	return result;
 };
 
-export const createOrUpdate = async <G, D>({
-	args: { input },
-	context,
-	info,
-	fields,
-}: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>) => {
+const _createOrUpdate = async <G, D>(
+	{ args: { input }, context, info, fields }: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>,
+	span?: Span
+) => {
 	logger.trace({ input, context, info }, 'Create or Update resolver called.');
 
 	let name;
@@ -177,6 +181,7 @@ export const createOrUpdate = async <G, D>({
 		throw new Error('Could not determine entity name from return type.');
 	}
 
+	span?.updateName(`Resolver - CreateOrUpdate ${name}`);
 	const entity = graphweaverMetadata.getEntityByName<G, D>(name);
 
 	if (!entity) {
@@ -275,70 +280,34 @@ export const createOrUpdate = async <G, D>({
 };
 
 // This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
-export const deleteOne =
-	(entity: EntityMetadata<any, any>) =>
-	async <G extends { name: string }>({
-		args: { filter },
-		context,
-		fields,
-	}: ResolverOptions<{ filter: Filter<G> }>) => {
-		if (!entity.provider) {
-			throw new Error(
-				`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
-			);
-		}
-
-		const hookManager = hookManagerMap.get(entity.name);
-		const params: DeleteHookParams<G> = {
-			args: { filter },
-			context,
-			fields,
-			transactional: false,
-		};
-
-		const hookParams = hookManager
-			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
-			: params;
-
-		if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
-
-		const success = await entity.provider.deleteOne(hookParams.args.filter);
-
-		hookManager &&
-			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
-				...hookParams,
-				deleted: success,
-			}));
-
-		return success;
-	};
-
-export const deleteMany =
-	(entity: EntityMetadata<any, any>) =>
-	async <G>({ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>) => {
-		if (!entity.provider) {
-			throw new Error(
-				`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
-			);
-		}
-		return withTransaction(entity.provider, async () => {
-			if (!entity.provider?.deleteMany) throw new Error('Provider has not implemented DeleteMany.');
+export const deleteOne = (entity: EntityMetadata<any, any>) =>
+	trace(
+		async <G extends { name: string }>(
+			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
+			span?: Span
+		) => {
+			span?.updateName(`Resolver - DeleteOne ${entity.name}`);
+			if (!entity.provider) {
+				throw new Error(
+					`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
+				);
+			}
 
 			const hookManager = hookManagerMap.get(entity.name);
-			const params: DeleteManyHookParams<G> = {
+			const params: DeleteHookParams<G> = {
 				args: { filter },
 				context,
 				fields,
-				transactional: !!entity.provider.withTransaction,
+				transactional: false,
 			};
 
 			const hookParams = hookManager
 				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 				: params;
 
-			if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
+			if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
 
-			const success = await entity.provider.deleteMany(hookParams.args?.filter);
+			const success = await entity.provider.deleteOne(hookParams.args.filter);
 
 			hookManager &&
 				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
@@ -347,8 +316,51 @@ export const deleteMany =
 				}));
 
 			return success;
-		});
-	};
+		}
+	);
+
+export const deleteMany = (entity: EntityMetadata<any, any>) =>
+	trace(
+		async <G>(
+			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
+			span?: Span
+		) => {
+			span?.updateName(`Resolver - DeleteMany ${entity.name}`);
+			if (!entity.provider) {
+				throw new Error(
+					`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
+				);
+			}
+			return withTransaction(entity.provider, async () => {
+				if (!entity.provider?.deleteMany)
+					throw new Error('Provider has not implemented DeleteMany.');
+
+				const hookManager = hookManagerMap.get(entity.name);
+				const params: DeleteManyHookParams<G> = {
+					args: { filter },
+					context,
+					fields,
+					transactional: !!entity.provider.withTransaction,
+				};
+
+				const hookParams = hookManager
+					? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+					: params;
+
+				if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
+
+				const success = await entity.provider.deleteMany(hookParams.args?.filter);
+
+				hookManager &&
+					(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+						...hookParams,
+						deleted: success,
+					}));
+
+				return success;
+			});
+		}
+	);
 
 // This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
 export const aggregate =
@@ -411,13 +423,11 @@ export const aggregate =
 		return success;
 	};
 
-export const listRelationshipField = async <G, D, R, C extends BaseContext>({
-	source,
-	args: { filter },
-	context,
-	fields,
-	info,
-}: ResolverOptions<{ filter: Filter<R> }, C, G>) => {
+const _listRelationshipField = async <G, D, R, C extends BaseContext>(
+	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
+	span?: Span
+) => {
+	span?.updateName(`Resolver - ListRelationshipField ${info.path.typename}`);
 	logger.trace(`Resolving ${info.parentType.name}.${info.fieldName}`);
 
 	if (!info.path.typename)
@@ -674,3 +684,8 @@ export const aggregateRelationshipField =
 
 		return result;
 	};
+
+export const getOne = trace(_getOne);
+export const list = trace(_list);
+export const listRelationshipField = trace(_listRelationshipField);
+export const createOrUpdate = trace(_createOrUpdate);

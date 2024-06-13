@@ -10,6 +10,7 @@ import {
 	fieldResolver,
 	enableFederation,
 	buildFederationSchema,
+	startTracing,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -80,6 +81,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
+
+		startTracing();
 
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});

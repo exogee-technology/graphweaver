@@ -502,19 +502,27 @@ export type Query = {
   apiKey?: Maybe<ApiKey>;
   /** Get multiple ApiKeys. */
   apiKeys?: Maybe<Array<Maybe<ApiKey>>>;
+  /** Get aggregated data for ApiKeys. */
+  apiKeys_aggregate?: Maybe<AggregationResult>;
   canEnrolWallet?: Maybe<Scalars['Boolean']['output']>;
   /** Get a single Credential. */
   credential?: Maybe<Credential>;
   /** Get multiple Credentials. */
   credentials?: Maybe<Array<Maybe<Credential>>>;
+  /** Get aggregated data for Credentials. */
+  credentials_aggregate?: Maybe<AggregationResult>;
   /** Get a single Tag. */
   tag?: Maybe<Tag>;
   /** Get multiple Tags. */
   tags?: Maybe<Array<Maybe<Tag>>>;
+  /** Get aggregated data for Tags. */
+  tags_aggregate?: Maybe<AggregationResult>;
   /** Get a single Task. */
   task?: Maybe<Task>;
   /** Get multiple Tasks. */
   tasks?: Maybe<Array<Maybe<Task>>>;
+  /** Get aggregated data for Tasks. */
+  tasks_aggregate?: Maybe<AggregationResult>;
   /** Get a single User. */
   user?: Maybe<User>;
   /** Get multiple Users. */
@@ -533,6 +541,11 @@ export type QueryApiKeysArgs = {
 };
 
 
+export type QueryApiKeys_AggregateArgs = {
+  filter?: InputMaybe<ApiKeysListFilter>;
+};
+
+
 export type QueryCredentialArgs = {
   id: Scalars['ID']['input'];
 };
@@ -541,6 +554,11 @@ export type QueryCredentialArgs = {
 export type QueryCredentialsArgs = {
   filter?: InputMaybe<CredentialsListFilter>;
   pagination?: InputMaybe<CredentialsPaginationInput>;
+};
+
+
+export type QueryCredentials_AggregateArgs = {
+  filter?: InputMaybe<CredentialsListFilter>;
 };
 
 
@@ -555,6 +573,11 @@ export type QueryTagsArgs = {
 };
 
 
+export type QueryTags_AggregateArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+};
+
+
 export type QueryTaskArgs = {
   id: Scalars['ID']['input'];
 };
@@ -563,6 +586,11 @@ export type QueryTaskArgs = {
 export type QueryTasksArgs = {
   filter?: InputMaybe<TasksListFilter>;
   pagination?: InputMaybe<TasksPaginationInput>;
+};
+
+
+export type QueryTasks_AggregateArgs = {
+  filter?: InputMaybe<TasksListFilter>;
 };
 
 
@@ -591,10 +619,16 @@ export type Tag = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   tasks?: Maybe<Array<Task>>;
+  tasks_aggregate?: Maybe<AggregationResult>;
 };
 
 
 export type TagTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+};
+
+
+export type TagTasks_AggregateArgs = {
   filter?: InputMaybe<TasksListFilter>;
 };
 
@@ -656,11 +690,17 @@ export type Task = {
   priority?: Maybe<Priority>;
   slug?: Maybe<Scalars['String']['output']>;
   tags: Array<Tag>;
+  tags_aggregate?: Maybe<AggregationResult>;
   user?: Maybe<User>;
 };
 
 
 export type TaskTagsArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+};
+
+
+export type TaskTags_AggregateArgs = {
   filter?: InputMaybe<TagsListFilter>;
 };
 
