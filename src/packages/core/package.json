@@ -29,7 +29,7 @@
 		"dataloader": "2.2.2",
 		"graphql": "16.8.1",
 		"graphql-parse-resolve-info": "4.13.0",
-		"graphql-query-complexity": "0.12.0",
+		"graphql-query-complexity": "1.0.0",
 		"pluralize": "8.0.0"
 	},
 	"devDependencies": {

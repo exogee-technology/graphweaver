@@ -964,8 +964,8 @@ importers:
         specifier: 4.13.0
         version: 4.13.0(graphql@16.8.1)
       graphql-query-complexity:
-        specifier: 0.12.0
-        version: 0.12.0(graphql@16.8.1)
+        specifier: 1.0.0
+        version: 1.0.0(graphql@16.8.1)
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
@@ -11689,8 +11689,8 @@ packages:
       - supports-color
     dev: false
 
-  /graphql-query-complexity@0.12.0(graphql@16.8.1):
-    resolution: {integrity: sha512-fWEyuSL6g/+nSiIRgIipfI6UXTI7bAxrpPlCY1c0+V3pAEUo1ybaKmSBgNr1ed2r+agm1plJww8Loig9y6s2dw==}
+  /graphql-query-complexity@1.0.0(graphql@16.8.1):
+    resolution: {integrity: sha512-Tj7mRIuKWjGomPaRW5E+ztY8bhYPf1v/7bkDPuzksrR3GqHeIS5jxzX8CfimlV3g9z0lT20RG9JgaUUjhRjtOA==}
     peerDependencies:
       graphql: ^14.6.0 || ^15.0.0 || ^16.0.0
     dependencies:
