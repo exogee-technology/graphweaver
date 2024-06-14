@@ -11,6 +11,8 @@ import {
 	enableFederation,
 	buildFederationSchema,
 	startTracing,
+	trace,
+	isTraceable,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -157,6 +159,16 @@ export default class Graphweaver<TContext extends BaseContext> {
 			fieldResolver,
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
+
+		if (isTraceable) {
+			// Wrap the executeHTTPGraphQLRequest method with a trace span
+			// This will allow us to trace the entire request from start to finish
+			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
+			this.server.executeHTTPGraphQLRequest = trace((request, trace) => {
+				trace?.span.updateName('Graphweaver Request');
+				return executeHTTPGraphQLRequest.bind(this.server)(request);
+			});
+		}
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {

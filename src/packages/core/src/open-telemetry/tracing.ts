@@ -1,11 +1,12 @@
 import process from 'process';
+import { isAsyncFunction } from 'util/types';
 import { Span, SpanOptions, SpanStatusCode, Tracer, trace as traceApi } from '@opentelemetry/api';
 import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 
 // Check is env variable is set to enable tracing
-const enableTracing = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
+export const isTraceable = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
 
 // Decorator to add tracing to any instance method
 // Usage:
@@ -15,10 +16,14 @@ const enableTracing = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
 // }
 export function TraceMethod() {
 	return (_target: any, _fieldName: string, descriptor: PropertyDescriptor) => {
-		if (enableTracing) {
+		if (isTraceable) {
 			const originalMethod = descriptor.value;
+			const isAsync = isAsyncFunction(originalMethod);
+
 			descriptor.value = function (...args: any[]) {
-				return trace(originalMethod.bind(this)).apply(this, args);
+				return isAsync
+					? trace(originalMethod.bind(this)).apply(this, args)
+					: traceSync(originalMethod.bind(this)).apply(this, args);
 			};
 		}
 	};
@@ -39,7 +44,7 @@ export const trace =
 	) =>
 	async (...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!enableTracing) {
+		if (!isTraceable) {
 			return fn(...functionArgs, undefined);
 		}
 
@@ -65,8 +70,42 @@ export const trace =
 		});
 	};
 
+export const traceSync =
+	<Args extends any[], T>(
+		fn: (...params: WithSpan<Args>) => T,
+		spanOptions: SpanOptions = {},
+		spanName: string = fn.name
+	) =>
+	(...functionArgs: Args) => {
+		// Check if tracing is enabled
+		if (!isTraceable) {
+			return fn(...functionArgs, undefined);
+		}
+
+		const tracer = traceApi.getTracer('graphweaver');
+
+		return tracer.startActiveSpan(spanName, spanOptions, (span: Span) => {
+			try {
+				const traceArg: Trace = { span, tracer };
+				const args = [...functionArgs, traceArg] as WithSpan<Args>;
+				const result = fn(...args);
+				span.setStatus({
+					code: SpanStatusCode.OK,
+				});
+				return result;
+			} catch (error: any) {
+				const errorMessage = String(error);
+				span.setStatus({ code: SpanStatusCode.ERROR, message: errorMessage });
+				span.recordException(error);
+				throw error;
+			} finally {
+				span.end();
+			}
+		});
+	};
+
 export const startTracing = () => {
-	if (enableTracing) {
+	if (isTraceable) {
 		const traceExporter = new OTLPTraceExporter({
 			url: `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces`,
 		});
