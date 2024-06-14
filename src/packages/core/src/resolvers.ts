@@ -90,7 +90,7 @@ const _getOne = async <G>(
 
 	let result = await entity.provider.findOne(hookParams.args.filter);
 
-	result = await fromBackendEntity(entity, result);
+	result = fromBackendEntity(entity, result);
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
@@ -156,9 +156,11 @@ const _list = async <G, D>(
 	});
 	logger.trace({ result }, 'Got result');
 
-	result = await Promise.all(
-		result.map<Promise<G | null>>((resultRow) => fromBackendEntity<G, D>(entity, resultRow as D))
+	const fromBackendEntitySpan = trace?.tracer.startSpan(
+		`FromBackendEntity - ${result.length} ${entity.name} ${result.length > 1 ? 'entities' : 'entity'}.`
 	);
+	result = result.map((resultRow) => fromBackendEntity(entity, resultRow));
+	fromBackendEntitySpan?.end();
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {
@@ -563,8 +565,8 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		dataEntities = [dataEntity];
 	}
 
-	const entities = await Promise.all(
-		(dataEntities ?? []).map((dataEntity) => fromBackendEntity(relatedEntityMetadata, dataEntity))
+	const entities = (dataEntities ?? []).map((dataEntity) =>
+		fromBackendEntity(relatedEntityMetadata, dataEntity)
 	);
 
 	logger.trace('Running after read hooks');

@@ -19,7 +19,7 @@ export const magicLink = new MagicLink({
 		const database = ConnectionManager.database(myConnection.connectionManagerId);
 		const credential = await database.em.findOneOrFail(Credential, { username });
 
-		const user = await fromBackendEntity(
+		const user = fromBackendEntity(
 			User,
 			await BaseLoaders.loadOne({ gqlEntityType: User, id: credential.id })
 		);

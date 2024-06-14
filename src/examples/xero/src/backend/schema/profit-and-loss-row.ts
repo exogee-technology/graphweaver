@@ -48,7 +48,7 @@ const parseReport = async (tenantId: string, report: ReportWithRows) => {
 						);
 
 						results.push(
-							await fromBackendEntity(ProfitAndLossRow, {
+							fromBackendEntity(ProfitAndLossRow, {
 								// @todo: This ID will not remain unchanged following a mutation -- though that may not be a problem.
 								id: generateId(
 									tenantId +

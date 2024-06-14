@@ -67,10 +67,7 @@ export const password = new Password({
 	acl,
 	// This is called when a user has logged in to get the profile
 	getUserProfile: async (id: string, operation: PasswordOperation): Promise<UserProfile<Roles>> => {
-		const user = await fromBackendEntity(
-			User,
-			await BaseLoaders.loadOne({ gqlEntityType: User, id })
-		);
+		const user = fromBackendEntity(User, await BaseLoaders.loadOne({ gqlEntityType: User, id }));
 
 		if (!user) throw new Error('Bad Request: Unknown user id provided.');
 

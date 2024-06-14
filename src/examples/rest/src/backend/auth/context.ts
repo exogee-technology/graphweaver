@@ -22,7 +22,7 @@ export const mapUserToProfile = async (user: User): Promise<UserProfile<Roles>> 
 // This function is called from the authentication provider
 // You must fetch the user by ID and return a UserProfile, which is added to the context
 export const addUserToContext = async (userId: string) => {
-	const user = await fromBackendEntity(
+	const user = fromBackendEntity(
 		User,
 		await BaseLoaders.loadOne({ gqlEntityType: User, id: userId })
 	);

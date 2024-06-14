@@ -121,7 +121,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 								? meta.target.toBackendEntity(node)
 								: (node as unknown as D);
 						const parentDataEntity = await meta.provider.createOne(backendEntity);
-						parent = await fromBackendEntity(meta, parentDataEntity);
+						parent = fromBackendEntity(meta, parentDataEntity);
 						parentId = parent?.[primaryKeyField];
 					}
 
