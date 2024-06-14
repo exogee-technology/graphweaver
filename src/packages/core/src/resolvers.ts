@@ -437,7 +437,9 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
 	trace?: Trace
 ) => {
-	trace?.span.updateName(`Resolver - ListRelationshipField ${info.path.typename}`);
+	trace?.span.updateName(
+		`Resolver - ListRelationshipField ${info.path.typename} - ${info.fieldName}`
+	);
 	logger.trace(`Resolving ${info.parentType.name}.${info.fieldName}`);
 
 	if (!info.path.typename)
