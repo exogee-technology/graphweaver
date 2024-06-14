@@ -43,7 +43,6 @@ import {
 	isInputMetadata,
 	isUnionMetadata,
 	MetadataType,
-	trace,
 	TypeValue,
 	UnionMetadata,
 } from '.';
@@ -760,7 +759,7 @@ class SchemaBuilderImplementation {
 							filter: { type: filterTypeForEntity(entity) },
 							pagination: { type: paginationTypeForEntity(entity) },
 						},
-						resolve: trace(resolvers.baseResolver(resolvers.list)),
+						resolve: resolvers.baseResolver(resolvers.list),
 					};
 
 					// Aggregations

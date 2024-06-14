@@ -7,6 +7,7 @@ import { Resource } from '@opentelemetry/resources';
 
 // Check is env variable is set to enable tracing
 export const isTraceable = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
+export const tracer = isTraceable ? traceApi.getTracer('graphweaver') : undefined;
 
 // Decorator to add tracing to any instance method
 // Usage:
@@ -44,11 +45,9 @@ export const trace =
 	) =>
 	async (...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!isTraceable) {
+		if (!isTraceable || !tracer) {
 			return fn(...functionArgs, undefined);
 		}
-
-		const tracer = traceApi.getTracer('graphweaver');
 
 		return tracer.startActiveSpan(spanName, spanOptions, async (span: Span) => {
 			try {
@@ -78,11 +77,9 @@ export const traceSync =
 	) =>
 	(...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!isTraceable) {
+		if (!isTraceable || !tracer) {
 			return fn(...functionArgs, undefined);
 		}
-
-		const tracer = traceApi.getTracer('graphweaver');
 
 		return tracer.startActiveSpan(spanName, spanOptions, (span: Span) => {
 			try {
