@@ -25,8 +25,8 @@
 	"devDependencies": {
 		"@types/lodash": "4.17.5",
 		"@types/node": "20.14.2",
-		"esbuild": "0.21.4",
-		"prettier": "3.3.1"
+		"esbuild": "0.21.5",
+		"prettier": "3.3.2"
 	},
 	"keywords": [
 		"graphql",

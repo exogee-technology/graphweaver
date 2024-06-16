@@ -28,7 +28,7 @@
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"chokidar": "3.6.0",
-		"esbuild": "0.21.4",
+		"esbuild": "0.21.5",
 		"inquirer": "9.2.23",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
@@ -42,7 +42,7 @@
 		"@types/semver": "7.5.8",
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.32",
-		"prettier": "3.3.1"
+		"prettier": "3.3.2"
 	},
 	"keywords": [
 		"graphql",

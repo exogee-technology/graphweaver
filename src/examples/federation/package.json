@@ -23,13 +23,13 @@
 		"@as-integrations/hapi": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@hapi/hapi": "21.3.9",
+		"@hapi/hapi": "21.3.10",
 		"dotenv": "16.4.5"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.0",
+		"@types/node": "20.14.2",
 		"graphweaver": "workspace:*",
-		"tsx": "4.11.0",
+		"tsx": "4.15.4",
 		"typescript": "5.4.5"
 	},
 	"keywords": [
