@@ -8,6 +8,7 @@ import { Trace } from './open-telemetry';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
+export type { Instrumentation } from '@opentelemetry/instrumentation';
 
 export interface BaseContext {}
 

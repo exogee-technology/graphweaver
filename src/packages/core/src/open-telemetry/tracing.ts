@@ -5,6 +5,8 @@ import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 
+import type { Instrumentation } from '@opentelemetry/instrumentation';
+
 // Check is env variable is set to enable tracing
 export const isTraceable = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
 export const tracer = isTraceable ? traceApi.getTracer('graphweaver') : undefined;
@@ -35,8 +37,10 @@ export interface Trace {
 	tracer: Tracer;
 }
 
-export // A generic type to wrap the function args in an array and add Span
+// A generic type to wrap the function args in an array and add Span
 type WithSpan<Args extends any[]> = [...Args, Trace | undefined];
+
+// Wrap a function with tracing
 export const trace =
 	<Args extends any[], T>(
 		fn: (...params: WithSpan<Args>) => Promise<T>,
@@ -69,6 +73,7 @@ export const trace =
 		});
 	};
 
+// Wrap a synchronous function with tracing
 export const traceSync =
 	<Args extends any[], T>(
 		fn: (...params: WithSpan<Args>) => T,
@@ -101,7 +106,12 @@ export const traceSync =
 		});
 	};
 
-export const startTracing = () => {
+// Start tracing with OpenTelemetry if enabled
+export const startTracing = ({
+	instrumentations,
+}: {
+	instrumentations: (Instrumentation | Instrumentation[])[];
+}) => {
 	if (isTraceable) {
 		const traceExporter = new OTLPTraceExporter({
 			url: `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces`,
@@ -109,6 +119,7 @@ export const startTracing = () => {
 
 		const sdk = new opentelemetry.NodeSDK({
 			traceExporter,
+			instrumentations,
 			resource: new Resource({
 				['service.name']: process.env.SERVICE_NAME ?? 'Graphweaver',
 			}),
