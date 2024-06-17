@@ -6,6 +6,7 @@ import {
 	isEntityMetadata,
 	isSerializableGraphQLEntityClass,
 } from '.';
+import { Trace, traceSync, tracer } from './open-telemetry';
 import { dataEntityForGraphQLEntity } from './default-from-backend-entity';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
@@ -33,7 +34,8 @@ export const fieldResolver = (
 		const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
 		if (isEntityMetadata(fieldTypeMetadata) && isSerializableGraphQLEntityClass(fieldType)) {
-			return fieldType.deserialize({
+			const span = tracer?.startSpan(`FieldResolver - ${parent}.${key} - SerializableEntity`);
+			const res = fieldType.deserialize({
 				// Yes, this is a lot of `as any`, but we know this is a GraphQLEntity and it will have come from
 				// our fromBackendEntity function, so we can go right to the data entity and pull out the appropriate
 				// field to pass through here.
@@ -42,10 +44,15 @@ export const fieldResolver = (
 				entityMetadata: metadata,
 				fieldMetadata: relationship,
 			});
+			span?.end();
+			return res;
 		}
 
 		if (typeof property === 'function') {
-			return property(source, args, context, info);
+			const span = tracer?.startSpan(`FieldResolver - ${parent}.${key} - Function`);
+			const res = property(source, args, context, info);
+			span?.end();
+			return res;
 		}
 
 		return property;
