@@ -6,6 +6,7 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
 
 import type { Instrumentation } from '@opentelemetry/instrumentation';
+import { logger } from '@exogee/logger';
 
 // Check is env variable is set to enable tracing
 export const isTraceable = !!process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
@@ -132,8 +133,8 @@ export const startTracing = ({
 		process.on('SIGTERM', () => {
 			sdk
 				.shutdown()
-				.then(() => console.log('Tracing terminated'))
-				.catch((error) => console.log('Error terminating tracing', error))
+				.then(() => logger.info('Tracing terminated'))
+				.catch((error) => logger.error('Error terminating tracing', error))
 				.finally(() => process.exit(0));
 		});
 	}
