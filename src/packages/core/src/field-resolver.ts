@@ -6,7 +6,7 @@ import {
 	isEntityMetadata,
 	isSerializableGraphQLEntityClass,
 } from '.';
-import { Trace, traceSync, tracer } from './open-telemetry';
+import { tracer } from './open-telemetry';
 import { dataEntityForGraphQLEntity } from './default-from-backend-entity';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
