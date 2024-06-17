@@ -94,7 +94,7 @@ export interface BackendProvider<D> {
 
 	entityType?: new () => D;
 
-	find(filter: Filter<D>, pagination?: PaginationOptions, trace?: Trace): Promise<D[]>;
+	find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]>;
 	findOne(filter: Filter<D>): Promise<D | null>;
 	findByRelatedId(
 		entity: any,
