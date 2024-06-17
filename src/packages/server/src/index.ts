@@ -170,6 +170,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
 			this.server.executeHTTPGraphQLRequest = trace((request, trace) => {
 				trace?.span.updateName('Graphweaver Request');
+				trace?.span.setAttributes({
+					'X-Amzn-RequestId': request.httpGraphQLRequest.headers.get('x-amzn-requestid'),
+					'X-Amzn-Trace-Id': request.httpGraphQLRequest.headers.get('x-amzn-trace-id'),
+					body: JSON.stringify(request.httpGraphQLRequest.body),
+					method: request.httpGraphQLRequest.method,
+				});
 				return executeHTTPGraphQLRequest.bind(this.server)(request);
 			});
 		}
