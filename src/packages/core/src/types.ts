@@ -4,7 +4,6 @@ import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
 
 import { graphweaverMetadata } from './metadata';
-import { Trace } from './open-telemetry';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
