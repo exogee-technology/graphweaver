@@ -17,7 +17,7 @@ import {
 
 const defaultSort: Record<string, Sort> = { ['date']: Sort.DESC };
 
-const parseReport = async (tenantId: string, report: ReportWithRows) => {
+const parseReport = (tenantId: string, report: ReportWithRows) => {
 	if (!report.reports || report.reports.length === 0) throw new Error('No reports to parse');
 
 	const results: ProfitAndLossRow[] = [];

@@ -8,7 +8,7 @@ import { Resource } from '@opentelemetry/resources';
 import type { Instrumentation } from '@opentelemetry/instrumentation';
 
 // Check is env variable is set to enable tracing
-export const isTraceable = process.env.OTEL_EXPORTER_OTLP_ENDPOINT ? true : false;
+export const isTraceable = !!process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 export const tracer = isTraceable ? traceApi.getTracer('graphweaver') : undefined;
 
 // Decorator to add tracing to any instance method

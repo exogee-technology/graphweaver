@@ -365,6 +365,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: Trace
 	): Promise<D> {
 		trace?.span.updateName(`Mikro-Orm - updateOne ${this.entityType.name}`);
+
 		logger.trace(`Running update ${this.entityType.name} with args`, {
 			id,
 			updateArgs: JSON.stringify(updateArgs),
@@ -379,17 +380,18 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			throw new Error(`Unable to locate ${this.entityType.name} with ID: '${id}' for updating.`);
 		}
 
+		const { version, ...updateArgsWithoutVersion } = updateArgs;
+
 		// If a version has been sent, let's check it
-		if (updateArgs?.version) {
+		if (version) {
 			try {
-				await this.database.em.lock(entity, LockMode.OPTIMISTIC, updateArgs.version);
-				delete updateArgs.version;
+				await this.database.em.lock(entity, LockMode.OPTIMISTIC, version);
 			} catch (err) {
 				throw new OptimisticLockError((err as Error)?.message, { entity });
 			}
 		}
 
-		await this.mapAndAssignKeys(entity, this.entityType, updateArgs);
+		await this.mapAndAssignKeys(entity, this.entityType, updateArgsWithoutVersion as Partial<D>);
 		await this.database.em.persistAndFlush(entity);
 
 		logger.trace(`update ${this.entityType.name} entity`, entity);
