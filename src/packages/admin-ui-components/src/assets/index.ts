@@ -1,39 +1,37 @@
-import ChevronDownIcon from './16-chevron-down.svg';
-import CloseIcon from './close-icon.svg';
-import ControlsIcon from './16-filter.svg';
-import DatabaseIcon from './16-database.svg';
-import DatabaseIcon24 from './24-database.svg';
-import DataSourcesIcon from './64-data-sources.svg';
-import ErrorIcon from './16-error.svg';
-import ExitIcon from './close-button-svgrepo-com.svg';
-import FilterIcon from './16-filter.svg';
-import GraphweaverLogo from './graphweaver-logo.svg';
-import InfoIcon from './16-info.svg';
-import LogoutIcon from './16-logout.svg';
-import OpenExternalIcon from './16-open-external.svg';
-import SearchIcon from './16-search.svg';
-import SuccessCheckmark from './success-checkmark.svg';
-import SuccessIcon from './16-success.svg';
-import TableIcon from './16-table.svg';
-import TableLightIcon from './16-table-light.svg';
-import WarningIcon from './16-warning.svg';
+import { ChevronDownIcon } from './16-chevron-down';
+import { CloseIcon } from './close-icon';
+import { FilterIcon } from './16-filter';
+import { DatabaseIcon } from './16-database';
+import { DatabaseIcon as DatabaseIcon24 } from './24-database';
+import { DataSourcesIcon } from './64-data-sources';
+import { ErrorIcon } from './16-error';
+import { CloseButtonIcon } from './close-button';
+import { GraphweaverLogo } from './graphweaver-logo';
+import { InfoIcon } from './16-info';
+import { LogoutIcon } from './16-logout';
+import { OpenExternalIcon } from './16-open-external';
+import { SearchIcon } from './16-search';
+import { SuccessCheckmarkIcon } from './success-checkmark';
+import { SuccessIcon } from './16-success';
+import { TableIcon } from './16-table';
+import { TableLightIcon } from './16-table-light';
+import { WarningIcon } from './16-warning';
 
 export {
 	ChevronDownIcon,
 	CloseIcon,
-	ControlsIcon,
+	FilterIcon,
 	DatabaseIcon,
 	DatabaseIcon24,
 	DataSourcesIcon,
 	ErrorIcon,
-	ExitIcon,
-	FilterIcon,
+	CloseButtonIcon,
 	GraphweaverLogo,
 	InfoIcon,
 	LogoutIcon,
 	OpenExternalIcon,
 	SearchIcon,
-	SuccessCheckmark,
+	SuccessCheckmarkIcon,
 	SuccessIcon,
 	TableIcon,
 	TableLightIcon,

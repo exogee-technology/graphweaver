@@ -9,6 +9,7 @@
 		"module": "CommonJS",
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
+		"jsx": "react-jsx",
 		"skipLibCheck": true
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import {
 	Loader,
 	DefaultLayout,
@@ -13,13 +13,12 @@ import { List, Root, Playground } from './pages';
 
 const defaultRoutes = [
 	{
-		path: '/',
 		element: <DefaultLayout />,
 		errorElement: <DefaultErrorFallback />,
 		children: [
 			{
 				path: '/',
-				element: <Root />,
+				element: customPages.defaultRoute ? <Navigate to={customPages.defaultRoute} /> : <Root />,
 			},
 			{
 				path: ':entity',
@@ -48,9 +47,10 @@ export const Router = () => {
 
 	useEffect(() => {
 		(async () => {
-			const routes = (await customPages.routes()).flat().filter((route) => route?.path);
+			// We need to blend their custom routes in at the top so they can override us if they want.
+			const routes = await customPages.routes();
 			setRouter(
-				createBrowserRouter([...defaultRoutes, ...routes], {
+				createBrowserRouter([...routes, ...defaultRoutes], {
 					basename: import.meta.env.VITE_ADMIN_UI_BASE || '/',
 				})
 			);

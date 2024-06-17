@@ -1,7 +1,6 @@
 import { MouseEventHandler } from 'react';
 
-import OpenIcon from '../assets/16-open-external.svg';
-import { CustomFieldArgs } from '@exogee/graphweaver-admin-ui-components';
+import { CustomFieldArgs, OpenExternalIcon } from '@exogee/graphweaver-admin-ui-components';
 
 interface Task {
 	user: {
@@ -18,7 +17,7 @@ export const Link = ({ entity }: CustomFieldArgs<Task>) => {
 	};
 	return (
 		<div style={{ cursor: 'pointer' }} onClick={handleClick}>
-			<OpenIcon />
+			<OpenExternalIcon />
 		</div>
 	);
 };

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 
 import { Button } from '../button';
 import type { ButtonProps } from '../button';
-import DownChevronIcon from '../assets/16-chevron-down.svg';
+import { ChevronDownIcon } from '../assets/16-chevron-down';
 
 import styles from './styles.module.css';
 
@@ -93,7 +93,7 @@ export const Popover = ({
 			<Button {...props} onClickOutside={handleOnOutsideClick} onClick={handleOnClickButton}>
 				{defaultValue?.name ?? children}
 
-				<DownChevronIcon />
+				<ChevronDownIcon />
 			</Button>
 			<ul
 				className={clsx(

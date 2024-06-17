@@ -2,7 +2,7 @@ import { apolloClient } from '../apollo';
 import { Button } from '../button';
 import { localStorageAuthKey } from '../config';
 
-import LogoutIcon from '../assets/16-logout.svg';
+import { LogoutIcon } from '../assets/16-logout';
 
 import styles from './styles.module.css';
 
