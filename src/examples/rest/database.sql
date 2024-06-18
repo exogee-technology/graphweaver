@@ -56,6 +56,19 @@ CREATE TABLE authentication (
   FOREIGN KEY (user_id) REFERENCES credential(id)
 );
 
+CREATE TABLE trace (
+  id VARCHAR(255) PRIMARY KEY,
+  trace_id VARCHAR(255) NOT NULL,
+  parent_id VARCHAR(255),
+  name VARCHAR(512) NOT NULL,
+  attributes JSON NOT NULL,
+  timestamp TIMESTAMP(6) NOT NULL,
+  duration INT NOT NULL,
+  INDEX `index_trace_timestamp` (`timestamp`),
+  INDEX `index_trace_trace_id` (`trace_id`),
+  INDEX `index_trace_parent_id` (`parent_id`)
+);
+
 INSERT INTO credential (username, password)
 VALUES
   ('luke', '$argon2id$v=19$m=65536,t=3,p=4$Gn/jQ7cAqwb0ZieRlzFXOw$Nyp/WnlHan1kKYaUAjQkidVvKSB2AUdAzLctPkD6sZo'),

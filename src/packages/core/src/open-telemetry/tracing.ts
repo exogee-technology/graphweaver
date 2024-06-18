@@ -4,9 +4,12 @@ import { Span, SpanOptions, SpanStatusCode, Tracer, trace as traceApi } from '@o
 import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
+import { logger } from '@exogee/logger';
 
 import type { Instrumentation } from '@opentelemetry/instrumentation';
-import { logger } from '@exogee/logger';
+
+import { JsonSpanProcessor } from './json-span-exporter';
+import { BackendProvider } from '..';
 
 // Check is env variable is set to enable tracing
 export const isTraceable = !!process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
@@ -110,8 +113,10 @@ export const traceSync =
 // Start tracing with OpenTelemetry if enabled
 export const startTracing = ({
 	instrumentations,
+	traceProvider,
 }: {
 	instrumentations: (Instrumentation | Instrumentation[])[];
+	traceProvider?: BackendProvider<unknown>;
 }) => {
 	if (isTraceable) {
 		const traceExporter = new OTLPTraceExporter({
@@ -119,12 +124,14 @@ export const startTracing = ({
 		});
 
 		const sdk = new opentelemetry.NodeSDK({
+			spanProcessors: traceProvider ? [JsonSpanProcessor(traceProvider)] : [],
 			traceExporter,
 			instrumentations,
 			resource: new Resource({
 				['service.name']: process.env.SERVICE_NAME ?? 'Graphweaver',
 			}),
 		});
+
 		// initialize the SDK and register with the OpenTelemetry API
 		// this enables the API to record telemetry
 		sdk.start();

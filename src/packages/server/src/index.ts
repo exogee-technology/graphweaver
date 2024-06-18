@@ -14,6 +14,7 @@ import {
 	trace,
 	isTraceable,
 	Instrumentation,
+	BackendProvider,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -66,6 +67,7 @@ export interface GraphweaverConfig {
 	};
 	schemaDirectives?: Record<string, any>;
 	openTelemetry?: {
+		traceProvider?: BackendProvider<unknown>;
 		instrumentations?: (Instrumentation | Instrumentation[])[];
 	};
 }
@@ -88,10 +90,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
 
-		startTracing({ instrumentations: this.config.openTelemetry?.instrumentations ?? [] });
-
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
+
+		startTracing({
+			instrumentations: this.config.openTelemetry?.instrumentations ?? [],
+			traceProvider: this.config.openTelemetry?.traceProvider,
+		});
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 

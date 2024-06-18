@@ -359,6 +359,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return result as D[];
 	}
 
+	@TraceMethod()
 	public async updateOne(
 		id: string | number,
 		updateArgs: Partial<D & { version?: number }>,

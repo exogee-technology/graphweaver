@@ -20,7 +20,7 @@ export const addServiceQuery = ({
 			'The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied.',
 		intentionalOverride: true,
 		getType: () => Service,
-		resolver: () => {
+		resolver: async () => {
 			return {
 				sdl: printSchemaWithDirectives(buildFederationSchema({ schemaDirectives })),
 			};

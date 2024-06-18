@@ -4,6 +4,7 @@ import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
 
 import { graphweaverMetadata } from './metadata';
+import { Trace } from './open-telemetry';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -263,10 +264,12 @@ export type ResolverOptions<TArgs = any, TContext = BaseContext, TSource = Sourc
 	context: TContext;
 	fields: ResolveTree;
 	info: GraphQLResolveInfo;
+	trace?: Trace;
 };
 
 export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = ({
 	args,
 	context,
 	fields,
-}: ResolverOptions<TArgs, TContext>) => TResult;
+	trace,
+}: ResolverOptions<TArgs, TContext>) => Promise<TResult>;
