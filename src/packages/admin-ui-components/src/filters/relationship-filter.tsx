@@ -3,6 +3,7 @@ import { useLazyQuery } from '@apollo/client';
 import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
+import { toSelectOption } from './utils';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -10,19 +11,15 @@ export interface RelationshipFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, newFilter: Filter) => void;
-	initialFilter?: Filter;
-	resetCount: number; // We use this to reset the filter using the key
+	filter?: Filter;
 }
 
 export const RelationshipFilter = ({
 	fieldName,
 	entity,
 	onChange,
-	initialFilter,
-	resetCount,
+	filter,
 }: RelationshipFilterProps) => {
-	const key = fieldName;
-	const initialValue = initialFilter?.[key] as RelationshipFilterType | undefined;
 	const { entityByName, entities } = useSchema();
 
 	const entityType = entityByName(entity);
@@ -79,14 +76,16 @@ export const RelationshipFilter = ({
 		};
 	});
 
+	const currentFilterValue =
+		(filter?.[fieldName] as Record<string, string[]> | undefined)?.[
+			`${relatedEntity.primaryKeyField}_in`
+		] ?? [];
+
 	return (
 		<ComboBox
-			key={`${fieldName}:${resetCount}`}
+			key={fieldName}
 			options={relationshipOptions}
-			value={(initialValue?.[`${relatedEntity.primaryKeyField}_in`] || []).map((id) => ({
-				value: id,
-				label: id,
-			}))}
+			value={currentFilterValue.map(toSelectOption)}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}

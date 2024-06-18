@@ -23,7 +23,7 @@ export const RelationshipField = ({
 	entity: EntityField;
 	autoFocus: boolean;
 }) => {
-	const [_, meta, helpers] = useField({ name, multiple: false });
+	const [{ value }, meta, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
 	const { initialValue } = meta;
 	const relatedEntity = entityByType(entity.type);
@@ -86,13 +86,6 @@ export const RelationshipField = ({
 		const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
 		return { label: item[label], value: item[relatedEntity.primaryKeyField] };
 	});
-
-	let value = [];
-	if (Array.isArray(initialValue)) {
-		value = initialValue;
-	} else if (initialValue !== null && initialValue !== undefined) {
-		value = [initialValue];
-	}
 
 	return (
 		<ComboBox

@@ -60,3 +60,5 @@ export const validateFilter = (
 		unsupportedKeys,
 	};
 };
+
+export const toSelectOption = (value: unknown) => ({ value, label: String(value) });
