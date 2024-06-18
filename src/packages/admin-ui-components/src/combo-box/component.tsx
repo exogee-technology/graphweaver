@@ -28,6 +28,12 @@ interface SelectProps {
 	['data-testid']?: string;
 }
 
+function arrayify<T>(value: T) {
+	if (Array.isArray(value)) return value;
+	if (value !== null && value !== undefined) return [value];
+	return [];
+}
+
 export const ComboBox = ({
 	options,
 	onChange,
@@ -39,7 +45,7 @@ export const ComboBox = ({
 	autoFocus = false,
 	['data-testid']: testId,
 }: SelectProps) => {
-	const valueArray = Array.isArray(value) ? value : [value];
+	const valueArray = arrayify(value);
 
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps } = useCombobox({

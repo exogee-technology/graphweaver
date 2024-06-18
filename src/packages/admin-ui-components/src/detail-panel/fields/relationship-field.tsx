@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 
 import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
-import { EntityField, useSchema } from '../../utils';
+import { EntityField, Filter, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
 const mode = (entity: EntityField) => {
@@ -39,24 +39,17 @@ export const RelationshipField = ({
 		}
 
 		// If the field is a multi select field we need to convert the values to an array of IDs
+		const mappedValues = values.map((item) =>
+			item && typeof item === 'object' && item.hasOwnProperty('value')
+				? { [relatedEntity.primaryKeyField]: item.value }
+				: item
+		);
+
 		if (mode(entity) === SelectMode.MULTI) {
-			return values.map((item) =>
-				item && typeof item === 'object' && item.hasOwnProperty('value')
-					? { [relatedEntity.primaryKeyField]: item.value }
-					: item
-			);
+			return mappedValues;
+		} else {
+			return mappedValues[0];
 		}
-
-		const singleValue = values[0];
-		// If the field is a single select field we need to convert the value to an object with the ID
-		if (singleValue && typeof singleValue === 'object' && 'value' in singleValue) {
-			// Single select fields will be an object with the ID as the value and a human readable 'label' attribute
-			// Extract out a simple { id: record_id } oject
-			return { [relatedEntity.primaryKeyField]: singleValue.value };
-		}
-
-		// If the value is a simple string or number we can just return it as is
-		return singleValue;
 	};
 
 	const handleOnChange = (selected: SelectOption[]) => {
@@ -87,10 +80,14 @@ export const RelationshipField = ({
 		return selectOption;
 	});
 
-	const valueForDisplay = arrayify(value).map((selectOption: SelectOption) => ({
-		label: selectOption.label ?? labelsById.get(selectOption.value as string) ?? selectOption.value,
-		value: selectOption.value,
-	}));
+	const valueForDisplay = arrayify(value).map((filter: Filter<string>) => {
+		const id = filter[relatedEntity.primaryKeyField];
+
+		return {
+			value: id,
+			label: labelsById.get(id) ?? id,
+		};
+	});
 
 	// If we've got our data back, we can look up the correct options in the result
 	// so we have a proper description for them.
