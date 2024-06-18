@@ -1,6 +1,5 @@
 import { Entity, Field } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 
 import { Trace as OrmTrace } from '../entities';
@@ -30,15 +29,15 @@ export class TraceEntity {
 	@Field(() => String)
 	traceId!: string;
 
-	@Field(() => String)
-	parentId!: string;
+	@Field(() => String, { nullable: true })
+	parentId?: string;
 
 	@Field(() => String)
 	name!: string;
 
-	@Field(() => ISODateStringScalar)
-	timestamp!: Date;
+	@Field(() => String)
+	timestamp!: string;
 
-	@Field(() => Number)
-	duration!: number;
+	@Field(() => String)
+	duration!: string;
 }

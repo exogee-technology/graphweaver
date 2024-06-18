@@ -62,8 +62,8 @@ CREATE TABLE trace (
   parent_id VARCHAR(255),
   name VARCHAR(512) NOT NULL,
   attributes JSON NOT NULL,
-  timestamp TIMESTAMP(6) NOT NULL,
-  duration INT NOT NULL,
+  timestamp BIGINT(20) NOT NULL,
+  duration BIGINT(20) NOT NULL,
   INDEX `index_trace_timestamp` (`timestamp`),
   INDEX `index_trace_trace_id` (`trace_id`),
   INDEX `index_trace_parent_id` (`parent_id`)

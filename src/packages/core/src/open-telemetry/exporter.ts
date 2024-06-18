@@ -1,10 +1,5 @@
 import { SpanExporter, ReadableSpan, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
-import {
-	ExportResult,
-	ExportResultCode,
-	hrTimeToMilliseconds,
-	hrTimeToTimeStamp,
-} from '@opentelemetry/core';
+import { ExportResult, ExportResultCode, hrTimeToMicroseconds } from '@opentelemetry/core';
 import { BackendProvider } from '../types';
 
 export class JsonSpanExporter implements SpanExporter {
@@ -47,8 +42,8 @@ export class JsonSpanExporter implements SpanExporter {
 			name: span.name,
 			id: span.spanContext().spanId,
 			// kind: span.kind,
-			timestamp: new Date(hrTimeToTimeStamp(span.startTime)),
-			duration: hrTimeToMilliseconds(span.duration),
+			timestamp: hrTimeToMicroseconds(span.startTime),
+			duration: hrTimeToMicroseconds(span.duration),
 			attributes: span.attributes,
 			// status: span.status,
 			// events: span.events,

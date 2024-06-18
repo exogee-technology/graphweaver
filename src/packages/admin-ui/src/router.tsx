@@ -9,7 +9,7 @@ import {
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { List, Root, Playground } from './pages';
+import { List, Root, Playground, Analytics } from './pages';
 
 const defaultRoutes = [
 	{
@@ -20,6 +20,10 @@ const defaultRoutes = [
 			{
 				path: '/',
 				element: <Root />,
+			},
+			{
+				path: '/traces',
+				element: <Analytics />,
 			},
 			{
 				path: ':entity',

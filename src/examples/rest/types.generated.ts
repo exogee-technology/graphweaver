@@ -17,8 +17,6 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
-  ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
@@ -815,19 +813,21 @@ export type Token = {
 
 export type Trace = {
   __typename?: 'Trace';
-  duration: Scalars['Float']['output'];
+  duration: Scalars['String']['output'];
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
-  parentId: Scalars['String']['output'];
-  timestamp: Scalars['ISOString']['output'];
+  parentId?: Maybe<Scalars['String']['output']>;
+  timestamp: Scalars['String']['output'];
   traceId: Scalars['String']['output'];
 };
 
 export type TracesListFilter = {
-  duration?: InputMaybe<Scalars['Float']['input']>;
-  duration_in?: InputMaybe<Array<Scalars['Float']['input']>>;
-  duration_ne?: InputMaybe<Scalars['Float']['input']>;
-  duration_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  duration?: InputMaybe<Scalars['String']['input']>;
+  duration_ilike?: InputMaybe<Scalars['String']['input']>;
+  duration_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  duration_like?: InputMaybe<Scalars['String']['input']>;
+  duration_ne?: InputMaybe<Scalars['String']['input']>;
+  duration_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   duration_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   duration_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
@@ -854,14 +854,12 @@ export type TracesListFilter = {
   parentId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   parentId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   parentId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  timestamp?: InputMaybe<Scalars['ISOString']['input']>;
-  timestamp_gt?: InputMaybe<Scalars['ISOString']['input']>;
-  timestamp_gte?: InputMaybe<Scalars['ISOString']['input']>;
-  timestamp_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
-  timestamp_lt?: InputMaybe<Scalars['ISOString']['input']>;
-  timestamp_lte?: InputMaybe<Scalars['ISOString']['input']>;
-  timestamp_ne?: InputMaybe<Scalars['ISOString']['input']>;
-  timestamp_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  timestamp?: InputMaybe<Scalars['String']['input']>;
+  timestamp_ilike?: InputMaybe<Scalars['String']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  timestamp_like?: InputMaybe<Scalars['String']['input']>;
+  timestamp_ne?: InputMaybe<Scalars['String']['input']>;
+  timestamp_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   timestamp_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   timestamp_null?: InputMaybe<Scalars['Boolean']['input']>;
   traceId?: InputMaybe<Scalars['String']['input']>;
