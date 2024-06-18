@@ -53,9 +53,9 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
-			return <LinkField name={field.name} entity={field} />;
+			return <LinkField name={field.name} field={field} />;
 		}
-		return <RelationshipField name={field.name} entity={field} autoFocus={autoFocus} />;
+		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'JSON') {
@@ -317,7 +317,15 @@ export const DetailPanel = () => {
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
 			const value = result?.[field.name as keyof typeof result];
-			acc[field.name] = value ?? field.initialValue ?? undefined;
+
+			if ((value as any)?.__typename) {
+				// If there's a __typename on the value, we want to strip it off.
+				const { __typename, ...rest } = value as any;
+				acc[field.name] = rest;
+			} else {
+				acc[field.name] = value ?? field.initialValue ?? undefined;
+			}
+
 			return acc;
 		},
 		{} as Record<string, any>

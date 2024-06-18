@@ -5,8 +5,8 @@ import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 import { EntityField, Filter, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
 
-const mode = (entity: EntityField) => {
-	if (entity.relationshipType === 'ONE_TO_MANY' || entity.relationshipType === 'MANY_TO_MANY') {
+const mode = (field: EntityField) => {
+	if (field.relationshipType === 'ONE_TO_MANY' || field.relationshipType === 'MANY_TO_MANY') {
 		return SelectMode.MULTI;
 	}
 
@@ -21,21 +21,21 @@ function arrayify<T>(value: T) {
 
 export const RelationshipField = ({
 	name,
-	entity,
+	field,
 	autoFocus,
 }: {
 	name: string;
-	entity: EntityField;
+	field: EntityField;
 	autoFocus: boolean;
 }) => {
 	const [{ value }, _, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
-	const relatedEntity = entityByType(entity.type);
+	const relatedEntity = entityByType(field.type);
 
 	const convertToGqlVariables = (values: SelectOption[]) => {
 		// If there are no values we can just return undefined or an empty array
 		if (!values || values.length === 0) {
-			return mode(entity) === SelectMode.MULTI ? [] : undefined;
+			return mode(field) === SelectMode.MULTI ? [] : undefined;
 		}
 
 		// If the field is a multi select field we need to convert the values to an array of IDs
@@ -45,7 +45,7 @@ export const RelationshipField = ({
 				: item
 		);
 
-		if (mode(entity) === SelectMode.MULTI) {
+		if (mode(field) === SelectMode.MULTI) {
 			return mappedValues;
 		} else {
 			return mappedValues[0];
@@ -97,7 +97,7 @@ export const RelationshipField = ({
 				options={options}
 				value={valueForDisplay}
 				onChange={handleOnChange}
-				mode={mode(entity)}
+				mode={mode(field)}
 				autoFocus={autoFocus}
 			/>
 		);
