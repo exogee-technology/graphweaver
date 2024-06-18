@@ -1,4 +1,4 @@
-import { InputTypeMetadata, graphweaverMetadata } from '..';
+import { InputTypeMetadata, graphweaverMetadata } from '../metadata';
 
 export type InputTypeOptions = Omit<InputTypeMetadata<any, any>, 'type' | 'fields' | 'target'>;
 

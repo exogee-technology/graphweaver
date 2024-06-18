@@ -1,2 +1,2 @@
 export * from './tracing';
-export * from './json-span-exporter';
+export * from './exporter';

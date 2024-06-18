@@ -29,12 +29,11 @@ import { ObjMap } from 'graphql/jsutils/ObjMap';
 import { logger } from '@exogee/logger';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 
+import { FieldMetadata, GetTypeFunction, TypeValue } from './types';
 import {
 	ArgsMetadata,
 	EntityMetadata,
 	EnumMetadata,
-	FieldMetadata,
-	GetTypeFunction,
 	graphweaverMetadata,
 	InputTypeMetadata,
 	isArgMetadata,
@@ -43,10 +42,9 @@ import {
 	isInputMetadata,
 	isUnionMetadata,
 	MetadataType,
-	trace,
-	TypeValue,
 	UnionMetadata,
-} from '.';
+} from './metadata';
+import { trace } from './open-telemetry';
 import * as resolvers from './resolvers';
 
 export const ID = GraphQLID;

@@ -17,6 +17,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
+  ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
@@ -523,6 +525,12 @@ export type Query = {
   tasks?: Maybe<Array<Maybe<Task>>>;
   /** Get aggregated data for Tasks. */
   tasks_aggregate?: Maybe<AggregationResult>;
+  /** Get a single Trace. */
+  trace?: Maybe<Trace>;
+  /** Get multiple Traces. */
+  traces?: Maybe<Array<Maybe<Trace>>>;
+  /** Get aggregated data for Traces. */
+  traces_aggregate?: Maybe<AggregationResult>;
   /** Get a single User. */
   user?: Maybe<User>;
   /** Get multiple Users. */
@@ -591,6 +599,22 @@ export type QueryTasksArgs = {
 
 export type QueryTasks_AggregateArgs = {
   filter?: InputMaybe<TasksListFilter>;
+};
+
+
+export type QueryTraceArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTracesArgs = {
+  filter?: InputMaybe<TracesListFilter>;
+  pagination?: InputMaybe<TracesPaginationInput>;
+};
+
+
+export type QueryTraces_AggregateArgs = {
+  filter?: InputMaybe<TracesListFilter>;
 };
 
 
@@ -787,6 +811,83 @@ export type TasksPaginationInput = {
 export type Token = {
   __typename?: 'Token';
   authToken: Scalars['String']['output'];
+};
+
+export type Trace = {
+  __typename?: 'Trace';
+  duration: Scalars['Float']['output'];
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  parentId: Scalars['String']['output'];
+  timestamp: Scalars['ISOString']['output'];
+  traceId: Scalars['String']['output'];
+};
+
+export type TracesListFilter = {
+  duration?: InputMaybe<Scalars['Float']['input']>;
+  duration_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  duration_ne?: InputMaybe<Scalars['Float']['input']>;
+  duration_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  duration_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  duration_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  id_ilike?: InputMaybe<Scalars['String']['input']>;
+  id_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_like?: InputMaybe<Scalars['String']['input']>;
+  id_ne?: InputMaybe<Scalars['String']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  parentId_ilike?: InputMaybe<Scalars['String']['input']>;
+  parentId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentId_like?: InputMaybe<Scalars['String']['input']>;
+  parentId_ne?: InputMaybe<Scalars['String']['input']>;
+  parentId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  parentId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  timestamp?: InputMaybe<Scalars['ISOString']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  timestamp_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  timestamp_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  timestamp_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  timestamp_null?: InputMaybe<Scalars['Boolean']['input']>;
+  traceId?: InputMaybe<Scalars['String']['input']>;
+  traceId_ilike?: InputMaybe<Scalars['String']['input']>;
+  traceId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  traceId_like?: InputMaybe<Scalars['String']['input']>;
+  traceId_ne?: InputMaybe<Scalars['String']['input']>;
+  traceId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  traceId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  traceId_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type TracesOrderByInput = {
+  duration?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  parentId?: InputMaybe<Sort>;
+  timestamp?: InputMaybe<Sort>;
+  traceId?: InputMaybe<Sort>;
+};
+
+/** Pagination options for Traces. */
+export type TracesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TracesOrderByInput>;
 };
 
 export type User = {

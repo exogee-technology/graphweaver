@@ -29,6 +29,7 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
 		"@mikro-orm/core": "6.2.9",
 		"@mikro-orm/mysql": "6.2.9",
 		"dotenv": "16.4.5",

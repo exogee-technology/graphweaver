@@ -1,4 +1,4 @@
-import { GetTypeFunction } from '..';
+import { GetTypeFunction } from '../types';
 import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {

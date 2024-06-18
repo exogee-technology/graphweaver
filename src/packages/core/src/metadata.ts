@@ -1,7 +1,9 @@
 import { DirectiveLocation } from 'graphql';
-import { FieldOptions, GetTypeFunction, SchemaBuilder } from '.';
-import { BackendProvider, FieldMetadata, Filter, Resolver } from './types';
 import { logger } from '@exogee/logger';
+
+import { SchemaBuilder } from './schema-builder';
+import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver } from './types';
+import { FieldOptions } from './decorators';
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';

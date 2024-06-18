@@ -8,8 +8,8 @@ import { logger } from '@exogee/logger';
 
 import type { Instrumentation } from '@opentelemetry/instrumentation';
 
-import { JsonSpanProcessor } from './json-span-exporter';
-import { BackendProvider } from '..';
+import { JsonSpanProcessor } from './exporter';
+import { BackendProvider } from '../types';
 
 // Check is env variable is set to enable tracing
 export const isTraceable = !!process.env.OTEL_EXPORTER_OTLP_ENDPOINT;

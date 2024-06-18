@@ -5,7 +5,7 @@ import {
 	hrTimeToMilliseconds,
 	hrTimeToTimeStamp,
 } from '@opentelemetry/core';
-import { BackendProvider } from '..';
+import { BackendProvider } from '../types';
 
 export class JsonSpanExporter implements SpanExporter {
 	constructor(private dataProvider: BackendProvider<unknown>) {}
