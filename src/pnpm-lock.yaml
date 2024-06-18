@@ -270,7 +270,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -313,10 +313,10 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -519,8 +519,8 @@ importers:
         specifier: 9.0.6
         version: 9.0.6(react@18.3.1)
       graphiql:
-        specifier: 3.2.3
-        version: 3.2.3(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.3.1
+        version: 3.3.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1)
       graphql:
         specifier: 16.8.1
         version: 16.8.1
@@ -1011,7 +1011,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1100,10 +1100,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       node-sqlite3-wasm:
         specifier: 0.8.16
         version: 0.8.16
@@ -1153,13 +1153,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)(pg@8.11.5)
       '@mikro-orm/mysql':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
@@ -3924,8 +3924,8 @@ packages:
     dev: false
     optional: true
 
-  /@graphiql/react@0.22.2(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-46UV7CBQdZ0iU537uOkOU6HOOs7P1o7vQpFSUezB4VRem0Y3I4TDaYQADCOo7gFlwBs5Vb9YOup8r7cmXGIr7A==}
+  /@graphiql/react@0.22.3(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-rZGs0BbJ4ImFy6l489aXUEB3HzGVoD7hI8CycydNRXR6+qYgp/fuNFCXMJe+q9gDyC/XhBXni8Pdugk8HxJ05g==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17 || ^18
@@ -5507,6 +5507,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)(sqlite3@5.1.7):
     resolution: {integrity: sha512-eSHPiS5em+RGv/jx5lP7a1xDVVlnrG+l90/7N7WAgTGcPOzyILVw9EJOZl2KR8dh8EfPI6Wm35Lo4qkO2LoDUg==}
@@ -5581,30 +5582,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9):
-    resolution: {integrity: sha512-CRW5QPvsQhlhRZbx9SsgLrdC7LxCSbz+Pm5rAA8S1SAZG8qJ1WxMovHF61PFZj/7rydnb9fSh4nVwfutOyYwWg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.2.9
-      '@mikro-orm/knex': 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
-      pg: 8.11.5
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1):
     resolution: {integrity: sha512-CRW5QPvsQhlhRZbx9SsgLrdC7LxCSbz+Pm5rAA8S1SAZG8qJ1WxMovHF61PFZj/7rydnb9fSh4nVwfutOyYwWg==}
     engines: {node: '>= 18.12.0'}
@@ -5652,6 +5629,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0):
     resolution: {integrity: sha512-+ZdlKEtE8HmqbZWSm44MaZwfeS1AlrhMJrZfRr5tQfvdKi5VuRQ+I87Uxo03Ni5r0JXV1wEfFyWovK5c6h1iCQ==}
@@ -11320,14 +11298,14 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /graphiql@3.2.3(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-b5XuFyTWkORhQkUZULPOPmUXocg+x7HFB53cYEjV7LcH4taB4ViGwmXqHILhfPtv+JcTN80Aw8HELVWSa16iiA==}
+  /graphiql@3.3.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-UA29FQ418Pcxat54CvM//S5G+7DKG7XQ7s9UyAEdb7zMAKPANIDd222XEYNxG2I/FgAxsiq3ZTBpxwvPbB9Mcw==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
     dependencies:
-      '@graphiql/react': 0.22.2(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1)
+      '@graphiql/react': 0.22.3(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.8.1)(react-dom@18.3.1)(react@18.3.1)
       '@graphiql/toolkit': 0.9.1(graphql@16.8.1)
       graphql: 16.8.1
       graphql-language-service: 5.2.1(graphql@16.8.1)
@@ -12886,6 +12864,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.12.0)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
