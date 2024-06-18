@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
-import { useEffect } from 'react';
 
 import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
@@ -14,6 +13,12 @@ const mode = (entity: EntityField) => {
 	return SelectMode.SINGLE;
 };
 
+function arrayify<T>(value: T) {
+	if (Array.isArray(value)) return value;
+	if (value !== null && value !== undefined) return [value];
+	return [];
+}
+
 export const RelationshipField = ({
 	name,
 	entity,
@@ -23,9 +28,8 @@ export const RelationshipField = ({
 	entity: EntityField;
 	autoFocus: boolean;
 }) => {
-	const [{ value }, meta, helpers] = useField({ name, multiple: false });
+	const [{ value }, _, helpers] = useField({ name, multiple: false });
 	const { entityByType } = useSchema();
-	const { initialValue } = meta;
 	const relatedEntity = entityByType(entity.type);
 
 	const convertToGqlVariables = (values: SelectOption[]) => {
@@ -55,14 +59,6 @@ export const RelationshipField = ({
 		return singleValue;
 	};
 
-	useEffect(() => {
-		if (initialValue && Array.isArray(initialValue)) {
-			helpers.setValue(convertToGqlVariables(initialValue));
-		} else if (initialValue !== null && initialValue !== undefined) {
-			helpers.setValue(convertToGqlVariables([initialValue]));
-		}
-	}, []);
-
 	const handleOnChange = (selected: SelectOption[]) => {
 		helpers.setValue(convertToGqlVariables(selected));
 	};
@@ -82,18 +78,30 @@ export const RelationshipField = ({
 		}
 	);
 
+	const labelsById = new Map<string, string>();
+
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
 		const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
-		return { label: item[label], value: item[relatedEntity.primaryKeyField] };
+		const selectOption = { label: item[label], value: item[relatedEntity.primaryKeyField] };
+		labelsById.set(selectOption.value, selectOption.label);
+		return selectOption;
 	});
 
-	return (
-		<ComboBox
-			options={options}
-			value={value}
-			onChange={handleOnChange}
-			mode={mode(entity)}
-			autoFocus={autoFocus}
-		/>
-	);
+	const valueForDisplay = arrayify(value).map((selectOption: SelectOption) => ({
+		label: selectOption.label ?? labelsById.get(selectOption.value as string) ?? selectOption.value,
+		value: selectOption.value,
+	}));
+
+	// If we've got our data back, we can look up the correct options in the result
+	// so we have a proper description for them.
+	if (data?.result)
+		return (
+			<ComboBox
+				options={options}
+				value={valueForDisplay}
+				onChange={handleOnChange}
+				mode={mode(entity)}
+				autoFocus={autoFocus}
+			/>
+		);
 };
