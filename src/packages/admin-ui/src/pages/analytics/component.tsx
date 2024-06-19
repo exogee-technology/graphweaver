@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
-import { GraphQlEditor, Header, TraceViewer } from '@exogee/graphweaver-admin-ui-components';
+import { GraphQlViewer, Header, TraceViewer } from '@exogee/graphweaver-admin-ui-components';
 
 import { queryForTrace } from './graphql';
 
@@ -26,7 +26,7 @@ export const Analytics = () => {
 				</Panel>
 				<PanelResizeHandle className={styles.handle} />
 				<Panel maxSize={80} defaultSize={40}>
-					<GraphQlEditor />
+					<GraphQlViewer />
 				</Panel>
 			</PanelGroup>
 		</div>

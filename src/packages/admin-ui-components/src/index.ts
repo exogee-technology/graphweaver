@@ -9,7 +9,7 @@ export * from './default-error-fallback';
 export * from './detail-panel-field-label';
 export * from './detail-panel';
 export * from './export-modal';
-export * from './graphql-editor';
+export * from './graphql-viewer';
 export * from './filter-bar';
 export * from './header';
 export * from './input';

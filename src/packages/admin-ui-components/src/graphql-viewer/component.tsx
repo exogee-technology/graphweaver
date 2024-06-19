@@ -1,6 +1,6 @@
 import { CodeBlock, atomOneDark } from 'react-code-blocks';
 
-export const GraphQlEditor = () => {
+export const GraphQlViewer = () => {
 	const graphql = `query {
   tasks {
     id

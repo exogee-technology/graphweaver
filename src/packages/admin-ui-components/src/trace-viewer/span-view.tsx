@@ -67,16 +67,18 @@ export const SpanView = ({
 
 			{showChildren && (
 				<div className={styles.spanChildren}>
-					{Array.isArray(data.children)
-						? data.children.map((child: any) => (
-								<SpanView
-									key={child.id}
-									data={child}
-									minTimestamp={minTimestamp}
-									maxTimestamp={maxTimestamp}
-								/>
-							))
-						: null}
+					<div className={styles.spanChildrenLine}>
+						{Array.isArray(data.children)
+							? data.children.map((child: any) => (
+									<SpanView
+										key={child.id}
+										data={child}
+										minTimestamp={minTimestamp}
+										maxTimestamp={maxTimestamp}
+									/>
+								))
+							: null}
+					</div>
 				</div>
 			)}
 		</div>
