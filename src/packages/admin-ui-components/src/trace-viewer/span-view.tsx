@@ -19,7 +19,7 @@ export const SpanView = ({
 }) => {
 	const [showChildren, setShowChildren] = useState(false); // State to toggle children visibility
 
-	const toggleChildren = () => setShowChildren(!showChildren);
+	const toggleChildren = () => data.children.length && setShowChildren(!showChildren);
 
 	const durationNano = UnixNanoTimeStamp.fromString(data.duration);
 	const startTimeUnixNano = UnixNanoTimeStamp.fromString(data.timestamp);

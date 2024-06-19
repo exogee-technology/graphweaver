@@ -7,19 +7,6 @@
 	gap: 20px;
 }
 
-.titleWrapper {
-	height: '66px';
-	max-height: '66px';
-}
-
-.trace {
-	display: flex;
-	flex-direction: column;
-	overflow: scroll;
-}
-
-.resizer {
-	flex-basis: 6px;
-	z-index: 2;
-	cursor: row-resize;
+.handle {
+	height: 20px;
 }

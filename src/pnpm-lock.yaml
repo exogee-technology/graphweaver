@@ -463,6 +463,9 @@ importers:
       react-modal:
         specifier: 3.16.1
         version: 3.16.1(react-dom@18.3.1)(react@18.3.1)
+      react-resizable-panels:
+        specifier: 2.0.19
+        version: 2.0.19(react-dom@18.3.1)(react@18.3.1)
       react-router-dom:
         specifier: 6.23.1
         version: 6.23.1(react-dom@18.3.1)(react@18.3.1)
@@ -15231,6 +15234,16 @@ packages:
       tslib: 2.6.3
       use-callback-ref: 1.3.2(@types/react@18.3.3)(react@18.3.1)
       use-sidecar: 1.1.2(@types/react@18.3.3)(react@18.3.1)
+    dev: false
+
+  /react-resizable-panels@2.0.19(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-v3E41kfKSuCPIvJVb4nL4mIZjjKIn/gh6YqZF/gDfQDolv/8XnhJBek4EiV2gOr3hhc5A3kOGOayk3DhanpaQw==}
+    peerDependencies:
+      react: ^16.14.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
     dev: false
 
   /react-router-dom@6.23.1(react-dom@18.3.1)(react@18.3.1):

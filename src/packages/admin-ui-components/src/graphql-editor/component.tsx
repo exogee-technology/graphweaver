@@ -49,7 +49,7 @@ export const GraphQlEditor = () => {
 			theme={atomOneDark}
 			customStyle={{
 				backgroundColor: '#14111a',
-				height: '40%',
+				height: '100%',
 				overflow: 'scroll',
 				flex: '1',
 			}}
