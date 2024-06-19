@@ -64,7 +64,7 @@ export class UnixNanoTimeStamp {
 
 		const calculatedWidth = this.multiply(percentageMultiplyer).divide(timespan).getBigInt();
 		const width =
-			calculatedWidth < 5 ? '5%' : calculatedWidth > 100 ? '100%' : `${calculatedWidth}%`;
+			calculatedWidth < 1 ? '1%' : calculatedWidth > 100 ? '100%' : `${calculatedWidth}%`;
 
 		const calculatedOffset = startTimestamp
 			.subtract(minTimestamp)
@@ -74,8 +74,8 @@ export class UnixNanoTimeStamp {
 		const offset =
 			calculatedOffset < 0
 				? '0%'
-				: calculatedWidth < 5 && calculatedOffset > 95
-					? '95%'
+				: calculatedWidth < 1 && calculatedOffset > 99
+					? '99%'
 					: `${calculatedOffset}%`;
 
 		return { width, offset };

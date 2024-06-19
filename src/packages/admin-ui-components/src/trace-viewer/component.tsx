@@ -1,8 +1,8 @@
-import { SpanView } from './span';
-import type { RenderTree, Span, Trace } from '../types';
+import { SpanView } from './span-view';
+import type { RenderTree, Span, Trace } from './types';
 
-import styles from '../styles.module.css';
-import { UnixNanoTimeStamp } from '../util/timestamp';
+import styles from './styles.module.css';
+import { UnixNanoTimeStamp } from '../utils/timestamp';
 
 export const createTreeData = (spanArray: Span[]): RenderTree[] => {
 	const treeData: RenderTree[] = [];
@@ -13,7 +13,9 @@ export const createTreeData = (spanArray: Span[]): RenderTree[] => {
 			...span,
 			children: [],
 		};
+	});
 
+	spanArray.forEach((span) => {
 		if (span.parentId) {
 			lookup[span.parentId]?.children?.push(lookup[span.id]);
 		} else {
