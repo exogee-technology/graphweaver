@@ -47,9 +47,8 @@ export const RelationshipField = ({
 
 			if (mode(field) === SelectMode.MULTI) {
 				return mappedResults;
-			} else {
-				return mappedResults[0];
 			}
+			return mappedResults[0];
 		},
 	});
 
