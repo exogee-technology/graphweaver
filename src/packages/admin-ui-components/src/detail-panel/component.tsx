@@ -188,18 +188,17 @@ const DetailForm = ({
 	// but be in control of exactly what gets sent to the server.
 	const submit = useCallback(
 		async (values: any, actions: FormikHelpers<any>) => {
-			let transformErrored = false;
-			const transformedValues = values;
-
 			try {
+				const transformedValues = values;
+
 				for (const transform of dataTransforms) {
 					transformedValues[transform.field.name] = await transform.transform(
 						values[transform.field.name]
 					);
 				}
+
 				await onSubmit(transformedValues, actions);
 			} catch (error: any) {
-				transformErrored = true;
 				console.error(error);
 				toast.error(error.message);
 			}
