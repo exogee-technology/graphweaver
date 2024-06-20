@@ -2,10 +2,11 @@ import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import clsx from 'clsx';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { Modal } from '../modal';
 
 import {
 	CustomField,
@@ -33,6 +34,7 @@ import { LinkField } from './fields/link-field';
 import { isValueEmpty } from './util';
 import { deleteFileToSignedURL, MediaField } from './fields/media-field';
 import { TextField } from './fields/text-field';
+import { dataTransforms } from './use-data-transform';
 
 interface ResultBaseType {
 	id: string;
@@ -71,12 +73,12 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 	}
 
 	const { enumByName } = useSchema();
-	const enumField = enumByName(field.type);
-	if (enumField) {
+	const enumObject = enumByName(field.type);
+	if (enumObject) {
 		return (
 			<EnumField
 				name={field.name}
-				typeEnum={enumField}
+				typeEnum={enumObject}
 				multiple={field.isArray}
 				autoFocus={autoFocus}
 			/>
@@ -182,6 +184,24 @@ const DetailForm = ({
 		[detailFields]
 	);
 
+	// Form fields can modify the data that's saved in form data before it goes up to
+	// get submitted. This allows them to work in whatever format is easiest for them
+	// but be in control of exactly what gets sent to the server.
+	const submit = useCallback(
+		async (values: any, actions: FormikHelpers<any>) => {
+			const transformedValues = values;
+
+			for (const transform of dataTransforms) {
+				transformedValues[transform.field.name] = await transform.transform(
+					values[transform.field.name]
+				);
+			}
+
+			await onSubmit(transformedValues, actions);
+		},
+		[dataTransforms]
+	);
+
 	const firstEditableField = detailFields.find((field) => !isFieldReadonly(field));
 
 	return (
@@ -190,7 +210,7 @@ const DetailForm = ({
 			validateOnChange={false} // We don't want to validate on change because it will trigger a toast message on every keystroke
 			validateOnBlur={false} // We don't want to validate on blur because it will trigger a toast message
 			initialValues={initialValues}
-			onSubmit={onSubmit}
+			onSubmit={submit}
 			onReset={onCancel}
 		>
 			{({ isSubmitting }) => (
@@ -317,15 +337,7 @@ export const DetailPanel = () => {
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
 			const value = result?.[field.name as keyof typeof result];
-
-			if ((value as any)?.__typename) {
-				// If there's a __typename on the value, we want to strip it off.
-				const { __typename, ...rest } = value as any;
-				acc[field.name] = rest;
-			} else {
-				acc[field.name] = value ?? field.initialValue ?? undefined;
-			}
-
+			acc[field.name] = value ?? field.initialValue ?? undefined;
 			return acc;
 		},
 		{} as Record<string, any>
@@ -468,17 +480,15 @@ export const DetailPanel = () => {
 						) : error || data?.result === null ? (
 							<p>Failed to load entity.</p>
 						) : (
-							<>
-								<DetailForm
-									initialValues={initialValues}
-									detailFields={formFields}
-									onCancel={closeModal}
-									onSubmit={handleOnSubmit}
-									persistName={persistName}
-									isReadOnly={selectedEntity.attributes.isReadOnly}
-									panelMode={panelMode}
-								/>
-							</>
+							<DetailForm
+								initialValues={initialValues}
+								detailFields={formFields}
+								onCancel={closeModal}
+								onSubmit={handleOnSubmit}
+								persistName={persistName}
+								isReadOnly={selectedEntity.attributes.isReadOnly}
+								panelMode={panelMode}
+							/>
 						)}
 					</>
 				}

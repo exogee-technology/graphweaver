@@ -4,6 +4,7 @@ import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 import { getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
+import { useState } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -21,6 +22,7 @@ export const RelationshipFilter = ({
 	filter,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
+	const [selectedItemsNameCache, setSelectedItemsNameCache] = useState<Record<string, string>>({});
 
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);

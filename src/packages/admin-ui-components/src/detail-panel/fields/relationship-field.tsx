@@ -2,8 +2,9 @@ import { useQuery } from '@apollo/client';
 import { useField } from 'formik';
 
 import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
-import { EntityField, Filter, useSchema } from '../../utils';
+import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
+import { useRegisterDataTransform } from '../use-data-transform';
 
 const mode = (field: EntityField) => {
 	if (field.relationshipType === 'ONE_TO_MANY' || field.relationshipType === 'MANY_TO_MANY') {
@@ -12,12 +13,6 @@ const mode = (field: EntityField) => {
 
 	return SelectMode.SINGLE;
 };
-
-function arrayify<T>(value: T) {
-	if (Array.isArray(value)) return value;
-	if (value !== null && value !== undefined) return [value];
-	return [];
-}
 
 export const RelationshipField = ({
 	name,
@@ -32,29 +27,28 @@ export const RelationshipField = ({
 	const { entityByType } = useSchema();
 	const relatedEntity = entityByType(field.type);
 
-	const convertToGqlVariables = (values: SelectOption[]) => {
-		// If there are no values we can just return undefined or an empty array
-		if (!values || values.length === 0) {
-			return mode(field) === SelectMode.MULTI ? [] : undefined;
-		}
+	// The form data works with select options for ease of management / display,
+	// but when we go to the server, we need to convert these to the correct format
+	// so that we don't trigger an update on the server of the related entity when
+	// we're only changing the foreign key.
+	useRegisterDataTransform({
+		field,
+		transform: async (value: unknown) => {
+			if (value === null || value === undefined || (Array.isArray(value) && value.length === 0)) {
+				return undefined;
+			}
 
-		// If the field is a multi select field we need to convert the values to an array of IDs
-		const mappedValues = values.map((item) =>
-			item && typeof item === 'object' && item.hasOwnProperty('value')
-				? { [relatedEntity.primaryKeyField]: item.value }
-				: item
-		);
+			const mappedResults = (value as SelectOption[]).map((item) => ({
+				[relatedEntity.primaryKeyField]: item.value,
+			}));
 
-		if (mode(field) === SelectMode.MULTI) {
-			return mappedValues;
-		} else {
-			return mappedValues[0];
-		}
-	};
-
-	const handleOnChange = (selected: SelectOption[]) => {
-		helpers.setValue(convertToGqlVariables(selected));
-	};
+			if (mode(field) === SelectMode.MULTI) {
+				return mappedResults;
+			} else {
+				return mappedResults[0];
+			}
+		},
+	});
 
 	const { data } = useQuery<{ result: Record<string, string>[] }>(
 		getRelationshipQuery(relatedEntity),
@@ -71,34 +65,20 @@ export const RelationshipField = ({
 		}
 	);
 
-	const labelsById = new Map<string, string>();
-
 	const options = (data?.result ?? []).map<SelectOption>((item): SelectOption => {
 		const label = relatedEntity.summaryField || relatedEntity.primaryKeyField;
-		const selectOption = { label: item[label], value: item[relatedEntity.primaryKeyField] };
-		labelsById.set(selectOption.value, selectOption.label);
-		return selectOption;
+		return { label: item[label], value: item[relatedEntity.primaryKeyField] };
 	});
 
-	const valueForDisplay = arrayify(value).map((filter: Filter<string>) => {
-		const id = filter[relatedEntity.primaryKeyField];
-
-		return {
-			value: id,
-			label: labelsById.get(id) ?? id,
-		};
-	});
-
-	// If we've got our data back, we can look up the correct options in the result
-	// so we have a proper description for them.
-	if (data?.result)
+	if (data?.result) {
 		return (
 			<ComboBox
 				options={options}
-				value={valueForDisplay}
-				onChange={handleOnChange}
+				value={value}
+				onChange={helpers.setValue}
 				mode={mode(field)}
 				autoFocus={autoFocus}
 			/>
 		);
+	}
 };
