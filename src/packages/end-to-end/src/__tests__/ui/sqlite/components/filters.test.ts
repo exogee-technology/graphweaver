@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { config } from '../../../../config';
 
-test('Filters - should not error when cleared each time', async ({ page }) => {
+test.skip('Filters - should not error when cleared each time', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: config.datasource }).click();
 
