@@ -199,6 +199,7 @@ const DetailForm = ({
 				} catch (error: any) {
 					transformErrored = true;
 
+					console.error(error);
 					// Because we don't show field errors, tell the user the problem.
 					// Ideally this line would be replaced with:
 					// actions.setFieldError(transform.field.name, error.message);
