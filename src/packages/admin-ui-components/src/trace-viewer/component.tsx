@@ -11,14 +11,15 @@ import styles from './styles.module.css';
 
 export const TraceViewer = ({ trace }: { trace: Trace }) => {
 	const spans = trace?.traces || [];
-	const treeData = createTreeFromTrace(spans);
+	const root = createTreeFromTrace(spans);
+
+	console.log(root);
 
 	const max = BigInt(spans.at(-1)?.timestamp ?? 0) + BigInt(spans.at(-1)?.duration ?? 0);
 
 	const minTimestamp = UnixNanoTimeStamp.fromString(spans[0].timestamp);
 	const maxTimestamp = UnixNanoTimeStamp.fromString(max.toString());
 
-	const root = treeData[0];
 	const graphql = JSON.parse(String(root.attributes.body)) as { query: string };
 
 	return (
@@ -26,14 +27,12 @@ export const TraceViewer = ({ trace }: { trace: Trace }) => {
 			<Panel maxSize={80}>
 				<div className={styles.scrollContainer}>
 					<div className={styles.spanListContainer}>
-						{treeData.map((treeItem) => (
-							<SpanView
-								key={treeItem.id}
-								data={treeItem}
-								minTimestamp={minTimestamp}
-								maxTimestamp={maxTimestamp}
-							/>
-						))}
+						<SpanView
+							key={root.id}
+							span={root}
+							minTimestamp={minTimestamp}
+							maxTimestamp={maxTimestamp}
+						/>
 					</div>
 				</div>
 			</Panel>

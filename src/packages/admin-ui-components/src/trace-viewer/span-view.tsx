@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { RenderTree } from '../utils';
+import { SpanTree } from '../utils';
 import { UnixNanoTimeStamp } from '../utils';
 import { ChevronDownIcon } from '../assets';
 
@@ -9,20 +9,20 @@ import { Spacer } from '../spacer';
 import clsx from 'clsx';
 
 export const SpanView = ({
-	data,
+	span,
 	minTimestamp,
 	maxTimestamp,
 }: {
-	data: RenderTree;
+	span: SpanTree;
 	minTimestamp: UnixNanoTimeStamp;
 	maxTimestamp: UnixNanoTimeStamp;
 }) => {
 	const [showChildren, setShowChildren] = useState(false); // State to toggle children visibility
 
-	const toggleChildren = () => data.children.length && setShowChildren(!showChildren);
+	const toggleChildren = () => span.childrenCount && setShowChildren(!showChildren);
 
-	const durationNano = UnixNanoTimeStamp.fromString(data.duration);
-	const startTimeUnixNano = UnixNanoTimeStamp.fromString(data.timestamp);
+	const durationNano = UnixNanoTimeStamp.fromString(span.duration);
+	const startTimeUnixNano = UnixNanoTimeStamp.fromString(span.timestamp);
 
 	const { width, offset } = durationNano.calculateWidthAndOffset(
 		startTimeUnixNano,
@@ -41,9 +41,9 @@ export const SpanView = ({
 				aria-expanded={showChildren}
 			>
 				<div className={styles.spanRow}>
-					{data.children.length > 0 && (
+					{span.childrenCount > 0 && (
 						<div className={styles.spanToggle}>
-							{data.children.length}{' '}
+							{span.childrenCount}{' '}
 							<span className={clsx(styles.chevron, !showChildren && styles.rotate)}>
 								<ChevronDownIcon />
 							</span>
@@ -51,7 +51,7 @@ export const SpanView = ({
 					)}
 					<p className={styles.textContainer} data-info="span-info">
 						<span className="font-bold" data-name="span-name">
-							{data.name}
+							{span.name}
 						</span>
 					</p>
 				</div>
@@ -68,11 +68,11 @@ export const SpanView = ({
 			{showChildren && (
 				<div className={styles.spanChildren}>
 					<div className={styles.spanChildrenLine}>
-						{Array.isArray(data.children)
-							? data.children.map((child: any) => (
+						{Array.isArray(span.children)
+							? span.children.map((child: any) => (
 									<SpanView
 										key={child.id}
-										data={child}
+										span={child}
 										minTimestamp={minTimestamp}
 										maxTimestamp={maxTimestamp}
 									/>

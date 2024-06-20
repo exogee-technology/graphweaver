@@ -13,8 +13,6 @@ export const TraceDetail = () => {
 		variables: { id },
 	});
 
-	console.log(data);
-
 	if (loading) {
 		return <Loader />;
 	}
@@ -37,8 +35,6 @@ export const TraceDetail = () => {
 
 export const TraceList = () => {
 	const { data, loading, error } = useQuery(queryForTraces);
-
-	console.log(data);
 
 	if (loading) {
 		return <Loader />;
