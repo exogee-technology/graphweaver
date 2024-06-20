@@ -42,9 +42,9 @@ export const RelationshipFilter = ({
 	// the server. The reason we always get the first one is we only display the name in the filter if there's
 	// one selected item. It will be in the cache because the grid will have fetched it.
 	const { data: displayData } = useFragment({
-		...fragmentForDisplayValueOfEntity(entityType),
+		...fragmentForDisplayValueOfEntity(relatedEntity),
 		from: {
-			__typename: entityType.name,
+			__typename: relatedEntity.name,
 			[relatedEntity.primaryKeyField]: currentFilterValue[0],
 		},
 	});
