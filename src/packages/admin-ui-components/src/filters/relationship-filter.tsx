@@ -1,10 +1,9 @@
-import { useLazyQuery } from '@apollo/client';
+import { useFragment, useLazyQuery } from '@apollo/client';
 
 import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
-import { getRelationshipQuery } from './graphql';
+import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
-import { useState } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -22,8 +21,6 @@ export const RelationshipFilter = ({
 	filter,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
-	const [selectedItemsNameCache, setSelectedItemsNameCache] = useState<Record<string, string>>({});
-
 	const entityType = entityByName(entity);
 	const field = entityType?.fields.find((f) => f.name === fieldName);
 	if (!field?.type) return null;
@@ -35,6 +32,22 @@ export const RelationshipFilter = ({
 
 	if (!relationshipEntity) return null;
 	const relatedEntity = entityByName(relationshipEntity);
+
+	const currentFilterValue =
+		(filter?.[fieldName] as Record<string, string[]> | undefined)?.[
+			`${relatedEntity.primaryKeyField}_in`
+		] ?? [];
+
+	// This reads the data for the related entity directly from the Apollo cache without going back to
+	// the server. The reason we always get the first one is we only display the name in the filter if there's
+	// one selected item. It will be in the cache because the grid will have fetched it.
+	const { data: displayData } = useFragment({
+		...fragmentForDisplayValueOfEntity(entityType),
+		from: {
+			__typename: entityType.name,
+			[relatedEntity.primaryKeyField]: currentFilterValue[0],
+		},
+	});
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		const hasSelectedOptions = (options ?? [])?.length > 0;
@@ -50,7 +63,7 @@ export const RelationshipFilter = ({
 		);
 	};
 
-	const [getRelationship, { data, loading, error }] = useLazyQuery<{
+	const [fetchRelationshipOptionsList, { data, loading, error }] = useLazyQuery<{
 		result: any[];
 	}>(getRelationshipQuery(relatedEntity), {
 		variables: {
@@ -66,7 +79,7 @@ export const RelationshipFilter = ({
 
 	const handleOnOpen = () => {
 		if (!data && !loading && !error) {
-			getRelationship();
+			fetchRelationshipOptionsList();
 		}
 	};
 
@@ -78,16 +91,21 @@ export const RelationshipFilter = ({
 		};
 	});
 
-	const currentFilterValue =
-		(filter?.[fieldName] as Record<string, string[]> | undefined)?.[
-			`${relatedEntity.primaryKeyField}_in`
-		] ?? [];
+	const currentValue =
+		currentFilterValue.length === 1
+			? {
+					label:
+						displayData?.[relatedEntity.summaryField ?? relatedEntity.primaryKeyField] ??
+						currentFilterValue[0],
+					value: currentFilterValue[0],
+				}
+			: currentFilterValue.map(toSelectOption);
 
 	return (
 		<ComboBox
 			key={fieldName}
 			options={relationshipOptions}
-			value={currentFilterValue.map(toSelectOption)}
+			value={currentValue}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}

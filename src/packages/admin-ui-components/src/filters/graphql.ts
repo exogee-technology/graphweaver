@@ -27,3 +27,13 @@ export const queryForFilterOptions = (entity: Entity, fieldName: string) => {
 		}
 	`;
 };
+
+export const fragmentForDisplayValueOfEntity = (entity: Entity) => ({
+	fragmentName: `${entity.name}DisplayValue`,
+	fragment: gql`
+		fragment ${entity.name}DisplayValue on ${entity.name} {
+			${entity.primaryKeyField}
+			${entity.summaryField}
+		}
+	`,
+});
