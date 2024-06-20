@@ -436,7 +436,7 @@ export const DetailPanel = () => {
 					</button>{' '}
 					has been successfully {panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
 				</div>,
-				{ duration: 15000 }
+				{ duration: 10_000 }
 			);
 		} catch (error: unknown) {
 			console.error(error);
