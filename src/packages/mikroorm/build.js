@@ -7,7 +7,7 @@ const validateMikroOrmPeerAndDevVersionsMatch = async () => {
 		await fs.readFile(path.resolve('package.json'), 'utf-8')
 	);
 
-	// Let's make sure first that the version in dev and peer match.
+	// Let's make sure that the version in dev and peer match.
 	const devVersion = devDependencies['@mikro-orm/core'];
 	const peerVersion = peerDependencies['@mikro-orm/core'];
 	if (devVersion !== peerVersion) {
