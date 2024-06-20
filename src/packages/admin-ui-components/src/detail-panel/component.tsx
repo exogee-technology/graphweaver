@@ -188,15 +188,26 @@ const DetailForm = ({
 	// but be in control of exactly what gets sent to the server.
 	const submit = useCallback(
 		async (values: any, actions: FormikHelpers<any>) => {
+			let transformErrored = false;
 			const transformedValues = values;
 
 			for (const transform of dataTransforms) {
-				transformedValues[transform.field.name] = await transform.transform(
-					values[transform.field.name]
-				);
+				try {
+					transformedValues[transform.field.name] = await transform.transform(
+						values[transform.field.name]
+					);
+				} catch (error: any) {
+					transformErrored = true;
+
+					// Because we don't show field errors, tell the user the problem.
+					// Ideally this line would be replaced with:
+					// actions.setFieldError(transform.field.name, error.message);
+					// But we'd have to show field errors for that to work.
+					toast.error(error.message);
+				}
 			}
 
-			await onSubmit(transformedValues, actions);
+			if (!transformErrored) await onSubmit(transformedValues, actions);
 		},
 		[dataTransforms]
 	);
