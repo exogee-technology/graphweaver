@@ -374,21 +374,6 @@ export const DetailPanel = () => {
 		try {
 			let result: FetchResult;
 
-			// If the form values contains an deleteUrl, then do a seperate mutation to delete the file
-			if (values.deleteUrl) {
-				await deleteFileToSignedURL(values.deleteUrl);
-			}
-
-			// If the form values contain an image, then do seperate mutation to upload the image
-			if (values.uploadUrl && values.file) {
-				await uploadFileToSignedURL(values.uploadUrl, values.file);
-			}
-
-			// if urls and file are there, remove them
-			delete values.deleteUrl;
-			delete values.uploadUrl;
-			delete values.file;
-
 			if (panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				result = await updateEntity({
