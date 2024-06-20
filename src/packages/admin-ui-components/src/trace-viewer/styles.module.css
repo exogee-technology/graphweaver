@@ -74,6 +74,11 @@
 	font-size: 0.75rem;
 }
 
+.spanTimeRight {
+	text-align: right;
+	right: 0;
+}
+
 .chevron {
 	display: flex;
 	transform-origin: center;

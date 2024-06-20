@@ -23,6 +23,10 @@ export class UnixNanoTimeStamp {
 		return new UnixNanoTimeStamp(BigInt(input));
 	}
 
+	public toDate(): Date {
+		return new Date(Number(this.input) / 1_000);
+	}
+
 	public toSIUnits(): {
 		value: number;
 		unit: 's' | 'ms' | 'μs' | 'ns';
@@ -58,7 +62,7 @@ export class UnixNanoTimeStamp {
 		maxTimestamp: UnixNanoTimeStamp
 	): {
 		width: string;
-		offset: string;
+		offset: number;
 	} {
 		const timespan = UnixNanoTimeStamp.duration(minTimestamp, maxTimestamp).getBigInt();
 
@@ -73,10 +77,10 @@ export class UnixNanoTimeStamp {
 			.getBigInt();
 		const offset =
 			calculatedOffset < 0
-				? '0%'
+				? 0
 				: calculatedWidth < 1 && calculatedOffset > 99
-					? '99%'
-					: `${calculatedOffset}%`;
+					? 99
+					: Number(calculatedOffset);
 
 		return { width, offset };
 	}

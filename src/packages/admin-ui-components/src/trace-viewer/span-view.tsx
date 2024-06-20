@@ -58,8 +58,11 @@ export const SpanView = ({
 				<Spacer height={8} />
 
 				<div className={styles.spanProgressBarContainer}>
-					<div className={styles.spanProgressBar} style={{ width, left: offset }}></div>
-					<div className={styles.spanTime} style={{ left: offset }}>
+					<div className={styles.spanProgressBar} style={{ width, left: `${offset}%` }}></div>
+					<div
+						className={clsx(styles.spanTime, offset >= 95 && styles.spanTimeRight)}
+						style={offset < 95 ? { left: `${offset}%` } : {}}
+					>
 						{Number(value).toFixed(2)} {unit}
 					</div>
 				</div>

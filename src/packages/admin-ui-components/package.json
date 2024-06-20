@@ -28,6 +28,7 @@
 		"@apollo/client": "3.10.5",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.1",
+		"@tanstack/react-table": "8.17.3",
 		"clsx": "2.1.1",
 		"downshift": "9.0.6",
 		"graphiql": "3.2.3",

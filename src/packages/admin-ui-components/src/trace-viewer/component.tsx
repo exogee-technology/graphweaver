@@ -5,15 +5,13 @@ import { GraphQlViewer } from '../graphql-viewer';
 import { SpanView } from './span-view';
 import { createTreeFromTrace } from '../utils';
 
-import type { Trace } from '../utils';
+import type { Span } from '../utils';
 
 import styles from './styles.module.css';
 
-export const TraceViewer = ({ trace }: { trace: Trace }) => {
-	const spans = trace?.traces || [];
+export const TraceViewer = ({ traces }: { traces?: Span[] }) => {
+	const spans = traces || [];
 	const root = createTreeFromTrace(spans);
-
-	console.log(root);
 
 	const max = BigInt(spans.at(-1)?.timestamp ?? 0) + BigInt(spans.at(-1)?.duration ?? 0);
 

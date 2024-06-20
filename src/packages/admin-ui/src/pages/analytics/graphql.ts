@@ -16,7 +16,7 @@ export const queryForTrace = gql`
 
 export const queryForTraces = gql`
 	query traces {
-		traces(filter: { parentId: null }, pagination: { orderBy: { timestamp: ASC } }) {
+		traces(filter: { parentId: null }, pagination: { orderBy: { timestamp: DESC } }) {
 			id
 			traceId
 			parentId

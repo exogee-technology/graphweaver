@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import {
-	Table,
+	EntityTable,
 	useSchema,
 	PAGE_SIZE,
 	decodeSearchParams,
@@ -122,7 +122,7 @@ export const List = () => {
 				<ListToolBar count={data?.aggregate?.count} onExportToCSV={handleExportToCSV} />
 			</Header>
 
-			<Table
+			<EntityTable
 				rows={rows}
 				orderBy={sort ?? []}
 				requestRefetch={requestRefetch}

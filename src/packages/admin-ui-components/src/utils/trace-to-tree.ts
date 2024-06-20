@@ -13,19 +13,41 @@ export type Span = {
 	attributes: Record<string, unknown>;
 };
 
-export type Trace = {
-	traces: Span[];
-};
-
-const applyChildrenCounts = (node: SpanTree): SpanTree => {
+const applyChildrenCountsAndGroup = (node: SpanTree): SpanTree => {
 	if (node.children.length === 0) return { ...node, childrenCount: 0 };
 
 	let count = 0;
-	const children: SpanTree[] = [];
+
+	const group = new Map<string, SpanTree[]>();
+
 	for (const child of node.children) {
-		const childWithCount = applyChildrenCounts(child);
-		children.push(childWithCount);
+		const childWithCount = applyChildrenCountsAndGroup(child);
+
+		// Group children by name
+		group.set(childWithCount.name, [...(group.get(childWithCount.name) ?? []), childWithCount]);
 		count += childWithCount.childrenCount;
+	}
+
+	const children = [];
+	for (const [_name, childNodes] of group) {
+		if (childNodes.length === 1) {
+			children.push(childNodes[0]);
+		} else {
+			// create a new span with the same id as the first child
+			const newSpan = {
+				...childNodes[0],
+				// Calculate the total duration of the group
+				duration: String(
+					Number(childNodes.at(-1)?.timestamp) +
+						Number(childNodes.at(-1)?.duration) -
+						Number(childNodes[0].timestamp)
+				),
+				children: childNodes,
+				childrenCount: childNodes.reduce((acc, child) => acc + child.childrenCount, 0),
+			};
+
+			children.push(newSpan);
+		}
 	}
 
 	return {
@@ -65,5 +87,5 @@ export const createTreeFromTrace = (spans: Span[]): SpanTree => {
 		throw new Error('No root node found');
 	}
 
-	return applyChildrenCounts(rootNode);
+	return applyChildrenCountsAndGroup(rootNode);
 };

@@ -6,7 +6,7 @@ import styles from './styles.module.css';
 import { Button } from '../button';
 import { Modal } from '../modal';
 import { Spinner } from '../spinner';
-import { TableRowItem } from '../table';
+import { TableRowItem } from '../entity-table';
 
 import toast from 'react-hot-toast';
 
