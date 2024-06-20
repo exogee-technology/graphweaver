@@ -38,7 +38,10 @@ export const RelationshipField = ({
 				return undefined;
 			}
 
-			const mappedResults = (value as SelectOption[]).map((item) => ({
+			let arrayifiedValue = value;
+			if (!Array.isArray(arrayifiedValue)) arrayifiedValue = [value];
+
+			const mappedResults = (arrayifiedValue as SelectOption[]).map((item) => ({
 				[relatedEntity.primaryKeyField]: item.value,
 			}));
 
