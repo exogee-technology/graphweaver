@@ -24,6 +24,7 @@ const exec = promisify(nodeExec);
 		],
 	});
 
-	// TODO: This won't work on Windows, guard accordingly.
-	await exec('chmod 755 bin/index.js');
+	if (process.platform !== 'win32') {
+		await exec('chmod 755 bin/index.js');
+	}
 })();
