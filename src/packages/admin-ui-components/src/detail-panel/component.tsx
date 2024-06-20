@@ -191,24 +191,18 @@ const DetailForm = ({
 			let transformErrored = false;
 			const transformedValues = values;
 
-			for (const transform of dataTransforms) {
-				try {
+			try {
+				for (const transform of dataTransforms) {
 					transformedValues[transform.field.name] = await transform.transform(
 						values[transform.field.name]
 					);
-				} catch (error: any) {
-					transformErrored = true;
-
-					console.error(error);
-					// Because we don't show field errors, tell the user the problem.
-					// Ideally this line would be replaced with:
-					// actions.setFieldError(transform.field.name, error.message);
-					// But we'd have to show field errors for that to work.
-					toast.error(error.message);
 				}
+				await onSubmit(transformedValues, actions);
+			} catch (error: any) {
+				transformErrored = true;
+				console.error(error);
+				toast.error(error.message);
 			}
-
-			if (!transformErrored) await onSubmit(transformedValues, actions);
 		},
 		[dataTransforms]
 	);
