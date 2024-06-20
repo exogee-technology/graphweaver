@@ -813,6 +813,7 @@ export type Token = {
 
 export type Trace = {
   __typename?: 'Trace';
+  attributes: Scalars['JSON']['output'];
   duration: Scalars['String']['output'];
   id: Scalars['String']['output'];
   name: Scalars['String']['output'];
@@ -822,6 +823,12 @@ export type Trace = {
 };
 
 export type TracesListFilter = {
+  attributes?: InputMaybe<Scalars['JSON']['input']>;
+  attributes_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  attributes_ne?: InputMaybe<Scalars['JSON']['input']>;
+  attributes_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  attributes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  attributes_null?: InputMaybe<Scalars['Boolean']['input']>;
   duration?: InputMaybe<Scalars['String']['input']>;
   duration_ilike?: InputMaybe<Scalars['String']['input']>;
   duration_in?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -873,6 +880,7 @@ export type TracesListFilter = {
 };
 
 export type TracesOrderByInput = {
+  attributes?: InputMaybe<Sort>;
   duration?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;

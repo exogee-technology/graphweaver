@@ -1,7 +1,8 @@
-import { BigIntType, Entity, PrimaryKey, Property, JsonType } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, JsonType } from '@mikro-orm/core';
+import { TraceData } from '@exogee/graphweaver';
 
 @Entity()
-export class Trace {
+export class Trace implements TraceData {
 	@PrimaryKey({ type: String })
 	id!: string;
 
@@ -21,5 +22,5 @@ export class Trace {
 	duration!: number;
 
 	@Property({ type: JsonType })
-	attributes!: Record<string, any>;
+	attributes!: Record<string, unknown>;
 }

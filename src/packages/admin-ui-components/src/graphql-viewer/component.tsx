@@ -1,46 +1,6 @@
 import { CodeBlock, atomOneDark } from 'react-code-blocks';
 
-export const GraphQlViewer = () => {
-	const graphql = `query {
-  tasks {
-    id
-    description
-    user {
-      id
-      name
-    }
-      id
-    description
-    user {
-      id
-      name
-    }
-      id
-    description
-    user {
-      id
-      name
-    }
-      id
-    description
-    user {
-      id
-      name
-    }
-      id
-    description
-    user {
-      id
-      name
-    }
-      id
-    description
-    user {
-      id
-      name
-    }
-  }
-}`;
+export const GraphQlViewer = ({ graphql }: { graphql: string }) => {
 	return (
 		<CodeBlock
 			text={graphql}
@@ -50,7 +10,7 @@ export const GraphQlViewer = () => {
 			customStyle={{
 				backgroundColor: '#14111a',
 				height: '100%',
-				overflow: 'scroll',
+				overflowY: 'auto',
 				flex: '1',
 			}}
 		/>

@@ -1,6 +1,7 @@
 import { Entity, Field } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 import { Trace as OrmTrace } from '../entities';
 import { myConnection } from '../database';
@@ -40,4 +41,7 @@ export class TraceEntity {
 
 	@Field(() => String)
 	duration!: string;
+
+	@Field(() => GraphQLJSON)
+	attributes!: Record<string, unknown>;
 }

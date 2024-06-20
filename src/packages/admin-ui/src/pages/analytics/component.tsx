@@ -1,34 +1,51 @@
 import { useQuery } from '@apollo/client';
-import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
-import { GraphQlViewer, Header, TraceViewer } from '@exogee/graphweaver-admin-ui-components';
+import { Header, Loader, TraceViewer } from '@exogee/graphweaver-admin-ui-components';
+import { useParams } from 'react-router-dom';
 
-import { queryForTrace } from './graphql';
+import { queryForTrace, queryForTraces } from './graphql';
 
 import styles from './styles.module.css';
 
-export const Analytics = () => {
-	const { data, loading, error } = useQuery(queryForTrace);
+export const TraceDetail = () => {
+	const { id } = useParams();
 
-	if (loading) return <div className={styles.wrapper}>Loading...</div>;
-	if (error) return <div className={styles.wrapper}>Error: {error.message}</div>;
+	const { data, loading, error } = useQuery(queryForTrace, {
+		variables: { id },
+	});
+
+	console.log(data);
+
+	if (loading) {
+		return <Loader />;
+	}
+	if (error) {
+		return <pre>{`Error! ${error.message}`}</pre>;
+	}
 
 	return (
 		<div className={styles.wrapper}>
 			<Header>
 				<div className="titleWrapper">
 					<h1>Trace</h1>
-					<p className="subtext">{'Detailed trace view for a376436d11e530e2a47efe2d43d7f9ec'}</p>
+					<p className="subtext">{`Detailed trace view for ${id}`}</p>
 				</div>
 			</Header>
-			<PanelGroup direction="vertical">
-				<Panel maxSize={80}>
-					<TraceViewer trace={data} />
-				</Panel>
-				<PanelResizeHandle className={styles.handle} />
-				<Panel maxSize={80} defaultSize={40}>
-					<GraphQlViewer />
-				</Panel>
-			</PanelGroup>
+			<TraceViewer trace={data} />
 		</div>
 	);
+};
+
+export const TraceList = () => {
+	const { data, loading, error } = useQuery(queryForTraces);
+
+	console.log(data);
+
+	if (loading) {
+		return <Loader />;
+	}
+	if (error) {
+		return <pre>{`Error! ${error.message}`}</pre>;
+	}
+
+	return <div className={styles.wrapper}></div>;
 };

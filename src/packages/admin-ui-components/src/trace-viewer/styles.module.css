@@ -87,7 +87,8 @@
 /* VIEWER */
 
 .scrollContainer {
-	overflow-y: scroll;
+	overflow-y: auto;
+	scrollbar-width: thin;
 	height: 100%;
 	background: #1e1a25;
 	border-radius: 0.25rem;
@@ -98,4 +99,8 @@
 	color: #71717a;
 	display: flex;
 	flex-direction: column;
+}
+
+.handle {
+	height: 20px;
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouteObject, RouterProvider } from 'react-router-dom';
 import {
 	Loader,
 	DefaultLayout,
@@ -9,9 +9,9 @@ import {
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { List, Root, Playground, Analytics } from './pages';
+import { List, Root, Playground, TraceList, TraceDetail } from './pages';
 
-const defaultRoutes = [
+const defaultRoutes: RouteObject[] = [
 	{
 		path: '/',
 		element: <DefaultLayout />,
@@ -23,7 +23,18 @@ const defaultRoutes = [
 			},
 			{
 				path: '/traces',
-				element: <Analytics />,
+				element: <Outlet />,
+
+				children: [
+					{
+						element: <TraceList />,
+						index: true,
+					},
+					{
+						path: ':id',
+						element: <TraceDetail />,
+					},
+				],
 			},
 			{
 				path: ':entity',

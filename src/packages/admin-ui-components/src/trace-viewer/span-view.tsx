@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { RenderTree } from './types';
-import { UnixNanoTimeStamp } from '../utils/timestamp';
+import { RenderTree } from '../utils';
+import { UnixNanoTimeStamp } from '../utils';
 import { ChevronDownIcon } from '../assets';
 
 import styles from './styles.module.css';

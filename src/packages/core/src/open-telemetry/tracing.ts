@@ -11,6 +11,16 @@ import type { Instrumentation } from '@opentelemetry/instrumentation';
 import { JsonSpanProcessor } from './exporter';
 import { BackendProvider } from '../types';
 
+export interface TraceData {
+	id: string;
+	traceId: string;
+	parentId: string;
+	name: string;
+	timestamp: Date;
+	duration: number;
+	attributes: Record<string, unknown>;
+}
+
 // Check is env variable is set to enable tracing
 export const isTraceable = !!process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 export const tracer = isTraceable ? traceApi.getTracer('graphweaver') : undefined;
