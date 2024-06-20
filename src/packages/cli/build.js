@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const { exec: nodeExec } = require('child_process');
-const path = require('node:path');
-const fs = require('node:fs/promises');
 const { promisify } = require('util');
 
 const { build } = require('esbuild');
