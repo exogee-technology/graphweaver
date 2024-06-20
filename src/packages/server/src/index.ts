@@ -1,4 +1,4 @@
-import { GraphQLSchema } from 'graphql';
+import { DocumentNode, GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
@@ -174,12 +174,21 @@ export default class Graphweaver<TContext extends BaseContext> {
 			// This will allow us to trace the entire request from start to finish
 			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
 			this.server.executeHTTPGraphQLRequest = trace((request, trace) => {
-				trace?.span.updateName('Graphweaver Request');
+				const body = request.httpGraphQLRequest.body as
+					| { operationName: string; query: string }
+					| undefined;
+				const operationName = body?.operationName ?? 'Graphweaver Request';
+
+				const gql = parse(body?.query ?? '');
+				const type = (gql.definitions[0] as OperationDefinitionNode)?.operation ?? '';
+
+				trace?.span.updateName(operationName);
 				trace?.span.setAttributes({
 					'X-Amzn-RequestId': request.httpGraphQLRequest.headers.get('x-amzn-requestid'),
 					'X-Amzn-Trace-Id': request.httpGraphQLRequest.headers.get('x-amzn-trace-id'),
 					body: JSON.stringify(request.httpGraphQLRequest.body),
 					method: request.httpGraphQLRequest.method,
+					type,
 				});
 				return executeHTTPGraphQLRequest.bind(this.server)(request);
 			});

@@ -23,6 +23,7 @@ export const queryForTraces = gql`
 			name
 			timestamp
 			duration
+			attributes
 		}
 	}
 `;

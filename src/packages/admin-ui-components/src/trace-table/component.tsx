@@ -21,6 +21,13 @@ const columns: ColumnDef<Span, any>[] = [
 	columnHelper.accessor('name', {
 		header: () => 'Name',
 	}),
+	columnHelper.accessor('attributes', {
+		header: () => 'Type',
+		cell: (info) => {
+			const attributes = info.getValue();
+			return attributes.type ?? '';
+		},
+	}),
 	columnHelper.accessor('duration', {
 		header: () => 'Duration',
 		cell: (info) => {
@@ -31,6 +38,13 @@ const columns: ColumnDef<Span, any>[] = [
 					{Number(value).toFixed(2)} {unit}
 				</span>
 			);
+		},
+	}),
+	columnHelper.accessor('attributes', {
+		header: () => 'Method',
+		cell: (info) => {
+			const attributes = info.getValue();
+			return attributes.method ?? '';
 		},
 	}),
 ];
