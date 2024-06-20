@@ -20,21 +20,20 @@ import {
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
-
-import styles from './styles.module.css';
 import {
 	BooleanField,
 	EnumField,
 	JSONField,
 	RelationshipField,
-	uploadFileToSignedURL,
+	LinkField,
+	MediaField,
+	TextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-import { LinkField } from './fields/link-field';
-import { isValueEmpty } from './util';
-import { deleteFileToSignedURL, MediaField } from './fields/media-field';
-import { TextField } from './fields/text-field';
+
 import { dataTransforms } from './use-data-transform';
+import { isValueEmpty } from './util';
+import styles from './styles.module.css';
 
 interface ResultBaseType {
 	id: string;
