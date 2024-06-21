@@ -7,10 +7,6 @@ import { useNavigate } from 'react-router-dom';
 const columnHelper = createColumnHelper<Span>();
 
 const columns: ColumnDef<Span, any>[] = [
-	columnHelper.accessor('traceId', {
-		header: () => 'Trace ID',
-		cell: (info) => info.getValue(),
-	}),
 	columnHelper.accessor('timestamp', {
 		cell: (info) => {
 			const timestamp = UnixNanoTimeStamp.fromString(info.getValue());
@@ -39,6 +35,10 @@ const columns: ColumnDef<Span, any>[] = [
 				</span>
 			);
 		},
+	}),
+	columnHelper.accessor('traceId', {
+		header: () => 'Trace ID',
+		cell: (info) => info.getValue(),
 	}),
 	columnHelper.accessor('attributes', {
 		header: () => 'Method',
