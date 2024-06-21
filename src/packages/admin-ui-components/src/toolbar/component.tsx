@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 export interface ToolBarProps {
 	title: string;
 	subtitle: string;
-	onExportToCSV: () => void;
+	onExportToCSV?: () => void;
 }
 
 export const ToolBar = ({ title, subtitle, onExportToCSV }: ToolBarProps) => {

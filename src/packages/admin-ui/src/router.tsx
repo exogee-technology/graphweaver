@@ -22,14 +22,9 @@ const defaultRoutes: RouteObject[] = [
 				element: <Root />,
 			},
 			{
-				path: '/traces',
+				path: 'traces',
 				element: <Outlet />,
-
 				children: [
-					{
-						element: <TraceList />,
-						index: true,
-					},
 					{
 						path: ':id',
 						element: <TraceDetail />,

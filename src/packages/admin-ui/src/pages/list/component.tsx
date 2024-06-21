@@ -16,10 +16,11 @@ import {
 } from '@exogee/graphweaver-admin-ui-components';
 
 import { queryForEntityPage } from './graphql';
+import { TraceList } from '../analytics';
 
 interface ListToolBarProps {
 	count?: number;
-	onExportToCSV: () => void;
+	onExportToCSV?: () => void;
 }
 
 export const ListToolBar = ({ count, onExportToCSV }: ListToolBarProps) => {
@@ -44,17 +45,23 @@ export const List = () => {
 	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
+	if (entity === 'Trace') {
+		return <TraceList />;
+	}
+
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const [showExportModal, setShowExportModal] = useState(false);
 	const { sort, page, filters } = decodeSearchParams(search);
 
+	const { primaryKeyField, fields } = entityByName(entity);
+
 	const queryVariables = {
 		pagination: {
 			offset: Math.max(page - 1, 0) * PAGE_SIZE,
 			limit: PAGE_SIZE,
-			orderBy: getOrderByQuery(entityByName(entity), sort),
+			orderBy: getOrderByQuery({ primaryKeyField, sort }),
 		},
 		...(filters ? { filter: filters } : {}),
 	};
@@ -98,7 +105,6 @@ export const List = () => {
 		type OverrideKey = keyof typeof row;
 		const overrides: { [k in OverrideKey]?: unknown } = {};
 
-		const { fields } = entityByName(entity);
 		for (const key in row) {
 			const field = fields.find((field) => field.name === key);
 			if (field?.type === 'JSON') {

@@ -52,13 +52,15 @@ export const ExportModal = ({
 					return;
 				}
 
+				const primaryKeyField = selectedEntity.primaryKeyField;
+
 				const { data } = await apolloClient.query({
 					query: GetEntity(selectedEntity, entityByName),
 					variables: {
 						pagination: {
 							offset: pageNumber * pageSize,
 							limit: pageSize,
-							orderBy: getOrderByQuery(selectedEntity, sort),
+							orderBy: getOrderByQuery({ primaryKeyField, sort }),
 						},
 						...(filters ? { filter: filters } : {}),
 					},

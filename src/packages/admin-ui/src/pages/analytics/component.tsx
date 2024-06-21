@@ -5,12 +5,16 @@ import {
 	Span,
 	TraceViewer,
 	TraceTable,
+	decodeSearchParams,
+	PAGE_SIZE,
+	getOrderByQuery,
 } from '@exogee/graphweaver-admin-ui-components';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { queryForTrace, queryForTraces } from './graphql';
 
 import styles from './styles.module.css';
+import { ListToolBar } from '../list';
 
 export const TraceDetail = () => {
 	const { id } = useParams();
@@ -40,7 +44,26 @@ export const TraceDetail = () => {
 };
 
 export const TraceList = () => {
-	const { data, loading, error } = useQuery<{ traces: Span[] }>(queryForTraces);
+	const [search] = useSearchParams();
+	const { sort, page, filters } = decodeSearchParams(search);
+
+	const variables = {
+		pagination: {
+			offset: Math.max(page - 1, 0) * PAGE_SIZE,
+			limit: PAGE_SIZE,
+			orderBy: getOrderByQuery({ sort, defaultSort: { timestamp: 'DESC' } }),
+		},
+		...(filters
+			? {
+					filter: {
+						...filters,
+						parentId: null,
+					},
+				}
+			: { filter: { parentId: null } }),
+	};
+
+	const { data, loading, error } = useQuery<{ traces: Span[] }>(queryForTraces, { variables });
 
 	if (loading) {
 		return <Loader />;
@@ -52,9 +75,7 @@ export const TraceList = () => {
 	return (
 		<div className={styles.wrapper}>
 			<Header>
-				<div className="titleWrapper">
-					<h1>Traces</h1>
-				</div>
+				<ListToolBar />
 			</Header>
 			<TraceTable traces={data?.traces} />
 		</div>

@@ -17,7 +17,7 @@ export const traceProvider = new MikroBackendProvider(OrmTrace, myConnection);
 @Entity('Trace', {
 	provider: traceProvider,
 	adminUIOptions: {
-		hideInSideBar: true,
+		hideInSideBar: false, // This should be true
 	},
 	apiOptions: {
 		excludeFromBuiltInWriteOperations: true,

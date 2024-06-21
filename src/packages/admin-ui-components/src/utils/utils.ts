@@ -9,8 +9,22 @@ export const isNumeric = (item: unknown): boolean => {
 	return false;
 };
 
-export const getOrderByQuery = (entity: Entity, sort?: SortField[]) => ({
+type Sort = 'ASC' | 'DESC';
+
+export const getOrderByQuery = ({
+	primaryKeyField,
+	sort,
+	defaultSort,
+}: {
+	primaryKeyField?: string;
+	sort?: SortField[];
+	defaultSort?: { [k in string]: Sort };
+}) => ({
 	...(sort
 		? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
-		: { [entity.primaryKeyField]: 'ASC' }),
+		: defaultSort
+			? defaultSort
+			: primaryKeyField
+				? { [primaryKeyField]: 'ASC' }
+				: {}),
 });

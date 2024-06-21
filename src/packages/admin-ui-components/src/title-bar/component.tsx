@@ -8,7 +8,7 @@ import styles from './styles.module.css';
 interface Props {
 	title: string;
 	subtitle: string;
-	onExportToCSV: () => void;
+	onExportToCSV?: () => void;
 }
 
 // @todo allow to be extended
@@ -42,7 +42,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 						<OpenPlaygroundIcon />
 					</Button>
 				</Link>
-				<Button className={styles.toolBarTrailingButton} onClick={onExportToCSV}>
+				<Button className={styles.toolBarTrailingButton} onClick={() => onExportToCSV?.()}>
 					Export to CSV
 				</Button>
 				<Link

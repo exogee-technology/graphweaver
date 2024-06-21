@@ -90,7 +90,7 @@ export const SideBar = () => {
 				<>
 					<p className={styles.subtext}>Analytics</p>
 					<ul className={clsx(styles.closed)}>
-						<DashboardRow key={'/traces'} name={'Traces'} route={'/traces'} />
+						<DashboardRow key={'/Trace'} name={'Traces'} route={'/Trace'} />
 					</ul>
 				</>
 			</div>

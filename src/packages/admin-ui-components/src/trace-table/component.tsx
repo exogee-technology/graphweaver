@@ -17,11 +17,12 @@ const columns: ColumnDef<Span, any>[] = [
 	columnHelper.accessor('name', {
 		header: () => 'Name',
 	}),
-	columnHelper.accessor('attributes', {
+	columnHelper.accessor((row) => row.attributes?.type, {
+		id: 'type',
 		header: () => 'Type',
 		cell: (info) => {
 			const attributes = info.getValue();
-			return attributes.type ?? '';
+			return attributes?.type ?? '';
 		},
 	}),
 	columnHelper.accessor('duration', {
@@ -40,11 +41,12 @@ const columns: ColumnDef<Span, any>[] = [
 		header: () => 'Trace ID',
 		cell: (info) => info.getValue(),
 	}),
-	columnHelper.accessor('attributes', {
+	columnHelper.accessor((row) => row.attributes?.method, {
+		id: 'method',
 		header: () => 'Method',
 		cell: (info) => {
 			const attributes = info.getValue();
-			return attributes.method ?? '';
+			return attributes?.method ?? '';
 		},
 	}),
 ];
@@ -57,7 +59,7 @@ export const TraceTable = ({ traces }: { traces?: Span[] }) => {
 	}
 
 	const handleRowClick = (row: Row<Span>) => {
-		navigate(`${row.original.traceId}`);
+		navigate(`/traces/${row.original.traceId}`);
 	};
 
 	return <Table data={traces} columns={columns} onRowClick={handleRowClick} />;

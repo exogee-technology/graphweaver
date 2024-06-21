@@ -12,7 +12,7 @@ export const queryForEntityPage = (entityName: string, entityByType: (type: stri
 	const entityCanCount = entity.supportedAggregationTypes.includes(AggregationType.COUNT);
 
 	return gql`
-		query AdminUIListPage($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
+		query ${pluralName}List($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
 			result: ${queryName}(filter: $filter, pagination: $pagination) {
 				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}
