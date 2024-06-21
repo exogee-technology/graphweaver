@@ -9,6 +9,8 @@ import {
 	AggregationType,
 	TraceMethod,
 	Trace,
+	traceSync,
+	trace as startTrace,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -254,9 +256,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		//     id
 		//   }
 		// }
-		const filterConversionSpan = trace?.tracer.startSpan('Convert filter to Mikro-Orm format');
-		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
-		filterConversionSpan?.end();
+		const where = traceSync((trace?: Trace) => {
+			trace?.span.updateName('Convert filter to Mikro-Orm format');
+			return filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		})();
 
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
@@ -289,9 +292,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		query.populate((driver as any).autoJoinOneToOneOwner(meta, []));
 
 		try {
-			const getResultSpan = trace?.tracer.startSpan('Mikro-Orm - Fetch Data');
-			const result = await query.getResult();
-			getResultSpan?.end();
+			const result = await startTrace(async (trace?: Trace) => {
+				trace?.span.updateName('Mikro-Orm - Fetch Data');
+				return query.getResult();
+			})();
 
 			logger.trace(`find ${this.entityType.name} result: ${result.length} rows`);
 
