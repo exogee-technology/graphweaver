@@ -13,17 +13,3 @@ export const queryForTrace = gql`
 		}
 	}
 `;
-
-export const queryForTraces = gql`
-	query traces($filter: TracesListFilter, $pagination: TracesPaginationInput) {
-		traces(filter: $filter, pagination: $pagination) {
-			id
-			traceId
-			parentId
-			name
-			timestamp
-			duration
-			attributes
-		}
-	}
-`;

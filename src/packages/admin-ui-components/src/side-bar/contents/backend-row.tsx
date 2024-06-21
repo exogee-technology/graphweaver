@@ -30,7 +30,10 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 					<ChevronDownIcon />
 				</a>
 				<ul>
-					{entities && entities.map((entity) => <EntityRow key={entity.name} entity={entity} />)}
+					{entities &&
+						entities
+							.filter((entity) => !entity.hideInSideBar)
+							.map((entity) => <EntityRow key={entity.name} entity={entity} />)}
 				</ul>
 			</li>
 		</ul>

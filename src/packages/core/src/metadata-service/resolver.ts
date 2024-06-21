@@ -61,10 +61,6 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			.map((entity) => {
 				const { name, adminUIOptions, provider } = entity;
 
-				// If the entity is hidden from the display, return undefined
-				// so that it won't show up in the metadata.
-				if (adminUIOptions?.hideInSideBar) return;
-
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
 
@@ -141,7 +137,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					summaryField,
 					fields,
 					attributes,
+					hideInSideBar: adminUIOptions?.hideInSideBar ?? false,
 					defaultFilter: adminUIOptions?.defaultFilter,
+					defaultSort: adminUIOptions?.defaultSort,
 					supportedAggregationTypes: [
 						...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
 					],

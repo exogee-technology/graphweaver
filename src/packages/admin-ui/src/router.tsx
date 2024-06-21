@@ -9,7 +9,7 @@ import {
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { List, Root, Playground, TraceList, TraceDetail } from './pages';
+import { List, Root, Playground, TraceDetail } from './pages';
 
 const defaultRoutes: RouteObject[] = [
 	{
@@ -22,14 +22,8 @@ const defaultRoutes: RouteObject[] = [
 				element: <Root />,
 			},
 			{
-				path: 'traces',
-				element: <Outlet />,
-				children: [
-					{
-						path: ':id',
-						element: <TraceDetail />,
-					},
-				],
+				path: 'Trace/:id',
+				element: <TraceDetail />,
 			},
 			{
 				path: ':entity',

@@ -6,47 +6,24 @@ import {
 	useSchema,
 	PAGE_SIZE,
 	decodeSearchParams,
-	ToolBar,
+	ListToolBar,
 	TableRowItem,
 	routeFor,
 	RequestRefetchOptions,
 	Header,
 	ExportModal,
 	getOrderByQuery,
+	EntityList,
 } from '@exogee/graphweaver-admin-ui-components';
 
 import { queryForEntityPage } from './graphql';
-import { TraceList } from '../analytics';
-
-interface ListToolBarProps {
-	count?: number;
-	onExportToCSV?: () => void;
-}
-
-export const ListToolBar = ({ count, onExportToCSV }: ListToolBarProps) => {
-	const { entity } = useParams();
-	const { entityByName } = useSchema();
-
-	let subtitle = '';
-	if (entity && entityByName(entity)) {
-		subtitle = `From ${entityByName(entity).backendId}`;
-	}
-	if (typeof count === 'number') {
-		if (subtitle) subtitle += ' ';
-		subtitle += `(${count} row${count === 1 ? '' : 's'})`;
-	}
-
-	return (
-		<ToolBar title={entity ?? 'Unknown Entity'} subtitle={subtitle} onExportToCSV={onExportToCSV} />
-	);
-};
 
 export const List = () => {
 	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
 	if (entity === 'Trace') {
-		return <TraceList />;
+		return <EntityList />;
 	}
 
 	const navigate = useNavigate();

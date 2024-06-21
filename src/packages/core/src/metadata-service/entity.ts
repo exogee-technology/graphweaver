@@ -4,7 +4,7 @@ import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { Entity, Field } from '../decorators';
 import { AggregationType, Filter } from '../types';
-import { graphweaverMetadata } from '..';
+import { Sort, graphweaverMetadata } from '..';
 
 graphweaverMetadata.collectEnumInformation({
 	target: AggregationType,
@@ -34,9 +34,15 @@ export class AdminUiEntityMetadata {
 	@Field(() => GraphQLJSON, { nullable: true })
 	defaultFilter?: Filter<unknown>;
 
+	@Field(() => GraphQLJSON, { nullable: true })
+	defaultSort?: Partial<Record<string, Sort>>;
+
 	@Field(() => AdminUiEntityAttributeMetadata)
 	attributes?: AdminUiEntityAttributeMetadata;
 
 	@Field(() => [AggregationType])
 	supportedAggregationTypes!: AggregationType[];
+
+	@Field(() => Boolean)
+	hideInSideBar!: boolean;
 }

@@ -2,7 +2,7 @@ import { DirectiveLocation } from 'graphql';
 import { logger } from '@exogee/logger';
 
 import { SchemaBuilder } from './schema-builder';
-import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver } from './types';
+import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver, Sort } from './types';
 import { FieldOptions } from './decorators';
 
 export interface EntityMetadata<G = unknown, D = unknown> {
@@ -39,6 +39,11 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// Users can still override this filter, but this is the default. This has no
 		// impact on the API, purely how entities are displayed in the Admin UI.
 		defaultFilter?: Filter<G>;
+
+		// Specifies the default sort used in the Admin UI when viewing the list view.
+		// Users can still override this sort, but this is the default. This has no
+		// impact on the API, purely how entities are displayed in the Admin UI.
+		defaultSort?: Partial<Record<keyof G, Sort>>;
 
 		// Specifies how many entities should be requested per page during a CSV export.
 		// If not set, the default is 200.

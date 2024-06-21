@@ -13,8 +13,8 @@ export type { Instrumentation } from '@opentelemetry/instrumentation';
 export interface BaseContext {}
 
 export enum Sort {
-	ASC = 'asc',
-	DESC = 'desc',
+	ASC = 'ASC',
+	DESC = 'DESC',
 }
 
 graphweaverMetadata.collectEnumInformation({

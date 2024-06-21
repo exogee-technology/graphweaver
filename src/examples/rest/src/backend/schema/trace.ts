@@ -1,4 +1,4 @@
-import { Entity, Field } from '@exogee/graphweaver';
+import { Entity, Field, Sort } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
 import { GraphQLJSON } from '@exogee/graphweaver-scalars';
@@ -14,10 +14,17 @@ export const traceProvider = new MikroBackendProvider(OrmTrace, myConnection);
 		all: true,
 	},
 })
-@Entity('Trace', {
+@Entity<TraceEntity>('Trace', {
 	provider: traceProvider,
 	adminUIOptions: {
-		hideInSideBar: false, // This should be true
+		readonly: true,
+		hideInSideBar: true,
+		defaultFilter: {
+			parentId: null,
+		},
+		defaultSort: {
+			timestamp: Sort.DESC,
+		},
 	},
 	apiOptions: {
 		excludeFromBuiltInWriteOperations: true,

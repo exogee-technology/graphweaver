@@ -10,6 +10,11 @@ export interface Schema {
 	enums: Enum[];
 }
 
+export enum Sort {
+	ASC = 'ASC',
+	DESC = 'DESC',
+}
+
 export interface Enum {
 	name: string;
 	values: Array<{
@@ -27,7 +32,9 @@ export interface Entity {
 	supportedAggregationTypes: AggregationType[];
 	fields: EntityField[];
 	defaultFilter?: Filter;
+	defaultSort?: Record<string, Sort>;
 	attributes: EntityAttributes;
+	hideInSideBar: boolean;
 }
 
 export enum AdminUIFilterType {
