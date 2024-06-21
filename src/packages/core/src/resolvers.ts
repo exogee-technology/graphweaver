@@ -24,7 +24,7 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
-import { Trace, trace } from './open-telemetry';
+import { Trace, traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
@@ -156,11 +156,12 @@ const _list = async <G, D>(
 	});
 	logger.trace({ result }, 'Got result');
 
-	const fromBackendEntitySpan = trace?.tracer.startSpan(
-		`FromBackendEntity - ${result.length} ${entity.name} ${result.length > 1 ? 'entities' : 'entity'}.`
-	);
-	result = result.map((resultRow) => fromBackendEntity(entity, resultRow));
-	fromBackendEntitySpan?.end();
+	result = traceSync<[], (G | null)[]>((trace?: Trace) => {
+		trace?.span.updateName(
+			`FromBackendEntity - ${result.length} ${entity.name} ${result.length > 1 ? 'entities' : 'entity'}`
+		);
+		return result.map((resultRow) => fromBackendEntity(entity, resultRow));
+	})();
 
 	// If a hook manager is installed, run the after read hooks for this operation.
 	if (hookManager) {

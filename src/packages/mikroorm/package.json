@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -37,10 +37,10 @@
 		"@mikro-orm/mysql": "6.2.9",
 		"@mikro-orm/postgresql": "6.2.9",
 		"@mikro-orm/sqlite": "6.2.9",
-		"@types/node": "20.14.2",
+		"@types/node": "20.14.6",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.21.5",
-		"glob": "10.4.1",
+		"glob": "10.4.2",
 		"ts-node": "10.9.2",
 		"typescript": "5.4.5"
 	},

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-s3-storage",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting Graphweaver to an AWS S3 bucket.",
@@ -35,7 +35,7 @@
 		"graphql": "16.8.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.2",
+		"@types/node": "20.14.6",
 		"typescript": "5.4.5",
 		"dotenv-cli": "7.4.2"
 	},

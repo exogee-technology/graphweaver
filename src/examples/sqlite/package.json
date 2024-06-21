@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-sqlite",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a SQLite database.",
@@ -24,7 +24,7 @@
 		"graphql": "16.8.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.2",
+		"@types/node": "20.14.6",
 		"graphweaver": "workspace:*",
 		"typescript": "5.4.5"
 	}

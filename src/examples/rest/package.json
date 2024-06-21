@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a Rest API with a MySQL database.",
@@ -40,7 +40,7 @@
 		"react": "18.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.2",
+		"@types/node": "20.14.6",
 		"dotenv-cli": "7.4.2",
 		"typescript": "5.4.5",
 		"vite": "5.3.1",
