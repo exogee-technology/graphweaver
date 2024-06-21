@@ -6,7 +6,6 @@ import {
 	PAGE_SIZE,
 	SortEntity,
 	SortField,
-	Span,
 	UnixNanoTimeStamp,
 	decodeSearchParams,
 	getOrderByQuery,
@@ -25,51 +24,6 @@ import { useMemo } from 'react';
 
 const columnHelper = createColumnHelper<any>();
 
-// const columns: ColumnDef<Span, any>[] = [
-// 	columnHelper.accessor('timestamp', {
-// 		cell: (info) => {
-// 			const timestamp = UnixNanoTimeStamp.fromString(info.getValue());
-// 			return <span>{timestamp.toDate().toLocaleString()}</span>;
-// 		},
-// 		header: () => 'Timestamp',
-// 	}),
-// 	columnHelper.accessor('name', {
-// 		header: () => 'Name',
-// 	}),
-// 	columnHelper.accessor((row) => row.attributes?.type, {
-// 		id: 'type',
-// 		header: () => 'Type',
-// 		cell: (info) => {
-// 			const attributes = info.getValue();
-// 			return attributes?.type ?? '';
-// 		},
-// 	}),
-// 	columnHelper.accessor('duration', {
-// 		header: () => 'Duration',
-// 		cell: (info) => {
-// 			const duration = UnixNanoTimeStamp.fromString(info.getValue());
-// 			const { value, unit } = duration.toSIUnits();
-// 			return (
-// 				<span>
-// 					{Number(value).toFixed(2)} {unit}
-// 				</span>
-// 			);
-// 		},
-// 	}),
-// 	columnHelper.accessor('traceId', {
-// 		header: () => 'Trace ID',
-// 		cell: (info) => info.getValue(),
-// 	}),
-// 	columnHelper.accessor((row) => row.attributes?.method, {
-// 		id: 'method',
-// 		header: () => 'Method',
-// 		cell: (info) => {
-// 			const attributes = info.getValue();
-// 			return attributes?.method ?? '';
-// 		},
-// 	}),
-// ];
-
 export const EntityList = <TData extends object>() => {
 	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
@@ -79,7 +33,7 @@ export const EntityList = <TData extends object>() => {
 	const [search] = useSearchParams();
 	const { sort: sorting, page, filters } = decodeSearchParams(search);
 
-	const { fields, defaultSort, primaryKeyField } = entityByName(entity);
+	const { fields, defaultSort, primaryKeyField, defaultFilter } = entityByName(entity);
 
 	const sort = getOrderByQuery({ sort: sorting, defaultSort, primaryKeyField });
 
@@ -93,10 +47,9 @@ export const EntityList = <TData extends object>() => {
 			? {
 					filter: {
 						...filters,
-						parentId: null,
 					},
 				}
-			: { filter: { parentId: null } }),
+			: { filter: defaultFilter }),
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<QueryResponse<TData>>(
