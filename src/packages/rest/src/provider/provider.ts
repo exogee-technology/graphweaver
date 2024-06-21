@@ -3,6 +3,8 @@ import {
 	Filter,
 	PaginationOptions,
 	BackendProviderConfig,
+	TraceMethod,
+	Trace,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -30,7 +32,13 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 	};
 
 	// GET METHODS
-	public async find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]> {
+	@TraceMethod()
+	public async find(
+		filter: Filter<D>,
+		pagination?: PaginationOptions,
+		trace?: Trace
+	): Promise<D[]> {
+		trace?.span.updateName(`Rest - find`);
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
@@ -58,7 +66,9 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 		}
 	}
 
-	public async findOne(filter: Filter<D>): Promise<D | null> {
+	@TraceMethod()
+	public async findOne(filter: Filter<D>, trace?: Trace): Promise<D | null> {
+		trace?.span.updateName(`Rest - findOne`);
 		logger.trace(`Running findOne ${this.entityTypeName} with Filter ${filter}`);
 
 		if (!this.accessor) {
@@ -71,12 +81,15 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 		return rows[0] || null;
 	}
 
+	@TraceMethod()
 	public async findByRelatedId(
 		entity: unknown,
 		relatedField: string,
 		relatedFieldIds: string[],
-		filter?: Filter<D>
+		filter?: Filter<D>,
+		trace?: Trace
 	): Promise<D[]> {
+		trace?.span.updateName(`Rest - findByRelatedId`);
 		if (!this.accessor) {
 			throw new Error(
 				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'

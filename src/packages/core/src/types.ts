@@ -7,6 +7,7 @@ import { graphweaverMetadata } from './metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
+export type { Instrumentation } from '@opentelemetry/instrumentation';
 
 export interface BaseContext {}
 
@@ -92,11 +93,7 @@ export interface BackendProvider<D> {
 
 	entityType?: new () => D;
 
-	find(
-		filter: Filter<D>,
-		pagination?: PaginationOptions,
-		additionalOptionsForBackend?: any
-	): Promise<D[]>;
+	find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]>;
 	findOne(filter: Filter<D>): Promise<D | null>;
 	findByRelatedId(
 		entity: any,

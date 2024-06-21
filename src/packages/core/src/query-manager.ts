@@ -3,6 +3,7 @@ import { TypeValue } from './types';
 
 import { BackendProvider, Filter, PaginationOptions } from './types';
 import { graphweaverMetadata } from './metadata';
+import { TraceMethod, Trace } from './open-telemetry';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -98,15 +99,20 @@ const visit = async <D>(
 };
 
 class QueryManagerImplementation {
-	find = async <G = unknown, D = unknown>({
-		entityName,
-		filter,
-		pagination,
-	}: {
-		entityName: string;
-		filter?: Filter<D>;
-		pagination?: PaginationOptions;
-	}) => {
+	@TraceMethod()
+	async find<G = unknown, D = unknown>(
+		{
+			entityName,
+			filter,
+			pagination,
+		}: {
+			entityName: string;
+			filter?: Filter<D>;
+			pagination?: PaginationOptions;
+		},
+		trace?: Trace
+	) {
+		trace?.span.updateName(`Query Manager - Find ${entityName}`);
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
 		if (!metadata) throw new Error(`Could not locate entity '${entityName}'`);
 
@@ -120,15 +126,15 @@ class QueryManagerImplementation {
 
 		// Ok, at this point we're good to go, we can just pass the find on down to the provider.
 		return metadata.provider.find(result.filter, pagination);
-	};
+	}
 
-	flattenFilter = async <G = unknown, D = unknown>({
+	async flattenFilter<G = unknown, D = unknown>({
 		entityName,
 		filter,
 	}: {
 		entityName: string;
 		filter?: Filter<D>;
-	}) => {
+	}) {
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
 		if (!metadata) throw new Error(`Could not locate entity '${entityName}'`);
 
@@ -138,7 +144,7 @@ class QueryManagerImplementation {
 		logger.trace('Filter after ID flattening: ', filter);
 
 		return result.filter;
-	};
+	}
 }
 
 export const QueryManager = new QueryManagerImplementation();
