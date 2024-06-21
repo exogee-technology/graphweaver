@@ -34,10 +34,10 @@ export class TraceEntity {
 	@Field(() => String)
 	id!: string;
 
-	@Field(() => String)
-	traceId!: string;
-
-	@Field(() => String, { nullable: true })
+	@Field(() => String, {
+		nullable: true,
+		adminUIOptions: { hideInFilterBar: false, hideInTable: false },
+	})
 	parentId?: string;
 
 	@Field(() => String)
@@ -49,6 +49,9 @@ export class TraceEntity {
 	@Field(() => String)
 	duration!: string;
 
-	@Field(() => GraphQLJSON)
+	@Field(() => String)
+	traceId!: string;
+
+	@Field(() => GraphQLJSON, { adminUIOptions: { hideInFilterBar: true, hideInTable: true } })
 	attributes!: Record<string, unknown>;
 }

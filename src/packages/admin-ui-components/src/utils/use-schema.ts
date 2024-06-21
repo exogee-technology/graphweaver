@@ -32,10 +32,12 @@ export interface Entity {
 	supportedAggregationTypes: AggregationType[];
 	fields: EntityField[];
 	defaultFilter?: Filter;
-	defaultSort?: Record<string, Sort>;
+	defaultSort?: SortEntity;
 	attributes: EntityAttributes;
 	hideInSideBar: boolean;
 }
+
+export type SortEntity = Record<string, Sort>;
 
 export enum AdminUIFilterType {
 	DATE_RANGE = 'DATE_RANGE',
@@ -109,8 +111,8 @@ export interface Filter<T = unknown> {
 	[x: string]: T;
 }
 
+// These two are deprecated and should be removed in the future.
 type SortDirection = 'ASC' | 'DESC';
-
 export interface SortField {
 	field: string;
 	direction: SortDirection;

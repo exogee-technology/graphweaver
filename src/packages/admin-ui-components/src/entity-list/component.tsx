@@ -1,13 +1,16 @@
 import { useQuery } from '@apollo/client';
-import { ColumnDef, Row, createColumnHelper } from '@tanstack/react-table';
+import { Row, createColumnHelper } from '@tanstack/react-table';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import {
 	PAGE_SIZE,
+	SortEntity,
+	SortField,
 	Span,
 	UnixNanoTimeStamp,
 	decodeSearchParams,
 	getOrderByQuery,
+	routeFor,
 	useSchema,
 } from '../utils';
 import { convertRowData } from './utils';
@@ -74,15 +77,17 @@ export const EntityList = <TData extends object>() => {
 	const navigate = useNavigate();
 	const { entityByName } = useSchema();
 	const [search] = useSearchParams();
-	const { sort, page, filters } = decodeSearchParams(search);
+	const { sort: sorting, page, filters } = decodeSearchParams(search);
 
-	const { fields, defaultSort } = entityByName(entity);
+	const { fields, defaultSort, primaryKeyField } = entityByName(entity);
+
+	const sort = getOrderByQuery({ sort: sorting, defaultSort, primaryKeyField });
 
 	const variables = {
 		pagination: {
 			offset: Math.max(page - 1, 0) * PAGE_SIZE,
 			limit: PAGE_SIZE,
-			orderBy: getOrderByQuery({ sort, defaultSort }),
+			orderBy: sort,
 		},
 		...(filters
 			? {
@@ -123,12 +128,30 @@ export const EntityList = <TData extends object>() => {
 		navigate(`${row.original[primaryKeyField as keyof T]}`);
 	};
 
+	const handleSortClick = (newSort: SortEntity) => {
+		console.log(newSort);
+		navigate(
+			routeFor({
+				entity,
+				filters,
+				sort: newSort as unknown as SortField[], // TODO this cast should be removed when we fix the sort type in the url
+				id,
+			})
+		);
+	};
+
 	return (
 		<div className={styles.wrapper}>
 			<Header>
 				<ListToolBar />
 			</Header>
-			<Table data={convertRowData(data, fields)} columns={columns} onRowClick={handleRowClick} />
+			<Table
+				data={convertRowData(data, fields)}
+				columns={columns}
+				sort={sort}
+				onRowClick={handleRowClick}
+				onSortClick={handleSortClick}
+			/>
 		</div>
 	);
 };

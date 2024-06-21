@@ -1,4 +1,4 @@
-import { Entity, Sort, SortField } from './use-schema';
+import { SortEntity, SortField } from './use-schema';
 
 export const isNumeric = (item: unknown): boolean => {
 	if (item === undefined || item === null) return false;
@@ -16,10 +16,12 @@ export const getOrderByQuery = ({
 }: {
 	primaryKeyField?: string;
 	sort?: SortField[];
-	defaultSort?: Record<string, Sort>;
+	defaultSort?: SortEntity;
 }) => ({
 	...(sort
-		? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
+		? Array.isArray(sort)
+			? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
+			: sort
 		: defaultSort
 			? defaultSort
 			: primaryKeyField

@@ -5,6 +5,7 @@
 	border-radius: 12px;
 	height: 100%;
 	background-color: #1e1a25;
+	border: 1px solid #3b3349;
 }
 
 .table {
@@ -18,7 +19,6 @@
 .table table {
 	min-width: 100%;
 	background-color: #1e1a25;
-	border: 1px solid #3b3349;
 }
 
 .table thead {
@@ -40,6 +40,33 @@
 	z-index: 1;
 	text-align: left;
 	padding: 0 10px;
+	align-items: center;
+	height: 48px;
+}
+
+.table th:hover {
+	background-color: #352d44;
+	cursor: pointer;
+}
+
+.table th .header {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	gap: 8px;
+}
+
+.table th .arrow {
+	transform-origin: center;
+	transition-duration: 0.3s;
+}
+
+.table th .asc {
+	transform: rotate(180deg);
+}
+
+.table th .desc {
+	transform: rotate(0deg);
 }
 
 .table tr {
@@ -47,7 +74,7 @@
 	max-height: 48px;
 }
 
-.table tr:hover {
+.table tbody tr:hover {
 	background-color: #352d44;
 }
 

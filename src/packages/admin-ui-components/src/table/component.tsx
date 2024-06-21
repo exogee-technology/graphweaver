@@ -1,25 +1,63 @@
 import { useState } from 'react';
-import { ColumnDef, Row, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
-
-import styles from './styles.module.css';
+import {
+	ColumnDef,
+	ColumnSort,
+	Row,
+	SortingState,
+	Updater,
+	flexRender,
+	getCoreRowModel,
+	useReactTable,
+} from '@tanstack/react-table';
 import clsx from 'clsx';
+
+import { ChevronDownIcon } from '../assets';
+import styles from './styles.module.css';
+import { Sort, SortEntity } from '../utils';
 
 type Props<T> = {
 	data: T[];
 	columns: ColumnDef<T, any>[];
+	sort?: SortEntity;
 	onRowClick?: (row: Row<T>) => void;
+	onSortClick?: (sort: SortEntity) => void;
 };
 
-export const Table = <T extends object>({ data: _data, columns, onRowClick }: Props<T>) => {
-	const [data] = useState(() => [...(_data ?? [])]);
+export const Table = <T extends object>({
+	data,
+	sort,
+	columns,
+	onRowClick,
+	onSortClick,
+}: Props<T>) => {
+	// Convert our sorting object to the format required by react-table
+	const sorting: ColumnSort[] = Object.entries(sort ?? {}).map(([field, direction]) => ({
+		id: field,
+		desc: direction === Sort.DESC,
+	}));
 
 	const handleRowClick = (row: Row<T>) => {
 		if (onRowClick) onRowClick(row);
 	};
 
+	const handleSortClick = (sorting: Updater<SortingState>) => {
+		const sortingState: ColumnSort | undefined = (sorting as any)?.()[0];
+		console.log(sortingState, onSortClick);
+		if (sortingState?.id) {
+			onSortClick?.({
+				[sortingState.id]: sortingState.desc ? Sort.DESC : Sort.ASC,
+			});
+		}
+	};
+
 	const table = useReactTable({
 		data,
 		columns,
+		manualSorting: true,
+		onSortingChange: handleSortClick,
+		state: {
+			sorting,
+		},
 		getCoreRowModel: getCoreRowModel(),
 	});
 
@@ -31,10 +69,28 @@ export const Table = <T extends object>({ data: _data, columns, onRowClick }: Pr
 						{table.getHeaderGroups().map((headerGroup) => (
 							<tr key={headerGroup.id}>
 								{headerGroup.headers.map((header) => (
-									<th key={header.id}>
-										{header.isPlaceholder
-											? null
-											: flexRender(header.column.columnDef.header, header.getContext())}
+									<th
+										key={header.id}
+										className={clsx()}
+										{...(header.column.getCanSort()
+											? { onClick: header.column.getToggleSortingHandler() }
+											: {})}
+									>
+										<span className={styles.header}>
+											{header.isPlaceholder
+												? null
+												: flexRender(header.column.columnDef.header, header.getContext())}
+											{header.column.getIsSorted() && (
+												<span
+													className={clsx(
+														styles.arrow,
+														styles[header.column.getIsSorted() as keyof typeof styles]
+													)}
+												>
+													<ChevronDownIcon />
+												</span>
+											)}
+										</span>
 									</th>
 								))}
 							</tr>

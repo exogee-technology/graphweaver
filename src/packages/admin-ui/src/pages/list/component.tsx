@@ -22,10 +22,6 @@ export const List = () => {
 	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
-	if (entity === 'Trace') {
-		return <EntityList />;
-	}
-
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
@@ -59,6 +55,10 @@ export const List = () => {
 			variables: queryVariables,
 		});
 	}, [page, JSON.stringify(filters), JSON.stringify(sort)]);
+
+	if (entity === 'Trace') {
+		return <EntityList />;
+	}
 
 	const requestRefetch = (state: Partial<RequestRefetchOptions>) => {
 		state.sortFields ? requestSort(state) : incrementPage();
