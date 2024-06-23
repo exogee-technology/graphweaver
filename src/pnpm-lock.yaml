@@ -163,8 +163,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       tsx:
-        specifier: 4.15.6
-        version: 4.15.6
+        specifier: 4.15.7
+        version: 4.15.7
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -1086,8 +1086,8 @@ importers:
         specifier: 29.1.5
         version: 29.1.5(@babel/core@7.24.7)(jest@29.7.0)(typescript@5.4.5)
       tsx:
-        specifier: 4.15.6
-        version: 4.15.6
+        specifier: 4.15.7
+        version: 4.15.7
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -16293,8 +16293,8 @@ packages:
   /tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
-  /tsx@4.15.6:
-    resolution: {integrity: sha512-is0VQQlfNZRHEuSSTKA6m4xw74IU4AizmuB6lAYLRt9XtuyeQnyJYexhNZOPCB59SqC4JzmSzPnHGBXxf3k0hA==}
+  /tsx@4.15.7:
+    resolution: {integrity: sha512-u3H0iSFDZM3za+VxkZ1kywdCeHCn+8/qHQS1MNoO2sONDgD95HlWtt8aB23OzeTmFP9IU4/8bZUdg58Uu5J4cg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
