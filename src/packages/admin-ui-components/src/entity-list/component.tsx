@@ -2,12 +2,12 @@ import { useQuery } from '@apollo/client';
 import { Row, createColumnHelper } from '@tanstack/react-table';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
+import { stabilizationKeys } from '@exogee/graphweaver-apollo-client';
 
 import {
 	PAGE_SIZE,
 	SortEntity,
 	SortField,
-	UnixNanoTimeStamp,
 	decodeSearchParams,
 	getOrderByQuery,
 	routeFor,
@@ -66,27 +66,22 @@ export const EntityList = <TData extends object>() => {
 	);
 
 	const handleFetchNextPage = async () => {
-		const moreData = (data?.result.length ?? 0) < (data?.aggregate?.count ?? 0);
-		console.log(data?.result.length, data?.aggregate?.count, moreData, !loading);
-		if (!loading && moreData) {
-			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
-			fetchMore({
-				variables: {
-					...variables,
-					pagination: {
-						...variables.pagination,
-						offset: nextPage * PAGE_SIZE,
-					},
-					filter: {
-						...variables.filter,
-						timestamp_lte: (data?.result[0] as any).timestamp,
-					},
+		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+		fetchMore({
+			variables: {
+				...variables,
+				pagination: {
+					...variables.pagination,
+					offset: nextPage * PAGE_SIZE,
 				},
-			});
-		}
+				filter: {
+					...variables.filter,
+					[stabilizationKeys]: [`timestamp_lte`],
+					timestamp_lte: (data?.result[0] as any).timestamp,
+				},
+			},
+		});
 	};
-
-	console.log(data);
 
 	if (loading && !data) {
 		return <Loader />;
@@ -121,6 +116,7 @@ export const EntityList = <TData extends object>() => {
 				<ListToolBar count={data.aggregate?.count} />
 			</Header>
 			<Table
+				loading={loading}
 				data={convertRowData(data, fields)}
 				columns={columns}
 				sort={sort}

@@ -8,6 +8,13 @@ interface Entity {
 	primaryKeyField: string;
 }
 
+export const stabilizationKeys = Symbol('stabilization');
+
+export interface FilterWithStabilization {
+	[stabilizationKeys]: string[];
+	[key: string]: unknown;
+}
+
 const generateTypePolicyFields = (entities: Entity[]) => {
 	const policy = {
 		keyArgs: (
@@ -16,10 +23,19 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 				pagination?: { orderBy: Record<string, unknown> };
 			} | null
 		) => {
-			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
-			args?.filter && delete args.filter.timestamp_lte;
-			const filter = args?.filter ? JSON.stringify(args.filter) : '';
+			// Remove Order Stabilization Keys
+			const filters = (args?.filter ?? {}) as unknown as FilterWithStabilization;
+			if (filters[stabilizationKeys]) {
+				const keys = filters[stabilizationKeys];
+				for (const key of keys) {
+					delete filters[key as keyof typeof filters];
+				}
+			}
+
+			const filter = JSON.stringify(filters);
 			const orderBy = args?.pagination?.orderBy ? JSON.stringify(args.pagination.orderBy) : '';
+
+			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
 			return btoa(`${filter}:${orderBy}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
 	ColumnDef,
 	ColumnSort,
@@ -16,6 +16,7 @@ import styles from './styles.module.css';
 import { Sort, SortEntity } from '../utils';
 
 type Props<T> = {
+	loading: boolean;
 	data: T[];
 	columns: ColumnDef<T, any>[];
 	sort?: SortEntity;
@@ -25,6 +26,7 @@ type Props<T> = {
 };
 
 export const Table = <T extends object>({
+	loading,
 	data,
 	sort,
 	columns,
@@ -55,24 +57,26 @@ export const Table = <T extends object>({
 		}
 	};
 
+	const scrolledToEnd = (containerRefElement: HTMLDivElement): boolean => {
+		// Return true when the scrollTop reaches the bottom ...
+		const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+		const tolerance = 175; // trigger when 5 rows from the end
+		const distanceFromTop = Math.round(scrollTop) + tolerance;
+		const atEndOfSet = distanceFromTop >= scrollHeight - clientHeight;
+		return atEndOfSet;
+	};
+
 	//called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
 	const fetchMoreOnBottomReached = useCallback(
 		(containerRefElement?: HTMLDivElement | null) => {
 			if (containerRefElement) {
-				const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-				//once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
-				if (scrollHeight - scrollTop - clientHeight < 500) {
-					fetchNextPage?.();
-				}
+				if (loading || !scrolledToEnd(containerRefElement)) return;
+
+				fetchNextPage?.();
 			}
 		},
 		[fetchNextPage]
 	);
-
-	//a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
-	useEffect(() => {
-		fetchMoreOnBottomReached(tableContainerRef.current);
-	}, [fetchMoreOnBottomReached]);
 
 	const table = useReactTable({
 		data,
@@ -88,7 +92,10 @@ export const Table = <T extends object>({
 	return (
 		<div
 			className={styles.container}
-			onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+			onScroll={(e) => {
+				console.log('scrolling...');
+				return fetchMoreOnBottomReached(e.target as HTMLDivElement);
+			}}
 			ref={tableContainerRef}
 		>
 			<div className={styles.table}>
