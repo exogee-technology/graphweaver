@@ -11,11 +11,7 @@ export class BaseDataProvider<D> implements BackendProvider<D> {
 	backendProviderConfig?: BackendProviderConfig;
 
 	// READ METHODS
-	public async find(
-		filter: Filter<D>,
-		pagination?: PaginationOptions,
-		additionalOptionsForBackend?: any
-	): Promise<D[]> {
+	public async find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]> {
 		throw new Error('Find not implemented.');
 	}
 

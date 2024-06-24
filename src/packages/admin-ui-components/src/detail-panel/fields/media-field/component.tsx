@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useField, useFormikContext } from 'formik';
+import toast from 'react-hot-toast';
 import { useMutation } from '@apollo/client';
 
 import { EntityField } from '../../../utils';
@@ -8,9 +9,21 @@ import { Button } from '../../../button';
 import { useAutoFocus } from '../../../hooks';
 
 import styles from './styles.module.css';
-import toast from 'react-hot-toast';
+import { useDataTransform } from '../../use-data-transform';
 
-export const deleteFileToSignedURL = async (deleteURL: string) => {
+const internalKey = Symbol('media-field-internal');
+
+interface WorkingMediaFieldValue {
+	[internalKey]:
+		| {
+				uploadUrl?: string;
+				deleteUrl?: string;
+				file?: File;
+		  }
+		| undefined;
+}
+
+const deleteFileToSignedURL = async (deleteURL: string) => {
 	const response = await fetch(deleteURL, {
 		method: 'DELETE',
 	});
@@ -22,7 +35,7 @@ export const deleteFileToSignedURL = async (deleteURL: string) => {
 	}
 };
 
-export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
+const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 	const response = await fetch(uploadURL, {
 		method: 'PUT',
 		body: file,
@@ -39,16 +52,44 @@ export const uploadFileToSignedURL = async (uploadURL: string, file: any) => {
 };
 
 export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
-	const { setValues } = useFormikContext();
+	const { setFieldValue } = useFormikContext();
 	const [mediaHasChanged, setMediaHasChanged] = useState(false);
 	const [_, meta] = useField({ name: field.name, multiple: false });
 	const { initialValue: media } = meta;
 	const [getUploadUrl] = useMutation(getUploadUrlMutation);
 	const [getDeleteUrl] = useMutation(getDeleteUrlMutation);
-
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 
-	const handleFileUpload = async (file: any) => {
+	useDataTransform({
+		field,
+		transform: async (value: unknown) => {
+			if (!value) return undefined;
+
+			// We may have some pending operations we need to do before the mutation goes up to the server.
+			const workingValue = value as WorkingMediaFieldValue;
+			const { deleteUrl, uploadUrl, file } = workingValue[internalKey] ?? {};
+
+			// If there's a file to delete, let's do it.
+			if (deleteUrl) {
+				await deleteFileToSignedURL(deleteUrl);
+			}
+
+			// If there's a file to upload, let's do that too.
+			if (uploadUrl && file) {
+				await uploadFileToSignedURL(uploadUrl, file);
+			}
+			// Ok, now we just need to give the correct shape to the server, which is:
+			// { filename: string, type: string } and nothing else.
+			const { filename, type } = (value as any) ?? {};
+			if (filename && type) return { filename, type };
+
+			// Ok, then whatever this is, it's not a set file.
+			return undefined;
+		},
+	});
+
+	const handleFileUpload = async (file: File) => {
+		// Where do we upload the new file to?
 		const res = await getUploadUrl({ variables: { key: file.name } });
 		const uploadUrl = res.data.getUploadUrl;
 		if (!uploadUrl) {
@@ -57,27 +98,29 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 			return;
 		}
 
+		// If there's an existing file, we need to delete it from S3 first to clean up what we had before.
 		let deleteUrl = null;
 		if (media) {
 			const deleteRes = await getDeleteUrl({ variables: { key: media.filename } });
 			deleteUrl = deleteRes.data.getDeleteUrl;
 			if (!deleteUrl) {
 				console.error('Delete URL is not available');
-				toast.error('Unable to delete file, please try again later.');
+				toast.error('Unable to get delete URL, please try again later.');
 				return;
 			}
 		}
 
-		setValues((prev: any) => ({
-			...prev,
-			uploadUrl: uploadUrl.url,
-			file: file,
-			[field.name]: {
-				filename: uploadUrl.filename,
-				type: uploadUrl.type,
+		// Alrighty, let's remember this for the future.
+		setFieldValue(field.name, {
+			filename: uploadUrl.filename,
+			type: uploadUrl.type,
+			[internalKey]: {
+				uploadUrl: uploadUrl.url,
+				file,
+				deleteUrl,
 			},
-			deleteUrl,
-		}));
+		});
+
 		setMediaHasChanged(true);
 	};
 
@@ -95,13 +138,8 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 			toast.error('Unable to delete file, please try again later.');
 			return;
 		}
-		setValues((prev: any) => ({
-			...prev,
-			uploadUrl: null,
-			file: null,
-			[field.name]: null,
-			deleteUrl,
-		}));
+
+		setFieldValue(field.name, null);
 		setMediaHasChanged(true);
 	};
 

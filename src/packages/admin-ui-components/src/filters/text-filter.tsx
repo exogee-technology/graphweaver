@@ -1,33 +1,24 @@
 import { useLazyQuery } from '@apollo/client';
 
 import { Filter, ComboBox, SelectMode, SelectOption, useSchema } from '..';
-import { queryForFilterText } from './graphql';
+import { queryForFilterOptions } from './graphql';
+import { toSelectOption } from './utils';
 
 export interface TextFilterProps {
 	fieldName: string;
 	entity: string;
 	onChange?: (fieldName: string, newFilter: Filter) => void;
-	initialFilter?: Filter | undefined;
-	resetCount: number; // We use this to reset the filter using the key
+	filter?: Filter;
 }
 
-export const TextFilter = ({
-	fieldName,
-	entity,
-	onChange,
-	initialFilter,
-	resetCount,
-}: TextFilterProps) => {
-	const initialValue = (
-		initialFilter?.[fieldName] ? [initialFilter?.[fieldName]] : initialFilter?.[`${fieldName}_in`]
-	) as string[] | undefined;
+export const TextFilter = ({ fieldName, entity, onChange, filter }: TextFilterProps) => {
 	const { entityByName } = useSchema();
 
 	const [getData, { loading, error, data }] = useLazyQuery<{
 		result: Record<string, string>[];
-	}>(queryForFilterText(entityByName(entity), fieldName));
+	}>(queryForFilterOptions(entityByName(entity), fieldName));
 
-	const textOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
+	const comboBoxOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
 
 	const handleOnChange = (options?: SelectOption[]) => {
 		const hasSelectedOptions = (options ?? [])?.length > 0;
@@ -43,11 +34,13 @@ export const TextFilter = ({
 		}
 	};
 
+	const currentFilterValue = (filter?.[`${fieldName}_in`] as string[]) ?? [];
+
 	return (
 		<ComboBox
-			key={`${fieldName}:${resetCount}`}
-			options={[...textOptions].map((value) => ({ value, label: value }))}
-			value={initialValue ? initialValue.map((value) => ({ value, label: undefined })) : []}
+			key={fieldName}
+			options={[...comboBoxOptions].map(toSelectOption)}
+			value={currentFilterValue.map(toSelectOption)}
 			placeholder={fieldName}
 			onChange={handleOnChange}
 			onOpen={handleOnOpen}

@@ -43,6 +43,7 @@ import {
 	isInputMetadata,
 	isUnionMetadata,
 	MetadataType,
+	trace,
 	TypeValue,
 	UnionMetadata,
 } from '.';
@@ -762,7 +763,7 @@ class SchemaBuilderImplementation {
 						resolve: resolvers.baseResolver(resolvers.list),
 					};
 
-					// Aggregrations
+					// Aggregations
 					if ((entity.provider.backendProviderConfig?.supportedAggregationTypes?.size ?? 0) > 0) {
 						fields[`${listQueryName}_aggregate`] = {
 							description: `Get aggregated data for ${entity.plural}.`,
@@ -791,7 +792,7 @@ class SchemaBuilderImplementation {
 							...customQuery,
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
-							resolve: resolvers.baseResolver(customQuery.resolver),
+							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
 						};
 					} else {
 						const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
@@ -800,7 +801,7 @@ class SchemaBuilderImplementation {
 							...customQuery,
 							args: customArgs,
 							type,
-							resolve: resolvers.baseResolver(customQuery.resolver),
+							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
 						};
 					}
 				}
@@ -953,14 +954,14 @@ class SchemaBuilderImplementation {
 							...customMutation,
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
-							resolve: resolvers.baseResolver(customMutation.resolver),
+							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 						};
 					} else {
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
 							type: graphQLScalarForTypeScriptType(type),
-							resolve: resolvers.baseResolver(customMutation.resolver),
+							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 						};
 					}
 				}

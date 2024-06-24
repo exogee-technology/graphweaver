@@ -45,7 +45,7 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>(gqlEntityType: {
 					? entity.target.toBackendEntityFilter(filter)
 					: (filter as Filter<D>);
 
-			const records = await entity.provider!.find(backendFilter);
+			const records = await entity.provider!.find(backendFilter, undefined);
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
 

@@ -1,1 +1,1 @@
-export * from './media-field';
+export * from './component';

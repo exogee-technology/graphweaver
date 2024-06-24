@@ -10,6 +10,10 @@ import {
 	fieldResolver,
 	enableFederation,
 	buildFederationSchema,
+	startTracing,
+	trace,
+	isTraceable,
+	Instrumentation,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -61,6 +65,9 @@ export interface GraphweaverConfig {
 		watchForFileChangesInPaths?: string[];
 	};
 	schemaDirectives?: Record<string, any>;
+	openTelemetry?: {
+		instrumentations?: (Instrumentation | Instrumentation[])[];
+	};
 }
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -80,6 +87,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
+
+		startTracing({ instrumentations: this.config.openTelemetry?.instrumentations ?? [] });
 
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
@@ -154,6 +163,22 @@ export default class Graphweaver<TContext extends BaseContext> {
 			fieldResolver,
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
+
+		if (isTraceable) {
+			// Wrap the executeHTTPGraphQLRequest method with a trace span
+			// This will allow us to trace the entire request from start to finish
+			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
+			this.server.executeHTTPGraphQLRequest = trace((request, trace) => {
+				trace?.span.updateName('Graphweaver Request');
+				trace?.span.setAttributes({
+					'X-Amzn-RequestId': request.httpGraphQLRequest.headers.get('x-amzn-requestid'),
+					'X-Amzn-Trace-Id': request.httpGraphQLRequest.headers.get('x-amzn-trace-id'),
+					body: JSON.stringify(request.httpGraphQLRequest.body),
+					method: request.httpGraphQLRequest.method,
+				});
+				return executeHTTPGraphQLRequest.bind(this.server)(request);
+			});
+		}
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {

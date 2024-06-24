@@ -12,37 +12,30 @@ interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
 	placeholder?: string;
 	isRangePicker?: boolean;
-	initialStartDate?: DateTime;
-	initialEndDate?: DateTime;
+	startDate?: DateTime;
+	endDate?: DateTime;
 }
 
 export const DatePicker = ({
 	onChange,
 	placeholder,
 	isRangePicker = false,
-	initialStartDate,
-	initialEndDate,
+	startDate,
+	endDate,
 }: Props) => {
-	const [startDate, setStartDate] = useState<DateTime | undefined>(initialStartDate);
-	const [endDate, setEndDate] = useState<DateTime | undefined>(initialEndDate);
 	const [isOpen, setIsOpen] = useState(false);
 	const datePickerRef = useRef<HTMLDivElement>(null);
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
-		setStartDate(start);
-		setEndDate(end);
 		setIsOpen(false);
 		onChange(start, end);
 	};
 
 	const close = () => {
 		setIsOpen(false);
-		onChange(startDate, endDate);
 	};
 
 	const clear = () => {
-		setStartDate(undefined);
-		setEndDate(undefined);
 		setIsOpen(false);
 		onChange(undefined, undefined);
 	};
@@ -61,7 +54,7 @@ export const DatePicker = ({
 
 	const handleOutsideClick = (event: MouseEvent) => {
 		if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
-			setIsOpen(false);
+			close();
 		}
 	};
 

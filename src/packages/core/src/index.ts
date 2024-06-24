@@ -8,6 +8,7 @@ export * from './field-resolver';
 export * from './hook-manager';
 export * from './metadata';
 export * from './metadata-service';
+export * from './open-telemetry';
 export * from './schema-builder';
 export * from './types';
 export * from './utils/create-or-update-entities';

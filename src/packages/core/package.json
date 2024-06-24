@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Graphweaver Core Package",
 	"license": "MIT",
 	"scripts": {
@@ -25,6 +25,10 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/utils": "10.2.2",
+		"@opentelemetry/api": "1.9.0",
+		"@opentelemetry/exporter-trace-otlp-http": "0.52.0",
+		"@opentelemetry/resources": "1.25.0",
+		"@opentelemetry/sdk-node": "0.52.0",
 		"class-validator": "0.14.1",
 		"dataloader": "2.2.2",
 		"graphql": "16.8.1",
@@ -33,6 +37,7 @@
 		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
+		"@opentelemetry/instrumentation": "0.52.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.21.5",
 		"glob": "10.4.2",
