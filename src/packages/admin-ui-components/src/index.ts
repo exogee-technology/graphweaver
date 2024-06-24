@@ -20,6 +20,7 @@ export * from './require-schema';
 export * from './side-bar';
 export * from './spacer';
 export * from './spinner';
+export * from './star-field';
 export * from './table';
 export * from './toast';
 export * from './toolbar';

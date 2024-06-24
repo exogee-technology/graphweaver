@@ -1,4 +1,4 @@
-import { ReactNode, useState, useMemo, useCallback } from 'react';
+import { ReactNode, useState, useMemo, useCallback, PropsWithChildren } from 'react';
 import clsx from 'clsx';
 
 import { Button } from '../button';
@@ -31,7 +31,7 @@ export const Popover = ({
 	defaultValue,
 	position = 'bottom',
 	...props
-}: PopoverProps): JSX.Element => {
+}: PropsWithChildren<PopoverProps>): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOnClickItem = (item: PopoverItem) => {

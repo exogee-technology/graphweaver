@@ -1,16 +1,64 @@
+.wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+}
+
+.leftPanel {
+	flex: 1;
+	background-color: #170f23;
+	border-right: 1px solid rgba(237, 232, 242, 0.1);
+	padding: 90px;
+	min-width: 600px;
+	max-width: 700px;
+}
+
+.logo {
+	width: 86px;
+	padding: 15px;
+}
+
 .heading {
-    font-size: 2rem;
-    font-weight: bold;
-    margin-bottom: 1rem;
-    margin-top: 2rem;
+	font-size: 2.2rem;
+	font-weight: bold;
+	line-height: 3rem;
+	margin-bottom: 3rem;
+	margin-top: 2rem;
 }
 
 .text {
-    margin-bottom: 1rem;
+	margin-bottom: 2rem;
 }
 
 .list {
-    list-style: disc;
-    margin-left: 2rem;
-    margin-bottom: 1rem;
+	list-style: disc;
+	margin-left: 2rem;
+	margin-bottom: 1rem;
+}
+
+.button {
+	width: 200px;
+	justify-content: space-between;
+	margin-top: 2rem;
+	margin-left: auto;
+}
+
+.arrow {
+	height: 8px;
+}
+
+.rightPanel {
+	flex: 1;
+}
+
+@media only screen and (max-width: 600px) {
+	.rightPanel {
+		display: none;
+	}
+
+	.leftPanel {
+		min-width: 100%;
+		padding: 50px;
+	}
 }
