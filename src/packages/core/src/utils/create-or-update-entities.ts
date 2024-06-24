@@ -174,8 +174,9 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			// We needed to create the parent earlier, no need to create it again
 			return parent;
 		} else if (isPrimaryKeyOnly(meta, node)) {
-			// If it's just an ID, return it as is
-			return node;
+			// If it's just an ID, return it as is, but we need to fromBackendEntity it
+			// so that it will have a reference back to its data entity.
+			return fromBackendEntity(meta, node as D);
 		} else if (primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1) {
 			// If it's an object with an ID and other properties, update the entity
 			const result = await meta.provider.updateOne(

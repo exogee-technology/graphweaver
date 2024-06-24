@@ -14,12 +14,12 @@ export const getRelationshipQuery = (entity: Entity) => {
 	`;
 };
 
-export const queryForFilterText = (entity: Entity, fieldName: string) => {
+export const queryForFilterOptions = (entity: Entity, fieldName: string) => {
 	const pluralName = entity.plural;
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`
-		query TextFilter {
+		query filterOptions {
 			result: ${queryName} {
 				${entity.primaryKeyField}
 				${fieldName}
@@ -27,3 +27,13 @@ export const queryForFilterText = (entity: Entity, fieldName: string) => {
 		}
 	`;
 };
+
+export const fragmentForDisplayValueOfEntity = (entity: Entity) => ({
+	fragmentName: `${entity.name}DisplayValue`,
+	fragment: gql`
+		fragment ${entity.name}DisplayValue on ${entity.name} {
+			${entity.primaryKeyField}
+			${entity.summaryField}
+		}
+	`,
+});

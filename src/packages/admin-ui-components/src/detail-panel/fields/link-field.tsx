@@ -2,7 +2,7 @@ import { useField, useFormikContext } from 'formik';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { EntityField, routeFor } from '../../utils';
 
-export const LinkField = ({ name, entity }: { name: string; entity: EntityField }) => {
+export const LinkField = ({ name, field }: { name: string; field: EntityField }) => {
 	const { dirty } = useFormikContext();
 	const navigate = useNavigate();
 	const [_, meta] = useField({ name: name, multiple: false });
@@ -26,11 +26,11 @@ export const LinkField = ({ name, entity }: { name: string; entity: EntityField 
 
 	return (
 		<>
-			{entity.relationshipType === 'ONE_TO_ONE' || entity.relationshipType === 'MANY_TO_ONE' ? (
+			{field.relationshipType === 'ONE_TO_ONE' || field.relationshipType === 'MANY_TO_ONE' ? (
 				<a
 					key={formEntity.id}
 					onClick={(e) =>
-						handleLinkClick(e, routeFor({ type: entity.type, id: formEntity.value as string }))
+						handleLinkClick(e, routeFor({ type: field.type, id: formEntity.value as string }))
 					}
 				>
 					{formEntity.label}
@@ -42,7 +42,7 @@ export const LinkField = ({ name, entity }: { name: string; entity: EntityField 
 							<a
 								key={value.value}
 								onClick={(e) =>
-									handleLinkClick(e, routeFor({ type: entity.type, id: value.value as string }))
+									handleLinkClick(e, routeFor({ type: field.type, id: value.value as string }))
 								}
 							>
 								{value.label}
