@@ -19,7 +19,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"graphql-type-json": "0.3.2",
+		"graphql-scalars": "1.23.0",
 		"luxon": "3.4.4"
 	},
 	"devDependencies": {

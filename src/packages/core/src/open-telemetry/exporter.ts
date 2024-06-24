@@ -40,7 +40,7 @@ export class JsonSpanExporter implements SpanExporter {
 			// traceState:
 			// 	(_a = span.spanContext().traceState) === null || _a === void 0 ? void 0 : _a.serialize(),
 			name: span.name,
-			id: span.spanContext().spanId,
+			spanId: span.spanContext().spanId,
 			// kind: span.kind,
 			timestamp: hrTimeToMicroseconds(span.startTime),
 			duration: hrTimeToMicroseconds(span.duration),

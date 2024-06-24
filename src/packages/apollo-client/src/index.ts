@@ -17,6 +17,7 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 			} | null
 		) => {
 			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
+			args?.filter && delete args.filter.timestamp_lte;
 			const filter = args?.filter ? JSON.stringify(args.filter) : '';
 			const orderBy = args?.pagination?.orderBy ? JSON.stringify(args.pagination.orderBy) : '';
 			return btoa(`${filter}:${orderBy}`);

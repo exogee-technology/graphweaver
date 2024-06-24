@@ -1,7 +1,7 @@
-import { Entity, Field, Sort } from '@exogee/graphweaver';
+import { Entity, Field, ID, Sort } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
-import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import { GraphQLJSON, GraphQLBigInt } from '@exogee/graphweaver-scalars';
 
 import { Trace as OrmTrace } from '../entities';
 import { myConnection } from '../database';
@@ -31,8 +31,11 @@ export const traceProvider = new MikroBackendProvider(OrmTrace, myConnection);
 	},
 })
 export class TraceEntity {
-	@Field(() => String)
+	@Field(() => ID)
 	id!: string;
+
+	@Field(() => String, { adminUIOptions: { hideInFilterBar: true, hideInTable: true } })
+	spanId!: string;
 
 	@Field(() => String, {
 		nullable: true,
@@ -43,11 +46,11 @@ export class TraceEntity {
 	@Field(() => String)
 	name!: string;
 
-	@Field(() => String)
-	timestamp!: string;
+	@Field(() => GraphQLBigInt)
+	timestamp!: bigint;
 
-	@Field(() => String)
-	duration!: string;
+	@Field(() => GraphQLBigInt)
+	duration!: bigint;
 
 	@Field(() => String)
 	traceId!: string;

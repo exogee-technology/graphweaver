@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { Row, createColumnHelper } from '@tanstack/react-table';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
 import {
 	PAGE_SIZE,
@@ -20,7 +21,6 @@ import { QueryResponse, queryForEntityPage } from './graphql';
 import { ListToolBar } from '../list-toolbar';
 
 import styles from './styles.module.css';
-import { useMemo } from 'react';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -31,7 +31,7 @@ export const EntityList = <TData extends object>() => {
 	const navigate = useNavigate();
 	const { entityByName } = useSchema();
 	const [search] = useSearchParams();
-	const { sort: sorting, page, filters } = decodeSearchParams(search);
+	const { sort: sorting, filters } = decodeSearchParams(search);
 
 	const { fields, defaultSort, primaryKeyField, defaultFilter } = entityByName(entity);
 
@@ -39,7 +39,7 @@ export const EntityList = <TData extends object>() => {
 
 	const variables = {
 		pagination: {
-			offset: Math.max(page - 1, 0) * PAGE_SIZE,
+			offset: 0,
 			limit: PAGE_SIZE,
 			orderBy: sort,
 		},
@@ -65,7 +65,30 @@ export const EntityList = <TData extends object>() => {
 		[]
 	);
 
-	if (loading) {
+	const handleFetchNextPage = async () => {
+		const moreData = (data?.result.length ?? 0) < (data?.aggregate?.count ?? 0);
+		console.log(data?.result.length, data?.aggregate?.count, moreData, !loading);
+		if (!loading && moreData) {
+			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+			fetchMore({
+				variables: {
+					...variables,
+					pagination: {
+						...variables.pagination,
+						offset: nextPage * PAGE_SIZE,
+					},
+					filter: {
+						...variables.filter,
+						timestamp_lte: (data?.result[0] as any).timestamp,
+					},
+				},
+			});
+		}
+	};
+
+	console.log(data);
+
+	if (loading && !data) {
 		return <Loader />;
 	}
 	if (error) {
@@ -82,7 +105,6 @@ export const EntityList = <TData extends object>() => {
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {
-		console.log(newSort);
 		navigate(
 			routeFor({
 				entity,
@@ -96,7 +118,7 @@ export const EntityList = <TData extends object>() => {
 	return (
 		<div className={styles.wrapper}>
 			<Header>
-				<ListToolBar />
+				<ListToolBar count={data.aggregate?.count} />
 			</Header>
 			<Table
 				data={convertRowData(data, fields)}
@@ -104,6 +126,7 @@ export const EntityList = <TData extends object>() => {
 				sort={sort}
 				onRowClick={handleRowClick}
 				onSortClick={handleSortClick}
+				fetchNextPage={handleFetchNextPage}
 			/>
 		</div>
 	);

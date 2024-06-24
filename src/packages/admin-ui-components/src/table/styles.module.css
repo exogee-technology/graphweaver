@@ -28,19 +28,16 @@
 	top: 0;
 }
 
-.table th {
+.table thead th {
 	vertical-align: middle;
-	color: #9e98a7;
-	font-weight: 500;
-	font-size: 14px;
-	line-height: 14px;
 	position: sticky;
 	top: 0;
 	z-index: 1;
 	text-align: left;
 	padding: 0 10px;
 	align-items: center;
-	height: 48px;
+	height: 40px;
+	border-bottom: 1px solid #3b3349;
 }
 
 .table th:hover {
@@ -53,6 +50,10 @@
 	align-items: center;
 	width: 100%;
 	gap: 8px;
+	color: #ede8f2a1;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 14px;
 }
 
 .table th .arrow {
@@ -68,7 +69,7 @@
 	transform: rotate(0deg);
 }
 
-.table tr {
+.table tbody tr {
 	height: 48px;
 	max-height: 48px;
 }

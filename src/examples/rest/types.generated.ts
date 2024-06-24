@@ -17,6 +17,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
+  BigInt: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
@@ -131,15 +133,23 @@ export type ApiKeyUpdateInput = {
 
 export type ApiKeysListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   key?: InputMaybe<Scalars['String']['input']>;
+  key_gt?: InputMaybe<Scalars['String']['input']>;
+  key_gte?: InputMaybe<Scalars['String']['input']>;
   key_ilike?: InputMaybe<Scalars['String']['input']>;
   key_in?: InputMaybe<Array<Scalars['String']['input']>>;
   key_like?: InputMaybe<Scalars['String']['input']>;
+  key_lt?: InputMaybe<Scalars['String']['input']>;
+  key_lte?: InputMaybe<Scalars['String']['input']>;
   key_ne?: InputMaybe<Scalars['String']['input']>;
   key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -187,15 +197,23 @@ export type CredentialUpdateInput = {
 
 export type CredentialsListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+  username_gt?: InputMaybe<Scalars['String']['input']>;
+  username_gte?: InputMaybe<Scalars['String']['input']>;
   username_ilike?: InputMaybe<Scalars['String']['input']>;
   username_in?: InputMaybe<Array<Scalars['String']['input']>>;
   username_like?: InputMaybe<Scalars['String']['input']>;
+  username_lt?: InputMaybe<Scalars['String']['input']>;
+  username_lte?: InputMaybe<Scalars['String']['input']>;
   username_ne?: InputMaybe<Scalars['String']['input']>;
   username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   username_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -678,15 +696,23 @@ export type TagUpdateInput = {
 
 export type TagsListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
   name_ilike?: InputMaybe<Scalars['String']['input']>;
   name_in?: InputMaybe<Array<Scalars['String']['input']>>;
   name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
   name_ne?: InputMaybe<Scalars['String']['input']>;
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -762,15 +788,23 @@ export type TaskUpdateInput = {
 
 export type TasksListFilter = {
   description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
   description_ilike?: InputMaybe<Scalars['String']['input']>;
   description_in?: InputMaybe<Array<Scalars['String']['input']>>;
   description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
   description_ne?: InputMaybe<Scalars['String']['input']>;
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   description_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -782,9 +816,13 @@ export type TasksListFilter = {
   isCompleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   isCompleted_null?: InputMaybe<Scalars['Boolean']['input']>;
   slug?: InputMaybe<Scalars['String']['input']>;
+  slug_gt?: InputMaybe<Scalars['String']['input']>;
+  slug_gte?: InputMaybe<Scalars['String']['input']>;
   slug_ilike?: InputMaybe<Scalars['String']['input']>;
   slug_in?: InputMaybe<Array<Scalars['String']['input']>>;
   slug_like?: InputMaybe<Scalars['String']['input']>;
+  slug_lt?: InputMaybe<Scalars['String']['input']>;
+  slug_lte?: InputMaybe<Scalars['String']['input']>;
   slug_ne?: InputMaybe<Scalars['String']['input']>;
   slug_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   slug_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -816,11 +854,12 @@ export type Token = {
 export type Trace = {
   __typename?: 'Trace';
   attributes: Scalars['JSON']['output'];
-  duration: Scalars['String']['output'];
-  id: Scalars['String']['output'];
+  duration: Scalars['BigInt']['output'];
+  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   parentId?: Maybe<Scalars['String']['output']>;
-  timestamp: Scalars['String']['output'];
+  spanId: Scalars['String']['output'];
+  timestamp: Scalars['BigInt']['output'];
   traceId: Scalars['String']['output'];
 };
 
@@ -831,50 +870,80 @@ export type TracesListFilter = {
   attributes_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
   attributes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   attributes_null?: InputMaybe<Scalars['Boolean']['input']>;
-  duration?: InputMaybe<Scalars['String']['input']>;
-  duration_ilike?: InputMaybe<Scalars['String']['input']>;
-  duration_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  duration_like?: InputMaybe<Scalars['String']['input']>;
-  duration_ne?: InputMaybe<Scalars['String']['input']>;
-  duration_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  duration?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  duration_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_ne?: InputMaybe<Scalars['BigInt']['input']>;
+  duration_nin?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   duration_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   duration_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['String']['input']>;
-  id_ilike?: InputMaybe<Scalars['String']['input']>;
-  id_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  id_like?: InputMaybe<Scalars['String']['input']>;
-  id_ne?: InputMaybe<Scalars['String']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
   name_ilike?: InputMaybe<Scalars['String']['input']>;
   name_in?: InputMaybe<Array<Scalars['String']['input']>>;
   name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
   name_ne?: InputMaybe<Scalars['String']['input']>;
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
+  parentId_gt?: InputMaybe<Scalars['String']['input']>;
+  parentId_gte?: InputMaybe<Scalars['String']['input']>;
   parentId_ilike?: InputMaybe<Scalars['String']['input']>;
   parentId_in?: InputMaybe<Array<Scalars['String']['input']>>;
   parentId_like?: InputMaybe<Scalars['String']['input']>;
+  parentId_lt?: InputMaybe<Scalars['String']['input']>;
+  parentId_lte?: InputMaybe<Scalars['String']['input']>;
   parentId_ne?: InputMaybe<Scalars['String']['input']>;
   parentId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   parentId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   parentId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  timestamp?: InputMaybe<Scalars['String']['input']>;
-  timestamp_ilike?: InputMaybe<Scalars['String']['input']>;
-  timestamp_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  timestamp_like?: InputMaybe<Scalars['String']['input']>;
-  timestamp_ne?: InputMaybe<Scalars['String']['input']>;
-  timestamp_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  spanId?: InputMaybe<Scalars['String']['input']>;
+  spanId_gt?: InputMaybe<Scalars['String']['input']>;
+  spanId_gte?: InputMaybe<Scalars['String']['input']>;
+  spanId_ilike?: InputMaybe<Scalars['String']['input']>;
+  spanId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  spanId_like?: InputMaybe<Scalars['String']['input']>;
+  spanId_lt?: InputMaybe<Scalars['String']['input']>;
+  spanId_lte?: InputMaybe<Scalars['String']['input']>;
+  spanId_ne?: InputMaybe<Scalars['String']['input']>;
+  spanId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  spanId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  spanId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_ne?: InputMaybe<Scalars['BigInt']['input']>;
+  timestamp_nin?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   timestamp_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   timestamp_null?: InputMaybe<Scalars['Boolean']['input']>;
   traceId?: InputMaybe<Scalars['String']['input']>;
+  traceId_gt?: InputMaybe<Scalars['String']['input']>;
+  traceId_gte?: InputMaybe<Scalars['String']['input']>;
   traceId_ilike?: InputMaybe<Scalars['String']['input']>;
   traceId_in?: InputMaybe<Array<Scalars['String']['input']>>;
   traceId_like?: InputMaybe<Scalars['String']['input']>;
+  traceId_lt?: InputMaybe<Scalars['String']['input']>;
+  traceId_lte?: InputMaybe<Scalars['String']['input']>;
   traceId_ne?: InputMaybe<Scalars['String']['input']>;
   traceId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   traceId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -887,6 +956,7 @@ export type TracesOrderByInput = {
   id?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   parentId?: InputMaybe<Sort>;
+  spanId?: InputMaybe<Sort>;
   timestamp?: InputMaybe<Sort>;
   traceId?: InputMaybe<Sort>;
 };
@@ -923,15 +993,23 @@ export type UserUpdateInput = {
 
 export type UsersListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
   name_ilike?: InputMaybe<Scalars['String']['input']>;
   name_in?: InputMaybe<Array<Scalars['String']['input']>>;
   name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
   name_ne?: InputMaybe<Scalars['String']['input']>;
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;

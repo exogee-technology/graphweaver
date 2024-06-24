@@ -73,7 +73,14 @@ const paginationTypes = new Map<string, GraphQLInputObjectType>();
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
 const scalarShouldGetMathOperations = (
 	scalar: GraphQLScalarType | NumberConstructor | DateConstructor | BigIntConstructor
-) => scalar === Number || scalar === Date || scalar === BigInt || scalar.name === 'ISOString';
+) =>
+	scalar === Number ||
+	scalar === Date ||
+	scalar === BigInt ||
+	scalar.name === 'ID' ||
+	scalar.name === 'BigInt' ||
+	scalar.name === 'String' ||
+	scalar.name === 'ISOString';
 
 const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	let enumType = enumTypes.get(enumMetadata.name);

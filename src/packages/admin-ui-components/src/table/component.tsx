@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
 	ColumnDef,
 	ColumnSort,
@@ -21,6 +21,7 @@ type Props<T> = {
 	sort?: SortEntity;
 	onRowClick?: (row: Row<T>) => void;
 	onSortClick?: (sort: SortEntity) => void;
+	fetchNextPage?: () => void;
 };
 
 export const Table = <T extends object>({
@@ -29,7 +30,11 @@ export const Table = <T extends object>({
 	columns,
 	onRowClick,
 	onSortClick,
+	fetchNextPage,
 }: Props<T>) => {
+	//we need a reference to the scrolling element for infinite scrolling
+	const tableContainerRef = useRef<HTMLDivElement>(null);
+
 	// Convert our sorting object to the format required by react-table
 	const sorting: ColumnSort[] = Object.entries(sort ?? {}).map(([field, direction]) => ({
 		id: field,
@@ -50,6 +55,25 @@ export const Table = <T extends object>({
 		}
 	};
 
+	//called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
+	const fetchMoreOnBottomReached = useCallback(
+		(containerRefElement?: HTMLDivElement | null) => {
+			if (containerRefElement) {
+				const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+				//once the user has scrolled within 500px of the bottom of the table, fetch more data if we can
+				if (scrollHeight - scrollTop - clientHeight < 500) {
+					fetchNextPage?.();
+				}
+			}
+		},
+		[fetchNextPage]
+	);
+
+	//a check on mount and after a fetch to see if the table is already scrolled to the bottom and immediately needs to fetch more data
+	useEffect(() => {
+		fetchMoreOnBottomReached(tableContainerRef.current);
+	}, [fetchMoreOnBottomReached]);
+
 	const table = useReactTable({
 		data,
 		columns,
@@ -62,7 +86,11 @@ export const Table = <T extends object>({
 	});
 
 	return (
-		<div className={styles.container}>
+		<div
+			className={styles.container}
+			onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+			ref={tableContainerRef}
+		>
 			<div className={styles.table}>
 				<table>
 					<thead>

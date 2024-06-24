@@ -1,10 +1,13 @@
-import { Entity, PrimaryKey, Property, JsonType } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, JsonType, BigIntType } from '@mikro-orm/core';
 import { TraceData } from '@exogee/graphweaver';
 
 @Entity()
 export class Trace implements TraceData {
-	@PrimaryKey({ type: String })
+	@PrimaryKey({ type: new BigIntType('string') })
 	id!: string;
+
+	@Property({ type: String })
+	spanId!: string;
 
 	@Property({ type: String })
 	traceId!: string;
@@ -15,11 +18,11 @@ export class Trace implements TraceData {
 	@Property({ type: String })
 	name!: string;
 
-	@Property({ type: Date })
-	timestamp!: Date;
+	@Property({ type: new BigIntType('bigint') })
+	timestamp!: bigint;
 
-	@Property({ type: Number })
-	duration!: number;
+	@Property({ type: new BigIntType('bigint') })
+	duration!: bigint;
 
 	@Property({ type: JsonType })
 	attributes!: Record<string, unknown>;

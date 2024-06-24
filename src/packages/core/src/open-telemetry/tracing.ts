@@ -16,8 +16,8 @@ export interface TraceData {
 	traceId: string;
 	parentId: string;
 	name: string;
-	timestamp: Date;
-	duration: number;
+	timestamp: bigint;
+	duration: bigint;
 	attributes: Record<string, unknown>;
 }
 

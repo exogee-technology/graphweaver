@@ -142,17 +142,25 @@ export type MediaUpdateInput = {
 
 export type MultipleMediaListFilter = {
   filename?: InputMaybe<Scalars['String']['input']>;
+  filename_gt?: InputMaybe<Scalars['String']['input']>;
+  filename_gte?: InputMaybe<Scalars['String']['input']>;
   filename_ilike?: InputMaybe<Scalars['String']['input']>;
   filename_in?: InputMaybe<Array<Scalars['String']['input']>>;
   filename_like?: InputMaybe<Scalars['String']['input']>;
+  filename_lt?: InputMaybe<Scalars['String']['input']>;
+  filename_lte?: InputMaybe<Scalars['String']['input']>;
   filename_ne?: InputMaybe<Scalars['String']['input']>;
   filename_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   filename_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   filename_null?: InputMaybe<Scalars['Boolean']['input']>;
   url?: InputMaybe<Scalars['String']['input']>;
+  url_gt?: InputMaybe<Scalars['String']['input']>;
+  url_gte?: InputMaybe<Scalars['String']['input']>;
   url_ilike?: InputMaybe<Scalars['String']['input']>;
   url_in?: InputMaybe<Array<Scalars['String']['input']>>;
   url_like?: InputMaybe<Scalars['String']['input']>;
+  url_lt?: InputMaybe<Scalars['String']['input']>;
+  url_lte?: InputMaybe<Scalars['String']['input']>;
   url_ne?: InputMaybe<Scalars['String']['input']>;
   url_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -288,7 +296,11 @@ export type SubmissionUpdateInput = {
 
 export type SubmissionsListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
