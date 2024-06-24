@@ -25,3 +25,4 @@ export * from './table';
 export * from './toast';
 export * from './toolbar';
 export * from './utils';
+export * from './welcome-page';
