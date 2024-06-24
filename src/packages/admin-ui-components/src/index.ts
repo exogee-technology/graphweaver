@@ -1,3 +1,4 @@
+export * from './404-page';
 export * from './alert';
 export * from './apollo';
 export * from './assets';
@@ -15,6 +16,7 @@ export * from './input';
 export * from './layouts';
 export * from './loader';
 export * from './logout';
+export * from './missing-entity';
 export * from './playground';
 export * from './require-schema';
 export * from './side-bar';

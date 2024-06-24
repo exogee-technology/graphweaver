@@ -8,7 +8,7 @@ export const useSelectedEntity = () => {
 	if (!entity) return {};
 
 	const selectedEntity = entityByName(entity);
-	if (!selectedEntity) throw new Error(`Unknown entity ${entity}`);
+	if (!selectedEntity) return {};
 
 	return { selectedEntity, selectedEntityId: id };
 };

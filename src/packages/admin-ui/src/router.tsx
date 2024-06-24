@@ -5,6 +5,7 @@ import {
 	DefaultLayout,
 	DefaultErrorFallback,
 	DetailPanel,
+	Page404,
 } from '@exogee/graphweaver-admin-ui-components';
 
 // This is injected by vite-plugin-graphweaver
@@ -39,6 +40,10 @@ const defaultRoutes = [
 	{
 		path: '/playground',
 		element: <Playground />,
+	},
+	{
+		path: '*',
+		element: <Page404 />,
 	},
 ];
 
