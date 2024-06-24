@@ -4,7 +4,7 @@ import { useField } from 'formik';
 import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
 import { EntityField, useSchema } from '../../utils';
 import { getRelationshipQuery } from '../graphql';
-import { useRegisterDataTransform } from '../use-data-transform';
+import { useDataTransform } from '../use-data-transform';
 
 const mode = (field: EntityField) => {
 	if (field.relationshipType === 'ONE_TO_MANY' || field.relationshipType === 'MANY_TO_MANY') {
@@ -31,7 +31,7 @@ export const RelationshipField = ({
 	// but when we go to the server, we need to convert these to the correct format
 	// so that we don't trigger an update on the server of the related entity when
 	// we're only changing the foreign key.
-	useRegisterDataTransform({
+	useDataTransform({
 		field,
 		transform: async (value: unknown) => {
 			if (value === null || value === undefined || (Array.isArray(value) && value.length === 0)) {

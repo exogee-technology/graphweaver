@@ -1,2 +1,2 @@
 export * from './component';
-export { useRegisterDataTransform } from './use-data-transform';
+export { useDataTransform } from './use-data-transform';

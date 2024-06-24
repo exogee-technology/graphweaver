@@ -6,19 +6,14 @@ export interface DataTransform<T> {
 	transform: (value: T) => T | Promise<T>;
 }
 
-export const dataTransforms: DataTransform<unknown>[] = [];
+export const dataTransforms: Record<string, DataTransform<unknown>> = {};
 
-export const useRegisterDataTransform = (transform: DataTransform<unknown>) => {
+export const useDataTransform = (transform: DataTransform<unknown>) => {
 	useEffect(() => {
-		if (!dataTransforms.find((t) => t.field === transform.field)) {
-			dataTransforms.push(transform);
-		}
+		dataTransforms[transform.field.name] = transform;
 
 		return () => {
-			dataTransforms.splice(
-				dataTransforms.findIndex((t) => t.field === transform.field),
-				1
-			);
+			delete dataTransforms[transform.field.name];
 		};
 	}, []);
 };

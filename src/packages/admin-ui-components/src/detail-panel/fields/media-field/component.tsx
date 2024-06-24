@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useField, useFormikContext } from 'formik';
+import toast from 'react-hot-toast';
 import { useMutation } from '@apollo/client';
 
 import { EntityField } from '../../../utils';
@@ -8,8 +9,7 @@ import { Button } from '../../../button';
 import { useAutoFocus } from '../../../hooks';
 
 import styles from './styles.module.css';
-import toast from 'react-hot-toast';
-import { useRegisterDataTransform } from '../../use-data-transform';
+import { useDataTransform } from '../../use-data-transform';
 
 const internalKey = Symbol('media-field-internal');
 
@@ -60,7 +60,7 @@ export const MediaField = ({ field, autoFocus }: { field: EntityField; autoFocus
 	const [getDeleteUrl] = useMutation(getDeleteUrlMutation);
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 
-	useRegisterDataTransform({
+	useDataTransform({
 		field,
 		transform: async (value: unknown) => {
 			if (!value) return undefined;

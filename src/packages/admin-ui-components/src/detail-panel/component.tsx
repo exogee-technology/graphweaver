@@ -191,7 +191,7 @@ const DetailForm = ({
 			try {
 				const transformedValues = values;
 
-				for (const transform of dataTransforms) {
+				for (const transform of Object.values(dataTransforms)) {
 					transformedValues[transform.field.name] = await transform.transform(
 						values[transform.field.name]
 					);
