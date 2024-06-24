@@ -16,6 +16,18 @@
 	}
 }
 
+@keyframes twinkle {
+	0% {
+		opacity: 1;
+	}
+	2% {
+		opacity: 0.45;
+	}
+	4% {
+		opacity: 1;
+	}
+}
+
 .space {
 	background: #100a1c;
 	position: relative;
@@ -31,10 +43,44 @@
 	mix-blend-mode: color-dodge;
 }
 
-.star:nth-child(even) {
-	animation-name: moveRight;
+.star:nth-child(6n) {
+	animation:
+		6s linear infinite moveRight,
+		2s ease infinite twinkle;
 }
 
-.star:nth-child(odd) {
-	animation-name: moveLeft;
+.star:nth-child(6n + 1) {
+	animation:
+		8s linear -1s infinite moveLeft,
+		2s ease -1s infinite twinkle;
+}
+
+.star:nth-child(6n + 2) {
+	animation:
+		10s linear -2s infinite moveRight,
+		2s ease -1.5s infinite twinkle;
+}
+
+.star:nth-child(6n + 2) {
+	animation:
+		12s linear -3s infinite moveLeft,
+		3s ease -2.5s infinite twinkle;
+}
+
+.star:nth-child(6n + 3) {
+	animation:
+		14s linear -4s infinite moveRight,
+		1s ease -0.5s infinite twinkle;
+}
+
+.star:nth-child(6n + 3) {
+	animation:
+		16s linear -5s infinite moveLeft,
+		4s ease -3.5s infinite twinkle;
+}
+
+.star:nth-child(6n + 5) {
+	animation:
+		18s linear -6s infinite moveRight,
+		2.5s ease -1s infinite twinkle;
 }

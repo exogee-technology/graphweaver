@@ -5,9 +5,9 @@ export const Arrow = (props: SVGProps<SVGSVGElement>) => (
 		<path
 			d="m1 4h8m0 0-3 3m3-3-3-3"
 			stroke={props.color ?? '#fff'}
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			stroke-width="1.5"
+			strokeLinecap="round"
+			strokeLinejoin="round"
+			strokeWidth="1.5"
 		/>
 	</svg>
 );
