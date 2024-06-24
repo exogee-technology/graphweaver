@@ -1,4 +1,5 @@
-import { useMemo } from 'react';
+import { DetailedHTMLProps, HTMLAttributes, PropsWithChildren, useMemo } from 'react';
+import clsx from 'clsx';
 import styles from './styles.module.css';
 import { LargeStar } from './large-star';
 import { SmallStar } from './small-star';
@@ -17,7 +18,9 @@ const starStyle = (radius: number) => ({
 	animationDuration: `${randomNumber(6, 16)}s`,
 });
 
-export const StarField = () => {
+export const StarField = (
+	props: PropsWithChildren<DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>>
+) => {
 	const stars = useMemo(() => {
 		const result = [];
 		for (let i = 0; i < numberOfStars; i++) {
@@ -37,5 +40,10 @@ export const StarField = () => {
 		return result;
 	}, []);
 
-	return <div className={styles.space}>{stars}</div>;
+	return (
+		<div {...props} className={clsx(styles.space, props.className)}>
+			{stars}
+			{props.children}
+		</div>
+	);
 };
