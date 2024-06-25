@@ -33,7 +33,7 @@
 		"graphql-tag": "2.12.6",
 		"rimraf": "5.0.7",
 		"rollup-plugin-visualizer": "5.12.0",
-		"serverless": "4.1.0",
+		"serverless": "4.1.5",
 		"serverless-dotenv-plugin": "6.0.0",
 		"serverless-offline": "13.6.0",
 		"vite": "5.3.1",
