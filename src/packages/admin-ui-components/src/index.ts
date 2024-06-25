@@ -5,6 +5,7 @@ export * from './assets';
 export * from './button';
 export * from './combo-box';
 export * from './config';
+export * from './custom-page-config';
 export * from './date-picker';
 export * from './default-error-fallback';
 export * from './detail-panel-field-label';
