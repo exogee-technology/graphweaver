@@ -2,24 +2,16 @@
 	font-size: 2.2rem;
 	font-weight: bold;
 	line-height: 3rem;
-	margin-bottom: 3rem;
-	margin-top: 2rem;
-}
-
-.text {
-	margin-bottom: 2rem;
 }
 
 .list {
 	list-style: disc;
 	margin-left: 2rem;
-	margin-bottom: 1rem;
 }
 
 .button {
 	width: 200px;
 	justify-content: space-between;
-	margin-top: 2rem;
 	margin-left: auto;
 }
 
