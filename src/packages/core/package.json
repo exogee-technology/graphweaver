@@ -37,7 +37,7 @@
 		"pluralize": "8.0.0"
 	},
 	"devDependencies": {
-		"@opentelemetry/instrumentation": "0.52.0",
+		"@opentelemetry/instrumentation": "0.52.1",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.21.5",
 		"glob": "10.4.2",
