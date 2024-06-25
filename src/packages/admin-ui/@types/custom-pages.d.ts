@@ -8,6 +8,7 @@ declare module 'virtual:graphweaver-user-supplied-custom-pages' {
 	}
 
 	export interface CustomPagesExport {
+		defaultRoute?: string;
 		routes: () => RouteObject[] | Promise<RouteObject[]>;
 		navLinks: () => NavLinkExport[] | Promise<NavLinkExport[]>;
 		loginProps?: LoginProps;

@@ -13,6 +13,7 @@ import {
 	Header,
 	ExportModal,
 	getOrderByQuery,
+	MissingEntity,
 } from '@exogee/graphweaver-admin-ui-components';
 
 import { queryForEntityPage } from './graphql';
@@ -40,10 +41,9 @@ export const ListToolBar = ({ count, onExportToCSV }: ListToolBarProps) => {
 	);
 };
 
-export const List = () => {
+export const ListWithSelectedEntity = () => {
 	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
-
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
@@ -54,7 +54,7 @@ export const List = () => {
 		pagination: {
 			offset: Math.max(page - 1, 0) * PAGE_SIZE,
 			limit: PAGE_SIZE,
-			orderBy: getOrderByQuery(entityByName(entity), sort),
+			orderBy: entityByName(entity) ? getOrderByQuery(entityByName(entity), sort) : undefined,
 		},
 		...(filters ? { filter: filters } : {}),
 	};
@@ -112,14 +112,18 @@ export const List = () => {
 		return { ...row, ...overrides } as typeof row;
 	});
 
-	const handleExportToCSV = () => {
-		setShowExportModal(true);
-	};
+	if (!entityByName(entity)) {
+		// We need to show the 404 page
+		return <MissingEntity entity={entity} />;
+	}
 
 	return (
 		<>
 			<Header>
-				<ListToolBar count={data?.aggregate?.count} onExportToCSV={handleExportToCSV} />
+				<ListToolBar
+					count={data?.aggregate?.count}
+					onExportToCSV={() => setShowExportModal(true)}
+				/>
 			</Header>
 
 			<Table
@@ -136,4 +140,17 @@ export const List = () => {
 			) : null}
 		</>
 	);
+};
+
+export const List = () => {
+	const { entity } = useParams();
+	const { entityByName } = useSchema();
+
+	if (!entity) throw new Error('There should always be an entity at this point.');
+
+	if (!entityByName(entity)) {
+		return <MissingEntity entity={entity} />;
+	}
+
+	return <ListWithSelectedEntity />;
 };

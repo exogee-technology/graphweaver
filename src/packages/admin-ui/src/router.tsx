@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import {
 	Loader,
 	DefaultLayout,
 	DefaultErrorFallback,
 	DetailPanel,
+	Page404,
 } from '@exogee/graphweaver-admin-ui-components';
 
 // This is injected by vite-plugin-graphweaver
@@ -13,13 +14,12 @@ import { List, Root, Playground } from './pages';
 
 const defaultRoutes = [
 	{
-		path: '/',
 		element: <DefaultLayout />,
 		errorElement: <DefaultErrorFallback />,
 		children: [
 			{
 				path: '/',
-				element: <Root />,
+				element: customPages.defaultRoute ? <Navigate to={customPages.defaultRoute} /> : <Root />,
 			},
 			{
 				path: ':entity',
@@ -41,6 +41,10 @@ const defaultRoutes = [
 		path: '/playground',
 		element: <Playground />,
 	},
+	{
+		path: '*',
+		element: <Page404 />,
+	},
 ];
 
 export const Router = () => {
@@ -48,9 +52,10 @@ export const Router = () => {
 
 	useEffect(() => {
 		(async () => {
-			const routes = (await customPages.routes()).flat().filter((route) => route?.path);
+			// We need to blend their custom routes in at the top so they can override us if they want.
+			const routes = await customPages.routes();
 			setRouter(
-				createBrowserRouter([...defaultRoutes, ...routes], {
+				createBrowserRouter([...routes, ...defaultRoutes], {
 					basename: import.meta.env.VITE_ADMIN_UI_BASE || '/',
 				})
 			);

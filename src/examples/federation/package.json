@@ -22,6 +22,7 @@
 		"@apollo/server": "4.10.4",
 		"@as-integrations/hapi": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@hapi/hapi": "21.3.10",
 		"dotenv": "16.4.5"

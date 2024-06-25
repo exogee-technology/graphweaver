@@ -6,7 +6,7 @@ import { Button } from '../button';
 import { DateSelector } from './date-selector';
 
 import styles from './styles.module.css';
-import { ExitIcon } from '../assets';
+import { CloseButtonIcon } from '../assets';
 
 interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
@@ -78,7 +78,7 @@ export const DatePicker = ({
 					<div className={styles.indicatorWrapper}>
 						<span className={styles.indicatorSeparator}></span>
 						<div className={styles.indicatorContainer}>
-							<ExitIcon className={styles.closeIcon} onClick={clear} />
+							<CloseButtonIcon className={styles.closeIcon} onClick={clear} />
 						</div>
 					</div>
 				)}

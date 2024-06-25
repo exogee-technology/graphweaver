@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom';
 import { Button } from '../button';
 import { Popover, PopoverItem } from '../popover';
-import OpenPlaygroundIcon from '../assets/16-open-external.svg';
+import { OpenExternalIcon } from '../assets/16-open-external';
 import { decodeSearchParams, routeFor, useSelectedEntity } from '../utils';
 import styles from './styles.module.css';
 
@@ -39,7 +39,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 				>
 					<Button>
 						Open Playground
-						<OpenPlaygroundIcon />
+						<OpenExternalIcon />
 					</Button>
 				</Link>
 				<Button className={styles.toolBarTrailingButton} onClick={onExportToCSV}>
