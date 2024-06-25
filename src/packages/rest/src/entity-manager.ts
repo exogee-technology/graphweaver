@@ -48,9 +48,9 @@ const hasId = (obj: unknown): obj is ObjectWithId => {
 	return typeof (obj as ObjectWithId).id === 'string';
 };
 
-const isObject = (value: unknown) => {
+function isObject(value: unknown): value is object {
 	return value != null && typeof value === 'object';
-};
+}
 
 export class EntityManager<T extends BaseEntity> {
 	constructor(
@@ -122,7 +122,7 @@ export class EntityManager<T extends BaseEntity> {
 
 	private mapValueWithEntity = (
 		entity: EntityConstructor<T>,
-		value: any | any[],
+		value: unknown | unknown[],
 		mapAsInput?: boolean // passed through to mapRelationshipWithEntity
 	): any => {
 		const { _fieldMap, _relationshipMap, _aliasMap, _externalEntityMap } = entity.prototype;
@@ -137,6 +137,9 @@ export class EntityManager<T extends BaseEntity> {
 			// If we have a date then we should convert to an ISO string
 			return value.toISOString();
 		} else if (isObject(value)) {
+			// This is convenient for later.
+			const recordValue = value as Record<string, any>;
+
 			// Visit all the things.
 			for (const [key, subValue] of Object.entries(value)) {
 				// Let's check if there is a relationship on this key
@@ -151,17 +154,17 @@ export class EntityManager<T extends BaseEntity> {
 					// If we have an external entity then we need to flatten the object and map it
 					// For example: { contact: { id: '123' } } to { contactid: '123' }
 					const externalIdField = _externalEntityMap?.get(key);
-					value[externalIdField] = subValue.id;
-					delete value[key];
+					recordValue[externalIdField] = subValue.id;
+					delete recordValue[key];
 				} else {
 					// if the key is not a relationship or external ID then we can just continue mapping the fields
-					value[key] = this.mapValueWithEntity(entity, subValue);
+					recordValue[key] = this.mapValueWithEntity(entity, subValue);
 
 					// Finally, we need to change any keys to the underlyingFieldName in the CRM which is created in both the field and many-to-many decorators
 					const mapField = _fieldMap.get(key);
 					if (typeof mapField !== 'undefined') {
-						value[mapField] = value[key];
-						delete value[key];
+						recordValue[mapField] = recordValue[key];
+						delete recordValue[key];
 					}
 				}
 			}
