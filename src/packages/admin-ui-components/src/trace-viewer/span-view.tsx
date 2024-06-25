@@ -74,7 +74,7 @@ export const SpanView = ({
 						{Array.isArray(span.children)
 							? span.children.map((child: any) => (
 									<SpanView
-										key={child.id}
+										key={child.spanId}
 										span={child}
 										minTimestamp={minTimestamp}
 										maxTimestamp={maxTimestamp}

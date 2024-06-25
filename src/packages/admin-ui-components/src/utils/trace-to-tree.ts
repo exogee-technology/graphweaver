@@ -5,6 +5,7 @@ export type SpanTree = Omit<Span, '__typename'> & {
 
 export type Span = {
 	id: string;
+	spanId: string;
 	parentId?: string | null; // Optional and nullable
 	traceId: string;
 	name: string;
@@ -63,12 +64,12 @@ export const createTreeFromTrace = (spans: Span[]): SpanTree => {
 
 	for (const span of spans) {
 		// Add the span to the lookup
-		const existingSpan = lookup.get(span.id);
+		const existingSpan = lookup.get(span.spanId);
 		const spanWithChildren: SpanTree = {
 			...span,
 			children: [...(existingSpan ? existingSpan.children : [])],
 		} as SpanTree;
-		lookup.set(span.id, spanWithChildren);
+		lookup.set(span.spanId, spanWithChildren);
 
 		// If this span has a parent, add this span as a child
 		if (span.parentId) {

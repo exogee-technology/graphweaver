@@ -8,6 +8,13 @@ interface Entity {
 	primaryKeyField: string;
 }
 
+enum Sort {
+	ASC = 'ASC',
+	DESC = 'DESC',
+}
+
+type SortEntity = Record<string, Sort>;
+
 export const stabilizationKeys = Symbol('stabilization');
 
 export interface FilterWithStabilization {
@@ -70,4 +77,24 @@ export const generateTypePolicies = (entities: Entity[]) => {
 	};
 
 	return result;
+};
+
+export const addStabilizationToFilter = <TData>(
+	filter: Record<string, unknown>,
+	sort: SortEntity,
+	firstElement: TData
+) => {
+	const filters = filter as FilterWithStabilization;
+
+	const keys = Object.keys(sort);
+	for (const key of keys) {
+		const isDesc = sort[key] === Sort.DESC;
+		const operationKey = isDesc ? 'lte' : 'gte';
+
+		filters[stabilizationKeys] = filters[stabilizationKeys] ?? [];
+		filters[stabilizationKeys].push(`${key}_${operationKey}`);
+		filters[`${key}_${operationKey}`] = firstElement[key as keyof TData];
+	}
+
+	return filters;
 };

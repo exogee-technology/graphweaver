@@ -26,7 +26,7 @@ export const TraceViewer = ({ traces }: { traces?: Span[] }) => {
 				<div className={styles.scrollContainer}>
 					<div className={styles.spanListContainer}>
 						<SpanView
-							key={root.id}
+							key={root.spanId}
 							span={root}
 							minTimestamp={minTimestamp}
 							maxTimestamp={maxTimestamp}

@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { Row, createColumnHelper } from '@tanstack/react-table';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
-import { stabilizationKeys } from '@exogee/graphweaver-apollo-client';
+import { addStabilizationToFilter } from '@exogee/graphweaver-apollo-client';
 
 import {
 	PAGE_SIZE,
@@ -65,24 +65,6 @@ export const EntityList = <TData extends object>() => {
 		[]
 	);
 
-	const handleFetchNextPage = async () => {
-		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
-		fetchMore({
-			variables: {
-				...variables,
-				pagination: {
-					...variables.pagination,
-					offset: nextPage * PAGE_SIZE,
-				},
-				filter: {
-					...variables.filter,
-					[stabilizationKeys]: [`timestamp_lte`],
-					timestamp_lte: (data?.result[0] as any).timestamp,
-				},
-			},
-		});
-	};
-
 	if (loading && !data) {
 		return <Loader />;
 	}
@@ -108,6 +90,20 @@ export const EntityList = <TData extends object>() => {
 				id,
 			})
 		);
+	};
+
+	const handleFetchNextPage = async () => {
+		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+		fetchMore({
+			variables: {
+				...variables,
+				pagination: {
+					...variables.pagination,
+					offset: nextPage * PAGE_SIZE,
+				},
+				filter: addStabilizationToFilter(variables.filter ?? {}, sort, data.result?.[0]),
+			},
+		});
 	};
 
 	return (
