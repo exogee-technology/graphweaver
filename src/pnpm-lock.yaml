@@ -91,6 +91,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
       '@exogee/graphweaver-builder':
         specifier: workspace:*
         version: link:../../packages/builder
