@@ -433,8 +433,8 @@ importers:
         specifier: 6.23.1
         version: 6.23.1(react-dom@18.3.1)(react@18.3.1)
       xero-node:
-        specifier: 6.0.0
-        version: 6.0.0
+        specifier: 7.0.0
+        version: 7.0.0
     devDependencies:
       '@types/node':
         specifier: 20.14.6
@@ -1425,8 +1425,8 @@ importers:
         specifier: 16.8.1
         version: 16.8.1
       xero-node:
-        specifier: 6.0.0
-        version: 6.0.0
+        specifier: 7.0.0
+        version: 7.0.0
     devDependencies:
       '@types/node':
         specifier: 20.14.6
@@ -6308,11 +6308,6 @@ packages:
   /@opentelemetry/semantic-conventions@1.25.1:
     resolution: {integrity: sha512-ZDjMJJQRlyk8A1KZFCc+bCbsyrn1wTwdNt56F7twdfUfnHUZUq77/WfONCj8p72NZOyP7pNTdUWSTYC3GTbuuQ==}
     engines: {node: '>=14'}
-    dev: false
-
-  /@panva/asn1.js@1.0.0:
-    resolution: {integrity: sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==}
-    engines: {node: '>=10.13.0'}
     dev: false
 
   /@parcel/source-map@2.1.1:
@@ -12928,11 +12923,8 @@ packages:
     hasBin: true
     dev: false
 
-  /jose@2.0.7:
-    resolution: {integrity: sha512-5hFWIigKqC+e/lRyQhfnirrAqUdIPMB7SJRqflJaO29dW7q5DFvH1XCSTmv6PQ6pb++0k6MJlLRoS0Wv4s38Wg==}
-    engines: {node: '>=10.13.0 < 13 || >=13.7.0'}
-    dependencies:
-      '@panva/asn1.js': 1.0.0
+  /jose@4.15.7:
+    resolution: {integrity: sha512-L7ioP+JAuZe8v+T5+zVI9Tx8LtU8BL7NxkyDFVMv+Qr3JW0jSoYDedLtodaXwfqMpeCyx4WXFNyu9tJt4WvC1A==}
     dev: false
 
   /jose@5.4.1:
@@ -13740,6 +13732,7 @@ packages:
 
   /make-error@1.3.6:
     resolution: {integrity: sha512-s8UhlNe7vPKomQhC1qFelMokr/Sc3AgNbso3n74mVPA5LTZwkB9NlXf4XPamLxJE8h0gh73rM94xvwRT2CVInw==}
+    dev: true
 
   /make-fetch-happen@9.1.0:
     resolution: {integrity: sha512-+zopwDy7DNknmwPQplem5lAZX/eCOzSvSNNcSKm5eVwTkOBzoktEfXsa9L23J/GIRhxRsaxzkPEhrJEpE2F4Gg==}
@@ -14351,15 +14344,11 @@ packages:
     hasBin: true
     dev: true
 
-  /openid-client@4.9.1:
-    resolution: {integrity: sha512-DYUF07AHjI3QDKqKbn2F7RqozT4hyi4JvmpodLrq0HHoNP7t/AjeG/uqiBK1/N2PZSAQEThVjDLHSmJN4iqu/w==}
-    engines: {node: ^10.19.0 || >=12.0.0 < 13 || >=13.7.0 < 14 || >= 14.2.0}
+  /openid-client@5.6.5:
+    resolution: {integrity: sha512-5P4qO9nGJzB5PI0LFlhj4Dzg3m4odt0qsJTfyEtZyOlkgpILwEioOhVVJOrS1iVH494S4Ee5OCjjg6Bf5WOj3w==}
     dependencies:
-      aggregate-error: 3.1.0
-      got: 11.8.6
-      jose: 2.0.7
+      jose: 4.15.7
       lru-cache: 6.0.0
-      make-error: 1.3.6
       object-hash: 2.2.0
       oidc-token-hash: 5.0.3
     dev: false
@@ -17362,11 +17351,11 @@ packages:
         optional: true
     dev: false
 
-  /xero-node@6.0.0:
-    resolution: {integrity: sha512-k4BOWWPc9GdEG/K6gdaNnQMekev/chNkYlDhbCsgXZVhfZk6NYIhIbgfRbC6O/YPlzDXXJj5Erd2tbkonZXWcA==}
+  /xero-node@7.0.0:
+    resolution: {integrity: sha512-XVGYy54ZyikYuF/CuKp8/aJ+EPd2bVN5ZI+qDIZhR+O4ySPFZ9762ua/WQXdaDOt/AxYP/ml8MHsAjRtOlOTvw==}
     dependencies:
       axios: 1.7.2
-      openid-client: 4.9.1
+      openid-client: 5.6.5
     transitivePeerDependencies:
       - debug
     dev: false
