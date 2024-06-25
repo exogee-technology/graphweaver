@@ -21,6 +21,7 @@ test('Ensure media is uploaded on create', async ({ page }) => {
 
 test('Ensure media is uploaded on update', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
+	await page.getByRole('link', { name: 'Get started!' }).click();
 	await page.getByRole('link', { name: 'mikro-orm-pg' }).click();
 	await page.getByRole('link', { name: 'Submission' }).click();
 
@@ -38,6 +39,7 @@ test('Ensure media is uploaded on update', async ({ page }) => {
 
 test('Ensure media is deleted', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
+	await page.getByRole('link', { name: 'Get started!' }).click();
 	await page.getByRole('link', { name: 'mikro-orm-pg' }).click();
 	await page.getByRole('link', { name: 'Submission' }).click();
 
