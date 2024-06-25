@@ -30,7 +30,7 @@
 	"devDependencies": {
 		"@types/node": "20.14.6",
 		"graphweaver": "workspace:*",
-		"tsx": "4.15.6",
+		"tsx": "4.15.7",
 		"typescript": "5.4.5"
 	},
 	"keywords": [
