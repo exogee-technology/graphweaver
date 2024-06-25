@@ -4,9 +4,7 @@ import path from 'path';
 import { config } from '../../../config';
 
 test('Ensure media is uploaded on create', async ({ page }) => {
-	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'mikro-orm-pg' }).click();
-	await page.getByRole('link', { name: 'Submission' }).click();
+	await page.goto(`${config.adminUiUrl}/Submission`);
 	await page.getByRole('button', { name: 'Create New Submission' }).click();
 	await page.waitForTimeout(1000);
 
@@ -20,11 +18,7 @@ test('Ensure media is uploaded on create', async ({ page }) => {
 });
 
 test('Ensure media is uploaded on update', async ({ page }) => {
-	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'Get started!' }).click();
-	await page.getByRole('link', { name: 'mikro-orm-pg' }).click();
-	await page.getByRole('link', { name: 'Submission' }).click();
-
+	await page.goto(`${config.adminUiUrl}/Submission`);
 	await page.getByRole('gridcell').last().click();
 	await page.waitForTimeout(1000);
 
@@ -38,10 +32,7 @@ test('Ensure media is uploaded on update', async ({ page }) => {
 });
 
 test('Ensure media is deleted', async ({ page }) => {
-	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'Get started!' }).click();
-	await page.getByRole('link', { name: 'mikro-orm-pg' }).click();
-	await page.getByRole('link', { name: 'Submission' }).click();
+	await page.goto(`${config.adminUiUrl}/Submission`);
 
 	await page.getByRole('gridcell').getByRole('img').last().click();
 	await page.waitForTimeout(1000);
