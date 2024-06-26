@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import { ChevronDownIcon } from '../assets';
 import styles from './styles.module.css';
 import { Sort, SortEntity } from '../utils';
+import { Spinner, SpinnerSize } from '../spinner';
 
 type Props<T> = {
 	loading: boolean;
@@ -145,13 +146,9 @@ export const Table = <T extends object>({
 					<tfoot>
 						{table.getFooterGroups().map((footerGroup) => (
 							<tr key={footerGroup.id}>
-								{footerGroup.headers.map((header) => (
-									<th key={header.id}>
-										{header.isPlaceholder
-											? null
-											: flexRender(header.column.columnDef.footer, header.getContext())}
-									</th>
-								))}
+								<th colSpan={footerGroup.headers.length}>
+									{loading ? <Spinner size={SpinnerSize.SMALL} /> : null}
+								</th>
 							</tr>
 						))}
 					</tfoot>

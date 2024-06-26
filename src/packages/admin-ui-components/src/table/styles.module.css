@@ -48,7 +48,7 @@
 	background-color: #352d44;
 }
 
-.table th .header {
+.table thead th .header {
 	display: flex;
 	align-items: center;
 	width: 100%;
@@ -59,16 +59,16 @@
 	line-height: 14px;
 }
 
-.table th .arrow {
+.table thead th .arrow {
 	transform-origin: center;
 	transition-duration: 0.3s;
 }
 
-.table th .asc {
+.table thead th .asc {
 	transform: rotate(180deg);
 }
 
-.table th .desc {
+.table thead th .desc {
 	transform: rotate(0deg);
 }
 
@@ -93,4 +93,12 @@
 	font-weight: 400;
 	padding: 0 10px;
 	white-space: nowrap;
+}
+
+.table tfoot {
+	height: 40px;
+}
+
+.table tfoot th {
+	vertical-align: middle;
 }
