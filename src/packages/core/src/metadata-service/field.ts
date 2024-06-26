@@ -34,4 +34,7 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => Boolean, { nullable: true })
 	hideInFilterBar?: boolean;
+
+	@Field(() => Boolean, { nullable: true })
+	hideInDetailForm?: boolean;
 }

@@ -23,7 +23,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const filters = searchParams.filters ?? entityByName(entityName).defaultFilter;
+	const filters = searchParams.filters ?? {};
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);

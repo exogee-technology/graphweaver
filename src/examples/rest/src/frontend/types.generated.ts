@@ -74,6 +74,7 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
   hideInFilterBar?: Maybe<Scalars['Boolean']['output']>;
   hideInTable?: Maybe<Scalars['Boolean']['output']>;
   isArray?: Maybe<Scalars['Boolean']['output']>;

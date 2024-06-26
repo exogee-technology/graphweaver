@@ -222,7 +222,7 @@ const DetailForm = ({
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
 							if (field.type === 'custom') {
-								if ((field as CustomField).hideOnDetailForm) return null;
+								if (field.hideInDetailForm) return null;
 
 								return (
 									<CustomFieldComponent
@@ -301,12 +301,7 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
-	const customFieldsToShow = (customFields?.get(selectedEntity.name) || []).filter(
-		(customField) => {
-			const { detailForm: show } = customField.showOn ?? { detailForm: true };
-			return show;
-		}
-	);
+	const customFieldsToShow = customFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
 		// We don't show Many to Many relationships in the form yet because we don't have

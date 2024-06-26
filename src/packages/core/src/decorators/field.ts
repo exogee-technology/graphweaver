@@ -16,6 +16,7 @@ export interface FieldOptions {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		hideInDetailForm?: boolean;
 		readonly?: boolean;
 		summaryField?: boolean;
 	};

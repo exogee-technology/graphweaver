@@ -128,10 +128,7 @@ const columnsForEntity = <T extends TableRowItem>(
 	];
 
 	// Which custom fields do we need to show here?
-	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
-		const { table: show } = customField.showOn ?? { table: true };
-		return show;
-	});
+	const customFieldsToShow = customFields?.get(entity.name) || [];
 
 	// Remove any fields that the user intends to replace with a custom field so
 	// their custom field indices are correct regardless of insertion order
@@ -144,7 +141,7 @@ const columnsForEntity = <T extends TableRowItem>(
 
 	// Ok, now we can merge our custom fields in
 	for (const customField of customFieldsToShow) {
-		if (!customField.hideOnTable) {
+		if (!customField.hideInTable) {
 			entityColumns.splice(customField.index ?? entityColumns.length, 0, {
 				key: customField.name,
 				name: customField.name,

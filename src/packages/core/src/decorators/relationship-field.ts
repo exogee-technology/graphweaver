@@ -8,6 +8,7 @@ type RelationshipFieldOptions<D> = {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		hideInDetailForm?: boolean;
 		readonly?: boolean;
 	};
 

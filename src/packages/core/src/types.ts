@@ -221,6 +221,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		hideInDetailForm?: boolean;
 		readonly?: boolean;
 	};
 	apiOptions?: {

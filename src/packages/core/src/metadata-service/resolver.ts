@@ -96,6 +96,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						},
 						hideInTable: field.adminUIOptions?.hideInTable,
 						hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
+						hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
 					};
 
 					// Check if we have an array of related entities

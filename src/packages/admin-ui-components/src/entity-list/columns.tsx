@@ -1,6 +1,8 @@
-import { createColumnHelper } from '@tanstack/react-table';
-import { Entity, EntityField, UnixNanoTimestamp, routeFor } from '../utils';
+import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Link } from 'react-router-dom';
+
+import { Entity, EntityField, UnixNanoTimestamp, routeFor } from '../utils';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -123,17 +125,43 @@ const isFieldSortable = (field: EntityField) => {
 	return true;
 };
 
-export const convertEntityToColumns = (
-	fields: EntityField[],
-	entityByType: (type: string) => Entity
-) => {
-	return fields
-		.filter((field) => !!!field.hideInTable)
+export const convertEntityToColumns = (entity: Entity, entityByType: (type: string) => Entity) => {
+	const entityColumns = entity.fields
+		.filter((field) => !field.hideInTable)
 		.map((field) =>
 			columnHelper.accessor(field.name, {
+				id: field.name,
 				header: () => field.name,
 				cell: (info) => cellForType(field, info.getValue(), entityByType),
 				enableSorting: isFieldSortable(field),
 			})
 		);
+
+	// Which custom fields do we need to show here?
+	const customFieldsToShow = (customFields?.get(entity.name) || []).filter(
+		(field) => !field.hideInTable
+	);
+
+	// Remove any fields that the user intends to replace with a custom field so
+	// their custom field indices are correct regardless of insertion order
+	for (const customField of customFieldsToShow) {
+		const index = entityColumns.findIndex((column) => column.id === customField.name);
+		if (index !== -1) {
+			entityColumns.splice(index, 1);
+		}
+	}
+
+	// Ok, now we can merge our custom fields in
+	for (const customField of customFieldsToShow) {
+		const column = columnHelper.accessor(customField.name, {
+			id: customField.name,
+			header: () => customField.name,
+			cell: (info: CellContext<unknown, unknown>) =>
+				customField.component?.({ context: 'table', entity: info.row.original }),
+			enableSorting: false,
+		});
+		entityColumns.splice(customField.index ?? entityColumns.length, 0, column);
+	}
+
+	return entityColumns;
 };

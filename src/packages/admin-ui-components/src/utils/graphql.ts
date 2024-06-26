@@ -32,6 +32,7 @@ export const SCHEMA_QUERY = gql`
 					}
 					hideInTable
 					hideInFilterBar
+					hideInDetailForm
 				}
 				attributes {
 					isReadOnly

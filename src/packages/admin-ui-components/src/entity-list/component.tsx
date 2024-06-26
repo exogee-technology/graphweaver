@@ -23,16 +23,17 @@ import { ListToolBar } from '../list-toolbar';
 import styles from './styles.module.css';
 
 export const EntityList = <TData extends object>() => {
-	const { entity, id } = useParams();
-	if (!entity) throw new Error('There should always be an entity at this point.');
+	const { entity: entityName, id } = useParams();
+	if (!entityName) throw new Error('There should always be an entity at this point.');
 
 	const navigate = useNavigate();
 	const { entityByName, entityByType } = useSchema();
 	const [search] = useSearchParams();
 	const { sort: sorting, filters } = decodeSearchParams(search);
-	const { fields, defaultSort, primaryKeyField, defaultFilter } = entityByName(entity);
+	const entity = entityByName(entityName);
+	const { fields, defaultSort, primaryKeyField, defaultFilter } = entity;
 	const columns = useMemo(
-		() => convertEntityToColumns(fields, entityByType),
+		() => convertEntityToColumns(entity, entityByType),
 		[fields, entityByType]
 	);
 
@@ -54,7 +55,7 @@ export const EntityList = <TData extends object>() => {
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<QueryResponse<TData>>(
-		queryForEntityPage(entity, entityByName),
+		queryForEntityPage(entityName, entityByName),
 		{
 			variables,
 			notifyOnNetworkStatusChange: true,

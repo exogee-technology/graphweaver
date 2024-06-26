@@ -55,8 +55,13 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		hideInSideBar?: boolean;
 
 		// If true, properties that reference this entity from other entities will not be able
-		// to be filtered in the list view for those entities. This is
+		// to be filtered in the list view for those entities.
 		hideInFilterBar?: boolean;
+
+		// If true, the entity will not show up in the list view in the Admin UI. This is useful
+		// for entities that are managed by some other system or we don't want a user to see in the
+		// adminUI.
+		hideInDetailForm?: boolean;
 
 		// Specifies what field on this entity should be used to summarise it in the Admin UI when
 		// referenced from other entities, e.g. if a Task in a to-do list application has an 'assigned to'

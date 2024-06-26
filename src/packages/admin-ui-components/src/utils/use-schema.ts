@@ -83,6 +83,7 @@ export interface EntityField {
 	};
 	hideInTable?: boolean;
 	hideInFilterBar?: boolean;
+	hideInDetailForm?: boolean;
 }
 
 export interface EntityFieldAttributes {
@@ -106,9 +107,7 @@ export interface CustomField<T = unknown> extends EntityField {
 	type: 'custom';
 
 	component: (args: CustomFieldArgs<T>) => JSX.Element;
-
-	hideOnTable?: boolean;
-	hideOnDetailForm?: boolean;
+	hideInDetailForm?: boolean;
 	panelMode?: PanelMode;
 }
 
