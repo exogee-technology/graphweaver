@@ -78,6 +78,8 @@ export interface EntityField {
 	extensions?: {
 		key: string;
 	};
+	hideInTable?: boolean;
+	hideInFilterBar?: boolean;
 }
 
 export interface EntityFieldAttributes {

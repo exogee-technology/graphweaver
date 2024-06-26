@@ -61,7 +61,10 @@ export const EntityList = <TData extends object>() => {
 	);
 
 	const columns = useMemo(
-		() => fields.map((field) => columnHelper.accessor(field.name, { header: () => field.name })),
+		() =>
+			fields
+				.filter((field) => !!!field.hideInTable)
+				.map((field) => columnHelper.accessor(field.name, { header: () => field.name })),
 		[]
 	);
 

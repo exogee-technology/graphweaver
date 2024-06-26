@@ -39,7 +39,7 @@ export class TraceEntity {
 
 	@Field(() => String, {
 		nullable: true,
-		adminUIOptions: { hideInFilterBar: false, hideInTable: false },
+		adminUIOptions: { hideInFilterBar: true, hideInTable: true },
 	})
 	parentId?: string;
 

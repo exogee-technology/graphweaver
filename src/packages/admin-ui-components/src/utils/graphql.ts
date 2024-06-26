@@ -30,6 +30,8 @@ export const SCHEMA_QUERY = gql`
 					extensions {
 						key
 					}
+					hideInTable
+					hideInFilterBar
 				}
 				attributes {
 					isReadOnly

@@ -64,17 +64,13 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
 
-				const visibleFields = Object.values(entity.fields).filter(
-					(field) => !field.adminUIOptions?.hideInTable
-				);
-
 				const attributes = new AdminUiEntityAttributeMetadata();
 				attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
 				attributes.isReadOnly = entity.adminUIOptions?.readonly;
 
 				let defaultSummaryField: 'name' | 'title' | undefined = undefined;
 
-				const fields = visibleFields?.map((field) => {
+				const fields = Object.values(entity.fields)?.map((field) => {
 					const {
 						fieldType,
 						isList,
@@ -98,6 +94,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 							isReadOnly,
 							isRequired,
 						},
+						hideInTable: field.adminUIOptions?.hideInTable,
+						hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
 					};
 
 					// Check if we have an array of related entities
@@ -119,9 +117,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 					}
 
-					fieldObject.filter = field.adminUIOptions?.hideInFilterBar
-						? undefined
-						: { type: mapFilterType(fieldObject) };
+					fieldObject.filter = { type: mapFilterType(fieldObject) };
 
 					return fieldObject;
 				});
