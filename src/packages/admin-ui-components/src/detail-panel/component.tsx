@@ -2,10 +2,11 @@ import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import clsx from 'clsx';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Modal } from '../modal';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { Modal } from '../modal';
 
 import {
 	CustomField,
@@ -19,20 +20,20 @@ import {
 import { Button } from '../button';
 import { Spinner } from '../spinner';
 import { generateCreateEntityMutation, generateUpdateEntityMutation } from './graphql';
-
-import styles from './styles.module.css';
 import {
 	BooleanField,
 	EnumField,
 	JSONField,
 	RelationshipField,
-	uploadFileToSignedURL,
+	LinkField,
+	MediaField,
+	TextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-import { LinkField } from './fields/link-field';
+
+import { dataTransforms } from './use-data-transform';
 import { isValueEmpty } from './util';
-import { deleteFileToSignedURL, MediaField } from './fields/media-field';
-import { TextField } from './fields/text-field';
+import styles from './styles.module.css';
 
 interface ResultBaseType {
 	id: string;
@@ -53,9 +54,9 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 	if (field.relationshipType) {
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
-			return <LinkField name={field.name} entity={field} />;
+			return <LinkField name={field.name} field={field} />;
 		}
-		return <RelationshipField name={field.name} entity={field} autoFocus={autoFocus} />;
+		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 	}
 
 	if (field.type === 'JSON') {
@@ -71,12 +72,12 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 	}
 
 	const { enumByName } = useSchema();
-	const enumField = enumByName(field.type);
-	if (enumField) {
+	const enumObject = enumByName(field.type);
+	if (enumObject) {
 		return (
 			<EnumField
 				name={field.name}
-				typeEnum={enumField}
+				typeEnum={enumObject}
 				multiple={field.isArray}
 				autoFocus={autoFocus}
 			/>
@@ -182,6 +183,29 @@ const DetailForm = ({
 		[detailFields]
 	);
 
+	// Form fields can modify the data that's saved in form data before it goes up to
+	// get submitted. This allows them to work in whatever format is easiest for them
+	// but be in control of exactly what gets sent to the server.
+	const submit = useCallback(
+		async (values: any, actions: FormikHelpers<any>) => {
+			try {
+				const transformedValues = values;
+
+				for (const transform of Object.values(dataTransforms)) {
+					transformedValues[transform.field.name] = await transform.transform(
+						values[transform.field.name]
+					);
+				}
+
+				await onSubmit(transformedValues, actions);
+			} catch (error: any) {
+				console.error(error);
+				toast.error(error.message);
+			}
+		},
+		[dataTransforms]
+	);
+
 	const firstEditableField = detailFields.find((field) => !isFieldReadonly(field));
 
 	return (
@@ -190,7 +214,7 @@ const DetailForm = ({
 			validateOnChange={false} // We don't want to validate on change because it will trigger a toast message on every keystroke
 			validateOnBlur={false} // We don't want to validate on blur because it will trigger a toast message
 			initialValues={initialValues}
-			onSubmit={onSubmit}
+			onSubmit={submit}
 			onReset={onCancel}
 		>
 			{({ isSubmitting }) => (
@@ -354,21 +378,6 @@ export const DetailPanel = () => {
 		try {
 			let result: FetchResult;
 
-			// If the form values contains an deleteUrl, then do a seperate mutation to delete the file
-			if (values.deleteUrl) {
-				await deleteFileToSignedURL(values.deleteUrl);
-			}
-
-			// If the form values contain an image, then do seperate mutation to upload the image
-			if (values.uploadUrl && values.file) {
-				await uploadFileToSignedURL(values.uploadUrl, values.file);
-			}
-
-			// if urls and file are there, remove them
-			delete values.deleteUrl;
-			delete values.uploadUrl;
-			delete values.file;
-
 			if (panelMode === PanelMode.EDIT) {
 				// Update an existing entity
 				result = await updateEntity({
@@ -416,7 +425,7 @@ export const DetailPanel = () => {
 					</button>{' '}
 					has been successfully {panelMode === PanelMode.EDIT ? 'updated' : 'created'}.
 				</div>,
-				{ duration: 15000 }
+				{ duration: 10_000 }
 			);
 		} catch (error: unknown) {
 			console.error(error);
@@ -460,17 +469,15 @@ export const DetailPanel = () => {
 						) : error || data?.result === null ? (
 							<p>Failed to load entity.</p>
 						) : (
-							<>
-								<DetailForm
-									initialValues={initialValues}
-									detailFields={formFields}
-									onCancel={closeModal}
-									onSubmit={handleOnSubmit}
-									persistName={persistName}
-									isReadOnly={selectedEntity.attributes.isReadOnly}
-									panelMode={panelMode}
-								/>
-							</>
+							<DetailForm
+								initialValues={initialValues}
+								detailFields={formFields}
+								onCancel={closeModal}
+								onSubmit={handleOnSubmit}
+								persistName={persistName}
+								isReadOnly={selectedEntity.attributes.isReadOnly}
+								panelMode={panelMode}
+							/>
 						)}
 					</>
 				}

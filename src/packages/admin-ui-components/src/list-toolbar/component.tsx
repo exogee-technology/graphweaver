@@ -22,6 +22,10 @@ export const ListToolBar = ({ count, onExportToCSV }: ListToolBarProps) => {
 	}
 
 	return (
-		<ToolBar title={entity ?? 'Unknown Entity'} subtitle={subtitle} onExportToCSV={onExportToCSV} />
+		<ToolBar
+			title={entity ?? 'Unknown Entity'}
+			subtitle={subtitle}
+			onExportToCSV={() => onExportToCSV?.()}
+		/>
 	);
 };

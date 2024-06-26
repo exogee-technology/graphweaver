@@ -1,4 +1,4 @@
-import { SuccessCheckmark, CloseIcon } from '../assets';
+import { SuccessCheckmarkIcon, CloseIcon } from '../assets';
 import { toast, ToastBar, Toaster } from 'react-hot-toast';
 
 import styles from './styles.module.css';
@@ -17,7 +17,7 @@ export const DismissibleToast = () => {
 					},
 					success: {
 						duration: 60_000,
-						icon: <SuccessCheckmark className={styles.successIcon} />,
+						icon: <SuccessCheckmarkIcon className={styles.successIcon} />,
 						style: {
 							background: '#302A3C',
 							color: 'white',

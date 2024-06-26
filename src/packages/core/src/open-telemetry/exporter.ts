@@ -1,4 +1,9 @@
-import { SpanExporter, ReadableSpan, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import {
+	SpanExporter,
+	ReadableSpan,
+	SimpleSpanProcessor,
+	SpanProcessor,
+} from '@opentelemetry/sdk-trace-base';
 import { ExportResult, ExportResultCode, hrTimeToMicroseconds } from '@opentelemetry/core';
 import { BackendProvider } from '../types';
 
@@ -65,5 +70,5 @@ export class JsonSpanExporter implements SpanExporter {
 	}
 }
 
-export const JsonSpanProcessor = (dataProvider: BackendProvider<unknown>) =>
+export const JsonSpanProcessor = (dataProvider: BackendProvider<unknown>): SpanProcessor =>
 	new SimpleSpanProcessor(new JsonSpanExporter(dataProvider));

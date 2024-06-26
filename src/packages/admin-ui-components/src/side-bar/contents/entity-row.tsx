@@ -11,6 +11,7 @@ export const EntityRow = ({ entity }: { entity: Entity }) => (
 		<NavLink
 			to={routeFor({ entity })}
 			className={({ isActive }) => clsx(styles.subListItem, isActive && styles.active)}
+			data-testid={`${entity.name}-entity-link`}
 		>
 			<TableIcon />
 			<span className={styles.subListItemText}>{entity.name}</span>

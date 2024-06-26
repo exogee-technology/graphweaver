@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState, createElement, useCallback } from 'react';
+import { ReactNode, useEffect, useCallback } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -19,14 +19,11 @@ import styles from './styles.module.css';
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity: entityName, id } = useParams();
 	if (!entityName) throw new Error('There should always be an entity at this point.');
-	const [resetCount, setResetCount] = useState(0);
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const [filters, setFilters] = useState(
-		searchParams.filters ?? entityByName(entityName).defaultFilter
-	);
+	const filters = searchParams.filters ?? entityByName(entityName).defaultFilter;
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
@@ -56,46 +53,54 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					duration: 5000,
 				}
 			);
-			setFilters(filter);
+
+			// Go off to a supported URL.
+			navigate(
+				routeFor({
+					entity: entityName,
+					id,
+					// Note: We're explicitly excluding page here so that it resets when we navigate.
+					sort: searchParams.sort,
+					filters: filter,
+				})
+			);
 		}
 	}, []);
 
-	useEffect(() => {
-		const { sort } = decodeSearchParams(search);
+	// This function updates the filter in state based on the filter keys updated and the newFilter value
+	const onFilter = (fieldName: string, newFilter: Filter) => {
+		// Remove any filters from the currentFilter that start with the same fieldName
+		for (const key of Object.keys(filters ?? {})) {
+			if (key.startsWith(fieldName)) delete filters?.[key];
+		}
+
+		// Combine all filters into one object
+		const combinedNewFilter = {
+			...filters,
+			...newFilter,
+		};
+
+		// And off we go.
 		navigate(
 			routeFor({
 				entity: entityName,
-				filters,
-				sort,
 				id,
+				// Note: We're explicitly excluding page here so that it resets when we navigate.
+				sort: searchParams.sort,
+				filters: combinedNewFilter,
 			})
 		);
-	}, [filters]);
-
-	// This function updates the filter in state based on the filter keys updated and the newFilter value
-	const onFilter = (fieldName: string, newFilter: Filter) => {
-		setFilters((currentFilter) => {
-			// Remove any filters from the currentFilter that start with the same fieldName
-			for (const key of Object.keys(currentFilter ?? {})) {
-				if (key.startsWith(fieldName)) delete currentFilter?.[key];
-			}
-
-			// Combine all filters into one object
-			const combinedNewFilter = {
-				...currentFilter,
-				...newFilter,
-			};
-
-			// Return undefined if there's nothing left in the filter.
-			const isFilterEmpty = Object.keys(combinedNewFilter).length === 0;
-			if (isFilterEmpty) return undefined;
-			return combinedNewFilter;
-		});
 	};
 
 	const clearAllFilters = () => {
-		setFilters(undefined);
-		setResetCount((resetCount) => resetCount + 1);
+		navigate(
+			routeFor({
+				entity: entityName,
+				// Note: We're explicitly excluding page here so that it resets when we navigate.
+				sort: searchParams.sort,
+				filters: undefined,
+			})
+		);
 	};
 
 	const getFilterComponents = useCallback(() => {
@@ -104,30 +109,28 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		return fields.map((field) => {
 			if (!field.filter?.type) return null;
 			const options = {
-				key: field.name,
 				fieldName: field.name,
 				entity: entityName,
 				onChange: onFilter,
-				resetCount: resetCount,
-				initialFilter: filters,
+				filter: filters,
 			};
 
 			switch (field.filter.type) {
 				case AdminUIFilterType.TEXT:
-					return createElement(TextFilter, options);
+					return <TextFilter key={field.name} {...options} />;
 				case AdminUIFilterType.BOOLEAN:
-					return createElement(BooleanFilter, options);
+					return <BooleanFilter key={field.name} {...options} />;
 				case AdminUIFilterType.RELATIONSHIP:
-					return createElement(RelationshipFilter, options);
+					return <RelationshipFilter key={field.name} {...options} />;
 				case AdminUIFilterType.ENUM:
-					return createElement(EnumFilter, options);
+					return <EnumFilter key={field.name} {...options} />;
 				case AdminUIFilterType.NUMERIC:
-					return createElement(NumericFilter, options);
+					return <NumericFilter key={field.name} {...options} />;
 				case AdminUIFilterType.DATE_RANGE:
-					return createElement(DateRangeFilter, options);
+					return <DateRangeFilter key={field.name} {...options} />;
 			}
 		});
-	}, [entityName, filters, resetCount]);
+	}, [entityName, filters]);
 
 	const filterComponents = getFilterComponents();
 	if (filterComponents.length === 0) return null;

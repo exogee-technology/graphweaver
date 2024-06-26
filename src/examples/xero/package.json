@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.10.5",
+		"@apollo/client": "3.10.6",
 		"@apollo/server": "4.10.4",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
@@ -45,14 +45,14 @@
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"react-router-dom": "6.23.1",
-		"xero-node": "6.0.0"
+		"xero-node": "7.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "20.14.6",
 		"esbuild": "0.21.5",
 		"prettier": "3.3.2",
 		"ts-node": "10.9.2",
-		"typescript": "5.4.5",
+		"typescript": "5.5.2",
 		"vite": "5.3.1"
 	}
 }

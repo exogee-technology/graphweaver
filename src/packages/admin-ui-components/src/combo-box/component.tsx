@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
 
@@ -21,89 +21,69 @@ interface SelectProps {
 	onChange: (selected: SelectOption[]) => void;
 	mode: SelectMode;
 	onOpen?: () => void;
-	value?: SelectOption[];
+	value?: SelectOption | SelectOption[];
 	placeholder?: string;
 	loading?: boolean;
 	autoFocus?: boolean;
 	['data-testid']?: string;
 }
 
+function arrayify<T>(value: T) {
+	if (Array.isArray(value)) return value;
+	if (value !== null && value !== undefined) return [value];
+	return [];
+}
+
 export const ComboBox = ({
 	options,
 	onChange,
 	onOpen,
+	mode,
 	value = [],
 	placeholder = 'Select',
 	loading = false,
-	mode,
 	autoFocus = false,
 	['data-testid']: testId,
 }: SelectProps) => {
-	const [selectedItems, setSelectedItems] = useState<SelectOption[]>(value);
+	const valueArray = arrayify(value);
 
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps } = useCombobox({
 		items: options,
-		onSelectedItemChange: handleSelectionChange,
 		itemToString: (item) => item?.label ?? '',
+		onSelectedItemChange: (change) => {
+			if (mode === SelectMode.MULTI) {
+				onChange([...valueArray, change.selectedItem]);
+			} else {
+				onChange([change.selectedItem]);
+			}
+		},
 	});
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();
 	}, [isOpen]);
 
-	useEffect(() => {
-		value !== selectedItems && onChange(selectedItems);
-	}, [selectedItems]);
-
-	function handleSelectionChange({ selectedItem }: any) {
-		if (!selectedItem) return;
-		if (mode === SelectMode.SINGLE) {
-			setSelectedItems([selectedItem]);
-		} else {
-			setSelectedItems((_selectedOptions) => {
-				const isOptionAlreadySelected = _selectedOptions.some(
-					(selected) => selected.value === selectedItem.value
-				);
-
-				if (!isOptionAlreadySelected) {
-					// If option is not found in _selectedOptions
-					return [..._selectedOptions, selectedItem];
-				}
-
-				// return the original array as nothing has changed
-				return _selectedOptions;
-			});
-		}
-	}
-
-	// This is only used when multi select is enabled
-	const handleDeleteAll = () => setSelectedItems([]);
-
 	const handleOnPillKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-		if (e.key === 'Backspace') handleDeleteAll();
-		if (e.key === 'Delete') handleDeleteAll();
+		if (e.key === 'Backspace' || e.key === 'Delete') onChange([]);
 	};
 
 	// Store the selected ids in an array for easy lookup
-	const selectedIds = useMemo(
-		() => new Set(selectedItems.map((item) => item.value)),
-		[selectedItems]
-	);
+	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [value]);
 
 	return (
 		<div className={styles.select} data-testid={testId}>
 			<div className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}>
 				<input readOnly className={styles.selectInput} {...getInputProps({ ref: inputRef })} />
-				{selectedItems.length > 0 ? (
+				{valueArray.length > 0 ? (
 					<div className={styles.selectedOptions}>
 						<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
 							<span className={styles.optionPillLabel}>
-								{selectedItems.length > 1 || !selectedItems?.[0]?.label
-									? `${selectedItems.length} Selected`
-									: selectedItems?.[0].label}
+								{valueArray.length > 1 || !valueArray[0].label
+									? `${valueArray.length} Selected`
+									: valueArray[0].label}
 							</span>
-							<span className={styles.deleteOption} onClick={handleDeleteAll}>
+							<span className={styles.deleteOption} onClick={() => onChange([])}>
 								&times;
 							</span>
 						</div>

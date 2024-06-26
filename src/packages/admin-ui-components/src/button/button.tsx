@@ -1,13 +1,14 @@
 import clsx from 'clsx';
-import { useEffect, useRef, ReactNode } from 'react';
+import { useEffect, useRef, PropsWithChildren } from 'react';
 import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
+import { useNavigate } from 'react-router-dom';
 
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
 	onClickOutside?(e: MouseEvent): any /** Event emitted when outside */;
-	className?: string /** alternative styling */;
-	children?: ReactNode;
+	href?: string;
+	className?: string;
 	type?: 'submit' | 'reset' | 'button';
 	disabled?: boolean;
 	loading?: boolean;
@@ -18,17 +19,21 @@ export const Button = ({
 	children,
 	onClickOutside,
 	className,
+	href,
 	type = 'button',
 	disabled = false,
 	loading = false,
-}: ButtonProps): JSX.Element => {
+}: PropsWithChildren<ButtonProps>): JSX.Element => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
+	const navigate = useNavigate();
 
-	function handleOnClickButton() {
-		onClick?.();
+	if (onClick && href) {
+		console.warn(
+			'Button component: You have provided both an onClick and an href. The onClick will be ignored in favor of the href.'
+		);
 	}
 
-	function handleMouseDownEvent(event: MouseEvent) {
+	const handleMouseDownEvent = (event: MouseEvent) => {
 		// No ref or target to compare? Return with no action
 		if (!buttonRef?.current || !event.target) {
 			return;
@@ -41,7 +46,7 @@ export const Button = ({
 
 		// Otherwise, click was outside the element, emit an event.
 		onClickOutside?.(event);
-	}
+	};
 
 	useEffect(() => {
 		// Register mousedown listeners to capture outside click
@@ -54,7 +59,10 @@ export const Button = ({
 	return (
 		<button
 			ref={buttonRef}
-			onClick={handleOnClickButton}
+			onClick={() => {
+				if (href) navigate(href);
+				else onClick?.();
+			}}
 			className={clsx([className, styles.button, disabled && styles.disabled])}
 			type={type}
 			disabled={disabled}

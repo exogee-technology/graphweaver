@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { FilterBar } from '../filter-bar';
 import { TitleBar } from '../title-bar';
-import FilterIcon from '../assets/16-filter.svg';
+import { FilterIcon } from '../assets/16-filter';
 import styles from './styles.module.css';
 
 export interface ToolBarProps {

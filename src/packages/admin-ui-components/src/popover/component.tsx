@@ -1,9 +1,9 @@
-import { ReactNode, useState, useMemo, useCallback } from 'react';
+import { ReactNode, useState, useMemo, useCallback, PropsWithChildren } from 'react';
 import clsx from 'clsx';
 
 import { Button } from '../button';
 import type { ButtonProps } from '../button';
-import DownChevronIcon from '../assets/16-chevron-down.svg';
+import { ChevronDownIcon } from '../assets/16-chevron-down';
 
 import styles from './styles.module.css';
 
@@ -31,7 +31,7 @@ export const Popover = ({
 	defaultValue,
 	position = 'bottom',
 	...props
-}: PopoverProps): JSX.Element => {
+}: PropsWithChildren<PopoverProps>): JSX.Element => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOnClickItem = (item: PopoverItem) => {
@@ -93,7 +93,7 @@ export const Popover = ({
 			<Button {...props} onClickOutside={handleOnOutsideClick} onClick={handleOnClickButton}>
 				{defaultValue?.name ?? children}
 
-				<DownChevronIcon />
+				<ChevronDownIcon />
 			</Button>
 			<ul
 				className={clsx(
