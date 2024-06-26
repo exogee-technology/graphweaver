@@ -386,7 +386,7 @@ export const DetailPanel = () => {
 					variables: {
 						input: values,
 					},
-					refetchQueries: [`AdminUIListPage`],
+					refetchQueries: [`${selectedEntity.plural}List`],
 				});
 			}
 

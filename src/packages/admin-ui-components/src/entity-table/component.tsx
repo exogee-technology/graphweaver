@@ -273,7 +273,7 @@ export const EntityTable = <T extends TableRowItem>({
 
 		const result = deleteEntities({
 			variables: { ids },
-			refetchQueries: [`AdminUIListPage`],
+			refetchQueries: [`${selectedEntity.plural}List`],
 		});
 
 		setSelectedRows(new Set());
