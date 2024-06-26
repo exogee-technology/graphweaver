@@ -46,6 +46,7 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 			return btoa(`${filter}:${orderBy}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
+			console.log(existing, incoming);
 			const mergeMap = new Map<string, { __ref: string }>();
 			for (const entity of [...existing, ...incoming]) {
 				mergeMap.set(entity.__ref, entity);

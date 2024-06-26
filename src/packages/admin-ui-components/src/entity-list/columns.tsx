@@ -74,17 +74,17 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	if (field.relationshipType) {
 		const relatedEntity = entityByType(field.type);
 
-		const linkForValue = (id: any) =>
+		const linkForValue = (item: any) =>
 			relatedEntity ? (
 				<Link
-					key={value.value}
-					to={routeFor({ type: field.type, id })}
+					key={item.value}
+					to={routeFor({ type: field.type, id: item.value })}
 					onClick={(e) => e.stopPropagation()}
 				>
-					{value.label}
+					{item.label}
 				</Link>
 			) : (
-				value.label
+				item.label
 			);
 
 		if (Array.isArray(value)) {
@@ -125,6 +125,37 @@ const isFieldSortable = (field: EntityField) => {
 	return true;
 };
 
+const addRowSelectionColumn = () => {
+	return columnHelper.accessor('select', {
+		id: 'select',
+		enableSorting: false,
+		size: 48,
+		header: ({ table }) => (
+			<input
+				type="checkbox"
+				{...{
+					checked: table.getIsAllRowsSelected(),
+					// indeterminate: table.getIsSomeRowsSelected(),
+					onChange: table.getToggleAllRowsSelectedHandler(),
+				}}
+			/>
+		),
+		cell: ({ row }) => (
+			<div className="px-1">
+				<input
+					type="checkbox"
+					{...{
+						checked: row.getIsSelected(),
+						disabled: !row.getCanSelect(),
+						// indeterminate: row.getIsSomeSelected(),
+						onChange: row.getToggleSelectedHandler(),
+					}}
+				/>
+			</div>
+		),
+	});
+};
+
 export const convertEntityToColumns = (entity: Entity, entityByType: (type: string) => Entity) => {
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
@@ -161,6 +192,11 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 			enableSorting: false,
 		});
 		entityColumns.splice(customField.index ?? entityColumns.length, 0, column);
+	}
+
+	// Add the row selection column if the entity is not read-only
+	if (!entity.attributes.isReadOnly) {
+		return [addRowSelectionColumn(), ...entityColumns];
 	}
 
 	return entityColumns;

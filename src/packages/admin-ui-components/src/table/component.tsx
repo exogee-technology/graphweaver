@@ -98,7 +98,7 @@ export const Table = <T extends object>({
 			ref={tableContainerRef}
 		>
 			<div className={styles.table}>
-				<table>
+				<table data-testid="table">
 					<thead>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<tr key={headerGroup.id}>

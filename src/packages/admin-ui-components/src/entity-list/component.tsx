@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Row } from '@tanstack/react-table';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { addStabilizationToFilter } from '@exogee/graphweaver-apollo-client';
 
@@ -74,7 +74,7 @@ export const EntityList = <TData extends object>() => {
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
 		// TODO: Navigate to the detail page this ID should be generic
-		const primaryKeyField = 'traceId';
+		const primaryKeyField = Object.hasOwn(row.original, 'traceId') ? 'traceId' : 'id';
 		navigate(`${row.original[primaryKeyField as keyof T]}`);
 	};
 
@@ -117,6 +117,7 @@ export const EntityList = <TData extends object>() => {
 				onSortClick={handleSortClick}
 				fetchNextPage={handleFetchNextPage}
 			/>
+			<Outlet />
 		</div>
 	);
 };
