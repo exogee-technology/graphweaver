@@ -63,7 +63,10 @@ export type EntityFieldType =
 	| 'Image'
 	| 'Media'
 	| 'Number'
-	| 'String';
+	| 'String'
+	| 'BigInt'
+	| 'NanoTimestamp'
+	| 'NanoDuration';
 
 export interface EntityField {
 	name: string;

@@ -8,7 +8,7 @@ const us = BigInt(1);
 /** Helper constant for calculating percentages without losing resolution */
 const percentageMultiplyer = BigInt(100);
 
-export class UnixNanoTimeStamp {
+export class UnixNanoTimestamp {
 	private input: number | bigint;
 
 	constructor(input: number | bigint) {
@@ -19,8 +19,8 @@ export class UnixNanoTimeStamp {
 		return BigInt(this.input);
 	}
 
-	public static fromString(input: string): UnixNanoTimeStamp {
-		return new UnixNanoTimeStamp(BigInt(input));
+	public static fromString(input: string): UnixNanoTimestamp {
+		return new UnixNanoTimestamp(BigInt(input));
 	}
 
 	public toDate(): Date {
@@ -57,14 +57,14 @@ export class UnixNanoTimeStamp {
 	}
 
 	public calculateWidthAndOffset(
-		startTimestamp: UnixNanoTimeStamp,
-		minTimestamp: UnixNanoTimeStamp,
-		maxTimestamp: UnixNanoTimeStamp
+		startTimestamp: UnixNanoTimestamp,
+		minTimestamp: UnixNanoTimestamp,
+		maxTimestamp: UnixNanoTimestamp
 	): {
 		width: string;
 		offset: number;
 	} {
-		const timespan = UnixNanoTimeStamp.duration(minTimestamp, maxTimestamp).getBigInt();
+		const timespan = UnixNanoTimestamp.duration(minTimestamp, maxTimestamp).getBigInt();
 
 		const calculatedWidth = this.multiply(percentageMultiplyer).divide(timespan).getBigInt();
 		const width =
@@ -85,25 +85,25 @@ export class UnixNanoTimeStamp {
 		return { width, offset };
 	}
 
-	public static duration(from: UnixNanoTimeStamp, to: UnixNanoTimeStamp): UnixNanoTimeStamp {
+	public static duration(from: UnixNanoTimestamp, to: UnixNanoTimestamp): UnixNanoTimestamp {
 		const duration = to.getBigInt() - from.getBigInt();
 
-		return new UnixNanoTimeStamp(duration);
+		return new UnixNanoTimestamp(duration);
 	}
 
-	public subtract(another: UnixNanoTimeStamp | bigint): UnixNanoTimeStamp {
+	public subtract(another: UnixNanoTimestamp | bigint): UnixNanoTimestamp {
 		const result =
-			this.getBigInt() - (another instanceof UnixNanoTimeStamp ? another.getBigInt() : another);
-		return new UnixNanoTimeStamp(result);
+			this.getBigInt() - (another instanceof UnixNanoTimestamp ? another.getBigInt() : another);
+		return new UnixNanoTimestamp(result);
 	}
 
-	public divide(divisor: bigint): UnixNanoTimeStamp {
+	public divide(divisor: bigint): UnixNanoTimestamp {
 		const result = this.getBigInt() / divisor;
-		return new UnixNanoTimeStamp(result);
+		return new UnixNanoTimestamp(result);
 	}
 
-	public multiply(multiplier: bigint): UnixNanoTimeStamp {
+	public multiply(multiplier: bigint): UnixNanoTimestamp {
 		const result = this.getBigInt() * multiplier;
-		return new UnixNanoTimeStamp(result);
+		return new UnixNanoTimestamp(result);
 	}
 }

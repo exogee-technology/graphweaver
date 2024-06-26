@@ -41,8 +41,6 @@ export const validateFilter = (
 	// This is a list of all the supported filter keys for this entity
 	const supportedKeys = getValidFilterProperties(fields);
 
-	console.log(supportedKeys, Object.keys(filter), fields);
-
 	// This is a list of all the keys in the filter that are not supported
 	const unsupportedKeys: string[] = [];
 

@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Row, createColumnHelper } from '@tanstack/react-table';
+import { Row } from '@tanstack/react-table';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import { addStabilizationToFilter } from '@exogee/graphweaver-apollo-client';
@@ -13,7 +13,7 @@ import {
 	routeFor,
 	useSchema,
 } from '../utils';
-import { convertRowData } from './utils';
+import { convertEntityToColumns } from './columns';
 import { Table } from '../table';
 import { Loader } from '../loader';
 import { Header } from '../header';
@@ -22,18 +22,19 @@ import { ListToolBar } from '../list-toolbar';
 
 import styles from './styles.module.css';
 
-const columnHelper = createColumnHelper<any>();
-
 export const EntityList = <TData extends object>() => {
 	const { entity, id } = useParams();
 	if (!entity) throw new Error('There should always be an entity at this point.');
 
 	const navigate = useNavigate();
-	const { entityByName } = useSchema();
+	const { entityByName, entityByType } = useSchema();
 	const [search] = useSearchParams();
 	const { sort: sorting, filters } = decodeSearchParams(search);
-
 	const { fields, defaultSort, primaryKeyField, defaultFilter } = entityByName(entity);
+	const columns = useMemo(
+		() => convertEntityToColumns(fields, entityByType),
+		[fields, entityByType]
+	);
 
 	const sort = getOrderByQuery({ sort: sorting, defaultSort, primaryKeyField });
 
@@ -58,14 +59,6 @@ export const EntityList = <TData extends object>() => {
 			variables,
 			notifyOnNetworkStatusChange: true,
 		}
-	);
-
-	const columns = useMemo(
-		() =>
-			fields
-				.filter((field) => !!!field.hideInTable)
-				.map((field) => columnHelper.accessor(field.name, { header: () => field.name })),
-		[]
 	);
 
 	if (loading && !data) {
@@ -116,7 +109,7 @@ export const EntityList = <TData extends object>() => {
 			</Header>
 			<Table
 				loading={loading}
-				data={convertRowData(data, fields)}
+				data={data?.result ?? []}
 				columns={columns}
 				sort={sort}
 				onRowClick={handleRowClick}

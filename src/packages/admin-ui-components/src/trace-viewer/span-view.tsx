@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 import { SpanTree } from '../utils';
-import { UnixNanoTimeStamp } from '../utils';
+import { UnixNanoTimestamp } from '../utils';
 import { ChevronDownIcon } from '../assets';
 
 import styles from './styles.module.css';
@@ -14,15 +14,15 @@ export const SpanView = ({
 	maxTimestamp,
 }: {
 	span: SpanTree;
-	minTimestamp: UnixNanoTimeStamp;
-	maxTimestamp: UnixNanoTimeStamp;
+	minTimestamp: UnixNanoTimestamp;
+	maxTimestamp: UnixNanoTimestamp;
 }) => {
 	const [showChildren, setShowChildren] = useState(false); // State to toggle children visibility
 
 	const toggleChildren = () => span.childrenCount && setShowChildren(!showChildren);
 
-	const durationNano = UnixNanoTimeStamp.fromString(span.duration);
-	const startTimeUnixNano = UnixNanoTimeStamp.fromString(span.timestamp);
+	const durationNano = UnixNanoTimestamp.fromString(span.duration);
+	const startTimeUnixNano = UnixNanoTimestamp.fromString(span.timestamp);
 
 	const { width, offset } = durationNano.calculateWidthAndOffset(
 		startTimeUnixNano,

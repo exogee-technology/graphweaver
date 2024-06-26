@@ -3,8 +3,6 @@ import {
 	ColumnDef,
 	ColumnSort,
 	Row,
-	SortingState,
-	Updater,
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
@@ -47,12 +45,12 @@ export const Table = <T extends object>({
 		if (onRowClick) onRowClick(row);
 	};
 
-	const handleSortClick = (sorting: Updater<SortingState>) => {
-		const sortingState: ColumnSort | undefined = (sorting as any)?.()[0];
-		console.log(sortingState, onSortClick);
-		if (sortingState?.id) {
+	const handleSortClick = (sortingState: ColumnSort[]) => {
+		// TODO We currently only support single column sorting
+		const [firstSortedColumn] = sortingState ?? [];
+		if (firstSortedColumn?.id) {
 			onSortClick?.({
-				[sortingState.id]: sortingState.desc ? Sort.DESC : Sort.ASC,
+				[firstSortedColumn.id]: firstSortedColumn.desc ? Sort.DESC : Sort.ASC,
 			});
 		}
 	};
@@ -82,7 +80,10 @@ export const Table = <T extends object>({
 		data,
 		columns,
 		manualSorting: true,
-		onSortingChange: handleSortClick,
+		onSortingChange: (updater) => {
+			const newSortingValue = updater instanceof Function ? updater(sorting) : updater;
+			handleSortClick(newSortingValue);
+		},
 		state: {
 			sorting,
 		},
@@ -92,10 +93,7 @@ export const Table = <T extends object>({
 	return (
 		<div
 			className={styles.container}
-			onScroll={(e) => {
-				console.log('scrolling...');
-				return fetchMoreOnBottomReached(e.target as HTMLDivElement);
-			}}
+			onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
 			ref={tableContainerRef}
 		>
 			<div className={styles.table}>

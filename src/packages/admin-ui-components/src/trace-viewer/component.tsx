@@ -1,6 +1,6 @@
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 
-import { UnixNanoTimeStamp } from '../utils/timestamp';
+import { UnixNanoTimestamp } from '../utils/timestamp';
 import { GraphQlViewer } from '../graphql-viewer';
 import { SpanView } from './span-view';
 import { createTreeFromTrace } from '../utils';
@@ -15,8 +15,8 @@ export const TraceViewer = ({ traces }: { traces?: Span[] }) => {
 
 	const max = BigInt(spans.at(-1)?.timestamp ?? 0) + BigInt(spans.at(-1)?.duration ?? 0);
 
-	const minTimestamp = UnixNanoTimeStamp.fromString(spans[0].timestamp);
-	const maxTimestamp = UnixNanoTimeStamp.fromString(max.toString());
+	const minTimestamp = UnixNanoTimestamp.fromString(spans[0].timestamp);
+	const maxTimestamp = UnixNanoTimestamp.fromString(max.toString());
 
 	const graphql = JSON.parse(String(root.attributes.body)) as { query: string };
 

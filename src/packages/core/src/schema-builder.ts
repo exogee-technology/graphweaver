@@ -78,9 +78,10 @@ const scalarShouldGetMathOperations = (
 	scalar === Date ||
 	scalar === BigInt ||
 	scalar.name === 'ID' ||
-	scalar.name === 'BigInt' ||
 	scalar.name === 'String' ||
-	scalar.name === 'ISOString';
+	scalar.name === 'ISOString' ||
+	(scalar instanceof GraphQLScalarType &&
+		(scalar?.extensions?.jsonSchema as Record<string, unknown>)?.type === 'integer');
 
 const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	let enumType = enumTypes.get(enumMetadata.name);

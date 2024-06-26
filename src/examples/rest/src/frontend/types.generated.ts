@@ -17,10 +17,12 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
-  BigInt: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  /** A duration in nanoseconds */
+  NanoDuration: { input: any; output: any; }
+  /** A timestamp in nanoseconds */
+  NanoTimestamp: { input: any; output: any; }
 };
 
 export type AdminUiEntityAttributeMetadata = {
@@ -856,12 +858,12 @@ export type Token = {
 export type Trace = {
   __typename?: 'Trace';
   attributes: Scalars['JSON']['output'];
-  duration: Scalars['BigInt']['output'];
+  duration: Scalars['NanoDuration']['output'];
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   parentId?: Maybe<Scalars['String']['output']>;
   spanId: Scalars['String']['output'];
-  timestamp: Scalars['BigInt']['output'];
+  timestamp: Scalars['NanoTimestamp']['output'];
   traceId: Scalars['String']['output'];
 };
 
@@ -872,14 +874,14 @@ export type TracesListFilter = {
   attributes_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
   attributes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   attributes_null?: InputMaybe<Scalars['Boolean']['input']>;
-  duration?: InputMaybe<Scalars['BigInt']['input']>;
-  duration_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  duration_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  duration_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  duration_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  duration_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  duration_ne?: InputMaybe<Scalars['BigInt']['input']>;
-  duration_nin?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  duration?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_gt?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_gte?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_in?: InputMaybe<Array<Scalars['NanoDuration']['input']>>;
+  duration_lt?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_lte?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_ne?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_nin?: InputMaybe<Array<Scalars['NanoDuration']['input']>>;
   duration_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   duration_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
@@ -928,14 +930,14 @@ export type TracesListFilter = {
   spanId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   spanId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   spanId_null?: InputMaybe<Scalars['Boolean']['input']>;
-  timestamp?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_gt?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_gte?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
-  timestamp_lt?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_lte?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_ne?: InputMaybe<Scalars['BigInt']['input']>;
-  timestamp_nin?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  timestamp?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['NanoTimestamp']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_ne?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_nin?: InputMaybe<Array<Scalars['NanoTimestamp']['input']>>;
   timestamp_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   timestamp_null?: InputMaybe<Scalars['Boolean']['input']>;
   traceId?: InputMaybe<Scalars['String']['input']>;

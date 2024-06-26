@@ -84,7 +84,9 @@ export const addStabilizationToFilter = <TData>(
 	sort: SortEntity,
 	firstElement: TData
 ) => {
-	const filters = filter as FilterWithStabilization;
+	const filters = {
+		...filter,
+	} as FilterWithStabilization;
 
 	const keys = Object.keys(sort);
 	for (const key of keys) {
