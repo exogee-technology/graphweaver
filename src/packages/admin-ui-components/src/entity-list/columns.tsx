@@ -103,6 +103,26 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	return cells[field.type as keyof typeof cells]?.(value) || value;
 };
 
+const isFieldSortable = (field: EntityField) => {
+	if (field.relationshipType) {
+		return false;
+	}
+
+	if (field.type === 'JSON') {
+		return false;
+	}
+
+	if (field.type === 'Media') {
+		return false;
+	}
+
+	if (field.isArray) {
+		return false;
+	}
+
+	return true;
+};
+
 export const convertEntityToColumns = (
 	fields: EntityField[],
 	entityByType: (type: string) => Entity
@@ -113,6 +133,7 @@ export const convertEntityToColumns = (
 			columnHelper.accessor(field.name, {
 				header: () => field.name,
 				cell: (info) => cellForType(field, info.getValue(), entityByType),
+				enableSorting: isFieldSortable(field),
 			})
 		);
 };

@@ -40,9 +40,12 @@
 	border-bottom: 1px solid #3b3349;
 }
 
-.table th:hover {
-	background-color: #352d44;
+.sortable {
 	cursor: pointer;
+}
+
+.sortable:hover {
+	background-color: #352d44;
 }
 
 .table th .header {

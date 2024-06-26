@@ -104,7 +104,7 @@ export const Table = <T extends object>({
 								{headerGroup.headers.map((header) => (
 									<th
 										key={header.id}
-										className={clsx()}
+										className={clsx(header.column.getCanSort() && styles.sortable)}
 										{...(header.column.getCanSort()
 											? { onClick: header.column.getToggleSortingHandler() }
 											: {})}
