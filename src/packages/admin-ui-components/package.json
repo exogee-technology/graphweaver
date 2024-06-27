@@ -43,7 +43,7 @@
 		"graphql": "16.9.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.23.1"
+		"react-router-dom": "6.24.0"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
@@ -57,7 +57,7 @@
 		"glob": "10.4.2",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.23.1",
+		"react-router-dom": "6.24.0",
 		"typescript": "5.5.2",
 		"vite": "5.3.1",
 		"vite-plugin-svgr": "4.2.0"
