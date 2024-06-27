@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -33,7 +33,7 @@
 		"clsx": "2.1.1",
 		"downshift": "9.0.6",
 		"graphiql": "3.3.1",
-		"graphql": "16.8.1",
+		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.4.4",
 		"papaparse": "5.4.1",
@@ -43,7 +43,7 @@
 	},
 	"peerDependencies": {
 		"formik": "2.4.6",
-		"graphql": "16.8.1",
+		"graphql": "16.9.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"react-router-dom": "6.23.1"

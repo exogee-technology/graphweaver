@@ -2,7 +2,7 @@ import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
-import { BaseContext, Trace } from './types';
+import { BaseContext, TraceOptions } from './types';
 import {
 	AggregationResult,
 	AggregationType,
@@ -37,7 +37,7 @@ export const baseResolver = (resolver: Resolver) => {
 		args: any,
 		context: BaseContext,
 		info: GraphQLResolveInfo,
-		trace?: Trace
+		trace?: TraceOptions
 	) => {
 		trace?.span.updateName(`Resolver - BaseResolver`);
 		return resolver({
@@ -52,7 +52,7 @@ export const baseResolver = (resolver: Resolver) => {
 
 const _getOne = async <G>(
 	{ args: { id }, context, fields, info }: ResolverOptions,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	logger.trace({ id, context, info }, 'Get One resolver called.');
 
@@ -107,7 +107,7 @@ const _getOne = async <G>(
 
 const _list = async <G, D>(
 	{ args: { filter, pagination }, context, info, fields }: ResolverOptions,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	logger.trace({ filter, pagination, context, info }, 'List resolver called.');
 
@@ -156,7 +156,7 @@ const _list = async <G, D>(
 	});
 	logger.trace({ result }, 'Got result');
 
-	result = traceSync<[], (G | null)[]>((trace?: Trace) => {
+	result = traceSync<[], (G | null)[]>((trace?: TraceOptions) => {
 		trace?.span.updateName(
 			`FromBackendEntity - ${result.length} ${entity.name} ${result.length > 1 ? 'entities' : 'entity'}`
 		);
@@ -178,7 +178,7 @@ const _list = async <G, D>(
 
 const _createOrUpdate = async <G, D>(
 	{ args: { input }, context, info, fields }: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	logger.trace({ input, context, info }, 'Create or Update resolver called.');
 
@@ -295,7 +295,7 @@ export const deleteOne = (entity: EntityMetadata<any, any>) =>
 	trace(
 		async <G extends { name: string }>(
 			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-			trace?: Trace
+			trace?: TraceOptions
 		) => {
 			trace?.span.updateName(`Resolver - DeleteOne ${entity.name}`);
 			if (!entity.provider) {
@@ -334,7 +334,7 @@ export const deleteMany = (entity: EntityMetadata<any, any>) =>
 	trace(
 		async <G>(
 			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-			trace?: Trace
+			trace?: TraceOptions
 		) => {
 			trace?.span.updateName(`Resolver - DeleteMany ${entity.name}`);
 			if (!entity.provider) {
@@ -436,7 +436,7 @@ export const aggregate =
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	trace?.span.updateName(
 		`Resolver - ListRelationshipField ${info.path.typename} - ${info.fieldName}`

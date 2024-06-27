@@ -7,23 +7,26 @@ import {
 	GraphQLNanoDuration,
 } from '@exogee/graphweaver-scalars';
 
-@Entity<TraceEntity>('Trace', {
-	adminUIOptions: {
-		readonly: true,
-		hideInSideBar: true,
-		defaultFilter: {
-			parentId: null,
-			name_nin: ['GraphweaverMetadata', 'TracesList', 'trace', 'IntrospectionQuery'],
+export const addTraceEntityToSchema = () => {
+	Entity<Trace>('Trace', {
+		adminUIOptions: {
+			readonly: true,
+			hideInSideBar: true,
+			defaultFilter: {
+				parentId: null,
+				name_nin: ['GraphweaverMetadata', 'TracesList', 'trace', 'IntrospectionQuery'],
+			},
+			defaultSort: {
+				timestamp: Sort.DESC,
+			},
 		},
-		defaultSort: {
-			timestamp: Sort.DESC,
+		apiOptions: {
+			excludeFromBuiltInWriteOperations: true,
 		},
-	},
-	apiOptions: {
-		excludeFromBuiltInWriteOperations: true,
-	},
-})
-export class TraceEntity {
+	})(Trace);
+};
+
+export class Trace {
 	@Field(() => ID)
 	id!: string;
 

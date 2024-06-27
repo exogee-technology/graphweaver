@@ -228,6 +228,9 @@ class Metadata {
 	public collectEntityInformation<G = unknown, D = unknown>(
 		args: CollectEntityInformationArgs<G, D>
 	) {
+		// Clear the cache so we can rebuild it with the new data.
+		this.nameLookupCache.clear();
+
 		// In most cases the entity info will already be in the map because field decorators run
 		// before class decorators. Override what we know our source of truth to be and keep rolling.
 		let existingMetadata = this.metadataByType.get(args.target) as EntityMetadata<G, D>;

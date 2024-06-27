@@ -1,4 +1,4 @@
-import type { TypePolicy } from '@apollo/client';
+import type { FieldPolicy, TypePolicies } from '@apollo/client';
 
 // Note: Entity metadata contains more than just these three fields,
 //       but this is all that we need in the context of this example.
@@ -23,7 +23,7 @@ export interface FilterWithStabilization {
 }
 
 const generateTypePolicyFields = (entities: Entity[]) => {
-	const policy = {
+	const policy: FieldPolicy<any> = {
 		keyArgs: (
 			args: {
 				filter?: Record<string, unknown>;
@@ -62,7 +62,7 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 };
 
 export const generateTypePolicies = (entities: Entity[]) => {
-	const result: { [entityName: string]: TypePolicy } = {};
+	const result: TypePolicies = {};
 
 	for (const entity of entities) {
 		if (result[entity.name]) throw new Error(`Duplicate entity name: '${entity.name}'`);

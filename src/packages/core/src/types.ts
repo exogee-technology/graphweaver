@@ -12,7 +12,7 @@ export interface BaseContext {}
 
 export const ID = GraphQLID;
 
-export interface Trace {
+export interface TraceOptions {
 	span: Span;
 	tracer: Tracer;
 }
@@ -265,7 +265,7 @@ export type ResolverOptions<TArgs = any, TContext = BaseContext, TSource = Sourc
 	context: TContext;
 	fields: ResolveTree;
 	info: GraphQLResolveInfo;
-	trace?: Trace;
+	trace?: TraceOptions;
 };
 
 export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = ({

@@ -9,9 +9,9 @@ import { logger } from '@exogee/logger';
 import type { Instrumentation } from '@opentelemetry/instrumentation';
 
 import { JsonSpanProcessor } from './exporter';
-import { BackendProvider, Trace } from '../types';
+import { BackendProvider, TraceOptions } from '../types';
 import { graphweaverMetadata } from '../metadata';
-import { TraceEntity } from './entity';
+import { Trace, addTraceEntityToSchema } from './entity';
 
 export interface TraceData {
 	id: string;
@@ -47,7 +47,7 @@ export function TraceMethod() {
 }
 
 // A generic type to wrap the function args in an array and add Span
-type WithSpan<Args extends any[]> = [...Args, Trace | undefined];
+type WithSpan<Args extends any[]> = [...Args, TraceOptions | undefined];
 
 // Wrap a function with tracing
 export const trace =
@@ -66,7 +66,7 @@ export const trace =
 
 		return tracer.startActiveSpan(spanName, spanOptions, async (span: Span) => {
 			try {
-				const traceArg: Trace = { span, tracer };
+				const traceArg: TraceOptions = { span, tracer };
 				const args = [...functionArgs, traceArg] as WithSpan<Args>;
 				const result = await fn(...args);
 				span.setStatus({
@@ -101,7 +101,7 @@ export const traceSync =
 
 		return tracer.startActiveSpan(spanName, spanOptions, (span: Span) => {
 			try {
-				const traceArg: Trace = { span, tracer };
+				const traceArg: TraceOptions = { span, tracer };
 				const args = [...functionArgs, traceArg] as WithSpan<Args>;
 				const result = fn(...args);
 				span.setStatus({
@@ -130,6 +130,8 @@ export const startTracing = ({
 	const exporterUrl = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 
 	if (exporterUrl || traceProvider) {
+		addTraceEntityToSchema();
+
 		const traceExporter = exporterUrl
 			? new OTLPTraceExporter({
 					url: `${exporterUrl}/v1/traces`,
@@ -138,7 +140,7 @@ export const startTracing = ({
 
 		if (traceProvider) {
 			graphweaverMetadata.collectProviderInformationForEntity({
-				target: TraceEntity,
+				target: Trace,
 				provider: traceProvider,
 			});
 		}

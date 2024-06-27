@@ -347,7 +347,42 @@ export type Trace = {
   traceId: Scalars['String']['output'];
 };
 
-export type TracesListFilter = {
+/** Data needed to create or update UnknownTypePlural. If an ID is passed, this is an update, otherwise it's an insert. */
+export type TraceCreateOrUpdateInput = {
+  attributes?: InputMaybe<Scalars['JSON']['input']>;
+  duration?: InputMaybe<Scalars['NanoDuration']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  spanId?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  traceId?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Data needed to create UnknownTypePlural. */
+export type TraceInsertInput = {
+  attributes: Scalars['JSON']['input'];
+  duration: Scalars['NanoDuration']['input'];
+  name: Scalars['String']['input'];
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  spanId: Scalars['String']['input'];
+  timestamp: Scalars['NanoTimestamp']['input'];
+  traceId: Scalars['String']['input'];
+};
+
+/** Data needed to update UnknownTypePlural. An ID must be passed. */
+export type TraceUpdateInput = {
+  attributes?: InputMaybe<Scalars['JSON']['input']>;
+  duration?: InputMaybe<Scalars['NanoDuration']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  spanId?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  traceId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UnknownTypePluralListFilter = {
   attributes?: InputMaybe<Scalars['JSON']['input']>;
   attributes_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   attributes_ne?: InputMaybe<Scalars['JSON']['input']>;
