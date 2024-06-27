@@ -90,7 +90,7 @@ export const Table = <T extends object>({
 		manualSorting: true,
 		getRowId: (row) => row[primaryKeyField as keyof typeof row] as string,
 		onSortingChange: (updater) => {
-			const newSortingValue = updater instanceof Function ? updater(sorting) : updater;
+			const newSortingValue = (updater as any)?.();
 			handleSortClick(newSortingValue);
 		},
 		onRowSelectionChange: (updater) => {
@@ -121,7 +121,9 @@ export const Table = <T extends object>({
 										key={header.id}
 										className={clsx(header.column.getCanSort() && styles.sortable)}
 										{...(header.column.getCanSort()
-											? { onClick: header.column.getToggleSortingHandler() }
+											? {
+													onClick: header.column.getToggleSortingHandler(),
+												}
 											: {})}
 									>
 										<span className={styles.header}>

@@ -12,7 +12,6 @@ export * from './default-error-fallback';
 export * from './detail-panel-field-label';
 export * from './detail-panel';
 export * from './entity-list';
-export * from './entity-table';
 export * from './export-modal';
 export * from './graphql-viewer';
 export * from './filter-bar';

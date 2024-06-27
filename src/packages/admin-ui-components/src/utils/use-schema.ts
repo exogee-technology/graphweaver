@@ -116,11 +116,6 @@ export interface Filter<T = unknown> {
 }
 
 // These two are deprecated and should be removed in the future.
-type SortDirection = 'ASC' | 'DESC';
-export interface SortField {
-	field: string;
-	direction: SortDirection;
-}
 
 type EntityMap = {
 	[entityName: string]: Entity;

@@ -8,7 +8,6 @@ import toast from 'react-hot-toast';
 import {
 	PAGE_SIZE,
 	SortEntity,
-	SortField,
 	decodeSearchParams,
 	getOrderByQuery,
 	routeFor,
@@ -26,6 +25,7 @@ import { Button } from '../button';
 import { SelectionBar } from '../selection-bar';
 
 import styles from './styles.module.css';
+import { ExportModal } from '../export-modal';
 
 export const EntityList = <TData extends object>() => {
 	const { entity: entityName, id } = useParams();
@@ -38,6 +38,7 @@ export const EntityList = <TData extends object>() => {
 	const entity = entityByName(entityName);
 	const [selectedRows, setSelectedRows] = useState<RowSelectionState>({});
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+	const [showExportModal, setShowExportModal] = useState(false);
 	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(entity));
 	const { fields, defaultSort, primaryKeyField, defaultFilter } = entity;
 	const columns = useMemo(
@@ -92,7 +93,7 @@ export const EntityList = <TData extends object>() => {
 			routeFor({
 				entity,
 				filters,
-				sort: newSort as unknown as SortField[], // TODO this cast should be removed when we fix the sort type in the url
+				sort: newSort, // TODO this cast should be removed when we fix the sort type in the url
 				id,
 			})
 		);
@@ -148,10 +149,14 @@ export const EntityList = <TData extends object>() => {
 			});
 	};
 
+	const handleShowExportModal = () => {
+		setShowExportModal(true);
+	};
+
 	return (
 		<div className={styles.wrapper}>
 			<Header>
-				<ListToolBar count={data.aggregate?.count} />
+				<ListToolBar count={data.aggregate?.count} onExportToCSV={handleShowExportModal} />
 			</Header>
 			<Table
 				loading={loading}
@@ -194,6 +199,10 @@ export const EntityList = <TData extends object>() => {
 					setSelectedRows={handleSelectedRowsChange}
 					handleDelete={handleDelete}
 				/>
+			)}
+
+			{showExportModal && (
+				<ExportModal closeModal={() => setShowExportModal(false)} sort={sort} filters={filters} />
 			)}
 			<Outlet />
 		</div>

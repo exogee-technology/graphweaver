@@ -6,7 +6,6 @@ import styles from './styles.module.css';
 import { Button } from '../button';
 import { Modal } from '../modal';
 import { Spinner } from '../spinner';
-import { TableRowItem } from '../entity-table';
 
 import toast from 'react-hot-toast';
 
@@ -14,21 +13,22 @@ import {
 	exportToCSV,
 	useSelectedEntity,
 	useSchema,
-	SortField,
 	getOrderByQuery,
 	Filter,
+	SortEntity,
 } from '../utils';
 import { GetEntity } from './graphql';
+import { Row } from '@tanstack/react-table';
 
 const DEFAULT_EXPORT_PAGE_SIZE = 200;
 
-export const ExportModal = ({
+export const ExportModal = <TData extends object>({
 	closeModal,
 	sort,
 	filters,
 }: {
 	closeModal: () => void;
-	sort?: SortField[];
+	sort?: SortEntity;
 	filters?: Filter;
 }) => {
 	const { selectedEntity } = useSelectedEntity();
@@ -45,7 +45,7 @@ export const ExportModal = ({
 			let pageNumber = 0;
 			let hasNextPage = true;
 
-			const allResults: TableRowItem[] = [];
+			const allResults: Row<TData>[] = [];
 
 			while (hasNextPage) {
 				if (abortRef.current) {
