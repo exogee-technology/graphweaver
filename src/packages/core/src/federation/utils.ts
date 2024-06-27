@@ -1,4 +1,5 @@
-import { SchemaBuilder, graphweaverMetadata } from '..';
+import { graphweaverMetadata } from '../metadata';
+import { SchemaBuilder } from '../schema-builder';
 
 const excludeGraphweaverTypes = [
 	'AdminUiEntityAttributeMetadata',

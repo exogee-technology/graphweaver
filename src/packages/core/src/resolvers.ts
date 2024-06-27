@@ -2,7 +2,7 @@ import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
-import { BaseContext } from './types';
+import { BaseContext, Trace } from './types';
 import {
 	AggregationResult,
 	AggregationType,
@@ -24,7 +24,7 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
-import { Trace, traceSync, trace } from './open-telemetry';
+import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';

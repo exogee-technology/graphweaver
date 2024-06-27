@@ -1,4 +1,4 @@
-import { graphweaverMetadata } from '..';
+import { graphweaverMetadata } from '../metadata';
 import { Entity, Field } from '../decorators';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 import { buildFederationSchema } from './utils';

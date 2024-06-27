@@ -1,15 +1,9 @@
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
-
-import {
-	AdminUIFilterType,
-	RelationshipType,
-	BaseContext,
-	graphweaverMetadata,
-	getFieldTypeWithMetadata,
-	ResolverOptions,
-} from '..';
+import { graphweaverMetadata } from '../metadata';
+import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
+import { getFieldTypeWithMetadata } from '../schema-builder';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship

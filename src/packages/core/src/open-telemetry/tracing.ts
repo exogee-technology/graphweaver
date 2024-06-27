@@ -1,6 +1,6 @@
 import process from 'process';
 import { isAsyncFunction } from 'util/types';
-import { Span, SpanOptions, SpanStatusCode, Tracer, trace as traceApi } from '@opentelemetry/api';
+import { Span, SpanOptions, SpanStatusCode, trace as traceApi } from '@opentelemetry/api';
 import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { Resource } from '@opentelemetry/resources';
@@ -9,7 +9,9 @@ import { logger } from '@exogee/logger';
 import type { Instrumentation } from '@opentelemetry/instrumentation';
 
 import { JsonSpanProcessor } from './exporter';
-import { BackendProvider } from '../types';
+import { BackendProvider, Trace } from '../types';
+import { graphweaverMetadata } from '../metadata';
+import { TraceEntity } from './entity';
 
 export interface TraceData {
 	id: string;
@@ -21,9 +23,9 @@ export interface TraceData {
 	attributes: Record<string, unknown>;
 }
 
-// Check is env variable is set to enable tracing
-export const isTraceable = !!process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
-export const tracer = isTraceable ? traceApi.getTracer('graphweaver') : undefined;
+export const isTraceable =
+	!!process.env.OTEL_EXPORTER_OTLP_ENDPOINT ||
+	graphweaverMetadata.getEntityByName('TraceEntity')?.provider;
 
 // Decorator to add tracing to any instance method
 // Usage:
@@ -46,11 +48,6 @@ export function TraceMethod() {
 	};
 }
 
-export interface Trace {
-	span: Span;
-	tracer: Tracer;
-}
-
 // A generic type to wrap the function args in an array and add Span
 type WithSpan<Args extends any[]> = [...Args, Trace | undefined];
 
@@ -63,9 +60,11 @@ export const trace =
 	) =>
 	async (...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!isTraceable || !tracer) {
+		if (!isTraceable) {
 			return fn(...functionArgs, undefined);
 		}
+
+		const tracer = traceApi.getTracer('graphweaver');
 
 		return tracer.startActiveSpan(spanName, spanOptions, async (span: Span) => {
 			try {
@@ -96,9 +95,11 @@ export const traceSync =
 	) =>
 	(...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!isTraceable || !tracer) {
+		if (!isTraceable) {
 			return fn(...functionArgs, undefined);
 		}
+
+		const tracer = traceApi.getTracer('graphweaver');
 
 		return tracer.startActiveSpan(spanName, spanOptions, (span: Span) => {
 			try {
@@ -128,10 +129,21 @@ export const startTracing = ({
 	instrumentations: (Instrumentation | Instrumentation[])[];
 	traceProvider?: BackendProvider<unknown>;
 }) => {
-	if (isTraceable) {
-		const traceExporter = new OTLPTraceExporter({
-			url: `${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}/v1/traces`,
-		});
+	const exporterUrl = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
+
+	if (exporterUrl || traceProvider) {
+		const traceExporter = exporterUrl
+			? new OTLPTraceExporter({
+					url: `${exporterUrl}/v1/traces`,
+				})
+			: undefined;
+
+		if (traceProvider) {
+			graphweaverMetadata.collectProviderInformationForEntity({
+				target: TraceEntity,
+				provider: traceProvider,
+			});
+		}
 
 		const sdk = new opentelemetry.NodeSDK({
 			spanProcessors: traceProvider ? [JsonSpanProcessor(traceProvider)] : [],

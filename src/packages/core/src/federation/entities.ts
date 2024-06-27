@@ -1,14 +1,10 @@
-import {
-	GraphQLResolveInfo,
-	ResolveTree,
-	ResolverOptions,
-	Source,
-	graphQLTypeForEntity,
-	graphweaverMetadata,
-} from '..';
+import { graphweaverMetadata } from '../metadata';
+import { GraphQLResolveInfo, ResolveTree, ResolverOptions } from '../types';
 import { AnyGraphQLType } from './scalars';
 import { getOne } from '../resolvers';
 import { getEntityTargets } from './utils';
+import { graphQLTypeForEntity } from '../schema-builder';
+import { Source } from 'graphql';
 
 export const addEntitiesQuery = () => {
 	const EntitiesUnion = graphweaverMetadata.collectUnionTypeInformation({

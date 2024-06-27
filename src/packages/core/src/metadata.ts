@@ -1,9 +1,9 @@
 import { DirectiveLocation } from 'graphql';
 import { logger } from '@exogee/logger';
 
-import { SchemaBuilder } from './schema-builder';
 import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver, Sort } from './types';
 import { FieldOptions } from './decorators';
+import { allOperations } from './operations';
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
@@ -547,7 +547,7 @@ class Metadata {
 		const key = keyParts.slice(0, keyParts.length - 1).join('_');
 
 		// Let's validate that the filter operation is one we recognise.
-		if (SchemaBuilder.isValidFilterOperation(keyParts[keyParts.length - 1])) {
+		if (allOperations.has(keyParts[keyParts.length - 1])) {
 			// Ok, that'll be the field name.
 			return entity.fields[key];
 		}
@@ -599,3 +599,8 @@ class Metadata {
 }
 
 export const graphweaverMetadata = new Metadata();
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'Sort',
+	target: Sort,
+});

@@ -1,5 +1,5 @@
-import { HookParams } from './types';
-import { TraceMethod, Trace } from './open-telemetry';
+import { HookParams, Trace } from './types';
+import { TraceMethod } from './open-telemetry';
 
 export enum HookRegister {
 	BEFORE_CREATE = 'BEFORE_CREATE',

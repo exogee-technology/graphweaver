@@ -1,10 +1,8 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
+import { Span, Tracer } from '@opentelemetry/api';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
-
-import { graphweaverMetadata } from './metadata';
-import { Trace } from './open-telemetry';
+import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -12,15 +10,17 @@ export type { Instrumentation } from '@opentelemetry/instrumentation';
 
 export interface BaseContext {}
 
+export const ID = GraphQLID;
+
+export interface Trace {
+	span: Span;
+	tracer: Tracer;
+}
+
 export enum Sort {
 	ASC = 'ASC',
 	DESC = 'DESC',
 }
-
-graphweaverMetadata.collectEnumInformation({
-	name: 'Sort',
-	target: Sort,
-});
 
 // TODO: When implementing multi-sort columns, Order By has to have its own order so a Record won't do
 // (Ordered Array-like is more important than Set-like )

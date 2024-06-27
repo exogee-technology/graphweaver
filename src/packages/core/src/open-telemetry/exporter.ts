@@ -5,6 +5,7 @@ import {
 	SpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
 import { ExportResult, ExportResultCode, hrTimeToMicroseconds } from '@opentelemetry/core';
+
 import { BackendProvider } from '../types';
 
 export class JsonSpanExporter implements SpanExporter {

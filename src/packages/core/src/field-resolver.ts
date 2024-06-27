@@ -1,12 +1,12 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
-import { BaseContext } from './types';
+import { BaseContext, Trace } from './types';
 import {
 	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
 	isSerializableGraphQLEntityClass,
 } from '.';
-import { Trace, trace } from './open-telemetry';
+import { trace } from './open-telemetry';
 import { dataEntityForGraphQLEntity } from './default-from-backend-entity';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
