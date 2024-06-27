@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-sqlite",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a SQLite database.",
@@ -21,7 +21,7 @@
 		"@mikro-orm/knex": "6.2.9",
 		"@mikro-orm/sqlite": "6.2.9",
 		"mikro-orm-sqlite-wasm": "workspace:*",
-		"graphql": "16.8.1"
+		"graphql": "16.9.0"
 	},
 	"devDependencies": {
 		"@types/node": "20.14.9",

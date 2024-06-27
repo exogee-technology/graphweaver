@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -25,7 +25,7 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",
-		"graphql": "16.8.1",
+		"graphql": "16.9.0",
 		"prop-types": "15.8.1",
 		"react": "18.3.1",
 		"react-data-grid": "7.0.0-beta.44",
