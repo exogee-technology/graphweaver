@@ -1,6 +1,6 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { packagesForBackend } from './backend';
-import { AWS_LAMBDA_VERSION, graphweaverVersion } from './constants';
+import { graphweaverVersion } from './constants';
 import { Backend } from '.';
 
 export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
@@ -20,7 +20,7 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			import: 'graphweaver import',
 		},
 		dependencies: {
-			'@as-integrations/aws-lambda': AWS_LAMBDA_VERSION,
+			'@as-integrations/aws-lambda': '3.1.0',
 			'@exogee/graphweaver': graphweaverVersion(version, '@exogee/graphweaver'),
 			'@exogee/graphweaver-scalars': graphweaverVersion(version, '@exogee/graphweaver-scalars'),
 			'@exogee/graphweaver-server': graphweaverVersion(version, '@exogee/graphweaver-server'),
@@ -28,9 +28,9 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			graphql: '16.9.0',
 		},
 		devDependencies: {
-			'@types/node': '20.2.5',
+			'@types/node': '20.14.9',
 			graphweaver: graphweaverVersion(version, 'graphweaver'),
-			typescript: '5.0.2',
+			typescript: '5.5.2',
 		},
 	};
 
