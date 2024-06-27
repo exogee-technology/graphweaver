@@ -30,7 +30,7 @@ import { Button } from '../button';
 import { Modal } from '../modal';
 import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
 import toast from 'react-hot-toast';
-import { SelectionBar } from '../selection-bar';
+// import { SelectionBar } from '../selection-bar';
 
 // Without stopping propagation on our links, the grid will be notified about the click,
 // which is not what we want. We want to navigate and not let the grid handle it
@@ -260,13 +260,13 @@ export const EntityTable = <T extends TableRowItem>({
 		return <pre>{`Error! ${error.message}`}</pre>;
 	}
 
-	const handleSelectedRowsChange = (selectedRows: Set<string>) => {
-		setSelectedRows(selectedRows);
-	};
+	// const handleSelectedRowsChange = (selectedRows: Set<string>) => {
+	// 	setSelectedRows(selectedRows);
+	// };
 
-	const handleDelete = () => {
-		setShowDeleteConfirmation(true);
-	};
+	// const handleDelete = () => {
+	// 	setShowDeleteConfirmation(true);
+	// };
 
 	const handleDeleteEntities = () => {
 		const ids = Array.from(selectedRows);
@@ -345,13 +345,13 @@ export const EntityTable = <T extends TableRowItem>({
 				}
 			/>
 
-			{selectedRows.size > 0 && (
+			{/* {selectedRows.size > 0 && (
 				<SelectionBar
 					selectedRows={selectedRows}
 					setSelectedRows={handleSelectedRowsChange}
 					handleDelete={handleDelete}
 				/>
-			)}
+			)} */}
 		</>
 	);
 };

@@ -2,72 +2,11 @@ import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Link } from 'react-router-dom';
 
-import { Entity, EntityField, UnixNanoTimestamp, routeFor } from '../utils';
+import { Entity, EntityField, routeFor } from '../utils';
+import { cells } from '../table/cells';
+import { Checkbox } from '../checkbox';
 
 const columnHelper = createColumnHelper<any>();
-
-const jsonCell = (value: any) => <div>{JSON.stringify(value)}</div>;
-
-const booleanCell = (value: any) => `${value}`;
-
-const nanoDurationCell = (value: any) => {
-	const duration = UnixNanoTimestamp.fromString(value);
-	const { value: displayValue, unit } = duration.toSIUnits();
-	return (
-		<span>
-			{Number(displayValue).toFixed(2)} {unit}
-		</span>
-	);
-};
-
-const nanoTimestampCell = (value: any) => {
-	const timestamp = UnixNanoTimestamp.fromString(value);
-	return <span>{timestamp.toDate().toLocaleString()}</span>;
-};
-
-const mediaCell = (value: any) => {
-	const media = value as {
-		url: string;
-		type: 'IMAGE' | 'OTHER';
-	};
-	if (!media) {
-		return null;
-	}
-
-	if (media.type === 'IMAGE') {
-		return (
-			<img
-				src={media.url}
-				style={{
-					width: '100%',
-					height: '100%',
-					objectFit: 'cover',
-					padding: 2,
-					borderRadius: 8,
-					objectPosition: 'center center',
-					textIndent: -9999,
-				}}
-				onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
-					(e.currentTarget.style.display = 'none')
-				}
-			/>
-		);
-	}
-
-	return (
-		<a href={media.url} target="_blank" rel="noreferrer">
-			{media.url}
-		</a>
-	);
-};
-
-const cells = {
-	JSON: jsonCell,
-	Boolean: booleanCell,
-	NanoDuration: nanoDurationCell,
-	NanoTimestamp: nanoTimestampCell,
-	Media: mediaCell,
-};
 
 const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
 	// Check if the field is a relationship
@@ -125,33 +64,31 @@ const isFieldSortable = (field: EntityField) => {
 	return true;
 };
 
-const addRowSelectionColumn = () => {
+const addRowCheckboxColumn = () => {
 	return columnHelper.accessor('select', {
 		id: 'select',
 		enableSorting: false,
 		size: 48,
+		minSize: 48,
+		maxSize: 48,
 		header: ({ table }) => (
-			<input
-				type="checkbox"
+			<Checkbox
 				{...{
 					checked: table.getIsAllRowsSelected(),
-					// indeterminate: table.getIsSomeRowsSelected(),
+					indeterminate: table.getIsSomeRowsSelected(),
 					onChange: table.getToggleAllRowsSelectedHandler(),
 				}}
 			/>
 		),
 		cell: ({ row }) => (
-			<div className="px-1">
-				<input
-					type="checkbox"
-					{...{
-						checked: row.getIsSelected(),
-						disabled: !row.getCanSelect(),
-						// indeterminate: row.getIsSomeSelected(),
-						onChange: row.getToggleSelectedHandler(),
-					}}
-				/>
-			</div>
+			<Checkbox
+				{...{
+					checked: row.getIsSelected(),
+					disabled: !row.getCanSelect(),
+					indeterminate: row.getIsSomeSelected(),
+					onChange: row.getToggleSelectedHandler(),
+				}}
+			/>
 		),
 	});
 };
@@ -196,7 +133,7 @@ export const convertEntityToColumns = (entity: Entity, entityByType: (type: stri
 
 	// Add the row selection column if the entity is not read-only
 	if (!entity.attributes.isReadOnly) {
-		return [addRowSelectionColumn(), ...entityColumns];
+		return [addRowCheckboxColumn(), ...entityColumns];
 	}
 
 	return entityColumns;

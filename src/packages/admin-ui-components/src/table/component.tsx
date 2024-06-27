@@ -3,6 +3,7 @@ import {
 	ColumnDef,
 	ColumnSort,
 	Row,
+	RowSelectionState,
 	flexRender,
 	getCoreRowModel,
 	useReactTable,
@@ -18,10 +19,13 @@ type Props<T> = {
 	loading: boolean;
 	data: T[];
 	columns: ColumnDef<T, any>[];
+	primaryKeyField: string;
 	sort?: SortEntity;
 	onRowClick?: (row: Row<T>) => void;
 	onSortClick?: (sort: SortEntity) => void;
 	fetchNextPage?: () => void;
+	onRowSelectionChange?: (selectedRows: RowSelectionState) => void;
+	rowSelection?: RowSelectionState;
 };
 
 export const Table = <T extends object>({
@@ -32,6 +36,9 @@ export const Table = <T extends object>({
 	onRowClick,
 	onSortClick,
 	fetchNextPage,
+	onRowSelectionChange,
+	rowSelection,
+	primaryKeyField,
 }: Props<T>) => {
 	//we need a reference to the scrolling element for infinite scrolling
 	const tableContainerRef = useRef<HTMLDivElement>(null);
@@ -81,13 +88,20 @@ export const Table = <T extends object>({
 		data,
 		columns,
 		manualSorting: true,
+		getRowId: (row) => row[primaryKeyField as keyof typeof row] as string,
 		onSortingChange: (updater) => {
 			const newSortingValue = updater instanceof Function ? updater(sorting) : updater;
 			handleSortClick(newSortingValue);
 		},
+		onRowSelectionChange: (updater) => {
+			const newSelectedRows = updater instanceof Function ? updater(rowSelection ?? {}) : updater;
+			onRowSelectionChange?.(newSelectedRows);
+		},
 		state: {
 			sorting,
+			rowSelection,
 		},
+		enableRowSelection: true,
 		getCoreRowModel: getCoreRowModel(),
 	});
 
@@ -135,7 +149,11 @@ export const Table = <T extends object>({
 							<tr
 								key={row.id}
 								className={clsx(i % 2 && styles.rowAlternateColor, onRowClick && styles.clickable)}
-								onClick={() => handleRowClick(row)}
+								onClick={(e) => {
+									if (!(e.target as any).closest('input')) {
+										handleRowClick(row);
+									}
+								}}
 							>
 								{row.getVisibleCells().map((cell) => (
 									<td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
