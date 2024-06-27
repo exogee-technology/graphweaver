@@ -166,7 +166,12 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 						noPrependStageInUrl: true,
 						useInProcess: true,
 						...(host ? { host } : {}),
-						...(port ? { httpPort: port + 1 } : {}),
+						...(port
+							? {
+									httpPort: port + 1,
+									lambdaPort: port + 2,
+								}
+							: {}),
 					},
 				},
 				getAllFunctions: () => Object.keys(backendFunctions),
