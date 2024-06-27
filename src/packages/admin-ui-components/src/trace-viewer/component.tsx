@@ -2,6 +2,7 @@ import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 
 import { UnixNanoTimestamp } from '../utils/timestamp';
 import { GraphQlViewer } from '../graphql-viewer';
+import { JsonViewer } from '../json-viewer';
 import { SpanView } from './span-view';
 import { createTreeFromTrace } from '../utils';
 
@@ -18,7 +19,7 @@ export const TraceViewer = ({ traces }: { traces?: Span[] }) => {
 	const minTimestamp = UnixNanoTimestamp.fromString(spans[0].timestamp);
 	const maxTimestamp = UnixNanoTimestamp.fromString(max.toString());
 
-	const graphql = JSON.parse(String(root.attributes.body)) as { query: string };
+	const graphql = JSON.parse(String(root.attributes.body)) as { query: string; variables: string };
 
 	return (
 		<PanelGroup direction="vertical">
@@ -34,10 +35,19 @@ export const TraceViewer = ({ traces }: { traces?: Span[] }) => {
 					</div>
 				</div>
 			</Panel>
-			<PanelResizeHandle className={styles.handle} />
+			<PanelResizeHandle className={styles.verticalHandle} />
 			<Panel maxSize={80} defaultSize={40}>
-				<GraphQlViewer graphql={graphql.query} />
+				<PanelGroup direction="horizontal">
+					<Panel>
+						<GraphQlViewer graphql={graphql.query} />
+					</Panel>
+					<PanelResizeHandle className={styles.horizontalHandle} />
+					<Panel maxSize={80} defaultSize={40}>
+						<JsonViewer text={graphql.variables} />
+					</Panel>
+				</PanelGroup>
 			</Panel>
+			s
 		</PanelGroup>
 	);
 };

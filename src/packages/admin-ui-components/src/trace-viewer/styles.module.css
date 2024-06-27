@@ -106,6 +106,10 @@
 	flex-direction: column;
 }
 
-.handle {
+.verticalHandle {
 	height: 20px;
+}
+
+.horizontalHandle {
+	width: 20px;
 }
