@@ -1,4 +1,4 @@
-import { DocumentNode, GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
+import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
@@ -169,7 +169,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
 
-		if (isTraceable) {
+		if (isTraceable()) {
 			// Wrap the executeHTTPGraphQLRequest method with a trace span
 			// This will allow us to trace the entire request from start to finish
 			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;

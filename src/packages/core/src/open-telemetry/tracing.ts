@@ -23,9 +23,9 @@ export interface TraceData {
 	attributes: Record<string, unknown>;
 }
 
-export const isTraceable =
+export const isTraceable = () =>
 	!!process.env.OTEL_EXPORTER_OTLP_ENDPOINT ||
-	graphweaverMetadata.getEntityByName('TraceEntity')?.provider;
+	!!graphweaverMetadata.getEntityByName('Trace')?.provider;
 
 // Decorator to add tracing to any instance method
 // Usage:
@@ -35,16 +35,14 @@ export const isTraceable =
 // }
 export function TraceMethod() {
 	return (_target: any, _fieldName: string, descriptor: PropertyDescriptor) => {
-		if (isTraceable) {
-			const originalMethod = descriptor.value;
-			const isAsync = isAsyncFunction(originalMethod);
+		const originalMethod = descriptor.value;
+		const isAsync = isAsyncFunction(originalMethod);
 
-			descriptor.value = function (...args: any[]) {
-				return isAsync
-					? trace(originalMethod.bind(this)).apply(this, args)
-					: traceSync(originalMethod.bind(this)).apply(this, args);
-			};
-		}
+		descriptor.value = function (...args: any[]) {
+			return isAsync
+				? trace(originalMethod.bind(this)).apply(this, args)
+				: traceSync(originalMethod.bind(this)).apply(this, args);
+		};
 	};
 }
 
@@ -60,7 +58,7 @@ export const trace =
 	) =>
 	async (...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!isTraceable) {
+		if (!isTraceable()) {
 			return fn(...functionArgs, undefined);
 		}
 
@@ -95,7 +93,7 @@ export const traceSync =
 	) =>
 	(...functionArgs: Args) => {
 		// Check if tracing is enabled
-		if (!isTraceable) {
+		if (!isTraceable()) {
 			return fn(...functionArgs, undefined);
 		}
 
