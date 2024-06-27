@@ -13,6 +13,7 @@ import {
 		hideInSideBar: true,
 		defaultFilter: {
 			parentId: null,
+			name_nin: ['GraphweaverMetadata', 'TracesList', 'trace', 'IntrospectionQuery'],
 		},
 		defaultSort: {
 			timestamp: Sort.DESC,

@@ -88,7 +88,6 @@ export const EntityList = <TData extends object>() => {
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {
-		console.log(newSort);
 		navigate(
 			routeFor({
 				entity,
