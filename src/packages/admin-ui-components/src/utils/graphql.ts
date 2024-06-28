@@ -9,6 +9,7 @@ export const SCHEMA_QUERY = gql`
 				plural
 				backendId
 				summaryField
+				fieldForDetailPanel
 				primaryKeyField
 				defaultFilter
 				defaultSort

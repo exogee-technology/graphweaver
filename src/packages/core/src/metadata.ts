@@ -74,6 +74,12 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// If true, the entity will not be editable in the Admin UI. This is useful for entities
 		// that are managed by some other system or we don't want a user to update from the adminUI.
 		readonly?: boolean;
+
+		// Specifies what field on this entity should be used to display a summary of the entity in the
+		// detail panel in the Admin UI. This is useful for entities where the primary key field is not
+		// the most useful field to display in the url.
+		// This value defaults to the primary key field if not set.
+		fieldForDetailPanel?: Extract<keyof G, string>;
 	};
 }
 

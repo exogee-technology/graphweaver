@@ -63,6 +63,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				attributes.isReadOnly = entity.adminUIOptions?.readonly;
 
 				let defaultSummaryField: 'name' | 'title' | undefined = undefined;
+				const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+				let defaultFieldForDetailPanel = primaryKeyField;
 
 				const fields = Object.values(entity.fields)?.map((field) => {
 					const {
@@ -75,6 +77,11 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					// set the default summary field
 					if (['name', 'title'].includes(field.name))
 						defaultSummaryField = field.name as 'name' | 'title';
+
+					// Check if the field is set as the field for the detail panel
+					if (field.adminUIOptions?.fieldForDetailPanel) {
+						defaultFieldForDetailPanel = field.name;
+					}
 
 					// Define field attributes
 					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
@@ -118,7 +125,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				});
 
 				const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
-				const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+				const fieldForDetailPanel =
+					entity.adminUIOptions?.fieldForDetailPanel ?? defaultFieldForDetailPanel;
 
 				return {
 					name,
@@ -126,6 +134,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					backendId,
 					primaryKeyField,
 					summaryField,
+					fieldForDetailPanel,
 					fields,
 					attributes,
 					hideInSideBar: adminUIOptions?.hideInSideBar ?? false,

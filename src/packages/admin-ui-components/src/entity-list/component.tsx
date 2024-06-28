@@ -40,7 +40,7 @@ export const EntityList = <TData extends object>() => {
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 	const [showExportModal, setShowExportModal] = useState(false);
 	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(entity));
-	const { fields, defaultSort, primaryKeyField, defaultFilter } = entity;
+	const { fields, defaultSort, primaryKeyField, defaultFilter, fieldForDetailPanel } = entity;
 	const columns = useMemo(
 		() => convertEntityToColumns(entity, entityByType),
 		[fields, entityByType]
@@ -82,9 +82,7 @@ export const EntityList = <TData extends object>() => {
 	}
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
-		// TODO: Navigate to the detail page this ID should be generic
-		const _primaryKeyField = Object.hasOwn(row.original, 'traceId') ? 'traceId' : primaryKeyField;
-		navigate(`${row.original[_primaryKeyField as keyof T]}`);
+		navigate(`${row.original[fieldForDetailPanel as keyof T]}`);
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {

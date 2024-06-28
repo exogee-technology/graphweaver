@@ -41,14 +41,14 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 		trace?.span.updateName(`Rest - find`);
 		if (!this.accessor) {
 			throw new Error(
-				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
+				'Attempting to run a find on a Rest Backend Provider that does not have an accessor.'
 			);
 		}
 
 		try {
 			const result = await this.accessor.find({
 				filter,
-				pagination: pagination,
+				pagination,
 			});
 
 			logger.trace(
@@ -73,11 +73,11 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 
 		if (!this.accessor) {
 			throw new Error(
-				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
+				'Attempting to run a find on a Rest Backend Provider that does not have an accessor.'
 			);
 		}
 
-		const rows = await this.find(filter);
+		const rows = await this.find(filter, undefined);
 		return rows[0] || null;
 	}
 
@@ -92,16 +92,19 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 		trace?.span.updateName(`Rest - findByRelatedId`);
 		if (!this.accessor) {
 			throw new Error(
-				'Attempting to run a find on a Xero Backend Provider that does not have an accessor.'
+				'Attempting to run a find on a Rest Backend Provider that does not have an accessor.'
 			);
 		}
 
 		const orFilters = relatedFieldIds.map((id) => ({ [relatedField]: id }));
 
-		return this.find({
-			_or: orFilters,
-			...filter,
-		} as Filter<D>);
+		return this.find(
+			{
+				_or: orFilters,
+				...filter,
+			} as Filter<D>,
+			undefined
+		);
 	}
 
 	// PUT METHODS

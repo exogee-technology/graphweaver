@@ -19,6 +19,7 @@ export interface FieldOptions {
 		hideInDetailForm?: boolean;
 		readonly?: boolean;
 		summaryField?: boolean;
+		fieldForDetailPanel?: boolean;
 	};
 	apiOptions?: {
 		// This marks the field as read only in the API.

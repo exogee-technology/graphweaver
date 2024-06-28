@@ -26,6 +26,9 @@ export class AdminUiEntityMetadata {
 	summaryField?: string | null;
 
 	@Field(() => String)
+	fieldForDetailPanel!: string;
+
+	@Field(() => String)
 	primaryKeyField!: string;
 
 	@Field(() => [AdminUiFieldMetadata])
