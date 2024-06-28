@@ -11,7 +11,10 @@ graphweaverMetadata.collectEnumInformation({
 	name: 'AggregationType',
 });
 
-@Entity('AdminUiEntityMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
+@Entity('AdminUiEntityMetadata', {
+	apiOptions: { excludeFromBuiltInOperations: true },
+	directives: { inaccessible: true },
+})
 export class AdminUiEntityMetadata {
 	@Field(() => String)
 	name!: string;

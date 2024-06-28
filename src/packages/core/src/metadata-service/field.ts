@@ -3,7 +3,10 @@ import { AdminUiFilterMetadata } from './filter';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
 import { AdminUiFieldExtensionsMetadata } from './field-extensions';
 
-@Entity('AdminUiFieldMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
+@Entity('AdminUiFieldMetadata', {
+	apiOptions: { excludeFromBuiltInOperations: true },
+	directives: { inaccessible: true },
+})
 export class AdminUiFieldMetadata {
 	@Field(() => String)
 	name!: string;
