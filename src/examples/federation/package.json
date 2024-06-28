@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
-	"version": "1.0.0-beta.3",
+	"version": "1.0.3",
 	"license": "MIT",
 	"description": "Example app used to test federation compatibility",
 	"main": "lib/index.js",
@@ -16,7 +16,8 @@
 		"build": "graphweaver build && cp dist/backend/index.js integration/index.js",
 		"start": "tsx src/backend/index.ts",
 		"print": "graphweaver print-schema --output integration/schema.graphql",
-		"test:integration": "pnpm print && pnpm build && cd integration && npm run test:integration"
+		"test:integration": "pnpm print && pnpm build && cd integration && npm run test:integration",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"@apollo/server": "4.10.4",
