@@ -87,12 +87,14 @@ export const SideBar = () => {
 					<BackendRow key={backend} backend={backend} />
 				))}
 
-				<>
-					<p className={styles.subtext}>Analytics</p>
-					<ul className={clsx(styles.closed)}>
-						<DashboardRow key={'/Trace'} name={'Trace'} route={'/Trace'} />
-					</ul>
-				</>
+				{schema.entityByName('Trace') && (
+					<>
+						<p className={styles.subtext}>Analytics</p>
+						<ul className={clsx(styles.closed)}>
+							<DashboardRow key={'/Trace'} name={'Trace'} route={'/Trace'} />
+						</ul>
+					</>
+				)}
 			</div>
 
 			<Spacer grow={1} />
