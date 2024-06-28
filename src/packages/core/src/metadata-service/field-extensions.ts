@@ -2,7 +2,7 @@ import { Entity, Field } from '../decorators';
 
 @Entity('AdminUiFieldExtensionsMetadata', {
 	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { shareable: true },
+	directives: { inaccessible: true },
 })
 export class AdminUiFieldExtensionsMetadata {
 	@Field(() => String, { nullable: true })

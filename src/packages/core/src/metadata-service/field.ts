@@ -5,7 +5,7 @@ import { AdminUiFieldExtensionsMetadata } from './field-extensions';
 
 @Entity('AdminUiFieldMetadata', {
 	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { shareable: true },
+	directives: { inaccessible: true },
 })
 export class AdminUiFieldMetadata {
 	@Field(() => String)

@@ -13,7 +13,7 @@ graphweaverMetadata.collectEnumInformation({
 
 @Entity('AdminUiEntityMetadata', {
 	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { shareable: true },
+	directives: { inaccessible: true },
 })
 export class AdminUiEntityMetadata {
 	@Field(() => String)

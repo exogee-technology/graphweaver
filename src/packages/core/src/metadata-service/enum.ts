@@ -3,7 +3,7 @@ import { AdminUiEnumValueMetadata } from './enum-value';
 
 @Entity('AdminUiEnumMetadata', {
 	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { shareable: true },
+	directives: { inaccessible: true },
 })
 export class AdminUiEnumMetadata {
 	@Field(() => String)
