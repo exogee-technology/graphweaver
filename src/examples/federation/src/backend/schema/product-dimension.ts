@@ -19,7 +19,7 @@ class JsonDataProvider extends BaseDataProvider<ProductDimension> {
 @Entity('ProductDimension', {
 	provider: new JsonDataProvider('Product Dimensions'),
 	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	directives: { shareable: true },
 })
 export class ProductDimension {
 	id!: string;
