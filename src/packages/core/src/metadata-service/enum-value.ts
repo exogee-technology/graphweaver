@@ -1,6 +1,9 @@
 import { Entity, Field } from '../decorators';
 
-@Entity('AdminUiEnumValueMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
+@Entity('AdminUiEnumValueMetadata', {
+	apiOptions: { excludeFromBuiltInOperations: true },
+	directives: { shareable: true },
+})
 export class AdminUiEnumValueMetadata {
 	@Field(() => String)
 	name!: string;
