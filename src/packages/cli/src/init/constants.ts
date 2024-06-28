@@ -3,7 +3,6 @@ import { peerDependencies as mikroPackagePeerDependencies } from '../../../mikro
 
 export const GRAPHWEAVER_TARGET_VERSION = version;
 export const MIKRO_ORM_TARGET_VERSION = mikroPackagePeerDependencies['@mikro-orm/core'];
-export const AWS_LAMBDA_VERSION = '2.0.1';
 
 export const graphweaverVersion = (versionOverride?: string, packageName?: string) => {
 	if (versionOverride === 'local' && packageName) {
