@@ -7,6 +7,10 @@ import os from 'os';
 // @ts-expect-error There are no types for this module, but we're not calling anything on it directly
 // so we don't actually care.
 import serverlessLogger from '@serverless/utils/log';
+// @ts-expect-error There are no types for this module either, but we're not calling anything on it directly
+// so we don't actually care.
+import logNode from 'log-node';
+logNode();
 
 import {
 	baseEsbuildConfig,
