@@ -83,8 +83,8 @@ export const EntityList = <TData extends object>() => {
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
 		// TODO: Navigate to the detail page this ID should be generic
-		const primaryKeyField = Object.hasOwn(row.original, 'traceId') ? 'traceId' : 'id';
-		navigate(`${row.original[primaryKeyField as keyof T]}`);
+		const _primaryKeyField = Object.hasOwn(row.original, 'traceId') ? 'traceId' : primaryKeyField;
+		navigate(`${row.original[_primaryKeyField as keyof T]}`);
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {

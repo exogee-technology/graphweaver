@@ -29,6 +29,6 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 	await expect(deleteToast).toHaveCount(1);
 
 	// Check that the item is removed from the table
-	const tableElement = await page.getByRole('gridcell', { name: tag });
+	const tableElement = await page.getByRole('cell', { name: tag });
 	await expect(tableElement).toHaveCount(0);
 });
