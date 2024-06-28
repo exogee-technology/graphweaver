@@ -152,7 +152,10 @@ export const Table = <T extends object>({
 								key={row.id}
 								className={clsx(i % 2 && styles.rowAlternateColor, onRowClick && styles.clickable)}
 								onClick={(e) => {
-									if (!(e.target as any).closest('input')) {
+									if (
+										!(e.target as HTMLElement).closest('label') &&
+										!(e.target as HTMLElement).closest('input')
+									) {
 										handleRowClick(row);
 									}
 								}}

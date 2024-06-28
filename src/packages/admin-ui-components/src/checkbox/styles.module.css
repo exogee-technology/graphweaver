@@ -1,0 +1,30 @@
+input[type='checkbox'] {
+	display: none;
+}
+input[type='checkbox'] + label {
+	appearance: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	border-radius: 3px;
+	border: 1px solid rgba(234, 229, 240, 0.2);
+	background-color: transparent;
+}
+
+input[type='checkbox']:checked + label {
+	background-color: #7038c2;
+	border: 1px solid #7038c2;
+}
+
+input[type='checkbox']:checked + label::after {
+	display: inline-block;
+	color: white;
+	content: '';
+	width: 8px;
+	height: 7px;
+	background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 8 7" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1L2.91667 6L1 3.875" stroke="%23EAE5F0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+	background-repeat: no-repeat;
+}

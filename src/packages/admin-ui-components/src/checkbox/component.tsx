@@ -1,11 +1,13 @@
-import { HTMLProps, useEffect, useRef } from 'react';
+import { HTMLProps, useEffect, useRef, useId } from 'react';
+
+import styles from './styles.module.css';
 
 export const Checkbox = ({
 	indeterminate,
-	className = '',
 	...rest
 }: { indeterminate?: boolean } & HTMLProps<HTMLInputElement>) => {
 	const ref = useRef<HTMLInputElement>(null!);
+	const id = useId();
 
 	useEffect(() => {
 		if (typeof indeterminate === 'boolean') {
@@ -13,5 +15,10 @@ export const Checkbox = ({
 		}
 	}, [ref, indeterminate]);
 
-	return <input type="checkbox" ref={ref} className={className + ' cursor-pointer'} {...rest} />;
+	return (
+		<>
+			<input type="checkbox" id={id} ref={ref} className={styles.checkbox} {...rest} />
+			<label className={styles.label} htmlFor={id} />
+		</>
+	);
 };

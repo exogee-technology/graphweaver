@@ -8,6 +8,7 @@ import { InvoiceLine } from './invoice-line';
 import { MediaType } from './media-type';
 import { Playlist } from './playlist';
 import { Track } from './track';
+import { Trace } from './trace';
 
 export * from './album';
 export * from './artist';
@@ -19,6 +20,7 @@ export * from './invoice-line';
 export * from './media-type';
 export * from './playlist';
 export * from './track';
+export * from './trace';
 
 export const entities = [
 	Album,
@@ -31,4 +33,5 @@ export const entities = [
 	MediaType,
 	Playlist,
 	Track,
+	Trace,
 ];

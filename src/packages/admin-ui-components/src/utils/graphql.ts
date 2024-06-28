@@ -56,6 +56,7 @@ export const generateGqlSelectForEntityFields = (
 	entityByType?: (entityType: string) => Entity
 ) =>
 	entity.fields
+		.filter((field) => !field.hideInTable)
 		.map((field) => {
 			if (field.relationshipType) {
 				if (!entityByType) {
