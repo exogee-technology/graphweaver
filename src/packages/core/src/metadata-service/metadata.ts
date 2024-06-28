@@ -11,5 +11,5 @@ export class AdminUiMetadata {
 	public entities: AdminUiEntityMetadata[] = [];
 
 	@Field(() => [AdminUiEnumMetadata])
-	public enums: AdminUiEntityMetadata[] = [];
+	public enums: AdminUiEnumMetadata[] = [];
 }
