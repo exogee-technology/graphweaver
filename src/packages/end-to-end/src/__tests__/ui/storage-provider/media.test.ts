@@ -19,7 +19,7 @@ test('Ensure media is uploaded on create', async ({ page }) => {
 
 test('Ensure media is uploaded on update', async ({ page }) => {
 	await page.goto(`${config.adminUiUrl}/Submission`);
-	await page.getByRole('cell').last().click();
+	await page.getByRole('cell').getByRole('img').last().click();
 	await page.waitForTimeout(1000);
 
 	const fileChooserPromise = page.waitForEvent('filechooser');

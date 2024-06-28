@@ -12,13 +12,12 @@ export const MediaCell = (value: any) => {
 			<img
 				src={media.url}
 				style={{
-					width: '100%',
-					height: '100%',
+					width: '200px',
+					height: '48px',
 					objectFit: 'cover',
 					padding: 2,
 					borderRadius: 8,
 					objectPosition: 'center center',
-					textIndent: -9999,
 				}}
 				onError={(e: React.SyntheticEvent<HTMLImageElement, Event>) =>
 					(e.currentTarget.style.display = 'none')
