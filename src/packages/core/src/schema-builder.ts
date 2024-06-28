@@ -793,6 +793,9 @@ class SchemaBuilderImplementation {
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
 							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
+							extensions: {
+								directives: customQuery.directives ?? {},
+							},
 						};
 					} else {
 						const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
@@ -802,6 +805,9 @@ class SchemaBuilderImplementation {
 							args: customArgs,
 							type,
 							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
+							extensions: {
+								directives: customQuery.directives ?? {},
+							},
 						};
 					}
 				}
@@ -955,6 +961,9 @@ class SchemaBuilderImplementation {
 							args: customArgs,
 							type: graphQLTypeForEntity(metadata),
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
+							extensions: {
+								directives: customMutation.directives ?? {},
+							},
 						};
 					} else {
 						fields[customMutation.name] = {
@@ -962,6 +971,9 @@ class SchemaBuilderImplementation {
 							args: customArgs,
 							type: graphQLScalarForTypeScriptType(type),
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
+							extensions: {
+								directives: customMutation.directives ?? {},
+							},
 						};
 					}
 				}
