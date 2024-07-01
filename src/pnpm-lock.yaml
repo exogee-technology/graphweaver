@@ -288,7 +288,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -340,10 +340,10 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -859,14 +859,14 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       serverless:
-        specifier: 4.1.6
-        version: 4.1.6
+        specifier: 4.1.7
+        version: 4.1.7
       serverless-dotenv-plugin:
         specifier: 6.0.0
-        version: 6.0.0(serverless@4.1.6)
+        version: 6.0.0(serverless@4.1.7)
       serverless-offline:
         specifier: 13.6.0
-        version: 13.6.0(serverless@4.1.6)
+        version: 13.6.0(serverless@4.1.7)
       vite:
         specifier: 5.3.2
         version: 5.3.2(@types/node@20.14.9)
@@ -1053,7 +1053,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1142,10 +1142,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       node-sqlite3-wasm:
         specifier: 0.8.16
         version: 0.8.16
@@ -1195,13 +1195,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)(pg@8.11.5)
       '@mikro-orm/mysql':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
@@ -5525,6 +5525,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)(sqlite3@5.1.7):
     resolution: {integrity: sha512-eSHPiS5em+RGv/jx5lP7a1xDVVlnrG+l90/7N7WAgTGcPOzyILVw9EJOZl2KR8dh8EfPI6Wm35Lo4qkO2LoDUg==}
@@ -5599,30 +5600,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9):
-    resolution: {integrity: sha512-CRW5QPvsQhlhRZbx9SsgLrdC7LxCSbz+Pm5rAA8S1SAZG8qJ1WxMovHF61PFZj/7rydnb9fSh4nVwfutOyYwWg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.2.9
-      '@mikro-orm/knex': 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)(sqlite3@5.1.7)
-      pg: 8.11.5
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.1):
     resolution: {integrity: sha512-CRW5QPvsQhlhRZbx9SsgLrdC7LxCSbz+Pm5rAA8S1SAZG8qJ1WxMovHF61PFZj/7rydnb9fSh4nVwfutOyYwWg==}
     engines: {node: '>= 18.12.0'}
@@ -5670,6 +5647,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0):
     resolution: {integrity: sha512-+ZdlKEtE8HmqbZWSm44MaZwfeS1AlrhMJrZfRr5tQfvdKi5VuRQ+I87Uxo03Ni5r0JXV1wEfFyWovK5c6h1iCQ==}
@@ -13204,6 +13182,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.12.0)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -15701,7 +15680,7 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-dotenv-plugin@6.0.0(serverless@4.1.6):
+  /serverless-dotenv-plugin@6.0.0(serverless@4.1.7):
     resolution: {integrity: sha512-8tLVNwHfDO0sBz6+m+DLTZquRk0AZq9rzqk3kphm1iIWKfan9R7RKt4hdq3eQ0kmDoqzudjPYBEXAJ5bUNKeGQ==}
     peerDependencies:
       serverless: 1 || 2 || pre-3 || 3
@@ -15709,10 +15688,10 @@ packages:
       chalk: 4.1.2
       dotenv: 16.4.5
       dotenv-expand: 10.0.0
-      serverless: 4.1.6
+      serverless: 4.1.7
     dev: false
 
-  /serverless-offline@13.6.0(serverless@4.1.6):
+  /serverless-offline@13.6.0(serverless@4.1.7):
     resolution: {integrity: sha512-aSMg9TNfFjVj4QFmHqPzLwbwCSVmrpeoe96ozOXaesn2VX+4lyS+kTF1TXh4pZd5/ef9cfcma3jcqmgnShrUyA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
@@ -15738,7 +15717,7 @@ packages:
       luxon: 3.4.4
       node-schedule: 2.1.1
       p-memoize: 7.1.1
-      serverless: 4.1.6
+      serverless: 4.1.7
       velocityjs: 2.0.6
       ws: 8.17.1
     transitivePeerDependencies:
@@ -15748,8 +15727,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /serverless@4.1.6:
-    resolution: {integrity: sha512-SolSMPEq/HOU/iqGk3Lxa0euKIX/QZ8e5QEyiq1IBfjNa1tkZZRKYBkm45P9DzL1EwrOmyYJBGJ3AIbN7b3UIg==}
+  /serverless@4.1.7:
+    resolution: {integrity: sha512-a+cRQEdSz3PaweIiEnVEELRi7ALQJ2RJN+UTB6p6ZUKZYW5L3seqt8oIWZDFszxTa3HgcRAFH+LaUD2Lqt3LnA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
