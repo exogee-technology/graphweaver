@@ -6,10 +6,10 @@ import { AdminUiEnumValueMetadata } from './enum-value';
 	directives: { inaccessible: true },
 })
 export class AdminUiEnumMetadata {
-	@Field(() => String)
+	@Field(() => String, { directives: { inaccessible: true } })
 	name!: string;
 
-	@Field(() => [AdminUiEnumValueMetadata])
+	@Field(() => [AdminUiEnumValueMetadata], { directives: { inaccessible: true } })
 	values() {
 		return [];
 	}

@@ -5,9 +5,9 @@ import { Entity, Field } from '../decorators';
 	directives: { inaccessible: true },
 })
 export class AdminUiEnumValueMetadata {
-	@Field(() => String)
+	@Field(() => String, { directives: { inaccessible: true } })
 	name!: string;
 
-	@Field(() => String)
+	@Field(() => String, { directives: { inaccessible: true } })
 	value!: string;
 }

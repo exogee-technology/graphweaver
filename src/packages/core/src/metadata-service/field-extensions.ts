@@ -5,6 +5,6 @@ import { Entity, Field } from '../decorators';
 	directives: { inaccessible: true },
 })
 export class AdminUiFieldExtensionsMetadata {
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, directives: { inaccessible: true } })
 	key?: string;
 }

@@ -12,6 +12,6 @@ graphweaverMetadata.collectEnumInformation({
 	directives: { inaccessible: true },
 })
 export class AdminUiFilterMetadata {
-	@Field(() => AdminUIFilterType)
+	@Field(() => AdminUIFilterType, { directives: { inaccessible: true } })
 	type!: AdminUIFilterType;
 }
