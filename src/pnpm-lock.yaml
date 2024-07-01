@@ -512,9 +512,6 @@ importers:
       esbuild-plugin-copy:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.21.5)
-      esbuild-plugin-svgr:
-        specifier: 2.1.0
-        version: 2.1.0(esbuild@0.21.5)(typescript@5.5.2)
       glob:
         specifier: 10.4.2
         version: 10.4.2
@@ -585,9 +582,6 @@ importers:
       esbuild-plugin-copy:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.21.5)
-      esbuild-plugin-svgr:
-        specifier: 2.1.0
-        version: 2.1.0(esbuild@0.21.5)(typescript@5.5.2)
       formik:
         specifier: 2.4.6
         version: 2.4.6(react@18.3.1)
@@ -746,9 +740,6 @@ importers:
       esbuild:
         specifier: 0.21.5
         version: 0.21.5
-      esbuild-plugin-svgr:
-        specifier: 2.1.0
-        version: 2.1.0(esbuild@0.21.5)(typescript@5.5.2)
       glob:
         specifier: 10.4.2
         version: 10.4.2
@@ -10466,19 +10457,6 @@ packages:
       esbuild: 0.21.5
       fs-extra: 10.1.0
       globby: 11.1.0
-    dev: true
-
-  /esbuild-plugin-svgr@2.1.0(esbuild@0.21.5)(typescript@5.5.2):
-    resolution: {integrity: sha512-BKJOlQvXjLipPDPYfX+N6i2tPxSuVOhlg+hEF/nkQwMwFV6IymvuCRO0wLvf9tGyL3mc3yIZ4n9pfxcCx/7v2Q==}
-    peerDependencies:
-      esbuild: ^0.19.1
-    dependencies:
-      '@svgr/core': 8.1.0(typescript@5.5.2)
-      '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
-      esbuild: 0.21.5
-    transitivePeerDependencies:
-      - supports-color
-      - typescript
     dev: true
 
   /esbuild@0.21.5:
