@@ -8,27 +8,33 @@ import { AdminUiFieldExtensionsMetadata } from './field-extensions';
 	directives: { inaccessible: true },
 })
 export class AdminUiFieldMetadata {
-	@Field(() => String)
+	@Field(() => String, { directives: { inaccessible: true } })
 	name!: string;
 
-	@Field(() => String)
+	@Field(() => String, { directives: { inaccessible: true } })
 	type!: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, directives: { inaccessible: true } })
 	relationshipType?: string;
 
-	@Field(() => String, { nullable: true })
+	@Field(() => String, { nullable: true, directives: { inaccessible: true } })
 	relatedEntity?: string;
 
-	@Field(() => AdminUiFilterMetadata, { nullable: true })
+	@Field(() => AdminUiFilterMetadata, { nullable: true, directives: { inaccessible: true } })
 	filter?: AdminUiFilterMetadata;
 
-	@Field(() => AdminUiFieldAttributeMetadata, { nullable: true })
+	@Field(() => AdminUiFieldAttributeMetadata, {
+		nullable: true,
+		directives: { inaccessible: true },
+	})
 	attributes?: AdminUiFieldAttributeMetadata;
 
-	@Field(() => AdminUiFieldExtensionsMetadata, { nullable: true })
+	@Field(() => AdminUiFieldExtensionsMetadata, {
+		nullable: true,
+		directives: { inaccessible: true },
+	})
 	extensions?: AdminUiFieldExtensionsMetadata;
 
-	@Field(() => Boolean, { nullable: true })
+	@Field(() => Boolean, { nullable: true, directives: { inaccessible: true } })
 	isArray?: boolean;
 }

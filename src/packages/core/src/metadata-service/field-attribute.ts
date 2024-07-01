@@ -5,9 +5,9 @@ import { Entity, Field } from '../decorators';
 	directives: { inaccessible: true },
 })
 export class AdminUiFieldAttributeMetadata {
-	@Field(() => Boolean)
+	@Field(() => Boolean, { directives: { inaccessible: true } })
 	isReadOnly!: boolean;
 
-	@Field(() => Boolean)
+	@Field(() => Boolean, { directives: { inaccessible: true } })
 	isRequired!: boolean;
 }

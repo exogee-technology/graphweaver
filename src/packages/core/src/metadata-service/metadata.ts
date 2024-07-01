@@ -7,9 +7,9 @@ import { AdminUiEnumMetadata } from './enum';
 	directives: { inaccessible: true },
 })
 export class AdminUiMetadata {
-	@Field(() => [AdminUiEntityMetadata])
+	@Field(() => [AdminUiEntityMetadata], { directives: { inaccessible: true } })
 	public entities: AdminUiEntityMetadata[] = [];
 
-	@Field(() => [AdminUiEnumMetadata])
+	@Field(() => [AdminUiEnumMetadata], { directives: { inaccessible: true } })
 	public enums: AdminUiEnumMetadata[] = [];
 }

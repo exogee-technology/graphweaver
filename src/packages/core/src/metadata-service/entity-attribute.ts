@@ -5,9 +5,9 @@ import { Entity, Field } from '../decorators';
 	directives: { inaccessible: true },
 })
 export class AdminUiEntityAttributeMetadata {
-	@Field(() => Boolean, { nullable: true })
+	@Field(() => Boolean, { nullable: true, directives: { inaccessible: true } })
 	isReadOnly?: boolean;
 
-	@Field(() => Number, { nullable: true })
+	@Field(() => Number, { nullable: true, directives: { inaccessible: true } })
 	exportPageSize?: number;
 }
