@@ -24,7 +24,7 @@ export class UnixNanoTimestamp {
 	}
 
 	public toDate(): Date {
-		return new Date(Number(this.input) / 1_000);
+		return new Date(Number(this.input) / 1_000_000);
 	}
 
 	public toSIUnits(): {
