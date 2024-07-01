@@ -37,8 +37,8 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
       turbo:
-        specifier: 2.0.5
-        version: 2.0.5
+        specifier: 2.0.6
+        version: 2.0.6
       typescript:
         specifier: 5.5.2
         version: 5.5.2
@@ -808,8 +808,8 @@ importers:
         specifier: 4.0.8
         version: 4.0.8(graphql@16.9.0)
       '@graphql-codegen/typescript-operations':
-        specifier: 4.2.1
-        version: 4.2.1(graphql@16.9.0)
+        specifier: 4.2.2
+        version: 4.2.2(graphql@16.9.0)
       '@graphql-codegen/typescript-react-apollo':
         specifier: 4.3.0
         version: 4.3.0(graphql-tag@2.12.6)(graphql@16.9.0)
@@ -4070,7 +4070,7 @@ packages:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-codegen/typed-document-node': 5.0.7(graphql@16.9.0)
       '@graphql-codegen/typescript': 4.0.8(graphql@16.9.0)
-      '@graphql-codegen/typescript-operations': 4.2.1(graphql@16.9.0)
+      '@graphql-codegen/typescript-operations': 4.2.2(graphql@16.9.0)
       '@graphql-codegen/visitor-plugin-common': 5.3.0(graphql@16.9.0)
       '@graphql-tools/documents': 1.0.1(graphql@16.9.0)
       '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
@@ -4197,14 +4197,14 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-codegen/typescript-operations@4.2.1(graphql@16.9.0):
-    resolution: {integrity: sha512-LhEPsaP+AI65zfK2j6CBAL4RT0bJL/rR9oRWlvwtHLX0t7YQr4CP4BXgvvej9brYdedAxHGPWeV1tPHy5/z9KQ==}
+  /@graphql-codegen/typescript-operations@4.2.2(graphql@16.9.0):
+    resolution: {integrity: sha512-8FJHIAubM4r9ElLuuDAKhdOjainSwRHEmGIrtEgEwHARKhMk1Ttj6bpOQDisYlbDl4ZTHWEJCdNa9o9rgcl+9g==}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-codegen/typescript': 4.0.8(graphql@16.9.0)
-      '@graphql-codegen/visitor-plugin-common': 5.2.0(graphql@16.9.0)
+      '@graphql-codegen/visitor-plugin-common': 5.3.0(graphql@16.9.0)
       auto-bind: 4.0.0
       graphql: 16.9.0
       tslib: 2.6.3
@@ -16546,64 +16546,64 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
-  /turbo-darwin-64@2.0.5:
-    resolution: {integrity: sha512-t/9XpWYIjOhIHUdwiR47SYBGYHkR1zWLxTkTNKZwCSn8BN0cfjPZ1BR6kcwYGxLGBhtl5GBf6A29nq2K7iwAjg==}
+  /turbo-darwin-64@2.0.6:
+    resolution: {integrity: sha512-XpgBwWj3Ggmz/gQVqXdMKXHC1iFPMDiuwugLwSzE7Ih0O13JuNtYZKhQnopvbDQnFQCeRq2Vsm5OTWabg/oB/g==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-darwin-arm64@2.0.5:
-    resolution: {integrity: sha512-//5y4RJvnal8CttOLBwlaBqblcQb1qTlIxLN+I8O3E3rPuvHOupNKB9ZJxYIQ8oWf8ns8Ec8cxQ0GSBLTJIMtA==}
+  /turbo-darwin-arm64@2.0.6:
+    resolution: {integrity: sha512-RfeZYXIAkiA21E8lsvfptGTqz/256YD+eI1x37fedfvnHFWuIMFZGAOwJxtZc6QasQunDZ9TRRREbJNI68tkIw==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-64@2.0.5:
-    resolution: {integrity: sha512-LDtEDU2Gm8p3lKu//aHXZFRKUCVu68BNF9LQ+HmiCKFpNyK7khpMTxIAAUhDqt+AzlrbxtrxcCpCJaWg1JDjHg==}
+  /turbo-linux-64@2.0.6:
+    resolution: {integrity: sha512-92UDa0xNQQbx0HdSp9ag3YSS3xPdavhc7q9q9mxIAcqyjjD6VElA4Y85m4F/DDGE5SolCrvBz2sQhVmkOd6Caw==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-linux-arm64@2.0.5:
-    resolution: {integrity: sha512-84wdrzntErBNxkHcwHxiTZdaginQAxGPnwLTyZj8lpUYI7okPoxy3jKpUeMHN3adm3iDedl/x0mYSIvVVkmOiA==}
+  /turbo-linux-arm64@2.0.6:
+    resolution: {integrity: sha512-eQKu6utCVUkIH2kqOzD8OS6E0ba6COjWm6PRDTNCHQRljZW503ycaTUIdMOiJrVg1MkEjDyOReUg8s8D18aJ4Q==}
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-64@2.0.5:
-    resolution: {integrity: sha512-SgaFZ0VW6kHCJogLNuLEleAauAJx2Y48wazZGVRmBpgSUS2AylXesaBMhJaEScYqLz7mIRn6KOgwM8D4wTxI9g==}
+  /turbo-windows-64@2.0.6:
+    resolution: {integrity: sha512-+9u4EPrpoeHYCQ46dRcou9kbkSoelhOelHNcbs2d86D6ruYD/oIAHK9qgYK8LeARRz0jxhZIA/dWYdYsxJJWkw==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo-windows-arm64@2.0.5:
-    resolution: {integrity: sha512-foUxLOZoru0IRNIxm53fkfM4ubas9P0nTFjIcHtd+E8YHeogt8GqTweNre2e6ri1EHDo71emmuQgpuoFCOXZMg==}
+  /turbo-windows-arm64@2.0.6:
+    resolution: {integrity: sha512-rdrKL+p+EjtdDVg0wQ/7yTbzkIYrnb0Pw4IKcjsy3M0RqUM9UcEi67b94XOAyTa5a0GqJL1+tUj2ebsFGPgZbg==}
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /turbo@2.0.5:
-    resolution: {integrity: sha512-+6+hcWr4nwuESlKqUc626HMOTd3QT8hUOc9QM45PP1d4nErGkNOgExm4Pcov3in7LTuadMnB0gcd/BuzkEDIPw==}
+  /turbo@2.0.6:
+    resolution: {integrity: sha512-/Ftmxd5Mq//a9yMonvmwENNUN65jOVTwhhBPQjEtNZutYT9YKyzydFGLyVM1nzhpLWahQSMamRc/RDBv5EapzA==}
     hasBin: true
     optionalDependencies:
-      turbo-darwin-64: 2.0.5
-      turbo-darwin-arm64: 2.0.5
-      turbo-linux-64: 2.0.5
-      turbo-linux-arm64: 2.0.5
-      turbo-windows-64: 2.0.5
-      turbo-windows-arm64: 2.0.5
+      turbo-darwin-64: 2.0.6
+      turbo-darwin-arm64: 2.0.6
+      turbo-linux-64: 2.0.6
+      turbo-linux-arm64: 2.0.6
+      turbo-windows-64: 2.0.6
+      turbo-windows-arm64: 2.0.6
     dev: true
 
   /type-check@0.4.0:
