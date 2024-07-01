@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react';
+import commonjs from 'vite-plugin-commonjs';
 import graphweaver from 'vite-plugin-graphweaver';
 import { InlineConfig } from 'vite';
 import path from 'path';
@@ -41,5 +42,5 @@ export const viteConfig = ({
 			'virtual:graphweaver-user-supplied-custom-fields',
 		],
 	},
-	plugins: [react(), graphweaver()],
+	plugins: [commonjs(), react(), graphweaver()],
 });
