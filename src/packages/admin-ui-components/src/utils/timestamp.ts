@@ -1,9 +1,9 @@
 /** BigInt representation of a second */
-const s = BigInt(1_000_000);
+const s = BigInt(1_000_000_000);
 /** BigInt representation of a millisecond */
-const ms = BigInt(1_000);
+const ms = BigInt(1_000_000);
 /** BigInt representation of a microsecond */
-const us = BigInt(1);
+const us = BigInt(1_000);
 
 /** Helper constant for calculating percentages without losing resolution */
 const percentageMultiplyer = BigInt(100);

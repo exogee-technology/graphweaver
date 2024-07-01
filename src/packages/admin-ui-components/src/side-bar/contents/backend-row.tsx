@@ -11,9 +11,11 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 	const { selectedEntity } = useSelectedEntity();
 	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
 
-	const entities = entitiesForBackend(backend)?.sort((left, right) =>
-		left.name.localeCompare(right.name)
-	);
+	const entities = entitiesForBackend(backend)
+		?.sort((left, right) => left.name.localeCompare(right.name))
+		.filter((entity) => !entity.hideInSideBar);
+
+	if (entities?.length === 0) return null;
 
 	return (
 		<ul key={backend} className={styles.entity}>
@@ -30,10 +32,7 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 					<ChevronDownIcon />
 				</a>
 				<ul>
-					{entities &&
-						entities
-							.filter((entity) => !entity.hideInSideBar)
-							.map((entity) => <EntityRow key={entity.name} entity={entity} />)}
+					{entities && entities.map((entity) => <EntityRow key={entity.name} entity={entity} />)}
 				</ul>
 			</li>
 		</ul>
