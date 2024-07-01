@@ -1,5 +1,5 @@
 import { SqliteDriver } from 'mikro-orm-sqlite-wasm';
-import { entities } from './entities';
+import { entities, Trace } from './entities';
 
 export const connection = {
 	connectionManagerId: 'sqlite',
@@ -10,4 +10,11 @@ export const connection = {
 	},
 };
 
-export const connections = [connection];
+export const traceConnection = {
+	connectionManagerId: 'sqlite2',
+	mikroOrmConfig: {
+		entities: [Trace],
+		driver: SqliteDriver,
+		dbName: 'databases/trace.sqlite',
+	},
+};

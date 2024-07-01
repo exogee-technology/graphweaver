@@ -993,6 +993,9 @@ importers:
       '@opentelemetry/api':
         specifier: 1.9.0
         version: 1.9.0
+      '@opentelemetry/context-async-hooks':
+        specifier: 1.25.1
+        version: 1.25.1(@opentelemetry/api@1.9.0)
       '@opentelemetry/core':
         specifier: 1.25.0
         version: 1.25.0(@opentelemetry/api@1.9.0)
@@ -1089,7 +1092,7 @@ importers:
         version: 16.9.0
       graphweaver:
         specifier: '*'
-        version: link:../cli
+        version: 1.0.4(@codemirror/language@6.0.0)(@mikro-orm/core@6.2.9)(csstype@3.1.3)(log@6.3.1)(pg@8.12.0)(typescript@5.5.2)
       promisify-child-process:
         specifier: 4.1.2
         version: 4.1.2
@@ -1129,7 +1132,7 @@ importers:
         version: 1.1.4(graphql@16.9.0)
       ts-jest:
         specifier: 29.1.5
-        version: 29.1.5(@babel/core@7.24.7)(jest@29.7.0)(typescript@5.5.2)
+        version: 29.1.5(@babel/core@7.24.7)(esbuild@0.21.5)(jest@29.7.0)(typescript@5.5.2)
       tsx:
         specifier: 4.15.7
         version: 4.15.7
@@ -3928,6 +3931,201 @@ packages:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
+    dev: false
+
+  /@exogee/graphweaver-admin-ui-components@1.0.4(@codemirror/language@6.0.0)(csstype@3.1.3)(formik@2.4.6)(graphql@16.9.0)(react-dom@18.3.1)(react-router-dom@6.24.0)(react@18.3.1):
+    resolution: {integrity: sha512-zFu4D0pISO/Kw25OPfz+RYJ+cnsqHLHxBGXsZXLCAHe8ixVnZW0o0ecHuZeSiaWjPjez1IzJFPSRDgEiBstFyw==}
+    peerDependencies:
+      formik: 2.4.6
+      graphql: 16.9.0
+      react: 18.3.1
+      react-dom: 18.3.1
+      react-router-dom: 6.24.0
+    dependencies:
+      '@apollo/client': 3.10.7(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+      '@exogee/graphweaver-apollo-client': 1.0.4(@apollo/client@3.10.7)
+      '@graphiql/toolkit': 0.9.1(graphql@16.9.0)
+      clsx: 2.1.1
+      downshift: 9.0.6(react@18.3.1)
+      formik: 2.4.6(react@18.3.1)
+      graphiql: 3.3.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+      graphql: 16.9.0
+      graphql-deduplicator: 2.0.6
+      luxon: 3.4.4
+      papaparse: 5.4.1
+      react: 18.3.1
+      react-data-grid: 7.0.0-beta.44(react-dom@18.3.1)(react@18.3.1)
+      react-dom: 18.3.1(react@18.3.1)
+      react-hot-toast: 2.4.1(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
+      react-router-dom: 6.24.0(react-dom@18.3.1)(react@18.3.1)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - graphql-ws
+      - subscriptions-transport-ws
+    dev: false
+
+  /@exogee/graphweaver-admin-ui@1.0.4(@codemirror/language@6.0.0)(csstype@3.1.3):
+    resolution: {integrity: sha512-yt7GeDHsjBvsJECDo7/JkRT0J4o3KCUxyOx/9kFHlv4UPJ+qZXftrlxb1aPBZDNCvyNxf2JIX3WdF9M2pPyHfQ==}
+    dependencies:
+      '@apollo/client': 3.10.7(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+      '@exogee/graphweaver-admin-ui-components': 1.0.4(@codemirror/language@6.0.0)(csstype@3.1.3)(formik@2.4.6)(graphql@16.9.0)(react-dom@18.3.1)(react-router-dom@6.24.0)(react@18.3.1)
+      clsx: 2.1.1
+      formik: 2.4.6(react@18.3.1)
+      graphql: 16.9.0
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-data-grid: 7.0.0-beta.44(react-dom@18.3.1)(react@18.3.1)
+      react-dom: 18.3.1(react@18.3.1)
+      react-modal: 3.16.1(react-dom@18.3.1)(react@18.3.1)
+      react-router-dom: 6.24.0(react-dom@18.3.1)(react@18.3.1)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - graphql-ws
+      - subscriptions-transport-ws
+    dev: false
+
+  /@exogee/graphweaver-apollo-client@1.0.4(@apollo/client@3.10.7):
+    resolution: {integrity: sha512-qhh1+okt0BNuGe6nPmnIOBHeUeJ/MYee8dViUnq6pIS7PBoNC7t60ydNaNVO1XRvBTWVnLqyMf+GcbTQP8DUuQ==}
+    peerDependencies:
+      '@apollo/client': ^3.10.4
+    dependencies:
+      '@apollo/client': 3.10.7(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+    dev: false
+
+  /@exogee/graphweaver-builder@1.0.4(log@6.3.1)(typescript@5.5.2):
+    resolution: {integrity: sha512-lFGpez7kgbzbiFNt+Zvq3xeJE8Wxu8IeFjVMSRBtkXU19YWF3+X/thIBeOktAhLqpSKCxDOO0rC15icFEFL02A==}
+    requiresBuild: true
+    dependencies:
+      '@exogee/graphweaver-config': 1.0.4
+      '@graphql-codegen/add': 5.0.3(graphql@16.9.0)
+      '@graphql-codegen/cli': 5.0.2(@types/node@20.14.9)(graphql@16.9.0)(typescript@5.5.2)
+      '@graphql-codegen/near-operation-file-preset': 3.0.0(graphql@16.9.0)
+      '@graphql-codegen/typescript': 4.0.7(graphql@16.9.0)
+      '@graphql-codegen/typescript-operations': 4.2.1(graphql@16.9.0)
+      '@graphql-codegen/typescript-react-apollo': 4.3.0(graphql-tag@2.12.6)(graphql@16.9.0)
+      '@serverless/utils': 6.15.0
+      '@vitejs/plugin-react': 4.3.1(vite@5.3.2)
+      class-validator: 0.14.1
+      dotenv: 16.4.5
+      esbuild: 0.21.5
+      esbuild-css-modules-plugin: 3.1.2(esbuild@0.21.5)
+      glob: 10.4.2
+      graphql: 16.9.0
+      graphql-tag: 2.12.6(graphql@16.9.0)
+      log-node: 8.0.3(log@6.3.1)
+      rimraf: 5.0.7
+      rollup-plugin-visualizer: 5.12.0
+      serverless: 4.1.6
+      serverless-dotenv-plugin: 6.0.0(serverless@4.1.6)
+      serverless-offline: 13.6.0(serverless@4.1.6)
+      vite: 5.3.2(@types/node@20.14.9)
+      vite-plugin-graphweaver: 1.0.4(vite@5.3.2)
+    transitivePeerDependencies:
+      - '@parcel/watcher'
+      - '@types/node'
+      - aws-crt
+      - bufferutil
+      - cosmiconfig-toml-loader
+      - debug
+      - encoding
+      - enquirer
+      - less
+      - lightningcss
+      - log
+      - rollup
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+      - typescript
+      - utf-8-validate
+    dev: false
+
+  /@exogee/graphweaver-config@1.0.4:
+    resolution: {integrity: sha512-/YFmI1p/qwxdYw2j53RVi59VTIE+zwj3/0/uYs35GVoLeWW3ED1Bk6hS5TLEWSbXhhy2kkLyQx15irLJ41KjvA==}
+    dependencies:
+      lodash: 4.17.21
+    dev: false
+
+  /@exogee/graphweaver-mikroorm@1.0.4(@mikro-orm/core@6.2.9)(pg@8.12.0):
+    resolution: {integrity: sha512-MjgSs84TLqTy7MxOV4IklMm4l/v9xMdyPuwG59yoepWvYp/NmQ0biD9esy7nqoWOj6ztuolRg97G8G+SL8yNHw==}
+    peerDependencies:
+      '@mikro-orm/core': 6.2.9
+    dependencies:
+      '@apollo/server': 4.10.4(graphql@16.9.0)
+      '@exogee/graphweaver': 1.0.4
+      '@exogee/logger': 1.0.4
+      '@mikro-orm/core': 6.2.9
+      dataloader: 2.2.2
+      decimal.js: 10.4.3
+      dotenv: 16.4.5
+      graphql: 16.9.0
+      pluralize: 8.0.0
+      reflect-metadata: 0.2.2
+    optionalDependencies:
+      '@mikro-orm/knex': 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.0)(pg@8.12.0)
+      '@mikro-orm/mysql': 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
+      '@mikro-orm/postgresql': 6.2.9(@mikro-orm/core@6.2.9)
+      '@mikro-orm/sqlite': 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - encoding
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    dev: false
+
+  /@exogee/graphweaver-scalars@1.0.4(graphql@16.9.0):
+    resolution: {integrity: sha512-a9g3YGk4Vn/OK+tM6Km4Sx3vl2Weik0Bh6bdTXPfRo3OPtSCl5Y8EGlhbNt7k7z06liLvuhPJqymcdqswLsZWQ==}
+    dependencies:
+      graphql-type-json: 0.3.2(graphql@16.9.0)
+      luxon: 3.4.4
+    transitivePeerDependencies:
+      - graphql
+    dev: false
+
+  /@exogee/graphweaver@1.0.4:
+    resolution: {integrity: sha512-a6UVQsdt+197+nodyDEkQH9Mr2U7OVHd6WJ+6qTwSNE0YhBH+0X1SfzogpAjCV7wlaK5G9IAYjjWQlbbpzn9Rw==}
+    dependencies:
+      '@apollo/server': 4.10.4(graphql@16.9.0)
+      '@exogee/graphweaver-scalars': 1.0.4(graphql@16.9.0)
+      '@exogee/logger': 1.0.4
+      '@graphql-tools/utils': 10.2.2(graphql@16.9.0)
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/exporter-trace-otlp-http': 0.52.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.25.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-node': 0.52.1(@opentelemetry/api@1.9.0)
+      class-validator: 0.14.1
+      dataloader: 2.2.2
+      graphql: 16.9.0
+      graphql-parse-resolve-info: 4.13.0(graphql@16.9.0)
+      graphql-query-complexity: 1.0.0(graphql@16.9.0)
+      pluralize: 8.0.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
+
+  /@exogee/logger@1.0.4:
+    resolution: {integrity: sha512-snbCZzVd3wOLhpoZDItm/XMBjB7vK13BHLPjH3ufXyhppO3ZZtVZXiN6tGwbSY/RlOrs5jiUxWM+m+goSi8uSQ==}
+    dependencies:
+      pino: 9.2.0
     dev: false
 
   /@floating-ui/core@1.6.3:
@@ -11756,7 +11954,6 @@ packages:
       graphql: '>=0.8.0'
     dependencies:
       graphql: 16.9.0
-    dev: true
 
   /graphql-ws@5.16.0(graphql@16.9.0):
     resolution: {integrity: sha512-Ju2RCU2dQMgSKtArPbEtsK5gNLnsQyTNIo/T7cZNp96niC1x0KdJNZV0TIoilceBPQwfb5itrGl8pkFeOUMl4A==}
@@ -11769,6 +11966,61 @@ packages:
   /graphql@16.9.0:
     resolution: {integrity: sha512-GGTKBX4SD7Wdb8mqeDLni2oaRGYQWjWHGKPQ24ZMnUtKfcsVoiv4uX8+LJr1K6U5VW2Lu1BwJnj7uiori0YtRw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
+
+  /graphweaver@1.0.4(@codemirror/language@6.0.0)(@mikro-orm/core@6.2.9)(csstype@3.1.3)(log@6.3.1)(pg@8.12.0)(typescript@5.5.2):
+    resolution: {integrity: sha512-cn1fb8TrEDqXFVLIdIjuM3wdFDGedhVuQjYO5Rh7e/eEeL0Kaz+NKhoRJr2/vDeG7vo2a705+kMU4LHaZAWuAg==}
+    hasBin: true
+    dependencies:
+      '@exogee/graphweaver': 1.0.4
+      '@exogee/graphweaver-admin-ui': 1.0.4(@codemirror/language@6.0.0)(csstype@3.1.3)
+      '@exogee/graphweaver-builder': 1.0.4(log@6.3.1)(typescript@5.5.2)
+      '@exogee/graphweaver-mikroorm': 1.0.4(@mikro-orm/core@6.2.9)(pg@8.12.0)
+      chokidar: 3.6.0
+      esbuild: 0.21.5
+      inquirer: 9.3.1
+      node-semver: 1.0.0
+      ora-classic: 5.4.2
+      semver: 7.6.2
+      validate-npm-package-name: 5.0.1
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@mikro-orm/core'
+      - '@parcel/watcher'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - aws-crt
+      - better-sqlite3
+      - bluebird
+      - bufferutil
+      - cosmiconfig-toml-loader
+      - csstype
+      - debug
+      - encoding
+      - enquirer
+      - graphql-ws
+      - less
+      - libsql
+      - lightningcss
+      - log
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - rollup
+      - sass
+      - sqlite3
+      - stylus
+      - subscriptions-transport-ws
+      - sugarss
+      - supports-color
+      - tedious
+      - terser
+      - typescript
+      - utf-8-validate
+    dev: false
 
   /has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
@@ -16565,7 +16817,7 @@ packages:
     dependencies:
       tslib: 2.6.3
 
-  /ts-jest@29.1.5(@babel/core@7.24.7)(jest@29.7.0)(typescript@5.5.2):
+  /ts-jest@29.1.5(@babel/core@7.24.7)(esbuild@0.21.5)(jest@29.7.0)(typescript@5.5.2):
     resolution: {integrity: sha512-UuClSYxM7byvvYfyWdFI+/2UxMmwNyJb0NPkZPQE2hew3RurV7l7zURgOHAd/1I1ZdPpe3GUsXNXAcN8TFKSIg==}
     engines: {node: ^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -16591,6 +16843,7 @@ packages:
     dependencies:
       '@babel/core': 7.24.7
       bs-logger: 0.2.6
+      esbuild: 0.21.5
       fast-json-stable-stringify: 2.1.0
       jest: 29.7.0
       jest-util: 29.7.0
@@ -17033,6 +17286,15 @@ packages:
       - supports-color
       - terser
     dev: true
+
+  /vite-plugin-graphweaver@1.0.4(vite@5.3.2):
+    resolution: {integrity: sha512-BeoqFLloSKzUQ+xTzHvcUTlpOZdHJ/NB8RNbRTYSHw4WltVbF0jF42skDZjh4eQ8HPFH0M3ijhJjU5+SZuBGcg==}
+    peerDependencies:
+      vite: '5'
+    dependencies:
+      '@exogee/graphweaver-config': 1.0.4
+      vite: 5.3.2(@types/node@20.14.9)
+    dev: false
 
   /vite-plugin-svgr@4.2.0(typescript@5.5.2)(vite@5.3.2):
     resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}

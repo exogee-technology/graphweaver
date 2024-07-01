@@ -1,8 +1,10 @@
 import process from 'process';
 import { isAsyncFunction } from 'util/types';
-import { Span, SpanOptions, SpanStatusCode, trace as traceApi } from '@opentelemetry/api';
+import { Span, SpanOptions, SpanStatusCode, trace as traceApi, context } from '@opentelemetry/api';
 import * as opentelemetry from '@opentelemetry/sdk-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
+import { AsyncHooksContextManager } from '@opentelemetry/context-async-hooks';
+import { isTracingSuppressed, suppressTracing, unsuppressTracing } from '@opentelemetry/core';
 import { Resource } from '@opentelemetry/resources';
 import { logger } from '@exogee/logger';
 
@@ -23,9 +25,21 @@ export interface TraceData {
 	attributes: Record<string, unknown>;
 }
 
+export const contextManager = new AsyncHooksContextManager();
+contextManager.enable();
+context.setGlobalContextManager(contextManager);
+
 export const isTraceable = () =>
 	!!process.env.OTEL_EXPORTER_OTLP_ENDPOINT ||
 	!!graphweaverMetadata.getEntityByName('Trace')?.provider;
+
+export const setEnableTracingForRequest = <T>(fn: () => Promise<T>) => {
+	return context.with(unsuppressTracing(contextManager.active()), fn);
+};
+
+export const setDisableTracingForRequest = <T>(fn: () => Promise<T>) => {
+	return context.with(suppressTracing(contextManager.active()), fn);
+};
 
 // Decorator to add tracing to any instance method
 // Usage:
@@ -38,11 +52,15 @@ export function TraceMethod() {
 		const originalMethod = descriptor.value;
 		const isAsync = isAsyncFunction(originalMethod);
 
-		descriptor.value = function (...args: any[]) {
-			return isAsync
-				? trace(originalMethod.bind(this)).apply(this, args)
-				: traceSync(originalMethod.bind(this)).apply(this, args);
-		};
+		if (isAsync) {
+			descriptor.value = async function (...args: any[]) {
+				return trace(originalMethod.bind(this)).apply(this, args);
+			};
+		} else {
+			descriptor.value = function (...args: any[]) {
+				return traceSync(originalMethod.bind(this)).apply(this, args);
+			};
+		}
 	};
 }
 
@@ -57,8 +75,10 @@ export const trace =
 		spanName: string = fn.name
 	) =>
 	async (...functionArgs: Args) => {
+		const isContextTracingSuppressed = isTracingSuppressed(contextManager.active());
+
 		// Check if tracing is enabled
-		if (!isTraceable()) {
+		if (!isTraceable() || isContextTracingSuppressed) {
 			return fn(...functionArgs, undefined);
 		}
 
@@ -92,8 +112,10 @@ export const traceSync =
 		spanName: string = fn.name
 	) =>
 	(...functionArgs: Args) => {
+		const isContextTracingSuppressed = isTracingSuppressed(contextManager.active());
+
 		// Check if tracing is enabled
-		if (!isTraceable()) {
+		if (!isTraceable() || isContextTracingSuppressed) {
 			return fn(...functionArgs, undefined);
 		}
 

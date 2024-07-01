@@ -15,6 +15,8 @@ import {
 	isTraceable,
 	Instrumentation,
 	BackendProvider,
+	setDisableTracingForRequest,
+	setEnableTracingForRequest,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -190,7 +192,17 @@ export default class Graphweaver<TContext extends BaseContext> {
 					method: request.httpGraphQLRequest.method,
 					type,
 				});
-				return executeHTTPGraphQLRequest.bind(this.server)(request);
+
+				//TODO: add check for type and ignore if traces
+				if (operationName === 'TracesList') {
+					return setDisableTracingForRequest(() => {
+						return executeHTTPGraphQLRequest.bind(this.server)(request);
+					});
+				} else {
+					return setEnableTracingForRequest(() => {
+						return executeHTTPGraphQLRequest.bind(this.server)(request);
+					});
+				}
 			});
 		}
 	}

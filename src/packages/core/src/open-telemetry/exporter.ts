@@ -4,19 +4,35 @@ import {
 	SimpleSpanProcessor,
 	SpanProcessor,
 } from '@opentelemetry/sdk-trace-base';
-import { ExportResult, ExportResultCode, hrTimeToMicroseconds } from '@opentelemetry/core';
+import {
+	ExportResult,
+	ExportResultCode,
+	hrTimeToMicroseconds,
+	hrTimeToNanoseconds,
+} from '@opentelemetry/core';
 
 import { BackendProvider } from '../types';
 
 export class JsonSpanExporter implements SpanExporter {
-	constructor(private dataProvider: BackendProvider<unknown>) {}
+	private queue: ReadableSpan[];
+	private locked: boolean = false;
+
+	constructor(private dataProvider: BackendProvider<unknown>) {
+		this.queue = [];
+	}
 	/**
 	 * Export spans.
 	 * @param spans
 	 * @param resultCallback
 	 */
-	async export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void) {
-		return this.saveSpans(spans, resultCallback);
+	export(spans: ReadableSpan[], resultCallback: (result: ExportResult) => void) {
+		if (this.locked) {
+			this.queue.push(...spans);
+			return;
+		} else {
+			this.locked = true;
+			return this.saveSpans(spans, resultCallback);
+		}
 	}
 	/**
 	 * Shutdown the exporter.
@@ -49,7 +65,7 @@ export class JsonSpanExporter implements SpanExporter {
 			spanId: span.spanContext().spanId,
 			// kind: span.kind,
 			timestamp: hrTimeToMicroseconds(span.startTime),
-			duration: hrTimeToMicroseconds(span.duration),
+			duration: hrTimeToNanoseconds(span.duration),
 			attributes: span.attributes,
 			// status: span.status,
 			// events: span.events,
@@ -62,8 +78,19 @@ export class JsonSpanExporter implements SpanExporter {
 	 * @param spans
 	 * @param done
 	 */
-	private async saveSpans(spans: ReadableSpan[], done?: (result: ExportResult) => void) {
-		await this.dataProvider.createMany(spans.map((span) => this.exportInfo(span)));
+	private async saveSpans(
+		spans: ReadableSpan[],
+		done?: (result: ExportResult) => void
+	): Promise<void> {
+		await (this.dataProvider as any)._createMany(spans.map((span) => this.exportInfo(span)));
+
+		if (this.queue.length > 0) {
+			const toSave = this.queue;
+			this.queue = [];
+			return this.saveSpans(toSave, done);
+		}
+
+		this.locked = false;
 
 		if (done) {
 			return done({ code: ExportResultCode.SUCCESS });
