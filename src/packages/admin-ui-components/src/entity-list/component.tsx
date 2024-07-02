@@ -90,7 +90,7 @@ export const EntityList = <TData extends object>() => {
 			routeFor({
 				entity,
 				filters,
-				sort: newSort, // TODO this cast should be removed when we fix the sort type in the url
+				sort: newSort,
 				id,
 			})
 		);

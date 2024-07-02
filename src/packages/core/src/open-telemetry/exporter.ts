@@ -47,24 +47,14 @@ export class JsonSpanExporter implements SpanExporter {
 	 * @param span
 	 */
 	private exportInfo(span: ReadableSpan) {
-		// var _a;
 		return {
-			// resource: {
-			// 	attributes: span.resource.attributes,
-			// },
 			traceId: span.spanContext().traceId,
 			parentId: span.parentSpanId,
-			// traceState:
-			// 	(_a = span.spanContext().traceState) === null || _a === void 0 ? void 0 : _a.serialize(),
 			name: span.name,
 			spanId: span.spanContext().spanId,
-			// kind: span.kind,
 			timestamp: hrTimeToNanoseconds(span.startTime),
 			duration: hrTimeToNanoseconds(span.duration),
 			attributes: span.attributes,
-			// status: span.status,
-			// events: span.events,
-			// links: span.links,
 		};
 	}
 
