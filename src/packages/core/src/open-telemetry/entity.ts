@@ -48,6 +48,7 @@ export const addTraceEntityToSchema = () => {
 		},
 		apiOptions: {
 			excludeFromBuiltInWriteOperations: true,
+			excludeFromTracing: true,
 		},
 	})(Trace);
 };

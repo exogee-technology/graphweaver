@@ -11,6 +11,7 @@ export const TraceDetail = () => {
 
 	const { data, loading, error } = useQuery<{ traces: Span[] }>(queryForTrace, {
 		variables: { id },
+		context: { headers: { ['x-graphweaver-suppress-tracing']: 'true' } },
 	});
 
 	if (loading) {

@@ -39,6 +39,7 @@ export type AdminUiEntityMetadata = {
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
   defaultSort?: Maybe<Scalars['JSON']['output']>;
+  excludeFromTracing: Scalars['Boolean']['output'];
   fieldForDetailPanel: Scalars['String']['output'];
   fields: Array<AdminUiFieldMetadata>;
   hideInSideBar: Scalars['Boolean']['output'];

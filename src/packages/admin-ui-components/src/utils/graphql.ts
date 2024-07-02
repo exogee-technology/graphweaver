@@ -8,6 +8,7 @@ export const SCHEMA_QUERY = gql`
 				name
 				plural
 				backendId
+				excludeFromTracing
 				summaryField
 				fieldForDetailPanel
 				primaryKeyField

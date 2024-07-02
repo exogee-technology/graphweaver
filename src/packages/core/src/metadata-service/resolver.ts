@@ -53,7 +53,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			graphweaverMetadata.entities()
 		)
 			.map((entity) => {
-				const { name, adminUIOptions, provider } = entity;
+				const { name, adminUIOptions, apiOptions, provider } = entity;
 
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
@@ -137,6 +137,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					fieldForDetailPanel,
 					fields,
 					attributes,
+					excludeFromTracing: apiOptions?.excludeFromTracing ?? false,
 					hideInSideBar: adminUIOptions?.hideInSideBar ?? false,
 					defaultFilter: adminUIOptions?.defaultFilter,
 					defaultSort: adminUIOptions?.defaultSort,

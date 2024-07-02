@@ -36,6 +36,7 @@ export interface Entity {
 	defaultSort?: SortEntity;
 	attributes: EntityAttributes;
 	hideInSideBar: boolean;
+	excludeFromTracing?: boolean;
 }
 
 export type SortEntity = Record<string, Sort>;

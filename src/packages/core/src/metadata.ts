@@ -32,6 +32,10 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// by fields. This is useful for entities that are not backed by a fully fledged provider or are
 		// otherwise dynamically generated.
 		excludeFromFiltering?: boolean;
+
+		// This means that there will be no recorded telemetry for this entity. This is useful for entities
+		// that are managed by some other system or we don't want to record telemetry for.
+		excludeFromTracing?: boolean;
 	};
 
 	adminUIOptions?: {

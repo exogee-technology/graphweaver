@@ -48,4 +48,7 @@ export class AdminUiEntityMetadata {
 
 	@Field(() => Boolean)
 	hideInSideBar!: boolean;
+
+	@Field(() => Boolean)
+	excludeFromTracing!: boolean;
 }

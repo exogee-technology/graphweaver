@@ -193,8 +193,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 					type,
 				});
 
-				//TODO: add check for type and ignore if traces
-				if (operationName === 'TracesList') {
+				const suppressTracing = request.httpGraphQLRequest.headers.get(
+					'x-graphweaver-suppress-tracing'
+				);
+
+				if (suppressTracing === 'true') {
 					return setDisableTracingForRequest(() => {
 						return executeHTTPGraphQLRequest.bind(this.server)(request);
 					});

@@ -40,7 +40,14 @@ export const EntityList = <TData extends object>() => {
 	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 	const [showExportModal, setShowExportModal] = useState(false);
 	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(entity));
-	const { fields, defaultSort, primaryKeyField, defaultFilter, fieldForDetailPanel } = entity;
+	const {
+		fields,
+		defaultSort,
+		primaryKeyField,
+		defaultFilter,
+		fieldForDetailPanel,
+		excludeFromTracing,
+	} = entity;
 	const columns = useMemo(
 		() => convertEntityToColumns(entity, entityByType),
 		[fields, entityByType]
@@ -68,6 +75,9 @@ export const EntityList = <TData extends object>() => {
 		{
 			variables,
 			notifyOnNetworkStatusChange: true,
+			...(excludeFromTracing
+				? { context: { headers: { ['x-graphweaver-suppress-tracing']: `true` } } }
+				: {}),
 		}
 	);
 
