@@ -18,7 +18,7 @@ export const Checkbox = ({
 	return (
 		<>
 			<input type="checkbox" id={id} ref={ref} className={styles.checkbox} {...rest} />
-			<label className={styles.label} htmlFor={id} />
+			<label className={styles.label} htmlFor={id} role="checkbox" />
 		</>
 	);
 };
