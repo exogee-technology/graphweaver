@@ -15740,9 +15740,9 @@ INSERT INTO Track VALUES(3503,'Koyaanisqatsi',347,2,10,'Philip Glass',206005,330
 CREATE TABLE [Trace]
 (
     [Id] INTEGER  NOT NULL,
-    [SpanId] INTEGER  NOT NULL,
-    [TraceId] INTEGER  NOT NULL,
-    [ParentId] INTEGER,
+    [SpanId] NVARCHAR(200)  NOT NULL,
+    [TraceId] NVARCHAR(200)  NOT NULL,
+    [ParentId] NVARCHAR(200),
     [Name] NVARCHAR(200)  NOT NULL,
     [Timestamp] BIGINT NOT NULL,
     [Duration] BIGINT NOT NULL,
