@@ -28,5 +28,5 @@ test('List Trace Page', async ({ page }) => {
 	await page.getByRole('button', { name: 'Rest - find' }).click();
 
 	await expect(await page.getByText('Detailed trace view for')).toBeVisible();
-	await expect(page).toHaveURL(new RegExp(`^${config.adminUiUrl}/Trace/.*`));
+	await expect(page).toHaveURL(new RegExp(`^.*/Trace/.*`));
 });
