@@ -67,7 +67,11 @@ export class JsonSpanExporter implements SpanExporter {
 		spans: ReadableSpan[],
 		done?: (result: ExportResult) => void
 	): Promise<void> {
-		await (this.dataProvider as any)._createMany(spans.map((span) => this.exportInfo(span)));
+		if (!this.dataProvider.createTraces) {
+			throw new Error('createTraces method is not implemented in the dataProvider');
+		}
+
+		await this.dataProvider.createTraces(spans.map((span) => this.exportInfo(span)));
 
 		if (this.queue.length > 0) {
 			const toSave = this.queue;

@@ -106,6 +106,9 @@ export interface BackendProvider<D> {
 	updateMany(entities: Partial<D>[]): Promise<D[]>;
 	createOne(entity: Partial<D>): Promise<D>;
 	createMany(entities: Partial<D>[]): Promise<D[]>;
+	// This is an optional method that can be implemented if the backend supports saving open telemetry traces.
+	// This method should not have the TraceMethod decorator applied to it.
+	createTraces?(entities: Partial<D>[]): Promise<D[]>;
 	createOrUpdateMany(entities: Partial<D>[]): Promise<D[]>;
 	deleteOne(filter: Filter<D>): Promise<boolean>;
 	// Optional deleteMany

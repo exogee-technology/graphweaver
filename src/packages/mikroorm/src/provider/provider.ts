@@ -497,7 +497,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return this._createMany(createItems);
 	}
 
-	public async _createMany(createItems: Partial<D>[]) {
+	public async createTraces(createItems: Partial<D>[]): Promise<D[]> {
+		return this._createMany(createItems);
+	}
+
+	private async _createMany(createItems: Partial<D>[]) {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createItems),
 		});
