@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -21,7 +21,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/client": "3.10.7",
+		"@apollo/client": "3.10.8",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",

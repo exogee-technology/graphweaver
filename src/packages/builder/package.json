@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -19,8 +19,8 @@
 		"@graphql-codegen/add": "5.0.3",
 		"@graphql-codegen/cli": "5.0.2",
 		"@graphql-codegen/near-operation-file-preset": "3.0.0",
-		"@graphql-codegen/typescript": "4.0.7",
-		"@graphql-codegen/typescript-operations": "4.2.1",
+		"@graphql-codegen/typescript": "4.0.8",
+		"@graphql-codegen/typescript-operations": "4.2.2",
 		"@graphql-codegen/typescript-react-apollo": "4.3.0",
 		"@serverless/utils": "6.15.0",
 		"@vitejs/plugin-react": "4.3.1",
@@ -42,7 +42,6 @@
 	},
 	"devDependencies": {
 		"@types/node": "20.14.9",
-		"@types/rimraf": "4.0.5",
 		"prettier": "3.3.2",
 		"typescript": "5.5.2"
 	},

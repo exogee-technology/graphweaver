@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -25,7 +25,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.10.7",
+		"@apollo/client": "3.10.8",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.1",
 		"@tanstack/react-table": "8.17.3",

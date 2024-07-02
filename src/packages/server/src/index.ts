@@ -119,6 +119,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 				description: 'Query used by the Admin UI to introspect the schema and metadata.',
 				getType: () => AdminUiMetadata,
 				resolver: resolveAdminUiMetadata(this.config.adminMetadata?.hooks),
+				directives: { inaccessible: true },
 			});
 		}
 

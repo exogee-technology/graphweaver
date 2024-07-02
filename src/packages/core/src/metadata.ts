@@ -200,6 +200,7 @@ export interface AdditionalOperationInformation {
 	name: string;
 	getType: () => any;
 	resolver: Resolver;
+	directives?: Record<string, unknown>;
 	args?: ArgsMetadata;
 	description?: string;
 }
@@ -568,14 +569,11 @@ class Metadata {
 		return undefined;
 	}
 
-	public addQuery(args: {
-		name: string;
-		getType: GetTypeFunction;
-		resolver: Resolver;
-		args?: ArgsMetadata;
-		description?: string;
-		intentionalOverride?: boolean;
-	}) {
+	public addQuery(
+		args: AdditionalOperationInformation & {
+			intentionalOverride?: boolean;
+		}
+	) {
 		if (this.additionalQueriesLookup.has(args.name) && !args.intentionalOverride) {
 			throw new Error(
 				`Query with name ${args.name} already exists and this is not an intentional override`
@@ -585,14 +583,11 @@ class Metadata {
 		this.additionalQueriesLookup.set(args.name, args);
 	}
 
-	public addMutation(args: {
-		name: string;
-		getType: GetTypeFunction;
-		resolver: Resolver;
-		args?: ArgsMetadata;
-		description?: string;
-		intentionalOverride?: boolean;
-	}) {
+	public addMutation(
+		args: AdditionalOperationInformation & {
+			intentionalOverride?: boolean;
+		}
+	) {
 		if (this.additionalMutationsLookup.has(args.name) && !args.intentionalOverride) {
 			throw new Error(
 				`Mutation with name ${args.name} already exists and this is not an intentional override`

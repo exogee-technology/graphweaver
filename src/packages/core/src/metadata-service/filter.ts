@@ -7,8 +7,11 @@ graphweaverMetadata.collectEnumInformation({
 	target: AdminUIFilterType,
 });
 
-@Entity('AdminUiFilterMetadata', { apiOptions: { excludeFromBuiltInOperations: true } })
+@Entity('AdminUiFilterMetadata', {
+	apiOptions: { excludeFromBuiltInOperations: true },
+	directives: { inaccessible: true },
+})
 export class AdminUiFilterMetadata {
-	@Field(() => AdminUIFilterType)
+	@Field(() => AdminUIFilterType, { directives: { inaccessible: true } })
 	type!: AdminUIFilterType;
 }
