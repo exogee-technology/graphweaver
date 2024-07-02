@@ -6,6 +6,9 @@ const GraphQLNanoTimestampConfig = {
 	...GraphQLBigInt,
 	name: 'NanoTimestamp',
 	description: 'A timestamp in nanoseconds',
+	extensions: {
+		type: 'integer',
+	},
 };
 
 export const GraphQLNanoTimestamp = new GraphQLScalarType(GraphQLNanoTimestampConfig);

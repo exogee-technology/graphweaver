@@ -6,6 +6,9 @@ const GraphQLNanoDurationConfig = {
 	...GraphQLBigInt,
 	name: 'NanoDuration',
 	description: 'A duration in nanoseconds',
+	extensions: {
+		type: 'integer',
+	},
 };
 
 export const GraphQLNanoDuration = new GraphQLScalarType(GraphQLNanoDurationConfig);

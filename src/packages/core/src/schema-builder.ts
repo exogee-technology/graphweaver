@@ -73,8 +73,7 @@ const scalarShouldGetMathOperations = (
 	scalar.name === 'ID' ||
 	scalar.name === 'String' ||
 	scalar.name === 'ISOString' ||
-	(scalar instanceof GraphQLScalarType &&
-		(scalar?.extensions?.jsonSchema as Record<string, unknown>)?.type === 'integer');
+	(scalar instanceof GraphQLScalarType && scalar?.extensions?.type === 'integer');
 
 const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 	let enumType = enumTypes.get(enumMetadata.name);
