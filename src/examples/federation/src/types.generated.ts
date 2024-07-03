@@ -138,6 +138,12 @@ export type DeprecatedProductsPaginationInput = {
   orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
 
+export type HiddenEntity = {
+  __typename?: 'HiddenEntity';
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type InventoriesOrderByInput = {
   id?: InputMaybe<Sort>;
 };
@@ -159,6 +165,7 @@ export type Product = {
   __typename?: 'Product';
   createdBy?: Maybe<User>;
   dimensions?: Maybe<ProductDimension>;
+  hiddenEntities?: Maybe<Array<HiddenEntity>>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   package?: Maybe<Scalars['String']['output']>;
