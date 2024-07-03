@@ -126,3 +126,6 @@ token.json
 
 # Federation Tests
 supergraph.config.js
+
+# Turbo Repo Caches
+**/.turbo/cache
