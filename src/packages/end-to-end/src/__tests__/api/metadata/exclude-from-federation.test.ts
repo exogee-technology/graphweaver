@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, Entity, BaseDataProvider, RelationshipField } from '@exogee/graphweaver';
-import { Kind, ObjectTypeDefinitionNode, isObjectType, parse } from 'graphql';
+import { Kind, ObjectTypeDefinitionNode, parse } from 'graphql';
 
 // ESLint, I know it looks like the entities in this file aren't used, but they actually are.
 /* eslint-disable @typescript-eslint/no-unused-vars */
