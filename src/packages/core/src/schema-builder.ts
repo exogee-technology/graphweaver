@@ -62,23 +62,39 @@ const allOperations = new Set([
 	...mathOperations,
 ]);
 
-const entityTypes = new Map<string, GraphQLObjectType>();
-const inputTypes = new Map<string, GraphQLInputObjectType>();
-const enumTypes = new Map<string, GraphQLEnumType>();
-const unionTypes = new Map<string, GraphQLUnionType>();
-const filterTypes = new Map<string, GraphQLInputObjectType>();
-const insertTypes = new Map<string, GraphQLInputObjectType>();
-const updateTypes = new Map<string, GraphQLInputObjectType>();
-const createOrUpdateTypes = new Map<string, GraphQLInputObjectType>();
-const paginationTypes = new Map<string, GraphQLInputObjectType>();
+class TypeCache {
+	public readonly entityTypes = new Map<string, GraphQLObjectType>();
+	public readonly inputTypes = new Map<string, GraphQLInputObjectType>();
+	public readonly enumTypes = new Map<string, GraphQLEnumType>();
+	public readonly unionTypes = new Map<string, GraphQLUnionType>();
+	public readonly filterTypes = new Map<string, GraphQLInputObjectType>();
+	public readonly insertTypes = new Map<string, GraphQLInputObjectType>();
+	public readonly updateTypes = new Map<string, GraphQLInputObjectType>();
+	public readonly createOrUpdateTypes = new Map<string, GraphQLInputObjectType>();
+	public readonly paginationTypes = new Map<string, GraphQLInputObjectType>();
+}
+type EntityFilter = (entity: EntityMetadata<any, any>) => boolean;
+const typeCaches = new Map<EntityFilter | undefined, TypeCache>();
+
+const typeCacheForEntityFilter = (entityFilter: EntityFilter | undefined) => {
+	if (!typeCaches.has(entityFilter)) {
+		typeCaches.set(entityFilter, new TypeCache());
+	}
+
+	return typeCaches.get(entityFilter)!;
+};
 
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
 const scalarShouldGetMathOperations = (
 	scalar: GraphQLScalarType | NumberConstructor | DateConstructor | BigIntConstructor
 ) => scalar === Number || scalar === Date || scalar === BigInt || scalar.name === 'ISOString';
 
-const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
-	let enumType = enumTypes.get(enumMetadata.name);
+const graphQLTypeForEnum = (
+	enumMetadata: EnumMetadata<any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let enumType = typeCache.enumTypes.get(enumMetadata.name);
 
 	if (!enumType) {
 		const values: GraphQLEnumValueConfigMap = {};
@@ -91,14 +107,18 @@ const graphQLTypeForEnum = (enumMetadata: EnumMetadata<any>) => {
 			values,
 		});
 
-		enumTypes.set(enumMetadata.name, enumType);
+		typeCache.enumTypes.set(enumMetadata.name, enumType);
 	}
 
 	return enumType;
 };
 
-const graphQLTypeForUnion = (unionMetadata: UnionMetadata) => {
-	let unionType = unionTypes.get(unionMetadata.name);
+const graphQLTypeForUnion = (
+	unionMetadata: UnionMetadata,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let unionType = typeCache.unionTypes.get(unionMetadata.name);
 
 	if (!unionType) {
 		const entitiesInUnion = unionMetadata.getTypes();
@@ -115,7 +135,7 @@ const graphQLTypeForUnion = (unionMetadata: UnionMetadata) => {
 
 		// Map types to GraphQL types
 		const graphQLTypes = entitiesInUnion.map((type) => {
-			const entityType = entityTypes.get(type.name);
+			const entityType = typeCache.entityTypes.get(type.name);
 			if (!entityType) {
 				throw new Error(`Union ${unionMetadata.name} has non-entity types.`);
 			}
@@ -128,7 +148,7 @@ const graphQLTypeForUnion = (unionMetadata: UnionMetadata) => {
 			types: graphQLTypes,
 		});
 
-		unionTypes.set(unionMetadata.name, unionType);
+		typeCache.unionTypes.set(unionMetadata.name, unionType);
 	}
 
 	return new GraphQLNonNull(new GraphQLList(unionType));
@@ -211,11 +231,15 @@ const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
 	}
 };
 
-const graphQLTypeForScalarEnumOrUnion = (metadata: unknown, type: TypeValue) => {
+const graphQLTypeForScalarEnumOrUnion = (
+	metadata: unknown,
+	type: TypeValue,
+	entityFilter: EntityFilter | undefined
+) => {
 	if (isEnumMetadata(metadata)) {
-		return graphQLTypeForEnum(metadata);
+		return graphQLTypeForEnum(metadata, entityFilter);
 	} else if (isUnionMetadata(metadata)) {
-		return graphQLTypeForUnion(metadata);
+		return graphQLTypeForUnion(metadata, entityFilter);
 	}
 
 	return graphQLScalarForTypeScriptType(type);
@@ -229,8 +253,12 @@ type GraphQLInputTypes =
 	| GraphQLList<any>
 	| GraphQLNonNull<any>;
 
-const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
-	let inputType = inputTypes.get(input.name);
+const graphQLTypeForInput = (
+	input: InputTypeMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let inputType = typeCache.inputTypes.get(input.name);
 
 	if (!inputType) {
 		inputType = new GraphQLInputObjectType({
@@ -245,9 +273,9 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 					let graphQLType: GraphQLInputTypes | undefined = undefined;
 
 					if (isInputMetadata(metadata)) {
-						graphQLType = graphQLTypeForInput(metadata);
+						graphQLType = graphQLTypeForInput(metadata, entityFilter);
 					} else {
-						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
+						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
@@ -268,15 +296,19 @@ const graphQLTypeForInput = (input: InputTypeMetadata<any, any>) => {
 		});
 	}
 
-	inputTypes.set(input.name, inputType);
+	typeCache.inputTypes.set(input.name, inputType);
 
 	return inputType;
 };
 
 // This is exported because deep within the create or update logic we need to stub a GraphQLResolveInfo object.
 // It's not meant to be used as a public API, please use the SchemaBuilder export unless you have a good reason not to.
-export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
-	let entityType = entityTypes.get(entity.name);
+export const graphQLTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let entityType = typeCache.entityTypes.get(entity.name);
 
 	if (!entityType) {
 		entityType = new GraphQLObjectType({
@@ -296,20 +328,23 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					const args: ObjMap<GraphQLArgumentConfig> = {};
 
 					if (isEntityMetadata(metadata)) {
-						graphQLType = graphQLTypeForEntity(metadata);
+						// If the entity filter says no, we don't need to build out this field.
+						if (entityFilter && !entityFilter(metadata)) continue;
+
+						graphQLType = graphQLTypeForEntity(metadata, entityFilter);
 
 						if (metadata.provider) {
 							resolve = resolvers.baseResolver(resolvers.listRelationshipField);
 
 							if (metadata.provider.backendProviderConfig?.filter) {
 								args['filter'] = {
-									type: filterTypeForEntity(metadata),
+									type: filterTypeForEntity(metadata, entityFilter),
 								};
 							}
 						}
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.
-						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
+						graphQLType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
 					}
 
 					// If it's an array, wrap it in a list and make it not nullable within the list.
@@ -351,7 +386,7 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 						fields[`${field.name}_aggregate`] = {
 							type: aggregationResult,
 							args: {
-								filter: { type: filterTypeForEntity(metadata) },
+								filter: { type: filterTypeForEntity(metadata, entityFilter) },
 							},
 
 							// TODO: Why is any required here?
@@ -366,14 +401,18 @@ export const graphQLTypeForEntity = (entity: EntityMetadata<any, any>) => {
 			},
 		});
 
-		entityTypes.set(entity.name, entityType);
+		typeCache.entityTypes.set(entity.name, entityType);
 	}
 
 	return entityType;
 };
 
-const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
-	let filterType = filterTypes.get(entity.name);
+const filterTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let filterType = typeCache.filterTypes.get(entity.name);
 	if (!filterType) {
 		filterType = new GraphQLInputObjectType({
 			name: `${entity.plural}ListFilter`,
@@ -386,6 +425,9 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
 
 					if (isEntityMetadata(metadata)) {
+						// If the entity filter says no, we don't need to build out this field.
+						if (entityFilter && !entityFilter(metadata)) continue;
+
 						if (
 							// These conditions are separate from the `if` above because we don't want to
 							// go down the else if chain for entities regardless of whether these options
@@ -394,7 +436,7 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 							!metadata.apiOptions?.excludeFromFiltering
 						) {
 							fields[field.name] = {
-								type: filterTypeForEntity(metadata),
+								type: filterTypeForEntity(metadata, entityFilter),
 							};
 						}
 					} else if (isScalarType(fieldType)) {
@@ -437,17 +479,21 @@ const filterTypeForEntity = (entity: EntityMetadata<any, any>) => {
 			},
 		});
 
-		filterTypes.set(entity.name, filterType);
+		typeCache.filterTypes.set(entity.name, filterType);
 	}
 
 	return filterType;
 };
 
-const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
-	let paginationType = paginationTypes.get(entity.name);
+const paginationTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let paginationType = typeCache.paginationTypes.get(entity.name);
 	const sortEnumMetadata = graphweaverMetadata.getEnumByName('Sort');
 	if (!sortEnumMetadata) throw new Error('Could not locate Sort enum, which should be built in.');
-	const sortEnum = graphQLTypeForEnum(sortEnumMetadata);
+	const sortEnum = graphQLTypeForEnum(sortEnumMetadata, entityFilter);
 
 	if (!paginationType) {
 		paginationType = new GraphQLInputObjectType({
@@ -491,14 +537,19 @@ const paginationTypeForEntity = (entity: EntityMetadata<any, any>) => {
 			},
 		});
 
-		paginationTypes.set(entity.name, paginationType);
+		typeCache.paginationTypes.set(entity.name, paginationType);
 	}
 
 	return paginationType;
 };
 
 const generateGraphQLInputFieldsForEntity =
-	(entity: EntityMetadata<any, any>, input: 'insert' | 'update' | 'createOrUpdate') => () => {
+	(
+		entity: EntityMetadata<any, any>,
+		input: 'insert' | 'update' | 'createOrUpdate',
+		entityFilter: EntityFilter | undefined
+	) =>
+	() => {
 		const fields: ObjMap<GraphQLInputFieldConfig> = {};
 		for (const field of Object.values(entity.fields)) {
 			// If it's excluded from built-in write operations, skip it.
@@ -523,12 +574,15 @@ const generateGraphQLInputFieldsForEntity =
 			const { fieldType, metadata, isList } = getFieldTypeWithMetadata(field.getType);
 
 			if (isEntityMetadata(metadata)) {
+				// If the entity filter says no, we don't need to build out this field.
+				if (entityFilter && !entityFilter(metadata)) continue;
+
 				// This if is separate to stop us cascading down to the scalar branch for entities that
 				if (
 					!metadata.apiOptions?.excludeFromBuiltInOperations &&
 					!metadata.apiOptions?.excludeFromBuiltInWriteOperations
 				) {
-					let type: GraphQLInputType = createOrUpdateTypeForEntity(metadata);
+					let type: GraphQLInputType = createOrUpdateTypeForEntity(metadata, entityFilter);
 
 					if (isList) {
 						// If it's a many relationship we need to wrap in non-null and list.
@@ -539,7 +593,11 @@ const generateGraphQLInputFieldsForEntity =
 				}
 			} else {
 				fields[field.name] = {
-					type: graphQLTypeForScalarEnumOrUnion(metadata, fieldType) as GraphQLInputType,
+					type: graphQLTypeForScalarEnumOrUnion(
+						metadata,
+						fieldType,
+						entityFilter
+					) as GraphQLInputType,
 				};
 			}
 
@@ -557,55 +615,70 @@ const generateGraphQLInputFieldsForEntity =
 		return fields;
 	};
 
-const insertTypeForEntity = (entity: EntityMetadata<any, any>) => {
-	let insertType = insertTypes.get(entity.name);
+const insertTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let insertType = typeCache.insertTypes.get(entity.name);
 
 	if (!insertType) {
 		insertType = new GraphQLInputObjectType({
 			name: `${entity.name}InsertInput`,
 			description: `Data needed to create ${entity.plural}.`,
-			fields: generateGraphQLInputFieldsForEntity(entity, 'insert'),
+			fields: generateGraphQLInputFieldsForEntity(entity, 'insert', entityFilter),
 		});
 
-		insertTypes.set(entity.name, insertType);
+		typeCache.insertTypes.set(entity.name, insertType);
 	}
 
 	return insertType;
 };
 
-const createOrUpdateTypeForEntity = (entity: EntityMetadata<any, any>) => {
-	let createOrUpdateType = createOrUpdateTypes.get(entity.name);
+const createOrUpdateTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let createOrUpdateType = typeCache.createOrUpdateTypes.get(entity.name);
 
 	if (!createOrUpdateType) {
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
-			fields: generateGraphQLInputFieldsForEntity(entity, 'createOrUpdate'),
+			fields: generateGraphQLInputFieldsForEntity(entity, 'createOrUpdate', entityFilter),
 		});
 
-		createOrUpdateTypes.set(entity.name, createOrUpdateType);
+		typeCache.createOrUpdateTypes.set(entity.name, createOrUpdateType);
 	}
 
 	return createOrUpdateType;
 };
 
-const updateTypeForEntity = (entity: EntityMetadata<any, any>) => {
-	let updateType = updateTypes.get(entity.name);
+const updateTypeForEntity = (
+	entity: EntityMetadata<any, any>,
+	entityFilter: EntityFilter | undefined
+) => {
+	const typeCache = typeCacheForEntityFilter(entityFilter);
+	let updateType = typeCache.updateTypes.get(entity.name);
 
 	if (!updateType) {
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
-			fields: generateGraphQLInputFieldsForEntity(entity, 'update'),
+			fields: generateGraphQLInputFieldsForEntity(entity, 'update', entityFilter),
 		});
 
-		updateTypes.set(entity.name, updateType);
+		typeCache.updateTypes.set(entity.name, updateType);
 	}
 
 	return updateType;
 };
 
-type SchemaBuildOptions = { schemaDirectives?: Record<string, unknown> };
+type SchemaBuildOptions = {
+	schemaDirectives?: Record<string, unknown>;
+	filterEntities?: (entity: EntityMetadata<any, any>) => boolean;
+};
 
 class SchemaBuilderImplementation {
 	public build(buildOptions?: SchemaBuildOptions) {
@@ -613,10 +686,10 @@ class SchemaBuilderImplementation {
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
 
-		const directives = Array.from(this.buildDirectives());
-		const types = Array.from(this.buildTypes());
-		const query = this.buildQueryType();
-		const mutation = this.buildMutationType();
+		const directives = Array.from(this.buildDirectives(buildOptions?.filterEntities));
+		const types = Array.from(this.buildTypes(buildOptions?.filterEntities));
+		const query = this.buildQueryType(buildOptions?.filterEntities);
+		const mutation = this.buildMutationType(buildOptions?.filterEntities);
 
 		logger.trace({ types, query, mutation, directives }, 'Built schema');
 
@@ -637,17 +710,19 @@ class SchemaBuilderImplementation {
 		return allOperations.has(filterOperation);
 	}
 
-	private *buildTypes() {
+	private *buildTypes(entityFilter: EntityFilter | undefined) {
 		for (const entity of graphweaverMetadata.entities()) {
+			if (entityFilter && !entityFilter(entity)) continue;
+
 			// The core entity object type
-			yield graphQLTypeForEntity(entity);
+			yield graphQLTypeForEntity(entity, entityFilter);
 
 			if (
 				!entity.apiOptions?.excludeFromBuiltInOperations &&
 				!entity.apiOptions?.excludeFromFiltering
 			) {
 				// The input type for filtering
-				yield filterTypeForEntity(entity);
+				yield filterTypeForEntity(entity, entityFilter);
 			}
 
 			if (
@@ -655,30 +730,30 @@ class SchemaBuilderImplementation {
 				!entity.apiOptions?.excludeFromBuiltInWriteOperations
 			) {
 				// The input type for inserting
-				yield insertTypeForEntity(entity);
+				yield insertTypeForEntity(entity, entityFilter);
 
 				// The input type for inserting
-				yield updateTypeForEntity(entity);
+				yield updateTypeForEntity(entity, entityFilter);
 
 				// The input type for creating or updating
-				yield createOrUpdateTypeForEntity(entity);
+				yield createOrUpdateTypeForEntity(entity, entityFilter);
 			}
 
 			// The input type for pagination and sorting
 			// This is only emitted if the entity has a provider, as it's only used for querying.
 			if (entity.provider) {
-				yield paginationTypeForEntity(entity);
+				yield paginationTypeForEntity(entity, entityFilter);
 			}
 		}
 
 		// Also emit all our input types.
 		for (const input of graphweaverMetadata.inputTypes()) {
-			yield graphQLTypeForInput(input);
+			yield graphQLTypeForInput(input, entityFilter);
 		}
 
 		// Also emit all our enums.
 		for (const enumType of graphweaverMetadata.enums()) {
-			yield graphQLTypeForEnum(enumType);
+			yield graphQLTypeForEnum(enumType, entityFilter);
 		}
 
 		// We have some singleton types to emit here too.
@@ -686,7 +761,10 @@ class SchemaBuilderImplementation {
 		yield deleteInput;
 	}
 
-	private graphQLTypeForArgs(args?: ArgsMetadata): GraphQLFieldConfigArgumentMap {
+	private graphQLTypeForArgs(
+		entityFilter: EntityFilter | undefined,
+		args?: ArgsMetadata
+	): GraphQLFieldConfigArgumentMap {
 		const map: GraphQLFieldConfigArgumentMap = {};
 		if (!args) return map;
 
@@ -697,9 +775,9 @@ class SchemaBuilderImplementation {
 
 			let inputType: GraphQLInputTypes;
 			if (isInputMetadata(metadata)) {
-				inputType = graphQLTypeForInput(metadata);
+				inputType = graphQLTypeForInput(metadata, entityFilter);
 			} else {
-				inputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
+				inputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType, entityFilter);
 			}
 
 			if (isArgMetadata(details) && !details.nullable) {
@@ -722,13 +800,15 @@ class SchemaBuilderImplementation {
 		return map;
 	}
 
-	private buildQueryType() {
+	private buildQueryType(entityFilter: EntityFilter | undefined) {
 		return new GraphQLObjectType({
 			name: 'Query',
 			fields: () => {
 				const fields: ThunkObjMap<GraphQLFieldConfig<any, any, any>> = {};
 
 				for (const entity of graphweaverMetadata.entities()) {
+					// If the entityFilter says no, skip it.
+					if (entityFilter && !entityFilter(entity)) continue;
 					// If it's excluded from built-in operations, skip it.
 					if (entity.apiOptions?.excludeFromBuiltInOperations) continue;
 					// If this entity does not have a data provider, skip it.
@@ -741,7 +821,7 @@ class SchemaBuilderImplementation {
 					}
 					fields[oneQueryName] = {
 						description: `Get a single ${entity.name}.`,
-						type: graphQLTypeForEntity(entity),
+						type: graphQLTypeForEntity(entity, entityFilter),
 						args: {
 							id: { type: new GraphQLNonNull(ID) },
 						},
@@ -755,10 +835,10 @@ class SchemaBuilderImplementation {
 					}
 					fields[listQueryName] = {
 						description: `Get multiple ${entity.plural}.`,
-						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						type: new GraphQLList(graphQLTypeForEntity(entity, entityFilter)),
 						args: {
-							filter: { type: filterTypeForEntity(entity) },
-							pagination: { type: paginationTypeForEntity(entity) },
+							filter: { type: filterTypeForEntity(entity, entityFilter) },
+							pagination: { type: paginationTypeForEntity(entity, entityFilter) },
 						},
 						resolve: resolvers.baseResolver(resolvers.list),
 					};
@@ -769,7 +849,7 @@ class SchemaBuilderImplementation {
 							description: `Get aggregated data for ${entity.plural}.`,
 							type: aggregationResult,
 							args: {
-								filter: { type: filterTypeForEntity(entity) },
+								filter: { type: filterTypeForEntity(entity, entityFilter) },
 							},
 							resolve: resolvers.baseResolver(resolvers.aggregate(entity)),
 						};
@@ -783,22 +863,30 @@ class SchemaBuilderImplementation {
 					}
 
 					const { fieldType, metadata } = getFieldTypeWithMetadata(customQuery.getType);
-					const customArgs = this.graphQLTypeForArgs(customQuery.args);
+					const customArgs = this.graphQLTypeForArgs(entityFilter, customQuery.args);
 
 					if (isEntityMetadata(metadata)) {
+						// If the entity filter says no, we will ignore their custom query because it references
+						// an entity that is filtered out of this schema.
+						if (entityFilter && !entityFilter(metadata)) continue;
+
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type: graphQLTypeForEntity(metadata),
+							type: graphQLTypeForEntity(metadata, entityFilter),
 							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
 							extensions: {
 								directives: customQuery.directives ?? {},
 							},
 						};
 					} else {
-						const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(metadata, fieldType);
+						const type: GraphQLOutputType = graphQLTypeForScalarEnumOrUnion(
+							metadata,
+							fieldType,
+							entityFilter
+						);
 
 						fields[customQuery.name] = {
 							...customQuery,
@@ -816,13 +904,16 @@ class SchemaBuilderImplementation {
 		});
 	}
 
-	private buildMutationType() {
+	private buildMutationType(entityFilter: EntityFilter | undefined) {
 		const mutation = new GraphQLObjectType({
 			name: 'Mutation',
 			fields: () => {
 				const fields: ThunkObjMap<GraphQLFieldConfig<any, any, any>> = {};
 
 				for (const entity of graphweaverMetadata.entities()) {
+					// If the entityFilter says no, skip it.
+					if (entityFilter && !entityFilter(entity)) continue;
+
 					// If it's excluded from built-in operations, skip it.
 					if (entity.apiOptions?.excludeFromBuiltInOperations) continue;
 					if (entity.apiOptions?.excludeFromBuiltInWriteOperations) continue;
@@ -837,9 +928,9 @@ class SchemaBuilderImplementation {
 					}
 					fields[createOneName] = {
 						description: `Create a single ${entity.name}.`,
-						type: graphQLTypeForEntity(entity),
+						type: graphQLTypeForEntity(entity, entityFilter),
 						args: {
-							input: { type: new GraphQLNonNull(insertTypeForEntity(entity)) },
+							input: { type: new GraphQLNonNull(insertTypeForEntity(entity, entityFilter)) },
 						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
@@ -851,11 +942,11 @@ class SchemaBuilderImplementation {
 					}
 					fields[createManyName] = {
 						description: `Create many ${entity.plural}.`,
-						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						type: new GraphQLList(graphQLTypeForEntity(entity, entityFilter)),
 						args: {
 							input: {
 								type: new GraphQLNonNull(
-									new GraphQLList(new GraphQLNonNull(insertTypeForEntity(entity)))
+									new GraphQLList(new GraphQLNonNull(insertTypeForEntity(entity, entityFilter)))
 								),
 							},
 						},
@@ -869,9 +960,9 @@ class SchemaBuilderImplementation {
 					}
 					fields[updateOneName] = {
 						description: `Update a single ${entity.name}.`,
-						type: graphQLTypeForEntity(entity),
+						type: graphQLTypeForEntity(entity, entityFilter),
 						args: {
-							input: { type: new GraphQLNonNull(updateTypeForEntity(entity)) },
+							input: { type: new GraphQLNonNull(updateTypeForEntity(entity, entityFilter)) },
 						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
@@ -883,11 +974,11 @@ class SchemaBuilderImplementation {
 					}
 					fields[updateManyName] = {
 						description: `Update many ${entity.plural}.`,
-						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						type: new GraphQLList(graphQLTypeForEntity(entity, entityFilter)),
 						args: {
 							input: {
 								type: new GraphQLNonNull(
-									new GraphQLList(new GraphQLNonNull(updateTypeForEntity(entity)))
+									new GraphQLList(new GraphQLNonNull(updateTypeForEntity(entity, entityFilter)))
 								),
 							},
 						},
@@ -901,11 +992,13 @@ class SchemaBuilderImplementation {
 					}
 					fields[createOrUpdateManyName] = {
 						description: `Create or update many ${entity.plural}.`,
-						type: new GraphQLList(graphQLTypeForEntity(entity)),
+						type: new GraphQLList(graphQLTypeForEntity(entity, entityFilter)),
 						args: {
 							input: {
 								type: new GraphQLNonNull(
-									new GraphQLList(new GraphQLNonNull(createOrUpdateTypeForEntity(entity)))
+									new GraphQLList(
+										new GraphQLNonNull(createOrUpdateTypeForEntity(entity, entityFilter))
+									)
 								),
 							},
 						},
@@ -937,7 +1030,7 @@ class SchemaBuilderImplementation {
 						description: `Delete many ${entity.plural} with a filter.`,
 						type: GraphQLBoolean,
 						args: {
-							filter: { type: new GraphQLNonNull(filterTypeForEntity(entity)) },
+							filter: { type: new GraphQLNonNull(filterTypeForEntity(entity, entityFilter)) },
 						},
 						resolve: resolvers.baseResolver(resolvers.deleteMany(entity)),
 					};
@@ -951,15 +1044,19 @@ class SchemaBuilderImplementation {
 
 					const type = customMutation.getType();
 					const metadata = graphweaverMetadata.metadataForType(type);
-					const customArgs = this.graphQLTypeForArgs(customMutation.args);
+					const customArgs = this.graphQLTypeForArgs(entityFilter, customMutation.args);
 
 					if (isEntityMetadata(metadata)) {
+						// If the entity filter says no, we will ignore their custom mutation because it references
+						// an entity that is filtered out of this schema.
+						if (entityFilter && !entityFilter(metadata)) continue;
+
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
-							type: graphQLTypeForEntity(metadata),
+							type: graphQLTypeForEntity(metadata, entityFilter),
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 							extensions: {
 								directives: customMutation.directives ?? {},
@@ -989,13 +1086,13 @@ class SchemaBuilderImplementation {
 		return mutation;
 	}
 
-	private *buildDirectives() {
+	private *buildDirectives(entityFilter: EntityFilter | undefined) {
 		for (const directive of graphweaverMetadata.directives()) {
 			const directiveType = new GraphQLDirective({
 				name: directive.name,
 				description: directive.description,
 				locations: directive.locations,
-				args: this.graphQLTypeForArgs(directive.args),
+				args: this.graphQLTypeForArgs(entityFilter, directive.args),
 				isRepeatable: directive.isRepeatable,
 			});
 

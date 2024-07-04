@@ -1,13 +1,12 @@
 import { Entity, Field } from '../decorators';
 
 @Entity('AdminUiEntityAttributeMetadata', {
-	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
 })
 export class AdminUiEntityAttributeMetadata {
-	@Field(() => Boolean, { nullable: true, directives: { inaccessible: true } })
+	@Field(() => Boolean, { nullable: true })
 	isReadOnly?: boolean;
 
-	@Field(() => Number, { nullable: true, directives: { inaccessible: true } })
+	@Field(() => Number, { nullable: true })
 	exportPageSize?: number;
 }

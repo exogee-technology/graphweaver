@@ -3,13 +3,12 @@ import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEnumMetadata } from './enum';
 
 @Entity('AdminUiMetadata', {
-	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
 })
 export class AdminUiMetadata {
-	@Field(() => [AdminUiEntityMetadata], { directives: { inaccessible: true } })
+	@Field(() => [AdminUiEntityMetadata])
 	public entities: AdminUiEntityMetadata[] = [];
 
-	@Field(() => [AdminUiEnumMetadata], { directives: { inaccessible: true } })
+	@Field(() => [AdminUiEnumMetadata])
 	public enums: AdminUiEnumMetadata[] = [];
 }
