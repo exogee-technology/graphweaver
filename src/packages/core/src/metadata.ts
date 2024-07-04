@@ -17,6 +17,11 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	primaryKeyField?: keyof G;
 
 	apiOptions?: {
+		// This means that the entity will not be returned in federation queries to the _service { sdl } query.
+		// In most cases it'd be better to use @inaccessible, but in some cases you truly do want a private entity
+		// that is usable in your Graphweaver instance but is not part of the schema we tell the federation router about.
+		excludeFromFederation?: boolean;
+
 		// This means that the entity should not be given the default list, find one, create, update, and delete
 		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
 		// enables excludeFromFiltering as well.

@@ -12,34 +12,33 @@ graphweaverMetadata.collectEnumInformation({
 });
 
 @Entity('AdminUiEntityMetadata', {
-	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
 })
 export class AdminUiEntityMetadata {
-	@Field(() => String, { directives: { inaccessible: true } })
+	@Field(() => String)
 	name!: string;
 
-	@Field(() => String, { directives: { inaccessible: true } })
+	@Field(() => String)
 	plural!: string;
 
-	@Field(() => String, { nullable: true, directives: { inaccessible: true } })
+	@Field(() => String, { nullable: true })
 	backendId?: string | null;
 
-	@Field(() => String, { nullable: true, directives: { inaccessible: true } })
+	@Field(() => String, { nullable: true })
 	summaryField?: string | null;
 
-	@Field(() => String, { directives: { inaccessible: true } })
+	@Field(() => String)
 	primaryKeyField!: string;
 
-	@Field(() => [AdminUiFieldMetadata], { directives: { inaccessible: true } })
+	@Field(() => [AdminUiFieldMetadata])
 	fields?: AdminUiFieldMetadata[] = [];
 
-	@Field(() => GraphQLJSON, { nullable: true, directives: { inaccessible: true } })
+	@Field(() => GraphQLJSON, { nullable: true })
 	defaultFilter?: Filter<unknown>;
 
-	@Field(() => AdminUiEntityAttributeMetadata, { directives: { inaccessible: true } })
+	@Field(() => AdminUiEntityAttributeMetadata)
 	attributes?: AdminUiEntityAttributeMetadata;
 
-	@Field(() => [AggregationType], { directives: { inaccessible: true } })
+	@Field(() => [AggregationType])
 	supportedAggregationTypes!: AggregationType[];
 }

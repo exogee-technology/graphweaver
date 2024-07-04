@@ -137,9 +137,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 				// It is recommended to ensure that federated subgraphs are not directly exposed to the public Internet. This feature is disabled by default for security reasons.
 				if (this.config.enableFederationTracing) plugins.push(ApolloServerPluginInlineTrace());
 
-				this.schema = buildFederationSchema({
-					schemaDirectives: this.config.schemaDirectives,
-				});
+				this.schema = buildFederationSchema({ schemaDirectives: this.config.schemaDirectives });
 			} else {
 				this.schema = SchemaBuilder.build({ schemaDirectives: this.config.schemaDirectives });
 			}
