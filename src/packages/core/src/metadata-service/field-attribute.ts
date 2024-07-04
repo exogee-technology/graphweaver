@@ -1,13 +1,12 @@
 import { Entity, Field } from '../decorators';
 
 @Entity('AdminUiFieldAttributeMetadata', {
-	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
 })
 export class AdminUiFieldAttributeMetadata {
-	@Field(() => Boolean, { directives: { inaccessible: true } })
+	@Field(() => Boolean)
 	isReadOnly!: boolean;
 
-	@Field(() => Boolean, { directives: { inaccessible: true } })
+	@Field(() => Boolean)
 	isRequired!: boolean;
 }
