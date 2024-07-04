@@ -27,7 +27,7 @@
 		"@exogee/graphweaver-scalars": "workspace:*"
 	},
 	"devDependencies": {
-		"esbuild": "0.21.5",
+		"esbuild": "0.23.0",
 		"glob": "10.4.2",
 		"typescript": "5.5.2"
 	},
