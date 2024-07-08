@@ -147,7 +147,7 @@ export const Table = <T extends object>({
 						))}
 					</thead>
 					<tbody>
-						{table.getRowModel().rows.map((row, i) => (
+						{table.getRowModel().rows.map((row) => (
 							<tr
 								key={row.id}
 								className={clsx(onRowClick && styles.clickable)}
