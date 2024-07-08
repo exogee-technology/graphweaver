@@ -1302,8 +1302,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@4.10.4)
       '@escape.tech/graphql-armor':
-        specifier: 3.0.0
-        version: 3.0.0(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0)
+        specifier: 3.0.1
+        version: 3.0.1(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -3664,8 +3664,8 @@ packages:
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
-  /@escape.tech/graphql-armor-max-aliases@2.4.0:
-    resolution: {integrity: sha512-d4V9EgtPRG9HIoPHuanFNLHj1ENB1YkZi9FbiBiH88x5VahCjVpMXDgKQGkG6RUTOODU4XKp0/ZgaOq0pX5oEA==}
+  /@escape.tech/graphql-armor-max-aliases@2.5.0:
+    resolution: {integrity: sha512-deaLZF3ASfJY9jUbBzoZW9IUHWqAVorpDR9Yez4mxk8iFltwCpgtJfVEb57T+R0RyiFrtjdUM5SQpNZJxhie7w==}
     engines: {node: '>=18.0.0'}
     dependencies:
       graphql: 16.9.0
@@ -3709,8 +3709,8 @@ packages:
     dependencies:
       graphql: 16.9.0
 
-  /@escape.tech/graphql-armor@3.0.0(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0):
-    resolution: {integrity: sha512-wI21VK7Hhfnw1Q6ulLE5/gi2/gNLmaM/xJKeVAlcZje70TUL8rhIi1POzOmj5kX53LnEdvHSY+24qJ/hcHN5MQ==}
+  /@escape.tech/graphql-armor@3.0.1(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0):
+    resolution: {integrity: sha512-NdlpdFojylmze1uXSzQ1gcOXy3mSAMIoftNe1wh5tBSyyeHxpiGb0AUpL7VlfOqe1UXilCX+3xr1vAHburrNDA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
@@ -3727,7 +3727,7 @@ packages:
       '@apollo/server': 4.10.4(graphql@16.9.0)
       '@escape.tech/graphql-armor-block-field-suggestions': 2.2.0
       '@escape.tech/graphql-armor-cost-limit': 2.2.0
-      '@escape.tech/graphql-armor-max-aliases': 2.4.0
+      '@escape.tech/graphql-armor-max-aliases': 2.5.0
       '@escape.tech/graphql-armor-max-depth': 2.3.0
       '@escape.tech/graphql-armor-max-directives': 2.2.0
       '@escape.tech/graphql-armor-max-tokens': 2.4.0
