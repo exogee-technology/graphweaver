@@ -11,13 +11,16 @@ export const isNumeric = (item: unknown): boolean => {
 
 export const getOrderByQuery = (entity: Entity, sort?: SortField[]) => ({
 	...(sort
-		? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
+		? sort.reduce(
+				(acc, { field, direction }) => {
+					acc[field] = direction;
+					return acc;
+				},
+				{} as Record<string, 'ASC' | 'DESC'>
+			)
 		: { [entity.primaryKeyField]: 'ASC' }),
 });
-		? sort.reduce((acc, { field, direction }) => {
-			acc[field] = direction;
-			return acc;
-		}, {})
+
 export const federationNameForEntity = (entityName: string, federationSubgraphName?: string) => {
 	if (!federationSubgraphName) return entityName;
 
