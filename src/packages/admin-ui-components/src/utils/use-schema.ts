@@ -8,7 +8,6 @@ import { PanelMode } from '../detail-panel';
 export interface Schema {
 	entities: Entity[];
 	enums: Enum[];
-	federationSubgraphName?: string;
 }
 
 export enum Sort {
@@ -103,7 +102,6 @@ export interface CustomFieldArgs<T = unknown> {
 	entity: T;
 	context: 'table' | 'detail-form';
 	panelMode: PanelMode;
-	federationSubgraphName?: string;
 }
 
 export interface CustomField<T = unknown> extends EntityField {
@@ -180,7 +178,6 @@ export const useSchema = () => {
 		error,
 		entities: Object.keys(entityMap),
 		backends: Object.keys(dataSourceMap),
-		federationSubgraphName: data?.result?.federationSubgraphName,
 		entityByName: (entityName: string) => entityMap[entityName],
 		entityByType: (entityType: string) => {
 			const entityName = entityType.replaceAll(/[^a-zA-Z\d]/g, '');

@@ -86,16 +86,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
 					const isRequired = !field.nullable;
 
-					let relatedTypeName = typeName;
-					if (relatedObject?.type === 'entity') {
-						relatedTypeName = graphweaverMetadata.federationNameForEntity(relatedObject);
-					} else if (relatedObject) {
-						relatedTypeName = relatedObject.name;
-					}
-
 					const fieldObject: AdminUiFieldMetadata = {
 						name: field.name,
-						type: relatedTypeName,
+						type: typeName,
 						isArray: isList,
 						attributes: {
 							isReadOnly,
@@ -170,7 +163,6 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 		return {
 			entities,
 			enums,
-			federationSubgraphName: graphweaverMetadata.federationSubgraphName,
 		};
 	};
 };

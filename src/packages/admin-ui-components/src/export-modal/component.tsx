@@ -32,7 +32,7 @@ export const ExportModal = <TData extends object>({
 	filters?: Filter;
 }) => {
 	const { selectedEntity } = useSelectedEntity();
-	const { entityByName, federationSubgraphName } = useSchema();
+	const { entityByName } = useSchema();
 	const [displayPageNumber, setDisplayPageNumber] = useState(1);
 	const abortRef = useRef(false);
 
@@ -53,7 +53,7 @@ export const ExportModal = <TData extends object>({
 				const primaryKeyField = selectedEntity.primaryKeyField;
 
 				const { data } = await apolloClient.query({
-					query: listEntityForExport(selectedEntity, entityByName, federationSubgraphName),
+					query: listEntityForExport(selectedEntity, entityByName),
 					variables: {
 						pagination: {
 							offset: pageNumber * pageSize,
