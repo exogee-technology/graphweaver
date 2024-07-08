@@ -39,7 +39,7 @@ const runChildCreateOrUpdate = <G = unknown>(
 	data: Partial<G> | Partial<G>[],
 	context: BaseContext
 ): Promise<G | G[]> => {
-	const graphQLType = graphQLTypeForEntity(entityMetadata);
+	const graphQLType = graphQLTypeForEntity(entityMetadata, undefined);
 
 	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
 	// result type. The only thing we read in it is the return type, so we'll just stub that.

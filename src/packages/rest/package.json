@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"description": "RESTful backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -35,11 +35,11 @@
 		"@types/lodash": "4.17.6",
 		"@types/luxon": "3.4.2",
 		"@types/node": "20.14.9",
-		"esbuild": "0.21.5",
+		"esbuild": "0.23.0",
 		"glob": "10.4.2",
 		"prettier": "3.3.2",
 		"ts-node": "10.9.2",
-		"typescript": "5.5.2"
+		"typescript": "5.5.3"
 	},
 	"keywords": [
 		"graphql",

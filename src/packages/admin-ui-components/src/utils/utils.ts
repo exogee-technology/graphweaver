@@ -28,3 +28,9 @@ export const getOrderByQuery = ({
 				? { [primaryKeyField]: 'ASC' }
 				: {}),
 });
+
+export const federationNameForEntity = (entityName: string, federationSubgraphName?: string) => {
+	if (!federationSubgraphName) return entityName;
+
+	return `${entityName}From${federationSubgraphName.charAt(0).toUpperCase() + federationSubgraphName.slice(1)}Subgraph`;
+};

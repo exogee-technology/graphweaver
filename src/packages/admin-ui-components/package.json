@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -31,7 +31,7 @@
 		"@tanstack/react-table": "8.17.3",
 		"clsx": "2.1.1",
 		"downshift": "9.0.6",
-		"graphiql": "3.3.1",
+		"graphiql": "3.3.2",
 		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.4.4",
@@ -45,23 +45,22 @@
 		"graphql": "16.9.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.24.0"
+		"react-router-dom": "6.24.1"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.4.2",
 		"@types/papaparse": "5.3.14",
 		"@types/react": "18.3.3",
-		"esbuild": "0.21.5",
+		"esbuild": "0.23.0",
 		"esbuild-plugin-copy": "2.1.1",
-		"esbuild-plugin-svgr": "2.1.0",
 		"formik": "2.4.6",
 		"glob": "10.4.2",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.24.0",
-		"typescript": "5.5.2",
-		"vite": "5.3.2",
+		"react-router-dom": "6.24.1",
+		"typescript": "5.5.3",
+		"vite": "5.3.3",
 		"vite-plugin-svgr": "4.2.0"
 	},
 	"keywords": [

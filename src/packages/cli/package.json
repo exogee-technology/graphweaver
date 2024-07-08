@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "MIT",
 	"scripts": {
@@ -28,8 +28,8 @@
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"chokidar": "3.6.0",
-		"esbuild": "0.21.5",
-		"inquirer": "9.3.1",
+		"esbuild": "0.23.0",
+		"inquirer": "9.3.4",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.6.2",

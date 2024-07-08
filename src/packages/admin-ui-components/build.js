@@ -1,5 +1,4 @@
 import esbuild from 'esbuild';
-import svgrPlugin from 'esbuild-plugin-svgr';
 import { copy } from 'esbuild-plugin-copy';
 
 (async () => {
@@ -16,7 +15,6 @@ import { copy } from 'esbuild-plugin-copy';
 			'.module.css': 'css',
 		},
 		plugins: [
-			svgrPlugin({ exportType: 'named' }),
 			copy({
 				assets: [
 					{

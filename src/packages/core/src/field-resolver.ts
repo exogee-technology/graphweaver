@@ -25,7 +25,7 @@ export const fieldResolver = async (
 
 		const parent = info.parentType.name;
 		const key = info.fieldName;
-		const metadata = graphweaverMetadata.getEntityByName(parent);
+		const metadata = (info.parentType.extensions.graphweaverSchemaInfo as any)?.sourceEntity;
 		if (!metadata) throw new Error(`Could not locate metadata for the '${parent}' entity`);
 
 		const relationship = metadata.fields[key];

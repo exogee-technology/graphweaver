@@ -60,16 +60,19 @@ const _getOne = async <G>(
 		throw new Error('Graphweaver getOne resolver can only be used to return single objects.');
 	}
 
-	const { name } = info.returnType;
-	const entity = graphweaverMetadata.getEntityByName(name);
-	trace?.span.updateName(`Resolver - GetOne ${name}`);
+	const entity = (info.returnType.extensions.graphweaverSchemaInfo as any)
+		?.sourceEntity as EntityMetadata<any, any>;
 
 	if (!entity) {
-		throw new Error(`Entity ${name} not found in metadata.`);
+		throw new Error(
+			`GraphQL type ${info.returnType} could not be mapped back to a source entity via graphweaverSchemaInfo extension.`
+		);
 	}
 
+	trace?.span.updateName(`Resolver - GetOne ${entity.name}`);
+
 	if (!entity.provider) {
-		throw new Error(`Entity ${name} does not have a provider, cannot resolve.`);
+		throw new Error(`Entity ${entity.name} does not have a provider, cannot resolve.`);
 	}
 
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
@@ -119,16 +122,21 @@ const _list = async <G, D>(
 		throw new Error('Graphweaver list resolver can only be used to return lists of objects.');
 	}
 
-	const { name } = info.returnType.ofType;
-	const entity = graphweaverMetadata.getEntityByName<any, any>(name);
-	trace?.span.updateName(`Resolver - List ${name}`);
+	const entity = (info.returnType.ofType.extensions.graphweaverSchemaInfo as any)
+		?.sourceEntity as EntityMetadata<any, any>;
 
 	if (!entity) {
-		throw new Error(`Entity ${name} not found in metadata.`);
+		throw new Error(
+			`GraphQL type ${info.returnType.ofType} could not be mapped back to a source entity via graphweaverSchemaInfo extension.`
+		);
 	}
 
+	trace?.span.updateName(`Resolver - List ${entity.name}`);
+
 	if (!entity.provider) {
-		throw new Error(`Entity ${name} does not have a provider, cannot resolve list operation.`);
+		throw new Error(
+			`Entity ${entity.name} does not have a provider, cannot resolve list operation.`
+		);
 	}
 
 	const hookManager = hookManagerMap.get(entity.name);
@@ -176,32 +184,36 @@ const _list = async <G, D>(
 	return result;
 };
 
-const _createOrUpdate = async <G, D>(
+const _createOrUpdate = async <G>(
 	{ args: { input }, context, info, fields }: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>,
 	trace?: TraceOptions
 ) => {
 	logger.trace({ input, context, info }, 'Create or Update resolver called.');
 
-	let name;
+	let graphQLType;
 
 	if (isObjectType(info.returnType)) {
-		name = info.returnType.name;
+		graphQLType = info.returnType;
 	} else if (isListType(info.returnType) && isObjectType(info.returnType.ofType)) {
-		name = info.returnType.ofType.name;
+		graphQLType = info.returnType.ofType;
 	} else {
 		throw new Error('Could not determine entity name from return type.');
 	}
 
-	trace?.span.updateName(`Resolver - CreateOrUpdate ${name}`);
-	const entity = graphweaverMetadata.getEntityByName<G, D>(name);
+	const entity = (graphQLType.extensions.graphweaverSchemaInfo as any)
+		?.sourceEntity as EntityMetadata<any, any>;
 
 	if (!entity) {
-		throw new Error(`Entity ${name} not found in metadata.`);
+		throw new Error(
+			`GraphQL type ${graphQLType} could not be mapped back to a source entity via graphweaverSchemaInfo extension.`
+		);
 	}
+
+	trace?.span.updateName(`Resolver - CreateOrUpdate ${entity.name}`);
 
 	if (!entity.provider) {
 		throw new Error(
-			`Entity ${name} does not have a provider, cannot resolve create or update operation.`
+			`Entity ${entity.name} does not have a provider, cannot resolve create or update operation.`
 		);
 	}
 
@@ -290,149 +302,190 @@ const _createOrUpdate = async <G, D>(
 	});
 };
 
-// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
-export const deleteOne = (entity: EntityMetadata<any, any>) =>
-	trace(
-		async <G extends { name: string }>(
-			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-			trace?: TraceOptions
-		) => {
-			trace?.span.updateName(`Resolver - DeleteOne ${entity.name}`);
-			if (!entity.provider) {
-				throw new Error(
-					`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
-				);
-			}
+const _deleteOne = async <G extends { name: string }>(
+	{ args: { filter }, info, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
+	trace?: TraceOptions
+) => {
+	const field = info.schema.getMutationType()?.getFields()[info.fieldName];
+	if (!field) {
+		throw new Error(`Could not find field ${info.fieldName} in mutation type.`);
+	}
 
-			const hookManager = hookManagerMap.get(entity.name);
-			const params: DeleteHookParams<G> = {
-				args: { filter },
-				context,
-				fields,
-				transactional: false,
-			};
+	const entity = (field.extensions.graphweaverSchemaInfo as any).sourceEntity as EntityMetadata<
+		any,
+		any
+	>;
 
-			const hookParams = hookManager
-				? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
-				: params;
+	if (!entity) {
+		throw new Error(
+			`GraphQL mutation field ${info.fieldName} could not be mapped back to a source entity via graphweaverSchemaInfo extension.`
+		);
+	}
 
-			if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
+	trace?.span.updateName(`Resolver - DeleteOne ${entity.name}`);
 
-			const success = await entity.provider.deleteOne(hookParams.args.filter);
+	if (!entity.provider) {
+		throw new Error(
+			`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
+		);
+	}
 
-			hookManager &&
-				(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
-					...hookParams,
-					deleted: success,
-				}));
-
-			return success;
-		}
-	);
-
-export const deleteMany = (entity: EntityMetadata<any, any>) =>
-	trace(
-		async <G>(
-			{ args: { filter }, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-			trace?: TraceOptions
-		) => {
-			trace?.span.updateName(`Resolver - DeleteMany ${entity.name}`);
-			if (!entity.provider) {
-				throw new Error(
-					`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
-				);
-			}
-			return withTransaction(entity.provider, async () => {
-				if (!entity.provider?.deleteMany)
-					throw new Error('Provider has not implemented DeleteMany.');
-
-				const hookManager = hookManagerMap.get(entity.name);
-				const params: DeleteManyHookParams<G> = {
-					args: { filter },
-					context,
-					fields,
-					transactional: !!entity.provider.withTransaction,
-				};
-
-				const hookParams = hookManager
-					? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
-					: params;
-
-				if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
-
-				const success = await entity.provider.deleteMany(hookParams.args?.filter);
-
-				hookManager &&
-					(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
-						...hookParams,
-						deleted: success,
-					}));
-
-				return success;
-			});
-		}
-	);
-
-// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
-export const aggregate =
-	(entity: EntityMetadata<any, any>) =>
-	async <G extends { name: string }>({
+	const hookManager = hookManagerMap.get(entity.name);
+	const params: DeleteHookParams<G> = {
 		args: { filter },
 		context,
 		fields,
-	}: ResolverOptions<{ filter: Filter<G> }>) => {
-		if (!entity.provider) {
-			throw new Error(
-				`Entity ${entity.name} does not have a provider, cannot resolve aggregate operation.`
-			);
-		}
+		transactional: false,
+	};
 
-		if (!entity.provider.aggregate) {
-			throw new Error(
-				'Provider has not implemented aggregate, cannot resolve aggregate operation.'
-			);
-		}
+	const hookParams = hookManager
+		? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
+		: params;
 
-		const requestedFields = fields.fieldsByTypeName.AggregationResult;
-		const requestedAggregations = new Set<AggregationType>();
-		if (requestedFields.count) requestedAggregations.add(AggregationType.COUNT);
+	if (!hookParams.args?.filter) throw new Error('No delete filter specified cannot continue.');
+
+	const success = await entity.provider.deleteOne(hookParams.args.filter);
+
+	hookManager &&
+		(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+			...hookParams,
+			deleted: success,
+		}));
+
+	return success;
+};
+
+const _deleteMany = async <G>(
+	{ args: { filter }, context, info, fields }: ResolverOptions<{ filter: Filter<G> }>,
+	trace?: TraceOptions
+) => {
+	const field = info.schema.getMutationType()?.getFields()[info.fieldName];
+	if (!field) {
+		throw new Error(`Could not find field ${info.fieldName} in mutation type.`);
+	}
+
+	const entity = (field.extensions.graphweaverSchemaInfo as any).sourceEntity as EntityMetadata<
+		any,
+		any
+	>;
+
+	if (!entity) {
+		throw new Error(
+			`GraphQL mutation field ${info.fieldName} could not be mapped back to a source entity via graphweaverSchemaInfo extension.`
+		);
+	}
+
+	trace?.span.updateName(`Resolver - DeleteMany ${entity.name}`);
+	if (!entity.provider) {
+		throw new Error(
+			`Entity ${entity.name} does not have a provider, cannot resolve delete operation.`
+		);
+	}
+	return withTransaction(entity.provider, async () => {
+		if (!entity.provider?.deleteMany) throw new Error('Provider has not implemented DeleteMany.');
 
 		const hookManager = hookManagerMap.get(entity.name);
-		const params: ReadHookParams<G> = {
+		const params: DeleteManyHookParams<G> = {
 			args: { filter },
 			context,
 			fields,
 			transactional: !!entity.provider.withTransaction,
 		};
+
 		const hookParams = hookManager
-			? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+			? await hookManager.runHooks(HookRegister.BEFORE_DELETE, params)
 			: params;
 
-		const transformedFilter =
-			hookParams.args?.filter &&
-			isTransformableGraphQLEntityClass(entity.target) &&
-			entity.target.toBackendEntityFilter
-				? entity.target.toBackendEntityFilter(hookParams.args?.filter)
-				: (hookParams.args?.filter as Filter<any> | undefined);
+		if (!hookParams.args?.filter) throw new Error('No delete ids specified cannot continue.');
 
-		const flattenedFilter = await QueryManager.flattenFilter<any>({
-			entityName: entity.name,
-			filter: transformedFilter,
-		});
+		const success = await entity.provider.deleteMany(hookParams.args?.filter);
 
-		const success = await entity.provider.aggregate(flattenedFilter, requestedAggregations);
-
-		// If a hook manager is installed, run the after read hooks for this operation.
-		// We don't actually have any entities to pass to the hook, so we'll just pass an empty array.
-		if (hookManager) {
-			await hookManager.runHooks(HookRegister.AFTER_READ, {
+		hookManager &&
+			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 				...hookParams,
-				entities: [],
-			});
-		}
+				deleted: success,
+			}));
 
 		return success;
+	});
+};
+
+// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
+const _aggregate = async <G extends { name: string }>(
+	{ args: { filter }, context, info, fields }: ResolverOptions<{ filter: Filter<G> }>,
+	trace?: TraceOptions
+) => {
+	const field = info.schema.getQueryType()?.getFields()[info.fieldName];
+	if (!field) {
+		throw new Error(`Could not find field ${info.fieldName} in mutation type.`);
+	}
+
+	const entity = (field.extensions.graphweaverSchemaInfo as any).sourceEntity as EntityMetadata<
+		any,
+		any
+	>;
+
+	if (!entity) {
+		throw new Error(
+			`GraphQL mutation field ${info.fieldName} could not be mapped back to a source entity via graphweaverSchemaInfo extension.`
+		);
+	}
+
+	if (!entity.provider) {
+		throw new Error(
+			`Entity ${entity.name} does not have a provider, cannot resolve aggregate operation.`
+		);
+	}
+
+	if (!entity.provider.aggregate) {
+		throw new Error('Provider has not implemented aggregate, cannot resolve aggregate operation.');
+	}
+
+	trace?.span.updateName(`Resolver - Aggregate ${entity.name}`);
+
+	const requestedFields =
+		fields.fieldsByTypeName[
+			graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')
+		];
+	const requestedAggregations = new Set<AggregationType>();
+	if (requestedFields.count) requestedAggregations.add(AggregationType.COUNT);
+
+	const hookManager = hookManagerMap.get(entity.name);
+	const params: ReadHookParams<G> = {
+		args: { filter },
+		context,
+		fields,
+		transactional: !!entity.provider.withTransaction,
 	};
+	const hookParams = hookManager
+		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+		: params;
+
+	const transformedFilter =
+		hookParams.args?.filter &&
+		isTransformableGraphQLEntityClass(entity.target) &&
+		entity.target.toBackendEntityFilter
+			? entity.target.toBackendEntityFilter(hookParams.args?.filter)
+			: (hookParams.args?.filter as Filter<any> | undefined);
+
+	const flattenedFilter = await QueryManager.flattenFilter<any>({
+		entityName: entity.name,
+		filter: transformedFilter,
+	});
+
+	const success = await entity.provider.aggregate(flattenedFilter, requestedAggregations);
+
+	// If a hook manager is installed, run the after read hooks for this operation.
+	// We don't actually have any entities to pass to the hook, so we'll just pass an empty array.
+	if (hookManager) {
+		await hookManager.runHooks(HookRegister.AFTER_READ, {
+			...hookParams,
+			entities: [],
+		});
+	}
+
+	return success;
+};
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
@@ -590,115 +643,127 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 };
 
 // This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
-export const aggregateRelationshipField =
-	(parentEntity: EntityMetadata<any, any>, field: FieldMetadata) =>
-	async <G, D, R, C extends BaseContext>({
-		args: { filter },
-		context,
-		source,
-		fields,
-	}: ResolverOptions<{ filter: Filter<R> }, C, G>): Promise<AggregationResult> => {
-		logger.trace('Resolving aggregated relationship field');
+export const aggregateRelationshipField = (
+	parentEntity: EntityMetadata<any, any>,
+	field: FieldMetadata
+) =>
+	trace(
+		async <G, D, R, C extends BaseContext>(
+			{ args: { filter }, context, source, fields }: ResolverOptions<{ filter: Filter<R> }, C, G>,
+			trace?: TraceOptions
+		): Promise<AggregationResult> => {
+			logger.trace('Resolving aggregated relationship field');
 
-		const requestedFields = fields.fieldsByTypeName.AggregationResult;
-		const requestedAggregations = new Set<AggregationType>();
-		if (requestedFields.count) requestedAggregations.add(AggregationType.COUNT);
+			const requestedFields =
+				fields.fieldsByTypeName[
+					graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')
+				];
+			const requestedAggregations = new Set<AggregationType>();
+			if (requestedFields.count) requestedAggregations.add(AggregationType.COUNT);
 
-		logger.trace(requestedAggregations, 'Requested aggregations');
+			logger.trace(requestedAggregations, 'Requested aggregations');
 
-		if (requestedAggregations.size === 0) {
-			logger.trace(requestedAggregations, 'No requested aggregations, returning.');
-			return {};
-		}
+			if (requestedAggregations.size === 0) {
+				logger.trace(requestedAggregations, 'No requested aggregations, returning.');
+				return {};
+			}
 
-		const { id, relatedField } = field.relationshipInfo ?? {};
+			trace?.span.updateName(
+				`Resolver - AggregateRelationshipField ${parentEntity.name}.${field.name}`
+			);
 
-		let idValue: ID | undefined = undefined;
-		if (id && typeof id === 'function') {
-			// If the id is a function, we'll call it with the source data to get the id value.
-			idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
-		} else if (id) {
-			// else if the id is a string, we'll try to get the value from the source data.
-			const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+			const { id, relatedField } = field.relationshipInfo ?? {};
 
-			// If the value is a string or number, we'll use it as the id value.
-			if (
-				typeof valueOfForeignKey === 'string' ||
-				typeof valueOfForeignKey === 'number' ||
-				typeof valueOfForeignKey === 'bigint'
-			) {
-				idValue = valueOfForeignKey;
-			} else {
-				// The ID value must be a string or a number otherwise we'll throw an error.
+			let idValue: ID | undefined = undefined;
+			if (id && typeof id === 'function') {
+				// If the id is a function, we'll call it with the source data to get the id value.
+				idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
+			} else if (id) {
+				// else if the id is a string, we'll try to get the value from the source data.
+				const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+
+				// If the value is a string or number, we'll use it as the id value.
+				if (
+					typeof valueOfForeignKey === 'string' ||
+					typeof valueOfForeignKey === 'number' ||
+					typeof valueOfForeignKey === 'bigint'
+				) {
+					idValue = valueOfForeignKey;
+				} else {
+					// The ID value must be a string or a number otherwise we'll throw an error.
+					throw new Error(
+						'Could not determine id value for relationship field only string or numbers are supported.'
+					);
+				}
+			}
+
+			const { fieldType } = getFieldTypeWithMetadata(field.getType);
+			const gqlEntityType = fieldType as { new (...args: any[]): R };
+
+			const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
+			if (!isEntityMetadata(relatedEntityMetadata)) {
 				throw new Error(
-					'Could not determine id value for relationship field only string or numbers are supported.'
+					`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`
 				);
 			}
-		}
+			const sourcePrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(
+				parentEntity
+			) as keyof G;
+			const relatedPrimaryKeyField =
+				graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
-		const { fieldType } = getFieldTypeWithMetadata(field.getType);
-		const gqlEntityType = fieldType as { new (...args: any[]): R };
+			// We need to construct a filter for the related entity and _and it with the user supplied filter.
+			const _and: Filter<R>[] = [];
 
-		const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
-		if (!isEntityMetadata(relatedEntityMetadata)) {
-			throw new Error(
-				`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`
+			// If we have a user supplied filter, add it to the _and array.
+			if (filter) _and.push(filter);
+
+			// Lets check the relationship type and add the appropriate filter.
+			if (idValue) {
+				_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
+			} else if (relatedField) {
+				_and.push({
+					[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
+				} as Filter<R>);
+			}
+
+			const relatedEntityFilter = { _and } as Filter<R>;
+
+			const params: ReadHookParams<R> = {
+				args: { filter: relatedEntityFilter },
+				context,
+				fields,
+				transactional: !!parentEntity.provider?.withTransaction,
+			};
+			const hookManager = hookManagerMap.get(gqlEntityType.name);
+			const hookParams = hookManager
+				? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
+				: params;
+
+			logger.trace('Aggregating with related field');
+
+			const result = await relatedEntityMetadata.provider?.aggregate?.(
+				relatedEntityFilter,
+				requestedAggregations
 			);
+
+			if (!result) throw new Error('No result from aggregation.');
+
+			logger.trace('Running after read hooks');
+			if (hookManager) {
+				await hookManager.runHooks(HookRegister.AFTER_READ, hookParams);
+			}
+
+			logger.trace('After read hooks ran');
+
+			return result;
 		}
-		const sourcePrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(
-			parentEntity
-		) as keyof G;
-		const relatedPrimaryKeyField =
-			graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
-
-		// We need to construct a filter for the related entity and _and it with the user supplied filter.
-		const _and: Filter<R>[] = [];
-
-		// If we have a user supplied filter, add it to the _and array.
-		if (filter) _and.push(filter);
-
-		// Lets check the relationship type and add the appropriate filter.
-		if (idValue) {
-			_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
-		} else if (relatedField) {
-			_and.push({
-				[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-			} as Filter<R>);
-		}
-
-		const relatedEntityFilter = { _and } as Filter<R>;
-
-		const params: ReadHookParams<R> = {
-			args: { filter: relatedEntityFilter },
-			context,
-			fields,
-			transactional: !!parentEntity.provider?.withTransaction,
-		};
-		const hookManager = hookManagerMap.get(gqlEntityType.name);
-		const hookParams = hookManager
-			? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
-			: params;
-
-		logger.trace('Aggregating with related field');
-
-		const result = await relatedEntityMetadata.provider?.aggregate?.(
-			relatedEntityFilter,
-			requestedAggregations
-		);
-
-		if (!result) throw new Error('No result from aggregation.');
-
-		logger.trace('Running after read hooks');
-		if (hookManager) {
-			await hookManager.runHooks(HookRegister.AFTER_READ, hookParams);
-		}
-
-		logger.trace('After read hooks ran');
-
-		return result;
-	};
+	);
 
 export const getOne = trace(_getOne);
 export const list = trace(_list);
 export const listRelationshipField = trace(_listRelationshipField);
 export const createOrUpdate = trace(_createOrUpdate);
+export const deleteOne = trace(_deleteOne);
+export const deleteMany = trace(_deleteMany);
+export const aggregate = trace(_aggregate);

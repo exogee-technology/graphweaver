@@ -2,13 +2,18 @@ import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Link } from 'react-router-dom';
 
-import { Entity, EntityField, routeFor } from '../utils';
+import { Entity, EntityField, federationNameForEntity, routeFor } from '../utils';
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
 
 const columnHelper = createColumnHelper<any>();
 
-const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
+const cellForType = (
+	field: EntityField,
+	value: any,
+	entityByType: (type: string) => Entity,
+	federationSubgraphName?: string
+) => {
 	// Check if the field is a relationship
 	if (field.relationshipType) {
 		const relatedEntity = entityByType(field.type);
@@ -40,8 +45,10 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 		return value.join(', ');
 	}
 
+	const typeName = federationNameForEntity(field.type, federationSubgraphName);
+
 	// Check if the field has a custom cell renderer
-	return cells[field.type as keyof typeof cells]?.(value) || value;
+	return cells[typeName as keyof typeof cells]?.(value) || value;
 };
 
 const isFieldSortable = (field: EntityField) => {
@@ -93,14 +100,18 @@ const addRowCheckboxColumn = () => {
 	});
 };
 
-export const convertEntityToColumns = (entity: Entity, entityByType: (type: string) => Entity) => {
+export const convertEntityToColumns = (
+	entity: Entity,
+	entityByType: (type: string) => Entity,
+	federationSubgraphName?: string
+) => {
 	const entityColumns = entity.fields
 		.filter((field) => !field.hideInTable)
 		.map((field) =>
 			columnHelper.accessor(field.name, {
 				id: field.name,
 				header: () => field.name,
-				cell: (info) => cellForType(field, info.getValue(), entityByType),
+				cell: (info) => cellForType(field, info.getValue(), entityByType, federationSubgraphName),
 				enableSorting: isFieldSortable(field),
 			})
 		);

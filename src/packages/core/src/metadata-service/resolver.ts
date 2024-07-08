@@ -53,8 +53,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			graphweaverMetadata.entities()
 		)
 			.map((entity) => {
-				const { name, adminUIOptions, apiOptions, provider } = entity;
-
+				const { adminUIOptions, apiOptions, provider } = entity;
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
 
@@ -87,9 +86,16 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
 					const isRequired = !field.nullable;
 
+					let relatedTypeName = typeName;
+					if (relatedObject?.type === 'entity') {
+						relatedTypeName = graphweaverMetadata.federationNameForEntity(relatedObject);
+					} else if (relatedObject) {
+						relatedTypeName = relatedObject.name;
+					}
+
 					const fieldObject: AdminUiFieldMetadata = {
 						name: field.name,
-						type: relatedObject?.name || typeName,
+						type: relatedTypeName,
 						isArray: isList,
 						attributes: {
 							isReadOnly,
@@ -105,7 +111,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						// Ok, it's a relationship to another object type that is an array, e.g. "to many".
 						// We'll default to one to many, then if we can find a field on the other side that points
 						// back to us and it's also an array, then it's a many to many.
-						fieldObject.relatedEntity = relatedObject.name;
+						fieldObject.relatedEntity = graphweaverMetadata.federationNameForEntity(relatedObject);
 						fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
 
 						const relatedEntityField = Object.values(relatedObject.fields).find((field) => {
@@ -129,7 +135,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					entity.adminUIOptions?.fieldForDetailPanel ?? defaultFieldForDetailPanel;
 
 				return {
-					name,
+					name: graphweaverMetadata.federationNameForEntity(entity),
 					plural,
 					backendId,
 					primaryKeyField,
@@ -161,6 +167,10 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			return result.metadata;
 		}
 
-		return { entities, enums };
+		return {
+			entities,
+			enums,
+			federationSubgraphName: graphweaverMetadata.federationSubgraphName,
+		};
 	};
 };

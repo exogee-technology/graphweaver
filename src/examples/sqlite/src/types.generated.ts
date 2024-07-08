@@ -106,6 +106,7 @@ export type AdminUiMetadata = {
   __typename?: 'AdminUiMetadata';
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
+  federationSubgraphName?: Maybe<Scalars['String']['output']>;
 };
 
 export type AggregationResult = {

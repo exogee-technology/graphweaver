@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "1.0.4",
+	"version": "1.1.0",
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
@@ -48,7 +48,7 @@
 		"web3-token": "1.0.6"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.45.0",
+		"@playwright/test": "1.45.1",
 		"@simplewebauthn/types": "10.0.0",
 		"@types/jest": "29.5.12",
 		"dotenv": "16.4.5",
@@ -59,8 +59,8 @@
 		"pg": "8.12.0",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.1.5",
-		"tsx": "4.16.0",
-		"typescript": "5.5.2"
+		"tsx": "4.16.2",
+		"typescript": "5.5.3"
 	},
 	"keywords": [
 		"graphql",

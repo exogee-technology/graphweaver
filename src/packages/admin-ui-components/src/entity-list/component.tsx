@@ -32,7 +32,7 @@ export const EntityList = <TData extends object>() => {
 	if (!entityName) throw new Error('There should always be an entity at this point.');
 
 	const navigate = useNavigate();
-	const { entityByName, entityByType } = useSchema();
+	const { entityByName, entityByType, federationSubgraphName } = useSchema();
 	const [search] = useSearchParams();
 	const { sort: sorting, filters } = decodeSearchParams(search);
 	const entity = entityByName(entityName);
@@ -49,7 +49,7 @@ export const EntityList = <TData extends object>() => {
 		excludeFromTracing,
 	} = entity;
 	const columns = useMemo(
-		() => convertEntityToColumns(entity, entityByType),
+		() => convertEntityToColumns(entity, entityByType, federationSubgraphName),
 		[fields, entityByType]
 	);
 

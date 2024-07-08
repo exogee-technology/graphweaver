@@ -103,10 +103,11 @@ export type AdminUiMetadata = {
   __typename?: 'AdminUiMetadata';
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
+  federationSubgraphName?: Maybe<Scalars['String']['output']>;
 };
 
-export type AggregationResult = {
-  __typename?: 'AggregationResult';
+export type AggregationResultFromExampleSubgraph = {
+  __typename?: 'AggregationResultFromExampleSubgraph';
   count: Scalars['Int']['output'];
 };
 
@@ -145,6 +146,12 @@ export type DeprecatedProductsPaginationInput = {
   orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
 
+export type HiddenEntity = {
+  __typename?: 'HiddenEntity';
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type InventoriesOrderByInput = {
   id?: InputMaybe<Sort>;
 };
@@ -166,6 +173,7 @@ export type Product = {
   __typename?: 'Product';
   createdBy?: Maybe<User>;
   dimensions?: Maybe<ProductDimension>;
+  hiddenEntities?: Maybe<Array<HiddenEntity>>;
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
   package?: Maybe<Scalars['String']['output']>;
@@ -348,7 +356,7 @@ export type UsersPaginationInput = {
 export type _Entity = CaseStudy | DeprecatedProduct | Inventory | Product | ProductDimension | ProductResearch | ProductVariation | User;
 
 export type _Service = {
-  __typename?: '_service';
+  __typename?: '_Service';
   sdl: Scalars['String']['output'];
 };
 
