@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
+import jwt, { Algorithm, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 import { logger } from '@exogee/logger';
+import jwksClient from 'jwks-rsa';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
@@ -18,6 +19,8 @@ const privateKey = process.env.AUTH_PRIVATE_KEY_PEM_BASE64
 	? Buffer.from(process.env.AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
 	: undefined;
 
+const jwksUri = process.env.AUTH_JWKS_URI ? process.env.AUTH_JWKS_URI : undefined;
+
 /**
  * Removes any prefix from the given authorization header.
  * The prefix is assumed to be separated from the actual token by whitespace.
@@ -35,9 +38,23 @@ export const isExpired = (token: string) => {
 };
 
 const TOKEN_PREFIX = 'Bearer';
+const algorithm = (process.env.AUTH_JWT_ALGORITHM ?? 'ES256') as Algorithm;
 
 export class AuthTokenProvider implements BaseAuthTokenProvider {
 	constructor(private authMethod?: AuthenticationMethod) {}
+
+	async getSigningKey(header: JwtHeader, callback: SigningKeyCallback) {
+		if (publicKey) return callback(null, publicKey);
+		if (jwksUri) {
+			const client = jwksClient({ jwksUri });
+			client.getSigningKey(header?.kid, function (err, key) {
+				const signingKey = key?.getPublicKey();
+				callback(err, signingKey);
+			});
+		} else {
+			callback(new Error('No public key or JWKS URI provided'));
+		}
+	}
 
 	async generateToken(user: UserProfile<unknown>) {
 		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
@@ -45,7 +62,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 
 		try {
 			const authToken = jwt.sign(payload, privateKey, {
-				algorithm: 'ES256',
+				algorithm,
 				expiresIn,
 			});
 			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
@@ -57,12 +74,10 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
-		if (!publicKey) throw new Error('AUTH_PUBLIC_KEY_PEM_BASE64 is required in environment');
-
 		const token = removeAuthPrefixIfPresent(authToken);
 		let payload;
 		try {
-			payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
+			payload = jwt.verify(token, this.getSigningKey, { algorithms: [algorithm] });
 		} catch (err) {
 			logger.error(err);
 			throw new Error('Verification of token failed');
