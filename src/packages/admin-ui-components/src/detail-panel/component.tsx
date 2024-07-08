@@ -12,6 +12,7 @@ import {
 	CustomField,
 	decodeSearchParams,
 	EntityField,
+	federationNameForEntity,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -48,7 +49,15 @@ export enum PanelMode {
 const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
 	field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 
-const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
+const getField = ({
+	field,
+	autoFocus,
+	federationSubgraphName,
+}: {
+	field: EntityField;
+	autoFocus: boolean;
+	federationSubgraphName?: string;
+}) => {
 	const isReadonly = isFieldReadonly(field);
 
 	if (field.relationshipType) {
@@ -67,7 +76,7 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 		return <BooleanField name={field.name} autoFocus={autoFocus} />;
 	}
 
-	if (field.type === 'Media') {
+	if (field.type === federationNameForEntity('Media', federationSubgraphName)) {
 		return <MediaField field={field} autoFocus={autoFocus} />;
 	}
 
@@ -91,13 +100,21 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 	);
 };
 
-const DetailField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
+const DetailField = ({
+	field,
+	autoFocus,
+	federationSubgraphName,
+}: {
+	field: EntityField;
+	autoFocus: boolean;
+	federationSubgraphName?: string;
+}) => {
 	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
 	return (
 		<div className={styles.detailField}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
-			{getField({ field, autoFocus })}
+			{getField({ field, autoFocus, federationSubgraphName })}
 		</div>
 	);
 };
@@ -106,13 +123,15 @@ const CustomFieldComponent = ({
 	field,
 	entity,
 	panelMode,
+	federationSubgraphName,
 }: {
 	field: CustomField;
 	entity: Record<string, any>;
 	panelMode: PanelMode;
+	federationSubgraphName?: string;
 }) => (
 	<div className={styles.detailField}>
-		{field.component({ entity, context: 'detail-form', panelMode })}
+		{field.component({ entity, context: 'detail-form', panelMode, federationSubgraphName })}
 	</div>
 );
 
@@ -139,6 +158,7 @@ const DetailForm = ({
 	onCancel,
 	onSubmit,
 	persistName,
+	federationSubgraphName,
 	isReadOnly,
 	panelMode,
 }: {
@@ -147,6 +167,7 @@ const DetailForm = ({
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
 	persistName: string;
+	federationSubgraphName?: string;
 	isReadOnly?: boolean;
 	panelMode: PanelMode;
 }) => {
@@ -230,6 +251,7 @@ const DetailForm = ({
 										field={field as CustomField}
 										entity={initialValues}
 										panelMode={panelMode}
+										federationSubgraphName={federationSubgraphName}
 									/>
 								);
 							} else {
@@ -238,6 +260,7 @@ const DetailForm = ({
 										key={field.name}
 										field={field}
 										autoFocus={field === firstEditableField}
+										federationSubgraphName={federationSubgraphName}
 									/>
 								);
 							}
@@ -481,6 +504,7 @@ export const DetailPanel = () => {
 								persistName={persistName}
 								isReadOnly={selectedEntity.attributes.isReadOnly}
 								panelMode={panelMode}
+								federationSubgraphName={federationSubgraphName}
 							/>
 						)}
 					</>

@@ -86,6 +86,7 @@ export interface CustomFieldArgs<T = unknown> {
 	entity: T;
 	context: 'table' | 'detail-form';
 	panelMode: PanelMode;
+	federationSubgraphName?: string;
 }
 
 export interface CustomField<T = unknown> extends EntityField {
