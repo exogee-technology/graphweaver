@@ -42,7 +42,7 @@
 		"esbuild": "0.23.0",
 		"glob": "10.4.2",
 		"ts-node": "10.9.2",
-		"typescript": "5.5.2"
+		"typescript": "5.5.3"
 	},
 	"optionalDependencies": {
 		"@mikro-orm/knex": "6.2.9",
