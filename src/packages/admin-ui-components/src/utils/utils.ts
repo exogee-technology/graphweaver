@@ -14,7 +14,10 @@ export const getOrderByQuery = (entity: Entity, sort?: SortField[]) => ({
 		? sort.reduce((acc, { field, direction }) => ({ ...acc, [field]: direction }), {})
 		: { [entity.primaryKeyField]: 'ASC' }),
 });
-
+		? sort.reduce((acc, { field, direction }) => {
+			acc[field] = direction;
+			return acc;
+		}, {})
 export const federationNameForEntity = (entityName: string, federationSubgraphName?: string) => {
 	if (!federationSubgraphName) return entityName;
 
