@@ -39,7 +39,14 @@ const isMedia = (value: unknown): value is MediaData =>
 		typeof value.type === 'string'
 	);
 
-@Entity('Media')
+@Entity('Media', {
+	apiOptions: {
+		// This allows us to use the Media type in multiple subgraphs at the same time,
+		// so if you have specified a federationSubgraphName in your Graphweaver config,
+		// the Media entity will be called MediaFrom[SubgraphName]Subgraph in the final result.
+		namespaceForFederation: true,
+	},
+})
 export class Media {
 	@Field(() => String)
 	filename!: string;

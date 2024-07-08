@@ -19,6 +19,9 @@ export type Scalars = {
   Float: { input: number; output: number; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  _Any: { input: any; output: any; }
+  federation__FieldSet: { input: any; output: any; }
+  link__Import: { input: any; output: any; }
 };
 
 export type AdminUiEntityAttributeMetadata = {
@@ -93,10 +96,11 @@ export type AdminUiMetadata = {
   __typename?: 'AdminUiMetadata';
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
+  federationSubgraphName?: Maybe<Scalars['String']['output']>;
 };
 
-export type AggregationResult = {
-  __typename?: 'AggregationResult';
+export type AggregationResultFromTestSubgraph = {
+  __typename?: 'AggregationResultFromTestSubgraph';
   count: Scalars['Int']['output'];
 };
 
@@ -108,17 +112,17 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
-export type Media = {
-  __typename?: 'Media';
-  filename: Scalars['String']['output'];
-  type: MediaType;
-  url: Scalars['String']['output'];
-};
-
 /** Data needed to create or update MultipleMedia. If an ID is passed, this is an update, otherwise it's an insert. */
 export type MediaCreateOrUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<MediaType>;
+};
+
+export type MediaFromTestSubgraph = {
+  __typename?: 'MediaFromTestSubgraph';
+  filename: Scalars['String']['output'];
+  type: MediaType;
+  url: Scalars['String']['output'];
 };
 
 /** Data needed to create MultipleMedia. */
@@ -224,15 +228,24 @@ export type MutationUpdateSubmissionsArgs = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Union of all types in this subgraph. This information is needed by the Apollo federation gateway. */
+  _entities: Array<Maybe<_Entity>>;
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
+  /** The sdl representing the federated service capabilities. Includes federation directives, removes federation types, and includes rest of full schema after schema directives have been applied. */
+  _service?: Maybe<_Service>;
   getDownloadUrl?: Maybe<Scalars['String']['output']>;
   /** Get a single Submission. */
   submission?: Maybe<Submission>;
   /** Get multiple Submissions. */
   submissions?: Maybe<Array<Maybe<Submission>>>;
   /** Get aggregated data for Submissions. */
-  submissions_aggregate?: Maybe<AggregationResult>;
+  submissions_aggregate?: Maybe<AggregationResultFromTestSubgraph>;
+};
+
+
+export type Query_EntitiesArgs = {
+  representations?: InputMaybe<Array<Scalars['_Any']['input']>>;
 };
 
 
@@ -264,7 +277,7 @@ export enum Sort {
 export type Submission = {
   __typename?: 'Submission';
   id: Scalars['ID']['output'];
-  image?: Maybe<Media>;
+  image?: Maybe<MediaFromTestSubgraph>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
@@ -304,3 +317,15 @@ export type SubmissionsPaginationInput = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<SubmissionsOrderByInput>;
 };
+
+export type _Entity = MediaFromTestSubgraph | Submission;
+
+export type _Service = {
+  __typename?: '_Service';
+  sdl: Scalars['String']['output'];
+};
+
+export enum Link__Purpose {
+  Execution = 'EXECUTION',
+  Security = 'SECURITY'
+}

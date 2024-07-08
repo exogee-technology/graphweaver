@@ -22,6 +22,16 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// that is usable in your Graphweaver instance but is not part of the schema we tell the federation router about.
 		excludeFromFederation?: boolean;
 
+		// If this entity will appear in multiple subgraphs, a federation router will need them to have unique names.
+		// A prime example of this in Graphweaver itself is the Media entity, which shows up as soon as you have media
+		// added to your project. If two Graphweaver instances both have Media in them, the federation router will
+		// expect that they're @shareable, but they won't return the same data from both places, so the best thing to do
+		// is to namespace them so that they're unique entities. When this property is specified as true, the entity
+		// will be renamed.
+		//
+		// For example, if our entity is called `Media` and our subgraph name is `music`, it'd be renamed to `MediaFromMusicSubgraph`.
+		namespaceForFederation?: boolean;
+
 		// This means that the entity should not be given the default list, find one, create, update, and delete
 		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
 		// enables excludeFromFiltering as well.
@@ -201,6 +211,8 @@ class Metadata {
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
 	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
+
+	public federationSubgraphName?: string;
 
 	// We have to lazy load this because fields get their decorators run first. This means
 	// when the field creates the entity, we need to not look at the name until after the
@@ -578,7 +590,24 @@ class Metadata {
 		this.additionalMutationsLookup.set(args.name, { ...args });
 	}
 
+	public federationNameForEntity(entity: EntityMetadata<any, any>) {
+		if (entity.apiOptions?.namespaceForFederation) {
+			return this.federationNameForGraphQLTypeName(entity.name);
+		}
+
+		return entity.name;
+	}
+
+	public federationNameForGraphQLTypeName(name: string) {
+		if (this.federationSubgraphName) {
+			return `${name}From${this.federationSubgraphName.charAt(0).toUpperCase() + this.federationSubgraphName.slice(1)}Subgraph`;
+		}
+
+		return name;
+	}
+
 	public clear() {
+		this.federationSubgraphName = undefined;
 		this.metadataByType.clear();
 		this.nameLookupCache.clear();
 		this.additionalMutationsLookup.clear();

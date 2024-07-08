@@ -269,14 +269,14 @@ export const DetailPanel = () => {
 	const { id, entity } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
-	const { entityByName, entityByType } = useSchema();
+	const { entityByName, entityByType, federationSubgraphName } = useSchema();
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	const panelMode = id === 'graphweaver-admin-new-entity' ? PanelMode.CREATE : PanelMode.EDIT;
 
 	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
-		queryForEntity(selectedEntity, entityByName),
+		queryForEntity(selectedEntity, entityByName, federationSubgraphName),
 		{
 			variables: { id },
 			skip: panelMode === PanelMode.CREATE,
@@ -347,8 +347,12 @@ export const DetailPanel = () => {
 		{} as Record<string, any>
 	);
 
-	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
-	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
+	const [updateEntity] = useMutation(
+		generateUpdateEntityMutation(selectedEntity, entityByType, federationSubgraphName)
+	);
+	const [createEntity] = useMutation(
+		generateCreateEntityMutation(selectedEntity, entityByType, federationSubgraphName)
+	);
 
 	const slideAnimationTime = useMemo(() => {
 		const slideAnimationTimeCssVar = getComputedStyle(document.documentElement)

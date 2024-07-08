@@ -11,4 +11,7 @@ export class AdminUiMetadata {
 
 	@Field(() => [AdminUiEnumMetadata])
 	public enums: AdminUiEnumMetadata[] = [];
+
+	@Field(() => String, { nullable: true })
+	public federationSubgraphName?: string;
 }

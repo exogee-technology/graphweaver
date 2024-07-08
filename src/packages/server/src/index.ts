@@ -55,7 +55,7 @@ export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
-	enableFederation?: boolean;
+	federationSubgraphName?: string;
 	enableFederationTracing?: boolean;
 	graphQLArmorOptions?: GraphQLArmorConfig;
 	corsOptions?: CorsPluginOptions;
@@ -78,7 +78,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 		apolloServerOptions: {
 			introspection: true,
 		},
-		enableFederation: false,
 		enableFederationTracing: false,
 		graphqlDeduplicator: {
 			enabled: true,
@@ -130,8 +129,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			if (this.config.enableFederation) {
-				enableFederation({ schemaDirectives: this.config.schemaDirectives });
+			if (this.config.federationSubgraphName) {
+				enableFederation({
+					federationSubgraphName: this.config.federationSubgraphName,
+					schemaDirectives: this.config.schemaDirectives,
+				});
 
 				// Caution: With this plugin, any client can request a trace for any operation, potentially revealing sensitive server information.
 				// It is recommended to ensure that federated subgraphs are not directly exposed to the public Internet. This feature is disabled by default for security reasons.

@@ -15,6 +15,7 @@ import {
 	routeFor,
 	SortField,
 	decodeSearchParams,
+	federationNameForEntity,
 } from '../utils';
 import { Spinner } from '../spinner';
 
@@ -42,7 +43,8 @@ const hideImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
 
 const columnsForEntity = <T extends TableRowItem>(
 	entity: Entity,
-	entityByType: (type: string) => Entity
+	entityByType: (type: string) => Entity,
+	federationSubgraphName?: string
 ): Column<T, unknown>[] => {
 	const entityColumns = [
 		...(entity.attributes.isReadOnly ? [] : [SelectColumn]),
@@ -81,7 +83,7 @@ const columnsForEntity = <T extends TableRowItem>(
 							return null;
 						}
 					}
-				: field.type === 'Media'
+				: field.type === federationNameForEntity('Media', federationSubgraphName)
 					? ({ row }: RenderCellProps<T, unknown>) => {
 							const media = row[field.name as keyof typeof row] as {
 								url: string;
@@ -189,7 +191,7 @@ export const Table = <T extends TableRowItem>({
 	);
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { entityByType } = useSchema();
+	const { entityByType, federationSubgraphName } = useSchema();
 	const [search] = useSearchParams();
 	const { selectedEntity } = useSelectedEntity();
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
@@ -306,7 +308,7 @@ export const Table = <T extends TableRowItem>({
 	return (
 		<>
 			<DataGrid
-				columns={columnsForEntity<T>(selectedEntity, entityByType)}
+				columns={columnsForEntity<T>(selectedEntity, entityByType, federationSubgraphName)}
 				rows={rows}
 				rowKeyGetter={rowKeyGetter}
 				sortColumns={sortColumns}

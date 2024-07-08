@@ -132,7 +132,7 @@ const generatePermissionListFromFields = <G>(
 	const permissionsList: RequiredPermission[] = [`${entityMetadata.name}:${AccessType.Read}`];
 
 	for (const [entityName, fields] of Object.entries(requestedFields.fieldsByTypeName)) {
-		if (entityName === 'AggregationResult') {
+		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
 			// We just need to record that they're trying to read the entity information via an aggregation and move on.
 			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
 		} else {
@@ -206,7 +206,7 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	}
 
 	for (const [entityName, fields] of Object.entries(resolveTree.fieldsByTypeName)) {
-		if (entityName === 'AggregationResult') {
+		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
 			// We just need to record that they're trying to read the entity information via an aggregation and move on.
 			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
 		} else {

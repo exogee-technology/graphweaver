@@ -96,10 +96,11 @@ export type AdminUiMetadata = {
   __typename?: 'AdminUiMetadata';
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
+  federationSubgraphName?: Maybe<Scalars['String']['output']>;
 };
 
-export type AggregationResult = {
-  __typename?: 'AggregationResult';
+export type AggregationResultFromExampleSubgraph = {
+  __typename?: 'AggregationResultFromExampleSubgraph';
   count: Scalars['Int']['output'];
 };
 
@@ -332,7 +333,7 @@ export type UsersPaginationInput = {
 export type _Entity = CaseStudy | DeprecatedProduct | Inventory | Product | ProductDimension | ProductResearch | ProductVariation | User;
 
 export type _Service = {
-  __typename?: '_service';
+  __typename?: '_Service';
   sdl: Scalars['String']['output'];
 };
 
