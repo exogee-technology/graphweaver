@@ -184,7 +184,7 @@ const _list = async <G, D>(
 	return result;
 };
 
-const _createOrUpdate = async <G, D>(
+const _createOrUpdate = async <G>(
 	{ args: { input }, context, info, fields }: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>,
 	trace?: Trace
 ) => {

@@ -9,7 +9,6 @@ import {
 	graphweaverMetadata,
 	getFieldTypeWithMetadata,
 	ResolverOptions,
-	EntityMetadata,
 } from '..';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
