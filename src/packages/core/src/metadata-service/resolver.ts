@@ -88,7 +88,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 
 					const fieldObject: AdminUiFieldMetadata = {
 						name: field.name,
-						type: typeName,
+						type: relatedObject?.name || typeName,
 						isArray: isList,
 						attributes: {
 							isReadOnly,
