@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client';
 import { Entity } from './use-schema';
+import { federationNameForEntity } from './utils';
 
 export const SCHEMA_QUERY = gql`
 	query graphweaver {
 		result: _graphweaver {
+			federationSubgraphName
 			entities {
 				name
 				plural
@@ -47,7 +49,8 @@ export const SCHEMA_QUERY = gql`
 
 export const generateGqlSelectForEntityFields = (
 	entity: Entity,
-	entityByType?: (entityType: string) => Entity
+	entityByType?: (entityType: string) => Entity,
+	federationSubgraphName?: string
 ) =>
 	entity.fields
 		.map((field) => {
@@ -63,7 +66,7 @@ export const generateGqlSelectForEntityFields = (
 					label: ${relatedEntity?.summaryField ?? relatedEntity?.primaryKeyField}
 				}`;
 			} else {
-				if (field.type === 'Media') {
+				if (field.type === federationNameForEntity('Media', federationSubgraphName)) {
 					return `${field.name} { filename, type, url }`;
 				}
 				return field.name;

@@ -15,6 +15,7 @@ import {
 	GraphQLList,
 	GraphQLNonNull,
 	GraphQLObjectType,
+	GraphQLObjectTypeExtensions,
 	GraphQLOutputType,
 	GraphQLScalarType,
 	GraphQLSchema,
@@ -22,6 +23,7 @@ import {
 	GraphQLUnionType,
 	isListType,
 	isNonNullType,
+	isObjectType,
 	isScalarType,
 	ThunkObjMap,
 } from 'graphql';
@@ -61,6 +63,27 @@ const allOperations = new Set([
 	...likeOperations,
 	...mathOperations,
 ]);
+
+export type GraphweaverSchemaExtension = Readonly<GraphQLObjectTypeExtensions<any, any>> & {
+	graphweaverSchemaInfo:
+		| GraphweaverSchemaInfoExtensionWithSourceEntity
+		| GraphweaverOtherSchemaInfoExtension;
+};
+
+export type GraphweaverOtherSchemaInfoExtension = {
+	type: 'deleteOneFilterInput' | 'aggregationResult' | 'customInput';
+};
+
+export type GraphweaverSchemaInfoExtensionWithSourceEntity = {
+	type:
+		| 'entity'
+		| 'paginationInput'
+		| 'createOrUpdateInput'
+		| 'updateInput'
+		| 'createInput'
+		| 'filterInput';
+	sourceEntity: EntityMetadata<any, any>;
+};
 
 class TypeCache {
 	public readonly entityTypes = new Map<string, GraphQLObjectType>();
@@ -135,11 +158,34 @@ const graphQLTypeForUnion = (
 
 		// Map types to GraphQL types
 		const graphQLTypes = entitiesInUnion.map((type) => {
-			const entityType = typeCache.entityTypes.get(type.name);
-			if (!entityType) {
-				throw new Error(`Union ${unionMetadata.name} has non-entity types.`);
+			// Both entity types and GraphQL types can end up here. If it's already a
+			// GraphQL type we're good to go.
+			if (isObjectType(type)) {
+				// Ensure we're looking at an entity type
+				if (
+					(type.extensions as GraphweaverSchemaExtension).graphweaverSchemaInfo.type !== 'entity'
+				) {
+					throw new Error(
+						`Union ${unionMetadata.name} has a GraphQLType ${type} which did not originate from an entity.`
+					);
+				}
+
+				return type;
 			}
-			return entityType;
+
+			if (isEntityMetadata(type)) {
+				const entityType = typeCache.entityTypes.get(type.name);
+				if (!entityType) {
+					throw new Error(
+						`Union ${unionMetadata.name} has entity type ${type} which could not be looked up in the type cache.`
+					);
+				}
+				return entityType;
+			}
+
+			throw new Error(
+				`Type ${type} is neither a GraphQLObjectType, nor an EntityMetadata Type in union ${unionMetadata.name}.`
+			);
 		});
 
 		unionType = new GraphQLUnionType({
@@ -157,6 +203,7 @@ const graphQLTypeForUnion = (
 // All entities are deleted by primary key, so we only need one of these.
 const deleteInput = new GraphQLInputObjectType({
 	name: 'DeleteOneFilterInput',
+	extensions: { graphweaverSchemaInfo: { type: 'deleteOneFilterInput' } },
 	fields: {
 		id: { type: new GraphQLNonNull(ID) },
 	},
@@ -165,6 +212,7 @@ const deleteInput = new GraphQLInputObjectType({
 // All aggregations follow the same shape so we only need one of those too.
 const aggregationResult = new GraphQLObjectType({
 	name: 'AggregationResult',
+	extensions: { graphweaverSchemaInfo: { type: 'aggregationResult' } },
 	fields: {
 		count: {
 			type: new GraphQLNonNull(GraphQLInt),
@@ -264,6 +312,7 @@ const graphQLTypeForInput = (
 		inputType = new GraphQLInputObjectType({
 			name: input.name,
 			description: input.description,
+			extensions: { graphweaverSchemaInfo: { type: 'customInput' } },
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
@@ -312,10 +361,11 @@ export const graphQLTypeForEntity = (
 
 	if (!entityType) {
 		entityType = new GraphQLObjectType({
-			name: entity.name,
+			name: graphweaverMetadata.federationNameForEntity(entity),
 			description: entity.description,
 			extensions: {
 				directives: entity.directives ?? {},
+				graphweaverSchemaInfo: { type: 'entity', sourceEntity: entity },
 			},
 			fields: () => {
 				const fields: ObjMap<GraphQLFieldConfig<unknown, unknown>> = {};
@@ -417,6 +467,7 @@ const filterTypeForEntity = (
 		filterType = new GraphQLInputObjectType({
 			name: `${entity.plural}ListFilter`,
 			description: entity.description,
+			extensions: { graphweaverSchemaType: 'filterInput' },
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
@@ -499,6 +550,7 @@ const paginationTypeForEntity = (
 		paginationType = new GraphQLInputObjectType({
 			name: `${entity.plural}PaginationInput`,
 			description: `Pagination options for ${entity.plural}.`,
+			extensions: { graphweaverSchemaType: 'paginationInput' },
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {
 					offset: { type: GraphQLInt },
@@ -626,6 +678,7 @@ const insertTypeForEntity = (
 		insertType = new GraphQLInputObjectType({
 			name: `${entity.name}InsertInput`,
 			description: `Data needed to create ${entity.plural}.`,
+			extensions: { graphweaverSchemaType: 'insertInput' },
 			fields: generateGraphQLInputFieldsForEntity(entity, 'insert', entityFilter),
 		});
 
@@ -646,6 +699,7 @@ const createOrUpdateTypeForEntity = (
 		createOrUpdateType = new GraphQLInputObjectType({
 			name: `${entity.name}CreateOrUpdateInput`,
 			description: `Data needed to create or update ${entity.plural}. If an ID is passed, this is an update, otherwise it's an insert.`,
+			extensions: { graphweaverSchemaType: 'createOrUpdateInput' },
 			fields: generateGraphQLInputFieldsForEntity(entity, 'createOrUpdate', entityFilter),
 		});
 
@@ -666,6 +720,7 @@ const updateTypeForEntity = (
 		updateType = new GraphQLInputObjectType({
 			name: `${entity.name}UpdateInput`,
 			description: `Data needed to update ${entity.plural}. An ID must be passed.`,
+			extensions: { graphweaverSchemaType: 'updateInput' },
 			fields: generateGraphQLInputFieldsForEntity(entity, 'update', entityFilter),
 		});
 
@@ -683,10 +738,11 @@ type SchemaBuildOptions = {
 class SchemaBuilderImplementation {
 	public build(buildOptions?: SchemaBuildOptions) {
 		const { schemaDirectives } = buildOptions ?? {};
+
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
-
 		const directives = Array.from(this.buildDirectives(buildOptions?.filterEntities));
+
 		const types = Array.from(this.buildTypes(buildOptions?.filterEntities));
 		const query = this.buildQueryType(buildOptions?.filterEntities);
 		const mutation = this.buildMutationType(buildOptions?.filterEntities);
@@ -756,7 +812,10 @@ class SchemaBuilderImplementation {
 			yield graphQLTypeForEnum(enumType, entityFilter);
 		}
 
-		// We have some singleton types to emit here too.
+		// The AggregationResult type might need to be namespaced for Federation
+		aggregationResult.name =
+			graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult');
+
 		yield aggregationResult;
 		yield deleteInput;
 	}
@@ -825,6 +884,9 @@ class SchemaBuilderImplementation {
 						args: {
 							id: { type: new GraphQLNonNull(ID) },
 						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'getOne', sourceEntity: entity },
+						},
 						resolve: resolvers.baseResolver(resolvers.getOne),
 					};
 
@@ -840,6 +902,9 @@ class SchemaBuilderImplementation {
 							filter: { type: filterTypeForEntity(entity, entityFilter) },
 							pagination: { type: paginationTypeForEntity(entity, entityFilter) },
 						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'list', sourceEntity: entity },
+						},
 						resolve: resolvers.baseResolver(resolvers.list),
 					};
 
@@ -851,7 +916,10 @@ class SchemaBuilderImplementation {
 							args: {
 								filter: { type: filterTypeForEntity(entity, entityFilter) },
 							},
-							resolve: resolvers.baseResolver(resolvers.aggregate(entity)),
+							extensions: {
+								graphweaverSchemaInfo: { type: 'aggregate', sourceEntity: entity },
+							},
+							resolve: resolvers.baseResolver(resolvers.aggregate),
 						};
 					}
 				}
@@ -932,6 +1000,9 @@ class SchemaBuilderImplementation {
 						args: {
 							input: { type: new GraphQLNonNull(insertTypeForEntity(entity, entityFilter)) },
 						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'createOne', sourceEntity: entity },
+						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
@@ -950,6 +1021,9 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'createMany', sourceEntity: entity },
+						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
@@ -963,6 +1037,9 @@ class SchemaBuilderImplementation {
 						type: graphQLTypeForEntity(entity, entityFilter),
 						args: {
 							input: { type: new GraphQLNonNull(updateTypeForEntity(entity, entityFilter)) },
+						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'updateOne', sourceEntity: entity },
 						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
@@ -981,6 +1058,9 @@ class SchemaBuilderImplementation {
 									new GraphQLList(new GraphQLNonNull(updateTypeForEntity(entity, entityFilter)))
 								),
 							},
+						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'updateMany', sourceEntity: entity },
 						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
@@ -1002,6 +1082,9 @@ class SchemaBuilderImplementation {
 								),
 							},
 						},
+						extensions: {
+							graphweaverSchemaInfo: { type: 'createOrUpdateMany', sourceEntity: entity },
+						},
 						resolve: resolvers.baseResolver(resolvers.createOrUpdate),
 					};
 
@@ -1018,7 +1101,10 @@ class SchemaBuilderImplementation {
 								type: new GraphQLNonNull(deleteInput),
 							},
 						},
-						resolve: resolvers.baseResolver(resolvers.deleteOne(entity)),
+						extensions: {
+							graphweaverSchemaInfo: { type: 'deleteOne', sourceEntity: entity },
+						},
+						resolve: resolvers.baseResolver(resolvers.deleteOne),
 					};
 
 					// Delete Many
@@ -1032,7 +1118,10 @@ class SchemaBuilderImplementation {
 						args: {
 							filter: { type: new GraphQLNonNull(filterTypeForEntity(entity, entityFilter)) },
 						},
-						resolve: resolvers.baseResolver(resolvers.deleteMany(entity)),
+						extensions: {
+							graphweaverSchemaInfo: { type: 'deleteMany', sourceEntity: entity },
+						},
+						resolve: resolvers.baseResolver(resolvers.deleteMany),
 					};
 				}
 

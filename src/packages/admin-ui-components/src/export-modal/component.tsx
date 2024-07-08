@@ -18,7 +18,7 @@ import {
 	getOrderByQuery,
 	Filter,
 } from '../utils';
-import { GetEntity } from './graphql';
+import { listEntityForExport } from './graphql';
 
 const DEFAULT_EXPORT_PAGE_SIZE = 200;
 
@@ -32,7 +32,7 @@ export const ExportModal = ({
 	filters?: Filter;
 }) => {
 	const { selectedEntity } = useSelectedEntity();
-	const { entityByName } = useSchema();
+	const { entityByName, federationSubgraphName } = useSchema();
 	const [displayPageNumber, setDisplayPageNumber] = useState(1);
 	const abortRef = useRef(false);
 
@@ -48,12 +48,10 @@ export const ExportModal = ({
 			const allResults: TableRowItem[] = [];
 
 			while (hasNextPage) {
-				if (abortRef.current) {
-					return;
-				}
+				if (abortRef.current) return;
 
 				const { data } = await apolloClient.query({
-					query: GetEntity(selectedEntity, entityByName),
+					query: listEntityForExport(selectedEntity, entityByName, federationSubgraphName),
 					variables: {
 						pagination: {
 							offset: pageNumber * pageSize,
@@ -65,9 +63,7 @@ export const ExportModal = ({
 					fetchPolicy: 'no-cache',
 				});
 
-				if (data && data.result.length > 0) {
-					allResults.push(...data.result);
-				}
+				if (data && data.result.length > 0) allResults.push(...data.result);
 
 				hasNextPage = data?.result.length === pageSize;
 				pageNumber++;
@@ -77,10 +73,7 @@ export const ExportModal = ({
 			exportToCSV(selectedEntity.name, allResults);
 		} catch (error) {
 			console.error(error);
-
-			toast.error(String(error), {
-				duration: 5000,
-			});
+			toast.error(String(error), { duration: 5000 });
 		} finally {
 			closeModal();
 		}

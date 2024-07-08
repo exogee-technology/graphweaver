@@ -14,14 +14,12 @@ export const addEntitiesQuery = () => {
 	const EntitiesUnion = graphweaverMetadata.collectUnionTypeInformation({
 		name: '_Entity',
 		getTypes: () =>
-			Array.from(graphweaverMetadata.entities())
-				.filter(
-					// The _service entity should not be included in the _entities union specifically
-					// but we don't want to omit it from the whole SDL returned by the _service query itself
-					// so we're just going to filter it out explicitly here.
-					(entity) => EXCLUDED_FROM_FEDERATION_ENTITY_FILTER(entity) && entity.name !== '_service'
-				)
-				.map((entity) => graphQLTypeForEntity(entity, EXCLUDED_FROM_FEDERATION_ENTITY_FILTER)),
+			Array.from(graphweaverMetadata.entities()).filter(
+				// The _Service entity should not be included in the _Entity union specifically
+				// but we don't want to omit it from the whole SDL returned by the _service query itself
+				// so we're just going to filter it out explicitly here.
+				(entity) => EXCLUDED_FROM_FEDERATION_ENTITY_FILTER(entity) && entity.name !== '_Service'
+			),
 	});
 
 	graphweaverMetadata.addQuery({

@@ -8,7 +8,7 @@ export const addServiceQuery = ({
 }: {
 	schemaDirectives?: Record<string, any>;
 }) => {
-	@Entity('_service', {
+	@Entity('_Service', {
 		apiOptions: { excludeFromBuiltInOperations: true },
 	})
 	class Service {

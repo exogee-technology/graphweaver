@@ -516,7 +516,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	@TraceMethod()
 	public async deleteOne(filter: Filter<D>, trace?: Trace): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteOne ${this.entityType.name}`);
-		logger.trace(`Running delete ${this.entityType.name} with filter ${filter}`);
+		logger.trace(filter, `Running delete ${this.entityType.name} with filter.`);
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);

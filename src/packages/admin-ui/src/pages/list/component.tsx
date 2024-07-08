@@ -46,7 +46,7 @@ export const ListWithSelectedEntity = () => {
 	if (!entity) throw new Error('There should always be an entity at this point.');
 	const navigate = useNavigate();
 	const [search] = useSearchParams();
-	const { entityByName } = useSchema();
+	const { entityByName, federationSubgraphName } = useSchema();
 	const [showExportModal, setShowExportModal] = useState(false);
 	const { sort, page, filters } = decodeSearchParams(search);
 
@@ -62,7 +62,7 @@ export const ListWithSelectedEntity = () => {
 	const { data, loading, error, fetchMore } = useQuery<{
 		result: TableRowItem[];
 		aggregate?: { count: number };
-	}>(queryForEntityPage(entity, entityByName), {
+	}>(queryForEntityPage(entity, entityByName, federationSubgraphName), {
 		variables: queryVariables,
 		notifyOnNetworkStatusChange: true,
 	});
