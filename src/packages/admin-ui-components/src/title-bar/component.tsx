@@ -42,9 +42,11 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 						<OpenExternalIcon />
 					</Button>
 				</Link>
-				<Button className={styles.toolBarTrailingButton} onClick={() => onExportToCSV?.()}>
-					Export to CSV
-				</Button>
+				{onExportToCSV && (
+					<Button className={styles.toolBarTrailingButton} onClick={onExportToCSV}>
+						Export to CSV
+					</Button>
+				)}
 				<Link
 					className={styles.toolBarTrailingButton}
 					to={routeFor({

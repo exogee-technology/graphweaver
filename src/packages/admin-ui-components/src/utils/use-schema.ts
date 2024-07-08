@@ -30,7 +30,7 @@ export interface Entity {
 	primaryKeyField: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
-	fieldForDetailPanel: string;
+	fieldForDetailPanelNavigationId: string;
 	supportedAggregationTypes: AggregationType[];
 	fields: EntityField[];
 	defaultFilter?: Filter;

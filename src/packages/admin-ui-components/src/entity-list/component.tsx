@@ -45,7 +45,7 @@ export const EntityList = <TData extends object>() => {
 		defaultSort,
 		primaryKeyField,
 		defaultFilter,
-		fieldForDetailPanel,
+		fieldForDetailPanelNavigationId,
 		excludeFromTracing,
 	} = entity;
 	const columns = useMemo(
@@ -61,13 +61,7 @@ export const EntityList = <TData extends object>() => {
 			limit: PAGE_SIZE,
 			orderBy: sort,
 		},
-		...(filters
-			? {
-					filter: {
-						...filters,
-					},
-				}
-			: { filter: defaultFilter }),
+		...(filters ? { filter: filters } : { filter: defaultFilter }),
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<QueryResponse<TData>>(
@@ -92,7 +86,7 @@ export const EntityList = <TData extends object>() => {
 	}
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
-		navigate(`${row.original[fieldForDetailPanel as keyof T]}`);
+		navigate(`${row.original[fieldForDetailPanelNavigationId as keyof T]}`);
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {

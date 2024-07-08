@@ -226,7 +226,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		hideInFilterBar?: boolean;
 		hideInDetailForm?: boolean;
 		readonly?: boolean;
-		fieldForDetailPanel?: boolean;
+		fieldForDetailPanelNavigationId?: boolean;
 	};
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;

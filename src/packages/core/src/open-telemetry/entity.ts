@@ -37,7 +37,7 @@ export const addTraceEntityToSchema = () => {
 		adminUIOptions: {
 			readonly: true,
 			hideInSideBar: true,
-			fieldForDetailPanel: 'traceId',
+			fieldForDetailPanelNavigationId: 'traceId',
 			defaultFilter: {
 				parentId: null,
 				name_nin: ['GraphweaverMetadata', 'TracesList', 'trace', 'IntrospectionQuery'],

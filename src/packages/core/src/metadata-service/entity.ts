@@ -28,7 +28,7 @@ export class AdminUiEntityMetadata {
 	summaryField?: string | null;
 
 	@Field(() => String)
-	fieldForDetailPanel!: string;
+	fieldForDetailPanelNavigationId!: string;
 
 	@Field(() => String)
 	primaryKeyField!: string;

@@ -12,7 +12,7 @@ export const SCHEMA_QUERY = gql`
 				backendId
 				excludeFromTracing
 				summaryField
-				fieldForDetailPanel
+				fieldForDetailPanelNavigationId
 				primaryKeyField
 				defaultFilter
 				defaultSort

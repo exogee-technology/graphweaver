@@ -48,8 +48,10 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// otherwise dynamically generated.
 		excludeFromFiltering?: boolean;
 
-		// This means that there will be no recorded telemetry for this entity. This is useful for entities
+		// This means that there will be no recorded telemetry for this entity when it's requested from the Admin UI. This is useful for entities
 		// that are managed by some other system or we don't want to record telemetry for.
+		//
+		// Note that in order to achieve this from your own front ends, you need to set the `X-GRAPHWEAVER-SUPPRESS-TRACING: true` header on the requests, which is what this option instructs the admin UI to do for you.
 		excludeFromTracing?: boolean;
 	};
 
@@ -98,7 +100,7 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// detail panel in the Admin UI. This is useful for entities where the primary key field is not
 		// the most useful field to display in the url.
 		// This value defaults to the primary key field if not set.
-		fieldForDetailPanel?: Extract<keyof G, string>;
+		fieldForDetailPanelNavigationId?: Extract<keyof G, string>;
 	};
 }
 

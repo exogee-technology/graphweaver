@@ -150,7 +150,7 @@ export const Table = <T extends object>({
 						{table.getRowModel().rows.map((row, i) => (
 							<tr
 								key={row.id}
-								className={clsx(i % 2 && styles.rowAlternateColor, onRowClick && styles.clickable)}
+								className={clsx(onRowClick && styles.clickable)}
 								onClick={(e) => {
 									if (
 										!(e.target as HTMLElement).closest('label') &&

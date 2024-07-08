@@ -65,7 +65,7 @@ export const createTreeFromTrace = (spans: Span[]): SpanTree => {
 	for (const span of spans) {
 		// Add the span to the lookup
 		const existingSpan = lookup.get(span.spanId);
-		const spanWithChildren: SpanTree = {
+		const spanWithChildren = {
 			...span,
 			children: [...(existingSpan ? existingSpan.children : [])],
 		} as SpanTree;

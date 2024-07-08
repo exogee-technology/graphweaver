@@ -78,7 +78,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						defaultSummaryField = field.name as 'name' | 'title';
 
 					// Check if the field is set as the field for the detail panel
-					if (field.adminUIOptions?.fieldForDetailPanel) {
+					if (field.adminUIOptions?.fieldForDetailPanelNavigationId) {
 						defaultFieldForDetailPanel = field.name;
 					}
 
@@ -131,8 +131,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				});
 
 				const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
-				const fieldForDetailPanel =
-					entity.adminUIOptions?.fieldForDetailPanel ?? defaultFieldForDetailPanel;
+				const fieldForDetailPanelNavigationId =
+					entity.adminUIOptions?.fieldForDetailPanelNavigationId ?? defaultFieldForDetailPanel;
 
 				return {
 					name: graphweaverMetadata.federationNameForEntity(entity),
@@ -140,7 +140,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					backendId,
 					primaryKeyField,
 					summaryField,
-					fieldForDetailPanel,
+					fieldForDetailPanelNavigationId,
 					fields,
 					attributes,
 					excludeFromTracing: apiOptions?.excludeFromTracing ?? false,

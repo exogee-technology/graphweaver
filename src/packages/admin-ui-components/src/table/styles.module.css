@@ -81,7 +81,7 @@
 	background-color: #352d44;
 }
 
-.table .rowAlternateColor {
+.table tr:nth-child(even) {
 	background-color: #241e2f;
 }
 

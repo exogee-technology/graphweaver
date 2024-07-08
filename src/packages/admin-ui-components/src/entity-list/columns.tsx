@@ -31,12 +31,12 @@ const cellForType = (
 				item.label
 			);
 
+		if (!value) return null;
+
 		if (Array.isArray(value)) {
 			return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
-		} else if (value) {
-			return linkForValue(value);
 		} else {
-			return null;
+			return linkForValue(value);
 		}
 	}
 
