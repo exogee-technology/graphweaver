@@ -40,7 +40,11 @@ const acl: AccessControlList<User, AuthorizationContext> = {
 };
 
 @ApplyAccessControlList(acl)
-@Entity('User', { provider })
+@Entity('User', {
+	provider,
+	adminUIOptions: { readonly: true },
+	apiOptions: { excludeFromBuiltInWriteOperations: true },
+})
 export class User {
 	@Field(() => ID)
 	id!: string;

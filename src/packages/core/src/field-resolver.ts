@@ -1,12 +1,12 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
-import { BaseContext } from './types';
+import { BaseContext, TraceOptions } from './types';
 import {
 	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
 	isSerializableGraphQLEntityClass,
 } from '.';
-import { Trace, trace } from './open-telemetry';
+import { trace } from './open-telemetry';
 import { dataEntityForGraphQLEntity } from './default-from-backend-entity';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
@@ -34,7 +34,7 @@ export const fieldResolver = async (
 		const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 
 		if (isEntityMetadata(fieldTypeMetadata) && isSerializableGraphQLEntityClass(fieldType)) {
-			const res = await trace(async (trace?: Trace) => {
+			const res = await trace(async (trace?: TraceOptions) => {
 				trace?.span.updateName(`FieldResolver - ${parent}.${key} - SerializableEntity`);
 				return fieldType.deserialize({
 					// Yes, this is a lot of `as any`, but we know this is a GraphQLEntity and it will have come from
@@ -50,7 +50,7 @@ export const fieldResolver = async (
 		}
 
 		if (typeof property === 'function') {
-			const res = await trace(async (trace?: Trace) => {
+			const res = await trace(async (trace?: TraceOptions) => {
 				trace?.span.updateName(`FieldResolver - ${parent}.${key} - Function`);
 				return property(source, args, context, info);
 			})();

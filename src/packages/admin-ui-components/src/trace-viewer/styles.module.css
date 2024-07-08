@@ -1,0 +1,115 @@
+.textContainer {
+	font-size: 0.85rem;
+	padding-top: 0.5rem;
+	padding-bottom: 0.5rem;
+}
+
+.spanContainer {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.spanDisplayInfo {
+	cursor: pointer;
+	border-radius: 12px;
+	padding: 8px 8px 30px 8px;
+}
+
+.spanDisplayInfo:hover {
+	background-color: #25212b;
+}
+
+.spanProgressBarContainer {
+	position: relative;
+	height: 1rem;
+	border-radius: 0.25rem;
+	background-color: #08060d;
+}
+
+.spanProgressBar {
+	position: absolute;
+	height: 1rem;
+	border-radius: 0.25rem;
+	background-color: #7038c2;
+}
+
+.spanChildren {
+	color: #71717a;
+	padding-left: 2.5rem;
+}
+
+.spanChildrenLine {
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+	border-left: 2px solid;
+	border-left-color: #100e12;
+}
+
+.spanRow {
+	display: flex;
+	gap: 10px;
+	flex-direction: row;
+	align-items: center;
+}
+
+.spanToggle {
+	background-color: #08060d;
+	padding: 4px 8px 4px 8px;
+	border-radius: 6px;
+	border: 1px solid #332d3f;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	color: #f5f4f799;
+}
+
+.spanTime {
+	position: absolute;
+	top: 18px;
+	color: #ffffffb0;
+	height: 1rem;
+	width: 200px;
+	font-size: 0.75rem;
+}
+
+.spanTimeRight {
+	text-align: right;
+	right: 0;
+}
+
+.chevron {
+	display: flex;
+	transform-origin: center;
+	transition-duration: 0.3s;
+}
+
+.rotate {
+	transform: rotate(-90deg);
+}
+
+/* VIEWER */
+
+.scrollContainer {
+	overflow-y: auto;
+	scrollbar-width: thin;
+	height: 100%;
+	background: #1e1a25;
+	border-radius: 0.25rem;
+	min-height: 100px;
+}
+
+.spanListContainer {
+	color: #71717a;
+	display: flex;
+	flex-direction: column;
+}
+
+.verticalHandle {
+	height: 20px;
+}
+
+.horizontalHandle {
+	width: 20px;
+}

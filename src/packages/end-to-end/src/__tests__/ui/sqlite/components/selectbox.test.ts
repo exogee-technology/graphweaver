@@ -7,7 +7,7 @@ test('Check Select field displays correct number of selected items based on init
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
-	await page.getByRole('gridcell', { name: 'For Those About To Rock' }).first().click();
+	await page.getByRole('cell', { name: 'For Those About To Rock' }).first().click();
 
 	// Expect "For Those About To Rock" to have 10 tracks+
 	await expect(page.getByText(/\d+ Selected/)).toBeVisible();
@@ -19,7 +19,7 @@ test('Check Select field shows correct number of selected items after adding add
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
-	await page.getByRole('gridcell', { name: '3', exact: true }).click();
+	await page.getByRole('cell', { name: '3', exact: true }).click();
 	await page
 		.locator('div')
 		.filter({ hasText: /^tracks\*3 Selected×$/ })
@@ -35,7 +35,7 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
-	await page.getByRole('gridcell', { name: 'For Those About To Rock We' }).click();
+	await page.getByRole('cell', { name: 'For Those About To Rock We' }).click();
 	await page
 		.locator('div')
 		.filter({ hasText: /^tracks\*10 Selected×$/ })

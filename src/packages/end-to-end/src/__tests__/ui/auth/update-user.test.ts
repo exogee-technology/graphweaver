@@ -10,7 +10,7 @@ test('should allow an admin to update a user', async ({ page }) => {
 	await page.getByPlaceholder('Password').press('Enter');
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
-	await page.getByRole('gridcell', { name: 'darth' }).click();
+	await page.getByRole('cell', { name: 'darth' }).click();
 	await page.getByPlaceholder('Password').click();
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByPlaceholder('Confirm').click();
@@ -29,7 +29,7 @@ test('should deny updating when a user has read only permission', async ({ page 
 	await page.getByPlaceholder('Password').press('Enter');
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
-	await page.getByRole('gridcell', { name: 'luke' }).click();
+	await page.getByRole('cell', { name: 'luke' }).click();
 	await page.getByPlaceholder('Password').click();
 	await page.getByPlaceholder('Password').fill('lightsaber123');
 	await page.getByPlaceholder('Confirm').click();

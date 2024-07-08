@@ -3,24 +3,22 @@ import { Entity, generateGqlSelectForEntityFields } from '../utils';
 
 export const generateUpdateEntityMutation = (
 	entity: Entity,
-	entityByType: (entityType: string) => Entity,
-	federationSubgraphName?: string
+	entityByType: (entityType: string) => Entity
 ) => gql`
     mutation updateEntity ($input: ${entity.name}UpdateInput!){
       update${entity.name} (input: $input) {
-        ${generateGqlSelectForEntityFields(entity, entityByType, federationSubgraphName)}
+        ${generateGqlSelectForEntityFields(entity, entityByType)}
       }
     }
   `;
 
 export const generateCreateEntityMutation = (
 	entity: Entity,
-	entityByType: (entityType: string) => Entity,
-	federationSubgraphName?: string
+	entityByType: (entityType: string) => Entity
 ) => gql`
     mutation createEntity ($input: ${entity.name}InsertInput!){
       create${entity.name} (input: $input) {
-        ${generateGqlSelectForEntityFields(entity, entityByType, federationSubgraphName)}
+        ${generateGqlSelectForEntityFields(entity, entityByType)}
       }
     }
   `;

@@ -1,4 +1,4 @@
-import { Entity, Filter, SortField } from './use-schema';
+import { Entity, Filter, SortEntity } from './use-schema';
 
 interface RouteForEntity {
 	entity: string | Entity;
@@ -25,7 +25,7 @@ interface RouteForDashboard {
 }
 
 interface SearchParams {
-	sort?: SortField[];
+	sort?: SortEntity;
 	filters?: Filter;
 	page?: number;
 }
@@ -74,7 +74,7 @@ export const encodeSearchParams = (searchParams: SearchParams) => {
 	let search = '';
 	let encoded: EncodedParams = {};
 
-	if (sort && sort.length > 0) {
+	if (sort) {
 		encoded = {
 			...encoded,
 			sort: encodeURIComponent(btoa(JSON.stringify(sort))),
@@ -102,7 +102,7 @@ export const encodeSearchParams = (searchParams: SearchParams) => {
 export const decodeSearchParams = (
 	search: URLSearchParams
 ): {
-	sort?: SortField[];
+	sort?: SortEntity;
 	filters?: Filter;
 	page: number;
 } => {

@@ -19,6 +19,7 @@ export * from './invoice-line';
 export * from './media-type';
 export * from './playlist';
 export * from './track';
+export * from './trace';
 
 export const entities = [
 	Album,

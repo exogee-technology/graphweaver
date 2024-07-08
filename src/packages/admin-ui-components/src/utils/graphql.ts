@@ -1,18 +1,20 @@
 import { gql } from '@apollo/client';
 import { Entity } from './use-schema';
-import { federationNameForEntity } from './utils';
 
 export const SCHEMA_QUERY = gql`
-	query graphweaver {
+	query GraphweaverMetadata {
 		result: _graphweaver {
-			federationSubgraphName
 			entities {
 				name
 				plural
 				backendId
+				excludeFromTracing
 				summaryField
+				fieldForDetailPanelNavigationId
 				primaryKeyField
 				defaultFilter
+				defaultSort
+				hideInSideBar
 				supportedAggregationTypes
 				fields {
 					name
@@ -30,6 +32,9 @@ export const SCHEMA_QUERY = gql`
 					extensions {
 						key
 					}
+					hideInTable
+					hideInFilterBar
+					hideInDetailForm
 				}
 				attributes {
 					isReadOnly
@@ -49,10 +54,10 @@ export const SCHEMA_QUERY = gql`
 
 export const generateGqlSelectForEntityFields = (
 	entity: Entity,
-	entityByType?: (entityType: string) => Entity,
-	federationSubgraphName?: string
+	entityByType?: (entityType: string) => Entity
 ) =>
 	entity.fields
+		.filter((field) => !field.hideInTable)
 		.map((field) => {
 			if (field.relationshipType) {
 				if (!entityByType) {
@@ -66,7 +71,7 @@ export const generateGqlSelectForEntityFields = (
 					label: ${relatedEntity?.summaryField ?? relatedEntity?.primaryKeyField}
 				}`;
 			} else {
-				if (field.type === federationNameForEntity('Media', federationSubgraphName)) {
+				if (field.type === 'Media') {
 					return `${field.name} { filename, type, url }`;
 				}
 				return field.name;

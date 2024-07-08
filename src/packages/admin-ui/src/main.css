@@ -38,6 +38,8 @@ body,
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 	background-color: var(--body-bg-color);
+	scrollbar-color: black transparent;
+	scrollbar-width: thin;
 
 	font-size: 14px;
 	line-height: 150%;

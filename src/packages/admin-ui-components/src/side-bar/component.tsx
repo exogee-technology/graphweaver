@@ -73,10 +73,7 @@ export const SideBar = () => {
 				{!!userDashboardLinks.length && (
 					<>
 						<p className={styles.subtext}>Dashboards</p>
-						<ul
-							//className={classnames(styles.entity, styles.closed)}
-							className={clsx(styles.closed)}
-						>
+						<ul className={clsx(styles.closed)}>
 							{userDashboardLinks.map((link) => (
 								<DashboardRow key={link.route} name={link.name} route={link.route} />
 							))}
@@ -89,6 +86,15 @@ export const SideBar = () => {
 				{schema.backends.map((backend) => (
 					<BackendRow key={backend} backend={backend} />
 				))}
+
+				{schema.entityByName('Trace') && (
+					<>
+						<p className={styles.subtext}>Analytics</p>
+						<ul className={clsx(styles.closed)}>
+							<DashboardRow key={'/Trace'} name={'Trace'} route={'/Trace'} />
+						</ul>
+					</>
+				)}
 			</div>
 
 			<Spacer grow={1} />

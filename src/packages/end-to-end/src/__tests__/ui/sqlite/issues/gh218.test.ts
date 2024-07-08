@@ -22,6 +22,6 @@ test('Ensure filtering by multiple items works', async ({ page }) => {
 		'A Copland Celebration, Vol. I'
 	);
 
-	// And there should be exactly 4 rows in the table: one header, and 3 data rows.
-	await expect(await page.getByTestId('table').getByRole('row').count()).toBe(4);
+	// And there should be exactly 5 rows in the table: one header, one footer, and 3 data rows.
+	await expect(await page.getByTestId('table').getByRole('row').count()).toBe(5);
 });

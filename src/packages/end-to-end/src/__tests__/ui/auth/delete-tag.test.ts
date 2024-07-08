@@ -20,7 +20,7 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 	const element = await page.getByText('has been successfully created');
 	await expect(element).toHaveCount(1);
 
-	await page.getByRole('row', { name: tag }).locator('label div').click();
+	await page.getByRole('row', { name: tag }).getByRole('checkbox').check();
 	await page.getByRole('button', { name: 'Actions' }).click();
 	await page.getByText('Delete selected row').click();
 	await page.getByRole('button', { name: 'Delete' }).click();
@@ -29,6 +29,6 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 	await expect(deleteToast).toHaveCount(1);
 
 	// Check that the item is removed from the table
-	const tableElement = await page.getByRole('gridcell', { name: tag });
+	const tableElement = await page.getByRole('cell', { name: tag });
 	await expect(tableElement).toHaveCount(0);
 });

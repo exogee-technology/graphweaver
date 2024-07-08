@@ -24,7 +24,7 @@ test('should allow an admin to create a user', async ({ page }) => {
 	await expect(element).toHaveCount(1);
 
 	// Check that the created item is in the table
-	const tableElement = await page.getByRole('gridcell', { name: username });
+	const tableElement = await page.getByRole('cell', { name: username });
 	await expect(tableElement).toHaveCount(1);
 });
 

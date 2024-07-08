@@ -15737,6 +15737,18 @@ INSERT INTO Track VALUES(3500,'String Quartet No. 12 in C Minor, D. 703 "Quartet
 INSERT INTO Track VALUES(3501,'L''orfeo, Act 3, Sinfonia (Orchestra)',345,2,24,'Claudio Monteverdi',66639,1189062,0.989999999999999992);
 INSERT INTO Track VALUES(3502,'Quintet for Horn, Violin, 2 Violas, and Cello in E Flat Major, K. 407/386c: III. Allegro',346,2,24,'Wolfgang Amadeus Mozart',221331,3665114,0.989999999999999992);
 INSERT INTO Track VALUES(3503,'Koyaanisqatsi',347,2,10,'Philip Glass',206005,3305164,0.989999999999999992);
+CREATE TABLE [Trace]
+(
+    [Id] INTEGER  NOT NULL,
+    [SpanId] NVARCHAR(200)  NOT NULL,
+    [TraceId] NVARCHAR(200)  NOT NULL,
+    [ParentId] NVARCHAR(200),
+    [Name] NVARCHAR(200)  NOT NULL,
+    [Timestamp] BIGINT NOT NULL,
+    [Duration] BIGINT NOT NULL,
+    [Attributes] JSON,
+    CONSTRAINT [PK_Track] PRIMARY KEY ([Id])
+);
 CREATE INDEX [IFK_AlbumArtistId] ON [Album] ([ArtistId]);
 CREATE INDEX [IFK_CustomerSupportRepId] ON [Customer] ([SupportRepId]);
 CREATE INDEX [IFK_EmployeeReportsTo] ON [Employee] ([ReportsTo]);
