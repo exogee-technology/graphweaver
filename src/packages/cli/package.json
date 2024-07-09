@@ -29,7 +29,7 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"chokidar": "3.6.0",
 		"esbuild": "0.23.0",
-		"inquirer": "9.3.4",
+		"inquirer": "10.0.1",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.6.2",
@@ -38,7 +38,7 @@
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.7",
-		"@types/node": "20.14.9",
+		"@types/node": "20.14.10",
 		"@types/semver": "7.5.8",
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.32",
