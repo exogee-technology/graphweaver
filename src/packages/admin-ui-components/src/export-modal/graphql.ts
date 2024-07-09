@@ -3,8 +3,7 @@ import { Entity, generateGqlSelectForEntityFields } from '../utils';
 
 export const listEntityForExport = (
 	entity: Entity,
-	entityByType?: (entityType: string) => Entity,
-	federationSubgraphName?: string
+	entityByType?: (entityType: string) => Entity
 ) => {
 	const pluralName = entity.plural;
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
@@ -12,7 +11,7 @@ export const listEntityForExport = (
 	return gql`
 		query entityCSVExport($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
 			result: ${queryName}(filter: $filter, pagination: $pagination) {
-				${generateGqlSelectForEntityFields(entity, entityByType, federationSubgraphName)}
+				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}
 		}
 	`;

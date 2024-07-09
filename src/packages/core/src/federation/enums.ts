@@ -1,4 +1,4 @@
-import { graphweaverMetadata } from '..';
+import { graphweaverMetadata } from '../metadata';
 
 export enum LinkPurpose {
 	SECURITY = 'SECURITY',

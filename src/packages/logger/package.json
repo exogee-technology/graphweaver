@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "1.1.0",
+	"version": "2.0.0",
 	"description": "Common logging output for Exogee projects",
 	"license": "MIT",
 	"directories": {
@@ -22,7 +22,7 @@
 		"pino": "9.2.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.9",
+		"@types/node": "20.14.10",
 		"esbuild": "0.23.0",
 		"glob": "10.4.2",
 		"typescript": "5.5.3"

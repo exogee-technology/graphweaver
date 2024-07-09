@@ -2,6 +2,7 @@ import Graphweaver from '@exogee/graphweaver-server';
 import { AuthorizationContext, authApolloPlugin } from '@exogee/graphweaver-auth';
 
 import './schema';
+import { traceProvider } from './schema/trace';
 // Auth Functions
 import { beforeRead, afterRead, addUserToContext } from './auth';
 
@@ -22,6 +23,10 @@ export const graphweaver = new Graphweaver<AuthorizationContext>({
 	},
 	fileAutoGenerationOptions: {
 		typesOutputPath: ['./'],
+	},
+	openTelemetry: {
+		traceProvider,
+		instrumentations: [],
 	},
 });
 

@@ -1,12 +1,12 @@
 import { apolloClient } from '../apollo';
 import { useEffect, useState, useRef } from 'react';
+import { Row } from '@tanstack/react-table';
 
 import styles from './styles.module.css';
 
 import { Button } from '../button';
 import { Modal } from '../modal';
 import { Spinner } from '../spinner';
-import { TableRowItem } from '../table';
 
 import toast from 'react-hot-toast';
 
@@ -14,25 +14,25 @@ import {
 	exportToCSV,
 	useSelectedEntity,
 	useSchema,
-	SortField,
 	getOrderByQuery,
 	Filter,
+	SortEntity,
 } from '../utils';
 import { listEntityForExport } from './graphql';
 
 const DEFAULT_EXPORT_PAGE_SIZE = 200;
 
-export const ExportModal = ({
+export const ExportModal = <TData extends object>({
 	closeModal,
 	sort,
 	filters,
 }: {
 	closeModal: () => void;
-	sort?: SortField[];
+	sort?: SortEntity;
 	filters?: Filter;
 }) => {
 	const { selectedEntity } = useSelectedEntity();
-	const { entityByName, federationSubgraphName } = useSchema();
+	const { entityByName } = useSchema();
 	const [displayPageNumber, setDisplayPageNumber] = useState(1);
 	const abortRef = useRef(false);
 
@@ -45,18 +45,20 @@ export const ExportModal = ({
 			let pageNumber = 0;
 			let hasNextPage = true;
 
-			const allResults: TableRowItem[] = [];
+			const allResults: Row<TData>[] = [];
 
 			while (hasNextPage) {
 				if (abortRef.current) return;
 
+				const primaryKeyField = selectedEntity.primaryKeyField;
+
 				const { data } = await apolloClient.query({
-					query: listEntityForExport(selectedEntity, entityByName, federationSubgraphName),
+					query: listEntityForExport(selectedEntity, entityByName),
 					variables: {
 						pagination: {
 							offset: pageNumber * pageSize,
 							limit: pageSize,
-							orderBy: getOrderByQuery(selectedEntity, sort),
+							orderBy: getOrderByQuery({ primaryKeyField, sort }),
 						},
 						...(filters ? { filter: filters } : {}),
 					},

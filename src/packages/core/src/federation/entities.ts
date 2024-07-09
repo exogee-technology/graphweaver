@@ -1,13 +1,9 @@
-import {
-	GraphQLResolveInfo,
-	ResolveTree,
-	ResolverOptions,
-	Source,
-	graphQLTypeForEntity,
-	graphweaverMetadata,
-} from '..';
+import { graphweaverMetadata } from '../metadata';
+import { GraphQLResolveInfo, ResolveTree, ResolverOptions } from '../types';
 import { AnyGraphQLType } from './scalars';
 import { getOne } from '../resolvers';
+import { graphQLTypeForEntity } from '../schema-builder';
+import { Source } from 'graphql';
 import { EXCLUDED_FROM_FEDERATION_ENTITY_FILTER } from './utils';
 
 export const addEntitiesQuery = () => {

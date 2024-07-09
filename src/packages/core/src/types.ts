@@ -1,9 +1,8 @@
 import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
+import { Span, Tracer } from '@opentelemetry/api';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { ResolveTree } from 'graphql-parse-resolve-info';
-import { GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
-
-import { graphweaverMetadata } from './metadata';
+import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -11,15 +10,17 @@ export type { Instrumentation } from '@opentelemetry/instrumentation';
 
 export interface BaseContext {}
 
-export enum Sort {
-	ASC = 'asc',
-	DESC = 'desc',
+export const ID = GraphQLID;
+
+export interface TraceOptions {
+	span: Span;
+	tracer: Tracer;
 }
 
-graphweaverMetadata.collectEnumInformation({
-	name: 'Sort',
-	target: Sort,
-});
+export enum Sort {
+	ASC = 'ASC',
+	DESC = 'DESC',
+}
 
 // TODO: When implementing multi-sort columns, Order By has to have its own order so a Record won't do
 // (Ordered Array-like is more important than Set-like )
@@ -105,6 +106,9 @@ export interface BackendProvider<D> {
 	updateMany(entities: Partial<D>[]): Promise<D[]>;
 	createOne(entity: Partial<D>): Promise<D>;
 	createMany(entities: Partial<D>[]): Promise<D[]>;
+	// This is an optional method that can be implemented if the backend supports saving open telemetry traces.
+	// This method should not have the TraceMethod decorator applied to it.
+	createTraces?(entities: Partial<D>[]): Promise<D[]>;
 	createOrUpdateMany(entities: Partial<D>[]): Promise<D[]>;
 	deleteOne(filter: Filter<D>): Promise<boolean>;
 	// Optional deleteMany
@@ -220,7 +224,9 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		hideInDetailForm?: boolean;
 		readonly?: boolean;
+		fieldForDetailPanelNavigationId?: boolean;
 	};
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;
@@ -263,10 +269,12 @@ export type ResolverOptions<TArgs = any, TContext = BaseContext, TSource = Sourc
 	context: TContext;
 	fields: ResolveTree;
 	info: GraphQLResolveInfo;
+	trace?: TraceOptions;
 };
 
 export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = ({
 	args,
 	context,
 	fields,
-}: ResolverOptions<TArgs, TContext>) => TResult;
+	trace,
+}: ResolverOptions<TArgs, TContext>) => Promise<TResult>;

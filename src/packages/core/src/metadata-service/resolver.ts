@@ -1,15 +1,9 @@
 import { AdminUiFieldMetadata } from './field';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
-
-import {
-	AdminUIFilterType,
-	RelationshipType,
-	BaseContext,
-	graphweaverMetadata,
-	getFieldTypeWithMetadata,
-	ResolverOptions,
-} from '..';
+import { graphweaverMetadata } from '../metadata';
+import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
+import { getFieldTypeWithMetadata } from '../schema-builder';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -59,26 +53,19 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			graphweaverMetadata.entities()
 		)
 			.map((entity) => {
-				const { adminUIOptions, provider } = entity;
-
-				// If the entity is hidden from the display, return undefined
-				// so that it won't show up in the metadata.
-				if (adminUIOptions?.hideInSideBar) return;
-
+				const { adminUIOptions, apiOptions, provider } = entity;
 				const backendId = entity.provider?.backendId;
 				const plural = entity.plural;
-
-				const visibleFields = Object.values(entity.fields).filter(
-					(field) => !field.adminUIOptions?.hideInTable
-				);
 
 				const attributes = new AdminUiEntityAttributeMetadata();
 				attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
 				attributes.isReadOnly = entity.adminUIOptions?.readonly;
 
 				let defaultSummaryField: 'name' | 'title' | undefined = undefined;
+				const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+				let defaultFieldForDetailPanel = primaryKeyField;
 
-				const fields = visibleFields?.map((field) => {
+				const fields = Object.values(entity.fields)?.map((field) => {
 					const {
 						fieldType,
 						isList,
@@ -90,25 +77,26 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					if (['name', 'title'].includes(field.name))
 						defaultSummaryField = field.name as 'name' | 'title';
 
+					// Check if the field is set as the field for the detail panel
+					if (field.adminUIOptions?.fieldForDetailPanelNavigationId) {
+						defaultFieldForDetailPanel = field.name;
+					}
+
 					// Define field attributes
 					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
 					const isRequired = !field.nullable;
 
-					let relatedTypeName = typeName;
-					if (relatedObject?.type === 'entity') {
-						relatedTypeName = graphweaverMetadata.federationNameForEntity(relatedObject);
-					} else if (relatedObject) {
-						relatedTypeName = relatedObject.name;
-					}
-
 					const fieldObject: AdminUiFieldMetadata = {
 						name: field.name,
-						type: relatedTypeName,
+						type: relatedObject?.name || typeName,
 						isArray: isList,
 						attributes: {
 							isReadOnly,
 							isRequired,
 						},
+						hideInTable: field.adminUIOptions?.hideInTable,
+						hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
+						hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
 					};
 
 					// Check if we have an array of related entities
@@ -130,15 +118,14 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 					}
 
-					fieldObject.filter = field.adminUIOptions?.hideInFilterBar
-						? undefined
-						: { type: mapFilterType(fieldObject) };
+					fieldObject.filter = { type: mapFilterType(fieldObject) };
 
 					return fieldObject;
 				});
 
 				const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
-				const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+				const fieldForDetailPanelNavigationId =
+					entity.adminUIOptions?.fieldForDetailPanelNavigationId ?? defaultFieldForDetailPanel;
 
 				return {
 					name: graphweaverMetadata.federationNameForEntity(entity),
@@ -146,9 +133,13 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					backendId,
 					primaryKeyField,
 					summaryField,
+					fieldForDetailPanelNavigationId,
 					fields,
 					attributes,
+					excludeFromTracing: apiOptions?.excludeFromTracing ?? false,
+					hideInSideBar: adminUIOptions?.hideInSideBar ?? false,
 					defaultFilter: adminUIOptions?.defaultFilter,
+					defaultSort: adminUIOptions?.defaultSort,
 					supportedAggregationTypes: [
 						...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
 					],
@@ -172,7 +163,6 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 		return {
 			entities,
 			enums,
-			federationSubgraphName: graphweaverMetadata.federationSubgraphName,
 		};
 	};
 };

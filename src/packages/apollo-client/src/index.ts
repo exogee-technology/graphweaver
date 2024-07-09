@@ -8,6 +8,20 @@ interface Entity {
 	primaryKeyField: string;
 }
 
+enum Sort {
+	ASC = 'ASC',
+	DESC = 'DESC',
+}
+
+type SortEntity = Record<string, Sort>;
+
+export const stabilizationKeys = Symbol('stabilization');
+
+export interface FilterWithStabilization {
+	[stabilizationKeys]: string[];
+	[key: string]: unknown;
+}
+
 const generateTypePolicyFields = (entities: Entity[]) => {
 	const policy: FieldPolicy<any> = {
 		keyArgs: (
@@ -16,9 +30,19 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 				pagination?: { orderBy: Record<string, unknown> };
 			} | null
 		) => {
-			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
-			const filter = args?.filter ? JSON.stringify(args.filter) : '';
+			// Remove Order Stabilization Keys
+			const filters = (args?.filter ?? {}) as unknown as FilterWithStabilization;
+			if (filters[stabilizationKeys]) {
+				const keys = filters[stabilizationKeys];
+				for (const key of keys) {
+					delete filters[key as keyof typeof filters];
+				}
+			}
+
+			const filter = JSON.stringify(filters);
 			const orderBy = args?.pagination?.orderBy ? JSON.stringify(args.pagination.orderBy) : '';
+
+			// https://www.apollographql.com/docs/react/pagination/key-args/#keyargs-function-advanced
 			return btoa(`${filter}:${orderBy}`);
 		},
 		merge(existing = [], incoming: { __ref: string }[]) {
@@ -53,4 +77,26 @@ export const generateTypePolicies = (entities: Entity[]) => {
 	};
 
 	return result;
+};
+
+export const addStabilizationToFilter = <TData>(
+	filter: Record<string, unknown>,
+	sort: SortEntity,
+	firstElement: TData
+) => {
+	const filters = {
+		...filter,
+	} as FilterWithStabilization;
+
+	const keys = Object.keys(sort);
+	for (const key of keys) {
+		const isDesc = sort[key] === Sort.DESC;
+		const operationKey = isDesc ? 'lte' : 'gte';
+
+		filters[stabilizationKeys] = filters[stabilizationKeys] ?? [];
+		filters[stabilizationKeys].push(`${key}_${operationKey}`);
+		filters[`${key}_${operationKey}`] = firstElement[key as keyof TData];
+	}
+
+	return filters;
 };

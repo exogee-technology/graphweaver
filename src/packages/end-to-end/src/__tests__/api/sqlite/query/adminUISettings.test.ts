@@ -128,11 +128,14 @@ test('Test the decorator adminUISettings', async () => {
 						backendId
 						defaultFilter
 						summaryField
+						hideInSideBar
 						fields {
 							name
 							type
 							relationshipType
 							relatedEntity
+							hideInTable
+							hideInFilterBar
 							filter {
 								type
 								__typename
@@ -169,10 +172,11 @@ test('Test the decorator adminUISettings', async () => {
 	});
 	assert(response.body.kind === 'single');
 	const result = response.body.singleResult.data?.result;
-	expect(result?.entities).toHaveLength(1);
+	expect(result?.entities).toHaveLength(2);
 
 	const albumEntity = result?.entities.find((entity) => entity.name === 'Album');
-	expect(albumEntity).toBeUndefined();
+	expect(albumEntity).not.toBeNull();
+	expect(albumEntity?.hideInSideBar).toStrictEqual(true);
 
 	const artistEntity = result?.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
@@ -184,11 +188,12 @@ test('Test the decorator adminUISettings', async () => {
 	expect(idField?.filter).not.toBeNull();
 
 	const nameField = artistEntity?.fields?.find((field) => field.name === 'name');
-	expect(nameField).toBeUndefined();
+	expect(nameField).not.toBeNull();
+	expect(nameField?.hideInTable).toStrictEqual(true);
 
 	const albumsField = artistEntity?.fields?.find((field) => field.name === 'albums');
 	expect(albumsField).not.toBeNull();
-	expect(albumsField?.filter).toBeNull();
+	expect(albumsField?.hideInFilterBar).toStrictEqual(true);
 
 	// Test that the type of the mediaDownloadUrlField field is Media
 	const mediaDownloadUrlField = artistEntity?.fields?.find(

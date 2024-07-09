@@ -1,4 +1,4 @@
-import { GetTypeFunction } from '..';
+import { GetTypeFunction } from '../types';
 import { graphweaverMetadata } from '../metadata';
 
 type RelationshipFieldOptions<D> = {
@@ -8,6 +8,7 @@ type RelationshipFieldOptions<D> = {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		hideInDetailForm?: boolean;
 		readonly?: boolean;
 	};
 

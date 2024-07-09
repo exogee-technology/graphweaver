@@ -61,5 +61,5 @@ graphweaverMetadata.addQuery({
 		},
 	},
 	getType: () => DeprecatedProduct,
-	resolver: () => true,
+	resolver: async () => true,
 });

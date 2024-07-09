@@ -3,14 +3,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { Button } from '../button';
-import {
-	AdminUIFilterType,
-	decodeSearchParams,
-	federationNameForEntity,
-	Filter,
-	routeFor,
-	useSchema,
-} from '../utils';
+import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
 	BooleanFilter,
 	validateFilter,
@@ -27,10 +20,10 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity: entityName, id } = useParams();
 	if (!entityName) throw new Error('There should always be an entity at this point.');
 	const [search] = useSearchParams();
-	const { entityByName, federationSubgraphName } = useSchema();
+	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const filters = searchParams.filters ?? entityByName(entityName).defaultFilter;
+	const filters = searchParams.filters ?? {};
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
@@ -39,11 +32,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// for now the workaround is to reduce the number of filters to 5
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON and Media types because they're not filterable
-			.filter(
-				(field) =>
-					field.type !== 'JSON' &&
-					field.type !== federationNameForEntity('Media', federationSubgraphName)
-			)
+			.filter((field) => field.type !== 'JSON' && field.type !== 'Media')
 			.slice(0, 5);
 
 		return fields;
@@ -118,7 +107,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		const fields = filterFieldsOnEntity();
 
 		return fields.map((field) => {
-			if (!field.filter?.type) return null;
+			if (field.hideInFilterBar || !field.filter?.type) return null;
 			const options = {
 				fieldName: field.name,
 				entity: entityName,

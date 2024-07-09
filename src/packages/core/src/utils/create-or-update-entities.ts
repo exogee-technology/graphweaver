@@ -1,21 +1,15 @@
 import { GraphQLList, GraphQLResolveInfo, Source } from 'graphql';
 
-import {
-	BaseContext,
-	CreateOrUpdateHookParams,
-	EntityMetadata,
-	HookRegister,
-	ResolveTree,
-	getFieldTypeWithMetadata,
-	graphQLTypeForEntity,
-	hookManagerMap,
-	isEntityMetadata,
-	isSerializableGraphQLEntityClass,
-	isTransformableGraphQLEntityClass,
-} from '..';
-import { graphweaverMetadata } from '../metadata';
+import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
 import { fromBackendEntity } from '../default-from-backend-entity';
+import { BaseContext, CreateOrUpdateHookParams, ResolveTree } from '../types';
+import { getFieldTypeWithMetadata, graphQLTypeForEntity } from '../schema-builder';
+import { HookRegister, hookManagerMap } from '../hook-manager';
+import {
+	isSerializableGraphQLEntityClass,
+	isTransformableGraphQLEntityClass,
+} from '../base-entities';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
