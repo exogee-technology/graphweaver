@@ -513,8 +513,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1(esbuild@0.23.0)
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       typescript:
         specifier: 5.5.3
         version: 5.5.3
@@ -592,8 +592,8 @@ importers:
         specifier: 2.4.6
         version: 2.4.6(react@18.3.1)
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -689,8 +689,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       prettier:
         specifier: 3.3.2
         version: 3.3.2
@@ -747,8 +747,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -838,8 +838,8 @@ importers:
         specifier: 3.1.2
         version: 3.1.2(esbuild@0.23.0)
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -1013,8 +1013,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       typescript:
         specifier: 5.5.3
         version: 5.5.3
@@ -1126,8 +1126,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       typescript:
         specifier: 5.5.3
         version: 5.5.3
@@ -1151,8 +1151,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       typescript:
         specifier: 5.5.3
         version: 5.5.3
@@ -1213,8 +1213,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@types/node@20.14.10)(typescript@5.5.3)
@@ -1265,8 +1265,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       prettier:
         specifier: 3.3.2
         version: 3.3.2
@@ -1296,8 +1296,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -1348,8 +1348,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
 
   packages/storage-provider:
     dependencies:
@@ -1373,8 +1373,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       typescript:
         specifier: 5.5.3
         version: 5.5.3
@@ -1392,8 +1392,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       typescript:
         specifier: 5.5.3
         version: 5.5.3
@@ -1432,8 +1432,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       glob:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 11.0.0
+        version: 11.0.0
       prettier:
         specifier: 3.3.2
         version: 3.3.2
@@ -11816,6 +11816,19 @@ packages:
       minipass: 7.1.2
       package-json-from-dist: 1.0.0
       path-scurry: 1.11.1
+    dev: false
+
+  /glob@11.0.0:
+    resolution: {integrity: sha512-9UiX/Bl6J2yaBbxKoEBRm4Cipxgok8kQYcOPEhScPwebu2I0HoQOuYdIO6S3hLuWoZgpDpwQZMzTFxgpkyT76g==}
+    engines: {node: 20 || >=22}
+    hasBin: true
+    dependencies:
+      foreground-child: 3.2.1
+      jackspeak: 4.0.1
+      minimatch: 10.0.1
+      minipass: 7.1.2
+      package-json-from-dist: 1.0.0
+      path-scurry: 2.0.0
 
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
@@ -12741,6 +12754,15 @@ packages:
   /jackspeak@3.4.1:
     resolution: {integrity: sha512-U23pQPDnmYybVkYjObcuYMk43VRlMLLqLI+RdZy8s8WV8WsxO9SnqSroKaluuvcNOdCAlauKszDwd+umbot5Mg==}
     engines: {node: '>=18'}
+    dependencies:
+      '@isaacs/cliui': 8.0.2
+    optionalDependencies:
+      '@pkgjs/parseargs': 0.11.0
+    dev: false
+
+  /jackspeak@4.0.1:
+    resolution: {integrity: sha512-cub8rahkh0Q/bw1+GxP7aeSe29hHHn2V4m29nnDlvCdlgU+3UGxkZp7Z53jLUdpX3jdTO0nJZUDl3xvbWc2Xog==}
+    engines: {node: 20 || >=22}
     dependencies:
       '@isaacs/cliui': 8.0.2
     optionalDependencies:
@@ -13908,6 +13930,11 @@ packages:
   /lru-cache@10.4.0:
     resolution: {integrity: sha512-bfJaPTuEiTYBu+ulDaeQ0F+uLmlfFkMgXj4cbwfuMSjgObGMzb55FMMbDvbRU0fAHZ4sLGkz2mKwcMg8Dvm8Ww==}
     engines: {node: '>=18'}
+    dev: false
+
+  /lru-cache@11.0.0:
+    resolution: {integrity: sha512-Qv32eSV1RSCfhY3fpPE2GNZ8jgM9X7rdAfemLWqTUxwiyIC4jJ6Sy0fZ8H+oLWevO6i4/bizg7c8d8i6bxrzbA==}
+    engines: {node: 20 || >=22}
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
@@ -14130,6 +14157,12 @@ packages:
   /minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
     dev: false
+
+  /minimatch@10.0.1:
+    resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
+    engines: {node: 20 || >=22}
+    dependencies:
+      brace-expansion: 2.0.1
 
   /minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -14816,6 +14849,14 @@ packages:
     engines: {node: '>=16 || 14 >=14.18'}
     dependencies:
       lru-cache: 10.4.0
+      minipass: 7.1.2
+    dev: false
+
+  /path-scurry@2.0.0:
+    resolution: {integrity: sha512-ypGJsmGtdXUOeM5u93TyeIEfEhM6s+ljAhrk5vAvSx8uyY/02OvrZnA0YNGUrPXfpJMgI1ODd3nwz8Npx4O4cg==}
+    engines: {node: 20 || >=22}
+    dependencies:
+      lru-cache: 11.0.0
       minipass: 7.1.2
 
   /path-to-regexp@0.1.7:
