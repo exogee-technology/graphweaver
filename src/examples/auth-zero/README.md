@@ -14,7 +14,7 @@ In order to run this example head over to Auth0 and create a new application:
 
 https://manage.auth0.com/dashboard/us/applications
 
-Once you have created the application make sure to set the below settings:
+Once you have created the application, make sure to set the below settings:
 
 Allowed Callback Urls: http://localhost:9000
 Allowed Logout Urls: http://localhost:9000
