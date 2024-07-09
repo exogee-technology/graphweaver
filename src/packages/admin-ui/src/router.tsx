@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouteObject, RouterProvider } from 'react-router-dom';
 import {
 	Loader,
 	DefaultLayout,
@@ -10,9 +10,9 @@ import {
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { List, Root, Playground } from './pages';
+import { List, Root, Playground, TraceDetail } from './pages';
 
-const defaultRoutes = [
+const defaultRoutes: RouteObject[] = [
 	{
 		element: <DefaultLayout />,
 		errorElement: <DefaultErrorFallback />,
@@ -20,6 +20,10 @@ const defaultRoutes = [
 			{
 				path: '/',
 				element: customPages.defaultRoute ? <Navigate to={customPages.defaultRoute} /> : <Root />,
+			},
+			{
+				path: 'Trace/:id',
+				element: <TraceDetail />,
 			},
 			{
 				path: ':entity',

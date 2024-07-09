@@ -7,7 +7,6 @@ import {
 	GraphQLFieldConfig,
 	GraphQLFieldConfigArgumentMap,
 	GraphQLFloat,
-	GraphQLID,
 	GraphQLInputFieldConfig,
 	GraphQLInputObjectType,
 	GraphQLInputType,
@@ -31,12 +30,11 @@ import { ObjMap } from 'graphql/jsutils/ObjMap';
 import { logger } from '@exogee/logger';
 import { printSchemaWithDirectives } from '@graphql-tools/utils';
 
+import { FieldMetadata, GetTypeFunction, ID, TypeValue } from './types';
 import {
 	ArgsMetadata,
 	EntityMetadata,
 	EnumMetadata,
-	FieldMetadata,
-	GetTypeFunction,
 	graphweaverMetadata,
 	InputTypeMetadata,
 	isArgMetadata,
@@ -45,24 +43,17 @@ import {
 	isInputMetadata,
 	isUnionMetadata,
 	MetadataType,
-	trace,
-	TypeValue,
 	UnionMetadata,
-} from '.';
+} from './metadata';
+import { trace } from './open-telemetry';
 import * as resolvers from './resolvers';
-
-export const ID = GraphQLID;
-
-const arrayOperations = new Set(['in', 'nin']);
-const basicOperations = new Set(['ne', 'notnull', 'null']);
-const likeOperations = new Set(['like', 'ilike']);
-const mathOperations = new Set(['gt', 'gte', 'lt', 'lte']);
-const allOperations = new Set([
-	...arrayOperations,
-	...basicOperations,
-	...likeOperations,
-	...mathOperations,
-]);
+import {
+	allOperations,
+	arrayOperations,
+	basicOperations,
+	likeOperations,
+	mathOperations,
+} from './operations';
 
 export type GraphweaverSchemaExtension = Readonly<GraphQLObjectTypeExtensions<any, any>> & {
 	graphweaverSchemaInfo:
@@ -110,7 +101,14 @@ const typeCacheForEntityFilter = (entityFilter: EntityFilter | undefined) => {
 const scalarShouldGetLikeOperations = (scalar: GraphQLScalarType) => scalar === GraphQLString;
 const scalarShouldGetMathOperations = (
 	scalar: GraphQLScalarType | NumberConstructor | DateConstructor | BigIntConstructor
-) => scalar === Number || scalar === Date || scalar === BigInt || scalar.name === 'ISOString';
+) =>
+	scalar === Number ||
+	scalar === Date ||
+	scalar === BigInt ||
+	scalar.name === 'ID' ||
+	scalar.name === 'String' ||
+	scalar.name === 'ISOString' ||
+	(scalar instanceof GraphQLScalarType && scalar?.extensions?.type === 'integer');
 
 const graphQLTypeForEnum = (
 	enumMetadata: EnumMetadata<any>,

@@ -2,7 +2,7 @@ import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
-import { BaseContext } from './types';
+import { BaseContext, TraceOptions } from './types';
 import {
 	AggregationResult,
 	AggregationType,
@@ -24,7 +24,7 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
-import { Trace, traceSync, trace } from './open-telemetry';
+import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
@@ -37,7 +37,7 @@ export const baseResolver = (resolver: Resolver) => {
 		args: any,
 		context: BaseContext,
 		info: GraphQLResolveInfo,
-		trace?: Trace
+		trace?: TraceOptions
 	) => {
 		trace?.span.updateName(`Resolver - BaseResolver`);
 		return resolver({
@@ -52,7 +52,7 @@ export const baseResolver = (resolver: Resolver) => {
 
 const _getOne = async <G>(
 	{ args: { id }, context, fields, info }: ResolverOptions,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	logger.trace({ id, context, info }, 'Get One resolver called.');
 
@@ -110,7 +110,7 @@ const _getOne = async <G>(
 
 const _list = async <G, D>(
 	{ args: { filter, pagination }, context, info, fields }: ResolverOptions,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	logger.trace({ filter, pagination, context, info }, 'List resolver called.');
 
@@ -164,7 +164,7 @@ const _list = async <G, D>(
 	});
 	logger.trace({ result }, 'Got result');
 
-	result = traceSync<[], (G | null)[]>((trace?: Trace) => {
+	result = traceSync<[], (G | null)[]>((trace?: TraceOptions) => {
 		trace?.span.updateName(
 			`FromBackendEntity - ${result.length} ${entity.name} ${result.length > 1 ? 'entities' : 'entity'}`
 		);
@@ -186,7 +186,7 @@ const _list = async <G, D>(
 
 const _createOrUpdate = async <G>(
 	{ args: { input }, context, info, fields }: ResolverOptions<{ input: Partial<G> | Partial<G>[] }>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	logger.trace({ input, context, info }, 'Create or Update resolver called.');
 
@@ -304,7 +304,7 @@ const _createOrUpdate = async <G>(
 
 const _deleteOne = async <G extends { name: string }>(
 	{ args: { filter }, info, context, fields }: ResolverOptions<{ filter: Filter<G> }>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	const field = info.schema.getMutationType()?.getFields()[info.fieldName];
 	if (!field) {
@@ -357,7 +357,7 @@ const _deleteOne = async <G extends { name: string }>(
 
 const _deleteMany = async <G>(
 	{ args: { filter }, context, info, fields }: ResolverOptions<{ filter: Filter<G> }>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	const field = info.schema.getMutationType()?.getFields()[info.fieldName];
 	if (!field) {
@@ -413,7 +413,7 @@ const _deleteMany = async <G>(
 // This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
 const _aggregate = async <G extends { name: string }>(
 	{ args: { filter }, context, info, fields }: ResolverOptions<{ filter: Filter<G> }>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	const field = info.schema.getQueryType()?.getFields()[info.fieldName];
 	if (!field) {
@@ -489,7 +489,7 @@ const _aggregate = async <G extends { name: string }>(
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
-	trace?: Trace
+	trace?: TraceOptions
 ) => {
 	trace?.span.updateName(
 		`Resolver - ListRelationshipField ${info.path.typename} - ${info.fieldName}`
@@ -650,7 +650,7 @@ export const aggregateRelationshipField = (
 	trace(
 		async <G, D, R, C extends BaseContext>(
 			{ args: { filter }, context, source, fields }: ResolverOptions<{ filter: Filter<R> }, C, G>,
-			trace?: Trace
+			trace?: TraceOptions
 		): Promise<AggregationResult> => {
 			logger.trace('Resolving aggregated relationship field');
 

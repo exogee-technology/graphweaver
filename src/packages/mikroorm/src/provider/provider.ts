@@ -8,7 +8,7 @@ import {
 	AggregationResult,
 	AggregationType,
 	TraceMethod,
-	Trace,
+	TraceOptions,
 	traceSync,
 	trace as startTrace,
 } from '@exogee/graphweaver';
@@ -239,7 +239,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async find(
 		filter: Filter<D>,
 		pagination?: PaginationOptions,
-		trace?: Trace
+		trace?: TraceOptions
 	): Promise<D[]> {
 		// If we have a span, update the name
 		trace?.span.updateName(`Mikro-Orm - Find ${this.entityType.name}`);
@@ -256,7 +256,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		//     id
 		//   }
 		// }
-		const where = traceSync((trace?: Trace) => {
+		const where = traceSync((trace?: TraceOptions) => {
 			trace?.span.updateName('Convert filter to Mikro-Orm format');
 			return filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 		})();
@@ -292,7 +292,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		query.populate((driver as any).autoJoinOneToOneOwner(meta, []));
 
 		try {
-			const result = await startTrace(async (trace?: Trace) => {
+			const result = await startTrace(async (trace?: TraceOptions) => {
 				trace?.span.updateName('Mikro-Orm - Fetch Data');
 				return query.getResult();
 			})();
@@ -320,7 +320,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async findOne(filter: Filter<D>, trace?: Trace): Promise<D | null> {
+	public async findOne(filter: Filter<D>, trace?: TraceOptions): Promise<D | null> {
 		trace?.span.updateName(`Mikro-Orm - FindOne ${this.entityType.name}`);
 		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
 
@@ -348,7 +348,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		relatedField: string,
 		relatedFieldIds: string[],
 		filter?: any,
-		trace?: Trace
+		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - findByRelatedId ${this.entityType.name}`);
 		const queryFilter = {
@@ -363,10 +363,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return result as D[];
 	}
 
+	@TraceMethod()
 	public async updateOne(
 		id: string | number,
 		updateArgs: Partial<D & { version?: number }>,
-		trace?: Trace
+		trace?: TraceOptions
 	): Promise<D> {
 		trace?.span.updateName(`Mikro-Orm - updateOne ${this.entityType.name}`);
 
@@ -406,7 +407,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	@TraceMethod()
 	public async updateMany(
 		updateItems: (Partial<D> & { id: string })[],
-		trace?: Trace
+		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - updateMany ${this.entityType.name}`);
 		logger.trace(`Running update many ${this.entityType.name} with args`, {
@@ -435,7 +436,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async createOrUpdateMany(items: Partial<D>[], trace?: Trace): Promise<D[]> {
+	public async createOrUpdateMany(items: Partial<D>[], trace?: TraceOptions): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - createOrUpdateMany ${this.entityType.name}`);
 		logger.trace(`Running create or update many for ${this.entityType.name} with args`, {
 			items: JSON.stringify(items),
@@ -475,7 +476,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async createOne(createArgs: Partial<D>, trace?: Trace): Promise<D> {
+	public async createOne(createArgs: Partial<D>, trace?: TraceOptions): Promise<D> {
 		trace?.span.updateName(`Mikro-Orm - createOne ${this.entityType.name}`);
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createArgs),
@@ -491,8 +492,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async createMany(createItems: Partial<D>[], trace?: Trace): Promise<D[]> {
+	public async createMany(createItems: Partial<D>[], trace?: TraceOptions): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - createMany ${this.entityType.name}`);
+		return this._createMany(createItems);
+	}
+
+	public async createTraces(createItems: Partial<D>[]): Promise<D[]> {
+		return this._createMany(createItems);
+	}
+
+	private async _createMany(createItems: Partial<D>[]) {
 		logger.trace(`Running create ${this.entityType.name} with args`, {
 			createArgs: JSON.stringify(createItems),
 		});
@@ -514,7 +523,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async deleteOne(filter: Filter<D>, trace?: Trace): Promise<boolean> {
+	public async deleteOne(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteOne ${this.entityType.name}`);
 		logger.trace(filter, `Running delete ${this.entityType.name} with filter.`);
 		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
@@ -536,7 +545,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async deleteMany(filter: Filter<D>, trace?: Trace): Promise<boolean> {
+	public async deleteMany(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteMany ${this.entityType.name}`);
 		logger.trace(`Running delete ${this.entityType.name}`);
 
@@ -596,7 +605,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async aggregate(
 		filter: Filter<D>,
 		requestedAggregations: Set<AggregationType>,
-		trace?: Trace
+		trace?: TraceOptions
 	): Promise<AggregationResult> {
 		trace?.span.updateName(`Mikro-Orm - aggregate ${this.entityType.name}`);
 		logger.trace(`Running aggregate ${this.entityType.name} with filter`, {

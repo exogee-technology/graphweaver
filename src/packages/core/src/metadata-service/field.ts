@@ -30,4 +30,13 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => Boolean, { nullable: true })
 	isArray?: boolean;
+
+	@Field(() => Boolean, { nullable: true })
+	hideInTable?: boolean;
+
+	@Field(() => Boolean, { nullable: true })
+	hideInFilterBar?: boolean;
+
+	@Field(() => Boolean, { nullable: true })
+	hideInDetailForm?: boolean;
 }

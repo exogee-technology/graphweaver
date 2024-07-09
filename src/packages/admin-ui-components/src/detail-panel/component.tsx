@@ -12,7 +12,6 @@ import {
 	CustomField,
 	decodeSearchParams,
 	EntityField,
-	federationNameForEntity,
 	queryForEntity,
 	routeFor,
 	useSchema,
@@ -49,15 +48,7 @@ export enum PanelMode {
 const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
 	field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 
-const getField = ({
-	field,
-	autoFocus,
-	federationSubgraphName,
-}: {
-	field: EntityField;
-	autoFocus: boolean;
-	federationSubgraphName?: string;
-}) => {
+const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const isReadonly = isFieldReadonly(field);
 
 	if (field.relationshipType) {
@@ -76,7 +67,7 @@ const getField = ({
 		return <BooleanField name={field.name} autoFocus={autoFocus} />;
 	}
 
-	if (field.type === federationNameForEntity('Media', federationSubgraphName)) {
+	if (field.type === 'Media') {
 		return <MediaField field={field} autoFocus={autoFocus} />;
 	}
 
@@ -100,21 +91,13 @@ const getField = ({
 	);
 };
 
-const DetailField = ({
-	field,
-	autoFocus,
-	federationSubgraphName,
-}: {
-	field: EntityField;
-	autoFocus: boolean;
-	federationSubgraphName?: string;
-}) => {
+const DetailField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
 	return (
 		<div className={styles.detailField}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
-			{getField({ field, autoFocus, federationSubgraphName })}
+			{getField({ field, autoFocus })}
 		</div>
 	);
 };
@@ -123,15 +106,13 @@ const CustomFieldComponent = ({
 	field,
 	entity,
 	panelMode,
-	federationSubgraphName,
 }: {
 	field: CustomField;
 	entity: Record<string, any>;
 	panelMode: PanelMode;
-	federationSubgraphName?: string;
 }) => (
 	<div className={styles.detailField}>
-		{field.component({ entity, context: 'detail-form', panelMode, federationSubgraphName })}
+		{field.component({ entity, context: 'detail-form', panelMode })}
 	</div>
 );
 
@@ -158,7 +139,6 @@ const DetailForm = ({
 	onCancel,
 	onSubmit,
 	persistName,
-	federationSubgraphName,
 	isReadOnly,
 	panelMode,
 }: {
@@ -167,7 +147,6 @@ const DetailForm = ({
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
 	persistName: string;
-	federationSubgraphName?: string;
 	isReadOnly?: boolean;
 	panelMode: PanelMode;
 }) => {
@@ -243,7 +222,7 @@ const DetailForm = ({
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
 							if (field.type === 'custom') {
-								if ((field as CustomField).hideOnDetailForm) return null;
+								if (field.hideInDetailForm) return null;
 
 								return (
 									<CustomFieldComponent
@@ -251,7 +230,6 @@ const DetailForm = ({
 										field={field as CustomField}
 										entity={initialValues}
 										panelMode={panelMode}
-										federationSubgraphName={federationSubgraphName}
 									/>
 								);
 							} else {
@@ -260,7 +238,6 @@ const DetailForm = ({
 										key={field.name}
 										field={field}
 										autoFocus={field === firstEditableField}
-										federationSubgraphName={federationSubgraphName}
 									/>
 								);
 							}
@@ -292,14 +269,14 @@ export const DetailPanel = () => {
 	const { id, entity } = useParams();
 	const navigate = useNavigate();
 	const { selectedEntity } = useSelectedEntity();
-	const { entityByName, entityByType, federationSubgraphName } = useSchema();
+	const { entityByName, entityByType } = useSchema();
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
 
 	const panelMode = id === 'graphweaver-admin-new-entity' ? PanelMode.CREATE : PanelMode.EDIT;
 
 	const { data, loading, error } = useQuery<{ result: ResultBaseType }>(
-		queryForEntity(selectedEntity, entityByName, federationSubgraphName),
+		queryForEntity(selectedEntity, entityByName),
 		{
 			variables: { id },
 			skip: panelMode === PanelMode.CREATE,
@@ -324,12 +301,7 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
-	const customFieldsToShow = (customFields?.get(selectedEntity.name) || []).filter(
-		(customField) => {
-			const { detailForm: show } = customField.showOn ?? { detailForm: true };
-			return show;
-		}
-	);
+	const customFieldsToShow = customFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
 		// We don't show Many to Many relationships in the form yet because we don't have
@@ -370,12 +342,8 @@ export const DetailPanel = () => {
 		{} as Record<string, any>
 	);
 
-	const [updateEntity] = useMutation(
-		generateUpdateEntityMutation(selectedEntity, entityByType, federationSubgraphName)
-	);
-	const [createEntity] = useMutation(
-		generateCreateEntityMutation(selectedEntity, entityByType, federationSubgraphName)
-	);
+	const [updateEntity] = useMutation(generateUpdateEntityMutation(selectedEntity, entityByType));
+	const [createEntity] = useMutation(generateCreateEntityMutation(selectedEntity, entityByType));
 
 	const slideAnimationTime = useMemo(() => {
 		const slideAnimationTimeCssVar = getComputedStyle(document.documentElement)
@@ -418,7 +386,7 @@ export const DetailPanel = () => {
 					variables: {
 						input: values,
 					},
-					refetchQueries: [`AdminUIListPage`],
+					refetchQueries: [`${selectedEntity.plural}List`],
 				});
 			}
 
@@ -504,7 +472,6 @@ export const DetailPanel = () => {
 								persistName={persistName}
 								isReadOnly={selectedEntity.attributes.isReadOnly}
 								panelMode={panelMode}
-								federationSubgraphName={federationSubgraphName}
 							/>
 						)}
 					</>

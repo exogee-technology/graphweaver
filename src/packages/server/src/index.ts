@@ -1,4 +1,4 @@
-import { GraphQLSchema } from 'graphql';
+import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
@@ -14,6 +14,9 @@ import {
 	trace,
 	isTraceable,
 	Instrumentation,
+	BackendProvider,
+	setDisableTracingForRequest,
+	setEnableTracingForRequest,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -66,6 +69,7 @@ export interface GraphweaverConfig {
 	};
 	schemaDirectives?: Record<string, any>;
 	openTelemetry?: {
+		traceProvider?: BackendProvider<unknown>;
 		instrumentations?: (Instrumentation | Instrumentation[])[];
 	};
 }
@@ -87,10 +91,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
 
-		startTracing({ instrumentations: this.config.openTelemetry?.instrumentations ?? [] });
-
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
+
+		startTracing({
+			instrumentations: this.config.openTelemetry?.instrumentations ?? [],
+			traceProvider: this.config.openTelemetry?.traceProvider,
+		});
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
@@ -165,19 +172,41 @@ export default class Graphweaver<TContext extends BaseContext> {
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
 
-		if (isTraceable) {
+		if (isTraceable()) {
 			// Wrap the executeHTTPGraphQLRequest method with a trace span
 			// This will allow us to trace the entire request from start to finish
 			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
 			this.server.executeHTTPGraphQLRequest = trace((request, trace) => {
-				trace?.span.updateName('Graphweaver Request');
+				const body = request.httpGraphQLRequest.body as
+					| { operationName: string; query: string }
+					| undefined;
+				const operationName = body?.operationName ?? 'Graphweaver Request';
+
+				const gql = parse(body?.query ?? '');
+				const type = (gql.definitions[0] as OperationDefinitionNode)?.operation ?? '';
+
+				trace?.span.updateName(operationName);
 				trace?.span.setAttributes({
 					'X-Amzn-RequestId': request.httpGraphQLRequest.headers.get('x-amzn-requestid'),
 					'X-Amzn-Trace-Id': request.httpGraphQLRequest.headers.get('x-amzn-trace-id'),
 					body: JSON.stringify(request.httpGraphQLRequest.body),
 					method: request.httpGraphQLRequest.method,
+					type,
 				});
-				return executeHTTPGraphQLRequest.bind(this.server)(request);
+
+				const suppressTracing = request.httpGraphQLRequest.headers.get(
+					'x-graphweaver-suppress-tracing'
+				);
+
+				if (suppressTracing === 'true') {
+					return setDisableTracingForRequest(() => {
+						return executeHTTPGraphQLRequest.bind(this.server)(request);
+					});
+				} else {
+					return setEnableTracingForRequest(() => {
+						return executeHTTPGraphQLRequest.bind(this.server)(request);
+					});
+				}
 			});
 		}
 	}

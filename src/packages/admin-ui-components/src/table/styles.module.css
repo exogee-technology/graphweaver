@@ -1,71 +1,107 @@
-/* TODO: */
-.spinner {
-	/* inline-size: 180px; */
-	/* padding-block: 8px;
-	padding-inline: 16px; */
-	position: relative;
-	text-align: center;
-	/* inset-block-end: 8px;
-	inset-inline-end: 8px; */
-	color: var(--body-copy-color);
-	line-height: 35px;
-	background: var(--body-bg-color);
-}
-
-.deleteEntitiesModal {
-	background: var(--detail-bg-color);
-	border: 1px solid rgba(237, 232, 242, 0.1);
+.container {
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
 	border-radius: 12px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	padding-left: 20px;
-	padding-right: 20px;
+	height: 100%;
+	background-color: #1e1a25;
+	border: 1px solid #3b3349;
 }
 
-.deleteEntitiesModal p {
-	color: var(--body-copy-color);
+.table {
+	position: relative;
 }
 
-.deleteEntitiesModalTitle {
-	font-size: 24px;
-	font-weight: 600;
-	line-height: 34px;
+.clickable {
+	cursor: pointer;
+}
+
+.table table {
+	min-width: 100%;
+	background-color: #1e1a25;
+}
+
+.table thead {
+	background-color: #271f36;
+	height: 40px;
+	position: sticky;
+	top: 0;
+}
+
+.table thead th {
+	vertical-align: middle;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 	text-align: left;
-	margin-top: 24px;
+	padding: 0 10px;
+	align-items: center;
+	height: 40px;
+	border-bottom: 1px solid #3b3349;
 }
 
-.deleteEntitiesModalFooter {
+.sortable {
+	cursor: pointer;
+}
+
+.sortable:hover {
+	background-color: #352d44;
+}
+
+.table thead th .header {
 	display: flex;
-	flex-direction: row;
-	justify-content: flex-end;
-	margin-top: 25px;
-	padding: 10px;
-}
-
-.deleteEntitiesModalFooter button {
+	align-items: center;
+	width: 100%;
+	gap: 8px;
+	color: #ede8f2a1;
 	font-weight: 500;
-	margin-left: 10px;
+	font-size: 14px;
+	line-height: 14px;
 }
 
-.deleteButton {
-	background: #f12316;
-	border-radius: 6px;
-	color: var(--body-copy-color);
-	padding: 8px 16px;
+.table thead th .arrow {
+	transform-origin: center;
+	transition-duration: 0.3s;
 }
 
-.deleteButton:hover {
-	background: #f12316;
-	opacity: 0.6;
+.table thead th .asc {
+	transform: rotate(180deg);
 }
 
-.successToast {
-	display: flex;
-	flex-direction: column;
+.table thead th .desc {
+	transform: rotate(0deg);
 }
 
-.deletedText {
-	color: #ede8f2b2;
+.table tbody tr {
+	height: 48px;
+	max-height: 48px;
+}
+
+.table tbody tr:hover {
+	background-color: #352d44;
+}
+
+.table tr:nth-child(even) {
+	background-color: #241e2f;
+}
+
+.table td {
+	max-width: 300px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	vertical-align: middle;
+	color: #ede8f2;
+	font-size: 14px;
+	line-height: 19.6px;
+	font-weight: 400;
+	padding: 0 10px;
+	white-space: nowrap;
+}
+
+.table tfoot {
+	height: 40px;
+}
+
+.table tfoot th {
+	vertical-align: middle;
 }

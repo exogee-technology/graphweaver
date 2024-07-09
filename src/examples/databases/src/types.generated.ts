@@ -32,7 +32,11 @@ export type AdminUiEntityMetadata = {
   attributes: AdminUiEntityAttributeMetadata;
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
+  defaultSort?: Maybe<Scalars['JSON']['output']>;
+  excludeFromTracing: Scalars['Boolean']['output'];
+  fieldForDetailPanelNavigationId: Scalars['String']['output'];
   fields: Array<AdminUiFieldMetadata>;
+  hideInSideBar: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
@@ -68,6 +72,9 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
+  hideInFilterBar?: Maybe<Scalars['Boolean']['output']>;
+  hideInTable?: Maybe<Scalars['Boolean']['output']>;
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
@@ -93,7 +100,6 @@ export type AdminUiMetadata = {
   __typename?: 'AdminUiMetadata';
   entities: Array<AdminUiEntityMetadata>;
   enums: Array<AdminUiEnumMetadata>;
-  federationSubgraphName?: Maybe<Scalars['String']['output']>;
 };
 
 export type AggregationResult = {
@@ -314,15 +320,23 @@ export type TaskUpdateInput = {
 
 export type TasksListFilter = {
   description?: InputMaybe<Scalars['String']['input']>;
+  description_gt?: InputMaybe<Scalars['String']['input']>;
+  description_gte?: InputMaybe<Scalars['String']['input']>;
   description_ilike?: InputMaybe<Scalars['String']['input']>;
   description_in?: InputMaybe<Array<Scalars['String']['input']>>;
   description_like?: InputMaybe<Scalars['String']['input']>;
+  description_lt?: InputMaybe<Scalars['String']['input']>;
+  description_lte?: InputMaybe<Scalars['String']['input']>;
   description_ne?: InputMaybe<Scalars['String']['input']>;
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   description_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -395,23 +409,35 @@ export type UsersListFilter = {
   deleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   deleted_null?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
+  email_gt?: InputMaybe<Scalars['String']['input']>;
+  email_gte?: InputMaybe<Scalars['String']['input']>;
   email_ilike?: InputMaybe<Scalars['String']['input']>;
   email_in?: InputMaybe<Array<Scalars['String']['input']>>;
   email_like?: InputMaybe<Scalars['String']['input']>;
+  email_lt?: InputMaybe<Scalars['String']['input']>;
+  email_lte?: InputMaybe<Scalars['String']['input']>;
   email_ne?: InputMaybe<Scalars['String']['input']>;
   email_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   email_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   email_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
+  username_gt?: InputMaybe<Scalars['String']['input']>;
+  username_gte?: InputMaybe<Scalars['String']['input']>;
   username_ilike?: InputMaybe<Scalars['String']['input']>;
   username_in?: InputMaybe<Array<Scalars['String']['input']>>;
   username_like?: InputMaybe<Scalars['String']['input']>;
+  username_lt?: InputMaybe<Scalars['String']['input']>;
+  username_lte?: InputMaybe<Scalars['String']['input']>;
   username_ne?: InputMaybe<Scalars['String']['input']>;
   username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   username_notnull?: InputMaybe<Scalars['Boolean']['input']>;

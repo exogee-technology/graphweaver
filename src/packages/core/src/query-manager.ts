@@ -1,9 +1,9 @@
 import { logger } from '@exogee/logger';
 import { TypeValue } from './types';
 
-import { BackendProvider, Filter, PaginationOptions } from './types';
+import { BackendProvider, Filter, PaginationOptions, TraceOptions } from './types';
 import { graphweaverMetadata } from './metadata';
-import { TraceMethod, Trace } from './open-telemetry';
+import { TraceMethod } from './open-telemetry';
 
 const operators = ['gt', 'gte', 'lt', 'lte', 'ne', 'in', 'nin', 'notnull', 'null', 'like', 'ilike'];
 
@@ -110,7 +110,7 @@ class QueryManagerImplementation {
 			filter?: Filter<D>;
 			pagination?: PaginationOptions;
 		},
-		trace?: Trace
+		trace?: TraceOptions
 	) {
 		trace?.span.updateName(`Query Manager - Find ${entityName}`);
 		const metadata = graphweaverMetadata.getEntityByName<G, D>(entityName);
