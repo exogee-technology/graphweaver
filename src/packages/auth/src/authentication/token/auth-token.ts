@@ -43,7 +43,7 @@ const algorithm = (process.env.AUTH_JWT_ALGORITHM ?? 'ES256') as Algorithm;
 export class AuthTokenProvider implements BaseAuthTokenProvider {
 	constructor(private authMethod?: AuthenticationMethod) {}
 
-	async getSigningKey(header: JwtHeader, callback: SigningKeyCallback) {
+	getSigningKey(header: JwtHeader, callback: SigningKeyCallback) {
 		if (publicKey) return callback(null, publicKey);
 		if (jwksUri) {
 			const client = jwksClient({ jwksUri });
@@ -58,7 +58,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 
 	async generateToken(user: UserProfile<unknown>) {
 		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
-		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
+		const payload = { sub: user.id, amr: [AuthenticationMethod.PASSWORD] };
 
 		try {
 			const authToken = jwt.sign(payload, privateKey, {
@@ -75,20 +75,21 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
 		const token = removeAuthPrefixIfPresent(authToken);
-		let payload;
-		try {
-			payload = jwt.verify(token, this.getSigningKey, { algorithms: [algorithm] });
-		} catch (err) {
-			logger.error(err);
-			throw new Error('Verification of token failed');
-		}
+		return new Promise((resolve, reject) => {
+			jwt.verify(token, this.getSigningKey, { algorithms: [algorithm] }, (err, payload) => {
+				if (err) {
+					logger.error(err);
+					return reject(err);
+				}
 
-		if (typeof payload === 'string' || payload == undefined) {
-			logger.error('JWT token payload is not an object');
-			throw new Error('Verification of token failed');
-		}
+				if (typeof payload === 'string' || payload == undefined) {
+					logger.error('JWT token payload is not an object');
+					return reject('Verification of token failed');
+				}
 
-		return payload;
+				return resolve(payload);
+			});
+		});
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
@@ -113,7 +114,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 				},
 				privateKey,
 				{
-					algorithm: 'ES256',
+					algorithm,
 				}
 			);
 			return new AuthToken(`${TOKEN_PREFIX} ${token}`);

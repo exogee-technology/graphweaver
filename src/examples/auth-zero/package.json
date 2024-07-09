@@ -1,0 +1,35 @@
+{
+	"name": "@exogee/graphweaver-example-auth-zero",
+	"version": "2.0.0",
+	"license": "MIT",
+	"private": true,
+	"description": "Example of connecting a SQLite database.",
+	"scripts": {
+		"build": "graphweaver build",
+		"start": "graphweaver start",
+		"watch": "graphweaver watch",
+		"import": "graphweaver import",
+		"version": "npm version --no-git-tag-version"
+	},
+	"dependencies": {
+		"@as-integrations/aws-lambda": "3.1.0",
+		"@auth0/auth0-spa-js": "2.1.3",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-auth": "workspace:*",
+		"@exogee/graphweaver-auth-ui-components": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@mikro-orm/core": "6.2.9",
+		"@mikro-orm/knex": "6.2.9",
+		"@mikro-orm/sqlite": "6.2.9",
+		"graphql": "16.9.0",
+		"mikro-orm-sqlite-wasm": "workspace:*",
+		"react": "18.3.1"
+	},
+	"devDependencies": {
+		"@types/node": "20.14.9",
+		"graphweaver": "workspace:*",
+		"typescript": "5.5.3"
+	}
+}
