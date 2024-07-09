@@ -10,7 +10,7 @@ To create a new sqlite database from the sql found in `./databases/database.sql`
 
 ## Auth0 Configuration
 
-In order to run this example head over to Auth0 and create a new application:
+In order to run this example, head over to Auth0 and create a new application:
 
 https://manage.auth0.com/dashboard/us/applications
 
@@ -20,7 +20,7 @@ Allowed Callback Urls: http://localhost:9000
 Allowed Logout Urls: http://localhost:9000
 Allowed Web Origins: http://localhost:9000
 
-In the Global Auth0 settings make sure to have a default Audience:
+In the Global Auth0 settings, make sure to have a default Audience:
 
 https://manage.auth0.com/dashboard/us/<AUTH_ZERO_DOMAIN>/tenant/general
 
