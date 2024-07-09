@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { createAuth0Client } from '@auth0/auth0-spa-js';
-import { localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
 
+// We are using this cache as a hook to save the access token in the local storage
 const cache = {
 	get: () => undefined,
 	remove: () => {},
@@ -17,26 +18,42 @@ const cache = {
 };
 
 export const Auth0 = () => {
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | undefined>();
 	const shouldRedirect = useRef(true);
+
 	useEffect(() => {
 		if (shouldRedirect.current) {
 			shouldRedirect.current = false;
-			const init = async () => {
-				const auth0Client = await createAuth0Client({
-					domain: import.meta.env.VITE_AUTH_ZERO_DOMAIN,
-					clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
-					cache,
-				});
-				try {
-					await auth0Client.loginWithPopup();
-				} catch (e) {
-					console.error(e);
-				}
-			};
-
-			init();
+			requestLogin();
 		}
 	}, []);
 
-	return <div>Loading...</div>;
+	const requestLogin = useCallback(async () => {
+		const auth0Client = await createAuth0Client({
+			domain: import.meta.env.VITE_AUTH_ZERO_DOMAIN,
+			clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
+			cache,
+		});
+		try {
+			await auth0Client.loginWithPopup();
+		} catch (e: any) {
+			if (e.message) setError(e.message);
+		} finally {
+			setLoading(false);
+		}
+	}, []);
+
+	const handleRetry = () => {
+		requestLogin();
+	};
+
+	if (loading) return <div>Loading...</div>;
+
+	return (
+		<div>
+			{error && <div>{error}</div>}
+			<Button onClick={handleRetry}>Retry</Button>
+		</div>
+	);
 };

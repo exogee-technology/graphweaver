@@ -3,7 +3,7 @@
 	"version": "2.0.0",
 	"license": "MIT",
 	"private": true,
-	"description": "Example of connecting a SQLite database.",
+	"description": "Example of connecting a SQLite database with Auth0.",
 	"scripts": {
 		"build": "graphweaver build",
 		"start": "graphweaver start",
