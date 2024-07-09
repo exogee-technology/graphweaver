@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { createAuth0Client } from '@auth0/auth0-spa-js';
 import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import { useNavigate } from 'react-router-dom';
 
 // We are using this cache as a hook to save the access token in the local storage
 const cache = {
@@ -10,9 +11,6 @@ const cache = {
 		const accessToken = value?.body?.access_token;
 		if (accessToken) {
 			localStorage.setItem(localStorageAuthKey, `Bearer ${accessToken}`);
-			const url = new URL(window.location.toString());
-			const redirectUrl = url.searchParams.get('redirect_uri') ?? '/';
-			window.location.href = redirectUrl;
 		}
 	},
 };
@@ -21,6 +19,7 @@ export const Auth0 = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>();
 	const shouldRedirect = useRef(true);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (shouldRedirect.current) {
@@ -28,6 +27,12 @@ export const Auth0 = () => {
 			requestLogin();
 		}
 	}, []);
+
+	useEffect(() => {
+		if (!loading && !error) {
+			navigate('/');
+		}
+	}, [loading, error]);
 
 	const requestLogin = useCallback(async () => {
 		const auth0Client = await createAuth0Client({
