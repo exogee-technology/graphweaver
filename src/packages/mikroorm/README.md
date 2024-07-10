@@ -16,13 +16,13 @@ To configure a single database it is possible to use env vars. There are two opt
 
 1. Specify a single AWS Secrets Manager ARN that contains a JSON object of the connection details
 
-```
+```shell
 DATABASE_SECRET_ARN='<AWS SECRET ARN>'
 ```
 
 2. Specify all the parameters as separate env vars
 
-```
+```shell
 DATABASE_HOST='localhost'
 DATABASE_NAME='no_acls'
 DATABASE_PORT='5432'
@@ -32,8 +32,7 @@ DATABASE_PASSWORD='postgres'
 
 If you have multiple databases connected to graphweaver then you will need to pass in the configuration settings in your own code.
 
-```
-
+```typescript
 const connection = {
     connectionManagerId: 'postgresql',
     entities,
@@ -53,7 +52,7 @@ const connection = {
 
 You can also pass a different ARN per connection:
 
-```
+```typescript
 const connection = {
     connectionManagerId: 'postgresql',
     entities,
@@ -63,4 +62,27 @@ const connection = {
 @Entity('Tag', {
 	provider: new MikroBackendProvider(OrmTag, connection),
 })
+```
+
+Lastly, you can also pass a function to the MikroOrmConfig option and Graphweaver will await the result. For example:
+
+```typescript
+export const postgresqlConnection: ConnectionOptions = {
+	connectionManagerId: 'postgresql',
+	mikroOrmConfig: async () => {
+		if (!config) {
+			logger.info('Resolving new connection config');
+			const credentials = await postgresqlCredentials();
+			config = {
+				entities: [LinkDataEntity, SubmissionDataEntity, UploadDataEntity, VisitDataEntity],
+				driver: PostgreSqlDriver,
+				...credentials,
+			};
+		} else {
+			logger.info('Returning pre-cached connection config');
+		}
+
+		return config;
+	},
+};
 ```
