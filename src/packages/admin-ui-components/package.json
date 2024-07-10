@@ -38,7 +38,7 @@
 		"papaparse": "5.4.1",
 		"react-code-blocks": "0.1.6",
 		"react-hot-toast": "2.4.1",
-		"react-resizable-panels": "2.0.19"
+		"react-resizable-panels": "2.0.20"
 	},
 	"peerDependencies": {
 		"formik": "2.4.6",
