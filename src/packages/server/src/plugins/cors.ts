@@ -40,7 +40,7 @@ export const corsPlugin = ({
 					].join(',')
 				);
 
-				const defaultOrigin = 'http://localhost:9000';
+				const defaultOrigin = process.env.CORS_ALLOWED_ORIGIN || 'http://localhost:9000';
 				const origin = request.http?.headers.get('origin') || defaultOrigin;
 				response.http?.headers.set('Access-Control-Allow-Credentials', 'true');
 
