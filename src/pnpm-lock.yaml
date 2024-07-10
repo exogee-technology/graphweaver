@@ -74,7 +74,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -273,7 +273,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/mysql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -343,7 +343,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -395,7 +395,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -911,8 +911,8 @@ importers:
         specifier: 8.0.3
         version: 8.0.3(log@6.3.1)
       rimraf:
-        specifier: 5.0.8
-        version: 5.0.8
+        specifier: 6.0.1
+        version: 6.0.1
       rollup-plugin-visualizer:
         specifier: 5.12.0
         version: 5.12.0
@@ -1108,7 +1108,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1197,7 +1197,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1253,13 +1253,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.0)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
       '@mikro-orm/mysql':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
@@ -6040,6 +6040,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.0)(pg@8.12.0):
     resolution: {integrity: sha512-eSHPiS5em+RGv/jx5lP7a1xDVVlnrG+l90/7N7WAgTGcPOzyILVw9EJOZl2KR8dh8EfPI6Wm35Lo4qkO2LoDUg==}
@@ -6182,6 +6183,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/mysql@6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0):
     resolution: {integrity: sha512-q9lYdxNekAXB9ys8SRijYf5dAMZ0/AZCwbzWjHlcFcUIf0+R1pUTZdnT6T0qDs+I7wjCwXt+EtWIh50CFGbxHA==}
@@ -6198,30 +6200,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9):
-    resolution: {integrity: sha512-CRW5QPvsQhlhRZbx9SsgLrdC7LxCSbz+Pm5rAA8S1SAZG8qJ1WxMovHF61PFZj/7rydnb9fSh4nVwfutOyYwWg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.2.9
-      '@mikro-orm/knex': 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.0)(pg@8.11.5)
-      pg: 8.11.5
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -12147,6 +12125,19 @@ packages:
       package-json-from-dist: 1.0.0
       path-scurry: 1.11.1
 
+  /glob@11.0.0:
+    resolution: {integrity: sha512-9UiX/Bl6J2yaBbxKoEBRm4Cipxgok8kQYcOPEhScPwebu2I0HoQOuYdIO6S3hLuWoZgpDpwQZMzTFxgpkyT76g==}
+    engines: {node: 20 || >=22}
+    hasBin: true
+    dependencies:
+      foreground-child: 3.2.1
+      jackspeak: 4.0.1
+      minimatch: 10.0.1
+      minipass: 7.1.2
+      package-json-from-dist: 1.0.0
+      path-scurry: 2.0.0
+    dev: false
+
   /glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Glob versions prior to v9 are no longer supported
@@ -13076,6 +13067,15 @@ packages:
     optionalDependencies:
       '@pkgjs/parseargs': 0.11.0
 
+  /jackspeak@4.0.1:
+    resolution: {integrity: sha512-cub8rahkh0Q/bw1+GxP7aeSe29hHHn2V4m29nnDlvCdlgU+3UGxkZp7Z53jLUdpX3jdTO0nJZUDl3xvbWc2Xog==}
+    engines: {node: 20 || >=22}
+    dependencies:
+      '@isaacs/cliui': 8.0.2
+    optionalDependencies:
+      '@pkgjs/parseargs': 0.11.0
+    dev: false
+
   /java-invoke-local@0.0.6:
     resolution: {integrity: sha512-gZmQKe1QrfkkMjCn8Qv9cpyJFyogTYqkP5WCobX5RNaHsJzIV/6NvAnlnouOcwKr29QrxLGDGcqYuJ+ae98s1A==}
     hasBin: true
@@ -13710,6 +13710,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(mysql2@3.10.0)(pg@8.12.0):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -14260,6 +14261,11 @@ packages:
     resolution: {integrity: sha512-bfJaPTuEiTYBu+ulDaeQ0F+uLmlfFkMgXj4cbwfuMSjgObGMzb55FMMbDvbRU0fAHZ4sLGkz2mKwcMg8Dvm8Ww==}
     engines: {node: '>=18'}
 
+  /lru-cache@11.0.0:
+    resolution: {integrity: sha512-Qv32eSV1RSCfhY3fpPE2GNZ8jgM9X7rdAfemLWqTUxwiyIC4jJ6Sy0fZ8H+oLWevO6i4/bizg7c8d8i6bxrzbA==}
+    engines: {node: 20 || >=22}
+    dev: false
+
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
     dependencies:
@@ -14487,6 +14493,13 @@ packages:
 
   /minimalistic-crypto-utils@1.0.1:
     resolution: {integrity: sha512-JIYlbt6g8i5jKfJ3xz7rF0LXmv2TkDxBLUkiBeZ7bAx4GnnNMr8xFpGnOxn6GhTEHx3SjRrZEoU+j04prX1ktg==}
+    dev: false
+
+  /minimatch@10.0.1:
+    resolution: {integrity: sha512-ethXTt3SGGR+95gudmqJ1eNhRO7eGEGIgYA9vnPatK4/etz2MEVDno5GMCibdMTuBMyElzIlgxMna3K94XDIDQ==}
+    engines: {node: 20 || >=22}
+    dependencies:
+      brace-expansion: 2.0.1
     dev: false
 
   /minimatch@3.1.2:
@@ -15175,6 +15188,14 @@ packages:
     dependencies:
       lru-cache: 10.4.0
       minipass: 7.1.2
+
+  /path-scurry@2.0.0:
+    resolution: {integrity: sha512-ypGJsmGtdXUOeM5u93TyeIEfEhM6s+ljAhrk5vAvSx8uyY/02OvrZnA0YNGUrPXfpJMgI1ODd3nwz8Npx4O4cg==}
+    engines: {node: 20 || >=22}
+    dependencies:
+      lru-cache: 11.0.0
+      minipass: 7.1.2
+    dev: false
 
   /path-to-regexp@0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
@@ -16167,12 +16188,13 @@ packages:
     dependencies:
       glob: 7.2.3
 
-  /rimraf@5.0.8:
-    resolution: {integrity: sha512-XSh0V2/yNhDEi8HwdIefD8MLgs4LQXPag/nEJWs3YUc3Upn+UHa1GyIkEg9xSSNt7HnkO5FjTvmcRzgf+8UZuw==}
-    engines: {node: '>=18'}
+  /rimraf@6.0.1:
+    resolution: {integrity: sha512-9dkvaxAsk/xNXSJzMgFqqMCuFgt2+KsOFek3TMLfo8NCPfWpBmqwyNn5Y+NX56QUYfCtsyhF3ayiboEoUmJk/A==}
+    engines: {node: 20 || >=22}
     hasBin: true
     dependencies:
-      glob: 10.4.3
+      glob: 11.0.0
+      package-json-from-dist: 1.0.0
     dev: false
 
   /ripemd160@2.0.2:
