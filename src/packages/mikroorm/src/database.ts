@@ -137,16 +137,20 @@ class DatabaseImplementation {
 		return this.em.getDriver().getConnection();
 	}
 
-	private getEnvironmentOverrides = async (): Promise<Options> => {
-		if (process.env.DATABASE_SECRET_ARN) {
+	private getEnvironmentOverrides = async (secretArn?: string): Promise<Options> => {
+		logger.trace('Database::getEnvironmentOverrides() - Enter');
+		const secret = secretArn ?? process.env.DATABASE_SECRET_ARN;
+		if (secret) {
 			const client = new SecretsManagerClient({
 				region: process.env.AWS_REGION,
 			});
-			const command = new GetSecretValueCommand({ SecretId: process.env.DATABASE_SECRET_ARN });
+			const command = new GetSecretValueCommand({ SecretId: secret });
 
 			try {
+				logger.trace('Fetching secret from Secrets Manager');
 				const response = await client.send(command);
 				const secret = JSON.parse(response.SecretString as string);
+				logger.trace('Secret fetched from Secrets Manager');
 
 				return {
 					host: secret.host,
@@ -163,6 +167,8 @@ class DatabaseImplementation {
 				throw error;
 			}
 		}
+
+		logger.trace('No secret ARN provided, using environment variables');
 
 		return {
 			host: process.env.DATABASE_HOST,
@@ -189,7 +195,9 @@ class DatabaseImplementation {
 				: connectionOptions?.mikroOrmConfig;
 
 		// And finally we can override all of this with environment variables if needed.
-		const environmentOverrides: Options = await this.getEnvironmentOverrides();
+		const environmentOverrides: Options = await this.getEnvironmentOverrides(
+			connectionOptions?.secretArn
+		);
 
 		// Create a function we can use to filter out undefined values in the object.
 		const filterUndefined = (obj?: Options) => {
