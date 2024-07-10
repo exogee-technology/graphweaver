@@ -195,9 +195,7 @@ class DatabaseImplementation {
 				: connectionOptions?.mikroOrmConfig;
 
 		// And finally we can override all of this with environment variables if needed.
-		const environmentOverrides: Options = await this.getEnvironmentOverrides(
-			connectionOptions?.secretArn
-		);
+		const environmentOverrides = await this.getEnvironmentOverrides(connectionOptions?.secretArn);
 
 		// Create a function we can use to filter out undefined values in the object.
 		const filterUndefined = (obj?: Options) => {
