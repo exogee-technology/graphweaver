@@ -30,7 +30,7 @@ const addKeyDirective = () => {
 	);
 
 	for (const entity of entities) {
-		// Ensure that the entity has a primary key field
+		// Ensure that the entity has a primary key field before we add the @key directive.
 		if (entity.fields[entity.primaryKeyField ?? ('id' as any)] === undefined) {
 			continue;
 		}
@@ -41,6 +41,7 @@ const addKeyDirective = () => {
 				...(entity.directives ? entity.directives : {}),
 				key: {
 					fields: entity.primaryKeyField ?? 'id',
+					resolvable: entity.apiOptions?.resolvableViaFederation,
 				},
 			},
 		});

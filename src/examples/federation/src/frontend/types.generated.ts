@@ -168,6 +168,11 @@ export type Inventory = {
   id: Scalars['ID']['output'];
 };
 
+export type NonResolvableEntity = {
+  __typename?: 'NonResolvableEntity';
+  id: Scalars['ID']['output'];
+};
+
 export type Product = {
   __typename?: 'Product';
   createdBy?: Maybe<User>;
@@ -352,7 +357,7 @@ export type UsersPaginationInput = {
   orderBy?: InputMaybe<UsersOrderByInput>;
 };
 
-export type _Entity = CaseStudy | DeprecatedProduct | Inventory | Product | ProductDimension | ProductResearch | ProductVariation | User;
+export type _Entity = CaseStudy | DeprecatedProduct | Inventory | NonResolvableEntity | Product | ProductDimension | ProductResearch | ProductVariation | User;
 
 export type _Service = {
   __typename?: '_Service';

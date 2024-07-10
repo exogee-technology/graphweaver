@@ -19,21 +19,6 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	primaryKeyField?: keyof G;
 
 	apiOptions?: {
-		// This means that the entity will not be returned in federation queries to the _service { sdl } query.
-		// In most cases it'd be better to use @inaccessible, but in some cases you truly do want a private entity
-		// that is usable in your Graphweaver instance but is not part of the schema we tell the federation router about.
-		excludeFromFederation?: boolean;
-
-		// If this entity will appear in multiple subgraphs, a federation router will need them to have unique names.
-		// A prime example of this in Graphweaver itself is the Media entity, which shows up as soon as you have media
-		// added to your project. If two Graphweaver instances both have Media in them, the federation router will
-		// expect that they're @shareable, but they won't return the same data from both places, so the best thing to do
-		// is to namespace them so that they're unique entities. When this property is specified as true, the entity
-		// will be renamed.
-		//
-		// For example, if our entity is called `Media` and our subgraph name is `music`, it'd be renamed to `MediaFromMusicSubgraph`.
-		namespaceForFederation?: boolean;
-
 		// This means that the entity should not be given the default list, find one, create, update, and delete
 		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
 		// enables excludeFromFiltering as well.
@@ -53,6 +38,29 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		//
 		// Note that in order to achieve this from your own front ends, you need to set the `X-GRAPHWEAVER-SUPPRESS-TRACING: true` header on the requests, which is what this option instructs the admin UI to do for you.
 		excludeFromTracing?: boolean;
+
+		// If this entity will appear in multiple subgraphs, a federation router will need them to have unique names.
+		// A prime example of this in Graphweaver itself is the Media entity, which shows up as soon as you have media
+		// added to your project. If two Graphweaver instances both have Media in them, the federation router will
+		// expect that they're @shareable, but they won't return the same data from both places, so the best thing to do
+		// is to namespace them so that they're unique entities. When this property is specified as true, the entity
+		// will be renamed.
+		//
+		// For example, if our entity is called `Media` and our subgraph name is `music`, it'd be renamed to `MediaFromMusicSubgraph`.
+		namespaceForFederation?: boolean;
+
+		// In Federation v2, entities can specify resolvable: false in their @key directive. This is how you link to entities that are
+		// outside of this Graphweaver instance. When this is set to false, we will emit @key(fields: "your pk field", resolvable: false).
+		// You should do this for the providerless reference entities that are there for linking via federation that you don't actually
+		// have the data for in this Graphweaver instance.
+		//
+		// Default: true
+		resolvableViaFederation?: boolean;
+
+		// This means that the entity will not be returned in federation queries to the _service { sdl } query.
+		// In most cases it'd be better to use @inaccessible, but in some cases you truly do want a private entity
+		// that is usable in your Graphweaver instance but is not part of the schema we tell the federation router about.
+		excludeFromFederation?: boolean;
 	};
 
 	adminUIOptions?: {
