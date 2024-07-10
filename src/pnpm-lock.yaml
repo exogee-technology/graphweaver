@@ -43,6 +43,61 @@ importers:
         specifier: 5.5.3
         version: 5.5.3
 
+  examples/auth-zero:
+    dependencies:
+      '@as-integrations/aws-lambda':
+        specifier: 3.1.0
+        version: 3.1.0(@apollo/server@4.10.4)
+      '@auth0/auth0-spa-js':
+        specifier: 2.1.3
+        version: 2.1.3
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@exogee/graphweaver-auth-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/auth-ui-components
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@mikro-orm/core':
+        specifier: 6.2.9
+        version: 6.2.9
+      '@mikro-orm/knex':
+        specifier: 6.2.9
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
+      '@mikro-orm/sqlite':
+        specifier: 6.2.9
+        version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
+      graphql:
+        specifier: 16.9.0
+        version: 16.9.0
+      mikro-orm-sqlite-wasm:
+        specifier: workspace:*
+        version: link:../../packages/mikro-orm-sqlite-wasm
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+    devDependencies:
+      '@types/node':
+        specifier: 20.14.9
+        version: 20.14.9
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      typescript:
+        specifier: 5.5.3
+        version: 5.5.3
+
   examples/aws-cognito:
     dependencies:
       '@apollo/server':
@@ -537,8 +592,8 @@ importers:
         specifier: 0.9.1
         version: 0.9.1(graphql@16.9.0)
       '@tanstack/react-table':
-        specifier: 8.17.3
-        version: 8.17.3(react-dom@18.3.1)(react@18.3.1)
+        specifier: 8.19.2
+        version: 8.19.2(react-dom@18.3.1)(react@18.3.1)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -567,8 +622,8 @@ importers:
         specifier: 2.4.1
         version: 2.4.1(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
       react-resizable-panels:
-        specifier: 2.0.19
-        version: 2.0.19(react-dom@18.3.1)(react@18.3.1)
+        specifier: 2.0.20
+        version: 2.0.20(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@types/graphql-deduplicator':
         specifier: 2.0.2
@@ -660,6 +715,9 @@ importers:
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
+      jwks-rsa:
+        specifier: 3.1.0
+        version: 3.1.0
       ms:
         specifier: 2.1.3
         version: 2.1.3
@@ -731,6 +789,9 @@ importers:
         specifier: 1.0.6
         version: 1.0.6(react@18.3.1)
     devDependencies:
+      '@auth0/auth0-spa-js':
+        specifier: 2.1.3
+        version: 2.1.3
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -1738,6 +1799,9 @@ packages:
       '@apollo/server': 4.10.4(graphql@16.9.0)
       '@hapi/hapi': 21.3.10
     dev: false
+
+  /@auth0/auth0-spa-js@2.1.3:
+    resolution: {integrity: sha512-NMTBNuuG4g3rame1aCnNS5qFYIzsTUV5qTFPRfTyYFS1feS6jsCBR+eTq9YkxCp1yuoM2UIcjunPaoPl77U9xQ==}
 
   /@aws-crypto/crc32@5.2.0:
     resolution: {integrity: sha512-nLbCWqQNgUiwwtFsen1AdzAtvuLRsQS8rYgMuxCrdKf9kOssamGLuPwyTY9wyYblNr9+1XM8v6zoDTPPSIeANg==}
@@ -8034,14 +8098,14 @@ packages:
       defer-to-connect: 2.0.1
     dev: false
 
-  /@tanstack/react-table@8.17.3(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-5gwg5SvPD3lNAXPuJJz1fOCEZYk9/GeBFH3w/hCgnfyszOIzwkwgp5I7Q4MJtn0WECp84b5STQUDdmvGi8m3nA==}
+  /@tanstack/react-table@8.19.2(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-itoSIAkA/Vsg+bjY23FSemcTyPhc5/1YjYyaMsr9QSH/cdbZnQxHVWrpWn0Sp2BWN71qkzR7e5ye8WuMmwyOjg==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
-      '@tanstack/table-core': 8.17.3
+      '@tanstack/table-core': 8.19.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false
@@ -8057,8 +8121,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@tanstack/table-core@8.17.3:
-    resolution: {integrity: sha512-mPBodDGVL+fl6d90wUREepHa/7lhsghg2A3vFpakEhrhtbIlgNAZiMr7ccTgak5qbHqF14Fwy+W1yFWQt+WmYQ==}
+  /@tanstack/table-core@8.19.2:
+    resolution: {integrity: sha512-KpRjhgehIhbfH78ARm/GJDXGnpdw4bCg3qas6yjWSi7czJhI/J6pWln7NHtmBkGE9ZbohiiNtLqwGzKmBfixig==}
     engines: {node: '>=12'}
     dev: false
 
@@ -8303,7 +8367,6 @@ packages:
     resolution: {integrity: sha512-/5hndP5dCjloafCXns6SZyESp3Ldq7YjH3zwzwczYnjxIT0Fqzk5ROSYVGfFyczIue7IUEj8hkvLbPoLQ18vQw==}
     dependencies:
       '@types/node': 20.14.10
-    dev: true
 
   /@types/keyv@3.1.4:
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
@@ -8352,6 +8415,12 @@ packages:
     resolution: {integrity: sha512-MdiXf+nDuMvY0gJKxyfZ7/6UFsETO7mGKF54MVD/ekJS6HdFtpZFBgrh6Pseu64XTb2MLyFPlbW6hj8HYRQNOQ==}
     dependencies:
       undici-types: 5.26.5
+
+  /@types/node@20.14.9:
+    resolution: {integrity: sha512-06OCtnTXtWOZBJlRApleWndH4JsRVs1pDCc8dLSQp+7PpUpX3ePdHyeNSFTeSe7FtKyQkrlPvHwJOW3SLd8Oyg==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
 
   /@types/otp-generator@4.0.2:
     resolution: {integrity: sha512-9+qqWzuFb332hXPbLgjUyOXlbcaTQkmkmqQjTduvNuOmPV5fW+iLv70JsVEhdUy0DWi4kY34++HDCaWl6N0AYg==}
@@ -13273,6 +13342,20 @@ packages:
       safe-buffer: 5.2.1
     dev: false
 
+  /jwks-rsa@3.1.0:
+    resolution: {integrity: sha512-v7nqlfezb9YfHHzYII3ef2a2j1XnGeSE/bK3WfumaYCqONAIstJbrEGapz4kadScZzEt7zYCN7bucj8C0Mv/Rg==}
+    engines: {node: '>=14'}
+    dependencies:
+      '@types/express': 4.17.21
+      '@types/jsonwebtoken': 9.0.6
+      debug: 4.3.5
+      jose: 4.15.9
+      limiter: 1.1.5
+      lru-memoizer: 2.3.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: false
+
   /jws@3.2.2:
     resolution: {integrity: sha512-YHlZCB6lMTllWDtSPHz/ZXTsi8S00usEV6v1tjq8tOUZzw7DpSDWVXjXDre6ed1w/pd495ODpHZYSdkRTsa0HA==}
     dependencies:
@@ -13667,6 +13750,10 @@ packages:
       lightningcss-win32-x64-msvc: 1.25.1
     dev: false
 
+  /limiter@1.1.5:
+    resolution: {integrity: sha512-FWWMIEOxz3GwUI4Ts/IvgVy6LPvoMPgjMdQ185nN6psJyBJ4yOpzqm695/h5umdLJg2vW3GR5iG11MAkR2AzJA==}
+    dev: false
+
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
@@ -13735,6 +13822,10 @@ packages:
 
   /lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
+    dev: false
+
+  /lodash.clonedeep@4.5.0:
+    resolution: {integrity: sha512-H5ZhCF25riFd9uB5UCkVKo61m3S/xZk1x4wA6yp/L3RFP6Z/eHH1ymQcGLo7J3GMPfm0V/7m1tryHuGVxpqEBQ==}
     dev: false
 
   /lodash.get@4.4.2:
@@ -13914,6 +14005,13 @@ packages:
   /lru-cache@8.0.5:
     resolution: {integrity: sha512-MhWWlVnuab1RG5/zMRRcVGXZLCXrZTgfwMikgzCegsPnG62yDQo5JnqKkrK4jO5iKqDAZGItAqN5CtKBCBWRUA==}
     engines: {node: '>=16.14'}
+    dev: false
+
+  /lru-memoizer@2.3.0:
+    resolution: {integrity: sha512-GXn7gyHAMhO13WSKrIiNfztwxodVsP8IoZ3XfrJV4yH2x0/OeTO/FIaAHTY5YekdGgW94njfuKmyyt1E0mR6Ug==}
+    dependencies:
+      lodash.clonedeep: 4.5.0
+      lru-cache: 6.0.0
     dev: false
 
   /lru-queue@0.1.0:
@@ -15494,8 +15592,8 @@ packages:
       use-sidecar: 1.1.2(@types/react@18.3.3)(react@18.3.1)
     dev: false
 
-  /react-resizable-panels@2.0.19(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-v3E41kfKSuCPIvJVb4nL4mIZjjKIn/gh6YqZF/gDfQDolv/8XnhJBek4EiV2gOr3hhc5A3kOGOayk3DhanpaQw==}
+  /react-resizable-panels@2.0.20(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-aMbK3VF8U+VBICG+rwhE0Rr/eFZaRzmNq3akBRL1TrayIpLXz7Rbok0//kYeWj6SQRsjcQ3f4eRplJicM+oL6w==}
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0

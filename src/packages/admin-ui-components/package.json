@@ -28,7 +28,7 @@
 		"@apollo/client": "3.10.8",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.1",
-		"@tanstack/react-table": "8.17.3",
+		"@tanstack/react-table": "8.19.2",
 		"clsx": "2.1.1",
 		"downshift": "9.0.6",
 		"graphiql": "3.3.2",
@@ -38,7 +38,7 @@
 		"papaparse": "5.4.1",
 		"react-code-blocks": "0.1.6",
 		"react-hot-toast": "2.4.1",
-		"react-resizable-panels": "2.0.19"
+		"react-resizable-panels": "2.0.20"
 	},
 	"peerDependencies": {
 		"formik": "2.4.6",
