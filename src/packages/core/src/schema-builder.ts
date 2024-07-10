@@ -737,6 +737,9 @@ class SchemaBuilderImplementation {
 	public build(buildOptions?: SchemaBuildOptions) {
 		const { schemaDirectives } = buildOptions ?? {};
 
+		// Before we get started, let's validate their now complete decorator situation.
+		graphweaverMetadata.validateEntities();
+
 		// Note: It's really important that this runs before the query and mutation
 		// steps below, as the fields in those reference the types we generate here.
 		const directives = Array.from(this.buildDirectives(buildOptions?.filterEntities));

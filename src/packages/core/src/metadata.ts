@@ -235,6 +235,7 @@ class Metadata {
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
 	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
+	private entityDecoratorCallLog = new Set<unknown>();
 
 	public federationSubgraphName?: string;
 
@@ -260,6 +261,11 @@ class Metadata {
 	) {
 		// Clear the cache so we can rebuild it with the new data.
 		this.nameLookupCache.clear();
+
+		// Log this call so validation later knows that the entity was decorated as well as the fields
+		// involved. This is used to give a more helpful error message when a GraphQL entity decorator
+		// is accidentally placed on something like a database entity field.
+		this.entityDecoratorCallLog.add(args.target);
 
 		// In most cases the entity info will already be in the map because field decorators run
 		// before class decorators. Override what we know our source of truth to be and keep rolling.
@@ -640,6 +646,25 @@ class Metadata {
 		this.additionalMutationsLookup.clear();
 		this.additionalQueriesLookup.clear();
 	}
+
+	// This exists because it's exceedingly easy to put the wrong decorator on the wrong entity, e.g.
+	// accidentally decorating your DB entity fields with GraphQL entity decorators. When this happens,
+	// without this validation the error message is not very helpful because it just says there's a duplicate
+	// entity with the same name. We can actually catch this specific scenario and give a much more helpful
+	// error, so that's what this function does.
+	public readonly validateEntities = () => {
+		for (const entity of this.entities()) {
+			if (!this.entityDecoratorCallLog.has(entity.target)) {
+				throw new Error(
+					`The entity '${entity.name}' is missing the @Entity() decorator from Graphweaver. This is likely because a field was mistakenly decorated with a GraphQL decorator when it is not a GraphQL entity. Fields on this entity are: '${Object.keys(
+						entity.fields
+					).join(
+						`', '`
+					)}'. If this is not a full list of all of the fields on the entity, examine the decorators on these fields closely and make sure they are in the correct files. Are they on a data source entity instead of the GraphQL entity?`
+				);
+			}
+		}
+	};
 }
 
 export const graphweaverMetadata = new Metadata();
