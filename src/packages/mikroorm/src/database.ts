@@ -10,6 +10,7 @@ import {
 	ReflectMetadataProvider,
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
+import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
@@ -136,6 +137,42 @@ class DatabaseImplementation {
 		return this.em.getDriver().getConnection();
 	}
 
+	private getEnvironmentOverrides = async (): Promise<Options> => {
+		if (process.env.DATABASE_SECRET_ARN) {
+			const client = new SecretsManagerClient({
+				region: process.env.AWS_REGION,
+			});
+			const command = new GetSecretValueCommand({ SecretId: process.env.DATABASE_SECRET_ARN });
+
+			try {
+				const response = await client.send(command);
+				const secret = JSON.parse(response.SecretString as string);
+
+				return {
+					host: secret.host,
+					port: secret.port,
+					user: secret.username,
+					password: secret.password,
+					dbName: secret.dbname,
+					driverOptions: {
+						connection: { ssl: true },
+					},
+				};
+			} catch (error) {
+				logger.error('Error fetching secret from Secrets Manager');
+				throw error;
+			}
+		}
+
+		return {
+			host: process.env.DATABASE_HOST,
+			port: process.env.DATABASE_PORT ? Number(process.env.DATABASE_PORT) : undefined,
+			user: process.env.DATABASE_USERNAME,
+			password: process.env.DATABASE_PASSWORD,
+			dbName: process.env.DATABASE_NAME,
+		};
+	};
+
 	private getConnectionInfo = async (connectionOptions?: ConnectionOptions): Promise<Options> => {
 		logger.trace('Database::getConnectionInfo() - Enter');
 
@@ -152,13 +189,7 @@ class DatabaseImplementation {
 				: connectionOptions?.mikroOrmConfig;
 
 		// And finally we can override all of this with environment variables if needed.
-		const environmentOverrides: Options = {
-			host: process.env.DATABASE_HOST,
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : undefined,
-			user: process.env.DATABASE_USERNAME,
-			password: process.env.DATABASE_PASSWORD,
-			dbName: process.env.DATABASE_NAME,
-		};
+		const environmentOverrides: Options = await this.getEnvironmentOverrides();
 
 		// Create a function we can use to filter out undefined values in the object.
 		const filterUndefined = (obj?: Options) => {
