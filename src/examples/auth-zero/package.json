@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-auth-zero",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a SQLite database with Auth0.",
