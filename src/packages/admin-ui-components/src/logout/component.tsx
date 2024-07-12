@@ -11,7 +11,7 @@ import styles from './styles.module.css';
 export const Logout = () => {
 	useEffect(() => {
 		console.warn(
-			'Logout component from AdminUI components is deprecated and will be removed in a future version. Use Logout from the AuthUI components instead.'
+			'The Logout component from AdminUI is deprecated and will be removed in a future version. Please update your code to use the Logout component from the AuthUI package instead.'
 		);
 	}, []);
 
