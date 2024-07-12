@@ -598,7 +598,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		return isList ? hookEntities : hookEntities[0];
 	}
 
-	logger.trace('Loading from BaseLoaders');
+	logger.trace('Existing data not found. Loading from BaseLoaders');
 
 	let dataEntities: D[] | undefined = undefined;
 	if (field.relationshipInfo?.relatedField) {
@@ -642,134 +642,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	}
 };
 
-const _listRelationshipFieldWithoutProvider = async <G, D, R, C extends BaseContext>(
-	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
-	trace?: TraceOptions
-) => {
-	trace?.span.updateName(
-		`Resolver - ListRelationshipFieldWithoutProvider ${info.path.typename} - ${info.fieldName}`
-	);
-	logger.trace(`Resolving ${info.parentType.name}.${info.fieldName}`);
-
-	if (!info.path.typename)
-		throw new Error(`No typename found in path for ${info.path}, this should not happen.`);
-
-	const entity = graphweaverMetadata.getEntityByName(info.path.typename);
-	if (!entity) {
-		throw new Error(`Entity ${info.path.typename} not found in metadata. This should not happen.`);
-	}
-
-	// The only case we can resolve here is when the requestor is asking for just the ID and we have the ID
-	// on the parent object. In this case we can just return the ID. If it's anything other than that we're
-	// out of luck as we have no provider to work with.
-
-	// We need to run the hooks first to make sure this isn't a violation of an ACL.
-	const field = entity.fields[info.fieldName];
-	const { id, relatedField } = field.relationshipInfo ?? {};
-
-	let idValue: ID | undefined = undefined;
-	if (id && typeof id === 'function') {
-		// If the id is a function, we'll call it with the source data to get the id value.
-		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
-	} else if (id) {
-		// else if the id is a string, we'll try to get the value from the source data.
-		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
-
-		// If the value is a string or number, we'll use it as the id value.
-		if (
-			typeof valueOfForeignKey === 'string' ||
-			typeof valueOfForeignKey === 'number' ||
-			typeof valueOfForeignKey === 'bigint'
-		) {
-			idValue = valueOfForeignKey;
-		} else {
-			// The ID value must be a string or a number otherwise we'll throw an error.
-			throw new Error(
-				'Could not determine id value for relationship field only string or numbers are supported.'
-			);
-		}
-	}
-
-	const { fieldType, isList } = getFieldTypeWithMetadata(field.getType);
-	const gqlEntityType = fieldType as { new (...args: any[]): R };
-
-	const relatedEntityMetadata = graphweaverMetadata.metadataForType(gqlEntityType);
-	if (!isEntityMetadata(relatedEntityMetadata)) {
-		throw new Error(`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`);
-	}
-	const sourcePrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
-	const relatedPrimaryKeyField =
-		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
-
-	// We need to construct a filter for the related entity and _and it with the user supplied filter.
-	const _and: Filter<R>[] = [];
-
-	// If we have a user supplied filter, add it to the _and array.
-	if (filter) _and.push(filter);
-
-	// Lets check the relationship type and add the appropriate filter.
-	if (idValue) {
-		_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
-	} else if (relatedField) {
-		_and.push({
-			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-		} as Filter<R>);
-	}
-
-	const relatedEntityFilter = { _and } as Filter<R>;
-
-	const params: ReadHookParams<R> = {
-		args: { filter: relatedEntityFilter },
-		context,
-		fields,
-		transactional: !!entity.provider?.withTransaction,
-	};
-	const hookManager = hookManagerMap.get(gqlEntityType.name);
-	const hookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
-		: params;
-
-	// If we've already resolved the data, we definitely want to return it.
-	const existingData = source[info.fieldName as keyof G];
-
-	if (typeof existingData !== 'undefined') {
-		logger.trace({ existingData }, 'Existing data found, returning.');
-
-		const entities = [existingData].flat();
-
-		logger.trace('Running after read hooks');
-		const { entities: hookEntities = [] } = hookManager
-			? await hookManager.runHooks(HookRegister.AFTER_READ, {
-					...hookParams,
-					entities,
-				})
-			: { entities };
-
-		logger.trace({ before: existingData, after: hookEntities }, 'After read hooks ran');
-
-		return isList ? hookEntities : hookEntities[0];
-	}
-
-	// Ok, if we're down here, don't have already resolved data, and don't have an ID value, we're done.
-	if (idValue === undefined || idValue === null) return null;
-
-	// Let's make up our entities with the IDs we have.
-	const entities = [{ [relatedPrimaryKeyField]: idValue } as R];
-
-	// And make sure our ACLs run
-	logger.trace('Running after read hooks');
-	const { entities: hookEntities = [] } = hookManager
-		? await hookManager.runHooks(HookRegister.AFTER_READ, {
-				...hookParams,
-				entities,
-			})
-		: { entities };
-
-	logger.trace({ before: entities, after: hookEntities }, 'After read hooks ran');
-
-	return isList ? hookEntities : hookEntities[0];
-};
-
+// This is a function generator where you can bind it to the correct entity when creating it, as we cannot look up the entity name / type from the info object.
 export const aggregateRelationshipField = (
 	parentEntity: EntityMetadata<any, any>,
 	field: FieldMetadata
@@ -890,7 +763,6 @@ export const aggregateRelationshipField = (
 export const getOne = trace(_getOne);
 export const list = trace(_list);
 export const listRelationshipField = trace(_listRelationshipField);
-export const listRelationshipFieldWithoutProvider = trace(_listRelationshipFieldWithoutProvider);
 export const createOrUpdate = trace(_createOrUpdate);
 export const deleteOne = trace(_deleteOne);
 export const deleteMany = trace(_deleteMany);
