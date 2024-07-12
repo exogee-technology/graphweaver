@@ -1,13 +1,6 @@
 import { GraphQLArgument, GraphQLResolveInfo, Source } from 'graphql';
 import { BaseContext, TraceOptions } from './types';
-import {
-	getFieldTypeWithMetadata,
-	graphweaverMetadata,
-	isEntityMetadata,
-	isSerializableGraphQLEntityClass,
-} from '.';
 import { trace } from './open-telemetry';
-import { dataEntityForGraphQLEntity } from './default-from-backend-entity';
 
 const isObject = (value: unknown): value is Record<string, unknown> => {
 	return typeof value == 'object' && value !== null;
