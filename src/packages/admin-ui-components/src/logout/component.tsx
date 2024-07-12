@@ -1,35 +1,25 @@
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+
+import { apolloClient } from '../apollo';
+import { Button } from '../button';
+import { localStorageAuthKey } from '../config';
+
+import { LogoutIcon } from '../assets/16-logout';
 
 import styles from './styles.module.css';
 
-import { apolloClient } from '../apollo';
-import { localStorageAuthKey } from '../config';
-import { Button } from '../button';
-import { LogoutIcon } from '../assets';
-import { useEffect } from 'react';
-
 export const Logout = () => {
-	const navigate = useNavigate();
-
 	useEffect(() => {
 		console.warn(
 			'Logout component from AdminUI components is deprecated and will be removed in a future version. Use Logout from the AuthUI components instead.'
 		);
 	}, []);
 
-	const handleOnLogout = async () => {
-		try {
-			localStorage.removeItem(localStorageAuthKey);
-			await apolloClient.clearStore();
-			await apolloClient.resetStore();
-			navigate(0);
-		} catch (error: any) {
-			const message = error?.message || 'Unknown error.';
-			toast.error(`Failed to logout. Please try again. Error: ${message}`, {
-				duration: 5000,
-			});
-		}
+	const handleOnLogout = () => {
+		localStorage.removeItem(localStorageAuthKey);
+		apolloClient.clearStore().then(() => {
+			apolloClient.resetStore();
+		});
 	};
 
 	return (
