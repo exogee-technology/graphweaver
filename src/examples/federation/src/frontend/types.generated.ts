@@ -179,6 +179,7 @@ export type Product = {
   dimensions?: Maybe<ProductDimension>;
   hiddenEntities?: Maybe<Array<HiddenEntity>>;
   id: Scalars['ID']['output'];
+  nonResolvableEntity: NonResolvableEntity;
   notes?: Maybe<Scalars['String']['output']>;
   package?: Maybe<Scalars['String']['output']>;
   research: Array<ProductResearch>;
