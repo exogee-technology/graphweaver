@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { graphweaverLogo } from '../config';
+import { graphweaverLogo, localStorageAuthKey } from '../config';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-custom-pages';
@@ -14,6 +14,7 @@ import { BackendRow, DashboardRow } from './contents';
 import { Spacer } from '../spacer';
 
 import styles from './styles.module.css';
+import { Logout } from '../logout';
 
 export const SideBar = () => {
 	const schema = useSchema();
@@ -100,6 +101,8 @@ export const SideBar = () => {
 
 			{customPages.sidebarFooter ? (
 				<customPages.sidebarFooter />
+			) : localStorage.getItem(localStorageAuthKey) ? (
+				<Logout />
 			) : (
 				<div className={styles.sideBarFooter}>
 					<div className={styles.footerText}>

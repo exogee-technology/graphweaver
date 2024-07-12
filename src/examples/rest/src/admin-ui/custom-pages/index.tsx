@@ -4,11 +4,9 @@ import {
 	PasswordLogin,
 	ForgottenPassword,
 	ResetPassword,
-	Logout,
 } from '@exogee/graphweaver-auth-ui-components';
 
 export const customPages = {
-	sidebarFooter: () => <Logout />,
 	routes: () => [
 		{
 			path: '/auth',

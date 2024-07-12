@@ -9,6 +9,7 @@ export { ErrorIcon } from './16-error';
 export { CloseButtonIcon } from './close-button';
 export { GraphweaverLogo } from './graphweaver-logo';
 export { InfoIcon } from './16-info';
+export { LogoutIcon } from './16-logout';
 export { OpenExternalIcon } from './16-open-external';
 export { SearchIcon } from './16-search';
 export { SuccessCheckmarkIcon } from './success-checkmark';
