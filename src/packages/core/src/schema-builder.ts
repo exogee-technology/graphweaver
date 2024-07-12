@@ -389,6 +389,8 @@ export const graphQLTypeForEntity = (
 									type: filterTypeForEntity(metadata, entityFilter),
 								};
 							}
+						} else {
+							resolve = resolvers.baseResolver(resolvers.listRelationshipFieldWithoutProvider);
 						}
 					} else {
 						// Ok, it's some kind of in-built scalar we need to map.

@@ -10,7 +10,7 @@ For running locally it is handy to have a local S3 env. For this we recommend ru
 
 Once Minio is installed and start the server with the following command:
 
-`minio server ~/data --address :9002`
+`minio server ~/data --address :9003`
 
 Create a new bucket here:
 

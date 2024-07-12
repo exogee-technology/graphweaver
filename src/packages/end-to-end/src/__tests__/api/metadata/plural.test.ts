@@ -32,6 +32,7 @@ test('should correctly plural name for User', async () => {
 		`,
 	});
 	assert(response.body.kind === 'single');
+	expect(response.body.singleResult.errors).toBeUndefined();
 	expect(response.body.singleResult.data?._graphweaver).toMatchObject({
 		entities: [{ name: 'User', plural: 'Users' }],
 	});
