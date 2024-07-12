@@ -12,6 +12,7 @@ export interface CustomRouteConfiguration {
 
 export interface CustomPageConfiguration {
 	defaultRoute?: string;
+	sidebarFooter?: () => ReactNode;
 	navLinks?: () => CustomNavLinkConfiguration[] | Promise<CustomNavLinkConfiguration[]>;
 	routes?: () => CustomRouteConfiguration[] | Promise<CustomRouteConfiguration[]>;
 }

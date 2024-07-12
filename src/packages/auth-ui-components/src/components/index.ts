@@ -5,3 +5,4 @@ export * from './one-time-password';
 export * from './web3';
 export * from './passkey';
 export * from './secret';
+export * from './logout';

@@ -80,7 +80,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		apolloServerOptions: {
-			introspection: true,
+			introspection: process.env.NODE_ENV !== 'production',
 		},
 		enableFederationTracing: false,
 		graphqlDeduplicator: {
@@ -156,7 +156,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		}
 
 		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
-		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());
+		if (logger.isLevelEnabled('trace')) logger.trace(`Schema: ${SchemaBuilder.print()}`);
 
 		logger.trace(`Graphweaver buildSchemaSync finished.`);
 		logger.trace(`Graphweaver starting ApolloServer`);

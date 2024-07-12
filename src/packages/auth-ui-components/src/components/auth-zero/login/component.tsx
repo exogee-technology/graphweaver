@@ -1,19 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { createAuth0Client } from '@auth0/auth0-spa-js';
-import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import { Button } from '@exogee/graphweaver-admin-ui-components';
 import { useNavigate } from 'react-router-dom';
-
-// We are using this cache as a hook to save the access token in the local storage
-const cache = {
-	get: () => undefined,
-	remove: () => {},
-	set: (_: string, value: any) => {
-		const accessToken = value?.body?.access_token;
-		if (accessToken) {
-			localStorage.setItem(localStorageAuthKey, `Bearer ${accessToken}`);
-		}
-	},
-};
+import { getAuth0Client } from '../client';
 
 export const Auth0 = () => {
 	const [loading, setLoading] = useState(true);
@@ -35,13 +23,9 @@ export const Auth0 = () => {
 	}, [loading, error]);
 
 	const requestLogin = useCallback(async () => {
-		const auth0Client = await createAuth0Client({
-			domain: import.meta.env.VITE_AUTH_ZERO_DOMAIN,
-			clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
-			cache,
-		});
 		try {
-			await auth0Client.loginWithPopup();
+			const client = await getAuth0Client();
+			await client.loginWithPopup();
 		} catch (e: any) {
 			if (e.message) setError(e.message);
 		} finally {
