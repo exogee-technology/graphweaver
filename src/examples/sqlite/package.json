@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-sqlite",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting a SQLite database.",
