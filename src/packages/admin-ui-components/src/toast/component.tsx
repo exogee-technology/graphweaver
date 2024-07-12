@@ -3,6 +3,8 @@ import { toast, ToastBar, Toaster } from 'react-hot-toast';
 
 import styles from './styles.module.css';
 
+export { toast } from 'react-hot-toast';
+
 export const DismissibleToast = () => {
 	return (
 		<div>

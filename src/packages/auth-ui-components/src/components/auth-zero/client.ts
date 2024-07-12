@@ -24,9 +24,10 @@ export const getAuth0Client = async () => {
 			clientId: import.meta.env.VITE_AUTH_CLIENT_ID,
 			cache,
 		});
-	} catch (err) {
-		console.error(err);
-		throw new Error('Failed to create Auth0 client');
+	} catch (err: any) {
+		const message = err.message || 'Unknown error.';
+		console.error('Error creating Auth0 client:', err);
+		throw new Error(`Failed to create Auth0 client: ${message}`);
 	}
 
 	return auth0Client;

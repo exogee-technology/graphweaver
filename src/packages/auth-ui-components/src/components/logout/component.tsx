@@ -1,4 +1,9 @@
-import { Button, apolloClient, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import {
+	Button,
+	apolloClient,
+	localStorageAuthKey,
+	toast,
+} from '@exogee/graphweaver-admin-ui-components';
 import { LogoutIcon } from '../../assets/16-logout';
 
 import styles from './styles.module.css';
@@ -12,11 +17,18 @@ export const Logout = ({ onLogout }: LogoutProps) => {
 	const navigate = useNavigate();
 
 	const handleOnLogout = async () => {
-		if (onLogout) await onLogout();
-		localStorage.removeItem(localStorageAuthKey);
-		await apolloClient.clearStore();
-		await apolloClient.resetStore();
-		navigate(0);
+		try {
+			if (onLogout) await onLogout();
+			localStorage.removeItem(localStorageAuthKey);
+			await apolloClient.clearStore();
+			await apolloClient.resetStore();
+			navigate(0);
+		} catch (error: any) {
+			const message = error?.message || 'Unknown error.';
+			toast.error(`Failed to logout. Please try again. Error: ${message}`, {
+				duration: 5000,
+			});
+		}
 	};
 
 	return (
