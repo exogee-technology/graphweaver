@@ -2,18 +2,21 @@ import { Button, apolloClient, localStorageAuthKey } from '@exogee/graphweaver-a
 import { LogoutIcon } from '../../assets/16-logout';
 
 import styles from './styles.module.css';
+import { useNavigate } from 'react-router-dom';
 
 type LogoutProps = {
-	onLogout?: () => void;
+	onLogout?: () => Promise<void>;
 };
 
 export const Logout = ({ onLogout }: LogoutProps) => {
-	const handleOnLogout = () => {
-		onLogout?.();
+	const navigate = useNavigate();
+
+	const handleOnLogout = async () => {
+		if (onLogout) await onLogout();
 		localStorage.removeItem(localStorageAuthKey);
-		apolloClient.clearStore().then(() => {
-			apolloClient.resetStore();
-		});
+		await apolloClient.clearStore();
+		await apolloClient.resetStore();
+		navigate(0);
 	};
 
 	return (
