@@ -28,27 +28,6 @@ export const fieldResolver = async (
 		const metadata = (info.parentType.extensions.graphweaverSchemaInfo as any)?.sourceEntity;
 		if (!metadata) throw new Error(`Could not locate metadata for the '${parent}' entity`);
 
-		const relationship = metadata.fields[key];
-
-		const { fieldType } = getFieldTypeWithMetadata(relationship.getType);
-		const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-
-		if (isEntityMetadata(fieldTypeMetadata) && isSerializableGraphQLEntityClass(fieldType)) {
-			const res = await trace(async (trace?: TraceOptions) => {
-				trace?.span.updateName(`FieldResolver - ${parent}.${key} - SerializableEntity`);
-				return fieldType.deserialize({
-					// Yes, this is a lot of `as any`, but we know this is a GraphQLEntity and it will have come from
-					// our fromBackendEntity function, so we can go right to the data entity and pull out the appropriate
-					// field to pass through here.
-					value: (dataEntityForGraphQLEntity(source as any) as any)[info.fieldName],
-					parent: source,
-					entityMetadata: metadata,
-					fieldMetadata: relationship,
-				});
-			})();
-			return res;
-		}
-
 		if (typeof property === 'function') {
 			const res = await trace(async (trace?: TraceOptions) => {
 				trace?.span.updateName(`FieldResolver - ${parent}.${key} - Function`);

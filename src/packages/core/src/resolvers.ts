@@ -22,6 +22,7 @@ import {
 	graphweaverMetadata,
 	hookManagerMap,
 	isEntityMetadata,
+	isSerializableGraphQLEntityClass,
 	isTransformableGraphQLEntityClass,
 } from '.';
 import { traceSync, trace } from './open-telemetry';
@@ -697,6 +698,20 @@ const _listRelationshipFieldWithoutProvider = async <G, D, R, C extends BaseCont
 	if (!isEntityMetadata(relatedEntityMetadata)) {
 		throw new Error(`Related entity ${gqlEntityType.name} not found in metadata or not an entity.`);
 	}
+
+	// This may be a serializable entity, in which case it's already embedded on the source, we just deserialise it.
+	if (isSerializableGraphQLEntityClass(fieldType)) {
+		return fieldType.deserialize({
+			// Yes, this is a lot of `as any`, but we know this is a GraphQLEntity and it will have come from
+			// our fromBackendEntity function, so we can go right to the data entity and pull out the appropriate
+			// field to pass through here.
+			value: (dataEntityForGraphQLEntity(source as any) as any)[info.fieldName],
+			parent: source as Source,
+			entityMetadata: entity,
+			fieldMetadata: field,
+		});
+	}
+
 	const sourcePrimaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
 	const relatedPrimaryKeyField =
 		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
