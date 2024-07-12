@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { graphweaverLogo, localStorageAuthKey } from '../config';
+import { graphweaverLogo } from '../config';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-custom-pages';
