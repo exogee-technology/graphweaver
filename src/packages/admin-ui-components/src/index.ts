@@ -20,7 +20,6 @@ export * from './input';
 export * from './layouts';
 export * from './list-toolbar';
 export * from './loader';
-export * from './logout';
 export * from './missing-entity';
 export * from './playground';
 export * from './require-schema';

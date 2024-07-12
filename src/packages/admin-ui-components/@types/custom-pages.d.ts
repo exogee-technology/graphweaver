@@ -11,6 +11,7 @@ declare module 'virtual:graphweaver-user-supplied-custom-pages' {
 		routes: () => RouteObject[] | Promise<RouteObject[]>;
 		navLinks: () => NavLinkExport[] | Promise<NavLinkExport[]>;
 		loginProps?: LoginProps;
+		sidebarFooter: () => JSX.Element | null;
 	}
 
 	export const customPages: CustomPagesExport;

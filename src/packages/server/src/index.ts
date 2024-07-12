@@ -80,7 +80,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		apolloServerOptions: {
-			introspection: true,
+			introspection: process.env.NODE_ENV !== 'production',
 		},
 		enableFederationTracing: false,
 		graphqlDeduplicator: {

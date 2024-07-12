@@ -1,13 +1,15 @@
-import { apolloClient } from '../apollo';
-import { Button } from '../button';
-import { localStorageAuthKey } from '../config';
-
-import { LogoutIcon } from '../assets/16-logout';
+import { Button, apolloClient, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
+import { LogoutIcon } from '../../assets/16-logout';
 
 import styles from './styles.module.css';
 
-export const Logout = () => {
+type LogoutProps = {
+	onLogout?: () => void;
+};
+
+export const Logout = ({ onLogout }: LogoutProps) => {
 	const handleOnLogout = () => {
+		onLogout?.();
 		localStorage.removeItem(localStorageAuthKey);
 		apolloClient.clearStore().then(() => {
 			apolloClient.resetStore();
