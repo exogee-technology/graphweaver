@@ -21,6 +21,21 @@ const privateKey = process.env.AUTH_PRIVATE_KEY_PEM_BASE64
 
 const jwksUri = process.env.AUTH_JWKS_URI ? process.env.AUTH_JWKS_URI : undefined;
 
+// There should be only one method to verify the token therefore we throw and error if both public key and JWKS URI are provided
+if (publicKey && jwksUri) {
+	throw new Error(`
+    Authentication configuration error:
+
+    Both a public key and a JWKS URI were detected. 
+    Please use only one method for token verification to ensure security.
+
+    If you intend to use an external JWKS URI, remove the 'PUBLIC_KEY' environment variable.
+    If you intend to use a local public key, remove the 'JWKS_URI' environment variable.
+
+    For more information, refer to our authentication configuration documentation: https://graphweaver.com/docs/authentication
+  `);
+}
+
 /**
  * Removes any prefix from the given authorization header.
  * The prefix is assumed to be separated from the actual token by whitespace.
