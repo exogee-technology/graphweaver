@@ -23,7 +23,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"esbuild": "0.23.0",
 		"graphql-type-json": "0.3.2",
-		"prettier": "3.3.2",
+		"prettier": "3.3.3",
 		"typescript": "5.5.3"
 	},
 	"peerDependencies": {
