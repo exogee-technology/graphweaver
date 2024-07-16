@@ -18,11 +18,13 @@ export const Logout = ({ onLogout }: LogoutProps) => {
 
 	const handleOnLogout = async () => {
 		try {
-			if (onLogout) await onLogout();
 			localStorage.removeItem(localStorageAuthKey);
 			await apolloClient.clearStore();
-			await apolloClient.resetStore();
-			navigate(0);
+			if (onLogout) {
+				await onLogout();
+			} else {
+				navigate(0);
+			}
 		} catch (error: any) {
 			const message = error?.message || 'Unknown error.';
 			toast.error(`Failed to logout. Please try again. Error: ${message}`, {
