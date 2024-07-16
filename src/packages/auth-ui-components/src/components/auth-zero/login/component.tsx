@@ -1,31 +1,59 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@exogee/graphweaver-admin-ui-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { getAuth0Client } from '../client';
 
 export const Auth0 = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>();
+
+	const [searchParams] = useSearchParams();
 	const shouldRedirect = useRef(true);
 	const navigate = useNavigate();
 
+	// In this effect we are checking if the user is coming back from the Auth0 login page or
+	// if the user is coming to the page for the first time. If the user is coming back from
+	// the Auth0 login page, we process the redirect. If the user is coming to the page for the
+	// first time, we redirect the user to the Auth0 login page.
 	useEffect(() => {
 		if (shouldRedirect.current) {
 			shouldRedirect.current = false;
-			requestLogin();
+			const code = searchParams.get('code');
+			const state = searchParams.get('state');
+
+			if (code && state) {
+				// The user is coming back from the Auth0 login page
+				processRedirect();
+			} else {
+				// The user is coming to the page for the first time
+				requestLogin();
+			}
 		}
 	}, []);
 
-	useEffect(() => {
-		if (!loading && !error) {
-			navigate('/');
-		}
-	}, [loading, error]);
-
+	// This function is called when the user clicks the login button or when the user is coming to the page for the first time
 	const requestLogin = useCallback(async () => {
 		try {
 			const client = await getAuth0Client();
-			await client.loginWithPopup();
+			const options = {
+				authorizationParams: {
+					redirect_uri: window.location.toString(),
+				},
+			};
+			await client.loginWithRedirect(options);
+		} catch (e: any) {
+			if (e.message) setError(e.message);
+			setLoading(false);
+		}
+	}, []);
+
+	// This function is called when the user is coming back from the Auth0 login page and we need to process the redirect
+	// This function will handle the redirect and redirect the user to the home page
+	const processRedirect = useCallback(async () => {
+		try {
+			const client = await getAuth0Client();
+			await client.handleRedirectCallback();
+			navigate('/');
 		} catch (e: any) {
 			if (e.message) setError(e.message);
 		} finally {
@@ -33,16 +61,12 @@ export const Auth0 = () => {
 		}
 	}, []);
 
-	const handleRetry = () => {
-		requestLogin();
-	};
-
 	if (loading) return <div>Loading...</div>;
 
 	return (
 		<div>
 			{error && <div>{error}</div>}
-			<Button onClick={handleRetry}>Retry</Button>
+			<Button onClick={requestLogin}>Login</Button>
 		</div>
 	);
 };

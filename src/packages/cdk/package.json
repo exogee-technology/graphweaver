@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-cdk",
-	"version": "2.0.3",
+	"version": "2.0.4",
 	"description": "Deploy GraphWeaver to AWS",
 	"license": "MIT",
 	"directories": {
