@@ -1,0 +1,41 @@
+{
+	"name": "@exogee/graphweaver-cdk",
+	"version": "2.0.3",
+	"description": "Deploy GraphWeaver to AWS",
+	"license": "MIT",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
+		"version": "npm version --no-git-tag-version"
+	},
+	"dependencies": {
+		"aws-cdk-lib": "2.149.0",
+		"constructs": "10.3.0"
+	},
+	"devDependencies": {
+		"@types/node": "20.14.10",
+		"esbuild": "0.23.0",
+		"glob": "10.4.3",
+		"typescript": "5.5.3"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
+}
