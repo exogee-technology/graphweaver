@@ -30,7 +30,7 @@ export class ApiStack extends cdk.Stack {
 		this.lambda = new NodejsFunction(this, `${id}-api-function`, {
 			runtime: lambda.Runtime.NODEJS_20_X,
 			handler: 'index.handler',
-			entry: require.resolve(`@exogee/${config.name}`),
+			entry: require.resolve(config.api.packageName),
 			bundling: {
 				externalModules: [
 					'sqlite3',
@@ -48,14 +48,14 @@ export class ApiStack extends cdk.Stack {
 			vpcSubnets: {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
 			},
-			memorySize: 1024,
+			memorySize: config.api.memorySize ?? 1024,
 			architecture: lambda.Architecture.ARM_64,
 			environment: {
 				NODE_EXTRA_CA_CERTS: '/var/runtime/ca-cert.pem',
 				DATABASE_SECRET_ARN: databaseStack.dbInstance.secret.secretFullArn,
 				...config.api.envVars,
 			},
-			timeout: cdk.Duration.seconds(120),
+			timeout: cdk.Duration.seconds(config.api.timeout ?? 10),
 		});
 
 		databaseStack.dbInstance.secret.grantRead(this.lambda);

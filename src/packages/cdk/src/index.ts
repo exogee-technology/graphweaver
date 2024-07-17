@@ -8,10 +8,11 @@ const env = {
 };
 
 export class GraphweaverApp extends Construct {
+	public appStack: AppStack;
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig) {
 		super(scope, id);
 
 		const stackName = `${id}-stack`;
-		new AppStack(scope, stackName, config, { env });
+		this.appStack = new AppStack(scope, stackName, config, { env });
 	}
 }

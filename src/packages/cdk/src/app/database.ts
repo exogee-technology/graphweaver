@@ -14,9 +14,11 @@ export class DatabaseStack extends cdk.Stack {
 		// RDS PostgreSQL Instance
 		this.dbInstance = new rds.DatabaseInstance(this, `${id}-database`, {
 			engine: rds.DatabaseInstanceEngine.postgres({
-				version: rds.PostgresEngineVersion.VER_16_2,
+				version: config.database.version ?? rds.PostgresEngineVersion.VER_16_2,
 			}),
-			instanceType: ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
+			instanceType:
+				config.database.instanceType ??
+				ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
 			credentials: rds.Credentials.fromGeneratedSecret(config.database.username),
 			vpc: config.network.vpc,
 			storageEncrypted: true,
@@ -24,7 +26,7 @@ export class DatabaseStack extends cdk.Stack {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
 			},
 			databaseName: config.database.name,
-			securityGroups: [config.network.dbSecurityGroup],
+			securityGroups: [config.network.databaseSecurityGroup],
 		});
 
 		new cdk.CfnOutput(this, `${id}-database-url`, {

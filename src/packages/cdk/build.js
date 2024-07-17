@@ -2,8 +2,10 @@
 	const esbuild = await import('esbuild');
 	const { glob } = await import('glob');
 
-	const entryPoints = await glob('./src/**/*.ts');
-
+	// Get all entry points for the build but not the test files
+	const entryPoints = await glob('./src/**/*.ts', {
+		ignore: ['./src/**/*.test.ts'],
+	});
 	await esbuild.build({
 		outdir: 'lib',
 		format: 'cjs',

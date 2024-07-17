@@ -26,10 +26,8 @@ export class WebsiteStack extends cdk.Stack {
 			}),
 		});
 
-		const buildPath = `../../../../apps/${config.name}/.graphweaver/admin-ui`;
-
 		new s3deploy.BucketDeployment(this, `${id}-bucket-deployment`, {
-			sources: [s3deploy.Source.asset(path.join(__dirname, buildPath))], // Path to your built website files
+			sources: [s3deploy.Source.asset(path.join(__dirname, config.adminUI.buildPath))], // Path to your built website files
 			destinationBucket: websiteBucket,
 		});
 
