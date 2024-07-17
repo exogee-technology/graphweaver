@@ -56,8 +56,6 @@ const websiteTemplate = Template.fromStack(graphweaverApp.appStack.website);
 const apiTemplate = Template.fromStack(graphweaverApp.appStack.api);
 const databaseTemplate = Template.fromStack(graphweaverApp.appStack.database);
 
-console.log(JSON.stringify(databaseTemplate.toJSON()));
-
 describe('GraphweaverApp', () => {
 	test('AdminUI', () => {
 		// Should create a S3 bucket to host the Admin UI
