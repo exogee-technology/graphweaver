@@ -1405,6 +1405,9 @@ importers:
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@4.10.4)
+      '@as-integrations/hapi':
+        specifier: 2.0.1
+        version: 2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.10)
       '@escape.tech/graphql-armor':
         specifier: 3.0.1
         version: 3.0.1(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0)
@@ -1414,6 +1417,9 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
+      '@hapi/hapi':
+        specifier: 21.3.10
+        version: 21.3.10
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0

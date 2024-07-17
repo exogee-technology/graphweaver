@@ -1,3 +1,5 @@
+import { Server } from '@hapi/hapi';
+import hapiApollo from '@as-integrations/hapi';
 import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
@@ -73,6 +75,11 @@ export interface GraphweaverConfig {
 		instrumentations?: (Instrumentation | Instrumentation[])[];
 	};
 }
+
+export type StartServerOptions = {
+	port: number;
+	path?: string;
+};
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
@@ -219,6 +226,23 @@ export default class Graphweaver<TContext extends BaseContext> {
 			this.server as unknown as ApolloServer<BaseContext>,
 			handlers.createAPIGatewayProxyEventRequestHandler()
 		);
+	}
+
+	public async start({ port, path }: StartServerOptions): Promise<void> {
+		logger.info(`Graphweaver start called`);
+		await this.server.start();
+
+		const hapi = new Server({ port });
+
+		await hapi.register({
+			plugin: hapiApollo,
+			options: {
+				apolloServer: this.server,
+				path,
+			},
+		});
+
+		await hapi.start();
 	}
 }
 
