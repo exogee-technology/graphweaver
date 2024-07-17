@@ -73,6 +73,10 @@
       "path": "src/packages/builder"
     },
     {
+      "name": "📦 @exogee/graphweaver-cdk",
+      "path": "src/packages/cdk"
+    },
+    {
       "name": "📦 @exogee/graphweaver-config",
       "path": "src/packages/config"
     },
