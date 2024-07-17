@@ -74,7 +74,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -169,7 +169,7 @@ importers:
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -180,8 +180,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       mysql2:
-        specifier: 3.10.2
-        version: 3.10.2
+        specifier: 3.10.3
+        version: 3.10.3
       pg:
         specifier: 8.12.0
         version: 8.12.0
@@ -287,8 +287,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       mysql2:
-        specifier: 3.10.2
-        version: 3.10.2
+        specifier: 3.10.3
+        version: 3.10.3
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -343,7 +343,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -395,7 +395,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1136,7 +1136,7 @@ importers:
         version: 6.2.9
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1225,7 +1225,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)(pg@8.11.5)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.12.0)
@@ -1281,13 +1281,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)(pg@8.11.5)
       '@mikro-orm/mysql':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
       '@mikro-orm/postgresql':
         specifier: 6.2.9
-        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)
+        version: 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)
       '@mikro-orm/sqlite':
         specifier: 6.2.9
         version: 6.2.9(@mikro-orm/core@6.2.9)(pg@8.11.5)
@@ -5911,7 +5911,7 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/knex@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5):
+  /@mikro-orm/knex@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)(pg@8.11.5):
     resolution: {integrity: sha512-eSHPiS5em+RGv/jx5lP7a1xDVVlnrG+l90/7N7WAgTGcPOzyILVw9EJOZl2KR8dh8EfPI6Wm35Lo4qkO2LoDUg==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
@@ -5929,7 +5929,7 @@ packages:
     dependencies:
       '@mikro-orm/core': 6.2.9
       fs-extra: 11.2.0
-      knex: 3.1.0(mysql2@3.10.2)(pg@8.11.5)
+      knex: 3.1.0(mysql2@3.10.3)(pg@8.11.5)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -6045,14 +6045,14 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2):
+  /@mikro-orm/postgresql@6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3):
     resolution: {integrity: sha512-CRW5QPvsQhlhRZbx9SsgLrdC7LxCSbz+Pm5rAA8S1SAZG8qJ1WxMovHF61PFZj/7rydnb9fSh4nVwfutOyYwWg==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
       '@mikro-orm/core': 6.2.9
-      '@mikro-orm/knex': 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.2)(pg@8.11.5)
+      '@mikro-orm/knex': 6.2.9(@mikro-orm/core@6.2.9)(mysql2@3.10.3)(pg@8.11.5)
       pg: 8.11.5
       postgres-array: 3.0.2
       postgres-date: 2.1.0
@@ -9344,6 +9344,11 @@ packages:
       - table
       - yaml
       - mime-types
+
+  /aws-ssl-profiles@1.1.1:
+    resolution: {integrity: sha512-+H+kuK34PfMaI9PNU/NSjBKL5hh/KDM9J72kwYeYEm0A8B1AC4fuCy3qsjnA7lxklgyXsB68yn8Z2xoZEjgwCQ==}
+    engines: {node: '>= 6.0.0'}
+    dev: false
 
   /axios@1.7.2:
     resolution: {integrity: sha512-2A8QhOMrbomlDuiLeK9XibIBzuHeRcqqNOHp0Cyp5EoJ1IFDh+XZH3A6BkXtv0K4gFGCI0Y4BM7B1wOEi0Rmgw==}
@@ -13686,7 +13691,7 @@ packages:
       - supports-color
     dev: false
 
-  /knex@3.1.0(mysql2@3.10.2)(pg@8.11.5):
+  /knex@3.1.0(mysql2@3.10.3)(pg@8.11.5):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
     engines: {node: '>=16'}
     hasBin: true
@@ -13723,7 +13728,7 @@ packages:
       getopts: 2.3.0
       interpret: 2.2.0
       lodash: 4.17.21
-      mysql2: 3.10.2
+      mysql2: 3.10.3
       pg: 8.11.5
       pg-connection-string: 2.6.2
       rechoir: 0.8.0
@@ -14589,10 +14594,11 @@ packages:
       sqlstring: 2.3.3
     dev: false
 
-  /mysql2@3.10.2:
-    resolution: {integrity: sha512-KCXPEvAkO0RcHPr362O5N8tFY2fXvbjfkPvRY/wGumh4EOemo9Hm5FjQZqv/pCmrnuxGu5OxnSENG0gTXqKMgQ==}
+  /mysql2@3.10.3:
+    resolution: {integrity: sha512-k43gmH9i79rZD4hGPdj7pDuT0UBiFjs4UzXEy1cJrV0QqcSABomoLwvejqdbcXN+Vd7gi999CVM6o9vCPKq29g==}
     engines: {node: '>= 8.0'}
     dependencies:
+      aws-ssl-profiles: 1.1.1
       denque: 2.1.0
       generate-function: 2.3.1
       iconv-lite: 0.6.3
