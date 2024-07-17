@@ -92,13 +92,13 @@ const config: GraphweaverAppConfig = {
 new GraphweaverApp(stack, 'GraphweaverApp', config);
 ```
 
-## Customize Your Configuration:
+## Customize Your Configuration
 
 Modify the GraphweaverAppConfig object to match your application's requirements.
 
 Provide database credentials, certificates, domain names, environment variables, and other relevant settings.
 
-## Deploy:
+## Deploy
 
 ```Bash
 cdk deploy
