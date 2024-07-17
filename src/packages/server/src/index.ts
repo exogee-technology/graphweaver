@@ -77,7 +77,8 @@ export interface GraphweaverConfig {
 }
 
 export type StartServerOptions = {
-	port: number;
+	host?: string;
+	port?: number;
 	path?: string;
 };
 
@@ -228,11 +229,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		);
 	}
 
-	public async start({ port, path }: StartServerOptions): Promise<void> {
+	public async start({ host, port, path }: StartServerOptions): Promise<void> {
 		logger.info(`Graphweaver start called`);
 		await this.server.start();
 
-		const hapi = new Server({ port });
+		const hapi = new Server({ host, port });
 
 		await hapi.register({
 			plugin: hapiApollo,

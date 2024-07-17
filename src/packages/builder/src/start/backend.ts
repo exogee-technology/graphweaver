@@ -96,6 +96,14 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	await Promise.all([checkNativeModules, buildBackend]);
 
+	const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+	const { graphweaver } = await import(buildDir);
+
+	if (graphweaver) {
+		graphweaver.start({ host, port: port + 1 });
+		return;
+	}
+
 	// Are there any custom additional functions we need to build?
 	for (const additionalFunction of additionalFunctions) {
 		if (
