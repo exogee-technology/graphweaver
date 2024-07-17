@@ -14,8 +14,8 @@ export class AppStack extends cdk.NestedStack {
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		this.website = new WebsiteStack(scope, `${id}-website`, config, props);
-		this.database = new DatabaseStack(scope, `${id}-database`, config, props);
-		this.api = new ApiStack(scope, `${id}-api`, this.database, config, props);
+		this.website = new WebsiteStack(scope, `${id}Website`, config, props);
+		this.database = new DatabaseStack(scope, `${id}Database`, config, props);
+		this.api = new ApiStack(scope, `${id}Api`, this.database, config, props);
 	}
 }

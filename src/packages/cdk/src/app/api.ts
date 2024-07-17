@@ -27,9 +27,9 @@ export class ApiStack extends cdk.Stack {
 			throw new Error('Missing required secret ARN for database');
 
 		// Create GraphQL Lambda Function
-		this.lambda = new NodejsFunction(this, `${id}-api-function`, {
-			runtime: lambda.Runtime.NODEJS_20_X,
-			handler: 'index.handler',
+		this.lambda = new NodejsFunction(this, `${id}ApiFunction`, {
+			runtime: config.api.runtime ?? lambda.Runtime.NODEJS_20_X,
+			handler: config.api.handler ?? 'index.handler',
 			entry: require.resolve(config.api.packageName),
 			bundling: {
 				externalModules: [
@@ -60,16 +60,16 @@ export class ApiStack extends cdk.Stack {
 
 		databaseStack.dbInstance.secret.grantRead(this.lambda);
 
-		const apiLogging = new LogGroup(this, `${id}-api-function-logging`);
+		const apiLogging = new LogGroup(this, `${id}ApiFunctionLogging`);
 
 		const certificateArn = config.api.cert;
 		const certificate = Certificate.fromCertificateArn(
 			this,
-			`${id}-APICertificateImported`,
+			`${id}ApiCertificateImported`,
 			certificateArn
 		);
 
-		const rest = new LambdaRestApi(this, `${id}-api-gateway`, {
+		const rest = new LambdaRestApi(this, `${id}ApiGateway`, {
 			domainName: {
 				domainName: config.api.url,
 				certificate,
@@ -97,7 +97,7 @@ export class ApiStack extends cdk.Stack {
 			handler: this.lambda,
 		});
 
-		new cdk.CfnOutput(this, `${id}-api-url`, {
+		new cdk.CfnOutput(this, `${id}ApiUrl`, {
 			value: rest.domainName?.domainNameAliasDomainName || '',
 		});
 	}

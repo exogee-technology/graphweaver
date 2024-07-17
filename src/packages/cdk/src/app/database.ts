@@ -12,7 +12,7 @@ export class DatabaseStack extends cdk.Stack {
 		super(scope, id, props);
 
 		// RDS PostgreSQL Instance
-		this.dbInstance = new rds.DatabaseInstance(this, `${id}-database`, {
+		this.dbInstance = new rds.DatabaseInstance(this, `${id}Database`, {
 			engine: rds.DatabaseInstanceEngine.postgres({
 				version: config.database.version ?? rds.PostgresEngineVersion.VER_16_2,
 			}),
@@ -29,7 +29,7 @@ export class DatabaseStack extends cdk.Stack {
 			securityGroups: [config.network.databaseSecurityGroup],
 		});
 
-		new cdk.CfnOutput(this, `${id}-database-url`, {
+		new cdk.CfnOutput(this, `${id}DatabaseUrl`, {
 			value: this.dbInstance.dbInstanceEndpointAddress,
 		});
 	}

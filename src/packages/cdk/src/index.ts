@@ -12,7 +12,7 @@ export class GraphweaverApp extends Construct {
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig) {
 		super(scope, id);
 
-		const stackName = `${id}-stack`;
+		const stackName = `${id}Stack`;
 		this.appStack = new AppStack(scope, stackName, config, { env });
 	}
 }

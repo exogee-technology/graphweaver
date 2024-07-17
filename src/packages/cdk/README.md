@@ -39,13 +39,13 @@ const vpc = new Vpc(stack, 'GraphweaverVpc');
 
 // Create Security Group for the Database
 const dbSecurityGroup = new SecurityGroup(this, 'DbSecurityGroup', {
-    vpc: vpc,
+    vpc,
     description: 'Security group for the database',
 });
 
 // Security Group for GraphQL Lambda
 const graphqlSecurityGroup = new SecurityGroup(this, 'GraphqlSecurityGroup', {
-    vpc: vpc,
+    vpc,
     description: 'Security group for GraphQL Lambda',
 });
 
@@ -59,7 +59,7 @@ dbSecurityGroup.addIngressRule(
 // Create Security Group for the Secrets Manager endpoint
 const secretManagerSecurityGroup = new SecurityGroup(this, 'SecretsManagerSecurityGroup', {
     vpc: this.vpc,
-    description: 'Security group for the secrets manage endpoint',
+    description: 'Security group for the Secrets Manager endpoint',
 });
 
 // Allow inbound traffic only from the GraphQL Lambda

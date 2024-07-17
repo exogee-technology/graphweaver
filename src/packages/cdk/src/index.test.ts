@@ -15,7 +15,7 @@ const databaseSecurityGroup = new SecurityGroup(stack, 'DatabaseSecurityGroup', 
 	vpc,
 });
 
-const graphweaverApp = new GraphweaverApp(stack, 'Test-Graphweaver', {
+const graphweaverApp = new GraphweaverApp(stack, 'TestGraphweaver', {
 	name: 'test',
 	network: {
 		vpc,
@@ -110,7 +110,7 @@ describe('GraphweaverApp', () => {
 
 		websiteTemplate.hasOutput('*', {
 			Value: {
-				'Fn::GetAtt': ['TestGraphweaverstackwebsitewebsitedistribution2478F6AD', 'DomainName'],
+				'Fn::GetAtt': ['TestGraphweaverStackWebsiteWebsiteDistribution071BF43D', 'DomainName'],
 			},
 		});
 	});
@@ -165,7 +165,7 @@ describe('GraphweaverApp', () => {
 					[
 						'https://',
 						{
-							Ref: 'TestGraphweaverstackapiapigatewayBC09F9B6',
+							Ref: 'TestGraphweaverStackApiApiGatewayE0EFC07E',
 						},
 						'.execute-api.',
 						{
@@ -177,7 +177,7 @@ describe('GraphweaverApp', () => {
 						},
 						'/',
 						{
-							Ref: 'TestGraphweaverstackapiapigatewayDeploymentStageprodF3A67CE7',
+							Ref: 'TestGraphweaverStackApiApiGatewayDeploymentStageprod597B26CD',
 						},
 						'/',
 					],
@@ -188,7 +188,7 @@ describe('GraphweaverApp', () => {
 		apiTemplate.hasOutput('*', {
 			Value: {
 				'Fn::GetAtt': [
-					'TestGraphweaverstackapiapigatewayCustomDomainC1C4A53C',
+					'TestGraphweaverStackApiApiGatewayCustomDomain0EC95E87',
 					'RegionalDomainName',
 				],
 			},

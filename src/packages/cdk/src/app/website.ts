@@ -15,7 +15,7 @@ export class WebsiteStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		const websiteBucket = new s3.Bucket(this, `${id}-bucket`, {
+		const websiteBucket = new s3.Bucket(this, `${id}Bucket`, {
 			websiteIndexDocument: 'index.html',
 			publicReadAccess: true,
 			blockPublicAccess: new s3.BlockPublicAccess({
@@ -26,7 +26,7 @@ export class WebsiteStack extends cdk.Stack {
 			}),
 		});
 
-		new s3deploy.BucketDeployment(this, `${id}-bucket-deployment`, {
+		new s3deploy.BucketDeployment(this, `${id}BucketDeployment`, {
 			sources: [s3deploy.Source.asset(path.join(__dirname, config.adminUI.buildPath))], // Path to your built website files
 			destinationBucket: websiteBucket,
 		});
@@ -34,15 +34,15 @@ export class WebsiteStack extends cdk.Stack {
 		const certificateArn = config.adminUI.cert;
 		const certificate = Certificate.fromCertificateArn(
 			this,
-			`${id}-WebsiteCertificateImported`,
+			`${id}WebsiteCertificateImported`,
 			certificateArn
 		);
 
-		const myResponseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(
+		const responseHeadersPolicy = new cloudfront.ResponseHeadersPolicy(
 			this,
-			`${id}-ResponseHeadersPolicy`,
+			`${id}ResponseHeadersPolicy`,
 			{
-				responseHeadersPolicyName: `${id}-AdminUIResponseHeadersPolicy`,
+				responseHeadersPolicyName: `${id}AdminUIResponseHeadersPolicy`,
 				comment: 'The policy used for the Admin UI website.',
 				corsBehavior: undefined,
 				customHeadersBehavior: {
@@ -72,7 +72,7 @@ export class WebsiteStack extends cdk.Stack {
 			}
 		);
 
-		this.distribution = new cloudfront.Distribution(this, `${id}-website-distribution`, {
+		this.distribution = new cloudfront.Distribution(this, `${id}WebsiteDistribution`, {
 			certificate,
 			domainNames: [config.adminUI.url],
 			defaultBehavior: {
@@ -81,7 +81,7 @@ export class WebsiteStack extends cdk.Stack {
 					httpPort: 80,
 					httpsPort: 443,
 				}),
-				responseHeadersPolicy: myResponseHeadersPolicy,
+				responseHeadersPolicy,
 				viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS, // Force HTTPS
 				allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
 				compress: true,
@@ -98,7 +98,7 @@ export class WebsiteStack extends cdk.Stack {
 			],
 		});
 
-		new cdk.CfnOutput(this, `${id}-website-url`, {
+		new cdk.CfnOutput(this, `${id}WebsiteUrl`, {
 			value: this.distribution.distributionDomainName,
 		});
 	}
