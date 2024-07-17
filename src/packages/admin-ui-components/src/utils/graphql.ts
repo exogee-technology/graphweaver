@@ -59,7 +59,9 @@ export const generateGqlSelectForEntityFields = (
 	entity.fields
 		.filter((field) => !field.hideInTable)
 		.map((field) => {
-			if (field.relationshipType) {
+			if (field.type === 'Media') {
+				return `${field.name} { filename, type, url }`;
+			} else if (field.relationshipType) {
 				if (!entityByType) {
 					throw new Error('entityByType is required for relationship fields');
 				}
@@ -70,11 +72,8 @@ export const generateGqlSelectForEntityFields = (
 					value: ${relatedEntity.primaryKeyField}
 					label: ${relatedEntity?.summaryField ?? relatedEntity?.primaryKeyField}
 				}`;
-			} else {
-				if (field.type === 'Media') {
-					return `${field.name} { filename, type, url }`;
-				}
-				return field.name;
 			}
+
+			return field.name;
 		})
 		.join(' ');

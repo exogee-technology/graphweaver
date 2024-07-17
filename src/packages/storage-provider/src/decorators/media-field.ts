@@ -54,7 +54,10 @@ export class Media {
 	@Field(() => MediaType)
 	type!: MediaType;
 
-	@Field(() => String, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
+	@Field(() => String, {
+		primaryKeyField: true,
+		apiOptions: { excludeFromBuiltInWriteOperations: true },
+	})
 	url!: string;
 
 	static serialize = ({ value }: { value: unknown }) => {
