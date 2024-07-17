@@ -1,27 +1,27 @@
 # Graphweaver CDK Deployment
 
-This package simplifies the deployment of your Graphweaver GraphQL applications on AWS, leveraging the AWS CDK (Cloud Development Kit). It streamlines infrastructure provisioning, network setup, and configuration for your GraphQL backend and admin UI.
+This package simplifies the deployment of your Graphweaver GraphQL applications on AWS, leveraging the AWS CDK (Cloud Development Kit). It streamlines infrastructure provisioning and configuration for your GraphQL backend and admin UI.
 
 ## Features
 
 * AWS CDK Integration: Easily define your infrastructure as code.
-* Network Configuration: Automates VPC setup, security groups for GraphQL and database.
 * GraphQL Backend: Handles deployment and configuration of your GraphQL API.
 * Admin UI: Deploys and secures the Graphweaver admin interface.
+* Database: Deploys and secures a Postgres database and connects it to the backend.
 * Customizable: Tailor API domain, certificates, environment variables, and more.
 
 ## Prerequisites
 
 * AWS Account: You'll need an active AWS account.
 * AWS CDK: Ensure the AWS CDK Toolkit is installed and configured.
-* Node.js and npm/yarn: For development and package management.
+* Node.js and pnpm: For development and package management.
 
 ## Installation
 
 Install the package:
 
 ```Bash
-pnpm install graphweaver-cdk
+pnpm install @exogee/graphweaver-cdk
 ```
 
 ## Usage
@@ -30,7 +30,7 @@ Create Your CDK App:
 
 ```TypeScript
 import { App, Stack } from 'aws-cdk-lib';
-import { GraphweaverApp } from 'graphweaver-app-deployment';
+import { GraphweaverApp } from '@exogee/graphweaver-cdk';
 import { Vpc, SecurityGroup, Port} from 'aws-cdk-lib/aws-ec2';
 
 const app = new App();
@@ -47,7 +47,6 @@ const dbSecurityGroup = new SecurityGroup(this, 'DbSecurityGroup', {
 const graphqlSecurityGroup = new SecurityGroup(this, 'GraphqlSecurityGroup', {
     vpc: vpc,
     description: 'Security group for GraphQL Lambda',
-    allowAllOutbound: true, // Allow Lambda to reach the internet for outbound connections
 });
 
 // Allow inbound traffic only from the GraphQL Lambda
@@ -61,7 +60,6 @@ dbSecurityGroup.addIngressRule(
 const secretManagerSecurityGroup = new SecurityGroup(this, 'SecretsManagerSecurityGroup', {
     vpc: this.vpc,
     description: 'Security group for the secrets manage endpoint',
-    allowAllOutbound: true,
 });
 
 // Allow inbound traffic only from the GraphQL Lambda
