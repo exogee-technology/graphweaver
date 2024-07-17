@@ -9,7 +9,12 @@ import { Checkbox } from '../checkbox';
 const columnHelper = createColumnHelper<any>();
 
 const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
-	// Check if the field is a relationship
+	// Is there a specific definition for the cell type?
+	if (cells[field.type as keyof typeof cells]) {
+		return cells[field.type as keyof typeof cells](value);
+	}
+
+	// If not, is it a relationship?
 	if (field.relationshipType) {
 		const relatedEntity = entityByType(field.type);
 
@@ -35,25 +40,25 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 		}
 	}
 
-	// Check if the field is an array and join the values
+	// Is it an array?
 	if (Array.isArray(value)) {
 		return value.join(', ');
 	}
 
-	// Check if the field has a custom cell renderer
-	return cells[field.type as keyof typeof cells]?.(value) || value;
+	// Ok, all we're left with is a simple value
+	return value;
 };
 
 const isFieldSortable = (field: EntityField) => {
-	if (field.relationshipType) {
-		return false;
-	}
-
 	if (field.type === 'JSON') {
 		return false;
 	}
 
 	if (field.type === 'Media') {
+		return false;
+	}
+
+	if (field.relationshipType) {
 		return false;
 	}
 
