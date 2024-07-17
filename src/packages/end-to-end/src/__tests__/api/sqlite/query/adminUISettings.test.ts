@@ -201,7 +201,7 @@ test('Test the decorator adminUISettings', async () => {
 	);
 
 	expect(mediaDownloadUrlField).not.toBeNull();
-	expect(mediaDownloadUrlField?.type).toBe('Media');
+	expect(mediaDownloadUrlField?.type).toBe('GraphweaverMedia');
 
 	// Test that the field is readonly
 	expect(mediaDownloadUrlField?.attributes?.isReadOnly).toBe(true);

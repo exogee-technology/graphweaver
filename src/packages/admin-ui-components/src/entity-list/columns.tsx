@@ -54,7 +54,7 @@ const isFieldSortable = (field: EntityField) => {
 		return false;
 	}
 
-	if (field.type === 'Media') {
+	if (field.type === 'GraphweaverMedia') {
 		return false;
 	}
 

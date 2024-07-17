@@ -110,6 +110,11 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// This value defaults to the primary key field if not set.
 		fieldForDetailPanelNavigationId?: Extract<keyof G, string>;
 	};
+
+	// This is used internally by reserved entities (such as GraphweaverMedia) to allow them to set their
+	// names. You should never set this on your own entities, as it disables error checking that is there
+	// to help ensure the system will work.
+	__INTERNAL_ignoreReservedEntityNames?: boolean;
 }
 
 export function isInputMetadata<G = unknown, D = unknown>(

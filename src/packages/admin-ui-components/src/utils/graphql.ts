@@ -59,7 +59,7 @@ export const generateGqlSelectForEntityFields = (
 	entity.fields
 		.filter((field) => !field.hideInTable)
 		.map((field) => {
-			if (field.type === 'Media') {
+			if (field.type === 'GraphweaverMedia') {
 				return `${field.name} { filename, type, url }`;
 			} else if (field.relationshipType) {
 				if (!entityByType) {

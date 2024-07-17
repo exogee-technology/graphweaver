@@ -59,7 +59,7 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 		return <BooleanField name={field.name} autoFocus={autoFocus} />;
 	}
 
-	if (field.type === 'Media') {
+	if (field.type === 'GraphweaverMedia') {
 		return <MediaField field={field} autoFocus={autoFocus} />;
 	}
 

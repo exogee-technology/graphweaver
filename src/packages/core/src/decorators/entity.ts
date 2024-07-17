@@ -1,6 +1,8 @@
 import { pluralise } from '../utils/plural';
 import { CollectEntityInformationArgs, graphweaverMetadata } from '../metadata';
 
+const reservedEntityNames = new Set(['GraphweaverMedia']);
+
 export type EntityOptions<G = unknown> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
@@ -22,6 +24,13 @@ export function Entity<G = unknown>(
 		if (!name) {
 			throw new Error('Could not determine name for entity.');
 		}
+
+		if (!resolvedOptions?.__INTERNAL_ignoreReservedEntityNames && reservedEntityNames.has(name)) {
+			throw new Error(
+				`The entity name "${name}" is reserved for internal use by Graphweaver. Please use a different name.`
+			);
+		}
+
 		const plural = pluralise(resolvedOptions?.plural ?? name, !!resolvedOptions?.plural);
 
 		// Let's make sure the new name is set on the target
