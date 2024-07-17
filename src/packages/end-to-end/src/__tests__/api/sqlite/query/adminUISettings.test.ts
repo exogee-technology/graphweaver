@@ -172,7 +172,7 @@ test('Test the decorator adminUISettings', async () => {
 	});
 	assert(response.body.kind === 'single');
 	const result = response.body.singleResult.data?.result;
-	expect(result?.entities).toHaveLength(2);
+	expect(result?.entities).toHaveLength(12);
 
 	const albumEntity = result?.entities.find((entity) => entity.name === 'Album');
 	expect(albumEntity).not.toBeNull();
