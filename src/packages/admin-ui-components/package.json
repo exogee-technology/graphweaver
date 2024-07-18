@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "2.0.4",
+	"version": "2.0.5",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "MIT",
 	"type": "module",
@@ -45,7 +45,7 @@
 		"graphql": "16.9.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.0"
+		"react-router-dom": "6.25.1"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
@@ -58,7 +58,7 @@
 		"glob": "10.4.3",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.0",
+		"react-router-dom": "6.25.1",
 		"typescript": "5.5.3",
 		"vite": "5.3.4",
 		"vite-plugin-svgr": "4.2.0"

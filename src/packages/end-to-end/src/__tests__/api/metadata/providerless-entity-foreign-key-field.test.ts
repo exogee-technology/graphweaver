@@ -52,4 +52,60 @@ test('should correctly resolve a non-provider-bound entity when the foreign key 
 			},
 		},
 	});
+
+	// This should also be correctly advertised to via the _graphweaver metadata service
+	const response2 = await graphweaver.server.executeOperation<{
+		_graphweaver: {
+			entities: [
+				{
+					name: string;
+					fields: {
+						name: string;
+						relatedEntity: string;
+						relationshipType: string;
+					}[];
+				},
+			];
+		};
+	}>({
+		query: gql`
+			query {
+				_graphweaver {
+					entities {
+						name
+						fields {
+							name
+							relatedEntity
+							relationshipType
+						}
+					}
+				}
+			}
+		`,
+	});
+	assert(response2.body.kind === 'single');
+	expect(response2.body.singleResult.errors).toBeUndefined();
+	const taskEntity = response2.body.singleResult.data?._graphweaver.entities.find(
+		(entity) => entity.name === 'Task'
+	);
+	expect(taskEntity).toMatchObject({
+		name: 'Task',
+		fields: [
+			{
+				name: 'taskId',
+				relatedEntity: null,
+				relationshipType: null,
+			},
+			{
+				name: 'userId',
+				relatedEntity: null,
+				relationshipType: null,
+			},
+			{
+				name: 'user',
+				relatedEntity: 'User',
+				relationshipType: 'MANY_TO_ONE',
+			},
+		],
+	});
 });

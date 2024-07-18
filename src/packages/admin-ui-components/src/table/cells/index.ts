@@ -9,5 +9,5 @@ export const cells = {
 	Boolean: BooleanCell,
 	NanoDuration: NanoDurationCell,
 	NanoTimestamp: NanoTimestampCell,
-	Media: MediaCell,
+	GraphweaverMedia: MediaCell,
 };

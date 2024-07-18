@@ -32,7 +32,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// for now the workaround is to reduce the number of filters to 5
 		const fields = entity.fields
 			// filter out rowEntity.fields with the JSON and Media types because they're not filterable
-			.filter((field) => field.type !== 'JSON' && field.type !== 'Media')
+			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia')
 			.slice(0, 5);
 
 		return fields;

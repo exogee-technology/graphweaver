@@ -51,101 +51,100 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 
 		const entities: (AdminUiEntityMetadata | undefined)[] = Array.from(
 			graphweaverMetadata.entities()
-		)
-			.map((entity) => {
-				const { adminUIOptions, apiOptions, provider } = entity;
-				const backendId = entity.provider?.backendId;
-				const plural = entity.plural;
+		).map((entity) => {
+			const { adminUIOptions, apiOptions, provider } = entity;
+			const backendId = entity.provider?.backendId;
+			const plural = entity.plural;
 
-				const attributes = new AdminUiEntityAttributeMetadata();
-				attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
-				attributes.isReadOnly = entity.adminUIOptions?.readonly;
+			const attributes = new AdminUiEntityAttributeMetadata();
+			attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
+			attributes.isReadOnly = entity.adminUIOptions?.readonly;
 
-				let defaultSummaryField: 'name' | 'title' | undefined = undefined;
-				const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
-				let defaultFieldForDetailPanel = primaryKeyField;
+			let defaultSummaryField: 'name' | 'title' | undefined = undefined;
+			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
+			let defaultFieldForDetailPanel = primaryKeyField;
 
-				const fields = Object.values(entity.fields)?.map((field) => {
-					const {
-						fieldType,
-						isList,
-						metadata: relatedObject,
-					} = getFieldTypeWithMetadata(field.getType);
-					const typeName = (fieldType as any).name;
+			const fields = Object.values(entity.fields)?.map((field) => {
+				const {
+					fieldType,
+					isList,
+					metadata: relatedObject,
+				} = getFieldTypeWithMetadata(field.getType);
+				const typeName = (fieldType as any).name;
 
-					// set the default summary field
-					if (['name', 'title'].includes(field.name))
-						defaultSummaryField = field.name as 'name' | 'title';
+				// set the default summary field
+				if (['name', 'title'].includes(field.name))
+					defaultSummaryField = field.name as 'name' | 'title';
 
-					// Check if the field is set as the field for the detail panel
-					if (field.adminUIOptions?.fieldForDetailPanelNavigationId) {
-						defaultFieldForDetailPanel = field.name;
-					}
+				// Check if the field is set as the field for the detail panel
+				if (field.adminUIOptions?.fieldForDetailPanelNavigationId) {
+					defaultFieldForDetailPanel = field.name;
+				}
 
-					// Define field attributes
-					const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
-					const isRequired = !field.nullable;
+				// Define field attributes
+				const isReadOnly = field.readonly ?? field.adminUIOptions?.readonly ?? false;
+				const isRequired = !field.nullable;
 
-					const fieldObject: AdminUiFieldMetadata = {
-						name: field.name,
-						type: relatedObject?.name || typeName,
-						isArray: isList,
-						attributes: {
-							isReadOnly,
-							isRequired,
-						},
-						hideInTable: field.adminUIOptions?.hideInTable,
-						hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
-						hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
-					};
-
-					// Check if we have an array of related entities
-					if (isList && relatedObject?.type === 'entity' && relatedObject.provider) {
-						// Ok, it's a relationship to another object type that is an array, e.g. "to many".
-						// We'll default to one to many, then if we can find a field on the other side that points
-						// back to us and it's also an array, then it's a many to many.
-						fieldObject.relatedEntity = graphweaverMetadata.federationNameForEntity(relatedObject);
-						fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
-
-						const relatedEntityField = Object.values(relatedObject.fields).find((field) => {
-							const fieldType = field.getType() as { name?: string };
-							return fieldType.name === (entity.target as { name?: string }).name;
-						});
-						if (Array.isArray(relatedEntityField?.getType())) {
-							fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
-						}
-					} else if (relatedObject && relatedObject?.type === 'entity' && relatedObject.provider) {
-						fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
-					}
-
-					fieldObject.filter = { type: mapFilterType(fieldObject) };
-
-					return fieldObject;
-				});
-
-				const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
-				const fieldForDetailPanelNavigationId =
-					entity.adminUIOptions?.fieldForDetailPanelNavigationId ?? defaultFieldForDetailPanel;
-
-				return {
-					name: graphweaverMetadata.federationNameForEntity(entity),
-					plural,
-					backendId,
-					primaryKeyField,
-					summaryField,
-					fieldForDetailPanelNavigationId,
-					fields,
-					attributes,
-					excludeFromTracing: apiOptions?.excludeFromTracing ?? false,
-					hideInSideBar: adminUIOptions?.hideInSideBar ?? false,
-					defaultFilter: adminUIOptions?.defaultFilter,
-					defaultSort: adminUIOptions?.defaultSort,
-					supportedAggregationTypes: [
-						...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
-					],
+				const fieldObject: AdminUiFieldMetadata = {
+					name: field.name,
+					type: relatedObject?.name || typeName,
+					isArray: isList,
+					attributes: {
+						isReadOnly,
+						isRequired,
+					},
+					hideInTable: field.adminUIOptions?.hideInTable,
+					hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
+					hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
 				};
-			})
-			.filter((entity) => entity && !!entity.backendId);
+
+				// Check if we have an array of related entities
+				if (isList && relatedObject?.type === 'entity') {
+					// Ok, it's a relationship to another object type that is an array, e.g. "to many".
+					// We'll default to one to many, then if we can find a field on the other side that points
+					// back to us and it's also an array, then it's a many to many.
+					fieldObject.relatedEntity = graphweaverMetadata.federationNameForEntity(relatedObject);
+					fieldObject.relationshipType = RelationshipType.ONE_TO_MANY;
+
+					const relatedEntityField = Object.values(relatedObject.fields).find((field) => {
+						const fieldType = field.getType() as { name?: string };
+						return fieldType.name === (entity.target as { name?: string }).name;
+					});
+					if (Array.isArray(relatedEntityField?.getType())) {
+						fieldObject.relationshipType = RelationshipType.MANY_TO_MANY;
+					}
+				} else if (relatedObject && relatedObject?.type === 'entity') {
+					fieldObject.relatedEntity = graphweaverMetadata.federationNameForEntity(relatedObject);
+					fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
+				}
+
+				fieldObject.filter = { type: mapFilterType(fieldObject) };
+
+				return fieldObject;
+			});
+
+			const summaryField = entity.adminUIOptions?.summaryField ?? defaultSummaryField;
+			const fieldForDetailPanelNavigationId =
+				entity.adminUIOptions?.fieldForDetailPanelNavigationId ?? defaultFieldForDetailPanel;
+
+			return {
+				name: graphweaverMetadata.federationNameForEntity(entity),
+				plural,
+				backendId,
+				primaryKeyField,
+				summaryField,
+				fieldForDetailPanelNavigationId,
+				fields,
+				attributes,
+				excludeFromTracing: apiOptions?.excludeFromTracing ?? false,
+				hideInSideBar: adminUIOptions?.hideInSideBar ?? false,
+				defaultFilter: adminUIOptions?.defaultFilter,
+				defaultSort: adminUIOptions?.defaultSort,
+				supportedAggregationTypes: [
+					...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
+				],
+			};
+		});
 
 		const enums = Array.from(graphweaverMetadata.enums()).map((registeredEnum) => ({
 			name: registeredEnum.name,

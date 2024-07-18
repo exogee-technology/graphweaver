@@ -115,37 +115,32 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
-export type Media = {
-  __typename?: 'Media';
+export type GraphweaverMedia = {
+  __typename?: 'GraphweaverMedia';
   filename: Scalars['String']['output'];
   type: MediaType;
   url: Scalars['String']['output'];
 };
 
-/** Data needed to create or update MultipleMedia. If an ID is passed, this is an update, otherwise it's an insert. */
-export type MediaCreateOrUpdateInput = {
+/** Data needed to create or update GraphweaverMedias. If an ID is passed, this is an update, otherwise it's an insert. */
+export type GraphweaverMediaCreateOrUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<MediaType>;
 };
 
-/** Data needed to create MultipleMedia. */
-export type MediaInsertInput = {
+/** Data needed to create GraphweaverMedias. */
+export type GraphweaverMediaInsertInput = {
   filename: Scalars['String']['input'];
   type: MediaType;
 };
 
-export enum MediaType {
-  Image = 'IMAGE',
-  Other = 'OTHER'
-}
-
-/** Data needed to update MultipleMedia. An ID must be passed. */
-export type MediaUpdateInput = {
+/** Data needed to update GraphweaverMedias. An ID must be passed. */
+export type GraphweaverMediaUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<MediaType>;
 };
 
-export type MultipleMediaListFilter = {
+export type GraphweaverMediasListFilter = {
   filename?: InputMaybe<Scalars['String']['input']>;
   filename_gt?: InputMaybe<Scalars['String']['input']>;
   filename_gte?: InputMaybe<Scalars['String']['input']>;
@@ -171,6 +166,11 @@ export type MultipleMediaListFilter = {
   url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   url_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
+
+export enum MediaType {
+  Image = 'IMAGE',
+  Other = 'OTHER'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -279,24 +279,24 @@ export enum Sort {
 export type Submission = {
   __typename?: 'Submission';
   id: Scalars['ID']['output'];
-  image?: Maybe<Media>;
+  image?: Maybe<GraphweaverMedia>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SubmissionCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
-  image?: InputMaybe<MediaCreateOrUpdateInput>;
+  image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
 };
 
 /** Data needed to create Submissions. */
 export type SubmissionInsertInput = {
-  image?: InputMaybe<MediaCreateOrUpdateInput>;
+  image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
 };
 
 /** Data needed to update Submissions. An ID must be passed. */
 export type SubmissionUpdateInput = {
   id: Scalars['ID']['input'];
-  image?: InputMaybe<MediaCreateOrUpdateInput>;
+  image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
 };
 
 export type SubmissionsListFilter = {
@@ -310,7 +310,7 @@ export type SubmissionsListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  image?: InputMaybe<MultipleMediaListFilter>;
+  image?: InputMaybe<GraphweaverMediasListFilter>;
 };
 
 export type SubmissionsOrderByInput = {

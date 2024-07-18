@@ -1,20 +1,22 @@
 {
 	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": [".env", "tsconfig.json"],
 	"tasks": {
 		"build:types": {
 			"dependsOn": ["^build:types"],
-			"cache": false
+			"outputs": ["dist/**", "lib/**", "bin/index.js*", "tsconfig.tsbuildinfo"]
 		},
 		"build:js": {
 			"dependsOn": ["^build:js"],
-			"cache": false
+			"outputs": ["dist/**", "lib/**", "bin/index.js*", "tsconfig.tsbuildinfo"]
 		},
 		"package:pack": {
-			"cache": false
+			"dependsOn": ["^build"],
+			"outputs": [".packs/**"]
 		},
 		"build": {
 			"dependsOn": ["^build"],
-			"cache": false
+			"outputs": ["dist/**", "lib/**", "bin/index.js*", "tsconfig.tsbuildinfo"]
 		}
 	}
 }

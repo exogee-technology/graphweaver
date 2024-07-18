@@ -51,14 +51,6 @@ const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
 const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const isReadonly = isFieldReadonly(field);
 
-	if (field.relationshipType) {
-		// If the field is readonly and a relationship, show a link to the entity/entities
-		if (isReadonly) {
-			return <LinkField name={field.name} field={field} />;
-		}
-		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
-	}
-
 	if (field.type === 'JSON') {
 		return <JSONField name={field.name} autoFocus={autoFocus} />;
 	}
@@ -67,8 +59,16 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 		return <BooleanField name={field.name} autoFocus={autoFocus} />;
 	}
 
-	if (field.type === 'Media') {
+	if (field.type === 'GraphweaverMedia') {
 		return <MediaField field={field} autoFocus={autoFocus} />;
+	}
+
+	if (field.relationshipType) {
+		// If the field is readonly and a relationship, show a link to the entity/entities
+		if (isReadonly) {
+			return <LinkField name={field.name} field={field} />;
+		}
+		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 	}
 
 	const { enumByName } = useSchema();

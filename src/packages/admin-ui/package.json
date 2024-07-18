@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "2.0.4",
+	"version": "2.0.5",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -31,7 +31,7 @@
 		"react-data-grid": "7.0.0-beta.44",
 		"react-dom": "18.3.1",
 		"react-modal": "3.16.1",
-		"react-router-dom": "6.25.0"
+		"react-router-dom": "6.25.1"
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-html": "0.18.2",
