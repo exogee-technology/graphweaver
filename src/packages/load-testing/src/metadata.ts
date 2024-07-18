@@ -11,14 +11,22 @@ export const options = {
 	},
 };
 
+const query = `
+query graphweaver {
+  result: _graphweaver {
+    entities {
+			name
+		}
+	}
+}`;
+
 export default function () {
 	const res = http.post(
 		url,
 		JSON.stringify({
 			operationName: 'graphweaver',
 			variables: {},
-			query:
-				'query graphweaver {\n  result: _graphweaver {\n    entities {\n      name\n      plural\n      backendId\n      summaryField\n      defaultFilter\n      fields {\n        name\n        type\n        isArray\n        relationshipType\n        relatedEntity\n        filter {\n          type\n          __typename\n        }\n        attributes {\n          isReadOnly\n          isRequired\n          __typename\n        }\n        extensions {\n          key\n          __typename\n        }\n        __typename\n      }\n      attributes {\n        isReadOnly\n        exportPageSize\n        __typename\n      }\n      __typename\n    }\n    enums {\n      name\n      values {\n        name\n        value\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}',
+			query,
 		}),
 		{
 			headers: {
