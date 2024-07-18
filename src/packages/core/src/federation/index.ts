@@ -1,3 +1,4 @@
+import { graphweaverMetadata } from '..';
 import { addDirectives } from './directives';
 import { addEntitiesQuery } from './entities';
 import { addEnums } from './enums';
@@ -7,9 +8,13 @@ export { buildFederationSchema } from './utils';
 
 export const enableFederation = ({
 	schemaDirectives,
+	federationSubgraphName,
 }: {
 	schemaDirectives?: Record<string, any>;
+	federationSubgraphName: string;
 }) => {
+	graphweaverMetadata.federationSubgraphName = federationSubgraphName;
+
 	addEnums();
 	addDirectives();
 	addServiceQuery({ schemaDirectives });

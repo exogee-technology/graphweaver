@@ -2,14 +2,13 @@ import { Entity, Field } from '../decorators';
 import { AdminUiEnumValueMetadata } from './enum-value';
 
 @Entity('AdminUiEnumMetadata', {
-	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
 })
 export class AdminUiEnumMetadata {
-	@Field(() => String, { directives: { inaccessible: true } })
+	@Field(() => String)
 	name!: string;
 
-	@Field(() => [AdminUiEnumValueMetadata], { directives: { inaccessible: true } })
+	@Field(() => [AdminUiEnumValueMetadata])
 	values() {
 		return [];
 	}

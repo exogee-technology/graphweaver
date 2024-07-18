@@ -12,6 +12,8 @@ import { ProductDimension } from './product-dimension';
 import { ProductResearch } from './product-research';
 import { User } from './user';
 import { data } from '../data';
+import { HiddenEntity } from './hidden-entity';
+import { NonResolvableEntity } from './non-resolvable-entity';
 
 class JsonDataProvider extends BaseDataProvider<Product> {
 	async findOne(filter: Filter<Product>) {
@@ -66,4 +68,13 @@ export class Product {
 
 	@RelationshipField(() => [ProductResearch], { id: 'research' })
 	research!: ProductResearch;
+
+	// Because HiddenEntity is excluded from federation, this property should not be included in the schema
+	// returned in the _service { sdl } query, but will be visible with standard introspection.
+	@RelationshipField(() => [HiddenEntity], { id: () => '1', nullable: true })
+	hiddenEntities!: HiddenEntity[];
+
+	// Because NonResolvableEntity is not backed by a provider, but we have the ID here, we can look it up.
+	@RelationshipField(() => NonResolvableEntity, { id: () => '1' })
+	nonResolvableEntity!: NonResolvableEntity;
 }

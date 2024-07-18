@@ -2,15 +2,19 @@ import { gql } from '@apollo/client';
 import { Entity } from './use-schema';
 
 export const SCHEMA_QUERY = gql`
-	query graphweaver {
+	query GraphweaverMetadata {
 		result: _graphweaver {
 			entities {
 				name
 				plural
 				backendId
+				excludeFromTracing
 				summaryField
+				fieldForDetailPanelNavigationId
 				primaryKeyField
 				defaultFilter
+				defaultSort
+				hideInSideBar
 				supportedAggregationTypes
 				fields {
 					name
@@ -28,6 +32,9 @@ export const SCHEMA_QUERY = gql`
 					extensions {
 						key
 					}
+					hideInTable
+					hideInFilterBar
+					hideInDetailForm
 				}
 				attributes {
 					isReadOnly
@@ -50,8 +57,11 @@ export const generateGqlSelectForEntityFields = (
 	entityByType?: (entityType: string) => Entity
 ) =>
 	entity.fields
+		.filter((field) => !field.hideInTable)
 		.map((field) => {
-			if (field.relationshipType) {
+			if (field.type === 'GraphweaverMedia') {
+				return `${field.name} { filename, type, url }`;
+			} else if (field.relationshipType) {
 				if (!entityByType) {
 					throw new Error('entityByType is required for relationship fields');
 				}
@@ -62,11 +72,8 @@ export const generateGqlSelectForEntityFields = (
 					value: ${relatedEntity.primaryKeyField}
 					label: ${relatedEntity?.summaryField ?? relatedEntity?.primaryKeyField}
 				}`;
-			} else {
-				if (field.type === 'Media') {
-					return `${field.name} { filename, type, url }`;
-				}
-				return field.name;
 			}
+
+			return field.name;
 		})
 		.join(' ');

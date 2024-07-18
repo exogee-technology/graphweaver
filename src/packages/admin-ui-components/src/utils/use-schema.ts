@@ -10,6 +10,11 @@ export interface Schema {
 	enums: Enum[];
 }
 
+export enum Sort {
+	ASC = 'ASC',
+	DESC = 'DESC',
+}
+
 export interface Enum {
 	name: string;
 	values: Array<{
@@ -24,11 +29,17 @@ export interface Entity {
 	primaryKeyField: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
+	fieldForDetailPanelNavigationId: string;
 	supportedAggregationTypes: AggregationType[];
 	fields: EntityField[];
 	defaultFilter?: Filter;
+	defaultSort?: SortEntity;
 	attributes: EntityAttributes;
+	hideInSideBar: boolean;
+	excludeFromTracing?: boolean;
 }
+
+export type SortEntity = Record<string, Sort>;
 
 export enum AdminUIFilterType {
 	DATE_RANGE = 'DATE_RANGE',
@@ -52,9 +63,12 @@ export type EntityFieldType =
 	| 'ID'
 	| 'JSON'
 	| 'Image'
-	| 'Media'
+	| 'GraphweaverMedia'
 	| 'Number'
-	| 'String';
+	| 'String'
+	| 'BigInt'
+	| 'NanoTimestamp'
+	| 'NanoDuration';
 
 export interface EntityField {
 	name: string;
@@ -69,6 +83,9 @@ export interface EntityField {
 	extensions?: {
 		key: string;
 	};
+	hideInTable?: boolean;
+	hideInFilterBar?: boolean;
+	hideInDetailForm?: boolean;
 }
 
 export interface EntityFieldAttributes {
@@ -92,9 +109,7 @@ export interface CustomField<T = unknown> extends EntityField {
 	type: 'custom';
 
 	component: (args: CustomFieldArgs<T>) => JSX.Element;
-
-	hideOnTable?: boolean;
-	hideOnDetailForm?: boolean;
+	hideInDetailForm?: boolean;
 	panelMode?: PanelMode;
 }
 
@@ -102,12 +117,7 @@ export interface Filter<T = unknown> {
 	[x: string]: T;
 }
 
-type SortDirection = 'ASC' | 'DESC';
-
-export interface SortField {
-	field: string;
-	direction: SortDirection;
-}
+// These two are deprecated and should be removed in the future.
 
 type EntityMap = {
 	[entityName: string]: Entity;

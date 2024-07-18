@@ -19,7 +19,11 @@ test('should correctly plural name for User', async () => {
 	}
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation({
+	const response = await graphweaver.server.executeOperation<{
+		_graphweaver: {
+			entities: [{ name: string; plural: string }];
+		};
+	}>({
 		query: gql`
 			query {
 				_graphweaver {
@@ -32,9 +36,11 @@ test('should correctly plural name for User', async () => {
 		`,
 	});
 	assert(response.body.kind === 'single');
-	expect(response.body.singleResult.data?._graphweaver).toMatchObject({
-		entities: [{ name: 'User', plural: 'Users' }],
-	});
+	expect(response.body.singleResult.errors).toBeUndefined();
+	const filteredEntities = response.body.singleResult.data?._graphweaver.entities.filter(
+		(entity) => entity.name === 'User'
+	);
+	expect(filteredEntities).toMatchObject([{ name: 'User', plural: 'Users' }]);
 
 	const introspection = await graphweaver.server.executeOperation<{
 		__schema: { types: { name: string; fields: { name: string }[] }[] };

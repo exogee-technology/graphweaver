@@ -1,7 +1,9 @@
 import { DirectiveLocation } from 'graphql';
-import { FieldOptions, GetTypeFunction, SchemaBuilder } from '.';
-import { BackendProvider, FieldMetadata, Filter, Resolver } from './types';
 import { logger } from '@exogee/logger';
+
+import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver, Sort } from './types';
+import { FieldOptions } from './decorators';
+import { allOperations } from './operations';
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
@@ -30,6 +32,35 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// by fields. This is useful for entities that are not backed by a fully fledged provider or are
 		// otherwise dynamically generated.
 		excludeFromFiltering?: boolean;
+
+		// This means that there will be no recorded telemetry for this entity when it's requested from the Admin UI. This is useful for entities
+		// that are managed by some other system or we don't want to record telemetry for.
+		//
+		// Note that in order to achieve this from your own front ends, you need to set the `X-GRAPHWEAVER-SUPPRESS-TRACING: true` header on the requests, which is what this option instructs the admin UI to do for you.
+		excludeFromTracing?: boolean;
+
+		// If this entity will appear in multiple subgraphs, a federation router will need them to have unique names.
+		// A prime example of this in Graphweaver itself is the Media entity, which shows up as soon as you have media
+		// added to your project. If two Graphweaver instances both have Media in them, the federation router will
+		// expect that they're @shareable, but they won't return the same data from both places, so the best thing to do
+		// is to namespace them so that they're unique entities. When this property is specified as true, the entity
+		// will be renamed.
+		//
+		// For example, if our entity is called `Media` and our subgraph name is `music`, it'd be renamed to `MediaFromMusicSubgraph`.
+		namespaceForFederation?: boolean;
+
+		// In Federation v2, entities can specify resolvable: false in their @key directive. This is how you link to entities that are
+		// outside of this Graphweaver instance. When this is set to false, we will emit @key(fields: "your pk field", resolvable: false).
+		// You should do this for the providerless reference entities that are there for linking via federation that you don't actually
+		// have the data for in this Graphweaver instance.
+		//
+		// Default: true
+		resolvableViaFederation?: boolean;
+
+		// This means that the entity will not be returned in federation queries to the _service { sdl } query.
+		// In most cases it'd be better to use @inaccessible, but in some cases you truly do want a private entity
+		// that is usable in your Graphweaver instance but is not part of the schema we tell the federation router about.
+		excludeFromFederation?: boolean;
 	};
 
 	adminUIOptions?: {
@@ -37,6 +68,11 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// Users can still override this filter, but this is the default. This has no
 		// impact on the API, purely how entities are displayed in the Admin UI.
 		defaultFilter?: Filter<G>;
+
+		// Specifies the default sort used in the Admin UI when viewing the list view.
+		// Users can still override this sort, but this is the default. This has no
+		// impact on the API, purely how entities are displayed in the Admin UI.
+		defaultSort?: Partial<Record<keyof G, Sort>>;
 
 		// Specifies how many entities should be requested per page during a CSV export.
 		// If not set, the default is 200.
@@ -48,8 +84,13 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		hideInSideBar?: boolean;
 
 		// If true, properties that reference this entity from other entities will not be able
-		// to be filtered in the list view for those entities. This is
+		// to be filtered in the list view for those entities.
 		hideInFilterBar?: boolean;
+
+		// If true, the entity will not show up in the list view in the Admin UI. This is useful
+		// for entities that are managed by some other system or we don't want a user to see in the
+		// adminUI.
+		hideInDetailForm?: boolean;
 
 		// Specifies what field on this entity should be used to summarise it in the Admin UI when
 		// referenced from other entities, e.g. if a Task in a to-do list application has an 'assigned to'
@@ -62,6 +103,20 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// If true, the entity will not be editable in the Admin UI. This is useful for entities
 		// that are managed by some other system or we don't want a user to update from the adminUI.
 		readonly?: boolean;
+
+		// Specifies what field on this entity should be used to display a summary of the entity in the
+		// detail panel in the Admin UI. This is useful for entities where the primary key field is not
+		// the most useful field to display in the url.
+		// This value defaults to the primary key field if not set.
+		fieldForDetailPanelNavigationId?: Extract<keyof G, string>;
+	};
+
+	// These options are used internally by Graphweaver. No need to use them in your code.
+	graphweaverInternalOptions?: {
+		// This is used internally by reserved entities (such as GraphweaverMedia) to allow them to set their
+		// names. You should never set this on your own entities, as it disables error checking that is there
+		// to help ensure the system will work.
+		ignoreReservedEntityNames?: boolean;
 	};
 }
 
@@ -196,6 +251,9 @@ class Metadata {
 
 	private additionalQueriesLookup = new Map<string, AdditionalOperationInformation>();
 	private additionalMutationsLookup = new Map<string, AdditionalOperationInformation>();
+	private entityDecoratorCallLog = new Set<unknown>();
+
+	public federationSubgraphName?: string;
 
 	// We have to lazy load this because fields get their decorators run first. This means
 	// when the field creates the entity, we need to not look at the name until after the
@@ -217,6 +275,14 @@ class Metadata {
 	public collectEntityInformation<G = unknown, D = unknown>(
 		args: CollectEntityInformationArgs<G, D>
 	) {
+		// Clear the cache so we can rebuild it with the new data.
+		this.nameLookupCache.clear();
+
+		// Log this call so validation later knows that the entity was decorated as well as the fields
+		// involved. This is used to give a more helpful error message when a GraphQL entity decorator
+		// is accidentally placed on something like a database entity field.
+		this.entityDecoratorCallLog.add(args.target);
+
 		// In most cases the entity info will already be in the map because field decorators run
 		// before class decorators. Override what we know our source of truth to be and keep rolling.
 		let existingMetadata = this.metadataByType.get(args.target) as EntityMetadata<G, D>;
@@ -536,7 +602,7 @@ class Metadata {
 		const key = keyParts.slice(0, keyParts.length - 1).join('_');
 
 		// Let's validate that the filter operation is one we recognise.
-		if (SchemaBuilder.isValidFilterOperation(keyParts[keyParts.length - 1])) {
+		if (allOperations.has(keyParts[keyParts.length - 1])) {
 			// Ok, that'll be the field name.
 			return entity.fields[key];
 		}
@@ -573,12 +639,53 @@ class Metadata {
 		this.additionalMutationsLookup.set(args.name, { ...args });
 	}
 
+	public federationNameForEntity(entity: EntityMetadata<any, any>) {
+		if (entity.apiOptions?.namespaceForFederation) {
+			return this.federationNameForGraphQLTypeName(entity.name);
+		}
+
+		return entity.name;
+	}
+
+	public federationNameForGraphQLTypeName(name: string) {
+		if (this.federationSubgraphName) {
+			return `${name}From${this.federationSubgraphName.charAt(0).toUpperCase() + this.federationSubgraphName.slice(1)}Subgraph`;
+		}
+
+		return name;
+	}
+
 	public clear() {
+		this.federationSubgraphName = undefined;
 		this.metadataByType.clear();
 		this.nameLookupCache.clear();
 		this.additionalMutationsLookup.clear();
 		this.additionalQueriesLookup.clear();
 	}
+
+	// This exists because it's exceedingly easy to put the wrong decorator on the wrong entity, e.g.
+	// accidentally decorating your DB entity fields with GraphQL entity decorators. When this happens,
+	// without this validation the error message is not very helpful because it just says there's a duplicate
+	// entity with the same name. We can actually catch this specific scenario and give a much more helpful
+	// error, so that's what this function does.
+	public readonly validateEntities = () => {
+		for (const entity of this.entities()) {
+			if (!this.entityDecoratorCallLog.has(entity.target)) {
+				throw new Error(
+					`The entity '${entity.name}' is missing the @Entity() decorator from Graphweaver. This is likely because a field was mistakenly decorated with a GraphQL decorator when it is not a GraphQL entity. Fields on this entity are: '${Object.keys(
+						entity.fields
+					).join(
+						`', '`
+					)}'. If this is not a full list of all of the fields on the entity, examine the decorators on these fields closely and make sure they are in the correct files. Are they on a data source entity instead of the GraphQL entity?`
+				);
+			}
+		}
+	};
 }
 
 export const graphweaverMetadata = new Metadata();
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'Sort',
+	target: Sort,
+});

@@ -1,360 +1,182 @@
-import DataGrid, {
-	Column,
-	RenderCellProps,
-	SortColumn,
-	SelectColumn,
-	CalculatedColumn,
-} from 'react-data-grid';
-import React, { useCallback, useState, MouseEvent, UIEventHandler } from 'react';
-import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-
+import { useCallback, useRef } from 'react';
 import {
-	Entity,
-	useSchema,
-	useSelectedEntity,
-	routeFor,
-	SortField,
-	decodeSearchParams,
-} from '../utils';
-import { Spinner } from '../spinner';
+	ColumnDef,
+	ColumnSort,
+	Row,
+	RowSelectionState,
+	flexRender,
+	getCoreRowModel,
+	useReactTable,
+} from '@tanstack/react-table';
+import clsx from 'clsx';
 
-import 'react-data-grid/lib/styles.css';
-// These are direct class name overrides to the styles above ^, so they're not in our styles.module.css
-import './table-styles.css';
+import { ChevronDownIcon } from '../assets';
 import styles from './styles.module.css';
-import { Loader } from '../loader';
-import { ApolloError, useMutation } from '@apollo/client';
+import { Sort, SortEntity } from '../utils';
+import { Spinner, SpinnerSize } from '../spinner';
 
-import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
-import { Button } from '../button';
-import { Modal } from '../modal';
-import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
-import toast from 'react-hot-toast';
-import { SelectionBar } from '../selection-bar';
-
-// Without stopping propagation on our links, the grid will be notified about the click,
-// which is not what we want. We want to navigate and not let the grid handle it
-const gobbleEvent = (e: MouseEvent<HTMLAnchorElement>) => e.stopPropagation();
-
-const hideImage = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
-	e.currentTarget.style.display = 'none';
+type Props<T> = {
+	loading: boolean;
+	data: T[];
+	columns: ColumnDef<T, any>[];
+	primaryKeyField: string;
+	sort?: SortEntity;
+	onRowClick?: (row: Row<T>) => void;
+	onSortClick?: (sort: SortEntity) => void;
+	fetchNextPage?: () => void;
+	onRowSelectionChange?: (selectedRows: RowSelectionState) => void;
+	rowSelection?: RowSelectionState;
 };
 
-const columnsForEntity = <T extends TableRowItem>(
-	entity: Entity,
-	entityByType: (type: string) => Entity
-): Column<T, unknown>[] => {
-	const entityColumns = [
-		...(entity.attributes.isReadOnly ? [] : [SelectColumn]),
-		...entity.fields.map((field) => ({
-			key: field.name,
-			name: field.name,
-			width: field.type === 'ID!' || field.type === 'ID' ? 20 : 200,
+export const Table = <T extends object>({
+	loading,
+	data,
+	sort,
+	columns,
+	onRowClick,
+	onSortClick,
+	fetchNextPage,
+	onRowSelectionChange,
+	rowSelection,
+	primaryKeyField,
+}: Props<T>) => {
+	//we need a reference to the scrolling element for infinite scrolling
+	const tableContainerRef = useRef<HTMLDivElement>(null);
 
-			// We don't support sorting by relationships yet.
-			sortable: !field.relationshipType,
+	// Convert our sorting object to the format required by react-table
+	const sorting: ColumnSort[] = Object.entries(sort ?? {}).map(([field, direction]) => ({
+		id: field,
+		desc: direction === Sort.DESC,
+	}));
 
-			renderCell: field.relationshipType
-				? ({ row }: RenderCellProps<T, unknown>) => {
-						const value = row[field.name as keyof typeof row];
-						const relatedEntity = entityByType(field.type);
+	const handleRowClick = (row: Row<T>) => {
+		if (onRowClick) onRowClick(row);
+	};
 
-						const linkForValue = (value: any) =>
-							relatedEntity ? (
-								<Link
-									key={value.value}
-									to={routeFor({ type: field.type, id: value.value as string })}
-									onClick={gobbleEvent}
-								>
-									{value.label}
-								</Link>
-							) : (
-								value.label
-							);
-
-						if (Array.isArray(value)) {
-							// We're in a many relationship. Return an array of links.
-							return value.flatMap((item) => [linkForValue(item), ', ']).slice(0, -1);
-						} else if (value) {
-							return linkForValue(value);
-						} else {
-							return null;
-						}
-					}
-				: field.type === 'Media'
-					? ({ row }: RenderCellProps<T, unknown>) => {
-							const media = row[field.name as keyof typeof row] as {
-								url: string;
-								type: 'IMAGE' | 'OTHER';
-							};
-							if (!media) {
-								return null;
-							}
-
-							if (media.type === 'IMAGE') {
-								return (
-									<img
-										src={media.url}
-										style={{
-											width: '100%',
-											height: '100%',
-											objectFit: 'cover',
-											padding: 2,
-											borderRadius: 8,
-											objectPosition: 'center center',
-											textIndent: -9999,
-										}}
-										onError={hideImage}
-									/>
-								);
-							}
-
-							return (
-								<a href={media.url} target="_blank" rel="noreferrer">
-									{media.url}
-								</a>
-							);
-						}
-					: field.isArray
-						? ({ row }: RenderCellProps<T, unknown>) => {
-								const value = row[field.name as keyof typeof row];
-								if (Array.isArray(value)) {
-									return value.join(', ');
-								}
-								return value;
-							}
-						: undefined,
-		})),
-	];
-
-	// Which custom fields do we need to show here?
-	const customFieldsToShow = (customFields?.get(entity.name) || []).filter((customField) => {
-		const { table: show } = customField.showOn ?? { table: true };
-		return show;
-	});
-
-	// Remove any fields that the user intends to replace with a custom field so
-	// their custom field indices are correct regardless of insertion order
-	for (const customField of customFieldsToShow) {
-		const index = entityColumns.findIndex((column) => column.name === customField.name);
-		if (index !== -1) {
-			entityColumns.splice(index, 1);
-		}
-	}
-
-	// Ok, now we can merge our custom fields in
-	for (const customField of customFieldsToShow) {
-		if (!customField.hideOnTable) {
-			entityColumns.splice(customField.index ?? entityColumns.length, 0, {
-				key: customField.name,
-				name: customField.name,
-				width: 200,
-				sortable: false,
-				renderCell: ({ row }: RenderCellProps<T, unknown>) =>
-					customField.component?.({ context: 'table', entity: row }),
+	const handleSortClick = (sortingState: ColumnSort[]) => {
+		// TODO We currently only support single column sorting
+		const [firstSortedColumn] = sortingState ?? [];
+		if (firstSortedColumn?.id) {
+			onSortClick?.({
+				[firstSortedColumn.id]: firstSortedColumn.desc ? Sort.DESC : Sort.ASC,
 			});
 		}
-	}
+	};
 
-	return entityColumns;
-};
-
-export interface TableRowItem {
-	id: string;
-}
-
-export interface RequestRefetchOptions {
-	sortFields?: SortField[];
-}
-
-export interface TableProps<T extends TableRowItem> {
-	rows: T[];
-	requestRefetch: (options: RequestRefetchOptions) => void;
-	orderBy: SortField[];
-	loading: boolean;
-	loadingNext: boolean;
-	error?: ApolloError;
-}
-
-export const Table = <T extends TableRowItem>({
-	rows,
-	requestRefetch,
-	orderBy = [],
-	loading,
-	loadingNext = false,
-	error,
-}: TableProps<T>) => {
-	const [sortColumns, setSortColumns] = useState<SortColumn[]>(
-		orderBy.map((f) => ({ columnKey: f.field, direction: f.direction }))
-	);
-	const navigate = useNavigate();
-	const { id } = useParams();
-	const { entityByType } = useSchema();
-	const [search] = useSearchParams();
-	const { selectedEntity } = useSelectedEntity();
-	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
-
-	const rowKeyGetter = useCallback(
-		(row: T) => String(row[selectedEntity.primaryKeyField as keyof T]),
-		[selectedEntity]
-	);
-
-	const rowClass = useCallback((row: T) => (row.id === id ? 'rdg-row-selected' : undefined), [id]);
-	const [selectedRows, setSelectedRows] = useState((): ReadonlySet<string> => new Set());
-	const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-	const [deleteEntities] = useMutation(generateDeleteManyEntitiesMutation(selectedEntity));
-
-	const scrolledToEnd = (event: React.UIEvent<Element>): boolean => {
+	const scrolledToEnd = (containerRefElement: HTMLDivElement): boolean => {
 		// Return true when the scrollTop reaches the bottom ...
-		const { currentTarget } = event;
-		const target = currentTarget as Element;
+		const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
 		const tolerance = 175; // trigger when 5 rows from the end
-		const distanceFromTop = Math.round(target.scrollTop) + tolerance;
-		const atEndOfSet = distanceFromTop >= currentTarget.scrollHeight - currentTarget.clientHeight;
+		const distanceFromTop = Math.round(scrollTop) + tolerance;
+		const atEndOfSet = distanceFromTop >= scrollHeight - clientHeight;
 		return atEndOfSet;
 	};
 
-	const handleScroll: UIEventHandler<HTMLDivElement> = async (event: React.UIEvent) => {
-		// Do nothing if we aren't at the last row, or if we're currently loading...
-		// Also do nothing if EOF detected (no more rows to load)
-		if (loadingNext || !scrolledToEnd(event)) {
-			return;
-		}
-		requestRefetch({});
-	};
+	//called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
+	const fetchMoreOnBottomReached = useCallback(
+		(containerRefElement?: HTMLDivElement | null) => {
+			if (containerRefElement) {
+				if (loading || !scrolledToEnd(containerRefElement)) return;
 
-	const handleSort = (newSortColumns: SortColumn[]) => {
-		setSortColumns(newSortColumns);
-
-		requestRefetch({
-			sortFields: newSortColumns.map((c) => ({
-				field: c.columnKey,
-				direction: c.direction,
-			})),
-		});
-	};
-
-	const navigateToDetailForEntity = useCallback(
-		({ row, column }: { row: T; column: CalculatedColumn<T, unknown> }) => {
-			// Don't navigate if the user has clicked the checkbox column
-			if (column.key === 'select-row') {
-				return;
+				fetchNextPage?.();
 			}
-
-			if (!selectedEntity) throw new Error('Selected entity is required to navigate');
-			// Don't set the filter in the route
-			const { filters, sort } = decodeSearchParams(search);
-			navigate(
-				routeFor({
-					entity: selectedEntity,
-					id: String(row[selectedEntity.primaryKeyField as keyof T]),
-					sort,
-					filters,
-				})
-			);
 		},
-		[search, selectedEntity]
+		[fetchNextPage]
 	);
 
-	if (loading) {
-		return <Loader />;
-	}
-	if (error) {
-		return <pre>{`Error! ${error.message}`}</pre>;
-	}
-
-	const handleSelectedRowsChange = (selectedRows: Set<string>) => {
-		setSelectedRows(selectedRows);
-	};
-
-	const handleDelete = () => {
-		setShowDeleteConfirmation(true);
-	};
-
-	const handleDeleteEntities = () => {
-		const ids = Array.from(selectedRows);
-
-		const result = deleteEntities({
-			variables: { ids },
-			refetchQueries: [`AdminUIListPage`],
-		});
-
-		setSelectedRows(new Set());
-		setShowDeleteConfirmation(false);
-
-		result
-			.then(() => {
-				toast.success(
-					<div className={styles.successToast}>
-						<div>Success</div>
-						<div className={styles.deletedText}>
-							Row{selectedRows.size === 1 ? '' : 's'} deleted
-						</div>
-					</div>
-				);
-			})
-			.catch((e) => {
-				console.error(e);
-				toast.error(
-					<div className={styles.errorToast}>
-						<div>An error occured while deleting rows</div>
-					</div>
-				);
-			});
-	};
+	const table = useReactTable({
+		data,
+		columns,
+		manualSorting: true,
+		getRowId: (row) => row[primaryKeyField as keyof typeof row] as string,
+		onSortingChange: (updater) => {
+			const newSortingValue = (updater as any)?.();
+			handleSortClick(newSortingValue);
+		},
+		onRowSelectionChange: (updater) => {
+			const newSelectedRows = updater instanceof Function ? updater(rowSelection ?? {}) : updater;
+			onRowSelectionChange?.(newSelectedRows);
+		},
+		state: {
+			sorting,
+			rowSelection,
+		},
+		enableRowSelection: true,
+		getCoreRowModel: getCoreRowModel(),
+	});
 
 	return (
-		<>
-			<DataGrid
-				columns={columnsForEntity<T>(selectedEntity, entityByType)}
-				rows={rows}
-				rowKeyGetter={rowKeyGetter}
-				sortColumns={sortColumns}
-				onSortColumnsChange={handleSort}
-				defaultColumnOptions={{ resizable: true }}
-				onSelectedRowsChange={setSelectedRows}
-				selectedRows={selectedRows}
-				onCellClick={navigateToDetailForEntity}
-				rowClass={rowClass}
-				onScroll={handleScroll}
-				className={styles.tableWrapper}
-				data-testid="table"
-			/>
-			{loadingNext && (
-				<div className={styles.spinner}>
-					<Spinner />
-				</div>
-			)}
-			<Modal
-				isOpen={showDeleteConfirmation}
-				hideCloseX
-				className={styles.deleteEntitiesModal}
-				modalContent={
-					<div>
-						<div className={styles.deleteEntitiesModalTitle}>
-							Delete {selectedRows.size} row{selectedRows.size > 1 ? 's' : ''}
-						</div>
-						<p>Are you sure you want to delete these rows?</p>
-						<p>This action cannot be undone.</p>
-						<div className={styles.deleteEntitiesModalFooter}>
-							<Button type="reset" onClick={() => setShowDeleteConfirmation(false)}>
-								Cancel
-							</Button>
-							<Button type="button" onClick={handleDeleteEntities} className={styles.deleteButton}>
-								Delete
-							</Button>
-						</div>
-					</div>
-				}
-			/>
-
-			{selectedRows.size > 0 && (
-				<SelectionBar
-					selectedRows={selectedRows}
-					setSelectedRows={handleSelectedRowsChange}
-					handleDelete={handleDelete}
-				/>
-			)}
-		</>
+		<div
+			className={styles.container}
+			onScroll={(e) => fetchMoreOnBottomReached(e.target as HTMLDivElement)}
+			ref={tableContainerRef}
+		>
+			<div className={styles.table}>
+				<table data-testid="table">
+					<thead>
+						{table.getHeaderGroups().map((headerGroup) => (
+							<tr key={headerGroup.id}>
+								{headerGroup.headers.map((header) => (
+									<th
+										key={header.id}
+										className={clsx(header.column.getCanSort() && styles.sortable)}
+										{...(header.column.getCanSort()
+											? {
+													onClick: header.column.getToggleSortingHandler(),
+												}
+											: {})}
+									>
+										<span className={styles.header}>
+											{header.isPlaceholder
+												? null
+												: flexRender(header.column.columnDef.header, header.getContext())}
+											{header.column.getIsSorted() && (
+												<span
+													className={clsx(
+														styles.arrow,
+														styles[header.column.getIsSorted() as keyof typeof styles]
+													)}
+												>
+													<ChevronDownIcon />
+												</span>
+											)}
+										</span>
+									</th>
+								))}
+							</tr>
+						))}
+					</thead>
+					<tbody>
+						{table.getRowModel().rows.map((row) => (
+							<tr
+								key={row.id}
+								className={clsx(onRowClick && styles.clickable)}
+								onClick={(e) => {
+									if (
+										!(e.target as HTMLElement).closest('label') &&
+										!(e.target as HTMLElement).closest('input')
+									) {
+										handleRowClick(row);
+									}
+								}}
+							>
+								{row.getVisibleCells().map((cell) => (
+									<td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+								))}
+							</tr>
+						))}
+					</tbody>
+					<tfoot>
+						{table.getFooterGroups().map((footerGroup) => (
+							<tr key={footerGroup.id}>
+								<th colSpan={footerGroup.headers.length}>
+									{loading ? <Spinner size={SpinnerSize.SMALL} /> : null}
+								</th>
+							</tr>
+						))}
+					</tfoot>
+				</table>
+			</div>
+		</div>
 	);
 };

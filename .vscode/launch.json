@@ -52,6 +52,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "Auth0 Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/auth-zero"
+    },
+    {
       "name": "Federation Example",
       "type": "node",
       "request": "launch",

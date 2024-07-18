@@ -1,9 +1,9 @@
 import { DirectiveLocation } from 'graphql';
 
-import { graphweaverMetadata } from '..';
+import { graphweaverMetadata } from '../metadata';
 import { LinkPurpose } from './enums';
 import { FieldSetGraphQLType, LinkImportGraphQLType } from './scalars';
-import { getEntityTargets } from './utils';
+import { EXCLUDED_FROM_FEDERATION_ENTITY_FILTER } from './utils';
 
 const addKeyDirective = () => {
 	// directive @key(fields: FieldSet!, resolvable: Boolean = true) repeatable on OBJECT | INTERFACE
@@ -25,10 +25,12 @@ const addKeyDirective = () => {
 	});
 
 	// Add the key directive to all entities
-	const entities = Array.from(getEntityTargets());
+	const entities = Array.from(graphweaverMetadata.entities()).filter(
+		EXCLUDED_FROM_FEDERATION_ENTITY_FILTER
+	);
 
 	for (const entity of entities) {
-		// Ensure that the entity has a primary key field
+		// Ensure that the entity has a primary key field before we add the @key directive.
 		if (entity.fields[entity.primaryKeyField ?? ('id' as any)] === undefined) {
 			continue;
 		}
@@ -39,6 +41,7 @@ const addKeyDirective = () => {
 				...(entity.directives ? entity.directives : {}),
 				key: {
 					fields: entity.primaryKeyField ?? 'id',
+					resolvable: entity.apiOptions?.resolvableViaFederation,
 				},
 			},
 		});

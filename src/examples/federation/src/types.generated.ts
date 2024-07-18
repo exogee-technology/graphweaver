@@ -35,7 +35,11 @@ export type AdminUiEntityMetadata = {
   attributes: AdminUiEntityAttributeMetadata;
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
+  defaultSort?: Maybe<Scalars['JSON']['output']>;
+  excludeFromTracing: Scalars['Boolean']['output'];
+  fieldForDetailPanelNavigationId: Scalars['String']['output'];
   fields: Array<AdminUiFieldMetadata>;
+  hideInSideBar: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
@@ -71,6 +75,9 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
+  hideInFilterBar?: Maybe<Scalars['Boolean']['output']>;
+  hideInTable?: Maybe<Scalars['Boolean']['output']>;
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
@@ -98,8 +105,8 @@ export type AdminUiMetadata = {
   enums: Array<AdminUiEnumMetadata>;
 };
 
-export type AggregationResult = {
-  __typename?: 'AggregationResult';
+export type AggregationResultFromExampleSubgraph = {
+  __typename?: 'AggregationResultFromExampleSubgraph';
   count: Scalars['Int']['output'];
 };
 
@@ -138,6 +145,12 @@ export type DeprecatedProductsPaginationInput = {
   orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
 
+export type HiddenEntity = {
+  __typename?: 'HiddenEntity';
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+};
+
 export type InventoriesOrderByInput = {
   id?: InputMaybe<Sort>;
 };
@@ -155,11 +168,18 @@ export type Inventory = {
   id: Scalars['ID']['output'];
 };
 
+export type NonResolvableEntity = {
+  __typename?: 'NonResolvableEntity';
+  id: Scalars['ID']['output'];
+};
+
 export type Product = {
   __typename?: 'Product';
   createdBy?: Maybe<User>;
   dimensions?: Maybe<ProductDimension>;
+  hiddenEntities?: Maybe<Array<HiddenEntity>>;
   id: Scalars['ID']['output'];
+  nonResolvableEntity: NonResolvableEntity;
   notes?: Maybe<Scalars['String']['output']>;
   package?: Maybe<Scalars['String']['output']>;
   research: Array<ProductResearch>;
@@ -211,31 +231,47 @@ export type ProductVariation = {
 
 export type ProductsListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
+  notes_gt?: InputMaybe<Scalars['String']['input']>;
+  notes_gte?: InputMaybe<Scalars['String']['input']>;
   notes_ilike?: InputMaybe<Scalars['String']['input']>;
   notes_in?: InputMaybe<Array<Scalars['String']['input']>>;
   notes_like?: InputMaybe<Scalars['String']['input']>;
+  notes_lt?: InputMaybe<Scalars['String']['input']>;
+  notes_lte?: InputMaybe<Scalars['String']['input']>;
   notes_ne?: InputMaybe<Scalars['String']['input']>;
   notes_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   notes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   notes_null?: InputMaybe<Scalars['Boolean']['input']>;
   package?: InputMaybe<Scalars['String']['input']>;
+  package_gt?: InputMaybe<Scalars['String']['input']>;
+  package_gte?: InputMaybe<Scalars['String']['input']>;
   package_ilike?: InputMaybe<Scalars['String']['input']>;
   package_in?: InputMaybe<Array<Scalars['String']['input']>>;
   package_like?: InputMaybe<Scalars['String']['input']>;
+  package_lt?: InputMaybe<Scalars['String']['input']>;
+  package_lte?: InputMaybe<Scalars['String']['input']>;
   package_ne?: InputMaybe<Scalars['String']['input']>;
   package_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   package_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   package_null?: InputMaybe<Scalars['Boolean']['input']>;
   sku?: InputMaybe<Scalars['String']['input']>;
+  sku_gt?: InputMaybe<Scalars['String']['input']>;
+  sku_gte?: InputMaybe<Scalars['String']['input']>;
   sku_ilike?: InputMaybe<Scalars['String']['input']>;
   sku_in?: InputMaybe<Array<Scalars['String']['input']>>;
   sku_like?: InputMaybe<Scalars['String']['input']>;
+  sku_lt?: InputMaybe<Scalars['String']['input']>;
+  sku_lte?: InputMaybe<Scalars['String']['input']>;
   sku_ne?: InputMaybe<Scalars['String']['input']>;
   sku_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   sku_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -322,10 +358,10 @@ export type UsersPaginationInput = {
   orderBy?: InputMaybe<UsersOrderByInput>;
 };
 
-export type _Entity = CaseStudy | DeprecatedProduct | Inventory | Product | ProductDimension | ProductResearch | ProductVariation | User;
+export type _Entity = CaseStudy | DeprecatedProduct | Inventory | NonResolvableEntity | Product | ProductDimension | ProductResearch | ProductVariation | User;
 
 export type _Service = {
-  __typename?: '_service';
+  __typename?: '_Service';
   sdl: Scalars['String']['output'];
 };
 

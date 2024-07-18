@@ -1,21 +1,15 @@
 import { GraphQLList, GraphQLResolveInfo, Source } from 'graphql';
 
-import {
-	BaseContext,
-	CreateOrUpdateHookParams,
-	EntityMetadata,
-	HookRegister,
-	ResolveTree,
-	getFieldTypeWithMetadata,
-	graphQLTypeForEntity,
-	hookManagerMap,
-	isEntityMetadata,
-	isSerializableGraphQLEntityClass,
-	isTransformableGraphQLEntityClass,
-} from '..';
-import { graphweaverMetadata } from '../metadata';
+import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
 import { fromBackendEntity } from '../default-from-backend-entity';
+import { BaseContext, CreateOrUpdateHookParams, ResolveTree } from '../types';
+import { getFieldTypeWithMetadata, graphQLTypeForEntity } from '../schema-builder';
+import { HookRegister, hookManagerMap } from '../hook-manager';
+import {
+	isSerializableGraphQLEntityClass,
+	isTransformableGraphQLEntityClass,
+} from '../base-entities';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -45,7 +39,7 @@ const runChildCreateOrUpdate = <G = unknown>(
 	data: Partial<G> | Partial<G>[],
 	context: BaseContext
 ): Promise<G | G[]> => {
-	const graphQLType = graphQLTypeForEntity(entityMetadata);
+	const graphQLType = graphQLTypeForEntity(entityMetadata, undefined);
 
 	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
 	// result type. The only thing we read in it is the return type, so we'll just stub that.

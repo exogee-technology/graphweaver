@@ -1,8 +1,10 @@
 import './case-study';
 import './deprecated-product';
+import './hidden-entity';
 import './inventory';
-import './product';
+import './non-resolvable-entity';
 import './product-dimension';
 import './product-research';
 import './product-variation';
+import './product';
 import './user';

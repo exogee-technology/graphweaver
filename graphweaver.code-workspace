@@ -5,6 +5,10 @@
       "path": "."
     },
     {
+      "name": "➡️ Example: Auth0",
+      "path": "src/examples/auth-zero"
+    },
+    {
       "name": "➡️ Example: AWS Cognito",
       "path": "src/examples/aws-cognito"
     },
@@ -67,6 +71,10 @@
     {
       "name": "📦 @exogee/graphweaver-builder",
       "path": "src/packages/builder"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-cdk",
+      "path": "src/packages/cdk"
     },
     {
       "name": "📦 @exogee/graphweaver-config",

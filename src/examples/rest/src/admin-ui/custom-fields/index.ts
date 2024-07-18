@@ -14,7 +14,7 @@ customFields.set('Task', [
 		type: 'custom',
 		index: 3,
 		component: Link,
-		hideOnDetailForm: true,
+		hideInDetailForm: true,
 	},
 ]);
 
@@ -23,14 +23,14 @@ customFields.set('Credential', [
 		name: 'password',
 		type: 'custom',
 		component: PasswordComponent,
-		hideOnTable: true,
+		hideInTable: true,
 		initialValue: '',
 	},
 	{
 		name: 'confirm',
 		type: 'custom',
 		component: ConfirmComponent,
-		hideOnTable: true,
+		hideInTable: true,
 		initialValue: '',
 	},
 ]);
@@ -41,7 +41,7 @@ customFields.set('ApiKey', [
 		name: 'secret',
 		type: 'custom',
 		component: SecretFieldComponent,
-		hideOnTable: true,
+		hideInTable: true,
 		initialValue: '',
 	},
 ]);

@@ -89,7 +89,11 @@ describe('Aggregation - Not Supported in Provider', () => {
 	});
 
 	test('_graphweaver should indicate that the entity does not support aggregation', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.server.executeOperation<{
+			_graphweaver: {
+				entities: [{ name: string; supportedAggregationTypes: string[] }];
+			};
+		}>({
 			query: gql`
 				query {
 					_graphweaver {
@@ -103,7 +107,11 @@ describe('Aggregation - Not Supported in Provider', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect((response.body.singleResult.data as any)._graphweaver.entities).toMatchObject([
+		expect(response.body.singleResult.errors).toBeUndefined();
+		const filteredEntities = response.body.singleResult.data?._graphweaver.entities.filter(
+			(entity) => entity.name === 'DeprecatedProduct'
+		);
+		expect(filteredEntities).toMatchObject([
 			{
 				name: 'DeprecatedProduct',
 				supportedAggregationTypes: [],

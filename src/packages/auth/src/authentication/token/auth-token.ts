@@ -1,5 +1,6 @@
-import jwt from 'jsonwebtoken';
+import jwt, { Algorithm, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 import { logger } from '@exogee/logger';
+import jwksClient from 'jwks-rsa';
 import ms from 'ms';
 
 import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
@@ -18,6 +19,23 @@ const privateKey = process.env.AUTH_PRIVATE_KEY_PEM_BASE64
 	? Buffer.from(process.env.AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
 	: undefined;
 
+const jwksUri = process.env.AUTH_JWKS_URI ? process.env.AUTH_JWKS_URI : undefined;
+
+// There should be only one method to verify the token therefore we throw and error if both public key and JWKS URI are provided
+if (publicKey && jwksUri) {
+	throw new Error(`
+    Authentication configuration error:
+
+    Both a public key and a JWKS URI were detected. 
+    Please use only one method for token verification to ensure security.
+
+    If you intend to use an external JWKS URI, remove the 'PUBLIC_KEY' environment variable.
+    If you intend to use a local public key, remove the 'JWKS_URI' environment variable.
+
+    For more information, refer to our authentication configuration documentation: https://graphweaver.com/docs/authentication
+  `);
+}
+
 /**
  * Removes any prefix from the given authorization header.
  * The prefix is assumed to be separated from the actual token by whitespace.
@@ -35,17 +53,31 @@ export const isExpired = (token: string) => {
 };
 
 const TOKEN_PREFIX = 'Bearer';
+const algorithm = (process.env.AUTH_JWT_ALGORITHM ?? 'ES256') as Algorithm;
 
 export class AuthTokenProvider implements BaseAuthTokenProvider {
 	constructor(private authMethod?: AuthenticationMethod) {}
 
+	getSigningKey(header: JwtHeader, callback: SigningKeyCallback) {
+		if (publicKey) return callback(null, publicKey);
+		if (jwksUri) {
+			const client = jwksClient({ jwksUri });
+			client.getSigningKey(header?.kid, function (err, key) {
+				const signingKey = key?.getPublicKey();
+				callback(err, signingKey);
+			});
+		} else {
+			callback(new Error('No public key or JWKS URI provided'));
+		}
+	}
+
 	async generateToken(user: UserProfile<unknown>) {
 		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
-		const payload = { id: user.id, amr: [AuthenticationMethod.PASSWORD] };
+		const payload = { sub: user.id, amr: [AuthenticationMethod.PASSWORD] };
 
 		try {
 			const authToken = jwt.sign(payload, privateKey, {
-				algorithm: 'ES256',
+				algorithm,
 				expiresIn,
 			});
 			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
@@ -57,23 +89,22 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async decodeToken(authToken: string): Promise<JwtPayload> {
-		if (!publicKey) throw new Error('AUTH_PUBLIC_KEY_PEM_BASE64 is required in environment');
-
 		const token = removeAuthPrefixIfPresent(authToken);
-		let payload;
-		try {
-			payload = jwt.verify(token, publicKey, { algorithms: ['ES256'] });
-		} catch (err) {
-			logger.error(err);
-			throw new Error('Verification of token failed');
-		}
+		return new Promise((resolve, reject) => {
+			jwt.verify(token, this.getSigningKey, { algorithms: [algorithm] }, (err, payload) => {
+				if (err) {
+					logger.error(err);
+					return reject(err);
+				}
 
-		if (typeof payload === 'string' || payload == undefined) {
-			logger.error('JWT token payload is not an object');
-			throw new Error('Verification of token failed');
-		}
+				if (typeof payload === 'string' || payload == undefined) {
+					logger.error('JWT token payload is not an object');
+					return reject('Verification of token failed');
+				}
 
-		return payload;
+				return resolve(payload);
+			});
+		});
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
@@ -98,7 +129,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 				},
 				privateKey,
 				{
-					algorithm: 'ES256',
+					algorithm,
 				}
 			);
 			return new AuthToken(`${TOKEN_PREFIX} ${token}`);

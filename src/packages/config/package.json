@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-config",
-	"version": "1.0.4",
+	"version": "2.0.5",
 	"description": "Retrieve and parse Graphweaver configurations",
 	"license": "MIT",
 	"scripts": {
@@ -23,10 +23,10 @@
 		"lodash": "4.17.21"
 	},
 	"devDependencies": {
-		"@types/lodash": "4.17.6",
-		"@types/node": "20.14.9",
-		"esbuild": "0.21.5",
-		"prettier": "3.3.2"
+		"@types/lodash": "4.17.7",
+		"@types/node": "20.14.11",
+		"esbuild": "0.23.0",
+		"prettier": "3.3.3"
 	},
 	"keywords": [
 		"graphql",

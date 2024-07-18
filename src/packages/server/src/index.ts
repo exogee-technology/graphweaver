@@ -1,4 +1,4 @@
-import { GraphQLSchema } from 'graphql';
+import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
@@ -14,6 +14,9 @@ import {
 	trace,
 	isTraceable,
 	Instrumentation,
+	BackendProvider,
+	setDisableTracingForRequest,
+	setEnableTracingForRequest,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -55,7 +58,7 @@ export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
-	enableFederation?: boolean;
+	federationSubgraphName?: string;
 	enableFederationTracing?: boolean;
 	graphQLArmorOptions?: GraphQLArmorConfig;
 	corsOptions?: CorsPluginOptions;
@@ -66,6 +69,7 @@ export interface GraphweaverConfig {
 	};
 	schemaDirectives?: Record<string, any>;
 	openTelemetry?: {
+		traceProvider?: BackendProvider<unknown>;
 		instrumentations?: (Instrumentation | Instrumentation[])[];
 	};
 }
@@ -76,9 +80,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		apolloServerOptions: {
-			introspection: true,
+			introspection: process.env.NODE_ENV !== 'production',
 		},
-		enableFederation: false,
 		enableFederationTracing: false,
 		graphqlDeduplicator: {
 			enabled: true,
@@ -88,10 +91,13 @@ export default class Graphweaver<TContext extends BaseContext> {
 	constructor(config?: GraphweaverConfig) {
 		logger.trace(`Graphweaver constructor called`);
 
-		startTracing({ instrumentations: this.config.openTelemetry?.instrumentations ?? [] });
-
 		// Assign default config
 		this.config = mergeConfig<GraphweaverConfig>(this.config, config ?? {});
+
+		startTracing({
+			instrumentations: this.config.openTelemetry?.instrumentations ?? [],
+			traceProvider: this.config.openTelemetry?.traceProvider,
+		});
 
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
@@ -130,16 +136,17 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.trace(graphweaverMetadata.typeCounts, `Graphweaver buildSchemaSync starting.`);
 
 		try {
-			if (this.config.enableFederation) {
-				enableFederation({ schemaDirectives: this.config.schemaDirectives });
+			if (this.config.federationSubgraphName) {
+				enableFederation({
+					federationSubgraphName: this.config.federationSubgraphName,
+					schemaDirectives: this.config.schemaDirectives,
+				});
 
 				// Caution: With this plugin, any client can request a trace for any operation, potentially revealing sensitive server information.
 				// It is recommended to ensure that federated subgraphs are not directly exposed to the public Internet. This feature is disabled by default for security reasons.
 				if (this.config.enableFederationTracing) plugins.push(ApolloServerPluginInlineTrace());
 
-				this.schema = buildFederationSchema({
-					schemaDirectives: this.config.schemaDirectives,
-				});
+				this.schema = buildFederationSchema({ schemaDirectives: this.config.schemaDirectives });
 			} else {
 				this.schema = SchemaBuilder.build({ schemaDirectives: this.config.schemaDirectives });
 			}
@@ -149,7 +156,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		}
 
 		// Wrap this in an if statement to avoid doing the work of the printing if trace logging isn't enabled.
-		if (logger.isLevelEnabled('trace')) logger.trace('Schema: ', SchemaBuilder.print());
+		if (logger.isLevelEnabled('trace')) logger.trace(`Schema: ${SchemaBuilder.print()}`);
 
 		logger.trace(`Graphweaver buildSchemaSync finished.`);
 		logger.trace(`Graphweaver starting ApolloServer`);
@@ -165,19 +172,41 @@ export default class Graphweaver<TContext extends BaseContext> {
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
 
-		if (isTraceable) {
+		if (isTraceable()) {
 			// Wrap the executeHTTPGraphQLRequest method with a trace span
 			// This will allow us to trace the entire request from start to finish
 			const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
 			this.server.executeHTTPGraphQLRequest = trace((request, trace) => {
-				trace?.span.updateName('Graphweaver Request');
+				const body = request.httpGraphQLRequest.body as
+					| { operationName: string; query: string }
+					| undefined;
+				const operationName = body?.operationName ?? 'Graphweaver Request';
+
+				const gql = parse(body?.query ?? '');
+				const type = (gql.definitions[0] as OperationDefinitionNode)?.operation ?? '';
+
+				trace?.span.updateName(operationName);
 				trace?.span.setAttributes({
 					'X-Amzn-RequestId': request.httpGraphQLRequest.headers.get('x-amzn-requestid'),
 					'X-Amzn-Trace-Id': request.httpGraphQLRequest.headers.get('x-amzn-trace-id'),
 					body: JSON.stringify(request.httpGraphQLRequest.body),
 					method: request.httpGraphQLRequest.method,
+					type,
 				});
-				return executeHTTPGraphQLRequest.bind(this.server)(request);
+
+				const suppressTracing = request.httpGraphQLRequest.headers.get(
+					'x-graphweaver-suppress-tracing'
+				);
+
+				if (suppressTracing === 'true') {
+					return setDisableTracingForRequest(() => {
+						return executeHTTPGraphQLRequest.bind(this.server)(request);
+					});
+				} else {
+					return setEnableTracingForRequest(() => {
+						return executeHTTPGraphQLRequest.bind(this.server)(request);
+					});
+				}
 			});
 		}
 	}

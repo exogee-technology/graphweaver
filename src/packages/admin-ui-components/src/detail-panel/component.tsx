@@ -51,14 +51,6 @@ const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
 const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const isReadonly = isFieldReadonly(field);
 
-	if (field.relationshipType) {
-		// If the field is readonly and a relationship, show a link to the entity/entities
-		if (isReadonly) {
-			return <LinkField name={field.name} field={field} />;
-		}
-		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
-	}
-
 	if (field.type === 'JSON') {
 		return <JSONField name={field.name} autoFocus={autoFocus} />;
 	}
@@ -67,8 +59,16 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 		return <BooleanField name={field.name} autoFocus={autoFocus} />;
 	}
 
-	if (field.type === 'Media') {
+	if (field.type === 'GraphweaverMedia') {
 		return <MediaField field={field} autoFocus={autoFocus} />;
+	}
+
+	if (field.relationshipType) {
+		// If the field is readonly and a relationship, show a link to the entity/entities
+		if (isReadonly) {
+			return <LinkField name={field.name} field={field} />;
+		}
+		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 	}
 
 	const { enumByName } = useSchema();
@@ -222,7 +222,7 @@ const DetailForm = ({
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
 							if (field.type === 'custom') {
-								if ((field as CustomField).hideOnDetailForm) return null;
+								if (field.hideInDetailForm) return null;
 
 								return (
 									<CustomFieldComponent
@@ -301,12 +301,7 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
-	const customFieldsToShow = (customFields?.get(selectedEntity.name) || []).filter(
-		(customField) => {
-			const { detailForm: show } = customField.showOn ?? { detailForm: true };
-			return show;
-		}
-	);
+	const customFieldsToShow = customFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
 		// We don't show Many to Many relationships in the form yet because we don't have
@@ -391,7 +386,7 @@ export const DetailPanel = () => {
 					variables: {
 						input: values,
 					},
-					refetchQueries: [`AdminUIListPage`],
+					refetchQueries: [`${selectedEntity.plural}List`],
 				});
 			}
 

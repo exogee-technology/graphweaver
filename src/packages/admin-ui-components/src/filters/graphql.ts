@@ -19,7 +19,7 @@ export const queryForFilterOptions = (entity: Entity, fieldName: string) => {
 	const queryName = pluralName[0].toLowerCase() + pluralName.slice(1);
 
 	return gql`
-		query filterOptions {
+		query ${pluralName}FilterOptions {
 			result: ${queryName} {
 				${entity.primaryKeyField}
 				${fieldName}

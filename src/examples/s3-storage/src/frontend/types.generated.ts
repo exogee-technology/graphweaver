@@ -32,7 +32,11 @@ export type AdminUiEntityMetadata = {
   attributes: AdminUiEntityAttributeMetadata;
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
+  defaultSort?: Maybe<Scalars['JSON']['output']>;
+  excludeFromTracing: Scalars['Boolean']['output'];
+  fieldForDetailPanelNavigationId: Scalars['String']['output'];
   fields: Array<AdminUiFieldMetadata>;
+  hideInSideBar: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
@@ -68,6 +72,9 @@ export type AdminUiFieldMetadata = {
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
+  hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
+  hideInFilterBar?: Maybe<Scalars['Boolean']['output']>;
+  hideInTable?: Maybe<Scalars['Boolean']['output']>;
   isArray?: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   relatedEntity?: Maybe<Scalars['String']['output']>;
@@ -108,54 +115,62 @@ export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
 
-export type Media = {
-  __typename?: 'Media';
+export type GraphweaverMedia = {
+  __typename?: 'GraphweaverMedia';
   filename: Scalars['String']['output'];
   type: MediaType;
   url: Scalars['String']['output'];
 };
 
-/** Data needed to create or update MultipleMedia. If an ID is passed, this is an update, otherwise it's an insert. */
-export type MediaCreateOrUpdateInput = {
+/** Data needed to create or update GraphweaverMedias. If an ID is passed, this is an update, otherwise it's an insert. */
+export type GraphweaverMediaCreateOrUpdateInput = {
   filename?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<MediaType>;
 };
 
-/** Data needed to create MultipleMedia. */
-export type MediaInsertInput = {
+/** Data needed to create GraphweaverMedias. */
+export type GraphweaverMediaInsertInput = {
   filename: Scalars['String']['input'];
   type: MediaType;
+};
+
+/** Data needed to update GraphweaverMedias. An ID must be passed. */
+export type GraphweaverMediaUpdateInput = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<MediaType>;
+};
+
+export type GraphweaverMediasListFilter = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  filename_gt?: InputMaybe<Scalars['String']['input']>;
+  filename_gte?: InputMaybe<Scalars['String']['input']>;
+  filename_ilike?: InputMaybe<Scalars['String']['input']>;
+  filename_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  filename_like?: InputMaybe<Scalars['String']['input']>;
+  filename_lt?: InputMaybe<Scalars['String']['input']>;
+  filename_lte?: InputMaybe<Scalars['String']['input']>;
+  filename_ne?: InputMaybe<Scalars['String']['input']>;
+  filename_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  filename_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  filename_null?: InputMaybe<Scalars['Boolean']['input']>;
+  url?: InputMaybe<Scalars['String']['input']>;
+  url_gt?: InputMaybe<Scalars['String']['input']>;
+  url_gte?: InputMaybe<Scalars['String']['input']>;
+  url_ilike?: InputMaybe<Scalars['String']['input']>;
+  url_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  url_like?: InputMaybe<Scalars['String']['input']>;
+  url_lt?: InputMaybe<Scalars['String']['input']>;
+  url_lte?: InputMaybe<Scalars['String']['input']>;
+  url_ne?: InputMaybe<Scalars['String']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export enum MediaType {
   Image = 'IMAGE',
   Other = 'OTHER'
 }
-
-/** Data needed to update MultipleMedia. An ID must be passed. */
-export type MediaUpdateInput = {
-  filename?: InputMaybe<Scalars['String']['input']>;
-  type?: InputMaybe<MediaType>;
-};
-
-export type MultipleMediaListFilter = {
-  filename?: InputMaybe<Scalars['String']['input']>;
-  filename_ilike?: InputMaybe<Scalars['String']['input']>;
-  filename_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  filename_like?: InputMaybe<Scalars['String']['input']>;
-  filename_ne?: InputMaybe<Scalars['String']['input']>;
-  filename_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  filename_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  filename_null?: InputMaybe<Scalars['Boolean']['input']>;
-  url?: InputMaybe<Scalars['String']['input']>;
-  url_ilike?: InputMaybe<Scalars['String']['input']>;
-  url_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  url_like?: InputMaybe<Scalars['String']['input']>;
-  url_ne?: InputMaybe<Scalars['String']['input']>;
-  url_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  url_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -264,34 +279,38 @@ export enum Sort {
 export type Submission = {
   __typename?: 'Submission';
   id: Scalars['ID']['output'];
-  image?: Maybe<Media>;
+  image?: Maybe<GraphweaverMedia>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SubmissionCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
-  image?: InputMaybe<MediaCreateOrUpdateInput>;
+  image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
 };
 
 /** Data needed to create Submissions. */
 export type SubmissionInsertInput = {
-  image?: InputMaybe<MediaCreateOrUpdateInput>;
+  image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
 };
 
 /** Data needed to update Submissions. An ID must be passed. */
 export type SubmissionUpdateInput = {
   id: Scalars['ID']['input'];
-  image?: InputMaybe<MediaCreateOrUpdateInput>;
+  image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
 };
 
 export type SubmissionsListFilter = {
   id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
   id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
   id_ne?: InputMaybe<Scalars['ID']['input']>;
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  image?: InputMaybe<MultipleMediaListFilter>;
+  image?: InputMaybe<GraphweaverMediasListFilter>;
 };
 
 export type SubmissionsOrderByInput = {

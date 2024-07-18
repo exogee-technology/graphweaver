@@ -147,7 +147,7 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 			);
 		}
 
-		const rows = await this.find(filter);
+		const rows = await this.find(filter, undefined);
 		return rows[0] || null;
 	}
 
@@ -165,10 +165,13 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 			);
 		}
 
-		return this.find({
-			_or: [relatedFieldIds.map((id) => ({ [relatedField]: id }))],
-			...filter,
-		});
+		return this.find(
+			{
+				_or: [relatedFieldIds.map((id) => ({ [relatedField]: id }))],
+				...filter,
+			},
+			undefined
+		);
 	}
 
 	// PUT METHODS

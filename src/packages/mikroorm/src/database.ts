@@ -10,6 +10,7 @@ import {
 	ReflectMetadataProvider,
 } from '@mikro-orm/core';
 import { logger } from '@exogee/logger';
+import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 
 import type { EntityManager as PgEntityManager, PostgreSqlDriver } from '@mikro-orm/postgresql';
 import type { EntityManager as MyEntityManager, MySqlDriver } from '@mikro-orm/mysql';
@@ -136,6 +137,48 @@ class DatabaseImplementation {
 		return this.em.getDriver().getConnection();
 	}
 
+	private getEnvironmentOverrides = async (secretArn?: string): Promise<Options> => {
+		logger.trace('Database::getEnvironmentOverrides() - Enter');
+		const secret = secretArn ?? process.env.DATABASE_SECRET_ARN;
+		if (secret) {
+			const client = new SecretsManagerClient({
+				region: process.env.AWS_REGION,
+			});
+			const command = new GetSecretValueCommand({ SecretId: secret });
+
+			try {
+				logger.trace('Fetching secret from Secrets Manager');
+				const response = await client.send(command);
+				const secret = JSON.parse(response.SecretString as string);
+				logger.trace('Secret fetched from Secrets Manager');
+
+				return {
+					host: secret.host,
+					port: secret.port,
+					user: secret.username,
+					password: secret.password,
+					dbName: secret.dbname,
+					driverOptions: {
+						connection: { ssl: true },
+					},
+				};
+			} catch (error) {
+				logger.error('Error fetching secret from Secrets Manager');
+				throw error;
+			}
+		}
+
+		logger.trace('No secret ARN provided, using environment variables');
+
+		return {
+			host: process.env.DATABASE_HOST,
+			port: process.env.DATABASE_PORT ? Number(process.env.DATABASE_PORT) : undefined,
+			user: process.env.DATABASE_USERNAME,
+			password: process.env.DATABASE_PASSWORD,
+			dbName: process.env.DATABASE_NAME,
+		};
+	};
+
 	private getConnectionInfo = async (connectionOptions?: ConnectionOptions): Promise<Options> => {
 		logger.trace('Database::getConnectionInfo() - Enter');
 
@@ -152,13 +195,7 @@ class DatabaseImplementation {
 				: connectionOptions?.mikroOrmConfig;
 
 		// And finally we can override all of this with environment variables if needed.
-		const environmentOverrides: Options = {
-			host: process.env.DATABASE_HOST,
-			port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : undefined,
-			user: process.env.DATABASE_USERNAME,
-			password: process.env.DATABASE_PASSWORD,
-			dbName: process.env.DATABASE_NAME,
-		};
+		const environmentOverrides = await this.getEnvironmentOverrides(connectionOptions?.secretArn);
 
 		// Create a function we can use to filter out undefined values in the object.
 		const filterUndefined = (obj?: Options) => {

@@ -23,7 +23,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const filters = searchParams.filters ?? entityByName(entityName).defaultFilter;
+	const filters = searchParams.filters ?? {};
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
@@ -31,8 +31,8 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		// we plan to redo this filter bar so that it is a drop down
 		// for now the workaround is to reduce the number of filters to 5
 		const fields = entity.fields
-			// filter out rowEntity.fields with the JSON type
-			.filter((field) => field.type !== 'JSON')
+			// filter out rowEntity.fields with the JSON and Media types because they're not filterable
+			.filter((field) => field.type !== 'JSON' && field.type !== 'GraphweaverMedia')
 			.slice(0, 5);
 
 		return fields;
@@ -107,7 +107,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		const fields = filterFieldsOnEntity();
 
 		return fields.map((field) => {
-			if (!field.filter?.type) return null;
+			if (field.hideInFilterBar || !field.filter?.type) return null;
 			const options = {
 				fieldName: field.name,
 				entity: entityName,

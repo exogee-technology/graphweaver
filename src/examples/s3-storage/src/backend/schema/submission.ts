@@ -3,7 +3,7 @@ import {
 	S3StorageProvider,
 	StorageType,
 	MediaField,
-	Media,
+	GraphweaverMedia,
 } from '@exogee/graphweaver-storage-provider';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -28,5 +28,5 @@ export class Submission {
 	id!: string;
 
 	@MediaField({ storageProvider: s3 })
-	image?: Media;
+	image?: GraphweaverMedia;
 }

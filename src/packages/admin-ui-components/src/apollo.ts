@@ -21,13 +21,13 @@ const authLink = new ApolloLink((operation, forward) => {
 	const currentRedirectSearchParam = new URLSearchParams(window.location.search).get(
 		'redirect_uri'
 	);
+	const context = operation.getContext();
 	const redirectUri =
-		operation.getContext()?.headers?.[REDIRECT_HEADER] ??
-		currentRedirectSearchParam ??
-		window.location.origin;
+		context?.headers?.[REDIRECT_HEADER] ?? currentRedirectSearchParam ?? window.location.origin;
 
 	operation.setContext({
 		headers: {
+			...(context?.headers ? context.headers : {}),
 			'Apollo-Require-Preflight': 'true',
 			'Content-Type': 'application/json',
 			...(currentAuthToken ? { Authorization: currentAuthToken } : {}),

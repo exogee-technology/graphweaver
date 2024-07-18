@@ -1,5 +1,4 @@
 import esbuild from 'esbuild';
-import svgrPlugin from 'esbuild-plugin-svgr';
 
 (async () => {
 	const { glob } = await import('glob');
@@ -14,6 +13,5 @@ import svgrPlugin from 'esbuild-plugin-svgr';
 		loader: {
 			'.module.css': 'css',
 		},
-		plugins: [svgrPlugin({ exportType: 'named' })],
 	});
 })();

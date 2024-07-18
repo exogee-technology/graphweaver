@@ -1,4 +1,5 @@
-import { Complexity, GetTypeFunction, graphweaverMetadata } from '..';
+import { graphweaverMetadata } from '../metadata';
+import { Complexity, GetTypeFunction } from '../types';
 
 export interface FieldOptions {
 	description?: string;
@@ -15,8 +16,10 @@ export interface FieldOptions {
 	adminUIOptions?: {
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
+		hideInDetailForm?: boolean;
 		readonly?: boolean;
 		summaryField?: boolean;
+		fieldForDetailPanelNavigationId?: boolean;
 	};
 	apiOptions?: {
 		// This marks the field as read only in the API.

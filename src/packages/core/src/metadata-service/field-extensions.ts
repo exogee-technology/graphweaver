@@ -1,10 +1,9 @@
 import { Entity, Field } from '../decorators';
 
 @Entity('AdminUiFieldExtensionsMetadata', {
-	apiOptions: { excludeFromBuiltInOperations: true },
-	directives: { inaccessible: true },
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
 })
 export class AdminUiFieldExtensionsMetadata {
-	@Field(() => String, { nullable: true, directives: { inaccessible: true } })
+	@Field(() => String, { nullable: true })
 	key?: string;
 }

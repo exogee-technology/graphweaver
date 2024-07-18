@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { graphweaverLogo, localStorageAuthKey } from '../config';
-import { Logout } from '../logout';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-custom-pages';
@@ -15,6 +14,7 @@ import { BackendRow, DashboardRow } from './contents';
 import { Spacer } from '../spacer';
 
 import styles from './styles.module.css';
+import { Logout } from '../logout';
 
 export const SideBar = () => {
 	const schema = useSchema();
@@ -73,10 +73,7 @@ export const SideBar = () => {
 				{!!userDashboardLinks.length && (
 					<>
 						<p className={styles.subtext}>Dashboards</p>
-						<ul
-							//className={classnames(styles.entity, styles.closed)}
-							className={clsx(styles.closed)}
-						>
+						<ul className={clsx(styles.closed)}>
 							{userDashboardLinks.map((link) => (
 								<DashboardRow key={link.route} name={link.name} route={link.route} />
 							))}
@@ -89,11 +86,22 @@ export const SideBar = () => {
 				{schema.backends.map((backend) => (
 					<BackendRow key={backend} backend={backend} />
 				))}
+
+				{schema.entityByName('Trace') && (
+					<>
+						<p className={styles.subtext}>Analytics</p>
+						<ul className={clsx(styles.closed)}>
+							<DashboardRow key={'/Trace'} name={'Trace'} route={'/Trace'} />
+						</ul>
+					</>
+				)}
 			</div>
 
 			<Spacer grow={1} />
 
-			{localStorage.getItem(localStorageAuthKey) ? (
+			{customPages.sidebarFooter ? (
+				<customPages.sidebarFooter />
+			) : localStorage.getItem(localStorageAuthKey) ? (
 				<Logout />
 			) : (
 				<div className={styles.sideBarFooter}>

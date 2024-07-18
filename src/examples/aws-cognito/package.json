@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-aws-cognito",
 	"private": true,
-	"version": "1.0.4",
+	"version": "2.0.5",
 	"license": "MIT",
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",
@@ -29,9 +29,9 @@
 		"react": "18.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.9",
+		"@types/node": "20.14.11",
 		"graphweaver": "workspace:*",
-		"typescript": "5.5.2"
+		"typescript": "5.5.3"
 	},
 	"keywords": [
 		"graphql",
