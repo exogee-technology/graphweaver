@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-s3-storage",
-	"version": "2.0.4",
+	"version": "2.0.5",
 	"license": "MIT",
 	"private": true,
 	"description": "Example of connecting Graphweaver to an AWS S3 bucket.",
