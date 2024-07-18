@@ -39,22 +39,28 @@ const isMedia = (value: unknown): value is MediaData =>
 		typeof value.type === 'string'
 	);
 
-@Entity('Media', {
+@Entity('GraphweaverMedia', {
 	apiOptions: {
 		// This allows us to use the Media type in multiple subgraphs at the same time,
 		// so if you have specified a federationSubgraphName in your Graphweaver config,
 		// the Media entity will be called MediaFrom[SubgraphName]Subgraph in the final result.
 		namespaceForFederation: true,
 	},
+
+	// GraphweaverMedia is a reserved entity name. It's reserved so it doesn't clash with this very entity.
+	graphweaverInternalOptions: { ignoreReservedEntityNames: true },
 })
-export class Media {
+export class GraphweaverMedia {
 	@Field(() => String)
 	filename!: string;
 
 	@Field(() => MediaType)
 	type!: MediaType;
 
-	@Field(() => String, { apiOptions: { excludeFromBuiltInWriteOperations: true } })
+	@Field(() => String, {
+		primaryKeyField: true,
+		apiOptions: { excludeFromBuiltInWriteOperations: true },
+	})
 	url!: string;
 
 	static serialize = ({ value }: { value: unknown }) => {
@@ -115,7 +121,7 @@ export function MediaField(options: MediaTypeFieldOptions): PropertyDecorator {
 		graphweaverMetadata.collectFieldInformation({
 			target,
 			name: propertyKey,
-			getType: () => Media,
+			getType: () => GraphweaverMedia,
 			adminUIOptions: {
 				readonly: true,
 			},

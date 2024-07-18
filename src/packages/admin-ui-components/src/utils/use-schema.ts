@@ -63,7 +63,7 @@ export type EntityFieldType =
 	| 'ID'
 	| 'JSON'
 	| 'Image'
-	| 'Media'
+	| 'GraphweaverMedia'
 	| 'Number'
 	| 'String'
 	| 'BigInt'

@@ -20,7 +20,11 @@ test('should return multipleFish as plural name for Fish', async () => {
 
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation({
+	const response = await graphweaver.server.executeOperation<{
+		_graphweaver: {
+			entities: [{ name: string; plural: string }];
+		};
+	}>({
 		query: gql`
 			query {
 				_graphweaver {
@@ -33,9 +37,11 @@ test('should return multipleFish as plural name for Fish', async () => {
 		`,
 	});
 	assert(response.body.kind === 'single');
-	expect(response.body.singleResult.data?._graphweaver).toMatchObject({
-		entities: [{ name: 'Fish', plural: 'MultipleFish' }],
-	});
+	expect(response.body.singleResult.errors).toBeUndefined();
+	const filteredEntities = response.body.singleResult.data?._graphweaver.entities.filter(
+		(entity) => entity.name === 'Fish'
+	);
+	expect(filteredEntities).toMatchObject([{ name: 'Fish', plural: 'MultipleFish' }]);
 
 	const introspection = await graphweaver.server.executeOperation<{
 		__schema: { types: { name: string; fields: { name: string }[] }[] };
