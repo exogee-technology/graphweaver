@@ -27,8 +27,8 @@ find ./packages/ -name bin/index.js -type d -exec rm -rf {} +
 echo "Removing Webpack build output (.deploy folders)"
 find ./packages/ -name .deploy -type d -exec rm -rf {} +
 
-echo "Removing Turbo cache directories"
-rm -rf .turbo/cache
+echo "Removing Turborepo cache directories"
+rm -rf .turbo/
 
 echo "Installing dependencies"
 pnpm install

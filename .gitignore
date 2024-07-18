@@ -128,4 +128,4 @@ token.json
 supergraph.config.js
 
 # Turbo Repo Caches
-**/.turbo/cache
+**/.turbo
