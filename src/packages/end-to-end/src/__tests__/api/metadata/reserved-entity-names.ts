@@ -27,9 +27,9 @@ test('should correctly throw when a reserved entity name is chosen without speci
 	);
 });
 
-test('should not throw when a reserved entity name is chosen and the __INTERNAL_ignoreReservedEntityNames option is set', () => {
+test('should not throw when a reserved entity name is chosen and the internalOptions.ignoreReservedEntityNames option is set', () => {
 	expect(() => {
-		@Entity('GraphweaverMedia', { __INTERNAL_ignoreReservedEntityNames: true })
+		@Entity('GraphweaverMedia', { graphweaverInternalOptions: { ignoreReservedEntityNames: true } })
 		class GraphweaverMedia {
 			@Field(() => ID)
 			id!: string;

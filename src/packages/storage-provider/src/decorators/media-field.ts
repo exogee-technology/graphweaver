@@ -40,13 +40,15 @@ const isMedia = (value: unknown): value is MediaData =>
 	);
 
 @Entity('GraphweaverMedia', {
-	__INTERNAL_ignoreReservedEntityNames: true,
 	apiOptions: {
 		// This allows us to use the Media type in multiple subgraphs at the same time,
 		// so if you have specified a federationSubgraphName in your Graphweaver config,
 		// the Media entity will be called MediaFrom[SubgraphName]Subgraph in the final result.
 		namespaceForFederation: true,
 	},
+
+	// GraphweaverMedia is a reserved entity name. It's reserved so it doesn't clash with this very entity.
+	graphweaverInternalOptions: { ignoreReservedEntityNames: true },
 })
 export class GraphweaverMedia {
 	@Field(() => String)

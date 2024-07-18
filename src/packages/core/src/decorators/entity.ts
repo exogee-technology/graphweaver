@@ -25,7 +25,10 @@ export function Entity<G = unknown>(
 			throw new Error('Could not determine name for entity.');
 		}
 
-		if (!resolvedOptions?.__INTERNAL_ignoreReservedEntityNames && reservedEntityNames.has(name)) {
+		if (
+			!resolvedOptions?.graphweaverInternalOptions?.ignoreReservedEntityNames &&
+			reservedEntityNames.has(name)
+		) {
 			throw new Error(
 				`The entity name "${name}" is reserved for internal use by Graphweaver. Please use a different name.`
 			);
