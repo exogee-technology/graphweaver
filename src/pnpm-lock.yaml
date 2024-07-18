@@ -1204,6 +1204,9 @@ importers:
 
   packages/load-testing:
     dependencies:
+      '@types/node':
+        specifier: 20.14.10
+        version: 20.14.10
       k6:
         specifier: 0.0.0
         version: 0.0.0
@@ -1420,7 +1423,7 @@ importers:
         version: 3.1.0(@apollo/server@4.10.4)
       '@as-integrations/hapi':
         specifier: 2.0.1
-        version: 2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.10)
+        version: 2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.7)
       '@escape.tech/graphql-armor':
         specifier: 3.0.1
         version: 3.0.1(@apollo/server@4.10.4)(@escape.tech/graphql-armor-types@0.6.0)
@@ -1431,8 +1434,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@hapi/hapi':
-        specifier: 21.3.10
-        version: 21.3.10
+        specifier: 21.3.7
+        version: 21.3.7
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
@@ -1848,6 +1851,17 @@ packages:
     dependencies:
       '@apollo/server': 4.10.4(graphql@16.9.0)
       '@hapi/hapi': 21.3.10
+    dev: false
+
+  /@as-integrations/hapi@2.0.1(@apollo/server@4.10.4)(@hapi/hapi@21.3.7):
+    resolution: {integrity: sha512-FpPmT0tKbRBvQ+xt7pT8lCmShpylE2fU46SBa764IbWOcnOyZv7Cw9KujAcM5gW/NLeFI/xjADLabOTonwQghg==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@apollo/server': ^4.0.0
+      '@hapi/hapi': ^20.2.2 || ^21.0.0
+    dependencies:
+      '@apollo/server': 4.10.4(graphql@16.9.0)
+      '@hapi/hapi': 21.3.7
     dev: false
 
   /@auth0/auth0-spa-js@2.1.3:
@@ -5223,6 +5237,30 @@ packages:
 
   /@hapi/hapi@21.3.10:
     resolution: {integrity: sha512-CmEcmTREW394MaGGKvWpoOK4rG8tKlpZLs30tbaBzhCrhiL2Ti/HARek9w+8Ya4nMBGcd+kDAzvU44OX8Ms0Jg==}
+    engines: {node: '>=14.15.0'}
+    dependencies:
+      '@hapi/accept': 6.0.3
+      '@hapi/ammo': 6.0.1
+      '@hapi/boom': 10.0.1
+      '@hapi/bounce': 3.0.1
+      '@hapi/call': 9.0.1
+      '@hapi/catbox': 12.1.1
+      '@hapi/catbox-memory': 6.0.2
+      '@hapi/heavy': 8.0.1
+      '@hapi/hoek': 11.0.4
+      '@hapi/mimos': 7.0.1
+      '@hapi/podium': 5.0.1
+      '@hapi/shot': 6.0.1
+      '@hapi/somever': 4.1.1
+      '@hapi/statehood': 8.1.1
+      '@hapi/subtext': 8.1.0
+      '@hapi/teamwork': 6.0.0
+      '@hapi/topo': 6.0.2
+      '@hapi/validate': 2.0.1
+    dev: false
+
+  /@hapi/hapi@21.3.7:
+    resolution: {integrity: sha512-33J0nreMfqkhY7wwRAZRy+9J+7J4QOH1JtICMjIUmxfaOYSJL/d8JJCtg57SX60944bhlCeu7isb7qyr2jT2oA==}
     engines: {node: '>=14.15.0'}
     dependencies:
       '@hapi/accept': 6.0.3

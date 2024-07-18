@@ -27,7 +27,7 @@
 		"@escape.tech/graphql-armor": "3.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@hapi/hapi": "21.3.10",
+		"@hapi/hapi": "21.3.7",
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.1",
 		"decimal.js": "10.4.3",

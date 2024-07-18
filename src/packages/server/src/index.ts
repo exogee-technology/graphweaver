@@ -77,9 +77,9 @@ export interface GraphweaverConfig {
 }
 
 export type StartServerOptions = {
-	host?: string;
-	port?: number;
-	path?: string;
+	path: string;
+	host: string;
+	port: number;
 };
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -233,17 +233,85 @@ export default class Graphweaver<TContext extends BaseContext> {
 		logger.info(`Graphweaver start called`);
 		await this.server.start();
 
-		const hapi = new Server({ host, port });
+		const hapi = new Server({
+			host: 'localhost',
+			port,
+			routes: {
+				cors: {
+					origin: ['*'],
+					credentials: true,
+					headers: [
+						'Content-Type',
+						'X-Amz-Date',
+						'Authorization',
+						'X-Api-Key',
+						'X-Amz-Security-Token',
+						'X-Amz-User-Agent',
+						'Xsrf-Token',
+						'X-Auth-Redirect',
+						'Apollo-Require-Preflight',
+					],
+				},
+			},
+		});
+
+		// hapi.route({
+		// 	method: 'OPTIONS',
+		// 	path,
+		// 	options: {
+
+		// 	},
+		// 	handler: () => 'ok',
+		// });
 
 		await hapi.register({
 			plugin: hapiApollo,
 			options: {
 				apolloServer: this.server,
 				path,
+				getRoute: {
+					options: {
+						cors: {
+							origin: ['*'],
+							credentials: true,
+							headers: [
+								'Content-Type',
+								'X-Amz-Date',
+								'Authorization',
+								'X-Api-Key',
+								'X-Amz-Security-Token',
+								'X-Amz-User-Agent',
+								'Xsrf-Token',
+								'X-Auth-Redirect',
+								'Apollo-Require-Preflight',
+							],
+						},
+					},
+				},
+				postRoute: {
+					options: {
+						cors: {
+							origin: ['*'],
+							credentials: true,
+							headers: [
+								'Content-Type',
+								'X-Amz-Date',
+								'Authorization',
+								'X-Api-Key',
+								'X-Amz-Security-Token',
+								'X-Amz-User-Agent',
+								'Xsrf-Token',
+								'X-Auth-Redirect',
+								'Apollo-Require-Preflight',
+							],
+						},
+					},
+				},
 			},
 		});
 
 		await hapi.start();
+		logger.info(`Server running on ${hapi.info.uri}`);
 	}
 }
 

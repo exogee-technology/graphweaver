@@ -97,13 +97,16 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	await Promise.all([checkNativeModules, buildBackend]);
 
 	const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
-	const { graphweaver } = await import(buildDir);
+	const { graphweaver, handler } = await import(buildDir);
 
-	// is there a handler
-	// if not start
-	// throw if additional functions are defined
-	if (graphweaver) {
-		graphweaver.start({ host, port: port + 1 });
+	if (!handler) {
+		if (additionalFunctions.length > 0) {
+			throw new Error(
+				'Additional functions are defined but no handler is exported. Please export a handler function to run Graphweaver in serverless mode.'
+			);
+		}
+
+		graphweaver.start({ host, port: port + 1, path: '/' });
 		return;
 	}
 
