@@ -32,16 +32,16 @@
 	"peerDependencies": {
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.0"
+		"react-router-dom": "6.25.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.10",
+		"@types/node": "20.14.11",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
 		"prettier": "3.3.3",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.0",
+		"react-router-dom": "6.25.1",
 		"typescript": "5.5.3"
 	},
 	"keywords": [
