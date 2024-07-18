@@ -1,0 +1,26 @@
+{
+	"name": "@exogee/graphweaver-load-testing",
+	"version": "2.0.4",
+	"description": "Graphweaver Load Testing Suite",
+	"license": "MIT",
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	],
+	"scripts": {
+		"test": "k6 run src/index.ts"
+	},
+	"dependencies": {
+		"k6": "0.0.0"
+	},
+	"devDependencies": {
+		"@types/k6": "0.52.0",
+		"typescript": "5.5.3"
+	}
+}

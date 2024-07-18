@@ -99,6 +99,9 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 	const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
 
+	// is there a handler
+	// if not start
+	// throw if additional functions are defined
 	if (graphweaver) {
 		graphweaver.start({ host, port: port + 1 });
 		return;

@@ -85,6 +85,10 @@
       "path": "src/packages/end-to-end"
     },
     {
+      "name": "📦 @exogee/graphweaver-load-testing",
+      "path": "src/packages/load-testing"
+    },
+    {
       "name": "📦 @exogee/graphweaver-mikroorm",
       "path": "src/packages/mikroorm"
     },

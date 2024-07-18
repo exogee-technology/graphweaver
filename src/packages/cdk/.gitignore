@@ -1,0 +1,5 @@
+test
+!bin/k6
+bin
+node_modules
+*.log
