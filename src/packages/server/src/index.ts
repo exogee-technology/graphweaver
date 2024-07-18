@@ -231,10 +231,10 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	public async start({ host, port, path }: StartServerOptions): Promise<void> {
 		logger.info(`Graphweaver start called`);
-		await this.server.start();
+		await this.server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
 		const hapi = new Server({
-			host: 'localhost',
+			host: '127.0.0.1',
 			port,
 			routes: {
 				cors: {
@@ -268,7 +268,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			plugin: hapiApollo,
 			options: {
 				apolloServer: this.server,
-				path: '/graphql',
+				path: '/',
 				getRoute: {
 					options: {
 						cors: {
