@@ -985,8 +985,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       inquirer:
-        specifier: 10.0.1
-        version: 10.0.1
+        specifier: 10.0.2
+        version: 10.0.2
       node-semver:
         specifier: 1.0.0
         version: 1.0.0
@@ -12644,8 +12644,8 @@ packages:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
     dev: false
 
-  /inquirer@10.0.1:
-    resolution: {integrity: sha512-XgthhRIn0Ci9JdGJpUo2EtpPfaczbooZbGTN+FTzSCyUb7YHJcPPnuSXfeG5903bJMy3OyEoVTQMnvO4Ly5tFg==}
+  /inquirer@10.0.2:
+    resolution: {integrity: sha512-G5n+WbW7oSF22wjTlQe69cRD8aokNMCtNreX8nVQ1XW1+UMGkaUYISYG0Se4UH2URWupOKAP+xM1CS+QvXqO2g==}
     engines: {node: '>=18'}
     dependencies:
       '@inquirer/prompts': 5.1.3
