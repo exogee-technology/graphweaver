@@ -1,6 +1,7 @@
 {
 	"name": "@exogee/graphweaver-load-testing",
 	"version": "2.0.4",
+	"private": true,
 	"description": "Graphweaver Load Testing Suite",
 	"license": "MIT",
 	"keywords": [
