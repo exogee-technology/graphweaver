@@ -14,7 +14,7 @@
 		"sqlite"
 	],
 	"scripts": {
-		"test": "k6 run src/index.ts"
+		"test": "./bin/k6 run ./src/test.ts"
 	},
 	"dependencies": {
 		"k6": "0.0.0"
