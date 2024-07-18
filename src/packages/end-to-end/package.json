@@ -41,7 +41,7 @@
 		"@mikro-orm/sqlite": "6.2.9",
 		"class-validator": "0.14.1",
 		"dotenv-cli": "7.4.2",
-		"ethers": "6.3.0",
+		"ethers": "6.13.1",
 		"graphql": "16.9.0",
 		"graphweaver": "*",
 		"promisify-child-process": "4.1.2",
