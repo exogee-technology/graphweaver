@@ -78,8 +78,8 @@ export interface GraphweaverConfig {
 
 export type StartServerOptions = {
 	path: string;
-	host: string;
 	port: number;
+	host?: string;
 };
 
 export default class Graphweaver<TContext extends BaseContext> {
@@ -234,79 +234,27 @@ export default class Graphweaver<TContext extends BaseContext> {
 		await this.server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
 		const hapi = new Server({
-			host: '127.0.0.1',
+			host: host ?? '127.0.0.1',
 			port,
-			routes: {
-				cors: {
-					origin: ['*'],
-					credentials: true,
-					headers: [
-						'Content-Type',
-						'X-Amz-Date',
-						'Authorization',
-						'X-Api-Key',
-						'X-Amz-Security-Token',
-						'X-Amz-User-Agent',
-						'Xsrf-Token',
-						'X-Auth-Redirect',
-						'Apollo-Require-Preflight',
-					],
-				},
-			},
 		});
 
-		// hapi.route({
-		// 	method: 'OPTIONS',
-		// 	path,
-		// 	options: {
-
-		// 	},
-		// 	handler: () => 'ok',
-		// });
+		hapi.route({
+			method: 'OPTIONS',
+			path: '/{any*}',
+			handler: async (_, reply) => {
+				const response = reply.response({});
+				// @todo Why is this needed?
+				response.header('Access-Control-Allow-Origin', '*');
+				response.header('Access-Control-Allow-Headers', '*');
+				return response;
+			},
+		});
 
 		await hapi.register({
 			plugin: hapiApollo,
 			options: {
 				apolloServer: this.server,
-				path: '/',
-				getRoute: {
-					options: {
-						cors: {
-							origin: ['*'],
-							credentials: true,
-							headers: [
-								'Content-Type',
-								'X-Amz-Date',
-								'Authorization',
-								'X-Api-Key',
-								'X-Amz-Security-Token',
-								'X-Amz-User-Agent',
-								'Xsrf-Token',
-								'X-Auth-Redirect',
-								'Apollo-Require-Preflight',
-							],
-						},
-					},
-				},
-				postRoute: {
-					options: {
-						cors: {
-							origin: ['*'],
-							credentials: true,
-							headers: [
-								'Content-Type',
-								'X-Amz-Date',
-								'Authorization',
-								'X-Api-Key',
-								'X-Amz-Security-Token',
-								'X-Amz-User-Agent',
-								'Xsrf-Token',
-								'X-Auth-Redirect',
-								'Apollo-Require-Preflight',
-							],
-						},
-					},
-				},
+				path,
 			},
 		});
 
