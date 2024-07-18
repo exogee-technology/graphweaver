@@ -268,7 +268,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			plugin: hapiApollo,
 			options: {
 				apolloServer: this.server,
-				path,
+				path: '/graphql',
 				getRoute: {
 					options: {
 						cors: {
