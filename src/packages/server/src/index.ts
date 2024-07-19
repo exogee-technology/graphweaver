@@ -234,7 +234,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 		await this.server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
 		const hapi = new Server({
-			host: host ?? '127.0.0.1',
+			host: host ?? '::',
 			port,
 		});
 
