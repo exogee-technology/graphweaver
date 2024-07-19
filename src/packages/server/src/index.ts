@@ -1,5 +1,5 @@
 import { Server } from '@hapi/hapi';
-import hapiApollo from '@as-integrations/hapi';
+import hapiApollo, { HapiApolloPluginOptions } from '@as-integrations/hapi';
 import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
@@ -35,6 +35,7 @@ import {
 } from './plugins';
 
 import type { CorsPluginOptions } from './plugins';
+import { ConnectionManager, RequestContext } from '@exogee/graphweaver-mikroorm';
 
 export * from '@apollo/server';
 export { startStandaloneServer } from '@apollo/server/standalone';
@@ -217,6 +218,16 @@ export default class Graphweaver<TContext extends BaseContext> {
 				}
 			});
 		}
+
+		const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
+		this.server.executeHTTPGraphQLRequest = (request) => {
+			const connection = ConnectionManager.database('my');
+			if (!connection) throw new Error('No database connection found');
+			return RequestContext.create(
+				connection.orm.em,
+				() => executeHTTPGraphQLRequest.bind(this.server)(request) as any
+			);
+		};
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {

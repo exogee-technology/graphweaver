@@ -21,6 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
+		"@exogee/graphweaver-mikroorm": "*",
 		"@apollo/server": "4.10.4",
 		"@as-integrations/hapi": "2.0.1",
 		"@as-integrations/aws-lambda": "3.1.0",
