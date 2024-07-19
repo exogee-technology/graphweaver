@@ -15,7 +15,8 @@
 		"sqlite"
 	],
 	"scripts": {
-		"test:metadata": "./bin/k6 run ./src/metadata.ts"
+		"test:metadata": "./bin/k6 run ./src/metadata.ts",
+		"test:create-one": "./bin/k6 run ./src/create-one.ts"
 	},
 	"dependencies": {
 		"@types/node": "20.14.10",
