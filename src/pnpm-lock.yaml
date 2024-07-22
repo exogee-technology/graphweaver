@@ -622,8 +622,8 @@ importers:
         specifier: 2.4.1
         version: 2.4.1(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
       react-resizable-panels:
-        specifier: 2.0.21
-        version: 2.0.21(react-dom@18.3.1)(react@18.3.1)
+        specifier: 2.0.22
+        version: 2.0.22(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@types/graphql-deduplicator':
         specifier: 2.0.2
@@ -16103,8 +16103,8 @@ packages:
       use-sidecar: 1.1.2(@types/react@18.3.3)(react@18.3.1)
     dev: false
 
-  /react-resizable-panels@2.0.21(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-rFRjZ2sJ+iut0hY+5NtIxoIRlQqTWqZ6rMNahaZeZDpRPQyg8xiKjrlvXMq52WswFwpg47GFJcxn7f9uAFnZsQ==}
+  /react-resizable-panels@2.0.22(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-G8x8o7wjQxCG+iF4x4ngKVBpe0CY+DAZ/SaiDoqBEt0yuKJe9OE/VVYMBMMugQ3GyQ65NnSJt23tujlaZZe75A==}
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
