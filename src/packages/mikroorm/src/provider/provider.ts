@@ -670,7 +670,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		return result;
 	}
 
-	public get plugins(): ApolloServerPlugin<BaseContext>[] {
+	public get apolloPlugins(): ApolloServerPlugin<BaseContext>[] {
 		return [ClearDatabaseContext, connectToDatabase(this.connection)];
 	}
 }

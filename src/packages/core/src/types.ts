@@ -131,7 +131,8 @@ export interface BackendProvider<D> {
 	): Promise<AggregationResult>;
 
 	backendProviderConfig?: BackendProviderConfig;
-	plugins?: ApolloServerPlugin<ApolloBaseContext>[];
+	apolloPlugins?: ApolloServerPlugin<ApolloBaseContext>[];
+	graphweaverPlugins?: GraphweaverPlugin[];
 }
 
 // G = GraphQL entity
@@ -278,3 +279,16 @@ export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = (
 	fields,
 	trace,
 }: ResolverOptions<TArgs, TContext>) => Promise<TResult>;
+
+export enum GraphweaverLifecycleEvent {
+	OnRequest = 'ON_REQUEST',
+}
+export type GraphweaverNextFunction = (
+	event: GraphweaverLifecycleEvent,
+	next: GraphweaverNextFunction
+) => void;
+
+export type GraphweaverPlugin = {
+	event: GraphweaverLifecycleEvent;
+	next: GraphweaverNextFunction;
+};

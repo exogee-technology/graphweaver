@@ -1,5 +1,3 @@
-import { Server } from '@hapi/hapi';
-import hapiApollo, { HapiApolloPluginOptions } from '@as-integrations/hapi';
 import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
 import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
@@ -19,6 +17,8 @@ import {
 	BackendProvider,
 	setDisableTracingForRequest,
 	setEnableTracingForRequest,
+	GraphweaverPlugin,
+	GraphweaverLifecycleEvent,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -32,13 +32,13 @@ import {
 	MutexRequestsInDevelopment,
 	corsPlugin,
 	dedupeGraphQL,
-} from './plugins';
+} from './apollo-plugins';
+import { StartServerOptions, startStandaloneServer } from './integrations/fastify';
 
-import type { CorsPluginOptions } from './plugins';
+import type { CorsPluginOptions } from './apollo-plugins';
 import { ConnectionManager, RequestContext } from '@exogee/graphweaver-mikroorm';
 
 export * from '@apollo/server';
-export { startStandaloneServer } from '@apollo/server/standalone';
 
 export type MetadataHookParams<C> = {
 	context: C;
@@ -70,6 +70,7 @@ export interface GraphweaverConfig {
 		typesOutputPath?: string[] | string;
 		watchForFileChangesInPaths?: string[];
 	};
+	plugins?: GraphweaverPlugin[];
 	schemaDirectives?: Record<string, any>;
 	openTelemetry?: {
 		traceProvider?: BackendProvider<unknown>;
@@ -77,15 +78,10 @@ export interface GraphweaverConfig {
 	};
 }
 
-export type StartServerOptions = {
-	path: string;
-	port: number;
-	host?: string;
-};
-
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
 	public schema: GraphQLSchema;
+	private graphweaverPlugins: Set<GraphweaverPlugin> = new Set();
 	private config: GraphweaverConfig = {
 		adminMetadata: { enabled: true },
 		apolloServerOptions: {
@@ -111,12 +107,25 @@ export default class Graphweaver<TContext extends BaseContext> {
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
 
 		for (const metadata of graphweaverMetadata.entities()) {
-			if (metadata.provider?.plugins && metadata.provider.plugins.length > 0) {
+			if (metadata.provider?.apolloPlugins && metadata.provider.apolloPlugins.length > 0) {
 				// only push unique plugins
-				const eMetadataProviderPlugins = metadata.provider.plugins.filter(
+				const eMetadataProviderPlugins = metadata.provider.apolloPlugins.filter(
 					(plugin) => !apolloPlugins.includes(plugin)
 				);
 				apolloPlugins.push(...eMetadataProviderPlugins);
+			}
+		}
+
+		this.graphweaverPlugins = new Set(this.config.plugins ?? []);
+
+		for (const metadata of graphweaverMetadata.entities()) {
+			if (
+				metadata.provider?.graphweaverPlugins &&
+				metadata.provider.graphweaverPlugins.length > 0
+			) {
+				metadata.provider.graphweaverPlugins.forEach((plugin) =>
+					this.graphweaverPlugins.add(plugin)
+				);
 			}
 		}
 
@@ -219,15 +228,29 @@ export default class Graphweaver<TContext extends BaseContext> {
 			});
 		}
 
-		const executeHTTPGraphQLRequest = this.server.executeHTTPGraphQLRequest;
-		this.server.executeHTTPGraphQLRequest = (request) => {
-			const connection = ConnectionManager.database('my');
-			if (!connection) throw new Error('No database connection found');
-			return RequestContext.create(
-				connection.orm.em,
-				() => executeHTTPGraphQLRequest.bind(this.server)(request) as any
-			);
-		};
+		this.graphweaverPlugins.add({
+			event: GraphweaverLifecycleEvent.OnRequest,
+			next: (event, next) => {
+				logger.trace(`Graphweaver OnRequest plugin called`);
+
+				const connection = ConnectionManager.database('my');
+				if (!connection) throw new Error('No database connection found');
+
+				RequestContext.create(connection.orm.em, next);
+			},
+		});
+
+		this.graphweaverPlugins.add({
+			event: GraphweaverLifecycleEvent.OnRequest,
+			next: (event, next) => {
+				logger.trace(`Graphweaver OnRequest plugin called`);
+
+				const connection = ConnectionManager.database('pg');
+				if (!connection) throw new Error('No database connection found');
+
+				RequestContext.create(connection.orm.em, next);
+			},
+		});
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {
@@ -242,35 +265,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 	public async start({ host, port, path }: StartServerOptions): Promise<void> {
 		logger.info(`Graphweaver start called`);
-		await this.server.startInBackgroundHandlingStartupErrorsByLoggingAndFailingAllRequests();
 
-		const hapi = new Server({
-			host: host ?? '::',
-			port,
-		});
+		const onRequestPlugins = [...this.graphweaverPlugins].filter(
+			(plugin) => plugin.event === GraphweaverLifecycleEvent.OnRequest
+		);
 
-		hapi.route({
-			method: 'OPTIONS',
-			path: '/{any*}',
-			handler: async (_, reply) => {
-				const response = reply.response({});
-				// @todo Why is this needed?
-				response.header('Access-Control-Allow-Origin', '*');
-				response.header('Access-Control-Allow-Headers', '*');
-				return response;
-			},
-		});
-
-		await hapi.register({
-			plugin: hapiApollo,
-			options: {
-				apolloServer: this.server,
-				path,
-			},
-		});
-
-		await hapi.start();
-		logger.info(`Server running on ${hapi.info.uri}`);
+		await startStandaloneServer({ host, port, path }, this.server, onRequestPlugins);
 	}
 }
 
