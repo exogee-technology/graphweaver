@@ -13,6 +13,9 @@ import {
 	trace as startTrace,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
+import { Reference } from '@mikro-orm/core';
+import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
+import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 import {
 	LockMode,
@@ -29,10 +32,7 @@ import {
 
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
-
-import { Reference } from '@mikro-orm/core';
-import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
-import { ApolloServerPlugin, BaseContext } from '@apollo/server';
+import { requestContext } from '../plugins/request-context';
 
 type PostgresError = {
 	code: string;
@@ -672,5 +672,13 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 	public get apolloPlugins(): ApolloServerPlugin<BaseContext>[] {
 		return [ClearDatabaseContext, connectToDatabase(this.connection)];
+	}
+
+	public get graphweaverPlugins() {
+		if (!this.connectionManagerId) {
+			throw new Error('Connection manager ID is required for Mikro-Orm backend provider.');
+		}
+
+		return [requestContext(this.connectionManagerId)];
 	}
 }

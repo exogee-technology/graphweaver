@@ -316,4 +316,3 @@ class ConnectionsManager {
 	}
 }
 export const ConnectionManager = new ConnectionsManager();
-export { RequestContext } from '@mikro-orm/core';

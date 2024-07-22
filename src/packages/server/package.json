@@ -26,7 +26,6 @@
 		"@as-integrations/fastify": "2.1.1",
 		"@escape.tech/graphql-armor": "3.0.1",
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "*",
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "9.0.1",
 		"async-mutex": "0.5.0",

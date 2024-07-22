@@ -36,7 +36,6 @@ import {
 import { StartServerOptions, startStandaloneServer } from './integrations/fastify';
 
 import type { CorsPluginOptions } from './apollo-plugins';
-import { ConnectionManager, RequestContext } from '@exogee/graphweaver-mikroorm';
 
 export * from '@apollo/server';
 
@@ -227,30 +226,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 				}
 			});
 		}
-
-		this.graphweaverPlugins.add({
-			event: GraphweaverLifecycleEvent.OnRequest,
-			next: (event, next) => {
-				logger.trace(`Graphweaver OnRequest plugin called`);
-
-				const connection = ConnectionManager.database('my');
-				if (!connection) throw new Error('No database connection found');
-
-				RequestContext.create(connection.orm.em, next);
-			},
-		});
-
-		this.graphweaverPlugins.add({
-			event: GraphweaverLifecycleEvent.OnRequest,
-			next: (event, next) => {
-				logger.trace(`Graphweaver OnRequest plugin called`);
-
-				const connection = ConnectionManager.database('pg');
-				if (!connection) throw new Error('No database connection found');
-
-				RequestContext.create(connection.orm.em, next);
-			},
-		});
 	}
 
 	public handler(): AWSLambda.APIGatewayProxyHandler {
