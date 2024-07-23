@@ -11,7 +11,7 @@ import { RequestContext } from './request-context';
 
 type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 
-type LoadOneOptions<G = unknown, D = unknown> = {
+type LoadOneOptions<G = unknown> = {
 	gqlEntityType: { new (...args: any[]): G };
 	id: string;
 };
@@ -178,7 +178,7 @@ export class BaseLoader {
 	private loadOneLoaderMap: LoaderMap = {};
 	private relatedIdLoaderMap: LoaderMap = {};
 
-	public loadOne<G = unknown, D = unknown>({ gqlEntityType, id }: LoadOneOptions<G, D>) {
+	public loadOne<G = unknown, D = unknown>({ gqlEntityType, id }: LoadOneOptions<G>) {
 		const loader = getBaseLoadOneLoader<G, D>({ gqlEntityType, keyStore: this.loadOneLoaderMap });
 		return loader.load(id);
 	}
@@ -204,14 +204,14 @@ export class BaseLoader {
 const sharedBaseLoader = new BaseLoader();
 
 export const BaseLoaders = {
-	loadOne: <G = unknown, D = unknown>(options: LoadOneOptions<G, D>) => {
+	loadOne: <G = unknown, D = unknown>(options: LoadOneOptions<G>) => {
 		const baseLoader = RequestContext.getBaseLoader();
 
 		if (!baseLoader) {
-			return sharedBaseLoader.loadOne(options);
+			return sharedBaseLoader.loadOne<G, D>(options);
 		}
 
-		return baseLoader.loadOne(options);
+		return baseLoader.loadOne<G, D>(options);
 	},
 	loadByRelatedId: <G = unknown, D = unknown>(options: LoadByRelatedIdOptions<G, D>) => {
 		const baseLoader = RequestContext.getBaseLoader();
