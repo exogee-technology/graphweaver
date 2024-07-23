@@ -117,7 +117,7 @@ export class SchemaEntityFile extends BaseFile {
 			return 'string';
 		}
 
-		return prop.type;
+		return prop.runtimeType;
 	}
 
 	protected getPropertyDefinition(prop: EntityProperty): string {
@@ -158,7 +158,7 @@ export class SchemaEntityFile extends BaseFile {
 			return 'ID';
 		}
 
-		if (prop.type === 'Date') {
+		if (prop.runtimeType === 'Date') {
 			this.scalarImports.add('ISODateStringScalar');
 			return 'ISODateStringScalar';
 		}
@@ -167,7 +167,7 @@ export class SchemaEntityFile extends BaseFile {
 			return 'Date';
 		}
 
-		if (prop.type === 'unknown') {
+		if (prop.runtimeType === 'unknown') {
 			return 'String';
 		}
 
@@ -176,7 +176,7 @@ export class SchemaEntityFile extends BaseFile {
 			return `GraphQLJSON`;
 		}
 
-		if (prop.type.includes('[]')) {
+		if (prop.runtimeType?.includes('[]')) {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
 		}
 
@@ -188,7 +188,7 @@ export class SchemaEntityFile extends BaseFile {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1)}]`;
 		}
 
-		return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+		return prop.runtimeType.charAt(0).toUpperCase() + prop.runtimeType.slice(1);
 	}
 
 	private getPropertyDecorator(prop: EntityProperty): string {
