@@ -124,7 +124,7 @@ export class DataEntityFile extends BaseFile {
 			}
 		}
 
-		return prop.type;
+		return prop.runtimeType;
 	}
 
 	protected getPropertyDefinition(prop: EntityProperty): string {
