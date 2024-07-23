@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react';
 import graphweaver from 'vite-plugin-graphweaver';
-import { InlineConfig } from 'vite';
+import type { InlineConfig } from 'vite';
 import path from 'path';
 
 export interface ViteConfigOptions {
