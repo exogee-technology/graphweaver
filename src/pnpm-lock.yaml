@@ -985,8 +985,8 @@ importers:
         specifier: 0.23.0
         version: 0.23.0
       inquirer:
-        specifier: 10.1.0
-        version: 10.1.0
+        specifier: 10.1.2
+        version: 10.1.2
       node-semver:
         specifier: 1.0.0
         version: 1.0.0
@@ -5796,8 +5796,8 @@ packages:
       ansi-escapes: 4.3.2
     dev: false
 
-  /@inquirer/prompts@5.3.0:
-    resolution: {integrity: sha512-r12wsB23AFTEirWJY8TyMItyfgVB/lk8Hu8gwgOW2+4U5pkiBmUE3mkucz6BRQ2jbvg4jwpbyGSmJ5T/Wo2BRQ==}
+  /@inquirer/prompts@5.3.2:
+    resolution: {integrity: sha512-8Jv+6rbY98ilFAZMYYfetu6XGXF/ZU44i5Z6Jx4t0xmwDh/AihdBV/FgetzDDZZMv5AMW1MT35LI0FiS55LoXw==}
     engines: {node: '>=18'}
     dependencies:
       '@inquirer/checkbox': 2.4.2
@@ -5808,7 +5808,7 @@ packages:
       '@inquirer/number': 1.0.5
       '@inquirer/password': 2.1.17
       '@inquirer/rawlist': 2.1.17
-      '@inquirer/search': 1.0.0
+      '@inquirer/search': 1.0.2
       '@inquirer/select': 2.4.2
     dev: false
 
@@ -5821,8 +5821,8 @@ packages:
       yoctocolors-cjs: 2.1.2
     dev: false
 
-  /@inquirer/search@1.0.0:
-    resolution: {integrity: sha512-hDx//88Ry8UZSiIbJKLhZ93yVETrziKGhhsRr9x3zovqRcjBoNroVpSxTz4wVWfeaq7UWeRCSW5LfoKep5fiiw==}
+  /@inquirer/search@1.0.2:
+    resolution: {integrity: sha512-E/JD3MeJwJeNilOnRDmHGnlUksyVqrTQEUNqkRpioj8J0sVxW7+pFRHBM2coFsiCpvI4XKRRhWsai5VP8rrfrQ==}
     engines: {node: '>=18'}
     dependencies:
       '@inquirer/core': 9.0.5
@@ -12782,11 +12782,11 @@ packages:
     resolution: {integrity: sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==}
     dev: false
 
-  /inquirer@10.1.0:
-    resolution: {integrity: sha512-r298BBoEjWWJbu5LSFTU7Ob+KL3/g5xsGCwNLtSFuIKb6rGeRJMzAwNlcrrbomkxc6ryfRDj8aFV/QC3QZ9cLQ==}
+  /inquirer@10.1.2:
+    resolution: {integrity: sha512-rwoy4e2xFz3rru5Q5695rKXLbNlVfODRhRftBEPdxHfbGzN1T8Fxzszcb//SaRnQHsRdiwR8dOZOV+y4SoZ4KQ==}
     engines: {node: '>=18'}
     dependencies:
-      '@inquirer/prompts': 5.3.0
+      '@inquirer/prompts': 5.3.2
       '@inquirer/type': 1.5.1
       '@types/mute-stream': 0.0.4
       ansi-escapes: 4.3.2
