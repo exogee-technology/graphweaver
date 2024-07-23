@@ -695,8 +695,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@simplewebauthn/server':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 10.0.1
+        version: 10.0.1
       apollo-server-errors:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.9.0)
@@ -7731,8 +7731,8 @@ packages:
       '@simplewebauthn/types': 10.0.0
     dev: false
 
-  /@simplewebauthn/server@10.0.0:
-    resolution: {integrity: sha512-w5eIoiF7ltg1sgggjY5Tx654j+DBuyEx2B3869jjmPp0xl2Z4BUP4kJ3yJ6DnZIv+ZYYntT3E6nZXNjPOQbrtw==}
+  /@simplewebauthn/server@10.0.1:
+    resolution: {integrity: sha512-djNWcRn+H+6zvihBFJSpG3fzb0NQS9c/Mw5dYOtZ9H+oDw8qn9Htqxt4cpqRvSOAfwqP7rOvE9rwqVaoGGc3hg==}
     engines: {node: '>=20.0.0'}
     dependencies:
       '@hexagon/base64': 1.1.28
