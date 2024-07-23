@@ -27,18 +27,17 @@ export const isIntrospectionError = (
 	);
 };
 
-const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') => {
+const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite' | 'rest') => {
 	// We want to read the package.json of gw app so we can ignore this error
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
 	const packageJson = require(path.join(process.cwd(), 'package.json'));
 	const dependencies = Object.keys(packageJson.dependencies ?? {});
 
 	// These dependencies are required to run the
-	const requiredDependencies = [
-		'@exogee/graphweaver-mikroorm',
-		'@mikro-orm/core',
-		`@mikro-orm/${source}`,
-	];
+	const requiredDependencies =
+		source === 'rest'
+			? ['@exogee/graphweaver-rest']
+			: ['@exogee/graphweaver-mikroorm', '@mikro-orm/core', `@mikro-orm/${source}`];
 
 	// hold on to any missing deps
 	const missingDependencies: string[] = [];
@@ -61,7 +60,7 @@ const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') 
 };
 
 export const importDataSource = async (
-	source: 'mysql' | 'postgresql' | 'sqlite',
+	source: 'mysql' | 'postgresql' | 'sqlite' | 'rest',
 	database?: string,
 	host?: string,
 	port?: number,
