@@ -1,4 +1,4 @@
-import { Plugin } from 'vite';
+import type { Plugin } from 'vite';
 import { loadCustomPages, loadCustomFields } from './loaders';
 
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
