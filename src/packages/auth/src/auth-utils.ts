@@ -1,5 +1,6 @@
 import { logger } from '@exogee/logger';
 import { ForbiddenError } from 'apollo-server-errors';
+import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -12,10 +13,8 @@ import {
 	AclMap,
 	buildAccessControlEntryForUser,
 	evaluateAccessControlValue,
-	getAuthorizationContext,
-	getRolesFromAuthorizationContext,
 } from './helper-functions';
-import { Filter, graphweaverMetadata, isEntityMetadata } from '@exogee/graphweaver';
+import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
