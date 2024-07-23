@@ -24,7 +24,7 @@ export const requestContext = (connectionManagerId: string): GraphweaverPlugin =
 			const connection = ConnectionManager.database(connectionManagerId);
 			if (!connection) throw new Error('No database connection found');
 
-			RequestContext.create(connection.orm.em, next);
+			RequestContext.create(connection.orm.em, next, {});
 		},
 	};
 

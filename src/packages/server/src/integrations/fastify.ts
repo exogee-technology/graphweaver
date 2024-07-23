@@ -3,6 +3,7 @@ import { ApolloServer, BaseContext } from '@apollo/server';
 import cors from '@fastify/cors';
 import fastifyApollo, { fastifyApolloDrainPlugin } from '@as-integrations/fastify';
 import { GraphweaverLifecycleEvent, GraphweaverPlugin } from '@exogee/graphweaver';
+import { logger } from '@exogee/logger';
 
 export type StartServerOptions = {
 	path: string;
@@ -22,8 +23,10 @@ const wrapRequest = async (plugins: GraphweaverPlugin[], done: HookHandlerDoneFu
 export const startStandaloneServer = async <TContext extends BaseContext>(
 	{ port, host }: StartServerOptions,
 	apollo: ApolloServer<TContext>,
-	plugins: GraphweaverPlugin[] = []
+	plugins: Set<GraphweaverPlugin>
 ) => {
+	logger.info(`Starting standalone server on ${host ?? '::'}:${port}`);
+
 	const fastify = Fastify({});
 
 	apollo.addPlugin(fastifyApolloDrainPlugin(fastify));
@@ -38,7 +41,13 @@ export const startStandaloneServer = async <TContext extends BaseContext>(
 	await fastify.register(fastifyApollo(apollo), options);
 
 	fastify.addHook('onRequest', (_, __, done) => {
-		wrapRequest(plugins, done);
+		const onRequestPlugins = [...plugins].filter(
+			(plugin) => plugin.event === GraphweaverLifecycleEvent.OnRequest
+		);
+
+		logger.trace('onRequest hook called');
+		console.log(onRequestPlugins);
+		wrapRequest(onRequestPlugins, done);
 	});
 
 	await fastify.listen({

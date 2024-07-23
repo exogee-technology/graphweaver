@@ -19,6 +19,8 @@ import {
 	setEnableTracingForRequest,
 	GraphweaverPlugin,
 	GraphweaverLifecycleEvent,
+	RequestContext,
+	GraphweaverNextFunction,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
@@ -127,6 +129,15 @@ export default class Graphweaver<TContext extends BaseContext> {
 				);
 			}
 		}
+
+		// Add the Graphweaver RequestContext plugin
+		this.graphweaverPlugins.add({
+			event: GraphweaverLifecycleEvent.OnRequest,
+			next: (_: GraphweaverLifecycleEvent, next: GraphweaverNextFunction) => {
+				logger.trace(`Graphweaver OnRequest plugin called`);
+				RequestContext.create(next);
+			},
+		});
 
 		if (this.config.adminMetadata?.enabled) {
 			logger.trace(`Graphweaver adminMetadata is enabled`);
@@ -241,11 +252,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 	public async start({ host, port, path }: StartServerOptions): Promise<void> {
 		logger.info(`Graphweaver start called`);
 
-		const onRequestPlugins = [...this.graphweaverPlugins].filter(
-			(plugin) => plugin.event === GraphweaverLifecycleEvent.OnRequest
-		);
-
-		await startStandaloneServer({ host, port, path }, this.server, onRequestPlugins);
+		await startStandaloneServer({ host, port, path }, this.server, this.graphweaverPlugins);
 	}
 }
 

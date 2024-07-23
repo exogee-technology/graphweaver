@@ -7,9 +7,21 @@ import {
 	isEntityMetadata,
 	isTransformableGraphQLEntityClass,
 } from '.';
+import { RequestContext } from './request-context';
 
-let loadOneLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
-let relatedIdLoaderMap: { [key: string]: DataLoader<string, unknown> } = {};
+type LoaderMap = { [key: string]: DataLoader<string, unknown> };
+
+type LoadOneOptions<G = unknown, D = unknown> = {
+	gqlEntityType: { new (...args: any[]): G };
+	id: string;
+};
+
+type LoadByRelatedIdOptions<G = unknown, D = unknown> = {
+	gqlEntityType: { new (...args: any[]): G };
+	relatedField: keyof D & string;
+	id: string;
+	filter?: Filter<G>;
+};
 
 const getGqlEntityName = (gqlEntityType: any) => {
 	const gqlTypeName = graphweaverMetadata.nameForObjectType(gqlEntityType);
@@ -19,11 +31,17 @@ const getGqlEntityName = (gqlEntityType: any) => {
 	return gqlTypeName;
 };
 
-const getBaseLoadOneLoader = <G = unknown, D = unknown>(gqlEntityType: {
-	new (...args: any[]): G;
+const getBaseLoadOneLoader = <G = unknown, D = unknown>({
+	gqlEntityType,
+	keyStore,
+}: {
+	gqlEntityType: {
+		new (...args: any[]): G;
+	};
+	keyStore: LoaderMap;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
-	if (!loadOneLoaderMap[gqlTypeName]) {
+	if (!keyStore[gqlTypeName]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
 		if (!entity?.provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
@@ -65,21 +83,23 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>(gqlEntityType: {
 			return keys.map((key) => lookup[key]);
 		};
 
-		loadOneLoaderMap[gqlTypeName] = new DataLoader(fetchRecordsById, {
+		keyStore[gqlTypeName] = new DataLoader(fetchRecordsById, {
 			maxBatchSize: entity.provider.maxDataLoaderBatchSize,
 		});
 	}
 
-	return loadOneLoaderMap[gqlTypeName] as DataLoader<string, D>;
+	return keyStore[gqlTypeName] as DataLoader<string, D>;
 };
 
-const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
+export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 	gqlEntityType,
 	relatedField,
+	keyStore,
 	filter,
 }: {
 	gqlEntityType: { new (...args: any[]): G };
 	relatedField: string;
+	keyStore: LoaderMap;
 	filter?: Filter<G>;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
@@ -87,7 +107,7 @@ const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 		filter
 	)}`; /* gqlTypeName-fieldname-filterObject */
 
-	if (!relatedIdLoaderMap[loaderKey]) {
+	if (!keyStore[loaderKey]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
 		if (!entity?.provider) throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
@@ -147,39 +167,68 @@ const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 			return keys.map((key) => lookup[key] || []);
 		};
 
-		relatedIdLoaderMap[loaderKey] = new DataLoader(fetchRecordsByRelatedId, {
+		keyStore[loaderKey] = new DataLoader(fetchRecordsByRelatedId, {
 			maxBatchSize: entity.provider.maxDataLoaderBatchSize,
 		});
 	}
-	return relatedIdLoaderMap[loaderKey] as DataLoader<string, D[]>;
+	return keyStore[loaderKey] as DataLoader<string, D[]>;
 };
 
-export const BaseLoaders = {
-	loadOne: <G = unknown, D = unknown>({
-		gqlEntityType,
-		id,
-	}: {
-		gqlEntityType: { new (...args: any[]): G };
-		id: string;
-	}) => {
-		const loader = getBaseLoadOneLoader<G, D>(gqlEntityType);
+export class BaseLoader {
+	private loadOneLoaderMap: LoaderMap = {};
+	private relatedIdLoaderMap: LoaderMap = {};
+
+	public loadOne<G = unknown, D = unknown>({ gqlEntityType, id }: LoadOneOptions<G, D>) {
+		const loader = getBaseLoadOneLoader<G, D>({ gqlEntityType, keyStore: this.loadOneLoaderMap });
 		return loader.load(id);
-	},
+	}
 
-	loadByRelatedId: <G = unknown, D = unknown>(args: {
-		gqlEntityType: { new (...args: any[]): G };
-		relatedField: keyof D & string;
-		id: string;
-		filter?: Filter<G>;
-	}) => {
-		const loader = getBaseRelatedIdLoader<G, D>(args);
+	public loadByRelatedId<G = unknown, D = unknown>(args: LoadByRelatedIdOptions<G, D>) {
+		this.loadOneLoaderMap;
+
+		const loader = getBaseRelatedIdLoader<G, D>({
+			...args,
+			keyStore: this.relatedIdLoaderMap,
+		});
 		return loader.load(args.id);
-	},
+	}
 
-	clearCache: () => {
+	public clearCache() {
 		logger.trace('Clearing Base Loader DataLoader cache.');
 
-		loadOneLoaderMap = {};
-		relatedIdLoaderMap = {};
+		this.loadOneLoaderMap = {};
+		this.relatedIdLoaderMap = {};
+	}
+}
+
+const sharedBaseLoader = new BaseLoader();
+
+export const BaseLoaders = {
+	loadOne: <G = unknown, D = unknown>(options: LoadOneOptions<G, D>) => {
+		const baseLoader = RequestContext.getBaseLoader();
+
+		if (!baseLoader) {
+			return sharedBaseLoader.loadOne(options);
+		}
+
+		return baseLoader.loadOne(options);
+	},
+	loadByRelatedId: <G = unknown, D = unknown>(options: LoadByRelatedIdOptions<G, D>) => {
+		const baseLoader = RequestContext.getBaseLoader();
+
+		if (!baseLoader) {
+			return sharedBaseLoader.loadByRelatedId(options);
+		}
+
+		return baseLoader.loadByRelatedId(options);
+	},
+	clearCache: () => {
+		const baseLoader = RequestContext.getBaseLoader();
+
+		if (!baseLoader) {
+			return sharedBaseLoader.clearCache();
+		}
+
+		baseLoader.clearCache();
 	},
 };
