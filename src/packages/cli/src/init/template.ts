@@ -28,9 +28,9 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			graphql: '16.9.0',
 		},
 		devDependencies: {
-			'@types/node': '20.14.9',
+			'@types/node': '20.14.11',
 			graphweaver: graphweaverVersion(version, 'graphweaver'),
-			typescript: '5.5.2',
+			typescript: '5.5.4',
 		},
 	};
 
