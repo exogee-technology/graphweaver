@@ -20,7 +20,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "4.10.4",
+		"@apollo/server": "4.10.5",
 		"@as-integrations/hapi": "2.0.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
