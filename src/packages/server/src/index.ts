@@ -1,5 +1,4 @@
 import { GraphQLSchema, OperationDefinitionNode, parse } from 'graphql';
-import { handlers, startServerAndCreateLambdaHandler } from '@as-integrations/aws-lambda';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 import {
@@ -35,7 +34,7 @@ import {
 	corsPlugin,
 	dedupeGraphQL,
 } from './apollo-plugins';
-import { StartServerOptions, startStandaloneServer } from './integrations/fastify';
+import { StartServerOptions, startStandaloneServer, startServerless } from './integrations';
 
 import type { CorsPluginOptions } from './apollo-plugins';
 
@@ -135,7 +134,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 			event: GraphweaverLifecycleEvent.OnRequest,
 			next: (_: GraphweaverLifecycleEvent, next: GraphweaverNextFunction) => {
 				logger.trace(`Graphweaver OnRequest plugin called`);
-				RequestContext.create(next);
+				return RequestContext.create(next);
 			},
 		});
 
@@ -242,17 +241,22 @@ export default class Graphweaver<TContext extends BaseContext> {
 	public handler(): AWSLambda.APIGatewayProxyHandler {
 		logger.info(`Graphweaver handler called`);
 
-		return startServerAndCreateLambdaHandler(
-			// @todo: fix this type, TContext extends BaseContext, this should work
-			this.server as unknown as ApolloServer<BaseContext>,
-			handlers.createAPIGatewayProxyEventRequestHandler()
-		);
+		return startServerless({
+			server: this.server,
+			graphweaverPlugins: this.graphweaverPlugins as Set<
+				GraphweaverPlugin<AWSLambda.APIGatewayProxyResult>
+			>,
+		});
 	}
 
 	public async start({ host, port, path }: StartServerOptions): Promise<void> {
 		logger.info(`Graphweaver start called`);
 
-		await startStandaloneServer({ host, port, path }, this.server, this.graphweaverPlugins);
+		await startStandaloneServer(
+			{ host, port, path },
+			this.server,
+			this.graphweaverPlugins as Set<GraphweaverPlugin<void>>
+		);
 	}
 }
 

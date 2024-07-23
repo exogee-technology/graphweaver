@@ -3,7 +3,7 @@ import {
 	GraphweaverNextFunction,
 	GraphweaverPlugin,
 } from '@exogee/graphweaver';
-import { RequestContext, t } from '@mikro-orm/core';
+import { RequestContext } from '@mikro-orm/core';
 import { ConnectionManager } from '..';
 import { logger } from '@exogee/logger';
 
@@ -24,7 +24,7 @@ export const requestContext = (connectionManagerId: string): GraphweaverPlugin =
 			const connection = ConnectionManager.database(connectionManagerId);
 			if (!connection) throw new Error('No database connection found');
 
-			RequestContext.create(connection.orm.em, next, {});
+			return RequestContext.create(connection.orm.em, next, {});
 		},
 	};
 

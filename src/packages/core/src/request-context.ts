@@ -21,11 +21,10 @@ export class RequestContext {
 	static getBaseLoader(): BaseLoader | undefined {
 		const context = RequestContext.currentRequestContext();
 		logger.trace(`Getting BaseLoader from RequestContext with id: ${context?.id ?? 'undefined'}`);
-		console.log(context);
 		return context ? context.BaseLoader : undefined;
 	}
 
-	static create<T>(next: (...args: any[]) => T): T {
+	static async create<T>(next: (...args: any[]) => T): Promise<T> {
 		const ctx = this.createContext();
 		logger.trace(`Creating RequestContext with ID: ${ctx.id}`);
 		return this.storage.run(ctx, next);
