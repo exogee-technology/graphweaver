@@ -61,7 +61,7 @@ let token: string | undefined;
 
 describe('ACL - Access Control Lists', () => {
 	beforeAll(async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -96,7 +96,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -125,7 +125,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -154,7 +154,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -183,7 +183,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -214,7 +214,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		await graphweaver.server.executeOperation({
+		await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -240,7 +240,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		await graphweaver.server.executeOperation({
+		await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -266,7 +266,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		await graphweaver.server.executeOperation({
+		await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {

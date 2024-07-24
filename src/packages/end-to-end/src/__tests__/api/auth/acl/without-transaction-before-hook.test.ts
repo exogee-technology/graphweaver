@@ -66,7 +66,7 @@ let token: string | undefined;
 
 describe('ACL - Without Transaction Before Hook', () => {
 	beforeAll(async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -94,7 +94,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -116,7 +116,7 @@ describe('ACL - Without Transaction Before Hook', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {

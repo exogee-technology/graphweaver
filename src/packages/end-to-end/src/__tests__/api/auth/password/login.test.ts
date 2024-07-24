@@ -43,7 +43,7 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Login', () => {
 	test('should return a valid user and successfully login.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -71,7 +71,7 @@ describe('Password Authentication - Login', () => {
 	});
 
 	test('should return an error when the password is incorrect.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`

@@ -49,7 +49,7 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Register', () => {
 	test('should create a new user.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			createCredential: { id: string };
 		}>({
 			query: gql`

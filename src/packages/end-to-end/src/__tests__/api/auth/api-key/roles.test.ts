@@ -125,7 +125,7 @@ describe('Role Assignment for API Key Authentication', () => {
 	test('should create task successfully when dark side has all permissions.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_darkside:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				mutation createEntity($input: TaskInsertInput!) {
@@ -148,7 +148,7 @@ describe('Role Assignment for API Key Authentication', () => {
 	test('should return forbidden error when light side only has read permissions.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_lightside:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				mutation createEntity($input: TaskInsertInput!) {

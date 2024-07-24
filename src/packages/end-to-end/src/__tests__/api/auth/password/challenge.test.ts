@@ -95,7 +95,7 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Challenge', () => {
 	test('should return an error to initiate a challenge for a password.', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				mutation updateEntity($input: TaskUpdateInput!) {
 					updateTask(input: $input) {
@@ -117,7 +117,7 @@ describe('Password Authentication - Challenge', () => {
 	});
 
 	test('should return an error to initiate a challenge for a password when updating a nested entity.', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				mutation updateEntity($input: TagUpdateInput!) {
 					updateTag(input: $input) {
@@ -145,7 +145,7 @@ describe('Password Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				mutation challengePassword($password: String!) {
 					result: challengePassword(password: $password) {
@@ -166,7 +166,7 @@ describe('Password Authentication - Challenge', () => {
 
 	test('should step up auth for password after login.', async () => {
 		// 1. Login to the server
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -189,7 +189,7 @@ describe('Password Authentication - Challenge', () => {
 		assert(token);
 
 		// 2. Step up auth to include password MFA
-		const challengeResponse = await graphweaver.server.executeOperation<{
+		const challengeResponse = await graphweaver.executeOperation<{
 			challengePassword: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -221,7 +221,7 @@ describe('Password Authentication - Challenge', () => {
 		expect(payload.exp).toBe(originalPayload.exp);
 
 		// 3. Make a new request with the stepped up auth it should not throw
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
 			query: gql`
 				mutation updateEntity($input: TaskUpdateInput!) {
@@ -246,7 +246,7 @@ describe('Password Authentication - Challenge', () => {
 		MockDate.set(today);
 
 		// 4. Make a new request one hour later with the stepped up auth it should throw as it expired after 30m
-		const expiredResponse = await graphweaver.server.executeOperation({
+		const expiredResponse = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: steppedUpToken }) } as any,
 			query: gql`
 				mutation updateEntity($input: TaskUpdateInput!) {

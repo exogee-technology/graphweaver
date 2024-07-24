@@ -1,4 +1,4 @@
-import { GraphQLSchema } from 'graphql';
+import { DocumentNode, GraphQLSchema } from 'graphql';
 import { ApolloArmor } from '@escape.tech/graphql-armor';
 import {
 	SchemaBuilder,
@@ -13,7 +13,7 @@ import {
 	GraphweaverPlugin,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { ApolloServer, BaseContext } from '@apollo/server';
+import { ApolloServer, BaseContext, GraphQLRequest } from '@apollo/server';
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
 import { LogErrors, LogRequests, corsPlugin, dedupeGraphQL } from './apollo-plugins';
@@ -21,6 +21,11 @@ import { StartServerOptions, startStandaloneServer, startServerless } from './in
 import { GraphweaverConfig, mergeConfig } from './config';
 import { enableTracing } from './trace';
 import { pluginManager } from './plugins';
+import {
+	ExecuteOperationOptions,
+	GraphQLResponse,
+} from '@apollo/server/dist/esm/externalTypes/graphql';
+import { onRequestWrapper } from './integrations/utils';
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
@@ -121,6 +126,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
 
+		this.server.executeOperation;
+
 		if (isTraceable()) enableTracing(this.server);
 	}
 
@@ -143,5 +150,18 @@ export default class Graphweaver<TContext extends BaseContext> {
 			this.server,
 			this.graphweaverPlugins as Set<GraphweaverPlugin<void>>
 		);
+	}
+
+	// This method is used for testing and wraps the Apollo executeOperation inside our request plugins
+	public async executeOperation<TData = Record<string, unknown>>(
+		request: Omit<GraphQLRequest<any>, 'query'> & {
+			query?: string | DocumentNode;
+		},
+		options: ExecuteOperationOptions<TContext> = {}
+	): Promise<GraphQLResponse<TData>> {
+		const plugins = this.graphweaverPlugins as Set<GraphweaverPlugin<GraphQLResponse<any>>>;
+		return onRequestWrapper<GraphQLResponse<any>>(plugins, async () => {
+			return this.server.executeOperation(request, options);
+		});
 	}
 }

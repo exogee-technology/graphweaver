@@ -84,7 +84,7 @@ describe('API Key Authentication', () => {
 	test('should return a E0001 error when no system user is found.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_fail:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				query {
@@ -105,7 +105,7 @@ describe('API Key Authentication', () => {
 	test('should return a E0002 error when API Key has been revoked.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_revoked:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				query {
@@ -126,7 +126,7 @@ describe('API Key Authentication', () => {
 	test('should return a E0003 error when password does not match.', async () => {
 		const base64EncodedCredentials = Buffer.from('test:test_fail').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				query {
@@ -147,7 +147,7 @@ describe('API Key Authentication', () => {
 	test('should return data when using a valid system user.', async () => {
 		const base64EncodedCredentials = Buffer.from('test:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				query {
