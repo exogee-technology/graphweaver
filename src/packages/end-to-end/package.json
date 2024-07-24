@@ -60,7 +60,7 @@
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.2.3",
 		"tsx": "4.16.2",
-		"typescript": "5.5.3"
+		"typescript": "5.5.4"
 	},
 	"keywords": [
 		"graphql",

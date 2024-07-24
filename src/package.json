@@ -43,7 +43,7 @@
 		"eslint-plugin-simple-import-sort": "12.1.1",
 		"prettier": "3.3.3",
 		"turbo": "2.0.9",
-		"typescript": "5.5.3"
+		"typescript": "5.5.4"
 	},
 	"pnpm": {
 		"overrides": {
