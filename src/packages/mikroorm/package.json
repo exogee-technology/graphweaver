@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.4",
+		"@apollo/server": "4.10.5",
 		"@aws-sdk/client-secrets-manager": "3.616.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
@@ -43,7 +43,7 @@
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
 		"ts-node": "10.9.2",
-		"typescript": "5.5.3"
+		"typescript": "5.5.4"
 	},
 	"optionalDependencies": {
 		"@mikro-orm/knex": "6.3.0",
