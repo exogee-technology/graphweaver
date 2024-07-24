@@ -3,7 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { BaseDataProvider, Field, ID, Entity } from '@exogee/graphweaver';
+import { BaseDataProvider, Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
 import { authApolloPlugin, UserProfile, ApiKeyEntity, ApiKey } from '@exogee/graphweaver-auth';
 
 class TaskProvider extends BaseDataProvider<any> {
@@ -36,6 +36,11 @@ enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
 	DARK_SIDE = 'DARK_SIDE',
 }
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'Roles',
+	target: Roles,
+});
 
 class ApiKeyBackendProvider extends BaseDataProvider<ApiKeyEntity<Roles>> {
 	async findOne({ key }: any): Promise<any> {

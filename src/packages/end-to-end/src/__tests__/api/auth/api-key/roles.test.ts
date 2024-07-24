@@ -3,7 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -28,6 +28,11 @@ enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
 	DARK_SIDE = 'DARK_SIDE',
 }
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'Roles',
+	target: Roles,
+});
 
 // Create Entity
 @OrmEntity({ tableName: 'api_key' })
