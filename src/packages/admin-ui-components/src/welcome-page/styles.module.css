@@ -14,9 +14,20 @@
 	max-width: 700px;
 }
 
+.leftPanelHeaderBar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
 .logo {
 	width: 86px;
 	padding: 15px;
+}
+
+.skipLink {
+	font-weight: 400;
+	color: rgba(237, 232, 242, 0.75);
 }
 
 .rightPanel {

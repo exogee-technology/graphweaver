@@ -8,7 +8,7 @@ import {
 import styles from './styles.module.css';
 
 export const WelcomePage = () => (
-	<WelcomePageLayout>
+	<WelcomePageLayout skipPath="/User">
 		<Spacer height={30} />
 		<h2 className={styles.heading}>MySQL / PostgreSQL Example</h2>
 		<Spacer height={30} />
