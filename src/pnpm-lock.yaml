@@ -1021,6 +1021,9 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
+      typescript:
+        specifier: 5.5.4
+        version: 5.5.4
 
   packages/config:
     dependencies:
@@ -1442,6 +1445,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
+      typescript:
+        specifier: 5.5.4
+        version: 5.5.4
 
   packages/storage-provider:
     dependencies:

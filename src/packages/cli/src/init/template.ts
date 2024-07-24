@@ -1,6 +1,12 @@
 import { writeFileSync, mkdirSync } from 'fs';
 import { packagesForBackend } from './backend';
-import { graphweaverVersion } from './constants';
+import {
+	graphweaverVersion,
+	AS_INTEGRATIONS_AWS_LAMBDA_TARGET_VERSION,
+	GRAPHQL_TARGET_VERSION,
+	NODE_TYPES_TARGET_VERSION,
+	TYPESCRIPT_TARGET_VERSION,
+} from './constants';
 import { Backend } from '.';
 
 export const makePackageJson = (projectName: string, backends: Backend[], version?: string) => {
@@ -20,17 +26,17 @@ export const makePackageJson = (projectName: string, backends: Backend[], versio
 			import: 'graphweaver import',
 		},
 		dependencies: {
-			'@as-integrations/aws-lambda': '3.1.0',
+			'@as-integrations/aws-lambda': AS_INTEGRATIONS_AWS_LAMBDA_TARGET_VERSION,
 			'@exogee/graphweaver': graphweaverVersion(version, '@exogee/graphweaver'),
 			'@exogee/graphweaver-scalars': graphweaverVersion(version, '@exogee/graphweaver-scalars'),
 			'@exogee/graphweaver-server': graphweaverVersion(version, '@exogee/graphweaver-server'),
 			...backendPackages,
-			graphql: '16.9.0',
+			graphql: GRAPHQL_TARGET_VERSION,
 		},
 		devDependencies: {
-			'@types/node': '20.14.11',
+			'@types/node': NODE_TYPES_TARGET_VERSION,
 			graphweaver: graphweaverVersion(version, 'graphweaver'),
-			typescript: '5.5.4',
+			typescript: TYPESCRIPT_TARGET_VERSION,
 		},
 	};
 
