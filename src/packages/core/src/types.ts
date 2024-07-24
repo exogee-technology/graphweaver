@@ -280,15 +280,16 @@ export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = (
 	trace,
 }: ResolverOptions<TArgs, TContext>) => Promise<TResult>;
 
-export enum GraphweaverLifecycleEvent {
+export enum GraphweaverRequestEvent {
 	OnRequest = 'ON_REQUEST',
 }
-export type GraphweaverNextFunction<T = unknown> = (
-	event: GraphweaverLifecycleEvent,
-	next: GraphweaverNextFunction<T>
+export type GraphweaverPluginNextFunction<T = unknown> = (
+	event: GraphweaverRequestEvent,
+	next: GraphweaverPluginNextFunction<T>
 ) => Promise<T>;
 
 export type GraphweaverPlugin<T = unknown> = {
-	event: GraphweaverLifecycleEvent;
-	next: GraphweaverNextFunction<T>;
+	name: string;
+	event: GraphweaverRequestEvent;
+	next: GraphweaverPluginNextFunction<T>;
 };

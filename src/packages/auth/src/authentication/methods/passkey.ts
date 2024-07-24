@@ -31,6 +31,7 @@ import {
 	Sort,
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
+import { BaseAuthMethod } from './base-auth-method';
 
 export type { AuthenticatorTransportFuture as PasskeyAuthenticatorTransportFuture } from '@simplewebauthn/types';
 
@@ -119,9 +120,10 @@ const config = {
 	origin: process.env.AUTH_PASSKEY_ORIGIN || 'http://localhost:9000',
 };
 
-export class Passkey {
+export class Passkey extends BaseAuthMethod {
 	private dataProvider: PasskeyDataProvider;
 	constructor({ dataProvider }: { dataProvider: PasskeyDataProvider }) {
+		super();
 		this.dataProvider = dataProvider;
 
 		graphweaverMetadata.addMutation({

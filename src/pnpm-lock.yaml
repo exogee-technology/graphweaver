@@ -691,6 +691,9 @@ importers:
       '@exogee/graphweaver-scalars':
         specifier: workspace:*
         version: link:../scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../server
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
@@ -1273,6 +1276,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../server
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger

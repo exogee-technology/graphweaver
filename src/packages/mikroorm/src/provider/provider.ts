@@ -11,11 +11,14 @@ import {
 	TraceOptions,
 	traceSync,
 	trace as startTrace,
+	GraphweaverRequestEvent,
+	GraphweaverPluginNextFunction,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { Reference } from '@mikro-orm/core';
+import { Reference, RequestContext } from '@mikro-orm/core';
 import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
 import { ApolloServerPlugin, BaseContext } from '@apollo/server';
+import { pluginManager } from '@exogee/graphweaver-server';
 
 import {
 	LockMode,
@@ -32,7 +35,6 @@ import {
 
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
-import { requestContext } from '../plugins/request-context';
 
 type PostgresError = {
 	code: string;
@@ -135,7 +137,29 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
 		this.transactionIsolationLevel = transactionIsolationLevel;
 		this.connection = connection;
+		this.addRequestContext();
 	}
+
+	private addRequestContext = () => {
+		const connectionManagerId = this.connectionManagerId;
+		if (!connectionManagerId) {
+			throw new Error('Expected connectionManagerId to be defined when calling addRequestContext.');
+		}
+
+		const connectionPlugin = {
+			name: connectionManagerId,
+			event: GraphweaverRequestEvent.OnRequest,
+			next: (_: GraphweaverRequestEvent, _next: GraphweaverPluginNextFunction) => {
+				logger.trace(`Graphweaver OnRequest plugin called`);
+
+				const connection = ConnectionManager.database(connectionManagerId);
+				if (!connection) throw new Error('No database connection found');
+
+				return RequestContext.create(connection.orm.em, _next, {});
+			},
+		};
+		pluginManager.addPlugin(connectionPlugin);
+	};
 
 	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<D>) => {
 		// Clean the input and remove any GraphQL classes from the object
@@ -672,13 +696,5 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 	public get apolloPlugins(): ApolloServerPlugin<BaseContext>[] {
 		return [ClearDatabaseContext, connectToDatabase(this.connection)];
-	}
-
-	public get graphweaverPlugins() {
-		if (!this.connectionManagerId) {
-			throw new Error('Connection manager ID is required for Mikro-Orm backend provider.');
-		}
-
-		return [requestContext(this.connectionManagerId)];
 	}
 }

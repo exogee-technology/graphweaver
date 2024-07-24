@@ -1,4 +1,4 @@
-import { GraphweaverLifecycleEvent, GraphweaverPlugin } from '@exogee/graphweaver';
+import { GraphweaverRequestEvent, GraphweaverPlugin } from '@exogee/graphweaver';
 
 type NextFunction<T = unknown> = () => Promise<T>;
 
@@ -14,7 +14,7 @@ const wrapRequest = async <T>(
 	if (!plugin) {
 		throw new Error('Graphweaver Plugin was undefined');
 	}
-	return plugin.next(GraphweaverLifecycleEvent.OnRequest, () => wrapRequest(plugins, next));
+	return plugin.next(GraphweaverRequestEvent.OnRequest, () => wrapRequest(plugins, next));
 };
 
 export const onRequestWrapper = async <T>(
@@ -22,7 +22,7 @@ export const onRequestWrapper = async <T>(
 	next: NextFunction<T>
 ): Promise<T> => {
 	const onRequestPlugins = [...plugins].filter(
-		(plugin) => plugin.event === GraphweaverLifecycleEvent.OnRequest
+		(plugin) => plugin.event === GraphweaverRequestEvent.OnRequest
 	);
 
 	return wrapRequest<T>(onRequestPlugins, next);

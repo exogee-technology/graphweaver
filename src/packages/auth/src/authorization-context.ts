@@ -37,10 +37,9 @@ export class RequestContext {
 	static upsertAuthorizationContext(context: AuthorizationContext) {
 		const authRequestContext = this.currentRequestContext();
 		if (authRequestContext) {
-			let authContext = authRequestContext.context.authContext;
-			if (authContext === undefined) authContext = {};
-			Object.assign(authContext, context);
-			this.storage.enterWith(authRequestContext);
+			if (authRequestContext.context.authContext === undefined)
+				authRequestContext.context.authContext = {};
+			Object.assign(authRequestContext.context.authContext, context);
 		}
 	}
 

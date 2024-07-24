@@ -14,6 +14,7 @@ import { AuthTokenProvider } from '../token';
 import { checkAuthentication } from '../../helper-functions';
 import { ChallengeError } from '../../errors';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
+import { BaseAuthMethod } from './base-auth-method';
 
 export type WalletAddress = {
 	address: string;
@@ -21,7 +22,7 @@ export type WalletAddress = {
 
 type Web3AuthProvider = BackendProvider<AuthenticationBaseEntity<WalletAddress>>;
 
-export class Web3 {
+export class Web3 extends BaseAuthMethod {
 	private provider: Web3AuthProvider;
 	private multiFactorAuthentication: () => Promise<MultiFactorAuthentication>;
 
@@ -32,6 +33,7 @@ export class Web3 {
 		provider: Web3AuthProvider;
 		multiFactorAuthentication: () => Promise<MultiFactorAuthentication>;
 	}) {
+		super();
 		this.provider = provider;
 
 		if (multiFactorAuthentication) {
