@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider, Field, ID, Entity } from '@exogee/graphweaver';
-import { authApolloPlugin, UserProfile, ApiKeyEntity } from '@exogee/graphweaver-auth';
+import { authApolloPlugin, UserProfile, ApiKeyEntity, ApiKey } from '@exogee/graphweaver-auth';
 
 class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
@@ -68,6 +68,12 @@ class ApiKeyBackendProvider extends BaseDataProvider<ApiKeyEntity<Roles>> {
 	}
 }
 const apiKeyDataProvider = new ApiKeyBackendProvider('ApiKey');
+
+new ApiKey<Roles>({
+	provider: apiKeyDataProvider,
+	acl: undefined,
+	roles: Roles,
+});
 
 const graphweaver = new Graphweaver({
 	apolloServerOptions: {

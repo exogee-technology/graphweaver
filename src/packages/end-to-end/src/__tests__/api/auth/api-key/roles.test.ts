@@ -11,6 +11,7 @@ import {
 	authApolloPlugin,
 	UserProfile,
 	ApiKeyEntity,
+	ApiKey,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -89,6 +90,12 @@ export class Task {
 }
 
 const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
+
+new ApiKey<Roles>({
+	provider: apiKeyDataProvider,
+	acl: undefined,
+	roles: Roles,
+});
 
 const graphweaver = new Graphweaver({
 	apolloServerOptions: {
