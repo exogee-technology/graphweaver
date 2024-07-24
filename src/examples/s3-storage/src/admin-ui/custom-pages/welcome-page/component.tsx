@@ -8,7 +8,7 @@ import {
 import styles from './styles.module.css';
 
 export const WelcomePage = () => (
-	<WelcomePageLayout>
+	<WelcomePageLayout skipPath="/Submission">
 		<Spacer height={30} />
 		<h2 className={styles.heading}>S3 Storage Example</h2>
 		<Spacer height={30} />
