@@ -29,5 +29,3 @@ export const graphweaver = new Graphweaver<AuthorizationContext>({
 		instrumentations: [],
 	},
 });
-
-export const handler = graphweaver.handler();

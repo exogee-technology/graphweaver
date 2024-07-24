@@ -13,4 +13,3 @@ export const graphweaver = new Graphweaver({
 		traceProvider,
 	},
 });
-// export const handler = graphweaver.handler();
