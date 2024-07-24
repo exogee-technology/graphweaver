@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.4",
+		"@apollo/server": "4.10.5",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@graphql-tools/utils": "10.3.2",
@@ -43,8 +43,8 @@
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
-		"typescript": "5.5.3",
-		"vitest": "2.0.3"
+		"typescript": "5.5.4",
+		"vitest": "2.0.4"
 	},
 	"keywords": [
 		"graphql",

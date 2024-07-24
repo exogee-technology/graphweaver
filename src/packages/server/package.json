@@ -21,7 +21,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.4",
+		"@apollo/server": "4.10.5",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@as-integrations/fastify": "2.1.1",
 		"@escape.tech/graphql-armor": "3.0.1",
@@ -38,7 +38,8 @@
 		"@escape.tech/graphql-armor-types": "0.6.0",
 		"@types/graphql-deduplicator": "2.0.2",
 		"esbuild": "0.23.0",
-		"glob": "10.4.3"
+		"glob": "10.4.3",
+		"typescript": "5.5.4"
 	},
 	"keywords": [
 		"graphql",
