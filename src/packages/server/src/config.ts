@@ -1,8 +1,25 @@
-import { ApolloServerOptionsWithStaticSchema } from '@apollo/server';
-import { AdminMetadata } from './types';
+import { BaseContext, ApolloServerOptionsWithStaticSchema } from '@apollo/server';
 import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
-import { CorsPluginOptions } from './apollo-plugins';
 import { BackendProvider, GraphweaverPlugin, Instrumentation } from '@exogee/graphweaver';
+
+import { CorsPluginOptions } from './apollo-plugins';
+
+export type MetadataHookParams<C> = {
+	context: C;
+	metadata?: { entities: any; enums: any };
+};
+export interface AdminMetadata {
+	enabled: boolean;
+	config?: any;
+	hooks?: {
+		beforeRead?: <C extends BaseContext>(
+			params: MetadataHookParams<C>
+		) => Promise<MetadataHookParams<C>>;
+		afterRead?: <C extends BaseContext>(
+			params: MetadataHookParams<C>
+		) => Promise<MetadataHookParams<C>>;
+	};
+}
 
 export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
