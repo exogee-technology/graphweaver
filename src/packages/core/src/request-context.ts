@@ -25,13 +25,13 @@ export class RequestContext {
 	}
 
 	static async create<T>(next: (...args: any[]) => T): Promise<T> {
-		const ctx = this.createContext();
+		const ctx = RequestContext.createContext();
 		logger.trace(`Creating RequestContext with ID: ${ctx.id}`);
-		return this.storage.run(ctx, next);
+		return RequestContext.storage.run(ctx, next);
 	}
 
 	static currentRequestContext(): RequestContext | undefined {
-		return this.storage.getStore();
+		return RequestContext.storage.getStore();
 	}
 
 	private static createContext(): RequestContext {

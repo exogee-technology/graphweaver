@@ -29,13 +29,13 @@ export class RequestContext {
 	}
 
 	static async create<T>(next: (...args: any[]) => T): Promise<T> {
-		const ctx = this.createContext();
+		const ctx = RequestContext.createContext();
 		logger.trace(`Creating AuthRequestContext with ID: ${ctx.id}`);
-		return this.storage.run(ctx, next);
+		return RequestContext.storage.run(ctx, next);
 	}
 
 	static upsertAuthorizationContext(context: AuthorizationContext) {
-		const authRequestContext = this.currentRequestContext();
+		const authRequestContext = RequestContext.currentRequestContext();
 		if (authRequestContext) {
 			if (authRequestContext.context.authContext === undefined)
 				authRequestContext.context.authContext = {};
@@ -44,7 +44,7 @@ export class RequestContext {
 	}
 
 	static currentRequestContext(): RequestContext | undefined {
-		return this.storage.getStore();
+		return RequestContext.storage.getStore();
 	}
 
 	private static createContext(): RequestContext {
