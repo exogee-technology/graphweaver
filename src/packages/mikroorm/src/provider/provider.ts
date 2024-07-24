@@ -29,7 +29,6 @@ import {
 	AnyEntity,
 	IsolationLevel,
 	ConnectionOptions,
-	ClearDatabaseContext,
 	connectToDatabase,
 } from '..';
 
@@ -695,6 +694,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	public get apolloPlugins(): ApolloServerPlugin<BaseContext>[] {
-		return [ClearDatabaseContext, connectToDatabase(this.connection)];
+		return [connectToDatabase(this.connection)];
 	}
 }
