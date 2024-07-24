@@ -11,7 +11,7 @@ import {
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
 import { importDataSource } from './import';
-import pkg from '../package.json';
+import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
 import * as path from 'path';
 
@@ -304,7 +304,7 @@ yargs
 			}
 		},
 	})
-	.version(pkg.version)
+	.version(version)
 	.showHelpOnFail(true)
 	.help('help')
 	.command({
