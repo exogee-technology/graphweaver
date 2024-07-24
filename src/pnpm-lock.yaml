@@ -1442,9 +1442,6 @@ importers:
       '@fastify/cors':
         specifier: 9.0.1
         version: 9.0.1
-      async-mutex:
-        specifier: 0.5.0
-        version: 0.5.0
       class-validator:
         specifier: 0.14.1
         version: 0.14.1

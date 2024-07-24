@@ -8,6 +8,9 @@ import {
 	isTransformableGraphQLEntityClass,
 } from '.';
 import { RequestContext } from './request-context';
+import { GraphweaverRequestEvent } from './types';
+
+import type { GraphweaverPlugin, GraphweaverPluginNextFunction } from './types';
 
 type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 
@@ -230,5 +233,14 @@ export const BaseLoaders = {
 		}
 
 		baseLoader.clearCache();
+	},
+};
+
+export const BaseLoaderRequestContextPlugin: GraphweaverPlugin = {
+	name: 'BaseLoaderRequestContextPlugin',
+	event: GraphweaverRequestEvent.OnRequest,
+	next: (_: GraphweaverRequestEvent, _next: GraphweaverPluginNextFunction) => {
+		logger.trace(`Graphweaver OnRequest BaseLoaderRequestContextPlugin called.`);
+		return RequestContext.create(_next);
 	},
 };

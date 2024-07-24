@@ -16,14 +16,7 @@ import { logger } from '@exogee/logger';
 import { ApolloServer, BaseContext } from '@apollo/server';
 import { ApolloServerPluginInlineTrace } from '@apollo/server/plugin/inlineTrace';
 
-import {
-	ClearDataLoaderCache,
-	LogErrors,
-	LogRequests,
-	MutexRequestsInDevelopment,
-	corsPlugin,
-	dedupeGraphQL,
-} from './apollo-plugins';
+import { LogErrors, LogRequests, corsPlugin, dedupeGraphQL } from './apollo-plugins';
 import { StartServerOptions, startStandaloneServer, startServerless } from './integrations';
 import { GraphweaverConfig, mergeConfig } from './config';
 import { enableTracing } from './trace';
@@ -82,10 +75,8 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		// Order is important here
 		const plugins = [
-			MutexRequestsInDevelopment,
 			LogRequests,
 			LogErrors,
-			ClearDataLoaderCache,
 			corsPlugin(this.config.corsOptions),
 			...apolloPlugins,
 			...(this.config.graphqlDeduplicator?.enabled ? [dedupeGraphQL] : []),

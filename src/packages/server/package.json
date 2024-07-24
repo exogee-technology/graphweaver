@@ -28,7 +28,6 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "9.0.1",
-		"async-mutex": "0.5.0",
 		"class-validator": "0.14.1",
 		"decimal.js": "10.4.3",
 		"fastify": "4.28.1",

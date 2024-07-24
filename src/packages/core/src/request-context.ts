@@ -1,7 +1,6 @@
 import { AsyncLocalStorage } from 'async_hooks';
 import { BaseLoader } from './base-loader';
 import { logger } from '@exogee/logger';
-import { GraphweaverRequestEvent, GraphweaverPlugin, GraphweaverPluginNextFunction } from './types';
 
 type Context = {
 	BaseLoaders: BaseLoader;
@@ -43,12 +42,3 @@ export class RequestContext {
 		return new RequestContext(context);
 	}
 }
-
-export const BaseLoaderRequestContextPlugin: GraphweaverPlugin = {
-	name: 'BaseLoaderRequestContextPlugin',
-	event: GraphweaverRequestEvent.OnRequest,
-	next: (_: GraphweaverRequestEvent, _next: GraphweaverPluginNextFunction) => {
-		logger.trace(`Graphweaver OnRequest BaseLoaderRequestContextPlugin called.`);
-		return RequestContext.create(_next);
-	},
-};
