@@ -140,16 +140,16 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${file} = ${prop.type}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.runtimeType}.${prop.default.toUpperCase()};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
 	}
 
 	protected getEnumClassDefinition(enumClassName: string): string {
-		this.coreImports.add('registerEnumType');
+		this.coreImports.add('graphweaverMetadata');
 		this.enumImports.add(enumClassName);
-		return `registerEnumType(${enumClassName}, { name: ${this.quote(enumClassName)} });`;
+		return `graphweaverMetadata.collectEnumInformation({ target: ${enumClassName}, name: ${this.quote(enumClassName)} });`;
 	}
 
 	private getGraphQLPropertyType(prop: EntityProperty): string {
