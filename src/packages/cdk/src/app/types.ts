@@ -29,7 +29,21 @@ export type GraphweaverAppConfig = {
 		// default-src 'self'; connect-src https://${config.api.url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;
 		csp?: string;
 	};
-	api: {
+	ecs?: {
+		// Name of the package containing the Graphweaver API
+		packageName: string;
+		// ARN of the certificate in AWS Certificate Manager to use for the API
+		cert: string;
+		// Custom domain name for the API
+		url: string;
+		// Environment variables to pass to the API Lambda function
+		envVars: Record<string, string>;
+		// Memory size for the API Lambda function, defaults to 256
+		cpuSize?: number;
+		// Memory size for the API Lambda function, defaults to 1024
+		memorySize?: number;
+	};
+	lambda?: {
 		// Name of the package containing the Graphweaver API
 		packageName: string;
 		// ARN of the certificate in AWS Certificate Manager to use for the API

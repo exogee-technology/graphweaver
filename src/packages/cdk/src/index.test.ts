@@ -41,7 +41,7 @@ const graphweaverApp = new GraphweaverApp(stack, 'TestGraphweaver', {
 			},
 		],
 	},
-	api: {
+	lambda: {
 		packageName: '@exogee/graphweaver',
 		cert: 'arn:aws:acm:ap-southeast-2:test:test:test',
 		url: 'api.test.com',

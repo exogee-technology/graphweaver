@@ -12,6 +12,9 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"scripts": {
+		"cdk-bootstrap": "dotenv -- cdk bootstrap -v",
+		"cdk-deploy": "dotenv -- cdk deploy --all",
+		"cdk-synth": "dotenv -- cdk synth",
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
@@ -24,6 +27,9 @@
 		"constructs": "10.3.0"
 	},
 	"devDependencies": {
+		"@digitak/esrun": "3.2.24",
+		"dotenv-cli": "7.2.1",
+		"aws-cdk": "2.150.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@types/node": "20.14.11",
 		"esbuild": "0.23.0",

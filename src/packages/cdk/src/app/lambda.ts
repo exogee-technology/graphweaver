@@ -7,30 +7,32 @@ import { AccessLogFormat, LambdaRestApi, LogGroupLogDestination } from 'aws-cdk-
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
 
-import { DatabaseStack } from './database';
-
 import { GraphweaverAppConfig } from './types';
 
-export class ApiStack extends cdk.Stack {
+export class LambdaStack extends cdk.Stack {
 	public readonly lambda: lambda.Function;
 
 	constructor(
 		scope: Construct,
 		id: string,
-		databaseStack: DatabaseStack,
+		database: {
+			secretFullArn: string;
+			instanceArn: string;
+		},
 		config: GraphweaverAppConfig,
 		props?: cdk.StackProps
 	) {
 		super(scope, id, props);
 
-		if (!databaseStack.dbInstance.secret?.secretFullArn)
-			throw new Error('Missing required secret ARN for database');
+		if (!config.lambda) {
+			throw new Error('Missing required lambda configuration');
+		}
 
 		// Create GraphQL Lambda Function
-		this.lambda = new NodejsFunction(this, `${id}ApiFunction`, {
-			runtime: config.api.runtime ?? lambda.Runtime.NODEJS_20_X,
-			handler: config.api.handler ?? 'index.handler',
-			entry: require.resolve(config.api.packageName),
+		this.lambda = new NodejsFunction(this, `${id}LambdaFunction`, {
+			runtime: config.lambda.runtime ?? lambda.Runtime.NODEJS_20_X,
+			handler: config.lambda.handler ?? 'index.handler',
+			entry: require.resolve(config.lambda.packageName),
 			bundling: {
 				externalModules: [
 					'sqlite3',
@@ -48,21 +50,19 @@ export class ApiStack extends cdk.Stack {
 			vpcSubnets: {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
 			},
-			memorySize: config.api.memorySize ?? 1024,
+			memorySize: config.lambda.memorySize ?? 1024,
 			architecture: lambda.Architecture.ARM_64,
 			environment: {
 				NODE_EXTRA_CA_CERTS: '/var/runtime/ca-cert.pem',
-				DATABASE_SECRET_ARN: databaseStack.dbInstance.secret.secretFullArn,
-				...config.api.envVars,
+				DATABASE_SECRET_ARN: database.secretFullArn,
+				...config.lambda.envVars,
 			},
-			timeout: cdk.Duration.seconds(config.api.timeout ?? 10),
+			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
 		});
 
-		databaseStack.dbInstance.secret.grantRead(this.lambda);
+		const apiLogging = new LogGroup(this, `${id}LambdaFunctionLogging`);
 
-		const apiLogging = new LogGroup(this, `${id}ApiFunctionLogging`);
-
-		const certificateArn = config.api.cert;
+		const certificateArn = config.lambda.cert;
 		const certificate = Certificate.fromCertificateArn(
 			this,
 			`${id}ApiCertificateImported`,
@@ -71,7 +71,7 @@ export class ApiStack extends cdk.Stack {
 
 		const rest = new LambdaRestApi(this, `${id}ApiGateway`, {
 			domainName: {
-				domainName: config.api.url,
+				domainName: config.lambda.url,
 				certificate,
 			},
 			deployOptions: {
