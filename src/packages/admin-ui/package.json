@@ -44,7 +44,7 @@
 		"glob": "10.4.3",
 		"typescript": "5.5.4",
 		"vite-plugin-svgr": "4.2.0",
-		"vite": "5.3.4"
+		"vite": "5.3.5"
 	},
 	"keywords": [
 		"graphql",
