@@ -19,7 +19,7 @@ export const startStandaloneServer = async <TContext extends BaseContext>(
 ) => {
 	logger.info(`Starting standalone server on ${host ?? '::'}:${port}`);
 
-	const fastify = Fastify({});
+	const fastify = Fastify();
 
 	apollo.addPlugin(fastifyApolloDrainPlugin(fastify));
 

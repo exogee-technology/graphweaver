@@ -204,14 +204,12 @@ export class BaseLoader {
 	}
 }
 
-const sharedBaseLoader = new BaseLoader();
-
 export const BaseLoaders = {
 	loadOne: <G = unknown, D = unknown>(options: LoadOneOptions<G>) => {
 		const baseLoader = RequestContext.getBaseLoader();
 
 		if (!baseLoader) {
-			return sharedBaseLoader.loadOne<G, D>(options);
+			throw new Error('BaseLoader not found in RequestContext');
 		}
 
 		return baseLoader.loadOne<G, D>(options);
@@ -220,7 +218,7 @@ export const BaseLoaders = {
 		const baseLoader = RequestContext.getBaseLoader();
 
 		if (!baseLoader) {
-			return sharedBaseLoader.loadByRelatedId(options);
+			throw new Error('BaseLoader not found in RequestContext');
 		}
 
 		return baseLoader.loadByRelatedId(options);
@@ -229,7 +227,7 @@ export const BaseLoaders = {
 		const baseLoader = RequestContext.getBaseLoader();
 
 		if (!baseLoader) {
-			return sharedBaseLoader.clearCache();
+			throw new Error('BaseLoader not found in RequestContext');
 		}
 
 		baseLoader.clearCache();
