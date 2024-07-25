@@ -115,7 +115,7 @@ export class Artist {
 test('Test the decorator adminUISettings', async () => {
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		result: {
 			entities: AdminUiEntityMetadata[];
 		};

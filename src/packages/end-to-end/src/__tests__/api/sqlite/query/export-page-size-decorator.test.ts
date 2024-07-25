@@ -66,7 +66,7 @@ export class Artist {
 test('Should return exportPageSize attribute for each entity in getAdminUiMetadata', async () => {
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		result: {
 			entities: AdminUiEntityMetadata[];
 		};

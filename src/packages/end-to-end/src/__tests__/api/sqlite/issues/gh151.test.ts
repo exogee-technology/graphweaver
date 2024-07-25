@@ -77,7 +77,7 @@ describe('RelationshipField', () => {
 	test('should not get error on buildSchema when object type name is not same as entity', async () => {
 		const graphweaver = new Graphweaver();
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			testAlbums: { id: string; renamedArtist: { id: string } }[];
 		}>({
 			query: gql`

@@ -86,7 +86,7 @@ describe('Root Aggregation', () => {
 	const graphweaver = new Graphweaver();
 
 	test('should correctly aggregate root album queries with no filter', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums_aggregate {
@@ -104,7 +104,7 @@ describe('Root Aggregation', () => {
 	});
 
 	test('should correctly aggregate root album queries with a filter', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums_aggregate(

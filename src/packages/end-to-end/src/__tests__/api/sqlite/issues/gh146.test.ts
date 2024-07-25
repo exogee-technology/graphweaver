@@ -79,7 +79,7 @@ describe('RelationshipField', () => {
 	test('should not get error on buildSchema when relationship field name is not same as entity', async () => {
 		const graphweaver = new Graphweaver();
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums {
