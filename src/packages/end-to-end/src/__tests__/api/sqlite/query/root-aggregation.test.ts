@@ -11,7 +11,7 @@ import {
 	Ref,
 } from '@mikro-orm/core';
 import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -86,7 +86,8 @@ describe('Root Aggregation', () => {
 	const graphweaver = new Graphweaver();
 
 	test('should correctly aggregate root album queries with no filter', async () => {
-		const response = await graphweaver.server.executeOperation({
+		await ConnectionManager.connect('sqlite', connection);
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums_aggregate {
@@ -104,7 +105,7 @@ describe('Root Aggregation', () => {
 	});
 
 	test('should correctly aggregate root album queries with a filter', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums_aggregate(

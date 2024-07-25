@@ -239,7 +239,7 @@ class DatabaseImplementation {
 
 		const orm = await MikroORM.init({
 			validateRequired: false, // Since v5, new entities are validated on runtime (just before executing insert queries), based on the entity metadata
-
+			contextName: connectionOptions?.connectionManagerId ?? 'default',
 			implicitTransactions: false,
 			metadataProvider: ReflectMetadataProvider,
 			discovery: {

@@ -96,6 +96,20 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	await Promise.all([checkNativeModules, buildBackend]);
 
+	const buildDir = path.posix.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+	const { graphweaver, handler } = await import(buildDir);
+
+	if (!handler) {
+		if (additionalFunctions.length > 0) {
+			throw new Error(
+				'Additional functions are defined but no handler is exported. Please export a handler function to run Graphweaver in serverless mode.'
+			);
+		}
+
+		graphweaver.start({ host, port: port + 1, path: '/' });
+		return;
+	}
+
 	// Are there any custom additional functions we need to build?
 	for (const additionalFunction of additionalFunctions) {
 		if (
@@ -169,7 +183,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 					'serverless-offline': {
 						noPrependStageInUrl: true,
 						useInProcess: true,
-						...(host ? { host } : {}),
+						...{ host: host ?? '::' },
 						...(port
 							? {
 									httpPort: port + 1,

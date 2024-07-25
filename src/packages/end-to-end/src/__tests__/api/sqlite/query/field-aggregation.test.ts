@@ -11,7 +11,7 @@ import {
 	Ref,
 } from '@mikro-orm/core';
 import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -86,7 +86,8 @@ describe('Field Aggregation', () => {
 	const graphweaver = new Graphweaver();
 
 	test('should correctly aggregate nested artist queries with no filter', async () => {
-		const response = await graphweaver.server.executeOperation({
+		await ConnectionManager.connect('sqlite', connection);
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums(pagination: { orderBy: { albumId: ASC }, limit: 2 }) {
@@ -108,7 +109,7 @@ describe('Field Aggregation', () => {
 	});
 
 	test('should correctly aggregate nested album queries with no filter', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					artists(pagination: { orderBy: { artistId: ASC }, limit: 3 }) {

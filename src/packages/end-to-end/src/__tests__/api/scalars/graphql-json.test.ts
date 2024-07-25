@@ -43,7 +43,7 @@ describe('GraphQL JSON Scalar Type', () => {
 
 		const graphweaver = new Graphweaver();
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					users {
