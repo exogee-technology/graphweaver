@@ -9,5 +9,3 @@ export const graphweaver = new Graphweaver({
 		plugins: [XeroAuthApolloPlugin],
 	},
 });
-
-export const handler = graphweaver.handler();

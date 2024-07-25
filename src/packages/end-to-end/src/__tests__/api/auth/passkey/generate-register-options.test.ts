@@ -70,7 +70,7 @@ const graphweaver = new Graphweaver({
 
 describe('passkey registration', () => {
 	it('should allow the registration of a device', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -92,7 +92,7 @@ describe('passkey registration', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			result: PublicKeyCredentialCreationOptionsJSON;
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,

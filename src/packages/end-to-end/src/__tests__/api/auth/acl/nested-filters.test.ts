@@ -114,7 +114,7 @@ let token: string | undefined;
 
 describe('ACL - Nested Filters', () => {
 	beforeAll(async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -144,7 +144,7 @@ describe('ACL - Nested Filters', () => {
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 		const spyOnTrackDataProvider = jest.spyOn(trackDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query artists {

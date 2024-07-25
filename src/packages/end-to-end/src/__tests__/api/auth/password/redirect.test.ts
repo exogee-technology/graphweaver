@@ -43,7 +43,7 @@ const graphweaver = new Graphweaver({
 
 describe('Password Authentication - Redirect', () => {
 	test('should redirect an unauthenticated user to the login screen.', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				{
 					_graphweaver {

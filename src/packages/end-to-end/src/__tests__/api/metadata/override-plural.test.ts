@@ -20,7 +20,7 @@ test('should return fishes as plural name when overridden', async () => {
 	}
 
 	const graphweaver = new Graphweaver();
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		_graphweaver: {
 			entities: [{ name: string; plural: string }];
 		};
@@ -43,7 +43,7 @@ test('should return fishes as plural name when overridden', async () => {
 	);
 	expect(filteredEntities).toMatchObject([{ name: 'Fish', plural: 'Fishes' }]);
 
-	const introspection = await graphweaver.server.executeOperation<{
+	const introspection = await graphweaver.executeOperation<{
 		__schema: { types: { name: string; fields: { name: string }[] }[] };
 	}>({
 		query: gql`

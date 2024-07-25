@@ -11,7 +11,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 import { Field, ID, Entity, RelationshipField, AdminUiEntityMetadata } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -78,8 +78,9 @@ export class Artist {
 
 test('Should return isArray = true if field property is defined as array', async () => {
 	const graphweaver = new Graphweaver();
+	await ConnectionManager.connect('sqlite', connection);
 
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		result: {
 			entities: AdminUiEntityMetadata[];
 		};

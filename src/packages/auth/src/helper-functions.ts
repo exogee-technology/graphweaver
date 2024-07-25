@@ -18,9 +18,7 @@ import {
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 import { ChallengeError } from './errors';
 import { getRulesForRoles } from './utils/get-rules-for-roles';
-
-type AuthContext<T extends AuthorizationContext | undefined> = T;
-let authContext: AuthContext<undefined> | AuthContext<AuthorizationContext> = undefined;
+import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
 
 const DEFAULT_ADMIN_ROLE_NAME = 'ADMINISTRATOR';
 let administratorRoleName = DEFAULT_ADMIN_ROLE_NAME;
@@ -57,33 +55,6 @@ export function getAdministratorRoleName() {
 		);
 	}
 	return administratorRoleName;
-}
-
-export function upsertAuthorizationContext(context: AuthorizationContext) {
-	if (authContext === undefined) authContext = {};
-	Object.assign(authContext, context);
-}
-
-export function clearAuthorizationContext() {
-	authContext = undefined;
-}
-
-export function getAuthorizationContext() {
-	return authContext;
-}
-
-export function getRolesFromAuthorizationContext() {
-	if (!authContext) {
-		throw new Error('Authorization context not set');
-	}
-	if (
-		!authContext.user?.roles ||
-		!Array.isArray(authContext.user?.roles) ||
-		authContext.user?.roles.length === 0
-	) {
-		throw new Error('Currently logged in user has no roles');
-	}
-	return authContext.user.roles;
 }
 
 /**
@@ -202,6 +173,8 @@ export const evaluateAccessControlValue = async <G, TContext extends Authorizati
 		consolidatedAccessControlValue.length > 0
 	) {
 		logger.trace(`Got permission filters: `, consolidatedAccessControlValue);
+
+		const authContext = getAuthorizationContext();
 
 		if (!authContext) {
 			throw new Error('Authorisation context provider not initialised');

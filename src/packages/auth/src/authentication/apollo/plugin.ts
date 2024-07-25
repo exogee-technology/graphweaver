@@ -5,16 +5,13 @@ import { AuthenticationError } from 'apollo-server-errors';
 
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
-import {
-	AclMap,
-	requireEnvironmentVariable,
-	upsertAuthorizationContext,
-} from '../../helper-functions';
+import { AclMap, requireEnvironmentVariable } from '../../helper-functions';
 import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
 import { registerAccessControlListHook } from '../../decorators';
 import { ApiKeyProvider } from '../methods';
+import { upsertAuthorizationContext } from '../../authorization-context';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 

@@ -9,6 +9,7 @@ import { AuthenticationBaseEntity } from '../entities';
 import { Token } from '../entities/token';
 import { AuthTokenProvider } from '../token';
 import { ChallengeError } from '../../errors';
+import { BaseAuthMethod } from './base-auth-method';
 
 export interface OneTimePasswordData {
 	code: string;
@@ -45,11 +46,12 @@ const createCode = () =>
 		specialChars: false,
 	});
 
-export class OneTimePassword {
+export class OneTimePassword extends BaseAuthMethod {
 	private provider: OneTimePasswordProvider;
 	private sendOTP: (otp: OneTimePasswordEntity) => Promise<boolean>;
 
 	constructor({ sendOTP, provider }: OneTimePasswordOptions) {
+		super();
 		this.provider = provider;
 		this.sendOTP = sendOTP;
 
