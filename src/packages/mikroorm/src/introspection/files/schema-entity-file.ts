@@ -171,6 +171,11 @@ export class SchemaEntityFile extends BaseFile {
 			return 'String';
 		}
 
+		if (prop.runtimeType === 'bigint') {
+			this.scalarImports.add('GraphQLBigInt');
+			return 'GraphQLBigInt';
+		}
+
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
 			this.scalarImports.add('GraphQLJSON');
 			return `GraphQLJSON`;
