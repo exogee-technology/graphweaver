@@ -83,6 +83,10 @@ CREATE TABLE "Invoice"
     "BillingCountry" VARCHAR(40),
     "BillingPostalCode" VARCHAR(10),
     "Total" NUMERIC(10,2) NOT NULL,
+    -- This default isn't a very realistic example, but it's here to test whether our enum generation:
+    -- a) Correctly handles the dash in 'partially-paid'
+    -- b) Generates both DB entities and schema entities with correct identifiers for the default.
+    "PaymentStatus" TEXT DEFAULT 'partially-paid' CHECK ("PaymentStatus" IN ('unpaid', 'partially-paid', 'paid')),
     CONSTRAINT "PK_Invoice" PRIMARY KEY  ("InvoiceId")
 );
 
