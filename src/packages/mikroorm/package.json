@@ -24,6 +24,7 @@
 		"@apollo/server": "4.10.5",
 		"@aws-sdk/client-secrets-manager": "3.616.0",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.2",
 		"decimal.js": "10.4.3",

@@ -23,6 +23,7 @@ import {
 import { hashPassword, verifyPassword } from '../../utils/argon2id';
 import { AuthTokenProvider } from '../token';
 import { AclMap } from '../../helper-functions';
+import { BaseAuthMethod } from './base-auth-method';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
@@ -69,7 +70,7 @@ export type PasswordOptions<D extends CredentialStorage> = {
 	onUserRegistered?(userId: string, context: AuthorizationContext): Promise<null>;
 };
 
-export class Password<D extends CredentialStorage> {
+export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 	private provider: BackendProvider<CredentialStorage>;
 	private getUserProfile: (
 		id: string,
@@ -89,6 +90,7 @@ export class Password<D extends CredentialStorage> {
 		onUserAuthenticated,
 		onUserRegistered,
 	}: PasswordOptions<D>) {
+		super();
 		this.provider = provider;
 		this.transactional = !!provider.withTransaction;
 		this.getUserProfile = getUserProfile;

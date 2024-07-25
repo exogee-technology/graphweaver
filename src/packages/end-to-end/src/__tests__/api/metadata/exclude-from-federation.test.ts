@@ -33,7 +33,7 @@ test('should include User in the schema but not in the federation _service { sdl
 	const graphweaver = new Graphweaver({ federationSubgraphName: 'test' });
 
 	// Federation _service { sdl } query should not include User
-	const response = await graphweaver.server.executeOperation<{ _service: { sdl: string } }>({
+	const response = await graphweaver.executeOperation<{ _service: { sdl: string } }>({
 		query: gql`
 			query {
 				_service {
@@ -64,7 +64,7 @@ test('should include User in the schema but not in the federation _service { sdl
 	expect(taskType.fields?.[0].name.value).toBe('id');
 
 	// But the normal introspection should
-	const introspection = await graphweaver.server.executeOperation<{
+	const introspection = await graphweaver.executeOperation<{
 		__schema: { types: { name: string; fields: { name: string }[] }[] };
 	}>({
 		query: gql`
