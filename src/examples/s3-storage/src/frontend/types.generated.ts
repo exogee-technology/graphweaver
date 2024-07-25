@@ -153,6 +153,9 @@ export type GraphweaverMediasListFilter = {
   filename_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   filename_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   filename_null?: InputMaybe<Scalars['Boolean']['input']>;
+  type?: InputMaybe<MediaType>;
+  type_in?: InputMaybe<Array<MediaType>>;
+  type_nin?: InputMaybe<Array<MediaType>>;
   url?: InputMaybe<Scalars['String']['input']>;
   url_gt?: InputMaybe<Scalars['String']['input']>;
   url_gte?: InputMaybe<Scalars['String']['input']>;

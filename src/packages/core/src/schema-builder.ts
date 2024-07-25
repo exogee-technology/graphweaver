@@ -490,6 +490,16 @@ const filterTypeForEntity = (
 								type: filterTypeForEntity(metadata, entityFilter),
 							};
 						}
+					} else if (isEnumMetadata(metadata)) {
+						const enumFieldType = graphQLTypeForEnum(metadata, entityFilter);
+
+						// Enums get basic and array operations.
+						fields[field.name] = { type: enumFieldType };
+						for (const operation of arrayOperations) {
+							fields[`${field.name}_${operation}`] = {
+								type: new GraphQLList(new GraphQLNonNull(enumFieldType)),
+							};
+						}
 					} else if (isScalarType(fieldType)) {
 						// Scalars get a basic operation.
 						fields[field.name] = { type: fieldType };

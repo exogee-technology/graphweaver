@@ -1,13 +1,15 @@
-import { Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { User as OrmUser } from '../entities';
+import { User as OrmUser, UserStatus } from '../entities';
 import { pgConnection } from '../database';
+
+graphweaverMetadata.collectEnumInformation({ target: UserStatus, name: 'UserStatus' });
 
 @Entity<User>('User', {
 	provider: new MikroBackendProvider(OrmUser, pgConnection),
 	adminUIOptions: {
-		defaultFilter: { deleted: false },
+		defaultFilter: { status: UserStatus.ACTIVE },
 		summaryField: 'username',
 	},
 })
@@ -21,6 +23,6 @@ export class User {
 	@Field(() => String)
 	email!: string;
 
-	@Field(() => Boolean, { defaultValue: false })
-	deleted!: boolean;
+	@Field(() => UserStatus, { defaultValue: UserStatus.ACTIVE })
+	status!: UserStatus;
 }
