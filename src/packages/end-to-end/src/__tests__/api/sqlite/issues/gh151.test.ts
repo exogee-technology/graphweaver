@@ -10,7 +10,7 @@ import {
 	PrimaryKey,
 } from '@mikro-orm/core';
 import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { resetDatabase } from '../../../../utils';
 
@@ -76,6 +76,7 @@ describe('RelationshipField', () => {
 
 	test('should not get error on buildSchema when object type name is not same as entity', async () => {
 		const graphweaver = new Graphweaver();
+		await ConnectionManager.connect('sqlite', connection);
 
 		const response = await graphweaver.executeOperation<{
 			testAlbums: { id: string; renamedArtist: { id: string } }[];
