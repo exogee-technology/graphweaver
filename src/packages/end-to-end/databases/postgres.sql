@@ -83,7 +83,7 @@ CREATE TABLE "Invoice"
     "BillingCountry" VARCHAR(40),
     "BillingPostalCode" VARCHAR(10),
     "Total" NUMERIC(10,2) NOT NULL,
-    "PaymentStatus" TEXT DEFAULT 'unpaid' CHECK ("PaymentStatus" IN ('unpaid', 'partially-paid', 'paid'))
+    "PaymentStatus" TEXT DEFAULT 'unpaid' CHECK ("PaymentStatus" IN ('unpaid', 'partially-paid', 'paid')),
     CONSTRAINT "PK_Invoice" PRIMARY KEY  ("InvoiceId")
 );
 
