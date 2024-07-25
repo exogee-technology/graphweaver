@@ -96,7 +96,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 
 	await Promise.all([checkNativeModules, buildBackend]);
 
-	const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+	const buildDir = path.posix.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver, handler } = await import(buildDir);
 
 	if (!handler) {
