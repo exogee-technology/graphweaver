@@ -183,7 +183,7 @@ export const startBackend = async ({ host, port }: BackendStartOptions) => {
 					'serverless-offline': {
 						noPrependStageInUrl: true,
 						useInProcess: true,
-						...(host ? { host } : { host: '::' }),
+						...{ host: host ?? '::' },
 						...(port
 							? {
 									httpPort: port + 1,
