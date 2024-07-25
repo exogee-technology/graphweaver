@@ -8,7 +8,7 @@ import type {
 import { ReferenceKind, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
-import { pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
+import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import pluralize from 'pluralize';
 
 export class SchemaEntityFile extends BaseFile {
@@ -140,7 +140,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${file} = ${prop.runtimeType}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.runtimeType}.${identifierForEnumValue(prop.default)};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
