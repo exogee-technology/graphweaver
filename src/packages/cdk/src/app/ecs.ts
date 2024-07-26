@@ -12,6 +12,8 @@ import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
 
 export class EcsStack extends cdk.Stack {
+	public readonly service: ApplicationLoadBalancedEc2Service;
+
 	constructor(
 		scope: Construct,
 		id: string,
@@ -66,7 +68,7 @@ export class EcsStack extends cdk.Stack {
 		taskRole.addToPolicy(secretsManagerPolicy);
 		taskRole.addToPolicy(rdsAccessPolicy);
 
-		const service = new ApplicationLoadBalancedEc2Service(scope, `${id}ALBService`, {
+		this.service = new ApplicationLoadBalancedEc2Service(scope, `${id}ALBService`, {
 			cluster,
 
 			taskImageOptions: {
@@ -93,7 +95,7 @@ export class EcsStack extends cdk.Stack {
 		});
 
 		// Our health check is at a different path than /
-		service.targetGroup.configureHealthCheck({
+		this.service.targetGroup.configureHealthCheck({
 			path: '/health',
 		});
 	}

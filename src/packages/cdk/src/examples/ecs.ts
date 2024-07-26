@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 const app = new App();
 
 // Start by defining the network stack this will setup the VPC and security groups
-export class NetworkStack extends cdk.Stack {
+class NetworkStack extends cdk.Stack {
 	public readonly vpc: ec2.Vpc;
 	public readonly graphqlSecurityGroup: ec2.SecurityGroup;
 	public readonly databaseSecurityGroup: ec2.SecurityGroup;
@@ -32,7 +32,7 @@ export class NetworkStack extends cdk.Stack {
 const networkStack = new NetworkStack(app, 'MyNetworkStack');
 
 // Create the GraphweaverApp
-new GraphweaverApp(app, 'TestGraphweaverDocker', {
+export const graphweaverApp = new GraphweaverApp(app, 'TestGraphweaverDocker', {
 	name: 'testDocker',
 	network: {
 		vpc: networkStack.vpc,

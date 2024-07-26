@@ -1,12 +1,14 @@
 import { describe, test } from 'vitest';
 import { Match, Template } from 'aws-cdk-lib/assertions';
-import { graphweaverApp } from './lambda';
+import { graphweaverApp } from './ecs';
 
 const websiteTemplate = Template.fromStack(graphweaverApp.website);
 const apiTemplate = Template.fromStack(graphweaverApp.api);
 const databaseTemplate = Template.fromStack(graphweaverApp.database);
 
-describe('GraphweaverApp - API Deployed to Lambda', () => {
+console.log(JSON.stringify(apiTemplate));
+
+describe('GraphweaverApp - API Deployed to ECS', () => {
 	test('AdminUI', () => {
 		// Should create a S3 bucket to host the Admin UI
 		websiteTemplate.resourceCountIs('AWS::S3::Bucket', 1);
@@ -68,85 +70,7 @@ describe('GraphweaverApp - API Deployed to Lambda', () => {
 		});
 	});
 
-	test('API', () => {
-		apiTemplate.resourceCountIs('AWS::Lambda::Function', 1);
-		apiTemplate.hasResourceProperties('AWS::Lambda::Function', {
-			Architectures: ['arm64'],
-			Environment: {
-				Variables: {
-					TEST_ENV_VAR: 'test',
-				},
-			},
-			MemorySize: 512,
-			VpcConfig: {
-				SecurityGroupIds: [
-					{
-						'Fn::ImportValue': Match.stringLikeRegexp('GraphQLSecurityGroup'),
-					},
-				],
-			},
-		});
-
-		apiTemplate.resourceCountIs('AWS::ApiGateway::RestApi', 1);
-		apiTemplate.resourceCountIs('AWS::ApiGateway::DomainName', 1);
-		apiTemplate.hasResourceProperties('AWS::ApiGateway::DomainName', {
-			DomainName: 'api.test.com',
-			RegionalCertificateArn: 'arn:aws:acm:ap-southeast-2:test:test:test',
-		});
-
-		apiTemplate.resourceCountIs('AWS::ApiGateway::Method', 4);
-		apiTemplate.hasResourceProperties('AWS::ApiGateway::Method', {
-			HttpMethod: 'OPTIONS',
-			Integration: {
-				IntegrationResponses: [
-					{
-						ResponseParameters: {
-							'method.response.header.Access-Control-Allow-Origin': "'https://admin-ui.test.com'",
-							'method.response.header.Access-Control-Allow-Methods': "'GET,POST,OPTIONS'",
-							'method.response.header.Access-Control-Allow-Headers':
-								"'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,Xsrf-Token,X-Auth-Redirect,X-Auth-Request-Redirect,Apollo-Require-Preflight'",
-						},
-					},
-				],
-			},
-		});
-
-		apiTemplate.hasOutput('*', {
-			Value: {
-				'Fn::Join': [
-					'',
-					[
-						'https://',
-						{
-							Ref: 'TestGraphweaverDockerStackApiApiGateway03E6A3A9',
-						},
-						'.execute-api.',
-						{
-							Ref: 'AWS::Region',
-						},
-						'.',
-						{
-							Ref: 'AWS::URLSuffix',
-						},
-						'/',
-						{
-							Ref: 'TestGraphweaverDockerStackApiApiGatewayDeploymentStageprod7376FDDA',
-						},
-						'/',
-					],
-				],
-			},
-		});
-
-		apiTemplate.hasOutput('*', {
-			Value: {
-				'Fn::GetAtt': [
-					'TestGraphweaverDockerStackApiApiGatewayCustomDomainA039BA27',
-					'RegionalDomainName',
-				],
-			},
-		});
-	});
+	test('API', () => {});
 
 	test('Database', () => {
 		databaseTemplate.resourceCountIs('AWS::RDS::DBInstance', 1);
