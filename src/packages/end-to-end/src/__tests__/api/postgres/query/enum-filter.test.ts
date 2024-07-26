@@ -16,7 +16,7 @@ describe('enum filter', () => {
 	test('should filter Invoices by PaymentStatus', async () => {
 		const { data } = await request<{ invoices: Invoice[] }>(config.baseUrl)
 			.query(gql`
-				query Invoices($filter: InvoiceListFilter) {
+				query Invoices($filter: InvoicesListFilter) {
 					invoices(filter: $filter) {
 						invoiceId
 						paymentStatus
