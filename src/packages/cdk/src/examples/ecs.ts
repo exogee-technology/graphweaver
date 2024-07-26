@@ -59,7 +59,7 @@ export const graphweaverApp = new GraphweaverApp(app, 'TestGraphweaverDocker', {
 		],
 	},
 	ecs: {
-		packageName: '@exogee/graphweaver',
+		buildPath: '../../examples/rest/dist/backend',
 		cert: 'arn:aws:acm:ap-southeast-2:test:test:test',
 		url: 'api.test.com',
 		memorySize: 512,

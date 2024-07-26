@@ -1,3 +1,5 @@
+import path from 'path';
+import fs from 'fs';
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
@@ -29,12 +31,16 @@ export class EcsStack extends cdk.Stack {
 		if (!database.dbInstance.secret?.secretFullArn)
 			throw new Error('Missing required secret ARN for database');
 
+		// Copy the docker file to the build directory
+		const dockerfilePath = path.resolve(__dirname, '../docker/Dockerfile');
+		fs.copyFileSync(
+			dockerfilePath,
+			path.join(path.resolve(__dirname, '../..', config.ecs.buildPath), 'Dockerfile')
+		);
+
 		const image = new DockerImageAsset(this, `${id}GraphweaverAppImage`, {
-			directory: './src/docker',
+			directory: config.ecs.buildPath,
 			file: 'Dockerfile',
-			buildArgs: {
-				APP_DIR: config.ecs.packageName,
-			},
 		});
 
 		const cluster = new Cluster(scope, `${id}EcsCluster`, {

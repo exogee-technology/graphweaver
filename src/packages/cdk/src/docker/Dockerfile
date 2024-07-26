@@ -5,7 +5,7 @@ FROM node:20
 WORKDIR /usr/src/app
 
 # Copy the application code from the specified directory
-COPY ./dist/backend/ ./
+COPY ./ ./
 
 # Expose the port your app will run on (e.g., 3000)
 EXPOSE 3000

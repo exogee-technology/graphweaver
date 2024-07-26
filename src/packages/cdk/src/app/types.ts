@@ -30,8 +30,8 @@ export type GraphweaverAppConfig = {
 		csp?: string;
 	};
 	ecs?: {
-		// Name of the package containing the Graphweaver API
-		packageName: string;
+		// Path to the Graphweaver app build directory (relative to the project root)
+		buildPath: string;
 		// ARN of the certificate in AWS Certificate Manager to use for the API
 		cert: string;
 		// Custom domain name for the API
