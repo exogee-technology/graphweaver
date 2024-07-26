@@ -9,7 +9,8 @@ graphweaverMetadata.collectEnumInformation({ target: UserStatus, name: 'UserStat
 @Entity<User>('User', {
 	provider: new MikroBackendProvider(OrmUser, pgConnection),
 	adminUIOptions: {
-		defaultFilter: { status: UserStatus.ACTIVE },
+		// TODO: Enum values as default filters don't currently work. This is a known issue
+		// defaultFilter: { status: UserStatus.ACTIVE },
 		summaryField: 'username',
 	},
 })
