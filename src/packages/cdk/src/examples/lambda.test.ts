@@ -1,56 +1,6 @@
 import { describe, test } from 'vitest';
-import { App, Stack } from 'aws-cdk-lib';
 import { Match, Template } from 'aws-cdk-lib/assertions';
-import { InstanceClass, InstanceSize, InstanceType, SecurityGroup, Vpc } from 'aws-cdk-lib/aws-ec2';
-import { GraphweaverApp } from './index';
-import { PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
-
-const mockApp = new App();
-const stack = new Stack(mockApp, 'MyStack');
-const vpc = new Vpc(stack, 'MyVpc');
-const graphqlSecurityGroup = new SecurityGroup(stack, 'GraphQLSecurityGroup', {
-	vpc,
-});
-const databaseSecurityGroup = new SecurityGroup(stack, 'DatabaseSecurityGroup', {
-	vpc,
-});
-
-const graphweaverApp = new GraphweaverApp(stack, 'TestGraphweaver', {
-	name: 'test',
-	network: {
-		vpc,
-		graphqlSecurityGroup,
-		databaseSecurityGroup,
-	},
-	database: {
-		name: 'gw_database_test',
-		username: 'gw_user_test',
-		version: PostgresEngineVersion.VER_13_12,
-		instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
-	},
-	adminUI: {
-		buildPath: '/',
-		cert: 'arn:aws:acm:us-east-1:test:test:test',
-		url: 'admin-ui.test.com',
-		csp: "default-src 'self';",
-		customHeaders: [
-			{
-				header: 'X-Graphweaver',
-				value: 'true',
-				override: true,
-			},
-		],
-	},
-	lambda: {
-		packageName: '@exogee/graphweaver',
-		cert: 'arn:aws:acm:ap-southeast-2:test:test:test',
-		url: 'api.test.com',
-		memorySize: 512,
-		envVars: {
-			TEST_ENV_VAR: 'test',
-		},
-	},
-});
+import { graphweaverApp } from './lambda';
 
 const websiteTemplate = Template.fromStack(graphweaverApp.website);
 const apiTemplate = Template.fromStack(graphweaverApp.api);
@@ -110,7 +60,10 @@ describe('GraphweaverApp', () => {
 
 		websiteTemplate.hasOutput('*', {
 			Value: {
-				'Fn::GetAtt': ['TestGraphweaverStackWebsiteWebsiteDistribution071BF43D', 'DomainName'],
+				'Fn::GetAtt': [
+					'TestGraphweaverDockerStackWebsiteWebsiteDistribution25D90871',
+					'DomainName',
+				],
 			},
 		});
 	});
@@ -165,7 +118,7 @@ describe('GraphweaverApp', () => {
 					[
 						'https://',
 						{
-							Ref: 'TestGraphweaverStackApiApiGatewayE0EFC07E',
+							Ref: 'TestGraphweaverDockerStackApiApiGateway03E6A3A9',
 						},
 						'.execute-api.',
 						{
@@ -177,7 +130,7 @@ describe('GraphweaverApp', () => {
 						},
 						'/',
 						{
-							Ref: 'TestGraphweaverStackApiApiGatewayDeploymentStageprod597B26CD',
+							Ref: 'TestGraphweaverDockerStackApiApiGatewayDeploymentStageprod7376FDDA',
 						},
 						'/',
 					],
@@ -188,7 +141,7 @@ describe('GraphweaverApp', () => {
 		apiTemplate.hasOutput('*', {
 			Value: {
 				'Fn::GetAtt': [
-					'TestGraphweaverStackApiApiGatewayCustomDomain0EC95E87',
+					'TestGraphweaverDockerStackApiApiGatewayCustomDomainA039BA27',
 					'RegionalDomainName',
 				],
 			},
