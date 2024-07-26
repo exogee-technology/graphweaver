@@ -30,6 +30,7 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
 		"@mikro-orm/core": "6.3.0",
+		"@mikro-orm/knex": "6.3.0",
 		"@mikro-orm/postgresql": "6.3.0",
 		"graphql": "16.9.0",
 		"graphweaver": "workspace:*",

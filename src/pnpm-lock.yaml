@@ -164,6 +164,9 @@ importers:
       '@mikro-orm/core':
         specifier: 6.3.0
         version: 6.3.0
+      '@mikro-orm/knex':
+        specifier: 6.3.0
+        version: 6.3.0(@mikro-orm/core@6.3.0)(mysql2@3.10.3)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.0
         version: 6.3.0(@mikro-orm/core@6.3.0)(pg@8.12.0)
@@ -271,6 +274,9 @@ importers:
       '@mikro-orm/core':
         specifier: 6.3.0
         version: 6.3.0
+      '@mikro-orm/knex':
+        specifier: 6.3.0
+        version: 6.3.0(@mikro-orm/core@6.3.0)(mysql2@3.10.3)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.0
         version: 6.3.0(@mikro-orm/core@6.3.0)(pg@8.12.0)
@@ -341,6 +347,9 @@ importers:
       '@mikro-orm/core':
         specifier: 6.3.0
         version: 6.3.0
+      '@mikro-orm/knex':
+        specifier: 6.3.0
+        version: 6.3.0(@mikro-orm/core@6.3.0)(mysql2@3.10.3)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.0
         version: 6.3.0(@mikro-orm/core@6.3.0)(mysql2@3.10.3)

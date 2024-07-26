@@ -20,7 +20,8 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"test": "vitest",
-		"version": "npm version --no-git-tag-version"
+		"version": "npm version --no-git-tag-version",
+		"build:docker": "docker build -f src/docker/Dockerfile ../../examples/s3-storage"
 	},
 	"dependencies": {
 		"aws-cdk-lib": "2.150.0",
