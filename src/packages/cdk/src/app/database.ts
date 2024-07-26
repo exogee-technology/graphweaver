@@ -11,7 +11,6 @@ export class DatabaseStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		// RDS PostgreSQL Instance
 		this.dbInstance = new rds.DatabaseInstance(this, `${id}Database`, {
 			engine: rds.DatabaseInstanceEngine.postgres({
 				version: config.database.version ?? rds.PostgresEngineVersion.VER_16_2,

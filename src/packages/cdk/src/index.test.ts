@@ -52,9 +52,9 @@ const graphweaverApp = new GraphweaverApp(stack, 'TestGraphweaver', {
 	},
 });
 
-const websiteTemplate = Template.fromStack(graphweaverApp.appStack.website);
-const apiTemplate = Template.fromStack(graphweaverApp.appStack.api);
-const databaseTemplate = Template.fromStack(graphweaverApp.appStack.database);
+const websiteTemplate = Template.fromStack(graphweaverApp.website);
+const apiTemplate = Template.fromStack(graphweaverApp.api);
+const databaseTemplate = Template.fromStack(graphweaverApp.database);
 
 describe('GraphweaverApp', () => {
 	test('AdminUI', () => {

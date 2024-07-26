@@ -8,6 +8,7 @@ import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
 
 import { GraphweaverAppConfig } from './types';
+import { DatabaseStack } from './database';
 
 export class LambdaStack extends cdk.Stack {
 	public readonly lambda: lambda.Function;
@@ -15,10 +16,7 @@ export class LambdaStack extends cdk.Stack {
 	constructor(
 		scope: Construct,
 		id: string,
-		database: {
-			secretFullArn: string;
-			instanceArn: string;
-		},
+		database: DatabaseStack,
 		config: GraphweaverAppConfig,
 		props?: cdk.StackProps
 	) {
@@ -27,6 +25,8 @@ export class LambdaStack extends cdk.Stack {
 		if (!config.lambda) {
 			throw new Error('Missing required lambda configuration');
 		}
+		if (!database.dbInstance.secret?.secretFullArn)
+			throw new Error('Missing required secret ARN for database');
 
 		// Create GraphQL Lambda Function
 		this.lambda = new NodejsFunction(this, `${id}LambdaFunction`, {
@@ -54,11 +54,13 @@ export class LambdaStack extends cdk.Stack {
 			architecture: lambda.Architecture.ARM_64,
 			environment: {
 				NODE_EXTRA_CA_CERTS: '/var/runtime/ca-cert.pem',
-				DATABASE_SECRET_ARN: database.secretFullArn,
+				DATABASE_SECRET_ARN: database.dbInstance.secret.secretFullArn,
 				...config.lambda.envVars,
 			},
 			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
 		});
+
+		database.dbInstance.secret.grantRead(this.lambda);
 
 		const apiLogging = new LogGroup(this, `${id}LambdaFunctionLogging`);
 

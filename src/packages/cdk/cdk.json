@@ -1,4 +1,4 @@
 {
-	"app": "esrun src/demo/index.ts",
+	"app": "esrun src/examples/ecs.ts",
 	"requireApproval": "never"
 }
