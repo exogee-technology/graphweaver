@@ -70,6 +70,7 @@ jobs:
           pnpm start-server &
           sleep 3 &&
           pnpm test-postgres &&
+          pnpm test-ui-postgres &&
           killall node
 
     env:

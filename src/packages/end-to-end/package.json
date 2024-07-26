@@ -25,6 +25,7 @@
 		"test-ui-auth": "pnpm exec playwright test ./auth",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
+		"test-ui-postgres": "pnpm exec playwright test ./postgres",
 		"test-ui-storage-provider": "pnpm exec playwright test ./storage-provider",
 		"test-ui-sqlite": "pnpm exec playwright test ./sqlite",
 		"version": "npm version --no-git-tag-version"
