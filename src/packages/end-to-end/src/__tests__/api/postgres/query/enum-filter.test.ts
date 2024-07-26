@@ -25,7 +25,7 @@ describe('enum filter', () => {
 			`)
 			.variables({
 				filter: {
-					paymentStatus: 'PARTIALLY-PAID',
+					paymentStatus: 'PARTIALLY_PAID',
 				},
 			})
 			.expectNoErrors();
