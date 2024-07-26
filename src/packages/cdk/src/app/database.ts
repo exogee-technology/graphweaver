@@ -5,11 +5,13 @@ import { Construct } from 'constructs';
 
 import { GraphweaverAppConfig } from './types';
 
-export class DatabaseStack extends cdk.Stack {
+export class DatabaseStack extends cdk.NestedStack {
 	public readonly dbInstance: rds.DatabaseInstance;
 
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
+
+		const vpc = config.network.vpc;
 
 		this.dbInstance = new rds.DatabaseInstance(this, `${id}Database`, {
 			engine: rds.DatabaseInstanceEngine.postgres({
@@ -19,7 +21,7 @@ export class DatabaseStack extends cdk.Stack {
 				config.database.instanceType ??
 				ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
 			credentials: rds.Credentials.fromGeneratedSecret(config.database.username),
-			vpc: config.network.vpc,
+			vpc,
 			storageEncrypted: true,
 			vpcSubnets: {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
@@ -28,8 +30,32 @@ export class DatabaseStack extends cdk.Stack {
 			securityGroups: [config.network.databaseSecurityGroup],
 		});
 
+		if (!this.dbInstance.secret?.secretFullArn)
+			throw new Error('Missing required secret ARN for database');
+
+		if (!this.dbInstance.secret?.secretArn)
+			throw new Error('Missing required secret ARN for database');
+
 		new cdk.CfnOutput(this, `${id}DatabaseUrl`, {
 			value: this.dbInstance.dbInstanceEndpointAddress,
+		});
+
+		// Export the secret ARN
+		new cdk.CfnOutput(this, `${id}DatabaseSecretArn`, {
+			value: this.dbInstance.secret?.secretArn,
+			exportName: 'EcsExampleDatabaseSecretArn',
+		});
+
+		// Export the secret Full ARN
+		new cdk.CfnOutput(this, `${id}DatabaseSecretFullArn`, {
+			value: this.dbInstance.secret?.secretFullArn,
+			exportName: 'EcsExampleDatabaseSecretFullArn',
+		});
+
+		// Export the instance ARN
+		new cdk.CfnOutput(this, `${id}DatabaseInstanceArn`, {
+			value: this.dbInstance.instanceArn,
+			exportName: 'EcsExampleDatabaseInstanceArn',
 		});
 	}
 }

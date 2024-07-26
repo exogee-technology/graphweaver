@@ -13,20 +13,16 @@ import { DatabaseStack } from './database';
 export class LambdaStack extends cdk.Stack {
 	public readonly lambda: lambda.Function;
 
-	constructor(
-		scope: Construct,
-		id: string,
-		database: DatabaseStack,
-		config: GraphweaverAppConfig,
-		props?: cdk.StackProps
-	) {
+	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
 		if (!config.lambda) {
 			throw new Error('Missing required lambda configuration');
 		}
-		if (!database.dbInstance.secret?.secretFullArn)
-			throw new Error('Missing required secret ARN for database');
+
+		const databaseSecretFullArn = cdk.Fn.importValue('EcsExampleDatabaseSecretFullArn');
+
+		const vpc = config.network.vpc;
 
 		// Create GraphQL Lambda Function
 		this.lambda = new NodejsFunction(this, `${id}LambdaFunction`, {
@@ -45,7 +41,7 @@ export class LambdaStack extends cdk.Stack {
 					'libsql',
 				],
 			},
-			vpc: config.network.vpc,
+			vpc,
 			securityGroups: [config.network.graphqlSecurityGroup],
 			vpcSubnets: {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
@@ -54,13 +50,11 @@ export class LambdaStack extends cdk.Stack {
 			architecture: lambda.Architecture.ARM_64,
 			environment: {
 				NODE_EXTRA_CA_CERTS: '/var/runtime/ca-cert.pem',
-				DATABASE_SECRET_ARN: database.dbInstance.secret.secretFullArn,
+				DATABASE_SECRET_ARN: databaseSecretFullArn,
 				...config.lambda.envVars,
 			},
 			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
 		});
-
-		database.dbInstance.secret.grantRead(this.lambda);
 
 		const apiLogging = new LogGroup(this, `${id}LambdaFunctionLogging`);
 

@@ -14,7 +14,7 @@
 	"scripts": {
 		"cdk-bootstrap": "dotenv -- cdk bootstrap -v",
 		"cdk-deploy": "dotenv -- cdk deploy --all",
-		"cdk-synth": "dotenv -- cdk synth",
+		"cdk-synth": "dotenv -- cdk synth --verbose",
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",

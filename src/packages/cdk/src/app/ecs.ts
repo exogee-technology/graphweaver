@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { InstanceClass, InstanceSize, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import { InstanceClass, InstanceSize, InstanceType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { AmiHardwareType, Cluster, ContainerImage, EcsOptimizedImage } from 'aws-cdk-lib/aws-ecs';
 import { ApplicationLoadBalancedEc2Service } from 'aws-cdk-lib/aws-ecs-patterns';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
@@ -16,20 +16,14 @@ import { DatabaseStack } from './database';
 export class EcsStack extends cdk.Stack {
 	public readonly service: ApplicationLoadBalancedEc2Service;
 
-	constructor(
-		scope: Construct,
-		id: string,
-		database: DatabaseStack,
-		config: GraphweaverAppConfig,
-		props?: cdk.StackProps
-	) {
+	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
 		if (!config.ecs) {
 			throw new Error('Missing required ECS configuration');
 		}
-		if (!database.dbInstance.secret?.secretFullArn)
-			throw new Error('Missing required secret ARN for database');
+
+		const vpc = config.network.vpc;
 
 		// Copy the docker file to the build directory
 		const dockerfilePath = path.resolve(__dirname, '../docker/Dockerfile');
@@ -49,7 +43,7 @@ export class EcsStack extends cdk.Stack {
 				machineImage: EcsOptimizedImage.amazonLinux2023(AmiHardwareType.ARM),
 				desiredCapacity: 1,
 			},
-			vpc: config.network.vpc,
+			vpc,
 		});
 
 		const certificateArn = config.ecs.cert;
@@ -59,17 +53,23 @@ export class EcsStack extends cdk.Stack {
 			certificateArn
 		);
 
+		// Import the secret ARN and get the secret instance
+		const databaseSecretArn = cdk.Fn.importValue('EcsExampleDatabaseSecretArn');
+		const databaseSecretFullArn = cdk.Fn.importValue('EcsExampleDatabaseSecretFullArn');
+		const databaseInstanceArn = cdk.Fn.importValue('EcsExampleDatabaseInstanceArn');
+
 		const secretsManagerPolicy = new PolicyStatement({
 			actions: ['secretsmanager:GetSecretValue'], // Allow reading secrets
-			resources: [database.dbInstance.secret.secretArn], // Only for this specific database secret
+			resources: [databaseSecretArn], // Only for this specific database secret
 		});
 		const rdsAccessPolicy = new PolicyStatement({
 			actions: ['rds-db:connect', 'rds-data:*'], // Allow connection and data access
-			resources: [database.dbInstance.instanceArn], // Only for this specific database
+			resources: [databaseInstanceArn], // Only for this specific database
 		});
 
 		const taskRole = new Role(this, `${id}EcsTaskRole`, {
 			assumedBy: new ServicePrincipal(`ecs-task.amazonaws.com`),
+			roleName: cdk.PhysicalName.GENERATE_IF_NEEDED,
 		});
 		taskRole.addToPolicy(secretsManagerPolicy);
 		taskRole.addToPolicy(rdsAccessPolicy);
@@ -82,7 +82,7 @@ export class EcsStack extends cdk.Stack {
 				image: ContainerImage.fromDockerImageAsset(image),
 				containerPort: 3000,
 				environment: {
-					DATABASE_SECRET_ARN: database.dbInstance.secret.secretFullArn,
+					DATABASE_SECRET_ARN: databaseSecretFullArn,
 					...config.ecs.envVars,
 				},
 			},
