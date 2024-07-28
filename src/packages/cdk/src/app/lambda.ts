@@ -13,14 +13,23 @@ import { DatabaseStack } from './database';
 export class LambdaStack extends cdk.Stack {
 	public readonly lambda: lambda.Function;
 
-	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
+	constructor(
+		scope: Construct,
+		id: string,
+		database: DatabaseStack,
+		config: GraphweaverAppConfig,
+		props?: cdk.StackProps
+	) {
 		super(scope, id, props);
 
 		if (!config.lambda) {
 			throw new Error('Missing required lambda configuration');
 		}
 
-		const databaseSecretFullArn = cdk.Fn.importValue('EcsExampleDatabaseSecretFullArn');
+		if (!database.dbInstance.secret?.secretFullArn) {
+			throw new Error('No database secret found.');
+		}
+		const databaseSecretFullArn = database.dbInstance.secret?.secretFullArn;
 
 		const vpc = config.network.vpc;
 

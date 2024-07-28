@@ -20,6 +20,7 @@ export class DatabaseStack extends cdk.NestedStack {
 			instanceType:
 				config.database.instanceType ??
 				ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
+			instanceIdentifier: cdk.PhysicalName.GENERATE_IF_NEEDED,
 			credentials: rds.Credentials.fromGeneratedSecret(config.database.username),
 			vpc,
 			storageEncrypted: true,

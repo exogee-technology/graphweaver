@@ -14,24 +14,31 @@ const env = {
 export class GraphweaverApp extends Construct {
 	public readonly website: WebsiteStack;
 	public readonly api: LambdaStack | EcsStack;
+	public readonly database: DatabaseStack;
 
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig) {
 		super(scope, id);
 
 		const stackName = `GraphweaverStack`;
-		const props = { env };
+		const props = {
+			env: {
+				...env,
+				account: process.env.AWS_ACCOUNT,
+				region: process.env.AWS_DEFAULT_REGION,
+			},
+		};
 
 		this.website = new WebsiteStack(scope, `${stackName}Website`, config, props);
-		new DatabaseStack(scope, `${stackName}Database`, config, props);
+		this.database = new DatabaseStack(scope, `${stackName}Database`, config, props);
 
 		if (config.lambda && config.ecs) {
 			throw new Error('Cannot specify both lambda and ecs configuration');
 		}
 
 		if (config.lambda) {
-			this.api = new LambdaStack(scope, `${stackName}Api`, config, props);
+			this.api = new LambdaStack(scope, `${stackName}Api`, this.database, config, props);
 		} else {
-			this.api = new EcsStack(scope, `${stackName}Api`, config, props);
+			this.api = new EcsStack(scope, `${stackName}Api`, this.database, config, props);
 		}
 	}
 }

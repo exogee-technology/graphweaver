@@ -29,10 +29,20 @@ class NetworkStack extends cdk.NestedStack {
 }
 
 const stackName = `GraphweaverStack`;
-const rootStack = new cdk.Stack(app, stackName);
+const rootStack = new cdk.Stack(app, stackName, {
+	env: {
+		account: process.env.AWS_ACCOUNT,
+		region: process.env.AWS_DEFAULT_REGION,
+	},
+});
 
 // Create the network stack and configure the network object that is passed to the GraphweaverApp
-const networkStack = new NetworkStack(rootStack, 'MyNetworkStack');
+const networkStack = new NetworkStack(rootStack, 'MyNetworkStack', {
+	env: {
+		account: process.env.AWS_ACCOUNT,
+		region: process.env.AWS_DEFAULT_REGION,
+	},
+});
 
 // Create the GraphweaverApp
 export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDocker', {
@@ -50,8 +60,8 @@ export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDock
 	},
 	adminUI: {
 		buildPath: '/',
-		cert: 'arn:aws:acm:us-east-1:test:test:test',
-		url: 'admin-ui.test.com',
+		cert: process.env.WEBSITE_CERTIFICATE_ARN ?? 'arn:aws:acm:us-east-1:test:test:test',
+		url: 'admin-ui-ecs.graphweaver.com',
 		csp: "default-src 'self';",
 		customHeaders: [
 			{
@@ -63,8 +73,8 @@ export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDock
 	},
 	ecs: {
 		buildPath: '../../examples/rest/dist/backend',
-		cert: 'arn:aws:acm:ap-southeast-2:test:test:test',
-		url: 'api.test.com',
+		cert: process.env.API_CERTIFICATE_ARN ?? 'arn:aws:acm:ap-southeast-2:test:test:test',
+		url: 'api-ecs.graphweaver.com',
 		memorySize: 512,
 		envVars: {
 			TEST_ENV_VAR: 'test',

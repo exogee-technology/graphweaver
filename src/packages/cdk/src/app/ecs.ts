@@ -13,10 +13,16 @@ import { PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
 
-export class EcsStack extends cdk.Stack {
+export class EcsStack extends cdk.NestedStack {
 	public readonly service: ApplicationLoadBalancedEc2Service;
 
-	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
+	constructor(
+		scope: Construct,
+		id: string,
+		database: DatabaseStack,
+		config: GraphweaverAppConfig,
+		props?: cdk.StackProps
+	) {
 		super(scope, id, props);
 
 		if (!config.ecs) {
@@ -53,10 +59,13 @@ export class EcsStack extends cdk.Stack {
 			certificateArn
 		);
 
+		if (!database.dbInstance.secret?.secretFullArn) {
+			throw new Error('No database secret found.');
+		}
 		// Import the secret ARN and get the secret instance
-		const databaseSecretArn = cdk.Fn.importValue('EcsExampleDatabaseSecretArn');
-		const databaseSecretFullArn = cdk.Fn.importValue('EcsExampleDatabaseSecretFullArn');
-		const databaseInstanceArn = cdk.Fn.importValue('EcsExampleDatabaseInstanceArn');
+		const databaseSecretArn = database.dbInstance.secret?.secretArn;
+		const databaseSecretFullArn = database.dbInstance.secret?.secretFullArn;
+		const databaseInstanceArn = database.dbInstance.instanceArn;
 
 		const secretsManagerPolicy = new PolicyStatement({
 			actions: ['secretsmanager:GetSecretValue'], // Allow reading secrets
