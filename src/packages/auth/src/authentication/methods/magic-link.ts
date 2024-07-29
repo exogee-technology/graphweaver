@@ -93,10 +93,14 @@ export class MagicLink extends BaseAuthMethod {
 
 	async generateMagicLink(username: string, ctx: AuthorizationContext) {
 		// check that the user exists
-		const user = await this.getUser(username);
-
-		// if the user does not exist, silently fail
-		if (!user?.id) {
+		let user = undefined;
+		try {
+			user = await this.getUser(username);
+			// if the user does not exist, silently fail
+			if (!user?.id) {
+				throw new Error('User not known, silently fail.');
+			}
+		} catch (err) {
 			logger.warn(`User with username ${username} does not exist or is not active.`);
 			return;
 		}

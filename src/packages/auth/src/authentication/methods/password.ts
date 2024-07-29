@@ -161,9 +161,8 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			username,
 		});
 
-		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed. (E0001)');
-		if (!credential.password)
-			throw new AuthenticationError('Bad Request: Authentication Failed. (E0002)');
+		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed');
+		if (!credential.password) throw new AuthenticationError('Bad Request: Authentication Failed');
 
 		if (await verifyPassword(password, credential.password)) {
 			return this.getUserProfile(credential.id, PasswordOperation.LOGIN, context);
@@ -171,7 +170,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 
 		this.onUserAuthenticated?.(credential.id, context);
 
-		throw new AuthenticationError('Unknown username or password, please try again');
+		throw new AuthenticationError('Bad Request: Authentication Failed');
 	}
 
 	async create(
