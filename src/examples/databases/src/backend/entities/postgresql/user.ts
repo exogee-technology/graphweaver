@@ -1,4 +1,10 @@
-import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { BigIntType, Enum, Entity, PrimaryKey, Property } from '@mikro-orm/core';
+
+export enum UserStatus {
+	ACTIVE = 'active',
+	BLOCKED = 'blocked',
+	SUSPENDED = 'suspended',
+}
 
 @Entity()
 export class User {
@@ -11,6 +17,11 @@ export class User {
 	@Property({ type: String })
 	email!: string;
 
-	@Property({ type: Boolean })
-	deleted!: boolean;
+	@Enum({
+		fieldName: 'status',
+		type: 'string',
+		items: () => UserStatus,
+		default: 'active',
+	})
+	status?: UserStatus = UserStatus.ACTIVE;
 }
