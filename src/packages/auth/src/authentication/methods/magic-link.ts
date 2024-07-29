@@ -98,10 +98,10 @@ export class MagicLink extends BaseAuthMethod {
 			user = await this.getUser(username);
 			// if the user does not exist, silently fail
 			if (!user?.id) {
-				throw new Error('User not known, silently fail.');
+				throw new Error('User id not returned from getUser child implementation');
 			}
 		} catch (err) {
-			logger.warn(`User with username ${username} does not exist or is not active.`);
+			logger.warn(`User with username ${username} does not exist or is not active, silently fail.`);
 			return;
 		}
 
