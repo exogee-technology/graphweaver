@@ -1227,8 +1227,8 @@ importers:
   packages/logger:
     dependencies:
       pino:
-        specifier: 9.3.1
-        version: 9.3.1
+        specifier: 9.3.2
+        version: 9.3.2
     devDependencies:
       '@types/node':
         specifier: 22.0.0
@@ -1252,8 +1252,8 @@ importers:
         specifier: 6.3.0
         version: 6.3.0(@mikro-orm/core@6.3.0)(pg@8.12.0)
       node-sqlite3-wasm:
-        specifier: 0.8.18
-        version: 0.8.18
+        specifier: 0.8.19
+        version: 0.8.19
     devDependencies:
       '@types/node':
         specifier: 22.0.0
@@ -11615,7 +11615,7 @@ packages:
       fast-json-stringify: 5.16.1
       find-my-way: 8.2.0
       light-my-request: 5.13.0
-      pino: 9.3.1
+      pino: 9.3.2
       process-warning: 3.0.0
       proxy-addr: 2.0.7
       rfdc: 1.4.1
@@ -14712,8 +14712,8 @@ packages:
     deprecated: please use 'semver'
     dev: false
 
-  /node-sqlite3-wasm@0.8.18:
-    resolution: {integrity: sha512-5Jrn9chnvNt5vNkPAhtMTFkYCtZGmoXgO3uGR0XHTqtf3cz9UMhU+UZNBVN+v7TrKe7ExY5lCp1JzuYPGqkXnQ==}
+  /node-sqlite3-wasm@0.8.19:
+    resolution: {integrity: sha512-kiZtBK2U+8Xr58lLRH9+WtT5oLB/Fs6yRoECMLIvxJuHdQ4fvjZGojttcuVSiMK1vUz3oXrKWr6ev4QrfQtBLw==}
     dev: false
 
   /nopt@5.0.0:
@@ -15233,8 +15233,8 @@ packages:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
     dev: false
 
-  /pino@9.3.1:
-    resolution: {integrity: sha512-afSfrq/hUiW/MFmQcLEwV9Zh8Ry6MrMTOyBU53o/fc0gEl+1OZ/Fks/xQCM2nOC0C/OfDtQMnT2d8c3kpcfSzA==}
+  /pino@9.3.2:
+    resolution: {integrity: sha512-WtARBjgZ7LNEkrGWxMBN/jvlFiE17LTbBoH0konmBU684Kd0uIiDwBXlcTCW7iJnA6HfIKwUssS/2AC6cDEanw==}
     hasBin: true
     dependencies:
       atomic-sleep: 1.0.0
@@ -15242,7 +15242,7 @@ packages:
       on-exit-leak-free: 2.1.2
       pino-abstract-transport: 1.2.0
       pino-std-serializers: 7.0.0
-      process-warning: 3.0.0
+      process-warning: 4.0.0
       quick-format-unescaped: 4.0.4
       real-require: 0.2.0
       safe-stable-stringify: 2.4.3
@@ -15434,6 +15434,10 @@ packages:
 
   /process-warning@3.0.0:
     resolution: {integrity: sha512-mqn0kFRl0EoqhnL0GQ0veqFHyIN1yig9RHh/InzORTUiZHFRAur+aMtRkELNwGs9aNwKS6tg/An4NYBPGwvtzQ==}
+    dev: false
+
+  /process-warning@4.0.0:
+    resolution: {integrity: sha512-/MyYDxttz7DfGMMHiysAsFE4qF+pQYAA8ziO/3NcRVrQ5fSk+Mns4QZA/oRPFzvcqNoVJXQNWNAsdwBXLUkQKw==}
     dev: false
 
   /process@0.11.10:
