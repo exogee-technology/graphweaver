@@ -157,19 +157,32 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		password: string,
 		context: AuthorizationContext
 	): Promise<UserProfile<unknown>> {
-		const credential = await this.provider.findOne({
-			username,
-		});
-
-		if (!credential) throw new AuthenticationError('Bad Request: Authentication Failed');
-		if (!credential.password) throw new AuthenticationError('Bad Request: Authentication Failed');
-
-		if (await verifyPassword(password, credential.password)) {
-			return this.getUserProfile(credential.id, PasswordOperation.LOGIN, context);
+		let credential = undefined;
+		try {
+			credential = await this.provider.findOne({
+				username,
+			});
+		} catch (err) {
+			logger.trace('No credential returned from provider');
+			throw new AuthenticationError('Bad Request: Authentication Failed');
 		}
 
-		this.onUserAuthenticated?.(credential.id, context);
+		if (!credential) {
+			logger.trace('No credential found');
+			throw new AuthenticationError('Bad Request: Authentication Failed');
+		}
+		if (!credential.password) {
+			logger.trace('No password attached to credential');
+			throw new AuthenticationError('Bad Request: Authentication Failed');
+		}
 
+		if (await verifyPassword(password, credential.password)) {
+			const profile = this.getUserProfile(credential.id, PasswordOperation.LOGIN, context);
+			this.onUserAuthenticated?.(credential.id, context);
+			return profile;
+		}
+
+		logger.trace(`Incorrect password for credential ${credential.id}`);
 		throw new AuthenticationError('Bad Request: Authentication Failed');
 	}
 
