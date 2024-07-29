@@ -54,7 +54,11 @@ export const WelcomePage = () => (
 		<Spacer height={10} />
 		<p>
 			If you're stuck,{' '}
-			<a href="" target="_blank" rel="noopener noreferrer">
+			<a
+				href="https://join.slack.com/t/graphweaver/shared_invite/zt-2hxeb04d3-reNTqeVUAWy2YVXWscWRaw"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
 				reach out to us on Slack
 			</a>
 			. We're here to help!

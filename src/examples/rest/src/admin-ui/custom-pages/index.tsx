@@ -5,9 +5,15 @@ import {
 	ForgottenPassword,
 	ResetPassword,
 } from '@exogee/graphweaver-auth-ui-components';
+import { WelcomePage } from './welcome-page';
 
 export const customPages = {
+	defaultRoute: '/welcome',
 	routes: () => [
+		{
+			path: '/welcome',
+			element: <WelcomePage />,
+		},
 		{
 			path: '/auth',
 			element: <Auth />,
