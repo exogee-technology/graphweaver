@@ -48,11 +48,11 @@
 		"xero-node": "7.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.12",
+		"@types/node": "22.0.0",
 		"esbuild": "0.23.0",
 		"prettier": "3.3.3",
 		"ts-node": "10.9.2",
 		"typescript": "5.5.4",
-		"vite": "5.3.4"
+		"vite": "5.3.5"
 	}
 }
