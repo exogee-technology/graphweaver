@@ -90,7 +90,7 @@ describe('Password Authentication - Login', () => {
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeDefined();
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Unknown username or password, please try again'
+			'Bad Request: Authentication Failed'
 		);
 	});
 });
