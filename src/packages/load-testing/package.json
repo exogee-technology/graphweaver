@@ -19,7 +19,7 @@
 		"test:create-one": "./bin/k6 run ./src/create-one.ts"
 	},
 	"dependencies": {
-		"@types/node": "20.14.12",
+		"@types/node": "22.0.0",
 		"k6": "0.0.0"
 	},
 	"devDependencies": {
