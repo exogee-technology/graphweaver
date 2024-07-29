@@ -488,8 +488,8 @@ importers:
         specifier: 6.25.1
         version: 6.25.1(react-dom@18.3.1)(react@18.3.1)
       xero-node:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 9.0.0
+        version: 9.0.0
     devDependencies:
       '@types/node':
         specifier: 22.0.0
@@ -1548,8 +1548,8 @@ importers:
         specifier: 16.9.0
         version: 16.9.0
       xero-node:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 9.0.0
+        version: 9.0.0
     devDependencies:
       '@types/node':
         specifier: 22.0.0
@@ -17855,8 +17855,8 @@ packages:
         optional: true
     dev: false
 
-  /xero-node@7.0.0:
-    resolution: {integrity: sha512-XVGYy54ZyikYuF/CuKp8/aJ+EPd2bVN5ZI+qDIZhR+O4ySPFZ9762ua/WQXdaDOt/AxYP/ml8MHsAjRtOlOTvw==}
+  /xero-node@9.0.0:
+    resolution: {integrity: sha512-+e0lVD63F/O7D+UPfbPmK5NfYlxx7Ew5+4mECQYba0+5BzW1btFei8RFyHiVlGeYGpH/WaELQKKPJCTndHTCgg==}
     dependencies:
       axios: 1.7.2
       openid-client: 5.6.5
