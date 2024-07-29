@@ -37,7 +37,7 @@ export const EnumField = ({
 
 	// Let's make sure we got values for everything. We should have.
 	if (
-		!comboBoxValue ||
+		(value && !comboBoxValue) ||
 		(Array.isArray(comboBoxValue) && value.some((v: SelectOption | undefined) => !v))
 	) {
 		throw new Error(
