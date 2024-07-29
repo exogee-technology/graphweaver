@@ -1,6 +1,7 @@
 import path from 'path';
+import fs from 'fs';
 import { spawn } from 'child_process';
-import { BuildOptions, PluginBuild, OnResolveArgs } from 'esbuild';
+import { BuildOptions, PluginBuild, OnResolveArgs, OnLoadArgs } from 'esbuild';
 
 export interface AdditionalFunctionConfig {
 	handlerPath: string;
@@ -129,6 +130,43 @@ export const checkPackageForNativeModules = () => ({
 		});
 	},
 });
+
+// This esbuild plugin will add a start function if needed to the index.ts file
+export const addStartFunction = {
+	name: 'addStartFunction',
+	setup(build: PluginBuild) {
+		let cache = new Map();
+
+		build.onLoad({ filter: /src\/backend\/index\.ts$/ }, async (args: OnLoadArgs) => {
+			let input = await fs.promises.readFile(args.path, 'utf8');
+			let key = args.path;
+			let value = cache.get(key);
+
+			// If the graphweaver app is a lambda function then there is nothing to change
+			if (input.includes('graphweaver.handler')) {
+				console.trace('Detected Lambda Handler');
+				return undefined;
+			}
+
+			console.trace('Appending start command.');
+			// Otherwise this is a standalone instance so we need to start the server
+			const startCommand = `\n
+				graphweaver.start({
+					host: process.env.HOST ?? '::',
+					port: Number(process.env.PORT ?? '9001'),
+					path: process.env.PATH ?? '/',
+				});`;
+
+			if (!value || value.input !== input) {
+				let contents = `${input}${startCommand}`;
+				value = { input, output: { contents } };
+				cache.set(key, value);
+			}
+
+			return value.output;
+		});
+	},
+};
 
 export const requireSilent = (module: string) => {
 	try {

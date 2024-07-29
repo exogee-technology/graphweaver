@@ -28,21 +28,16 @@ class NetworkStack extends cdk.NestedStack {
 	}
 }
 
+const env = {
+	account: process.env.AWS_ACCOUNT,
+	region: process.env.AWS_DEFAULT_REGION,
+};
+
 const stackName = `GraphweaverStack`;
-const rootStack = new cdk.Stack(app, stackName, {
-	env: {
-		account: process.env.AWS_ACCOUNT,
-		region: process.env.AWS_DEFAULT_REGION,
-	},
-});
+const rootStack = new cdk.Stack(app, stackName, { env });
 
 // Create the network stack and configure the network object that is passed to the GraphweaverApp
-const networkStack = new NetworkStack(rootStack, 'MyNetworkStack', {
-	env: {
-		account: process.env.AWS_ACCOUNT,
-		region: process.env.AWS_DEFAULT_REGION,
-	},
-});
+const networkStack = new NetworkStack(rootStack, 'MyNetworkStack', { env });
 
 // Create the GraphweaverApp
 export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDocker', {

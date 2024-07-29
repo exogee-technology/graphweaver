@@ -4,7 +4,6 @@ import { WebsiteStack } from './app/website';
 import { DatabaseStack } from './app/database';
 import { LambdaStack } from './app/lambda';
 import { EcsStack } from './app/ecs';
-import { Stack } from 'aws-cdk-lib';
 
 const env = {
 	account: process.env.AWS_ACCOUNT,
@@ -20,13 +19,7 @@ export class GraphweaverApp extends Construct {
 		super(scope, id);
 
 		const stackName = `GraphweaverStack`;
-		const props = {
-			env: {
-				...env,
-				account: process.env.AWS_ACCOUNT,
-				region: process.env.AWS_DEFAULT_REGION,
-			},
-		};
+		const props = { env };
 
 		this.website = new WebsiteStack(scope, `${stackName}Website`, config, props);
 		this.database = new DatabaseStack(scope, `${stackName}Database`, config, props);

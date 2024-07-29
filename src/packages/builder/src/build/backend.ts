@@ -5,6 +5,7 @@ import { rimraf } from 'rimraf';
 import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
 
 import {
+	addStartFunction,
 	baseEsbuildConfig,
 	buildOutputPathFor,
 	checkPackageForNativeModules,
@@ -67,7 +68,7 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 					minify: true,
 					metafile: true,
 					external: getExternalModules(),
-					plugins: [checkPackageForNativeModules()],
+					plugins: [checkPackageForNativeModules(), addStartFunction],
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})
