@@ -3,7 +3,7 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
 import { Field, ID, Entity, AdminUiEntityMetadata } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
 
@@ -65,8 +65,9 @@ export class Artist {
 
 test('Should return exportPageSize attribute for each entity in getAdminUiMetadata', async () => {
 	const graphweaver = new Graphweaver();
+	await ConnectionManager.connect('sqlite', connection);
 
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		result: {
 			entities: AdminUiEntityMetadata[];
 		};

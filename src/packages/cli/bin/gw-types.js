@@ -5,7 +5,7 @@ const utils = require('@graphql-tools/utils');
 const path = require('path');
 
 const generateTypes = async () => {
-	const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+	const buildDir = path.posix.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
 	const { graphweaver } = await import(buildDir);
 
 	if (!graphweaver?.schema) {

@@ -68,7 +68,7 @@ describe('Security', () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query artists {
 					artists {
@@ -106,7 +106,7 @@ describe('Security', () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				fragment artistFragment on Artist {
 					albums {

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "2.0.5",
+	"version": "2.0.6",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -22,8 +22,9 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.10.5",
-		"@aws-sdk/client-secrets-manager": "3.616.0",
+		"@aws-sdk/client-secrets-manager": "3.620.0",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.2",
 		"decimal.js": "10.4.3",
@@ -38,7 +39,7 @@
 		"@mikro-orm/mysql": "6.3.0",
 		"@mikro-orm/postgresql": "6.3.0",
 		"@mikro-orm/sqlite": "6.3.0",
-		"@types/node": "20.14.11",
+		"@types/node": "22.0.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",

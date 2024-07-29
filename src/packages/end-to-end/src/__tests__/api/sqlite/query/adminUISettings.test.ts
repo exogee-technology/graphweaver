@@ -10,7 +10,7 @@ import {
 	Property,
 } from '@mikro-orm/core';
 import { Field, ID, Entity, RelationshipField, AdminUiEntityMetadata } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { MediaField, S3StorageProvider } from '@exogee/graphweaver-storage-provider';
 
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -114,8 +114,9 @@ export class Artist {
 
 test('Test the decorator adminUISettings', async () => {
 	const graphweaver = new Graphweaver();
+	await ConnectionManager.connect('sqlite', connection);
 
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		result: {
 			entities: AdminUiEntityMetadata[];
 		};

@@ -12,7 +12,7 @@
 		},
 		"package:pack": {
 			"dependsOn": ["^build"],
-			"outputs": [".packs/**"]
+			"outputs": ["../../.packs/**"]
 		},
 		"build": {
 			"dependsOn": ["^build"],

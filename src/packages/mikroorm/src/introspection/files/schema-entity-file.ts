@@ -8,7 +8,7 @@ import type {
 import { ReferenceKind, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
-import { pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
+import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import pluralize from 'pluralize';
 
 export class SchemaEntityFile extends BaseFile {
@@ -140,16 +140,16 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${file} = ${prop.type}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.runtimeType}.${identifierForEnumValue(prop.default)};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
 	}
 
 	protected getEnumClassDefinition(enumClassName: string): string {
-		this.coreImports.add('registerEnumType');
+		this.coreImports.add('graphweaverMetadata');
 		this.enumImports.add(enumClassName);
-		return `registerEnumType(${enumClassName}, { name: ${this.quote(enumClassName)} });`;
+		return `graphweaverMetadata.collectEnumInformation({ target: ${enumClassName}, name: ${this.quote(enumClassName)} });`;
 	}
 
 	private getGraphQLPropertyType(prop: EntityProperty): string {
@@ -169,6 +169,11 @@ export class SchemaEntityFile extends BaseFile {
 
 		if (prop.runtimeType === 'unknown') {
 			return 'String';
+		}
+
+		if (prop.runtimeType === 'bigint') {
+			this.scalarImports.add('GraphQLBigInt');
+			return 'GraphQLBigInt';
 		}
 
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {

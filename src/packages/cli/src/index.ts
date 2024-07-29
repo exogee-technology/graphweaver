@@ -261,7 +261,11 @@ yargs
 				console.log('Watch process started...');
 				await startFrontend(args as StartOptions);
 
-				const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+				const buildDir = path.posix.join(
+					'file://',
+					process.cwd(),
+					`./.graphweaver/backend/index.js`
+				);
 				const { graphweaver } = await import(buildDir);
 				const codegenOptions = graphweaver?.config?.fileAutoGenerationOptions;
 

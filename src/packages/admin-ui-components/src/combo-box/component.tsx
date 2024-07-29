@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import clsx from 'clsx';
 import { useCombobox } from 'downshift';
 
+import { ChevronDownIcon } from '../assets';
 import { Spinner } from '../spinner';
 import { useAutoFocus } from '../hooks';
 import styles from './styles.module.css';
@@ -73,7 +74,7 @@ export const ComboBox = ({
 
 	return (
 		<div className={styles.select} data-testid={testId}>
-			<div className={`${styles.selectBox} ${isOpen ? styles.open : ''}`}>
+			<div className={clsx(styles.selectBox, isOpen && styles.open)}>
 				<input readOnly className={styles.selectInput} {...getInputProps({ ref: inputRef })} />
 				{valueArray.length > 0 ? (
 					<div className={styles.selectedOptions}>
@@ -92,7 +93,9 @@ export const ComboBox = ({
 					<span className={styles.placeholder}>{placeholder}</span>
 				)}
 
-				<span className={`${styles.arrow} ${isOpen ? styles.arrowUp : styles.arrowDown}`}></span>
+				<span className={styles.arrow}>
+					<ChevronDownIcon />
+				</span>
 			</div>
 
 			<ul className={styles.optionsDropdown} {...getMenuProps()}>

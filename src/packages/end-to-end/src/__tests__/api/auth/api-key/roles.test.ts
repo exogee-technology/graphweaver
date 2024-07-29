@@ -3,7 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
 import {
 	AccessControlList,
 	ApplyAccessControlList,
@@ -11,6 +11,7 @@ import {
 	authApolloPlugin,
 	UserProfile,
 	ApiKeyEntity,
+	ApiKey,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -27,6 +28,11 @@ enum Roles {
 	LIGHT_SIDE = 'LIGHT_SIDE',
 	DARK_SIDE = 'DARK_SIDE',
 }
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'Roles',
+	target: Roles,
+});
 
 // Create Entity
 @OrmEntity({ tableName: 'api_key' })
@@ -90,6 +96,12 @@ export class Task {
 
 const apiKeyDataProvider = new MikroBackendProvider(OrmApiKey, connection);
 
+new ApiKey<Roles>({
+	provider: apiKeyDataProvider,
+	acl: undefined,
+	roles: Roles,
+});
+
 const graphweaver = new Graphweaver({
 	apolloServerOptions: {
 		plugins: [authApolloPlugin(async () => ({}) as UserProfile<any>, { apiKeyDataProvider })],
@@ -125,7 +137,7 @@ describe('Role Assignment for API Key Authentication', () => {
 	test('should create task successfully when dark side has all permissions.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_darkside:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				mutation createEntity($input: TaskInsertInput!) {
@@ -148,7 +160,7 @@ describe('Role Assignment for API Key Authentication', () => {
 	test('should return forbidden error when light side only has read permissions.', async () => {
 		const base64EncodedCredentials = Buffer.from('test_lightside:test').toString('base64');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ ['x-api-key']: base64EncodedCredentials }) } as any,
 			query: gql`
 				mutation createEntity($input: TaskInsertInput!) {

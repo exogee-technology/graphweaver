@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-aws",
-	"version": "2.0.5",
+	"version": "2.0.6",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -32,8 +32,8 @@
 		"graphql-type-json": "0.3.2"
 	},
 	"dependencies": {
-		"@aws-sdk/client-cognito-identity-provider": "3.616.0",
-		"@aws-sdk/client-lambda": "3.616.0",
+		"@aws-sdk/client-cognito-identity-provider": "3.620.0",
+		"@aws-sdk/client-lambda": "3.620.0",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"graphql": "16.9.0"
 	}

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-auth",
-	"version": "2.0.5",
+	"version": "2.0.6",
 	"description": "Row-Level Security support for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -26,6 +26,7 @@
 		"@apollo/server": "4.10.5",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@simplewebauthn/server": "10.0.1",
 		"apollo-server-errors": "3.3.1",
@@ -43,7 +44,7 @@
 		"@simplewebauthn/types": "10.0.0",
 		"@types/jsonwebtoken": "9.0.6",
 		"@types/ms": "0.7.34",
-		"@types/node": "20.14.11",
+		"@types/node": "22.0.0",
 		"@types/otp-generator": "4.0.2",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",

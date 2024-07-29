@@ -59,7 +59,7 @@ let token: string | undefined;
 
 describe('ACL - Implicit Deny', () => {
 	beforeAll(async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -87,7 +87,7 @@ describe('ACL - Implicit Deny', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -109,7 +109,7 @@ describe('ACL - Implicit Deny', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'createOne');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -131,7 +131,7 @@ describe('ACL - Implicit Deny', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'updateOne');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -153,7 +153,7 @@ describe('ACL - Implicit Deny', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteOne');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {
@@ -173,7 +173,7 @@ describe('ACL - Implicit Deny', () => {
 
 		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'deleteMany');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation {

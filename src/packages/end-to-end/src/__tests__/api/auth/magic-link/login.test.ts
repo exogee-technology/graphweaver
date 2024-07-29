@@ -85,7 +85,7 @@ describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
 		const redeemMagicLinkSpy = jest.spyOn(MagicLinkBackendProvider.prototype, 'updateOne');
 
-		const sendResponse = await graphweaver.server.executeOperation<{
+		const sendResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -101,7 +101,7 @@ describe('Magic Link Authentication - Login', () => {
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
