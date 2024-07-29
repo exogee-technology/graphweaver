@@ -70,6 +70,17 @@ export class LambdaStack extends cdk.Stack {
 			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
 		});
 
+		// ⚠️ Grant the Lambda function access to the database secret ⚠️
+		// This only happens when using the default secret from the database stack
+		// If a custom secret is provided, the user is responsible for granting access to the Lambda function
+		// Again, this is a best practice to use your own secret and manage the permissions.
+		if (
+			database.dbInstance.secret?.secretFullArn &&
+			databaseSecretFullArn === database.dbInstance.secret?.secretFullArn
+		) {
+			database.dbInstance.secret.grantRead(this.lambda);
+		}
+
 		const apiLogging = new LogGroup(this, `${id}LambdaFunctionLogging`);
 
 		const certificateArn = config.lambda.cert;

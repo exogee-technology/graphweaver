@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { InstanceClass, InstanceSize, InstanceType, Vpc } from 'aws-cdk-lib/aws-ec2';
+import { InstanceClass, InstanceSize, InstanceType, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
 import { AmiHardwareType, Cluster, ContainerImage, EcsOptimizedImage } from 'aws-cdk-lib/aws-ecs';
 import { ApplicationLoadBalancedEc2Service } from 'aws-cdk-lib/aws-ecs-patterns';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
@@ -11,6 +11,7 @@ import { ApplicationProtocol } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 
 import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 
 export class EcsStack extends cdk.NestedStack {
 	public readonly service: ApplicationLoadBalancedEc2Service;
@@ -58,6 +59,9 @@ export class EcsStack extends cdk.NestedStack {
 			instanceType: InstanceType.of(InstanceClass.BURSTABLE4_GRAVITON, InstanceSize.MICRO),
 			machineImage: EcsOptimizedImage.amazonLinux2023(AmiHardwareType.ARM),
 			desiredCapacity: 1,
+			vpcSubnets: {
+				subnetType: SubnetType.PRIVATE_WITH_EGRESS,
+			},
 		});
 
 		// Add the security group to the ec2 resources that used by your cluster
@@ -94,6 +98,22 @@ export class EcsStack extends cdk.NestedStack {
 			// 	domainName: 'exogee.com',
 			// }),
 		});
+
+		// ⚠️ Grant the ec2 instance access to the database secret ⚠️
+		// This only happens when using the default secret from the database stack
+		// If a custom secret is provided, the user is responsible for granting access to the Lambda function
+		// Again, it is a best practice to use your own secret and manage the permissions.
+		if (
+			database.dbInstance.secret?.secretFullArn &&
+			databaseSecretFullArn === database.dbInstance.secret?.secretFullArn
+		) {
+			const secretsManagerPolicy = new PolicyStatement({
+				actions: ['secretsmanager:GetSecretValue'], // Allow reading secrets
+				resources: [databaseSecretFullArn], // Only for this specific database secret
+			});
+
+			this.service.taskDefinition.addToTaskRolePolicy(secretsManagerPolicy);
+		}
 
 		// Our health check is at a different path than /
 		this.service.targetGroup.configureHealthCheck({
