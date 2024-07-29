@@ -42,6 +42,8 @@ export type GraphweaverAppConfig = {
 		cpuSize?: number;
 		// Memory size for the API Lambda function, defaults to 1024
 		memorySize?: number;
+		// Pass the database secret ARN to the Lambda function
+		databaseSecretFullArn?: string;
 	};
 	lambda?: {
 		// Name of the package containing the Graphweaver API
@@ -61,6 +63,8 @@ export type GraphweaverAppConfig = {
 		runtime?: Runtime;
 		// Lambda handler for the API
 		handler?: string;
+		// Pass the database secret ARN to the Lambda function
+		databaseSecretFullArn?: string;
 	};
 	network: {
 		// VPC to deploy the application into

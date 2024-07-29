@@ -30,33 +30,5 @@ export class DatabaseStack extends cdk.NestedStack {
 			databaseName: config.database.name,
 			securityGroups: [config.network.databaseSecurityGroup],
 		});
-
-		if (!this.dbInstance.secret?.secretFullArn)
-			throw new Error('Missing required secret ARN for database');
-
-		if (!this.dbInstance.secret?.secretArn)
-			throw new Error('Missing required secret ARN for database');
-
-		new cdk.CfnOutput(this, `${id}DatabaseUrl`, {
-			value: this.dbInstance.dbInstanceEndpointAddress,
-		});
-
-		// Export the secret ARN
-		new cdk.CfnOutput(this, `${id}DatabaseSecretArn`, {
-			value: this.dbInstance.secret?.secretArn,
-			exportName: 'EcsExampleDatabaseSecretArn',
-		});
-
-		// Export the secret Full ARN
-		new cdk.CfnOutput(this, `${id}DatabaseSecretFullArn`, {
-			value: this.dbInstance.secret?.secretFullArn,
-			exportName: 'EcsExampleDatabaseSecretFullArn',
-		});
-
-		// Export the instance ARN
-		new cdk.CfnOutput(this, `${id}DatabaseInstanceArn`, {
-			value: this.dbInstance.instanceArn,
-			exportName: 'EcsExampleDatabaseInstanceArn',
-		});
 	}
 }

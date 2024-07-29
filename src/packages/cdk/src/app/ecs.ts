@@ -8,7 +8,6 @@ import { ApplicationLoadBalancedEc2Service } from 'aws-cdk-lib/aws-ecs-patterns'
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { DockerImageAsset } from 'aws-cdk-lib/aws-ecr-assets';
 import { ApplicationProtocol } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
-import { PolicyStatement, Role, ServicePrincipal } from 'aws-cdk-lib/aws-iam';
 
 import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
@@ -29,6 +28,16 @@ export class EcsStack extends cdk.NestedStack {
 			throw new Error('Missing required ECS configuration');
 		}
 
+		// ⚠️ Avoid using the database root user in the application layer. ⚠️
+		// Create a dedicated user with limited permissions and pass its credentials via a secret manager ARN.
+		// This is a best practice for security and compliance.
+		const databaseSecretFullArn =
+			config.ecs.databaseSecretFullArn ?? database.dbInstance.secret?.secretFullArn;
+
+		if (!databaseSecretFullArn) {
+			throw new Error('No database secret found.');
+		}
+
 		const vpc = config.network.vpc;
 
 		// Copy the docker file to the build directory
@@ -43,14 +52,16 @@ export class EcsStack extends cdk.NestedStack {
 			file: 'Dockerfile',
 		});
 
-		const cluster = new Cluster(scope, `${id}EcsCluster`, {
-			capacity: {
-				instanceType: InstanceType.of(InstanceClass.BURSTABLE4_GRAVITON, InstanceSize.MICRO),
-				machineImage: EcsOptimizedImage.amazonLinux2023(AmiHardwareType.ARM),
-				desiredCapacity: 1,
-			},
-			vpc,
+		const cluster = new Cluster(scope, `${id}EcsCluster`, { vpc });
+
+		const autoScalingGroup = cluster.addCapacity('DefaultAutoScalingGroup', {
+			instanceType: InstanceType.of(InstanceClass.BURSTABLE4_GRAVITON, InstanceSize.MICRO),
+			machineImage: EcsOptimizedImage.amazonLinux2023(AmiHardwareType.ARM),
+			desiredCapacity: 1,
 		});
+
+		// Add the security group to the ec2 resources that used by your cluster
+		autoScalingGroup.addSecurityGroup(config.network.graphqlSecurityGroup);
 
 		const certificateArn = config.ecs.cert;
 		const certificate = Certificate.fromCertificateArn(
@@ -59,35 +70,10 @@ export class EcsStack extends cdk.NestedStack {
 			certificateArn
 		);
 
-		if (!database.dbInstance.secret?.secretFullArn) {
-			throw new Error('No database secret found.');
-		}
-		// Import the secret ARN and get the secret instance
-		const databaseSecretArn = database.dbInstance.secret?.secretArn;
-		const databaseSecretFullArn = database.dbInstance.secret?.secretFullArn;
-		const databaseInstanceArn = database.dbInstance.instanceArn;
-
-		const secretsManagerPolicy = new PolicyStatement({
-			actions: ['secretsmanager:GetSecretValue'], // Allow reading secrets
-			resources: [databaseSecretArn], // Only for this specific database secret
-		});
-		const rdsAccessPolicy = new PolicyStatement({
-			actions: ['rds-db:connect', 'rds-data:*'], // Allow connection and data access
-			resources: [databaseInstanceArn], // Only for this specific database
-		});
-
-		const taskRole = new Role(this, `${id}EcsTaskRole`, {
-			assumedBy: new ServicePrincipal(`ecs-task.amazonaws.com`),
-			roleName: cdk.PhysicalName.GENERATE_IF_NEEDED,
-		});
-		taskRole.addToPolicy(secretsManagerPolicy);
-		taskRole.addToPolicy(rdsAccessPolicy);
-
 		this.service = new ApplicationLoadBalancedEc2Service(scope, `${id}ALBService`, {
 			cluster,
 
 			taskImageOptions: {
-				taskRole,
 				image: ContainerImage.fromDockerImageAsset(image),
 				containerPort: 3000,
 				environment: {
@@ -103,7 +89,7 @@ export class EcsStack extends cdk.NestedStack {
 			certificate,
 			protocol: ApplicationProtocol.HTTPS,
 			redirectHTTP: true,
-			// domainName: config.ecs.url,
+			domainName: config.ecs.url,
 			// domainZone: HostedZone.fromLookup(construct, 'hosted-zone', {
 			// 	domainName: 'exogee.com',
 			// }),

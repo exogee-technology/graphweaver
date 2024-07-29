@@ -26,10 +26,15 @@ export class LambdaStack extends cdk.Stack {
 			throw new Error('Missing required lambda configuration');
 		}
 
-		if (!database.dbInstance.secret?.secretFullArn) {
+		// ⚠️ Avoid using the database root user in the application layer. ⚠️
+		// Create a dedicated user with limited permissions and pass its credentials via a secret manager ARN.
+		// This is a best practice for security and compliance.
+		const databaseSecretFullArn =
+			config.lambda.databaseSecretFullArn ?? database.dbInstance.secret?.secretFullArn;
+
+		if (!databaseSecretFullArn) {
 			throw new Error('No database secret found.');
 		}
-		const databaseSecretFullArn = database.dbInstance.secret?.secretFullArn;
 
 		const vpc = config.network.vpc;
 
