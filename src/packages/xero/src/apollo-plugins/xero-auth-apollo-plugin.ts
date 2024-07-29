@@ -89,8 +89,9 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			try {
 				token = new TokenSet(JSON.parse(authHeader));
 			} catch (error) {
+				logger.error(error);
 				logger.trace(
-					'Auth Header is not valid JSON or could not be read by TokenSet, rejecting request.'
+					'Auth Header is either not valid JSON or could not be read by TokenSet, rejecting request.'
 				);
 				throw new GraphQLError('You are not authorized to perform this action.', {
 					extensions: { code: 'FORBIDDEN' },
