@@ -94,7 +94,7 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 const DetailField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
 	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
 	return (
-		<div className={styles.detailField}>
+		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
 			{getField({ field, autoFocus })}

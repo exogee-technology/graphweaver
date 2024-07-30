@@ -167,6 +167,9 @@ export type ApiKeysListFilter = {
   revoked_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   revoked_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   revoked_null?: InputMaybe<Scalars['Boolean']['input']>;
+  roles?: InputMaybe<Roles>;
+  roles_in?: InputMaybe<Array<Roles>>;
+  roles_nin?: InputMaybe<Array<Roles>>;
 };
 
 export type ApiKeysOrderByInput = {
@@ -770,6 +773,9 @@ export type TasksListFilter = {
   isCompleted_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   isCompleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   isCompleted_null?: InputMaybe<Scalars['Boolean']['input']>;
+  priority?: InputMaybe<Priority>;
+  priority_in?: InputMaybe<Array<Priority>>;
+  priority_nin?: InputMaybe<Array<Priority>>;
   slug?: InputMaybe<Scalars['String']['input']>;
   slug_gt?: InputMaybe<Scalars['String']['input']>;
   slug_gte?: InputMaybe<Scalars['String']['input']>;

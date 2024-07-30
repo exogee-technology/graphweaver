@@ -59,6 +59,10 @@ jobs:
         working-directory: src/packages/end-to-end
         run: pnpm seed-postgres
 
+      - name: Install Playwright's dependencies
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
       - name: Import Postgres Chinook Database
         working-directory: src/packages/end-to-end
         run: pnpm import-database-postgres
@@ -70,6 +74,7 @@ jobs:
           pnpm start-server &
           sleep 3 &&
           pnpm test-postgres &&
+          pnpm test-ui-postgres &&
           killall node
 
     env:
