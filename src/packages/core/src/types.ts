@@ -131,8 +131,11 @@ export interface BackendProvider<D> {
 	): Promise<AggregationResult>;
 
 	backendProviderConfig?: BackendProviderConfig;
+
+	/**
+	 * @deprecated The method should not be used and will be removed in the future. Use `apolloPluginManager.addPlugin` instead.
+	 */
 	apolloPlugins?: ApolloServerPlugin<ApolloBaseContext>[];
-	graphweaverPlugins?: GraphweaverPlugin[];
 }
 
 // G = GraphQL entity

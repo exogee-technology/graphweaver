@@ -10,8 +10,15 @@ import { UserProfile, UserProfileType } from '../../user-profile';
 import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
 import { registerAccessControlListHook } from '../../decorators';
-import { ApiKeyProvider } from '../methods';
+import { ApiKeyProvider, getApiKeyProvider } from '../methods';
 import { upsertAuthorizationContext } from '../../authorization-context';
+import { getAddUserToContext } from '../../user-context';
+import {
+	applyImplicitAllow,
+	applyImplicitDeny,
+	getImplicitAllow,
+	setImplicitAllow,
+} from '../../implicit-authorization';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -49,28 +56,6 @@ const isURLWhitelisted = (authRedirect: URL) => {
 	);
 };
 
-const applyImplicitAllow = () => {
-	for (const key of graphweaverMetadata.entityNames()) {
-		if (!AclMap.has(key)) {
-			// Allow access to all operations
-			registerAccessControlListHook(key, {
-				Everyone: {
-					all: true,
-				},
-			});
-		}
-	}
-};
-
-const applyImplicitDeny = () => {
-	for (const key of graphweaverMetadata.entityNames()) {
-		if (!AclMap.has(key)) {
-			// An empty ACL means we deny access to all operations
-			registerAccessControlListHook(key, {});
-		}
-	}
-};
-
 export const applyDefaultMetadataACL = () => {
 	// By default we allow all users to read the admin metadata
 	const defaultAcl: AccessControlList<any, AuthorizationContext> = {
@@ -96,23 +81,45 @@ export const applyDefaultMetadataACL = () => {
 };
 
 type AuthApolloPluginOptions<R> = {
+	// @deprecated This option will be removed in the future, use setImplicitAllow instead.
 	implicitAllow?: boolean;
+
+	// @deprecated This option will be removed in the future and now happens automatically when creating an API Key auth method.
 	apiKeyDataProvider?: ApiKeyProvider<R>;
 };
 
 export const authApolloPlugin = <R>(
-	addUserToContext: (userId: string) => Promise<UserProfile<R>>,
+	addUserToContext?: (userId: string) => Promise<UserProfile<R>>,
 	options?: AuthApolloPluginOptions<R>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
 		async requestDidStart({ request, contextValue }) {
+			if (addUserToContext) {
+				console.warn(
+					"WARNING: The 'addUserToContext' argument is deprecated. Please add the addUserToContext function to the request context instead."
+				);
+			}
+
+			if (options?.apiKeyDataProvider) {
+				console.warn(
+					"WARNING: The 'apiKeyDataProvider' argument is deprecated and will be removed in the future."
+				);
+			}
+
+			if (options?.implicitAllow) {
+				setImplicitAllow(options.implicitAllow);
+				console.warn(
+					"WARNING: The 'implicitAllow' option is deprecated. Please use the 'setImplicitAllow' function instead."
+				);
+			}
+
 			logger.trace('authApolloPlugin requestDidStart');
 
 			// Apply the default ACL to the admin metadata
 			applyDefaultMetadataACL();
 
 			// If the implicitAllow option is set, we allow access to all entities that do not have an ACL defined.
-			if (options?.implicitAllow) {
+			if (getImplicitAllow()) {
 				applyImplicitAllow();
 			} else {
 				// By default we deny access to all entities and the developer must define each ACL.
@@ -143,13 +150,15 @@ export const authApolloPlugin = <R>(
 			let tokenVerificationFailed = false;
 			let apiKeyVerificationFailedMessage: string | undefined = undefined;
 
-			if (apiKeyHeader && options?.apiKeyDataProvider) {
+			const apiKeyProvider = getApiKeyProvider();
+
+			if (apiKeyHeader && apiKeyProvider) {
 				// Case 1. API Key auth header found.
 				logger.trace('X-API-Key header found checking validity.');
 
 				const [key, secret] = Buffer.from(apiKeyHeader, 'base64').toString('utf-8').split(':');
 
-				const apiKey = await options.apiKeyDataProvider?.findOne({
+				const apiKey = await apiKeyProvider?.findOne({
 					key,
 				});
 
@@ -189,7 +198,14 @@ export const authApolloPlugin = <R>(
 
 					const userId = typeof decoded === 'object' ? decoded?.sub : undefined;
 					if (!userId) throw new Error('Token verification failed: No user ID found.');
-					const userProfile = await addUserToContext(userId);
+
+					const addUserToContextCallback = getAddUserToContext() ?? addUserToContext;
+					if (!addUserToContextCallback)
+						throw new Error(
+							'No addUserToContext provider please set one using the setAddUserToContext function.'
+						);
+
+					const userProfile = await addUserToContextCallback(userId);
 
 					contextValue.token = decoded;
 					contextValue.user = userProfile;

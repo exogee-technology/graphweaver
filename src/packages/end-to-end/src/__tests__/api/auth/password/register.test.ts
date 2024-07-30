@@ -1,14 +1,16 @@
 import gql from 'graphql-tag';
 import Graphweaver from '@exogee/graphweaver-server';
 import {
-	authApolloPlugin,
 	UserProfile,
 	CredentialStorage,
 	hashPassword,
 	Password,
+	setAddUserToContext,
+	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
 import { BaseDataProvider } from '@exogee/graphweaver';
+import { set } from 'mockdate';
 
 const user: CredentialStorage = {
 	id: '1',
@@ -41,11 +43,10 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('Password Authentication - Register', () => {
 	test('should create a new user.', async () => {

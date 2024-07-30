@@ -5,11 +5,11 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	Password,
 	CredentialStorage,
 	hashPassword,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const user: CredentialStorage = {
@@ -35,11 +35,9 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 describe('Password Authentication - Login', () => {
 	test('should return a valid user and successfully login.', async () => {
