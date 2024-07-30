@@ -17,6 +17,18 @@ export const WelcomePage = () => (
 			<a href="https://github.com/lerocha/chinook-database">Chinook</a> with the tracing table
 			added.
 		</p>
+		<Spacer height={10} />
+		<p>
+			If you're stuck,{' '}
+			<a
+				href="https://join.slack.com/t/graphweaver/shared_invite/zt-2hxeb04d3-reNTqeVUAWy2YVXWscWRaw"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				reach out to us on Slack
+			</a>
+			. We're here to help!
+		</p>
 		<Spacer height={30} />
 		<Button className={styles.button} href="/Album">
 			Get started! <Arrow className={styles.arrow} />

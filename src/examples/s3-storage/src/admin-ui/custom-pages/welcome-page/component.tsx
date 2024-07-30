@@ -81,6 +81,18 @@ export class Submission {
 			This creates a query that will generate a signed URL, and a mutation to accept the result once
 			S3 has accepted the file upload from the client. Ready to have a look?
 		</p>
+		<Spacer height={10} />
+		<p>
+			If you're stuck,{' '}
+			<a
+				href="https://join.slack.com/t/graphweaver/shared_invite/zt-2hxeb04d3-reNTqeVUAWy2YVXWscWRaw"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				reach out to us on Slack
+			</a>
+			. We're here to help!
+		</p>
 		<Spacer height={30} />
 		<Button className={styles.button} href="/Submission">
 			Get started! <Arrow className={styles.arrow} />
