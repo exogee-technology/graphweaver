@@ -383,7 +383,7 @@ export const beforeRead = (gqlEntityTypeName: string) => {
 		const acl = getACL(gqlEntityTypeName);
 		// 3. Combine the access filter with the original filter
 		const accessFilter = await getAccessFilter(acl, AccessType.Read);
-		const consolidatedFilter = andFilters(params.args.filter, accessFilter);
+		const consolidatedFilter = andFilters(params.args?.filter, accessFilter);
 
 		return {
 			...params,

@@ -24,19 +24,7 @@ export const password = new Password({
 	getUserProfile: async (): Promise<UserProfile<unknown>> => user,
 });
 
-const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
-	// Ensure only logged in users can access the admin ui metadata
-	if (!params.context.token) throw new ForbiddenError('Forbidden');
-	return params;
-};
-
 setAddUserToContext(async () => user);
-
-ApplyAccessControlList({
-	Everyone: {
-		all: () => false,
-	},
-})(AdminUiMetadata);
 
 const graphweaver = new Graphweaver();
 
