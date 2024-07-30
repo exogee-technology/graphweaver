@@ -10,7 +10,6 @@ import {
 } from '@exogee/graphweaver-auth';
 import assert from 'assert';
 import { BaseDataProvider } from '@exogee/graphweaver';
-import { set } from 'mockdate';
 
 const user: CredentialStorage = {
 	id: '1',

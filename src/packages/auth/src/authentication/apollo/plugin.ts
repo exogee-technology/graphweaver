@@ -1,6 +1,5 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
