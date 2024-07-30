@@ -20,9 +20,9 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.3.0",
-		"@mikro-orm/knex": "6.3.0",
-		"@mikro-orm/sqlite": "6.3.0",
+		"@mikro-orm/core": "6.3.1",
+		"@mikro-orm/knex": "6.3.1",
+		"@mikro-orm/sqlite": "6.3.1",
 		"graphql": "16.9.0",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"react": "18.3.1"
