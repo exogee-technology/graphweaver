@@ -10,11 +10,11 @@
 
 <!-- PROJECT DESCRIPTION -->
 <p align="center">
-  Data Everywhere - Instant GraphQL
+  The code-first, MAXIMALLY CUSTOMISABLE open source alternative to Hasura that is easy to self host. 
 </p>
 
 <p align="center">
-  Graphweaver speeds up your GraphQL development by securely connecting all your data sources in one place.
+  Graphweaver speeds up your GraphQL development by securely connecting all your data sources in one place. Once your API has been bootstrapped, you can add permissions / auth and completely customise every operation in your server. We offer in-built resolvers for all common data access scenarios, but give you full flexibilty to override them however you like!
 </p>
 
 <p align="center">
@@ -63,7 +63,9 @@ In the past we used to copy data from everywhere to the DB, but that always brea
 
 Well, after years of grappling with this issue, we wanted a way to easily build a single GraphQL API in front of all those sources. An API that allows you to execute queries that even span across datasources (give me DB records where customer in CRM name is "Bob"), and also allows you to administer your data all from one place.
 
-That's why we built Graphweaver. We've been using it on our projects for about a year now and think you'll love it too!
+Other tools are oriented around the schema file. This is great until you actually need to go to production. Need to override that one operation? Change exactly how your auth tokens are handled? With Graphweaver you're never constrained because it's all just a standard GraphQL server which you can tweak the behaviour of however you like.
+
+That's why we built Graphweaver. Start quickly, use the default for most things, change whatever you like, self-host, and never lose control.
 
 ## Features
 
