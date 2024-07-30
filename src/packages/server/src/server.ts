@@ -20,12 +20,13 @@ import { LogErrors, LogRequests, corsPlugin, dedupeGraphQL } from './apollo-plug
 import { StartServerOptions, startStandaloneServer, startServerless } from './integrations';
 import { GraphweaverConfig, mergeConfig } from './config';
 import { enableTracing } from './trace';
-import { pluginManager } from './plugins';
+import { pluginManager } from './plugin-manager';
 import {
 	ExecuteOperationOptions,
 	GraphQLResponse,
 } from '@apollo/server/dist/esm/externalTypes/graphql';
 import { onRequestWrapper } from './integrations/utils';
+import { apolloPluginManager } from './apollo-plugins/apollo-plugin-manager';
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
@@ -56,7 +57,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Configure the plugins for Graphweaver and Apollo
 		this.graphweaverPlugins = pluginManager.getPlugins();
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
+		apolloPlugins.push(...apolloPluginManager.getPlugins());
 
+		// @todo The provider apolloPlugins method has been deprecated and the below loop should be removed in the future.
 		for (const metadata of graphweaverMetadata.entities()) {
 			if (metadata.provider?.apolloPlugins && metadata.provider.apolloPlugins.length > 0) {
 				// only push unique plugins

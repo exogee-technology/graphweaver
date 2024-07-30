@@ -1,12 +1,14 @@
 import { GraphweaverPluginNextFunction, GraphweaverRequestEvent } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { pluginManager } from '@exogee/graphweaver-server';
+import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import { RequestContext } from '../../authorization-context';
+import { authApolloPlugin } from '../apollo';
 
 export class BaseAuthMethod {
 	constructor() {
 		this.addRequestContext();
+		this.addApolloPlugin();
 	}
 
 	private addRequestContext = () => {
@@ -20,5 +22,9 @@ export class BaseAuthMethod {
 			},
 		};
 		pluginManager.addPlugin(connectionPlugin);
+	};
+
+	private addApolloPlugin = () => {
+		apolloPluginManager.addPlugin('AuthApolloPlugin', authApolloPlugin());
 	};
 }

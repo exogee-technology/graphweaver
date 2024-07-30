@@ -2,6 +2,8 @@ export * from './decorators';
 export * from './types';
 export * from './helper-functions';
 export * from './authentication';
+export * from './implicit-authorization';
 export * from './errors';
 export * from './user-profile';
 export * from './utils/argon2id';
+export * from './user-context';

@@ -3,7 +3,6 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	AuthenticationBaseEntity,
 	Password,
@@ -13,6 +12,8 @@ import {
 	OneTimePasswordData,
 	AuthenticationMethod,
 	OneTimePasswordEntity,
+	setAddUserToContext,
+	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_CODE = '123456';
@@ -87,11 +88,10 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('One Time Password Authentication - Challenge', () => {
 	afterEach(() => {

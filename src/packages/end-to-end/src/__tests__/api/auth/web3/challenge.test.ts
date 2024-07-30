@@ -1,13 +1,13 @@
 import {
 	AuthenticationMethod,
 	UserProfile,
-	authApolloPlugin,
 	WalletAddress,
 	CredentialStorage,
 	hashPassword,
 	Password,
 	Web3,
 	AuthenticationBaseEntity,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -93,16 +93,12 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [
-			authApolloPlugin(async () => ({
-				...user,
-				roles: ['user'],
-			})),
-		],
-	},
-});
+setAddUserToContext(async () => ({
+	...user,
+	roles: ['user'],
+}));
+
+const graphweaver = new Graphweaver();
 
 describe('web3 challenge', () => {
 	afterEach(() => {
