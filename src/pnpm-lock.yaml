@@ -54,6 +54,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
       '@exogee/graphweaver-auth':
         specifier: workspace:*
         version: link:../../packages/auth
@@ -109,6 +112,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
       '@exogee/graphweaver-aws':
         specifier: workspace:*
         version: link:../../packages/aws-cognito
@@ -381,6 +387,9 @@ importers:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../../packages/mikroorm
@@ -405,6 +414,12 @@ importers:
       mikro-orm-sqlite-wasm:
         specifier: workspace:*
         version: link:../../packages/mikro-orm-sqlite-wasm
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: 18.3.1
+        version: 18.3.1(react@18.3.1)
     devDependencies:
       '@types/node':
         specifier: 22.0.0

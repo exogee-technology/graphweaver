@@ -4,6 +4,7 @@ import { gql } from '@apollo/client';
 import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
 import { AllCompanies, SingleCompany } from './dashboards';
 import { TenantsQuery } from './index.generated';
+import { WelcomePage } from './welcome-page';
 
 const tenantsQuery = gql`
 	query Tenants {
@@ -15,7 +16,12 @@ const tenantsQuery = gql`
 `;
 
 export const customPages = {
+	defaultRoute: '/welcome',
 	routes: () => [
+		{
+			path: '/welcome',
+			element: <WelcomePage />,
+		},
 		{
 			// This is where Xero sends us back to after the OAuth flow.
 			// Its job is to read the code and store it in local storage, then

@@ -8,6 +8,10 @@ test('should allow an admin to update a user', async ({ page }) => {
 	await page.getByPlaceholder('Username').press('Tab');
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByPlaceholder('Password').press('Enter');
+
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('cell', { name: 'darth' }).click();
@@ -27,6 +31,10 @@ test('should deny updating when a user has read only permission', async ({ page 
 	await page.getByPlaceholder('Username').press('Tab');
 	await page.getByPlaceholder('Password').fill('lightsaber123');
 	await page.getByPlaceholder('Password').press('Enter');
+
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('cell', { name: 'luke' }).click();
@@ -49,6 +57,10 @@ test('should deny a non-admin to update another user', async ({ page }) => {
 	await page.getByPlaceholder('Username').press('Tab');
 	await page.getByPlaceholder('Password').fill('lightsaber123');
 	await page.getByPlaceholder('Password').press('Enter');
+
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	// Load another user's page
 	await page.goto(`${config.adminUiUrl}/Credential/4`);

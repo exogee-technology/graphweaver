@@ -1,0 +1,20 @@
+.heading {
+	font-size: 2.2rem;
+	font-weight: bold;
+	line-height: 3rem;
+}
+
+.list {
+	list-style: disc;
+	margin-left: 2rem;
+}
+
+.button {
+	width: 200px;
+	justify-content: space-between;
+	margin-left: auto;
+}
+
+.arrow {
+	height: 8px;
+}

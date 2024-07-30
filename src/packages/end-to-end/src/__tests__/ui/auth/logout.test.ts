@@ -9,6 +9,10 @@ test('should allow a successful logout', async ({ page }) => {
 	await page.getByPlaceholder('Password').click();
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByRole('button', { name: 'Login' }).click();
+
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await expect(page.getByRole('button', { name: 'Sign Out' })).toBeVisible();
 	await page.getByRole('button', { name: 'Sign Out' }).click();
 	await expect(page.getByPlaceholder('Username')).toBeVisible();
