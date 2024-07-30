@@ -102,11 +102,11 @@ const assertUserCanPerformRequest = async <G>(
 		permissionsFromFilterArgsOnFields.push(...getFilterArgumentsOnFields(entityMetadata, fields));
 	}
 
-	const permissionsFromInputArgs = args.items
+	const permissionsFromInputArgs = args?.items
 		? generatePermissionListFromArgs()(gqlEntityTypeName, args.items, accessType)
 		: [];
 
-	const permissionsFromFilterArgs = args.filter
+	const permissionsFromFilterArgs = args?.filter
 		? generatePermissionListFromArgs()(gqlEntityTypeName, [args.filter], accessType, true)
 		: [];
 
