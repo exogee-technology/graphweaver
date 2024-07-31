@@ -135,17 +135,13 @@ export const checkPackageForNativeModules = () => ({
 export const addStartFunctionIfNeeded = () => ({
 	name: 'addStartFunctionIfNeeded',
 	setup(build: PluginBuild) {
-		const cache = new Map();
-
 		build.onLoad({ filter: /src\/backend\/index\.ts$/ }, async (args: OnLoadArgs) => {
 			const input = await fs.promises.readFile(args.path, 'utf8');
-			const key = args.path;
-			let value = cache.get(key);
 
 			// If the graphweaver app is a lambda function then there is nothing to change
 			if (input.includes('graphweaver.handler')) {
-				console.log('Detected Lambda Handler');
-				return value.output;
+				console.log('Lambda handler detected. No changes needed.');
+				return { contents: input };
 			}
 
 			// Otherwise this is a standalone instance so we need to start the server
@@ -158,13 +154,7 @@ export const addStartFunctionIfNeeded = () => ({
 					path: process.env.PATH ?? '/',
 				});`;
 
-			if (!value || value.input !== input) {
-				const contents = `${input}${startCommand}`;
-				value = { input, output: { contents } };
-				cache.set(key, value);
-			}
-
-			return value.output;
+			return { contents: `${input}${startCommand}` };
 		});
 	},
 });
