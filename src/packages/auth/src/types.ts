@@ -41,14 +41,39 @@ export type AccessControlList<G, TContext extends AuthorizationContext = Authori
 	[K in string]?: AccessControlEntry<G, TContext>;
 };
 
-export interface AccessControlEntry<G, TContext extends AuthorizationContext> {
-	read?: AccessControlValue<G, TContext>;
-	create?: AccessControlValue<G, TContext>;
-	update?: AccessControlValue<G, TContext>;
-	delete?: AccessControlValue<G, TContext>;
-	write?: AccessControlValue<G, TContext>;
-	all?: AccessControlValue<G, TContext>;
-}
+type ReadAccessControl<G, TContext extends AuthorizationContext> =
+	| { read: AccessControlValue<G, TContext>; readSome?: never }
+	| { readSome: AccessControlValue<G, TContext>; read?: never };
+
+type CreateAccessControl<G, TContext extends AuthorizationContext> =
+	| { create: AccessControlValue<G, TContext>; createSome?: never }
+	| { createSome: AccessControlValue<G, TContext>; create?: never };
+
+type UpdateAccessControl<G, TContext extends AuthorizationContext> =
+	| { update: AccessControlValue<G, TContext>; updateSome?: never }
+	| { updateSome: AccessControlValue<G, TContext>; update?: never };
+
+type DeleteAccessControl<G, TContext extends AuthorizationContext> = {
+	delete: AccessControlValue<G, TContext>;
+};
+
+type WriteAccessControl<G, TContext extends AuthorizationContext> =
+	| { write: AccessControlValue<G, TContext>; writeSome?: never }
+	| { writeSome: AccessControlValue<G, TContext>; write?: never };
+
+type AllAccessControl<G, TContext extends AuthorizationContext> =
+	| { all: AccessControlValue<G, TContext>; allSome?: never }
+	| { allSome: AccessControlValue<G, TContext>; all?: never };
+
+export type AccessControlEntry<G, TContext extends AuthorizationContext> = CreateAccessControl<
+	G,
+	TContext
+> &
+	ReadAccessControl<G, TContext> &
+	UpdateAccessControl<G, TContext> &
+	DeleteAccessControl<G, TContext> &
+	WriteAccessControl<G, TContext> &
+	AllAccessControl<G, TContext>;
 
 export type ConsolidatedAccessControlEntry<G, TContext extends AuthorizationContext> = {
 	[K in AccessType]?: ConsolidatedAccessControlValue<G, TContext>;
