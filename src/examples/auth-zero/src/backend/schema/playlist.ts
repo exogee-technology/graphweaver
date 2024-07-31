@@ -1,9 +1,16 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+
 import { Track } from './track';
 import { Playlist as OrmPlaylist } from '../entities';
 import { connection } from '../database';
 
+@ApplyAccessControlList({
+	Everyone: {
+		read: true,
+	},
+})
 @Entity('Playlist', {
 	provider: new MikroBackendProvider(OrmPlaylist, connection),
 })
