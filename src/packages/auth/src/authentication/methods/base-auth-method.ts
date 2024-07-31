@@ -16,7 +16,7 @@ export class BaseAuthMethod {
 	constructor() {
 		this.addRequestContext();
 		this.addApolloPlugin();
-		this.enforceLoggedIn();
+		this.ensureAdminUIMetadataIsAuthenticated();
 	}
 
 	private addRequestContext = () => {
@@ -36,7 +36,7 @@ export class BaseAuthMethod {
 		apolloPluginManager.addPlugin('AuthApolloPlugin', authApolloPlugin());
 	};
 
-	private enforceLoggedIn = async () => {
+	private ensureAdminUIMetadataIsAuthenticated = async () => {
 		// Ensure that accessing the admin ui metadata requires the user to be logged in
 		// This will then redirect the user if not logged in
 		// This is the default and can be overridden by the user first if needed
