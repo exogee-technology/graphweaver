@@ -5,6 +5,7 @@ import { rimraf } from 'rimraf';
 import { AdditionalFunctionOptions, config } from '@exogee/graphweaver-config';
 
 import {
+	addStartFunctionIfNeeded,
 	baseEsbuildConfig,
 	buildOutputPathFor,
 	checkPackageForNativeModules,
@@ -14,9 +15,7 @@ import {
 	makeAllPackagesExternalPlugin,
 } from '../util';
 
-export interface BackendBuildOptions {}
-
-export const buildBackend = async (_: BackendBuildOptions) => {
+export const buildBackend = async () => {
 	console.log('Building backend....');
 
 	// Clear the folder
@@ -29,8 +28,10 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 		onResolveEsbuildConfiguration({
 			...baseEsbuildConfig,
 
-			// Anything in node_modules should be marked as external for running.
-			plugins: [makeAllPackagesExternalPlugin()],
+			plugins: [
+				// Anything in node_modules should be marked as external for running.
+				makeAllPackagesExternalPlugin(),
+			],
 
 			entryPoints: ['./src/backend/index.ts'],
 			outfile: '.graphweaver/backend/index.js',
@@ -67,7 +68,15 @@ export const buildBackend = async (_: BackendBuildOptions) => {
 					minify: true,
 					metafile: true,
 					external: getExternalModules(),
-					plugins: [checkPackageForNativeModules()],
+					plugins: [
+						// Native modules are not yet supported.
+						checkPackageForNativeModules(),
+
+						// In non-lambda mode, the built output needs to actually start the server instead of just defining a function.
+						// We don't do this in the .graphweaver build above because we don't want to start the server in our .graphweaver
+						// built output, only in the dist version.
+						addStartFunctionIfNeeded(),
+					],
 					entryPoints: [inputPathFor(backendFunction.handlerPath)],
 					outfile: `${buildOutputPathFor(backendFunction.handlerPath)}.js`,
 				})

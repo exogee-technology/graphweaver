@@ -213,9 +213,6 @@ importers:
       '@apollo/server':
         specifier: 4.10.5
         version: 4.10.5(graphql@16.9.0)
-      '@as-integrations/hapi':
-        specifier: 2.0.1
-        version: 2.0.1(@apollo/server@4.10.5)(@hapi/hapi@21.3.10)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -225,9 +222,6 @@ importers:
       '@exogee/graphweaver-server':
         specifier: workspace:*
         version: link:../../packages/server
-      '@hapi/hapi':
-        specifier: 21.3.10
-        version: 21.3.10
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -1061,6 +1055,9 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
+      vite:
+        specifier: 5.3.5
+        version: 5.3.5(@types/node@22.0.0)
 
   packages/core:
     dependencies:
@@ -1878,17 +1875,6 @@ packages:
       '@apollo/server': 4.10.5(graphql@16.9.0)
       fastify: 4.28.1
       fastify-plugin: 4.5.1
-    dev: false
-
-  /@as-integrations/hapi@2.0.1(@apollo/server@4.10.5)(@hapi/hapi@21.3.10):
-    resolution: {integrity: sha512-FpPmT0tKbRBvQ+xt7pT8lCmShpylE2fU46SBa764IbWOcnOyZv7Cw9KujAcM5gW/NLeFI/xjADLabOTonwQghg==}
-    engines: {node: '>=16'}
-    peerDependencies:
-      '@apollo/server': ^4.0.0
-      '@hapi/hapi': ^20.2.2 || ^21.0.0
-    dependencies:
-      '@apollo/server': 4.10.5(graphql@16.9.0)
-      '@hapi/hapi': 21.3.10
     dev: false
 
   /@auth0/auth0-spa-js@2.1.3:
