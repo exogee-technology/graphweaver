@@ -8,7 +8,9 @@ import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import { RequestContext } from '../../authorization-context';
 import { authApolloPlugin } from '../apollo';
-import { AclMap, ApplyAccessControlList } from '../..';
+import { getImplicitAllow } from '../../implicit-authorization';
+import { ApplyAccessControlList } from '../../decorators/apply-access-control-list';
+import { AclMap } from '../../helper-functions';
 
 export class BaseAuthMethod {
 	constructor() {
@@ -38,7 +40,7 @@ export class BaseAuthMethod {
 		// Ensure that accessing the admin ui metadata requires the user to be logged in
 		// This will then redirect the user if not logged in
 		// This is the default and can be overridden by the user first if needed
-		if (!AclMap.has('AdminUiMetadata')) {
+		if (!AclMap.has('AdminUiMetadata') && !getImplicitAllow()) {
 			logger.trace('Adding AdminUiMetadata ACL');
 			ApplyAccessControlList({
 				Everyone: {
