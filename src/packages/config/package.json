@@ -20,7 +20,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"lodash": "4.17.21"
+		"lodash": "4.17.21",
+		"vite": "5.3.5"
 	},
 	"devDependencies": {
 		"@types/lodash": "4.17.7",

@@ -1,5 +1,6 @@
 import { join } from 'path';
 import { merge } from 'lodash';
+import type { InlineConfig } from 'vite';
 
 export interface BackendOptions {
 	additionalFunctions: Array<AdditionalFunctionOptions>;
@@ -20,13 +21,13 @@ export interface AdminUIOptions {
 
 export interface StartOptions {
 	onResolveEsbuildConfiguration(options: any): Promise<any> | any;
-	onResolveViteConfiguration(options: any): Promise<any> | any;
+	onResolveViteConfiguration(options: InlineConfig): Promise<InlineConfig> | InlineConfig;
 	onResolveServerlessOfflineConfiguration(options: any): Promise<any> | any;
 }
 
 export interface BuildOptions {
 	onResolveEsbuildConfiguration(options: any): Promise<any> | any;
-	onResolveViteConfiguration(options: any): Promise<any> | any;
+	onResolveViteConfiguration(options: InlineConfig): Promise<InlineConfig> | InlineConfig;
 }
 
 export interface ConfigOptions {

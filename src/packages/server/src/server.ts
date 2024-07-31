@@ -113,7 +113,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 		if (logger.isLevelEnabled('trace')) logger.trace(`Schema: ${SchemaBuilder.print()}`);
 
 		logger.trace(`Graphweaver buildSchemaSync finished.`);
-		logger.trace(`Graphweaver starting ApolloServer`);
 		logger.trace(`Protecting with GraphQL Armor 🛡️`);
 		const armor = new ApolloArmor(config?.graphQLArmorOptions);
 		const protection = armor.protect();
@@ -125,8 +124,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			fieldResolver,
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
-
-		this.server.executeOperation;
 
 		if (isTraceable()) enableTracing(this.server);
 	}
