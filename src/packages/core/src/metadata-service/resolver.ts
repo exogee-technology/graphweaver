@@ -4,6 +4,7 @@ import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { graphweaverMetadata } from '../metadata';
 import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
 import { getFieldTypeWithMetadata } from '../schema-builder';
+import { hookManagerMap, HookRegister } from '../hook-manager';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -36,6 +37,9 @@ type MetadataHookParams<C> = {
 	metadata?: { entities: any; enums: any };
 };
 
+/**
+ * @deprecated This argument should not be used and will be removed in the future. Use `applyAccessControlList` instead.
+ */
 type Hooks = {
 	beforeRead?: <C extends BaseContext>(
 		params: MetadataHookParams<C>
@@ -46,8 +50,18 @@ type Hooks = {
 };
 
 export const resolveAdminUiMetadata = (hooks?: Hooks) => {
-	return async <C extends BaseContext>({ context }: ResolverOptions<unknown, C>) => {
+	return async <C extends BaseContext>({ context, fields }: ResolverOptions<unknown, C>) => {
+		// @deprecated the line below can be removed once the hook is
 		await hooks?.beforeRead?.({ context });
+
+		const hookManager = hookManagerMap.get('AdminUiMetadata');
+
+		if (hookManager)
+			await hookManager.runHooks(HookRegister.BEFORE_READ, {
+				context,
+				transactional: false,
+				fields,
+			});
 
 		const entities: (AdminUiEntityMetadata | undefined)[] = Array.from(
 			graphweaverMetadata.entities()

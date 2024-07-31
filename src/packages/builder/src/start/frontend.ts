@@ -30,7 +30,7 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 		// deprecated. Once we move to ESM, we can use the ESM entry point directly above.
 		const { createServer } = await import('vite');
 		server = await createServer(
-			onResolveViteConfiguration(
+			await onResolveViteConfiguration(
 				viteConfig({
 					rootDirectory,
 					backendUrl: backendUrl.toString(),

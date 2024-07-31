@@ -20,6 +20,7 @@
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
 		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
 		"clean": "./clean.sh && pnpm build",
+		"force:build": "TURBO_FORCE=true pnpm build",
 		"format": "pnpm prettier",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write .",
@@ -34,8 +35,8 @@
 		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "7.17.0",
-		"@typescript-eslint/parser": "7.17.0",
+		"@typescript-eslint/eslint-plugin": "7.18.0",
+		"@typescript-eslint/parser": "7.18.0",
 		"concurrently": "8.2.2",
 		"eslint": "8.57.0",
 		"eslint-config-prettier": "9.1.0",
