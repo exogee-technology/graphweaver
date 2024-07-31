@@ -4,6 +4,7 @@ import { AdminUiEntityAttributeMetadata } from './entity-attribute';
 import { graphweaverMetadata } from '../metadata';
 import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
 import { getFieldTypeWithMetadata } from '../schema-builder';
+import { hookManagerMap, HookRegister } from '../hook-manager';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -36,6 +37,9 @@ type MetadataHookParams<C> = {
 	metadata?: { entities: any; enums: any };
 };
 
+/**
+ * @deprecated This argument should not be used and will be removed in the future. Use `applyAccessControlList` instead.
+ */
 type Hooks = {
 	beforeRead?: <C extends BaseContext>(
 		params: MetadataHookParams<C>
@@ -46,8 +50,18 @@ type Hooks = {
 };
 
 export const resolveAdminUiMetadata = (hooks?: Hooks) => {
-	return async <C extends BaseContext>({ context }: ResolverOptions<unknown, C>) => {
+	return async <C extends BaseContext>({ context, fields }: ResolverOptions<unknown, C>) => {
+		// @deprecated the line below can be removed once the hook is
 		await hooks?.beforeRead?.({ context });
+
+		const hookManager = hookManagerMap.get('AdminUiMetadata');
+
+		if (hookManager)
+			await hookManager.runHooks(HookRegister.BEFORE_READ, {
+				context,
+				transactional: false,
+				fields,
+			});
 
 		const entities: (AdminUiEntityMetadata | undefined)[] = Array.from(
 			graphweaverMetadata.entities()
@@ -148,9 +162,14 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 
 		const enums = Array.from(graphweaverMetadata.enums()).map((registeredEnum) => ({
 			name: registeredEnum.name,
-			values: Object.entries(registeredEnum.target).map(([name, value]) => ({
+			values: Object.entries(registeredEnum.target).map(([name]) => ({
 				name,
-				value,
+
+				// While it seems odd to return the name twice here, that's actually what the client should use as the value
+				// for the enum. In the backend we have something like enum UserStatus { ACTIVE = 'active' }. When this comes out
+				// in the GraphQL schema it'll be referred to as 'ACTIVE' in that schema, so the client should always use the key
+				// for the value to send to the backend. This is intentional.
+				value: name,
 			})),
 		}));
 

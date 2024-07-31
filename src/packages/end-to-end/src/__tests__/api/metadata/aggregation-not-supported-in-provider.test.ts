@@ -48,7 +48,7 @@ describe('Aggregation - Not Supported in Provider', () => {
 	const graphweaver = new Graphweaver();
 
 	test('Introspection should not have an aggregate root product query because the provider has not declared support', async () => {
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					deprecatedProducts_aggregate {
@@ -64,7 +64,7 @@ describe('Aggregation - Not Supported in Provider', () => {
 			'Cannot query field "deprecatedProducts_aggregate" on type "Query". [Suggestion hidden]?'
 		);
 
-		const introspectionResponse = await graphweaver.server.executeOperation({
+		const introspectionResponse = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					__schema {
@@ -89,7 +89,7 @@ describe('Aggregation - Not Supported in Provider', () => {
 	});
 
 	test('_graphweaver should indicate that the entity does not support aggregation', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			_graphweaver: {
 				entities: [{ name: string; supportedAggregationTypes: string[] }];
 			};

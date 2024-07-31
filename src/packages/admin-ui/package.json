@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "2.0.5",
+	"version": "2.0.7",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -21,7 +21,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/client": "3.10.8",
+		"@apollo/client": "3.11.1",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",
@@ -42,9 +42,9 @@
 		"esbuild": "0.23.0",
 		"esbuild-plugin-copy": "2.1.1",
 		"glob": "10.4.3",
-		"typescript": "5.5.3",
+		"typescript": "5.5.4",
 		"vite-plugin-svgr": "4.2.0",
-		"vite": "5.3.4"
+		"vite": "5.3.5"
 	},
 	"keywords": [
 		"graphql",

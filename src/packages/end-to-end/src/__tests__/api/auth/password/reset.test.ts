@@ -6,13 +6,14 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	ForgottenPasswordLinkData,
 	AuthenticationBaseEntity,
 	CredentialStorage,
 	ForgottenPassword,
 	Password,
+	setAddUserToContext,
+	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
 
 let token = '';
@@ -82,15 +83,14 @@ new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('Forgotten Password flow', () => {
 	test('should generate a forgotten password link and allow resetting', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			sendResetPasswordLink: boolean;
 		}>({
 			query: gql`
@@ -107,7 +107,7 @@ describe('Forgotten Password flow', () => {
 		expect(response.body.singleResult.errors).toBeUndefined();
 		expect(response.body.singleResult.data?.sendResetPasswordLink).toBe(true);
 
-		const resetPasswordResponse = await graphweaver.server.executeOperation<{
+		const resetPasswordResponse = await graphweaver.executeOperation<{
 			resetPassword: boolean;
 		}>({
 			query: gql`
@@ -125,7 +125,7 @@ describe('Forgotten Password flow', () => {
 		expect(resetPasswordResponse.body.singleResult.errors).toBeUndefined();
 		expect(resetPasswordResponse.body.singleResult.data?.resetPassword).toBe(true);
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`

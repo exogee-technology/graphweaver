@@ -3,7 +3,6 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	AuthenticationBaseEntity,
 	Password,
@@ -13,6 +12,8 @@ import {
 	OneTimePasswordData,
 	AuthenticationMethod,
 	OneTimePasswordEntity,
+	setAddUserToContext,
+	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_CODE = '123456';
@@ -87,11 +88,10 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('One Time Password Authentication - Challenge', () => {
 	afterEach(() => {
@@ -99,7 +99,7 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -121,7 +121,7 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if ttl expired.', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -152,7 +152,7 @@ describe('One Time Password Authentication - Challenge', () => {
 				}) as OneTimePasswordEntity
 		);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation verifyOTPChallenge($code: String!) {
@@ -173,7 +173,7 @@ describe('One Time Password Authentication - Challenge', () => {
 	});
 
 	test('should pass challenge if using correct token.', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -197,7 +197,7 @@ describe('One Time Password Authentication - Challenge', () => {
 
 		jest.spyOn(OneTimePassword.prototype, 'redeemOTP').mockImplementation(async () => true);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			result: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,

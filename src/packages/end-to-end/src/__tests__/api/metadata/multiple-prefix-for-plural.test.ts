@@ -20,7 +20,7 @@ test('should return multipleFish as plural name for Fish', async () => {
 
 	const graphweaver = new Graphweaver();
 
-	const response = await graphweaver.server.executeOperation<{
+	const response = await graphweaver.executeOperation<{
 		_graphweaver: {
 			entities: [{ name: string; plural: string }];
 		};
@@ -43,7 +43,7 @@ test('should return multipleFish as plural name for Fish', async () => {
 	);
 	expect(filteredEntities).toMatchObject([{ name: 'Fish', plural: 'MultipleFish' }]);
 
-	const introspection = await graphweaver.server.executeOperation<{
+	const introspection = await graphweaver.executeOperation<{
 		__schema: { types: { name: string; fields: { name: string }[] }[] };
 	}>({
 		query: gql`

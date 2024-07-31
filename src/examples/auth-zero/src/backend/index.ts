@@ -1,21 +1,10 @@
 import Graphweaver from '@exogee/graphweaver-server';
-import { authApolloPlugin } from '@exogee/graphweaver-auth';
+import { setAddUserToContext } from '@exogee/graphweaver-auth';
 
+import { addUserToContext } from './auth';
 import './schema';
-import { addUserToContext, afterRead, beforeRead } from './auth';
 
-export const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(addUserToContext, { implicitAllow: true })],
-	},
+// This function is called when a user logs in
+setAddUserToContext(addUserToContext);
 
-	adminMetadata: {
-		enabled: true,
-		hooks: {
-			// These hooks filter the admin ui entities based on the logged in user
-			beforeRead,
-			afterRead,
-		},
-	},
-});
-export const handler = graphweaver.handler();
+export const graphweaver = new Graphweaver();

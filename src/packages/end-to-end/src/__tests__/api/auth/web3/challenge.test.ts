@@ -1,13 +1,13 @@
 import {
 	AuthenticationMethod,
 	UserProfile,
-	authApolloPlugin,
 	WalletAddress,
 	CredentialStorage,
 	hashPassword,
 	Password,
 	Web3,
 	AuthenticationBaseEntity,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -93,16 +93,12 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [
-			authApolloPlugin(async () => ({
-				...user,
-				roles: ['user'],
-			})),
-		],
-	},
-});
+setAddUserToContext(async () => ({
+	...user,
+	roles: ['user'],
+}));
+
+const graphweaver = new Graphweaver();
 
 describe('web3 challenge', () => {
 	afterEach(() => {
@@ -110,7 +106,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return an OTP challenge when checking if we can enrol an web3 wallet address', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -132,7 +128,7 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -149,7 +145,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return OTP challenge when enrolling a wallet and auth token contains no otp step up', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -171,7 +167,7 @@ describe('web3 challenge', () => {
 		const token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation enrolWallet($token: String!) {
@@ -191,7 +187,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return true for enrol wallet', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -222,7 +218,7 @@ describe('web3 challenge', () => {
 		const spy = jest.spyOn(Web3.prototype, 'saveWalletAddress');
 		const web3Address = await ethers_signer.getAddress();
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation enrolWallet($token: String!) {
@@ -240,7 +236,7 @@ describe('web3 challenge', () => {
 	});
 
 	it('should return true for verify wallet and step up the token with wb3', async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -266,7 +262,7 @@ describe('web3 challenge', () => {
 			expires_in: '1d',
 		});
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			result: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,

@@ -1,4 +1,5 @@
 export * from './api-key';
+export * from './auth-zero';
 export * from './one-time-password';
 export * from './password';
 export * from './forgotten-password';

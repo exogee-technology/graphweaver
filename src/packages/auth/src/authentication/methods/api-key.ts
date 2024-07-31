@@ -18,6 +18,7 @@ import { AccessControlList, AuthorizationContext } from '../../types';
 import { ApiKeyEntity } from '../entities';
 import { hashPassword } from '../../utils/argon2id';
 import { AclMap } from '../../helper-functions';
+import { BaseAuthMethod } from './base-auth-method';
 
 @InputType(`ApiKeyInsertInput`)
 export class ApiKeyInputArgs<R> {
@@ -54,7 +55,13 @@ export class ApiKeyUpdateInputArgs<R> {
 
 export type ApiKeyProvider<R> = BackendProvider<ApiKeyEntity<R>>;
 
-export class ApiKey<R extends string> {
+export function getApiKeyProvider<R>() {
+	const entity = graphweaverMetadata.getEntityByName('ApiKey');
+
+	return entity?.provider as ApiKeyProvider<R> | undefined;
+}
+
+export class ApiKey<R extends string> extends BaseAuthMethod {
 	private provider: ApiKeyProvider<R>;
 	private transactional: boolean;
 
@@ -67,6 +74,7 @@ export class ApiKey<R extends string> {
 		roles: unknown;
 		acl?: AccessControlList<ApiKeyEntity<R>, AuthorizationContext>;
 	}) {
+		super();
 		this.provider = provider;
 		this.transactional = !!provider.withTransaction;
 

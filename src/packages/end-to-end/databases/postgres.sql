@@ -83,6 +83,13 @@ CREATE TABLE "Invoice"
     "BillingCountry" VARCHAR(40),
     "BillingPostalCode" VARCHAR(10),
     "Total" NUMERIC(10,2) NOT NULL,
+    -- This isn't relevant to the Invoice data, it's just here to make sure we introspect and use the correct scalar
+    -- for bigint fields.
+    "Timestamp" bigint,
+    -- This default isn't a very realistic example, but it's here to test whether our enum generation:
+    -- a) Correctly handles the dash in 'partially-paid'
+    -- b) Generates both DB entities and schema entities with correct identifiers for the default.
+    "PaymentStatus" TEXT DEFAULT 'partially-paid' CHECK ("PaymentStatus" IN ('unpaid', 'partially-paid', 'paid')),
     CONSTRAINT "PK_Invoice" PRIMARY KEY  ("InvoiceId")
 );
 
@@ -4426,8 +4433,8 @@ INSERT INTO "Customer" ("CustomerId", "FirstName", "LastName", "Address", "City"
 INSERT INTO "Customer" ("CustomerId", "FirstName", "LastName", "Address", "City", "Country", "PostalCode", "Phone", "Email", "SupportRepId") VALUES (58, N'Manoj', N'Pareek', N'12,Community Centre', N'Delhi', N'India', N'110017', N'+91 0124 39883988', N'manoj.pareek@rediff.com', 3);
 INSERT INTO "Customer" ("CustomerId", "FirstName", "LastName", "Address", "City", "Country", "PostalCode", "Phone", "Email", "SupportRepId") VALUES (59, N'Puja', N'Srivastava', N'3,Raj Bhavan Road', N'Bangalore', N'India', N'560001', N'+91 080 22289999', N'puja_srivastava@yahoo.in', 3);
 
-INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingCountry", "BillingPostalCode", "Total") VALUES (1, 2, '2009/1/1', N'Theodor-Heuss-Straße 34', N'Stuttgart', N'Germany', N'70174', 1.98);
-INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingCountry", "BillingPostalCode", "Total") VALUES (2, 4, '2009/1/2', N'Ullevålsveien 14', N'Oslo', N'Norway', N'0171', 3.96);
+INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingCountry", "BillingPostalCode", "Total", "PaymentStatus") VALUES (1, 2, '2009/1/1', N'Theodor-Heuss-Straße 34', N'Stuttgart', N'Germany', N'70174', 1.98, 'paid');
+INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingCountry", "BillingPostalCode", "Total", "PaymentStatus") VALUES (2, 4, '2009/1/2', N'Ullevålsveien 14', N'Oslo', N'Norway', N'0171', 3.96, 'paid');
 INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingCountry", "BillingPostalCode", "Total") VALUES (3, 8, '2009/1/3', N'Grétrystraat 63', N'Brussels', N'Belgium', N'1000', 5.94);
 INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingState", "BillingCountry", "BillingPostalCode", "Total") VALUES (4, 14, '2009/1/6', N'8210 111 ST NW', N'Edmonton', N'AB', N'Canada', N'T6G 2C7', 8.91);
 INSERT INTO "Invoice" ("InvoiceId", "CustomerId", "InvoiceDate", "BillingAddress", "BillingCity", "BillingState", "BillingCountry", "BillingPostalCode", "Total") VALUES (5, 23, '2009/1/11', N'69 Salem Street', N'Boston', N'MA', N'USA', N'2113', 13.86);

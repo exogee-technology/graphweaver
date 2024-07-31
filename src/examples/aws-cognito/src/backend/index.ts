@@ -8,5 +8,3 @@ export const cognitoUser = createAwsCognitoUserProvider({
 });
 
 export const graphweaver = new Graphweaver();
-
-export const handler = graphweaver.handler();

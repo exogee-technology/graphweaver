@@ -10,7 +10,7 @@ import {
 	PrimaryKey,
 } from '@mikro-orm/core';
 import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
-import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { resetDatabase } from '../../../../utils';
 
@@ -78,8 +78,9 @@ describe('RelationshipField', () => {
 
 	test('should not get error on buildSchema when relationship field name is not same as entity', async () => {
 		const graphweaver = new Graphweaver();
+		await ConnectionManager.connect('sqlite', connection);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
 					albums {

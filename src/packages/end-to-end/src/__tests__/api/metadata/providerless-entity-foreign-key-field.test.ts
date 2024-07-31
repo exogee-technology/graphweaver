@@ -30,7 +30,7 @@ test('should correctly resolve a non-provider-bound entity when the foreign key 
 	}
 
 	const graphweaver = new Graphweaver();
-	const response = await graphweaver.server.executeOperation({
+	const response = await graphweaver.executeOperation({
 		query: gql`
 			query {
 				task(id: "1") {
@@ -54,7 +54,7 @@ test('should correctly resolve a non-provider-bound entity when the foreign key 
 	});
 
 	// This should also be correctly advertised to via the _graphweaver metadata service
-	const response2 = await graphweaver.server.executeOperation<{
+	const response2 = await graphweaver.executeOperation<{
 		_graphweaver: {
 			entities: [
 				{

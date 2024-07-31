@@ -131,7 +131,11 @@ export interface BackendProvider<D> {
 	): Promise<AggregationResult>;
 
 	backendProviderConfig?: BackendProviderConfig;
-	plugins?: ApolloServerPlugin<ApolloBaseContext>[];
+
+	/**
+	 * @deprecated The method should not be used and will be removed in the future. Use `apolloPluginManager.addPlugin` instead.
+	 */
+	apolloPlugins?: ApolloServerPlugin<ApolloBaseContext>[];
 }
 
 // G = GraphQL entity
@@ -278,3 +282,17 @@ export type Resolver<TArgs = any, TContext = BaseContext, TResult = unknown> = (
 	fields,
 	trace,
 }: ResolverOptions<TArgs, TContext>) => Promise<TResult>;
+
+export enum GraphweaverRequestEvent {
+	OnRequest = 'ON_REQUEST',
+}
+export type GraphweaverPluginNextFunction<T = unknown> = (
+	event: GraphweaverRequestEvent,
+	next: GraphweaverPluginNextFunction<T>
+) => Promise<T>;
+
+export type GraphweaverPlugin<T = unknown> = {
+	name: string;
+	event: GraphweaverRequestEvent;
+	next: GraphweaverPluginNextFunction<T>;
+};

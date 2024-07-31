@@ -6,12 +6,12 @@ import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
 import {
 	CredentialStorage,
-	authApolloPlugin,
 	UserProfile,
 	hashPassword,
 	Password,
 	ApplyAccessControlList,
 	AclMap,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -51,17 +51,15 @@ export const password = new Password({
 	getUserProfile: async () => user,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 let token: string | undefined;
 
 describe('ACL - Multiple Roles', () => {
 	beforeAll(async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -99,7 +97,7 @@ describe('ACL - Multiple Roles', () => {
 			},
 		})(Album);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {

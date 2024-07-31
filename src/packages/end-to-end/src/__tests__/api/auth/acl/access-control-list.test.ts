@@ -5,13 +5,13 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	ApplyAccessControlList,
 	AclMap,
 	CredentialStorage,
 	hashPassword,
 	Password,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -51,17 +51,15 @@ export const password = new Password({
 	getUserProfile: async () => user,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 let token: string | undefined;
 
 describe('ACL - Access Control Lists', () => {
 	beforeAll(async () => {
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -96,7 +94,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -125,7 +123,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -154,7 +152,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -183,7 +181,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -214,7 +212,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		await graphweaver.server.executeOperation({
+		await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -240,7 +238,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		await graphweaver.server.executeOperation({
+		await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
@@ -266,7 +264,7 @@ describe('ACL - Access Control Lists', () => {
 			},
 		})(Artist);
 
-		await graphweaver.server.executeOperation({
+		await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {

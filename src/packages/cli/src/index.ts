@@ -11,7 +11,7 @@ import {
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
 import { importDataSource } from './import';
-import pkg from '../package.json';
+import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
 import * as path from 'path';
 
@@ -260,7 +260,11 @@ yargs
 				console.log('Watch process started...');
 				await startFrontend(args as StartOptions);
 
-				const buildDir = path.join('file://', process.cwd(), `./.graphweaver/backend/index.js`);
+				const buildDir = path.posix.join(
+					'file://',
+					process.cwd(),
+					`./.graphweaver/backend/index.js`
+				);
 				const { graphweaver } = await import(buildDir);
 				const codegenOptions = graphweaver?.config?.fileAutoGenerationOptions;
 
@@ -303,7 +307,7 @@ yargs
 			}
 		},
 	})
-	.version(pkg.version)
+	.version(version)
 	.showHelpOnFail(true)
 	.help('help')
 	.command({

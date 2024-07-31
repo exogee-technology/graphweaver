@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, BaseDataProvider, RelationshipField, Entity } from '@exogee/graphweaver';
-import { authApolloPlugin, UserProfile, ApplyAccessControlList } from '@exogee/graphweaver-auth';
+import { UserProfile, ApplyAccessControlList, setAddUserToContext } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
 	id: '1',
@@ -57,18 +57,16 @@ export class Artist {
 	albums!: Album[];
 }
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 describe('Security', () => {
 	test('should check the depth of a query and error when it reaches seven.', async () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				query artists {
 					artists {
@@ -106,7 +104,7 @@ describe('Security', () => {
 		const spyOnArtistDataProvider = jest.spyOn(artistDataProvider, 'find');
 		const spyOnAlbumDataProvider = jest.spyOn(albumDataProvider, 'find');
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			query: gql`
 				fragment artistFragment on Artist {
 					albums {

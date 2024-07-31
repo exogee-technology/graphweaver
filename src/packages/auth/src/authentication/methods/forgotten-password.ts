@@ -9,6 +9,7 @@ import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
 import { AuthenticationBaseEntity, CredentialStorage } from '../entities';
 import { defaultPasswordStrength, updatePasswordCredential } from './utils';
+import { BaseAuthMethod } from './base-auth-method';
 
 const config = {
 	rate: {
@@ -39,7 +40,7 @@ export type ForgottenPasswordOptions = {
 	assertPasswordStrength?: (password?: string) => boolean;
 };
 
-export class ForgottenPassword {
+export class ForgottenPassword extends BaseAuthMethod {
 	private provider: ForgottenPasswordLinkProvider;
 	private assertPasswordStrength: (password?: string) => boolean;
 
@@ -66,6 +67,7 @@ export class ForgottenPassword {
 		sendForgottenPasswordLink,
 		getUser,
 	}: ForgottenPasswordOptions) {
+		super();
 		this.provider = provider;
 		this.sendForgottenPasswordLink = sendForgottenPasswordLink;
 		this.getUser = getUser;

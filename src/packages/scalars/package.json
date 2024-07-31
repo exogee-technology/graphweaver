@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-scalars",
-	"version": "2.0.5",
+	"version": "2.0.7",
 	"description": "Common scalar types for use with @exogee/graphweaver",
 	"license": "MIT",
 	"main": "lib/index.js",
@@ -28,7 +28,7 @@
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
 		"graphql": "16.9.0",
-		"typescript": "5.5.3"
+		"typescript": "5.5.4"
 	},
 	"keywords": [
 		"graphql",

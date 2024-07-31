@@ -1,5 +1,5 @@
 import path from 'path';
-import { ViteDevServer, createServer } from 'vite';
+import type { ViteDevServer } from 'vite';
 import { viteConfig } from '../vite-config';
 import { config } from '@exogee/graphweaver-config';
 
@@ -25,8 +25,12 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 
 		const backendUrl = new URL('/', 'http://localhost');
 		backendUrl.port = String((port || 9000) + 1);
+
+		// We're using the async import here because we're in CJS and vite's CJS entry point is
+		// deprecated. Once we move to ESM, we can use the ESM entry point directly above.
+		const { createServer } = await import('vite');
 		server = await createServer(
-			onResolveViteConfiguration(
+			await onResolveViteConfiguration(
 				viteConfig({
 					rootDirectory,
 					backendUrl: backendUrl.toString(),

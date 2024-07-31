@@ -10,6 +10,10 @@ test('should allow an admin to create a user', async ({ page }) => {
 	await page.getByPlaceholder('Password').click();
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByPlaceholder('Password').press('Enter');
+
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('button', { name: 'Create New Credential' }).click();
@@ -35,6 +39,10 @@ test('should not allow a non-admin to create a user', async ({ page }) => {
 	await page.getByPlaceholder('Username').press('Tab');
 	await page.getByPlaceholder('Password').fill('lightsaber123');
 	await page.getByPlaceholder('Password').press('Enter');
+
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'Credential' }).click();
 	await page.getByRole('button', { name: 'Create New Credential' }).click();

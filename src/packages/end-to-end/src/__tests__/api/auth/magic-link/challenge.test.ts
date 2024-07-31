@@ -3,12 +3,13 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	MagicLink,
 	AuthenticationBaseEntity,
 	MagicLinkData,
 	AuthenticationMethod,
+	setAddUserToContext,
+	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
@@ -76,11 +77,10 @@ export const magicLink = new MagicLink({
 	sendMagicLink,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('Magic Link Authentication - Challenge', () => {
 	afterEach(() => {
@@ -88,7 +88,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if not logged in.', async () => {
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -110,7 +110,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if using incorrect token.', async () => {
-		const sendResponse = await graphweaver.server.executeOperation({
+		const sendResponse = await graphweaver.executeOperation({
 			query: gql`
 				mutation sendLoginMagicLink($username: String!) {
 					sendLoginMagicLink(username: $username)
@@ -124,7 +124,7 @@ describe('Magic Link Authentication - Challenge', () => {
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -145,7 +145,7 @@ describe('Magic Link Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation verifyChallengeMagicLink($token: String!) {
@@ -166,7 +166,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should fail challenge if ttl expired.', async () => {
-		const sendResponse = await graphweaver.server.executeOperation({
+		const sendResponse = await graphweaver.executeOperation({
 			query: gql`
 				mutation sendLoginMagicLink($username: String!) {
 					sendLoginMagicLink(username: $username)
@@ -180,7 +180,7 @@ describe('Magic Link Authentication - Challenge', () => {
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -210,7 +210,7 @@ describe('Magic Link Authentication - Challenge', () => {
 				}) as AuthenticationBaseEntity<MagicLinkData>
 		);
 
-		const response = await graphweaver.server.executeOperation({
+		const response = await graphweaver.executeOperation({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				mutation verifyChallengeMagicLink($token: String!) {
@@ -231,7 +231,7 @@ describe('Magic Link Authentication - Challenge', () => {
 	});
 
 	test('should pass challenge if using correct token.', async () => {
-		const sendResponse = await graphweaver.server.executeOperation({
+		const sendResponse = await graphweaver.executeOperation({
 			query: gql`
 				mutation sendLoginMagicLink($username: String!) {
 					sendLoginMagicLink(username: $username)
@@ -245,7 +245,7 @@ describe('Magic Link Authentication - Challenge', () => {
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
@@ -266,7 +266,7 @@ describe('Magic Link Authentication - Challenge', () => {
 		const token = loginResponse.body.singleResult.data?.verifyLoginMagicLink?.authToken;
 		assert(token);
 
-		const response = await graphweaver.server.executeOperation<{
+		const response = await graphweaver.executeOperation<{
 			result: { authToken: string };
 		}>({
 			http: { headers: new Headers({ authorization: token }) } as any,

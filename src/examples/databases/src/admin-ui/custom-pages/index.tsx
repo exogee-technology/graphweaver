@@ -3,7 +3,6 @@ import { WelcomePage } from './welcome-page';
 
 export const customPages: CustomPageConfiguration = {
 	defaultRoute: '/welcome',
-	navLinks: async () => [{ name: 'Welcome', route: '/welcome' }],
 	routes: () => [
 		{
 			path: '/welcome',

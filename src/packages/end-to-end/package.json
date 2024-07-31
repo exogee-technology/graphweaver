@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "2.0.5",
+	"version": "2.0.7",
 	"description": "Graphweaver Test Suite",
 	"license": "MIT",
 	"scripts": {
@@ -25,6 +25,7 @@
 		"test-ui-auth": "pnpm exec playwright test ./auth",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
+		"test-ui-postgres": "pnpm exec playwright test ./postgres",
 		"test-ui-storage-provider": "pnpm exec playwright test ./storage-provider",
 		"test-ui-sqlite": "pnpm exec playwright test ./sqlite",
 		"version": "npm version --no-git-tag-version"
@@ -36,9 +37,9 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "6.2.9",
-		"@mikro-orm/postgresql": "6.2.9",
-		"@mikro-orm/sqlite": "6.2.9",
+		"@mikro-orm/core": "6.3.1",
+		"@mikro-orm/postgresql": "6.3.1",
+		"@mikro-orm/sqlite": "6.3.1",
 		"class-validator": "0.14.1",
 		"dotenv-cli": "7.4.2",
 		"ethers": "6.3.0",
@@ -48,7 +49,7 @@
 		"web3-token": "1.0.6"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.45.2",
+		"@playwright/test": "1.45.3",
 		"@simplewebauthn/types": "10.0.0",
 		"@types/jest": "29.5.12",
 		"dotenv": "16.4.5",
@@ -58,9 +59,9 @@
 		"mockdate": "3.0.5",
 		"pg": "8.12.0",
 		"supertest-graphql": "1.1.4",
-		"ts-jest": "29.2.2",
+		"ts-jest": "29.2.3",
 		"tsx": "4.16.2",
-		"typescript": "5.5.3"
+		"typescript": "5.5.4"
 	},
 	"keywords": [
 		"graphql",

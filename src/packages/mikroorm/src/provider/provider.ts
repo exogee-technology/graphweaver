@@ -11,8 +11,13 @@ import {
 	TraceOptions,
 	traceSync,
 	trace as startTrace,
+	GraphweaverRequestEvent,
+	GraphweaverPluginNextFunction,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
+import { Reference, RequestContext } from '@mikro-orm/core';
+import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
+import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import {
 	LockMode,
@@ -23,16 +28,11 @@ import {
 	AnyEntity,
 	IsolationLevel,
 	ConnectionOptions,
-	ClearDatabaseContext,
 	connectToDatabase,
 } from '..';
 
 import { OptimisticLockError } from '../utils/errors';
 import { assign } from './assign';
-
-import { Reference } from '@mikro-orm/core';
-import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
-import { ApolloServerPlugin, BaseContext } from '@apollo/server';
 
 type PostgresError = {
 	code: string;
@@ -135,7 +135,39 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
 		this.transactionIsolationLevel = transactionIsolationLevel;
 		this.connection = connection;
+		this.addRequestContext();
+		this.connectToDatabase();
 	}
+
+	private connectToDatabase = async () => {
+		const connectionManagerId = this.connectionManagerId;
+		if (!connectionManagerId) {
+			throw new Error('Expected connectionManagerId to be defined when calling addRequestContext.');
+		}
+
+		apolloPluginManager.addPlugin(connectionManagerId, connectToDatabase(this.connection));
+	};
+
+	private addRequestContext = () => {
+		const connectionManagerId = this.connectionManagerId;
+		if (!connectionManagerId) {
+			throw new Error('Expected connectionManagerId to be defined when calling addRequestContext.');
+		}
+
+		const connectionPlugin = {
+			name: connectionManagerId,
+			event: GraphweaverRequestEvent.OnRequest,
+			next: (_: GraphweaverRequestEvent, _next: GraphweaverPluginNextFunction) => {
+				logger.trace(`Graphweaver OnRequest plugin called`);
+
+				const connection = ConnectionManager.database(connectionManagerId);
+				if (!connection) throw new Error('No database connection found');
+
+				return RequestContext.create(connection.orm.em, _next, {});
+			},
+		};
+		pluginManager.addPlugin(connectionPlugin);
+	};
 
 	private mapAndAssignKeys = (result: D, entityType: new () => D, inputArgs: Partial<D>) => {
 		// Clean the input and remove any GraphQL classes from the object
@@ -668,9 +700,5 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		}
 
 		return result;
-	}
-
-	public get plugins(): ApolloServerPlugin<BaseContext>[] {
-		return [ClearDatabaseContext, connectToDatabase(this.connection)];
 	}
 }

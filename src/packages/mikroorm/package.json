@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "2.0.5",
+	"version": "2.0.7",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "MIT",
 	"scripts": {
@@ -21,9 +21,10 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.4",
-		"@aws-sdk/client-secrets-manager": "3.616.0",
+		"@apollo/server": "4.10.5",
+		"@aws-sdk/client-secrets-manager": "3.620.1",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.2",
 		"decimal.js": "10.4.3",
@@ -33,27 +34,27 @@
 		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.2.9",
-		"@mikro-orm/knex": "6.2.9",
-		"@mikro-orm/mysql": "6.2.9",
-		"@mikro-orm/postgresql": "6.2.9",
-		"@mikro-orm/sqlite": "6.2.9",
-		"@types/node": "20.14.11",
+		"@mikro-orm/core": "6.3.1",
+		"@mikro-orm/knex": "6.3.1",
+		"@mikro-orm/mysql": "6.3.1",
+		"@mikro-orm/postgresql": "6.3.1",
+		"@mikro-orm/sqlite": "6.3.1",
+		"@types/node": "22.0.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
 		"ts-node": "10.9.2",
-		"typescript": "5.5.3"
+		"typescript": "5.5.4"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/knex": "6.2.9",
-		"@mikro-orm/mysql": "6.2.9",
-		"@mikro-orm/postgresql": "6.2.9",
-		"@mikro-orm/sqlite": "6.2.9"
+		"@mikro-orm/knex": "6.3.1",
+		"@mikro-orm/mysql": "6.3.1",
+		"@mikro-orm/postgresql": "6.3.1",
+		"@mikro-orm/sqlite": "6.3.1"
 	},
 	"peerDependencies": {
-		"@mikro-orm/core": "6.2.9",
-		"@mikro-orm/knex": "6.2.9"
+		"@mikro-orm/core": "6.3.1",
+		"@mikro-orm/knex": "6.3.1"
 	},
 	"keywords": [
 		"graphql",

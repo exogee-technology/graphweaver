@@ -3,12 +3,12 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	MagicLink,
 	AuthenticationMethod,
 	AuthenticationBaseEntity,
 	MagicLinkData,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
@@ -75,17 +75,15 @@ export const magicLink = new MagicLink({
 	sendMagicLink,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {
 		const redeemMagicLinkSpy = jest.spyOn(MagicLinkBackendProvider.prototype, 'updateOne');
 
-		const sendResponse = await graphweaver.server.executeOperation<{
+		const sendResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
 		}>({
 			query: gql`
@@ -101,7 +99,7 @@ describe('Magic Link Authentication - Login', () => {
 		assert(sendResponse.body.kind === 'single');
 		expect(sendResponse.body.singleResult.errors).toBeUndefined();
 
-		const loginResponse = await graphweaver.server.executeOperation<{
+		const loginResponse = await graphweaver.executeOperation<{
 			verifyLoginMagicLink: { authToken: string };
 		}>({
 			query: gql`
