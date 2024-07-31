@@ -1,14 +1,11 @@
 import gql from 'graphql-tag';
-import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
-import { AdminUiMetadata, BaseDataProvider } from '@exogee/graphweaver';
+import Graphweaver from '@exogee/graphweaver-server';
+import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	UserProfile,
-	AuthorizationContext,
-	ForbiddenError,
 	CredentialStorage,
 	Password,
 	setAddUserToContext,
-	ApplyAccessControlList,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
