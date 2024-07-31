@@ -16,7 +16,7 @@ const user = new UserProfile({
 
 class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {}
 
-export const password = new Password({
+new Password({
 	provider: new PasswordBackendProvider('password'),
 	getUserProfile: async (): Promise<UserProfile<unknown>> => user,
 });
