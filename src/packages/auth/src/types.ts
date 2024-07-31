@@ -43,15 +43,15 @@ export type AccessControlList<G, TContext extends AuthorizationContext = Authori
 
 type ReadAccessControl<G, TContext extends AuthorizationContext> =
 	| { read?: AccessControlValue<G, TContext>; readSome?: never }
-	| { readSome?: SomeAccessControlValue<G, TContext>; read?: never };
+	| { readSome?: AccessControlValue<G, TContext>; read?: never };
 
 type CreateAccessControl<G, TContext extends AuthorizationContext> =
 	| { create?: AccessControlValue<G, TContext>; createSome?: never }
-	| { createSome?: SomeAccessControlValue<G, TContext>; create?: never };
+	| { createSome?: AccessControlValue<G, TContext>; create?: never };
 
 type UpdateAccessControl<G, TContext extends AuthorizationContext> =
 	| { update?: AccessControlValue<G, TContext>; updateSome?: never }
-	| { updateSome?: SomeAccessControlValue<G, TContext>; update?: never };
+	| { updateSome?: AccessControlValue<G, TContext>; update?: never };
 
 type DeleteAccessControl<G, TContext extends AuthorizationContext> = {
 	delete?: AccessControlValue<G, TContext>;
@@ -59,11 +59,11 @@ type DeleteAccessControl<G, TContext extends AuthorizationContext> = {
 
 type WriteAccessControl<G, TContext extends AuthorizationContext> =
 	| { write?: AccessControlValue<G, TContext>; writeSome?: never }
-	| { writeSome?: SomeAccessControlValue<G, TContext>; write?: never };
+	| { writeSome?: AccessControlValue<G, TContext>; write?: never };
 
 type AllAccessControl<G, TContext extends AuthorizationContext> =
 	| { all?: AccessControlValue<G, TContext>; allSome?: never }
-	| { allSome?: SomeAccessControlValue<G, TContext>; all?: never };
+	| { allSome?: AccessControlValue<G, TContext>; all?: never };
 
 export type AccessControlEntry<G, TContext extends AuthorizationContext> = CreateAccessControl<
 	G,
@@ -84,13 +84,17 @@ export type SomeAccessControlValue<G, TContext extends AuthorizationContext> = {
 	fields: AccessControlColumnValue<G, TContext>;
 };
 
+export type DefaultAccessControlValue<G, TContext extends AuthorizationContext> =
+	| true
+	| AccessControlFilterFunction<G, TContext>;
+
 export type AccessControlColumnValue<G, TContext extends AuthorizationContext> =
 	| (keyof G)[]
 	| ((context: TContext) => (keyof G)[]);
 
 export type AccessControlValue<G, TContext extends AuthorizationContext> =
-	| true
-	| AccessControlFilterFunction<G, TContext>;
+	| DefaultAccessControlValue<G, TContext>
+	| SomeAccessControlValue<G, TContext>;
 
 export type AccessControlFilterFunctionResult<G> =
 	| Filter<G>
