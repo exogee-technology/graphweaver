@@ -372,42 +372,42 @@ export type TasksPaginationInput = {
 
 export type User = {
   __typename?: 'User';
-  deleted: Scalars['Boolean']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  status: UserStatus;
   username: Scalars['String']['output'];
 };
 
 /** Data needed to create or update Users. If an ID is passed, this is an update, otherwise it's an insert. */
 export type UserCreateOrUpdateInput = {
-  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  status?: InputMaybe<UserStatus>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data needed to create Users. */
 export type UserInsertInput = {
-  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email: Scalars['String']['input'];
+  status?: InputMaybe<UserStatus>;
   username: Scalars['String']['input'];
 };
 
+export enum UserStatus {
+  Active = 'ACTIVE',
+  Blocked = 'BLOCKED',
+  Suspended = 'SUSPENDED'
+}
+
 /** Data needed to update Users. An ID must be passed. */
 export type UserUpdateInput = {
-  deleted?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  status?: InputMaybe<UserStatus>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UsersListFilter = {
-  deleted?: InputMaybe<Scalars['Boolean']['input']>;
-  deleted_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
-  deleted_ne?: InputMaybe<Scalars['Boolean']['input']>;
-  deleted_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
-  deleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  deleted_null?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_gt?: InputMaybe<Scalars['String']['input']>;
   email_gte?: InputMaybe<Scalars['String']['input']>;
@@ -430,6 +430,9 @@ export type UsersListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  status?: InputMaybe<UserStatus>;
+  status_in?: InputMaybe<Array<UserStatus>>;
+  status_nin?: InputMaybe<Array<UserStatus>>;
   username?: InputMaybe<Scalars['String']['input']>;
   username_gt?: InputMaybe<Scalars['String']['input']>;
   username_gte?: InputMaybe<Scalars['String']['input']>;
@@ -445,9 +448,9 @@ export type UsersListFilter = {
 };
 
 export type UsersOrderByInput = {
-  deleted?: InputMaybe<Sort>;
   email?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
+  status?: InputMaybe<Sort>;
   username?: InputMaybe<Sort>;
 };
 

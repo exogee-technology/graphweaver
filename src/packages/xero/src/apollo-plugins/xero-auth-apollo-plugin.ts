@@ -86,7 +86,18 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			// to make sure it's not obviously invalid for users who aren't being malicious. If they are
 			// being malicious, Xero won't serve data anyway, but we can provide nice messages to the user
 			// for common things like expiry.
-			token = new TokenSet(JSON.parse(authHeader));
+			try {
+				token = new TokenSet(JSON.parse(authHeader));
+			} catch (error) {
+				logger.error(error);
+				logger.trace(
+					'Auth Header is either not valid JSON or could not be read by TokenSet, rejecting request.'
+				);
+				throw new GraphQLError('You are not authorized to perform this action.', {
+					extensions: { code: 'FORBIDDEN' },
+				});
+			}
+
 			logger.trace('Token parsed successfully.');
 			if (token.token_type !== 'Bearer') {
 				logger.trace('Token type is not Bearer, rejecting request.');

@@ -1,12 +1,22 @@
-import { GraphweaverPluginNextFunction, GraphweaverRequestEvent } from '@exogee/graphweaver';
+import {
+	AdminUiMetadata,
+	GraphweaverPluginNextFunction,
+	GraphweaverRequestEvent,
+} from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { pluginManager } from '@exogee/graphweaver-server';
+import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import { RequestContext } from '../../authorization-context';
+import { authApolloPlugin } from '../apollo';
+import { getImplicitAllow } from '../../implicit-authorization';
+import { ApplyAccessControlList } from '../../decorators/apply-access-control-list';
+import { AclMap } from '../../helper-functions';
 
 export class BaseAuthMethod {
 	constructor() {
 		this.addRequestContext();
+		this.addApolloPlugin();
+		this.ensureAdminUIMetadataIsAuthenticated();
 	}
 
 	private addRequestContext = () => {
@@ -20,5 +30,25 @@ export class BaseAuthMethod {
 			},
 		};
 		pluginManager.addPlugin(connectionPlugin);
+	};
+
+	private addApolloPlugin = () => {
+		apolloPluginManager.addPlugin('AuthApolloPlugin', authApolloPlugin());
+	};
+
+	private ensureAdminUIMetadataIsAuthenticated = async () => {
+		// Ensure that accessing the admin ui metadata requires the user to be logged in
+		// This will then redirect the user if not logged in
+		// This is the default and can be overridden by the user first if needed
+		if (!AclMap.has('AdminUiMetadata') && !getImplicitAllow()) {
+			logger.trace('Adding AdminUiMetadata ACL');
+			ApplyAccessControlList({
+				Everyone: {
+					all: (context) => !!context.token,
+				},
+			})(AdminUiMetadata);
+		} else {
+			logger.trace('AdminUiMetadata ACL already exists');
+		}
 	};
 }

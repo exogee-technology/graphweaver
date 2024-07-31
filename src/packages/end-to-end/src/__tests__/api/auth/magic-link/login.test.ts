@@ -3,12 +3,12 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	MagicLink,
 	AuthenticationMethod,
 	AuthenticationBaseEntity,
 	MagicLinkData,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const MOCK_TOKEN = 'D0123220-D728-4FC3-AC32-E4ACC48FC5C8';
@@ -75,11 +75,9 @@ export const magicLink = new MagicLink({
 	sendMagicLink,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 describe('Magic Link Authentication - Login', () => {
 	test('should be able to login with magic link.', async () => {

@@ -1,0 +1,15 @@
+.heading {
+	font-size: 2.2rem;
+	font-weight: bold;
+	line-height: 3rem;
+}
+
+.button {
+	width: 200px;
+	justify-content: space-between;
+	margin-left: auto;
+}
+
+.arrow {
+	height: 8px;
+}

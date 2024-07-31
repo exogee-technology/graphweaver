@@ -8,10 +8,10 @@ import {
 	AccessControlList,
 	ApplyAccessControlList,
 	AuthorizationContext,
-	authApolloPlugin,
 	UserProfile,
 	ApiKeyEntity,
 	ApiKey,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider, ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { SqliteDriver } from '@mikro-orm/sqlite';
@@ -102,11 +102,9 @@ new ApiKey<Roles>({
 	roles: Roles,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => ({}) as UserProfile<any>, { apiKeyDataProvider })],
-	},
-});
+setAddUserToContext(async () => ({}) as UserProfile<any>);
+
+const graphweaver = new Graphweaver();
 
 describe('Role Assignment for API Key Authentication', () => {
 	beforeAll(async () => {

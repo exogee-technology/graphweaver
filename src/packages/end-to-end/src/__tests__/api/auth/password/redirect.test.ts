@@ -2,12 +2,12 @@ import gql from 'graphql-tag';
 import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	AuthorizationContext,
 	ForbiddenError,
 	CredentialStorage,
 	Password,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -29,10 +29,9 @@ const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookPa
 	return params;
 };
 
+setAddUserToContext(async () => user);
+
 const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
 	adminMetadata: {
 		enabled: true,
 		hooks: {
