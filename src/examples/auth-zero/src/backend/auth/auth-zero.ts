@@ -1,4 +1,6 @@
-import { setAddUserToContext, setImplicitAllow, UserProfile } from '@exogee/graphweaver-auth';
+import { UserProfile, AuthZero } from '@exogee/graphweaver-auth';
+
+export const authZero = new AuthZero();
 
 export const addUserToContext = async (userId: string) => {
 	return new UserProfile({
@@ -6,6 +8,3 @@ export const addUserToContext = async (userId: string) => {
 		roles: ['everyone'],
 	});
 };
-
-setAddUserToContext(addUserToContext);
-setImplicitAllow(true);
