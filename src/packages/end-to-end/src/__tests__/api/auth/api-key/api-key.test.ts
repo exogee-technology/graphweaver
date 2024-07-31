@@ -4,7 +4,13 @@ import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider, Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
-import { authApolloPlugin, UserProfile, ApiKeyEntity, ApiKey } from '@exogee/graphweaver-auth';
+import {
+	UserProfile,
+	ApiKeyEntity,
+	ApiKey,
+	setAddUserToContext,
+	setImplicitAllow,
+} from '@exogee/graphweaver-auth';
 
 class TaskProvider extends BaseDataProvider<any> {
 	public async withTransaction<T>(callback: () => Promise<T>) {
@@ -80,16 +86,10 @@ new ApiKey<Roles>({
 	roles: Roles,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [
-			authApolloPlugin(async () => ({}) as UserProfile<any>, {
-				apiKeyDataProvider,
-				implicitAllow: true,
-			}),
-		],
-	},
-});
+setAddUserToContext(async () => ({}) as UserProfile<any>);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('API Key Authentication', () => {
 	test('should return a E0001 error when no system user is found.', async () => {

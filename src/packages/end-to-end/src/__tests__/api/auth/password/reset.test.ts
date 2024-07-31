@@ -6,13 +6,14 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	ForgottenPasswordLinkData,
 	AuthenticationBaseEntity,
 	CredentialStorage,
 	ForgottenPassword,
 	Password,
+	setAddUserToContext,
+	setImplicitAllow,
 } from '@exogee/graphweaver-auth';
 
 let token = '';
@@ -82,11 +83,10 @@ new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('Forgotten Password flow', () => {
 	test('should generate a forgotten password link and allow resetting', async () => {

@@ -1,10 +1,8 @@
 import gql from 'graphql-tag';
-import Graphweaver, { MetadataHookParams } from '@exogee/graphweaver-server';
+import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider } from '@exogee/graphweaver';
 import {
 	UserProfile,
-	AuthorizationContext,
-	ForbiddenError,
 	CredentialStorage,
 	Password,
 	setAddUserToContext,
@@ -18,29 +16,16 @@ const user = new UserProfile({
 
 class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {}
 
-export const password = new Password({
+new Password({
 	provider: new PasswordBackendProvider('password'),
 	getUserProfile: async (): Promise<UserProfile<unknown>> => user,
 });
 
-const beforeRead = async <C extends AuthorizationContext>(params: MetadataHookParams<C>) => {
-	// Ensure only logged in users can access the admin ui metadata
-	if (!params.context.token) throw new ForbiddenError('Forbidden');
-	return params;
-};
-
 setAddUserToContext(async () => user);
 
-const graphweaver = new Graphweaver({
-	adminMetadata: {
-		enabled: true,
-		hooks: {
-			beforeRead,
-		},
-	},
-});
+const graphweaver = new Graphweaver();
 
-describe('Password Authentication - Redirect', () => {
+describe('AdminUiMetadata - ACL', () => {
 	test('should redirect an unauthenticated user to the login screen.', async () => {
 		const response = await graphweaver.executeOperation({
 			query: gql`

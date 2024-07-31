@@ -17,8 +17,7 @@ import {
 import { logger } from '@exogee/logger';
 import { Reference, RequestContext } from '@mikro-orm/core';
 import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
-import { ApolloServerPlugin, BaseContext } from '@apollo/server';
-import { pluginManager } from '@exogee/graphweaver-server';
+import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import {
 	LockMode,
@@ -137,7 +136,17 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this.transactionIsolationLevel = transactionIsolationLevel;
 		this.connection = connection;
 		this.addRequestContext();
+		this.connectToDatabase();
 	}
+
+	private connectToDatabase = async () => {
+		const connectionManagerId = this.connectionManagerId;
+		if (!connectionManagerId) {
+			throw new Error('Expected connectionManagerId to be defined when calling addRequestContext.');
+		}
+
+		apolloPluginManager.addPlugin(connectionManagerId, connectToDatabase(this.connection));
+	};
 
 	private addRequestContext = () => {
 		const connectionManagerId = this.connectionManagerId;
@@ -691,9 +700,5 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		}
 
 		return result;
-	}
-
-	public get apolloPlugins(): ApolloServerPlugin<BaseContext>[] {
-		return [connectToDatabase(this.connection)];
 	}
 }

@@ -1,6 +1,5 @@
 import {
 	UserProfile,
-	authApolloPlugin,
 	Passkey,
 	CredentialStorage,
 	hashPassword,
@@ -8,6 +7,7 @@ import {
 	AuthenticationBaseEntity,
 	AuthenticationMethod,
 	PasskeyData,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
@@ -62,11 +62,9 @@ export const passkey = new Passkey({
 	dataProvider: new PasskeyDataProvider('Passkey'),
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 describe('passkey registration', () => {
 	it('should allow the registration of a device', async () => {
