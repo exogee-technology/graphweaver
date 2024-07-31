@@ -42,28 +42,28 @@ export type AccessControlList<G, TContext extends AuthorizationContext = Authori
 };
 
 type ReadAccessControl<G, TContext extends AuthorizationContext> =
-	| { read: AccessControlValue<G, TContext>; readSome?: never }
-	| { readSome: AccessControlValue<G, TContext>; read?: never };
+	| { read?: AccessControlValue<G, TContext>; readSome?: never }
+	| { readSome?: SomeAccessControlValue<G, TContext>; read?: never };
 
 type CreateAccessControl<G, TContext extends AuthorizationContext> =
-	| { create: AccessControlValue<G, TContext>; createSome?: never }
-	| { createSome: AccessControlValue<G, TContext>; create?: never };
+	| { create?: AccessControlValue<G, TContext>; createSome?: never }
+	| { createSome?: SomeAccessControlValue<G, TContext>; create?: never };
 
 type UpdateAccessControl<G, TContext extends AuthorizationContext> =
-	| { update: AccessControlValue<G, TContext>; updateSome?: never }
-	| { updateSome: AccessControlValue<G, TContext>; update?: never };
+	| { update?: AccessControlValue<G, TContext>; updateSome?: never }
+	| { updateSome?: SomeAccessControlValue<G, TContext>; update?: never };
 
 type DeleteAccessControl<G, TContext extends AuthorizationContext> = {
-	delete: AccessControlValue<G, TContext>;
+	delete?: AccessControlValue<G, TContext>;
 };
 
 type WriteAccessControl<G, TContext extends AuthorizationContext> =
-	| { write: AccessControlValue<G, TContext>; writeSome?: never }
-	| { writeSome: AccessControlValue<G, TContext>; write?: never };
+	| { write?: AccessControlValue<G, TContext>; writeSome?: never }
+	| { writeSome?: SomeAccessControlValue<G, TContext>; write?: never };
 
 type AllAccessControl<G, TContext extends AuthorizationContext> =
-	| { all: AccessControlValue<G, TContext>; allSome?: never }
-	| { allSome: AccessControlValue<G, TContext>; all?: never };
+	| { all?: AccessControlValue<G, TContext>; allSome?: never }
+	| { allSome?: SomeAccessControlValue<G, TContext>; all?: never };
 
 export type AccessControlEntry<G, TContext extends AuthorizationContext> = CreateAccessControl<
 	G,
@@ -78,6 +78,15 @@ export type AccessControlEntry<G, TContext extends AuthorizationContext> = Creat
 export type ConsolidatedAccessControlEntry<G, TContext extends AuthorizationContext> = {
 	[K in AccessType]?: ConsolidatedAccessControlValue<G, TContext>;
 };
+
+export type SomeAccessControlValue<G, TContext extends AuthorizationContext> = {
+	rowFilter: AccessControlValue<G, TContext>;
+	fields: AccessControlColumnValue<G, TContext>;
+};
+
+export type AccessControlColumnValue<G, TContext extends AuthorizationContext> =
+	| (keyof G)[]
+	| ((context: TContext) => (keyof G)[]);
 
 export type AccessControlValue<G, TContext extends AuthorizationContext> =
 	| true

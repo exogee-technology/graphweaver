@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { Filter } from '@exogee/graphweaver';
+import { Filter, graphweaverMetadata } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -257,4 +257,10 @@ export const checkAuthentication = async (
 			);
 		}
 	}
+};
+
+export const allFieldsExcept = <G>(entityName: string, excludeFields: (keyof G)[]): (keyof G)[] => {
+	const entity = graphweaverMetadata.getEntityByName<G>(entityName);
+	const fields = Object.keys(entity?.fields ?? {}) as (keyof G)[];
+	return fields;
 };
