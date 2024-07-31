@@ -15,9 +15,7 @@ import {
 	makeAllPackagesExternalPlugin,
 } from '../util';
 
-export interface BackendBuildOptions {}
-
-export const buildBackend = async (_?: BackendBuildOptions) => {
+export const buildBackend = async () => {
 	console.log('Building backend....');
 
 	// Clear the folder

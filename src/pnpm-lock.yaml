@@ -1042,9 +1042,6 @@ importers:
       lodash:
         specifier: 4.17.21
         version: 4.17.21
-      vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.0.0)
     devDependencies:
       '@types/lodash':
         specifier: 4.17.7
@@ -1058,6 +1055,9 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
+      vite:
+        specifier: 5.3.5
+        version: 5.3.5(@types/node@22.0.0)
 
   packages/core:
     dependencies:
