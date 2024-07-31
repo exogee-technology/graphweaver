@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  Graphweaver speeds up your GraphQL development by securely connecting all your data sources in one place. Once your API has been bootstrapped, you can add permissions / auth and completely customise every operation in your server. We offer in-built resolvers for all common data access scenarios, but give you full flexibility to override them however you like!
+  Graphweaver speeds up your GraphQL development by securely connecting all your data sources in one place. Once your API has been bootstrapped, you can add permissions / auth and completely customise every operation in your server. We offer in-built resolvers for all common data access scenarios, but give you full flexibility to override them however you like! You also get an admin area that you can customise so that you don't have to build a back office system ever again.
 </p>
 
 <p align="center">
