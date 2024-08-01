@@ -31,7 +31,7 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 		const { createServer } = await import('vite');
 		server = await createServer(
 			await onResolveViteConfiguration(
-				viteConfig({
+				await viteConfig({
 					rootDirectory,
 					backendUrl: backendUrl.toString(),
 					host,
