@@ -27,7 +27,7 @@ export const buildFrontend = async ({ adminUiBase }: FrontendBuildOptions) => {
 
 	const { onResolveViteConfiguration } = config().build;
 	const resolvedViteConfig = await onResolveViteConfiguration(
-		viteConfig({ rootDirectory, base: adminUiBase })
+		await viteConfig({ rootDirectory, base: adminUiBase })
 	);
 	await build(resolvedViteConfig);
 
