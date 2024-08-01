@@ -298,6 +298,9 @@ export const generate = async (databaseType: DatabaseType, options: ConnectionOp
 	} catch (err) {
 		if (err instanceof IntrospectionError) throw err;
 
+		console.error('Got error during introspection:');
+		console.error(err);
+
 		throw new IntrospectionError(
 			`Warning: Unable to connect to database.`,
 			hasErrorMessage(err) ? err.message : 'Please check the connection settings and try again'

@@ -175,6 +175,7 @@ export const importDataSource = async (
 		}
 		console.log(`${fileCount} files have been successfully created in the project.`);
 	} catch (err: unknown) {
+		console.error(err);
 		if (isIntrospectionError(err)) {
 			console.warn(`\n\n${err.title}\n${err.message}\n\n`);
 		} else {
