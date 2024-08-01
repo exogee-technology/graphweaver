@@ -148,7 +148,7 @@ CREATE UNIQUE INDEX to_one_pkey ON "ToOne"(id text_ops);
 CREATE UNIQUE INDEX to_one_name_key ON "ToOne"(name text_ops);
 
 CREATE TABLE "ToOneKeyOwner" (
-    id text NOT NULL,
+    id text PRIMARY KEY,
     related_entity_name text NOT NULL REFERENCES "ToOne"(name) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
