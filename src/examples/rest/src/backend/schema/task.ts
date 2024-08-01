@@ -32,10 +32,11 @@ type DeleteHook = DeleteHookParams<Task, AuthorizationContext>;
 
 const acl: AccessControlList<Task, AuthorizationContext> = {
 	LIGHT_SIDE: {
-		allSome: {
-			// Here we are applying column level security to prevent access to the priority column by default all fields are allowed
+		all: {
+			// Here we are applying column level security to prevent access to the "priority" column, by default all fields are allowed
 			fieldRestrictions: ['priority'],
-			rowFilter: (context) => ({ user: { id: context.user?.id } }), // Here we are applying row level security to only allow access to tasks that belong to the user
+			// Next, we are applying row level security to only allow access to tasks that belong to the user
+			rowFilter: (context) => ({ user: { id: context.user?.id } }),
 		},
 	},
 	DARK_SIDE: {

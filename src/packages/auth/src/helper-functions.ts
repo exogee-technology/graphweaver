@@ -119,7 +119,7 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
 		operation: keyof AccessControlEntry<G, TContext>,
 		value: AccessControlValue<G, TContext>
 	) => {
-		const operationName = mapOperation(operation.replace('Some', ''));
+		const operationName = mapOperation(operation);
 		const accessControlValue =
 			value === true || typeof value === 'function' ? value : value.rowFilter;
 
@@ -168,7 +168,7 @@ export const buildFieldAccessControlEntryForUser = <G, TContext extends Authoriz
 		operation: keyof AccessControlEntry<G, TContext>,
 		fieldsOnValue: (keyof G)[]
 	) => {
-		const operationName = mapOperation(operation.replace('Some', ''));
+		const operationName = mapOperation(operation);
 		const fields = result.get(operationName) ?? new Set<keyof G>();
 		fieldsOnValue.forEach((field) => fields.add(field));
 		result.set(operationName, fields);
@@ -197,7 +197,6 @@ export const buildFieldAccessControlEntryForUser = <G, TContext extends Authoriz
 					if (operationName.startsWith('all') || operationName.startsWith('write')) {
 						addToResult('create', fieldsOnValue);
 						addToResult('update', fieldsOnValue);
-						addToResult('delete', fieldsOnValue);
 
 						if (operationName.startsWith('all')) {
 							addToResult('read', fieldsOnValue);

@@ -51,10 +51,10 @@ describe('buildAccessControlEntryForUser', () => {
 		});
 	});
 
-	it('should return a create, read, update and delete when setting allSome', () => {
+	it('should return a create, read, update and delete when setting all with rowFilter', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
 			user: {
-				allSome: { rowFilter: true },
+				all: { rowFilter: true },
 			},
 		};
 
@@ -119,7 +119,7 @@ describe('buildAccessControlEntryForUser', () => {
 	it('should correctly handle the "write" and "allSome" shorthand operations', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
 			role1: { write: () => ({ id: 1 }) },
-			role2: { allSome: { rowFilter: true } },
+			role2: { all: { rowFilter: true } },
 		};
 
 		const result = buildAccessControlEntryForUser(acl, ['role1', 'role2']);
@@ -169,7 +169,7 @@ describe('buildFieldAccessControlEntryForUser', () => {
 	it('should return prevented fields on a simple read field access call', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
 			user: {
-				readSome: {
+				read: {
 					fieldRestrictions: ['id'],
 					rowFilter: true,
 				},
@@ -185,11 +185,11 @@ describe('buildFieldAccessControlEntryForUser', () => {
 	it('should merge prevented fields when using read and all operation types', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
 			user: {
-				readSome: {
+				read: {
 					fieldRestrictions: ['id'],
 					rowFilter: true,
 				},
-				allSome: {
+				all: {
 					fieldRestrictions: ['secureField'],
 					rowFilter: true,
 				},
@@ -201,13 +201,12 @@ describe('buildFieldAccessControlEntryForUser', () => {
 			[AccessType.Read]: new Set(['id', 'secureField']),
 			[AccessType.Create]: new Set(['secureField']),
 			[AccessType.Update]: new Set(['secureField']),
-			[AccessType.Delete]: new Set(['secureField']),
 		});
 	});
 
 	it('should return an empty set if no roles match', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
-			admin: { readSome: true },
+			admin: { read: true },
 		};
 		const result = buildFieldAccessControlEntryForUser(acl, ['user'], {});
 		expect(result).toEqual({});
@@ -216,13 +215,13 @@ describe('buildFieldAccessControlEntryForUser', () => {
 	it('should handle multiple roles with field restrictions', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
 			user: {
-				readSome: {
+				read: {
 					fieldRestrictions: ['id'],
 					rowFilter: true,
 				},
 			},
 			manager: {
-				readSome: {
+				read: {
 					fieldRestrictions: ['name', 'email'],
 					rowFilter: true,
 				},
@@ -249,7 +248,7 @@ describe('buildFieldAccessControlEntryForUser', () => {
 	it('should handle field restrictions as a function of the context', () => {
 		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
 			user: {
-				readSome: {
+				read: {
 					fieldRestrictions: (context: AuthorizationContext) =>
 						context.user?.roles?.includes('admin') ? [] : ['sensitiveData'],
 					rowFilter: true,
