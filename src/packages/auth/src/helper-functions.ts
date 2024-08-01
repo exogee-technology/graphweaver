@@ -155,6 +155,10 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
 	return consolidatedAccessControlEntry;
 };
 
+export const buildFieldAccessControlEntryForUser = (): string[] => {
+	return [];
+};
+
 /**
  * @param filters The list of individual filters to be combined into a single 'anded' filter
  * @returns A single filter object imposing all of the input filter conditions together

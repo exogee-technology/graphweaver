@@ -14,7 +14,7 @@ import { RequestContext } from '../../authorization-context';
 import { authApolloPlugin } from '../apollo';
 import { getImplicitAllow } from '../../implicit-authorization';
 import { ApplyAccessControlList } from '../../decorators/apply-access-control-list';
-import { AclMap } from '../../helper-functions';
+import { AclMap, buildFieldAccessControlEntryForUser } from '../../helper-functions';
 import { AuthorizationContext } from '../../types';
 
 export class BaseAuthMethod {
@@ -62,25 +62,25 @@ export class BaseAuthMethod {
 		const afterRead = async (
 			params: ReadHookParams<AdminUiEntityMetadata, AuthorizationContext>
 		) => {
-			// Filter out the priority column from the Task entity if the user is on the light side
-			const entityName = 'Task';
-			const preventedColumn = 'priority';
+			const entities = params.entities ?? [];
+			for (const entity of entities) {
+				if (!entity) continue;
 
-			// Filter out the prevented column from within the specificed entity
-			const filteredEntities = params.entities?.map((entity) => {
-				if (entity?.name === entityName) {
-					const filteredFields = entity.fields?.filter((field) => field.name !== preventedColumn);
-					return {
-						...entity,
-						fields: filteredFields,
-					};
-				}
-				return entity;
-			});
+				const fields = buildFieldAccessControlEntryForUser();
+
+				const filteredFields = entity.fields
+					?.map((field) => {
+						if (fields.includes(field.name)) {
+							return field;
+						}
+					})
+					.filter((field) => field !== undefined);
+				entity.fields = filteredFields;
+			}
 
 			return {
 				...params,
-				entities: filteredEntities,
+				entities,
 			};
 		};
 
