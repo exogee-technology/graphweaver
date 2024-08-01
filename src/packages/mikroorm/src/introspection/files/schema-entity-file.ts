@@ -104,6 +104,10 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	protected getTypescriptPropertyType(prop: EntityProperty): string {
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
+			return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+		}
+
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
 			return `Record<string, unknown>`;
 		}
@@ -185,6 +189,10 @@ export class SchemaEntityFile extends BaseFile {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
 		}
 
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
+			return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+		}
+
 		if ([ReferenceKind.MANY_TO_MANY, ReferenceKind.ONE_TO_MANY].includes(prop.kind)) {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
 		}
@@ -193,7 +201,14 @@ export class SchemaEntityFile extends BaseFile {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1)}]`;
 		}
 
-		return prop.runtimeType.charAt(0).toUpperCase() + prop.runtimeType.slice(1);
+		const lastChanceType = prop.runtimeType ?? prop.type;
+
+		if (!lastChanceType) {
+			console.error(`Property is malformed, it has no type or runtimeType:`, prop);
+			throw new Error(`Property ${prop.name} on ${prop.entity} entity has no type or runtimeType.`);
+		}
+
+		return lastChanceType.charAt(0).toUpperCase() + lastChanceType.slice(1);
 	}
 
 	private getPropertyDecorator(prop: EntityProperty): string {

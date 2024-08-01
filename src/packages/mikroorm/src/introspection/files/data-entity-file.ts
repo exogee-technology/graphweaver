@@ -111,6 +111,10 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getPropertyType(prop: EntityProperty): string {
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
+			return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+		}
+
 		const columnType = prop.columnTypes?.[0]?.toLowerCase();
 
 		if (['jsonb', 'json', 'any'].includes(columnType)) {
