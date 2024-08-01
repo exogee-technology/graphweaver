@@ -37,7 +37,7 @@ export const assertUserCanPerformRequestedAction = async (
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
 	await assertObjectLevelPermissions(
-		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext() as string[]),
+		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext()),
 		requiredPermission
 	);
 };
@@ -48,7 +48,7 @@ export const getAccessFilter = async (
 ) => {
 	const consolidatedAclEntry = buildAccessControlEntryForUser(
 		acl,
-		getRolesFromAuthorizationContext() as string[]
+		getRolesFromAuthorizationContext()
 	);
 
 	const readEntry = consolidatedAclEntry[requiredPermission];

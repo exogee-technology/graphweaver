@@ -10,12 +10,13 @@ import {
 import { logger } from '@exogee/logger';
 import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
-import { RequestContext } from '../../authorization-context';
+import { getRolesFromAuthorizationContext, RequestContext } from '../../authorization-context';
 import { authApolloPlugin } from '../apollo';
 import { getImplicitAllow } from '../../implicit-authorization';
 import { ApplyAccessControlList } from '../../decorators/apply-access-control-list';
 import { AclMap, buildFieldAccessControlEntryForUser } from '../../helper-functions';
-import { AuthorizationContext } from '../../types';
+import { AuthorizationContext, BASE_ROLE_EVERYONE } from '../../types';
+import { getACL } from '../../auth-utils';
 
 export class BaseAuthMethod {
 	constructor() {
@@ -63,18 +64,15 @@ export class BaseAuthMethod {
 			params: ReadHookParams<AdminUiEntityMetadata, AuthorizationContext>
 		) => {
 			const entities = params.entities ?? [];
+			const roles = [...getRolesFromAuthorizationContext(), BASE_ROLE_EVERYONE];
+
 			for (const entity of entities) {
 				if (!entity) continue;
 
-				const fields = buildFieldAccessControlEntryForUser();
+				const acl = getACL(entity.name);
+				const fields = buildFieldAccessControlEntryForUser(acl, roles, params.context);
 
-				const filteredFields = entity.fields
-					?.map((field) => {
-						if (fields.includes(field.name)) {
-							return field;
-						}
-					})
-					.filter((field) => field !== undefined);
+				const filteredFields = entity.fields?.filter((field) => !fields.has(field.name));
 				entity.fields = filteredFields;
 			}
 

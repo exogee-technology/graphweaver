@@ -16,7 +16,7 @@ import {
 	ListInputFilterArgs,
 	AccessControlEntry,
 } from './types';
-import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
+import { GENERIC_AUTH_ERROR_MESSAGE, getACL } from './auth-utils';
 import { ChallengeError } from './errors';
 import { getRulesForRoles } from './utils/get-rules-for-roles';
 import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
@@ -155,8 +155,39 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
 	return consolidatedAccessControlEntry;
 };
 
-export const buildFieldAccessControlEntryForUser = (): string[] => {
-	return [];
+export const buildFieldAccessControlEntryForUser = <G, TContext extends AuthorizationContext>(
+	acl: Partial<AccessControlList<G, TContext>>,
+	roles: string[],
+	context: TContext
+): Set<keyof G> => {
+	const entries = roles.map((role) => acl[role]).filter((role) => !!role);
+
+	const fields = new Set<keyof G>();
+
+	for (const entry of entries) {
+		const accessControlValues = Object.values<AccessControlValue<G, TContext> | undefined>(entry);
+
+		for (const accessControlValue of accessControlValues) {
+			if (!accessControlValue) {
+				continue;
+			}
+
+			if (
+				accessControlValue !== true &&
+				typeof accessControlValue !== 'function' &&
+				accessControlValue.fieldRestrictions
+			) {
+				const fieldsOnValue =
+					typeof accessControlValue.fieldRestrictions === 'function'
+						? accessControlValue.fieldRestrictions(context)
+						: accessControlValue.fieldRestrictions;
+
+				fieldsOnValue.forEach((field) => fields.add(field));
+			}
+		}
+	}
+
+	return fields;
 };
 
 /**
@@ -276,10 +307,4 @@ export const checkAuthentication = async (
 			);
 		}
 	}
-};
-
-export const allFieldsExcept = <G>(entityName: string, excludeFields: (keyof G)[]): (keyof G)[] => {
-	const entity = graphweaverMetadata.getEntityByName<G>(entityName);
-	const fields = Object.keys(entity?.fields ?? {}) as (keyof G)[];
-	return fields.filter((field) => !excludeFields.includes(field));
 };

@@ -17,7 +17,6 @@ import {
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
 	AuthorizationContext,
-	allFieldsExcept,
 } from '@exogee/graphweaver-auth';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -34,7 +33,8 @@ type DeleteHook = DeleteHookParams<Task, AuthorizationContext>;
 const acl: AccessControlList<Task, AuthorizationContext> = {
 	LIGHT_SIDE: {
 		allSome: {
-			fields: allFieldsExcept<Task>('Task', ['priority']), // Here we are applying column level security to prevent access to the priority column
+			// Here we are applying column level security to prevent access to the priority column by default all fields are allowed
+			fieldRestrictions: ['priority'],
 			rowFilter: (context) => ({ user: { id: context.user?.id } }), // Here we are applying row level security to only allow access to tasks that belong to the user
 		},
 	},
