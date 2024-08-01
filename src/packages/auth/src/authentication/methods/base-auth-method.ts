@@ -15,7 +15,7 @@ import { authApolloPlugin } from '../apollo';
 import { getImplicitAllow } from '../../implicit-authorization';
 import { ApplyAccessControlList } from '../../decorators/apply-access-control-list';
 import { AclMap, buildFieldAccessControlEntryForUser } from '../../helper-functions';
-import { AuthorizationContext, BASE_ROLE_EVERYONE } from '../../types';
+import { AccessType, AuthorizationContext, BASE_ROLE_EVERYONE } from '../../types';
 import { getACL } from '../../auth-utils';
 
 export class BaseAuthMethod {
@@ -70,10 +70,13 @@ export class BaseAuthMethod {
 				if (!entity) continue;
 
 				const acl = getACL(entity.name);
-				const fields = buildFieldAccessControlEntryForUser(acl, roles, params.context);
+				const result = buildFieldAccessControlEntryForUser(acl, roles, params.context);
 
-				const filteredFields = entity.fields?.filter((field) => !fields.has(field.name));
-				entity.fields = filteredFields;
+				const fields = result[AccessType.Read];
+				if (fields) {
+					const filteredFields = entity.fields?.filter((field) => !fields.has(field.name));
+					entity.fields = filteredFields;
+				}
 			}
 
 			return {

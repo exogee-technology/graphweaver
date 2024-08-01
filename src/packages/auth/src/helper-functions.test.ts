@@ -177,7 +177,32 @@ describe('buildFieldAccessControlEntryForUser', () => {
 		};
 
 		const result = buildFieldAccessControlEntryForUser(acl, ['user'], {});
-		expect(result).toEqual(new Set(['id']));
+		expect(result).toEqual({
+			[AccessType.Read]: new Set(['id']),
+		});
+	});
+
+	it('should merge prevented fields when using read and all operation types', () => {
+		const acl: Partial<AccessControlList<any, AuthorizationContext>> = {
+			user: {
+				readSome: {
+					fieldRestrictions: ['id'],
+					rowFilter: true,
+				},
+				allSome: {
+					fieldRestrictions: ['secureField'],
+					rowFilter: true,
+				},
+			},
+		};
+
+		const result = buildFieldAccessControlEntryForUser(acl, ['user'], {});
+		expect(result).toEqual({
+			[AccessType.Read]: new Set(['id', 'secureField']),
+			[AccessType.Create]: new Set(['secureField']),
+			[AccessType.Update]: new Set(['secureField']),
+			[AccessType.Delete]: new Set(['secureField']),
+		});
 	});
 
 	it('should return an empty set if no roles match', () => {
@@ -185,7 +210,7 @@ describe('buildFieldAccessControlEntryForUser', () => {
 			admin: { readSome: true },
 		};
 		const result = buildFieldAccessControlEntryForUser(acl, ['user'], {});
-		expect(result).toEqual(new Set());
+		expect(result).toEqual({});
 	});
 
 	it('should handle multiple roles with field restrictions', () => {
@@ -205,7 +230,9 @@ describe('buildFieldAccessControlEntryForUser', () => {
 		};
 
 		const result = buildFieldAccessControlEntryForUser(acl, ['user', 'manager'], {});
-		expect(result).toEqual(new Set(['id', 'name', 'email']));
+		expect(result).toEqual({
+			[AccessType.Read]: new Set(['id', 'name', 'email']),
+		});
 	});
 
 	it('should ignore access control values without fieldRestrictions', () => {
@@ -216,7 +243,7 @@ describe('buildFieldAccessControlEntryForUser', () => {
 		};
 
 		const result = buildFieldAccessControlEntryForUser(acl, ['user'], {});
-		expect(result).toEqual(new Set());
+		expect(result).toEqual({});
 	});
 
 	it('should handle field restrictions as a function of the context', () => {
@@ -233,9 +260,11 @@ describe('buildFieldAccessControlEntryForUser', () => {
 		const result1 = buildFieldAccessControlEntryForUser(acl, ['user'], {
 			user: { roles: ['admin'] },
 		});
-		expect(result1).toEqual(new Set());
+		expect(result1).toEqual({});
 
 		const result2 = buildFieldAccessControlEntryForUser(acl, ['user'], { user: { roles: [] } });
-		expect(result2).toEqual(new Set(['sensitiveData']));
+		expect(result2).toEqual({
+			[AccessType.Read]: new Set(['sensitiveData']),
+		});
 	});
 });

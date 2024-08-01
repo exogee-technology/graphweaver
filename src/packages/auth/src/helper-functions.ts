@@ -15,6 +15,7 @@ import {
 	AuthenticationMethod,
 	ListInputFilterArgs,
 	AccessControlEntry,
+	ConsolidatedFieldAccessControlEntry,
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE, getACL } from './auth-utils';
 import { ChallengeError } from './errors';
@@ -159,35 +160,57 @@ export const buildFieldAccessControlEntryForUser = <G, TContext extends Authoriz
 	acl: Partial<AccessControlList<G, TContext>>,
 	roles: string[],
 	context: TContext
-): Set<keyof G> => {
+): ConsolidatedFieldAccessControlEntry<G> => {
 	const entries = roles.map((role) => acl[role]).filter((role) => !!role);
 
-	const fields = new Set<keyof G>();
+	const result = new Map<AccessType, Set<keyof G>>();
+	const addToResult = (
+		operation: keyof AccessControlEntry<G, TContext>,
+		fieldsOnValue: (keyof G)[]
+	) => {
+		const operationName = mapOperation(operation.replace('Some', ''));
+		const fields = result.get(operationName) ?? new Set<keyof G>();
+		fieldsOnValue.forEach((field) => fields.add(field));
+		result.set(operationName, fields);
+	};
 
 	for (const entry of entries) {
-		const accessControlValues = Object.values<AccessControlValue<G, TContext> | undefined>(entry);
+		const accessControlValues = Object.entries<AccessControlValue<G, TContext> | undefined>(entry);
 
-		for (const accessControlValue of accessControlValues) {
-			if (!accessControlValue) {
+		for (const [operation, accessControlValue] of accessControlValues) {
+			if (
+				!accessControlValue ||
+				accessControlValue === true ||
+				typeof accessControlValue === 'function'
+			) {
 				continue;
 			}
 
-			if (
-				accessControlValue !== true &&
-				typeof accessControlValue !== 'function' &&
-				accessControlValue.fieldRestrictions
-			) {
+			if (accessControlValue.fieldRestrictions) {
 				const fieldsOnValue =
 					typeof accessControlValue.fieldRestrictions === 'function'
 						? accessControlValue.fieldRestrictions(context)
 						: accessControlValue.fieldRestrictions;
 
-				fieldsOnValue.forEach((field) => fields.add(field));
+				if (fieldsOnValue?.length) {
+					const operationName = operation as keyof AccessControlEntry<G, TContext>;
+					if (operationName.startsWith('all') || operationName.startsWith('write')) {
+						addToResult('create', fieldsOnValue);
+						addToResult('update', fieldsOnValue);
+						addToResult('delete', fieldsOnValue);
+
+						if (operationName.startsWith('all')) {
+							addToResult('read', fieldsOnValue);
+						}
+					} else {
+						addToResult(operationName, fieldsOnValue);
+					}
+				}
 			}
 		}
 	}
 
-	return fields;
+	return Object.fromEntries(result);
 };
 
 /**

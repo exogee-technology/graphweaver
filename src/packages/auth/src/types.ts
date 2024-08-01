@@ -79,6 +79,10 @@ export type ConsolidatedAccessControlEntry<G, TContext extends AuthorizationCont
 	[K in AccessType]?: ConsolidatedAccessControlValue<G, TContext>;
 };
 
+export type ConsolidatedFieldAccessControlEntry<G> = {
+	[K in AccessType]?: Set<keyof G>;
+};
+
 export type SomeAccessControlValue<G, TContext extends AuthorizationContext> = {
 	rowFilter: AccessControlValue<G, TContext>;
 	fieldRestrictions?: AccessControlColumnValue<G, TContext>;
