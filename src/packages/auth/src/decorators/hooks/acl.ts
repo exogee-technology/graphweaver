@@ -421,16 +421,18 @@ export const afterCreateOrUpdate = (
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
 		// Check permissions on restricted fields
-		const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
-		if (!requestedFields) {
-			throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
+		if (!params.isAggregate) {
+			const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
+			if (!requestedFields) {
+				throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
+			}
+			await assertUserHasAccessToFields(
+				gqlEntityTypeName,
+				params.context,
+				requestedFields,
+				AccessType.Read
+			);
 		}
-		await assertUserHasAccessToFields(
-			gqlEntityTypeName,
-			params.context,
-			requestedFields,
-			AccessType.Read
-		);
 
 		// Check permissions for this entity based on the currently logged in user
 		await assertUserCanPerformRequest(

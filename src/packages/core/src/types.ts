@@ -156,6 +156,7 @@ export interface CreateOrUpdateHookParams<G, TContext = BaseContext>
 
 export interface ReadHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
 	args: { filter?: Filter<G>; pagination?: PaginationOptions };
+	isAggregate?: boolean;
 }
 
 export interface DeleteHookParams<G, TContext = BaseContext> extends HookParams<G, TContext> {
