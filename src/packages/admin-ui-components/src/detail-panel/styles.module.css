@@ -59,6 +59,10 @@
 	opacity: 0.5;
 }
 
+.textArea {
+	height: 150px;
+}
+
 .modalOverlay {
 	position: fixed;
 	inset: 0px;
