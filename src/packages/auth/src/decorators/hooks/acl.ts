@@ -360,13 +360,25 @@ export const beforeCreateOrUpdate = (
 	accessType: AccessType.Create | AccessType.Update
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
-		// 1. Check permissions for this entity based on the currently logged in user
+		// Check permissions on restricted fields
+		const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
+		if (!requestedFields) {
+			throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
+		}
+		// Lets check the user has access to read the requested fields
+		await assertUserHasAccessToFields(
+			gqlEntityTypeName,
+			params.context,
+			requestedFields,
+			AccessType.Read
+		);
+		// Check permissions for this entity based on the currently logged in user
 		await assertUserCanPerformRequest(gqlEntityTypeName, params.fields, params.args, accessType);
-		// 2. Fetch the ACL for this entity
+		// Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
-		// 3. Fetch the filter for the currently logged in user
+		// Fetch the filter for the currently logged in user
 		const accessFilter = await getAccessFilter(acl, accessType);
-		// 4. Check if the filter has values and then assert we are in a transaction
+		// Check if the filter has values and then assert we are in a transaction
 		// You can only use a filter in this way when you are in a transaction
 		if (isPopulatedFilter(accessFilter)) assertTransactional(params.transactional);
 
@@ -408,6 +420,7 @@ export const afterCreateOrUpdate = (
 
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
+		// Check permissions on restricted fields
 		const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
 		if (!requestedFields) {
 			throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
@@ -419,16 +432,16 @@ export const beforeRead = (gqlEntityTypeName: string) => {
 			AccessType.Read
 		);
 
-		// 1. Check permissions for this entity based on the currently logged in user
+		// Check permissions for this entity based on the currently logged in user
 		await assertUserCanPerformRequest(
 			gqlEntityTypeName,
 			params.fields,
 			params.args,
 			AccessType.Read
 		);
-		// 2. Fetch the ACL for this entity
+		// Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
-		// 3. Combine the access filter with the original filter
+		// Combine the access filter with the original filter
 		const accessFilter = await getAccessFilter(acl, AccessType.Read);
 		const consolidatedFilter = andFilters(params.args?.filter, accessFilter);
 
