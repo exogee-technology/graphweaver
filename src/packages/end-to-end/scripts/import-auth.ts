@@ -25,7 +25,7 @@ async function main() {
 		await removeDirectory('./app');
 
 		// Copy the auth example over for testing
-		await execAsync('cp -r ../../examples/rest ./app');
+		await execAsync('cp -r ../../examples/rest-with-auth ./app');
 
 		// Update to use the local dependencies
 		process.chdir('./app');

@@ -70,7 +70,7 @@ jobs:
           envkey_AUTH_WHITELIST_DOMAINS: localhost
           directory: src/packages/end-to-end/app
 
-      - name: Start and Test Rest Example
+      - name: Start and Test Rest With Auth Example
         working-directory: src/packages/end-to-end
         timeout-minutes: 4
         run: |
