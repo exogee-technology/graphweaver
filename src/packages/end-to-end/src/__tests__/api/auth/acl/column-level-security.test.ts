@@ -3,28 +3,29 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
+import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
 import {
-	CredentialStorage,
 	UserProfile,
+	ApplyAccessControlList,
+	CredentialStorage,
 	hashPassword,
 	Password,
-	ApplyAccessControlList,
-	AclMap,
 	setAddUserToContext,
+	AclMap,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
 	id: '1',
-	roles: ['admin', 'user'],
+	roles: ['user'],
 	displayName: 'Test User',
 });
 
 class AlbumBackendProvider extends BaseDataProvider<any> {
-	async findOne() {
-		return { id: '1' };
+	async find() {
+		return [{ id: 1, title: 'Album Title', description: 'Album Description' }];
 	}
 }
+
 const albumDataProvider = new AlbumBackendProvider('album');
 
 @Entity('Album', {
@@ -33,6 +34,9 @@ const albumDataProvider = new AlbumBackendProvider('album');
 export class Album {
 	@Field(() => ID)
 	id!: number;
+
+	@Field(() => String)
+	title!: string;
 
 	@Field(() => String)
 	description!: string;
@@ -62,7 +66,7 @@ const graphweaver = new Graphweaver();
 
 let token: string | undefined;
 
-describe('ACL - Multiple Roles', () => {
+describe('Column Level Security', () => {
 	beforeAll(async () => {
 		const loginResponse = await graphweaver.executeOperation<{
 			loginPassword: { authToken: string };
@@ -87,33 +91,39 @@ describe('ACL - Multiple Roles', () => {
 		expect(token).toContain('Bearer ');
 	});
 
-	test('should return true when listing a single entity and one role explicitly allows access.', async () => {
+	test('should return an error as user does not have access to description', async () => {
 		assert(token);
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
-			admin: {
-				all: true,
-			},
 			user: {
-				all: () => false,
+				all: {
+					fieldRestrictions: ['description'],
+					rowFilter: true,
+				},
 			},
 		})(Album);
 
-		const response = await graphweaver.executeOperation({
+		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
 				query {
-					album(id: 1) {
+					albums {
 						id
+						title
+						description
 					}
 				}
 			`,
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toBeUndefined();
+		expect(response.body.singleResult.errors).toBeDefined();
 
-		expect(response.body.singleResult.data?.album).toEqual({ id: '1' });
+		expect(response.body.singleResult.errors?.length).toBe(1);
+		expect(response.body.singleResult.errors?.[0].message).toBe(
+			'Cannot query field "description" on type "Album". [Suggestion hidden]?'
+		);
 	});
 });

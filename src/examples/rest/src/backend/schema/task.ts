@@ -115,43 +115,75 @@ export class Task {
 	// They are included here as an example of how to use them
 	@Hook(HookRegister.BEFORE_CREATE)
 	async beforeCreate(params: CreateOrUpdateHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_CREATE)
 	async afterCreate(params: CreateOrUpdateHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_READ)
 	async beforeRead(params: ReadHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_READ)
 	async afterRead(params: ReadHook) {
 		// filter the retured data object (entities) out priorty
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_UPDATE)
 	async beforeUpdate(params: CreateOrUpdateHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_UPDATE)
 	async afterUpdate(params: CreateOrUpdateHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.BEFORE_DELETE)
 	async beforeDelete(params: DeleteHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 	@Hook(HookRegister.AFTER_DELETE)
 	async afterDelete(params: DeleteHook) {
-		const filteredEntities = preventLightSideAccess(params, params.fields['Task'], 'priority');
+		const filteredEntities = preventLightSideAccess(
+			params,
+			params.fields.fieldsByTypeName['Task'],
+			'priority'
+		);
 		return { ...params, entities: filteredEntities };
 	}
 }
