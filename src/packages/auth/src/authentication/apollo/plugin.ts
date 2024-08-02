@@ -223,7 +223,7 @@ export const authApolloPlugin = <R>(
 				},
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
-					const errors = (response.body as any)?.singleResult?.errors;
+					let errors = (response.body as any)?.singleResult?.errors;
 
 					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
 						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
@@ -264,6 +264,17 @@ export const authApolloPlugin = <R>(
 							buildRedirectUri(authRedirect, RedirectType.LOGIN)
 						);
 					}
+
+					// Here we are cleaning up the error messages to remove the path if it is a restricted field error.
+					// This ensures that the client does not know the field exists as the message is identical to a field that does not exist.
+					errors = errors?.map((error: any) => {
+						if (error.extensions.code === ErrorCodes.RESTRICTED_FIELD) {
+							delete error.path;
+							delete error.locations;
+							delete (response.body as any)?.singleResult.data;
+						}
+						return error;
+					});
 				},
 			};
 		},

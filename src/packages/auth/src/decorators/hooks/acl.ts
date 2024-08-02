@@ -12,8 +12,8 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
-import { AccessType, AuthorizationContext } from '../../types';
-import { andFilters } from '../../helper-functions';
+import { AccessType, AuthorizationContext, BASE_ROLE_EVERYONE } from '../../types';
+import { andFilters, buildFieldAccessControlEntryForUser } from '../../helper-functions';
 import {
 	GENERIC_AUTH_ERROR_MESSAGE,
 	assertUserCanPerformRequestedAction,
@@ -22,6 +22,8 @@ import {
 	getAccessFilter,
 	isPopulatedFilter,
 } from '../../auth-utils';
+import { getRolesFromAuthorizationContext } from '../../authorization-context';
+import { RestrictedFieldError } from '../../errors';
 
 const aggregatePattern = /_aggregate$/;
 
@@ -122,6 +124,40 @@ const assertUserCanPerformRequest = async <G>(
 		const [entityName, action] = permission.split(':');
 		const acl = getACL(entityName);
 		await assertUserCanPerformRequestedAction(acl, action as AccessType);
+	}
+};
+
+export const assertUserHasAccessToFields = <TContext extends AuthorizationContext>(
+	entityName: string,
+	context: TContext,
+	requestedFields: ResolveTree | { [str: string]: ResolveTree },
+	accessType: AccessType
+) => {
+	const roles = [...getRolesFromAuthorizationContext(), BASE_ROLE_EVERYONE];
+
+	const acl = getACL(entityName);
+	const result = buildFieldAccessControlEntryForUser(acl, roles, context);
+
+	const restrictedFields = result[accessType];
+	if (!restrictedFields) return;
+
+	for (const field of restrictedFields) {
+		if (typeof field !== 'string') {
+			throw new Error(
+				`Unexpected field type in access control list for entity ${entityName}. Expected string, got ${typeof field}`
+			);
+		}
+
+		if (Object.keys(requestedFields).includes(field)) {
+			logger.error(
+				requestedFields,
+				`User does not have access to field: '${field}' on ${entityName} entity`
+			);
+
+			throw new RestrictedFieldError(
+				`Cannot query field "${field}" on type "${entityName}". [Suggestion hidden]?`
+			);
+		}
 	}
 };
 
@@ -372,6 +408,17 @@ export const afterCreateOrUpdate = (
 
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
+		const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
+		if (!requestedFields) {
+			throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
+		}
+		await assertUserHasAccessToFields(
+			gqlEntityTypeName,
+			params.context,
+			requestedFields,
+			AccessType.Read
+		);
+
 		// 1. Check permissions for this entity based on the currently logged in user
 		await assertUserCanPerformRequest(
 			gqlEntityTypeName,

@@ -104,6 +104,31 @@ describe('Column Level Security', () => {
 			},
 		})(Album);
 
+		const fieldDoesNotExistResponse = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query {
+					albums {
+						id
+						title
+						_description
+					}
+				}
+			`,
+		});
+
+		assert(fieldDoesNotExistResponse.body.kind === 'single');
+		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
+		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
+
+		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		assert(error);
+		error = {
+			...error,
+			// Change the error message to match the expected error message
+			message: error.message.replace('_description', 'description'),
+		};
+
 		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
 			http: { headers: new Headers({ authorization: token }) } as any,
 			query: gql`
@@ -122,8 +147,154 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0].message).toBe(
-			'Cannot query field "description" on type "Album". [Suggestion hidden]?'
-		);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+	});
+
+	test('should return an error as user does not have access to description when creating', async () => {
+		assert(token);
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			user: {
+				all: {
+					fieldRestrictions: ['description'],
+					rowFilter: true,
+				},
+			},
+		})(Album);
+
+		const fieldDoesNotExistResponse = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation createAlbum($input: AlbumInsertInput!) {
+					createAlbum(input: $input) {
+						id
+						title
+						_description
+					}
+				}
+			`,
+			variables: {
+				input: {
+					title: 'Album Title',
+					_description: 'Album Description',
+				},
+			},
+		});
+
+		assert(fieldDoesNotExistResponse.body.kind === 'single');
+		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
+		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
+
+		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		assert(error);
+		error = {
+			...error,
+			// Change the error message to match the expected error message
+			message: error.message.replace('_description', 'description'),
+		};
+
+		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation createAlbum($input: AlbumInsertInput!) {
+					createAlbum(input: $input) {
+						id
+						title
+						description
+					}
+				}
+			`,
+			variables: {
+				input: {
+					title: 'Album Title',
+					description: 'Album Description',
+				},
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.data).toBeUndefined();
+		expect(response.body.singleResult.errors).toBeDefined();
+
+		expect(response.body.singleResult.errors?.length).toBe(1);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+	});
+
+	test('should return an error as user does not have access to description when updating', async () => {
+		assert(token);
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			user: {
+				all: {
+					fieldRestrictions: ['description'],
+					rowFilter: true,
+				},
+			},
+		})(Album);
+
+		const fieldDoesNotExistResponse = await graphweaver.executeOperation<{
+			albums: Album[];
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation updateAlbum($input: AlbumUpdateInput!) {
+					updateAlbum(input: $input) {
+						id
+						title
+						_description
+					}
+				}
+			`,
+			variables: {
+				input: {
+					id: '1',
+					title: 'Album Title',
+					_description: 'Album Description',
+				},
+			},
+		});
+
+		assert(fieldDoesNotExistResponse.body.kind === 'single');
+		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
+		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
+
+		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		assert(error);
+		error = {
+			...error,
+			// Change the error message to match the expected error message
+			message: error.message.replace('_description', 'description'),
+		};
+
+		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				mutation updateAlbum($input: AlbumUpdateInput!) {
+					updateAlbum(input: $input) {
+						id
+						title
+						description
+					}
+				}
+			`,
+			variables: {
+				input: {
+					id: '1',
+					title: 'Album Title',
+					description: 'Album Description',
+				},
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.data).toBeUndefined();
+		expect(response.body.singleResult.errors).toBeDefined();
+
+		console.log(response.body.singleResult.errors);
+
+		expect(response.body.singleResult.errors?.length).toBe(1);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
 	});
 });

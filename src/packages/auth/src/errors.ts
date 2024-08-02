@@ -6,6 +6,7 @@ export { ForbiddenError } from 'apollo-server-errors';
 export enum ErrorCodes {
 	CHALLENGE = 'CHALLENGE',
 	FORBIDDEN = 'FORBIDDEN',
+	RESTRICTED_FIELD = 'GRAPHQL_VALIDATION_FAILED',
 }
 
 export class ChallengeError extends ApolloError {
@@ -18,6 +19,16 @@ export class ChallengeError extends ApolloError {
 	) {
 		super(message, ErrorCodes.CHALLENGE, extensions);
 		this.code = ErrorCodes.CHALLENGE;
+		this.extensions = { ...this.extensions, code: this.code };
+
+		Object.defineProperty(this, 'name', { value: 'ChallengeError' });
+	}
+}
+
+export class RestrictedFieldError extends ApolloError {
+	constructor(message: string) {
+		super(message, ErrorCodes.RESTRICTED_FIELD);
+		this.code = ErrorCodes.RESTRICTED_FIELD;
 		this.extensions = { ...this.extensions, code: this.code };
 
 		Object.defineProperty(this, 'name', { value: 'ChallengeError' });
