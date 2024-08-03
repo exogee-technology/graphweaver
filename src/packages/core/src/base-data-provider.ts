@@ -1,3 +1,4 @@
+import { EntityMetadata } from './metadata';
 import { BackendProvider, BackendProviderConfig, Filter, PaginationOptions } from './types';
 
 // ESLint, I know we have a lot of unused variables here, it's ok, they're just for reference.
@@ -15,7 +16,7 @@ export class BaseDataProvider<D> implements BackendProvider<D> {
 		throw new Error('Find not implemented.');
 	}
 
-	public async findOne(filter: Filter<D>): Promise<D | null> {
+	public async findOne(filter: Filter<D>, entityMetadata?: EntityMetadata): Promise<D | null> {
 		throw new Error('FindOne not implemented.');
 	}
 	public async findByRelatedId(

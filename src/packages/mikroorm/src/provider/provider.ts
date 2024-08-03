@@ -13,9 +13,11 @@ import {
 	trace as startTrace,
 	GraphweaverRequestEvent,
 	GraphweaverPluginNextFunction,
+	EntityMetadata,
+	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { Reference, RequestContext } from '@mikro-orm/core';
+import { Reference, RequestContext, sql } from '@mikro-orm/core';
 import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
 import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
@@ -352,19 +354,32 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	}
 
 	@TraceMethod()
-	public async findOne(filter: Filter<D>, trace?: TraceOptions): Promise<D | null> {
+	public async findOne(
+		filter: Filter<D>,
+		entityMetadata?: EntityMetadata,
+		trace?: TraceOptions
+	): Promise<D | null> {
 		trace?.span.updateName(`Mikro-Orm - FindOne ${this.entityType.name}`);
 		logger.trace(`Running findOne ${this.entityType.name} with filter ${filter}`);
 
 		const metadata = this.em.getMetadata().get(this.entityType.name);
-		if (metadata.primaryKeys.length !== 1) {
+		let primaryKeyField = metadata.primaryKeys[0];
+
+		if (!primaryKeyField && entityMetadata) {
+			// When using virtual entities, MikroORM will have no primary keys.
+			// In this scenario we actually know what the primary key is from
+			// the GraphQL metadata, so we can go ahead and use it.
+			primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entityMetadata);
+		}
+
+		if (!primaryKeyField || metadata.primaryKeys.length > 1) {
 			throw new Error(
 				`Entity ${this.entityType.name} has ${metadata.primaryKeys.length} primary keys. We only support entities with a single primary key at this stage.`
 			);
 		}
 
 		const [result] = await this.find(filter, {
-			orderBy: { [metadata.primaryKeys[0]]: Sort.DESC },
+			orderBy: { [primaryKeyField]: Sort.DESC },
 			offset: 0,
 			limit: 1,
 		});
@@ -665,11 +680,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		// and return a Query Builder instance.
 		const query = this.em.createQueryBuilder(this.entityType);
 
-		// Certain query filters can result in duplicate records once all joins are resolved
-		// These duplicates can be discarded as related entities are returned to the
-		// API consumer via field resolvers
-		query.setFlag(QueryFlag.DISTINCT);
-
 		if (Object.keys(whereWithAppliedExternalIdFields).length > 0) {
 			query.andWhere(whereWithAppliedExternalIdFields);
 		}
@@ -679,7 +689,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		try {
 			if (requestedAggregations.has(AggregationType.COUNT)) {
 				const meta = this.database.em.getMetadata().get(this.entityType.name);
-				result.count = await query.getCount(meta.primaryKeys);
+				if (meta.primaryKeys.length) {
+					// It's a standard entity with primary keys, we can do a full distinct
+					// on these keys.
+					result.count = await query.getCount(meta.primaryKeys, true);
+				} else {
+					// It's either a virtual entity, or it's an entity without primary keys.
+					// We just need to count * as a fallback, no distinct.
+					const [firstRow] = await query.select(sql`count(*)`.as('count')).execute();
+					result.count = firstRow.count;
+				}
 			}
 		} catch (err) {
 			logger.error(`find ${this.entityType.name} error: ${JSON.stringify(err)}`);

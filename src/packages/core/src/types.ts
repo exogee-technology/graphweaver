@@ -3,6 +3,7 @@ import { Span, Tracer } from '@opentelemetry/api';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
+import { EntityMetadata } from './metadata';
 
 export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -95,9 +96,9 @@ export interface BackendProvider<D> {
 	entityType?: new () => D;
 
 	find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]>;
-	findOne(filter: Filter<D>): Promise<D | null>;
+	findOne(filter: Filter<D>, entityMetadata?: EntityMetadata): Promise<D | null>;
 	findByRelatedId(
-		entity: any,
+		entity: { new (): D },
 		relatedField: string,
 		relatedIds: readonly string[],
 		filter?: Filter<D>
