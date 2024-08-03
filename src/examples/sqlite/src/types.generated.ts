@@ -21,6 +21,10 @@ export type Scalars = {
   ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
+  /** A duration in nanoseconds */
+  NanoDuration: { input: any; output: any; }
+  /** A timestamp in nanoseconds */
+  NanoTimestamp: { input: any; output: any; }
 };
 
 export type AdminUiEntityAttributeMetadata = {
@@ -1936,6 +1940,12 @@ export type Query = {
   totalInvoicesByCustomers?: Maybe<Array<Maybe<TotalInvoicesByCustomer>>>;
   /** Get aggregated data for TotalInvoicesByCustomers. */
   totalInvoicesByCustomers_aggregate?: Maybe<AggregationResult>;
+  /** Get a single Trace. */
+  trace?: Maybe<Trace>;
+  /** Get multiple Traces. */
+  traces?: Maybe<Array<Maybe<Trace>>>;
+  /** Get aggregated data for Traces. */
+  traces_aggregate?: Maybe<AggregationResult>;
   /** Get a single Track. */
   track?: Maybe<Track>;
   /** Get multiple Tracks. */
@@ -2105,6 +2115,22 @@ export type QueryTotalInvoicesByCustomers_AggregateArgs = {
 };
 
 
+export type QueryTraceArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTracesArgs = {
+  filter?: InputMaybe<TracesListFilter>;
+  pagination?: InputMaybe<TracesPaginationInput>;
+};
+
+
+export type QueryTraces_AggregateArgs = {
+  filter?: InputMaybe<TracesListFilter>;
+};
+
+
 export type QueryTrackArgs = {
   id: Scalars['ID']['input'];
 };
@@ -2179,6 +2205,123 @@ export type TotalInvoicesByCustomersPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<TotalInvoicesByCustomersOrderByInput>;
+};
+
+export type Trace = {
+  __typename?: 'Trace';
+  attributes: Scalars['JSON']['output'];
+  duration: Scalars['NanoDuration']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  parentId?: Maybe<Scalars['String']['output']>;
+  spanId: Scalars['String']['output'];
+  timestamp: Scalars['NanoTimestamp']['output'];
+  traceId: Scalars['String']['output'];
+};
+
+export type TracesListFilter = {
+  attributes?: InputMaybe<Scalars['JSON']['input']>;
+  attributes_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  attributes_ne?: InputMaybe<Scalars['JSON']['input']>;
+  attributes_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
+  attributes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  attributes_null?: InputMaybe<Scalars['Boolean']['input']>;
+  duration?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_gt?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_gte?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_in?: InputMaybe<Array<Scalars['NanoDuration']['input']>>;
+  duration_lt?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_lte?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_ne?: InputMaybe<Scalars['NanoDuration']['input']>;
+  duration_nin?: InputMaybe<Array<Scalars['NanoDuration']['input']>>;
+  duration_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  duration_null?: InputMaybe<Scalars['Boolean']['input']>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  parentId?: InputMaybe<Scalars['String']['input']>;
+  parentId_gt?: InputMaybe<Scalars['String']['input']>;
+  parentId_gte?: InputMaybe<Scalars['String']['input']>;
+  parentId_ilike?: InputMaybe<Scalars['String']['input']>;
+  parentId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentId_like?: InputMaybe<Scalars['String']['input']>;
+  parentId_lt?: InputMaybe<Scalars['String']['input']>;
+  parentId_lte?: InputMaybe<Scalars['String']['input']>;
+  parentId_ne?: InputMaybe<Scalars['String']['input']>;
+  parentId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  parentId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  parentId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  spanId?: InputMaybe<Scalars['String']['input']>;
+  spanId_gt?: InputMaybe<Scalars['String']['input']>;
+  spanId_gte?: InputMaybe<Scalars['String']['input']>;
+  spanId_ilike?: InputMaybe<Scalars['String']['input']>;
+  spanId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  spanId_like?: InputMaybe<Scalars['String']['input']>;
+  spanId_lt?: InputMaybe<Scalars['String']['input']>;
+  spanId_lte?: InputMaybe<Scalars['String']['input']>;
+  spanId_ne?: InputMaybe<Scalars['String']['input']>;
+  spanId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  spanId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  spanId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  timestamp?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_gt?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_gte?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_in?: InputMaybe<Array<Scalars['NanoTimestamp']['input']>>;
+  timestamp_lt?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_lte?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_ne?: InputMaybe<Scalars['NanoTimestamp']['input']>;
+  timestamp_nin?: InputMaybe<Array<Scalars['NanoTimestamp']['input']>>;
+  timestamp_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  timestamp_null?: InputMaybe<Scalars['Boolean']['input']>;
+  traceId?: InputMaybe<Scalars['String']['input']>;
+  traceId_gt?: InputMaybe<Scalars['String']['input']>;
+  traceId_gte?: InputMaybe<Scalars['String']['input']>;
+  traceId_ilike?: InputMaybe<Scalars['String']['input']>;
+  traceId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  traceId_like?: InputMaybe<Scalars['String']['input']>;
+  traceId_lt?: InputMaybe<Scalars['String']['input']>;
+  traceId_lte?: InputMaybe<Scalars['String']['input']>;
+  traceId_ne?: InputMaybe<Scalars['String']['input']>;
+  traceId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  traceId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  traceId_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type TracesOrderByInput = {
+  attributes?: InputMaybe<Sort>;
+  duration?: InputMaybe<Sort>;
+  id?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  parentId?: InputMaybe<Sort>;
+  spanId?: InputMaybe<Sort>;
+  timestamp?: InputMaybe<Sort>;
+  traceId?: InputMaybe<Sort>;
+};
+
+/** Pagination options for Traces. */
+export type TracesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TracesOrderByInput>;
 };
 
 export type Track = {
