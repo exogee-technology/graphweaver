@@ -1,6 +1,6 @@
 import { BigIntType, Entity, Property } from '@mikro-orm/core';
 
-@Entity({ expression: 'SELECT * FROM TotalInvoicesByCustomer' })
+@Entity({ expression: 'SELECT CustomerId, Total FROM TotalInvoicesByCustomer' })
 export class TotalInvoicesByCustomer {
 	@Property({ fieldName: 'CustomerId', type: new BigIntType('string') })
 	customerId!: string;
