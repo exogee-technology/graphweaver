@@ -3,7 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
+import { Field, ID, BaseDataProvider, Entity, RelationshipField } from '@exogee/graphweaver';
 import {
 	UserProfile,
 	ApplyAccessControlList,
@@ -40,6 +40,36 @@ export class Album {
 
 	@Field(() => String)
 	description!: string;
+
+	@RelationshipField<Artist>(() => Artist, { relatedField: 'albums' })
+	artist!: Artist;
+}
+
+class ArtistBackendProvider extends BaseDataProvider<any> {
+	async find() {
+		return [{ id: 1, description: 'Album Description', albums: [1] }];
+	}
+}
+
+const artistDataProvider = new ArtistBackendProvider('artist');
+
+@ApplyAccessControlList({
+	Everyone: {
+		all: true,
+	},
+})
+@Entity('Artist', {
+	provider: artistDataProvider,
+})
+export class Artist {
+	@Field(() => ID)
+	id!: number;
+
+	@Field(() => String)
+	description!: string;
+
+	@RelationshipField<Album>(() => [Album], { relatedField: 'artist' })
+	albums!: Album[];
 }
 
 const cred: CredentialStorage = {
@@ -435,6 +465,71 @@ describe('Column Level Security', () => {
 
 		assert(response.body.kind === 'single');
 		console.log(response.body.singleResult.errors);
+		expect(response.body.singleResult.data).toBeUndefined();
+		expect(response.body.singleResult.errors).toBeDefined();
+
+		expect(response.body.singleResult.errors?.length).toBe(1);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+	});
+
+	test('should return an error as user does not have access to read description when reading a nested entity', async () => {
+		assert(token);
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			user: {
+				all: {
+					fieldRestrictions: ['description'],
+					rowFilter: true,
+				},
+			},
+		})(Album);
+
+		const fieldDoesNotExistResponse = await graphweaver.executeOperation<{
+			albums: Album[];
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query artists {
+					artists {
+						id
+						albums {
+							id
+							_description
+						}
+					}
+				}
+			`,
+		});
+
+		assert(fieldDoesNotExistResponse.body.kind === 'single');
+		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
+		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
+
+		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		assert(error);
+		error = {
+			...error,
+			// Change the error message to match the expected error message
+			message: error.message.replace('_description', 'description'),
+		};
+
+		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query artists {
+					artists {
+						id
+						albums {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
+
+		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.data).toBeUndefined();
 		expect(response.body.singleResult.errors).toBeDefined();
 
