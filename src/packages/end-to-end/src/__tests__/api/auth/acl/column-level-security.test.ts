@@ -372,4 +372,73 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors?.length).toBe(1);
 		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
 	});
+
+	test('should return an error as user does not have access to read to the description field when used as a filter', async () => {
+		assert(token);
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			user: {
+				read: {
+					fieldRestrictions: ['description'],
+					rowFilter: true,
+				},
+			},
+		})(Album);
+
+		const fieldDoesNotExistResponse = await graphweaver.executeOperation<{
+			albums: Album[];
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query albums($filter: AlbumsListFilter) {
+					albums(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					// This does not exist and gives us the standard error that we match against
+					_description: 'Album Description',
+				},
+			},
+		});
+
+		assert(fieldDoesNotExistResponse.body.kind === 'single');
+		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
+		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
+
+		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		assert(error);
+		error = {
+			...error,
+			// Change the error message to match the expected error message
+			message: error.message.replace('_description', 'description'),
+		};
+
+		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query albums($filter: AlbumsListFilter) {
+					albums(filter: $filter) {
+						id
+					}
+				}
+			`,
+			variables: {
+				filter: {
+					description: 'Album Description',
+				},
+			},
+		});
+
+		assert(response.body.kind === 'single');
+		console.log(response.body.singleResult.errors);
+		expect(response.body.singleResult.data).toBeUndefined();
+		expect(response.body.singleResult.errors).toBeDefined();
+
+		expect(response.body.singleResult.errors?.length).toBe(1);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+	});
 });
