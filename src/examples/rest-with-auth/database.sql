@@ -168,7 +168,7 @@ INSERT INTO tag (name)
 VALUES
   ('urgent'),
   ('waiting-for-decision'),
-  ('needed-for-managment')
+  ('needed-for-management')
 ;
 
 INSERT INTO task_tags (task_id, tag_id)
