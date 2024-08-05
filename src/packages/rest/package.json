@@ -1,15 +1,16 @@
 {
-	"name": "@exogee/graphweaver-rest",
+	"name": "@exogee/graphweaver-example-xero",
 	"version": "2.0.7",
-	"description": "RESTful backend for @exogee/graphweaver",
-	"license": "MIT",
+	"license": "Apache-2.0",
+	"private": true,
+	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
 	"scripts": {
-		"build": "npm run build:js && npm run build:types",
-		"build:js": "node build.js",
-		"build:types": "tsc --emitDeclarationOnly",
-		"package:pack": "pnpm pack",
+		"build": "graphweaver build",
+		"gw": "graphweaver",
 		"prettier": "prettier --write src/**/*.ts",
-		"codegen": "graphql-codegen --config ./codegen.yml",
+		"start": "graphweaver start",
+		"watch": "graphweaver watch",
+		"start:backend": "graphweaver start backend",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -21,34 +22,37 @@
 		"lib"
 	],
 	"dependencies": {
+		"@apollo/client": "3.11.2",
+		"@apollo/server": "4.10.5",
+		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"apollo-server-errors": "3.3.1",
+		"@nivo/bump": "0.87.0",
+		"@nivo/core": "0.87.0",
+		"@nivo/line": "0.87.0",
+		"@nivo/tooltip": "0.87.0",
+		"async-mutex": "0.5.0",
 		"class-validator": "0.14.1",
-		"dataloader": "2.2.2",
-		"dotenv": "16.4.5",
+		"decimal.js": "10.4.3",
 		"graphql": "16.9.0",
-		"lodash": "4.17.21",
-		"luxon": "3.4.4"
+		"graphweaver": "workspace:*",
+		"prop-types": "15.8.1",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
+		"react-router-dom": "6.25.1",
+		"xero-node": "7.0.0"
 	},
 	"devDependencies": {
-		"@types/lodash": "4.17.7",
-		"@types/luxon": "3.4.2",
 		"@types/node": "22.1.0",
 		"esbuild": "0.23.0",
-		"glob": "10.4.3",
 		"prettier": "3.3.3",
 		"ts-node": "10.9.2",
-		"typescript": "5.5.4"
-	},
-	"keywords": [
-		"graphql",
-		"gql",
-		"headless",
-		"cms",
-		"postgres",
-		"postgresql",
-		"mysql",
-		"sqlite"
-	]
+		"typescript": "5.5.4",
+		"vite": "5.3.5"
+	}
 }

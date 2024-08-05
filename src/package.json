@@ -2,7 +2,7 @@
 	"name": "graphweaver-monorepo",
 	"description": "Graphweaver: Quickly build a GraphQL server which connects to all your datasources",
 	"private": true,
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"packageManager": "pnpm@8.15.8",
 	"repository": {
 		"type": "git",

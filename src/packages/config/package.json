@@ -1,14 +1,16 @@
 {
-	"name": "@exogee/graphweaver-config",
+	"name": "@exogee/graphweaver-example-xero",
 	"version": "2.0.7",
-	"description": "Retrieve and parse Graphweaver configurations",
-	"license": "MIT",
+	"license": "Apache-2.0",
+	"private": true,
+	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
 	"scripts": {
-		"build": "npm run build:js && npm run build:types",
-		"build:js": "node build.js",
-		"build:types": "tsc --emitDeclarationOnly",
-		"package:pack": "pnpm pack",
-		"prettier": "prettier --write .",
+		"build": "graphweaver build",
+		"gw": "graphweaver",
+		"prettier": "prettier --write src/**/*.ts",
+		"start": "graphweaver start",
+		"watch": "graphweaver watch",
+		"start:backend": "graphweaver start backend",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -20,23 +22,37 @@
 		"lib"
 	],
 	"dependencies": {
-		"lodash": "4.17.21"
+		"@apollo/client": "3.11.2",
+		"@apollo/server": "4.10.5",
+		"@as-integrations/aws-lambda": "3.1.0",
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
+		"@exogee/graphweaver-scalars": "workspace:*",
+		"@exogee/graphweaver-server": "workspace:*",
+		"@exogee/graphweaver-xero": "workspace:*",
+		"@exogee/logger": "workspace:*",
+		"@nivo/bump": "0.87.0",
+		"@nivo/core": "0.87.0",
+		"@nivo/line": "0.87.0",
+		"@nivo/tooltip": "0.87.0",
+		"async-mutex": "0.5.0",
+		"class-validator": "0.14.1",
+		"decimal.js": "10.4.3",
+		"graphql": "16.9.0",
+		"graphweaver": "workspace:*",
+		"prop-types": "15.8.1",
+		"react": "18.3.1",
+		"react-dom": "18.3.1",
+		"react-router-dom": "6.25.1",
+		"xero-node": "7.0.0"
 	},
 	"devDependencies": {
-		"@types/lodash": "4.17.7",
 		"@types/node": "22.1.0",
 		"esbuild": "0.23.0",
 		"prettier": "3.3.3",
+		"ts-node": "10.9.2",
+		"typescript": "5.5.4",
 		"vite": "5.3.5"
-	},
-	"keywords": [
-		"graphql",
-		"gql",
-		"headless",
-		"cms",
-		"postgres",
-		"postgresql",
-		"mysql",
-		"sqlite"
-	]
+	}
 }
