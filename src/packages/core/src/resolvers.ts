@@ -92,7 +92,7 @@ const _getOne = async <G>(
 
 	if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
 
-	let result = await entity.provider.findOne(hookParams.args.filter);
+	let result = await entity.provider.findOne(hookParams.args.filter, entity);
 
 	result = fromBackendEntity(entity, result);
 

@@ -162,3 +162,20 @@ VALUES
   ('Do some Pilates', false, 9, 'MEDIUM'),
   ('Watch a comedy', true, 10, 'HIGH')
   ;
+
+-- Seed data for tag table
+INSERT INTO tag (name)
+VALUES
+  ('urgent'),
+  ('waiting-for-decision'),
+  ('needed-for-management')
+;
+
+INSERT INTO task_tags (task_id, tag_id)
+VALUES
+  (1, 1),
+  (1, 2),
+  (2, 1),
+  (3, 1),
+  (3, 2)
+;

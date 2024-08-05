@@ -1,0 +1,4 @@
+# Working build files
+.esbuild
+.graphweaver
+*.pem

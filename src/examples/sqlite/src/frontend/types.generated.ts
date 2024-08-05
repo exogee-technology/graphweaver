@@ -1934,6 +1934,12 @@ export type Query = {
   playlists?: Maybe<Array<Maybe<Playlist>>>;
   /** Get aggregated data for Playlists. */
   playlists_aggregate?: Maybe<AggregationResult>;
+  /** Get a single TotalInvoicesByCustomer. */
+  totalInvoicesByCustomer?: Maybe<TotalInvoicesByCustomer>;
+  /** Get multiple TotalInvoicesByCustomers. */
+  totalInvoicesByCustomers?: Maybe<Array<Maybe<TotalInvoicesByCustomer>>>;
+  /** Get aggregated data for TotalInvoicesByCustomers. */
+  totalInvoicesByCustomers_aggregate?: Maybe<AggregationResult>;
   /** Get a single Trace. */
   trace?: Maybe<Trace>;
   /** Get multiple Traces. */
@@ -2093,6 +2099,22 @@ export type QueryPlaylists_AggregateArgs = {
 };
 
 
+export type QueryTotalInvoicesByCustomerArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTotalInvoicesByCustomersArgs = {
+  filter?: InputMaybe<TotalInvoicesByCustomersListFilter>;
+  pagination?: InputMaybe<TotalInvoicesByCustomersPaginationInput>;
+};
+
+
+export type QueryTotalInvoicesByCustomers_AggregateArgs = {
+  filter?: InputMaybe<TotalInvoicesByCustomersListFilter>;
+};
+
+
 export type QueryTraceArgs = {
   id: Scalars['ID']['input'];
 };
@@ -2128,6 +2150,62 @@ export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type TotalInvoicesByCustomer = {
+  __typename?: 'TotalInvoicesByCustomer';
+  customer: Customer;
+  customerId: Scalars['ID']['output'];
+  customer_aggregate?: Maybe<AggregationResult>;
+  total: Scalars['String']['output'];
+};
+
+
+export type TotalInvoicesByCustomerCustomerArgs = {
+  filter?: InputMaybe<CustomersListFilter>;
+};
+
+
+export type TotalInvoicesByCustomerCustomer_AggregateArgs = {
+  filter?: InputMaybe<CustomersListFilter>;
+};
+
+export type TotalInvoicesByCustomersListFilter = {
+  customer?: InputMaybe<CustomersListFilter>;
+  customerId?: InputMaybe<Scalars['ID']['input']>;
+  customerId_gt?: InputMaybe<Scalars['ID']['input']>;
+  customerId_gte?: InputMaybe<Scalars['ID']['input']>;
+  customerId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  customerId_lt?: InputMaybe<Scalars['ID']['input']>;
+  customerId_lte?: InputMaybe<Scalars['ID']['input']>;
+  customerId_ne?: InputMaybe<Scalars['ID']['input']>;
+  customerId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  customerId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  customerId_null?: InputMaybe<Scalars['Boolean']['input']>;
+  total?: InputMaybe<Scalars['String']['input']>;
+  total_gt?: InputMaybe<Scalars['String']['input']>;
+  total_gte?: InputMaybe<Scalars['String']['input']>;
+  total_ilike?: InputMaybe<Scalars['String']['input']>;
+  total_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  total_like?: InputMaybe<Scalars['String']['input']>;
+  total_lt?: InputMaybe<Scalars['String']['input']>;
+  total_lte?: InputMaybe<Scalars['String']['input']>;
+  total_ne?: InputMaybe<Scalars['String']['input']>;
+  total_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  total_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  total_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type TotalInvoicesByCustomersOrderByInput = {
+  customerId?: InputMaybe<Sort>;
+  total?: InputMaybe<Sort>;
+};
+
+/** Pagination options for TotalInvoicesByCustomers. */
+export type TotalInvoicesByCustomersPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TotalInvoicesByCustomersOrderByInput>;
+};
 
 export type Trace = {
   __typename?: 'Trace';

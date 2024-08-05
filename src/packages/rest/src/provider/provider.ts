@@ -5,6 +5,7 @@ import {
 	BackendProviderConfig,
 	TraceMethod,
 	TraceOptions,
+	EntityMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
@@ -67,7 +68,11 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 	}
 
 	@TraceMethod()
-	public async findOne(filter: Filter<D>, trace?: TraceOptions): Promise<D | null> {
+	public async findOne(
+		filter: Filter<D>,
+		entityMetadata?: EntityMetadata,
+		trace?: TraceOptions
+	): Promise<D | null> {
 		trace?.span.updateName(`Rest - findOne`);
 		logger.trace(`Running findOne ${this.entityTypeName} with Filter ${filter}`);
 
