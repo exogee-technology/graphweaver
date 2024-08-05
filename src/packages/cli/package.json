@@ -1,58 +1,58 @@
 {
-	"name": "@exogee/graphweaver-example-xero",
+	"name": "graphweaver",
 	"version": "2.0.7",
-	"license": "Apache-2.0",
-	"private": true,
-	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
+	"description": "A tool for managing, running, debugging and building Graphweaver projects",
+	"license": "MIT",
 	"scripts": {
-		"build": "graphweaver build",
-		"gw": "graphweaver",
-		"prettier": "prettier --write src/**/*.ts",
-		"start": "graphweaver start",
-		"watch": "graphweaver watch",
-		"start:backend": "graphweaver start backend",
+		"build": "npm run build:js",
+		"build:js": "node build.js",
+		"package:pack": "pnpm pack",
+		"prettier": "prettier --write .",
+		"gw": "./bin/gw-bin.js",
 		"version": "npm version --no-git-tag-version"
 	},
-	"main": "lib/index.js",
+	"main": "bin/index.js",
 	"source": "src/index.ts",
-	"directories": {
-		"lib": "lib"
+	"bin": {
+		"graphweaver": "bin/gw-bin.js",
+		"gw": "bin/gw-bin.js",
+		"gw-types": "bin/gw-types.js",
+		"gw-print-schema": "bin/gw-print-schema.js"
 	},
 	"files": [
-		"lib"
+		"bin"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.2",
-		"@apollo/server": "4.10.5",
-		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
-		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@exogee/graphweaver-scalars": "workspace:*",
-		"@exogee/graphweaver-server": "workspace:*",
-		"@exogee/graphweaver-xero": "workspace:*",
-		"@exogee/logger": "workspace:*",
-		"@nivo/bump": "0.87.0",
-		"@nivo/core": "0.87.0",
-		"@nivo/line": "0.87.0",
-		"@nivo/tooltip": "0.87.0",
-		"async-mutex": "0.5.0",
-		"class-validator": "0.14.1",
-		"decimal.js": "10.4.3",
-		"graphql": "16.9.0",
-		"graphweaver": "workspace:*",
-		"prop-types": "15.8.1",
-		"react": "18.3.1",
-		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.1",
-		"xero-node": "7.0.0"
+		"@exogee/graphweaver-builder": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
+		"chokidar": "3.6.0",
+		"esbuild": "0.23.0",
+		"inquirer": "10.1.6",
+		"node-semver": "1.0.0",
+		"ora-classic": "5.4.2",
+		"semver": "7.6.3",
+		"validate-npm-package-name": "5.0.1",
+		"yargs": "17.7.2"
 	},
 	"devDependencies": {
+		"@types/inquirer": "9.0.7",
 		"@types/node": "22.1.0",
-		"esbuild": "0.23.0",
+		"@types/semver": "7.5.8",
+		"@types/validate-npm-package-name": "4.0.2",
+		"@types/yargs": "17.0.32",
 		"prettier": "3.3.3",
-		"ts-node": "10.9.2",
-		"typescript": "5.5.4",
-		"vite": "5.3.5"
-	}
+		"typescript": "5.5.4"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
 }

@@ -2,7 +2,7 @@
 	"name": "@exogee/graphweaver-server",
 	"version": "2.0.7",
 	"description": "Server support for @exogee/graphweaver",
-	"license": "Apache-2.0",
+	"license": "MIT",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",

@@ -2,7 +2,7 @@
 	"name": "@exogee/logger",
 	"version": "2.0.7",
 	"description": "Common logging output for Exogee projects",
-	"license": "Apache-2.0",
+	"license": "MIT",
 	"directories": {
 		"lib": "lib"
 	},
