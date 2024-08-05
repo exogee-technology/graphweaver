@@ -27,6 +27,12 @@ class AlbumBackendProvider extends BaseDataProvider<any> {
 }
 
 const albumDataProvider = new AlbumBackendProvider('album');
+albumDataProvider.backendProviderConfig = {
+	filter: true,
+	pagination: false,
+	orderBy: false,
+	sort: false,
+};
 
 @Entity('Album', {
 	provider: albumDataProvider,
@@ -523,6 +529,69 @@ describe('Column Level Security', () => {
 						albums {
 							id
 							description
+						}
+					}
+				}
+			`,
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.data).toBeUndefined();
+		expect(response.body.singleResult.errors).toBeDefined();
+
+		expect(response.body.singleResult.errors?.length).toBe(1);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+	});
+
+	test('should return an error as user does not have access to read description when reading a nested filter', async () => {
+		assert(token);
+
+		AclMap.delete('Album');
+		ApplyAccessControlList({
+			user: {
+				all: {
+					fieldRestrictions: ['description'],
+					rowFilter: true,
+				},
+			},
+		})(Album);
+
+		const fieldDoesNotExistResponse = await graphweaver.executeOperation<{
+			albums: Album[];
+		}>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query artists {
+					artists {
+						id
+						albums(filter: { _description: "Album Description" }) {
+							id
+						}
+					}
+				}
+			`,
+		});
+
+		assert(fieldDoesNotExistResponse.body.kind === 'single');
+		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
+		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
+
+		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		assert(error);
+		error = {
+			...error,
+			// Change the error message to match the expected error message
+			message: error.message.replace('_description', 'description'),
+		};
+
+		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
+			http: { headers: new Headers({ authorization: token }) } as any,
+			query: gql`
+				query artists {
+					artists {
+						id
+						albums(filter: { description: "Album Description" }) {
+							id
 						}
 					}
 				}
