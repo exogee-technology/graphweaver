@@ -4,7 +4,7 @@ It is possible to connect a database and an external REST API to Graphweaver and
 
 This example demonstrates how to do that with MySQL and the Star Wars API and how to setup Authentication.
 
-To run the example make sure that you have a local MySQL database and that you seed the database with:
+To run the example, make sure that you have a local MySQL database and that you seed the database with:
 
 `pnpm import-database`
 
