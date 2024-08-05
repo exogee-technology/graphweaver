@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { Filter, graphweaverMetadata } from '@exogee/graphweaver';
+import { Filter } from '@exogee/graphweaver';
 
 import {
 	AccessControlList,
@@ -17,7 +17,7 @@ import {
 	AccessControlEntry,
 	ConsolidatedFieldAccessControlEntry,
 } from './types';
-import { GENERIC_AUTH_ERROR_MESSAGE, getACL } from './auth-utils';
+import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 import { ChallengeError } from './errors';
 import { getRulesForRoles } from './utils/get-rules-for-roles';
 import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';

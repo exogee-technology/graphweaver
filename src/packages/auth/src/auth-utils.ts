@@ -6,15 +6,18 @@ import {
 	AccessControlList,
 	AccessType,
 	AuthorizationContext,
+	BASE_ROLE_EVERYONE,
 	ConsolidatedAccessControlEntry,
 	ConsolidatedAccessControlValue,
 } from './types';
 import {
 	AclMap,
 	buildAccessControlEntryForUser,
+	buildFieldAccessControlEntryForUser,
 	evaluateAccessControlValue,
 } from './helper-functions';
 import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
+import { RestrictedFieldError } from './errors';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -40,6 +43,31 @@ export const assertUserCanPerformRequestedAction = async (
 		buildAccessControlEntryForUser(acl, getRolesFromAuthorizationContext()),
 		requiredPermission
 	);
+};
+
+export const assertUserHasAccessToField = <TContext extends AuthorizationContext>(
+	fieldName: string,
+	entityName: string,
+	context: TContext,
+	accessType: AccessType
+) => {
+	const roles = [...getRolesFromAuthorizationContext(), BASE_ROLE_EVERYONE];
+	const acl = getACL(entityName);
+	const result = buildFieldAccessControlEntryForUser(acl, roles, context);
+
+	const restrictedFields = result[accessType];
+	if (!restrictedFields) return;
+
+	if (restrictedFields.has(fieldName)) {
+		logger.error(
+			restrictedFields,
+			`User does not have access to field: '${fieldName}' on ${entityName} entity`
+		);
+
+		throw new RestrictedFieldError(
+			`Cannot query field "${fieldName}" on type "${entityName}". [Suggestion hidden]?`
+		);
+	}
 };
 
 export const getAccessFilter = async (

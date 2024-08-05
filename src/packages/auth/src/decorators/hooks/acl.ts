@@ -12,18 +12,17 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
-import { AccessType, AuthorizationContext, BASE_ROLE_EVERYONE } from '../../types';
-import { andFilters, buildFieldAccessControlEntryForUser } from '../../helper-functions';
+import { AccessType, AuthorizationContext } from '../../types';
+import { andFilters } from '../../helper-functions';
 import {
 	GENERIC_AUTH_ERROR_MESSAGE,
 	assertUserCanPerformRequestedAction,
+	assertUserHasAccessToField,
 	checkAuthorization,
 	getACL,
 	getAccessFilter,
 	isPopulatedFilter,
 } from '../../auth-utils';
-import { getRolesFromAuthorizationContext } from '../../authorization-context';
-import { RestrictedFieldError } from '../../errors';
 
 const aggregatePattern = /_aggregate$/;
 
@@ -82,19 +81,25 @@ const assertTransactional = (transactional: boolean) => {
 	}
 };
 
-type EntityName = string;
+enum RequirePermissionType {
+	ENTITY = 'ENTITY',
+	FIELD = 'FIELD',
+}
 type RequiredPermission = {
-	entityName: EntityName;
+	entityName: string;
+	type: RequirePermissionType;
 	accessType: AccessType;
+	fieldName?: string;
 };
 // This function walks through the selection set and checks each relationship field to see if it is an entity and if so, checks the ACL
 // This is not checking the filter only the boolean permission
 // This is checked in all before hooks and before calling the data provider
-const assertUserCanPerformRequest = async <G>(
+const assertUserCanPerformRequest = async <G, TContext extends AuthorizationContext>(
 	gqlEntityTypeName: string,
 	fields: ResolveTree | undefined,
 	args: GraphQLArgs<G>,
-	accessType: AccessType
+	accessType: AccessType,
+	context: TContext
 ) => {
 	const entityMetadata = graphweaverMetadata.getEntityByName(gqlEntityTypeName);
 	if (!entityMetadata) throw new Error(`Could not locate entity by name ${gqlEntityTypeName}.`);
@@ -124,42 +129,15 @@ const assertUserCanPerformRequest = async <G>(
 
 	// Check the permissions
 	for (const permission of permissionsList) {
-		const { entityName, accessType } = permission;
-		const acl = getACL(entityName);
-		await assertUserCanPerformRequestedAction(acl, accessType);
-	}
-};
+		const { entityName, accessType, type, fieldName } = permission;
 
-export const assertUserHasAccessToFields = <TContext extends AuthorizationContext>(
-	entityName: string,
-	context: TContext,
-	requestedFields: ResolveTree | { [str: string]: ResolveTree },
-	accessType: AccessType
-) => {
-	const roles = [...getRolesFromAuthorizationContext(), BASE_ROLE_EVERYONE];
-
-	const acl = getACL(entityName);
-	const result = buildFieldAccessControlEntryForUser(acl, roles, context);
-
-	const restrictedFields = result[accessType];
-	if (!restrictedFields) return;
-
-	for (const field of restrictedFields) {
-		if (typeof field !== 'string') {
-			throw new Error(
-				`Unexpected field type in access control list for entity ${entityName}. Expected string, got ${typeof field}`
-			);
-		}
-
-		if (Object.keys(requestedFields).includes(field)) {
-			logger.error(
-				requestedFields,
-				`User does not have access to field: '${field}' on ${entityName} entity`
-			);
-
-			throw new RestrictedFieldError(
-				`Cannot query field "${field}" on type "${entityName}". [Suggestion hidden]?`
-			);
+		if (type === RequirePermissionType.ENTITY) {
+			const acl = getACL(entityName);
+			await assertUserCanPerformRequestedAction(acl, accessType);
+		} else if (type === RequirePermissionType.FIELD && fieldName) {
+			assertUserHasAccessToField(fieldName, entityName, context, accessType);
+		} else {
+			throw new Error('Unrecognized permission type, unable to apply permissions.');
 		}
 	}
 };
@@ -169,13 +147,21 @@ const generatePermissionListFromFields = <G>(
 	requestedFields: ResolveTree
 ) => {
 	const permissionsList: RequiredPermission[] = [
-		{ entityName: entityMetadata.name, accessType: AccessType.Read },
+		{
+			entityName: entityMetadata.name,
+			accessType: AccessType.Read,
+			type: RequirePermissionType.ENTITY,
+		},
 	];
 
 	for (const [entityName, fields] of Object.entries(requestedFields.fieldsByTypeName)) {
 		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
 			// We just need to record that they're trying to read the entity information via an aggregation and move on.
-			permissionsList.push({ entityName: entityMetadata.name, accessType: AccessType.Read });
+			permissionsList.push({
+				entityName: entityMetadata.name,
+				accessType: AccessType.Read,
+				type: RequirePermissionType.ENTITY,
+			});
 		} else {
 			for (const fieldValue of Object.values(fields)) {
 				let fieldMetadata = entityMetadata.fields[fieldValue.name];
@@ -202,6 +188,13 @@ const generatePermissionListFromFields = <G>(
 				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 				if (isEntityMetadata(fieldTypeMetadata)) {
 					permissionsList.push(...generatePermissionListFromFields(fieldTypeMetadata, fieldValue));
+				} else {
+					permissionsList.push({
+						entityName: entityMetadata.name,
+						fieldName: fieldValue.name,
+						accessType: AccessType.Read,
+						type: RequirePermissionType.FIELD,
+					});
 				}
 			}
 		}
@@ -216,7 +209,11 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	const permissionsList: RequiredPermission[] = [];
 
 	const recurseThroughArg = (entityMetadata: EntityMetadata, filter: Filter<unknown>) => {
-		permissionsList.push({ entityName: entityMetadata.name, accessType: AccessType.Read });
+		permissionsList.push({
+			entityName: entityMetadata.name,
+			accessType: AccessType.Read,
+			type: RequirePermissionType.ENTITY,
+		});
 
 		for (const [filterKey, value] of Object.entries(filter)) {
 			const fieldMetadata = graphweaverMetadata.fieldMetadataForFilterKey(
@@ -249,7 +246,11 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	for (const [entityName, fields] of Object.entries(resolveTree.fieldsByTypeName)) {
 		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
 			// We just need to record that they're trying to read the entity information via an aggregation and move on.
-			permissionsList.push({ entityName: entityMetadata.name, accessType: AccessType.Read });
+			permissionsList.push({
+				entityName: entityMetadata.name,
+				accessType: AccessType.Read,
+				type: RequirePermissionType.ENTITY,
+			});
 		} else {
 			for (const fieldValue of Object.values(fields)) {
 				let fieldMetadata = entityMetadata.fields[fieldValue.name];
@@ -296,21 +297,41 @@ const generatePermissionListFromArgs = <G>() => {
 	) => {
 		for (const node of argumentNode) {
 			if (filter) {
-				permissionsList.push({ entityName, accessType: AccessType.Read });
+				permissionsList.push({
+					entityName,
+					accessType: AccessType.Read,
+					type: RequirePermissionType.ENTITY,
+				});
 			} else {
 				// We are an input argument so we need to check the access type
 				switch (accessType) {
 					case AccessType.Read:
-						permissionsList.push({ entityName, accessType: AccessType.Read });
+						permissionsList.push({
+							entityName,
+							accessType: AccessType.Read,
+							type: RequirePermissionType.ENTITY,
+						});
 						break;
 					case AccessType.Create:
-						permissionsList.push({ entityName, accessType: AccessType.Create });
+						permissionsList.push({
+							entityName,
+							accessType: AccessType.Create,
+							type: RequirePermissionType.ENTITY,
+						});
 						break;
 					case AccessType.Update:
-						permissionsList.push({ entityName, accessType: AccessType.Update });
+						permissionsList.push({
+							entityName,
+							accessType: AccessType.Update,
+							type: RequirePermissionType.ENTITY,
+						});
 						break;
 					case AccessType.Delete:
-						permissionsList.push({ entityName, accessType: AccessType.Delete });
+						permissionsList.push({
+							entityName,
+							accessType: AccessType.Delete,
+							type: RequirePermissionType.ENTITY,
+						});
 						break;
 					default:
 						throw new Error('Unrecognized access type, unable to apply permissions');
@@ -365,20 +386,14 @@ export const beforeCreateOrUpdate = (
 	accessType: AccessType.Create | AccessType.Update
 ) => {
 	return async <G>(params: CreateOrUpdateHookParams<G, AuthorizationContext>) => {
-		// Check permissions on restricted fields
-		const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
-		if (!requestedFields) {
-			throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
-		}
-		// Lets check the user has access to read the requested fields
-		await assertUserHasAccessToFields(
-			gqlEntityTypeName,
-			params.context,
-			requestedFields,
-			AccessType.Read
-		);
 		// Check permissions for this entity based on the currently logged in user
-		await assertUserCanPerformRequest(gqlEntityTypeName, params.fields, params.args, accessType);
+		await assertUserCanPerformRequest(
+			gqlEntityTypeName,
+			params.fields,
+			params.args,
+			accessType,
+			params.context
+		);
 		// Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
 		// Fetch the filter for the currently logged in user
@@ -425,26 +440,13 @@ export const afterCreateOrUpdate = (
 
 export const beforeRead = (gqlEntityTypeName: string) => {
 	return async <G>(params: ReadHookParams<G, AuthorizationContext>) => {
-		// Check permissions on restricted fields
-		if (!params.isAggregate) {
-			const requestedFields = params.fields?.fieldsByTypeName[gqlEntityTypeName];
-			if (!requestedFields) {
-				throw new Error(`Could not locate requested fields for ${gqlEntityTypeName}`);
-			}
-			await assertUserHasAccessToFields(
-				gqlEntityTypeName,
-				params.context,
-				requestedFields,
-				AccessType.Read
-			);
-		}
-
 		// Check permissions for this entity based on the currently logged in user
 		await assertUserCanPerformRequest(
 			gqlEntityTypeName,
 			params.fields,
 			params.args,
-			AccessType.Read
+			AccessType.Read,
+			params.context
 		);
 		// Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
@@ -469,7 +471,8 @@ export const beforeDelete = (gqlEntityTypeName: string) => {
 			gqlEntityTypeName,
 			params.fields,
 			params.args,
-			AccessType.Delete
+			AccessType.Delete,
+			params.context
 		);
 		// 2. Fetch the ACL for this entity
 		const acl = getACL(gqlEntityTypeName);
