@@ -444,7 +444,7 @@ describe('Column Level Security', () => {
 		error = {
 			...error,
 			// Change the error message to match the expected error message
-			message: error.message.replace('_description', 'description'),
+			message: error.message.replace(/_description/g, 'description'),
 		};
 
 		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
