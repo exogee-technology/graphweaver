@@ -83,7 +83,10 @@ const assertTransactional = (transactional: boolean) => {
 };
 
 type EntityName = string;
-type RequiredPermission = `${EntityName}:${AccessType}`;
+type RequiredPermission = {
+	entityName: EntityName;
+	accessType: AccessType;
+};
 // This function walks through the selection set and checks each relationship field to see if it is an entity and if so, checks the ACL
 // This is not checking the filter only the boolean permission
 // This is checked in all before hooks and before calling the data provider
@@ -121,9 +124,9 @@ const assertUserCanPerformRequest = async <G>(
 
 	// Check the permissions
 	for (const permission of permissionsList) {
-		const [entityName, action] = permission.split(':');
+		const { entityName, accessType } = permission;
 		const acl = getACL(entityName);
-		await assertUserCanPerformRequestedAction(acl, action as AccessType);
+		await assertUserCanPerformRequestedAction(acl, accessType);
 	}
 };
 
@@ -165,12 +168,14 @@ const generatePermissionListFromFields = <G>(
 	entityMetadata: EntityMetadata<G>,
 	requestedFields: ResolveTree
 ) => {
-	const permissionsList: RequiredPermission[] = [`${entityMetadata.name}:${AccessType.Read}`];
+	const permissionsList: RequiredPermission[] = [
+		{ entityName: entityMetadata.name, accessType: AccessType.Read },
+	];
 
 	for (const [entityName, fields] of Object.entries(requestedFields.fieldsByTypeName)) {
 		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
 			// We just need to record that they're trying to read the entity information via an aggregation and move on.
-			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
+			permissionsList.push({ entityName: entityMetadata.name, accessType: AccessType.Read });
 		} else {
 			for (const fieldValue of Object.values(fields)) {
 				let fieldMetadata = entityMetadata.fields[fieldValue.name];
@@ -211,7 +216,7 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	const permissionsList: RequiredPermission[] = [];
 
 	const recurseThroughArg = (entityMetadata: EntityMetadata, filter: Filter<unknown>) => {
-		permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
+		permissionsList.push({ entityName: entityMetadata.name, accessType: AccessType.Read });
 
 		for (const [filterKey, value] of Object.entries(filter)) {
 			const fieldMetadata = graphweaverMetadata.fieldMetadataForFilterKey(
@@ -244,7 +249,7 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 	for (const [entityName, fields] of Object.entries(resolveTree.fieldsByTypeName)) {
 		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
 			// We just need to record that they're trying to read the entity information via an aggregation and move on.
-			permissionsList.push(`${entityMetadata.name}:${AccessType.Read}`);
+			permissionsList.push({ entityName: entityMetadata.name, accessType: AccessType.Read });
 		} else {
 			for (const fieldValue of Object.values(fields)) {
 				let fieldMetadata = entityMetadata.fields[fieldValue.name];
@@ -291,21 +296,21 @@ const generatePermissionListFromArgs = <G>() => {
 	) => {
 		for (const node of argumentNode) {
 			if (filter) {
-				permissionsList.push(`${entityName}:${AccessType.Read}`);
+				permissionsList.push({ entityName, accessType: AccessType.Read });
 			} else {
 				// We are an input argument so we need to check the access type
 				switch (accessType) {
 					case AccessType.Read:
-						permissionsList.push(`${entityName}:${AccessType.Read}`);
+						permissionsList.push({ entityName, accessType: AccessType.Read });
 						break;
 					case AccessType.Create:
-						permissionsList.push(`${entityName}:${AccessType.Create}`);
+						permissionsList.push({ entityName, accessType: AccessType.Create });
 						break;
 					case AccessType.Update:
-						permissionsList.push(`${entityName}:${AccessType.Update}`);
+						permissionsList.push({ entityName, accessType: AccessType.Update });
 						break;
 					case AccessType.Delete:
-						permissionsList.push(`${entityName}:${AccessType.Delete}`);
+						permissionsList.push({ entityName, accessType: AccessType.Delete });
 						break;
 					default:
 						throw new Error('Unrecognized access type, unable to apply permissions');
