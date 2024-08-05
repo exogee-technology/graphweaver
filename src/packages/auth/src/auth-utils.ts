@@ -17,7 +17,7 @@ import {
 	evaluateAccessControlValue,
 } from './helper-functions';
 import { getAuthorizationContext, getRolesFromAuthorizationContext } from './authorization-context';
-import { RestrictedFieldError } from './errors';
+import { RestrictedFieldError, FieldLocation } from './errors';
 
 export const GENERIC_AUTH_ERROR_MESSAGE = 'Forbidden';
 
@@ -45,12 +45,23 @@ export const assertUserCanPerformRequestedAction = async (
 	);
 };
 
-export const assertUserHasAccessToField = <TContext extends AuthorizationContext>(
-	fieldName: string,
-	entityName: string,
-	context: TContext,
-	accessType: AccessType
-) => {
+export type FieldDetails = {
+	name: string;
+	location: FieldLocation;
+	value?: string;
+};
+
+export const assertUserHasAccessToField = <TContext extends AuthorizationContext>({
+	field,
+	entityName,
+	context,
+	accessType,
+}: {
+	field: FieldDetails;
+	entityName: string;
+	context: TContext;
+	accessType: AccessType;
+}) => {
 	const roles = [...getRolesFromAuthorizationContext(), BASE_ROLE_EVERYONE];
 	const acl = getACL(entityName);
 	const result = buildFieldAccessControlEntryForUser(acl, roles, context);
@@ -58,15 +69,13 @@ export const assertUserHasAccessToField = <TContext extends AuthorizationContext
 	const restrictedFields = result[accessType];
 	if (!restrictedFields) return;
 
-	if (restrictedFields.has(fieldName)) {
+	if (restrictedFields.has(field.name)) {
 		logger.error(
 			restrictedFields,
-			`User does not have access to field: '${fieldName}' on ${entityName} entity`
+			`User does not have access to field: '${field.name}' on ${entityName} entity`
 		);
 
-		throw new RestrictedFieldError(
-			`Cannot query field "${fieldName}" on type "${entityName}". [Suggestion hidden]?`
-		);
+		throw new RestrictedFieldError(entityName, field);
 	}
 };
 

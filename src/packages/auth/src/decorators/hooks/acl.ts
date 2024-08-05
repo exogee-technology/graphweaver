@@ -15,6 +15,7 @@ import { logger } from '@exogee/logger';
 import { AccessType, AuthorizationContext } from '../../types';
 import { andFilters } from '../../helper-functions';
 import {
+	FieldDetails,
 	GENERIC_AUTH_ERROR_MESSAGE,
 	assertUserCanPerformRequestedAction,
 	assertUserHasAccessToField,
@@ -23,6 +24,7 @@ import {
 	getAccessFilter,
 	isPopulatedFilter,
 } from '../../auth-utils';
+import { FieldLocation } from '../../errors';
 
 const aggregatePattern = /_aggregate$/;
 
@@ -85,11 +87,12 @@ enum RequirePermissionType {
 	ENTITY = 'ENTITY',
 	FIELD = 'FIELD',
 }
+
 type RequiredPermission = {
 	entityName: string;
 	type: RequirePermissionType;
 	accessType: AccessType;
-	fieldName?: string;
+	field?: FieldDetails;
 };
 // This function walks through the selection set and checks each relationship field to see if it is an entity and if so, checks the ACL
 // This is not checking the filter only the boolean permission
@@ -129,13 +132,18 @@ const assertUserCanPerformRequest = async <G, TContext extends AuthorizationCont
 
 	// Check the permissions
 	for (const permission of permissionsList) {
-		const { entityName, accessType, type, fieldName } = permission;
+		const { entityName, accessType, type, field } = permission;
 
 		if (type === RequirePermissionType.ENTITY) {
 			const acl = getACL(entityName);
 			await assertUserCanPerformRequestedAction(acl, accessType);
-		} else if (type === RequirePermissionType.FIELD && fieldName) {
-			assertUserHasAccessToField(fieldName, entityName, context, accessType);
+		} else if (type === RequirePermissionType.FIELD && field) {
+			assertUserHasAccessToField({
+				field,
+				entityName,
+				context,
+				accessType,
+			});
 		} else {
 			throw new Error('Unrecognized permission type, unable to apply permissions.');
 		}
@@ -191,7 +199,10 @@ const generatePermissionListFromFields = <G>(
 				} else {
 					permissionsList.push({
 						entityName: entityMetadata.name,
-						fieldName: fieldValue.name,
+						field: {
+							name: fieldValue.name,
+							location: FieldLocation.FIELD,
+						},
 						accessType: AccessType.Read,
 						type: RequirePermissionType.FIELD,
 					});
@@ -371,6 +382,17 @@ const generatePermissionListFromArgs = <G>() => {
 							filter
 						);
 					}
+				} else if (filter) {
+					permissionsList.push({
+						entityName,
+						field: {
+							name: key,
+							location: FieldLocation.FILTER,
+							value: String(value),
+						},
+						accessType: AccessType.Read,
+						type: RequirePermissionType.FIELD,
+					});
 				}
 			}
 		}

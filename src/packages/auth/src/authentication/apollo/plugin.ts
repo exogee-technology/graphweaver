@@ -268,10 +268,15 @@ export const authApolloPlugin = <R>(
 					// Here we are cleaning up the error messages to remove the path if it is a restricted field error.
 					// This ensures that the client does not know the field exists as the message is identical to a field that does not exist.
 					errors = errors?.map((error: any) => {
-						if (error.extensions.code === ErrorCodes.RESTRICTED_FIELD) {
-							delete error.path;
-							delete error.locations;
+						// Remove the path from the error if it is a restricted field error
+						delete error.path;
+						// Remove the location from the error if it is a restricted field error
+						delete error.locations;
+
+						// Remove the data from the response if it is a restricted field error
+						if (error.extensions?.isRestrictedFieldError) {
 							delete (response.body as any)?.singleResult.data;
+							delete error.extensions.isRestrictedFieldError;
 						}
 						return error;
 					});
