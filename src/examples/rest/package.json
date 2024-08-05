@@ -2,8 +2,8 @@
 	"name": "@exogee/graphweaver-example-rest",
 	"version": "2.0.7",
 	"license": "MIT",
+	"description": "Simple example of connecting to a Rest API.",
 	"private": true,
-	"description": "Example of connecting a Rest API with a MySQL database.",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -13,46 +13,22 @@
 		"lib"
 	],
 	"scripts": {
-		"import-database": "dotenv -- bash ./scripts/import.sh",
 		"build": "graphweaver build",
 		"start": "graphweaver start",
 		"watch": "graphweaver watch",
+		"import": "graphweaver import",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "4.10.5",
-		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-admin-ui-components": "workspace:*",
-		"@exogee/graphweaver-auth": "workspace:*",
-		"@exogee/graphweaver-auth-ui-components": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.3.1",
-		"@mikro-orm/mysql": "6.3.1",
-		"dotenv": "16.4.5",
 		"got-cjs": "12.5.4",
-		"graphql": "16.9.0",
-		"graphweaver": "workspace:*",
-		"mysql2": "3.11.0",
-		"react": "18.3.1"
+		"graphql": "16.9.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.0.0",
-		"dotenv-cli": "7.4.2",
-		"typescript": "5.5.4",
-		"vite": "5.3.5",
-		"vite-plugin-svgr": "4.2.0"
-	},
-	"keywords": [
-		"graphql",
-		"gql",
-		"headless",
-		"cms",
-		"postgres",
-		"postgresql",
-		"mysql",
-		"sqlite"
-	]
+		"@types/node": "22.1.0",
+		"graphweaver": "workspace:*",
+		"typescript": "5.5.4"
+	}
 }
