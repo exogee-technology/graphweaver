@@ -241,12 +241,34 @@ importers:
 
   examples/rest:
     dependencies:
-      '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
-      '@as-integrations/aws-lambda':
-        specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-rest':
+        specifier: workspace:*
+        version: link:../../packages/rest
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      got-cjs:
+        specifier: 12.5.4
+        version: 12.5.4
+      graphql:
+        specifier: 16.9.0
+        version: 16.9.0
+    devDependencies:
+      '@types/node':
+        specifier: 22.1.0
+        version: 22.1.0
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      typescript:
+        specifier: 5.5.4
+        version: 5.5.4
+
+  examples/rest-with-auth:
+    dependencies:
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -305,9 +327,6 @@ importers:
       vite:
         specifier: 5.3.5
         version: 5.3.5(@types/node@22.1.0)
-      vite-plugin-svgr:
-        specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.3.5)
 
   examples/s3-storage:
     dependencies:

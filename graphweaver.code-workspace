@@ -25,8 +25,12 @@
       "path": "src/examples/databases"
     },
     {
-      "name": "➡️ Example: REST API and MySQL Database",
+      "name": "➡️ Example: REST API",
       "path": "src/examples/rest"
+    },
+    {
+      "name": "➡️ Example: REST API, MySQL Database and Auth",
+      "path": "src/examples/rest-with-auth"
     },
     {
       "name": "➡️ Example: SQLite Database",

@@ -1,4 +1,1 @@
-import './user';
-import './task';
-import './tag';
-import './trace';
+export * from './person';
