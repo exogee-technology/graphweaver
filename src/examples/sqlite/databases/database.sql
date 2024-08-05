@@ -15759,4 +15759,11 @@ CREATE INDEX [IFK_PlaylistTrackTrackId] ON [PlaylistTrack] ([TrackId]);
 CREATE INDEX [IFK_TrackAlbumId] ON [Track] ([AlbumId]);
 CREATE INDEX [IFK_TrackGenreId] ON [Track] ([GenreId]);
 CREATE INDEX [IFK_TrackMediaTypeId] ON [Track] ([MediaTypeId]);
+
+CREATE VIEW TotalInvoicesByCustomer AS 
+  SELECT CustomerId, SUM(Total) as Total
+  FROM Invoice
+  GROUP BY CustomerId
+  ORDER BY CustomerId ASC
+
 COMMIT;

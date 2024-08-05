@@ -7,6 +7,7 @@ import { Invoice } from './invoice';
 import { InvoiceLine } from './invoice-line';
 import { MediaType } from './media-type';
 import { Playlist } from './playlist';
+import { TotalInvoicesByCustomer } from './total-invoices-by-customer';
 import { Track } from './track';
 
 export * from './album';
@@ -18,6 +19,7 @@ export * from './invoice';
 export * from './invoice-line';
 export * from './media-type';
 export * from './playlist';
+export * from './total-invoices-by-customer';
 export * from './track';
 export * from './trace';
 
@@ -31,5 +33,6 @@ export const entities = [
 	InvoiceLine,
 	MediaType,
 	Playlist,
+	TotalInvoicesByCustomer,
 	Track,
 ];

@@ -112,6 +112,16 @@
       "cwd": "${workspaceFolder}/src/examples/rest"
     },
     {
+      "name": "Rest with Auth Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/rest-with-auth"
+    },
+    {
       "name": "S3 Example",
       "type": "node",
       "request": "launch",

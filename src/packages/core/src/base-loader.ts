@@ -129,6 +129,9 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 					? entity.target.toBackendEntityFilter(filter ?? {})
 					: (filter as Filter<D> | undefined);
 
+			if (!entity.provider.entityType)
+				throw new Error('EntityType is required on provider at this stage.');
+
 			const records = await entity.provider!.findByRelatedId(
 				entity.provider.entityType,
 				relatedField,
