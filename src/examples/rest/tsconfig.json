@@ -10,8 +10,7 @@
 		"allowSyntheticDefaultImports": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"jsx": "react-jsx",
-		"types": ["vite/client"]
+		"jsx": "react-jsx"
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],
 	"include": ["./src"]
