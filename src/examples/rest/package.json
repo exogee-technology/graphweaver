@@ -29,8 +29,8 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.3.1",
-		"@mikro-orm/mysql": "6.3.1",
+		"@mikro-orm/core": "6.3.3",
+		"@mikro-orm/mysql": "6.3.3",
 		"dotenv": "16.4.5",
 		"got-cjs": "12.5.4",
 		"graphql": "16.9.0",
@@ -39,7 +39,7 @@
 		"react": "18.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.0.0",
+		"@types/node": "22.1.0",
 		"dotenv-cli": "7.4.2",
 		"typescript": "5.5.4",
 		"vite": "5.3.5",

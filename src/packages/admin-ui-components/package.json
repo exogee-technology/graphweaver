@@ -27,11 +27,11 @@
 	"dependencies": {
 		"@apollo/client": "3.11.2",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
-		"@graphiql/toolkit": "0.9.1",
+		"@graphiql/toolkit": "0.9.2",
 		"@tanstack/react-table": "8.19.3",
 		"clsx": "2.1.1",
 		"downshift": "9.0.7",
-		"graphiql": "3.3.2",
+		"graphiql": "3.4.0",
 		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.4.4",
