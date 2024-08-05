@@ -23,13 +23,12 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"graphweaver": "workspace:*",
 		"got-cjs": "12.5.4",
 		"graphql": "16.9.0"
 	},
 	"devDependencies": {
 		"@types/node": "22.1.0",
-		"graphweaver": "2.0.7",
+		"graphweaver": "workspace:*",
 		"typescript": "5.5.4"
 	}
 }
