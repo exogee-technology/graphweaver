@@ -11,7 +11,7 @@ import {
 
 const acl: AccessControlList<TaskCountByTag, AuthorizationContext> = {
 	// Dark side users can look at all tasks, nobody else can.
-	DARK_SIDE: { all: true },
+	DARK_SIDE: { read: true },
 };
 
 // Note: This entity is backed by a view. It allows filtering, pagination, and sorting as per normal
