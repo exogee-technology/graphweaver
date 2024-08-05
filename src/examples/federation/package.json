@@ -2,7 +2,7 @@
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
 	"version": "2.0.7",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"description": "Example app used to test federation compatibility",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
