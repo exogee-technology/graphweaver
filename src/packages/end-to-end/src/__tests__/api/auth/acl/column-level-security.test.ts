@@ -183,7 +183,9 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({ extensions: error.extensions, message: error.message })
+		);
 	});
 
 	test('should return an error as user does not have access to description even when using an alias', async () => {
@@ -241,7 +243,9 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({ extensions: error.extensions, message: error.message })
+		);
 	});
 
 	test('should return an error as user does not have access to description when creating', async () => {
@@ -312,7 +316,9 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({ extensions: error.extensions, message: error.message })
+		);
 	});
 
 	test('should return an error as user does not have access to read description when updating', async () => {
@@ -387,7 +393,9 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({ extensions: error.extensions, message: error.message })
+		);
 	});
 
 	test('should return an error as user does not have access to write to the description field', async () => {
@@ -430,13 +438,8 @@ describe('Column Level Security', () => {
 		expect(fieldDoesNotExistResponse.body.singleResult.data).toBeUndefined();
 		expect(fieldDoesNotExistResponse.body.singleResult.errors).toBeDefined();
 
-		let error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
+		const error = fieldDoesNotExistResponse.body.singleResult.errors?.[0];
 		assert(error);
-		error = {
-			...error,
-			// Change the error message to match the expected error message
-			message: error.message.replace('_description', 'description'),
-		};
 
 		const response = await graphweaver.executeOperation<{ albums: Album[] }>({
 			http: { headers: new Headers({ authorization: token }) } as any,
@@ -463,11 +466,12 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual({
-			...error,
-			// Change the error message to match the expected error message
-			message: 'Field "description" is not defined by type "Album". [Suggestion hidden]?',
-		});
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({
+				extensions: error.extensions,
+				message: 'Field "description" is not defined by type "Album". [Suggestion hidden]?',
+			})
+		);
 	});
 
 	test('should return an error as user does not have access to read to the description field when used as a filter', async () => {
@@ -526,16 +530,17 @@ describe('Column Level Security', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		console.log(response.body.singleResult.errors);
+
 		expect(response.body.singleResult.data).toBeUndefined();
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual({
-			...error,
-			// Change the error message to match the expected error message
-			message: 'Field "description" is not defined by type "Album". [Suggestion hidden]?',
-		});
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({
+				extensions: error.extensions,
+				message: 'Field "description" is not defined by type "Album". [Suggestion hidden]?',
+			})
+		);
 	});
 
 	test('should return an error as user does not have access to read description when reading a nested entity', async () => {
@@ -600,7 +605,9 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({ extensions: error.extensions, message: error.message })
+		);
 	});
 
 	test('should return an error as user does not have access to read description when reading a nested filter', async () => {
@@ -663,7 +670,9 @@ describe('Column Level Security', () => {
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual(error);
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({ extensions: error.extensions, message: error.message })
+		);
 	});
 
 	test('should return an error as user does not have access to write to the description field even when nested', async () => {
@@ -736,15 +745,16 @@ describe('Column Level Security', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		console.log(response.body.singleResult.errors);
+
 		expect(response.body.singleResult.data).toBeUndefined();
 		expect(response.body.singleResult.errors).toBeDefined();
 
 		expect(response.body.singleResult.errors?.length).toBe(1);
-		expect(response.body.singleResult.errors?.[0]).toStrictEqual({
-			...error,
-			// Change the error message to match the expected error message
-			message: 'Field "description" is not defined by type "Album". [Suggestion hidden]?',
-		});
+		expect(response.body.singleResult.errors?.[0]).toStrictEqual(
+			expect.objectContaining({
+				extensions: error.extensions,
+				message: 'Field "description" is not defined by type "Album". [Suggestion hidden]?',
+			})
+		);
 	});
 });

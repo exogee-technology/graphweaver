@@ -246,6 +246,16 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 				});
 			} else if (isEntityMetadata(fieldTypeMetadata)) {
 				recurseThroughArg(fieldTypeMetadata, value as Filter<unknown>);
+			} else {
+				permissionsList.push({
+					entityName: entityMetadata.name,
+					field: {
+						name: filterKey,
+						location: FieldLocation.NESTED_FILTER,
+					},
+					accessType: AccessType.Read,
+					type: RequirePermissionType.FIELD,
+				});
 			}
 		}
 	};

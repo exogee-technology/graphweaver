@@ -6,7 +6,7 @@ import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '.
 import { AuthTokenProvider, isExpired } from '../token';
 import { AclMap, requireEnvironmentVariable } from '../../helper-functions';
 import { UserProfile, UserProfileType } from '../../user-profile';
-import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
+import { ChallengeError, ErrorCodes, ForbiddenError, RestrictedFieldError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
 import { registerAccessControlListHook } from '../../decorators';
 import { ApiKeyProvider, getApiKeyProvider } from '../methods';
@@ -25,6 +25,8 @@ const didEncounterForbiddenError = (error: any): error is ForbiddenError =>
 	error.extensions.code === ErrorCodes.FORBIDDEN;
 const didEncounterChallengeError = (error: any): error is ChallengeError =>
 	error.extensions.code === ErrorCodes.CHALLENGE;
+const didEncounterRestrictedFieldError = (error: any): error is RestrictedFieldError =>
+	error.extensions?.isRestrictedFieldError;
 
 enum RedirectType {
 	CHALLENGE = 'challenge',
@@ -265,21 +267,18 @@ export const authApolloPlugin = <R>(
 						);
 					}
 
-					// Here we are cleaning up the error messages to remove the path if it is a restricted field error.
-					// This ensures that the client does not know the field exists as the message is identical to a field that does not exist.
-					errors = errors?.map((error: any) => {
-						// Remove the path from the error if it is a restricted field error
-						delete error.path;
-						// Remove the location from the error if it is a restricted field error
-						delete error.locations;
-
-						// Remove the data from the response if it is a restricted field error
-						if (error.extensions?.isRestrictedFieldError) {
-							delete (response.body as any)?.singleResult.data;
-							delete error.extensions.isRestrictedFieldError;
-						}
-						return error;
-					});
+					// Let's check if we have any Restricted Field Errors
+					if (errors?.some(didEncounterRestrictedFieldError)) {
+						// Here we are cleaning up the error messages to remove the empty data entity
+						errors = errors?.map((error: any) => {
+							if (error.extensions?.isRestrictedFieldError) {
+								delete error.path;
+								delete (response.body as any)?.singleResult.data;
+								delete error.extensions.isRestrictedFieldError;
+							}
+							return error;
+						});
+					}
 				},
 			};
 		},

@@ -1,6 +1,7 @@
 import { ApolloError } from 'apollo-server-errors';
 import { AuthenticationMethod } from './types';
 import { FieldDetails } from './auth-utils';
+import { graphweaverMetadata } from '@exogee/graphweaver';
 
 export { ForbiddenError } from 'apollo-server-errors';
 
@@ -33,6 +34,7 @@ enum RestrictedFieldErrorCode {
 export enum FieldLocation {
 	FIELD = 'FIELD',
 	FILTER = 'FILTER',
+	NESTED_FILTER = 'NESTED_FILTER',
 	INPUT = 'INPUT',
 }
 
@@ -47,6 +49,9 @@ export class RestrictedFieldError extends ApolloError {
 			case FieldLocation.FIELD:
 				this.formatFieldMessage();
 				break;
+			case FieldLocation.NESTED_FILTER:
+				this.formatFilterMessage();
+				break;
 			case FieldLocation.FILTER:
 				this.formatArgMessage();
 				break;
@@ -58,6 +63,16 @@ export class RestrictedFieldError extends ApolloError {
 
 	private formatFieldMessage() {
 		this.message = `Cannot query field "${this.field.name}" on type "${this.entityName}". [Suggestion hidden]?`;
+		this.extensions = {
+			...this.extensions,
+			code: RestrictedFieldErrorCode.GRAPHQL_VALIDATION_FAILED,
+			isRestrictedFieldError: true,
+		};
+	}
+
+	private formatFilterMessage() {
+		const entity = graphweaverMetadata.getEntityByName(this.entityName);
+		this.message = `Field "${this.field.name}" is not defined by type "${entity?.plural ?? this.entityName}ListFilter". [Suggestion hidden]?`;
 		this.extensions = {
 			...this.extensions,
 			code: RestrictedFieldErrorCode.GRAPHQL_VALIDATION_FAILED,
