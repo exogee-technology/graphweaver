@@ -46,7 +46,7 @@ You will be able to login using one of the following credentials:
 
 ## Start a local development server
 
-Once the database is up and running you can start the example with:
+Once the database is up and running, you can start the example with:
 
 ```sh
 pnpm i
