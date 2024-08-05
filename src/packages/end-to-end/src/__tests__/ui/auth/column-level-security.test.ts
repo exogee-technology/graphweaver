@@ -14,7 +14,7 @@ test('should allow to see the priority column', async ({ page }) => {
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
-	await page.getByRole('link', { name: 'Task' }).click();
+	await page.getByRole('link', { name: 'Task', exact: true }).click();
 
 	await expect(await page.getByText('priority')).toBeVisible();
 });
@@ -32,7 +32,7 @@ test('should not allow to see the priority column', async ({ page }) => {
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
-	await page.getByRole('link', { name: 'Task' }).click();
+	await page.getByRole('link', { name: 'Task', exact: true }).click();
 
 	await expect(await page.getByText('priority')).not.toBeVisible();
 });
