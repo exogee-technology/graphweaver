@@ -500,6 +500,12 @@ export type Query = {
   tags_aggregate?: Maybe<AggregationResult>;
   /** Get a single Task. */
   task?: Maybe<Task>;
+  /** Get a single TaskCountByTag. */
+  taskCountByTag?: Maybe<TaskCountByTag>;
+  /** Get multiple TaskCountByTags. */
+  taskCountByTags?: Maybe<Array<Maybe<TaskCountByTag>>>;
+  /** Get aggregated data for TaskCountByTags. */
+  taskCountByTags_aggregate?: Maybe<AggregationResult>;
   /** Get multiple Tasks. */
   tasks?: Maybe<Array<Maybe<Task>>>;
   /** Get aggregated data for Tasks. */
@@ -567,6 +573,22 @@ export type QueryTags_AggregateArgs = {
 
 export type QueryTaskArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryTaskCountByTagArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTaskCountByTagsArgs = {
+  filter?: InputMaybe<TaskCountByTagsListFilter>;
+  pagination?: InputMaybe<TaskCountByTagsPaginationInput>;
+};
+
+
+export type QueryTaskCountByTags_AggregateArgs = {
+  filter?: InputMaybe<TaskCountByTagsListFilter>;
 };
 
 
@@ -713,6 +735,56 @@ export type TaskTagsArgs = {
 
 export type TaskTags_AggregateArgs = {
   filter?: InputMaybe<TagsListFilter>;
+};
+
+export type TaskCountByTag = {
+  __typename?: 'TaskCountByTag';
+  count: Scalars['Float']['output'];
+  tag: Tag;
+  tagId: Scalars['ID']['output'];
+  tag_aggregate?: Maybe<AggregationResult>;
+};
+
+
+export type TaskCountByTagTagArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+};
+
+
+export type TaskCountByTagTag_AggregateArgs = {
+  filter?: InputMaybe<TagsListFilter>;
+};
+
+export type TaskCountByTagsListFilter = {
+  count?: InputMaybe<Scalars['Float']['input']>;
+  count_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  count_ne?: InputMaybe<Scalars['Float']['input']>;
+  count_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  count_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  count_null?: InputMaybe<Scalars['Boolean']['input']>;
+  tag?: InputMaybe<TagsListFilter>;
+  tagId?: InputMaybe<Scalars['ID']['input']>;
+  tagId_gt?: InputMaybe<Scalars['ID']['input']>;
+  tagId_gte?: InputMaybe<Scalars['ID']['input']>;
+  tagId_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  tagId_lt?: InputMaybe<Scalars['ID']['input']>;
+  tagId_lte?: InputMaybe<Scalars['ID']['input']>;
+  tagId_ne?: InputMaybe<Scalars['ID']['input']>;
+  tagId_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  tagId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  tagId_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type TaskCountByTagsOrderByInput = {
+  count?: InputMaybe<Sort>;
+  tagId?: InputMaybe<Sort>;
+};
+
+/** Pagination options for TaskCountByTags. */
+export type TaskCountByTagsPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<TaskCountByTagsOrderByInput>;
 };
 
 /** Data needed to create or update Tasks. If an ID is passed, this is an update, otherwise it's an insert. */
