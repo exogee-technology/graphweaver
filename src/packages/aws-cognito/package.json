@@ -18,7 +18,7 @@
 		"package:pack": "pnpm pack",
 		"version": "npm version --no-git-tag-version"
 	},
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"devDependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"esbuild": "0.23.0",
