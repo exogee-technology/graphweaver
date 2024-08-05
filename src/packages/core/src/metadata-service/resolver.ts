@@ -73,9 +73,10 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			const attributes = new AdminUiEntityAttributeMetadata();
 			attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
 			attributes.isReadOnly =
-				entity.adminUIOptions?.readonly ||
-				entity.apiOptions?.excludeFromBuiltInOperations ||
-				entity.apiOptions?.excludeFromBuiltInWriteOperations;
+				entity.adminUIOptions?.readonly ??
+				entity.apiOptions?.excludeFromBuiltInOperations ??
+				entity.apiOptions?.excludeFromBuiltInWriteOperations ??
+				false;
 
 			let defaultSummaryField: 'name' | 'title' | undefined = undefined;
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
