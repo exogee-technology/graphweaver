@@ -1,7 +1,8 @@
 import { ApolloError } from 'apollo-server-errors';
+import { graphweaverMetadata } from '@exogee/graphweaver';
+
 import { AuthenticationMethod } from './types';
 import { FieldDetails } from './auth-utils';
-import { graphweaverMetadata } from '@exogee/graphweaver';
 
 export { ForbiddenError } from 'apollo-server-errors';
 
