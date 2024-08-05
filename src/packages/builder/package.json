@@ -34,7 +34,7 @@
 		"log-node": "8.0.3",
 		"rimraf": "5.0.8",
 		"rollup-plugin-visualizer": "5.12.0",
-		"serverless-offline": "13.6.0",
+		"serverless-offline": "14.0.0",
 		"vite": "5.3.5",
 		"vite-plugin-graphweaver": "workspace:*"
 	},
