@@ -28,7 +28,7 @@
 		"graphql": "16.9.0",
 		"prop-types": "15.8.1",
 		"react": "18.3.1",
-		"react-data-grid": "7.0.0-beta.44",
+		"react-data-grid": "7.0.0-beta.45",
 		"react-dom": "18.3.1",
 		"react-modal": "3.16.1",
 		"react-router-dom": "6.25.1"
