@@ -18,7 +18,7 @@ test('List Trace Page', async ({ page }) => {
 
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByTestId('Tag-entity-link').click();
-	await page.getByRole('link', { name: 'Task' }).click();
+	await page.getByTestId('Task-entity-link').click();
 
 	await page.getByRole('link', { name: 'Trace' }).click();
 	await page.reload();
