@@ -382,15 +382,14 @@ const generatePermissionListFromArgs = <G>() => {
 							filter
 						);
 					}
-				} else if (filter) {
+				} else {
 					permissionsList.push({
 						entityName,
 						field: {
 							name: key,
-							location: FieldLocation.FILTER,
-							value: String(value),
+							location: filter ? FieldLocation.FILTER : FieldLocation.INPUT,
 						},
-						accessType: AccessType.Read,
+						accessType: filter ? AccessType.Read : accessType,
 						type: RequirePermissionType.FIELD,
 					});
 				}

@@ -1,6 +1,5 @@
 import { ApolloError } from 'apollo-server-errors';
 import { AuthenticationMethod } from './types';
-import { graphweaverMetadata } from '@exogee/graphweaver';
 import { FieldDetails } from './auth-utils';
 
 export { ForbiddenError } from 'apollo-server-errors';
@@ -34,6 +33,7 @@ enum RestrictedFieldErrorCode {
 export enum FieldLocation {
 	FIELD = 'FIELD',
 	FILTER = 'FILTER',
+	INPUT = 'INPUT',
 }
 
 export class RestrictedFieldError extends ApolloError {
@@ -48,7 +48,10 @@ export class RestrictedFieldError extends ApolloError {
 				this.formatFieldMessage();
 				break;
 			case FieldLocation.FILTER:
-				this.formatFilterArgMessage();
+				this.formatArgMessage();
+				break;
+			case FieldLocation.INPUT:
+				this.formatArgMessage();
 				break;
 		}
 	}
@@ -62,9 +65,8 @@ export class RestrictedFieldError extends ApolloError {
 		};
 	}
 
-	private formatFilterArgMessage() {
-		const entity = graphweaverMetadata.getEntityByName(this.entityName);
-		this.message = `Variable "$filter" got invalid value { ${this.field.name}: "${this.field.value}" }; Field "${this.field.name}" is not defined by type "${entity?.plural}ListFilter". [Suggestion hidden]?`;
+	private formatArgMessage() {
+		this.message = `Field "${this.field.name}" is not defined by type "${this.entityName}". [Suggestion hidden]?`;
 		this.extensions = {
 			...this.extensions,
 			code: RestrictedFieldErrorCode.BAD_USER_INPUT,

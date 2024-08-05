@@ -48,7 +48,6 @@ export const assertUserCanPerformRequestedAction = async (
 export type FieldDetails = {
 	name: string;
 	location: FieldLocation;
-	value?: string;
 };
 
 export const assertUserHasAccessToField = <TContext extends AuthorizationContext>({
