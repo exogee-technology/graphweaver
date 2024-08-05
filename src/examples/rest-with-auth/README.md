@@ -37,7 +37,7 @@ AUTH_PUBLIC_KEY_PEM_BASE64="base64_encoded_pem_public_key"
 AUTH_PRIVATE_KEY_PEM_BASE64="base64_encoded_pem_private_key"
 ```
 
-You will be able to login using one of the following credentials:
+You will be able to log in using one of the following credentials:
 
 ```javascript
     { username: 'luke', password: 'lightsaber123' },
