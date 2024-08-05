@@ -2,7 +2,7 @@
 	"name": "@exogee/graphweaver-admin-ui-components",
 	"version": "2.1.0",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"type": "module",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",

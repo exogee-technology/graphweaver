@@ -18,12 +18,12 @@ test('should show virtual entities', async ({ page }) => {
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByTestId('TaskCountByTag-entity-link').click();
 
-	expect(await page.getByRole('row').nth(1).getByRole('cell').nth(2).innerText()).toBe('urgent');
-	expect(await page.getByRole('row').nth(1).getByRole('cell').nth(3).innerText()).toBe('3');
-	expect(await page.getByRole('row').nth(2).getByRole('cell').nth(2).innerText()).toBe(
+	expect(await page.getByRole('row').nth(1).getByRole('cell').nth(1).innerText()).toBe('urgent');
+	expect(await page.getByRole('row').nth(1).getByRole('cell').nth(2).innerText()).toBe('3');
+	expect(await page.getByRole('row').nth(2).getByRole('cell').nth(1).innerText()).toBe(
 		'waiting-for-decision'
 	);
-	expect(await page.getByRole('row').nth(2).getByRole('cell').nth(3).innerText()).toBe('2');
+	expect(await page.getByRole('row').nth(2).getByRole('cell').nth(2).innerText()).toBe('2');
 
 	expect(await page.getByRole('row').count()).toBe(4);
 });

@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-rest",
 	"version": "2.1.0",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"description": "Simple example of connecting to a Rest API.",
 	"private": true,
 	"main": "lib/index.js",
