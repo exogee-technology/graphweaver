@@ -22,9 +22,9 @@ import {
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
 const didEncounterForbiddenError = (error: any): error is ForbiddenError =>
-	error.extensions.code === ErrorCodes.FORBIDDEN;
+	error.extensions?.code === ErrorCodes.FORBIDDEN;
 const didEncounterChallengeError = (error: any): error is ChallengeError =>
-	error.extensions.code === ErrorCodes.CHALLENGE;
+	error.extensions?.code === ErrorCodes.CHALLENGE;
 const didEncounterRestrictedFieldError = (error: any): error is RestrictedFieldError =>
 	error.extensions?.isRestrictedFieldError;
 

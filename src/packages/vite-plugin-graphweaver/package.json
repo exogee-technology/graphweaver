@@ -1,8 +1,8 @@
 {
 	"name": "vite-plugin-graphweaver",
-	"version": "2.0.7",
+	"version": "2.1.0",
 	"description": "A vite plugin for use with @exogee/graphweaver's admin UI",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {

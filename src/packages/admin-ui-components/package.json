@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "2.0.7",
+	"version": "2.1.0",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"type": "module",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
@@ -25,7 +25,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.2",
+		"@apollo/client": "3.11.3",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.9.2",
 		"@tanstack/react-table": "8.19.3",
@@ -34,7 +34,7 @@
 		"graphiql": "3.4.0",
 		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6",
-		"luxon": "3.4.4",
+		"luxon": "3.5.0",
 		"papaparse": "5.4.1",
 		"react-code-blocks": "0.1.6",
 		"react-hot-toast": "2.4.1",
@@ -45,7 +45,7 @@
 		"graphql": "16.9.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.1"
+		"react-router-dom": "6.26.0"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
@@ -58,7 +58,7 @@
 		"glob": "10.4.3",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.25.1",
+		"react-router-dom": "6.26.0",
 		"typescript": "5.5.4",
 		"vite": "5.3.5",
 		"vite-plugin-svgr": "4.2.0"

@@ -3,7 +3,7 @@
 	"version": "2.0.4",
 	"private": true,
 	"description": "Graphweaver Load Testing Suite",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"keywords": [
 		"graphql",
 		"gql",
