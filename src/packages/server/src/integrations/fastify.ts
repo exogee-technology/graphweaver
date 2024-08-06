@@ -41,4 +41,6 @@ export const startStandaloneServer = async <TContext extends BaseContext>(
 		port,
 		host: host ?? '::',
 	});
+
+	return fastify;
 };
