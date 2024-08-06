@@ -62,31 +62,27 @@ export class RestrictedFieldError extends ApolloError {
 		}
 	}
 
-	private formatFieldMessage() {
-		this.message = `Cannot query field "${this.field.name}" on type "${this.entityName}". [Suggestion hidden]?`;
+	private setExtensions(code: RestrictedFieldErrorCode) {
 		this.extensions = {
 			...this.extensions,
-			code: RestrictedFieldErrorCode.GRAPHQL_VALIDATION_FAILED,
+			code,
 			isRestrictedFieldError: true,
 		};
+	}
+
+	private formatFieldMessage() {
+		this.message = `Cannot query field "${this.field.name}" on type "${this.entityName}". [Suggestion hidden]?`;
+		this.setExtensions(RestrictedFieldErrorCode.GRAPHQL_VALIDATION_FAILED);
 	}
 
 	private formatFilterMessage() {
 		const entity = graphweaverMetadata.getEntityByName(this.entityName);
 		this.message = `Field "${this.field.name}" is not defined by type "${entity?.plural ?? this.entityName}ListFilter". [Suggestion hidden]?`;
-		this.extensions = {
-			...this.extensions,
-			code: RestrictedFieldErrorCode.GRAPHQL_VALIDATION_FAILED,
-			isRestrictedFieldError: true,
-		};
+		this.setExtensions(RestrictedFieldErrorCode.GRAPHQL_VALIDATION_FAILED);
 	}
 
 	private formatArgMessage() {
 		this.message = `Field "${this.field.name}" is not defined by type "${this.entityName}". [Suggestion hidden]?`;
-		this.extensions = {
-			...this.extensions,
-			code: RestrictedFieldErrorCode.BAD_USER_INPUT,
-			isRestrictedFieldError: true,
-		};
+		this.setExtensions(RestrictedFieldErrorCode.BAD_USER_INPUT);
 	}
 }
