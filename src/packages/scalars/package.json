@@ -20,7 +20,7 @@
 	},
 	"dependencies": {
 		"graphql-scalars": "1.23.0",
-		"luxon": "3.4.4"
+		"luxon": "3.5.0"
 	},
 	"devDependencies": {
 		"@types/luxon": "3.4.2",
