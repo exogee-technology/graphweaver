@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-load-testing",
-	"version": "2.0.4",
+	"version": "2.2.0",
 	"private": true,
 	"description": "Graphweaver Load Testing Suite",
 	"license": "Apache-2.0",
@@ -16,7 +16,8 @@
 	],
 	"scripts": {
 		"test:metadata": "./bin/k6 run ./src/metadata.ts",
-		"test:create-one": "./bin/k6 run ./src/create-one.ts"
+		"test:create-one": "./bin/k6 run ./src/create-one.ts",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
 		"@types/node": "22.1.0",
