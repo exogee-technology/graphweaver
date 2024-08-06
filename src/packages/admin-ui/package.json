@@ -21,7 +21,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/client": "3.11.2",
+		"@apollo/client": "3.11.3",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",
