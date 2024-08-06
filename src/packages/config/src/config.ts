@@ -15,9 +15,29 @@ export interface AdditionalFunctionOptions {
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ANY';
 }
 
+export enum AuthMethod {
+	PASSWORD = 'PASSWORD',
+	API_KEY = 'API_KEY',
+	AUTH_ZERO = 'AUTH_ZERO',
+	MAGIC_LINK = 'MAGIC_LINK',
+	ONE_TIME_PASSWORD = 'ONE_TIME_PASSWORD',
+	WEB3 = 'WEB3',
+	PASSKEY = 'PASSKEY',
+}
+
+export interface AdminUIAuthOptions {
+	primaryMethods: AuthMethod[];
+	secondaryMethods: AuthMethod[];
+	password: {
+		enableForgottenPassword: boolean;
+		enableResetPassword: boolean;
+	};
+}
+
 export interface AdminUIOptions {
 	customPagesPath: string;
 	customFieldsPath: string;
+	auth?: AdminUIAuthOptions;
 }
 
 export interface ServerlessOfflineFunctionConfig {

@@ -15,6 +15,8 @@ export const startFrontend = async ({ host, port }: StartOptions) => {
 	if (!server) {
 		const { onResolveViteConfiguration } = config().start;
 
+		console.log(config());
+
 		// Generate a Vite Config
 		const rootDirectory = path.resolve(
 			require.resolve('@exogee/graphweaver-admin-ui'),
