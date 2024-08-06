@@ -51,10 +51,6 @@ const defaultRoutes: RouteObject[] = [
 	},
 ];
 
-export function registerCustomRoutes(routes: RouteObject[]) {
-	defaultRoutes.push(...routes);
-}
-
 export const Router = () => {
 	const [router, setRouter] = useState<ReturnType<typeof createBrowserRouter> | null>(null);
 
