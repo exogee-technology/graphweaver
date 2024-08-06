@@ -6,7 +6,7 @@ import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '.
 import { AuthTokenProvider, isExpired } from '../token';
 import { AclMap, requireEnvironmentVariable } from '../../helper-functions';
 import { UserProfile, UserProfileType } from '../../user-profile';
-import { ChallengeError, ErrorCodes, ForbiddenError } from '../../errors';
+import { ChallengeError, ErrorCodes, ForbiddenError, RestrictedFieldError } from '../../errors';
 import { verifyPassword } from '../../utils/argon2id';
 import { registerAccessControlListHook } from '../../decorators';
 import { ApiKeyProvider, getApiKeyProvider } from '../methods';
@@ -22,9 +22,11 @@ import {
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
 const didEncounterForbiddenError = (error: any): error is ForbiddenError =>
-	error.extensions.code === ErrorCodes.FORBIDDEN;
+	error.extensions?.code === ErrorCodes.FORBIDDEN;
 const didEncounterChallengeError = (error: any): error is ChallengeError =>
-	error.extensions.code === ErrorCodes.CHALLENGE;
+	error.extensions?.code === ErrorCodes.CHALLENGE;
+const didEncounterRestrictedFieldError = (error: any): error is RestrictedFieldError =>
+	error.extensions?.isRestrictedFieldError;
 
 enum RedirectType {
 	CHALLENGE = 'challenge',
@@ -223,7 +225,7 @@ export const authApolloPlugin = <R>(
 				},
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
-					const errors = (response.body as any)?.singleResult?.errors;
+					let errors = (response.body as any)?.singleResult?.errors;
 
 					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
 						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
@@ -263,6 +265,19 @@ export const authApolloPlugin = <R>(
 							'X-Auth-Redirect',
 							buildRedirectUri(authRedirect, RedirectType.LOGIN)
 						);
+					}
+
+					// Let's check if we have any Restricted Field Errors
+					if (errors?.some(didEncounterRestrictedFieldError)) {
+						// Here we are cleaning up the error messages to remove the empty data entity
+						errors = errors?.map((error: any) => {
+							if (error.extensions?.isRestrictedFieldError) {
+								delete error.path;
+								delete (response.body as any)?.singleResult.data;
+								delete error.extensions.isRestrictedFieldError;
+							}
+							return error;
+						});
 					}
 				},
 			};

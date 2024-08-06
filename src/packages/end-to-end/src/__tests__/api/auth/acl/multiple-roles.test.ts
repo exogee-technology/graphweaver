@@ -20,7 +20,12 @@ const user = new UserProfile({
 	displayName: 'Test User',
 });
 
-const albumDataProvider = new BaseDataProvider<any>('album');
+class AlbumBackendProvider extends BaseDataProvider<any> {
+	async findOne() {
+		return { id: '1' };
+	}
+}
+const albumDataProvider = new AlbumBackendProvider('album');
 
 @Entity('Album', {
 	provider: albumDataProvider,
@@ -82,10 +87,8 @@ describe('ACL - Multiple Roles', () => {
 		expect(token).toContain('Bearer ');
 	});
 
-	test('should return forbidden in the before read hook when listing a single entity and one role explicitly denys access.', async () => {
+	test('should return true when listing a single entity and one role explicitly allows access.', async () => {
 		assert(token);
-
-		const spyOnDataProvider = jest.spyOn(albumDataProvider, 'findOne');
 
 		AclMap.delete('Album');
 		ApplyAccessControlList({
@@ -108,9 +111,9 @@ describe('ACL - Multiple Roles', () => {
 			`,
 		});
 
-		expect(spyOnDataProvider).not.toBeCalled();
-
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toBe('Forbidden');
+		expect(response.body.singleResult.errors).toBeUndefined();
+
+		expect(response.body.singleResult.data?.album).toEqual({ id: '1' });
 	});
 });

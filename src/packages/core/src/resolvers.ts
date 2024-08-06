@@ -457,6 +457,7 @@ const _aggregate = async <G extends { name: string }>(
 		context,
 		fields,
 		transactional: !!entity.provider.withTransaction,
+		isAggregate: true,
 	};
 	const hookParams = hookManager
 		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)

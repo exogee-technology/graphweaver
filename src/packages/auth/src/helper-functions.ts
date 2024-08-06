@@ -14,6 +14,8 @@ import {
 	MultiFactorAuthenticationRule,
 	AuthenticationMethod,
 	ListInputFilterArgs,
+	AccessControlEntry,
+	ConsolidatedFieldAccessControlEntry,
 } from './types';
 import { GENERIC_AUTH_ERROR_MESSAGE } from './auth-utils';
 import { ChallengeError } from './errors';
@@ -36,10 +38,10 @@ const isEmptyObject = (candidate: any) => {
 const titleCase = (input: string) => input.charAt(0).toUpperCase() + input.slice(1);
 
 const mapOperation = (operationName: string): AccessType => {
-	const result = AccessType[titleCase(operationName) as AccessType];
+	const result = AccessType[titleCase(operationName.replace('Some', '')) as AccessType];
 	if (result === undefined) {
 		logger.error(`Could not map invalid operation name: ${operationName}`);
-		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+		throw new Error('Encountered invalid ACL');
 	}
 	return result;
 };
@@ -65,8 +67,8 @@ export function getAdministratorRoleName() {
  * access control value
  */
 const consolidateAccessControlValue = <G, TContext extends AuthorizationContext>(
-	base: AccessControlValue<G, TContext>,
-	candidate: AccessControlValue<G, TContext>
+	candidate: AccessControlValue<G, TContext>,
+	base?: ConsolidatedAccessControlValue<G, TContext>
 ): ConsolidatedAccessControlValue<G, TContext> | undefined => {
 	// True is the broadest possible permission already, leave as is
 	// Likewise, if the new value is true, set and return
@@ -110,34 +112,104 @@ export const buildAccessControlEntryForUser = <G, TContext extends Authorization
 	// Build a new AccessControlEntry representing the combined permission represented by all the roles
 	// the user belongs to
 	const consideredRoles: string[] = [...roles, BASE_ROLE_EVERYONE];
-	const consolidatedAccessControlEntry = consideredRoles.reduce((result, role) => {
-		const entry = acl[role];
-		if (!entry) {
-			return result;
-		}
+	const entries = consideredRoles.map((role) => acl[role]).filter((role) => !!role);
 
-		Object.entries(entry).forEach(([operation, value]) => {
-			if (!['read', 'create', 'update', 'delete', 'write', 'all'].includes(operation))
-				throw new Error('Encountered invalid ACL');
+	const consolidatedAccessControlEntry: ConsolidatedAccessControlEntry<G, TContext> = {};
+	const addValue = (
+		operation: keyof AccessControlEntry<G, TContext>,
+		value: AccessControlValue<G, TContext>
+	) => {
+		const operationName = mapOperation(operation);
+		const accessControlValue =
+			value === true || typeof value === 'function' ? value : value.rowFilter;
 
-			// Keep updating the result until all the roles + operations within the roles have been considered
-			const ops = [] as any[];
-			if (operation === 'write') {
-				ops.push(...['create', 'update', 'delete']);
-			} else if (operation === 'all') {
-				ops.push(...['read', 'create', 'update', 'delete']);
-			} else {
-				ops.push(operation);
+		consolidatedAccessControlEntry[operationName] = consolidateAccessControlValue(
+			accessControlValue,
+			consolidatedAccessControlEntry[operationName]
+		);
+	};
+
+	for (const entry of entries) {
+		const accessControlValues = Object.entries<AccessControlValue<G, TContext> | undefined>(entry);
+
+		for (const [operation, accessControlValue] of accessControlValues) {
+			if (!accessControlValue) {
+				continue;
 			}
 
-			ops.forEach(
-				(op) => (result[mapOperation(op)] = consolidateAccessControlValue(result[op], value))
-			);
-		});
-		return result;
-	}, {} as any);
+			const operationName = operation as keyof AccessControlEntry<G, TContext>;
+
+			if (operationName.startsWith('all') || operationName.startsWith('write')) {
+				addValue('create', accessControlValue);
+				addValue('update', accessControlValue);
+				addValue('delete', accessControlValue);
+
+				if (operationName.startsWith('all')) {
+					addValue('read', accessControlValue);
+				}
+			} else {
+				addValue(operationName, accessControlValue);
+			}
+		}
+	}
 
 	return consolidatedAccessControlEntry;
+};
+
+export const buildFieldAccessControlEntryForUser = <G, TContext extends AuthorizationContext>(
+	acl: Partial<AccessControlList<G, TContext>>,
+	roles: string[],
+	context: TContext
+): ConsolidatedFieldAccessControlEntry<G> => {
+	const entries = roles.map((role) => acl[role]).filter((role) => !!role);
+
+	const result = new Map<AccessType, Set<keyof G>>();
+	const addToResult = (
+		operation: keyof AccessControlEntry<G, TContext>,
+		fieldsOnValue: (keyof G)[]
+	) => {
+		const operationName = mapOperation(operation);
+		const fields = result.get(operationName) ?? new Set<keyof G>();
+		fieldsOnValue.forEach((field) => fields.add(field));
+		result.set(operationName, fields);
+	};
+
+	for (const entry of entries) {
+		const accessControlValues = Object.entries<AccessControlValue<G, TContext> | undefined>(entry);
+
+		for (const [operation, accessControlValue] of accessControlValues) {
+			if (
+				!accessControlValue ||
+				accessControlValue === true ||
+				typeof accessControlValue === 'function'
+			) {
+				continue;
+			}
+
+			if (accessControlValue.fieldRestrictions) {
+				const fieldsOnValue =
+					typeof accessControlValue.fieldRestrictions === 'function'
+						? accessControlValue.fieldRestrictions(context)
+						: accessControlValue.fieldRestrictions;
+
+				if (fieldsOnValue?.length) {
+					const operationName = operation as keyof AccessControlEntry<G, TContext>;
+					if (operationName.startsWith('all') || operationName.startsWith('write')) {
+						addToResult('create', fieldsOnValue);
+						addToResult('update', fieldsOnValue);
+
+						if (operationName.startsWith('all')) {
+							addToResult('read', fieldsOnValue);
+						}
+					} else {
+						addToResult(operationName, fieldsOnValue);
+					}
+				}
+			}
+		}
+	}
+
+	return Object.fromEntries(result);
 };
 
 /**

@@ -177,6 +177,20 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			})),
 		}));
 
+		if (hookManager) {
+			const result = await hookManager.runHooks(HookRegister.AFTER_READ, {
+				context,
+				transactional: false,
+				fields,
+				entities,
+			});
+			return {
+				entities: result.entities,
+				enums: enums,
+			};
+		}
+
+		// @deprecated this section of code can be removed once the hook argument is removed
 		if (hooks?.afterRead) {
 			const result = await hooks.afterRead({ context, metadata: { entities, enums } });
 			return result.metadata;
