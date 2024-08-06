@@ -142,11 +142,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		});
 	}
 
-	public async start({ host, port, path }: StartServerOptions) {
+	public async start(options: StartServerOptions) {
 		logger.info(`Graphweaver start called`);
 
-		return await startStandaloneServer(
-			{ host, port, path },
+		await startStandaloneServer(
+			options,
 			this.server,
 			this.graphweaverPlugins as Set<GraphweaverPlugin<void>>
 		);
