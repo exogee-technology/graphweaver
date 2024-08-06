@@ -15,15 +15,23 @@ import { authApolloPlugin } from '../apollo';
 import { getImplicitAllow } from '../../implicit-authorization';
 import { ApplyAccessControlList } from '../../decorators/apply-access-control-list';
 import { AclMap, buildFieldAccessControlEntryForUser } from '../../helper-functions';
-import { AccessType, AuthorizationContext, BASE_ROLE_EVERYONE } from '../../types';
+import {
+	AccessType,
+	AuthenticationMethod,
+	AuthorizationContext,
+	BASE_ROLE_EVERYONE,
+} from '../../types';
 import { getACL } from '../../auth-utils';
+import { authManager } from '../../authentication-manager';
 
 export class BaseAuthMethod {
-	constructor() {
+	constructor(private methodType: AuthenticationMethod) {
 		this.addRequestContext();
 		this.addApolloPlugin();
 		this.ensureAdminUIMetadataIsAuthenticated();
 		this.filterAdminUIMetadataColumns();
+
+		authManager.registerMethod(this.methodType);
 	}
 
 	private addRequestContext = () => {

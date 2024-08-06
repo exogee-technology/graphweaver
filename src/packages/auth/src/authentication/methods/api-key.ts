@@ -14,7 +14,7 @@ import {
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError, ValidationError } from 'apollo-server-errors';
 
-import { AccessControlList, AuthorizationContext } from '../../types';
+import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
 import { ApiKeyEntity } from '../entities';
 import { hashPassword } from '../../utils/argon2id';
 import { AclMap } from '../../helper-functions';
@@ -74,7 +74,7 @@ export class ApiKey<R extends string> extends BaseAuthMethod {
 		roles: unknown;
 		acl?: AccessControlList<ApiKeyEntity<R>, AuthorizationContext>;
 	}) {
-		super();
+		super(AuthenticationMethod.API_KEY);
 		this.provider = provider;
 		this.transactional = !!provider.withTransaction;
 

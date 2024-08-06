@@ -3,6 +3,9 @@ import { UserProfile } from './user-profile';
 
 export enum AuthenticationMethod {
 	PASSWORD = 'pwd',
+	API_KEY = 'api',
+	AUTH_ZERO = 'au0',
+	FORGOTTEN_PASSWORD = 'fpd',
 	MAGIC_LINK = 'mgl',
 	ONE_TIME_PASSWORD = 'otp',
 	WEB3 = 'wb3',

@@ -123,7 +123,7 @@ const config = {
 export class Passkey extends BaseAuthMethod {
 	private dataProvider: PasskeyDataProvider;
 	constructor({ dataProvider }: { dataProvider: PasskeyDataProvider }) {
-		super();
+		super(AuthenticationMethod.PASSKEY);
 		this.dataProvider = dataProvider;
 
 		graphweaverMetadata.addMutation({

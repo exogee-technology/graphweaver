@@ -51,7 +51,7 @@ export class OneTimePassword extends BaseAuthMethod {
 	private sendOTP: (otp: OneTimePasswordEntity) => Promise<boolean>;
 
 	constructor({ sendOTP, provider }: OneTimePasswordOptions) {
-		super();
+		super(AuthenticationMethod.ONE_TIME_PASSWORD);
 		this.provider = provider;
 		this.sendOTP = sendOTP;
 

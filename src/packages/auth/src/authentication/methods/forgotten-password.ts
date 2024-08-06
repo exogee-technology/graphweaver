@@ -4,7 +4,7 @@ import { logger } from '@exogee/logger';
 import { randomUUID } from 'node:crypto';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 
-import { AuthorizationContext, AuthenticationType } from '../../types';
+import { AuthorizationContext, AuthenticationType, AuthenticationMethod } from '../../types';
 import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
 import { AuthenticationBaseEntity, CredentialStorage } from '../entities';
@@ -67,7 +67,7 @@ export class ForgottenPassword extends BaseAuthMethod {
 		sendForgottenPasswordLink,
 		getUser,
 	}: ForgottenPasswordOptions) {
-		super();
+		super(AuthenticationMethod.FORGOTTEN_PASSWORD);
 		this.provider = provider;
 		this.sendForgottenPasswordLink = sendForgottenPasswordLink;
 		this.getUser = getUser;
