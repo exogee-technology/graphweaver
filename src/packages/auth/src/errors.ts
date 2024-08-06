@@ -59,6 +59,8 @@ export class RestrictedFieldError extends ApolloError {
 			case FieldLocation.INPUT:
 				this.formatArgMessage();
 				break;
+			default:
+				throw new Error(`Unknown field location: ${this.field.location}`);
 		}
 	}
 
