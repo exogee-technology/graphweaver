@@ -37,7 +37,7 @@ albumDataProvider.backendProviderConfig = {
 @Entity('Album', {
 	provider: albumDataProvider,
 })
-export class Album {
+class Album {
 	@Field(() => ID)
 	id!: number;
 
@@ -67,7 +67,7 @@ const artistDataProvider = new ArtistBackendProvider('artist');
 @Entity('Artist', {
 	provider: artistDataProvider,
 })
-export class Artist {
+class Artist {
 	@Field(() => ID)
 	id!: number;
 
@@ -91,7 +91,7 @@ class PasswordBackendProvider extends BaseDataProvider<CredentialStorage> {
 	}
 }
 
-export const password = new Password({
+new Password({
 	provider: new PasswordBackendProvider('password'),
 	getUserProfile: async () => user,
 });
