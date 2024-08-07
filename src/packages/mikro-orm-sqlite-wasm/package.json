@@ -9,7 +9,7 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
-		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
+		"generate:schema": "tsx ./src/utils/generate-db-schema.ts",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -29,6 +29,7 @@
 		"@types/node": "22.1.0",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
+		"tsx": "4.16.5",
 		"typescript": "5.5.4"
 	},
 	"keywords": [
