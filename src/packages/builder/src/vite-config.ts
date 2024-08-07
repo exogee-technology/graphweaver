@@ -1,4 +1,6 @@
 import graphweaver from 'vite-plugin-graphweaver';
+import { config as getGraphweaverConfig } from '@exogee/graphweaver-config';
+
 import type { InlineConfig } from 'vite';
 import path from 'path';
 
@@ -28,6 +30,7 @@ export const viteConfig = async ({
 		define: {
 			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `'${backendUrl}'` } : {}),
 			'import.meta.env.VITE_ADMIN_UI_BASE': `'${base.replace(/\/$/, '')}'`,
+			'import.meta.env.VITE_GRAPHWEAVER_CONFIG': JSON.stringify(getGraphweaverConfig().adminUI),
 		},
 		build: {
 			outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
@@ -68,6 +71,7 @@ export const viteConfig = async ({
 				// our vite plugin directly.
 				'virtual:graphweaver-user-supplied-custom-pages',
 				'virtual:graphweaver-user-supplied-custom-fields',
+				'virtual:graphweaver-auth-routes',
 			],
 		},
 		plugins: [react(), graphweaver()],

@@ -15,10 +15,14 @@ export interface AdditionalFunctionOptions {
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ANY';
 }
 
-export enum AuthMethod {
+export enum PrimaryAuthMethod {
 	PASSWORD = 'PASSWORD',
-	API_KEY = 'API_KEY',
+	MAGIC_LINK = 'MAGIC_LINK',
 	AUTH_ZERO = 'AUTH_ZERO',
+}
+
+export enum SecondaryAuthMethod {
+	PASSWORD = 'PASSWORD',
 	MAGIC_LINK = 'MAGIC_LINK',
 	ONE_TIME_PASSWORD = 'ONE_TIME_PASSWORD',
 	WEB3 = 'WEB3',
@@ -26,8 +30,8 @@ export enum AuthMethod {
 }
 
 export interface AdminUIAuthOptions {
-	primaryMethods: AuthMethod[];
-	secondaryMethods: AuthMethod[];
+	primaryMethods: PrimaryAuthMethod[];
+	secondaryMethods: SecondaryAuthMethod[];
 	password: {
 		enableForgottenPassword: boolean;
 		enableResetPassword: boolean;

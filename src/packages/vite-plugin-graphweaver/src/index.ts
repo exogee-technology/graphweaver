@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite';
-import { loadCustomPages, loadCustomFields } from './loaders';
+import { loadCustomPages, loadCustomFields, loadAuthRoutes } from './loaders';
 
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
 
@@ -16,6 +16,9 @@ const graphweaverPlugin = ({
 	const virtualCustomFieldsModuleId = 'virtual:graphweaver-user-supplied-custom-fields';
 	const resolvedVirtualCustomFieldModuleId = resolved(virtualCustomFieldsModuleId);
 
+	const virtualAuthRoutesId = 'virtual:graphweaver-auth-routes';
+	const resolvedVirtualAuthRoutesModuleId = resolved(virtualAuthRoutesId);
+
 	let adminUiPath: string | undefined;
 
 	return {
@@ -30,6 +33,7 @@ const graphweaverPlugin = ({
 			// node_modules directory, or in the admin-ui package's node_modules directory.
 			if (id === virtualModuleId) return resolvedVirtualModuleId;
 			if (id === virtualCustomFieldsModuleId) return resolvedVirtualCustomFieldModuleId;
+			if (id === virtualAuthRoutesId) return resolvedVirtualAuthRoutesModuleId;
 
 			// Ok, if it's not any of our virtual modules, it may be in the user's project
 			// directory.
@@ -53,6 +57,8 @@ const graphweaverPlugin = ({
 			if (id === resolvedVirtualModuleId) return await loadCustomPages(projectRoot);
 
 			if (id === resolvedVirtualCustomFieldModuleId) return await loadCustomFields(projectRoot);
+
+			if (id === resolvedVirtualAuthRoutesModuleId) return await loadAuthRoutes();
 		},
 	};
 };

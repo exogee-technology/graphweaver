@@ -823,6 +823,9 @@ importers:
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
+      '@exogee/graphweaver-config':
+        specifier: workspace:*
+        version: link:../config
       '@simplewebauthn/types':
         specifier: 10.0.0
         version: 10.0.0

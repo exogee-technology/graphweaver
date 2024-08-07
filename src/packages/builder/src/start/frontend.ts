@@ -1,7 +1,7 @@
 import path from 'path';
 import type { ViteDevServer } from 'vite';
 import { viteConfig } from '../vite-config';
-import { config } from '@exogee/graphweaver-config';
+import { config as getConfig } from '@exogee/graphweaver-config';
 
 export interface StartOptions {
 	host?: string /** Host to listen on e.g. 0.0.0.0 */;
@@ -13,9 +13,8 @@ let server: ViteDevServer | undefined = undefined;
 export const startFrontend = async ({ host, port }: StartOptions) => {
 	// Let's check if we need to start the server
 	if (!server) {
-		const { onResolveViteConfiguration } = config().start;
-
-		console.log(config());
+		const config = getConfig();
+		const { onResolveViteConfiguration } = config.start;
 
 		// Generate a Vite Config
 		const rootDirectory = path.resolve(
