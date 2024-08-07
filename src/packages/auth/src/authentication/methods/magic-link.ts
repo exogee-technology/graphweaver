@@ -50,7 +50,7 @@ export class MagicLink extends BaseAuthMethod {
 	private sendMagicLink: (url: URL, magicLink: MagicLinkEntity) => Promise<boolean>;
 
 	constructor({ provider, getUser, sendMagicLink }: MagicLinkOptions) {
-		super(AuthenticationMethod.MAGIC_LINK);
+		super();
 
 		this.getUser = getUser;
 		this.sendMagicLink = sendMagicLink;

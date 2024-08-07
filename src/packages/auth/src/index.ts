@@ -7,4 +7,3 @@ export * from './errors';
 export * from './user-profile';
 export * from './utils/argon2id';
 export * from './user-context';
-export * from './authentication-manager';

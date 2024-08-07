@@ -33,7 +33,7 @@ export class Web3 extends BaseAuthMethod {
 		provider: Web3AuthProvider;
 		multiFactorAuthentication: () => Promise<MultiFactorAuthentication>;
 	}) {
-		super(AuthenticationMethod.WEB3);
+		super();
 		this.provider = provider;
 
 		if (multiFactorAuthentication) {

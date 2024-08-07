@@ -90,7 +90,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		onUserAuthenticated,
 		onUserRegistered,
 	}: PasswordOptions<D>) {
-		super(AuthenticationMethod.PASSWORD);
+		super();
 		this.provider = provider;
 		this.transactional = !!provider.withTransaction;
 		this.getUserProfile = getUserProfile;
