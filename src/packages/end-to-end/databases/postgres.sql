@@ -138,21 +138,6 @@ CREATE TABLE "Track"
     CONSTRAINT "PK_Track" PRIMARY KEY  ("TrackId")
 );
 
--- These are here to test a specific scenario that used to crash the introspection process.
-CREATE TABLE "ToOne" (
-    id text PRIMARY KEY,
-    name text NOT NULL
-);
-
-CREATE UNIQUE INDEX to_one_pkey ON "ToOne"(id text_ops);
-CREATE UNIQUE INDEX to_one_name_key ON "ToOne"(name text_ops);
-
-CREATE TABLE "ToOneKeyOwner" (
-    id text PRIMARY KEY,
-    related_entity_name text NOT NULL REFERENCES "ToOne"(name) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
-
 /*******************************************************************************
    Create Primary Key Unique Indexes
 ********************************************************************************/

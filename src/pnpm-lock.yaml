@@ -77,7 +77,7 @@ importers:
         version: 6.3.3
       '@mikro-orm/knex':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.3
         version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)
@@ -362,7 +362,7 @@ importers:
         version: 6.3.3
       '@mikro-orm/postgresql':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -417,7 +417,7 @@ importers:
         version: 6.3.3
       '@mikro-orm/knex':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.3
         version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)
@@ -528,9 +528,6 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
-      ts-node:
-        specifier: 10.9.2
-        version: 10.9.2(@types/node@22.1.0)(typescript@5.5.4)
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -780,9 +777,6 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
-      ts-node:
-        specifier: 10.9.2
-        version: 10.9.2(@types/node@22.1.0)(typescript@5.5.4)
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1170,7 +1164,7 @@ importers:
         version: 6.3.3
       '@mikro-orm/postgresql':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.3
         version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)
@@ -1275,7 +1269,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.3
         version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)
@@ -1292,6 +1286,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
+      tsx:
+        specifier: 4.16.5
+        version: 4.16.5
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1334,13 +1331,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.3
         version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.3
-        version: 6.3.3(@mikro-orm/core@6.3.3)
+        version: 6.3.3(@mikro-orm/core@6.3.3)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.3
         version: 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)
@@ -1360,9 +1357,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
-      ts-node:
-        specifier: 10.9.2
-        version: 10.9.2(@types/node@22.1.0)(typescript@5.5.4)
+      tsx:
+        specifier: 4.16.5
+        version: 4.16.5
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1415,9 +1412,6 @@ importers:
       prettier:
         specifier: 3.3.3
         version: 3.3.3
-      ts-node:
-        specifier: 10.9.2
-        version: 10.9.2(@types/node@22.1.0)(typescript@5.5.4)
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -3537,13 +3531,6 @@ packages:
       style-mod: 4.1.2
       w3c-keyname: 2.2.8
     dev: false
-
-  /@cspotcode/source-map-support@0.8.1:
-    resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
-    engines: {node: '>=12'}
-    dependencies:
-      '@jridgewell/trace-mapping': 0.3.9
-    dev: true
 
   /@emotion/is-prop-valid@0.8.8:
     resolution: {integrity: sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==}
@@ -5993,13 +5980,6 @@ packages:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  /@jridgewell/trace-mapping@0.3.9:
-    resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
-    dependencies:
-      '@jridgewell/resolve-uri': 3.1.2
-      '@jridgewell/sourcemap-codec': 1.5.0
-    dev: true
-
   /@js-sdsl/ordered-map@4.4.2:
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
     dev: false
@@ -6148,30 +6128,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.3(@mikro-orm/core@6.3.3):
-    resolution: {integrity: sha512-nNjRd+l6U/m38SNBN8bsXrDL7KEQmpzWlOHG90yIs8zLjohlOx++2CFhVaSeabQ2GdT4CTJJcPpld9+V5lSJrg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.3.3
-      '@mikro-orm/knex': 6.3.3(@mikro-orm/core@6.3.3)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -8348,22 +8304,6 @@ packages:
     dev: false
     optional: true
 
-  /@tsconfig/node10@1.0.11:
-    resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
-    dev: true
-
-  /@tsconfig/node12@1.0.11:
-    resolution: {integrity: sha512-cqefuRsh12pWyGsIoBKJA9luFu3mRxCA+ORZvA4ktLSzIuCUtWVxGIuXigEwO5/ywWFMZ2QEGKWvkZG1zDMTag==}
-    dev: true
-
-  /@tsconfig/node14@1.0.3:
-    resolution: {integrity: sha512-ysT8mhdixWK6Hw3i1V2AeRqZ5WfXg1G43mqoYlM2nc6388Fq5jcXyr5mRsqViLx/GJYdoL0bfXD8nmF+Zn/Iow==}
-    dev: true
-
-  /@tsconfig/node16@1.0.4:
-    resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
-    dev: true
-
   /@types/aws-lambda@8.10.141:
     resolution: {integrity: sha512-SMWlRBukG9KV8ZNjwemp2AzDibp/czIAeKKTw09nCPbWxVskIxactCJCGOp4y6I1hCMY7T7UGfySvBLXNeUbEw==}
     dev: false
@@ -9154,13 +9094,6 @@ packages:
       acorn: 8.12.1
     dev: true
 
-  /acorn-walk@8.3.3:
-    resolution: {integrity: sha512-MxXdReSRhGO7VlFe1bRG/oI7/mdLV9B9JJT0N8vZOhF7gFRR5l3M8W9G8JxmKV+JC5mGqJ0QvqfSOLsCPa4nUw==}
-    engines: {node: '>=0.4.0'}
-    dependencies:
-      acorn: 8.12.1
-    dev: true
-
   /acorn@8.12.1:
     resolution: {integrity: sha512-tcpGyI9zbizT9JbV6oYE477V6mTlXvvi0T0G3SNIYE2apm/G5huBa1+K89VGeovbg+jycCrfhl3ADxErOuO6Jg==}
     engines: {node: '>=0.4.0'}
@@ -9332,10 +9265,6 @@ packages:
       readable-stream: 3.6.2
     dev: false
     optional: true
-
-  /arg@4.1.3:
-    resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==}
-    dev: true
 
   /argparse@1.0.10:
     resolution: {integrity: sha512-o5Roy6tNG4SL/FOkCAN6RzjiakZS25RLYFrcMttJqbdd8BWrnA+fGz57iN5Pb06pvBGvl5gQ0B48dJlslXvoTg==}
@@ -10461,10 +10390,6 @@ packages:
       - ts-node
     dev: true
 
-  /create-require@1.1.1:
-    resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
-    dev: true
-
   /cron-parser@4.9.0:
     resolution: {integrity: sha512-p0SaNjrHOnQeR8/VnfGbmg9te2kfyYSQ7Sc/j/6DtPL3JQvKxmjO9TSjNFpujqV3vEYYBvNNvXSxzyksBWAx1Q==}
     engines: {node: '>=12.0.0'}
@@ -10923,11 +10848,6 @@ packages:
   /diff-sequences@29.6.3:
     resolution: {integrity: sha512-EjePK1srD3P08o2j4f0ExnylqRs5B9tJjcp9t1krH2qRi8CCdsYfwe9JgSLurFBWwq4uOlipzfk5fHNvwFKr8Q==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
-    dev: true
-
-  /diff@4.0.2:
-    resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
-    engines: {node: '>=0.3.1'}
     dev: true
 
   /dijkstrajs@1.0.3:
@@ -17225,37 +17145,6 @@ packages:
     resolution: {integrity: sha512-PGcnJoTBnVGy6yYNFxWVNkdcAuAMstvutN9MgDJIV6L0oG8fB+ZNNy1T+wJzah8RPGor1mZuPQkVfXNDpy9eHA==}
     dev: false
 
-  /ts-node@10.9.2(@types/node@22.1.0)(typescript@5.5.4):
-    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.11
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 22.1.0
-      acorn: 8.12.1
-      acorn-walk: 8.3.3
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 5.5.4
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: true
-
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
     dev: false
@@ -17575,10 +17464,6 @@ packages:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
     hasBin: true
     dev: false
-
-  /v8-compile-cache-lib@3.0.1:
-    resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
-    dev: true
 
   /v8-to-istanbul@9.3.0:
     resolution: {integrity: sha512-kiGUalWN+rgBJ/1OHZsBtU4rXZOfj/7rKQxULKlIzwzQSvMJUUNgPwJEEh7gU6xEVxC0ahoOBvN2YI8GH6FNgA==}
@@ -18060,11 +17945,6 @@ packages:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
     dev: false
-
-  /yn@3.1.1:
-    resolution: {integrity: sha512-Ux4ygGWsu2c7isFWe8Yu1YluJmqVhxqK2cLXNQA5AcC3QfbGNpM7fu0Y8b/z16pXLnFxZYvWhd3fhBY9DLmC6Q==}
-    engines: {node: '>=6'}
-    dev: true
 
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
