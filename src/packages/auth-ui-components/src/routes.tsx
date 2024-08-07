@@ -6,12 +6,7 @@ import {
 	ResetPassword,
 } from './components';
 import { Auth, Challenge } from './pages';
-
-enum PrimaryAuthMethod {
-	PASSWORD = 'PASSWORD',
-	MAGIC_LINK = 'MAGIC_LINK',
-	AUTH_ZERO = 'AUTH_ZERO',
-}
+import { PrimaryAuthMethod } from './types';
 
 const mapComponent = (method: PrimaryAuthMethod) => {
 	switch (method) {
