@@ -30,11 +30,11 @@ export enum SecondaryAuthMethod {
 }
 
 export interface AdminUIAuthOptions {
-	primaryMethods: PrimaryAuthMethod[];
-	secondaryMethods: SecondaryAuthMethod[];
-	password: {
-		enableForgottenPassword: boolean;
-		enableResetPassword: boolean;
+	primaryMethods?: PrimaryAuthMethod[];
+	secondaryMethods?: SecondaryAuthMethod[];
+	password?: {
+		enableForgottenPassword?: boolean;
+		enableResetPassword?: boolean;
 	};
 }
 

@@ -1,4 +1,10 @@
-import { ForgottenPassword, MagicLinkLogin, PasswordLogin, ResetPassword } from './components';
+import {
+	Auth0,
+	ForgottenPassword,
+	MagicLinkLogin,
+	PasswordLogin,
+	ResetPassword,
+} from './components';
 import { Auth, Challenge } from './pages';
 
 enum PrimaryAuthMethod {
@@ -14,7 +20,7 @@ const mapComponent = (method: PrimaryAuthMethod) => {
 		case PrimaryAuthMethod.MAGIC_LINK:
 			return <MagicLinkLogin />;
 		case PrimaryAuthMethod.AUTH_ZERO:
-			return <MagicLinkLogin />;
+			return <Auth0 />;
 		default:
 			throw new Error(`Unknown primary auth method: ${method}`);
 	}
@@ -43,14 +49,14 @@ export const loadRoutes = () => {
 		});
 	}
 
-	if (password.enableForgottenPassword) {
+	if (password?.enableForgottenPassword) {
 		routes.add({
 			path: 'forgot-password',
 			element: <ForgottenPassword />,
 		});
 	}
 
-	if (password.enableResetPassword) {
+	if (password?.enableResetPassword) {
 		routes.add({
 			path: 'reset-password',
 			element: <ResetPassword />,
