@@ -44,14 +44,16 @@ export const loadRoutes = () => {
 		});
 	}
 
-	if (password?.enableForgottenPassword) {
+	const hasPassword = primaryMethods.includes(PrimaryAuthMethod.PASSWORD);
+
+	if (hasPassword && password?.enableForgottenPassword) {
 		routes.add({
 			path: 'forgot-password',
 			element: <ForgottenPassword />,
 		});
 	}
 
-	if (password?.enableResetPassword) {
+	if (hasPassword && password?.enableResetPassword) {
 		routes.add({
 			path: 'reset-password',
 			element: <ResetPassword />,

@@ -109,6 +109,12 @@ export const defaultConfig = (): ConfigOptions => {
 		adminUI: {
 			customPagesPath: 'src/admin-ui/custom-pages',
 			customFieldsPath: 'src/admin-ui/custom-fields',
+			auth: {
+				password: {
+					enableForgottenPassword: true,
+					enableResetPassword: true,
+				},
+			},
 		},
 		start: {
 			onResolveEsbuildConfiguration: (options) => options,

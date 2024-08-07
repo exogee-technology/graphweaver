@@ -6,7 +6,7 @@ export const SignOut = () => null;`;
 export const loadAuth = async () => {
 	try {
 		const { adminUI } = config();
-		if (adminUI.auth) {
+		if (adminUI.auth?.primaryMethods) {
 			return `export { loadRoutes, SignOut } from '@exogee/graphweaver-auth-ui-components';`;
 		} else {
 			return defaultReturn;
