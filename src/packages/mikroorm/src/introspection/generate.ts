@@ -43,18 +43,18 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 		for (const prop of meta.relations) {
 			if (!prop.name.includes('Inverse')) {
 				const targetMeta = metadata.find((m) => m.className === prop.type);
-
-				// Validate that this relationship is to the primary key of the referenced column as that's
-				// all we currently support.
 				const referencedTablePrimaryKeys = Utils.flatten(
 					(targetMeta?.getPrimaryProps() ?? []).map((pk) => pk.fieldNames)
 				);
 
-				for (const referencedColumn of prop.referencedColumnNames) {
-					if (!referencedTablePrimaryKeys.includes(referencedColumn)) {
-						nonPrimaryKeyReferenceErrors.push(
-							` - Relationship between ${meta.className}.${prop.fieldNames.join(', ')} and ${targetMeta?.className}.${referencedColumn} is not supported.`
-						);
+				// Check any props that actually have fields in the database to store keys in for references to non-primary keys.
+				if (prop.fieldNames?.length) {
+					for (const referencedColumn of prop.referencedColumnNames) {
+						if (!referencedTablePrimaryKeys.includes(referencedColumn)) {
+							nonPrimaryKeyReferenceErrors.push(
+								` - Relationship between ${meta.className}.${prop.fieldNames.join(', ')} and ${targetMeta?.className}.${referencedColumn} is not supported.`
+							);
+						}
 					}
 				}
 
