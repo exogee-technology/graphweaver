@@ -10,7 +10,7 @@ import {
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
-import { loadRoutes as loadAuthRoutes } from 'virtual:graphweaver-auth-routes';
+import { loadRoutes as loadAuthRoutes } from 'virtual:graphweaver-auth-ui-components';
 
 import { List, Root, Playground, TraceDetail } from './pages';
 

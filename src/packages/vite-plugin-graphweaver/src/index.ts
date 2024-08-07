@@ -1,5 +1,5 @@
 import type { Plugin } from 'vite';
-import { loadCustomPages, loadCustomFields, loadAuthRoutes } from './loaders';
+import { loadCustomPages, loadCustomFields, loadAuth } from './loaders';
 
 const resolved = (virtualModuleId: string) => `\0${virtualModuleId}`;
 
@@ -16,7 +16,7 @@ const graphweaverPlugin = ({
 	const virtualCustomFieldsModuleId = 'virtual:graphweaver-user-supplied-custom-fields';
 	const resolvedVirtualCustomFieldModuleId = resolved(virtualCustomFieldsModuleId);
 
-	const virtualAuthRoutesId = 'virtual:graphweaver-auth-routes';
+	const virtualAuthRoutesId = 'virtual:graphweaver-auth-ui-components';
 	const resolvedVirtualAuthRoutesModuleId = resolved(virtualAuthRoutesId);
 
 	let adminUiPath: string | undefined;
@@ -58,7 +58,7 @@ const graphweaverPlugin = ({
 
 			if (id === resolvedVirtualCustomFieldModuleId) return await loadCustomFields(projectRoot);
 
-			if (id === resolvedVirtualAuthRoutesModuleId) return await loadAuthRoutes();
+			if (id === resolvedVirtualAuthRoutesModuleId) return await loadAuth();
 		},
 	};
 };

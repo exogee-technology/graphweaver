@@ -1,6 +1,6 @@
 import { config } from '@exogee/graphweaver-config';
 
-export const loadAuthRoutes = async () => {
+export const loadAuth = async () => {
 	try {
 		const { adminUI } = config();
 		if (adminUI.auth) {
