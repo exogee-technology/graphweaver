@@ -61,7 +61,7 @@ export const Router = () => {
 			// We need to blend their custom routes in at the top so they can override us if they want.
 			const routes = await customPages.routes();
 			setRouter(
-				createBrowserRouter([...routes, ...defaultRoutes, ...loadAuthRoutes()], {
+				createBrowserRouter([...loadAuthRoutes(), ...routes, ...defaultRoutes], {
 					basename: import.meta.env.VITE_ADMIN_UI_BASE || '/',
 				})
 			);
