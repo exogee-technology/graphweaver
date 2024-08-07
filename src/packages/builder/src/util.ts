@@ -147,11 +147,11 @@ export const addStartFunctionIfNeeded = () => ({
 			// Otherwise this is a standalone instance so we need to start the server
 			console.log('Appending start command.');
 			const startCommand = `\n
-				console.log('Starting server on port: ' + (process.env.PORT ?? '9001'));
+				console.log('Starting server on port: ' + (process.env.GRAPHWEAVER_API_PORT ?? '9001'));
 				graphweaver.start({
-					host: process.env.HOST ?? '::',
-					port: Number(process.env.PORT ?? '9001'),
-					path: process.env.PATH ?? '/',
+					host: process.env.GRAPHWEAVER_API_HOST ?? '::',
+					port: Number(process.env.GRAPHWEAVER_API_PORT ?? '9001'),
+					path: process.env.GRAPHWEAVER_API_PATH ?? '/',
 				});`;
 
 			return { contents: `${input}${startCommand}` };
