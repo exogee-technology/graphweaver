@@ -1,5 +1,4 @@
 import { CustomField } from '@exogee/graphweaver-admin-ui-components';
-import '@exogee/graphweaver-auth-ui-components';
 
 import { Link } from './link';
 

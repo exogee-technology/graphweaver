@@ -45,6 +45,7 @@ export const viteConfig = async ({
 				// Not sure why, but they need to be here.
 				'formik',
 				'graphql',
+				'graphql-tag',
 
 				// These are CJS dependencies that need to get translated to ESM before Vite will be happy with them.
 				// We used to pull all of our dependencies in automatically from package.json and force this, but
