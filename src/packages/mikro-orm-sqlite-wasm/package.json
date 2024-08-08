@@ -9,7 +9,7 @@
 		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
-		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
+		"generate:schema": "tsx ./src/utils/generate-db-schema.ts",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -21,14 +21,15 @@
 		"lib"
 	],
 	"dependencies": {
-		"@mikro-orm/knex": "6.3.3",
-		"@mikro-orm/sqlite": "6.3.3",
+		"@mikro-orm/knex": "6.3.4",
+		"@mikro-orm/sqlite": "6.3.4",
 		"node-sqlite3-wasm": "0.8.19"
 	},
 	"devDependencies": {
 		"@types/node": "22.1.0",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
+		"tsx": "4.16.5",
 		"typescript": "5.5.4"
 	},
 	"keywords": [

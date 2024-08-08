@@ -62,6 +62,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "Introspection - Introspect Database",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["test-introspection"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/mikroorm"
+    },
+    {
       "name": "Auth0 Example",
       "type": "node",
       "request": "launch",

@@ -37,18 +37,33 @@ export class IntrospectionError extends Error {
 const hasErrorMessage = (error: any): error is { message: string } => error.message;
 
 const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
+	const nonPrimaryKeyReferenceErrors: string[] = [];
+
 	for (const meta of metadata.filter((m) => !m.pivotTable)) {
 		for (const prop of meta.relations) {
 			if (!prop.name.includes('Inverse')) {
 				const targetMeta = metadata.find((m) => m.className === prop.type);
+				const referencedTablePrimaryKeys = Utils.flatten(
+					(targetMeta?.getPrimaryProps() ?? []).map((pk) => pk.fieldNames)
+				);
+
+				// Check any props that actually have fields in the database to store keys in for references to non-primary keys.
+				if (prop.fieldNames?.length) {
+					for (const referencedColumn of prop.referencedColumnNames) {
+						if (!referencedTablePrimaryKeys.includes(referencedColumn)) {
+							nonPrimaryKeyReferenceErrors.push(
+								` - Relationship between ${meta.className}.${prop.fieldNames.join(', ')} and ${targetMeta?.className}.${referencedColumn} is not supported.`
+							);
+						}
+					}
+				}
+
 				const newProp = {
 					name: prop.name + 'Inverse',
 					type: meta.className,
 					joinColumns: prop.fieldNames,
 					referencedTableName: meta.tableName,
-					referencedColumnNames: Utils.flatten(
-						(targetMeta?.getPrimaryProps() ?? []).map((pk) => pk.fieldNames)
-					),
+					referencedColumnNames: referencedTablePrimaryKeys,
 					mappedBy: prop.name,
 				} as EntityProperty;
 
@@ -75,6 +90,13 @@ const generateBidirectionalRelations = (metadata: EntityMetadata[]): void => {
 				targetMeta?.addProperty(newProp);
 			}
 		}
+	}
+
+	if (nonPrimaryKeyReferenceErrors.length) {
+		throw new IntrospectionError(
+			`Unsupported Relationship${nonPrimaryKeyReferenceErrors.length === 1 ? '' : 's'} Detected`,
+			`\n${nonPrimaryKeyReferenceErrors.join('\n')}\n\nForeign keys in Graphweaver currently need to reference the primary key of the other table.`
+		);
 	}
 };
 

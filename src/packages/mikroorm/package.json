@@ -7,9 +7,10 @@
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
+		"generate:schema": "tsx ./src/utils/generate-db-schema.ts",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
-		"generate:schema": "ts-node ./src/utils/generate-db-schema.ts",
+		"test-introspection": "tsx scripts/test-introspection.ts",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -22,7 +23,7 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.10.5",
-		"@aws-sdk/client-secrets-manager": "3.623.0",
+		"@aws-sdk/client-secrets-manager": "3.624.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
@@ -34,27 +35,27 @@
 		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.3.3",
-		"@mikro-orm/knex": "6.3.3",
-		"@mikro-orm/mysql": "6.3.3",
-		"@mikro-orm/postgresql": "6.3.3",
-		"@mikro-orm/sqlite": "6.3.3",
+		"@mikro-orm/core": "6.3.4",
+		"@mikro-orm/knex": "6.3.4",
+		"@mikro-orm/mysql": "6.3.4",
+		"@mikro-orm/postgresql": "6.3.4",
+		"@mikro-orm/sqlite": "6.3.4",
 		"@types/node": "22.1.0",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
-		"ts-node": "10.9.2",
+		"tsx": "4.16.5",
 		"typescript": "5.5.4"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/knex": "6.3.3",
-		"@mikro-orm/mysql": "6.3.3",
-		"@mikro-orm/postgresql": "6.3.3",
-		"@mikro-orm/sqlite": "6.3.3"
+		"@mikro-orm/knex": "6.3.4",
+		"@mikro-orm/mysql": "6.3.4",
+		"@mikro-orm/postgresql": "6.3.4",
+		"@mikro-orm/sqlite": "6.3.4"
 	},
 	"peerDependencies": {
-		"@mikro-orm/core": "6.3.3",
-		"@mikro-orm/knex": "6.3.3"
+		"@mikro-orm/core": "6.3.4",
+		"@mikro-orm/knex": "6.3.4"
 	},
 	"keywords": [
 		"graphql",
