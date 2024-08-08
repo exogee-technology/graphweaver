@@ -851,8 +851,8 @@ importers:
   packages/aws-cognito:
     dependencies:
       '@aws-sdk/client-cognito-identity-provider':
-        specifier: 3.624.0
-        version: 3.624.0
+        specifier: 3.625.0
+        version: 3.625.0
       '@aws-sdk/client-lambda':
         specifier: 3.624.0
         version: 3.624.0
@@ -1502,11 +1502,11 @@ importers:
   packages/storage-provider:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.624.0
-        version: 3.624.0
+        specifier: 3.626.0
+        version: 3.626.0
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.624.0
-        version: 3.624.0
+        specifier: 3.626.0
+        version: 3.626.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1965,8 +1965,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/client-cognito-identity-provider@3.624.0:
-    resolution: {integrity: sha512-AKzSCARzVUqclaXxxRE7UXZAhF+HoJGbAdYvQxj9LJdejuBRCo49LUqmiCTr7pUEPDK/RkDtv3+JLhxqN4z8YA==}
+  /@aws-sdk/client-cognito-identity-provider@3.625.0:
+    resolution: {integrity: sha512-R633JVXkbLyySVQBKX/D2NfyayGPRbW/T4ZkZYKX11NurQTeGfCAl0jxE16F+7iW4IKkb7U6FgkjF6lYlin7og==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
@@ -2068,8 +2068,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-s3@3.624.0:
-    resolution: {integrity: sha512-A18tgTKC4ZTAwV8i3pkyAL1XDLgH7WGS5hZA/0FOntI5l+icztGZFF8CdeYWEAFnZA7SfHK6vmtEbIQDOzTTAA==}
+  /@aws-sdk/client-s3@3.626.0:
+    resolution: {integrity: sha512-+ul1NEdiAuq5L0lhxWb+FcQuw+1RKU4lNugdX/EF3Lr6Bpuo384K/4r9cRwOo/6PqRYMIengBMc9Q2HVAu8ZWg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
@@ -2086,11 +2086,11 @@ packages:
       '@aws-sdk/middleware-location-constraint': 3.609.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-sdk-s3': 3.624.0
+      '@aws-sdk/middleware-sdk-s3': 3.626.0
       '@aws-sdk/middleware-ssec': 3.609.0
       '@aws-sdk/middleware-user-agent': 3.620.0
       '@aws-sdk/region-config-resolver': 3.614.0
-      '@aws-sdk/signature-v4-multi-region': 3.624.0
+      '@aws-sdk/signature-v4-multi-region': 3.626.0
       '@aws-sdk/types': 3.609.0
       '@aws-sdk/util-endpoints': 3.614.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
@@ -2528,8 +2528,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/middleware-sdk-s3@3.624.0:
-    resolution: {integrity: sha512-HUiaZ6+JXcG0qQda10ZxDGJvbT71YUp1zX+oikIsfTUeq0N75O82OY3Noqd7cyjEVtsGSo/y0e6U3aV1hO+wPw==}
+  /@aws-sdk/middleware-sdk-s3@3.626.0:
+    resolution: {integrity: sha512-frFh6GQ1OEGueB0fL6Ft5rdHF+eu8JZUREjeBNEcg1qRqtMpPOlYkKzJ434d4zo+JHSK5xKFeb/Gu/kvB4LxEA==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/core': 3.624.0
@@ -2580,11 +2580,11 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.624.0:
-    resolution: {integrity: sha512-JcBJGSsWf4p3mHkEFtzJo2x7y1cbUHnkzD550xvGXgJGq5Fljn3D+39jvTm2Tfd7UFxO7G3qIEYndBM/aIGFWw==}
+  /@aws-sdk/s3-request-presigner@3.626.0:
+    resolution: {integrity: sha512-vG1HdYPymEMzAWTSfLVYTTdz25ZkH6WU26BCU5Wz3xrYZgCdabNZgPNyQg0c0ZVQDBWFD4LZ5ITP/3cWcm5o1A==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/signature-v4-multi-region': 3.624.0
+      '@aws-sdk/signature-v4-multi-region': 3.626.0
       '@aws-sdk/types': 3.609.0
       '@aws-sdk/util-format-url': 3.609.0
       '@smithy/middleware-endpoint': 3.1.0
@@ -2594,11 +2594,11 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/signature-v4-multi-region@3.624.0:
-    resolution: {integrity: sha512-gu1SfCyUPnq4s0AI1xdAl0whHwhkTyltg4QZWc4vnZvEVudCpJVVxEcroUHYQIO51YyVUT9jSMS1SVRe5VqPEw==}
+  /@aws-sdk/signature-v4-multi-region@3.626.0:
+    resolution: {integrity: sha512-n3yN668b2XLY6155y2KRCCDfA67Acxf/wUS60wGPNrJKk9O5AZzGQzZF8tLfMSng5YBS/CCHN40ooMhRwSLWUg==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/middleware-sdk-s3': 3.624.0
+      '@aws-sdk/middleware-sdk-s3': 3.626.0
       '@aws-sdk/types': 3.609.0
       '@smithy/protocol-http': 4.1.0
       '@smithy/signature-v4': 4.1.0
