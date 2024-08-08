@@ -1,4 +1,6 @@
 import graphweaver from 'vite-plugin-graphweaver';
+import { config as getGraphweaverConfig } from '@exogee/graphweaver-config';
+
 import type { InlineConfig } from 'vite';
 import path from 'path';
 
@@ -21,6 +23,22 @@ export const viteConfig = async ({
 	// CJS entrypoint for vite has been deprecated.
 	const { default: react } = await import('@vitejs/plugin-react');
 
+	// if config includes auth options then check that the auth package is installed
+	const config = getGraphweaverConfig();
+
+	// Auth is optional, so we only need to check if it's enabled.
+	// If it is, we need to make sure the package is installed.
+	if (config.adminUI.auth?.primaryMethods) {
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		const { dependencies } = require(path.join(process.cwd(), './package.json'));
+		const packages = Object.keys(dependencies);
+		if (!packages.includes('@exogee/graphweaver-auth-ui-components')) {
+			throw new Error(
+				`You have auth enabled in your Graphweaver config, but the auth package is not installed. Run 'pnpm add @exogee/graphweaver-auth-ui-components' to install it.`
+			);
+		}
+	}
+
 	return {
 		configFile: false,
 		root: rootDirectory,
@@ -28,6 +46,7 @@ export const viteConfig = async ({
 		define: {
 			...(backendUrl ? { 'import.meta.env.VITE_GRAPHWEAVER_API_URL': `'${backendUrl}'` } : {}),
 			'import.meta.env.VITE_ADMIN_UI_BASE': `'${base.replace(/\/$/, '')}'`,
+			'import.meta.env.VITE_GRAPHWEAVER_CONFIG': JSON.stringify(config.adminUI),
 		},
 		build: {
 			outDir: path.resolve(process.cwd(), '.graphweaver', 'admin-ui'),
@@ -42,6 +61,7 @@ export const viteConfig = async ({
 				// Not sure why, but they need to be here.
 				'formik',
 				'graphql',
+				'graphql-tag',
 
 				// These are CJS dependencies that need to get translated to ESM before Vite will be happy with them.
 				// We used to pull all of our dependencies in automatically from package.json and force this, but
@@ -68,6 +88,7 @@ export const viteConfig = async ({
 				// our vite plugin directly.
 				'virtual:graphweaver-user-supplied-custom-pages',
 				'virtual:graphweaver-user-supplied-custom-fields',
+				'virtual:graphweaver-auth-ui-components',
 			],
 		},
 		plugins: [react(), graphweaver()],

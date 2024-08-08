@@ -6,3 +6,4 @@ export * from './web3';
 export * from './passkey';
 export * from './secret';
 export * from './logout';
+export * from './sign-out';

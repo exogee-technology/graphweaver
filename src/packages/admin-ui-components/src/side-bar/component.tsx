@@ -6,6 +6,7 @@ import { graphweaverLogo, localStorageAuthKey } from '../config';
 
 // This is injected by vite-plugin-graphweaver
 import { customPages, NavLinkExport } from 'virtual:graphweaver-user-supplied-custom-pages';
+import { SignOut } from 'virtual:graphweaver-auth-ui-components';
 
 import { GraphweaverLogo } from '../assets';
 import { useSchema } from '../utils';
@@ -14,7 +15,6 @@ import { BackendRow, DashboardRow } from './contents';
 import { Spacer } from '../spacer';
 
 import styles from './styles.module.css';
-import { Logout } from '../logout';
 
 export const SideBar = () => {
 	const schema = useSchema();
@@ -102,7 +102,7 @@ export const SideBar = () => {
 			{customPages.sidebarFooter ? (
 				<customPages.sidebarFooter />
 			) : localStorage.getItem(localStorageAuthKey) ? (
-				<Logout />
+				<SignOut />
 			) : (
 				<div className={styles.sideBarFooter}>
 					<div className={styles.footerText}>

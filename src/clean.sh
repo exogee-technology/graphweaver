@@ -6,6 +6,9 @@ rm -rf ./.build
 echo "Removing node_modules"
 find . -name node_modules -type d -exec rm -rf {} +
 
+echo "Removing local_modules"
+find . -name local_modules -type d -exec rm -rf {} +
+
 echo "Removing cdk.out directories"
 find . -name cdk.out -type d -exec rm -rf {} +
 

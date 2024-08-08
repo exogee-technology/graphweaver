@@ -10,6 +10,8 @@ import {
 
 // This is injected by vite-plugin-graphweaver
 import { customPages } from 'virtual:graphweaver-user-supplied-custom-pages';
+import { loadRoutes as loadAuthRoutes } from 'virtual:graphweaver-auth-ui-components';
+
 import { List, Root, Playground, TraceDetail } from './pages';
 
 const defaultRoutes: RouteObject[] = [
@@ -59,7 +61,7 @@ export const Router = () => {
 			// We need to blend their custom routes in at the top so they can override us if they want.
 			const routes = await customPages.routes();
 			setRouter(
-				createBrowserRouter([...routes, ...defaultRoutes], {
+				createBrowserRouter([...routes, ...loadAuthRoutes(), ...defaultRoutes], {
 					basename: import.meta.env.VITE_ADMIN_UI_BASE || '/',
 				})
 			);

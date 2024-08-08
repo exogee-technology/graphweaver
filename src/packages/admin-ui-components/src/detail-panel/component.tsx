@@ -6,6 +6,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { customFields as authCustomFields } from 'virtual:graphweaver-auth-ui-components';
 import { Modal } from '../modal';
 
 import {
@@ -328,7 +329,8 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
-	const customFieldsToShow = customFields?.get(selectedEntity.name) || [];
+	const customFieldsToShow =
+		customFields?.get(selectedEntity.name) || authCustomFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
 		// We don't show Many to Many relationships in the form yet because we don't have
