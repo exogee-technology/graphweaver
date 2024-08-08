@@ -81,7 +81,6 @@ export const viteConfig = async ({
 				'react',
 				'rehackt',
 				'set-value',
-				'react-code-blocks',
 			],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
