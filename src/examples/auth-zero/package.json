@@ -25,12 +25,12 @@
 		"@mikro-orm/knex": "6.3.4",
 		"@mikro-orm/sqlite": "6.3.4",
 		"graphql": "16.9.0",
+		"graphweaver": "workspace:*",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"react": "18.3.1"
 	},
 	"devDependencies": {
 		"@types/node": "22.1.0",
-		"graphweaver": "workspace:*",
 		"typescript": "5.5.4"
 	}
 }
