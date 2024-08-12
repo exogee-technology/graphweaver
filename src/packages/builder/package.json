@@ -33,7 +33,6 @@
 		"glob": "10.4.3",
 		"graphql": "16.9.0",
 		"graphql-tag": "2.12.6",
-		"hash-wasm": "4.11.0",
 		"log-node": "8.0.3",
 		"omgopass": "3.2.1",
 		"rimraf": "5.0.8",
