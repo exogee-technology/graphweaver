@@ -1,8 +1,31 @@
-import { initialiseAuth } from '@exogee/graphweaver-builder';
+import { DatabaseOptions, initialiseAuth } from '@exogee/graphweaver-builder';
 import { promptForDatabaseOptions } from '../database';
 
-export const initAuth = async ({ method }: { method: 'password' }) => {
-	const databaseOptions = await promptForDatabaseOptions({});
+interface InitAuthOptions extends Partial<DatabaseOptions> {
+	method: 'password';
+}
+
+export const initAuth = async ({
+	method,
+	source,
+	database,
+	host,
+	port,
+	password,
+	user,
+}: InitAuthOptions) => {
+	if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
+		throw new Error(`Invalid source: ${source}`);
+	}
+
+	const databaseOptions = await promptForDatabaseOptions({
+		source,
+		database,
+		host,
+		port,
+		password,
+		user,
+	});
 
 	const { default: inquirer } = await import('inquirer');
 	const prompt = await inquirer.prompt<any, { tableName: string }>([
