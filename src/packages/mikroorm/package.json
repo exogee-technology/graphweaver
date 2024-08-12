@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.10.5",
+		"@apollo/server": "4.11.0",
 		"@aws-sdk/client-secrets-manager": "3.624.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
@@ -44,7 +44,7 @@
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.23.0",
 		"glob": "10.4.3",
-		"tsx": "4.16.5",
+		"tsx": "4.17.0",
 		"typescript": "5.5.4"
 	},
 	"optionalDependencies": {

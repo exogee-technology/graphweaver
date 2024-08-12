@@ -47,7 +47,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@auth0/auth0-spa-js':
         specifier: 2.1.3
         version: 2.1.3
@@ -104,11 +104,11 @@ importers:
   examples/aws-cognito:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -144,11 +144,11 @@ importers:
   examples/databases:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -211,8 +211,8 @@ importers:
   examples/federation:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -233,8 +233,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       tsx:
-        specifier: 4.16.5
-        version: 4.16.5
+        specifier: 4.17.0
+        version: 4.17.0
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -325,20 +325,20 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
 
   examples/s3-storage:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -396,7 +396,7 @@ importers:
     dependencies:
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -447,14 +447,14 @@ importers:
   examples/xero:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -532,14 +532,14 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
 
   packages/admin-ui:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -582,7 +582,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@5.3.5)
+        version: 4.3.1(vite@5.4.0)
       esbuild:
         specifier: 0.23.0
         version: 0.23.0
@@ -596,17 +596,17 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.3.5)
+        version: 4.2.0(typescript@5.5.4)(vite@5.4.0)
 
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -623,8 +623,8 @@ importers:
         specifier: 9.0.7
         version: 9.0.7(react@18.3.1)
       graphiql:
-        specifier: 3.4.0
-        version: 3.4.0(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.4.1
+        version: 3.4.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -644,8 +644,8 @@ importers:
         specifier: 2.4.1
         version: 2.4.1(csstype@3.1.3)(react-dom@18.3.1)(react@18.3.1)
       react-resizable-panels:
-        specifier: 2.0.22
-        version: 2.0.22(react-dom@18.3.1)(react@18.3.1)
+        specifier: 2.0.23
+        version: 2.0.23(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@types/graphql-deduplicator':
         specifier: 2.0.2
@@ -684,17 +684,17 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.3.5)
+        version: 4.2.0(typescript@5.5.4)(vite@5.4.0)
 
   packages/apollo-client:
     devDependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       esbuild:
         specifier: 0.23.0
         version: 0.23.0
@@ -705,8 +705,8 @@ importers:
   packages/auth:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -787,8 +787,8 @@ importers:
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@simplewebauthn/browser':
         specifier: 10.0.0
         version: 10.0.0
@@ -842,17 +842,17 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.3.5)
+        version: 4.2.0(typescript@5.5.4)(vite@5.4.0)
 
   packages/aws-cognito:
     dependencies:
       '@aws-sdk/client-cognito-identity-provider':
-        specifier: 3.625.0
-        version: 3.625.0
+        specifier: 3.628.0
+        version: 3.628.0
       '@aws-sdk/client-lambda':
         specifier: 3.624.0
         version: 3.624.0
@@ -910,7 +910,7 @@ importers:
         version: 6.15.0
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@5.3.5)
+        version: 4.3.1(vite@5.4.0)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -948,8 +948,8 @@ importers:
         specifier: 14.0.0
         version: 14.0.0
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
@@ -1078,14 +1078,14 @@ importers:
         specifier: 3.3.3
         version: 3.3.3
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
 
   packages/core:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@exogee/graphweaver-scalars':
         specifier: workspace:*
         version: link:../scalars
@@ -1236,8 +1236,8 @@ importers:
         specifier: 29.2.4
         version: 29.2.4(@babel/core@7.25.2)(jest@29.7.0)(typescript@5.5.4)
       tsx:
-        specifier: 4.16.5
-        version: 4.16.5
+        specifier: 4.17.0
+        version: 4.17.0
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1299,8 +1299,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       tsx:
-        specifier: 4.16.5
-        version: 4.16.5
+        specifier: 4.17.0
+        version: 4.17.0
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1308,8 +1308,8 @@ importers:
   packages/mikroorm:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@aws-sdk/client-secrets-manager':
         specifier: 3.624.0
         version: 3.624.0
@@ -1370,8 +1370,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       tsx:
-        specifier: 4.16.5
-        version: 4.16.5
+        specifier: 4.17.0
+        version: 4.17.0
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1459,17 +1459,17 @@ importers:
   packages/server:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@as-integrations/aws-lambda':
         specifier: 3.1.0
-        version: 3.1.0(@apollo/server@4.10.5)
+        version: 3.1.0(@apollo/server@4.11.0)
       '@as-integrations/fastify':
         specifier: 2.1.1
-        version: 2.1.1(@apollo/server@4.10.5)(fastify@4.28.1)
+        version: 2.1.1(@apollo/server@4.11.0)(fastify@4.28.1)
       '@escape.tech/graphql-armor':
         specifier: 3.0.1
-        version: 3.0.1(@apollo/server@4.10.5)(@escape.tech/graphql-armor-types@0.6.0)
+        version: 3.0.1(@apollo/server@4.11.0)(@escape.tech/graphql-armor-types@0.6.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1514,11 +1514,11 @@ importers:
   packages/storage-provider:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.626.0
-        version: 3.626.0
+        specifier: 3.627.0
+        version: 3.627.0
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.626.0
-        version: 3.626.0
+        specifier: 3.627.0
+        version: 3.627.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1558,14 +1558,14 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.3.5
-        version: 5.3.5(@types/node@22.1.0)
+        specifier: 5.4.0
+        version: 5.4.0(@types/node@22.1.0)
 
   packages/xero:
     dependencies:
       '@apollo/server':
-        specifier: 4.10.5
-        version: 4.10.5(graphql@16.9.0)
+        specifier: 4.11.0
+        version: 4.11.0(graphql@16.9.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1631,8 +1631,8 @@ packages:
       graphql: 16.9.0
     dev: false
 
-  /@apollo/client@3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-bocd9vQc9PSq4MG6129HKF8ujUirVod98he9OEWpyOs5CXnUC81zNRaUshA4wPSflR6mnx0yRuRankp1V8A+og==}
+  /@apollo/client@3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-bmgYKkULpym8wt8aXlAZ1heaYo0skLJ5ru0qJ+JCRoo03Pe+yIDbBCnqlDw6Mjj76hFkDw3HwFMgZC2Hxp30Mg==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -1700,8 +1700,8 @@ packages:
       graphql: 16.9.0
     dev: false
 
-  /@apollo/server@4.10.5(graphql@16.9.0):
-    resolution: {integrity: sha512-I+Oi1CnphXExSAAsZbclgRDN4k4CEMxyKRzYg3bir5N8OmydEhzXDlIGAOETP/TKblxR7HPXGvwn2cJKzbl46w==}
+  /@apollo/server@4.11.0(graphql@16.9.0):
+    resolution: {integrity: sha512-SWDvbbs0wl2zYhKG6aGLxwTJ72xpqp0awb2lotNpfezd9VcAvzaUizzKQqocephin2uMoaA8MguoyBmgtPzNWw==}
     engines: {node: '>=14.16.0'}
     peerDependencies:
       graphql: ^16.6.0
@@ -1877,24 +1877,24 @@ packages:
       - encoding
     dev: false
 
-  /@as-integrations/aws-lambda@3.1.0(@apollo/server@4.10.5):
+  /@as-integrations/aws-lambda@3.1.0(@apollo/server@4.11.0):
     resolution: {integrity: sha512-V7H9ICXgt5KDKfEjYSRB59lEVfQqi7oSIZEeBGzPrmfhSPIHyFCNJyHi1hXdJmRb6GHpCNmtffmqRgsB0i9k3w==}
     engines: {node: '>=16.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
     dependencies:
-      '@apollo/server': 4.10.5(graphql@16.9.0)
+      '@apollo/server': 4.11.0(graphql@16.9.0)
       '@types/aws-lambda': 8.10.143
     dev: false
 
-  /@as-integrations/fastify@2.1.1(@apollo/server@4.10.5)(fastify@4.28.1):
+  /@as-integrations/fastify@2.1.1(@apollo/server@4.11.0)(fastify@4.28.1):
     resolution: {integrity: sha512-iupYSQyRrlBAdsDcCYzuKjJlJAKiQpRDLd33A6yAF3Ip/rGrSDDDrxfJWp6FqyVlivSL+MQkGIphmUI/ckfZkg==}
     engines: {node: '>=16'}
     peerDependencies:
       '@apollo/server': ^4.0.0
       fastify: ^4.4.0
     dependencies:
-      '@apollo/server': 4.10.5(graphql@16.9.0)
+      '@apollo/server': 4.11.0(graphql@16.9.0)
       fastify: 4.28.1
       fastify-plugin: 4.5.1
     dev: false
@@ -1977,8 +1977,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/client-cognito-identity-provider@3.625.0:
-    resolution: {integrity: sha512-R633JVXkbLyySVQBKX/D2NfyayGPRbW/T4ZkZYKX11NurQTeGfCAl0jxE16F+7iW4IKkb7U6FgkjF6lYlin7og==}
+  /@aws-sdk/client-cognito-identity-provider@3.628.0:
+    resolution: {integrity: sha512-l3zty5vvE38zswQf/WQBA4D6F8lYW9v7eGCeAkhjjxW21SqpcylKWzh8ar5Ybgn1OoH81EAnI9NVGnvrRitoIw==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
@@ -2080,8 +2080,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-s3@3.626.0:
-    resolution: {integrity: sha512-+ul1NEdiAuq5L0lhxWb+FcQuw+1RKU4lNugdX/EF3Lr6Bpuo384K/4r9cRwOo/6PqRYMIengBMc9Q2HVAu8ZWg==}
+  /@aws-sdk/client-s3@3.627.0:
+    resolution: {integrity: sha512-XTbtRLPVfq2lHo0SUP6HJb6HgBsKsJR54bhhVTwj5SZ4G26KOmx2iFOz9SgHie5apU7vWIhijb48LIhbLArgGg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
@@ -2592,8 +2592,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.626.0:
-    resolution: {integrity: sha512-vG1HdYPymEMzAWTSfLVYTTdz25ZkH6WU26BCU5Wz3xrYZgCdabNZgPNyQg0c0ZVQDBWFD4LZ5ITP/3cWcm5o1A==}
+  /@aws-sdk/s3-request-presigner@3.627.0:
+    resolution: {integrity: sha512-UA4EWIQITlBVFFMNC4AP5YUWWJ2Bmdzg7238Pm6W8xqpKOgHDPdbEKjhiEsSt1SG6B4Ogk4PnP0oSANtn3hjPQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.626.0
@@ -3424,7 +3424,7 @@ packages:
     resolution: {integrity: sha512-rtjk5ifyMzOna1c7PBu7J1VCt0PvA5wy3o8eMVnxMKb7z8KA7JFecvD04dSn14vj/bBaAbqRsGed5OjtofEnLA==}
     dependencies:
       '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.30.0
+      '@codemirror/view': 6.31.0
       '@lezer/common': 1.2.1
       '@lezer/highlight': 1.2.0
       '@lezer/lr': 1.4.2
@@ -3435,8 +3435,8 @@ packages:
     resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
     dev: false
 
-  /@codemirror/view@6.30.0:
-    resolution: {integrity: sha512-96Nmn8OeLh6aONQprIeYk8hGVnEuYpWuxKSkdsODOx9hWPxyuyZGvmvxV/JmLsp+CubMO1PsLaN5TNNgrl0UrQ==}
+  /@codemirror/view@6.31.0:
+    resolution: {integrity: sha512-pEqRyzcodpvIuWOhGSo0AIs3WKnewDl1EffAnaSZjqGtxk8HisBLY3VltYKA6Lr94VBH3B6O7G8G1tsQ/Wyi7w==}
     dependencies:
       '@codemirror/state': 6.4.1
       style-mod: 4.1.2
@@ -3930,7 +3930,7 @@ packages:
     dependencies:
       graphql: 16.9.0
 
-  /@escape.tech/graphql-armor@3.0.1(@apollo/server@4.10.5)(@escape.tech/graphql-armor-types@0.6.0):
+  /@escape.tech/graphql-armor@3.0.1(@apollo/server@4.11.0)(@escape.tech/graphql-armor-types@0.6.0):
     resolution: {integrity: sha512-NdlpdFojylmze1uXSzQ1gcOXy3mSAMIoftNe1wh5tBSyyeHxpiGb0AUpL7VlfOqe1UXilCX+3xr1vAHburrNDA==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
@@ -3945,7 +3945,7 @@ packages:
       '@escape.tech/graphql-armor-types':
         optional: true
     dependencies:
-      '@apollo/server': 4.10.5(graphql@16.9.0)
+      '@apollo/server': 4.11.0(graphql@16.9.0)
       '@escape.tech/graphql-armor-block-field-suggestions': 2.2.0
       '@escape.tech/graphql-armor-cost-limit': 2.2.0
       '@escape.tech/graphql-armor-max-aliases': 2.5.0
@@ -4373,8 +4373,8 @@ packages:
     dev: false
     optional: true
 
-  /@graphiql/react@0.23.0(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-iRcJ380k+1Yusp3KZ8ccFY65IV2NWSAmlbp9Ec5qFAzyAWTl57gCi1jF9nS0LhPAiHE4yNPCnya0CQu7HgJqfg==}
+  /@graphiql/react@0.23.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-s0xeyDyaRcL5lkwloBob9vM+j5umfr+zxUvydRl3ZpIezmJiq5UXe5jRb2Rt+azHyNJ7yrcnqJgyW0MbyP9Mdw==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17 || ^18
@@ -8790,7 +8790,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.3.1(vite@5.3.5):
+  /@vitejs/plugin-react@4.3.1(vite@5.4.0):
     resolution: {integrity: sha512-m/V2syj5CuVnaxcUJOQRel/Wr31FFXRFlnOoq1TVtkCxsY5veGMTEmpWHndrhB2U8ScHtCQB1e+4hWYExQc6Lg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -8801,7 +8801,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.3.5(@types/node@22.1.0)
+      vite: 5.4.0(@types/node@22.1.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -12143,18 +12143,15 @@ packages:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
     dev: true
 
-  /graphiql@3.4.0(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-doD57sfakoo8jjTPd1wbx3QWv1shnZ+XSnk31TkV2njCKCmmdqnTQlwcpbCfA34BiGCvsqZa62Jc8denCW+qWA==}
+  /graphiql@3.4.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-jSx8O6OWa2wSsEt1OBT6aQRT3NQLzjQuVCjNNijZa81Y3h3DJJ9inDHk/UFNhzL8xUwiDxV1zYXNopCCM6OhNw==}
     peerDependencies:
       graphql: ^15.5.0 || ^16.0.0
       react: ^16.8.0 || ^17 || ^18
       react-dom: ^16.8.0 || ^17 || ^18
     dependencies:
-      '@graphiql/react': 0.23.0(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
-      '@graphiql/toolkit': 0.9.2(graphql@16.9.0)
+      '@graphiql/react': 0.23.1(@codemirror/language@6.0.0)(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       graphql: 16.9.0
-      graphql-language-service: 5.2.2(graphql@16.9.0)
-      markdown-it: 14.1.0
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     transitivePeerDependencies:
@@ -15660,8 +15657,8 @@ packages:
       use-sidecar: 1.1.2(@types/react@18.3.3)(react@18.3.1)
     dev: false
 
-  /react-resizable-panels@2.0.22(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-G8x8o7wjQxCG+iF4x4ngKVBpe0CY+DAZ/SaiDoqBEt0yuKJe9OE/VVYMBMMugQ3GyQ65NnSJt23tujlaZZe75A==}
+  /react-resizable-panels@2.0.23(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-8ZKTwTU11t/FYwiwhMdtZYYyFxic5U5ysRu2YwfkAgDbUJXFvnWSJqhnzkSlW+mnDoNAzDCrJhdOSXBPA76wug==}
     peerDependencies:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0
@@ -17040,6 +17037,18 @@ packages:
       get-tsconfig: 4.7.6
     optionalDependencies:
       fsevents: 2.3.3
+    dev: false
+
+  /tsx@4.17.0:
+    resolution: {integrity: sha512-eN4mnDA5UMKDt4YZixo9tBioibaMBpoxBkD+rIPAjVmYERSG0/dWEY1CEFuV89CgASlKL499q8AhmkMnnjtOJg==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+    dependencies:
+      esbuild: 0.23.0
+      get-tsconfig: 4.7.6
+    optionalDependencies:
+      fsevents: 2.3.3
+    dev: true
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
@@ -17383,19 +17392,20 @@ packages:
       debug: 4.3.6
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@22.1.0)
+      vite: 5.4.0(@types/node@22.1.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
       - lightningcss
       - sass
+      - sass-embedded
       - stylus
       - sugarss
       - supports-color
       - terser
     dev: true
 
-  /vite-plugin-svgr@4.2.0(typescript@5.5.4)(vite@5.3.5):
+  /vite-plugin-svgr@4.2.0(typescript@5.5.4)(vite@5.4.0):
     resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4 || 5
@@ -17403,15 +17413,15 @@ packages:
       '@rollup/pluginutils': 5.1.0
       '@svgr/core': 8.1.0(typescript@5.5.4)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
-      vite: 5.3.5(@types/node@22.1.0)
+      vite: 5.4.0(@types/node@22.1.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
     dev: true
 
-  /vite@5.3.5(@types/node@22.1.0):
-    resolution: {integrity: sha512-MdjglKR6AQXQb9JGiS7Rc2wC6uMjcm7Go/NHNO63EwiJXfuk9PgqiP/n5IDJCziMkfw9n4Ubp7lttNwz+8ZVKA==}
+  /vite@5.4.0(@types/node@22.1.0):
+    resolution: {integrity: sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -17419,6 +17429,7 @@ packages:
       less: '*'
       lightningcss: ^1.21.0
       sass: '*'
+      sass-embedded: '*'
       stylus: '*'
       sugarss: '*'
       terser: ^5.4.0
@@ -17430,6 +17441,8 @@ packages:
       lightningcss:
         optional: true
       sass:
+        optional: true
+      sass-embedded:
         optional: true
       stylus:
         optional: true
@@ -17487,13 +17500,14 @@ packages:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@22.1.0)
+      vite: 5.4.0(@types/node@22.1.0)
       vite-node: 2.0.5(@types/node@22.1.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
       - less
       - lightningcss
       - sass
+      - sass-embedded
       - stylus
       - sugarss
       - supports-color

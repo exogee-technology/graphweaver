@@ -22,8 +22,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.3",
-		"@apollo/server": "4.10.5",
+		"@apollo/client": "3.11.4",
+		"@apollo/server": "4.11.0",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
@@ -52,6 +52,6 @@
 		"esbuild": "0.23.0",
 		"prettier": "3.3.3",
 		"typescript": "5.5.4",
-		"vite": "5.3.5"
+		"vite": "5.4.0"
 	}
 }
