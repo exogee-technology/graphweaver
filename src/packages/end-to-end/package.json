@@ -6,6 +6,7 @@
 	"scripts": {
 		"build:types": "tsc --noEmit",
 		"import-auth": "pnpm unpack && tsx ./scripts/import-auth.ts",
+		"import-auth0": "pnpm unpack && tsx ./scripts/import-auth0.ts",
 		"import-storage-provider": "pnpm unpack && tsx ./scripts/import-storage-provider.ts",
 		"import-database-sqlite": "pnpm unpack && tsx ./scripts/import-sqlite.ts",
 		"import-database-postgres": "pnpm unpack && . ./scripts/import-postgres.sh",
@@ -60,7 +61,7 @@
 		"pg": "8.12.0",
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.2.4",
-		"tsx": "4.16.5",
+		"tsx": "4.17.0",
 		"typescript": "5.5.4"
 	},
 	"keywords": [
