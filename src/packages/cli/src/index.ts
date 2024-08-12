@@ -4,13 +4,13 @@ import semver from 'semver';
 import {
 	StartOptions,
 	analyseBundle,
-	initialiseAuth,
 	buildBackend,
 	buildFrontend,
 	startBackend,
 	startFrontend,
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
+import { initAuth } from './auth';
 import { importDataSource } from './import';
 import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
@@ -320,7 +320,7 @@ yargs
 				describe: 'The primary authentication method to use.',
 			}),
 		handler: async () => {
-			await initialiseAuth({ method: 'password' });
+			await initAuth({ method: 'password' });
 		},
 	})
 	.version(version)

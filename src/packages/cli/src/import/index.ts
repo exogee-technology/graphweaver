@@ -2,7 +2,9 @@ import { introspection } from '@exogee/graphweaver-mikroorm';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import ora from 'ora-classic';
 import path from 'path';
+
 import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
+import { promptForDatabaseOptions } from '../database';
 
 const createDirectories = (dirPath: string) => {
 	const directories = dirPath.split(path.sep);
@@ -69,83 +71,28 @@ export const importDataSource = async (
 	user?: string,
 	overwriteAllFiles?: boolean
 ) => {
-	const prompts = [];
-
-	if (source === 'sqlite') {
-		if (!database) {
-			prompts.push({
-				type: 'input',
-				name: 'dbName',
-				message: `What is the database name?`,
-			});
-		}
-	}
-
-	if (source === 'postgresql' || source === 'mysql') {
-		if (!database) {
-			prompts.push({
-				type: 'input',
-				name: 'dbName',
-				message: `What is the database name?`,
-			});
-		}
-		if (!host) {
-			prompts.push({
-				type: 'input',
-				name: 'host',
-				default: '127.0.0.1',
-				message: `What is the database server's hostname?`,
-			});
-		}
-		if (!port) {
-			prompts.push({
-				type: 'input',
-				name: 'port',
-				default: source === 'postgresql' ? 5432 : 3306,
-				message: `What is the port?`,
-			});
-		}
-		if (!user) {
-			prompts.push({
-				type: 'input',
-				name: 'user',
-				default: source === 'postgresql' ? 'postgres' : 'root',
-				message: `What is the username to access the database server?`,
-			});
-		}
-		if (!password) {
-			prompts.push({
-				type: 'password',
-				mask: '*',
-				name: 'password',
-				message: `What is the password for this user?`,
-			});
-		}
-	}
-	const { default: inquirer } = await import('inquirer');
-
-	if (prompts.length > 0) {
-		const answers = await inquirer.prompt(prompts);
-		database = answers.dbName ?? database;
-		host = answers.host ?? host;
-		port = answers.port ?? port;
-		password = answers.password ?? password;
-		user = answers.user ?? user;
-	}
+	const databaseOptions = await promptForDatabaseOptions({
+		source,
+		database,
+		host,
+		port,
+		password,
+		user,
+	});
 
 	// check we have all the dependencies needed to run the import
-	checkForMissingDependencies(source);
+	await checkForMissingDependencies(source);
 
 	const spinner = ora('Introspecting...').start();
 
 	try {
 		const files = await introspection(source, {
 			mikroOrmConfig: {
-				host,
-				dbName: database,
-				user,
-				password,
-				port,
+				host: databaseOptions.host,
+				dbName: databaseOptions.database,
+				user: databaseOptions.user,
+				password: databaseOptions.password,
+				port: databaseOptions.port,
 			},
 		});
 
@@ -158,7 +105,8 @@ export const importDataSource = async (
 			const fileFullPath = path.join(process.cwd(), './src/', file.path, file.name);
 			let overwrite = true;
 			if (!overwriteAllFiles && file.needOverwriteWarning && existsSync(fileFullPath)) {
-				const prompt = await inquirer.prompt<{ overwrite: boolean }>([
+				const { default: inquirer } = await import('inquirer');
+				const prompt = await inquirer.prompt<any, { overwrite: boolean }>([
 					{
 						type: 'confirm',
 						name: 'overwrite',
