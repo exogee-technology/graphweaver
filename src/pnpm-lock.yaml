@@ -331,8 +331,8 @@ importers:
   examples/s3-storage:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@apollo/server':
         specifier: 4.10.5
         version: 4.10.5(graphql@16.9.0)
@@ -447,8 +447,8 @@ importers:
   examples/xero:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@apollo/server':
         specifier: 4.10.5
         version: 4.10.5(graphql@16.9.0)
@@ -538,8 +538,8 @@ importers:
   packages/admin-ui:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -605,8 +605,8 @@ importers:
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -693,8 +693,8 @@ importers:
   packages/apollo-client:
     devDependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       esbuild:
         specifier: 0.23.0
         version: 0.23.0
@@ -787,8 +787,8 @@ importers:
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.3
-        version: 3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.4
+        version: 3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@simplewebauthn/browser':
         specifier: 10.0.0
         version: 10.0.0
@@ -1619,8 +1619,8 @@ packages:
       graphql: 16.9.0
     dev: false
 
-  /@apollo/client@3.11.3(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-bocd9vQc9PSq4MG6129HKF8ujUirVod98he9OEWpyOs5CXnUC81zNRaUshA4wPSflR6mnx0yRuRankp1V8A+og==}
+  /@apollo/client@3.11.4(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-bmgYKkULpym8wt8aXlAZ1heaYo0skLJ5ru0qJ+JCRoo03Pe+yIDbBCnqlDw6Mjj76hFkDw3HwFMgZC2Hxp30Mg==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
