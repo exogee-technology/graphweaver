@@ -4,6 +4,7 @@ import semver from 'semver';
 import {
 	StartOptions,
 	analyseBundle,
+	initialiseAuth,
 	buildBackend,
 	buildFrontend,
 	startBackend,
@@ -306,6 +307,20 @@ yargs
 					console.log('Waiting for changes... \n\n');
 				});
 			}
+		},
+	})
+	.command({
+		command: ['init-auth [method]', 'auth [method]'],
+		describe: 'Initialise Graphweaver with a primary authentication method.',
+		builder: (yargs) =>
+			yargs.positional('method', {
+				type: 'string',
+				choices: ['password'],
+				default: 'password',
+				describe: 'The primary authentication method to use.',
+			}),
+		handler: async () => {
+			await initialiseAuth({ method: 'password' });
 		},
 	})
 	.version(version)

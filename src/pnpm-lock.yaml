@@ -881,6 +881,9 @@ importers:
 
   packages/builder:
     dependencies:
+      '@exogee/graphweaver-auth':
+        specifier: workspace:*
+        version: link:../auth
       '@exogee/graphweaver-config':
         specifier: workspace:*
         version: link:../config
@@ -929,9 +932,15 @@ importers:
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.9.0)
+      hash-wasm:
+        specifier: 4.11.0
+        version: 4.11.0
       log-node:
         specifier: 8.0.3
         version: 8.0.3(log@6.3.1)
+      omgopass:
+        specifier: 3.2.1
+        version: 3.2.1
       rimraf:
         specifier: 5.0.8
         version: 5.0.8
@@ -951,12 +960,18 @@ importers:
       '@types/node':
         specifier: 22.1.0
         version: 22.1.0
+      '@types/omgopass':
+        specifier: 3.2.3
+        version: 3.2.3
       prettier:
         specifier: 3.3.3
         version: 3.3.3
       typescript:
         specifier: 5.5.4
         version: 5.5.4
+      vitest:
+        specifier: 2.0.5
+        version: 2.0.5(@types/node@22.1.0)
 
   packages/cdk:
     dependencies:
@@ -8454,6 +8469,10 @@ packages:
     dependencies:
       undici-types: 6.13.0
 
+  /@types/omgopass@3.2.3:
+    resolution: {integrity: sha512-tBihWcBapTQb2tLgtAJ3kepzeP/Qg9lvem2VSsYbkttKMINRBfUWFUDGqP9QXSukIqjK4qpDnNaOiwKHNQpQfA==}
+    dev: true
+
   /@types/otp-generator@4.0.2:
     resolution: {integrity: sha512-9+qqWzuFb332hXPbLgjUyOXlbcaTQkmkmqQjTduvNuOmPV5fW+iLv70JsVEhdUy0DWi4kY34++HDCaWl6N0AYg==}
     dev: true
@@ -14686,6 +14705,10 @@ packages:
   /oidc-token-hash@5.0.3:
     resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}
     engines: {node: ^10.13.0 || >=12.0.0}
+    dev: false
+
+  /omgopass@3.2.1:
+    resolution: {integrity: sha512-Q0QqwwL3ag1Pyjhx6vfieaz73pHNLa3v59qhRcTCUINmJOwdcLu0kNKncBSF2ylnzrqmZw9VRgOEdAwvCSxffA==}
     dev: false
 
   /on-exit-leak-free@2.1.2:

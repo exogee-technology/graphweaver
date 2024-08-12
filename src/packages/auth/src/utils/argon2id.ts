@@ -15,15 +15,19 @@ export const verifyPassword = async (password: string, hash: string): Promise<bo
 		password,
 	});
 
+export const argon2IdOptions = {
+	salt: generateSalt(),
+	parallelism: 4,
+	iterations: 3,
+	memorySize: 65536,
+	hashLength: 32,
+	outputType: 'encoded',
+};
+
 // The defaults below are taken from the argon2 package
 // https://github.com/ranisalt/node-argon2/blob/master/argon2.cjs#L33
 export const hashPassword = async (password: string): Promise<string> =>
 	argon2id({
 		password,
-		salt: generateSalt(),
-		parallelism: 4,
-		iterations: 3,
-		memorySize: 65536,
-		hashLength: 32,
-		outputType: 'encoded',
+		...argon2IdOptions,
 	});
