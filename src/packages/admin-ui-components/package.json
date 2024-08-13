@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -30,7 +30,7 @@
 		"@graphiql/toolkit": "0.9.2",
 		"@tanstack/react-table": "8.20.1",
 		"clsx": "2.1.1",
-		"downshift": "9.0.7",
+		"downshift": "9.0.8",
 		"graphiql": "3.4.1",
 		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6",

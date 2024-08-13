@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-load-testing",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"private": true,
 	"description": "Graphweaver Load Testing Suite",
 	"license": "Apache-2.0",
@@ -20,7 +20,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@types/node": "22.1.0",
+		"@types/node": "22.2.0",
 		"k6": "0.0.0"
 	},
 	"devDependencies": {

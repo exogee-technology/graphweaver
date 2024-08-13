@@ -1,6 +1,7 @@
+import { JwtPayload } from './types';
 import { UserProfile } from './user-profile';
 
-type AddUserToContext<R> = (userId: string) => Promise<UserProfile<R>>;
+type AddUserToContext<R> = (userId: string, token: JwtPayload) => Promise<UserProfile<R>>;
 
 class AuthContextManager<R> {
 	private _addUserToContext?: AddUserToContext<R>;
