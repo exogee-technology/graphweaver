@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "2.2.1",
+	"version": "2.2.2",
 	"description": "Common logging output for Exogee projects",
 	"license": "Apache-2.0",
 	"directories": {
