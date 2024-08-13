@@ -37,4 +37,7 @@ export const initAuth = async ({
 	]);
 
 	await initialiseAuth({ method, tableName: prompt.tableName, ...databaseOptions });
+
+	// Force exit because Mikro is keeping the socket open to the db
+	process.exit();
 };

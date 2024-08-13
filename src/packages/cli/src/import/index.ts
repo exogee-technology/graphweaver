@@ -1,4 +1,4 @@
-import { introspection } from '@exogee/graphweaver-mikroorm';
+import { startIntrospection } from '@exogee/graphweaver-builder';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import ora from 'ora-classic';
 import path from 'path';
@@ -86,16 +86,7 @@ export const importDataSource = async (
 	const spinner = ora('Introspecting...').start();
 
 	try {
-		const files = await introspection(source, {
-			mikroOrmConfig: {
-				host: databaseOptions.host,
-				dbName: databaseOptions.database,
-				user: databaseOptions.user,
-				password: databaseOptions.password,
-				port: databaseOptions.port,
-			},
-		});
-
+		const files = await startIntrospection(databaseOptions);
 		spinner.stop();
 
 		let fileCount = 0;
