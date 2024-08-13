@@ -8,34 +8,6 @@ import { AuthToken } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthenticationMethod, JwtPayload } from '../../types';
 
-const expiresIn = process.env.AUTH_JWT_EXPIRES_IN ?? '8h';
-const mfaExpiresIn = process.env.AUTH_JWT_CHALLENGE_EXPIRES_IN ?? '30m';
-// Decode the two environment variables above from base64 and save as vars
-const publicKey = process.env.AUTH_PUBLIC_KEY_PEM_BASE64
-	? Buffer.from(process.env.AUTH_PUBLIC_KEY_PEM_BASE64, 'base64').toString('ascii')
-	: undefined;
-
-const privateKey = process.env.AUTH_PRIVATE_KEY_PEM_BASE64
-	? Buffer.from(process.env.AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
-	: undefined;
-
-const jwksUri = process.env.AUTH_JWKS_URI ? process.env.AUTH_JWKS_URI : undefined;
-
-// There should be only one method to verify the token therefore we throw and error if both public key and JWKS URI are provided
-if (publicKey && jwksUri) {
-	throw new Error(`
-    Authentication configuration error:
-
-    Both a public key and a JWKS URI were detected. 
-    Please use only one method for token verification to ensure security.
-
-    If you intend to use an external JWKS URI, remove the 'PUBLIC_KEY' environment variable.
-    If you intend to use a local public key, remove the 'JWKS_URI' environment variable.
-
-    For more information, refer to our authentication configuration documentation: https://graphweaver.com/docs/authentication
-  `);
-}
-
 /**
  * Removes any prefix from the given authorization header.
  * The prefix is assumed to be separated from the actual token by whitespace.
@@ -56,12 +28,46 @@ const TOKEN_PREFIX = 'Bearer';
 const algorithm = (process.env.AUTH_JWT_ALGORITHM ?? 'ES256') as Algorithm;
 
 export class AuthTokenProvider implements BaseAuthTokenProvider {
-	constructor(private authMethod?: AuthenticationMethod) {}
+	private readonly expiresIn: string;
+	private readonly mfaExpiresIn: string;
+	private readonly publicKey?: string;
+	private readonly privateKey?: string;
+	private readonly jwksUri?: string;
+
+	constructor(private authMethod?: AuthenticationMethod) {
+		this.expiresIn = process.env.AUTH_JWT_EXPIRES_IN ?? '8h';
+		this.mfaExpiresIn = process.env.AUTH_JWT_CHALLENGE_EXPIRES_IN ?? '30m';
+		// Decode the two environment variables above from base64 and save as vars
+		this.publicKey = process.env.AUTH_PUBLIC_KEY_PEM_BASE64
+			? Buffer.from(process.env.AUTH_PUBLIC_KEY_PEM_BASE64, 'base64').toString('ascii')
+			: undefined;
+
+		this.privateKey = process.env.AUTH_PRIVATE_KEY_PEM_BASE64
+			? Buffer.from(process.env.AUTH_PRIVATE_KEY_PEM_BASE64, 'base64').toString('ascii')
+			: undefined;
+
+		this.jwksUri = process.env.AUTH_JWKS_URI ? process.env.AUTH_JWKS_URI : undefined;
+
+		// There should be only one method to verify the token therefore we throw and error if both public key and JWKS URI are provided
+		if (this.publicKey && this.jwksUri) {
+			throw new Error(`
+    Authentication configuration error:
+
+    Both a public key and a JWKS URI were detected. 
+    Please use only one method for token verification to ensure security.
+
+    If you intend to use an external JWKS URI, remove the 'PUBLIC_KEY' environment variable.
+    If you intend to use a local public key, remove the 'JWKS_URI' environment variable.
+
+    For more information, refer to our authentication configuration documentation: https://graphweaver.com/docs/authentication
+  `);
+		}
+	}
 
 	getSigningKey(header: JwtHeader, callback: SigningKeyCallback) {
-		if (publicKey) return callback(null, publicKey);
-		if (jwksUri) {
-			const client = jwksClient({ jwksUri });
+		if (this.publicKey) return callback(null, this.publicKey);
+		if (this.jwksUri) {
+			const client = jwksClient({ jwksUri: this.jwksUri });
 			client.getSigningKey(header?.kid, function (err, key) {
 				const signingKey = key?.getPublicKey();
 				callback(err, signingKey);
@@ -72,13 +78,13 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async generateToken(user: UserProfile<unknown>) {
-		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
+		if (!this.privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		const payload = { sub: user.id, amr: [AuthenticationMethod.PASSWORD] };
 
 		try {
-			const authToken = jwt.sign(payload, privateKey, {
+			const authToken = jwt.sign(payload, this.privateKey, {
 				algorithm,
-				expiresIn,
+				expiresIn: this.expiresIn,
 			});
 			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 			return token;
@@ -108,10 +114,10 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 	}
 
 	async stepUpToken(existingTokenPayload: JwtPayload) {
-		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
+		if (!this.privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		if (!this.authMethod) throw new Error('Please provide an authMethod in the constructor.');
 
-		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
+		const expires = Math.floor((Date.now() + ms(this.mfaExpiresIn)) / 1000);
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), this.authMethod]);
 
@@ -127,7 +133,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 						},
 					},
 				},
-				privateKey,
+				this.privateKey,
 				{
 					algorithm,
 				}

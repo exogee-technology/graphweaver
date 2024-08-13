@@ -209,60 +209,6 @@ export type AlbumsPaginationInput = {
   orderBy?: InputMaybe<AlbumsOrderByInput>;
 };
 
-export type ApiKey = {
-  __typename?: 'ApiKey';
-  id: Scalars['ID']['output'];
-  key: Scalars['String']['output'];
-  revoked?: Maybe<Scalars['Boolean']['output']>;
-  roles?: Maybe<Array<Scalars['String']['output']>>;
-};
-
-export type ApiKeyInsertInput = {
-  key: Scalars['String']['input'];
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Array<Scalars['String']['input']>>;
-  secret: Scalars['String']['input'];
-};
-
-export type ApiKeyUpdateInput = {
-  id: Scalars['ID']['input'];
-  key?: InputMaybe<Scalars['String']['input']>;
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  roles?: InputMaybe<Array<Scalars['String']['input']>>;
-  secret?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type ApiKeysListFilter = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  key?: InputMaybe<Scalars['String']['input']>;
-  key_gt?: InputMaybe<Scalars['String']['input']>;
-  key_gte?: InputMaybe<Scalars['String']['input']>;
-  key_ilike?: InputMaybe<Scalars['String']['input']>;
-  key_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_like?: InputMaybe<Scalars['String']['input']>;
-  key_lt?: InputMaybe<Scalars['String']['input']>;
-  key_lte?: InputMaybe<Scalars['String']['input']>;
-  key_ne?: InputMaybe<Scalars['String']['input']>;
-  key_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  key_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  key_null?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked_in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
-  revoked_ne?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
-  revoked_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  revoked_null?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type Artist = {
   __typename?: 'Artist';
   albums: Array<Album>;
@@ -337,50 +283,6 @@ export type ArtistsPaginationInput = {
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<ArtistsOrderByInput>;
-};
-
-export type Credential = {
-  __typename?: 'Credential';
-  id: Scalars['ID']['output'];
-  username: Scalars['String']['output'];
-};
-
-export type CredentialInsertInput = {
-  confirm: Scalars['String']['input'];
-  password: Scalars['String']['input'];
-  username: Scalars['String']['input'];
-};
-
-export type CredentialUpdateInput = {
-  confirm?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['String']['input'];
-  password?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CredentialsListFilter = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
-  username_gt?: InputMaybe<Scalars['String']['input']>;
-  username_gte?: InputMaybe<Scalars['String']['input']>;
-  username_ilike?: InputMaybe<Scalars['String']['input']>;
-  username_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_like?: InputMaybe<Scalars['String']['input']>;
-  username_lt?: InputMaybe<Scalars['String']['input']>;
-  username_lte?: InputMaybe<Scalars['String']['input']>;
-  username_ne?: InputMaybe<Scalars['String']['input']>;
-  username_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  username_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  username_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type Customer = {
@@ -1898,24 +1800,6 @@ export type MutationUpdateTracksArgs = {
   input: Array<TrackUpdateInput>;
 };
 
-export type PasskeyAuthenticationResponse = {
-  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
-  clientExtensionResults: Scalars['JSON']['input'];
-  id: Scalars['ID']['input'];
-  rawId: Scalars['String']['input'];
-  response: Scalars['JSON']['input'];
-  type: Scalars['String']['input'];
-};
-
-export type PasskeyRegistrationResponse = {
-  authenticatorAttachment?: InputMaybe<Scalars['String']['input']>;
-  clientExtensionResults: Scalars['JSON']['input'];
-  id: Scalars['ID']['input'];
-  rawId: Scalars['String']['input'];
-  response: Scalars['JSON']['input'];
-  type: Scalars['String']['input'];
-};
-
 export type Playlist = {
   __typename?: 'Playlist';
   name?: Maybe<Scalars['String']['output']>;
@@ -2266,11 +2150,6 @@ export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
-
-export type Token = {
-  __typename?: 'Token';
-  authToken: Scalars['String']['output'];
-};
 
 export type TotalInvoicesByCustomer = {
   __typename?: 'TotalInvoicesByCustomer';

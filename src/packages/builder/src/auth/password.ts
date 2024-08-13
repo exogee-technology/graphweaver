@@ -1,4 +1,3 @@
-import { hashPassword } from '@exogee/graphweaver-auth';
 import { ConnectionManager, DatabaseType, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 import generatePassword from 'omgopass';
 
@@ -48,7 +47,7 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 		);
 
 	const pwd = generatePassword();
-	const hash = await hashPassword(pwd);
+	const hash = pwd;
 	const pwdString = `****** Admin Password: ${pwd} ******`;
 
 	const knex = database.em.getConnection().getKnex();
