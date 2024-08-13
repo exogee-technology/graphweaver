@@ -67,7 +67,7 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 
 	const pwd = generatePassword();
 	const hash = argon2id({
-		pwd,
+		password: pwd,
 		...argon2IdOptions,
 	});
 	const pwdString = `****** Admin Password: ${pwd} ******`;
