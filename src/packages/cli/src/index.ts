@@ -20,6 +20,7 @@ import * as path from 'path';
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
 yargs
+	.scriptName('graphweaver')
 	.env('GRAPHWEAVER')
 	.check(() => {
 		if (semver.lt(process.version, MINIMUM_NODE_SUPPORTED)) {
