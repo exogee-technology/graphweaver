@@ -32,6 +32,7 @@
 		"esbuild": "0.23.0",
 		"esbuild-css-modules-plugin": "3.1.2",
 		"glob": "10.4.3",
+		"hash-wasm": "4.11.0",
 		"graphql": "16.9.0",
 		"graphql-tag": "2.12.6",
 		"log-node": "8.0.3",

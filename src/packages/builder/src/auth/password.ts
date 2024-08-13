@@ -1,7 +1,26 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore This file is the only one we need for the bundle
+import { argon2id } from 'hash-wasm/dist/argon2.umd.min.js';
+import crypto from 'crypto';
 import { ConnectionManager, DatabaseType, ConnectionOptions } from '@exogee/graphweaver-mikroorm';
 import generatePassword from 'omgopass';
 
 import { DatabaseOptions } from './index';
+
+const generateSalt = (): Uint8Array => {
+	const salt = new Uint8Array(16);
+	// Fill the salt array with cryptographically secure random numbers.
+	return crypto.getRandomValues(salt);
+};
+
+const argon2IdOptions = {
+	salt: generateSalt(),
+	parallelism: 4,
+	iterations: 3,
+	memorySize: 65536,
+	hashLength: 32,
+	outputType: 'encoded',
+};
 
 const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -47,7 +66,10 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 		);
 
 	const pwd = generatePassword();
-	const hash = pwd;
+	const hash = argon2id({
+		pwd,
+		...argon2IdOptions,
+	});
 	const pwdString = `****** Admin Password: ${pwd} ******`;
 
 	const knex = database.em.getConnection().getKnex();
