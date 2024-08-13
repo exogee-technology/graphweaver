@@ -77,7 +77,7 @@ importers:
         version: 6.3.5
       '@mikro-orm/knex':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)
@@ -362,7 +362,7 @@ importers:
         version: 6.3.5
       '@mikro-orm/postgresql':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -417,7 +417,7 @@ importers:
         version: 6.3.5
       '@mikro-orm/knex':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)
@@ -881,9 +881,15 @@ importers:
 
   packages/builder:
     dependencies:
+      '@exogee/graphweaver-admin-ui':
+        specifier: workspace:*
+        version: link:../admin-ui
       '@exogee/graphweaver-config':
         specifier: workspace:*
         version: link:../config
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../mikroorm
       '@graphql-codegen/add':
         specifier: 5.0.3
         version: 5.0.3(graphql@16.9.0)
@@ -929,9 +935,15 @@ importers:
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.9.0)
+      hash-wasm:
+        specifier: 4.11.0
+        version: 4.11.0
       log-node:
         specifier: 8.0.3
         version: 8.0.3(log@6.3.1)
+      omgopass:
+        specifier: 3.2.1
+        version: 3.2.1
       rimraf:
         specifier: 5.0.8
         version: 5.0.8
@@ -951,12 +963,18 @@ importers:
       '@types/node':
         specifier: 22.2.0
         version: 22.2.0
+      '@types/omgopass':
+        specifier: 3.2.3
+        version: 3.2.3
       prettier:
         specifier: 3.3.3
         version: 3.3.3
       typescript:
         specifier: 5.5.4
         version: 5.5.4
+      vitest:
+        specifier: 2.0.5
+        version: 2.0.5(@types/node@22.2.0)
 
   packages/cdk:
     dependencies:
@@ -988,18 +1006,9 @@ importers:
 
   packages/cli:
     dependencies:
-      '@exogee/graphweaver':
-        specifier: workspace:*
-        version: link:../core
-      '@exogee/graphweaver-admin-ui':
-        specifier: workspace:*
-        version: link:../admin-ui
       '@exogee/graphweaver-builder':
         specifier: workspace:*
         version: link:../builder
-      '@exogee/graphweaver-mikroorm':
-        specifier: workspace:*
-        version: link:../mikroorm
       chokidar:
         specifier: 3.6.0
         version: 3.6.0
@@ -1164,7 +1173,7 @@ importers:
         version: 6.3.5
       '@mikro-orm/postgresql':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)
@@ -1269,7 +1278,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)
@@ -1331,13 +1340,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.5
-        version: 6.3.5(@mikro-orm/core@6.3.5)
+        version: 6.3.5(@mikro-orm/core@6.3.5)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.5
         version: 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)
@@ -3915,6 +3924,7 @@ packages:
 
   /@escape.tech/graphql-armor-types@0.6.0:
     resolution: {integrity: sha512-Y3X6JgkB1N1MMaHNXaE2IeJWIs6wT4XcPvXM8PRWmT2DblZfY4NYiV1mh0GTInKdlnrEr5hquOR9XV+M3Da43w==}
+    requiresBuild: true
     dependencies:
       graphql: 16.9.0
 
@@ -6016,6 +6026,7 @@ packages:
   /@mikro-orm/mysql@6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0):
     resolution: {integrity: sha512-PtnMq2A6JLII6p1P7LbybE5T3L4TTP9oJ6gyfCrPpZcMTgyWOW6MmtosAHmbZY6bKtxZPnEm6vOP0/dUlXpG/g==}
     engines: {node: '>= 18.12.0'}
+    requiresBuild: true
     peerDependencies:
       '@mikro-orm/core': ^6.0.0
     dependencies:
@@ -6028,30 +6039,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.5(@mikro-orm/core@6.3.5):
-    resolution: {integrity: sha512-FdVrmox8IvB7XUcXSvzqPnoW5zbuowWLd4ypIZiCowUAavozHtFLjO4kV19plMhABPrIbogIneR4C9vyBmpTdA==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.3.5
-      '@mikro-orm/knex': 6.3.5(@mikro-orm/core@6.3.5)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -8491,6 +8478,10 @@ packages:
     dependencies:
       undici-types: 6.13.0
 
+  /@types/omgopass@3.2.3:
+    resolution: {integrity: sha512-tBihWcBapTQb2tLgtAJ3kepzeP/Qg9lvem2VSsYbkttKMINRBfUWFUDGqP9QXSukIqjK4qpDnNaOiwKHNQpQfA==}
+    dev: true
+
   /@types/otp-generator@4.0.2:
     resolution: {integrity: sha512-9+qqWzuFb332hXPbLgjUyOXlbcaTQkmkmqQjTduvNuOmPV5fW+iLv70JsVEhdUy0DWi4kY34++HDCaWl6N0AYg==}
     dev: true
@@ -9305,6 +9296,7 @@ packages:
   /aws-ssl-profiles@1.1.1:
     resolution: {integrity: sha512-+H+kuK34PfMaI9PNU/NSjBKL5hh/KDM9J72kwYeYEm0A8B1AC4fuCy3qsjnA7lxklgyXsB68yn8Z2xoZEjgwCQ==}
     engines: {node: '>= 6.0.0'}
+    requiresBuild: true
     dev: false
 
   /axios@1.7.3:
@@ -10679,6 +10671,7 @@ packages:
   /denque@2.1.0:
     resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==}
     engines: {node: '>=0.10'}
+    requiresBuild: true
     dev: false
 
   /depd@2.0.0:
@@ -11925,6 +11918,7 @@ packages:
 
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
+    requiresBuild: true
 
   /fs2@0.3.9:
     resolution: {integrity: sha512-WsOqncODWRlkjwll+73bAxVW3JPChDgaPX3DT4iTTm73UmG4VgALa7LaFblP232/DN60itkOrPZ8kaP1feksGQ==}
@@ -11976,6 +11970,7 @@ packages:
 
   /generate-function@2.3.1:
     resolution: {integrity: sha512-eeB5GfMNeevm/GRYq20ShmsaGcmI81kIX2K9XQx5miC8KdHaC6Jm0qQ8ZNeGOi7wYB8OsdxKs+Y2oVuTFuVwKQ==}
+    requiresBuild: true
     dependencies:
       is-property: 1.0.2
     dev: false
@@ -12556,6 +12551,7 @@ packages:
   /iconv-lite@0.6.3:
     resolution: {integrity: sha512-4fCk79wshMdzMp2rH06qWrJE4iolqLhCUH+OiuIgU++RB0+94NlDL81atO7GX55uUKueo0txHNtvEyI6D7WdMw==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       safer-buffer: 2.1.2
 
@@ -12623,6 +12619,7 @@ packages:
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
     deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+    requiresBuild: true
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -12842,6 +12839,7 @@ packages:
 
   /is-property@1.0.2:
     resolution: {integrity: sha512-Ks/IoX00TtClbGQr4TWXemAnktAQvYB7HzcCxDGqEZU6oCmb2INHuOoKxbtR+HFkmYWBKv/dOZtGRiAjDhj92g==}
+    requiresBuild: true
     dev: false
 
   /is-relative@1.0.0:
@@ -14113,6 +14111,7 @@ packages:
   /lru-cache@8.0.5:
     resolution: {integrity: sha512-MhWWlVnuab1RG5/zMRRcVGXZLCXrZTgfwMikgzCegsPnG62yDQo5JnqKkrK4jO5iKqDAZGItAqN5CtKBCBWRUA==}
     engines: {node: '>=16.14'}
+    requiresBuild: true
     dev: false
 
   /lru-memoizer@2.3.0:
@@ -14329,6 +14328,7 @@ packages:
 
   /minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
+    requiresBuild: true
     dependencies:
       brace-expansion: 1.1.11
 
@@ -14491,6 +14491,7 @@ packages:
   /mysql2@3.11.0:
     resolution: {integrity: sha512-J9phbsXGvTOcRVPR95YedzVSxJecpW5A5+cQ57rhHIFXteTP10HCs+VBjS7DHIKfEaI1zQ5tlVrquCd64A6YvA==}
     engines: {node: '>= 8.0'}
+    requiresBuild: true
     dependencies:
       aws-ssl-profiles: 1.1.1
       denque: 2.1.0
@@ -14506,6 +14507,7 @@ packages:
   /named-placeholders@1.1.3:
     resolution: {integrity: sha512-eLoBxg6wE/rZkJPhU/xRX1WTpkFEwDJEN96oxFrTsqBdbT5ec295Q+CoHrL9IT0DipqKhmGcaZmwOt8OON5x1w==}
     engines: {node: '>=12.0.0'}
+    requiresBuild: true
     dependencies:
       lru-cache: 7.18.3
     dev: false
@@ -14721,6 +14723,10 @@ packages:
   /oidc-token-hash@5.0.3:
     resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}
     engines: {node: ^10.13.0 || >=12.0.0}
+    dev: false
+
+  /omgopass@3.2.1:
+    resolution: {integrity: sha512-Q0QqwwL3ag1Pyjhx6vfieaz73pHNLa3v59qhRcTCUINmJOwdcLu0kNKncBSF2ylnzrqmZw9VRgOEdAwvCSxffA==}
     dev: false
 
   /on-exit-leak-free@2.1.2:
@@ -14986,6 +14992,7 @@ packages:
   /path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
 
   /path-key@3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
@@ -15069,13 +15076,16 @@ packages:
 
   /pg-connection-string@2.6.4:
     resolution: {integrity: sha512-v+Z7W/0EO707aNMaAEfiGnGL9sxxumwLl2fJvCQtMn9Fxsg+lPpPkdcyBSv/KFgpGdYkMfn+EI1Or2EHjpgLCA==}
+    requiresBuild: true
 
   /pg-int8@1.0.1:
     resolution: {integrity: sha512-WCtabS6t3c8SkpDBUlb1kjOs7l66xsGdKpIPZsg4wR+B3+u9UAum2odSsF9tnvxg80h4ZxLWMy4pRjOsFIqQpw==}
     engines: {node: '>=4.0.0'}
+    requiresBuild: true
 
   /pg-pool@3.6.2(pg@8.12.0):
     resolution: {integrity: sha512-Htjbg8BlwXqSBQ9V8Vjtc+vzf/6fVUuak/3/XXKA9oxZprwW3IMDQTGHP+KDmVL7rtd+R1QjbnCFPuTHm3G4hg==}
+    requiresBuild: true
     peerDependencies:
       pg: '>=8.0'
     dependencies:
@@ -15083,10 +15093,12 @@ packages:
 
   /pg-protocol@1.6.1:
     resolution: {integrity: sha512-jPIlvgoD63hrEuihvIg+tJhoGjUsLPn6poJY9N5CnlPd91c2T18T/9zBtLxZSb1EhYxBRoZJtzScCaWlYLtktg==}
+    requiresBuild: true
 
   /pg-types@2.2.0:
     resolution: {integrity: sha512-qTAAlrEsl8s4OiEQY69wDvcMIdQN6wdz5ojQiOy6YRMuynxenON0O5oCpJI6lshc6scgAY8qvJ2On/p+CXY0GA==}
     engines: {node: '>=4'}
+    requiresBuild: true
     dependencies:
       pg-int8: 1.0.1
       postgres-array: 2.0.0
@@ -15097,6 +15109,7 @@ packages:
   /pg@8.12.0:
     resolution: {integrity: sha512-A+LHUSnwnxrnL/tZ+OLfqR1SxLN3c/pgDztZ47Rpbsd4jUytsTtwQo/TLPRzPJMp/1pbhYVhH9cuSZLAajNfjQ==}
     engines: {node: '>= 8.0.0'}
+    requiresBuild: true
     peerDependencies:
       pg-native: '>=3.0.1'
     peerDependenciesMeta:
@@ -15113,6 +15126,7 @@ packages:
 
   /pgpass@1.0.5:
     resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
+    requiresBuild: true
     dependencies:
       split2: 4.2.0
 
@@ -15255,34 +15269,41 @@ packages:
   /postgres-array@2.0.0:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
     engines: {node: '>=4'}
+    requiresBuild: true
 
   /postgres-array@3.0.2:
     resolution: {integrity: sha512-6faShkdFugNQCLwucjPcY5ARoW1SlbnrZjmGl0IrrqewpvxvhSLHimCVzqeuULCbG0fQv7Dtk1yDbG3xv7Veog==}
     engines: {node: '>=12'}
+    requiresBuild: true
     dev: false
 
   /postgres-bytea@1.0.0:
     resolution: {integrity: sha512-xy3pmLuQqRBZBXDULy7KbaitYqLcmxigw14Q5sj8QBVLqEwXfeybIKVWiqAXTlcvdvb0+xkOtDbfQMOf4lST1w==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
 
   /postgres-date@1.0.7:
     resolution: {integrity: sha512-suDmjLVQg78nMK2UZ454hAG+OAW+HQPZ6n++TNDUX+L0+uUlLywnoxJKDou51Zm+zTCjrCl0Nq6J9C5hP9vK/Q==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
 
   /postgres-date@2.1.0:
     resolution: {integrity: sha512-K7Juri8gtgXVcDfZttFKVmhglp7epKb1K4pgrkLxehjqkrgPhfG6OO8LHLkfaqkbpjNRnra018XwAr1yQFWGcA==}
     engines: {node: '>=12'}
+    requiresBuild: true
     dev: false
 
   /postgres-interval@1.2.0:
     resolution: {integrity: sha512-9ZhXKM/rw350N1ovuWHbGxnGh/SNJ4cnxHiM0rxE4VN41wsg8P8zWn9hv/buK00RP4WvlOyr/RBDiptyxVbkZQ==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
     dependencies:
       xtend: 4.0.2
 
   /postgres-interval@4.0.2:
     resolution: {integrity: sha512-EMsphSQ1YkQqKZL2cuG0zHkmjCCzQqQ71l2GXITqRwjhRleCdv00bDk/ktaSi0LnlaPzAc3535KTrjXsTdtx7A==}
     engines: {node: '>=12'}
+    requiresBuild: true
     dev: false
 
   /prebuild-install@7.1.2:
@@ -15981,6 +16002,7 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
+    requiresBuild: true
     dependencies:
       glob: 7.2.3
 
@@ -16170,6 +16192,7 @@ packages:
 
   /seq-queue@0.0.5:
     resolution: {integrity: sha512-hr3Wtp/GZIc/6DAGPDcV4/9WoZhjrkXsi5B/07QgX8tsdc6ilr7BFM6PM6rbdAX1kFSDYeZGLipIZZKyQP0O5Q==}
+    requiresBuild: true
     dev: false
 
   /serve-static@1.15.0:
@@ -17689,6 +17712,7 @@ packages:
 
   /wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
+    requiresBuild: true
 
   /write-file-atomic@4.0.2:
     resolution: {integrity: sha512-7KxauUdBmSdWnmpaGFg+ppNjKF8uNLry8LyzjauQDOVONfFLNKrKvQOxZ/VuTIcS/gge/YNahf5RIIQWTSarlg==}
