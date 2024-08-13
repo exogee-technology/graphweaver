@@ -2,7 +2,12 @@ import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
 import { AuthenticationError } from 'apollo-server-errors';
 
-import { AccessControlList, AuthenticationMethod, AuthorizationContext } from '../../types';
+import {
+	AccessControlList,
+	AuthenticationMethod,
+	AuthorizationContext,
+	JwtPayload,
+} from '../../types';
 import { AuthTokenProvider, isExpired } from '../token';
 import { AclMap, requireEnvironmentVariable } from '../../helper-functions';
 import { UserProfile, UserProfileType } from '../../user-profile';
@@ -90,7 +95,7 @@ type AuthApolloPluginOptions<R> = {
 };
 
 export const authApolloPlugin = <R>(
-	addUserToContext?: (userId: string) => Promise<UserProfile<R>>,
+	addUserToContext?: (userId: string, token: JwtPayload) => Promise<UserProfile<R>>,
 	options?: AuthApolloPluginOptions<R>
 ): ApolloServerPlugin<AuthorizationContext> => {
 	return {
@@ -206,7 +211,7 @@ export const authApolloPlugin = <R>(
 							'No addUserToContext provider please set one using the setAddUserToContext function.'
 						);
 
-					const userProfile = await addUserToContextCallback(userId);
+					const userProfile = await addUserToContextCallback(userId, decoded);
 
 					contextValue.token = decoded;
 					contextValue.user = userProfile;
