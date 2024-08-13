@@ -9,7 +9,7 @@ export enum AuthenticationMethod {
 	PASSKEY = 'pky',
 }
 
-export interface JwtPayload {
+export interface JwtPayload extends Record<string, unknown> {
 	sub?: string;
 	iat?: number;
 	exp?: number;
