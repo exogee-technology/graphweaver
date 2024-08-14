@@ -23,6 +23,7 @@ import {
 	getImplicitAllow,
 	setImplicitAllow,
 } from '../../implicit-authorization';
+import { GraphQLError } from 'graphql';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
@@ -225,18 +226,30 @@ export const authApolloPlugin = <R>(
 
 			return {
 				didResolveOperation: async () => {
-					if (apiKeyVerificationFailedMessage)
+					// We throw these from here instead of above so our willSendResponse will actually get called.
+					// If thrown above, we don't get to return the additional handlers, then the plugin doesn't
+					// get to handle the response.
+					//
+					// This is early enough in the request lifecycle that the resolvers don't actually get run when
+					// an error is thrown here.
+					if (apiKeyVerificationFailedMessage) {
 						throw new AuthenticationError(apiKeyVerificationFailedMessage);
+					}
+					if (tokenVerificationFailed) {
+						throw new AuthenticationError('Unauthorized: Token verification failed.');
+					}
 				},
+
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
 					let errors = (response.body as any)?.singleResult?.errors;
 
 					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
-						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
+						// If we received a forbidden error we need to redirect, set the header to tell the client to do so.
 						if (errors.some(didEncounterForbiddenError)) {
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
-							response.http?.headers.set(
+							response.http.status = 200;
+							response.http.headers.set(
 								'X-Auth-Redirect',
 								buildRedirectUri(authRedirect, RedirectType.LOGIN)
 							);
@@ -257,7 +270,8 @@ export const authApolloPlugin = <R>(
 							new Set<AuthenticationMethod>()
 						);
 
-						response.http?.headers.set(
+						response.http.status = 200;
+						response.http.headers.set(
 							'X-Auth-Redirect',
 							buildRedirectUri(authRedirect, RedirectType.CHALLENGE, [...providers])
 						);
@@ -266,7 +280,8 @@ export const authApolloPlugin = <R>(
 					// Let's check if verification has failed and redirect to login if it has
 					if (tokenVerificationFailed) {
 						logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
-						response.http?.headers.set(
+						response.http.status = 200;
+						response.http.headers.set(
 							'X-Auth-Redirect',
 							buildRedirectUri(authRedirect, RedirectType.LOGIN)
 						);
