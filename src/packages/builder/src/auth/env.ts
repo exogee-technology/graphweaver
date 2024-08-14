@@ -10,7 +10,6 @@ export const generateKeyPair = async () => {
 	// Export the private key
 	const privateKeyDer = privateKey.export({ type: 'sec1', format: 'der' }).toString('base64');
 	const formattedPrivateKey = privateKeyDer.replace(regex, '$&\n');
-
 	const privatePem = `-----BEGIN EC PRIVATE KEY-----\n${formattedPrivateKey}\n-----END EC PRIVATE KEY-----\n`;
 	const base64EncodedPrivatePem = Buffer.from(privatePem).toString('base64');
 
