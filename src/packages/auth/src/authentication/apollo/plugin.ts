@@ -23,7 +23,6 @@ import {
 	getImplicitAllow,
 	setImplicitAllow,
 } from '../../implicit-authorization';
-import { GraphQLError } from 'graphql';
 
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
