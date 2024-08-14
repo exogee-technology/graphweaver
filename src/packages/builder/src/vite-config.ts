@@ -71,7 +71,6 @@ export const viteConfig = async ({
 				'copy-to-clipboard',
 				'graphql-deduplicator',
 				'hoist-non-react-statics',
-				'lowlight',
 				'nullthrows',
 				'papaparse',
 				'prop-types',
