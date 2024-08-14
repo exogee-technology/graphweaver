@@ -50,12 +50,15 @@ export function setAdministratorRoleName(roleName: string) {
 	administratorRoleName = roleName;
 }
 
+let hasLoggedAboutDefaultAdminRoleName = false;
 export function getAdministratorRoleName() {
-	if (administratorRoleName === DEFAULT_ADMIN_ROLE_NAME) {
+	if (!hasLoggedAboutDefaultAdminRoleName && administratorRoleName === DEFAULT_ADMIN_ROLE_NAME) {
 		logger.warn(
 			`The default administrator role name is being used. Please set a custom administrator role name using the setAdministratorRoleName function.`
 		);
+		hasLoggedAboutDefaultAdminRoleName = true;
 	}
+
 	return administratorRoleName;
 }
 
