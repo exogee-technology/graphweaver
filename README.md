@@ -187,7 +187,7 @@ Begin by creating a new branch. Base it on the latest main branch.
 
 Evaluate changes and adhere to Semantic Versioning (semver). Run the relevant command for `major`, `minor` or `patch` changes.
 
-```console
+```bash
 $ pnpm version:bump patch
 ```
 
@@ -200,7 +200,7 @@ To release a beta build run:
 Now the versions are bumped, but packages that depend on each other are still referencing the old version. Run this command
 to update all the references across the monorepo.
 
-```console
+```bash
 $ pnpm relink:deps
 ```
 
