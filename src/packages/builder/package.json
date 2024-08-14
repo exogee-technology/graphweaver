@@ -16,9 +16,9 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"dependencies": {
+		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@graphql-codegen/add": "5.0.3",
 		"@graphql-codegen/cli": "5.0.2",
 		"@graphql-codegen/near-operation-file-preset": "3.0.0",
@@ -32,9 +32,9 @@
 		"esbuild": "0.23.0",
 		"esbuild-css-modules-plugin": "3.1.2",
 		"glob": "10.4.3",
-		"hash-wasm": "4.11.0",
 		"graphql": "16.9.0",
 		"graphql-tag": "2.12.6",
+		"hash-wasm": "4.11.0",
 		"log-node": "8.0.3",
 		"omgopass": "3.2.1",
 		"rimraf": "5.0.8",
@@ -44,8 +44,10 @@
 		"vite-plugin-graphweaver": "workspace:*"
 	},
 	"devDependencies": {
-		"@types/omgopass": "3.2.3",
+		"@types/jsonwebtoken": "9.0.6",
 		"@types/node": "22.2.0",
+		"@types/omgopass": "3.2.3",
+		"jsonwebtoken": "9.0.2",
 		"prettier": "3.3.3",
 		"typescript": "5.5.4",
 		"vitest": "2.0.5"
