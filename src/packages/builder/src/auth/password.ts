@@ -7,13 +7,13 @@ import generatePassword from 'omgopass';
 
 import { DatabaseOptions } from './index';
 
-const generateSalt = (): Uint8Array => {
+export const generateSalt = (): Uint8Array => {
 	const salt = new Uint8Array(16);
 	// Fill the salt array with cryptographically secure random numbers.
 	return crypto.getRandomValues(salt);
 };
 
-const argon2IdOptions = {
+export const argon2IdOptions = {
 	salt: generateSalt(),
 	parallelism: 4,
 	iterations: 3,
