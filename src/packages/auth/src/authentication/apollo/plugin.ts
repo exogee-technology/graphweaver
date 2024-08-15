@@ -183,60 +183,82 @@ export const authApolloPlugin = <R>(
 				} else {
 					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0003)';
 				}
-			} else if (!authHeader || isExpired(authHeader)) {
-				// Case 2. No auth header or it has expired.
-				logger.trace('No Auth header, setting redirect');
-
-				// We are a guest and have not logged in yet.
-				contextValue.user = new UserProfile({
-					id: undefined,
-					roles: ['GUEST'],
-				});
-				upsertAuthorizationContext(contextValue);
 			} else {
-				// Case 3. There is a valid auth header
-				logger.trace('Got a token, checking it is valid.');
+				// Ok, we are working in token land at this point. We either have the following scenarios:
+				// - There's no token
+				// - There is a token but it's expired / invalid / whatever
+				// - There is a token and it's valid
+				// First step is to see if we can decode the token if there is one.
+				if (!authHeader) {
+					// Case 1. No auth header at all.
+					logger.trace('No Auth header, treating as guest');
 
-				const tokenProvider = new AuthTokenProvider();
-
-				try {
-					const decoded = await tokenProvider.decodeToken(authHeader);
-
-					const userId = typeof decoded === 'object' ? decoded?.sub : undefined;
-					if (!userId) throw new Error('Token verification failed: No user ID found.');
-
-					const addUserToContextCallback = getAddUserToContext() ?? addUserToContext;
-					if (!addUserToContextCallback)
-						throw new Error(
-							'No addUserToContext provider please set one using the setAddUserToContext function.'
-						);
-
-					const userProfile = await addUserToContextCallback(userId, decoded);
-
-					contextValue.token = decoded;
-					contextValue.user = userProfile;
-
+					// We are a guest and have not logged in yet.
+					contextValue.user = new UserProfile({
+						id: undefined,
+						roles: ['GUEST'],
+					});
 					upsertAuthorizationContext(contextValue);
-				} catch (err: unknown) {
-					logger.trace(`JWT verification failed. ${err}`);
-					tokenVerificationFailed = true;
+				} else {
+					// Case 2 and 3. There is an auth header, is it valid?
+					logger.trace('Got a token, checking it is valid.');
+
+					const tokenProvider = new AuthTokenProvider();
+
+					try {
+						const decoded = await tokenProvider.decodeToken(authHeader);
+
+						const userId = typeof decoded === 'object' ? decoded?.sub : undefined;
+						if (!userId) throw new Error('Token verification failed: No user ID found.');
+
+						if (isExpired(decoded)) throw new Error('Token verification failed: Token is expired.');
+
+						const addUserToContextCallback = getAddUserToContext() ?? addUserToContext;
+						if (!addUserToContextCallback) {
+							throw new Error(
+								'No addUserToContext provider please set one using the setAddUserToContext function.'
+							);
+						}
+
+						const userProfile = await addUserToContextCallback(userId, decoded);
+
+						contextValue.token = decoded;
+						contextValue.user = userProfile;
+
+						upsertAuthorizationContext(contextValue);
+					} catch (err: unknown) {
+						logger.trace(`JWT verification failed. ${err}`);
+						tokenVerificationFailed = true;
+					}
 				}
 			}
 
 			return {
 				didResolveOperation: async () => {
-					if (apiKeyVerificationFailedMessage)
+					// We throw these from here instead of above so our willSendResponse will actually get called.
+					// If thrown above, we don't get to return the additional handlers, then the plugin doesn't
+					// get to handle the response.
+					//
+					// This is early enough in the request lifecycle that the resolvers don't actually get run when
+					// an error is thrown here.
+					if (apiKeyVerificationFailedMessage) {
 						throw new AuthenticationError(apiKeyVerificationFailedMessage);
+					}
+					if (tokenVerificationFailed) {
+						throw new AuthenticationError('Unauthorized: Token verification failed.');
+					}
 				},
+
 				willSendResponse: async ({ response, contextValue }) => {
 					// Let's check if we are a guest and have received any errors
 					let errors = (response.body as any)?.singleResult?.errors;
 
 					if (contextValue.user?.roles?.includes('GUEST') && response && errors) {
-						//If we received a forbidden error we need to redirect, set the header to tell the client to do so.
+						// If we received a forbidden error we need to redirect, set the header to tell the client to do so.
 						if (errors.some(didEncounterForbiddenError)) {
 							logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
-							response.http?.headers.set(
+							response.http.status = 200;
+							response.http.headers.set(
 								'X-Auth-Redirect',
 								buildRedirectUri(authRedirect, RedirectType.LOGIN)
 							);
@@ -257,7 +279,8 @@ export const authApolloPlugin = <R>(
 							new Set<AuthenticationMethod>()
 						);
 
-						response.http?.headers.set(
+						response.http.status = 200;
+						response.http.headers.set(
 							'X-Auth-Redirect',
 							buildRedirectUri(authRedirect, RedirectType.CHALLENGE, [...providers])
 						);
@@ -266,7 +289,8 @@ export const authApolloPlugin = <R>(
 					// Let's check if verification has failed and redirect to login if it has
 					if (tokenVerificationFailed) {
 						logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
-						response.http?.headers.set(
+						response.http.status = 200;
+						response.http.headers.set(
 							'X-Auth-Redirect',
 							buildRedirectUri(authRedirect, RedirectType.LOGIN)
 						);

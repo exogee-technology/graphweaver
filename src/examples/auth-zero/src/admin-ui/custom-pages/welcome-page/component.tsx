@@ -7,7 +7,7 @@ import {
 import styles from './styles.module.css';
 
 export const WelcomePage = () => (
-	<WelcomePageLayout skipPath="/Submission">
+	<WelcomePageLayout skipPath="/Album">
 		<Spacer height={30} />
 		<h2 className={styles.heading}>Auth0 Example</h2>
 		<Spacer height={30} />
@@ -64,7 +64,7 @@ export const WelcomePage = () => (
 			. We're here to help!
 		</p>
 		<Spacer height={30} />
-		<Button className={styles.button} href="/Submission">
+		<Button className={styles.button} href="/Album">
 			Get started! <Arrow className={styles.arrow} />
 		</Button>
 	</WelcomePageLayout>
