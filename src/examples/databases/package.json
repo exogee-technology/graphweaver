@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-databases",
-	"version": "2.2.0",
+	"version": "2.2.4",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a MySQL and PostgreSQL database together.",
@@ -26,9 +26,9 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.3.4",
-		"@mikro-orm/mysql": "6.3.4",
-		"@mikro-orm/postgresql": "6.3.4",
+		"@mikro-orm/core": "6.3.5",
+		"@mikro-orm/mysql": "6.3.5",
+		"@mikro-orm/postgresql": "6.3.5",
 		"class-validator": "0.14.1",
 		"graphql": "16.9.0",
 		"graphweaver": "workspace:*",
@@ -39,7 +39,7 @@
 		"react-syntax-highlighter": "15.5.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.1.0",
+		"@types/node": "22.3.0",
 		"typescript": "5.5.4"
 	},
 	"keywords": [
