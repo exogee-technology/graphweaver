@@ -63,7 +63,7 @@ describe('Security', () => {
 		const response = await graphweaver.executeOperation<{
 			challengePassword: { authToken: string };
 		}>({
-			http: { headers: new Headers({ authorization: 'Bearer aGVsbG8=' }) } as any,
+			http: { headers: new Headers({ authorization: 'Bearer mockToken' }) } as any,
 			query: gql`
 				query {
 					tags {
