@@ -3,6 +3,7 @@ import { writeFile } from 'fs/promises';
 import { generateConfig } from './config';
 import { generateAuthEnv } from './env';
 import { generateAdminPassword } from './password';
+import { generateApiKey } from './api-key';
 
 export type Source = 'mysql' | 'postgresql' | 'sqlite';
 
@@ -16,7 +17,7 @@ export interface DatabaseOptions {
 }
 
 interface InitialiseAuthOptions extends DatabaseOptions {
-	method: 'password';
+	method: 'password' | 'api-key';
 	tableName: string;
 }
 
@@ -25,6 +26,13 @@ export const initialiseAuth = async ({ method, ...databaseOptions }: InitialiseA
 	const envFile = await generateAuthEnv();
 	await writeFile('.env', envFile);
 	const configFile = await generateConfig();
-	await writeFile('graphweaver-config.js', configFile);
-	await generateAdminPassword(databaseOptions);
+
+	if (method === 'password') {
+		await writeFile('graphweaver-config.js', configFile);
+		await generateAdminPassword(databaseOptions);
+	}
+
+	if (method === 'api-key') {
+		await generateApiKey(databaseOptions);
+	}
 };
