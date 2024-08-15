@@ -4,7 +4,7 @@ process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
+import { BaseDataProvider, Entity, Field, ID } from '@exogee/graphweaver';
 import {
 	UserProfile,
 	Password,
@@ -17,7 +17,7 @@ import {
 @Entity('Tag', {
 	provider: new BaseDataProvider('Tag'),
 })
-class Tag {
+export class Tag {
 	@Field(() => ID)
 	id!: string;
 
