@@ -24,6 +24,9 @@ export const generateKeyPair = async () => {
 
 export const generateAuthEnv = async (method: 'password' | 'api-key') => {
 	console.log('Generating Auth Environment...');
+	if (method !== 'password' && method !== 'api-key') {
+		throw new Error(`Invalid method: ${method}. Expected 'password' or 'api-key'.`);
+	}
 
 	const { privateKey, publicKey } = await generateKeyPair();
 

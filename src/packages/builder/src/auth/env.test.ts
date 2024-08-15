@@ -4,6 +4,10 @@ import jwt from 'jsonwebtoken';
 import { generateAuthEnv, generateKeyPair } from './env';
 
 describe('generateAuthEnv', () => {
+	it('should throw an error for an invalid method', async () => {
+		await expect(generateAuthEnv('invalid-method' as any)).rejects.toThrow('Invalid method');
+	});
+
 	it('should return a env file with each string key', async () => {
 		const env = await generateAuthEnv('password');
 		expect(env).toEqual(expect.stringContaining('AUTH_PUBLIC_KEY_PEM_BASE64='));
