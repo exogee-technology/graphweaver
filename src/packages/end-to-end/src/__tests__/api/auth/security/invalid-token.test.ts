@@ -1,50 +1,18 @@
 process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 process.env.PASSWORD_CHALLENGE_JWT_EXPIRES_IN = '30m';
 
-import MockDate from 'mockdate';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import {
 	UserProfile,
-	ApplyMultiFactorAuthentication,
-	AuthenticationMethod,
 	Password,
 	CredentialStorage,
 	hashPassword,
 	setImplicitAllow,
 	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
-
-class TaskProvider extends BaseDataProvider<any> {
-	public async withTransaction<T>(callback: () => Promise<T>) {
-		return await callback();
-	}
-	async updateOne(data: any) {
-		return data;
-	}
-}
-
-@ApplyMultiFactorAuthentication<Task>(() => ({
-	Everyone: {
-		// all users must provide a password mfa when writing data
-		Write: [{ factorsRequired: 1, providers: [AuthenticationMethod.PASSWORD] }],
-	},
-}))
-@Entity('Task', {
-	provider: new TaskProvider('Task'),
-})
-class Task {
-	@Field(() => ID)
-	id!: number;
-
-	@Field(() => String)
-	description!: string;
-
-	@RelationshipField<Tag>(() => [Tag], { relatedField: 'tasks' })
-	tags!: Tag[];
-}
 
 @Entity('Tag', {
 	provider: new BaseDataProvider('Tag'),
@@ -55,9 +23,6 @@ class Tag {
 
 	@Field(() => String)
 	name!: string;
-
-	@RelationshipField<Task>(() => [Task], { relatedField: 'tags' })
-	tasks!: Task[];
 }
 
 const user = new UserProfile({
