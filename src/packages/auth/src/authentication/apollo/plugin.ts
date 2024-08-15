@@ -194,7 +194,7 @@ export const authApolloPlugin = <R>(
 				});
 				upsertAuthorizationContext(contextValue);
 			} else {
-				// Case 3. There is a valid auth header
+				// Case 3. There is an auth header, is it valid?
 				logger.trace('Got a token, checking it is valid.');
 
 				const tokenProvider = new AuthTokenProvider();
@@ -224,7 +224,7 @@ export const authApolloPlugin = <R>(
 			}
 
 			return {
-				didResolveOperation: async () => {
+				didResolveSource: async () => {
 					// We throw these from here instead of above so our willSendResponse will actually get called.
 					// If thrown above, we don't get to return the additional handlers, then the plugin doesn't
 					// get to handle the response.
