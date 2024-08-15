@@ -224,7 +224,7 @@ export const authApolloPlugin = <R>(
 			}
 
 			return {
-				didResolveSource: async () => {
+				didResolveOperation: async () => {
 					// We throw these from here instead of above so our willSendResponse will actually get called.
 					// If thrown above, we don't get to return the additional handlers, then the plugin doesn't
 					// get to handle the response.
