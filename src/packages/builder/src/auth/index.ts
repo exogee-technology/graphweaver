@@ -23,11 +23,11 @@ interface InitialiseAuthOptions extends DatabaseOptions {
 
 export const initialiseAuth = async ({ method, ...databaseOptions }: InitialiseAuthOptions) => {
 	console.log(`Initialising Auth with ${method}...`);
-	const envFile = await generateAuthEnv();
+	const envFile = await generateAuthEnv(method);
 	await writeFile('.env', envFile);
-	const configFile = await generateConfig();
 
 	if (method === 'password') {
+		const configFile = await generateConfig();
 		await writeFile('graphweaver-config.js', configFile);
 		await generateAdminPassword(databaseOptions);
 	}
