@@ -1,8 +1,10 @@
 import { DatabaseOptions, initialiseAuth } from '@exogee/graphweaver-builder';
 import { promptForDatabaseOptions } from '../database';
 
+export type AuthMethod = 'password' | 'api-key';
+
 interface InitAuthOptions extends Partial<DatabaseOptions> {
-	method: 'password';
+	method: AuthMethod;
 }
 
 export const initAuth = async ({
@@ -32,7 +34,8 @@ export const initAuth = async ({
 		{
 			type: 'input',
 			name: 'tableName',
-			message: `Please specify the exact name of the table where you would like the credentials to be stored:`,
+			default: method === 'password' ? 'Credentials' : 'ApiKey',
+			message: `Please specify the exact name of the table where you would like the data to be stored:`,
 		},
 	]);
 

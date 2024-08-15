@@ -2,16 +2,29 @@
 // @ts-ignore This file is the only one we need for the bundle
 import { argon2id } from 'hash-wasm/dist/argon2.umd.min.js';
 import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
-import generatePassword from 'omgopass';
+import crypto from 'crypto';
 
 import { DatabaseOptions } from './index';
 import { argon2IdOptions, closeConnection, openConnection } from './utils';
 
-interface GenerateAdminPasswordOptions extends DatabaseOptions {
+interface GenerateApiKeyOptions extends DatabaseOptions {
 	tableName: string;
 }
 
-export const generateAdminPassword = async (options: GenerateAdminPasswordOptions) => {
+const generateKeyAndSecret = async () => {
+	// Generate secret
+
+	const secretKey = await crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, [
+		'encrypt',
+	]);
+	const { k: secretValue } = await crypto.subtle.exportKey('jwk', secretKey);
+
+	const generatedKey = crypto.randomUUID();
+
+	return { key: generatedKey, secret: secretValue };
+};
+
+export const generateApiKey = async (options: GenerateApiKeyOptions) => {
 	await openConnection(options.source, {
 		mikroOrmConfig: {
 			host: options.host,
@@ -28,22 +41,24 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 			`Warning: Unable to connect to database. Please check the connection settings and try again`
 		);
 
-	const pwd = generatePassword();
+	const { key, secret } = await generateKeyAndSecret();
 	const hash = await argon2id({
-		password: pwd,
+		password: secret,
 		...argon2IdOptions,
 	});
-	const pwdString = `****** Admin Password: ${pwd} ******`;
+	const base64ApiKey = Buffer.from(`${key}:${secret}`).toString('base64');
+	const keyString = `**** API Key: ${base64ApiKey} ****`;
 
 	const knex = database.em.getConnection().getKnex();
 	await knex(options.tableName).insert({
-		username: 'admin',
-		password: hash,
+		api_key: key,
+		secret: hash,
+		roles: 'ApiKeyUsers',
 	});
 	await closeConnection();
 
-	const paddingLineString = '*'.repeat(pwdString.length);
+	const paddingLineString = '*'.repeat(keyString.length);
 	console.log(`\n\n${paddingLineString}`);
-	console.log(pwdString);
+	console.log(keyString);
 	console.log(`${paddingLineString}\n`);
 };

@@ -22,16 +22,21 @@ export const generateKeyPair = async () => {
 	return { privateKey: base64EncodedPrivatePem, publicKey: base64EncodedPublicPem };
 };
 
-export const generateAuthEnv = async () => {
+export const generateAuthEnv = async (method: 'password' | 'api-key') => {
 	console.log('Generating Auth Environment...');
+	if (method !== 'password' && method !== 'api-key') {
+		throw new Error(`Invalid method: ${method}. Expected 'password' or 'api-key'.`);
+	}
 
 	const { privateKey, publicKey } = await generateKeyPair();
 
+	const keys = `AUTH_PUBLIC_KEY_PEM_BASE64='${publicKey}'
+AUTH_PRIVATE_KEY_PEM_BASE64='${privateKey}'`;
+
 	const env = `
 # Generated Auth Environment Variables
-# This file contains the environment variables required for password authentication.
-AUTH_PUBLIC_KEY_PEM_BASE64='${publicKey}'
-AUTH_PRIVATE_KEY_PEM_BASE64='${privateKey}'
+# This file contains the environment variables required for authentication.
+${method === 'password' ? keys : ''}
 AUTH_BASE_URI="http://localhost:9000"
 AUTH_WHITELIST_DOMAINS="localhost"
 `;
