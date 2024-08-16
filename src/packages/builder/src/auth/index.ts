@@ -27,10 +27,12 @@ export const initialiseAuth = async ({ method, ...databaseOptions }: InitialiseA
 	console.log(`Initialising Auth with ${method}...`);
 	const envFile = await generateAuthEnv(method);
 	await writeFile('.env', envFile);
+	console.log('Environment file generated (./.env)');
 
 	if (method === 'password' || method === 'magic-link') {
 		const configFile = await generateConfig(method);
 		await writeFile('graphweaver-config.js', configFile);
+		console.log('Config file generated (./graphweaver-config.js)\n');
 	}
 
 	if (method === 'password') {
