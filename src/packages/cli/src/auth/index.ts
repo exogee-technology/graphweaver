@@ -1,7 +1,7 @@
 import { DatabaseOptions, initialiseAuth } from '@exogee/graphweaver-builder';
 import { promptForDatabaseOptions } from '../database';
 
-export type AuthMethod = 'password' | 'api-key';
+export type AuthMethod = 'password' | 'api-key' | 'magic-link';
 
 interface InitAuthOptions extends Partial<DatabaseOptions> {
 	method: AuthMethod;
