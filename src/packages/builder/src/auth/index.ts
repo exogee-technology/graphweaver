@@ -16,8 +16,10 @@ export interface DatabaseOptions {
 	user?: string;
 }
 
+export type AuthMethod = 'password' | 'api-key' | 'magic-link';
+
 interface InitialiseAuthOptions extends DatabaseOptions {
-	method: 'password' | 'api-key';
+	method: AuthMethod;
 	tableName: string;
 }
 
@@ -26,9 +28,12 @@ export const initialiseAuth = async ({ method, ...databaseOptions }: InitialiseA
 	const envFile = await generateAuthEnv(method);
 	await writeFile('.env', envFile);
 
-	if (method === 'password') {
-		const configFile = await generateConfig();
+	if (method === 'password' || method === 'magic-link') {
+		const configFile = await generateConfig(method);
 		await writeFile('graphweaver-config.js', configFile);
+	}
+
+	if (method === 'password') {
 		await generateAdminPassword(databaseOptions);
 	}
 
