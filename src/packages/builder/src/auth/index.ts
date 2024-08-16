@@ -8,8 +8,8 @@ import { generateApiKey } from './api-key';
 export type Source = 'mysql' | 'postgresql' | 'sqlite';
 
 export interface DatabaseOptions {
-	source: Source;
-	database: string;
+	source?: Source;
+	database?: string;
 	host?: string;
 	port?: number;
 	password?: string;

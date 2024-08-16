@@ -17,23 +17,22 @@ export const initAuth = async ({
 	password,
 	user,
 }: InitAuthOptions) => {
-	if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
-		throw new Error(`Invalid source: ${source}`);
-	}
-
-	const databaseOptions = await promptForDatabaseOptions({
-		source,
-		database,
-		host,
-		port,
-		password,
-		user,
-	});
-
-	const { default: inquirer } = await import('inquirer');
-
 	let tableName = '';
-	if (!['password', 'api-key'].includes(method)) {
+	let databaseOptions = {};
+	if (['password', 'api-key'].includes(method)) {
+		if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
+			throw new Error(`Invalid source: ${source}`);
+		}
+		databaseOptions = await promptForDatabaseOptions({
+			source,
+			database,
+			host,
+			port,
+			password,
+			user,
+		});
+
+		const { default: inquirer } = await import('inquirer');
 		const prompt = await inquirer.prompt<any, { tableName: string }>([
 			{
 				type: 'input',
