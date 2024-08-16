@@ -31,16 +31,21 @@ export const initAuth = async ({
 	});
 
 	const { default: inquirer } = await import('inquirer');
-	const prompt = await inquirer.prompt<any, { tableName: string }>([
-		{
-			type: 'input',
-			name: 'tableName',
-			default: method === 'password' ? 'Credentials' : 'ApiKey',
-			message: `Please specify the exact name of the table where you would like the data to be stored:`,
-		},
-	]);
 
-	await initialiseAuth({ method, tableName: prompt.tableName, ...databaseOptions });
+	let tableName = '';
+	if (!['password', 'api-key'].includes(method)) {
+		const prompt = await inquirer.prompt<any, { tableName: string }>([
+			{
+				type: 'input',
+				name: 'tableName',
+				default: method === 'password' ? 'Credentials' : 'ApiKey',
+				message: `Please specify the exact name of the table where you would like the data to be stored:`,
+			},
+		]);
+		tableName = prompt.tableName;
+	}
+
+	await initialiseAuth({ method, tableName, ...databaseOptions });
 
 	// Force exit because Mikro is keeping the socket open to the db
 	process.exit();
