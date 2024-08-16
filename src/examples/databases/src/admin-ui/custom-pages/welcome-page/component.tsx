@@ -1,11 +1,15 @@
-import { CodeBlock, dracula } from 'react-code-blocks';
 import {
 	Arrow,
 	Button,
 	Spacer,
 	WelcomePage as WelcomePageLayout,
 } from '@exogee/graphweaver-admin-ui-components';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import graphql from 'react-syntax-highlighter/dist/esm/languages/prism/graphql';
+import theme from 'react-syntax-highlighter/dist/esm/styles/prism/coldark-dark';
 import styles from './styles.module.css';
+
+SyntaxHighlighter.registerLanguage('graphql', graphql);
 
 export const WelcomePage = () => (
 	<WelcomePageLayout skipPath="/User">
@@ -23,14 +27,13 @@ export const WelcomePage = () => (
 			This is useful to demonstrate how cross datasource filtering works. For example, when you run
 			this query:
 		</p>
-		<Spacer height={10} />
-		<CodeBlock
-			showLineNumbers
+		<SyntaxHighlighter
 			language="graphql"
-			theme={dracula}
-			customStyle={{ backgroundColor: 'hsl(264, 40%, 10%)', marginBottom: '1rem' }}
-			codeContainerStyle={{}}
-			text={`query CrossDatasourceFiltering {
+			style={theme}
+			showLineNumbers
+			customStyle={{ background: 'hsl(264, 40%, 10%)' }}
+		>
+			{`query CrossDatasourceFiltering {
     tasks(filter: {user: {username_in: ["mike_jones", "jane_smith"]}}) {
         description
         user {
@@ -38,8 +41,7 @@ export const WelcomePage = () => (
         }
     }
 }`}
-		/>
-		<Spacer height={10} />
+		</SyntaxHighlighter>
 		<p>
 			Graphweaver does something really special. It will go to the Postgres database, find user IDs
 			matching the filter, then go to the MySQL database and find tasks where the user ID is one of
