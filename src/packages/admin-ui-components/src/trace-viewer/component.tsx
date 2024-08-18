@@ -47,7 +47,6 @@ export const TraceViewer = ({ traces }: { traces?: Span[] }) => {
 					</Panel>
 				</PanelGroup>
 			</Panel>
-			s
 		</PanelGroup>
 	);
 };
