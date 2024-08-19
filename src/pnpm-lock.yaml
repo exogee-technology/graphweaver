@@ -989,8 +989,8 @@ importers:
   packages/cdk:
     dependencies:
       aws-cdk-lib:
-        specifier: 2.151.0
-        version: 2.151.0(constructs@10.3.0)
+        specifier: 2.152.0
+        version: 2.152.0(constructs@10.3.0)
       constructs:
         specifier: 10.3.0
         version: 10.3.0
@@ -9267,8 +9267,8 @@ packages:
       fastq: 1.17.1
     dev: false
 
-  /aws-cdk-lib@2.151.0(constructs@10.3.0):
-    resolution: {integrity: sha512-SIzzOGSYO+s1f+y2zyGKK8wH5JmN+nkrGOL28iHzmx9lXK0NaT0+d5sjTbzLo2C8iogzbR91yGnIKze0GzZXHg==}
+  /aws-cdk-lib@2.152.0(constructs@10.3.0):
+    resolution: {integrity: sha512-w8Dn92xYCUWSRL9ncoXzpGzyDAHbljnrhXFm/pTR1YZTxdbLHvIOdh7D9b9qhtghUnq2i522I6/z2NJggPcNWQ==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
