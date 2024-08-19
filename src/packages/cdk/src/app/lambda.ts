@@ -16,8 +16,8 @@ export class LambdaStack extends cdk.Stack {
 	constructor(
 		scope: Construct,
 		id: string,
-		database: DatabaseStack,
 		config: GraphweaverAppConfig,
+		database?: DatabaseStack,
 		props?: cdk.StackProps
 	) {
 		super(scope, id, props);
@@ -30,11 +30,7 @@ export class LambdaStack extends cdk.Stack {
 		// Create a dedicated user with limited permissions and pass its credentials via a secret manager ARN.
 		// This is a best practice for security and compliance.
 		const databaseSecretFullArn =
-			config.lambda.databaseSecretFullArn ?? database.dbInstance.secret?.secretFullArn;
-
-		if (!databaseSecretFullArn) {
-			throw new Error('No database secret found.');
-		}
+			config.lambda.databaseSecretFullArn ?? database?.dbInstance.secret?.secretFullArn;
 
 		const vpc = config.network.vpc;
 
@@ -64,7 +60,7 @@ export class LambdaStack extends cdk.Stack {
 			architecture: lambda.Architecture.ARM_64,
 			environment: {
 				NODE_EXTRA_CA_CERTS: '/var/runtime/ca-cert.pem',
-				DATABASE_SECRET_ARN: databaseSecretFullArn,
+				...(databaseSecretFullArn ? { DATABASE_SECRET_ARN: databaseSecretFullArn } : {}),
 				...config.lambda.envVars,
 			},
 			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
@@ -75,7 +71,7 @@ export class LambdaStack extends cdk.Stack {
 		// If a custom secret is provided, the user is responsible for granting access to the Lambda function
 		// Again, this is a best practice to use your own secret and manage the permissions.
 		if (
-			database.dbInstance.secret?.secretFullArn &&
+			database?.dbInstance.secret?.secretFullArn &&
 			databaseSecretFullArn === database.dbInstance.secret?.secretFullArn
 		) {
 			database.dbInstance.secret.grantRead(this.lambda);

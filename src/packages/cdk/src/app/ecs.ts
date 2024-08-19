@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { InstanceClass, InstanceSize, InstanceType, SubnetType, Vpc } from 'aws-cdk-lib/aws-ec2';
+import { InstanceClass, InstanceSize, InstanceType, SubnetType } from 'aws-cdk-lib/aws-ec2';
 import { AmiHardwareType, Cluster, ContainerImage, EcsOptimizedImage } from 'aws-cdk-lib/aws-ecs';
 import { ApplicationLoadBalancedEc2Service } from 'aws-cdk-lib/aws-ecs-patterns';
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
@@ -19,8 +19,8 @@ export class EcsStack extends cdk.NestedStack {
 	constructor(
 		scope: Construct,
 		id: string,
-		database: DatabaseStack,
 		config: GraphweaverAppConfig,
+		database?: DatabaseStack,
 		props?: cdk.StackProps
 	) {
 		super(scope, id, props);
@@ -33,11 +33,7 @@ export class EcsStack extends cdk.NestedStack {
 		// Create a dedicated user with limited permissions and pass its credentials via a secret manager ARN.
 		// This is a best practice for security and compliance.
 		const databaseSecretFullArn =
-			config.ecs.databaseSecretFullArn ?? database.dbInstance.secret?.secretFullArn;
-
-		if (!databaseSecretFullArn) {
-			throw new Error('No database secret found.');
-		}
+			config.ecs.databaseSecretFullArn ?? database?.dbInstance.secret?.secretFullArn;
 
 		const vpc = config.network.vpc;
 
@@ -81,7 +77,7 @@ export class EcsStack extends cdk.NestedStack {
 				image: ContainerImage.fromDockerImageAsset(image),
 				containerPort: 3000,
 				environment: {
-					DATABASE_SECRET_ARN: databaseSecretFullArn,
+					...(databaseSecretFullArn ? { DATABASE_SECRET_ARN: databaseSecretFullArn } : {}),
 					...config.ecs.envVars,
 				},
 			},
@@ -104,7 +100,7 @@ export class EcsStack extends cdk.NestedStack {
 		// If a custom secret is provided, the user is responsible for granting access to the Lambda function
 		// Again, it is a best practice to use your own secret and manage the permissions.
 		if (
-			database.dbInstance.secret?.secretFullArn &&
+			database?.dbInstance.secret?.secretFullArn &&
 			databaseSecretFullArn === database.dbInstance.secret?.secretFullArn
 		) {
 			const secretsManagerPolicy = new PolicyStatement({

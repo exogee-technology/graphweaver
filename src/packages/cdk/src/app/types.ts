@@ -5,15 +5,13 @@ import { PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
 
 export type GraphweaverAppConfig = {
 	name: string;
-	database: {
-		// Username for the database
-		username: string;
-		// Name of the database
-		name: string;
-		// Instance type for the database, defaults to t4g.micro.
-		instanceType?: InstanceType;
-		// Postgres version for the database, defaults to VER_16_2
-		version?: PostgresEngineVersion;
+	network: {
+		// VPC to deploy the application into
+		vpc: IVpc;
+		// Security group for the GraphQL API
+		graphqlSecurityGroup: SecurityGroup;
+		// Security group for the database
+		databaseSecurityGroup: SecurityGroup;
 	};
 	adminUI: {
 		// Path to the admin UI build directory (relative to the project root)
@@ -28,6 +26,16 @@ export type GraphweaverAppConfig = {
 		// Content Security Policy for the website. Defaults to:
 		// default-src 'self'; connect-src https://${config.api.url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;
 		csp?: string;
+	};
+	database?: {
+		// Username for the database
+		username: string;
+		// Name of the database
+		name: string;
+		// Instance type for the database, defaults to t4g.micro.
+		instanceType?: InstanceType;
+		// Postgres version for the database, defaults to VER_16_2
+		version?: PostgresEngineVersion;
 	};
 	ecs?: {
 		// Path to the Graphweaver app build directory (relative to the project root)
@@ -65,13 +73,5 @@ export type GraphweaverAppConfig = {
 		handler?: string;
 		// Pass the database secret ARN to the Lambda function
 		databaseSecretFullArn?: string;
-	};
-	network: {
-		// VPC to deploy the application into
-		vpc: IVpc;
-		// Security group for the GraphQL API
-		graphqlSecurityGroup: SecurityGroup;
-		// Security group for the database
-		databaseSecurityGroup: SecurityGroup;
 	};
 };
