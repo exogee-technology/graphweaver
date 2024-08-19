@@ -78,7 +78,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -363,7 +363,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/postgresql':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -418,7 +418,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -955,8 +955,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       serverless-offline:
-        specifier: 14.0.0
-        version: 14.0.0
+        specifier: 14.1.1
+        version: 14.1.1
       vite:
         specifier: 5.4.1
         version: 5.4.1(@types/node@22.3.0)
@@ -1186,7 +1186,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/postgresql':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -1291,7 +1291,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -1353,13 +1353,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -6044,30 +6044,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.3.6(@mikro-orm/core@6.3.6):
-    resolution: {integrity: sha512-S2dcccJGZcB8Bj5HpT77Qjf7MrHd+6VoSsacecUnEQMkI4mCPYfMKC0yChEmEchXJT0vtcr6ZJhLivPVUPVAeQ==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.3.6
-      '@mikro-orm/knex': 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0):
     resolution: {integrity: sha512-S2dcccJGZcB8Bj5HpT77Qjf7MrHd+6VoSsacecUnEQMkI4mCPYfMKC0yChEmEchXJT0vtcr6ZJhLivPVUPVAeQ==}
     engines: {node: '>= 18.12.0'}
@@ -10457,6 +10433,11 @@ packages:
       type: 2.7.3
     dev: false
 
+  /data-uri-to-buffer@4.0.1:
+    resolution: {integrity: sha512-0R9ikRb668HB7QDxT1vkpuUBtqc53YyAwMwGeUFKRojY/NWKvdZ+9UYtRfGmhqNbRkTSVpMbmyhXipFFv2cb/A==}
+    engines: {node: '>= 12'}
+    dev: false
+
   /dataloader@2.2.2:
     resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
 
@@ -11632,6 +11613,14 @@ packages:
       pend: 1.2.0
     dev: false
 
+  /fetch-blob@3.2.0:
+    resolution: {integrity: sha512-7yAQpD2UMJzLi1Dqv7qFYnPbaPx7ZfFK6PiIxQ4PfkGPyNyl2Ugx+a/umUonmKqjhM4DnfbMvdX6otXq83soQQ==}
+    engines: {node: ^12.20 || >= 14.13}
+    dependencies:
+      node-domexception: 1.0.0
+      web-streams-polyfill: 3.3.3
+    dev: false
+
   /fetch-mock@9.11.0:
     resolution: {integrity: sha512-PG1XUv+x7iag5p/iNHD4/jdpxL9FtVSqRMUQhPab4hVDt80T1MH5ehzVrL2IdXO9Q2iBggArFvPqjUbHFuI58Q==}
     engines: {node: '>=4.0.0'}
@@ -11819,6 +11808,13 @@ packages:
   /format@0.2.2:
     resolution: {integrity: sha512-wzsgA6WOq+09wrU1tsJ09udeR/YZRaeArL9e1wPbFg3GG2yDnC2ldKpxs4xunpFF9DgqCqOIra3bc1HWrJ37Ww==}
     engines: {node: '>=0.4.x'}
+    dev: false
+
+  /formdata-polyfill@4.0.10:
+    resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
+    engines: {node: '>=12.20.0'}
+    dependencies:
+      fetch-blob: 3.2.0
     dev: false
 
   /formidable@2.1.2:
@@ -14574,6 +14570,11 @@ packages:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
     dev: false
 
+  /node-domexception@1.0.0:
+    resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
+    engines: {node: '>=10.5.0'}
+    dev: false
+
   /node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
     engines: {node: 4.x || >=6.0.0}
@@ -14584,6 +14585,15 @@ packages:
         optional: true
     dependencies:
       whatwg-url: 5.0.0
+    dev: false
+
+  /node-fetch@3.3.2:
+    resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    dependencies:
+      data-uri-to-buffer: 4.0.1
+      fetch-blob: 3.2.0
+      formdata-polyfill: 4.0.10
     dev: false
 
   /node-gyp-build@4.8.1:
@@ -16174,8 +16184,8 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-offline@14.0.0:
-    resolution: {integrity: sha512-MFY5RMjiwhuBW2yrD4VJOb1+ktkxB5OF2Vaih5ObSXqVUkIPoZcmE6Ojr6cD11h8q4CT46L2YsmCXJuWe7xJOQ==}
+  /serverless-offline@14.1.1:
+    resolution: {integrity: sha512-9OjpednYB2pLEpR6pmEstSJntTi81Z6vSrlp5FlZYkxhffjssfc4465HVBwj0aHqlHoJRWkKMKUErqCVpykjqQ==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       serverless: ^4.0.0
@@ -16201,10 +16211,11 @@ packages:
       jsonschema: 1.4.1
       jszip: 3.10.1
       luxon: 3.5.0
+      node-fetch: 3.3.2
       node-schedule: 2.1.1
       p-memoize: 7.1.1
       tree-kill: 1.2.2
-      tsx: 4.16.5
+      tsx: 4.17.0
       velocityjs: 2.0.6
       ws: 8.18.0
     transitivePeerDependencies:
@@ -17004,17 +17015,6 @@ packages:
   /tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
-  /tsx@4.16.5:
-    resolution: {integrity: sha512-ArsiAQHEW2iGaqZ8fTA1nX0a+lN5mNTyuGRRO6OW3H/Yno1y9/t1f9YOI1Cfoqz63VAthn++ZYcbDP7jPflc+A==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-    dependencies:
-      esbuild: 0.21.5
-      get-tsconfig: 4.7.6
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: false
-
   /tsx@4.17.0:
     resolution: {integrity: sha512-eN4mnDA5UMKDt4YZixo9tBioibaMBpoxBkD+rIPAjVmYERSG0/dWEY1CEFuV89CgASlKL499q8AhmkMnnjtOJg==}
     engines: {node: '>=18.0.0'}
@@ -17024,7 +17024,6 @@ packages:
       get-tsconfig: 4.7.6
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
