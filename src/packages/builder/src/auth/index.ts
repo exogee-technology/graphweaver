@@ -42,4 +42,6 @@ export const initialiseAuth = async ({ method, ...databaseOptions }: InitialiseA
 	if (method === 'api-key') {
 		await generateApiKey(databaseOptions);
 	}
+
+	console.log(`\n${method} auth initialised successfully\n`);
 };
