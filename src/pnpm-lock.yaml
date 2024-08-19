@@ -78,7 +78,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -326,8 +326,8 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
 
   examples/s3-storage:
     dependencies:
@@ -363,7 +363,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/postgresql':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -418,7 +418,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -514,8 +514,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-router-dom:
-        specifier: 6.26.0
-        version: 6.26.0(react-dom@18.3.1)(react@18.3.1)
+        specifier: 6.26.1
+        version: 6.26.1(react-dom@18.3.1)(react@18.3.1)
       xero-node:
         specifier: 7.0.0
         version: 7.0.0
@@ -533,8 +533,8 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
 
   packages/admin-ui:
     dependencies:
@@ -566,8 +566,8 @@ importers:
         specifier: 3.16.1
         version: 3.16.1(react-dom@18.3.1)(react@18.3.1)
       react-router-dom:
-        specifier: 6.26.0
-        version: 6.26.0(react-dom@18.3.1)(react@18.3.1)
+        specifier: 6.26.1
+        version: 6.26.1(react-dom@18.3.1)(react@18.3.1)
     devDependencies:
       '@chialab/esbuild-plugin-html':
         specifier: 0.18.2
@@ -583,7 +583,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@5.4.0)
+        version: 4.3.1(vite@5.4.1)
       esbuild:
         specifier: 0.23.0
         version: 0.23.0
@@ -597,11 +597,11 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.4.0)
+        version: 4.2.0(typescript@5.5.4)(vite@5.4.1)
 
   packages/admin-ui-components:
     dependencies:
@@ -682,17 +682,17 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-router-dom:
-        specifier: 6.26.0
-        version: 6.26.0(react-dom@18.3.1)(react@18.3.1)
+        specifier: 6.26.1
+        version: 6.26.1(react-dom@18.3.1)(react@18.3.1)
       typescript:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.4.0)
+        version: 4.2.0(typescript@5.5.4)(vite@5.4.1)
 
   packages/apollo-client:
     devDependencies:
@@ -846,20 +846,20 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.5.4)(vite@5.4.0)
+        version: 4.2.0(typescript@5.5.4)(vite@5.4.1)
 
   packages/aws-cognito:
     dependencies:
       '@aws-sdk/client-cognito-identity-provider':
-        specifier: 3.629.0
-        version: 3.629.0
+        specifier: 3.632.0
+        version: 3.632.0
       '@aws-sdk/client-lambda':
-        specifier: 3.629.0
-        version: 3.629.0
+        specifier: 3.632.0
+        version: 3.632.0
       '@exogee/graphweaver-rest':
         specifier: workspace:*
         version: link:../rest
@@ -917,7 +917,7 @@ importers:
         version: 6.15.0
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@5.4.0)
+        version: 4.3.1(vite@5.4.1)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -958,8 +958,8 @@ importers:
         specifier: 14.0.0
         version: 14.0.0
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
@@ -989,8 +989,8 @@ importers:
   packages/cdk:
     dependencies:
       aws-cdk-lib:
-        specifier: 2.151.0
-        version: 2.151.0(constructs@10.3.0)
+        specifier: 2.152.0
+        version: 2.152.0(constructs@10.3.0)
       constructs:
         specifier: 10.3.0
         version: 10.3.0
@@ -1085,8 +1085,8 @@ importers:
         specifier: 3.3.3
         version: 3.3.3
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
 
   packages/core:
     dependencies:
@@ -1100,8 +1100,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@graphql-tools/utils':
-        specifier: 10.5.3
-        version: 10.5.3(graphql@16.9.0)
+        specifier: 10.5.4
+        version: 10.5.4(graphql@16.9.0)
       '@opentelemetry/api':
         specifier: 1.9.0
         version: 1.9.0
@@ -1186,7 +1186,7 @@ importers:
         version: 6.3.6
       '@mikro-orm/postgresql':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -1291,7 +1291,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -1321,8 +1321,8 @@ importers:
         specifier: 4.11.0
         version: 4.11.0(graphql@16.9.0)
       '@aws-sdk/client-secrets-manager':
-        specifier: 3.629.0
-        version: 3.629.0
+        specifier: 3.632.0
+        version: 3.632.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1353,13 +1353,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.6
-        version: 6.3.6(@mikro-orm/core@6.3.6)
+        version: 6.3.6(@mikro-orm/core@6.3.6)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.6
         version: 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)
@@ -1524,11 +1524,11 @@ importers:
   packages/storage-provider:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.629.0
-        version: 3.629.0
+        specifier: 3.633.0
+        version: 3.633.0
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.629.0
-        version: 3.629.0
+        specifier: 3.633.0
+        version: 3.633.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1568,8 +1568,8 @@ importers:
         specifier: 5.5.4
         version: 5.5.4
       vite:
-        specifier: 5.4.0
-        version: 5.4.0(@types/node@22.3.0)
+        specifier: 5.4.1
+        version: 5.4.1(@types/node@22.3.0)
 
   packages/xero:
     dependencies:
@@ -1614,8 +1614,8 @@ importers:
         specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-router-dom:
-        specifier: 6.26.0
-        version: 6.26.0(react-dom@18.3.1)(react@18.3.1)
+        specifier: 6.26.1
+        version: 6.26.1(react-dom@18.3.1)(react@18.3.1)
       typescript:
         specifier: 5.5.4
         version: 5.5.4
@@ -1987,23 +1987,23 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/client-cognito-identity-provider@3.629.0:
-    resolution: {integrity: sha512-eM9IIAjYI9/xbkcgtyMNIpIFXQCb9kD0BmawoYOtxtmuhDO/JqxYHg+aDxzb0WeeVBOgZReFBmhvmYK4oI7qjw==}
+  /@aws-sdk/client-cognito-identity-provider@3.632.0:
+    resolution: {integrity: sha512-RP9L/LKu3qwXT6z+eq8tjOb4kpT2JiQYi483pVg85jf1PiIB+aoPA0Dbre7f+b7Wpo3FyPIlFqKuHzqhPWZvfQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.629.0(@aws-sdk/client-sts@3.629.0)
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sso-oidc': 3.632.0(@aws-sdk/client-sts@3.632.0)
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/core': 3.629.0
-      '@aws-sdk/credential-provider-node': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-node': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/middleware-host-header': 3.620.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@smithy/config-resolver': 3.0.5
@@ -2036,23 +2036,23 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-lambda@3.629.0:
-    resolution: {integrity: sha512-b0Ka8TbQOBcTus+1ebfq9YE35G34G1sazU1u3HSOq0jEyOd9Ljd5GM5ZAUB1FaiLXTPtCjt04hT3WdHRWB/6Fg==}
+  /@aws-sdk/client-lambda@3.632.0:
+    resolution: {integrity: sha512-vF4KRuHGr6EfW+dssm56S6b+jAa8dKqdWduHNms1TQFah0iOkjc9Dpo4p4j6bobZcuricGko/OZy9ynb1Dwldg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.629.0(@aws-sdk/client-sts@3.629.0)
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sso-oidc': 3.632.0(@aws-sdk/client-sts@3.632.0)
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/core': 3.629.0
-      '@aws-sdk/credential-provider-node': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-node': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/middleware-host-header': 3.620.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@smithy/config-resolver': 3.0.5
@@ -2090,17 +2090,17 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-s3@3.629.0:
-    resolution: {integrity: sha512-Q0YXKdUA7NboPl94JOKD4clHHuERG1Kwy0JPbU+3Hvmz/UuwUGBmlfaRAqd9y4LXsTv/2xKtFPW9R+nBfy9mwA==}
+  /@aws-sdk/client-s3@3.633.0:
+    resolution: {integrity: sha512-KPwNGlZlCRUADNTvwPJmvDvlh8N/jxjcv5e71M/mWxLXwSPdlHlRjVSBL1/CPSXUr86XRAsPL+BCRkdiytUhbg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.629.0(@aws-sdk/client-sts@3.629.0)
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sso-oidc': 3.632.0(@aws-sdk/client-sts@3.632.0)
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/core': 3.629.0
-      '@aws-sdk/credential-provider-node': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-node': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/middleware-bucket-endpoint': 3.620.0
       '@aws-sdk/middleware-expect-continue': 3.620.0
       '@aws-sdk/middleware-flexible-checksums': 3.620.0
@@ -2108,13 +2108,13 @@ packages:
       '@aws-sdk/middleware-location-constraint': 3.609.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-sdk-s3': 3.629.0
+      '@aws-sdk/middleware-sdk-s3': 3.633.0
       '@aws-sdk/middleware-ssec': 3.609.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
-      '@aws-sdk/signature-v4-multi-region': 3.629.0
+      '@aws-sdk/signature-v4-multi-region': 3.633.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@aws-sdk/xml-builder': 3.609.0
@@ -2156,23 +2156,23 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-secrets-manager@3.629.0:
-    resolution: {integrity: sha512-ZZKI9uTQ3WIdbCZK6sveccalLTWgyOZeebi+Gnwl5ztKMk4OfwZKxyhry1DXB8gMrlISniREDb3ZxUZdFNwqfQ==}
+  /@aws-sdk/client-secrets-manager@3.632.0:
+    resolution: {integrity: sha512-WsQhPHHK1yPfALcP1B7nBSGDzky6vFTUEXnUdfzb5Xy2cT+JTBTS6ChtQGqqOuGHDP/3t/9soqZ+L6rUCYBb/Q==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.629.0(@aws-sdk/client-sts@3.629.0)
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sso-oidc': 3.632.0(@aws-sdk/client-sts@3.632.0)
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/core': 3.629.0
-      '@aws-sdk/credential-provider-node': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-node': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/middleware-host-header': 3.620.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@smithy/config-resolver': 3.0.5
@@ -2206,24 +2206,24 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sso-oidc@3.629.0(@aws-sdk/client-sts@3.629.0):
-    resolution: {integrity: sha512-3if0LauNJPqubGYf8vnlkp+B3yAeKRuRNxfNbHlE6l510xWGcKK/ZsEmiFmfePzKKSRrDh/cxMFMScgOrXptNg==}
+  /@aws-sdk/client-sso-oidc@3.632.0(@aws-sdk/client-sts@3.632.0):
+    resolution: {integrity: sha512-Oh1fIWaoZluihOCb/zDEpRTi+6an82fgJz7fyRBugyLhEtDjmvpCQ3oKjzaOhoN+4EvXAm1ZS/ZgpvXBlIRTgw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-sts': ^3.629.0
+      '@aws-sdk/client-sts': ^3.632.0
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/core': 3.629.0
-      '@aws-sdk/credential-provider-node': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-node': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/middleware-host-header': 3.620.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@smithy/config-resolver': 3.0.5
@@ -2256,8 +2256,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sso@3.629.0:
-    resolution: {integrity: sha512-2w8xU4O0Grca5HmT2dXZ5fF0g39RxODtmoqHJDsK5DSt750LqDG4w3ktmBvQs3+SrpkkJOjlX5v/hb2PCxVbww==}
+  /@aws-sdk/client-sso@3.632.0:
+    resolution: {integrity: sha512-iYWHiKBz44m3chCFvtvHnvCpL2rALzyr1e6tOZV3dLlOKtQtDUlPy6OtnXDu4y+wyJCniy8ivG3+LAe4klzn1Q==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
@@ -2266,10 +2266,10 @@ packages:
       '@aws-sdk/middleware-host-header': 3.620.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@smithy/config-resolver': 3.0.5
@@ -2302,22 +2302,22 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sts@3.629.0:
-    resolution: {integrity: sha512-RjOs371YwnSVGxhPjuluJKaxl4gcPYTAky0nPjwBime0i9/iS9nI8R8l5j7k7ec9tpFWjBPvNnThCU07pvjdzw==}
+  /@aws-sdk/client-sts@3.632.0:
+    resolution: {integrity: sha512-Ss5cBH09icpTvT+jtGGuQlRdwtO7RyE9BF4ZV/CEPATdd9whtJt4Qxdya8BUnkWR7h5HHTrQHqai3YVYjku41A==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
-      '@aws-sdk/client-sso-oidc': 3.629.0(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/client-sso-oidc': 3.632.0(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/core': 3.629.0
-      '@aws-sdk/credential-provider-node': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-node': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/middleware-host-header': 3.620.0
       '@aws-sdk/middleware-logger': 3.609.0
       '@aws-sdk/middleware-recursion-detection': 3.620.0
-      '@aws-sdk/middleware-user-agent': 3.620.0
+      '@aws-sdk/middleware-user-agent': 3.632.0
       '@aws-sdk/region-config-resolver': 3.614.0
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@aws-sdk/util-user-agent-browser': 3.609.0
       '@aws-sdk/util-user-agent-node': 3.614.0
       '@smithy/config-resolver': 3.0.5
@@ -2391,18 +2391,18 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/credential-provider-ini@3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0):
-    resolution: {integrity: sha512-r9fI7BABARvVDp77DBUImQzYdvarAIdhbvpCEZib0rlpvfWu3zxE9KZcapCAAi0MPjxeDfb7RMehFQIkAP7mYw==}
+  /@aws-sdk/credential-provider-ini@3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0):
+    resolution: {integrity: sha512-m6epoW41xa1ajU5OiHcmQHoGVtrbXBaRBOUhlCLZmcaqMLYsboM4iD/WZP8aatKEON5tTnVXh/4StV8D/+wemw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      '@aws-sdk/client-sts': ^3.629.0
+      '@aws-sdk/client-sts': ^3.632.0
     dependencies:
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/credential-provider-env': 3.620.1
       '@aws-sdk/credential-provider-http': 3.622.0
       '@aws-sdk/credential-provider-process': 3.620.1
-      '@aws-sdk/credential-provider-sso': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)
-      '@aws-sdk/credential-provider-web-identity': 3.621.0(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-sso': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)
+      '@aws-sdk/credential-provider-web-identity': 3.621.0(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/types': 3.609.0
       '@smithy/credential-provider-imds': 3.2.0
       '@smithy/property-provider': 3.1.3
@@ -2414,16 +2414,16 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/credential-provider-node@3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0):
-    resolution: {integrity: sha512-868hnVOLlXOBHk91Rl0jZIRgr/M4WJCa0nOrW9A9yidsQxuZp9P0vshDmm4hMvNZadmPIfo0Rra2MpA4RELoCw==}
+  /@aws-sdk/credential-provider-node@3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0):
+    resolution: {integrity: sha512-cL8fuJWm/xQBO4XJPkeuZzl3XinIn9EExWgzpG48NRMKR5us1RI/ucv7xFbBBaG+r/sDR2HpYBIA3lVIpm1H3Q==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/credential-provider-env': 3.620.1
       '@aws-sdk/credential-provider-http': 3.622.0
-      '@aws-sdk/credential-provider-ini': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-ini': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/credential-provider-process': 3.620.1
-      '@aws-sdk/credential-provider-sso': 3.629.0(@aws-sdk/client-sso-oidc@3.629.0)
-      '@aws-sdk/credential-provider-web-identity': 3.621.0(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/credential-provider-sso': 3.632.0(@aws-sdk/client-sso-oidc@3.632.0)
+      '@aws-sdk/credential-provider-web-identity': 3.621.0(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/types': 3.609.0
       '@smithy/credential-provider-imds': 3.2.0
       '@smithy/property-provider': 3.1.3
@@ -2447,12 +2447,12 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/credential-provider-sso@3.629.0(@aws-sdk/client-sso-oidc@3.629.0):
-    resolution: {integrity: sha512-Lf4XOuj6jamxgGZGrVojERh5S+NS2t2S4CUOnAu6tJ5U0GPlpjhINUKlcVxJBpsIXudMGW1nkumAd3+kazCPig==}
+  /@aws-sdk/credential-provider-sso@3.632.0(@aws-sdk/client-sso-oidc@3.632.0):
+    resolution: {integrity: sha512-P/4wB6j7ym5QCPTL2xlMfvf2NcXSh+z0jmsZP4WW/tVwab4hvgabPPbLeEZDSWZ0BpgtxKGvRq0GSHuGeirQbA==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/client-sso': 3.629.0
-      '@aws-sdk/token-providers': 3.614.0(@aws-sdk/client-sso-oidc@3.629.0)
+      '@aws-sdk/client-sso': 3.632.0
+      '@aws-sdk/token-providers': 3.614.0(@aws-sdk/client-sso-oidc@3.632.0)
       '@aws-sdk/types': 3.609.0
       '@smithy/property-provider': 3.1.3
       '@smithy/shared-ini-file-loader': 3.1.4
@@ -2463,13 +2463,13 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/credential-provider-web-identity@3.621.0(@aws-sdk/client-sts@3.629.0):
+  /@aws-sdk/credential-provider-web-identity@3.621.0(@aws-sdk/client-sts@3.632.0):
     resolution: {integrity: sha512-w7ASSyfNvcx7+bYGep3VBgC3K6vEdLmlpjT7nSIHxxQf+WSdvy+HynwJosrpZax0sK5q0D1Jpn/5q+r5lwwW6w==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@aws-sdk/client-sts': ^3.621.0
     dependencies:
-      '@aws-sdk/client-sts': 3.629.0
+      '@aws-sdk/client-sts': 3.632.0
       '@aws-sdk/types': 3.609.0
       '@smithy/property-provider': 3.1.3
       '@smithy/types': 3.3.0
@@ -2551,8 +2551,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/middleware-sdk-s3@3.629.0:
-    resolution: {integrity: sha512-FRXLcnPWXBoq/T9mnGnrpqhrSKNSm22rqJ0L7P14KESmbGuwhF/7ELYYxXIpgnIpb/CIUVmIU5EE8lsW1VTe8A==}
+  /@aws-sdk/middleware-sdk-s3@3.633.0:
+    resolution: {integrity: sha512-7jjmWVw28wIHOdrHyTCvwKr1EYGrZI13DviwAOwRC0y9dB8gGCdRiA4fNczripUBxolCCE9mpqLrqy5pXtTzvA==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/core': 3.629.0
@@ -2580,12 +2580,12 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/middleware-user-agent@3.620.0:
-    resolution: {integrity: sha512-bvS6etn+KsuL32ubY5D3xNof1qkenpbJXf/ugGXbg0n98DvDFQ/F+SMLxHgbnER5dsKYchNnhmtI6/FC3HFu/A==}
+  /@aws-sdk/middleware-user-agent@3.632.0:
+    resolution: {integrity: sha512-yY/sFsHKwG9yzSf/DTclqWJaGPI2gPBJDCGBujSqTG1zlS7Ot4fqi91DZ6088BFWzbOorDzJFcAhAEFzc6LuQg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/types': 3.609.0
-      '@aws-sdk/util-endpoints': 3.614.0
+      '@aws-sdk/util-endpoints': 3.632.0
       '@smithy/protocol-http': 4.1.0
       '@smithy/types': 3.3.0
       tslib: 2.6.3
@@ -2603,11 +2603,11 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.629.0:
-    resolution: {integrity: sha512-6lVgK9Y5m+AqisPNLs1Low5oJHFg/lfsuEsQMKG5y0/uqR1KVLswiaY1mhp0cprMEXRN2DDMAhP7i+jy5/WLNw==}
+  /@aws-sdk/s3-request-presigner@3.633.0:
+    resolution: {integrity: sha512-WUcBSdBenzA65y8MCDPcOaKWYhU0+AuocI1hm46TaPcPhE4E2oVoYbk1MeufkaSavR741iM4fm+b16ESUF963A==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/signature-v4-multi-region': 3.629.0
+      '@aws-sdk/signature-v4-multi-region': 3.633.0
       '@aws-sdk/types': 3.609.0
       '@aws-sdk/util-format-url': 3.609.0
       '@smithy/middleware-endpoint': 3.1.0
@@ -2617,11 +2617,11 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/signature-v4-multi-region@3.629.0:
-    resolution: {integrity: sha512-GPX6dnmuLGDFp7CsGqGCzleEoNyr9ekgOzSBtcL5nKX++NruxO7f1QzJAbcYvz0gdKvz958UO0EKsGM6hnkTSg==}
+  /@aws-sdk/signature-v4-multi-region@3.633.0:
+    resolution: {integrity: sha512-96F7Mx4lybMZdE0TTEkw6EKpeB0hxqp3J8fUJasesekTnO7jsklc47GHL5R3whyS/L4/JaPazm0Pi2DEH3kw1w==}
     engines: {node: '>=16.0.0'}
     dependencies:
-      '@aws-sdk/middleware-sdk-s3': 3.629.0
+      '@aws-sdk/middleware-sdk-s3': 3.633.0
       '@aws-sdk/types': 3.609.0
       '@smithy/protocol-http': 4.1.0
       '@smithy/signature-v4': 4.1.0
@@ -2629,13 +2629,13 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/token-providers@3.614.0(@aws-sdk/client-sso-oidc@3.629.0):
+  /@aws-sdk/token-providers@3.614.0(@aws-sdk/client-sso-oidc@3.632.0):
     resolution: {integrity: sha512-okItqyY6L9IHdxqs+Z116y5/nda7rHxLvROxtAJdLavWTYDydxrZstImNgGWTeVdmc0xX2gJCI77UYUTQWnhRw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@aws-sdk/client-sso-oidc': ^3.614.0
     dependencies:
-      '@aws-sdk/client-sso-oidc': 3.629.0(@aws-sdk/client-sts@3.629.0)
+      '@aws-sdk/client-sso-oidc': 3.632.0(@aws-sdk/client-sts@3.632.0)
       '@aws-sdk/types': 3.609.0
       '@smithy/property-provider': 3.1.3
       '@smithy/shared-ini-file-loader': 3.1.4
@@ -2658,8 +2658,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/util-endpoints@3.614.0:
-    resolution: {integrity: sha512-wK2cdrXHH4oz4IomV/yrGkftU9A+ITB6nFL+rxxyO78is2ifHJpFdV4aqk4LSkXYPi6CXWNru/Dqc7yiKXgJPw==}
+  /@aws-sdk/util-endpoints@3.632.0:
+    resolution: {integrity: sha512-LlYMU8pAbcEQphOpE6xaNLJ8kPGhklZZTVzZVpVW477NaaGgoGTMYNXTABYHcxeF5E2lLrxql9OmVpvr8GWN8Q==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/types': 3.609.0
@@ -4465,7 +4465,7 @@ packages:
       '@graphql-tools/load': 8.0.2(graphql@16.9.0)
       '@graphql-tools/prisma-loader': 8.0.4(@types/node@22.3.0)(graphql@16.9.0)
       '@graphql-tools/url-loader': 8.0.2(@types/node@22.3.0)(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.2(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
       '@whatwg-node/fetch': 0.8.8
       chalk: 4.1.2
       cosmiconfig: 8.3.6(typescript@5.5.4)
@@ -4512,7 +4512,7 @@ packages:
       '@graphql-codegen/typescript-operations': 4.2.3(graphql@16.9.0)
       '@graphql-codegen/visitor-plugin-common': 5.3.1(graphql@16.9.0)
       '@graphql-tools/documents': 1.0.1(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4528,7 +4528,7 @@ packages:
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-tools/schema': 10.0.4(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
     dev: false
@@ -4540,7 +4540,7 @@ packages:
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-codegen/visitor-plugin-common': 5.3.1(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       auto-bind: 4.0.0
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4558,7 +4558,7 @@ packages:
       '@graphql-codegen/add': 3.2.3(graphql@16.9.0)
       '@graphql-codegen/plugin-helpers': 3.1.2(graphql@16.9.0)
       '@graphql-codegen/visitor-plugin-common': 2.13.1(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.2(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
       graphql: 16.9.0
       parse-filepath: 1.0.2
       tslib: 2.6.3
@@ -4600,7 +4600,7 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       change-case-all: 1.0.15
       common-tags: 1.8.2
       graphql: 16.9.0
@@ -4615,7 +4615,7 @@ packages:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
     dev: false
@@ -4716,7 +4716,7 @@ packages:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-tools/optimize': 2.0.0(graphql@16.9.0)
       '@graphql-tools/relay-operation-optimizer': 7.0.1(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       auto-bind: 4.0.0
       change-case-all: 1.0.15
       dependency-graph: 0.11.0
@@ -4736,7 +4736,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@ardatan/sync-fetch': 0.0.1
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@whatwg-node/fetch': 0.9.19
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4750,7 +4750,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       dataloader: 2.2.2
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4764,7 +4764,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/graphql-tag-pluck': 8.3.2(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       globby: 11.1.0
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4782,7 +4782,7 @@ packages:
       '@graphql-tools/batch-execute': 9.0.4(graphql@16.9.0)
       '@graphql-tools/executor': 1.3.1(graphql@16.9.0)
       '@graphql-tools/schema': 10.0.4(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@repeaterjs/repeater': 3.0.6
       dataloader: 2.2.2
       graphql: 16.9.0
@@ -4806,7 +4806,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@types/ws': 8.5.12
       graphql: 16.9.0
       graphql-ws: 5.16.0(graphql@16.9.0)
@@ -4824,7 +4824,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@repeaterjs/repeater': 3.0.6
       '@whatwg-node/fetch': 0.9.19
       extract-files: 11.0.0
@@ -4842,7 +4842,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@types/ws': 8.5.12
       graphql: 16.9.0
       isomorphic-ws: 5.0.0(ws@8.18.0)
@@ -4859,7 +4859,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.9.0)
       '@repeaterjs/repeater': 3.0.6
       graphql: 16.9.0
@@ -4874,7 +4874,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/graphql-tag-pluck': 8.3.2(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       is-glob: 4.0.3
       micromatch: 4.0.7
@@ -4893,7 +4893,7 @@ packages:
       '@ardatan/sync-fetch': 0.0.1
       '@graphql-tools/executor-http': 1.1.5(@types/node@22.3.0)(graphql@16.9.0)
       '@graphql-tools/graphql-tag-pluck': 8.3.2(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@whatwg-node/fetch': 0.9.19
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4911,7 +4911,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/import': 7.0.1(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       globby: 11.1.0
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4929,7 +4929,7 @@ packages:
       '@babel/plugin-syntax-import-assertions': 7.24.7(@babel/core@7.25.2)
       '@babel/traverse': 7.23.2
       '@babel/types': 7.25.2
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
     transitivePeerDependencies:
@@ -4942,7 +4942,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       resolve-from: 5.0.0
       tslib: 2.6.3
@@ -4954,7 +4954,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       globby: 11.1.0
       graphql: 16.9.0
       tslib: 2.6.3
@@ -4968,7 +4968,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/schema': 10.0.4(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       p-limit: 3.1.0
       tslib: 2.6.3
@@ -4990,7 +4990,7 @@ packages:
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
     dev: false
@@ -5021,7 +5021,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/url-loader': 8.0.2(@types/node@22.3.0)(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@types/js-yaml': 4.0.9
       '@whatwg-node/fetch': 0.9.19
       chalk: 4.1.2
@@ -5066,7 +5066,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@ardatan/relay-compiler': 12.0.0(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
     transitivePeerDependencies:
@@ -5081,7 +5081,7 @@ packages:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@graphql-tools/merge': 9.0.4(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
       value-or-promise: 1.0.12
@@ -5110,7 +5110,7 @@ packages:
       '@graphql-tools/executor-graphql-ws': 1.2.0(graphql@16.9.0)
       '@graphql-tools/executor-http': 1.1.5(@types/node@22.3.0)(graphql@16.9.0)
       '@graphql-tools/executor-legacy-ws': 1.1.0(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       '@graphql-tools/wrap': 10.0.5(graphql@16.9.0)
       '@types/ws': 8.5.12
       '@whatwg-node/fetch': 0.9.19
@@ -5126,8 +5126,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@graphql-tools/utils@10.5.2(graphql@16.9.0):
-    resolution: {integrity: sha512-VZpw7wxwmQGcCGt8epw6fDb8LkoySbTJ/MU565ibKivPqCkH96XK36Et/N0RlRCYGN6QAXn5UIaSbOYYHrnpAA==}
+  /@graphql-tools/utils@10.5.3(graphql@16.9.0):
+    resolution: {integrity: sha512-XVyYptHEB7OeYwLTvG0092r5+a5SptTdOB0Ppov2nr6MrMZuyDLzEUNUapD75EdiOZzrVpO3JcHZ7FdRxiIyrw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -5139,8 +5139,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@graphql-tools/utils@10.5.3(graphql@16.9.0):
-    resolution: {integrity: sha512-XVyYptHEB7OeYwLTvG0092r5+a5SptTdOB0Ppov2nr6MrMZuyDLzEUNUapD75EdiOZzrVpO3JcHZ7FdRxiIyrw==}
+  /@graphql-tools/utils@10.5.4(graphql@16.9.0):
+    resolution: {integrity: sha512-XHnyCWSlg1ccsD8s0y6ugo5GZ5TpkTiFVNPSYms5G0s6Z/xTuSmiLBfeqgkfaCwLmLaQnRCmNDL2JRnqc2R5bQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -5179,7 +5179,7 @@ packages:
     dependencies:
       '@graphql-tools/delegate': 10.0.18(graphql@16.9.0)
       '@graphql-tools/schema': 10.0.4(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       graphql: 16.9.0
       tslib: 2.6.3
       value-or-promise: 1.0.12
@@ -6038,30 +6038,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.6(@mikro-orm/core@6.3.6):
-    resolution: {integrity: sha512-S2dcccJGZcB8Bj5HpT77Qjf7MrHd+6VoSsacecUnEQMkI4mCPYfMKC0yChEmEchXJT0vtcr6ZJhLivPVUPVAeQ==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': ^6.0.0
-    dependencies:
-      '@mikro-orm/core': 6.3.6
-      '@mikro-orm/knex': 6.3.6(@mikro-orm/core@6.3.6)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -7361,8 +7337,8 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@remix-run/router@1.19.0:
-    resolution: {integrity: sha512-zDICCLKEwbVYTS6TjYaWtHXxkdoUvD/QXvyVZjGCsWz5vyH7aFeONlPffPdW+Y/t6KT0MgXb2Mfjun9YpWN1dA==}
+  /@remix-run/router@1.19.1:
+    resolution: {integrity: sha512-S45oynt/WH19bHbIXjtli6QmwNYvaz+vtnubvNpNDvUOoA/OWh6j1OikIP3G+v5GHdxyC6EXoChG3HgYGEUfcg==}
     engines: {node: '>=14.0.0'}
 
   /@repeaterjs/repeater@3.0.6:
@@ -8827,7 +8803,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.3.1(vite@5.4.0):
+  /@vitejs/plugin-react@4.3.1(vite@5.4.1):
     resolution: {integrity: sha512-m/V2syj5CuVnaxcUJOQRel/Wr31FFXRFlnOoq1TVtkCxsY5veGMTEmpWHndrhB2U8ScHtCQB1e+4hWYExQc6Lg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -8838,7 +8814,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.0(@types/node@22.3.0)
+      vite: 5.4.1(@types/node@22.3.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -9294,8 +9270,8 @@ packages:
       fastq: 1.17.1
     dev: false
 
-  /aws-cdk-lib@2.151.0(constructs@10.3.0):
-    resolution: {integrity: sha512-SIzzOGSYO+s1f+y2zyGKK8wH5JmN+nkrGOL28iHzmx9lXK0NaT0+d5sjTbzLo2C8iogzbR91yGnIKze0GzZXHg==}
+  /aws-cdk-lib@2.152.0(constructs@10.3.0):
+    resolution: {integrity: sha512-w8Dn92xYCUWSRL9ncoXzpGzyDAHbljnrhXFm/pTR1YZTxdbLHvIOdh7D9b9qhtghUnq2i522I6/z2NJggPcNWQ==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -12199,7 +12175,7 @@ packages:
       '@graphql-tools/load': 8.0.2(graphql@16.9.0)
       '@graphql-tools/merge': 9.0.4(graphql@16.9.0)
       '@graphql-tools/url-loader': 8.0.2(@types/node@22.3.0)(graphql@16.9.0)
-      '@graphql-tools/utils': 10.5.3(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
       cosmiconfig: 8.3.6(typescript@5.5.4)
       graphql: 16.9.0
       jiti: 1.21.6
@@ -15687,17 +15663,17 @@ packages:
       react-router: 6.23.1(react@18.3.1)
     dev: false
 
-  /react-router-dom@6.26.0(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-RRGUIiDtLrkX3uYcFiCIxKFWMcWQGMojpYZfcstc63A1+sSnVgILGIm9gNUA6na3Fm1QuPGSBQH2EMbAZOnMsQ==}
+  /react-router-dom@6.26.1(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-veut7m41S1fLql4pLhxeSW3jlqs+4MtjRLj0xvuCEXsxusJCbs6I8yn9BxzzDX2XDgafrccY6hwjmd/bL54tFw==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
       react-dom: '>=16.8'
     dependencies:
-      '@remix-run/router': 1.19.0
+      '@remix-run/router': 1.19.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
-      react-router: 6.26.0(react@18.3.1)
+      react-router: 6.26.1(react@18.3.1)
 
   /react-router@6.23.1(react@18.3.1):
     resolution: {integrity: sha512-fzcOaRF69uvqbbM7OhvQyBTFDVrrGlsFdS3AL+1KfIBtGETibHzi3FkoTRyiDJnWNc2VxrfvR+657ROHjaNjqQ==}
@@ -15709,13 +15685,13 @@ packages:
       react: 18.3.1
     dev: false
 
-  /react-router@6.26.0(react@18.3.1):
-    resolution: {integrity: sha512-wVQq0/iFYd3iZ9H2l3N3k4PL8EEHcb0XlU2Na8nEwmiXgIUElEH6gaJDtUQxJ+JFzmIXaQjfdpcGWaM6IoQGxg==}
+  /react-router@6.26.1(react@18.3.1):
+    resolution: {integrity: sha512-kIwJveZNwp7teQRI5QmwWo39A5bXRyqpH0COKKmPnyD2vBvDwgFXSqDUYtt1h+FEyfnE8eXr7oe0MxRzVwCcvQ==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       react: '>=16.8'
     dependencies:
-      '@remix-run/router': 1.19.0
+      '@remix-run/router': 1.19.1
       react: 18.3.1
 
   /react-style-singleton@2.2.1(@types/react@18.3.3)(react@18.3.1):
@@ -16183,7 +16159,7 @@ packages:
       serverless:
         optional: true
     dependencies:
-      '@aws-sdk/client-lambda': 3.629.0
+      '@aws-sdk/client-lambda': 3.632.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.10
@@ -17368,7 +17344,7 @@ packages:
       debug: 4.3.6
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.4.0(@types/node@22.3.0)
+      vite: 5.4.1(@types/node@22.3.0)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -17381,7 +17357,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-svgr@4.2.0(typescript@5.5.4)(vite@5.4.0):
+  /vite-plugin-svgr@4.2.0(typescript@5.5.4)(vite@5.4.1):
     resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4 || 5
@@ -17389,15 +17365,15 @@ packages:
       '@rollup/pluginutils': 5.1.0
       '@svgr/core': 8.1.0(typescript@5.5.4)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
-      vite: 5.4.0(@types/node@22.3.0)
+      vite: 5.4.1(@types/node@22.3.0)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
     dev: true
 
-  /vite@5.4.0(@types/node@22.3.0):
-    resolution: {integrity: sha512-5xokfMX0PIiwCMCMb9ZJcMyh5wbBun0zUzKib+L65vAZ8GY9ePZMXxFrHbr/Kyll2+LSCY7xtERPpxkBDKngwg==}
+  /vite@5.4.1(@types/node@22.3.0):
+    resolution: {integrity: sha512-1oE6yuNXssjrZdblI9AfBbHCC41nnyoVoEZxQnID6yvQZAFBzxxkqoFLtHUMkYunL8hwOLEjgTuxpkRxvba3kA==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -17476,7 +17452,7 @@ packages:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.4.0(@types/node@22.3.0)
+      vite: 5.4.1(@types/node@22.3.0)
       vite-node: 2.0.5(@types/node@22.3.0)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
