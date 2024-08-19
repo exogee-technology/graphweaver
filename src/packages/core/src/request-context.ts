@@ -45,8 +45,8 @@ export class RequestContext {
 		// isolated async contexts, you can do so with this environment variable.
 		if (process.env.GRAPHWEAVER_DISABLE_ASYNC_LOCAL_STORAGE === 'true') {
 			logger.trace('AsyncLocalStorage is disabled, using workaround storage, creating context.');
-			this.workaroundStorage = ctx;
-			return await this.mutex.runExclusive(next);
+			RequestContext.workaroundStorage = ctx;
+			return await RequestContext.mutex.runExclusive(next);
 		} else {
 			logger.trace('Creating new AsyncLocalStorage context.');
 			return RequestContext.storage.run(ctx, next);
@@ -55,7 +55,7 @@ export class RequestContext {
 
 	static currentRequestContext(): RequestContext | undefined {
 		if (process.env.GRAPHWEAVER_DISABLE_ASYNC_LOCAL_STORAGE === 'true') {
-			return this.workaroundStorage;
+			return RequestContext.workaroundStorage;
 		} else {
 			return RequestContext.storage.getStore();
 		}
