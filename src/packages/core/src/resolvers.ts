@@ -92,7 +92,7 @@ const _getOne = async <G>(
 
 	if (!hookParams.args?.filter) throw new Error('No find filter specified cannot continue.');
 
-	let result = await entity.provider.findOne(hookParams.args.filter);
+	let result = await entity.provider.findOne(hookParams.args.filter, entity);
 
 	result = fromBackendEntity(entity, result);
 
@@ -457,6 +457,7 @@ const _aggregate = async <G extends { name: string }>(
 		context,
 		fields,
 		transactional: !!entity.provider.withTransaction,
+		isAggregate: true,
 	};
 	const hookParams = hookManager
 		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)

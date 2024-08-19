@@ -20,12 +20,13 @@ import { LogErrors, LogRequests, corsPlugin, dedupeGraphQL } from './apollo-plug
 import { StartServerOptions, startStandaloneServer, startServerless } from './integrations';
 import { GraphweaverConfig, mergeConfig } from './config';
 import { enableTracing } from './trace';
-import { pluginManager } from './plugins';
+import { pluginManager } from './plugin-manager';
 import {
 	ExecuteOperationOptions,
 	GraphQLResponse,
 } from '@apollo/server/dist/esm/externalTypes/graphql';
 import { onRequestWrapper } from './integrations/utils';
+import { apolloPluginManager } from './apollo-plugins/apollo-plugin-manager';
 
 export default class Graphweaver<TContext extends BaseContext> {
 	server: ApolloServer<TContext>;
@@ -56,7 +57,9 @@ export default class Graphweaver<TContext extends BaseContext> {
 		// Configure the plugins for Graphweaver and Apollo
 		this.graphweaverPlugins = pluginManager.getPlugins();
 		const apolloPlugins = this.config.apolloServerOptions?.plugins || [];
+		apolloPlugins.push(...apolloPluginManager.getPlugins());
 
+		// @todo The provider apolloPlugins method has been deprecated and the below loop should be removed in the future.
 		for (const metadata of graphweaverMetadata.entities()) {
 			if (metadata.provider?.apolloPlugins && metadata.provider.apolloPlugins.length > 0) {
 				// only push unique plugins
@@ -113,7 +116,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 		if (logger.isLevelEnabled('trace')) logger.trace(`Schema: ${SchemaBuilder.print()}`);
 
 		logger.trace(`Graphweaver buildSchemaSync finished.`);
-		logger.trace(`Graphweaver starting ApolloServer`);
 		logger.trace(`Protecting with GraphQL Armor 🛡️`);
 		const armor = new ApolloArmor(config?.graphQLArmorOptions);
 		const protection = armor.protect();
@@ -125,8 +127,6 @@ export default class Graphweaver<TContext extends BaseContext> {
 			fieldResolver,
 			includeStacktraceInErrorResponses: process.env.IS_OFFLINE === 'true',
 		});
-
-		this.server.executeOperation;
 
 		if (isTraceable()) enableTracing(this.server);
 	}
@@ -142,11 +142,11 @@ export default class Graphweaver<TContext extends BaseContext> {
 		});
 	}
 
-	public async start({ host, port, path }: StartServerOptions): Promise<void> {
+	public async start(options: StartServerOptions) {
 		logger.info(`Graphweaver start called`);
 
 		await startStandaloneServer(
-			{ host, port, path },
+			options,
 			this.server,
 			this.graphweaverPlugins as Set<GraphweaverPlugin<void>>
 		);

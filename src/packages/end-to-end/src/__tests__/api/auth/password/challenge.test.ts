@@ -7,13 +7,14 @@ import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
 import { BaseDataProvider, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import {
-	authApolloPlugin,
 	UserProfile,
 	ApplyMultiFactorAuthentication,
 	AuthenticationMethod,
 	Password,
 	CredentialStorage,
 	hashPassword,
+	setImplicitAllow,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 class TaskProvider extends BaseDataProvider<any> {
@@ -87,11 +88,10 @@ export const password = new Password({
 	},
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user, { implicitAllow: true })],
-	},
-});
+setAddUserToContext(async () => user);
+setImplicitAllow(true);
+
+const graphweaver = new Graphweaver();
 
 describe('Password Authentication - Challenge', () => {
 	test('should return an error to initiate a challenge for a password.', async () => {

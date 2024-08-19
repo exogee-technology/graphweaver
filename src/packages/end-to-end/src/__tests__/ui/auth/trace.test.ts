@@ -9,13 +9,16 @@ test('List Trace Page', async ({ page }) => {
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByPlaceholder('Password').press('Enter');
 
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	await page.getByRole('link', { name: 'Trace' }).click();
 
 	await expect(page.getByRole('heading', { name: 'Trace' })).toBeVisible();
 
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
-	await page.getByRole('link', { name: 'Tag' }).click();
-	await page.getByRole('link', { name: 'Task' }).click();
+	await page.getByTestId('Tag-entity-link').click();
+	await page.getByTestId('Task-entity-link').click();
 
 	await page.getByRole('link', { name: 'Trace' }).click();
 	await page.reload();

@@ -2,6 +2,7 @@ import yargs from 'yargs';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
+	Source,
 	StartOptions,
 	analyseBundle,
 	buildBackend,
@@ -10,6 +11,7 @@ import {
 	startFrontend,
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
+import { initAuth, AuthMethod, authMethods } from './auth';
 import { importDataSource } from './import';
 import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
@@ -18,6 +20,7 @@ import * as path from 'path';
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
 yargs
+	.scriptName('graphweaver')
 	.env('GRAPHWEAVER')
 	.check(() => {
 		if (semver.lt(process.version, MINIMUM_NODE_SUPPORTED)) {
@@ -115,7 +118,10 @@ yargs
 			if (host) console.log(`Database Host: ${host}`);
 			if (port) console.log(`Database Port: ${port}`);
 			if (user) console.log(`Database User: ${user}`);
-			console.log();
+
+			if (source !== 'mysql' && source !== 'postgresql' && source !== 'sqlite') {
+				throw new Error(`Unsupported source: ${source}`);
+			}
 
 			await importDataSource(source, database, host, port, password, user, overwrite);
 		},
@@ -154,7 +160,7 @@ yargs
 				}),
 		handler: async ({ environment, adminUiBase }) => {
 			if (environment === 'backend' || environment === 'all') {
-				await buildBackend({});
+				await buildBackend();
 				await generateTypes();
 			}
 			if (environment === 'frontend' || environment === 'all') {
@@ -173,7 +179,7 @@ yargs
 		command: ['build-types'],
 		describe: 'Builds your Graphweaver types.',
 		handler: async () => {
-			await buildBackend({});
+			await buildBackend();
 			await generateTypes();
 
 			// Note, this will leave the ESBuild service process around:
@@ -196,7 +202,7 @@ yargs
 			}),
 		handler: async ({ output }) => {
 			console.log('Printing schema...');
-			await buildBackend({});
+			await buildBackend();
 			await printSchema(output);
 		},
 	})
@@ -300,12 +306,68 @@ yargs
 				// Restart the process on file change
 				watcher.on('change', async () => {
 					console.log('File changed. Rebuilding generated files...');
-					await buildBackend(args as any);
+					await buildBackend();
 					await generateTypes();
 					console.log('Rebuild complete.\n\n');
 					console.log('Waiting for changes... \n\n');
 				});
 			}
+		},
+	})
+	.command({
+		command: ['init-auth [method]', 'auth [method]'],
+		describe: 'Initialise Graphweaver with a primary authentication method.',
+		builder: (yargs) =>
+			yargs
+				.positional('method', {
+					type: 'string',
+					choices: authMethods,
+					default: 'password',
+					describe: 'The primary authentication method to use.',
+				})
+				.option('source', {
+					type: 'string',
+					choices: ['mysql', 'postgresql', 'sqlite'],
+					describe: 'Specify the database type.',
+				})
+				.option('database', {
+					type: 'string',
+					describe: 'Specify the database name.',
+				})
+				.option('host', {
+					type: 'string',
+					describe: 'Specify the database server hostname.',
+				})
+				.option('port', {
+					type: 'number',
+					describe: 'Specify the database server port.',
+				})
+				.option('password', {
+					type: 'string',
+					describe: 'Specify the database server password.',
+				})
+				.option('user', {
+					type: 'string',
+					describe: 'Specify the database server user.',
+				}),
+		handler: async ({ method, source, database, host, port, password, user }) => {
+			if (!authMethods.includes(method)) {
+				throw new Error(`Unsupported method: ${method}, please use ${authMethods.join(', ')}`);
+			}
+
+			if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
+				throw new Error(`Invalid source: ${source}`);
+			}
+
+			await initAuth({
+				method: method as AuthMethod,
+				source: source as Source,
+				database,
+				host,
+				port,
+				password,
+				user,
+			});
 		},
 	})
 	.version(version)

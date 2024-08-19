@@ -77,5 +77,5 @@ export function getRolesFromAuthorizationContext() {
 	) {
 		throw new Error('Currently logged in user has no roles');
 	}
-	return authContext.user.roles;
+	return authContext.user.roles as string[];
 }

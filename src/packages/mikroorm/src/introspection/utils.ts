@@ -11,3 +11,7 @@ export const pascalToCamelCaseString = (value: string) => {
 	const restOfString = value.slice(1);
 	return firstChar + restOfString;
 };
+
+// Anything that is not alphanumeric or an underscore is replaced with an underscore, then the value is uppercased
+export const identifierForEnumValue = (value: string) =>
+	value.replace(/[^a-z0-9_]/gi, '_').toUpperCase();

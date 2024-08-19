@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-example-federation",
 	"private": true,
-	"version": "2.0.5",
-	"license": "MIT",
+	"version": "2.2.6",
+	"license": "Apache-2.0",
 	"description": "Example app used to test federation compatibility",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
@@ -13,25 +13,23 @@
 		"lib"
 	],
 	"scripts": {
-		"build": "graphweaver build && cp dist/backend/index.js integration/index.js",
-		"start": "tsx src/backend/index.ts",
+		"build": "graphweaver build backend && cp dist/backend/index.js integration/index.js",
+		"start": "graphweaver start backend --port 4000",
 		"print": "graphweaver print-schema --output integration/schema.graphql",
 		"test:integration": "pnpm print && pnpm build && cd integration && npm run test:integration",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "4.10.5",
-		"@as-integrations/hapi": "2.0.1",
+		"@apollo/server": "4.11.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@hapi/hapi": "21.3.10",
 		"dotenv": "16.4.5"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.11",
+		"@types/node": "22.3.0",
 		"graphweaver": "workspace:*",
-		"tsx": "4.16.2",
+		"tsx": "4.17.0",
 		"typescript": "5.5.4"
 	},
 	"keywords": [

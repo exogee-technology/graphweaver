@@ -1,10 +1,11 @@
 import { describe, test } from 'vitest';
 import { Match, Template } from 'aws-cdk-lib/assertions';
 import { graphweaverApp } from './ecs';
+import { Stack } from 'aws-cdk-lib';
 
 const websiteTemplate = Template.fromStack(graphweaverApp.website);
 const apiTemplate = Template.fromStack(graphweaverApp.api);
-const databaseTemplate = Template.fromStack(graphweaverApp.database);
+const databaseTemplate = Template.fromStack(graphweaverApp.database as Stack);
 
 console.log(JSON.stringify(apiTemplate));
 

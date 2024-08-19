@@ -62,6 +62,16 @@
       "cwd": "${workspaceFolder}/src/packages/end-to-end"
     },
     {
+      "name": "Introspection - Introspect Database",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["test-introspection"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/packages/mikroorm"
+    },
+    {
       "name": "Auth0 Example",
       "type": "node",
       "request": "launch",
@@ -110,6 +120,16 @@
       "restart": true,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/src/examples/rest"
+    },
+    {
+      "name": "Rest with Auth Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/rest-with-auth"
     },
     {
       "name": "S3 Example",

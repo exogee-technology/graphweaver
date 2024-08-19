@@ -1,6 +1,11 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"globalDependencies": [".env", "tsconfig.json"],
+	"globalDependencies": [
+		".env",
+		"tsconfig.json",
+		"packages/builder/src/**/*.ts",
+		"packages/vite-plugin-graphweaver/src/**/*.ts"
+	],
 	"tasks": {
 		"build:types": {
 			"dependsOn": ["^build:types"],
@@ -12,7 +17,7 @@
 		},
 		"package:pack": {
 			"dependsOn": ["^build"],
-			"outputs": [".packs/**"]
+			"outputs": ["../../.packs/**"]
 		},
 		"build": {
 			"dependsOn": ["^build"],

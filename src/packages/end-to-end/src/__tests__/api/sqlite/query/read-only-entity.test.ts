@@ -121,5 +121,5 @@ test('Should return isReadOnly attribute for each entity in getAdminUiMetadata',
 
 	const artistEntity = result?.entities.find((entity) => entity.name === 'Artist');
 	expect(artistEntity).not.toBeNull();
-	expect(artistEntity?.attributes?.isReadOnly).toBeNull();
+	expect(artistEntity?.attributes?.isReadOnly).toEqual(false);
 });

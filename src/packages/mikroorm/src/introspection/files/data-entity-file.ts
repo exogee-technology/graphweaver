@@ -34,7 +34,7 @@ import type {
 import { ReferenceKind, UnknownType, Utils } from '@mikro-orm/core';
 import { BaseFile } from './base-file';
 import { DatabaseType } from '../../database';
-import { pascalToKebabCaseString } from '../utils';
+import { identifierForEnumValue, pascalToKebabCaseString } from '../utils';
 
 export class DataEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -111,6 +111,10 @@ export class DataEntityFile extends BaseFile {
 	}
 
 	protected getPropertyType(prop: EntityProperty): string {
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
+			return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+		}
+
 		const columnType = prop.columnTypes?.[0]?.toLowerCase();
 
 		if (['jsonb', 'json', 'any'].includes(columnType)) {
@@ -154,7 +158,7 @@ export class DataEntityFile extends BaseFile {
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${file} = ${prop.type}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.runtimeType}.${identifierForEnumValue(prop.default)};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
@@ -165,7 +169,7 @@ export class DataEntityFile extends BaseFile {
 		let file = `export enum ${enumClassName} {\n`;
 
 		for (const enumValue of enumValues) {
-			file += `${padding}${enumValue.toUpperCase()} = '${enumValue}',\n`;
+			file += `${padding}${identifierForEnumValue(enumValue)} = '${enumValue}',\n`;
 		}
 
 		file += '}\n';
@@ -208,7 +212,7 @@ export class DataEntityFile extends BaseFile {
 		}
 
 		if (prop.enum) {
-			options.items = `() => ${prop.type}`;
+			options.items = `() => ${prop.runtimeType}`;
 		}
 
 		this.getCommonDecoratorOptions(options, prop);

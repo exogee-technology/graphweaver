@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-apollo-client",
-	"version": "2.0.5",
+	"version": "2.2.6",
 	"description": "Useful helpers for working with Apollo Client and Graphweaver",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"type": "module",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
@@ -25,7 +25,7 @@
 		"@apollo/client": "^3.10.4"
 	},
 	"devDependencies": {
-		"@apollo/client": "3.11.1",
+		"@apollo/client": "3.11.4",
 		"esbuild": "0.23.0",
 		"typescript": "5.5.4"
 	},

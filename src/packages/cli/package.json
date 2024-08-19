@@ -1,8 +1,8 @@
 {
 	"name": "graphweaver",
-	"version": "2.0.5",
+	"version": "2.2.6",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"scripts": {
 		"build": "npm run build:js",
 		"build:js": "node build.js",
@@ -23,13 +23,10 @@
 		"bin"
 	],
 	"dependencies": {
-		"@exogee/graphweaver": "workspace:*",
-		"@exogee/graphweaver-admin-ui": "workspace:*",
 		"@exogee/graphweaver-builder": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"chokidar": "3.6.0",
 		"esbuild": "0.23.0",
-		"inquirer": "10.1.2",
+		"inquirer": "10.1.8",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.6.3",
@@ -38,10 +35,10 @@
 	},
 	"devDependencies": {
 		"@types/inquirer": "9.0.7",
-		"@types/node": "20.14.11",
+		"@types/node": "22.3.0",
 		"@types/semver": "7.5.8",
 		"@types/validate-npm-package-name": "4.0.2",
-		"@types/yargs": "17.0.32",
+		"@types/yargs": "17.0.33",
 		"prettier": "3.3.3",
 		"typescript": "5.5.4"
 	},

@@ -6,11 +6,11 @@ import Graphweaver from '@exogee/graphweaver-server';
 import { Field, ID, Entity, BaseDataProvider, RelationshipField } from '@exogee/graphweaver';
 import {
 	CredentialStorage,
-	authApolloPlugin,
 	UserProfile,
 	hashPassword,
 	Password,
 	ApplyAccessControlList,
+	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
 const user = new UserProfile({
@@ -104,11 +104,9 @@ export const password = new Password({
 	getUserProfile: async () => user,
 });
 
-const graphweaver = new Graphweaver({
-	apolloServerOptions: {
-		plugins: [authApolloPlugin(async () => user)],
-	},
-});
+setAddUserToContext(async () => user);
+
+const graphweaver = new Graphweaver();
 
 let token: string | undefined;
 

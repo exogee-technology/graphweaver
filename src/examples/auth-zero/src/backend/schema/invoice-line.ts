@@ -1,10 +1,17 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { ApplyAccessControlList } from '@exogee/graphweaver-auth';
+
 import { Invoice } from './invoice';
 import { Track } from './track';
 import { InvoiceLine as OrmInvoiceLine } from '../entities';
 import { connection } from '../database';
 
+@ApplyAccessControlList({
+	Everyone: {
+		read: true,
+	},
+})
 @Entity('InvoiceLine', {
 	provider: new MikroBackendProvider(OrmInvoiceLine, connection),
 })

@@ -8,7 +8,7 @@ import type {
 import { ReferenceKind, Utils } from '@mikro-orm/core';
 
 import { BaseFile } from './base-file';
-import { pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
+import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import pluralize from 'pluralize';
 
 export class SchemaEntityFile extends BaseFile {
@@ -104,6 +104,10 @@ export class SchemaEntityFile extends BaseFile {
 	}
 
 	protected getTypescriptPropertyType(prop: EntityProperty): string {
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
+			return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
+		}
+
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
 			return `Record<string, unknown>`;
 		}
@@ -140,16 +144,16 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.enum && typeof prop.default === 'string') {
-			return `${padding}${file} = ${prop.type}.${prop.default.toUpperCase()};\n`;
+			return `${padding}${file} = ${prop.runtimeType}.${identifierForEnumValue(prop.default)};\n`;
 		}
 
 		return `${padding}${prop.name} = ${prop.default};\n`;
 	}
 
 	protected getEnumClassDefinition(enumClassName: string): string {
-		this.coreImports.add('registerEnumType');
+		this.coreImports.add('graphweaverMetadata');
 		this.enumImports.add(enumClassName);
-		return `registerEnumType(${enumClassName}, { name: ${this.quote(enumClassName)} });`;
+		return `graphweaverMetadata.collectEnumInformation({ target: ${enumClassName}, name: ${this.quote(enumClassName)} });`;
 	}
 
 	private getGraphQLPropertyType(prop: EntityProperty): string {
@@ -171,6 +175,11 @@ export class SchemaEntityFile extends BaseFile {
 			return 'String';
 		}
 
+		if (prop.runtimeType === 'bigint') {
+			this.scalarImports.add('GraphQLBigInt');
+			return 'GraphQLBigInt';
+		}
+
 		if (['jsonb', 'json', 'any'].includes(prop.columnTypes?.[0])) {
 			this.scalarImports.add('GraphQLJSON');
 			return `GraphQLJSON`;
@@ -178,6 +187,10 @@ export class SchemaEntityFile extends BaseFile {
 
 		if (prop.runtimeType?.includes('[]')) {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1).replace('[]', '')}]`;
+		}
+
+		if ([ReferenceKind.ONE_TO_ONE, ReferenceKind.MANY_TO_ONE].includes(prop.kind)) {
+			return prop.type.charAt(0).toUpperCase() + prop.type.slice(1);
 		}
 
 		if ([ReferenceKind.MANY_TO_MANY, ReferenceKind.ONE_TO_MANY].includes(prop.kind)) {
@@ -188,7 +201,14 @@ export class SchemaEntityFile extends BaseFile {
 			return `[${prop.type.charAt(0).toUpperCase() + prop.type.slice(1)}]`;
 		}
 
-		return prop.runtimeType.charAt(0).toUpperCase() + prop.runtimeType.slice(1);
+		const lastChanceType = prop.runtimeType ?? prop.type;
+
+		if (!lastChanceType) {
+			console.error(`Property is malformed, it has no type or runtimeType:`, prop);
+			throw new Error(`Property ${prop.name} on ${prop.entity} entity has no type or runtimeType.`);
+		}
+
+		return lastChanceType.charAt(0).toUpperCase() + lastChanceType.slice(1);
 	}
 
 	private getPropertyDecorator(prop: EntityProperty): string {

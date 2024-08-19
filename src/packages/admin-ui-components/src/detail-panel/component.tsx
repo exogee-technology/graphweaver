@@ -6,6 +6,7 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
+import { customFields as authCustomFields } from 'virtual:graphweaver-auth-ui-components';
 import { Modal } from '../modal';
 
 import {
@@ -48,11 +49,20 @@ export enum PanelMode {
 const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
 	field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
 
-const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
-	const isReadonly = isFieldReadonly(field);
+const getField = ({
+	field,
+	autoFocus,
+	panelMode,
+}: {
+	field: EntityField;
+	autoFocus: boolean;
+	panelMode: PanelMode;
+}) => {
+	// In Create mode, all readonly fields should be writeable.
+	const isReadonly = panelMode !== PanelMode.CREATE && isFieldReadonly(field);
 
 	if (field.type === 'JSON') {
-		return <JSONField name={field.name} autoFocus={autoFocus} />;
+		return <JSONField name={field.name} autoFocus={autoFocus} disabled={isReadonly} />;
 	}
 
 	if (field.type === 'Boolean') {
@@ -91,13 +101,21 @@ const getField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean
 	);
 };
 
-const DetailField = ({ field, autoFocus }: { field: EntityField; autoFocus: boolean }) => {
+const DetailField = ({
+	field,
+	autoFocus,
+	panelMode,
+}: {
+	field: EntityField;
+	autoFocus: boolean;
+	panelMode: PanelMode;
+}) => {
 	const isRequired = !(field.type === 'ID' || field.type === 'ID!') && field.attributes?.isRequired;
 	return (
-		<div className={styles.detailField}>
+		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
-			{getField({ field, autoFocus })}
+			{getField({ field, autoFocus, panelMode })}
 		</div>
 	);
 };
@@ -162,22 +180,31 @@ const DetailForm = ({
 					field.type !== 'custom' &&
 					isValueEmpty(values[field.name])
 				) {
-					errors[field.name] = 'Required';
+					errors[field.name] = 'Field is Required';
+				}
+
+				if (field.type === 'JSON') {
+					// Let's ensure we can parse the JSON.
+					try {
+						JSON.parse(values[field.name]);
+					} catch (error) {
+						errors[field.name] = 'Invalid JSON';
+					}
 				}
 			}
 
-			const fieldsInError = Object.keys(errors);
-			if (fieldsInError.length === 0) return {};
+			const groupedByError: Record<string, string[]> = {};
+			for (const [field, error] of Object.entries(errors)) {
+				if (!groupedByError[error]) groupedByError[error] = [];
+				groupedByError[error].push(field);
+			}
+			const message = Object.entries(groupedByError)
+				.map(([error, fields]) => `Error ${error}: ${fields.join(', ')}`)
+				.join('\n');
 
 			// TODO EXOGW-150: instead of using toast, we should use a formik error message on the form itself
-			toast.error(
-				`${fieldsInError.join(', ')} ${fieldsInError.length > 1 ? 'are' : 'is a'} required field${
-					fieldsInError.length > 1 ? 's' : ''
-				}.`,
-				{
-					duration: 5000,
-				}
-			);
+			toast.error(message, { duration: 5000 });
+
 			return errors;
 		},
 		[detailFields]
@@ -238,6 +265,7 @@ const DetailForm = ({
 										key={field.name}
 										field={field}
 										autoFocus={field === firstEditableField}
+										panelMode={panelMode}
 									/>
 								);
 							}
@@ -301,7 +329,8 @@ export const DetailPanel = () => {
 		navigate(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
-	const customFieldsToShow = customFields?.get(selectedEntity.name) || [];
+	const customFieldsToShow =
+		customFields?.get(selectedEntity.name) || authCustomFields?.get(selectedEntity.name) || [];
 
 	const formFields: EntityField[] = selectedEntity.fields.filter((field) => {
 		// We don't show Many to Many relationships in the form yet because we don't have

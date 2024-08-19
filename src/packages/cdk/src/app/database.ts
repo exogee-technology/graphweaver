@@ -11,6 +11,10 @@ export class DatabaseStack extends cdk.NestedStack {
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
+		if (!config.database) {
+			throw new Error('Missing required database configuration');
+		}
+
 		const vpc = config.network.vpc;
 
 		this.dbInstance = new rds.DatabaseInstance(this, `${id}Database`, {

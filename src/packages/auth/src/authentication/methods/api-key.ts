@@ -55,6 +55,12 @@ export class ApiKeyUpdateInputArgs<R> {
 
 export type ApiKeyProvider<R> = BackendProvider<ApiKeyEntity<R>>;
 
+export function getApiKeyProvider<R>() {
+	const entity = graphweaverMetadata.getEntityByName('ApiKey');
+
+	return entity?.provider as ApiKeyProvider<R> | undefined;
+}
+
 export class ApiKey<R extends string> extends BaseAuthMethod {
 	private provider: ApiKeyProvider<R>;
 	private transactional: boolean;

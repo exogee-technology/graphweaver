@@ -24,18 +24,17 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 	return (
 		<div className={styles.toolBarWrapper}>
 			<div className="titleWrapper">
-				<h1>{title}</h1>
+				<h1 className={styles.title}>{title}</h1>
 				<p className="subtext">{subtitle}</p>
 			</div>
 
 			<div className={styles.toolsWrapper}>
 				<Link
-					className={styles.toolBarTrailingButton}
 					to={{ pathname: '/playground' }}
 					// If we are in an iframe then open in the same window otherwise open in a new tab
 					target={window === window.parent ? '_blank' : '_self'}
 					rel="noopener noreferrer"
-					aria-label={`Open Playground`}
+					aria-label="Open Playground"
 				>
 					<Button>
 						Open Playground

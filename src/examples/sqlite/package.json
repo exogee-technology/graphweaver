@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-sqlite",
-	"version": "2.0.5",
-	"license": "MIT",
+	"version": "2.2.6",
+	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a SQLite database.",
 	"scripts": {
@@ -14,17 +14,20 @@
 	"dependencies": {
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
+		"@exogee/graphweaver-admin-ui-components": "workspace:*",
+		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@exogee/graphweaver-mikroorm": "workspace:*",
-		"@mikro-orm/core": "6.3.0",
-		"@mikro-orm/knex": "6.3.0",
-		"@mikro-orm/sqlite": "6.3.0",
+		"@mikro-orm/core": "6.3.6",
+		"@mikro-orm/knex": "6.3.6",
+		"@mikro-orm/sqlite": "6.3.6",
+		"graphql": "16.9.0",
 		"mikro-orm-sqlite-wasm": "workspace:*",
-		"graphql": "16.9.0"
+		"react": "18.3.1",
+		"react-dom": "18.3.1"
 	},
 	"devDependencies": {
-		"@types/node": "20.14.11",
+		"@types/node": "22.3.0",
 		"graphweaver": "workspace:*",
 		"typescript": "5.5.4"
 	}

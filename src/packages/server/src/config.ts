@@ -11,6 +11,9 @@ export type MetadataHookParams<C> = {
 export interface AdminMetadata {
 	enabled: boolean;
 	config?: any;
+	/**
+	 * @deprecated This argument should not be used and will be removed in the future. Use `applyAccessControlList` instead.
+	 */
 	hooks?: {
 		beforeRead?: <C extends BaseContext>(
 			params: MetadataHookParams<C>

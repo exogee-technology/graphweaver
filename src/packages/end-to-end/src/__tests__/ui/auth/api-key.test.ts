@@ -11,6 +11,9 @@ test('should allow a successful api key creation', async ({ page }) => {
 	await page.getByPlaceholder('Password').fill('deathstar123');
 	await page.getByRole('button', { name: 'Login' }).click();
 
+	// Close the welcome page
+	await page.getByRole('button', { name: 'Get started!' }).click();
+
 	// navigate to the grid page
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
 	await page.getByRole('link', { name: 'ApiKey' }).click();

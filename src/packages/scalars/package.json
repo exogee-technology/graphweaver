@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-scalars",
-	"version": "2.0.5",
+	"version": "2.2.6",
 	"description": "Common scalar types for use with @exogee/graphweaver",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"directories": {
@@ -20,7 +20,7 @@
 	},
 	"dependencies": {
 		"graphql-scalars": "1.23.0",
-		"luxon": "3.4.4"
+		"luxon": "3.5.0"
 	},
 	"devDependencies": {
 		"@types/luxon": "3.4.2",
