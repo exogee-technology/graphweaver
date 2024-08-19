@@ -25,6 +25,10 @@ const generateKeyAndSecret = async () => {
 };
 
 export const generateApiKey = async (options: GenerateApiKeyOptions) => {
+	if (!options.source) {
+		throw new Error('No source specified, please specify a data source.');
+	}
+
 	await openConnection(options.source, {
 		mikroOrmConfig: {
 			host: options.host,
