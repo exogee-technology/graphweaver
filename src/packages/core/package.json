@@ -31,6 +31,7 @@
 		"@opentelemetry/resources": "1.25.1",
 		"@opentelemetry/sdk-node": "0.52.1",
 		"@opentelemetry/sdk-trace-base": "1.25.1",
+		"async-mutex": "0.5.0",
 		"class-validator": "0.14.1",
 		"dataloader": "2.2.2",
 		"graphql": "16.9.0",
