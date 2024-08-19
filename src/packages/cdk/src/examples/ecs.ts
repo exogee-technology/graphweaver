@@ -70,6 +70,7 @@ export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDock
 		buildPath: '../../examples/rest/dist/backend',
 		cert: process.env.API_CERTIFICATE_ARN ?? 'arn:aws:acm:ap-southeast-2:test:test:test',
 		url: 'api-ecs.graphweaver.com',
+		hostedZone: 'graphweaver.com',
 		memorySize: 512,
 		envVars: {
 			TEST_ENV_VAR: 'test',

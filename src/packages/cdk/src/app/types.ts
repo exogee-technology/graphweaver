@@ -44,6 +44,8 @@ export type GraphweaverAppConfig = {
 		cert: string;
 		// Custom domain name for the API
 		url: string;
+		// Route 53 hosted domain name
+		hostedZone: string;
 		// Environment variables to pass to the API Lambda function
 		envVars: Record<string, string>;
 		// Memory size for the API Lambda function, defaults to 256

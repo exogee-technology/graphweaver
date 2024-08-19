@@ -12,6 +12,7 @@ import { ApplicationProtocol } from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
 import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
+import { HostedZone } from 'aws-cdk-lib/aws-route53';
 
 export class EcsStack extends cdk.NestedStack {
 	public readonly service: ApplicationLoadBalancedEc2Service;
@@ -90,9 +91,9 @@ export class EcsStack extends cdk.NestedStack {
 			protocol: ApplicationProtocol.HTTPS,
 			redirectHTTP: true,
 			domainName: config.ecs.url,
-			// domainZone: HostedZone.fromLookup(construct, 'hosted-zone', {
-			// 	domainName: 'exogee.com',
-			// }),
+			domainZone: HostedZone.fromLookup(scope, 'hosted-zone', {
+				domainName: config.ecs.hostedZone,
+			}),
 		});
 
 		// ⚠️ Grant the ec2 instance access to the database secret ⚠️
