@@ -1,18 +1,23 @@
-import { CodeBlock, atomOneDark } from 'react-code-blocks';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import graphql from 'react-syntax-highlighter/dist/esm/languages/prism/graphql';
+import theme from 'react-syntax-highlighter/dist/esm/styles/prism/coldark-dark';
+
+SyntaxHighlighter.registerLanguage('graphql', graphql);
 
 export const GraphQlViewer = ({ graphql }: { graphql: string }) => {
 	return (
-		<CodeBlock
-			text={graphql}
+		<SyntaxHighlighter
 			language="graphql"
-			showLineNumbers={true}
-			theme={atomOneDark}
+			showLineNumbers
+			style={theme}
 			customStyle={{
 				backgroundColor: '#14111a',
 				height: '100%',
 				overflowY: 'auto',
 				flex: '1',
 			}}
-		/>
+		>
+			{graphql}
+		</SyntaxHighlighter>
 	);
 };

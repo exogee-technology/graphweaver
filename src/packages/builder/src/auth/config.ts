@@ -5,7 +5,7 @@ export const generateConfig = async (method: 'password' | 'magic-link') => {
 module.exports = {
 	adminUI: {
 		auth: {
-			primaryMethods: [${method === 'password' ? 'PASSWORD' : 'MAGIC_LINK'}],
+			primaryMethods: ["${method === 'password' ? 'PASSWORD' : 'MAGIC_LINK'}"],
 		},
 	},
 };
