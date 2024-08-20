@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "2.2.4",
+	"version": "2.2.7",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -36,31 +36,32 @@
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.5.0",
 		"papaparse": "5.4.1",
-		"react-code-blocks": "0.1.6",
 		"react-hot-toast": "2.4.1",
-		"react-resizable-panels": "2.0.23"
+		"react-resizable-panels": "2.0.23",
+		"react-syntax-highlighter": "15.5.0"
 	},
 	"peerDependencies": {
 		"formik": "2.4.6",
 		"graphql": "16.9.0",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.26.0"
+		"react-router-dom": "6.26.1"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.4.2",
 		"@types/papaparse": "5.3.14",
 		"@types/react": "18.3.3",
-		"esbuild": "0.23.0",
+		"@types/react-syntax-highlighter": "15.5.13",
+		"esbuild": "0.23.1",
 		"esbuild-plugin-copy": "2.1.1",
 		"formik": "2.4.6",
 		"glob": "10.4.3",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-router-dom": "6.26.0",
+		"react-router-dom": "6.26.1",
 		"typescript": "5.5.4",
-		"vite": "5.4.0",
+		"vite": "5.4.1",
 		"vite-plugin-svgr": "4.2.0"
 	},
 	"keywords": [

@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { AuthMethod } from './index';
 
 export const generateKeyPair = async () => {
 	const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
@@ -22,9 +23,11 @@ export const generateKeyPair = async () => {
 	return { privateKey: base64EncodedPrivatePem, publicKey: base64EncodedPublicPem };
 };
 
-export const generateAuthEnv = async (method: 'password' | 'api-key') => {
+export const generateAuthEnv = async (method: AuthMethod) => {
 	console.log('Generating Auth Environment...');
-	if (method !== 'password' && method !== 'api-key') {
+
+	const methods = ['password', 'magic-link', 'api-key'];
+	if (!methods.includes(method)) {
 		throw new Error(`Invalid method: ${method}. Expected 'password' or 'api-key'.`);
 	}
 
@@ -36,7 +39,7 @@ AUTH_PRIVATE_KEY_PEM_BASE64='${privateKey}'`;
 	const env = `
 # Generated Auth Environment Variables
 # This file contains the environment variables required for authentication.
-${method === 'password' ? keys : ''}
+${['password', 'magic-link'].includes(method) ? keys : ''}
 AUTH_BASE_URI="http://localhost:9000"
 AUTH_WHITELIST_DOMAINS="localhost"
 `;

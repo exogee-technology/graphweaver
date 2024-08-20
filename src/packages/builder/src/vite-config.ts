@@ -62,26 +62,31 @@ export const viteConfig = async ({
 				'formik',
 				'graphql',
 				'graphql-tag',
+				'@exogee/graphweaver-admin-ui-components > react-syntax-highlighter',
+				'@exogee/graphweaver-admin-ui-components > react-syntax-highlighter/dist/esm/styles/prism/coldark-dark',
+				'@exogee/graphweaver-admin-ui-components > react-syntax-highlighter/dist/esm/languages/prism/graphql',
+				'@exogee/graphweaver-admin-ui-components > react-syntax-highlighter/dist/esm/languages/prism/typescript',
+				'@exogee/graphweaver-admin-ui-components > react-syntax-highlighter/dist/esm/languages/prism/json',
 
 				// These are CJS dependencies that need to get translated to ESM before Vite will be happy with them.
 				// We used to pull all of our dependencies in automatically from package.json and force this, but
 				// optimizing deps also means they're not normal source files, so we want this to be a minimal list
 				// that decreases over time.
+				'@babel/runtime/regenerator',
 				'copy-to-clipboard',
 				'graphql-deduplicator',
 				'hoist-non-react-statics',
 				'nullthrows',
 				'papaparse',
 				'prop-types',
+				'react',
 				'react-dom',
 				'react-dom/client',
 				'react-fast-compare',
 				'react-is',
 				'react-router-dom',
-				'react',
 				'rehackt',
 				'set-value',
-				'react-code-blocks',
 			],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by

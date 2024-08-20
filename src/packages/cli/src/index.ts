@@ -11,7 +11,7 @@ import {
 	startFrontend,
 } from '@exogee/graphweaver-builder';
 import { Backend, init } from './init';
-import { initAuth, AuthMethod } from './auth';
+import { initAuth, AuthMethod, authMethods } from './auth';
 import { importDataSource } from './import';
 import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
@@ -321,7 +321,7 @@ yargs
 			yargs
 				.positional('method', {
 					type: 'string',
-					choices: ['password', 'api-key'],
+					choices: authMethods,
 					default: 'password',
 					describe: 'The primary authentication method to use.',
 				})
@@ -351,8 +351,8 @@ yargs
 					describe: 'Specify the database server user.',
 				}),
 		handler: async ({ method, source, database, host, port, password, user }) => {
-			if (!['password', 'api-key'].includes(method)) {
-				throw new Error(`Unsupported method: ${method}, please use 'password' or 'api-key'`);
+			if (!authMethods.includes(method)) {
+				throw new Error(`Unsupported method: ${method}, please use ${authMethods.join(', ')}`);
 			}
 
 			if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
