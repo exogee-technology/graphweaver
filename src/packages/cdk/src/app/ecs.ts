@@ -76,7 +76,7 @@ export class EcsStack extends cdk.NestedStack {
 
 			taskImageOptions: {
 				image: ContainerImage.fromDockerImageAsset(image),
-				containerPort: 3000,
+				containerPort: 9001,
 				environment: {
 					...(databaseSecretFullArn ? { DATABASE_SECRET_ARN: databaseSecretFullArn } : {}),
 					...config.ecs.envVars,
