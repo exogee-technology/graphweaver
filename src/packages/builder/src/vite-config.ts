@@ -60,6 +60,7 @@ export const viteConfig = async ({
 				// These are deps where if we don't pre-build them things stop working even though they're ESM.
 				// Not sure why, but they need to be here.
 				'formik',
+				'graphiql',
 				'graphql',
 				'graphql-tag',
 				'@exogee/graphweaver-admin-ui-components > react-syntax-highlighter',
