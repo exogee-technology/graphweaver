@@ -7,4 +7,5 @@ import './invoice';
 import './invoice-line';
 import './media-type';
 import './playlist';
+import './total-invoices-by-customer';
 import './track';

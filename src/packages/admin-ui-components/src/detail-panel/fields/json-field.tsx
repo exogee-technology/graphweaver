@@ -1,16 +1,36 @@
+import clsx from 'clsx';
 import { useField } from 'formik';
 
 import { useAutoFocus } from '../../hooks';
+import styles from '../styles.module.css';
 
-export const JSONField = ({ name, autoFocus }: { name: string; autoFocus: boolean }) => {
-	const [_, meta] = useField({ name, multiple: false });
-	const { initialValue } = meta;
+export const JSONField = ({
+	name,
+	autoFocus,
+	disabled,
+}: {
+	name: string;
+	autoFocus: boolean;
+	disabled?: boolean;
+}) => {
+	const [field, meta] = useField({ name, multiple: false });
+	const inputRef = useAutoFocus<HTMLTextAreaElement>(autoFocus);
 
-	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
+	if (disabled) {
+		return (
+			<code ref={inputRef} tabIndex={0}>
+				{JSON.stringify(meta.value, null, 4)}
+			</code>
+		);
+	}
 
 	return (
-		<code ref={inputRef} tabIndex={0}>
-			{JSON.stringify(initialValue, null, 4)}
-		</code>
+		<textarea
+			{...field}
+			id={name}
+			ref={inputRef}
+			rows={6}
+			className={clsx(styles.textInputField, styles.textArea)}
+		/>
 	);
 };

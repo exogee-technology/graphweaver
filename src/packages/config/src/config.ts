@@ -15,9 +15,33 @@ export interface AdditionalFunctionOptions {
 	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'ANY';
 }
 
+export enum PrimaryAuthMethod {
+	PASSWORD = 'PASSWORD',
+	MAGIC_LINK = 'MAGIC_LINK',
+	AUTH_ZERO = 'AUTH_ZERO',
+}
+
+export enum SecondaryAuthMethod {
+	PASSWORD = 'PASSWORD',
+	MAGIC_LINK = 'MAGIC_LINK',
+	ONE_TIME_PASSWORD = 'ONE_TIME_PASSWORD',
+	WEB3 = 'WEB3',
+	PASSKEY = 'PASSKEY',
+}
+
+export interface AdminUIAuthOptions {
+	primaryMethods?: PrimaryAuthMethod[];
+	secondaryMethods?: SecondaryAuthMethod[];
+	password?: {
+		enableForgottenPassword?: boolean;
+		enableResetPassword?: boolean;
+	};
+}
+
 export interface AdminUIOptions {
 	customPagesPath: string;
 	customFieldsPath: string;
+	auth?: AdminUIAuthOptions;
 }
 
 export interface ServerlessOfflineFunctionConfig {
@@ -85,6 +109,12 @@ export const defaultConfig = (): ConfigOptions => {
 		adminUI: {
 			customPagesPath: 'src/admin-ui/custom-pages',
 			customFieldsPath: 'src/admin-ui/custom-fields',
+			auth: {
+				password: {
+					enableForgottenPassword: true,
+					enableResetPassword: true,
+				},
+			},
 		},
 		start: {
 			onResolveEsbuildConfiguration: (options) => options,

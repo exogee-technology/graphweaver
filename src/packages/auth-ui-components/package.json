@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/graphweaver-auth-ui-components",
-	"version": "2.0.7",
+	"version": "2.2.7",
 	"description": "Components from Graphweaver's Auth UI which you can use in your projects as you like",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"type": "module",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
@@ -25,7 +25,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.1",
+		"@apollo/client": "3.11.4",
 		"@simplewebauthn/browser": "10.0.0",
 		"@usedapp/core": "1.2.16",
 		"ethers": "5.7.2",
@@ -45,12 +45,12 @@
 		"@simplewebauthn/types": "10.0.0",
 		"@types/react": "18.3.3",
 		"@types/react-dom": "18.3.0",
-		"esbuild": "0.23.0",
+		"esbuild": "0.23.1",
 		"glob": "10.4.3",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
 		"typescript": "5.5.4",
-		"vite": "5.3.5",
+		"vite": "5.4.1",
 		"vite-plugin-svgr": "4.2.0",
 		"@auth0/auth0-spa-js": "2.1.3"
 	},

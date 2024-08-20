@@ -15,7 +15,7 @@ export const loadCustomPages = async (projectRoot: string) => {
 		return `export const customPages = {
 		routes: () => [],
 		navLinks: () => [],
-		sidebarFooter: () => null,
+		sidebarFooter: undefined,
 	};`;
 	}
 };

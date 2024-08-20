@@ -9,7 +9,7 @@ export enum AuthenticationMethod {
 	PASSKEY = 'pky',
 }
 
-export interface JwtPayload {
+export interface JwtPayload extends Record<string, unknown> {
 	sub?: string;
 	iat?: number;
 	exp?: number;
@@ -41,22 +41,39 @@ export type AccessControlList<G, TContext extends AuthorizationContext = Authori
 	[K in string]?: AccessControlEntry<G, TContext>;
 };
 
-export interface AccessControlEntry<G, TContext extends AuthorizationContext> {
+export type AccessControlEntry<G, TContext extends AuthorizationContext> = {
 	read?: AccessControlValue<G, TContext>;
 	create?: AccessControlValue<G, TContext>;
 	update?: AccessControlValue<G, TContext>;
-	delete?: AccessControlValue<G, TContext>;
-	write?: AccessControlValue<G, TContext>;
+	delete?: DefaultAccessControlValue<G, TContext>;
 	all?: AccessControlValue<G, TContext>;
-}
+	write?: AccessControlValue<G, TContext>;
+};
 
 export type ConsolidatedAccessControlEntry<G, TContext extends AuthorizationContext> = {
 	[K in AccessType]?: ConsolidatedAccessControlValue<G, TContext>;
 };
 
-export type AccessControlValue<G, TContext extends AuthorizationContext> =
+export type ConsolidatedFieldAccessControlEntry<G> = {
+	[K in AccessType]?: Set<keyof G>;
+};
+
+export type SomeAccessControlValue<G, TContext extends AuthorizationContext> = {
+	rowFilter: AccessControlValue<G, TContext>;
+	fieldRestrictions?: AccessControlColumnValue<G, TContext>;
+};
+
+export type DefaultAccessControlValue<G, TContext extends AuthorizationContext> =
 	| true
 	| AccessControlFilterFunction<G, TContext>;
+
+export type AccessControlColumnValue<G, TContext extends AuthorizationContext> =
+	| (keyof G)[]
+	| ((context: TContext) => (keyof G)[]);
+
+export type AccessControlValue<G, TContext extends AuthorizationContext> =
+	| DefaultAccessControlValue<G, TContext>
+	| SomeAccessControlValue<G, TContext>;
 
 export type AccessControlFilterFunctionResult<G> =
 	| Filter<G>

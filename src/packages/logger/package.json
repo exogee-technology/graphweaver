@@ -1,8 +1,8 @@
 {
 	"name": "@exogee/logger",
-	"version": "2.0.7",
+	"version": "2.2.7",
 	"description": "Common logging output for Exogee projects",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"directories": {
 		"lib": "lib"
 	},
@@ -22,8 +22,8 @@
 		"pino": "9.3.2"
 	},
 	"devDependencies": {
-		"@types/node": "22.0.0",
-		"esbuild": "0.23.0",
+		"@types/node": "22.3.0",
+		"esbuild": "0.23.1",
 		"glob": "10.4.3",
 		"typescript": "5.5.4"
 	},

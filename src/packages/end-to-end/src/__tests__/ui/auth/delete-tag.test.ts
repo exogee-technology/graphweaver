@@ -16,7 +16,7 @@ test('should allow an admin to delete a tag', async ({ page }) => {
 	await page.getByRole('button', { name: 'Get started!' }).click();
 
 	await page.getByRole('link', { name: 'mikro-orm-my-sql' }).click();
-	await page.getByRole('link', { name: 'Tag' }).click();
+	await page.getByTestId('Tag-entity-link').click();
 	await page.getByRole('button', { name: 'Create New Tag' }).click();
 	await page.getByLabel('name').click();
 	await page.getByLabel('name').fill(tag);

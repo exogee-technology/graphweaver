@@ -1,9 +1,9 @@
 {
 	"name": "@exogee/graphweaver-load-testing",
-	"version": "2.0.4",
+	"version": "2.2.7",
 	"private": true,
 	"description": "Graphweaver Load Testing Suite",
-	"license": "MIT",
+	"license": "Apache-2.0",
 	"keywords": [
 		"graphql",
 		"gql",
@@ -16,14 +16,15 @@
 	],
 	"scripts": {
 		"test:metadata": "./bin/k6 run ./src/metadata.ts",
-		"test:create-one": "./bin/k6 run ./src/create-one.ts"
+		"test:create-one": "./bin/k6 run ./src/create-one.ts",
+		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@types/node": "22.0.0",
+		"@types/node": "22.3.0",
 		"k6": "0.0.0"
 	},
 	"devDependencies": {
-		"@types/k6": "0.52.0",
+		"@types/k6": "0.53.0",
 		"typescript": "5.5.4"
 	}
 }

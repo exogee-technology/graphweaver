@@ -34,6 +34,7 @@ export const ExportModal = <TData extends object>({
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName } = useSchema();
 	const [displayPageNumber, setDisplayPageNumber] = useState(1);
+	const [displayTotalPages, setDisplayTotalPages] = useState<number | undefined>();
 	const abortRef = useRef(false);
 
 	if (!selectedEntity) throw new Error('There should always be a selected entity at this point.');
@@ -70,6 +71,11 @@ export const ExportModal = <TData extends object>({
 				hasNextPage = data?.result.length === pageSize;
 				pageNumber++;
 				setDisplayPageNumber(pageNumber);
+
+				if (data?.aggregate?.count) {
+					const totalPages = Math.ceil(data.aggregate.count / pageSize);
+					setDisplayTotalPages(totalPages);
+				}
 			}
 
 			exportToCSV(selectedEntity.name, allResults);
@@ -94,8 +100,11 @@ export const ExportModal = <TData extends object>({
 			modalContent={
 				<div className={styles.contentContainer}>
 					<p>
-						Processing page {displayPageNumber} &#40;Fetching {pageSize} records&#41;
+						Processing page {displayPageNumber}{' '}
+						{displayTotalPages &&
+							`of ${displayTotalPages} page${displayTotalPages !== 1 ? 's' : ''}`}
 					</p>
+					<p>&#40;Fetching {pageSize} records per page&#41;</p>
 					<Spinner />
 					<div className={styles.buttonContainer}>
 						<Button

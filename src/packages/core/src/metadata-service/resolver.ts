@@ -72,7 +72,11 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 
 			const attributes = new AdminUiEntityAttributeMetadata();
 			attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
-			attributes.isReadOnly = entity.adminUIOptions?.readonly;
+			attributes.isReadOnly =
+				entity.adminUIOptions?.readonly ??
+				entity.apiOptions?.excludeFromBuiltInOperations ??
+				entity.apiOptions?.excludeFromBuiltInWriteOperations ??
+				false;
 
 			let defaultSummaryField: 'name' | 'title' | undefined = undefined;
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
@@ -173,6 +177,20 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 			})),
 		}));
 
+		if (hookManager) {
+			const result = await hookManager.runHooks(HookRegister.AFTER_READ, {
+				context,
+				transactional: false,
+				fields,
+				entities,
+			});
+			return {
+				entities: result.entities,
+				enums: enums,
+			};
+		}
+
+		// @deprecated this section of code can be removed once the hook argument is removed
 		if (hooks?.afterRead) {
 			const result = await hooks.afterRead({ context, metadata: { entities, enums } });
 			return result.metadata;

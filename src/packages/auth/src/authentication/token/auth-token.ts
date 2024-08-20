@@ -47,10 +47,7 @@ const removeAuthPrefixIfPresent = (authorizationHeader: string): string => {
 	return authorizationHeader.replace(prefixPattern, '');
 };
 
-export const isExpired = (token: string) => {
-	const decodedJwt = JSON.parse(atob(token.split('.')[1]));
-	return decodedJwt.exp * 1000 < Date.now();
-};
+export const isExpired = (token: JwtPayload) => !token.exp || token.exp * 1000 < Date.now();
 
 const TOKEN_PREFIX = 'Bearer';
 const algorithm = (process.env.AUTH_JWT_ALGORITHM ?? 'ES256') as Algorithm;

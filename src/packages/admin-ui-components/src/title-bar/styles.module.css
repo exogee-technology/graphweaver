@@ -12,6 +12,10 @@
 	gap: 12px;
 }
 
+.toolsWrapper button {
+	white-space: nowrap;
+}
+
 .search {
 	background: rgba(237, 232, 242, 0.02);
 	border: 1px solid var(--detail-border-color);
@@ -22,4 +26,10 @@
 	background-position-x: 8px;
 	background-position-y: center;
 	outline: 0;
+}
+
+@media only screen and (max-width: 1200px) {
+	.title {
+		font-size: 24px;
+	}
 }

@@ -108,7 +108,7 @@ export interface CustomField<T = unknown> extends EntityField {
 	index?: number;
 	type: 'custom';
 
-	component: (args: CustomFieldArgs<T>) => JSX.Element;
+	component: (args: CustomFieldArgs<T>) => JSX.Element | null;
 	hideInDetailForm?: boolean;
 	panelMode?: PanelMode;
 }

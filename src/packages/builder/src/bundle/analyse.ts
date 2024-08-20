@@ -15,7 +15,7 @@ export const analyseBundle = async () => {
 		'dist'
 	);
 
-	const config = viteConfig({ rootDirectory });
+	const config = await viteConfig({ rootDirectory });
 
 	await build({
 		...config,

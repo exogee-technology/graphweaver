@@ -62,7 +62,10 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 };
 
 export const generateTypePolicies = (entities: Entity[]) => {
-	const result: TypePolicies = {};
+	const result: TypePolicies = {
+		// AggregationResult objects don't have any ID field at all, so they cannot be cached.
+		AggregationResult: { keyFields: [] },
+	};
 
 	for (const entity of entities) {
 		if (result[entity.name]) throw new Error(`Duplicate entity name: '${entity.name}'`);
