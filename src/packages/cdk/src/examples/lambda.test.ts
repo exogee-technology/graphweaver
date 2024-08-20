@@ -61,10 +61,7 @@ describe('GraphweaverApp - API Deployed to Lambda', () => {
 
 		websiteTemplate.hasOutput('*', {
 			Value: {
-				'Fn::GetAtt': [
-					'TestGraphweaverDockerStackWebsiteWebsiteDistribution25D90871',
-					'DomainName',
-				],
+				'Fn::GetAtt': ['GraphweaverStackWebsiteWebsiteDistributionC9A031FA', 'DomainName'],
 			},
 		});
 	});
@@ -79,13 +76,6 @@ describe('GraphweaverApp - API Deployed to Lambda', () => {
 				},
 			},
 			MemorySize: 512,
-			VpcConfig: {
-				SecurityGroupIds: [
-					{
-						'Fn::ImportValue': Match.stringLikeRegexp('GraphQLSecurityGroup'),
-					},
-				],
-			},
 		});
 
 		apiTemplate.resourceCountIs('AWS::ApiGateway::RestApi', 1);
@@ -111,42 +101,6 @@ describe('GraphweaverApp - API Deployed to Lambda', () => {
 				],
 			},
 		});
-
-		apiTemplate.hasOutput('*', {
-			Value: {
-				'Fn::Join': [
-					'',
-					[
-						'https://',
-						{
-							Ref: 'TestGraphweaverDockerStackApiApiGateway03E6A3A9',
-						},
-						'.execute-api.',
-						{
-							Ref: 'AWS::Region',
-						},
-						'.',
-						{
-							Ref: 'AWS::URLSuffix',
-						},
-						'/',
-						{
-							Ref: 'TestGraphweaverDockerStackApiApiGatewayDeploymentStageprod7376FDDA',
-						},
-						'/',
-					],
-				],
-			},
-		});
-
-		apiTemplate.hasOutput('*', {
-			Value: {
-				'Fn::GetAtt': [
-					'TestGraphweaverDockerStackApiApiGatewayCustomDomainA039BA27',
-					'RegionalDomainName',
-				],
-			},
-		});
 	});
 
 	test('Database', () => {
@@ -159,11 +113,6 @@ describe('GraphweaverApp - API Deployed to Lambda', () => {
 			DBInstanceClass: 'db.t4g.micro',
 			MasterUsername: 'gw_user_test',
 			EngineVersion: '13.12',
-			VPCSecurityGroups: [
-				{
-					'Fn::ImportValue': Match.stringLikeRegexp('DatabaseSecurityGroup'),
-				},
-			],
 		});
 	});
 });

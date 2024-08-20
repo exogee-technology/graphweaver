@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
 
-export class LambdaStack extends cdk.Stack {
+export class LambdaStack extends cdk.NestedStack {
 	public readonly lambda: lambda.Function;
 
 	constructor(

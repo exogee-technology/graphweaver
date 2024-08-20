@@ -29,8 +29,8 @@ class NetworkStack extends cdk.NestedStack {
 }
 
 const env = {
-	account: process.env.AWS_ACCOUNT,
-	region: process.env.AWS_DEFAULT_REGION,
+	account: process.env.AWS_ACCOUNT ?? '123456789012',
+	region: process.env.AWS_DEFAULT_REGION ?? 'ap-southeast-2',
 };
 
 const stackName = `GraphweaverStack`;

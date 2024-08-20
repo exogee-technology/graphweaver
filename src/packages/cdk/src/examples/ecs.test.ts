@@ -18,7 +18,7 @@ describe('GraphweaverApp - API Deployed to ECS', () => {
 		websiteTemplate.resourceCountIs('AWS::CloudFront::Distribution', 1);
 		websiteTemplate.hasResourceProperties('AWS::CloudFront::Distribution', {
 			DistributionConfig: {
-				Aliases: ['admin-ui.test.com'],
+				Aliases: ['admin-ui-ecs.graphweaver.com'],
 			},
 		});
 
@@ -37,7 +37,8 @@ describe('GraphweaverApp - API Deployed to ECS', () => {
 				},
 				SecurityHeadersConfig: {
 					ContentSecurityPolicy: {
-						ContentSecurityPolicy: "default-src 'self';",
+						ContentSecurityPolicy:
+							"default-src 'self'; connect-src https://api-ecs.graphweaver.com; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;",
 						Override: true,
 					},
 					ContentTypeOptions: {
@@ -63,10 +64,7 @@ describe('GraphweaverApp - API Deployed to ECS', () => {
 
 		websiteTemplate.hasOutput('*', {
 			Value: {
-				'Fn::GetAtt': [
-					'TestGraphweaverDockerStackWebsiteWebsiteDistribution25D90871',
-					'DomainName',
-				],
+				'Fn::GetAtt': ['GraphweaverStackWebsiteWebsiteDistributionC9A031FA', 'DomainName'],
 			},
 		});
 	});
@@ -83,11 +81,6 @@ describe('GraphweaverApp - API Deployed to ECS', () => {
 			DBInstanceClass: 'db.t4g.micro',
 			MasterUsername: 'gw_user_test',
 			EngineVersion: '13.12',
-			VPCSecurityGroups: [
-				{
-					'Fn::ImportValue': Match.stringLikeRegexp('DatabaseSecurityGroup'),
-				},
-			],
 		});
 	});
 });

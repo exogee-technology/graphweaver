@@ -10,7 +10,7 @@ import { Construct } from 'constructs';
 const app = new App();
 
 // Start by defining the network stack this will setup the VPC and security groups
-class NetworkStack extends cdk.Stack {
+class NetworkStack extends cdk.NestedStack {
 	public readonly vpc: ec2.Vpc;
 	public readonly graphqlSecurityGroup: ec2.SecurityGroup;
 	public readonly databaseSecurityGroup: ec2.SecurityGroup;
@@ -28,11 +28,19 @@ class NetworkStack extends cdk.Stack {
 	}
 }
 
+const env = {
+	account: process.env.AWS_ACCOUNT ?? '123456789012',
+	region: process.env.AWS_DEFAULT_REGION ?? 'ap-southeast-2',
+};
+
+const stackName = `GraphweaverStack`;
+const rootStack = new cdk.Stack(app, stackName, { env });
+
 // Create the network stack and configure the network object that is passed to the GraphweaverApp
-const networkStack = new NetworkStack(app, 'MyNetworkStack');
+const networkStack = new NetworkStack(rootStack, 'MyNetworkStack');
 
 // Create the GraphweaverApp
-export const graphweaverApp = new GraphweaverApp(app, 'TestGraphweaverDocker', {
+export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDocker', {
 	name: 'testDocker',
 	network: {
 		vpc: networkStack.vpc,
