@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "2.2.6",
+	"version": "2.2.7",
 	"description": "RESTful backend for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -35,7 +35,7 @@
 		"@types/lodash": "4.17.7",
 		"@types/luxon": "3.4.2",
 		"@types/node": "22.3.0",
-		"esbuild": "0.23.0",
+		"esbuild": "0.23.1",
 		"glob": "10.4.3",
 		"prettier": "3.3.3",
 		"typescript": "5.5.4"

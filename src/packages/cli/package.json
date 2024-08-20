@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "2.2.6",
+	"version": "2.2.7",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -25,7 +25,7 @@
 	"dependencies": {
 		"@exogee/graphweaver-builder": "workspace:*",
 		"chokidar": "3.6.0",
-		"esbuild": "0.23.0",
+		"esbuild": "0.23.1",
 		"inquirer": "10.1.8",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
