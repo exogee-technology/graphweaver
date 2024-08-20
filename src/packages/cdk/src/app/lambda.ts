@@ -7,30 +7,38 @@ import { AccessLogFormat, LambdaRestApi, LogGroupLogDestination } from 'aws-cdk-
 import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
 
+import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
 
-import { GraphweaverAppConfig } from './types';
-
-export class ApiStack extends cdk.Stack {
+export class LambdaStack extends cdk.NestedStack {
 	public readonly lambda: lambda.Function;
 
 	constructor(
 		scope: Construct,
 		id: string,
-		databaseStack: DatabaseStack,
 		config: GraphweaverAppConfig,
+		database?: DatabaseStack,
 		props?: cdk.StackProps
 	) {
 		super(scope, id, props);
 
-		if (!databaseStack.dbInstance.secret?.secretFullArn)
-			throw new Error('Missing required secret ARN for database');
+		if (!config.lambda) {
+			throw new Error('Missing required lambda configuration');
+		}
+
+		// ⚠️ Avoid using the database root user in the application layer. ⚠️
+		// Create a dedicated user with limited permissions and pass its credentials via a secret manager ARN.
+		// This is a best practice for security and compliance.
+		const databaseSecretFullArn =
+			config.lambda.databaseSecretFullArn ?? database?.dbInstance.secret?.secretFullArn;
+
+		const vpc = config.network.vpc;
 
 		// Create GraphQL Lambda Function
-		this.lambda = new NodejsFunction(this, `${id}ApiFunction`, {
-			runtime: config.api.runtime ?? lambda.Runtime.NODEJS_20_X,
-			handler: config.api.handler ?? 'index.handler',
-			entry: require.resolve(config.api.packageName),
+		this.lambda = new NodejsFunction(this, `${id}LambdaFunction`, {
+			runtime: config.lambda.runtime ?? lambda.Runtime.NODEJS_20_X,
+			handler: config.lambda.handler ?? 'index.handler',
+			entry: require.resolve(config.lambda.packageName),
 			bundling: {
 				externalModules: [
 					'sqlite3',
@@ -43,26 +51,35 @@ export class ApiStack extends cdk.Stack {
 					'libsql',
 				],
 			},
-			vpc: config.network.vpc,
+			vpc,
 			securityGroups: [config.network.graphqlSecurityGroup],
 			vpcSubnets: {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
 			},
-			memorySize: config.api.memorySize ?? 1024,
+			memorySize: config.lambda.memorySize ?? 1024,
 			architecture: lambda.Architecture.ARM_64,
 			environment: {
 				NODE_EXTRA_CA_CERTS: '/var/runtime/ca-cert.pem',
-				DATABASE_SECRET_ARN: databaseStack.dbInstance.secret.secretFullArn,
-				...config.api.envVars,
+				...(databaseSecretFullArn ? { DATABASE_SECRET_ARN: databaseSecretFullArn } : {}),
+				...config.lambda.envVars,
 			},
-			timeout: cdk.Duration.seconds(config.api.timeout ?? 10),
+			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
 		});
 
-		databaseStack.dbInstance.secret.grantRead(this.lambda);
+		// ⚠️ Grant the Lambda function access to the database secret ⚠️
+		// This only happens when using the default secret from the database stack
+		// If a custom secret is provided, the user is responsible for granting access to the Lambda function
+		// Again, this is a best practice to use your own secret and manage the permissions.
+		if (
+			database?.dbInstance.secret?.secretFullArn &&
+			databaseSecretFullArn === database.dbInstance.secret?.secretFullArn
+		) {
+			database.dbInstance.secret.grantRead(this.lambda);
+		}
 
-		const apiLogging = new LogGroup(this, `${id}ApiFunctionLogging`);
+		const apiLogging = new LogGroup(this, `${id}LambdaFunctionLogging`);
 
-		const certificateArn = config.api.cert;
+		const certificateArn = config.lambda.cert;
 		const certificate = Certificate.fromCertificateArn(
 			this,
 			`${id}ApiCertificateImported`,
@@ -71,7 +88,7 @@ export class ApiStack extends cdk.Stack {
 
 		const rest = new LambdaRestApi(this, `${id}ApiGateway`, {
 			domainName: {
-				domainName: config.api.url,
+				domainName: config.lambda.url,
 				certificate,
 			},
 			deployOptions: {

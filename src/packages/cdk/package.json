@@ -12,18 +12,25 @@
 	"main": "lib/index.js",
 	"source": "src/index.ts",
 	"scripts": {
+		"cdk-bootstrap": "dotenv -- cdk bootstrap -v",
+		"cdk-deploy": "dotenv -- cdk deploy --all",
+		"cdk-synth": "dotenv -- cdk synth --verbose",
 		"build": "npm run build:js && npm run build:types",
 		"build:js": "node build.js",
 		"build:types": "tsc --emitDeclarationOnly",
 		"package:pack": "pnpm pack",
-		"test": "vitest",
-		"version": "npm version --no-git-tag-version"
+		"test": "dotenv -- vitest",
+		"version": "npm version --no-git-tag-version",
+		"build:docker": "docker build -f src/docker/Dockerfile ../../examples/s3-storage"
 	},
 	"dependencies": {
 		"aws-cdk-lib": "2.152.0",
 		"constructs": "10.3.0"
 	},
 	"devDependencies": {
+		"@digitak/esrun": "3.2.24",
+		"dotenv-cli": "7.2.1",
+		"aws-cdk": "2.150.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@types/node": "22.4.1",
 		"esbuild": "0.23.1",

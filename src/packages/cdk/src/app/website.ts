@@ -15,6 +15,12 @@ export class WebsiteStack extends cdk.Stack {
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
+		const url = config.lambda?.url ?? config.ecs?.url;
+
+		if (!url) {
+			throw new Error('Missing required Graphweaver API URL for website');
+		}
+
 		const websiteBucket = new s3.Bucket(this, `${id}Bucket`, {
 			websiteIndexDocument: 'index.html',
 			publicReadAccess: true,
@@ -52,7 +58,7 @@ export class WebsiteStack extends cdk.Stack {
 					contentSecurityPolicy: {
 						contentSecurityPolicy:
 							config.adminUI.csp ??
-							`default-src 'self'; connect-src https://${config.api.url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;`,
+							`default-src 'self'; connect-src https://${url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;`,
 						override: true,
 					},
 					contentTypeOptions: { override: true },

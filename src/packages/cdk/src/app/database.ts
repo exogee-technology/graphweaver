@@ -5,13 +5,18 @@ import { Construct } from 'constructs';
 
 import { GraphweaverAppConfig } from './types';
 
-export class DatabaseStack extends cdk.Stack {
+export class DatabaseStack extends cdk.NestedStack {
 	public readonly dbInstance: rds.DatabaseInstance;
 
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
 
-		// RDS PostgreSQL Instance
+		if (!config.database) {
+			throw new Error('Missing required database configuration');
+		}
+
+		const vpc = config.network.vpc;
+
 		this.dbInstance = new rds.DatabaseInstance(this, `${id}Database`, {
 			engine: rds.DatabaseInstanceEngine.postgres({
 				version: config.database.version ?? rds.PostgresEngineVersion.VER_16_2,
@@ -19,18 +24,15 @@ export class DatabaseStack extends cdk.Stack {
 			instanceType:
 				config.database.instanceType ??
 				ec2.InstanceType.of(ec2.InstanceClass.T4G, ec2.InstanceSize.MICRO),
+			instanceIdentifier: cdk.PhysicalName.GENERATE_IF_NEEDED,
 			credentials: rds.Credentials.fromGeneratedSecret(config.database.username),
-			vpc: config.network.vpc,
+			vpc,
 			storageEncrypted: true,
 			vpcSubnets: {
 				subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
 			},
 			databaseName: config.database.name,
 			securityGroups: [config.network.databaseSecurityGroup],
-		});
-
-		new cdk.CfnOutput(this, `${id}DatabaseUrl`, {
-			value: this.dbInstance.dbInstanceEndpointAddress,
 		});
 	}
 }

@@ -37,6 +37,13 @@ export const startStandaloneServer = async <TContext extends BaseContext>(
 		onRequestWrapper(plugins, async () => done());
 	});
 
+	fastify.get('/health', async (_, reply) => {
+		reply.statusCode = 200;
+		reply.send({
+			status: 'ok',
+		});
+	});
+
 	await fastify.listen({
 		port,
 		host: host ?? '::',

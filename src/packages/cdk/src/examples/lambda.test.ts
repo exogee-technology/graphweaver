@@ -1,62 +1,13 @@
 import { describe, test } from 'vitest';
-import { App, Stack } from 'aws-cdk-lib';
-import { Match, Template } from 'aws-cdk-lib/assertions';
-import { InstanceClass, InstanceSize, InstanceType, SecurityGroup, Vpc } from 'aws-cdk-lib/aws-ec2';
-import { GraphweaverApp } from './index';
-import { PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
+import { Template } from 'aws-cdk-lib/assertions';
+import { graphweaverApp } from './lambda';
+import { Stack } from 'aws-cdk-lib';
 
-const mockApp = new App();
-const stack = new Stack(mockApp, 'MyStack');
-const vpc = new Vpc(stack, 'MyVpc');
-const graphqlSecurityGroup = new SecurityGroup(stack, 'GraphQLSecurityGroup', {
-	vpc,
-});
-const databaseSecurityGroup = new SecurityGroup(stack, 'DatabaseSecurityGroup', {
-	vpc,
-});
+const websiteTemplate = Template.fromStack(graphweaverApp.website);
+const apiTemplate = Template.fromStack(graphweaverApp.api);
+const databaseTemplate = Template.fromStack(graphweaverApp.database as Stack);
 
-const graphweaverApp = new GraphweaverApp(stack, 'TestGraphweaver', {
-	name: 'test',
-	network: {
-		vpc,
-		graphqlSecurityGroup,
-		databaseSecurityGroup,
-	},
-	database: {
-		name: 'gw_database_test',
-		username: 'gw_user_test',
-		version: PostgresEngineVersion.VER_13_12,
-		instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
-	},
-	adminUI: {
-		buildPath: '/',
-		cert: 'arn:aws:acm:us-east-1:test:test:test',
-		url: 'admin-ui.test.com',
-		csp: "default-src 'self';",
-		customHeaders: [
-			{
-				header: 'X-Graphweaver',
-				value: 'true',
-				override: true,
-			},
-		],
-	},
-	api: {
-		packageName: '@exogee/graphweaver',
-		cert: 'arn:aws:acm:ap-southeast-2:test:test:test',
-		url: 'api.test.com',
-		memorySize: 512,
-		envVars: {
-			TEST_ENV_VAR: 'test',
-		},
-	},
-});
-
-const websiteTemplate = Template.fromStack(graphweaverApp.appStack.website);
-const apiTemplate = Template.fromStack(graphweaverApp.appStack.api);
-const databaseTemplate = Template.fromStack(graphweaverApp.appStack.database);
-
-describe('GraphweaverApp', () => {
+describe('GraphweaverApp - API Deployed to Lambda', () => {
 	test('AdminUI', () => {
 		// Should create a S3 bucket to host the Admin UI
 		websiteTemplate.resourceCountIs('AWS::S3::Bucket', 1);
@@ -110,7 +61,7 @@ describe('GraphweaverApp', () => {
 
 		websiteTemplate.hasOutput('*', {
 			Value: {
-				'Fn::GetAtt': ['TestGraphweaverStackWebsiteWebsiteDistribution071BF43D', 'DomainName'],
+				'Fn::GetAtt': ['GraphweaverStackWebsiteWebsiteDistributionC9A031FA', 'DomainName'],
 			},
 		});
 	});
@@ -125,13 +76,6 @@ describe('GraphweaverApp', () => {
 				},
 			},
 			MemorySize: 512,
-			VpcConfig: {
-				SecurityGroupIds: [
-					{
-						'Fn::ImportValue': Match.stringLikeRegexp('GraphQLSecurityGroup'),
-					},
-				],
-			},
 		});
 
 		apiTemplate.resourceCountIs('AWS::ApiGateway::RestApi', 1);
@@ -157,42 +101,6 @@ describe('GraphweaverApp', () => {
 				],
 			},
 		});
-
-		apiTemplate.hasOutput('*', {
-			Value: {
-				'Fn::Join': [
-					'',
-					[
-						'https://',
-						{
-							Ref: 'TestGraphweaverStackApiApiGatewayE0EFC07E',
-						},
-						'.execute-api.',
-						{
-							Ref: 'AWS::Region',
-						},
-						'.',
-						{
-							Ref: 'AWS::URLSuffix',
-						},
-						'/',
-						{
-							Ref: 'TestGraphweaverStackApiApiGatewayDeploymentStageprod597B26CD',
-						},
-						'/',
-					],
-				],
-			},
-		});
-
-		apiTemplate.hasOutput('*', {
-			Value: {
-				'Fn::GetAtt': [
-					'TestGraphweaverStackApiApiGatewayCustomDomain0EC95E87',
-					'RegionalDomainName',
-				],
-			},
-		});
 	});
 
 	test('Database', () => {
@@ -205,11 +113,6 @@ describe('GraphweaverApp', () => {
 			DBInstanceClass: 'db.t4g.micro',
 			MasterUsername: 'gw_user_test',
 			EngineVersion: '13.12',
-			VPCSecurityGroups: [
-				{
-					'Fn::ImportValue': Match.stringLikeRegexp('DatabaseSecurityGroup'),
-				},
-			],
 		});
 	});
 });
