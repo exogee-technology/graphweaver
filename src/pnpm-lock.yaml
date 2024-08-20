@@ -858,8 +858,8 @@ importers:
         specifier: 3.632.0
         version: 3.632.0
       '@aws-sdk/client-lambda':
-        specifier: 3.632.0
-        version: 3.632.0
+        specifier: 3.634.0
+        version: 3.634.0
       '@exogee/graphweaver-rest':
         specifier: workspace:*
         version: link:../rest
@@ -2036,8 +2036,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-lambda@3.632.0:
-    resolution: {integrity: sha512-vF4KRuHGr6EfW+dssm56S6b+jAa8dKqdWduHNms1TQFah0iOkjc9Dpo4p4j6bobZcuricGko/OZy9ynb1Dwldg==}
+  /@aws-sdk/client-lambda@3.634.0:
+    resolution: {integrity: sha512-usQhHRkJ9etWUIDusS2DK/UP1PlEP1XoeXJpnMDTTQGT2XPMtWlLaa5OYOrVqUiZbVE3FJNCS7K2ReIex/JciQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
@@ -3468,8 +3468,8 @@ packages:
     dev: false
     optional: true
 
-  /@envelop/core@5.0.1:
-    resolution: {integrity: sha512-wxA8EyE1fPnlbP0nC/SFI7uU8wSNf4YjxZhAPu0P63QbgIvqHtHsH4L3/u+rsTruzhk3OvNRgQyLsMfaR9uzAQ==}
+  /@envelop/core@5.0.2:
+    resolution: {integrity: sha512-tVL6OrMe6UjqLosiE+EH9uxh2TQC0469GwF4tE014ugRaDDKKVWwFwZe0TBMlcyHKh5MD4ZxktWo/1hqUxIuhw==}
     engines: {node: '>=18.0.0'}
     requiresBuild: true
     dependencies:
@@ -3869,7 +3869,7 @@ packages:
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
-      '@envelop/core': 5.0.1
+      '@envelop/core': 5.0.2
     dev: false
 
   /@escape.tech/graphql-armor-cost-limit@2.2.0:
@@ -3878,7 +3878,7 @@ packages:
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
-      '@envelop/core': 5.0.1
+      '@envelop/core': 5.0.2
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
@@ -3888,7 +3888,7 @@ packages:
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
-      '@envelop/core': 5.0.1
+      '@envelop/core': 5.0.2
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
@@ -3898,7 +3898,7 @@ packages:
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
-      '@envelop/core': 5.0.1
+      '@envelop/core': 5.0.2
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
@@ -3908,7 +3908,7 @@ packages:
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
-      '@envelop/core': 5.0.1
+      '@envelop/core': 5.0.2
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
@@ -3918,7 +3918,7 @@ packages:
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
-      '@envelop/core': 5.0.1
+      '@envelop/core': 5.0.2
       '@escape.tech/graphql-armor-types': 0.6.0
     dev: false
 
@@ -9051,6 +9051,7 @@ packages:
   /aggregate-error@3.1.0:
     resolution: {integrity: sha512-4I7Td01quW/RpocfNayFdFVk1qSuoh0E7JrbRJ16nH01HhKFQ88INq9Sd+nd72zqRySlr9BmDA8xlEJ6vJMrYA==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dependencies:
       clean-stack: 2.2.0
       indent-string: 4.0.0
@@ -9931,6 +9932,7 @@ packages:
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dev: false
 
   /cli-boxes@3.0.0:
@@ -12618,6 +12620,7 @@ packages:
   /indent-string@4.0.0:
     resolution: {integrity: sha512-EdDDZu4A2OyIK7Lr/2zG+w5jmbuk1DVBnEwREQvBzspBJkCEbRa8GxU1lghYcaGJCnRWibjDXlq779X1/y5xwg==}
     engines: {node: '>=8'}
+    requiresBuild: true
     dev: false
 
   /infer-owner@1.0.4:
@@ -16201,7 +16204,7 @@ packages:
       serverless:
         optional: true
     dependencies:
-      '@aws-sdk/client-lambda': 3.632.0
+      '@aws-sdk/client-lambda': 3.634.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.10
