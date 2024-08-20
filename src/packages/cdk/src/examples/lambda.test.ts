@@ -1,5 +1,5 @@
 import { describe, test } from 'vitest';
-import { Match, Template } from 'aws-cdk-lib/assertions';
+import { Template } from 'aws-cdk-lib/assertions';
 import { graphweaverApp } from './lambda';
 import { Stack } from 'aws-cdk-lib';
 
