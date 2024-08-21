@@ -138,9 +138,10 @@ const assertUserCanPerformRequest = async <G, TContext extends AuthorizationCont
 			const acl = getACL(entityName);
 
 			if (!acl || Object.keys(acl).length === 0) {
-				throw new Error(
+				logger.error(
 					`The entity ${entityName} does not have an ACL defined. Please define an ACL for this entity.`
 				);
+				throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
 			}
 
 			try {
