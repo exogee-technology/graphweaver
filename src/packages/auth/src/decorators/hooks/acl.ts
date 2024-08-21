@@ -136,7 +136,19 @@ const assertUserCanPerformRequest = async <G, TContext extends AuthorizationCont
 
 		if (type === RequirePermissionType.ENTITY) {
 			const acl = getACL(entityName);
-			await assertUserCanPerformRequestedAction(acl, accessType);
+			try {
+				await assertUserCanPerformRequestedAction(acl, accessType);
+			} catch (e) {
+				logger.error(`User does not have permission to ${accessType} the ${entityName} entity`, e);
+
+				if (acl && Object.keys(acl).length === 0) {
+					logger.error(
+						`The entity ${entityName} does not have an ACL defined. Please define an ACL for this entity.`
+					);
+				}
+
+				throw e;
+			}
 		} else if (type === RequirePermissionType.FIELD && field) {
 			assertUserHasAccessToField({
 				field,
