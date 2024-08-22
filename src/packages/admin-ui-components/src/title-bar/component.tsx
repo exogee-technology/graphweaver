@@ -23,7 +23,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 
 	return (
 		<div className={styles.toolBarWrapper}>
-			<div className="titleWrapper">
+			<div className={styles.titleWrapper}>
 				<h1 className={styles.title}>{title}</h1>
 				<p className="subtext">{subtitle}</p>
 			</div>
@@ -56,7 +56,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 					})}
 					aria-label={`Create New ${selectedEntity.name}`}
 				>
-					<Button disabled={selectedEntity.attributes.isReadOnly}>
+					<Button disabled={selectedEntity.attributes.isReadOnly} className={styles.createButton}>
 						Create New {selectedEntity.name}
 					</Button>
 				</Link>

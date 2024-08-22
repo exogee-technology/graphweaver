@@ -1,0 +1,27 @@
+.wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	gap: 18px;
+}
+
+.dataSourceIcon {
+	width: 64px;
+}
+
+.title {
+	font-family: 'Inter';
+	font-weight: 600;
+	font-size: 32px;
+	line-height: 140%;
+	color: #ede8f2;
+}
+
+.text {
+	background-color: #080214;
+	padding: 16px;
+	border-radius: 12px;
+	color: #ffffff57;
+}

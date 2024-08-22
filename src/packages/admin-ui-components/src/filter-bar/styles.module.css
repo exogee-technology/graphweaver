@@ -6,3 +6,9 @@
 	min-height: 38px;
 	align-items: center;
 }
+
+@media only screen and (max-width: 1200px) {
+	.filterBarWrapper {
+		flex-wrap: wrap;
+	}
+}

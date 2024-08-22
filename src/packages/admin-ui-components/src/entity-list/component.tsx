@@ -23,6 +23,7 @@ import { Modal } from '../modal';
 import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
 import { Button } from '../button';
 import { SelectionBar } from '../selection-bar';
+import { ErrorView } from '../error-view';
 
 import styles from './styles.module.css';
 import { ExportModal } from '../export-modal';
@@ -79,10 +80,10 @@ export const EntityList = <TData extends object>() => {
 		return <Loader />;
 	}
 	if (error) {
-		return <pre>{`Error! ${error.message}`}</pre>;
+		return <ErrorView message={error.message} />;
 	}
 	if (!data) {
-		return <pre>{`Error! Unable to load entity.`}</pre>;
+		return <ErrorView message="Error! Unable to load entity." />;
 	}
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
