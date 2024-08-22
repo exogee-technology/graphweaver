@@ -1,4 +1,4 @@
-import yargs from 'yargs';
+import yargs, { help } from 'yargs';
 import chokidar from 'chokidar';
 import semver from 'semver';
 import {
@@ -118,11 +118,15 @@ yargs
 			if (port) console.log(`Database Port: ${port}`);
 			if (user) console.log(`Database User: ${user}`);
 
-			if (source !== 'mysql' && source !== 'postgresql' && source !== 'sqlite') {
+			if (
+				!source ||
+				(source !== 'mysql' && source !== 'postgresql' && source !== 'sqlite' && source !== 'rest')
+			) {
+				help();
 				throw new Error(`Unsupported source: ${source}`);
+			} else {
+				await importDataSource(source, database, host, port, password, user, overwrite);
 			}
-
-			await importDataSource(source, database, host, port, password, user, overwrite);
 		},
 	})
 	.command({

@@ -16,6 +16,10 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 		throw new Error('No source specified, please specify a data source.');
 	}
 
+	if (options.source === 'rest') {
+		throw new Error('REST data sources are not supported for admin password generation.');
+	}
+
 	await openConnection(options.source, {
 		mikroOrmConfig: {
 			host: options.host,

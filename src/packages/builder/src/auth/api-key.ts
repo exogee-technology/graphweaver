@@ -29,6 +29,10 @@ export const generateApiKey = async (options: GenerateApiKeyOptions) => {
 		throw new Error('No source specified, please specify a data source.');
 	}
 
+	if (options.source === 'rest') {
+		throw new Error('REST data sources are not supported for API key generation.');
+	}
+
 	await openConnection(options.source, {
 		mikroOrmConfig: {
 			host: options.host,

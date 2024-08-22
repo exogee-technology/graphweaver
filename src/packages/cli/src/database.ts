@@ -16,7 +16,7 @@ export const promptForDatabaseOptions = async ({
 				type: 'list',
 				name: 'source',
 				message: `What is the data source?`,
-				choices: ['mysql', 'postgresql', 'sqlite'],
+				choices: ['mysql', 'postgresql', 'sqlite', 'rest'],
 			},
 		]);
 		source = prompt.source;
@@ -30,6 +30,16 @@ export const promptForDatabaseOptions = async ({
 				type: 'input',
 				name: 'dbName',
 				message: `What is the database name?`,
+			});
+		}
+	}
+
+	if (source === 'rest') {
+		if (!database) {
+			prompts.push({
+				type: 'input',
+				name: 'dbName',
+				message: `Where is the Open API spec? (Both file path and URL are supported)`,
 			});
 		}
 	}

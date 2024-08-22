@@ -9,6 +9,7 @@
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write .",
 		"gw": "./bin/gw-bin.js",
+		"start": "./bin/gw-bin.js",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "bin/index.js",

@@ -894,6 +894,9 @@ importers:
       '@exogee/graphweaver-mikroorm':
         specifier: workspace:*
         version: link:../mikroorm
+      '@exogee/graphweaver-rest':
+        specifier: workspace:*
+        version: link:../rest
       '@graphql-codegen/add':
         specifier: 5.0.3
         version: 5.0.3(graphql@16.9.0)
@@ -1394,6 +1397,9 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
+      '@inquirer/prompts':
+        specifier: 5.3.8
+        version: 5.3.8
       '@readme/openapi-parser':
         specifier: 2.6.0
         version: 2.6.0(openapi-types@12.1.3)
