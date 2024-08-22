@@ -876,8 +876,8 @@ importers:
         specifier: 3.635.0
         version: 3.635.0
       '@aws-sdk/client-lambda':
-        specifier: 3.635.0
-        version: 3.635.0
+        specifier: 3.636.0
+        version: 3.636.0
       '@exogee/graphweaver-rest':
         specifier: workspace:*
         version: link:../rest
@@ -2063,8 +2063,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-lambda@3.635.0:
-    resolution: {integrity: sha512-py7XtJ4lULpVogpYXIGH/jcPA6RlHuSFJCzv3NGCilVQpKftcsXy7+ckx0Y+pEJjwCpP8G2RhHNcSpNYfxaPbg==}
+  /@aws-sdk/client-lambda@3.636.0:
+    resolution: {integrity: sha512-rJitBBQAEVdyf4E6PhwFwD7uIM222dfx2oEIuFKkUb5rMKaFocnJbzvS3yGv/dZwDcUtMV5+5ibMCfgE8gAiJg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
@@ -12243,6 +12243,7 @@ packages:
 
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
+    requiresBuild: true
 
   /fs2@0.3.9:
     resolution: {integrity: sha512-WsOqncODWRlkjwll+73bAxVW3JPChDgaPX3DT4iTTm73UmG4VgALa7LaFblP232/DN60itkOrPZ8kaP1feksGQ==}
@@ -12949,6 +12950,7 @@ packages:
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
     deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+    requiresBuild: true
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -15312,6 +15314,7 @@ packages:
   /path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
     engines: {node: '>=0.10.0'}
+    requiresBuild: true
 
   /path-key@3.1.1:
     resolution: {integrity: sha512-ojmeN0qd+y0jszEtoY48r0Peq5dwMEkIlCOu6Q5f41lfkswXuKtYrhgoTpLnyIcHm24Uhqx+5Tqm2InSwLhE6Q==}
@@ -16490,7 +16493,7 @@ packages:
       serverless:
         optional: true
     dependencies:
-      '@aws-sdk/client-lambda': 3.635.0
+      '@aws-sdk/client-lambda': 3.636.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.10
