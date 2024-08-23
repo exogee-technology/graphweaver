@@ -159,3 +159,10 @@
 .unsavedChangesButton:hover {
 	background-color: #4c475b;
 }
+
+@media only screen and (max-width: 600px) {
+	.detailContainer {
+		max-width: 100%;
+		min-width: 100%;
+	}
+}
