@@ -1,7 +1,7 @@
 {
-	"name": "@exogee/graphweaver-rest",
+	"name": "@exogee/graphweaver-rest-legacy",
 	"version": "2.2.8",
-	"description": "RESTful backend adapter for @exogee/graphweaver",
+	"description": "Legacy RESTful backend adapter for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
 		"build": "npm run build:js && npm run build:types",
@@ -23,10 +23,17 @@
 	"dependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
+		"apollo-server-errors": "3.3.1",
+		"class-validator": "0.14.1",
 		"dataloader": "2.2.2",
-		"got-cjs": "12.5.4"
+		"dotenv": "16.4.5",
+		"graphql": "16.9.0",
+		"lodash": "4.17.21",
+		"luxon": "3.5.0"
 	},
 	"devDependencies": {
+		"@types/lodash": "4.17.7",
+		"@types/luxon": "3.4.2",
 		"@types/node": "22.4.1",
 		"esbuild": "0.23.1",
 		"glob": "10.4.3",
@@ -38,7 +45,9 @@
 		"gql",
 		"headless",
 		"cms",
-		"REST",
-		"federation"
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
 	]
 }

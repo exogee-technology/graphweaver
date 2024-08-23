@@ -1,8 +1,9 @@
-import { BaseEntity, Field } from '@exogee/graphweaver-rest';
+import { BaseEntity, ExternalIdField, Field } from '@exogee/graphweaver-rest';
+import { foreignKeySerializer } from '../../rest-client';
 
 /*
 Example Person from API
-{
+    {
         "name": "Luke Skywalker",
         "height": "172",
         "mass": "77",
@@ -50,4 +51,8 @@ export class Person extends BaseEntity {
 
 	@Field()
 	url!: string;
+
+	@ExternalIdField({ from: 'Vehicle' })
+	@Field({ serializer: foreignKeySerializer })
+	vehicles!: string[];
 }

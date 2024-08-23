@@ -9,6 +9,10 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 
+logger.warn(
+	'The @exogee/graphweaver-rest-legacy package is deprecated and will be removed in a future release.'
+);
+
 export type AccessorParams = {
 	filter?: Record<string, any>;
 	pagination?: PaginationOptions;
@@ -18,7 +22,7 @@ export interface RestDataAccessor<T> {
 }
 
 export class RestBackendProvider<D = unknown> implements Provider<D> {
-	public readonly backendId = 'rest-api';
+	public readonly backendId = 'legacy-rest-api';
 	public constructor(
 		protected entityTypeName: string,
 		protected accessor?: RestDataAccessor<D>

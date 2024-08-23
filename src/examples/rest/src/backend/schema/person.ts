@@ -1,8 +1,9 @@
-import { Entity, Field, ID } from '@exogee/graphweaver';
+import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { AccessorParams, RestBackendProvider, inMemoryFilterFor } from '@exogee/graphweaver-rest';
 
 import { Person as RestPerson } from '../entities';
 import { fetch } from '../rest-client';
+import { Vehicle } from './vehicle';
 
 @Entity('Person', {
 	adminUIOptions: { readonly: true },
@@ -40,4 +41,7 @@ export class Person {
 
 	@Field(() => String)
 	birth_year!: string;
+
+	@RelationshipField(() => [Vehicle], { id: 'vehicles', nullable: true })
+	vehicles!: Vehicle[];
 }
