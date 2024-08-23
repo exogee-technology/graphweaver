@@ -92,4 +92,8 @@
 	.titleBar {
 		display: flex;
 	}
+
+	.content {
+		height: calc(100% - 44px);
+	}
 }
