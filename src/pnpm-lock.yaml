@@ -973,8 +973,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       serverless-offline:
-        specifier: 14.1.1
-        version: 14.1.1
+        specifier: 14.2.0
+        version: 14.2.0
       vite:
         specifier: 5.4.2
         version: 5.4.2(@types/node@22.4.1)
@@ -16484,8 +16484,8 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-offline@14.1.1:
-    resolution: {integrity: sha512-9OjpednYB2pLEpR6pmEstSJntTi81Z6vSrlp5FlZYkxhffjssfc4465HVBwj0aHqlHoJRWkKMKUErqCVpykjqQ==}
+  /serverless-offline@14.2.0:
+    resolution: {integrity: sha512-6FwrBT0tZZN3yzT81W92d2RstQbtUdIIgz0qb3pAT+kICOrvE+/8GgIdXJPxgE0x9Y+tllwwBchBwPnM3PnQbw==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       serverless: ^4.0.0
