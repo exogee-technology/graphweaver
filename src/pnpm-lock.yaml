@@ -1026,8 +1026,8 @@ importers:
         specifier: 2.154.0
         version: 2.154.0
       dotenv-cli:
-        specifier: 7.2.1
-        version: 7.2.1
+        specifier: 7.4.2
+        version: 7.4.2
       esbuild:
         specifier: 0.23.1
         version: 0.23.1
@@ -11024,16 +11024,6 @@ packages:
     dependencies:
       no-case: 3.0.4
       tslib: 2.6.3
-
-  /dotenv-cli@7.2.1:
-    resolution: {integrity: sha512-ODHbGTskqRtXAzZapDPvgNuDVQApu4oKX8lZW7Y0+9hKA6le1ZJlyRS687oU9FXjOVEDU/VFV6zI125HzhM1UQ==}
-    hasBin: true
-    dependencies:
-      cross-spawn: 7.0.3
-      dotenv: 16.4.5
-      dotenv-expand: 10.0.0
-      minimist: 1.2.8
-    dev: true
 
   /dotenv-cli@7.4.2:
     resolution: {integrity: sha512-SbUj8l61zIbzyhIbg0FwPJq6+wjbzdn9oEtozQpZ6kW2ihCcapKVZj49oCT3oPM+mgQm+itgvUQcG5szxVrZTA==}
