@@ -237,7 +237,12 @@ export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 				this.config.fieldConfig ?? ({} as FieldConfig)
 			)) {
 				if (fieldConfig.transform?.fromApi) {
-					(row as any)[field] = fieldConfig.transform.fromApi((row as any)[field], row);
+					const proposedValue = fieldConfig.transform.fromApi((row as any)[field], row);
+					if (proposedValue.__proto__) {
+						throw new Error('fromApi should never return a result with __proto__');
+					}
+
+					(row as any)[field] = proposedValue;
 				}
 			}
 
