@@ -8,6 +8,9 @@
 	color: var(--body-copy-color);
 	border: 1px solid var(--select-border-color);
 	border-radius: 6px;
+	max-height: 35px;
+	min-height: 35px;
+	overflow: hidden;
 }
 
 .inputSelector:hover {
@@ -98,7 +101,7 @@
 	white-space: nowrap;
 	overflow: hidden;
 	color: #6c757d;
-	padding: 8px;
+	padding: 5px 8px;
 	text-transform: capitalize;
 }
 
