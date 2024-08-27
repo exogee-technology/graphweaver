@@ -9,10 +9,10 @@ import { myConnection } from '../database';
 
 export const mapUserToProfile = async (user: User): Promise<UserProfile<Roles>> => {
 	const database = ConnectionManager.database(myConnection.connectionManagerId);
-	const credential = await database.em.findOneOrFail(Credential, { id: user.id });
+	const credential = await database.em.findOneOrFail(Credential, { id: user.url });
 
 	return new UserProfile({
-		id: user.id,
+		id: user.url,
 		roles: user.name === 'Darth Vader' ? [Roles.DARK_SIDE] : [Roles.LIGHT_SIDE],
 		displayName: user.name,
 		username: credential.username,

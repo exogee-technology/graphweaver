@@ -1,31 +1,24 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { AccessorParams, RestBackendProvider, inMemoryFilterFor } from '@exogee/graphweaver-rest';
+import { RestBackendProvider } from '@exogee/graphweaver-rest';
 
-import { Person as RestPerson } from '../entities';
-import { fetch } from '../rest-client';
+import { urlToIdTransform } from '../utils';
 import { Vehicle } from './vehicle';
 
 @Entity('Person', {
 	adminUIOptions: { readonly: true },
 	apiOptions: { excludeFromBuiltInWriteOperations: true },
-	provider: new RestBackendProvider('Person', {
-		find: async ({ filter }: AccessorParams) => {
-			const results = await fetch<RestPerson>(`/people`);
-
-			for (const person of results) {
-				const [_, __, id] = (new URL(person.url).pathname.split('/') || []).filter((part) => part);
-				(person as { id: string }).id = id || person.url;
-			}
-
-			if (filter) return results.filter(inMemoryFilterFor(filter));
-
-			return results;
+	provider: new RestBackendProvider({
+		baseUrl: 'https://swapi.info/api',
+		defaultPath: 'people',
+		fieldConfig: {
+			url: { transform: urlToIdTransform },
+			vehicles: { transform: urlToIdTransform },
 		},
 	}),
 })
 export class Person {
-	@Field(() => ID)
-	id!: string;
+	@Field(() => ID, { primaryKeyField: true })
+	url!: string;
 
 	@Field(() => String)
 	name!: string;

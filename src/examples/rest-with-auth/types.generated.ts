@@ -725,6 +725,7 @@ export type Task = {
   tags: Array<Tag>;
   tags_aggregate?: Maybe<AggregationResult>;
   user?: Maybe<User>;
+  userId: Scalars['String']['output'];
 };
 
 
@@ -795,6 +796,7 @@ export type TaskCreateOrUpdateInput = {
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Data needed to create Tasks. */
@@ -804,6 +806,7 @@ export type TaskInsertInput = {
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  userId: Scalars['String']['input'];
 };
 
 /** Data needed to update Tasks. An ID must be passed. */
@@ -814,6 +817,7 @@ export type TaskUpdateInput = {
   priority?: InputMaybe<Priority>;
   slug?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<TagCreateOrUpdateInput>>;
+  userId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type TasksListFilter = {
@@ -862,6 +866,18 @@ export type TasksListFilter = {
   slug_null?: InputMaybe<Scalars['Boolean']['input']>;
   tags?: InputMaybe<TagsListFilter>;
   user?: InputMaybe<UsersListFilter>;
+  userId?: InputMaybe<Scalars['String']['input']>;
+  userId_gt?: InputMaybe<Scalars['String']['input']>;
+  userId_gte?: InputMaybe<Scalars['String']['input']>;
+  userId_ilike?: InputMaybe<Scalars['String']['input']>;
+  userId_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  userId_like?: InputMaybe<Scalars['String']['input']>;
+  userId_lt?: InputMaybe<Scalars['String']['input']>;
+  userId_lte?: InputMaybe<Scalars['String']['input']>;
+  userId_ne?: InputMaybe<Scalars['String']['input']>;
+  userId_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  userId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  userId_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type TasksOrderByInput = {
@@ -870,6 +886,7 @@ export type TasksOrderByInput = {
   isCompleted?: InputMaybe<Sort>;
   priority?: InputMaybe<Sort>;
   slug?: InputMaybe<Sort>;
+  userId?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Tasks. */
@@ -1003,21 +1020,23 @@ export type TracesPaginationInput = {
 
 export type User = {
   __typename?: 'User';
-  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  tasks: Array<Task>;
+  tasks_aggregate?: Maybe<AggregationResult>;
+  url: Scalars['ID']['output'];
+};
+
+
+export type UserTasksArgs = {
+  filter?: InputMaybe<TasksListFilter>;
+};
+
+
+export type UserTasks_AggregateArgs = {
+  filter?: InputMaybe<TasksListFilter>;
 };
 
 export type UsersListFilter = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
   name_gte?: InputMaybe<Scalars['String']['input']>;
@@ -1030,11 +1049,22 @@ export type UsersListFilter = {
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  tasks?: InputMaybe<TasksListFilter>;
+  url?: InputMaybe<Scalars['ID']['input']>;
+  url_gt?: InputMaybe<Scalars['ID']['input']>;
+  url_gte?: InputMaybe<Scalars['ID']['input']>;
+  url_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_lt?: InputMaybe<Scalars['ID']['input']>;
+  url_lte?: InputMaybe<Scalars['ID']['input']>;
+  url_ne?: InputMaybe<Scalars['ID']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type UsersOrderByInput = {
-  id?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
+  url?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Users. */

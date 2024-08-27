@@ -152,16 +152,6 @@ export type PeopleListFilter = {
   height_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   height_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   height_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
   mass?: InputMaybe<Scalars['String']['input']>;
   mass_gt?: InputMaybe<Scalars['String']['input']>;
   mass_gte?: InputMaybe<Scalars['String']['input']>;
@@ -186,6 +176,16 @@ export type PeopleListFilter = {
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  url?: InputMaybe<Scalars['ID']['input']>;
+  url_gt?: InputMaybe<Scalars['ID']['input']>;
+  url_gte?: InputMaybe<Scalars['ID']['input']>;
+  url_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_lt?: InputMaybe<Scalars['ID']['input']>;
+  url_lte?: InputMaybe<Scalars['ID']['input']>;
+  url_ne?: InputMaybe<Scalars['ID']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
   vehicles?: InputMaybe<VehiclesListFilter>;
 };
 
@@ -193,9 +193,9 @@ export type PeopleOrderByInput = {
   birth_year?: InputMaybe<Sort>;
   hair_color?: InputMaybe<Sort>;
   height?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
   mass?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
+  url?: InputMaybe<Sort>;
 };
 
 /** Pagination options for People. */
@@ -210,9 +210,9 @@ export type Person = {
   birth_year: Scalars['String']['output'];
   hair_color: Scalars['String']['output'];
   height: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
   mass: Scalars['String']['output'];
   name: Scalars['String']['output'];
+  url: Scalars['ID']['output'];
   vehicles?: Maybe<Array<Vehicle>>;
 };
 
@@ -261,13 +261,13 @@ export type Vehicle = {
   __typename?: 'Vehicle';
   costInCredits: Scalars['String']['output'];
   crew: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
   length: Scalars['String']['output'];
   manufacturer: Scalars['String']['output'];
   model: Scalars['String']['output'];
   name: Scalars['String']['output'];
   passengers: Scalars['String']['output'];
   pilots: Array<Person>;
+  url: Scalars['ID']['output'];
 };
 
 export type VehiclesListFilter = {
@@ -295,16 +295,6 @@ export type VehiclesListFilter = {
   crew_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   crew_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   crew_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
   length?: InputMaybe<Scalars['String']['input']>;
   length_gt?: InputMaybe<Scalars['String']['input']>;
   length_gte?: InputMaybe<Scalars['String']['input']>;
@@ -366,17 +356,27 @@ export type VehiclesListFilter = {
   passengers_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   passengers_null?: InputMaybe<Scalars['Boolean']['input']>;
   pilots?: InputMaybe<PeopleListFilter>;
+  url?: InputMaybe<Scalars['ID']['input']>;
+  url_gt?: InputMaybe<Scalars['ID']['input']>;
+  url_gte?: InputMaybe<Scalars['ID']['input']>;
+  url_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_lt?: InputMaybe<Scalars['ID']['input']>;
+  url_lte?: InputMaybe<Scalars['ID']['input']>;
+  url_ne?: InputMaybe<Scalars['ID']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type VehiclesOrderByInput = {
   costInCredits?: InputMaybe<Sort>;
   crew?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
   length?: InputMaybe<Sort>;
   manufacturer?: InputMaybe<Sort>;
   model?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
   passengers?: InputMaybe<Sort>;
+  url?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Vehicles. */

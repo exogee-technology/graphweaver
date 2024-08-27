@@ -7,6 +7,7 @@
 		outdir: 'lib',
 		format: 'cjs',
 		platform: 'node',
+		sourcemap: 'linked',
 		entryPoints,
 	});
 })();

@@ -153,12 +153,14 @@
     },
     {
       "name": "Xero Example",
+      "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/src/examples/xero",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start"],
-      "type": "node",
-      "env": { "LOGGING_LEVEL": "trace" }
+      "restart": true,
+      "sourceMaps": true,
+      "env": { "LOGGING_LEVEL": "trace" },
+      "cwd": "${workspaceFolder}/src/examples/xero"
     }
   ]
 }

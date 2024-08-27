@@ -95,7 +95,11 @@ export interface BackendProvider<D> {
 
 	entityType?: new () => D;
 
-	find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]>;
+	find(
+		filter: Filter<D>,
+		pagination?: PaginationOptions,
+		entityMetadata?: EntityMetadata
+	): Promise<D[]>;
 	findOne(filter: Filter<D>, entityMetadata?: EntityMetadata): Promise<D | null>;
 	findByRelatedId(
 		entity: { new (): D },
@@ -118,7 +122,7 @@ export interface BackendProvider<D> {
 	// Optional, allows the resolver to start a transaction
 	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
 
-	// Optional. Queried to get foriegn key values from fields for relationship fields to
+	// Optional. Queried to get foreign key values from fields for relationship fields to
 	// allow the GraphQL entities to work completely at the GQL level.
 	foreignKeyForRelationshipField?(field: FieldMetadata<any, D>, dataEntity: D): string | number;
 
@@ -200,11 +204,13 @@ export enum RelationshipType {
 }
 
 export interface BackendProviderConfig {
-	filter: boolean;
-	pagination: boolean;
-	orderBy: boolean;
-	sort: boolean;
+	filter?: boolean;
+	pagination?: boolean;
+	orderBy?: boolean;
 	supportedAggregationTypes?: Set<AggregationType>;
+	// Default is 'find', which will call the find method on the provider with a filter like `{ id_in: ['1', '2'] }`.
+	// If you specify 'findOne', it will repeatedly call the findOne method on the provider with a filter like `{ id: '1' }`.
+	idListLoadingMethod?: 'find' | 'findOne';
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (

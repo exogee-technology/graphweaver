@@ -6,6 +6,7 @@ import {
 	TraceMethod,
 	TraceOptions,
 	EntityMetadata,
+	BackendProviderConfig,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import got, { Options as GotOptions, Method } from 'got-cjs';
@@ -20,38 +21,56 @@ export interface RestDataAccessor<T> {
 }
 
 export interface FieldConfig {
-	transform?: {
-		fromApi?: (value: unknown) => any;
-		toApi?: (value: any) => unknown;
-	};
+	transform?: FieldTransformer;
+}
+
+export interface FieldTransformer {
+	fromApi?: (fieldValue: unknown, dataObject: unknown) => any;
+	toApi?: (value: any, dataObject: unknown) => unknown;
 }
 
 export interface RestBackendProviderConfig<D = unknown> {
 	baseUrl: string;
 	defaultPath?: string;
+	defaultResultKey?: string;
 	endpointOverrides?: {
-		create?: { path?: string; method?: Method };
-		list?: { path?: string; method?: Method };
-		getOne?: { path?: string; method?: Method };
-		update?: { path?: string; method?: Method };
-		delete?: { path?: string; method?: Method };
+		create?: { path?: string; method?: Method; resultKey?: string };
+		list?: { path?: string; method?: Method; resultKey?: string };
+		getOne?: { path?: string; method?: Method; resultKey?: string };
+		update?: { path?: string; method?: Method; resultKey?: string };
+		delete?: { path?: string; method?: Method; resultKey?: string };
 	};
 	fieldConfig?: { [fieldName in keyof D]: FieldConfig };
 	clientOptions?: GotOptions;
+
+	// This is an optional setting that allows you to control how relationships are loaded.
+	// The default is 'find' which will list all rows on the endpoint and filter in memory.
+	// If you swap to 'findOne' it will do an individual REST find for each row that's needed,
+	// which is useful if your result set is too large to filter in memory, or if you're usually
+	// fetching small amounts of this entity from a much larger result.
+	relationshipLoadingMethod?: 'find' | 'findOne';
 }
 
 export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
-	public readonly backendId = 'rest-api';
-	public constructor(protected config: RestBackendProviderConfig<D>) {}
+	public readonly backendId;
+	public readonly backendProviderConfig: BackendProviderConfig;
+
+	public constructor(protected config: RestBackendProviderConfig<D>) {
+		this.backendId = `rest-provider-${path.posix.join(config.baseUrl, config.defaultPath ?? '')}`;
+		this.backendProviderConfig = { idListLoadingMethod: config.relationshipLoadingMethod };
+	}
 
 	// GET METHODS
 	@TraceMethod()
 	public async find(
 		filter: Filter<D>,
 		pagination?: PaginationOptions,
+		entityMetadata?: EntityMetadata,
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Rest - find`);
+
+		if (!entityMetadata) throw new Error('Entity metadata is required for REST provider.');
 
 		const method = this.config.endpointOverrides?.list?.method ?? 'get';
 		const url = path.posix.join(
@@ -65,14 +84,40 @@ export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 		);
 
 		try {
-			let result = await got(url, {
+			let result: D[] = await got(url, {
 				method,
 				...this.config.clientOptions,
-			}).json<D[]>();
+			}).json();
+
+			logger.trace({ result }, `Rest Adapter: Result returned from API.`);
+
+			const resultKey =
+				this.config.endpointOverrides?.list?.resultKey ?? this.config.defaultResultKey;
+
+			if (resultKey) {
+				logger.trace(`Rest Adapter: Result key is '${resultKey}', extracting from result.`);
+
+				// If they've given us a result key it means the result is something like { data: [] }
+				// or { rows: [] } and we need to grab the array out of the object we now have.
+				result = (result as unknown as Record<string, D[]>)[resultKey];
+			}
+
+			if (!Array.isArray(result)) {
+				logger.error(
+					{ result, resultKey },
+					'Rest Adapter: Result is not an array. If the result returns an object and you need to extract an array from a certain key, provide a defaultResultKey or resultKey in the provider config for this endpoint.'
+				);
+
+				throw new Error('Result is not an array.');
+			}
 
 			logger.trace(`Rest Adapter: Find returned ${result.length} rows.`);
 
-			result = result.filter(inMemoryFilterFor(filter));
+			// We have to do the field config transforms before filtering because the filter
+			// may very well depend on the transform.
+			result = this.mapWithFieldConfig(result);
+
+			result = result.filter(inMemoryFilterFor(entityMetadata, filter));
 			logger.trace(`Rest Adapter: Filtered result returned ${result.length} rows.`);
 
 			if (pagination) {
@@ -80,7 +125,7 @@ export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 				logger.trace(`Rest Adapter: Pagination applied, result is now ${result.length} rows.`);
 			}
 
-			return this.mapWithFieldConfig(result);
+			return result;
 		} catch (error: any) {
 			// Nicer error message if we can muster it.
 			if (error.response?.body) throw error.response.body;
@@ -118,10 +163,19 @@ export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 			);
 
 			try {
-				const result = await got(url, {
+				let result: D = await got(url, {
 					method,
 					...this.config.clientOptions,
-				}).json<D>();
+				}).json();
+
+				const resultKey =
+					this.config.endpointOverrides?.getOne?.resultKey ?? this.config.defaultResultKey;
+
+				if (resultKey) {
+					// If they've given us a result key it means the result is something like { data: { } }
+					// or { object: { } } and we need to grab the actual result out of the object we now have.
+					result = (result as unknown as Record<string, D>)[resultKey];
+				}
 
 				return this.mapWithFieldConfig([result])[0] ?? null;
 			} catch (error: any) {
@@ -183,7 +237,7 @@ export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 				this.config.fieldConfig ?? ({} as FieldConfig)
 			)) {
 				if (fieldConfig.transform?.fromApi) {
-					(row as any)[field] = fieldConfig.transform.fromApi((row as any)[field]);
+					(row as any)[field] = fieldConfig.transform.fromApi((row as any)[field], row);
 				}
 			}
 

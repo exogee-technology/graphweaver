@@ -33,7 +33,6 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 		filter: false,
 		pagination: false,
 		orderBy: false,
-		sort: false,
 	};
 
 	// GET METHODS
@@ -41,6 +40,7 @@ export class RestBackendProvider<D = unknown> implements Provider<D> {
 	public async find(
 		filter: Filter<D>,
 		pagination?: PaginationOptions,
+		entityMetadata?: EntityMetadata,
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Rest - find`);
