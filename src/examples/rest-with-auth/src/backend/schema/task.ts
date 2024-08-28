@@ -19,11 +19,11 @@ const acl: AccessControlList<Task, AuthorizationContext> = {
 			// Here we are applying column level security to prevent access to the "priority" column, by default all fields are allowed
 			fieldRestrictions: ['priority'],
 			// Next, we are applying row level security to only allow access to tasks that belong to the user
-			rowFilter: (context) => ({ user: { id: context.user?.id } }),
+			rowFilter: (context) => ({ userId: context.user?.id }),
 		},
 	},
 	DARK_SIDE: {
-		// Dark side user role can perform operations on any tasks
+		// Dark side user role can perform all operations on any task
 		all: true,
 	},
 };
@@ -55,6 +55,9 @@ export class Task {
 
 	@Field(() => Boolean)
 	isCompleted!: boolean;
+
+	@Field(() => String)
+	userId!: string;
 
 	@RelationshipField<OrmTask>(() => User, { id: 'userId', nullable: true })
 	user?: User;

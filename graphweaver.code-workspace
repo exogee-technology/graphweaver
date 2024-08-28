@@ -101,6 +101,10 @@
       "path": "src/packages/rest"
     },
     {
+      "name": "📦 @exogee/graphweaver-rest-legacy",
+      "path": "src/packages/rest-legacy"
+    },
+    {
       "name": "📦 @exogee/graphweaver-scalars",
       "path": "src/packages/scalars"
     },

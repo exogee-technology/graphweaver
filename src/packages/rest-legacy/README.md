@@ -1,6 +1,8 @@
-# `@exogee/graphweaver-rest`
+# `@exogee/graphweaver-rest-legacy`
 
-RESTful adapter package for Graphweaver.
+Legacy RESTful adapter package for Graphweaver
+
+If you're getting started with a REST API, use the current `@exogee/graphweaver-rest` package. It's simpler and more powerful at the same time.
 
 ## Documentation
 

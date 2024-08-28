@@ -68,6 +68,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 		).map((entity) => {
 			const { adminUIOptions, apiOptions, provider } = entity;
 			const backendId = entity.provider?.backendId;
+			const backendDisplayName = entity.provider?.backendDisplayName;
 			const plural = entity.plural;
 
 			const attributes = new AdminUiEntityAttributeMetadata();
@@ -149,6 +150,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				name: graphweaverMetadata.federationNameForEntity(entity),
 				plural,
 				backendId,
+				backendDisplayName,
 				primaryKeyField,
 				summaryField,
 				fieldForDetailPanelNavigationId,

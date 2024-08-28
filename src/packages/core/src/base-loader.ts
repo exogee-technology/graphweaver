@@ -2,9 +2,12 @@ import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 
 import {
+	EntityMetadata,
 	Filter,
+	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
+	isGraphQLScalarForTypeScriptType,
 	isTransformableGraphQLEntityClass,
 } from '.';
 import { RequestContext } from './request-context';
@@ -56,17 +59,31 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 			);
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
-			const filter = {
-				_or: keys.map((id) => ({ [primaryKeyField]: id })),
+			const listFilter = {
+				[`${String(primaryKeyField)}_in`]: keys,
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
 			} as Filter<G>;
 
 			const backendFilter =
 				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
-					? entity.target.toBackendEntityFilter(filter)
-					: (filter as Filter<D>);
+					? entity.target.toBackendEntityFilter(listFilter)
+					: (listFilter as Filter<D>);
 
-			const records = await entity.provider!.find(backendFilter, undefined);
+			let records: D[];
+			if (entity.provider?.backendProviderConfig?.idListLoadingMethod !== 'findOne') {
+				records = await entity.provider!.find(backendFilter, undefined, entity as EntityMetadata);
+			} else {
+				records = (
+					await Promise.all(
+						keys.map((key) =>
+							entity.provider!.findOne(
+								{ [primaryKeyField]: key } as Filter<D>,
+								entity as EntityMetadata
+							)
+						)
+					)
+				).filter((row) => row) as D[];
+			}
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
 
@@ -144,13 +161,17 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 			// Need to return in the same order as was requested. Iterate once and create
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D[] } = {};
+			const fieldMetadata = entity.fields[relatedField];
+			const {
+				isList,
+				fieldType,
+				metadata: fieldTypeMetadata,
+			} = getFieldTypeWithMetadata(fieldMetadata.getType);
+
 			for (const record of records) {
-				const fieldMetadata = entity.fields[relatedField];
-				const fieldType = fieldMetadata?.getType();
-				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 				if (isEntityMetadata(fieldTypeMetadata)) {
 					const relatedRecord = record[relatedField as keyof D];
-					if (Array.isArray(fieldType)) {
+					if (isList) {
 						// ManyToManys come back this way.
 						for (const subRecord of relatedRecord as Iterable<D>) {
 							const stringPrimaryKey = String(subRecord[primaryKeyField]);
@@ -167,6 +188,11 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 						if (!lookup[relatedRecordId]) lookup[relatedRecordId] = [];
 						lookup[relatedRecordId].push(record);
 					}
+				} else if (isGraphQLScalarForTypeScriptType(fieldType)) {
+					// Ok, in this case we just need to make a lookup for the field we know they gave us.
+					const foreignKey = String(record[relatedField as keyof D]);
+					if (!lookup[foreignKey]) lookup[foreignKey] = [];
+					lookup[foreignKey].push(record);
 				}
 			}
 

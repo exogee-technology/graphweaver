@@ -237,7 +237,7 @@ export const getFieldTypeWithMetadata = (
 	return { fieldType, isList, metadata };
 };
 
-const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
+export const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
 		if (isListType(type) || isNonNullType(type)) {
 			return unwrapType(type.ofType);
@@ -251,7 +251,7 @@ const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 	return unwrapType(field.getType());
 };
 
-const isGraphQLScalarForTypeScriptType = (type: TypeValue): type is GraphQLScalarType => {
+export const isGraphQLScalarForTypeScriptType = (type: TypeValue) => {
 	switch (type) {
 		case String:
 		case Number:

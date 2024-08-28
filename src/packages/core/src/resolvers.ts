@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
+import { GraphQLResolveInfo, Source, isListType, isObjectType, isScalarType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
@@ -18,6 +18,7 @@ import {
 	Resolver,
 	ResolverOptions,
 	createOrUpdateEntities,
+	getFieldType,
 	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	hookManagerMap,
@@ -159,7 +160,7 @@ const _list = async <G, D>(
 			: (hookParams.args?.filter as Filter<D> | undefined);
 
 	let result = await QueryManager.find<D>({
-		entityName: entity.name,
+		entityMetadata: entity,
 		filter: transformedFilter,
 		pagination: hookParams.args?.pagination,
 	});
@@ -471,7 +472,7 @@ const _aggregate = async <G extends { name: string }>(
 			: (hookParams.args?.filter as Filter<any> | undefined);
 
 	const flattenedFilter = await QueryManager.flattenFilter<any>({
-		entityName: entity.name,
+		entityMetadata: entity,
 		filter: transformedFilter,
 	});
 
@@ -512,7 +513,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
 
-	let idValue: ID | undefined = undefined;
+	let idValue: ID | ID[] | undefined = undefined;
 	if (id && typeof id === 'function') {
 		// If the id is a function, we'll call it with the source data to get the id value.
 		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
@@ -524,13 +525,14 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		if (
 			typeof valueOfForeignKey === 'string' ||
 			typeof valueOfForeignKey === 'number' ||
-			typeof valueOfForeignKey === 'bigint'
+			typeof valueOfForeignKey === 'bigint' ||
+			Array.isArray(valueOfForeignKey)
 		) {
 			idValue = valueOfForeignKey;
 		} else {
 			// The ID value must be a string or a number otherwise we'll throw an error.
 			throw new Error(
-				'Could not determine id value for relationship field only string or numbers are supported.'
+				'Could not determine ID value for relationship field. Only strings, numbers or arrays of strings or numbers are supported.'
 			);
 		}
 	}
@@ -559,11 +561,32 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	// Lets check the relationship type and add the appropriate filter.
 	if (idValue) {
-		_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
+		if (Array.isArray(idValue)) {
+			_and.push({ [`${relatedPrimaryKeyField}_in`]: idValue } as Filter<R>);
+		} else {
+			_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
+		}
+	} else if (
+		relatedField &&
+		isScalarType(getFieldType(relatedEntityMetadata.fields[relatedField]))
+	) {
+		// Scalars should get a simple filter, e.g. if we have Tasks in a DB which have a userId field, and we
+		// have Users in a REST API with their PK called 'key', instead of trying to filter like:
+		// { userId: { key: '1' } }
+		// we should instead filter like:
+		// { userId: '1' }
+		// because the database provider doesn't understand the shape of the user object at all.
+		_and.push({ [relatedField]: source[sourcePrimaryKeyField] } as unknown as Filter<R>);
 	} else if (relatedField) {
+		// While object filters should nest as not all providers understand what { user: '1' } means. It's more
+		// clear to give them { user: { key: '1' } }.
 		_and.push({
 			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
 		} as Filter<R>);
+	} else {
+		throw new Error(
+			'Did not determine how to filter the relationship. Either id or relatedField is required.'
+		);
 	}
 
 	const relatedEntityFilter = { _and } as Filter<R>;
@@ -598,6 +621,8 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		logger.trace({ before: existingData, after: hookEntities }, 'After read hooks ran');
 
 		return isList ? hookEntities : hookEntities[0];
+	} else {
+		logger.trace('No existing data found.');
 	}
 
 	logger.trace('Loading from BaseLoaders');
@@ -615,12 +640,15 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		});
 	} else if (idValue) {
 		logger.trace('Loading with loadOne');
-
-		const dataEntity = await BaseLoaders.loadOne<R, D>({
-			gqlEntityType,
-			id: String(idValue),
-		});
-		dataEntities = [dataEntity];
+		const idsToLoad = Array.isArray(idValue) ? idValue : [idValue];
+		dataEntities = await Promise.all(
+			idsToLoad.map((id) =>
+				BaseLoaders.loadOne<R, D>({
+					gqlEntityType,
+					id: String(id),
+				})
+			)
+		);
 	}
 
 	const entities = (dataEntities ?? []).map((dataEntity) =>

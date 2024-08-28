@@ -1,4 +1,4 @@
-import { BaseEntity, Field } from '@exogee/graphweaver-rest';
+import { BaseEntity, Field } from '@exogee/graphweaver-rest-legacy';
 
 export class CognitoUserBackendEntity extends BaseEntity {
 	@Field()

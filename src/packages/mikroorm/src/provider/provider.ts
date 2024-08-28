@@ -99,7 +99,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		filter: true,
 		pagination: false,
 		orderBy: false,
-		sort: false,
 		supportedAggregationTypes: new Set<AggregationType>([AggregationType.COUNT]),
 	};
 
@@ -273,6 +272,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async find(
 		filter: Filter<D>,
 		pagination?: PaginationOptions,
+		entityMetadata?: EntityMetadata,
 		trace?: TraceOptions
 	): Promise<D[]> {
 		// If we have a span, update the name

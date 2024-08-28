@@ -74,7 +74,6 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 		filter: false,
 		pagination: false,
 		orderBy: false,
-		sort: false,
 	};
 
 	public static clearTokens() {

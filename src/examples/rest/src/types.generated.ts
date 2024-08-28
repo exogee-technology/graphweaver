@@ -30,6 +30,7 @@ export type AdminUiEntityAttributeMetadata = {
 export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
   attributes: AdminUiEntityAttributeMetadata;
+  backendDisplayName?: Maybe<Scalars['String']['output']>;
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
   defaultSort?: Maybe<Scalars['JSON']['output']>;
@@ -152,16 +153,6 @@ export type PeopleListFilter = {
   height_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   height_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   height_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  id_null?: InputMaybe<Scalars['Boolean']['input']>;
   mass?: InputMaybe<Scalars['String']['input']>;
   mass_gt?: InputMaybe<Scalars['String']['input']>;
   mass_gte?: InputMaybe<Scalars['String']['input']>;
@@ -186,15 +177,26 @@ export type PeopleListFilter = {
   name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  url?: InputMaybe<Scalars['ID']['input']>;
+  url_gt?: InputMaybe<Scalars['ID']['input']>;
+  url_gte?: InputMaybe<Scalars['ID']['input']>;
+  url_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_lt?: InputMaybe<Scalars['ID']['input']>;
+  url_lte?: InputMaybe<Scalars['ID']['input']>;
+  url_ne?: InputMaybe<Scalars['ID']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
+  vehicles?: InputMaybe<VehiclesListFilter>;
 };
 
 export type PeopleOrderByInput = {
   birth_year?: InputMaybe<Sort>;
   hair_color?: InputMaybe<Sort>;
   height?: InputMaybe<Sort>;
-  id?: InputMaybe<Sort>;
   mass?: InputMaybe<Sort>;
   name?: InputMaybe<Sort>;
+  url?: InputMaybe<Sort>;
 };
 
 /** Pagination options for People. */
@@ -209,9 +211,10 @@ export type Person = {
   birth_year: Scalars['String']['output'];
   hair_color: Scalars['String']['output'];
   height: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
   mass: Scalars['String']['output'];
   name: Scalars['String']['output'];
+  url: Scalars['ID']['output'];
+  vehicles?: Maybe<Array<Vehicle>>;
 };
 
 export type Query = {
@@ -222,6 +225,10 @@ export type Query = {
   people?: Maybe<Array<Maybe<Person>>>;
   /** Get a single Person. */
   person?: Maybe<Person>;
+  /** Get a single Vehicle. */
+  vehicle?: Maybe<Vehicle>;
+  /** Get multiple Vehicles. */
+  vehicles?: Maybe<Array<Maybe<Vehicle>>>;
 };
 
 
@@ -235,7 +242,147 @@ export type QueryPersonArgs = {
   id: Scalars['ID']['input'];
 };
 
+
+export type QueryVehicleArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryVehiclesArgs = {
+  filter?: InputMaybe<VehiclesListFilter>;
+  pagination?: InputMaybe<VehiclesPaginationInput>;
+};
+
 export enum Sort {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type Vehicle = {
+  __typename?: 'Vehicle';
+  cost_in_credits: Scalars['String']['output'];
+  crew: Scalars['String']['output'];
+  length: Scalars['String']['output'];
+  manufacturer: Scalars['String']['output'];
+  model: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  passengers: Scalars['String']['output'];
+  pilots: Array<Person>;
+  url: Scalars['ID']['output'];
+};
+
+export type VehiclesListFilter = {
+  cost_in_credits?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_gt?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_gte?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_ilike?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  cost_in_credits_like?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_lt?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_lte?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_ne?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  cost_in_credits_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  cost_in_credits_null?: InputMaybe<Scalars['Boolean']['input']>;
+  crew?: InputMaybe<Scalars['String']['input']>;
+  crew_gt?: InputMaybe<Scalars['String']['input']>;
+  crew_gte?: InputMaybe<Scalars['String']['input']>;
+  crew_ilike?: InputMaybe<Scalars['String']['input']>;
+  crew_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  crew_like?: InputMaybe<Scalars['String']['input']>;
+  crew_lt?: InputMaybe<Scalars['String']['input']>;
+  crew_lte?: InputMaybe<Scalars['String']['input']>;
+  crew_ne?: InputMaybe<Scalars['String']['input']>;
+  crew_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  crew_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  crew_null?: InputMaybe<Scalars['Boolean']['input']>;
+  length?: InputMaybe<Scalars['String']['input']>;
+  length_gt?: InputMaybe<Scalars['String']['input']>;
+  length_gte?: InputMaybe<Scalars['String']['input']>;
+  length_ilike?: InputMaybe<Scalars['String']['input']>;
+  length_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  length_like?: InputMaybe<Scalars['String']['input']>;
+  length_lt?: InputMaybe<Scalars['String']['input']>;
+  length_lte?: InputMaybe<Scalars['String']['input']>;
+  length_ne?: InputMaybe<Scalars['String']['input']>;
+  length_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  length_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  length_null?: InputMaybe<Scalars['Boolean']['input']>;
+  manufacturer?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_gt?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_gte?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_ilike?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  manufacturer_like?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_lt?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_lte?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_ne?: InputMaybe<Scalars['String']['input']>;
+  manufacturer_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  manufacturer_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  manufacturer_null?: InputMaybe<Scalars['Boolean']['input']>;
+  model?: InputMaybe<Scalars['String']['input']>;
+  model_gt?: InputMaybe<Scalars['String']['input']>;
+  model_gte?: InputMaybe<Scalars['String']['input']>;
+  model_ilike?: InputMaybe<Scalars['String']['input']>;
+  model_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  model_like?: InputMaybe<Scalars['String']['input']>;
+  model_lt?: InputMaybe<Scalars['String']['input']>;
+  model_lte?: InputMaybe<Scalars['String']['input']>;
+  model_ne?: InputMaybe<Scalars['String']['input']>;
+  model_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  model_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  model_null?: InputMaybe<Scalars['Boolean']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  name_gt?: InputMaybe<Scalars['String']['input']>;
+  name_gte?: InputMaybe<Scalars['String']['input']>;
+  name_ilike?: InputMaybe<Scalars['String']['input']>;
+  name_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_like?: InputMaybe<Scalars['String']['input']>;
+  name_lt?: InputMaybe<Scalars['String']['input']>;
+  name_lte?: InputMaybe<Scalars['String']['input']>;
+  name_ne?: InputMaybe<Scalars['String']['input']>;
+  name_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  name_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  name_null?: InputMaybe<Scalars['Boolean']['input']>;
+  passengers?: InputMaybe<Scalars['String']['input']>;
+  passengers_gt?: InputMaybe<Scalars['String']['input']>;
+  passengers_gte?: InputMaybe<Scalars['String']['input']>;
+  passengers_ilike?: InputMaybe<Scalars['String']['input']>;
+  passengers_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  passengers_like?: InputMaybe<Scalars['String']['input']>;
+  passengers_lt?: InputMaybe<Scalars['String']['input']>;
+  passengers_lte?: InputMaybe<Scalars['String']['input']>;
+  passengers_ne?: InputMaybe<Scalars['String']['input']>;
+  passengers_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  passengers_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  passengers_null?: InputMaybe<Scalars['Boolean']['input']>;
+  pilots?: InputMaybe<PeopleListFilter>;
+  url?: InputMaybe<Scalars['ID']['input']>;
+  url_gt?: InputMaybe<Scalars['ID']['input']>;
+  url_gte?: InputMaybe<Scalars['ID']['input']>;
+  url_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_lt?: InputMaybe<Scalars['ID']['input']>;
+  url_lte?: InputMaybe<Scalars['ID']['input']>;
+  url_ne?: InputMaybe<Scalars['ID']['input']>;
+  url_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  url_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  url_null?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type VehiclesOrderByInput = {
+  cost_in_credits?: InputMaybe<Sort>;
+  crew?: InputMaybe<Sort>;
+  length?: InputMaybe<Sort>;
+  manufacturer?: InputMaybe<Sort>;
+  model?: InputMaybe<Sort>;
+  name?: InputMaybe<Sort>;
+  passengers?: InputMaybe<Sort>;
+  url?: InputMaybe<Sort>;
+};
+
+/** Pagination options for Vehicles. */
+export type VehiclesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<VehiclesOrderByInput>;
+};

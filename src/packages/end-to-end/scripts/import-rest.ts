@@ -24,8 +24,8 @@ async function main() {
 		await execAsync('pwd');
 		await removeDirectory('./app');
 
-		// Copy the storage example over for testing
-		await execAsync('cp -r ../../examples/s3-storage ./app');
+		// Copy the auth example over for testing
+		await execAsync('cp -r ../../examples/rest ./app');
 
 		// Update to use the local dependencies
 		process.chdir('./app');
@@ -36,9 +36,11 @@ async function main() {
 			if (key.startsWith('@exogee')) {
 				packageJson.dependencies[key] = `file:../local_modules/${key}`;
 			} else if (key === 'graphweaver') {
-				packageJson.dependencies[key] = `file:../local_modules/graphweaver`;
+				packageJson.devDependencies[key] = `file:../local_modules/graphweaver`;
 			} else if (key === 'vite-plugin-graphweaver') {
 				packageJson.dependencies[key] = `file:../local_modules/vite-plugin-graphweaver`;
+			} else if (key === 'mikro-orm-sqlite-wasm') {
+				packageJson.dependencies[key] = `file:../local_modules/mikro-orm-sqlite-wasm`;
 			}
 		}
 
@@ -57,9 +59,7 @@ async function main() {
 		delete tsJson.references;
 		await fs.promises.writeFile('tsconfig.json', JSON.stringify(tsJson, null, 2));
 
-		// Import the database
 		await execAsync('pnpm build');
-		await execAsync('pnpm import-database');
 	} catch (error) {
 		console.error('Error:', error);
 		throw error;

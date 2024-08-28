@@ -878,9 +878,9 @@ importers:
       '@aws-sdk/client-lambda':
         specifier: 3.637.0
         version: 3.637.0
-      '@exogee/graphweaver-rest':
+      '@exogee/graphweaver-rest-legacy':
         specifier: workspace:*
-        version: link:../rest
+        version: link:../rest-legacy
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -1230,7 +1230,7 @@ importers:
         specifier: 16.9.0
         version: 16.9.0
       graphweaver:
-        specifier: '*'
+        specifier: workspace:*
         version: link:../cli
       promisify-child-process:
         specifier: 4.1.2
@@ -1421,6 +1421,43 @@ importers:
       '@exogee/logger':
         specifier: workspace:*
         version: link:../logger
+      dataloader:
+        specifier: 2.2.2
+        version: 2.2.2
+      escape-string-regexp:
+        specifier: 4.0.0
+        version: 4.0.0
+      got-cjs:
+        specifier: 12.5.4
+        version: 12.5.4
+    devDependencies:
+      '@types/node':
+        specifier: 22.5.0
+        version: 22.5.0
+      esbuild:
+        specifier: 0.23.1
+        version: 0.23.1
+      glob:
+        specifier: 10.4.3
+        version: 10.4.3
+      prettier:
+        specifier: 3.3.3
+        version: 3.3.3
+      typescript:
+        specifier: 5.5.4
+        version: 5.5.4
+      vitest:
+        specifier: 2.0.5
+        version: 2.0.5(@types/node@22.5.0)
+
+  packages/rest-legacy:
+    dependencies:
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../core
+      '@exogee/logger':
+        specifier: workspace:*
+        version: link:../logger
       apollo-server-errors:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.9.0)
@@ -1450,8 +1487,8 @@ importers:
         specifier: 3.4.2
         version: 3.4.2
       '@types/node':
-        specifier: 22.5.0
-        version: 22.5.0
+        specifier: 22.4.1
+        version: 22.4.1
       esbuild:
         specifier: 0.23.1
         version: 0.23.1
@@ -8730,6 +8767,12 @@ packages:
       form-data: 4.0.0
     dev: false
 
+  /@types/node@22.4.1:
+    resolution: {integrity: sha512-1tbpb9325+gPnKK0dMm+/LMriX0vKxf6RnB0SZUqfyVkQ4fMgUSySqhxE/y8Jvs4NyF1yHzTfG9KlnkIODxPKg==}
+    dependencies:
+      undici-types: 6.19.8
+    dev: true
+
   /@types/node@22.5.0:
     resolution: {integrity: sha512-DkFrJOe+rfdHTqqMg0bSNlGlQ85hSoh2TPzZyhHsXnMtligRWpxUySiyw8FY14ITt24HVCiQPWxS3KO/QlGmWg==}
     dependencies:
@@ -11360,7 +11403,6 @@ packages:
   /escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
-    dev: true
 
   /eslint-config-prettier@9.1.0(eslint@8.57.0):
     resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}

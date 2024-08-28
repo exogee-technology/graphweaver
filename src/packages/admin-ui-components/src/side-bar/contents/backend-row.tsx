@@ -6,19 +6,22 @@ import { useSelectedEntity } from '../../utils/use-selected-entity';
 import { EntityRow } from './entity-row';
 import styles from '../styles.module.css';
 
-export const BackendRow = ({ backend }: { backend: string }) => {
-	const { entitiesForBackend } = useSchema();
+export const BackendRow = ({ backendDisplayName }: { backendDisplayName: string }) => {
+	const { entitiesForBackendDisplayName, backendIdsForDisplayName } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
-	const [expanded, setExpanded] = useState(selectedEntity?.backendId === backend);
+	const [expanded, setExpanded] = useState(
+		selectedEntity?.backendId &&
+			backendIdsForDisplayName(backendDisplayName).has(selectedEntity.backendId)
+	);
 
-	const entities = entitiesForBackend(backend)
-		?.sort((left, right) => left.name.localeCompare(right.name))
-		.filter((entity) => !entity.hideInSideBar);
+	const entities = entitiesForBackendDisplayName(backendDisplayName)
+		.filter((entity) => !entity.hideInSideBar)
+		.sort((left, right) => left.name.localeCompare(right.name));
 
 	if (entities?.length === 0) return null;
 
 	return (
-		<ul key={backend} className={styles.entity}>
+		<ul key={backendDisplayName}>
 			<li className={expanded ? styles.open : styles.closed}>
 				<a
 					href="/#"
@@ -28,7 +31,7 @@ export const BackendRow = ({ backend }: { backend: string }) => {
 					}}
 				>
 					<DatabaseIcon />
-					<div className={styles.dataSourceTitle}>{backend}</div>
+					<div className={styles.dataSourceTitle}>{backendDisplayName}</div>
 					<ChevronDownIcon />
 				</a>
 				<ul>

@@ -1,22 +1,21 @@
 import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
+import { Person } from './person';
 import { RestBackendProvider } from '@exogee/graphweaver-rest';
-
 import { urlToIdTransform } from '../utils';
-import { Vehicle } from './vehicle';
 
-@Entity('Person', {
+@Entity('Vehicle', {
 	adminUIOptions: { readonly: true },
 	apiOptions: { excludeFromBuiltInWriteOperations: true },
 	provider: new RestBackendProvider({
 		baseUrl: 'https://swapi.info/api',
-		defaultPath: 'people',
+		defaultPath: 'vehicles',
 		fieldConfig: {
 			url: { transform: urlToIdTransform },
-			vehicles: { transform: urlToIdTransform },
+			pilots: { transform: urlToIdTransform },
 		},
 	}),
 })
-export class Person {
+export class Vehicle {
 	@Field(() => ID, { primaryKeyField: true })
 	url!: string;
 
@@ -24,17 +23,23 @@ export class Person {
 	name!: string;
 
 	@Field(() => String)
-	height!: string;
+	model!: string;
 
 	@Field(() => String)
-	mass!: string;
+	manufacturer!: string;
 
 	@Field(() => String)
-	hair_color!: string;
+	cost_in_credits!: string;
 
 	@Field(() => String)
-	birth_year!: string;
+	length!: string;
 
-	@RelationshipField(() => [Vehicle], { id: 'vehicles', nullable: true })
-	vehicles!: Vehicle[];
+	@Field(() => String)
+	crew!: string;
+
+	@Field(() => String)
+	passengers!: string;
+
+	@RelationshipField(() => [Person], { id: 'pilots' })
+	pilots!: string[];
 }
