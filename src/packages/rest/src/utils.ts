@@ -8,9 +8,24 @@ const operatorFunctionMap = {
 	nin: (fieldValue: any, testValue: any[]) => !operatorFunctionMap.in(fieldValue, testValue),
 
 	// Equality Operations
-	ne: (fieldValue: any, testValue: any) => fieldValue !== testValue,
-	notnull: (fieldValue: any) => fieldValue !== null && fieldValue !== undefined,
+	eq: (fieldValue: any, testValue: any) => {
+		if (Array.isArray(fieldValue) && Array.isArray(testValue)) {
+			if (fieldValue === testValue) return true;
+			if (fieldValue == null || testValue == null) return false;
+			if (fieldValue.length !== testValue.length) return false;
+
+			for (let i = 0; i < fieldValue.length; i++) {
+				if (fieldValue[i] !== testValue[i]) return false;
+			}
+		} else if (testValue === null || testValue === undefined || testValue !== fieldValue) {
+			return false;
+		}
+
+		return true;
+	},
+	ne: (fieldValue: any, testValue: any) => !operatorFunctionMap.eq(fieldValue, testValue),
 	null: (fieldValue: any) => fieldValue === null || fieldValue === undefined,
+	notnull: (fieldValue: any) => !operatorFunctionMap.null(fieldValue),
 
 	// Math Operations
 	gt: (fieldValue: any, testValue: any) =>
@@ -74,11 +89,7 @@ export const inMemoryFilterFor =
 
 				if (!result) return false;
 			} else {
-				if (
-					item[filterKey] === null ||
-					item[filterKey] === undefined ||
-					item[filterKey] !== filterValue
-				) {
+				if (!operatorFunctionMap.eq(item[filterKey], filterValue)) {
 					return false;
 				}
 			}

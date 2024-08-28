@@ -75,6 +75,26 @@ describe('inMemoryFilterFor', () => {
 		expect(filter({})).toBe(false);
 	});
 
+	it('should filter an array', () => {
+		const filter = inMemoryFilterFor(fakeUserEntity, { tags: ['a', 'b'] });
+		expect(filter({ tags: ['a', 'b'] })).toBe(true);
+		expect(filter({ tags: ['a'] })).toBe(false);
+		expect(filter({ tags: ['b'] })).toBe(false);
+		expect(filter({ tags: [] })).toBe(false);
+		expect(filter({ name: null })).toBe(false);
+		expect(filter({})).toBe(false);
+	});
+
+	it('should apply ne with an array', () => {
+		const filter = inMemoryFilterFor(fakeUserEntity, { tags_ne: ['a', 'b'] });
+		expect(filter({ tags: ['a', 'b'] })).toBe(false);
+		expect(filter({ tags: ['a'] })).toBe(true);
+		expect(filter({ tags: ['b'] })).toBe(true);
+		expect(filter({ tags: [] })).toBe(true);
+		expect(filter({ name: null })).toBe(true);
+		expect(filter({})).toBe(true);
+	});
+
 	it('should apply gt with a number', () => {
 		const filter = inMemoryFilterFor(fakeUserEntity, { age_gt: 5 });
 		expect(filter({ age: 5.1 })).toBe(true);
