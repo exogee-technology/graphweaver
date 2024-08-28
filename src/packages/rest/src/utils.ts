@@ -1,12 +1,10 @@
 import { EntityMetadata } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
+import escapeStringRegexp from 'escape-string-regexp';
 
 const operatorFunctionMap = {
 	// Array Operations
-	in: (fieldValue: any, testValue: any[]) => {
-		const set = new Set(testValue);
-		return set.has(fieldValue);
-	},
+	in: (fieldValue: any, testValue: any[]) => new Set(testValue).has(fieldValue),
 	nin: (fieldValue: any, testValue: any[]) => !operatorFunctionMap.in(fieldValue, testValue),
 
 	// Equality Operations
@@ -15,21 +13,23 @@ const operatorFunctionMap = {
 	null: (fieldValue: any) => fieldValue === null || fieldValue === undefined,
 
 	// Math Operations
-	gt: (fieldValue: any, testValue: any) => fieldValue > testValue,
-	gte: (fieldValue: any, testValue: any) => fieldValue >= testValue,
-	lt: (fieldValue: any, testValue: any) => fieldValue < testValue,
-	lte: (fieldValue: any, testValue: any) => fieldValue <= testValue,
+	gt: (fieldValue: any, testValue: any) =>
+		typeof fieldValue == typeof testValue && fieldValue > testValue,
+	gte: (fieldValue: any, testValue: any) =>
+		typeof fieldValue == typeof testValue && fieldValue >= testValue,
+	lt: (fieldValue: any, testValue: any) =>
+		typeof fieldValue == typeof testValue && fieldValue < testValue,
+	lte: (fieldValue: any, testValue: any) =>
+		typeof fieldValue == typeof testValue && fieldValue <= testValue,
 
 	// String Operations
-	like: (fieldValue: any, testValue: string) => {
-		const regex = new RegExp(testValue.replace(/%/g, '.*'));
-		return regex.test(fieldValue);
-	},
-	ilike: (fieldValue: any, testValue: string) => {
-		const regex = new RegExp(testValue.replace(/%/g, '.*'), 'i');
-		return regex.test(fieldValue);
-	},
+	like: (fieldValue: any, testValue: string) => new RegExp(likeToRegex(testValue)).test(fieldValue),
+	ilike: (fieldValue: any, testValue: string) =>
+		new RegExp(likeToRegex(testValue), 'i').test(fieldValue),
 };
+
+const likeToRegex = (likeString: string) =>
+	`^${escapeStringRegexp(likeString).replaceAll('%', '.*').replaceAll('_', '.')}$`;
 
 // Generator function, which returns a function that can filter an array based on the Graphweaver filter
 // passed in. This will not scale infinitely, but works in many cases. For other cases, you may need to

@@ -10,6 +10,7 @@
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
 		"codegen": "graphql-codegen --config ./codegen.yml",
+		"test": "vitest",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -24,6 +25,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"dataloader": "2.2.2",
+		"escape-string-regexp": "5.0.0",
 		"got-cjs": "12.5.4"
 	},
 	"devDependencies": {
@@ -31,7 +33,8 @@
 		"esbuild": "0.23.1",
 		"glob": "10.4.3",
 		"prettier": "3.3.3",
-		"typescript": "5.5.4"
+		"typescript": "5.5.4",
+		"vitest": "2.0.5"
 	},
 	"keywords": [
 		"graphql",
