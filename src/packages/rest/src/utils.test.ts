@@ -4,11 +4,11 @@ import { inMemoryFilterFor } from './utils';
 import { EntityMetadata, GRAPHQL_MAX_INT } from '@exogee/graphweaver';
 
 class FakeUser {
-	name: string;
-	age: number;
-	bankBalance: bigint;
-	tags: string[];
-	wow_i_am_a_field_with_an_annoying_name: number;
+	name!: string;
+	age!: number;
+	bankBalance!: bigint;
+	tags!: string[];
+	wow_i_am_a_field_with_an_annoying_name!: number;
 }
 
 const fakeUserEntity: EntityMetadata = {

@@ -93,6 +93,10 @@ export interface BackendProvider<D> {
 	// queries when you query across data sources.
 	readonly backendId: string;
 
+	// Optional, used for display purposes in the Admin UI, deafults to backendId
+	// if not specified.
+	readonly backendDisplayName?: string;
+
 	entityType?: new () => D;
 
 	find(

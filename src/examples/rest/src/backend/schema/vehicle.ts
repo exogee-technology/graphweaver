@@ -29,7 +29,7 @@ export class Vehicle {
 	manufacturer!: string;
 
 	@Field(() => String)
-	costInCredits!: string;
+	cost_in_credits!: string;
 
 	@Field(() => String)
 	length!: string;

@@ -25,7 +25,8 @@ export interface Enum {
 export interface Entity {
 	name: string;
 	plural: string;
-	backendId: string;
+	backendId?: string;
+	backendDisplayName?: string;
 	primaryKeyField: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
@@ -138,14 +139,19 @@ export const useSchema = () => {
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
-		const result: { [backendId: string]: Entity[] } = {};
+		const result: { [backendId: string]: { displayName: string; entities: Entity[] } } = {};
 		if (!data?.result?.entities) return result;
 
 		for (const entity of data.result.entities) {
 			if (entity.backendId) {
-				if (!result[entity.backendId]) result[entity.backendId] = [];
+				if (!result[entity.backendId]) {
+					result[entity.backendId] = {
+						displayName: entity.backendDisplayName ?? entity.backendId,
+						entities: [],
+					};
+				}
 
-				result[entity.backendId].push(entity);
+				result[entity.backendId].entities.push(entity);
 			}
 		}
 		return result;
@@ -184,6 +190,32 @@ export const useSchema = () => {
 			return entityMap[entityName];
 		},
 		enumByName: (enumName: string) => enumMap[enumName],
-		entitiesForBackend: (backendId: string) => dataSourceMap[backendId],
+		displayNameForBackend: (backendId: string) => dataSourceMap[backendId].displayName,
+		entitiesForBackend: (backendId: string) => dataSourceMap[backendId].entities,
+		backendDisplayNames: Array.from(
+			new Set(Object.values(dataSourceMap).map((dataSource) => dataSource.displayName))
+		).sort(),
+		backendIdsForDisplayName: (backendDisplayName: string) => {
+			const backendIds = new Set<string>();
+
+			for (const backendId of Object.keys(dataSourceMap)) {
+				if (dataSourceMap[backendId].displayName === backendDisplayName) {
+					backendIds.add(backendId);
+				}
+			}
+
+			return backendIds;
+		},
+		entitiesForBackendDisplayName: (backendDisplayName: string) => {
+			const entities = [];
+
+			for (const backendId of Object.keys(dataSourceMap)) {
+				if (dataSourceMap[backendId].displayName === backendDisplayName) {
+					entities.push(...dataSourceMap[backendId].entities);
+				}
+			}
+
+			return entities;
+		},
 	};
 };

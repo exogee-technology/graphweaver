@@ -43,6 +43,11 @@ export interface RestBackendProviderConfig<D = unknown> {
 	fieldConfig?: { [fieldName in keyof D]: FieldConfig };
 	clientOptions?: GotOptions;
 
+	// This is an optional setting that allows you to control how this provider is displayed in the Admin UI.
+	// If you do not set a value, it will default to 'REST (hostname of baseUrl)'. Entities are grouped by
+	// their backend's display name, so if you want to group them in a more specific way, this is the way to do it.
+	displayName?: string;
+
 	// This is an optional setting that allows you to control how relationships are loaded.
 	// The default is 'find' which will list all rows on the endpoint and filter in memory.
 	// If you swap to 'findOne' it will do an individual REST find for each row that's needed,
@@ -53,10 +58,12 @@ export interface RestBackendProviderConfig<D = unknown> {
 
 export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 	public readonly backendId;
+	public readonly backendDisplayName;
 	public readonly backendProviderConfig: BackendProviderConfig;
 
 	public constructor(protected config: RestBackendProviderConfig<D>) {
 		this.backendId = `rest-provider-${path.posix.join(config.baseUrl, config.defaultPath ?? '')}`;
+		this.backendDisplayName = config.displayName ?? `REST (${new URL(config.baseUrl).hostname})`;
 		this.backendProviderConfig = { idListLoadingMethod: config.relationshipLoadingMethod };
 	}
 

@@ -36,6 +36,7 @@ export type AdminUiEntityAttributeMetadata = {
 export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
   attributes: AdminUiEntityAttributeMetadata;
+  backendDisplayName?: Maybe<Scalars['String']['output']>;
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
   defaultSort?: Maybe<Scalars['JSON']['output']>;

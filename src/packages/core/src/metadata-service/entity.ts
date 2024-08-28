@@ -25,6 +25,9 @@ export class AdminUiEntityMetadata {
 	backendId?: string | null;
 
 	@Field(() => String, { nullable: true })
+	backendDisplayName?: string | null;
+
+	@Field(() => String, { nullable: true })
 	summaryField?: string | null;
 
 	@Field(() => String)

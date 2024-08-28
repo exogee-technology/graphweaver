@@ -34,10 +34,6 @@ export const SideBar = () => {
 		})();
 	}, []);
 
-	const handleOnImageLoad = () => {
-		setImageLoaded(true);
-	};
-
 	if (loading)
 		return (
 			<div className={styles.sideBar}>
@@ -64,7 +60,7 @@ export const SideBar = () => {
 						[styles.logo]: imageLoaded,
 						[styles.logoLoading]: !imageLoaded,
 					})}
-					onLoad={handleOnImageLoad}
+					onLoad={() => setImageLoaded(true)}
 				/>
 				{!imageLoaded && <GraphweaverLogo width="52" className={styles.logo} />}
 			</Link>
@@ -83,8 +79,8 @@ export const SideBar = () => {
 
 				<p className={styles.subtext}>Data Sources</p>
 
-				{schema.backends.map((backend) => (
-					<BackendRow key={backend} backend={backend} />
+				{schema.backendDisplayNames.map((backendDisplayName) => (
+					<BackendRow key={backendDisplayName} backendDisplayName={backendDisplayName} />
 				))}
 
 				{schema.entityByName('Trace') && (

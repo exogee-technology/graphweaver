@@ -30,6 +30,7 @@ export type AdminUiEntityAttributeMetadata = {
 export type AdminUiEntityMetadata = {
   __typename?: 'AdminUiEntityMetadata';
   attributes: AdminUiEntityAttributeMetadata;
+  backendDisplayName?: Maybe<Scalars['String']['output']>;
   backendId?: Maybe<Scalars['String']['output']>;
   defaultFilter?: Maybe<Scalars['JSON']['output']>;
   defaultSort?: Maybe<Scalars['JSON']['output']>;
@@ -259,7 +260,7 @@ export enum Sort {
 
 export type Vehicle = {
   __typename?: 'Vehicle';
-  costInCredits: Scalars['String']['output'];
+  cost_in_credits: Scalars['String']['output'];
   crew: Scalars['String']['output'];
   length: Scalars['String']['output'];
   manufacturer: Scalars['String']['output'];
@@ -271,18 +272,18 @@ export type Vehicle = {
 };
 
 export type VehiclesListFilter = {
-  costInCredits?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_gt?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_gte?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_ilike?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_in?: InputMaybe<Array<Scalars['String']['input']>>;
-  costInCredits_like?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_lt?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_lte?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_ne?: InputMaybe<Scalars['String']['input']>;
-  costInCredits_nin?: InputMaybe<Array<Scalars['String']['input']>>;
-  costInCredits_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  costInCredits_null?: InputMaybe<Scalars['Boolean']['input']>;
+  cost_in_credits?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_gt?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_gte?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_ilike?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  cost_in_credits_like?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_lt?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_lte?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_ne?: InputMaybe<Scalars['String']['input']>;
+  cost_in_credits_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  cost_in_credits_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  cost_in_credits_null?: InputMaybe<Scalars['Boolean']['input']>;
   crew?: InputMaybe<Scalars['String']['input']>;
   crew_gt?: InputMaybe<Scalars['String']['input']>;
   crew_gte?: InputMaybe<Scalars['String']['input']>;
@@ -369,7 +370,7 @@ export type VehiclesListFilter = {
 };
 
 export type VehiclesOrderByInput = {
-  costInCredits?: InputMaybe<Sort>;
+  cost_in_credits?: InputMaybe<Sort>;
   crew?: InputMaybe<Sort>;
   length?: InputMaybe<Sort>;
   manufacturer?: InputMaybe<Sort>;

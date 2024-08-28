@@ -14,7 +14,7 @@ export const ListToolBar = ({ count, onExportToCSV }: ListToolBarProps) => {
 
 	let subtitle = '';
 	if (entity && entityByName(entity)) {
-		subtitle = `From ${entityByName(entity).backendId}`;
+		subtitle = `From ${entityByName(entity).backendDisplayName ?? entityByName(entity).backendId}`;
 	}
 	if (typeof count === 'number') {
 		if (subtitle) subtitle += ' ';
