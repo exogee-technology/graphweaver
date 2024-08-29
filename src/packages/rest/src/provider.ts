@@ -128,7 +128,10 @@ export class RestBackendProvider<D = unknown> implements BackendProvider<D> {
 			logger.trace(`Rest Adapter: Filtered result returned ${result.length} rows.`);
 
 			if (pagination) {
-				result = result.slice(pagination.offset, pagination.offset + pagination.limit);
+				result = result.slice(
+					pagination.offset ?? 0,
+					(pagination.offset ?? 0) + (pagination.limit ?? 50)
+				);
 				logger.trace(`Rest Adapter: Pagination applied, result is now ${result.length} rows.`);
 			}
 
