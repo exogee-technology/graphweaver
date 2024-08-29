@@ -31,7 +31,7 @@
 		"@tanstack/react-table": "8.20.5",
 		"clsx": "2.1.1",
 		"downshift": "9.0.8",
-		"graphiql": "3.7.0",
+		"graphiql": "3.7.1",
 		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.5.0",
