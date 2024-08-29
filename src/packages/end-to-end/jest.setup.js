@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 // set up environment variables for jest
 const dotenv = require('dotenv');
 dotenv.config({

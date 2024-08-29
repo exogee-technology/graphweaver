@@ -10,7 +10,7 @@ export const loadCustomFields = async (projectRoot: string) => {
 
 		// @todo Validate import- we can't import typescript here but we could validate another way
 		return `export { customFields } from '${resolvedCustomFieldsPath}';`;
-	} catch (error) {
+	} catch {
 		console.warn('No custom fields component found');
 		return `export const customFields = new Map();`;
 	}

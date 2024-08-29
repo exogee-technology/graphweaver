@@ -187,7 +187,7 @@ const DetailForm = ({
 					// Let's ensure we can parse the JSON.
 					try {
 						JSON.parse(values[field.name]);
-					} catch (error) {
+					} catch {
 						errors[field.name] = 'Invalid JSON';
 					}
 				}

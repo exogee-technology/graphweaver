@@ -167,7 +167,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			credential = await this.provider.findOne({
 				username,
 			});
-		} catch (err) {
+		} catch {
 			logger.trace('No credential returned from provider');
 			throw new AuthenticationError(errResponseString);
 		}

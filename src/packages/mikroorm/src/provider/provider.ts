@@ -82,7 +82,6 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 	return filter;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export class MikroBackendProvider<D> implements BackendProvider<D> {
 	private _backendId: string;
 
@@ -310,9 +309,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		}
 
 		// If we have specified a limit, offset or order then update the query
-		pagination?.limit && query.limit(pagination.limit);
-		pagination?.offset && query.offset(pagination.offset);
-		pagination?.orderBy && query.orderBy({ ...pagination.orderBy });
+		if (pagination?.limit) query.limit(pagination.limit);
+		if (pagination?.offset) query.offset(pagination.offset);
+		if (pagination?.orderBy) query.orderBy({ ...pagination.orderBy });
 
 		// Certain query filters can result in duplicate records once all joins are resolved
 		// These duplicates can be discarded as related entities are returned to the

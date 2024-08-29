@@ -135,7 +135,7 @@ export const config = (
 	try {
 		const customConfigPath = join(configRoot, configFileName);
 
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const customConfig = require(customConfigPath);
 		if (!customConfig) throw new Error();
 

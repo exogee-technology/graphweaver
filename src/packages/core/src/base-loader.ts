@@ -216,8 +216,6 @@ export class BaseLoader {
 	}
 
 	public loadByRelatedId<G = unknown, D = unknown>(args: LoadByRelatedIdOptions<G, D>) {
-		this.loadOneLoaderMap;
-
 		const loader = getBaseRelatedIdLoader<G, D>({
 			...args,
 			keyStore: this.relatedIdLoaderMap,

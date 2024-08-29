@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const utils = require('@graphql-tools/utils');
 const { writeFileSync } = require('fs');
 const path = require('path');

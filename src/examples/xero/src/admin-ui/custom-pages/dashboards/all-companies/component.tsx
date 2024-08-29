@@ -8,15 +8,15 @@ import { Loader } from '@exogee/graphweaver-admin-ui-components';
 import { theme } from '../theme';
 import styles from './styles.module.css';
 import { netProfitTooltip } from './tooltips';
-import { useProfitAndLossRowsQuery } from './component.generated';
+import { useAllCompaniesProfitAndLossRowsQuery } from './component.generated';
 
 type TenantNetProfitData = {
 	id: string;
 	data: { x: Date; y: number }[];
 };
 
-gql`
-	query profitAndLossRows($description: String!) {
+export const query = gql`
+	query allCompaniesProfitAndLossRows($description: String!) {
 		profitAndLossRows(filter: { description: $description }) {
 			amount
 			date
@@ -32,7 +32,7 @@ const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 const monthString = (date: Date) => `${months[date.getMonth()]} ${date.getFullYear()}`;
 
 export const AllCompanies = () => {
-	const { data, loading, error } = useProfitAndLossRowsQuery({
+	const { data, loading, error } = useAllCompaniesProfitAndLossRowsQuery({
 		variables: { description: 'Net Profit' },
 	});
 

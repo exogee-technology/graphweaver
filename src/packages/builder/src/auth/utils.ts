@@ -17,7 +17,7 @@ export const argon2IdOptions = {
 };
 
 export const openConnection = async (type: DatabaseType, options: ConnectionOptions) => {
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const module = require(`@mikro-orm/${type}`);
 	const PLATFORMS = {
 		mysql: 'MySqlDriver',
