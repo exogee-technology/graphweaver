@@ -24,7 +24,7 @@
 		"k6": "0.0.0"
 	},
 	"devDependencies": {
-		"@types/k6": "0.53.0",
+		"@types/k6": "0.53.1",
 		"typescript": "5.5.4"
 	}
 }
