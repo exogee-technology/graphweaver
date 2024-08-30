@@ -24,7 +24,7 @@
 		"build:docker": "docker build -f src/docker/Dockerfile ../../examples/s3-storage"
 	},
 	"dependencies": {
-		"aws-cdk-lib": "2.153.0",
+		"aws-cdk-lib": "2.155.0",
 		"constructs": "10.3.0"
 	},
 	"devDependencies": {
