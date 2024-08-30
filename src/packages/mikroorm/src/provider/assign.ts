@@ -12,9 +12,6 @@ import { logger } from '@exogee/logger';
 
 import { ConnectionManager } from '../database';
 
-// This is how Mikro ORM does it within their own code, so in this file we're ok with non-null assertions.
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-
 interface AssignOptions {
 	// Whether this assign should be allowed to create new entities.
 	// If false and a create is attempted, assign will throw.

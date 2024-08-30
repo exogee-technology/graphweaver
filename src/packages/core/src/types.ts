@@ -9,7 +9,7 @@ export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 export type { GraphQLResolveInfo } from 'graphql';
 export type { Instrumentation } from '@opentelemetry/instrumentation';
 
-export interface BaseContext {}
+export type BaseContext = object;
 
 export const ID = GraphQLID;
 
@@ -229,7 +229,7 @@ export type ClassType<T extends object = object, Arguments extends unknown[] = a
 };
 
 // We want TypeValues to be able to just be generic Functions as well.
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export type TypeValue = ClassType | GraphQLScalarType | Function | object | symbol;
 
 export type GetTypeFunction = (type?: void) => TypeValue;

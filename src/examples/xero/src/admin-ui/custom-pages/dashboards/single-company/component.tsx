@@ -7,12 +7,12 @@ import { Loader } from '@exogee/graphweaver-admin-ui-components';
 import { theme } from '../theme';
 import styles from './styles.module.css';
 import { tooltip } from './tooltip';
-import { useProfitAndLossRowsQuery } from './component.generated';
+import { useSingleCompanyProfitAndLossRowsQuery } from './component.generated';
 
 const categories = ['Net Profit', 'Total Operating Expenses', 'Gross Profit'];
 
-gql`
-	query profitAndLossRows($tenantId: ID!) {
+export const singleCompanyQuery = gql`
+	query singleCompanyProfitAndLossRows($tenantId: ID!) {
 		profitAndLossRows(filter: { tenantId: $tenantId }) {
 			amount
 			date
@@ -28,7 +28,7 @@ gql`
 export const SingleCompany = () => {
 	const { tenantId } = useParams();
 
-	const { data, loading, error } = useProfitAndLossRowsQuery({
+	const { data, loading, error } = useSingleCompanyProfitAndLossRowsQuery({
 		variables: { tenantId },
 	});
 

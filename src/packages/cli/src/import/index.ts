@@ -31,7 +31,7 @@ export const isIntrospectionError = (
 
 const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') => {
 	// We want to read the package.json of gw app so we can ignore this error
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
+	// eslint-disable-next-line @typescript-eslint/no-require-imports
 	const packageJson = require(path.join(process.cwd(), 'package.json'));
 	const dependencies = Object.keys(packageJson.dependencies ?? {});
 

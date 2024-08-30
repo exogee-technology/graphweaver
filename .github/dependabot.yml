@@ -28,6 +28,9 @@ updates:
       nivo:
         patterns:
           - "@nivo*"
+      opentelemetry:
+        patterns:
+          - "@opentelemetry*"
       simplewebauthn:
         patterns:
           - "@simplewebauthn*"

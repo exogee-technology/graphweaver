@@ -92,7 +92,7 @@ export class GraphweaverMedia {
 		if (value && typeof value === 'string') {
 			try {
 				value = JSON.parse(value);
-			} catch (e) {
+			} catch {
 				throw new Error('Unable to deserialize Media value from data provider.');
 			}
 		}

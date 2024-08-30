@@ -53,7 +53,7 @@ export const getExternalModules = (): string[] => {
 
 	// The end user might explicitly require these, so we'll exclude them from the list of external modules.
 	const requiredModules = new Set([
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		...Object.keys(require(path.join(process.cwd(), './package.json')).dependencies),
 	]);
 
@@ -161,6 +161,7 @@ export const addStartFunctionIfNeeded = () => ({
 
 export const requireSilent = (module: string) => {
 	try {
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		return require(module);
 	} catch {
 		// If we are here we might not have the package installed so we'll just return an empty object.

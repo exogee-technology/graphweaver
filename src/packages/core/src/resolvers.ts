@@ -348,11 +348,12 @@ const _deleteOne = async <G extends { name: string }>(
 
 	const success = await entity.provider.deleteOne(hookParams.args.filter);
 
-	hookManager &&
-		(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+	if (hookManager) {
+		await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 			...hookParams,
 			deleted: success,
-		}));
+		});
+	}
 
 	return success;
 };
@@ -402,11 +403,12 @@ const _deleteMany = async <G>(
 
 		const success = await entity.provider.deleteMany(hookParams.args?.filter);
 
-		hookManager &&
-			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+		if (hookManager) {
+			await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 				...hookParams,
 				deleted: success,
-			}));
+			});
+		}
 
 		return success;
 	});

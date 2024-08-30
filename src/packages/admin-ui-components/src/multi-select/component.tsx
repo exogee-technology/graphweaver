@@ -89,7 +89,7 @@ export const Select = ({
 	}, []);
 
 	useEffect(() => {
-		value !== selectedOptions && onChange(selectedOptions);
+		if (value !== selectedOptions) onChange(selectedOptions);
 	}, [selectedOptions]);
 
 	return (
