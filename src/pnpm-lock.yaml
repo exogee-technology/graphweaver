@@ -82,7 +82,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -263,7 +263,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -382,10 +382,10 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -440,7 +440,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -1027,8 +1027,8 @@ importers:
         specifier: 22.5.0
         version: 22.5.0
       aws-cdk:
-        specifier: 2.154.1
-        version: 2.154.1
+        specifier: 2.155.0
+        version: 2.155.0
       dotenv-cli:
         specifier: 7.4.2
         version: 7.4.2
@@ -1217,7 +1217,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/postgresql':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -1322,7 +1322,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -1384,13 +1384,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -6345,30 +6345,6 @@ packages:
       - tedious
     dev: false
 
-  /@mikro-orm/postgresql@6.3.7(@mikro-orm/core@6.3.7):
-    resolution: {integrity: sha512-9bGzJTMTqiaqTrCtW9DvmTZs01DBu5q4tjRnq5UA+Bf+egGpd0GMOcn6RStSvP0dnSPr1B71rJ+oQz1tqy5Ubg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': 6.3.7
-    dependencies:
-      '@mikro-orm/core': 6.3.7
-      '@mikro-orm/knex': 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
   /@mikro-orm/postgresql@6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0):
     resolution: {integrity: sha512-9bGzJTMTqiaqTrCtW9DvmTZs01DBu5q4tjRnq5UA+Bf+egGpd0GMOcn6RStSvP0dnSPr1B71rJ+oQz1tqy5Ubg==}
     engines: {node: '>= 18.12.0'}
@@ -9618,8 +9594,8 @@ packages:
       - yaml
       - mime-types
 
-  /aws-cdk@2.154.1:
-    resolution: {integrity: sha512-yJoLTo+fUHRLD4YQMt/QoOPgiT/daci4I5KcaDK8Cx2fWA0Z3h5U9+bWS3ah+8OeZ91fciNCwt6Yt/0p+cp2GQ==}
+  /aws-cdk@2.155.0:
+    resolution: {integrity: sha512-AV7Ym/o7/xyDh6sqcGatWD6Bqa7Swe0OWJq+1srVww0MdBiy5yM3zYAA1+ZeqZNjFQThJPA+pYZQFTgojuaVBA==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
     optionalDependencies:
@@ -16800,9 +16776,6 @@ packages:
   /sqlite3@5.1.7:
     resolution: {integrity: sha512-GGIyOiFaG+TUra3JIfkI/zGP8yZYLPQ0pl1bH+ODjiX57sPhrLU5sQJn1y9bDKZUFYkX1crlrPfSYt0BKKdkog==}
     requiresBuild: true
-    peerDependenciesMeta:
-      node-gyp:
-        optional: true
     dependencies:
       bindings: 1.5.0
       node-addon-api: 7.1.1
