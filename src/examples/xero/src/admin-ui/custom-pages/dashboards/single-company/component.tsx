@@ -11,7 +11,7 @@ import { useSingleCompanyProfitAndLossRowsQuery } from './component.generated';
 
 const categories = ['Net Profit', 'Total Operating Expenses', 'Gross Profit'];
 
-export const query = gql`
+export const singleCompanyQuery = gql`
 	query singleCompanyProfitAndLossRows($tenantId: ID!) {
 		profitAndLossRows(filter: { tenantId: $tenantId }) {
 			amount

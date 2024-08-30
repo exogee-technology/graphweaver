@@ -15,7 +15,7 @@ type TenantNetProfitData = {
 	data: { x: Date; y: number }[];
 };
 
-export const query = gql`
+export const allCompaniesQuery = gql`
 	query allCompaniesProfitAndLossRows($description: String!) {
 		profitAndLossRows(filter: { description: $description }) {
 			amount
