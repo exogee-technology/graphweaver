@@ -19,6 +19,10 @@ updates:
       aws-sdk:
         patterns:
           - "@aws-sdk*"
+      aws-cdk:
+        patterns:
+          - "aws-cdk"
+          - "aws-cdk-lib"
       graphql-tools:
         patterns:
           - "@graphql-tools*"
