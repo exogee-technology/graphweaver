@@ -42,7 +42,7 @@
 		"eslint-plugin-oxlint": "0.9.1",
 		"globals": "15.9.0",
 		"prettier": "3.3.3",
-		"turbo": "2.0.13",
+		"turbo": "2.1.0",
 		"typescript": "5.5.4",
 		"typescript-eslint": "8.3.0"
 	},
