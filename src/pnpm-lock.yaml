@@ -1027,8 +1027,8 @@ importers:
         specifier: 22.5.1
         version: 22.5.1
       aws-cdk:
-        specifier: 2.154.1
-        version: 2.154.1
+        specifier: 2.155.0
+        version: 2.155.0
       dotenv-cli:
         specifier: 7.4.2
         version: 7.4.2
@@ -9597,8 +9597,8 @@ packages:
       - yaml
       - mime-types
 
-  /aws-cdk@2.154.1:
-    resolution: {integrity: sha512-yJoLTo+fUHRLD4YQMt/QoOPgiT/daci4I5KcaDK8Cx2fWA0Z3h5U9+bWS3ah+8OeZ91fciNCwt6Yt/0p+cp2GQ==}
+  /aws-cdk@2.155.0:
+    resolution: {integrity: sha512-AV7Ym/o7/xyDh6sqcGatWD6Bqa7Swe0OWJq+1srVww0MdBiy5yM3zYAA1+ZeqZNjFQThJPA+pYZQFTgojuaVBA==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
     optionalDependencies:
