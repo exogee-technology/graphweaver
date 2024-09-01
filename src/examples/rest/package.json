@@ -31,7 +31,7 @@
 		"graphql": "16.9.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.5.1",
+		"@types/node": "22.5.2",
 		"graphweaver": "workspace:*",
 		"typescript": "5.5.4"
 	}
