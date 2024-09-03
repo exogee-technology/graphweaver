@@ -29,9 +29,6 @@ importers:
       eslint-config-prettier:
         specifier: 9.1.0
         version: 9.1.0(eslint@9.9.1)
-      eslint-plugin-oxlint:
-        specifier: 0.9.1
-        version: 0.9.1
       globals:
         specifier: 15.9.0
         version: 15.9.0
@@ -11453,12 +11450,6 @@ packages:
       eslint: 9.9.1
     dev: true
 
-  /eslint-plugin-oxlint@0.9.1:
-    resolution: {integrity: sha512-xWgxk4S3ccXn8bMZr9Zsm0ybbiAPmB9MTfr+IBR5SOkitqVbRcbw2a+vEu92RN855UELaiw5ZciYfqZL28WpkA==}
-    dependencies:
-      scule: 1.3.0
-    dev: true
-
   /eslint-scope@8.0.2:
     resolution: {integrity: sha512-6E4xmrTw5wtxnLA5wYL3WDfhZ/1bUBGOXV0zQvVRDOtrR8D0p6W7fs3JweNYhwRYeGvd/1CKX2se0/2s7Q/nJA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -16460,10 +16451,6 @@ packages:
   /scuid@1.1.0:
     resolution: {integrity: sha512-MuCAyrGZcTLfQoH2XoBlQ8C6bzwN88XT/0slOGz0pn8+gIP85BOAfYa44ZXQUTOwRwPU0QvgU+V+OSajl/59Xg==}
     dev: false
-
-  /scule@1.3.0:
-    resolution: {integrity: sha512-6FtHJEvt+pVMIB9IBY+IcCJ6Z5f1iQnytgyfKMhDKgmzYG+TeH/wx1y3l27rshSbLiSanrR9ffZDrEsmjlQF2g==}
-    dev: true
 
   /secp256k1@4.0.3:
     resolution: {integrity: sha512-NLZVf+ROMxwtEj3Xa562qgv2BK5e2WNmXPiOdVIPLgs6lyTzMvBq0aWTYMI5XCP9jZMVKOcqZLw/Wc4vDkuxhA==}
