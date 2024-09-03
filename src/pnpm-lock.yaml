@@ -82,7 +82,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -263,7 +263,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -382,10 +382,10 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -440,7 +440,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -1217,7 +1217,7 @@ importers:
         version: 6.3.7
       '@mikro-orm/postgresql':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -1302,8 +1302,8 @@ importers:
   packages/logger:
     dependencies:
       pino:
-        specifier: 9.3.2
-        version: 9.3.2
+        specifier: 9.4.0
+        version: 9.4.0
     devDependencies:
       '@types/node':
         specifier: 22.5.2
@@ -1322,7 +1322,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -1384,13 +1384,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.7
-        version: 6.3.7(@mikro-orm/core@6.3.7)
+        version: 6.3.7(@mikro-orm/core@6.3.7)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.7
         version: 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)
@@ -6347,30 +6347,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.7(@mikro-orm/core@6.3.7):
-    resolution: {integrity: sha512-9bGzJTMTqiaqTrCtW9DvmTZs01DBu5q4tjRnq5UA+Bf+egGpd0GMOcn6RStSvP0dnSPr1B71rJ+oQz1tqy5Ubg==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': 6.3.7
-    dependencies:
-      '@mikro-orm/core': 6.3.7
-      '@mikro-orm/knex': 6.3.7(@mikro-orm/core@6.3.7)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -11962,7 +11938,7 @@ packages:
       fast-json-stringify: 5.16.1
       find-my-way: 8.2.0
       light-my-request: 5.13.0
-      pino: 9.3.2
+      pino: 9.4.0
       process-warning: 3.0.0
       proxy-addr: 2.0.7
       rfdc: 1.4.1
@@ -15569,8 +15545,8 @@ packages:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
     dev: false
 
-  /pino@9.3.2:
-    resolution: {integrity: sha512-WtARBjgZ7LNEkrGWxMBN/jvlFiE17LTbBoH0konmBU684Kd0uIiDwBXlcTCW7iJnA6HfIKwUssS/2AC6cDEanw==}
+  /pino@9.4.0:
+    resolution: {integrity: sha512-nbkQb5+9YPhQRz/BeQmrWpEknAaqjpAqRK8NwJpmrX/JHu7JuZC5G1CeAwJDJfGes4h+YihC6in3Q2nGb+Y09w==}
     hasBin: true
     dependencies:
       atomic-sleep: 1.0.0
