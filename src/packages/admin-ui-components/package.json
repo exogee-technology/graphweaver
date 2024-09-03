@@ -61,7 +61,7 @@
 		"react-dom": "18.3.1",
 		"react-router-dom": "6.26.1",
 		"typescript": "5.5.4",
-		"vite": "5.4.2",
+		"vite": "5.4.3",
 		"vite-plugin-svgr": "4.2.0"
 	},
 	"keywords": [
