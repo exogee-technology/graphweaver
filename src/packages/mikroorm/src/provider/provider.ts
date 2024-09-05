@@ -181,10 +181,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 		const mapFieldNames = (partialFilterObj: any) => {
 			for (const [from, to] of Object.entries(map || {})) {
-				if (partialFilterObj[from] && typeof partialFilterObj[from].id !== 'undefined') {
-					if (Object.keys(partialFilterObj[from]).length > 1) {
+				if (partialFilterObj[from]) {
+					const keys = Object.keys(partialFilterObj[from]);
+					if (keys.length > 1) {
 						throw new Error(
-							`Expected precisely 1 key called 'id' in queryObj.${from} on ${target}, got ${JSON.stringify(
+							`Expected precisely 1 key in queryObj.${from} on ${target}, got ${JSON.stringify(
 								partialFilterObj[from],
 								null,
 								4
@@ -192,7 +193,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 						);
 					}
 
-					partialFilterObj[to] = partialFilterObj[from].id;
+					partialFilterObj[to] = partialFilterObj[from][keys[0]];
 					delete partialFilterObj[from];
 				}
 			}
