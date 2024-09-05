@@ -531,6 +531,9 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 			Array.isArray(valueOfForeignKey)
 		) {
 			idValue = valueOfForeignKey;
+		} else if (typeof valueOfForeignKey === 'undefined' || valueOfForeignKey === null) {
+			// If the value is null, we'll use it as the id value.
+			idValue = undefined;
 		} else {
 			// The ID value must be a string or a number otherwise we'll throw an error.
 			throw new Error(
@@ -539,7 +542,11 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		}
 	}
 
-	if (typeof existingData === 'undefined' && !idValue && !field.relationshipInfo?.relatedField) {
+	if (
+		typeof existingData === 'undefined' &&
+		(typeof idValue === 'undefined' || idValue === null) &&
+		!field.relationshipInfo?.relatedField
+	) {
 		// id is null and we are loading a single instance so let's return null
 		return null;
 	}
