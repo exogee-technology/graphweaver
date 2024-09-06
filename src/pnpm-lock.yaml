@@ -82,7 +82,7 @@ importers:
         version: 6.3.8
       '@mikro-orm/knex':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
@@ -263,7 +263,7 @@ importers:
         version: 6.3.8
       '@mikro-orm/knex':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
@@ -351,8 +351,8 @@ importers:
   examples/s3-storage:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.7
-        version: 3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.8
+        version: 3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@apollo/server':
         specifier: 4.11.0
         version: 4.11.0(graphql@16.9.0)
@@ -382,10 +382,10 @@ importers:
         version: 6.3.8
       '@mikro-orm/knex':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -440,7 +440,7 @@ importers:
         version: 6.3.8
       '@mikro-orm/knex':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
@@ -470,8 +470,8 @@ importers:
   examples/xero:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.7
-        version: 3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.8
+        version: 3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@apollo/server':
         specifier: 4.11.0
         version: 4.11.0(graphql@16.9.0)
@@ -561,8 +561,8 @@ importers:
   packages/admin-ui:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.7
-        version: 3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.8
+        version: 3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -628,8 +628,8 @@ importers:
   packages/admin-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.7
-        version: 3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.8
+        version: 3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@exogee/graphweaver-apollo-client':
         specifier: workspace:*
         version: link:../apollo-client
@@ -719,8 +719,8 @@ importers:
   packages/apollo-client:
     devDependencies:
       '@apollo/client':
-        specifier: 3.11.7
-        version: 3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.8
+        version: 3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       esbuild:
         specifier: 0.23.1
         version: 0.23.1
@@ -813,8 +813,8 @@ importers:
   packages/auth-ui-components:
     dependencies:
       '@apollo/client':
-        specifier: 3.11.7
-        version: 3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
+        specifier: 3.11.8
+        version: 3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1)
       '@simplewebauthn/browser':
         specifier: 10.0.0
         version: 10.0.0
@@ -1217,7 +1217,7 @@ importers:
         version: 6.3.8
       '@mikro-orm/postgresql':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
@@ -1322,7 +1322,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
@@ -1384,13 +1384,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.8
-        version: 6.3.8(@mikro-orm/core@6.3.8)
+        version: 6.3.8(@mikro-orm/core@6.3.8)(mysql2@3.11.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.8
         version: 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)
@@ -1709,8 +1709,8 @@ packages:
       graphql: 16.9.0
     dev: false
 
-  /@apollo/client@3.11.7(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-wcYTVZmdvTJlrDWfGYFMD5Kq4WZx9RK74KAuZa0rKtblVD/k21SqzhBqh6WHPT4dsXD2yvmWSgBSUYilxzFQ3Q==}
+  /@apollo/client@3.11.8(@types/react@18.3.5)(graphql@16.9.0)(react-dom@18.3.1)(react@18.3.1):
+    resolution: {integrity: sha512-CgG1wbtMjsV2pRGe/eYITmV5B8lXUCYljB2gB/6jWTFQcrvirUVvKg7qtFdjYkQSFbIffU1IDyxgeaN81eTjbA==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5
@@ -6347,30 +6347,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.8(@mikro-orm/core@6.3.8):
-    resolution: {integrity: sha512-9Ce3ddKQAMBMHkE1ofE++r8Tkq9YB7yK0my6EQlD3BM2wCSWq/Uj/67Ru7x+JTFiwcr9+sGEXwSv2Tsx8Z0fyw==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': 6.3.8
-    dependencies:
-      '@mikro-orm/core': 6.3.8
-      '@mikro-orm/knex': 6.3.8(@mikro-orm/core@6.3.8)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
