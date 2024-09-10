@@ -1011,8 +1011,8 @@ importers:
   packages/cdk:
     dependencies:
       aws-cdk-lib:
-        specifier: 2.155.0
-        version: 2.155.0(constructs@10.3.0)
+        specifier: 2.157.0
+        version: 2.157.0(constructs@10.3.0)
       constructs:
         specifier: 10.3.0
         version: 10.3.0
@@ -1027,8 +1027,8 @@ importers:
         specifier: 22.5.4
         version: 22.5.4
       aws-cdk:
-        specifier: 2.155.0
-        version: 2.155.0
+        specifier: 2.157.0
+        version: 2.157.0
       dotenv-cli:
         specifier: 7.4.2
         version: 7.4.2
@@ -9616,8 +9616,8 @@ packages:
       fastq: 1.17.1
     dev: false
 
-  /aws-cdk-lib@2.155.0(constructs@10.3.0):
-    resolution: {integrity: sha512-QGzDhLldBXsyOUmhgtZ98PiOUS2g1Mb5MO08FiOvQn3+KSyJjQdq0GoyxtDpCNGLaWmIfcyrtB9aDhod38fl9g==}
+  /aws-cdk-lib@2.157.0(constructs@10.3.0):
+    resolution: {integrity: sha512-07uVY1MVool092wP+jb2XjPR9PFvF26VDDatY6BXR+AliW9sFZ4NKB7zzJrzZOyAbA3cTbedEca0EpRLZ7bjYw==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -9641,8 +9641,8 @@ packages:
       - yaml
       - mime-types
 
-  /aws-cdk@2.155.0:
-    resolution: {integrity: sha512-AV7Ym/o7/xyDh6sqcGatWD6Bqa7Swe0OWJq+1srVww0MdBiy5yM3zYAA1+ZeqZNjFQThJPA+pYZQFTgojuaVBA==}
+  /aws-cdk@2.157.0:
+    resolution: {integrity: sha512-x/6ZUm/JuQoSdbDUiNdPvKcwh5tsJl+Mk07RKJLSKagN179VJLQk5BzT4P+bFVMzAeYRMpURjPCOwjKbU1V7OQ==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
     optionalDependencies:
