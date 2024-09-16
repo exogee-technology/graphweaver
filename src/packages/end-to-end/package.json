@@ -54,7 +54,7 @@
 	"devDependencies": {
 		"@playwright/test": "1.47.0",
 		"@simplewebauthn/types": "10.0.0",
-		"@types/jest": "29.5.12",
+		"@types/jest": "29.5.13",
 		"dotenv": "16.4.5",
 		"graphql-tag": "2.12.6",
 		"http-server": "14.1.1",
