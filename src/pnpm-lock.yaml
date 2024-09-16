@@ -30,8 +30,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(eslint@9.10.0)
       eslint-plugin-oxlint:
-        specifier: 0.9.3
-        version: 0.9.3
+        specifier: 0.9.5
+        version: 0.9.5
       globals:
         specifier: 15.9.0
         version: 15.9.0
@@ -82,7 +82,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -263,7 +263,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -382,10 +382,10 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)
+        version: 6.3.9(@mikro-orm/core@6.3.9)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -440,7 +440,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -1217,7 +1217,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/postgresql':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)
+        version: 6.3.9(@mikro-orm/core@6.3.9)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -1322,7 +1322,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -1384,13 +1384,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)
+        version: 6.3.9(@mikro-orm/core@6.3.9)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -6385,6 +6385,30 @@ packages:
       - mariadb
       - mysql
       - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+    dev: false
+
+  /@mikro-orm/postgresql@6.3.9(@mikro-orm/core@6.3.9):
+    resolution: {integrity: sha512-oBlEkE+hZVV5jLnGopWUK6gOXa+ZyQD+IOOxSOoRDbduaHEvSxnUIFrrI0A/PBIjS5NmGUePVG39PC45D/dM8A==}
+    engines: {node: '>= 18.12.0'}
+    peerDependencies:
+      '@mikro-orm/core': 6.3.9
+    dependencies:
+      '@mikro-orm/core': 6.3.9
+      '@mikro-orm/knex': 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+      pg: 8.12.0
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -11499,8 +11523,8 @@ packages:
       eslint: 9.10.0
     dev: true
 
-  /eslint-plugin-oxlint@0.9.3:
-    resolution: {integrity: sha512-clPdk0sdeLWiGA94e2IFD/OZYWq56xb5CvLsx/02L7gTL8IiJoBP8JvHxhHgRNDwxiwNNBW3TDD70J710WYNJg==}
+  /eslint-plugin-oxlint@0.9.5:
+    resolution: {integrity: sha512-y8AohK5k4L8Zfj7SiixggqKbVqz8V0VaBRc4OFEmJ4EHtUAHcO3cLWjgea0UleAiv2FiZENjnT45puqPYHY3QQ==}
     dependencies:
       scule: 1.3.0
     dev: true
