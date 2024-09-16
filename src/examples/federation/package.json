@@ -30,7 +30,7 @@
 		"@types/node": "22.5.5",
 		"graphweaver": "workspace:*",
 		"tsx": "4.19.1",
-		"typescript": "5.5.4"
+		"typescript": "5.6.2"
 	},
 	"keywords": [
 		"graphql",
