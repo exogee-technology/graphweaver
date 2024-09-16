@@ -44,7 +44,7 @@
 		"@simplewebauthn/types": "10.0.0",
 		"@types/jsonwebtoken": "9.0.6",
 		"@types/ms": "0.7.34",
-		"@types/node": "22.5.4",
+		"@types/node": "22.5.5",
 		"@types/otp-generator": "4.0.2",
 		"esbuild": "0.23.1",
 		"glob": "10.4.3",
