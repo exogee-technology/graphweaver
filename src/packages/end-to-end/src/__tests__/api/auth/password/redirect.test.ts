@@ -56,7 +56,7 @@ describe('Password Authentication - Redirect', () => {
 
 		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
 			`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=${encodeURIComponent(
-				process.env.AUTH_BASE_URI + '/' ?? ''
+				process.env.AUTH_BASE_URI + '/'
 			)}`
 		);
 	});
