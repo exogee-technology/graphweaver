@@ -82,7 +82,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -263,7 +263,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -382,10 +382,10 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -440,7 +440,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -1217,7 +1217,7 @@ importers:
         version: 6.3.9
       '@mikro-orm/postgresql':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -1322,13 +1322,13 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
       node-sqlite3-wasm:
-        specifier: 0.8.20
-        version: 0.8.20
+        specifier: 0.8.21
+        version: 0.8.21
     devDependencies:
       '@types/node':
         specifier: 22.5.5
@@ -1384,13 +1384,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.9
-        version: 6.3.9(@mikro-orm/core@6.3.9)
+        version: 6.3.9(@mikro-orm/core@6.3.9)(mysql2@3.11.2)
       '@mikro-orm/sqlite':
         specifier: 6.3.9
         version: 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)
@@ -6385,30 +6385,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.9(@mikro-orm/core@6.3.9):
-    resolution: {integrity: sha512-oBlEkE+hZVV5jLnGopWUK6gOXa+ZyQD+IOOxSOoRDbduaHEvSxnUIFrrI0A/PBIjS5NmGUePVG39PC45D/dM8A==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': 6.3.9
-    dependencies:
-      '@mikro-orm/core': 6.3.9
-      '@mikro-orm/knex': 6.3.9(@mikro-orm/core@6.3.9)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -15163,8 +15139,8 @@ packages:
     deprecated: please use 'semver'
     dev: false
 
-  /node-sqlite3-wasm@0.8.20:
-    resolution: {integrity: sha512-DU20P641RwOFQMrLzUHb0Ih6I40jiZSn87+p/KgZAC/o9f9MnlTsGIdvwNRtl0RKgRh3ePP/W2LEf+NmYcDXrw==}
+  /node-sqlite3-wasm@0.8.21:
+    resolution: {integrity: sha512-w0IIGCU1I1EQJMkHgDOL2K+4iCQOdnnEmSnj3zQCtjzvrJyaz78qgK47dS/Ptsca1x2uCLYjkAYa3r5WlIHu9A==}
     dev: false
 
   /nopt@5.0.0:
