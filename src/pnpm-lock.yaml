@@ -932,8 +932,8 @@ importers:
         specifier: 4.2.3
         version: 4.2.3(graphql@16.9.0)
       '@graphql-codegen/typescript-react-apollo':
-        specifier: 4.3.1
-        version: 4.3.1(graphql@16.9.0)
+        specifier: 4.3.2
+        version: 4.3.2(graphql@16.9.0)
       '@serverless/utils':
         specifier: 6.15.0
         version: 6.15.0
@@ -4996,8 +4996,8 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-codegen/typescript-react-apollo@4.3.1(graphql@16.9.0):
-    resolution: {integrity: sha512-kl4zbGzOjoTlCEBIsN5+/yOje5dL1qFLhe7YLaTiPGGw9p7/AH99Dp/cEqFlj+4DfMVGR9MS5yIdIC8lZukUBg==}
+  /@graphql-codegen/typescript-react-apollo@4.3.2(graphql@16.9.0):
+    resolution: {integrity: sha512-io2tWfeehBqOB2X6llqLE6B9wjjsXZT/GTZlguGVXdbR7WhSJO9GXyLflXYKxom/h2bPjkVL534Ev6wZLcs0wA==}
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
