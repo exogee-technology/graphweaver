@@ -36,11 +36,11 @@
 		"reflect-metadata": "0.2.2"
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.3.9",
-		"@mikro-orm/knex": "6.3.9",
-		"@mikro-orm/mysql": "6.3.9",
-		"@mikro-orm/postgresql": "6.3.9",
-		"@mikro-orm/sqlite": "6.3.9",
+		"@mikro-orm/core": "6.3.10",
+		"@mikro-orm/knex": "6.3.10",
+		"@mikro-orm/mysql": "6.3.10",
+		"@mikro-orm/postgresql": "6.3.10",
+		"@mikro-orm/sqlite": "6.3.10",
 		"@types/node": "22.5.5",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.23.1",
@@ -49,14 +49,14 @@
 		"typescript": "5.5.4"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/knex": "6.3.9",
-		"@mikro-orm/mysql": "6.3.9",
-		"@mikro-orm/postgresql": "6.3.9",
-		"@mikro-orm/sqlite": "6.3.9"
+		"@mikro-orm/knex": "6.3.10",
+		"@mikro-orm/mysql": "6.3.10",
+		"@mikro-orm/postgresql": "6.3.10",
+		"@mikro-orm/sqlite": "6.3.10"
 	},
 	"peerDependencies": {
-		"@mikro-orm/core": "6.3.9",
-		"@mikro-orm/knex": "6.3.9"
+		"@mikro-orm/core": "6.3.10",
+		"@mikro-orm/knex": "6.3.10"
 	},
 	"keywords": [
 		"graphql",
