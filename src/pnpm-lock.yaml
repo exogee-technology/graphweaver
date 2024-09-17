@@ -1293,8 +1293,8 @@ importers:
         version: 0.0.0
     devDependencies:
       '@types/k6':
-        specifier: 0.53.1
-        version: 0.53.1
+        specifier: 0.53.2
+        version: 0.53.2
       typescript:
         specifier: 5.6.2
         version: 5.6.2
@@ -8784,8 +8784,8 @@ packages:
     dependencies:
       '@types/node': 22.5.5
 
-  /@types/k6@0.53.1:
-    resolution: {integrity: sha512-Mm1+7kESDNssyBiMV+5MVAJKwpJbj1Y3X1YkCDlaiPbjuc8DeaPtQFBv3pnip/0ZjM9P/P/aDNvd4BvQT0lQDg==}
+  /@types/k6@0.53.2:
+    resolution: {integrity: sha512-TxFJbeSfD/RfQe+GeMbpdwiOOySRTj3vfHvcA4yoLQ3wvGPjyppCqmyKXgktf3535T+YAc41bB7GkhuCPRmfUg==}
     dev: true
 
   /@types/keyv@3.1.4:
