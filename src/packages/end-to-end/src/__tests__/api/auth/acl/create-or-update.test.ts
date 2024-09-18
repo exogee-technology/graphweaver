@@ -16,7 +16,7 @@ import {
 
 class AlbumDataProvider extends BaseDataProvider<Album> {
 	async findOne(filter: Filter<Album>) {
-		if (filter.id === 1) {
+		if (String(filter.id) === '1') {
 			return {
 				id: 1,
 				description: 'dummy album',
