@@ -3,7 +3,7 @@ import { GraphQLList, GraphQLResolveInfo, Source } from 'graphql';
 import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
 import { fromBackendEntity } from '../default-from-backend-entity';
-import { BaseContext, CreateOrUpdateHookParams, ResolveTree } from '../types';
+import { BaseContext, CreateOrUpdateHookParams, Filter, ResolveTree } from '../types';
 import { getFieldTypeWithMetadata, graphQLTypeForEntity } from '../schema-builder';
 import { HookRegister, hookManagerMap } from '../hook-manager';
 import {
@@ -24,6 +24,8 @@ const isLinking = <G = unknown, D = unknown>(
 		: isPrimaryKeyOnly(entity, node);
 };
 
+export const isCreateOrUpdate = async () => {};
+
 // Used to check if we have only {id: ''} object
 export const isPrimaryKeyOnly = <G = unknown, D = unknown>(
 	entity: EntityMetadata<G, D>,
@@ -31,7 +33,11 @@ export const isPrimaryKeyOnly = <G = unknown, D = unknown>(
 ) => {
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
 
-	return primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length === 1;
+	return (
+		typeof node[primaryKeyField] !== 'undefined' &&
+		node[primaryKeyField] !== null &&
+		Object.keys(node).length === 1
+	);
 };
 
 const runChildCreateOrUpdate = <G = unknown>(
@@ -42,17 +48,17 @@ const runChildCreateOrUpdate = <G = unknown>(
 	const graphQLType = graphQLTypeForEntity(entityMetadata, undefined);
 
 	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
-	// result type. The only thing we read in it is the return type, so we'll just stub that.
+	// result type. The only things we read in it is the return type so we'll just stub that.
 	const infoFacade: Partial<GraphQLResolveInfo> = {
 		returnType: Array.isArray(data) ? new GraphQLList(graphQLType) : graphQLType,
 	};
 
 	return createOrUpdate({
-		source: {} as Source, // @todo: What should this be?
+		source: {} as Source,
 		args: { input: data },
 		context,
 		info: infoFacade as GraphQLResolveInfo,
-		fields: {} as ResolveTree, // @todo: What should this be?
+		fields: {} as ResolveTree,
 	});
 };
 
@@ -103,7 +109,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					// If it's a linking entity or an array of linking entities, nothing to do here
 				} else if (Array.isArray(childNode)) {
 					// If we have an array, we may need to create the parent first as children need reference to the parent
-					// As are updating the parent from the child, we can remove this key
+					// As we are updating the parent from the child, we can remove this key
 					delete node[key as keyof Partial<G>];
 
 					// Check if we already have the parent ID
@@ -126,7 +132,6 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 						);
 					}
 
-					// Add parent ID to children and perform the mutation
 					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
 					const parentField = Object.values(relatedEntityMetadata.fields).find((field) => {
 						const { fieldType: type } = getFieldTypeWithMetadata(field.getType);
@@ -137,6 +142,8 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 							`Implementation Error: No parent field found for ${relatedEntityMetadata.name}`
 						);
 					}
+
+					// Add parent ID to children and perform the mutation
 					const childEntities = childNode.map((child) => ({
 						...child,
 						[parentField.name]: { [primaryKeyField]: parentId },
@@ -171,24 +178,51 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			// If it's just an ID, return it as is, but we need to fromBackendEntity it
 			// so that it will have a reference back to its data entity.
 			return fromBackendEntity(meta, node as D);
-		} else if (primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1) {
-			// If it's an object with an ID and other properties, update the entity
-			const result = await meta.provider.updateOne(
-				String(node[primaryKeyField]),
-				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
-					? meta.target.toBackendEntity(node)
-					: (node as unknown as Partial<D>)
-			);
-			return fromBackendEntity(meta, result);
 		} else {
-			// If it's an object without an ID, create a new entity
-			const result = await meta.provider.createOne(
-				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
-					? meta.target.toBackendEntity(node)
-					: (node as unknown as Partial<D>)
-			);
+			// Is it a create or an update?
+			let operation: 'create' | 'update';
+			// If client side ID generation is disabled, we can be sure it follows our old rules.
+			if (!meta.apiOptions?.clientGeneratedPrimaryKeys) {
+				operation =
+					primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1
+						? 'update'
+						: 'create';
+			} else {
+				// Ok, this is a client generated primary key entity. That means we don't know which it is until we check
+				// whether the entity exists in the first place.
+				// If there's no primary key at this point, that's an error.
+				const primaryKey = node[primaryKeyField];
+				if (!primaryKey)
+					throw new Error(
+						'Cannot call create or update on a client generated primary key entity without specifying a primary key.'
+					);
 
-			return fromBackendEntity(meta, result);
+				const existing = await meta.provider.findOne({
+					[primaryKeyField]: primaryKey,
+				} as Filter<D>);
+				operation = existing ? 'update' : 'create';
+			}
+
+			if (operation === 'update') {
+				const result = await meta.provider.updateOne(
+					String(node[primaryKeyField]),
+					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
+						? meta.target.toBackendEntity(node)
+						: (node as unknown as Partial<D>)
+				);
+
+				return fromBackendEntity(meta, result);
+			} else if (operation === 'create') {
+				const result = await meta.provider.createOne(
+					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
+						? meta.target.toBackendEntity(node)
+						: (node as unknown as Partial<D>)
+				);
+
+				return fromBackendEntity(meta, result);
+			} else {
+				throw new Error(`Unknown create or update operation: '${operation}'`);
+			}
 		}
 	}
 

@@ -72,7 +72,15 @@ export type GraphweaverSchemaInfoExtensionWithSourceEntity = {
 		| 'createOrUpdateInput'
 		| 'updateInput'
 		| 'createInput'
-		| 'filterInput';
+		| 'filterInput'
+		| 'createOne'
+		| 'createMany'
+		| 'updateOne'
+		| 'updateMany'
+		| 'createOrUpdateMany'
+		| 'deleteOne'
+		| 'deleteMany';
+
 	sourceEntity: EntityMetadata<any, any>;
 };
 
@@ -620,8 +628,17 @@ const generateGraphQLInputFieldsForEntity =
 			// The ID field is a special case based on the input type.
 			if (field.name === (entity.primaryKeyField ?? 'id')) {
 				switch (input) {
+					case 'insert':
+						if (entity.apiOptions?.clientGeneratedPrimaryKeys) {
+							fields[field.name] = { type: new GraphQLNonNull(ID) };
+						}
+						break;
 					case 'createOrUpdate':
-						fields[field.name] = { type: ID };
+						if (entity.apiOptions?.clientGeneratedPrimaryKeys) {
+							fields[field.name] = { type: new GraphQLNonNull(ID) };
+						} else {
+							fields[field.name] = { type: ID };
+						}
 						break;
 					case 'update':
 						fields[field.name] = { type: new GraphQLNonNull(ID) };

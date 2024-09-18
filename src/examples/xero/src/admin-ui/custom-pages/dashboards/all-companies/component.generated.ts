@@ -52,8 +52,8 @@ export function useAllCompaniesProfitAndLossRowsLazyQuery(baseOptions?: Apollo.L
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<AllCompaniesProfitAndLossRowsQuery, AllCompaniesProfitAndLossRowsQueryVariables>(AllCompaniesProfitAndLossRowsDocument, options);
         }
-export function useAllCompaniesProfitAndLossRowsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<AllCompaniesProfitAndLossRowsQuery, AllCompaniesProfitAndLossRowsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
+export function useAllCompaniesProfitAndLossRowsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<AllCompaniesProfitAndLossRowsQuery, AllCompaniesProfitAndLossRowsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<AllCompaniesProfitAndLossRowsQuery, AllCompaniesProfitAndLossRowsQueryVariables>(AllCompaniesProfitAndLossRowsDocument, options);
         }
 export type AllCompaniesProfitAndLossRowsQueryHookResult = ReturnType<typeof useAllCompaniesProfitAndLossRowsQuery>;

@@ -152,6 +152,7 @@ export type AccountsPaginationInput = {
 
 export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
+  clientGeneratedPrimaryKeys?: Maybe<Scalars['Boolean']['output']>;
   exportPageSize?: Maybe<Scalars['Float']['output']>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };

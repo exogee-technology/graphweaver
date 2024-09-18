@@ -97,6 +97,7 @@ export interface EntityFieldAttributes {
 export interface EntityAttributes {
 	isReadOnly?: boolean;
 	exportPageSize?: number;
+	clientGeneratedPrimaryKeys?: boolean;
 }
 
 export interface CustomFieldArgs<T = unknown> {

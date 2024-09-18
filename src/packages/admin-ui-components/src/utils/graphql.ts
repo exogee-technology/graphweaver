@@ -40,6 +40,7 @@ export const SCHEMA_QUERY = gql`
 				attributes {
 					isReadOnly
 					exportPageSize
+					clientGeneratedPrimaryKeys
 				}
 			}
 			enums {

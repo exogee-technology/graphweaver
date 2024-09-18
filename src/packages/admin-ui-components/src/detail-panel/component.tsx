@@ -12,6 +12,7 @@ import { Modal } from '../modal';
 import {
 	CustomField,
 	decodeSearchParams,
+	Entity,
 	EntityField,
 	queryForEntity,
 	routeFor,
@@ -46,27 +47,50 @@ export enum PanelMode {
 	EDIT = 'EDIT',
 }
 
-const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
-	field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
+const isFieldReadonly = (
+	panelMode: PanelMode,
+	entity: Entity,
+	field: EntityField | CustomField<unknown>
+) => {
+	// Regardless of if we're creating or editing, IDs should always be read only
+	// unless the entity has client generated primary keys.
+	if (
+		(field.type === 'ID' || field.type === 'ID!') &&
+		!entity.attributes.clientGeneratedPrimaryKeys
+	) {
+		return true;
+	}
+
+	// If the entity as a whole is read only, then all fields should be read only.
+	if (entity.attributes.isReadOnly) return true;
+
+	// If we're editing and a field is read only, it should be shown as read only.
+	// However if we're creating, we may need to write the value for the initial creation.
+	if (panelMode !== PanelMode.CREATE && field.attributes?.isReadOnly) return true;
+
+	return false;
+};
 
 const getField = ({
+	entity,
 	field,
 	autoFocus,
 	panelMode,
 }: {
+	entity: Entity;
 	field: EntityField;
 	autoFocus: boolean;
 	panelMode: PanelMode;
 }) => {
-	// In Create mode, all readonly fields should be writeable.
-	const isReadonly = panelMode !== PanelMode.CREATE && isFieldReadonly(field);
+	// In Create mode, all readonly fields should be writeable except ID fields
+	const isReadonly = isFieldReadonly(panelMode, entity, field);
 
 	if (field.type === 'JSON') {
 		return <JSONField name={field.name} autoFocus={autoFocus} disabled={isReadonly} />;
 	}
 
 	if (field.type === 'Boolean') {
-		return <BooleanField name={field.name} autoFocus={autoFocus} />;
+		return <BooleanField name={field.name} autoFocus={autoFocus} disabled={isReadonly} />;
 	}
 
 	if (field.type === 'GraphweaverMedia') {
@@ -77,8 +101,9 @@ const getField = ({
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
 			return <LinkField name={field.name} field={field} />;
+		} else {
+			return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 		}
-		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 	}
 
 	const { enumByName } = useSchema();
@@ -90,6 +115,7 @@ const getField = ({
 				typeEnum={enumObject}
 				multiple={field.isArray}
 				autoFocus={autoFocus}
+				disabled={isReadonly}
 			/>
 		);
 	}
@@ -102,10 +128,12 @@ const getField = ({
 };
 
 const DetailField = ({
+	entity,
 	field,
 	autoFocus,
 	panelMode,
 }: {
+	entity: Entity;
 	field: EntityField;
 	autoFocus: boolean;
 	panelMode: PanelMode;
@@ -115,7 +143,7 @@ const DetailField = ({
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
-			{getField({ field, autoFocus, panelMode })}
+			{getField({ entity, field, autoFocus, panelMode })}
 		</div>
 	);
 };
@@ -153,6 +181,7 @@ const PersistForm = ({ name }: { name: string }) => {
 
 const DetailForm = ({
 	initialValues,
+	entity,
 	detailFields,
 	onCancel,
 	onSubmit,
@@ -161,6 +190,7 @@ const DetailForm = ({
 	panelMode,
 }: {
 	initialValues: Record<string, any>;
+	entity: Entity;
 	detailFields: (EntityField | CustomField)[];
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
@@ -203,7 +233,7 @@ const DetailForm = ({
 				.join('\n');
 
 			// TODO EXOGW-150: instead of using toast, we should use a formik error message on the form itself
-			toast.error(message, { duration: 5000 });
+			if (message) toast.error(message, { duration: 5000 });
 
 			return errors;
 		},
@@ -233,7 +263,9 @@ const DetailForm = ({
 		[dataTransforms]
 	);
 
-	const firstEditableField = detailFields.find((field) => !isFieldReadonly(field));
+	const firstEditableField = detailFields.find(
+		(field) => !isFieldReadonly(panelMode, entity, field)
+	);
 
 	return (
 		<Formik
@@ -263,6 +295,7 @@ const DetailForm = ({
 								return (
 									<DetailField
 										key={field.name}
+										entity={entity}
 										field={field}
 										autoFocus={field === firstEditableField}
 										panelMode={panelMode}
@@ -400,29 +433,32 @@ export const DetailPanel = () => {
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		try {
-			let result: FetchResult;
+			let result: FetchResult | undefined = undefined;
 
-			if (panelMode === PanelMode.EDIT) {
-				// Update an existing entity
-				result = await updateEntity({
-					variables: {
-						input: values,
-					},
-				});
-			} else {
-				// Create a new entity
-				result = await createEntity({
-					variables: {
-						input: values,
-					},
-					refetchQueries: [`${selectedEntity.plural}List`],
-				});
+			try {
+				if (panelMode === PanelMode.EDIT) {
+					// Update an existing entity
+					result = await updateEntity({
+						variables: {
+							input: values,
+						},
+					});
+				} else {
+					// Create a new entity
+					result = await createEntity({
+						variables: {
+							input: values,
+						},
+						refetchQueries: [`${selectedEntity.plural}List`],
+					});
+				}
+			} catch (error: any) {
+				console.error(error);
+				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
 			}
 
-			if (!result.data) {
-				return toast.error('No data received in response', {
-					duration: 5000,
-				});
+			if (!result?.data) {
+				return toast.error('No data received in response', { duration: 5000 });
 			}
 
 			clearSessionState();
@@ -496,6 +532,7 @@ export const DetailPanel = () => {
 							<DetailForm
 								initialValues={initialValues}
 								detailFields={formFields}
+								entity={selectedEntity}
 								onCancel={closeModal}
 								onSubmit={handleOnSubmit}
 								persistName={persistName}

@@ -11,7 +11,7 @@ test('Ensure people can be listed and that they have vehicles', async ({ page })
 	await expect(page.locator('tbody')).toContainText('Snowspeeder, Imperial Speeder Bike');
 	await page.getByRole('cell', { name: 'Leia Organa' }).click();
 	await expect(page.getByTestId('detail-panel-field-vehicles')).toContainText(
-		'Imperial Speeder Bike×'
+		'vehiclesImperial Speeder Bike'
 	);
 });
 
@@ -23,10 +23,12 @@ test('Ensure vehicles can be listed and that they have pilots', async ({ page })
 	await expect(page.locator('tbody')).toContainText('Snowspeeder');
 	await expect(page.locator('tbody')).toContainText('Luke Skywalker, Wedge Antilles');
 	await page.getByRole('cell', { name: 'Incom corporation', exact: true }).click();
-	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText('2 Selected×');
+	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText(
+		'pilots*Luke SkywalkerWedge Antilles'
+	);
 	await page.locator('._overlay_1slpl_1').click();
 	await page.getByRole('cell', { name: 'AT-ST' }).click();
-	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText('Chewbacca×');
+	await expect(page.getByTestId('detail-panel-field-pilots')).toContainText('pilots*Chewbacca');
 });
 
 test('Ensure people can be filtered', async ({ page }) => {
