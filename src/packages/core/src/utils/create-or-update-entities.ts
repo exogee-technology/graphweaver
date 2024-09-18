@@ -180,17 +180,13 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			return fromBackendEntity(meta, node as D);
 		} else {
 			// Is it a create or an update?
-			let operation: 'create' | 'update';
-			// If client side ID generation is disabled, we can be sure it follows our old rules.
-			if (!meta.apiOptions?.clientGeneratedPrimaryKeys) {
-				operation =
-					primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1
-						? 'update'
-						: 'create';
-			} else {
-				// Ok, this is a client generated primary key entity. That means we don't know which it is until we check
-				// whether the entity exists in the first place.
-				// If there's no primary key at this point, that's an error.
+			let operation: 'create' | 'update' = 'create';
+
+			// If there's an ID, we can't be certain whether it's an update or a create. It could be
+			// a client-side primary key entity, or it could be a server side primary key entity where the
+			// ID is coming from a hook. So if there's an ID, there's only one way to be sure
+			// what the operation is, which is to check if it already exists or not.
+			if (primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1) {
 				const primaryKey = node[primaryKeyField];
 				if (!primaryKey)
 					throw new Error(
