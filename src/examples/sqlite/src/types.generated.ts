@@ -28,6 +28,7 @@ export type Scalars = {
 
 export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
+  clientGeneratedPrimaryKeys?: Maybe<Scalars['Boolean']['output']>;
   exportPageSize?: Maybe<Scalars['Float']['output']>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
@@ -879,13 +880,14 @@ export type GenreTracks_AggregateArgs = {
 
 /** Data needed to create or update Genres. If an ID is passed, this is an update, otherwise it's an insert. */
 export type GenreCreateOrUpdateInput = {
-  genreId?: InputMaybe<Scalars['ID']['input']>;
+  genreId: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };
 
 /** Data needed to create Genres. */
 export type GenreInsertInput = {
+  genreId: Scalars['ID']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
   tracks?: InputMaybe<Array<TrackCreateOrUpdateInput>>;
 };

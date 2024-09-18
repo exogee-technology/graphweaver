@@ -73,6 +73,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 
 			const attributes = new AdminUiEntityAttributeMetadata();
 			attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
+			attributes.clientGeneratedPrimaryKeys = entity.apiOptions?.clientGeneratedPrimaryKeys;
 			attributes.isReadOnly =
 				entity.adminUIOptions?.readonly ??
 				entity.apiOptions?.excludeFromBuiltInOperations ??

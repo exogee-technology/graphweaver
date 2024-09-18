@@ -53,8 +53,8 @@ export function useSingleCompanyProfitAndLossRowsLazyQuery(baseOptions?: Apollo.
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<SingleCompanyProfitAndLossRowsQuery, SingleCompanyProfitAndLossRowsQueryVariables>(SingleCompanyProfitAndLossRowsDocument, options);
         }
-export function useSingleCompanyProfitAndLossRowsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<SingleCompanyProfitAndLossRowsQuery, SingleCompanyProfitAndLossRowsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
+export function useSingleCompanyProfitAndLossRowsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<SingleCompanyProfitAndLossRowsQuery, SingleCompanyProfitAndLossRowsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
           return Apollo.useSuspenseQuery<SingleCompanyProfitAndLossRowsQuery, SingleCompanyProfitAndLossRowsQueryVariables>(SingleCompanyProfitAndLossRowsDocument, options);
         }
 export type SingleCompanyProfitAndLossRowsQueryHookResult = ReturnType<typeof useSingleCompanyProfitAndLossRowsQuery>;

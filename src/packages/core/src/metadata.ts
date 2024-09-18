@@ -19,6 +19,16 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	primaryKeyField?: keyof G;
 
 	apiOptions?: {
+		// By default we expect the underlying data provider to generate the primary keys for entities, e.g. an
+		// identity field in a database. This allows consistency and centralised control. It is, however, sometimes
+		// nice to allow for client side ID creation, particularly with uuid IDs, or in situations like chat programs
+		// where you want the client to know the ID before it even does the initial mutation to create the entity.
+		// In these cases, you'll want to set this to true. The schema will then emit the primary key field as a
+		// required field in calls to create the entity. If you call createOrUpdate with these entities, it will
+		// be less efficient because we have to go to the underlying datasource to see if the entity exists before
+		// we can decide if it was a create or if it was an update that you meant.
+		clientGeneratedPrimaryKeys?: boolean;
+
 		// This means that the entity should not be given the default list, find one, create, update, and delete
 		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
 		// enables excludeFromFiltering as well.

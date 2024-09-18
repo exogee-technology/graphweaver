@@ -24,6 +24,8 @@ const isLinking = <G = unknown, D = unknown>(
 		: isPrimaryKeyOnly(entity, node);
 };
 
+export const isCreateOrUpdate = async () => {};
+
 // Used to check if we have only {id: ''} object
 export const isPrimaryKeyOnly = <G = unknown, D = unknown>(
 	entity: EntityMetadata<G, D>,
@@ -31,7 +33,11 @@ export const isPrimaryKeyOnly = <G = unknown, D = unknown>(
 ) => {
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
 
-	return primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length === 1;
+	return (
+		typeof node[primaryKeyField] !== 'undefined' &&
+		node[primaryKeyField] !== null &&
+		Object.keys(node).length === 1
+	);
 };
 
 const runChildCreateOrUpdate = <G = unknown>(
@@ -42,17 +48,17 @@ const runChildCreateOrUpdate = <G = unknown>(
 	const graphQLType = graphQLTypeForEntity(entityMetadata, undefined);
 
 	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
-	// result type. The only thing we read in it is the return type, so we'll just stub that.
+	// result type. The only things we read in it is the return type so we'll just stub that.
 	const infoFacade: Partial<GraphQLResolveInfo> = {
 		returnType: Array.isArray(data) ? new GraphQLList(graphQLType) : graphQLType,
 	};
 
 	return createOrUpdate({
-		source: {} as Source, // @todo: What should this be?
+		source: {} as Source,
 		args: { input: data },
 		context,
 		info: infoFacade as GraphQLResolveInfo,
-		fields: {} as ResolveTree, // @todo: What should this be?
+		fields: {} as ResolveTree,
 	});
 };
 
@@ -103,7 +109,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					// If it's a linking entity or an array of linking entities, nothing to do here
 				} else if (Array.isArray(childNode)) {
 					// If we have an array, we may need to create the parent first as children need reference to the parent
-					// As are updating the parent from the child, we can remove this key
+					// As we are updating the parent from the child, we can remove this key
 					delete node[key as keyof Partial<G>];
 
 					// Check if we already have the parent ID
@@ -127,19 +133,9 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					}
 
 					// Add parent ID to children and perform the mutation
-					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
-					const parentField = Object.values(relatedEntityMetadata.fields).find((field) => {
-						const { fieldType: type } = getFieldTypeWithMetadata(field.getType);
-						return type === meta.target;
-					});
-					if (!parentField) {
-						throw new Error(
-							`Implementation Error: No parent field found for ${relatedEntityMetadata.name}`
-						);
-					}
 					const childEntities = childNode.map((child) => ({
 						...child,
-						[parentField.name]: { [primaryKeyField]: parentId },
+						[key]: { [primaryKeyField]: parentId },
 					}));
 
 					// Now create/update the children

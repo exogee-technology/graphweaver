@@ -13,6 +13,8 @@ import {
 	EntityMetadata,
 	FieldMetadata,
 	Filter,
+	GraphweaverSchemaExtension,
+	GraphweaverSchemaInfoExtensionWithSourceEntity,
 	HookRegister,
 	ReadHookParams,
 	Resolver,
@@ -202,8 +204,9 @@ const _createOrUpdate = async <G>(
 		throw new Error('Could not determine entity name from return type.');
 	}
 
-	const entity = (graphQLType.extensions.graphweaverSchemaInfo as any)
-		?.sourceEntity as EntityMetadata<any, any>;
+	const schemaInfo = graphQLType.extensions
+		.graphweaverSchemaInfo as GraphweaverSchemaInfoExtensionWithSourceEntity;
+	const entity = schemaInfo.sourceEntity;
 
 	if (!entity) {
 		throw new Error(
@@ -236,16 +239,59 @@ const _createOrUpdate = async <G>(
 		// Separate Create and Update items
 		const updateItems: Partial<G>[] = [];
 		const createItems: Partial<G>[] = [];
-		for (const item of inputArray) {
-			if (hasId(entity, item)) {
-				updateItems.push(item);
-			} else {
-				createItems.push(item);
+		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
+
+		// In this very specific case, we can't figure out what to do unless we query the underlying
+		// provider for each entity. We'll at least do it with an _in query.
+		if (entity.apiOptions?.clientGeneratedPrimaryKeys && schemaInfo.type === 'createOrUpdateMany') {
+			// The only way to know if this is a create or update is to see if the
+			// IDs already exist or not.
+			const lookup = new Map<string, Partial<G>>();
+			for (const item of inputArray) {
+				lookup.set(item[primaryKeyField] as string, item);
+			}
+
+			const existingEntities = await entity.provider?.find({
+				filter: {
+					[`${String(primaryKeyField)}_in`]: lookup.keys(),
+				},
+			});
+
+			for (const existingEntity of existingEntities ?? []) {
+				const existingEntityKey = existingEntity[primaryKeyField] as string;
+				const inputEntity = lookup.get(existingEntityKey);
+				if (inputEntity) {
+					updateItems.push(inputEntity);
+					lookup.delete(existingEntityKey);
+				} else {
+					throw new Error(
+						`Could not locate input entity for ID ${existingEntityKey}. This should not happen.`
+					);
+				}
+			}
+
+			for (const remainingItem of lookup.values()) {
+				createItems.push(remainingItem);
+			}
+		} else if (schemaInfo.type === 'createOne' || schemaInfo.type === 'createMany') {
+			// If they called create they definitely meant to create.
+			createItems.push(...inputArray);
+		} else if (schemaInfo.type === 'updateOne' || schemaInfo.type === 'updateMany') {
+			// Likewise, if they called update they definitely meant to update.
+			updateItems.push(...inputArray);
+		} else {
+			// Ok, we're in createOrUpdate, but server is generating IDs, so we can tell if they
+			// meant to create or update just by whether there's an ID or not.
+			for (const item of inputArray) {
+				if (hasId(entity, item)) {
+					updateItems.push(item);
+				} else {
+					createItems.push(item);
+				}
 			}
 		}
 
 		// Extract ids of items being updated
-		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
 		const updateItemIds = updateItems.map((item) => item[primaryKeyField as keyof typeof item]);
 
 		// Prepare updateParams and run hook if needed

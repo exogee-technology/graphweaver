@@ -6,6 +6,7 @@ import { connection } from '../database';
 
 @Entity('Genre', {
 	provider: new MikroBackendProvider(OrmGenre, connection),
+	apiOptions: { clientGeneratedPrimaryKeys: true },
 })
 export class Genre {
 	@Field(() => ID, { primaryKeyField: true })

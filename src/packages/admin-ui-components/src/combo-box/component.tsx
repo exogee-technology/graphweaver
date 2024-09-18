@@ -26,6 +26,7 @@ interface SelectProps {
 	placeholder?: string;
 	loading?: boolean;
 	autoFocus?: boolean;
+	disabled?: boolean;
 	['data-testid']?: string;
 }
 
@@ -44,6 +45,7 @@ export const ComboBox = ({
 	placeholder = 'Select',
 	loading = false,
 	autoFocus = false,
+	disabled = false,
 	['data-testid']: testId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
@@ -52,6 +54,7 @@ export const ComboBox = ({
 	const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps } = useCombobox({
 		items: options,
 		itemToString: (item) => item?.label ?? '',
+		isItemDisabled: () => disabled,
 		onSelectedItemChange: (change) => {
 			if (mode === SelectMode.MULTI) {
 				onChange([...valueArray, change.selectedItem]);
