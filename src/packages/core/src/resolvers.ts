@@ -13,7 +13,6 @@ import {
 	EntityMetadata,
 	FieldMetadata,
 	Filter,
-	GraphweaverSchemaExtension,
 	GraphweaverSchemaInfoExtensionWithSourceEntity,
 	HookRegister,
 	ReadHookParams,
