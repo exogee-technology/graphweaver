@@ -132,10 +132,21 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 						);
 					}
 
+					// @todo: What if there are mutiple fields on the child that reference the same type? Don't we want a specific one?
+					const parentField = Object.values(relatedEntityMetadata.fields).find((field) => {
+						const { fieldType: type } = getFieldTypeWithMetadata(field.getType);
+						return type === meta.target;
+					});
+					if (!parentField) {
+						throw new Error(
+							`Implementation Error: No parent field found for ${relatedEntityMetadata.name}`
+						);
+					}
+
 					// Add parent ID to children and perform the mutation
 					const childEntities = childNode.map((child) => ({
 						...child,
-						[key]: { [primaryKeyField]: parentId },
+						[parentField.name]: { [primaryKeyField]: parentId },
 					}));
 
 					// Now create/update the children
