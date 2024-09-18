@@ -880,8 +880,8 @@ importers:
         specifier: 3.651.1
         version: 3.651.1
       '@aws-sdk/client-lambda':
-        specifier: 3.651.1
-        version: 3.651.1
+        specifier: 3.653.0
+        version: 3.653.0
       '@exogee/graphweaver-rest-legacy':
         specifier: workspace:*
         version: link:../rest-legacy
@@ -2112,8 +2112,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-lambda@3.651.1:
-    resolution: {integrity: sha512-/8+j1m5+hJ1fUZLWr+bC/R1/ScGIasR1Kj0jCwJUXZL+ZjKaggiy7sVmVC7DZdaD/hKCdts8SpUeXZejPjSiFg==}
+  /@aws-sdk/client-lambda@3.653.0:
+    resolution: {integrity: sha512-0iLpqsySIHr8DguLk1x3pglGz6S5Ft+/IYWG6qdc9X7UNGmUcmkKjzP2IVHBhrQJboV4j4yeT9nYUIlKeyx/IQ==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
@@ -17000,7 +17000,7 @@ packages:
       serverless:
         optional: true
     dependencies:
-      '@aws-sdk/client-lambda': 3.651.1
+      '@aws-sdk/client-lambda': 3.653.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.10
