@@ -233,7 +233,7 @@ const DetailForm = ({
 				.join('\n');
 
 			// TODO EXOGW-150: instead of using toast, we should use a formik error message on the form itself
-			toast.error(message, { duration: 5000 });
+			if (message) toast.error(message, { duration: 5000 });
 
 			return errors;
 		},
@@ -433,29 +433,32 @@ export const DetailPanel = () => {
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		try {
-			let result: FetchResult;
+			let result: FetchResult | undefined = undefined;
 
-			if (panelMode === PanelMode.EDIT) {
-				// Update an existing entity
-				result = await updateEntity({
-					variables: {
-						input: values,
-					},
-				});
-			} else {
-				// Create a new entity
-				result = await createEntity({
-					variables: {
-						input: values,
-					},
-					refetchQueries: [`${selectedEntity.plural}List`],
-				});
+			try {
+				if (panelMode === PanelMode.EDIT) {
+					// Update an existing entity
+					result = await updateEntity({
+						variables: {
+							input: values,
+						},
+					});
+				} else {
+					// Create a new entity
+					result = await createEntity({
+						variables: {
+							input: values,
+						},
+						refetchQueries: [`${selectedEntity.plural}List`],
+					});
+				}
+			} catch (error: any) {
+				console.error(error);
+				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
 			}
 
-			if (!result.data) {
-				return toast.error('No data received in response', {
-					duration: 5000,
-				});
+			if (!result?.data) {
+				return toast.error('No data received in response', { duration: 5000 });
 			}
 
 			clearSessionState();

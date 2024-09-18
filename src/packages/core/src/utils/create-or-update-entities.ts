@@ -3,7 +3,7 @@ import { GraphQLList, GraphQLResolveInfo, Source } from 'graphql';
 import { EntityMetadata, graphweaverMetadata, isEntityMetadata } from '../metadata';
 import { createOrUpdate } from '../resolvers';
 import { fromBackendEntity } from '../default-from-backend-entity';
-import { BaseContext, CreateOrUpdateHookParams, ResolveTree } from '../types';
+import { BaseContext, CreateOrUpdateHookParams, Filter, ResolveTree } from '../types';
 import { getFieldTypeWithMetadata, graphQLTypeForEntity } from '../schema-builder';
 import { HookRegister, hookManagerMap } from '../hook-manager';
 import {
@@ -167,24 +167,51 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			// If it's just an ID, return it as is, but we need to fromBackendEntity it
 			// so that it will have a reference back to its data entity.
 			return fromBackendEntity(meta, node as D);
-		} else if (primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1) {
-			// If it's an object with an ID and other properties, update the entity
-			const result = await meta.provider.updateOne(
-				String(node[primaryKeyField]),
-				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
-					? meta.target.toBackendEntity(node)
-					: (node as unknown as Partial<D>)
-			);
-			return fromBackendEntity(meta, result);
 		} else {
-			// If it's an object without an ID, create a new entity
-			const result = await meta.provider.createOne(
-				isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
-					? meta.target.toBackendEntity(node)
-					: (node as unknown as Partial<D>)
-			);
+			// Is it a create or an update?
+			let operation: 'create' | 'update';
+			// If client side ID generation is disabled, we can be sure it follows our old rules.
+			if (!meta.apiOptions?.clientGeneratedPrimaryKeys) {
+				operation =
+					primaryKeyField in node && node[primaryKeyField] && Object.keys(node).length > 1
+						? 'update'
+						: 'create';
+			} else {
+				// Ok, this is a client generated primary key entity. That means we don't know which it is until we check
+				// whether the entity exists in the first place.
+				// If there's no primary key at this point, that's an error.
+				const primaryKey = node[primaryKeyField];
+				if (!primaryKey)
+					throw new Error(
+						'Cannot call create or update on a client generated primary key entity without specifying a primary key.'
+					);
 
-			return fromBackendEntity(meta, result);
+				const existing = await meta.provider.findOne({
+					[primaryKeyField]: primaryKey,
+				} as Filter<D>);
+				operation = existing ? 'update' : 'create';
+			}
+
+			if (operation === 'update') {
+				const result = await meta.provider.updateOne(
+					String(node[primaryKeyField]),
+					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
+						? meta.target.toBackendEntity(node)
+						: (node as unknown as Partial<D>)
+				);
+
+				return fromBackendEntity(meta, result);
+			} else if (operation === 'create') {
+				const result = await meta.provider.createOne(
+					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
+						? meta.target.toBackendEntity(node)
+						: (node as unknown as Partial<D>)
+				);
+
+				return fromBackendEntity(meta, result);
+			} else {
+				throw new Error(`Unknown create or update operation: '${operation}'`);
+			}
 		}
 	}
 
