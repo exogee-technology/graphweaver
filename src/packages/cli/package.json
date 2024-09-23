@@ -24,7 +24,7 @@
 	],
 	"dependencies": {
 		"@exogee/graphweaver-builder": "workspace:*",
-		"chokidar": "4.0.0",
+		"chokidar": "4.0.1",
 		"esbuild": "0.23.1",
 		"inquirer": "11.0.2",
 		"node-semver": "1.0.0",
