@@ -73,7 +73,10 @@ export const promptForDatabaseOptions = async ({
 				connectionManagerId?: string;
 				mikroOrmConfig: Partial<DatabaseOptions>;
 			}>(sandbox.module.exports)) {
-				if (typeof value.connectionManagerId === 'string') {
+				if (
+					typeof value.connectionManagerId === 'string' &&
+					typeof value.mikroOrmConfig === 'object'
+				) {
 					// It's legit.
 					connections.set(value.connectionManagerId, value.mikroOrmConfig);
 				}
