@@ -9,7 +9,7 @@ export type Source = 'mysql' | 'postgresql' | 'sqlite';
 
 export interface DatabaseOptions {
 	source?: Source;
-	database?: string;
+	dbName?: string;
 	host?: string;
 	port?: number;
 	password?: string;

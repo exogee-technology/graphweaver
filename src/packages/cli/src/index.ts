@@ -83,7 +83,6 @@ yargs
 				.positional('source', {
 					type: 'string',
 					choices: ['mysql', 'postgresql', 'sqlite'],
-					default: 'postgresql',
 					describe: 'The data source to import.',
 				})
 				.option('database', {

@@ -22,7 +22,7 @@ export const generateAdminPassword = async (options: GenerateAdminPasswordOption
 			port: options.port,
 			user: options.user,
 			password: options.password,
-			dbName: options.database,
+			dbName: options.dbName,
 		},
 	});
 
