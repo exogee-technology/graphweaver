@@ -25,7 +25,7 @@
 	"devDependencies": {
 		"@types/luxon": "3.4.2",
 		"decimal.js": "10.4.3",
-		"esbuild": "0.23.1",
+		"esbuild": "0.24.0",
 		"glob": "10.4.3",
 		"graphql": "16.9.0",
 		"typescript": "5.6.2"
