@@ -34,18 +34,22 @@ export class DatabaseFile {
 		const connection = [`export const connection = {`];
 		connection.push(`${pad}connectionManagerId: '${this.databaseType}',`);
 		connection.push(`${pad}mikroOrmConfig: {`);
-		connection.push(`${pad}${pad}entities: entities,`);
+		connection.push(`${pad}${pad}entities,`);
 		connection.push(
 			`${pad}${pad}driver: ${
 				isPostgresql ? 'PostgreSqlDriver' : isMySQL ? 'MySqlDriver' : 'SqliteDriver'
 			},`
 		);
-		connection.push(`${pad}${pad}dbName: '${config.dbName}',`);
+		connection.push(`${pad}${pad}dbName: process.env.DATABASE_NAME || '${config.dbName}',`);
 		if (!isSQLite) {
-			connection.push(`${pad}${pad}host: '${config.host}',`);
-			connection.push(`${pad}${pad}user: '${config.user}',`);
-			connection.push(`${pad}${pad}password: '${config.password}',`);
-			connection.push(`${pad}${pad}port: ${config.port},`);
+			connection.push(`${pad}${pad}host: process.env.DATABASE_HOST || '${config.host}',`);
+			connection.push(`${pad}${pad}user: process.env.DATABASE_USER || '${config.user}',`);
+			connection.push(
+				`${pad}${pad}password: process.env.DATABASE_PASSWORD || '${config.password}',`
+			);
+			connection.push(
+				`${pad}${pad}port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : ${config.port},`
+			);
 		}
 		connection.push(`${pad}},`);
 		connection.push(`};`);

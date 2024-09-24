@@ -2,7 +2,7 @@ import { DatabaseOptions, Source } from '@exogee/graphweaver-builder';
 
 export const promptForDatabaseOptions = async ({
 	source,
-	database,
+	dbName,
 	host,
 	port,
 	password,
@@ -25,7 +25,7 @@ export const promptForDatabaseOptions = async ({
 	const prompts: any[] = [];
 
 	if (source === 'sqlite') {
-		if (!database) {
+		if (typeof dbName === 'undefined') {
 			prompts.push({
 				type: 'input',
 				name: 'dbName',
@@ -35,14 +35,14 @@ export const promptForDatabaseOptions = async ({
 	}
 
 	if (source === 'postgresql' || source === 'mysql') {
-		if (!database) {
+		if (typeof dbName === 'undefined') {
 			prompts.push({
 				type: 'input',
 				name: 'dbName',
 				message: `What is the database name?`,
 			});
 		}
-		if (!host) {
+		if (typeof host === 'undefined') {
 			prompts.push({
 				type: 'input',
 				name: 'host',
@@ -58,7 +58,7 @@ export const promptForDatabaseOptions = async ({
 				message: `What is the port?`,
 			});
 		}
-		if (!user) {
+		if (typeof user === 'undefined') {
 			prompts.push({
 				type: 'input',
 				name: 'user',
@@ -66,7 +66,7 @@ export const promptForDatabaseOptions = async ({
 				message: `What is the username to access the database server?`,
 			});
 		}
-		if (!password) {
+		if (typeof password === 'undefined') {
 			prompts.push({
 				type: 'password',
 				mask: '*',
@@ -78,16 +78,16 @@ export const promptForDatabaseOptions = async ({
 
 	if (prompts.length > 0) {
 		const answers = await inquirer.prompt(prompts);
-		database = answers.dbName ?? database;
+		dbName = answers.dbName ?? dbName;
 		host = answers.host ?? host;
 		port = answers.port ?? port;
 		password = answers.password ?? password;
 		user = answers.user ?? user;
 	}
 
-	if (!database) {
+	if (!dbName) {
 		throw new Error('Database name has not been provided, please provide a database name.');
 	}
 
-	return { source, database, host, port, password, user };
+	return { source, dbName, host, port, password, user };
 };

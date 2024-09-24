@@ -16,6 +16,7 @@ import { importDataSource } from './import';
 import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
 import * as path from 'path';
+import { config } from '@exogee/graphweaver-config';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
@@ -83,7 +84,6 @@ yargs
 				.positional('source', {
 					type: 'string',
 					choices: ['mysql', 'postgresql', 'sqlite'],
-					default: 'postgresql',
 					describe: 'The data source to import.',
 				})
 				.option('database', {
@@ -113,6 +113,19 @@ yargs
 				}),
 		handler: async ({ source, database, host, port, password, user, overwrite }) => {
 			console.log('Importing data source...');
+			// Do we have any pre-configured options?
+			const { import: importOptions } = config();
+
+			if (importOptions) {
+				if (source === undefined) source = importOptions.source;
+				if (database === undefined) database = importOptions.dbName;
+				if (host === undefined) host = importOptions.host;
+				if (!port) port = importOptions.port;
+				if (user === undefined) user = importOptions.user;
+				if (password === undefined) password = importOptions.password;
+				if (overwrite === undefined) overwrite = importOptions.overwrite;
+			}
+
 			if (source) console.log(`Source: ${source}`);
 			if (database) console.log(`Database Name: ${database}`);
 			if (host) console.log(`Database Host: ${host}`);

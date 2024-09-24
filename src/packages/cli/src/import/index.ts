@@ -1,7 +1,7 @@
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import path from 'node:path';
 import { startIntrospection } from '@exogee/graphweaver-builder';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import ora from 'ora-classic';
-import path from 'path';
 
 import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
 import { promptForDatabaseOptions } from '../database';
@@ -64,7 +64,7 @@ const checkForMissingDependencies = (source: 'mysql' | 'postgresql' | 'sqlite') 
 
 export const importDataSource = async (
 	source: 'mysql' | 'postgresql' | 'sqlite',
-	database?: string,
+	dbName?: string,
 	host?: string,
 	port?: number,
 	password?: string,
@@ -73,7 +73,7 @@ export const importDataSource = async (
 ) => {
 	const databaseOptions = await promptForDatabaseOptions({
 		source,
-		database,
+		dbName,
 		host,
 		port,
 		password,
@@ -91,9 +91,9 @@ export const importDataSource = async (
 
 		let fileCount = 0;
 		for (const file of files) {
-			createDirectories(path.join('./src/', file.path));
+			createDirectories(path.join('.', 'src', file.path));
 
-			const fileFullPath = path.join(process.cwd(), './src/', file.path, file.name);
+			const fileFullPath = path.join(process.cwd(), 'src', file.path, file.name);
 			let overwrite = true;
 			if (!overwriteAllFiles && file.needOverwriteWarning && existsSync(fileFullPath)) {
 				const { default: inquirer } = await import('inquirer');

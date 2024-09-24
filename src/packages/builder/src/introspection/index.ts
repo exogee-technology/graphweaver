@@ -10,7 +10,7 @@ export const startIntrospection = async (databaseOptions: DatabaseOptions) => {
 	return introspection(databaseOptions.source, {
 		mikroOrmConfig: {
 			host: databaseOptions.host,
-			dbName: databaseOptions.database,
+			dbName: databaseOptions.dbName,
 			user: databaseOptions.user,
 			password: databaseOptions.password,
 			port: databaseOptions.port,
