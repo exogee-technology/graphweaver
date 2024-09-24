@@ -3,6 +3,12 @@ import { GraphQLArmorConfig } from '@escape.tech/graphql-armor-types';
 import { BackendProvider, GraphweaverPlugin, Instrumentation } from '@exogee/graphweaver';
 
 import { CorsPluginOptions } from './apollo-plugins';
+import type {
+	FastifyHttp2Options,
+	FastifyHttp2SecureOptions,
+	FastifyHttpOptions,
+	FastifyHttpsOptions,
+} from 'fastify';
 
 export type MetadataHookParams<C> = {
 	context: C;
@@ -28,6 +34,11 @@ export interface GraphweaverConfig {
 	adminMetadata?: AdminMetadata;
 	// We omit schema here because we will build it from your entities + schema extensions.
 	apolloServerOptions?: Omit<ApolloServerOptionsWithStaticSchema<any>, 'schema'>;
+	fastifyOptions?:
+		| FastifyHttp2SecureOptions<any>
+		| FastifyHttp2Options<any>
+		| FastifyHttpsOptions<any>
+		| FastifyHttpOptions<any>;
 	federationSubgraphName?: string;
 	enableFederationTracing?: boolean;
 	graphQLArmorOptions?: GraphQLArmorConfig;
