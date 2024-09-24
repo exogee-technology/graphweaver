@@ -32,7 +32,7 @@
 		"dotenv-cli": "7.4.2",
 		"aws-cdk": "2.159.1",
 		"@exogee/graphweaver": "workspace:*",
-		"@types/node": "22.5.5",
+		"@types/node": "22.6.1",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
 		"typescript": "5.6.2",
