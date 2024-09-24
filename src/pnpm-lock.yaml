@@ -82,10 +82,10 @@ importers:
         version: 6.3.10
       '@mikro-orm/knex':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -263,10 +263,10 @@ importers:
         version: 6.3.10
       '@mikro-orm/knex':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -315,7 +315,7 @@ importers:
         version: 6.3.10
       '@mikro-orm/mysql':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)
       dotenv:
         specifier: 16.4.5
         version: 16.4.5
@@ -345,8 +345,8 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
 
   examples/s3-storage:
     dependencies:
@@ -382,10 +382,10 @@ importers:
         version: 6.3.10
       '@mikro-orm/knex':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)(pg@8.13.0)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -440,10 +440,10 @@ importers:
         version: 6.3.10
       '@mikro-orm/knex':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -555,8 +555,8 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
 
   packages/admin-ui:
     dependencies:
@@ -605,7 +605,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@5.4.6)
+        version: 4.3.1(vite@5.4.7)
       esbuild:
         specifier: 0.23.1
         version: 0.23.1
@@ -619,11 +619,11 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.6.2)(vite@5.4.6)
+        version: 4.2.0(typescript@5.6.2)(vite@5.4.7)
 
   packages/admin-ui-components:
     dependencies:
@@ -710,11 +710,11 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.6.2)(vite@5.4.6)
+        version: 4.2.0(typescript@5.6.2)(vite@5.4.7)
 
   packages/apollo-client:
     devDependencies:
@@ -868,11 +868,11 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
       vite-plugin-svgr:
         specifier: 4.2.0
-        version: 4.2.0(typescript@5.6.2)(vite@5.4.6)
+        version: 4.2.0(typescript@5.6.2)(vite@5.4.7)
 
   packages/aws-cognito:
     dependencies:
@@ -939,7 +939,7 @@ importers:
         version: 6.15.0
       '@vitejs/plugin-react':
         specifier: 4.3.1
-        version: 4.3.1(vite@5.4.6)
+        version: 4.3.1(vite@5.4.7)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -980,8 +980,8 @@ importers:
         specifier: 14.3.1
         version: 14.3.1
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
@@ -1116,8 +1116,8 @@ importers:
         specifier: 3.3.3
         version: 3.3.3
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
 
   packages/core:
     dependencies:
@@ -1217,7 +1217,7 @@ importers:
         version: 6.3.10
       '@mikro-orm/postgresql':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.10
         version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)
@@ -1322,10 +1322,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)(pg@8.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)
       node-sqlite3-wasm:
         specifier: 0.8.22
         version: 0.8.22
@@ -1384,13 +1384,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)(sqlite3@5.1.7)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)(pg@8.12.0)
       '@mikro-orm/mysql':
         specifier: 6.3.10
         version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.10
-        version: 6.3.10(@mikro-orm/core@6.3.10)
+        version: 6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.10
         version: 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)
@@ -1636,8 +1636,8 @@ importers:
         specifier: 5.6.2
         version: 5.6.2
       vite:
-        specifier: 5.4.6
-        version: 5.4.6(@types/node@22.5.5)
+        specifier: 5.4.7
+        version: 5.4.7(@types/node@22.5.5)
 
   packages/xero:
     dependencies:
@@ -6308,6 +6308,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.3.10(@mikro-orm/core@6.3.10)(mysql2@3.11.2)(pg@8.13.0):
     resolution: {integrity: sha512-8afHDN6PR2k+JbAWFEtguU+EVBcOFQhLl2q/DP0LbGznrwcn8xYGu0wyLps7rmVhM3OZ6UxCykrABo9CYi/Jew==}
@@ -6428,6 +6429,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/knex@6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0)(sqlite3@5.1.7):
     resolution: {integrity: sha512-8afHDN6PR2k+JbAWFEtguU+EVBcOFQhLl2q/DP0LbGznrwcn8xYGu0wyLps7rmVhM3OZ6UxCykrABo9CYi/Jew==}
@@ -6479,6 +6481,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/mysql@6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0):
     resolution: {integrity: sha512-Q/CZimVerAnnSpdCgB5FpiJ5oFWT5xpcUvsCJL1P2Jko7zjxkvvdOK8sxG30lsDl6R2t4KrwrXOoETLiInEPXA==}
@@ -6495,30 +6498,6 @@ packages:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    dev: false
-
-  /@mikro-orm/postgresql@6.3.10(@mikro-orm/core@6.3.10):
-    resolution: {integrity: sha512-Qy3myNy3Tsv4/T1JRbKz10TzHSkyvpUEzlm2K3RPr3a0nolN3PIuFpmxArCwMhzk6JwcWtla2S+HkGOMKXbCZA==}
-    engines: {node: '>= 18.12.0'}
-    peerDependencies:
-      '@mikro-orm/core': 6.3.10
-    dependencies:
-      '@mikro-orm/core': 6.3.10
-      '@mikro-orm/knex': 6.3.10(@mikro-orm/core@6.3.10)(pg@8.12.0)(sqlite3@5.1.7)
-      pg: 8.12.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -6572,6 +6551,7 @@ packages:
       - supports-color
       - tedious
     dev: false
+    optional: true
 
   /@mikro-orm/sqlite@6.3.10(@mikro-orm/core@6.3.10)(pg@8.13.0):
     resolution: {integrity: sha512-boOlgwjQLY5+lMrqTAoGaIEuqqK2SB8c6mcESVQtuD04JWNir00Xj/9EUwxWfuMfmFCX1dV6tESL/7yNfbTYUw==}
@@ -9346,7 +9326,7 @@ packages:
       - supports-color
     dev: false
 
-  /@vitejs/plugin-react@4.3.1(vite@5.4.6):
+  /@vitejs/plugin-react@4.3.1(vite@5.4.7):
     resolution: {integrity: sha512-m/V2syj5CuVnaxcUJOQRel/Wr31FFXRFlnOoq1TVtkCxsY5veGMTEmpWHndrhB2U8ScHtCQB1e+4hWYExQc6Lg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -9357,7 +9337,7 @@ packages:
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.25.2)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.6(@types/node@22.5.5)
+      vite: 5.4.7(@types/node@22.5.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -9370,7 +9350,7 @@ packages:
       tinyrainbow: 1.2.0
     dev: true
 
-  /@vitest/mocker@2.1.1(@vitest/spy@2.1.1)(vite@5.4.6):
+  /@vitest/mocker@2.1.1(@vitest/spy@2.1.1)(vite@5.4.7):
     resolution: {integrity: sha512-LNN5VwOEdJqCmJ/2XJBywB11DLlkbY0ooDJW3uRX5cZyYCrc4PI/ePX0iQhE3BiEGiQmK4GE7Q/PqCkkaiPnrA==}
     peerDependencies:
       '@vitest/spy': 2.1.1
@@ -9385,7 +9365,7 @@ packages:
       '@vitest/spy': 2.1.1
       estree-walker: 3.0.3
       magic-string: 0.30.11
-      vite: 5.4.6(@types/node@22.5.5)
+      vite: 5.4.7(@types/node@22.5.5)
     dev: true
 
   /@vitest/pretty-format@2.1.1:
@@ -14268,6 +14248,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(mysql2@3.11.2)(pg@8.13.0):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -14460,6 +14441,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: false
+    optional: true
 
   /knex@3.1.0(pg@8.13.0)(sqlite3@5.1.7):
     resolution: {integrity: sha512-GLoII6hR0c4ti243gMs5/1Rb3B+AjwMOfjYm97pu0FOQa7JH56hgBxYf5WK2525ceSbBY1cjeZ9yk99GPMB6Kw==}
@@ -18209,7 +18191,7 @@ packages:
       cac: 6.7.14
       debug: 4.3.6
       pathe: 1.1.2
-      vite: 5.4.6(@types/node@22.5.5)
+      vite: 5.4.7(@types/node@22.5.5)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -18222,7 +18204,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-svgr@4.2.0(typescript@5.6.2)(vite@5.4.6):
+  /vite-plugin-svgr@4.2.0(typescript@5.6.2)(vite@5.4.7):
     resolution: {integrity: sha512-SC7+FfVtNQk7So0XMjrrtLAbEC8qjFPifyD7+fs/E6aaNdVde6umlVVh0QuwDLdOMu7vp5RiGFsB70nj5yo0XA==}
     peerDependencies:
       vite: ^2.6.0 || 3 || 4 || 5
@@ -18230,15 +18212,15 @@ packages:
       '@rollup/pluginutils': 5.1.0
       '@svgr/core': 8.1.0(typescript@5.6.2)
       '@svgr/plugin-jsx': 8.1.0(@svgr/core@8.1.0)
-      vite: 5.4.6(@types/node@22.5.5)
+      vite: 5.4.7(@types/node@22.5.5)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - typescript
     dev: true
 
-  /vite@5.4.6(@types/node@22.5.5):
-    resolution: {integrity: sha512-IeL5f8OO5nylsgzd9tq4qD2QqI0k2CQLGrWD0rCN0EQJZpBK5vJAx0I+GDkMOXxQX/OfFHMuLIx6ddAxGX/k+Q==}
+  /vite@5.4.7(@types/node@22.5.5):
+    resolution: {integrity: sha512-5l2zxqMEPVENgvzTuBpHer2awaetimj2BGkhBPdnwKbPNOlHsODU+oiazEZzLK7KhAnOrO+XGYJYn4ZlUhDtDQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -18302,7 +18284,7 @@ packages:
     dependencies:
       '@types/node': 22.5.5
       '@vitest/expect': 2.1.1
-      '@vitest/mocker': 2.1.1(@vitest/spy@2.1.1)(vite@5.4.6)
+      '@vitest/mocker': 2.1.1(@vitest/spy@2.1.1)(vite@5.4.7)
       '@vitest/pretty-format': 2.1.1
       '@vitest/runner': 2.1.1
       '@vitest/snapshot': 2.1.1
@@ -18317,7 +18299,7 @@ packages:
       tinyexec: 0.3.0
       tinypool: 1.0.1
       tinyrainbow: 1.2.0
-      vite: 5.4.6(@types/node@22.5.5)
+      vite: 5.4.7(@types/node@22.5.5)
       vite-node: 2.1.1(@types/node@22.5.5)
       why-is-node-running: 2.3.0
     transitivePeerDependencies:
