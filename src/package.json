@@ -37,14 +37,14 @@
 	"devDependencies": {
 		"@eslint/js": "9.11.0",
 		"concurrently": "9.0.1",
-		"eslint": "9.10.0",
+		"eslint": "9.11.0",
 		"eslint-config-prettier": "9.1.0",
-		"eslint-plugin-oxlint": "0.9.6",
+		"eslint-plugin-oxlint": "0.9.7",
 		"globals": "15.9.0",
 		"prettier": "3.3.3",
 		"turbo": "2.1.2",
 		"typescript": "5.6.2",
-		"typescript-eslint": "8.6.0"
+		"typescript-eslint": "8.7.0"
 	},
 	"pnpm": {
 		"overrides": {
