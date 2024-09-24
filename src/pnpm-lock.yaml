@@ -977,8 +977,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0
       serverless-offline:
-        specifier: 14.3.1
-        version: 14.3.1
+        specifier: 14.3.2
+        version: 14.3.2
       vite:
         specifier: 5.4.7
         version: 5.4.7(@types/node@22.5.5)
@@ -17009,8 +17009,8 @@ packages:
       - supports-color
     dev: false
 
-  /serverless-offline@14.3.1:
-    resolution: {integrity: sha512-v5PyNV1874kB4yD0GzcNP9QCSDbo8kp5p0XFDvfQZ/viVL3l18BhncA2SU861QZFSfMiFd/Lxj24g9UP/kJqxg==}
+  /serverless-offline@14.3.2:
+    resolution: {integrity: sha512-+stI4DJ9YAy8JDU8f8rvsJUEw9X6sDyAmjPXt/1Z+pjWt278RZmpI77prz0X/O+4GUKAx4dBRGQmHxjMbT3vDg==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       serverless: ^4.0.0
@@ -17040,7 +17040,7 @@ packages:
       node-schedule: 2.1.1
       p-memoize: 7.1.1
       tree-kill: 1.2.2
-      tsx: 4.19.0
+      tsx: 4.19.1
       velocityjs: 2.0.6
       ws: 8.18.0
     transitivePeerDependencies:
@@ -17833,17 +17833,6 @@ packages:
   /tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
-  /tsx@4.19.0:
-    resolution: {integrity: sha512-bV30kM7bsLZKZIOCHeMNVMJ32/LuJzLVajkQI/qf92J2Qr08ueLQvW00PUZGiuLPP760UINwupgUj8qrSCPUKg==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
-    dependencies:
-      esbuild: 0.23.1
-      get-tsconfig: 4.7.6
-    optionalDependencies:
-      fsevents: 2.3.3
-    dev: false
-
   /tsx@4.19.1:
     resolution: {integrity: sha512-0flMz1lh74BR4wOvBjuh9olbnwqCPc35OOlfyzHba0Dc+QNUeWX/Gq2YTbnwcWPO3BMd8fkzRVrHcsR+a7z7rA==}
     engines: {node: '>=18.0.0'}
@@ -17853,7 +17842,6 @@ packages:
       get-tsconfig: 4.7.6
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
