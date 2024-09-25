@@ -1107,8 +1107,8 @@ importers:
         version: 4.17.21
     devDependencies:
       '@types/lodash':
-        specifier: 4.17.7
-        version: 4.17.7
+        specifier: 4.17.9
+        version: 4.17.9
       '@types/node':
         specifier: 22.5.5
         version: 22.5.5
@@ -1488,8 +1488,8 @@ importers:
         version: 3.5.0
     devDependencies:
       '@types/lodash':
-        specifier: 4.17.7
-        version: 4.17.7
+        specifier: 4.17.9
+        version: 4.17.9
       '@types/luxon':
         specifier: 3.4.2
         version: 3.4.2
@@ -9165,8 +9165,8 @@ packages:
       '@types/node': 22.5.5
     dev: false
 
-  /@types/lodash@4.17.7:
-    resolution: {integrity: sha512-8wTvZawATi/lsmNu10/j2hk1KEP0IvjubqPE3cu1Xz7xfXXt5oCq3SNUz4fMIP4XGF9Ky+Ue2tBA3hcS7LSBlA==}
+  /@types/lodash@4.17.9:
+    resolution: {integrity: sha512-w9iWudx1XWOHW5lQRS9iKpK/XuRhnN+0T7HvdCCd802FYkT1AMTnxndJHGrNJwRoRHkslGr4S29tjm1cT7x/7w==}
     dev: true
 
   /@types/long@4.0.2:
