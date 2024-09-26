@@ -35,7 +35,7 @@
 		"react-router-dom": "6.26.2"
 	},
 	"devDependencies": {
-		"@types/node": "22.7.0",
+		"@types/node": "22.7.3",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
 		"prettier": "3.3.3",
