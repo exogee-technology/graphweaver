@@ -31,7 +31,7 @@
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.6.3",
-		"validate-npm-package-name": "5.0.1",
+		"validate-npm-package-name": "6.0.0",
 		"yargs": "17.7.2"
 	},
 	"devDependencies": {
