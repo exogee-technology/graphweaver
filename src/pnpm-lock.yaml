@@ -30,8 +30,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(eslint@9.11.1)
       eslint-plugin-oxlint:
-        specifier: 0.9.8
-        version: 0.9.8
+        specifier: 0.9.9
+        version: 0.9.9
       globals:
         specifier: 15.9.0
         version: 15.9.0
@@ -11887,8 +11887,8 @@ packages:
       eslint: 9.11.1
     dev: true
 
-  /eslint-plugin-oxlint@0.9.8:
-    resolution: {integrity: sha512-SR6tUbnjXkx6BS5COhqcq9cAW4i1HnHhzZpwpQT0EOI+01O0Yc5FnqrN11xXxu/FKprDIOYT7TEpg57LRNwXUA==}
+  /eslint-plugin-oxlint@0.9.9:
+    resolution: {integrity: sha512-X5LYXFWGFvLlEXuMEggZJdQH6qWGkPRYh09C9Kv3Cq9eKmBjPnKJ8iyzmdiPsQ5N4Jh5q2O+HMf1SrYVp0NtVA==}
     dependencies:
       scule: 1.3.0
     dev: true
