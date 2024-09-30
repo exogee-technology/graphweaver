@@ -3,14 +3,14 @@
 	"description": "Graphweaver: Quickly build a GraphQL server which connects to all your datasources",
 	"private": true,
 	"license": "Apache-2.0",
-	"packageManager": "pnpm@8.15.8",
+	"packageManager": "pnpm@9.11.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/exogee-technology/graphweaver.git"
 	},
 	"engines": {
 		"node": ">=18",
-		"pnpm": ">=8"
+		"pnpm": ">=9"
 	},
 	"scripts": {
 		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" \"pnpm build:examples\"",
@@ -50,11 +50,11 @@
 		"overrides": {
 			"d3-color": "3.1.0",
 			"@babel/traverse": "7.23.2",
-			"@mikro-orm/core": "6.3.10",
-			"@mikro-orm/knex": "6.3.10",
-			"@mikro-orm/postgresql": "6.3.10",
-			"@mikro-orm/mysql": "6.3.10",
-			"@mikro-orm/sqlite": "6.3.10"
+			"@mikro-orm/core": "6.3.11",
+			"@mikro-orm/knex": "6.3.11",
+			"@mikro-orm/postgresql": "6.3.11",
+			"@mikro-orm/mysql": "6.3.11",
+			"@mikro-orm/sqlite": "6.3.11"
 		},
 		"peerDependencyRules": {
 			"ignoreMissing": [
