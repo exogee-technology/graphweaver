@@ -43,7 +43,7 @@
 	"devDependencies": {
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@simplewebauthn/types": "10.0.0",
-		"@types/react": "18.3.9",
+		"@types/react": "18.3.11",
 		"@types/react-dom": "18.3.0",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
