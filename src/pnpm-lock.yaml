@@ -1296,8 +1296,8 @@ importers:
         version: 0.0.0
     devDependencies:
       '@types/k6':
-        specifier: 0.53.2
-        version: 0.53.2
+        specifier: 0.54.1
+        version: 0.54.1
       typescript:
         specifier: 5.6.2
         version: 5.6.2
@@ -5033,8 +5033,8 @@ packages:
   '@types/jsonwebtoken@9.0.7':
     resolution: {integrity: sha512-ugo316mmTYBl2g81zDFnZ7cfxlut3o+/EQdaP7J8QN2kY6lJ22hmQYCK5EHcJHbrW+dkCGSCPgbG8JtYj6qSrg==}
 
-  '@types/k6@0.53.2':
-    resolution: {integrity: sha512-TxFJbeSfD/RfQe+GeMbpdwiOOySRTj3vfHvcA4yoLQ3wvGPjyppCqmyKXgktf3535T+YAc41bB7GkhuCPRmfUg==}
+  '@types/k6@0.54.1':
+    resolution: {integrity: sha512-ezTMhuWr3TZIMOqAv51/4rD5T4FE1pSryrh5BCgxsniuqxbi5jQ3YEiOlO9C1+LvJcliC2byyd2Cw6cnUY7CLg==}
 
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
@@ -14907,7 +14907,7 @@ snapshots:
     dependencies:
       '@types/node': 22.7.4
 
-  '@types/k6@0.53.2': {}
+  '@types/k6@0.54.1': {}
 
   '@types/keyv@3.1.4':
     dependencies:
