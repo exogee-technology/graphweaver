@@ -604,8 +604,8 @@ importers:
         specifier: 3.16.3
         version: 3.16.3
       '@vitejs/plugin-react':
-        specifier: 4.3.1
-        version: 4.3.1(vite@5.4.8(@types/node@22.7.4)(lightningcss@1.27.0))
+        specifier: 4.3.2
+        version: 4.3.2(vite@5.4.8(@types/node@22.7.4)(lightningcss@1.27.0))
       esbuild:
         specifier: 0.24.0
         version: 0.24.0
@@ -938,8 +938,8 @@ importers:
         specifier: 6.15.0
         version: 6.15.0(encoding@0.1.13)
       '@vitejs/plugin-react':
-        specifier: 4.3.1
-        version: 4.3.1(vite@5.4.8(@types/node@22.7.4)(lightningcss@1.27.0))
+        specifier: 4.3.2
+        version: 4.3.2(vite@5.4.8(@types/node@22.7.4)(lightningcss@1.27.0))
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -5233,8 +5233,8 @@ packages:
       ethers: ^5
       react: '*'
 
-  '@vitejs/plugin-react@4.3.1':
-    resolution: {integrity: sha512-m/V2syj5CuVnaxcUJOQRel/Wr31FFXRFlnOoq1TVtkCxsY5veGMTEmpWHndrhB2U8ScHtCQB1e+4hWYExQc6Lg==}
+  '@vitejs/plugin-react@4.3.2':
+    resolution: {integrity: sha512-hieu+o05v4glEBucTcKMK3dlES0OeJlD9YVOAPraVMOInBCwzumaIFiUjr4bHK7NPgnAHgiskUoceKercrN8vg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       vite: ^4.2.0 || ^5.0.0
@@ -15142,7 +15142,7 @@ snapshots:
       - node-fetch
       - supports-color
 
-  '@vitejs/plugin-react@4.3.1(vite@5.4.8(@types/node@22.7.4)(lightningcss@1.27.0))':
+  '@vitejs/plugin-react@4.3.2(vite@5.4.8(@types/node@22.7.4)(lightningcss@1.27.0))':
     dependencies:
       '@babel/core': 7.25.2
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.25.2)
