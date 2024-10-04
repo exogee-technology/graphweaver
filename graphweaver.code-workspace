@@ -21,6 +21,10 @@
       "path": "src/examples/federation"
     },
     {
+      "name": "➡️ Example: Microsoft Entra",
+      "path": "src/examples/microsoft-entra"
+    },
+    {
       "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
     },

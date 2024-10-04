@@ -6,8 +6,8 @@ import {
 	ReadHookParams,
 	hookManagerMap,
 } from '@exogee/graphweaver';
-import { AccessControlList, AccessType, AclMap, AuthorizationContext } from '..';
-
+import { AccessType, AccessControlList, AuthorizationContext } from '../types';
+import { AclMap } from '../helper-functions';
 import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeCreateOrUpdate } from './hooks/acl';
 
 export const registerAccessControlListHook = <G, TContext extends AuthorizationContext>(

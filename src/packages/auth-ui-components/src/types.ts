@@ -1,13 +1,14 @@
 export enum AuthenticationMethod {
-	PASSWORD = 'pwd',
 	MAGIC_LINK = 'mgl',
 	ONE_TIME_PASSWORD = 'otp',
-	WEB3 = 'wb3',
 	PASSKEY = 'pky',
+	PASSWORD = 'pwd',
+	WEB3 = 'wb3',
 }
 
 export enum PrimaryAuthMethod {
-	PASSWORD = 'PASSWORD',
-	MAGIC_LINK = 'MAGIC_LINK',
 	AUTH_ZERO = 'AUTH_ZERO',
+	MAGIC_LINK = 'MAGIC_LINK',
+	MICROSOFT_ENTRA = 'MICROSOFT_ENTRA',
+	PASSWORD = 'PASSWORD',
 }

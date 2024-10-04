@@ -2,6 +2,7 @@ import {
 	Auth0,
 	ForgottenPassword,
 	MagicLinkLogin,
+	MicrosoftEntra,
 	PasswordLogin,
 	ResetPassword,
 } from './components';
@@ -10,12 +11,14 @@ import { PrimaryAuthMethod } from './types';
 
 const mapComponent = (method: PrimaryAuthMethod) => {
 	switch (method) {
-		case PrimaryAuthMethod.PASSWORD:
-			return <PasswordLogin />;
-		case PrimaryAuthMethod.MAGIC_LINK:
-			return <MagicLinkLogin />;
 		case PrimaryAuthMethod.AUTH_ZERO:
 			return <Auth0 />;
+		case PrimaryAuthMethod.MAGIC_LINK:
+			return <MagicLinkLogin />;
+		case PrimaryAuthMethod.MICROSOFT_ENTRA:
+			return <MicrosoftEntra />;
+		case PrimaryAuthMethod.PASSWORD:
+			return <PasswordLogin />;
 		default:
 			throw new Error(`Unknown primary auth method: ${method}`);
 	}

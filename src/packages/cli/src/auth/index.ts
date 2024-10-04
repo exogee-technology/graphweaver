@@ -11,7 +11,7 @@ interface InitAuthOptions extends Partial<DatabaseOptions> {
 export const initAuth = async ({
 	method,
 	source,
-	database,
+	dbName,
 	host,
 	port,
 	password,
@@ -25,7 +25,7 @@ export const initAuth = async ({
 		}
 		databaseOptions = await promptForDatabaseOptions({
 			source,
-			database,
+			dbName,
 			host,
 			port,
 			password,
