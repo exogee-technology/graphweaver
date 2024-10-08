@@ -1,23 +1,15 @@
+import { useCallback } from 'react';
 import { Logout } from '../../logout';
-import { useMsal } from '@azure/msal-react';
-import { MicrosoftEntraProvider } from '../client';
+import { publicClientApplication } from '../client';
 
-type MicrosoftEntraLogoutProps = {
+export interface MicrosoftEntraLogoutProps {
 	redirectTo?: string;
-};
+}
 
-const LogoutComponent = ({ redirectTo }: MicrosoftEntraLogoutProps) => {
-	const { instance } = useMsal();
-
-	const handleLogout = async () => {
-		await instance.logout({ postLogoutRedirectUri: redirectTo });
-	};
+export const MicrosoftEntraLogout = ({ redirectTo }: MicrosoftEntraLogoutProps) => {
+	const handleLogout = useCallback(async () => {
+		await publicClientApplication.logoutRedirect({ postLogoutRedirectUri: redirectTo });
+	}, []);
 
 	return <Logout onLogout={handleLogout} />;
 };
-
-export const MicrosoftEntraLogout = ({ redirectTo }: MicrosoftEntraLogoutProps) => (
-	<MicrosoftEntraProvider>
-		<LogoutComponent redirectTo={redirectTo} />
-	</MicrosoftEntraProvider>
-);

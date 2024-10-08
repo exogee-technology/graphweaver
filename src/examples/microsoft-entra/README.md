@@ -1,6 +1,6 @@
-# Auth Zero Example Graphweaver Project
+# Microsoft Entra Example Graphweaver Project
 
-This example uses the Sqlite example as a base and adds Auth0 Login.
+This example uses the Sqlite example as a base and adds Microsoft Entra Login.
 
 ## Making Database changes
 
@@ -8,21 +8,35 @@ To create a new sqlite database from the sql found in `./databases/database.sql`
 
 `cat databases/database.sql | sqlite3 databases/database.sqlite`
 
-## Auth0 Configuration
+## Microsoft Entra Configuration
 
-In order to run this example, head over to Auth0 and create a new application:
+### Create App Registration
 
-https://manage.auth0.com/dashboard/us/applications
+In order to run this example, head over to Entra and create a new application:
+https://entra.microsoft.com/#view/Microsoft_AAD_RegisteredApps/ApplicationsListBlade/quickStartType~/null/sourceType/Microsoft_AAD_IAM
 
-Once you have created the application, make sure to set the below settings:
+Configure the values as follows:
 
-Allowed Callback Urls: http://localhost:9000
-Allowed Logout Urls: http://localhost:9000
-Allowed Web Origins: http://localhost:9000
+- Name: [What you'd like to call this application]
+- Redirect URI: Single-page application (SPA) platform, http://localhost:9000/auth/login
 
-In the Global Auth0 settings, make sure to have a default Audience:
+### Fix Invalid JWTs
 
-https://manage.auth0.com/dashboard/us/<AUTH_ZERO_DOMAIN>/tenant/general
+Sadly, Entra is not compliant with the OIDC specification by default. They add a `nonce` claim to the
+JWT header, which means the JWT no longer passes signature verification. You can read more about it here: https://xsreality.medium.com/making-azure-ad-oidc-compliant-5734b70c43ff
+
+To fix the JWTs so they'll pass verification, we'll need to add a custom claim. This makes it so that when users log in, the token given by Microsoft is standards compliant.
+
+1. Select the "Expose an API" tab.
+2. Click "Add a scope"
+3. If the control panel asks you to set an Application ID URI, accept the default by clicking "Save and continue"
+4. Choose a Scope name. This can be anything. If you're unsure, you can use `Graphweaver.Login`.
+5. Under "Who can consent?" select "Admins and users"
+6. Admin consent display name: "Login"
+7. Admin consent description: "Allows you to log into the application"
+8. Leave "State" set to the default of "Enabled"
+
+Save the custom claim and copy the Scope identifier. It will start with `api://[your application uuid/guid]`. You'll need it for the `.env` file shortly.
 
 Lastly, setup the following env vars:
 

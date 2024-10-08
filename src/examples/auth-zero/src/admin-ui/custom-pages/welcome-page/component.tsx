@@ -20,7 +20,7 @@ export const WelcomePage = () => (
 		<Spacer height={10} />
 		<p>The main components that you need on your frontend are:</p>
 		<Spacer height={10} />
-		<ul>
+		<ul className={styles.list}>
 			<li>
 				Code that recognises the X-Auth-Redirect header and follows it when sent from the backend.
 			</li>
@@ -34,7 +34,7 @@ export const WelcomePage = () => (
 		<Spacer height={10} />
 		<p>The main components that you need on your backend are:</p>
 		<Spacer height={10} />
-		<ul>
+		<ul className={styles.list}>
 			<li>
 				Code that will return the X-Auth-Redirect header to the frontend when the user is not
 				authenticated.

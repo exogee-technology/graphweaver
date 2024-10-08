@@ -82,7 +82,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -281,7 +281,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -321,7 +321,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/mysql':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -440,10 +440,10 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -876,9 +876,6 @@ importers:
       '@azure/msal-browser':
         specifier: 3.25.0
         version: 3.25.0
-      '@azure/msal-react':
-        specifier: 2.1.1
-        version: 2.1.1(@azure/msal-browser@3.25.0)(react@18.3.1)
       '@simplewebauthn/browser':
         specifier: 10.0.0
         version: 10.0.0
@@ -1284,7 +1281,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -1389,7 +1386,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -1451,13 +1448,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/mysql':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -2096,13 +2093,6 @@ packages:
   '@azure/msal-common@14.15.0':
     resolution: {integrity: sha512-ImAQHxmpMneJ/4S8BRFhjt1MZ3bppmpRPYYNyzeQPeFN288YKbb8TmmISQEbtfkQ1BPASvYZU5doIZOPBAqENQ==}
     engines: {node: '>=0.8.0'}
-
-  '@azure/msal-react@2.1.1':
-    resolution: {integrity: sha512-XOBgAR0fbkfUUkQZyhIlwAZiy8WIzNWxAAFacJgyL8LiE2Y5pgM9var9X0Jh7Oz/1Oy5lhTQDtCYWSMHmTZ84Q==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      '@azure/msal-browser': ^3.25.0
-      react: ^16.8.0 || ^17 || ^18
 
   '@babel/code-frame@7.24.7':
     resolution: {integrity: sha512-BcYH1CVJBO9tvyIZ2jVeXgSIMvGZ2FDRvDdOIVQyuklNKSsx+eppDEBq/g47Ayw+RqNFE+URvOShmf+f/qwAlA==}
@@ -11116,11 +11106,6 @@ snapshots:
 
   '@azure/msal-common@14.15.0': {}
 
-  '@azure/msal-react@2.1.1(@azure/msal-browser@3.25.0)(react@18.3.1)':
-    dependencies:
-      '@azure/msal-browser': 3.25.0
-      react: 18.3.1
-
   '@babel/code-frame@7.24.7':
     dependencies:
       '@babel/highlight': 7.24.7
@@ -13436,25 +13421,6 @@ snapshots:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/postgresql@6.3.12(@mikro-orm/core@6.3.12)':
-    dependencies:
-      '@mikro-orm/core': 6.3.12
-      '@mikro-orm/knex': 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
-      pg: 8.13.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
