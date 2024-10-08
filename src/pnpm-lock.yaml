@@ -82,7 +82,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -281,7 +281,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -321,7 +321,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/mysql':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -440,10 +440,10 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -987,8 +987,8 @@ importers:
         specifier: 3.0.0
         version: 3.0.0(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-codegen/typescript':
-        specifier: 4.0.9
-        version: 4.0.9(encoding@0.1.13)(graphql@16.9.0)
+        specifier: 4.1.0
+        version: 4.1.0(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-codegen/typescript-operations':
         specifier: 4.2.3
         version: 4.2.3(encoding@0.1.13)(graphql@16.9.0)
@@ -1281,7 +1281,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -1386,7 +1386,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -1448,13 +1448,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/mysql':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -3371,8 +3371,9 @@ packages:
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
-  '@graphql-codegen/typescript@4.0.9':
-    resolution: {integrity: sha512-0O35DMR4d/ctuHL1Zo6mRUUzp0BoszKfeWsa6sCm/g70+S98+hEfTwZNDkQHylLxapiyjssF9uw/F+sXqejqLw==}
+  '@graphql-codegen/typescript@4.1.0':
+    resolution: {integrity: sha512-/fS53Nh6U6c58GTOxqfyKTLQfQv36P8II/vPw/fg0cdcWbALhRPls69P8vXUWjrElmLKzCrdusBWPp/r+AKUBQ==}
+    engines: {node: '>=16'}
     peerDependencies:
       graphql: ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
@@ -3383,6 +3384,12 @@ packages:
 
   '@graphql-codegen/visitor-plugin-common@5.3.1':
     resolution: {integrity: sha512-MktoBdNZhSmugiDjmFl1z6rEUUaqyxtFJYWnDilE7onkPgyw//O0M+TuPBJPBWdyV6J2ond0Hdqtq+rkghgSIQ==}
+    peerDependencies:
+      graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
+
+  '@graphql-codegen/visitor-plugin-common@5.4.0':
+    resolution: {integrity: sha512-tL7hOrO+4MiNfDiHewhRQCiH9GTAh0M9Y/BZxYGGEdnrfGgqK5pCxtjq7EY/L19VGIyU7hhzYTQ0r1HzEbB4Jw==}
+    engines: {node: '>=16'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
 
@@ -12385,7 +12392,7 @@ snapshots:
       '@graphql-codegen/gql-tag-operations': 4.0.9(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-codegen/typed-document-node': 5.0.9(encoding@0.1.13)(graphql@16.9.0)
-      '@graphql-codegen/typescript': 4.0.9(encoding@0.1.13)(graphql@16.9.0)
+      '@graphql-codegen/typescript': 4.1.0(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-codegen/typescript-operations': 4.2.3(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-codegen/visitor-plugin-common': 5.3.1(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-tools/documents': 1.0.1(graphql@16.9.0)
@@ -12482,7 +12489,7 @@ snapshots:
   '@graphql-codegen/typescript-operations@4.2.3(encoding@0.1.13)(graphql@16.9.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
-      '@graphql-codegen/typescript': 4.0.9(encoding@0.1.13)(graphql@16.9.0)
+      '@graphql-codegen/typescript': 4.1.0(encoding@0.1.13)(graphql@16.9.0)
       '@graphql-codegen/visitor-plugin-common': 5.3.1(encoding@0.1.13)(graphql@16.9.0)
       auto-bind: 4.0.0
       graphql: 16.9.0
@@ -12503,11 +12510,11 @@ snapshots:
       - encoding
       - supports-color
 
-  '@graphql-codegen/typescript@4.0.9(encoding@0.1.13)(graphql@16.9.0)':
+  '@graphql-codegen/typescript@4.1.0(encoding@0.1.13)(graphql@16.9.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-codegen/schema-ast': 4.1.0(graphql@16.9.0)
-      '@graphql-codegen/visitor-plugin-common': 5.3.1(encoding@0.1.13)(graphql@16.9.0)
+      '@graphql-codegen/visitor-plugin-common': 5.4.0(encoding@0.1.13)(graphql@16.9.0)
       auto-bind: 4.0.0
       graphql: 16.9.0
       tslib: 2.6.3
@@ -12533,6 +12540,23 @@ snapshots:
       - supports-color
 
   '@graphql-codegen/visitor-plugin-common@5.3.1(encoding@0.1.13)(graphql@16.9.0)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
+      '@graphql-tools/optimize': 2.0.0(graphql@16.9.0)
+      '@graphql-tools/relay-operation-optimizer': 7.0.1(encoding@0.1.13)(graphql@16.9.0)
+      '@graphql-tools/utils': 10.5.4(graphql@16.9.0)
+      auto-bind: 4.0.0
+      change-case-all: 1.0.15
+      dependency-graph: 0.11.0
+      graphql: 16.9.0
+      graphql-tag: 2.12.6(graphql@16.9.0)
+      parse-filepath: 1.0.2
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@graphql-codegen/visitor-plugin-common@5.4.0(encoding@0.1.13)(graphql@16.9.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.0.4(graphql@16.9.0)
       '@graphql-tools/optimize': 2.0.0(graphql@16.9.0)
@@ -13424,25 +13448,6 @@ snapshots:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/postgresql@6.3.12(@mikro-orm/core@6.3.12)':
-    dependencies:
-      '@mikro-orm/core': 6.3.12
-      '@mikro-orm/knex': 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
-      pg: 8.13.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
