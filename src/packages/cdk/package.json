@@ -24,13 +24,13 @@
 		"build:docker": "docker build -f src/docker/Dockerfile ../../examples/s3-storage"
 	},
 	"dependencies": {
-		"aws-cdk-lib": "2.160.0",
+		"aws-cdk-lib": "2.161.1",
 		"constructs": "10.3.0"
 	},
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
 		"dotenv-cli": "7.4.2",
-		"aws-cdk": "2.160.0",
+		"aws-cdk": "2.161.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@types/node": "22.7.4",
 		"esbuild": "0.24.0",
