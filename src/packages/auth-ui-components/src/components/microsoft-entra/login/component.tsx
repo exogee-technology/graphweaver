@@ -43,12 +43,16 @@ export const MicrosoftEntra = () => {
 			await publicClientApplication.loginRedirect({
 				scopes,
 
-				// Prompt: 'login' will ensure the user can select which account they want to sign in to, and when they log out
-				// they won't be transparently logged back in without asking. If there's a better value for this setting, we'd be
-				// happy to consider it, but as far as we can tell this is the only way to get the logout function to behave as
-				// a user would expect it to.
-				// https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2547
-				prompt: 'login',
+				// The 'select_account' prompt value will ensure the user can select which account they want to sign in to, and
+				// when they log out they won't be transparently logged back in without asking. It does not force them to re-enter
+				// their credentials like prompt: 'login' would. If there's a better value for this setting, we'd be happy to
+				// consider it, but as far as we can tell this is the only way to get the logout function to behave as a user
+				// would expect it to. If we allow silent login, then when they log out, they go back to "not authed" which then
+				// redirects them back to the Entra login page, which then silently logs them back in, which feels like you can't log out.
+				//
+				// Supported values: https://learn.microsoft.com/en-us/entra/identity-platform/msal-js-prompt-behavior
+				// Issue with the logout behaviour: https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/2547
+				prompt: 'select_account',
 			});
 		} catch (error: any) {
 			if (error.message) setError(error.message);
