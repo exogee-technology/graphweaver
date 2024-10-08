@@ -41,8 +41,15 @@ Save the custom claim and copy the Scope identifier. It will start with `api://[
 Lastly, setup the following env vars:
 
 ```
-AUTH_JWKS_URI="https://<THE_AUTH0_DOMAIN>/.well-known/jwks.json"
+AUTH_BASE_URI="http://localhost:9000"
+AUTH_WHITELIST_DOMAINS="localhost"
 AUTH_JWT_ALGORITHM="RS256"
-VITE_AUTH_ZERO_DOMAIN=<THE_AUTH0_DOMAIN>
-VITE_AUTH_CLIENT_ID=<THE_AUTH0_CLIENT_ID>
+VITE_MICROSOFT_ENTRA_CLIENT_ID="YOUR_ENTRA_CLIENT_ID"
+
+# If you're using the `common` tenant, do this:
+AUTH_JWKS_URI="https://login.microsoftonline.com/common/discovery/v2.0/keys?appId=[YOUR_CLIENT_ID]"
+
+# Otherwise, do this:
+# AUTH_JWKS_URI="https://login.microsoftonline.com/[TENANT_ID]/discovery/v2.0/keys?appId=[YOUR_CLIENT_ID]"
+# VITE_MICROSOFT_ENTRA_TENANT_ID="[TENANT_ID]"
 ```
