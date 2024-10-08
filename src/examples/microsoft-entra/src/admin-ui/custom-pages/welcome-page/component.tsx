@@ -9,13 +9,17 @@ import styles from './styles.module.css';
 export const WelcomePage = () => (
 	<WelcomePageLayout skipPath="/Album">
 		<Spacer height={30} />
-		<h2 className={styles.heading}>Auth0 Example</h2>
+		<h2 className={styles.heading}>Microsoft Entra Example</h2>
 		<Spacer height={30} />
-		<p>This example shows how to use Auth0 as your authentication provider with Graphweaver.</p>
+		<p>
+			This example shows how to use Microsoft Entra as your authentication provider with
+			Graphweaver.
+		</p>
 		<Spacer height={20} />
 		<p>
 			The principles shown here can be used to use any external authentication provider with
-			Graphweaver, but we've built specific components to make it especially easy to use Auth0.
+			Graphweaver, but we've built specific components to make it especially easy to use Microsoft
+			Entra.
 		</p>
 		<Spacer height={10} />
 		<p>The main components that you need on your frontend are:</p>
@@ -24,11 +28,20 @@ export const WelcomePage = () => (
 			<li>
 				Code that recognises the X-Auth-Redirect header and follows it when sent from the backend.
 			</li>
-			<li>A receiving page to get the token back from Auth0.</li>
+			<li>A receiving page to get the token back from Entra.</li>
 			<li>Components to handle login and logout.</li>
 			<li>
 				These are already configured for the Admin UI in this project. You can use the Admin UI
-				components in your project if it suits you, or you can create similar components separately.
+				components in your project if it suits you, or you can create similar components separately
+				that use the{' '}
+				<a href="https://www.npmjs.com/package/@azure/msal-browser" target="_blank">
+					@azure/msal-browser
+				</a>{' '}
+				package directly, or use{' '}
+				<a href="https://www.npmjs.com/package/@azure/msal-react" target="_blank">
+					@azure/msal-react
+				</a>{' '}
+				if you prefer.
 			</li>
 		</ul>
 		<Spacer height={10} />
@@ -47,9 +60,10 @@ export const WelcomePage = () => (
 		</ul>
 		<Spacer height={10} />
 		<p>
-			To get started, copy the .env.example file to just .env, add the values you get from the Auth0
+			To get started, configure your app registration in Azure as per the readme (you need a custom
+			claim!), copy the .env.example file to just .env, add the values you get from the Entra
 			console then run pnpm start. If you're getting a 500 error from your backend, the most likely
-			cause is that you haven't set up the Auth0 values correctly.
+			cause is that you haven't set up the Entra values correctly.
 		</p>
 		<Spacer height={10} />
 		<p>

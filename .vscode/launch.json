@@ -102,6 +102,16 @@
       "cwd": "${workspaceFolder}/src/examples/mailchimp"
     },
     {
+      "name": "Microsoft Entra Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/microsoft-entra"
+    },
+    {
       "name": "MySQL and PostgreSQL Database Example",
       "type": "node",
       "request": "launch",

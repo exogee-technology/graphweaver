@@ -364,8 +364,19 @@ yargs
 					describe: 'Specify the database server user.',
 				}),
 		handler: async ({ method, source, database, host, port, password, user }) => {
-			if (!authMethods.includes(method)) {
+			if (!authMethods.includes(method as (typeof authMethods)[0])) {
 				throw new Error(`Unsupported method: ${method}, please use ${authMethods.join(', ')}`);
+			}
+
+			const { import: importOptions } = config();
+
+			if (importOptions) {
+				if (source === undefined) source = importOptions.source;
+				if (database === undefined) database = importOptions.dbName;
+				if (host === undefined) host = importOptions.host;
+				if (!port) port = importOptions.port;
+				if (user === undefined) user = importOptions.user;
+				if (password === undefined) password = importOptions.password;
 			}
 
 			if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
@@ -375,7 +386,7 @@ yargs
 			await initAuth({
 				method: method as AuthMethod,
 				source: source as Source,
-				database,
+				dbName: database,
 				host,
 				port,
 				password,
