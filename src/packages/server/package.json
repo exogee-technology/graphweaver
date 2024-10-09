@@ -30,7 +30,7 @@
 		"@fastify/cors": "9.0.1",
 		"class-validator": "0.14.1",
 		"decimal.js": "10.4.3",
-		"fastify": "4.28.1",
+		"fastify": "5.0.0",
 		"graphql": "16.9.0",
 		"graphql-deduplicator": "2.0.6"
 	},
