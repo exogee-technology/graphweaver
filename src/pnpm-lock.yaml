@@ -30,8 +30,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(eslint@9.11.1(jiti@1.21.6))
       eslint-plugin-oxlint:
-        specifier: 0.9.9
-        version: 0.9.9
+        specifier: 0.9.10
+        version: 0.9.10
       globals:
         specifier: 15.10.0
         version: 15.10.0
@@ -6565,8 +6565,8 @@ packages:
     peerDependencies:
       eslint: '>=7.0.0'
 
-  eslint-plugin-oxlint@0.9.9:
-    resolution: {integrity: sha512-X5LYXFWGFvLlEXuMEggZJdQH6qWGkPRYh09C9Kv3Cq9eKmBjPnKJ8iyzmdiPsQ5N4Jh5q2O+HMf1SrYVp0NtVA==}
+  eslint-plugin-oxlint@0.9.10:
+    resolution: {integrity: sha512-8AyknsmYBJ/82dNChwUDnR4PmE9jKfNn9W+dQ3buzmrwoTvpSIuho2A/KoaGv6B7Lz0cMaEloR6BGo/a0b/xOw==}
 
   eslint-scope@8.0.2:
     resolution: {integrity: sha512-6E4xmrTw5wtxnLA5wYL3WDfhZ/1bUBGOXV0zQvVRDOtrR8D0p6W7fs3JweNYhwRYeGvd/1CKX2se0/2s7Q/nJA==}
@@ -16712,7 +16712,7 @@ snapshots:
     dependencies:
       eslint: 9.11.1(jiti@1.21.6)
 
-  eslint-plugin-oxlint@0.9.9:
+  eslint-plugin-oxlint@0.9.10:
     dependencies:
       scule: 1.3.0
 
