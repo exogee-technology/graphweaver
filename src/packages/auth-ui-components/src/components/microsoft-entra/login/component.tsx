@@ -58,6 +58,7 @@ export const MicrosoftEntra = () => {
 			// "interaction_in_progress" is a specific error that is expected to be generated when the user is already in the process of logging out.
 			// Everything works fine, so there's no reason to trouble the user with it.
 			if (error.message && error.errorCode !== 'interaction_in_progress') {
+				console.error(error);
 				setError(error.message);
 				setLoading(false);
 			} else if (error.errorCode === 'interaction_in_progress') {
