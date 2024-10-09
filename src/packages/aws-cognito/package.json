@@ -28,8 +28,8 @@
 	},
 	"peerDependencies": {
 		"@exogee/graphweaver": "workspace:*",
-		"graphql": "16.9.0",
-		"graphql-type-json": "0.3.2"
+		"graphql": "^16.9.0",
+		"graphql-type-json": "^0.3.2"
 	},
 	"dependencies": {
 		"@aws-sdk/client-cognito-identity-provider": "3.666.0",
