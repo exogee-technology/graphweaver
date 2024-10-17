@@ -46,7 +46,7 @@
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
 		"tsx": "4.19.1",
-		"typescript": "5.6.2"
+		"typescript": "5.6.3"
 	},
 	"optionalDependencies": {
 		"@mikro-orm/knex": "6.3.12",
