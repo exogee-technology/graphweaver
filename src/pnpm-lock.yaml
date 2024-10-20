@@ -82,7 +82,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -281,7 +281,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -321,7 +321,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/mysql':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -440,10 +440,10 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -804,8 +804,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@simplewebauthn/server':
-        specifier: 10.0.1
-        version: 10.0.1(encoding@0.1.13)
+        specifier: 11.0.0
+        version: 11.0.0(encoding@0.1.13)
       apollo-server-errors:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.9.0)
@@ -838,8 +838,8 @@ importers:
         version: 1.0.6(react@18.3.1)
     devDependencies:
       '@simplewebauthn/types':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 11.0.0
+        version: 11.0.0
       '@types/jsonwebtoken':
         specifier: 9.0.7
         version: 9.0.7
@@ -874,8 +874,8 @@ importers:
         specifier: 3.11.8
         version: 3.11.8(@types/react@18.3.11)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(subscriptions-transport-ws@0.11.0(graphql@16.9.0))
       '@simplewebauthn/browser':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 11.0.0
+        version: 11.0.0
       '@usedapp/core':
         specifier: 1.2.16
         version: 1.2.16(ethers@5.7.2)(node-fetch@3.3.2)(react@18.3.1)
@@ -905,8 +905,8 @@ importers:
         specifier: workspace:*
         version: link:../admin-ui-components
       '@simplewebauthn/types':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 11.0.0
+        version: 11.0.0
       '@types/react':
         specifier: 18.3.11
         version: 18.3.11
@@ -1281,7 +1281,7 @@ importers:
         version: 6.3.12
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -1311,8 +1311,8 @@ importers:
         specifier: 1.48.1
         version: 1.48.1
       '@simplewebauthn/types':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 11.0.0
+        version: 11.0.0
       '@types/jest':
         specifier: 29.5.13
         version: 29.5.13
@@ -1386,7 +1386,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -1448,13 +1448,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)(pg@8.13.0)
       '@mikro-orm/mysql':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
       '@mikro-orm/postgresql':
         specifier: 6.3.12
-        version: 6.3.12(@mikro-orm/core@6.3.12)
+        version: 6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)
       '@mikro-orm/sqlite':
         specifier: 6.3.12
         version: 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)
@@ -4667,15 +4667,15 @@ packages:
     resolution: {integrity: sha512-7eDbqKv/OBd11jjdZjUwFGN8sHWkeUqLeHXHQxQ1azja2IM7WIH+z/aLgzR6LhB3/MINNwtjesDpjGqTMj2JKQ==}
     engines: {node: '>=12.0'}
 
-  '@simplewebauthn/browser@10.0.0':
-    resolution: {integrity: sha512-hG0JMZD+LiLUbpQcAjS4d+t4gbprE/dLYop/CkE01ugU/9sKXflxV5s0DRjdz3uNMFecatRfb4ZLG3XvF8m5zg==}
+  '@simplewebauthn/browser@11.0.0':
+    resolution: {integrity: sha512-KEGCStrl08QC2I561BzxqGiwoknblP6O1YW7jApdXLPtIqZ+vgJYAv8ssLCdm1wD8HGAHd49CJLkUF8X70x/pg==}
 
-  '@simplewebauthn/server@10.0.1':
-    resolution: {integrity: sha512-djNWcRn+H+6zvihBFJSpG3fzb0NQS9c/Mw5dYOtZ9H+oDw8qn9Htqxt4cpqRvSOAfwqP7rOvE9rwqVaoGGc3hg==}
+  '@simplewebauthn/server@11.0.0':
+    resolution: {integrity: sha512-zu8dxKcPiRUNSN2kmrnNOzNbRI8VaR/rL4ENCHUfC6PEE7SAAdIql9g5GBOd/wOVZolIsaZz3ccFxuGoVP0iaw==}
     engines: {node: '>=20.0.0'}
 
-  '@simplewebauthn/types@10.0.0':
-    resolution: {integrity: sha512-SFXke7xkgPRowY2E+8djKbdEznTVnD5R6GO7GPTthpHrokLvNKw8C3lFZypTxLI7KkCfGPfhtqB3d7OVGGa9jQ==}
+  '@simplewebauthn/types@11.0.0':
+    resolution: {integrity: sha512-b2o0wC5u2rWts31dTgBkAtSNKGX0cvL6h8QedNsKmj8O4QoLFQFR3DBVBUlpyVEhYKA+mXGUaXbcOc4JdQ3HzA==}
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -13459,25 +13459,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.3.12(@mikro-orm/core@6.3.12)':
-    dependencies:
-      '@mikro-orm/core': 6.3.12
-      '@mikro-orm/knex': 6.3.12(@mikro-orm/core@6.3.12)(pg@8.13.0)(sqlite3@5.1.7)
-      pg: 8.13.0
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/postgresql@6.3.12(@mikro-orm/core@6.3.12)(mysql2@3.11.3)':
     dependencies:
       '@mikro-orm/core': 6.3.12
@@ -14411,11 +14392,11 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@simplewebauthn/browser@10.0.0':
+  '@simplewebauthn/browser@11.0.0':
     dependencies:
-      '@simplewebauthn/types': 10.0.0
+      '@simplewebauthn/types': 11.0.0
 
-  '@simplewebauthn/server@10.0.1(encoding@0.1.13)':
+  '@simplewebauthn/server@11.0.0(encoding@0.1.13)':
     dependencies:
       '@hexagon/base64': 1.1.28
       '@levischuck/tiny-cbor': 0.2.2
@@ -14424,12 +14405,12 @@ snapshots:
       '@peculiar/asn1-rsa': 2.3.13
       '@peculiar/asn1-schema': 2.3.13
       '@peculiar/asn1-x509': 2.3.13
-      '@simplewebauthn/types': 10.0.0
+      '@simplewebauthn/types': 11.0.0
       cross-fetch: 4.0.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
-  '@simplewebauthn/types@10.0.0': {}
+  '@simplewebauthn/types@11.0.0': {}
 
   '@sinclair/typebox@0.27.8': {}
 
