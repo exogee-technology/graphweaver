@@ -25,7 +25,7 @@
 	},
 	"dependencies": {
 		"aws-cdk-lib": "2.166.0",
-		"constructs": "10.3.0"
+		"constructs": "10.4.2"
 	},
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
