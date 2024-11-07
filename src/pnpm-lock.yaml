@@ -1072,8 +1072,8 @@ importers:
   packages/cdk:
     dependencies:
       aws-cdk-lib:
-        specifier: 2.165.0
-        version: 2.165.0(constructs@10.3.0)
+        specifier: 2.166.0
+        version: 2.166.0(constructs@10.3.0)
       constructs:
         specifier: 10.3.0
         version: 10.3.0
@@ -1088,8 +1088,8 @@ importers:
         specifier: 22.7.5
         version: 22.7.5
       aws-cdk:
-        specifier: 2.165.0
-        version: 2.165.0
+        specifier: 2.166.0
+        version: 2.166.0
       dotenv-cli:
         specifier: 7.4.2
         version: 7.4.2
@@ -5609,8 +5609,8 @@ packages:
   avvio@8.4.0:
     resolution: {integrity: sha512-CDSwaxINFy59iNwhYnkvALBwZiTydGkOecZyPkqBpABYR1KqGEsET0VOOYDwtleZSUIdeY36DC2bSZ24CO1igA==}
 
-  aws-cdk-lib@2.165.0:
-    resolution: {integrity: sha512-jCIUcaNDhAO/Yxik29L2LJiXkZImbEOlw/dWwhlcIx1eJyxUW+IWuMbGjXEMg8/QH56FBA5TLkZpTTsRstHS/Q==}
+  aws-cdk-lib@2.166.0:
+    resolution: {integrity: sha512-FAsIz/CpczbMrcShgvTWNp3kcGN6IDojJWNLqHioTRsTekcyN3OPmKvQJXUNWL0fnhTd8biFXC2esg6kM19xZw==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -5627,8 +5627,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.165.0:
-    resolution: {integrity: sha512-9j7i/qVBGmGJqu1xAKtawYo5AqI+6mI4pGmTdzNmrNfynDCrLVuVKSqf2LnhMh2KPWetEMiSPyyekfvXGWgZbw==}
+  aws-cdk@2.166.0:
+    resolution: {integrity: sha512-AvwYXJt92lMlp0pB49HJtlvyWFZUBcX4DliIV3JfLngLpAlwVHQtvzPbL8qCvxHwZ3CIzJ1wKEth8QzdYmyOPQ==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
 
@@ -15712,7 +15712,7 @@ snapshots:
       '@fastify/error': 3.4.1
       fastq: 1.17.1
 
-  aws-cdk-lib@2.165.0(constructs@10.3.0):
+  aws-cdk-lib@2.166.0(constructs@10.3.0):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.209
       '@aws-cdk/asset-kubectl-v20': 2.1.3
@@ -15720,7 +15720,7 @@ snapshots:
       '@aws-cdk/cloud-assembly-schema': 38.0.1
       constructs: 10.3.0
 
-  aws-cdk@2.165.0:
+  aws-cdk@2.166.0:
     optionalDependencies:
       fsevents: 2.3.2
 
