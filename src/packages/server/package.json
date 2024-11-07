@@ -24,7 +24,7 @@
 		"@apollo/server": "4.11.0",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@as-integrations/fastify": "2.1.1",
-		"@escape.tech/graphql-armor": "3.0.1",
+		"@escape.tech/graphql-armor": "3.1.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "9.0.1",
