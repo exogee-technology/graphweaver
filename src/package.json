@@ -36,7 +36,7 @@
 	},
 	"devDependencies": {
 		"@eslint/js": "9.14.0",
-		"concurrently": "9.0.1",
+		"concurrently": "9.1.0",
 		"eslint": "9.14.0",
 		"eslint-config-prettier": "9.1.0",
 		"eslint-plugin-oxlint": "0.9.10",
