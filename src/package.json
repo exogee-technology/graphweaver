@@ -9,7 +9,7 @@
 		"url": "https://github.com/exogee-technology/graphweaver.git"
 	},
 	"engines": {
-		"node": ">=18",
+		"node": ">=22",
 		"pnpm": ">=9"
 	},
 	"scripts": {
