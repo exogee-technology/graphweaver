@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base
-FROM node:20
+FROM node:22
 
 # Set the working directory within the container
 WORKDIR /usr/src/app
