@@ -1602,7 +1602,7 @@ importers:
         version: 2.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(fastify@4.28.1)
       '@escape.tech/graphql-armor':
         specifier: 3.1.1
-        version: 3.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.6.0)
+        version: 3.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.7.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1629,8 +1629,8 @@ importers:
         version: 2.0.6
     devDependencies:
       '@escape.tech/graphql-armor-types':
-        specifier: 0.6.0
-        version: 0.6.0
+        specifier: 0.7.0
+        version: 0.7.0
       '@types/graphql-deduplicator':
         specifier: 2.0.2
         version: 2.0.2
@@ -3093,9 +3093,6 @@ packages:
   '@escape.tech/graphql-armor-max-tokens@2.5.0':
     resolution: {integrity: sha512-XypQs0NELYwmz/Mx9wVjw1riI3bvZyU2Ya4BnV0AIFLd9UYYl0BzuI4BSR46t5V2Sh73ePl6Ru1jj5rb4nfVOw==}
     engines: {node: '>=18.0.0'}
-
-  '@escape.tech/graphql-armor-types@0.6.0':
-    resolution: {integrity: sha512-Y3X6JgkB1N1MMaHNXaE2IeJWIs6wT4XcPvXM8PRWmT2DblZfY4NYiV1mh0GTInKdlnrEr5hquOR9XV+M3Da43w==}
 
   '@escape.tech/graphql-armor-types@0.7.0':
     resolution: {integrity: sha512-RHxyyp6PDgS6NAPnnmB6JdmUJ6oqhpSHFbsglGWeCcnNzceA5AkQFpir7VIDbVyS8LNC1xhipOtk7f9ycrIemQ==}
@@ -11830,16 +11827,11 @@ snapshots:
       '@envelop/core': 5.0.2
       '@escape.tech/graphql-armor-types': 0.7.0
 
-  '@escape.tech/graphql-armor-types@0.6.0':
-    dependencies:
-      graphql: 16.9.0
-
   '@escape.tech/graphql-armor-types@0.7.0':
     dependencies:
       graphql: 16.9.0
-    optional: true
 
-  '@escape.tech/graphql-armor@3.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.6.0)':
+  '@escape.tech/graphql-armor@3.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.7.0)':
     dependencies:
       '@escape.tech/graphql-armor-block-field-suggestions': 2.2.0
       '@escape.tech/graphql-armor-cost-limit': 2.4.0
@@ -11851,7 +11843,7 @@ snapshots:
     optionalDependencies:
       '@apollo/server': 4.11.2(encoding@0.1.13)(graphql@16.9.0)
       '@envelop/core': 5.0.2
-      '@escape.tech/graphql-armor-types': 0.6.0
+      '@escape.tech/graphql-armor-types': 0.7.0
 
   '@eslint-community/eslint-utils@4.4.0(eslint@9.14.0(jiti@1.21.6))':
     dependencies:
