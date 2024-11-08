@@ -23,6 +23,10 @@ updates:
         patterns:
           - "aws-cdk"
           - "aws-cdk-lib"
+      fastify:
+        patterns:
+          - "fastify"
+          - "@fastify*"
       graphql-tools:
         patterns:
           - "@graphql-tools*"
