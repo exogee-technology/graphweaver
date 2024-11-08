@@ -9,6 +9,7 @@ export type EntityOptions<G = unknown> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
 
+export type HookFunction<G> = (params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>) => Promise<Partial<G>> | Partial<G>;
 export function Entity(name: string): ClassDecorator;
 export function Entity<G = unknown>(options: EntityOptions<G>): ClassDecorator;
 export function Entity<G = unknown>(name: string, options: EntityOptions<G>): ClassDecorator;
@@ -38,7 +39,7 @@ export function Entity<G = unknown>(
 
 		const plural = pluralise(resolvedOptions?.plural ?? name, !!resolvedOptions?.plural);
 
-		function registerHook(hookManager: HookManager<G>, hookType: HookRegister, hook: Function) {
+		function registerHook(hookManager: HookManager<G>, hookType: HookRegister, hook: HookFunction<G>) {
 			hookManager.registerHook(hookType, async (params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>) => {
 				const modifiedParams = await Promise.resolve(hook(params));
 				return {
@@ -52,35 +53,35 @@ export function Entity<G = unknown>(
 			const hookManager = hookManagerMap.get(name) || new HookManager<G>();
 			
 			if (resolvedOptions.hooks.beforeCreate) {
-				registerHook(hookManager, HookRegister.BEFORE_CREATE, resolvedOptions.hooks.beforeCreate);
+				registerHook(hookManager, HookRegister.BEFORE_CREATE, resolvedOptions.hooks.beforeCreate as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.afterCreate) {
-				registerHook(hookManager, HookRegister.AFTER_CREATE, resolvedOptions.hooks.afterCreate);
+				registerHook(hookManager, HookRegister.AFTER_CREATE, resolvedOptions.hooks.afterCreate as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.beforeUpdate) {
-				registerHook(hookManager, HookRegister.BEFORE_UPDATE, resolvedOptions.hooks.beforeUpdate);
+				registerHook(hookManager, HookRegister.BEFORE_UPDATE, resolvedOptions.hooks.beforeUpdate as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.afterUpdate) {
-				registerHook(hookManager, HookRegister.AFTER_UPDATE, resolvedOptions.hooks.afterUpdate);
+				registerHook(hookManager, HookRegister.AFTER_UPDATE, resolvedOptions.hooks.afterUpdate as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.beforeDelete) {
-				registerHook(hookManager, HookRegister.BEFORE_DELETE, resolvedOptions.hooks.beforeDelete);
+				registerHook(hookManager, HookRegister.BEFORE_DELETE, resolvedOptions.hooks.beforeDelete as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.afterDelete) {
-				registerHook(hookManager, HookRegister.AFTER_DELETE, resolvedOptions.hooks.afterDelete);
+				registerHook(hookManager, HookRegister.AFTER_DELETE, resolvedOptions.hooks.afterDelete as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.beforeRead) {
-				registerHook(hookManager, HookRegister.BEFORE_READ, resolvedOptions.hooks.beforeRead);
+				registerHook(hookManager, HookRegister.BEFORE_READ, resolvedOptions.hooks.beforeRead as HookFunction<G>);
 			}
 
 			if (resolvedOptions.hooks.afterRead) {
-				registerHook(hookManager, HookRegister.AFTER_READ, resolvedOptions.hooks.afterRead);
+				registerHook(hookManager, HookRegister.AFTER_READ, resolvedOptions.hooks.afterRead as HookFunction<G>);
 			}
 			
 			hookManagerMap.set(name, hookManager);
