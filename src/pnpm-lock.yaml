@@ -597,8 +597,8 @@ importers:
         specifier: 6.28.0
         version: 6.28.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       xero-node:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 9.3.0
+        version: 9.3.0
     devDependencies:
       '@types/node':
         specifier: 22.9.0
@@ -1715,8 +1715,8 @@ importers:
         specifier: 16.9.0
         version: 16.9.0
       xero-node:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 9.3.0
+        version: 9.3.0
     devDependencies:
       '@types/node':
         specifier: 22.9.0
@@ -10076,8 +10076,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  xero-node@7.0.0:
-    resolution: {integrity: sha512-XVGYy54ZyikYuF/CuKp8/aJ+EPd2bVN5ZI+qDIZhR+O4ySPFZ9762ua/WQXdaDOt/AxYP/ml8MHsAjRtOlOTvw==}
+  xero-node@9.3.0:
+    resolution: {integrity: sha512-0uXEjzNE+Eek02uBZNa3lXEnQjemCVegQLdFqQPCq4QmAF5U421haVl44P+uAWBFTbf4quGN4AtGy6CfL9ONrQ==}
 
   xml2js@0.6.2:
     resolution: {integrity: sha512-T4rieHaC1EXcES0Kxxj4JWgaUQHDk+qwHcYOCFHfiwKz7tOVPLq7Hjq9dM1WCMhylqMEfP7hMcOIChvotiZegA==}
@@ -20867,7 +20867,7 @@ snapshots:
 
   ws@8.5.0: {}
 
-  xero-node@7.0.0:
+  xero-node@9.3.0:
     dependencies:
       axios: 1.7.7
       openid-client: 5.6.5
