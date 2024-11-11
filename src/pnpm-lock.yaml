@@ -558,17 +558,17 @@ importers:
         specifier: workspace:*
         version: link:../../packages/logger
       '@nivo/bump':
-        specifier: 0.87.0
-        version: 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.88.0
+        version: 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@nivo/core':
-        specifier: 0.87.0
-        version: 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.88.0
+        version: 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@nivo/line':
-        specifier: 0.87.0
-        version: 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.88.0
+        version: 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@nivo/tooltip':
-        specifier: 0.87.0
-        version: 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 0.88.0
+        version: 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       async-mutex:
         specifier: 0.5.0
         version: 0.5.0
@@ -3971,51 +3971,51 @@ packages:
     resolution: {integrity: sha512-3fkKj25kEjsfObL6IlKPAlHYPq/oYwUkkQ03zsTTiDjD7vg/RxjdiLeCydqtxHZP0JgsXL3D/X5oAkMGzuUp/Q==}
     engines: {node: '>=12'}
 
-  '@nivo/annotations@0.87.0':
-    resolution: {integrity: sha512-4Xk/soEmi706iOKszjX1EcGLBNIvhMifCYXOuLIFlMAXqhw1x2YS7PxickVSskdSzJCwJX4NgQ/R/9u6nxc5OA==}
+  '@nivo/annotations@0.88.0':
+    resolution: {integrity: sha512-NXE+1oIUn+EGWMQpnpeRMLgi2wyuzhGDoJQY4OUHissCUiNotid2oNQ/PXJwN0toiu+/j9SyhzI32xr70OPi7Q==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/axes@0.87.0':
-    resolution: {integrity: sha512-zCRBfiRKJi+xOxwxH5Pxq/8+yv3fAYDl4a1F2Ssnp5gMIobwzVsdearvsm5B04e9bfy3ZXTL7KgbkEkSAwu6SA==}
+  '@nivo/axes@0.88.0':
+    resolution: {integrity: sha512-jF7aIxzTNayV5cI1J/b9Q1FfpMBxTXGk3OwSigXMSfYWlliskDn2u0qGRLiYhuXFdQAWIp4oXsO1GcAQ0eRVdg==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/bump@0.87.0':
-    resolution: {integrity: sha512-JMtdnw9wFoFJkGHDV/jl0/Xto9Vj2SkBJgoBjdJDfEAdIK7W5g3tyCvXU/XzrS4jUIK/yz68moW6i6DlWJy2bA==}
+  '@nivo/bump@0.88.0':
+    resolution: {integrity: sha512-I/4LHIDjDpG7whSvc6nIgoFxENOGmzTSlnmCplMyGSmNKIZEyIgTl9jZLYWzl36/uoPSg+BYXfLeAmkvEdpwWQ==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/colors@0.87.0':
-    resolution: {integrity: sha512-S4pZzRGKK23t8XAjQMhML6wwsfKO9nH03xuyN4SvCodNA/Dmdys9xV+9Dg/VILTzvzsBTBGTX0dFBg65WoKfVg==}
+  '@nivo/colors@0.88.0':
+    resolution: {integrity: sha512-IZ+leYIqAlo7dyLHmsQwujanfRgXyoQ5H7PU3RWLEn1PP0zxDKLgEjFEDADpDauuslh2Tx0L81GNkWR6QSP0Mw==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/core@0.87.0':
-    resolution: {integrity: sha512-yEQWJn7QjWnbmCZccBCo4dligNyNyz3kgyV9vEtcaB1iGeKhg55RJEAlCOul+IDgSCSPFci2SxTmipE6LZEZCg==}
+  '@nivo/core@0.88.0':
+    resolution: {integrity: sha512-XjUkA5MmwjLP38bdrJwn36Gj7T5SYMKD55LYQp/1nIJPdxqJ38dUfE4XyBDfIEgfP6yrHOihw3C63cUdnUBoiw==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/legends@0.87.0':
-    resolution: {integrity: sha512-bVJCeqEmK4qHrxNaPU/+hXUd/yaKlcQ0yrsR18ewoknVX+pgvbe/+tRKJ+835JXlvRijYIuqwK1sUJQIxyB7oA==}
+  '@nivo/legends@0.88.0':
+    resolution: {integrity: sha512-d4DF9pHbD8LmGJlp/Gp1cF4e8y2wfQTcw3jVhbZj9zkb7ZWB7JfeF60VHRfbXNux9bjQ9U78/SssQqueVDPEmg==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/line@0.87.0':
-    resolution: {integrity: sha512-Ki/WDd8ZU8VWScW4ZeKUFCXRdAEg8nrS+F+jdfJDPxyxUMHZJCAbrXrnsExcEQLOaDQ2aU/bijEMiDS8/dJzuA==}
+  '@nivo/line@0.88.0':
+    resolution: {integrity: sha512-hFTyZ3BdAZvq2HwdwMj2SJGUeodjEW+7DLtFMIIoVIxmjZlAs3z533HcJ9cJd3it928fDm8SF/rgHs0TztYf9Q==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/scales@0.87.0':
-    resolution: {integrity: sha512-IHdY9w2em/xpWurcbhUR3cUA1dgbY06rU8gmA/skFCwf3C4Da3Rqwr0XqvxmkDC+EdT/iFljMbLst7VYiCnSdw==}
+  '@nivo/scales@0.88.0':
+    resolution: {integrity: sha512-HbpxkQp6tHCltZ1yDGeqdLcaJl5ze54NPjurfGtx/Uq+H5IQoBd4Tln49bUar5CsFAMsXw8yF1HQvASr7I1SIA==}
 
-  '@nivo/tooltip@0.87.0':
-    resolution: {integrity: sha512-nZJWyRIt/45V/JBdJ9ksmNm1LFfj59G1Dy9wB63Icf2YwyBT+J+zCzOGXaY7gxCxgF1mnSL3dC7fttcEdXyN/g==}
+  '@nivo/tooltip@0.88.0':
+    resolution: {integrity: sha512-iEjVfQA8gumAzg/yUinjTwswygCkE5Iwuo8opwnrbpNIqMrleBV+EAKIgB0PrzepIoW8CFG/SJhoiRfbU8jhOw==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
-  '@nivo/voronoi@0.87.0':
-    resolution: {integrity: sha512-Tg+9YnCX8LKsEwZMY1Q83mWiVFiyU2smxrO3JaC9vzjIh/2A/bkNPwC6BdmRaQMvY1jngKs+WKDnNxSQWFSOEg==}
+  '@nivo/voronoi@0.88.0':
+    resolution: {integrity: sha512-MyiNLvODthFoMjQ7Wjp693nogbTmVEx8Yn/7QkJhyPQbFyyA37TF/D1a/ox4h2OslXtP6K9QFN+42gB/zu7ixw==}
     peerDependencies:
       react: '>= 16.14.0 < 19.0.0'
 
@@ -13620,20 +13620,20 @@ snapshots:
 
   '@n1ru4l/push-pull-async-iterable-iterator@3.2.0': {}
 
-  '@nivo/annotations@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/annotations@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/colors': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/colors': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-spring/web': 9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       lodash: 4.17.21
       react: 18.3.1
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/axes@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/axes@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/scales': 0.87.0
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/scales': 0.88.0
       '@react-spring/web': 9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/d3-format': 1.4.5
       '@types/d3-time-format': 2.3.4
@@ -13643,15 +13643,15 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/bump@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/bump@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/axes': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/colors': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/legends': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/scales': 0.87.0
-      '@nivo/tooltip': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/voronoi': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/axes': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/colors': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/legends': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/scales': 0.88.0
+      '@nivo/tooltip': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/voronoi': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-spring/web': 9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/d3-scale': 4.0.8
       '@types/d3-shape': 3.1.6
@@ -13661,9 +13661,9 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/colors@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/colors@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/d3-color': 3.1.3
       '@types/d3-scale': 4.0.8
       '@types/d3-scale-chromatic': 3.0.3
@@ -13677,9 +13677,9 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/core@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/core@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/tooltip': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/tooltip': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-spring/web': 9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/d3-shape': 3.1.6
       d3-color: 3.1.0
@@ -13695,33 +13695,33 @@ snapshots:
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/legends@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/legends@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/colors': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/colors': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/d3-scale': 4.0.8
       d3-scale: 4.0.2
       react: 18.3.1
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/line@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/line@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/annotations': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/axes': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/colors': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/legends': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/scales': 0.87.0
-      '@nivo/tooltip': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/voronoi': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/annotations': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/axes': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/colors': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/legends': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/scales': 0.88.0
+      '@nivo/tooltip': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/voronoi': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-spring/web': 9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       d3-shape: 3.2.0
       react: 18.3.1
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/scales@0.87.0':
+  '@nivo/scales@0.88.0':
     dependencies:
       '@types/d3-scale': 4.0.8
       '@types/d3-time': 1.1.4
@@ -13731,18 +13731,18 @@ snapshots:
       d3-time-format: 3.0.0
       lodash: 4.17.21
 
-  '@nivo/tooltip@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/tooltip@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-spring/web': 9.7.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
     transitivePeerDependencies:
       - react-dom
 
-  '@nivo/voronoi@0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@nivo/voronoi@0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@nivo/core': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@nivo/tooltip': 0.87.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/core': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@nivo/tooltip': 0.88.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/d3-delaunay': 6.0.4
       '@types/d3-scale': 4.0.8
       d3-delaunay: 6.0.4
