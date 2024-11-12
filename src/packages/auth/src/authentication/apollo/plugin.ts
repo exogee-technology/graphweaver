@@ -227,7 +227,7 @@ export const authApolloPlugin = <R>(
 
 						upsertAuthorizationContext(contextValue);
 					} catch (err: unknown) {
-						logger.trace(`JWT verification failed. ${err}`);
+						logger.error(`JWT verification failed. ${err}`);
 						tokenVerificationFailed = true;
 					}
 				}
