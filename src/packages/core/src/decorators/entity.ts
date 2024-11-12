@@ -9,7 +9,9 @@ export type EntityOptions<G = unknown> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
 
-export type CustomHookFunction<G> = (params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>) => Promise<Partial<G>> | Partial<G>;
+export type CustomHookFunction<G> = (
+	params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
 export function Entity(name: string): ClassDecorator;
 export function Entity<G = unknown>(options: EntityOptions<G>): ClassDecorator;
 export function Entity<G = unknown>(name: string, options: EntityOptions<G>): ClassDecorator;
@@ -39,51 +41,30 @@ export function Entity<G = unknown>(
 
 		const plural = pluralise(resolvedOptions?.plural ?? name, !!resolvedOptions?.plural);
 
-		function registerHook(hookManager: HookManager<G>, hookType: HookRegister, hook: CustomHookFunction<G>) {
-			hookManager.registerHook(hookType, async (params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>) => {
-				const modifiedParams = await Promise.resolve(hook(params));
-				return {
-					...params,
-					...modifiedParams
-				};
-			});
+		function registerHook(
+			hookManager: HookManager<G>,
+			hookType: HookRegister,
+			hook: CustomHookFunction<G>
+		) {
+			hookManager.registerHook(
+				hookType,
+				async (params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>) => {
+					const modifiedParams = await Promise.resolve(hook(params));
+					return {
+						...params,
+						...modifiedParams,
+					};
+				}
+			);
 		}
 
 		if (resolvedOptions?.hooks) {
 			const hookManager = hookManagerMap.get(name) || new HookManager<G>();
-			
-			if (resolvedOptions.hooks.beforeCreate) {
-				registerHook(hookManager, HookRegister.BEFORE_CREATE, resolvedOptions.hooks.beforeCreate as CustomHookFunction<G>);
+
+			for (const [hookType, hook] of resolvedOptions.hooks) {
+				registerHook(hookManager, hookType, hook as CustomHookFunction<G>);
 			}
 
-			if (resolvedOptions.hooks.afterCreate) {
-				registerHook(hookManager, HookRegister.AFTER_CREATE, resolvedOptions.hooks.afterCreate as CustomHookFunction<G>);
-			}
-
-			if (resolvedOptions.hooks.beforeUpdate) {
-				registerHook(hookManager, HookRegister.BEFORE_UPDATE, resolvedOptions.hooks.beforeUpdate as CustomHookFunction<G>);
-			}
-
-			if (resolvedOptions.hooks.afterUpdate) {
-				registerHook(hookManager, HookRegister.AFTER_UPDATE, resolvedOptions.hooks.afterUpdate as CustomHookFunction<G>);
-			}
-
-			if (resolvedOptions.hooks.beforeDelete) {
-				registerHook(hookManager, HookRegister.BEFORE_DELETE, resolvedOptions.hooks.beforeDelete as CustomHookFunction<G>);
-			}
-
-			if (resolvedOptions.hooks.afterDelete) {
-				registerHook(hookManager, HookRegister.AFTER_DELETE, resolvedOptions.hooks.afterDelete as CustomHookFunction<G>);
-			}
-
-			if (resolvedOptions.hooks.beforeRead) {
-				registerHook(hookManager, HookRegister.BEFORE_READ, resolvedOptions.hooks.beforeRead as CustomHookFunction<G>);
-			}
-
-			if (resolvedOptions.hooks.afterRead) {
-				registerHook(hookManager, HookRegister.AFTER_READ, resolvedOptions.hooks.afterRead as CustomHookFunction<G>);
-			}
-			
 			hookManagerMap.set(name, hookManager);
 		}
 

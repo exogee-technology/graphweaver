@@ -1,24 +1,55 @@
 import { DirectiveLocation } from 'graphql';
 import { logger } from '@exogee/logger';
 
-import { BackendProvider, CreateOrUpdateHookParams, DeleteManyHookParams, FieldMetadata, Filter, GetTypeFunction, ReadHookParams, Resolver, Sort } from './types';
+import {
+	BackendProvider,
+	CreateOrUpdateHookParams,
+	DeleteManyHookParams,
+	FieldMetadata,
+	Filter,
+	GetTypeFunction,
+	ReadHookParams,
+	Resolver,
+	Sort,
+} from './types';
 import { FieldOptions } from './decorators';
 import { allOperations } from './operations';
+import { HookRegister } from './hook-manager';
 
-export type EntityHookFunctionCreateOrUpdate<G = unknown> = (params: CreateOrUpdateHookParams<G>) => Promise<Partial<G>> | Partial<G>;
-export type EntityHookFunctionDelete<G = unknown> = (params: DeleteManyHookParams<G>) => Promise<Partial<G>> | Partial<G>;
-export type EntityHookFunctionRead<G = unknown> = (params: ReadHookParams<G>) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionCreateOrUpdate<G = unknown> = (
+	params: CreateOrUpdateHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionDelete<G = unknown> = (
+	params: DeleteManyHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionRead<G = unknown> = (
+	params: ReadHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
 
-export interface EntityHooks<G = unknown> {
-	beforeCreate?: EntityHookFunctionCreateOrUpdate<G>;
-	afterCreate?: EntityHookFunctionCreateOrUpdate<G>;
-	beforeUpdate?: EntityHookFunctionCreateOrUpdate<G>;
-	afterUpdate?: EntityHookFunctionCreateOrUpdate<G>;
-	beforeDelete?: EntityHookFunctionDelete<G>;
-	afterDelete?: EntityHookFunctionDelete<G>;
-	beforeRead?: EntityHookFunctionRead<G>;
-	afterRead?: EntityHookFunctionRead<G>;
-}
+export type CreateOrUpdateHookRegistration<G> = [
+	(
+		| HookRegister.BEFORE_CREATE
+		| HookRegister.AFTER_CREATE
+		| HookRegister.BEFORE_UPDATE
+		| HookRegister.AFTER_UPDATE
+	),
+	EntityHookFunctionCreateOrUpdate<G>,
+];
+
+type DeleteHookRegistration<G> = [
+	HookRegister.BEFORE_DELETE | HookRegister.AFTER_DELETE,
+	EntityHookFunctionDelete<G>,
+];
+
+export type ReadHookRegistration<G> = [
+	HookRegister.BEFORE_READ | HookRegister.AFTER_READ,
+	EntityHookFunctionRead<G>,
+];
+
+export type HookRegistration<G> =
+	| CreateOrUpdateHookRegistration<G>
+	| DeleteHookRegistration<G>
+	| ReadHookRegistration<G>;
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
@@ -29,7 +60,7 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
 	directives?: Record<string, unknown>;
-	hooks?: EntityHooks<G>;
+	hooks?: HookRegistration<G>[];
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
 	primaryKeyField?: keyof G;
