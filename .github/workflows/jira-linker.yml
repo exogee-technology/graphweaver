@@ -1,8 +1,5 @@
 name: action-jira-linker
-on:
-  pull_request:
-    types:
-      - opened
+on: [pull_request]
 
 jobs:
   action-jira-linker:
