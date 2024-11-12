@@ -82,7 +82,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -321,7 +321,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -440,10 +440,10 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -932,8 +932,8 @@ importers:
         specifier: 3.687.0
         version: 3.687.0
       '@aws-sdk/client-lambda':
-        specifier: 3.688.0
-        version: 3.688.0
+        specifier: 3.689.0
+        version: 3.689.0
       '@exogee/graphweaver-rest-legacy':
         specifier: workspace:*
         version: link:../rest-legacy
@@ -1272,7 +1272,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1377,7 +1377,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1439,13 +1439,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1647,11 +1647,11 @@ importers:
   packages/storage-provider:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.688.0
-        version: 3.688.0
+        specifier: 3.689.0
+        version: 3.689.0
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.688.0
-        version: 3.688.0
+        specifier: 3.689.0
+        version: 3.689.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1921,12 +1921,12 @@ packages:
     resolution: {integrity: sha512-7mBhvKEo7HxQk/I9qO8r7Y36AwbHE6gH+vwWDPsj0BylW9n0YKRIrsyiKHo2VcEgTYOXUvrwb+YD4pHsGKFi9g==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/client-lambda@3.688.0':
-    resolution: {integrity: sha512-CArdmevkUbqDQuVjDsjrWxZpzV2I4gOCGcksw63Pz482OFqbHzvWvuyButdNPCpOGdh5RczVrEa91VKTpFRJAg==}
+  '@aws-sdk/client-lambda@3.689.0':
+    resolution: {integrity: sha512-ipUKzoCFBMQwPR3yVcgJSYaqVgyUdIwhKy3TMJ8USoOgx+TrGo2OIv3qkcLzDPS/wdNwZjNWu8NOoc8y5m92Fg==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/client-s3@3.688.0':
-    resolution: {integrity: sha512-bLyF7gT0RTWrsJPxbaslg1xP1gUdw3BJVvgfWM/63BDBpVCqIk9YlrXfJwjImcKguxGp8sCTdttywmfdPwQEfg==}
+  '@aws-sdk/client-s3@3.689.0':
+    resolution: {integrity: sha512-qYD1GJEPeLM6H3x8BuAAMXZltvVce5vGiwtZc9uMkBBo3HyFnmPitIPTPfaD1q8LOn/7KFdkY4MJ4e8D3YpV9g==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/client-secrets-manager@3.687.0':
@@ -1991,8 +1991,8 @@ packages:
     resolution: {integrity: sha512-5yYqIbyhLhH29vn4sHiTj7sU6GttvLMk3XwCmBXjo2k2j3zHqFUwh9RyFGF9VY6Z392Drf/E/cl+qOGypwULpg==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/middleware-flexible-checksums@3.688.0':
-    resolution: {integrity: sha512-diIBWLpM5eg3sRggKSKGUJGBh8VyFo/wZLq80GSq1kxGlmJOMvwT6YvE+Z51xhEbYTKIjX9IH/NhO7W4pA3MNw==}
+  '@aws-sdk/middleware-flexible-checksums@3.689.0':
+    resolution: {integrity: sha512-6VxMOf3mgmAgg6SMagwKj5pAe+putcx2F2odOAWviLcobFpdM/xK9vNry7p6kY+RDNmSlBvcji9wnU59fjV74Q==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/middleware-host-header@3.686.0':
@@ -2027,8 +2027,8 @@ packages:
     resolution: {integrity: sha512-6zXD3bSD8tcsMAVVwO1gO7rI1uy2fCD3czgawuPGPopeLiPpo6/3FoUWCQzk2nvEhj7p9Z4BbjwZGSlRkVrXTw==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/s3-request-presigner@3.688.0':
-    resolution: {integrity: sha512-RvG5R+XXl86ykwdfq2wuEOa0zJyZwJE4f0cuEt2ivMTfWsJZmwKielcTcjX8AeJTecW0iwukSZppT77lqG700Q==}
+  '@aws-sdk/s3-request-presigner@3.689.0':
+    resolution: {integrity: sha512-E9P59HEsPeFuO10yKyYE180J3V1DRVFTa0H0XzrBTP+s2g9g8xvfyGqoDYJw5YHUckqls39jT5nlbrf+kBSrfg==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/signature-v4-multi-region@3.687.0':
@@ -5422,7 +5422,7 @@ packages:
   apollo-server-errors@3.3.1:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
-    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now end-of-life (as of October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
 
@@ -10424,7 +10424,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-lambda@3.688.0':
+  '@aws-sdk/client-lambda@3.689.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -10475,7 +10475,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-s3@3.688.0':
+  '@aws-sdk/client-s3@3.689.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
@@ -10486,7 +10486,7 @@ snapshots:
       '@aws-sdk/credential-provider-node': 3.687.0(@aws-sdk/client-sso-oidc@3.687.0(@aws-sdk/client-sts@3.687.0))(@aws-sdk/client-sts@3.687.0)
       '@aws-sdk/middleware-bucket-endpoint': 3.686.0
       '@aws-sdk/middleware-expect-continue': 3.686.0
-      '@aws-sdk/middleware-flexible-checksums': 3.688.0
+      '@aws-sdk/middleware-flexible-checksums': 3.689.0
       '@aws-sdk/middleware-host-header': 3.686.0
       '@aws-sdk/middleware-location-constraint': 3.686.0
       '@aws-sdk/middleware-logger': 3.686.0
@@ -10841,7 +10841,7 @@ snapshots:
       '@smithy/types': 3.6.0
       tslib: 2.7.0
 
-  '@aws-sdk/middleware-flexible-checksums@3.688.0':
+  '@aws-sdk/middleware-flexible-checksums@3.689.0':
     dependencies:
       '@aws-crypto/crc32': 5.2.0
       '@aws-crypto/crc32c': 5.2.0
@@ -10925,7 +10925,7 @@ snapshots:
       '@smithy/util-middleware': 3.0.8
       tslib: 2.7.0
 
-  '@aws-sdk/s3-request-presigner@3.688.0':
+  '@aws-sdk/s3-request-presigner@3.689.0':
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.687.0
       '@aws-sdk/types': 3.686.0
@@ -13349,25 +13349,6 @@ snapshots:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/postgresql@6.4.0(@mikro-orm/core@6.4.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.0
-      '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
-      pg: 8.13.1
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -19671,7 +19652,7 @@ snapshots:
 
   serverless-offline@14.3.4(serverless@4.4.3):
     dependencies:
-      '@aws-sdk/client-lambda': 3.688.0
+      '@aws-sdk/client-lambda': 3.689.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.10
