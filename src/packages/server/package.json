@@ -21,10 +21,10 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.11.0",
+		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@as-integrations/fastify": "2.1.1",
-		"@escape.tech/graphql-armor": "3.0.1",
+		"@escape.tech/graphql-armor": "3.1.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "9.0.1",
@@ -35,7 +35,7 @@
 		"graphql-deduplicator": "2.0.6"
 	},
 	"devDependencies": {
-		"@escape.tech/graphql-armor-types": "0.6.0",
+		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",

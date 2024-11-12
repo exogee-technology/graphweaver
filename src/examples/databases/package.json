@@ -18,7 +18,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/server": "4.11.0",
+		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
@@ -33,14 +33,14 @@
 		"class-validator": "0.14.1",
 		"graphql": "16.9.0",
 		"graphweaver": "workspace:*",
-		"mysql2": "3.11.3",
+		"mysql2": "3.11.4",
 		"pg": "8.13.1",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-syntax-highlighter": "15.5.0"
+		"react-syntax-highlighter": "15.6.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.7.5",
+		"@types/node": "22.9.0",
 		"typescript": "5.6.3"
 	},
 	"keywords": [

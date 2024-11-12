@@ -20,8 +20,8 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/client": "3.11.8",
-		"@apollo/server": "4.11.0",
+		"@apollo/client": "3.11.9",
+		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
@@ -37,10 +37,10 @@
 		"pg": "8.13.1",
 		"react": "18.3.1",
 		"react-dom": "18.3.1",
-		"react-syntax-highlighter": "15.5.0"
+		"react-syntax-highlighter": "15.6.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.7.5",
+		"@types/node": "22.9.0",
 		"dotenv-cli": "7.4.2",
 		"typescript": "5.6.3"
 	},

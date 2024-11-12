@@ -23,13 +23,13 @@
 	"dependencies": {
 		"@mikro-orm/knex": "6.3.13",
 		"@mikro-orm/sqlite": "6.3.13",
-		"node-sqlite3-wasm": "0.8.23"
+		"node-sqlite3-wasm": "0.8.26"
 	},
 	"devDependencies": {
-		"@types/node": "22.7.5",
+		"@types/node": "22.9.0",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
-		"tsx": "4.19.1",
+		"tsx": "4.19.2",
 		"typescript": "5.6.3"
 	},
 	"keywords": [

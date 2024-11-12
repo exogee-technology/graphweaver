@@ -24,19 +24,19 @@
 		"build:docker": "docker build -f src/docker/Dockerfile ../../examples/s3-storage"
 	},
 	"dependencies": {
-		"aws-cdk-lib": "2.165.0",
-		"constructs": "10.3.0"
+		"aws-cdk-lib": "2.166.0",
+		"constructs": "10.4.2"
 	},
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
 		"dotenv-cli": "7.4.2",
-		"aws-cdk": "2.165.0",
+		"aws-cdk": "2.166.0",
 		"@exogee/graphweaver": "workspace:*",
-		"@types/node": "22.7.5",
+		"@types/node": "22.9.0",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
 		"typescript": "5.6.3",
-		"vitest": "2.1.2"
+		"vitest": "2.1.4"
 	},
 	"keywords": [
 		"graphql",
