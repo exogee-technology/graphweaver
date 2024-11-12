@@ -26,30 +26,16 @@ export type EntityHookFunctionRead<G = unknown> = (
 	params: ReadHookParams<G>
 ) => Promise<Partial<G>> | Partial<G>;
 
-export type CreateOrUpdateHookRegistration<G> = [
-	(
-		| HookRegister.BEFORE_CREATE
-		| HookRegister.AFTER_CREATE
-		| HookRegister.BEFORE_UPDATE
-		| HookRegister.AFTER_UPDATE
-	),
-	EntityHookFunctionCreateOrUpdate<G>,
-];
-
-type DeleteHookRegistration<G> = [
-	HookRegister.BEFORE_DELETE | HookRegister.AFTER_DELETE,
-	EntityHookFunctionDelete<G>,
-];
-
-export type ReadHookRegistration<G> = [
-	HookRegister.BEFORE_READ | HookRegister.AFTER_READ,
-	EntityHookFunctionRead<G>,
-];
-
-export type HookRegistration<G> =
-	| CreateOrUpdateHookRegistration<G>
-	| DeleteHookRegistration<G>
-	| ReadHookRegistration<G>;
+export interface HookRegistration<G> {
+	[HookRegister.BEFORE_CREATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.AFTER_CREATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.BEFORE_UPDATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.AFTER_UPDATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.BEFORE_DELETE]?: EntityHookFunctionDelete<G>[];
+	[HookRegister.AFTER_DELETE]?: EntityHookFunctionDelete<G>[];
+	[HookRegister.BEFORE_READ]?: EntityHookFunctionRead<G>[];
+	[HookRegister.AFTER_READ]?: EntityHookFunctionRead<G>[];
+}
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
@@ -60,7 +46,7 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
 	directives?: Record<string, unknown>;
-	hooks?: HookRegistration<G>[];
+	hooks?: HookRegistration<G>;
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
 	primaryKeyField?: keyof G;

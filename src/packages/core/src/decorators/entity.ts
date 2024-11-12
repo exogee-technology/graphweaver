@@ -1,5 +1,5 @@
 import { pluralise } from '../utils/plural';
-import { CollectEntityInformationArgs, graphweaverMetadata } from '../metadata';
+import { CollectEntityInformationArgs, graphweaverMetadata, HookRegistration } from '../metadata';
 import { HookManager, hookManagerMap, HookRegister } from '../hook-manager';
 import { CreateOrUpdateHookParams, DeleteHookParams, ReadHookParams } from '../types';
 
@@ -61,8 +61,10 @@ export function Entity<G = unknown>(
 		if (resolvedOptions?.hooks) {
 			const hookManager = hookManagerMap.get(name) || new HookManager<G>();
 
-			for (const [hookType, hook] of resolvedOptions.hooks) {
-				registerHook(hookManager, hookType, hook as CustomHookFunction<G>);
+			for (const hookType of Object.keys(resolvedOptions.hooks) as (keyof HookRegistration<G>)[]) {
+				for (const hook of resolvedOptions?.hooks[hookType] ?? []) {
+					registerHook(hookManager, hookType, hook as CustomHookFunction<G>);
+				}
 			}
 
 			hookManagerMap.set(name, hookManager);

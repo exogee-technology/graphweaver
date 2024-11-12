@@ -11,7 +11,7 @@ describe('Hooks', () => {
 		const hookFunction = jest.fn((params: any) => params);
 
 		@Entity('User', {
-			hooks: [[HookRegister.BEFORE_READ, hookFunction]],
+			hooks: { [HookRegister.BEFORE_READ]: [hookFunction] },
 			provider: {
 				backendId: 'dummy-provider',
 				find: async () => [{ id: '1', name: 'Test User' }],
