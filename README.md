@@ -104,8 +104,8 @@ https://github.com/exogee-technology/graphweaver/assets/81122022/3c4eb47e-84ff-4
 
 Before we start the installer make sure you are running:
 
-- Node `>18.*`
-- PNPM `>8.*`
+- Node `>22.*`
+- PNPM `>9.*`
 
 With those two installed you can create a new project with the **Graphweaver CLI**, by running:
 
