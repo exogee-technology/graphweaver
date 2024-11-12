@@ -1,9 +1,41 @@
 import { DirectiveLocation } from 'graphql';
 import { logger } from '@exogee/logger';
 
-import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver, Sort } from './types';
+import {
+	BackendProvider,
+	CreateOrUpdateHookParams,
+	DeleteManyHookParams,
+	FieldMetadata,
+	Filter,
+	GetTypeFunction,
+	ReadHookParams,
+	Resolver,
+	Sort,
+} from './types';
 import { FieldOptions } from './decorators';
 import { allOperations } from './operations';
+import { HookRegister } from './hook-manager';
+
+export type EntityHookFunctionCreateOrUpdate<G = unknown> = (
+	params: CreateOrUpdateHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionDelete<G = unknown> = (
+	params: DeleteManyHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionRead<G = unknown> = (
+	params: ReadHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+
+export interface HookRegistration<G> {
+	[HookRegister.BEFORE_CREATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.AFTER_CREATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.BEFORE_UPDATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.AFTER_UPDATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.BEFORE_DELETE]?: EntityHookFunctionDelete<G>[];
+	[HookRegister.AFTER_DELETE]?: EntityHookFunctionDelete<G>[];
+	[HookRegister.BEFORE_READ]?: EntityHookFunctionRead<G>[];
+	[HookRegister.AFTER_READ]?: EntityHookFunctionRead<G>[];
+}
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
@@ -14,6 +46,7 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
 	directives?: Record<string, unknown>;
+	hooks?: HookRegistration<G>;
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
 	primaryKeyField?: keyof G;
