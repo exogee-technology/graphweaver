@@ -18,8 +18,8 @@ importers:
   .:
     devDependencies:
       '@eslint/js':
-        specifier: 9.14.0
-        version: 9.14.0
+        specifier: 9.15.0
+        version: 9.15.0
       concurrently:
         specifier: 9.1.0
         version: 9.1.0
@@ -82,7 +82,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -321,7 +321,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -440,10 +440,10 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
+        version: 6.4.0(@mikro-orm/core@6.4.0)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1272,7 +1272,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
+        version: 6.4.0(@mikro-orm/core@6.4.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1377,7 +1377,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1439,13 +1439,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
+        version: 6.4.0(@mikro-orm/core@6.4.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -3136,6 +3136,10 @@ packages:
 
   '@eslint/js@9.14.0':
     resolution: {integrity: sha512-pFoEtFWCPyDOl+C6Ift+wC7Ro89otjigCf5vcuWqWgqNSQbRrpjSvdeE6ofLz4dHmyxD5f7gIdGT4+p36L6Twg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.15.0':
+    resolution: {integrity: sha512-tMTqrY+EzbXmKJR5ToI8lxu7jaN5EdmrBFJpQk5JmSlyLsx6o4t27r883K5xsLuCYCpfKBCGswMSWXsM+jB7lg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.4':
@@ -11878,6 +11882,8 @@ snapshots:
 
   '@eslint/js@9.14.0': {}
 
+  '@eslint/js@9.15.0': {}
+
   '@eslint/object-schema@2.1.4': {}
 
   '@eslint/plugin-kit@0.2.0':
@@ -13352,6 +13358,25 @@ snapshots:
       - mariadb
       - mysql
       - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/postgresql@6.4.0(@mikro-orm/core@6.4.0)':
+    dependencies:
+      '@mikro-orm/core': 6.4.0
+      '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+      pg: 8.13.1
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
       - pg-native
       - sqlite3
       - supports-color
