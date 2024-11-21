@@ -44,7 +44,7 @@
 		"@mikro-orm/postgresql": "6.4.0",
 		"@mikro-orm/sqlite": "6.4.0",
 		"class-validator": "0.14.1",
-		"dotenv-cli": "7.4.2",
+		"dotenv-cli": "7.4.3",
 		"ethers": "6.3.0",
 		"graphql": "16.9.0",
 		"graphweaver": "workspace:*",
