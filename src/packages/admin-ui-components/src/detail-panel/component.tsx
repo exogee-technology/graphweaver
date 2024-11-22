@@ -280,9 +280,8 @@ const DetailForm = ({
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
-							if (field.type === 'custom') {
-								if (field.hideInDetailForm) return null;
-
+							if (field.hideInDetailForm) return null;
+							else if (field.type === 'custom') {
 								return (
 									<CustomFieldComponent
 										key={field.name}
