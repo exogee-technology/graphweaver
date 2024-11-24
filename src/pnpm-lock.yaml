@@ -1063,8 +1063,8 @@ importers:
   packages/cdk:
     dependencies:
       aws-cdk-lib:
-        specifier: 2.169.0
-        version: 2.169.0(constructs@10.4.2)
+        specifier: 2.170.0
+        version: 2.170.0(constructs@10.4.2)
       constructs:
         specifier: 10.4.2
         version: 10.4.2
@@ -1079,8 +1079,8 @@ importers:
         specifier: 22.9.0
         version: 22.9.0
       aws-cdk:
-        specifier: 2.169.0
-        version: 2.169.0
+        specifier: 2.170.0
+        version: 2.170.0
       dotenv-cli:
         specifier: 7.4.3
         version: 7.4.3
@@ -5429,7 +5429,7 @@ packages:
   apollo-server-errors@3.3.1:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
-    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now end-of-life (as of October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
 
@@ -5456,7 +5456,7 @@ packages:
     engines: {node: '>=10'}
 
   array-flatten@1.1.1:
-    resolution: {integrity: sha1-ml9pkFGx5wczKPKgCJaLZOopVdI=}
+    resolution: {integrity: sha512-PCVAQswWemu6UdxsDFFX/+gVeYqKAod3D3UVm91jHwynguOwAvYPhx8nNlM++NqRcK6CxxpUafjmhIdKiHibqg==}
 
   array-unflat-js@0.1.3:
     resolution: {integrity: sha512-8pljkLj4vfz2i7Tf3yB31tRrszjP8/kwIyABGfcZ1GcHlvdUB0Sbx0WzQkOPMqUBxa/bu4+/NAyHEpDtZJzlJw==}
@@ -5507,8 +5507,8 @@ packages:
   avvio@8.4.0:
     resolution: {integrity: sha512-CDSwaxINFy59iNwhYnkvALBwZiTydGkOecZyPkqBpABYR1KqGEsET0VOOYDwtleZSUIdeY36DC2bSZ24CO1igA==}
 
-  aws-cdk-lib@2.169.0:
-    resolution: {integrity: sha512-JBwXMZNkXLCyIJmyK6HcA5UDaYYmJhQ0+ZmE10uTgNTqo/7lZpXYyQYES0SWGM4XrR18lFcH73RmHSAaoEyQhw==}
+  aws-cdk-lib@2.170.0:
+    resolution: {integrity: sha512-hlfoOJUZmAY3TjOXjWhAYKlrPcfGNTXA24NirwkEYOX+t1HD8OLSrYZvluMc7nWgIZf1Mq1g6M0xNEZJqykPrA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -5525,8 +5525,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.169.0:
-    resolution: {integrity: sha512-ZMe86k0ycRyvtX+prTRutzqGHLimdThx2UOCc+zDa28AtfLvr4ztJ88g6BKSE+WiUeOOQWVD1RVLxWqMujUitA==}
+  aws-cdk@2.170.0:
+    resolution: {integrity: sha512-gjQZnJIBtm5rd2k/s9BLSFeLxiFbHgr4wgNuEajf0dxLwHvZeafZiSTz86SSh03BEU1fB74IV73ozE4RoMTijQ==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
 
@@ -5988,7 +5988,7 @@ packages:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
   cookie-signature@1.0.6:
-    resolution: {integrity: sha1-4wOogrNCzD7oylE6eZmXNNqzriw=}
+    resolution: {integrity: sha512-QADzlaHc8icV8I7vbaJXJwod9HWYp8uCqf1xa4OfNu1T7JVxQIrUgOWtHdNDtPiywmFbiS12VjotIXLrKM3orQ==}
 
   cookie@0.6.0:
     resolution: {integrity: sha512-U71cyTamuh1CRNCfpGY6to28lxvNwPG4Guz/EVjgf3Jmzv0vlDp1atT9eS5dDjMYHucpHbWns6Lwf3BKz6svdw==}
@@ -6355,7 +6355,7 @@ packages:
     resolution: {integrity: sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==}
 
   ee-first@1.1.1:
-    resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
+    resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==}
 
   ejs@3.1.10:
     resolution: {integrity: sha512-UeJmFfOrAQS8OJWPZ4qtgHyWExa088/MtK5UEyoJGFH67cDEXkZSviOiKRCZ4Xij0zxI3JECgYs3oKx+AizQBA==}
@@ -6841,7 +6841,7 @@ packages:
     resolution: {integrity: sha512-fUY88kXvGiIItgNC7wcTOl0SNRCVXMKSWW2Yzfmn7EKNc+MpCzcz9DhdHcdjbrtN3c6R4H5dTY2jiCpPdysEjA==}
 
   fresh@0.5.2:
-    resolution: {integrity: sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=}
+    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
 
   fs-constants@1.0.0:
@@ -8025,7 +8025,7 @@ packages:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
 
   media-typer@0.3.0:
-    resolution: {integrity: sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=}
+    resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
     engines: {node: '>= 0.6'}
 
   memoizee@0.4.17:
@@ -9828,7 +9828,7 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
   utils-merge@1.0.1:
-    resolution: {integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=}
+    resolution: {integrity: sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==}
     engines: {node: '>= 0.4.0'}
 
   uuid@8.3.2:
@@ -15320,7 +15320,7 @@ snapshots:
       '@fastify/error': 3.4.1
       fastq: 1.17.1
 
-  aws-cdk-lib@2.169.0(constructs@10.4.2):
+  aws-cdk-lib@2.170.0(constructs@10.4.2):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.209
       '@aws-cdk/asset-kubectl-v20': 2.1.3
@@ -15328,7 +15328,7 @@ snapshots:
       '@aws-cdk/cloud-assembly-schema': 38.0.1
       constructs: 10.4.2
 
-  aws-cdk@2.169.0:
+  aws-cdk@2.170.0:
     optionalDependencies:
       fsevents: 2.3.2
 
