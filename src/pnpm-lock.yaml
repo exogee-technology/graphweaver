@@ -813,8 +813,8 @@ importers:
         specifier: 16.9.0
         version: 16.9.0
       hash-wasm:
-        specifier: 4.11.0
-        version: 4.11.0
+        specifier: 4.12.0
+        version: 4.12.0
       jsonwebtoken:
         specifier: 9.0.2
         version: 9.0.2
@@ -1014,8 +1014,8 @@ importers:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.9.0)
       hash-wasm:
-        specifier: 4.11.0
-        version: 4.11.0
+        specifier: 4.12.0
+        version: 4.12.0
       log-node:
         specifier: 8.0.3
         version: 8.0.3(log@6.3.1)
@@ -7090,8 +7090,8 @@ packages:
     resolution: {integrity: sha512-1nmYp/rhMDiE7AYkDw+lLwlAzz0AntGIe51F3RfFfEqyQ3feY2eI/NcwC6umIQVOASPMsWJLJScWKSSvzL9IVA==}
     engines: {node: '>=4'}
 
-  hash-wasm@4.11.0:
-    resolution: {integrity: sha512-HVusNXlVqHe0fzIzdQOGolnFN6mX/fqcrSAOcTBXdvzrXVHwTz11vXeKRmkR5gTuwVpvHZEIyKoePDvuAR+XwQ==}
+  hash-wasm@4.12.0:
+    resolution: {integrity: sha512-+/2B2rYLb48I/evdOIhP+K/DD2ca2fgBjp6O+GBEnCDk2e4rpeXIK8GvIyRPjTezgmWn9gmKwkQjjx6BtqDHVQ==}
 
   hash.js@1.1.7:
     resolution: {integrity: sha512-taOaskGt4z4SOANNseOviYDvjEJinIkRgmp7LbKP2YTTmVxWBl87s/uzK9r+44BclBSp2X7K1hqeNfz9JbBeXA==}
@@ -17334,7 +17334,7 @@ snapshots:
       readable-stream: 3.6.2
       safe-buffer: 5.2.1
 
-  hash-wasm@4.11.0: {}
+  hash-wasm@4.12.0: {}
 
   hash.js@1.1.7:
     dependencies:
