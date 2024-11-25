@@ -2,12 +2,12 @@ import { ApolloClient, InMemoryCache, ApolloLink, HttpLink } from '@apollo/clien
 import { inflate } from 'graphql-deduplicator';
 import { localStorageAuthKey, uri } from './config';
 
-const httpLink = new HttpLink({
-	uri,
-});
-
 export const REDIRECT_HEADER = 'X-Auth-Request-Redirect';
 
+// Allow custom pages / other components to use the `gql` tag as they need.
+export { gql } from '@apollo/client';
+
+const httpLink = new HttpLink({ uri });
 const authLink = new ApolloLink((operation, forward) => {
 	//  If there's something called `graphweaver-auth` in local storage, we need to send that to the server.
 	const currentAuthToken = localStorage.getItem(localStorageAuthKey);
