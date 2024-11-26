@@ -82,7 +82,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -321,7 +321,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -440,10 +440,10 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1272,7 +1272,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1377,13 +1377,13 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       node-sqlite3-wasm:
-        specifier: 0.8.26
-        version: 0.8.26
+        specifier: 0.8.27
+        version: 0.8.27
     devDependencies:
       '@types/node':
         specifier: 22.9.0
@@ -1439,13 +1439,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -5436,7 +5436,7 @@ packages:
   apollo-server-errors@3.3.1:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
-    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now end-of-life (as of October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
 
@@ -8301,8 +8301,8 @@ packages:
     resolution: {integrity: sha512-RB7VKO1hfCLiCxzXD2IynGcqFGaxLLbKibDmeZwQnnHX1JYA1PozO125hm+++AWDs03PKa7fV8YkMUtg2rbquw==}
     deprecated: please use 'semver'
 
-  node-sqlite3-wasm@0.8.26:
-    resolution: {integrity: sha512-IgYM5wIitTGLqohphlIy51jUCC7U8/1FrH5nYX5mhFCpKXA+NuhKC/51ncIuHnshir8HqGnqSLvSFKdk1I1Urw==}
+  node-sqlite3-wasm@0.8.27:
+    resolution: {integrity: sha512-lA6mxtnQWl5bCqYP1U3atLyZ87CP+Y1H2BP7OOMpjUPh0t9E2Y0ZkU7pSuWpzk1pAhMo+80R5xuCc4VJMshyjg==}
 
   nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
@@ -13382,25 +13382,6 @@ snapshots:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/postgresql@6.4.0(@mikro-orm/core@6.4.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.0
-      '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
-      pg: 8.13.1
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
@@ -18814,7 +18795,7 @@ snapshots:
 
   node-semver@1.0.0: {}
 
-  node-sqlite3-wasm@0.8.26: {}
+  node-sqlite3-wasm@0.8.27: {}
 
   nopt@5.0.0:
     dependencies:
