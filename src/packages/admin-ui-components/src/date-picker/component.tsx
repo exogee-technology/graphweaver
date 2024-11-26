@@ -12,8 +12,8 @@ interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
 	placeholder?: string;
 	isRangePicker?: boolean;
-	startDate?: DateTime;
-	endDate?: DateTime;
+	startDate?: DateTime | string;
+	endDate?: DateTime | string;
 }
 
 export const DatePicker = ({
@@ -26,27 +26,33 @@ export const DatePicker = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const datePickerRef = useRef<HTMLDivElement>(null);
 
+	const luxonStartDate = startDate
+		? DateTime.isDateTime(startDate)
+			? startDate
+			: DateTime.fromISO(startDate)
+		: undefined;
+	const luxonEndDate = endDate
+		? DateTime.isDateTime(endDate)
+			? endDate
+			: DateTime.fromISO(endDate)
+		: undefined;
+
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
 		setIsOpen(false);
 		onChange(start, end);
 	};
 
-	const close = () => {
-		setIsOpen(false);
-	};
-
-	const clear = () => {
-		setIsOpen(false);
-		onChange(undefined, undefined);
-	};
+	const clear = () => handleDateRangeSelect(undefined, undefined);
 
 	const displayText = () => {
-		if (startDate) {
+		if (luxonStartDate) {
 			const selectedDatesText = [
-				startDate.toFormat('dd/MM/yyyy'),
-				endDate ? endDate.toFormat('dd/MM/yyyy') : undefined,
+				luxonStartDate.toFormat('dd/MM/yyyy'),
+				luxonEndDate?.toFormat('dd/MM/yyyy'),
 			];
-			return isRangePicker ? `${selectedDatesText.join('-')}` : startDate.toFormat('dd/MM/yyyy');
+			return isRangePicker
+				? `${selectedDatesText.join('-')}`
+				: luxonStartDate.toFormat('dd/MM/yyyy');
 		} else {
 			return placeholder ?? '';
 		}
@@ -86,16 +92,16 @@ export const DatePicker = ({
 			{isOpen && (
 				<div className={styles.popup} ref={datePickerRef}>
 					<DateSelector
-						startDate={startDate}
-						endDate={endDate}
+						startDate={luxonStartDate}
+						endDate={luxonEndDate}
 						onSelect={handleDateRangeSelect}
 						isRangePicker={isRangePicker}
 					/>
 					<div className={styles.filterButtons}>
-						<Button type={'button'} className={styles.finishButton} onClick={close}>
+						<Button type="button" className={styles.finishButton} onClick={() => setIsOpen(false)}>
 							Done
 						</Button>
-						<Button type={'reset'} className={styles.clearButton} onClick={clear}>
+						<Button type="reset" className={styles.clearButton} onClick={clear}>
 							Clear
 						</Button>
 					</div>

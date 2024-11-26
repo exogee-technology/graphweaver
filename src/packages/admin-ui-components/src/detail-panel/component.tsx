@@ -30,6 +30,7 @@ import {
 	LinkField,
 	MediaField,
 	TextField,
+	DateField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
@@ -90,7 +91,11 @@ const getField = ({
 	}
 
 	if (field.type === 'Boolean') {
-		return <BooleanField name={field.name} autoFocus={autoFocus} disabled={isReadonly} />;
+		return <BooleanField field={field} autoFocus={autoFocus} disabled={isReadonly} />;
+	}
+
+	if (field.type === 'Date') {
+		return <DateField field={field} />;
 	}
 
 	if (field.type === 'GraphweaverMedia') {

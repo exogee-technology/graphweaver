@@ -16,6 +16,10 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The concept of a date without a time and/or timezone, e.g. My birthday is January 1st, 1864 regardless of timezone. */
+  Date: { input: any; output: any; }
+  /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
+  ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: { input: any; output: any; }
 };
@@ -275,10 +279,13 @@ export enum Sort {
 
 export type Task = {
   __typename?: 'Task';
+  createdAt: Scalars['ISOString']['output'];
   description: Scalars['String']['output'];
+  dueAt?: Maybe<Scalars['Date']['output']>;
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
+  updatedAt: Scalars['ISOString']['output'];
   user: User;
   user_aggregate?: Maybe<AggregationResult>;
 };
@@ -295,31 +302,50 @@ export type TaskUser_AggregateArgs = {
 
 /** Data needed to create or update Tasks. If an ID is passed, this is an update, otherwise it's an insert. */
 export type TaskCreateOrUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  dueAt?: InputMaybe<Scalars['Date']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 /** Data needed to create Tasks. */
 export type TaskInsertInput = {
+  createdAt: Scalars['ISOString']['input'];
   description: Scalars['String']['input'];
+  dueAt?: InputMaybe<Scalars['Date']['input']>;
   isCompleted: Scalars['Boolean']['input'];
   meta?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt: Scalars['ISOString']['input'];
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 /** Data needed to update Tasks. An ID must be passed. */
 export type TaskUpdateInput = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  dueAt?: InputMaybe<Scalars['Date']['input']>;
   id: Scalars['ID']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
 
 export type TasksListFilter = {
+  createdAt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  createdAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  createdAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  createdAt_null?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   description_gt?: InputMaybe<Scalars['String']['input']>;
   description_gte?: InputMaybe<Scalars['String']['input']>;
@@ -332,6 +358,16 @@ export type TasksListFilter = {
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   description_null?: InputMaybe<Scalars['Boolean']['input']>;
+  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt_gt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt_gte?: InputMaybe<Scalars['Date']['input']>;
+  dueAt_in?: InputMaybe<Array<Scalars['Date']['input']>>;
+  dueAt_lt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt_lte?: InputMaybe<Scalars['Date']['input']>;
+  dueAt_ne?: InputMaybe<Scalars['Date']['input']>;
+  dueAt_nin?: InputMaybe<Array<Scalars['Date']['input']>>;
+  dueAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  dueAt_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -354,14 +390,27 @@ export type TasksListFilter = {
   meta_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
   meta_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   meta_null?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_in?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_lt?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_lte?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_ne?: InputMaybe<Scalars['ISOString']['input']>;
+  updatedAt_nin?: InputMaybe<Array<Scalars['ISOString']['input']>>;
+  updatedAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  updatedAt_null?: InputMaybe<Scalars['Boolean']['input']>;
   user?: InputMaybe<UsersListFilter>;
 };
 
 export type TasksOrderByInput = {
+  createdAt?: InputMaybe<Sort>;
   description?: InputMaybe<Sort>;
+  dueAt?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   isCompleted?: InputMaybe<Sort>;
   meta?: InputMaybe<Sort>;
+  updatedAt?: InputMaybe<Sort>;
 };
 
 /** Pagination options for Tasks. */

@@ -1,4 +1,5 @@
 export * from './boolean-field';
+export * from './date-field';
 export * from './enum-field';
 export * from './json-field';
 export * from './link-field';

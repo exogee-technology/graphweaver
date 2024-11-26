@@ -1,43 +1,42 @@
-import { useField } from 'formik';
-import { useEffect } from 'react';
+import { Field, FieldProps } from 'formik';
 import { SelectOption, ComboBox, SelectMode } from '../../combo-box';
+import { EntityField } from '../../utils';
+import { useDataTransform } from '../use-data-transform';
 
 export const BooleanField = ({
-	name,
+	field,
 	autoFocus,
 	disabled = false,
 }: {
-	name: string;
+	field: EntityField;
 	autoFocus: boolean;
 	disabled?: boolean;
 }) => {
-	const [_, meta, helpers] = useField({ name, multiple: false });
-	const { initialValue } = meta;
+	// Before we go up to the server we need to change over to a boolean from an array of options
+	useDataTransform({
+		field,
+		transform: async (value: unknown) => {
+			if (!value || !Array.isArray(value)) return undefined;
 
-	useEffect(() => {
-		helpers.setValue(initialValue);
-	}, []);
-
-	const handleOnChange = (selected: SelectOption[]) => {
-		const value = selected?.[0]?.value;
-		if (value === undefined) {
-			helpers.setValue(undefined);
-		} else {
-			helpers.setValue(value);
-		}
-	};
+			return value[0]?.value;
+		},
+	});
 
 	return (
-		<ComboBox
-			options={[
-				{ value: true, label: 'true' },
-				{ value: false, label: 'false' },
-			]}
-			value={initialValue === undefined ? [] : [{ value: initialValue, label: `${initialValue}` }]}
-			onChange={handleOnChange}
-			mode={SelectMode.SINGLE}
-			disabled={disabled}
-			autoFocus={autoFocus}
-		/>
+		<Field name={field.name}>
+			{({ field, form }: FieldProps) => (
+				<ComboBox
+					options={[
+						{ value: true, label: 'true' },
+						{ value: false, label: 'false' },
+					]}
+					value={field.value}
+					onChange={(selected: SelectOption[]) => form.setFieldValue(field.name, selected)}
+					mode={SelectMode.SINGLE}
+					disabled={disabled}
+					autoFocus={autoFocus}
+				/>
+			)}
+		</Field>
 	);
 };

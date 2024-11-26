@@ -54,6 +54,7 @@ import {
 	likeOperations,
 	mathOperations,
 } from './operations';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 
 export type GraphweaverSchemaExtension = Readonly<GraphQLObjectTypeExtensions<any, any>> & {
 	graphweaverSchemaInfo:
@@ -115,6 +116,7 @@ const scalarShouldGetMathOperations = (
 	scalar === BigInt ||
 	scalar.name === 'ID' ||
 	scalar.name === 'String' ||
+	scalar.name === 'Date' ||
 	scalar.name === 'ISOString' ||
 	(scalar instanceof GraphQLScalarType && scalar?.extensions?.type === 'integer');
 
@@ -264,6 +266,7 @@ export const isGraphQLScalarForTypeScriptType = (type: TypeValue) => {
 		case String:
 		case Number:
 		case Boolean:
+		case Date:
 			return true;
 		default:
 			return false;
@@ -280,6 +283,8 @@ const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
 			return GraphQLFloat;
 		case Boolean:
 			return GraphQLBoolean;
+		case Date:
+			return ISODateStringScalar;
 		default:
 			throw new Error(`Could not map TypeScript type ${String(type)} to a GraphQL scalar.`);
 	}
