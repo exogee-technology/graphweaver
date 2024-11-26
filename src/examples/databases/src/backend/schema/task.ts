@@ -1,6 +1,6 @@
 import { RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
-import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+import { DateScalar, GraphQLJSON } from '@exogee/graphweaver-scalars';
 
 import { Task as OrmTask } from '../entities';
 import { User } from './user';
@@ -18,6 +18,15 @@ export class Task {
 
 	@Field(() => Boolean)
 	isCompleted!: boolean;
+
+	@Field(() => Date)
+	createdAt!: Date;
+
+	@Field(() => Date)
+	updatedAt!: Date;
+
+	@Field(() => DateScalar, { nullable: true })
+	dueAt?: Date;
 
 	// Example of a field resolver using a json type
 	@Field(() => GraphQLJSON, { nullable: true, readonly: true })
