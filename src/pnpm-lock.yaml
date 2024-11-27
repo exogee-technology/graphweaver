@@ -36,8 +36,8 @@ importers:
         specifier: 15.12.0
         version: 15.12.0
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       turbo:
         specifier: 2.3.1
         version: 2.3.1
@@ -607,8 +607,8 @@ importers:
         specifier: 0.24.0
         version: 0.24.0
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -853,8 +853,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -951,8 +951,8 @@ importers:
         specifier: 0.3.2
         version: 0.3.2(graphql@16.9.0)
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -1051,8 +1051,8 @@ importers:
         specifier: 9.0.2
         version: 9.0.2
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -1146,8 +1146,8 @@ importers:
         specifier: 17.0.33
         version: 17.0.33
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -1168,8 +1168,8 @@ importers:
         specifier: 0.24.0
         version: 0.24.0
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       vite:
         specifier: 5.4.11
         version: 5.4.11(@types/node@22.9.0)(lightningcss@1.27.0)
@@ -1500,8 +1500,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -1555,8 +1555,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       typescript:
         specifier: 5.6.3
         version: 5.6.3
@@ -1728,8 +1728,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       prettier:
-        specifier: 3.3.3
-        version: 3.3.3
+        specifier: 3.4.1
+        version: 3.4.1
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -8702,8 +8702,8 @@ packages:
     resolution: {integrity: sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g==}
     engines: {node: '>= 0.8.0'}
 
-  prettier@3.3.3:
-    resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
+  prettier@3.4.1:
+    resolution: {integrity: sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -19197,7 +19197,7 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier@3.3.3: {}
+  prettier@3.4.1: {}
 
   pretty-format@29.7.0:
     dependencies:
