@@ -26,7 +26,7 @@
 		"@graphql-codegen/typescript-operations": "4.4.0",
 		"@graphql-codegen/typescript-react-apollo": "4.3.2",
 		"@serverless/utils": "6.15.0",
-		"@vitejs/plugin-react": "4.3.3",
+		"@vitejs/plugin-react": "4.3.4",
 		"class-validator": "0.14.1",
 		"dotenv": "16.4.5",
 		"esbuild": "0.24.0",
