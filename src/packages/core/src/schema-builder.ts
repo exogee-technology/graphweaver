@@ -484,6 +484,12 @@ const filterTypeForEntity = (
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
+				// Add top level and/or/not
+				const selfFilter = filterTypeForEntity(entity, entityFilter);
+				fields['_and'] = { type: new GraphQLList(selfFilter) };
+				fields['_or'] = { type: new GraphQLList(selfFilter) };
+				fields['_not'] = { type: selfFilter };
+
 				for (const field of Object.values(entity.fields)) {
 					const fieldType = getFieldType(field);
 					const metadata = graphweaverMetadata.metadataForType(fieldType);

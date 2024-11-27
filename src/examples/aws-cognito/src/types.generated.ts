@@ -156,6 +156,9 @@ export type CognitoUserUpdateInput = {
 };
 
 export type CognitoUsersListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CognitoUsersListFilter>>>;
+  _not?: InputMaybe<CognitoUsersListFilter>;
+  _or?: InputMaybe<Array<InputMaybe<CognitoUsersListFilter>>>;
   attributes?: InputMaybe<Scalars['String']['input']>;
   attributes_gt?: InputMaybe<Scalars['String']['input']>;
   attributes_gte?: InputMaybe<Scalars['String']['input']>;

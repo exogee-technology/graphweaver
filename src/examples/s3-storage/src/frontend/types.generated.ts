@@ -142,6 +142,9 @@ export type GraphweaverMediaUpdateInput = {
 };
 
 export type GraphweaverMediasListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<GraphweaverMediasListFilter>>>;
+  _not?: InputMaybe<GraphweaverMediasListFilter>;
+  _or?: InputMaybe<Array<InputMaybe<GraphweaverMediasListFilter>>>;
   filename?: InputMaybe<Scalars['String']['input']>;
   filename_gt?: InputMaybe<Scalars['String']['input']>;
   filename_gte?: InputMaybe<Scalars['String']['input']>;
@@ -304,6 +307,9 @@ export type SubmissionUpdateInput = {
 };
 
 export type SubmissionsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<SubmissionsListFilter>>>;
+  _not?: InputMaybe<SubmissionsListFilter>;
+  _or?: InputMaybe<Array<InputMaybe<SubmissionsListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;

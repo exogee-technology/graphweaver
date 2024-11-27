@@ -117,6 +117,9 @@ export type DeleteOneFilterInput = {
 };
 
 export type PeopleListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<PeopleListFilter>>>;
+  _not?: InputMaybe<PeopleListFilter>;
+  _or?: InputMaybe<Array<InputMaybe<PeopleListFilter>>>;
   birth_year?: InputMaybe<Scalars['String']['input']>;
   birth_year_gt?: InputMaybe<Scalars['String']['input']>;
   birth_year_gte?: InputMaybe<Scalars['String']['input']>;
@@ -272,6 +275,9 @@ export type Vehicle = {
 };
 
 export type VehiclesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<VehiclesListFilter>>>;
+  _not?: InputMaybe<VehiclesListFilter>;
+  _or?: InputMaybe<Array<InputMaybe<VehiclesListFilter>>>;
   cost_in_credits?: InputMaybe<Scalars['String']['input']>;
   cost_in_credits_gt?: InputMaybe<Scalars['String']['input']>;
   cost_in_credits_gte?: InputMaybe<Scalars['String']['input']>;
