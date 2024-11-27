@@ -173,7 +173,6 @@ export type AlbumUpdateInput = {
 
 export type AlbumsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<AlbumsListFilter>>>;
-  _not?: InputMaybe<AlbumsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<AlbumsListFilter>>>;
   albumId?: InputMaybe<Scalars['ID']['input']>;
   albumId_gt?: InputMaybe<Scalars['ID']['input']>;
@@ -253,7 +252,6 @@ export type ArtistUpdateInput = {
 
 export type ArtistsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<ArtistsListFilter>>>;
-  _not?: InputMaybe<ArtistsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<ArtistsListFilter>>>;
   albums?: InputMaybe<AlbumsListFilter>;
   artistId?: InputMaybe<Scalars['ID']['input']>;
@@ -387,7 +385,6 @@ export type CustomerUpdateInput = {
 
 export type CustomersListFilter = {
   _and?: InputMaybe<Array<InputMaybe<CustomersListFilter>>>;
-  _not?: InputMaybe<CustomersListFilter>;
   _or?: InputMaybe<Array<InputMaybe<CustomersListFilter>>>;
   address?: InputMaybe<Scalars['String']['input']>;
   address_gt?: InputMaybe<Scalars['String']['input']>;
@@ -679,7 +676,6 @@ export type EmployeeUpdateInput = {
 
 export type EmployeesListFilter = {
   _and?: InputMaybe<Array<InputMaybe<EmployeesListFilter>>>;
-  _not?: InputMaybe<EmployeesListFilter>;
   _or?: InputMaybe<Array<InputMaybe<EmployeesListFilter>>>;
   address?: InputMaybe<Scalars['String']['input']>;
   address_gt?: InputMaybe<Scalars['String']['input']>;
@@ -913,7 +909,6 @@ export type GenreUpdateInput = {
 
 export type GenresListFilter = {
   _and?: InputMaybe<Array<InputMaybe<GenresListFilter>>>;
-  _not?: InputMaybe<GenresListFilter>;
   _or?: InputMaybe<Array<InputMaybe<GenresListFilter>>>;
   genreId?: InputMaybe<Scalars['ID']['input']>;
   genreId_gt?: InputMaybe<Scalars['ID']['input']>;
@@ -1074,7 +1069,6 @@ export type InvoiceLineUpdateInput = {
 
 export type InvoiceLinesListFilter = {
   _and?: InputMaybe<Array<InputMaybe<InvoiceLinesListFilter>>>;
-  _not?: InputMaybe<InvoiceLinesListFilter>;
   _or?: InputMaybe<Array<InputMaybe<InvoiceLinesListFilter>>>;
   invoice?: InputMaybe<InvoicesListFilter>;
   invoiceLineId?: InputMaybe<Scalars['ID']['input']>;
@@ -1137,7 +1131,6 @@ export type InvoiceUpdateInput = {
 
 export type InvoicesListFilter = {
   _and?: InputMaybe<Array<InputMaybe<InvoicesListFilter>>>;
-  _not?: InputMaybe<InvoicesListFilter>;
   _or?: InputMaybe<Array<InputMaybe<InvoicesListFilter>>>;
   billingAddress?: InputMaybe<Scalars['String']['input']>;
   billingAddress_gt?: InputMaybe<Scalars['String']['input']>;
@@ -1293,7 +1286,6 @@ export type MediaTypeUpdateInput = {
 
 export type MediaTypesListFilter = {
   _and?: InputMaybe<Array<InputMaybe<MediaTypesListFilter>>>;
-  _not?: InputMaybe<MediaTypesListFilter>;
   _or?: InputMaybe<Array<InputMaybe<MediaTypesListFilter>>>;
   mediaTypeId?: InputMaybe<Scalars['ID']['input']>;
   mediaTypeId_gt?: InputMaybe<Scalars['ID']['input']>;
@@ -1866,7 +1858,6 @@ export type PlaylistUpdateInput = {
 
 export type PlaylistsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<PlaylistsListFilter>>>;
-  _not?: InputMaybe<PlaylistsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<PlaylistsListFilter>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
@@ -2200,7 +2191,6 @@ export type TotalInvoicesByCustomerCustomer_AggregateArgs = {
 
 export type TotalInvoicesByCustomersListFilter = {
   _and?: InputMaybe<Array<InputMaybe<TotalInvoicesByCustomersListFilter>>>;
-  _not?: InputMaybe<TotalInvoicesByCustomersListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TotalInvoicesByCustomersListFilter>>>;
   customer?: InputMaybe<CustomersListFilter>;
   customerId?: InputMaybe<Scalars['ID']['input']>;
@@ -2253,7 +2243,6 @@ export type Trace = {
 
 export type TracesListFilter = {
   _and?: InputMaybe<Array<InputMaybe<TracesListFilter>>>;
-  _not?: InputMaybe<TracesListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TracesListFilter>>>;
   attributes?: InputMaybe<Scalars['JSON']['input']>;
   attributes_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
@@ -2475,7 +2464,6 @@ export type TrackUpdateInput = {
 
 export type TracksListFilter = {
   _and?: InputMaybe<Array<InputMaybe<TracksListFilter>>>;
-  _not?: InputMaybe<TracksListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TracksListFilter>>>;
   album?: InputMaybe<AlbumsListFilter>;
   bytes?: InputMaybe<Scalars['Float']['input']>;
