@@ -1382,8 +1382,8 @@ importers:
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       node-sqlite3-wasm:
-        specifier: 0.8.26
-        version: 0.8.26
+        specifier: 0.8.27
+        version: 0.8.27
     devDependencies:
       '@types/node':
         specifier: 22.9.0
@@ -8301,8 +8301,8 @@ packages:
     resolution: {integrity: sha512-RB7VKO1hfCLiCxzXD2IynGcqFGaxLLbKibDmeZwQnnHX1JYA1PozO125hm+++AWDs03PKa7fV8YkMUtg2rbquw==}
     deprecated: please use 'semver'
 
-  node-sqlite3-wasm@0.8.26:
-    resolution: {integrity: sha512-IgYM5wIitTGLqohphlIy51jUCC7U8/1FrH5nYX5mhFCpKXA+NuhKC/51ncIuHnshir8HqGnqSLvSFKdk1I1Urw==}
+  node-sqlite3-wasm@0.8.27:
+    resolution: {integrity: sha512-lA6mxtnQWl5bCqYP1U3atLyZ87CP+Y1H2BP7OOMpjUPh0t9E2Y0ZkU7pSuWpzk1pAhMo+80R5xuCc4VJMshyjg==}
 
   nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
@@ -18795,7 +18795,7 @@ snapshots:
 
   node-semver@1.0.0: {}
 
-  node-sqlite3-wasm@0.8.26: {}
+  node-sqlite3-wasm@0.8.27: {}
 
   nopt@5.0.0:
     dependencies:
