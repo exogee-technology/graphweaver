@@ -140,6 +140,8 @@ export type ApiKeyUpdateInput = {
 };
 
 export type ApiKeysListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ApiKeysListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ApiKeysListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -207,6 +209,8 @@ export type CredentialUpdateInput = {
 };
 
 export type CredentialsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<CredentialsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<CredentialsListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -679,6 +683,8 @@ export type TagUpdateInput = {
 };
 
 export type TagsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<TagsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<TagsListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;
@@ -758,6 +764,8 @@ export type TaskCountByTagTag_AggregateArgs = {
 };
 
 export type TaskCountByTagsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<TaskCountByTagsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<TaskCountByTagsListFilter>>>;
   count?: InputMaybe<Scalars['Float']['input']>;
   count_in?: InputMaybe<Array<Scalars['Float']['input']>>;
   count_ne?: InputMaybe<Scalars['Float']['input']>;
@@ -822,6 +830,8 @@ export type TaskUpdateInput = {
 };
 
 export type TasksListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<TasksListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<TasksListFilter>>>;
   description?: InputMaybe<Scalars['String']['input']>;
   description_gt?: InputMaybe<Scalars['String']['input']>;
   description_gte?: InputMaybe<Scalars['String']['input']>;
@@ -915,6 +925,8 @@ export type Trace = {
 };
 
 export type TracesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<TracesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<TracesListFilter>>>;
   attributes?: InputMaybe<Scalars['JSON']['input']>;
   attributes_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
   attributes_ne?: InputMaybe<Scalars['JSON']['input']>;
@@ -1038,6 +1050,8 @@ export type UserTasks_AggregateArgs = {
 };
 
 export type UsersListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   name_gt?: InputMaybe<Scalars['String']['input']>;
   name_gte?: InputMaybe<Scalars['String']['input']>;

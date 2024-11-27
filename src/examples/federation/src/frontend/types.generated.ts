@@ -231,6 +231,8 @@ export type ProductVariation = {
 };
 
 export type ProductsListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ProductsListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ProductsListFilter>>>;
   id?: InputMaybe<Scalars['ID']['input']>;
   id_gt?: InputMaybe<Scalars['ID']['input']>;
   id_gte?: InputMaybe<Scalars['ID']['input']>;

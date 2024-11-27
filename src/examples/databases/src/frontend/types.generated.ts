@@ -336,6 +336,8 @@ export type TaskUpdateInput = {
 };
 
 export type TasksListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<TasksListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<TasksListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -458,6 +460,8 @@ export type UserUpdateInput = {
 };
 
 export type UsersListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_gt?: InputMaybe<Scalars['String']['input']>;
   email_gte?: InputMaybe<Scalars['String']['input']>;
