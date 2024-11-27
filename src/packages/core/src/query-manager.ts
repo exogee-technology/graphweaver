@@ -47,6 +47,11 @@ const visit = async (currentEntityMetadata: EntityMetadata, currentFilter: any) 
 					return filter;
 				})
 			);
+		} else if (fieldName === '_not') {
+			// The _not is an exception because the value is not an array, but it is just like above, we need
+			// to visit on down the tree.
+			const { filter } = await visit(currentEntityMetadata, value);
+			currentFilter[fieldName] = filter;
 		} else if (typeof value === 'object') {
 			// Let's recurse. To do that we need to look up the field.
 			const field = getFieldFromEntity(currentEntityMetadata, fieldName);

@@ -202,8 +202,12 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		// Check for and/or/etc at the root level and handle correctly
 		for (const rootLevelKey of Object.keys(values)) {
 			if (mikroObjectOperations.has(rootLevelKey)) {
-				for (const field of values[rootLevelKey]) {
-					mapFieldNames(field);
+				if (Array.isArray(values[rootLevelKey])) {
+					for (const field of values[rootLevelKey]) {
+						mapFieldNames(field);
+					}
+				} else {
+					mapFieldNames(values[rootLevelKey]);
 				}
 			}
 		}
@@ -284,12 +288,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 		// Strip custom types out of the equation.
 		// This query only works if we JSON.parse(JSON.stringify(filter)):
-		//
-		// query {
-		//   drivers (filter: { region: { name: "North Shore" }}) {
-		//     id
-		//   }
-		// }
 		const where = traceSync((trace?: TraceOptions) => {
 			trace?.span.updateName('Convert filter to Mikro-Orm format');
 			return filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;

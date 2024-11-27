@@ -1,15 +1,8 @@
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import {
-	Entity as DataEntity,
-	Collection,
-	Ref,
-	ManyToOne,
-	OneToMany,
-	PrimaryKey,
-} from '@mikro-orm/core';
-import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
+import { Entity as DataEntity, Property, PrimaryKey } from '@mikro-orm/core';
+import { Field, ID, Entity } from '@exogee/graphweaver';
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { resetDatabase } from '../../../../utils';
@@ -22,28 +15,14 @@ class OrmAlbum {
 	@PrimaryKey({ fieldName: 'AlbumId', type: 'number' })
 	id!: number;
 
-	@ManyToOne({
-		entity: () => OrmArtist,
-		ref: true,
-		fieldName: 'ArtistId',
-		index: 'IFK_AlbumArtistId',
-	})
-	artist!: Ref<OrmArtist>;
-}
-
-@DataEntity({ tableName: 'Artist' })
-class OrmArtist {
-	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
-	id!: number;
-
-	@OneToMany({ entity: () => OrmAlbum, mappedBy: 'artist' })
-	albums = new Collection<OrmAlbum>(this);
+	@Property({ fieldName: 'Title', type: 'string' })
+	title!: string;
 }
 
 const connection = {
 	connectionManagerId: 'sqlite',
 	mikroOrmConfig: {
-		entities: [OrmAlbum, OrmArtist],
+		entities: [OrmAlbum],
 		driver: SqliteDriver,
 		dbName: 'databases/database.sqlite',
 	},
@@ -56,21 +35,8 @@ export class Album {
 	@Field(() => ID)
 	id!: number;
 
-	@RelationshipField<OrmAlbum>(() => Artist, {
-		id: (entity) => entity.artist?.id,
-	})
-	renamed_artist!: Artist;
-}
-
-@Entity('Artist', {
-	provider: new MikroBackendProvider(OrmArtist, connection),
-})
-export class Artist {
-	@Field(() => ID)
-	id!: number;
-
-	@RelationshipField<Album>(() => [Album], { relatedField: 'renamed_artist' })
-	renamed_albums!: Album[];
+	@Field(() => String)
+	title!: string;
 }
 
 describe('Top level and/or/not', () => {
@@ -83,37 +49,43 @@ describe('Top level and/or/not', () => {
 		const response = await graphweaver.executeOperation({
 			query: gql`
 				query {
-					albums(_and: [{ id: 1 }, { id: 2 }]) {
+					albums(filter: { _and: [{ id: 5 }, { id: 6 }] }) {
 						id
+						title
 					}
 				}
 			`,
 		});
 		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBe(undefined);
 		expect(response.body.singleResult.data?.albums).toHaveLength(0);
 
 		const response2 = await graphweaver.executeOperation({
 			query: gql`
 				query {
-					albums(_or: [{ id: 1 }, { id: 2 }]) {
+					albums(filter: { _or: [{ id: 5 }, { id: 6 }] }) {
 						id
+						title
 					}
 				}
 			`,
 		});
 		assert(response2.body.kind === 'single');
+		expect(response2.body.singleResult.errors).toBe(undefined);
 		expect(response2.body.singleResult.data?.albums).toHaveLength(2);
 
-		const response3 = await graphweaver.executeOperation({
-			query: gql`
-				query {
-					albums(_not: { id: 1 }) {
-						id
-					}
-				}
-			`,
-		});
-		assert(response3.body.kind === 'single');
-		expect(response3.body.singleResult.data?.albums).toHaveLength(345);
+		// const response3 = await graphweaver.executeOperation({
+		// 	query: gql`
+		// 		query {
+		// 			albums(filter: { id: { _not: 5 } }) {
+		// 				id
+		// 				title
+		// 			}
+		// 		}
+		// 	`,
+		// });
+		// assert(response3.body.kind === 'single');
+		// expect(response3.body.singleResult.errors).toBe(undefined);
+		// expect(response3.body.singleResult.data?.albums).toHaveLength(345);
 	});
 });
