@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-config",
-	"version": "2.8.4",
+	"version": "2.8.5",
 	"description": "Retrieve and parse Graphweaver configurations",
 	"license": "Apache-2.0",
 	"scripts": {
