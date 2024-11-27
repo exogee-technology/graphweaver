@@ -1647,11 +1647,11 @@ importers:
   packages/storage-provider:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.699.0
-        version: 3.699.0
+        specifier: 3.700.0
+        version: 3.700.0
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.699.0
-        version: 3.699.0
+        specifier: 3.700.0
+        version: 3.700.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1925,8 +1925,8 @@ packages:
     resolution: {integrity: sha512-K9TGvQB8hkjwNhfWSfYllUpttqxTcd78ShSRCIhlcwzzsmQphET10xEb0Tm1k8sqriSQ+CiVOFSkX78gqoHzBg==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/client-s3@3.699.0':
-    resolution: {integrity: sha512-x3wV9e6d0esA6Yyg3xWJucMYd/O8JVrNCJnGm/sz3lMYOQGefpVZKZZsHcnzQcTEVAQMF/T5/cdfdvPzIx/esA==}
+  '@aws-sdk/client-s3@3.700.0':
+    resolution: {integrity: sha512-TZTc8OZ873VodJNcsQ4Y/60f0Y0Ws5Z3Xm5QBgPCvhqQS7/+V28pXM3fAomJsKDWTxzH0nP9csX5cPvLybgdZQ==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/client-secrets-manager@3.699.0':
@@ -2027,8 +2027,8 @@ packages:
     resolution: {integrity: sha512-7EuH142lBXjI8yH6dVS/CZeiK/WZsmb/8zP6bQbVYpMrppSTgB3MzZZdxVZGzL5r8zPQOU10wLC4kIMy0qdBVQ==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/s3-request-presigner@3.699.0':
-    resolution: {integrity: sha512-r4/A55LfdqtVmaa8FEaN4uvNiJK+fjtPdX1WgscOa+BA0tkzFGXzmAKmtw/gLhJtgsDPc0Pgd15nQJnnPn94Mg==}
+  '@aws-sdk/s3-request-presigner@3.700.0':
+    resolution: {integrity: sha512-1M84DaDsRuRZHC9tKyRNAGXUNg7/WeHgizpHVVeDo62s83E4I+mHHOf4Cmzui+KxbXEVkcnjJyIiXqbCQJY43w==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/signature-v4-multi-region@3.696.0':
@@ -10491,7 +10491,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-s3@3.699.0':
+  '@aws-sdk/client-s3@3.700.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
@@ -10941,7 +10941,7 @@ snapshots:
       '@smithy/util-middleware': 3.0.10
       tslib: 2.7.0
 
-  '@aws-sdk/s3-request-presigner@3.699.0':
+  '@aws-sdk/s3-request-presigner@3.700.0':
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.696.0
       '@aws-sdk/types': 3.696.0
