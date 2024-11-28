@@ -1,3 +1,4 @@
+import path from 'node:path';
 import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
@@ -26,6 +27,13 @@ export class LambdaStack extends cdk.NestedStack {
 			throw new Error('Missing required lambda configuration');
 		}
 
+		if (!config.lambda.packageName && !config.lambda.buildPath) {
+			throw new Error('Missing required lambda packageName or buildPath');
+		}
+		if (config.lambda.packageName && config.lambda.buildPath) {
+			throw new Error('Cannot provide both packageName and buildPath');
+		}
+
 		// ⚠️ Avoid using the database root user in the application layer. ⚠️
 		// Create a dedicated user with limited permissions and pass its credentials via a secret manager ARN.
 		// This is a best practice for security and compliance.
@@ -38,7 +46,9 @@ export class LambdaStack extends cdk.NestedStack {
 		this.lambda = new NodejsFunction(this, `${id}LambdaFunction`, {
 			runtime: config.lambda.runtime ?? lambda.Runtime.NODEJS_20_X,
 			handler: config.lambda.handler ?? 'index.handler',
-			entry: require.resolve(config.lambda.packageName),
+			entry: config.lambda.packageName
+				? require.resolve(config.lambda.packageName)
+				: path.join(config.lambda.buildPath ?? '', 'index.ts'),
 			bundling: {
 				externalModules: [
 					'sqlite3',
