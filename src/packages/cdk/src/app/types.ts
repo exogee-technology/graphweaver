@@ -38,7 +38,7 @@ export type GraphweaverAppConfig = {
 		version?: PostgresEngineVersion;
 	};
 	ecs?: {
-		// Path to the Graphweaver app build directory (relative to the project root)
+		// Path to the Graphweaver backend build directory
 		buildPath: string;
 		// ARN of the certificate in AWS Certificate Manager to use for the API
 		cert: string;
@@ -56,8 +56,11 @@ export type GraphweaverAppConfig = {
 		databaseSecretFullArn?: string;
 	};
 	lambda?: {
-		// Name of the package containing the Graphweaver API
-		packageName: string;
+		// Either provide the name of the package containing the Graphweaver API
+		packageName?: string;
+		// Or the path to the Graphweaver backend build directory
+		buildPath?: string;
+
 		// ARN of the certificate in AWS Certificate Manager to use for the API
 		// This must be in Certificate Manager in the region you intend to deploy the API to.
 		cert: string;
