@@ -76,16 +76,17 @@
 	position: absolute;
 	z-index: 2;
 	top: 95%;
-	background-color: var(--body-bg-color);
+	background-color: #1c1725;
+	border: 1px solid var(--detail-border-color);
 	border-radius: 6px;
 	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	padding: 8px 16px 16px;
 	overflow: hidden;
 }
 
 .filterButtons {
 	display: flex;
 	flex-direction: row;
-	background-color: var(--body-bg-color);
 	gap: 8px;
 	padding: 8px;
 }
@@ -110,4 +111,9 @@
 	color: var(--body-copy-color);
 	border-radius: 6px 0px 0px 6px;
 	padding-right: 10px;
+}
+
+/* Styling overrides for react-day-picker */
+:global(.rdp-root) {
+	--rdp-accent-color: var(--primary-color);
 }

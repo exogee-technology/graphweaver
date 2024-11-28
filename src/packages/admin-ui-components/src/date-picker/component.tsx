@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
 import clsx from 'clsx';
+import { DayPicker } from 'react-day-picker';
+
+import 'react-day-picker/style.css';
 
 import { Button } from '../button';
-import { DateSelector } from './date-selector';
 
 import styles from './styles.module.css';
 import { CloseButtonIcon } from '../assets';
@@ -16,6 +18,13 @@ interface Props {
 	endDate?: DateTime | string;
 }
 
+const toLuxonDate = (date: Date | DateTime | string | undefined) => {
+	if (DateTime.isDateTime(date)) return date;
+	if (typeof date === 'string') return DateTime.fromISO(date);
+	if (date instanceof Date) return DateTime.fromJSDate(date);
+	return undefined;
+};
+
 export const DatePicker = ({
 	onChange,
 	placeholder,
@@ -26,16 +35,8 @@ export const DatePicker = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const datePickerRef = useRef<HTMLDivElement>(null);
 
-	const luxonStartDate = startDate
-		? DateTime.isDateTime(startDate)
-			? startDate
-			: DateTime.fromISO(startDate)
-		: undefined;
-	const luxonEndDate = endDate
-		? DateTime.isDateTime(endDate)
-			? endDate
-			: DateTime.fromISO(endDate)
-		: undefined;
+	const luxonStartDate = toLuxonDate(startDate);
+	const luxonEndDate = toLuxonDate(endDate);
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
 		setIsOpen(false);
@@ -91,12 +92,26 @@ export const DatePicker = ({
 			</div>
 			{isOpen && (
 				<div className={styles.popup} ref={datePickerRef}>
-					<DateSelector
-						startDate={luxonStartDate}
-						endDate={luxonEndDate}
-						onSelect={handleDateRangeSelect}
-						isRangePicker={isRangePicker}
-					/>
+					{isRangePicker ? (
+						<DayPicker
+							mode="range"
+							selected={{ from: luxonStartDate?.toJSDate(), to: luxonEndDate?.toJSDate() }}
+							onSelect={(range) =>
+								handleDateRangeSelect(toLuxonDate(range?.from), toLuxonDate(range?.to))
+							}
+							defaultMonth={luxonStartDate?.toJSDate()}
+							captionLayout="dropdown"
+						/>
+					) : (
+						<DayPicker
+							mode="single"
+							selected={luxonStartDate?.toJSDate()}
+							onSelect={(date) => handleDateRangeSelect(toLuxonDate(date))}
+							defaultMonth={luxonStartDate?.toJSDate()}
+							captionLayout="dropdown"
+						/>
+					)}
+
 					<div className={styles.filterButtons}>
 						<Button type="button" className={styles.finishButton} onClick={() => setIsOpen(false)}>
 							Done
