@@ -27,7 +27,7 @@
 	"devDependencies": {
 		"@apollo/client": "3.11.10",
 		"esbuild": "0.24.0",
-		"typescript": "5.6.3"
+		"typescript": "5.7.2"
 	},
 	"keywords": [
 		"graphql",
