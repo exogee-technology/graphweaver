@@ -82,7 +82,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -321,7 +321,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -440,10 +440,10 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1066,8 +1066,8 @@ importers:
   packages/cdk:
     dependencies:
       aws-cdk-lib:
-        specifier: 2.171.0
-        version: 2.171.0(constructs@10.4.2)
+        specifier: 2.171.1
+        version: 2.171.1(constructs@10.4.2)
       constructs:
         specifier: 10.4.2
         version: 10.4.2
@@ -1082,8 +1082,8 @@ importers:
         specifier: 22.9.0
         version: 22.9.0
       aws-cdk:
-        specifier: 2.171.0
-        version: 2.171.0
+        specifier: 2.171.1
+        version: 2.171.1
       dotenv-cli:
         specifier: 7.4.4
         version: 7.4.4
@@ -1275,7 +1275,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1380,7 +1380,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1442,13 +1442,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -5475,7 +5475,7 @@ packages:
   apollo-server-errors@3.3.1:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
-    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now end-of-life (as of October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
 
@@ -5553,8 +5553,8 @@ packages:
   avvio@8.4.0:
     resolution: {integrity: sha512-CDSwaxINFy59iNwhYnkvALBwZiTydGkOecZyPkqBpABYR1KqGEsET0VOOYDwtleZSUIdeY36DC2bSZ24CO1igA==}
 
-  aws-cdk-lib@2.171.0:
-    resolution: {integrity: sha512-N0O0mWI+S8PAbiED7eV05qVfbJgHkdh+jQS4BOG6CUAc/i2s9U4w+XDRkK8auO0HgTM9+ahEaFfucMuQ4abRWQ==}
+  aws-cdk-lib@2.171.1:
+    resolution: {integrity: sha512-BmXodHmeOWu7EZMwXFA+Mp+SnlZgIwhMxfOmqpdGa5dXF4BWOrs0cm4YgrzcJkg0XK713eXPj5IWGj8YeRIU3g==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -5571,8 +5571,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.171.0:
-    resolution: {integrity: sha512-tVo4hYS0iAbiCFxUh2/7KoDL6EHEIUAurCJaBs2BOUAB9DfBuUAPp8DGUK4iVF8XzrQQ4f3a5ivN7DteQrGBEQ==}
+  aws-cdk@2.171.1:
+    resolution: {integrity: sha512-IWENyT4F5UcLr1szLsbipUdjIHn8FD3d/RvaIvhs2+qCamkfEV5mqv/ChMvRJ8H2jebhIZ2iz74or9O5Ismp+Q==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
 
@@ -13476,25 +13476,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.4.0(@mikro-orm/core@6.4.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.0
-      '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
-      pg: 8.13.1
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/postgresql@6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)':
     dependencies:
       '@mikro-orm/core': 6.4.0
@@ -15456,7 +15437,7 @@ snapshots:
       '@fastify/error': 3.4.1
       fastq: 1.17.1
 
-  aws-cdk-lib@2.171.0(constructs@10.4.2):
+  aws-cdk-lib@2.171.1(constructs@10.4.2):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.209
       '@aws-cdk/asset-kubectl-v20': 2.1.3
@@ -15464,7 +15445,7 @@ snapshots:
       '@aws-cdk/cloud-assembly-schema': 38.0.1
       constructs: 10.4.2
 
-  aws-cdk@2.171.0:
+  aws-cdk@2.171.1:
     optionalDependencies:
       fsevents: 2.3.2
 
