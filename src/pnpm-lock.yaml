@@ -82,7 +82,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -321,7 +321,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -440,10 +440,10 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1272,7 +1272,7 @@ importers:
         version: 6.4.0
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1377,7 +1377,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1439,13 +1439,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)(pg@8.13.1)
       '@mikro-orm/mysql':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.0)(mysql2@3.11.4)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)
@@ -1601,8 +1601,8 @@ importers:
         specifier: 2.1.1
         version: 2.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(fastify@4.28.1)
       '@escape.tech/graphql-armor':
-        specifier: 3.1.1
-        version: 3.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.7.0)
+        specifier: 3.1.2
+        version: 3.1.2(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.7.0)
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -3103,8 +3103,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@escape.tech/graphql-armor-block-field-suggestions@2.2.0':
-    resolution: {integrity: sha512-a8E/mwDzlQsjv5WDxeG+cI7JprR+d0GbMKvwfNyuiS1f2yfSOiZjY45ZNbOhhPbIgvF8QtJysD+ZFax2cPcfUA==}
+  '@escape.tech/graphql-armor-block-field-suggestions@3.0.0':
+    resolution: {integrity: sha512-fx6o6uh9t9B96qFMdzp3TfBPW/wcGExa9F82PgHIekpKkg50K8848brv6y8Ue17VpVsleiYXHQeMtS4W4pY2AQ==}
     engines: {node: '>=18.0.0'}
 
   '@escape.tech/graphql-armor-cost-limit@2.4.0':
@@ -3130,8 +3130,8 @@ packages:
   '@escape.tech/graphql-armor-types@0.7.0':
     resolution: {integrity: sha512-RHxyyp6PDgS6NAPnnmB6JdmUJ6oqhpSHFbsglGWeCcnNzceA5AkQFpir7VIDbVyS8LNC1xhipOtk7f9ycrIemQ==}
 
-  '@escape.tech/graphql-armor@3.1.1':
-    resolution: {integrity: sha512-hEzpCYQkr9LPLUkra01WqN9SNt1hlM5bbDbBoJhNPfzEE4TNUMx3cBUVyT8ZNznWrFlzLdggGPWBBid7psQgcA==}
+  '@escape.tech/graphql-armor@3.1.2':
+    resolution: {integrity: sha512-nrCSdBTQU2f087xQXDqCI8dbyG+YG0Rj79vNonahea0qs12pKGTpKgOkbTnEeFqY/UIWxlkl9zipKWa5VoEPgg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@apollo/server': ^4.0.0
@@ -11871,7 +11871,7 @@ snapshots:
   '@esbuild/win32-x64@0.24.0':
     optional: true
 
-  '@escape.tech/graphql-armor-block-field-suggestions@2.2.0':
+  '@escape.tech/graphql-armor-block-field-suggestions@3.0.0':
     dependencies:
       graphql: 16.9.0
     optionalDependencies:
@@ -11916,9 +11916,9 @@ snapshots:
     dependencies:
       graphql: 16.9.0
 
-  '@escape.tech/graphql-armor@3.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.7.0)':
+  '@escape.tech/graphql-armor@3.1.2(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))(@envelop/core@5.0.2)(@escape.tech/graphql-armor-types@0.7.0)':
     dependencies:
-      '@escape.tech/graphql-armor-block-field-suggestions': 2.2.0
+      '@escape.tech/graphql-armor-block-field-suggestions': 3.0.0
       '@escape.tech/graphql-armor-cost-limit': 2.4.0
       '@escape.tech/graphql-armor-max-aliases': 2.6.0
       '@escape.tech/graphql-armor-max-depth': 2.4.0
@@ -13454,25 +13454,6 @@ snapshots:
       - mariadb
       - mysql
       - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/postgresql@6.4.0(@mikro-orm/core@6.4.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.0
-      '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
-      pg: 8.13.1
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
       - pg-native
       - sqlite3
       - supports-color
