@@ -1567,8 +1567,8 @@ importers:
   packages/scalars:
     dependencies:
       graphql-scalars:
-        specifier: 1.23.0
-        version: 1.23.0(graphql@16.9.0)
+        specifier: 1.24.0
+        version: 1.24.0(graphql@16.9.0)
       luxon:
         specifier: 3.5.0
         version: 3.5.0
@@ -7093,8 +7093,8 @@ packages:
     peerDependencies:
       graphql: 14 - 16
 
-  graphql-scalars@1.23.0:
-    resolution: {integrity: sha512-YTRNcwitkn8CqYcleKOx9IvedA8JIERn8BRq21nlKgOr4NEcTaWEG0sT+H92eF3ALTFbPgsqfft4cw+MGgv0Gg==}
+  graphql-scalars@1.24.0:
+    resolution: {integrity: sha512-olbFN39m0XsHHESACUdd7jWU/lGxMMS1B7NZ8XqpqhKZrjBxzeGYAnQ4Ax//huYds771wb7gCznA+65QDuUa+g==}
     engines: {node: '>=10'}
     peerDependencies:
       graphql: ^0.8.0 || ^0.9.0 || ^0.10.0 || ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
@@ -17425,7 +17425,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  graphql-scalars@1.23.0(graphql@16.9.0):
+  graphql-scalars@1.24.0(graphql@16.9.0):
     dependencies:
       graphql: 16.9.0
       tslib: 2.7.0
