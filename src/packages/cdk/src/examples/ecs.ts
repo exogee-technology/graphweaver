@@ -54,7 +54,7 @@ export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDock
 		instanceType: InstanceType.of(InstanceClass.T4G, InstanceSize.MICRO),
 	},
 	adminUI: {
-		buildPath: '../../../../examples/rest/.graphweaver/admin-ui',
+		buildPath: '../../examples/rest/.graphweaver/admin-ui',
 		cert: process.env.WEBSITE_CERTIFICATE_ARN ?? 'arn:aws:acm:us-east-1:test:test:test',
 		url: 'admin-ui-ecs.graphweaver.com',
 		customHeaders: [
