@@ -48,7 +48,7 @@ export class LambdaStack extends cdk.NestedStack {
 			handler: config.lambda.handler ?? 'index.handler',
 			entry: config.lambda.packageName
 				? require.resolve(config.lambda.packageName)
-				: path.join(config.lambda.buildPath ?? '', 'index.ts'),
+				: config.lambda.buildPath,
 			bundling: {
 				externalModules: [
 					'sqlite3',
