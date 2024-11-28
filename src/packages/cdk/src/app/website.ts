@@ -1,4 +1,3 @@
-import path from 'path';
 import * as cdk from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
@@ -33,7 +32,7 @@ export class WebsiteStack extends cdk.Stack {
 		});
 
 		new s3deploy.BucketDeployment(this, `${id}BucketDeployment`, {
-			sources: [s3deploy.Source.asset(path.join(__dirname, config.adminUI.buildPath))], // Path to your built website files
+			sources: [s3deploy.Source.asset(config.adminUI.buildPath)], // Path to your built website files
 			destinationBucket: websiteBucket,
 		});
 
