@@ -36,7 +36,7 @@
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.5.0",
 		"papaparse": "5.4.1",
-		"react-day-picker": "9.4.0",
+		"react-day-picker": "9.4.1",
 		"react-hot-toast": "2.4.1",
 		"react-resizable-panels": "2.1.7",
 		"react-syntax-highlighter": "15.6.1"
