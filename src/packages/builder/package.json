@@ -50,7 +50,7 @@
 		"jsonwebtoken": "9.0.2",
 		"prettier": "3.4.1",
 		"typescript": "5.7.2",
-		"vitest": "2.1.6"
+		"vitest": "2.1.8"
 	},
 	"keywords": [
 		"graphql",
