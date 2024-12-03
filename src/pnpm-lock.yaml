@@ -127,8 +127,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -231,8 +231,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/server
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
     devDependencies:
       '@types/node':
         specifier: 22.10.1
@@ -326,8 +326,8 @@ importers:
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       got-cjs:
         specifier: 12.5.4
         version: 12.5.4
@@ -375,8 +375,8 @@ importers:
         specifier: 6.4.0
         version: 6.4.0(@mikro-orm/core@6.4.0)
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       got-cjs:
         specifier: 12.5.4
         version: 12.5.4
@@ -810,8 +810,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -999,8 +999,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       esbuild:
         specifier: 0.24.0
         version: 0.24.0
@@ -1311,8 +1311,8 @@ importers:
         specifier: 29.5.14
         version: 29.5.14
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       graphql-tag:
         specifier: 2.12.6
         version: 2.12.6(graphql@16.9.0)
@@ -1428,8 +1428,8 @@ importers:
         specifier: 10.4.3
         version: 10.4.3
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -1530,8 +1530,8 @@ importers:
         specifier: 2.2.2
         version: 2.2.2
       dotenv:
-        specifier: 16.4.5
-        version: 16.4.5
+        specifier: 16.4.6
+        version: 16.4.6
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -5344,7 +5344,7 @@ packages:
   apollo-server-errors@3.3.1:
     resolution: {integrity: sha512-xnZJ5QWs6FixHICXHxUfm+ZWqqxrNuPlQ+kj5m6RtEgIpekOPssH/SD9gf2B4HuWV0QozorrygwZnux8POvyPA==}
     engines: {node: '>=12.0'}
-    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now deprecated (end-of-life October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
+    deprecated: The `apollo-server-errors` package is part of Apollo Server v2 and v3, which are now end-of-life (as of October 22nd 2023 and October 22nd 2024, respectively). This package's functionality is now found in the `@apollo/server` package. See https://www.apollographql.com/docs/apollo-server/previous-versions/ for more details.
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
 
@@ -6255,6 +6255,10 @@ packages:
 
   dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
+    engines: {node: '>=12'}
+
+  dotenv@16.4.6:
+    resolution: {integrity: sha512-JhcR/+KIjkkjiU8yEpaB/USlzVi3i5whwOjpIRNGi9svKEXZSe+Qp6IWAjFjv+2GViAoDRCUv/QLNziQxsLqDg==}
     engines: {node: '>=12'}
 
   downshift@9.0.8:
@@ -12585,7 +12589,7 @@ snapshots:
       '@whatwg-node/fetch': 0.9.21
       chalk: 4.1.2
       debug: 4.3.7
-      dotenv: 16.4.5
+      dotenv: 16.4.6
       graphql: 16.9.0
       graphql-request: 6.1.0(encoding@0.1.13)(graphql@16.9.0)
       http-proxy-agent: 7.0.2
@@ -16321,13 +16325,15 @@ snapshots:
   dotenv-cli@7.4.4:
     dependencies:
       cross-spawn: 7.0.6
-      dotenv: 16.4.5
+      dotenv: 16.4.6
       dotenv-expand: 10.0.0
       minimist: 1.2.8
 
   dotenv-expand@10.0.0: {}
 
   dotenv@16.4.5: {}
+
+  dotenv@16.4.6: {}
 
   downshift@9.0.8(react@18.3.1):
     dependencies:
