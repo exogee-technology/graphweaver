@@ -237,6 +237,13 @@ class DatabaseImplementation {
 
 		logger.trace(`${params.entities?.length}x entities`);
 
+		// Log the params, obfuscating the password used for the connection if there is one.
+		const { password, ...rest } = params;
+		logger.info(
+			{ connectionParams: rest },
+			'Connecting to database using MikroORM. Note: connectionParams have password removed for security.'
+		);
+
 		const orm = await MikroORM.init({
 			validateRequired: false, // Since v5, new entities are validated on runtime (just before executing insert queries), based on the entity metadata
 			contextName: connectionOptions?.connectionManagerId ?? 'default',
