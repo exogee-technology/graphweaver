@@ -51,6 +51,7 @@ export class LambdaStack extends cdk.NestedStack {
 				: config.lambda.buildPath,
 			bundling: {
 				externalModules: [
+					'@aws-sdk/*',
 					'sqlite3',
 					'better-sqlite3',
 					'pg-query-stream',
