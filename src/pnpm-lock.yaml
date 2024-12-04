@@ -1650,11 +1650,11 @@ importers:
   packages/storage-provider:
     dependencies:
       '@aws-sdk/client-s3':
-        specifier: 3.703.0
-        version: 3.703.0
+        specifier: 3.705.0
+        version: 3.705.0
       '@aws-sdk/s3-request-presigner':
-        specifier: 3.703.0
-        version: 3.703.0
+        specifier: 3.705.0
+        version: 3.705.0
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../core
@@ -1928,8 +1928,8 @@ packages:
     resolution: {integrity: sha512-K9TGvQB8hkjwNhfWSfYllUpttqxTcd78ShSRCIhlcwzzsmQphET10xEb0Tm1k8sqriSQ+CiVOFSkX78gqoHzBg==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/client-s3@3.703.0':
-    resolution: {integrity: sha512-4TSrIamzASTeRPKXrTLcEwo+viPTuOSGcbXh4HC1R0m/rXwK0BHJ4btJ0Q34nZNF+WzvM+FiemXVjNc8qTAxog==}
+  '@aws-sdk/client-s3@3.705.0':
+    resolution: {integrity: sha512-Fm0Cbc4zr0yG0DnNycz7ywlL5tQFdLSb7xCIPfzrxJb3YQiTXWxH5eu61SSsP/Z6RBNRolmRPvst/iNgX0fWvA==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/client-secrets-manager@3.699.0':
@@ -2030,8 +2030,8 @@ packages:
     resolution: {integrity: sha512-7EuH142lBXjI8yH6dVS/CZeiK/WZsmb/8zP6bQbVYpMrppSTgB3MzZZdxVZGzL5r8zPQOU10wLC4kIMy0qdBVQ==}
     engines: {node: '>=16.0.0'}
 
-  '@aws-sdk/s3-request-presigner@3.703.0':
-    resolution: {integrity: sha512-zW2DVxymjcktvmtAggdXSkD0aXNKXEosR1dqmn759PIWwEtmxrrmcAXeCha0eEH2BpPGMASGeSb22TIZquVw6A==}
+  '@aws-sdk/s3-request-presigner@3.705.0':
+    resolution: {integrity: sha512-dAQiXv/TqjEUCoEeiKqQGI8LJ3g8Xv+XJL4W9CwsB6ZHHDq0Q05ulpDSkhhCf52ySXf5dJ33e1o/VeUDY3q0pw==}
     engines: {node: '>=16.0.0'}
 
   '@aws-sdk/signature-v4-multi-region@3.696.0':
@@ -5593,8 +5593,8 @@ packages:
   axios@1.7.7:
     resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
-  axios@1.7.8:
-    resolution: {integrity: sha512-Uu0wb7KNqK2t5K+YQyVCLM76prD5sRFjKHbJYCP1J7JFGEQ6nN7HWn9+04LAeiJ3ji54lgS/gZCH1oxyrf1SPw==}
+  axios@1.7.9:
+    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
 
   babel-jest@29.7.0:
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
@@ -10602,7 +10602,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-s3@3.703.0':
+  '@aws-sdk/client-s3@3.705.0':
     dependencies:
       '@aws-crypto/sha1-browser': 5.2.0
       '@aws-crypto/sha256-browser': 5.2.0
@@ -11052,7 +11052,7 @@ snapshots:
       '@smithy/util-middleware': 3.0.10
       tslib: 2.7.0
 
-  '@aws-sdk/s3-request-presigner@3.703.0':
+  '@aws-sdk/s3-request-presigner@3.705.0':
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.696.0
       '@aws-sdk/types': 3.696.0
@@ -15654,7 +15654,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  axios@1.7.8:
+  axios@1.7.9:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.1
@@ -20143,7 +20143,7 @@ snapshots:
 
   serverless@4.4.3:
     dependencies:
-      axios: 1.7.8
+      axios: 1.7.9
       axios-proxy-builder: 0.1.2
       rimraf: 5.0.8
       xml2js: 0.6.2
