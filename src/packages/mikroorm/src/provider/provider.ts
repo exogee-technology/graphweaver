@@ -157,11 +157,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		const connectionPlugin = {
 			name: connectionManagerId,
 			event: GraphweaverRequestEvent.OnRequest,
-			next: (_: GraphweaverRequestEvent, _next: GraphweaverPluginNextFunction) => {
+			next: async (_: GraphweaverRequestEvent, _next: GraphweaverPluginNextFunction) => {
 				logger.trace(`Graphweaver OnRequest plugin called`);
 
-				const connection = ConnectionManager.database(connectionManagerId);
-				if (!connection) throw new Error('No database connection found');
+				const connection = await ConnectionManager.awaitableDatabase(connectionManagerId);
+
+				if (!connection) {
+					throw new Error(
+						`No database connection found for connectionManagerId: ${connectionManagerId} after waiting for connection. This should not happen.`
+					);
+				}
 
 				return RequestContext.create(connection.orm.em, _next, {});
 			},
