@@ -24,7 +24,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"dotenv": "16.4.6"
+		"dotenv": "16.4.7"
 	},
 	"devDependencies": {
 		"@types/node": "22.10.1",
