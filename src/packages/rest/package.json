@@ -24,7 +24,7 @@
 	"dependencies": {
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"dataloader": "2.2.2",
+		"dataloader": "2.2.3",
 		"escape-string-regexp": "4.0.0",
 		"got-cjs": "12.5.4"
 	},
