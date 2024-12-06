@@ -25,7 +25,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"class-validator": "0.14.1",
-		"dataloader": "2.2.2",
+		"dataloader": "2.2.3",
 		"graphql": "16.9.0",
 		"xero-node": "9.3.0"
 	},

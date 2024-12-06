@@ -28,7 +28,7 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"dataloader": "2.2.2",
+		"dataloader": "2.2.3",
 		"decimal.js": "10.4.3",
 		"dotenv": "16.4.7",
 		"graphql": "16.9.0",

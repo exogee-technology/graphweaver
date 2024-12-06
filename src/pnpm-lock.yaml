@@ -1216,8 +1216,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dataloader:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.2.3
+        version: 2.2.3
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -1422,8 +1422,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       dataloader:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.2.3
+        version: 2.2.3
       decimal.js:
         specifier: 10.4.3
         version: 10.4.3
@@ -1484,8 +1484,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       dataloader:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.2.3
+        version: 2.2.3
       escape-string-regexp:
         specifier: 4.0.0
         version: 4.0.0
@@ -1527,8 +1527,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dataloader:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.2.3
+        version: 2.2.3
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -1712,8 +1712,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dataloader:
-        specifier: 2.2.2
-        version: 2.2.2
+        specifier: 2.2.3
+        version: 2.2.3
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -6193,6 +6193,9 @@ packages:
 
   dataloader@2.2.2:
     resolution: {integrity: sha512-8YnDaaf7N3k/q5HnTJVuzSyLETjoZjVmHc4AeKAzOvKHEFQKcn64OKBfzHYtE9zGjctNM7V9I0MfnUVLpi7M5g==}
+
+  dataloader@2.2.3:
+    resolution: {integrity: sha512-y2krtASINtPFS1rSDjacrFgn1dcUuoREVabwlOGOe4SdxenREqwjwjElAdwvbGM7kgZz9a3KVicWR7vcz8rnzA==}
 
   date-fns@4.1.0:
     resolution: {integrity: sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==}
@@ -12650,7 +12653,7 @@ snapshots:
   '@graphql-tools/batch-execute@9.0.4(graphql@16.9.0)':
     dependencies:
       '@graphql-tools/utils': 10.6.2(graphql@16.9.0)
-      dataloader: 2.2.2
+      dataloader: 2.2.3
       graphql: 16.9.0
       tslib: 2.7.0
       value-or-promise: 1.0.12
@@ -12673,7 +12676,7 @@ snapshots:
       '@graphql-tools/schema': 10.0.6(graphql@16.9.0)
       '@graphql-tools/utils': 10.6.2(graphql@16.9.0)
       '@repeaterjs/repeater': 3.0.6
-      dataloader: 2.2.2
+      dataloader: 2.2.3
       graphql: 16.9.0
       tslib: 2.7.0
 
@@ -16413,6 +16416,8 @@ snapshots:
   data-uri-to-buffer@4.0.1: {}
 
   dataloader@2.2.2: {}
+
+  dataloader@2.2.3: {}
 
   date-fns@4.1.0: {}
 
