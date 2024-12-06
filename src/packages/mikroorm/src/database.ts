@@ -298,7 +298,7 @@ class ConnectionsManager {
 		return databaseConnection;
 	}
 
-	public connect = async (id: string, connectionOptions: ConnectionOptions) => {
+	public connect = (id: string, connectionOptions: ConnectionOptions) => {
 		if (this.connections.has(id)) return this.connections.get(id);
 
 		const connect = new Promise<DatabaseImplementation>((resolve, reject) => {
