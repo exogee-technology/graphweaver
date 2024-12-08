@@ -25,7 +25,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.10",
+		"@apollo/client": "3.12.2",
 		"@simplewebauthn/browser": "10.0.0",
 		"@usedapp/core": "1.2.16",
 		"ethers": "5.7.2",
