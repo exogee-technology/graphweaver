@@ -10,5 +10,6 @@ export enum PrimaryAuthMethod {
 	AUTH_ZERO = 'AUTH_ZERO',
 	MAGIC_LINK = 'MAGIC_LINK',
 	MICROSOFT_ENTRA = 'MICROSOFT_ENTRA',
+	OKTA = 'OKTA',
 	PASSWORD = 'PASSWORD',
 }

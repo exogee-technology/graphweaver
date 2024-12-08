@@ -305,6 +305,64 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
 
+  examples/okta:
+    dependencies:
+      '@as-integrations/aws-lambda':
+        specifier: 3.1.0
+        version: 3.1.0(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.9.0))
+      '@exogee/graphweaver':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@exogee/graphweaver-admin-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/admin-ui-components
+      '@exogee/graphweaver-auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
+      '@exogee/graphweaver-auth-ui-components':
+        specifier: workspace:*
+        version: link:../../packages/auth-ui-components
+      '@exogee/graphweaver-mikroorm':
+        specifier: workspace:*
+        version: link:../../packages/mikroorm
+      '@exogee/graphweaver-scalars':
+        specifier: workspace:*
+        version: link:../../packages/scalars
+      '@exogee/graphweaver-server':
+        specifier: workspace:*
+        version: link:../../packages/server
+      '@mikro-orm/core':
+        specifier: 6.4.0
+        version: 6.4.0
+      '@mikro-orm/knex':
+        specifier: 6.4.0
+        version: 6.4.0(@mikro-orm/core@6.4.0)
+      '@mikro-orm/sqlite':
+        specifier: 6.4.0
+        version: 6.4.0(@mikro-orm/core@6.4.0)
+      '@okta/okta-auth-js':
+        specifier: 7.9.0
+        version: 7.9.0(encoding@0.1.13)
+      graphql:
+        specifier: 16.9.0
+        version: 16.9.0
+      graphweaver:
+        specifier: workspace:*
+        version: link:../../packages/cli
+      mikro-orm-sqlite-wasm:
+        specifier: workspace:*
+        version: link:../../packages/mikro-orm-sqlite-wasm
+      react:
+        specifier: 18.3.1
+        version: 18.3.1
+    devDependencies:
+      '@types/node':
+        specifier: 22.10.1
+        version: 22.10.1
+      typescript:
+        specifier: 5.7.2
+        version: 5.7.2
+
   examples/rest:
     dependencies:
       '@exogee/graphweaver':
@@ -901,6 +959,9 @@ importers:
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
+      '@okta/okta-auth-js':
+        specifier: 7.9.0
+        version: 7.9.0(encoding@0.1.13)
       '@simplewebauthn/types':
         specifier: 10.0.0
         version: 10.0.0
@@ -2468,6 +2529,10 @@ packages:
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
+
+  '@babel/runtime@7.22.10':
+    resolution: {integrity: sha512-21t/fkKLMZI4pqP2wlmsQAWnYW1PDyKyyUV4vCi+B25ydmdaYTKXPwCj0BzSUnZf4seIiYvSA3jcZ3gdsMFkLQ==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.25.6':
     resolution: {integrity: sha512-VBj9MYyDb9tuLq7yzqjgzt6Q+IBQLrGZfdjOekyEirZPHxXWoTSGUTMrpsfi58Up73d13NfYLv8HT9vmznjzhQ==}
@@ -4090,6 +4155,10 @@ packages:
     engines: {node: '>=10'}
     deprecated: This functionality has been moved to @npmcli/fs
 
+  '@okta/okta-auth-js@7.9.0':
+    resolution: {integrity: sha512-8CWHwF/V2XSIORVCmobjY870egvxmzpzOVdApKGlt50x6FSKQEyXXsJPt+dELGXHYp3LVkARm10e7WvYkoop1Q==}
+    engines: {node: '>=14.0'}
+
   '@opentelemetry/api-logs@0.55.0':
     resolution: {integrity: sha512-3cpa+qI45VHYcA5c0bHM6VHo9gicv3p5mlLHNG3rLyjQU8b7e0st1rWtrUn3JbZ3DwwCfhKop4eQ9UuYlC6Pkg==}
     engines: {node: '>=14'}
@@ -4246,6 +4315,14 @@ packages:
 
   '@peculiar/asn1-x509@2.3.13':
     resolution: {integrity: sha512-PfeLQl2skXmxX2/AFFCVaWU8U6FKW1Db43mgBhShCOFS1bVxqtvusq1hVjfuEcuSQGedrLdCSvTgabluwN/M9A==}
+
+  '@peculiar/json-schema@1.1.12':
+    resolution: {integrity: sha512-coUfuoMeIB7B8/NMekxaDzLhaYmp0HZNPEjYRm9goRou8UZIC3z21s0sL9AWoCw4EG876QyO3kYrc61WNF9B/w==}
+    engines: {node: '>=8.0.0'}
+
+  '@peculiar/webcrypto@1.5.0':
+    resolution: {integrity: sha512-BRs5XUAwiyCDQMsVA9IDvDa7UBR9gAvPHgugOeGng3YN6vJ9JYonyDc0lNczErgtCWtucjR5N7VtaonboD/ezg==}
+    engines: {node: '>=10.12.0'}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -5375,6 +5452,9 @@ packages:
     resolution: {integrity: sha512-FNoYzHawTMk/6KMQoEG5O4PuioX19UbwdQKF44yw0nLfOypfQdjtfZzo/UIJWAJ23sNIFbD1Ug9lbaDGMwbqQA==}
     engines: {node: '>=8'}
 
+  Base64@1.1.0:
+    resolution: {integrity: sha512-qeacf8dvGpf+XAT27ESHMh7z84uRzj/ua2pQdJg483m3bEXv/kVFtDnMgvf70BQGqzbZhR9t6BmASzKvqfJf3Q==}
+
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
 
@@ -5549,6 +5629,11 @@ packages:
   asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
 
+  atob@2.1.2:
+    resolution: {integrity: sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==}
+    engines: {node: '>= 4.5.0'}
+    hasBin: true
+
   atomic-sleep@1.0.0:
     resolution: {integrity: sha512-kNOjDqAh7px0XWNI+4QbzoiR/nTkHAWNud2uvnJquD1/x5a7EQZMJT0AczqK0Qn67oY/TTQ1LbUKajZpp3I9tQ==}
     engines: {node: '>=8.0.0'}
@@ -5697,6 +5782,9 @@ packages:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
     engines: {node: '>=8'}
 
+  broadcast-channel@5.3.0:
+    resolution: {integrity: sha512-0PmDYc/iUGZ4QbnCnV7u+WleygiS1bZ4oV6t4rANXYtSgEFtGhB5jimJPLOVpPtce61FVxrH8CYylfO5g7OLKw==}
+
   brorand@1.1.0:
     resolution: {integrity: sha512-cKV8tMCEpQs4hK/ik71d6LrPOnpkpGBR0wzxqr68g2m/LB2GxVYQroAjMJZRVM1Y4BCjCKc3vAamxSzOY2RP+w==}
 
@@ -5720,6 +5808,11 @@ packages:
 
   bser@2.1.1:
     resolution: {integrity: sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==}
+
+  btoa@1.2.1:
+    resolution: {integrity: sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==}
+    engines: {node: '>= 0.4.0'}
+    hasBin: true
 
   buffer-alloc-unsafe@1.1.0:
     resolution: {integrity: sha512-TEM2iMIEQdJ2yjPJoSIsldnleVaAk1oW3DBVUykyOLsEsFmEc9kn+SFFPz+gl54KQNxlDnAwCXosOS9Okx2xAg==}
@@ -5941,6 +6034,10 @@ packages:
 
   clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
+    engines: {node: '>=0.8'}
+
+  clone@2.1.2:
+    resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
 
   clsx@1.2.1:
@@ -6736,6 +6833,9 @@ packages:
 
   fast-safe-stringify@2.1.1:
     resolution: {integrity: sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==}
+
+  fast-text-encoding@1.0.6:
+    resolution: {integrity: sha512-VhXlQgj9ioXCqGstD37E/HBeqEGV/qOD/kmbVG8h5xKBYvM1L3lR1Zn4555cQ8GkYbJa8aJSipLPndE1k6zK2w==}
 
   fast-uri@2.4.0:
     resolution: {integrity: sha512-ypuAmmMKInk5q7XcepxlnUWDLWv4GFtaJqAzWKqn62IpQ3pejtr5dTVbt3vwqVaMKmkNR55sTT+CqUKIaT21BA==}
@@ -7684,6 +7784,10 @@ packages:
   jose@5.9.3:
     resolution: {integrity: sha512-egLIoYSpcd+QUF+UHgobt5YzI2Pkw/H39ou9suW687MY6PmCwPmkNV/4TNjn1p2tX5xO3j0d0sq5hiYE24bSlg==}
 
+  js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
+
   js-sha3@0.8.0:
     resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
 
@@ -8326,6 +8430,10 @@ packages:
   node-addon-api@7.1.1:
     resolution: {integrity: sha512-5m3bsyrjFWE1xf7nz7YXdN4udnVtXK6/Yfgn5qnahL6bCkf2yKt4k3nuTKAtT4r3IG8JNR2ncsIMdZuAzJjHQQ==}
 
+  node-cache@5.1.2:
+    resolution: {integrity: sha512-t1QzWwnk4sjLWaQAS8CHgOJ+RAfmHpxFWmc36IWTiWHQfs0w5JDMBS1b1ZxQteo0vVVuWJvIUKHDkkeK7vIGCg==}
+    engines: {node: '>= 8.0.0'}
+
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==}
     engines: {node: '>=10.5.0'}
@@ -8419,6 +8527,9 @@ packages:
 
   obliterator@2.0.4:
     resolution: {integrity: sha512-lgHwxlxV1qIg1Eap7LgIeoBWIMFibOjbrYPIPJZcI1mmGAI2m3lNYpK12Y+GBdPQ0U1hRwSord7GIaawz962qQ==}
+
+  oblivious-set@1.1.1:
+    resolution: {integrity: sha512-Oh+8fK09mgGmAshFdH6hSVco6KZmd1tTwNFWj35OvzdmJTMZtAkbn05zar2iG3v6sDs1JLEtOiBGNb6BHwkb2w==}
 
   oidc-token-hash@5.0.3:
     resolution: {integrity: sha512-IF4PcGgzAr6XXSff26Sk/+P4KZFJVuHAJZj3wgO3vX2bMdNVp/QXTP3P7CEm9V1IdG8lDLY3HhiqpsE/nOwpPw==}
@@ -8515,6 +8626,10 @@ packages:
   p-memoize@7.1.1:
     resolution: {integrity: sha512-DZ/bONJILHkQ721hSr/E9wMz5Am/OTJ9P6LhLFo2Tu+jL8044tgc9LwHO8g4PiaYePnlVVRAJcKmgy8J9MVFrA==}
     engines: {node: '>=14.16'}
+
+  p-queue@6.6.2:
+    resolution: {integrity: sha512-RwFpb72c/BhQLEXIZ5K2e+AhgNVmIejGlTgiB9MzZ0e93GRvqZ7uSi0dvRF7/XIXDeNkra2fNHBxTyPDGySpjQ==}
+    engines: {node: '>=8'}
 
   p-timeout@3.2.0:
     resolution: {integrity: sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==}
@@ -9606,6 +9721,9 @@ packages:
     resolution: {integrity: sha512-wFH7+SEAcKfJpfLPkrgMPvvwnEtj8W4IurvEyrKsDleXnKLCDw71w8jltvfLa8Rm4qQxxT4jmDBYbJG/z7qoww==}
     engines: {node: '>=0.12'}
 
+  tiny-emitter@1.1.0:
+    resolution: {integrity: sha512-HFhr+OKGIHRO6krgzEt9MqbMO98wPDzDPr1BOpM/nZCChkK40UYn8b70nSjcan4jTzDSQecy1KRVVQRohIRWrw==}
+
   tiny-warning@1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
 
@@ -9860,6 +9978,9 @@ packages:
     resolution: {integrity: sha512-6bc58dPYhCMHHuwxldQxO3RRNZ4eCogZ/st++0+fcC1nr0jiGUtAdBJ2qzmLQWSxbtz42pWt4QQMiZ9HvZf5cg==}
     engines: {node: '>=0.10.0'}
 
+  unload@2.4.1:
+    resolution: {integrity: sha512-IViSAm8Z3sRBYA+9wc0fLQmU9Nrxb16rcDmIiR6Y9LJSZzI7QY5QsDhqPpKOjAn0O9/kfK1TfNEMMAGPTIraPw==}
+
   unpipe@1.0.0:
     resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
     engines: {node: '>= 0.8'}
@@ -10082,6 +10203,12 @@ packages:
   web3-token@1.0.6:
     resolution: {integrity: sha512-a4gSwpDHWmQvoHiB7OLV+2xSVrz9ITB1T+LdnmdYh6H7ZNWVYpWtDC25ShMbKTL3WUwGqxyk2v9pSDOIApHv9w==}
 
+  webcrypto-core@1.8.1:
+    resolution: {integrity: sha512-P+x1MvlNCXlKbLSOY4cYrdreqPG5hbzkmawbcXLKN/mf6DZW0SdNNkZ+sjwsqVkI4A4Ko2sPZmkZtCKY58w83A==}
+
+  webcrypto-shim@0.1.7:
+    resolution: {integrity: sha512-JAvAQR5mRNRxZW2jKigWMjCMkjSdmP5cColRP1U/pTg69VgHXEi1orv5vVpJ55Zc5MIaPc1aaurzd9pjv2bveg==}
+
   webidl-conversions@3.0.1:
     resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
 
@@ -10195,6 +10322,10 @@ packages:
 
   xero-node@9.3.0:
     resolution: {integrity: sha512-0uXEjzNE+Eek02uBZNa3lXEnQjemCVegQLdFqQPCq4QmAF5U421haVl44P+uAWBFTbf4quGN4AtGy6CfL9ONrQ==}
+
+  xhr2@0.1.3:
+    resolution: {integrity: sha512-6RmGK22QwC7yXB1CRwyLWuS2opPcKOlAu0ViAnyZjDlzrEmCKL4kLHkfvB8oMRWeztMsNoDGAjsMZY15w/4tTw==}
+    engines: {node: '>= 0.6'}
 
   xml2js@0.6.2:
     resolution: {integrity: sha512-T4rieHaC1EXcES0Kxxj4JWgaUQHDk+qwHcYOCFHfiwKz7tOVPLq7Hjq9dM1WCMhylqMEfP7hMcOIChvotiZegA==}
@@ -11564,6 +11695,10 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.0
       '@babel/helper-plugin-utils': 7.25.9
+
+  '@babel/runtime@7.22.10':
+    dependencies:
+      regenerator-runtime: 0.14.1
 
   '@babel/runtime@7.25.6':
     dependencies:
@@ -13919,6 +14054,26 @@ snapshots:
       rimraf: 3.0.2
     optional: true
 
+  '@okta/okta-auth-js@7.9.0(encoding@0.1.13)':
+    dependencies:
+      '@babel/runtime': 7.25.6
+      '@peculiar/webcrypto': 1.5.0
+      Base64: 1.1.0
+      atob: 2.1.2
+      broadcast-channel: 5.3.0
+      btoa: 1.2.1
+      core-js: 3.38.1
+      cross-fetch: 3.1.8(encoding@0.1.13)
+      fast-text-encoding: 1.0.6
+      js-cookie: 3.0.5
+      node-cache: 5.1.2
+      p-cancelable: 2.1.1
+      tiny-emitter: 1.1.0
+      webcrypto-shim: 0.1.7
+      xhr2: 0.1.3
+    transitivePeerDependencies:
+      - encoding
+
   '@opentelemetry/api-logs@0.55.0':
     dependencies:
       '@opentelemetry/api': 1.9.0
@@ -14143,6 +14298,18 @@ snapshots:
       ipaddr.js: 2.2.0
       pvtsutils: 1.3.5
       tslib: 2.7.0
+
+  '@peculiar/json-schema@1.1.12':
+    dependencies:
+      tslib: 2.7.0
+
+  '@peculiar/webcrypto@1.5.0':
+    dependencies:
+      '@peculiar/asn1-schema': 2.3.13
+      '@peculiar/json-schema': 1.1.12
+      pvtsutils: 1.3.5
+      tslib: 2.7.0
+      webcrypto-core: 1.8.1
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -15463,6 +15630,8 @@ snapshots:
     dependencies:
       tslib: 2.7.0
 
+  Base64@1.1.0: {}
+
   abbrev@1.1.1:
     optional: true
 
@@ -15621,6 +15790,8 @@ snapshots:
   async@3.2.6: {}
 
   asynckit@0.4.0: {}
+
+  atob@2.1.2: {}
 
   atomic-sleep@1.0.0: {}
 
@@ -15841,6 +16012,13 @@ snapshots:
     dependencies:
       fill-range: 7.1.1
 
+  broadcast-channel@5.3.0:
+    dependencies:
+      '@babel/runtime': 7.22.10
+      oblivious-set: 1.1.1
+      p-queue: 6.6.2
+      unload: 2.4.1
+
   brorand@1.1.0: {}
 
   browserify-aes@1.2.0:
@@ -15876,6 +16054,8 @@ snapshots:
   bser@2.1.1:
     dependencies:
       node-int64: 0.4.0
+
+  btoa@1.2.1: {}
 
   buffer-alloc-unsafe@1.1.0: {}
 
@@ -16163,6 +16343,8 @@ snapshots:
       mimic-response: 1.0.1
 
   clone@1.0.4: {}
+
+  clone@2.1.2: {}
 
   clsx@1.2.1: {}
 
@@ -17150,6 +17332,8 @@ snapshots:
   fast-redact@3.5.0: {}
 
   fast-safe-stringify@2.1.1: {}
+
+  fast-text-encoding@1.0.6: {}
 
   fast-uri@2.4.0: {}
 
@@ -18390,6 +18574,8 @@ snapshots:
 
   jose@5.9.3: {}
 
+  js-cookie@3.0.5: {}
+
   js-sha3@0.8.0: {}
 
   js-string-escape@1.0.1: {}
@@ -19157,6 +19343,10 @@ snapshots:
 
   node-addon-api@7.1.1: {}
 
+  node-cache@5.1.2:
+    dependencies:
+      clone: 2.1.2
+
   node-domexception@1.0.0: {}
 
   node-fetch@2.7.0(encoding@0.1.13):
@@ -19246,6 +19436,8 @@ snapshots:
   object-inspect@1.13.2: {}
 
   obliterator@2.0.4: {}
+
+  oblivious-set@1.1.1: {}
 
   oidc-token-hash@5.0.3: {}
 
@@ -19360,6 +19552,11 @@ snapshots:
     dependencies:
       mimic-fn: 4.0.0
       type-fest: 3.13.1
+
+  p-queue@6.6.2:
+    dependencies:
+      eventemitter3: 4.0.7
+      p-timeout: 3.2.0
 
   p-timeout@3.2.0:
     dependencies:
@@ -20526,6 +20723,8 @@ snapshots:
       es5-ext: 0.10.64
       next-tick: 1.1.0
 
+  tiny-emitter@1.1.0: {}
+
   tiny-warning@1.0.3: {}
 
   tinybench@2.9.0: {}
@@ -20737,6 +20936,8 @@ snapshots:
     dependencies:
       normalize-path: 2.1.1
 
+  unload@2.4.1: {}
+
   unpipe@1.0.0: {}
 
   update-browserslist-db@1.1.1(browserslist@4.24.2):
@@ -20921,6 +21122,16 @@ snapshots:
     transitivePeerDependencies:
       - react
 
+  webcrypto-core@1.8.1:
+    dependencies:
+      '@peculiar/asn1-schema': 2.3.13
+      '@peculiar/json-schema': 1.1.12
+      asn1js: 3.0.5
+      pvtsutils: 1.3.5
+      tslib: 2.7.0
+
+  webcrypto-shim@0.1.7: {}
+
   webidl-conversions@3.0.1: {}
 
   webidl-conversions@4.0.2: {}
@@ -21003,6 +21214,8 @@ snapshots:
       openid-client: 5.6.5
     transitivePeerDependencies:
       - debug
+
+  xhr2@0.1.3: {}
 
   xml2js@0.6.2:
     dependencies:
