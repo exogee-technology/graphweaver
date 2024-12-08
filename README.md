@@ -67,10 +67,6 @@ Other tools are oriented around the schema file. This is great until you actuall
 
 That's why we built Graphweaver. Start quickly, use the default for most things, change whatever you like, self-host, and never lose control.
 
-## Ask AI
-
-[Graphweaver] (https://codeparrot.ai/oracle?owner=exogee-technology&repo=graphweaver) AI will help you understand this repository better. You can ask for code examples, installation guide, debugging help and much more.
-
 ## Features
 
 - **Instant GraphQL API -** Instant CRUD API from any data source
@@ -95,6 +91,10 @@ Graphweaver comes pre-built with the following security features:
 For more on security see the [security documentation](https://graphweaver.com/docs/security).
 
 <!-- DOCUMENTATION -->
+
+## Ask AI
+
+[Graphweaver AI](https://codeparrot.ai/oracle?owner=exogee-technology&repo=graphweaver) will help you understand this repository better. You can ask for code examples, an installation guide, debugging help and much more.
 
 ## Documentation
 
