@@ -973,7 +973,7 @@ class SchemaBuilderImplementation {
 						throw new Error(`Duplicate query name: ${customQuery.name}.`);
 					}
 
-					const { fieldType, metadata } = getFieldTypeWithMetadata(customQuery.getType);
+					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customQuery.getType);
 					const customArgs = this.graphQLTypeForArgs(entityFilter, customQuery.args);
 
 					if (isEntityMetadata(metadata)) {
@@ -981,12 +981,14 @@ class SchemaBuilderImplementation {
 						// an entity that is filtered out of this schema.
 						if (entityFilter && !entityFilter(metadata)) continue;
 
+						const graphQLType = graphQLTypeForEntity(metadata, entityFilter);
+
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type: graphQLTypeForEntity(metadata, entityFilter),
+							type: isList ? new GraphQLList(graphQLType) : graphQLType,
 							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
 							extensions: {
 								directives: customQuery.directives ?? {},
@@ -1174,8 +1176,7 @@ class SchemaBuilderImplementation {
 						throw new Error(`Duplicate mutation name: ${customMutation.name}.`);
 					}
 
-					const type = customMutation.getType();
-					const metadata = graphweaverMetadata.metadataForType(type);
+					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customMutation.getType);
 					const customArgs = this.graphQLTypeForArgs(entityFilter, customMutation.args);
 
 					if (isEntityMetadata(metadata)) {
@@ -1185,10 +1186,12 @@ class SchemaBuilderImplementation {
 
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
+						const graphQLType = graphQLTypeForEntity(metadata, entityFilter);
+
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
-							type: graphQLTypeForEntity(metadata, entityFilter),
+							type: isList ? new GraphQLList(graphQLType) : graphQLType,
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 							extensions: {
 								directives: customMutation.directives ?? {},
@@ -1198,7 +1201,7 @@ class SchemaBuilderImplementation {
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
-							type: graphQLScalarForTypeScriptType(type),
+							type: graphQLScalarForTypeScriptType(fieldType),
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 							extensions: {
 								directives: customMutation.directives ?? {},
