@@ -403,8 +403,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   examples/s3-storage:
     dependencies:
@@ -613,8 +613,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/admin-ui:
     dependencies:
@@ -663,7 +663,7 @@ importers:
         version: 3.16.3
       '@vitejs/plugin-react':
         specifier: 4.3.4
-        version: 4.3.4(vite@6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1))
+        version: 4.3.4(vite@6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1))
       esbuild:
         specifier: 0.24.0
         version: 0.24.0
@@ -677,8 +677,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/admin-ui-components:
     dependencies:
@@ -768,8 +768,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/apollo-client:
     devDependencies:
@@ -926,8 +926,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/aws-cognito:
     dependencies:
@@ -994,7 +994,7 @@ importers:
         version: 6.15.0(encoding@0.1.13)
       '@vitejs/plugin-react':
         specifier: 4.3.4
-        version: 4.3.4(vite@6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1))
+        version: 4.3.4(vite@6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1))
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -1035,8 +1035,8 @@ importers:
         specifier: 14.3.4
         version: 14.3.4(serverless@4.4.3)
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
       vite-plugin-graphweaver:
         specifier: workspace:*
         version: link:../vite-plugin-graphweaver
@@ -1174,8 +1174,8 @@ importers:
         specifier: 3.4.2
         version: 3.4.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/core:
     dependencies:
@@ -1694,8 +1694,8 @@ importers:
         specifier: 5.7.2
         version: 5.7.2
       vite:
-        specifier: 6.0.2
-        version: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+        specifier: 6.0.3
+        version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
 
   packages/xero:
     dependencies:
@@ -8660,9 +8660,6 @@ packages:
   pgpass@1.0.5:
     resolution: {integrity: sha512-FdW9r/jQZhSeohs1Z3sI1yxFQNFvMcnmfuj4WBMUTxOrAyLMaTcE1aAMBiTlbMNaXvBCQuVi0R7hd8udDSP7ug==}
 
-  picocolors@1.1.0:
-    resolution: {integrity: sha512-TQ92mBOW0l3LeMeyLV6mzy/kWr8lkd/hp3mTg7wYK7zJhuBStmGMBG0BdeDZS/dZx1IukaX6Bk11zcln25o1Aw==}
-
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
 
@@ -9995,8 +9992,8 @@ packages:
       terser:
         optional: true
 
-  vite@6.0.2:
-    resolution: {integrity: sha512-XdQ+VsY2tJpBsKGs0wf3U/+azx8BBpYRHFAyKm5VeEZNOJZRB63q7Sc8Iup3k0TrN3KO6QgyzFf+opSbfY1y0g==}
+  vite@6.0.3:
+    resolution: {integrity: sha512-Cmuo5P0ENTN6HxLSo6IHsjCLn/81Vgrp81oaiFFMRa8gGDj5xEjIcEpf2ZymZtZR8oU0P2JX5WuUp/rlXcHkAw==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -11146,7 +11143,7 @@ snapshots:
     dependencies:
       '@babel/helper-validator-identifier': 7.25.9
       js-tokens: 4.0.0
-      picocolors: 1.1.0
+      picocolors: 1.1.1
 
   '@babel/compat-data@7.26.2': {}
 
@@ -15357,14 +15354,14 @@ snapshots:
       - node-fetch
       - supports-color
 
-  '@vitejs/plugin-react@4.3.4(vite@6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1))':
+  '@vitejs/plugin-react@4.3.4(vite@6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1))':
     dependencies:
       '@babel/core': 7.26.0
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
+      vite: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -19498,8 +19495,6 @@ snapshots:
     dependencies:
       split2: 4.2.0
 
-  picocolors@1.1.0: {}
-
   picocolors@1.1.1: {}
 
   picomatch@2.3.1: {}
@@ -20843,7 +20838,7 @@ snapshots:
       fsevents: 2.3.3
       lightningcss: 1.27.0
 
-  vite@6.0.2(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1):
+  vite@6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1):
     dependencies:
       esbuild: 0.24.0
       postcss: 8.4.49
