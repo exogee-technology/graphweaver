@@ -92,11 +92,15 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 			const lookup: { [key: string]: D } = {};
 			for (const record of records) {
 				const primaryKeyValue = record[primaryKeyField];
-				if (typeof primaryKeyValue === 'number' || typeof primaryKeyValue === 'string') {
+				if (
+					typeof primaryKeyValue === 'number' ||
+					typeof primaryKeyValue === 'string' ||
+					typeof primaryKeyValue === 'bigint'
+				) {
 					lookup[String(record[primaryKeyField])] = record;
 				} else {
 					logger.warn(
-						`Ignoring primary key value ${primaryKeyValue} because it is not a string or number.`
+						`Ignoring primary key value ${primaryKeyValue} because it is not a string, number, or bigint.`
 					);
 				}
 			}
