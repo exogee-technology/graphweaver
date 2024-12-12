@@ -1032,8 +1032,8 @@ importers:
         specifier: 5.12.0
         version: 5.12.0(rollup@4.28.0)
       serverless-offline:
-        specifier: 14.3.4
-        version: 14.3.4(serverless@4.4.3)
+        specifier: 14.4.0
+        version: 14.4.0(serverless@4.4.3)
       vite:
         specifier: 6.0.3
         version: 6.0.3(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.27.0)(tsx@4.19.2)(yaml@2.5.1)
@@ -3909,14 +3909,14 @@ packages:
   '@js-sdsl/ordered-map@4.4.2':
     resolution: {integrity: sha512-iUKgm52T8HOE/makSxjqoWhe95ZJA1/G1sYsGev2JDKUSS14KAgg1LHb+Ba+IPow0xflbnSkOsZcO08C7w1gYw==}
 
-  '@jsep-plugin/assignment@1.2.1':
-    resolution: {integrity: sha512-gaHqbubTi29aZpVbBlECRpmdia+L5/lh2BwtIJTmtxdbecEyyX/ejAOg7eQDGNvGOUmPY7Z2Yxdy9ioyH/VJeA==}
+  '@jsep-plugin/assignment@1.3.0':
+    resolution: {integrity: sha512-VVgV+CXrhbMI3aSusQyclHkenWSAm95WaiKrMxRFam3JSUiIaQjoMIw2sEs/OX4XifnqeQUN4DYbJjlA8EfktQ==}
     engines: {node: '>= 10.16.0'}
     peerDependencies:
       jsep: ^0.4.0||^1.0.0
 
-  '@jsep-plugin/regex@1.0.3':
-    resolution: {integrity: sha512-XfZgry4DwEZvSFtS/6Y+R48D7qJYJK6R9/yJFyUFHCIUMEEHuJ4X95TDgJp5QkmzfLYvapMPzskV5HpIDrREug==}
+  '@jsep-plugin/regex@1.0.4':
+    resolution: {integrity: sha512-q7qL4Mgjs1vByCaTnDFcBnV9HS7GVPJX5vyVoCgZHNSC9rjwIlmbXG5sUuorR5ndfHAIlJ8pVStxvjXHbNvtUg==}
     engines: {node: '>= 10.16.0'}
     peerDependencies:
       jsep: ^0.4.0||^1.0.0
@@ -7693,8 +7693,8 @@ packages:
   jsbn@1.1.0:
     resolution: {integrity: sha512-4bYVV3aAMtDTTu4+xsDYa6sy9GyJ69/amsu9sYF2zqjiEoZA5xJi3BrfX3uY+/IekIu7MwdObdbDWpoZdBv3/A==}
 
-  jsep@1.3.9:
-    resolution: {integrity: sha512-i1rBX5N7VPl0eYb6+mHNp52sEuaS2Wi8CDYx1X5sn9naevL78+265XJqy1qENEk7mRKwS06NHpUqiBwR7qeodw==}
+  jsep@1.4.0:
+    resolution: {integrity: sha512-B7qPcEVE3NVkmSJbaYxvv4cHkVW7DQsZz13pUMrfS8z8Q/BuShN+gcTXrUlPiGqM2/t/EEaI030bpxMqY8gMlw==}
     engines: {node: '>= 10.16.0'}
 
   jsesc@2.5.2:
@@ -7725,6 +7725,9 @@ packages:
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
+  json-stringify-safe@5.0.1:
+    resolution: {integrity: sha512-ZClg6AaYvamvYEE82d3Iyd3vSSIjQ+odgjaTzRuO3s7toCdFKczob2i0zCh7JE8kWn17yvAWhUVxvqGwUalsRA==}
+
   json-to-pretty-yaml@1.2.2:
     resolution: {integrity: sha512-rvm6hunfCcqegwYaG5T4yKJWxc9FXFgBVrcTZ4XfSVRwa5HA/Xs+vB/Eo9treYYHCeNM0nrSUr82V/M31Urc7A==}
     engines: {node: '>= 0.2.0'}
@@ -7737,8 +7740,8 @@ packages:
   jsonfile@6.1.0:
     resolution: {integrity: sha512-5dgndWOriYSm5cnYaJNhalLNDKOqFwyDB/rr1E9ZsGciGvKPs8R2xYGCacuf3z6K1YKDz182fd+fY3cn3pMqXQ==}
 
-  jsonpath-plus@10.1.0:
-    resolution: {integrity: sha512-gHfV1IYqH8uJHYVTs8BJX1XKy2/rR93+f8QQi0xhx95aCiXn1ettYAd5T+7FU6wfqyDoX/wy0pm/fL3jOKJ9Lg==}
+  jsonpath-plus@10.2.0:
+    resolution: {integrity: sha512-T9V+8iNYKFL2n2rF+w02LBOT2JjDnTjioaNFrxRy0Bv1y/hNsqR/EBK7Ojy2ythRHwmz2cRIls+9JitQGZC/sw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -8301,6 +8304,10 @@ packages:
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
 
+  nock@13.5.6:
+    resolution: {integrity: sha512-o2zOYiCpzRqSzPj0Zt/dQ/DqZeYoaQ7TUonc/xUPjCGl9WeHpNbxgVvOquXYAaJzI0M9BXV3HTzG0p8IUAbBTQ==}
+    engines: {node: '>= 10.13'}
+
   node-abi@3.68.0:
     resolution: {integrity: sha512-7vbj10trelExNjFSBm5kTvZXXa7pZyKWx9RCKIyqe6I9Ev3IzGpQoqBP3a+cOdxY+pWj6VkP28n/2wWysBHD/A==}
     engines: {node: '>=10'}
@@ -8811,6 +8818,10 @@ packages:
   prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
 
+  propagate@2.0.1:
+    resolution: {integrity: sha512-vGrhOavPSTz4QVNuBNdcNXePNdNMaO1xj9yBeH1ScQPjk/rhg9sSlCXPhMkFuaNNW/syTvYqsnbIJxMBfRbbag==}
+    engines: {node: '>= 8'}
+
   property-information@5.6.0:
     resolution: {integrity: sha512-YUHSPk+A30YPv+0Qf8i9Mbfe/C0hdPXk1s1jPVToV8pk8BQtpw10ct89Eo7OWkutrwqvT0eicAxlOg3dOAu8JA==}
 
@@ -9250,8 +9261,8 @@ packages:
     resolution: {integrity: sha512-VqpjJZKadQB/PEbEwvFdO43Ax5dFBZ2UECszz8bQ7pi7wt//PWe1P6MN7eCnjsatYtBT6EuiClbjSWP2WrIoTw==}
     engines: {node: '>= 0.8.0'}
 
-  serverless-offline@14.3.4:
-    resolution: {integrity: sha512-PlLyllDHSHSVCv3vcRT5fFxSyjDBVHMLirzzfBK0NTG7JvL90mQvSedBGncHD2XcaPvjxo8ZW6OfEMEe9nQKuQ==}
+  serverless-offline@14.4.0:
+    resolution: {integrity: sha512-PKNDc33HwFH6qD/VIOjhhiu6bKffIIMTG4DjOR1Kh2lv3zriIuW5bCzPUzGS7aP/x7rQbz/LDNWxftzsp6uizQ==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       serverless: ^4.0.0
@@ -9713,11 +9724,6 @@ packages:
 
   tslib@2.7.0:
     resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
-
-  tsx@4.19.1:
-    resolution: {integrity: sha512-0flMz1lh74BR4wOvBjuh9olbnwqCPc35OOlfyzHba0Dc+QNUeWX/Gq2YTbnwcWPO3BMd8fkzRVrHcsR+a7z7rA==}
-    engines: {node: '>=18.0.0'}
-    hasBin: true
 
   tsx@4.19.2:
     resolution: {integrity: sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==}
@@ -13435,13 +13441,13 @@ snapshots:
 
   '@js-sdsl/ordered-map@4.4.2': {}
 
-  '@jsep-plugin/assignment@1.2.1(jsep@1.3.9)':
+  '@jsep-plugin/assignment@1.3.0(jsep@1.4.0)':
     dependencies:
-      jsep: 1.3.9
+      jsep: 1.4.0
 
-  '@jsep-plugin/regex@1.0.3(jsep@1.3.9)':
+  '@jsep-plugin/regex@1.0.4(jsep@1.4.0)':
     dependencies:
-      jsep: 1.3.9
+      jsep: 1.4.0
 
   '@kamilkisiela/fast-url-parser@1.1.4': {}
 
@@ -18294,7 +18300,7 @@ snapshots:
   jsbn@1.1.0:
     optional: true
 
-  jsep@1.3.9: {}
+  jsep@1.4.0: {}
 
   jsesc@2.5.2: {}
 
@@ -18314,6 +18320,8 @@ snapshots:
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
+  json-stringify-safe@5.0.1: {}
+
   json-to-pretty-yaml@1.2.2:
     dependencies:
       remedial: 1.0.8
@@ -18327,11 +18335,11 @@ snapshots:
     optionalDependencies:
       graceful-fs: 4.2.11
 
-  jsonpath-plus@10.1.0:
+  jsonpath-plus@10.2.0:
     dependencies:
-      '@jsep-plugin/assignment': 1.2.1(jsep@1.3.9)
-      '@jsep-plugin/regex': 1.0.3(jsep@1.3.9)
-      jsep: 1.3.9
+      '@jsep-plugin/assignment': 1.3.0(jsep@1.4.0)
+      '@jsep-plugin/regex': 1.0.4(jsep@1.4.0)
+      jsep: 1.4.0
 
   jsonschema@1.4.1: {}
 
@@ -18951,6 +18959,14 @@ snapshots:
       lower-case: 2.0.2
       tslib: 2.7.0
 
+  nock@13.5.6:
+    dependencies:
+      debug: 4.3.7
+      json-stringify-safe: 5.0.1
+      propagate: 2.0.1
+    transitivePeerDependencies:
+      - supports-color
+
   node-abi@3.68.0:
     dependencies:
       semver: 7.6.3
@@ -19459,6 +19475,8 @@ snapshots:
       object-assign: 4.1.1
       react-is: 16.13.1
 
+  propagate@2.0.1: {}
+
   property-information@5.6.0:
     dependencies:
       xtend: 4.0.2
@@ -19914,7 +19932,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  serverless-offline@14.3.4(serverless@4.4.3):
+  serverless-offline@14.4.0(serverless@4.4.3):
     dependencies:
       '@aws-sdk/client-lambda': 3.699.0
       '@hapi/boom': 10.0.1
@@ -19930,16 +19948,17 @@ snapshots:
       java-invoke-local: 0.0.6
       jose: 5.9.3
       js-string-escape: 1.0.1
-      jsonpath-plus: 10.1.0
+      jsonpath-plus: 10.2.0
       jsonschema: 1.4.1
       jszip: 3.10.1
       luxon: 3.5.0
+      nock: 13.5.6
       node-fetch: 3.3.2
       node-schedule: 2.1.1
       p-memoize: 7.1.1
       serverless: 4.4.3
       tree-kill: 1.2.2
-      tsx: 4.19.1
+      tsx: 4.19.2
       velocityjs: 2.0.6
       ws: 8.18.0
     transitivePeerDependencies:
@@ -20422,13 +20441,6 @@ snapshots:
   tslib@2.6.3: {}
 
   tslib@2.7.0: {}
-
-  tsx@4.19.1:
-    dependencies:
-      esbuild: 0.23.1
-      get-tsconfig: 4.8.1
-    optionalDependencies:
-      fsevents: 2.3.3
 
   tsx@4.19.2:
     dependencies:
