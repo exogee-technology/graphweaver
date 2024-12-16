@@ -1064,13 +1064,6 @@ importers:
         version: 2.1.8(@types/node@22.10.1)(lightningcss@1.27.0)
 
   packages/cdk:
-    dependencies:
-      aws-cdk-lib:
-        specifier: 2.173.1
-        version: 2.173.1(constructs@10.4.2)
-      constructs:
-        specifier: 10.4.2
-        version: 10.4.2
     devDependencies:
       '@digitak/esrun':
         specifier: 3.2.26
@@ -1084,6 +1077,12 @@ importers:
       aws-cdk:
         specifier: 2.173.1
         version: 2.173.1
+      aws-cdk-lib:
+        specifier: 2.173.1
+        version: 2.173.1(constructs@10.4.2)
+      constructs:
+        specifier: 10.4.2
+        version: 10.4.2
       dotenv-cli:
         specifier: 7.4.4
         version: 7.4.4

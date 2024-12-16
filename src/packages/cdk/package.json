@@ -23,14 +23,16 @@
 		"version": "npm version --no-git-tag-version",
 		"build:docker": "docker build -f src/docker/Dockerfile ../../examples/s3-storage"
 	},
-	"dependencies": {
-		"aws-cdk-lib": "2.173.1",
-		"constructs": "10.4.2"
+	"peerDependencies": {
+		"aws-cdk-lib": "^2.173.1",
+		"constructs": "^10.4.2"
 	},
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
 		"dotenv-cli": "7.4.4",
 		"aws-cdk": "2.173.1",
+		"aws-cdk-lib": "2.173.1",
+		"constructs": "10.4.2",
 		"@exogee/graphweaver": "workspace:*",
 		"@types/node": "22.10.1",
 		"esbuild": "0.24.0",
