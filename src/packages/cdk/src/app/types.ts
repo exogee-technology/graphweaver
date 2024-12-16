@@ -1,5 +1,5 @@
 import { ResponseCustomHeader } from 'aws-cdk-lib/aws-cloudfront';
-import { IVpc, SecurityGroup, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import { InstanceType, IVpc, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
 
@@ -78,5 +78,7 @@ export type GraphweaverAppConfig = {
 		handler?: string;
 		// Pass the database secret ARN to the Lambda function
 		databaseSecretFullArn?: string;
+		// A list of CORS origins to allow. Defaults to the admin UI URL.
+		allowedOrigins?: string[];
 	};
 };
