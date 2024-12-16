@@ -1,15 +1,14 @@
-import path from 'node:path';
 import * as cdk from 'aws-cdk-lib';
+import { AccessLogFormat, LambdaRestApi, LogGroupLogDestination } from 'aws-cdk-lib/aws-apigateway';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { LogGroup } from 'aws-cdk-lib/aws-logs';
-import { AccessLogFormat, LambdaRestApi, LogGroupLogDestination } from 'aws-cdk-lib/aws-apigateway';
-import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import { Construct } from 'constructs';
 
-import { GraphweaverAppConfig } from './types';
 import { DatabaseStack } from './database';
+import { GraphweaverAppConfig } from './types';
 
 export class LambdaStack extends cdk.NestedStack {
 	public readonly lambda: lambda.Function;
@@ -107,7 +106,7 @@ export class LambdaStack extends cdk.NestedStack {
 				accessLogFormat: AccessLogFormat.jsonWithStandardFields(),
 			},
 			defaultCorsPreflightOptions: {
-				allowOrigins: [`https://${config.adminUI.url}`],
+				allowOrigins: config.lambda.allowedOrigins ?? [`https://${config.adminUI.url}`],
 				allowMethods: ['GET', 'POST', 'OPTIONS'],
 				allowHeaders: [
 					'Content-Type',
