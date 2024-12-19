@@ -1,9 +1,9 @@
 import * as cdk from 'aws-cdk-lib';
-import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 
 import { GraphweaverAppConfig } from './types';
@@ -49,7 +49,7 @@ export class WebsiteStack extends cdk.Stack {
 			{
 				responseHeadersPolicyName: `${id}AdminUIResponseHeadersPolicy`,
 				comment: 'The policy used for the Admin UI website.',
-				corsBehavior: undefined,
+				corsBehavior: config.adminUI.cors ?? undefined,
 				customHeadersBehavior: {
 					customHeaders: [...(config.adminUI.customHeaders ? config.adminUI.customHeaders : [])],
 				},
