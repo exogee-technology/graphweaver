@@ -801,8 +801,8 @@ importers:
         specifier: workspace:*
         version: link:../logger
       '@simplewebauthn/server':
-        specifier: 10.0.1
-        version: 10.0.1(encoding@0.1.13)
+        specifier: 13.0.0
+        version: 13.0.0(encoding@0.1.13)
       apollo-server-errors:
         specifier: 3.3.1
         version: 3.3.1(graphql@16.9.0)
@@ -835,8 +835,8 @@ importers:
         version: 1.0.6(react@18.3.1)
     devDependencies:
       '@simplewebauthn/types':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 12.0.0
+        version: 12.0.0
       '@types/jsonwebtoken':
         specifier: 9.0.7
         version: 9.0.7
@@ -871,8 +871,8 @@ importers:
         specifier: 3.12.2
         version: 3.12.2(@types/react@18.3.12)(graphql-ws@5.16.0(graphql@16.9.0))(graphql@16.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(subscriptions-transport-ws@0.11.0(graphql@16.9.0))
       '@simplewebauthn/browser':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 13.0.0
+        version: 13.0.0
       '@usedapp/core':
         specifier: 1.2.16
         version: 1.2.16(ethers@5.7.2)(node-fetch@3.3.2)(react@18.3.1)
@@ -902,8 +902,8 @@ importers:
         specifier: workspace:*
         version: link:../admin-ui-components
       '@simplewebauthn/types':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 12.0.0
+        version: 12.0.0
       '@types/react':
         specifier: 18.3.12
         version: 18.3.12
@@ -1304,8 +1304,8 @@ importers:
         specifier: 1.49.0
         version: 1.49.0
       '@simplewebauthn/types':
-        specifier: 10.0.0
-        version: 10.0.0
+        specifier: 12.0.0
+        version: 12.0.0
       '@types/jest':
         specifier: 29.5.14
         version: 29.5.14
@@ -2522,8 +2522,8 @@ packages:
   '@codemirror/state@6.5.0':
     resolution: {integrity: sha512-MwBHVK60IiIHDcoMet78lxt6iw5gJOGSbNbOIVBHWVXIH4/Nq1+GQgLLGgI1KlnN86WDXsPudVaqYHKBIx7Eyw==}
 
-  '@codemirror/view@6.36.0':
-    resolution: {integrity: sha512-aMePDnkNNKE8dSOo1w689xYa3dijREbRajiRcgjSGc2TWN7MTdE+9pm5fxwdz0C4D9Di1VZomrn2M+xDe7tTVg==}
+  '@codemirror/view@6.36.1':
+    resolution: {integrity: sha512-miD1nyT4m4uopZaDdO2uXU/LLHliKNYL9kB1C1wJHrunHLm/rpkb5QVSokqgw9hFqEZakrdlb/VGWX8aYZTslQ==}
 
   '@date-fns/tz@1.2.0':
     resolution: {integrity: sha512-LBrd7MiJZ9McsOgxqWX7AaxrDjcFVjWH/tIKJd7pnR7McaslGYOP1QmmiBXdJH/H/yLCT+rcQ7FaPBUxRGUtrg==}
@@ -4720,15 +4720,15 @@ packages:
     resolution: {integrity: sha512-7eDbqKv/OBd11jjdZjUwFGN8sHWkeUqLeHXHQxQ1azja2IM7WIH+z/aLgzR6LhB3/MINNwtjesDpjGqTMj2JKQ==}
     engines: {node: '>=12.0'}
 
-  '@simplewebauthn/browser@10.0.0':
-    resolution: {integrity: sha512-hG0JMZD+LiLUbpQcAjS4d+t4gbprE/dLYop/CkE01ugU/9sKXflxV5s0DRjdz3uNMFecatRfb4ZLG3XvF8m5zg==}
+  '@simplewebauthn/browser@13.0.0':
+    resolution: {integrity: sha512-7d/+gxoFoDQxq2EkLl/PuTIQ/rnSrA3bmr8L2Ij7bRyicJoCJX/NDGUNExyctB9nSDrEkkcrJMDkwpCYOGU3Lg==}
 
-  '@simplewebauthn/server@10.0.1':
-    resolution: {integrity: sha512-djNWcRn+H+6zvihBFJSpG3fzb0NQS9c/Mw5dYOtZ9H+oDw8qn9Htqxt4cpqRvSOAfwqP7rOvE9rwqVaoGGc3hg==}
+  '@simplewebauthn/server@13.0.0':
+    resolution: {integrity: sha512-Tb3hJRpeT4cgT2uPORc465qu9LGXcDoIegFmkIgqw7XNZtsaoHzn3xI1DiFH7ukzs6JbhfQBRyY4rlfCdTwkNw==}
     engines: {node: '>=20.0.0'}
 
-  '@simplewebauthn/types@10.0.0':
-    resolution: {integrity: sha512-SFXke7xkgPRowY2E+8djKbdEznTVnD5R6GO7GPTthpHrokLvNKw8C3lFZypTxLI7KkCfGPfhtqB3d7OVGGa9jQ==}
+  '@simplewebauthn/types@12.0.0':
+    resolution: {integrity: sha512-q6y8MkoV8V8jB4zzp18Uyj2I7oFp2/ONL8c3j8uT06AOWu3cIChc1au71QYHrP2b+xDapkGTiv+9lX7xkTlAsA==}
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -5330,6 +5330,7 @@ packages:
 
   '@web3modal/core@2.4.3':
     resolution: {integrity: sha512-7Z/sDe9RIYQ2k9ITcxgEa/u7FvlI76vcVVZn9UY4ISivefqrH4JAS3GX4JmVNUUlovwuiZdyqBv4llAQOMK6Rg==}
+    deprecated: Web3Modal is now Reown AppKit. Please follow the upgrade guide at https://docs.reown.com/appkit/upgrade/from-w3m-to-reown
 
   '@web3modal/standalone@2.4.3':
     resolution: {integrity: sha512-5ATXBoa4GGm+TIUSsKWsfWCJunv1XevOizpgTFhqyeGgRDmWhqsz9UIPzH/1mk+g0iJ/xqMKs5F6v9D2QeKxag==}
@@ -5337,6 +5338,7 @@ packages:
 
   '@web3modal/ui@2.4.3':
     resolution: {integrity: sha512-J989p8CdtEhI9gZHf/rZ/WFqYlrAHWw9GmAhFoiNODwjAp0BoG/uoaPiijJMchXdngihZOjLGCQwDXU16DHiKg==}
+    deprecated: Web3Modal is now Reown AppKit. Please follow the upgrade guide at https://docs.reown.com/appkit/upgrade/from-w3m-to-reown
 
   '@whatwg-node/fetch@0.9.21':
     resolution: {integrity: sha512-Wt0jPb+04JjobK0pAAN7mEHxVHcGA9HoP3OyCsZtyAecNQeADXCZ1MihFwVwjsgaRYuGVmNlsCmLxlG6mor8Gw==}
@@ -11618,7 +11620,7 @@ snapshots:
   '@codemirror/language@6.0.0':
     dependencies:
       '@codemirror/state': 6.5.0
-      '@codemirror/view': 6.36.0
+      '@codemirror/view': 6.36.1
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
@@ -11628,7 +11630,7 @@ snapshots:
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
-  '@codemirror/view@6.36.0':
+  '@codemirror/view@6.36.1':
     dependencies:
       '@codemirror/state': 6.5.0
       style-mod: 4.1.2
@@ -14584,11 +14586,9 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@simplewebauthn/browser@10.0.0':
-    dependencies:
-      '@simplewebauthn/types': 10.0.0
+  '@simplewebauthn/browser@13.0.0': {}
 
-  '@simplewebauthn/server@10.0.1(encoding@0.1.13)':
+  '@simplewebauthn/server@13.0.0(encoding@0.1.13)':
     dependencies:
       '@hexagon/base64': 1.1.28
       '@levischuck/tiny-cbor': 0.2.2
@@ -14597,12 +14597,11 @@ snapshots:
       '@peculiar/asn1-rsa': 2.3.13
       '@peculiar/asn1-schema': 2.3.13
       '@peculiar/asn1-x509': 2.3.13
-      '@simplewebauthn/types': 10.0.0
       cross-fetch: 4.0.0(encoding@0.1.13)
     transitivePeerDependencies:
       - encoding
 
-  '@simplewebauthn/types@10.0.0': {}
+  '@simplewebauthn/types@12.0.0': {}
 
   '@sinclair/typebox@0.27.8': {}
 
