@@ -1379,10 +1379,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.1)
       '@mikro-orm/sqlite':
         specifier: 6.4.0
-        version: 6.4.0(@mikro-orm/core@6.4.0)
+        version: 6.4.0(@mikro-orm/core@6.4.1)
       node-sqlite3-wasm:
         specifier: 0.8.28
         version: 0.8.28
@@ -3956,6 +3956,10 @@ packages:
     resolution: {integrity: sha512-8DOqA4UXRfo9+mmIepxNioTkWKmn06M0YRLb2jRrVb2NYMsA/ihGaTggbaLQXXLpy/Qk2Ke3+T0mWDyXZKcwnQ==}
     engines: {node: '>= 18.12.0'}
 
+  '@mikro-orm/core@6.4.1':
+    resolution: {integrity: sha512-OChUSn2Kx1cGnVo8TcB5J9+6LonVXZCuzK808oD1gnnkmQxWtqFMLO695s4m2jmBGl3LUXXvKfXndagp9v/h7g==}
+    engines: {node: '>= 18.12.0'}
+
   '@mikro-orm/knex@6.4.0':
     resolution: {integrity: sha512-27ZC0RxZ4rcGKam/bJsqgyrjfonCstNAFcdOrs/yncYjV8sGOHSdSxtfWuWQVzQCMEL64K7q+RDCUmygAoo4SA==}
     engines: {node: '>= 18.12.0'}
@@ -5330,6 +5334,7 @@ packages:
 
   '@web3modal/core@2.4.3':
     resolution: {integrity: sha512-7Z/sDe9RIYQ2k9ITcxgEa/u7FvlI76vcVVZn9UY4ISivefqrH4JAS3GX4JmVNUUlovwuiZdyqBv4llAQOMK6Rg==}
+    deprecated: Web3Modal is now Reown AppKit. Please follow the upgrade guide at https://docs.reown.com/appkit/upgrade/from-w3m-to-reown
 
   '@web3modal/standalone@2.4.3':
     resolution: {integrity: sha512-5ATXBoa4GGm+TIUSsKWsfWCJunv1XevOizpgTFhqyeGgRDmWhqsz9UIPzH/1mk+g0iJ/xqMKs5F6v9D2QeKxag==}
@@ -5337,6 +5342,7 @@ packages:
 
   '@web3modal/ui@2.4.3':
     resolution: {integrity: sha512-J989p8CdtEhI9gZHf/rZ/WFqYlrAHWw9GmAhFoiNODwjAp0BoG/uoaPiijJMchXdngihZOjLGCQwDXU16DHiKg==}
+    deprecated: Web3Modal is now Reown AppKit. Please follow the upgrade guide at https://docs.reown.com/appkit/upgrade/from-w3m-to-reown
 
   '@whatwg-node/fetch@0.9.21':
     resolution: {integrity: sha512-Wt0jPb+04JjobK0pAAN7mEHxVHcGA9HoP3OyCsZtyAecNQeADXCZ1MihFwVwjsgaRYuGVmNlsCmLxlG6mor8Gw==}
@@ -8130,6 +8136,10 @@ packages:
 
   mikro-orm@6.4.0:
     resolution: {integrity: sha512-dnkvm+xJifwjPEkwipKPpbVEeW7XL3w06yREQiUxGQwcnVowpt+tYFelgr5dnPTpARFNoP5Lc0qTlpWaXVRsxA==}
+    engines: {node: '>= 18.12.0'}
+
+  mikro-orm@6.4.1:
+    resolution: {integrity: sha512-hRVi5KE1vi4U83RqPcOyVnf+GXcC61jjsRHUuNUMzqYIwElmBubfXZ4Fz/GnKvDtlGcXHnVg2e366wJ++8uOtA==}
     engines: {node: '>= 18.12.0'}
 
   mime-db@1.52.0:
@@ -13488,6 +13498,16 @@ snapshots:
       mikro-orm: 6.4.0
       reflect-metadata: 0.2.2
 
+  '@mikro-orm/core@6.4.1':
+    dependencies:
+      dataloader: 2.2.3
+      dotenv: 16.4.7
+      esprima: 4.0.1
+      fs-extra: 11.2.0
+      globby: 11.1.0
+      mikro-orm: 6.4.1
+      reflect-metadata: 0.2.2
+
   '@mikro-orm/knex@6.4.0(@mikro-orm/core@6.4.0)':
     dependencies:
       '@mikro-orm/core': 6.4.0
@@ -13593,6 +13613,36 @@ snapshots:
       - supports-color
       - tedious
 
+  '@mikro-orm/knex@6.4.0(@mikro-orm/core@6.4.1)':
+    dependencies:
+      '@mikro-orm/core': 6.4.1
+      fs-extra: 11.2.0
+      knex: 3.1.0
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/knex@6.4.0(@mikro-orm/core@6.4.1)(sqlite3@5.1.7)':
+    dependencies:
+      '@mikro-orm/core': 6.4.1
+      fs-extra: 11.2.0
+      knex: 3.1.0(sqlite3@5.1.7)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
   '@mikro-orm/mysql@6.4.0(@mikro-orm/core@6.4.0)':
     dependencies:
       '@mikro-orm/core': 6.4.0
@@ -13686,6 +13736,25 @@ snapshots:
     dependencies:
       '@mikro-orm/core': 6.4.0
       '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.0)(pg@8.13.1)(sqlite3@5.1.7)
+      fs-extra: 11.2.0
+      sqlite3: 5.1.7
+      sqlstring-sqlite: 0.1.1
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - supports-color
+      - tedious
+
+  '@mikro-orm/sqlite@6.4.0(@mikro-orm/core@6.4.1)':
+    dependencies:
+      '@mikro-orm/core': 6.4.1
+      '@mikro-orm/knex': 6.4.0(@mikro-orm/core@6.4.1)(sqlite3@5.1.7)
       fs-extra: 11.2.0
       sqlite3: 5.1.7
       sqlstring-sqlite: 0.1.1
@@ -18969,6 +19038,8 @@ snapshots:
       picomatch: 2.3.1
 
   mikro-orm@6.4.0: {}
+
+  mikro-orm@6.4.1: {}
 
   mime-db@1.52.0: {}
 
