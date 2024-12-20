@@ -446,6 +446,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			}
 		}
 
+		// For an update we also want to go ahead and remove the primary key if it's autoincremented, as
+		// users should not be able to change the primary key. There are also scenarios like
+		// GENERATED ALWAYS AS IDENTITY where even supplying the primary key in the update query will
+		// cause an error.
+		const meta = this.database.em.getMetadata().get(this.entityType.name);
+		for (const key of meta.primaryKeys) {
+			const { autoincrement } = meta.properties[key];
+			if (autoincrement) delete (updateArgsWithoutVersion as any)[key];
+		}
+
 		await this.mapAndAssignKeys(entity, this.entityType, updateArgsWithoutVersion as Partial<D>);
 		await this.database.em.persistAndFlush(entity);
 
@@ -464,6 +474,8 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			updateItems: JSON.stringify(updateItems),
 		});
 
+		const meta = this.database.em.getMetadata().get(this.entityType.name);
+
 		const entities = await this.database.transactional<D[]>(async () => {
 			return Promise.all<D>(
 				updateItems.map(async (item) => {
@@ -473,6 +485,16 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 					const entity = await this.database.em.findOneOrFail(this.entityType, item.id, {
 						populate: [...this.visitPathForPopulate(this.entityType.name, item)] as `${string}.`[],
 					});
+
+					// For an update we also want to go ahead and remove the primary key if it's autoincremented, as
+					// users should not be able to change the primary key. There are also scenarios like
+					// GENERATED ALWAYS AS IDENTITY where even supplying the primary key in the update query will
+					// cause an error.
+					for (const key of meta.primaryKeys) {
+						const { autoincrement } = meta.properties[key];
+						if (autoincrement) delete (item as any)[key];
+					}
+
 					await this.mapAndAssignKeys(entity, this.entityType, item);
 					this.database.em.persist(entity);
 					return entity;
