@@ -452,8 +452,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		// cause an error.
 		const meta = this.database.em.getMetadata().get(this.entityType.name);
 		for (const key of meta.primaryKeys) {
-			const { autoincrement } = meta.properties[key];
-			if (autoincrement) delete (updateArgsWithoutVersion as any)[key];
+			if (meta.properties[key].autoincrement) delete (updateArgsWithoutVersion as any)[key];
 		}
 
 		await this.mapAndAssignKeys(entity, this.entityType, updateArgsWithoutVersion as Partial<D>);
@@ -491,8 +490,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 					// GENERATED ALWAYS AS IDENTITY where even supplying the primary key in the update query will
 					// cause an error.
 					for (const key of meta.primaryKeys) {
-						const { autoincrement } = meta.properties[key];
-						if (autoincrement) delete (item as any)[key];
+						if (meta.properties[key].autoincrement) delete (item as any)[key];
 					}
 
 					await this.mapAndAssignKeys(entity, this.entityType, item);
