@@ -257,7 +257,7 @@ export async function checkAuthorization<G = unknown>(
 	const acl = getACL(entityName);
 	const meta = graphweaverMetadata.getEntityByName(entityName);
 
-	logger.trace('Checking whether user can perform reuqested action.');
+	logger.trace('Checking whether user can perform requested action.');
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
