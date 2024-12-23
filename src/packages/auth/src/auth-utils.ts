@@ -251,13 +251,19 @@ export async function checkAuthorization<G = unknown>(
 	requestInput: Partial<G>,
 	requiredPermission: AccessType
 ) {
+	logger.trace({ entityName, id, requestInput, requiredPermission }, 'Entering checkAuthorization');
+
 	// Get ACL first
 	const acl = getACL(entityName);
 	const meta = graphweaverMetadata.getEntityByName(entityName);
 
+	logger.trace('Checking whether user can perform reuqested action.');
+
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
 	await assertUserCanPerformRequestedAction(acl, requiredPermission);
+
+	logger.trace('They can, now checking entity permissions.');
 
 	// Now check whether the root entity passes permissions filters (if set)
 	await checkEntityPermission(entityName, id, requiredPermission);
@@ -303,6 +309,8 @@ export async function checkAuthorization<G = unknown>(
 		logger.info(`Permission check failed:`, e);
 		permissionsErrorHandler(e);
 	}
+
+	logger.trace('Leaving checkAuthorization, auth passed.');
 }
 
 const checkPayloadAndFilterScalarsAndDates = (requestInput: any, key: string, value: any) => {
