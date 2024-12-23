@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "2.9.9",
+	"version": "2.9.10",
 	"description": "Graphweaver Core Package",
 	"license": "Apache-2.0",
 	"scripts": {
