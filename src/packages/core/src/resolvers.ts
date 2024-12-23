@@ -291,7 +291,12 @@ const _createOrUpdate = async <G>(
 		}
 
 		// Extract ids of items being updated
-		const updateItemIds = updateItems.map((item) => item[primaryKeyField as keyof typeof item]);
+		const updateItemIds = new Set(
+			updateItems.map((item) =>
+				// Normalise the type to a string, as string will always be able to hold whatever primary key type is used.
+				String(item[primaryKeyField as keyof typeof item])
+			)
+		);
 
 		// Prepare updateParams and run hook if needed
 		const updateParams: CreateOrUpdateHookParams<G> = {
@@ -320,10 +325,10 @@ const _createOrUpdate = async <G>(
 
 		// Filter update and create entities
 		let updatedEntities = entities.filter(
-			(entity) => entity && updateItemIds.includes(entity[primaryKeyField])
+			(entity) => entity && updateItemIds.has(String(entity[primaryKeyField]))
 		);
 		let createdEntities = entities.filter(
-			(entity) => entity && !updateItemIds.includes(entity[primaryKeyField])
+			(entity) => entity && !updateItemIds.has(String(entity[primaryKeyField]))
 		);
 
 		// Run after hooks for update and create entities
