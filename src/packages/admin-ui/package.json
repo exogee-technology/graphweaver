@@ -28,14 +28,14 @@
 		"graphql": "16.9.0",
 		"prop-types": "15.8.1",
 		"react": "18.3.1",
-		"react-dom": "18.3.1",
+		"react-dom": "19.0.0",
 		"react-modal": "3.16.1",
 		"react-router-dom": "6.28.0"
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-html": "0.18.2",
 		"@types/react": "18.3.12",
-		"@types/react-dom": "18.3.1",
+		"@types/react-dom": "19.0.2",
 		"@types/react-modal": "3.16.3",
 		"@vitejs/plugin-react": "4.3.4",
 		"esbuild": "0.24.0",
