@@ -46,11 +46,11 @@
 		"@azure/msal-browser": "3.28.0",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@simplewebauthn/types": "10.0.0",
-		"@types/react": "18.3.12",
+		"@types/react": "19.0.2",
 		"@types/react-dom": "18.3.1",
 		"esbuild": "0.24.0",
 		"glob": "10.4.3",
-		"react": "18.3.1",
+		"react": "19.0.0",
 		"react-dom": "18.3.1",
 		"typescript": "5.7.2",
 		"vite": "6.0.3"
