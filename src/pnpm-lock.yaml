@@ -33,8 +33,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(eslint@9.16.0(jiti@1.21.6))
       globals:
-        specifier: 15.13.0
-        version: 15.13.0
+        specifier: 15.14.0
+        version: 15.14.0
       prettier:
         specifier: 3.4.2
         version: 3.4.2
@@ -82,7 +82,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -321,7 +321,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -440,10 +440,10 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -498,7 +498,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -1274,7 +1274,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/postgresql':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -1379,7 +1379,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -1441,13 +1441,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -7052,8 +7052,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.13.0:
-    resolution: {integrity: sha512-49TewVEz0UxZjr1WYYsWpPrhyC/B/pA8Bq0fUmet2n+eR7yn0IvNzNaoBwnK6mdkzcN+se7Ez9zUgULTz2QH4g==}
+  globals@15.14.0:
+    resolution: {integrity: sha512-OkToC372DtlQeje9/zHIo5CT8lRP/FUgEOKBEhU4e0abL7J7CD24fD9ohiLN5hagG/kWCYj4K5oaxxtj2Z0Dig==}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -13557,6 +13557,25 @@ snapshots:
       - supports-color
       - tedious
 
+  '@mikro-orm/postgresql@6.4.2(@mikro-orm/core@6.4.2)':
+    dependencies:
+      '@mikro-orm/core': 6.4.2
+      '@mikro-orm/knex': 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
+      pg: 8.13.1
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
   '@mikro-orm/postgresql@6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)':
     dependencies:
       '@mikro-orm/core': 6.4.2
@@ -17457,7 +17476,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.13.0: {}
+  globals@15.14.0: {}
 
   globby@11.1.0:
     dependencies:
