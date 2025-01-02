@@ -44,8 +44,8 @@
 	"peerDependencies": {
 		"formik": "^2.4.6",
 		"graphql": "^16.9.0",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
+		"react": "^18.0.0 || ^19.0.0",
+		"react-dom": "^18.0.0 || ^19.0.0",
 		"react-router-dom": "^6.26.2"
 	},
 	"devDependencies": {
@@ -59,7 +59,7 @@
 		"formik": "2.4.6",
 		"glob": "10.4.3",
 		"react": "19.0.0",
-		"react-dom": "18.3.1",
+		"react-dom": "19.0.0",
 		"react-router-dom": "6.28.0",
 		"typescript": "5.7.2",
 		"vite": "6.0.3"
