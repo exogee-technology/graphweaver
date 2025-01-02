@@ -9,7 +9,7 @@ export interface AlertProps {
 	children?: ReactNode;
 }
 
-export const Alert = ({ severity = 'error', children }: AlertProps): JSX.Element => {
+export const Alert = ({ severity = 'error', children }: AlertProps) => {
 	const severityClass = {
 		['error']: styles.error,
 		['warning']: styles.warning,

@@ -5,10 +5,8 @@ export interface HeaderProps {
 	children?: ReactNode;
 }
 
-export const Header = ({ children }: HeaderProps): JSX.Element => {
-	return (
-		<header>
-			<div className={styles.header}>{children}</div>
-		</header>
-	);
-};
+export const Header = ({ children }: HeaderProps) => (
+	<header>
+		<div className={styles.header}>{children}</div>
+	</header>
+);

@@ -23,7 +23,7 @@ export const Button = ({
 	type = 'button',
 	disabled = false,
 	loading = false,
-}: PropsWithChildren<ButtonProps>): JSX.Element => {
+}: PropsWithChildren<ButtonProps>) => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const navigate = useNavigate();
 

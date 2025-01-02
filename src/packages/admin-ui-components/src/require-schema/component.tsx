@@ -6,7 +6,7 @@ export interface RequireSchemaProps {
 	children?: ReactNode;
 }
 
-export const RequireSchema = ({ children }: RequireSchemaProps): JSX.Element => {
+export const RequireSchema = ({ children }: RequireSchemaProps) => {
 	const { loading, error } = useSchema();
 
 	if (error) return <div>{error.message}</div>;

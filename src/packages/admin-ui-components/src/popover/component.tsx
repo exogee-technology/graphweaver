@@ -31,7 +31,7 @@ export const Popover = ({
 	defaultValue,
 	position = 'bottom',
 	...props
-}: PropsWithChildren<PopoverProps>): JSX.Element => {
+}: PropsWithChildren<PopoverProps>) => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const handleOnClickItem = (item: PopoverItem) => {
