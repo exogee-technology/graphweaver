@@ -1,5 +1,7 @@
 declare module 'virtual:graphweaver-user-supplied-custom-pages' {
 	import { RouteObject } from 'react-router-dom';
+	import { JSX } from 'react';
+
 	export interface NavLinkExport {
 		name: string;
 		route: string;

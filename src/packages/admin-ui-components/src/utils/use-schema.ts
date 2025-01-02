@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, JSX } from 'react';
 import { InMemoryCache, useQuery } from '@apollo/client';
 import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
 

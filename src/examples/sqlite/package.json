@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-sqlite",
-	"version": "2.9.4",
+	"version": "2.9.10",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a SQLite database.",
@@ -18,13 +18,13 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.4.0",
-		"@mikro-orm/knex": "6.4.0",
-		"@mikro-orm/sqlite": "6.4.0",
+		"@mikro-orm/core": "6.4.2",
+		"@mikro-orm/knex": "6.4.2",
+		"@mikro-orm/sqlite": "6.4.2",
 		"graphql": "16.9.0",
 		"mikro-orm-sqlite-wasm": "workspace:*",
-		"react": "18.3.1",
-		"react-dom": "18.3.1"
+		"react": "19.0.0",
+		"react-dom": "19.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "22.10.1",

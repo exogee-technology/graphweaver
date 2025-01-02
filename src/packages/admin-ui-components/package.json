@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "2.9.4",
+	"version": "2.9.10",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -25,10 +25,10 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.10",
+		"@apollo/client": "3.12.2",
 		"@exogee/graphweaver-apollo-client": "workspace:*",
 		"@graphiql/toolkit": "0.11.1",
-		"@tanstack/react-table": "8.20.5",
+		"@tanstack/react-table": "8.20.6",
 		"clsx": "2.1.1",
 		"downshift": "9.0.8",
 		"graphiql": "3.7.2",
@@ -44,25 +44,25 @@
 	"peerDependencies": {
 		"formik": "^2.4.6",
 		"graphql": "^16.9.0",
-		"react": "^18.3.1",
-		"react-dom": "^18.3.1",
+		"react": "^18.0.0 || ^19.0.0",
+		"react-dom": "^18.0.0 || ^19.0.0",
 		"react-router-dom": "^6.26.2"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
 		"@types/luxon": "3.4.2",
 		"@types/papaparse": "5.3.15",
-		"@types/react": "18.3.12",
+		"@types/react": "19.0.2",
 		"@types/react-syntax-highlighter": "15.5.13",
 		"esbuild": "0.24.0",
 		"esbuild-plugin-copy": "2.1.1",
 		"formik": "2.4.6",
 		"glob": "10.4.3",
-		"react": "18.3.1",
-		"react-dom": "18.3.1",
+		"react": "19.0.0",
+		"react-dom": "19.0.0",
 		"react-router-dom": "6.28.0",
 		"typescript": "5.7.2",
-		"vite": "6.0.2"
+		"vite": "6.0.3"
 	},
 	"keywords": [
 		"graphql",

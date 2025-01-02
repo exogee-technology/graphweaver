@@ -19,25 +19,37 @@ updates:
       aws-sdk:
         patterns:
           - "@aws-sdk*"
+
       aws-cdk:
         patterns:
           - "aws-cdk"
           - "aws-cdk-lib"
+
       graphql-tools:
         patterns:
           - "@graphql-tools*"
+
       mikro-orm:
         patterns:
           - "@mikro-orm*"
+
       nivo:
         patterns:
           - "@nivo*"
+
       opentelemetry:
         patterns:
           - "@opentelemetry*"
+
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+
       simplewebauthn:
         patterns:
           - "@simplewebauthn*"
+
       typescript-eslint:
         patterns:
           - "@typescript-eslint*"

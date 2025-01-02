@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-s3-storage",
-	"version": "2.9.4",
+	"version": "2.9.10",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting Graphweaver to an AWS S3 bucket.",
@@ -20,7 +20,7 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
-		"@apollo/client": "3.11.10",
+		"@apollo/client": "3.12.2",
 		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
@@ -29,14 +29,14 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "6.4.0",
-		"@mikro-orm/knex": "6.4.0",
-		"@mikro-orm/postgresql": "6.4.0",
+		"@mikro-orm/core": "6.4.2",
+		"@mikro-orm/knex": "6.4.2",
+		"@mikro-orm/postgresql": "6.4.2",
 		"graphql": "16.9.0",
 		"graphweaver": "workspace:*",
 		"pg": "8.13.1",
-		"react": "18.3.1",
-		"react-dom": "18.3.1",
+		"react": "19.0.0",
+		"react-dom": "19.0.0",
 		"react-syntax-highlighter": "15.6.1"
 	},
 	"devDependencies": {

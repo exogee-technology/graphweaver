@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-builder",
-	"version": "2.9.4",
+	"version": "2.9.10",
 	"description": "A tool for building and running Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -39,8 +39,8 @@
 		"omgopass": "3.2.1",
 		"rimraf": "5.0.8",
 		"rollup-plugin-visualizer": "5.12.0",
-		"serverless-offline": "14.3.4",
-		"vite": "6.0.2",
+		"serverless-offline": "14.4.0",
+		"vite": "6.0.3",
 		"vite-plugin-graphweaver": "workspace:*"
 	},
 	"devDependencies": {

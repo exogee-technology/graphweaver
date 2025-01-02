@@ -1,5 +1,5 @@
-import { ResponseCustomHeader } from 'aws-cdk-lib/aws-cloudfront';
-import { IVpc, SecurityGroup, InstanceType } from 'aws-cdk-lib/aws-ec2';
+import { ResponseCustomHeader, ResponseHeadersCorsBehavior } from 'aws-cdk-lib/aws-cloudfront';
+import { InstanceType, IVpc, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
 import { PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
 
@@ -26,6 +26,8 @@ export type GraphweaverAppConfig = {
 		// Content Security Policy for the website. Defaults to:
 		// default-src 'self'; connect-src https://${config.api.url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;
 		csp?: string;
+		// CORS behavior for the website
+		cors?: ResponseHeadersCorsBehavior;
 	};
 	database?: {
 		// Username for the database
@@ -78,5 +80,7 @@ export type GraphweaverAppConfig = {
 		handler?: string;
 		// Pass the database secret ARN to the Lambda function
 		databaseSecretFullArn?: string;
+		// A list of CORS origins to allow. Defaults to the admin UI URL.
+		allowedOrigins?: string[];
 	};
 };

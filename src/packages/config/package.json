@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-config",
-	"version": "2.9.4",
+	"version": "2.9.10",
 	"description": "Retrieve and parse Graphweaver configurations",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -27,7 +27,7 @@
 		"@types/node": "22.10.1",
 		"esbuild": "0.24.0",
 		"prettier": "3.4.2",
-		"vite": "6.0.2"
+		"vite": "6.0.3"
 	},
 	"keywords": [
 		"graphql",

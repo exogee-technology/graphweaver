@@ -1,7 +1,7 @@
 {
 	"name": "@exogee/graphweaver-example-aws-cognito",
 	"private": true,
-	"version": "2.9.4",
+	"version": "2.9.10",
 	"license": "Apache-2.0",
 	"description": "Example of connecting to AWS Cognito",
 	"main": "lib/index.js",
@@ -27,7 +27,7 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"dotenv": "16.4.7",
 		"graphql": "16.9.0",
-		"react": "18.3.1"
+		"react": "19.0.0"
 	},
 	"devDependencies": {
 		"@types/node": "22.10.1",
