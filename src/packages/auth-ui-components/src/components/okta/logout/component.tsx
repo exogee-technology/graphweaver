@@ -10,7 +10,13 @@ export interface OktaLogoutProps {
 export const OktaLogout = ({ redirectTo }: OktaLogoutProps) => {
 	const handleLogout = useCallback(async () => {
 		localStorage.removeItem(localStorageAuthKey);
-		await okta.signOut({ postLogoutRedirectUri: redirectTo });
+
+		await okta.signOut({
+			postLogoutRedirectUri: redirectTo,
+			revokeAccessToken: true,
+			revokeRefreshToken: true,
+			clearTokensBeforeRedirect: true,
+		});
 	}, []);
 
 	return <Logout onLogout={handleLogout} />;

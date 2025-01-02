@@ -13,5 +13,14 @@
 		"jsx": "react-jsx"
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],
+	"references": [
+		{ "path": "../../packages/admin-ui-components" },
+		{ "path": "../../packages/auth-ui-components" },
+		{ "path": "../../packages/auth" },
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/scalars" },
+		{ "path": "../../packages/server" }
+	],
 	"include": ["./src"]
 }

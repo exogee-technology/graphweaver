@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
 import { useNavigate } from 'react-router-dom';
 import { okta } from '../client';
-import { AccessToken, IDToken } from '@okta/okta-auth-js';
 
 const scopes = ['openid'];
 if (import.meta.env.VITE_OKTA_ADDITIONAL_SCOPES) {
@@ -17,30 +16,26 @@ export const Okta = () => {
 	useEffect(() => {
 		(async () => {
 			try {
-				// If we're coming back from a successful login redirect, parse the tokens and set them
 				if (okta.token.isLoginRedirect()) {
+					// If we're coming back from a successful login redirect, parse the tokens and set the the ID token in localStorage.
 					const { tokens } = await okta.token.parseFromUrl();
+
 					if (!tokens.accessToken) {
 						throw new Error('No access token found in login redirect response.');
 					}
 
-					okta.tokenManager.setTokens(tokens);
-					localStorage.setItem(localStorageAuthKey, tokens.accessToken.accessToken);
-				}
-
-				const accessToken = (await okta.tokenManager.get('accessToken')) as AccessToken | undefined;
-				const idToken = (await okta.tokenManager.get('idToken')) as IDToken | undefined;
-				let userInfo;
-				if (accessToken && idToken) {
-					userInfo = await okta.token.getUserInfo(accessToken, idToken);
-				}
-
-				if (userInfo) {
-					// If there's a user we can go ahead and navigate to the home page.
+					localStorage.setItem(localStorageAuthKey, `Bearer ${tokens.accessToken.accessToken}`);
 					navigate('/');
 				} else {
 					// Otherwise, we need to go through the login flow.
-					await okta.token.getWithRedirect({ scopes });
+					let redirectUri = window.location.origin;
+					if (!redirectUri.endsWith('/')) redirectUri += '/';
+					redirectUri += 'auth/login';
+
+					await okta.token.getWithRedirect({
+						scopes,
+						redirectUri,
+					});
 				}
 			} catch (error: any) {
 				console.error(error);

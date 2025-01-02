@@ -101,20 +101,20 @@ export const authApolloPlugin = <R>(
 	return {
 		async requestDidStart({ request, contextValue }) {
 			if (addUserToContext) {
-				console.warn(
+				logger.warn(
 					"WARNING: The 'addUserToContext' argument is deprecated. Please add the addUserToContext function to the request context instead."
 				);
 			}
 
 			if (options?.apiKeyDataProvider) {
-				console.warn(
+				logger.warn(
 					"WARNING: The 'apiKeyDataProvider' argument is deprecated and will be removed in the future."
 				);
 			}
 
 			if (options?.implicitAllow) {
 				setImplicitAllow(options.implicitAllow);
-				console.warn(
+				logger.warn(
 					"WARNING: The 'implicitAllow' option is deprecated. Please use the 'setImplicitAllow' function instead."
 				);
 			}
@@ -126,9 +126,11 @@ export const authApolloPlugin = <R>(
 
 			// If the implicitAllow option is set, we allow access to all entities that do not have an ACL defined.
 			if (getImplicitAllow()) {
+				logger.trace('Applying implicit allow');
 				applyImplicitAllow();
 			} else {
 				// By default we deny access to all entities and the developer must define each ACL.
+				logger.trace('Applying implicit deny');
 				applyImplicitDeny();
 			}
 
