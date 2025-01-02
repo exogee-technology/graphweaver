@@ -29,7 +29,7 @@
 	},
 	"devDependencies": {
 		"@digitak/esrun": "3.2.26",
-		"dotenv-cli": "7.4.4",
+		"dotenv-cli": "8.0.0",
 		"aws-cdk": "2.173.2",
 		"aws-cdk-lib": "2.173.2",
 		"constructs": "10.4.2",
