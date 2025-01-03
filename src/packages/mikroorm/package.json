@@ -31,7 +31,7 @@
 		"dataloader": "2.2.3",
 		"decimal.js": "10.4.3",
 		"dotenv": "16.4.7",
-		"graphql": "16.9.0",
+		"graphql": "16.10.0",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.2.2"
 	},
