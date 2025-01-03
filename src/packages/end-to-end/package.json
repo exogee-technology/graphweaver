@@ -46,7 +46,7 @@
 		"class-validator": "0.14.1",
 		"dotenv-cli": "8.0.0",
 		"ethers": "6.3.0",
-		"graphql": "16.9.0",
+		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
 		"promisify-child-process": "4.1.2",
 		"web3-token": "1.0.6"
