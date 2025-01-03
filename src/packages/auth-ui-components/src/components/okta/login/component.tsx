@@ -24,18 +24,28 @@ export const Okta = () => {
 						throw new Error('No access token found in login redirect response.');
 					}
 
+					okta.tokenManager.setTokens(tokens);
 					localStorage.setItem(localStorageAuthKey, `Bearer ${tokens.accessToken.accessToken}`);
+
 					navigate('/');
 				} else {
-					// Otherwise, we need to go through the login flow.
-					let redirectUri = window.location.origin;
-					if (!redirectUri.endsWith('/')) redirectUri += '/';
-					redirectUri += 'auth/login';
+					// Do we have a valid user?
+					const authState = okta.authStateManager.getAuthState();
 
-					await okta.token.getWithRedirect({
-						scopes,
-						redirectUri,
-					});
+					if (authState?.isAuthenticated) {
+						// The user is already authenticated, so we can redirect to the home page.
+						navigate('/');
+					} else {
+						// Otherwise, we need to go through the login flow.
+						let redirectUri = window.location.origin;
+						if (!redirectUri.endsWith('/')) redirectUri += '/';
+						redirectUri += 'auth/login';
+
+						await okta.token.getWithRedirect({
+							scopes,
+							redirectUri,
+						});
+					}
 				}
 			} catch (error: any) {
 				console.error(error);
