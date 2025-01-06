@@ -7,9 +7,9 @@
 		"resolveJsonModule": true
 	},
 	"references": [
-		{ "path": "../vite-plugin-graphweaver" },
+		{ "path": "../config" },
 		{ "path": "../builder" },
-		{ "path": "../core" },
-		{ "path": "../mikroorm" }
+		{ "path": "../mikroorm" },
+		{ "path": "../vite-plugin-graphweaver" }
 	]
 }

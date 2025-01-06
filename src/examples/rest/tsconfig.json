@@ -13,5 +13,13 @@
 		"jsx": "react-jsx"
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],
-	"include": ["./src"]
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/admin-ui-components" },
+		{ "path": "../../packages/admin-ui" },
+		{ "path": "../../packages/builder" },
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/server" }
+	]
 }

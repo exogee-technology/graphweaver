@@ -7,5 +7,10 @@
 	},
 	"include": ["./src", "../../@types"],
 	"exclude": ["src/**/*.test.ts"],
-	"references": [{ "path": "../core" }, { "path": "../logger" }]
+	"references": [
+		{ "path": "../core" },
+		{ "path": "../logger" },
+		{ "path": "../scalars" },
+		{ "path": "../server" }
+	]
 }

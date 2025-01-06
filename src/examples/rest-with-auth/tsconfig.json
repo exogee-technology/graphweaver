@@ -14,5 +14,16 @@
 		"types": ["vite/client"]
 	},
 	"exclude": ["**/node_modules/**", "**/lib/**"],
-	"include": ["./src"]
+	"include": ["./src"],
+	"references": [
+		{ "path": "../../packages/admin-ui-components" },
+		{ "path": "../../packages/admin-ui" },
+		{ "path": "../../packages/auth-ui-components" },
+		{ "path": "../../packages/auth" },
+		{ "path": "../../packages/builder" },
+		{ "path": "../../packages/core" },
+		{ "path": "../../packages/mikroorm" },
+		{ "path": "../../packages/rest" },
+		{ "path": "../../packages/server" }
+	]
 }

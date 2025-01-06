@@ -10,8 +10,16 @@
 	},
 	"include": ["src/**/*"],
 	"references": [
-		{ "path": "../../packages/auth" },
-		{ "path": "../../packages/core" },
-		{ "path": "../../packages/admin-ui-components" }
+		{ "path": "../admin-ui" },
+		{ "path": "../auth-ui-components" },
+		{ "path": "../auth" },
+		{ "path": "../aws-cognito" },
+		{ "path": "../builder" },
+		{ "path": "../core" },
+		{ "path": "../logger" },
+		{ "path": "../mikroorm" },
+		{ "path": "../scalars" },
+		{ "path": "../server" },
+		{ "path": "../storage-provider" }
 	]
 }
