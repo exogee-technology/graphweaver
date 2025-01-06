@@ -14,40 +14,50 @@ export const Okta = () => {
 	const [error, setError] = useState<string | undefined>();
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		(async () => {
-			try {
-				// If we're coming back from a successful login redirect, parse the tokens and set them
-				if (okta.token.isLoginRedirect()) {
-					const { tokens } = await okta.token.parseFromUrl();
-					if (!tokens.accessToken) {
-						throw new Error('No access token found in login redirect response.');
-					}
-
-					okta.tokenManager.setTokens(tokens);
-					localStorage.setItem(localStorageAuthKey, `Bearer ${tokens.accessToken.accessToken}`);
+	const handleLogin = async () => {
+		try {
+			// If we're coming back from a successful login redirect, parse the tokens and set them
+			if (okta.token.isLoginRedirect()) {
+				const { tokens } = await okta.token.parseFromUrl();
+				if (!tokens.accessToken) {
+					throw new Error('No access token found in login redirect response.');
 				}
 
-				const accessToken = (await okta.tokenManager.get('accessToken')) as AccessToken | undefined;
-				const idToken = (await okta.tokenManager.get('idToken')) as IDToken | undefined;
-				let userInfo;
-				if (accessToken && idToken) {
-					userInfo = await okta.token.getUserInfo(accessToken, idToken);
-				}
-
-				if (userInfo) {
-					// If there's a user we can go ahead and navigate to the home page.
-					navigate('/');
-				} else {
-					// Otherwise, we need to go through the login flow.
-					await okta.token.getWithRedirect({ scopes });
-				}
-			} catch (error: any) {
-				console.error(error);
-				setLoading(false);
-				if (error.message) setError(error.message);
+				okta.tokenManager.setTokens(tokens);
+				localStorage.setItem(localStorageAuthKey, `Bearer ${tokens.accessToken.accessToken}`);
 			}
-		})();
+
+			const accessToken = (await okta.tokenManager.get('accessToken')) as AccessToken | undefined;
+			const idToken = (await okta.tokenManager.get('idToken')) as IDToken | undefined;
+			let userInfo;
+			if (accessToken && idToken) {
+				try {
+					userInfo = await okta.token.getUserInfo(accessToken, idToken);
+				} catch (error: any) {
+					console.error('Error while fetching user info: ', error);
+					console.error('Treating user as not authenticated.');
+				}
+			}
+
+			if (userInfo) {
+				// If there's a user we can go ahead and navigate to the home page.
+				navigate('/');
+			} else {
+				// Otherwise, we need to go through the login flow.
+				await okta.token.getWithRedirect({
+					scopes,
+					redirectUri: window.location.origin + window.location.pathname,
+				});
+			}
+		} catch (error: any) {
+			console.error(error);
+			setLoading(false);
+			if (error.message) setError(error.message);
+		}
+	};
+
+	useEffect(() => {
+		handleLogin();
 	}, []);
 
 	if (loading) return <div>Loading...</div>;
@@ -60,7 +70,7 @@ export const Okta = () => {
 			 * This button is here as a failsafe. If the component is rendered, then the user can click the button to request a login.
 			 * It should never actually appear in this implementation.
 			 */}
-			<Button onClick={() => okta.token.getWithRedirect({ scopes })}>Login</Button>
+			<Button onClick={handleLogin}>Login</Button>
 		</div>
 	);
 };

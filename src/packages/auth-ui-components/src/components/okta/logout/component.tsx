@@ -1,23 +1,19 @@
-import { useCallback } from 'react';
 import { Logout } from '../../logout';
 import { okta } from '../client';
 import { localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
 
-export interface OktaLogoutProps {
-	redirectTo?: string;
-}
+export const OktaLogout = () => (
+	<Logout
+		onLogout={async () => {
+			localStorage.removeItem(localStorageAuthKey);
 
-export const OktaLogout = ({ redirectTo }: OktaLogoutProps) => {
-	const handleLogout = useCallback(async () => {
-		localStorage.removeItem(localStorageAuthKey);
-
-		await okta.signOut({
-			postLogoutRedirectUri: redirectTo,
-			revokeAccessToken: true,
-			revokeRefreshToken: true,
-			clearTokensBeforeRedirect: true,
-		});
-	}, []);
-
-	return <Logout onLogout={handleLogout} />;
-};
+			await okta.signOut({
+				// Always go back to the root.
+				postLogoutRedirectUri: window.location.origin,
+				revokeAccessToken: true,
+				revokeRefreshToken: true,
+				clearTokensBeforeRedirect: true,
+			});
+		}}
+	/>
+);
