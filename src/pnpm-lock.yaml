@@ -24,8 +24,8 @@ importers:
         specifier: 6.11.3
         version: 6.11.3
       concurrently:
-        specifier: 9.1.0
-        version: 9.1.0
+        specifier: 9.1.2
+        version: 9.1.2
       eslint:
         specifier: 9.16.0
         version: 9.16.0(jiti@1.21.6)
@@ -33,8 +33,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(eslint@9.16.0(jiti@1.21.6))
       globals:
-        specifier: 15.13.0
-        version: 15.13.0
+        specifier: 15.14.0
+        version: 15.14.0
       prettier:
         specifier: 3.4.2
         version: 3.4.2
@@ -82,7 +82,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -281,7 +281,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -379,7 +379,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -455,8 +455,8 @@ importers:
         specifier: 22.10.1
         version: 22.10.1
       dotenv-cli:
-        specifier: 7.4.4
-        version: 7.4.4
+        specifier: 8.0.0
+        version: 8.0.0
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -498,10 +498,10 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       graphql:
         specifier: 16.9.0
         version: 16.9.0
@@ -525,8 +525,8 @@ importers:
         specifier: 22.10.1
         version: 22.10.1
       dotenv-cli:
-        specifier: 7.4.4
-        version: 7.4.4
+        specifier: 8.0.0
+        version: 8.0.0
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -556,7 +556,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -1090,8 +1090,8 @@ importers:
         specifier: 5.0.8
         version: 5.0.8
       rollup-plugin-visualizer:
-        specifier: 5.12.0
-        version: 5.12.0(rollup@4.28.0)
+        specifier: 5.13.1
+        version: 5.13.1(rollup@4.28.0)
       serverless-offline:
         specifier: 14.4.0
         version: 14.4.0(serverless@4.4.3)
@@ -1136,17 +1136,17 @@ importers:
         specifier: 22.10.1
         version: 22.10.1
       aws-cdk:
-        specifier: 2.173.2
-        version: 2.173.2
+        specifier: 2.173.4
+        version: 2.173.4
       aws-cdk-lib:
-        specifier: 2.173.2
-        version: 2.173.2(constructs@10.4.2)
+        specifier: 2.173.4
+        version: 2.173.4(constructs@10.4.2)
       constructs:
         specifier: 10.4.2
         version: 10.4.2
       dotenv-cli:
-        specifier: 7.4.4
-        version: 7.4.4
+        specifier: 8.0.0
+        version: 8.0.0
       esbuild:
         specifier: 0.24.0
         version: 0.24.0
@@ -1335,7 +1335,7 @@ importers:
         version: 6.4.2
       '@mikro-orm/postgresql':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -1343,8 +1343,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       dotenv-cli:
-        specifier: 7.4.4
-        version: 7.4.4
+        specifier: 8.0.0
+        version: 8.0.0
       ethers:
         specifier: 6.3.0
         version: 6.3.0
@@ -1420,8 +1420,8 @@ importers:
   packages/logger:
     dependencies:
       pino:
-        specifier: 9.5.0
-        version: 9.5.0
+        specifier: 9.6.0
+        version: 9.6.0
     devDependencies:
       '@types/node':
         specifier: 22.10.1
@@ -1440,7 +1440,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -1502,13 +1502,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
       '@mikro-orm/postgresql':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
         version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
@@ -5670,8 +5670,8 @@ packages:
   avvio@8.4.0:
     resolution: {integrity: sha512-CDSwaxINFy59iNwhYnkvALBwZiTydGkOecZyPkqBpABYR1KqGEsET0VOOYDwtleZSUIdeY36DC2bSZ24CO1igA==}
 
-  aws-cdk-lib@2.173.2:
-    resolution: {integrity: sha512-cL9+z8Pl3VZGoO7BwdsrFAOeud/vSl3at7OvmhihbNprMN15XuFUx/rViAU5OI1m92NbV4NBzYSLbSeCwYLNyw==}
+  aws-cdk-lib@2.173.4:
+    resolution: {integrity: sha512-0reN94TzkWmyVZDDBlYB4qzJUig8wTHEe82YLHlWRUhrU78fT+drVGUr+lYZwwETaZ+8fLdCOl9ULvFNq7iczQ==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -5688,8 +5688,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.173.2:
-    resolution: {integrity: sha512-qyMU4FoRJdZDUpsOBqyRBALBjf5A2N/MaHKX9iJUkbTET+d+nR07x3ai4TcEES+8pqPFHMTKpQMRDXs9Py/15w==}
+  aws-cdk@2.173.4:
+    resolution: {integrity: sha512-zgs3xU28VEKIwHwJHu0ZHeoEmwLGnHS2jPCMc2MsIMZu+a7CKyE77Tw6LwJkuuB96BQyqr6xJB3SbeWjXmcFhQ==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
 
@@ -6140,8 +6140,8 @@ packages:
   concat-map@0.0.1:
     resolution: {integrity: sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg==}
 
-  concurrently@9.1.0:
-    resolution: {integrity: sha512-VxkzwMAn4LP7WyMnJNbHN5mKV9L2IbyDjpzemKr99sXNR3GqRNMMHdm7prV1ws9wg7ETj6WUkNOigZVsptwbgg==}
+  concurrently@9.1.2:
+    resolution: {integrity: sha512-H9MWcoPsYddwbOGM6difjVwVZHl63nwMEwDJG/L7VGtuaJhb12h2caPG2tVPWs7emuYix252iGfqOyrz1GczTQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -6505,8 +6505,8 @@ packages:
   dot-case@3.0.4:
     resolution: {integrity: sha512-Kv5nKlh6yRrdrGvxeJ2e5y2eRUpkUosIW4A2AS38zwSz27zu7ufDwQPi5Jhs3XAlGNetl3bmnGhQsMtkKJnj3w==}
 
-  dotenv-cli@7.4.4:
-    resolution: {integrity: sha512-XkBYCG0tPIes+YZr4SpfFv76SQrV/LeCE8CI7JSEMi3VR9MvTihCGTOtbIexD6i2mXF+6px7trb1imVCXSNMDw==}
+  dotenv-cli@8.0.0:
+    resolution: {integrity: sha512-aLqYbK7xKOiTMIRf1lDPbI+Y+Ip/wo5k3eyp6ePysVaSqbyxjyK3dK35BTxG+rmd7djf5q2UPs4noPNH+cj0Qw==}
     hasBin: true
 
   dotenv-expand@10.0.0:
@@ -7152,8 +7152,8 @@ packages:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
     engines: {node: '>=18'}
 
-  globals@15.13.0:
-    resolution: {integrity: sha512-49TewVEz0UxZjr1WYYsWpPrhyC/B/pA8Bq0fUmet2n+eR7yn0IvNzNaoBwnK6mdkzcN+se7Ez9zUgULTz2QH4g==}
+  globals@15.14.0:
+    resolution: {integrity: sha512-OkToC372DtlQeje9/zHIo5CT8lRP/FUgEOKBEhU4e0abL7J7CD24fD9ohiLN5hagG/kWCYj4K5oaxxtj2Z0Dig==}
     engines: {node: '>=18'}
 
   globby@11.1.0:
@@ -8803,6 +8803,10 @@ packages:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
 
+  picomatch@4.0.2:
+    resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
+    engines: {node: '>=12'}
+
   pify@2.3.0:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
@@ -8825,8 +8829,8 @@ packages:
   pino-std-serializers@7.0.0:
     resolution: {integrity: sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==}
 
-  pino@9.5.0:
-    resolution: {integrity: sha512-xSEmD4pLnV54t0NOUN16yCl7RIB1c5UUOse5HSyEXtBp+FgFQyPeDutc+Q2ZO7/22vImV7VfEjH/1zV2QuqvYw==}
+  pino@9.6.0:
+    resolution: {integrity: sha512-i85pKRCt4qMjZ1+L7sy2Ag4t1atFcdbEt76+7iRJn1g2BvsnRMGu9p8pivl9fs63M2kF/A0OacFZhTub+m/qMg==}
     hasBin: true
 
   pirates@4.0.6:
@@ -9312,13 +9316,16 @@ packages:
   robust-predicates@3.0.2:
     resolution: {integrity: sha512-IXgzBWvWQwE6PrDI05OvmXUIruQTcoMDzRsOd5CDvHCVLcLHMTSYvOK5Cm46kWqlV3yAbuSpBZdJ5oP5OUoStg==}
 
-  rollup-plugin-visualizer@5.12.0:
-    resolution: {integrity: sha512-8/NU9jXcHRs7Nnj07PF2o4gjxmm9lXIrZ8r175bT9dK8qoLlvKTwRMArRCMgpMGlq8CTLugRvEmyMeMXIU2pNQ==}
-    engines: {node: '>=14'}
+  rollup-plugin-visualizer@5.13.1:
+    resolution: {integrity: sha512-vMg8i6BprL8aFm9DKvL2c8AwS8324EgymYQo9o6E26wgVvwMhsJxS37aNL6ZsU7X9iAcMYwdME7gItLfG5fwJg==}
+    engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
+      rolldown: 1.x
       rollup: 2.x || 3.x || 4.x
     peerDependenciesMeta:
+      rolldown:
+        optional: true
       rollup:
         optional: true
 
@@ -13696,6 +13703,25 @@ snapshots:
       - supports-color
       - tedious
 
+  '@mikro-orm/postgresql@6.4.2(@mikro-orm/core@6.4.2)':
+    dependencies:
+      '@mikro-orm/core': 6.4.2
+      '@mikro-orm/knex': 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
+      pg: 8.13.1
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
   '@mikro-orm/postgresql@6.4.2(@mikro-orm/core@6.4.2)(mysql2@3.11.5)':
     dependencies:
       '@mikro-orm/core': 6.4.2
@@ -15761,7 +15787,7 @@ snapshots:
       '@fastify/error': 3.4.1
       fastq: 1.17.1
 
-  aws-cdk-lib@2.173.2(constructs@10.4.2):
+  aws-cdk-lib@2.173.4(constructs@10.4.2):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.209
       '@aws-cdk/asset-kubectl-v20': 2.1.3
@@ -15769,7 +15795,7 @@ snapshots:
       '@aws-cdk/cloud-assembly-schema': 38.0.1
       constructs: 10.4.2
 
-  aws-cdk@2.173.2:
+  aws-cdk@2.173.4:
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -16360,7 +16386,7 @@ snapshots:
 
   concat-map@0.0.1: {}
 
-  concurrently@9.1.0:
+  concurrently@9.1.2:
     dependencies:
       chalk: 4.1.2
       lodash: 4.17.21
@@ -16709,7 +16735,7 @@ snapshots:
       no-case: 3.0.4
       tslib: 2.7.0
 
-  dotenv-cli@7.4.4:
+  dotenv-cli@8.0.0:
     dependencies:
       cross-spawn: 7.0.6
       dotenv: 16.4.7
@@ -17311,7 +17337,7 @@ snapshots:
       fast-json-stringify: 5.16.1
       find-my-way: 8.2.2
       light-my-request: 5.13.0
-      pino: 9.5.0
+      pino: 9.6.0
       process-warning: 3.0.0
       proxy-addr: 2.0.7
       rfdc: 1.4.1
@@ -17646,7 +17672,7 @@ snapshots:
 
   globals@14.0.0: {}
 
-  globals@15.13.0: {}
+  globals@15.14.0: {}
 
   globby@11.1.0:
     dependencies:
@@ -19552,6 +19578,8 @@ snapshots:
 
   picomatch@2.3.1: {}
 
+  picomatch@4.0.2: {}
+
   pify@2.3.0: {}
 
   pify@3.0.0: {}
@@ -19568,7 +19596,7 @@ snapshots:
 
   pino-std-serializers@7.0.0: {}
 
-  pino@9.5.0:
+  pino@9.6.0:
     dependencies:
       atomic-sleep: 1.0.0
       fast-redact: 3.5.0
@@ -20043,10 +20071,10 @@ snapshots:
 
   robust-predicates@3.0.2: {}
 
-  rollup-plugin-visualizer@5.12.0(rollup@4.28.0):
+  rollup-plugin-visualizer@5.13.1(rollup@4.28.0):
     dependencies:
       open: 8.4.2
-      picomatch: 2.3.1
+      picomatch: 4.0.2
       source-map: 0.7.4
       yargs: 17.7.2
     optionalDependencies:

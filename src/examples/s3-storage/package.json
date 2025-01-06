@@ -41,7 +41,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "22.10.1",
-		"dotenv-cli": "7.4.4",
+		"dotenv-cli": "8.0.0",
 		"typescript": "5.7.2"
 	},
 	"keywords": [
