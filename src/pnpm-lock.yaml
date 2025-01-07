@@ -339,10 +339,10 @@ importers:
         version: 6.4.2
       '@mikro-orm/knex':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)(sqlite3@5.1.7)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       '@mikro-orm/sqlite':
         specifier: 6.4.2
-        version: 6.4.2(@mikro-orm/core@6.4.2)(pg@8.13.1)
+        version: 6.4.2(@mikro-orm/core@6.4.2)
       '@okta/okta-auth-js':
         specifier: 7.9.0
         version: 7.9.0(encoding@0.1.13)
