@@ -27,7 +27,7 @@
 		"@exogee/graphweaver-config": "workspace:*",
 		"chokidar": "4.0.1",
 		"esbuild": "0.24.0",
-		"inquirer": "11.1.0",
+		"inquirer": "12.3.0",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.6.3",
