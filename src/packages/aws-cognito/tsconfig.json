@@ -12,5 +12,5 @@
 		"jsx": "react-jsx"
 	},
 	"include": ["./src"],
-	"references": [{ "path": "../../packages/core" }, { "path": "../../packages/rest" }]
+	"references": [{ "path": "../core" }, { "path": "../rest-legacy" }]
 }

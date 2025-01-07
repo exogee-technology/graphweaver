@@ -5,5 +5,10 @@
 		"rootDir": "./src",
 		"outDir": "./lib"
 	},
-	"references": [{ "path": "../vite-plugin-graphweaver" }, { "path": "../config" }]
+	"references": [
+		{ "path": "../admin-ui" },
+		{ "path": "../config" },
+		{ "path": "../mikroorm" },
+		{ "path": "../vite-plugin-graphweaver" }
+	]
 }

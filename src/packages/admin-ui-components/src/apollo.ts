@@ -13,11 +13,11 @@ const authLink = new ApolloLink((operation, forward) => {
 	const currentAuthToken = localStorage.getItem(localStorageAuthKey);
 
 	// The token should include the type and the credential, if not let's emit a warning.
-	if (currentAuthToken && currentAuthToken.split(' ').length < 2)
+	if (currentAuthToken && currentAuthToken.split(' ').length < 2) {
 		console.warn(
 			'Current Graphweaver Auth Token is invalid, it should be in the form "[type] [credential]"'
 		);
-
+	}
 	const currentRedirectSearchParam = new URLSearchParams(window.location.search).get(
 		'redirect_uri'
 	);

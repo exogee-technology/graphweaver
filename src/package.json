@@ -20,6 +20,7 @@
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
 		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
 		"clean": "./clean.sh && pnpm force:build",
+		"fix:project:references": "pnpm set-project-references --save",
 		"force:build": "TURBO_FORCE=true pnpm build",
 		"format": "pnpm prettier",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
@@ -35,6 +36,7 @@
 		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
+		"@bessonovs/set-project-references": "0.0.10",
 		"@eslint/js": "9.17.0",
 		"@types/eslint-config-prettier": "6.11.3",
 		"concurrently": "9.1.2",

@@ -3,6 +3,7 @@ export * from './auth-zero';
 export * from './forgotten-password';
 export * from './magic-link';
 export * from './microsoft-entra';
+export * from './okta';
 export * from './one-time-password';
 export * from './passkey';
 export * from './password';

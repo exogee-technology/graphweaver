@@ -3,6 +3,7 @@ import {
 	ForgottenPassword,
 	MagicLinkLogin,
 	MicrosoftEntra,
+	Okta,
 	PasswordLogin,
 	ResetPassword,
 } from './components';
@@ -19,6 +20,8 @@ const mapComponent = (method: PrimaryAuthMethod) => {
 			return <MicrosoftEntra />;
 		case PrimaryAuthMethod.PASSWORD:
 			return <PasswordLogin />;
+		case PrimaryAuthMethod.OKTA:
+			return <Okta />;
 		default:
 			throw new Error(`Unknown primary auth method: ${method}`);
 	}
