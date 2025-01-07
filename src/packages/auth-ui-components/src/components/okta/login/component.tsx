@@ -15,6 +15,12 @@ export const Okta = () => {
 	const navigate = useNavigate();
 
 	const handleLogin = async () => {
+		if (!okta) {
+			throw new Error(
+				'Okta is not initialised. Please set the Okta environment variables as per the documentation.'
+			);
+		}
+
 		try {
 			// If we're coming back from a successful login redirect, parse the tokens and set them
 			if (okta.token.isLoginRedirect()) {
