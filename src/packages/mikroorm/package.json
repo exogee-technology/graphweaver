@@ -43,7 +43,7 @@
 		"@mikro-orm/sqlite": "6.4.2",
 		"@types/node": "22.10.1",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.24.0",
+		"esbuild": "0.24.2",
 		"glob": "10.4.3",
 		"tsx": "4.19.2",
 		"typescript": "5.7.2"
