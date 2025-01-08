@@ -354,6 +354,12 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
+
+		// This allows people with expired tokens to not get redirected to login while trying to log in.
+		// This happens at the end of this function so that we can be sure all the other checks have passed
+		// before we say it's ok not to redirect to login.
+		context.skipLoginRedirect = true;
+
 		return authToken;
 	}
 

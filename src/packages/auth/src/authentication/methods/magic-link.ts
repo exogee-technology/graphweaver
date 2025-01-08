@@ -216,8 +216,15 @@ export class MagicLink extends BaseAuthMethod {
 
 	async verifyLoginMagicLink({
 		args: { username, token },
-	}: ResolverOptions<{ username: string; token: string }>): Promise<Token> {
-		return this.verifyMagicLink(username, token);
+		context,
+	}: ResolverOptions<{ username: string; token: string }, AuthorizationContext>): Promise<Token> {
+		const result = await this.verifyMagicLink(username, token);
+
+		// If they have an expired token while successfully trying to verify a magic link, they don't actually need to get
+		// redirected to login.
+		context.skipLoginRedirect = true;
+
+		return result;
 	}
 
 	async sendChallengeMagicLink({

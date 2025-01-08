@@ -74,9 +74,7 @@ describe('Security', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.errors?.[0]?.message).toEqual(
-			'Unauthorized: Token verification failed.'
-		);
+		expect(response.body.singleResult.data).toEqual({ tags: null });
 		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
 			`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=${encodeURIComponent(
 				process.env.AUTH_BASE_URI + '/'
