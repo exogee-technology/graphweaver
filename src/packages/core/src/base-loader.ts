@@ -127,9 +127,7 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 	filter?: Filter<G>;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
-	const loaderKey = `${gqlTypeName}-${relatedField}-${JSON.stringify(
-		filter
-	)}`; /* gqlTypeName-fieldname-filterObject */
+	const loaderKey = `${gqlTypeName}-${relatedField}`; /* gqlTypeName-fieldname */
 
 	if (!keyStore[loaderKey]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
