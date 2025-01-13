@@ -424,7 +424,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 			strategy: LoadStrategy.SELECT_IN,
 
 			// This tells MikroORM we only need to load the related entities if they match the filter specified above.
-			populateWhere: queryFilter,
+			populateWhere: PopulateHint.INFER,
 		});
 
 		return result as D[];
