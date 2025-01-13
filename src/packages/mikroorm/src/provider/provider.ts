@@ -411,6 +411,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				$and: [queryFilter, ...[gqlToMikro(filter)]],
 			};
 		}
+
 		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
 		const result = await this.database.em.find(entity, queryFilter, {
 			// We only need one result per entity.
