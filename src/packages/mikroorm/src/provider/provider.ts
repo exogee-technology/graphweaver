@@ -407,7 +407,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 
 		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
 		const result = await this.database.em.find(entity, queryFilter, {
+			flags: [QueryFlag.DISTINCT],
 			populate,
+			populateWhere: { [relatedField]: { $in: relatedFieldIds } },
 		});
 
 		return result as D[];
