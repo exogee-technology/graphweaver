@@ -20,6 +20,7 @@ type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 type LoadOneOptions<G = unknown> = {
 	gqlEntityType: { new (...args: any[]): G };
 	id: string;
+	filter?: Filter<G>;
 };
 
 type LoadByRelatedIdOptions<G = unknown, D = unknown> = {
@@ -39,12 +40,14 @@ const getGqlEntityName = (gqlEntityType: any) => {
 
 const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 	gqlEntityType,
+	filter,
 	keyStore,
 }: {
 	gqlEntityType: {
 		new (...args: any[]): G;
 	};
 	keyStore: LoaderMap;
+	filter?: Filter<G>;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
 	if (!keyStore[gqlTypeName]) {
@@ -59,10 +62,16 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 			);
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
-			const listFilter = {
+			let listFilter = {
 				[`${String(primaryKeyField)}_in`]: keys,
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
 			} as Filter<G>;
+
+			if (filter) {
+				listFilter = {
+					_and: [listFilter, filter],
+				} as Filter<G>;
+			}
 
 			const backendFilter =
 				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
@@ -214,9 +223,9 @@ export class BaseLoader {
 	private loadOneLoaderMap: LoaderMap = {};
 	private relatedIdLoaderMap: LoaderMap = {};
 
-	public loadOne<G = unknown, D = unknown>({ gqlEntityType, id }: LoadOneOptions<G>) {
-		const loader = getBaseLoadOneLoader<G, D>({ gqlEntityType, keyStore: this.loadOneLoaderMap });
-		return loader.load(id);
+	public loadOne<G = unknown, D = unknown>(args: LoadOneOptions<G>) {
+		const loader = getBaseLoadOneLoader<G, D>({ ...args, keyStore: this.loadOneLoaderMap });
+		return loader.load(args.id);
 	}
 
 	public loadByRelatedId<G = unknown, D = unknown>(args: LoadByRelatedIdOptions<G, D>) {

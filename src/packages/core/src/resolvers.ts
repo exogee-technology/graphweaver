@@ -695,7 +695,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 			gqlEntityType,
 			relatedField: field.relationshipInfo.relatedField as keyof D & string,
 			id: String(source[sourcePrimaryKeyField]),
-			filter: relatedEntityFilter as Filter<typeof gqlEntityType>,
+			filter,
 		});
 	} else if (idValue) {
 		logger.trace('Loading with loadOne');
@@ -705,6 +705,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 				BaseLoaders.loadOne<R, D>({
 					gqlEntityType,
 					id: String(id),
+					filter,
 				})
 			)
 		);

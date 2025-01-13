@@ -17,7 +17,7 @@ import {
 	graphweaverMetadata,
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
-import { Reference, RequestContext, sql } from '@mikro-orm/core';
+import { LoadStrategy, Reference, RequestContext, sql } from '@mikro-orm/core';
 import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
 import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
@@ -401,13 +401,30 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - findByRelatedId ${this.entityType.name}`);
-		const queryFilter = {
-			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[gqlToMikro(filter) ?? []]],
-		};
+
+		// Any is the actual type from MikroORM, sorry folks.
+		let queryFilter: any = { [relatedField]: { $in: relatedFieldIds } };
+
+		if (filter) {
+			// Since the user has supplied a filter, we need to and it in.
+			queryFilter = {
+				$and: [queryFilter, ...[gqlToMikro(filter)]],
+			};
+		}
 
 		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
 		const result = await this.database.em.find(entity, queryFilter, {
+			// We only need one result per entity.
+			flags: [QueryFlag.DISTINCT],
+
+			// We do want to populate the relation, however, see below.
 			populate,
+
+			// We'd love to use the default joined loading strategy, but it doesn't work with the populateWhere option.
+			strategy: LoadStrategy.SELECT_IN,
+
+			// This tells MikroORM we only need to load the related entities if they match the filter specified above.
+			populateWhere: PopulateHint.INFER,
 		});
 
 		return result as D[];
