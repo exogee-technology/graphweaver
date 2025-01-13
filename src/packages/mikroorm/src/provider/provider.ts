@@ -411,13 +411,13 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 				$and: [queryFilter, ...[gqlToMikro(filter)]],
 			};
 		}
-
+		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
 		const result = await this.database.em.find(entity, queryFilter, {
 			// We only need one result per entity.
 			flags: [QueryFlag.DISTINCT],
 
 			// We do want to populate the relation, however, see below.
-			populate: [relatedField as AutoPath<typeof entity, PopulateHint>],
+			populate,
 
 			// We'd love to use the default joined loading strategy, but it doesn't work with the populateWhere option.
 			strategy: LoadStrategy.SELECT_IN,
