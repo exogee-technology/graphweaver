@@ -705,6 +705,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 				BaseLoaders.loadOne<R, D>({
 					gqlEntityType,
 					id: String(id),
+					filter,
 				})
 			)
 		);
