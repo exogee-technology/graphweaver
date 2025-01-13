@@ -401,24 +401,29 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		trace?: TraceOptions
 	): Promise<D[]> {
 		trace?.span.updateName(`Mikro-Orm - findByRelatedId ${this.entityType.name}`);
-		const queryFilter = {
-			$and: [{ [relatedField]: { $in: relatedFieldIds } }, ...[gqlToMikro(filter) ?? []]],
-		};
 
-		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
+		// Any is the actual type from MikroORM, sorry folks.
+		let queryFilter: any = { [relatedField]: { $in: relatedFieldIds } };
+
+		if (filter) {
+			// Since the user has supplied a filter, we need to and it in.
+			queryFilter = {
+				$and: [queryFilter, ...[gqlToMikro(filter)]],
+			};
+		}
+
 		const result = await this.database.em.find(entity, queryFilter, {
 			// We only need one result per entity.
 			flags: [QueryFlag.DISTINCT],
 
 			// We do want to populate the relation, however, see below.
-			populate,
+			populate: [relatedField as AutoPath<typeof entity, PopulateHint>],
 
-			// We'd love to use the default joined loading strategy, but it doesn't work with the
-			// populateWhere option.
+			// We'd love to use the default joined loading strategy, but it doesn't work with the populateWhere option.
 			strategy: LoadStrategy.SELECT_IN,
 
 			// This tells MikroORM we only need to load the related entities if they match the filter specified above.
-			populateWhere: { [relatedField]: { $in: relatedFieldIds } },
+			populateWhere: queryFilter,
 		});
 
 		return result as D[];
