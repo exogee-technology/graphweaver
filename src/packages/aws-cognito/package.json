@@ -35,6 +35,6 @@
 		"@aws-sdk/client-cognito-identity-provider": "3.726.1",
 		"@aws-sdk/client-lambda": "3.726.1",
 		"@exogee/graphweaver-rest-legacy": "workspace:*",
-		"graphql": "16.9.0"
+		"graphql": "16.10.0"
 	}
 }

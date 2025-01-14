@@ -32,7 +32,7 @@
 		"@mikro-orm/core": "6.4.2",
 		"@mikro-orm/knex": "6.4.2",
 		"@mikro-orm/postgresql": "6.4.2",
-		"graphql": "16.9.0",
+		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
 		"pg": "8.13.1",
 		"react": "19.0.0",
