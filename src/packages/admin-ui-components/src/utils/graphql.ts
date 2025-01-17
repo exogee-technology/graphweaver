@@ -29,7 +29,6 @@ export const SCHEMA_QUERY = gql`
 					attributes {
 						isReadOnly
 						isRequired
-						filterType
 					}
 					extensions {
 						key

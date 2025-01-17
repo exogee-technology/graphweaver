@@ -109,11 +109,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					name: field.name,
 					type: relatedObject?.name || typeName,
 					isArray: isList,
-					//@ts-expect-error - TODO fix me
 					attributes: {
 						isReadOnly,
 						isRequired,
-						// filterType: field.adminUIOptions?.filterType
 					},
 					hideInTable: field.adminUIOptions?.hideInTable,
 					hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
@@ -141,9 +139,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				}
 
 				const filterType = field.adminUIOptions?.filterType ?? mapFilterType(fieldObject);
-				if (fieldObject.attributes) {
-					fieldObject.attributes.filterType = filterType;
-				}
+
 				fieldObject.filter = { type: filterType };
 
 				return fieldObject;
