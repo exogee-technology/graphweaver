@@ -24,6 +24,7 @@ export type AdminUiEntityAttributeMetadata = {
   __typename?: 'AdminUiEntityAttributeMetadata';
   clientGeneratedPrimaryKeys?: Maybe<Scalars['Boolean']['output']>;
   exportPageSize?: Maybe<Scalars['Float']['output']>;
+  filterType?: Maybe<AdminUiFilterType>;
   isReadOnly?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -59,6 +60,7 @@ export type AdminUiEnumValueMetadata = {
 
 export type AdminUiFieldAttributeMetadata = {
   __typename?: 'AdminUiFieldAttributeMetadata';
+  filterType: AdminUiFilterType;
   isReadOnly: Scalars['Boolean']['output'];
   isRequired: Scalars['Boolean']['output'];
 };
@@ -91,6 +93,7 @@ export type AdminUiFilterMetadata = {
 export enum AdminUiFilterType {
   Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
+  DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
   Relationship = 'RELATIONSHIP',

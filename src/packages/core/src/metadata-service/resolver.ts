@@ -1,10 +1,10 @@
-import { AdminUiFieldMetadata } from './field';
+import { hookManagerMap, HookRegister } from '../hook-manager';
+import { graphweaverMetadata } from '../metadata';
+import { getFieldTypeWithMetadata } from '../schema-builder';
+import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
-import { graphweaverMetadata } from '../metadata';
-import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
-import { getFieldTypeWithMetadata } from '../schema-builder';
-import { hookManagerMap, HookRegister } from '../hook-manager';
+import { AdminUiFieldMetadata } from './field';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -18,17 +18,17 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Otherwise check the type
 	switch (field.type) {
 		case 'ID':
-			return AdminUIFilterType.TEXT;
+			return AdminUIFilterType.DROP_DOWN_TEXT;
 		case 'Number':
 			return AdminUIFilterType.NUMERIC;
 		case 'String':
-			return AdminUIFilterType.TEXT;
+			return AdminUIFilterType.DROP_DOWN_TEXT;
 		case 'ISOString':
 			return AdminUIFilterType.DATE_RANGE;
 		case 'Boolean':
 			return AdminUIFilterType.BOOLEAN;
 		default:
-			return AdminUIFilterType.TEXT;
+			return AdminUIFilterType.DROP_DOWN_TEXT;
 	}
 };
 
@@ -80,6 +80,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				entity.apiOptions?.excludeFromBuiltInWriteOperations ??
 				false;
 
+			// TODO This is unnecessary and needs to be tidied up
+			attributes.filterType = entity.adminUIOptions?.filterType;
+
 			let defaultSummaryField: 'name' | 'title' | undefined = undefined;
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
 			let defaultFieldForDetailPanel = primaryKeyField;
@@ -109,9 +112,11 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					name: field.name,
 					type: relatedObject?.name || typeName,
 					isArray: isList,
+					//@ts-expect-error - TODO fix me
 					attributes: {
 						isReadOnly,
 						isRequired,
+						// filterType: field.adminUIOptions?.filterType
 					},
 					hideInTable: field.adminUIOptions?.hideInTable,
 					hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
@@ -138,7 +143,11 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 				}
 
-				fieldObject.filter = { type: mapFilterType(fieldObject) };
+				const filterType = field.adminUIOptions?.filterType ?? mapFilterType(fieldObject);
+				if (fieldObject.attributes) {
+					fieldObject.attributes.filterType = filterType;
+				}
+				fieldObject.filter = { type: filterType };
 
 				return fieldObject;
 			});

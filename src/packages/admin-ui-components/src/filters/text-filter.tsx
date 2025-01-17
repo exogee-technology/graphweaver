@@ -1,8 +1,4 @@
-import { useLazyQuery } from '@apollo/client';
-
-import { Filter, ComboBox, SelectMode, SelectOption, useSchema } from '..';
-import { queryForFilterOptions } from './graphql';
-import { toSelectOption } from './utils';
+import { Filter, Input } from '..';
 
 export interface TextFilterProps {
 	fieldName: string;
@@ -11,41 +7,18 @@ export interface TextFilterProps {
 	filter?: Filter;
 }
 
-export const TextFilter = ({ fieldName, entity, onChange, filter }: TextFilterProps) => {
-	const { entityByName } = useSchema();
-
-	const [getData, { loading, error, data }] = useLazyQuery<{
-		result: Record<string, string>[];
-	}>(queryForFilterOptions(entityByName(entity), fieldName));
-
-	const comboBoxOptions = new Set<string>((data?.result || []).map((value) => value?.[fieldName]));
-
-	const handleOnChange = (options?: SelectOption[]) => {
-		const hasSelectedOptions = (options ?? [])?.length > 0;
-		onChange?.(
-			fieldName,
-			hasSelectedOptions ? { [`${fieldName}_in`]: options?.map((option) => option.value) } : {}
-		);
+export const TextFilter = ({ fieldName, onChange, filter }: TextFilterProps) => {
+	const handleOnChange = (fieldName: string, newValue?: string) => {
+		onChange?.(fieldName, newValue ? { [fieldName]: newValue } : {});
 	};
-
-	const handleOnOpen = () => {
-		if (!data && !loading && !error) {
-			getData();
-		}
-	};
-
-	const currentFilterValue = (filter?.[`${fieldName}_in`] as string[]) ?? [];
 
 	return (
-		<ComboBox
+		<Input
 			key={fieldName}
-			options={[...comboBoxOptions].map(toSelectOption)}
-			value={currentFilterValue.map(toSelectOption)}
-			placeholder={fieldName}
+			inputMode="text"
+			fieldName={fieldName}
+			value={String(filter?.[fieldName] ?? '')}
 			onChange={handleOnChange}
-			onOpen={handleOnOpen}
-			loading={loading}
-			mode={SelectMode.MULTI}
 			data-testid={`${fieldName}-filter`}
 		/>
 	);

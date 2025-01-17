@@ -1,18 +1,19 @@
-import { ReactNode, useEffect, useCallback } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { ReactNode, useCallback, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 import { Button } from '../button';
-import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 import {
 	BooleanFilter,
-	validateFilter,
 	DateRangeFilter,
+	DropdownTextFilter,
 	EnumFilter,
 	NumericFilter,
 	RelationshipFilter,
 	TextFilter,
+	validateFilter,
 } from '../filters';
+import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 
 import styles from './styles.module.css';
 
@@ -118,6 +119,8 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			switch (field.filter.type) {
 				case AdminUIFilterType.TEXT:
 					return <TextFilter key={field.name} {...options} />;
+				case AdminUIFilterType.DROP_DOWN_TEXT:
+					return <DropdownTextFilter key={field.name} {...options} />;
 				case AdminUIFilterType.BOOLEAN:
 					return <BooleanFilter key={field.name} {...options} />;
 				case AdminUIFilterType.RELATIONSHIP:
