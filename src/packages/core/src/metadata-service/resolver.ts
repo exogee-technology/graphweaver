@@ -80,9 +80,6 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				entity.apiOptions?.excludeFromBuiltInWriteOperations ??
 				false;
 
-			// TODO This is unnecessary and needs to be tidied up
-			attributes.filterType = entity.adminUIOptions?.filterType;
-
 			let defaultSummaryField: 'name' | 'title' | undefined = undefined;
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity);
 			let defaultFieldForDetailPanel = primaryKeyField;
