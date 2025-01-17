@@ -1,5 +1,5 @@
-import { ChangeEvent, useEffect, useState } from 'react';
 import clsx from 'clsx';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { useDebounce } from '../hooks';
 
@@ -29,6 +29,11 @@ export const Input = ({
 }: NumericFilterProps) => {
 	const [value, setValue] = useState<string | undefined>(initialValue ?? '');
 	const debouncedValue = useDebounce<string | undefined>(value, 800); // debounce request for 800ms
+
+	useEffect(() => {
+		// Respond to a change in the value prop passed in from the parent
+		setValue(initialValue);
+	}, [initialValue]);
 
 	const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
 		setValue(event.target.value);
