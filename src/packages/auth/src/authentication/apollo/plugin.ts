@@ -237,7 +237,16 @@ export const authApolloPlugin = <R>(
 
 						upsertAuthorizationContext(contextValue);
 					} catch (err: unknown) {
-						logger.error({ err }, 'JWT verification failed.');
+						logger.error({ err }, 'JWT verification failed, treating as guest.');
+
+						// We are a guest and have not logged in yet.
+						contextValue.user = new UserProfile({
+							id: undefined,
+							roles: ['GUEST'],
+						});
+						upsertAuthorizationContext(contextValue);
+
+						// But we still got an error and need to tell the client to redirect to login.
 						tokenVerificationFailed = true;
 					}
 				}
@@ -253,9 +262,6 @@ export const authApolloPlugin = <R>(
 					// an error is thrown here.
 					if (apiKeyVerificationFailedMessage) {
 						throw new AuthenticationError(apiKeyVerificationFailedMessage);
-					}
-					if (tokenVerificationFailed) {
-						throw new AuthenticationError('Unauthorized: Token verification failed.');
 					}
 				},
 
@@ -275,7 +281,7 @@ export const authApolloPlugin = <R>(
 						}
 					}
 
-					//If we received a challenge error we need to redirect, set the header to tell the client to do so.
+					// If we received a challenge error we need to redirect, set the header to tell the client to do so.
 					if (errors?.some(didEncounterChallengeError)) {
 						logger.trace('Forbidden Error Found: setting X-Auth-Redirect header.');
 
@@ -296,8 +302,9 @@ export const authApolloPlugin = <R>(
 						);
 					}
 
-					// Let's check if verification has failed and redirect to login if it has
-					if (tokenVerificationFailed) {
+					// Let's check if verification has failed and redirect to login if it has, but only if this
+					// happens when we're not actually trying to log in.
+					if (tokenVerificationFailed && !contextValue.skipLoginRedirect) {
 						logger.trace('JWT verification failed: setting X-Auth-Redirect header.');
 						response.http.status = 200;
 						response.http.headers.set(
