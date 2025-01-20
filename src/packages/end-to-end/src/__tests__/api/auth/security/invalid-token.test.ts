@@ -74,7 +74,7 @@ describe('Security', () => {
 		});
 
 		assert(response.body.kind === 'single');
-		expect(response.body.singleResult.data).toBe([]);
+		expect(response.body.singleResult.data).toBe({ tags: null });
 		expect(response.http.headers.get('X-Auth-Redirect')).toBe(
 			`${process.env.AUTH_BASE_URI}/auth/login?redirect_uri=${encodeURIComponent(
 				process.env.AUTH_BASE_URI + '/'
