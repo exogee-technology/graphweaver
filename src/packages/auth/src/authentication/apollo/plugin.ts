@@ -171,9 +171,13 @@ export const authApolloPlugin = <R>(
 				});
 
 				if (!apiKey || !apiKey.secret) {
-					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0001)';
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed.';
+					logger.error(
+						`API Key Authentication Failed. No API Key was received, or it had no secret.`
+					);
 				} else if (apiKey.revoked) {
-					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0002)';
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed.';
+					logger.error({ apiKey }, `API Key Authentication Failed. API Key is revoked.`);
 				} else if (await verifyPassword(secret, apiKey.secret)) {
 					contextValue.user = new UserProfile({
 						id: String(apiKey.id),
@@ -183,7 +187,11 @@ export const authApolloPlugin = <R>(
 					contextValue.token = {};
 					upsertAuthorizationContext(contextValue);
 				} else {
-					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed. (E0003)';
+					apiKeyVerificationFailedMessage = 'Bad Request: API Key Authentication Failed.';
+					logger.error(
+						{ apiKey },
+						`API Key Authentication Failed. Verify password call did not succeed.`
+					);
 				}
 			} else {
 				// Ok, we are working in token land at this point. We either have the following scenarios:
