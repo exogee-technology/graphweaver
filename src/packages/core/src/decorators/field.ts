@@ -1,5 +1,5 @@
 import { graphweaverMetadata } from '../metadata';
-import { Complexity, GetTypeFunction } from '../types';
+import { AdminUIFilterType, Complexity, GetTypeFunction } from '../types';
 
 export interface FieldOptions {
 	description?: string;
@@ -14,6 +14,7 @@ export interface FieldOptions {
 	// This will supersede any other read only settings.
 	readonly?: boolean;
 	adminUIOptions?: {
+		filterType?: AdminUIFilterType;
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
 		hideInDetailForm?: boolean;

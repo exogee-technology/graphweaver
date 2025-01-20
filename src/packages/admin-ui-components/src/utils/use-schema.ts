@@ -1,9 +1,9 @@
-import { useEffect, useMemo, JSX } from 'react';
 import { InMemoryCache, useQuery } from '@apollo/client';
 import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
+import { JSX, useEffect, useMemo } from 'react';
 
-import { SCHEMA_QUERY } from './graphql';
 import { PanelMode } from '../detail-panel';
+import { SCHEMA_QUERY } from './graphql';
 
 export interface Schema {
 	entities: Entity[];
@@ -49,6 +49,7 @@ export enum AdminUIFilterType {
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 	BOOLEAN = 'BOOLEAN',
+	DROP_DOWN_TEXT = 'DROP_DOWN_TEXT',
 }
 
 export enum AggregationType {

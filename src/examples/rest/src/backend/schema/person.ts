@@ -1,4 +1,4 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
+import { AdminUIFilterType, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { RestBackendProvider } from '@exogee/graphweaver-rest';
 
 import { urlToIdTransform } from '../utils';
@@ -20,7 +20,7 @@ export class Person {
 	@Field(() => ID, { primaryKeyField: true })
 	url!: string;
 
-	@Field(() => String)
+	@Field(() => String, { adminUIOptions: { filterType: AdminUIFilterType.TEXT } })
 	name!: string;
 
 	@Field(() => String)

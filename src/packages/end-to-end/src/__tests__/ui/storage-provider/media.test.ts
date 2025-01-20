@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import path from 'path';
 
 import { config } from '../../../config';
@@ -19,6 +19,8 @@ test('Ensure media is uploaded on create', async ({ page }) => {
 
 test('Ensure media is uploaded on update', async ({ page }) => {
 	await page.goto(`${config.adminUiUrl}/Submission`);
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
+
 	await page.getByRole('cell').getByRole('img').last().click();
 	await page.waitForTimeout(1000);
 
@@ -33,6 +35,7 @@ test('Ensure media is uploaded on update', async ({ page }) => {
 
 test('Ensure media is deleted', async ({ page }) => {
 	await page.goto(`${config.adminUiUrl}/Submission`);
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	await page.getByRole('cell').getByRole('img').last().click();
 	await page.waitForTimeout(1000);

@@ -5,7 +5,7 @@ const getValidFilterProperties = (fields: EntityField[]): Set<string> => {
 	const supportedKeys = new Set<string>();
 	for (const field of fields) {
 		switch (field.filter?.type) {
-			case AdminUIFilterType.TEXT:
+			case AdminUIFilterType.DROP_DOWN_TEXT:
 				supportedKeys.add(field.name);
 				supportedKeys.add(`${field.name}_in`);
 				break;
