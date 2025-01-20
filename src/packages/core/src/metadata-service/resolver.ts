@@ -18,11 +18,11 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Otherwise check the type
 	switch (field.type) {
 		case 'ID':
-			return AdminUIFilterType.DROP_DOWN_TEXT;
+			return AdminUIFilterType.TEXT;
 		case 'Number':
 			return AdminUIFilterType.NUMERIC;
 		case 'String':
-			return AdminUIFilterType.DROP_DOWN_TEXT;
+			return AdminUIFilterType.TEXT;
 		case 'ISOString':
 			return AdminUIFilterType.DATE_RANGE;
 		case 'Boolean':
