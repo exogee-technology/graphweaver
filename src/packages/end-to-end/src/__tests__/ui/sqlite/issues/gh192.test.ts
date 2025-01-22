@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { randomUUID } from 'crypto';
 
 import { config } from '../../../../config';
@@ -24,7 +24,7 @@ test('ensure toast is displayed with the name of the item after creation', async
 	// create new album called Random UUID title
 	await page.getByRole('button', { name: 'Create New Album' }).click();
 	await page.waitForTimeout(1000);
-	await page.getByRole('textbox', { name: 'title' }).fill(title);
+	await page.getByLabel('title*').fill(title);
 
 	await expect(page.locator('form').locator('label').filter({ hasText: 'artist' })).toBeVisible();
 	await page
