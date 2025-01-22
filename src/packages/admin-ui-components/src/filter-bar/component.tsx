@@ -98,14 +98,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	}, []);
 
 	const clearAllFilters = () => {
-		navigate(
-			routeFor({
-				entity: entityName,
-				// Note: We're explicitly excluding page here so that it resets when we navigate.
-				sort: searchParams.sort,
-				filters: undefined,
-			})
-		);
+		setFiltersState({});
 	};
 
 	const getFilterComponents = useCallback(() => {
