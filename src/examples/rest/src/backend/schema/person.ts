@@ -17,13 +17,16 @@ import { Vehicle } from './vehicle';
 	}),
 })
 export class Person {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, {
+		primaryKeyField: true,
+		adminUIOptions: { filterType: AdminUIFilterType.DROP_DOWN_TEXT },
+	})
 	url!: string;
 
 	@Field(() => String, { adminUIOptions: { filterType: AdminUIFilterType.TEXT } })
 	name!: string;
 
-	@Field(() => String)
+	@Field(() => String, { adminUIOptions: { filterType: AdminUIFilterType.DROP_DOWN_TEXT } })
 	height!: string;
 
 	@Field(() => String)

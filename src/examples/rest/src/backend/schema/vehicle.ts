@@ -1,7 +1,7 @@
-import { Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
-import { Person } from './person';
+import { AdminUIFilterType, Entity, Field, ID, RelationshipField } from '@exogee/graphweaver';
 import { RestBackendProvider } from '@exogee/graphweaver-rest';
 import { urlToIdTransform } from '../utils';
+import { Person } from './person';
 
 @Entity('Vehicle', {
 	adminUIOptions: { readonly: true },
@@ -16,7 +16,10 @@ import { urlToIdTransform } from '../utils';
 	}),
 })
 export class Vehicle {
-	@Field(() => ID, { primaryKeyField: true })
+	@Field(() => ID, {
+		primaryKeyField: true,
+		adminUIOptions: { filterType: AdminUIFilterType.DROP_DOWN_TEXT },
+	})
 	url!: string;
 
 	@Field(() => String)
