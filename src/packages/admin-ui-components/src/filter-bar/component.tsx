@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect } from 'react';
+import { ReactNode, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
@@ -15,6 +15,7 @@ import {
 } from '../filters';
 import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
 
+import { useDebounce } from '../hooks';
 import styles from './styles.module.css';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
@@ -24,7 +25,9 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entityByName } = useSchema();
 	const navigate = useNavigate();
 	const searchParams = decodeSearchParams(search);
-	const filters = searchParams.filters ?? {};
+
+	const [filtersState, setFiltersState] = useState(searchParams.filters ?? {});
+	const debouncedFilters = useDebounce(filtersState, 800);
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
@@ -42,7 +45,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	useEffect(() => {
 		// On mount, check if the filters are supported by the entity
 		const fields = filterFieldsOnEntity();
-		const { filter, unsupportedKeys } = validateFilter(fields, filters);
+		const { filter, unsupportedKeys } = validateFilter(fields, debouncedFilters);
 
 		if (unsupportedKeys.length) {
 			const isPlural = unsupportedKeys.length > 1;
@@ -66,32 +69,33 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				})
 			);
 		}
-	}, []);
 
-	// This function updates the filter in state based on the filter keys updated and the newFilter value
-	const onFilter = (fieldName: string, newFilter: Filter) => {
-		// Remove any filters from the currentFilter that start with the same fieldName
-		for (const key of Object.keys(filters ?? {})) {
-			if (key.startsWith(fieldName)) delete filters?.[key];
-		}
-
-		// Combine all filters into one object
-		const combinedNewFilter = {
-			...filters,
-			...newFilter,
-		};
-
-		// And off we go.
 		navigate(
 			routeFor({
 				entity: entityName,
 				id,
 				// Note: We're explicitly excluding page here so that it resets when we navigate.
 				sort: searchParams.sort,
-				filters: combinedNewFilter,
+				filters: debouncedFilters,
 			})
 		);
-	};
+	}, [debouncedFilters]);
+
+	// This function updates the filter in state based on the filter keys updated and the newFilter value
+	const onFilter = useCallback((fieldName: string, newFilter: Filter) => {
+		// Remove any filters from the currentFilter that start with the same fieldName
+		for (const key of Object.keys(filtersState ?? {})) {
+			if (key.startsWith(fieldName)) delete filtersState?.[key];
+		}
+
+		// Combine all filters into one object
+		const combinedNewFilter = {
+			...filtersState,
+			...newFilter,
+		};
+
+		setFiltersState(combinedNewFilter);
+	}, []);
 
 	const clearAllFilters = () => {
 		navigate(
@@ -113,7 +117,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				fieldName: field.name,
 				entity: entityName,
 				onChange: onFilter,
-				filter: filters,
+				filter: filtersState,
 			};
 
 			switch (field.filter.type) {
@@ -133,7 +137,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					return <DateRangeFilter key={field.name} {...options} />;
 			}
 		});
-	}, [entityName, filters]);
+	}, [entityName, filtersState]);
 
 	const filterComponents = getFilterComponents();
 	if (filterComponents.length === 0) return null;

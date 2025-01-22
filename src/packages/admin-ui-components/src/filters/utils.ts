@@ -25,6 +25,9 @@ const getValidFilterProperties = (fields: EntityField[]): Set<string> => {
 				supportedKeys.add(`${field.name}_gte`);
 				supportedKeys.add(`${field.name}_lte`);
 				break;
+			case AdminUIFilterType.TEXT:
+				supportedKeys.add(field.name);
+				break;
 		}
 	}
 
