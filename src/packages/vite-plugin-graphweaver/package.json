@@ -23,7 +23,7 @@
 		"esbuild": "0.24.2",
 		"glob": "10.4.3",
 		"typescript": "5.7.2",
-		"vite": "6.0.3"
+		"vite": "6.0.9"
 	},
 	"peerDependencies": {
 		"vite": "^5.0.0 || ^6.0.0"

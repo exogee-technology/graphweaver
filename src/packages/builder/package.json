@@ -40,7 +40,7 @@
 		"rimraf": "5.0.8",
 		"rollup-plugin-visualizer": "5.13.1",
 		"serverless-offline": "14.4.0",
-		"vite": "6.0.3",
+		"vite": "6.0.9",
 		"vite-plugin-graphweaver": "workspace:*"
 	},
 	"devDependencies": {
