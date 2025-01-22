@@ -1,7 +1,11 @@
-import { DirectiveLocation } from 'graphql';
 import { logger } from '@exogee/logger';
+import { DirectiveLocation } from 'graphql';
 
+import { FieldOptions } from './decorators';
+import { HookRegister } from './hook-manager';
+import { allOperations } from './operations';
 import {
+	AdminUIFilterType,
 	BackendProvider,
 	CreateOrUpdateHookParams,
 	DeleteManyHookParams,
@@ -12,9 +16,6 @@ import {
 	Resolver,
 	Sort,
 } from './types';
-import { FieldOptions } from './decorators';
-import { allOperations } from './operations';
-import { HookRegister } from './hook-manager';
 
 export type EntityHookFunctionCreateOrUpdate<G = unknown> = (
 	params: CreateOrUpdateHookParams<G>
@@ -152,6 +153,9 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// the most useful field to display in the url.
 		// This value defaults to the primary key field if not set.
 		fieldForDetailPanelNavigationId?: Extract<keyof G, string>;
+
+		// Specifies the type of control to use for this field in filter bar in the Admin UI.
+		filterType?: AdminUIFilterType;
 	};
 
 	// These options are used internally by Graphweaver. No need to use them in your code.

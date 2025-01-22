@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 import { config } from '../../../config';
 
@@ -37,7 +37,8 @@ test('Ensure people can be filtered', async ({ page }) => {
 	await page.getByTestId('Person-entity-link').click();
 	await page.getByTestId('url-filter').getByRole('combobox').click();
 	await page.getByRole('option', { name: '4', exact: true }).click();
-	await page.getByTestId('loader').waitFor({ state: 'hidden' });
+	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCJdfQ%3D%3D'));
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Only Darth Vader should be showing.
 	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(1);
@@ -47,7 +48,8 @@ test('Ensure people can be filtered', async ({ page }) => {
 
 	await page.getByTestId('url-filter').getByRole('combobox').click();
 	await page.getByRole('option', { name: '2', exact: true }).click();
-	await page.getByTestId('loader').waitFor({ state: 'hidden' });
+	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCIsIjIiXX0%3D'));
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Now Darth Vader and C-3PO should be showing.
 	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(2);
@@ -60,7 +62,8 @@ test('Ensure people can be filtered', async ({ page }) => {
 
 	// Clear the filters, and we should be back to everyone.
 	await page.getByRole('button', { name: 'Clear Filters' }).click();
-	await page.getByTestId('loader').waitFor({ state: 'hidden' });
+	await page.waitForURL((url) => !url.toString().includes('filters'));
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(50);
 });
 
@@ -70,7 +73,8 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 	await page.getByTestId('Vehicle-entity-link').click();
 	await page.getByTestId('url-filter').getByRole('combobox').click();
 	await page.getByRole('option', { name: '4', exact: true }).click();
-	await page.getByTestId('loader').waitFor({ state: 'hidden' });
+	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCJdfQ%3D%3D'));
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Only the Sand Crawler should be showing.
 	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(1);
@@ -80,7 +84,8 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 
 	await page.getByTestId('url-filter').getByRole('combobox').click();
 	await page.getByRole('option', { name: '14', exact: true }).click();
-	await page.getByTestId('loader').waitFor({ state: 'hidden' });
+	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCIsIjE0Il19'));
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
 	// Now Sand Crawler and Snowspeeder should be showing.
 	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(2);
@@ -93,6 +98,7 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 
 	// Clear the filters, and we should be back to all vehicles.
 	await page.getByRole('button', { name: 'Clear Filters' }).click();
-	await page.getByTestId('loader').waitFor({ state: 'hidden' });
+	await page.waitForURL((url) => !url.toString().includes('filters'));
+	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 	await expect(await page.getByTestId('table').locator('tbody').locator('tr').count()).toBe(39);
 });

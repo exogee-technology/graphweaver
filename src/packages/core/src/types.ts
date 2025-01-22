@@ -1,13 +1,13 @@
-import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
+import { BaseContext as ApolloBaseContext, ApolloServerPlugin } from '@apollo/server';
 import { Span, Tracer } from '@opentelemetry/api';
-import { ComplexityEstimator } from 'graphql-query-complexity';
-import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
+import { ResolveTree } from 'graphql-parse-resolve-info';
+import { ComplexityEstimator } from 'graphql-query-complexity';
 import { EntityMetadata } from './metadata';
 
-export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
-export type { GraphQLResolveInfo } from 'graphql';
 export type { Instrumentation } from '@opentelemetry/instrumentation';
+export type { GraphQLResolveInfo } from 'graphql';
+export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 
 export type BaseContext = object;
 
@@ -183,6 +183,7 @@ export enum AdminUIFilterType {
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 	BOOLEAN = 'BOOLEAN',
+	DROP_DOWN_TEXT = 'DROP_DOWN_TEXT',
 }
 
 export type AdminUIEntitySettings<G> = {
@@ -243,6 +244,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		hideInDetailForm?: boolean;
 		readonly?: boolean;
 		fieldForDetailPanelNavigationId?: boolean;
+		filterType?: AdminUIFilterType;
 	};
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;

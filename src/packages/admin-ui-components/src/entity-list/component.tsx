@@ -1,10 +1,18 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Row, RowSelectionState } from '@tanstack/react-table';
-import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
 import { addStabilizationToFilter } from '@exogee/graphweaver-apollo-client';
+import { Row, RowSelectionState } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
+import { Button } from '../button';
+import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
+import { ErrorView } from '../error-view';
+import { Header } from '../header';
+import { ListToolBar } from '../list-toolbar';
+import { Modal } from '../modal';
+import { SelectionBar } from '../selection-bar';
+import { Table } from '../table';
 import {
 	PAGE_SIZE,
 	SortEntity,
@@ -14,19 +22,10 @@ import {
 	useSchema,
 } from '../utils';
 import { convertEntityToColumns } from './columns';
-import { Table } from '../table';
-import { Loader } from '../loader';
-import { Header } from '../header';
 import { QueryResponse, queryForEntityPage } from './graphql';
-import { ListToolBar } from '../list-toolbar';
-import { Modal } from '../modal';
-import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
-import { Button } from '../button';
-import { SelectionBar } from '../selection-bar';
-import { ErrorView } from '../error-view';
 
-import styles from './styles.module.css';
 import { ExportModal } from '../export-modal';
+import styles from './styles.module.css';
 
 export const EntityList = <TData extends object>() => {
 	const { entity: entityName, id } = useParams();
@@ -76,13 +75,10 @@ export const EntityList = <TData extends object>() => {
 		}
 	);
 
-	if (loading && !data) {
-		return <Loader />;
-	}
 	if (error) {
 		return <ErrorView message={error.message} />;
 	}
-	if (!data) {
+	if (!loading && !data) {
 		return <ErrorView message="Error! Unable to load entity." />;
 	}
 
@@ -110,7 +106,7 @@ export const EntityList = <TData extends object>() => {
 					...variables.pagination,
 					offset: nextPage * PAGE_SIZE,
 				},
-				filter: addStabilizationToFilter(variables.filter ?? {}, sort, data.result?.[0]),
+				filter: addStabilizationToFilter(variables.filter ?? {}, sort, data?.result?.[0]),
 			},
 		});
 	};
@@ -158,7 +154,7 @@ export const EntityList = <TData extends object>() => {
 	return (
 		<div className={styles.wrapper}>
 			<Header>
-				<ListToolBar count={data.aggregate?.count} onExportToCSV={handleShowExportModal} />
+				<ListToolBar count={data?.aggregate?.count} onExportToCSV={handleShowExportModal} />
 			</Header>
 			<Table
 				loading={loading}

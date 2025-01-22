@@ -1,7 +1,5 @@
-import { ChangeEvent, useEffect, useState } from 'react';
 import clsx from 'clsx';
-
-import { useDebounce } from '../hooks';
+import { ChangeEvent } from 'react';
 
 import styles from './styles.module.css';
 
@@ -21,23 +19,11 @@ interface NumericFilterProps {
 		| undefined;
 }
 
-export const Input = ({
-	fieldName,
-	onChange,
-	value: initialValue,
-	inputMode,
-}: NumericFilterProps) => {
-	const [value, setValue] = useState<string | undefined>(initialValue ?? '');
-	const debouncedValue = useDebounce<string | undefined>(value, 800); // debounce request for 800ms
-
+export const Input = ({ fieldName, onChange, value, inputMode }: NumericFilterProps) => {
 	const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
-		setValue(event.target.value);
-	};
-
-	useEffect(() => {
 		if (!onChange) return;
-		onChange(fieldName, debouncedValue);
-	}, [debouncedValue]);
+		onChange(fieldName, event.target.value);
+	};
 
 	return (
 		<div className={styles.inputWrapper}>
