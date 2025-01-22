@@ -57,15 +57,11 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 		}
 
 		const fetchRecordsById = async (keys: readonly string[]) => {
-			const uniqueKeys = [...new Set(keys)];
-
-			logger.trace(
-				`DataLoader: Loading ${gqlTypeName}, ${uniqueKeys.length} record(s): (${uniqueKeys.join(', ')})`
-			);
+			logger.trace({ keys }, `DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s)`);
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
 			let listFilter = {
-				[`${String(primaryKeyField)}_in`]: uniqueKeys,
+				[`${String(primaryKeyField)}_in`]: keys,
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
 			} as Filter<G>;
 
