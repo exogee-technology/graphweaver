@@ -23,7 +23,7 @@ export class Person {
 	})
 	url!: string;
 
-	@Field(() => String, { adminUIOptions: { filterType: AdminUIFilterType.TEXT } })
+	@Field(() => String)
 	name!: string;
 
 	@Field(() => String, { adminUIOptions: { filterType: AdminUIFilterType.DROP_DOWN_TEXT } })
