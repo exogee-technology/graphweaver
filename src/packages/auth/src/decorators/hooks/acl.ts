@@ -462,9 +462,7 @@ export const afterCreateOrUpdate = (
 		const items = params.args.items;
 		const entities = (params.entities ?? []) as G[];
 
-		// 1. Check to ensure we are within a transaction
-		assertTransactional(params.transactional);
-		// 2. Check user has permission for each for each entity
+		// Check user has permission for each for each entity, recursing as we go.
 		const authChecks = entities.map((entity, index) =>
 			entity?.[primaryKeyField]
 				? checkAuthorization(
@@ -473,7 +471,8 @@ export const afterCreateOrUpdate = (
 							? Number(entity[primaryKeyField])
 							: String(entity[primaryKeyField]),
 						items[index],
-						accessType
+						accessType,
+						params.transactional
 					)
 				: undefined
 		);
