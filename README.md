@@ -216,11 +216,15 @@ Commit the changes. Create a pull request targeting the main branch.
 
 Await PR approval, then merge it into main to integrate new versions.
 
-## 6. Publish to NPM:
+## 6. Create a Release:
 
-After merging, trigger the "Publish to NPM" workflow in the Actions tab.
+After merging, click on Tags -> Releases -> 'Draft a new release' or visit https://github.com/exogee-technology/graphweaver/releases/new. Choose a new tag for the release, then fill in the description. Populate New Features and tidy up the list of PRs, hit Publish release
 
-## 7. Verify and Monitor:
+## 7. Publish to NPM:
+
+Trigger the "Publish to NPM" workflow in the Actions tab.
+
+## 8. Verify and Monitor:
 
 Monitor the workflow progress in GitHub Actions. Confirm successful publication in the npm registry.
 
