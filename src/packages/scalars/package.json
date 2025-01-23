@@ -23,7 +23,7 @@
 		"luxon": "3.5.0"
 	},
 	"peerDependencies": {
-		"graphql": "^16.0.0"
+		"graphql": "16"
 	},
 	"devDependencies": {
 		"@types/luxon": "3.4.2",

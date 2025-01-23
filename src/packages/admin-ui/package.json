@@ -20,12 +20,14 @@
 		"test:prettier": "prettier --check .",
 		"version": "npm version --no-git-tag-version"
 	},
+	"peerDependencies": {
+		"graphql": "16"
+	},
 	"dependencies": {
 		"@apollo/client": "3.12.4",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",
-		"graphql": "16.10.0",
 		"prop-types": "15.8.1",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
@@ -38,6 +40,7 @@
 		"@types/react-dom": "19.0.0",
 		"@types/react-modal": "3.16.3",
 		"@vitejs/plugin-react": "4.3.4",
+		"graphql": "16.10.0",
 		"esbuild": "0.24.2",
 		"esbuild-plugin-copy": "2.1.1",
 		"glob": "10.4.3",
