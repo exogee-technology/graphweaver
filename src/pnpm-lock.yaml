@@ -691,9 +691,6 @@ importers:
       formik:
         specifier: 2.4.6
         version: 2.4.6(react@19.0.0)
-      graphql:
-        specifier: 16.10.0
-        version: 16.10.0
       prop-types:
         specifier: 15.8.1
         version: 15.8.1
@@ -734,6 +731,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
+      graphql:
+        specifier: 16.10.0
+        version: 16.10.0
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -764,9 +764,6 @@ importers:
       graphiql:
         specifier: 3.7.2
         version: 3.7.2(@codemirror/language@6.0.0)(@types/node@22.10.7)(@types/react-dom@19.0.2(@types/react@19.0.2))(@types/react@19.0.2)(graphql-ws@5.16.0(graphql@16.10.0))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      graphql:
-        specifier: 16.10.0
-        version: 16.10.0
       graphql-deduplicator:
         specifier: 2.0.6
         version: 2.0.6
@@ -816,6 +813,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
+      graphql:
+        specifier: 16.10.0
+        version: 16.10.0
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -944,7 +944,7 @@ importers:
         specifier: ^2.2.9
         version: 2.4.6(react@19.0.0)
       graphql:
-        specifier: ^16.9.0
+        specifier: '16'
         version: 16.10.0
       react-router-dom:
         specifier: ^6.23.1
@@ -1493,9 +1493,6 @@ importers:
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
-      graphql:
-        specifier: 16.10.0
-        version: 16.10.0
       pluralize:
         specifier: 8.0.0
         version: 8.0.0
@@ -1531,6 +1528,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
+      graphql:
+        specifier: 16.10.0
+        version: 16.10.0
       tsx:
         specifier: 4.19.2
         version: 4.19.2
@@ -1777,9 +1777,6 @@ importers:
       dataloader:
         specifier: 2.2.3
         version: 2.2.3
-      graphql:
-        specifier: 16.10.0
-        version: 16.10.0
       xero-node:
         specifier: 9.3.0
         version: 9.3.0
@@ -1793,6 +1790,9 @@ importers:
       glob:
         specifier: 10.4.3
         version: 10.4.3
+      graphql:
+        specifier: 16.10.0
+        version: 16.10.0
       prettier:
         specifier: 3.4.2
         version: 3.4.2

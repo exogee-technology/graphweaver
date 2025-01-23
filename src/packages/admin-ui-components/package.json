@@ -32,7 +32,6 @@
 		"clsx": "2.1.1",
 		"downshift": "9.0.8",
 		"graphiql": "3.7.2",
-		"graphql": "16.10.0",
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.5.0",
 		"papaparse": "5.4.1",
@@ -43,7 +42,7 @@
 	},
 	"peerDependencies": {
 		"formik": "^2.4.6",
-		"graphql": "^16.9.0",
+		"graphql": "16",
 		"react": "^18.0.0 || ^19.0.0",
 		"react-dom": "^18.0.0 || ^19.0.0",
 		"react-router-dom": "^6.26.2"
@@ -58,6 +57,7 @@
 		"esbuild-plugin-copy": "2.1.1",
 		"formik": "2.4.6",
 		"glob": "10.4.3",
+		"graphql": "16.10.0",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"react-router-dom": "6.28.0",

@@ -36,7 +36,7 @@
 		"@azure/msal-browser": "^3.25.0",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"formik": "^2.2.9",
-		"graphql": "^16.9.0",
+		"graphql": "16",
 		"@okta/okta-auth-js": "^7.9.0",
 		"react": "^18.0.0 || ^19.0.0",
 		"react-dom": "^18.0.0 || ^19.0.0",

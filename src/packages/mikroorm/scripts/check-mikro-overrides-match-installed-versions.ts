@@ -8,7 +8,9 @@ console.log(
 );
 
 if (packageVersion !== overrideVersion) {
-	throw new Error('@mikro-orm/core version mismatch.');
+	throw new Error(
+		`@mikro-orm/core version mismatch. Installed: '${packageVersion}', Overridden: '${overrideVersion}'`
+	);
 } else {
 	console.log('Success: versions match.');
 }
