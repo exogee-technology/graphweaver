@@ -48,7 +48,7 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@okta/okta-auth-js": "7.9.0",
 		"@simplewebauthn/types": "10.0.0",
-		"@types/react": "19.0.2",
+		"@types/react": "19.0.7",
 		"@types/react-dom": "19.0.2",
 		"esbuild": "0.24.2",
 		"glob": "10.4.3",
