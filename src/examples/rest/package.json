@@ -23,9 +23,9 @@
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-rest": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/knex": "6.4.2",
-		"@mikro-orm/core": "6.4.2",
-		"@mikro-orm/mysql": "6.4.2",
+		"@mikro-orm/knex": "6.4.4",
+		"@mikro-orm/core": "6.4.4",
+		"@mikro-orm/mysql": "6.4.4",
 		"dotenv": "16.4.7",
 		"got-cjs": "12.5.4",
 		"graphql": "16.10.0"
