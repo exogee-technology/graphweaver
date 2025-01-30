@@ -60,7 +60,7 @@
 		"graphql": "16.10.0",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
-		"react-router-dom": "6.28.0",
+		"react-router-dom": "7.1.4",
 		"typescript": "5.7.2",
 		"vite": "6.0.11"
 	},
