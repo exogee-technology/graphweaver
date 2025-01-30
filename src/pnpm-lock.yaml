@@ -256,8 +256,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.10.0))
       '@azure/msal-browser':
-        specifier: 3.28.0
-        version: 3.28.0
+        specifier: 4.0.2
+        version: 4.0.2
       '@exogee/graphweaver':
         specifier: workspace:*
         version: link:../../packages/core
@@ -957,8 +957,8 @@ importers:
         specifier: 2.1.3
         version: 2.1.3
       '@azure/msal-browser':
-        specifier: 3.28.0
-        version: 3.28.0
+        specifier: 4.0.2
+        version: 4.0.2
       '@exogee/graphweaver-admin-ui-components':
         specifier: workspace:*
         version: link:../admin-ui-components
@@ -2137,12 +2137,12 @@ packages:
     resolution: {integrity: sha512-Zrjxi5qwGEcUsJ0ru7fRtW74WcTS0rbLcehoFB+rN1GRi2hbLcFaYs4PwVA5diLeAJH0gszv3x4Hr/S87MfbKQ==}
     engines: {node: '>=18.0.0'}
 
-  '@azure/msal-browser@3.28.0':
-    resolution: {integrity: sha512-1c1qUF6vB52mWlyoMem4xR1gdwiQWYEQB2uhDkbAL4wVJr8WmAcXybc1Qs33y19N4BdPI8/DHI7rPE8L5jMtWw==}
+  '@azure/msal-browser@4.0.2':
+    resolution: {integrity: sha512-bq6PasUpJgBSOSMeSlh8gXh4LZGgAaPoJFNcu5u0zxwueh+I8NpMb9oxlCfS/8CJHyXUhTUAMLSnvThemNdyQw==}
     engines: {node: '>=0.8.0'}
 
-  '@azure/msal-common@14.16.0':
-    resolution: {integrity: sha512-1KOZj9IpcDSwpNiQNjt0jDYZpQvNZay7QAEi/5DLubay40iGYtLzya/jbjRPLyOTZhEKyL1MzPuw2HqBCjceYA==}
+  '@azure/msal-common@15.0.2':
+    resolution: {integrity: sha512-RQHmI5vOMYLNSO0ER7d/O9TojWWEn4m0YtWbL8mZthkKGQI7ALn5ONHUVTUSxSVYwGYdHGNrwiHAzQhboqwZzQ==}
     engines: {node: '>=0.8.0'}
 
   '@babel/code-frame@7.24.7':
@@ -11406,11 +11406,11 @@ snapshots:
       '@smithy/types': 4.1.0
       tslib: 2.8.1
 
-  '@azure/msal-browser@3.28.0':
+  '@azure/msal-browser@4.0.2':
     dependencies:
-      '@azure/msal-common': 14.16.0
+      '@azure/msal-common': 15.0.2
 
-  '@azure/msal-common@14.16.0': {}
+  '@azure/msal-common@15.0.2': {}
 
   '@babel/code-frame@7.24.7':
     dependencies:
