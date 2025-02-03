@@ -637,8 +637,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       decimal.js:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 10.5.0
+        version: 10.5.0
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -1488,8 +1488,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       decimal.js:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 10.5.0
+        version: 10.5.0
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -1640,8 +1640,8 @@ importers:
         specifier: 3.4.2
         version: 3.4.2
       decimal.js:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 10.5.0
+        version: 10.5.0
       esbuild:
         specifier: 0.24.2
         version: 0.24.2
@@ -1682,8 +1682,8 @@ importers:
         specifier: 0.14.1
         version: 0.14.1
       decimal.js:
-        specifier: 10.4.3
-        version: 10.4.3
+        specifier: 10.5.0
+        version: 10.5.0
       fastify:
         specifier: 4.28.1
         version: 4.28.1
@@ -2616,8 +2616,8 @@ packages:
   '@codemirror/language@6.0.0':
     resolution: {integrity: sha512-rtjk5ifyMzOna1c7PBu7J1VCt0PvA5wy3o8eMVnxMKb7z8KA7JFecvD04dSn14vj/bBaAbqRsGed5OjtofEnLA==}
 
-  '@codemirror/state@6.5.1':
-    resolution: {integrity: sha512-3rA9lcwciEB47ZevqvD8qgbzhM9qMb8vCcQCNmDfVRPQG4JT9mSb0Jg8H7YjKGGQcFnLN323fj9jdnG59Kx6bg==}
+  '@codemirror/state@6.5.2':
+    resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
 
   '@codemirror/view@6.36.2':
     resolution: {integrity: sha512-DZ6ONbs8qdJK0fdN7AB82CgI6tYXf4HWk1wSVa0+9bhVznCuuvhQtX8bFBoy3dv8rZSQqUd8GvhVAcielcidrA==}
@@ -6468,8 +6468,8 @@ packages:
     resolution: {integrity: sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==}
     engines: {node: '>=0.10.0'}
 
-  decimal.js@10.4.3:
-    resolution: {integrity: sha512-VBBaLc1MgL5XpzgIP7ny5Z6Nx3UrRkIViUkPUdtl9aya5amy3De1gsUUSB1g3+3sExYNjCAsAznmukyxCb1GRA==}
+  decimal.js@10.5.0:
+    resolution: {integrity: sha512-8vDa8Qxvr/+d94hSh5P3IJwI5t8/c0KsMp+g8bNw9cY2icONa5aPfvKeieW1WlG0WQYwwhJ7mjui2xtiePQSXw==}
 
   decompress-response@6.0.0:
     resolution: {integrity: sha512-aW35yZM6Bb/4oJlZncMH2LCoZtJXTRxES17vE3hoRiowU2kWHaJKFkSBDnDR+cm9J+9QhXmREyIfv0pji9ejCQ==}
@@ -11954,20 +11954,20 @@ snapshots:
 
   '@codemirror/language@6.0.0':
     dependencies:
-      '@codemirror/state': 6.5.1
+      '@codemirror/state': 6.5.2
       '@codemirror/view': 6.36.2
       '@lezer/common': 1.2.3
       '@lezer/highlight': 1.2.1
       '@lezer/lr': 1.4.2
       style-mod: 4.1.2
 
-  '@codemirror/state@6.5.1':
+  '@codemirror/state@6.5.2':
     dependencies:
       '@marijn/find-cluster-break': 1.0.2
 
   '@codemirror/view@6.36.2':
     dependencies:
-      '@codemirror/state': 6.5.1
+      '@codemirror/state': 6.5.2
       style-mod: 4.1.2
       w3c-keyname: 2.2.8
 
@@ -16841,7 +16841,7 @@ snapshots:
 
   decamelize@1.2.0: {}
 
-  decimal.js@10.4.3: {}
+  decimal.js@10.5.0: {}
 
   decompress-response@6.0.0:
     dependencies:
