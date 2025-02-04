@@ -17,6 +17,7 @@ import { Credential, CredentialStorage, Token } from '../entities';
 import {
 	PasswordStrengthError,
 	defaultPasswordStrength,
+	makeLoginPasswordQuerySafeForLogging,
 	runAfterHooks,
 	updatePasswordCredential,
 } from './utils';
@@ -24,6 +25,7 @@ import { hashPassword, verifyPassword } from '../../utils/argon2id';
 import { AuthTokenProvider } from '../token';
 import { AclMap } from '../../helper-functions';
 import { BaseAuthMethod } from './base-auth-method';
+import { Kind, parse } from 'graphql';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
@@ -136,6 +138,14 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.loginPassword.bind(this),
+			logOnDidResolveOperation: (params) => {
+				const { query, variables } = makeLoginPasswordQuerySafeForLogging(
+					params.query,
+					params.variables
+				);
+
+				return { query, variables };
+			},
 		});
 
 		graphweaverMetadata.addMutation({

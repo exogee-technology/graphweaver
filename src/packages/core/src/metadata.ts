@@ -274,7 +274,21 @@ export interface UnionMetadata {
 	getTypes: GetTypeFunction;
 }
 
+type VariableValues = {
+	[name: string]: any;
+};
+
 export type CollectUnionTypeInformationArgs = Omit<UnionMetadata, 'type' | 'target'>;
+
+export interface LogOnDidResolveOperationParams {
+	query: string;
+	variables: VariableValues | undefined;
+}
+
+export interface LogOnDidResolveOperationResponse {
+	query: string;
+	variables: VariableValues | undefined;
+}
 
 export interface AdditionalOperationInformation {
 	name: string;
@@ -283,6 +297,18 @@ export interface AdditionalOperationInformation {
 	directives?: Record<string, unknown>;
 	args?: ArgsMetadata;
 	description?: string;
+
+	/**
+	 * Optional function to override the default logging of the operation.
+	 * This allows you to change the log message, perhaps to obfuscate sensitive data, or to add additional context.
+	 * This log gets printed at `didResolveOperation` of the Apollo lifecycle.
+	 * For more information of the lifecycle see https://www.apollographql.com/docs/apollo-server/integrations/plugins-event-reference#didresolveoperation
+	 * @param params The query as a string and the variables as an object
+	 * @returns the query and variables to log. Internally Graphweaver does something like `logger.info(logOnDidResolveOperation(params))`
+	 */
+	logOnDidResolveOperation?: (
+		params: Readonly<LogOnDidResolveOperationParams>
+	) => LogOnDidResolveOperationResponse;
 }
 
 export type MetadataType =
@@ -624,6 +650,14 @@ class Metadata {
 		if (!isInputMetadata(meta)) return undefined;
 
 		return meta;
+	}
+
+	public getAdditionalQueryByName(name: string) {
+		return this.additionalQueriesLookup.get(name);
+	}
+
+	public getAdditionalMutationByName(name: string) {
+		return this.additionalMutationsLookup.get(name);
 	}
 
 	// look up the name of an entity or enum by its type

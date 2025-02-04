@@ -1,29 +1,34 @@
 import { ApolloServerPlugin } from '@apollo/server';
 import { logger } from '@exogee/logger';
-import { stripIgnoredCharacters } from 'graphql';
+import { getDidResolveOperationItemsToLog, extractInitialQuerySegment } from './utils';
 
 // This plugin logs on each request.
 export const LogRequests: ApolloServerPlugin = {
 	async requestDidStart({ request: { variables, query } }) {
-		const variablesCopy = { ...variables };
+		logger.info(extractInitialQuerySegment(query), 'Query Received');
 
-		logger.info(
-			{
-				query: query ? stripIgnoredCharacters(query) : query,
-				variables: JSON.stringify(variablesCopy),
-			},
-			'Query received'
-		);
-
-		let operation: string | null;
+		let requestOperationName: string | null;
 		return {
-			async didResolveOperation({ operationName }) {
-				operation = operationName;
+			async didResolveOperation({ operationName, operation }) {
+				requestOperationName = operationName;
+				if (!operation) return;
+
+				const logItems = getDidResolveOperationItemsToLog(operation, variables);
+
+				logItems.forEach(({ queryLog, variablesLog }) => {
+					logger.info(
+						{
+							query: queryLog,
+							variables: variablesLog,
+						},
+						'Operation Resolved'
+					);
+				});
 			},
 
 			async willSendResponse({ response }) {
 				logger.info(
-					{ operation },
+					{ operation: requestOperationName },
 					`Sending ${JSON.stringify(response).length * 2} bytes in response.`
 				);
 			},
