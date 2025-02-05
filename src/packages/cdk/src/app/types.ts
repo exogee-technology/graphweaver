@@ -1,7 +1,7 @@
 import { ResponseCustomHeader, ResponseHeadersCorsBehavior } from 'aws-cdk-lib/aws-cloudfront';
 import { InstanceType, IVpc, SecurityGroup } from 'aws-cdk-lib/aws-ec2';
 import { Runtime } from 'aws-cdk-lib/aws-lambda';
-import { PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
+import { DatabaseInstanceProps, PostgresEngineVersion } from 'aws-cdk-lib/aws-rds';
 
 export type GraphweaverAppConfig = {
 	name: string;
@@ -29,7 +29,7 @@ export type GraphweaverAppConfig = {
 		// CORS behavior for the website
 		cors?: ResponseHeadersCorsBehavior;
 	};
-	database?: {
+	database?: Omit<DatabaseInstanceProps, 'engine' | 'instanceType' | 'version' | 'vpc'> & {
 		// Username for the database
 		username: string;
 		// Name of the database
