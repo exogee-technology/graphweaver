@@ -29,7 +29,7 @@
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "9.0.1",
 		"class-validator": "0.14.1",
-		"decimal.js": "10.4.3",
+		"decimal.js": "10.5.0",
 		"fastify": "4.28.1",
 		"graphql": "16.10.0",
 		"graphql-deduplicator": "2.0.6"
