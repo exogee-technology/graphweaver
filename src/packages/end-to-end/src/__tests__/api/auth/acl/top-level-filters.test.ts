@@ -35,7 +35,6 @@ class OrmAlbum {
 	})
 	artist!: Ref<OrmArtist>;
 }
-///Users/mackcheesman/Desktop/Work/Graphweaver/graphweaver-root/src/packages/end-to-end/databases/database.sqlite
 @DataEntity({ tableName: 'Artist' })
 class OrmArtist {
 	@PrimaryKey({ fieldName: 'ArtistId', type: 'number' })
