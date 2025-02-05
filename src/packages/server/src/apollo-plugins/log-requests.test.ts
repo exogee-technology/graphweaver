@@ -117,7 +117,7 @@ describe('getDidResolveOperationItemsToLog', () => {
 			{
 				queryLog:
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\"testUser\\", password: $foo) {\\n    authToken\\n  }\\n}"',
-				variablesLog: '{\"foo\":\"bar\"}',
+				variablesLog: '{"foo":"bar"}',
 			},
 		]);
 	});
@@ -152,12 +152,12 @@ describe('getDidResolveOperationItemsToLog', () => {
 			{
 				queryLog:
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\"testUser\\", password: $foo) {\\n    authToken\\n  }\\n}"',
-				variablesLog: '{\"foo\":\"bar\"}',
+				variablesLog: '{"foo":"bar"}',
 			},
 			{
 				// TODO: $foo variable is not really needed here, we should remove it just like we did with the variable. However, we are not leaking sensitive data, just variable names.
 				queryLog:
-					'custom query called with \"mutation test1($foo: String!) {\\n  loginPassword(username: \\\"calledTwice\\\", password: \\\"asdf\\\") {\\n    authToken\\n  }\\n}\"',
+					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\"calledTwice\\", password: \\"asdf\\") {\\n    authToken\\n  }\\n}"',
 				// Notice that the variable stays with the query it belongs to (the first query).
 				variablesLog: '{}',
 			},

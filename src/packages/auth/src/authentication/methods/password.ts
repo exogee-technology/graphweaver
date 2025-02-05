@@ -25,7 +25,6 @@ import { hashPassword, verifyPassword } from '../../utils/argon2id';
 import { AuthTokenProvider } from '../token';
 import { AclMap } from '../../helper-functions';
 import { BaseAuthMethod } from './base-auth-method';
-import { Kind, parse } from 'graphql';
 
 export enum PasswordOperation {
 	LOGIN = 'login',
