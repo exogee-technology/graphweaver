@@ -245,21 +245,22 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 				filterKey
 			);
 
-			const keyIsTopLevelFilterProp = isTopLevelFilterProperty(filterKey);
+			if (isTopLevelFilterProperty(filterKey)) {
+				value.forEach((item) => {
+					recurseThroughArg(entityMetadata, item);
+				});
+				continue;
+			}
 
-			if (!fieldMetadata && !keyIsTopLevelFilterProp) {
+			if (!fieldMetadata) {
 				throw new Error(
 					`Could not determine field metadata for filter key: '${filterKey}' on ${entityMetadata.name} entity`
 				);
 			}
 			
-			const fieldType = fieldMetadata?.getType();
-			const fieldTypeMetadata = fieldType === undefined ? entityMetadata : graphweaverMetadata.metadataForType(fieldType);
-			if (keyIsTopLevelFilterProp) {
-				value.forEach((item) => {
-					recurseThroughArg(entityMetadata, item);
-				});
-			} else if (isEntityMetadata(fieldTypeMetadata)) {
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+			if (isEntityMetadata(fieldTypeMetadata)) {
 				recurseThroughArg(fieldTypeMetadata, value as Filter<unknown>);
 			} else {
 				permissionsList.push({
