@@ -75,7 +75,10 @@ export class Album {
 
 @ApplyAccessControlList({
     Everyone: {
-        all: (context) => ({ id: context.user?.id }),
+        all: (context) => {
+            if (context.user?.roles?.[0] === 'admin') return true;
+            return { id: "2" };
+        },
     },
 })
 @Entity('Artist', {
@@ -146,7 +149,7 @@ describe('Compound filter tests', () => {
         token = loginResponse.body.singleResult.data?.loginPassword?.authToken;
         expect(token).toContain('Bearer ');
     });
-    test('And', async () => {
+    test('Top-level _and filter', async () => {
         const response = await graphweaver.executeOperation({
             http: { headers: new Headers({ authorization: token ?? '' }) } as any,
             query: gql`
@@ -159,7 +162,7 @@ describe('Compound filter tests', () => {
             variables: {
                 "filter": {
                   "_and": [
-                    { "id": "3"}, 
+                    { "id": "2"}, 
                     { "id": "1"}
                   ]
                 }
@@ -168,9 +171,12 @@ describe('Compound filter tests', () => {
 
         assert(response.body.kind === 'single');
         expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
+        expect(response.body.singleResult.data?.artists).toHaveLength(0);
     });
-    test('Or', async () => {
-        const response = await graphweaver.executeOperation({
+    test('Top-level _or filter', async () => {
+        const response = await graphweaver.executeOperation<{
+            artists: { id: string }[];
+        }>({
             http: { headers: new Headers({ authorization: token ?? '' }) } as any,
             query: gql`
                 query artists($filter: ArtistsListFilter) {
@@ -182,7 +188,7 @@ describe('Compound filter tests', () => {
             variables: {
                 "filter": {
                   "_or": [
-                    { "id": "3"}, 
+                    { "id": "2"}, 
                     { "id": "1"}
                   ]
                 }
@@ -191,9 +197,12 @@ describe('Compound filter tests', () => {
 
         assert(response.body.kind === 'single');
         expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
+        expect(response.body.singleResult.data?.artists).toHaveLength(2);
     });
-    test('Not logged in', async () => {
-        const response = await graphweaver.executeOperation({
+    test('ACLs are still being respected', async () => {
+        const response = await graphweaver.executeOperation<{
+            artists: { id: string }[];
+        }>({
             query: gql`
                 query artists($filter: ArtistsListFilter) {
                     artists(filter: $filter) {
@@ -204,7 +213,7 @@ describe('Compound filter tests', () => {
             variables: {
                 "filter": {
                   "_or": [
-                    { "id": "3"}, 
+                    { "id": "2"}, 
                     { "id": "1"}
                   ]
                 }
@@ -213,5 +222,7 @@ describe('Compound filter tests', () => {
 
         assert(response.body.kind === 'single');
         expect(response.body.singleResult.errors?.[0]?.message).toBeUndefined();
+        expect(response.body.singleResult.data?.artists).toHaveLength(1);
+        expect(response.body.singleResult.data?.artists[0].id).toEqual("2");
     });
 });

@@ -53,7 +53,7 @@ async function main() {
 		await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
 		await execAsync("pnpm add '@mikro-orm/sqlite'")
-		fs.mkdirSync('./app/databases');
+		fs.mkdirSync('./databases');
 		await execAsync('pwd');
 		await execAsync('pnpm i --ignore-workspace --no-lockfile');
 

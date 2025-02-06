@@ -245,15 +245,17 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 				filterKey
 			);
 
-			if (!fieldMetadata) {
+			const keyIsTopLevelFilterProp = isTopLevelFilterProperty(filterKey);
+
+			if (!fieldMetadata && !keyIsTopLevelFilterProp) {
 				throw new Error(
-					`Could not determine field metadata for filter key: '${filterKey} on ${entityMetadata.name} entity'`
+					`Could not determine field metadata for filter key: '${filterKey}' on ${entityMetadata.name} entity`
 				);
 			}
-
-			const fieldType = fieldMetadata.getType();
-			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
-			if (isTopLevelFilterProperty(filterKey)) {
+			
+			const fieldType = fieldMetadata?.getType();
+			const fieldTypeMetadata = fieldType === undefined ? entityMetadata : graphweaverMetadata.metadataForType(fieldType);
+			if (keyIsTopLevelFilterProp) {
 				value.forEach((item) => {
 					recurseThroughArg(entityMetadata, item);
 				});
