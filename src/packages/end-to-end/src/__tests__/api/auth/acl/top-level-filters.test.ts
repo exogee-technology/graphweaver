@@ -15,8 +15,6 @@ import {
 import { Field, ID, Entity, RelationshipField, BaseDataProvider } from '@exogee/graphweaver';
 import { ConnectionManager, MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
-import { resetDatabase } from '../../../../utils';
-
 import { SqliteDriver } from '@mikro-orm/sqlite';
 import { ApplyAccessControlList, CredentialStorage, hashPassword, Password, setAddUserToContext, UserProfile } from '@exogee/graphweaver-auth';
 
