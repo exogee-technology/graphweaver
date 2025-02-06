@@ -124,7 +124,6 @@ let token: string | undefined;
 
 describe('Compound filter tests', () => {
     beforeAll(async () => {
-        await resetDatabase();
         await ConnectionManager.connect('sqlite', connection);
         const loginResponse = await graphweaver.executeOperation<{
             loginPassword: { authToken: string };
