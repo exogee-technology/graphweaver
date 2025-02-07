@@ -32,6 +32,7 @@ export interface Entity {
 	summaryField?: string;
 	fieldForDetailPanelNavigationId: string;
 	supportedAggregationTypes: AggregationType[];
+	providerComparisonSupported: boolean;
 	fields: EntityField[];
 	defaultFilter?: Filter;
 	defaultSort?: SortEntity;

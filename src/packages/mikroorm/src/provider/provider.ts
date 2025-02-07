@@ -99,6 +99,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		pagination: false,
 		orderBy: false,
 		supportedAggregationTypes: new Set<AggregationType>([AggregationType.COUNT]),
+		providerComparisonSupported: true,
 	};
 
 	get backendId() {

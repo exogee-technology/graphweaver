@@ -47,6 +47,7 @@ export const EntityList = <TData extends object>() => {
 		defaultFilter,
 		fieldForDetailPanelNavigationId,
 		excludeFromTracing,
+		providerComparisonSupported
 	} = entity;
 	const columns = useMemo(
 		() => convertEntityToColumns(entity, entityByType),
@@ -106,7 +107,7 @@ export const EntityList = <TData extends object>() => {
 					...variables.pagination,
 					offset: nextPage * PAGE_SIZE,
 				},
-				filter: addStabilizationToFilter(variables.filter ?? {}, sort, data?.result?.[0]),
+				filter: providerComparisonSupported ? variables.filter ?? {} : addStabilizationToFilter(variables.filter ?? {}, sort, data?.result?.[0]),
 			},
 		});
 	};

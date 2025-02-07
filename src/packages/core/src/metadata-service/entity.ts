@@ -52,6 +52,9 @@ export class AdminUiEntityMetadata {
 	supportedAggregationTypes!: AggregationType[];
 
 	@Field(() => Boolean)
+	providerComparisonSupported!: boolean;
+
+	@Field(() => Boolean)
 	hideInSideBar!: boolean;
 
 	@Field(() => Boolean)

@@ -45,6 +45,7 @@ export type AdminUiEntityMetadata = {
   name: Scalars['String']['output'];
   plural: Scalars['String']['output'];
   primaryKeyField: Scalars['String']['output'];
+  providerComparisonSupported: Scalars['Boolean']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
   supportedAggregationTypes: Array<AggregationType>;
 };

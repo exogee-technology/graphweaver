@@ -166,6 +166,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				supportedAggregationTypes: [
 					...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
 				],
+				providerComparisonSupported: provider?.backendProviderConfig?.providerComparisonSupported ?? false,
 			};
 		});
 
