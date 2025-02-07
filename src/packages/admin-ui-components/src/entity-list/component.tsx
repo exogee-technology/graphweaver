@@ -100,14 +100,18 @@ export const EntityList = <TData extends object>() => {
 
 	const handleFetchNextPage = async () => {
 		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+		const offset = providerComparisonSupported ? 0 : nextPage * PAGE_SIZE;
+
+		const filterVar = variables.filter ?? {};
+		const filter = providerComparisonSupported ? addStabilizationToFilter(filterVar, sort, data?.result?.[data.result.length - 1]) : filterVar;
 		fetchMore({
 			variables: {
 				...variables,
 				pagination: {
 					...variables.pagination,
-					offset: nextPage * PAGE_SIZE,
+					offset
 				},
-				filter: providerComparisonSupported ? variables.filter ?? {} : addStabilizationToFilter(variables.filter ?? {}, sort, data?.result?.[0]),
+				filter
 			},
 		});
 	};
