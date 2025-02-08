@@ -77,24 +77,18 @@ export const maskSensitiveValuesForLogging = (
 	const safeVariables: VariableValues = JSON.parse(JSON.stringify(variables ?? {}));
 	const safeAst = visit(ast, {
 		enter(node) {
-			if (
-				node.kind === Kind.ARGUMENT &&
-				node.name.value === 'password' &&
-				node.value.kind === Kind.STRING
-			) {
-				return {
-					...node,
-					value: {
-						...node.value,
-						value: '********',
-					},
-				};
-			}
-
 			if (node.kind === Kind.ARGUMENT && node.name.value === 'password') {
-				const valueNode = node.value;
-				if (valueNode.kind === Kind.VARIABLE) {
-					const variableName = valueNode.name.value;
+				if (node.value.kind === Kind.STRING) {
+					return {
+						...node,
+						value: {
+							...node.value,
+							value: '********',
+						},
+					};
+				}
+				if (node.value.kind === Kind.VARIABLE) {
+					const variableName = node.value.name.value;
 					safeVariables[variableName] = '********';
 				}
 			}
