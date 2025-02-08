@@ -116,6 +116,7 @@ describe('getDidResolveOperationItemsToLog', () => {
 		expect(result).toEqual([
 			{
 				query:
+					// eslint-disable-next-line
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\\"testUser\\\", password: $foo) {\\n    authToken\\n  }\\n}"',
 				variables: '{"foo":"bar"}',
 			},
@@ -152,11 +153,12 @@ describe('getDidResolveOperationItemsToLog', () => {
 			{
 				query:
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\"testUser\\", password: $foo) {\\n    authToken\\n  }\\n}"',
-				variables: '{\"foo\":\"bar\"}',
+				variables: '{"foo":"bar"}',
 			},
 			{
 				// TODO: $foo variable is not really needed here, we should remove it just like we did with the variable. However, we are not leaking sensitive data, just variable names.
 				query:
+					// eslint-disable-next-line
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\\"calledTwice\\\", password: \\\"asdf\\\") {\\n    authToken\\n  }\\n}"',
 				// Notice that the variable stays with the query it belongs to (the first query).
 				variables: '{}',
