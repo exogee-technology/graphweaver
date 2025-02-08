@@ -17,7 +17,7 @@ import { Credential, CredentialStorage, Token } from '../entities';
 import {
 	PasswordStrengthError,
 	defaultPasswordStrength,
-	makeLoginPasswordQuerySafeForLogging,
+	maskSensitiveValuesForLogging,
 	runAfterHooks,
 	updatePasswordCredential,
 } from './utils';
@@ -138,10 +138,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			getType: () => Token,
 			resolver: this.loginPassword.bind(this),
 			logOnDidResolveOperation: (params) => {
-				const { query, variables } = makeLoginPasswordQuerySafeForLogging(
-					params.query,
-					params.variables
-				);
+				const { query, variables } = maskSensitiveValuesForLogging(params.ast, params.variables);
 
 				return { query, variables };
 			},

@@ -1,5 +1,5 @@
 import { logger } from '@exogee/logger';
-import { DirectiveLocation } from 'graphql';
+import { DirectiveLocation, OperationDefinitionNode } from 'graphql';
 
 import { FieldOptions } from './decorators';
 import { HookRegister } from './hook-manager';
@@ -281,7 +281,7 @@ type VariableValues = {
 export type CollectUnionTypeInformationArgs = Omit<UnionMetadata, 'type' | 'target'>;
 
 export interface LogOnDidResolveOperationParams {
-	query: string;
+	ast: OperationDefinitionNode;
 	variables: VariableValues | undefined;
 }
 
@@ -303,7 +303,7 @@ export interface AdditionalOperationInformation {
 	 * This allows you to change the log message, perhaps to obfuscate sensitive data, or to add additional context.
 	 * This log gets printed at `didResolveOperation` of the Apollo lifecycle.
 	 * For more information of the lifecycle see https://www.apollographql.com/docs/apollo-server/integrations/plugins-event-reference#didresolveoperation
-	 * @param params The query as a string and the variables as an object
+	 * @param params The query as AST and the variables as an object
 	 * @returns the query and variables to log. Internally Graphweaver does something like `logger.info(logOnDidResolveOperation(params))`
 	 */
 	logOnDidResolveOperation?: (

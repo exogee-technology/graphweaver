@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { extractInitialQuerySegment, getDidResolveOperationItemsToLog } from './utils';
-import { Kind, parse, Token } from 'graphql';
+import { Kind, parse, print, Token } from 'graphql';
 import { graphweaverMetadata } from '@exogee/graphweaver';
 
 describe('getFirstPartOfQuery', () => {
@@ -82,7 +82,7 @@ beforeAll(() => {
 		logOnDidResolveOperation: (params) => {
 			// Notice, in real life this function would be in charge of obfuscating sensitive data.
 			return {
-				query: `custom query called with ${JSON.stringify(params.query)}`,
+				query: `custom query called with ${JSON.stringify(print(params.ast))}`,
 				variables: params.variables,
 			};
 		},
@@ -115,9 +115,9 @@ describe('getDidResolveOperationItemsToLog', () => {
 
 		expect(result).toEqual([
 			{
-				queryLog:
+				query:
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\"testUser\\", password: $foo) {\\n    authToken\\n  }\\n}"',
-				variablesLog: '{\"foo\":\"bar\"}',
+				variables: '{\"foo\":\"bar\"}',
 			},
 		]);
 	});
@@ -150,16 +150,16 @@ describe('getDidResolveOperationItemsToLog', () => {
 
 		expect(result).toEqual([
 			{
-				queryLog:
+				query:
 					'custom query called with "mutation test1($foo: String!) {\\n  loginPassword(username: \\"testUser\\", password: $foo) {\\n    authToken\\n  }\\n}"',
-				variablesLog: '{\"foo\":\"bar\"}',
+				variables: '{\"foo\":\"bar\"}',
 			},
 			{
 				// TODO: $foo variable is not really needed here, we should remove it just like we did with the variable. However, we are not leaking sensitive data, just variable names.
-				queryLog:
+				query:
 					'custom query called with \"mutation test1($foo: String!) {\\n  loginPassword(username: \\\"calledTwice\\\", password: \\\"asdf\\\") {\\n    authToken\\n  }\\n}\"',
 				// Notice that the variable stays with the query it belongs to (the first query).
-				variablesLog: '{}',
+				variables: '{}',
 			},
 		]);
 	});

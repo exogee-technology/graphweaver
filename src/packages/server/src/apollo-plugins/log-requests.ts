@@ -15,11 +15,11 @@ export const LogRequests: ApolloServerPlugin = {
 
 				const logItems = getDidResolveOperationItemsToLog(operation, variables);
 
-				logItems.forEach(({ queryLog, variablesLog }) => {
+				logItems.forEach(({ query, variables }) => {
 					logger.info(
 						{
-							query: queryLog,
-							variables: variablesLog,
+							query,
+							variables,
 						},
 						'Operation Resolved'
 					);

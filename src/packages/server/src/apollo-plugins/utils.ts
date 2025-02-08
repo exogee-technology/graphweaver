@@ -60,8 +60,8 @@ const getVariables = (selection: SelectionNode, allVariables: VariableValues | u
 };
 
 interface GetDidResolveOperationItemsToLogResultItem {
-	queryLog: string;
-	variablesLog: string;
+	query: string;
+	variables: string;
 }
 
 export const getDidResolveOperationItemsToLog = (
@@ -89,17 +89,17 @@ export const getDidResolveOperationItemsToLog = (
 		};
 		if (additionalOperation?.logOnDidResolveOperation) {
 			const resultToLog = additionalOperation.logOnDidResolveOperation?.({
-				query: print(ast),
+				ast,
 				variables: getVariables(selection, variables),
 			});
 			result.push({
-				queryLog: resultToLog.query,
-				variablesLog: JSON.stringify(resultToLog.variables),
+				query: resultToLog.query,
+				variables: JSON.stringify(resultToLog.variables),
 			});
 		} else {
 			result.push({
-				queryLog: stripIgnoredCharacters(print(ast)),
-				variablesLog: JSON.stringify(getVariables(selection, variables)),
+				query: stripIgnoredCharacters(print(ast)),
+				variables: JSON.stringify(getVariables(selection, variables)),
 			});
 		}
 	});

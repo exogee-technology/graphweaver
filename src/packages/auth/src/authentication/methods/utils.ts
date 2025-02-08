@@ -5,7 +5,7 @@ import { hashPassword } from '../../utils/argon2id';
 import { CredentialUpdateInput, CredentialInsertInput } from './password';
 import { CredentialStorage } from '../entities';
 import { VariableValues } from '@apollo/server/dist/esm/externalTypes/graphql';
-import { Kind, parse, print, stripIgnoredCharacters, visit } from 'graphql';
+import { Kind, OperationDefinitionNode, print, stripIgnoredCharacters, visit } from 'graphql';
 
 export class PasswordStrengthError extends ApolloError {
 	constructor(message: string, extensions?: Record<string, any>) {
@@ -70,13 +70,11 @@ export const runAfterHooks = async <D, H = CredentialInsertInput | CredentialUpd
 	return hookEntities;
 };
 
-export const makeLoginPasswordQuerySafeForLogging = (
-	queryString: string,
+export const maskSensitiveValuesForLogging = (
+	ast: OperationDefinitionNode,
 	variables: VariableValues | undefined
 ) => {
 	const safeVariables: VariableValues = JSON.parse(JSON.stringify(variables ?? {}));
-	const ast = parse(queryString);
-
 	const safeAst = visit(ast, {
 		enter(node) {
 			if (
@@ -93,13 +91,8 @@ export const makeLoginPasswordQuerySafeForLogging = (
 				};
 			}
 
-			if (
-				node.kind === Kind.ARGUMENT &&
-				node.name.value === 'password' &&
-				node.value.kind === Kind.VARIABLE
-			) {
+			if (node.kind === Kind.ARGUMENT && node.name.value === 'password') {
 				const valueNode = node.value;
-				// this `if` statement is required for Typescript to know that valueNode is a VariableNode
 				if (valueNode.kind === Kind.VARIABLE) {
 					const variableName = valueNode.name.value;
 					safeVariables[variableName] = '********';
