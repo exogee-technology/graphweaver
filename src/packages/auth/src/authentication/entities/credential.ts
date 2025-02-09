@@ -11,6 +11,7 @@ export interface CredentialStorage {
 	Everyone: {
 		// everyone can read their own credentials by default
 		read: (context) => ({ id: context.user?.id }),
+		create: true,
 	},
 })
 @Entity('Credential', {
