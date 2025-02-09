@@ -167,13 +167,16 @@ const generatePermissionListFromFields = <G>(
 	entityMetadata: EntityMetadata<G>,
 	requestedFields: ResolveTree
 ) => {
-	const permissionsList: RequiredPermission[] = [
-		{
+	const permissionsList: RequiredPermission[] = [];
+
+	if (Object.keys(requestedFields.fieldsByTypeName).length > 0) {
+		// If at least one field is requested, do they have permission to read the entity?
+		permissionsList.push({
 			entityName: entityMetadata.name,
 			accessType: AccessType.Read,
 			type: RequirePermissionType.ENTITY,
-		},
-	];
+		});
+	}
 
 	for (const [entityName, fields] of Object.entries(requestedFields.fieldsByTypeName)) {
 		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
