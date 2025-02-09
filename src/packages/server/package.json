@@ -10,7 +10,8 @@
 		"build:watch": "pnpm build:js --watch",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
-		"version": "npm version --no-git-tag-version"
+		"version": "npm version --no-git-tag-version",
+		"test": "vitest"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
@@ -39,6 +40,7 @@
 		"@types/graphql-deduplicator": "2.0.2",
 		"esbuild": "0.24.2",
 		"glob": "10.4.3",
+		"vitest": "2.1.8",
 		"typescript": "5.7.2"
 	},
 	"keywords": [
