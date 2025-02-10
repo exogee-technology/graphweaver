@@ -52,7 +52,7 @@ export class AdminUiEntityMetadata {
 	supportedAggregationTypes!: AggregationType[];
 
 	@Field(() => Boolean)
-	providerComparisonSupported!: boolean;
+	supportsPseudoCursorPagination!: boolean;
 
 	@Field(() => Boolean)
 	hideInSideBar!: boolean;
