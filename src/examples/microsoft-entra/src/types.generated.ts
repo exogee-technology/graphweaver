@@ -45,6 +45,7 @@ export type AdminUiEntityMetadata = {
   primaryKeyField: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
   supportedAggregationTypes: Array<AggregationType>;
+  supportsPseudoCursorPagination: Scalars['Boolean']['output'];
 };
 
 export type AdminUiEnumMetadata = {

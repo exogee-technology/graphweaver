@@ -216,6 +216,7 @@ export interface BackendProviderConfig {
 	// Default is 'find', which will call the find method on the provider with a filter like `{ id_in: ['1', '2'] }`.
 	// If you specify 'findOne', it will repeatedly call the findOne method on the provider with a filter like `{ id: '1' }`.
 	idListLoadingMethod?: 'find' | 'findOne';
+	supportsPseudoCursorPagination?: boolean;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (

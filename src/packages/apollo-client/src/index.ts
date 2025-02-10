@@ -85,7 +85,7 @@ export const generateTypePolicies = (entities: Entity[]) => {
 export const addStabilizationToFilter = <TData>(
 	filter: Record<string, unknown>,
 	sort: SortEntity,
-	firstElement: TData
+	lastElement: TData
 ) => {
 	const filters = {
 		...filter,
@@ -98,7 +98,7 @@ export const addStabilizationToFilter = <TData>(
 
 		filters[stabilizationKeys] = filters[stabilizationKeys] ?? [];
 		filters[stabilizationKeys].push(`${key}_${operationKey}`);
-		filters[`${key}_${operationKey}`] = firstElement[key as keyof TData];
+		filters[`${key}_${operationKey}`] = lastElement[key as keyof TData];
 	}
 
 	return filters;

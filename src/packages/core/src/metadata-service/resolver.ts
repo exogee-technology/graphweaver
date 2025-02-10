@@ -166,6 +166,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				supportedAggregationTypes: [
 					...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
 				],
+				supportsPseudoCursorPagination: provider?.backendProviderConfig?.supportsPseudoCursorPagination ?? false,
 			};
 		});
 

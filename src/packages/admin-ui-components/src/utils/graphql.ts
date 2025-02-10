@@ -17,6 +17,7 @@ export const SCHEMA_QUERY = gql`
 				defaultSort
 				hideInSideBar
 				supportedAggregationTypes
+				supportsPseudoCursorPagination
 				fields {
 					name
 					type

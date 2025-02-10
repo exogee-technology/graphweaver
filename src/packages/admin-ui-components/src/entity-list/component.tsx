@@ -47,6 +47,7 @@ export const EntityList = <TData extends object>() => {
 		defaultFilter,
 		fieldForDetailPanelNavigationId,
 		excludeFromTracing,
+		supportsPseudoCursorPagination
 	} = entity;
 	const columns = useMemo(
 		() => convertEntityToColumns(entity, entityByType),
@@ -99,14 +100,18 @@ export const EntityList = <TData extends object>() => {
 
 	const handleFetchNextPage = async () => {
 		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+		const offset = supportsPseudoCursorPagination ? 0 : nextPage * PAGE_SIZE;
+
+		const filterVar = variables.filter ?? {};
+		const filter = supportsPseudoCursorPagination ? addStabilizationToFilter(filterVar, sort, data?.result?.[data.result.length - 1]) : filterVar;
 		fetchMore({
 			variables: {
 				...variables,
 				pagination: {
 					...variables.pagination,
-					offset: nextPage * PAGE_SIZE,
+					offset
 				},
-				filter: addStabilizationToFilter(variables.filter ?? {}, sort, data?.result?.[0]),
+				filter
 			},
 		});
 	};
