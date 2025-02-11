@@ -38,7 +38,7 @@
 	"devDependencies": {
 		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
-		"esbuild": "0.24.2",
+		"esbuild": "0.25.0",
 		"glob": "10.4.3",
 		"vitest": "2.1.8",
 		"typescript": "5.7.2"
