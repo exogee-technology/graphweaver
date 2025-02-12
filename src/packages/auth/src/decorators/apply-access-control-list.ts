@@ -10,11 +10,19 @@ import { AccessType, AccessControlList, AuthorizationContext } from '../types';
 import { AclMap } from '../helper-functions';
 import { afterCreateOrUpdate, beforeDelete, beforeRead, beforeCreateOrUpdate } from './hooks/acl';
 
+interface AclRegistrationOptions {
+	/**
+	 * By default if an ACL already exists for the entity, an error will be thrown. If you want to override the existing ACL if already exists, set this to true.
+	 */
+	overrideIfExists?: boolean;
+}
+
 export const registerAccessControlListHook = <G, TContext extends AuthorizationContext>(
 	entityName: string,
-	acl: Partial<AccessControlList<G, TContext>>
+	acl: Partial<AccessControlList<G, TContext>>,
+	options: AclRegistrationOptions = {}
 ) => {
-	if (AclMap.get(entityName)) {
+	if (!options.overrideIfExists && AclMap.get(entityName)) {
 		throw new Error(`An ACL already exists for ${entityName}`);
 	}
 	AclMap.set(entityName, acl);
@@ -51,9 +59,10 @@ export const registerAccessControlListHook = <G, TContext extends AuthorizationC
 };
 
 export function ApplyAccessControlList<G, TContext extends AuthorizationContext>(
-	acl: Partial<AccessControlList<G, TContext>>
+	acl: Partial<AccessControlList<G, TContext>>,
+	options: AclRegistrationOptions = {}
 ) {
 	return function (constructor: any): void {
-		registerAccessControlListHook(constructor.name, acl);
+		registerAccessControlListHook(constructor.name, acl, options);
 	};
 }
