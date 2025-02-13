@@ -45,7 +45,7 @@
 		"esbuild-plugin-copy": "2.1.1",
 		"glob": "10.4.3",
 		"typescript": "5.7.2",
-		"vite": "6.0.11"
+		"vite": "6.1.0"
 	},
 	"keywords": [
 		"graphql",
