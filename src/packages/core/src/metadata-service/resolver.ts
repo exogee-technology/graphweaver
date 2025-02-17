@@ -1,4 +1,3 @@
-import { DetailPanelInputComponent } from '../decorators';
 import { hookManagerMap, HookRegister } from '../hook-manager';
 import { graphweaverMetadata } from '../metadata';
 import { getFieldTypeWithMetadata } from '../schema-builder';
