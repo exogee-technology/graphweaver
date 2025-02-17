@@ -1,9 +1,8 @@
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { Link } from 'react-router-dom';
-import { Editor } from '@tiptap/react';
 
-import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '../utils';
+import { Entity, EntityField, routeFor } from '../utils';
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
 
