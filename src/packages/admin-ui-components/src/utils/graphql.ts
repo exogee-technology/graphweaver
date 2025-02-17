@@ -37,6 +37,10 @@ export const SCHEMA_QUERY = gql`
 					hideInTable
 					hideInFilterBar
 					hideInDetailForm
+					detailPanelInputComponent {
+						name
+						options
+					}
 				}
 				attributes {
 					isReadOnly

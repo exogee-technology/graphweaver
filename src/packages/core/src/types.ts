@@ -4,6 +4,7 @@ import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphq
 import { ResolveTree } from 'graphql-parse-resolve-info';
 import { ComplexityEstimator } from 'graphql-query-complexity';
 import { EntityMetadata } from './metadata';
+import { DetailPanelInputComponent, DetailPanelInputComponentOption } from './decorators';
 
 export type { Instrumentation } from '@opentelemetry/instrumentation';
 export type { GraphQLResolveInfo } from 'graphql';
@@ -246,6 +247,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		readonly?: boolean;
 		fieldForDetailPanelNavigationId?: boolean;
 		filterType?: AdminUIFilterType;
+		detailPanelInputComponent?: DetailPanelInputComponentOption | DetailPanelInputComponent;
 	};
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;

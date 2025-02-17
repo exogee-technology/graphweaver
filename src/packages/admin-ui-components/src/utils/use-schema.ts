@@ -73,6 +73,16 @@ export type EntityFieldType =
 	| 'NanoTimestamp'
 	| 'NanoDuration';
 
+export enum DetailPanelInputComponentOption {
+	TEXT = 'TEXT',
+	MARKDOWN = 'MARKDOWN',
+}
+
+export interface DetailPanelInputComponent {
+	name: DetailPanelInputComponentOption;
+	options?: Record<string, unknown>;
+}
+
 export interface EntityField {
 	name: string;
 	type: EntityFieldType;
@@ -89,6 +99,7 @@ export interface EntityField {
 	hideInTable?: boolean;
 	hideInFilterBar?: boolean;
 	hideInDetailForm?: boolean;
+	detailPanelInputComponent?: DetailPanelInputComponent;
 }
 
 export interface EntityFieldAttributes {

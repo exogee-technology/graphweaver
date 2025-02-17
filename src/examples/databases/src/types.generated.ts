@@ -47,6 +47,7 @@ export type AdminUiEntityMetadata = {
   primaryKeyField: Scalars['String']['output'];
   summaryField?: Maybe<Scalars['String']['output']>;
   supportedAggregationTypes: Array<AggregationType>;
+  supportsPseudoCursorPagination: Scalars['Boolean']['output'];
 };
 
 export type AdminUiEnumMetadata = {
@@ -75,6 +76,7 @@ export type AdminUiFieldExtensionsMetadata = {
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  detailPanelInputComponent?: Maybe<DetailPanelInputComponent>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
@@ -95,6 +97,7 @@ export type AdminUiFilterMetadata = {
 export enum AdminUiFilterType {
   Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
+  DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
   Relationship = 'RELATIONSHIP',
@@ -119,6 +122,17 @@ export enum AggregationType {
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
+
+export type DetailPanelInputComponent = {
+  __typename?: 'DetailPanelInputComponent';
+  name: DetailPanelInputComponentOption;
+  options?: Maybe<Scalars['JSON']['output']>;
+};
+
+export enum DetailPanelInputComponentOption {
+  Markdown = 'MARKDOWN',
+  Text = 'TEXT'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -426,6 +440,7 @@ export type User = {
   __typename?: 'User';
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  notes?: Maybe<Scalars['String']['output']>;
   status: UserStatus;
   username: Scalars['String']['output'];
 };
@@ -434,6 +449,7 @@ export type User = {
 export type UserCreateOrUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<UserStatus>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -441,6 +457,7 @@ export type UserCreateOrUpdateInput = {
 /** Data needed to create Users. */
 export type UserInsertInput = {
   email: Scalars['String']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<UserStatus>;
   username: Scalars['String']['input'];
 };
@@ -455,6 +472,7 @@ export enum UserStatus {
 export type UserUpdateInput = {
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  notes?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<UserStatus>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -484,6 +502,18 @@ export type UsersListFilter = {
   id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  notes?: InputMaybe<Scalars['String']['input']>;
+  notes_gt?: InputMaybe<Scalars['String']['input']>;
+  notes_gte?: InputMaybe<Scalars['String']['input']>;
+  notes_ilike?: InputMaybe<Scalars['String']['input']>;
+  notes_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  notes_like?: InputMaybe<Scalars['String']['input']>;
+  notes_lt?: InputMaybe<Scalars['String']['input']>;
+  notes_lte?: InputMaybe<Scalars['String']['input']>;
+  notes_ne?: InputMaybe<Scalars['String']['input']>;
+  notes_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  notes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  notes_null?: InputMaybe<Scalars['Boolean']['input']>;
   status?: InputMaybe<UserStatus>;
   status_in?: InputMaybe<Array<UserStatus>>;
   status_nin?: InputMaybe<Array<UserStatus>>;
@@ -504,6 +534,7 @@ export type UsersListFilter = {
 export type UsersOrderByInput = {
   email?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
+  notes?: InputMaybe<Sort>;
   status?: InputMaybe<Sort>;
   username?: InputMaybe<Sort>;
 };

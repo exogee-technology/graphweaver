@@ -1,7 +1,25 @@
-import { Entity, Field } from '../decorators';
+import { DetailPanelInputComponentOption, Entity, Field } from '../decorators';
 import { AdminUiFilterMetadata } from './filter';
 import { AdminUiFieldAttributeMetadata } from './field-attribute';
 import { AdminUiFieldExtensionsMetadata } from './field-extensions';
+import { graphweaverMetadata } from '../metadata';
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
+
+graphweaverMetadata.collectEnumInformation({
+	name: 'DetailPanelInputComponentOption',
+	target: DetailPanelInputComponentOption,
+});
+
+@Entity('DetailPanelInputComponent', {
+	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
+})
+class DetailPanelInputComponent {
+	@Field(() => DetailPanelInputComponentOption)
+	name!: string;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	options?: Record<string, unknown>;
+}
 
 @Entity('AdminUiFieldMetadata', {
 	apiOptions: { excludeFromBuiltInOperations: true, excludeFromFederation: true },
@@ -39,4 +57,7 @@ export class AdminUiFieldMetadata {
 
 	@Field(() => Boolean, { nullable: true })
 	hideInDetailForm?: boolean;
+
+	@Field(() => DetailPanelInputComponent, { nullable: true })
+	detailPanelInputComponent?: DetailPanelInputComponent;
 }

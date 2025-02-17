@@ -1,4 +1,10 @@
-import { Field, ID, Entity, graphweaverMetadata } from '@exogee/graphweaver';
+import {
+	Field,
+	ID,
+	Entity,
+	graphweaverMetadata,
+	DetailPanelInputComponentOption,
+} from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { User as OrmUser, UserStatus } from '../entities';
@@ -26,4 +32,19 @@ export class User {
 
 	@Field(() => UserStatus, { defaultValue: UserStatus.ACTIVE })
 	status!: UserStatus;
+
+	@Field(() => String, {
+		nullable: true,
+		description: 'Formatted text using markdown',
+		adminUIOptions: {
+			detailPanelInputComponent: {
+				name: DetailPanelInputComponentOption.MARKDOWN,
+				options: {
+					h5: { hide: true },
+					h6: { hide: true },
+				},
+			},
+		},
+	})
+	notes?: string;
 }

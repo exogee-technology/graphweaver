@@ -1,0 +1,158 @@
+.label {
+	flex: none;
+	font-family: 'Inter';
+	font-style: normal;
+	font-size: 14px;
+	line-height: 150%;
+	color: rgba(237, 232, 242, 0.6);
+	font-weight: 600;
+	margin-bottom: 10px;
+}
+
+.markdown {
+	border: 1px solid var(--detail-border-color);
+}
+
+.markdown :global .tiptap {
+	min-height: 300px;
+	padding: 10px;
+}
+
+.buttonGroup {
+	display: flex;
+	gap: 5px;
+	flex-wrap: wrap;
+	margin: 5px;
+}
+
+.buttonGroup button {
+	border: 0;
+	border-radius: 3px;
+	flex: 1;
+}
+
+.buttonGroup button:disabled {
+	background-color: rgba(237, 232, 242, 0.2);
+}
+
+.buttonGroup button:hover {
+	filter: brightness(150%);
+}
+
+.isActive {
+	background-color: var(--primary-color);
+}
+
+/* Revert the reset of rules within the markdown field so things like lists have bullet points and correct format */
+.markdown :global .tiptap div,
+.markdown :global .tiptap span,
+.markdown :global .tiptap object,
+.markdown :global .tiptap iframe,
+.markdown :global .tiptap h1,
+.markdown :global .tiptap h2,
+.markdown :global .tiptap h3,
+.markdown :global .tiptap h4,
+.markdown :global .tiptap h5,
+.markdown :global .tiptap h6,
+.markdown :global .tiptap p,
+.markdown :global .tiptap blockquote,
+.markdown :global .tiptap pre,
+.markdown :global .tiptap abbr,
+.markdown :global .tiptap address,
+.markdown :global .tiptap cite,
+.markdown :global .tiptap code,
+.markdown :global .tiptap del,
+.markdown :global .tiptap dfn,
+.markdown :global .tiptap em,
+.markdown :global .tiptap img,
+.markdown :global .tiptap ins,
+.markdown :global .tiptap kbd,
+.markdown :global .tiptap q,
+.markdown :global .tiptap samp,
+.markdown :global .tiptap small,
+.markdown :global .tiptap strong,
+.markdown :global .tiptap sub,
+.markdown :global .tiptap sup,
+.markdown :global .tiptap var,
+.markdown :global .tiptap b,
+.markdown :global .tiptap i,
+.markdown :global .tiptap dl,
+.markdown :global .tiptap dt,
+.markdown :global .tiptap dd,
+.markdown :global .tiptap ol,
+.markdown :global .tiptap ul,
+.markdown :global .tiptap li,
+.markdown :global .tiptap fieldset,
+.markdown :global .tiptap form,
+.markdown :global .tiptap label,
+.markdown :global .tiptap legend,
+.markdown :global .tiptap table,
+.markdown :global .tiptap caption,
+.markdown :global .tiptap tbody,
+.markdown :global .tiptap tfoot,
+.markdown :global .tiptap thead,
+.markdown :global .tiptap tr,
+.markdown :global .tiptap th,
+.markdown :global .tiptap td,
+.markdown :global .tiptap article,
+.markdown :global .tiptap aside,
+.markdown :global .tiptap figure,
+.markdown :global .tiptap footer,
+.markdown :global .tiptap header,
+.markdown :global .tiptap menu,
+.markdown :global .tiptap nav,
+.markdown :global .tiptap section,
+.markdown :global .tiptap time,
+.markdown :global .tiptap mark,
+.markdown :global .tiptap audio,
+.markdown :global .tiptap video,
+.markdown :global .tiptap details,
+.markdown :global .tiptap summary {
+	margin: revert;
+	padding: revert;
+	border: revert;
+	font-size: revert;
+	font-weight: revert;
+	vertical-align: revert;
+	display: revert;
+	list-style: revert;
+}
+
+.markdown :global .tiptap blockquote,
+.markdown :global .tiptap q {
+	quotes: revert;
+}
+
+.markdown :global .tiptap blockquote:before,
+.markdown :global .tiptap blockquote:after,
+.markdown :global .tiptap q:before,
+.markdown :global .tiptap q:after {
+	content: revert;
+}
+
+.markdown :global .tiptap a {
+	margin: revert;
+	padding: revert;
+	font-size: revert;
+	vertical-align: revert;
+	background: revert;
+	text-decoration: revert;
+	font-weight: revert;
+}
+
+.markdown :global .tiptap del {
+	text-decoration: revert;
+}
+
+.markdown :global .tiptap abbr[title],
+.markdown :global .tiptap dfn[title] {
+	border-bottom: revert;
+	cursor: revert;
+}
+
+.markdown :global .tiptap pre {
+	white-space: revert;
+	white-space: revert;
+	white-space: revert;
+	word-wrap: revert;
+}

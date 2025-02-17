@@ -1,3 +1,4 @@
+import { DetailPanelInputComponent } from '../decorators';
 import { hookManagerMap, HookRegister } from '../hook-manager';
 import { graphweaverMetadata } from '../metadata';
 import { getFieldTypeWithMetadata } from '../schema-builder';
@@ -116,6 +117,12 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					hideInTable: field.adminUIOptions?.hideInTable,
 					hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
 					hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
+					detailPanelInputComponent:
+						typeof field.adminUIOptions?.detailPanelInputComponent === 'string'
+							? {
+									name: field.adminUIOptions?.detailPanelInputComponent,
+								}
+							: field.adminUIOptions?.detailPanelInputComponent,
 				};
 
 				// Check if we have an array of related entities
@@ -166,7 +173,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				supportedAggregationTypes: [
 					...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
 				],
-				supportsPseudoCursorPagination: provider?.backendProviderConfig?.supportsPseudoCursorPagination ?? false,
+				supportsPseudoCursorPagination:
+					provider?.backendProviderConfig?.supportsPseudoCursorPagination ?? false,
 			};
 		});
 
