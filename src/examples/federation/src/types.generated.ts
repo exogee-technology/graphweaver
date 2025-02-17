@@ -75,6 +75,7 @@ export type AdminUiFieldExtensionsMetadata = {
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  detailPanelInputComponent?: Maybe<DetailPanelInputComponent>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
@@ -147,6 +148,17 @@ export type DeprecatedProductsPaginationInput = {
   offset?: InputMaybe<Scalars['Int']['input']>;
   orderBy?: InputMaybe<DeprecatedProductsOrderByInput>;
 };
+
+export type DetailPanelInputComponent = {
+  __typename?: 'DetailPanelInputComponent';
+  name: DetailPanelInputComponentOption;
+  options?: Maybe<Scalars['JSON']['output']>;
+};
+
+export enum DetailPanelInputComponentOption {
+  Markdown = 'MARKDOWN',
+  Text = 'TEXT'
+}
 
 export type HiddenEntity = {
   __typename?: 'HiddenEntity';

@@ -89,7 +89,6 @@ export const viteConfig = async ({
 				'rehackt',
 				'set-value',
 				'@tiptap/extension-link',
-				'@tiptap/pm',
 				'@tiptap/react',
 				'@tiptap/starter-kit',
 			],

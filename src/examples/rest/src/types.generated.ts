@@ -72,6 +72,7 @@ export type AdminUiFieldExtensionsMetadata = {
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  detailPanelInputComponent?: Maybe<DetailPanelInputComponent>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
@@ -117,6 +118,17 @@ export enum AggregationType {
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
+
+export type DetailPanelInputComponent = {
+  __typename?: 'DetailPanelInputComponent';
+  name: DetailPanelInputComponentOption;
+  options?: Maybe<Scalars['JSON']['output']>;
+};
+
+export enum DetailPanelInputComponentOption {
+  Markdown = 'MARKDOWN',
+  Text = 'TEXT'
+}
 
 export type PeopleListFilter = {
   _and?: InputMaybe<Array<InputMaybe<PeopleListFilter>>>;

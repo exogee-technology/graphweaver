@@ -30,7 +30,6 @@
 		"@graphiql/toolkit": "0.11.1",
 		"@tanstack/react-table": "8.20.6",
 		"@tiptap/extension-link": "2.11.5",
-		"@tiptap/pm": "2.11.5",
 		"@tiptap/react": "2.11.5",
 		"@tiptap/starter-kit": "2.11.5",
 		"clsx": "2.1.1",
