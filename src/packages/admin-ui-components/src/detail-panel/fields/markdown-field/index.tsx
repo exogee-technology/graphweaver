@@ -32,7 +32,7 @@ interface Props {
 	options: Record<string, unknown>;
 }
 
-export const MarkdownField2 = (props: Props) => {
+export const MarkdownField = (props: Props) => {
 	const { field, isReadOnly, options } = props;
 	const [formikField, _, { setValue }] = useField<string>({ name: field.name });
 	const content = formikField.value;

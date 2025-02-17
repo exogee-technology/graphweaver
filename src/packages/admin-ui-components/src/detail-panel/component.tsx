@@ -32,7 +32,7 @@ import {
 	MediaField,
 	TextField,
 	DateField,
-	MarkdownField2,
+	MarkdownField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
@@ -129,7 +129,7 @@ const getField = ({
 
 	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN) {
 		return (
-			<MarkdownField2
+			<MarkdownField
 				key={field.name}
 				field={field}
 				isReadOnly={!!isReadonly}
