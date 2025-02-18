@@ -38,19 +38,16 @@ export const MarkdownField = (props: Props) => {
 	const content = formikField.value;
 
 	return (
-		<div>
-			<div className={styles.label}>{field.name}</div>
-			<div className={styles.markdown}>
-				<EditorProvider
-					extensions={extensions}
-					content={content}
-					slotBefore={isReadOnly ? undefined : <MenuBar options={options} />}
-					onUpdate={(props) => {
-						setValue(props.editor.getHTML());
-					}}
-					editable={!isReadOnly}
-				/>
-			</div>
+		<div className={styles.markdown}>
+			<EditorProvider
+				extensions={extensions}
+				content={content}
+				slotBefore={isReadOnly ? undefined : <MenuBar options={options} />}
+				onUpdate={(props) => {
+					setValue(props.editor.getHTML());
+				}}
+				editable={!isReadOnly}
+			/>
 		</div>
 	);
 };

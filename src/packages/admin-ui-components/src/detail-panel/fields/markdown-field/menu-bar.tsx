@@ -1,4 +1,28 @@
-import { useCurrentEditor } from '@tiptap/react';
+import { useMemo, useState } from 'react';
+import { Editor, useCurrentEditor } from '@tiptap/react';
+import {
+	EditorBoldIcon,
+	EditorCodeBlockIcon,
+	EditorCodeIcon,
+	EditorH1Icon,
+	EditorH2Icon,
+	EditorH3Icon,
+	EditorH4Icon,
+	EditorH5Icon,
+	EditorH6Icon,
+	EditorHIcon,
+	EditorItalicIcon,
+	EditorLinkIcon,
+	EditorOrderedListIcon,
+	EditorPIcon,
+	EditorBlockquoteIcon,
+	EditorRedoIcon,
+	EditorSeparatorIcon,
+	EditorStrikeIcon,
+	EditorUndoIcon,
+	EditorUnlinkIcon,
+	EditorUnOrderedListIcon,
+} from '../../../assets';
 import styles from './styles.module.css';
 
 interface Props {
@@ -16,6 +40,7 @@ interface Props {
 		link?: { hide?: boolean };
 		bulletList?: { hide?: boolean };
 		orderedList?: { hide?: boolean };
+		unorderedList?: { hide?: boolean };
 		codeBlock?: { hide?: boolean };
 		blockquote?: { hide?: boolean };
 		horizontalRule?: { hide?: boolean };
@@ -54,11 +79,115 @@ export const MenuBar = (props: Props) => {
 		editor.chain().focus().toggleCode().run();
 	};
 
-	const handleParagraphClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+	const handleCodeBlockClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
 		event.stopPropagation();
-		editor.chain().focus().setParagraph().run();
+		editor.chain().focus().toggleCodeBlock().run();
 	};
+
+	const handleHorizontalRuleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().setHorizontalRule().run();
+	};
+
+	const handleUndoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().undo().run();
+	};
+
+	const handleRedoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().redo().run();
+	};
+
+	return (
+		<div className={styles.buttonContainer}>
+			<HeaderOptions editor={editor} options={options} />
+			<ListOptions editor={editor} options={options} />
+			{!options.blockquote?.hide && (
+				<button
+					onClick={handleCodeBlockClick}
+					className={editor.isActive('codeBlock') ? styles.isActive : ''}
+				>
+					<EditorCodeBlockIcon />
+				</button>
+			)}
+
+			<div className={styles.verticalSeparator}></div>
+
+			{!options.bold?.hide && (
+				<button
+					onClick={handleBoldClick}
+					className={editor.isActive('bold') ? styles.isActive : ''}
+				>
+					<EditorBoldIcon />
+				</button>
+			)}
+			{!options.italic?.hide && (
+				<button
+					onClick={handleItalicClick}
+					className={editor.isActive('italic') ? styles.isActive : ''}
+				>
+					<EditorItalicIcon />
+				</button>
+			)}
+			{!options.strike?.hide && (
+				<button
+					onClick={handleStrikeClick}
+					className={editor.isActive('strike') ? styles.isActive : ''}
+				>
+					<EditorStrikeIcon />
+				</button>
+			)}
+			<LinkButton editor={editor} options={options} />
+			{!options.code?.hide && (
+				<button
+					onClick={handleCodeClick}
+					className={editor.isActive('code') ? styles.isActive : ''}
+				>
+					<EditorCodeIcon />
+				</button>
+			)}
+			{!options.horizontalRule?.hide && (
+				<button onClick={handleHorizontalRuleClick}>
+					<EditorSeparatorIcon />
+				</button>
+			)}
+
+			<div className={styles.verticalSeparator}></div>
+
+			<button onClick={handleUndoClick} disabled={!editor.can().chain().focus().undo().run()}>
+				<EditorUndoIcon />
+			</button>
+			<button onClick={handleRedoClick} disabled={!editor.can().chain().focus().redo().run()}>
+				<EditorRedoIcon />
+			</button>
+		</div>
+	);
+};
+
+interface SectionProps {
+	editor: Editor;
+	options: Props['options'];
+}
+
+const HeaderOptions = (props: SectionProps) => {
+	const { editor, options } = props;
+	const [showItems, setShowItems] = useState(false);
+
+	const show = useMemo(() => {
+		return {
+			h1: !options.h1?.hide,
+			h2: !options.h2?.hide,
+			h3: !options.h3?.hide,
+			h4: !options.h4?.hide,
+			h5: !options.h5?.hide,
+			h6: !options.h6?.hide,
+		};
+	}, [options]);
 
 	const handleHeadingClick =
 		(level: 1 | 2 | 3 | 4 | 5 | 6) => (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -66,6 +195,172 @@ export const MenuBar = (props: Props) => {
 			event.stopPropagation();
 			editor.chain().focus().toggleHeading({ level }).run();
 		};
+
+	const handleParagraphClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().setParagraph().run();
+	};
+
+	return (
+		<div onMouseEnter={() => setShowItems(true)} onMouseLeave={() => setShowItems(false)}>
+			{show.h1 ? (
+				<button
+					onClick={handleHeadingClick(1)}
+					className={
+						editor.isActive('paragraph') || editor.isActive('heading') ? styles.isActive : ''
+					}
+				>
+					<EditorHIcon />
+				</button>
+			) : (
+				<button
+					onClick={handleParagraphClick}
+					className={editor.isActive('paragraph') ? styles.isActive : ''}
+				>
+					<EditorPIcon />
+				</button>
+			)}
+			{showItems && (
+				<div className={styles.itemsContainer}>
+					<button
+						onClick={handleParagraphClick}
+						className={editor.isActive('paragraph') ? styles.isActive : ''}
+					>
+						<EditorPIcon />
+					</button>
+					{show.h1 && (
+						<button
+							onClick={handleHeadingClick(1)}
+							className={editor.isActive('heading', { level: 1 }) ? styles.isActive : ''}
+						>
+							<EditorH1Icon />
+						</button>
+					)}
+					{show.h2 && (
+						<button
+							onClick={handleHeadingClick(2)}
+							className={editor.isActive('heading', { level: 2 }) ? styles.isActive : ''}
+						>
+							<EditorH2Icon />
+						</button>
+					)}
+					{show.h3 && (
+						<button
+							onClick={handleHeadingClick(3)}
+							className={editor.isActive('heading', { level: 3 }) ? styles.isActive : ''}
+						>
+							<EditorH3Icon />
+						</button>
+					)}
+					{show.h4 && (
+						<button
+							onClick={handleHeadingClick(4)}
+							className={editor.isActive('heading', { level: 4 }) ? styles.isActive : ''}
+						>
+							<EditorH4Icon />
+						</button>
+					)}
+					{show.h5 && (
+						<button
+							onClick={handleHeadingClick(5)}
+							className={editor.isActive('heading', { level: 5 }) ? styles.isActive : ''}
+						>
+							<EditorH5Icon />
+						</button>
+					)}
+					{show.h6 && (
+						<button
+							onClick={handleHeadingClick(6)}
+							className={editor.isActive('heading', { level: 6 }) ? styles.isActive : ''}
+						>
+							<EditorH6Icon />
+						</button>
+					)}
+				</div>
+			)}
+		</div>
+	);
+};
+
+const ListOptions = (props: SectionProps) => {
+	const { editor, options } = props;
+	const [showItems, setShowItems] = useState(false);
+
+	const handleBulletListClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().toggleBulletList().run();
+	};
+
+	const handleOrderedListClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().toggleOrderedList().run();
+	};
+
+	const handleBlockquoteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		editor.chain().focus().toggleBlockquote().run();
+	};
+
+	const getMainAndOptionButtons = () => {
+		const buttons = {
+			unorderedList: !options.unorderedList?.hide && (
+				<button
+					key={1}
+					onClick={handleBulletListClick}
+					className={editor.isActive('bulletList') ? styles.isActive : ''}
+				>
+					<EditorUnOrderedListIcon />
+				</button>
+			),
+			orderedList: !options.orderedList?.hide && (
+				<button
+					key={2}
+					onClick={handleOrderedListClick}
+					className={editor.isActive('orderedList') ? styles.isActive : ''}
+				>
+					<EditorOrderedListIcon />
+				</button>
+			),
+			blockquote: !options.blockquote?.hide && (
+				<button
+					key={3}
+					onClick={handleBlockquoteClick}
+					className={editor.isActive('blockquote') ? styles.isActive : ''}
+				>
+					<EditorBlockquoteIcon />
+				</button>
+			),
+		};
+
+		const mainButton = buttons.unorderedList || buttons.orderedList || buttons.blockquote;
+
+		if (!mainButton) {
+			return [undefined, []] as const;
+		}
+
+		const optionButtons = Object.values(buttons).filter((button) => button && button != mainButton);
+
+		return [mainButton, optionButtons] as const;
+	};
+
+	const [mainButton, optionButtons] = getMainAndOptionButtons();
+
+	if (!mainButton) return null;
+
+	return (
+		<div onMouseEnter={() => setShowItems(true)} onMouseLeave={() => setShowItems(false)}>
+			{mainButton}
+			{showItems && <div className={styles.itemsContainer}>{optionButtons}</div>}
+		</div>
+	);
+};
+
+const LinkButton = (props: SectionProps) => {
+	const { editor, options } = props;
 
 	const handleSetLinkClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		event.preventDefault();
@@ -95,206 +390,19 @@ export const MenuBar = (props: Props) => {
 		editor.chain().focus().unsetLink().run();
 	};
 
-	const handleBulletListClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleBulletList().run();
-	};
+	if (options.link?.hide) return null;
 
-	const handleOrderedListClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleOrderedList().run();
-	};
-
-	const handleCodeBlockClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleCodeBlock().run();
-	};
-
-	const handleBlockquoteClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleBlockquote().run();
-	};
-
-	const handleHorizontalRuleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().setHorizontalRule().run();
-	};
-
-	const handleUndoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().undo().run();
-	};
-
-	const handleRedoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().redo().run();
-	};
+	if (editor.isActive('link')) {
+		return (
+			<button onClick={handleUnsetLinkClick} className={styles.isActive}>
+				<EditorUnlinkIcon />
+			</button>
+		);
+	}
 
 	return (
-		<div>
-			<div className={styles.buttonGroup}>
-				{!options.bold?.hide && (
-					<button
-						onClick={handleBoldClick}
-						disabled={!editor.can().chain().focus().toggleBold().run()}
-						className={editor.isActive('bold') ? styles.isActive : ''}
-					>
-						Bold
-					</button>
-				)}
-				{!options.italic?.hide && (
-					<button
-						onClick={handleItalicClick}
-						disabled={!editor.can().chain().focus().toggleItalic().run()}
-						className={editor.isActive('italic') ? styles.isActive : ''}
-					>
-						Italic
-					</button>
-				)}
-				{!options.strike?.hide && (
-					<button
-						onClick={handleStrikeClick}
-						disabled={!editor.can().chain().focus().toggleStrike().run()}
-						className={editor.isActive('strike') ? styles.isActive : ''}
-					>
-						Strike
-					</button>
-				)}
-				{!options.code?.hide && (
-					<button
-						onClick={handleCodeClick}
-						disabled={!editor.can().chain().focus().toggleCode().run()}
-						className={editor.isActive('code') ? styles.isActive : ''}
-					>
-						Code
-					</button>
-				)}
-			</div>
-
-			<div className={styles.buttonGroup}>
-				<button
-					onClick={handleParagraphClick}
-					className={editor.isActive('paragraph') ? styles.isActive : ''}
-				>
-					Paragraph
-				</button>
-				{!options.h1?.hide && (
-					<button
-						onClick={handleHeadingClick(1)}
-						className={editor.isActive('heading', { level: 1 }) ? styles.isActive : ''}
-					>
-						H1
-					</button>
-				)}
-				{!options.h2?.hide && (
-					<button
-						onClick={handleHeadingClick(2)}
-						className={editor.isActive('heading', { level: 2 }) ? styles.isActive : ''}
-					>
-						H2
-					</button>
-				)}
-				{!options.h3?.hide && (
-					<button
-						onClick={handleHeadingClick(3)}
-						className={editor.isActive('heading', { level: 3 }) ? styles.isActive : ''}
-					>
-						H3
-					</button>
-				)}
-				{!options.h4?.hide && (
-					<button
-						onClick={handleHeadingClick(4)}
-						className={editor.isActive('heading', { level: 4 }) ? styles.isActive : ''}
-					>
-						H4
-					</button>
-				)}
-				{!options.h5?.hide && (
-					<button
-						onClick={handleHeadingClick(5)}
-						className={editor.isActive('heading', { level: 5 }) ? styles.isActive : ''}
-					>
-						H5
-					</button>
-				)}
-				{!options.h6?.hide && (
-					<button
-						onClick={handleHeadingClick(6)}
-						className={editor.isActive('heading', { level: 6 }) ? styles.isActive : ''}
-					>
-						H6
-					</button>
-				)}
-			</div>
-
-			{!options.link?.hide && (
-				<div className={styles.buttonGroup}>
-					<button onClick={handleSetLinkClick} disabled={editor.view.state.selection.empty}>
-						Set link
-					</button>
-					<button onClick={handleUnsetLinkClick} disabled={!editor.isActive('link')}>
-						Unset link
-					</button>
-				</div>
-			)}
-
-			<div className={styles.buttonGroup}>
-				{!options.bulletList?.hide && (
-					<button
-						onClick={handleBulletListClick}
-						className={editor.isActive('bulletList') ? styles.isActive : ''}
-					>
-						Bullet list
-					</button>
-				)}
-				{!options.orderedList?.hide && (
-					<button
-						onClick={handleOrderedListClick}
-						className={editor.isActive('orderedList') ? styles.isActive : ''}
-					>
-						Ordered list
-					</button>
-				)}
-			</div>
-
-			<div className={styles.buttonGroup}>
-				{!options.codeBlock?.hide && (
-					<button
-						onClick={handleCodeBlockClick}
-						className={editor.isActive('codeBlock') ? styles.isActive : ''}
-					>
-						Code block
-					</button>
-				)}
-				{!options.blockquote?.hide && (
-					<button
-						onClick={handleBlockquoteClick}
-						className={editor.isActive('blockquote') ? styles.isActive : ''}
-					>
-						Blockquote
-					</button>
-				)}
-				{!options.horizontalRule?.hide && (
-					<button onClick={handleHorizontalRuleClick}>Horizontal rule</button>
-				)}
-			</div>
-
-			<div className={styles.buttonGroup}>
-				<button onClick={handleUndoClick} disabled={!editor.can().chain().focus().undo().run()}>
-					Undo
-				</button>
-				<button onClick={handleRedoClick} disabled={!editor.can().chain().focus().redo().run()}>
-					Redo
-				</button>
-			</div>
-		</div>
+		<button onClick={handleSetLinkClick} disabled={editor.view.state.selection.empty}>
+			<EditorLinkIcon />
+		</button>
 	);
 };

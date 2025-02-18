@@ -17,3 +17,4 @@ export { SuccessIcon } from './16-success';
 export { TableIcon } from './16-table';
 export { TableLightIcon } from './16-table-light';
 export { WarningIcon } from './16-warning';
+export * from './editor-icons';
