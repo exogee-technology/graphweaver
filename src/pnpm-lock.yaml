@@ -658,8 +658,8 @@ importers:
         specifier: 6.28.0
         version: 6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       xero-node:
-        specifier: 9.3.0
-        version: 9.3.0
+        specifier: 10.0.0
+        version: 10.0.0
     devDependencies:
       '@types/node':
         specifier: 22.10.1
@@ -1781,8 +1781,8 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
       xero-node:
-        specifier: 9.3.0
-        version: 9.3.0
+        specifier: 10.0.0
+        version: 10.0.0
     devDependencies:
       '@types/node':
         specifier: 22.10.1
@@ -5889,9 +5889,6 @@ packages:
 
   axios-proxy-builder@0.1.2:
     resolution: {integrity: sha512-6uBVsBZzkB3tCC8iyx59mCjQckhB8+GQrI9Cop8eC7ybIsvs/KtnNgEBfRMSEa7GqK2VBGUzgjNYMdPIfotyPA==}
-
-  axios@1.7.7:
-    resolution: {integrity: sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==}
 
   axios@1.7.9:
     resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
@@ -10615,8 +10612,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  xero-node@9.3.0:
-    resolution: {integrity: sha512-0uXEjzNE+Eek02uBZNa3lXEnQjemCVegQLdFqQPCq4QmAF5U421haVl44P+uAWBFTbf4quGN4AtGy6CfL9ONrQ==}
+  xero-node@10.0.0:
+    resolution: {integrity: sha512-ui3efO+tyiTerKXRRMJ7WvFEonfcOFHYEDQZxMdNFGZi6jpW+6Rp6GDZEJ40VYU34JNT1ZZyrXY6+NRu4i/ADQ==}
 
   xhr2@0.1.3:
     resolution: {integrity: sha512-6RmGK22QwC7yXB1CRwyLWuS2opPcKOlAu0ViAnyZjDlzrEmCKL4kLHkfvB8oMRWeztMsNoDGAjsMZY15w/4tTw==}
@@ -16292,14 +16289,6 @@ snapshots:
     dependencies:
       tunnel: 0.0.6
 
-  axios@1.7.7:
-    dependencies:
-      follow-redirects: 1.15.9
-      form-data: 4.0.0
-      proxy-from-env: 1.1.0
-    transitivePeerDependencies:
-      - debug
-
   axios@1.7.9:
     dependencies:
       follow-redirects: 1.15.9
@@ -21883,9 +21872,9 @@ snapshots:
 
   ws@8.5.0: {}
 
-  xero-node@9.3.0:
+  xero-node@10.0.0:
     dependencies:
-      axios: 1.7.7
+      axios: 1.7.9
       openid-client: 5.6.5
     transitivePeerDependencies:
       - debug
