@@ -6,7 +6,7 @@ import { EntityField } from '../../../utils';
 import { MenuBar } from './menu-bar';
 import styles from './styles.module.css';
 
-const extensions = [
+export const extensions = [
 	StarterKit.configure({
 		bulletList: {
 			keepMarks: true,

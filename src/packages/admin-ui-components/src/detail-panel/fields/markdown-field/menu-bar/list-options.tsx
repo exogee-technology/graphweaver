@@ -66,7 +66,7 @@ export const ListOptions = (props: SectionProps) => {
 			return [undefined, []] as const;
 		}
 
-		const optionButtons = Object.values(buttons).filter((button) => button && button != mainButton);
+		const optionButtons = Object.values(buttons).filter((button) => button);
 
 		return [mainButton, optionButtons] as const;
 	}, [options, editor]);

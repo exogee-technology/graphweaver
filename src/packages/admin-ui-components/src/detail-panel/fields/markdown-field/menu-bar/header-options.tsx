@@ -45,9 +45,7 @@ export const HeaderOptions = (props: SectionProps) => {
 			{show.h1 ? (
 				<button
 					onClick={handleHeadingClick(1)}
-					className={
-						editor.isActive('paragraph') || editor.isActive('heading') ? styles.isActive : ''
-					}
+					className={editor.isActive('heading') ? styles.isActive : ''}
 				>
 					<EditorHIcon />
 				</button>
