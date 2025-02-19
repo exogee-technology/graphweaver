@@ -85,10 +85,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -284,10 +284,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -339,10 +339,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       '@okta/okta-auth-js':
         specifier: 7.9.0
         version: 7.9.0(encoding@0.1.13)
@@ -382,10 +382,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -434,7 +434,7 @@ importers:
         version: 6.4.6
       '@mikro-orm/mysql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -501,10 +501,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -559,10 +559,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -654,9 +654,9 @@ importers:
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
-      react-router-dom:
-        specifier: 6.28.0
-        version: 6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      wouter:
+        specifier: 3.6.0
+        version: 3.6.0(react@19.0.0)
       xero-node:
         specifier: 10.0.0
         version: 10.0.0
@@ -700,12 +700,15 @@ importers:
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
+      react-error-boundary:
+        specifier: 5.0.0
+        version: 5.0.0(react@19.0.0)
       react-modal:
         specifier: 3.16.1
         version: 3.16.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react-router-dom:
-        specifier: 6.28.0
-        version: 6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      wouter:
+        specifier: 3.6.0
+        version: 3.6.0(react@19.0.0)
     devDependencies:
       '@chialab/esbuild-plugin-html':
         specifier: 0.18.2
@@ -776,6 +779,9 @@ importers:
       react-day-picker:
         specifier: 9.4.1
         version: 9.4.1(react@19.0.0)
+      react-error-boundary:
+        specifier: 5.0.0
+        version: 5.0.0(react@19.0.0)
       react-hot-toast:
         specifier: 2.4.1
         version: 2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -785,6 +791,9 @@ importers:
       react-syntax-highlighter:
         specifier: 15.6.1
         version: 15.6.1(react@19.0.0)
+      wouter:
+        specifier: 3.6.0
+        version: 3.6.0(react@19.0.0)
     devDependencies:
       '@types/graphql-deduplicator':
         specifier: 2.0.2
@@ -822,9 +831,6 @@ importers:
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
-      react-router-dom:
-        specifier: 6.28.0
-        version: 6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -946,12 +952,12 @@ importers:
       graphql:
         specifier: '16'
         version: 16.10.0
-      react-router-dom:
-        specifier: ^6.23.1
-        version: 6.26.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       web3-token:
         specifier: 1.0.6
         version: 1.0.6(react@19.0.0)
+      wouter:
+        specifier: 3.6.0
+        version: 3.6.0(react@19.0.0)
     devDependencies:
       '@auth0/auth0-spa-js':
         specifier: 2.1.3
@@ -1338,7 +1344,7 @@ importers:
         version: 6.4.6
       '@mikro-orm/postgresql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
         version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
@@ -1443,10 +1449,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       node-sqlite3-wasm:
         specifier: 0.8.28
         version: 0.8.28
@@ -1502,16 +1508,16 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)(pg@8.13.2)
       '@mikro-orm/mysql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
       '@mikro-orm/postgresql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.4.6
@@ -1805,9 +1811,6 @@ importers:
       react-dom:
         specifier: 19.0.0
         version: 19.0.0(react@19.0.0)
-      react-router-dom:
-        specifier: 6.28.0
-        version: 6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       typescript:
         specifier: 5.7.2
         version: 5.7.2
@@ -4863,14 +4866,6 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-
-  '@remix-run/router@1.19.2':
-    resolution: {integrity: sha512-baiMx18+IMuD1yyvOGaHM9QrVUPGGG0jC+z+IPHnRJWUAUvaKuWKyE8gjDj2rzv3sz9zOGoRSPgeBVHRhZnBlA==}
-    engines: {node: '>=14.0.0'}
-
-  '@remix-run/router@1.21.0':
-    resolution: {integrity: sha512-xfSkCAchbdG5PnbrKqFWwia4Bi61nH+wm8wLEqfHDyp7Y3dZzgqS2itV8i4gAq9pC2HsTpwyBC6Ds8VHZ96JlA==}
-    engines: {node: '>=14.0.0'}
 
   '@repeaterjs/repeater@3.0.6':
     resolution: {integrity: sha512-Javneu5lsuhwNCryN+pXH93VPQ8g0dBX7wItHFgYiwQmzE1sVdg5tWHiOgHywzL2W21XQopa7IwIEnNbmeUJYA==}
@@ -8618,6 +8613,9 @@ packages:
     resolution: {integrity: sha512-bAxsR8BVfj60DWXHE3u30oHzfl4G7khkSuPW+qvpd7jFRHm7dLxOjUk1EHACJ/hxLY8phGJ0YhYHZo7jil7Qdg==}
     engines: {node: '>= 8'}
 
+  mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
   mkdirp-classic@0.5.3:
     resolution: {integrity: sha512-gKLcREMhtuZRwRAfqP3RFW+TK4JqApVBtOIftVgjuABpAtpxhPGaDcfvbhNvD0B8iD1oUr/txX35NjcaY6Ns/A==}
 
@@ -9337,6 +9335,11 @@ packages:
     peerDependencies:
       react: ^19.0.0
 
+  react-error-boundary@5.0.0:
+    resolution: {integrity: sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==}
+    peerDependencies:
+      react: '>=16.13.1'
+
   react-fast-compare@2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
 
@@ -9396,32 +9399,6 @@ packages:
       react: ^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
       react-dom: ^16.14.0 || ^17.0.0 || ^18.0.0 || ^19.0.0 || ^19.0.0-rc
 
-  react-router-dom@6.26.2:
-    resolution: {integrity: sha512-z7YkaEW0Dy35T3/QKPYB1LjMK2R1fxnHO8kWpUMTBdfVzZrWOiY9a7CtN8HqdWtDUWd5FY6Dl8HFsqVwH4uOtQ==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      react: '>=16.8'
-      react-dom: '>=16.8'
-
-  react-router-dom@6.28.0:
-    resolution: {integrity: sha512-kQ7Unsl5YdyOltsPGl31zOjLrDv+m2VcIEcIHqYYD3Lp0UppLjrzcfJqDJwXxFw3TH/yvapbnUvPlAj7Kx5nbg==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      react: '>=16.8'
-      react-dom: '>=16.8'
-
-  react-router@6.26.2:
-    resolution: {integrity: sha512-tvN1iuT03kHgOFnLPfLJ8V95eijteveqdOSk+srqfePtQvqCExB8eHOYnlilbOcyJyKnYkr1vJvf7YqotAJu1A==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      react: '>=16.8'
-
-  react-router@6.28.0:
-    resolution: {integrity: sha512-HrYdIFqdrnhDw0PqG/AKjAqEqM7AvxCz0DQ4h2W8k6nqmc5uRBYDag0SBxx9iYz5G8gnuNVLzUe13wl9eAsXXg==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      react: '>=16.8'
-
   react-style-singleton@2.2.1:
     resolution: {integrity: sha512-ZWj0fHEMyWkHzKYUr2Bs/4zU6XLmq9HsgBURm7g5pAVfyn49DgUiNgY2d4lXRlYSiCif9YBGpQleewkcqddc7g==}
     engines: {node: '>=10'}
@@ -9476,6 +9453,10 @@ packages:
 
   regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
+
+  regexparam@3.0.0:
+    resolution: {integrity: sha512-RSYAtP31mvYLkAHrOlh25pCNQ5hWnT106VukGaaFfuJrZFkGRX5GhUAdPqpSDXxOhA2c4akmRuplv1mRqnBn6Q==}
+    engines: {node: '>=8'}
 
   rehackt@0.1.0:
     resolution: {integrity: sha512-7kRDOuLHB87D/JESKxQoRwv4DzbIdwkAGQ7p6QKGdVlY1IZheUnVhlk/4UZlNUVxdAXpyxikE3URsG067ybVzw==}
@@ -10588,6 +10569,11 @@ packages:
   word-wrap@1.2.5:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
+
+  wouter@3.6.0:
+    resolution: {integrity: sha512-l11eR4urCc+CbY8+pV8HKFHxEqMgffss9aVB1XwiSkLDtH3cI6XpCa50cOzREzL0KwQqrwCVE5dCyeNcCgFpPg==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   wrap-ansi@6.2.0:
     resolution: {integrity: sha512-r6lPcBGxZXlIcymEu7InxDMhdW0KDxpLgoFLcguasxCaJ/SOIZwINatK9KY/tf+ZrlywOKU0UDj3ATXUBfxJXA==}
@@ -14019,36 +14005,6 @@ snapshots:
       mikro-orm: 6.4.6
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.12.0)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)(pg@8.13.1)':
     dependencies:
       '@mikro-orm/core': 6.4.6
@@ -14079,21 +14035,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.1)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.6
@@ -14109,11 +14050,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)':
+  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.6
       fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.2)
+      knex: 3.1.0(pg@8.13.2)(sqlite3@5.1.7)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -14123,37 +14064,7 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/mysql@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
-      mysql2: 3.12.0
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
+    optional: true
 
   '@mikro-orm/mysql@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)':
     dependencies:
@@ -14171,20 +14082,17 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.4.6(@mikro-orm/core@6.4.6)':
+  '@mikro-orm/mysql@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)':
     dependencies:
       '@mikro-orm/core': 6.4.6
-      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
-      pg: 8.13.2
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
+      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)(pg@8.13.2)
+      mysql2: 3.12.0
     transitivePeerDependencies:
       - better-sqlite3
       - libsql
       - mariadb
       - mysql
-      - mysql2
+      - pg
       - pg-native
       - sqlite3
       - supports-color
@@ -14209,25 +14117,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/sqlite@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
-
   '@mikro-orm/sqlite@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)':
     dependencies:
       '@mikro-orm/core': 6.4.6
@@ -14246,6 +14135,26 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
+
+  '@mikro-orm/sqlite@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)':
+    dependencies:
+      '@mikro-orm/core': 6.4.6
+      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)(sqlite3@5.1.7)
+      fs-extra: 11.3.0
+      sqlite3: 5.1.7
+      sqlstring-sqlite: 0.1.1
+    transitivePeerDependencies:
+      - better-sqlite3
+      - bluebird
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - supports-color
+      - tedious
+    optional: true
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -15105,10 +15014,6 @@ snapshots:
       '@react-spring/types': 9.7.4
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-
-  '@remix-run/router@1.19.2': {}
-
-  '@remix-run/router@1.21.0': {}
 
   '@repeaterjs/repeater@3.0.6': {}
 
@@ -19297,46 +19202,6 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  knex@3.1.0:
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(mysql2@3.12.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.12.0
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(mysql2@3.12.0)(pg@8.13.1):
     dependencies:
       colorette: 2.0.19
@@ -19381,27 +19246,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.13.1):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.13.1
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(pg@8.13.1)(sqlite3@5.1.7):
     dependencies:
       colorette: 2.0.19
@@ -19424,7 +19268,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.13.2):
+  knex@3.1.0(pg@8.13.2)(sqlite3@5.1.7):
     dependencies:
       colorette: 2.0.19
       commander: 10.0.1
@@ -19442,29 +19286,10 @@ snapshots:
       tildify: 2.0.0
     optionalDependencies:
       pg: 8.13.2
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
+    optional: true
 
   leven@3.1.0: {}
 
@@ -19872,6 +19697,8 @@ snapshots:
     dependencies:
       minipass: 3.3.6
       yallist: 4.0.0
+
+  mitt@3.0.1: {}
 
   mkdirp-classic@0.5.3: {}
 
@@ -20596,6 +20423,11 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0
 
+  react-error-boundary@5.0.0(react@19.0.0):
+    dependencies:
+      '@babel/runtime': 7.26.7
+      react: 19.0.0
+
   react-fast-compare@2.0.4: {}
 
   react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
@@ -20648,30 +20480,6 @@ snapshots:
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-
-  react-router-dom@6.26.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
-    dependencies:
-      '@remix-run/router': 1.19.2
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      react-router: 6.26.2(react@19.0.0)
-
-  react-router-dom@6.28.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
-    dependencies:
-      '@remix-run/router': 1.21.0
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      react-router: 6.28.0(react@19.0.0)
-
-  react-router@6.26.2(react@19.0.0):
-    dependencies:
-      '@remix-run/router': 1.19.2
-      react: 19.0.0
-
-  react-router@6.28.0(react@19.0.0):
-    dependencies:
-      '@remix-run/router': 1.21.0
-      react: 19.0.0
 
   react-style-singleton@2.2.1(@types/react@19.0.10)(react@19.0.0):
     dependencies:
@@ -20735,6 +20543,8 @@ snapshots:
       prismjs: 1.27.0
 
   regenerator-runtime@0.14.1: {}
+
+  regexparam@3.0.0: {}
 
   rehackt@0.1.0(@types/react@19.0.10)(react@19.0.0):
     optionalDependencies:
@@ -21937,6 +21747,13 @@ snapshots:
       string-width: 5.1.2
 
   word-wrap@1.2.5: {}
+
+  wouter@3.6.0(react@19.0.0):
+    dependencies:
+      mitt: 3.0.1
+      react: 19.0.0
+      regexparam: 3.0.0
+      use-sync-external-store: 1.2.0(react@19.0.0)
 
   wrap-ansi@6.2.0:
     dependencies:

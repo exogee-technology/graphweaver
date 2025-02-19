@@ -1,3 +1,4 @@
+import { Route } from 'wouter';
 import {
 	Auth0,
 	ForgottenPassword,
@@ -31,20 +32,20 @@ export const loadRoutes = () => {
 	const config = import.meta.env.VITE_GRAPHWEAVER_CONFIG;
 	if (!config.auth) return [];
 
-	const routes = new Set();
+	const routes: { path: string; element: React.ReactNode }[] = [];
 	const { primaryMethods, secondaryMethods, password } = config.auth;
 
 	for (const method of primaryMethods) {
 		const formattedMethodName = method.toLowerCase().replace('_', '-') + '-';
 		const path = `${primaryMethods.length > 1 ? formattedMethodName : ''}login`;
-		routes.add({
+		routes.push({
 			path,
 			element: mapComponent(method),
 		});
 	}
 
 	if (secondaryMethods) {
-		routes.add({
+		routes.push({
 			path: 'challenge',
 			element: <Challenge />,
 		});
@@ -53,14 +54,14 @@ export const loadRoutes = () => {
 	const hasPassword = primaryMethods.includes(PrimaryAuthMethod.PASSWORD);
 
 	if (hasPassword && password?.enableForgottenPassword) {
-		routes.add({
+		routes.push({
 			path: 'forgot-password',
 			element: <ForgottenPassword />,
 		});
 	}
 
 	if (hasPassword && password?.enableResetPassword) {
-		routes.add({
+		routes.push({
 			path: 'reset-password',
 			element: <ResetPassword />,
 		});
@@ -69,8 +70,15 @@ export const loadRoutes = () => {
 	return [
 		{
 			path: '/auth',
-			element: <Auth />,
-			children: Array.from(routes),
+			element: (
+				<Auth>
+					{routes.map((route) => (
+						<Route key={route.path} path={route.path}>
+							{route.element}
+						</Route>
+					))}
+				</Auth>
+			),
 		},
 	];
 };

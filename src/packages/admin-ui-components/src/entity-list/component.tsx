@@ -3,7 +3,7 @@ import { addStabilizationToFilter } from '@exogee/graphweaver-apollo-client';
 import { Row, RowSelectionState } from '@tanstack/react-table';
 import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'wouter';
 
 import { Button } from '../button';
 import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
@@ -27,11 +27,11 @@ import { QueryResponse, queryForEntityPage } from './graphql';
 import { ExportModal } from '../export-modal';
 import styles from './styles.module.css';
 
-export const EntityList = <TData extends object>() => {
+export const EntityList = <TData extends object>({ children }: { children: React.ReactNode }) => {
 	const { entity: entityName, id } = useParams();
 	if (!entityName) throw new Error('There should always be an entity at this point.');
 
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 	const { entityByName, entityByType } = useSchema();
 	const [search] = useSearchParams();
 	const { sort: sorting, filters } = decodeSearchParams(search);
@@ -47,7 +47,7 @@ export const EntityList = <TData extends object>() => {
 		defaultFilter,
 		fieldForDetailPanelNavigationId,
 		excludeFromTracing,
-		supportsPseudoCursorPagination
+		supportsPseudoCursorPagination,
 	} = entity;
 	const columns = useMemo(
 		() => convertEntityToColumns(entity, entityByType),
@@ -84,11 +84,11 @@ export const EntityList = <TData extends object>() => {
 	}
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
-		navigate(`${row.original[fieldForDetailPanelNavigationId as keyof T]}`);
+		setLocation(`${row.original[fieldForDetailPanelNavigationId as keyof T]}`);
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {
-		navigate(
+		setLocation(
 			routeFor({
 				entity,
 				filters,
@@ -103,15 +103,17 @@ export const EntityList = <TData extends object>() => {
 		const offset = supportsPseudoCursorPagination ? 0 : nextPage * PAGE_SIZE;
 
 		const filterVar = variables.filter ?? {};
-		const filter = supportsPseudoCursorPagination ? addStabilizationToFilter(filterVar, sort, data?.result?.[data.result.length - 1]) : filterVar;
+		const filter = supportsPseudoCursorPagination
+			? addStabilizationToFilter(filterVar, sort, data?.result?.[data.result.length - 1])
+			: filterVar;
 		fetchMore({
 			variables: {
 				...variables,
 				pagination: {
 					...variables.pagination,
-					offset
+					offset,
 				},
-				filter
+				filter,
 			},
 		});
 	};
@@ -207,7 +209,7 @@ export const EntityList = <TData extends object>() => {
 			{showExportModal && (
 				<ExportModal closeModal={() => setShowExportModal(false)} sort={sort} filters={filters} />
 			)}
-			<Outlet />
+			{children}
 		</div>
 	);
 };

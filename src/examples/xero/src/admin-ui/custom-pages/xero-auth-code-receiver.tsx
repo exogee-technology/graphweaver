@@ -1,4 +1,4 @@
-import { useSearchParams, Navigate } from 'react-router-dom';
+import { useSearchParams, Redirect } from 'wouter';
 
 export const XeroAuthCodeReceiver = () => {
 	const [searchParams] = useSearchParams();
@@ -22,5 +22,5 @@ export const XeroAuthCodeReceiver = () => {
 	localStorage.setItem('graphweaver-auth', window.location.href);
 
 	// Ok, now that we've saved it we're good to go.
-	return <Navigate to="/" />;
+	return <Redirect to="/" />;
 };

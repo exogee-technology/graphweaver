@@ -2,7 +2,7 @@ import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import clsx from 'clsx';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'wouter';
 import toast from 'react-hot-toast';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
@@ -332,7 +332,7 @@ export const DetailPanel = () => {
 	const modalRedirectUrl = search.get('modalRedirectUrl');
 
 	const { id, entity } = useParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName, entityByType } = useSchema();
 
@@ -358,12 +358,12 @@ export const DetailPanel = () => {
 		// If the path does not include the entity name, then we've already moved to a different entity
 		// Navigate to the current path to close the overlay
 		if (!regexPattern.test(path)) {
-			navigate(path);
+			setLocation(path);
 			return;
 		}
 
 		const { filters, sort } = decodeSearchParams(search);
-		navigate(routeFor({ entity: selectedEntity, filters, sort }));
+		setLocation(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
 	const customFieldsToShow =
@@ -432,7 +432,7 @@ export const DetailPanel = () => {
 
 	const navigateToDetailForEntity = (id?: string) => {
 		if (!id) return;
-		navigate(routeFor({ entity: selectedEntity, id }));
+		setLocation(routeFor({ entity: selectedEntity, id }));
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
@@ -508,7 +508,7 @@ export const DetailPanel = () => {
 	const handleConfirmLeave = () => {
 		if (!modalRedirectUrl) return;
 
-		navigate(modalRedirectUrl, { replace: true });
+		setLocation(modalRedirectUrl, { replace: true });
 	};
 
 	const handleCancelLeave = () => {

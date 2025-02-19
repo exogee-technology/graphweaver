@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { okta } from '../client';
 import { AccessToken, IDToken } from '@okta/okta-auth-js';
 
@@ -12,7 +12,7 @@ if (import.meta.env.VITE_OKTA_ADDITIONAL_SCOPES) {
 export const Okta = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const handleLogin = async () => {
 		if (!okta) {
@@ -47,7 +47,7 @@ export const Okta = () => {
 
 			if (userInfo) {
 				// If there's a user we can go ahead and navigate to the home page.
-				navigate('/');
+				setLocation('/');
 			} else {
 				// Otherwise, we need to go through the login flow.
 				await okta.token.getWithRedirect({

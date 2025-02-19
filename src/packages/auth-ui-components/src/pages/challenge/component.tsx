@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 import {
 	MagicLinkChallenge,
 	OTPChallenge,

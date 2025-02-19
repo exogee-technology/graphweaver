@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'wouter';
 
 import { Button } from '../button';
 import {
@@ -23,7 +23,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	if (!entityName) throw new Error('There should always be an entity at this point.');
 	const [search] = useSearchParams();
 	const { entityByName } = useSchema();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 	const searchParams = decodeSearchParams(search);
 
 	const [filtersState, setFiltersState] = useState(searchParams.filters ?? {});
@@ -59,7 +59,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			);
 
 			// Go off to a supported URL.
-			navigate(
+			setLocation(
 				routeFor({
 					entity: entityName,
 					id,
@@ -70,7 +70,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 			);
 		}
 
-		navigate(
+		setLocation(
 			routeFor({
 				entity: entityName,
 				id,

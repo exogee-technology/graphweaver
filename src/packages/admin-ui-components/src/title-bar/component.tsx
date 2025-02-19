@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'wouter';
 import { Button } from '../button';
 import { Popover, PopoverItem } from '../popover';
 import { OpenExternalIcon } from '../assets/16-open-external';
@@ -30,7 +30,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 
 			<div className={styles.toolsWrapper}>
 				<Link
-					to={{ pathname: '/playground' }}
+					to="/playground"
 					// If we are in an iframe then open in the same window otherwise open in a new tab
 					target={window === window.parent ? '_blank' : '_self'}
 					rel="noopener noreferrer"

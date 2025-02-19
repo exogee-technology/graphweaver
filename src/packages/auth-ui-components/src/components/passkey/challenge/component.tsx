@@ -13,7 +13,7 @@ import {
 	PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
 import { Form, Formik } from 'formik';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'wouter';
 
 import {
 	GENERATE_AUTHENTICATION_OPTIONS,
@@ -104,7 +104,7 @@ const AuthenticateButton = ({
 }) => {
 	const [loading, setLoading] = useState(false);
 	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
@@ -135,7 +135,7 @@ const AuthenticateButton = ({
 
 			localStorage.setItem(localStorageAuthKey, authToken);
 
-			navigate(formatRedirectUrl(redirectUri), { replace: true });
+			setLocation(formatRedirectUrl(redirectUri), { replace: true });
 		} catch (error: any) {
 			setError(error);
 			setLoading(false);

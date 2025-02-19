@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import {

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import { Outlet } from 'react-router-dom';
 
 import { SideBar } from '../../side-bar';
 import { RequireSchema } from '../../require-schema';
@@ -12,7 +11,7 @@ const SIDEBAR_MIN_WIDTH = 220;
 const SIDEBAR_MAX_WIDTH = 820;
 const SIDEBAR_START_WIDTH = 320;
 
-export const DefaultLayout = () => {
+export const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const resizer = useRef<HTMLDivElement>(null);
 	const [flexBasis, setFlexBasis] = useState(SIDEBAR_START_WIDTH);
 	const [openMenu, setOpenMenu] = useState(false);
@@ -55,9 +54,7 @@ export const DefaultLayout = () => {
 						<SideBar />
 					</div>
 					<div className={styles.resizer} ref={resizer}></div>
-					<div className={styles.content}>
-						<Outlet />
-					</div>
+					<div className={styles.content}>{children}</div>
 				</div>
 			</div>
 			<Modal

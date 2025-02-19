@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import { GraphweaverLogo } from '../assets';
 import { StarField } from '../star-field';
 import styles from './styles.module.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 
 interface Props extends PropsWithChildren {
 	skipPath?: string;
