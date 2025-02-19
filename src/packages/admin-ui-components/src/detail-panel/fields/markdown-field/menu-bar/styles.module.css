@@ -1,0 +1,60 @@
+.buttonContainer {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	gap: 2px;
+	justify-content: space-between;
+	padding: 5px;
+	border-bottom: 1px solid var(--detail-border-color);
+	background: rgba(23, 18, 33, 0.05);
+	border-radius: 16px 16px 0 0;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+}
+
+.buttonContainer button {
+	min-width: 30px;
+	background: 0;
+	border: 0;
+	border-bottom: 1px solid transparent;
+}
+
+.buttonContainer button svg {
+	fill: rgb(176, 133, 256);
+}
+
+.buttonContainer button:hover {
+	border-bottom: 1px solid var(--secondary-color);
+}
+
+.buttonContainer button.isActive svg {
+	fill: var(--secondary-color);
+}
+
+.buttonContainer button:disabled svg {
+	fill: rgba(237, 232, 242, 0.2);
+}
+
+.verticalSeparator {
+	width: 2px;
+	margin-left: 2px;
+	border-left: 1px solid var(--detail-border-color);
+}
+
+.itemsContainer {
+	position: absolute;
+	border: 1px solid var(--detail-border-color);
+	border-top: 0;
+	padding-top: 5px;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+
+	background: rgba(23, 18, 33, 0.9);
+	border-radius: 0 0 6px 6px;
+	box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
