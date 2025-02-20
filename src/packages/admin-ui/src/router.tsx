@@ -23,7 +23,6 @@ export type RouteObject = {
 
 export const Router = () => {
 	const [routes, setRoutes] = useState<RouteObject[] | null>(null);
-	const basename = import.meta.env.VITE_ADMIN_UI_BASE || '/';
 
 	useEffect(() => {
 		(async () => {
@@ -35,7 +34,7 @@ export const Router = () => {
 
 	return (
 		<ErrorBoundary FallbackComponent={DefaultErrorFallback}>
-			<WouterRouter base={basename}>
+			<WouterRouter base={import.meta.env.VITE_ADMIN_UI_BASE}>
 				<Switch>
 					{/* render the custom routes allowing them to override our default routes */}
 					{routes.map((route) => (
