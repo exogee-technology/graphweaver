@@ -14,7 +14,7 @@ export const DashboardRow = ({
 	route: string;
 	end?: boolean;
 }) => {
-	const [isActive] = useRoute(end ? route : `${route}/*`);
+	const [isActive] = useRoute(end ? route : `${route}/*?`);
 
 	return (
 		<li>

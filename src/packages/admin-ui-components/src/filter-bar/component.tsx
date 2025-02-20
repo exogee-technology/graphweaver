@@ -13,21 +13,33 @@ import {
 	TextFilter,
 	validateFilter,
 } from '../filters';
-import { AdminUIFilterType, decodeSearchParams, Filter, routeFor, useSchema } from '../utils';
+import {
+	AdminUIFilterType,
+	decodeSearchParams,
+	encodeSearchParams,
+	Filter,
+	routeFor,
+	useSchema,
+} from '../utils';
 
-import { useDebounce } from '../hooks';
 import styles from './styles.module.css';
+import { useDebounce } from '../hooks';
 
 export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	const { entity: entityName, id } = useParams();
 	if (!entityName) throw new Error('There should always be an entity at this point.');
-	const [search] = useSearchParams();
+	const [search, setSearch] = useSearchParams();
 	const { entityByName } = useSchema();
 	const [, setLocation] = useLocation();
 	const searchParams = decodeSearchParams(search);
+	const [temporaryFilters, setTemporaryFilters] = useState(searchParams.filters ?? {});
 
-	const [filtersState, setFiltersState] = useState(searchParams.filters ?? {});
-	const debouncedFilters = useDebounce(filtersState, 800);
+	// We need to apply the temporary filters to the search params but only after a debounce.
+	useDebounce(
+		temporaryFilters,
+		(filters) => setSearch(encodeSearchParams({ ...searchParams, filters })),
+		800
+	);
 
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
@@ -45,7 +57,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 	useEffect(() => {
 		// On mount, check if the filters are supported by the entity
 		const fields = filterFieldsOnEntity();
-		const { filter, unsupportedKeys } = validateFilter(fields, debouncedFilters);
+		const { filter, unsupportedKeys } = validateFilter(fields, searchParams.filters);
 
 		if (unsupportedKeys.length) {
 			const isPlural = unsupportedKeys.length > 1;
@@ -76,29 +88,29 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				id,
 				// Note: We're explicitly excluding page here so that it resets when we navigate.
 				sort: searchParams.sort,
-				filters: debouncedFilters,
+				filters: filter,
 			})
 		);
-	}, [debouncedFilters]);
+	}, []);
 
 	// This function updates the filter in state based on the filter keys updated and the newFilter value
-	const onFilter = useCallback((fieldName: string, newFilter: Filter) => {
+	const onFilter = (fieldName: string, newFilter: Filter) => {
 		// Remove any filters from the currentFilter that start with the same fieldName
-		for (const key of Object.keys(filtersState ?? {})) {
-			if (key.startsWith(fieldName)) delete filtersState?.[key];
+		for (const key of Object.keys(temporaryFilters)) {
+			if (key.startsWith(fieldName)) delete temporaryFilters[key];
 		}
 
 		// Combine all filters into one object
 		const combinedNewFilter = {
-			...filtersState,
+			...temporaryFilters,
 			...newFilter,
 		};
 
-		setFiltersState(combinedNewFilter);
-	}, []);
+		setTemporaryFilters(combinedNewFilter);
+	};
 
 	const clearAllFilters = () => {
-		setFiltersState({});
+		setTemporaryFilters({});
 	};
 
 	const getFilterComponents = useCallback(() => {
@@ -110,7 +122,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 				fieldName: field.name,
 				entity: entityName,
 				onChange: onFilter,
-				filter: filtersState,
+				filter: temporaryFilters,
 			};
 
 			switch (field.filter.type) {
@@ -130,7 +142,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					return <DateRangeFilter key={field.name} {...options} />;
 			}
 		});
-	}, [entityName, filtersState]);
+	}, [entityName, temporaryFilters]);
 
 	const filterComponents = getFilterComponents();
 	if (filterComponents.length === 0) return null;

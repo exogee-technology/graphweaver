@@ -84,7 +84,14 @@ export const EntityList = <TData extends object>({ children }: { children: React
 	}
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
-		setLocation(`${row.original[fieldForDetailPanelNavigationId as keyof T]}`);
+		setLocation(
+			routeFor({
+				entity,
+				filters,
+				sort: sorting,
+				id: row.original[fieldForDetailPanelNavigationId as keyof T] as string,
+			})
+		);
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {

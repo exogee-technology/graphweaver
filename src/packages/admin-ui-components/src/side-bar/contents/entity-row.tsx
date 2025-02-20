@@ -8,7 +8,7 @@ import styles from '../styles.module.css';
 
 export const EntityRow = ({ entity }: { entity: Entity }) => {
 	const entityRoute = routeFor({ entity });
-	const [isActive] = useRoute(`${entityRoute}/*`);
+	const [isActive] = useRoute(`${entityRoute}/*?`);
 
 	return (
 		<li>
