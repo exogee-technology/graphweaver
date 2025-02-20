@@ -62,7 +62,7 @@ export const ResetPassword = () => {
 					{!!error && <Alert>{error.message}</Alert>}
 
 					<div className={styles.inputContainer}>
-						<PasswordComponent />
+						<PasswordComponent autofocus />
 						<ConfirmComponent />
 					</div>
 
