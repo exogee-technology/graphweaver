@@ -29,8 +29,8 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 			</div>
 
 			<div className={styles.toolsWrapper}>
-				<Link
-					to="/playground"
+				<a
+					href="/playground"
 					// If we are in an iframe then open in the same window otherwise open in a new tab
 					target={window === window.parent ? '_blank' : '_self'}
 					rel="noopener noreferrer"
@@ -40,7 +40,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 						Open Playground
 						<OpenExternalIcon />
 					</Button>
-				</Link>
+				</a>
 				{onExportToCSV && (
 					<Button className={styles.toolBarTrailingButton} onClick={onExportToCSV}>
 						Export to CSV

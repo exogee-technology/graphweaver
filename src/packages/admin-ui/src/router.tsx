@@ -67,16 +67,6 @@ export const Router = () => {
 						</DefaultLayout>
 					</Route>
 
-					<Route path="/:entity/:id?">
-						<DefaultLayout>
-							<List>
-								<Route path="/:entity/:id">
-									<DetailPanel />
-								</Route>
-							</List>
-						</DefaultLayout>
-					</Route>
-
 					<Route path="/loader">
 						<DefaultLayout>
 							<Loader />
@@ -85,6 +75,16 @@ export const Router = () => {
 
 					<Route path="/playground">
 						<Playground />
+					</Route>
+
+					<Route path="/:entity/:id?">
+						<DefaultLayout>
+							<List>
+								<Route path="/:entity/:id">
+									<DetailPanel />
+								</Route>
+							</List>
+						</DefaultLayout>
 					</Route>
 
 					<Route>
