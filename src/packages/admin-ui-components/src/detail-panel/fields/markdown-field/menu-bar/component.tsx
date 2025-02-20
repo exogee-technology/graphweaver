@@ -13,6 +13,7 @@ import { Props } from './utils';
 import { HeaderOptions } from './header-options';
 import { ListOptions } from './list-options';
 import { LinkButton } from './link-button';
+import { Button } from './button';
 import styles from './styles.module.css';
 
 export const MenuBar = (props: Props) => {
@@ -23,116 +24,70 @@ export const MenuBar = (props: Props) => {
 		return null;
 	}
 
-	const handleBoldClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleBold().run();
-	};
-
-	const handleItalicClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleItalic().run();
-	};
-
-	const handleStrikeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleStrike().run();
-	};
-
-	const handleCodeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleCode().run();
-	};
-
-	const handleCodeBlockClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().toggleCodeBlock().run();
-	};
-
-	const handleHorizontalRuleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().setHorizontalRule().run();
-	};
-
-	const handleUndoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().undo().run();
-	};
-
-	const handleRedoClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().redo().run();
-	};
-
 	return (
 		<div className={styles.buttonContainer}>
 			<HeaderOptions editor={editor} options={options} />
 			<ListOptions editor={editor} options={options} />
-			{!options.blockquote?.hide && (
-				<button
-					onClick={handleCodeBlockClick}
-					className={editor.isActive('codeBlock') ? styles.isActive : ''}
-				>
-					<EditorCodeBlockIcon />
-				</button>
-			)}
+			<Button
+				hide={options.codeBlock?.hide}
+				command={editor.chain().focus().toggleCodeBlock()}
+				activeWhen="codeBlock"
+				Icon={<EditorCodeBlockIcon />}
+				title="Code Block"
+			/>
 
 			<div className={styles.verticalSeparator}></div>
 
-			{!options.bold?.hide && (
-				<button
-					onClick={handleBoldClick}
-					className={editor.isActive('bold') ? styles.isActive : ''}
-				>
-					<EditorBoldIcon />
-				</button>
-			)}
-			{!options.italic?.hide && (
-				<button
-					onClick={handleItalicClick}
-					className={editor.isActive('italic') ? styles.isActive : ''}
-				>
-					<EditorItalicIcon />
-				</button>
-			)}
-			{!options.strike?.hide && (
-				<button
-					onClick={handleStrikeClick}
-					className={editor.isActive('strike') ? styles.isActive : ''}
-				>
-					<EditorStrikeIcon />
-				</button>
-			)}
+			<Button
+				hide={options.bold?.hide}
+				command={editor.chain().focus().toggleBold()}
+				activeWhen="bold"
+				Icon={<EditorBoldIcon />}
+				title="Bold"
+			/>
+			<Button
+				hide={options.italic?.hide}
+				command={editor.chain().focus().toggleItalic()}
+				activeWhen="italic"
+				Icon={<EditorItalicIcon />}
+				title="Italic"
+			/>
+			<Button
+				hide={options.strike?.hide}
+				command={editor.chain().focus().toggleStrike()}
+				activeWhen="strike"
+				Icon={<EditorStrikeIcon />}
+				title="Strike"
+			/>
 			<LinkButton editor={editor} options={options} />
-			{!options.code?.hide && (
-				<button
-					onClick={handleCodeClick}
-					className={editor.isActive('code') ? styles.isActive : ''}
-				>
-					<EditorCodeIcon />
-				</button>
-			)}
-			{!options.horizontalRule?.hide && (
-				<button onClick={handleHorizontalRuleClick}>
-					<EditorSeparatorIcon />
-				</button>
-			)}
+			<Button
+				hide={options.code?.hide}
+				command={editor.chain().focus().toggleCode()}
+				activeWhen="code"
+				Icon={<EditorCodeIcon />}
+				title="Code"
+			/>
+			<Button
+				hide={options.horizontalRule?.hide}
+				command={editor.chain().focus().setHorizontalRule()}
+				Icon={<EditorSeparatorIcon />}
+				title="Separator"
+			/>
 
 			<div className={styles.verticalSeparator}></div>
 
-			<button onClick={handleUndoClick} disabled={!editor.can().chain().focus().undo().run()}>
-				<EditorUndoIcon />
-			</button>
-			<button onClick={handleRedoClick} disabled={!editor.can().chain().focus().redo().run()}>
-				<EditorRedoIcon />
-			</button>
+			<Button
+				command={editor.chain().focus().undo()}
+				Icon={<EditorUndoIcon />}
+				disabled={!editor.can().chain().focus().undo().run()}
+				title="Undo"
+			/>
+			<Button
+				command={editor.chain().focus().redo()}
+				Icon={<EditorRedoIcon />}
+				disabled={!editor.can().chain().focus().redo().run()}
+				title="Redo"
+			/>
 		</div>
 	);
 };

@@ -4,6 +4,7 @@ import Link from '@tiptap/extension-link';
 import { useField } from 'formik';
 import { EntityField } from '../../../utils';
 import { MenuBar } from './menu-bar';
+import { Props as MenuBarProps } from './menu-bar/utils';
 import styles from './styles.module.css';
 
 export const extensions = [
@@ -29,7 +30,7 @@ export const extensions = [
 interface Props {
 	field: EntityField;
 	isReadOnly: boolean;
-	options: Record<string, unknown>;
+	options: MenuBarProps['options'];
 }
 
 export const MarkdownField = (props: Props) => {

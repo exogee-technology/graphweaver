@@ -43,12 +43,16 @@
 	border-left: 1px solid var(--detail-border-color);
 }
 
+.multiButtonContainer:hover .itemsContainer /*with mouse*/, .multiButtonContainer:active .itemsContainer /*touch screens*/ {
+	display: flex;
+}
+
 .itemsContainer {
+	display: none;
 	position: absolute;
 	border: 1px solid var(--detail-border-color);
 	border-top: 0;
 	padding-top: 5px;
-	display: flex;
 	flex-direction: column;
 	gap: 5px;
 	backdrop-filter: blur(10px);

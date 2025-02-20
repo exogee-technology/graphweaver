@@ -10,7 +10,10 @@ export const LinkButton = (props: SectionProps) => {
 		event.stopPropagation();
 
 		const previousUrl = editor.getAttributes('link').href;
-		const url = window.prompt('full URL, e.g. https://www.example.com', previousUrl);
+		const url = window.prompt(
+			'Please enter the full URL address, e.g. https://www.example.com or mailto:example@gmail.com or tel:+1234567890',
+			previousUrl
+		);
 
 		if (!url?.trim()) {
 			return;
@@ -21,7 +24,9 @@ export const LinkButton = (props: SectionProps) => {
 			editor.chain().focus().extendMarkRange('link').setLink({ href: parsedUrl.toString() }).run();
 		} catch (error) {
 			if (error instanceof Error) {
-				alert('Please enter a valid full URL, e.g. https://www.example.com');
+				alert(
+					'The URL entered is not valid, Please enter a valid full URL including the protocol, for example: https://www.example.com or mailto:example@gmail.com or tel:+1234567890'
+				);
 				console.error(error);
 			}
 		}
@@ -37,14 +42,18 @@ export const LinkButton = (props: SectionProps) => {
 
 	if (editor.isActive('link')) {
 		return (
-			<button onClick={handleUnsetLinkClick} className={styles.isActive}>
+			<button
+				onClick={handleUnsetLinkClick}
+				className={styles.isActive}
+				title={`unlink ${editor.getAttributes('link').href}`}
+			>
 				<EditorUnlinkIcon />
 			</button>
 		);
 	}
 
 	return (
-		<button onClick={handleSetLinkClick} disabled={editor.view.state.selection.empty}>
+		<button onClick={handleSetLinkClick} disabled={editor.view.state.selection.empty} title="link">
 			<EditorLinkIcon />
 		</button>
 	);

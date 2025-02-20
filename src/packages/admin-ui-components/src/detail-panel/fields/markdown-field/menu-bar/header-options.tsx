@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react';
 import {
 	EditorH1Icon,
 	EditorH2Icon,
@@ -11,110 +10,75 @@ import {
 } from '../../../../assets';
 import styles from './styles.module.css';
 import { SectionProps } from './utils';
+import { Button } from './button';
 
 export const HeaderOptions = (props: SectionProps) => {
 	const { editor, options } = props;
-	const [showItems, setShowItems] = useState(false);
 
-	const show = useMemo(() => {
-		return {
-			h1: !options.h1?.hide,
-			h2: !options.h2?.hide,
-			h3: !options.h3?.hide,
-			h4: !options.h4?.hide,
-			h5: !options.h5?.hide,
-			h6: !options.h6?.hide,
-		};
-	}, [options]);
-
-	const handleHeadingClick =
-		(level: 1 | 2 | 3 | 4 | 5 | 6) => (event: React.MouseEvent<HTMLButtonElement>) => {
-			event.preventDefault();
-			event.stopPropagation();
-			editor.chain().focus().toggleHeading({ level }).run();
-		};
-
-	const handleParagraphClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault();
-		event.stopPropagation();
-		editor.chain().focus().setParagraph().run();
+	const hCommand = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
+		return editor.chain().focus().toggleHeading({ level });
 	};
 
+	const hOptionButtons = ([1, 2, 3, 4, 5, 6] as const)
+		.map((level) => {
+			const hide = options[`h${level}`]?.hide;
+			if (hide) return null;
+
+			return (
+				<Button
+					key={level}
+					hide={hide}
+					command={hCommand(level)}
+					Icon={<EditorHNIcon level={level} />}
+					activeWhen="heading"
+					activeWhenAttributes={{ level }}
+					title={`Heading ${level}`}
+				/>
+			);
+		})
+		.filter(Boolean);
+
+	const pButton = (
+		<Button
+			key="p"
+			command={editor.chain().focus().setParagraph()}
+			Icon={<EditorPIcon />}
+			activeWhen="paragraph"
+			title="Paragraph"
+		/>
+	);
+
+	// The main button is either a generic H or a P button
+	const mainButton =
+		hOptionButtons.length > 0 ? (
+			<Button
+				command={hCommand(hOptionButtons[0]?.props.level)}
+				Icon={<EditorHIcon />}
+				activeWhen="heading"
+				title="Heading"
+			/>
+		) : (
+			pButton
+		); // Note that this is a button with a generic H icon and is active when any H is active
+
+	// If no H options to show then no option buttons needed, otherwise we show [P, H1-H6] buttons
+	const optionButtons = hOptionButtons[0] ? [pButton, ...hOptionButtons] : [];
+
 	return (
-		<div onMouseEnter={() => setShowItems(true)} onMouseLeave={() => setShowItems(false)}>
-			{show.h1 ? (
-				<button
-					onClick={handleHeadingClick(1)}
-					className={editor.isActive('heading') ? styles.isActive : ''}
-				>
-					<EditorHIcon />
-				</button>
-			) : (
-				<button
-					onClick={handleParagraphClick}
-					className={editor.isActive('paragraph') ? styles.isActive : ''}
-				>
-					<EditorPIcon />
-				</button>
-			)}
-			{showItems && (
-				<div className={styles.itemsContainer}>
-					<button
-						onClick={handleParagraphClick}
-						className={editor.isActive('paragraph') ? styles.isActive : ''}
-					>
-						<EditorPIcon />
-					</button>
-					{show.h1 && (
-						<button
-							onClick={handleHeadingClick(1)}
-							className={editor.isActive('heading', { level: 1 }) ? styles.isActive : ''}
-						>
-							<EditorH1Icon />
-						</button>
-					)}
-					{show.h2 && (
-						<button
-							onClick={handleHeadingClick(2)}
-							className={editor.isActive('heading', { level: 2 }) ? styles.isActive : ''}
-						>
-							<EditorH2Icon />
-						</button>
-					)}
-					{show.h3 && (
-						<button
-							onClick={handleHeadingClick(3)}
-							className={editor.isActive('heading', { level: 3 }) ? styles.isActive : ''}
-						>
-							<EditorH3Icon />
-						</button>
-					)}
-					{show.h4 && (
-						<button
-							onClick={handleHeadingClick(4)}
-							className={editor.isActive('heading', { level: 4 }) ? styles.isActive : ''}
-						>
-							<EditorH4Icon />
-						</button>
-					)}
-					{show.h5 && (
-						<button
-							onClick={handleHeadingClick(5)}
-							className={editor.isActive('heading', { level: 5 }) ? styles.isActive : ''}
-						>
-							<EditorH5Icon />
-						</button>
-					)}
-					{show.h6 && (
-						<button
-							onClick={handleHeadingClick(6)}
-							className={editor.isActive('heading', { level: 6 }) ? styles.isActive : ''}
-						>
-							<EditorH6Icon />
-						</button>
-					)}
-				</div>
-			)}
+		<div className={styles.multiButtonContainer}>
+			{mainButton}
+			{optionButtons.length > 0 && <div className={styles.itemsContainer}>{optionButtons}</div>}
 		</div>
 	);
+};
+
+const EditorHNIcon = ({ level }: { level: 1 | 2 | 3 | 4 | 5 | 6 }) => {
+	return {
+		1: <EditorH1Icon />,
+		2: <EditorH2Icon />,
+		3: <EditorH3Icon />,
+		4: <EditorH4Icon />,
+		5: <EditorH5Icon />,
+		6: <EditorH6Icon />,
+	}[level];
 };

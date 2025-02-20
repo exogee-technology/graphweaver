@@ -1,4 +1,4 @@
-import { Editor } from '@tiptap/react';
+import { ChainedCommands, Editor } from '@tiptap/react';
 
 export interface Props {
 	options: {
@@ -26,3 +26,10 @@ export interface SectionProps {
 	editor: Editor;
 	options: Props['options'];
 }
+
+export const editorClickHandler =
+	(command: ChainedCommands) => (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault();
+		event.stopPropagation();
+		command.run();
+	};
