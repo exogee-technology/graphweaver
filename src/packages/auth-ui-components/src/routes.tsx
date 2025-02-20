@@ -1,4 +1,3 @@
-import { Route } from 'wouter';
 import {
 	Auth0,
 	ForgottenPassword,
