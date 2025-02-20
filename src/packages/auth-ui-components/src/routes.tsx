@@ -37,17 +37,21 @@ export const loadRoutes = () => {
 
 	for (const method of primaryMethods) {
 		const formattedMethodName = method.toLowerCase().replace('_', '-') + '-';
-		const path = `${primaryMethods.length > 1 ? formattedMethodName : ''}login`;
+		const path = `auth/${primaryMethods.length > 1 ? formattedMethodName : ''}login`;
 		routes.push({
 			path,
-			element: mapComponent(method),
+			element: <Auth>{mapComponent(method)}</Auth>,
 		});
 	}
 
 	if (secondaryMethods) {
 		routes.push({
-			path: 'challenge',
-			element: <Challenge />,
+			path: 'auth/challenge',
+			element: (
+				<Auth>
+					<Challenge />
+				</Auth>
+			),
 		});
 	}
 
@@ -55,30 +59,25 @@ export const loadRoutes = () => {
 
 	if (hasPassword && password?.enableForgottenPassword) {
 		routes.push({
-			path: 'forgot-password',
-			element: <ForgottenPassword />,
+			path: 'auth/forgot-password',
+			element: (
+				<Auth>
+					<ForgottenPassword />
+				</Auth>
+			),
 		});
 	}
 
 	if (hasPassword && password?.enableResetPassword) {
 		routes.push({
-			path: 'reset-password',
-			element: <ResetPassword />,
+			path: 'auth/reset-password',
+			element: (
+				<Auth>
+					<ResetPassword />
+				</Auth>
+			),
 		});
 	}
 
-	return [
-		{
-			path: '/auth',
-			element: (
-				<Auth>
-					{routes.map((route) => (
-						<Route key={route.path} path={route.path}>
-							{route.element}
-						</Route>
-					))}
-				</Auth>
-			),
-		},
-	];
+	return routes;
 };
