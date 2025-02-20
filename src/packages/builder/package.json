@@ -22,7 +22,7 @@
 		"@graphql-codegen/add": "5.0.3",
 		"@graphql-codegen/cli": "5.0.3",
 		"@graphql-codegen/near-operation-file-preset": "3.0.0",
-		"@graphql-codegen/typescript": "4.1.3",
+		"@graphql-codegen/typescript": "4.1.4",
 		"@graphql-codegen/typescript-operations": "4.4.0",
 		"@graphql-codegen/typescript-react-apollo": "4.3.2",
 		"@serverless/utils": "6.15.0",
@@ -31,7 +31,7 @@
 		"dotenv": "16.4.7",
 		"esbuild": "0.25.0",
 		"esbuild-css-modules-plugin": "3.1.4",
-		"glob": "10.4.3",
+		"glob": "11.0.1",
 		"graphql": "16.10.0",
 		"graphql-tag": "2.12.6",
 		"hash-wasm": "4.12.0",
@@ -40,7 +40,7 @@
 		"rimraf": "5.0.8",
 		"rollup-plugin-visualizer": "5.13.1",
 		"serverless-offline": "14.4.0",
-		"vite": "6.0.11",
+		"vite": "6.1.0",
 		"vite-plugin-graphweaver": "workspace:*"
 	},
 	"devDependencies": {

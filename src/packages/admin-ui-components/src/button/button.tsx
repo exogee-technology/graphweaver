@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useEffect, useRef, PropsWithChildren } from 'react';
 import { Spinner, SpinnerSize } from '../spinner';
 import styles from './styles.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 export interface ButtonProps {
 	onClick?(): any /** Event emitted when clicked */;
@@ -25,7 +25,7 @@ export const Button = ({
 	loading = false,
 }: PropsWithChildren<ButtonProps>) => {
 	const buttonRef = useRef<HTMLButtonElement>(null);
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	if (onClick && href) {
 		console.warn(
@@ -60,7 +60,7 @@ export const Button = ({
 		<button
 			ref={buttonRef}
 			onClick={() => {
-				if (href) navigate(href);
+				if (href) setLocation(href);
 				else onClick?.();
 			}}
 			className={clsx([className, styles.button, disabled && styles.disabled])}

@@ -43,7 +43,7 @@
 		"@opentelemetry/instrumentation": "0.57.1",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.25.0",
-		"glob": "10.4.3",
+		"glob": "11.0.1",
 		"typescript": "5.7.2",
 		"vitest": "2.1.9"
 	},

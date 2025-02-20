@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'wouter';
 
 import { useSchema } from '../utils';
 import { ToolBar } from '../toolbar';

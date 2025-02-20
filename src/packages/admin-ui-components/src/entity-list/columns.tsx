@@ -1,7 +1,7 @@
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
-import { Link } from 'react-router-dom';
 import { generateText, generateJSON } from '@tiptap/react';
+import { Link } from 'wouter';
 import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '../utils';
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';

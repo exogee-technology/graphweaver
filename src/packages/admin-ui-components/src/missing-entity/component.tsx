@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 import { DataSourcesIcon } from '../assets/64-data-sources';
 import styles from './styles.module.css';
 import { Spacer } from '../spacer';

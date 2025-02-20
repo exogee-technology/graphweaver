@@ -1,13 +1,13 @@
 import { useState } from 'react';
-import { Link, useRouteError } from 'react-router-dom';
+import { Link } from 'wouter';
+import type { FallbackProps } from 'react-error-boundary';
 import { Button, GraphweaverLogo, Spacer, StarField } from '..';
 import { ErrorIcon } from '../assets';
 import styles from './styles.module.css';
 
 const originalButtonText = 'Copy Error Information to Clipboard';
 
-export const DefaultErrorFallback = () => {
-	const error = useRouteError();
+export const DefaultErrorFallback = ({ error }: FallbackProps) => {
 	const [showingCopied, setShowingCopied] = useState(false);
 
 	// Ensure we log the error to the console so the developer can see it.

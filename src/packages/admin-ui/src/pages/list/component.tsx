@@ -1,7 +1,7 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'wouter';
 import { useSchema, EntityList, MissingEntity } from '@exogee/graphweaver-admin-ui-components';
 
-export const List = () => {
+export const List = ({ children }: { children: React.ReactNode }) => {
 	const { entity } = useParams();
 	const { entityByName } = useSchema();
 
@@ -11,5 +11,5 @@ export const List = () => {
 		return <MissingEntity entity={entity} />;
 	}
 
-	return <EntityList />;
+	return <EntityList>{children}</EntityList>;
 };

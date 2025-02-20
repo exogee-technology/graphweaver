@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Button, localStorageAuthKey } from '@exogee/graphweaver-admin-ui-components';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 import { publicClientApplication } from '../client';
 
 const scopes = import.meta.env.VITE_MICROSOFT_ENTRA_SCOPES
@@ -10,7 +10,7 @@ const scopes = import.meta.env.VITE_MICROSOFT_ENTRA_SCOPES
 export const MicrosoftEntra = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | undefined>();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	useEffect(() => {
 		(async () => {
@@ -24,7 +24,7 @@ export const MicrosoftEntra = () => {
 					localStorage.setItem(localStorageAuthKey, tokenResponse.accessToken);
 
 					// Then off we go.
-					navigate('/');
+					setLocation('/');
 				} else {
 					// They're either just landing on the page or they're coming back from a failed login
 					await requestLogin();

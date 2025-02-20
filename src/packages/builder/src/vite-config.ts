@@ -85,7 +85,6 @@ export const viteConfig = async ({
 				'react-dom/client',
 				'react-fast-compare',
 				'react-is',
-				'react-router-dom',
 				'rehackt',
 				'set-value',
 				'@tiptap/extension-link',
