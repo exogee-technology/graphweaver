@@ -14,7 +14,7 @@ export const WelcomePage = () => {
 	//
 	// It's better for UX if we redirect to the login page instead.
 	if (!localStorage.getItem(localStorageAuthKey)) {
-		return <Redirect to={`/auth/login?redirect_uri=${encodeURIComponent('/welcome')}`} />;
+		return <Redirect to={`/auth/login?redirect_uri=${encodeURI(window.location.href)}`} />;
 	}
 
 	return (
