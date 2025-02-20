@@ -32,7 +32,7 @@ import {
 	MediaField,
 	TextField,
 	DateField,
-	MarkdownField,
+	RichTextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
@@ -127,9 +127,9 @@ const getField = ({
 		);
 	}
 
-	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN) {
+	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
 		return (
-			<MarkdownField
+			<RichTextField
 				key={field.name}
 				field={field}
 				isReadOnly={!!isReadonly}

@@ -46,7 +46,7 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 		return value.join(', ');
 	}
 
-	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN) {
+	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
 		if (!value) return null;
 		try {
 			const json = generateJSON(value, extensions);

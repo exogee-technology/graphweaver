@@ -35,10 +35,10 @@ export class User {
 
 	@Field(() => String, {
 		nullable: true,
-		description: 'Formatted text using markdown',
+		description: 'Formatted text using rich text (saved as HTML)',
 		adminUIOptions: {
 			detailPanelInputComponent: {
-				name: DetailPanelInputComponentOption.MARKDOWN,
+				name: DetailPanelInputComponentOption.RICH_TEXT,
 				options: {
 					h5: { hide: true },
 					h6: { hide: true },

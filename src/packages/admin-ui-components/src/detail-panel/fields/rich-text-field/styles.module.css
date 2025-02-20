@@ -1,0 +1,124 @@
+.richText {
+	border: 1px solid var(--detail-border-color);
+	border-radius: 5px;
+	overflow: unset; /* so the button container can be sticky */
+}
+
+.richText :global .tiptap {
+	min-height: 300px;
+	padding: 10px;
+}
+
+/* Revert the reset of rules within the richText field so things like lists have bullet points and correct format */
+.richText :global .tiptap div,
+.richText :global .tiptap span,
+.richText :global .tiptap object,
+.richText :global .tiptap iframe,
+.richText :global .tiptap h1,
+.richText :global .tiptap h2,
+.richText :global .tiptap h3,
+.richText :global .tiptap h4,
+.richText :global .tiptap h5,
+.richText :global .tiptap h6,
+.richText :global .tiptap p,
+.richText :global .tiptap blockquote,
+.richText :global .tiptap pre,
+.richText :global .tiptap abbr,
+.richText :global .tiptap address,
+.richText :global .tiptap cite,
+.richText :global .tiptap code,
+.richText :global .tiptap del,
+.richText :global .tiptap dfn,
+.richText :global .tiptap em,
+.richText :global .tiptap img,
+.richText :global .tiptap ins,
+.richText :global .tiptap kbd,
+.richText :global .tiptap q,
+.richText :global .tiptap samp,
+.richText :global .tiptap small,
+.richText :global .tiptap strong,
+.richText :global .tiptap sub,
+.richText :global .tiptap sup,
+.richText :global .tiptap var,
+.richText :global .tiptap b,
+.richText :global .tiptap i,
+.richText :global .tiptap dl,
+.richText :global .tiptap dt,
+.richText :global .tiptap dd,
+.richText :global .tiptap ol,
+.richText :global .tiptap ul,
+.richText :global .tiptap li,
+.richText :global .tiptap fieldset,
+.richText :global .tiptap form,
+.richText :global .tiptap label,
+.richText :global .tiptap legend,
+.richText :global .tiptap table,
+.richText :global .tiptap caption,
+.richText :global .tiptap tbody,
+.richText :global .tiptap tfoot,
+.richText :global .tiptap thead,
+.richText :global .tiptap tr,
+.richText :global .tiptap th,
+.richText :global .tiptap td,
+.richText :global .tiptap article,
+.richText :global .tiptap aside,
+.richText :global .tiptap figure,
+.richText :global .tiptap footer,
+.richText :global .tiptap header,
+.richText :global .tiptap menu,
+.richText :global .tiptap nav,
+.richText :global .tiptap section,
+.richText :global .tiptap time,
+.richText :global .tiptap mark,
+.richText :global .tiptap audio,
+.richText :global .tiptap video,
+.richText :global .tiptap details,
+.richText :global .tiptap summary {
+	margin: revert;
+	padding: revert;
+	border: revert;
+	font-size: revert;
+	font-weight: revert;
+	vertical-align: revert;
+	display: revert;
+	list-style: revert;
+}
+
+.richText :global .tiptap blockquote,
+.richText :global .tiptap q {
+	quotes: revert;
+}
+
+.richText :global .tiptap blockquote:before,
+.richText :global .tiptap blockquote:after,
+.richText :global .tiptap q:before,
+.richText :global .tiptap q:after {
+	content: revert;
+}
+
+.richText :global .tiptap a {
+	margin: revert;
+	padding: revert;
+	font-size: revert;
+	vertical-align: revert;
+	background: revert;
+	text-decoration: revert;
+	font-weight: revert;
+}
+
+.richText :global .tiptap del {
+	text-decoration: revert;
+}
+
+.richText :global .tiptap abbr[title],
+.richText :global .tiptap dfn[title] {
+	border-bottom: revert;
+	cursor: revert;
+}
+
+.richText :global .tiptap pre {
+	white-space: revert;
+	white-space: revert;
+	white-space: revert;
+	word-wrap: revert;
+}

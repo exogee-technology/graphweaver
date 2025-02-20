@@ -6,4 +6,4 @@ export * from './link-field';
 export * from './relationship-field';
 export * from './media-field';
 export * from './text-field';
-export * from './markdown-field/index';
+export * from './rich-text-field/index';

@@ -33,13 +33,13 @@ interface Props {
 	options: MenuBarProps['options'];
 }
 
-export const MarkdownField = (props: Props) => {
+export const RichTextField = (props: Props) => {
 	const { field, isReadOnly, options } = props;
 	const [formikField, _, { setValue }] = useField<string>({ name: field.name });
 	const content = formikField.value;
 
 	return (
-		<div className={styles.markdown}>
+		<div className={styles.richText}>
 			<EditorProvider
 				extensions={extensions}
 				content={content}
