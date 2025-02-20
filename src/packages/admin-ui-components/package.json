@@ -57,7 +57,7 @@
 		"esbuild": "0.25.0",
 		"esbuild-plugin-copy": "2.1.1",
 		"formik": "2.4.6",
-		"glob": "10.4.3",
+		"glob": "11.0.1",
 		"graphql": "16.10.0",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",

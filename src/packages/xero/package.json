@@ -34,7 +34,7 @@
 	"devDependencies": {
 		"@types/node": "22.10.1",
 		"esbuild": "0.25.0",
-		"glob": "10.4.3",
+		"glob": "11.0.1",
 		"graphql": "16.10.0",
 		"prettier": "3.4.2",
 		"react": "19.0.0",
