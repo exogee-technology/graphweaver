@@ -38,12 +38,12 @@ export const Router = () => {
 				<Switch>
 					{/* render the custom routes allowing them to override our default routes */}
 					{routes.map((route) => (
-						<Route key={route.path} path={route.path}>
+						<Route key={route.path} path={route.path} nest>
 							{route.element}
 
 							{/* recurse into the children routes */}
 							{route.children?.map((child) => (
-								<Route key={child.path} path={child.path}>
+								<Route key={child.path} path={child.path} nest>
 									{child.element}
 								</Route>
 							))}
