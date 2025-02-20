@@ -1,15 +1,18 @@
-import { Field } from 'formik';
+import { Field, FieldAttributes } from 'formik';
 
 import styles from './styles.module.css';
 
-export const PasswordFieldComponent = () => {
+export const PasswordFieldComponent = (props: FieldAttributes<any>) => {
 	return (
 		<Field
-			type="password"
+			// These can be overridden
+			className={styles.textInputField}
 			placeholder="Password"
+			{...props}
+			// But we really want these to not be overridden
+			type="password"
 			id="password"
 			name="password"
-			className={styles.textInputField}
 		/>
 	);
 };
@@ -26,13 +29,13 @@ export const ConfirmFieldComponent = () => {
 	);
 };
 
-export const PasswordComponent = () => {
+export const PasswordComponent = (props: FieldAttributes<any>) => {
 	return (
 		<>
 			<label htmlFor="password" className={styles.fieldLabel}>
 				password
 			</label>
-			<PasswordFieldComponent />
+			<PasswordFieldComponent {...props} />
 		</>
 	);
 };

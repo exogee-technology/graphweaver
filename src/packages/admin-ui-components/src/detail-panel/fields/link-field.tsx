@@ -1,10 +1,10 @@
 import { useField, useFormikContext } from 'formik';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'wouter';
 import { EntityField, routeFor } from '../../utils';
 
 export const LinkField = ({ name, field }: { name: string; field: EntityField }) => {
 	const { dirty } = useFormikContext();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 	const [_, meta] = useField({ name: name, multiple: false });
 	const { initialValue: formEntity } = meta;
 	const [__, setSearchParams] = useSearchParams();
@@ -20,7 +20,7 @@ export const LinkField = ({ name, field }: { name: string; field: EntityField })
 			searchParams.set('modalRedirectUrl', route);
 			setSearchParams(searchParams);
 		} else {
-			navigate(route);
+			setLocation(route);
 		}
 	};
 

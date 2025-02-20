@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams } from 'wouter';
 import { useSchema } from './use-schema';
 
 export const useSelectedEntity = () => {

@@ -55,6 +55,7 @@ export const ForgottenPassword = () => {
 						placeholder="Username"
 						id="username"
 						name="username"
+						autofocus
 						className={styles.textInputField}
 					/>
 

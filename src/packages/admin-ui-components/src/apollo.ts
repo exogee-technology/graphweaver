@@ -37,9 +37,16 @@ const authLink = new ApolloLink((operation, forward) => {
 
 	return forward(operation).map((response) => {
 		const context = operation.getContext();
-		//  If the server sends back a header called `X-Auth-Redirect` on any response, we need to redirect the user to that URL.
+		// If the server sends back a header called `X-Auth-Redirect` on any response, we need to redirect the user to that URL
+		// unless we're already there.
 		const redirectHeader = context.response.headers.get('X-Auth-Redirect');
-		if (redirectHeader) window.location.href = redirectHeader;
+		if (redirectHeader && redirectHeader !== window.location.href) {
+			window.location.href = redirectHeader;
+		} else if (redirectHeader && redirectHeader === window.location.href) {
+			console.warn(
+				"Received redirect header from server but we're already at the redirect URL, no need to redirect."
+			);
+		}
 
 		// If the server sends back a header called `Authorization` on any response, we need to
 		// update our `graphweaver-auth` local storage value with what we got from the server.

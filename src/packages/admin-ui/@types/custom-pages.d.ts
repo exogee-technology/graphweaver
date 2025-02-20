@@ -1,5 +1,5 @@
 declare module 'virtual:graphweaver-user-supplied-custom-pages' {
-	import { RouteObject } from 'react-router-dom';
+	import { RouteObject } from '@exogee/graphweaver-admin-ui';
 	import type { LoginProps } from '@exogee/graphweaver-admin-ui-components';
 
 	export interface NavLinkExport {

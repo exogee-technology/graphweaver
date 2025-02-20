@@ -1,6 +1,6 @@
 import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'wouter';
 import { gql } from '@apollo/client';
 import { Loader } from '@exogee/graphweaver-admin-ui-components';
 
@@ -26,7 +26,7 @@ export const singleCompanyQuery = gql`
 `;
 
 export const SingleCompany = () => {
-	const { tenantId } = useParams();
+	const { tenantId } = useParams<{ tenantId: string }>();
 
 	const { data, loading, error } = useSingleCompanyProfitAndLossRowsQuery({
 		variables: { tenantId },

@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'wouter';
 import { useMutation } from '@apollo/client';
 import {
 	GraphweaverLogo,
@@ -25,7 +25,7 @@ export const OTPChallenge = () => {
 	const [error, setError] = useState<Error | undefined>();
 	const [sent, setSent] = useState<boolean>(false);
 	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
@@ -59,7 +59,7 @@ export const OTPChallenge = () => {
 				if (!authToken) throw new Error('Missing auth token');
 
 				localStorage.setItem(localStorageAuthKey, authToken);
-				navigate(formatRedirectUrl(redirectUri), {
+				setLocation(formatRedirectUrl(redirectUri), {
 					replace: true,
 				});
 			} catch (error) {
@@ -67,7 +67,7 @@ export const OTPChallenge = () => {
 				setError(error instanceof Error ? error : new Error(String(error)));
 			}
 		},
-		[verifyOTP, navigate]
+		[verifyOTP, setLocation]
 	);
 
 	return (

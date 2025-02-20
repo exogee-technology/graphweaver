@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { createBrowserRouter, Navigate, RouteObject, RouterProvider } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary';
+import { Router as WouterRouter, Route, Switch, Redirect } from 'wouter';
 import {
 	Loader,
 	DefaultLayout,
@@ -14,61 +15,83 @@ import { loadRoutes as loadAuthRoutes } from 'virtual:graphweaver-auth-ui-compon
 
 import { List, Root, Playground, TraceDetail } from './pages';
 
-const defaultRoutes: RouteObject[] = [
-	{
-		element: <DefaultLayout />,
-		errorElement: <DefaultErrorFallback />,
-		children: [
-			{
-				path: '/',
-				element: customPages.defaultRoute ? <Navigate to={customPages.defaultRoute} /> : <Root />,
-			},
-			{
-				path: 'Trace/:id',
-				element: <TraceDetail />,
-			},
-			{
-				path: ':entity',
-				element: <List />,
-				children: [
-					{
-						path: ':id',
-						element: <DetailPanel />,
-					},
-				],
-			},
-			{
-				path: 'loader',
-				element: <Loader />,
-			},
-		],
-	},
-	{
-		path: '/playground',
-		element: <Playground />,
-	},
-	{
-		path: '*',
-		element: <Page404 />,
-	},
-];
+export type RouteObject = {
+	path: string;
+	element: React.ReactNode;
+	children?: RouteObject[];
+};
 
 export const Router = () => {
-	const [router, setRouter] = useState<ReturnType<typeof createBrowserRouter> | null>(null);
+	const [routes, setRoutes] = useState<RouteObject[] | null>(null);
 
 	useEffect(() => {
 		(async () => {
-			// We need to blend their custom routes in at the top so they can override us if they want.
-			const routes = await customPages.routes();
-			setRouter(
-				createBrowserRouter([...routes, ...loadAuthRoutes(), ...defaultRoutes], {
-					basename: import.meta.env.VITE_ADMIN_UI_BASE || '/',
-				})
-			);
+			setRoutes([...(await customPages.routes()), ...loadAuthRoutes()]);
 		})();
 	}, []);
 
-	if (!router) return <Loader />;
+	if (!routes) return <Loader />;
 
-	return <RouterProvider router={router} />;
+	return (
+		<ErrorBoundary FallbackComponent={DefaultErrorFallback}>
+			<WouterRouter base={import.meta.env.VITE_ADMIN_UI_BASE}>
+				<Switch>
+					{/* render the custom routes allowing them to override our default routes */}
+					{routes.map((route) => (
+						<Route key={route.path} path={route.path} nest={(route.children?.length ?? 0) > 0}>
+							{route.element}
+
+							{/* recurse into the children routes */}
+							{route.children?.map((child) => (
+								<Route key={child.path} path={child.path} nest={(child.children?.length ?? 0) > 0}>
+									{child.element}
+								</Route>
+							))}
+						</Route>
+					))}
+
+					{/* render the default routes */}
+					<Route path="/">
+						<DefaultLayout>
+							{customPages.defaultRoute && customPages.defaultRoute !== '/' ? (
+								<Redirect to={customPages.defaultRoute} />
+							) : (
+								<Root />
+							)}
+						</DefaultLayout>
+					</Route>
+
+					<Route path="/trace/:id">
+						<DefaultLayout>
+							<TraceDetail />
+						</DefaultLayout>
+					</Route>
+
+					<Route path="/loader">
+						<DefaultLayout>
+							<Loader />
+						</DefaultLayout>
+					</Route>
+
+					<Route path="/playground">
+						<Playground />
+					</Route>
+
+					<Route path="/:entity/:id?">
+						<DefaultLayout>
+							<List>
+								<Route path="/:entity/:id">
+									<DetailPanel />
+								</Route>
+							</List>
+						</DefaultLayout>
+					</Route>
+
+					<Route>
+						<Page404 />
+					</Route>
+				</Switch>
+			</WouterRouter>
+		</ErrorBoundary>
+	);
 };

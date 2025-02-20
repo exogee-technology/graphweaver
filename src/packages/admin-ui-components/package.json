@@ -36,16 +36,17 @@
 		"luxon": "3.5.0",
 		"papaparse": "5.5.2",
 		"react-day-picker": "9.4.1",
+		"react-error-boundary": "5.0.0",
 		"react-hot-toast": "2.4.1",
 		"react-resizable-panels": "2.1.7",
-		"react-syntax-highlighter": "15.6.1"
+		"react-syntax-highlighter": "15.6.1",
+		"wouter": "3.6.0"
 	},
 	"peerDependencies": {
 		"formik": "^2.4.6",
 		"graphql": "16",
 		"react": "^18.0.0 || ^19.0.0",
-		"react-dom": "^18.0.0 || ^19.0.0",
-		"react-router-dom": "^6.26.2"
+		"react-dom": "^18.0.0 || ^19.0.0"
 	},
 	"devDependencies": {
 		"@types/graphql-deduplicator": "2.0.2",
@@ -60,7 +61,6 @@
 		"graphql": "16.10.0",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
-		"react-router-dom": "6.28.0",
 		"typescript": "5.7.2",
 		"vite": "6.1.0"
 	},

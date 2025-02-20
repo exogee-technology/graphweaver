@@ -31,46 +31,52 @@ export const loadRoutes = () => {
 	const config = import.meta.env.VITE_GRAPHWEAVER_CONFIG;
 	if (!config.auth) return [];
 
-	const routes = new Set();
+	const routes: { path: string; element: React.ReactNode }[] = [];
 	const { primaryMethods, secondaryMethods, password } = config.auth;
 
 	for (const method of primaryMethods) {
 		const formattedMethodName = method.toLowerCase().replace('_', '-') + '-';
-		const path = `${primaryMethods.length > 1 ? formattedMethodName : ''}login`;
-		routes.add({
+		const path = `auth/${primaryMethods.length > 1 ? formattedMethodName : ''}login`;
+		routes.push({
 			path,
-			element: mapComponent(method),
+			element: <Auth>{mapComponent(method)}</Auth>,
 		});
 	}
 
 	if (secondaryMethods) {
-		routes.add({
-			path: 'challenge',
-			element: <Challenge />,
+		routes.push({
+			path: 'auth/challenge',
+			element: (
+				<Auth>
+					<Challenge />
+				</Auth>
+			),
 		});
 	}
 
 	const hasPassword = primaryMethods.includes(PrimaryAuthMethod.PASSWORD);
 
 	if (hasPassword && password?.enableForgottenPassword) {
-		routes.add({
-			path: 'forgot-password',
-			element: <ForgottenPassword />,
+		routes.push({
+			path: 'auth/forgot-password',
+			element: (
+				<Auth>
+					<ForgottenPassword />
+				</Auth>
+			),
 		});
 	}
 
 	if (hasPassword && password?.enableResetPassword) {
-		routes.add({
-			path: 'reset-password',
-			element: <ResetPassword />,
+		routes.push({
+			path: 'auth/reset-password',
+			element: (
+				<Auth>
+					<ResetPassword />
+				</Auth>
+			),
 		});
 	}
 
-	return [
-		{
-			path: '/auth',
-			element: <Auth />,
-			children: Array.from(routes),
-		},
-	];
+	return routes;
 };
