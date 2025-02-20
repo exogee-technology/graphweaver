@@ -41,6 +41,11 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		800
 	);
 
+	useEffect(() => {
+		// Reset the filters to whatever is in the URL because the entity has changed.
+		setTemporaryFilters(searchParams.filters ?? {});
+	}, [entityName]);
+
 	const filterFieldsOnEntity = useCallback(() => {
 		const entity = entityByName(entityName);
 		// @todo - currently the filters are not fitting on the screen
