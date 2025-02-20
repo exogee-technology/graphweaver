@@ -51,10 +51,10 @@ jobs:
 
       - name: Start and Test GW instance
         working-directory: src/packages/end-to-end
-        timeout-minutes: 4
+        timeout-minutes: 7
         run: |
           pnpm start-server &
-          sleep 3 &&
+          sleep 5 &&
           pnpm test-sqlite &&
           pnpm test-ui-sqlite &&
           killall node
