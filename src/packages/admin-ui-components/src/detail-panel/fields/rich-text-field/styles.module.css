@@ -122,3 +122,13 @@
 	white-space: revert;
 	word-wrap: revert;
 }
+
+/* We want the focus rectangle to appear all the way around the editor and toolbar,
+   so hide the outline on the text box and add a border to the richText container. */
+.richText:focus-within {
+	border: 1px solid var(--body-copy-color);
+}
+
+.editor:focus {
+	outline: none;
+}

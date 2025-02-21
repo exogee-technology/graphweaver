@@ -48,6 +48,14 @@ export const RichTextField = (props: Props) => {
 					setValue(props.editor.getHTML());
 				}}
 				editable={!isReadOnly}
+				editorContainerProps={{
+					className: styles.editorContainer,
+				}}
+				editorProps={{
+					attributes: {
+						class: styles.editor,
+					},
+				}}
 			/>
 		</div>
 	);
