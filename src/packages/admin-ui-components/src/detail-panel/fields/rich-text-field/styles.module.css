@@ -129,6 +129,10 @@
 	border: 1px solid var(--body-copy-color);
 }
 
+.editor {
+	overflow-y: hidden;
+}
+
 .editor:focus {
 	outline: none;
 }

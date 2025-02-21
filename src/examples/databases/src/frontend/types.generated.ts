@@ -130,6 +130,7 @@ export type DetailPanelInputComponent = {
 };
 
 export enum DetailPanelInputComponentOption {
+  Markdown = 'MARKDOWN',
   RichText = 'RICH_TEXT',
   Text = 'TEXT'
 }
@@ -298,7 +299,6 @@ export type Task = {
   dueAt?: Maybe<Scalars['Date']['output']>;
   id: Scalars['ID']['output'];
   isCompleted: Scalars['Boolean']['output'];
-  meta?: Maybe<Scalars['JSON']['output']>;
   updatedAt: Scalars['ISOString']['output'];
   user: User;
   user_aggregate?: Maybe<AggregationResult>;
@@ -321,7 +321,6 @@ export type TaskCreateOrUpdateInput = {
   dueAt?: InputMaybe<Scalars['Date']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
-  meta?: InputMaybe<Scalars['JSON']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
@@ -332,7 +331,6 @@ export type TaskInsertInput = {
   description: Scalars['String']['input'];
   dueAt?: InputMaybe<Scalars['Date']['input']>;
   isCompleted: Scalars['Boolean']['input'];
-  meta?: InputMaybe<Scalars['JSON']['input']>;
   updatedAt: Scalars['ISOString']['input'];
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
@@ -344,7 +342,6 @@ export type TaskUpdateInput = {
   dueAt?: InputMaybe<Scalars['Date']['input']>;
   id: Scalars['ID']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
-  meta?: InputMaybe<Scalars['JSON']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   user?: InputMaybe<UserCreateOrUpdateInput>;
 };
@@ -400,12 +397,6 @@ export type TasksListFilter = {
   isCompleted_nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
   isCompleted_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   isCompleted_null?: InputMaybe<Scalars['Boolean']['input']>;
-  meta?: InputMaybe<Scalars['JSON']['input']>;
-  meta_in?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  meta_ne?: InputMaybe<Scalars['JSON']['input']>;
-  meta_nin?: InputMaybe<Array<Scalars['JSON']['input']>>;
-  meta_notnull?: InputMaybe<Scalars['Boolean']['input']>;
-  meta_null?: InputMaybe<Scalars['Boolean']['input']>;
   updatedAt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
   updatedAt_gte?: InputMaybe<Scalars['ISOString']['input']>;
@@ -425,7 +416,6 @@ export type TasksOrderByInput = {
   dueAt?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   isCompleted?: InputMaybe<Sort>;
-  meta?: InputMaybe<Sort>;
   updatedAt?: InputMaybe<Sort>;
 };
 

@@ -261,6 +261,7 @@ export type DetailPanelInputComponent = {
 };
 
 export enum DetailPanelInputComponentOption {
+  Markdown = 'MARKDOWN',
   RichText = 'RICH_TEXT',
   Text = 'TEXT'
 }

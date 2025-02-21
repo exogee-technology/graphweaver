@@ -43,6 +43,7 @@
 		"react-hot-toast": "2.4.1",
 		"react-resizable-panels": "2.1.7",
 		"react-syntax-highlighter": "15.6.1",
+		"tiptap-markdown": "0.8.10",
 		"wouter": "3.6.0"
 	},
 	"peerDependencies": {

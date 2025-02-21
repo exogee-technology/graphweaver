@@ -85,10 +85,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -284,10 +284,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -339,10 +339,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       '@okta/okta-auth-js':
         specifier: 7.9.0
         version: 7.9.0(encoding@0.1.13)
@@ -382,10 +382,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -434,7 +434,7 @@ importers:
         version: 6.4.6
       '@mikro-orm/mysql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -504,10 +504,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -562,10 +562,10 @@ importers:
         version: 6.4.6
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -803,6 +803,9 @@ importers:
       react-syntax-highlighter:
         specifier: 15.6.1
         version: 15.6.1(react@19.0.0)
+      tiptap-markdown:
+        specifier: 0.8.10
+        version: 0.8.10(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))
       wouter:
         specifier: 3.6.0
         version: 3.6.0(react@19.0.0)
@@ -1356,7 +1359,7 @@ importers:
         version: 6.4.6
       '@mikro-orm/postgresql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
         version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
@@ -1461,10 +1464,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)
       node-sqlite3-wasm:
         specifier: 0.8.28
         version: 0.8.28
@@ -1520,13 +1523,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)(pg@8.13.2)
       '@mikro-orm/mysql':
         specifier: 6.4.6
         version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
       '@mikro-orm/postgresql':
         specifier: 6.4.6
-        version: 6.4.6(@mikro-orm/core@6.4.6)
+        version: 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
       '@mikro-orm/sqlite':
         specifier: 6.4.6
         version: 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
@@ -5545,6 +5548,9 @@ packages:
   '@types/keyv@3.1.4':
     resolution: {integrity: sha512-BQ5aZNSCpj7D6K2ksrRCTmKRLEpnPvWDiLPfoGyhZ++8YtiK9d/3DBKPJgry359X/P1PfruyYwvnvwFjuEiEIg==}
 
+  '@types/linkify-it@3.0.5':
+    resolution: {integrity: sha512-yg6E+u0/+Zjva+buc3EIb+29XEg4wltq7cSmd4Uc2EE/1nUVmxyzpX6gUXD0V8jIrG0r7YeOGVIbYRkxeooCtw==}
+
   '@types/linkify-it@5.0.0':
     resolution: {integrity: sha512-sVDA58zAw4eWAffKOaQH5/5j3XeayukzDk+ewSsnv3p4yJEZHCCzMDiZM8e0OUrRvmpGZ85jf4yDHkHsgBNr9Q==}
 
@@ -5557,8 +5563,14 @@ packages:
   '@types/luxon@3.4.2':
     resolution: {integrity: sha512-TifLZlFudklWlMBfhubvgqTXRzLDI5pCbGa4P8a3wPyUQSW+1xQ5eDsreP9DWHX3tjq1ke96uYG/nwundroWcA==}
 
+  '@types/markdown-it@13.0.9':
+    resolution: {integrity: sha512-1XPwR0+MgXLWfTn9gCsZ55AHOKW1WN+P9vr0PaQh5aerR9LLQXUbjfEAFhjmEmyoYFWAyuN2Mqkn40MZ4ukjBw==}
+
   '@types/markdown-it@14.1.2':
     resolution: {integrity: sha512-promo4eFwuiW+TfGxhi+0x3czqTYJkG8qB17ZUJiVF10Xm7NLVRSLUsfRTU/6h1e24VvRnXCx+hG7li58lkzog==}
+
+  '@types/mdurl@1.0.5':
+    resolution: {integrity: sha512-6L6VymKTzYSrEf4Nev4Xa1LCHKrlTlYCBMTlQKFuddo1CvQcE52I0mwfOJayueUC7MJuXOeHTcIU683lzd0cUA==}
 
   '@types/mdurl@2.0.0':
     resolution: {integrity: sha512-RGdgjQUZba5p6QEFAVx2OGb8rQDL/cPRG7GiedRzMcJ1tYnUANBncjbSB1NRGwbvjcPeikRABz2nshyPk1bhWg==}
@@ -8681,6 +8693,9 @@ packages:
     resolution: {integrity: sha512-8y/eV9QQZCiyn1SprXSrCmqJN0yNRATe+PO8ztwqrvrbdRLA3eYJF0yaR0YayLWkMbsQSKWS9N2gPcGEc4UsZg==}
     engines: {node: '>=0.10.0'}
 
+  markdown-it-task-lists@2.1.1:
+    resolution: {integrity: sha512-TxFAc76Jnhb2OUu+n3yz9RMu4CwGfaT788br6HhEDlvWfdeJcLUsxk1Hgw2yJio0OXsxv7pyIPmvECY7bMbluA==}
+
   markdown-it@14.1.0:
     resolution: {integrity: sha512-a54IwgWPaeBCAAsv13YgmALOF1elABB08FxO9i+r4VFk5Vl4pKokRPeX8u5TCgSsPi6ec1otfLjdOpVcgbpshg==}
     hasBin: true
@@ -10333,6 +10348,11 @@ packages:
 
   tippy.js@6.3.7:
     resolution: {integrity: sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==}
+
+  tiptap-markdown@0.8.10:
+    resolution: {integrity: sha512-iDVkR2BjAqkTDtFX0h94yVvE2AihCXlF0Q7RIXSJPRSR5I0PA1TMuAg6FHFpmqTn4tPxJ0by0CK7PUMlnFLGEQ==}
+    peerDependencies:
+      '@tiptap/core': ^2.0.3
 
   title-case@3.0.3:
     resolution: {integrity: sha512-e1zGYRvbffpcHIrnuqT0Dh+gEJtDaxDSoG4JAIpq4oDFyooziLBIiYQv0GBT4FUAnUop5uZ1hiIAj7oAF6sOCA==}
@@ -14329,36 +14349,6 @@ snapshots:
       mikro-orm: 6.4.6
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.12.0)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)(pg@8.13.1)':
     dependencies:
       '@mikro-orm/core': 6.4.6
@@ -14389,41 +14379,11 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.1)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.6
       fs-extra: 11.3.0
       knex: 3.1.0(pg@8.13.1)(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.2)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -14449,37 +14409,6 @@ snapshots:
       - supports-color
       - tedious
     optional: true
-
-  '@mikro-orm/knex@6.4.6(@mikro-orm/core@6.4.6)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      fs-extra: 11.3.0
-      knex: 3.1.0(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/mysql@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)
-      mysql2: 3.12.0
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
 
   '@mikro-orm/mysql@6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.1)':
     dependencies:
@@ -14512,26 +14441,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-    optional: true
-
-  '@mikro-orm/postgresql@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(pg@8.13.2)
-      pg: 8.13.2
-      postgres-array: 3.0.2
-      postgres-date: 2.1.0
-      postgres-interval: 4.0.2
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
 
   '@mikro-orm/postgresql@6.4.6(@mikro-orm/core@6.4.6)(mysql2@3.12.0)':
     dependencies:
@@ -14549,25 +14458,6 @@ snapshots:
       - mysql2
       - pg-native
       - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/sqlite@6.4.6(@mikro-orm/core@6.4.6)':
-    dependencies:
-      '@mikro-orm/core': 6.4.6
-      '@mikro-orm/knex': 6.4.6(@mikro-orm/core@6.4.6)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
       - supports-color
       - tedious
 
@@ -16270,6 +16160,8 @@ snapshots:
     dependencies:
       '@types/node': 22.10.1
 
+  '@types/linkify-it@3.0.5': {}
+
   '@types/linkify-it@5.0.0': {}
 
   '@types/lodash@4.17.14': {}
@@ -16278,10 +16170,17 @@ snapshots:
 
   '@types/luxon@3.4.2': {}
 
+  '@types/markdown-it@13.0.9':
+    dependencies:
+      '@types/linkify-it': 3.0.5
+      '@types/mdurl': 1.0.5
+
   '@types/markdown-it@14.1.2':
     dependencies:
       '@types/linkify-it': 5.0.0
       '@types/mdurl': 2.0.0
+
+  '@types/mdurl@1.0.5': {}
 
   '@types/mdurl@2.0.0': {}
 
@@ -19847,46 +19746,6 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  knex@3.1.0:
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(mysql2@3.12.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.12.0
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(mysql2@3.12.0)(pg@8.13.1):
     dependencies:
       colorette: 2.0.19
@@ -19931,27 +19790,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.13.1):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.13.1
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(pg@8.13.1)(sqlite3@5.1.7):
     dependencies:
       colorette: 2.0.19
@@ -19971,27 +19809,6 @@ snapshots:
     optionalDependencies:
       pg: 8.13.1
       sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(pg@8.13.2):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.13.2
     transitivePeerDependencies:
       - supports-color
 
@@ -20017,27 +19834,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
     optional: true
-
-  knex@3.1.0(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
 
   leven@3.1.0: {}
 
@@ -20316,6 +20112,8 @@ snapshots:
       tmpl: 1.0.5
 
   map-cache@0.2.2: {}
+
+  markdown-it-task-lists@2.1.1: {}
 
   markdown-it@14.1.0:
     dependencies:
@@ -22064,6 +21862,14 @@ snapshots:
   tippy.js@6.3.7:
     dependencies:
       '@popperjs/core': 2.11.8
+
+  tiptap-markdown@0.8.10(@tiptap/core@2.11.5(@tiptap/pm@2.11.5)):
+    dependencies:
+      '@tiptap/core': 2.11.5(@tiptap/pm@2.11.5)
+      '@types/markdown-it': 13.0.9
+      markdown-it: 14.1.0
+      markdown-it-task-lists: 2.1.1
+      prosemirror-markdown: 1.13.1
 
   title-case@3.0.3:
     dependencies:

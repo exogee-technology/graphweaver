@@ -76,6 +76,7 @@ export type EntityFieldType =
 export enum DetailPanelInputComponentOption {
 	TEXT = 'TEXT',
 	RICH_TEXT = 'RICH_TEXT',
+	MARKDOWN = 'MARKDOWN',
 }
 
 export interface DetailPanelInputComponent {
