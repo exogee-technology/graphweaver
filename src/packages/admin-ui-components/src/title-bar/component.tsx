@@ -31,7 +31,7 @@ export const TitleBar = ({ title, subtitle, onExportToCSV }: Props) => {
 			<div className={styles.toolsWrapper}>
 				{/* By default we want to open in a new window. <Link /> doesn't do that for us.
 				    But when we're in an iframe, we can't open a new window, so we just clobber. */}
-				{!window.parent ? (
+				{window.self === window.top ? (
 					<a
 						href="/playground"
 						target="_blank"
