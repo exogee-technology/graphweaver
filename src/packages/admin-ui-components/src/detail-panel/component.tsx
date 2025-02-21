@@ -127,13 +127,19 @@ const getField = ({
 		);
 	}
 
-	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
+	if (
+		field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT ||
+		field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+	) {
 		return (
 			<RichTextField
 				key={field.name}
 				field={field}
 				isReadOnly={!!isReadonly}
 				options={field.detailPanelInputComponent?.options ?? {}}
+				asMarkdown={
+					field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+				}
 			/>
 		);
 	}

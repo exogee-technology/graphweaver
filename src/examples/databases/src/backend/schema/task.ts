@@ -1,4 +1,10 @@
-import { RelationshipField, Field, ID, Entity } from '@exogee/graphweaver';
+import {
+	RelationshipField,
+	Field,
+	ID,
+	Entity,
+	DetailPanelInputComponentOption,
+} from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { DateScalar, GraphQLJSON } from '@exogee/graphweaver-scalars';
 
@@ -13,7 +19,12 @@ export class Task {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String)
+	@Field(() => String, {
+		description: 'Formatted text using Markdown, the Admin UI allows users to enter markdown text',
+		adminUIOptions: {
+			detailPanelInputComponent: DetailPanelInputComponentOption.MARKDOWN,
+		},
+	})
 	description!: string;
 
 	@Field(() => Boolean)
