@@ -87,6 +87,9 @@ export const viteConfig = async ({
 				'react-is',
 				'rehackt',
 				'set-value',
+				'@tiptap/extension-link',
+				'@tiptap/react',
+				'@tiptap/starter-kit',
 			],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by

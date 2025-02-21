@@ -16,7 +16,8 @@ CREATE TABLE "user" (
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'suspended', 'blocked'))
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'suspended', 'blocked')),
+  notes TEXT
 );
 
 -- Seed data for user table

@@ -74,6 +74,7 @@ export type AdminUiFieldExtensionsMetadata = {
 export type AdminUiFieldMetadata = {
   __typename?: 'AdminUiFieldMetadata';
   attributes?: Maybe<AdminUiFieldAttributeMetadata>;
+  detailPanelInputComponent?: Maybe<DetailPanelInputComponent>;
   extensions?: Maybe<AdminUiFieldExtensionsMetadata>;
   filter?: Maybe<AdminUiFilterMetadata>;
   hideInDetailForm?: Maybe<Scalars['Boolean']['output']>;
@@ -657,6 +658,17 @@ export type CustomersPaginationInput = {
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
+
+export type DetailPanelInputComponent = {
+  __typename?: 'DetailPanelInputComponent';
+  name: DetailPanelInputComponentOption;
+  options?: Maybe<Scalars['JSON']['output']>;
+};
+
+export enum DetailPanelInputComponentOption {
+  RichText = 'RICH_TEXT',
+  Text = 'TEXT'
+}
 
 export type Employee = {
   __typename?: 'Employee';

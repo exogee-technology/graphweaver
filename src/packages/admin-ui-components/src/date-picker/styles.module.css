@@ -74,7 +74,7 @@
 
 .popup {
 	position: absolute;
-	z-index: 2;
+	z-index: 1000;
 	top: 95%;
 	background-color: #1c1725;
 	border: 1px solid var(--detail-border-color);
@@ -110,6 +110,7 @@
 	color: var(--body-copy-color);
 	border-radius: 6px 0px 0px 6px;
 	padding-right: 10px;
+	outline: 1px solid var(--body-copy-color);
 }
 
 /* Styling overrides for react-day-picker */

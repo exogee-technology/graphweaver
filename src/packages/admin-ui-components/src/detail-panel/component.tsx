@@ -12,6 +12,7 @@ import { Modal } from '../modal';
 import {
 	CustomField,
 	decodeSearchParams,
+	DetailPanelInputComponentOption,
 	Entity,
 	EntityField,
 	queryForEntity,
@@ -31,6 +32,7 @@ import {
 	MediaField,
 	TextField,
 	DateField,
+	RichTextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
@@ -121,6 +123,17 @@ const getField = ({
 				multiple={field.isArray}
 				autoFocus={autoFocus}
 				disabled={isReadonly}
+			/>
+		);
+	}
+
+	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
+		return (
+			<RichTextField
+				key={field.name}
+				field={field}
+				isReadOnly={!!isReadonly}
+				options={field.detailPanelInputComponent?.options ?? {}}
 			/>
 		);
 	}
