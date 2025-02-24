@@ -16,7 +16,7 @@ export const HeaderOptions = (props: SectionProps) => {
 	const { editor, options } = props;
 
 	const hCommand = (level: 1 | 2 | 3 | 4 | 5 | 6) => {
-		return editor.chain().focus().toggleHeading({ level });
+		return () => editor.chain().focus().toggleHeading({ level }).run();
 	};
 
 	const hOptionButtons = ([1, 2, 3, 4, 5, 6] as const)
@@ -41,7 +41,7 @@ export const HeaderOptions = (props: SectionProps) => {
 	const pButton = (
 		<Button
 			key="p"
-			command={editor.chain().focus().setParagraph()}
+			command={() => editor.chain().focus().setParagraph().run()}
 			Icon={<EditorPIcon />}
 			activeWhen="paragraph"
 			title="Paragraph"
