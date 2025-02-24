@@ -4,7 +4,7 @@ import styles from './styles.module.css';
 
 interface Props {
 	hide?: boolean;
-	command: ChainedCommands;
+	command: () => boolean;
 	activeWhen?: string;
 	activeWhenAttributes?: Record<string, unknown>;
 	Icon: React.ReactNode;

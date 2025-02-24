@@ -14,7 +14,7 @@ export const ListOptions = (props: SectionProps) => {
 		<Button
 			key={1}
 			hide={options.unorderedList?.hide}
-			command={editor.chain().focus().toggleBulletList()}
+			command={() => editor.chain().focus().toggleBulletList().run()}
 			activeWhen="bulletList"
 			Icon={<EditorUnOrderedListIcon />}
 			title="Unordered List"
@@ -23,7 +23,7 @@ export const ListOptions = (props: SectionProps) => {
 		<Button
 			key={2}
 			hide={options.orderedList?.hide}
-			command={editor.chain().focus().toggleOrderedList()}
+			command={() => editor.chain().focus().toggleOrderedList().run()}
 			activeWhen="orderedList"
 			Icon={<EditorOrderedListIcon />}
 			title="Ordered List"
@@ -32,7 +32,7 @@ export const ListOptions = (props: SectionProps) => {
 		<Button
 			key={3}
 			hide={options.blockquote?.hide}
-			command={editor.chain().focus().toggleBlockquote()}
+			command={() => editor.chain().focus().toggleBlockquote().run()}
 			activeWhen="blockquote"
 			Icon={<EditorBlockquoteIcon />}
 			title="Blockquote"

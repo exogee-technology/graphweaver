@@ -1,4 +1,4 @@
-import { useCurrentEditor } from '@tiptap/react';
+import { ChainedCommands, useCurrentEditor } from '@tiptap/react';
 import {
 	EditorBoldIcon,
 	EditorCodeBlockIcon,
@@ -24,13 +24,21 @@ export const MenuBar = (props: Props) => {
 		return null;
 	}
 
+	const getCommand = (
+		command: {
+			[K in keyof ChainedCommands]: ChainedCommands[K] extends () => ChainedCommands ? K : never;
+		}[keyof ChainedCommands]
+	) => {
+		return () => editor.chain().focus()[command]().run();
+	};
+
 	return (
 		<div className={styles.buttonContainer}>
 			<HeaderOptions editor={editor} options={options} />
 			<ListOptions editor={editor} options={options} />
 			<Button
 				hide={options.codeBlock?.hide}
-				command={editor.chain().focus().toggleCodeBlock()}
+				command={getCommand('toggleCodeBlock')}
 				activeWhen="codeBlock"
 				Icon={<EditorCodeBlockIcon />}
 				title="Code Block"
@@ -40,21 +48,21 @@ export const MenuBar = (props: Props) => {
 
 			<Button
 				hide={options.bold?.hide}
-				command={editor.chain().focus().toggleBold()}
+				command={getCommand('toggleBold')}
 				activeWhen="bold"
 				Icon={<EditorBoldIcon />}
 				title="Bold"
 			/>
 			<Button
 				hide={options.italic?.hide}
-				command={editor.chain().focus().toggleItalic()}
+				command={getCommand('toggleItalic')}
 				activeWhen="italic"
 				Icon={<EditorItalicIcon />}
 				title="Italic"
 			/>
 			<Button
 				hide={options.strike?.hide}
-				command={editor.chain().focus().toggleStrike()}
+				command={getCommand('toggleStrike')}
 				activeWhen="strike"
 				Icon={<EditorStrikeIcon />}
 				title="Strike"
@@ -62,14 +70,14 @@ export const MenuBar = (props: Props) => {
 			<LinkButton editor={editor} options={options} />
 			<Button
 				hide={options.code?.hide}
-				command={editor.chain().focus().toggleCode()}
+				command={getCommand('toggleCode')}
 				activeWhen="code"
 				Icon={<EditorCodeIcon />}
 				title="Code"
 			/>
 			<Button
 				hide={options.horizontalRule?.hide}
-				command={editor.chain().focus().setHorizontalRule()}
+				command={getCommand('setHorizontalRule')}
 				Icon={<EditorSeparatorIcon />}
 				title="Separator"
 			/>
@@ -77,13 +85,13 @@ export const MenuBar = (props: Props) => {
 			<div className={styles.verticalSeparator}></div>
 
 			<Button
-				command={editor.chain().focus().undo()}
+				command={getCommand('undo')}
 				Icon={<EditorUndoIcon />}
 				disabled={!editor.can().chain().focus().undo().run()}
 				title="Undo"
 			/>
 			<Button
-				command={editor.chain().focus().redo()}
+				command={getCommand('redo')}
 				Icon={<EditorRedoIcon />}
 				disabled={!editor.can().chain().focus().redo().run()}
 				title="Redo"
