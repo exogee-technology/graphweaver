@@ -15,8 +15,8 @@ interface Props {
 
 export const RichTextField = (props: Props) => {
 	const { field, isReadOnly, options, asMarkdown } = props;
-	const [formikField, _, { setValue }] = useField<string>({ name: field.name });
-	const content = formikField.value;
+	const [, meta, { setValue }] = useField<string>({ name: field.name });
+	const content = meta.value;
 
 	return (
 		<div className={styles.richText}>
