@@ -1160,8 +1160,8 @@ importers:
         specifier: 2.1000.2
         version: 2.1000.2
       aws-cdk-lib:
-        specifier: 2.179.0
-        version: 2.179.0(constructs@10.4.2)
+        specifier: 2.180.0
+        version: 2.180.0(constructs@10.4.2)
       constructs:
         specifier: 10.4.2
         version: 10.4.2
@@ -6048,8 +6048,8 @@ packages:
   avvio@8.4.0:
     resolution: {integrity: sha512-CDSwaxINFy59iNwhYnkvALBwZiTydGkOecZyPkqBpABYR1KqGEsET0VOOYDwtleZSUIdeY36DC2bSZ24CO1igA==}
 
-  aws-cdk-lib@2.179.0:
-    resolution: {integrity: sha512-fwkoEzvh3TXYj+GPkyq/GSQt63JJV1dBgDKwr3xRdb8lQaPntSclmisa+ARO8tjPfkru1NqxAFQTtiqtAE83cA==}
+  aws-cdk-lib@2.180.0:
+    resolution: {integrity: sha512-ncYx3MGcLL397WAg6LOHV8G/5d0FkdoskiUscqFawLWioK75f0M6AIuif9kxrxLBvbMOncOfqhV8wIsCM1fquA==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
       constructs: ^10.0.0
@@ -16798,7 +16798,7 @@ snapshots:
       '@fastify/error': 3.4.1
       fastq: 1.19.0
 
-  aws-cdk-lib@2.179.0(constructs@10.4.2):
+  aws-cdk-lib@2.180.0(constructs@10.4.2):
     dependencies:
       '@aws-cdk/asset-awscli-v1': 2.2.224
       '@aws-cdk/asset-node-proxy-agent-v6': 2.1.0
