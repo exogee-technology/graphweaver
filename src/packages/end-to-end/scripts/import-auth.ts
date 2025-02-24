@@ -57,7 +57,9 @@ async function main() {
 
 		await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
-		await execAsync(`pnpm add '@mikro-orm/sqlite@${getDependencyVersion('@mikro-orm/sqlite')}'`);
+		await execAsync(
+			`pnpm add '@mikro-orm/sqlite@${await getDependencyVersion('@mikro-orm/sqlite')}'`
+		);
 		fs.mkdirSync('./databases');
 		await execAsync('pwd');
 		await execAsync('pnpm i --ignore-workspace --no-lockfile');
