@@ -20,7 +20,14 @@ async function execAsync(command: string) {
 }
 
 const getDependencyVersion = async (dependency: string) => {
-	const packageJson = JSON.parse(await fs.promises.readFile('package.json', 'utf-8'));
+	const packageJson = JSON.parse(
+		await fs.promises.readFile(path.join(__dirname, '..', 'package.json'), 'utf-8')
+	);
+
+	if (!packageJson.dependencies?.[dependency]) {
+		throw new Error(`Dependency ${dependency} not found in package.json`);
+	}
+
 	return packageJson.dependencies[dependency];
 };
 
