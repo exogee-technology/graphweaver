@@ -106,13 +106,17 @@ export const EntityList = <TData extends object>({ children }: { children: React
 	};
 
 	const handleFetchNextPage = async () => {
-		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
-		const offset = supportsPseudoCursorPagination ? 0 : nextPage * PAGE_SIZE;
+		const lastElement = data?.result?.[data.result.length - 1];
 
-		const filterVar = variables.filter ?? {};
-		const filter = supportsPseudoCursorPagination
-			? addStabilizationToFilter(filterVar, sort, data?.result?.[data.result.length - 1])
-			: filterVar;
+		let filter = variables.filter ?? {};
+		let offset = 0;
+		if (supportsPseudoCursorPagination && Object.keys(sort).find((k) => k === entity.primaryKeyField)) {
+			filter = addStabilizationToFilter(filter, sort, lastElement, entity);
+		} else {
+			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+			offset = nextPage * PAGE_SIZE;
+		}
+
 		fetchMore({
 			variables: {
 				...variables,

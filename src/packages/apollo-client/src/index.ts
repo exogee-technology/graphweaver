@@ -85,7 +85,8 @@ export const generateTypePolicies = (entities: Entity[]) => {
 export const addStabilizationToFilter = <TData>(
 	filter: Record<string, unknown>,
 	sort: SortEntity,
-	lastElement: TData
+	lastElement: TData,
+	entity: Entity
 ) => {
 	const filters = {
 		...filter,
@@ -93,6 +94,7 @@ export const addStabilizationToFilter = <TData>(
 
 	const keys = Object.keys(sort);
 	for (const key of keys) {
+		if (key !== entity.primaryKeyField) continue;
 		const isDesc = sort[key] === Sort.DESC;
 		const operationKey = isDesc ? 'lte' : 'gte';
 
