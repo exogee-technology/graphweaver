@@ -110,8 +110,11 @@ export const EntityList = <TData extends object>({ children }: { children: React
 
 		let filter = variables.filter ?? {};
 		let offset = 0;
-		if (supportsPseudoCursorPagination && Object.keys(sort).find((k) => k === entity.primaryKeyField)) {
-			filter = addStabilizationToFilter(filter, sort, lastElement, entity);
+		const sortedByPrimaryKeyOnly = Object.keys(sort).length === 1 && Object.keys(sort)[0] === entity.primaryKeyField;
+		if (supportsPseudoCursorPagination && sortedByPrimaryKeyOnly) {
+			// We don't yet have a way to define sort order, so for now we
+			// can only page this way in this case.
+			filter = addStabilizationToFilter(filter, sort, lastElement);
 		} else {
 			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
 			offset = nextPage * PAGE_SIZE;
