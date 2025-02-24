@@ -1,5 +1,6 @@
 import { logger } from '@exogee/logger';
 import { DirectiveLocation, OperationDefinitionNode } from 'graphql';
+import { version } from '../package.json';
 
 import { FieldOptions } from './decorators';
 import { HookRegister } from './hook-manager';
@@ -317,6 +318,26 @@ export type MetadataType =
 	| InputTypeMetadata<any, any>
 	| DirectiveMetadata
 	| UnionMetadata;
+
+// Singleton protection. If there are multiple instances of Metadata from different Graphweaver versions
+// all being installed side by side, we should error and let them know this.
+const graphweaverMetadataVersion = Symbol('graphweaverMetadataVersion');
+const globalWithMetadataVersion = global as GraphweaverMetadataVersion;
+interface GraphweaverMetadataVersion {
+	[graphweaverMetadataVersion]?: string;
+}
+
+if (globalWithMetadataVersion[graphweaverMetadataVersion] === undefined) {
+	globalWithMetadataVersion[graphweaverMetadataVersion] = version;
+} else if (globalWithMetadataVersion[graphweaverMetadataVersion] === version) {
+	throw new Error(
+		`Multiple instances of the Graphweaver Metadata singleton are being used, but the two that have been discovered are both version '${version}'. This is not supported. Please ensure you are not installing multiple versions of Graphweaver at once.`
+	);
+} else {
+	throw new Error(
+		`Multiple versions of the Graphweaver Metadata singleton are being used. The first version to load was '${globalWithMetadataVersion[graphweaverMetadataVersion]}' and the version trying to load currently is '${version}'. This is not supported. Please ensure you are not installing multiple versions of Graphweaver at once.`
+	);
+}
 
 class Metadata {
 	private metadataByType = new Map<unknown, MetadataType>();
