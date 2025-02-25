@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import fs from 'fs';
 import gql from 'graphql-tag';
+import { Jimp } from 'jimp';
 import path from 'path';
 import request from 'supertest-graphql';
 import { config } from '../../../../config';
@@ -8,6 +9,7 @@ import { config } from '../../../../config';
 type Media = {
 	filename: string;
 	type: string;
+	url: string;
 };
 
 type Submission = {
@@ -27,7 +29,6 @@ describe('Nested entities in custom mutations', () => {
 			}
 		`);
 		const file = fs.readFileSync(path.join(__dirname, '../fixtures/pickle.png'));
-		// console.log(newUpload);
 		const uploadUrl = newUpload.data?.getUploadUrl.url;
 		const uploadedFilename = newUpload.data?.getUploadUrl.filename;
 		if (!uploadUrl) {
@@ -54,18 +55,14 @@ describe('Nested entities in custom mutations', () => {
 			}
 		`);
 
-		// access the local file
-
-		// console.log(newSubmission.data);
-
 		const newSubmissionId = newSubmission.data?.createSubmission.id;
 
 		if (!newSubmissionId) {
 			throw new Error('No submission ID returned');
 		}
-		console.log('Uploaded file', newSubmissionId, filename, uploadUrl);
 
-		const response = await request<{ submission: Submission }>(config.baseUrl).path('/').query(gql`
+		const response = await request<{ createThumbnail: Submission }>(config.baseUrl).path('/')
+			.query(gql`
 				mutation {
 					createThumbnail(input: { submissionId: "${newSubmissionId}", width: 100, height: 100 }) {
 						id
@@ -77,11 +74,20 @@ describe('Nested entities in custom mutations', () => {
 					}
 				}
 			`);
-		// console.log(config.baseUrl);
-		console.log(response.errors);
 		expect(response.errors).toBeUndefined();
 		expect(response.data).toEqual({
 			createThumbnail: expect.objectContaining({ id: expect.any(String) }),
 		});
+
+		const finalUrl = response?.data?.createThumbnail.image.url;
+
+		if (!finalUrl) {
+			throw new Error('No URL returned');
+		}
+
+		const thumbnail = await Jimp.read(finalUrl);
+
+		expect(thumbnail.width).toEqual(100);
+		expect(thumbnail.height).toEqual(100);
 	});
 });

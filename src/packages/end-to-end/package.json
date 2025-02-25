@@ -49,6 +49,7 @@
 		"ethers": "6.3.0",
 		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
+		"jimp": "1.6.0",
 		"promisify-child-process": "4.1.2",
 		"web3-token": "1.0.6"
 	},
