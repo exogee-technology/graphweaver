@@ -1,4 +1,4 @@
-import { ChainedCommands, useCurrentEditor } from '@tiptap/react';
+import { useCurrentEditor } from '@tiptap/react';
 import { editorClickHandler } from './utils';
 import styles from './styles.module.css';
 
