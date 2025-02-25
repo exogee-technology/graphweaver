@@ -1,0 +1,87 @@
+import { randomUUID } from 'crypto';
+import fs from 'fs';
+import gql from 'graphql-tag';
+import path from 'path';
+import request from 'supertest-graphql';
+import { config } from '../../../../config';
+
+type Media = {
+	filename: string;
+	type: string;
+};
+
+type Submission = {
+	id: string;
+	image: Media;
+};
+
+describe('Nested entities in custom mutations', () => {
+	test('should allow a selection of nested entities in custom mutations', async () => {
+		const uuid = randomUUID();
+		const filename = `${uuid}.png`;
+		const newUpload = await request<{ getUploadUrl: { url: string; filename: string } }>(
+			config.baseUrl
+		).path('/').query(gql`
+			mutation {
+				getUploadUrl( key: "${filename}" ) 
+			}
+		`);
+		const file = fs.readFileSync(path.join(__dirname, '../fixtures/pickle.png'));
+		// console.log(newUpload);
+		const uploadUrl = newUpload.data?.getUploadUrl.url;
+		const uploadedFilename = newUpload.data?.getUploadUrl.filename;
+		if (!uploadUrl) {
+			throw new Error('No URL returned');
+		}
+		if (!uploadedFilename) {
+			throw new Error('No filename returned');
+		}
+		await fetch(uploadUrl, {
+			method: 'PUT',
+			body: file,
+		});
+
+		const newSubmission = await request<{ createSubmission: Submission }>(config.baseUrl).path('/')
+			.query(gql`
+			mutation {
+				createSubmission(input: { image: { filename: "${uploadedFilename}", type: IMAGE } }) {
+					id
+					image {
+						filename
+						type
+					}
+				}
+			}
+		`);
+
+		// access the local file
+
+		// console.log(newSubmission.data);
+
+		const newSubmissionId = newSubmission.data?.createSubmission.id;
+
+		if (!newSubmissionId) {
+			throw new Error('No submission ID returned');
+		}
+		console.log('Uploaded file', newSubmissionId, filename, uploadUrl);
+
+		const response = await request<{ submission: Submission }>(config.baseUrl).path('/').query(gql`
+				mutation {
+					createThumbnail(input: { submissionId: "${newSubmissionId}", width: 100, height: 100 }) {
+						id
+						image {
+							filename
+							type
+							url
+						}
+					}
+				}
+			`);
+		// console.log(config.baseUrl);
+		console.log(response.errors);
+		expect(response.errors).toBeUndefined();
+		expect(response.data).toEqual({
+			createThumbnail: expect.objectContaining({ id: expect.any(String) }),
+		});
+	});
+});
