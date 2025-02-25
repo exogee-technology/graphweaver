@@ -1,4 +1,11 @@
-import { Field, graphweaverMetadata, ID, InputType, ResolverOptions } from '@exogee/graphweaver';
+import {
+	Field,
+	fromBackendEntity,
+	graphweaverMetadata,
+	ID,
+	InputType,
+	ResolverOptions,
+} from '@exogee/graphweaver';
 import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { Jimp } from 'jimp';
 import { s3 } from '../s3';
@@ -28,12 +35,9 @@ graphweaverMetadata.addMutation({
 	}: ResolverOptions<{ input: CreateThumbnailInput }>) => {
 		// get the metadata of the submission to copy
 		const database = ConnectionManager.database('pg');
-		console.log('Fetch submission from db', args.input.submissionId);
 		const submission = await database.em.findOneOrFail(Submission, {
 			id: args.input.submissionId.toString(),
 		});
-
-		console.log(submission.image);
 
 		const filename = JSON.parse(submission.image as unknown as string)?.filename;
 
@@ -44,7 +48,6 @@ graphweaverMetadata.addMutation({
 		// fetch the image data
 		const imageUrl = await s3.getDownloadUrlForKey(filename);
 
-		console.log('Looking for image', filename, imageUrl);
 		// resize the image to the desired dimensions
 		const input = await Jimp.read(imageUrl);
 		const resizedImage = await input
@@ -76,8 +79,7 @@ graphweaverMetadata.addMutation({
 
 		await database.em.persistAndFlush(result);
 
-		console.log('Created new submission', result);
-
-		return result;
+		// Call fromBackendEntity to ensure the client can access nested fields
+		return fromBackendEntity(Submission, result);
 	},
 });
