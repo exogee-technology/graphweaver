@@ -17,8 +17,10 @@ type Submission = {
 	image: Media;
 };
 
-describe('Nested entities in custom mutations', () => {
-	test('should allow a selection of nested entities in custom mutations', async () => {
+describe('Nested entities in custom operations', () => {
+	let testSubmission: Submission;
+
+	beforeEach(async () => {
 		const uuid = randomUUID();
 		const filename = `${uuid}.png`;
 		const newUpload = await request<{ getUploadUrl: { url: string; filename: string } }>(
@@ -55,14 +57,41 @@ describe('Nested entities in custom mutations', () => {
 			}
 		`);
 
-		const newSubmissionId = newSubmission.data?.createSubmission.id;
-
-		if (!newSubmissionId) {
-			throw new Error('No submission ID returned');
+		if (!newSubmission.data?.createSubmission) {
+			throw new Error('No submission was created or returned in setup');
 		}
 
-		const response = await request<{ createThumbnail: Submission }>(config.baseUrl).path('/')
-			.query(gql`
+		testSubmission = newSubmission.data?.createSubmission;
+	});
+
+	describe('Custom queries', () => {
+		test.only('should allow a selection of nested entities in a custom query', async () => {
+			const response = await request<{ submissionByFilename: Submission }>(config.baseUrl).path('/')
+				.query(gql`
+				query {
+					submissionByFilename(filename: "${testSubmission.image.filename}") {
+						id
+						image {
+							filename
+							type
+							url
+						}
+					}
+				}
+			`);
+			expect(response.errors).toBeUndefined();
+			expect(response.data).toEqual({
+				submissionByFilename: expect.objectContaining({ id: expect.any(String) }),
+			});
+		});
+	});
+
+	describe('Custom mutations', () => {
+		test('should allow a selection of nested entities in custom mutations', async () => {
+			const newSubmissionId = testSubmission.id;
+
+			const response = await request<{ createThumbnail: Submission }>(config.baseUrl).path('/')
+				.query(gql`
 				mutation {
 					createThumbnail(input: { submissionId: "${newSubmissionId}", width: 100, height: 100 }) {
 						id
@@ -74,20 +103,21 @@ describe('Nested entities in custom mutations', () => {
 					}
 				}
 			`);
-		expect(response.errors).toBeUndefined();
-		expect(response.data).toEqual({
-			createThumbnail: expect.objectContaining({ id: expect.any(String) }),
+			expect(response.errors).toBeUndefined();
+			expect(response.data).toEqual({
+				createThumbnail: expect.objectContaining({ id: expect.any(String) }),
+			});
+
+			const finalUrl = response?.data?.createThumbnail.image.url;
+
+			if (!finalUrl) {
+				throw new Error('No URL returned');
+			}
+
+			const thumbnail = await Jimp.read(finalUrl);
+
+			expect(thumbnail.width).toEqual(100);
+			expect(thumbnail.height).toEqual(100);
 		});
-
-		const finalUrl = response?.data?.createThumbnail.image.url;
-
-		if (!finalUrl) {
-			throw new Error('No URL returned');
-		}
-
-		const thumbnail = await Jimp.read(finalUrl);
-
-		expect(thumbnail.width).toEqual(100);
-		expect(thumbnail.height).toEqual(100);
 	});
 });

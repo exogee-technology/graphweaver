@@ -107,6 +107,7 @@ jobs:
         run: |
           pnpm start-server &
           sleep 5 &&
+          pnpm test-storage-provider &&
           pnpm test-ui-storage-provider &&
           killall node
 
