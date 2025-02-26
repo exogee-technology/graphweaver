@@ -8,7 +8,11 @@ import { AuthorizationContext, AuthenticationType } from '../../types';
 import { UserProfile } from '../../user-profile';
 import { requireEnvironmentVariable } from '../../helper-functions';
 import { AuthenticationBaseEntity, CredentialStorage } from '../entities';
-import { defaultPasswordStrength, updatePasswordCredential } from './utils';
+import {
+	defaultPasswordStrength,
+	handleLogOnDidResolveOperation,
+	updatePasswordCredential,
+} from './utils';
 import { BaseAuthMethod } from './base-auth-method';
 
 const config = {
@@ -90,6 +94,7 @@ export class ForgottenPassword extends BaseAuthMethod {
 			},
 			getType: () => Boolean,
 			resolver: this.resetPassword.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(new Set(['password', 'token'])),
 		});
 	}
 

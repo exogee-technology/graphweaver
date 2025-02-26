@@ -15,12 +15,15 @@ import { checkAuthentication } from '../../helper-functions';
 import { ChallengeError } from '../../errors';
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import { BaseAuthMethod } from './base-auth-method';
+import { handleLogOnDidResolveOperation } from './utils';
 
 export type WalletAddress = {
 	address: string;
 };
 
 type Web3AuthProvider = BackendProvider<AuthenticationBaseEntity<WalletAddress>>;
+
+const sensitiveFields = new Set('token');
 
 export class Web3 extends BaseAuthMethod {
 	private provider: Web3AuthProvider;
@@ -61,6 +64,7 @@ export class Web3 extends BaseAuthMethod {
 				token: () => String,
 			},
 			resolver: this.enrolWallet.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -70,6 +74,7 @@ export class Web3 extends BaseAuthMethod {
 				token: () => String,
 			},
 			resolver: this.verifyWeb3Challenge.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 	}
 

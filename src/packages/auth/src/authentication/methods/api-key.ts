@@ -19,6 +19,7 @@ import { ApiKeyEntity } from '../entities';
 import { hashPassword } from '../../utils/argon2id';
 import { AclMap } from '../../helper-functions';
 import { BaseAuthMethod } from './base-auth-method';
+import { handleLogOnDidResolveOperation } from './utils';
 
 @InputType(`ApiKeyInsertInput`)
 export class ApiKeyInputArgs<R> {
@@ -100,6 +101,8 @@ export class ApiKey<R extends string> extends BaseAuthMethod {
 			getType: () => [roles],
 		});
 
+		const apiKeySensitiveFields = new Set(['secret']);
+
 		// Add the createApiKey and updateApiKey mutations
 		graphweaverMetadata.addMutation({
 			name: 'createApiKey',
@@ -109,6 +112,7 @@ export class ApiKey<R extends string> extends BaseAuthMethod {
 			getType: () => ApiKeyEntity<R>,
 			resolver: this.createApiKey.bind(this),
 			intentionalOverride: true,
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(apiKeySensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -119,6 +123,7 @@ export class ApiKey<R extends string> extends BaseAuthMethod {
 			getType: () => ApiKeyEntity<R>,
 			resolver: this.updateApiKey.bind(this),
 			intentionalOverride: true,
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(apiKeySensitiveFields),
 		});
 	}
 
