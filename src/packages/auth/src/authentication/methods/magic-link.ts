@@ -8,10 +8,16 @@ import { Token } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthTokenProvider } from '../token';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
+import {
+	BackendProvider,
+	LogOnDidResolveOperationParams,
+	ResolverOptions,
+	graphweaverMetadata,
+} from '@exogee/graphweaver';
 import { AuthenticationType } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
 import { BaseAuthMethod } from './base-auth-method';
+import { handleLogOnDidResolveOperation } from './utils';
 
 const config = {
 	rate: {
@@ -44,6 +50,8 @@ export interface MagicLinkOptions {
 // For now this is just a uuid
 const createToken = randomUUID;
 
+const apiKeySensitiveFields = new Set(['token']);
+
 export class MagicLink extends BaseAuthMethod {
 	private provider: MagicLinkProvider;
 	private getUser: (username: string) => Promise<UserProfile<unknown>>;
@@ -73,6 +81,7 @@ export class MagicLink extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.verifyLoginMagicLink.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(apiKeySensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -88,6 +97,7 @@ export class MagicLink extends BaseAuthMethod {
 				token: () => String,
 			},
 			resolver: this.verifyChallengeMagicLink.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(apiKeySensitiveFields),
 		});
 	}
 

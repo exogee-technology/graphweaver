@@ -490,6 +490,7 @@ const filterTypeForEntity = (
 				fields['_or'] = { type: new GraphQLList(selfFilter) };
 
 				// There's currently a problem with the _not operator and MikroORM, so we're not adding it for now.
+				// https://github.com/mikro-orm/mikro-orm/issues/6452
 				// fields['_not'] = { type: selfFilter };
 
 				for (const field of Object.values(entity.fields)) {
