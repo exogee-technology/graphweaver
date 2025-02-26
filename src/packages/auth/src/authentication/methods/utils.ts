@@ -89,30 +89,32 @@ const obfuscateSensitiveValues = (
 				return '********';
 			}
 
-			if (value === null || value === undefined) return value;
+			if (value === null || value === undefined) {
+				return value;
+			}
 
 			if (Array.isArray(value)) {
 				return value.map((item: any) => obfuscateNode(key, item));
 			}
 
-			if (typeof value === 'symbol') return '********'; // technically impossible, but just in case
+			if (typeof value === 'symbol') {
+				return '********'; // technically impossible, but just in case
+			}
 
 			if (typeof value === 'object') {
-				for (const newKey in value) {
-					value[newKey] = obfuscateNode(newKey, value[newKey]);
-				}
+				return obfuscateObject(value);
 			}
 
 			return value;
 		};
 
-		const variablesCopy = JSON.parse(JSON.stringify(variables));
+		const obfuscateObject = (obj: any) => {
+			return Object.fromEntries(
+				Object.entries(obj).map(([key, value]) => [key, obfuscateNode(key, value)])
+			);
+		};
 
-		for (const key in variablesCopy) {
-			variablesCopy[key] = obfuscateNode(key, variablesCopy[key]);
-		}
-
-		return variablesCopy;
+		return obfuscateObject(variables);
 	} catch (e) {
 		logger.error('obfuscateSensitiveValues - error', e);
 		return undefined;
