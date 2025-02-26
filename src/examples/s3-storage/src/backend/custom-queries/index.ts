@@ -10,9 +10,8 @@ graphweaverMetadata.addQuery({
 	args: { filename: () => String },
 	resolver: async ({ args }: ResolverOptions<{ filename: string }>) => {
 		const db = ConnectionManager.database(pgConnection.connectionManagerId);
-		const all = await db.em.findAll(OrmSubmission);
 		const result = await db.em.findOne(OrmSubmission, { image: { filename: args.filename } });
 
-		return fromBackendEntity(Submission, result);
+		return result ? fromBackendEntity(Submission, result) : null;
 	},
 });

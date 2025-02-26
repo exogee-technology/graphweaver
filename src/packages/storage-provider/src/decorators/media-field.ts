@@ -66,7 +66,10 @@ export class GraphweaverMedia {
 	static serialize = ({ value }: { value: unknown }) => {
 		if (value === null) return null;
 		if (isMedia(value)) {
-			return value;
+			return {
+				filename: value.filename,
+				type: value.type,
+			};
 		}
 		throw new Error(
 			'Invalid Media input data provided. Please sent a filename and type when creating or updating media.'

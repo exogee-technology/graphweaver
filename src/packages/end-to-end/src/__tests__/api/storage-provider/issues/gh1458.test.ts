@@ -84,6 +84,27 @@ describe('Nested entities in custom operations', () => {
 				submissionByFilename: expect.objectContaining({ id: expect.any(String) }),
 			});
 		});
+
+		test('should allow a null result from a custom query', async () => {
+			const response = await request<{ submissionByFilename: Submission }>(config.baseUrl)
+				.path('/')
+				.query(gql`
+					query {
+						submissionByFilename(filename: "notexists.png") {
+							id
+							image {
+								filename
+								type
+								url
+							}
+						}
+					}
+				`);
+			expect(response.errors).toBeUndefined();
+			expect(response.data).toEqual({
+				submissionByFilename: null,
+			});
+		});
 	});
 
 	describe('Custom mutations', () => {
