@@ -8,6 +8,7 @@ import {
 } from '@exogee/graphweaver';
 import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { Jimp } from 'jimp';
+import { pgConnection } from '../database';
 import { s3 } from '../s3';
 import { Submission } from '../schema';
 @InputType('CreateThumbnailInput')
@@ -34,7 +35,7 @@ graphweaverMetadata.addMutation({
 		fields,
 	}: ResolverOptions<{ input: CreateThumbnailInput }>) => {
 		// get the metadata of the submission to copy
-		const database = ConnectionManager.database('pg');
+		const database = ConnectionManager.database(pgConnection.connectionManagerId);
 		const submission = await database.em.findOneOrFail(Submission, {
 			id: args.input.submissionId.toString(),
 		});
