@@ -44,18 +44,28 @@ describe('Nested entities in custom operations', () => {
 			body: file,
 		});
 
-		const newSubmission = await request<{ createSubmission: Submission }>(config.baseUrl).path('/')
+		const newSubmission = await request<{ createSubmission: Submission }>(config.baseUrl)
+			.path('/')
 			.query(gql`
-			mutation {
-				createSubmission(input: { image: { filename: "${uploadedFilename}", type: IMAGE } }) {
-					id
-					image {
-						filename
-						type
+				mutation CreateSubmission($input: SubmissionInsertInput!) {
+					createSubmission(input: $input) {
+						id
+						image {
+							filename
+							type
+						}
 					}
 				}
-			}
-		`);
+			`)
+			.variables({
+				input: {
+					image: {
+						filename: uploadedFilename,
+						type: 'IMAGE',
+					},
+				},
+			})
+			.expectNoErrors();
 
 		if (!newSubmission.data?.createSubmission) {
 			throw new Error('No submission was created or returned in setup');
@@ -66,19 +76,24 @@ describe('Nested entities in custom operations', () => {
 
 	describe('Custom queries', () => {
 		test('should allow a selection of nested entities in a custom query', async () => {
-			const response = await request<{ submissionByFilename: Submission }>(config.baseUrl).path('/')
+			const response = await request<{ submissionByFilename: Submission }>(config.baseUrl)
+				.path('/')
 				.query(gql`
-				query {
-					submissionByFilename(filename: "${testSubmission.image.filename}") {
-						id
-						image {
-							filename
-							type
-							url
+					query SubmissionByFilename($filename: String!) {
+						submissionByFilename(filename: $filename) {
+							id
+							image {
+								filename
+								type
+								url
+							}
 						}
 					}
-				}
-			`);
+				`)
+				.variables({
+					filename: testSubmission.image.filename,
+				})
+				.expectNoErrors();
 			expect(response.errors).toBeUndefined();
 			expect(response.data).toEqual({
 				submissionByFilename: expect.objectContaining({ id: expect.any(String) }),
@@ -89,8 +104,8 @@ describe('Nested entities in custom operations', () => {
 			const response = await request<{ submissionByFilename: Submission }>(config.baseUrl)
 				.path('/')
 				.query(gql`
-					query {
-						submissionByFilename(filename: "notexists.png") {
+					query SubmissionByFilename($filename: String!) {
+						submissionByFilename(filename: $filename) {
 							id
 							image {
 								filename
@@ -99,7 +114,11 @@ describe('Nested entities in custom operations', () => {
 							}
 						}
 					}
-				`);
+				`)
+				.variables({
+					filename: 'notexists.png',
+				})
+				.expectNoErrors();
 			expect(response.errors).toBeUndefined();
 			expect(response.data).toEqual({
 				submissionByFilename: null,
@@ -111,19 +130,28 @@ describe('Nested entities in custom operations', () => {
 		test('should allow a selection of nested entities in custom mutations', async () => {
 			const newSubmissionId = testSubmission.id;
 
-			const response = await request<{ createThumbnail: Submission }>(config.baseUrl).path('/')
+			const response = await request<{ createThumbnail: Submission }>(config.baseUrl)
+				.path('/')
 				.query(gql`
-				mutation {
-					createThumbnail(input: { submissionId: "${newSubmissionId}", width: 100, height: 100 }) {
-						id
-						image {
-							filename
-							type
-							url
+					mutation CreateThumbnail($input: CreateThumbnailInput!) {
+						createThumbnail(input: $input) {
+							id
+							image {
+								filename
+								type
+								url
+							}
 						}
 					}
-				}
-			`);
+				`)
+				.variables({
+					input: {
+						submissionId: newSubmissionId,
+						width: 100,
+						height: 100,
+					},
+				})
+				.expectNoErrors();
 			expect(response.errors).toBeUndefined();
 			expect(response.data).toEqual({
 				createThumbnail: expect.objectContaining({ id: expect.any(String) }),
