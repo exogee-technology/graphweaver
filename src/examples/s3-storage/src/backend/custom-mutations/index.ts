@@ -9,7 +9,7 @@ import {
 import { ConnectionManager } from '@exogee/graphweaver-mikroorm';
 import { Jimp } from 'jimp';
 import { pgConnection } from '../database';
-import { s3 } from '../s3';
+import { s3Provider } from '../s3-provider';
 import { Submission } from '../schema';
 @InputType('CreateThumbnailInput')
 class CreateThumbnailInput {
@@ -47,7 +47,7 @@ graphweaverMetadata.addMutation({
 		}
 
 		// fetch the image data
-		const imageUrl = await s3.getDownloadUrlForKey(filename);
+		const imageUrl = await s3Provider.getDownloadUrlForKey(filename);
 
 		// resize the image to the desired dimensions
 		const input = await Jimp.read(imageUrl);
@@ -55,7 +55,7 @@ graphweaverMetadata.addMutation({
 			.resize({ w: args.input.width, h: args.input.height })
 			.getBuffer('image/png');
 
-		const upload = await s3.getUploadUrl({
+		const upload = await s3Provider.getUploadUrl({
 			args: { key: filename },
 			source,
 			context,

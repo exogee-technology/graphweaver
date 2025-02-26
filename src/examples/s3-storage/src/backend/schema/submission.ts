@@ -4,7 +4,7 @@ import { GraphweaverMedia, MediaField } from '@exogee/graphweaver-storage-provid
 
 import { pgConnection } from '../database';
 import { Submission as OrmSubmission } from '../entities';
-import { s3 } from '../s3';
+import { s3Provider } from '../s3-provider';
 
 if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
 
@@ -15,6 +15,6 @@ export class Submission {
 	@Field(() => ID)
 	id!: string;
 
-	@MediaField({ storageProvider: s3 })
+	@MediaField({ storageProvider: s3Provider })
 	image?: GraphweaverMedia;
 }
