@@ -5,9 +5,10 @@ import { Link } from 'wouter';
 import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '../utils';
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
-import { extensions } from '../detail-panel/fields';
+import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
 
 const columnHelper = createColumnHelper<any>();
+const richTextExtensions = getExtensions({});
 
 const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
 	// Is there a specific definition for the cell type?
@@ -49,8 +50,8 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
 		if (!value) return null;
 		try {
-			const json = generateJSON(value, extensions);
-			return <div>{generateText(json, extensions)}</div>;
+			const json = generateJSON(value, richTextExtensions);
+			return <div>{generateText(json, richTextExtensions)}</div>;
 		} catch (e) {
 			console.error(e);
 			return <div>{value}</div>;
