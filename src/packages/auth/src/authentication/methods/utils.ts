@@ -121,12 +121,10 @@ const obfuscateSensitiveValues = (
 	}
 };
 
-const defaultSensitiveNodeNames = new Set(['password']);
-
 const maskSensitiveValuesForLogging = (
 	ast: OperationDefinitionNode,
 	variables: VariableValues | undefined,
-	nodeNamesToMask: Set<string> = defaultSensitiveNodeNames
+	nodeNamesToMask: Set<string>
 ) => {
 	logger.trace('maskSensitiveValuesForLogging - enter');
 	const safeVariables = obfuscateSensitiveValues(variables, nodeNamesToMask);
