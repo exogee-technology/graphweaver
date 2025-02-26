@@ -3,7 +3,8 @@
 	"include": ["./src"],
 	"compilerOptions": {
 		"rootDir": "./src",
-		"outDir": "./lib"
+		"outDir": "./lib",
+		"resolveJsonModule": true
 	},
 	"references": [{ "path": "../logger" }, { "path": "../scalars" }]
 }

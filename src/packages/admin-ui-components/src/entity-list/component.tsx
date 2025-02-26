@@ -106,13 +106,20 @@ export const EntityList = <TData extends object>({ children }: { children: React
 	};
 
 	const handleFetchNextPage = async () => {
-		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
-		const offset = supportsPseudoCursorPagination ? 0 : nextPage * PAGE_SIZE;
+		const lastElement = data?.result?.[data.result.length - 1];
 
-		const filterVar = variables.filter ?? {};
-		const filter = supportsPseudoCursorPagination
-			? addStabilizationToFilter(filterVar, sort, data?.result?.[data.result.length - 1])
-			: filterVar;
+		let filter = variables.filter ?? {};
+		let offset = 0;
+		const sortedByPrimaryKeyOnly = Object.keys(sort).length === 1 && Object.keys(sort)[0] === entity.primaryKeyField;
+		if (supportsPseudoCursorPagination && sortedByPrimaryKeyOnly) {
+			// We don't yet have a way to define sort order, so for now we
+			// can only page this way in this case.
+			filter = addStabilizationToFilter(filter, sort, lastElement);
+		} else {
+			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+			offset = nextPage * PAGE_SIZE;
+		}
+
 		fetchMore({
 			variables: {
 				...variables,
