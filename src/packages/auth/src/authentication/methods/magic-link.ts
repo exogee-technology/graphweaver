@@ -8,12 +8,7 @@ import { Token } from '../entities/token';
 import { UserProfile } from '../../user-profile';
 import { AuthTokenProvider } from '../token';
 import { requireEnvironmentVariable } from '../../helper-functions';
-import {
-	BackendProvider,
-	LogOnDidResolveOperationParams,
-	ResolverOptions,
-	graphweaverMetadata,
-} from '@exogee/graphweaver';
+import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import { AuthenticationType } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
 import { BaseAuthMethod } from './base-auth-method';
