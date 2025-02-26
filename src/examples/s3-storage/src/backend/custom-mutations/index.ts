@@ -40,7 +40,7 @@ graphweaverMetadata.addMutation({
 			id: args.input.submissionId.toString(),
 		});
 
-		const filename = JSON.parse(submission.image as unknown as string)?.filename;
+		const filename = submission.image.filename;
 
 		if (!filename) {
 			throw new Error('No filename attached to submission');

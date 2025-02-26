@@ -65,7 +65,7 @@ describe('Nested entities in custom operations', () => {
 	});
 
 	describe('Custom queries', () => {
-		test.only('should allow a selection of nested entities in a custom query', async () => {
+		test('should allow a selection of nested entities in a custom query', async () => {
 			const response = await request<{ submissionByFilename: Submission }>(config.baseUrl).path('/')
 				.query(gql`
 				query {

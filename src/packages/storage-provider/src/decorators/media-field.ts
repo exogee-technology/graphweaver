@@ -1,9 +1,9 @@
 import {
 	Entity,
 	Field,
+	FieldMetadata,
 	FieldOptions,
 	graphweaverMetadata,
-	FieldMetadata,
 	Source,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
@@ -66,10 +66,7 @@ export class GraphweaverMedia {
 	static serialize = ({ value }: { value: unknown }) => {
 		if (value === null) return null;
 		if (isMedia(value)) {
-			return JSON.stringify({
-				filename: value.filename,
-				type: value.type,
-			});
+			return value;
 		}
 		throw new Error(
 			'Invalid Media input data provided. Please sent a filename and type when creating or updating media.'
