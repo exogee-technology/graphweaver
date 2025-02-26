@@ -1,10 +1,10 @@
-import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 import { ExternalIdField } from '@exogee/graphweaver-mikroorm';
+import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class Task {
-	@PrimaryKey({ type: new BigIntType('string') })
-	id!: string;
+	@PrimaryKey({ type: new BigIntType() })
+	id!: number;
 
 	@Property({ type: String })
 	description!: string;
