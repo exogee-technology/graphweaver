@@ -344,8 +344,8 @@ importers:
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)
       '@okta/okta-auth-js':
-        specifier: 7.9.0
-        version: 7.9.0(encoding@0.1.13)
+        specifier: 7.11.0
+        version: 7.11.0(encoding@0.1.13)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -981,8 +981,8 @@ importers:
         specifier: workspace:*
         version: link:../admin-ui-components
       '@okta/okta-auth-js':
-        specifier: 7.9.0
-        version: 7.9.0(encoding@0.1.13)
+        specifier: 7.11.0
+        version: 7.11.0(encoding@0.1.13)
       '@simplewebauthn/types':
         specifier: 10.0.0
         version: 10.0.0
@@ -4350,8 +4350,8 @@ packages:
     engines: {node: '>=10'}
     deprecated: This functionality has been moved to @npmcli/fs
 
-  '@okta/okta-auth-js@7.9.0':
-    resolution: {integrity: sha512-8CWHwF/V2XSIORVCmobjY870egvxmzpzOVdApKGlt50x6FSKQEyXXsJPt+dELGXHYp3LVkARm10e7WvYkoop1Q==}
+  '@okta/okta-auth-js@7.11.0':
+    resolution: {integrity: sha512-YL+TRH6gb5Odg6MlVv8i6LQ0VpXNZx2W0p5uf1TUsFl/MYXlCuK9JCuHQCXh9ZOHdHFmD4cHTQbI3s9ctScARQ==}
     engines: {node: '>=14.0'}
 
   '@opentelemetry/api-logs@0.57.2':
@@ -4531,6 +4531,9 @@ packages:
 
   '@peculiar/asn1-schema@2.3.13':
     resolution: {integrity: sha512-3Xq3a01WkHRZL8X04Zsfg//mGaA21xlL4tlVn4v2xGT0JStiztATRkMwa5b+f/HXmY2smsiLXYK46Gwgzvfg3g==}
+
+  '@peculiar/asn1-schema@2.3.15':
+    resolution: {integrity: sha512-QPeD8UA8axQREpgR5UTAfu2mqQmm97oUqahDtNdBcfj3qAnoXzFdQW+aNf/tD2WVXF8Fhmftxoj0eMIT++gX2w==}
 
   '@peculiar/asn1-x509@2.3.13':
     resolution: {integrity: sha512-PfeLQl2skXmxX2/AFFCVaWU8U6FKW1Db43mgBhShCOFS1bVxqtvusq1hVjfuEcuSQGedrLdCSvTgabluwN/M9A==}
@@ -6082,6 +6085,9 @@ packages:
   axios@1.7.9:
     resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
 
+  axios@1.8.1:
+    resolution: {integrity: sha512-NN+fvwH/kV01dYUQ3PTOZns4LWtWhOFCAhQ/pHb88WQ1hNe5V/dvFwc4VJcDL11LT9xSX0QtsR8sWUuyOuOq7g==}
+
   babel-jest@29.7.0:
     resolution: {integrity: sha512-BrvGY3xZSwEcCzKvKsCi2GgHqDqsYkOP4/by5xCgIwGXQxIEh+8ew3gmrE1y7XRR6LHZIj6yLYnUi/mm2KXKBg==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -6560,8 +6566,8 @@ packages:
   copy-to-clipboard@3.3.3:
     resolution: {integrity: sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==}
 
-  core-js@3.38.1:
-    resolution: {integrity: sha512-OP35aUorbU3Zvlx7pjsFdu1rGNnD4pgw/CWoYzRY3t2EzoVT7shKHY1dlAy3f41cGIO7ZDPQimhGFTlEYkG/Hw==}
+  core-js@3.40.0:
+    resolution: {integrity: sha512-7vsMc/Lty6AGnn7uFpYT56QesI5D2Y/UkgKounk87OP9Z2H9Z8kj6jzcSGAxFmUtDOS0ntK6lbQz+Nsa0Jj6mQ==}
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
@@ -9566,6 +9572,9 @@ packages:
   pvtsutils@1.3.5:
     resolution: {integrity: sha512-ARvb14YB9Nm2Xi6nBq1ZX6dAM0FsJnuk+31aUp4TrcZEdKUlSqOqsxJHUPJDNE3qiIp+iUPEIeR6Je/tgV7zsA==}
 
+  pvtsutils@1.3.6:
+    resolution: {integrity: sha512-PLgQXQ6H2FWCaeRak8vvk1GW462lMxB5s3Jm673N82zI4vqtVUPuZdffdZbPDFRoU8kAhItWFtPCWiPpp4/EDg==}
+
   pvutils@1.1.3:
     resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
     engines: {node: '>=6.0.0'}
@@ -11159,7 +11168,7 @@ snapshots:
       '@babel/core': 7.26.0
       '@babel/generator': 7.26.5
       '@babel/parser': 7.26.7
-      '@babel/runtime': 7.26.7
+      '@babel/runtime': 7.26.9
       '@babel/traverse': 7.23.2
       '@babel/types': 7.26.7
       babel-preset-fbjs: 3.4.0(@babel/core@7.26.0)
@@ -11182,7 +11191,7 @@ snapshots:
     dependencies:
       '@babel/generator': 7.26.5
       '@babel/parser': 7.26.7
-      '@babel/runtime': 7.26.7
+      '@babel/runtime': 7.26.9
       babel-preset-fbjs: 3.4.0(@babel/core@7.26.0)
       chalk: 4.1.2
       fb-watchman: 2.0.2
@@ -14774,15 +14783,15 @@ snapshots:
       rimraf: 3.0.2
     optional: true
 
-  '@okta/okta-auth-js@7.9.0(encoding@0.1.13)':
+  '@okta/okta-auth-js@7.11.0(encoding@0.1.13)':
     dependencies:
-      '@babel/runtime': 7.26.7
+      '@babel/runtime': 7.26.9
       '@peculiar/webcrypto': 1.5.0
       Base64: 1.1.0
       atob: 2.1.2
       broadcast-channel: 5.3.0
       btoa: 1.2.1
-      core-js: 3.38.1
+      core-js: 3.40.0
       cross-fetch: 3.2.0(encoding@0.1.13)
       fast-text-encoding: 1.0.6
       js-cookie: 3.0.5
@@ -15055,6 +15064,12 @@ snapshots:
       pvtsutils: 1.3.5
       tslib: 2.8.1
 
+  '@peculiar/asn1-schema@2.3.15':
+    dependencies:
+      asn1js: 3.0.5
+      pvtsutils: 1.3.6
+      tslib: 2.8.1
+
   '@peculiar/asn1-x509@2.3.13':
     dependencies:
       '@peculiar/asn1-schema': 2.3.13
@@ -15069,9 +15084,9 @@ snapshots:
 
   '@peculiar/webcrypto@1.5.0':
     dependencies:
-      '@peculiar/asn1-schema': 2.3.13
+      '@peculiar/asn1-schema': 2.3.15
       '@peculiar/json-schema': 1.1.12
-      pvtsutils: 1.3.5
+      pvtsutils: 1.3.6
       tslib: 2.8.1
       webcrypto-core: 1.8.1
 
@@ -16764,7 +16779,7 @@ snapshots:
 
   asn1js@3.0.5:
     dependencies:
-      pvtsutils: 1.3.5
+      pvtsutils: 1.3.6
       pvutils: 1.1.3
       tslib: 2.8.1
 
@@ -16817,6 +16832,14 @@ snapshots:
       tunnel: 0.0.6
 
   axios@1.7.9:
+    dependencies:
+      follow-redirects: 1.15.9
+      form-data: 4.0.2
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.8.1:
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.2
@@ -17433,7 +17456,7 @@ snapshots:
     dependencies:
       toggle-selection: 1.0.6
 
-  core-js@3.38.1: {}
+  core-js@3.40.0: {}
 
   core-util-is@1.0.3: {}
 
@@ -18445,8 +18468,8 @@ snapshots:
   fetch-mock@9.11.0(node-fetch@3.3.2):
     dependencies:
       '@babel/core': 7.26.0
-      '@babel/runtime': 7.26.7
-      core-js: 3.38.1
+      '@babel/runtime': 7.26.9
+      core-js: 3.40.0
       debug: 4.4.0
       glob-to-regexp: 0.4.1
       is-subset: 0.1.1
@@ -21164,6 +21187,10 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
+  pvtsutils@1.3.6:
+    dependencies:
+      tslib: 2.8.1
+
   pvutils@1.1.3: {}
 
   qrcode@1.5.3:
@@ -21598,7 +21625,7 @@ snapshots:
 
   serverless@4.4.3:
     dependencies:
-      axios: 1.7.9
+      axios: 1.8.1
       axios-proxy-builder: 0.1.2
       rimraf: 5.0.8
       xml2js: 0.6.2
@@ -22496,10 +22523,10 @@ snapshots:
 
   webcrypto-core@1.8.1:
     dependencies:
-      '@peculiar/asn1-schema': 2.3.13
+      '@peculiar/asn1-schema': 2.3.15
       '@peculiar/json-schema': 1.1.12
       asn1js: 3.0.5
-      pvtsutils: 1.3.5
+      pvtsutils: 1.3.6
       tslib: 2.8.1
 
   webcrypto-shim@0.1.7: {}
