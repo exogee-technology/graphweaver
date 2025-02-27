@@ -85,8 +85,8 @@ describe('null filter', () => {
 			})
 			.expectNoErrors();
 
-		expect(data?.customers).toHaveLength(49);
-		expect(data?.customers?.[0]?.company).toBeNull();
+		expect(data?.customers).toHaveLength(1);
+		expect(data?.customers?.[0]?.company).toBe('JetBrains s.r.o.');
 	});
 
 	test('should filter by Customers with company_null = false AND company in [JetBrains s.r.o.]', async () => {
