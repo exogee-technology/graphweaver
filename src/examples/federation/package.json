@@ -29,7 +29,7 @@
 	"devDependencies": {
 		"@types/node": "22.10.1",
 		"graphweaver": "workspace:*",
-		"tsx": "4.19.2",
+		"tsx": "4.19.3",
 		"typescript": "5.7.2"
 	},
 	"keywords": [
