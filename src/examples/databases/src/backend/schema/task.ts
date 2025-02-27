@@ -16,7 +16,7 @@ import { User } from './user';
 })
 export class Task {
 	@Field(() => GraphQLBigInt)
-	id!: number;
+	id!: bigint;
 
 	@Field(() => String, {
 		description: 'Formatted text using Markdown, the Admin UI allows users to enter markdown text',
