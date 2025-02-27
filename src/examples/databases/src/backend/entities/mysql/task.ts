@@ -4,7 +4,7 @@ import { BigIntType, Entity, PrimaryKey, Property } from '@mikro-orm/core';
 @Entity()
 export class Task {
 	@PrimaryKey({ type: new BigIntType() })
-	id!: number;
+	id!: bigint;
 
 	@Property({ type: String })
 	description!: string;
