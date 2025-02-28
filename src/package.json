@@ -37,7 +37,7 @@
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.10",
-		"@eslint/js": "9.17.0",
+		"@eslint/js": "9.21.0",
 		"@types/eslint-config-prettier": "6.11.3",
 		"concurrently": "9.1.2",
 		"eslint": "9.16.0",
@@ -46,7 +46,7 @@
 		"prettier": "3.4.2",
 		"turbo": "2.4.2",
 		"typescript": "5.7.2",
-		"typescript-eslint": "8.22.0"
+		"typescript-eslint": "8.25.0"
 	},
 	"pnpm": {
 		"overrides": {

@@ -1,10 +1,10 @@
-import { ChainedCommands, useCurrentEditor } from '@tiptap/react';
+import { useCurrentEditor } from '@tiptap/react';
 import { editorClickHandler } from './utils';
 import styles from './styles.module.css';
 
 interface Props {
 	hide?: boolean;
-	command: ChainedCommands;
+	command: () => boolean;
 	activeWhen?: string;
 	activeWhenAttributes?: Record<string, unknown>;
 	Icon: React.ReactNode;

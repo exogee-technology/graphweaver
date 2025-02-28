@@ -37,7 +37,7 @@ import {
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
 import { dataTransforms } from './use-data-transform';
-import { isValueEmpty } from './util';
+import { isValueEmpty, parseValueForForm } from './util';
 import styles from './styles.module.css';
 
 interface ResultBaseType {
@@ -127,13 +127,19 @@ const getField = ({
 		);
 	}
 
-	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
+	if (
+		field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT ||
+		field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+	) {
 		return (
 			<RichTextField
 				key={field.name}
 				field={field}
 				isReadOnly={!!isReadonly}
 				options={field.detailPanelInputComponent?.options ?? {}}
+				asMarkdown={
+					field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+				}
 			/>
 		);
 	}
@@ -231,11 +237,12 @@ const DetailForm = ({
 					errors[field.name] = 'Field is Required';
 				}
 
-				if (field.type === 'JSON') {
+				if (field.type === 'JSON' && values[field.name]) {
 					// Let's ensure we can parse the JSON.
 					try {
 						JSON.parse(values[field.name]);
-					} catch {
+					} catch (error) {
+						console.error(error);
 						errors[field.name] = 'Invalid JSON';
 					}
 				}
@@ -414,7 +421,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce(
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
-			const value = result?.[field.name as keyof typeof result];
+			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result]);
 			acc[field.name] = value ?? field.initialValue ?? undefined;
 			return acc;
 		},

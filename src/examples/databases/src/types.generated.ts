@@ -16,6 +16,8 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
+  BigInt: { input: any; output: any; }
   /** The concept of a date without a time and/or timezone, e.g. My birthday is January 1st, 1864 regardless of timezone. */
   Date: { input: any; output: any; }
   /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
@@ -130,6 +132,7 @@ export type DetailPanelInputComponent = {
 };
 
 export enum DetailPanelInputComponentOption {
+  Markdown = 'MARKDOWN',
   RichText = 'RICH_TEXT',
   Text = 'TEXT'
 }
@@ -296,7 +299,7 @@ export type Task = {
   createdAt: Scalars['ISOString']['output'];
   description: Scalars['String']['output'];
   dueAt?: Maybe<Scalars['Date']['output']>;
-  id: Scalars['ID']['output'];
+  id: Scalars['BigInt']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
   updatedAt: Scalars['ISOString']['output'];
@@ -384,14 +387,10 @@ export type TasksListFilter = {
   dueAt_nin?: InputMaybe<Array<Scalars['Date']['input']>>;
   dueAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   dueAt_null?: InputMaybe<Scalars['Boolean']['input']>;
-  id?: InputMaybe<Scalars['ID']['input']>;
-  id_gt?: InputMaybe<Scalars['ID']['input']>;
-  id_gte?: InputMaybe<Scalars['ID']['input']>;
-  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
-  id_lt?: InputMaybe<Scalars['ID']['input']>;
-  id_lte?: InputMaybe<Scalars['ID']['input']>;
-  id_ne?: InputMaybe<Scalars['ID']['input']>;
-  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id?: InputMaybe<Scalars['BigInt']['input']>;
+  id_in?: InputMaybe<Array<Scalars['BigInt']['input']>>;
+  id_ne?: InputMaybe<Scalars['BigInt']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['BigInt']['input']>>;
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;

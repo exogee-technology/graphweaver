@@ -17,7 +17,7 @@ import { Credential, CredentialStorage, Token } from '../entities';
 import {
 	PasswordStrengthError,
 	defaultPasswordStrength,
-	maskSensitiveValuesForLogging,
+	handleLogOnDidResolveOperation,
 	runAfterHooks,
 	updatePasswordCredential,
 } from './utils';
@@ -71,6 +71,8 @@ export type PasswordOptions<D extends CredentialStorage> = {
 	onUserRegistered?(userId: string, context: AuthorizationContext): Promise<null>;
 };
 
+const sensitiveFields = new Set(['password']);
+
 export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 	private provider: BackendProvider<CredentialStorage>;
 	private getUserProfile: (
@@ -117,6 +119,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			getType: () => Credential,
 			resolver: this.createCredential.bind(this),
 			intentionalOverride: true,
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -127,6 +130,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			getType: () => Credential,
 			resolver: this.updateCredential.bind(this),
 			intentionalOverride: true,
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -137,11 +141,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.loginPassword.bind(this),
-			logOnDidResolveOperation: (params) => {
-				const { query, variables } = maskSensitiveValuesForLogging(params.ast, params.variables);
-
-				return { query, variables };
-			},
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -151,6 +151,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.challengePassword.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 	}
 

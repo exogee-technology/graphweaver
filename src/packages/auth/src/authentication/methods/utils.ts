@@ -1,4 +1,11 @@
-import { BackendProvider, HookParams, HookRegister, hookManagerMap } from '@exogee/graphweaver';
+import {
+	BackendProvider,
+	HookParams,
+	HookRegister,
+	LogOnDidResolveOperationParams,
+	hookManagerMap,
+} from '@exogee/graphweaver';
+import { logger } from '@exogee/logger';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { hashPassword } from '../../utils/argon2id';
@@ -70,14 +77,63 @@ export const runAfterHooks = async <D, H = CredentialInsertInput | CredentialUpd
 	return hookEntities;
 };
 
-export const maskSensitiveValuesForLogging = (
-	ast: OperationDefinitionNode,
-	variables: VariableValues | undefined
+const obfuscateSensitiveValues = (
+	variables: VariableValues | undefined,
+	nodeNamesToMask: Set<string>
 ) => {
-	const safeVariables: VariableValues = JSON.parse(JSON.stringify(variables ?? {}));
+	try {
+		if (!variables) return variables;
+
+		const obfuscateNode = (key: string, value: any): any => {
+			if (nodeNamesToMask.has(key)) {
+				return '********';
+			}
+
+			if (value === null || value === undefined) {
+				return value;
+			}
+
+			if (Array.isArray(value)) {
+				return value.map((item: any) => obfuscateNode(key, item));
+			}
+
+			if (typeof value === 'symbol') {
+				return '********'; // technically impossible, but just in case
+			}
+
+			if (typeof value === 'object') {
+				return obfuscateObject(value);
+			}
+
+			return value;
+		};
+
+		const obfuscateObject = (obj: any) => {
+			return Object.fromEntries(
+				Object.entries(obj).map(([key, value]) => [key, obfuscateNode(key, value)])
+			);
+		};
+
+		return obfuscateObject(variables);
+	} catch (e) {
+		logger.error('obfuscateSensitiveValues - error', e);
+		return undefined;
+	}
+};
+
+const maskSensitiveValuesForLogging = (
+	ast: OperationDefinitionNode,
+	variables: VariableValues | undefined,
+	nodeNamesToMask: Set<string>
+) => {
+	logger.trace('maskSensitiveValuesForLogging - enter');
+	const safeVariables = obfuscateSensitiveValues(variables, nodeNamesToMask);
 	const safeAst = visit(ast, {
 		enter(node) {
-			if (node.kind === Kind.ARGUMENT && node.name.value === 'password') {
+			if (
+				(node.kind === Kind.OBJECT_FIELD || node.kind === Kind.ARGUMENT) &&
+				nodeNamesToMask.has(node.name.value)
+			) {
 				if (node.value.kind === Kind.STRING) {
 					return {
 						...node,
@@ -86,10 +142,6 @@ export const maskSensitiveValuesForLogging = (
 							value: '********',
 						},
 					};
-				}
-				if (node.value.kind === Kind.VARIABLE) {
-					const variableName = node.value.name.value;
-					safeVariables[variableName] = '********';
 				}
 			}
 		},
@@ -100,3 +152,14 @@ export const maskSensitiveValuesForLogging = (
 		variables: safeVariables,
 	};
 };
+
+export const handleLogOnDidResolveOperation =
+	(sensitiveFields: Set<string>) => (params: Readonly<LogOnDidResolveOperationParams>) => {
+		const { query, variables } = maskSensitiveValuesForLogging(
+			params.ast,
+			params.variables,
+			sensitiveFields
+		);
+
+		return { query, variables };
+	};

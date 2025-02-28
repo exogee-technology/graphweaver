@@ -43,11 +43,12 @@ type PostgresError = {
 
 const objectOperations = new Set(['_and', '_or', '_not']);
 const mikroObjectOperations = new Set(['$and', '$or', '$not']);
+const nullBooleanOperations = new Set(['null', 'notnull']);
 
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
 
-export const gqlToMikro: (filter: any) => any = (filter: any) => {
+export const gqlToMikro = (filter: any): any => {
 	if (Array.isArray(filter)) {
 		return filter.map((element) => gqlToMikro(element));
 	} else if (typeof filter === 'object') {
@@ -63,14 +64,40 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 				// Recurse over nested filters only (arrays are an argument to a filter, not a nested filter)
 				filter[key] = gqlToMikro(filter[key]);
 			} else if (key.indexOf('_') >= 0) {
-				// { firstName_in: ['k', 'b'] } => { firstName: { $in: ['k', 'b'] } }
 				const [newKey, operator] = key.split('_');
-				const newValue = { [`$${operator}`]: gqlToMikro(filter[key]) };
+				let newValue;
+				if (nullBooleanOperations.has(operator) && typeof filter[key] === 'boolean') {
+					// { firstName_null: true } => { firstName: { $eq: null } } or { firstName_null: false } => { firstName: { $ne: null } }
+					// { firstName_notnull: true } => { firstName: { $ne: null } } or { firstName_notnull: false } => { firstName: { $eq: null } }
+					newValue =
+						(filter[key] && operator === 'null') || (!filter[key] && operator === 'notnull')
+							? { $eq: null }
+							: { $ne: null };
+				} else {
+					// { firstName_in: ['k', 'b'] } => { firstName: { $in: ['k', 'b'] } }
+					newValue = { [`$${operator}`]: gqlToMikro(filter[key]) };
+					// They can construct multiple filters for the same key. In that case we need
+					// to append them all into an object.
+				}
 
-				// They can construct multiple filters for the same key. In that case we need
-				// to append them all into an object.
 				if (typeof filter[newKey] !== 'undefined') {
-					filter[newKey] = { ...filter[newKey], ...newValue };
+					if (typeof filter[newKey] !== 'object') {
+						if (typeof newValue === 'object' && '$eq' in newValue) {
+							throw new Error(
+								`property ${newKey} on filter is ambiguous. There are two values for this property: ${filter[newKey]} and ${newValue.$eq}`
+							);
+						}
+						filter[newKey] = { ...{ $eq: filter[newKey] }, ...newValue };
+					} else {
+						if (newValue && typeof newValue === 'object' && '$eq' in newValue) {
+							throw new Error(
+								`property ${newKey} on filter is ambiguous. There are two values for this property: ${JSON.stringify(
+									filter[newKey]
+								)} and ${JSON.stringify(newValue)}`
+							);
+						}
+						filter[newKey] = { ...filter[newKey], ...newValue };
+					}
 				} else {
 					filter[newKey] = newValue;
 				}

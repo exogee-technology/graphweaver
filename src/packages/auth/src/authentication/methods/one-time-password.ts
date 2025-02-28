@@ -10,6 +10,7 @@ import { Token } from '../entities/token';
 import { AuthTokenProvider } from '../token';
 import { ChallengeError } from '../../errors';
 import { BaseAuthMethod } from './base-auth-method';
+import { handleLogOnDidResolveOperation } from './utils';
 
 export interface OneTimePasswordData {
 	code: string;
@@ -68,6 +69,7 @@ export class OneTimePassword extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.verifyOTPChallenge.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(new Set(['code'])),
 		});
 	}
 

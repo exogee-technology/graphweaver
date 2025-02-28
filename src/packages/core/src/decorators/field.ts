@@ -4,6 +4,7 @@ import { AdminUIFilterType, Complexity, GetTypeFunction } from '../types';
 export enum DetailPanelInputComponentOption {
 	TEXT = 'TEXT',
 	RICH_TEXT = 'RICH_TEXT',
+	MARKDOWN = 'MARKDOWN',
 }
 
 /**

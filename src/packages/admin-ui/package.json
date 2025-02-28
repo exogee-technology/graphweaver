@@ -32,13 +32,13 @@
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"react-error-boundary": "5.0.0",
-		"react-modal": "3.16.1",
+		"react-modal": "3.16.3",
 		"wouter": "3.6.0"
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-html": "0.18.2",
 		"@types/react": "19.0.10",
-		"@types/react-dom": "19.0.0",
+		"@types/react-dom": "19.0.4",
 		"@types/react-modal": "3.16.3",
 		"@vitejs/plugin-react": "4.3.4",
 		"esbuild": "0.25.0",

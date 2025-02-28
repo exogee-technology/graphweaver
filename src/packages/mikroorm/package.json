@@ -10,8 +10,9 @@
 		"generate:schema": "tsx ./src/utils/generate-db-schema.ts",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
-		"test": "tsx scripts/check-mikro-overrides-match-installed-versions.ts",
+		"test": "tsx scripts/check-mikro-overrides-match-installed-versions.ts && pnpm run:unit:tests",
 		"test-introspection": "tsx scripts/test-introspection.ts",
+		"run:unit:tests": "vitest",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -50,8 +51,9 @@
 		"esbuild": "0.25.0",
 		"glob": "11.0.1",
 		"graphql": "16.10.0",
-		"tsx": "4.19.2",
-		"typescript": "5.7.2"
+		"tsx": "4.19.3",
+		"typescript": "5.7.2",
+		"vitest": "2.1.9"
 	},
 	"optionalDependencies": {
 		"@mikro-orm/knex": "^6.4.7",
