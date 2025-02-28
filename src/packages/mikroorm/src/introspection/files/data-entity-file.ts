@@ -31,10 +31,10 @@ import type {
 	NamingStrategy,
 	Platform,
 } from '@mikro-orm/core';
-import { ReferenceKind, UnknownType, Utils } from '@mikro-orm/core';
-import { BaseFile } from './base-file';
+import { BigIntType, ReferenceKind, UnknownType, Utils } from '@mikro-orm/core';
 import { DatabaseType } from '../../database';
 import { identifierForEnumValue, pascalToKebabCaseString } from '../utils';
+import { BaseFile } from './base-file';
 
 export class DataEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -126,6 +126,10 @@ export class DataEntityFile extends BaseFile {
 			if (columnType?.startsWith('nvarchar(') || columnType?.startsWith('varchar(')) {
 				return 'string';
 			}
+		}
+
+		if (prop.type === 'bigint') {
+			return 'string';
 		}
 
 		return prop.runtimeType;
@@ -320,7 +324,13 @@ export class DataEntityFile extends BaseFile {
 		) {
 			options.type = this.quote(prop.columnTypes[0]);
 		} else {
-			options.type = this.quote(prop.type);
+			// Special case for when prop.type is BigIntType
+			if (mappedType1 instanceof BigIntType) {
+				this.coreImports.add('BigIntType');
+				options.type = "new BigIntType('string')";
+			} else {
+				options.type = this.quote(prop.type);
+			}
 		}
 
 		if (prop.length) {

@@ -193,6 +193,9 @@ importers:
       graphql:
         specifier: 16.10.0
         version: 16.10.0
+      graphql-scalars:
+        specifier: 1.24.0
+        version: 1.24.0(graphql@16.10.0)
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
