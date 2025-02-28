@@ -707,8 +707,8 @@ importers:
         specifier: 5.0.0
         version: 5.0.0(react@19.0.0)
       react-modal:
-        specifier: 3.16.1
-        version: 3.16.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: 3.16.3
+        version: 3.16.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       wouter:
         specifier: 3.6.0
         version: 3.6.0(react@19.0.0)
@@ -1523,16 +1523,16 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)
       '@mikro-orm/mysql':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.4.7
@@ -9682,12 +9682,11 @@ packages:
   react-lifecycles-compat@3.0.4:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
 
-  react-modal@3.16.1:
-    resolution: {integrity: sha512-VStHgI3BVcGo7OXczvnJN7yT2TWHJPDXZWyI/a0ssFNhGZWsPmB8cF0z33ewDXq4VfYMO1vXgiv/g8Nj9NDyWg==}
-    engines: {node: '>=8'}
+  react-modal@3.16.3:
+    resolution: {integrity: sha512-yCYRJB5YkeQDQlTt17WGAgFJ7jr2QYcWa1SHqZ3PluDmnKJ/7+tVU+E6uKyZ0nODaeEj+xCpK4LcSnKXLMC0Nw==}
     peerDependencies:
-      react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
-      react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18
+      react: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18 || ^19
+      react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17 || ^18 || ^19
 
   react-refresh@0.14.2:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
@@ -14482,22 +14481,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.7
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.3)(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.4.7(@mikro-orm/core@6.4.7)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.7
@@ -14544,23 +14527,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-
-  '@mikro-orm/mysql@6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)':
-    dependencies:
-      '@mikro-orm/core': 6.4.7
-      '@mikro-orm/knex': 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
-      mysql2: 3.12.0
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
 
   '@mikro-orm/postgresql@6.4.7(@mikro-orm/core@6.4.7)':
     dependencies:
@@ -14637,26 +14603,6 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
-
-  '@mikro-orm/sqlite@6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)':
-    dependencies:
-      '@mikro-orm/core': 6.4.7
-      '@mikro-orm/knex': 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
-    optional: true
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -20069,29 +20015,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.13.3)(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.13.3
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   knex@3.1.0(sqlite3@5.1.7):
     dependencies:
       colorette: 2.0.19
@@ -21398,7 +21321,7 @@ snapshots:
 
   react-lifecycles-compat@3.0.4: {}
 
-  react-modal@3.16.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-modal@3.16.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       exenv: 1.2.2
       prop-types: 15.8.1
