@@ -67,28 +67,27 @@ describe('null filter', () => {
 		expect(data?.customers?.[0]?.company).toBeNull();
 	});
 
-	// Not working, but this bug is unrelated to the current PR about null filters
-	// test('should filter by Customers with company_null = false AND company = JetBrains s.r.o.', async () => {
-	// 	const { data } = await request<{ customers: any }>(config.baseUrl)
-	// 		.query(gql`
-	// 			query Customers($filter: CustomersListFilter) {
-	// 				customers(filter: $filter) {
-	// 					customerId
-	// 					company
-	// 				}
-	// 			}
-	// 		`)
-	// 		.variables({
-	// 			filter: {
-	// 				company_null: false,
-	// 				company: 'JetBrains s.r.o.',
-	// 			},
-	// 		})
-	// 		.expectNoErrors();
+	test('should filter by Customers with company_null = false AND company = JetBrains s.r.o.', async () => {
+		const { data } = await request<{ customers: any }>(config.baseUrl)
+			.query(gql`
+				query Customers($filter: CustomersListFilter) {
+					customers(filter: $filter) {
+						customerId
+						company
+					}
+				}
+			`)
+			.variables({
+				filter: {
+					company_null: false,
+					company: 'JetBrains s.r.o.',
+				},
+			})
+			.expectNoErrors();
 
-	// 	expect(data?.customers).toHaveLength(49);
-	// 	expect(data?.customers?.[0]?.company).toBeNull();
-	// });
+		expect(data?.customers).toHaveLength(1);
+		expect(data?.customers?.[0]?.company).toBe('JetBrains s.r.o.');
+	});
 
 	test('should filter by Customers with company_null = false AND company in [JetBrains s.r.o.]', async () => {
 		const { data } = await request<{ customers: any }>(config.baseUrl)
