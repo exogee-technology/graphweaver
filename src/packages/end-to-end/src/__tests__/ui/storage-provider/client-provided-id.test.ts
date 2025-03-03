@@ -28,7 +28,6 @@ test('Ensure a new image note can be created when an ID is provided', async ({ p
 	await page.getByRole('button', { name: 'Create New ImageNote' }).click();
 	await page.waitForTimeout(1000);
 
-	// await page.getByLabel('note', { exact: true }).click();
 	await page.getByLabel('note*').fill('This is a note');
 
 	await page.getByLabel('id').click();

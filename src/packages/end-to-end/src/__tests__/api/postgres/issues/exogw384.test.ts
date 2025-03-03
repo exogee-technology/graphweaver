@@ -6,8 +6,12 @@ import gql from 'graphql-tag';
 // ESLint, I know it looks like the entities in this file aren't used, but they actually are.
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
+const dataProviderWithFindOne = new BaseDataProvider('EntityWithClientGeneratedId');
+dataProviderWithFindOne.updateOne = async () => undefined;
+dataProviderWithFindOne.createOne = async () => undefined;
+dataProviderWithFindOne.findOne = async () => ({ id: '12345', description: 'Test User' });
 @Entity('EntityWithClientGeneratedId', {
-	provider: new BaseDataProvider('EntityWithClientGeneratedId'),
+	provider: dataProviderWithFindOne,
 	apiOptions: { clientGeneratedPrimaryKeys: true },
 })
 class EntityWithClientGeneratedId {
@@ -63,6 +67,22 @@ describe('clientGeneratedPrimaryKeys', () => {
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
 			'Field "EntityWithClientGeneratedIdInsertInput.id" of required type "ID!" was not provided.'
 		);
+	});
+
+	test('should successfully create a record when the ID is provided for client-generated ID entity', async () => {
+		const response = await graphweaver.executeOperation<any>({
+			query: gql`
+				mutation {
+					createEntityWithClientGeneratedId(input: { id: "12345", description: "Test User" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
+
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
 	});
 
 	test('should NOT throw error because the ID is NOT marked as client-generated, and we are not passing an ID when trying to create a record', async () => {
