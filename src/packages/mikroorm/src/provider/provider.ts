@@ -187,10 +187,6 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		}
 	}
 
-	private gqlToMikro(filter: any) {
-		return gqlToMikro(filter, this.getDbType());
-	}
-
 	private connectToDatabase = async () => {
 		const connectionManagerId = this.connectionManagerId;
 		if (!connectionManagerId) {
@@ -347,7 +343,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		// This query only works if we JSON.parse(JSON.stringify(filter)):
 		const where = traceSync((trace?: TraceOptions) => {
 			trace?.span.updateName('Convert filter to Mikro-Orm format');
-			return filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+			return filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
 		})();
 
 		// Convert from: { account: {id: '6' }}
@@ -460,7 +456,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		if (filter) {
 			// Since the user has supplied a filter, we need to and it in.
 			queryFilter = {
-				$and: [queryFilter, ...[this.gqlToMikro(filter)]],
+				$and: [queryFilter, ...[gqlToMikro(filter, this.getDbType())]],
 			};
 		}
 
@@ -665,7 +661,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async deleteOne(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteOne ${this.entityType.name}`);
 		logger.trace(filter, `Running delete ${this.entityType.name} with filter.`);
-		const where = filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);
 
@@ -689,7 +685,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		logger.trace(`Running delete ${this.entityType.name}`);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
-			const where = filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+			const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
 			const whereWithAppliedExternalIdFields =
 				where && this.applyExternalIdFields(this.entityType, where);
 
@@ -759,7 +755,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		//     id
 		//   }
 		// }
-		const where = filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
 
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
