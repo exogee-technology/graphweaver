@@ -18,7 +18,9 @@ import {
 } from '@exogee/graphweaver';
 import { logger } from '@exogee/logger';
 import { LoadStrategy, Reference, RequestContext, sql } from '@mikro-orm/core';
-import { AutoPath, PopulateHint } from '@mikro-orm/postgresql';
+import { AutoPath, PopulateHint, PostgreSqlDriver } from '@mikro-orm/postgresql';
+import { SqliteDriver } from '@mikro-orm/sqlite';
+import { MySqlDriver } from '@mikro-orm/mysql';
 import { pluginManager, apolloPluginManager } from '@exogee/graphweaver-server';
 
 import {
@@ -31,6 +33,7 @@ import {
 	IsolationLevel,
 	ConnectionOptions,
 	connectToDatabase,
+	DatabaseType
 } from '..';
 
 import { OptimisticLockError } from '../utils/errors';
@@ -48,9 +51,9 @@ const nullBooleanOperations = new Set(['null', 'notnull']);
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
 
-export const gqlToMikro: (filter: any) => any = (filter: any) => {
+export const gqlToMikro: (filter: any, databaseType?: DatabaseType) => any = (filter: any, databaseType?: DatabaseType) => {
 	if (Array.isArray(filter)) {
-		return filter.map((element) => gqlToMikro(element));
+		return filter.map((element) => gqlToMikro(element, databaseType));
 	} else if (typeof filter === 'object') {
 		for (const key of Object.keys(filter)) {
 			// A null here is a user-specified value and is valid to filter on
@@ -58,11 +61,11 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 
 			if (objectOperations.has(key)) {
 				// { _not: '1' } => { $not: '1' }
-				filter[key.replace('_', '$')] = gqlToMikro(filter[key]);
+				filter[key.replace('_', '$')] = gqlToMikro(filter[key], databaseType);
 				delete filter[key];
 			} else if (typeof filter[key] === 'object' && !Array.isArray(filter[key])) {
 				// Recurse over nested filters only (arrays are an argument to a filter, not a nested filter)
-				filter[key] = gqlToMikro(filter[key]);
+				filter[key] = gqlToMikro(filter[key], databaseType);
 			} else if (key.indexOf('_') >= 0) {
 				const [newKey, operator] = key.split('_');
 				let newValue;
@@ -73,9 +76,12 @@ export const gqlToMikro: (filter: any) => any = (filter: any) => {
 						(filter[key] && operator === 'null') || (!filter[key] && operator === 'notnull')
 							? { $eq: null }
 							: { $ne: null };
+				} else if (operator === 'ilike' && databaseType !== "postgresql") {
+					logger.warn(`The $ilike operator is not supported by ${databaseType} databases. Operator coerced to { $like: "${filter[key]}"}`)
+					newValue = { $like: filter[key] };
 				} else {
 					// { firstName_in: ['k', 'b'] } => { firstName: { $in: ['k', 'b'] } }
-					newValue = { [`$${operator}`]: gqlToMikro(filter[key]) };
+					newValue = { [`$${operator}`]: gqlToMikro(filter[key], databaseType) };
 					// They can construct multiple filters for the same key. In that case we need
 					// to append them all into an object.
 				}
@@ -148,6 +154,24 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		this.connection = connection;
 		this.addRequestContext();
 		this.connectToDatabase();
+		
+	}
+	private getDbType(): DatabaseType {
+		const driver = this.em.getDriver().constructor.name;
+		switch (driver) {
+			case SqliteDriver.name:
+				return "sqlite";
+			case MySqlDriver.name:
+				return "mysql";
+			case PostgreSqlDriver.name:
+				return "postgresql";
+			default:
+				throw new Error(`This driver (${driver}) is not supported!`);
+		}
+	}
+
+	private gqlToMikro(filter: any) {
+		return gqlToMikro(filter, this.getDbType());
 	}
 
 	private connectToDatabase = async () => {
@@ -306,7 +330,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		// This query only works if we JSON.parse(JSON.stringify(filter)):
 		const where = traceSync((trace?: TraceOptions) => {
 			trace?.span.updateName('Convert filter to Mikro-Orm format');
-			return filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+			return filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 		})();
 
 		// Convert from: { account: {id: '6' }}
@@ -419,7 +443,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		if (filter) {
 			// Since the user has supplied a filter, we need to and it in.
 			queryFilter = {
-				$and: [queryFilter, ...[gqlToMikro(filter)]],
+				$and: [queryFilter, ...[this.gqlToMikro(filter)]],
 			};
 		}
 
@@ -624,7 +648,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async deleteOne(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteOne ${this.entityType.name}`);
 		logger.trace(filter, `Running delete ${this.entityType.name} with filter.`);
-		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		const where = filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);
 
@@ -648,7 +672,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		logger.trace(`Running delete ${this.entityType.name}`);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
-			const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+			const where = filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 			const whereWithAppliedExternalIdFields =
 				where && this.applyExternalIdFields(this.entityType, where);
 
@@ -718,7 +742,7 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		//     id
 		//   }
 		// }
-		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
+		const where = filter ? this.gqlToMikro(JSON.parse(JSON.stringify(filter))) : undefined;
 
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
