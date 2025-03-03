@@ -34,6 +34,7 @@
 		"graphql": "16.10.0",
 		"graphql-scalars": "1.24.0",
 		"graphweaver": "workspace:*",
+		"json-bigint-patch": "0.0.8",
 		"mysql2": "3.12.0",
 		"pg": "8.13.1",
 		"react": "19.0.0",
