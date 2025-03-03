@@ -77,7 +77,7 @@ export const gqlToMikro = (filter: any, databaseType?: DatabaseType): any => {
 							? { $eq: null }
 							: { $ne: null };
 				} else if (operator === 'ilike' && databaseType !== "postgresql") {
-					logger.warn(`The $ilike operator is not supported by ${databaseType} databases. Operator coerced to { $like: "${filter[key]}"}`)
+					logger.warn(`The $ilike operator is not supported by ${databaseType} databases. Operator coerced to $like.`)
 					newValue = { $like: filter[key] };
 				} else {
 					// { firstName_in: ['k', 'b'] } => { firstName: { $in: ['k', 'b'] } }
