@@ -1,23 +1,22 @@
 import {
-	RelationshipField,
-	Field,
-	ID,
-	Entity,
 	DetailPanelInputComponentOption,
+	Entity,
+	Field,
+	RelationshipField,
 } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 import { DateScalar, GraphQLJSON } from '@exogee/graphweaver-scalars';
-
+import { GraphQLBigInt } from 'graphql-scalars';
+import { myConnection } from '../database';
 import { Task as OrmTask } from '../entities';
 import { User } from './user';
-import { myConnection } from '../database';
 
 @Entity('Task', {
 	provider: new MikroBackendProvider(OrmTask, myConnection),
 })
 export class Task {
-	@Field(() => ID)
-	id!: string;
+	@Field(() => GraphQLBigInt)
+	id!: bigint;
 
 	@Field(() => String, {
 		description: 'Formatted text using Markdown, the Admin UI allows users to enter markdown text',

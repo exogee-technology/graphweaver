@@ -51,7 +51,7 @@ const nullBooleanOperations = new Set(['null', 'notnull']);
 const appendPath = (path: string, newPath: string) =>
 	path.length ? `${path}.${newPath}` : newPath;
 
-export const gqlToMikro: (filter: any, databaseType?: DatabaseType) => any = (filter: any, databaseType?: DatabaseType) => {
+export const gqlToMikro = (filter: any, databaseType?: DatabaseType): any => {
 	if (Array.isArray(filter)) {
 		return filter.map((element) => gqlToMikro(element, databaseType));
 	} else if (typeof filter === 'object') {
@@ -85,8 +85,25 @@ export const gqlToMikro: (filter: any, databaseType?: DatabaseType) => any = (fi
 					// They can construct multiple filters for the same key. In that case we need
 					// to append them all into an object.
 				}
+
 				if (typeof filter[newKey] !== 'undefined') {
-					filter[newKey] = { ...filter[newKey], ...newValue };
+					if (typeof filter[newKey] !== 'object') {
+						if (typeof newValue === 'object' && '$eq' in newValue) {
+							throw new Error(
+								`property ${newKey} on filter is ambiguous. There are two values for this property: ${filter[newKey]} and ${newValue.$eq}`
+							);
+						}
+						filter[newKey] = { ...{ $eq: filter[newKey] }, ...newValue };
+					} else {
+						if (newValue && typeof newValue === 'object' && '$eq' in newValue) {
+							throw new Error(
+								`property ${newKey} on filter is ambiguous. There are two values for this property: ${JSON.stringify(
+									filter[newKey]
+								)} and ${JSON.stringify(newValue)}`
+							);
+						}
+						filter[newKey] = { ...filter[newKey], ...newValue };
+					}
 				} else {
 					filter[newKey] = newValue;
 				}
