@@ -1,4 +1,4 @@
-import { Field, ID, Entity } from '@exogee/graphweaver';
+import { Field, ID, Entity, RelationshipField } from '@exogee/graphweaver';
 import {
 	S3StorageProvider,
 	StorageType,
@@ -9,6 +9,7 @@ import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
 import { Submission as OrmSubmission } from '../entities';
 import { pgConnection } from '../database';
+import { ImageNote } from './image-note';
 
 if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
 
@@ -29,4 +30,13 @@ export class Submission {
 
 	@MediaField({ storageProvider: s3 })
 	image?: GraphweaverMedia;
+
+	@RelationshipField<Submission>(() => ImageNote, {
+		id: (entity) => {
+			if (!entity.imageNote) return null;
+			return entity.imageNote.id;
+		},
+		nullable: true,
+	})
+	imageNote?: ImageNote;
 }
