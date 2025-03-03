@@ -1,7 +1,10 @@
 import assert from 'assert';
 import { Field, ID, Entity, BaseDataProvider } from '@exogee/graphweaver';
-import Graphweaver, { BaseContext } from '@exogee/graphweaver-server';
+import Graphweaver from '@exogee/graphweaver-server';
 import gql from 'graphql-tag';
+
+// ESLint, I know it looks like the entities in this file aren't used, but they actually are.
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 @Entity('EntityWithClientGeneratedId', {
 	provider: new BaseDataProvider('EntityWithClientGeneratedId'),
