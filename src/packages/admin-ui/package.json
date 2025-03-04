@@ -24,7 +24,7 @@
 		"graphql": "16"
 	},
 	"dependencies": {
-		"@apollo/client": "3.12.4",
+		"@apollo/client": "3.13.1",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",
