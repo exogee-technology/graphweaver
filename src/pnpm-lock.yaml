@@ -85,7 +85,7 @@ importers:
         version: 6.4.7
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -290,7 +290,7 @@ importers:
         version: 6.4.7
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -345,7 +345,7 @@ importers:
         version: 6.4.7
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -388,7 +388,7 @@ importers:
         version: 6.4.7
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -510,10 +510,10 @@ importers:
         version: 6.4.7
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/postgresql':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)
+        version: 6.4.7(@mikro-orm/core@6.4.7)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -571,7 +571,7 @@ importers:
         version: 6.4.7
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -1368,7 +1368,7 @@ importers:
         version: 6.4.7
       '@mikro-orm/postgresql':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)
+        version: 6.4.7(@mikro-orm/core@6.4.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -1476,7 +1476,7 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -1535,13 +1535,13 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
       '@mikro-orm/mysql':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.7
-        version: 6.4.7(@mikro-orm/core@6.4.7)(mysql2@3.12.0)
+        version: 6.4.7(@mikro-orm/core@6.4.7)
       '@mikro-orm/sqlite':
         specifier: 6.4.7
         version: 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)
@@ -14796,6 +14796,25 @@ snapshots:
       - mariadb
       - mysql
       - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/postgresql@6.4.7(@mikro-orm/core@6.4.7)':
+    dependencies:
+      '@mikro-orm/core': 6.4.7
+      '@mikro-orm/knex': 6.4.7(@mikro-orm/core@6.4.7)(pg@8.13.3)(sqlite3@5.1.7)
+      pg: 8.13.3
+      postgres-array: 3.0.2
+      postgres-date: 2.1.0
+      postgres-interval: 4.0.2
+    transitivePeerDependencies:
+      - better-sqlite3
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
       - pg-native
       - sqlite3
       - supports-color
