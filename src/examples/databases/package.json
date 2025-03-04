@@ -32,10 +32,10 @@
 		"@mikro-orm/postgresql": "6.4.7",
 		"class-validator": "0.14.1",
 		"graphql": "16.10.0",
-		"graphql-scalars": "1.24.0",
+		"graphql-scalars": "1.24.1",
 		"graphweaver": "workspace:*",
 		"mysql2": "3.12.0",
-		"pg": "8.13.1",
+		"pg": "8.13.3",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"react-syntax-highlighter": "15.6.1"
