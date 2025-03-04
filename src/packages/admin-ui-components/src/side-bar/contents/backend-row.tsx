@@ -6,12 +6,19 @@ import { useSelectedEntity } from '../../utils/use-selected-entity';
 import { EntityRow } from './entity-row';
 import styles from '../styles.module.css';
 
-export const BackendRow = ({ backendDisplayName }: { backendDisplayName: string }) => {
+export const BackendRow = ({
+	backendDisplayName,
+	defaultOpen,
+}: {
+	backendDisplayName: string;
+	defaultOpen: boolean;
+}) => {
 	const { entitiesForBackendDisplayName, backendIdsForDisplayName } = useSchema();
 	const { selectedEntity } = useSelectedEntity();
 	const [expanded, setExpanded] = useState(
-		selectedEntity?.backendId &&
-			backendIdsForDisplayName(backendDisplayName).has(selectedEntity.backendId)
+		(!selectedEntity && defaultOpen) ||
+			(selectedEntity?.backendId &&
+				backendIdsForDisplayName(backendDisplayName).has(selectedEntity.backendId))
 	);
 
 	const entities = entitiesForBackendDisplayName(backendDisplayName)
