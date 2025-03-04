@@ -24,6 +24,7 @@
 		"test-postgres": "export DATABASE=postgres && jest --runInBand -- api/postgres",
 		"test-sqlite": "dotenv -e .env.sqlite -- jest --runInBand --forceExit ---- api/sqlite",
 		"test-scalars": "jest --runInBand --forceExit ---- api/scalars",
+		"test-storage-provider": "jest --runInBand --forceExit ---- api/storage-provider",
 		"test-ui-auth": "pnpm exec playwright test ./auth",
 		"test-ui:init": "pnpm exec playwright install",
 		"test-ui:report": "pnpm exec playwright show-report",
@@ -48,6 +49,7 @@
 		"ethers": "6.3.0",
 		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
+		"jimp": "1.6.0",
 		"promisify-child-process": "4.1.2",
 		"web3-token": "1.0.6"
 	},

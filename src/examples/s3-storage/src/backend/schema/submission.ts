@@ -1,24 +1,12 @@
-import { Field, ID, Entity } from '@exogee/graphweaver';
-import {
-	S3StorageProvider,
-	StorageType,
-	MediaField,
-	GraphweaverMedia,
-} from '@exogee/graphweaver-storage-provider';
+import { Entity, Field, ID } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
+import { GraphweaverMedia, MediaField } from '@exogee/graphweaver-storage-provider';
 
-import { Submission as OrmSubmission } from '../entities';
 import { pgConnection } from '../database';
+import { Submission as OrmSubmission } from '../entities';
+import { s3Provider } from '../s3-provider';
 
 if (!process.env.AWS_S3_BUCKET) throw new Error('Missing required env AWS_S3_BUCKET');
-
-const s3 = new S3StorageProvider({
-	bucketName: process.env.AWS_S3_BUCKET,
-	region: process.env.AWS_REGION,
-	type: StorageType.S3,
-	expiresIn: 3600,
-	endpoint: process.env.AWS_S3_ENDPOINT,
-});
 
 @Entity('Submission', {
 	provider: new MikroBackendProvider(OrmSubmission, pgConnection),
@@ -27,6 +15,6 @@ export class Submission {
 	@Field(() => ID)
 	id!: string;
 
-	@MediaField({ storageProvider: s3 })
+	@MediaField({ storageProvider: s3Provider })
 	image?: GraphweaverMedia;
 }

@@ -115,6 +115,12 @@ export enum AggregationType {
   Count = 'COUNT'
 }
 
+export type CreateThumbnailInput = {
+  height: Scalars['Float']['input'];
+  submissionId: Scalars['ID']['input'];
+  width: Scalars['Float']['input'];
+};
+
 export type DeleteOneFilterInput = {
   id: Scalars['ID']['input'];
 };
@@ -200,6 +206,7 @@ export type Mutation = {
   createSubmission?: Maybe<Submission>;
   /** Create many Submissions. */
   createSubmissions?: Maybe<Array<Maybe<Submission>>>;
+  createThumbnail?: Maybe<Submission>;
   /** Delete a single Submission. */
   deleteSubmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Submissions with a filter. */
@@ -225,6 +232,11 @@ export type MutationCreateSubmissionArgs = {
 
 export type MutationCreateSubmissionsArgs = {
   input: Array<SubmissionInsertInput>;
+};
+
+
+export type MutationCreateThumbnailArgs = {
+  input?: InputMaybe<CreateThumbnailInput>;
 };
 
 
@@ -264,6 +276,7 @@ export type Query = {
   getDownloadUrl?: Maybe<Scalars['String']['output']>;
   /** Get a single Submission. */
   submission?: Maybe<Submission>;
+  submissionByFilename?: Maybe<Submission>;
   /** Get multiple Submissions. */
   submissions?: Maybe<Array<Maybe<Submission>>>;
   /** Get aggregated data for Submissions. */
@@ -278,6 +291,11 @@ export type QueryGetDownloadUrlArgs = {
 
 export type QuerySubmissionArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QuerySubmissionByFilenameArgs = {
+  filename?: InputMaybe<Scalars['String']['input']>;
 };
 
 
