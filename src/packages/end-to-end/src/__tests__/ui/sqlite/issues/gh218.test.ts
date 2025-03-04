@@ -3,7 +3,6 @@ import { config } from '../../../../config';
 
 test('Ensure filtering by multiple items works', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 
 	await page.getByTestId('artist-filter').getByRole('combobox').click();

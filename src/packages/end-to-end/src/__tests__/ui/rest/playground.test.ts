@@ -4,8 +4,6 @@ import { config } from '../../../config';
 
 test('Ensure users can navigate to the playground and execute a query', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.goto('http://localhost:9000/');
-	await page.getByRole('link', { name: 'REST (swapi.info)' }).click();
 	await page.getByTestId('Person-entity-link').click();
 	const page1Promise = page.waitForEvent('popup');
 	await page.getByRole('button', { name: 'Open Playground' }).click();
@@ -33,8 +31,6 @@ test('Ensure users can navigate to the playground and execute a query with pagin
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.goto('http://localhost:9000/');
-	await page.getByRole('link', { name: 'REST (swapi.info)' }).click();
 	await page.getByTestId('Person-entity-link').click();
 	const page1Promise = page.waitForEvent('popup');
 	await page.getByRole('button', { name: 'Open Playground' }).click();

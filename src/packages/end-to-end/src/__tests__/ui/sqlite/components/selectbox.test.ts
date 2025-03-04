@@ -5,7 +5,6 @@ test('Check Select field displays correct number of selected items based on init
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: 'For Those About To Rock' }).first().click();
 
@@ -17,7 +16,6 @@ test('Check Select field shows correct number of selected items after adding add
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: '3', exact: true }).click();
 	await page
@@ -33,7 +31,6 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: 'For Those About To Rock We' }).click();
 	await page
@@ -53,7 +50,6 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 
 test('Should allow navigation around using a keyboard', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Employee' }).click();
 
 	await page.getByRole('combobox').nth(0).click();
