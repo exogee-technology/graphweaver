@@ -34,7 +34,7 @@
 		"@mikro-orm/postgresql": "6.4.7",
 		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
-		"pg": "8.13.1",
+		"pg": "8.13.3",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"react-syntax-highlighter": "15.6.1"
