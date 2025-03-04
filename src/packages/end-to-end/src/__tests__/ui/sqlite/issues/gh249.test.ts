@@ -5,7 +5,6 @@ test('Navigate to entity then click through to related entity from one of the re
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Artist' }).click();
 	expect(page.url()).toBe(`${config.adminUiUrl}/Artist`);
 	await page.getByRole('link', { name: 'Facelift' }).click();

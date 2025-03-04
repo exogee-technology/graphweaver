@@ -3,7 +3,6 @@ import { config } from '../../../../config';
 
 test('should update number field from the detail panel', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'InvoiceLine' }).click();
 	await page.getByRole('cell', { name: 'Balls to the wall' }).click();
 	await page.getByLabel('quantity').click();
