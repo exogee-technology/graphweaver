@@ -33,7 +33,7 @@ import {
 	IsolationLevel,
 	ConnectionOptions,
 	connectToDatabase,
-	DatabaseType
+	DatabaseType,
 } from '..';
 
 import { OptimisticLockError } from '../utils/errors';
@@ -76,8 +76,10 @@ export const gqlToMikro = (filter: any, databaseType?: DatabaseType): any => {
 						(filter[key] && operator === 'null') || (!filter[key] && operator === 'notnull')
 							? { $eq: null }
 							: { $ne: null };
-				} else if (operator === 'ilike' && databaseType !== "postgresql") {
-					logger.warn(`The $ilike operator is not supported by ${databaseType} databases. Operator coerced to $like.`)
+				} else if (operator === 'ilike' && databaseType !== 'postgresql') {
+					logger.warn(
+						`The $ilike operator is not supported by ${databaseType} databases. Operator coerced to $like.`
+					);
 					newValue = { $like: filter[key] };
 				} else {
 					// { firstName_in: ['k', 'b'] } => { firstName: { $in: ['k', 'b'] } }
@@ -124,6 +126,11 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public connectionManagerId?: string;
 	private transactionIsolationLevel!: IsolationLevel;
 
+	// This is an optional setting that allows you to control how this provider is displayed in the Admin UI.
+	// If you do not set a value, it will default to 'REST (hostname of baseUrl)'. Entities are grouped by
+	// their backend's display name, so if you want to group them in a more specific way, this is the way to do it.
+	public readonly backendDisplayName?: string;
+
 	public readonly supportsInFilter = true;
 
 	// Default backend provider config
@@ -162,26 +169,27 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public constructor(
 		mikroType: new () => D,
 		connection: ConnectionOptions,
-		transactionIsolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ
+		transactionIsolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ,
+		displayName?: string
 	) {
 		this.entityType = mikroType;
 		this.connectionManagerId = connection.connectionManagerId;
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
 		this.transactionIsolationLevel = transactionIsolationLevel;
+		this.backendDisplayName = displayName;
 		this.connection = connection;
 		this.addRequestContext();
 		this.connectToDatabase();
-		
 	}
 	private getDbType(): DatabaseType {
 		const driver = this.em.getDriver().constructor.name;
 		switch (driver) {
 			case SqliteDriver.name:
-				return "sqlite";
+				return 'sqlite';
 			case MySqlDriver.name:
-				return "mysql";
+				return 'mysql';
 			case PostgreSqlDriver.name:
-				return "postgresql";
+				return 'postgresql';
 			default:
 				throw new Error(`This driver (${driver}) is not supported!`);
 		}
@@ -661,7 +669,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public async deleteOne(filter: Filter<D>, trace?: TraceOptions): Promise<boolean> {
 		trace?.span.updateName(`Mikro-Orm - deleteOne ${this.entityType.name}`);
 		logger.trace(filter, `Running delete ${this.entityType.name} with filter.`);
-		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
+		const where = filter
+			? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType())
+			: undefined;
 		const whereWithAppliedExternalIdFields =
 			where && this.applyExternalIdFields(this.entityType, where);
 
@@ -685,7 +695,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		logger.trace(`Running delete ${this.entityType.name}`);
 
 		const deletedRows = await this.database.transactional<number>(async () => {
-			const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
+			const where = filter
+				? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType())
+				: undefined;
 			const whereWithAppliedExternalIdFields =
 				where && this.applyExternalIdFields(this.entityType, where);
 
@@ -755,7 +767,9 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		//     id
 		//   }
 		// }
-		const where = filter ? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType()) : undefined;
+		const where = filter
+			? gqlToMikro(JSON.parse(JSON.stringify(filter)), this.getDbType())
+			: undefined;
 
 		// Convert from: { account: {id: '6' }}
 		// to { accountId: '6' }
