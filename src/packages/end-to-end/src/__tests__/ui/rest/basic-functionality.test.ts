@@ -4,7 +4,6 @@ import { config } from '../../../config';
 
 test('Ensure people can be listed and that they have vehicles', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'REST (swapi.info)' }).click();
 	await page.getByTestId('Person-entity-link').click();
 	await expect(page.locator('tbody')).toContainText('Luke Skywalker');
 	await expect(page.locator('tbody')).toContainText('19BBY');
@@ -17,7 +16,6 @@ test('Ensure people can be listed and that they have vehicles', async ({ page })
 
 test('Ensure vehicles can be listed and that they have pilots', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'REST (swapi.info)' }).click();
 	await page.getByTestId('Vehicle-entity-link').click();
 	await expect(page.locator('tbody')).toContainText('Sand Crawler');
 	await expect(page.locator('tbody')).toContainText('Snowspeeder');
@@ -68,7 +66,6 @@ test('Ensure people can be filtered', async ({ page }) => {
 
 test('Ensure vehicles can be filtered', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'REST (swapi.info)' }).click();
 	await page.getByTestId('Vehicle-entity-link').click();
 	await page.getByTestId('url-filter').getByRole('combobox').click();
 	await page.getByRole('option', { name: '4', exact: true }).click();

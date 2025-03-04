@@ -3,7 +3,6 @@ import { config } from '../../../config';
 
 test('Detail Panel - should allow editing of an entity with an enum dropdown', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: 'mikro-orm-postgresql' }).click();
 
 	await page.getByTestId('Invoice-entity-link').click();
 	await page.getByRole('cell', { name: '1', exact: true }).click();
