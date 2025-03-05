@@ -117,6 +117,11 @@ export const gqlToMikro = (filter: any, databaseType?: DatabaseType): any => {
 	return filter;
 };
 
+export interface AdditionalOptions {
+	transactionIsolationLevel?: IsolationLevel;
+	backendDisplayName?: string;
+}
+
 export class MikroBackendProvider<D> implements BackendProvider<D> {
 	private _backendId: string;
 
@@ -169,14 +174,33 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 	public constructor(
 		mikroType: new () => D,
 		connection: ConnectionOptions,
-		transactionIsolationLevel: IsolationLevel = IsolationLevel.REPEATABLE_READ,
-		displayName?: string
+		transactionIsolationLevel?: IsolationLevel
+	);
+	public constructor(
+		mikroType: new () => D,
+		connection: ConnectionOptions,
+		additionalOptions?: AdditionalOptions
+	);
+	public constructor(
+		mikroType: new () => D,
+		connection: ConnectionOptions,
+		optionsOrIsolationLevel: AdditionalOptions | IsolationLevel = {
+			transactionIsolationLevel: IsolationLevel.REPEATABLE_READ,
+		}
 	) {
+		const options =
+			typeof optionsOrIsolationLevel === 'object'
+				? optionsOrIsolationLevel
+				: {
+						transactionIsolationLevel: optionsOrIsolationLevel,
+					};
+
 		this.entityType = mikroType;
 		this.connectionManagerId = connection.connectionManagerId;
 		this._backendId = `mikro-orm-${connection.connectionManagerId || ''}`;
-		this.transactionIsolationLevel = transactionIsolationLevel;
-		this.backendDisplayName = displayName;
+		this.transactionIsolationLevel =
+			options.transactionIsolationLevel ?? IsolationLevel.REPEATABLE_READ;
+		this.backendDisplayName = options.backendDisplayName;
 		this.connection = connection;
 		this.addRequestContext();
 		this.connectToDatabase();
