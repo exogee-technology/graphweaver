@@ -30,7 +30,7 @@
 		"react": "19.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.10.1",
+		"@types/node": "22.13.9",
 		"typescript": "5.7.2"
 	}
 }

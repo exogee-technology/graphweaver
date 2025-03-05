@@ -42,7 +42,7 @@
 		"react-syntax-highlighter": "15.6.1"
 	},
 	"devDependencies": {
-		"@types/node": "22.10.1",
+		"@types/node": "22.13.9",
 		"typescript": "5.7.2"
 	},
 	"keywords": [
