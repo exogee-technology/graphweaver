@@ -462,10 +462,10 @@ export class MikroBackendProvider<D> implements BackendProvider<D> {
 		let queryFilter: any = { [relatedField]: { $in: relatedFieldIds } };
 
 		if (filter) {
+			// JSON.parse(JSON.stringify()) is needed. See https://exogee.atlassian.net/browse/EXOGW-419
+			const gqlToMikroFilter = JSON.parse(JSON.stringify([gqlToMikro(filter, this.getDbType())]));
 			// Since the user has supplied a filter, we need to and it in.
-			queryFilter = {
-				$and: [queryFilter, ...[gqlToMikro(filter, this.getDbType())]],
-			};
+			queryFilter = { $and: [queryFilter, ...gqlToMikroFilter] };
 		}
 
 		const populate = [relatedField as AutoPath<typeof entity, PopulateHint>];
