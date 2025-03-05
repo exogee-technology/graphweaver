@@ -3,8 +3,6 @@ import { config } from '../../../../config';
 
 test('Filters - should not error when used without clearing', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
-
 	const entityLinks = page.getByTestId(/-entity-link$/);
 
 	// Select a filter on the first page

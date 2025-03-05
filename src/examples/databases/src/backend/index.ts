@@ -1,4 +1,5 @@
 import Graphweaver from '@exogee/graphweaver-server';
+import 'json-bigint-patch';
 
 import './schema';
 

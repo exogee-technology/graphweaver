@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-rest",
-	"version": "2.12.1",
+	"version": "2.12.2",
 	"description": "RESTful backend adapter for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -34,7 +34,7 @@
 		"glob": "11.0.1",
 		"prettier": "3.4.2",
 		"typescript": "5.7.2",
-		"vitest": "2.1.9"
+		"vitest": "3.0.7"
 	},
 	"keywords": [
 		"graphql",

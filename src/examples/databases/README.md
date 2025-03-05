@@ -161,3 +161,7 @@ Once the database is up and running you can start the example with:
 pnpm i
 pnpm start
 ```
+
+# BigInt support via scalars
+
+When you use `graphweaver import` to import an existing database, it will generate any column of type `bigint` to be serialised as a string. This technique requires no extra dependencies, but it comes with the downside that the client will receive the column's value as a string. This repo contains an example of another way to handle `bigint` columns and their values. The `task.id` column uses a type `GraphQLBigInt` from the `graphql-scalars` package. It's also necessary to install and import `json-bigint-patch` to allow the javascript `bigint` value to be serialised to JSON.

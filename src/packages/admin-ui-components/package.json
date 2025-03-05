@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui-components",
-	"version": "2.12.1",
+	"version": "2.12.2",
 	"description": "Components from Graphweaver's admin UI which you can use in your projects as you like",
 	"license": "Apache-2.0",
 	"type": "module",
@@ -38,7 +38,7 @@
 		"graphql-deduplicator": "2.0.6",
 		"luxon": "3.5.0",
 		"papaparse": "5.5.2",
-		"react-day-picker": "9.4.1",
+		"react-day-picker": "9.5.1",
 		"react-error-boundary": "5.0.0",
 		"react-hot-toast": "2.4.1",
 		"react-resizable-panels": "2.1.7",

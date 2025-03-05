@@ -79,8 +79,12 @@ export const SideBar = () => {
 
 				<p className={styles.subtext}>Data Sources</p>
 
-				{schema.backendDisplayNames.map((backendDisplayName) => (
-					<BackendRow key={backendDisplayName} backendDisplayName={backendDisplayName} />
+				{schema.backendDisplayNames.map((backendDisplayName, index) => (
+					<BackendRow
+						key={backendDisplayName}
+						backendDisplayName={backendDisplayName}
+						defaultOpen={index === 0}
+					/>
 				))}
 
 				{schema.entityByName('Trace') && (
