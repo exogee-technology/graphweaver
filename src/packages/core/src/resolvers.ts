@@ -672,12 +672,12 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		? await hookManager.runHooks(HookRegister.BEFORE_READ, testParams)
 		: testParams;
 
-	const transformedFilter =
-		hookParams.args?.filter &&
-		isTransformableGraphQLEntityClass(entity.target) &&
-		entity.target.toBackendEntityFilter
-			? entity.target.toBackendEntityFilter(hookParams.args?.filter)
-			: (hookParams.args?.filter as Filter<D> | undefined);
+	// const transformedFilter =
+	// 	hookParams.args?.filter &&
+	// 	isTransformableGraphQLEntityClass(entity.target) &&
+	// 	entity.target.toBackendEntityFilter
+	// 		? entity.target.toBackendEntityFilter(hookParams.args?.filter)
+	// 		: (hookParams.args?.filter as Filter<D> | undefined);
 
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
