@@ -661,24 +661,6 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		? await hookManager.runHooks(HookRegister.BEFORE_READ, params)
 		: params;
 
-	const testParams: ReadHookParams<R> = {
-		args: { filter },
-		context,
-		fields,
-		transactional: !!entity.provider?.withTransaction,
-	};
-
-	const testHookParams = hookManager
-		? await hookManager.runHooks(HookRegister.BEFORE_READ, testParams)
-		: testParams;
-
-	// const transformedFilter =
-	// 	hookParams.args?.filter &&
-	// 	isTransformableGraphQLEntityClass(entity.target) &&
-	// 	entity.target.toBackendEntityFilter
-	// 		? entity.target.toBackendEntityFilter(hookParams.args?.filter)
-	// 		: (hookParams.args?.filter as Filter<D> | undefined);
-
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
 
@@ -713,9 +695,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 			gqlEntityType,
 			relatedField: field.relationshipInfo.relatedField as keyof D & string,
 			id: String(source[sourcePrimaryKeyField]),
-			// filter: transformedFilter,
-			// filter,
-			filter: testHookParams.args?.filter,
+			filter: hookParams.args?.filter,
 		});
 	} else if (idValue) {
 		logger.trace('Loading with loadOne');
@@ -725,9 +705,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 				BaseLoaders.loadOne<R, D>({
 					gqlEntityType,
 					id: String(id),
-					// filter: transformedFilter,
-					// filter,
-					filter: testHookParams.args?.filter,
+					filter: hookParams.args?.filter,
 				})
 			)
 		);
