@@ -619,11 +619,13 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	if (filter) _and.push(filter);
 
 	// Lets check the relationship type and add the appropriate filter.
+	let relationshipFilterChunk: Filter<R> | undefined = undefined;
+
 	if (idValue) {
 		if (Array.isArray(idValue)) {
-			_and.push({ [`${relatedPrimaryKeyField}_in`]: idValue } as Filter<R>);
+			relationshipFilterChunk = { [`${relatedPrimaryKeyField}_in`]: idValue } as Filter<R>;
 		} else {
-			_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
+			relationshipFilterChunk = { [relatedPrimaryKeyField]: idValue } as Filter<R>;
 		}
 	} else if (
 		relatedField &&
@@ -635,18 +637,22 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		// we should instead filter like:
 		// { userId: '1' }
 		// because the database provider doesn't understand the shape of the user object at all.
-		_and.push({ [relatedField]: source[sourcePrimaryKeyField] } as unknown as Filter<R>);
+		relationshipFilterChunk = {
+			[relatedField]: source[sourcePrimaryKeyField],
+		} as unknown as Filter<R>;
 	} else if (relatedField) {
 		// While object filters should nest as not all providers understand what { user: '1' } means. It's more
 		// clear to give them { user: { key: '1' } }.
-		_and.push({
+		relationshipFilterChunk = {
 			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-		} as Filter<R>);
+		} as Filter<R>;
 	} else {
 		throw new Error(
 			'Did not determine how to filter the relationship. Either id or relatedField is required.'
 		);
 	}
+
+	if (relationshipFilterChunk) _and.push(relationshipFilterChunk);
 
 	const relatedEntityFilter = { _and } as Filter<R>;
 
@@ -686,6 +692,21 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	logger.trace('Loading from BaseLoaders');
 
+	const removeRelationshipFilterChunk = (
+		filter: Filter<R> | undefined,
+		relationshipFilterChunk: Filter<R>
+	) => {
+		const newFilter = filter?._and?.filter((chunk) => chunk !== relationshipFilterChunk);
+
+		if (newFilter?.length === filter?._and?.length) {
+			throw new Error(
+				'No relationship filter found in hook params. This usually means a hook has deep cloned the filter. Please add to the object instead of cloneing it if possible. If this limitation is problematic open a GitHub issue so we can understand your use case better.'
+			);
+		}
+
+		return newFilter;
+	};
+
 	let dataEntities: D[] | undefined = undefined;
 	if (field.relationshipInfo?.relatedField) {
 		logger.trace('Loading with loadByRelatedId');
@@ -695,17 +716,22 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 			gqlEntityType,
 			relatedField: field.relationshipInfo.relatedField as keyof D & string,
 			id: String(source[sourcePrimaryKeyField]),
-			filter: hookParams.args?.filter,
+			filter: {
+				_and: removeRelationshipFilterChunk(hookParams.args?.filter, relationshipFilterChunk),
+			} as Filter<R>,
 		});
 	} else if (idValue) {
 		logger.trace('Loading with loadOne');
+
 		const idsToLoad = Array.isArray(idValue) ? idValue : [idValue];
 		dataEntities = await Promise.all(
 			idsToLoad.map((id) =>
 				BaseLoaders.loadOne<R, D>({
 					gqlEntityType,
 					id: String(id),
-					filter: hookParams.args?.filter,
+					filter: {
+						_and: removeRelationshipFilterChunk(hookParams.args?.filter, relationshipFilterChunk),
+					} as Filter<R>,
 				})
 			)
 		);
