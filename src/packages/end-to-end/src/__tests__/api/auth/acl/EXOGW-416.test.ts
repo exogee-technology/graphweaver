@@ -190,9 +190,9 @@ describe.only('Nested entity queries should not bypass row-level security', () =
 
 	afterAll(async () => {
 		// delete the task, tag, and task_tags tables
-		await em?.getConnection().execute('DROP `Task`');
-		await em?.getConnection().execute('DROP `Tag`');
-		await em?.getConnection().execute('DROP `task_tags`');
+		await em?.getConnection().execute('DROP TABLE `Task`');
+		await em?.getConnection().execute('DROP TABLE `Tag`');
+		await em?.getConnection().execute('DROP TABLE `task_tags`');
 
 		await em?.getConnection().close();
 	});
