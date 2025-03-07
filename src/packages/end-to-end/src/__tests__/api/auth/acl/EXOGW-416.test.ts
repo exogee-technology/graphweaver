@@ -68,11 +68,13 @@ const connection = {
 	},
 };
 
+const taskProvider = new MikroBackendProvider(OrmTask, connection);
+
 @ApplyAccessControlList({
 	Everyone: { all: (context) => ({ userId: context.user?.id }) },
 })
 @Entity('Task', {
-	provider: new MikroBackendProvider(OrmTask, connection),
+	provider: taskProvider,
 })
 export class Task {
 	@Field(() => ID)
@@ -198,6 +200,7 @@ describe.only('Nested entity queries should not bypass row-level security', () =
 	});
 
 	test.only('Should only return tasks that the user has access to when asking for tags', async () => {
+		const spyOnArtistDataProvider = jest.spyOn(taskProvider, 'findByRelatedId');
 		// create 3 tasks for our user and another 3 for a different user
 		const task1ForAuthenticatedUser = new OrmTask('task1ForAuthenticatedUser', user.id);
 		const task2ForAuthenticatedUser = new OrmTask('task2ForAuthenticatedUser', user.id);
@@ -264,5 +267,8 @@ describe.only('Nested entity queries should not bypass row-level security', () =
 				{ id: 'task3ForAuthenticatedUser' },
 			],
 		});
+
+		// If this is called more than once then we are not batching properly
+		expect(spyOnArtistDataProvider).toHaveBeenCalledTimes(1);
 	});
 });
