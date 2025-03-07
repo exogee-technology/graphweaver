@@ -54,7 +54,7 @@ const appendPath = (path: string, newPath: string) =>
 export const gqlToMikro = (filter: any, databaseType?: DatabaseType): any => {
 	if (Array.isArray(filter)) {
 		return filter.map((element) => gqlToMikro(element, databaseType));
-	} else if (typeof filter === 'object') {
+	} else if (typeof filter === 'object' && filter !== null) {
 		for (const key of Object.keys(filter)) {
 			// A null here is a user-specified value and is valid to filter on
 			if (filter[key] === null) continue;
