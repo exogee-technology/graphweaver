@@ -132,7 +132,7 @@ const graphweaver = new Graphweaver();
 let token: string | undefined;
 let em: EntityManager | undefined = undefined;
 
-describe.only('Nested entity queries should not bypass row-level security', () => {
+describe('Nested entity queries should not bypass row-level security', () => {
 	beforeAll(async () => {
 		const connectionResult = await ConnectionManager.connect('sqlite', connection);
 		em = connectionResult?.em;
@@ -199,7 +199,7 @@ describe.only('Nested entity queries should not bypass row-level security', () =
 		await em?.getConnection().close();
 	});
 
-	test.only('Should only return tasks that the user has access to when asking for tags', async () => {
+	test('Should only return tasks that the user has access to when asking for tags', async () => {
 		const spyOnArtistDataProvider = jest.spyOn(taskProvider, 'findByRelatedId');
 		// create 3 tasks for our user and another 3 for a different user
 		const task1ForAuthenticatedUser = new OrmTask('task1ForAuthenticatedUser', user.id);
