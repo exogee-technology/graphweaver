@@ -29,10 +29,15 @@ import {
 } from '.';
 import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
-import { applyDefaultValues, hasId, withTransaction } from './utils';
+import { applyDefaultValues, hasId, isDefined, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
-
-type ID = string | number | bigint;
+import {
+	constructFilterForRelatedEntity,
+	getDataEntities,
+	getIdValue,
+	getLoaderFilter,
+	ID,
+} from './metadata-service/resolver.utils';
 
 export const baseResolver = (resolver: Resolver) => {
 	return async (
@@ -543,9 +548,10 @@ const _aggregate = async <G extends { name: string }>(
 };
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
-	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
+	resolverOptions: ResolverOptions<{ filter: Filter<R> }, C, G>,
 	trace?: TraceOptions
 ) => {
+	const { source, context, fields, info } = resolverOptions;
 	trace?.span.updateName(
 		`Resolver - ListRelationshipField ${info.path.typename} - ${info.fieldName}`
 	);
@@ -565,38 +571,9 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
 
-	let idValue: ID | ID[] | undefined = undefined;
-	if (id && typeof id === 'function') {
-		// If the id is a function, we'll call it with the source data to get the id value.
-		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
-	} else if (id) {
-		// else if the id is a string, we'll try to get the value from the source data.
-		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+	const idValue = getIdValue(id, source);
 
-		// If the value is a string or number, we'll use it as the id value.
-		if (
-			typeof valueOfForeignKey === 'string' ||
-			typeof valueOfForeignKey === 'number' ||
-			typeof valueOfForeignKey === 'bigint' ||
-			Array.isArray(valueOfForeignKey)
-		) {
-			idValue = valueOfForeignKey;
-		} else if (typeof valueOfForeignKey === 'undefined' || valueOfForeignKey === null) {
-			// If the value is null, we'll use it as the id value.
-			idValue = undefined;
-		} else {
-			// The ID value must be a string or a number otherwise we'll throw an error.
-			throw new Error(
-				'Could not determine ID value for relationship field. Only strings, numbers or arrays of strings or numbers are supported.'
-			);
-		}
-	}
-
-	if (
-		typeof existingData === 'undefined' &&
-		(typeof idValue === 'undefined' || idValue === null) &&
-		!field.relationshipInfo?.relatedField
-	) {
+	if (existingData === undefined && !isDefined(idValue) && !relatedField) {
 		// id is null and we are loading a single instance so let's return null
 		return null;
 	}
@@ -613,48 +590,14 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
 	// We need to construct a filter for the related entity and _and it with the user supplied filter.
-	const _and: Filter<R>[] = [];
-
-	// If we have a user supplied filter, add it to the _and array.
-	if (filter) _and.push(filter);
-
-	// Lets check the relationship type and add the appropriate filter.
-	let relationshipFilterChunk: Filter<R> | undefined = undefined;
-
-	if (idValue) {
-		if (Array.isArray(idValue)) {
-			relationshipFilterChunk = { [`${relatedPrimaryKeyField}_in`]: idValue } as Filter<R>;
-		} else {
-			relationshipFilterChunk = { [relatedPrimaryKeyField]: idValue } as Filter<R>;
-		}
-	} else if (
-		relatedField &&
-		isScalarType(getFieldType(relatedEntityMetadata.fields[relatedField]))
-	) {
-		// Scalars should get a simple filter, e.g. if we have Tasks in a DB which have a userId field, and we
-		// have Users in a REST API with their PK called 'key', instead of trying to filter like:
-		// { userId: { key: '1' } }
-		// we should instead filter like:
-		// { userId: '1' }
-		// because the database provider doesn't understand the shape of the user object at all.
-		relationshipFilterChunk = {
-			[relatedField]: source[sourcePrimaryKeyField],
-		} as unknown as Filter<R>;
-	} else if (relatedField) {
-		// While object filters should nest as not all providers understand what { user: '1' } means. It's more
-		// clear to give them { user: { key: '1' } }.
-		relationshipFilterChunk = {
-			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-		} as Filter<R>;
-	} else {
-		throw new Error(
-			'Did not determine how to filter the relationship. Either id or relatedField is required.'
-		);
-	}
-
-	if (relationshipFilterChunk) _and.push(relationshipFilterChunk);
-
-	const relatedEntityFilter = { _and } as Filter<R>;
+	const { relatedEntityFilter, relationshipFilterChunk } = constructFilterForRelatedEntity({
+		resolverOptions,
+		idValue,
+		relatedPrimaryKeyField,
+		relatedField,
+		relatedEntityMetadata,
+		sourcePrimaryKeyField,
+	});
 
 	const params: ReadHookParams<R> = {
 		args: { filter: relatedEntityFilter },
@@ -670,7 +613,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
 
-	if (typeof existingData !== 'undefined') {
+	if (existingData !== undefined) {
 		logger.trace({ existingData }, 'Existing data found, returning.');
 
 		const entities = [existingData].flat();
@@ -692,69 +635,16 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	logger.trace('Loading from BaseLoaders');
 
-	let relationshipFilterChunkFound = !relationshipFilterChunk;
-	/**
-	 * Look for `relationshipFilterChunk` and remove it from the filter.
-	 * This is necessary because we are batch loading data and that relationshipFilterChunk makes the filter different for each record, which ends up triggering a SQL query for each record (not batching at all).
-	 * What we want to achieve is having a filter with ACLs into it, but without the relationship chunk.
-	 */
-	const removeRelationshipFilterChunk = (
-		filter: Filter<R> | undefined,
-		relationshipFilterChunk: Filter<R>
-	): Filter<R> | undefined => {
-		if (!filter?._and) return filter;
-		return {
-			_and: filter._and.map((item) => {
-				if (item === relationshipFilterChunk) {
-					relationshipFilterChunkFound = true;
-					return undefined;
-				}
-				if (item._and) {
-					// nested _and, we need to took here too
-					return removeRelationshipFilterChunk(item, relationshipFilterChunk);
-				}
-				return item;
-			}),
-		} as Filter<R>;
-	};
+	const loaderFilter = getLoaderFilter(hookParams, relationshipFilterChunk);
 
-	const loaderFilter = removeRelationshipFilterChunk(
-		hookParams.args?.filter,
-		relationshipFilterChunk
-	);
-
-	if (!relationshipFilterChunkFound) {
-		// If we are getting this error, make sure `removeRelationshipFilterChunk` is working as expected.
-		throw new Error(
-			'No relationship filter found in hook params. This usually means a hook has deep cloned the filter. Please add to the object instead of cloning it if possible. If this limitation is problematic open a GitHub issue so we can understand your use case better.'
-		);
-	}
-
-	let dataEntities: D[] | undefined = undefined;
-	if (field.relationshipInfo?.relatedField) {
-		logger.trace('Loading with loadByRelatedId');
-
-		// This should be typed as <gqlEntityType, relatedEntityType>
-		dataEntities = await BaseLoaders.loadByRelatedId<R, D>({
-			gqlEntityType,
-			relatedField: field.relationshipInfo.relatedField as keyof D & string,
-			id: String(source[sourcePrimaryKeyField]),
-			filter: loaderFilter,
-		});
-	} else if (idValue) {
-		logger.trace('Loading with loadOne');
-
-		const idsToLoad = Array.isArray(idValue) ? idValue : [idValue];
-		dataEntities = await Promise.all(
-			idsToLoad.map((id) =>
-				BaseLoaders.loadOne<R, D>({
-					gqlEntityType,
-					id: String(id),
-					filter: loaderFilter,
-				})
-			)
-		);
-	}
+	const dataEntities = await getDataEntities({
+		source,
+		idValue,
+		field,
+		sourcePrimaryKeyField,
+		loaderFilter,
+		gqlEntityType,
+	});
 
 	const entities = (dataEntities ?? []).map((dataEntity) =>
 		fromBackendEntity(relatedEntityMetadata, dataEntity)
