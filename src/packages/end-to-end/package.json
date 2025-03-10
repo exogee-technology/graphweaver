@@ -32,6 +32,7 @@
 		"test-ui-rest": "pnpm exec playwright test ./rest",
 		"test-ui-storage-provider": "pnpm exec playwright test ./storage-provider",
 		"test-ui-sqlite": "pnpm exec playwright test ./sqlite",
+		"test-fuzz": "jest --forceExit -- fuzzer/tests",
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
