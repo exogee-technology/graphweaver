@@ -138,7 +138,7 @@ describe('Nested entity queries should not bypass row-level security', () => {
 		em = connectionResult?.em;
 		assert(em !== undefined);
 
-		// If tables exists then fail, we are assuming that the tables do not exist
+		// If tables exist then fail, we are assuming that the tables do not exist
 		const tables = await em
 			?.getConnection()
 			.execute('SELECT name FROM sqlite_master WHERE type="table"');
@@ -150,7 +150,7 @@ describe('Nested entity queries should not bypass row-level security', () => {
 			tableNames.includes('task_tags')
 		) {
 			throw new Error(
-				'Tables already exist, this test suit assumes that the tables do not exist, the suit throws away the tables at the end of the test'
+				'Tables already exist, this test suite assumes that the tables do not exist. The suite throws away the tables at the end of the test'
 			);
 		}
 
@@ -222,7 +222,7 @@ describe('Nested entity queries should not bypass row-level security', () => {
 		tagForOtherUser.tasks.add(task2ForOtherUser);
 		tagForOtherUser.tasks.add(task3ForOtherUser);
 
-		await em?.persistAndFlush([
+		await em!.persistAndFlush([
 			task1ForAuthenticatedUser,
 			task2ForAuthenticatedUser,
 			task3ForAuthenticatedUser,

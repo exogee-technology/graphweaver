@@ -136,6 +136,7 @@ export const getLoaderFilter = <R>(
 	 * Look for `relationshipFilterChunk` and remove it from the filter.
 	 * This is necessary because we are batch loading data and that relationshipFilterChunk makes the filter different for each record, which ends up triggering a SQL query for each record (not batching at all).
 	 * What we want to achieve is having a filter with ACLs into it, but without the relationship chunk.
+	 * Note that the relationship chunk is _and-ed with the user supplied filter.
 	 */
 	const removeRelationshipFilterChunk = (
 		filter: Filter<R> | undefined,
@@ -143,6 +144,7 @@ export const getLoaderFilter = <R>(
 	): Filter<R> | undefined => {
 		if (!filter?._and) return filter;
 		return {
+			// We only need to look at the _and because `constructFilterForRelatedEntity` _ands the relationship filter with the user supplied filter. User supplied filter is untouched.
 			_and: filter._and.map((item) => {
 				if (item === relationshipFilterChunk) {
 					relationshipFilterChunkFound = true;
