@@ -1,7 +1,7 @@
 import { BaseContext } from '@apollo/server';
 import { dataEntityForGraphQLEntity } from '../default-from-backend-entity';
-import { Filter, ReadHookParams, ResolverOptions, TraceOptions } from '../types';
-import { EntityMetadata, MetadataType } from '../metadata';
+import { Filter, ReadHookParams, ResolverOptions } from '../types';
+import { EntityMetadata } from '../metadata';
 import { isScalarType } from 'graphql';
 import { getFieldType } from '../schema-builder';
 import { logger } from '@exogee/logger';
@@ -15,14 +15,14 @@ export type ID = string | number | bigint;
  * If the id is a function then it calls it to get the ID value.
  * If the id is a string then it tries to get the value from the source data.
  */
-export const getIdValue = <G, D, R, C extends BaseContext>(
-	id: string | bigint | ((dataEntity: unknown) => string | number | bigint | undefined) | undefined,
+export const getIdValue = <G, D>(
+	id: string | bigint | ((dataEntity: D) => string | number | bigint | undefined) | undefined,
 	source: G
 ) => {
 	let idValue: ID | ID[] | undefined = undefined;
 	if (id && typeof id === 'function') {
 		// If the id is a function, we'll call it with the source data to get the id value.
-		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
+		idValue = id(dataEntityForGraphQLEntity(source as any) as any);
 	} else if (id) {
 		// else if the id is a string, we'll try to get the value from the source data.
 		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
@@ -49,7 +49,7 @@ export const getIdValue = <G, D, R, C extends BaseContext>(
 	return idValue;
 };
 
-interface ConstructFilterForRelatedEntityParams<G, D, R, C extends BaseContext> {
+interface ConstructFilterForRelatedEntityParams<G, R, C extends BaseContext> {
 	resolverOptions: ResolverOptions<{ filter: Filter<R> }, C, G>;
 	idValue: ID | ID[] | undefined;
 	relatedPrimaryKeyField: string;
@@ -63,8 +63,8 @@ interface ConstructFilterForRelatedEntityParams<G, D, R, C extends BaseContext> 
  * we then get this filter and _and it with the filter for the relationship.
  * Both the resulting filter and the relationship filter are returned so that later we can remove the relationship filter from the filter.
  */
-export const constructFilterForRelatedEntity = <G, D, R, C extends BaseContext>(
-	params: ConstructFilterForRelatedEntityParams<G, D, R, C>
+export const constructFilterForRelatedEntity = <G, R, C extends BaseContext>(
+	params: ConstructFilterForRelatedEntityParams<G, R, C>
 ) => {
 	const {
 		resolverOptions: {
@@ -172,10 +172,10 @@ export const getLoaderFilter = <R>(
 	return loaderFilter;
 };
 
-interface GetDataEntitiesParams<G, D, R, C extends BaseContext> {
+interface GetDataEntitiesParams<G, D, R> {
 	source: G;
 	idValue: ID | ID[] | undefined;
-	field: EntityMetadata['fields'][string];
+	field: EntityMetadata<G, D>['fields'][string];
 	sourcePrimaryKeyField: keyof G;
 	loaderFilter: Filter<R> | undefined;
 	gqlEntityType: { new (...args: any[]): R };
@@ -186,9 +186,7 @@ interface GetDataEntitiesParams<G, D, R, C extends BaseContext> {
  * If the field has a relatedField, it will use the relatedField to load the data entities.
  * If the field has an id, it will use the id to load the data entities.
  */
-export const getDataEntities = async <G, D, R, C extends BaseContext>(
-	params: GetDataEntitiesParams<G, D, R, C>
-) => {
+export const getDataEntities = async <G, D, R>(params: GetDataEntitiesParams<G, D, R>) => {
 	const { source, idValue, field, gqlEntityType, sourcePrimaryKeyField, loaderFilter } = params;
 	let dataEntities: D[] | undefined = undefined;
 	if (field.relationshipInfo?.relatedField) {

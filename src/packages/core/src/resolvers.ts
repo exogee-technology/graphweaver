@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, Source, isListType, isObjectType, isScalarType } from 'graphql';
+import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
@@ -6,7 +6,6 @@ import { BaseContext, TraceOptions } from './types';
 import {
 	AggregationResult,
 	AggregationType,
-	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	DeleteManyHookParams,
@@ -19,7 +18,6 @@ import {
 	Resolver,
 	ResolverOptions,
 	createOrUpdateEntities,
-	getFieldType,
 	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	hookManagerMap,
@@ -560,7 +558,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	if (!info.path.typename)
 		throw new Error(`No typename found in path for ${info.path}, this should not happen.`);
 
-	const entity = graphweaverMetadata.getEntityByName(info.path.typename);
+	const entity = graphweaverMetadata.getEntityByName<G, D>(info.path.typename);
 	if (!entity) {
 		throw new Error(`Entity ${info.path.typename} not found in metadata. This should not happen.`);
 	}
@@ -571,7 +569,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
 
-	const idValue = getIdValue(id, source);
+	const idValue = getIdValue<G, D>(id, source);
 
 	if (existingData === undefined && !isDefined(idValue) && !relatedField) {
 		// id is null and we are loading a single instance so let's return null
@@ -637,7 +635,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	const loaderFilter = getLoaderFilter(hookParams, relationshipFilterChunk);
 
-	const dataEntities = await getDataEntities({
+	const dataEntities = await getDataEntities<G, D, R>({
 		source,
 		idValue,
 		field,
