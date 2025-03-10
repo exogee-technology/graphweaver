@@ -1,11 +1,11 @@
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
-import { Submission } from './entities';
+import { ImageNote, Submission } from './entities';
 
 export const pgConnection = {
 	connectionManagerId: 'pg',
 	mikroOrmConfig: {
-		entities: [Submission],
+		entities: [Submission, ImageNote],
 		driver: PostgreSqlDriver,
 		dbName: process.env.PGDATABASE,
 		user: process.env.PGUSER,
