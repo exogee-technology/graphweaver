@@ -1,4 +1,4 @@
-import { GraphQLResolveInfo, Source, isListType, isObjectType, isScalarType } from 'graphql';
+import { GraphQLResolveInfo, Source, isListType, isObjectType } from 'graphql';
 import { logger } from '@exogee/logger';
 import { ResolveTree, parseResolveInfo } from 'graphql-parse-resolve-info';
 
@@ -6,7 +6,6 @@ import { BaseContext, TraceOptions } from './types';
 import {
 	AggregationResult,
 	AggregationType,
-	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	DeleteManyHookParams,
@@ -19,7 +18,6 @@ import {
 	Resolver,
 	ResolverOptions,
 	createOrUpdateEntities,
-	getFieldType,
 	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	hookManagerMap,
@@ -29,10 +27,15 @@ import {
 } from '.';
 import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
-import { applyDefaultValues, hasId, withTransaction } from './utils';
+import { applyDefaultValues, hasId, isDefined, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
-
-type ID = string | number | bigint;
+import {
+	constructFilterForRelatedEntity,
+	getDataEntities,
+	getIdValue,
+	getLoaderFilter,
+	ID,
+} from './metadata-service/resolver.utils';
 
 export const baseResolver = (resolver: Resolver) => {
 	return async (
@@ -543,9 +546,10 @@ const _aggregate = async <G extends { name: string }>(
 };
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
-	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
+	resolverOptions: ResolverOptions<{ filter: Filter<R> }, C, G>,
 	trace?: TraceOptions
 ) => {
+	const { source, context, fields, info } = resolverOptions;
 	trace?.span.updateName(
 		`Resolver - ListRelationshipField ${info.path.typename} - ${info.fieldName}`
 	);
@@ -554,7 +558,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	if (!info.path.typename)
 		throw new Error(`No typename found in path for ${info.path}, this should not happen.`);
 
-	const entity = graphweaverMetadata.getEntityByName(info.path.typename);
+	const entity = graphweaverMetadata.getEntityByName<G, D>(info.path.typename);
 	if (!entity) {
 		throw new Error(`Entity ${info.path.typename} not found in metadata. This should not happen.`);
 	}
@@ -565,38 +569,9 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
 
-	let idValue: ID | ID[] | undefined = undefined;
-	if (id && typeof id === 'function') {
-		// If the id is a function, we'll call it with the source data to get the id value.
-		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
-	} else if (id) {
-		// else if the id is a string, we'll try to get the value from the source data.
-		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+	const idValue = getIdValue<G, D>(id, source);
 
-		// If the value is a string or number, we'll use it as the id value.
-		if (
-			typeof valueOfForeignKey === 'string' ||
-			typeof valueOfForeignKey === 'number' ||
-			typeof valueOfForeignKey === 'bigint' ||
-			Array.isArray(valueOfForeignKey)
-		) {
-			idValue = valueOfForeignKey;
-		} else if (typeof valueOfForeignKey === 'undefined' || valueOfForeignKey === null) {
-			// If the value is null, we'll use it as the id value.
-			idValue = undefined;
-		} else {
-			// The ID value must be a string or a number otherwise we'll throw an error.
-			throw new Error(
-				'Could not determine ID value for relationship field. Only strings, numbers or arrays of strings or numbers are supported.'
-			);
-		}
-	}
-
-	if (
-		typeof existingData === 'undefined' &&
-		(typeof idValue === 'undefined' || idValue === null) &&
-		!field.relationshipInfo?.relatedField
-	) {
+	if (existingData === undefined && !isDefined(idValue) && !relatedField) {
 		// id is null and we are loading a single instance so let's return null
 		return null;
 	}
@@ -613,42 +588,14 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
 	// We need to construct a filter for the related entity and _and it with the user supplied filter.
-	const _and: Filter<R>[] = [];
-
-	// If we have a user supplied filter, add it to the _and array.
-	if (filter) _and.push(filter);
-
-	// Lets check the relationship type and add the appropriate filter.
-	if (idValue) {
-		if (Array.isArray(idValue)) {
-			_and.push({ [`${relatedPrimaryKeyField}_in`]: idValue } as Filter<R>);
-		} else {
-			_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
-		}
-	} else if (
-		relatedField &&
-		isScalarType(getFieldType(relatedEntityMetadata.fields[relatedField]))
-	) {
-		// Scalars should get a simple filter, e.g. if we have Tasks in a DB which have a userId field, and we
-		// have Users in a REST API with their PK called 'key', instead of trying to filter like:
-		// { userId: { key: '1' } }
-		// we should instead filter like:
-		// { userId: '1' }
-		// because the database provider doesn't understand the shape of the user object at all.
-		_and.push({ [relatedField]: source[sourcePrimaryKeyField] } as unknown as Filter<R>);
-	} else if (relatedField) {
-		// While object filters should nest as not all providers understand what { user: '1' } means. It's more
-		// clear to give them { user: { key: '1' } }.
-		_and.push({
-			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-		} as Filter<R>);
-	} else {
-		throw new Error(
-			'Did not determine how to filter the relationship. Either id or relatedField is required.'
-		);
-	}
-
-	const relatedEntityFilter = { _and } as Filter<R>;
+	const { relatedEntityFilter, relationshipFilterChunk } = constructFilterForRelatedEntity({
+		resolverOptions,
+		idValue,
+		relatedPrimaryKeyField,
+		relatedField,
+		relatedEntityMetadata,
+		sourcePrimaryKeyField,
+	});
 
 	const params: ReadHookParams<R> = {
 		args: { filter: relatedEntityFilter },
@@ -664,7 +611,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
 
-	if (typeof existingData !== 'undefined') {
+	if (existingData !== undefined) {
 		logger.trace({ existingData }, 'Existing data found, returning.');
 
 		const entities = [existingData].flat();
@@ -686,30 +633,16 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 
 	logger.trace('Loading from BaseLoaders');
 
-	let dataEntities: D[] | undefined = undefined;
-	if (field.relationshipInfo?.relatedField) {
-		logger.trace('Loading with loadByRelatedId');
+	const loaderFilter = getLoaderFilter(hookParams, relationshipFilterChunk);
 
-		// This should be typed as <gqlEntityType, relatedEntityType>
-		dataEntities = await BaseLoaders.loadByRelatedId<R, D>({
-			gqlEntityType,
-			relatedField: field.relationshipInfo.relatedField as keyof D & string,
-			id: String(source[sourcePrimaryKeyField]),
-			filter,
-		});
-	} else if (idValue) {
-		logger.trace('Loading with loadOne');
-		const idsToLoad = Array.isArray(idValue) ? idValue : [idValue];
-		dataEntities = await Promise.all(
-			idsToLoad.map((id) =>
-				BaseLoaders.loadOne<R, D>({
-					gqlEntityType,
-					id: String(id),
-					filter,
-				})
-			)
-		);
-	}
+	const dataEntities = await getDataEntities<G, D, R>({
+		source,
+		idValue,
+		field,
+		sourcePrimaryKeyField,
+		loaderFilter,
+		gqlEntityType,
+	});
 
 	const entities = (dataEntities ?? []).map((dataEntity) =>
 		fromBackendEntity(relatedEntityMetadata, dataEntity)
@@ -974,7 +907,7 @@ export const aggregateRelationshipField = (
 			logger.trace('Aggregating with related field');
 
 			const result = await relatedEntityMetadata.provider?.aggregate?.(
-				relatedEntityFilter,
+				hookParams.args?.filter,
 				requestedAggregations
 			);
 
