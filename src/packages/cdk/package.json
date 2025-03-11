@@ -35,7 +35,7 @@
 		"constructs": "10.4.2",
 		"@exogee/graphweaver": "workspace:*",
 		"@types/node": "22.13.10",
-		"esbuild": "0.25.0",
+		"esbuild": "0.25.1",
 		"glob": "11.0.1",
 		"typescript": "5.7.2",
 		"vitest": "3.0.7"
