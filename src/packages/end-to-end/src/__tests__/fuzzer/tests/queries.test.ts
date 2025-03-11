@@ -7,15 +7,17 @@ interface Task {
 }
 const FIVE_SECONDS = 5 * 1000;
 
+// TODO: Use env variable
 const fuzzer = new GraphweaverFuzzClient('http://localhost:9001');
 
 
 describe('Read operations (queries)', () => {
     beforeAll(async () => {
+        // From the REST with auth example README
         await fuzzer.loginPassword('luke', 'lightsaber123');
     });
 
-    test('Fuzzing on reading tasks', async () => {
+    test('Tasks', async () => {
         const query = request`query tasks($filter: TasksListFilter!) { tasks(filter: $filter) { id description } }`
 
         let { tasks } = await fuzzer.makeRequest<{ tasks: Task[] }>(query, { variables: { filter: {} } });
@@ -38,22 +40,22 @@ describe('Read operations (queries)', () => {
         const payload = "'-SLEEP(30); #"
 
         const stringFields = ['description', 'userId', 'slug'];
-        const filter: Record<string, any> = {};
+        const filters: Record<string, any>[] = [];
         for (const f of stringFields) {
-            filter[f] = payload;
-            filter[`${f}_ne`] = payload;
-            for (const op of [...mathOperations, ...likeOperations]) {
-                filter[`${f}_${op}`] = payload;
+            const or: Record<string, any> = {}
+            or[f] = payload;
+            for (const op of [...mathOperations, ...likeOperations, 'ne']) {
+                or[`${f}_${op}`] = payload;
             } 
+            filters.push(or);
         }
-
-        
-        const tasksPromise = fuzzer.makeRequest<{ tasks: Task[] }>(taskQuery, { variables: { filter } });
+        // Use 'or' to have the provider try to evaluate every filter
+        const tasksPromise = fuzzer.makeRequest<{ tasks: Task[] }>(taskQuery, { variables: { filter: { _or: filters } } });
         const startTime = Date.now();
         await tasksPromise;
         const endTime = Date.now();
         expect(endTime - startTime).toBeLessThan(FIVE_SECONDS);
         
-    })
+    });
 
 })

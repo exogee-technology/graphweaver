@@ -10,6 +10,7 @@ interface GraphQLRequest {
 type RawRequest = ReturnType<typeof request>;
 type RequestArgs = Omit<GraphQLRequest, "query" | "operationName">;
 
+
 export const GRAPHQL_ENDPOINT = 'http://localhost:9001';
 
 export const gql = (input: TemplateStringsArray) => {
@@ -44,6 +45,15 @@ export const request = (query: TemplateStringsArray) => {
 	};
 };
 
+
+export const loginRequest = request`
+    mutation loginPassword($username: String, $password: String) {
+        loginPassword(username: $username, password: $password) {
+            authToken
+        }
+    }
+`;
+
 export class GraphweaverFuzzClient {
     private url: string;
     private defaultHeaders: Record<string, string>;
@@ -77,16 +87,12 @@ export class GraphweaverFuzzClient {
      * @param password 
      */
     public async loginPassword(username: string, password: string) {
-        const { loginPassword } = await this.makeRequest<{ loginPassword: {authToken: string}}>(request`
-            mutation loginPassword($username: String, $password: String) {
-                loginPassword(username: $username, password: $password) {
-                    authToken
-                }
-            }
-        `, { variables: { username, password }});
+        const { authToken } = (await this.makeRequest<{ loginPassword: {authToken: string}}>(
+            loginRequest, 
+            { variables: { username, password } }
+        )).loginPassword;
 
-        this.setHeader('Authorization', loginPassword.authToken);
-
+        this.setHeader('Authorization', authToken);
     }
 
 }

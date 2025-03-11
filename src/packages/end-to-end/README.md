@@ -120,3 +120,7 @@ Once you have setup these pre-requisites you can run the following scripts:
 `pnpm import-storage-provider` // this will copy over the example app to the local `./app` directory and use the packed node modules.
 `pnpm start-server` // this will start the app from the `./app` directory
 `pnpm test-ui-storage-provider` // This will run the playwright UI tests
+
+## Fuzzer
+
+The 'fuzzer' tests are currently under construction. For now, you will need to follow the instructions within and then run the `rest-with-auth` example. These tests do not run in the pipeline yet.
