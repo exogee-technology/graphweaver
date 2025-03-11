@@ -13,7 +13,7 @@
 	},
 	"dependencies": {
 		"@as-integrations/aws-lambda": "3.1.0",
-		"@azure/msal-browser": "4.2.0",
+		"@azure/msal-browser": "4.5.1",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-auth": "workspace:*",
@@ -30,7 +30,7 @@
 		"react": "19.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.10.1",
+		"@types/node": "22.13.10",
 		"typescript": "5.7.2"
 	}
 }

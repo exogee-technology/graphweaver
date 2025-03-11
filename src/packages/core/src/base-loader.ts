@@ -50,7 +50,8 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 	filter?: Filter<G>;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
-	if (!keyStore[gqlTypeName]) {
+	const loaderKey = `${gqlTypeName}-${JSON.stringify(filter)}`;
+	if (!keyStore[loaderKey]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
 		if (!entity?.provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
@@ -114,12 +115,12 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 			return keys.map((key) => lookup[key]);
 		};
 
-		keyStore[gqlTypeName] = new DataLoader(fetchRecordsById, {
+		keyStore[loaderKey] = new DataLoader(fetchRecordsById, {
 			maxBatchSize: entity.provider.maxDataLoaderBatchSize,
 		});
 	}
 
-	return keyStore[gqlTypeName] as DataLoader<string, D>;
+	return keyStore[loaderKey] as DataLoader<string, D>;
 };
 
 export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({

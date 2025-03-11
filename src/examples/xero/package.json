@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.12.4",
+		"@apollo/client": "3.13.3",
 		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
@@ -48,7 +48,7 @@
 		"xero-node": "10.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.10.1",
+		"@types/node": "22.13.10",
 		"esbuild": "0.25.0",
 		"prettier": "3.4.2",
 		"typescript": "5.7.2",
