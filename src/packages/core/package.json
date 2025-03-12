@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver",
-	"version": "2.12.3",
+	"version": "2.12.4",
 	"description": "Graphweaver Core Package",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -42,10 +42,10 @@
 	"devDependencies": {
 		"@opentelemetry/instrumentation": "0.57.2",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.25.0",
+		"esbuild": "0.25.1",
 		"glob": "11.0.1",
 		"typescript": "5.7.2",
-		"vitest": "3.0.7"
+		"vitest": "3.0.8"
 	},
 	"keywords": [
 		"graphql",
