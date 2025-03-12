@@ -51,7 +51,7 @@
 		"@types/node": "22.13.10",
 		"esbuild": "0.25.1",
 		"prettier": "3.4.2",
-		"typescript": "5.7.2",
+		"typescript": "5.7.3",
 		"vite": "6.1.0"
 	}
 }
