@@ -1,6 +1,3 @@
-process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
-process.env.DATABASE = 'sqlite';
-
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
