@@ -77,15 +77,27 @@ describe('Top level and/or/not', () => {
 		const response3 = await graphweaver.executeOperation({
 			query: gql`
 				query {
-					albums(filter: { _not: { id: "5" } }) {
-						id
-						title
+					albums_aggregate {
+						count
 					}
 				}
 			`,
 		});
 		assert(response3.body.kind === 'single');
 		expect(response3.body.singleResult.errors).toBe(undefined);
-		expect(response3.body.singleResult.data?.albums).toHaveLength(345);
+		const totalCount: number = (response3.body.singleResult.data?.albums_aggregate as any).count;
+
+		const response4 = await graphweaver.executeOperation({
+			query: gql`
+				query {
+					albums_aggregate(filter: { _not: { id: "5" } }) {
+						count
+					}
+				}
+			`,
+		});
+		assert(response4.body.kind === 'single');
+		expect(response4.body.singleResult.errors).toBe(undefined);
+		expect((response4.body.singleResult.data?.albums_aggregate as any).count).toBe(totalCount - 1);
 	});
 });
