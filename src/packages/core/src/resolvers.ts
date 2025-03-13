@@ -29,14 +29,14 @@ import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, isDefined, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
-import { getGraphweaverMutationType } from './utils/resolver.utils';
 import {
+	getGraphweaverMutationType,
 	constructFilterForRelatedEntity,
 	getDataEntities,
 	getIdValue,
 	getLoaderFilter,
 	ID,
-} from './metadata-service/resolver.utils';
+} from './utils/resolver.utils';
 
 export const baseResolver = (resolver: Resolver) => {
 	return async (
