@@ -194,6 +194,85 @@ export type GraphweaverMediasListFilter = {
   url_null?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+export type ImageNote = {
+  __typename?: 'ImageNote';
+  id: Scalars['ID']['output'];
+  note: Scalars['String']['output'];
+  submission: Submission;
+  submission_aggregate?: Maybe<AggregationResult>;
+};
+
+
+export type ImageNoteSubmissionArgs = {
+  filter?: InputMaybe<SubmissionsListFilter>;
+};
+
+
+export type ImageNoteSubmission_AggregateArgs = {
+  filter?: InputMaybe<SubmissionsListFilter>;
+};
+
+/** Data needed to create or update ImageNotes. If an ID is passed, this is an update, otherwise it's an insert. */
+export type ImageNoteCreateOrUpdateInput = {
+  id: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  submission?: InputMaybe<SubmissionCreateOrUpdateInput>;
+};
+
+/** Data needed to create ImageNotes. */
+export type ImageNoteInsertInput = {
+  id: Scalars['ID']['input'];
+  note: Scalars['String']['input'];
+  submission?: InputMaybe<SubmissionCreateOrUpdateInput>;
+};
+
+/** Data needed to update ImageNotes. An ID must be passed. */
+export type ImageNoteUpdateInput = {
+  id: Scalars['ID']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  submission?: InputMaybe<SubmissionCreateOrUpdateInput>;
+};
+
+export type ImageNotesListFilter = {
+  _and?: InputMaybe<Array<InputMaybe<ImageNotesListFilter>>>;
+  _or?: InputMaybe<Array<InputMaybe<ImageNotesListFilter>>>;
+  id?: InputMaybe<Scalars['ID']['input']>;
+  id_gt?: InputMaybe<Scalars['ID']['input']>;
+  id_gte?: InputMaybe<Scalars['ID']['input']>;
+  id_in?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_lt?: InputMaybe<Scalars['ID']['input']>;
+  id_lte?: InputMaybe<Scalars['ID']['input']>;
+  id_ne?: InputMaybe<Scalars['ID']['input']>;
+  id_nin?: InputMaybe<Array<Scalars['ID']['input']>>;
+  id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  id_null?: InputMaybe<Scalars['Boolean']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  note_gt?: InputMaybe<Scalars['String']['input']>;
+  note_gte?: InputMaybe<Scalars['String']['input']>;
+  note_ilike?: InputMaybe<Scalars['String']['input']>;
+  note_in?: InputMaybe<Array<Scalars['String']['input']>>;
+  note_like?: InputMaybe<Scalars['String']['input']>;
+  note_lt?: InputMaybe<Scalars['String']['input']>;
+  note_lte?: InputMaybe<Scalars['String']['input']>;
+  note_ne?: InputMaybe<Scalars['String']['input']>;
+  note_nin?: InputMaybe<Array<Scalars['String']['input']>>;
+  note_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  note_null?: InputMaybe<Scalars['Boolean']['input']>;
+  submission?: InputMaybe<SubmissionsListFilter>;
+};
+
+export type ImageNotesOrderByInput = {
+  id?: InputMaybe<Sort>;
+  note?: InputMaybe<Sort>;
+};
+
+/** Pagination options for ImageNotes. */
+export type ImageNotesPaginationInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<ImageNotesOrderByInput>;
+};
+
 export enum MediaType {
   Image = 'IMAGE',
   Other = 'OTHER'
@@ -201,6 +280,12 @@ export enum MediaType {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  /** Create a single ImageNote. */
+  createImageNote?: Maybe<ImageNote>;
+  /** Create many ImageNotes. */
+  createImageNotes?: Maybe<Array<Maybe<ImageNote>>>;
+  /** Create or update many ImageNotes. */
+  createOrUpdateImageNotes?: Maybe<Array<Maybe<ImageNote>>>;
   /** Create or update many Submissions. */
   createOrUpdateSubmissions?: Maybe<Array<Maybe<Submission>>>;
   /** Create a single Submission. */
@@ -208,16 +293,39 @@ export type Mutation = {
   /** Create many Submissions. */
   createSubmissions?: Maybe<Array<Maybe<Submission>>>;
   createThumbnail?: Maybe<Submission>;
+  /** Delete a single ImageNote. */
+  deleteImageNote?: Maybe<Scalars['Boolean']['output']>;
+  /** Delete many ImageNotes with a filter. */
+  deleteImageNotes?: Maybe<Scalars['Boolean']['output']>;
   /** Delete a single Submission. */
   deleteSubmission?: Maybe<Scalars['Boolean']['output']>;
   /** Delete many Submissions with a filter. */
   deleteSubmissions?: Maybe<Scalars['Boolean']['output']>;
   getDeleteUrl?: Maybe<Scalars['String']['output']>;
   getUploadUrl?: Maybe<Scalars['JSON']['output']>;
+  /** Update a single ImageNote. */
+  updateImageNote?: Maybe<ImageNote>;
+  /** Update many ImageNotes. */
+  updateImageNotes?: Maybe<Array<Maybe<ImageNote>>>;
   /** Update a single Submission. */
   updateSubmission?: Maybe<Submission>;
   /** Update many Submissions. */
   updateSubmissions?: Maybe<Array<Maybe<Submission>>>;
+};
+
+
+export type MutationCreateImageNoteArgs = {
+  input: ImageNoteInsertInput;
+};
+
+
+export type MutationCreateImageNotesArgs = {
+  input: Array<ImageNoteInsertInput>;
+};
+
+
+export type MutationCreateOrUpdateImageNotesArgs = {
+  input: Array<ImageNoteCreateOrUpdateInput>;
 };
 
 
@@ -241,6 +349,16 @@ export type MutationCreateThumbnailArgs = {
 };
 
 
+export type MutationDeleteImageNoteArgs = {
+  filter: DeleteOneFilterInput;
+};
+
+
+export type MutationDeleteImageNotesArgs = {
+  filter: ImageNotesListFilter;
+};
+
+
 export type MutationDeleteSubmissionArgs = {
   filter: DeleteOneFilterInput;
 };
@@ -261,6 +379,16 @@ export type MutationGetUploadUrlArgs = {
 };
 
 
+export type MutationUpdateImageNoteArgs = {
+  input: ImageNoteUpdateInput;
+};
+
+
+export type MutationUpdateImageNotesArgs = {
+  input: Array<ImageNoteUpdateInput>;
+};
+
+
 export type MutationUpdateSubmissionArgs = {
   input: SubmissionUpdateInput;
 };
@@ -275,6 +403,12 @@ export type Query = {
   /** Query used by the Admin UI to introspect the schema and metadata. */
   _graphweaver?: Maybe<AdminUiMetadata>;
   getDownloadUrl?: Maybe<Scalars['String']['output']>;
+  /** Get a single ImageNote. */
+  imageNote?: Maybe<ImageNote>;
+  /** Get multiple ImageNotes. */
+  imageNotes?: Maybe<Array<Maybe<ImageNote>>>;
+  /** Get aggregated data for ImageNotes. */
+  imageNotes_aggregate?: Maybe<AggregationResult>;
   /** Get a single Submission. */
   submission?: Maybe<Submission>;
   submissionByFilename?: Maybe<Submission>;
@@ -287,6 +421,22 @@ export type Query = {
 
 export type QueryGetDownloadUrlArgs = {
   key?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QueryImageNoteArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryImageNotesArgs = {
+  filter?: InputMaybe<ImageNotesListFilter>;
+  pagination?: InputMaybe<ImageNotesPaginationInput>;
+};
+
+
+export type QueryImageNotes_AggregateArgs = {
+  filter?: InputMaybe<ImageNotesListFilter>;
 };
 
 
@@ -319,23 +469,38 @@ export type Submission = {
   __typename?: 'Submission';
   id: Scalars['ID']['output'];
   image?: Maybe<GraphweaverMedia>;
+  imageNote?: Maybe<ImageNote>;
+  imageNote_aggregate?: Maybe<AggregationResult>;
+};
+
+
+export type SubmissionImageNoteArgs = {
+  filter?: InputMaybe<ImageNotesListFilter>;
+};
+
+
+export type SubmissionImageNote_AggregateArgs = {
+  filter?: InputMaybe<ImageNotesListFilter>;
 };
 
 /** Data needed to create or update Submissions. If an ID is passed, this is an update, otherwise it's an insert. */
 export type SubmissionCreateOrUpdateInput = {
   id?: InputMaybe<Scalars['ID']['input']>;
   image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
+  imageNote?: InputMaybe<ImageNoteCreateOrUpdateInput>;
 };
 
 /** Data needed to create Submissions. */
 export type SubmissionInsertInput = {
   image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
+  imageNote?: InputMaybe<ImageNoteCreateOrUpdateInput>;
 };
 
 /** Data needed to update Submissions. An ID must be passed. */
 export type SubmissionUpdateInput = {
   id: Scalars['ID']['input'];
   image?: InputMaybe<GraphweaverMediaCreateOrUpdateInput>;
+  imageNote?: InputMaybe<ImageNoteCreateOrUpdateInput>;
 };
 
 export type SubmissionsListFilter = {
@@ -352,6 +517,7 @@ export type SubmissionsListFilter = {
   id_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   id_null?: InputMaybe<Scalars['Boolean']['input']>;
   image?: InputMaybe<GraphweaverMediasListFilter>;
+  imageNote?: InputMaybe<ImageNotesListFilter>;
 };
 
 export type SubmissionsOrderByInput = {
