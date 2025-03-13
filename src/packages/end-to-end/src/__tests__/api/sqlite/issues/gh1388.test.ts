@@ -77,7 +77,7 @@ describe('Top level and/or/not', () => {
 		const response3 = await graphweaver.executeOperation({
 			query: gql`
 				query {
-					albums(filter: { id: { _not: 5 } }) {
+					albums(filter: { id: { _not: "5" } }) {
 						id
 						title
 					}
