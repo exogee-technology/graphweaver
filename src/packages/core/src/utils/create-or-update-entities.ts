@@ -11,6 +11,7 @@ import {
 	isTransformableGraphQLEntityClass,
 } from '../base-entities';
 import { getGraphweaverMutationType } from './resolver.utils';
+import { isDefined } from './common';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -226,6 +227,13 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 
 				return fromBackendEntity(meta, result);
 			} else if (operation === 'create') {
+				const clientGeneratedPrimaryKeys = meta.apiOptions?.clientGeneratedPrimaryKeys;
+				if (isDefined(node[primaryKeyField]) && clientGeneratedPrimaryKeys !== true) {
+					// Wait, you are creating an entity but giving it an ID? That's not right.
+					throw new Error(
+						`Cannot create entity with ID '${node[primaryKeyField]}' because clientGeneratedPrimaryKeys is not enabled.`
+					);
+				}
 				const result = await meta.provider.createOne(
 					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 						? meta.target.toBackendEntity(node)
