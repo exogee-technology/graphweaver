@@ -107,6 +107,9 @@ class DatabaseImplementation {
 				let result: T;
 				try {
 					result = await callback();
+				} catch (error) {
+					logger.error('Error in transaction', error);
+					throw error;
 				} finally {
 					delete this.transactionalEm;
 					delete this.transactionInProgressIsolationLevel;
