@@ -120,8 +120,7 @@ const connection = {
 			OrmRootWithBackendId,
 		],
 		driver: SqliteDriver,
-		dbName: 'databases/database.sqlite',
-		debug: true,
+		dbName: ':memory:',
 	},
 };
 

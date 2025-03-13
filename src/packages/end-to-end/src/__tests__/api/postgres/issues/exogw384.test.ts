@@ -45,10 +45,10 @@ class EntityWithoutClientGeneratedId {
 	description!: string;
 }
 
-@Entity('EntityWitClientGeneratedIdNotDefined', {
+@Entity('EntityWithClientGeneratedIdNotDefined', {
 	provider: providerWithCreateOne,
 })
-class EntityWitClientGeneratedIdNotDefined {
+class EntityWithClientGeneratedIdNotDefined {
 	@Field(() => ID)
 	id!: string;
 
@@ -132,7 +132,7 @@ describe('clientGeneratedPrimaryKeys', () => {
 		const response = await graphweaver.executeOperation({
 			query: gql`
 				mutation {
-					createEntityWitClientGeneratedIdNotDefined(input: { description: "Test User" }) {
+					createEntityWithClientGeneratedIdNotDefined(input: { description: "Test User" }) {
 						id
 						description
 					}
