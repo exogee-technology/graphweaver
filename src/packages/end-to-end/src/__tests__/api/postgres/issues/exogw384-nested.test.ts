@@ -538,7 +538,7 @@ describe('EXOGW-384 Nested - Create operations', () => {
 
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Field \"ChildWithClientIdCreateOrUpdateInput.id\" of required type \"ID!\" was not provided.'
+			'Field "ChildWithClientIdCreateOrUpdateInput.id" of required type "ID!" was not provided.'
 		);
 	});
 
