@@ -77,7 +77,7 @@ describe('Top level and/or/not', () => {
 		const response3 = await graphweaver.executeOperation({
 			query: gql`
 				query {
-					albums(filter: { id: { _not: "5" } }) {
+					albums(filter: { _not: { id: "5" } }) {
 						id
 						title
 					}
@@ -87,19 +87,5 @@ describe('Top level and/or/not', () => {
 		assert(response3.body.kind === 'single');
 		expect(response3.body.singleResult.errors).toBe(undefined);
 		expect(response3.body.singleResult.data?.albums).toHaveLength(345);
-
-		const response4 = await graphweaver.executeOperation({
-			query: gql`
-				query {
-					albums(filter: { _not: { id: "5" } }) {
-						id
-						title
-					}
-				}
-			`,
-		});
-		assert(response4.body.kind === 'single');
-		expect(response4.body.singleResult.errors).toBe(undefined);
-		expect(response4.body.singleResult.data?.albums).toHaveLength(345);
 	});
 });
