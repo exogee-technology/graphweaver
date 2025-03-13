@@ -74,18 +74,18 @@ describe('Top level and/or/not', () => {
 		expect(response2.body.singleResult.errors).toBe(undefined);
 		expect(response2.body.singleResult.data?.albums).toHaveLength(2);
 
-		// const response3 = await graphweaver.executeOperation({
-		// 	query: gql`
-		// 		query {
-		// 			albums(filter: { id: { _not: 5 } }) {
-		// 				id
-		// 				title
-		// 			}
-		// 		}
-		// 	`,
-		// });
-		// assert(response3.body.kind === 'single');
-		// expect(response3.body.singleResult.errors).toBe(undefined);
-		// expect(response3.body.singleResult.data?.albums).toHaveLength(345);
+		const response3 = await graphweaver.executeOperation({
+			query: gql`
+				query {
+					albums(filter: { id: { _not: 5 } }) {
+						id
+						title
+					}
+				}
+			`,
+		});
+		assert(response3.body.kind === 'single');
+		expect(response3.body.singleResult.errors).toBe(undefined);
+		expect(response3.body.singleResult.data?.albums).toHaveLength(345);
 	});
 });
