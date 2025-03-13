@@ -21,8 +21,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@mikro-orm/knex": "6.4.7",
-		"@mikro-orm/sqlite": "6.4.7",
+		"@mikro-orm/knex": "6.4.9",
+		"@mikro-orm/sqlite": "6.4.9",
 		"node-sqlite3-wasm": "0.8.28"
 	},
 	"devDependencies": {
@@ -30,7 +30,7 @@
 		"esbuild": "0.25.1",
 		"glob": "11.0.1",
 		"tsx": "4.19.3",
-		"typescript": "5.7.2"
+		"typescript": "5.7.3"
 	},
 	"keywords": [
 		"graphql",
