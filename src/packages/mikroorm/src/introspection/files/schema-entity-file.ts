@@ -172,7 +172,7 @@ export class SchemaEntityFile extends BaseFile {
 		}
 
 		if (prop.columnTypes?.[0] === 'date') {
-			return 'Date';
+			return 'DateScalar';
 		}
 
 		if (prop.runtimeType === 'unknown') {

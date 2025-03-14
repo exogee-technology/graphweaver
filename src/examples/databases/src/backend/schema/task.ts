@@ -1,4 +1,5 @@
 import {
+	AdminUIFilterType,
 	DetailPanelInputComponentOption,
 	Entity,
 	Field,
@@ -22,6 +23,7 @@ export class Task {
 		description: 'Formatted text using Markdown, the Admin UI allows users to enter markdown text',
 		adminUIOptions: {
 			detailPanelInputComponent: DetailPanelInputComponentOption.MARKDOWN,
+			hideInFilterBar: true,
 		},
 	})
 	description!: string;
@@ -32,7 +34,12 @@ export class Task {
 	@Field(() => Date)
 	createdAt!: Date;
 
-	@Field(() => Date)
+	@Field(() => Date, {
+		adminUIOptions: {
+			// I want my admin-ui users to not have to filter with time, just the date. The system should handle the time behind the scenes.
+			filterType: AdminUIFilterType.DATE_RANGE,
+		},
+	})
 	updatedAt!: Date;
 
 	@Field(() => DateScalar, { nullable: true })

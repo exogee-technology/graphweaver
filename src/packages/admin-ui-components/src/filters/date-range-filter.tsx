@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon';
-
-import { Filter } from '../';
+import { AdminUIFilterType, dateTimeFieldTypes, Filter } from '../';
 import { DatePicker } from '../date-picker';
 
 export type DateRangeFilterType = { [x: string]: string } | undefined;
@@ -10,6 +9,8 @@ export interface DateRangeFilterProps {
 	entity: string; // Not used but added to conform to API
 	onChange?: (fieldName: string, newFilter: Filter) => void;
 	filter?: Filter;
+	filterType: AdminUIFilterType.DATE_TIME_RANGE | AdminUIFilterType.DATE_RANGE;
+	fieldType: string;
 }
 
 const getFilterDateTime = (key: string, filter?: Filter) => {
@@ -17,16 +18,30 @@ const getFilterDateTime = (key: string, filter?: Filter) => {
 	return isoString ? DateTime.fromISO(isoString) : undefined;
 };
 
-export const DateRangeFilter = ({ fieldName, onChange, filter }: DateRangeFilterProps) => {
+export const DateRangeFilter = ({
+	fieldName,
+	onChange,
+	filter,
+	filterType,
+	fieldType,
+}: DateRangeFilterProps) => {
 	const startKey = `${fieldName}_gte`;
 	const endKey = `${fieldName}_lte`;
 	const startDate = getFilterDateTime(startKey, filter);
 	const endDate = getFilterDateTime(endKey, filter);
 
 	const handleOnChange = (startDate?: DateTime, endDate?: DateTime) => {
+		// Note: There is an option to render filter as DATE_RANGE but still have a fieldType that has time. In this case the system should not show the time but handle it behind the scenes.
+		const isDateWithTime =
+			filterType === AdminUIFilterType.DATE_TIME_RANGE || dateTimeFieldTypes.has(fieldType);
 		onChange?.(
 			fieldName,
-			startDate && endDate ? { [startKey]: startDate.toISO(), [endKey]: endDate.toISO() } : {}
+			startDate && endDate
+				? {
+						[startKey]: isDateWithTime ? startDate.toISO() : startDate.toISODate(),
+						[endKey]: isDateWithTime ? endDate.toISO() : endDate.toISODate(),
+					}
+				: {}
 		);
 	};
 
@@ -38,6 +53,8 @@ export const DateRangeFilter = ({ fieldName, onChange, filter }: DateRangeFilter
 			isRangePicker
 			startDate={startDate}
 			endDate={endDate}
+			filterType={filterType}
+			fieldType={fieldType}
 			data-testid={`${fieldName}-filter`}
 		/>
 	);
