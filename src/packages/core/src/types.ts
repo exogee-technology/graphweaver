@@ -178,6 +178,7 @@ export interface DeleteManyHookParams<G, TContext = BaseContext> extends HookPar
 }
 
 export enum AdminUIFilterType {
+	DATE_TIME_RANGE = 'DATE_TIME_RANGE',
 	DATE_RANGE = 'DATE_RANGE',
 	ENUM = 'ENUM',
 	NUMERIC = 'NUMERIC',

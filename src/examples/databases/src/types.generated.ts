@@ -19,7 +19,7 @@ export type Scalars = {
   /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   BigInt: { input: any; output: any; }
   /** The concept of a date without a time and/or timezone, e.g. My birthday is January 1st, 1864 regardless of timezone. */
-  Date: { input: any; output: any; }
+  DateScalar: { input: any; output: any; }
   /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
   ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
@@ -99,6 +99,7 @@ export type AdminUiFilterMetadata = {
 export enum AdminUiFilterType {
   Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
+  DateTimeRange = 'DATE_TIME_RANGE',
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
@@ -298,7 +299,7 @@ export type Task = {
   __typename?: 'Task';
   createdAt: Scalars['ISOString']['output'];
   description: Scalars['String']['output'];
-  dueAt?: Maybe<Scalars['Date']['output']>;
+  dueAt?: Maybe<Scalars['DateScalar']['output']>;
   id: Scalars['BigInt']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
@@ -321,7 +322,7 @@ export type TaskUser_AggregateArgs = {
 export type TaskCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
@@ -333,7 +334,7 @@ export type TaskCreateOrUpdateInput = {
 export type TaskInsertInput = {
   createdAt: Scalars['ISOString']['input'];
   description: Scalars['String']['input'];
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
   isCompleted: Scalars['Boolean']['input'];
   meta?: InputMaybe<Scalars['JSON']['input']>;
   updatedAt: Scalars['ISOString']['input'];
@@ -344,7 +345,7 @@ export type TaskInsertInput = {
 export type TaskUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
   id: Scalars['ID']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
@@ -377,14 +378,14 @@ export type TasksListFilter = {
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   description_null?: InputMaybe<Scalars['Boolean']['input']>;
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_gt?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_gte?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_in?: InputMaybe<Array<Scalars['Date']['input']>>;
-  dueAt_lt?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_lte?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_ne?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_nin?: InputMaybe<Array<Scalars['Date']['input']>>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_gt?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_gte?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_in?: InputMaybe<Array<Scalars['DateScalar']['input']>>;
+  dueAt_lt?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_lte?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_ne?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_nin?: InputMaybe<Array<Scalars['DateScalar']['input']>>;
   dueAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   dueAt_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;

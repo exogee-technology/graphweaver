@@ -117,3 +117,16 @@
 :global(.rdp-root) {
 	--rdp-accent-color: var(--primary-color);
 }
+
+.timeSelector {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.timeSelector input {
+	width: 101px;
+	border: 1px solid var(--primary-color);
+	border-radius: 7px;
+	padding: 1px 5px;
+}

@@ -65,3 +65,5 @@ export const validateFilter = (
 };
 
 export const toSelectOption = (value: unknown) => ({ value, label: String(value) });
+
+export const dateTimeFieldTypes = new Set(['ISOString', 'Date']);

@@ -1,14 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { DateTime } from 'luxon';
 import clsx from 'clsx';
 import { DayPicker } from 'react-day-picker';
-
 import 'react-day-picker/style.css';
-
 import { Button } from '../button';
-
 import styles from './styles.module.css';
 import { CloseButtonIcon } from '../assets';
+import { TimeInput } from './time-input';
+import { AdminUIFilterType } from '../utils';
+import { dateTimeFieldTypes } from '../filters';
+import { getFormat, setTime, toLuxonDate } from './utils';
 
 interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
@@ -16,14 +17,9 @@ interface Props {
 	isRangePicker?: boolean;
 	startDate?: DateTime | string;
 	endDate?: DateTime | string;
+	filterType: AdminUIFilterType.DATE_TIME_RANGE | AdminUIFilterType.DATE_RANGE;
+	fieldType: string;
 }
-
-const toLuxonDate = (date: Date | DateTime | string | undefined) => {
-	if (DateTime.isDateTime(date)) return date;
-	if (typeof date === 'string') return DateTime.fromISO(date);
-	if (date instanceof Date) return DateTime.fromJSDate(date);
-	return undefined;
-};
 
 export const DatePicker = ({
 	onChange,
@@ -31,6 +27,8 @@ export const DatePicker = ({
 	isRangePicker = false,
 	startDate,
 	endDate,
+	filterType,
+	fieldType,
 }: Props) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const datePickerRef = useRef<HTMLDivElement>(null);
@@ -39,34 +37,62 @@ export const DatePicker = ({
 	const luxonEndDate = toLuxonDate(endDate);
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
-		setIsOpen(false);
+		const shouldHandleTimeBehindTheScenes =
+			filterType === AdminUIFilterType.DATE_RANGE && dateTimeFieldTypes.has(fieldType);
+
+		// Set the new date, but keep the time
+		// If the time is handled behind the scenes (time is not shown to user but dataType has time) then let's handle it.
+		// Otherwise, the time is whatever the user has said the time is, which is already set in the previous state (which is the startDate and endDate variables)
+		start = shouldHandleTimeBehindTheScenes
+			? start?.startOf('day')
+			: setTime(start, startDate, DateTime.now().startOf('day'));
+		end = shouldHandleTimeBehindTheScenes
+			? (end?.endOf('day') ?? start?.endOf('day'))
+			: setTime(end, endDate, DateTime.now().endOf('day'));
+
 		onChange(start, end);
 	};
 
-	const clear = () => handleDateRangeSelect(undefined, undefined);
+	const handleTimeInputChange = (mode: 'start' | 'end') => (start?: DateTime, end?: DateTime) => {
+		// set the new time but keep the date
+		if (mode === 'start') {
+			start = setTime(startDate, start, DateTime.now().startOf('day'));
+		}
+		if (mode === 'end') {
+			end = setTime(endDate, end, DateTime.now().endOf('day'));
+		}
+		onChange(start, end);
+	};
+
+	const clear = () => {
+		handleDateRangeSelect(undefined, undefined);
+		setIsOpen(false);
+	};
 
 	const displayText = () => {
+		const withTime = filterType === AdminUIFilterType.DATE_TIME_RANGE;
 		if (luxonStartDate) {
 			const selectedDatesText = [
-				luxonStartDate.toFormat('dd/MM/yyyy'),
-				luxonEndDate?.toFormat('dd/MM/yyyy'),
+				luxonStartDate.toFormat(getFormat(withTime)),
+				luxonEndDate?.toFormat(getFormat(withTime)),
 			];
 			return isRangePicker
 				? `${selectedDatesText.join('-')}`
-				: luxonStartDate.toFormat('dd/MM/yyyy');
+				: luxonStartDate.toFormat(getFormat(withTime));
 		} else {
 			return placeholder ?? '';
 		}
 	};
 
-	const handleOutsideClick = (event: MouseEvent) => {
-		if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
-			close();
-		}
-	};
-
 	useEffect(() => {
+		const handleOutsideClick = (event: MouseEvent) => {
+			if (datePickerRef.current && !datePickerRef.current.contains(event.target as Node)) {
+				setIsOpen(false);
+			}
+		};
+
 		document.addEventListener('mousedown', handleOutsideClick);
+
 		return () => {
 			document.removeEventListener('mousedown', handleOutsideClick);
 		};
@@ -110,6 +136,34 @@ export const DatePicker = ({
 							defaultMonth={luxonStartDate?.toJSDate()}
 							captionLayout="dropdown"
 						/>
+					)}
+
+					{filterType === AdminUIFilterType.DATE_TIME_RANGE && !isRangePicker && (
+						<div className={styles.timeSelector}>
+							Time:
+							<TimeInput
+								value={luxonStartDate}
+								setValue={handleTimeInputChange('start')}
+								defaultTime="00:00:00"
+							/>
+						</div>
+					)}
+					{filterType === AdminUIFilterType.DATE_TIME_RANGE && isRangePicker && (
+						<div className={styles.timeSelector}>
+							From:{' '}
+							<TimeInput
+								value={luxonStartDate}
+								setValue={(value) => handleTimeInputChange('start')(value, luxonEndDate)}
+								defaultTime="00:00:00"
+							/>
+							<div style={{ width: '5px' }}> </div>
+							To:{' '}
+							<TimeInput
+								value={luxonEndDate}
+								setValue={(value) => handleTimeInputChange('end')(luxonStartDate, value)}
+								defaultTime="23:59:59"
+							/>
+						</div>
 					)}
 
 					<div className={styles.filterButtons}>

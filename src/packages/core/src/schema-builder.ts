@@ -117,6 +117,7 @@ const scalarShouldGetMathOperations = (
 	scalar.name === 'ID' ||
 	scalar.name === 'String' ||
 	scalar.name === 'Date' ||
+	scalar.name === 'DateScalar' ||
 	scalar.name === 'ISOString' ||
 	(scalar instanceof GraphQLScalarType && scalar?.extensions?.type === 'integer');
 
