@@ -1026,8 +1026,8 @@ importers:
   packages/aws-cognito:
     dependencies:
       '@aws-sdk/client-cognito-identity-provider':
-        specifier: 3.760.0
-        version: 3.760.0
+        specifier: 3.768.0
+        version: 3.768.0
       '@aws-sdk/client-lambda':
         specifier: 3.758.0
         version: 3.758.0
@@ -2025,8 +2025,8 @@ packages:
   '@aws-crypto/util@5.2.0':
     resolution: {integrity: sha512-4RkU9EsI6ZpBve5fseQlGNUWKMa1RLPQ1dnjnQoe07ldfIzcsGb5hC5W0Dm7u423KWzawlrpbjXBrXCEv9zazQ==}
 
-  '@aws-sdk/client-cognito-identity-provider@3.760.0':
-    resolution: {integrity: sha512-nDhdT5N2l+kpq4Y1P7UEP/FB6XP5TnwTLYNNlAocKHmFyryI8YqGpCgUE/01z+/wcebQgveuP80NoidV8th2IA==}
+  '@aws-sdk/client-cognito-identity-provider@3.768.0':
+    resolution: {integrity: sha512-HG43plusOJwAL2CgL2u8x4bPfj+RY63p5JDR8vkGY6bvzc97RSsPBvVbG3XKKqloRmwuGskZEmwsUnyirTO0hQ==}
     engines: {node: '>=18.0.0'}
 
   '@aws-sdk/client-lambda@3.758.0':
@@ -11220,7 +11220,7 @@ snapshots:
       '@smithy/util-utf8': 2.3.0
       tslib: 2.8.1
 
-  '@aws-sdk/client-cognito-identity-provider@3.760.0':
+  '@aws-sdk/client-cognito-identity-provider@3.768.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
