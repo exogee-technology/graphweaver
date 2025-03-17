@@ -60,6 +60,10 @@ export type GraphweaverAppConfig = {
 	lambda?: {
 		// Either provide the name of the package containing the Graphweaver API
 		packageName?: string;
+
+		// Name of the Lambda function shown in AWS
+		functionName?: string;
+
 		// Or the path to the Graphweaver backend build directory
 		buildPath?: string;
 
