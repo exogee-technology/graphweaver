@@ -1,4 +1,5 @@
 import { DatabaseOptions, initialiseAuth } from '@exogee/graphweaver-builder';
+import { input } from '@inquirer/prompts';
 import { promptForDatabaseOptions } from '../database';
 
 export const authMethods = ['password', 'api-key', 'magic-link'] as const;
@@ -32,16 +33,10 @@ export const initAuth = async ({
 			user,
 		});
 
-		const { default: inquirer } = await import('inquirer');
-		const prompt = await inquirer.prompt<any, { tableName: string }>([
-			{
-				type: 'input',
-				name: 'tableName',
-				default: method === 'password' ? 'Credentials' : 'ApiKey',
-				message: `Please specify the exact name of the table where you would like the data to be stored:`,
-			},
-		]);
-		tableName = prompt.tableName;
+		tableName = await input({
+			message: `Please specify the exact name of the table where you would like the data to be stored:`,
+			default: method === 'password' ? 'Credentials' : 'ApiKey',
+		});
 	}
 
 	await initialiseAuth({ method, tableName, ...databaseOptions });

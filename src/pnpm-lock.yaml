@@ -85,10 +85,10 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/sqlite':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -290,10 +290,10 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/sqlite':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -345,10 +345,10 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/sqlite':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       '@okta/okta-auth-js':
         specifier: 7.11.1
         version: 7.11.1(encoding@0.1.13)
@@ -388,10 +388,10 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/mysql':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -408,6 +408,37 @@ importers:
       graphweaver:
         specifier: workspace:*
         version: link:../../packages/cli
+      typescript:
+        specifier: 5.7.3
+        version: 5.7.3
+
+  examples/rest-introspection-example:
+    dependencies:
+      '@as-integrations/aws-lambda':
+        specifier: 3.1.0
+        version: 3.1.0(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.10.0))
+      '@exogee/graphweaver':
+        specifier: 2.12.4
+        version: 2.12.4(encoding@0.1.13)
+      '@exogee/graphweaver-rest':
+        specifier: 2.12.4
+        version: 2.12.4(encoding@0.1.13)
+      '@exogee/graphweaver-scalars':
+        specifier: 2.12.4
+        version: 2.12.4(graphql@16.10.0)
+      '@exogee/graphweaver-server':
+        specifier: 2.12.4
+        version: 2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(encoding@0.1.13)
+      graphql:
+        specifier: 16.10.0
+        version: 16.10.0
+    devDependencies:
+      '@types/node':
+        specifier: 22.13.10
+        version: 22.13.10
+      graphweaver:
+        specifier: 2.12.4
+        version: 2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.9)(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(encoding@0.1.13)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.35.0)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
       typescript:
         specifier: 5.7.3
         version: 5.7.3
@@ -440,7 +471,7 @@ importers:
         version: 6.4.9
       '@mikro-orm/mysql':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       dotenv:
         specifier: 16.4.7
         version: 16.4.7
@@ -510,7 +541,7 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.9
         version: 6.4.9(@mikro-orm/core@6.4.9)
@@ -571,10 +602,10 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/sqlite':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       graphql:
         specifier: 16.10.0
         version: 16.10.0
@@ -1204,18 +1235,15 @@ importers:
       '@exogee/graphweaver-config':
         specifier: workspace:*
         version: link:../config
+      '@inquirer/prompts':
+        specifier: 5.3.8
+        version: 5.3.8
       chokidar:
         specifier: 4.0.3
         version: 4.0.3
       esbuild:
         specifier: 0.25.1
         version: 0.25.1
-      inquirer:
-        specifier: 11.1.0
-        version: 11.1.0
-      node-semver:
-        specifier: 1.0.0
-        version: 1.0.0
       ora-classic:
         specifier: 5.4.2
         version: 5.4.2
@@ -1229,9 +1257,6 @@ importers:
         specifier: 17.7.2
         version: 17.7.2
     devDependencies:
-      '@types/inquirer':
-        specifier: 9.0.7
-        version: 9.0.7
       '@types/node':
         specifier: 22.13.10
         version: 22.13.10
@@ -1479,10 +1504,10 @@ importers:
     dependencies:
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/sqlite':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       node-sqlite3-wasm:
         specifier: 0.8.28
         version: 0.8.28
@@ -1538,16 +1563,16 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       '@mikro-orm/mysql':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.9
         version: 6.4.9(@mikro-orm/core@6.4.9)
       '@mikro-orm/sqlite':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.4.9
@@ -2703,6 +2728,18 @@ packages:
     cpu: [ppc64]
     os: [aix]
 
+  '@esbuild/aix-ppc64@0.24.2':
+    resolution: {integrity: sha512-thpVCb/rhxE/BnMLQ7GReQLLN8q9qbHmI55F4489/ByVg2aQaQ6kbcLb6FHkocZzQhxc4gx0sCk0tJkKBFzDhA==}
+    engines: {node: '>=18'}
+    cpu: [ppc64]
+    os: [aix]
+
+  '@esbuild/aix-ppc64@0.25.0':
+    resolution: {integrity: sha512-O7vun9Sf8DFjH2UtqK8Ku3LkquL9SZL8OLY1T5NZkA34+wG3OQF7cl4Ql8vdNzM6fzBbYfLaiRLIOZ+2FOCgBQ==}
+    engines: {node: '>=18'}
+    cpu: [ppc64]
+    os: [aix]
+
   '@esbuild/aix-ppc64@0.25.1':
     resolution: {integrity: sha512-kfYGy8IdzTGy+z0vFGvExZtxkFlA4zAxgKEahG9KE1ScBjpQnFsNOX8KTU5ojNru5ed5CVoJYXFtoxaq5nFbjQ==}
     engines: {node: '>=18'}
@@ -2717,6 +2754,18 @@ packages:
 
   '@esbuild/android-arm64@0.23.1':
     resolution: {integrity: sha512-xw50ipykXcLstLeWH7WRdQuysJqejuAGPd30vd1i5zSyKK3WE+ijzHmLKxdiCMtH1pHz78rOg0BKSYOSB/2Khw==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [android]
+
+  '@esbuild/android-arm64@0.24.2':
+    resolution: {integrity: sha512-cNLgeqCqV8WxfcTIOeL4OAtSmL8JjcN6m09XIgro1Wi7cF4t/THaWEa7eL5CMoMBdjoHOTh/vwTO/o2TRXIyzg==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [android]
+
+  '@esbuild/android-arm64@0.25.0':
+    resolution: {integrity: sha512-grvv8WncGjDSyUBjN9yHXNt+cq0snxXbDxy5pJtzMKGmmpPxeAmAhWxXI+01lU5rwZomDgD3kJwulEnhTRUd6g==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [android]
@@ -2739,6 +2788,18 @@ packages:
     cpu: [arm]
     os: [android]
 
+  '@esbuild/android-arm@0.24.2':
+    resolution: {integrity: sha512-tmwl4hJkCfNHwFB3nBa8z1Uy3ypZpxqxfTQOcHX+xRByyYgunVbZ9MzUUfb0RxaHIMnbHagwAxuTL+tnNM+1/Q==}
+    engines: {node: '>=18'}
+    cpu: [arm]
+    os: [android]
+
+  '@esbuild/android-arm@0.25.0':
+    resolution: {integrity: sha512-PTyWCYYiU0+1eJKmw21lWtC+d08JDZPQ5g+kFyxP0V+es6VPPSUhM6zk8iImp2jbV6GwjX4pap0JFbUQN65X1g==}
+    engines: {node: '>=18'}
+    cpu: [arm]
+    os: [android]
+
   '@esbuild/android-arm@0.25.1':
     resolution: {integrity: sha512-dp+MshLYux6j/JjdqVLnMglQlFu+MuVeNrmT5nk6q07wNhCdSnB7QZj+7G8VMUGh1q+vj2Bq8kRsuyA00I/k+Q==}
     engines: {node: '>=18'}
@@ -2753,6 +2814,18 @@ packages:
 
   '@esbuild/android-x64@0.23.1':
     resolution: {integrity: sha512-nlN9B69St9BwUoB+jkyU090bru8L0NA3yFvAd7k8dNsVH8bi9a8cUAUSEcEEgTp2z3dbEDGJGfP6VUnkQnlReg==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [android]
+
+  '@esbuild/android-x64@0.24.2':
+    resolution: {integrity: sha512-B6Q0YQDqMx9D7rvIcsXfmJfvUYLoP722bgfBlO5cGvNVb5V/+Y7nhBE3mHV9OpxBf4eAS2S68KZztiPaWq4XYw==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [android]
+
+  '@esbuild/android-x64@0.25.0':
+    resolution: {integrity: sha512-m/ix7SfKG5buCnxasr52+LI78SQ+wgdENi9CqyCXwjVR2X4Jkz+BpC3le3AoBPYTC9NHklwngVXvbJ9/Akhrfg==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [android]
@@ -2775,6 +2848,18 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
+  '@esbuild/darwin-arm64@0.24.2':
+    resolution: {integrity: sha512-kj3AnYWc+CekmZnS5IPu9D+HWtUI49hbnyqk0FLEJDbzCIQt7hg7ucF1SQAilhtYpIujfaHr6O0UHlzzSPdOeA==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@esbuild/darwin-arm64@0.25.0':
+    resolution: {integrity: sha512-mVwdUb5SRkPayVadIOI78K7aAnPamoeFR2bT5nszFUZ9P8UpK4ratOdYbZZXYSqPKMHfS1wdHCJk1P1EZpRdvw==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [darwin]
+
   '@esbuild/darwin-arm64@0.25.1':
     resolution: {integrity: sha512-5hEZKPf+nQjYoSr/elb62U19/l1mZDdqidGfmFutVUjjUZrOazAtwK+Kr+3y0C/oeJfLlxo9fXb1w7L+P7E4FQ==}
     engines: {node: '>=18'}
@@ -2789,6 +2874,18 @@ packages:
 
   '@esbuild/darwin-x64@0.23.1':
     resolution: {integrity: sha512-aClqdgTDVPSEGgoCS8QDG37Gu8yc9lTHNAQlsztQ6ENetKEO//b8y31MMu2ZaPbn4kVsIABzVLXYLhCGekGDqw==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@esbuild/darwin-x64@0.24.2':
+    resolution: {integrity: sha512-WeSrmwwHaPkNR5H3yYfowhZcbriGqooyu3zI/3GGpF8AyUdsrrP0X6KumITGA9WOyiJavnGZUwPGvxvwfWPHIA==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@esbuild/darwin-x64@0.25.0':
+    resolution: {integrity: sha512-DgDaYsPWFTS4S3nWpFcMn/33ZZwAAeAFKNHNa1QN0rI4pUjgqf0f7ONmXf6d22tqTY+H9FNdgeaAa+YIFUn2Rg==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [darwin]
@@ -2811,6 +2908,18 @@ packages:
     cpu: [arm64]
     os: [freebsd]
 
+  '@esbuild/freebsd-arm64@0.24.2':
+    resolution: {integrity: sha512-UN8HXjtJ0k/Mj6a9+5u6+2eZ2ERD7Edt1Q9IZiB5UZAIdPnVKDoG7mdTVGhHJIeEml60JteamR3qhsr1r8gXvg==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [freebsd]
+
+  '@esbuild/freebsd-arm64@0.25.0':
+    resolution: {integrity: sha512-VN4ocxy6dxefN1MepBx/iD1dH5K8qNtNe227I0mnTRjry8tj5MRk4zprLEdG8WPyAPb93/e4pSgi1SoHdgOa4w==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [freebsd]
+
   '@esbuild/freebsd-arm64@0.25.1':
     resolution: {integrity: sha512-1MrCZs0fZa2g8E+FUo2ipw6jw5qqQiH+tERoS5fAfKnRx6NXH31tXBKI3VpmLijLH6yriMZsxJtaXUyFt/8Y4A==}
     engines: {node: '>=18'}
@@ -2825,6 +2934,18 @@ packages:
 
   '@esbuild/freebsd-x64@0.23.1':
     resolution: {integrity: sha512-lK1eJeyk1ZX8UklqFd/3A60UuZ/6UVfGT2LuGo3Wp4/z7eRTRYY+0xOu2kpClP+vMTi9wKOfXi2vjUpO1Ro76g==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@esbuild/freebsd-x64@0.24.2':
+    resolution: {integrity: sha512-TvW7wE/89PYW+IevEJXZ5sF6gJRDY/14hyIGFXdIucxCsbRmLUcjseQu1SyTko+2idmCw94TgyaEZi9HUSOe3Q==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [freebsd]
+
+  '@esbuild/freebsd-x64@0.25.0':
+    resolution: {integrity: sha512-mrSgt7lCh07FY+hDD1TxiTyIHyttn6vnjesnPoVDNmDfOmggTLXRv8Id5fNZey1gl/V2dyVK1VXXqVsQIiAk+A==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [freebsd]
@@ -2847,6 +2968,18 @@ packages:
     cpu: [arm64]
     os: [linux]
 
+  '@esbuild/linux-arm64@0.24.2':
+    resolution: {integrity: sha512-7HnAD6074BW43YvvUmE/35Id9/NB7BeX5EoNkK9obndmZBUk8xmJJeU7DwmUeN7tkysslb2eSl6CTrYz6oEMQg==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@esbuild/linux-arm64@0.25.0':
+    resolution: {integrity: sha512-9QAQjTWNDM/Vk2bgBl17yWuZxZNQIF0OUUuPZRKoDtqF2k4EtYbpyiG5/Dk7nqeK6kIJWPYldkOcBqjXjrUlmg==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [linux]
+
   '@esbuild/linux-arm64@0.25.1':
     resolution: {integrity: sha512-jaN3dHi0/DDPelk0nLcXRm1q7DNJpjXy7yWaWvbfkPvI+7XNSc/lDOnCLN7gzsyzgu6qSAmgSvP9oXAhP973uQ==}
     engines: {node: '>=18'}
@@ -2861,6 +2994,18 @@ packages:
 
   '@esbuild/linux-arm@0.23.1':
     resolution: {integrity: sha512-CXXkzgn+dXAPs3WBwE+Kvnrf4WECwBdfjfeYHpMeVxWE0EceB6vhWGShs6wi0IYEqMSIzdOF1XjQ/Mkm5d7ZdQ==}
+    engines: {node: '>=18'}
+    cpu: [arm]
+    os: [linux]
+
+  '@esbuild/linux-arm@0.24.2':
+    resolution: {integrity: sha512-n0WRM/gWIdU29J57hJyUdIsk0WarGd6To0s+Y+LwvlC55wt+GT/OgkwoXCXvIue1i1sSNWblHEig00GBWiJgfA==}
+    engines: {node: '>=18'}
+    cpu: [arm]
+    os: [linux]
+
+  '@esbuild/linux-arm@0.25.0':
+    resolution: {integrity: sha512-vkB3IYj2IDo3g9xX7HqhPYxVkNQe8qTK55fraQyTzTX/fxaDtXiEnavv9geOsonh2Fd2RMB+i5cbhu2zMNWJwg==}
     engines: {node: '>=18'}
     cpu: [arm]
     os: [linux]
@@ -2883,6 +3028,18 @@ packages:
     cpu: [ia32]
     os: [linux]
 
+  '@esbuild/linux-ia32@0.24.2':
+    resolution: {integrity: sha512-sfv0tGPQhcZOgTKO3oBE9xpHuUqguHvSo4jl+wjnKwFpapx+vUDcawbwPNuBIAYdRAvIDBfZVvXprIj3HA+Ugw==}
+    engines: {node: '>=18'}
+    cpu: [ia32]
+    os: [linux]
+
+  '@esbuild/linux-ia32@0.25.0':
+    resolution: {integrity: sha512-43ET5bHbphBegyeqLb7I1eYn2P/JYGNmzzdidq/w0T8E2SsYL1U6un2NFROFRg1JZLTzdCoRomg8Rvf9M6W6Gg==}
+    engines: {node: '>=18'}
+    cpu: [ia32]
+    os: [linux]
+
   '@esbuild/linux-ia32@0.25.1':
     resolution: {integrity: sha512-OJykPaF4v8JidKNGz8c/q1lBO44sQNUQtq1KktJXdBLn1hPod5rE/Hko5ugKKZd+D2+o1a9MFGUEIUwO2YfgkQ==}
     engines: {node: '>=18'}
@@ -2897,6 +3054,18 @@ packages:
 
   '@esbuild/linux-loong64@0.23.1':
     resolution: {integrity: sha512-Vx09LzEoBa5zDnieH8LSMRToj7ir/Jeq0Gu6qJ/1GcBq9GkfoEAoXvLiW1U9J1qE/Y/Oyaq33w5p2ZWrNNHNEw==}
+    engines: {node: '>=18'}
+    cpu: [loong64]
+    os: [linux]
+
+  '@esbuild/linux-loong64@0.24.2':
+    resolution: {integrity: sha512-CN9AZr8kEndGooS35ntToZLTQLHEjtVB5n7dl8ZcTZMonJ7CCfStrYhrzF97eAecqVbVJ7APOEe18RPI4KLhwQ==}
+    engines: {node: '>=18'}
+    cpu: [loong64]
+    os: [linux]
+
+  '@esbuild/linux-loong64@0.25.0':
+    resolution: {integrity: sha512-fC95c/xyNFueMhClxJmeRIj2yrSMdDfmqJnyOY4ZqsALkDrrKJfIg5NTMSzVBr5YW1jf+l7/cndBfP3MSDpoHw==}
     engines: {node: '>=18'}
     cpu: [loong64]
     os: [linux]
@@ -2919,6 +3088,18 @@ packages:
     cpu: [mips64el]
     os: [linux]
 
+  '@esbuild/linux-mips64el@0.24.2':
+    resolution: {integrity: sha512-iMkk7qr/wl3exJATwkISxI7kTcmHKE+BlymIAbHO8xanq/TjHaaVThFF6ipWzPHryoFsesNQJPE/3wFJw4+huw==}
+    engines: {node: '>=18'}
+    cpu: [mips64el]
+    os: [linux]
+
+  '@esbuild/linux-mips64el@0.25.0':
+    resolution: {integrity: sha512-nkAMFju7KDW73T1DdH7glcyIptm95a7Le8irTQNO/qtkoyypZAnjchQgooFUDQhNAy4iu08N79W4T4pMBwhPwQ==}
+    engines: {node: '>=18'}
+    cpu: [mips64el]
+    os: [linux]
+
   '@esbuild/linux-mips64el@0.25.1':
     resolution: {integrity: sha512-1osBbPEFYwIE5IVB/0g2X6i1qInZa1aIoj1TdL4AaAb55xIIgbg8Doq6a5BzYWgr+tEcDzYH67XVnTmUzL+nXg==}
     engines: {node: '>=18'}
@@ -2933,6 +3114,18 @@ packages:
 
   '@esbuild/linux-ppc64@0.23.1':
     resolution: {integrity: sha512-dKN8fgVqd0vUIjxuJI6P/9SSSe/mB9rvA98CSH2sJnlZ/OCZWO1DJvxj8jvKTfYUdGfcq2dDxoKaC6bHuTlgcw==}
+    engines: {node: '>=18'}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@esbuild/linux-ppc64@0.24.2':
+    resolution: {integrity: sha512-shsVrgCZ57Vr2L8mm39kO5PPIb+843FStGt7sGGoqiiWYconSxwTiuswC1VJZLCjNiMLAMh34jg4VSEQb+iEbw==}
+    engines: {node: '>=18'}
+    cpu: [ppc64]
+    os: [linux]
+
+  '@esbuild/linux-ppc64@0.25.0':
+    resolution: {integrity: sha512-NhyOejdhRGS8Iwv+KKR2zTq2PpysF9XqY+Zk77vQHqNbo/PwZCzB5/h7VGuREZm1fixhs4Q/qWRSi5zmAiO4Fw==}
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [linux]
@@ -2955,6 +3148,18 @@ packages:
     cpu: [riscv64]
     os: [linux]
 
+  '@esbuild/linux-riscv64@0.24.2':
+    resolution: {integrity: sha512-4eSFWnU9Hhd68fW16GD0TINewo1L6dRrB+oLNNbYyMUAeOD2yCK5KXGK1GH4qD/kT+bTEXjsyTCiJGHPZ3eM9Q==}
+    engines: {node: '>=18'}
+    cpu: [riscv64]
+    os: [linux]
+
+  '@esbuild/linux-riscv64@0.25.0':
+    resolution: {integrity: sha512-5S/rbP5OY+GHLC5qXp1y/Mx//e92L1YDqkiBbO9TQOvuFXM+iDqUNG5XopAnXoRH3FjIUDkeGcY1cgNvnXp/kA==}
+    engines: {node: '>=18'}
+    cpu: [riscv64]
+    os: [linux]
+
   '@esbuild/linux-riscv64@0.25.1':
     resolution: {integrity: sha512-nSut/Mx5gnilhcq2yIMLMe3Wl4FK5wx/o0QuuCLMtmJn+WeWYoEGDN1ipcN72g1WHsnIbxGXd4i/MF0gTcuAjQ==}
     engines: {node: '>=18'}
@@ -2969,6 +3174,18 @@ packages:
 
   '@esbuild/linux-s390x@0.23.1':
     resolution: {integrity: sha512-9ygs73tuFCe6f6m/Tb+9LtYxWR4c9yg7zjt2cYkjDbDpV/xVn+68cQxMXCjUpYwEkze2RcU/rMnfIXNRFmSoDw==}
+    engines: {node: '>=18'}
+    cpu: [s390x]
+    os: [linux]
+
+  '@esbuild/linux-s390x@0.24.2':
+    resolution: {integrity: sha512-S0Bh0A53b0YHL2XEXC20bHLuGMOhFDO6GN4b3YjRLK//Ep3ql3erpNcPlEFed93hsQAjAQDNsvcK+hV90FubSw==}
+    engines: {node: '>=18'}
+    cpu: [s390x]
+    os: [linux]
+
+  '@esbuild/linux-s390x@0.25.0':
+    resolution: {integrity: sha512-XM2BFsEBz0Fw37V0zU4CXfcfuACMrppsMFKdYY2WuTS3yi8O1nFOhil/xhKTmE1nPmVyvQJjJivgDT+xh8pXJA==}
     engines: {node: '>=18'}
     cpu: [s390x]
     os: [linux]
@@ -2991,11 +3208,35 @@ packages:
     cpu: [x64]
     os: [linux]
 
+  '@esbuild/linux-x64@0.24.2':
+    resolution: {integrity: sha512-8Qi4nQcCTbLnK9WoMjdC9NiTG6/E38RNICU6sUNqK0QFxCYgoARqVqxdFmWkdonVsvGqWhmm7MO0jyTqLqwj0Q==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [linux]
+
+  '@esbuild/linux-x64@0.25.0':
+    resolution: {integrity: sha512-9yl91rHw/cpwMCNytUDxwj2XjFpxML0y9HAOH9pNVQDpQrBxHy01Dx+vaMu0N1CKa/RzBD2hB4u//nfc+Sd3Cw==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [linux]
+
   '@esbuild/linux-x64@0.25.1':
     resolution: {integrity: sha512-xbfUhu/gnvSEg+EGovRc+kjBAkrvtk38RlerAzQxvMzlB4fXpCFCeUAYzJvrnhFtdeyVCDANSjJvOvGYoeKzFA==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
+
+  '@esbuild/netbsd-arm64@0.24.2':
+    resolution: {integrity: sha512-wuLK/VztRRpMt9zyHSazyCVdCXlpHkKm34WUyinD2lzK07FAHTq0KQvZZlXikNWkDGoT6x3TD51jKQ7gMVpopw==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [netbsd]
+
+  '@esbuild/netbsd-arm64@0.25.0':
+    resolution: {integrity: sha512-RuG4PSMPFfrkH6UwCAqBzauBWTygTvb1nxWasEJooGSJ/NwRw7b2HOwyRTQIU97Hq37l3npXoZGYMy3b3xYvPw==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [netbsd]
 
   '@esbuild/netbsd-arm64@0.25.1':
     resolution: {integrity: sha512-O96poM2XGhLtpTh+s4+nP7YCCAfb4tJNRVZHfIE7dgmax+yMP2WgMd2OecBuaATHKTHsLWHQeuaxMRnCsH8+5g==}
@@ -3015,6 +3256,18 @@ packages:
     cpu: [x64]
     os: [netbsd]
 
+  '@esbuild/netbsd-x64@0.24.2':
+    resolution: {integrity: sha512-VefFaQUc4FMmJuAxmIHgUmfNiLXY438XrL4GDNV1Y1H/RW3qow68xTwjZKfj/+Plp9NANmzbH5R40Meudu8mmw==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [netbsd]
+
+  '@esbuild/netbsd-x64@0.25.0':
+    resolution: {integrity: sha512-jl+qisSB5jk01N5f7sPCsBENCOlPiS/xptD5yxOx2oqQfyourJwIKLRA2yqWdifj3owQZCL2sn6o08dBzZGQzA==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [netbsd]
+
   '@esbuild/netbsd-x64@0.25.1':
     resolution: {integrity: sha512-X53z6uXip6KFXBQ+Krbx25XHV/NCbzryM6ehOAeAil7X7oa4XIq+394PWGnwaSQ2WRA0KI6PUO6hTO5zeF5ijA==}
     engines: {node: '>=18'}
@@ -3023,6 +3276,18 @@ packages:
 
   '@esbuild/openbsd-arm64@0.23.1':
     resolution: {integrity: sha512-3x37szhLexNA4bXhLrCC/LImN/YtWis6WXr1VESlfVtVeoFJBRINPJ3f0a/6LV8zpikqoUg4hyXw0sFBt5Cr+Q==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [openbsd]
+
+  '@esbuild/openbsd-arm64@0.24.2':
+    resolution: {integrity: sha512-YQbi46SBct6iKnszhSvdluqDmxCJA+Pu280Av9WICNwQmMxV7nLRHZfjQzwbPs3jeWnuAhE9Jy0NrnJ12Oz+0A==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [openbsd]
+
+  '@esbuild/openbsd-arm64@0.25.0':
+    resolution: {integrity: sha512-21sUNbq2r84YE+SJDfaQRvdgznTD8Xc0oc3p3iW/a1EVWeNj/SdUCbm5U0itZPQYRuRTW20fPMWMpcrciH2EJw==}
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [openbsd]
@@ -3045,6 +3310,18 @@ packages:
     cpu: [x64]
     os: [openbsd]
 
+  '@esbuild/openbsd-x64@0.24.2':
+    resolution: {integrity: sha512-+iDS6zpNM6EnJyWv0bMGLWSWeXGN/HTaF/LXHXHwejGsVi+ooqDfMCCTerNFxEkM3wYVcExkeGXNqshc9iMaOA==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [openbsd]
+
+  '@esbuild/openbsd-x64@0.25.0':
+    resolution: {integrity: sha512-2gwwriSMPcCFRlPlKx3zLQhfN/2WjJ2NSlg5TKLQOJdV0mSxIcYNTMhk3H3ulL/cak+Xj0lY1Ym9ysDV1igceg==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [openbsd]
+
   '@esbuild/openbsd-x64@0.25.1':
     resolution: {integrity: sha512-T3H78X2h1tszfRSf+txbt5aOp/e7TAz3ptVKu9Oyir3IAOFPGV6O9c2naym5TOriy1l0nNf6a4X5UXRZSGX/dw==}
     engines: {node: '>=18'}
@@ -3059,6 +3336,18 @@ packages:
 
   '@esbuild/sunos-x64@0.23.1':
     resolution: {integrity: sha512-RBRT2gqEl0IKQABT4XTj78tpk9v7ehp+mazn2HbUeZl1YMdaGAQqhapjGTCe7uw7y0frDi4gS0uHzhvpFuI1sA==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [sunos]
+
+  '@esbuild/sunos-x64@0.24.2':
+    resolution: {integrity: sha512-hTdsW27jcktEvpwNHJU4ZwWFGkz2zRJUz8pvddmXPtXDzVKTTINmlmga3ZzwcuMpUvLw7JkLy9QLKyGpD2Yxig==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [sunos]
+
+  '@esbuild/sunos-x64@0.25.0':
+    resolution: {integrity: sha512-bxI7ThgLzPrPz484/S9jLlvUAHYMzy6I0XiU1ZMeAEOBcS0VePBFxh1JjTQt3Xiat5b6Oh4x7UC7IwKQKIJRIg==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [sunos]
@@ -3081,6 +3370,18 @@ packages:
     cpu: [arm64]
     os: [win32]
 
+  '@esbuild/win32-arm64@0.24.2':
+    resolution: {integrity: sha512-LihEQ2BBKVFLOC9ZItT9iFprsE9tqjDjnbulhHoFxYQtQfai7qfluVODIYxt1PgdoyQkz23+01rzwNwYfutxUQ==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@esbuild/win32-arm64@0.25.0':
+    resolution: {integrity: sha512-ZUAc2YK6JW89xTbXvftxdnYy3m4iHIkDtK3CLce8wg8M2L+YZhIvO1DKpxrd0Yr59AeNNkTiic9YLf6FTtXWMw==}
+    engines: {node: '>=18'}
+    cpu: [arm64]
+    os: [win32]
+
   '@esbuild/win32-arm64@0.25.1':
     resolution: {integrity: sha512-GE7XvrdOzrb+yVKB9KsRMq+7a2U/K5Cf/8grVFRAGJmfADr/e/ODQ134RK2/eeHqYV5eQRFxb1hY7Nr15fv1NQ==}
     engines: {node: '>=18'}
@@ -3099,6 +3400,18 @@ packages:
     cpu: [ia32]
     os: [win32]
 
+  '@esbuild/win32-ia32@0.24.2':
+    resolution: {integrity: sha512-q+iGUwfs8tncmFC9pcnD5IvRHAzmbwQ3GPS5/ceCyHdjXubwQWI12MKWSNSMYLJMq23/IUCvJMS76PDqXe1fxA==}
+    engines: {node: '>=18'}
+    cpu: [ia32]
+    os: [win32]
+
+  '@esbuild/win32-ia32@0.25.0':
+    resolution: {integrity: sha512-eSNxISBu8XweVEWG31/JzjkIGbGIJN/TrRoiSVZwZ6pkC6VX4Im/WV2cz559/TXLcYbcrDN8JtKgd9DJVIo8GA==}
+    engines: {node: '>=18'}
+    cpu: [ia32]
+    os: [win32]
+
   '@esbuild/win32-ia32@0.25.1':
     resolution: {integrity: sha512-uOxSJCIcavSiT6UnBhBzE8wy3n0hOkJsBOzy7HDAuTDE++1DJMRRVCPGisULScHL+a/ZwdXPpXD3IyFKjA7K8A==}
     engines: {node: '>=18'}
@@ -3113,6 +3426,18 @@ packages:
 
   '@esbuild/win32-x64@0.23.1':
     resolution: {integrity: sha512-BHpFFeslkWrXWyUPnbKm+xYYVYruCinGcftSBaa8zoF9hZO4BcSCFUvHVTtzpIY6YzUnYtuEhZ+C9iEXjxnasg==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [win32]
+
+  '@esbuild/win32-x64@0.24.2':
+    resolution: {integrity: sha512-7VTgWzgMGvup6aSqDPLiW5zHaxYJGTO4OokMjIlrCtf+VpEL+cXKtCvg723iguPYI5oaUNdS+/V7OU2gvXVWEg==}
+    engines: {node: '>=18'}
+    cpu: [x64]
+    os: [win32]
+
+  '@esbuild/win32-x64@0.25.0':
+    resolution: {integrity: sha512-ZENoHJBxA20C2zFzh6AI4fT6RraMzjYw4xKWemRTRmRVtN9c5DcH9r/f2ihEkMjOW5eGgrwCslG/+Y/3bL+DHQ==}
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
@@ -3298,6 +3623,53 @@ packages:
 
   '@ethersproject/wordlists@5.7.0':
     resolution: {integrity: sha512-S2TFNJNfHWVHNE6cNDjbVlZ6MgE17MIxMbMg2zv3wn+3XSJGosL1m9ZVv3GXCf/2ymSsQ+hRI5IzoMJTG6aoVA==}
+
+  '@exogee/graphweaver-admin-ui-components@2.12.4':
+    resolution: {integrity: sha512-cbzytzLOwp8Aof4YZzOp9V/KhDHrX/o6aqdNlkQZtQub11yr9kcT7BWVHBEH5MEgKP9enFpLbmztVJGOFU60iQ==}
+    peerDependencies:
+      formik: ^2.4.6
+      graphql: '16'
+      react: ^18.0.0 || ^19.0.0
+      react-dom: ^18.0.0 || ^19.0.0
+
+  '@exogee/graphweaver-admin-ui@2.12.4':
+    resolution: {integrity: sha512-B77ASUR6Saz58by3AJHue+2a0ubwX0Dx1w6q6aXFpCSybBHyEmMuu0/F8e4iOkVG4fOUZK4tMHd3tMprSirKJQ==}
+    peerDependencies:
+      graphql: '16'
+
+  '@exogee/graphweaver-apollo-client@2.12.4':
+    resolution: {integrity: sha512-OCGazVUJVaId+ywMpbKfJ0humPEeYLrzpv+Ll5/ySAxFCwNCIyXVkpO0CA2sprRZq48fUqvwj50Qdz8iQrQ6cQ==}
+    peerDependencies:
+      '@apollo/client': ^3.10.4
+
+  '@exogee/graphweaver-builder@2.12.4':
+    resolution: {integrity: sha512-szpLiCtIDdbnxAEYYWsAASV07qYfZbBnIOmPHBbEu7SgFnnegVanL3keqtqhn3gTq4QlS20OnKiqb2HY6KR0Ow==}
+
+  '@exogee/graphweaver-config@2.12.4':
+    resolution: {integrity: sha512-N0goZlw15uKP4yDTCMcRkC5KlqKKcEQmh/Koad6QPs/t3hzxWZE3VSd+J7GqRUATRpZijjpwk58dwWtHeFCyhQ==}
+
+  '@exogee/graphweaver-mikroorm@2.12.4':
+    resolution: {integrity: sha512-UcEHFKVUO8NT3uw/SPTyRngJSB5Ptpa0nfL08yTRj6biZgAdUony+QprALi6Ucbb9SqICigKUET5P+RV3SWp4A==}
+    peerDependencies:
+      '@mikro-orm/core': 6.4.9
+      graphql: '16'
+
+  '@exogee/graphweaver-rest@2.12.4':
+    resolution: {integrity: sha512-wnqNmj+hVJiBntQTXrNRb2bQEBTV8/sNm3XoIVovz2+ELDYErQ8oRV9qmwNmHBFGd3pjYJQWUyS1TMjFYg6fag==}
+
+  '@exogee/graphweaver-scalars@2.12.4':
+    resolution: {integrity: sha512-l3ae3U03LupItZg+Sgdqal3vkOS6KiPCurBQGhQEdjUUXgdyvcCbYbB+Vw4vzfQ5owJFGk/irnuuBJGn+8lI7Q==}
+    peerDependencies:
+      graphql: '16'
+
+  '@exogee/graphweaver-server@2.12.4':
+    resolution: {integrity: sha512-KqglQx8Ybm5RlZaGil8AiAnuxGrr2AUrkwX7m2CUvdJOq7ndrB98NMFOK0TWaANAN66jAdstjIPkoS+XhldewQ==}
+
+  '@exogee/graphweaver@2.12.4':
+    resolution: {integrity: sha512-ilD0CXW3O22gNLC9HlQuezg7/taNh9jZrypqu60LORa3W3Fpux85E0b6xEhmLR62PJ06VaHAzkgB6Em6Iatldg==}
+
+  '@exogee/logger@2.12.4':
+    resolution: {integrity: sha512-WOAXor/eUan5dWrui7M0uWP/OJBP0Vbe/ipKm9ox4FSl2vnNiF7bUFVjE/t+K5z31idC/Cm0vgrYuMznYb857w==}
 
   '@fastify/ajv-compiler@3.6.0':
     resolution: {integrity: sha512-LwdXQJjmMD+GwLOkP7TVC68qa+pSSogeWWmznRJ/coyTcfe9qA05AHFSe1eZFwK6q+xVRpChnvFUkf1iYaSZsQ==}
@@ -5506,9 +5878,6 @@ packages:
   '@types/http-errors@2.0.4':
     resolution: {integrity: sha512-D0CFMMtydbJAegzOyHjtiKPLlvnm3iTZyZRSZoLq2mRhDdmLfIWOCYPfQJ4cu2erKghU++QvjcUjp/5h7hESpA==}
 
-  '@types/inquirer@9.0.7':
-    resolution: {integrity: sha512-Q0zyBupO6NxGRZut/JdmqYKOnN95Eg5V8Csg3PGKkP+FnvsUZx1jAyK7fztIszxxMuoBA6E3KXWvdZVXIpx60g==}
-
   '@types/istanbul-lib-coverage@2.0.6':
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
 
@@ -5657,9 +6026,6 @@ packages:
 
   '@types/tern@0.23.9':
     resolution: {integrity: sha512-ypzHFE/wBzh+BlH6rrBgS5I/Z7RD21pGhZ2rltb/+ZrVM1awdZwjx7hE5XfuYgHWk9uvV5HLZN3SloevCAp3Bw==}
-
-  '@types/through@0.0.33':
-    resolution: {integrity: sha512-HsJ+z3QuETzP3cswwtzt2vEIiHBk/dCcHGhbmG5X3ecnwFD/lPrMpliGXxSCg03L9AhrdwA4Oz/qfspkDW+xGQ==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -5814,10 +6180,6 @@ packages:
   '@whatwg-node/node-fetch@0.7.12':
     resolution: {integrity: sha512-ec9ZPDImceXD9gShv0VTc6q0waZ7ccpiYXNbAeGMjGQAZ8hkAeAYOXoiJsfaHO5Pt0UR+SbNVTJGP2aeFMYz0Q==}
     engines: {node: '>=18.0.0'}
-
-  '@whatwg-node/promise-helpers@1.2.2':
-    resolution: {integrity: sha512-aPVTGCs/QEYkSTnYcLKE1wyYZykbGjaXsEwXHc0FKbSlojIpdw72BQMJx9aJXzkCs6qy9WfDV0jhV9C2qIYYOA==}
-    engines: {node: '>=16.0.0'}
 
   '@whatwg-node/promise-helpers@1.2.4':
     resolution: {integrity: sha512-daEUfaHbaMuAcor+FPAVK+pOCSzsAYhK6LN1y81EcakdqQEPQvjm74PTmfwfv8POg8pw4RyCv9LXB1e+mQDwqg==}
@@ -7061,6 +7423,16 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  esbuild@0.24.2:
+    resolution: {integrity: sha512-+9egpBW8I3CD5XPe0n6BfT5fxLzxrlDzqydF3aviG+9ni1lDC/OvMHcxqEFV0+LANZG5R1bFMWfUrjVsdwxJvA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  esbuild@0.25.0:
+    resolution: {integrity: sha512-BXq5mqc8ltbaN34cDqWuYKyNhX8D/Z0J1xdtdQ8UcIIIyJyz+ZMKUt58tF3SrZ85jcfN/PZYhjR5uDQAYNVbuw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   esbuild@0.25.1:
     resolution: {integrity: sha512-BGO5LtrGC7vxnqucAe/rmvKdJllfGaYWdyABvyMoXQlfYMb2bbRuReWR5tEGE//4LcNJj9XrkovTqNYRFZHAMQ==}
     engines: {node: '>=18'}
@@ -7724,6 +8096,10 @@ packages:
   graphql@16.9.0:
     resolution: {integrity: sha512-GGTKBX4SD7Wdb8mqeDLni2oaRGYQWjWHGKPQ24ZMnUtKfcsVoiv4uX8+LJr1K6U5VW2Lu1BwJnj7uiori0YtRw==}
     engines: {node: ^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0}
+
+  graphweaver@2.12.4:
+    resolution: {integrity: sha512-KL537HbpABRStO/pP3TOseyB4pwv+tD2dOjVd3EX8EGy+AEbvZGoqhwwTwJBCouWVYTo610RxepHMgeKt7ZgxA==}
+    hasBin: true
 
   has-flag@3.0.0:
     resolution: {integrity: sha512-sKJf1+ceQBr4SMkvQnBDNDtf4TXpVhVGateu0t918bl30FnbE2m4vNLX+VWe/dpjlb+HugGYzW7uQXH98HPEYw==}
@@ -9703,6 +10079,12 @@ packages:
     peerDependencies:
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
 
+  react-day-picker@9.5.1:
+    resolution: {integrity: sha512-PxuK8inYLlYgM2zZUVBPsaBM5jI40suPeG+naKyx7kpyF032RRlEAUEjkpW9/poTASh/vyWAOVqjGuGw+47isw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      react: '>=16.8.0'
+
   react-day-picker@9.6.2:
     resolution: {integrity: sha512-HVrTpDUYGKbi9scU9v2N3BPGMnL5jwekGFXcyyrvpamZdgYGfzVcovsBD4/yNGxhpCIX5X/5IoLDEAayNv1EqA==}
     engines: {node: '>=18'}
@@ -9721,6 +10103,13 @@ packages:
 
   react-fast-compare@2.0.4:
     resolution: {integrity: sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==}
+
+  react-hot-toast@2.4.1:
+    resolution: {integrity: sha512-j8z+cQbWIM5LY37pR6uZR6D4LfseplqnuAO4co4u8917hBUvXlEqyP1ZzqVLcqoyUesZZv/ImreoCeHVDpE5pQ==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: '>=16'
+      react-dom: '>=16'
 
   react-hot-toast@2.5.2:
     resolution: {integrity: sha512-Tun3BbCxzmXXM7C+NI4qiv6lT0uwGh4oAfeJyNOjYUejTsm35mK9iCaYLGv8cBz9L5YxZLx/2ii7zsIwPtPUdw==}
@@ -10790,6 +11179,51 @@ packages:
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
 
+  vite-plugin-graphweaver@2.12.4:
+    resolution: {integrity: sha512-micJv38VgxUYMdwO/D+1tiObET0p9gv2fWc5XKT+f5/tnClI0irqLb5lAu9wr75FCzlPyYP60qmUFPMI4dHWDg==}
+    peerDependencies:
+      vite: ^5.0.0 || ^6.0.0
+
+  vite@6.1.0:
+    resolution: {integrity: sha512-RjjMipCKVoR4hVfPY6GQTgveinjNuyLw+qruksLDvA5ktI1150VmcMBKmQaEWJhg/j6Uaf6dNCNA0AfdzUb/hQ==}
+    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
+    hasBin: true
+    peerDependencies:
+      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
+      jiti: '>=1.21.0'
+      less: '*'
+      lightningcss: ^1.21.0
+      sass: '*'
+      sass-embedded: '*'
+      stylus: '*'
+      sugarss: '*'
+      terser: ^5.16.0
+      tsx: ^4.8.1
+      yaml: ^2.4.2
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+      jiti:
+        optional: true
+      less:
+        optional: true
+      lightningcss:
+        optional: true
+      sass:
+        optional: true
+      sass-embedded:
+        optional: true
+      stylus:
+        optional: true
+      sugarss:
+        optional: true
+      terser:
+        optional: true
+      tsx:
+        optional: true
+      yaml:
+        optional: true
+
   vite@6.2.1:
     resolution: {integrity: sha512-n2GnqDb6XPhlt9B8olZPrgMD/es/Nd1RdChF6CBD/fHW6pUyUTt2sQW2fPRX5GiD9XEa6+8A6A4f2vT6pSsE7Q==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -11280,6 +11714,26 @@ snapshots:
       '@babel/parser': 7.26.9
       '@babel/runtime': 7.26.9
       babel-preset-fbjs: 3.4.0(@babel/core@7.26.9)
+      chalk: 4.1.2
+      fb-watchman: 2.0.2
+      fbjs: 3.0.5(encoding@0.1.13)
+      graphql: 16.10.0
+      immutable: 3.7.6
+      invariant: 2.2.4
+      nullthrows: 1.1.1
+      relay-runtime: 12.0.0(encoding@0.1.13)
+      signedsource: 1.0.0
+    transitivePeerDependencies:
+      - '@babel/core'
+      - encoding
+      - supports-color
+
+  '@ardatan/relay-compiler@12.0.1(encoding@0.1.13)(graphql@16.10.0)':
+    dependencies:
+      '@babel/generator': 7.26.9
+      '@babel/parser': 7.26.9
+      '@babel/runtime': 7.26.9
+      babel-preset-fbjs: 3.4.0
       chalk: 4.1.2
       fb-watchman: 2.0.2
       fbjs: 3.0.5(encoding@0.1.13)
@@ -12142,6 +12596,14 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@babel/plugin-proposal-object-rest-spread@7.20.7':
+    dependencies:
+      '@babel/compat-data': 7.26.5
+      '@babel/helper-compilation-targets': 7.26.5
+      '@babel/helper-plugin-utils': 7.26.5
+      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.26.0)
+      '@babel/plugin-transform-parameters': 7.25.9(@babel/core@7.26.9)
+
   '@babel/plugin-proposal-object-rest-spread@7.20.7(@babel/core@7.26.9)':
     dependencies:
       '@babel/compat-data': 7.26.5
@@ -12331,6 +12793,13 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.9
       '@babel/helper-plugin-utils': 7.26.5
+
+  '@babel/plugin-transform-modules-commonjs@7.26.3':
+    dependencies:
+      '@babel/helper-module-transforms': 7.26.0(@babel/core@7.26.0)
+      '@babel/helper-plugin-utils': 7.26.5
+    transitivePeerDependencies:
+      - supports-color
 
   '@babel/plugin-transform-modules-commonjs@7.26.3(@babel/core@7.26.9)':
     dependencies:
@@ -12545,6 +13014,12 @@ snapshots:
   '@esbuild/aix-ppc64@0.23.1':
     optional: true
 
+  '@esbuild/aix-ppc64@0.24.2':
+    optional: true
+
+  '@esbuild/aix-ppc64@0.25.0':
+    optional: true
+
   '@esbuild/aix-ppc64@0.25.1':
     optional: true
 
@@ -12552,6 +13027,12 @@ snapshots:
     optional: true
 
   '@esbuild/android-arm64@0.23.1':
+    optional: true
+
+  '@esbuild/android-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/android-arm64@0.25.0':
     optional: true
 
   '@esbuild/android-arm64@0.25.1':
@@ -12563,6 +13044,12 @@ snapshots:
   '@esbuild/android-arm@0.23.1':
     optional: true
 
+  '@esbuild/android-arm@0.24.2':
+    optional: true
+
+  '@esbuild/android-arm@0.25.0':
+    optional: true
+
   '@esbuild/android-arm@0.25.1':
     optional: true
 
@@ -12570,6 +13057,12 @@ snapshots:
     optional: true
 
   '@esbuild/android-x64@0.23.1':
+    optional: true
+
+  '@esbuild/android-x64@0.24.2':
+    optional: true
+
+  '@esbuild/android-x64@0.25.0':
     optional: true
 
   '@esbuild/android-x64@0.25.1':
@@ -12581,6 +13074,12 @@ snapshots:
   '@esbuild/darwin-arm64@0.23.1':
     optional: true
 
+  '@esbuild/darwin-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/darwin-arm64@0.25.0':
+    optional: true
+
   '@esbuild/darwin-arm64@0.25.1':
     optional: true
 
@@ -12588,6 +13087,12 @@ snapshots:
     optional: true
 
   '@esbuild/darwin-x64@0.23.1':
+    optional: true
+
+  '@esbuild/darwin-x64@0.24.2':
+    optional: true
+
+  '@esbuild/darwin-x64@0.25.0':
     optional: true
 
   '@esbuild/darwin-x64@0.25.1':
@@ -12599,6 +13104,12 @@ snapshots:
   '@esbuild/freebsd-arm64@0.23.1':
     optional: true
 
+  '@esbuild/freebsd-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/freebsd-arm64@0.25.0':
+    optional: true
+
   '@esbuild/freebsd-arm64@0.25.1':
     optional: true
 
@@ -12606,6 +13117,12 @@ snapshots:
     optional: true
 
   '@esbuild/freebsd-x64@0.23.1':
+    optional: true
+
+  '@esbuild/freebsd-x64@0.24.2':
+    optional: true
+
+  '@esbuild/freebsd-x64@0.25.0':
     optional: true
 
   '@esbuild/freebsd-x64@0.25.1':
@@ -12617,6 +13134,12 @@ snapshots:
   '@esbuild/linux-arm64@0.23.1':
     optional: true
 
+  '@esbuild/linux-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/linux-arm64@0.25.0':
+    optional: true
+
   '@esbuild/linux-arm64@0.25.1':
     optional: true
 
@@ -12624,6 +13147,12 @@ snapshots:
     optional: true
 
   '@esbuild/linux-arm@0.23.1':
+    optional: true
+
+  '@esbuild/linux-arm@0.24.2':
+    optional: true
+
+  '@esbuild/linux-arm@0.25.0':
     optional: true
 
   '@esbuild/linux-arm@0.25.1':
@@ -12635,6 +13164,12 @@ snapshots:
   '@esbuild/linux-ia32@0.23.1':
     optional: true
 
+  '@esbuild/linux-ia32@0.24.2':
+    optional: true
+
+  '@esbuild/linux-ia32@0.25.0':
+    optional: true
+
   '@esbuild/linux-ia32@0.25.1':
     optional: true
 
@@ -12642,6 +13177,12 @@ snapshots:
     optional: true
 
   '@esbuild/linux-loong64@0.23.1':
+    optional: true
+
+  '@esbuild/linux-loong64@0.24.2':
+    optional: true
+
+  '@esbuild/linux-loong64@0.25.0':
     optional: true
 
   '@esbuild/linux-loong64@0.25.1':
@@ -12653,6 +13194,12 @@ snapshots:
   '@esbuild/linux-mips64el@0.23.1':
     optional: true
 
+  '@esbuild/linux-mips64el@0.24.2':
+    optional: true
+
+  '@esbuild/linux-mips64el@0.25.0':
+    optional: true
+
   '@esbuild/linux-mips64el@0.25.1':
     optional: true
 
@@ -12660,6 +13207,12 @@ snapshots:
     optional: true
 
   '@esbuild/linux-ppc64@0.23.1':
+    optional: true
+
+  '@esbuild/linux-ppc64@0.24.2':
+    optional: true
+
+  '@esbuild/linux-ppc64@0.25.0':
     optional: true
 
   '@esbuild/linux-ppc64@0.25.1':
@@ -12671,6 +13224,12 @@ snapshots:
   '@esbuild/linux-riscv64@0.23.1':
     optional: true
 
+  '@esbuild/linux-riscv64@0.24.2':
+    optional: true
+
+  '@esbuild/linux-riscv64@0.25.0':
+    optional: true
+
   '@esbuild/linux-riscv64@0.25.1':
     optional: true
 
@@ -12678,6 +13237,12 @@ snapshots:
     optional: true
 
   '@esbuild/linux-s390x@0.23.1':
+    optional: true
+
+  '@esbuild/linux-s390x@0.24.2':
+    optional: true
+
+  '@esbuild/linux-s390x@0.25.0':
     optional: true
 
   '@esbuild/linux-s390x@0.25.1':
@@ -12689,7 +13254,19 @@ snapshots:
   '@esbuild/linux-x64@0.23.1':
     optional: true
 
+  '@esbuild/linux-x64@0.24.2':
+    optional: true
+
+  '@esbuild/linux-x64@0.25.0':
+    optional: true
+
   '@esbuild/linux-x64@0.25.1':
+    optional: true
+
+  '@esbuild/netbsd-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/netbsd-arm64@0.25.0':
     optional: true
 
   '@esbuild/netbsd-arm64@0.25.1':
@@ -12701,10 +13278,22 @@ snapshots:
   '@esbuild/netbsd-x64@0.23.1':
     optional: true
 
+  '@esbuild/netbsd-x64@0.24.2':
+    optional: true
+
+  '@esbuild/netbsd-x64@0.25.0':
+    optional: true
+
   '@esbuild/netbsd-x64@0.25.1':
     optional: true
 
   '@esbuild/openbsd-arm64@0.23.1':
+    optional: true
+
+  '@esbuild/openbsd-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/openbsd-arm64@0.25.0':
     optional: true
 
   '@esbuild/openbsd-arm64@0.25.1':
@@ -12716,6 +13305,12 @@ snapshots:
   '@esbuild/openbsd-x64@0.23.1':
     optional: true
 
+  '@esbuild/openbsd-x64@0.24.2':
+    optional: true
+
+  '@esbuild/openbsd-x64@0.25.0':
+    optional: true
+
   '@esbuild/openbsd-x64@0.25.1':
     optional: true
 
@@ -12723,6 +13318,12 @@ snapshots:
     optional: true
 
   '@esbuild/sunos-x64@0.23.1':
+    optional: true
+
+  '@esbuild/sunos-x64@0.24.2':
+    optional: true
+
+  '@esbuild/sunos-x64@0.25.0':
     optional: true
 
   '@esbuild/sunos-x64@0.25.1':
@@ -12734,6 +13335,12 @@ snapshots:
   '@esbuild/win32-arm64@0.23.1':
     optional: true
 
+  '@esbuild/win32-arm64@0.24.2':
+    optional: true
+
+  '@esbuild/win32-arm64@0.25.0':
+    optional: true
+
   '@esbuild/win32-arm64@0.25.1':
     optional: true
 
@@ -12743,6 +13350,12 @@ snapshots:
   '@esbuild/win32-ia32@0.23.1':
     optional: true
 
+  '@esbuild/win32-ia32@0.24.2':
+    optional: true
+
+  '@esbuild/win32-ia32@0.25.0':
+    optional: true
+
   '@esbuild/win32-ia32@0.25.1':
     optional: true
 
@@ -12750,6 +13363,12 @@ snapshots:
     optional: true
 
   '@esbuild/win32-x64@0.23.1':
+    optional: true
+
+  '@esbuild/win32-x64@0.24.2':
+    optional: true
+
+  '@esbuild/win32-x64@0.25.0':
     optional: true
 
   '@esbuild/win32-x64@0.25.1':
@@ -13115,6 +13734,253 @@ snapshots:
       '@ethersproject/properties': 5.7.0
       '@ethersproject/strings': 5.7.0
 
+  '@exogee/graphweaver-admin-ui-components@2.12.4(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(formik@2.4.6(react@19.0.0))(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))':
+    dependencies:
+      '@apollo/client': 3.13.3(@types/react@19.0.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+      '@exogee/graphweaver-apollo-client': 2.12.4(@apollo/client@3.13.3(@types/react@19.0.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0)))
+      '@graphiql/toolkit': 0.11.1(@types/node@22.13.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)
+      '@tanstack/react-table': 8.21.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@tiptap/extension-link': 2.11.5(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)
+      '@tiptap/react': 2.11.5(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      '@tiptap/starter-kit': 2.11.5
+      clsx: 2.1.1
+      downshift: 9.0.8(react@19.0.0)
+      formik: 2.4.6(react@19.0.0)
+      graphiql: 3.8.3(@codemirror/language@6.0.0)(@types/node@22.13.10)(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      graphql: 16.10.0
+      graphql-deduplicator: 2.0.6
+      luxon: 3.5.0
+      papaparse: 5.5.2
+      react: 19.0.0
+      react-day-picker: 9.5.1(react@19.0.0)
+      react-dom: 19.0.0(react@19.0.0)
+      react-error-boundary: 5.0.0(react@19.0.0)
+      react-hot-toast: 2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-resizable-panels: 2.1.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-syntax-highlighter: 15.6.1(react@19.0.0)
+      tiptap-markdown: 0.8.10(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))
+      wouter: 3.6.0(react@19.0.0)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@tiptap/core'
+      - '@tiptap/pm'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - graphql-ws
+      - subscriptions-transport-ws
+
+  '@exogee/graphweaver-admin-ui@2.12.4(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))':
+    dependencies:
+      '@apollo/client': 3.13.3(@types/react@19.0.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+      '@exogee/graphweaver-admin-ui-components': 2.12.4(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(formik@2.4.6(react@19.0.0))(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+      clsx: 2.1.1
+      formik: 2.4.6(react@19.0.0)
+      graphql: 16.10.0
+      prop-types: 15.8.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+      react-error-boundary: 5.0.0(react@19.0.0)
+      react-modal: 3.16.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      wouter: 3.6.0(react@19.0.0)
+    transitivePeerDependencies:
+      - '@codemirror/language'
+      - '@tiptap/core'
+      - '@tiptap/pm'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - csstype
+      - graphql-ws
+      - subscriptions-transport-ws
+
+  '@exogee/graphweaver-apollo-client@2.12.4(@apollo/client@3.13.3(@types/react@19.0.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0)))':
+    dependencies:
+      '@apollo/client': 3.13.3(@types/react@19.0.10)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+
+  '@exogee/graphweaver-builder@2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.9)(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(encoding@0.1.13)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.35.0)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)':
+    dependencies:
+      '@exogee/graphweaver-admin-ui': 2.12.4(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(graphql@16.10.0)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))
+      '@exogee/graphweaver-config': 2.12.4
+      '@exogee/graphweaver-mikroorm': 2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.9)(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-codegen/add': 5.0.3(graphql@16.10.0)
+      '@graphql-codegen/cli': 5.0.5(@types/node@22.13.10)(encoding@0.1.13)(graphql@16.10.0)(typescript@5.7.3)
+      '@graphql-codegen/near-operation-file-preset': 3.0.0(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-codegen/typescript': 4.1.4(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-codegen/typescript-operations': 4.4.0(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-codegen/typescript-react-apollo': 4.3.2(encoding@0.1.13)(graphql@16.10.0)
+      '@serverless/utils': 6.15.0(encoding@0.1.13)
+      '@vitejs/plugin-react': 4.3.4(vite@6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))
+      class-validator: 0.14.1
+      dotenv: 16.4.7
+      esbuild: 0.25.0
+      esbuild-css-modules-plugin: 3.1.4(esbuild@0.25.0)
+      glob: 11.0.1
+      graphql: 16.10.0
+      graphql-tag: 2.12.6(graphql@16.10.0)
+      hash-wasm: 4.12.0
+      log-node: 8.0.3(log@6.3.1)
+      omgopass: 3.2.1
+      rimraf: 5.0.8
+      rollup-plugin-visualizer: 5.14.0(rollup@4.35.0)
+      serverless-offline: 14.4.0(serverless@4.4.3)
+      vite: 6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0)
+      vite-plugin-graphweaver: 2.12.4(vite@6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@codemirror/language'
+      - '@envelop/core'
+      - '@escape.tech/graphql-armor-types'
+      - '@fastify/websocket'
+      - '@mikro-orm/core'
+      - '@parcel/watcher'
+      - '@tiptap/core'
+      - '@tiptap/pm'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - aws-crt
+      - better-sqlite3
+      - bluebird
+      - bufferutil
+      - cosmiconfig-toml-loader
+      - csstype
+      - encoding
+      - enquirer
+      - graphql-ws
+      - jiti
+      - less
+      - libsql
+      - lightningcss
+      - log
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - rolldown
+      - rollup
+      - sass
+      - sass-embedded
+      - serverless
+      - sqlite3
+      - stylus
+      - subscriptions-transport-ws
+      - sugarss
+      - supports-color
+      - tedious
+      - terser
+      - tsx
+      - typescript
+      - uWebSockets.js
+      - utf-8-validate
+      - yaml
+
+  '@exogee/graphweaver-config@2.12.4':
+    dependencies:
+      lodash: 4.17.21
+
+  '@exogee/graphweaver-mikroorm@2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.9)(encoding@0.1.13)(graphql@16.10.0)':
+    dependencies:
+      '@apollo/server': 4.11.2(encoding@0.1.13)(graphql@16.10.0)
+      '@aws-sdk/client-secrets-manager': 3.758.0
+      '@exogee/graphweaver': 2.12.4(encoding@0.1.13)
+      '@exogee/graphweaver-server': 2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(encoding@0.1.13)
+      '@exogee/logger': 2.12.4
+      '@mikro-orm/core': 6.4.9
+      dataloader: 2.2.3
+      decimal.js: 10.5.0
+      dotenv: 16.4.7
+      graphql: 16.10.0
+      pluralize: 8.0.0
+      reflect-metadata: 0.2.2
+    optionalDependencies:
+      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
+      '@mikro-orm/mysql': 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
+      '@mikro-orm/postgresql': 6.4.9(@mikro-orm/core@6.4.9)
+      '@mikro-orm/sqlite': 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
+    transitivePeerDependencies:
+      - '@envelop/core'
+      - '@escape.tech/graphql-armor-types'
+      - aws-crt
+      - better-sqlite3
+      - bluebird
+      - encoding
+      - libsql
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@exogee/graphweaver-rest@2.12.4(encoding@0.1.13)':
+    dependencies:
+      '@exogee/graphweaver': 2.12.4(encoding@0.1.13)
+      '@exogee/logger': 2.12.4
+      dataloader: 2.2.3
+      escape-string-regexp: 4.0.0
+      got-cjs: 12.5.4
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@exogee/graphweaver-scalars@2.12.4(graphql@16.10.0)':
+    dependencies:
+      graphql: 16.10.0
+      graphql-scalars: 1.24.1(graphql@16.10.0)
+      luxon: 3.5.0
+
+  '@exogee/graphweaver-server@2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(encoding@0.1.13)':
+    dependencies:
+      '@apollo/server': 4.11.2(encoding@0.1.13)(graphql@16.10.0)
+      '@as-integrations/aws-lambda': 3.1.0(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.10.0))
+      '@as-integrations/fastify': 2.1.1(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.10.0))(fastify@4.28.1)
+      '@escape.tech/graphql-armor': 3.1.2(@apollo/server@4.11.2(encoding@0.1.13)(graphql@16.10.0))(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)
+      '@exogee/graphweaver': 2.12.4(encoding@0.1.13)
+      '@exogee/logger': 2.12.4
+      '@fastify/cors': 9.0.1
+      class-validator: 0.14.1
+      decimal.js: 10.5.0
+      fastify: 4.28.1
+      graphql: 16.10.0
+      graphql-deduplicator: 2.0.6
+    transitivePeerDependencies:
+      - '@envelop/core'
+      - '@escape.tech/graphql-armor-types'
+      - encoding
+      - supports-color
+
+  '@exogee/graphweaver@2.12.4(encoding@0.1.13)':
+    dependencies:
+      '@apollo/server': 4.11.2(encoding@0.1.13)(graphql@16.10.0)
+      '@exogee/graphweaver-scalars': 2.12.4(graphql@16.10.0)
+      '@exogee/logger': 2.12.4
+      '@graphql-tools/utils': 10.8.4(graphql@16.10.0)
+      '@opentelemetry/api': 1.9.0
+      '@opentelemetry/core': 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/exporter-trace-otlp-http': 0.57.2(@opentelemetry/api@1.9.0)
+      '@opentelemetry/resources': 1.30.1(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-node': 0.57.2(@opentelemetry/api@1.9.0)
+      '@opentelemetry/sdk-trace-base': 1.30.1(@opentelemetry/api@1.9.0)
+      async-mutex: 0.5.0
+      class-validator: 0.14.1
+      dataloader: 2.2.3
+      graphql: 16.10.0
+      graphql-parse-resolve-info: 4.13.0(graphql@16.10.0)
+      graphql-query-complexity: 1.0.0(graphql@16.10.0)
+      pluralize: 8.0.0
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+
+  '@exogee/logger@2.12.4':
+    dependencies:
+      pino: 9.6.0
+
   '@fastify/ajv-compiler@3.6.0':
     dependencies:
       ajv: 8.17.1
@@ -13369,6 +14235,19 @@ snapshots:
       - encoding
       - supports-color
 
+  '@graphql-codegen/typescript-operations@4.4.0(encoding@0.1.13)(graphql@16.10.0)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 5.1.0(graphql@16.10.0)
+      '@graphql-codegen/typescript': 4.1.4(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-codegen/visitor-plugin-common': 5.6.0(encoding@0.1.13)(graphql@16.10.0)
+      auto-bind: 4.0.0
+      graphql: 16.10.0
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - '@babel/core'
+      - encoding
+      - supports-color
+
   '@graphql-codegen/typescript-operations@4.5.1(encoding@0.1.13)(graphql@16.10.0)':
     dependencies:
       '@graphql-codegen/plugin-helpers': 5.1.0(graphql@16.10.0)
@@ -13436,6 +14315,24 @@ snapshots:
       '@graphql-codegen/plugin-helpers': 5.1.0(graphql@16.10.0)
       '@graphql-tools/optimize': 2.0.0(graphql@16.10.0)
       '@graphql-tools/relay-operation-optimizer': 7.0.12(@babel/core@7.26.9)(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-tools/utils': 10.8.6(graphql@16.10.0)
+      auto-bind: 4.0.0
+      change-case-all: 1.0.15
+      dependency-graph: 0.11.0
+      graphql: 16.10.0
+      graphql-tag: 2.12.6(graphql@16.10.0)
+      parse-filepath: 1.0.2
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - '@babel/core'
+      - encoding
+      - supports-color
+
+  '@graphql-codegen/visitor-plugin-common@5.6.0(encoding@0.1.13)(graphql@16.10.0)':
+    dependencies:
+      '@graphql-codegen/plugin-helpers': 5.1.0(graphql@16.10.0)
+      '@graphql-tools/optimize': 2.0.0(graphql@16.10.0)
+      '@graphql-tools/relay-operation-optimizer': 7.0.12(encoding@0.1.13)(graphql@16.10.0)
       '@graphql-tools/utils': 10.8.6(graphql@16.10.0)
       auto-bind: 4.0.0
       change-case-all: 1.0.15
@@ -13726,6 +14623,17 @@ snapshots:
       - encoding
       - supports-color
 
+  '@graphql-tools/relay-operation-optimizer@7.0.12(encoding@0.1.13)(graphql@16.10.0)':
+    dependencies:
+      '@ardatan/relay-compiler': 12.0.1(encoding@0.1.13)(graphql@16.10.0)
+      '@graphql-tools/utils': 10.8.6(graphql@16.10.0)
+      graphql: 16.10.0
+      tslib: 2.8.1
+    transitivePeerDependencies:
+      - '@babel/core'
+      - encoding
+      - supports-color
+
   '@graphql-tools/relay-operation-optimizer@7.0.14(encoding@0.1.13)(graphql@16.10.0)':
     dependencies:
       '@ardatan/relay-compiler': 12.0.2(encoding@0.1.13)(graphql@16.10.0)
@@ -13792,7 +14700,7 @@ snapshots:
   '@graphql-tools/utils@10.8.4(graphql@16.10.0)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.10.0)
-      '@whatwg-node/promise-helpers': 1.2.2
+      '@whatwg-node/promise-helpers': 1.2.4
       cross-inspect: 1.0.1
       dset: 3.1.4
       graphql: 16.10.0
@@ -14642,41 +15550,11 @@ snapshots:
       mikro-orm: 6.4.9
       reflect-metadata: 0.2.2
 
-  '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      fs-extra: 11.3.0
-      knex: 3.1.0
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.12.0)(pg@8.13.3)':
     dependencies:
       '@mikro-orm/core': 6.4.9
       fs-extra: 11.3.0
       knex: 3.1.0(mysql2@3.12.0)(pg@8.13.3)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.13.0)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -14702,21 +15580,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.13.3)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.9
@@ -14726,37 +15589,6 @@ snapshots:
     transitivePeerDependencies:
       - mysql
       - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      fs-extra: 11.3.0
-      knex: 3.1.0(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/mysql@6.4.9(@mikro-orm/core@6.4.9)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)
-      mysql2: 3.13.0
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
       - pg
       - pg-native
       - sqlite3
@@ -14782,7 +15614,7 @@ snapshots:
   '@mikro-orm/postgresql@6.4.9(@mikro-orm/core@6.4.9)':
     dependencies:
       '@mikro-orm/core': 6.4.9
-      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
+      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)(pg@8.13.3)
       pg: 8.13.3
       postgres-array: 3.0.4
       postgres-date: 2.1.0
@@ -14814,25 +15646,6 @@ snapshots:
       - mysql2
       - pg-native
       - sqlite3
-      - supports-color
-      - tedious
-
-  '@mikro-orm/sqlite@6.4.9(@mikro-orm/core@6.4.9)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
       - supports-color
       - tedious
 
@@ -16519,11 +17332,6 @@ snapshots:
 
   '@types/http-errors@2.0.4': {}
 
-  '@types/inquirer@9.0.7':
-    dependencies:
-      '@types/through': 0.0.33
-      rxjs: 7.8.1
-
   '@types/istanbul-lib-coverage@2.0.6': {}
 
   '@types/istanbul-lib-report@3.0.3':
@@ -16681,10 +17489,6 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.6
 
-  '@types/through@0.0.33':
-    dependencies:
-      '@types/node': 22.13.10
-
   '@types/trusted-types@2.0.7': {}
 
   '@types/unist@2.0.11': {}
@@ -16804,6 +17608,17 @@ snapshots:
       - node-fetch
       - supports-color
 
+  '@vitejs/plugin-react@4.3.4(vite@6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))':
+    dependencies:
+      '@babel/core': 7.26.0
+      '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.0)
+      '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.0)
+      '@types/babel__core': 7.20.5
+      react-refresh: 0.14.2
+      vite: 6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0)
+    transitivePeerDependencies:
+      - supports-color
+
   '@vitejs/plugin-react@4.3.4(vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0))':
     dependencies:
       '@babel/core': 7.26.0
@@ -16897,10 +17712,6 @@ snapshots:
       '@whatwg-node/disposablestack': 0.0.6
       '@whatwg-node/promise-helpers': 1.2.4
       busboy: 1.6.0
-      tslib: 2.8.1
-
-  '@whatwg-node/promise-helpers@1.2.2':
-    dependencies:
       tslib: 2.8.1
 
   '@whatwg-node/promise-helpers@1.2.4':
@@ -17184,6 +17995,38 @@ snapshots:
       '@babel/plugin-syntax-optional-chaining': 7.8.3(@babel/core@7.26.0)
       '@babel/plugin-syntax-private-property-in-object': 7.14.5(@babel/core@7.26.0)
       '@babel/plugin-syntax-top-level-await': 7.14.5(@babel/core@7.26.0)
+
+  babel-preset-fbjs@3.4.0:
+    dependencies:
+      '@babel/plugin-proposal-class-properties': 7.18.6(@babel/core@7.26.9)
+      '@babel/plugin-proposal-object-rest-spread': 7.20.7
+      '@babel/plugin-syntax-class-properties': 7.12.13(@babel/core@7.26.0)
+      '@babel/plugin-syntax-flow': 7.26.0(@babel/core@7.26.9)
+      '@babel/plugin-syntax-jsx': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-syntax-object-rest-spread': 7.8.3(@babel/core@7.26.0)
+      '@babel/plugin-transform-arrow-functions': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-block-scoped-functions': 7.26.5(@babel/core@7.26.9)
+      '@babel/plugin-transform-block-scoping': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-classes': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-computed-properties': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-destructuring': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-flow-strip-types': 7.26.5(@babel/core@7.26.9)
+      '@babel/plugin-transform-for-of': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-function-name': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-literals': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-member-expression-literals': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-modules-commonjs': 7.26.3
+      '@babel/plugin-transform-object-super': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-parameters': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-property-literals': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-react-display-name': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-react-jsx': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-shorthand-properties': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-spread': 7.25.9(@babel/core@7.26.9)
+      '@babel/plugin-transform-template-literals': 7.25.9(@babel/core@7.26.9)
+      babel-plugin-syntax-trailing-function-commas: 7.0.0-beta.0
+    transitivePeerDependencies:
+      - supports-color
 
   babel-preset-fbjs@3.4.0(@babel/core@7.26.9):
     dependencies:
@@ -18215,6 +19058,12 @@ snapshots:
       es6-iterator: 2.0.3
       es6-symbol: 3.1.4
 
+  esbuild-css-modules-plugin@3.1.4(esbuild@0.25.0):
+    dependencies:
+      esbuild: 0.25.0
+      lightningcss: 1.29.1
+      lodash-es: 4.17.21
+
   esbuild-css-modules-plugin@3.1.4(esbuild@0.25.1):
     dependencies:
       esbuild: 0.25.1
@@ -18280,6 +19129,62 @@ snapshots:
       '@esbuild/win32-arm64': 0.23.1
       '@esbuild/win32-ia32': 0.23.1
       '@esbuild/win32-x64': 0.23.1
+
+  esbuild@0.24.2:
+    optionalDependencies:
+      '@esbuild/aix-ppc64': 0.24.2
+      '@esbuild/android-arm': 0.24.2
+      '@esbuild/android-arm64': 0.24.2
+      '@esbuild/android-x64': 0.24.2
+      '@esbuild/darwin-arm64': 0.24.2
+      '@esbuild/darwin-x64': 0.24.2
+      '@esbuild/freebsd-arm64': 0.24.2
+      '@esbuild/freebsd-x64': 0.24.2
+      '@esbuild/linux-arm': 0.24.2
+      '@esbuild/linux-arm64': 0.24.2
+      '@esbuild/linux-ia32': 0.24.2
+      '@esbuild/linux-loong64': 0.24.2
+      '@esbuild/linux-mips64el': 0.24.2
+      '@esbuild/linux-ppc64': 0.24.2
+      '@esbuild/linux-riscv64': 0.24.2
+      '@esbuild/linux-s390x': 0.24.2
+      '@esbuild/linux-x64': 0.24.2
+      '@esbuild/netbsd-arm64': 0.24.2
+      '@esbuild/netbsd-x64': 0.24.2
+      '@esbuild/openbsd-arm64': 0.24.2
+      '@esbuild/openbsd-x64': 0.24.2
+      '@esbuild/sunos-x64': 0.24.2
+      '@esbuild/win32-arm64': 0.24.2
+      '@esbuild/win32-ia32': 0.24.2
+      '@esbuild/win32-x64': 0.24.2
+
+  esbuild@0.25.0:
+    optionalDependencies:
+      '@esbuild/aix-ppc64': 0.25.0
+      '@esbuild/android-arm': 0.25.0
+      '@esbuild/android-arm64': 0.25.0
+      '@esbuild/android-x64': 0.25.0
+      '@esbuild/darwin-arm64': 0.25.0
+      '@esbuild/darwin-x64': 0.25.0
+      '@esbuild/freebsd-arm64': 0.25.0
+      '@esbuild/freebsd-x64': 0.25.0
+      '@esbuild/linux-arm': 0.25.0
+      '@esbuild/linux-arm64': 0.25.0
+      '@esbuild/linux-ia32': 0.25.0
+      '@esbuild/linux-loong64': 0.25.0
+      '@esbuild/linux-mips64el': 0.25.0
+      '@esbuild/linux-ppc64': 0.25.0
+      '@esbuild/linux-riscv64': 0.25.0
+      '@esbuild/linux-s390x': 0.25.0
+      '@esbuild/linux-x64': 0.25.0
+      '@esbuild/netbsd-arm64': 0.25.0
+      '@esbuild/netbsd-x64': 0.25.0
+      '@esbuild/openbsd-arm64': 0.25.0
+      '@esbuild/openbsd-x64': 0.25.0
+      '@esbuild/sunos-x64': 0.25.0
+      '@esbuild/win32-arm64': 0.25.0
+      '@esbuild/win32-ia32': 0.25.0
+      '@esbuild/win32-x64': 0.25.0
 
   esbuild@0.25.1:
     optionalDependencies:
@@ -19198,6 +20103,68 @@ snapshots:
   graphql@16.10.0: {}
 
   graphql@16.9.0: {}
+
+  graphweaver@2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.9)(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(encoding@0.1.13)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.35.0)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0):
+    dependencies:
+      '@exogee/graphweaver-builder': 2.12.4(@envelop/core@5.2.3)(@escape.tech/graphql-armor-types@0.7.0)(@mikro-orm/core@6.4.9)(@tiptap/core@2.11.5(@tiptap/pm@2.11.5))(@tiptap/pm@2.11.5)(@types/node@22.13.10)(@types/react@19.0.10)(csstype@3.1.3)(encoding@0.1.13)(graphql-ws@6.0.4(graphql@16.10.0)(ws@8.18.1))(jiti@2.4.2)(lightningcss@1.29.1)(log@6.3.1)(rollup@4.35.0)(serverless@4.4.3)(subscriptions-transport-ws@0.11.0(graphql@16.10.0))(tsx@4.19.3)(typescript@5.7.3)(yaml@2.7.0)
+      '@exogee/graphweaver-config': 2.12.4
+      chokidar: 4.0.3
+      esbuild: 0.25.0
+      inquirer: 11.1.0
+      node-semver: 1.0.0
+      ora-classic: 5.4.2
+      semver: 7.7.1
+      validate-npm-package-name: 6.0.0
+      yargs: 17.7.2
+    transitivePeerDependencies:
+      - '@babel/core'
+      - '@codemirror/language'
+      - '@envelop/core'
+      - '@escape.tech/graphql-armor-types'
+      - '@fastify/websocket'
+      - '@mikro-orm/core'
+      - '@parcel/watcher'
+      - '@tiptap/core'
+      - '@tiptap/pm'
+      - '@types/node'
+      - '@types/react'
+      - '@types/react-dom'
+      - aws-crt
+      - better-sqlite3
+      - bluebird
+      - bufferutil
+      - cosmiconfig-toml-loader
+      - csstype
+      - encoding
+      - enquirer
+      - graphql-ws
+      - jiti
+      - less
+      - libsql
+      - lightningcss
+      - log
+      - mariadb
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - rolldown
+      - rollup
+      - sass
+      - sass-embedded
+      - serverless
+      - sqlite3
+      - stylus
+      - subscriptions-transport-ws
+      - sugarss
+      - supports-color
+      - tedious
+      - terser
+      - tsx
+      - typescript
+      - uWebSockets.js
+      - utf-8-validate
+      - yaml
 
   has-flag@3.0.0: {}
 
@@ -20131,25 +21098,6 @@ snapshots:
 
   kleur@3.0.3: {}
 
-  knex@3.1.0:
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(mysql2@3.12.0)(pg@8.13.3):
     dependencies:
       colorette: 2.0.19
@@ -20169,27 +21117,6 @@ snapshots:
     optionalDependencies:
       mysql2: 3.12.0
       pg: 8.13.3
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(mysql2@3.13.0):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.13.0
     transitivePeerDependencies:
       - supports-color
 
@@ -20215,27 +21142,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(pg@8.13.3):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.13.3
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(pg@8.13.3)(sqlite3@5.1.7):
     dependencies:
       colorette: 2.0.19
@@ -20254,27 +21160,6 @@ snapshots:
       tildify: 2.0.0
     optionalDependencies:
       pg: 8.13.3
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-
-  knex@3.1.0(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
       sqlite3: 5.1.7
     transitivePeerDependencies:
       - supports-color
@@ -21547,6 +22432,13 @@ snapshots:
     dependencies:
       react: 19.0.0
 
+  react-day-picker@9.5.1(react@19.0.0):
+    dependencies:
+      '@date-fns/tz': 1.2.0
+      date-fns: 4.1.0
+      date-fns-jalali: 4.1.0-0
+      react: 19.0.0
+
   react-day-picker@9.6.2(react@19.0.0):
     dependencies:
       '@date-fns/tz': 1.2.0
@@ -21565,6 +22457,14 @@ snapshots:
       react: 19.0.0
 
   react-fast-compare@2.0.4: {}
+
+  react-hot-toast@2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      goober: 2.1.16(csstype@3.1.3)
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    transitivePeerDependencies:
+      - csstype
 
   react-hot-toast@2.5.2(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
@@ -22657,6 +23557,24 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  vite-plugin-graphweaver@2.12.4(vite@6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0)):
+    dependencies:
+      '@exogee/graphweaver-config': 2.12.4
+      vite: 6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0)
+
+  vite@6.1.0(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0):
+    dependencies:
+      esbuild: 0.24.2
+      postcss: 8.5.3
+      rollup: 4.35.0
+    optionalDependencies:
+      '@types/node': 22.13.10
+      fsevents: 2.3.3
+      jiti: 2.4.2
+      lightningcss: 1.29.1
+      tsx: 4.19.3
+      yaml: 2.7.0
 
   vite@6.2.1(@types/node@22.13.10)(jiti@2.4.2)(lightningcss@1.29.1)(tsx@4.19.3)(yaml@2.7.0):
     dependencies:

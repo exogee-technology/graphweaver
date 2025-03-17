@@ -95,7 +95,9 @@ export interface BuildOptions {
 }
 
 export interface ImportOptions {
-	source?: 'mysql' | 'postgresql' | 'sqlite';
+	source?: 'mysql' | 'postgresql' | 'sqlite' | 'rest';
+	database?: string;
+	// Deprecated, please use database instead.
 	dbName?: string;
 	host?: string;
 	port?: number;

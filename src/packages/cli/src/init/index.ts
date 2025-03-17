@@ -2,6 +2,7 @@ import { exit, cwd } from 'process';
 import path from 'path';
 import validatePackageName from 'validate-npm-package-name';
 import { valid as validateSemver } from 'semver';
+import { input, checkbox, confirm } from '@inquirer/prompts';
 
 import {
 	makePackageJson,
@@ -56,66 +57,51 @@ export const init = async ({
 	if (initialName && Array.isArray(initialBackends) && initialBackends.length > 0) {
 		initGraphweaver(initialName, initialBackends, version);
 	} else {
-		const { default: inquirer } = await import('inquirer');
+		const name = await input({
+			message: `What would your like to call your new project?`,
+			default: initialName,
+			validate: (value) => {
+				const { validForNewPackages, warnings, errors } = validatePackageName(value);
+				const messages = [...(errors ?? []), ...(warnings ?? [])];
+				if (!validForNewPackages) return `Project name is not valid: ${messages.join(',')}`;
+				return true;
+			},
+		});
 
-		const {
-			name,
-			createDirectory = true,
-			backends,
-		} = await inquirer.prompt([
-			{
-				type: 'input',
-				name: 'name',
-				message: `What would your like to call your new project?`,
-				default: initialName,
-				validate: (answer) => {
-					const { validForNewPackages, warnings, errors } = validatePackageName(answer);
-					const messages = [...(errors ?? []), ...(warnings ?? [])];
-					if (!validForNewPackages) return `Project name is not valid: ${messages.join(',')}`;
-					return true;
+		const backends = await checkbox({
+			message: 'Which Graphweaver backends will you need?',
+			choices: [
+				{
+					value: Backend.Postgres,
+					name: 'MikroORM - PostgreSQL Backend',
 				},
+				{
+					value: Backend.Mysql,
+					name: 'MikroORM - MySQL Backend',
+				},
+				{
+					value: Backend.Sqlite,
+					name: 'MikroORM - SQLite Backend',
+				},
+				{
+					value: Backend.Rest,
+					name: 'REST Backend',
+				},
+			],
+			validate: (selected) => {
+				if (selected.length < 1) {
+					return 'You must select at least one backend (Press <space> to select).';
+				}
+				return true;
 			},
-			{
-				type: 'checkbox',
-				name: 'backends',
-				message: 'Which Graphweaver backends will you need?',
-				default: initialBackends,
-				choices: [
-					{
-						value: Backend.Postgres,
-						name: 'MikroORM - PostgreSQL Backend',
-					},
-					{
-						value: Backend.Mysql,
-						name: 'MikroORM - MySQL Backend',
-					},
-					{
-						value: Backend.Sqlite,
-						name: 'MikroORM - SQLite Backend',
-					},
-					{
-						value: Backend.Rest,
-						name: 'REST Backend',
-					},
-				],
-				validate: (answer) => {
-					if (answer.length < 1) {
-						return 'You must select at least one backend (Press <space> to select).';
-					}
+		});
 
-					return true;
-				},
-			},
-			{
-				type: 'confirm',
-				name: 'createDirectory',
-				message: (answers) =>
-					`OK, we're ready- I'm going to create a new app in "${path.join(
-						cwd(),
-						answers.name
-					)}" - is that OK?`,
-			},
-		]);
+		const createDirectory = await confirm({
+			message: `OK, we're ready- I'm going to create a new app in "${path.join(
+				cwd(),
+				name
+			)}" - is that OK?`,
+		});
 
 		if (!createDirectory) abort();
 		initGraphweaver(name, backends, version);

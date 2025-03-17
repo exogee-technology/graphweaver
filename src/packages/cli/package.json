@@ -26,17 +26,15 @@
 	"dependencies": {
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
+		"@inquirer/prompts": "5.3.8",
 		"chokidar": "4.0.3",
 		"esbuild": "0.25.1",
-		"inquirer": "11.1.0",
-		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
 		"semver": "7.7.1",
 		"validate-npm-package-name": "6.0.0",
 		"yargs": "17.7.2"
 	},
 	"devDependencies": {
-		"@types/inquirer": "9.0.7",
 		"@types/node": "22.13.10",
 		"@types/semver": "7.5.8",
 		"@types/validate-npm-package-name": "4.0.2",

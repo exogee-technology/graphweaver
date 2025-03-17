@@ -1,103 +1,88 @@
 import { DatabaseOptions, Source } from '@exogee/graphweaver-builder';
+import { select, input, password } from '@inquirer/prompts';
 
 export const promptForDatabaseOptions = async ({
 	source,
 	database,
 	host,
 	port,
-	password,
+	password: passwordValue,
 	user,
 }: Partial<DatabaseOptions>): Promise<DatabaseOptions> => {
-	const { default: inquirer } = await import('inquirer');
-
 	if (!source) {
-		const prompt = await inquirer.prompt<any, { source: Source }>([
-			{
-				type: 'list',
-				name: 'source',
-				message: `What is the data source?`,
-				choices: ['mysql', 'postgresql', 'sqlite', 'rest'],
-			},
-		]);
-		source = prompt.source;
+		source = await select<Source>({
+			message: `What is the data source?`,
+			choices: [
+				{ value: 'mysql', name: 'mysql' },
+				{ value: 'postgresql', name: 'postgresql' },
+				{ value: 'sqlite', name: 'sqlite' },
+				{ value: 'rest', name: 'rest' },
+			],
+		});
 	}
 
-	const prompts: any[] = [];
-
-	if (source === 'sqlite') {
-		if (typeof database === 'undefined') {
-			prompts.push({
-				type: 'input',
-				name: 'database',
-				message: `What is the database name?`,
-			});
-		}
+	if (source === 'sqlite' && typeof database === 'undefined') {
+		database = await input({
+			message: `What is the database name?`,
+		});
 	}
 
-	if (source === 'rest') {
-		if (!database) {
-			prompts.push({
-				type: 'input',
-				name: 'database',
+	if (source === 'rest' && !database) {
+		database = (
+			await input({
 				message: `Where is the Open API spec? (Both file path and URL are supported)`,
-			});
-		}
+			})
+		)?.trim();
 	}
 
 	if (source === 'postgresql' || source === 'mysql') {
 		if (typeof database === 'undefined') {
-			prompts.push({
-				type: 'input',
-				name: 'database',
+			database = await input({
 				message: `What is the database name?`,
 			});
 		}
-		if (typeof host === 'undefined') {
-			prompts.push({
-				type: 'input',
-				name: 'host',
-				default: '127.0.0.1',
-				message: `What is the database server's hostname?`,
-			});
-		}
-		if (!port) {
-			prompts.push({
-				type: 'input',
-				name: 'port',
-				default: source === 'postgresql' ? 5432 : 3306,
-				message: `What is the port?`,
-			});
-		}
-		if (typeof user === 'undefined') {
-			prompts.push({
-				type: 'input',
-				name: 'user',
-				default: source === 'postgresql' ? 'postgres' : 'root',
-				message: `What is the username to access the database server?`,
-			});
-		}
-		if (typeof password === 'undefined') {
-			prompts.push({
-				type: 'password',
-				mask: '*',
-				name: 'password',
-				message: `What is the password for this user?`,
-			});
-		}
-	}
 
-	if (prompts.length > 0) {
-		const answers = await inquirer.prompt(prompts);
-		database = answers.database ?? database;
-		host = answers.host ?? host;
-		port = answers.port ?? port;
-		password = answers.password ?? password;
-		user = answers.user ?? user;
+		if (typeof host === 'undefined') {
+			host = await input({
+				message: `What is the database server's hostname?`,
+				default: '127.0.0.1',
+			});
+		}
+
+		if (!port) {
+			port = Number(
+				await input({
+					message: `What is the port?`,
+					default: source === 'postgresql' ? '5432' : '3306',
+				})
+			);
+		}
+
+		if (typeof user === 'undefined') {
+			user = await input({
+				message: `What is the username to access the database server?`,
+				default: source === 'postgresql' ? 'postgres' : 'root',
+			});
+		}
+
+		if (typeof passwordValue === 'undefined') {
+			passwordValue = await password({
+				message: `What is the password for this user?`,
+				mask: '*',
+			});
+		}
 	}
 
 	if (!database) {
 		throw new Error('Database name has not been provided, please provide a database name.');
 	}
 
-	return { source, database, host, port, password, user };
+	return {
+		source,
+		database,
+		host,
+		port,
+		password: passwordValue,
+		user,
+	};
 };

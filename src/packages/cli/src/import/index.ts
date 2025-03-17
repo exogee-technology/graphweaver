@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { startIntrospection } from '@exogee/graphweaver-builder';
 import ora from 'ora-classic';
+import { confirm } from '@inquirer/prompts';
 
 import { GRAPHWEAVER_TARGET_VERSION, MIKRO_ORM_TARGET_VERSION } from '../init/constants';
 import { promptForDatabaseOptions } from '../database';
@@ -72,7 +73,7 @@ export const importDataSource = async (
 ) => {
 	const databaseOptions = await promptForDatabaseOptions({
 		source,
-		dbName: database,
+		database,
 		host,
 		port,
 		password,
@@ -95,16 +96,10 @@ export const importDataSource = async (
 			const fileFullPath = path.join(process.cwd(), 'src', file.path, file.name);
 			let overwrite = true;
 			if (!overwriteAllFiles && file.needOverwriteWarning && existsSync(fileFullPath)) {
-				const { default: inquirer } = await import('inquirer');
-				const prompt = await inquirer.prompt<any, { overwrite: boolean }>([
-					{
-						type: 'confirm',
-						name: 'overwrite',
-						message: `Overwrite this file ${path.join(file.path, file.name)}?`,
-						default: true,
-					},
-				]);
-				overwrite = prompt.overwrite;
+				overwrite = await confirm({
+					message: `Overwrite this file ${path.join(file.path, file.name)}?`,
+					default: true,
+				});
 			}
 			if (overwrite) {
 				writeFileSync(fileFullPath, file.contents);

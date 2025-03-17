@@ -118,7 +118,7 @@ yargs
 
 			if (importOptions) {
 				if (source === undefined) source = importOptions.source;
-				if (database === undefined) database = importOptions.dbName;
+				if (database === undefined) database = importOptions.database ?? importOptions.dbName;
 				if (host === undefined) host = importOptions.host;
 				if (!port) port = importOptions.port;
 				if (user === undefined) user = importOptions.user;
