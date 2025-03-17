@@ -74,6 +74,7 @@ export class LambdaStack extends cdk.NestedStack {
 				...config.lambda.envVars,
 			},
 			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
+			functionName: `${id}LambdaFunction`,
 		});
 
 		// ⚠️ Grant the Lambda function access to the database secret ⚠️
