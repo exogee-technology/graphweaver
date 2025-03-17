@@ -33,6 +33,9 @@ export class User {
 	@Field(() => UserStatus, { defaultValue: UserStatus.ACTIVE })
 	status!: UserStatus;
 
+	@Field(() => Number, { nullable: true })
+	age?: number;
+
 	@Field(() => String, {
 		nullable: true,
 		description: 'Formatted text using rich text (saved as HTML)',

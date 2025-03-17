@@ -29,7 +29,7 @@ export const Input = ({ fieldName, onChange, value, inputMode }: NumericFilterPr
 		<div className={styles.inputWrapper}>
 			<div className={clsx(value && styles.inputHighlighted, styles.input)}>
 				<input
-					type="text"
+					type={inputMode === 'numeric' || inputMode === 'decimal' ? 'number' : 'text'}
 					inputMode={inputMode}
 					key={fieldName}
 					placeholder={fieldName}
