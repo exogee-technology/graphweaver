@@ -438,6 +438,7 @@ export type TasksPaginationInput = {
 
 export type User = {
   __typename?: 'User';
+  age?: Maybe<Scalars['Float']['output']>;
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
@@ -447,6 +448,7 @@ export type User = {
 
 /** Data needed to create or update Users. If an ID is passed, this is an update, otherwise it's an insert. */
 export type UserCreateOrUpdateInput = {
+  age?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
@@ -456,6 +458,7 @@ export type UserCreateOrUpdateInput = {
 
 /** Data needed to create Users. */
 export type UserInsertInput = {
+  age?: InputMaybe<Scalars['Float']['input']>;
   email: Scalars['String']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<UserStatus>;
@@ -470,6 +473,7 @@ export enum UserStatus {
 
 /** Data needed to update Users. An ID must be passed. */
 export type UserUpdateInput = {
+  age?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
@@ -480,6 +484,16 @@ export type UserUpdateInput = {
 export type UsersListFilter = {
   _and?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
   _or?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
+  age?: InputMaybe<Scalars['Float']['input']>;
+  age_gt?: InputMaybe<Scalars['Float']['input']>;
+  age_gte?: InputMaybe<Scalars['Float']['input']>;
+  age_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  age_lt?: InputMaybe<Scalars['Float']['input']>;
+  age_lte?: InputMaybe<Scalars['Float']['input']>;
+  age_ne?: InputMaybe<Scalars['Float']['input']>;
+  age_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  age_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  age_null?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_gt?: InputMaybe<Scalars['String']['input']>;
   email_gte?: InputMaybe<Scalars['String']['input']>;
@@ -532,6 +546,7 @@ export type UsersListFilter = {
 };
 
 export type UsersOrderByInput = {
+  age?: InputMaybe<Sort>;
   email?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   notes?: InputMaybe<Sort>;

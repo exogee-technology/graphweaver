@@ -119,6 +119,7 @@ const scalarShouldGetMathOperations = (
 	scalar.name === 'Date' ||
 	scalar.name === 'DateScalar' ||
 	scalar.name === 'ISOString' ||
+	scalar.name === 'Float' ||
 	(scalar instanceof GraphQLScalarType && scalar?.extensions?.type === 'integer');
 
 const graphQLTypeForEnum = (
