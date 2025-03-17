@@ -11,6 +11,7 @@ import {
 	makeTsConfig,
 	makeReadme,
 	makeDatabase,
+	makeGitIgnore,
 } from './template';
 
 export enum Backend {
@@ -36,6 +37,7 @@ export const initGraphweaver = (projectName: string, backends: Backend[], versio
 	makeIndex(projectName);
 	if (needsDatabaseConnection(backends)) makeDatabase(projectName, backends);
 	makeSchemaIndex(projectName);
+	makeGitIgnore(projectName);
 };
 
 type InitOptions = {
