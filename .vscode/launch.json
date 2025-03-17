@@ -102,6 +102,16 @@
       "cwd": "${workspaceFolder}/src/examples/mailchimp"
     },
     {
+      "name": "Microsoft Entra Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/microsoft-entra"
+    },
+    {
       "name": "MySQL and PostgreSQL Database Example",
       "type": "node",
       "request": "launch",
@@ -110,6 +120,16 @@
       "restart": true,
       "sourceMaps": true,
       "cwd": "${workspaceFolder}/src/examples/databases"
+    },
+    {
+      "name": "Okta Example",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["start"],
+      "restart": true,
+      "sourceMaps": true,
+      "cwd": "${workspaceFolder}/src/examples/okta"
     },
     {
       "name": "Rest Example",
@@ -153,12 +173,14 @@
     },
     {
       "name": "Xero Example",
+      "type": "node",
       "request": "launch",
-      "cwd": "${workspaceFolder}/src/examples/xero",
       "runtimeExecutable": "pnpm",
       "runtimeArgs": ["start"],
-      "type": "node",
-      "env": { "LOGGING_LEVEL": "trace" }
+      "restart": true,
+      "sourceMaps": true,
+      "env": { "LOGGING_LEVEL": "trace" },
+      "cwd": "${workspaceFolder}/src/examples/xero"
     }
   ]
 }

@@ -51,56 +51,62 @@ export const makeDirectories = (projectName: string) => {
 };
 
 export const makeDatabase = (projectName: string, backends: Backend[]) => {
-	const myDriverImport = `import { MySqlDriver } from '@mikro-orm/mysql';`;
-	const myConnection = `export const myConnection = {
-	connectionManagerId: 'my',
-	mikroOrmConfig: {
-		driver: MySqlDriver,
-		entities: [],
-		dbName: '%%REPLACE_WITH_DB_NAME%%',
-		user: '%%REPLACE_WITH_USERNAME%%',
-		password: '%%REPLACE_WITH_PASSWORD%%',
-		port: 3306,
-	},
-};`;
-
-	const pgDriverImport = `import { PostgreSqlDriver } from '@mikro-orm/postgresql';`;
-	const pgConnection = `export const pgConnection = {
-	connectionManagerId: 'pg',
-	mikroOrmConfig: {
-		driver: PostgreSqlDriver,
-		entities: [],
-		dbName: '%%REPLACE_WITH_DB_NAME%%',
-		user: '%%REPLACE_WITH_USERNAME%%',
-		password: '%%REPLACE_WITH_PASSWORD%%',
-		port: 5432,
-	},
-};`;
-
-	const liteDriverImport = `import { SqliteDriver } from 'mikro-orm-sqlite-wasm';`;
-	const liteConnection = `export const liteConnection = {
-	connectionManagerId: 'sqlite',
-	mikroOrmConfig: {
-		driver: SqliteDriver,
-		entities: [],
-		dbName: '%%REPLACE_WITH_DB_NAME%%',
-	},
-};`;
-
 	const hasPostgres = backends.some((backend) => backend === Backend.Postgres);
 	const hasMySql = backends.some((backend) => backend === Backend.Mysql);
 	const hasSqlite = backends.some((backend) => backend === Backend.Sqlite);
 
-	const database = `
-${hasPostgres ? pgDriverImport : ``}
-${hasMySql ? myDriverImport : ``}
-${hasSqlite ? liteDriverImport : ``}
+	let example;
+	if (hasPostgres) {
+		example = `import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 
-${hasPostgres ? pgConnection : ``}
-${hasMySql ? myConnection : ``}
-${hasSqlite ? liteConnection : ``}
+export const connection = {
+	connectionManagerId: 'postgres',
+	mikroOrmConfig: {
+		driver: PostgreSqlDriver,
+		entities: [],
+		dbName: process.env.DATABASE_NAME || 'your_db_name',
+		user: process.env.DATABASE_USER || 'your_user',
+		password: process.env.DATABASE_PASSWORD || 'your_password',
+		host: process.env.DATABASE_HOST || 'localhost',
+		port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 5432,
+	},
+};`;
+	} else if (hasMySql) {
+		example = `import { MySqlDriver } from '@mikro-orm/mysql';
 
-	`;
+export const connection = {
+	connectionManagerId: 'mysql',
+	mikroOrmConfig: {
+		driver: MySqlDriver,
+		entities: [],
+		dbName: process.env.DATABASE_NAME || 'your_db_name',
+		user: process.env.DATABASE_USER || 'your_user',
+		password: process.env.DATABASE_PASSWORD || 'your_password',
+		port: process.env.DATABASE_PORT ? parseInt(process.env.DATABASE_PORT) : 3306,
+	},
+};`;
+	} else if (hasSqlite) {
+		example = `import { SqliteDriver } from 'mikro-orm-sqlite-wasm';
+
+export const connection = {
+	connectionManagerId: 'sqlite',
+	mikroOrmConfig: {
+		driver: SqliteDriver,
+		entities: [],
+		dbName: process.env.DATABASE_NAME || 'your_db_name_with_path',
+	},
+};`;
+	} else {
+		throw new Error(`Could not determine database type from ${backends}`);
+	}
+
+	const database = `/*
+You'll want to import your database connection here or use the 'npx graphweaver@latest import' command do generate it.
+Example:
+
+${example}
+
+*/`;
 
 	writeFileSync(`${projectName}/src/backend/database.ts`, database);
 };

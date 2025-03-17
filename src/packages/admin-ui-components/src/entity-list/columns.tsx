@@ -1,12 +1,14 @@
 import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
-import { Link } from 'react-router-dom';
-
-import { Entity, EntityField, routeFor } from '../utils';
+import { generateText, generateJSON } from '@tiptap/react';
+import { Link } from 'wouter';
+import { DetailPanelInputComponentOption, Entity, EntityField, routeFor } from '../utils';
 import { cells } from '../table/cells';
 import { Checkbox } from '../checkbox';
+import { getExtensions } from '../detail-panel/fields/rich-text-field/utils';
 
 const columnHelper = createColumnHelper<any>();
+const richTextExtensions = getExtensions({});
 
 const cellForType = (field: EntityField, value: any, entityByType: (type: string) => Entity) => {
 	// Is there a specific definition for the cell type?
@@ -43,6 +45,17 @@ const cellForType = (field: EntityField, value: any, entityByType: (type: string
 	// Is it an array?
 	if (Array.isArray(value)) {
 		return value.join(', ');
+	}
+
+	if (field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT) {
+		if (!value) return null;
+		try {
+			const json = generateJSON(value, richTextExtensions);
+			return <div>{generateText(json, richTextExtensions)}</div>;
+		} catch (e) {
+			console.error(e);
+			return <div>{value}</div>;
+		}
 	}
 
 	// Ok, all we're left with is a simple value

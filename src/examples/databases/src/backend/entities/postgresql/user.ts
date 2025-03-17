@@ -24,4 +24,7 @@ export class User {
 		default: 'active',
 	})
 	status?: UserStatus = UserStatus.ACTIVE;
+
+	@Property({ type: String, nullable: true })
+	notes!: string;
 }

@@ -7,11 +7,13 @@ export const EnumField = ({
 	typeEnum,
 	multiple,
 	autoFocus = false,
+	disabled = false,
 }: {
 	name: string;
 	typeEnum: Enum;
 	multiple?: boolean;
 	autoFocus?: boolean;
+	disabled?: boolean;
 }) => {
 	const [{ value }, _, helpers] = useField({ name, multiple });
 
@@ -53,6 +55,7 @@ export const EnumField = ({
 			onChange={handleOnChange}
 			mode={multiple ? SelectMode.MULTI : SelectMode.SINGLE}
 			autoFocus={autoFocus}
+			disabled={disabled}
 		/>
 	);
 };

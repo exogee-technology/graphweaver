@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
-import { Outlet } from 'react-router-dom';
 
 import { SideBar } from '../../side-bar';
 import { RequireSchema } from '../../require-schema';
 import styles from './styles.module.css';
+import clsx from 'clsx';
+import { Modal } from '../../modal';
+import { MenuIcon } from '../../assets/menu';
 
 const SIDEBAR_MIN_WIDTH = 220;
 const SIDEBAR_MAX_WIDTH = 820;
 const SIDEBAR_START_WIDTH = 320;
 
-export const DefaultLayout = () => {
+export const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 	const resizer = useRef<HTMLDivElement>(null);
 	const [flexBasis, setFlexBasis] = useState(SIDEBAR_START_WIDTH);
+	const [openMenu, setOpenMenu] = useState(false);
 
 	const resize = (e: { x: number }) => {
 		const size = e.x;
@@ -37,19 +40,32 @@ export const DefaultLayout = () => {
 		};
 	}, []);
 
+	const handleOpenMenu = () => setOpenMenu(true);
+	const handleCloseMenu = () => setOpenMenu(false);
+
 	return (
 		<RequireSchema>
 			<div className={styles.wrapper}>
 				<div className={styles.container}>
+					<div className={styles.titleBar} onClick={handleOpenMenu}>
+						<MenuIcon />
+					</div>
 					<div className={styles.sidebar} style={{ flexBasis: `${flexBasis}px` }}>
 						<SideBar />
 					</div>
 					<div className={styles.resizer} ref={resizer}></div>
-					<div className={styles.content}>
-						<Outlet />
-					</div>
+					<div className={styles.content}>{children}</div>
 				</div>
 			</div>
+			<Modal
+				key={'sidebar-menu'}
+				isOpen={openMenu}
+				onRequestClose={handleCloseMenu}
+				shouldCloseOnEsc
+				shouldCloseOnOverlayClick
+				className={openMenu ? clsx(styles.sideMenu, styles.slideIn) : styles.sideMenu}
+				modalContent={<SideBar />}
+			/>
 		</RequireSchema>
 	);
 };

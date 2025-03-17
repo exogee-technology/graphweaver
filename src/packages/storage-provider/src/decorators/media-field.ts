@@ -1,9 +1,9 @@
 import {
 	Entity,
 	Field,
+	FieldMetadata,
 	FieldOptions,
 	graphweaverMetadata,
-	FieldMetadata,
 	Source,
 } from '@exogee/graphweaver';
 import { S3StorageProvider } from '../storageProvider';
@@ -66,10 +66,10 @@ export class GraphweaverMedia {
 	static serialize = ({ value }: { value: unknown }) => {
 		if (value === null) return null;
 		if (isMedia(value)) {
-			return JSON.stringify({
+			return {
 				filename: value.filename,
 				type: value.type,
-			});
+			};
 		}
 		throw new Error(
 			'Invalid Media input data provided. Please sent a filename and type when creating or updating media.'
@@ -92,7 +92,7 @@ export class GraphweaverMedia {
 		if (value && typeof value === 'string') {
 			try {
 				value = JSON.parse(value);
-			} catch (e) {
+			} catch {
 				throw new Error('Unable to deserialize Media value from data provider.');
 			}
 		}

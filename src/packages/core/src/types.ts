@@ -1,15 +1,16 @@
-import { ApolloServerPlugin, BaseContext as ApolloBaseContext } from '@apollo/server';
+import { BaseContext as ApolloBaseContext, ApolloServerPlugin } from '@apollo/server';
 import { Span, Tracer } from '@opentelemetry/api';
-import { ComplexityEstimator } from 'graphql-query-complexity';
-import { ResolveTree } from 'graphql-parse-resolve-info';
 import { GraphQLID, GraphQLResolveInfo, GraphQLScalarType, Source } from 'graphql';
+import { ResolveTree } from 'graphql-parse-resolve-info';
+import { ComplexityEstimator } from 'graphql-query-complexity';
 import { EntityMetadata } from './metadata';
+import { DetailPanelInputComponent, DetailPanelInputComponentOption } from './decorators';
 
-export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
-export type { GraphQLResolveInfo } from 'graphql';
 export type { Instrumentation } from '@opentelemetry/instrumentation';
+export type { GraphQLResolveInfo } from 'graphql';
+export type { FieldsByTypeName, ResolveTree } from 'graphql-parse-resolve-info';
 
-export interface BaseContext {}
+export type BaseContext = object;
 
 export const ID = GraphQLID;
 
@@ -93,9 +94,17 @@ export interface BackendProvider<D> {
 	// queries when you query across data sources.
 	readonly backendId: string;
 
+	// Optional, used for display purposes in the Admin UI, deafults to backendId
+	// if not specified.
+	readonly backendDisplayName?: string;
+
 	entityType?: new () => D;
 
-	find(filter: Filter<D>, pagination?: PaginationOptions): Promise<D[]>;
+	find(
+		filter: Filter<D>,
+		pagination?: PaginationOptions,
+		entityMetadata?: EntityMetadata
+	): Promise<D[]>;
 	findOne(filter: Filter<D>, entityMetadata?: EntityMetadata): Promise<D | null>;
 	findByRelatedId(
 		entity: { new (): D },
@@ -118,7 +127,7 @@ export interface BackendProvider<D> {
 	// Optional, allows the resolver to start a transaction
 	withTransaction?: <T>(callback: () => Promise<T>) => Promise<T>;
 
-	// Optional. Queried to get foriegn key values from fields for relationship fields to
+	// Optional. Queried to get foreign key values from fields for relationship fields to
 	// allow the GraphQL entities to work completely at the GQL level.
 	foreignKeyForRelationshipField?(field: FieldMetadata<any, D>, dataEntity: D): string | number;
 
@@ -175,6 +184,7 @@ export enum AdminUIFilterType {
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 	BOOLEAN = 'BOOLEAN',
+	DROP_DOWN_TEXT = 'DROP_DOWN_TEXT',
 }
 
 export type AdminUIEntitySettings<G> = {
@@ -200,11 +210,14 @@ export enum RelationshipType {
 }
 
 export interface BackendProviderConfig {
-	filter: boolean;
-	pagination: boolean;
-	orderBy: boolean;
-	sort: boolean;
+	filter?: boolean;
+	pagination?: boolean;
+	orderBy?: boolean;
 	supportedAggregationTypes?: Set<AggregationType>;
+	// Default is 'find', which will call the find method on the provider with a filter like `{ id_in: ['1', '2'] }`.
+	// If you specify 'findOne', it will repeatedly call the findOne method on the provider with a filter like `{ id: '1' }`.
+	idListLoadingMethod?: 'find' | 'findOne';
+	supportsPseudoCursorPagination?: boolean;
 }
 
 export type Constructor<T extends object, Arguments extends unknown[] = any[]> = new (
@@ -219,7 +232,7 @@ export type ClassType<T extends object = object, Arguments extends unknown[] = a
 };
 
 // We want TypeValues to be able to just be generic Functions as well.
-// eslint-disable-next-line @typescript-eslint/ban-types
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export type TypeValue = ClassType | GraphQLScalarType | Function | object | symbol;
 
 export type GetTypeFunction = (type?: void) => TypeValue;
@@ -233,6 +246,8 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		hideInDetailForm?: boolean;
 		readonly?: boolean;
 		fieldForDetailPanelNavigationId?: boolean;
+		filterType?: AdminUIFilterType;
+		detailPanelInputComponent?: DetailPanelInputComponentOption | DetailPanelInputComponent;
 	};
 	apiOptions?: {
 		excludeFromBuiltInWriteOperations?: boolean;
@@ -242,7 +257,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 	getType: GetTypeFunction;
 	relationshipInfo?: {
 		relatedField?: string;
-		id?: string | ((dataEntity: D) => string | number | undefined);
+		id?: string | bigint | ((dataEntity: D) => string | number | bigint | undefined);
 	};
 	description?: string;
 	deprecationReason?: string;

@@ -7,14 +7,14 @@ import {
 import { LogoutIcon } from '../../assets/16-logout';
 
 import styles from './styles.module.css';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'wouter';
 
 type LogoutProps = {
 	onLogout?: () => Promise<void>;
 };
 
 export const Logout = ({ onLogout }: LogoutProps) => {
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const handleOnLogout = async () => {
 		try {
@@ -23,7 +23,7 @@ export const Logout = ({ onLogout }: LogoutProps) => {
 			if (onLogout) {
 				await onLogout();
 			} else {
-				navigate(0);
+				setLocation('/');
 			}
 		} catch (error: any) {
 			const message = error?.message || 'Unknown error.';

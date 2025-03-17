@@ -9,4 +9,7 @@ export class AdminUiEntityAttributeMetadata {
 
 	@Field(() => Number, { nullable: true })
 	exportPageSize?: number;
+
+	@Field(() => Boolean, { nullable: true })
+	clientGeneratedPrimaryKeys?: boolean;
 }

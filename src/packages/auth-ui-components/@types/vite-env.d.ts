@@ -1,17 +1,19 @@
 /// <reference types="vite/client" />
 
 enum PrimaryAuthMethod {
-	PASSWORD = 'PASSWORD',
-	MAGIC_LINK = 'MAGIC_LINK',
 	AUTH_ZERO = 'AUTH_ZERO',
+	MAGIC_LINK = 'MAGIC_LINK',
+	MICROSOFT_ENTRA = 'MICROSOFT_ENTRA',
+	OKTA = 'OKTA',
+	PASSWORD = 'PASSWORD',
 }
 
 enum SecondaryAuthMethod {
-	PASSWORD = 'PASSWORD',
 	MAGIC_LINK = 'MAGIC_LINK',
 	ONE_TIME_PASSWORD = 'ONE_TIME_PASSWORD',
-	WEB3 = 'WEB3',
 	PASSKEY = 'PASSKEY',
+	PASSWORD = 'PASSWORD',
+	WEB3 = 'WEB3',
 }
 
 interface AdminUIAuthOptions {

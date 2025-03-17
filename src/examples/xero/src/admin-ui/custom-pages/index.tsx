@@ -5,6 +5,7 @@ import { XeroAuthCodeReceiver } from './xero-auth-code-receiver';
 import { AllCompanies, SingleCompany } from './dashboards';
 import { TenantsQuery } from './index.generated';
 import { WelcomePage } from './welcome-page';
+import { Route } from 'wouter';
 
 const tenantsQuery = gql`
 	query Tenants {
@@ -31,17 +32,16 @@ export const customPages = {
 		},
 		{
 			path: 'xero-dashboard',
-			element: <DefaultLayout />,
-			children: [
-				{
-					index: true,
-					element: <AllCompanies />,
-				},
-				{
-					path: ':tenantId',
-					element: <SingleCompany />,
-				},
-			],
+			element: (
+				<DefaultLayout>
+					<Route path="/:tenantId">
+						<SingleCompany />
+					</Route>
+					<Route path="/">
+						<AllCompanies />
+					</Route>
+				</DefaultLayout>
+			),
 		},
 	],
 

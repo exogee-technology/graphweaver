@@ -13,7 +13,7 @@ import {
 	PublicKeyCredentialRequestOptionsJSON,
 } from '@simplewebauthn/types';
 import { Form, Formik } from 'formik';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'wouter';
 
 import {
 	GENERATE_AUTHENTICATION_OPTIONS,
@@ -82,7 +82,6 @@ const RegisterButton = ({
 	return (
 		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleOnRegister}>
 			{({ isSubmitting }) => (
-				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<div className={styles.titleContainerCenter}>Connect Passkey</div>
 					<div className={styles.buttonContainerCenter}>
@@ -105,7 +104,7 @@ const AuthenticateButton = ({
 }) => {
 	const [loading, setLoading] = useState(false);
 	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
@@ -136,7 +135,7 @@ const AuthenticateButton = ({
 
 			localStorage.setItem(localStorageAuthKey, authToken);
 
-			navigate(formatRedirectUrl(redirectUri), { replace: true });
+			setLocation(formatRedirectUrl(redirectUri), { replace: true });
 		} catch (error: any) {
 			setError(error);
 			setLoading(false);
@@ -148,7 +147,6 @@ const AuthenticateButton = ({
 	return (
 		<Formik<Form> initialValues={{ code: '' }} onSubmit={handleOnAuthenticate}>
 			{({ isSubmitting }) => (
-				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<div className={styles.titleContainerCenter}>Verify Passkey</div>
 					<div className={styles.buttonContainerCenter}>

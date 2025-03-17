@@ -1,14 +1,11 @@
 import { Spacer } from '@exogee/graphweaver-admin-ui-components';
-import { Outlet } from 'react-router-dom';
 
 import styles from './styles.module.css';
 
-export const Auth = () => {
+export const Auth = ({ children }: { children: React.ReactNode }) => {
 	return (
 		<div className={styles.wrapper}>
-			<div className={styles.container}>
-				<Outlet />
-			</div>
+			<div className={styles.container}>{children}</div>
 			<Spacer height={30} />
 
 			<div className={styles.footer}>

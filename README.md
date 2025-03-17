@@ -92,6 +92,10 @@ For more on security see the [security documentation](https://graphweaver.com/do
 
 <!-- DOCUMENTATION -->
 
+## Ask AI
+
+[Graphweaver AI](https://codeparrot.ai/oracle?owner=exogee-technology&repo=graphweaver) will help you understand this repository better. You can ask for code examples, an installation guide, debugging help and much more.
+
 ## Documentation
 
 Comprehensive documentation and usage examples can be found on our [Docs Site](https://graphweaver.com/docs). It covers installation instructions, detailed API documentation, security implementation and guides to help you get started with Graphweaver.
@@ -104,8 +108,8 @@ https://github.com/exogee-technology/graphweaver/assets/81122022/3c4eb47e-84ff-4
 
 Before we start the installer make sure you are running:
 
-- Node `>18.*`
-- PNPM `>8.*`
+- Node `>22.*`
+- PNPM `>9.*`
 
 With those two installed you can create a new project with the **Graphweaver CLI**, by running:
 
@@ -212,11 +216,15 @@ Commit the changes. Create a pull request targeting the main branch.
 
 Await PR approval, then merge it into main to integrate new versions.
 
-## 6. Publish to NPM:
+## 6. Create a Release:
 
-After merging, trigger the "Publish to NPM" workflow in the Actions tab.
+After merging, click on Tags -> Releases -> 'Draft a new release' or visit https://github.com/exogee-technology/graphweaver/releases/new. Choose a new tag for the release, then fill in the description. Populate New Features and tidy up the list of PRs, hit Publish release
 
-## 7. Verify and Monitor:
+## 7. Publish to NPM:
+
+Trigger the "Publish to NPM" workflow in the Actions tab.
+
+## 8. Verify and Monitor:
 
 Monitor the workflow progress in GitHub Actions. Confirm successful publication in the npm registry.
 

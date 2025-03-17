@@ -12,7 +12,7 @@ export const loadAuth = async () => {
 		} else {
 			return defaultReturn;
 		}
-	} catch (error) {
+	} catch {
 		console.warn('No custom pages component found');
 		return defaultReturn;
 	}

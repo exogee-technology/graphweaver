@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "2.2.7",
+	"version": "2.12.4",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -10,7 +10,8 @@
 		"build:watch": "pnpm build:js --watch",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
-		"version": "npm version --no-git-tag-version"
+		"version": "npm version --no-git-tag-version",
+		"test": "vitest"
 	},
 	"main": "lib/index.js",
 	"source": "src/index.ts",
@@ -21,25 +22,26 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.11.0",
+		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@as-integrations/fastify": "2.1.1",
-		"@escape.tech/graphql-armor": "3.0.1",
+		"@escape.tech/graphql-armor": "3.1.2",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/logger": "workspace:*",
 		"@fastify/cors": "9.0.1",
 		"class-validator": "0.14.1",
-		"decimal.js": "10.4.3",
+		"decimal.js": "10.5.0",
 		"fastify": "4.28.1",
-		"graphql": "16.9.0",
+		"graphql": "16.10.0",
 		"graphql-deduplicator": "2.0.6"
 	},
 	"devDependencies": {
-		"@escape.tech/graphql-armor-types": "0.6.0",
+		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
-		"esbuild": "0.23.1",
-		"glob": "10.4.3",
-		"typescript": "5.5.4"
+		"esbuild": "0.25.1",
+		"glob": "11.0.1",
+		"vitest": "3.0.8",
+		"typescript": "5.7.3"
 	},
 	"keywords": [
 		"graphql",

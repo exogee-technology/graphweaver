@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "2.2.7",
+	"version": "2.12.4",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -10,7 +10,9 @@
 		"generate:schema": "tsx ./src/utils/generate-db-schema.ts",
 		"package:pack": "pnpm pack",
 		"prettier": "prettier --write src/**/*.ts",
+		"test": "tsx scripts/check-mikro-overrides-match-installed-versions.ts && pnpm run:unit:tests",
 		"test-introspection": "tsx scripts/test-introspection.ts",
+		"run:unit:tests": "vitest",
 		"version": "npm version --no-git-tag-version"
 	},
 	"main": "lib/index.js",
@@ -22,40 +24,42 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.11.0",
-		"@aws-sdk/client-secrets-manager": "3.632.0",
+		"@apollo/server": "4.11.2",
+		"@aws-sdk/client-secrets-manager": "3.758.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"dataloader": "2.2.2",
-		"decimal.js": "10.4.3",
-		"dotenv": "16.4.5",
-		"graphql": "16.9.0",
+		"dataloader": "2.2.3",
+		"decimal.js": "10.5.0",
+		"dotenv": "16.4.7",
 		"pluralize": "8.0.0",
 		"reflect-metadata": "0.2.2"
 	},
+	"peerDependencies": {
+		"graphql": "16",
+		"@mikro-orm/core": "6",
+		"@mikro-orm/knex": "6"
+	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.3.6",
-		"@mikro-orm/knex": "6.3.6",
-		"@mikro-orm/mysql": "6.3.6",
-		"@mikro-orm/postgresql": "6.3.6",
-		"@mikro-orm/sqlite": "6.3.6",
-		"@types/node": "22.4.1",
+		"@mikro-orm/core": "6.4.9",
+		"@mikro-orm/knex": "6.4.9",
+		"@mikro-orm/mysql": "6.4.9",
+		"@mikro-orm/postgresql": "6.4.9",
+		"@mikro-orm/sqlite": "6.4.9",
+		"@types/node": "22.13.10",
 		"@types/pluralize": "0.0.33",
-		"esbuild": "0.23.1",
-		"glob": "10.4.3",
-		"tsx": "4.17.0",
-		"typescript": "5.5.4"
+		"esbuild": "0.25.1",
+		"glob": "11.0.1",
+		"graphql": "16.10.0",
+		"tsx": "4.19.3",
+		"typescript": "5.7.3",
+		"vitest": "3.0.8"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/knex": "6.3.6",
-		"@mikro-orm/mysql": "6.3.6",
-		"@mikro-orm/postgresql": "6.3.6",
-		"@mikro-orm/sqlite": "6.3.6"
-	},
-	"peerDependencies": {
-		"@mikro-orm/core": "6.3.6",
-		"@mikro-orm/knex": "6.3.6"
+		"@mikro-orm/knex": "^6.4.9",
+		"@mikro-orm/mysql": "^6.4.9",
+		"@mikro-orm/postgresql": "^6.4.9",
+		"@mikro-orm/sqlite": "^6.4.9"
 	},
 	"keywords": [
 		"graphql",

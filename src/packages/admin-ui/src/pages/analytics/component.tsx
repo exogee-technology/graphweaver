@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Header, Loader, Span, TraceViewer } from '@exogee/graphweaver-admin-ui-components';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'wouter';
 
 import { queryForTrace } from './graphql';
 

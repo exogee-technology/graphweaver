@@ -134,6 +134,12 @@ export default class Graphweaver<TContext extends BaseContext> {
 	public handler(): AWSLambda.APIGatewayProxyHandler {
 		logger.info(`Graphweaver handler called`);
 
+		if (this.config.fastifyOptions) {
+			logger.warn(
+				"Fastify options have been configured, but we're running in lambda mode, so they will be ignored."
+			);
+		}
+
 		return startServerless({
 			server: this.server,
 			graphweaverPlugins: this.graphweaverPlugins as Set<
@@ -147,6 +153,7 @@ export default class Graphweaver<TContext extends BaseContext> {
 
 		await startStandaloneServer(
 			options,
+			this.config,
 			this.server,
 			this.graphweaverPlugins as Set<GraphweaverPlugin<void>>
 		);

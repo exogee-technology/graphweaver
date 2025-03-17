@@ -1,10 +1,9 @@
-import path from 'path';
 import * as cdk from 'aws-cdk-lib';
-import * as s3 from 'aws-cdk-lib/aws-s3';
-import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
+import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
-import { Certificate } from 'aws-cdk-lib/aws-certificatemanager';
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 
 import { GraphweaverAppConfig } from './types';
@@ -14,6 +13,12 @@ export class WebsiteStack extends cdk.Stack {
 
 	constructor(scope: Construct, id: string, config: GraphweaverAppConfig, props?: cdk.StackProps) {
 		super(scope, id, props);
+
+		const url = config.lambda?.url ?? config.ecs?.url;
+
+		if (!url) {
+			throw new Error('Missing required Graphweaver API URL for website');
+		}
 
 		const websiteBucket = new s3.Bucket(this, `${id}Bucket`, {
 			websiteIndexDocument: 'index.html',
@@ -27,7 +32,7 @@ export class WebsiteStack extends cdk.Stack {
 		});
 
 		new s3deploy.BucketDeployment(this, `${id}BucketDeployment`, {
-			sources: [s3deploy.Source.asset(path.join(__dirname, config.adminUI.buildPath))], // Path to your built website files
+			sources: [s3deploy.Source.asset(config.adminUI.buildPath)], // Path to your built website files
 			destinationBucket: websiteBucket,
 		});
 
@@ -44,7 +49,7 @@ export class WebsiteStack extends cdk.Stack {
 			{
 				responseHeadersPolicyName: `${id}AdminUIResponseHeadersPolicy`,
 				comment: 'The policy used for the Admin UI website.',
-				corsBehavior: undefined,
+				corsBehavior: config.adminUI.cors ?? undefined,
 				customHeadersBehavior: {
 					customHeaders: [...(config.adminUI.customHeaders ? config.adminUI.customHeaders : [])],
 				},
@@ -52,7 +57,7 @@ export class WebsiteStack extends cdk.Stack {
 					contentSecurityPolicy: {
 						contentSecurityPolicy:
 							config.adminUI.csp ??
-							`default-src 'self'; connect-src https://${config.api.url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;`,
+							`default-src 'self'; connect-src https://${url}; font-src 'self' fonts.gstatic.com data:; style-src 'self' 'unsafe-inline' fonts.googleapis.com; img-src 'self' https://graphweaver.com;`,
 						override: true,
 					},
 					contentTypeOptions: { override: true },

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'wouter';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import {
@@ -24,7 +24,7 @@ export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: 
 	const [login] = useMutation<{ result: { authToken: string } }>(LOGIN_MUTATION);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const redirectUri = searchParams.get('redirect_uri');
 	if (!redirectUri) throw new Error('Missing redirect URL');
@@ -45,7 +45,7 @@ export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: 
 			if (!token) throw new Error('Missing token');
 
 			localStorage.setItem(localStorageAuthKey, token);
-			navigate(formatRedirectUrl(redirectUri), { replace: true });
+			setLocation(formatRedirectUrl(redirectUri), { replace: true });
 		} catch (error) {
 			resetForm();
 			setError(error instanceof Error ? error : new Error(String(error)));
@@ -56,7 +56,6 @@ export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: 
 		<>
 			<Formik<Form> initialValues={{ username: '', password: '' }} onSubmit={handleOnSubmit}>
 				{({ isSubmitting }) => (
-					// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 					<Form className={styles.wrapper}>
 						<GraphweaverLogo width="52" className={styles.logo} />
 						<div className={styles.titleContainer}>Login</div>
@@ -64,6 +63,7 @@ export const PasswordLogin = ({ canResetPassword = true }: { canResetPassword?: 
 							placeholder="Username"
 							id="username"
 							name="username"
+							autofocus
 							className={styles.textInputField}
 						/>
 						<PasswordFieldComponent />

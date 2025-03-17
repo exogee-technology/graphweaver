@@ -24,6 +24,7 @@ export interface AuthorizationContext extends BaseContext {
 	token?: string | JwtPayload;
 	user?: UserProfile<unknown>;
 	redirectUri?: URL;
+	skipLoginRedirect?: boolean;
 }
 
 export enum AccessType {

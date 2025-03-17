@@ -7,9 +7,9 @@ import type {
 } from '@mikro-orm/core';
 import { ReferenceKind, Utils } from '@mikro-orm/core';
 
-import { BaseFile } from './base-file';
-import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
 import pluralize from 'pluralize';
+import { identifierForEnumValue, pascalToCamelCaseString, pascalToKebabCaseString } from '../utils';
+import { BaseFile } from './base-file';
 
 export class SchemaEntityFile extends BaseFile {
 	protected readonly coreImports = new Set<string>();
@@ -118,6 +118,10 @@ export class SchemaEntityFile extends BaseFile {
 
 		if (prop.type === 'unknown') {
 			//fallback to string if unknown
+			return 'string';
+		}
+
+		if (prop.type === 'bigint') {
 			return 'string';
 		}
 

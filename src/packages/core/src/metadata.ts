@@ -1,9 +1,43 @@
-import { DirectiveLocation } from 'graphql';
 import { logger } from '@exogee/logger';
+import { DirectiveLocation, OperationDefinitionNode } from 'graphql';
+import { version } from '../package.json';
 
-import { BackendProvider, FieldMetadata, Filter, GetTypeFunction, Resolver, Sort } from './types';
 import { FieldOptions } from './decorators';
+import { HookRegister } from './hook-manager';
 import { allOperations } from './operations';
+import {
+	AdminUIFilterType,
+	BackendProvider,
+	CreateOrUpdateHookParams,
+	DeleteManyHookParams,
+	FieldMetadata,
+	Filter,
+	GetTypeFunction,
+	ReadHookParams,
+	Resolver,
+	Sort,
+} from './types';
+
+export type EntityHookFunctionCreateOrUpdate<G = unknown> = (
+	params: CreateOrUpdateHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionDelete<G = unknown> = (
+	params: DeleteManyHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+export type EntityHookFunctionRead<G = unknown> = (
+	params: ReadHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
+
+export interface HookRegistration<G> {
+	[HookRegister.BEFORE_CREATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.AFTER_CREATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.BEFORE_UPDATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.AFTER_UPDATE]?: EntityHookFunctionCreateOrUpdate<G>[];
+	[HookRegister.BEFORE_DELETE]?: EntityHookFunctionDelete<G>[];
+	[HookRegister.AFTER_DELETE]?: EntityHookFunctionDelete<G>[];
+	[HookRegister.BEFORE_READ]?: EntityHookFunctionRead<G>[];
+	[HookRegister.AFTER_READ]?: EntityHookFunctionRead<G>[];
+}
 
 export interface EntityMetadata<G = unknown, D = unknown> {
 	type: 'entity';
@@ -14,11 +48,22 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 	provider?: BackendProvider<D>;
 	fields: { [key: string]: FieldMetadata<G, D> };
 	directives?: Record<string, unknown>;
+	hooks?: HookRegistration<G>;
 
 	// The field that is treated as the primary key. Defaults to `id` if nothing is specified.
 	primaryKeyField?: keyof G;
 
 	apiOptions?: {
+		// By default we expect the underlying data provider to generate the primary keys for entities, e.g. an
+		// identity field in a database. This allows consistency and centralised control. It is, however, sometimes
+		// nice to allow for client side ID creation, particularly with uuid IDs, or in situations like chat programs
+		// where you want the client to know the ID before it even does the initial mutation to create the entity.
+		// In these cases, you'll want to set this to true. The schema will then emit the primary key field as a
+		// required field in calls to create the entity. If you call createOrUpdate with these entities, it will
+		// be less efficient because we have to go to the underlying datasource to see if the entity exists before
+		// we can decide if it was a create or if it was an update that you meant.
+		clientGeneratedPrimaryKeys?: boolean;
+
 		// This means that the entity should not be given the default list, find one, create, update, and delete
 		// operations. This is useful for entities that you're defining the API for yourself. Setting this to true
 		// enables excludeFromFiltering as well.
@@ -109,6 +154,9 @@ export interface EntityMetadata<G = unknown, D = unknown> {
 		// the most useful field to display in the url.
 		// This value defaults to the primary key field if not set.
 		fieldForDetailPanelNavigationId?: Extract<keyof G, string>;
+
+		// Specifies the type of control to use for this field in filter bar in the Admin UI.
+		filterType?: AdminUIFilterType;
 	};
 
 	// These options are used internally by Graphweaver. No need to use them in your code.
@@ -227,7 +275,21 @@ export interface UnionMetadata {
 	getTypes: GetTypeFunction;
 }
 
+type VariableValues = {
+	[name: string]: any;
+};
+
 export type CollectUnionTypeInformationArgs = Omit<UnionMetadata, 'type' | 'target'>;
+
+export interface LogOnDidResolveOperationParams {
+	ast: OperationDefinitionNode;
+	variables: VariableValues | undefined;
+}
+
+export interface LogOnDidResolveOperationResponse {
+	query: string;
+	variables: VariableValues | undefined;
+}
 
 export interface AdditionalOperationInformation {
 	name: string;
@@ -236,6 +298,18 @@ export interface AdditionalOperationInformation {
 	directives?: Record<string, unknown>;
 	args?: ArgsMetadata;
 	description?: string;
+
+	/**
+	 * Optional function to override the default logging of the operation.
+	 * This allows you to change the log message, perhaps to obfuscate sensitive data, or to add additional context.
+	 * This log gets printed at `didResolveOperation` of the Apollo lifecycle.
+	 * For more information of the lifecycle see https://www.apollographql.com/docs/apollo-server/integrations/plugins-event-reference#didresolveoperation
+	 * @param params The query as AST and the variables as an object
+	 * @returns the query and variables to log. Internally Graphweaver does something like `logger.info(logOnDidResolveOperation(params))`
+	 */
+	logOnDidResolveOperation?: (
+		params: Readonly<LogOnDidResolveOperationParams>
+	) => LogOnDidResolveOperationResponse;
 }
 
 export type MetadataType =
@@ -244,6 +318,26 @@ export type MetadataType =
 	| InputTypeMetadata<any, any>
 	| DirectiveMetadata
 	| UnionMetadata;
+
+// Singleton protection. If there are multiple instances of Metadata from different Graphweaver versions
+// all being installed side by side, we should error and let them know this.
+const graphweaverMetadataVersion = Symbol('graphweaverMetadataVersion');
+const globalWithMetadataVersion = global as GraphweaverMetadataVersion;
+interface GraphweaverMetadataVersion {
+	[graphweaverMetadataVersion]?: string;
+}
+
+if (globalWithMetadataVersion[graphweaverMetadataVersion] === undefined) {
+	globalWithMetadataVersion[graphweaverMetadataVersion] = version;
+} else if (globalWithMetadataVersion[graphweaverMetadataVersion] === version) {
+	throw new Error(
+		`Multiple instances of the Graphweaver Metadata singleton are being used, but the two that have been discovered are both version '${version}'. This is not supported. Please ensure you are not installing multiple versions of Graphweaver at once.`
+	);
+} else {
+	throw new Error(
+		`Multiple versions of the Graphweaver Metadata singleton are being used. The first version to load was '${globalWithMetadataVersion[graphweaverMetadataVersion]}' and the version trying to load currently is '${version}'. This is not supported. Please ensure you are not installing multiple versions of Graphweaver at once.`
+	);
+}
 
 class Metadata {
 	private metadataByType = new Map<unknown, MetadataType>();
@@ -577,6 +671,14 @@ class Metadata {
 		if (!isInputMetadata(meta)) return undefined;
 
 		return meta;
+	}
+
+	public getAdditionalQueryByName(name: string) {
+		return this.additionalQueriesLookup.get(name);
+	}
+
+	public getAdditionalMutationByName(name: string) {
+		return this.additionalMutationsLookup.get(name);
 	}
 
 	// look up the name of an entity or enum by its type

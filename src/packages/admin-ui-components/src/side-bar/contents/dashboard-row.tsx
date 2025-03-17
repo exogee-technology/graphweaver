@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { NavLink } from 'react-router-dom';
+import { Link, useRoute } from 'wouter';
 
 import { TableIcon } from '../../assets';
 
@@ -13,15 +13,15 @@ export const DashboardRow = ({
 	name: string;
 	route: string;
 	end?: boolean;
-}) => (
-	<li>
-		<NavLink
-			to={route}
-			className={({ isActive }) => clsx(styles.subListItem, isActive && styles.active)}
-			end={end}
-		>
-			<TableIcon />
-			{name}
-		</NavLink>
-	</li>
-);
+}) => {
+	const [isActive] = useRoute(end ? route : `${route}/*?`);
+
+	return (
+		<li>
+			<Link to={route} className={clsx(styles.subListItem, isActive && styles.active)}>
+				<TableIcon />
+				{name}
+			</Link>
+		</li>
+	);
+};

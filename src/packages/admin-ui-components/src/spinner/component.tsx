@@ -12,7 +12,10 @@ type Props = {
 
 export const Spinner = ({ size = SpinnerSize.LARGE }: Props) => {
 	return (
-		<div className={clsx(styles.container, size === SpinnerSize.SMALL && styles.small)}>
+		<div
+			data-testid="spinner"
+			className={clsx(styles.container, size === SpinnerSize.SMALL && styles.small)}
+		>
 			<div className={clsx(styles.wrapper, size === SpinnerSize.SMALL && styles.small)}>
 				<div className={styles.loader}></div>
 			</div>

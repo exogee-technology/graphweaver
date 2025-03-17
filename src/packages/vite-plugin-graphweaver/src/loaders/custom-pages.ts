@@ -10,7 +10,7 @@ export const loadCustomPages = async (projectRoot: string) => {
 		// @todo Validate import- we can't import typescript here but we could validate another way
 
 		return `export { customPages } from '${resolvedCustomPagesPath}';`;
-	} catch (error) {
+	} catch {
 		console.warn('No custom pages component found');
 		return `export const customPages = {
 		routes: () => [],

@@ -16,6 +16,7 @@ import { importDataSource } from './import';
 import { version } from '../package.json';
 import { generateTypes, printSchema } from './tasks';
 import * as path from 'path';
+import { config } from '@exogee/graphweaver-config';
 
 const MINIMUM_NODE_SUPPORTED = '18.0.0';
 
@@ -112,6 +113,19 @@ yargs
 				}),
 		handler: async ({ source, database, host, port, password, user, overwrite }) => {
 			console.log('Importing data source...');
+			// Do we have any pre-configured options?
+			const { import: importOptions } = config();
+
+			if (importOptions) {
+				if (source === undefined) source = importOptions.source;
+				if (database === undefined) database = importOptions.dbName;
+				if (host === undefined) host = importOptions.host;
+				if (!port) port = importOptions.port;
+				if (user === undefined) user = importOptions.user;
+				if (password === undefined) password = importOptions.password;
+				if (overwrite === undefined) overwrite = importOptions.overwrite;
+			}
+
 			if (source) console.log(`Source: ${source}`);
 			if (database) console.log(`Database Name: ${database}`);
 			if (host) console.log(`Database Host: ${host}`);
@@ -354,8 +368,19 @@ yargs
 					describe: 'Specify the database server user.',
 				}),
 		handler: async ({ method, source, database, host, port, password, user }) => {
-			if (!authMethods.includes(method)) {
+			if (!authMethods.includes(method as (typeof authMethods)[0])) {
 				throw new Error(`Unsupported method: ${method}, please use ${authMethods.join(', ')}`);
+			}
+
+			const { import: importOptions } = config();
+
+			if (importOptions) {
+				if (source === undefined) source = importOptions.source;
+				if (database === undefined) database = importOptions.dbName;
+				if (host === undefined) host = importOptions.host;
+				if (!port) port = importOptions.port;
+				if (user === undefined) user = importOptions.user;
+				if (password === undefined) password = importOptions.password;
 			}
 
 			if (source && !['mysql', 'postgresql', 'sqlite'].includes(source)) {
@@ -365,7 +390,7 @@ yargs
 			await initAuth({
 				method: method as AuthMethod,
 				source: source as Source,
-				database,
+				dbName: database,
 				host,
 				port,
 				password,

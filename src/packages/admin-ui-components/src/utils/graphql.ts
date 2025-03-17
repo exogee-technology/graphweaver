@@ -8,6 +8,7 @@ export const SCHEMA_QUERY = gql`
 				name
 				plural
 				backendId
+				backendDisplayName
 				excludeFromTracing
 				summaryField
 				fieldForDetailPanelNavigationId
@@ -16,6 +17,7 @@ export const SCHEMA_QUERY = gql`
 				defaultSort
 				hideInSideBar
 				supportedAggregationTypes
+				supportsPseudoCursorPagination
 				fields {
 					name
 					type
@@ -35,10 +37,15 @@ export const SCHEMA_QUERY = gql`
 					hideInTable
 					hideInFilterBar
 					hideInDetailForm
+					detailPanelInputComponent {
+						name
+						options
+					}
 				}
 				attributes {
 					isReadOnly
 					exportPageSize
+					clientGeneratedPrimaryKeys
 				}
 			}
 			enums {

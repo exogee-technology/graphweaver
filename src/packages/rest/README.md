@@ -1,6 +1,6 @@
 # `@exogee/graphweaver-rest`
 
-RESTful adapter package for Graphweaver
+RESTful adapter package for Graphweaver.
 
 ## Documentation
 

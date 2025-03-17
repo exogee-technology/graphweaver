@@ -181,7 +181,8 @@ export const assertObjectLevelPermissions = async <G, TContext extends Authoriza
 export async function checkEntityPermission<G = unknown, D = unknown>(
 	entityName: string,
 	id: string | number,
-	accessType: AccessType
+	accessType: AccessType,
+	transactional: boolean
 ) {
 	const acl = getACL(entityName);
 	const accessControlEntry = buildAccessControlEntryForUser(
@@ -222,6 +223,19 @@ export async function checkEntityPermission<G = unknown, D = unknown>(
 		_and: [{ [primaryKeyField]: id }, accessFilter],
 	};
 
+	// If we've made it down here, we need to assert that this is all happening within a transaction
+	// or it's possible we'll do a partial write before we discover they were trying to do something
+	// they shouldn't be allowed to do.
+	//
+	// We don't want this check higher up, because it should only be applied if they've actually configured
+	// row level security ACLs.
+	if (!transactional) {
+		logger.error(
+			'Row Level Security can only be applied within a transaction and this hook is not transactional.'
+		);
+		throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+	}
+
 	try {
 		const { provider } = graphweaverMetadata.getEntityByName(entityName) ?? {};
 		if (!provider) {
@@ -249,18 +263,25 @@ export async function checkAuthorization<G = unknown>(
 	entityName: string,
 	id: string | number,
 	requestInput: Partial<G>,
-	requiredPermission: AccessType
+	requiredPermission: AccessType,
+	transactional: boolean
 ) {
+	logger.trace({ entityName, id, requestInput, requiredPermission }, 'Entering checkAuthorization');
+
 	// Get ACL first
 	const acl = getACL(entityName);
 	const meta = graphweaverMetadata.getEntityByName(entityName);
+
+	logger.trace('Checking whether user can perform requested action.');
 
 	// Check whether the user can perform the request type of action at all,
 	// before evaluating any (more expensive) permissions filters
 	await assertUserCanPerformRequestedAction(acl, requiredPermission);
 
+	logger.trace('They can, now checking entity permissions.');
+
 	// Now check whether the root entity passes permissions filters (if set)
-	await checkEntityPermission(entityName, id, requiredPermission);
+	await checkEntityPermission(entityName, id, requiredPermission, transactional);
 
 	// Recurse through the list
 	const relatedEntityAuthChecks: Promise<any>[] = [];
@@ -290,7 +311,13 @@ export async function checkAuthorization<G = unknown>(
 				// The creation hook will triggered for that entity and the permissions checked
 				if (relatedId) {
 					relatedEntityAuthChecks.push(
-						checkAuthorization(relatedEntityMetadata.name, relatedId, item, accessType)
+						checkAuthorization(
+							relatedEntityMetadata.name,
+							relatedId,
+							item,
+							accessType,
+							transactional
+						)
 					);
 				}
 			}
@@ -303,6 +330,8 @@ export async function checkAuthorization<G = unknown>(
 		logger.info(`Permission check failed:`, e);
 		permissionsErrorHandler(e);
 	}
+
+	logger.trace('Leaving checkAuthorization, auth passed.');
 }
 
 const checkPayloadAndFilterScalarsAndDates = (requestInput: any, key: string, value: any) => {

@@ -52,7 +52,7 @@ export const XeroAuthApolloPlugin: ApolloServerPlugin<XeroTokenContext> = {
 			try {
 				new URL(authHeader);
 				validURL = true;
-			} catch (error) {
+			} catch {
 				logger.debug('Not a valid URL.');
 			}
 		}

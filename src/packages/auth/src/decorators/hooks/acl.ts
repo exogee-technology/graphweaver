@@ -136,7 +136,20 @@ const assertUserCanPerformRequest = async <G, TContext extends AuthorizationCont
 
 		if (type === RequirePermissionType.ENTITY) {
 			const acl = getACL(entityName);
-			await assertUserCanPerformRequestedAction(acl, accessType);
+
+			if (!acl || Object.keys(acl).length === 0) {
+				logger.error(
+					`The entity ${entityName} does not have an ACL defined. Please define an ACL for this entity.`
+				);
+				throw new Error(GENERIC_AUTH_ERROR_MESSAGE);
+			}
+
+			try {
+				await assertUserCanPerformRequestedAction(acl, accessType);
+			} catch (e) {
+				logger.error(`User does not have permission to ${accessType} the ${entityName} entity`, e);
+				throw e;
+			}
 		} else if (type === RequirePermissionType.FIELD && field) {
 			assertUserHasAccessToField({
 				field,
@@ -154,13 +167,16 @@ const generatePermissionListFromFields = <G>(
 	entityMetadata: EntityMetadata<G>,
 	requestedFields: ResolveTree
 ) => {
-	const permissionsList: RequiredPermission[] = [
-		{
+	const permissionsList: RequiredPermission[] = [];
+
+	if (Object.keys(requestedFields.fieldsByTypeName).length > 0) {
+		// If at least one field is requested, do they have permission to read the entity?
+		permissionsList.push({
 			entityName: entityMetadata.name,
 			accessType: AccessType.Read,
 			type: RequirePermissionType.ENTITY,
-		},
-	];
+		});
+	}
 
 	for (const [entityName, fields] of Object.entries(requestedFields.fieldsByTypeName)) {
 		if (entityName === graphweaverMetadata.federationNameForGraphQLTypeName('AggregationResult')) {
@@ -232,19 +248,22 @@ const getFilterArgumentsOnFields = (entityMetadata: EntityMetadata, resolveTree:
 				filterKey
 			);
 
-			if (!fieldMetadata) {
-				throw new Error(
-					`Could not determine field metadata for filter key: '${filterKey} on ${entityMetadata.name} entity'`
-				);
-			}
-
-			const fieldType = fieldMetadata.getType();
-			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 			if (isTopLevelFilterProperty(filterKey)) {
 				value.forEach((item) => {
 					recurseThroughArg(entityMetadata, item);
 				});
-			} else if (isEntityMetadata(fieldTypeMetadata)) {
+				continue;
+			}
+
+			if (!fieldMetadata) {
+				throw new Error(
+					`Could not determine field metadata for filter key: '${filterKey}' on ${entityMetadata.name} entity`
+				);
+			}
+			
+			const fieldType = fieldMetadata.getType();
+			const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
+			if (isEntityMetadata(fieldTypeMetadata)) {
 				recurseThroughArg(fieldTypeMetadata, value as Filter<unknown>);
 			} else {
 				permissionsList.push({
@@ -449,9 +468,7 @@ export const afterCreateOrUpdate = (
 		const items = params.args.items;
 		const entities = (params.entities ?? []) as G[];
 
-		// 1. Check to ensure we are within a transaction
-		assertTransactional(params.transactional);
-		// 2. Check user has permission for each for each entity
+		// Check user has permission for each for each entity, recursing as we go.
 		const authChecks = entities.map((entity, index) =>
 			entity?.[primaryKeyField]
 				? checkAuthorization(
@@ -460,7 +477,8 @@ export const afterCreateOrUpdate = (
 							? Number(entity[primaryKeyField])
 							: String(entity[primaryKeyField]),
 						items[index],
-						accessType
+						accessType,
+						params.transactional
 					)
 				: undefined
 		);

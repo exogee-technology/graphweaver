@@ -89,6 +89,7 @@ export const trace =
 				});
 				return result;
 			} catch (error: any) {
+				logger.error(error);
 				const errorMessage = String(error);
 				span.setStatus({ code: SpanStatusCode.ERROR, message: errorMessage });
 				span.recordException(error);

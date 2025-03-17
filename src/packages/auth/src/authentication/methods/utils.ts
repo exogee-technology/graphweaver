@@ -1,9 +1,18 @@
-import { BackendProvider, HookParams, HookRegister, hookManagerMap } from '@exogee/graphweaver';
+import {
+	BackendProvider,
+	HookParams,
+	HookRegister,
+	LogOnDidResolveOperationParams,
+	hookManagerMap,
+} from '@exogee/graphweaver';
+import { logger } from '@exogee/logger';
 import { ApolloError, AuthenticationError } from 'apollo-server-errors';
 
 import { hashPassword } from '../../utils/argon2id';
 import { CredentialUpdateInput, CredentialInsertInput } from './password';
 import { CredentialStorage } from '../entities';
+import { VariableValues } from '@apollo/server/dist/esm/externalTypes/graphql';
+import { Kind, OperationDefinitionNode, print, stripIgnoredCharacters, visit } from 'graphql';
 
 export class PasswordStrengthError extends ApolloError {
 	constructor(message: string, extensions?: Record<string, any>) {
@@ -67,3 +76,90 @@ export const runAfterHooks = async <D, H = CredentialInsertInput | CredentialUpd
 
 	return hookEntities;
 };
+
+const obfuscateSensitiveValues = (
+	variables: VariableValues | undefined,
+	nodeNamesToMask: Set<string>
+) => {
+	try {
+		if (!variables) return variables;
+
+		const obfuscateNode = (key: string, value: any): any => {
+			if (nodeNamesToMask.has(key)) {
+				return '********';
+			}
+
+			if (value === null || value === undefined) {
+				return value;
+			}
+
+			if (Array.isArray(value)) {
+				return value.map((item: any) => obfuscateNode(key, item));
+			}
+
+			if (typeof value === 'symbol') {
+				return '********'; // technically impossible, but just in case
+			}
+
+			if (typeof value === 'object') {
+				return obfuscateObject(value);
+			}
+
+			return value;
+		};
+
+		const obfuscateObject = (obj: any) => {
+			return Object.fromEntries(
+				Object.entries(obj).map(([key, value]) => [key, obfuscateNode(key, value)])
+			);
+		};
+
+		return obfuscateObject(variables);
+	} catch (e) {
+		logger.error('obfuscateSensitiveValues - error', e);
+		return undefined;
+	}
+};
+
+const maskSensitiveValuesForLogging = (
+	ast: OperationDefinitionNode,
+	variables: VariableValues | undefined,
+	nodeNamesToMask: Set<string>
+) => {
+	logger.trace('maskSensitiveValuesForLogging - enter');
+	const safeVariables = obfuscateSensitiveValues(variables, nodeNamesToMask);
+	const safeAst = visit(ast, {
+		enter(node) {
+			if (
+				(node.kind === Kind.OBJECT_FIELD || node.kind === Kind.ARGUMENT) &&
+				nodeNamesToMask.has(node.name.value)
+			) {
+				if (node.value.kind === Kind.STRING) {
+					return {
+						...node,
+						value: {
+							...node.value,
+							value: '********',
+						},
+					};
+				}
+			}
+		},
+	});
+
+	return {
+		query: stripIgnoredCharacters(print(safeAst)),
+		variables: safeVariables,
+	};
+};
+
+export const handleLogOnDidResolveOperation =
+	(sensitiveFields: Set<string>) => (params: Readonly<LogOnDidResolveOperationParams>) => {
+		const { query, variables } = maskSensitiveValuesForLogging(
+			params.ast,
+			params.variables,
+			sensitiveFields
+		);
+
+		return { query, variables };
+	};

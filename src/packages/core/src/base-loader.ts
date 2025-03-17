@@ -2,9 +2,12 @@ import { logger } from '@exogee/logger';
 import DataLoader from 'dataloader';
 
 import {
+	EntityMetadata,
 	Filter,
+	getFieldTypeWithMetadata,
 	graphweaverMetadata,
 	isEntityMetadata,
+	isGraphQLScalarForTypeScriptType,
 	isTransformableGraphQLEntityClass,
 } from '.';
 import { RequestContext } from './request-context';
@@ -17,6 +20,7 @@ type LoaderMap = { [key: string]: DataLoader<string, unknown> };
 type LoadOneOptions<G = unknown> = {
 	gqlEntityType: { new (...args: any[]): G };
 	id: string;
+	filter?: Filter<G>;
 };
 
 type LoadByRelatedIdOptions<G = unknown, D = unknown> = {
@@ -36,37 +40,58 @@ const getGqlEntityName = (gqlEntityType: any) => {
 
 const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 	gqlEntityType,
+	filter,
 	keyStore,
 }: {
 	gqlEntityType: {
 		new (...args: any[]): G;
 	};
 	keyStore: LoaderMap;
+	filter?: Filter<G>;
 }) => {
 	const gqlTypeName = getGqlEntityName(gqlEntityType);
-	if (!keyStore[gqlTypeName]) {
+	const loaderKey = `${gqlTypeName}-${JSON.stringify(filter)}`;
+	if (!keyStore[loaderKey]) {
 		const entity = graphweaverMetadata.getEntityByName<G, D>(gqlTypeName);
 		if (!entity?.provider) {
 			throw new Error(`Unable to locate provider for type '${gqlTypeName}'`);
 		}
 
 		const fetchRecordsById = async (keys: readonly string[]) => {
-			logger.trace(
-				`DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s): (${keys.join(', ')})`
-			);
+			logger.trace({ keys }, `DataLoader: Loading ${gqlTypeName}, ${keys.length} record(s)`);
 			const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof D;
 
-			const filter = {
-				_or: keys.map((id) => ({ [primaryKeyField]: id })),
+			let listFilter = {
+				[`${String(primaryKeyField)}_in`]: keys,
 				// Note: Typecast here shouldn't be necessary, but FilterEntity<G> doesn't like this.
 			} as Filter<G>;
 
+			if (filter) {
+				listFilter = {
+					_and: [listFilter, filter],
+				} as Filter<G>;
+			}
+
 			const backendFilter =
 				isTransformableGraphQLEntityClass(entity.target) && entity.target.toBackendEntityFilter
-					? entity.target.toBackendEntityFilter(filter)
-					: (filter as Filter<D>);
+					? entity.target.toBackendEntityFilter(listFilter)
+					: (listFilter as Filter<D>);
 
-			const records = await entity.provider!.find(backendFilter, undefined);
+			let records: D[];
+			if (entity.provider?.backendProviderConfig?.idListLoadingMethod !== 'findOne') {
+				records = await entity.provider!.find(backendFilter, undefined, entity as EntityMetadata);
+			} else {
+				records = (
+					await Promise.all(
+						keys.map((key) =>
+							entity.provider!.findOne(
+								{ [primaryKeyField]: key } as Filter<D>,
+								entity as EntityMetadata
+							)
+						)
+					)
+				).filter((row) => row) as D[];
+			}
 
 			logger.trace(`Loading ${gqlTypeName} got ${records.length} result(s).`);
 
@@ -75,23 +100,27 @@ const getBaseLoadOneLoader = <G = unknown, D = unknown>({
 			const lookup: { [key: string]: D } = {};
 			for (const record of records) {
 				const primaryKeyValue = record[primaryKeyField];
-				if (typeof primaryKeyValue === 'number' || typeof primaryKeyValue === 'string') {
+				if (
+					typeof primaryKeyValue === 'number' ||
+					typeof primaryKeyValue === 'string' ||
+					typeof primaryKeyValue === 'bigint'
+				) {
 					lookup[String(record[primaryKeyField])] = record;
 				} else {
 					logger.warn(
-						`Ignoring primary key value ${primaryKeyValue} because it is not a string or number.`
+						`Ignoring primary key value ${primaryKeyValue} because it is not a string, number, or bigint.`
 					);
 				}
 			}
 			return keys.map((key) => lookup[key]);
 		};
 
-		keyStore[gqlTypeName] = new DataLoader(fetchRecordsById, {
+		keyStore[loaderKey] = new DataLoader(fetchRecordsById, {
 			maxBatchSize: entity.provider.maxDataLoaderBatchSize,
 		});
 	}
 
-	return keyStore[gqlTypeName] as DataLoader<string, D>;
+	return keyStore[loaderKey] as DataLoader<string, D>;
 };
 
 export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
@@ -144,13 +173,17 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 			// Need to return in the same order as was requested. Iterate once and create
 			// a map by ID so we don't n^2 this stuff.
 			const lookup: { [key: string]: D[] } = {};
+			const fieldMetadata = entity.fields[relatedField];
+			const {
+				isList,
+				fieldType,
+				metadata: fieldTypeMetadata,
+			} = getFieldTypeWithMetadata(fieldMetadata.getType);
+
 			for (const record of records) {
-				const fieldMetadata = entity.fields[relatedField];
-				const fieldType = fieldMetadata?.getType();
-				const fieldTypeMetadata = graphweaverMetadata.metadataForType(fieldType);
 				if (isEntityMetadata(fieldTypeMetadata)) {
 					const relatedRecord = record[relatedField as keyof D];
-					if (Array.isArray(fieldType)) {
+					if (isList) {
 						// ManyToManys come back this way.
 						for (const subRecord of relatedRecord as Iterable<D>) {
 							const stringPrimaryKey = String(subRecord[primaryKeyField]);
@@ -167,6 +200,11 @@ export const getBaseRelatedIdLoader = <G = unknown, D = unknown>({
 						if (!lookup[relatedRecordId]) lookup[relatedRecordId] = [];
 						lookup[relatedRecordId].push(record);
 					}
+				} else if (isGraphQLScalarForTypeScriptType(fieldType)) {
+					// Ok, in this case we just need to make a lookup for the field we know they gave us.
+					const foreignKey = String(record[relatedField as keyof D]);
+					if (!lookup[foreignKey]) lookup[foreignKey] = [];
+					lookup[foreignKey].push(record);
 				}
 			}
 
@@ -184,14 +222,12 @@ export class BaseLoader {
 	private loadOneLoaderMap: LoaderMap = {};
 	private relatedIdLoaderMap: LoaderMap = {};
 
-	public loadOne<G = unknown, D = unknown>({ gqlEntityType, id }: LoadOneOptions<G>) {
-		const loader = getBaseLoadOneLoader<G, D>({ gqlEntityType, keyStore: this.loadOneLoaderMap });
-		return loader.load(id);
+	public loadOne<G = unknown, D = unknown>(args: LoadOneOptions<G>) {
+		const loader = getBaseLoadOneLoader<G, D>({ ...args, keyStore: this.loadOneLoaderMap });
+		return loader.load(args.id);
 	}
 
 	public loadByRelatedId<G = unknown, D = unknown>(args: LoadByRelatedIdOptions<G, D>) {
-		this.loadOneLoaderMap;
-
 		const loader = getBaseRelatedIdLoader<G, D>({
 			...args,
 			keyStore: this.relatedIdLoaderMap,

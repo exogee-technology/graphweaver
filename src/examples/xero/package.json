@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "2.2.7",
+	"version": "2.12.4",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -22,8 +22,8 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.11.4",
-		"@apollo/server": "4.11.0",
+		"@apollo/client": "3.13.3",
+		"@apollo/server": "4.11.2",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui": "workspace:*",
@@ -32,26 +32,26 @@
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-xero": "workspace:*",
 		"@exogee/logger": "workspace:*",
-		"@nivo/bump": "0.87.0",
-		"@nivo/core": "0.87.0",
-		"@nivo/line": "0.87.0",
-		"@nivo/tooltip": "0.87.0",
+		"@nivo/bump": "0.88.0",
+		"@nivo/core": "0.88.0",
+		"@nivo/line": "0.88.0",
+		"@nivo/tooltip": "0.88.0",
 		"async-mutex": "0.5.0",
 		"class-validator": "0.14.1",
-		"decimal.js": "10.4.3",
-		"graphql": "16.9.0",
+		"decimal.js": "10.5.0",
+		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
 		"prop-types": "15.8.1",
-		"react": "18.3.1",
-		"react-dom": "18.3.1",
-		"react-router-dom": "6.26.1",
-		"xero-node": "7.0.0"
+		"react": "19.0.0",
+		"react-dom": "19.0.0",
+		"wouter": "3.6.0",
+		"xero-node": "10.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.4.1",
-		"esbuild": "0.23.1",
-		"prettier": "3.3.3",
-		"typescript": "5.5.4",
-		"vite": "5.4.1"
+		"@types/node": "22.13.10",
+		"esbuild": "0.25.1",
+		"prettier": "3.4.2",
+		"typescript": "5.7.3",
+		"vite": "6.2.1"
 	}
 }

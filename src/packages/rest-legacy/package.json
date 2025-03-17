@@ -1,0 +1,53 @@
+{
+	"name": "@exogee/graphweaver-rest-legacy",
+	"version": "2.12.4",
+	"description": "Legacy RESTful backend adapter for @exogee/graphweaver",
+	"license": "Apache-2.0",
+	"scripts": {
+		"build": "npm run build:js && npm run build:types",
+		"build:js": "node build.js",
+		"build:types": "tsc --emitDeclarationOnly",
+		"package:pack": "pnpm pack",
+		"prettier": "prettier --write src/**/*.ts",
+		"codegen": "graphql-codegen --config ./codegen.yml",
+		"version": "npm version --no-git-tag-version"
+	},
+	"main": "lib/index.js",
+	"source": "src/index.ts",
+	"directories": {
+		"lib": "lib"
+	},
+	"files": [
+		"lib"
+	],
+	"dependencies": {
+		"@exogee/graphweaver": "workspace:*",
+		"@exogee/logger": "workspace:*",
+		"apollo-server-errors": "3.3.1",
+		"class-validator": "0.14.1",
+		"dataloader": "2.2.3",
+		"dotenv": "16.4.7",
+		"graphql": "16.10.0",
+		"lodash": "4.17.21",
+		"luxon": "3.5.0"
+	},
+	"devDependencies": {
+		"@types/lodash": "4.17.16",
+		"@types/luxon": "3.4.2",
+		"@types/node": "22.13.10",
+		"esbuild": "0.25.1",
+		"glob": "11.0.1",
+		"prettier": "3.4.2",
+		"typescript": "5.7.3"
+	},
+	"keywords": [
+		"graphql",
+		"gql",
+		"headless",
+		"cms",
+		"postgres",
+		"postgresql",
+		"mysql",
+		"sqlite"
+	]
+}

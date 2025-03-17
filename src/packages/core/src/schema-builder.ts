@@ -54,6 +54,7 @@ import {
 	likeOperations,
 	mathOperations,
 } from './operations';
+import { ISODateStringScalar } from '@exogee/graphweaver-scalars';
 
 export type GraphweaverSchemaExtension = Readonly<GraphQLObjectTypeExtensions<any, any>> & {
 	graphweaverSchemaInfo:
@@ -72,7 +73,15 @@ export type GraphweaverSchemaInfoExtensionWithSourceEntity = {
 		| 'createOrUpdateInput'
 		| 'updateInput'
 		| 'createInput'
-		| 'filterInput';
+		| 'filterInput'
+		| 'createOne'
+		| 'createMany'
+		| 'updateOne'
+		| 'updateMany'
+		| 'createOrUpdateMany'
+		| 'deleteOne'
+		| 'deleteMany';
+
 	sourceEntity: EntityMetadata<any, any>;
 };
 
@@ -107,6 +116,7 @@ const scalarShouldGetMathOperations = (
 	scalar === BigInt ||
 	scalar.name === 'ID' ||
 	scalar.name === 'String' ||
+	scalar.name === 'Date' ||
 	scalar.name === 'ISOString' ||
 	(scalar instanceof GraphQLScalarType && scalar?.extensions?.type === 'integer');
 
@@ -237,7 +247,7 @@ export const getFieldTypeWithMetadata = (
 	return { fieldType, isList, metadata };
 };
 
-const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
+export const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 	const unwrapType = (type: TypeValue): TypeValue => {
 		if (isListType(type) || isNonNullType(type)) {
 			return unwrapType(type.ofType);
@@ -251,11 +261,12 @@ const getFieldType = (field: FieldMetadata<any, any>): TypeValue => {
 	return unwrapType(field.getType());
 };
 
-const isGraphQLScalarForTypeScriptType = (type: TypeValue): type is GraphQLScalarType => {
+export const isGraphQLScalarForTypeScriptType = (type: TypeValue) => {
 	switch (type) {
 		case String:
 		case Number:
 		case Boolean:
+		case Date:
 			return true;
 		default:
 			return false;
@@ -272,6 +283,8 @@ const graphQLScalarForTypeScriptType = (type: TypeValue): GraphQLScalarType => {
 			return GraphQLFloat;
 		case Boolean:
 			return GraphQLBoolean;
+		case Date:
+			return ISODateStringScalar;
 		default:
 			throw new Error(`Could not map TypeScript type ${String(type)} to a GraphQL scalar.`);
 	}
@@ -471,6 +484,12 @@ const filterTypeForEntity = (
 			fields: () => {
 				const fields: ObjMap<GraphQLInputFieldConfig> = {};
 
+				// Add top level and/or/not
+				const selfFilter = filterTypeForEntity(entity, entityFilter);
+				fields['_and'] = { type: new GraphQLList(selfFilter) };
+				fields['_or'] = { type: new GraphQLList(selfFilter) };
+				fields['_not'] = { type: selfFilter };
+
 				for (const field of Object.values(entity.fields)) {
 					const fieldType = getFieldType(field);
 					const metadata = graphweaverMetadata.metadataForType(fieldType);
@@ -620,8 +639,17 @@ const generateGraphQLInputFieldsForEntity =
 			// The ID field is a special case based on the input type.
 			if (field.name === (entity.primaryKeyField ?? 'id')) {
 				switch (input) {
+					case 'insert':
+						if (entity.apiOptions?.clientGeneratedPrimaryKeys) {
+							fields[field.name] = { type: new GraphQLNonNull(ID) };
+						}
+						break;
 					case 'createOrUpdate':
-						fields[field.name] = { type: ID };
+						if (entity.apiOptions?.clientGeneratedPrimaryKeys) {
+							fields[field.name] = { type: new GraphQLNonNull(ID) };
+						} else {
+							fields[field.name] = { type: ID };
+						}
 						break;
 					case 'update':
 						fields[field.name] = { type: new GraphQLNonNull(ID) };
@@ -943,7 +971,7 @@ class SchemaBuilderImplementation {
 						throw new Error(`Duplicate query name: ${customQuery.name}.`);
 					}
 
-					const { fieldType, metadata } = getFieldTypeWithMetadata(customQuery.getType);
+					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customQuery.getType);
 					const customArgs = this.graphQLTypeForArgs(entityFilter, customQuery.args);
 
 					if (isEntityMetadata(metadata)) {
@@ -951,12 +979,14 @@ class SchemaBuilderImplementation {
 						// an entity that is filtered out of this schema.
 						if (entityFilter && !entityFilter(metadata)) continue;
 
+						const graphQLType = graphQLTypeForEntity(metadata, entityFilter);
+
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type: graphQLTypeForEntity(metadata, entityFilter),
+							type: isList ? new GraphQLList(graphQLType) : graphQLType,
 							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
 							extensions: {
 								directives: customQuery.directives ?? {},
@@ -1144,8 +1174,7 @@ class SchemaBuilderImplementation {
 						throw new Error(`Duplicate mutation name: ${customMutation.name}.`);
 					}
 
-					const type = customMutation.getType();
-					const metadata = graphweaverMetadata.metadataForType(type);
+					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customMutation.getType);
 					const customArgs = this.graphQLTypeForArgs(entityFilter, customMutation.args);
 
 					if (isEntityMetadata(metadata)) {
@@ -1155,10 +1184,12 @@ class SchemaBuilderImplementation {
 
 						// We're no longer checking for `excludeFromBuiltInOperations` here because this is
 						// a user or system defined additional query, so by definition it needs to be included here.
+						const graphQLType = graphQLTypeForEntity(metadata, entityFilter);
+
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
-							type: graphQLTypeForEntity(metadata, entityFilter),
+							type: isList ? new GraphQLList(graphQLType) : graphQLType,
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 							extensions: {
 								directives: customMutation.directives ?? {},
@@ -1168,7 +1199,7 @@ class SchemaBuilderImplementation {
 						fields[customMutation.name] = {
 							...customMutation,
 							args: customArgs,
-							type: graphQLScalarForTypeScriptType(type),
+							type: graphQLScalarForTypeScriptType(fieldType),
 							resolve: trace(resolvers.baseResolver(customMutation.resolver)),
 							extensions: {
 								directives: customMutation.directives ?? {},

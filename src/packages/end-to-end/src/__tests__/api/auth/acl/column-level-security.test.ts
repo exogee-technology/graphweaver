@@ -31,7 +31,6 @@ albumDataProvider.backendProviderConfig = {
 	filter: true,
 	pagination: false,
 	orderBy: false,
-	sort: false,
 };
 
 @Entity('Album', {

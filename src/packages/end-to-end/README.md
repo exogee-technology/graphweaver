@@ -5,6 +5,9 @@ This package tests the following:
 - Using the CLI to create a new Graphweaver app
 - Imports a data source to be used to query
 - Makes requests to the API and tests the results
+- Uses complete apps from the `examples` folder
+
+NOTE: Each end to end test scenario has a different approach to preparing a graphweaver app to be tested, and building it in the `app` folder. For example, the `import-rest` step copies an existing, fully baked graphweaver app from the `examples` area. This means that you can modify schema files in that location and then import those changes into the system being tested. On the other hand, the `import-database-sqlite` step uses the approach of generating a graphweaver app from the schema of a database. This means the system being tested will be entirely based on the initial output of the graphweaver generator.
 
 ## Database
 

@@ -48,13 +48,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
 
-      - uses: pnpm/action-setup@v4.0.0
+      - uses: pnpm/action-setup@v4.1.0
         with:
-          version: 8.15.8
+          version: 9.15.3
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
@@ -107,6 +107,7 @@ jobs:
         run: |
           pnpm start-server &
           sleep 5 &&
+          pnpm test-storage-provider &&
           pnpm test-ui-storage-provider &&
           killall node
 

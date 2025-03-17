@@ -109,7 +109,7 @@ describe('API Key Authentication', () => {
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeDefined();
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Bad Request: API Key Authentication Failed. (E0001)'
+			'Bad Request: API Key Authentication Failed.'
 		);
 	});
 
@@ -130,7 +130,7 @@ describe('API Key Authentication', () => {
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeDefined();
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Bad Request: API Key Authentication Failed. (E0002)'
+			'Bad Request: API Key Authentication Failed.'
 		);
 	});
 
@@ -151,7 +151,7 @@ describe('API Key Authentication', () => {
 		assert(response.body.kind === 'single');
 		expect(response.body.singleResult.errors).toBeDefined();
 		expect(response.body.singleResult.errors?.[0]?.message).toBe(
-			'Bad Request: API Key Authentication Failed. (E0003)'
+			'Bad Request: API Key Authentication Failed.'
 		);
 	});
 

@@ -17,6 +17,7 @@ import { Credential, CredentialStorage, Token } from '../entities';
 import {
 	PasswordStrengthError,
 	defaultPasswordStrength,
+	handleLogOnDidResolveOperation,
 	runAfterHooks,
 	updatePasswordCredential,
 } from './utils';
@@ -70,6 +71,8 @@ export type PasswordOptions<D extends CredentialStorage> = {
 	onUserRegistered?(userId: string, context: AuthorizationContext): Promise<null>;
 };
 
+const sensitiveFields = new Set(['password']);
+
 export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 	private provider: BackendProvider<CredentialStorage>;
 	private getUserProfile: (
@@ -116,6 +119,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			getType: () => Credential,
 			resolver: this.createCredential.bind(this),
 			intentionalOverride: true,
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -126,6 +130,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			getType: () => Credential,
 			resolver: this.updateCredential.bind(this),
 			intentionalOverride: true,
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -136,6 +141,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.loginPassword.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -145,6 +151,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.challengePassword.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(sensitiveFields),
 		});
 	}
 
@@ -167,7 +174,7 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 			credential = await this.provider.findOne({
 				username,
 			});
-		} catch (err) {
+		} catch {
 			logger.trace('No credential returned from provider');
 			throw new AuthenticationError(errResponseString);
 		}
@@ -354,6 +361,12 @@ export class Password<D extends CredentialStorage> extends BaseAuthMethod {
 		if (!userProfile) throw new AuthenticationError('Login unsuccessful: Authentication failed.');
 
 		const authToken = await tokenProvider.generateToken(userProfile);
+
+		// This allows people with expired tokens to not get redirected to login while trying to log in.
+		// This happens at the end of this function so that we can be sure all the other checks have passed
+		// before we say it's ok not to redirect to login.
+		context.skipLoginRedirect = true;
+
 		return authToken;
 	}
 

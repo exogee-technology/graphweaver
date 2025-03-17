@@ -1,5 +1,7 @@
 import { pluralise } from '../utils/plural';
-import { CollectEntityInformationArgs, graphweaverMetadata } from '../metadata';
+import { CollectEntityInformationArgs, graphweaverMetadata, HookRegistration } from '../metadata';
+import { HookManager, hookManagerMap, HookRegister } from '../hook-manager';
+import { CreateOrUpdateHookParams, DeleteHookParams, ReadHookParams } from '../types';
 
 const reservedEntityNames = new Set(['GraphweaverMedia']);
 
@@ -7,6 +9,9 @@ export type EntityOptions<G = unknown> = Partial<
 	Omit<CollectEntityInformationArgs<G, any>, 'fields' | 'gqlEntityType'>
 >;
 
+export type CustomHookFunction<G> = (
+	params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>
+) => Promise<Partial<G>> | Partial<G>;
 export function Entity(name: string): ClassDecorator;
 export function Entity<G = unknown>(options: EntityOptions<G>): ClassDecorator;
 export function Entity<G = unknown>(name: string, options: EntityOptions<G>): ClassDecorator;
@@ -35,6 +40,35 @@ export function Entity<G = unknown>(
 		}
 
 		const plural = pluralise(resolvedOptions?.plural ?? name, !!resolvedOptions?.plural);
+
+		function registerHook(
+			hookManager: HookManager<G>,
+			hookType: HookRegister,
+			hook: CustomHookFunction<G>
+		) {
+			hookManager.registerHook(
+				hookType,
+				async (params: CreateOrUpdateHookParams<G> | DeleteHookParams<G> | ReadHookParams<G>) => {
+					const modifiedParams = await Promise.resolve(hook(params));
+					return {
+						...params,
+						...modifiedParams,
+					};
+				}
+			);
+		}
+
+		if (resolvedOptions?.hooks) {
+			const hookManager = hookManagerMap.get(name) || new HookManager<G>();
+
+			for (const hookType of Object.keys(resolvedOptions.hooks) as (keyof HookRegistration<G>)[]) {
+				for (const hook of resolvedOptions?.hooks[hookType] ?? []) {
+					registerHook(hookManager, hookType, hook as CustomHookFunction<G>);
+				}
+			}
+
+			hookManagerMap.set(name, hookManager);
+		}
 
 		// Let's make sure the new name is set on the target
 		Object.defineProperty(target, 'name', { value: name });

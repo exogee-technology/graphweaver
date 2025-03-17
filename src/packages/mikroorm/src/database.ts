@@ -107,6 +107,9 @@ class DatabaseImplementation {
 				let result: T;
 				try {
 					result = await callback();
+				} catch (error) {
+					logger.error('Error in transaction', error);
+					throw error;
 				} finally {
 					delete this.transactionalEm;
 					delete this.transactionInProgressIsolationLevel;
@@ -237,6 +240,13 @@ class DatabaseImplementation {
 
 		logger.trace(`${params.entities?.length}x entities`);
 
+		// Log the params, obfuscating the password used for the connection if there is one.
+		const { password, ...rest } = params;
+		logger.info(
+			{ connectionParams: rest },
+			'Connecting to database using MikroORM. Note: connectionParams have password removed for security.'
+		);
+
 		const orm = await MikroORM.init({
 			validateRequired: false, // Since v5, new entities are validated on runtime (just before executing insert queries), based on the entity metadata
 			contextName: connectionOptions?.connectionManagerId ?? 'default',
@@ -274,11 +284,8 @@ class DatabaseImplementation {
 }
 
 class ConnectionsManager {
-	private connections: Map<string, DatabaseImplementation>;
-
-	constructor() {
-		this.connections = new Map<string, DatabaseImplementation>();
-	}
+	private connections = new Map<string, DatabaseImplementation>();
+	private connectionPromises = new Map<string, Promise<DatabaseImplementation>>();
 
 	getConnections() {
 		return Array.from(this.connections.values());
@@ -294,19 +301,33 @@ class ConnectionsManager {
 		return databaseConnection;
 	}
 
-	public connect = async (id?: string, connectionOptions?: ConnectionOptions) => {
-		if (!id) throw new Error('Error: No id attached to connection.');
-
+	public connect = (id: string, connectionOptions: ConnectionOptions) => {
 		if (this.connections.has(id)) return this.connections.get(id);
-		const database = new DatabaseImplementation();
-		if (connectionOptions) await database.connect(connectionOptions);
-		logger.trace(`Saving database connection with id "${id}".`);
-		this.connections.set(id, database);
+
+		const connect = new Promise<DatabaseImplementation>((resolve, reject) => {
+			const database = new DatabaseImplementation();
+			database
+				.connect(connectionOptions)
+				.then(() => {
+					logger.trace(`Saving database connection with id "${id}".`);
+					this.connections.set(id, database);
+					resolve(database);
+				})
+				.catch(reject);
+		});
+
+		this.connectionPromises.set(id, connect);
+
+		return connect;
 	};
 
 	public database(id: string) {
 		logger.trace(`Finding database connection for id "${id}"`);
 		return this.connections.get(id);
+	}
+
+	public awaitableDatabase(id: string) {
+		return this.connectionPromises.get(id);
 	}
 
 	public async close(id: string) {

@@ -47,6 +47,11 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 	// Xero's API starts balking when we send requests with more than 25 OR filters in them.
 	public readonly maxDataLoaderBatchSize = 25;
 
+	// This is an optional setting that allows you to control how this provider is displayed in the Admin UI.
+	// If you do not set a value, it will default to the backendId. Entities are grouped by
+	// their backend's display name, so if you want to group them in a more specific way, this is the way to do it.
+	public readonly backendDisplayName?: string;
+
 	protected static xero: XeroClient;
 
 	protected static resetXeroClient = () => {
@@ -66,15 +71,17 @@ export class XeroBackendProvider<D = unknown> implements BackendProvider<D> {
 
 	public constructor(
 		protected entityTypeName: string,
-		protected accessor?: XeroDataAccessor<D>
-	) {}
+		protected accessor?: XeroDataAccessor<D>,
+		displayName?: string
+	) {
+		this.backendDisplayName = displayName;
+	}
 
 	// Default backend provider config
 	public readonly backendProviderConfig: BackendProviderConfig = {
 		filter: false,
 		pagination: false,
 		orderBy: false,
-		sort: false,
 	};
 
 	public static clearTokens() {

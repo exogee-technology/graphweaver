@@ -44,6 +44,12 @@ async function main() {
 			}
 		}
 
+		for (const key of Object.keys(packageJson.devDependencies ?? {})) {
+			if (key === 'graphweaver') {
+				packageJson.devDependencies[key] = `file:../local_modules/graphweaver`;
+			}
+		}
+
 		await fs.promises.writeFile(packageJsonPath, JSON.stringify(packageJson, null, 2));
 
 		await execAsync('pwd');

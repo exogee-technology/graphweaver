@@ -1,11 +1,10 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 import { config } from '../../../../config';
 
 test('Check Select field displays correct number of selected items based on initial values', async ({
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: 'For Those About To Rock' }).first().click();
 
@@ -17,7 +16,6 @@ test('Check Select field shows correct number of selected items after adding add
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: '3', exact: true }).click();
 	await page
@@ -25,7 +23,7 @@ test('Check Select field shows correct number of selected items after adding add
 		.filter({ hasText: /^tracks\*3 Selected×$/ })
 		.getByRole('combobox')
 		.click({ delay: 1000 });
-	await page.getByText('"40"').click();
+	await page.getByRole('listbox').getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('4 Selected');
 });
 
@@ -33,7 +31,6 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	page,
 }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
 	await page.getByRole('link', { name: 'Album' }).click();
 	await page.getByRole('cell', { name: 'For Those About To Rock We' }).click();
 	await page
@@ -53,16 +50,13 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 
 test('Should allow navigation around using a keyboard', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
-	await page.getByRole('link', { name: config.datasource }).click();
-	await page.getByRole('link', { name: 'Album' }).click();
+	await page.getByRole('link', { name: 'Employee' }).click();
 
-	await page.getByRole('combobox').nth(1).click();
-	await page.getByRole('combobox').nth(1).press('Tab', { delay: 300 });
-	await page.getByRole('combobox').nth(2).press('ArrowDown', { delay: 300 });
-	await page.getByRole('combobox').nth(2).press('ArrowDown', { delay: 300 });
-	await page.getByRole('combobox').nth(2).press('ArrowDown', { delay: 300 });
-	await page.getByRole('combobox').nth(2).press('Enter', { delay: 300 });
-	await expect(await page.getByText('AC/DC×')).toBeVisible();
-	await page.getByText('AC/DC×').press('Delete');
-	await expect(await page.getByText('AC/DC×')).not.toBeVisible();
+	await page.getByRole('combobox').nth(0).click();
+	await page.getByRole('combobox').nth(0).press('ArrowDown', { delay: 300 });
+	await page.getByRole('combobox').nth(0).press('ArrowDown', { delay: 300 });
+	await page.getByRole('combobox').nth(0).press('Enter', { delay: 300 });
+	await expect(await page.getByText('IT Manager×')).toBeVisible();
+	await page.getByText('IT Manager×').press('Delete');
+	await expect(await page.getByText('IT Manager×')).not.toBeVisible();
 });

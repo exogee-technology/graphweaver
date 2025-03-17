@@ -3,6 +3,7 @@
 	"globalDependencies": [
 		".env",
 		"tsconfig.json",
+		"packages/**/build.js",
 		"packages/builder/src/**/*.ts",
 		"packages/vite-plugin-graphweaver/src/**/*.ts"
 	],

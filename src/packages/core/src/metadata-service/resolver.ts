@@ -1,10 +1,10 @@
-import { AdminUiFieldMetadata } from './field';
+import { hookManagerMap, HookRegister } from '../hook-manager';
+import { graphweaverMetadata } from '../metadata';
+import { getFieldTypeWithMetadata } from '../schema-builder';
+import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
 import { AdminUiEntityMetadata } from './entity';
 import { AdminUiEntityAttributeMetadata } from './entity-attribute';
-import { graphweaverMetadata } from '../metadata';
-import { AdminUIFilterType, BaseContext, RelationshipType, ResolverOptions } from '../types';
-import { getFieldTypeWithMetadata } from '../schema-builder';
-import { hookManagerMap, HookRegister } from '../hook-manager';
+import { AdminUiFieldMetadata } from './field';
 
 const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 	// Check if we have a relationship
@@ -28,7 +28,7 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 		case 'Boolean':
 			return AdminUIFilterType.BOOLEAN;
 		default:
-			return AdminUIFilterType.TEXT;
+			return AdminUIFilterType.DROP_DOWN_TEXT;
 	}
 };
 
@@ -68,10 +68,12 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 		).map((entity) => {
 			const { adminUIOptions, apiOptions, provider } = entity;
 			const backendId = entity.provider?.backendId;
+			const backendDisplayName = entity.provider?.backendDisplayName;
 			const plural = entity.plural;
 
 			const attributes = new AdminUiEntityAttributeMetadata();
 			attributes.exportPageSize = entity.adminUIOptions?.exportPageSize;
+			attributes.clientGeneratedPrimaryKeys = entity.apiOptions?.clientGeneratedPrimaryKeys;
 			attributes.isReadOnly =
 				entity.adminUIOptions?.readonly ??
 				entity.apiOptions?.excludeFromBuiltInOperations ??
@@ -114,6 +116,12 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					hideInTable: field.adminUIOptions?.hideInTable,
 					hideInFilterBar: field.adminUIOptions?.hideInFilterBar,
 					hideInDetailForm: field.adminUIOptions?.hideInDetailForm,
+					detailPanelInputComponent:
+						typeof field.adminUIOptions?.detailPanelInputComponent === 'string'
+							? {
+									name: field.adminUIOptions?.detailPanelInputComponent,
+								}
+							: field.adminUIOptions?.detailPanelInputComponent,
 				};
 
 				// Check if we have an array of related entities
@@ -136,7 +144,9 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 					fieldObject.relationshipType = RelationshipType.MANY_TO_ONE;
 				}
 
-				fieldObject.filter = { type: mapFilterType(fieldObject) };
+				const filterType = field.adminUIOptions?.filterType ?? mapFilterType(fieldObject);
+
+				fieldObject.filter = { type: filterType };
 
 				return fieldObject;
 			});
@@ -149,6 +159,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				name: graphweaverMetadata.federationNameForEntity(entity),
 				plural,
 				backendId,
+				backendDisplayName,
 				primaryKeyField,
 				summaryField,
 				fieldForDetailPanelNavigationId,
@@ -161,6 +172,8 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				supportedAggregationTypes: [
 					...(provider?.backendProviderConfig?.supportedAggregationTypes ?? new Set()),
 				],
+				supportsPseudoCursorPagination:
+					provider?.backendProviderConfig?.supportsPseudoCursorPagination ?? false,
 			};
 		});
 

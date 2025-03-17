@@ -1,0 +1,71 @@
+name: REST UI End to End Tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  auth-ui-end-to-end-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        env:
+          cache-name: cache-pnpm-modules
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.node-version }}-
+
+      - uses: pnpm/action-setup@v4.1.0
+        with:
+          version: 9.15.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+          cache-dependency-path: src/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm i
+
+      - name: Build CLI tool
+        run: pnpm build
+
+      - name: Install Playwright's dependencies
+        working-directory: src/packages/end-to-end
+        run: pnpm playwright install --with-deps chromium
+
+      - name: Build and Setup Rest
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 4
+        run: |
+          pnpm import-rest
+        env:
+          CI: true
+
+      - name: Start and Test Rest Example
+        working-directory: src/packages/end-to-end
+        timeout-minutes: 4
+        run: |
+          pnpm start-server &
+          sleep 5 &&
+          pnpm test-ui-rest &&
+          killall node
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: src/packages/end-to-end/playwright-report/
+          retention-days: 30
+        env:
+          CI: true

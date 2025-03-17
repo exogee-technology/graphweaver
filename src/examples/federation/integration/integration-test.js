@@ -1,5 +1,5 @@
 // Yes, we generally don't want requires, but here we actually do.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const { exec } = require('node:child_process');
 
 // This whole script is here just to assert that the output of the federation test command

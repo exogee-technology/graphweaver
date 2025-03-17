@@ -1,10 +1,18 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Row, RowSelectionState } from '@tanstack/react-table';
-import { Outlet, useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { useMemo, useState } from 'react';
 import { addStabilizationToFilter } from '@exogee/graphweaver-apollo-client';
+import { Row, RowSelectionState } from '@tanstack/react-table';
+import { useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useLocation, useParams, useSearchParams } from 'wouter';
 
+import { Button } from '../button';
+import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
+import { ErrorView } from '../error-view';
+import { Header } from '../header';
+import { ListToolBar } from '../list-toolbar';
+import { Modal } from '../modal';
+import { SelectionBar } from '../selection-bar';
+import { Table } from '../table';
 import {
 	PAGE_SIZE,
 	SortEntity,
@@ -14,24 +22,16 @@ import {
 	useSchema,
 } from '../utils';
 import { convertEntityToColumns } from './columns';
-import { Table } from '../table';
-import { Loader } from '../loader';
-import { Header } from '../header';
 import { QueryResponse, queryForEntityPage } from './graphql';
-import { ListToolBar } from '../list-toolbar';
-import { Modal } from '../modal';
-import { generateDeleteManyEntitiesMutation } from '../detail-panel/graphql';
-import { Button } from '../button';
-import { SelectionBar } from '../selection-bar';
 
-import styles from './styles.module.css';
 import { ExportModal } from '../export-modal';
+import styles from './styles.module.css';
 
-export const EntityList = <TData extends object>() => {
+export const EntityList = <TData extends object>({ children }: { children: React.ReactNode }) => {
 	const { entity: entityName, id } = useParams();
 	if (!entityName) throw new Error('There should always be an entity at this point.');
 
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 	const { entityByName, entityByType } = useSchema();
 	const [search] = useSearchParams();
 	const { sort: sorting, filters } = decodeSearchParams(search);
@@ -47,6 +47,7 @@ export const EntityList = <TData extends object>() => {
 		defaultFilter,
 		fieldForDetailPanelNavigationId,
 		excludeFromTracing,
+		supportsPseudoCursorPagination,
 	} = entity;
 	const columns = useMemo(
 		() => convertEntityToColumns(entity, entityByType),
@@ -75,22 +76,26 @@ export const EntityList = <TData extends object>() => {
 		}
 	);
 
-	if (loading && !data) {
-		return <Loader />;
-	}
 	if (error) {
-		return <pre>{`Error! ${error.message}`}</pre>;
+		return <ErrorView message={error.message} />;
 	}
-	if (!data) {
-		return <pre>{`Error! Unable to load entity.`}</pre>;
+	if (!loading && !data) {
+		return <ErrorView message="Error! Unable to load entity." />;
 	}
 
 	const handleRowClick = <T extends object>(row: Row<T>) => {
-		navigate(`${row.original[fieldForDetailPanelNavigationId as keyof T]}`);
+		setLocation(
+			routeFor({
+				entity,
+				filters,
+				sort: sorting,
+				id: row.original[fieldForDetailPanelNavigationId as keyof T] as string,
+			})
+		);
 	};
 
 	const handleSortClick = (newSort: SortEntity) => {
-		navigate(
+		setLocation(
 			routeFor({
 				entity,
 				filters,
@@ -101,15 +106,28 @@ export const EntityList = <TData extends object>() => {
 	};
 
 	const handleFetchNextPage = async () => {
-		const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+		const lastElement = data?.result?.[data.result.length - 1];
+
+		let filter = variables.filter ?? {};
+		let offset = 0;
+		const sortedByPrimaryKeyOnly = Object.keys(sort).length === 1 && Object.keys(sort)[0] === entity.primaryKeyField;
+		if (supportsPseudoCursorPagination && sortedByPrimaryKeyOnly) {
+			// We don't yet have a way to define sort order, so for now we
+			// can only page this way in this case.
+			filter = addStabilizationToFilter(filter, sort, lastElement);
+		} else {
+			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
+			offset = nextPage * PAGE_SIZE;
+		}
+
 		fetchMore({
 			variables: {
 				...variables,
 				pagination: {
 					...variables.pagination,
-					offset: nextPage * PAGE_SIZE,
+					offset,
 				},
-				filter: addStabilizationToFilter(variables.filter ?? {}, sort, data.result?.[0]),
+				filter,
 			},
 		});
 	};
@@ -157,7 +175,7 @@ export const EntityList = <TData extends object>() => {
 	return (
 		<div className={styles.wrapper}>
 			<Header>
-				<ListToolBar count={data.aggregate?.count} onExportToCSV={handleShowExportModal} />
+				<ListToolBar count={data?.aggregate?.count} onExportToCSV={handleShowExportModal} />
 			</Header>
 			<Table
 				loading={loading}
@@ -205,7 +223,7 @@ export const EntityList = <TData extends object>() => {
 			{showExportModal && (
 				<ExportModal closeModal={() => setShowExportModal(false)} sort={sort} filters={filters} />
 			)}
-			<Outlet />
+			{children}
 		</div>
 	);
 };

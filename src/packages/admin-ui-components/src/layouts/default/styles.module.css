@@ -1,3 +1,7 @@
+:root {
+	--side-menu-slide-animation-time: 300ms;
+}
+
 .wrapper {
 	flex-direction: column;
 	user-select: none;
@@ -28,10 +32,68 @@
 }
 
 .content {
-	padding: 20px 20px 0px 20px;
+	padding: 20px;
 	flex-basis: 0;
 	flex-grow: 1;
 	min-width: 0;
 	display: flex;
 	flex-direction: column;
+	min-width: 380px;
+}
+
+.titleBar {
+	display: none;
+	height: 44px;
+	max-height: 44px;
+	min-height: 44px;
+	fill: white;
+	flex-direction: column;
+	justify-content: center;
+	padding: 0 20px;
+}
+
+.openMenu {
+	transform: translate3d(0, 0, 0);
+}
+
+.sideMenu {
+	max-width: 320px;
+	min-width: 320px;
+	height: 100%;
+	align-self: start;
+	background: var(--detail-bg-color);
+	border: 1px solid var(--detail-border-color);
+	border-radius: 6px;
+
+	/* Make sure the div starts off the screen */
+	transform: translateX(-100%);
+	transition: transform var(--side-menu-slide-animation-time);
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.sideMenu.slideIn {
+	transform: translateX(0%);
+}
+
+@media only screen and (max-width: 600px) {
+	.container {
+		flex-direction: column;
+	}
+
+	.resizer {
+		display: none;
+	}
+	.sidebar {
+		position: absolute;
+		z-index: 3;
+		transform: translate3d(-274px, 10px, 10px);
+	}
+	.titleBar {
+		display: flex;
+	}
+
+	.content {
+		height: calc(100% - 44px);
+	}
 }

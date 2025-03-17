@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'wouter';
 import { Form, Formik, FormikHelpers } from 'formik';
 import { useMutation } from '@apollo/client';
 import { GraphweaverLogo, Alert, Button } from '@exogee/graphweaver-admin-ui-components';
@@ -21,7 +21,7 @@ export const ResetPassword = () => {
 	const [resetPassword] = useMutation<{ result: boolean }>(RESET_PASSWORD);
 	const [error, setError] = useState<Error | undefined>();
 	const [searchParams] = useSearchParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	const token = searchParams.get('token');
 	const redirectUri = searchParams.get('redirect_uri');
@@ -43,7 +43,7 @@ export const ResetPassword = () => {
 			});
 
 			const redirectUrl = redirectUri ?? new URL('/');
-			navigate(`${authPath}${loginPath}?redirect_uri=${redirectUrl}`, {
+			setLocation(`${authPath}${loginPath}?redirect_uri=${redirectUrl}`, {
 				replace: true,
 			});
 		} catch (error) {
@@ -55,7 +55,6 @@ export const ResetPassword = () => {
 	return (
 		<Formik<Form> initialValues={{ password: '', confirm: '' }} onSubmit={handleOnSubmit}>
 			{({ isSubmitting }) => (
-				// @ts-expect-error - Formik typing issue https://github.com/jaredpalmer/formik/issues/2120#issuecomment-566515114
 				<Form className={styles.wrapper}>
 					<GraphweaverLogo width="52" className={styles.logo} />
 					<div className={styles.titleContainer}>Please enter your new password</div>
@@ -63,7 +62,7 @@ export const ResetPassword = () => {
 					{!!error && <Alert>{error.message}</Alert>}
 
 					<div className={styles.inputContainer}>
-						<PasswordComponent />
+						<PasswordComponent autofocus />
 						<ConfirmComponent />
 					</div>
 

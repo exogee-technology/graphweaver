@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'wouter';
 import { Button, GraphweaverLogo, Spacer, StarField } from '..';
 import { ErrorIcon } from '../assets';
 import styles from './styles.module.css';

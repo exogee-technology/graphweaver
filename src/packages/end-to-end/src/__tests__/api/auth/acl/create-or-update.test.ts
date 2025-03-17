@@ -3,7 +3,7 @@ process.env.PASSWORD_AUTH_REDIRECT_URI = '*';
 import gql from 'graphql-tag';
 import assert from 'assert';
 import Graphweaver from '@exogee/graphweaver-server';
-import { Field, ID, BaseDataProvider, Entity } from '@exogee/graphweaver';
+import { Field, ID, BaseDataProvider, Entity, Filter } from '@exogee/graphweaver';
 import {
 	CredentialStorage,
 	UserProfile,
@@ -14,13 +14,19 @@ import {
 	setAddUserToContext,
 } from '@exogee/graphweaver-auth';
 
-const user = new UserProfile({
-	id: '1',
-	roles: ['admin'],
-	displayName: 'Test User',
-});
+class AlbumDataProvider extends BaseDataProvider<Album> {
+	async findOne(filter: Filter<Album>) {
+		if (String(filter.id) === '1') {
+			return {
+				id: 1,
+				description: 'dummy album',
+			};
+		}
 
-const albumDataProvider = new BaseDataProvider<any>('album');
+		return null;
+	}
+}
+const albumDataProvider = new AlbumDataProvider('album');
 
 @Entity('Album', {
 	provider: albumDataProvider,
@@ -32,6 +38,12 @@ export class Album {
 	@Field(() => String)
 	description!: string;
 }
+
+const user = new UserProfile({
+	id: '1',
+	roles: ['admin'],
+	displayName: 'Test User',
+});
 
 const cred: CredentialStorage = {
 	id: '1',

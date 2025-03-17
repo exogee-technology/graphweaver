@@ -21,8 +21,16 @@
       "path": "src/examples/federation"
     },
     {
+      "name": "➡️ Example: Microsoft Entra",
+      "path": "src/examples/microsoft-entra"
+    },
+    {
       "name": "➡️ Example: MySQL and PostgreSQL Databases",
       "path": "src/examples/databases"
+    },
+    {
+      "name": "➡️ Example: Okta",
+      "path": "src/examples/okta"
     },
     {
       "name": "➡️ Example: REST API",
@@ -99,6 +107,10 @@
     {
       "name": "📦 @exogee/graphweaver-rest",
       "path": "src/packages/rest"
+    },
+    {
+      "name": "📦 @exogee/graphweaver-rest-legacy",
+      "path": "src/packages/rest-legacy"
     },
     {
       "name": "📦 @exogee/graphweaver-scalars",

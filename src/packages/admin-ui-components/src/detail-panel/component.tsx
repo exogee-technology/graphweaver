@@ -2,7 +2,7 @@ import { useMutation, useQuery, FetchResult } from '@apollo/client';
 import clsx from 'clsx';
 import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams, useSearchParams } from 'wouter';
 import toast from 'react-hot-toast';
 
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
@@ -12,6 +12,8 @@ import { Modal } from '../modal';
 import {
 	CustomField,
 	decodeSearchParams,
+	DetailPanelInputComponentOption,
+	Entity,
 	EntityField,
 	queryForEntity,
 	routeFor,
@@ -29,11 +31,13 @@ import {
 	LinkField,
 	MediaField,
 	TextField,
+	DateField,
+	RichTextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 
 import { dataTransforms } from './use-data-transform';
-import { isValueEmpty } from './util';
+import { isValueEmpty, parseValueForForm } from './util';
 import styles from './styles.module.css';
 
 interface ResultBaseType {
@@ -46,27 +50,54 @@ export enum PanelMode {
 	EDIT = 'EDIT',
 }
 
-const isFieldReadonly = (field: EntityField | CustomField<unknown>) =>
-	field.type === 'ID' || field.type === 'ID!' || field.attributes?.isReadOnly;
+const isFieldReadonly = (
+	panelMode: PanelMode,
+	entity: Entity,
+	field: EntityField | CustomField<unknown>
+) => {
+	// Regardless of if we're creating or editing, IDs should always be read only
+	// unless the entity has client generated primary keys.
+	if (
+		(field.type === 'ID' || field.type === 'ID!') &&
+		!entity.attributes.clientGeneratedPrimaryKeys
+	) {
+		return true;
+	}
+
+	// If the entity as a whole is read only, then all fields should be read only.
+	if (entity.attributes.isReadOnly) return true;
+
+	// If we're editing and a field is read only, it should be shown as read only.
+	// However if we're creating, we may need to write the value for the initial creation.
+	if (panelMode !== PanelMode.CREATE && field.attributes?.isReadOnly) return true;
+
+	return false;
+};
 
 const getField = ({
+	entity,
 	field,
 	autoFocus,
 	panelMode,
 }: {
+	entity: Entity;
 	field: EntityField;
 	autoFocus: boolean;
 	panelMode: PanelMode;
 }) => {
-	// In Create mode, all readonly fields should be writeable.
-	const isReadonly = panelMode !== PanelMode.CREATE && isFieldReadonly(field);
+	// In Create mode, all readonly fields should be writeable except ID fields
+	const isReadonly = isFieldReadonly(panelMode, entity, field);
 
 	if (field.type === 'JSON') {
 		return <JSONField name={field.name} autoFocus={autoFocus} disabled={isReadonly} />;
 	}
 
 	if (field.type === 'Boolean') {
-		return <BooleanField name={field.name} autoFocus={autoFocus} />;
+		return <BooleanField field={field} autoFocus={autoFocus} disabled={isReadonly} />;
+	}
+
+	if (field.type === 'Date') {
+		return <DateField field={field} />;
 	}
 
 	if (field.type === 'GraphweaverMedia') {
@@ -77,8 +108,9 @@ const getField = ({
 		// If the field is readonly and a relationship, show a link to the entity/entities
 		if (isReadonly) {
 			return <LinkField name={field.name} field={field} />;
+		} else {
+			return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 		}
-		return <RelationshipField name={field.name} field={field} autoFocus={autoFocus} />;
 	}
 
 	const { enumByName } = useSchema();
@@ -90,6 +122,24 @@ const getField = ({
 				typeEnum={enumObject}
 				multiple={field.isArray}
 				autoFocus={autoFocus}
+				disabled={isReadonly}
+			/>
+		);
+	}
+
+	if (
+		field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.RICH_TEXT ||
+		field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+	) {
+		return (
+			<RichTextField
+				key={field.name}
+				field={field}
+				isReadOnly={!!isReadonly}
+				options={field.detailPanelInputComponent?.options ?? {}}
+				asMarkdown={
+					field.detailPanelInputComponent?.name === DetailPanelInputComponentOption.MARKDOWN
+				}
 			/>
 		);
 	}
@@ -102,10 +152,12 @@ const getField = ({
 };
 
 const DetailField = ({
+	entity,
 	field,
 	autoFocus,
 	panelMode,
 }: {
+	entity: Entity;
 	field: EntityField;
 	autoFocus: boolean;
 	panelMode: PanelMode;
@@ -115,7 +167,7 @@ const DetailField = ({
 		<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 			<DetailPanelFieldLabel fieldName={field.name} required={isRequired} />
 
-			{getField({ field, autoFocus, panelMode })}
+			{getField({ entity, field, autoFocus, panelMode })}
 		</div>
 	);
 };
@@ -153,6 +205,7 @@ const PersistForm = ({ name }: { name: string }) => {
 
 const DetailForm = ({
 	initialValues,
+	entity,
 	detailFields,
 	onCancel,
 	onSubmit,
@@ -161,6 +214,7 @@ const DetailForm = ({
 	panelMode,
 }: {
 	initialValues: Record<string, any>;
+	entity: Entity;
 	detailFields: (EntityField | CustomField)[];
 	onSubmit: (values: any, actions: FormikHelpers<any>) => void;
 	onCancel: () => void;
@@ -183,11 +237,12 @@ const DetailForm = ({
 					errors[field.name] = 'Field is Required';
 				}
 
-				if (field.type === 'JSON') {
+				if (field.type === 'JSON' && values[field.name]) {
 					// Let's ensure we can parse the JSON.
 					try {
 						JSON.parse(values[field.name]);
 					} catch (error) {
+						console.error(error);
 						errors[field.name] = 'Invalid JSON';
 					}
 				}
@@ -203,7 +258,7 @@ const DetailForm = ({
 				.join('\n');
 
 			// TODO EXOGW-150: instead of using toast, we should use a formik error message on the form itself
-			toast.error(message, { duration: 5000 });
+			if (message) toast.error(message, { duration: 5000 });
 
 			return errors;
 		},
@@ -233,7 +288,9 @@ const DetailForm = ({
 		[dataTransforms]
 	);
 
-	const firstEditableField = detailFields.find((field) => !isFieldReadonly(field));
+	const firstEditableField = detailFields.find(
+		(field) => !isFieldReadonly(panelMode, entity, field)
+	);
 
 	return (
 		<Formik
@@ -248,9 +305,8 @@ const DetailForm = ({
 				<Form className={styles.detailFormContainer}>
 					<div className={styles.detailFieldList}>
 						{detailFields.map((field) => {
-							if (field.type === 'custom') {
-								if (field.hideInDetailForm) return null;
-
+							if (field.hideInDetailForm) return null;
+							else if (field.type === 'custom') {
 								return (
 									<CustomFieldComponent
 										key={field.name}
@@ -263,6 +319,7 @@ const DetailForm = ({
 								return (
 									<DetailField
 										key={field.name}
+										entity={entity}
 										field={field}
 										autoFocus={field === firstEditableField}
 										panelMode={panelMode}
@@ -295,7 +352,7 @@ export const DetailPanel = () => {
 	const modalRedirectUrl = search.get('modalRedirectUrl');
 
 	const { id, entity } = useParams();
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 	const { selectedEntity } = useSelectedEntity();
 	const { entityByName, entityByType } = useSchema();
 
@@ -321,12 +378,12 @@ export const DetailPanel = () => {
 		// If the path does not include the entity name, then we've already moved to a different entity
 		// Navigate to the current path to close the overlay
 		if (!regexPattern.test(path)) {
-			navigate(path);
+			setLocation(path);
 			return;
 		}
 
 		const { filters, sort } = decodeSearchParams(search);
-		navigate(routeFor({ entity: selectedEntity, filters, sort }));
+		setLocation(routeFor({ entity: selectedEntity, filters, sort }));
 	};
 
 	const customFieldsToShow =
@@ -364,7 +421,7 @@ export const DetailPanel = () => {
 	const initialValues = formFields.reduce(
 		(acc, field) => {
 			const result = savedSessionState ?? data?.result;
-			const value = result?.[field.name as keyof typeof result];
+			const value = parseValueForForm(field.type, result?.[field.name as keyof typeof result]);
 			acc[field.name] = value ?? field.initialValue ?? undefined;
 			return acc;
 		},
@@ -395,34 +452,37 @@ export const DetailPanel = () => {
 
 	const navigateToDetailForEntity = (id?: string) => {
 		if (!id) return;
-		navigate(routeFor({ entity: selectedEntity, id }));
+		setLocation(routeFor({ entity: selectedEntity, id }));
 	};
 
 	const handleOnSubmit = async (values: any, actions: FormikHelpers<any>) => {
 		try {
-			let result: FetchResult;
+			let result: FetchResult | undefined = undefined;
 
-			if (panelMode === PanelMode.EDIT) {
-				// Update an existing entity
-				result = await updateEntity({
-					variables: {
-						input: values,
-					},
-				});
-			} else {
-				// Create a new entity
-				result = await createEntity({
-					variables: {
-						input: values,
-					},
-					refetchQueries: [`${selectedEntity.plural}List`],
-				});
+			try {
+				if (panelMode === PanelMode.EDIT) {
+					// Update an existing entity
+					result = await updateEntity({
+						variables: {
+							input: values,
+						},
+					});
+				} else {
+					// Create a new entity
+					result = await createEntity({
+						variables: {
+							input: values,
+						},
+						refetchQueries: [`${selectedEntity.plural}List`],
+					});
+				}
+			} catch (error: any) {
+				console.error(error);
+				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
 			}
 
-			if (!result.data) {
-				return toast.error('No data received in response', {
-					duration: 5000,
-				});
+			if (!result?.data) {
+				return toast.error('No data received in response', { duration: 5000 });
 			}
 
 			clearSessionState();
@@ -468,7 +528,7 @@ export const DetailPanel = () => {
 	const handleConfirmLeave = () => {
 		if (!modalRedirectUrl) return;
 
-		navigate(modalRedirectUrl, { replace: true });
+		setLocation(modalRedirectUrl, { replace: true });
 	};
 
 	const handleCancelLeave = () => {
@@ -496,6 +556,7 @@ export const DetailPanel = () => {
 							<DetailForm
 								initialValues={initialValues}
 								detailFields={formFields}
+								entity={selectedEntity}
 								onCancel={closeModal}
 								onSubmit={handleOnSubmit}
 								persistName={persistName}

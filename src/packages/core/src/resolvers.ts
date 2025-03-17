@@ -6,13 +6,13 @@ import { BaseContext, TraceOptions } from './types';
 import {
 	AggregationResult,
 	AggregationType,
-	BaseLoaders,
 	CreateOrUpdateHookParams,
 	DeleteHookParams,
 	DeleteManyHookParams,
 	EntityMetadata,
 	FieldMetadata,
 	Filter,
+	GraphweaverSchemaInfoExtensionWithSourceEntity,
 	HookRegister,
 	ReadHookParams,
 	Resolver,
@@ -27,10 +27,16 @@ import {
 } from '.';
 import { traceSync, trace } from './open-telemetry';
 import { QueryManager } from './query-manager';
-import { applyDefaultValues, hasId, withTransaction } from './utils';
+import { applyDefaultValues, hasId, isDefined, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
-
-type ID = string | number | bigint;
+import {
+	getGraphweaverMutationType,
+	constructFilterForRelatedEntity,
+	getDataEntities,
+	getIdValue,
+	getLoaderFilter,
+	ID,
+} from './utils/resolver.utils';
 
 export const baseResolver = (resolver: Resolver) => {
 	return async (
@@ -159,7 +165,7 @@ const _list = async <G, D>(
 			: (hookParams.args?.filter as Filter<D> | undefined);
 
 	let result = await QueryManager.find<D>({
-		entityName: entity.name,
+		entityMetadata: entity,
 		filter: transformedFilter,
 		pagination: hookParams.args?.pagination,
 	});
@@ -201,8 +207,9 @@ const _createOrUpdate = async <G>(
 		throw new Error('Could not determine entity name from return type.');
 	}
 
-	const entity = (graphQLType.extensions.graphweaverSchemaInfo as any)
-		?.sourceEntity as EntityMetadata<any, any>;
+	const schemaInfo = graphQLType.extensions
+		.graphweaverSchemaInfo as GraphweaverSchemaInfoExtensionWithSourceEntity;
+	const entity = schemaInfo.sourceEntity;
 
 	if (!entity) {
 		throw new Error(
@@ -224,6 +231,8 @@ const _createOrUpdate = async <G>(
 	const inputArray = Array.isArray(input) ? input : [input];
 
 	return withTransaction(entity.provider, async () => {
+		const graphweaverMutationType = getGraphweaverMutationType(info);
+
 		// Extracted common properties
 		const hookManager = hookManagerMap.get(entity.name);
 		const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
@@ -235,17 +244,74 @@ const _createOrUpdate = async <G>(
 		// Separate Create and Update items
 		const updateItems: Partial<G>[] = [];
 		const createItems: Partial<G>[] = [];
-		for (const item of inputArray) {
-			if (hasId(entity, item)) {
-				updateItems.push(item);
-			} else {
-				createItems.push(item);
+		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
+
+		// In this very specific case, we can't figure out what to do unless we query the underlying
+		// provider for each entity. We'll at least do it with an _in query.
+		if (
+			entity.apiOptions?.clientGeneratedPrimaryKeys &&
+			graphweaverMutationType === 'createOrUpdateMany'
+		) {
+			// The only way to know if this is a create or update is to see if the
+			// IDs already exist or not.
+			const lookup = new Map<string, Partial<G>>();
+			for (const item of inputArray) {
+				lookup.set(item[primaryKeyField] as string, item);
+			}
+
+			const existingEntities = await entity.provider?.find({
+				filter: {
+					[`${String(primaryKeyField)}_in`]: lookup.keys(),
+				},
+			});
+
+			for (const existingEntity of existingEntities ?? []) {
+				const existingEntityKey = existingEntity[primaryKeyField] as string;
+				const inputEntity = lookup.get(existingEntityKey);
+				if (inputEntity) {
+					updateItems.push(inputEntity);
+					lookup.delete(existingEntityKey);
+				} else {
+					throw new Error(
+						`Could not locate input entity for ID ${existingEntityKey}. This should not happen.`
+					);
+				}
+			}
+
+			for (const remainingItem of lookup.values()) {
+				createItems.push(remainingItem);
+			}
+		} else if (
+			graphweaverMutationType === 'createOne' ||
+			graphweaverMutationType === 'createMany'
+		) {
+			// If they called create they definitely meant to create.
+			createItems.push(...inputArray);
+		} else if (
+			graphweaverMutationType === 'updateOne' ||
+			graphweaverMutationType === 'updateMany'
+		) {
+			// Likewise, if they called update they definitely meant to update.
+			updateItems.push(...inputArray);
+		} else {
+			// Ok, we're in createOrUpdate, but server is generating IDs, so we can tell if they
+			// meant to create or update just by whether there's an ID or not.
+			for (const item of inputArray) {
+				if (hasId(entity, item)) {
+					updateItems.push(item);
+				} else {
+					createItems.push(item);
+				}
 			}
 		}
 
 		// Extract ids of items being updated
-		const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(entity) as keyof G;
-		const updateItemIds = updateItems.map((item) => item[primaryKeyField as keyof typeof item]);
+		const updateItemIds = new Set(
+			updateItems.map((item) =>
+				// Normalise the type to a string, as string will always be able to hold whatever primary key type is used.
+				String(item[primaryKeyField as keyof typeof item])
+			)
+		);
 
 		// Prepare updateParams and run hook if needed
 		const updateParams: CreateOrUpdateHookParams<G> = {
@@ -274,10 +340,10 @@ const _createOrUpdate = async <G>(
 
 		// Filter update and create entities
 		let updatedEntities = entities.filter(
-			(entity) => entity && updateItemIds.includes(entity[primaryKeyField])
+			(entity) => entity && updateItemIds.has(String(entity[primaryKeyField]))
 		);
 		let createdEntities = entities.filter(
-			(entity) => entity && !updateItemIds.includes(entity[primaryKeyField])
+			(entity) => entity && !updateItemIds.has(String(entity[primaryKeyField]))
 		);
 
 		// Run after hooks for update and create entities
@@ -347,11 +413,12 @@ const _deleteOne = async <G extends { name: string }>(
 
 	const success = await entity.provider.deleteOne(hookParams.args.filter);
 
-	hookManager &&
-		(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+	if (hookManager) {
+		await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 			...hookParams,
 			deleted: success,
-		}));
+		});
+	}
 
 	return success;
 };
@@ -401,11 +468,12 @@ const _deleteMany = async <G>(
 
 		const success = await entity.provider.deleteMany(hookParams.args?.filter);
 
-		hookManager &&
-			(await hookManager.runHooks(HookRegister.AFTER_DELETE, {
+		if (hookManager) {
+			await hookManager.runHooks(HookRegister.AFTER_DELETE, {
 				...hookParams,
 				deleted: success,
-			}));
+			});
+		}
 
 		return success;
 	});
@@ -471,7 +539,7 @@ const _aggregate = async <G extends { name: string }>(
 			: (hookParams.args?.filter as Filter<any> | undefined);
 
 	const flattenedFilter = await QueryManager.flattenFilter<any>({
-		entityName: entity.name,
+		entityMetadata: entity,
 		filter: transformedFilter,
 	});
 
@@ -490,9 +558,10 @@ const _aggregate = async <G extends { name: string }>(
 };
 
 const _listRelationshipField = async <G, D, R, C extends BaseContext>(
-	{ source, args: { filter }, context, fields, info }: ResolverOptions<{ filter: Filter<R> }, C, G>,
+	resolverOptions: ResolverOptions<{ filter: Filter<R> }, C, G>,
 	trace?: TraceOptions
 ) => {
+	const { source, context, fields, info } = resolverOptions;
 	trace?.span.updateName(
 		`Resolver - ListRelationshipField ${info.path.typename} - ${info.fieldName}`
 	);
@@ -501,7 +570,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	if (!info.path.typename)
 		throw new Error(`No typename found in path for ${info.path}, this should not happen.`);
 
-	const entity = graphweaverMetadata.getEntityByName(info.path.typename);
+	const entity = graphweaverMetadata.getEntityByName<G, D>(info.path.typename);
 	if (!entity) {
 		throw new Error(`Entity ${info.path.typename} not found in metadata. This should not happen.`);
 	}
@@ -512,30 +581,9 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	const field = entity.fields[info.fieldName];
 	const { id, relatedField } = field.relationshipInfo ?? {};
 
-	let idValue: ID | undefined = undefined;
-	if (id && typeof id === 'function') {
-		// If the id is a function, we'll call it with the source data to get the id value.
-		idValue = id(dataEntityForGraphQLEntity<G, D>(source as any));
-	} else if (id) {
-		// else if the id is a string, we'll try to get the value from the source data.
-		const valueOfForeignKey = dataEntityForGraphQLEntity<G, D>(source as any)?.[id as keyof D];
+	const idValue = getIdValue<G, D>(id, source);
 
-		// If the value is a string or number, we'll use it as the id value.
-		if (
-			typeof valueOfForeignKey === 'string' ||
-			typeof valueOfForeignKey === 'number' ||
-			typeof valueOfForeignKey === 'bigint'
-		) {
-			idValue = valueOfForeignKey;
-		} else {
-			// The ID value must be a string or a number otherwise we'll throw an error.
-			throw new Error(
-				'Could not determine id value for relationship field only string or numbers are supported.'
-			);
-		}
-	}
-
-	if (typeof existingData === 'undefined' && !idValue && !field.relationshipInfo?.relatedField) {
+	if (existingData === undefined && !isDefined(idValue) && !relatedField) {
 		// id is null and we are loading a single instance so let's return null
 		return null;
 	}
@@ -552,21 +600,14 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		graphweaverMetadata.primaryKeyFieldForEntity(relatedEntityMetadata);
 
 	// We need to construct a filter for the related entity and _and it with the user supplied filter.
-	const _and: Filter<R>[] = [];
-
-	// If we have a user supplied filter, add it to the _and array.
-	if (filter) _and.push(filter);
-
-	// Lets check the relationship type and add the appropriate filter.
-	if (idValue) {
-		_and.push({ [relatedPrimaryKeyField]: idValue } as Filter<R>);
-	} else if (relatedField) {
-		_and.push({
-			[relatedField]: { [sourcePrimaryKeyField]: source[sourcePrimaryKeyField] },
-		} as Filter<R>);
-	}
-
-	const relatedEntityFilter = { _and } as Filter<R>;
+	const { relatedEntityFilter, relationshipFilterChunk } = constructFilterForRelatedEntity({
+		resolverOptions,
+		idValue,
+		relatedPrimaryKeyField,
+		relatedField,
+		relatedEntityMetadata,
+		sourcePrimaryKeyField,
+	});
 
 	const params: ReadHookParams<R> = {
 		args: { filter: relatedEntityFilter },
@@ -582,7 +623,7 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 	// Ok, now we've run our hooks and validated permissions, let's first check if we already have the data.
 	logger.trace('Checking for existing data.');
 
-	if (typeof existingData !== 'undefined') {
+	if (existingData !== undefined) {
 		logger.trace({ existingData }, 'Existing data found, returning.');
 
 		const entities = [existingData].flat();
@@ -598,30 +639,22 @@ const _listRelationshipField = async <G, D, R, C extends BaseContext>(
 		logger.trace({ before: existingData, after: hookEntities }, 'After read hooks ran');
 
 		return isList ? hookEntities : hookEntities[0];
+	} else {
+		logger.trace('No existing data found.');
 	}
 
 	logger.trace('Loading from BaseLoaders');
 
-	let dataEntities: D[] | undefined = undefined;
-	if (field.relationshipInfo?.relatedField) {
-		logger.trace('Loading with loadByRelatedId');
+	const loaderFilter = getLoaderFilter(hookParams, relationshipFilterChunk);
 
-		// This should be typed as <gqlEntityType, relatedEntityType>
-		dataEntities = await BaseLoaders.loadByRelatedId<R, D>({
-			gqlEntityType,
-			relatedField: field.relationshipInfo.relatedField as keyof D & string,
-			id: String(source[sourcePrimaryKeyField]),
-			filter: relatedEntityFilter as Filter<typeof gqlEntityType>,
-		});
-	} else if (idValue) {
-		logger.trace('Loading with loadOne');
-
-		const dataEntity = await BaseLoaders.loadOne<R, D>({
-			gqlEntityType,
-			id: String(idValue),
-		});
-		dataEntities = [dataEntity];
-	}
+	const dataEntities = await getDataEntities<G, D, R>({
+		source,
+		idValue,
+		field,
+		sourcePrimaryKeyField,
+		loaderFilter,
+		gqlEntityType,
+	});
 
 	const entities = (dataEntities ?? []).map((dataEntity) =>
 		fromBackendEntity(relatedEntityMetadata, dataEntity)
@@ -886,7 +919,7 @@ export const aggregateRelationshipField = (
 			logger.trace('Aggregating with related field');
 
 			const result = await relatedEntityMetadata.provider?.aggregate?.(
-				relatedEntityFilter,
+				hookParams.args?.filter,
 				requestedAggregations
 			);
 

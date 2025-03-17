@@ -12,6 +12,7 @@ import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/g
 import { AuthenticationType } from '../../types';
 import { AuthenticationBaseEntity } from '../entities';
 import { BaseAuthMethod } from './base-auth-method';
+import { handleLogOnDidResolveOperation } from './utils';
 
 const config = {
 	rate: {
@@ -44,6 +45,8 @@ export interface MagicLinkOptions {
 // For now this is just a uuid
 const createToken = randomUUID;
 
+const apiKeySensitiveFields = new Set(['token']);
+
 export class MagicLink extends BaseAuthMethod {
 	private provider: MagicLinkProvider;
 	private getUser: (username: string) => Promise<UserProfile<unknown>>;
@@ -73,6 +76,7 @@ export class MagicLink extends BaseAuthMethod {
 			},
 			getType: () => Token,
 			resolver: this.verifyLoginMagicLink.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(apiKeySensitiveFields),
 		});
 
 		graphweaverMetadata.addMutation({
@@ -88,6 +92,7 @@ export class MagicLink extends BaseAuthMethod {
 				token: () => String,
 			},
 			resolver: this.verifyChallengeMagicLink.bind(this),
+			logOnDidResolveOperation: handleLogOnDidResolveOperation(apiKeySensitiveFields),
 		});
 	}
 
@@ -100,7 +105,7 @@ export class MagicLink extends BaseAuthMethod {
 			if (!user?.id) {
 				throw new Error('User id not returned from getUser child implementation');
 			}
-		} catch (err) {
+		} catch {
 			logger.warn(`User with username ${username} does not exist or is not active, silently fail.`);
 			return;
 		}
@@ -216,8 +221,15 @@ export class MagicLink extends BaseAuthMethod {
 
 	async verifyLoginMagicLink({
 		args: { username, token },
-	}: ResolverOptions<{ username: string; token: string }>): Promise<Token> {
-		return this.verifyMagicLink(username, token);
+		context,
+	}: ResolverOptions<{ username: string; token: string }, AuthorizationContext>): Promise<Token> {
+		const result = await this.verifyMagicLink(username, token);
+
+		// If they have an expired token while successfully trying to verify a magic link, they don't actually need to get
+		// redirected to login.
+		context.skipLoginRedirect = true;
+
+		return result;
 	}
 
 	async sendChallengeMagicLink({

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'wouter';
 import { useMutation } from '@apollo/client';
 import {
 	GraphweaverLogo,

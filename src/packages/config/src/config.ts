@@ -94,11 +94,22 @@ export interface BuildOptions {
 	onResolveViteConfiguration(options: InlineConfig): Promise<InlineConfig> | InlineConfig;
 }
 
+export interface ImportOptions {
+	source?: 'mysql' | 'postgresql' | 'sqlite';
+	dbName?: string;
+	host?: string;
+	port?: number;
+	user?: string;
+	password?: string;
+	overwrite?: boolean;
+}
+
 export interface ConfigOptions {
 	backend: BackendOptions;
 	adminUI: AdminUIOptions;
 	start: StartOptions;
 	build: BuildOptions;
+	import: ImportOptions;
 }
 
 export const defaultConfig = (): ConfigOptions => {
@@ -125,6 +136,7 @@ export const defaultConfig = (): ConfigOptions => {
 			onResolveEsbuildConfiguration: (options) => options,
 			onResolveViteConfiguration: (options) => options,
 		},
+		import: {},
 	};
 };
 
@@ -135,7 +147,7 @@ export const config = (
 	try {
 		const customConfigPath = join(configRoot, configFileName);
 
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const customConfig = require(customConfigPath);
 		if (!customConfig) throw new Error();
 

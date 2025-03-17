@@ -1,9 +1,9 @@
-import { useEffect, useMemo } from 'react';
 import { InMemoryCache, useQuery } from '@apollo/client';
 import { generateTypePolicies } from '@exogee/graphweaver-apollo-client';
+import { JSX, useEffect, useMemo } from 'react';
 
-import { SCHEMA_QUERY } from './graphql';
 import { PanelMode } from '../detail-panel';
+import { SCHEMA_QUERY } from './graphql';
 
 export interface Schema {
 	entities: Entity[];
@@ -25,12 +25,14 @@ export interface Enum {
 export interface Entity {
 	name: string;
 	plural: string;
-	backendId: string;
+	backendId?: string;
+	backendDisplayName?: string;
 	primaryKeyField: string;
 	// TODO: Type so it matches a field name on the entity instead of just string.
 	summaryField?: string;
 	fieldForDetailPanelNavigationId: string;
 	supportedAggregationTypes: AggregationType[];
+	supportsPseudoCursorPagination: boolean;
 	fields: EntityField[];
 	defaultFilter?: Filter;
 	defaultSort?: SortEntity;
@@ -48,6 +50,7 @@ export enum AdminUIFilterType {
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 	BOOLEAN = 'BOOLEAN',
+	DROP_DOWN_TEXT = 'DROP_DOWN_TEXT',
 }
 
 export enum AggregationType {
@@ -70,6 +73,17 @@ export type EntityFieldType =
 	| 'NanoTimestamp'
 	| 'NanoDuration';
 
+export enum DetailPanelInputComponentOption {
+	TEXT = 'TEXT',
+	RICH_TEXT = 'RICH_TEXT',
+	MARKDOWN = 'MARKDOWN',
+}
+
+export interface DetailPanelInputComponent {
+	name: DetailPanelInputComponentOption;
+	options?: Record<string, unknown>;
+}
+
 export interface EntityField {
 	name: string;
 	type: EntityFieldType;
@@ -86,6 +100,7 @@ export interface EntityField {
 	hideInTable?: boolean;
 	hideInFilterBar?: boolean;
 	hideInDetailForm?: boolean;
+	detailPanelInputComponent?: DetailPanelInputComponent;
 }
 
 export interface EntityFieldAttributes {
@@ -96,6 +111,7 @@ export interface EntityFieldAttributes {
 export interface EntityAttributes {
 	isReadOnly?: boolean;
 	exportPageSize?: number;
+	clientGeneratedPrimaryKeys?: boolean;
 }
 
 export interface CustomFieldArgs<T = unknown> {
@@ -138,14 +154,19 @@ export const useSchema = () => {
 
 	// This is a map of backendId to a list of entities
 	const dataSourceMap = useMemo(() => {
-		const result: { [backendId: string]: Entity[] } = {};
+		const result: { [backendId: string]: { displayName: string; entities: Entity[] } } = {};
 		if (!data?.result?.entities) return result;
 
 		for (const entity of data.result.entities) {
 			if (entity.backendId) {
-				if (!result[entity.backendId]) result[entity.backendId] = [];
+				if (!result[entity.backendId]) {
+					result[entity.backendId] = {
+						displayName: entity.backendDisplayName ?? entity.backendId,
+						entities: [],
+					};
+				}
 
-				result[entity.backendId].push(entity);
+				result[entity.backendId].entities.push(entity);
 			}
 		}
 		return result;
@@ -184,6 +205,32 @@ export const useSchema = () => {
 			return entityMap[entityName];
 		},
 		enumByName: (enumName: string) => enumMap[enumName],
-		entitiesForBackend: (backendId: string) => dataSourceMap[backendId],
+		displayNameForBackend: (backendId: string) => dataSourceMap[backendId].displayName,
+		entitiesForBackend: (backendId: string) => dataSourceMap[backendId].entities,
+		backendDisplayNames: Array.from(
+			new Set(Object.values(dataSourceMap).map((dataSource) => dataSource.displayName))
+		).sort(),
+		backendIdsForDisplayName: (backendDisplayName: string) => {
+			const backendIds = new Set<string>();
+
+			for (const backendId of Object.keys(dataSourceMap)) {
+				if (dataSourceMap[backendId].displayName === backendDisplayName) {
+					backendIds.add(backendId);
+				}
+			}
+
+			return backendIds;
+		},
+		entitiesForBackendDisplayName: (backendDisplayName: string) => {
+			const entities = [];
+
+			for (const backendId of Object.keys(dataSourceMap)) {
+				if (dataSourceMap[backendId].displayName === backendDisplayName) {
+					entities.push(...dataSourceMap[backendId].entities);
+				}
+			}
+
+			return entities;
+		},
 	};
 };

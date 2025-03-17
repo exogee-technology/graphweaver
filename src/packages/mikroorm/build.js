@@ -10,7 +10,7 @@ const validateMikroOrmPeerAndDevVersionsMatch = async () => {
 	// Let's make sure that the version in dev and peer match.
 	const devVersion = devDependencies['@mikro-orm/core'];
 	const peerVersion = peerDependencies['@mikro-orm/core'];
-	if (devVersion !== peerVersion) {
+	if (devVersion.split('.')[0] !== peerVersion) {
 		throw new Error(
 			`The version of @mikro-orm/core in the mikroorm package's devDependencies (${devVersion}) and peerDependencies (${peerVersion}) do not match.`
 		);

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@exogee/graphweaver-admin-ui-components';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'wouter';
 import { getAuth0Client } from '../client';
 
 export const Auth0 = () => {
@@ -9,7 +9,7 @@ export const Auth0 = () => {
 
 	const [searchParams] = useSearchParams();
 	const shouldRedirect = useRef(true);
-	const navigate = useNavigate();
+	const [, setLocation] = useLocation();
 
 	// In this effect we are checking if the user is coming back from the Auth0 login page or
 	// if the user is coming to the page for the first time. If the user is coming back from
@@ -53,7 +53,7 @@ export const Auth0 = () => {
 		try {
 			const client = await getAuth0Client();
 			await client.handleRedirectCallback();
-			navigate('/');
+			setLocation('/');
 		} catch (e: any) {
 			if (e.message) setError(e.message);
 		} finally {

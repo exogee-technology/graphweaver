@@ -16,7 +16,8 @@ CREATE TABLE "user" (
   username VARCHAR(50) NOT NULL,
   email VARCHAR(100) NOT NULL,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'suspended', 'blocked'))
+  status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'suspended', 'blocked')),
+  notes TEXT
 );
 
 -- Seed data for user table
@@ -45,6 +46,7 @@ CREATE TABLE task (
   completed BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  due_at DATE NULL,
   user_id BIGINT NOT NULL
 );
 
@@ -159,3 +161,7 @@ Once the database is up and running you can start the example with:
 pnpm i
 pnpm start
 ```
+
+# BigInt support via scalars
+
+When you use `graphweaver import` to import an existing database, it will generate any column of type `bigint` to be serialised as a string. This technique requires no extra dependencies, but it comes with the downside that the client will receive the column's value as a string. This repo contains an example of another way to handle `bigint` columns and their values. The `task.id` column uses a type `GraphQLBigInt` from the `graphql-scalars` package. It's also necessary to install and import `json-bigint-patch` to allow the javascript `bigint` value to be serialised to JSON.

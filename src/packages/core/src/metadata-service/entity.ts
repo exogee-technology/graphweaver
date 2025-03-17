@@ -25,6 +25,9 @@ export class AdminUiEntityMetadata {
 	backendId?: string | null;
 
 	@Field(() => String, { nullable: true })
+	backendDisplayName?: string | null;
+
+	@Field(() => String, { nullable: true })
 	summaryField?: string | null;
 
 	@Field(() => String)
@@ -47,6 +50,9 @@ export class AdminUiEntityMetadata {
 
 	@Field(() => [AggregationType])
 	supportedAggregationTypes!: AggregationType[];
+
+	@Field(() => Boolean)
+	supportsPseudoCursorPagination!: boolean;
 
 	@Field(() => Boolean)
 	hideInSideBar!: boolean;

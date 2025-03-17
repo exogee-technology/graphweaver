@@ -29,7 +29,7 @@ export const viteConfig = async ({
 	// Auth is optional, so we only need to check if it's enabled.
 	// If it is, we need to make sure the package is installed.
 	if (config.adminUI.auth?.primaryMethods) {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
+		// eslint-disable-next-line @typescript-eslint/no-require-imports
 		const { dependencies } = require(path.join(process.cwd(), './package.json'));
 		const packages = Object.keys(dependencies);
 		if (!packages.includes('@exogee/graphweaver-auth-ui-components')) {
@@ -85,9 +85,11 @@ export const viteConfig = async ({
 				'react-dom/client',
 				'react-fast-compare',
 				'react-is',
-				'react-router-dom',
 				'rehackt',
 				'set-value',
+				'@tiptap/extension-link',
+				'@tiptap/react',
+				'@tiptap/starter-kit',
 			],
 			exclude: [
 				// This can't be bundled because it's virtual and supplied by
