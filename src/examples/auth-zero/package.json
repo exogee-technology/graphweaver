@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-auth-zero",
-	"version": "2.12.3",
+	"version": "2.12.4",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of connecting a SQLite database with Auth0.",
@@ -21,9 +21,9 @@
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
-		"@mikro-orm/core": "6.4.7",
-		"@mikro-orm/knex": "6.4.7",
-		"@mikro-orm/sqlite": "6.4.7",
+		"@mikro-orm/core": "6.4.9",
+		"@mikro-orm/knex": "6.4.9",
+		"@mikro-orm/sqlite": "6.4.9",
 		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
 		"mikro-orm-sqlite-wasm": "workspace:*",
@@ -31,6 +31,6 @@
 	},
 	"devDependencies": {
 		"@types/node": "22.13.10",
-		"typescript": "5.7.2"
+		"typescript": "5.7.3"
 	}
 }

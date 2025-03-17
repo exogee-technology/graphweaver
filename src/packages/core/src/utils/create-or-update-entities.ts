@@ -10,6 +10,8 @@ import {
 	isSerializableGraphQLEntityClass,
 	isTransformableGraphQLEntityClass,
 } from '../base-entities';
+import { getGraphweaverMutationType } from './resolver.utils';
+import { isDefined } from './common';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -43,13 +45,16 @@ export const isPrimaryKeyOnly = <G = unknown, D = unknown>(
 const runChildCreateOrUpdate = <G = unknown>(
 	entityMetadata: EntityMetadata<any, any>,
 	data: Partial<G> | Partial<G>[],
-	context: BaseContext
+	context: BaseContext,
+	info: GraphQLResolveInfo
 ): Promise<G | G[]> => {
 	const graphQLType = graphQLTypeForEntity(entityMetadata, undefined);
 
 	// This is a fake GraphQL Resolve Info we pass to ourselves so the resolver will return the correct
 	// result type. The only things we read in it is the return type so we'll just stub that.
 	const infoFacade: Partial<GraphQLResolveInfo> = {
+		schema: info.schema,
+		fieldName: info.fieldName,
 		returnType: Array.isArray(data) ? new GraphQLList(graphQLType) : graphQLType,
 	};
 
@@ -150,10 +155,15 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					}));
 
 					// Now create/update the children
-					await runChildCreateOrUpdate(relatedEntityMetadata, childEntities, context);
+					await runChildCreateOrUpdate(relatedEntityMetadata, childEntities, context, info);
 				} else if (Object.keys(childNode).length > 0) {
 					// If only one object, create or update it first, then update the parent reference
-					const result = await runChildCreateOrUpdate(relatedEntityMetadata, childNode, context);
+					const result = await runChildCreateOrUpdate(
+						relatedEntityMetadata,
+						childNode,
+						context,
+						info
+					);
 
 					// Now we need to pull the ID out to link the result.
 					const primaryKeyField =
@@ -196,6 +206,14 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 				const existing = await meta.provider.findOne({
 					[primaryKeyField]: primaryKey,
 				} as Filter<D>);
+				const graphweaverMutationType = getGraphweaverMutationType(info);
+				if (
+					(graphweaverMutationType === 'createOne' || graphweaverMutationType === 'createMany') &&
+					existing
+				) {
+					throw new Error(`Entity with ID ${primaryKey} already exists`);
+				}
+
 				operation = existing ? 'update' : 'create';
 			}
 
@@ -209,6 +227,13 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 
 				return fromBackendEntity(meta, result);
 			} else if (operation === 'create') {
+				const clientGeneratedPrimaryKeys = meta.apiOptions?.clientGeneratedPrimaryKeys;
+				if (isDefined(node[primaryKeyField]) && clientGeneratedPrimaryKeys !== true) {
+					// Wait, you are creating an entity but giving it an ID? That's not right.
+					throw new Error(
+						`Cannot create entity with ID '${node[primaryKeyField]}' because clientGeneratedPrimaryKeys is not enabled.`
+					);
+				}
 				const result = await meta.provider.createOne(
 					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 						? meta.target.toBackendEntity(node)

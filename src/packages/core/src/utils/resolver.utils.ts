@@ -1,3 +1,5 @@
+import { GraphQLResolveInfo } from 'graphql';
+import { GraphweaverSchemaInfoExtensionWithSourceEntity } from '../schema-builder';
 import { BaseContext } from '@apollo/server';
 import { dataEntityForGraphQLEntity } from '../default-from-backend-entity';
 import { Filter, ReadHookParams, ResolverOptions } from '../types';
@@ -7,6 +9,15 @@ import { getFieldType } from '../schema-builder';
 import { logger } from '@exogee/logger';
 import { BaseLoaders } from '../base-loader';
 import { isDefined } from '../utils';
+
+export const getGraphweaverMutationType = (
+	info: GraphQLResolveInfo
+): GraphweaverSchemaInfoExtensionWithSourceEntity['type'] | undefined => {
+	return (
+		info?.schema?.getMutationType?.()?.getFields?.()[info?.fieldName]?.extensions
+			?.graphweaverSchemaInfo as GraphweaverSchemaInfoExtensionWithSourceEntity | undefined
+	)?.type;
+};
 
 export type ID = string | number | bigint;
 

@@ -30,12 +30,13 @@ import { QueryManager } from './query-manager';
 import { applyDefaultValues, hasId, isDefined, withTransaction } from './utils';
 import { dataEntityForGraphQLEntity, fromBackendEntity } from './default-from-backend-entity';
 import {
+	getGraphweaverMutationType,
 	constructFilterForRelatedEntity,
 	getDataEntities,
 	getIdValue,
 	getLoaderFilter,
 	ID,
-} from './metadata-service/resolver.utils';
+} from './utils/resolver.utils';
 
 export const baseResolver = (resolver: Resolver) => {
 	return async (
@@ -230,6 +231,8 @@ const _createOrUpdate = async <G>(
 	const inputArray = Array.isArray(input) ? input : [input];
 
 	return withTransaction(entity.provider, async () => {
+		const graphweaverMutationType = getGraphweaverMutationType(info);
+
 		// Extracted common properties
 		const hookManager = hookManagerMap.get(entity.name);
 		const commonParams: Omit<CreateOrUpdateHookParams<G>, 'args'> = {
@@ -245,7 +248,10 @@ const _createOrUpdate = async <G>(
 
 		// In this very specific case, we can't figure out what to do unless we query the underlying
 		// provider for each entity. We'll at least do it with an _in query.
-		if (entity.apiOptions?.clientGeneratedPrimaryKeys && schemaInfo.type === 'createOrUpdateMany') {
+		if (
+			entity.apiOptions?.clientGeneratedPrimaryKeys &&
+			graphweaverMutationType === 'createOrUpdateMany'
+		) {
 			// The only way to know if this is a create or update is to see if the
 			// IDs already exist or not.
 			const lookup = new Map<string, Partial<G>>();
@@ -275,10 +281,16 @@ const _createOrUpdate = async <G>(
 			for (const remainingItem of lookup.values()) {
 				createItems.push(remainingItem);
 			}
-		} else if (schemaInfo.type === 'createOne' || schemaInfo.type === 'createMany') {
+		} else if (
+			graphweaverMutationType === 'createOne' ||
+			graphweaverMutationType === 'createMany'
+		) {
 			// If they called create they definitely meant to create.
 			createItems.push(...inputArray);
-		} else if (schemaInfo.type === 'updateOne' || schemaInfo.type === 'updateMany') {
+		} else if (
+			graphweaverMutationType === 'updateOne' ||
+			graphweaverMutationType === 'updateMany'
+		) {
 			// Likewise, if they called update they definitely meant to update.
 			updateItems.push(...inputArray);
 		} else {

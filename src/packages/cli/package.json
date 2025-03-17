@@ -1,6 +1,6 @@
 {
 	"name": "graphweaver",
-	"version": "2.12.3",
+	"version": "2.12.4",
 	"description": "A tool for managing, running, debugging and building Graphweaver projects",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -26,7 +26,7 @@
 		"@exogee/graphweaver-builder": "workspace:*",
 		"@exogee/graphweaver-config": "workspace:*",
 		"chokidar": "4.0.3",
-		"esbuild": "0.25.0",
+		"esbuild": "0.25.1",
 		"inquirer": "11.1.0",
 		"node-semver": "1.0.0",
 		"ora-classic": "5.4.2",
@@ -41,7 +41,7 @@
 		"@types/validate-npm-package-name": "4.0.2",
 		"@types/yargs": "17.0.33",
 		"prettier": "3.4.2",
-		"typescript": "5.7.2"
+		"typescript": "5.7.3"
 	},
 	"keywords": [
 		"graphql",

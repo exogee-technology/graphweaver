@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/logger",
-	"version": "2.12.3",
+	"version": "2.12.4",
 	"description": "Common logging output for Exogee projects",
 	"license": "Apache-2.0",
 	"directories": {
@@ -23,9 +23,9 @@
 	},
 	"devDependencies": {
 		"@types/node": "22.13.10",
-		"esbuild": "0.25.0",
+		"esbuild": "0.25.1",
 		"glob": "11.0.1",
-		"typescript": "5.7.2"
+		"typescript": "5.7.3"
 	},
 	"keywords": [
 		"graphql",

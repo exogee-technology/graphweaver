@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-end-to-end",
-	"version": "2.12.3",
+	"version": "2.12.4",
 	"description": "Graphweaver Test Suite",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -42,9 +42,9 @@
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/graphweaver-storage-provider": "workspace:*",
-		"@mikro-orm/core": "6.4.7",
-		"@mikro-orm/postgresql": "6.4.7",
-		"@mikro-orm/sqlite": "6.4.7",
+		"@mikro-orm/core": "6.4.9",
+		"@mikro-orm/postgresql": "6.4.9",
+		"@mikro-orm/sqlite": "6.4.9",
 		"class-validator": "0.14.1",
 		"dotenv-cli": "8.0.0",
 		"ethers": "6.3.0",
@@ -67,7 +67,7 @@
 		"supertest-graphql": "1.1.4",
 		"ts-jest": "29.2.6",
 		"tsx": "4.19.3",
-		"typescript": "5.7.2"
+		"typescript": "5.7.3"
 	},
 	"keywords": [
 		"graphql",

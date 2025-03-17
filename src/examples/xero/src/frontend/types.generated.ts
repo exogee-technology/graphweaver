@@ -84,6 +84,7 @@ export type AccountUpdateInput = {
 
 export type AccountsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<AccountsListFilter>>>;
+  _not?: InputMaybe<AccountsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<AccountsListFilter>>>;
   code?: InputMaybe<Scalars['String']['input']>;
   code_gt?: InputMaybe<Scalars['String']['input']>;
@@ -463,6 +464,7 @@ export type ProfitAndLossRowUpdateInput = {
 
 export type ProfitAndLossRowsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<ProfitAndLossRowsListFilter>>>;
+  _not?: InputMaybe<ProfitAndLossRowsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<ProfitAndLossRowsListFilter>>>;
   account?: InputMaybe<AccountsListFilter>;
   accountId?: InputMaybe<Scalars['ID']['input']>;
@@ -639,6 +641,7 @@ export type TenantUpdateInput = {
 
 export type TenantsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<TenantsListFilter>>>;
+  _not?: InputMaybe<TenantsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TenantsListFilter>>>;
   authEventId?: InputMaybe<Scalars['String']['input']>;
   authEventId_gt?: InputMaybe<Scalars['String']['input']>;

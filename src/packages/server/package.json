@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-server",
-	"version": "2.12.3",
+	"version": "2.12.4",
 	"description": "Server support for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -38,10 +38,10 @@
 	"devDependencies": {
 		"@escape.tech/graphql-armor-types": "0.7.0",
 		"@types/graphql-deduplicator": "2.0.2",
-		"esbuild": "0.25.0",
+		"esbuild": "0.25.1",
 		"glob": "11.0.1",
-		"vitest": "3.0.7",
-		"typescript": "5.7.2"
+		"vitest": "3.0.8",
+		"typescript": "5.7.3"
 	},
 	"keywords": [
 		"graphql",
