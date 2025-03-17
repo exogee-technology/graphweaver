@@ -2,7 +2,7 @@ import { DatabaseOptions, Source } from '@exogee/graphweaver-builder';
 
 export const promptForDatabaseOptions = async ({
 	source,
-	dbName,
+	database,
 	host,
 	port,
 	password,
@@ -25,10 +25,10 @@ export const promptForDatabaseOptions = async ({
 	const prompts: any[] = [];
 
 	if (source === 'sqlite') {
-		if (typeof dbName === 'undefined') {
+		if (typeof database === 'undefined') {
 			prompts.push({
 				type: 'input',
-				name: 'dbName',
+				name: 'database',
 				message: `What is the database name?`,
 			});
 		}
@@ -38,17 +38,17 @@ export const promptForDatabaseOptions = async ({
 		if (!database) {
 			prompts.push({
 				type: 'input',
-				name: 'dbName',
+				name: 'database',
 				message: `Where is the Open API spec? (Both file path and URL are supported)`,
 			});
 		}
 	}
 
 	if (source === 'postgresql' || source === 'mysql') {
-		if (typeof dbName === 'undefined') {
+		if (typeof database === 'undefined') {
 			prompts.push({
 				type: 'input',
-				name: 'dbName',
+				name: 'database',
 				message: `What is the database name?`,
 			});
 		}
@@ -88,16 +88,16 @@ export const promptForDatabaseOptions = async ({
 
 	if (prompts.length > 0) {
 		const answers = await inquirer.prompt(prompts);
-		dbName = answers.dbName ?? dbName;
+		database = answers.database ?? database;
 		host = answers.host ?? host;
 		port = answers.port ?? port;
 		password = answers.password ?? password;
 		user = answers.user ?? user;
 	}
 
-	if (!dbName) {
+	if (!database) {
 		throw new Error('Database name has not been provided, please provide a database name.');
 	}
 
-	return { source, dbName, host, port, password, user };
+	return { source, database, host, port, password, user };
 };

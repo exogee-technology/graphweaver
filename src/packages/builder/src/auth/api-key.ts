@@ -39,7 +39,7 @@ export const generateApiKey = async (options: GenerateApiKeyOptions) => {
 			port: options.port,
 			user: options.user,
 			password: options.password,
-			dbName: options.dbName,
+			dbName: options.database,
 		},
 	});
 
