@@ -101,6 +101,7 @@ export enum AdminUiFilterType {
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
+  NumericRange = 'NUMERIC_RANGE',
   Relationship = 'RELATIONSHIP',
   Text = 'TEXT'
 }
@@ -783,7 +784,11 @@ export type TaskCountByTagsListFilter = {
   _and?: InputMaybe<Array<InputMaybe<TaskCountByTagsListFilter>>>;
   _or?: InputMaybe<Array<InputMaybe<TaskCountByTagsListFilter>>>;
   count?: InputMaybe<Scalars['Float']['input']>;
+  count_gt?: InputMaybe<Scalars['Float']['input']>;
+  count_gte?: InputMaybe<Scalars['Float']['input']>;
   count_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  count_lt?: InputMaybe<Scalars['Float']['input']>;
+  count_lte?: InputMaybe<Scalars['Float']['input']>;
   count_ne?: InputMaybe<Scalars['Float']['input']>;
   count_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
   count_notnull?: InputMaybe<Scalars['Boolean']['input']>;

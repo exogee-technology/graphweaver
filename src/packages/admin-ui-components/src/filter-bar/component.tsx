@@ -9,6 +9,7 @@ import {
 	DropdownTextFilter,
 	EnumFilter,
 	NumericFilter,
+	NumericRangeFilter,
 	RelationshipFilter,
 	TextFilter,
 	validateFilter,
@@ -143,6 +144,8 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					return <EnumFilter key={field.name} {...options} />;
 				case AdminUIFilterType.NUMERIC:
 					return <NumericFilter key={field.name} {...options} />;
+				case AdminUIFilterType.NUMERIC_RANGE:
+					return <NumericRangeFilter key={field.name} {...options} />;
 				case AdminUIFilterType.DATE_RANGE:
 				case AdminUIFilterType.DATE_TIME_RANGE:
 					return (
