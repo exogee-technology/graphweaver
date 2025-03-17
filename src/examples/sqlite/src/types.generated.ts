@@ -103,6 +103,7 @@ export enum AdminUiFilterType {
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
+  NumericRange = 'NUMERIC_RANGE',
   Relationship = 'RELATIONSHIP',
   Text = 'TEXT'
 }
@@ -1104,7 +1105,11 @@ export type InvoiceLinesListFilter = {
   invoiceLineId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   invoiceLineId_null?: InputMaybe<Scalars['Boolean']['input']>;
   quantity?: InputMaybe<Scalars['Float']['input']>;
+  quantity_gt?: InputMaybe<Scalars['Float']['input']>;
+  quantity_gte?: InputMaybe<Scalars['Float']['input']>;
   quantity_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  quantity_lt?: InputMaybe<Scalars['Float']['input']>;
+  quantity_lte?: InputMaybe<Scalars['Float']['input']>;
   quantity_ne?: InputMaybe<Scalars['Float']['input']>;
   quantity_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
   quantity_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2495,7 +2500,11 @@ export type TracksListFilter = {
   _or?: InputMaybe<Array<InputMaybe<TracksListFilter>>>;
   album?: InputMaybe<AlbumsListFilter>;
   bytes?: InputMaybe<Scalars['Float']['input']>;
+  bytes_gt?: InputMaybe<Scalars['Float']['input']>;
+  bytes_gte?: InputMaybe<Scalars['Float']['input']>;
   bytes_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  bytes_lt?: InputMaybe<Scalars['Float']['input']>;
+  bytes_lte?: InputMaybe<Scalars['Float']['input']>;
   bytes_ne?: InputMaybe<Scalars['Float']['input']>;
   bytes_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
   bytes_notnull?: InputMaybe<Scalars['Boolean']['input']>;
@@ -2516,7 +2525,11 @@ export type TracksListFilter = {
   invoiceLines?: InputMaybe<InvoiceLinesListFilter>;
   mediaType?: InputMaybe<MediaTypesListFilter>;
   milliseconds?: InputMaybe<Scalars['Float']['input']>;
+  milliseconds_gt?: InputMaybe<Scalars['Float']['input']>;
+  milliseconds_gte?: InputMaybe<Scalars['Float']['input']>;
   milliseconds_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  milliseconds_lt?: InputMaybe<Scalars['Float']['input']>;
+  milliseconds_lte?: InputMaybe<Scalars['Float']['input']>;
   milliseconds_ne?: InputMaybe<Scalars['Float']['input']>;
   milliseconds_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
   milliseconds_notnull?: InputMaybe<Scalars['Boolean']['input']>;

@@ -117,54 +117,16 @@
 	--rdp-accent-color: var(--primary-color);
 }
 
-.timeSelector {
-	display: flex;
-	gap: 5px;
-	align-items: center;
-}
-
-.timeSelector input {
-	width: 101px;
-	border: 1px solid var(--primary-color);
-	border-radius: 7px;
-	padding: 1px 5px;
-}
-
-.rangeSelector {
-	display: flex;
-}
-
-.rangeSelector > button:first-of-type {
-	border-radius: 6px 0px 0px 6px;
-}
-
-.rangeSelector > button:last-of-type {
-	border-radius: 0px 6px 6px 0px;
-}
-
-.rangeButton {
-	background-color: var(--select-background);
-	border: 1px solid var(--select-border-color);
-	color: var(--body-copy-color);
-	cursor: pointer;
-	flex: 1;
-	font-size: 12px;
-}
-
-.rangeButton:hover {
-	background-color: rgba(237, 232, 242, 0.5);
-}
-
-.rangeButton.active {
-	background-color: var(--primary-color);
-}
-
 .inputContainer {
 	display: flex;
 	gap: 2px;
-	margin: 10px 0;
+	margin: 10px 0 15px 0;
 }
 
 .inputContainer > input {
 	width: 100%;
+	background-color: var(--select-background);
+	border: 1px solid var(--select-border-color);
+	border-radius: 7px;
+	padding: 1px 5px;
 }

@@ -100,6 +100,7 @@ export enum AdminUiFilterType {
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
+  NumericRange = 'NUMERIC_RANGE',
   Relationship = 'RELATIONSHIP',
   Text = 'TEXT'
 }

@@ -13,57 +13,36 @@ interface Props {
 	filter?: Filter;
 }
 
-export const NumericFilter = ({ fieldName, onChange, filter }: Props) => {
+export const NumericRangeFilter = ({ fieldName, onChange, filter }: Props) => {
 	const startKey = `${fieldName}_gte`;
 	const endKey = `${fieldName}_lte`;
 	const from = getNumberOrUndefined(filter?.[startKey] ?? filter?.[fieldName]);
 	const to = getNumberOrUndefined(filter?.[endKey]);
-	const [isRange, setIsRange] = useState(
-		isDefined(filter?.[endKey]) || isDefined(filter?.[startKey])
-	);
 	const [isOpen, setIsOpen] = useState(false);
 	const popUpRef = useRef<HTMLDivElement>(null);
 
 	/**
-	 * Note: don't rely on closure values for `from`, `to` and `isRange` as we sometimes set these values and immediately call `handleOnChange`
+	 * Note: don't rely on closure values for `from`, `to` as we sometimes set these values and immediately call `handleOnChange`
 	 * React setState is async and the values might not be updated yet, so we are shadowing the state values with passed arguments
 	 * */
-	const handleOnChange = (from: unknown, to: unknown, isRange: boolean) => {
+	const handleOnChange = (from: unknown, to: unknown) => {
 		from = getNumberOrUndefined(from);
 		to = getNumberOrUndefined(to);
 
-		if (isRange) {
-			onChange?.(fieldName, {
-				[startKey]: from,
-				[endKey]: to,
-				[fieldName]: undefined,
-			});
-		} else {
-			onChange?.(fieldName, {
-				[fieldName]: from,
-				[startKey]: undefined,
-				[endKey]: undefined,
-			});
-		}
+		onChange?.(fieldName, {
+			[startKey]: from,
+			[endKey]: to,
+			[fieldName]: undefined,
+		});
 	};
 
 	const clear = () => {
-		handleOnChange(undefined, undefined, isRange);
+		handleOnChange(undefined, undefined);
 		setIsOpen(false);
 	};
 
-	const handleRangeSelected = () => {
-		setIsRange(true);
-		handleOnChange(from, to, true);
-	};
-
-	const handleSingleSelected = () => {
-		setIsRange(false);
-		handleOnChange(from, undefined, false);
-	};
-
 	const displayText = () => {
-		if (isRange && (isDefined(from) || isDefined(to))) {
+		if (isDefined(from) || isDefined(to)) {
 			if (isDefined(from) && isDefined(to)) {
 				return `${from} - ${to}`;
 			} else if (isDefined(from)) {
@@ -110,44 +89,20 @@ export const NumericFilter = ({ fieldName, onChange, filter }: Props) => {
 			</div>
 			{isOpen && (
 				<div className={styles.popup} ref={popUpRef}>
-					<div className={styles.rangeSelector}>
-						<button
-							type="button"
-							className={clsx(styles.rangeButton, !isRange && styles.active)}
-							onClick={handleSingleSelected}
-						>
-							Single
-						</button>
-						<button
-							type="button"
-							className={clsx(styles.rangeButton, isRange && styles.active)}
-							onClick={handleRangeSelected}
-						>
-							Range
-						</button>
-					</div>
 					<div className={styles.inputContainer}>
-						{isRange ? (
-							<>
-								<input
-									type="number"
-									value={from ?? ''}
-									onChange={(e) => handleOnChange(e.target.value, to, true)}
-								/>
-								<span>-</span>
-								<input
-									type="number"
-									value={to ?? ''}
-									onChange={(e) => handleOnChange(from, e.target.value, true)}
-								/>
-							</>
-						) : (
-							<input
-								type="number"
-								value={from ?? ''}
-								onChange={(e) => handleOnChange(e.target.value, undefined, false)}
-							/>
-						)}
+						<input
+							type="number"
+							value={from ?? ''}
+							onChange={(e) => handleOnChange(e.target.value, to)}
+							placeholder="from"
+						/>
+						<span>-</span>
+						<input
+							type="number"
+							value={to ?? ''}
+							onChange={(e) => handleOnChange(from, e.target.value)}
+							placeholder="to"
+						/>
 					</div>
 
 					<div className={styles.filterButtons}>
