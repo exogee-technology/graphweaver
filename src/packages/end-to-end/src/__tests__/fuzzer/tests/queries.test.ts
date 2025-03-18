@@ -20,13 +20,13 @@ describe('Read operations (queries)', () => {
     test('Tasks', async () => {
         const query = request`query tasks($filter: TasksListFilter!) { tasks(filter: $filter) { id description } }`
 
-        let { tasks } = await fuzzer.makeRequest<{ tasks: Task[] }>(query, { variables: { filter: {} } });
-        const expectedTaskIds = tasks.map((t) => t.id);
+        const { data } = await fuzzer.makeRequest<{ tasks: Task[] }>(query, { variables: { filter: {} } });
+        const expectedTaskIds = data.tasks.map((t) => t.id);
 
         for (const c of CHARSET) {
-            let { tasks } = await fuzzer.makeRequest<{ tasks: Task[] }>(query, { 
+            const { tasks } = (await fuzzer.makeRequest<{ tasks: Task[] }>(query, { 
                 variables: { filter: { description_ilike: `%${c}%` } } 
-            });
+            })).data;
             for (const {id} of tasks) {
                 expect(expectedTaskIds).toContain(id);
             }

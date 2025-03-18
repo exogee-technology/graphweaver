@@ -7,9 +7,14 @@ interface GraphQLRequest {
     headers?: Record<string, string>;
 
 }
-type RawRequest = ReturnType<typeof request>;
-type RequestArgs = Omit<GraphQLRequest, "query" | "operationName">;
-
+export type RawRequest = ReturnType<typeof request>;
+export type RequestArgs = Omit<GraphQLRequest, "query" | "operationName">;
+export interface RequestError { 
+    message: string, 
+    path: (string | number)[], 
+    extensions: any, 
+    locations: {line: number, column: number}[]
+}
 
 export const GRAPHQL_ENDPOINT = 'http://localhost:9001';
 
@@ -41,7 +46,10 @@ export const request = (query: TemplateStringsArray) => {
 			},
 			body: queryFunction(request.variables),
 		});
-		return (await fetchResult.json()).data as T;
+		return (await fetchResult.json()) as { 
+            data: T, 
+            errors?: Error[]
+        };
 	};
 };
 
@@ -90,10 +98,11 @@ export class GraphweaverFuzzClient {
         const { authToken } = (await this.makeRequest<{ loginPassword: {authToken: string}}>(
             loginRequest, 
             { variables: { username, password } }
-        )).loginPassword;
+        )).data.loginPassword;
 
         this.setHeader('Authorization', authToken);
     }
+    
 
 }
 
