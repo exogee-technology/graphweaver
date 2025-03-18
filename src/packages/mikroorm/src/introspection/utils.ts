@@ -1,5 +1,5 @@
 export const pascalToKebabCaseString = (value: string) => {
-	return value.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase();
+	return value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 };
 
 export const snakeToCamelCaseString = (value: string) => {

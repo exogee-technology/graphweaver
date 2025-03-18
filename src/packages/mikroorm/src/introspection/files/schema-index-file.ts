@@ -17,8 +17,9 @@ export class SchemaIndexFile {
 				.filter((meta) => !meta.pivotTable)
 				.map(
 					(meta) =>
-						`import './${meta.className.replace(/([a-z0–9])([A-Z])/g, '$1-$2').toLowerCase()}';`
+						`import './${meta.className.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}';`
 				)
+				.sort()
 				.join('\n') + '\n'
 		);
 	}
