@@ -1,3 +1,6 @@
+import { loginRequest } from ".";
+import { config } from "../../../config";
+
 const getOpname = /(query|mutation) ?([\w\d-_]+)? ?\(.*?\)? \{/;
 
 interface GraphQLRequest {
@@ -15,8 +18,6 @@ export interface RequestError {
     extensions: any, 
     locations: {line: number, column: number}[]
 }
-
-export const GRAPHQL_ENDPOINT = 'http://localhost:9001';
 
 export const gql = (input: TemplateStringsArray) => {
 	const str = Array.isArray(input) ? input.join('') : String(input);
@@ -36,8 +37,11 @@ export const gql = (input: TemplateStringsArray) => {
 export const request = (query: TemplateStringsArray) => {
 	const queryFunction = gql(query);
 
+    /**
+     * Allows extra headers to be specified
+     */
 	return async <T>(request: RequestArgs) => {
-		const fetchResult = await fetch(GRAPHQL_ENDPOINT, {
+		const fetchResult = await fetch(config.baseUrl, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
@@ -53,21 +57,10 @@ export const request = (query: TemplateStringsArray) => {
 	};
 };
 
-
-export const loginRequest = request`
-    mutation loginPassword($username: String, $password: String) {
-        loginPassword(username: $username, password: $password) {
-            authToken
-        }
-    }
-`;
-
 export class GraphweaverFuzzClient {
-    private url: string;
     private defaultHeaders: Record<string, string>;
 
-    public constructor(url: string) {
-        this.url = url;
+    public constructor() {
         this.defaultHeaders = { 
             'Accept': 'application/json',
 			'Content-Type': 'application/json',
@@ -90,7 +83,7 @@ export class GraphweaverFuzzClient {
     
     /**
      * Utility to get a token to make subsequent requests with.
-     * Not for fuzzing the loginPassword mutation
+     * Not for fuzzing the loginPassword mutation.
      * @param username 
      * @param password 
      */

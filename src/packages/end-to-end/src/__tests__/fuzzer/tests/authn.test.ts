@@ -1,15 +1,16 @@
-import { CHARSET, GraphweaverFuzzClient, loginRequest, RequestError } from "../utils";
+import { GraphweaverFuzzClient, loginRequest, RequestError } from "../utils";
 
 // TODO: Use env variable
-const fuzzer = new GraphweaverFuzzClient('http://localhost:9001');
+const fuzzer = new GraphweaverFuzzClient();
 
 
 describe('In-built authentication operations', () => {
 
-    test('Look for distinct login errors', async () => {
+    test('Information leaks in auth errors', async () => {
 
+        // The first two usernames here belong to existing users, the rest don't.
         const usernames = ['luke', 'darth', 'admin', 'alice', 'bob', 'eve'];
-        // const login = await fuzzer.loginPassword('fake', 'user');
+
         const example = await fuzzer.makeRequest<{ loginPassword: { authToken: string }}>(
             loginRequest, { variables: { username: 'fake', password: 'user' } }
         );
@@ -18,6 +19,7 @@ describe('In-built authentication operations', () => {
         
         // TODO: Learn how to make types work better here?
         const expectedError: RequestError = (example.errors?.[0] as unknown) as RequestError;
+        expect(expectedError.locations.length).toEqual(1);
 
         for (const username of usernames) {
 

@@ -8,7 +8,7 @@ interface Task {
 const FIVE_SECONDS = 5 * 1000;
 
 // TODO: Use env variable
-const fuzzer = new GraphweaverFuzzClient('http://localhost:9001');
+const fuzzer = new GraphweaverFuzzClient();
 
 
 describe('Read operations (queries)', () => {
