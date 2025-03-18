@@ -24,7 +24,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/server": "4.11.2",
+		"@apollo/server": "4.11.3",
 		"@aws-sdk/client-secrets-manager": "3.758.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
