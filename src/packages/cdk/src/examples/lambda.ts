@@ -68,7 +68,7 @@ export const graphweaverApp = new GraphweaverApp(rootStack, 'TestGraphweaverDock
 	},
 	lambda: {
 		packageName: '@exogee/graphweaver',
-		functionName: 'Graphweaver API',
+		functionName: 'Graphweaver_API',
 		cert: 'arn:aws:acm:ap-southeast-2:test:test:test',
 		url: 'api.test.com',
 		memorySize: 512,
