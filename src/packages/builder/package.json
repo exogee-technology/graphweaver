@@ -22,8 +22,8 @@
 		"@graphql-codegen/add": "5.0.3",
 		"@graphql-codegen/cli": "5.0.5",
 		"@graphql-codegen/near-operation-file-preset": "3.0.0",
-		"@graphql-codegen/typescript": "4.1.4",
-		"@graphql-codegen/typescript-operations": "4.4.0",
+		"@graphql-codegen/typescript": "4.1.5",
+		"@graphql-codegen/typescript-operations": "4.5.1",
 		"@graphql-codegen/typescript-react-apollo": "4.3.2",
 		"@serverless/utils": "6.15.0",
 		"@vitejs/plugin-react": "4.3.4",
@@ -40,7 +40,7 @@
 		"rimraf": "5.0.8",
 		"rollup-plugin-visualizer": "5.14.0",
 		"serverless-offline": "14.4.0",
-		"vite": "6.1.0",
+		"vite": "6.2.2",
 		"vite-plugin-graphweaver": "workspace:*"
 	},
 	"devDependencies": {

@@ -74,6 +74,7 @@ export class LambdaStack extends cdk.NestedStack {
 				...config.lambda.envVars,
 			},
 			timeout: cdk.Duration.seconds(config.lambda.timeout ?? 10),
+			functionName: sanitiseName(config.lambda?.functionName ?? 'Graphweaver'),
 		});
 
 		// ⚠️ Grant the Lambda function access to the database secret ⚠️
@@ -129,3 +130,6 @@ export class LambdaStack extends cdk.NestedStack {
 		});
 	}
 }
+
+// Function name can contain only letters, numbers, hyphens, or underscores with no spaces, and must be less than 64 characters.
+const sanitiseName = (name: string) => name.replace(/[^a-zA-Z0-9-_]/g, '').substring(0, 64);
