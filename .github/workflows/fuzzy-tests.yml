@@ -34,6 +34,9 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
+      - name: 🔥 Initialize MySQL
+        run: sudo systemctl start mysql.service
+
       - name: Install dependencies
         run: pnpm i
 
