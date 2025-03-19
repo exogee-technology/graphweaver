@@ -121,6 +121,8 @@ Once you have setup these pre-requisites you can run the following scripts:
 `pnpm start-server` // this will start the app from the `./app` directory
 `pnpm test-ui-storage-provider` // This will run the playwright UI tests
 
-## Fuzzer
+## To Run 'Fuzzer' Tests
 
-The 'fuzzer' tests are currently under construction. For now, you will need to follow the instructions within and then run the `rest-with-auth` example. These tests do not run in the pipeline yet.
+These tests are a 'prototype' for a fuzzer for Graphweaver.
+
+To run them, follow the [steps above](#to-run-tests-auth) to set up the Auth E2E tests, and then run `pnpm test-fuzz`.
