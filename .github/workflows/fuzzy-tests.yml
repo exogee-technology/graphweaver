@@ -40,11 +40,20 @@ jobs:
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Import the REST with auth example
+        working-directory: src/packages/end-to-end
+        run: |
+          pnpm import-auth
+
       - name: Start and Test Auth
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm test-fuzz
+          (cd app && pnpm start) &
+          sleep 5 &&
+          cd .. &&
+          pnpm test-fuzz &&
+          killall node
 
         env:
           CI: true
