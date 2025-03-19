@@ -57,14 +57,16 @@ jobs:
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          (cd app && pnpm start) &
+          $(cd app && pnpm start) &
           sleep 5 &&
-          cd .. &&
           pnpm test-fuzz &&
           killall node
 
         env:
           CI: true
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: root
           AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
           AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
           AUTH_BASE_URI: "http://localhost:9000"
