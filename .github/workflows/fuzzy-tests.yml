@@ -44,6 +44,11 @@ jobs:
         working-directory: src/packages/end-to-end
         run: |
           pnpm import-auth
+        env:
+          CI: true
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: root
 
       - name: Start and Test Auth
         working-directory: src/packages/end-to-end
