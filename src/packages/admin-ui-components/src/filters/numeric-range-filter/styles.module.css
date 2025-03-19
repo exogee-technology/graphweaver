@@ -121,12 +121,9 @@
 	display: flex;
 	gap: 2px;
 	margin: 10px 0 15px 0;
+	align-items: center;
 }
 
-.inputContainer > input {
+input.input {
 	width: 100%;
-	background-color: var(--select-background);
-	border: 1px solid var(--select-border-color);
-	border-radius: 7px;
-	padding: 1px 5px;
 }

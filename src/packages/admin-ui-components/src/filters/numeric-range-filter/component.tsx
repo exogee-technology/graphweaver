@@ -4,6 +4,7 @@ import { Filter } from '../../utils';
 import { getNumberOrUndefined, isDefined } from './utils';
 import { CloseButtonIcon } from '../../assets';
 import { Button } from '../../button';
+import { Input } from '../../input';
 import styles from './styles.module.css';
 
 interface Props {
@@ -90,18 +91,20 @@ export const NumericRangeFilter = ({ fieldName, onChange, filter }: Props) => {
 			{isOpen && (
 				<div className={styles.popup} ref={popUpRef}>
 					<div className={styles.inputContainer}>
-						<input
-							type="number"
-							value={from ?? ''}
-							onChange={(e) => handleOnChange(e.target.value, to)}
-							placeholder="from"
+						<Input
+							inputMode="numeric"
+							fieldName="from"
+							value={`${from ?? ''}`}
+							onChange={(_: unknown, value: unknown) => handleOnChange(value, to)}
+							inputClassName={styles.input}
 						/>
 						<span>-</span>
-						<input
-							type="number"
-							value={to ?? ''}
-							onChange={(e) => handleOnChange(from, e.target.value)}
-							placeholder="to"
+						<Input
+							inputMode="numeric"
+							fieldName="to"
+							value={`${to ?? ''}`}
+							onChange={(_: unknown, value: unknown) => handleOnChange(from, value)}
+							inputClassName={styles.input}
 						/>
 					</div>
 
