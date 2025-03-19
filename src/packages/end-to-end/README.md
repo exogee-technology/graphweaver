@@ -120,3 +120,9 @@ Once you have setup these pre-requisites you can run the following scripts:
 `pnpm import-storage-provider` // this will copy over the example app to the local `./app` directory and use the packed node modules.
 `pnpm start-server` // this will start the app from the `./app` directory
 `pnpm test-ui-storage-provider` // This will run the playwright UI tests
+
+## To Run 'Fuzzer' Tests
+
+These tests are a 'prototype' for a fuzzer for Graphweaver.
+
+To run them, follow the [steps above](#to-run-tests-auth) to set up the Auth E2E tests, and then run `pnpm test-fuzz`.
