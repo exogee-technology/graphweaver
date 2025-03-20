@@ -32,7 +32,7 @@
 	"devDependencies": {
 		"@types/node": "22.13.10",
 		"graphweaver": "workspace:*",
-		"typescript": "5.7.3"
+		"typescript": "5.8.2"
 	},
 	"keywords": [
 		"graphql",
