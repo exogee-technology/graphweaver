@@ -160,3 +160,19 @@ export const makeReadme = (projectName: string) => {
 	const readme = `# ${projectName} Graphweaver Project`;
 	writeFileSync(`${projectName}/README.md`, readme);
 };
+
+export const makeGitIgnore = (projectName: string) => {
+	const gitIgnore = `
+# Dependency directories
+node_modules
+
+# dotenv environment variables file
+.env
+.env.test
+
+# Built artefacts
+lib
+.graphweaver
+`;
+	writeFileSync(`${projectName}/.gitignore`, gitIgnore);
+};
