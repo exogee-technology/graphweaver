@@ -180,13 +180,13 @@ importers:
         version: 6.4.9
       '@mikro-orm/knex':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.12.0)(pg@8.13.3)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.14.0)(pg@8.13.3)
       '@mikro-orm/mysql':
         specifier: 6.4.9
         version: 6.4.9(@mikro-orm/core@6.4.9)(pg@8.13.3)
       '@mikro-orm/postgresql':
         specifier: 6.4.9
-        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.12.0)
+        version: 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.14.0)
       class-validator:
         specifier: 0.14.1
         version: 0.14.1
@@ -203,8 +203,8 @@ importers:
         specifier: 0.0.8
         version: 0.0.8
       mysql2:
-        specifier: 3.12.0
-        version: 3.12.0
+        specifier: 3.14.0
+        version: 3.14.0
       pg:
         specifier: 8.13.3
         version: 8.13.3
@@ -454,8 +454,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/cli
       mysql2:
-        specifier: 3.12.0
-        version: 3.12.0
+        specifier: 3.14.0
+        version: 3.14.0
       react:
         specifier: 19.0.0
         version: 19.0.0
@@ -8547,12 +8547,12 @@ packages:
     resolution: {integrity: sha512-avsJQhyd+680gKXyG/sQc0nXaC6rBkPOfyHYcFb9+hdkqQkR9bdnkJ0AMZhke0oesPqIO+mFFJ+IdBc7mst4IA==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  mysql2@3.12.0:
-    resolution: {integrity: sha512-C8fWhVysZoH63tJbX8d10IAoYCyXy4fdRFz2Ihrt9jtPILYynFEKUUzpp1U7qxzDc3tMbotvaBH+sl6bFnGZiw==}
-    engines: {node: '>= 8.0'}
-
   mysql2@3.13.0:
     resolution: {integrity: sha512-M6DIQjTqKeqXH5HLbLMxwcK5XfXHw30u5ap6EZmu7QVmcF/gnh2wS/EOiQ4MTbXz/vQeoXrmycPlVRM00WSslg==}
+    engines: {node: '>= 8.0'}
+
+  mysql2@3.14.0:
+    resolution: {integrity: sha512-8eMhmG6gt/hRkU1G+8KlGOdQi2w+CgtNoD1ksXZq9gQfkfDsX4LHaBwTe1SY0Imx//t2iZA03DFnyYKPinxSRw==}
     engines: {node: '>= 8.0'}
 
   named-placeholders@1.1.3:
@@ -13984,21 +13984,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.12.0)(pg@8.13.3)':
-    dependencies:
-      '@mikro-orm/core': 6.4.9
-      fs-extra: 11.3.0
-      knex: 3.1.0(mysql2@3.12.0)(pg@8.13.3)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-
   '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.13.0)':
     dependencies:
       '@mikro-orm/core': 6.4.9
@@ -14019,6 +14004,21 @@ snapshots:
       '@mikro-orm/core': 6.4.9
       fs-extra: 11.3.0
       knex: 3.1.0(mysql2@3.13.0)(pg@8.13.3)
+      sqlstring: 2.3.3
+    transitivePeerDependencies:
+      - mysql
+      - mysql2
+      - pg
+      - pg-native
+      - sqlite3
+      - supports-color
+      - tedious
+
+  '@mikro-orm/knex@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.14.0)(pg@8.13.3)':
+    dependencies:
+      '@mikro-orm/core': 6.4.9
+      fs-extra: 11.3.0
+      knex: 3.1.0(mysql2@3.14.0)(pg@8.13.3)
       sqlstring: 2.3.3
     transitivePeerDependencies:
       - mysql
@@ -14125,10 +14125,10 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/postgresql@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.12.0)':
+  '@mikro-orm/postgresql@6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.14.0)':
     dependencies:
       '@mikro-orm/core': 6.4.9
-      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.12.0)(pg@8.13.3)
+      '@mikro-orm/knex': 6.4.9(@mikro-orm/core@6.4.9)(mysql2@3.14.0)(pg@8.13.3)
       pg: 8.13.3
       postgres-array: 3.0.4
       postgres-date: 2.1.0
@@ -19326,28 +19326,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  knex@3.1.0(mysql2@3.12.0)(pg@8.13.3):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      mysql2: 3.12.0
-      pg: 8.13.3
-    transitivePeerDependencies:
-      - supports-color
-
   knex@3.1.0(mysql2@3.13.0):
     dependencies:
       colorette: 2.0.19
@@ -19387,6 +19365,28 @@ snapshots:
       tildify: 2.0.0
     optionalDependencies:
       mysql2: 3.13.0
+      pg: 8.13.3
+    transitivePeerDependencies:
+      - supports-color
+
+  knex@3.1.0(mysql2@3.14.0)(pg@8.13.3):
+    dependencies:
+      colorette: 2.0.19
+      commander: 10.0.1
+      debug: 4.3.4
+      escalade: 3.2.0
+      esm: 3.2.25
+      get-package-type: 0.1.0
+      getopts: 2.3.0
+      interpret: 2.2.0
+      lodash: 4.17.21
+      pg-connection-string: 2.6.2
+      rechoir: 0.8.0
+      resolve-from: 5.0.0
+      tarn: 3.0.2
+      tildify: 2.0.0
+    optionalDependencies:
+      mysql2: 3.14.0
       pg: 8.13.3
     transitivePeerDependencies:
       - supports-color
@@ -19907,7 +19907,7 @@ snapshots:
 
   mute-stream@1.0.0: {}
 
-  mysql2@3.12.0:
+  mysql2@3.13.0:
     dependencies:
       aws-ssl-profiles: 1.1.2
       denque: 2.1.0
@@ -19919,7 +19919,7 @@ snapshots:
       seq-queue: 0.0.5
       sqlstring: 2.3.3
 
-  mysql2@3.13.0:
+  mysql2@3.14.0:
     dependencies:
       aws-ssl-profiles: 1.1.2
       denque: 2.1.0
