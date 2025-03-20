@@ -19,7 +19,7 @@ export const Logout = ({ onLogout }: LogoutProps) => {
 	const handleOnLogout = async () => {
 		try {
 			localStorage.removeItem(localStorageAuthKey);
-			await apolloClient.clearStore();
+			await apolloClient.resetStore();
 			if (onLogout) {
 				await onLogout();
 			} else {
