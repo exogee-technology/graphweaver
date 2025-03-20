@@ -45,8 +45,14 @@ export type SortEntity = Record<string, Sort>;
 
 export enum AdminUIFilterType {
 	DATE_RANGE = 'DATE_RANGE',
+	DATE_TIME_RANGE = 'DATE_TIME_RANGE',
 	ENUM = 'ENUM',
+
+	/** Default for numbers - shows simple numeric input */
 	NUMERIC = 'NUMERIC',
+
+	/** Shows a range to filter by a range from and to a number. */
+	NUMERIC_RANGE = 'NUMERIC_RANGE',
 	RELATIONSHIP = 'RELATIONSHIP',
 	TEXT = 'TEXT',
 	BOOLEAN = 'BOOLEAN',

@@ -86,9 +86,8 @@
 
 .filterButtons {
 	display: flex;
-	flex-direction: row;
+	justify-content: space-around;
 	gap: 8px;
-	padding: 8px;
 }
 
 .inputField {
@@ -118,15 +117,13 @@
 	--rdp-accent-color: var(--primary-color);
 }
 
-.timeSelector {
+.inputContainer {
 	display: flex;
-	gap: 5px;
+	gap: 2px;
+	margin: 10px 0 15px 0;
 	align-items: center;
 }
 
-.timeSelector input {
-	width: 101px;
-	border: 1px solid var(--primary-color);
-	border-radius: 7px;
-	padding: 1px 5px;
+input.input {
+	width: 100%;
 }

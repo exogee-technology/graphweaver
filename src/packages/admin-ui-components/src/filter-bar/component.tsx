@@ -9,6 +9,7 @@ import {
 	DropdownTextFilter,
 	EnumFilter,
 	NumericFilter,
+	NumericRangeFilter,
 	RelationshipFilter,
 	TextFilter,
 	validateFilter,
@@ -143,8 +144,18 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 					return <EnumFilter key={field.name} {...options} />;
 				case AdminUIFilterType.NUMERIC:
 					return <NumericFilter key={field.name} {...options} />;
+				case AdminUIFilterType.NUMERIC_RANGE:
+					return <NumericRangeFilter key={field.name} {...options} />;
 				case AdminUIFilterType.DATE_RANGE:
-					return <DateRangeFilter key={field.name} {...options} />;
+				case AdminUIFilterType.DATE_TIME_RANGE:
+					return (
+						<DateRangeFilter
+							key={field.name}
+							{...options}
+							filterType={field.filter.type}
+							fieldType={field.type}
+						/>
+					);
 			}
 		});
 	}, [entityName, temporaryFilters]);

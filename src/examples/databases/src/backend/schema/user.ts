@@ -4,6 +4,7 @@ import {
 	Entity,
 	graphweaverMetadata,
 	DetailPanelInputComponentOption,
+	AdminUIFilterType,
 } from '@exogee/graphweaver';
 import { MikroBackendProvider } from '@exogee/graphweaver-mikroorm';
 
@@ -32,6 +33,14 @@ export class User {
 
 	@Field(() => UserStatus, { defaultValue: UserStatus.ACTIVE })
 	status!: UserStatus;
+
+	@Field(() => Number, {
+		nullable: true,
+		adminUIOptions: {
+			filterType: AdminUIFilterType.NUMERIC_RANGE,
+		},
+	})
+	age?: number;
 
 	@Field(() => String, {
 		nullable: true,

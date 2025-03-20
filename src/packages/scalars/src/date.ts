@@ -1,7 +1,7 @@
 import { GraphQLScalarType, Kind } from 'graphql';
 
 export const DateScalar = new GraphQLScalarType({
-	name: 'Date',
+	name: 'DateScalar',
 	description:
 		'The concept of a date without a time and/or timezone, e.g. My birthday is January 1st, 1864 regardless of timezone.',
 	serialize(value: unknown): string {

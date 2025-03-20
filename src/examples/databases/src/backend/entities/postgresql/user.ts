@@ -25,6 +25,9 @@ export class User {
 	})
 	status?: UserStatus = UserStatus.ACTIVE;
 
+	@Property({ type: Number, nullable: true })
+	age?: number;
+
 	@Property({ type: String, nullable: true })
 	notes!: string;
 }

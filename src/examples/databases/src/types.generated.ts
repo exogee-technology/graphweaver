@@ -19,7 +19,7 @@ export type Scalars = {
   /** The `BigInt` scalar type represents non-fractional signed whole numeric values. */
   BigInt: { input: any; output: any; }
   /** The concept of a date without a time and/or timezone, e.g. My birthday is January 1st, 1864 regardless of timezone. */
-  Date: { input: any; output: any; }
+  DateScalar: { input: any; output: any; }
   /** Returns a string in simplified extended ISO format (ISO 8601), which is always 24 or 27 characters long (YYYY-MM-DDTHH:mm:ss.sssZ or ±YYYYYY-MM-DDTHH:mm:ss.sssZ, respectively). The timezone is always zero UTC offset, as denoted by the suffix "Z". */
   ISOString: { input: any; output: any; }
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
@@ -99,9 +99,11 @@ export type AdminUiFilterMetadata = {
 export enum AdminUiFilterType {
   Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
+  DateTimeRange = 'DATE_TIME_RANGE',
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
+  NumericRange = 'NUMERIC_RANGE',
   Relationship = 'RELATIONSHIP',
   Text = 'TEXT'
 }
@@ -298,7 +300,7 @@ export type Task = {
   __typename?: 'Task';
   createdAt: Scalars['ISOString']['output'];
   description: Scalars['String']['output'];
-  dueAt?: Maybe<Scalars['Date']['output']>;
+  dueAt?: Maybe<Scalars['DateScalar']['output']>;
   id: Scalars['BigInt']['output'];
   isCompleted: Scalars['Boolean']['output'];
   meta?: Maybe<Scalars['JSON']['output']>;
@@ -321,7 +323,7 @@ export type TaskUser_AggregateArgs = {
 export type TaskCreateOrUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
@@ -333,7 +335,7 @@ export type TaskCreateOrUpdateInput = {
 export type TaskInsertInput = {
   createdAt: Scalars['ISOString']['input'];
   description: Scalars['String']['input'];
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
   isCompleted: Scalars['Boolean']['input'];
   meta?: InputMaybe<Scalars['JSON']['input']>;
   updatedAt: Scalars['ISOString']['input'];
@@ -344,7 +346,7 @@ export type TaskInsertInput = {
 export type TaskUpdateInput = {
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
   id: Scalars['ID']['input'];
   isCompleted?: InputMaybe<Scalars['Boolean']['input']>;
   meta?: InputMaybe<Scalars['JSON']['input']>;
@@ -354,6 +356,7 @@ export type TaskUpdateInput = {
 
 export type TasksListFilter = {
   _and?: InputMaybe<Array<InputMaybe<TasksListFilter>>>;
+  _not?: InputMaybe<TasksListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TasksListFilter>>>;
   createdAt?: InputMaybe<Scalars['ISOString']['input']>;
   createdAt_gt?: InputMaybe<Scalars['ISOString']['input']>;
@@ -377,14 +380,14 @@ export type TasksListFilter = {
   description_nin?: InputMaybe<Array<Scalars['String']['input']>>;
   description_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   description_null?: InputMaybe<Scalars['Boolean']['input']>;
-  dueAt?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_gt?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_gte?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_in?: InputMaybe<Array<Scalars['Date']['input']>>;
-  dueAt_lt?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_lte?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_ne?: InputMaybe<Scalars['Date']['input']>;
-  dueAt_nin?: InputMaybe<Array<Scalars['Date']['input']>>;
+  dueAt?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_gt?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_gte?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_in?: InputMaybe<Array<Scalars['DateScalar']['input']>>;
+  dueAt_lt?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_lte?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_ne?: InputMaybe<Scalars['DateScalar']['input']>;
+  dueAt_nin?: InputMaybe<Array<Scalars['DateScalar']['input']>>;
   dueAt_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   dueAt_null?: InputMaybe<Scalars['Boolean']['input']>;
   id?: InputMaybe<Scalars['BigInt']['input']>;
@@ -437,6 +440,7 @@ export type TasksPaginationInput = {
 
 export type User = {
   __typename?: 'User';
+  age?: Maybe<Scalars['Float']['output']>;
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   notes?: Maybe<Scalars['String']['output']>;
@@ -446,6 +450,7 @@ export type User = {
 
 /** Data needed to create or update Users. If an ID is passed, this is an update, otherwise it's an insert. */
 export type UserCreateOrUpdateInput = {
+  age?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
   notes?: InputMaybe<Scalars['String']['input']>;
@@ -455,6 +460,7 @@ export type UserCreateOrUpdateInput = {
 
 /** Data needed to create Users. */
 export type UserInsertInput = {
+  age?: InputMaybe<Scalars['Float']['input']>;
   email: Scalars['String']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<UserStatus>;
@@ -469,6 +475,7 @@ export enum UserStatus {
 
 /** Data needed to update Users. An ID must be passed. */
 export type UserUpdateInput = {
+  age?: InputMaybe<Scalars['Float']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   notes?: InputMaybe<Scalars['String']['input']>;
@@ -478,7 +485,18 @@ export type UserUpdateInput = {
 
 export type UsersListFilter = {
   _and?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
+  _not?: InputMaybe<UsersListFilter>;
   _or?: InputMaybe<Array<InputMaybe<UsersListFilter>>>;
+  age?: InputMaybe<Scalars['Float']['input']>;
+  age_gt?: InputMaybe<Scalars['Float']['input']>;
+  age_gte?: InputMaybe<Scalars['Float']['input']>;
+  age_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  age_lt?: InputMaybe<Scalars['Float']['input']>;
+  age_lte?: InputMaybe<Scalars['Float']['input']>;
+  age_ne?: InputMaybe<Scalars['Float']['input']>;
+  age_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
+  age_notnull?: InputMaybe<Scalars['Boolean']['input']>;
+  age_null?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   email_gt?: InputMaybe<Scalars['String']['input']>;
   email_gte?: InputMaybe<Scalars['String']['input']>;
@@ -531,6 +549,7 @@ export type UsersListFilter = {
 };
 
 export type UsersOrderByInput = {
+  age?: InputMaybe<Sort>;
   email?: InputMaybe<Sort>;
   id?: InputMaybe<Sort>;
   notes?: InputMaybe<Sort>;

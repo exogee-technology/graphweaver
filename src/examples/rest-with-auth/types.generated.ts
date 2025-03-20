@@ -97,9 +97,11 @@ export type AdminUiFilterMetadata = {
 export enum AdminUiFilterType {
   Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
+  DateTimeRange = 'DATE_TIME_RANGE',
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
+  NumericRange = 'NUMERIC_RANGE',
   Relationship = 'RELATIONSHIP',
   Text = 'TEXT'
 }
@@ -786,7 +788,11 @@ export type TaskCountByTagsListFilter = {
   _not?: InputMaybe<TaskCountByTagsListFilter>;
   _or?: InputMaybe<Array<InputMaybe<TaskCountByTagsListFilter>>>;
   count?: InputMaybe<Scalars['Float']['input']>;
+  count_gt?: InputMaybe<Scalars['Float']['input']>;
+  count_gte?: InputMaybe<Scalars['Float']['input']>;
   count_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  count_lt?: InputMaybe<Scalars['Float']['input']>;
+  count_lte?: InputMaybe<Scalars['Float']['input']>;
   count_ne?: InputMaybe<Scalars['Float']['input']>;
   count_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
   count_notnull?: InputMaybe<Scalars['Boolean']['input']>;

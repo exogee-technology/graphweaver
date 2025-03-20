@@ -10,6 +10,7 @@ import { customFields as authCustomFields } from 'virtual:graphweaver-auth-ui-co
 import { Modal } from '../modal';
 
 import {
+	AdminUIFilterType,
 	CustomField,
 	decodeSearchParams,
 	DetailPanelInputComponentOption,
@@ -96,8 +97,18 @@ const getField = ({
 		return <BooleanField field={field} autoFocus={autoFocus} disabled={isReadonly} />;
 	}
 
-	if (field.type === 'Date') {
-		return <DateField field={field} />;
+	if (field.type === 'Date' || field.type === 'DateScalar') {
+		return (
+			<DateField
+				field={field}
+				filterType={
+					field.type === 'DateScalar'
+						? AdminUIFilterType.DATE_RANGE
+						: AdminUIFilterType.DATE_TIME_RANGE
+				}
+				fieldType={field.type}
+			/>
+		);
 	}
 
 	if (field.type === 'GraphweaverMedia') {

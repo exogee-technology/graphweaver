@@ -24,6 +24,9 @@ const mapFilterType = (field: AdminUiFieldMetadata): AdminUIFilterType => {
 		case 'String':
 			return AdminUIFilterType.TEXT;
 		case 'ISOString':
+		case 'Date':
+			return AdminUIFilterType.DATE_TIME_RANGE;
+		case 'DateScalar':
 			return AdminUIFilterType.DATE_RANGE;
 		case 'Boolean':
 			return AdminUIFilterType.BOOLEAN;

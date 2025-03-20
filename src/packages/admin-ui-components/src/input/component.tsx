@@ -17,9 +17,16 @@ interface NumericFilterProps {
 		| 'none'
 		| 'decimal'
 		| undefined;
+	inputClassName?: string;
 }
 
-export const Input = ({ fieldName, onChange, value, inputMode }: NumericFilterProps) => {
+export const Input = ({
+	fieldName,
+	onChange,
+	value,
+	inputMode,
+	inputClassName,
+}: NumericFilterProps) => {
 	const handleOnChange = (event: ChangeEvent<HTMLInputElement>) => {
 		if (!onChange) return;
 		onChange(fieldName, event.target.value);
@@ -29,7 +36,8 @@ export const Input = ({ fieldName, onChange, value, inputMode }: NumericFilterPr
 		<div className={styles.inputWrapper}>
 			<div className={clsx(value && styles.inputHighlighted, styles.input)}>
 				<input
-					type="text"
+					className={inputClassName}
+					type={inputMode === 'numeric' || inputMode === 'decimal' ? 'number' : 'text'}
 					inputMode={inputMode}
 					key={fieldName}
 					placeholder={fieldName}
