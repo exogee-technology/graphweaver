@@ -1029,8 +1029,8 @@ importers:
         specifier: 3.768.0
         version: 3.768.0
       '@aws-sdk/client-lambda':
-        specifier: 3.758.0
-        version: 3.758.0
+        specifier: 3.771.0
+        version: 3.771.0
       '@exogee/graphweaver-rest-legacy':
         specifier: workspace:*
         version: link:../rest-legacy
@@ -2023,8 +2023,8 @@ packages:
     resolution: {integrity: sha512-HG43plusOJwAL2CgL2u8x4bPfj+RY63p5JDR8vkGY6bvzc97RSsPBvVbG3XKKqloRmwuGskZEmwsUnyirTO0hQ==}
     engines: {node: '>=18.0.0'}
 
-  '@aws-sdk/client-lambda@3.758.0':
-    resolution: {integrity: sha512-k7L9fe0NN1v2Vhg4ofA1pb26gTdGVFdkA6XUQyElLEdcKzJzoYiQ60faNLuMPfH0zsKNvy/xKfNOD6DFZWjgEg==}
+  '@aws-sdk/client-lambda@3.771.0':
+    resolution: {integrity: sha512-0/4IGf4Nbc9Dfo6/9P0Qq7O5B1L7DGsfUg6Yl963GTOaM8wwYc8WzZy7F3EqMYIrGPz0M12IdYL9bU0hThnZvA==}
     engines: {node: '>=18.0.0'}
 
   '@aws-sdk/client-s3@3.758.0':
@@ -11203,7 +11203,7 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
 
-  '@aws-sdk/client-lambda@3.758.0':
+  '@aws-sdk/client-lambda@3.771.0':
     dependencies:
       '@aws-crypto/sha256-browser': 5.2.0
       '@aws-crypto/sha256-js': 5.2.0
@@ -21455,7 +21455,7 @@ snapshots:
 
   serverless-offline@14.4.0(serverless@4.4.3):
     dependencies:
-      '@aws-sdk/client-lambda': 3.758.0
+      '@aws-sdk/client-lambda': 3.771.0
       '@hapi/boom': 10.0.1
       '@hapi/h2o2': 10.0.4
       '@hapi/hapi': 21.3.10
