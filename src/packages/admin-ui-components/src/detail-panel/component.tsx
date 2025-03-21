@@ -4,11 +4,9 @@ import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useParams, useSearchParams } from 'wouter';
 import toast from 'react-hot-toast';
-
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { customFields as authCustomFields } from 'virtual:graphweaver-auth-ui-components';
 import { Modal } from '../modal';
-
 import {
 	AdminUIFilterType,
 	CustomField,
@@ -36,7 +34,7 @@ import {
 	RichTextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-
+import { getEntityListQueryName } from '../entity-list/graphql';
 import { dataTransforms } from './use-data-transform';
 import { isValueEmpty, parseValueForForm } from './util';
 import styles from './styles.module.css';
@@ -471,22 +469,15 @@ export const DetailPanel = () => {
 			let result: FetchResult | undefined = undefined;
 
 			try {
-				if (panelMode === PanelMode.EDIT) {
-					// Update an existing entity
-					result = await updateEntity({
-						variables: {
-							input: values,
-						},
-					});
-				} else {
-					// Create a new entity
-					result = await createEntity({
-						variables: {
-							input: values,
-						},
-						refetchQueries: [`${selectedEntity.plural}List`],
-					});
-				}
+				const options = {
+					variables: {
+						input: values,
+					},
+					refetchQueries: [getEntityListQueryName(selectedEntity)],
+				};
+
+				result =
+					panelMode === PanelMode.EDIT ? await updateEntity(options) : await createEntity(options);
 			} catch (error: any) {
 				console.error(error);
 				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
