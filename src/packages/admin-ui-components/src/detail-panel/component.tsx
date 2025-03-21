@@ -4,11 +4,9 @@ import { Form, Formik, FormikHelpers, useFormikContext } from 'formik';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useParams, useSearchParams } from 'wouter';
 import toast from 'react-hot-toast';
-
 import { customFields } from 'virtual:graphweaver-user-supplied-custom-fields';
 import { customFields as authCustomFields } from 'virtual:graphweaver-auth-ui-components';
 import { Modal } from '../modal';
-
 import {
 	AdminUIFilterType,
 	CustomField,
@@ -36,7 +34,8 @@ import {
 	RichTextField,
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
-
+import { getEntityListQueryName } from '../entity-list/graphql';
+import { apolloClient } from '../apollo';
 import { dataTransforms } from './use-data-transform';
 import { isValueEmpty, parseValueForForm } from './util';
 import styles from './styles.module.css';
@@ -487,6 +486,8 @@ export const DetailPanel = () => {
 						refetchQueries: [`${selectedEntity.plural}List`],
 					});
 				}
+				const listQueryName = getEntityListQueryName(selectedEntity);
+				await apolloClient.refetchQueries({ include: [listQueryName] });
 			} catch (error: any) {
 				console.error(error);
 				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
