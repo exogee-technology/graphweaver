@@ -13,11 +13,11 @@ export const queryForEntityPage = (entityName: string, entityByType: (type: stri
 	const entityCanCount = entity.supportedAggregationTypes.includes(AggregationType.COUNT);
 
 	return gql`
-		query ${pluralName}List($filter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
-			result: ${queryName}(filter: $filter, pagination: $pagination) {
+		query ${pluralName}List($detailFilter: ${pluralName}ListFilter, $countFilter: ${pluralName}ListFilter, $pagination: ${pluralName}PaginationInput) {
+			result: ${queryName}(filter: $detailFilter, pagination: $pagination) {
 				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}
-			${entityCanCount ? `aggregate: ${queryName}_aggregate(filter: $filter) { count }` : ''}
+			${entityCanCount ? `aggregate: ${queryName}_aggregate(filter: $countFilter) { count }` : ''}
 		}
 	`;
 };
