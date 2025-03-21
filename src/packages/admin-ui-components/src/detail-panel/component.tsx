@@ -35,7 +35,6 @@ import {
 } from './fields';
 import { DetailPanelFieldLabel } from '../detail-panel-field-label';
 import { getEntityListQueryName } from '../entity-list/graphql';
-import { apolloClient } from '../apollo';
 import { dataTransforms } from './use-data-transform';
 import { isValueEmpty, parseValueForForm } from './util';
 import styles from './styles.module.css';
@@ -470,24 +469,15 @@ export const DetailPanel = () => {
 			let result: FetchResult | undefined = undefined;
 
 			try {
-				if (panelMode === PanelMode.EDIT) {
-					// Update an existing entity
-					result = await updateEntity({
-						variables: {
-							input: values,
-						},
-					});
-				} else {
-					// Create a new entity
-					result = await createEntity({
-						variables: {
-							input: values,
-						},
-						refetchQueries: [`${selectedEntity.plural}List`],
-					});
-				}
-				const listQueryName = getEntityListQueryName(selectedEntity);
-				await apolloClient.refetchQueries({ include: [listQueryName] });
+				const options = {
+					variables: {
+						input: values,
+					},
+					refetchQueries: [getEntityListQueryName(selectedEntity)],
+				};
+
+				result =
+					panelMode === PanelMode.EDIT ? await updateEntity(options) : await createEntity(options);
 			} catch (error: any) {
 				console.error(error);
 				return toast.error(`Error from server: ${error.message}`, { duration: 5000 });
