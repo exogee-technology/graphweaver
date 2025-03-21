@@ -64,7 +64,7 @@ const generateTypePolicyFields = (entities: Entity[]) => {
 export const generateTypePolicies = (entities: Entity[]) => {
 	const result: TypePolicies = {
 		// AggregationResult objects don't have any ID field at all, so they cannot be cached.
-		AggregationResult: { keyFields: [] },
+		AggregationResult: { keyFields: false },
 	};
 
 	for (const entity of entities) {
