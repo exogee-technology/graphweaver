@@ -22,10 +22,10 @@ import { BaseDataProvider } from '@exogee/graphweaver';
 
 const phrase =
 	'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
-const mnemonic = Ethers.Mnemonic.fromPhrase(phrase);
-const mnemonic_instance = Ethers.HDNodeWallet.fromMnemonic(mnemonic);
-const ethers_provider = new Ethers.JsonRpcProvider();
-const ethers_signer = new Ethers.Wallet(mnemonic_instance.privateKey, ethers_provider);
+const mnemonic = (Ethers as any).Mnemonic.fromPhrase(phrase);
+const mnemonic_instance = (Ethers as any).HDNodeWallet.fromMnemonic(mnemonic);
+const ethers_provider = new (Ethers as any).JsonRpcProvider();
+const ethers_signer = new (Ethers as any).Wallet(mnemonic_instance.privateKey, ethers_provider);
 
 class WalletAddressBackendProvider extends BaseDataProvider<
 	AuthenticationBaseEntity<WalletAddress>
