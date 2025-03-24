@@ -1,4 +1,4 @@
-name: Auth End to End Tests
+name: Fuzzy Tests
 
 on:
   pull_request:
@@ -34,20 +34,39 @@ jobs:
           cache: "pnpm"
           cache-dependency-path: src/pnpm-lock.yaml
 
+      - name: 🔥 Initialize MySQL
+        run: sudo systemctl start mysql.service
+
       - name: Install dependencies
         run: pnpm i
 
       - name: Build CLI tool
         run: pnpm build
 
+      - name: Import the REST with auth example
+        working-directory: src/packages/end-to-end
+        run: |
+          pnpm import-auth
+        env:
+          CI: true
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: root
+
       - name: Start and Test Auth
         working-directory: src/packages/end-to-end
         timeout-minutes: 2
         run: |
-          pnpm test-auth
+          $(cd app && pnpm start) &
+          sleep 5 &&
+          pnpm test-fuzz &&
+          killall node
 
         env:
           CI: true
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: root
           AUTH_PUBLIC_KEY_PEM_BASE64: ${{ secrets.AUTH_PUBLIC_KEY_PEM_BASE64 }}
           AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
           AUTH_BASE_URI: "http://localhost:9000"
