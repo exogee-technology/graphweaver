@@ -1,0 +1,152 @@
+export enum ChartColorScheme {
+	blues = 'blues',
+	greens = 'greens',
+	greys = 'greys',
+	oranges = 'oranges',
+	purples = 'purples',
+	reds = 'reds',
+	blue_green = 'blue_green',
+	blue_purple = 'blue_purple',
+	green_blue = 'green_blue',
+	orange_red = 'orange_red',
+	purple_blue_green = 'purple_blue_green',
+	purple_blue = 'purple_blue',
+	purple_red = 'purple_red',
+	red_purple = 'red_purple',
+	yellow_green_blue = 'yellow_green_blue',
+	yellow_green = 'yellow_green',
+	yellow_orange_brown = 'yellow_orange_brown',
+	yellow_orange_red = 'yellow_orange_red',
+	brown_blueGreen = 'brown_blueGreen',
+	purpleRed_green = 'purpleRed_green',
+	pink_yellowGreen = 'pink_yellowGreen',
+	purple_orange = 'purple_orange',
+	red_blue = 'red_blue',
+	red_grey = 'red_grey',
+	red_yellow_blue = 'red_yellow_blue',
+	red_yellow_green = 'red_yellow_green',
+	spectral = 'spectral',
+	nivo = 'nivo',
+	category10 = 'category10',
+	accent = 'accent',
+	dark2 = 'dark2',
+	paired = 'paired',
+	pastel1 = 'pastel1',
+	pastel2 = 'pastel2',
+	set1 = 'set1',
+	set2 = 'set2',
+	set3 = 'set3',
+	tableau10 = 'tableau10',
+	RedPurple = 'red_purple',
+}
+
+export const theme = {
+	background: '#100a1c',
+	text: {
+		fontSize: 12,
+		fill: '#ede8f2',
+		outlineWidth: 0,
+		outlineColor: '#ede8f2',
+	},
+	axis: {
+		domain: {
+			line: {
+				stroke: '#777777',
+				strokeWidth: 1,
+			},
+		},
+		legend: {
+			text: {
+				fontSize: 12,
+				fill: '#ede8f2',
+				outlineWidth: 0,
+				outlineColor: 'transparent',
+			},
+		},
+		ticks: {
+			line: {
+				stroke: '#777777',
+				strokeWidth: 1,
+			},
+			text: {
+				fontSize: 11,
+				fill: '#e4dfea',
+				outlineWidth: 0,
+				outlineColor: 'transparent',
+			},
+		},
+	},
+	grid: {
+		line: {
+			stroke: '#dddddd',
+			strokeWidth: 1,
+		},
+	},
+	legends: {
+		title: {
+			text: {
+				fontSize: 11,
+				fill: '#ede8f2',
+				outlineWidth: 0,
+				outlineColor: 'transparent',
+			},
+		},
+		text: {
+			fontSize: 11,
+			fill: '#ede8f2',
+			outlineWidth: 0,
+			outlineColor: 'transparent',
+		},
+		ticks: {
+			line: {},
+			text: {
+				fontSize: 10,
+				fill: '#333333',
+				outlineWidth: 0,
+				outlineColor: 'transparent',
+			},
+		},
+	},
+	annotations: {
+		text: {
+			fontSize: 13,
+			fill: '#333333',
+			outlineWidth: 2,
+			outlineColor: '#ffffff',
+			outlineOpacity: 1,
+		},
+		link: {
+			stroke: '#000000',
+			strokeWidth: 1,
+			outlineWidth: 2,
+			outlineColor: '#ffffff',
+			outlineOpacity: 1,
+		},
+		outline: {
+			stroke: '#000000',
+			strokeWidth: 2,
+			outlineWidth: 2,
+			outlineColor: '#ffffff',
+			outlineOpacity: 1,
+		},
+		symbol: {
+			fill: '#000000',
+			outlineWidth: 2,
+			outlineColor: '#ffffff',
+			outlineOpacity: 1,
+		},
+	},
+	tooltip: {
+		wrapper: {},
+		container: {
+			background: '#171221',
+			color: '#abbce9',
+			fontSize: 12,
+		},
+		basic: {},
+		chip: {},
+		table: {},
+		tableCell: {},
+		tableCellValue: {},
+	},
+};
