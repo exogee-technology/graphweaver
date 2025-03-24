@@ -13,7 +13,7 @@ import Graphweaver from '@exogee/graphweaver-server';
 import assert from 'assert';
 import gql from 'graphql-tag';
 import Web3Token from 'web3-token';
-import Ethers from 'ethers';
+import { Mnemonic, HDNodeWallet, JsonRpcProvider, Wallet } from 'ethers';
 import { BaseDataProvider } from '@exogee/graphweaver';
 
 // ESLint, I know it looks like the entities in this file aren't used, but they actually are.
@@ -22,10 +22,10 @@ import { BaseDataProvider } from '@exogee/graphweaver';
 
 const phrase =
 	'abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about';
-const mnemonic = (Ethers as any).Mnemonic.fromPhrase(phrase);
-const mnemonic_instance = (Ethers as any).HDNodeWallet.fromMnemonic(mnemonic);
-const ethers_provider = new (Ethers as any).JsonRpcProvider();
-const ethers_signer = new (Ethers as any).Wallet(mnemonic_instance.privateKey, ethers_provider);
+const mnemonic = Mnemonic.fromPhrase(phrase);
+const mnemonic_instance = HDNodeWallet.fromMnemonic(mnemonic);
+const ethers_provider = new JsonRpcProvider();
+const ethers_signer = new Wallet(mnemonic_instance.privateKey, ethers_provider);
 
 class WalletAddressBackendProvider extends BaseDataProvider<
 	AuthenticationBaseEntity<WalletAddress>
