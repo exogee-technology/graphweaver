@@ -43,20 +43,20 @@
 		"eslint": "9.16.0",
 		"eslint-config-prettier": "10.1.1",
 		"globals": "16.0.0",
-		"prettier": "3.4.2",
+		"prettier": "3.5.3",
 		"turbo": "2.4.2",
 		"typescript": "5.8.2",
-		"typescript-eslint": "8.26.1"
+		"typescript-eslint": "8.27.0"
 	},
 	"pnpm": {
 		"overrides": {
 			"d3-color": "3.1.0",
 			"@babel/traverse": "7.23.2",
-			"@mikro-orm/core": "6.4.9",
-			"@mikro-orm/knex": "6.4.9",
-			"@mikro-orm/postgresql": "6.4.9",
-			"@mikro-orm/mysql": "6.4.9",
-			"@mikro-orm/sqlite": "6.4.9"
+			"@mikro-orm/core": "6.4.10",
+			"@mikro-orm/knex": "6.4.10",
+			"@mikro-orm/postgresql": "6.4.10",
+			"@mikro-orm/mysql": "6.4.10",
+			"@mikro-orm/sqlite": "6.4.10"
 		},
 		"peerDependencyRules": {
 			"ignoreMissing": [
