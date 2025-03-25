@@ -47,6 +47,9 @@ export const startStandaloneServer = async <TContext extends BaseContext>(
 		onRequestWrapper(plugins, async () => done());
 	});
 
+	// Always flush the logger on each request so logs get persisted.
+	fastify.addHook('onResponse', async () => logger.flush());
+
 	fastify.get('/health', async (_, reply) => {
 		reply.statusCode = 200;
 		reply.send({
