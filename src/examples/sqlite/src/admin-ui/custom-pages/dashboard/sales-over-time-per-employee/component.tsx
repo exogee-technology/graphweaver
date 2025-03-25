@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import classNames from 'classNames';
+import { clsx } from 'clsx';
 import { useData } from './use-data';
 import { LineChart } from './line-chart';
 import { BarChart } from './bar-chart';
@@ -35,8 +35,8 @@ export const SalesOverTimePerEmployee = () => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error: {error.message}</p>;
 
-	const lineClassName = classNames(styles.buttonLine, { [styles.active]: chartType === 'line' });
-	const barClassName = classNames(styles.buttonBar, { [styles.active]: chartType === 'bar' });
+	const lineClassName = clsx(styles.buttonLine, { [styles.active]: chartType === 'line' });
+	const barClassName = clsx(styles.buttonBar, { [styles.active]: chartType === 'bar' });
 
 	return (
 		<div className={styles.container}>
