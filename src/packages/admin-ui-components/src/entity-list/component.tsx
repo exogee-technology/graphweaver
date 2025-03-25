@@ -55,6 +55,7 @@ export const EntityList = <TData extends object>({ children }: { children: React
 	);
 
 	const sort = getOrderByQuery({ sort: sorting, defaultSort, primaryKeyField });
+	const filter = filters ?? defaultFilter ?? {};
 
 	const variables = {
 		pagination: {
@@ -62,7 +63,8 @@ export const EntityList = <TData extends object>({ children }: { children: React
 			limit: PAGE_SIZE,
 			orderBy: sort,
 		},
-		...(filters ? { filter: filters } : { filter: defaultFilter }),
+		detailFilter: filter,
+		countFilter: filter,
 	};
 
 	const { data, loading, error, fetchMore } = useQuery<QueryResponse<TData>>(
@@ -108,13 +110,14 @@ export const EntityList = <TData extends object>({ children }: { children: React
 	const handleFetchNextPage = async () => {
 		const lastElement = data?.result?.[data.result.length - 1];
 
-		let filter = variables.filter ?? {};
+		let detailFilter = variables.detailFilter ?? {};
 		let offset = 0;
-		const sortedByPrimaryKeyOnly = Object.keys(sort).length === 1 && Object.keys(sort)[0] === entity.primaryKeyField;
+		const sortedByPrimaryKeyOnly =
+			Object.keys(sort).length === 1 && Object.keys(sort)[0] === entity.primaryKeyField;
 		if (supportsPseudoCursorPagination && sortedByPrimaryKeyOnly) {
 			// We don't yet have a way to define sort order, so for now we
 			// can only page this way in this case.
-			filter = addStabilizationToFilter(filter, sort, lastElement);
+			detailFilter = addStabilizationToFilter(detailFilter, sort, lastElement);
 		} else {
 			const nextPage = Math.ceil((data?.result.length ?? 0) / PAGE_SIZE);
 			offset = nextPage * PAGE_SIZE;
@@ -127,7 +130,8 @@ export const EntityList = <TData extends object>({ children }: { children: React
 					...variables.pagination,
 					offset,
 				},
-				filter,
+				detailFilter,
+				countFilter: variables.countFilter,
 			},
 		});
 	};
