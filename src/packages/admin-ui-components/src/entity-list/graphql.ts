@@ -17,9 +17,16 @@ export const queryForEntityPage = (entityName: string, entityByType: (type: stri
 	const entityFieldName = pluralEntityName[0].toLowerCase() + pluralEntityName.slice(1);
 	const queryName = getEntityListQueryName(entity);
 	const entityCanCount = entity.supportedAggregationTypes.includes(AggregationType.COUNT);
+	const parameterDeclaration = [
+		`$detailFilter: ${pluralEntityName}ListFilter`,
+		entityCanCount ? ` $countFilter: ${pluralEntityName}ListFilter` : undefined,
+		`$pagination: ${pluralEntityName}PaginationInput`,
+	]
+		.filter(Boolean)
+		.join(', ');
 
 	return gql`
-		query ${queryName}($detailFilter: ${pluralEntityName}ListFilter, $countFilter: ${pluralEntityName}ListFilter, $pagination: ${pluralEntityName}PaginationInput) {
+		query ${queryName}( ${parameterDeclaration} ) {
 			result: ${entityFieldName}(filter: $detailFilter, pagination: $pagination) {
 				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}
