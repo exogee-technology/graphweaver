@@ -38,7 +38,7 @@
 		"wouter": "3.6.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.10",
+		"@types/node": "22.13.13",
 		"dotenv-cli": "8.0.0",
 		"typescript": "5.8.2",
 		"vite": "6.2.2"
