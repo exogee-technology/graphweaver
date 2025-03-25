@@ -12,12 +12,14 @@ export interface RelationshipFilterProps {
 	entity: string;
 	onChange?: (fieldName: string, newFilter: Filter) => void;
 	filter?: Filter;
+	orderBy?: { [field: string]: 'ASC' | 'DESC' };
 }
 
 export const RelationshipFilter = ({
 	fieldName,
 	entity,
 	onChange,
+	orderBy,
 	filter,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
@@ -70,7 +72,7 @@ export const RelationshipFilter = ({
 			...(relatedEntity.summaryField
 				? {
 						pagination: {
-							orderBy: { [relatedEntity.summaryField]: 'ASC' },
+							orderBy: orderBy ?? { [relatedEntity.summaryField]: 'ASC' },
 						},
 					}
 				: {}),
