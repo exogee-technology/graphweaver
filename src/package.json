@@ -37,10 +37,10 @@
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.10",
-		"@eslint/js": "9.21.0",
+		"@eslint/js": "9.23.0",
 		"@types/eslint-config-prettier": "6.11.3",
 		"concurrently": "9.1.2",
-		"eslint": "9.16.0",
+		"eslint": "9.23.0",
 		"eslint-config-prettier": "10.1.1",
 		"globals": "16.0.0",
 		"prettier": "3.5.3",
@@ -52,11 +52,11 @@
 		"overrides": {
 			"d3-color": "3.1.0",
 			"@babel/traverse": "7.23.2",
-			"@mikro-orm/core": "6.4.10",
-			"@mikro-orm/knex": "6.4.10",
-			"@mikro-orm/postgresql": "6.4.10",
-			"@mikro-orm/mysql": "6.4.10",
-			"@mikro-orm/sqlite": "6.4.10"
+			"@mikro-orm/core": "6.4.11",
+			"@mikro-orm/knex": "6.4.11",
+			"@mikro-orm/postgresql": "6.4.11",
+			"@mikro-orm/mysql": "6.4.11",
+			"@mikro-orm/sqlite": "6.4.11"
 		},
 		"peerDependencyRules": {
 			"ignoreMissing": [

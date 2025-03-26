@@ -17,13 +17,20 @@ export const queryForEntityPage = (entityName: string, entityByType: (type: stri
 	const entityFieldName = pluralEntityName[0].toLowerCase() + pluralEntityName.slice(1);
 	const queryName = getEntityListQueryName(entity);
 	const entityCanCount = entity.supportedAggregationTypes.includes(AggregationType.COUNT);
+	const parameterDeclaration = [
+		`$detailFilter: ${pluralEntityName}ListFilter`,
+		entityCanCount ? ` $countFilter: ${pluralEntityName}ListFilter` : undefined,
+		`$pagination: ${pluralEntityName}PaginationInput`,
+	]
+		.filter(Boolean)
+		.join(', ');
 
 	return gql`
-		query ${queryName}($filter: ${pluralEntityName}ListFilter, $pagination: ${pluralEntityName}PaginationInput) {
-			result: ${entityFieldName}(filter: $filter, pagination: $pagination) {
+		query ${queryName}( ${parameterDeclaration} ) {
+			result: ${entityFieldName}(filter: $detailFilter, pagination: $pagination) {
 				${generateGqlSelectForEntityFields(entity, entityByType)}
 			}
-			${entityCanCount ? `aggregate: ${entityFieldName}_aggregate(filter: $filter) { count }` : ''}
+			${entityCanCount ? `aggregate: ${entityFieldName}_aggregate(filter: $countFilter) { count }` : ''}
 		}
 	`;
 };
