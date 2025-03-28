@@ -24,7 +24,7 @@
 	},
 	"devDependencies": {
 		"@types/lodash": "4.17.16",
-		"@types/node": "22.13.10",
+		"@types/node": "22.13.14",
 		"esbuild": "0.25.1",
 		"prettier": "3.5.3",
 		"vite": "6.2.3"
