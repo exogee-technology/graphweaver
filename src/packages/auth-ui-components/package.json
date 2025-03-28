@@ -48,14 +48,14 @@
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@okta/okta-auth-js": "7.11.1",
 		"@simplewebauthn/types": "10.0.0",
-		"@types/react": "19.0.10",
+		"@types/react": "19.0.12",
 		"@types/react-dom": "19.0.4",
 		"esbuild": "0.25.1",
 		"glob": "11.0.1",
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"typescript": "5.8.2",
-		"vite": "6.2.2"
+		"vite": "6.2.3"
 	},
 	"keywords": [
 		"graphql",

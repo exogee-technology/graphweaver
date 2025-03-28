@@ -46,7 +46,7 @@
 		"prettier": "3.5.3",
 		"turbo": "2.4.2",
 		"typescript": "5.8.2",
-		"typescript-eslint": "8.27.0"
+		"typescript-eslint": "8.28.0"
 	},
 	"pnpm": {
 		"overrides": {
