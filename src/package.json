@@ -13,7 +13,7 @@
 		"pnpm": ">=9"
 	},
 	"scripts": {
-		"build": "concurrently \"turbo build:js\" \"turbo build:types\"",
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" && pnpm build:examples",
 		"build:examples": "turbo --filter \"./examples/**\" build",
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
 		"build:packages": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
