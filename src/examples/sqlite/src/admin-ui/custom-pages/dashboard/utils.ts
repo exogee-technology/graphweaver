@@ -37,7 +37,6 @@ export enum ChartColorScheme {
 	set2 = 'set2',
 	set3 = 'set3',
 	tableau10 = 'tableau10',
-	RedPurple = 'red_purple',
 }
 
 export const theme = {

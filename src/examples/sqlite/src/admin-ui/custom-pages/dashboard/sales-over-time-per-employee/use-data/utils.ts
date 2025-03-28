@@ -1,6 +1,5 @@
 import { DateTime } from 'luxon';
 import { DateSlot, EmployeeId, TotalSales } from '../utils';
-import { SalesPerEmployeeQuery } from './graphql.generated';
 import { LineChartItem } from '../line-chart/utils';
 import { BarChartItem } from '../bar-chart/utils';
 
