@@ -55,7 +55,7 @@
 		"react": "19.0.0",
 		"react-dom": "19.0.0",
 		"typescript": "5.8.2",
-		"vite": "6.2.2"
+		"vite": "6.2.3"
 	},
 	"keywords": [
 		"graphql",
