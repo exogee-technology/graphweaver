@@ -12,22 +12,31 @@
 		"version": "npm version --no-git-tag-version"
 	},
 	"dependencies": {
+		"@apollo/client": "3.13.4",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"@exogee/graphweaver-mikroorm": "workspace:*",
 		"@exogee/graphweaver-scalars": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
+		"@nivo/bar": "0.88.0",
+		"@nivo/core": "0.88.0",
+		"@nivo/line": "0.88.0",
+		"@nivo/pie": "0.88.0",
+		"clsx": "2.1.1",
 		"@mikro-orm/core": "6.4.11",
 		"@mikro-orm/knex": "6.4.11",
 		"@mikro-orm/sqlite": "6.4.11",
 		"graphql": "16.10.0",
+		"luxon": "3.5.0",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"react": "19.0.0",
 		"react-dom": "19.0.0"
 	},
 	"devDependencies": {
+		"@types/luxon": "3.4.2",
 		"@types/node": "22.13.14",
+		"@types/react": "19.0.12",
 		"graphweaver": "workspace:*",
 		"typescript": "5.8.2"
 	}

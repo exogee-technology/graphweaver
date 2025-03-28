@@ -1,0 +1,48 @@
+.container {
+	display: flex;
+}
+
+.controlsContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-width: 200px;
+}
+
+.chartContainer {
+	flex: 1;
+}
+
+.chartType {
+	display: flex;
+}
+
+.buttonLine,
+.buttonBar {
+	background-color: #5817ba;
+	cursor: pointer;
+	border: 1px solid #5817ba;
+	padding: 5px 10px;
+	border-radius: 5px;
+	width: 100%;
+}
+
+.buttonLine {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.buttonBar {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.buttonLine.active,
+.buttonBar.active {
+	background-color: var(--secondary-color);
+	border: var(--secondary-color);
+}
+
+.rangeInput {
+	width: 100%;
+}
