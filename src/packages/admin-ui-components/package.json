@@ -63,8 +63,8 @@
 		"formik": "2.4.6",
 		"glob": "11.0.1",
 		"graphql": "16.10.0",
-		"react": "19.0.0",
-		"react-dom": "19.0.0",
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
 		"typescript": "5.8.2",
 		"vite": "6.2.3"
 	},
