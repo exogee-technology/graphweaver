@@ -97,7 +97,7 @@ export const DatePicker = ({
 
 		setDateInputValue(e.target.value);
 
-		if (parsedStart.isValid || !parsedEnd) {
+		if (parsedStart.isValid || parsedEnd.isValid) {
 			onChange(
 				parsedStart.isValid 
 					? parsedStart 
@@ -132,7 +132,7 @@ export const DatePicker = ({
 		<div className={styles.container}>
 			<div className={styles.inputSelector}>
 				<input
-					className={clsx(startDate && styles.inputFieldActive, styles.inputField)}
+					className={clsx((startDate || dateInputValue.length) && styles.inputFieldActive, styles.inputField)}
 					onClick={() => setIsOpen((isOpen) => !isOpen)}
 					placeholder={placeholder}
 					value={(dateInputValue)}
