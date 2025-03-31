@@ -30,11 +30,28 @@ export const DatePicker = ({
 	filterType,
 	fieldType,
 }: Props) => {
-	const [isOpen, setIsOpen] = useState(false);
-	const datePickerRef = useRef<HTMLDivElement>(null);
+
+	const inputDisplayText = (start?: DateTime, end?: DateTime) => {
+		const withTime = filterType === AdminUIFilterType.DATE_TIME_RANGE;
+		if (start) {
+			const selectedDatesText = [
+				start.toFormat(getFormat(withTime)),
+				end?.toFormat(getFormat(withTime)),
+			];
+			return isRangePicker
+				? `${selectedDatesText.join('-')}`
+				: start.toFormat(getFormat(withTime));
+		} else {
+			return '';
+		}
+	};
 
 	const luxonStartDate = toLuxonDate(startDate);
 	const luxonEndDate = toLuxonDate(endDate);
+
+	const [isOpen, setIsOpen] = useState(false);
+	const [dateInputValue, setDateInputValue] = useState(inputDisplayText(luxonStartDate, luxonEndDate));
+	const datePickerRef = useRef<HTMLDivElement>(null);
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
 		const shouldHandleTimeBehindTheScenes =
@@ -50,6 +67,8 @@ export const DatePicker = ({
 			? (end?.endOf('day') ?? start?.endOf('day'))
 			: setTime(end, endDate, DateTime.now().endOf('day'));
 
+		setDateInputValue(inputDisplayText(start, end));
+
 		onChange(start, end);
 	};
 
@@ -61,27 +80,38 @@ export const DatePicker = ({
 		if (mode === 'end') {
 			end = setTime(endDate, end, DateTime.now().endOf('day'));
 		}
+		setDateInputValue(inputDisplayText(start, end))
 		onChange(start, end);
+	};
+
+	const handleInputFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const withTime = filterType === AdminUIFilterType.DATE_TIME_RANGE;
+		
+		let [inputStart, inputEnd] = isRangePicker 
+			? e.target.value.trim().split("-") 
+			: [e.target.value, undefined];
+
+		// Luxon is really picky about formats, hence the replaceAll
+		const parsedStart = DateTime.fromFormat(inputStart.replaceAll(/\s+/g, ' '), getFormat(withTime));
+		const parsedEnd = DateTime.fromFormat(inputEnd?.replaceAll(/\s+/g, ' ') ?? '', getFormat(withTime));
+
+		setDateInputValue(e.target.value);
+
+		if (parsedStart.isValid || !parsedEnd) {
+			onChange(
+				parsedStart.isValid 
+					? parsedStart 
+					: luxonStartDate, 
+				parsedEnd.isValid 
+					? parsedEnd 
+					: luxonEndDate
+			);
+		}
 	};
 
 	const clear = () => {
 		handleDateRangeSelect(undefined, undefined);
 		setIsOpen(false);
-	};
-
-	const displayText = () => {
-		const withTime = filterType === AdminUIFilterType.DATE_TIME_RANGE;
-		if (luxonStartDate) {
-			const selectedDatesText = [
-				luxonStartDate.toFormat(getFormat(withTime)),
-				luxonEndDate?.toFormat(getFormat(withTime)),
-			];
-			return isRangePicker
-				? `${selectedDatesText.join('-')}`
-				: luxonStartDate.toFormat(getFormat(withTime));
-		} else {
-			return placeholder ?? '';
-		}
 	};
 
 	useEffect(() => {
@@ -101,12 +131,14 @@ export const DatePicker = ({
 	return (
 		<div className={styles.container}>
 			<div className={styles.inputSelector}>
-				<div
+				<input
 					className={clsx(startDate && styles.inputFieldActive, styles.inputField)}
 					onClick={() => setIsOpen((isOpen) => !isOpen)}
-				>
-					{displayText()}
-				</div>
+					placeholder={placeholder}
+					value={(dateInputValue)}
+					onChange={handleInputFieldChange}
+					onBlur={() => {setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate))}}
+				/>
 				{startDate && (
 					<div className={styles.indicatorWrapper}>
 						<span className={styles.indicatorSeparator}></span>

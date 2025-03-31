@@ -116,6 +116,7 @@
 /* Styling overrides for react-day-picker */
 :global(.rdp-root) {
 	--rdp-accent-color: var(--primary-color);
+	--rdp-accent-background-color: #382f46;
 }
 
 .timeSelector {
