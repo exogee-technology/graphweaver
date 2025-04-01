@@ -14,11 +14,11 @@ export const setTime = (
 ) => {
 	const dateLuxon = toLuxonDate(date);
 	const timeDateLuxon = toLuxonDate(time) ?? defaultTime;
-	if (!dateLuxon) return dateLuxon;
-	return dateLuxon.startOf('day').plus({
-		hours: timeDateLuxon.hour,
-		minutes: timeDateLuxon.minute,
-		seconds: timeDateLuxon.second,
+	if (!dateLuxon || !dateLuxon.isValid || !timeDateLuxon.isValid) return dateLuxon;
+	return dateLuxon.set({
+		hour: timeDateLuxon.hour,
+		minute: timeDateLuxon.minute,
+		second: timeDateLuxon.second,
 	});
 };
 

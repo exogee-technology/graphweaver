@@ -19,10 +19,10 @@ export const TimeInput = (props: Props) => {
 				if (!event.target.value) return;
 				const newDate = DateTime.fromISO(event.target.value);
 				setValue(
-					(value ?? DateTime.now())?.startOf('day').plus({
-						hours: newDate.hour,
-						minutes: newDate.minute,
-						seconds: newDate.second,
+					(value ?? DateTime.now()).set({
+						hour: newDate.hour,
+						minute: newDate.minute,
+						second: newDate.second,
 					})
 				);
 			}}

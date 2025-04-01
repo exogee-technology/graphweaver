@@ -9,7 +9,7 @@ import { CloseButtonIcon } from '../assets';
 import { TimeInput } from './time-input';
 import { AdminUIFilterType } from '../utils';
 import { dateTimeFieldTypes } from '../filters';
-import { getFormat, setTime, toLuxonDate } from './utils';
+import { setTime, toLuxonDate } from './utils';
 
 interface Props {
 	onChange: (startDate?: DateTime, endDate?: DateTime) => void;
@@ -30,26 +30,30 @@ export const DatePicker = ({
 	filterType,
 	fieldType,
 }: Props) => {
-
-	const inputDisplayText = (start?: DateTime, end?: DateTime) => {
-		const withTime = filterType === AdminUIFilterType.DATE_TIME_RANGE;
-		if (start) {
-			const selectedDatesText = [
-				start.toFormat(getFormat(withTime)),
-				end?.toFormat(getFormat(withTime)),
-			];
-			return isRangePicker
-				? `${selectedDatesText.join('-')}`
-				: start.toFormat(getFormat(withTime));
-		} else {
-			return '';
-		}
-	};
-
+	const [isDateLocaleFormat, setIsDateLocaleFormat] = useState(true);
 	const luxonStartDate = toLuxonDate(startDate);
 	const luxonEndDate = toLuxonDate(endDate);
 
 	const [isOpen, setIsOpen] = useState(false);
+
+	const inputDisplayText = (start?: DateTime, end?: DateTime) => {
+		if (start) {
+			const selectedDatesText = isDateLocaleFormat 
+				? [
+					start.toLocaleString(),
+					end?.toLocaleString(),
+				] : [
+					start.toISODate(),
+					end?.toISODate(),
+				];
+			return isRangePicker
+				? `${selectedDatesText.join(' to ')}`
+				: start.toLocaleString();
+		} else {
+			return '';
+		}
+	};
+	
 	const [dateInputValue, setDateInputValue] = useState(inputDisplayText(luxonStartDate, luxonEndDate));
 	const datePickerRef = useRef<HTMLDivElement>(null);
 
@@ -85,18 +89,32 @@ export const DatePicker = ({
 	};
 
 	const handleInputFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const withTime = filterType === AdminUIFilterType.DATE_TIME_RANGE;
-		
-		let [inputStart, inputEnd] = isRangePicker 
-			? e.target.value.trim().split("-") 
+		setDateInputValue(e.target.value);
+		const [inputStart, inputEnd] = isRangePicker 
+			? e.target.value.trim().split(/\s+to\s+/) 
 			: [e.target.value, undefined];
 
-		// Luxon is really picky about formats, hence the replaceAll
-		const parsedStart = DateTime.fromFormat(inputStart.replaceAll(/\s+/g, ' '), getFormat(withTime));
-		const parsedEnd = DateTime.fromFormat(inputEnd?.replaceAll(/\s+/g, ' ') ?? '', getFormat(withTime));
+		let parsedStart = DateTime.fromISO(inputStart);
+		let parsedEnd = inputEnd === undefined
+			? DateTime.invalid('No end date provided')
+			: DateTime.fromISO(inputEnd).startOf('day');
 
-		setDateInputValue(e.target.value);
+		// If that didn't work, attempt to parse from locale format
+		const { locale } = Intl.DateTimeFormat().resolvedOptions();
+		if (!parsedStart.isValid) {
+			parsedStart = DateTime.fromFormat(inputStart, 'D', { locale });
+			parsedStart.isValid && setIsDateLocaleFormat(true);
+		} else {
+			setIsDateLocaleFormat(false);
+		}
+		if (!parsedEnd.isValid && inputEnd !== undefined) {
+			parsedEnd = DateTime.fromFormat(inputEnd, 'D', { locale });
+		}
 
+		parsedStart = setTime(parsedStart, luxonStartDate, parsedStart.startOf('day')) ?? parsedStart;
+		parsedEnd = setTime(parsedEnd, luxonEndDate, parsedEnd.endOf('day')) ?? parsedEnd;
+
+		// Only trigger onChange if the changed input actually formed a valid date
 		if (parsedStart.isValid || parsedEnd.isValid) {
 			onChange(
 				parsedStart.isValid 
@@ -137,7 +155,7 @@ export const DatePicker = ({
 					placeholder={placeholder}
 					value={(dateInputValue)}
 					onChange={handleInputFieldChange}
-					onBlur={() => {setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate))}}
+					onBlur={() => {setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate))}} //TODO: Fix
 				/>
 				{startDate && (
 					<div className={styles.indicatorWrapper}>
