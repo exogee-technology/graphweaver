@@ -131,4 +131,5 @@
 	border: 1px solid var(--primary-color);
 	border-radius: 7px;
 	padding: 3px 5px;
+	flex-grow: 1;
 }

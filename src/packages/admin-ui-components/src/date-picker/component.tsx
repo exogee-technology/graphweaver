@@ -155,7 +155,7 @@ export const DatePicker = ({
 					placeholder={placeholder}
 					value={(dateInputValue)}
 					onChange={handleInputFieldChange}
-					onBlur={() => {setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate))}} //TODO: Fix
+					onBlur={() => {setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate))}}
 				/>
 				{startDate && (
 					<div className={styles.indicatorWrapper}>
@@ -190,28 +190,28 @@ export const DatePicker = ({
 
 					{filterType === AdminUIFilterType.DATE_TIME_RANGE && !isRangePicker && (
 						<div className={styles.timeSelector}>
-							Time:
 							<TimeInput
 								value={luxonStartDate}
 								setValue={handleTimeInputChange('start')}
 								defaultTime="00:00:00"
+								label='Time'
 							/>
 						</div>
 					)}
 					{filterType === AdminUIFilterType.DATE_TIME_RANGE && isRangePicker && (
 						<div className={styles.timeSelector}>
-							From:{' '}
 							<TimeInput
 								value={luxonStartDate}
 								setValue={(value) => handleTimeInputChange('start')(value, luxonEndDate)}
 								defaultTime="00:00:00"
+								label='From'
 							/>
 							<div style={{ width: '5px' }}> </div>
-							To:{' '}
 							<TimeInput
 								value={luxonEndDate}
 								setValue={(value) => handleTimeInputChange('end')(luxonStartDate, value)}
 								defaultTime="23:59:59"
+								label='To'
 							/>
 						</div>
 					)}
