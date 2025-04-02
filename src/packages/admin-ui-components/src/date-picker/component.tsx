@@ -30,7 +30,7 @@ export const DatePicker = ({
 	filterType,
 	fieldType,
 }: Props) => {
-	const [isDateLocaleFormat, setIsDateLocaleFormat] = useState(true);
+	const [isDateLocalFormat, setIsDateLocalFormat] = useState(true);
 	const luxonStartDate = toLuxonDate(startDate);
 	const luxonEndDate = toLuxonDate(endDate);
 
@@ -38,23 +38,18 @@ export const DatePicker = ({
 
 	const inputDisplayText = (start?: DateTime, end?: DateTime) => {
 		if (start) {
-			const selectedDatesText = isDateLocaleFormat 
-				? [
-					start.toLocaleString(),
-					end?.toLocaleString(),
-				] : [
-					start.toISODate(),
-					end?.toISODate(),
-				];
-			return isRangePicker
-				? `${selectedDatesText.join(' to ')}`
-				: start.toLocaleString();
+			const selectedDatesText = isDateLocalFormat
+				? [start.toLocaleString(), end?.toLocaleString()]
+				: [start.toISODate(), end?.toISODate()];
+			return isRangePicker ? `${selectedDatesText.join(' to ')}` : start.toLocaleString();
 		} else {
 			return '';
 		}
 	};
-	
-	const [dateInputValue, setDateInputValue] = useState(inputDisplayText(luxonStartDate, luxonEndDate));
+
+	const [dateInputValue, setDateInputValue] = useState(
+		inputDisplayText(luxonStartDate, luxonEndDate)
+	);
 	const datePickerRef = useRef<HTMLDivElement>(null);
 
 	const handleDateRangeSelect = (start?: DateTime, end?: DateTime) => {
@@ -84,28 +79,29 @@ export const DatePicker = ({
 		if (mode === 'end') {
 			end = setTime(endDate, end, DateTime.now().endOf('day'));
 		}
-		setDateInputValue(inputDisplayText(start, end))
+		setDateInputValue(inputDisplayText(start, end));
 		onChange(start, end);
 	};
 
 	const handleInputFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setDateInputValue(e.target.value);
-		const [inputStart, inputEnd] = isRangePicker 
-			? e.target.value.trim().split(/\s+to\s+/) 
+		const [inputStart, inputEnd] = isRangePicker
+			? e.target.value.trim().split(/\s+to\s+/)
 			: [e.target.value, undefined];
 
 		let parsedStart = DateTime.fromISO(inputStart);
-		let parsedEnd = inputEnd === undefined
-			? DateTime.invalid('No end date provided')
-			: DateTime.fromISO(inputEnd).startOf('day');
+		let parsedEnd =
+			inputEnd === undefined
+				? DateTime.invalid('No end date provided')
+				: DateTime.fromISO(inputEnd).startOf('day');
 
 		// If that didn't work, attempt to parse from locale format
 		const { locale } = Intl.DateTimeFormat().resolvedOptions();
 		if (!parsedStart.isValid) {
 			parsedStart = DateTime.fromFormat(inputStart, 'D', { locale });
-			parsedStart.isValid && setIsDateLocaleFormat(true);
+			if (parsedStart.isValid) setIsDateLocalFormat(true);
 		} else {
-			setIsDateLocaleFormat(false);
+			setIsDateLocalFormat(false);
 		}
 		if (!parsedEnd.isValid && inputEnd !== undefined) {
 			parsedEnd = DateTime.fromFormat(inputEnd, 'D', { locale });
@@ -117,12 +113,8 @@ export const DatePicker = ({
 		// Only trigger onChange if the changed input actually formed a valid date
 		if (parsedStart.isValid || parsedEnd.isValid) {
 			onChange(
-				parsedStart.isValid 
-					? parsedStart 
-					: luxonStartDate, 
-				parsedEnd.isValid 
-					? parsedEnd 
-					: luxonEndDate
+				parsedStart.isValid ? parsedStart : luxonStartDate,
+				parsedEnd.isValid ? parsedEnd : luxonEndDate
 			);
 		}
 	};
@@ -150,12 +142,17 @@ export const DatePicker = ({
 		<div className={styles.container}>
 			<div className={styles.inputSelector}>
 				<input
-					className={clsx((startDate || dateInputValue.length) && styles.inputFieldActive, styles.inputField)}
+					className={clsx(
+						(startDate || dateInputValue.length) && styles.inputFieldActive,
+						styles.inputField
+					)}
 					onClick={() => setIsOpen((isOpen) => !isOpen)}
 					placeholder={placeholder}
-					value={(dateInputValue)}
+					value={dateInputValue}
 					onChange={handleInputFieldChange}
-					onBlur={() => {setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate))}}
+					onBlur={() => {
+						setDateInputValue(inputDisplayText(luxonStartDate, luxonEndDate));
+					}}
 				/>
 				{startDate && (
 					<div className={styles.indicatorWrapper}>
@@ -194,7 +191,7 @@ export const DatePicker = ({
 								value={luxonStartDate}
 								setValue={handleTimeInputChange('start')}
 								defaultTime="00:00:00"
-								label='Time'
+								label="Time"
 							/>
 						</div>
 					)}
@@ -204,14 +201,14 @@ export const DatePicker = ({
 								value={luxonStartDate}
 								setValue={(value) => handleTimeInputChange('start')(value, luxonEndDate)}
 								defaultTime="00:00:00"
-								label='From'
+								label="From"
 							/>
 							<div style={{ width: '5px' }}> </div>
 							<TimeInput
 								value={luxonEndDate}
 								setValue={(value) => handleTimeInputChange('end')(luxonStartDate, value)}
 								defaultTime="23:59:59"
-								label='To'
+								label="To"
 							/>
 						</div>
 					)}

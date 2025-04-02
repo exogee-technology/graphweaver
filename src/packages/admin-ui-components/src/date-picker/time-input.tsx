@@ -1,12 +1,11 @@
 import { DateTime } from 'luxon';
 import { useId } from 'react';
-import styles from './styles.module.css';
 
 interface Props {
 	value: DateTime | undefined;
 	setValue: (value: DateTime) => void;
 	defaultTime: string;
-	label?: string
+	label?: string;
 }
 
 const timeFormat = 'HH:mm:ss';
@@ -16,11 +15,9 @@ export const TimeInput = (props: Props) => {
 	const id = useId();
 	return (
 		<>
-			{label && <label htmlFor={id}>
-				{label}
-			</label>}
+			{label && <label htmlFor={id}>{label}</label>}
 			<input
-				id={id} 
+				id={id}
 				type="time"
 				step={1}
 				value={value?.toFormat(timeFormat) ?? defaultTime}
