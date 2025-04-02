@@ -22,6 +22,7 @@ const getValidFilterProperties = (fields: EntityField[]): Set<string> => {
 				supportedKeys.add(field.name);
 				break;
 			case AdminUIFilterType.DATE_RANGE:
+			case AdminUIFilterType.DATE_TIME_RANGE:
 				supportedKeys.add(`${field.name}_gte`);
 				supportedKeys.add(`${field.name}_lte`);
 				break;
