@@ -76,7 +76,9 @@ export const ComboBox = ({
 			setInputValue('');
 
 			if (mode === SelectMode.MULTI) {
-				onChange([...valueArray, change.selectedItem]);
+				if (!selectedIds.has(change.selectedItem.value)) {
+					onChange([...valueArray, change.selectedItem]);
+				}
 			} else {
 				onChange([change.selectedItem]);
 			}
