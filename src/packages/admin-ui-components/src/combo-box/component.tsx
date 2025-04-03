@@ -112,7 +112,7 @@ export const ComboBox = ({
 
 	return (
 		<div className={styles.select} data-testid={testId}>
-			<div className={clsx(styles.selectBox, isOpen && styles.open)}>
+			<div className={clsx(styles.selectBox, isOpen && styles.open)} data-testid={`${testId}-box`}>
 				<div className={styles.inputContainer}>
 					{valueArray.length > 0 && (
 						<div className={styles.selectedOptions}>
@@ -134,6 +134,7 @@ export const ComboBox = ({
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
+								data-testid={`${testId}-input`}
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,

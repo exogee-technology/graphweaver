@@ -29,13 +29,11 @@ test('ensure toast is displayed with the name of the item after creation', async
 	await page
 		.locator('div')
 		.filter({ hasText: /^artist\*Select$/ })
-		.getByRole('combobox')
 		.click(); // Click the artist dropdown
 	await page.locator('form').getByText('A Cor Do Som').click();
 	await page
 		.locator('div')
 		.filter({ hasText: /^tracks\*Select$/ })
-		.getByRole('combobox')
 		.click();
 	await page.locator('form').getByText('#9 Dream').click();
 	await page.getByRole('button', { name: 'Save' }).click();

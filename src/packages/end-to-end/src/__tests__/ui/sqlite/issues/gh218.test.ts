@@ -5,9 +5,9 @@ test('Ensure filtering by multiple items works', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Album' }).click();
 
-	await page.getByTestId('artist-filter').getByRole('combobox').click();
+	await page.getByTestId('artist-filter').click();
 	await page.getByTestId('combo-option-AC/DC').click();
-	await page.getByTestId('artist-filter').getByRole('combobox').click();
+	await page.getByTestId('artist-filter').click();
 	await page.getByTestId('combo-option-Aaron Copland & London').click();
 
 	// Those rows should look like this:

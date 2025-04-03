@@ -21,7 +21,6 @@ test('Check Select field shows correct number of selected items after adding add
 	await page
 		.locator('div')
 		.filter({ hasText: /^tracks\*3 Selected×$/ })
-		.getByRole('combobox')
 		.click({ delay: 1000 });
 	await page.getByRole('listbox').getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('4 Selected');
@@ -36,7 +35,6 @@ test('Check adding additional item to OneToMany field and saving functions as ex
 	await page
 		.locator('div')
 		.filter({ hasText: /^tracks\*10 Selected×$/ })
-		.getByRole('combobox')
 		.click({ delay: 1000 });
 	await page.getByText('"40"').click();
 	await expect(page.locator('form')).toContainText('11 Selected');
@@ -52,10 +50,10 @@ test('Should allow navigation around using a keyboard', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Employee' }).click();
 
-	await page.getByRole('combobox').nth(0).click();
-	await page.getByRole('combobox').nth(0).press('ArrowDown', { delay: 300 });
-	await page.getByRole('combobox').nth(0).press('ArrowDown', { delay: 300 });
-	await page.getByRole('combobox').nth(0).press('Enter', { delay: 300 });
+	await page.getByTestId('employee-filter').click();
+	await page.getByTestId('employee-filter').press('ArrowDown', { delay: 300 });
+	await page.getByTestId('employee-filter').press('ArrowDown', { delay: 300 });
+	await page.getByTestId('employee-filter').press('Enter', { delay: 300 });
 	await expect(await page.getByText('IT Manager×')).toBeVisible();
 	await page.getByText('IT Manager×').press('Delete');
 	await expect(await page.getByText('IT Manager×')).not.toBeVisible();
