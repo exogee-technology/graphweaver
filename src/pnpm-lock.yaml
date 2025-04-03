@@ -1196,8 +1196,8 @@ importers:
         specifier: 22.13.14
         version: 22.13.14
       aws-cdk:
-        specifier: 2.1006.0
-        version: 2.1006.0
+        specifier: 2.1007.0
+        version: 2.1007.0
       aws-cdk-lib:
         specifier: 2.187.0
         version: 2.187.0(constructs@10.4.2)
@@ -1562,16 +1562,16 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)
+        version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/mysql':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)
+        version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/postgresql':
         specifier: 6.4.11
         version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/sqlite':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)
+        version: 6.4.11(@mikro-orm/core@6.4.11)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.4.11
@@ -5733,8 +5733,8 @@ packages:
       - yaml
       - mime-types
 
-  aws-cdk@2.1006.0:
-    resolution: {integrity: sha512-6qYnCt4mBN+3i/5F+FC2yMETkDHY/IL7gt3EuqKVPcaAO4jU7oXfVSlR60CYRkZWL4fnAurUV14RkJuJyVG/IA==}
+  aws-cdk@2.1007.0:
+    resolution: {integrity: sha512-/UOYOTGWUm+pP9qxg03tID5tL6euC+pb+xo0RBue+xhnUWwj/Bbsw6DbqbpOPMrNzTUxmM723/uMEQmM6S26dw==}
     engines: {node: '>= 14.15.0'}
     hasBin: true
 
@@ -13952,22 +13952,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.14.1)(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.11
@@ -14014,23 +13998,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-
-  '@mikro-orm/mysql@6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)(pg@8.14.1)
-      mysql2: 3.14.0
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
 
   '@mikro-orm/postgresql@6.4.11(@mikro-orm/core@6.4.11)':
     dependencies:
@@ -14107,26 +14074,6 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
-
-  '@mikro-orm/sqlite@6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
-    optional: true
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -16368,7 +16315,7 @@ snapshots:
       '@aws-cdk/cloud-assembly-schema': 41.2.0
       constructs: 10.4.2
 
-  aws-cdk@2.1006.0:
+  aws-cdk@2.1007.0:
     optionalDependencies:
       fsevents: 2.3.2
 
@@ -19399,29 +19346,6 @@ snapshots:
       pg: 8.14.1
     transitivePeerDependencies:
       - supports-color
-
-  knex@3.1.0(pg@8.14.1)(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.14.1
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
 
   knex@3.1.0(sqlite3@5.1.7):
     dependencies:
