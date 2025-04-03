@@ -166,6 +166,7 @@ export const ComboBox = ({
 								})}
 								key={item.value as any}
 								{...getItemProps({ item, index })}
+								data-testid={`combo-option-${item.label}`}
 							>
 								<span>{item.label}</span>
 							</li>
