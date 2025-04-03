@@ -33,7 +33,7 @@ test('Ensure people can be filtered', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByTestId('Person-entity-link').click();
 	await page.getByTestId('url-filter').getByRole('combobox').click();
-	await page.getByRole('option', { name: '4', exact: true }).click();
+	await page.getByTestId('combo-option-4').click();
 	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCJdfQ%3D%3D'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
@@ -44,7 +44,7 @@ test('Ensure people can be filtered', async ({ page }) => {
 	).toBe('4Darth Vader202136none41.9BBY');
 
 	await page.getByTestId('url-filter').getByRole('combobox').click();
-	await page.getByRole('option', { name: '2', exact: true }).click();
+	await page.getByTestId('combo-option-2').click();
 	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCIsIjIiXX0%3D'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
@@ -68,7 +68,7 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 	await page.goto(config.adminUiUrl);
 	await page.getByTestId('Vehicle-entity-link').click();
 	await page.getByTestId('url-filter').getByRole('combobox').click();
-	await page.getByRole('option', { name: '4', exact: true }).click();
+	await page.getByTestId('combo-option-4').click();
 	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCJdfQ%3D%3D'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 
@@ -79,7 +79,7 @@ test('Ensure vehicles can be filtered', async ({ page }) => {
 	).toBe('4Sand CrawlerDigger CrawlerCorellia Mining Corporation15000036.8 4630');
 
 	await page.getByTestId('url-filter').getByRole('combobox').click();
-	await page.getByRole('option', { name: '14', exact: true }).click();
+	await page.getByTestId('combo-option-14').click();
 	await page.waitForURL((url) => url.toString().includes('filters=eyJ1cmxfaW4iOlsiNCIsIjE0Il19'));
 	await page.getByTestId('spinner').waitFor({ state: 'hidden' });
 

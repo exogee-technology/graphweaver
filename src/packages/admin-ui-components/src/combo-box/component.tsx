@@ -111,7 +111,7 @@ export const ComboBox = ({
 	const selectedIds = useMemo(() => new Set(valueArray.map((item) => item.value)), [value]);
 
 	return (
-		<div className={styles.select} data-testid={testId} role="combobox" aria-expanded={isOpen}>
+		<div className={styles.select} data-testid={testId}>
 			<div className={clsx(styles.selectBox, isOpen && styles.open)}>
 				<div className={styles.inputContainer}>
 					{valueArray.length > 0 && (
