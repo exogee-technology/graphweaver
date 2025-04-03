@@ -76,11 +76,11 @@ export const ComboBox = ({
 			setInputValue('');
 
 			if (mode === SelectMode.MULTI) {
-				if (!selectedIds.has(change.selectedItem.value)) {
+				if (change.selectedItem && !selectedIds.has(change.selectedItem.value)) {
 					onChange([...valueArray, change.selectedItem]);
 				}
 			} else {
-				onChange([change.selectedItem]);
+				onChange(change.selectedItem ? [change.selectedItem] : []);
 			}
 		},
 	});
