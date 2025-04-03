@@ -53,10 +53,6 @@ export const ComboBox = ({
 	['data-testid']: testId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
-	
-	// Generate a unique ID for ARIA relationships
-	const listboxId = useMemo(() => `combobox-listbox-${Math.random().toString(36).substr(2, 9)}`, []);
-	
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
 	const {
 		isOpen,
@@ -138,8 +134,6 @@ export const ComboBox = ({
 							<input
 								readOnly={!allowFreeTyping}
 								className={styles.selectInput}
-								role="textbox"
-								aria-controls={listboxId}
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,
@@ -159,7 +153,7 @@ export const ComboBox = ({
 				</span>
 			</div>
 
-			<ul id={listboxId} className={styles.optionsDropdown} role="listbox" {...getMenuProps()}>
+			<ul className={styles.optionsDropdown} role="listbox" {...getMenuProps()}>
 				{isOpen &&
 					(loading ? (
 						<Spinner />
@@ -171,8 +165,6 @@ export const ComboBox = ({
 									[styles.selected]: selectedIds.has(item.value),
 								})}
 								key={item.value as any}
-								role="option"
-								aria-selected={highlightedIndex === index}
 								{...getItemProps({ item, index })}
 							>
 								<span>{item.label}</span>
