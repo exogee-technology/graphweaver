@@ -5,8 +5,8 @@ export const getRelationshipQuery = (entity: Entity) => {
 	const queryName = entity.plural[0].toLowerCase() + entity.plural.slice(1);
 
 	return gql`
-		query getRelationship ($pagination: ${entity.plural}PaginationInput) {
-			result: ${queryName} (pagination: $pagination) {
+		query getRelationship ($filter: ${entity.plural}ListFilter, $pagination: ${entity.plural}PaginationInput) {
+			result: ${queryName} (filter: $filter, pagination: $pagination) {
 				${entity.primaryKeyField}
 				${entity.summaryField ? entity.summaryField : ''}
 			}
