@@ -7,8 +7,8 @@ test('Ensure filtering by multiple items works', async ({ page }) => {
 
 	await page.getByTestId('artist-filter').getByRole('combobox').click();
 	await page.getByTestId('combo-option-AC/DC').click();
-	await page.getByTestId('artist-filter').getByRole('combobox').click();
-	await page.getByTestId('combo-option-Aaron Copland & London').click();
+	await page.getByTestId('artist-filter').click();
+	await page.getByTestId('combo-option-Aaron Copland & London Symphony Orchestra').click();
 
 	// Those rows should look like this:
 	await expect(await page.getByTestId('table').getByRole('row').nth(1)).toContainText(
