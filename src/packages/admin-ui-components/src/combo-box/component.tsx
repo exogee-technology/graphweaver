@@ -143,7 +143,7 @@ export const ComboBox = ({
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,
-									onFocus: () => toggleMenu(),
+									onFocus: toggleMenu,
 									placeholder,
 								})}
 							/>
