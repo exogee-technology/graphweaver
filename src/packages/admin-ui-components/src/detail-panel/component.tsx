@@ -190,7 +190,7 @@ const CustomFieldComponent = ({
 	entity: Record<string, any>;
 	panelMode: PanelMode;
 }) => (
-	<div className={styles.detailField}>
+	<div className={styles.detailField} data-testid={`detail-panel-field-${field.name}`}>
 		{field.component({ entity, context: 'detail-form', panelMode })}
 	</div>
 );
