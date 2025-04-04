@@ -30,7 +30,6 @@ test('should allow a successful api key creation', async ({ page }) => {
 	await page
 		.locator('div')
 		.filter({ hasText: /^rolesSelect$/ })
-		.getByRole('combobox')
 		.click();
 	await page.locator('form').getByText('LIGHT_SIDE').click();
 
