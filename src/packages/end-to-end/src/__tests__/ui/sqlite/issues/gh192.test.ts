@@ -7,7 +7,7 @@ test('ensure toast is displayed with the name of the item after creation', async
 	await page.goto(config.adminUiUrl);
 	await page.getByRole('link', { name: 'Album' }).click();
 
-	await page.getByTestId('detail-panel-field-artist').getByRole('combobox').click();
+	await page.getByTestId('artist-filter').getByRole('combobox').click();
 	await expect(page.getByText('A Cor Do Som')).toBeVisible();
 	await page.getByText('A Cor Do Som').click();
 
