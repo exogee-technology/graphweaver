@@ -33,7 +33,7 @@ test('Ensure a new image note can be created when an ID is provided', async ({ p
 	await page.getByLabel('id').click();
 	await page.getByLabel('id').fill('8a8e1d03-6024-4163-ae73-9d369f9e2922');
 
-	await page.getByTestId('detail-panel-field-submission-box').getByRole('combobox').click();
+	await page.getByTestId('detail-panel-field-submission').getByRole('combobox').click();
 	await page.getByTestId(`combo-option-${submissionId}`).click();
 
 	await page.getByRole('button', { name: 'Save' }).click();
