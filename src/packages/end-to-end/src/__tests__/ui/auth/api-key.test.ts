@@ -27,7 +27,7 @@ test('should allow a successful api key creation', async ({ page }) => {
 
 	const apiKey = await page.inputValue('input#key');
 
-	await page.getByTestId('detail-panel-field-roles').click();
+	await page.getByTestId('detail-panel-field-roles').getByRole('combobox').click();
 	await page.getByTestId('combo-option-LIGHT_SIDE').click();
 
 	await page.getByRole('button', { name: 'Save' }).click();
