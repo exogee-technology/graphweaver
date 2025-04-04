@@ -62,6 +62,7 @@ export const ComboBox = ({
 		getItemProps,
 		inputValue,
 		setInputValue,
+		toggleMenu,
 	} = useCombobox({
 		items: options,
 		itemToString: (item) => item?.label ?? '',
@@ -112,7 +113,11 @@ export const ComboBox = ({
 
 	return (
 		<div className={styles.select} data-testid={testId}>
-			<div className={clsx(styles.selectBox, isOpen && styles.open)} data-testid={`${testId}-box`}>
+			<div
+				className={clsx(styles.selectBox, isOpen && styles.open)}
+				data-testid={`${testId}-box`}
+				onClick={() => !disabled && toggleMenu()}
+			>
 				<div className={styles.inputContainer}>
 					{valueArray.length > 0 && (
 						<div className={styles.selectedOptions}>
@@ -129,7 +134,7 @@ export const ComboBox = ({
 						</div>
 					)}
 
-					{(allowFreeTyping || valueArray.length === 0) && (
+					{allowFreeTyping && (
 						<div className={styles.inputWrapper}>
 							<input
 								readOnly={!allowFreeTyping}
@@ -138,16 +143,12 @@ export const ComboBox = ({
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,
-									placeholder: valueArray.length === 0 ? placeholder : '',
+									placeholder,
 								})}
 							/>
 						</div>
 					)}
 				</div>
-
-				{valueArray.length === 0 && !inputValue && (
-					<span className={styles.placeholder}>{placeholder}</span>
-				)}
 
 				<span className={styles.arrow}>
 					<ChevronDownIcon />

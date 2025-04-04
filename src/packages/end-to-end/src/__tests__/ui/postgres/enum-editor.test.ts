@@ -9,8 +9,8 @@ test('Detail Panel - should allow editing of an entity with an enum dropdown', a
 
 	// This invoice starts in 'UNPAID' status, so let's change that.
 	// Click specifically on the box element which is the clickable part
-	await page.getByTestId('detail-panel-field-paymentStatus-box').click();
-	await page.getByTestId('combo-option-PAID').click();
+	await page.getByTestId('detail-panel-field-paymentStatus').getByRole('combobox').click();
+	await page.getByRole('option', { name: 'PAID', exact: true }).click();
 
 	// We should have 'PAID' selected now.
 	await expect(page.getByTestId('detail-panel-field-paymentStatus')).toContainText(
