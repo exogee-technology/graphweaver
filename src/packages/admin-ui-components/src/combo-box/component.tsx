@@ -134,7 +134,7 @@ export const ComboBox = ({
 						</div>
 					)}
 
-					{allowFreeTyping && (
+					{(allowFreeTyping || valueArray.length === 0) && (
 						<div className={styles.inputWrapper}>
 							<input
 								readOnly={!allowFreeTyping}
@@ -143,6 +143,7 @@ export const ComboBox = ({
 								{...getInputProps({
 									ref: inputRef,
 									onBlur: handleBlur,
+									onFocus: () => toggleMenu(),
 									placeholder,
 								})}
 							/>
