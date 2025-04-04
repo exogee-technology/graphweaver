@@ -16,4 +16,11 @@ test('Filters - should not error when used without clearing', async ({ page }) =
 	// We should not have an error.
 	expect(await page.getByText('Unhandled Error').count()).toBe(0);
 	expect(await page.getByText('Error!').allInnerTexts()).toStrictEqual([]);
+
+	await page.goto('http://localhost:9000/welcome');
+	await page.getByRole('button', { name: 'Get started!' }).click();
+	await page.getByTestId('albumId-filter').click();
+	await page.getByRole('option', { name: '3', exact: true }).click();
+	await page.goto('http://localhost:9000/Album?page=1');
+	await page.getByText('×').click();
 });
