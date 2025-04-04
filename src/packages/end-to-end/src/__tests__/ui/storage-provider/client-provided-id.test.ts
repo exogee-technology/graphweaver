@@ -68,7 +68,7 @@ test('Ensure a new image note cannot be created when an ID is not provided', asy
 
 	await page.getByLabel('note*').fill('This is a note');
 
-	await page.getByTestId('detail-panel-field-submission-box').getByRole('combobox').click();
+	await page.getByTestId('detail-panel-field-submission').getByRole('combobox').click();
 	await page.getByTestId(`combo-option-${submissionId}`).click();
 
 	await page.getByRole('button', { name: 'Save' }).click();
