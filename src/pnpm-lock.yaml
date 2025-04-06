@@ -1260,8 +1260,8 @@ importers:
         specifier: 22.13.14
         version: 22.13.14
       '@types/semver':
-        specifier: 7.5.8
-        version: 7.5.8
+        specifier: 7.7.0
+        version: 7.7.0
       '@types/validate-npm-package-name':
         specifier: 4.0.2
         version: 4.0.2
@@ -1562,16 +1562,16 @@ importers:
     optionalDependencies:
       '@mikro-orm/knex':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)
+        version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/mysql':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)
+        version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/postgresql':
         specifier: 6.4.11
         version: 6.4.11(@mikro-orm/core@6.4.11)
       '@mikro-orm/sqlite':
         specifier: 6.4.11
-        version: 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)
+        version: 6.4.11(@mikro-orm/core@6.4.11)
     devDependencies:
       '@mikro-orm/core':
         specifier: 6.4.11
@@ -5317,8 +5317,8 @@ packages:
   '@types/secp256k1@4.0.6':
     resolution: {integrity: sha512-hHxJU6PAEUn0TP4S/ZOzuTUvJWuZ6eIKeNKb5RBpODvSl6hp1Wrw4s7ATY50rklRCScUDpHzVA/DQdSjJ3UoYQ==}
 
-  '@types/semver@7.5.8':
-    resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
+  '@types/semver@7.7.0':
+    resolution: {integrity: sha512-k107IF4+Xr7UHjwDc7Cfd6PRQfbdkiRabXGRjo07b4WyPahFBZCZ1sE+BNxYIJPPg73UkfOsVOLwqVc/6ETrIA==}
 
   '@types/send@0.17.4':
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
@@ -13952,22 +13952,6 @@ snapshots:
       - supports-color
       - tedious
 
-  '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)(sqlite3@5.1.7)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      fs-extra: 11.3.0
-      knex: 3.1.0(pg@8.14.1)(sqlite3@5.1.7)
-      sqlstring: 2.3.3
-    transitivePeerDependencies:
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
-
   '@mikro-orm/knex@6.4.11(@mikro-orm/core@6.4.11)(sqlite3@5.1.7)':
     dependencies:
       '@mikro-orm/core': 6.4.11
@@ -14014,23 +13998,6 @@ snapshots:
       - sqlite3
       - supports-color
       - tedious
-
-  '@mikro-orm/mysql@6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(mysql2@3.14.0)(pg@8.14.1)
-      mysql2: 3.14.0
-    transitivePeerDependencies:
-      - better-sqlite3
-      - libsql
-      - mariadb
-      - mysql
-      - pg
-      - pg-native
-      - sqlite3
-      - supports-color
-      - tedious
-    optional: true
 
   '@mikro-orm/postgresql@6.4.11(@mikro-orm/core@6.4.11)':
     dependencies:
@@ -14107,26 +14074,6 @@ snapshots:
       - pg-native
       - supports-color
       - tedious
-
-  '@mikro-orm/sqlite@6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)':
-    dependencies:
-      '@mikro-orm/core': 6.4.11
-      '@mikro-orm/knex': 6.4.11(@mikro-orm/core@6.4.11)(pg@8.14.1)(sqlite3@5.1.7)
-      fs-extra: 11.3.0
-      sqlite3: 5.1.7
-      sqlstring-sqlite: 0.1.1
-    transitivePeerDependencies:
-      - better-sqlite3
-      - bluebird
-      - libsql
-      - mariadb
-      - mysql
-      - mysql2
-      - pg
-      - pg-native
-      - supports-color
-      - tedious
-    optional: true
 
   '@motionone/animation@10.18.0':
     dependencies:
@@ -15923,7 +15870,7 @@ snapshots:
     dependencies:
       '@types/node': 22.13.14
 
-  '@types/semver@7.5.8': {}
+  '@types/semver@7.7.0': {}
 
   '@types/send@0.17.4':
     dependencies:
@@ -19399,29 +19346,6 @@ snapshots:
       pg: 8.14.1
     transitivePeerDependencies:
       - supports-color
-
-  knex@3.1.0(pg@8.14.1)(sqlite3@5.1.7):
-    dependencies:
-      colorette: 2.0.19
-      commander: 10.0.1
-      debug: 4.3.4
-      escalade: 3.2.0
-      esm: 3.2.25
-      get-package-type: 0.1.0
-      getopts: 2.3.0
-      interpret: 2.2.0
-      lodash: 4.17.21
-      pg-connection-string: 2.6.2
-      rechoir: 0.8.0
-      resolve-from: 5.0.0
-      tarn: 3.0.2
-      tildify: 2.0.0
-    optionalDependencies:
-      pg: 8.14.1
-      sqlite3: 5.1.7
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
 
   knex@3.1.0(sqlite3@5.1.7):
     dependencies:
