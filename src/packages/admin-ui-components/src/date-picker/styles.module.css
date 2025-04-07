@@ -1,5 +1,6 @@
 .container {
-	flex: 1;
+	flex-shrink: 0;
+	flex-grow: 1;
 }
 
 .inputSelector {
@@ -116,6 +117,21 @@
 /* Styling overrides for react-day-picker */
 :global(.rdp-root) {
 	--rdp-accent-color: var(--primary-color);
+	--rdp-accent-background-color: #382f46;
+}
+
+.timeSelector {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.timeSelector input {
+	width: 101px;
+	border: 1px solid var(--primary-color);
+	border-radius: 7px;
+	padding: 3px 5px;
+	flex-grow: 1;
 }
 
 .timeSelector {

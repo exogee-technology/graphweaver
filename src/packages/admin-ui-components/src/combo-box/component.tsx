@@ -27,6 +27,8 @@ interface SelectProps {
 	loading?: boolean;
 	autoFocus?: boolean;
 	disabled?: boolean;
+	allowFreeTyping?: boolean;
+	onInputChange?: (inputValue: string) => void;
 	['data-testid']?: string;
 }
 
@@ -46,23 +48,57 @@ export const ComboBox = ({
 	loading = false,
 	autoFocus = false,
 	disabled = false,
+	allowFreeTyping = false,
+	onInputChange,
 	['data-testid']: testId,
 }: SelectProps) => {
 	const valueArray = arrayify(value);
-
 	const inputRef = useAutoFocus<HTMLInputElement>(autoFocus);
-	const { isOpen, getMenuProps, getInputProps, highlightedIndex, getItemProps } = useCombobox({
+	const {
+		isOpen,
+		getMenuProps,
+		getInputProps,
+		highlightedIndex,
+		getItemProps,
+		inputValue,
+		setInputValue,
+		toggleMenu,
+	} = useCombobox({
 		items: options,
 		itemToString: (item) => item?.label ?? '',
 		isItemDisabled: () => disabled,
+		onInputValueChange: ({ inputValue }) => {
+			if (allowFreeTyping && onInputChange && inputValue !== undefined) {
+				onInputChange(inputValue);
+			}
+		},
 		onSelectedItemChange: (change) => {
+			setInputValue('');
+
 			if (mode === SelectMode.MULTI) {
-				onChange([...valueArray, change.selectedItem]);
+				if (change.selectedItem && !selectedIds.has(change.selectedItem.value)) {
+					onChange([...valueArray, change.selectedItem]);
+				}
 			} else {
-				onChange([change.selectedItem]);
+				onChange(change.selectedItem ? [change.selectedItem] : []);
 			}
 		},
 	});
+
+	// Clear typed text on blur if no item was selected
+	const handleBlur = () => {
+		if (allowFreeTyping && inputValue) {
+			// Check if the input matches any option
+			const matchingOption = options.find(
+				(option) => option.label?.toLowerCase() === inputValue.toLowerCase()
+			);
+
+			// Clear input if no match found
+			if (!matchingOption) {
+				setInputValue('');
+			}
+		}
+	};
 
 	useEffect(() => {
 		if (isOpen) onOpen?.();
@@ -77,24 +113,43 @@ export const ComboBox = ({
 
 	return (
 		<div className={styles.select} data-testid={testId}>
-			<div className={clsx(styles.selectBox, isOpen && styles.open)}>
-				<input readOnly className={styles.selectInput} {...getInputProps({ ref: inputRef })} />
-				{valueArray.length > 0 ? (
-					<div className={styles.selectedOptions}>
-						<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
-							<span className={styles.optionPillLabel}>
-								{valueArray.length > 1 || !valueArray[0].label
-									? `${valueArray.length} Selected`
-									: valueArray[0].label}
-							</span>
-							<span className={styles.deleteOption} onClick={() => onChange([])}>
-								&times;
-							</span>
+			<div
+				className={clsx(styles.selectBox, isOpen && styles.open)}
+				onClick={() => !disabled && toggleMenu()}
+				data-testid={testId ? `${testId}-box` : undefined}
+			>
+				<div className={styles.inputContainer}>
+					{valueArray.length > 0 && (
+						<div className={styles.selectedOptions}>
+							<div className={styles.optionPill} tabIndex={0} onKeyDown={handleOnPillKeyDown}>
+								<span className={styles.optionPillLabel}>
+									{valueArray.length > 1 || !valueArray[0].label
+										? `${valueArray.length} Selected`
+										: valueArray[0].label}
+								</span>
+								<span className={styles.deleteOption} onClick={() => onChange([])}>
+									&times;
+								</span>
+							</div>
 						</div>
-					</div>
-				) : (
-					<span className={styles.placeholder}>{placeholder}</span>
-				)}
+					)}
+
+					{(allowFreeTyping || valueArray.length === 0) && (
+						<div className={styles.inputWrapper}>
+							<input
+								readOnly={!allowFreeTyping}
+								className={styles.selectInput}
+								data-testid={testId ? `${testId}-input` : undefined}
+								{...getInputProps({
+									ref: inputRef,
+									onBlur: handleBlur,
+									onFocus: toggleMenu,
+									placeholder,
+								})}
+							/>
+						</div>
+					)}
+				</div>
 
 				<span className={styles.arrow}>
 					<ChevronDownIcon />
@@ -114,6 +169,7 @@ export const ComboBox = ({
 								})}
 								key={item.value as any}
 								{...getItemProps({ item, index })}
+								data-testid={`combo-option-${item.label}`}
 							>
 								<span>{item.label}</span>
 							</li>

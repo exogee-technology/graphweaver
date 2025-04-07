@@ -4,6 +4,7 @@ import { ComboBox, SelectMode, SelectOption } from '../combo-box';
 import { Filter, useSchema } from '../utils';
 import { fragmentForDisplayValueOfEntity, getRelationshipQuery } from './graphql';
 import { toSelectOption } from './utils';
+import { useState } from 'react';
 
 export type RelationshipFilterType = { [fieldIn: string]: string[] };
 
@@ -12,16 +13,27 @@ export interface RelationshipFilterProps {
 	entity: string;
 	onChange?: (fieldName: string, newFilter: Filter) => void;
 	filter?: Filter;
+	orderBy?: { [field: string]: 'ASC' | 'DESC' };
+
+	// You can use this to enable users to search for related entities with text.
+	// Make sure all fields are indexed to respond quickly to ILIKE queries. You
+	// can do this in Postgres with trigram indexes. The component will or all
+	// fields you specify, so a match in any of them will be found. This is slow
+	// and you should be very selective about which fields you enable this for.
+	searchableFields?: string[];
 }
 
 export const RelationshipFilter = ({
 	fieldName,
 	entity,
 	onChange,
+	orderBy,
 	filter,
+	searchableFields,
 }: RelationshipFilterProps) => {
 	const { entityByName, entities } = useSchema();
 	const entityType = entityByName(entity);
+	const [inputValue, setInputValue] = useState('');
 	const field = entityType?.fields.find((f) => f.name === fieldName);
 	if (!field?.type) return null;
 
@@ -67,10 +79,24 @@ export const RelationshipFilter = ({
 		result: any[];
 	}>(getRelationshipQuery(relatedEntity), {
 		variables: {
+			filter:
+				searchableFields?.length && inputValue
+					? searchableFields?.length === 1
+						? {
+								[`${searchableFields[0]}_ilike`]: `%${inputValue}%`,
+							}
+						: {
+								// add an _or with ilike for each searchable field from props
+								_or: searchableFields?.map((field) => ({
+									[`${field}_ilike`]: `%${inputValue}%`,
+								})),
+							}
+					: undefined,
+
 			...(relatedEntity.summaryField
 				? {
 						pagination: {
-							orderBy: { [relatedEntity.summaryField]: 'ASC' },
+							orderBy: orderBy ?? { [relatedEntity.summaryField]: 'ASC' },
 						},
 					}
 				: {}),
@@ -108,6 +134,8 @@ export const RelationshipFilter = ({
 			value={currentValue}
 			placeholder={fieldName}
 			onChange={handleOnChange}
+			onInputChange={setInputValue}
+			allowFreeTyping={!!searchableFields?.length}
 			onOpen={handleOnOpen}
 			loading={loading}
 			mode={SelectMode.MULTI}

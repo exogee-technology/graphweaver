@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-mikroorm",
-	"version": "2.12.4",
+	"version": "2.14.2",
 	"description": "MikroORM backend for @exogee/graphweaver",
 	"license": "Apache-2.0",
 	"scripts": {
@@ -25,7 +25,7 @@
 	],
 	"dependencies": {
 		"@apollo/server": "4.11.3",
-		"@aws-sdk/client-secrets-manager": "3.772.0",
+		"@aws-sdk/client-secrets-manager": "3.782.0",
 		"@exogee/graphweaver": "workspace:*",
 		"@exogee/graphweaver-server": "workspace:*",
 		"@exogee/logger": "workspace:*",
@@ -41,12 +41,12 @@
 		"@mikro-orm/knex": "6"
 	},
 	"devDependencies": {
-		"@mikro-orm/core": "6.4.10",
-		"@mikro-orm/knex": "6.4.10",
-		"@mikro-orm/mysql": "6.4.10",
-		"@mikro-orm/postgresql": "6.4.10",
-		"@mikro-orm/sqlite": "6.4.10",
-		"@types/node": "22.13.10",
+		"@mikro-orm/core": "6.4.11",
+		"@mikro-orm/knex": "6.4.11",
+		"@mikro-orm/mysql": "6.4.11",
+		"@mikro-orm/postgresql": "6.4.11",
+		"@mikro-orm/sqlite": "6.4.11",
+		"@types/node": "22.13.14",
 		"@types/pluralize": "0.0.33",
 		"esbuild": "0.25.1",
 		"glob": "11.0.1",
@@ -56,10 +56,10 @@
 		"vitest": "3.0.9"
 	},
 	"optionalDependencies": {
-		"@mikro-orm/knex": "^6.4.10",
-		"@mikro-orm/mysql": "^6.4.10",
-		"@mikro-orm/postgresql": "^6.4.10",
-		"@mikro-orm/sqlite": "^6.4.10"
+		"@mikro-orm/knex": "^6.4.11",
+		"@mikro-orm/mysql": "^6.4.11",
+		"@mikro-orm/postgresql": "^6.4.11",
+		"@mikro-orm/sqlite": "^6.4.11"
 	},
 	"keywords": [
 		"graphql",

@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-example-xero",
-	"version": "2.12.4",
+	"version": "2.14.2",
 	"license": "Apache-2.0",
 	"private": true,
 	"description": "Example of using @exogee/graphweaver to connect two Xero instances",
@@ -22,7 +22,7 @@
 		"lib"
 	],
 	"dependencies": {
-		"@apollo/client": "3.13.4",
+		"@apollo/client": "3.13.5",
 		"@apollo/server": "4.11.3",
 		"@as-integrations/aws-lambda": "3.1.0",
 		"@exogee/graphweaver": "workspace:*",
@@ -42,16 +42,16 @@
 		"graphql": "16.10.0",
 		"graphweaver": "workspace:*",
 		"prop-types": "15.8.1",
-		"react": "19.0.0",
-		"react-dom": "19.0.0",
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
 		"wouter": "3.6.0",
 		"xero-node": "10.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "22.13.10",
+		"@types/node": "22.13.14",
 		"esbuild": "0.25.1",
 		"prettier": "3.5.3",
 		"typescript": "5.8.2",
-		"vite": "6.2.2"
+		"vite": "6.2.5"
 	}
 }

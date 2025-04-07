@@ -26,22 +26,44 @@
 	width: 100%;
 }
 
+.inputContainer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	width: calc(100% - 30px);
+	min-height: 28px;
+}
+
 .selectedOptions {
-	pointer-events: none;
-	z-index: 2;
 	display: flex;
 	flex-wrap: nowrap;
 	padding: 4px;
+	z-index: 2;
+}
+
+.inputWrapper {
+	flex: 1;
+	min-width: 50px;
 }
 
 .selectInput {
-	position: absolute;
 	background: transparent;
 	border: 0;
-	color: transparent;
 	width: 100%;
-	height: 35px;
+	height: 27px;
 	cursor: pointer;
+	padding: 4px 8px;
+	color: inherit;
+	outline: none;
+}
+
+.select:has(input:focus) .selectInput {
+	color: var(--body-copy-color);
+}
+
+/* Hide placeholder when input is focused */
+.select:has(input:focus) .placeholder {
+	display: none;
 }
 
 .optionPill {
@@ -132,6 +154,15 @@
 
 .selectBox.open > .arrow {
 	transform: translateY(-4px) rotate(180deg);
+}
+
+.select:has(input:focus) .selectBox {
+	background-color: var(--select-hover-background);
+	color: var(--body-copy-color);
+	border-radius: 6px;
+	border-color: var(--select-border-color);
+	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+	outline: none;
 }
 
 .focused {

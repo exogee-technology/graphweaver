@@ -26,16 +26,16 @@ Save these values to the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` env var
 
 To run the example make sure that you have a local PostgreSQL database and that you seed the database as below.
 
-The user table in PostgreSQL looks like this:
+The submission and image_note tables in PostgreSQL look like this:
 
-```
-CREATE DATABASE gw_storage_provider;
+```sql
+CREATE TABLE "submission" (id SERIAL PRIMARY KEY, image jsonb);
 
-CREATE TABLE "submission" (
-  id SERIAL PRIMARY KEY,
-  image jsonb
+CREATE TABLE "image_note" (
+  id UUID PRIMARY KEY,
+  submission_id INTEGER REFERENCES submission(id) NOT NULL,
+  note TEXT NOT NULL
 );
-
 ```
 
 Once the database is up and running make sure to set the values in the .env file by:

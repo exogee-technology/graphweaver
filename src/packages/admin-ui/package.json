@@ -1,6 +1,6 @@
 {
 	"name": "@exogee/graphweaver-admin-ui",
-	"version": "2.12.4",
+	"version": "2.14.2",
 	"type": "module",
 	"main": "dist/main.js",
 	"types": "src/main.tsx",
@@ -24,20 +24,20 @@
 		"graphql": "16"
 	},
 	"dependencies": {
-		"@apollo/client": "3.13.4",
+		"@apollo/client": "3.13.5",
 		"@exogee/graphweaver-admin-ui-components": "workspace:*",
 		"clsx": "2.1.1",
 		"formik": "2.4.6",
 		"prop-types": "15.8.1",
-		"react": "19.0.0",
-		"react-dom": "19.0.0",
+		"react": "19.1.0",
+		"react-dom": "19.1.0",
 		"react-error-boundary": "5.0.0",
 		"react-modal": "3.16.3",
 		"wouter": "3.6.0"
 	},
 	"devDependencies": {
 		"@chialab/esbuild-plugin-html": "0.18.2",
-		"@types/react": "19.0.10",
+		"@types/react": "19.0.12",
 		"@types/react-dom": "19.0.4",
 		"@types/react-modal": "3.16.3",
 		"@vitejs/plugin-react": "4.3.4",
@@ -46,7 +46,7 @@
 		"glob": "11.0.1",
 		"graphql": "16.10.0",
 		"typescript": "5.8.2",
-		"vite": "6.2.2"
+		"vite": "6.2.5"
 	},
 	"keywords": [
 		"graphql",

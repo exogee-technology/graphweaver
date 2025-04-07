@@ -13,50 +13,49 @@
 		"pnpm": ">=9"
 	},
 	"scripts": {
-		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" \"pnpm build:examples\"",
-		"build:packages": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build": "concurrently \"pnpm build:types\" \"pnpm build:js\" && pnpm build:examples",
 		"build:examples": "turbo --filter \"./examples/**\" build",
-		"build:types": "turbo --filter \"!./examples/**\" build:types",
 		"build:js": "turbo --filter \"!./examples/**\" build:js",
-		"build:watch": "concurrently -prefix \"none\" \"pnpm build:js --watch\" \"pnpm -r build:types\"",
+		"build:packages": "concurrently \"pnpm build:types\" \"pnpm build:js\"",
+		"build:types": "turbo --filter \"!./examples/**\" build:types",
 		"clean": "./clean.sh && pnpm force:build",
+		"database:rebuild-local": "dropdb graphweaver --if-exists && createdb graphweaver && pnpm migrate",
 		"fix:project:references": "pnpm set-project-references --save",
 		"force:build": "TURBO_FORCE=true pnpm build",
 		"format": "pnpm prettier",
+		"lint:fix": "eslint . --fix",
+		"lint": "eslint .",
+		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && pnpm packages:pack",
 		"packages:pack": "turbo --filter \"!./examples/**\" package:pack -- --pack-destination ../../.packs",
 		"prettier": "prettier --write .",
-		"pack:all": "rm -rf .packs && mkdir -p .packs && pnpm build:packages && pnpm packages:pack",
-		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",
 		"publish:dry": "pnpm build && pnpm -r publish --no-git-checks --access public --dry-run",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"database:rebuild-local": "dropdb graphweaver --if-exists && createdb graphweaver && pnpm migrate",
-		"start": "echo \"To start an example, cd examples/[the application you want] then run pnpm start\"",
+		"publish:packages": "pnpm build && pnpm -r publish --no-git-checks --access public",
 		"relink:deps": "pnpm --filter \"!@exogee/graphweaver-end-to-end\" update -r \"@exogee/*\" \"vite-plugin-graphweaver\"",
+		"start": "echo \"To start an example, cd examples/[the application you want] then run pnpm start\"",
 		"version:bump": "pnpm -r version"
 	},
 	"devDependencies": {
 		"@bessonovs/set-project-references": "0.0.10",
-		"@eslint/js": "9.21.0",
+		"@eslint/js": "9.23.0",
 		"@types/eslint-config-prettier": "6.11.3",
 		"concurrently": "9.1.2",
-		"eslint": "9.16.0",
+		"eslint": "9.23.0",
 		"eslint-config-prettier": "10.1.1",
 		"globals": "16.0.0",
 		"prettier": "3.5.3",
-		"turbo": "2.4.2",
+		"turbo": "2.4.4",
 		"typescript": "5.8.2",
-		"typescript-eslint": "8.27.0"
+		"typescript-eslint": "8.28.0"
 	},
 	"pnpm": {
 		"overrides": {
 			"d3-color": "3.1.0",
 			"@babel/traverse": "7.23.2",
-			"@mikro-orm/core": "6.4.10",
-			"@mikro-orm/knex": "6.4.10",
-			"@mikro-orm/postgresql": "6.4.10",
-			"@mikro-orm/mysql": "6.4.10",
-			"@mikro-orm/sqlite": "6.4.10"
+			"@mikro-orm/core": "6.4.11",
+			"@mikro-orm/knex": "6.4.11",
+			"@mikro-orm/postgresql": "6.4.11",
+			"@mikro-orm/mysql": "6.4.11",
+			"@mikro-orm/sqlite": "6.4.11"
 		},
 		"peerDependencyRules": {
 			"ignoreMissing": [

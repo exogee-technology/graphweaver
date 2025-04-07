@@ -1,0 +1,27 @@
+.container {
+	display: flex;
+}
+
+.controlsContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	min-width: 200px;
+}
+
+.chartContainer {
+	flex: 1;
+	height: 35vh;
+}
+
+.controlItem {
+	display: flex;
+	flex-direction: column;
+}
+
+.checkBoxContainer {
+	display: flex;
+	flex-direction: row;
+	gap: 10px;
+	align-items: center;
+}

@@ -226,9 +226,11 @@ export type AdminUiFilterMetadata = {
 export enum AdminUiFilterType {
   Boolean = 'BOOLEAN',
   DateRange = 'DATE_RANGE',
+  DateTimeRange = 'DATE_TIME_RANGE',
   DropDownText = 'DROP_DOWN_TEXT',
   Enum = 'ENUM',
   Numeric = 'NUMERIC',
+  NumericRange = 'NUMERIC_RANGE',
   Relationship = 'RELATIONSHIP',
   Text = 'TEXT'
 }
@@ -478,7 +480,11 @@ export type ProfitAndLossRowsListFilter = {
   accountId_notnull?: InputMaybe<Scalars['Boolean']['input']>;
   accountId_null?: InputMaybe<Scalars['Boolean']['input']>;
   amount?: InputMaybe<Scalars['Float']['input']>;
+  amount_gt?: InputMaybe<Scalars['Float']['input']>;
+  amount_gte?: InputMaybe<Scalars['Float']['input']>;
   amount_in?: InputMaybe<Array<Scalars['Float']['input']>>;
+  amount_lt?: InputMaybe<Scalars['Float']['input']>;
+  amount_lte?: InputMaybe<Scalars['Float']['input']>;
   amount_ne?: InputMaybe<Scalars['Float']['input']>;
   amount_nin?: InputMaybe<Array<Scalars['Float']['input']>>;
   amount_notnull?: InputMaybe<Scalars['Boolean']['input']>;
