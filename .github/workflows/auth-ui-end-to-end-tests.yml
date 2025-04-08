@@ -65,7 +65,7 @@ jobs:
           envkey_DATABASE_HOST: 127.0.0.1
           envkey_DATABASE_USERNAME: root
           envkey_DATABASE_PASSWORD: root
-          envkey_AUTH_PUBLIC_KEY_PEM_BASE64: "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUZrd0V3WUhLb1pJemowQ0FRWUlLb1pJemowREFRY0RRZ0FFcVFSUC9nem1ZdVJyR012UzJxeXpLaU05c0Z2aQpyWFRWVUsrMDBHaFFDa2NhdThOcWZsWG9nOEhyTkVsalkwWWpYcVVqOCs2ZDlySkEwTHo0NmFGSmp3PT0KLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
+          envkey_AUTH_PUBLIC_KEY_PEM_BASE64: ${{ secrets.AUTH_PUBLIC_KEY_PEM_BASE64 }}
           envkey_AUTH_PRIVATE_KEY_PEM_BASE64: ${{ secrets.AUTH_PRIVATE_KEY_PEM_BASE64 }}
           envkey_AUTH_WHITELIST_DOMAINS: localhost
           directory: src/packages/end-to-end/app

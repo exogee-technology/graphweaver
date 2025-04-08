@@ -133,3 +133,16 @@
 	padding: 3px 5px;
 	flex-grow: 1;
 }
+
+.timeSelector {
+	display: flex;
+	gap: 5px;
+	align-items: center;
+}
+
+.timeSelector input {
+	width: 101px;
+	border: 1px solid var(--primary-color);
+	border-radius: 7px;
+	padding: 1px 5px;
+}
