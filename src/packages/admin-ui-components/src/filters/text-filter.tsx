@@ -16,7 +16,10 @@ export const TextFilter = ({
 	caseInsensitive,
 	substringMatch,
 }: TextFilterProps) => {
-	const filterKey = caseInsensitive || substringMatch ? `${fieldName}_ilike` : fieldName;
+	let filterKey = fieldName;
+	if (substringMatch) filterKey = `${fieldName}_like`;
+	if (caseInsensitive) filterKey = `${fieldName}_ilike`;
+
 	let value = String(filter?.[filterKey] ?? '');
 	if (caseInsensitive || substringMatch) value = value.replaceAll('\\%', '%');
 	if (substringMatch) value = value.slice(1, -1);
