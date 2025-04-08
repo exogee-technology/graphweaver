@@ -17,6 +17,8 @@ interface Props {
 	isRangePicker?: boolean;
 	startDate?: DateTime | string;
 	endDate?: DateTime | string;
+	// Optionally override the system locale for the dates users type
+	locale?: string;
 	filterType: AdminUIFilterType.DATE_TIME_RANGE | AdminUIFilterType.DATE_RANGE;
 	fieldType: string;
 }
@@ -27,6 +29,7 @@ export const DatePicker = ({
 	isRangePicker = false,
 	startDate,
 	endDate,
+	locale,
 	filterType,
 	fieldType,
 }: Props) => {
@@ -96,15 +99,17 @@ export const DatePicker = ({
 				: DateTime.fromISO(inputEnd).startOf('day');
 
 		// If that didn't work, attempt to parse from locale format
-		const { locale } = Intl.DateTimeFormat().resolvedOptions();
+		const resolvedOptions = Intl.DateTimeFormat().resolvedOptions();
 		if (!parsedStart.isValid) {
-			parsedStart = DateTime.fromFormat(inputStart, 'D', { locale });
+			parsedStart = DateTime.fromFormat(inputStart, 'D', {
+				locale: locale ?? resolvedOptions.locale,
+			});
 			if (parsedStart.isValid) setIsDateLocalFormat(true);
 		} else {
 			setIsDateLocalFormat(false);
 		}
 		if (!parsedEnd.isValid && inputEnd !== undefined) {
-			parsedEnd = DateTime.fromFormat(inputEnd, 'D', { locale });
+			parsedEnd = DateTime.fromFormat(inputEnd, 'D', { locale: locale ?? resolvedOptions.locale });
 		}
 
 		parsedStart = setTime(parsedStart, luxonStartDate, parsedStart.startOf('day')) ?? parsedStart;
