@@ -97,6 +97,7 @@ export interface EntityField {
 	relationshipType?: 'MANY_TO_MANY' | 'MANY_TO_ONE' | 'ONE_TO_MANY' | 'ONE_TO_ONE';
 	filter?: {
 		type: AdminUIFilterType;
+		options?: Record<string, unknown>;
 	};
 	attributes?: EntityFieldAttributes;
 	initialValue?: string | number | boolean;

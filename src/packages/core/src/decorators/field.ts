@@ -100,6 +100,7 @@ export interface FieldOptions {
 	readonly?: boolean;
 	adminUIOptions?: {
 		filterType?: AdminUIFilterType;
+		filterOptions?: Record<string, unknown>;
 		hideInTable?: boolean;
 		hideInFilterBar?: boolean;
 		hideInDetailForm?: boolean;

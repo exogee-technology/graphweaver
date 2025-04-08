@@ -10,6 +10,7 @@ type RelationshipFieldOptions<D> = {
 		hideInFilterBar?: boolean;
 		hideInDetailForm?: boolean;
 		readonly?: boolean;
+		filterOptions?: Record<string, unknown>;
 	};
 
 	// Add custom field directives to this field

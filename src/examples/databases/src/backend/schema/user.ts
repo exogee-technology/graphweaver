@@ -25,7 +25,14 @@ export class User {
 	@Field(() => ID)
 	id!: string;
 
-	@Field(() => String)
+	@Field(() => String, {
+		adminUIOptions: {
+			filterOptions: {
+				caseInsensitive: true,
+				substringMatch: true,
+			},
+		},
+	})
 	username!: string;
 
 	@Field(() => String)

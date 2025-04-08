@@ -144,7 +144,7 @@ export const ComboBox = ({
 									ref: inputRef,
 									onBlur: handleBlur,
 									onFocus: toggleMenu,
-									placeholder,
+									placeholder: valueArray.length === 0 ? placeholder : undefined,
 								})}
 							/>
 						</div>
