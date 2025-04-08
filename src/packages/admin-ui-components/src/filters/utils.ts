@@ -28,6 +28,10 @@ const getValidFilterProperties = (fields: EntityField[]): Set<string> => {
 				break;
 			case AdminUIFilterType.TEXT:
 				supportedKeys.add(field.name);
+				// Support for case insensitive and substring matching filters
+				if (field.filter?.options?.caseInsensitive || field.filter?.options?.substringMatch) {
+					supportedKeys.add(`${field.name}_ilike`);
+				}
 				break;
 		}
 	}
