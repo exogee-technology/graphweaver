@@ -148,8 +148,7 @@ export const resolveAdminUiMetadata = (hooks?: Hooks) => {
 				}
 
 				const filterType = field.adminUIOptions?.filterType ?? mapFilterType(fieldObject);
-
-				fieldObject.filter = { type: filterType };
+				fieldObject.filter = { type: filterType, options: field.adminUIOptions?.filterOptions };
 
 				return fieldObject;
 			});

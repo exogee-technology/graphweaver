@@ -1,3 +1,4 @@
+import { GraphQLJSON } from '@exogee/graphweaver-scalars';
 import { Entity, Field } from '../decorators';
 import { graphweaverMetadata } from '../metadata';
 import { AdminUIFilterType } from '../types';
@@ -13,4 +14,7 @@ graphweaverMetadata.collectEnumInformation({
 export class AdminUiFilterMetadata {
 	@Field(() => AdminUIFilterType)
 	type!: AdminUIFilterType;
+
+	@Field(() => GraphQLJSON, { nullable: true })
+	options?: Record<string, unknown>;
 }

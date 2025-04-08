@@ -125,6 +125,7 @@ export const FilterBar = ({ iconBefore }: { iconBefore?: ReactNode }) => {
 		return fields.map((field) => {
 			if (field.hideInFilterBar || !field.filter?.type) return null;
 			const options = {
+				...field.filter.options,
 				fieldName: field.name,
 				entity: entityName,
 				onChange: onFilter,

@@ -253,6 +253,7 @@ export interface FieldMetadata<G = unknown, D = unknown> {
 		readonly?: boolean;
 		fieldForDetailPanelNavigationId?: boolean;
 		filterType?: AdminUIFilterType;
+		filterOptions?: Record<string, unknown>;
 		detailPanelInputComponent?: DetailPanelInputComponentOption | DetailPanelInputComponent;
 	};
 	apiOptions?: {

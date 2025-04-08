@@ -26,6 +26,7 @@ export const SCHEMA_QUERY = gql`
 					relatedEntity
 					filter {
 						type
+						options
 					}
 					attributes {
 						isReadOnly

@@ -220,6 +220,7 @@ export type AdminUiFieldMetadata = {
 
 export type AdminUiFilterMetadata = {
   __typename?: 'AdminUiFilterMetadata';
+  options?: Maybe<Scalars['JSON']['output']>;
   type: AdminUiFilterType;
 };
 

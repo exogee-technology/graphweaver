@@ -21,6 +21,9 @@ CREATE TABLE "user" (
   age INTEGER
 );
 
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX user_username_trigram ON "user" USING gin (username gin_trgm_ops);
+
 -- Seed data for user table
 INSERT INTO "user" (username, email)
 VALUES

@@ -37,7 +37,7 @@
 .selectedOptions {
 	display: flex;
 	flex-wrap: nowrap;
-	padding: 4px;
+	padding: 0 4px;
 	z-index: 2;
 }
 
