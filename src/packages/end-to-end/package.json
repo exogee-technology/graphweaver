@@ -55,7 +55,7 @@
 		"web3-token": "1.0.6"
 	},
 	"devDependencies": {
-		"@playwright/test": "1.49.1",
+		"@playwright/test": "1.51.1",
 		"@simplewebauthn/types": "10.0.0",
 		"@types/jest": "29.5.14",
 		"@types/node": "22.13.10",
