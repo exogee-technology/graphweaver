@@ -46,7 +46,7 @@
 		"glob": "11.0.1",
 		"graphql": "16.10.0",
 		"typescript": "5.8.2",
-		"vite": "6.2.5"
+		"vite": "6.3.1"
 	},
 	"keywords": [
 		"graphql",
