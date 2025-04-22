@@ -113,7 +113,7 @@ Before we start the installer make sure you are running:
 
 With those two installed you can create a new project with the **Graphweaver CLI**, by running:
 
-`npx graphweaver@latest init`
+`pnpx graphweaver@latest init`
 
 The prompts will ask you which backends to install for this app.
 
