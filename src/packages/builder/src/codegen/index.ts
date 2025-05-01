@@ -22,18 +22,21 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 			pluginLoader: async (plugin: string) => import(plugin),
 			schema,
 			ignoreNoDocuments: true,
+			noSilentErrors: true, // TODO: Wait for graphql-codegen PR
 			documents: [
 				path.join('./src', extensions),
 				...(options?.watchForFileChangesInPaths?.map((clientPath) =>
 					path.join(clientPath, extensions)
 				) || []),
 			],
+			
 			generates: {
 				'src/types.generated.ts': {
 					config: {
 						skipDocumentsValidation: {
 							skipDuplicateValidation: true, // A flag to disable the validation for duplicate query and mutation names we don't need this as we are using near-operation-file
 						},
+						noSilentErrors: true,
 					},
 					plugins: [
 						{
@@ -49,6 +52,10 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 					presetConfig: {
 						extension: '.generated.ts',
 						baseTypesPath: 'types.generated.ts',
+						noSilentErrors: true, // TODO: Wait for graphql-codegen PR
+					},
+					config: {
+						noSilentErrors: true, // TODO: Wait for graphql-codegen PR
 					},
 					plugins: [
 						{
@@ -82,10 +89,12 @@ export const codeGenerator = async (schema: string, options?: CodegenOptions) =>
 		const defaultStateMessage = `Unable to find any GraphQL type definitions for the following pointers:`;
 		if (err.message && err.message.includes(defaultStateMessage)) {
 			// do nothing for now and silently fail
+			console.log('CCCCCCCC')
 		} else {
 			console.log(err.message + `\n in ${err.source?.name}`);
 		}
 	}
+	console.log('BBBBBBB')
 };
 
 const formatListOfTypeOutputPaths = (typesOutputPath?: string | string[]) => {
