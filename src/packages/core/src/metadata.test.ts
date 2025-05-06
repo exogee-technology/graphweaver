@@ -62,10 +62,9 @@ describe('Metadata', () => {
 
 	it('should correctly identify the field for a filter key where the field has a list return type', () => {
 		expect(
-			graphweaverMetadata.fieldMetadataForFilterKey(
-				stubEntityMetadata,
-				'field_with_list_return_type_in'
-			)?.getType()
+			graphweaverMetadata
+				.fieldMetadataForFilterKey(stubEntityMetadata, 'field_with_list_return_type_in')
+				?.getType()
 		).toStrictEqual([String]);
 	});
 

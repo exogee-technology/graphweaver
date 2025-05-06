@@ -976,8 +976,6 @@ class SchemaBuilderImplementation {
 					const { fieldType, isList, metadata } = getFieldTypeWithMetadata(customQuery.getType);
 					const customArgs = this.graphQLTypeForArgs(entityFilter, customQuery.args);
 
-					
-
 					if (isEntityMetadata(metadata)) {
 						// If the entity filter says no, we will ignore their custom query because it references
 						// an entity that is filtered out of this schema.
