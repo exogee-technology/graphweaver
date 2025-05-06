@@ -30,6 +30,11 @@ const stubEntityMetadata: EntityMetadata<any> = {
 			target: TestEntity,
 			getType: () => String,
 		},
+		field_with_list_return_type: {
+			name: 'field_with_list_return_type',
+			target: TestEntity,
+			getType: () => [String],
+		},
 	},
 };
 
@@ -53,6 +58,14 @@ describe('Metadata', () => {
 				'field_with_lots_of_underscores_gt'
 			)?.name
 		).toBe('field_with_lots_of_underscores');
+	});
+
+	it('should correctly identify the field for a filter key where the field has a list return type', () => {
+		expect(
+			graphweaverMetadata
+				.fieldMetadataForFilterKey(stubEntityMetadata, 'field_with_list_return_type_in')
+				?.getType()
+		).toStrictEqual([String]);
 	});
 
 	it('should ignore a filter key that does not specify a valid filter operator as the last portion of the key', () => {

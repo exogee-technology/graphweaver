@@ -1004,7 +1004,7 @@ class SchemaBuilderImplementation {
 						fields[customQuery.name] = {
 							...customQuery,
 							args: customArgs,
-							type,
+							type: isList ? new GraphQLList(type) : type,
 							resolve: trace(resolvers.baseResolver(customQuery.resolver)),
 							extensions: {
 								directives: customQuery.directives ?? {},
