@@ -23,7 +23,7 @@
 		"@graphql-codegen/cli": "5.0.5",
 		"@graphql-codegen/near-operation-file-preset": "3.0.0",
 		"@graphql-codegen/typescript": "4.1.6",
-		"@graphql-codegen/typescript-operations": "4.5.1",
+		"@graphql-codegen/typescript-operations": "4.6.0",
 		"@graphql-codegen/typescript-react-apollo": "4.3.2",
 		"@serverless/utils": "6.15.0",
 		"@vitejs/plugin-react": "4.3.4",
