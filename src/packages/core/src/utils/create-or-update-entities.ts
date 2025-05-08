@@ -12,6 +12,7 @@ import {
 } from '../base-entities';
 import { getGraphweaverMutationType } from './resolver.utils';
 import { isDefined } from './common';
+import { generateWriteDeps } from './write-deps';
 
 // Checks if we have an object
 const isObject = <G>(node: Partial<G> | Partial<G>[]) => typeof node === 'object' && node !== null;
@@ -79,8 +80,11 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 
 	const primaryKeyField = graphweaverMetadata.primaryKeyFieldForEntity(meta) as keyof G;
 
+	console.log('TEST', await generateWriteDeps(input, meta, info, context));
+
 	if (Array.isArray(input)) {
 		// If input is an array, loop through the elements
+		console.log('RECEIVING ARRAY: ', input);
 		const nodes: Partial<G | null>[] = [];
 		for (const node of input) {
 			const updatedNode = await createOrUpdateEntities(node, meta, info, context);
@@ -107,6 +111,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			if (isEntityMetadata(relatedEntityMetadata)) {
 				if (isSerializableGraphQLEntityClass(fieldType)) {
 					// If it's a serializable entity, we should delegate the serialization to it.
+					console.log('SERIALIZABLE ENTITY: ', fieldType.serialize({ value: childNode }));
 					node[key as keyof typeof node] = fieldType.serialize({ value: childNode }) as
 						| G[keyof G]
 						| undefined;
@@ -116,6 +121,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 					// If we have an array, we may need to create the parent first as children need reference to the parent
 					// As we are updating the parent from the child, we can remove this key
 					delete node[key as keyof Partial<G>];
+					console.log('RELATED ENTITY METADATA: ', relationship.relationshipInfo);
 
 					// Check if we already have the parent ID
 					let parentId = node[primaryKeyField] ?? parent?.[primaryKeyField];
@@ -125,6 +131,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 							isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
 								? meta.target.toBackendEntity(node)
 								: (node as unknown as D);
+						console.log('CREATING PARENT: ', backendEntity);
 						const parentDataEntity = await meta.provider.createOne(backendEntity);
 						parent = fromBackendEntity(meta, parentDataEntity);
 						parentId = parent?.[primaryKeyField];
@@ -153,11 +160,12 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 						...child,
 						[parentField.name]: { [primaryKeyField]: parentId },
 					}));
-
+					console.log('CHILD ENTITIES: ', childEntities);
 					// Now create/update the children
 					await runChildCreateOrUpdate(relatedEntityMetadata, childEntities, context, info);
 				} else if (Object.keys(childNode).length > 0) {
 					// If only one object, create or update it first, then update the parent reference
+					console.log('CHILD NODE: ', childNode);
 					const result = await runChildCreateOrUpdate(
 						relatedEntityMetadata,
 						childNode,
@@ -218,6 +226,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 			}
 
 			if (operation === 'update') {
+				console.log('UPDATING ENTITY: ', node);
 				const result = await meta.provider.updateOne(
 					String(node[primaryKeyField]),
 					isTransformableGraphQLEntityClass<G, D>(meta.target) && meta.target.toBackendEntity
@@ -227,6 +236,7 @@ export const createOrUpdateEntities = async <G = unknown, D = unknown>(
 
 				return fromBackendEntity(meta, result);
 			} else if (operation === 'create') {
+				console.log('CREATING ENTITY: ', node);
 				const clientGeneratedPrimaryKeys = meta.apiOptions?.clientGeneratedPrimaryKeys;
 				if (isDefined(node[primaryKeyField]) && clientGeneratedPrimaryKeys !== true) {
 					// Wait, you are creating an entity but giving it an ID? That's not right.

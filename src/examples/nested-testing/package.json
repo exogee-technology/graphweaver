@@ -1,0 +1,28 @@
+{
+    "name": "nested-testing",
+    "version": "0.1.0",
+    "description": "nested-testing Graphweaver Project",
+    "scripts": {
+        "build": "graphweaver build",
+        "start": "graphweaver start",
+        "watch": "graphweaver watch",
+        "import": "graphweaver import"
+    },
+    "dependencies": {
+        "@as-integrations/aws-lambda": "3.1.0",
+        "@exogee/graphweaver": "2.15.1",
+        "@exogee/graphweaver-scalars": "2.15.1",
+        "@exogee/graphweaver-server": "2.15.1",
+        "@exogee/graphweaver-mikroorm": "2.15.1",
+        "@mikro-orm/core": "6",
+        "@mikro-orm/knex": "6",
+        "@mikro-orm/postgresql": "6",
+        "pg": "8.12.0",
+        "graphql": "16.10.0"
+    },
+    "devDependencies": {
+        "@types/node": "22.13.14",
+        "graphweaver": "2.15.1",
+        "typescript": "5.8.2"
+    }
+}
