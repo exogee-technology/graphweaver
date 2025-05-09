@@ -1,6 +1,6 @@
 import { BackendProvider, ResolverOptions, graphweaverMetadata } from '@exogee/graphweaver';
 import otpGenerator from 'otp-generator';
-import ms from 'ms';
+import ms, { StringValue } from 'ms';
 import { logger } from '@exogee/logger';
 import { AuthenticationError, ForbiddenError } from 'apollo-server-errors';
 
@@ -167,7 +167,7 @@ export class OneTimePassword extends BaseAuthMethod {
 		// Check if the user created X links in the last X period
 		const { rate } = config;
 		// Current date minus the rate limit period
-		const period = new Date(new Date().getTime() - ms(rate.period));
+		const period = new Date(new Date().getTime() - ms(rate.period as StringValue));
 		const otps = await this.getOTPs(userId, period);
 
 		// Check rate limiting conditions for otp creation
@@ -203,7 +203,7 @@ export class OneTimePassword extends BaseAuthMethod {
 
 			const otp = await this.getOTP(userId, code);
 			// Check that the otp is still valid
-			const ttl = new Date(new Date().getTime() - ms(config.ttl));
+			const ttl = new Date(new Date().getTime() - ms(config.ttl as StringValue));
 			if (otp.createdAt < ttl)
 				throw new AuthenticationError('Challenge unsuccessful: Authentication OTP expired.');
 
