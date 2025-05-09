@@ -1,7 +1,7 @@
 import jwt, { Algorithm, JwtHeader, SigningKeyCallback } from 'jsonwebtoken';
 import { logger } from '@exogee/logger';
 import jwksClient from 'jwks-rsa';
-import ms from 'ms';
+import ms, { StringValue } from 'ms';
 
 import { BaseAuthTokenProvider } from '../token/base-auth-token-provider';
 import { AuthToken } from '../entities/token';
@@ -75,7 +75,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 		try {
 			const authToken = jwt.sign(payload, privateKey, {
 				algorithm,
-				expiresIn,
+				expiresIn: expiresIn as StringValue,
 			});
 			const token = new AuthToken(`${TOKEN_PREFIX} ${authToken}`);
 			return token;
@@ -108,7 +108,7 @@ export class AuthTokenProvider implements BaseAuthTokenProvider {
 		if (!privateKey) throw new Error('AUTH_PRIVATE_KEY_PEM_BASE64 is required in environment');
 		if (!this.authMethod) throw new Error('Please provide an authMethod in the constructor.');
 
-		const expires = Math.floor((Date.now() + ms(mfaExpiresIn)) / 1000);
+		const expires = Math.floor((Date.now() + ms(mfaExpiresIn as StringValue)) / 1000);
 
 		const amr = new Set([...(existingTokenPayload.amr ?? []), this.authMethod]);
 
