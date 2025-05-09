@@ -268,121 +268,121 @@ beforeEach(async () => {
 });
 
 describe('EXOGW-384 Nested - Create operations', () => {
-	// it('Should succeed - create rootClientId only', async () => {
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithClientId(input: { id: "1", description: "Root 1" }) {
-	// 					id
-	// 					description
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should succeed - create rootClientId only', async () => {
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithClientId(input: { id: "1", description: "Root 1" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
 
-	// 	const rootRecords = await em?.getRepository(OrmRootWithClientId).findAll();
-	// 	assert(rootRecords !== undefined);
-	// 	expect(rootRecords).toHaveLength(1);
+		const rootRecords = await em?.getRepository(OrmRootWithClientId).findAll();
+		assert(rootRecords !== undefined);
+		expect(rootRecords).toHaveLength(1);
 
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors).toBeUndefined();
-	// 	expect(response.body.singleResult.data).toEqual({
-	// 		createRootWithClientId: {
-	// 			id: '1',
-	// 			description: 'Root 1',
-	// 		},
-	// 	});
-	// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			createRootWithClientId: {
+				id: '1',
+				description: 'Root 1',
+			},
+		});
+	});
 
-	// it('Should succeed - create rootBackendId only', async () => {
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithBackendId(input: { description: "Root 1" }) {
-	// 					id
-	// 					description
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should succeed - create rootBackendId only', async () => {
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithBackendId(input: { description: "Root 1" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
 
-	// 	const rootRecords = await em?.getRepository(OrmRootWithBackendId).findAll();
-	// 	assert(rootRecords !== undefined);
-	// 	expect(rootRecords).toHaveLength(1);
+		const rootRecords = await em?.getRepository(OrmRootWithBackendId).findAll();
+		assert(rootRecords !== undefined);
+		expect(rootRecords).toHaveLength(1);
 
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors).toBeUndefined();
-	// 	expect(response.body.singleResult.data).toEqual({
-	// 		createRootWithBackendId: {
-	// 			id: '1',
-	// 			description: 'Root 1',
-	// 		},
-	// 	});
-	// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			createRootWithBackendId: {
+				id: '1',
+				description: 'Root 1',
+			},
+		});
+	});
 
-	// it('Should succeed - create rootClientId + childrenClientId + childrenBackendId', async () => {
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithClientId(
-	// 					input: {
-	// 						id: "1"
-	// 						description: "Root 1"
-	// 						childrenWithClientId: [
-	// 							{ id: "1", description: "Child 1" }
-	// 							{ id: "2", description: "Child 2" }
-	// 						]
-	// 						childrenWithBackendId: [{ description: "Child 3" }, { description: "Child 4" }]
-	// 					}
-	// 				) {
-	// 					id
-	// 					description
-	// 					childrenWithClientId {
-	// 						id
-	// 						description
-	// 					}
-	// 					childrenWithBackendId {
-	// 						id
-	// 						description
-	// 					}
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should succeed - create rootClientId + childrenClientId + childrenBackendId', async () => {
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithClientId(
+						input: {
+							id: "1"
+							description: "Root 1"
+							childrenWithClientId: [
+								{ id: "1", description: "Child 1" }
+								{ id: "2", description: "Child 2" }
+							]
+							childrenWithBackendId: [{ description: "Child 3" }, { description: "Child 4" }]
+						}
+					) {
+						id
+						description
+						childrenWithClientId {
+							id
+							description
+						}
+						childrenWithBackendId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-	// 	const rootRecords = await em?.getRepository(OrmRootWithClientId).findAll();
-	// 	assert(rootRecords !== undefined);
-	// 	expect(rootRecords).toHaveLength(1);
-	// 	const [rootRecord] = rootRecords;
+		const rootRecords = await em?.getRepository(OrmRootWithClientId).findAll();
+		assert(rootRecords !== undefined);
+		expect(rootRecords).toHaveLength(1);
+		const [rootRecord] = rootRecords;
 
-	// 	const childrenWithClientIdRecords = await em?.getRepository(OrmChildWithClientId).findAll();
-	// 	assert(childrenWithClientIdRecords !== undefined);
-	// 	expect(childrenWithClientIdRecords).toHaveLength(2);
+		const childrenWithClientIdRecords = await em?.getRepository(OrmChildWithClientId).findAll();
+		assert(childrenWithClientIdRecords !== undefined);
+		expect(childrenWithClientIdRecords).toHaveLength(2);
 
-	// 	const childrenWithBackendIdRecords = await em?.getRepository(OrmChildWithBackendId).findAll();
-	// 	assert(childrenWithBackendIdRecords !== undefined);
-	// 	expect(childrenWithBackendIdRecords).toHaveLength(2);
-	// 	const [child1, child2] = childrenWithBackendIdRecords;
+		const childrenWithBackendIdRecords = await em?.getRepository(OrmChildWithBackendId).findAll();
+		assert(childrenWithBackendIdRecords !== undefined);
+		expect(childrenWithBackendIdRecords).toHaveLength(2);
+		const [child1, child2] = childrenWithBackendIdRecords;
 
-	// 	assert(response.body.kind === 'single');
-	// 	console.log(response.body?.singleResult?.data);
-	// 	console.log(JSON.stringify(response.body?.singleResult?.data));
-	// 	expect(response.body.singleResult.errors).toBeUndefined();
-	// 	expect(response.body.singleResult.data).toEqual({
-	// 		createRootWithClientId: {
-	// 			id: `${rootRecord.id}`,
-	// 			description: 'Root 1',
-	// 			childrenWithClientId: [
-	// 				{ id: '1', description: 'Child 1' },
-	// 				{ id: '2', description: 'Child 2' },
-	// 			],
-	// 			childrenWithBackendId: [
-	// 				{ id: `${child1.id}`, description: 'Child 3' },
-	// 				{ id: `${child2.id}`, description: 'Child 4' },
-	// 			],
-	// 		},
-	// 	});
-	// });
+		assert(response.body.kind === 'single');
+		console.log(response.body?.singleResult?.data);
+		console.log(JSON.stringify(response.body?.singleResult?.data));
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			createRootWithClientId: {
+				id: `${rootRecord.id}`,
+				description: 'Root 1',
+				childrenWithClientId: [
+					{ id: '1', description: 'Child 1' },
+					{ id: '2', description: 'Child 2' },
+				],
+				childrenWithBackendId: [
+					{ id: `${child1.id}`, description: 'Child 3' },
+					{ id: `${child2.id}`, description: 'Child 4' },
+				],
+			},
+		});
+	});
 
 	// @TODO: https://exogee.atlassian.net/browse/EXOGW-431
 	it('Should succeed - create rootBackendId + childrenClientId + childrenBackendId', async () => {
@@ -438,7 +438,7 @@ describe('EXOGW-384 Nested - Create operations', () => {
 
 		expect(response.body.singleResult.errors).toBeUndefined();
 		expect(response.body.singleResult.data).toEqual({
-			createRootWithClientId: {
+			createRootWithBackendId: {
 				id: `${rootRecord.id}`,
 				description: 'Root 1',
 				childrenWithClientId: [
@@ -459,410 +459,410 @@ describe('EXOGW-384 Nested - Create operations', () => {
 		});
 	});
 
-	// it('Should fail - passing IDs to childrenWithBackendId', async () => {
-	// 	const childId = '123';
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithClientId(
-	// 					input: {
-	// 						id: "1"
-	// 						description: "Root 1"
-	// 						childrenWithBackendId: [
-	// 							{ id: ${childId}, description: "Child ${childId}" }
-	// 						]
-	// 					}
-	// 				) {
-	// 					id
-	// 					description
-	// 					childrenWithClientId {
-	// 						id
-	// 						description
-	// 					}
-	// 					childrenWithBackendId {
-	// 						id
-	// 						description
-	// 					}
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should fail - passing IDs to childrenWithBackendId', async () => {
+		const childId = '123';
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithClientId(
+						input: {
+							id: "1"
+							description: "Root 1"
+							childrenWithBackendId: [
+								{ id: ${childId}, description: "Child ${childId}" }
+							]
+						}
+					) {
+						id
+						description
+						childrenWithClientId {
+							id
+							description
+						}
+						childrenWithBackendId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-	// 	const rootRecords = await em?.getConnection().execute('SELECT * FROM RootWithClientId');
-	// 	const childrenWithClientIdRecords = await em
-	// 		?.getConnection()
-	// 		.execute('SELECT * FROM ChildWithClientId');
-	// 	const childrenWithBackendIdRecords = await em
-	// 		?.getConnection()
-	// 		.execute('SELECT * FROM ChildWithBackendId');
+		const rootRecords = await em?.getConnection().execute('SELECT * FROM RootWithClientId');
+		const childrenWithClientIdRecords = await em
+			?.getConnection()
+			.execute('SELECT * FROM ChildWithClientId');
+		const childrenWithBackendIdRecords = await em
+			?.getConnection()
+			.execute('SELECT * FROM ChildWithBackendId');
 
-	// 	console.log(rootRecords);
-	// 	console.log(childrenWithClientIdRecords);
-	// 	console.log(childrenWithBackendIdRecords);
+		console.log(rootRecords);
+		console.log(childrenWithClientIdRecords);
+		console.log(childrenWithBackendIdRecords);
 
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors?.[0]?.message).toBe(
-	// 		`Cannot create entity with ID '${childId}' because clientGeneratedPrimaryKeys is not enabled.`
-	// 	);
-	// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			`Cannot create entity with ID '${childId}' because clientGeneratedPrimaryKeys is not enabled.`
+		);
+	});
 
-	// it('Should fail - passing no IDs to childrenWithClientId', async () => {
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithClientId(
-	// 					input: {
-	// 						id: "1"
-	// 						description: "Root 1"
-	// 						childrenWithClientId: [{ description: "Child 1" }, { description: "Child 2" }]
-	// 						childrenWithBackendId: [
-	// 							{ id: "3", description: "Child 3" }
-	// 							{ id: "4", description: "Child 4" }
-	// 						]
-	// 					}
-	// 				) {
-	// 					id
-	// 					description
-	// 					childrenWithClientId {
-	// 						id
-	// 						description
-	// 					}
-	// 					childrenWithBackendId {
-	// 						id
-	// 						description
-	// 					}
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should fail - passing no IDs to childrenWithClientId', async () => {
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithClientId(
+						input: {
+							id: "1"
+							description: "Root 1"
+							childrenWithClientId: [{ description: "Child 1" }, { description: "Child 2" }]
+							childrenWithBackendId: [
+								{ id: "3", description: "Child 3" }
+								{ id: "4", description: "Child 4" }
+							]
+						}
+					) {
+						id
+						description
+						childrenWithClientId {
+							id
+							description
+						}
+						childrenWithBackendId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors?.[0]?.message).toBe(
-	// 		'Field \"ChildWithClientIdCreateOrUpdateInput.id\" of required type \"ID!\" was not provided.'
-	// 	);
-	// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Field \"ChildWithClientIdCreateOrUpdateInput.id\" of required type \"ID!\" was not provided.'
+		);
+	});
 
-	// it('Should fail - passing IDs to rootWithBackendId', async () => {
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithBackendId(input: { id: "1", description: "Root 1" }) {
-	// 					id
-	// 					description
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should fail - passing IDs to rootWithBackendId', async () => {
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithBackendId(input: { id: "1", description: "Root 1" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
 
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors?.[0]?.message).toBe(
-	// 		'Field \"id\" is not defined by type \"RootWithBackendIdInsertInput\".'
-	// 	);
-	// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Field \"id\" is not defined by type \"RootWithBackendIdInsertInput\".'
+		);
+	});
 
-	// it('Should fail - passing no IDs to rootWithClientId', async () => {
-	// 	const response = await graphweaver.executeOperation({
-	// 		query: gql`
-	// 			mutation {
-	// 				createRootWithClientId(input: { description: "Root 1" }) {
-	// 					id
-	// 					description
-	// 				}
-	// 			}
-	// 		`,
-	// 	});
+	it('Should fail - passing no IDs to rootWithClientId', async () => {
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					createRootWithClientId(input: { description: "Root 1" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
 
-	// 	assert(response.body.kind === 'single');
-	// 	expect(response.body.singleResult.errors?.[0]?.message).toBe(
-	// 		'Field \"RootWithClientIdInsertInput.id\" of required type \"ID!\" was not provided.'
-	// 	);
-	// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors?.[0]?.message).toBe(
+			'Field \"RootWithClientIdInsertInput.id\" of required type \"ID!\" was not provided.'
+		);
+	});
 });
 
-// describe('EXOGW-384 Nested - Update operations', () => {
-// 	it('Should succeed - update rootClientId only', async () => {
-// 		assert(em !== undefined);
-// 		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
-// 			id: '1',
-// 			description: 'Root 1',
-// 		});
+describe('EXOGW-384 Nested - Update operations', () => {
+	it('Should succeed - update rootClientId only', async () => {
+		assert(em !== undefined);
+		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
+			id: '1',
+			description: 'Root 1',
+		});
 
-// 		const response = await graphweaver.executeOperation({
-// 			query: gql`
-// 				mutation {
-// 					updateRootWithClientId(input: { id: "1", description: "Updated Root 1" }) {
-// 						id
-// 						description
-// 					}
-// 				}
-// 			`,
-// 		});
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					updateRootWithClientId(input: { id: "1", description: "Updated Root 1" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
 
-// 		assert(response.body.kind === 'single');
-// 		expect(response.body.singleResult.errors).toBeUndefined();
-// 		expect(response.body.singleResult.data).toEqual({
-// 			updateRootWithClientId: {
-// 				id: '1',
-// 				description: 'Updated Root 1',
-// 			},
-// 		});
-// 	});
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			updateRootWithClientId: {
+				id: '1',
+				description: 'Updated Root 1',
+			},
+		});
+	});
 
-// 	it('Should succeed - update rootClientId + childrenClientId', async () => {
-// 		assert(em !== undefined);
-// 		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
-// 			id: '1',
-// 			description: 'Root 1',
-// 		});
+	it('Should succeed - update rootClientId + childrenClientId', async () => {
+		assert(em !== undefined);
+		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
+			id: '1',
+			description: 'Root 1',
+		});
 
-// 		const child1 = wrap(new OrmChildWithClientId()).assign({
-// 			id: '1',
-// 			description: 'Child 1',
-// 		});
+		const child1 = wrap(new OrmChildWithClientId()).assign({
+			id: '1',
+			description: 'Child 1',
+		});
 
-// 		const child2 = wrap(new OrmChildWithClientId()).assign({
-// 			id: '2',
-// 			description: 'Child 2',
-// 		});
+		const child2 = wrap(new OrmChildWithClientId()).assign({
+			id: '2',
+			description: 'Child 2',
+		});
 
-// 		rootWithClientId.childrenWithClientId.add(child1);
-// 		rootWithClientId.childrenWithClientId.add(child2);
+		rootWithClientId.childrenWithClientId.add(child1);
+		rootWithClientId.childrenWithClientId.add(child2);
 
-// 		await em.persistAndFlush([rootWithClientId, child1, child2]);
+		await em.persistAndFlush([rootWithClientId, child1, child2]);
 
-// 		const response = await graphweaver.executeOperation({
-// 			query: gql`
-// 				mutation {
-// 					updateRootWithClientId(
-// 						input: {
-// 							id: "1"
-// 							description: "Updated Root 1"
-// 							childrenWithClientId: [{ id: "1", description: "Updated Child 1" }]
-// 						}
-// 					) {
-// 						id
-// 						description
-// 						childrenWithClientId {
-// 							id
-// 							description
-// 						}
-// 					}
-// 				}
-// 			`,
-// 		});
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					updateRootWithClientId(
+						input: {
+							id: "1"
+							description: "Updated Root 1"
+							childrenWithClientId: [{ id: "1", description: "Updated Child 1" }]
+						}
+					) {
+						id
+						description
+						childrenWithClientId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-// 		assert(response.body.kind === 'single');
-// 		expect(response.body.singleResult.errors).toBeUndefined();
-// 		expect(response.body.singleResult.data).toEqual({
-// 			updateRootWithClientId: {
-// 				id: '1',
-// 				description: 'Updated Root 1',
-// 				childrenWithClientId: [
-// 					{ id: '1', description: 'Updated Child 1' },
-// 					{ id: '2', description: 'Child 2' },
-// 				],
-// 			},
-// 		});
-// 	});
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			updateRootWithClientId: {
+				id: '1',
+				description: 'Updated Root 1',
+				childrenWithClientId: [
+					{ id: '1', description: 'Updated Child 1' },
+					{ id: '2', description: 'Child 2' },
+				],
+			},
+		});
+	});
 
-// 	it('Should succeed - update rootClientId + childrenBackendId', async () => {
-// 		assert(em !== undefined);
-// 		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
-// 			id: '1',
-// 			description: 'Root 1',
-// 		});
+	it('Should succeed - update rootClientId + childrenBackendId', async () => {
+		assert(em !== undefined);
+		const rootWithClientId = wrap(new OrmRootWithClientId()).assign({
+			id: '1',
+			description: 'Root 1',
+		});
 
-// 		const child1 = wrap(new OrmChildWithBackendId()).assign({
-// 			id: 1,
-// 			description: 'Child 1',
-// 		});
+		const child1 = wrap(new OrmChildWithBackendId()).assign({
+			id: 1,
+			description: 'Child 1',
+		});
 
-// 		const child2 = wrap(new OrmChildWithBackendId()).assign({
-// 			id: 2,
-// 			description: 'Child 2',
-// 		});
+		const child2 = wrap(new OrmChildWithBackendId()).assign({
+			id: 2,
+			description: 'Child 2',
+		});
 
-// 		rootWithClientId.childrenWithBackendId.add(child1);
-// 		rootWithClientId.childrenWithBackendId.add(child2);
+		rootWithClientId.childrenWithBackendId.add(child1);
+		rootWithClientId.childrenWithBackendId.add(child2);
 
-// 		await em.persistAndFlush([rootWithClientId, child1, child2]);
+		await em.persistAndFlush([rootWithClientId, child1, child2]);
 
-// 		const response = await graphweaver.executeOperation({
-// 			query: gql`
-// 				mutation {
-// 					updateRootWithClientId(
-// 						input: {
-// 							id: "1"
-// 							description: "Updated Root 1"
-// 							childrenWithBackendId: [{ id: "1", description: "Updated Child 1" }]
-// 						}
-// 					) {
-// 						id
-// 						description
-// 						childrenWithBackendId {
-// 							id
-// 							description
-// 						}
-// 					}
-// 				}
-// 			`,
-// 		});
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					updateRootWithClientId(
+						input: {
+							id: "1"
+							description: "Updated Root 1"
+							childrenWithBackendId: [{ id: "1", description: "Updated Child 1" }]
+						}
+					) {
+						id
+						description
+						childrenWithBackendId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-// 		assert(response.body.kind === 'single');
-// 		expect(response.body.singleResult.errors).toBeUndefined();
-// 		expect(response.body.singleResult.data).toEqual({
-// 			updateRootWithClientId: {
-// 				id: '1',
-// 				description: 'Updated Root 1',
-// 				childrenWithBackendId: [
-// 					{ id: '1', description: 'Updated Child 1' },
-// 					{ id: '2', description: 'Child 2' },
-// 				],
-// 			},
-// 		});
-// 	});
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			updateRootWithClientId: {
+				id: '1',
+				description: 'Updated Root 1',
+				childrenWithBackendId: [
+					{ id: '1', description: 'Updated Child 1' },
+					{ id: '2', description: 'Child 2' },
+				],
+			},
+		});
+	});
 
-// 	it('Should succeed - update rootBackendId only', async () => {
-// 		assert(em !== undefined);
-// 		const rootWithBackendId = wrap(new OrmRootWithBackendId()).assign({
-// 			id: 1,
-// 			description: 'Root 1',
-// 		});
+	it('Should succeed - update rootBackendId only', async () => {
+		assert(em !== undefined);
+		const rootWithBackendId = wrap(new OrmRootWithBackendId()).assign({
+			id: 1,
+			description: 'Root 1',
+		});
 
-// 		await em.persistAndFlush(rootWithBackendId);
+		await em.persistAndFlush(rootWithBackendId);
 
-// 		const response = await graphweaver.executeOperation({
-// 			query: gql`
-// 				mutation {
-// 					updateRootWithBackendId(input: { id: "1", description: "Updated Root 1" }) {
-// 						id
-// 						description
-// 					}
-// 				}
-// 			`,
-// 		});
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					updateRootWithBackendId(input: { id: "1", description: "Updated Root 1" }) {
+						id
+						description
+					}
+				}
+			`,
+		});
 
-// 		assert(response.body.kind === 'single');
-// 		expect(response.body.singleResult.errors).toBeUndefined();
-// 		expect(response.body.singleResult.data).toEqual({
-// 			updateRootWithBackendId: {
-// 				id: '1',
-// 				description: 'Updated Root 1',
-// 			},
-// 		});
-// 	});
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			updateRootWithBackendId: {
+				id: '1',
+				description: 'Updated Root 1',
+			},
+		});
+	});
 
-// 	it('Should succeed - update rootBackendId + childrenClientId', async () => {
-// 		assert(em !== undefined);
-// 		const rootWithBackendId = wrap(new OrmRootWithBackendId()).assign({
-// 			id: 1,
-// 			description: 'Root 1',
-// 		});
+	it('Should succeed - update rootBackendId + childrenClientId', async () => {
+		assert(em !== undefined);
+		const rootWithBackendId = wrap(new OrmRootWithBackendId()).assign({
+			id: 1,
+			description: 'Root 1',
+		});
 
-// 		const child1 = wrap(new OrmChildWithClientId()).assign({
-// 			id: '1',
-// 			description: 'Child 1',
-// 		});
+		const child1 = wrap(new OrmChildWithClientId()).assign({
+			id: '1',
+			description: 'Child 1',
+		});
 
-// 		const child2 = wrap(new OrmChildWithClientId()).assign({
-// 			id: '2',
-// 			description: 'Child 2',
-// 		});
+		const child2 = wrap(new OrmChildWithClientId()).assign({
+			id: '2',
+			description: 'Child 2',
+		});
 
-// 		rootWithBackendId.childrenWithClientId.add(child1);
-// 		rootWithBackendId.childrenWithClientId.add(child2);
+		rootWithBackendId.childrenWithClientId.add(child1);
+		rootWithBackendId.childrenWithClientId.add(child2);
 
-// 		await em.persistAndFlush([rootWithBackendId, child1, child2]);
+		await em.persistAndFlush([rootWithBackendId, child1, child2]);
 
-// 		const response = await graphweaver.executeOperation({
-// 			query: gql`
-// 				mutation {
-// 					updateRootWithBackendId(
-// 						input: {
-// 							id: "1"
-// 							description: "Updated Root 1"
-// 							childrenWithClientId: [{ id: "1", description: "Updated Child 1" }]
-// 						}
-// 					) {
-// 						id
-// 						description
-// 						childrenWithClientId {
-// 							id
-// 							description
-// 						}
-// 					}
-// 				}
-// 			`,
-// 		});
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					updateRootWithBackendId(
+						input: {
+							id: "1"
+							description: "Updated Root 1"
+							childrenWithClientId: [{ id: "1", description: "Updated Child 1" }]
+						}
+					) {
+						id
+						description
+						childrenWithClientId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-// 		assert(response.body.kind === 'single');
-// 		expect(response.body.singleResult.errors).toBeUndefined();
-// 		expect(response.body.singleResult.data).toEqual({
-// 			updateRootWithBackendId: {
-// 				id: '1',
-// 				description: 'Updated Root 1',
-// 				childrenWithClientId: [
-// 					{ id: '1', description: 'Updated Child 1' },
-// 					{ id: '2', description: 'Child 2' },
-// 				],
-// 			},
-// 		});
-// 	});
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			updateRootWithBackendId: {
+				id: '1',
+				description: 'Updated Root 1',
+				childrenWithClientId: [
+					{ id: '1', description: 'Updated Child 1' },
+					{ id: '2', description: 'Child 2' },
+				],
+			},
+		});
+	});
 
-// 	it('Should succeed - update rootBackendId + childrenBackendId', async () => {
-// 		assert(em !== undefined);
-// 		const rootWithBackendId = wrap(new OrmRootWithBackendId()).assign({
-// 			id: 1,
-// 			description: 'Root 1',
-// 		});
+	it('Should succeed - update rootBackendId + childrenBackendId', async () => {
+		assert(em !== undefined);
+		const rootWithBackendId = wrap(new OrmRootWithBackendId()).assign({
+			id: 1,
+			description: 'Root 1',
+		});
 
-// 		const child1 = wrap(new OrmChildWithBackendId()).assign({
-// 			id: 1,
-// 			description: 'Child 1',
-// 		});
+		const child1 = wrap(new OrmChildWithBackendId()).assign({
+			id: 1,
+			description: 'Child 1',
+		});
 
-// 		const child2 = wrap(new OrmChildWithBackendId()).assign({
-// 			id: 2,
-// 			description: 'Child 2',
-// 		});
+		const child2 = wrap(new OrmChildWithBackendId()).assign({
+			id: 2,
+			description: 'Child 2',
+		});
 
-// 		rootWithBackendId.childrenWithBackendId.add(child1);
-// 		rootWithBackendId.childrenWithBackendId.add(child2);
+		rootWithBackendId.childrenWithBackendId.add(child1);
+		rootWithBackendId.childrenWithBackendId.add(child2);
 
-// 		await em.persistAndFlush([rootWithBackendId, child1, child2]);
+		await em.persistAndFlush([rootWithBackendId, child1, child2]);
 
-// 		const response = await graphweaver.executeOperation({
-// 			query: gql`
-// 				mutation {
-// 					updateRootWithBackendId(
-// 						input: {
-// 							id: "1"
-// 							description: "Updated Root 1"
-// 							childrenWithBackendId: [{ id: "1", description: "Updated Child 1" }]
-// 						}
-// 					) {
-// 						id
-// 						description
-// 						childrenWithBackendId {
-// 							id
-// 							description
-// 						}
-// 					}
-// 				}
-// 			`,
-// 		});
+		const response = await graphweaver.executeOperation({
+			query: gql`
+				mutation {
+					updateRootWithBackendId(
+						input: {
+							id: "1"
+							description: "Updated Root 1"
+							childrenWithBackendId: [{ id: "1", description: "Updated Child 1" }]
+						}
+					) {
+						id
+						description
+						childrenWithBackendId {
+							id
+							description
+						}
+					}
+				}
+			`,
+		});
 
-// 		assert(response.body.kind === 'single');
-// 		expect(response.body.singleResult.errors).toBeUndefined();
-// 		expect(response.body.singleResult.data).toEqual({
-// 			updateRootWithBackendId: {
-// 				id: '1',
-// 				description: 'Updated Root 1',
-// 				childrenWithBackendId: [
-// 					{ id: '1', description: 'Updated Child 1' },
-// 					{ id: '2', description: 'Child 2' },
-// 				],
-// 			},
-// 		});
-// 	});
-// });
+		assert(response.body.kind === 'single');
+		expect(response.body.singleResult.errors).toBeUndefined();
+		expect(response.body.singleResult.data).toEqual({
+			updateRootWithBackendId: {
+				id: '1',
+				description: 'Updated Root 1',
+				childrenWithBackendId: [
+					{ id: '1', description: 'Updated Child 1' },
+					{ id: '2', description: 'Child 2' },
+				],
+			},
+		});
+	});
+});
