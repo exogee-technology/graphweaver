@@ -959,8 +959,8 @@ importers:
         specifier: 9.0.9
         version: 9.0.9
       '@types/ms':
-        specifier: 0.7.34
-        version: 0.7.34
+        specifier: 2.1.0
+        version: 2.1.0
       '@types/node':
         specifier: 22.13.14
         version: 22.13.14
@@ -5316,8 +5316,8 @@ packages:
   '@types/mime@1.3.5':
     resolution: {integrity: sha512-/pyBZWSLD2n0dcHE3hq8s8ZvcETHtEuF+3E7XVt0Ig2nvsVQXdghHVcEkIWjy9A0wKfTn97a/PSDYohKIlnP/w==}
 
-  '@types/ms@0.7.34':
-    resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
+  '@types/ms@2.1.0':
+    resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
 
   '@types/mute-stream@0.0.4':
     resolution: {integrity: sha512-CPM9nzrCPPJHQNA9keH9CVkVI+WR5kMa+7XEs5jcGQ0VoAGnLv242w8lIVgwAEfmE4oufJRaTc9PNLQl0ioAow==}
@@ -15954,7 +15954,7 @@ snapshots:
 
   '@types/jsonwebtoken@9.0.9':
     dependencies:
-      '@types/ms': 0.7.34
+      '@types/ms': 2.1.0
       '@types/node': 22.13.14
 
   '@types/k6@1.0.2': {}
@@ -15991,7 +15991,7 @@ snapshots:
 
   '@types/mime@1.3.5': {}
 
-  '@types/ms@0.7.34': {}
+  '@types/ms@2.1.0': {}
 
   '@types/mute-stream@0.0.4':
     dependencies:
