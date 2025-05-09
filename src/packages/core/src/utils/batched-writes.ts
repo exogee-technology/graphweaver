@@ -113,7 +113,6 @@ export const generateOperationBatches = async <G = unknown, D = unknown>(
 		} else if (isObject(input)) {
 			let node = { ...input };
 			const nodeId = `${operationId}:${index}`;
-			const parentId = node[primaryKeyField];
 			// Object containing instructions on what this operation should do once it has finished
 			const operationProcesses: Array<OperationProcess> = [];
 			for (const entry of Object.entries(input)) {
@@ -287,6 +286,9 @@ export const runBatchedWrites = async <G = unknown, D = unknown>(
 							if (!sourceNode) {
 								throw new Error(`Target node ${nodeId} not found`);
 							}
+
+							// THIS SECTION NEEDS CLARIFICATION!!!
+
 							for (const key of keys) {
 								const { sourceKey, value } = key;
 								const targetNode = nodes.get(targetNodeId);
