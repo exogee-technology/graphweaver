@@ -28,13 +28,13 @@
 		"@mikro-orm/knex": "6.4.11",
 		"@mikro-orm/sqlite": "6.4.11",
 		"graphql": "16.10.0",
-		"luxon": "3.5.0",
+		"luxon": "3.6.1",
 		"mikro-orm-sqlite-wasm": "workspace:*",
 		"react": "19.1.0",
 		"react-dom": "19.1.0"
 	},
 	"devDependencies": {
-		"@types/luxon": "3.4.2",
+		"@types/luxon": "3.6.2",
 		"@types/node": "22.13.14",
 		"@types/react": "19.0.12",
 		"graphweaver": "workspace:*",
