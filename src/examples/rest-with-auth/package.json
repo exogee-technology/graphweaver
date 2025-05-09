@@ -40,7 +40,7 @@
 	"devDependencies": {
 		"@types/node": "22.13.14",
 		"dotenv-cli": "8.0.0",
-		"typescript": "5.8.2",
+		"typescript": "5.8.3",
 		"vite": "6.3.5"
 	},
 	"keywords": [
